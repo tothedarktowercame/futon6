@@ -8,4 +8,8 @@ build/
 .cpcache/
 data/se-physics.json
 data/physics-se/
+data/pm-term-dictionary.json
+data/math-term-dictionary.json
+data/pm-all-terms/pm-full-dictionary.json
+data/planetmath-batch.log
 *.npy
