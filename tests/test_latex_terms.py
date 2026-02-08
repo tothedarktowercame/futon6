@@ -2,7 +2,7 @@
 
 import os
 import pytest
-from futon6.planetmath import load_edn
+from futon6.planetmath import load_edn, load_tex_dir, merge_tex_bodies
 from futon6.latex_terms import (
     extract_terms,
     extract_xrefs,
@@ -13,6 +13,9 @@ from futon6.latex_terms import (
 )
 
 CATTHEORY_EDN = os.path.expanduser("~/code/planetmath/category-theory.edn")
+CATTHEORY_TEX = os.path.expanduser(
+    "~/code/planetmath/18_Category_theory_homological_algebra"
+)
 
 
 class TestExtractTerms:
@@ -119,3 +122,37 @@ class TestEnrichReal:
         print(f"\nEnrichment stats: {stats}")
         # This is a discovery test — we want to know the numbers
         assert stats["entries_enriched"] > 0
+
+
+class TestEnrichWithTex:
+    """Test enrichment pipeline using full .tex body text.
+
+    The EDN body field contains only the LaTeX preamble. Full enrichment
+    requires merging .tex file bodies first. This is where the real
+    signal lives.
+    """
+
+    @pytest.fixture
+    def enriched_with_tex(self):
+        entries = load_edn(CATTHEORY_EDN)
+        tex_data = load_tex_dir(CATTHEORY_TEX)
+        merged = merge_tex_bodies(entries, tex_data)
+        return enrich_all(merged)
+
+    def test_tex_enrichment_finds_xrefs(self, enriched_with_tex):
+        stats = enrichment_stats(enriched_with_tex)
+        # With full .tex bodies we expect substantial xrefs
+        assert stats["total_extracted_xrefs"] > 100
+        print(f"\nTex enrichment stats: {stats}")
+
+    def test_tex_enrichment_finds_implicit_relations(self, enriched_with_tex):
+        stats = enrichment_stats(enriched_with_tex)
+        assert stats["total_implicit_relations"] > 50
+
+    def test_tex_enrichment_finds_terms(self, enriched_with_tex):
+        stats = enrichment_stats(enriched_with_tex)
+        assert stats["total_new_terms"] > 500
+
+    def test_tex_enrichment_finds_environments(self, enriched_with_tex):
+        stats = enrichment_stats(enriched_with_tex)
+        assert stats["total_environments"] > 100

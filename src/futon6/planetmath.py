@@ -1,9 +1,10 @@
-"""PlanetMath EDN loader.
+"""PlanetMath loader.
 
-Reads PlanetMath EDN exports and produces normalized entry dicts
-suitable for graph construction.
+Reads PlanetMath EDN exports and .tex source files, produces normalized
+entry dicts suitable for graph construction.
 """
 
+import re
 import edn_format
 from pathlib import Path
 
@@ -172,8 +173,84 @@ def extract_msc_entities(entries: list[dict]) -> list[dict]:
     return list(codes.values())
 
 
-def build_graph(edn_path: str) -> dict:
+def load_tex_dir(tex_dir: str) -> dict[str, dict]:
+    """Load .tex files from a PlanetMath MSC directory.
+
+    Returns a dict keyed by canonical name (from \\pmcanonicalname),
+    with values containing the full body text and metadata extracted
+    from the preamble.
+    """
+    tex_dir = Path(tex_dir)
+    entries = {}
+
+    for tex_file in sorted(tex_dir.glob("*.tex")):
+        raw = tex_file.read_text(errors="replace")
+        canonical = _extract_pm_field(raw, "pmcanonicalname")
+        if not canonical:
+            continue
+
+        # Extract document body (after \begin{document})
+        body_match = re.search(
+            r"\\begin\{document\}(.*?)(?:\\end\{document\}|$)",
+            raw, re.DOTALL,
+        )
+        body = body_match.group(1).strip() if body_match else ""
+
+        # Extract preamble metadata
+        related = re.findall(r"\\pmrelated\{([^}]+)\}", raw)
+        synonyms = [m.group(1) for m in
+                     re.finditer(r"\\pmsynonym\{([^}]*)\}\{[^}]*\}", raw)]
+
+        entries[canonical] = {
+            "canonical_name": canonical,
+            "body_full": body,
+            "related_tex": related,
+            "synonyms": synonyms,
+            "source_tex": tex_file.name,
+        }
+
+    return entries
+
+
+def _extract_pm_field(raw: str, field: str) -> str | None:
+    """Extract a \\pm<field>{value} from LaTeX preamble."""
+    m = re.search(rf"\\{field}\{{([^}}]+)\}}", raw)
+    return m.group(1) if m else None
+
+
+def merge_tex_bodies(entries: list[dict], tex_data: dict[str, dict]) -> list[dict]:
+    """Merge full .tex body text and metadata into EDN entries.
+
+    Matches by entry ID -> canonical name.
+    """
+    merged = []
+    for e in entries:
+        eid = e["id"]
+        tex = tex_data.get(eid, {})
+        updated = {**e}
+        if tex:
+            updated["body"] = tex.get("body_full", e.get("body", ""))
+            # Add synonyms from .tex that aren't in defines
+            existing_defines = set(e.get("defines", []))
+            new_synonyms = [s for s in tex.get("synonyms", [])
+                           if s not in existing_defines]
+            if new_synonyms:
+                updated["defines"] = e.get("defines", []) + new_synonyms
+            # Add related from .tex that aren't in related
+            existing_related = set(e.get("related", []))
+            new_related = [r for r in tex.get("related_tex", [])
+                          if r not in existing_related]
+            if new_related:
+                updated["related"] = e.get("related", []) + new_related
+        merged.append(updated)
+    return merged
+
+
+def build_graph(edn_path: str, tex_dir: str | None = None) -> dict:
     """Load PlanetMath EDN and build the full entity/relation graph.
+
+    If tex_dir is provided, merges full body text and additional metadata
+    from .tex source files.
 
     Returns:
         {
@@ -183,6 +260,9 @@ def build_graph(edn_path: str) -> dict:
         }
     """
     entries = load_edn(edn_path)
+    if tex_dir:
+        tex_data = load_tex_dir(tex_dir)
+        entries = merge_tex_bodies(entries, tex_data)
     entities = entries_to_entities(entries)
     term_entities = extract_term_entities(entries)
     msc_entities = extract_msc_entities(entries)

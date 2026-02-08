@@ -8,10 +8,15 @@ from futon6.planetmath import (
     entries_to_relations,
     extract_term_entities,
     extract_msc_entities,
+    load_tex_dir,
+    merge_tex_bodies,
     build_graph,
 )
 
 CATTHEORY_EDN = os.path.expanduser("~/code/planetmath/category-theory.edn")
+CATTHEORY_TEX = os.path.expanduser(
+    "~/code/planetmath/18_Category_theory_homological_algebra"
+)
 
 
 @pytest.fixture
@@ -104,3 +109,68 @@ class TestBuildGraph:
         assert "Definition" in types
         assert "DefinedTerm" in types
         assert "MSCCode" in types
+
+
+class TestTexLoading:
+    @pytest.fixture
+    def tex_data(self):
+        return load_tex_dir(CATTHEORY_TEX)
+
+    def test_loads_tex_files(self, tex_data):
+        assert len(tex_data) > 100  # category theory has hundreds of .tex files
+
+    def test_tex_entry_has_fields(self, tex_data):
+        for canonical, data in tex_data.items():
+            assert "canonical_name" in data
+            assert "body_full" in data
+            assert "source_tex" in data
+
+    def test_tex_bodies_nonempty(self, tex_data):
+        nonempty = [d for d in tex_data.values() if d["body_full"]]
+        assert len(nonempty) > 50
+
+    def test_synonyms_extracted(self, tex_data):
+        all_synonyms = [s for d in tex_data.values() for s in d.get("synonyms", [])]
+        assert len(all_synonyms) > 50
+
+
+class TestMergeTexBodies:
+    def test_merge_enriches_entries(self):
+        entries = load_edn(CATTHEORY_EDN)
+        tex_data = load_tex_dir(CATTHEORY_TEX)
+        merged = merge_tex_bodies(entries, tex_data)
+        assert len(merged) == len(entries)
+        # Some entries should now have full body text
+        bodies_changed = sum(
+            1 for orig, m in zip(entries, merged)
+            if m.get("body", "") != orig.get("body", "")
+        )
+        assert bodies_changed > 50
+
+    def test_synonyms_added_to_defines(self):
+        entries = load_edn(CATTHEORY_EDN)
+        tex_data = load_tex_dir(CATTHEORY_TEX)
+        merged = merge_tex_bodies(entries, tex_data)
+        total_defines_before = sum(len(e.get("defines", [])) for e in entries)
+        total_defines_after = sum(len(e.get("defines", [])) for e in merged)
+        assert total_defines_after > total_defines_before
+
+
+class TestBuildGraphWithTex:
+    @pytest.fixture
+    def graph_with_tex(self):
+        return build_graph(CATTHEORY_EDN, tex_dir=CATTHEORY_TEX)
+
+    def test_more_terms_with_tex(self, graph_with_tex):
+        """With .tex bodies, synonym extraction adds many more defined terms."""
+        graph_no_tex = build_graph(CATTHEORY_EDN)
+        assert graph_with_tex["stats"]["terms"] > graph_no_tex["stats"]["terms"]
+
+    def test_more_relations_with_tex(self, graph_with_tex):
+        """With .tex bodies, related links from preamble add more relations."""
+        graph_no_tex = build_graph(CATTHEORY_EDN)
+        assert graph_with_tex["stats"]["relations"] > graph_no_tex["stats"]["relations"]
+
+    def test_graph_entity_ids_still_unique(self, graph_with_tex):
+        ids = [e["entity/id"] for e in graph_with_tex["entities"]]
+        assert len(ids) == len(set(ids))
