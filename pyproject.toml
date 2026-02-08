@@ -15,10 +15,14 @@ dev = [
     "pytest>=7.0",
     "ipython",
 ]
+gpu = [
+    "torch>=2.0",
+    "flash-attn>=2.0; platform_system == 'Linux'",
+]
 
 [build-system]
 requires = ["setuptools>=68.0"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
