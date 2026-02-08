@@ -80,9 +80,18 @@ def extract_latex(html_str: str) -> list[str]:
 
 
 def parse_se_tags(tag_str: str) -> list[str]:
-    """Parse SE tag string like '<algebra><group-theory>' into list."""
+    """Parse SE tag string into list.
+
+    Handles both formats:
+    - Angle-bracket: '<algebra><group-theory>'
+    - Pipe-delimited: '|algebra|group-theory|'
+    """
     if not tag_str:
         return []
+    # Pipe-delimited (real SE dumps)
+    if "|" in tag_str:
+        return [t for t in tag_str.split("|") if t]
+    # Angle-bracket (older format / some dumps)
     return _SE_TAGS_RE.findall(tag_str)
 
 
@@ -133,7 +142,11 @@ def iter_posts(xml_path: str, min_score: int = 0):
 
 
 def load_posts(xml_path: str, min_score: int = 0) -> dict[int, SEPost]:
-    """Load all posts into a dict keyed by post ID."""
+    """Load all posts into a dict keyed by post ID.
+
+    WARNING: holds all posts in memory. For large dumps use
+    build_qa_pairs_streaming() instead.
+    """
     return {p.id: p for p in iter_posts(xml_path, min_score)}
 
 
@@ -141,6 +154,8 @@ def build_qa_pairs(posts: dict[int, SEPost]) -> list[SEQAPair]:
     """Match questions with their accepted or highest-scored answer.
 
     Returns QA pairs where both question and answer exist.
+    WARNING: requires all posts in memory. For large dumps use
+    build_qa_pairs_streaming() instead.
     """
     questions = {pid: p for pid, p in posts.items() if p.post_type == "question"}
 
@@ -168,6 +183,115 @@ def build_qa_pairs(posts: dict[int, SEPost]) -> list[SEQAPair]:
             answer=answer,
             tags=q.tags,
         ))
+
+    return pairs
+
+
+def build_qa_pairs_streaming(xml_path: str, min_score: int = 0) -> list[SEQAPair]:
+    """Build QA pairs with two streaming passes over the XML.
+
+    Pass 1: collect only pairing metadata (IDs, scores, accepted answer).
+             ~50 bytes per post instead of ~2KB.
+    Pass 2: stream again, loading only posts that are part of a pair.
+
+    Memory: O(pairs) not O(all posts). Safe on 4GB machines for multi-GB dumps.
+    """
+    import sys
+
+    # --- Pass 1: collect pairing metadata ---
+    # For questions: {qid: (accepted_answer_id, tags)}
+    questions: dict[int, tuple[int | None, list[str]]] = {}
+    # For answers: {parent_id: [(answer_id, score)]}
+    answers_by_q: dict[int, list[tuple[int, int]]] = {}
+
+    for event, elem in iterparse(xml_path, events=("end",)):
+        if elem.tag != "row":
+            continue
+        attrs = elem.attrib
+        post_type_id = int(attrs.get("PostTypeId", 0))
+        score = int(attrs.get("Score", 0))
+
+        if post_type_id == 1 and score >= min_score:
+            qid = int(attrs["Id"])
+            acc = int(a) if (a := attrs.get("AcceptedAnswerId")) else None
+            tags = parse_se_tags(attrs.get("Tags", ""))
+            questions[qid] = (acc, tags)
+        elif post_type_id == 2 and score >= min_score:
+            parent = int(p) if (p := attrs.get("ParentId")) else None
+            if parent:
+                answers_by_q.setdefault(parent, []).append(
+                    (int(attrs["Id"]), score))
+        elem.clear()
+
+    # Decide which answer to pick for each question
+    # {qid: answer_id_to_load}
+    pair_map: dict[int, int] = {}
+    for qid, (accepted, _tags) in questions.items():
+        candidates = answers_by_q.get(qid, [])
+        if not candidates:
+            continue
+        if accepted and any(aid == accepted for aid, _ in candidates):
+            pair_map[qid] = accepted
+        else:
+            pair_map[qid] = max(candidates, key=lambda x: x[1])[0]
+
+    # IDs we need to load in pass 2
+    needed_ids = set(pair_map.keys()) | set(pair_map.values())
+
+    print(f"       Pass 1: {len(questions)} questions, "
+          f"{sum(len(v) for v in answers_by_q.values())} answers, "
+          f"{len(pair_map)} pairs to load", file=sys.stderr)
+
+    # Free pass-1 structures we no longer need
+    del answers_by_q
+
+    # --- Pass 2: load only the posts we need ---
+    loaded: dict[int, SEPost] = {}
+
+    for event, elem in iterparse(xml_path, events=("end",)):
+        if elem.tag != "row":
+            continue
+        attrs = elem.attrib
+        pid = int(attrs.get("Id", 0))
+        if pid not in needed_ids:
+            elem.clear()
+            continue
+
+        post_type_id = int(attrs.get("PostTypeId", 0))
+        body_html = attrs.get("Body", "")
+        loaded[pid] = SEPost(
+            id=pid,
+            post_type="question" if post_type_id == 1 else "answer",
+            title=attrs.get("Title", ""),
+            body=body_html,
+            body_text=strip_html(body_html),
+            body_latex=extract_latex(body_html),
+            score=int(attrs.get("Score", 0)),
+            tags=parse_se_tags(attrs.get("Tags", "")),
+            answer_count=int(attrs.get("AnswerCount", 0)),
+            accepted_answer_id=int(a) if (a := attrs.get("AcceptedAnswerId")) else None,
+            parent_id=int(p) if (p := attrs.get("ParentId")) else None,
+            creation_date=attrs.get("CreationDate", ""),
+        )
+        elem.clear()
+
+        # Stop early if we have everything
+        if len(loaded) == len(needed_ids):
+            break
+
+    print(f"       Pass 2: loaded {len(loaded)}/{len(needed_ids)} posts",
+          file=sys.stderr)
+
+    # --- Assemble pairs ---
+    pairs = []
+    for qid, aid in pair_map.items():
+        q = loaded.get(qid)
+        a = loaded.get(aid)
+        if q and a:
+            pairs.append(SEQAPair(
+                question=q, answer=a,
+                tags=questions[qid][1],
+            ))
 
     return pairs
 

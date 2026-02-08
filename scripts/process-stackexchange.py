@@ -32,9 +32,7 @@ from concurrent.futures import ProcessPoolExecutor
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from futon6.stackexchange import (
-    iter_posts,
-    load_posts,
-    build_qa_pairs,
+    build_qa_pairs_streaming,
     qa_to_entity,
     qa_to_relations,
     tag_entities,
@@ -92,15 +90,9 @@ def main():
 
     t0 = time.time()
 
-    # --- Stage 1: Parse XML ---
-    print(f"[1/4] Parsing {args.posts_xml} (min_score={args.min_score})...")
-    posts = load_posts(args.posts_xml, min_score=args.min_score)
-    print(f"       Loaded {len(posts)} posts in {time.time()-t0:.1f}s")
-
-    # --- Stage 2: Build QA pairs ---
-    t1 = time.time()
-    print(f"[2/4] Building QA pairs...")
-    pairs = build_qa_pairs(posts)
+    # --- Stage 1+2: Stream XML and build QA pairs ---
+    print(f"[1/4] Streaming {args.posts_xml} (min_score={args.min_score})...")
+    pairs = build_qa_pairs_streaming(args.posts_xml, min_score=args.min_score)
     stats = corpus_stats(pairs)
     print(f"       {stats['qa_pairs']} QA pairs, "
           f"{stats['unique_tags']} tags, "
@@ -108,7 +100,7 @@ def main():
           f"{stats['total_latex_fragments']} LaTeX fragments")
     print(f"       Avg question score: {stats['avg_q_score']:.1f}, "
           f"avg answer score: {stats['avg_a_score']:.1f}")
-    print(f"       Built in {time.time()-t1:.1f}s")
+    print(f"       Built in {time.time()-t0:.1f}s")
 
     # --- Stage 3: Embeddings ---
     embeddings = None

@@ -6,3 +6,6 @@ __pycache__/
 dist/
 build/
 .cpcache/
+data/se-physics.json
+data/physics-se/
+*.npy
