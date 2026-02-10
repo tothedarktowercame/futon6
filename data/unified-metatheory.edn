@@ -1,0 +1,233 @@
+;; Unified Metatheory for Mathematical Discourse
+;; ================================================
+;; 4 layers, 84 types — empirically derived from 4,963 physics.SE entities.
+;;
+;; The text decomposes into:
+;;   Layer 1: $MATH$ — LaTeX expressions (pass through)
+;;   Layer 2: 🍅 NER  — named math concepts (19K kernel lookup)
+;;   Layer 3: STRUCTURE — scope bindings (tree) + anaphora (graph edges)
+;;   Layer 4: INFORMAL  — reasoning annotations on scope nodes
+;;
+;; Key design principle: mathematical objects persist by REFERENCE,
+;; not by redefinition. The :hx/parent field gives the scope tree.
+;; The :hx/refs field gives the anaphoric graph. Together they
+;; capture identity across the text.
+;;
+;; Every type is empirically attested. The LLM classifies into this
+;; type system; it does not invent types.
+
+{:metatheory/version "2.0"
+ :metatheory/source  "physics.stackexchange (4963 entities sampled)"
+ :metatheory/date    "2026-02-10"
+ :metatheory/layers  4
+
+ ;; ============================================================
+ ;; LAYER 3a: SCOPE BINDINGS — 27 types, tree structure
+ ;; ============================================================
+ ;; Output: hyperedge with :hx/parent (tree) + :hx/refs (graph)
+ ;; See scope-metatheory.edn for full type definitions.
+
+ :scope-types
+ {:bind     ["bind/let" "bind/define" "bind/name" "bind/associate"]
+  :quant    ["quant/universal" "quant/existential" "quant/select" "quant/given"]
+  :assume   ["assume/explicit" "assume/conditional" "assume/consider" "assume/wlog"]
+  :constrain ["constrain/where" "constrain/such-that" "constrain/with" "constrain/here"]
+  :formula  ["formula/integral" "formula/limit" "formula/sum-index"
+             "formula/prod-index" "formula/set-builder" "formula/sup-inf"
+             "formula/quantifier-symbol"]
+  :proof    ["proof/claim" "proof/case" "proof/induction" "proof/method"]
+  :conclude ["conclude/therefore" "conclude/explicit" "conclude/qed"]}
+
+ :scope-stats
+ {:total-events 5322
+  :events-per-entity 1.07
+  :classical-coverage 0.24}
+
+ ;; ============================================================
+ ;; LAYER 3b: ANAPHORA — 11 types, graph edges across scopes
+ ;; ============================================================
+ ;; Output: :hx/refs field on scope hyperedges, pointing to the
+ ;; binding(s) being referenced.
+ ;;
+ ;; Anaphora turns the scope TREE into a scope GRAPH.
+ ;; "that root" resolves to a prior bind/* node.
+ ;; "similarly" creates a structural parallel to a prior scope.
+
+ :anaphora-types
+ {:demonstrative
+  [{:type "anaph/that-noun"
+    :pattern "that root / that function / that map"
+    :desc "Demonstrative reference to a prior binding"
+    :frequency 184}
+   {:type "anaph/this-noun"
+    :pattern "this equation / this operator / this means"
+    :desc "Proximal demonstrative to recent binding or result"
+    :frequency 472}
+   {:type "anaph/the-above"
+    :pattern "the above expression / the preceding argument"
+    :desc "Spatial/textual reference to prior content"
+    :frequency 309}
+   {:type "anaph/the-same"
+    :pattern "the same quantum state / the same space"
+    :desc "Identity assertion — two references share a referent"
+    :frequency 1857}
+   {:type "anaph/such"
+    :pattern "such a function / such elements"
+    :desc "Kind-reference to a prior type or condition"
+    :frequency 296}
+   {:type "anaph/latter-former"
+    :pattern "the former / the latter"
+    :desc "Positional reference in a previously introduced pair"
+    :frequency 132}]
+
+  :structural
+  [{:type "anaph/respectively"
+    :pattern "X and Y are A and B, respectively"
+    :desc "Parallel binding: maps a list to a prior list"
+    :frequency 124}
+   {:type "anaph/similarly"
+    :pattern "Similarly, ... / Analogously, ..."
+    :desc "Structural analogy — reuses prior argument shape"
+    :frequency 127}
+   {:type "anaph/likewise"
+    :pattern "Likewise / Correspondingly"
+    :desc "Parallel structure with prior scope"
+    :frequency 57}]
+
+  :persistence
+  [{:type "anaph/still"
+    :pattern "is still $X$ / still holds / still valid"
+    :desc "Identity persistence across a scope boundary"
+    :frequency 11}
+   {:type "anaph/remains"
+    :pattern "remains true / remains valid / remains a ..."
+    :desc "Asserts binding survives a scope transition"
+    :frequency 171}]}
+
+ :anaphora-stats
+ {:total-events 3932
+  :events-per-entity 0.79}
+
+ ;; ============================================================
+ ;; LAYER 4: INFORMAL REASONING — 46 types, annotations on nodes
+ ;; ============================================================
+ ;; These are NOT separate scope nodes. They annotate existing
+ ;; scope/anaphora nodes as :hx/labels or :hx/context.
+ ;;
+ ;; The LLM tags each scope with the informal reasoning move(s)
+ ;; it participates in. Connectives are context, not structure.
+
+ :informal-types
+ {;; STRATEGY — problem-solving moves (map to existing 25 patterns)
+  :strategy
+  ["strategy/example"          ;; 703  → work-examples-first
+   "strategy/analogy"          ;; 352  → transport-across-isomorphism
+   "strategy/contradiction"    ;; 288  → argue-by-contradiction
+   "strategy/inversion"        ;; 261  → dualise-the-problem
+   "strategy/generalize"       ;; 217  → find-the-right-abstraction
+   "strategy/simplify"         ;; 185  → try-a-simpler-case
+   "strategy/count"            ;; 141  (NEW)
+   "strategy/special-case"     ;; 90   → check-the-extreme-cases
+   "strategy/dimensions"       ;; 57   (NEW — physics-specific)
+   "strategy/symmetry"         ;; 41   → exploit-symmetry
+   "strategy/extreme-case"     ;; 18   → check-the-extreme-cases
+   ]
+
+  ;; CONNECTIVE — argument glue (annotates, does not create nodes)
+  :connective
+  ["connective/adversative"    ;; but, however, on the other hand (5,953)
+   "connective/causal"         ;; because, since, the reason is (3,707)
+   "connective/consequential"  ;; so, note that, in fact (5,697)
+   "connective/clarifying"     ;; that is, in other words, namely, more precisely (506)
+   "connective/intuitive"      ;; intuitively, roughly speaking (49)
+   ]
+
+  ;; EXPLAIN — pedagogical framing
+  :explain
+  ["explain/think-of"          ;; 880  "think of it as..."
+   "explain/meaning"           ;; 367  "this means that..."
+   "explain/register-shift"    ;; 426  physically/mathematically/informally
+   "explain/the-idea"          ;; 37   "the idea is..." / "the trick is..."
+   ]
+
+  ;; CORRECT — error correction and nuance
+  :correct
+  ["correct/actually"          ;; 731  "actually, ..."
+   "correct/wrong"             ;; 153  "this is not correct"
+   "correct/subtlety"          ;; 82   "there is a subtlety"
+   "correct/misconception"     ;; 27   "common misconception"
+   "correct/careful"           ;; 11   "one must be careful"
+   ]
+
+  ;; APPROX — approximation reasoning
+  :approx
+  ["approx/neglect"            ;; 291  → quotient-by-irrelevance
+   "approx/order-of-mag"       ;; 255  → estimate-by-bounding
+   "approx/perturbative"       ;; 95   "to first order"
+   "approx/regime"             ;; 35   "in the small/large/weak limit"
+   ]
+
+  ;; EPISTEMIC — knowledge claims and hedging
+  :epistemic
+  ["epistemic/can-show"        ;; 318  "one can show that"
+   "epistemic/turns-out"       ;; 148  "it turns out that"
+   "epistemic/not-obvious"     ;; 133  "not obvious" / "surprisingly"
+   "epistemic/known"           ;; 25   "it is well known"
+   "epistemic/open"            ;; 12   "open question" / "unsolved"
+   ]
+
+  ;; CONSTRUCT — existence and building
+  :construct
+  ["construct/exists"          ;; 1354 "there is a ..."
+   "construct/explicit"        ;; 562  "explicitly" / "concretely"
+   "construct/build"           ;; 344  "constructing" / "we obtain"
+   ]}
+
+ :informal-stats
+ {:total-events 24756
+  :events-per-entity 4.99
+  :strategy-events 2353
+  :connective-events 16117
+  :other-events 6286}
+
+ ;; ============================================================
+ ;; COMBINED STATISTICS
+ ;; ============================================================
+ :combined
+ {:total-types 84
+  :scope-types 27
+  :anaphora-types 11
+  :informal-types 46
+  :total-events-per-entity 6.9   ;; scope + anaphora (LLM extracts these)
+  :annotation-events-per-entity 5.0  ;; informal (LLM annotates with these)
+
+  ;; What the LLM must produce per entity:
+  ;; ~7 scope/anaphora hyperedges (structural)
+  ;; ~5 informal annotations (labels on those hyperedges)
+  ;; Total LLM work per entity: ~12 classification decisions
+  }
+
+ ;; ============================================================
+ ;; REPRESENTATION
+ ;; ============================================================
+ ;; Every entity produces a list of hyperedges:
+ ;;
+ ;; {:hx/id      "se-physics-849:scope-002"
+ ;;  :hx/type    "bind/let"               ;; one of 27+11 structural types
+ ;;  :hx/ends    [{:role "entity" :ident "se-physics-849"}
+ ;;               {:role "symbol" :latex "\\xi"}
+ ;;               {:role "type"   :text "that root"}]
+ ;;  :hx/parent  "se-physics-849:scope-001"     ;; tree edge (nesting)
+ ;;  :hx/refs    ["se-physics-849:scope-000"]   ;; graph edges (anaphora)
+ ;;  :hx/content {:match "Let $\\xi$ be that root" :position 142}
+ ;;  :hx/labels  ["bind" "let"]
+ ;;  :hx/context {:strategy nil
+ ;;               :connective "connective/consequential"
+ ;;               :epistemic nil
+ ;;               :explain nil}}
+ ;;
+ ;; The :hx/parent field gives the scope tree.
+ ;; The :hx/refs field gives the anaphoric graph.
+ ;; The :hx/context field gives the informal reasoning layer.
+ ;; Together: a typed hypergraph encoding mathematical discourse.
+ }
