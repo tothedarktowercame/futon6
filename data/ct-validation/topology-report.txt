@@ -1,0 +1,102 @@
+========================================================================
+LOCAL TOPOLOGY REPORT — PlanetMath CT Wiring Diagrams
+========================================================================
+
+Entries analyzed:     313
+Well-formed DAGs:     67/313 (21%)
+CAR identified:       313/313
+Conclude detected:    140/313
+Average arity:        0.6 parameters
+Average comp:wire:    1.50
+Average orphan rate:  49.9%
+
+--- Arity Distribution (# of let-bindings = parameters) ---
+  arity  0:  184  ##################################################
+  arity  1:   92  ##################################################
+  arity  2:   28  ############################
+  arity  3:    3  ###
+  arity  4:    2  ##
+  arity  5:    2  ##
+  arity  6:    2  ##
+
+--- Entry Type Breakdown ---
+  Definition                      181
+  Topic                           39
+  Theorem                         32
+  Example                         20
+  Proof                           9
+  Feature                         7
+  Corollary                       6
+  Derivation                      5
+  Result                          5
+  Bibliography                    3
+  Biography                       3
+  Unknown                         2
+  Axiom                           1
+
+--- Component:Wire Ratio Distribution ---
+  0 (no wires)                    96
+  <0.5 (wire-dense)               27
+  0.5-1.0                         34
+  1.0-2.0                         80
+  2.0-5.0 (comp-dense)            58
+  5.0+ (very comp-dense)          18
+
+--- Common Structural Problems ---
+   150  N/N components are orphans
+    96  no components detected
+
+--- Best-Wired Entries (most connected flow) ---
+  AbelianGroupsFormAnAbelianCategoryProofThat    comp=24  edges=26  orphans=5  arity=1  CAR=category  Ab of abelian groups
+  QuotientCategory                               comp= 8  edges=15  orphans=1  arity=2  CAR=quotient category
+  AFunctorIsAnEquivalenceIffItIsFullyFaithfulAndEssentiallySurjective  comp=16  edges=13  orphans=3  arity=0  CAR=a functor is an equivalence if
+  FunctorCategoryExamples                        comp= 3  edges= 5  orphans=0  arity=1  CAR=group-groupoid
+  ConstantFunctor                                comp= 4  edges= 3  orphans=0  arity=1  CAR=constant functor
+  ExamplesOfMonics                               comp=14  edges=15  orphans=6  arity=1  CAR=examples of monics
+  Precategory                                    comp= 7  edges= 5  orphans=1  arity=1  CAR=free category
+  TensorProductOfAlgebras                        comp= 3  edges= 2  orphans=0  arity=0  CAR=tensor product of algebras
+  Equalizer                                      comp= 4  edges= 4  orphans=1  arity=2  CAR=coequalizer
+  EffectiveEquivalenceRelation                   comp= 4  edges= 2  orphans=0  arity=0  CAR=effective equivalence relation
+
+--- Worst-Wired Entries (most orphans / disconnected) ---
+  AlternativeDefinitionOfCategory1               comp=98  edges=16  orphans=77  77/98 components are orphans
+  DirectLimitOfSets                              comp=27  edges= 4  orphans=20  20/27 components are orphans
+  ProofOfPropertiesOfUniverse                    comp=34  edges= 7  orphans=21  21/34 components are orphans
+  GrothendieckCategoryTheorems                   comp=19  edges= 1  orphans=17  17/19 components are orphans
+  GrothendieckCategoryTheorems1                  comp=19  edges= 1  orphans=17  17/19 components are orphans
+  GrothendieckCategoryTheorems12                 comp=19  edges= 1  orphans=17  17/19 components are orphans
+  GrothendieckCategoryTheorems123                comp=19  edges= 1  orphans=17  17/19 components are orphans
+  CategoricalDirectProduct                       comp=13  edges= 0  orphans=13  13/13 components are orphans
+  CategoricalDirectSum                           comp=13  edges= 0  orphans=13  13/13 components are orphans
+  PropertiesOfDirectProduct                      comp=30  edges= 9  orphans=17  17/30 components are orphans
+
+--- CAR Examples (defined term as lambda) ---
+  (relation                  A,B : objects in A,B : objects in C : the diagonal relation on C : an arbitrary set and)
+    → define a \emph{corelation}
+
+  (direct family             \mathcal{A}=\lbrace A_i\mid i\in I\rbrace : a family of sets indexed by a  \mathcal{A} : a direct family of sets \mathcal{A} : a direct family of sets indexe J : a subset of a directed set)
+    → is called the \emph{direct limit}
+
+  (limit                     G : a functor from categories \mathcal{I} : a \PMlinkname{ G : the empty functor (from the em L\in \mathcal{C} : the inverse limit of)
+    → \end{proof}
+
+  (kernel                    \mathcal{C} : a category with zero object \sigma:S\to G : another group homomorphism wit \phi: G\to H : as above q: H\to T : a group homomorphism with)
+    → define a \emph{zero morphism}
+
+  (properties of pullback    I : the disjoint union of non-empt I' = \lbrace x_i:C_i\to C \mid i\in I\rbrace : a set of morphisms in \lbrace x_i: C_i\to C\mid i\in I\rbrace : a collection of morphisms inde \alpha,\beta:J\to I : two surjections)
+    → \end{proof}
+
+  (inverse image             f:A\to B : a morphism in a category \im(f) : the image of j:f^{-1}(B)\to A : the canonical inclusion)
+    → denoted by $f^{-1}(B)$
+
+  (category of functors      \mathcal{C},\mathcal{D} : categories [S] : the equivalence class containi)
+    → define the \emph{functor category}
+
+  (Grothendieck category the {\bf G} : a Grothendieck category with a {\bf G} : a Grothendieck category with a)
+    → is denoted by ${\bf fg}_U {\bf G}$
+
+  (Grothendieck category the {\bf G} : a Grothendieck category with a {\bf G} : a Grothendieck category with a)
+    → is denoted by ${\bf fg}_U {\bf G}$
+
+  (Grothendieck category the {\bf G} : a Grothendieck category with a {\bf G} : a Grothendieck category with a)
+    → is denoted by ${\bf fg}_U {\bf G}$
