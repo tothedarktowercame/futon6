@@ -1,0 +1,58 @@
+{
+  "title": "O-0: Classical Baseline \u2014 Chapter 6 at SE Scale",
+  "method": "Corneli (2014) learning-event detection with NER kernel",
+  "generated": "2026-02-09T23:17:59.612891",
+  "corneli_2014_baseline": {
+    "source": "PlanetMath",
+    "users": 445,
+    "time_span_years": 9,
+    "forum_posts": 8051,
+    "corrections": 14064,
+    "learning_event_edits": 3867,
+    "note": "Values from Corneli (2014) Chapter 6 and f6/learning-event-detection flexiarg"
+  },
+  "physics_se_results": {
+    "source": "physics.stackexchange",
+    "users_total": 94117,
+    "users_with_learning_events": 91738,
+    "total_text_entries": 1004339,
+    "total_learning_events": 2228868,
+    "total_treatment_events": 1130261,
+    "avg_final_vocabulary": 23.681885312961526,
+    "max_final_vocabulary": 3524,
+    "median_final_vocabulary": 8
+  },
+  "ou_model": {
+    "n_users_fit": 12445,
+    "n_converged": 12249,
+    "theta": {
+      "mean": 0.4639535457515927,
+      "median": 0.2632048947933048,
+      "std": 0.5438838685005648
+    },
+    "alpha": {
+      "mean": -38.40514018346151,
+      "median": 0.146247674030412,
+      "std": 742.4492539471671,
+      "positive_fraction": 0.7296102852551225
+    },
+    "mu": {
+      "mean": 178.10685399190177,
+      "median": 0.18242377198586138
+    },
+    "sigma": {
+      "mean": 2.107209378089462,
+      "median": 1.6277386046561182
+    }
+  },
+  "comparison": {
+    "scale_factor_users": 206.15280898876404,
+    "scale_factor_events": 576.3816912335144,
+    "note": "Physics.SE should have more users and events than PlanetMath. If O-U parameters are in the same order of magnitude, the model generalises across platforms."
+  },
+  "verification": {
+    "V13_ner_trajectories": true,
+    "V14_learning_events_detectable": true,
+    "V15_ou_parameters_plausible": true
+  }
+}
