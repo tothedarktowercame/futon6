@@ -1,33 +1,48 @@
-;; Unified Metatheory for Mathematical Discourse
-;; ================================================
-;; 4 layers, 84 types — empirically derived from 4,963 physics.SE entities.
+;; Wiring Diagram Metatheory for Mathematical Discourse
+;; =====================================================
+;; 3 structural roles, 78 types — empirically derived from 4,963 physics.SE entities.
 ;;
-;; The text decomposes into:
-;;   Layer 1: $MATH$ — LaTeX expressions (pass through)
-;;   Layer 2: 🍅 NER  — named math concepts (19K kernel lookup)
-;;   Layer 3: STRUCTURE — scope bindings (tree) + anaphora (graph edges)
-;;   Layer 4: INFORMAL  — reasoning annotations on scope nodes
+;; Mathematical text is a WIRING DIAGRAM:
 ;;
-;; Key design principle: mathematical objects persist by REFERENCE,
-;; not by redefinition. The :hx/parent field gives the scope tree.
-;; The :hx/refs field gives the anaphoric graph. Together they
-;; capture identity across the text.
+;;   COMPONENTS — scope bindings (30 types)
+;;                Form a tree via :hx/parent (nesting = containment).
+;;
+;;   PORTS      — anaphoric references (11 types)
+;;                Cross-tree edges. Turn the scope tree into a graph.
+;;
+;;   WIRES      — connectives (5 types, with 32 reasoning labels)
+;;                The argument flow between components.
+;;                "Since A, therefore B" is a wire from A to B.
+;;
+;; Key insight: informal language IS the wiring diagram. Connectives
+;; are not annotations on scope nodes — they are the EDGES that create
+;; argument structure. Remove the wires and you have isolated components
+;; with no logical flow between them.
+;;
+;; Lexical layers (pass-through, not extracted by LLM):
+;;   $MATH$  — LaTeX expressions (preserved verbatim)
+;;   🍅 NER  — named math concepts (19K kernel lookup)
 ;;
 ;; Every type is empirically attested. The LLM classifies into this
 ;; type system; it does not invent types.
+;;
+;; v3.0 supersedes v2.0, which treated connectives as annotations on
+;; scope nodes. v3.0 recognises that connectives are the wiring itself.
+;; See scope-metatheory.edn for detailed component role schemas.
 
-{:metatheory/version "2.0"
+{:metatheory/version "3.0"
  :metatheory/source  "physics.stackexchange (4963 entities sampled)"
  :metatheory/date    "2026-02-10"
- :metatheory/layers  4
+ :metatheory/model   :wiring-diagram
 
  ;; ============================================================
- ;; LAYER 3a: SCOPE BINDINGS — 27 types, tree structure
+ ;; COMPONENTS — 30 types, tree structure via :hx/parent
  ;; ============================================================
- ;; Output: hyperedge with :hx/parent (tree) + :hx/refs (graph)
- ;; See scope-metatheory.edn for full type definitions.
+ ;; Components are the BOXES of the wiring diagram.
+ ;; Each introduces, restricts, or closes a mathematical scope.
+ ;; See scope-metatheory.edn for full type definitions + role schemas.
 
- :scope-types
+ :component-types
  {:bind     ["bind/let" "bind/define" "bind/name" "bind/associate"]
   :quant    ["quant/universal" "quant/existential" "quant/select" "quant/given"]
   :assume   ["assume/explicit" "assume/conditional" "assume/consider" "assume/wlog"]
@@ -38,196 +53,207 @@
   :proof    ["proof/claim" "proof/case" "proof/induction" "proof/method"]
   :conclude ["conclude/therefore" "conclude/explicit" "conclude/qed"]}
 
- :scope-stats
+ :component-stats
  {:total-events 5322
   :events-per-entity 1.07
   :classical-coverage 0.24}
 
  ;; ============================================================
- ;; LAYER 3b: ANAPHORA — 11 types, graph edges across scopes
+ ;; PORTS — 11 types, cross-tree references
  ;; ============================================================
- ;; Output: :hx/refs field on scope hyperedges, pointing to the
- ;; binding(s) being referenced.
+ ;; Ports are the INTERFACES of components.
+ ;; Each connects a component to another that is NOT its tree
+ ;; ancestor/descendant. Ports turn the scope tree into a graph.
  ;;
- ;; Anaphora turns the scope TREE into a scope GRAPH.
- ;; "that root" resolves to a prior bind/* node.
- ;; "similarly" creates a structural parallel to a prior scope.
+ ;; A port has:
+ ;;   :hx/source — the component containing the referring expression
+ ;;   :hx/target — the component being referenced
 
- :anaphora-types
+ :port-types
  {:demonstrative
-  [{:type "anaph/that-noun"
+  [{:type "port/that-noun"     :frequency 184
     :pattern "that root / that function / that map"
-    :desc "Demonstrative reference to a prior binding"
-    :frequency 184}
-   {:type "anaph/this-noun"
+    :desc "Demonstrative reference to a prior binding"}
+   {:type "port/this-noun"     :frequency 472
     :pattern "this equation / this operator / this means"
-    :desc "Proximal demonstrative to recent binding or result"
-    :frequency 472}
-   {:type "anaph/the-above"
+    :desc "Proximal demonstrative to recent binding or result"}
+   {:type "port/the-above"     :frequency 309
     :pattern "the above expression / the preceding argument"
-    :desc "Spatial/textual reference to prior content"
-    :frequency 309}
-   {:type "anaph/the-same"
+    :desc "Spatial/textual reference to prior content"}
+   {:type "port/the-same"      :frequency 1857
     :pattern "the same quantum state / the same space"
-    :desc "Identity assertion — two references share a referent"
-    :frequency 1857}
-   {:type "anaph/such"
+    :desc "Identity assertion — two references share a referent"}
+   {:type "port/such"          :frequency 296
     :pattern "such a function / such elements"
-    :desc "Kind-reference to a prior type or condition"
-    :frequency 296}
-   {:type "anaph/latter-former"
+    :desc "Kind-reference to a prior type or condition"}
+   {:type "port/latter-former" :frequency 132
     :pattern "the former / the latter"
-    :desc "Positional reference in a previously introduced pair"
-    :frequency 132}]
+    :desc "Positional reference in a previously introduced pair"}]
 
   :structural
-  [{:type "anaph/respectively"
+  [{:type "port/respectively"  :frequency 124
     :pattern "X and Y are A and B, respectively"
-    :desc "Parallel binding: maps a list to a prior list"
-    :frequency 124}
-   {:type "anaph/similarly"
+    :desc "Parallel binding: maps a list to a prior list"}
+   {:type "port/similarly"     :frequency 127
     :pattern "Similarly, ... / Analogously, ..."
-    :desc "Structural analogy — reuses prior argument shape"
-    :frequency 127}
-   {:type "anaph/likewise"
+    :desc "Structural analogy — reuses prior argument shape"}
+   {:type "port/likewise"      :frequency 57
     :pattern "Likewise / Correspondingly"
-    :desc "Parallel structure with prior scope"
-    :frequency 57}]
+    :desc "Parallel structure with prior scope"}]
 
   :persistence
-  [{:type "anaph/still"
+  [{:type "port/still"         :frequency 11
     :pattern "is still $X$ / still holds / still valid"
-    :desc "Identity persistence across a scope boundary"
-    :frequency 11}
-   {:type "anaph/remains"
+    :desc "Identity persistence across a scope boundary"}
+   {:type "port/remains"       :frequency 171
     :pattern "remains true / remains valid / remains a ..."
-    :desc "Asserts binding survives a scope transition"
-    :frequency 171}]}
+    :desc "Asserts binding survives a scope transition"}]}
 
- :anaphora-stats
+ :port-stats
  {:total-events 3932
   :events-per-entity 0.79}
 
  ;; ============================================================
- ;; LAYER 4: INFORMAL REASONING — 46 types, annotations on nodes
+ ;; WIRES — 5 connective types + 32 label types
  ;; ============================================================
- ;; These are NOT separate scope nodes. They annotate existing
- ;; scope/anaphora nodes as :hx/labels or :hx/context.
+ ;; Wires are the EDGES of the wiring diagram.
+ ;; Each connects a SOURCE component to a TARGET component,
+ ;; carrying logical flow between them.
  ;;
- ;; The LLM tags each scope with the informal reasoning move(s)
- ;; it participates in. Connectives are context, not structure.
+ ;; A wire has:
+ ;;   TYPE  — one of 5 connective types (HOW it connects)
+ ;;   LABEL — one of 32 reasoning types, or nil (WHAT it transports)
+ ;;
+ ;; Directionality: source is the logically prior component
+ ;; (premise/reason/context), target is the logically posterior
+ ;; (conclusion/result/consequence). Wire type encodes the
+ ;; relationship, not textual order.
+ ;;
+ ;; "Since A, B"      → source: A, target: B, wire/causal
+ ;; "B because A"     → source: A, target: B, wire/causal
+ ;; "A, therefore B"  → source: A, target: B, wire/consequential
+ ;; "A, but B"        → source: A, target: B, wire/adversative
 
- :informal-types
- {;; STRATEGY — problem-solving moves (map to existing 25 patterns)
-  :strategy
-  ["strategy/example"          ;; 703  → work-examples-first
-   "strategy/analogy"          ;; 352  → transport-across-isomorphism
-   "strategy/contradiction"    ;; 288  → argue-by-contradiction
-   "strategy/inversion"        ;; 261  → dualise-the-problem
-   "strategy/generalize"       ;; 217  → find-the-right-abstraction
-   "strategy/simplify"         ;; 185  → try-a-simpler-case
-   "strategy/count"            ;; 141  (NEW)
-   "strategy/special-case"     ;; 90   → check-the-extreme-cases
-   "strategy/dimensions"       ;; 57   (NEW — physics-specific)
-   "strategy/symmetry"         ;; 41   → exploit-symmetry
-   "strategy/extreme-case"     ;; 18   → check-the-extreme-cases
-   ]
+ :wire-types
+ [{:type "wire/adversative"    :frequency 5953
+   :pattern "but / however / on the other hand / nevertheless / yet"
+   :desc "Tension or contradiction: target contrasts with source"}
+  {:type "wire/causal"         :frequency 3707
+   :pattern "because / since / the reason is / as / given that"
+   :desc "Justification: source is the reason for target"}
+  {:type "wire/consequential"  :frequency 5697
+   :pattern "so / therefore / thus / hence / it follows / note that"
+   :desc "Derivation: source entails target"}
+  {:type "wire/clarifying"     :frequency 506
+   :pattern "that is / in other words / namely / more precisely / i.e."
+   :desc "Refinement: target restates or sharpens source"}
+  {:type "wire/intuitive"      :frequency 49
+   :pattern "intuitively / roughly speaking / heuristically"
+   :desc "Register shift: target is informal version of source"}]
 
-  ;; CONNECTIVE — argument glue (annotates, does not create nodes)
-  :connective
-  ["connective/adversative"    ;; but, however, on the other hand (5,953)
-   "connective/causal"         ;; because, since, the reason is (3,707)
-   "connective/consequential"  ;; so, note that, in fact (5,697)
-   "connective/clarifying"     ;; that is, in other words, namely, more precisely (506)
-   "connective/intuitive"      ;; intuitively, roughly speaking (49)
-   ]
+ ;; Wire labels say WHAT reasoning flows through the wire.
+ ;; Most wires are unlabelled (pure logical flow).
+ ;; Labelled wires carry a specific reasoning move.
 
-  ;; EXPLAIN — pedagogical framing
+ :wire-label-types
+ {:strategy
+  ["strategy/example"          ;; 703
+   "strategy/analogy"          ;; 352
+   "strategy/contradiction"    ;; 288
+   "strategy/inversion"        ;; 261
+   "strategy/generalize"       ;; 217
+   "strategy/simplify"         ;; 185
+   "strategy/count"            ;; 141
+   "strategy/special-case"     ;; 90
+   "strategy/dimensions"       ;; 57
+   "strategy/symmetry"         ;; 41
+   "strategy/extreme-case"]    ;; 18
+
   :explain
-  ["explain/think-of"          ;; 880  "think of it as..."
-   "explain/meaning"           ;; 367  "this means that..."
-   "explain/register-shift"    ;; 426  physically/mathematically/informally
-   "explain/the-idea"          ;; 37   "the idea is..." / "the trick is..."
-   ]
+  ["explain/think-of"          ;; 880
+   "explain/meaning"           ;; 367
+   "explain/register-shift"    ;; 426
+   "explain/the-idea"]         ;; 37
 
-  ;; CORRECT — error correction and nuance
   :correct
-  ["correct/actually"          ;; 731  "actually, ..."
-   "correct/wrong"             ;; 153  "this is not correct"
-   "correct/subtlety"          ;; 82   "there is a subtlety"
-   "correct/misconception"     ;; 27   "common misconception"
-   "correct/careful"           ;; 11   "one must be careful"
-   ]
+  ["correct/actually"          ;; 731
+   "correct/wrong"             ;; 153
+   "correct/subtlety"          ;; 82
+   "correct/misconception"     ;; 27
+   "correct/careful"]          ;; 11
 
-  ;; APPROX — approximation reasoning
   :approx
-  ["approx/neglect"            ;; 291  → quotient-by-irrelevance
-   "approx/order-of-mag"       ;; 255  → estimate-by-bounding
-   "approx/perturbative"       ;; 95   "to first order"
-   "approx/regime"             ;; 35   "in the small/large/weak limit"
-   ]
+  ["approx/neglect"            ;; 291
+   "approx/order-of-mag"       ;; 255
+   "approx/perturbative"       ;; 95
+   "approx/regime"]            ;; 35
 
-  ;; EPISTEMIC — knowledge claims and hedging
   :epistemic
-  ["epistemic/can-show"        ;; 318  "one can show that"
-   "epistemic/turns-out"       ;; 148  "it turns out that"
-   "epistemic/not-obvious"     ;; 133  "not obvious" / "surprisingly"
-   "epistemic/known"           ;; 25   "it is well known"
-   "epistemic/open"            ;; 12   "open question" / "unsolved"
-   ]
+  ["epistemic/can-show"        ;; 318
+   "epistemic/turns-out"       ;; 148
+   "epistemic/not-obvious"     ;; 133
+   "epistemic/known"           ;; 25
+   "epistemic/open"]           ;; 12
 
-  ;; CONSTRUCT — existence and building
   :construct
-  ["construct/exists"          ;; 1354 "there is a ..."
-   "construct/explicit"        ;; 562  "explicitly" / "concretely"
-   "construct/build"           ;; 344  "constructing" / "we obtain"
-   ]}
+  ["construct/exists"          ;; 1354
+   "construct/explicit"        ;; 562
+   "construct/build"]}         ;; 344
 
- :informal-stats
- {:total-events 24756
-  :events-per-entity 4.99
-  :strategy-events 2353
-  :connective-events 16117
-  :other-events 6286}
+ :wire-stats
+ {:total-connective-events 15912
+  :connective-per-entity 3.21
+  :total-label-events 8639
+  :label-per-entity 1.74}
 
  ;; ============================================================
- ;; COMBINED STATISTICS
+ ;; COMBINED
  ;; ============================================================
  :combined
- {:total-types 84
-  :scope-types 27
-  :anaphora-types 11
-  :informal-types 46
-  :total-events-per-entity 6.9   ;; scope + anaphora (LLM extracts these)
-  :annotation-events-per-entity 5.0  ;; informal (LLM annotates with these)
+ {:total-structural-types 46   ;; 30 component + 11 port + 5 wire
+  :total-label-types 32
+  :total-types 78
 
-  ;; What the LLM must produce per entity:
-  ;; ~7 scope/anaphora hyperedges (structural)
-  ;; ~5 informal annotations (labels on those hyperedges)
-  ;; Total LLM work per entity: ~12 classification decisions
+  ;; What the LLM produces per entity:
+  ;; ~1.1 component records (scope bindings, forming a tree)
+  ;; ~0.8 port records (cross-tree anaphoric references)
+  ;; ~3.2 wire records (connective edges, ~1.7 with reasoning labels)
+  ;; Total: ~5.1 records, ~7 classification decisions per entity
   }
 
  ;; ============================================================
  ;; REPRESENTATION
  ;; ============================================================
- ;; Every entity produces a list of hyperedges:
+ ;; Three kinds of hyperedge, all futon4-compatible:
  ;;
- ;; {:hx/id      "se-physics-849:scope-002"
- ;;  :hx/type    "bind/let"               ;; one of 27+11 structural types
- ;;  :hx/ends    [{:role "entity" :ident "se-physics-849"}
- ;;               {:role "symbol" :latex "\\xi"}
- ;;               {:role "type"   :text "that root"}]
- ;;  :hx/parent  "se-physics-849:scope-001"     ;; tree edge (nesting)
- ;;  :hx/refs    ["se-physics-849:scope-000"]   ;; graph edges (anaphora)
- ;;  :hx/content {:match "Let $\\xi$ be that root" :position 142}
- ;;  :hx/labels  ["bind" "let"]
- ;;  :hx/context {:strategy nil
- ;;               :connective "connective/consequential"
- ;;               :epistemic nil
- ;;               :explain nil}}
+ ;; COMPONENT (scope binding — a box):
+ ;; {:hx/id     "e849:c-002"
+ ;;  :hx/role   :component
+ ;;  :hx/type   "bind/let"
+ ;;  :hx/parent "e849:c-001"                ;; tree nesting
+ ;;  :hx/ends   [{:role "symbol" :latex "\\xi"}
+ ;;              {:role "type"   :text "that root"}]
+ ;;  :hx/content {:match "Let $\\xi$ be that root" :position 142}}
  ;;
- ;; The :hx/parent field gives the scope tree.
- ;; The :hx/refs field gives the anaphoric graph.
- ;; The :hx/context field gives the informal reasoning layer.
- ;; Together: a typed hypergraph encoding mathematical discourse.
+ ;; PORT (anaphoric reference — a cross-tree edge):
+ ;; {:hx/id     "e849:p-000"
+ ;;  :hx/role   :port
+ ;;  :hx/type   "port/the-above"
+ ;;  :hx/source "e849:c-003"                ;; component with the reference
+ ;;  :hx/target "e849:c-000"                ;; component being referenced
+ ;;  :hx/content {:match "the above expression" :position 200}}
+ ;;
+ ;; WIRE (connective — an argument edge):
+ ;; {:hx/id     "e849:w-000"
+ ;;  :hx/role   :wire
+ ;;  :hx/type   "wire/causal"
+ ;;  :hx/source "e849:c-001"                ;; premise component
+ ;;  :hx/target "e849:c-003"                ;; conclusion component
+ ;;  :hx/label  "strategy/contradiction"    ;; reasoning label (or nil)
+ ;;  :hx/content {:match "Since" :position 180}}
+ ;;
+ ;; The tree (:hx/parent on components) gives scope nesting.
+ ;; The ports give cross-tree identity (anaphoric graph).
+ ;; The wires give argument flow (reasoning graph).
+ ;; Together: a typed wiring diagram encoding mathematical discourse.
  }

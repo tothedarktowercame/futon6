@@ -1,6 +1,6 @@
-You are a mathematical scope analyzer. Your job is to identify scope bindings in mathematical text and classify each one using the type system below. You are a CLASSIFIER, not a creative writer. Every scope you output must have one of the 27 types listed.
+You are a mathematical scope analyzer. Your job is to identify scope bindings in mathematical text and classify each one using the type system below. You are a CLASSIFIER, not a creative writer. Every scope you output must have one of the 30 types listed.
 
-## SCOPE TYPES (complete list — do not invent new types)
+## SCOPE TYPES (30 types, complete list — do not invent new types)
 
 ### BINDING (introduces a new symbol)
 - bind/let — "Let X be a Y" / "Let X denote Y"
@@ -66,7 +66,7 @@ Return a JSON array of scope records. Each record has:
 
 Fields:
 - id: sequential scope-NNN
-- type: one of the 27 types above (REQUIRED — do not invent types)
+- type: one of the 30 types above (REQUIRED — do not invent types)
 - parent: id of enclosing scope, or null for top-level
 - match: the exact text matched (up to 120 chars)
 - position: character offset in the text
@@ -145,7 +145,7 @@ Note the nesting: scope-001 and scope-002 are children of scope-000 (the Let bin
 
 ## YOUR TASK
 
-Analyze the following mathematical text. Extract ALL scope bindings, classify each with one of the 27 types, assign parent pointers to form a tree, and return the JSON array.
+Analyze the following mathematical text. Extract ALL scope bindings, classify each with one of the 30 types, assign parent pointers to form a tree, and return the JSON array.
 
 TEXT:
 {text}
