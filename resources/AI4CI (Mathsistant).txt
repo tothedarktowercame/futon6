@@ -1,0 +1,318 @@
+﻿AI For Collective Intelligence Rapid Response Fund – Proposal Form
+Project details
+Project title
+	AI-Augmented Exploration of Mathematical Knowledge Structures
+	Expected start date
+	1 February 2026
+	Expected end date
+	31 August 2026
+	
+
+Collaborating organisations
+Lead organisation (must be eligible to receive funding from EPSRC)
+	Oxford Brookes University
+	
+
+Non-academic project partner(s)
+	
+
+Name of project partner
+	Hyperreal Enterprises Ltd
+	Project partner website
+	https://hyperreal.enterprises
+	Brief description of project partner
+	Hyperreal offers research and software consulting with a futures orientation.
+	
+
+Name of project partner
+	Topos Institute
+	Project partner website
+	https://topos.institute
+	Brief description of project partner
+	The Topos Institute is a nonprofit research lab developing tools and frameworks grounded in category theory to support collaboration, knowledge representation, and complex systems design.
+	
+
+Other organisations and nature of involvement (if any)
+	
+
+	
+
+Project Team
+Please append or attach by email a 2-page CV for each academic named as a team member on this proposal. 
+Academic project lead (must be eligible to receive funding from EPSRC)  
+	Name
+	Eleni Elia
+	Position
+	Senior Lecturer in Statistics and Mathematics 
+	Organisation
+	Oxford Brookes University
+	Email address
+	eelia@brookes.ac.uk
+	
+
+Non-Academic project partner lead
+	Name
+	Joseph Corneli
+	Position
+	Director
+	Organisation
+	Hyperreal Enterprises
+	Email address
+	joseph.corneli@hyperreal.enterprises
+	
+
+
+
+Non-Academic project partner lead
+	Name
+	Valeria de Paiva
+	Position
+	Principal Research Scientist
+	Organisation
+	Topos Institute
+	Email address
+	valeria.depaiva@gmail.com
+	
+
+Other Academic and Non-Academic team members (copy & paste the table if you need to add more):
+Name
+	[RESEARCH FELLOW]
+	Position
+	Contract Researcher
+	Organisation
+	Hyperreal Enterprises
+	Email address
+	[TBD]
+	Role in project team
+	Core contributor on data extraction, representation learning, and system development.
+	
+
+Summary
+Explain your project to a lay audience (this will be published on publicly available materials if the project is funded). (Max 100 words)
+	Mathematics is typically written in formats designed for humans, not machines.[a]  Specialist machine languages for automatic theorem proving are not widely used by human mathematicians.  Meanwhile, contemporary LLM-based AI systems have only superficial mathematical knowledge, and are performant problem solvers only in limited domains. For reliable and widespread machine assistance in mathematics, we need a new approach to representation, suitable for both people and machines.  In this project, we will turn open-access mathematical texts into structured data that AI can learn from.  We will evaluate the effect this has on mathematical communication and comprehension.
+	
+
+Project plan
+Describe the proposed plan of work. (Max 1000[b] words)
+	Mathematics has long been seen as a key testing ground for artificial intelligence.  While large language models (LLMs) have been successful in solving benchmark problems, these systems remain disconnected from the reasoning processes and workflows of most mathematicians.  They provide little support for exploratory thought, informal dialogue, or meaningful engagement with complex concepts where facts matter.
+
+
+This state of affairs stands in noticeable contrast with the state-of-the-art[c] both in less symbolically rigorous qualitative domains, and in the more structured domain of computer programming coding.  In these otherwise distal domains, computational assistance is widely used.  This is possible because it is straightforward to construct statistically reliable, machine-readable, structured representations of knowledge in these domains.  To do the same thing for mathematics requires a somewhat different approach.
+
+
+We will use LLM-based Natural Language Processing (NLP) techniques to understand and model mathematical discourse using large naturalistic data as input, and graphical structures as output.  We will use the resulting knowledge base to prototype a basic mathematical assistant.  All outputs — corpora, processing pipelines, and the recommender prototype — will be openly released, laying the groundwork for future work in mathematical AI.
+
+
+Importance
+
+
+(A) For artificial intelligence : Mathematics is a proving ground for developing AI support in symbolically rich domains in which facts matter.
+
+
+(B) For mathematics : Formal theorem proving representations are an important part of computer mathematics, however robust computational support also needs to be able to take account of informal mathematical reasoning, and to date less attention has been given to that domain.
+
+
+(C) For collective intelligence : Collective intelligence requires shared representations of knowledge that support exploration, disagreement, and refinement.
+
+
+Most work in computer mathematics has focused on one of these domains at a time, with some limited pairwise cross-over.  We believe all these dimensions need to be progressed simultaneously.  This is how we build the preconditions for genuine collective intelligence that enables people to build shared understanding at depth.
+
+
+Feasibility
+
+
+It’s worth noting that the key individual components of the proposed toolchain have all been developed at a prototype level.  For example:
+
+
+Deyan Ginev’s NNexus Glasses demonstrated a user interface that marked up mathematical texts by adding links to the definitions of mathematical keywords.  In this case, the keywords had been harvested from existing structured sources, such as PlanetMath.  Valeria de Paiva and colleagues have used LLMs to uncover math concepts in text (https://arxiv.org/abs/2309.00642), and de Paiva and others developed Knowledge Graphs of mathematical concepts (e.g., https://arxiv.org/abs/2311.12649).  Knowledge Graphs, have, in turn, been applied widely in recommender and question answering contexts.
+
+
+The following work plan may nevertheless read as highly ambitious, so please read the steps in the spirit of a further feasibility study, to show that the ideas above can be scaled up.  
+
+
+Work Plan
+
+
+This project will build a system that can extract and represent mathematical knowledge from research papers. The main goal is to create a tool that transforms raw mathematical text into structured graphs and makes those graphs useful for users, especially mathematicians.
+
+
+Corpus Preparation (Month 1). We begin by collecting documents[d] from open-access mathematical sources including[e] arXiv, Stack Exchange, Wikipedia.  These documents are written in or can be transformed into LaTeX. We will clean, preprocess, and further transform the text into structured formats, using LaTeXML.  This includes splitting the text into sections and large-scale environments (e.g., abstract, definitions, theorems).
+
+
+Entity and Relation Extraction (Month 2). A key function for the system we are building is to identify important terms in the text (e.g., mathematical objects, theorems, definitions, symbols).  These are collectively referred to as named entities.  We will use models like ByT5 or CANINE, which are particularly good for working with text that includes unique symbols. In addition to identifying named entities, we will extract relationships between them, including both structural and semantic relationships (for example: “Definition A introduces Term B”, “Theorem C builds on Lemma D”, or “x is an element of set 𝔛”).  We will use methods similar to IMoJIE, which can extract such triples from text.  We will draw on Wikipedia + Wikidata to bootstrap and ground-truth the extractions.
+
+
+Graph Construction and Recommender Prototype (Month 3). From the extracted entities and relations, we will build a graph that represents the structure of each input document. Each node is a concept or object; each edge is a relation (e.g. introduces, builds_on, contains).  We will use a library like rdflib for this. The individual document graphs will also be merged into a single global knowledge base, requiring alignment of similar concepts across documents.  We will build a simple user interface — for example, using Streamlit — that lets users click on terms and see related concepts, dependencies, and suggested reading paths.
+
+
+Evaluation with LLMs and Authors (Months 4-5). We will run two primary evaluations.  First, we will use Large Language Models to simulate a user reading the paper.  This will be broken down into two tasks: question generation and question answering.  Both tasks will be performed by two different agents, one with, and one without access to the associated structured graph of contents. Generated questions will be distributed to both agents.  We hypothesise that the agent with access to the contents graph will be able to answer more of both its own questions and the questions from the unenhanced LLM agent.  Second, we will contact a small number of authors (N=20 over the course of the project) and invite them to ask questions which will be addressed in parallel to the two versions of the assistant, rating each answer (indicating which is clearer, more coherent, and most useful for other potential readers).  This will give us feedback on the quality of the graphs and the system overall.
+
+
+System Refinement, Collective Intelligence feedback loop, and Documentation (Months 4–5). Based on the evaluation results, we will refine the entity and relation extraction models. We will also iterate on the user interface layer, so that it is able to incorporate user feedback on content that improves the structure of the underlying graph. All code, outputs, and system behavior will be clearly documented, with worked examples to support reuse and inspection.
+
+
+Public Release and Summer School (Month 6). We will publish the code and datasets online under an open license.  We will convene a summer school style week with invited mathematicians, AI researchers, educators, and ethicists to explore the system’s uses, limits, and directions for further development.  This follow-on to related events such as Big Proof at the Newton Institute will enable inclusive deliberation about long-term goals, constraints, and possible extensions.
+
+
+	
+
+Alignment with the 4Cs 
+Collective – how does this project match the AI4CI remit (Max 250 words)
+	This project contributes to collective intelligence by building tools that help structure and interrogate mathematical knowledge in a way that is useful to both humans and machines. Rather than focusing only on formal proof or retrieval, we aim to support shared exploratory understanding. Our prototype will turn mathematical texts into structured representations that can be visualised, queried, and tested via dialogue.
+Beyond the technical pipeline, we pilot mechanisms for collaborative epistemic refinement. These include a self-play question-answering system (in which models with and without access to structured graphs engage in dialogue about mathematical texts), and a lightweight annotation interface (e.g. using NNexus Glasses) to let human authors review and revise graph-based interpretations of their own papers. These human–machine–human loops provide a novel approach to grounding, sense-making, and evaluation.
+By enabling mutual intelligibility between authors, readers, and AI systems, we take a step toward practical infrastructures for collective reasoning in complex domains. Our approach is modular, open, and grounded in ongoing research partnerships. Even as a pilot, this project sets a precedent for usable, inspectable collective intelligence tools in the symbolic sciences.
+	Concrete – set out the project’s explicit deliverables and how they lead to credible post-project ambitions. (Max 250 words)
+	Deliverables include: (1) annotated datasets from arXiv and Math.SE; (2) relation-extraction pipeline; (3) working prototype of a recommender; (4) evaluation report; (5) dissemination materials. These will support follow-on proposals[f] in mathematical reasoning and epistemic AI.
+
+
+While our evaluation does not directly address a known mathematics benchmark, it does create the basis of a “self-play” learning strategy, in which the AI system will ask and answer questions about mathematical content.  While it is out of scope for this proof-of-concept phase, this sets the stage for challenging the system with a human-level "benchmark[g]", such as the PhD comprehensive exam questions in the Berkeley Problems in Mathematics book and similar sources.
+	Collaborative – how will the project partners work together to deliver the project? What expertise is each partner contributing? (Max 250 words)
+	Led by a world expert on text mining from the University of Manchester,  the project draws on expertise from Hyperreal Enterprises and Topos who have worked extensively with the mathematics domain. Each brings strengths in open research, epistemic modelling, and formal reasoning. The PhD student will play a pivotal hands-on role in technical development.
+	Committed – what resources will the project partners commit (either in cash or in-kind)? Describe these (max 250 words) and state their value. You must also include a signed and dated letter of support from each non-academic partner as an attachment.
+	\
+Hyperreal will offer project coordination, with additional in-kind support for technical infrastructure.  Topos offers *advice* on mathematics and graph-based reasoning.
+
+
+
+
+	Value £
+	Cash or in-kind
+	Description
+	Staff time
+	
+
+	
+
+	
+
+	Equipment/consumables
+	
+
+	
+
+	
+
+	Travel
+	
+
+	
+
+	
+
+	Other (specify)
+	
+
+	
+
+	
+
+	
+
+If you have more than one project partner, please make additional copies of this table.
+
+
+	
+
+Consideration of Equality, Diversity and Inclusion
+Explain what considerations have been given to equality, diversity and inclusion. (Max 200 words)
+	Access to advanced mathematical knowledge is often limited by structural barriers — including access to elite institutions, fluent local mentorship, and confidence navigating specialist language.  A student without access to that infrastructure — whether due to geography, language, background, or cost — may never encounter the concept meaningfully, or know why it matters.
+
+
+This project addresses that gap by building machine-readable representations that make mathematical knowledge navigable and explorable. We aim to support diverse learners — across disciplines, languages, and levels — by creating tools that scaffold understanding without requiring social privilege or insider access. While this pilot focuses on English corpora, we explicitly frame this as groundwork for a more inclusive, multilingual knowledge infrastructure.
+	
+
+Sustainability
+Explain what considerations have been given to sustainability. (Max 200 words)
+	This project emphasises sustainability both in terms of environmental cost and long-term knowledge value. We will use open-source models and efficient pipelines (e.g. small-model fine-tuning, dataset filtering) to minimise compute needs. All outputs — code, data, interface prototypes — will be openly licensed and designed for reuse. Compute resources will be carefully scoped and budgeted to avoid waste.
+
+
+More fundamentally, our approach aligns with recent work showing that the environmental impact of large language models must be assessed relative to the epistemic value they deliver. By focusing on a domain where correctness, traceability, and structured reasoning matter — and by developing tools that can support future experimental, educational, and policy-oriented work — we aim to maximise the long-term impact per kilojoule. Rather than treating AI as a black-box oracle, we build lightweight infrastructure that makes knowledge computable and legible. This reflects a deeper commitment to responsible and meaningful use of AI in society.
+	
+
+Responsible Research and Innovation
+Explain what considerations have been given to responsible research and innovation. (Max 200 words)
+	This project treats representation not just as a technical challenge but as a matter of epistemic responsibility. By building a minimal, functioning prototype using open data and transparent methods, we create a shared reference point for dialogue. Rather than attempting to anticipate all implications up front, we take a staged approach: deliver the essential rapid, low-cost engineering first, concluding the project with a structured summer-school style workshop to develop next steps.  Initial direction-setting with the project is informed by a long engagement with online communities and computer mathematics.
+	
+
+Requested budget
+Provide a detailed breakdown of your budget and justification. (Max 250 words)
+	
+
+One NLP researcher will be based at Hyperreal Enterprises, with project advice from Topos.  In parallel with the research student’s focus on NLP extraction, a supervised student[h] at Oxford Brookes will design and implement the graph infrastructure.  This includes merging local document graphs into a unified global structure, implementing concept alignment techniques, and building a query interface that supports both the user-facing recommender and the evaluation layer. This division of effort ensures that the NLP and systems engineering challenges can be addressed in parallel by experts in each domain.  Regular meetings will ensure alignment and provide technical and strategic support.
+
+
+- Covers 6 months part-time, salary + overhead
+- Graph infrastructure, recommender integration, global alignment
+- Time from Oxford Brookes + Hyperreal Enterprises
+- Support from NACTEM, Topos, etc.
+- Storage, backup, parsing LaTeX
+- Cloud-based GPU/TPU time
+- Streamlit/React contractor or stipend
+- Synthetic learner testing and A/B comparisons
+- £100 x 20 authors for evaluation feedback
+- Writing time, events, travel
+- Scheduling, reporting, archiving
+- Covers compute/data spikes or unexpected tooling needs
+	
+
+
+
+	Description (insert extra rows if needed)
+	Amount £
+	Directly Incurred
+	Staff costs
+	0.2 FTE NLP researcher
+Supervised student developer (0.25 FTE) 
+	15,000
+11,250
+	Travel
+	
+
+	
+
+	Consumables
+	Summer School co-pay
+	8,000
+	Other (specify)
+	arXiv data access + processing
+Compute resources
+Frontend prototyping
+LLM API costs (e.g. GPT-4-turbo)
+ArXiv author honoraria
+	4,000
+4,000
+2,000
+3,000
+2,000
+	TOTAL
+	£49,250
+	
+
+Administrative contact
+Please provide the details of the administrative contact at the lead organisation who will be responsible for handling the contract process, should the proposal be successful.
+Name
+	[TBD]
+	Position
+	
+
+	Email address
+	
+
+	
+
+Additional documents
+Please append or attach by email: 
+* a letter of support from each of your project partners which details their support for and commitment to the project. (If you have more than one project partner, please include a letter for each.)
+* a 2-page CV for each academic named as a team member on this proposal. 
+[a]May be relevant to reference this story about AI to AI communication? Turned out to be important have it understandable by humans as well
+ https://www.snopes.com/fact-check/facebook-ai-developed-own-language/
+[b]Currently 878
+[c]Well phrased!
+[d]Could Ai also help with a corpus from non-English texts?
+[e]The Internet Archive?
+[f]Another thing we have talked about is aligning natural language texts with formal, eg., Lean.  Others have already made progress on auto-formalisation, so if there's a future direction here, we should think about how the NL work adds something different.
+[g]Cf. https://techcrunch.com/2025/07/23/a-new-ai-coding-challenge-just-published-its-first-results-and-they-arent-pretty/
+
+
+In the previous big proposal, Sophia had proposed that we develop a benchmark, that is also interesting, maybe to fold in more explicitly as future work.
+[h]Is this feasible?  If not, I guess we could do the graph database stuff externally as well, leaving the question about what the OBU part of this would be!

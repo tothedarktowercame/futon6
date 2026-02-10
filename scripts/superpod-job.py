@@ -28,16 +28,24 @@ All stages:
     2. Dense embeddings (GPU, bge-large-en-v1.5)
     3. LLM pattern tagging (GPU, Llama-3-8B)
     4. Clustering (CPU, HDBSCAN on embeddings)
+    5. NER term spotting + scope detection (CPU, classical)
 
 Each stage writes its output independently — if a stage fails, earlier
 outputs are still usable.
+
+Stage 5 output uses futon4-compatible hyperedge format for scope records:
+  :hx/type, :hx/ends (with roles), :hx/content, :hx/labels
+This enables direct ingest into futon1/XTDB via the standard relation→hx
+conversion path. See futon1/apps/graph-memory for schema.
 """
 
 import argparse
 import json
 import os
+import re
 import sys
 import time
+import uuid
 from pathlib import Path
 
 import numpy as np
@@ -91,6 +99,233 @@ def write_json(path, data):
     with open(path, "w") as f:
         json.dump(data, f, ensure_ascii=False)
     print(f"       Written {path} ({os.path.getsize(path) / 1e6:.1f} MB)")
+
+
+# --- Stage 5: NER term spotting + scope detection (CPU, classical) ---
+
+# Scope detection regexes (from data/ner-kernel/scope-patterns.edn).
+# Baked in for self-containment, same as patterns above.
+SCOPE_REGEXES = [
+    ("let-binding", r"\bLet\s+\$([^$]+)\$\s+(be|denote)\s+([^.,$]+)"),
+    ("define", r"\bDefine\s+\$([^$]+)\$\s*(:=|=|\\equiv)\s*([^.,$]+)"),
+    ("assume", r"\b(Assume|Suppose)\s+(that\s+)?\$([^$]+)\$"),
+    ("consider", r"\bConsider\s+(a|an|the|some)?\s*\$?([^$.]{1,60})"),
+    ("for-any", r"\b(?:for\s+)?(any|every|each|all)\s+\$([^$]+)\$"),
+    ("where-binding", r"\bwhere\s+\$([^$]+)\$\s+(is|denotes|represents)\s+([^.,$]+)"),
+    ("set-notation", r"\$([^$]*\\in\s+[^$]+)\$"),
+]
+
+
+def load_ner_kernel(path):
+    """Load NER kernel terms from TSV.
+
+    Returns (single_terms_set, multi_index, multi_count).
+    multi_index maps first content word -> [(term_lower, term_original, canon_id)].
+    """
+    singles = {}      # term_lower -> (term_orig, canon_id)
+    multi_index = {}   # first_content_word -> [(term_lower, term_orig, canon_id)]
+    multi_count = 0
+    skip_prefixes = ("$", "(", "\"", "-")
+
+    with open(path) as f:
+        next(f)  # skip header
+        for line in f:
+            parts = line.rstrip("\n").split("\t")
+            if len(parts) < 4:
+                continue
+            term_lower = parts[0].strip()
+            term_orig = parts[1].strip()
+            canon = parts[3].strip() if len(parts) > 3 else term_lower
+
+            if not term_lower or any(term_lower.startswith(p) for p in skip_prefixes):
+                continue
+            if len(term_lower) < 3:
+                continue
+
+            words = term_lower.split()
+            if len(words) == 1:
+                singles[term_lower] = (term_orig, canon)
+            else:
+                first_key = None
+                for w in words:
+                    if len(w) >= 3:
+                        first_key = w
+                        break
+                if first_key is None:
+                    first_key = words[0]
+                if first_key not in multi_index:
+                    multi_index[first_key] = []
+                multi_index[first_key].append((term_lower, term_orig, canon))
+                multi_count += 1
+
+    return singles, multi_index, multi_count
+
+
+def spot_terms_entity(text, singles, multi_index):
+    """Spot NER terms in entity text.
+
+    Returns list of {term, canon, source} dicts.
+    """
+    text_lower = text.lower()
+    words = text_lower.split()
+    hits = {}  # term_lower -> (term_orig, canon)
+
+    # Single-word matches
+    for w in set(words):
+        clean = w.strip(".,;:!?()[]\"'")
+        if clean in singles:
+            hits[clean] = singles[clean]
+
+    # Multi-word matches via inverted index
+    for w in set(words):
+        clean = w.strip(".,;:!?()[]\"'")
+        if clean in multi_index:
+            for term_lower, term_orig, canon in multi_index[clean]:
+                if term_lower not in hits and term_lower in text_lower:
+                    hits[term_lower] = (term_orig, canon)
+
+    return [{"term": orig, "term_lower": tl, "canon": canon}
+            for tl, (orig, canon) in sorted(hits.items())]
+
+
+def detect_scopes_entity(entity_id, text):
+    """Detect scope openers in text, returning futon4-compatible hyperedges.
+
+    Each scope record is a hyperedge with:
+      hx/type  — scope type (let-binding, define, assume, etc.)
+      hx/ends  — endpoints with roles (entity, symbol, type/condition)
+      hx/content — match text and position
+      hx/labels — tags for filtering
+    """
+    scopes = []
+    scope_idx = 0
+
+    for stype, pattern in SCOPE_REGEXES:
+        for m in re.finditer(pattern, text):
+            scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+            scope_idx += 1
+
+            ends = [{"role": "entity", "ident": entity_id}]
+
+            if stype == "let-binding":
+                # Groups: symbol, be/denote, type description
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "type", "text": m.group(3).strip()[:80]})
+
+            elif stype == "define":
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "value", "text": m.group(3).strip()[:80]})
+
+            elif stype == "assume":
+                ends.append({"role": "condition",
+                             "latex": m.group(3).strip()})
+
+            elif stype == "consider":
+                obj = (m.group(2) or "").strip()
+                if obj:
+                    ends.append({"role": "object", "text": obj[:80]})
+
+            elif stype == "for-any":
+                ends.append({"role": "quantifier", "text": m.group(1)})
+                ends.append({"role": "symbol", "latex": m.group(2).strip()})
+
+            elif stype == "where-binding":
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "description",
+                             "text": m.group(3).strip()[:80]})
+
+            elif stype == "set-notation":
+                ends.append({"role": "membership", "latex": m.group(1).strip()})
+
+            scopes.append({
+                "hx/id": scope_id,
+                "hx/type": f"scope/{stype}",
+                "hx/ends": ends,
+                "hx/content": {"match": m.group()[:120],
+                               "position": m.start()},
+                "hx/labels": ["scope", stype],
+            })
+
+    return scopes
+
+
+def run_stage5_ner_scopes(entities, pairs, ner_kernel_path, outdir):
+    """Run Stage 5: NER term spotting + scope detection.
+
+    Memory-safe: streams results directly to disk (one JSON object per line
+    inside a JSON array), never accumulating all results in RAM.
+
+    Returns stats dict.
+    """
+    from collections import Counter
+
+    singles, multi_index, multi_count = load_ner_kernel(ner_kernel_path)
+    print(f"       NER kernel: {len(singles)} single + {multi_count} multi-word terms")
+
+    ner_path = outdir / "ner-terms.json"
+    scope_path = outdir / "scopes.json"
+
+    total_ner_hits = 0
+    total_scopes = 0
+    entities_with_ner = 0
+    entities_with_scopes = 0
+    stype_freq = Counter()
+    n = len(entities)
+
+    with open(ner_path, "w") as ner_f, open(scope_path, "w") as scope_f:
+        ner_f.write("[\n")
+        scope_f.write("[\n")
+
+        for i, (entity, pair) in enumerate(zip(entities, pairs)):
+            eid = entity["entity/id"]
+            full_text = (pair.question.body_text + " " + pair.answer.body_text)
+            answer_text = pair.answer.body_text
+
+            # NER term spotting
+            terms = spot_terms_entity(full_text, singles, multi_index)
+            if terms:
+                entities_with_ner += 1
+                total_ner_hits += len(terms)
+
+            # Scope detection
+            scopes = detect_scopes_entity(eid, answer_text)
+            if scopes:
+                entities_with_scopes += 1
+                total_scopes += len(scopes)
+                for s in scopes:
+                    stype_freq[s["hx/type"]] += 1
+
+            # Write to disk immediately, then discard
+            sep = ",\n" if i > 0 else ""
+            ner_f.write(sep + json.dumps(
+                {"entity_id": eid, "terms": terms, "count": len(terms)},
+                ensure_ascii=False))
+            scope_f.write(sep + json.dumps(
+                {"entity_id": eid, "scopes": scopes, "count": len(scopes)},
+                ensure_ascii=False))
+
+            if (i + 1) % 10000 == 0 or (i + 1) == n:
+                print(f"       [{i+1}/{n}] "
+                      f"NER: {total_ner_hits} hits, "
+                      f"scopes: {total_scopes} records")
+
+        ner_f.write("\n]")
+        scope_f.write("\n]")
+
+    print(f"       Written {ner_path} ({os.path.getsize(ner_path) / 1e6:.1f} MB)")
+    print(f"       Written {scope_path} ({os.path.getsize(scope_path) / 1e6:.1f} MB)")
+
+    return {
+        "ner_kernel_terms": len(singles) + multi_count,
+        "entities_processed": n,
+        "total_ner_hits": total_ner_hits,
+        "entities_with_ner": entities_with_ner,
+        "ner_coverage": entities_with_ner / n if n else 0,
+        "total_scopes": total_scopes,
+        "entities_with_scopes": entities_with_scopes,
+        "scope_coverage": entities_with_scopes / n if n else 0,
+        "scope_type_freq": dict(stype_freq.most_common()),
+    }
 
 
 # --- Stage 3: LLM pattern tagging ---
@@ -269,6 +504,13 @@ def main():
     parser.add_argument("--skip-clustering", action="store_true")
     parser.add_argument("--min-cluster-size", type=int, default=50)
 
+    # NER + scope detection (Stage 5)
+    parser.add_argument("--ner-kernel",
+                        default="data/ner-kernel/terms.tsv",
+                        help="Path to NER kernel TSV")
+    parser.add_argument("--skip-ner", action="store_true",
+                        help="Skip NER term spotting and scope detection")
+
     args = parser.parse_args()
 
     outdir = Path(args.output_dir)
@@ -277,7 +519,7 @@ def main():
     t0 = time.time()
 
     # ========== Stage 1: Parse ==========
-    print(f"[Stage 1/4] Parsing {args.posts_xml}...")
+    print(f"[Stage 1/5] Parsing {args.posts_xml}...")
     pairs = build_qa_pairs_streaming(args.posts_xml, min_score=args.min_score)
     stats = corpus_stats(pairs)
     print(f"       {stats['qa_pairs']} QA pairs, "
@@ -306,7 +548,7 @@ def main():
     # ========== Stage 2: Embeddings ==========
     if not args.skip_embeddings:
         t2 = time.time()
-        print(f"\n[Stage 2/4] Embeddings ({args.embed_model})...")
+        print(f"\n[Stage 2/5] Embeddings ({args.embed_model})...")
         embeddings = compute_qa_embeddings(
             pairs,
             model_name=args.embed_model,
@@ -319,7 +561,7 @@ def main():
               f"saved {os.path.getsize(emb_path)/1e9:.2f} GB")
         print(f"       Stage 2 done in {time.time()-t2:.0f}s")
     else:
-        print(f"\n[Stage 2/4] Skipped (--skip-embeddings)")
+        print(f"\n[Stage 2/5] Skipped (--skip-embeddings)")
         embeddings = None
 
     # ========== Stage 3: LLM pattern tagging ==========
@@ -327,7 +569,7 @@ def main():
         t3 = time.time()
         global _llm_start
         _llm_start = t3
-        print(f"\n[Stage 3/4] LLM pattern tagging ({args.llm_model})...")
+        print(f"\n[Stage 3/5] LLM pattern tagging ({args.llm_model})...")
         pattern_tags = tag_patterns_llm_batch(
             pairs,
             model_name=args.llm_model,
@@ -345,12 +587,12 @@ def main():
         for name, count in freq.most_common(10):
             print(f"         {name}: {count}")
     else:
-        print(f"\n[Stage 3/4] Skipped (--skip-llm)")
+        print(f"\n[Stage 3/5] Skipped (--skip-llm)")
 
     # ========== Stage 4: Clustering ==========
     if not args.skip_clustering and embeddings is not None:
         t4 = time.time()
-        print(f"\n[Stage 4/4] Clustering...")
+        print(f"\n[Stage 4/5] Clustering...")
         labels, n_clusters, n_noise = cluster_embeddings(
             embeddings, min_cluster_size=args.min_cluster_size)
 
@@ -366,7 +608,32 @@ def main():
         write_json(outdir / "clusters.json", cluster_data)
         print(f"       Stage 4 done in {time.time()-t4:.0f}s")
     else:
-        print(f"\n[Stage 4/4] Skipped")
+        print(f"\n[Stage 4/5] Skipped")
+
+    # ========== Stage 5: NER + Scope Detection ==========
+    stage5_stats = None
+    if not args.skip_ner:
+        ner_path = Path(args.ner_kernel)
+        if not ner_path.exists():
+            print(f"\n[Stage 5/5] Skipped (NER kernel not found: {ner_path})")
+        else:
+            t5 = time.time()
+            print(f"\n[Stage 5/5] NER term spotting + scope detection...")
+            print(f"       Kernel: {ner_path}")
+            stage5_stats = run_stage5_ner_scopes(
+                entities, pairs, str(ner_path), outdir)
+
+            print(f"       NER coverage: {stage5_stats['ner_coverage']:.0%} "
+                  f"({stage5_stats['entities_with_ner']}/{stage5_stats['entities_processed']})")
+            print(f"       Scope coverage: {stage5_stats['scope_coverage']:.0%} "
+                  f"({stage5_stats['entities_with_scopes']}/{stage5_stats['entities_processed']})")
+            if stage5_stats['scope_type_freq']:
+                print(f"       Scope types:")
+                for stype, count in stage5_stats['scope_type_freq'].items():
+                    print(f"         {stype}: {count}")
+            print(f"       Stage 5 done in {time.time()-t5:.0f}s")
+    else:
+        print(f"\n[Stage 5/5] Skipped (--skip-ner)")
 
     # ========== Manifest ==========
     elapsed = time.time() - t0
@@ -387,7 +654,9 @@ def main():
             *([] if args.skip_embeddings else ["embeddings"]),
             *([] if args.skip_llm else ["llm_pattern_tags"]),
             *([] if args.skip_clustering or embeddings is None else ["clustering"]),
+            *([] if args.skip_ner or stage5_stats is None else ["ner_scopes"]),
         ],
+        "stage5_stats": stage5_stats,
         "output_files": [f.name for f in outdir.iterdir() if f.is_file()],
         "patterns": PATTERN_NAMES,
     }

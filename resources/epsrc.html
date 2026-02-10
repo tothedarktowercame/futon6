@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<link rel=icon href="favicon.png">
+<title>Large-scale Epistemic Agent-based Processes for Question Answering (LEAPQA)</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link rel="stylesheet" href="tufte.css"/>
+<link rel="stylesheet" href="latex.css"/>
+<link rel="stylesheet" href="org.css"/>
+
+<script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+<script async="async" defer="defer" src="https://hypothes.is/embed.js"></script>
+</head>
+<body bgcolor="#F5F5F5" vlink="blue" link="blue">
+<article>
+  <h1>Large-scale Epistemic Agent-based <span>Processes for Question Answering</span><span>(LEAPQA)</span></h1>
+<section>
+<p>The LEAPQA project will use artificial intelligence
+to create an online learning support tool for technical training in computer science and mathematics. Our strategy is to model both the technical content that users contribute to the popular Stack Exchange network of question and answer websites, as well as the epistemic process of learning through Q&amp;A dialogues. Computer programs will be written to accomplish two tasks:
+(T1) workable, albeit partial, translation of technical natural language texts into formal knowledge representations; and (T2) functional processes for heuristic reasoning that act on the above-mentioned representations to pose and solve practical problems in the domain.<label for="mn-figure-1" class="margin-toggle">&#8853;</label><input type="checkbox" id="mn-figure-1" class="margin-toggle"/><span class="marginnote"><img src="https://hyperreal.enterprises/img/lion-and-unicorn.png" alt="Lion and Unicorn"/></span> The fidelity and usefulness of this model will be evaluated in two ways: (i) via synthetic research based on computational challenges that agents can only solve if they have a good model of the domain, and, (ii) via user studies with an intelligent tutoring system built using the agent model. In the intelligent tutoring application, bots will help novice learners answer their own questions, employing George Pólya’s chief heuristic: “If you can’t solve a problem, then there is an easier problem you can solve: find it” <a href="#section1">[1]</a>. The evaluations will allow us to answer this Research question: Can autonomous computational agents build an explicit, functional, model of the knowledge and epistemic processes that underlie a large technical corpus written by many authors?</p>
+
+<p>This proposal targets the Priority Area: High Productivity Services through Specialised Artificial Intelligence. The specific service sector targeted is education. Links between skill acquisition, higher productivity, and economic performance are well established <a href="#section2">[2]</a>. As society is transformed by technology, it is crucial that we transform education to keep up. Indeed, Developing skills is one of ten pillars in the UK’s Industrial Strategy. Doug Lenat remarks in AI Magazine that “The popularity of massive open online courses (MOOCs) and the Khan Academy are early indicators of how much demand there is even for non-AI-based education courseware” <a href="#section3">[3]</a>. Dame Wendy Hall and Jérôme Pesenti conclude that “AI could positively affect every area of STEM education” <a href="#section4">[4]</a>.</p>
+
+<p>For example, Georgia Tech professor Ashok Goel used IBM Bluemix to create a digital TA that could answer routine questions on his course’s forum <a href="#section5">[5]</a>. LEAPQA will follow this line of thinking to work at scale, using data supplied by Stack Exchange Inc., a for-profit company that maintains popular open source “Web 2.0” Q&amp;A websites including Stack Overflow (14m questions, 10m answers). Whereas Stack Overflow serves developers who need answers to one-off questions, our tutoring platform will provide the structured and continuous support needed by novice learners. The scientific aspects of the proposal centre on this Hypothesis: Technical Q&amp;A interaction patterns (1) can be modelled with computational agents to allow them to learn from each other in dialogue, and thereby (2) develop an operational understanding of the contents of symbolic domains, which can (3) be used as the basis of effective tutoring systems for technical topics.</p>
+</section>
+<section>
+<h2>Economic benefits for the UK</h2>
+<p><i>Short Term</i> Potential applications range from “technical education for those not pursuing an academic path” <a href="#section6">[6]</a> to effective on-the-job learning for professionals who aim to acquire new skills quickly. Learning technology is volatile, and consumers are “migrating rapidly to more efficient knowledge and learning transfer products” <a href="#section7">[7]</a>. To offset the risk associated with entering a volatile industry, software produced during the project will be released under a suitable open source license to encourage innovation by third parties. Open source software has both commercial opportunities and public good properties. Wikipedia, which has an education oriented mission – but which does not yet offer a tutoring service – is “an asset worth tens of billions of dollars that produces hundreds of billions of dollars of consumer benefit” <a href="#section8">[8]</a>.</p>
+
+<p><i>Long Term</i> The learning model pioneered in the LEAPQA project will accelerate the development of artificially intelligent systems for programming and other symbolic tasks, with potentially transformative impact across the economy.</p>
+</section>
+<section> 
+<h2>Scientific track record:</h2>
+<p>I have a diverse and
+well-integrated set of research accomplishments,
+centred around the development of mathematical
+AI. My first journal publications were in pure
+  mathematics. After graduation, I worked for a summer at the artificial intelligence firm Cycorp, Inc., and then with PlanetMath.org, Ltd., a nonprofit that created one of the earliest online communities devoted to facilitating global access to mathematical knowledge. Asking how to sustain the impact of this work led to my doctoral research at the Open University’s Knowledge Media Institute. Partly inspired by my research on “Peer Produced Peer Learning” <a href="#section9">[9]</a>, communications scholar Howard Rheingold convened the Peeragogy project in connection with his 2011 Berkeley Regents lecture <a href="#section10">[10]</a>. I participated as the coordinating editor for the Peeragogy Handbook <a href="#section11">[11]</a> and together with a global team gathered design patterns for effective collaboration and peer-to-peer learning <a href="#section12">[12]</a>. I also worked with a team at Jacobs University, Bremen, as the lead developer of a new software system for PlanetMath that was selected as a Finalist in Elsevier’s “Executable Paper Challenge” <a href="#section13">[13]</a>. In my first postdoctoral position at Goldsmiths, University of London, I published extensively on computational creativity, and in 2016 garnered a Best Paper award at the International Conference on Computational Creativity for a paper dealing with autonomous evaluation of creative work <a href="#section14">[14]</a>.
+A software prototype that I had developed to help theorise interactions on PlanetMath <a href="#section15">[15]</a> has evolved into the technical basis of a model of mathematical communication that underpins LEAPQA <a href="#section16">[16]</a>. My most recent journal publication in Artificial Intelligence puts this work on a strong foundation, using the tools and formal theories of argumentation.<a href="#section17">[17]</a></p>
+</section>
+<section> 
+<h2>My research vision:</h2>
+
+<p>Building agent-based models
+of contemporary social machines is a new approach to the classic challenges of artificial intelligence.
+Whereas machine learning alone can master
+subsymbolic domains, as Turing had already anticipated <a href="#section18">[18]</a>, agent models are on the critical path to (super-)intelligent systems with meaningful behaviour in symbolic domains. This project is, thus, a route to developing Human-Like Computing
+, a major challenge within the EPSRC’s Future Intelligent Technologies priority area. The EPSRC’s strategy highlights the grand challenge of building a system that will “allow training where there is no human expert, or a lack of time or resources” <a href="#section19">[19]</a>. Describing his experiments with an AI teaching assistant, Ashok Goel pointed out (Note <a href="#section5">[5]</a>) that rapid progress was made possible by explicitly including a model of interaction in the system, along with a model of content.  My background in argumentation research will help with this aspect, but I will rely on a Research Associate (RA) with expertise relevant to T1-translation to work on other aspects of the dataand language-oriented research programme. The candidate pool may include, but will not be limited to, researchers who have experience with mathematical language (<a href="#section20">[20]</a>, <a href="#section21">[21]</a>, <a href="#section22">[22]</a>). I will focus on T2-reasoning and the synthetic evaluation work that will strengthen the system’s abilities. Both staff members will work jointly on the application to tutoring, which will involve subject-matter experts (SMEs) and novice learners in research studies that fine-tune the prototype and evaluate its usefulness in tutoring contexts. We will use early deployment of a working prototype, progressively improved models of real-world content, continual testing of agent behaviour through synthetic means, and direct engagement with potential users to develop a marketable proof-of-concept.</p>
+</section>
+<section> 
+<h2>Personal motivation:</h2>
+
+<p>My core motivation in the project is to use inspiring ideas from AI research to build a practical system for technical education. Not only do I have an innovative idea about how to combine social computing and artificial intelligence in this application: I also match the demanding person specification. I have experience delivering high-quality research in both artificial intelligence and social computing. I have created software that is in public use. I have experience collaborating with both small interdisciplinary research teams and globally active organisations. I am excited about developing new business models for education using open source software and cutting-edge AI technologies.
+</section>
+<section> 
+<h2>Overview of project objectives:</h2>
+<p>LEAPQA will focus on modelling three sites in the Stack Exchange network: Stack Overflow (the most popular sub-site, devoted to programming questions), math.stackexchange.com (the second-most popular subsite, for mathematics questions below research level), and MathOverflow (a specialist site for research mathematics).
+  
+<h3>Objective 1. Modelling dialogues with computational agents that learn.</h3>
+<p>(a) Agents discuss hypotheses about Stack Exchange data in light of evidence. This example dialogue might ensue when modelling a Mathoverflow question <a href="#section3">[23]</a>:</p>
+
+<p><i>Agent A</i>: “In this query [linked ] the ‘infinite case’
+is mentioned, but what value is infinite?”<br/>
+<i>Agent B</i>: “Based on follow-up comment #2 [linked], it appears that either the subgroup’s order or its index could be infinite.”</p>
+
+<p>(Note that this dialogue would in fact take place in a simplified process language.) (b) Agents will alter their programming based on these interactions. For example, from the above dialogue, Agent A might learn to look at follow-up comments to check cases of ambiguity.</p>
+
+<h3>Objective 2. Developing an operational understanding of the <span>contents of symbolic domains.</span></h3>
+
+<p>The primary technical challenge faced in the LEAPQA project is (a) to apply our existing modelling language (Notes <a href="#section16">[16]</a>, <a href="#section23">[23]</a>) at a large scale (i) on Stack Exchange, rather than working by hand to meticulously study smaller examples as we did when designing the language. We will follow Kaliszyk et al, who show that certain schematic patterns are frequently used in mathematical text (<a href="#section24">[24]</a>, <a href="#section25">[25]</a>) and devise software to recognise common patterns in technical language and translate them to our representation language. (ii )
+As a scientific control (to ensure coverage of basic topics), we will also apply this technique to several standard textbooks, and correlate their contents with Stack Exchange questions. (b) Zhang et al show that it is possible to predict “coarse” structure of dialogue using machine learning techniques <a href="#section26">[26]</a>. </a>Once we have a more detailed model of what is said, we can make more fine-grained predictions. <i>(i)</i> We will formalise common patterns of interaction as dialogue games to facilitate reasoning about process <a href="#section27">[27]</a>.  <i>(ii)</i> We will also expand the system’s ability to enact processes by integrating external systems.</p>
+
+<h3>Objective 3. Evaluate computational agents’ abilities with synthetic <span>tasks and applications to tutoring.</span></h3>
+
+<p>Agent-based simulations afford (a) a range of preliminary validation steps that are easier to achieve than full-blown question answering or pedagogical diagnostics. For example, several synthetic challenges of increasing difficulty: (i ) match an existing answer with its corresponding question (selecting from a small pool of possible choices); (ii ) identify questions that have been tagged as “duplicates” (given questions in order, but not tags); (iii ) identify existing answers that would help address a given question, and explain why. When the agents’ abilities have been sufficiently developed in synthetic experiments, we will experiment with human subjects with two goals: (b) to test whether agents can be effectively taught by human instructors, and (c), mutatis mutandis, to establish whether automated feedback from agents is useful for human learners.</p>
+</section>
+<section> 
+<h2>Related Work:</h2>
+<p>About 20% of the edits on the English Wikipedia are currently carried out by bots <a href="#section28">[28]</a>. To accomplish this, the bots need a robust but not terribly sophisticated understanding of some limited aspects of Wikipedia’s model. Projects have also been initiated to build a “Wikipedia” and a “World Wide Web” exclusively for robots <a href="#section29">[29]</a>. And yet, these sites do not share the key feature in the current proposal, which aims to model user behaviour, not just to amass factual or procedural knowledge. Experience from my doctoral research is relevant to user modelling: drawing on a decade of interaction data, I applied a contemporary statistical model that differentiates between two kinds of learning, using technical keywords as an indicator <a href="#section30">[30]</a>. Expertise and learning have been studied on Stack Exchange as well: indicators include users’ voting behaviour <a href="#section31">[31]</a> and topic models <a href="#section32">32</a>. Bansal et al point out that skill development through “self-play” – famously used by DeepMind to improve AlphaGo – is of broad use in training agent systems <a href="#section4">[33]</a>. In a semantics-rich environment like Stack Exchange, interaction between agents also needs a rich semantics. Our approach will use “critics”, pioneered by Sussman <a href="#section34">[34]</a>, and applied more recently by Singh <a href="#section35">[35]</a>. A Sussman-style approach has the further benefit of supporting explanatory models of epistemic behaviour, as required by Objective 3(a)(iii). Ground-truthed questions based on free text understanding provide a “neutral” challenge and a further route to evaluation <a href="#section36">[36]</a>.</p>
+</section>
+<section> 
+<h2>Ambassadorship</h2>
+<p>The following collaborative activities will involve industrial and academic stakeholders in shaping the project and enhancing its long-term impact.</p>
+
+<h3>M1-M6. Heterogeneous reasoning with industrial AI.</h3>
+<p>Integrating external commercial systems into SE′, as collections of agents, will allow LEAPQA to make rapid progress early on. Project staff will work with the IBM Bluemix Garage to create a working prototype ready for public deployment within the first six months of the project. This strategy will enable us to adapt the platform based on its behaviour and the needs of early users. Cycorp has offered a free ResearchCyc license that will help extend the system’s reasoning capabilities. Research visits to Cycorp and to IBM’s headquarters are budgeted for and will be arranged when we have interesting results to discuss.</p>
+
+<h3>M7-M12. Integrating mathematical systems.</h3>
+<p>I will work with the partners in the EPSRC Platform grant led by Andrew Ireland on “The Integration and Interaction of Multiple Mathematical Reasoning Processes” (EP/N014758/1) to provide a pathway to deployed integrations of external systems. Among these, the project will use Wolfram Research’s Mathematica as a demonstrator. I will arrange a visit to Wolfram Research’s offices in Oxford.</p>
+
+<h3>M13-M18. Argument mining for maths.</h3>
+<p>I will visit the Arg-Tech team at the University of Dundee, where Chris Reed is leading a EPSRC-funded project on Argument Mining (EP/N014871/1). I will work with my collaborator Alison Pease on detecting and formalising patterns of interaction in technical discussions.</p>
+
+<h3>M19-M27. Technical work behind the scenes.</h3>
+<p>In order to understand the way mathematicians and programmers learn from Q&amp;A dialogues, I will involve expert users directly in training the system. An interface that allows these SMEs to critique the system’s behaviour will be deployed, and the system improved in response to three separate in-person studies.</p>
+
+<h3>M28-M36. Intelligent tutoring.</h3>
+<p>In order to develop a framework that facilitates good outcomes for students, I will consult with Johanna Moore and Chris Sangwin, experts in automatic tutoring and technology enhanced education at the University of Edinburgh. Longitudinal classroom-based studies will focus on specific technical areas (e.g., Calculus) in order to facilitate assessment of impact on learning outcomes.</p>
+</section>
+<section> 
+<h2>Outreach.</h2>
+<p>I will engage with Innovate UK and its Knowledge Transfer Network in order to develop partnerships and pitch for further funding.
+</section>
+<section>   
+<h2>Leadership potential:</h2>
+<p>My research has a fundamentally interdisciplinary scope, taking into account social institutions, learning, and computational modelling. This interdisciplinary mix has led to a novel proposal for building AI applications for the Mathematical Sciences and computing disciplines. The work outlined builds on my strong track record in both areas. The methods may extend to other fields, with broad social impact. I demonstrate leadership potential through my advocacy work as well as through innovative research, evidenced, e.g., by invited  talks (<a href="#section37">[37]</a>, <a href="#section38">[38]</a>, <a href="#section39">[39]</a>)</p>
+</section>
+<section> 
+<h2>LEAPQA: Justification of Resources</h2>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Item</th>
+<th scope="col" class="org-left">Description</th>
+<th scope="col" class="org-left">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">Principal Investigator</td>
+<td class="org-left">162,062</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">Researcher</td>
+<td class="org-left">135,512</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">International travel for research visits</td>
+<td class="org-left">2,000</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">Travel in the UK to collaborators</td>
+<td class="org-left">3,400</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-left">Conference Travel</td>
+<td class="org-left">10,500</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-left">Travel for research studies and impact activities</td>
+<td class="org-left">1,100</td>
+</tr>
+
+<tr>
+<td class="org-right">7</td>
+<td class="org-left">IBM Bluemix consultancy fees</td>
+<td class="org-left">89,000</td>
+</tr>
+
+<tr>
+<td class="org-right">8</td>
+<td class="org-left">Licensing fees</td>
+<td class="org-left">11,664</td>
+</tr>
+
+<tr>
+<td class="org-right">9</td>
+<td class="org-left">Compensation for study participants</td>
+<td class="org-left">2,250</td>
+</tr>
+
+<tr>
+<td class="org-right">10</td>
+<td class="org-left">Open University (Estates)</td>
+<td class="org-left">35,833</td>
+</tr>
+
+<tr>
+<td class="org-right">11</td>
+<td class="org-left">Open University (Indirects)</td>
+<td class="org-left">271,538</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-right">&#xa0;</td>
+<td class="org-left">Total</td>
+<td class="org-left">724,859</td>
+</tr>
+
+<tr>
+<td class="org-right">&#xa0;</td>
+<td class="org-left">Research Council Contribution (80%)</td>
+<td class="org-left">579,887</td>
+</tr>
+</tbody>
+</table>
+
+<p>This proposal addresses the priority area “High Productivity Services through Artificial Intelligence, data and digital technologies” outlined in the call, and the “Developing skills” pillar of the Industrial Strategy. The project is aligned with the EPSRC’s Future Intelligent Technologies Cross-ICT priority area and will also impact the Mathematical Sciences research theme. The proposed work builds upon a suggestion from AI pioneer Alan
+Turing that is only now within our reach:
+modelling epistemic processes at a large scale using agent technologies. The project integrates ideas from social computing, agent modelling, and knowledge representation and reasoning (KRR).
+The primary application will be to intelligent
+tutoring for technical education. The project will run June 29, 2018–June 28, 2021.
+The project team will be comprised of the PI who will be appointed at the Senior Research Associate
+level [Line Item 1] and one Research Associate
+with a background in natural language processing (NLP) and other skills relevant to the challenge of
+extracting technical content from online dialogues [Line Item 2]
+. Technical texts pose a number of
+challenges that are not directly present in mainstream NLP, because they intermix domain specific languages (e.g., complex formulae) and exposition. The challenges involved justify the appointment of a postdoctoral researcher (or
+someone with equivalent experience). The RA will have a 35 month contract in order to facilitate the search for suitable candidates. The PI will spend approximately 80% time working on developing an agent-based model that mirrors the epistemic interactions on Stack Exchange. Reasoning effectively about technical content involves both common sense and domain-specific models. Outreach and dissemination activities will take
+15% of the PI’s time, and the other 5% will be
+spent on management and supervision. The RA
+will focus on technical tasks but will also be
+involved in research studies and paper writing.
+The project will involve visits to industrial and
+academic partners both overseas [Line Item 3] and in the UK [Line Item4]. Research outputs
+will be presented at international conferences on
+  artificial intelligence [Line Item 5]. Travel to carry out research studies and to engage in impact activies is budgeted for [Line Item 6].</p>
+
+
+<h2>Travel breakdown:</h2>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Item</th>
+<th scope="col" class="org-left">Description</th>
+<th scope="col" class="org-right">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">3.1.</td>
+<td class="org-left">Travel to US to visit AI companies</td>
+<td class="org-right">1000</td>
+</tr>
+
+<tr>
+<td class="org-right">3.1.a.</td>
+<td class="org-left">PI to Cycorp in Austin, TX</td>
+<td class="org-right">500</td>
+</tr>
+
+<tr>
+<td class="org-right">3.1.b.</td>
+<td class="org-left">PI to IBM in Yorktown Heights, NY</td>
+<td class="org-right">500</td>
+</tr>
+
+<tr>
+<td class="org-right">4.1.</td>
+<td class="org-left">PI, RA to IBM Bluemix Garage in London</td>
+<td class="org-right">2000</td>
+</tr>
+
+<tr>
+<td class="org-right">4.2.</td>
+<td class="org-left">PI to Wolfram Research in Oxford</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">4.3.</td>
+<td class="org-left">PI to Andrew Ireland at Heriot-Watt, Edinburgh</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-right">4.4.</td>
+<td class="org-left">PI to Arg-Tech group at Dundee</td>
+<td class="org-right">500</td>
+</tr>
+
+<tr>
+<td class="org-right">4.5.</td>
+<td class="org-left">PI to Johanna Moore and Chris Sangwin in Edinburgh</td>
+<td class="org-right">500</td>
+</tr>
+
+<tr>
+<td class="org-right">5.1.</td>
+<td class="org-left">RA presentation IJCAI 2019</td>
+<td class="org-right">2500</td>
+</tr>
+
+<tr>
+<td class="org-right">5.2.</td>
+<td class="org-left">RA presentation IJCAI 2020</td>
+<td class="org-right">1500</td>
+</tr>
+
+<tr>
+<td class="org-right">5.3.</td>
+<td class="org-left">PI presentation IJCAI 2021</td>
+<td class="org-right">1500</td>
+</tr>
+
+<tr>
+<td class="org-right">5.4.</td>
+<td class="org-left">RA presentation CICM 2019</td>
+<td class="org-right">1500</td>
+</tr>
+
+<tr>
+<td class="org-right">5.5.</td>
+<td class="org-left">PI presentation CICM 2020</td>
+<td class="org-right">2000</td>
+</tr>
+
+<tr>
+<td class="org-right">5.6.</td>
+<td class="org-left">PI presentation AITP 2019</td>
+<td class="org-right">1500</td>
+</tr>
+
+<tr>
+<td class="org-right">6.1.</td>
+<td class="org-left">RA, PI SME Study 1</td>
+<td class="org-right">500</td>
+</tr>
+
+<tr>
+<td class="org-right">6.2.</td>
+<td class="org-left">RA, PI SME Study 2</td>
+<td class="org-right">500</td>
+</tr>
+
+<tr>
+<td class="org-right">6.3.</td>
+<td class="org-left">RA, PI SME Study 3</td>
+<td class="org-right">500</td>
+</tr>
+
+<tr>
+<td class="org-right">6.4.</td>
+<td class="org-left">PI Innovate conference</td>
+<td class="org-right">500</td>
+</tr>
+
+<tr>
+<td class="org-right">6.5.</td>
+<td class="org-left">PI travel to monthly events hosted by the Knowledge Transfer Network during the final year of the project</td>
+<td class="org-right">600</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-right">&#xa0;</td>
+<td class="org-left">Total</td>
+<td class="org-right">19000</td>
+</tr>
+</tbody>
+</table>
+
+<p>Research visits to leading AI service providers (3.1.a–3.1.b) will be arranged when we have significant results to discuss that industry experts can help us extend. Consultations with developers and expert users of mathematical software systems
+(4.2–4.3) will enable us to integrate key
+domain-specific provisions. The PI will spend two
+weeks during the first half of the project working with the Arg-Tech group at the University of
+Dundee to formally model argument structures
+(4.4) and two weeks in the second half of the
+project designing experiments with experts at the University of Edinburgh (4.5). Presentations at leading AI conferences (5.1–5.2) will be a primary means of disseminating the project results. We will also engage with discipline specific conferences
+(5.4–5.6) with the aim of building informal
+collaborations with international partners. The amounts requested take into account the varying prices of travel and registration.
+In order to quickly develop a working model that can be deployed early on and extended throughout the project by our project staff, IBM’s Bluemix Garage consultancy will be retained for an initial round of design and prototyping during the first six months of the project [Line Item 7]. This will lead to a robust development plan and a working prototype. Both staff members will participate in the prototyping activities via “pair programming” sessions with IBM staff. The justification for the significant expense associated with retaining an expert software consultancy is that we can deploy a
+working version of the system early on, and adapt
+it in light of feedback from early adopters and the system’s own online behaviour. The platform will therefore have seen over a year of active use before
+we begin formal studies with SMEs in month 19. This will make it easier for SMEs to focus on
+substance rather than on difficulties with the platform. IBM Bluemix was used by Ashok Goel to build the AI teaching assistant “Jill Watson”, which received considerable coverage in the popular press. A multi-agent variant of Jill Watson is an approximate description our development goal,
+which justifies using a similar technical approach. The Bluemix Garage has agreed to discount the
+usual price of their consultancy services by £11K.</p>
+
+<h2>Consultancy breakdown:</h2>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Item</th>
+<th scope="col" class="org-left">Description</th>
+<th scope="col" class="org-right">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">K1.</td>
+<td class="org-left">IBM Bluemix Garage Design Thinking workshop</td>
+<td class="org-right">25000</td>
+</tr>
+
+<tr>
+<td class="org-left">K2.</td>
+<td class="org-left">IBM Bluemix Garage build out (2 wks)</td>
+<td class="org-right">64000</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">Total</td>
+<td class="org-right">89000</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Licensing breakdown</h2>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Item</th>
+<th scope="col" class="org-left">Description</th>
+<th scope="col" class="org-right">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">L1.</td>
+<td class="org-left">IBM Bluemix cloud plan (30 months)</td>
+<td class="org-right">9000</td>
+</tr>
+
+<tr>
+<td class="org-left">L2.</td>
+<td class="org-left">Wolfram Development Platform “Producer” plan (30 months)</td>
+<td class="org-right">2664</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">Total</td>
+<td class="org-right">11664</td>
+</tr>
+</tbody>
+</table>
+
+<p>Apart from informal feedback on the public
+deployment, and evaluation in synthetic research challenges, the system will be robustly assessed in two structured phases of formal research studies. In the first phase, subject-matter experts (SMEs)
+will be engaged to train the system [Line Item 9]. This will be carried out in three separate studies to
+allow adjustments to be made between studies. In each study, five SMEs will be involved, and will be compensated for 6 to 15 hours of participation
+which can be spread out over a week. The system will be explained and project staff will be available
+to help users work with the interface during the first day of the study. SMEs will be rewarded for their participation with £10/hour in Amazon vouchers. In the second phase, students will use the system in a longitudinal study in connection
+  with coursework and will not be compensated.</p>
+
+<h2>Compensation for study participants:</h2>
+                                          
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Item</th>
+<th scope="col" class="org-left">Description</th>
+<th scope="col" class="org-right">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">S1.</td>
+<td class="org-left">SME study 1</td>
+<td class="org-right">750</td>
+</tr>
+
+<tr>
+<td class="org-left">S2.</td>
+<td class="org-left">SME study 2</td>
+<td class="org-right">750</td>
+</tr>
+
+<tr>
+<td class="org-left">S3.</td>
+<td class="org-left">SME study 3</td>
+<td class="org-right">750</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">Total</td>
+<td class="org-right">2250</td>
+</tr>
+</tbody>
+</table>
+
+<p>The project will take place in the Knowledge Media Institute of The Open University [Line Items 9 and 10]. The themes of the proposal match several key research strengths of KMi: knowledge extraction, artificial intelligence, and applications to education. The PI will report to KMi’s Director, John Domingue.</p>
+
+</section>
+<section> 
+<h2>Value for money:</h2>
+<p>Two primary business models will be explored in the outreach phase. The first model is straightforward service provision, in which extensions to the platform are contracted for and developed in-house. In the second model, the platform is seen as a multi-sided marketplace, with certification and regulatory oversight provided centrally. Both models have the potential for significant short-term benefits to the UK through direct applications in technical education in line with the Industrial Strategy. Over the long term, the approach is expected to generalise to other intelligent service applications.</p>
+</section>
+<section> 
+<h2>References:</h2>
+<p id="section1"><b>[1]</b> How to Solve It. 1945</p>
+<p id="section2"><b>[2]</b> Universities UK: “Why invest in Universities?”, 2015</p>
+<p id="section3"><b>[3]</b> “WWTS (What Would Turing Say?)” AI Magazine 37.1, 2016</p>
+<p id="section4"><b>[4]</b> “Growing the artificial intelligence industry in the UK”, 2017</p>
+<p id="section5"><b>[5]</b> “A teaching assistant named Jill Watson”, TEDxSanFrancisco, 2016</p>
+<p id="section6"><b>[6]</b> “Building our Industrial Strategy”, 2017 </p>
+<p id="section7"><b>[7]</b> “The 2016–2021 Worldwide Self-paced eLearning Market”, 2016</p>
+<p id="section8"><b>[8]</b> “Wikipedia’s Economic Value”, 2013</p>
+<p id="section9"><b>[9]</b> <a href="http://ceur-ws.org/Vol-739/paper+5.pdf">“Paragogy”</a>, 6th Open Knowledge Conference. 2011.</p>
+<p id="section10"><b>[10]</b> <a href="https://dmlcentral.net/toward-peeragogy/">Toward Peeragogy</a></p>
+<p id="section11"><b>[11]</b> Peeragogy Handbook, 3rd ed. 2016</p>
+<p id="section12"><b>[12]</b> <a href="http://www.hillside.net/plop/2015/papers/peopleeducation/19.pdf">Patterns of Peeragogy”</a>. Pattern Languages of Programs Conference. 2015.</p>
+<p id="section13"><b>[13]</b> <a href="http://www.sciencedirect.com/science/article/pii/S1877050911001219">“The Planetary System: Web 3.0 &amp; Active Documents for STEM”.</a> Procedia Computer Science 4, 2011.</p>
+<p id="section14"><b>[14]</b> <a href="http://www.computationalcreativity.net/iccc2016/wp-content/uploads/2016/01/paper_28.pdf">“An Argument-based Creative Assistant for Harmonic Blending”.</a> Proc. Seventh International Conference on Computational Creativity. 2016</p>
+<p id="section15"><b>[15]</b> <a href="http://metameso.org/~joe/docs/sbdm.html">“A Scholia-based Document Model for Commons-based Peer Production”</a>. Free Culture and the Digital Library Symposium Proceedings. 2005</p>
+<p id="section16"><b>[16]</b> <a href="http://metameso.org/ar/farm-2017.pdf">Modelling the way mathematics is actually done”</a>. International Workshop on Functional Art, Music, Modelling and Design (FARM 2017). 2017</p>
+<p id="section17"><b>[17]</b> <a href="http://www.sciencedirect.com/science/article/pii/S0004370217300267">Lakatos-style Collaborative Mathematics through Dialectical, Structured and Abstract Argumentation”</a>. <i>Artificial Intelligence</i> 246, 2017</p>
+<p id="section18"><b>[18]</b> <a href="https://academic.oup.com/philmat/article-abstract/4/3/256/1416001/Intelligent-Machinery-A-Heretical-Theory">“Intelligent Machinery, A heretical theory”</a>. Philosophia Mathematica 4.3, <b>[1951]</b> 1996</p>
+<p id="section19"><b>[19]</b> “A Strategy Roadmap for Human-like Computing”, 2017 </p>
+<p id="section20"><b>[20]</b> The Language of Mathematics: A Linguistic and Philosophical Investigation. 2013</p>
+<p id="section21"><b>[21]</b> <a href="https://www.researchgate.net/profile/Deyan_Ginev/publication/216797039_The_Structure_of_Mathematical_Expressions/links/0fcfd50056b4487cfb000000.pdf">“The structure of mathematical expressions”</a>, 2011</p>
+<p id="section22"><b>[22]</b> <a href="http://www.uvrr.de/anglistik/sdv-vol-38-1-2-2014-the-language-of-mathematics-computational-linguistic-and-logical-aspects.html">“The language of mathematics computational, linguistic and logical aspects [Special Issue]”.</a> Sprache und Datenverarbeitung. International Journal for Language Data Processing 2014.1-2, 2016</p>
+<p id="section23"><b>[23]</b> <a href="http://metameso.org/~joe/papers/corneli2017towards.pdf">“Towards mathematical AI via a model of the content and process of mathematical question and answer dialogues”.</a> Intelligent Computer Mathematics 10th International Conference. 2017</p>
+<p id="section24"><b>[24]</b> <a href="http://cl-informatik.uibk.ac.at/cek/docs/14/ckjujvhg-cicm14-poster.pdf">“Developing corpus-based translation methods between informal and formal mathematics”</a>. International Conference on Intelligent Computer Mathematics. 2014</p>
+<p id="section25"><b>[25]</b> <a href="http://people.csail.mit.edu/axz/papers/discourse.pdf">“Characterizing Online Discussion Using Coarse DiscourseSequences”</a>. Proc. Eleventh International Conference on Web and Social Media. 2017</p>
+<p id="section26"><b>[26]</b> <a href="https://doi.org/10.1007/BF00128990">“Dialogue games: Conventions of human interaction”. </a>Argumentation 2.4, 1988 </p>
+<p id="section27"><b>[27]</b> “Beyond opening up the black box: Investigating the role of algorithmic systems in Wikipedian organizational culture”. Big Data &amp; Society 4.2, 2017</p>
+<p id="section28"><b>[28]</b> <a href="https://www.technologyreview.com/s/600848/wikipedia-for-robots/">Wikipedia for robots</a></p>
+<p id="section29"><b>[29]</b> <a href="http://roboearth.ethz.ch/">Roboearth</a></p>
+<p id="section30"><b>[30]</b> <a href="https://robohow.eu/">Robohow</a></p>
+<p id="section31"><b>[31]</b> Peer produced peer learning: A mathematics case study” (Chapter 6)</p>
+<p id="section32"><b>[32]</b> <a href="https://aclweb.org/anthology/D/D13/D13-1009.pdf">“Question difficulty estimation in community question answering services”. </a>Proc. 2013 Conference on Empirical Methods in Natural Language Processing. 2013</p>
+<p id="section33"><b>[33]</b> “Uncovering the Dynamics of Crowdlearning and the Value of Knowledge”. Proc. Tenth ACM International Conference on Web Search and Data Mining. 2017</p>
+<p id="section34"><b>[34]</b> “Emergent Complexity via Multi-Agent Competition”. arXiv preprint arXiv:1710.03748, 2017</p>
+<p id="section35"><b>[35]</b> “A computational model of skill acquisition”, 1973</p>
+<p id="section36"><b>[36]</b> “EM-ONE: an architecture for reflective commonsense thinking”, 2005</p>
+<p id="section37"><b>[37]</b> <a href="https://rajpurkar.github.io/SQuAD-explorer/">Squad Explorer</a></p>
+<p id="section38"><b>[38]</b> “The PlanetMath Encyclopedia”, Workshop on Mathematical Wikis @ ITP, 2011</p>
+<p id="section39"><b>[39]</b> “Embedded Evaluation”, ZiF Workshop: From Computational Creativity to Creativity Science, 2016</p>
+<p id="section40"><b>[40]</b> “Peering into Learning”, Harvard Kennedy School of Government Alumni Breakfast (online panelist), 2017
+</article>
+
+<script>
+anchors.options = {
+  visible: 'hover',
+  placement: 'left',
+  truncate: 0,
+  base: 'https://hyperreal.enterprises',
+  icon: '🖢'
+};
+anchors.add('h1');
+anchors.options = {
+  visible: 'hover',
+  placement: 'left',
+  icon: '§'
+};
+anchors.add('h2');
+anchors.add('h3');
+</script>
+
+</body>
+</html>

@@ -13,3 +13,7 @@ data/math-term-dictionary.json
 data/pm-all-terms/pm-full-dictionary.json
 data/planetmath-batch.log
 *.npy
+data/hyperreal.json
+data/hyperreal-futon5.json
+data/nlab-preview/
+data/o0/
