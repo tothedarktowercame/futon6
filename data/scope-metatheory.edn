@@ -1,0 +1,329 @@
+;; Scope Metatheory for Mathematical Text
+;; =======================================
+;; 7 categories, 27 types — empirically derived from 4,980 physics.SE entities.
+;; This is the complete type system for mathematical scope bindings.
+;; The LLM classifies; it does not invent types.
+;;
+;; Each scope record is a futon4-compatible hyperedge:
+;;   :hx/id      — unique identifier
+;;   :hx/type    — one of the 27 types below
+;;   :hx/ends    — endpoints with typed roles (see role schemas)
+;;   :hx/parent  — id of enclosing scope (nil for top-level)
+;;   :hx/content — matched text + position
+;;   :hx/labels  — category + type tags
+
+{:metatheory/version "1.0"
+ :metatheory/source  "physics.stackexchange (4980 entities sampled)"
+ :metatheory/date    "2026-02-10"
+
+ :categories
+ [{;; ============================================================
+   ;; BINDING — introduces a new symbol with a type or value
+   ;; ============================================================
+   :category "bind"
+   :description "Introduces a new symbol into scope with a type, value, or role."
+   :types
+   [{:type "bind/let"
+     :pattern "Let X be a Y / Let X denote Y"
+     :roles [{:role "symbol" :required true :desc "The symbol being bound (LaTeX)"}
+             {:role "type"   :required true :desc "What the symbol is (natural language or LaTeX)"}]
+     :frequency 56
+     :examples ["Let $Z$ be the number of protons"
+                "Let $\\xi$ be that root"
+                "Let $X$ be a nice topological space"]}
+
+    {:type "bind/define"
+     :pattern "Define X := Y / We define X = Y / We define the X as Y"
+     :roles [{:role "symbol"     :required true  :desc "Symbol or name being defined"}
+             {:role "definition" :required true  :desc "The defining expression"}]
+     :frequency 9
+     :examples ["Define $TX$ as $\\coprod_{x\\in X} T_x X$"
+                "We define the Fourier transform as above"
+                "We define the Teichmuller set $T_n = \\{0,1,\\xi,\\ldots\\}$"]}
+
+    {:type "bind/name"
+     :pattern "denote by X / call this X / writing X for Y / introduce X"
+     :roles [{:role "symbol" :required true  :desc "The name or symbol"}
+             {:role "referent" :required false :desc "What it refers to"}]
+     :frequency 55
+     :examples ["denote by $g$ = $so(n-1,2)$"
+                "call this the propagator"
+                "writing $O$ for the price of the option"]}
+
+    {:type "bind/associate"
+     :pattern "we associate (an) X to/with Y"
+     :roles [{:role "symbol" :required true :desc "The associated object"}
+             {:role "target" :required true :desc "What it is associated to"}]
+     :frequency 3
+     :examples ["we associate an amplitude $\\phi[x(t)]$"]}]
+   }
+
+   {;; ============================================================
+    ;; QUANTIFIER — introduces bound variable with domain
+    ;; ============================================================
+    :category "quant"
+    :description "Introduces a bound variable ranging over a specified domain."
+    :types
+    [{:type "quant/universal"
+      :pattern "for all/every/each/any X in S"
+      :roles [{:role "quantifier" :required true :values ["all" "every" "each" "any"]}
+              {:role "variable"   :required true :desc "Bound variable (LaTeX)"}
+              {:role "domain"     :required false :desc "Domain of quantification"}]
+      :frequency 115
+      :examples ["for all $x \\in S$"
+                 "for every $\\varepsilon > 0$"
+                 "for each $j = 1, \\ldots, m$"]}
+
+     {:type "quant/existential"
+      :pattern "there exists X (such that P)"
+      :roles [{:role "variable"  :required true :desc "Existentially quantified variable"}
+              {:role "domain"    :required false}
+              {:role "condition" :required false :desc "Existence condition"}]
+      :frequency 2
+      :examples ["there exists $c = c(\\beta, d) > 0$ such that"]}
+
+     {:type "quant/select"
+      :pattern "take/choose/fix/pick (any) X"
+      :roles [{:role "verb"     :required true :values ["take" "choose" "fix" "pick"]}
+              {:role "variable" :required true}
+              {:role "domain"   :required false}]
+      :frequency 61
+      :examples ["Take any $r$ to be the inverse radial coordinate"
+                 "Fix $C$ by requiring that $P(-a) = 0$"
+                 "Choose $2^N$ complex coefficients"]}
+
+     {:type "quant/given"
+      :pattern "given (a/an/any) X"
+      :roles [{:role "variable" :required true}
+              {:role "type"     :required false}]
+      :frequency 28
+      :examples ["Given a function $f$"
+                 "for a given $L$ and $S$"]}]
+    }
+
+   {;; ============================================================
+    ;; ASSUMPTION — restricts what follows without binding a symbol
+    ;; ============================================================
+    :category "assume"
+    :description "Introduces a hypothesis or restriction on the current scope."
+    :types
+    [{:type "assume/explicit"
+      :pattern "Assume/Suppose (that) P"
+      :roles [{:role "condition" :required true :desc "The assumed proposition"}]
+      :frequency 625
+      :examples ["Assume from now on that the metric is flat"
+                 "Suppose that the endpoints are fixed"]}
+
+     {:type "assume/conditional"
+      :pattern "If X is/has/satisfies P"
+      :roles [{:role "subject"   :required true :desc "What is being conditioned on"}
+              {:role "predicate" :required true :desc "The condition"}]
+      :frequency 156
+      :examples ["If $a \\neq 0$ is a non-zero constant acceleration"
+                 "if $X$ is simply-connected"
+                 "If the metric is Lorentzian"]}
+
+     {:type "assume/consider"
+      :pattern "Consider (a/the) X"
+      :roles [{:role "object" :required true :desc "The object under consideration"}]
+      :frequency 638
+      :examples ["Consider the state vector of the deuteron"
+                 "Consider a particle moving in one dimension"]}
+
+     {:type "assume/wlog"
+      :pattern "Without loss of generality / WLOG"
+      :roles [{:role "simplification" :required false :desc "What is being simplified"}]
+      :frequency 9
+      :examples ["without loss of generality, assume $x > 0$"]}]
+    }
+
+   {;; ============================================================
+    ;; CONSTRAINT — adds condition to already-bound variables
+    ;; ============================================================
+    :category "constrain"
+    :description "Adds a constraint or clarification to variables already in scope."
+    :types
+    [{:type "constrain/where"
+      :pattern "where X is/denotes/represents Y"
+      :roles [{:role "symbol"      :required true}
+              {:role "description" :required true}]
+      :frequency 744
+      :examples ["where $W$ represents a Wiener process"
+                 "where $r_c$ is called the cutoff radius"]}
+
+     {:type "constrain/such-that"
+      :pattern "such that P(X)"
+      :roles [{:role "condition" :required true}]
+      :frequency 70
+      :examples ["such that $q$ and $x$ can end up bound"]}
+
+     {:type "constrain/with"
+      :pattern "with X being/a/the Y"
+      :roles [{:role "symbol"      :required true}
+              {:role "description" :required true}]
+      :frequency 63
+      :examples ["with $F$ a given function of the terminal stock price"]}
+
+     {:type "constrain/here"
+      :pattern "Here, X is/denotes Y"
+      :roles [{:role "symbol"      :required true}
+              {:role "description" :required true}]
+      :frequency 55
+      :examples ["Here, $\\Delta(\\dot{x}_{cm})$ is the change in velocity"]}]
+    }
+
+   {;; ============================================================
+    ;; FORMULA — scope openers inside display/inline math
+    ;; ============================================================
+    :category "formula"
+    :description "Bindings introduced by mathematical notation itself."
+    :types
+    [{:type "formula/integral"
+      :pattern "\\int ... dx"
+      :roles [{:role "variable" :required true :desc "Integration variable"}
+              {:role "domain"   :required false :desc "Integration domain"}]
+      :frequency 436
+      :examples ["$\\int p(X_f|X_k) dX_k$"]}
+
+     {:type "formula/limit"
+      :pattern "\\lim_{x \\to a}"
+      :roles [{:role "variable" :required true}
+              {:role "target"   :required true :desc "Limit point"}]
+      :frequency 55
+      :examples ["$\\lim_{\\Delta t \\to 0}$"]}
+
+     {:type "formula/sum-index"
+      :pattern "\\sum_{x \\in S}"
+      :roles [{:role "variable" :required true :desc "Summation index"}
+              {:role "domain"   :required false :desc "Index domain"}]
+      :frequency 28
+      :examples ["$\\sum_{x \\in S} f(x)$"]}
+
+     {:type "formula/prod-index"
+      :pattern "\\prod_{x \\in S}"
+      :roles [{:role "variable" :required true}
+              {:role "domain"   :required false}]
+      :frequency 4
+      :examples ["$\\prod_{e \\in \\partial p} s_e$"]}
+
+     {:type "formula/set-builder"
+      :pattern "\\{x : P(x)\\} or \\{x \\mid P(x)\\}"
+      :roles [{:role "variable"  :required true}
+              {:role "condition" :required true}]
+      :frequency 1
+      :examples ["$\\{f \\in C^2 : f(-a) = f(a) = 0\\}$"]}
+
+     {:type "formula/sup-inf"
+      :pattern "\\sup_{x \\in S} / \\inf / \\max / \\min"
+      :roles [{:role "operator" :required true :values ["sup" "inf" "max" "min"]}
+              {:role "variable" :required true}
+              {:role "domain"   :required false}]
+      :frequency 1
+      :examples ["$\\sup_{\\psi \\in H}$"]}
+
+     {:type "formula/quantifier-symbol"
+      :pattern "\\forall x / \\exists x"
+      :roles [{:role "quantifier" :required true :values ["forall" "exists"]}
+              {:role "variable"   :required true}]
+      :frequency 44
+      :examples ["$\\forall l > 0$" "$\\exists \\xi \\in ]a,b[$"]}
+
+     ;; NOTE: formula/membership (our current set-notation) is subsumed by
+     ;; the above. A bare "$x \\in S$" is a constraint, not a formula binding.
+     ;; It should be tagged as constrain/membership when it appears in prose,
+     ;; or as the :domain role of a quantifier/formula when inside one.
+     ]
+    }
+
+   {;; ============================================================
+    ;; PROOF — argument structure (implicit scope boundaries)
+    ;; ============================================================
+    :category "proof"
+    :description "Structural elements that create implicit scope boundaries in proofs."
+    :types
+    [{:type "proof/claim"
+      :pattern "Claim: P"
+      :roles [{:role "statement" :required true}]
+      :frequency 49}
+
+     {:type "proof/case"
+      :pattern "Case N: / Case (description):"
+      :roles [{:role "case-id"    :required true}
+              {:role "description" :required false}]
+      :frequency 16}
+
+     {:type "proof/induction"
+      :pattern "Base case / Inductive step / Inductive hypothesis"
+      :roles [{:role "phase" :required true :values ["base" "step" "hypothesis"]}]
+      :frequency 1}
+
+     {:type "proof/method"
+      :pattern "Proof by X / We prove by X"
+      :roles [{:role "method" :required true
+               :values ["contradiction" "induction" "construction"
+                        "contrapositive" "exhaustion" "descent"]}]
+      :frequency 54}]
+    }
+
+   {;; ============================================================
+    ;; CONCLUSION — signals scope closure
+    ;; ============================================================
+    :category "conclude"
+    :description "Markers that signal the end of a scope or derivation step."
+    :types
+    [{:type "conclude/therefore"
+      :pattern "therefore / thus / hence / so / it follows"
+      :roles [{:role "conclusion" :required false :desc "The concluded proposition"}]
+      :frequency 1817}
+
+     {:type "conclude/explicit"
+      :pattern "we conclude (that) P"
+      :roles [{:role "conclusion" :required true}]
+      :frequency 16}
+
+     {:type "conclude/qed"
+      :pattern "QED / □ / ∎ / \\qed"
+      :roles []
+      :frequency 127}]
+    }]
+
+ ;; ============================================================
+ ;; NESTING RULES
+ ;; ============================================================
+ ;; These rules tell the LLM how to assign :hx/parent pointers.
+ ;;
+ ;; 1. A BINDING opens a scope. All subsequent scopes that reference
+ ;;    the bound symbol are children of that binding.
+ ;;
+ ;; 2. A CONSTRAINT is always a child of the most recent binding
+ ;;    it references (where-clause → its let-binding).
+ ;;
+ ;; 3. A FORMULA binding is a child of the enclosing text scope.
+ ;;
+ ;; 4. PROOF/CASE creates a new scope. All bindings inside the case
+ ;;    are children of the case node.
+ ;;
+ ;; 5. CONCLUSION closes the innermost open scope.
+ ;;
+ ;; 6. ASSUMPTION opens a conditional scope. Everything up to the
+ ;;    next conclusion or counter-assumption is a child.
+
+ :nesting-rules
+ ["bind/* opens scope; constrain/* attaches to nearest ancestor binding"
+  "formula/* is child of enclosing prose scope"
+  "proof/case opens scope; all contents are children"
+  "conclude/* closes innermost open scope"
+  "assume/conditional opens scope through next conclude/*"
+  "Top-level scopes (no parent) are children of the entity root"]
+
+ ;; ============================================================
+ ;; COVERAGE ESTIMATE
+ ;; ============================================================
+ :coverage
+ {:total-scope-events 5322
+  :entities-sampled   4980
+  :events-per-entity  1.07
+  :classical-coverage 0.24
+  :classical-types    7
+  :metatheory-types   27
+  :expected-llm-coverage ">0.85"}}
