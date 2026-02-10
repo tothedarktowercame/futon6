@@ -15,5 +15,6 @@ data/planetmath-batch.log
 *.npy
 data/hyperreal.json
 data/hyperreal-futon5.json
+data/physicslab.json
 data/nlab-preview/
 data/o0/

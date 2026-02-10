@@ -482,6 +482,8 @@ def main():
                         help="SE site name")
     parser.add_argument("--min-score", type=int, default=1,
                         help="Minimum post score")
+    parser.add_argument("--limit", type=int, default=None,
+                        help="Max QA pairs to process (for dry runs)")
 
     # Embedding options
     parser.add_argument("--embed-model", default="BAAI/bge-large-en-v1.5",
@@ -521,6 +523,9 @@ def main():
     # ========== Stage 1: Parse ==========
     print(f"[Stage 1/5] Parsing {args.posts_xml}...")
     pairs = build_qa_pairs_streaming(args.posts_xml, min_score=args.min_score)
+    if args.limit and len(pairs) > args.limit:
+        print(f"       Parsed {len(pairs)} pairs, limiting to {args.limit}")
+        pairs = pairs[:args.limit]
     stats = corpus_stats(pairs)
     print(f"       {stats['qa_pairs']} QA pairs, "
           f"{stats['unique_tags']} tags, "
