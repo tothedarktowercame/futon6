@@ -472,6 +472,136 @@ def cluster_embeddings(embeddings, min_cluster_size=50, max_clusters=500):
     return labels.tolist(), n_clusters, n_noise
 
 
+def print_dry_run(args):
+    """Print execution plan without running anything."""
+    posts = Path(args.posts_xml)
+    posts_size = posts.stat().st_size / 1e9 if posts.exists() else 0
+
+    # Estimate QA pair count from file size (~6KB per QA pair for physics.SE)
+    est_pairs = int(posts_size * 1e9 / 6000) if posts_size else "?"
+    if args.limit:
+        est_pairs = min(est_pairs, args.limit) if isinstance(est_pairs, int) else args.limit
+
+    # Estimate output sizes (based on physics.SE ratios: 114K pairs → 438MB entities)
+    if isinstance(est_pairs, int):
+        est_entities_mb = est_pairs * 438 / 114000
+        est_embeddings_gb = est_pairs * 1024 * 4 / 1e9  # 1024-dim float32
+        est_total_gb = est_entities_mb / 1000 + est_embeddings_gb + 0.5  # +0.5 for misc
+    else:
+        est_entities_mb = est_embeddings_gb = est_total_gb = "?"
+
+    # Estimate time (based on physics.SE: ~15min for 114K on GPU)
+    if isinstance(est_pairs, int):
+        est_stage1_min = est_pairs / 114000 * 2
+        est_stage2_min = est_pairs / 114000 * 5  # embeddings
+        est_stage3_min = est_pairs / 114000 * 8  # LLM inference (slowest)
+        est_stage4_min = est_pairs / 114000 * 1  # clustering
+        est_stage5_min = est_pairs / 114000 * 2  # NER + scope
+        est_total_min = est_stage1_min + est_stage2_min + est_stage3_min + est_stage4_min + est_stage5_min
+    else:
+        est_stage1_min = est_stage2_min = est_stage3_min = "?"
+        est_stage4_min = est_stage5_min = est_total_min = "?"
+
+    print("=" * 64)
+    print("SUPERPOD JOB — DRY RUN (nothing will be executed)")
+    print("=" * 64)
+    print()
+    print(f"  Input:        {args.posts_xml}")
+    print(f"  Input size:   {posts_size:.2f} GB" if posts_size else f"  Input:        {args.posts_xml} (NOT FOUND)")
+    print(f"  Site:         {args.site}")
+    print(f"  Min score:    {args.min_score}")
+    print(f"  Limit:        {args.limit or 'none'}")
+    print(f"  Output dir:   {args.output_dir}")
+    print()
+    print(f"  Est. QA pairs:  ~{est_pairs:,}" if isinstance(est_pairs, int) else f"  Est. QA pairs:  {est_pairs}")
+    print()
+
+    fmt = lambda v: f"{v:.1f}" if isinstance(v, float) else str(v)
+
+    print("  STAGE PLAN:")
+    print(f"  {'Stage':<42s} {'Model/Tool':<36s} {'Est. Time':>10s}")
+    print(f"  {'-'*42} {'-'*36} {'-'*10}")
+    print(f"  {'1. Parse XML → QA pairs (CPU)':<42s} {'streaming XML parser':<36s} {fmt(est_stage1_min)+' min':>10s}")
+
+    if args.skip_embeddings:
+        print(f"  {'2. Embeddings':<42s} {'SKIPPED':>10s}")
+    else:
+        print(f"  {'2. Dense embeddings (GPU)':<42s} {args.embed_model:<36s} {fmt(est_stage2_min)+' min':>10s}")
+
+    if args.skip_llm:
+        print(f"  {'3. LLM pattern tagging':<42s} {'SKIPPED':>10s}")
+    else:
+        print(f"  {'3. LLM pattern tagging (GPU)':<42s} {args.llm_model:<36s} {fmt(est_stage3_min)+' min':>10s}")
+
+    if args.skip_clustering:
+        print(f"  {'4. Clustering':<42s} {'SKIPPED':>10s}")
+    else:
+        print(f"  {'4. Clustering (CPU)':<42s} {'HDBSCAN/KMeans':<36s} {fmt(est_stage4_min)+' min':>10s}")
+
+    if args.skip_ner:
+        print(f"  {'5. NER + scope detection':<42s} {'SKIPPED':>10s}")
+    else:
+        print(f"  {'5. NER + scope detection (CPU)':<42s} {args.ner_kernel:<36s} {fmt(est_stage5_min)+' min':>10s}")
+
+    print(f"  {'-'*42} {'-'*36} {'-'*10}")
+
+    skipped = sum([args.skip_embeddings, args.skip_llm, args.skip_clustering, args.skip_ner])
+    active = 5 - skipped
+    print(f"  {'TOTAL':<42s} {f'{active}/5 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
+    print()
+
+    print("  ESTIMATED OUTPUT:")
+    if isinstance(est_entities_mb, (int, float)):
+        print(f"    entities.json         ~{fmt(est_entities_mb)} MB")
+        if not args.skip_embeddings:
+            print(f"    embeddings.npy        ~{fmt(est_embeddings_gb)} GB")
+        if not args.skip_llm:
+            print(f"    pattern-tags.json     ~{fmt(est_entities_mb * 0.3)} MB")
+        if not args.skip_clustering:
+            print(f"    clusters.json         ~{fmt(est_entities_mb * 0.05)} MB")
+        if not args.skip_ner:
+            print(f"    ner-terms.json        ~{fmt(est_entities_mb * 0.4)} MB")
+            print(f"    scopes.json           ~{fmt(est_entities_mb * 0.2)} MB")
+        print(f"    {'':24s} --------")
+        print(f"    {'TOTAL':24s} ~{fmt(est_total_gb)} GB")
+    else:
+        print(f"    (cannot estimate — input file not found)")
+    print()
+
+    print("  GPU REQUIREMENTS:")
+    if not args.skip_embeddings or not args.skip_llm:
+        print(f"    Embedding model:  {args.embed_model}" if not args.skip_embeddings else "")
+        print(f"    LLM model:        {args.llm_model}" if not args.skip_llm else "")
+        vram = 2 if args.skip_llm else 18  # bge-large ~2GB, Llama-3-8B ~16GB
+        print(f"    Est. VRAM needed: ~{vram} GB")
+    else:
+        print(f"    None (CPU-only stages)")
+    print()
+
+    print("  PATTERNS (25 math-informal):")
+    for i, (name, desc) in enumerate(PATTERNS):
+        print(f"    {i+1:2d}. {name:<35s} {desc[:50]}")
+    print()
+
+    print("  TO RUN FOR REAL:")
+    cmd_parts = [f"python scripts/superpod-job.py {args.posts_xml}"]
+    cmd_parts.append(f"  --output-dir {args.output_dir}")
+    cmd_parts.append(f"  --site {args.site}")
+    if args.limit:
+        cmd_parts.append(f"  --limit {args.limit}")
+    if args.skip_embeddings:
+        cmd_parts.append(f"  --skip-embeddings")
+    if args.skip_llm:
+        cmd_parts.append(f"  --skip-llm")
+    if args.skip_clustering:
+        cmd_parts.append(f"  --skip-clustering")
+    if args.skip_ner:
+        cmd_parts.append(f"  --skip-ner")
+    print(f"    {' \\\\\n    '.join(cmd_parts)}")
+    print()
+    print("=" * 64)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Superpod batch job: SE dump → F6 artefacts")
@@ -483,7 +613,9 @@ def main():
     parser.add_argument("--min-score", type=int, default=1,
                         help="Minimum post score")
     parser.add_argument("--limit", type=int, default=None,
-                        help="Max QA pairs to process (for dry runs)")
+                        help="Max QA pairs to process")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Show execution plan without running anything")
 
     # Embedding options
     parser.add_argument("--embed-model", default="BAAI/bge-large-en-v1.5",
@@ -514,6 +646,11 @@ def main():
                         help="Skip NER term spotting and scope detection")
 
     args = parser.parse_args()
+
+    # ========== Dry Run ==========
+    if args.dry_run:
+        print_dry_run(args)
+        return
 
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
