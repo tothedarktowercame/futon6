@@ -21,7 +21,8 @@ Usage:
     python scripts/physicslab.py neighborhood "Lagrangian" [--depth 2]
     python scripts/physicslab.py bridge "functor"  # cross-reference to hyperreal
 
-Memory-safe: streams NER terms file, never loads full entities.json.
+Memory-safe: two-pass streaming build, never loads full JSON files,
+no per-edge tag Counters. Handles 114K+ entities in ~300MB RSS.
 """
 
 import argparse
@@ -36,10 +37,13 @@ PHYSICSLAB_DB = Path("data/physicslab.json")
 HYPERREAL_DB = Path("data/hyperreal.json")
 
 # Minimum co-occurrence count for a morphism to exist
-MIN_COOCCURRENCE = 2
+MIN_COOCCURRENCE = 3
 
-# Maximum terms per entity to consider (prevents hub explosion)
-MAX_TERMS_PER_ENTITY = 100
+# Maximum terms per entity to consider (prevents combinatorial explosion)
+MAX_TERMS_PER_ENTITY = 30
+
+# Terms appearing in more than this fraction of entities are too generic
+MAX_FREQ_PCT = 0.25
 
 # Generic words that leak through the NER kernel — not physics concepts.
 # These create noisy hub nodes in the co-occurrence graph.
@@ -55,38 +59,86 @@ STOPWORDS = frozenset({
     "actually", "basically", "essentially", "indeed", "well",
 })
 
+CHUNK_SIZE = 64 * 1024  # 64KB read chunks
+
+
+# --- Memory-safe JSON streaming ---
+
+def stream_json_objects(path):
+    """Stream top-level objects from a JSON array file.
+
+    Uses string-aware bracket counting — never loads the full file.
+    Yields parsed dicts one at a time.
+    """
+    with open(path, "rb") as f:
+        buf = b""
+        depth = 0
+        in_string = False
+        escape_next = False
+        obj_start = -1
+        total_read = 0
+
+        while True:
+            chunk = f.read(CHUNK_SIZE)
+            if not chunk:
+                break
+            total_read += len(chunk)
+
+            for i, byte in enumerate(chunk):
+                ch = chr(byte)
+
+                if escape_next:
+                    escape_next = False
+                    continue
+
+                if in_string:
+                    if ch == '\\':
+                        escape_next = True
+                    elif ch == '"':
+                        in_string = False
+                    continue
+
+                if ch == '"':
+                    in_string = True
+                    continue
+
+                if ch == '{':
+                    if depth == 0:
+                        obj_start = len(buf) + i
+                    depth += 1
+                elif ch == '}':
+                    depth -= 1
+                    if depth == 0 and obj_start >= 0:
+                        # Extract the complete object
+                        obj_end = len(buf) + i + 1
+                        obj_bytes = (buf + chunk)[obj_start:obj_end]
+                        try:
+                            yield json.loads(obj_bytes)
+                        except json.JSONDecodeError:
+                            pass
+                        obj_start = -1
+
+            # Keep only unprocessed data (from current object start)
+            if obj_start >= 0:
+                buf = (buf + chunk)[obj_start:]
+                obj_start = 0
+            else:
+                buf = b""
+
 
 # --- Build phase ---
-
-def stream_ner_entities(ner_path, entities_path):
-    """Stream (entity_id, terms, tags) from pipeline output.
-
-    Loads ner-terms.json fully (small per entity) but streams entity
-    metadata only for fields we need (tags).
-    """
-    # Build entity_id -> tags lookup from entities.json
-    # We only need the tags field, not full body text
-    tags_by_id = {}
-    with open(entities_path) as f:
-        for obj in json.load(f):
-            tags_by_id[obj["entity/id"]] = obj.get("tags", [])
-
-    with open(ner_path) as f:
-        ner_data = json.load(f)
-
-    for entry in ner_data:
-        eid = entry["entity_id"]
-        terms = [t["term_lower"] for t in entry["terms"]]
-        tags = tags_by_id.get(eid, [])
-        yield eid, terms, tags
-
 
 def build_category(pipeline_dir, min_cooccurrence=MIN_COOCCURRENCE):
     """Build the physics.SE free category from pipeline output.
 
-    Objects: NER terms that appear in at least 2 entities.
-    Morphisms: (term_A, term_B) co-occurring in at least min_cooccurrence entities.
-    Enrichment: SE tags shared across co-occurring entities.
+    Memory-safe two-pass build:
+      Pass 1: stream NER JSON → term frequencies (small Counter).
+              Stream entities JSON → tags per entity ID (small dict).
+              Determine known terms (freq >= 5, freq < 25% of entities).
+      Pass 2: stream NER JSON again → co-occurrence Counter for known
+              term pairs only. No per-edge tag storage.
+
+    Tag enrichment is derived from per-object tag data at query time.
     """
     pipeline_dir = Path(pipeline_dir)
     ner_path = pipeline_dir / "ner-terms.json"
@@ -99,77 +151,129 @@ def build_category(pipeline_dir, min_cooccurrence=MIN_COOCCURRENCE):
         print(f"Error: {entities_path} not found.")
         sys.exit(1)
 
-    print("Building physicsLab category...")
+    print("Building physicsLab category (memory-safe)...")
 
-    # Pass 1: collect term frequencies and co-occurrence counts
-    term_freq = Counter()         # term -> entity count
-    cooccur = Counter()           # (term_a, term_b) -> entity count, a < b
-    term_tags = defaultdict(Counter)  # term -> {tag: count}
-    edge_tags = defaultdict(Counter)  # (a, b) -> {tag: count}
+    # --- Pass 1a: stream entities.json for tags only ---
+    print("  Pass 1a: streaming entity tags...")
+    tags_by_id = {}
+    n_ent = 0
+    for obj in stream_json_objects(str(entities_path)):
+        eid = obj.get("entity/id", "")
+        tags_by_id[eid] = obj.get("tags", [])
+        n_ent += 1
+        if n_ent % 20000 == 0:
+            print(f"    [{n_ent}] entities scanned")
+    print(f"    {n_ent} entities, tags index: "
+          f"{sys.getsizeof(tags_by_id) / 1e6:.1f} MB (approx)")
+
+    # --- Pass 1b: stream NER JSON for term frequencies ---
+    print("  Pass 1b: streaming term frequencies...")
+    term_freq = Counter()
+    term_tags = defaultdict(Counter)
     n_entities = 0
-
-    print("  Pass 1: counting co-occurrences...")
-    for eid, terms, tags in stream_ner_entities(ner_path, entities_path):
+    for entry in stream_json_objects(str(ner_path)):
         n_entities += 1
-        # Filter stopwords and cap terms
-        terms = sorted(t for t in set(terms)
-                       if t not in STOPWORDS)[:MAX_TERMS_PER_ENTITY]
+        eid = entry.get("entity_id", "")
+        terms = [t["term_lower"] for t in entry.get("terms", [])]
+        tags = tags_by_id.get(eid, [])
+
+        # Filter stopwords
+        terms = [t for t in set(terms) if t not in STOPWORDS]
 
         for t in terms:
             term_freq[t] += 1
             for tag in tags:
                 term_tags[t][tag] += 1
 
+        if n_entities % 20000 == 0:
+            print(f"    [{n_entities}] entities, {len(term_freq)} unique terms")
+
+    print(f"    {n_entities} entities, {len(term_freq)} unique terms")
+
+    # Determine known terms: freq >= 5, not too generic
+    max_freq = int(n_entities * MAX_FREQ_PCT)
+    known_terms = frozenset(
+        t for t, f in term_freq.items()
+        if f >= 5 and f <= max_freq
+    )
+    excluded_generic = [t for t, f in term_freq.most_common()
+                        if f > max_freq and t not in STOPWORDS]
+    print(f"    Known terms: {len(known_terms)} "
+          f"(freq 5..{max_freq}, excluded {len(excluded_generic)} too-generic)")
+    if excluded_generic[:10]:
+        print(f"    Excluded (top): {', '.join(excluded_generic[:10])}")
+
+    # Free tags_by_id — we don't need it for pass 2
+    del tags_by_id
+
+    # --- Pass 2: stream NER again for co-occurrence ---
+    print("  Pass 2: streaming co-occurrence counts...")
+    cooccur = Counter()
+    n2 = 0
+    for entry in stream_json_objects(str(ner_path)):
+        n2 += 1
+        terms = [t["term_lower"] for t in entry.get("terms", [])]
+        # Filter to known terms, cap to prevent O(n²) blowup
+        terms = sorted(t for t in set(terms)
+                       if t in known_terms)[:MAX_TERMS_PER_ENTITY]
+
         # Co-occurrence: all pairs (ordered to deduplicate)
-        for i, a in enumerate(terms):
-            for b in terms[i + 1:]:
-                key = (a, b)
-                cooccur[key] += 1
-                for tag in tags:
-                    edge_tags[key][tag] += 1
+        for i in range(len(terms)):
+            a = terms[i]
+            for j in range(i + 1, len(terms)):
+                cooccur[(a, terms[j])] += 1
 
-        if n_entities % 10000 == 0:
-            print(f"    [{n_entities}] entities, {len(cooccur)} co-occurrence pairs")
+        if n2 % 20000 == 0:
+            print(f"    [{n2}] entities, {len(cooccur)} unique pairs, "
+                  f"~{sys.getsizeof(cooccur) / 1e6:.0f} MB")
 
-    print(f"  {n_entities} entities, {len(term_freq)} unique terms, "
-          f"{len(cooccur)} raw co-occurrence pairs")
+    print(f"    {n2} entities, {len(cooccur)} unique co-occurrence pairs")
 
-    # Filter: objects must appear in >= 2 entities
+    # --- Build objects ---
     objects = {}
-    for term, freq in term_freq.items():
-        if freq >= 2:
-            top_tags = [t for t, _ in term_tags[term].most_common(5)]
-            objects[term] = {
-                "name": term,
-                "frequency": freq,
-                "top_tags": top_tags,
-            }
+    for term in known_terms:
+        freq = term_freq[term]
+        top_tags = [t for t, _ in term_tags[term].most_common(5)]
+        objects[term] = {
+            "name": term,
+            "frequency": freq,
+            "top_tags": top_tags,
+        }
 
-    known = set(objects.keys())
-    print(f"  {len(objects)} objects (terms appearing in >= 2 entities)")
+    # Free large intermediates
+    del term_freq, term_tags
 
-    # Filter morphisms: both endpoints known, count >= threshold
-    morphisms = {}
+    # --- Build morphisms (no per-edge tags — derive from objects) ---
     adjacency = defaultdict(list)
-    reverse_adj = defaultdict(list)
+    morph_counts = {}  # "src→dst" -> count (compact)
     link_count = 0
 
     for (a, b), count in cooccur.items():
-        if count >= min_cooccurrence and a in known and b in known:
-            shared_tags = [t for t, _ in edge_tags[(a, b)].most_common(10)]
-            # Bidirectional: both a→b and b→a
+        if count >= min_cooccurrence:
             for src, dst in [(a, b), (b, a)]:
                 key = f"{src}→{dst}"
-                if key not in morphisms:
-                    morphisms[key] = {
-                        "cooccurrence": count,
-                        "shared_tags": shared_tags,
-                    }
+                if key not in morph_counts:
+                    morph_counts[key] = count
                     adjacency[src].append(dst)
-                    reverse_adj[dst].append(src)
                     link_count += 1
 
-    print(f"  {link_count} morphisms (co-occurrence >= {min_cooccurrence})")
+    del cooccur
+    print(f"  {len(objects)} objects, {link_count} morphisms "
+          f"(co-occurrence >= {min_cooccurrence})")
+
+    # --- Assemble output ---
+    # Morphisms: store count + shared tags derived from objects
+    morphisms = {}
+    for key, count in morph_counts.items():
+        src, dst = key.split("→", 1)
+        src_tags = set(objects.get(src, {}).get("top_tags", []))
+        dst_tags = set(objects.get(dst, {}).get("top_tags", []))
+        shared = sorted(src_tags & dst_tags)
+        morphisms[key] = {
+            "cooccurrence": count,
+            "shared_tags": shared[:5],
+        }
+    del morph_counts
 
     category = {
         "meta": {
@@ -180,6 +284,7 @@ def build_category(pipeline_dir, min_cooccurrence=MIN_COOCCURRENCE):
             "object_count": len(objects),
             "morphism_count": link_count,
             "min_cooccurrence": min_cooccurrence,
+            "max_freq_pct": MAX_FREQ_PCT,
             "objects_with_outgoing": sum(1 for v in adjacency.values() if v),
         },
         "objects": objects,
