@@ -1,0 +1,252 @@
+\documentclass[10pt,landscape]{article}
+\usepackage[margin=1.5cm,landscape]{geometry}
+\usepackage{xcolor}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{amssymb,amsmath}
+\usepackage{parskip}
+
+% Wiring diagram colors
+\definecolor{comp}{HTML}{2563EB}      % components — blue
+\definecolor{compbg}{HTML}{DBEAFE}
+\definecolor{wire-adv}{HTML}{DC2626}  % wire/adversative — red
+\definecolor{wire-caus}{HTML}{EA580C} % wire/causal — orange
+\definecolor{wire-cons}{HTML}{9333EA} % wire/consequential — purple
+\definecolor{wire-clar}{HTML}{0891B2} % wire/clarifying — teal
+\definecolor{port}{HTML}{16A34A}      % ports — green
+\definecolor{portbg}{HTML}{DCFCE7}
+\definecolor{label}{HTML}{CA8A04}     % wire labels — amber
+\definecolor{labelbg}{HTML}{FEF9C3}
+\definecolor{dimtext}{HTML}{6B7280}   % dimmed text
+
+% Annotation commands
+\newcommand{\comp}[1]{\colorbox{compbg}{\textcolor{comp}{\textsf{\textbf{#1}}}}}
+\newcommand{\wA}[1]{\textcolor{wire-adv}{\textbf{#1}}}      % adversative
+\newcommand{\wC}[1]{\textcolor{wire-caus}{\textbf{#1}}}      % causal
+\newcommand{\wQ}[1]{\textcolor{wire-cons}{\textbf{#1}}}      % consequential
+\newcommand{\wL}[1]{\textcolor{wire-clar}{\textbf{#1}}}      % clarifying
+\newcommand{\prt}[1]{\colorbox{portbg}{\textcolor{port}{\textsf{#1}}}}  % port
+\newcommand{\lbl}[1]{\colorbox{labelbg}{\textcolor{label}{\scriptsize #1}}} % label
+\newcommand{\mathsnip}[1]{\textcolor{dimtext}{\texttt{#1}}}  % math (dimmed)
+
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Wiring Diagram Comparison: Functor Category}\\[4pt]
+{\large PlanetMath vs nLab --- same concept, different wiring}\\[2pt]
+{\small Generated 2026-02-10 from unified metatheory v3.0}
+\end{center}
+
+\vspace{6pt}
+
+% Legend
+\begin{tcolorbox}[colback=gray!5, colframe=gray!40, title={\small\bfseries Legend: Wiring Diagram Elements}, fonttitle=\sffamily]
+\begin{tabularx}{\textwidth}{XXXXXX}
+\comp{component} &
+\wA{adversative} &
+\wC{causal} &
+\wQ{consequential} &
+\wL{clarifying} &
+\prt{port/anaphora} \\
+\scriptsize scope binding &
+\scriptsize but, however &
+\scriptsize because, since &
+\scriptsize therefore, hence &
+\scriptsize that is, namely &
+\scriptsize the above, similarly \\
+\end{tabularx}
+\end{tcolorbox}
+
+\vspace{4pt}
+
+\begin{multicols}{2}
+
+% ============================================================
+% LEFT COLUMN: PlanetMath
+% ============================================================
+\begin{tcolorbox}[colback=blue!2, colframe=comp, title={\sffamily\bfseries PlanetMath: Functor Category}, fonttitle=\sffamily\small]
+{\small\sffamily 5,949 chars $\cdot$ 19 components $\cdot$ 10 wires $\cdot$ 2 ports $\cdot$ ratio 2:1}
+\end{tcolorbox}
+
+\small
+
+\comp{Let $\mathcal{C},\mathcal{D}$ be categories}.
+\comp{Consider the class} of all (covariant) functors from $\mathcal{C}$ to $\mathcal{D}$. \comp{Consider} the following sets and operations
+on the class: \comp{for each $S:\mathcal{C}\to\mathcal{D}$}, define a set $\hom(S,T)$:
+\comp{$\tau \in \hom(S,T)$} iff $\tau$ is a natural transformation from $S$ to $T$.
+For \comp{every $\tau \in \hom(S,T)$} and \comp{every $\eta \in \hom(T,U)$}, define
+$\eta\circ\tau$ to be the natural transformation $\eta\bullet\tau: S\Rightarrow U$
+\wC{given} by $(\eta\bullet\tau)_A := \eta_A\circ\tau_A$
+\comp{for every $A \in \mathcal{C}$}. \comp{$1_S \in \hom(S,S)$} is the identity
+natural transformation.
+
+It is not hard to see that $\hom(S,T)$ is indeed a set (\wC{since} $\mathcal{D}$ is a
+category, $\hom(T(A),S(A))$ is a set \comp{for every $A \in \mathcal{C}$},
+\wQ{so that} $\hom(S,T)$ is a ``subset'' of the Cartesian product\ldots).
+
+The class, together with the hom sets and composition, has all the
+properties of a category, and is called the \emph{functor category} of
+$\mathcal{C}$ and $\mathcal{D}$, and is denoted by $\mathcal{D}^{\mathcal{C}}$.
+
+If the categories are small, \wQ{it follows} from the discussion above that
+the functor category is also a category in the ``traditional'' sense.
+\wA{However}, \comp{for any $U$} in a universe $\mathfrak{U}$, \mathsnip{[\ldots]}
+\wQ{so that} the functor category of two $U$-small categories is again
+$U$-small.
+
+\prt{This means} that using Grothendieck's axiom,
+the functor category is a ``legitimate'' category, \wC{since}
+\comp{$S \in \mathfrak{U}$} for \comp{every} $S$.
+
+\wC{Because} the objects of a functor category are functors, a morphism between
+two objects in a functor category is a natural transformation between two functors.
+\wQ{In fact}, a functor category is a special case of \prt{the same}
+construction\ldots
+
+\vspace{6pt}
+\begin{tcolorbox}[colback=blue!3, colframe=comp, boxrule=0.3pt]
+\scriptsize\sffamily
+\textbf{Component signature:}
+constrain/such-that~\textbf{7},
+quant/universal~\textbf{7},
+bind/let~\textbf{2},
+assume/consider~\textbf{2},
+assume/explicit~\textbf{1}\\[2pt]
+\textbf{Wire signature:}
+\textcolor{wire-caus}{causal~\textbf{5}},
+\textcolor{wire-cons}{consequential~\textbf{4}},
+\textcolor{wire-adv}{adversative~\textbf{1}}
+\end{tcolorbox}
+
+% ============================================================
+% RIGHT COLUMN: nLab
+% ============================================================
+\columnbreak
+
+\begin{tcolorbox}[colback=green!2, colframe=port, title={\sffamily\bfseries nLab: Functor Category}, fonttitle=\sffamily\small]
+{\small\sffamily 9,951 chars $\cdot$ 8 components $\cdot$ 22 wires $\cdot$ 3 ports $\cdot$ ratio 1:3}
+\end{tcolorbox}
+
+\small
+
+\comp{Let $\mathcal{C}$ be} an accessible category that is \emph{not}
+essentially small. \wQ{In fact} $[\mathcal{C}, Set]$ is equivalent to the
+full subcategory of \mathsnip{[\ldots]}.
+
+\lbl{The idea is} that we can form a new category whose objects are
+functors and whose morphisms are natural transformations.
+
+A functor category is also called a \wL{``that is''} a category of diagrams
+or a category of presheaves. \prt{Similarly}, one can consider enriched
+functor categories.
+
+The category $[I,C]$ of functors from a small category $I$ to $C$, with
+natural transformations between them, is \wL{more precisely} the category
+where: \comp{for any $a:A$}, a morphism $\gamma: F \to G$ consists of
+components \comp{$\gamma_a$}: $F(a) \to G(a)$ \comp{for each $a$},
+subject to naturality: \comp{for any $a,b:A$} and $f:a\to b$, the square commutes.
+
+\wA{But} this definition requires $I$ to be small.
+\wA{However}, there are ways around this restriction.
+
+\wC{Because} functor categories are central to topos theory, there is a
+well-developed theory of their properties.
+\lbl{It is well known} that $[C^{op}, Set]$ is a topos
+\comp{for each} small $C$. \wQ{Hence} it has all limits and colimits.
+
+\wA{But} size issues intervene when $C$ is large.
+\wA{Nevertheless}, one can work with accessible categories.
+
+\wQ{It follows} that the Yoneda embedding $y: C \hookrightarrow [C^{op}, Set]$
+is fully faithful. \wL{That is}, $C$ embeds as a full subcategory of its
+presheaf category.
+
+\prt{The above} construction generalises to enriched categories.
+The enriched functor category $[C,D]_V$ has \prt{the same} objects
+\wA{but} morphisms are $V$-natural transformations.
+
+\wC{Since} enriched functor categories satisfy \wL{that is} the
+\wQ{so that} one obtains a closed monoidal structure.
+
+\vspace{6pt}
+\begin{tcolorbox}[colback=green!3, colframe=port, boxrule=0.3pt]
+\scriptsize\sffamily
+\textbf{Component signature:}
+quant/universal~\textbf{6},
+bind/let~\textbf{1},
+assume/consider~\textbf{1}\\[2pt]
+\textbf{Wire signature:}
+\textcolor{wire-caus}{causal~\textbf{7}},
+\textcolor{wire-adv}{adversative~\textbf{6}},
+\textcolor{wire-clar}{clarifying~\textbf{5}},
+\textcolor{wire-cons}{consequential~\textbf{4}}
+\end{tcolorbox}
+
+\end{multicols}
+
+\vspace{4pt}
+
+% ============================================================
+% BOTTOM: Comparison table
+% ============================================================
+\begin{tcolorbox}[colback=white, colframe=black!60, title={\sffamily\bfseries Rewiring Analysis}, fonttitle=\sffamily]
+\begin{multicols}{2}
+
+\small
+\begin{tabular}{lrrrl}
+\toprule
+\textbf{Element} & \textbf{PM} & \textbf{nLab} & \textbf{$\Delta$} & \textbf{Interpretation} \\
+\midrule
+\multicolumn{5}{l}{\textit{Components (scope bindings)}} \\
+constrain/such-that & 7 & 0 & $-7$ & PM: explicit precision \\
+quant/universal & 7 & 6 & $-1$ & $\approx$ shared \\
+bind/let & 2 & 1 & $-1$ & $\approx$ shared \\
+\midrule
+\multicolumn{5}{l}{\textit{Wires (connectives)}} \\
+wire/adversative & 1 & 6 & $+5$ & nLab: nuancing \\
+wire/clarifying & 0 & 5 & $+5$ & nLab: reformulation \\
+wire/causal & 5 & 7 & $+2$ & nLab: more justification \\
+wire/consequential & 4 & 4 & $0$ & shared derivation \\
+\midrule
+\multicolumn{5}{l}{\textit{Density (per 1000 chars)}} \\
+components & 3.19 & 0.80 & & PM 4$\times$ denser \\
+wires & 1.68 & 2.21 & & nLab 1.3$\times$ denser \\
+\bottomrule
+\end{tabular}
+
+\columnbreak
+
+\textbf{The rewiring as exposition morphism:}
+
+\smallskip
+To transform PM $\to$ nLab:
+\begin{itemize}[nosep,leftmargin=1em]
+\item \textcolor{comp}{Remove} 7 precision constraints (such-that)
+\item \textcolor{wire-adv}{Add} 5 adversative wires (but, however)
+\item \textcolor{wire-clar}{Add} 5 clarifying wires (that is, namely)
+\item \textcolor{label}{Add} epistemic/pedagogical labels
+\end{itemize}
+
+\smallskip
+\textbf{Component:Wire ratio encodes style:}
+\begin{itemize}[nosep,leftmargin=1em]
+\item PM ratio 2:1 $\to$ \emph{reference} (define precisely)
+\item nLab ratio 1:3 $\to$ \emph{tutorial} (explain connections)
+\item The same mathematical content; different wiring
+\end{itemize}
+
+\smallskip
+{\small\itshape The rewiring is a morphism in a category of expositions.
+It preserves the mathematical content (shared components)
+while transforming the pedagogical structure (wires).}
+
+\end{multicols}
+\end{tcolorbox}
+
+\end{document}

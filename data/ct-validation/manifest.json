@@ -1,0 +1,80 @@
+{
+  "generated": "2026-02-10T20:15:02Z",
+  "source": "planetmath/18_Category_theory_homological_algebra",
+  "metatheory_version": "3.0",
+  "entries": 313,
+  "empty_skipped": 0,
+  "elapsed_seconds": 7.1,
+  "classical_stats": {
+    "total_ner_hits": 11227,
+    "ner_per_entry": 35.87,
+    "total_components": 1229,
+    "components_per_entry": 3.93,
+    "total_wires": 1127,
+    "wires_per_entry": 3.6,
+    "total_ports": 315,
+    "ports_per_entry": 1.01,
+    "total_labels": 510,
+    "labels_per_entry": 1.63,
+    "component_type_freq": {
+      "constrain/such-that": 665,
+      "quant/universal": 209,
+      "bind/let": 187,
+      "constrain/where": 98,
+      "assume/explicit": 57,
+      "assume/consider": 13
+    },
+    "wire_type_freq": {
+      "wire/consequential": 457,
+      "wire/adversative": 283,
+      "wire/causal": 244,
+      "wire/clarifying": 138,
+      "wire/intuitive": 5
+    },
+    "port_type_freq": {
+      "port/the-above": 80,
+      "port/the-same": 74,
+      "port/this-noun": 60,
+      "port/similarly": 46,
+      "port/such": 38,
+      "port/that-noun": 9,
+      "port/likewise": 8
+    },
+    "label_type_freq": {
+      "construct/exists": 297,
+      "strategy/example": 116,
+      "strategy/generalize": 32,
+      "explain/meaning": 26,
+      "explain/think-of": 12,
+      "correct/actually": 10,
+      "epistemic/known": 8,
+      "construct/explicit": 5,
+      "epistemic/can-show": 3,
+      "explain/the-idea": 1
+    }
+  },
+  "bridge_stats": {
+    "total_bridges": 137,
+    "bridge_pct": 43.8,
+    "match_types": {
+      "defines": 41,
+      "title": 96
+    }
+  },
+  "golden_count": 20,
+  "entry_type_dist": {
+    "Definition": 181,
+    "Topic": 39,
+    "Theorem": 32,
+    "Example": 20,
+    "Proof": 9,
+    "Feature": 7,
+    "Corollary": 6,
+    "Derivation": 5,
+    "Result": 5,
+    "Bibliography": 3,
+    "Biography": 3,
+    "Unknown": 2,
+    "Axiom": 1
+  }
+}

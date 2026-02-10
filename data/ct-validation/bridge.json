@@ -1,0 +1,1002 @@
+[
+ {
+  "pm_id": "pm-ct-AlgebraicCategoriesAndClassesOfAlgebras",
+  "pm_title": "algebraic categories and classes of algebras",
+  "pm_defines": "algebraic category",
+  "nlab_name": "algebraic category",
+  "nlab_id": "nlab-2908",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-AlgebraicCategory",
+  "pm_title": "algebraic category",
+  "nlab_name": "algebraic category",
+  "nlab_id": "nlab-2908",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-CanonicalLocalizingSystem",
+  "pm_title": "canonical localizing system",
+  "pm_defines": "localizing subcategory",
+  "nlab_name": "localizing subcategory",
+  "nlab_id": "nlab-5392",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-CompositionsOfNaturalTransformations",
+  "pm_title": "compositions of natural transformations",
+  "pm_defines": "vertical composition",
+  "nlab_name": "vertical composition",
+  "nlab_id": "nlab-4713",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-ConstantFunctor",
+  "pm_title": "constant functor",
+  "nlab_name": "constant functor",
+  "nlab_id": "nlab-2767",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-DerivationOfCohomologyGroupTheoremForConnectedCWcomplexes",
+  "pm_title": "derivation of cohomology group theorem for connected CW-complexes",
+  "pm_defines": "fundamental class",
+  "nlab_name": "fundamental class",
+  "nlab_id": "nlab-6021",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-Functor",
+  "pm_title": "functor",
+  "nlab_name": "functor",
+  "nlab_id": "nlab-123",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-FunctorCategory",
+  "pm_title": "functor category",
+  "nlab_name": "functor category",
+  "nlab_id": "nlab-225",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-GrothendieckSpectralSequence",
+  "pm_title": "Grothendieck spectral sequence",
+  "nlab_name": "grothendieck spectral sequence",
+  "nlab_id": "nlab-1685",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-NaturalEquivalence",
+  "pm_title": "natural equivalence",
+  "nlab_name": "natural equivalence",
+  "nlab_id": "nlab-5661",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-RepresentableFunctor",
+  "pm_title": "representable functor",
+  "nlab_name": "representable functor",
+  "nlab_id": "nlab-311",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-TensorProductOfAlgebras",
+  "pm_title": "tensor product of algebras",
+  "nlab_name": "tensor product of algebras",
+  "nlab_id": "nlab-8563",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ToposAxioms",
+  "pm_title": "topos axioms",
+  "pm_defines": "topos",
+  "nlab_name": "topos",
+  "nlab_id": "nlab-124",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-CategoryTheory",
+  "pm_title": "category theory",
+  "nlab_name": "category theory",
+  "nlab_id": "nlab-19",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ArrowCategory",
+  "pm_title": "arrow category",
+  "nlab_name": "arrow category",
+  "nlab_id": "nlab-404",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Automorphism",
+  "pm_title": "automorphism",
+  "nlab_name": "automorphism",
+  "nlab_id": "nlab-281",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-BalancedCategory",
+  "pm_title": "balanced category",
+  "nlab_name": "balanced category",
+  "nlab_id": "nlab-487",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Category",
+  "pm_title": "category",
+  "nlab_name": "category",
+  "nlab_id": "nlab-111",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ConcreteCategory",
+  "pm_title": "concrete category",
+  "nlab_name": "concrete category",
+  "nlab_id": "nlab-565",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-DiagonalFunctor",
+  "pm_title": "diagonal functor",
+  "nlab_name": "diagonal functor",
+  "nlab_id": "nlab-5308",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-DiscreteCategory",
+  "pm_title": "discrete category",
+  "nlab_name": "discrete category",
+  "nlab_id": "nlab-132",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-DisjointUnionOfCategories",
+  "pm_title": "disjoint union of categories",
+  "pm_defines": "disjoint union",
+  "nlab_name": "disjoint union",
+  "nlab_id": "nlab-876",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-Endofunctor",
+  "pm_title": "endofunctor",
+  "nlab_name": "endofunctor",
+  "nlab_id": "nlab-569",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ExtremalMonomorphism",
+  "pm_title": "extremal monomorphism",
+  "nlab_name": "extremal monomorphism",
+  "nlab_id": "nlab-1907",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ForgetfulFunctor",
+  "pm_title": "forgetful functor",
+  "nlab_name": "forgetful functor",
+  "nlab_id": "nlab-208",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-IdentityFunctor",
+  "pm_title": "identity functor",
+  "nlab_name": "identity functor",
+  "nlab_id": "nlab-1396",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ImageOfAMorphism",
+  "pm_title": "image of a morphism",
+  "pm_defines": "image",
+  "nlab_name": "image",
+  "nlab_id": "nlab-445",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-InverseImageOfAMorphism",
+  "pm_title": "inverse image of a morphism",
+  "pm_defines": "inverse image",
+  "nlab_name": "inverse image",
+  "nlab_id": "nlab-1138",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-Multifunctor",
+  "pm_title": "multifunctor",
+  "nlab_name": "multifunctor",
+  "nlab_id": "nlab-24419",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ProductOfCategories",
+  "pm_title": "product of categories",
+  "pm_defines": "product category",
+  "nlab_name": "product category",
+  "nlab_id": "nlab-4095",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-SectionsAndRetractions",
+  "pm_title": "sections and retractions",
+  "pm_defines": "section",
+  "nlab_name": "section",
+  "nlab_id": "nlab-704",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-Source",
+  "pm_title": "source",
+  "nlab_name": "source",
+  "nlab_id": "nlab-113",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Subcategory",
+  "pm_title": "subcategory",
+  "nlab_name": "subcategory",
+  "nlab_id": "nlab-126",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-TypesOfMorphisms",
+  "pm_title": "types of morphisms",
+  "pm_defines": "monomorphism",
+  "nlab_name": "monomorphism",
+  "nlab_id": "nlab-571",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-ZeroObject",
+  "pm_title": "zero object",
+  "nlab_name": "zero object",
+  "nlab_id": "nlab-371",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-CommutativeDiagram",
+  "pm_title": "commutative diagram",
+  "nlab_name": "commutative diagram",
+  "nlab_id": "nlab-3755",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ConnectedCategory",
+  "pm_title": "connected category",
+  "nlab_name": "connected category",
+  "nlab_id": "nlab-4007",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Precategory",
+  "pm_title": "precategory",
+  "nlab_name": "precategory",
+  "nlab_id": "nlab-24541",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-WellpointedTopos",
+  "pm_title": "well-pointed topos",
+  "nlab_name": "well-pointed topos",
+  "nlab_id": "nlab-240",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-mathcalUsmall",
+  "pm_title": "$\\mathcal{U",
+  "pm_defines": "small category",
+  "nlab_name": "small category",
+  "nlab_id": "nlab-223",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-Endomorphism",
+  "pm_title": "endomorphism",
+  "nlab_name": "endomorphism",
+  "nlab_id": "nlab-256",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Equalizer",
+  "pm_title": "equalizer",
+  "nlab_name": "equalizer",
+  "nlab_id": "nlab-1028",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Monic",
+  "pm_title": "monic",
+  "pm_defines": "split monomorphism",
+  "nlab_name": "split monomorphism",
+  "nlab_id": "nlab-760",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-PartialOrderingOnSubobjectsOfAnObject",
+  "pm_title": "partial ordering on subobjects of an object",
+  "pm_defines": "union",
+  "nlab_name": "union",
+  "nlab_id": "nlab-594",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-PowerObject",
+  "pm_title": "power object",
+  "nlab_name": "power object",
+  "nlab_id": "nlab-1449",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-RegularMonomorphism",
+  "pm_title": "regular monomorphism",
+  "nlab_name": "regular monomorphism",
+  "nlab_id": "nlab-582",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-StrongMonomorphism",
+  "pm_title": "strong monomorphism",
+  "nlab_name": "strong monomorphism",
+  "nlab_id": "nlab-1057",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Subobject",
+  "pm_title": "subobject",
+  "nlab_name": "subobject",
+  "nlab_id": "nlab-312",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-AmnesticFunctor",
+  "pm_title": "amnestic functor",
+  "nlab_name": "amnestic functor",
+  "nlab_id": "nlab-8158",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ExactFunctor",
+  "pm_title": "exact functor",
+  "nlab_name": "exact functor",
+  "nlab_id": "nlab-1050",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-FaithfulFunctor",
+  "pm_title": "faithful functor",
+  "nlab_name": "faithful functor",
+  "nlab_id": "nlab-209",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-FullFunctor",
+  "pm_title": "full functor",
+  "nlab_name": "full functor",
+  "nlab_id": "nlab-210",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-2Ccategory",
+  "pm_title": "2-C*-category",
+  "pm_defines": "commutative monoid",
+  "nlab_name": "commutative monoid",
+  "nlab_id": "nlab-1566",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-CommaCategory",
+  "pm_title": "comma category",
+  "nlab_name": "comma category",
+  "nlab_id": "nlab-745",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-NaturalTransformation",
+  "pm_title": "natural transformation",
+  "nlab_name": "natural transformation",
+  "nlab_id": "nlab-122",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-YonedaLemma",
+  "pm_title": "Yoneda lemma",
+  "nlab_name": "yoneda lemma",
+  "nlab_id": "nlab-466",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-CategoricalPullback",
+  "pm_title": "categorical pullback",
+  "pm_defines": "pushout",
+  "nlab_name": "pushout",
+  "nlab_id": "nlab-592",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-KernelOfAMorphism",
+  "pm_title": "kernel of a morphism",
+  "pm_defines": "kernel",
+  "nlab_name": "kernel",
+  "nlab_id": "nlab-1031",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-KernelPair",
+  "pm_title": "kernel pair",
+  "nlab_name": "kernel pair",
+  "nlab_id": "nlab-482",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-LimitOfAFunctor",
+  "pm_title": "limit of a functor",
+  "pm_defines": "limit",
+  "nlab_name": "limit",
+  "nlab_id": "nlab-314",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-LimitingCone",
+  "pm_title": "limiting cone",
+  "pm_defines": "cone",
+  "nlab_name": "cone",
+  "nlab_id": "nlab-316",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-NsupercategoryTheory",
+  "pm_title": "$n$-supercategory theory",
+  "pm_defines": "supercategory",
+  "nlab_name": "supercategory",
+  "nlab_id": "nlab-28089",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-PowerOfAnObject",
+  "pm_title": "power of an object",
+  "pm_defines": "copower",
+  "nlab_name": "copower",
+  "nlab_id": "nlab-415",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-Supercategory",
+  "pm_title": "supercategory",
+  "nlab_name": "supercategory",
+  "nlab_id": "nlab-28089",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-CategoryOfFractions",
+  "pm_title": "category of fractions",
+  "nlab_name": "category of fractions",
+  "nlab_id": "nlab-969",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-FactorizationSystem",
+  "pm_title": "factorization system",
+  "nlab_name": "factorization system",
+  "nlab_id": "nlab-400",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-QuotientCategory",
+  "pm_title": "quotient category",
+  "nlab_name": "quotient category",
+  "nlab_id": "nlab-6014",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-CompleteCategory",
+  "pm_title": "complete category",
+  "nlab_name": "complete category",
+  "nlab_id": "nlab-589",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-AdjointFunctor",
+  "pm_title": "adjoint functor",
+  "nlab_name": "adjoint functor",
+  "nlab_id": "nlab-494",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-EquivalenceOfCategories",
+  "pm_title": "equivalence of categories",
+  "nlab_name": "equivalence of categories",
+  "nlab_id": "nlab-800",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-HigherDimensionalAlgebra",
+  "pm_title": "higher dimensional algebra",
+  "nlab_name": "higher dimensional algebra",
+  "nlab_id": "nlab-697",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ReflectiveSubcategory",
+  "pm_title": "reflective subcategory",
+  "nlab_name": "reflective subcategory",
+  "nlab_id": "nlab-619",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-UnitOfAdjunction",
+  "pm_title": "unit of adjunction",
+  "pm_defines": "unit",
+  "nlab_name": "unit",
+  "nlab_id": "nlab-4710",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-UniversalMappingProperty",
+  "pm_title": "universal mapping property",
+  "pm_defines": "universality",
+  "nlab_name": "universality",
+  "nlab_id": "nlab-6586",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-ExactSequenceTheoremInC3category",
+  "pm_title": "exact sequence theorem in $C_3$--category",
+  "pm_defines": "exact sequence",
+  "nlab_name": "exact sequence",
+  "nlab_id": "nlab-1242",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-GeneratorOfACategory",
+  "pm_title": "generator of a category",
+  "pm_defines": "generator",
+  "nlab_name": "generator",
+  "nlab_id": "nlab-9685",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-GrothendieckCategory",
+  "pm_title": "Grothendieck category",
+  "nlab_name": "grothendieck category",
+  "nlab_id": "nlab-1127",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Skeleton",
+  "pm_title": "skeleton",
+  "nlab_name": "skeleton",
+  "nlab_id": "nlab-27807",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-RelationOnObjects",
+  "pm_title": "relation on objects",
+  "pm_defines": "relation",
+  "nlab_name": "relation",
+  "nlab_id": "nlab-866",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-NaturalNumbersObject",
+  "pm_title": "natural numbers object",
+  "nlab_name": "natural numbers object",
+  "nlab_id": "nlab-1181",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-SubobjectClassifier",
+  "pm_title": "subobject classifier",
+  "nlab_name": "subobject classifier",
+  "nlab_id": "nlab-306",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Topos",
+  "pm_title": "topos",
+  "nlab_name": "topos",
+  "nlab_id": "nlab-124",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-CategoryOfPointedTopologicalSpaces",
+  "pm_title": "category of pointed topological spaces",
+  "pm_defines": "pointed topological space",
+  "nlab_name": "pointed topological space",
+  "nlab_id": "nlab-10472",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-GroupoidRepresentationTheorem",
+  "pm_title": "groupoid representation theorem",
+  "pm_defines": "groupoid representation",
+  "nlab_name": "groupoid representation",
+  "nlab_id": "nlab-18453",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-GroupoidcategoryTheoretic",
+  "pm_title": "groupoid (category theoretic)",
+  "pm_defines": "composable pair",
+  "nlab_name": "composable pair",
+  "nlab_id": "nlab-4656",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-TopologicalGroupoid",
+  "pm_title": "topological groupoid",
+  "nlab_name": "topological groupoid",
+  "nlab_id": "nlab-5014",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Congruence",
+  "pm_title": "congruence",
+  "nlab_name": "congruence",
+  "nlab_id": "nlab-961",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-DoubleCategory",
+  "pm_title": "double category",
+  "nlab_name": "double category",
+  "nlab_id": "nlab-251",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Comonad",
+  "pm_title": "comonad",
+  "nlab_name": "comonad",
+  "nlab_id": "nlab-1876",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-CategoryOfSmallCategories",
+  "pm_title": "category of small categories",
+  "pm_defines": "Cat",
+  "nlab_name": "cat",
+  "nlab_id": "nlab-4398",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-GroupoidRepresentationsInducedByMeasure",
+  "pm_title": "groupoid representations induced by measure",
+  "pm_defines": "groupoid representation",
+  "nlab_name": "groupoid representation",
+  "nlab_id": "nlab-18453",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-ThinSquare",
+  "pm_title": "thin square",
+  "pm_defines": "tree",
+  "nlab_name": "tree",
+  "nlab_id": "nlab-2255",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-WeakHomotopyAdditionLemma",
+  "pm_title": "weak homotopy addition lemma",
+  "pm_defines": "path groupoid",
+  "nlab_name": "path groupoid",
+  "nlab_id": "nlab-1315",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-CartesianClosedCategory",
+  "pm_title": "Cartesian closed category",
+  "nlab_name": "cartesian closed category",
+  "nlab_id": "nlab-375",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ExponentialObject",
+  "pm_title": "exponential object",
+  "nlab_name": "exponential object",
+  "nlab_id": "nlab-1313",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-QuantumGroupoids",
+  "pm_title": "quantum groupoids",
+  "pm_defines": "quantum group",
+  "nlab_name": "quantum group",
+  "nlab_id": "nlab-2082",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-GroupObject",
+  "pm_title": "group object",
+  "nlab_name": "group object",
+  "nlab_id": "nlab-1118",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-InternalCategory",
+  "pm_title": "internal category",
+  "nlab_name": "internal category",
+  "nlab_id": "nlab-403",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-2category",
+  "pm_title": "2-category",
+  "nlab_name": "2-category",
+  "nlab_id": "nlab-373",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-AdditiveCategory",
+  "pm_title": "additive category",
+  "nlab_name": "additive category",
+  "nlab_id": "nlab-1035",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-AdditiveFunctor",
+  "pm_title": "additive functor",
+  "nlab_name": "additive functor",
+  "nlab_id": "nlab-1180",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-CategoricalSequence",
+  "pm_title": "categorical sequence",
+  "pm_defines": "exact functor",
+  "nlab_name": "exact functor",
+  "nlab_id": "nlab-1050",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-FunctorCategory1",
+  "pm_title": "functor category",
+  "nlab_name": "functor category",
+  "nlab_id": "nlab-225",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-LocalGrothendieckCategory",
+  "pm_title": "local Grothendieck category",
+  "pm_defines": "local category",
+  "nlab_name": "local category",
+  "nlab_id": "nlab-11286",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-Ncategory",
+  "pm_title": "n-category",
+  "nlab_name": "n-category",
+  "nlab_id": "nlab-353",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-QuotientCategoryAdditive",
+  "pm_title": "quotient category, additive",
+  "pm_defines": "dense subcategory",
+  "nlab_name": "dense subcategory",
+  "nlab_id": "nlab-977",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-SectionFunctor",
+  "pm_title": "section functor",
+  "pm_defines": "localizing subcategory",
+  "nlab_name": "localizing subcategory",
+  "nlab_id": "nlab-5392",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-AbelianCategory",
+  "pm_title": "abelian category",
+  "nlab_name": "abelian category",
+  "nlab_id": "nlab-1041",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ExactSequence1",
+  "pm_title": "exact sequence",
+  "nlab_name": "exact sequence",
+  "nlab_id": "nlab-1242",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-NormalCategory",
+  "pm_title": "normal category",
+  "pm_defines": "normal monomorphism",
+  "nlab_name": "normal monomorphism",
+  "nlab_id": "nlab-2979",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-ProjectiveObject",
+  "pm_title": "projective object",
+  "nlab_name": "projective object",
+  "nlab_id": "nlab-414",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-RegularCategory",
+  "pm_title": "regular category",
+  "nlab_name": "regular category",
+  "nlab_id": "nlab-453",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-MitchellsEmbeddingTheorem",
+  "pm_title": "Mitchell's embedding theorem",
+  "pm_defines": "Freyd-Mitchell embedding theorem",
+  "nlab_name": "freyd-mitchell embedding theorem",
+  "nlab_id": "nlab-4628",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-DerivedCategory",
+  "pm_title": "derived category",
+  "nlab_name": "derived category",
+  "nlab_id": "nlab-1070",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Site",
+  "pm_title": "site",
+  "nlab_name": "site",
+  "nlab_id": "nlab-147",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Presheaf",
+  "pm_title": "presheaf",
+  "nlab_name": "presheaf",
+  "nlab_id": "nlab-146",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-RingedSpace",
+  "pm_title": "ringed space",
+  "nlab_name": "ringed space",
+  "nlab_id": "nlab-1303",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Sheafification",
+  "pm_title": "sheafification",
+  "nlab_name": "sheafification",
+  "nlab_id": "nlab-1094",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-SmallSiteOnAScheme",
+  "pm_title": "small site on a scheme",
+  "pm_defines": "Zariski site",
+  "nlab_name": "zariski site",
+  "nlab_id": "nlab-5928",
+  "match_type": "defines"
+ },
+ {
+  "pm_id": "pm-ct-Quasicrystal",
+  "pm_title": "quasicrystal",
+  "nlab_name": "quasicrystal",
+  "nlab_id": "nlab-21108",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-DerivedFunctor",
+  "pm_title": "derived functor",
+  "nlab_name": "derived functor",
+  "nlab_id": "nlab-265",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-HorseshoeLemma",
+  "pm_title": "horseshoe lemma",
+  "nlab_name": "horseshoe lemma",
+  "nlab_id": "nlab-8152",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-LieAlgebraCohomology",
+  "pm_title": "Lie algebra cohomology",
+  "nlab_name": "lie algebra cohomology",
+  "nlab_id": "nlab-2593",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Syzygy",
+  "pm_title": "syzygy",
+  "nlab_name": "syzygy",
+  "nlab_id": "nlab-8511",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Ext",
+  "pm_title": "Ext",
+  "nlab_name": "ext",
+  "nlab_id": "nlab-4510",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Tor",
+  "pm_title": "Tor",
+  "nlab_name": "tor",
+  "nlab_id": "nlab-4511",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-Nerve",
+  "pm_title": "nerve",
+  "nlab_name": "nerve",
+  "nlab_id": "nlab-444",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-SimplicialCategory",
+  "pm_title": "simplicial category",
+  "nlab_name": "simplicial category",
+  "nlab_id": "nlab-262",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-SimplicialObject",
+  "pm_title": "simplicial object",
+  "nlab_name": "simplicial object",
+  "nlab_id": "nlab-367",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ChainComplex",
+  "pm_title": "chain complex",
+  "nlab_name": "chain complex",
+  "nlab_id": "nlab-1067",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ChainHomotopy",
+  "pm_title": "chain homotopy",
+  "nlab_name": "chain homotopy",
+  "nlab_id": "nlab-5641",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ChainHomotopyEquivalence",
+  "pm_title": "chain homotopy equivalence",
+  "nlab_name": "chain homotopy equivalence",
+  "nlab_id": "nlab-17289",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-ChainMap",
+  "pm_title": "chain map",
+  "nlab_name": "chain map",
+  "nlab_id": "nlab-8164",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-CochainComplex",
+  "pm_title": "cochain complex",
+  "nlab_name": "cochain complex",
+  "nlab_id": "nlab-1326",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-SnakeLemma",
+  "pm_title": "snake lemma",
+  "nlab_name": "snake lemma",
+  "nlab_id": "nlab-1777",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-LeraySpectralSequence",
+  "pm_title": "Leray spectral sequence",
+  "nlab_name": "leray spectral sequence",
+  "nlab_id": "nlab-8151",
+  "match_type": "title"
+ },
+ {
+  "pm_id": "pm-ct-SpectralSequence",
+  "pm_title": "spectral sequence",
+  "nlab_name": "spectral sequence",
+  "nlab_id": "nlab-1686",
+  "match_type": "title"
+ }
+]

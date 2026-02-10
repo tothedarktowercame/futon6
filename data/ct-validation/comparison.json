@@ -1,0 +1,36 @@
+{
+  "natural_transformation": {
+    "pm": {
+      "components": 0,
+      "wires": 3,
+      "ports": 0,
+      "component_sig": {},
+      "wire_sig": {
+        "wire/adversative": 1,
+        "wire/causal": 1,
+        "wire/consequential": 1
+      },
+      "port_sig": {}
+    },
+    "nlab": {
+      "components": 4,
+      "wires": 14,
+      "ports": 10,
+      "component_sig": {
+        "quant/universal": 1,
+        "constrain/such-that": 3
+      },
+      "wire_sig": {
+        "wire/causal": 3,
+        "wire/consequential": 5,
+        "wire/adversative": 6
+      },
+      "port_sig": {
+        "port/similarly": 1,
+        "port/such": 2,
+        "port/the-above": 4,
+        "port/this-noun": 3
+      }
+    }
+  }
+}
