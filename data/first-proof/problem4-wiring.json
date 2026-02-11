@@ -59,8 +59,8 @@
       "id": "p4-s4",
       "node_type": "answer",
       "post_id": 404,
-      "body_text": "Core argument: 1/Phi_n is a concave function f of cumulants (kappa_2, kappa_3, ...). Concavity follows from electrostatic interpretation: adding independent perturbations cannot decrease reciprocal Coulomb energy.",
-      "score": 0,
+      "body_text": "[ERROR] Original claim: 1/Phi_n is concave in cumulants. Numerical tests show 1/Phi_n is NEITHER convex NOR concave in coefficient space. The concavity claim is unproven.",
+      "score": -1,
       "creation_date": "2026-02-11",
       "parent_post_id": 4
     },
@@ -68,10 +68,19 @@
       "id": "p4-s4a",
       "node_type": "comment",
       "post_id": 4041,
-      "body_text": "Superadditivity from concavity: f(kappa(p) + kappa(q)) >= f(kappa(p)) + f(kappa(q)) since f(0) = 0 and f is concave.",
-      "score": 0,
+      "body_text": "[ERROR] Direction wrong: concavity + f(0)=0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity. For superadditivity need CONVEXITY + f(0)=0.",
+      "score": -1,
       "creation_date": "2026-02-11",
       "parent_post_id": 404
+    },
+    {
+      "id": "p4-num",
+      "node_type": "answer",
+      "post_id": 407,
+      "body_text": "Numerical verification: 0/8000 violations for n=2,3,4,5. Inequality IS true. Superadditivity specific to ⊞_n (fails ~40% under plain coeff addition). Analytic proof remains open.",
+      "score": 2,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4
     },
     {
       "id": "p4-s5",
@@ -86,7 +95,7 @@
       "id": "p4-s6",
       "node_type": "answer",
       "post_id": 406,
-      "body_text": "Conclusion: Yes, the inequality holds. Cumulant additivity + concavity of 1/Phi_n => superadditivity. Equality iff p or q is (x-a)^n.",
+      "body_text": "Conclusion: Yes, inequality TRUE (numerically verified). But analytic proof via concavity is BROKEN (direction error + function not concave). Proof incomplete.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 4
@@ -131,9 +140,23 @@
     {
       "source": "p4-s4",
       "target": "p4-s1",
+      "edge_type": "retract",
+      "evidence": "[RETRACTED] 1/Phi_n concavity claim — numerically neither convex nor concave",
+      "detection": "classical"
+    },
+    {
+      "source": "p4-num",
+      "target": "p4-problem",
       "edge_type": "assert",
-      "evidence": "1/Phi_n concave in cumulants by electrostatic interpretation",
-      "detection": "structural"
+      "evidence": "Numerical verification: 0/8000 violations, inequality IS true",
+      "detection": "classical"
+    },
+    {
+      "source": "p4-num",
+      "target": "p4-s4",
+      "edge_type": "challenge",
+      "evidence": "1/Phi_n neither convex nor concave; superadditivity specific to ⊞_n structure",
+      "detection": "classical"
     },
     {
       "source": "p4-s4",
@@ -145,9 +168,9 @@
     {
       "source": "p4-s4a",
       "target": "p4-s4",
-      "edge_type": "clarify",
-      "evidence": "f(a+b) >= f(a) + f(b) when f concave with f(0) = 0",
-      "detection": "structural"
+      "edge_type": "challenge",
+      "evidence": "[ERROR] concavity+f(0)=0 gives SUBadditivity, not superadditivity; need CONVEXITY",
+      "detection": "classical"
     },
     {
       "source": "p4-s5",
@@ -160,15 +183,15 @@
       "source": "p4-s6",
       "target": "p4-problem",
       "edge_type": "assert",
-      "evidence": "Yes: cumulant additivity + concavity => superadditivity",
-      "detection": "structural"
+      "evidence": "Yes (numerically), but analytic proof broken",
+      "detection": "classical"
     },
     {
       "source": "p4-s6",
-      "target": "p4-s4",
+      "target": "p4-num",
       "edge_type": "reference",
-      "evidence": "Concavity of 1/Phi_n in cumulants",
-      "detection": "structural"
+      "evidence": "Numerical verification supports truth of inequality",
+      "detection": "classical"
     },
     {
       "source": "p4-s6",
@@ -306,7 +329,7 @@
     },
     {
       "hx/id": "first-proof-p4:edge-005",
-      "hx/type": "thread/assert",
+      "hx/type": "thread/retract",
       "hx/ends": [
         {
           "role": "source",
@@ -320,13 +343,63 @@
         }
       ],
       "hx/content": {
-        "evidence": "1/Phi_n concave in cumulants by electrostatic interpretation",
-        "detection": "structural"
+        "evidence": "[RETRACTED] 1/Phi_n concavity claim — numerically neither convex nor concave",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "retract",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-012",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-num",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Numerical verification: 0/8000 violations, inequality IS true",
+        "detection": "classical"
       },
       "hx/labels": [
         "thread",
         "assert",
-        "structural"
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-013",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-num",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "1/Phi_n neither convex nor concave; superadditivity specific to ⊞_n structure",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "classical"
       ]
     },
     {
@@ -356,7 +429,7 @@
     },
     {
       "hx/id": "first-proof-p4:edge-007",
-      "hx/type": "thread/clarify",
+      "hx/type": "thread/challenge",
       "hx/ends": [
         {
           "role": "source",
@@ -370,13 +443,13 @@
         }
       ],
       "hx/content": {
-        "evidence": "f(a+b) >= f(a) + f(b) when f concave with f(0) = 0",
-        "detection": "structural"
+        "evidence": "[ERROR] concavity+f(0)=0 gives SUBadditivity, not superadditivity; need CONVEXITY",
+        "detection": "classical"
       },
       "hx/labels": [
         "thread",
-        "clarify",
-        "structural"
+        "challenge",
+        "classical"
       ]
     },
     {
@@ -420,13 +493,13 @@
         }
       ],
       "hx/content": {
-        "evidence": "Yes: cumulant additivity + concavity => superadditivity",
-        "detection": "structural"
+        "evidence": "Yes (numerically), but analytic proof broken",
+        "detection": "classical"
       },
       "hx/labels": [
         "thread",
         "assert",
-        "structural"
+        "classical"
       ]
     },
     {
@@ -440,18 +513,18 @@
         },
         {
           "role": "target",
-          "ident": "p4-s4",
+          "ident": "p4-num",
           "node_type": "answer"
         }
       ],
       "hx/content": {
-        "evidence": "Concavity of 1/Phi_n in cumulants",
-        "detection": "structural"
+        "evidence": "Numerical verification supports truth of inequality",
+        "detection": "classical"
       },
       "hx/labels": [
         "thread",
         "reference",
-        "structural"
+        "classical"
       ]
     },
     {
@@ -481,21 +554,24 @@
     }
   ],
   "stats": {
-    "n_nodes": 10,
-    "n_edges": 12,
+    "n_nodes": 11,
+    "n_edges": 14,
     "node_types": {
       "question": 1,
-      "answer": 6,
+      "answer": 7,
       "comment": 3
     },
     "edge_types": {
-      "clarify": 4,
+      "clarify": 3,
       "assert": 3,
       "exemplify": 2,
-      "reference": 3
+      "reference": 3,
+      "challenge": 2,
+      "retract": 1
     },
     "detection_types": {
-      "structural": 12
+      "structural": 8,
+      "classical": 6
     }
   }
 }

@@ -25,8 +25,13 @@ p, q of degree n:
 
 ## Answer
 
-**Yes.** The inequality holds, and equality iff p or q is (x - a)^n for
-some constant a (i.e., all roots coincide).
+**Yes** (numerically verified, proof incomplete). The inequality holds with
+0 violations in 8000 random trials for n = 2, 3, 4, 5. Equality holds
+exactly at n = 2 (where 1/Phi_2 is linear in the sole cumulant kappa_2).
+For n >= 3, the inequality is strict for generic polynomials.
+
+The original proof via "concavity of 1/Phi_n implies superadditivity"
+contains errors (see Section 5a). The analytic proof remains open.
 
 ## Solution
 
@@ -107,7 +112,7 @@ Key properties:
 Using property (b), interpret p ⊞_n q as the expected characteristic
 polynomial of A + UBU* where char(A) = p, char(B) = q.
 
-**Step 4a: Phi_n as curvature of the log-characteristic polynomial.**
+**Phi_n as curvature of the log-characteristic polynomial.**
 
 Define F_A(x) = log |det(xI - A)| = sum_i log|x - lambda_i|. Then:
 
@@ -118,67 +123,57 @@ At the roots: Phi_n(p) = -sum_i F_A''(lambda_i) (with appropriate signs).
 More precisely, Phi_n(p) = sum_i [F_A'(lambda_i)]^2 where F_A' is the
 regularized derivative (sum_{j != i} 1/(lambda_i - lambda_j)).
 
-**Step 4b: Convexity of 1/Phi_n under free convolution.**
+### 5. Finite free cumulants and the bilinear structure
 
-The key insight: 1/Phi_n measures "root spread" (how separated the roots are).
-Free convolution adds independent "randomness" to the root locations, which
-can only increase the spread.
+**The MSS coefficient formula.** The ⊞_n operation acts on coefficients as:
 
-Formally, for the random matrix A + UBU*:
+    c_k = sum_{i+j=k} [(n-i)!(n-j)! / (n!(n-k)!)] a_i b_j
 
-- The roots of p ⊞_n q are the expected root locations (in a specific sense)
-- The "force" at each root of p ⊞_n q combines forces from both A and B
-- By the independence of A and UBU*, the variance of forces adds
+This is bilinear but NOT simply additive in the a_k. For example, at n=3:
 
-This gives:
+    c_1 = a_1 + b_1                     (additive)
+    c_2 = a_2 + (2/3)*a_1*b_1 + b_2     (cross-term!)
+    c_3 = a_3 + (1/3)*a_2*b_1 + (1/3)*a_1*b_2 + b_3
 
-    1/Phi_n(p ⊞_n q) >= 1/Phi_n(p) + 1/Phi_n(q)
+**Finite free cumulants.** Following Arizmendi-Perales (2018), there exist
+finite free cumulants kappa_k^(n) related to the a_k by a nonlinear
+moment-cumulant formula (via non-crossing partitions with falling-factorial
+weights) such that:
 
-### 5. Proof via the finite free cumulant expansion
+    kappa_k^(n)(p ⊞_n q) = kappa_k^(n)(p) + kappa_k^(n)(q)
 
-**Finite free cumulants:** For a monic degree-n polynomial p, define the
-finite free cumulants kappa_1, ..., kappa_n by:
+The polynomial coefficients a_k are NOT the finite free cumulants; they
+are finite free MOMENTS. The relationship involves a Möbius inversion on the
+lattice of non-crossing partitions.
 
-    p(x) = sum_{k=0}^n (-1)^k e_k(lambda_1,...,lambda_n) x^{n-k}
+### 5a. What the proof requires (GAP)
 
-where e_k are the elementary symmetric polynomials. The finite free cumulants
-are defined via:
-
-    a_k = sum_{pi in NC(k)} prod_{B in pi} kappa_{|B|}  *  [combinatorial factor]
-
-where NC(k) denotes non-crossing partitions of {1,...,k}.
-
-**Key property of ⊞_n:** Under finite free convolution, the finite free
-cumulants ADD:
-
-    kappa_k(p ⊞_n q) = kappa_k(p) + kappa_k(q)
-
-(This is the defining property of free cumulants, analogous to classical
-cumulants under classical convolution.)
-
-**Phi_n in terms of cumulants:** The root separation energy can be expressed
-in terms of the finite free cumulants. Specifically:
-
-    1/Phi_n(p) = f(kappa_2, kappa_3, ..., kappa_n)
-
-where f is a function that depends on the cumulants of order >= 2 (kappa_1
-just shifts all roots uniformly and doesn't affect Phi_n).
-
-The crucial property: **f is concave** in the cumulants. This follows from
-the electrostatic interpretation: adding independent perturbations to root
-positions increases the expected reciprocal Coulomb energy.
-
-Since cumulants add under ⊞_n:
-
-    1/Phi_n(p ⊞_n q) = f(kappa_2(p) + kappa_2(q), kappa_3(p) + kappa_3(q), ...)
-
-By concavity of f (with f(0,...,0) = 0 for the degenerate polynomial):
+To complete the proof via the cumulant approach, one would need to show that
+1/Phi_n, expressed as a function f(kappa_2^(n), ..., kappa_n^(n)) of the
+finite free cumulants, satisfies superadditivity:
 
     f(kappa(p) + kappa(q)) >= f(kappa(p)) + f(kappa(q))
 
-which is exactly:
+**Note on direction:** Superadditivity of f follows if f is CONVEX with
+f(0) = 0. (Concavity + f(0) = 0 would give SUBadditivity, the wrong
+direction.) However, numerical experiments show that 1/Phi_n is neither
+globally convex nor concave in the polynomial coefficient space, and the
+superadditivity is specific to ⊞_n — it fails for plain coefficient-wise
+addition (~40% violation rate for n=3,4,5).
 
-    1/Phi_n(p ⊞_n q) >= 1/Phi_n(p) + 1/Phi_n(q)
+**Status of this step:** The superadditivity of 1/Phi_n under ⊞_n is
+**numerically verified** (0 violations in 8000 random trials for n=2,3,4,5)
+but the analytic proof via convexity of f in finite free cumulant space
+remains open. A correct proof may require:
+
+(a) Explicit computation of 1/Phi_n in finite free cumulant coordinates and
+    verification of convexity in that specific coordinate system, or
+
+(b) A direct argument via the MSS random matrix model E_U[char(A + UBU*)]
+    using properties of Haar-random unitary conjugation, or
+
+(c) An electrostatic/log-gas argument that works with the specific bilinear
+    structure of ⊞_n rather than relying on global function properties.
 
 ### 6. Verification for small cases
 
@@ -203,20 +198,65 @@ Equality! This is consistent: for degree 2 symmetric polynomials, the
 inequality holds with equality (because the cumulant structure is purely
 quadratic).
 
-### 7. Summary
+### 7. Summary and status
 
-The inequality 1/Phi_n(p ⊞_n q) >= 1/Phi_n(p) + 1/Phi_n(q) holds because:
+**The inequality is TRUE** — numerically verified with 0 violations in 8000
+random trials for n = 2, 3, 4, 5, with LHS/RHS ratios ranging from 1.0
+(equality at n=2) to over 2000 (large surplus at n=5).
 
-1. Finite free cumulants add under ⊞_n
-2. 1/Phi_n is a concave function of the cumulants (orders >= 2)
-3. Concavity + additivity => superadditivity
-4. Equality iff one polynomial is degenerate (all roots equal)
+**What is established:**
 
-The concavity of 1/Phi_n in the cumulant variables follows from the
-electrostatic/log-gas interpretation: Phi_n is the total Coulomb self-energy,
-1/Phi_n is the reciprocal energy, and adding independent perturbations
-(which is what free convolution does to cumulants) cannot decrease the
-reciprocal energy.
+1. Finite free cumulants add under ⊞_n (Arizmendi-Perales 2018)
+2. 1/Phi_n is superadditive under ⊞_n (numerical, high confidence)
+3. Equality at n=2 (1/Phi_2 is linear in kappa_2)
+4. The superadditivity is SPECIFIC to ⊞_n — it fails under plain
+   coefficient addition (~40% violation rate)
+
+**What remains open:**
+
+The analytic proof of superadditivity. The original argument claimed
+"concavity of 1/Phi_n in cumulants implies superadditivity," but this
+has two errors: (a) concavity + f(0)=0 gives SUBadditivity, not
+superadditivity, and (b) 1/Phi_n is neither globally convex nor concave.
+A correct proof likely needs to exploit the specific bilinear structure
+of the MSS convolution formula or the random matrix interpretation.
+
+### 8. Numerical evidence
+
+Verification script: `scripts/verify-p4-inequality.py`
+
+**Superadditivity test** (2000 random real-rooted polynomial pairs per n):
+
+| n | violations | min ratio | mean ratio | max ratio |
+|---|-----------|-----------|------------|-----------|
+| 2 | 0/2000    | 1.000000  | 1.000000   | 1.000000  |
+| 3 | 0/2000    | 1.000082  | 3.031736   | 162.446   |
+| 4 | 0/2000    | 1.003866  | 9.549935   | 2268.065  |
+| 5 | 0/2000    | 1.032848  | 14.457013  | 2119.743  |
+
+Ratio = LHS/RHS = [1/Phi_n(p⊞q)] / [1/Phi_n(p) + 1/Phi_n(q)]; ratio >= 1
+means inequality holds. Strict inequality for n >= 3.
+
+**Convexity/concavity test** (midpoint test in coefficient space):
+
+| n | convex violations | concave violations | total tests |
+|---|------------------|--------------------|-------------|
+| 3 | 757 (50.6%)      | 738 (49.4%)        | 1495        |
+| 4 | 648 (65.7%)      | 338 (34.3%)        | 986         |
+| 5 | 433 (72.9%)      | 161 (27.1%)        | 594         |
+
+1/Phi_n is NEITHER convex NOR concave in coefficient space.
+
+**Plain coefficient addition test** (NOT ⊞_n):
+
+| n | violations | total |
+|---|-----------|-------|
+| 3 | 240       | 609   |
+| 4 | 159       | 373   |
+| 5 | 116       | 218   |
+
+Superadditivity FAILS under plain addition — the inequality is specific
+to the MSS bilinear structure of ⊞_n.
 
 ## Key References from futon6 corpus
 
@@ -226,3 +266,13 @@ reciprocal energy.
 - PlanetMath: "logarithmic derivative" (LogarithmicDerivative)
 - PlanetMath: "partial fraction decomposition" (ALectureOnThePartialFractionDecompositionMethod)
 - PlanetMath: "cumulant generating function" (CumulantGeneratingFunction)
+
+## External References
+
+- Marcus, Spielman, Srivastava (2015), "Interlacing Families II: Mixed Characteristic
+  Polynomials and the Kadison-Singer Problem," Annals of Math 182(1), 327-350.
+  [Defines ⊞_n, proves real-rootedness preservation, random matrix interpretation]
+
+- Arizmendi, Perales (2018), "Cumulants for finite free convolution," J. Combinatorial
+  Theory Ser. A 155, 244-266. arXiv:1702.04761.
+  [Defines finite free cumulants that linearize under ⊞_n]
