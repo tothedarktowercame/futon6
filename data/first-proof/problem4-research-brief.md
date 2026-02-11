@@ -92,7 +92,7 @@ Search terms:
 - "finite R-transform"
 - "finite free" cumulant moment
 - "finite free convolution" cumulant linearization
-- arXiv:1702.04761
+- arXiv:1611.06598
 
 What we're looking for: Explicit formulas for finite free cumulants in terms
 of coefficients (moment-cumulant relation). Also: any convexity/monotonicity
@@ -157,7 +157,7 @@ direct computation via Weingarten calculus or HCIZ-type integrals.
   [Defines ⊞_n, proves real-rootedness preservation, random matrix model]
 
 - Arizmendi, Perales (2018), "Cumulants for finite free convolution,"
-  JCTA 155, 244-266. arXiv:1702.04761.
+  JCTA 155, 244-266. arXiv:1611.06598.
   [Finite free cumulants that linearize under ⊞_n — the right coordinates]
 
 - Marcus (2021), "Polynomial convolutions and (finite) free probability,"
