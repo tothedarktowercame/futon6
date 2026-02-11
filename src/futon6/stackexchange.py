@@ -494,17 +494,31 @@ def build_threads_streaming(
 
 # --- Conversion to F6 entities ---
 
-def qa_to_entity(pair: SEQAPair) -> dict:
+def _site_slug(site: str | None) -> str:
+    """Return stable site slug used in SE entity IDs."""
+    if not site:
+        return "stackexchange"
+    return site.split(".")[0]
+
+
+def make_se_entity_id(question_id: int, site: str = "physics.stackexchange") -> str:
+    """Build canonical SE entity ID for a question."""
+    return f"se-{_site_slug(site)}-{question_id}"
+
+
+def qa_to_entity(pair: SEQAPair, site: str = "physics.stackexchange",
+                 entity_id: str | None = None) -> dict:
     """Convert a QA pair to an F6 entity dict.
 
     Shape matches planetmath.entries_to_entities() output.
     """
     q = pair.question
     a = pair.answer
+    eid = entity_id or make_se_entity_id(q.id, site)
     return {
-        "entity/id": f"se-physics-{q.id}",
+        "entity/id": eid,
         "entity/type": "QAPair",
-        "entity/source": "physics.stackexchange",
+        "entity/source": site,
         "title": q.title,
         "question-body": q.body_text,
         "answer-body": a.body_text,
@@ -517,17 +531,19 @@ def qa_to_entity(pair: SEQAPair) -> dict:
     }
 
 
-def qa_to_relations(pair: SEQAPair) -> list[dict]:
+def qa_to_relations(pair: SEQAPair, site: str = "physics.stackexchange",
+                    entity_id: str | None = None) -> list[dict]:
     """Extract relations from a QA pair.
 
     Generates:
     - tagged-with relations (from SE tags)
     """
     q = pair.question
+    source_id = entity_id or make_se_entity_id(q.id, site)
     relations = []
     for tag in pair.tags:
         relations.append({
-            "from": f"se-physics-{q.id}",
+            "from": source_id,
             "to": f"se-tag-{tag}",
             "type": "tagged-with",
         })

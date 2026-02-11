@@ -215,6 +215,33 @@ class TestEntityConversion:
         finally:
             os.unlink(path)
 
+    def test_qa_to_entity_custom_site(self):
+        path = _write_sample_xml()
+        try:
+            posts = load_posts(path)
+            pairs = build_qa_pairs(posts)
+            entity = qa_to_entity(pairs[0], site="mathoverflow.net")
+            assert entity["entity/source"] == "mathoverflow.net"
+            assert entity["entity/id"].startswith("se-mathoverflow-")
+        finally:
+            os.unlink(path)
+
+    def test_qa_to_relations_custom_site_and_id(self):
+        path = _write_sample_xml()
+        try:
+            posts = load_posts(path)
+            pairs = build_qa_pairs(posts)
+            q1_pair = next(p for p in pairs if p.question.id == 1)
+            rels = qa_to_relations(
+                q1_pair,
+                site="mathoverflow.net",
+                entity_id="se-mathoverflow-1",
+            )
+            assert len(rels) == 3
+            assert all(r["from"] == "se-mathoverflow-1" for r in rels)
+        finally:
+            os.unlink(path)
+
     def test_tag_entities(self):
         path = _write_sample_xml()
         try:

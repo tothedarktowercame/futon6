@@ -12,12 +12,12 @@ Download + run (self-contained):
 
     python scripts/superpod-job.py --download mathoverflow --data-dir ./se-data
     python scripts/superpod-job.py ./se-data/mathoverflow.net/Posts.xml \\
-        --output-dir ./mo-processed --site mathoverflow
+        --output-dir ./mo-processed --site mathoverflow.net
 
     # CPU-only (no GPU required):
     python scripts/superpod-job.py ./se-data/math.stackexchange.com/Posts.xml \\
         --skip-embeddings --skip-llm --skip-clustering \\
-        --site math.stackexchange
+        --site math.stackexchange --output-dir ./math-se-processed
 
     # Dry run (shows plan, downloads nothing, processes nothing):
     python scripts/superpod-job.py ./se-data/math.stackexchange.com/Posts.xml --dry-run
@@ -90,7 +90,7 @@ SE_DUMPS = {
     },
     "mathoverflow": {
         "url": "https://archive.org/download/stackexchange/mathoverflow.net.7z",
-        "site": "mathoverflow",
+        "site": "mathoverflow.net",
         "dirname": "mathoverflow.net",
         "description": "MathOverflow (~500 MB compressed, ~100K QA pairs, research-level)",
     },
@@ -227,6 +227,26 @@ PATTERNS = [
 ]
 
 PATTERN_NAMES = [p[0] for p in PATTERNS]
+
+
+def derive_default_output_dir(site):
+    """Pick a stable default output directory from site name."""
+    normalized = (site or "").strip().lower()
+    known = {
+        "math.stackexchange": "./math-se-processed",
+        "math.stackexchange.com": "./math-se-processed",
+        "mathoverflow": "./mo-processed",
+        "mathoverflow.net": "./mo-processed",
+        "physics.stackexchange": "./physics-se-processed",
+        "physics.stackexchange.com": "./physics-se-processed",
+    }
+    if normalized in known:
+        return known[normalized]
+
+    slug = re.sub(r"[^a-z0-9]+", "-", normalized).strip("-")
+    if not slug:
+        slug = "se-site"
+    return f"./{slug}-processed"
 
 
 def write_json(path, data):
@@ -519,7 +539,7 @@ def _create_llm_pipeline(model_name, batch_size=8):
 
 
 def tag_patterns_llm_batch(pairs, model_name=None, batch_size=8, device="cuda",
-                           pipe=None, tokenizer=None):
+                           pipe=None, tokenizer=None, entry_ids=None):
     """Tag QA pairs with reasoning patterns using a local LLM.
 
     Uses transformers pipeline for batched inference. If pipe/tokenizer
@@ -530,6 +550,8 @@ def tag_patterns_llm_batch(pairs, model_name=None, batch_size=8, device="cuda",
 
     results = []
     total = len(pairs)
+    if entry_ids is not None and len(entry_ids) != total:
+        raise ValueError(f"entry_ids length ({len(entry_ids)}) != pairs length ({total})")
 
     for start in range(0, total, batch_size):
         batch = pairs[start:start + batch_size]
@@ -551,8 +573,11 @@ def tag_patterns_llm_batch(pairs, model_name=None, batch_size=8, device="cuda",
         for i, out in enumerate(outputs):
             text = out[0]["generated_text"].strip()
             pattern_ids = _parse_pattern_response(text)
+            entry_id = (entry_ids[start + i]
+                        if entry_ids is not None
+                        else f"se-math-{batch[i].question.id}")
             results.append({
-                "entry_id": f"se-math-{batch[i].question.id}",
+                "entry_id": entry_id,
                 "patterns": [PATTERN_NAMES[pid - 1] for pid in pattern_ids
                              if 1 <= pid <= 25],
                 "raw": text,
@@ -736,6 +761,10 @@ def classify_thread_performatives_llm_batch(diagrams, pipe, tokenizer,
 
 def cluster_embeddings(embeddings, min_cluster_size=50, max_clusters=500):
     """Cluster embeddings using HDBSCAN (or KMeans fallback)."""
+    if len(embeddings) == 0:
+        print("       No embeddings to cluster (0 rows)")
+        return [], 0, 0
+
     try:
         from sklearn.cluster import HDBSCAN
         print(f"       Using HDBSCAN (min_cluster_size={min_cluster_size})...")
@@ -750,16 +779,23 @@ def cluster_embeddings(embeddings, min_cluster_size=50, max_clusters=500):
         print(f"       {n_clusters} clusters, {n_noise} noise points")
     except (ImportError, Exception) as e:
         print(f"       HDBSCAN failed ({e}), falling back to KMeans...")
-        from sklearn.cluster import MiniBatchKMeans
-        n_clusters = min(max_clusters, len(embeddings) // 100)
-        kmeans = MiniBatchKMeans(
-            n_clusters=n_clusters,
-            batch_size=4096,
-            n_init=3,
-        )
-        labels = kmeans.fit_predict(embeddings)
-        n_noise = 0
-        print(f"       {n_clusters} clusters (KMeans)")
+        try:
+            from sklearn.cluster import MiniBatchKMeans
+            n_clusters = max(1, min(max_clusters, len(embeddings) // 100))
+            kmeans = MiniBatchKMeans(
+                n_clusters=n_clusters,
+                batch_size=4096,
+                n_init=3,
+            )
+            labels = kmeans.fit_predict(embeddings)
+            n_noise = 0
+            print(f"       {n_clusters} clusters (KMeans)")
+        except (ImportError, Exception) as kmeans_err:
+            # Last-resort fallback: keep pipeline running even without sklearn.
+            print(f"       KMeans unavailable ({kmeans_err}); assigning one cluster")
+            labels = np.zeros(len(embeddings), dtype=int)
+            n_clusters = 1
+            n_noise = 0
 
     return labels.tolist(), n_clusters, n_noise
 
@@ -898,20 +934,33 @@ def generate_moist_prompts(pairs, entities, outdir, stages=None, thread_diagrams
         print(f"       Written {path} ({count} prompts, {size_mb:.1f} MB)")
         generated["thread_performatives"] = {"path": str(path), "count": count}
 
-    # Write a manifest for the moist-run
+    # Write/update a manifest for the moist-run (merge stages across calls).
+    manifest_path = prompt_dir / "manifest.json"
+    merged_stages = {}
+    if manifest_path.exists():
+        try:
+            with open(manifest_path) as f:
+                prev_manifest = json.load(f)
+            if isinstance(prev_manifest, dict):
+                prev_stages = prev_manifest.get("stages", {})
+                if isinstance(prev_stages, dict):
+                    merged_stages.update(prev_stages)
+        except (OSError, json.JSONDecodeError):
+            pass
+    merged_stages.update(generated)
+
     manifest = {
         "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "mode": "moist-run",
         "note": "Prompt files for Codex/Claude batch submission. "
                 "Each JSONL line has entity_id, question_id, stage, prompt.",
-        "stages": generated,
+        "stages": merged_stages,
         "usage": {
             "codex": "codex --prompt-file <path.jsonl>",
             "claude_api": "for line in open(path): send(json.loads(line)['prompt'])",
             "manual": "Read prompt field, paste into LLM, save response",
         },
     }
-    manifest_path = prompt_dir / "manifest.json"
     with open(manifest_path, "w") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
     print(f"       Written {manifest_path}")
@@ -944,10 +993,22 @@ def print_dry_run(args):
         est_stage3_min = est_pairs / 114000 * 8  # LLM inference (slowest)
         est_stage4_min = est_pairs / 114000 * 1  # clustering
         est_stage5_min = est_pairs / 114000 * 2  # NER + scope
-        est_total_min = est_stage1_min + est_stage2_min + est_stage3_min + est_stage4_min + est_stage5_min
+        est_stage6_min = est_stage1_min  # rough placeholder for reverse morphogenesis
+        est_stage7_min = est_stage1_min * 1.5
     else:
         est_stage1_min = est_stage2_min = est_stage3_min = "?"
-        est_stage4_min = est_stage5_min = est_total_min = "?"
+        est_stage4_min = est_stage5_min = est_stage6_min = est_stage7_min = "?"
+
+    skip_embeddings = args.skip_embeddings or args.moist_run
+    skip_clustering = args.skip_clustering or args.moist_run
+    llm_inference_active = (not args.skip_llm) and (not args.moist_run)
+
+    stage2_active = not skip_embeddings
+    stage3_active = args.moist_run or (not args.skip_llm)
+    stage4_active = not skip_clustering
+    stage5_active = not args.skip_ner
+    stage6_active = args.moist_run or (not args.skip_llm)
+    stage7_active = not args.skip_threads
 
     print("=" * 64)
     print("SUPERPOD JOB — DRY RUN (nothing will be executed)")
@@ -970,57 +1031,72 @@ def print_dry_run(args):
     print(f"  {'-'*42} {'-'*36} {'-'*10}")
     print(f"  {'1. Parse XML → QA pairs (CPU)':<42s} {'streaming XML parser':<36s} {fmt(est_stage1_min)+' min':>10s}")
 
-    if args.skip_embeddings:
+    if not stage2_active:
         print(f"  {'2. Embeddings':<42s} {'SKIPPED':>10s}")
     else:
         print(f"  {'2. Dense embeddings (GPU)':<42s} {args.embed_model:<36s} {fmt(est_stage2_min)+' min':>10s}")
 
-    if args.skip_llm:
+    if not stage3_active:
         print(f"  {'3. LLM pattern tagging':<42s} {'SKIPPED':>10s}")
+    elif args.moist_run:
+        print(f"  {'3. Pattern tagging prompts (CPU)':<42s} {'prompt generation':<36s} {fmt(est_stage1_min)+' min':>10s}")
     else:
         print(f"  {'3. LLM pattern tagging (GPU)':<42s} {args.llm_model:<36s} {fmt(est_stage3_min)+' min':>10s}")
 
-    if args.skip_clustering:
+    if not stage4_active:
         print(f"  {'4. Clustering':<42s} {'SKIPPED':>10s}")
     else:
         print(f"  {'4. Clustering (CPU)':<42s} {'HDBSCAN/KMeans':<36s} {fmt(est_stage4_min)+' min':>10s}")
 
-    if args.skip_ner:
+    if not stage5_active:
         print(f"  {'5. NER + scope detection':<42s} {'SKIPPED':>10s}")
     else:
         print(f"  {'5. NER + scope detection (CPU)':<42s} {args.ner_kernel:<36s} {fmt(est_stage5_min)+' min':>10s}")
 
-    # Stage 6 is always present (CPU — prompt generation or LLM)
-    est_stage6_min = est_stage1_min  # roughly same as parse (just string formatting)
-    print(f"  {'6. Reverse morphogenesis S←Q←A (LLM)':<42s} {args.llm_model:<36s} {fmt(est_stage6_min)+' min':>10s}")
+    if not stage6_active:
+        print(f"  {'6. Reverse morphogenesis S←Q←A':<42s} {'SKIPPED':>10s}")
+    elif args.moist_run:
+        print(f"  {'6. Reverse morphogenesis prompts':<42s} {'prompt generation':<36s} {fmt(est_stage6_min)+' min':>10s}")
+    else:
+        print(f"  {'6. Reverse morphogenesis S←Q←A (LLM)':<42s} {args.llm_model:<36s} {fmt(est_stage6_min)+' min':>10s}")
 
     # Stage 7: Thread wiring diagrams
-    est_stage7_min = est_stage1_min * 1.5 if isinstance(est_stage1_min, float) else "?"
-    if args.skip_threads:
+    if not stage7_active:
         print(f"  {'7. Thread wiring diagrams':<42s} {'SKIPPED':>10s}")
     else:
-        thread_limit_note = f" (limit={args.thread_limit})" if args.thread_limit else ""
         print(f"  {'7. Thread wiring + performatives (CPU)':<42s} {'IATC regex bank':<36s} {fmt(est_stage7_min)+' min':>10s}")
 
     print(f"  {'-'*42} {'-'*36} {'-'*10}")
 
-    skipped = sum([args.skip_embeddings, args.skip_llm, args.skip_clustering, args.skip_ner, args.skip_threads])
-    active = 7 - skipped
-    if isinstance(est_total_min, (int, float)):
-        est_total_min += est_stage6_min
-        if not args.skip_threads:
-            est_total_min += est_stage7_min if isinstance(est_stage7_min, float) else 0
+    active = (1 + int(stage2_active) + int(stage3_active) + int(stage4_active)
+              + int(stage5_active) + int(stage6_active) + int(stage7_active))
+    if isinstance(est_stage1_min, (int, float)):
+        est_total_min = est_stage1_min
+        if stage2_active:
+            est_total_min += est_stage2_min
+        if stage3_active:
+            est_total_min += est_stage1_min if args.moist_run else est_stage3_min
+        if stage4_active:
+            est_total_min += est_stage4_min
+        if stage5_active:
+            est_total_min += est_stage5_min
+        if stage6_active:
+            est_total_min += est_stage6_min
+        if stage7_active:
+            est_total_min += est_stage7_min
+    else:
+        est_total_min = "?"
     print(f"  {'TOTAL':<42s} {f'{active}/7 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
     print()
 
     print("  ESTIMATED OUTPUT:")
     if isinstance(est_entities_mb, (int, float)):
         print(f"    entities.json         ~{fmt(est_entities_mb)} MB")
-        if not args.skip_embeddings:
+        if stage2_active:
             print(f"    embeddings.npy        ~{fmt(est_embeddings_gb)} GB")
-        if not args.skip_llm:
+        if llm_inference_active:
             print(f"    pattern-tags.json     ~{fmt(est_entities_mb * 0.3)} MB")
-        if not args.skip_clustering:
+        if stage4_active:
             print(f"    clusters.json         ~{fmt(est_entities_mb * 0.05)} MB")
         if not args.skip_ner:
             print(f"    ner-terms.json        ~{fmt(est_entities_mb * 0.4)} MB")
@@ -1034,10 +1110,10 @@ def print_dry_run(args):
     print()
 
     print("  GPU REQUIREMENTS:")
-    if not args.skip_embeddings or not args.skip_llm:
-        print(f"    Embedding model:  {args.embed_model}" if not args.skip_embeddings else "")
-        print(f"    LLM model:        {args.llm_model}" if not args.skip_llm else "")
-        vram = 2 if args.skip_llm else 18  # bge-large ~2GB, Llama-3-8B ~16GB
+    if stage2_active or llm_inference_active:
+        print(f"    Embedding model:  {args.embed_model}" if stage2_active else "")
+        print(f"    LLM model:        {args.llm_model}" if llm_inference_active else "")
+        vram = 18 if llm_inference_active else 2  # bge-large ~2GB, Llama-3-8B ~16GB
         print(f"    Est. VRAM needed: ~{vram} GB")
     else:
         print(f"    None (CPU-only stages)")
@@ -1100,8 +1176,8 @@ def main():
     parser.add_argument("--data-dir", default="./se-data",
                         help="Directory for downloaded dumps (default: ./se-data)")
 
-    parser.add_argument("--output-dir", "-o", default="./math-se-processed",
-                        help="Output directory for all artefacts")
+    parser.add_argument("--output-dir", "-o", default=None,
+                        help="Output directory for all artefacts (default: auto from --site)")
     parser.add_argument("--site", default="math.stackexchange",
                         help="SE site name")
     parser.add_argument("--min-score", type=int, default=1,
@@ -1151,6 +1227,26 @@ def main():
 
     args = parser.parse_args()
 
+    # Dry-run for download-only mode: infer expected Posts.xml path with no side effects.
+    if args.dry_run and args.download and not args.posts_xml:
+        dump = SE_DUMPS[args.download]
+        if args.site == parser.get_default("site"):
+            args.site = dump["site"]
+        args.posts_xml = str(Path(args.data_dir) / dump["dirname"] / "Posts.xml")
+        print(f"  Dry run note: inferred posts path from --download {args.download}:")
+        print(f"    {args.posts_xml}")
+
+    if not args.output_dir:
+        args.output_dir = derive_default_output_dir(args.site)
+
+    # ========== Dry Run ==========
+    # Run before download logic to guarantee no network/filesystem side effects.
+    if args.dry_run:
+        if not args.posts_xml:
+            parser.error("posts_xml is required for --dry-run unless used with --download")
+        print_dry_run(args)
+        return
+
     # ========== Download ==========
     if args.download:
         posts_path = download_and_extract(args.download, args.data_dir)
@@ -1161,11 +1257,6 @@ def main():
 
     if not args.posts_xml:
         parser.error("posts_xml is required (or use --download to fetch data first)")
-
-    # ========== Dry Run ==========
-    if args.dry_run:
-        print_dry_run(args)
-        return
 
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
@@ -1215,11 +1306,11 @@ def main():
     entities = []
     all_relations = []
     for pair in pairs:
-        entity = qa_to_entity(pair)
-        entity["entity/source"] = args.site
-        entity["entity/id"] = f"se-{args.site.split('.')[0]}-{pair.question.id}"
+        entity_id = f"se-{args.site.split('.')[0]}-{pair.question.id}"
+        entity = qa_to_entity(pair, site=args.site, entity_id=entity_id)
         entities.append(entity)
-        all_relations.extend(qa_to_relations(pair))
+        rels = qa_to_relations(pair, site=args.site, entity_id=entity_id)
+        all_relations.extend(rels)
 
     tags = tag_entities(pairs)
 
@@ -1278,6 +1369,7 @@ def main():
             pairs,
             batch_size=args.llm_batch_size,
             pipe=pipe, tokenizer=tok,
+            entry_ids=[e["entity/id"] for e in entities],
         )
         write_json(outdir / "pattern-tags.json", pattern_tags)
         print(f"       Stage 3 done in {time.time()-t3:.0f}s")

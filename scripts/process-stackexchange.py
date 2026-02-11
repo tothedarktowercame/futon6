@@ -126,10 +126,8 @@ def main():
     entities = []
     relations = []
     for i, pair in enumerate(pairs):
-        entity = qa_to_entity(pair)
-        # Override site name
-        entity["entity/source"] = args.site
-        entity["entity/id"] = f"se-{args.site.split('.')[0]}-{pair.question.id}"
+        entity_id = f"se-{args.site.split('.')[0]}-{pair.question.id}"
+        entity = qa_to_entity(pair, site=args.site, entity_id=entity_id)
 
         if embeddings is not None:
             entity["embedding-model"] = args.model
@@ -138,7 +136,7 @@ def main():
             entity["embedding"] = embeddings[i].tolist()
 
         entities.append(entity)
-        relations.extend(qa_to_relations(pair))
+        relations.extend(qa_to_relations(pair, site=args.site, entity_id=entity_id))
 
     tags = tag_entities(pairs)
 
