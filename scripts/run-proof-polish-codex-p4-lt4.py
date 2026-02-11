@@ -61,7 +61,7 @@ RESPONSE_SCHEMA = {
                         ],
                     },
                 },
-                "required": ["question_id", "title", "relevance"],
+                "required": ["question_id", "title", "relevance", "site"],
                 "additionalProperties": False,
             },
         },
