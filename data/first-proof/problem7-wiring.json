@@ -23,7 +23,7 @@
       "id": "p7-s2",
       "node_type": "answer",
       "post_id": 702,
-      "body_text": "Gamma is rational PD group of dim d = dim(X). Orbifold X/Gamma satisfies rational Poincare duality. So H*(Gamma;Q) has PD structure.",
+      "body_text": "Gamma satisfies rational PD via Bredon cohomology (Brown Ch.VIII Thm 10.1, Luck Sec.6.6). Orbifold PD theorem: H^*_Gamma(X;R_Q) has PD in dim d=dim(X). H^k(Gamma;Q) = H^{d-k}(Gamma;Q).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -32,7 +32,7 @@
       "id": "p7-s3",
       "node_type": "answer",
       "post_id": 703,
-      "body_text": "Surgery theory: existence of closed d-manifold M with pi_1=Gamma and rationally acyclic cover reduces to surgery obstruction in L_d(Z[Gamma]).",
+      "body_text": "Surgery theory: Gamma finitely presented (Raghunathan), B Gamma rational finite complex, d>=5 for SO(2k+1,1) k>=3. Normal map via Thom transversality (Wall Sec.9.4). Obstruction in L_d(Z[Gamma]).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -50,7 +50,7 @@
       "id": "p7-s4",
       "node_type": "answer",
       "post_id": 704,
-      "body_text": "Rational surgery obstruction vanishes for suitable choices: odd-dimensional hyperbolic lattices in SO(2k+1,1), k>=3. Parity kills the signature obstruction.",
+      "body_text": "Rational obstruction vanishes for d odd: L_*(Z)⊗Q = Q in deg 0 mod 4 (Ranicki 1992 Prop 15.11). AHSS: contributions only at even q, so odd total degree d receives no signature terms. Multisignature vanishes in odd dim.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -59,7 +59,7 @@
       "id": "p7-s5",
       "node_type": "answer",
       "post_id": 705,
-      "body_text": "Smith theory does NOT obstruct over Q: Z/2 acting freely on rationally acyclic space has no fixed-point constraint (2 invertible in Q). Only mod-2 Smith theory applies.",
+      "body_text": "REMARK (anti-obstruction only): Smith theory does NOT obstruct over Q. Z/2 on rationally acyclic space has no fixed-point constraint (2 invertible in Q). Does not contribute to construction; only rules out potential objection.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7

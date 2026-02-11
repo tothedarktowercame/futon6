@@ -23,7 +23,7 @@
       "id": "p2-s2",
       "node_type": "answer",
       "post_id": 202,
-      "body_text": "Finite and nonzero for all s means f(q^{-s}) has no poles/zeros on C^x, hence equals c*q^{-ks}. Requires V to cancel L-factor to a monomial.",
+      "body_text": "Finite and nonzero for all s means f(q^{-s}) has no poles/zeros on C^x, hence equals c*q^{-ks}. Fractional ideal I is free rank-1 over C[q^s,q^{-s}]; since L^{-1} is a polynomial, c*q^{-ks} lies in I. By spanning, some V realizes it.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 2
@@ -32,16 +32,25 @@
       "id": "p2-s3",
       "node_type": "answer",
       "post_id": 203,
-      "body_text": "u_Q twist: R(u_Q)W nonzero for all Q since right-translation by unipotent preserves Whittaker model. Restriction to mirabolic gives nonzero Kirillov function.",
+      "body_text": "u_Q twist: R(u_Q)W nonzero for all Q. Kirillov injectivity (BZ 1976, Thm 5.21): restriction W -> W|_{P_{n+1}} is injective for generic Pi. So phi_Q = W(diag(g,1)u_Q) is nonzero in Kirillov model.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 2
     },
     {
+      "id": "p2-s3a",
+      "node_type": "answer",
+      "post_id": 2031,
+      "body_text": "Fixed-W spanning lemma: for any nonzero phi in Kirillov model, integrals over V generate full fractional ideal. Proof: Kirillov model irreducible as GL_n-rep (BZ 1976), so L_phi independent of nonzero phi. PID structure forces L_phi = L(s, Pi x pi).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 203
+    },
+    {
       "id": "p2-s4",
       "node_type": "answer",
       "post_id": 204,
-      "body_text": "Nondegeneracy: nonzero phi_Q in Kirillov model => integrals over V span full fractional ideal (JPSS 1983). Can choose V to get any element of ideal.",
+      "body_text": "Nondegeneracy: nonzero phi_Q in Kirillov model => integrals over V span full fractional ideal (JPSS 1983). Fixed-W spanning lemma (Section 3a) closes the gap for fixed W_0.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 2
@@ -50,7 +59,7 @@
       "id": "p2-s5",
       "node_type": "answer",
       "post_id": 205,
-      "body_text": "Choose W_0 = new vector of Pi. R(u_Q)W_0 nonzero for all Q. u_Q shift at scale q^{-c(pi)} matches conductor of pi, ensuring support overlap.",
+      "body_text": "Choose W_0 = new vector of Pi. R(u_Q)W_0 nonzero for all Q. Casselman-Shalika formula: support of W_0 in N*T^+*K_1(p^{c(Pi)}); u_Q shift aligns conductor levels (JPSS 1981, Sec. 5).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 2
@@ -94,6 +103,20 @@
       "target": "p2-problem",
       "edge_type": "reform",
       "evidence": "Recast as Kirillov model nondegeneracy via u_Q twist",
+      "detection": "structural"
+    },
+    {
+      "source": "p2-s3a",
+      "target": "p2-s3",
+      "edge_type": "assert",
+      "evidence": "Fixed-W spanning: Kirillov injectivity + irreducibility imply full ideal generation for any nonzero phi",
+      "detection": "structural"
+    },
+    {
+      "source": "p2-s4",
+      "target": "p2-s3a",
+      "edge_type": "reference",
+      "evidence": "Nondegeneracy for fixed W uses the fixed-W spanning lemma",
       "detection": "structural"
     },
     {
@@ -226,6 +249,56 @@
       "hx/labels": [
         "thread",
         "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p2:edge-011",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p2-s3a",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p2-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Fixed-W spanning: Kirillov injectivity + irreducibility imply full ideal generation for any nonzero phi",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p2:edge-012",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p2-s4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p2-s3a",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Nondegeneracy for fixed W uses the fixed-W spanning lemma",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
         "structural"
       ]
     },
@@ -431,21 +504,21 @@
     }
   ],
   "stats": {
-    "n_nodes": 8,
-    "n_edges": 11,
+    "n_nodes": 9,
+    "n_edges": 13,
     "node_types": {
       "question": 1,
-      "answer": 6,
+      "answer": 7,
       "comment": 1
     },
     "edge_types": {
       "clarify": 3,
       "reform": 1,
-      "assert": 3,
-      "reference": 4
+      "assert": 4,
+      "reference": 5
     },
     "detection_types": {
-      "structural": 10,
+      "structural": 12,
       "classical": 1
     }
   }

@@ -32,7 +32,7 @@
       "id": "p8-s3",
       "node_type": "answer",
       "post_id": 803,
-      "body_text": "SYMPLECTIC DIRECT SUM: remaining omega entries are a=omega(e1,e3), b=omega(e2,e4). In basis (e1,e3,e2,e4), omega is block diagonal. R^4 = V1 ⊕ V2 with V1=span(opposite edges).",
+      "body_text": "SYMPLECTIC DIRECT SUM: remaining omega entries are a=omega(e1,e3), b=omega(e2,e4). Nondegeneracy hypothesis: 4 edges span R^4 (generic for Lagrangian surfaces; two distinct Lagrangian planes generically span R^4). In basis (e1,e3,e2,e4), omega block diagonal. R^4 = V1 ⊕ V2.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 8
@@ -47,10 +47,19 @@
       "parent_post_id": 8
     },
     {
+      "id": "p8-s4a",
+      "node_type": "answer",
+      "post_id": 8041,
+      "body_text": "Crease smoothing lemma: Lagrangian half-planes meeting at edge smoothed via generating function interpolation S_t = chi*S_1 + (1-chi)*S_2. Graph y=grad S_t is Lagrangian, C^1-close to original. V1⊕V2 decomposition persists under C^1-perturbation.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 8
+    },
+    {
       "id": "p8-s5",
       "node_type": "answer",
       "post_id": 805,
-      "body_text": "Lagrangian surgery (Polterovich 1991): transverse crossing with Maslov 0 resolved by smooth neck. Darboux coords adapted to V1 ⊕ V2. Neck via generating function y = grad S(x).",
+      "body_text": "Lagrangian surgery (Polterovich 1991): after crease smoothing (Sec 5a), sheets cross transversally with Maslov 0. Resolved by smooth neck. Darboux coords adapted to V1 ⊕ V2. Neck via generating function y = grad S(x).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 8
@@ -59,7 +68,7 @@
       "id": "p8-s6",
       "node_type": "answer",
       "post_id": 806,
-      "body_text": "Global smoothing: resolve vertices (surgery), smooth edges (generating function interpolation), compose Hamiltonian isotopies for K_t.",
+      "body_text": "Global smoothing with support control: vertex surgeries in disjoint balls B_i (commute by disjoint support). Edge smoothings on remaining crease arcs. Composition of compactly supported Hamiltonian isotopies (McDuff-Salamon Prop 3.17). K_t -> K_0 in C^0.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 8
@@ -110,6 +119,20 @@
       "target": "p8-s3",
       "edge_type": "assert",
       "evidence": "Decomposed Maslov loop has winding 0 in each factor",
+      "detection": "structural"
+    },
+    {
+      "source": "p8-s4a",
+      "target": "p8-s3",
+      "edge_type": "assert",
+      "evidence": "Crease smoothing bridges polyhedral to smooth setting; V1⊕V2 persists under C^1-perturbation",
+      "detection": "structural"
+    },
+    {
+      "source": "p8-s5",
+      "target": "p8-s4a",
+      "edge_type": "reference",
+      "evidence": "Surgery applies after crease smoothing produces smooth transverse crossing",
       "detection": "structural"
     },
     {
@@ -253,6 +276,56 @@
       "hx/labels": [
         "thread",
         "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p8:edge-010",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p8-s4a",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p8-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Crease smoothing bridges polyhedral to smooth setting; V1⊕V2 persists under C^1-perturbation",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p8:edge-011",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p8-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p8-s4a",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Surgery applies after crease smoothing produces smooth transverse crossing",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
         "structural"
       ]
     },
@@ -408,23 +481,23 @@
     }
   ],
   "stats": {
-    "n_nodes": 9,
-    "n_edges": 10,
+    "n_nodes": 10,
+    "n_edges": 12,
     "node_types": {
       "question": 1,
-      "answer": 7,
+      "answer": 8,
       "comment": 1
     },
     "edge_types": {
       "clarify": 1,
       "reform": 1,
-      "assert": 5,
-      "reference": 1,
+      "assert": 6,
+      "reference": 2,
       "challenge": 1,
       "exemplify": 1
     },
     "detection_types": {
-      "structural": 9,
+      "structural": 11,
       "classical": 1
     }
   }
