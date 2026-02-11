@@ -1,0 +1,52 @@
+flowchart TD
+    %% Problem 10 — Claude draft (pre-Codex)
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p10-problem{{"p10-problem<br/>Given the mode-k subproblem [(Z⊗K)ᵀSS'(Z⊗K) + λ(Iᵣ⊗K..."}}
+    p10-s1["p10-s1<br/>Why direct methods fail: The system matrix A is nr×n..."]
+    p10-s2["p10-s2<br/>The key insight: CG only requires the action v ↦ Av,..."]
+    p10-s2a(["p10-s2a<br/>Forward map at observed entries: By the Kronecker id..."])
+    p10-s2b(["p10-s2b<br/>Adjoint map from sparse result: The sparse vector w ..."])
+    p10-s2c(["p10-s2c<br/>Regularization term: λ(Iᵣ⊗K)vec(V) = λ·vec(KV). Cost..."])
+    p10-s2-total(["p10-s2-total<br/>Total per matvec: O(n²r + qr). No dependence on N. T..."])
+    p10-s3["p10-s3<br/>Right-hand side: b = (Iᵣ⊗K)vec(B) where B = TZ. T is..."]
+    p10-s4["p10-s4<br/>Preconditioner choice: P = (H⊗K) where H = ZᵀZ + λIᵣ..."]
+    p10-s4-hadamard(["p10-s4-hadamard<br/>Why this structure? The Khatri-Rao Hadamard property..."])
+    p10-s4-solve(["p10-s4-solve<br/>Preconditioner solve: P⁻¹ = H⁻¹⊗K⁻¹. Precompute Chol..."])
+    p10-s5["p10-s5<br/>Convergence: CG on P⁻¹A converges in t = O(√κ·log(1/..."]
+    p10-s6["p10-s6<br/>Complexity summary: Total per mode-k subproblem O(n³..."]
+    p10-s7["p10-s7<br/>Algorithm: SETUP computes Cholesky factors and RHS. ..."]
+
+    %% Edges
+    p10-s1 -.->|"🔴 challenge: Direct methods cost O(Nnr), proportio..."| p10-problem
+    p10-s2 -->|"🟡 reform: CG only requires v ↦ Av, never the ma..."| p10-s1
+    p10-s2a -->|"🔵 clarify: Kronecker identity gives forward map;..."| p10-s2
+    p10-s2b -->|"🔵 clarify: Sparse W' has only q nonzeros; adjoin..."| p10-s2
+    p10-s2c -->|"🔵 clarify: Regularization is just λ·vec(KV), O(n²r)"| p10-s2
+    p10-s2-total ==>|"🟢 assert: Combining forward + adjoint + regular..."| p10-s2a
+    p10-s2-total ==>|"🟢 assert: Combining forward + adjoint + regular..."| p10-s2b
+    p10-s2-total ==>|"🟢 agree: Regularization absorbed into n²r term"| p10-s2c
+    p10-s3 -->|"🔵 clarify: RHS uses sparse T and Kronecker struc..."| p10-problem
+    p10-s4 -->|"🟡 reform: P = (H⊗K) approximates A for faster c..."| p10-s2
+    p10-s4-hadamard -->|"🔵 clarify: Khatri-Rao Hadamard: ZᵀZ = ∏(AᵢᵀAᵢ), ..."| p10-s4
+    p10-s4-solve -.->|"🟣 exemplify: P⁻¹ = H⁻¹⊗K⁻¹ via Cholesky; each solv..."| p10-s4
+    p10-s5 ==>|"🟢 assert: P ≈ A ⟹ κ(P⁻¹A) small ⟹ t = O(r) iter..."| p10-s4
+    p10-s6 ==>|"🟢 assert: O(n³ + t(n²r + qr)), no N-dependence,..."| p10-problem
+    p10-s6 -->|"⚪ reference: Matvec cost O(n²r + qr) per iteration"| p10-s2-total
+    p10-s6 -->|"⚪ reference: Preconditioner solve O(n²r) per itera..."| p10-s4-solve
+    p10-s6 -->|"⚪ reference: t = O(r) iterations from convergence ..."| p10-s5
+    p10-s7 -.->|"🟣 exemplify: Pseudocode instantiates the complexit..."| p10-s6
+    p10-s7 -->|"⚪ reference: MATVEC subroutine implements implicit..."| p10-s2
+    p10-s7 -->|"⚪ reference: PRECOND_SOLVE subroutine implements K..."| p10-s4-solve
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p10-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p10-s1,p10-s2,p10-s3,p10-s4,p10-s5,p10-s6,p10-s7 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p10-s2a,p10-s2b,p10-s2c,p10-s2-total,p10-s4-hadamard,p10-s4-solve comment

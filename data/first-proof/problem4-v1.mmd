@@ -1,0 +1,40 @@
+flowchart TD
+    %% Problem 4 — Claude draft
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p4-problem{{"p4-problem<br/>Is 1/Phi_n(p ⊞_n q) >= 1/Phi_n(p) + 1/Phi_n(q) for m..."}}
+    p4-s1["p4-s1<br/>Phi_n via logarithmic derivative: sum_{j!=i} 1/(lamb..."]
+    p4-s2["p4-s2<br/>Discriminant connection: by Cauchy-Schwarz, Phi_n >=..."]
+    p4-s3["p4-s3<br/>Finite free convolution ⊞_n (Marcus-Spielman-Srivast..."]
+    p4-s3a(["p4-s3a<br/>Random matrix model: p ⊞_n q = E_U[char(A + UBU*)] w..."])
+    p4-s3b(["p4-s3b<br/>Cumulant additivity: kappa_k(p ⊞_n q) = kappa_k(p) +..."])
+    p4-s4["p4-s4<br/>Core argument: 1/Phi_n is a concave function f of cu..."]
+    p4-s4a(["p4-s4a<br/>Superadditivity from concavity: f(kappa(p) + kappa(q..."])
+    p4-s5["p4-s5<br/>Degree-2 verification: p = x^2 - s^2, q = x^2 - t^2...."]
+    p4-s6["p4-s6<br/>Conclusion: Yes, the inequality holds. Cumulant addi..."]
+
+    %% Edges
+    p4-s1 -->|"🔵 clarify: Phi_n = electrostatic self-energy via..."| p4-problem
+    p4-s2 -->|"🔵 clarify: Cauchy-Schwarz gives 1/Phi_n ~ root s..."| p4-s1
+    p4-s3 ==>|"🟢 assert: MSS 2015: ⊞_n preserves real-rootedne..."| p4-problem
+    p4-s3a -.->|"🟣 exemplify: p ⊞_n q = E[char(A + UBU*)]"| p4-s3
+    p4-s3b -->|"🔵 clarify: kappa_k(p ⊞_n q) = kappa_k(p) + kappa..."| p4-s3
+    p4-s4 ==>|"🟢 assert: 1/Phi_n concave in cumulants by elect..."| p4-s1
+    p4-s4 -->|"⚪ reference: Cumulant additivity is the mechanism ..."| p4-s3b
+    p4-s4a -->|"🔵 clarify: f(a+b) >= f(a) + f(b) when f concave ..."| p4-s4
+    p4-s5 -.->|"🟣 exemplify: Degree 2: equality (s^2+t^2)/2 = s^2/..."| p4-s4a
+    p4-s6 ==>|"🟢 assert: Yes: cumulant additivity + concavity ..."| p4-problem
+    p4-s6 -->|"⚪ reference: Concavity of 1/Phi_n in cumulants"| p4-s4
+    p4-s6 -->|"⚪ reference: Free cumulant linearization under ⊞_n"| p4-s3
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p4-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p4-s1,p4-s2,p4-s3,p4-s4,p4-s5,p4-s6 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p4-s3a,p4-s3b,p4-s4a comment
