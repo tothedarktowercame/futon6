@@ -1,0 +1,37 @@
+flowchart TD
+    %% first-proof-p8
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p8-problem{{"p8-problem<br/>Polyhedral Lagrangian surface K in R^4, 4 faces per ..."}}
+    p8-s1["p8-s1<br/>Lagrangian Grassmannian Lambda(2) = U(2)/O(2), pi_1 ..."]
+    p8-s2["p8-s2<br/>4-valent vertex structure: 4 faces pair into two 'sh..."]
+    p8-s3["p8-s3<br/>Maslov index of vertex loop L_1->L_2->L_3->L_4->L_1 ..."]
+    p8-s4["p8-s4<br/>Lagrangian surgery (Polterovich 1991, Lalonde-Sikora..."]
+    p8-s4a(["p8-s4a<br/>Surgery in Darboux coords: L_1 = {y=0}, L_2 transver..."])
+    p8-s5["p8-s5<br/>Application: resolve vertices (Lagrangian surgery on..."]
+    p8-s5a(["p8-s5a<br/>4-face condition is essential: odd valence prevents ..."])
+    p8-s6["p8-s6<br/>Conclusion: Yes, smoothing exists. 4-face => paired ..."]
+
+    %% Edges
+    p8-s1 -->|"🔵 clarify: Lagrangian Grassmannian and Maslov cl..."| p8-problem
+    p8-s2 -->|"🟡 reform: 4 faces pair into two crossing sheets..."| p8-s1
+    p8-s3 ==>|"🟢 assert: Maslov index of transverse crossing is 0"| p8-s2
+    p8-s4 ==>|"🟢 assert: Lagrangian surgery resolves transvers..."| p8-problem
+    p8-s4a -.->|"🟣 exemplify: Darboux coordinates construction of s..."| p8-s4
+    p8-s5 ==>|"🟢 assert: Compose vertex surgery + edge smoothi..."| p8-s4
+    p8-s5 -->|"⚪ reference: Maslov 0 ensures surgery is unobstructed"| p8-s3
+    p8-s5a -.->|"🔴 challenge: Odd valence breaks pairing; obstructi..."| p8-s5
+    p8-s6 ==>|"🟢 assert: Yes: 4-face => paired sheets => surge..."| p8-problem
+    p8-s6 -->|"⚪ reference: Full smoothing pipeline from vertex +..."| p8-s5
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p8-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p8-s1,p8-s2,p8-s3,p8-s4,p8-s5,p8-s6 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p8-s4a,p8-s5a comment
