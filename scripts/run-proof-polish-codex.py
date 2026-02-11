@@ -79,8 +79,8 @@ RESPONSE_SCHEMA = {
 }
 
 
-# Verification focus for each proof step
-NODE_VERIFICATION_FOCUS = {
+# Verification focus for each proof step (Problem 10 profile)
+P10_NODE_VERIFICATION_FOCUS = {
     "p10-problem": (
         "Verify the problem is well-posed with explicit assumptions: lambda > 0 and "
         "K_tau = K + tau I is PD (or solve restricted to Range(K)). Confirm "
@@ -145,24 +145,159 @@ NODE_VERIFICATION_FOCUS = {
 }
 
 
-def build_node_prompt(node: dict, edges: list[dict], solution_text: str) -> str:
+# Verification focus for each proof step (Problem 6 profile)
+P6_NODE_VERIFICATION_FOCUS = {
+    "p6-problem": (
+        "Verify the statement is mathematically well-posed: define epsilon-light "
+        "subset precisely in Laplacian PSD order and confirm the existential "
+        "quantifiers over all graphs and epsilon in (0,1)."
+    ),
+    "p6-s1": (
+        "Verify the Laplacian reformulation and effective-resistance framing. "
+        "Check whether ||L^{+/2} L_S L^{+/2}|| <= epsilon is equivalent to "
+        "epsilon L - L_S >= 0 on the appropriate subspace."
+    ),
+    "p6-s2": (
+        "Verify the K_n tight example: eigenvalues of induced K_s Laplacian and "
+        "the reduction to s <= epsilon n. Confirm that this yields c <= 1 upper bound."
+    ),
+    "p6-s3": (
+        "Verify random vertex sampling with p=epsilon: E[|S|]=epsilon n and "
+        "E[L_S]=epsilon^2 L. Check that this only proves expectation-level control."
+    ),
+    "p6-s3a": (
+        "Verify the Chernoff concentration constants in |S| >= epsilon n / 2 and "
+        "the stated failure probability."
+    ),
+    "p6-s3b": (
+        "Verify E[L_S]=epsilon^2 L and the comparison to epsilon L. Check wording "
+        "around multiplicative gap and whether it is stated correctly."
+    ),
+    "p6-s4": (
+        "Verify the core concentration strategy: why expectation is insufficient, "
+        "and how star domination plus matrix concentration yields high-probability "
+        "operator inequality."
+    ),
+    "p6-s4a": (
+        "Verify star domination algebraically (edge indicators to vertex indicators) "
+        "and confirm that the resulting matrix sum has independent summands."
+    ),
+    "p6-s4b": (
+        "Verify Matrix Freedman/Bernstein setup: martingale definition, "
+        "difference bounds, and explicit predictable-variation control."
+    ),
+    "p6-s5": (
+        "Verify this step is explicitly marked as an external dependency "
+        "(not re-proved in-text) and that no stronger claim is asserted."
+    ),
+    "p6-s6": (
+        "Verify the final logic is conditional: unconditional results in-text plus "
+        "the existential YES answer only under the external theorem assumption."
+    ),
+}
+
+
+PROOF_PROFILES = {
+    "first-proof-p10": {
+        "role": (
+            "You are a mathematical proof verifier with expertise in numerical linear "
+            "algebra, tensor decomposition, and RKHS methods."
+        ),
+        "task": (
+            "Verify one step of a proof that PCG solves RKHS-constrained tensor CP "
+            "decomposition without O(N) computation."
+        ),
+        "search_topics": (
+            "Kronecker products, CG/PCG for structured systems, tensor decomposition, "
+            "RKHS kernels, sparse observation operators."
+        ),
+        "problem_context": [
+            "The system is: [(Z⊗K_tau)^T S S^T (Z⊗K_tau) + lambda(I_r⊗K_tau)]vec(W) = (I_r⊗K_tau)vec(B)",
+            "where W in R^{n x r}, K_tau = K + tau I in R^{n x n} (PD for tau>0), Z in R^{M x r},",
+            "S selects q observed entries from N = nM, and B = T Z.",
+            "Regime: n, r << q << N.",
+        ],
+        "node_focus": P10_NODE_VERIFICATION_FOCUS,
+        "synthesis_node_id": "p10-synthesis",
+        "synthesis_points": [
+            "Is the proof complete, and does the final complexity claim follow?",
+            "Are SPD assumptions, preconditioner derivation, and convergence assumptions explicit?",
+            "Which steps are still weakest, and how can they be tightened?",
+        ],
+    },
+    "first-proof-p6": {
+        "role": (
+            "You are a mathematical proof verifier with expertise in spectral graph "
+            "theory, Laplacians, and matrix concentration inequalities."
+        ),
+        "task": (
+            "Verify one step of a proof about epsilon-light vertex subsets in graphs "
+            "using Laplacian PSD inequalities."
+        ),
+        "search_topics": (
+            "Graph Laplacians, effective resistance, Matrix Chernoff/Freedman, "
+            "independent Bernoulli matrix sums, induced subgraph spectra."
+        ),
+        "problem_context": [
+            "Goal: for every graph G=(V,E) and epsilon in (0,1), find S subseteq V with |S| >= c*epsilon*|V|",
+            "such that S is epsilon-light, i.e. epsilon*L - L_S is PSD (L graph Laplacian, L_S induced-subgraph Laplacian).",
+            "Proof strategy uses random vertex sampling, star domination, and matrix concentration.",
+        ],
+        "node_focus": P6_NODE_VERIFICATION_FOCUS,
+        "synthesis_node_id": "p6-synthesis",
+        "synthesis_points": [
+            "Is the conditional status of the existential conclusion stated clearly?",
+            "Are concentration assumptions and martingale parameters explicit and valid?",
+            "Are any remaining claims stronger than what is actually proved in-text?",
+        ],
+    },
+}
+
+
+def infer_profile(wiring: dict) -> dict:
+    """Infer prompt profile from wiring thread_id."""
+    thread_id = wiring.get("thread_id", "")
+    if thread_id in PROOF_PROFILES:
+        return PROOF_PROFILES[thread_id]
+    return {
+        "role": (
+            "You are a mathematical proof verifier. Check correctness, assumptions, "
+            "and logical completeness."
+        ),
+        "task": "Verify one step of the supplied proof.",
+        "search_topics": "Relevant mathematical references on Math StackExchange.",
+        "problem_context": ["Use the full proof text and local claim context below."],
+        "node_focus": {},
+        "synthesis_node_id": "proof-synthesis",
+        "synthesis_points": [
+            "Is the proof complete?",
+            "What assumptions are missing?",
+            "How should the argument be tightened?",
+        ],
+    }
+
+
+def build_node_prompt(
+    node: dict,
+    edges: list[dict],
+    solution_text: str,
+    profile: dict,
+) -> str:
     """Build a verification prompt for a single proof node."""
     node_id = node["id"]
-    focus = NODE_VERIFICATION_FOCUS.get(node_id, "Verify the mathematical claim.")
+    focus_map = profile.get("node_focus", {})
+    focus = focus_map.get(node_id, "Verify the mathematical claim.")
 
     # Find edges involving this node
     incoming = [e for e in edges if e["target"] == node_id]
     outgoing = [e for e in edges if e["source"] == node_id]
 
     lines = [
-        "You are a mathematical proof verifier with expertise in numerical linear "
-        "algebra, tensor decomposition, and RKHS methods.",
+        profile["role"],
         "",
         "## Task",
         "",
-        "Verify one step of a proof that PCG solves RKHS-constrained tensor CP "
-        "decomposition without O(N) computation. Cross-reference with math.SE "
-        "discussions when possible.",
+        profile["task"] + " Cross-reference with relevant math.SE discussions when possible.",
         "",
         "## Proof Step Under Review",
         "",
@@ -191,16 +326,12 @@ def build_node_prompt(node: dict, edges: list[dict], solution_text: str) -> str:
     lines.extend([
         "## Full Problem Context",
         "",
-        "The system is: [(Z⊗K_tau)ᵀSSᵀ(Z⊗K_tau) + λ(Iᵣ⊗K_tau)]vec(W) = (Iᵣ⊗K_tau)vec(B)",
-        "where W ∈ ℝ^{n×r}, K_tau = K + tau I ∈ ℝ^{n×n} (PD for tau>0), Z ∈ ℝ^{M×r} Khatri-Rao product,",
-        "S selects q observed entries from N = nM total, B = TZ is the MTTKRP.",
-        "Regime: n, r ≪ q ≪ N.",
+        *profile["problem_context"],
         "",
         "## Instructions",
         "",
         "1. Verify the mathematical claim in this proof step.",
-        "2. Search math.SE for relevant discussions (Kronecker products, CG for "
-        "structured systems, tensor decomposition, RKHS, sparse observation).",
+        f"2. Search math.SE for relevant discussions ({profile['search_topics']}).",
         "3. Identify any gaps, unstated assumptions, or potential errors.",
         "4. Suggest improvements if the claim could be tightened or clarified.",
         "5. Reply as a single JSON object matching the required schema.",
@@ -209,17 +340,24 @@ def build_node_prompt(node: dict, edges: list[dict], solution_text: str) -> str:
     return "\n".join(lines)
 
 
-def build_synthesis_prompt(solution_text: str, wiring: dict) -> str:
+def build_synthesis_prompt(solution_text: str, wiring: dict, profile: dict) -> str:
     """Build a synthesis prompt that reviews the entire proof."""
     stats = wiring.get("stats", {})
+    synthesis_points = profile.get("synthesis_points", [])
+    instructions = []
+    for i, point in enumerate(synthesis_points, start=1):
+        instructions.append(f"{i}. {point}")
+    instructions.extend([
+        f"{len(instructions)+1}. Search math.SE for references relevant to this proof domain.",
+        f"{len(instructions)+1}. Reply as a single JSON object matching the required schema. "
+        f"Use node_id='{profile['synthesis_node_id']}' for the synthesis.",
+    ])
     return "\n".join([
         "You are a mathematical proof verifier reviewing a complete proof.",
         "",
         "## Task",
         "",
-        "Review this proof that PCG solves RKHS-constrained tensor CP decomposition "
-        "without O(N) computation. Assess completeness, correctness, and suggest "
-        "improvements.",
+        profile["task"] + " Assess completeness, correctness, and suggest improvements.",
         "",
         "## Proof",
         "",
@@ -232,17 +370,7 @@ def build_synthesis_prompt(solution_text: str, wiring: dict) -> str:
         "",
         "## Instructions",
         "",
-        "1. Is the proof complete? Does the final complexity claim follow from "
-        "the stated steps?",
-        "2. Are there unstated assumptions (e.g., about K being well-conditioned, "
-        "Z having full rank, the observation pattern)?",
-        "3. The convergence bound (Section 5) is the weakest link — can it be "
-        "tightened with references from math.SE?",
-        "4. Search math.SE for: Kronecker product CG, tensor decomposition "
-        "preconditioning, RKHS regression complexity, sparse observation matvec.",
-        "5. Suggest a tighter or more elegant statement of the main result.",
-        "6. Reply as a single JSON object matching the required schema. "
-        "Use node_id='p10-synthesis' for the synthesis.",
+        *instructions,
     ])
 
 
@@ -302,6 +430,7 @@ def main() -> int:
         print("Run: python3 scripts/proof-wiring-diagram.py", file=sys.stderr)
         return 2
     wiring = json.loads(args.wiring.read_text())
+    profile = infer_profile(wiring)
 
     # Load solution
     solution_text = ""
@@ -314,7 +443,12 @@ def main() -> int:
     # Build prompts for each node
     prompts = []
     for node in nodes:
-        prompt_text = build_node_prompt(node, edges, solution_text)
+        prompt_text = build_node_prompt(
+            node=node,
+            edges=edges,
+            solution_text=solution_text,
+            profile=profile,
+        )
         prompts.append({
             "node_id": node["id"],
             "node_type": node["node_type"],
@@ -323,9 +457,9 @@ def main() -> int:
 
     # Add synthesis prompt
     prompts.append({
-        "node_id": "p10-synthesis",
+        "node_id": profile["synthesis_node_id"],
         "node_type": "synthesis",
-        "prompt": build_synthesis_prompt(solution_text, wiring),
+        "prompt": build_synthesis_prompt(solution_text, wiring, profile),
     })
 
     # Write prompts

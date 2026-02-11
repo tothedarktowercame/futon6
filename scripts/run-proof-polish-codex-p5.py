@@ -20,9 +20,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import tempfile
+import time
 from collections import Counter
 from pathlib import Path
 
@@ -57,7 +59,7 @@ RESPONSE_SCHEMA = {
                         "enum": ["math.stackexchange.com", "mathoverflow.net", "other", "unknown"],
                     },
                 },
-                "required": ["question_id", "title", "relevance"],
+                "required": ["question_id", "title", "relevance", "site"],
                 "additionalProperties": False,
             },
         },
@@ -82,6 +84,78 @@ RESPONSE_SCHEMA = {
     ],
     "additionalProperties": False,
 }
+
+
+def _extract_json_objects(text: str) -> list[dict]:
+    """Extract top-level JSON objects from noisy text."""
+    objs: list[dict] = []
+    if not text:
+        return objs
+    decoder = json.JSONDecoder()
+    n = len(text)
+    i = 0
+    while i < n:
+        if text[i] != "{":
+            i += 1
+            continue
+        try:
+            parsed, end = decoder.raw_decode(text, i)
+        except json.JSONDecodeError:
+            i += 1
+            continue
+        if isinstance(parsed, dict):
+            objs.append(parsed)
+        i = end
+    return objs
+
+
+def _is_schema_like_response(obj: dict) -> bool:
+    req = RESPONSE_SCHEMA.get("required", [])
+    return all(k in obj for k in req)
+
+
+def _parse_codex_response(raw_text: str, expected_node_id: str) -> tuple[dict | None, str | None]:
+    """Parse Codex response from direct JSON or embedded JSON in noisy logs."""
+    # Fast path
+    try:
+        parsed = json.loads(raw_text)
+        if isinstance(parsed, dict):
+            if _is_schema_like_response(parsed):
+                if parsed.get("node_id") != expected_node_id:
+                    parsed["node_id"] = expected_node_id
+                return parsed, None
+            return None, "JSON object missing required fields"
+    except Exception:
+        pass
+
+    # Recovery path: extract embedded objects and pick best candidate
+    candidates = _extract_json_objects(raw_text)
+    for obj in reversed(candidates):
+        if _is_schema_like_response(obj):
+            if obj.get("node_id") != expected_node_id:
+                obj["node_id"] = expected_node_id
+            return obj, None
+
+    if candidates:
+        return None, "No embedded JSON object matched required response schema"
+    return None, "No JSON object found in response"
+
+
+def _is_transient_codex_error(rc: int, stderr_text: str) -> bool:
+    if rc == 124:
+        return True
+    lowered = stderr_text.lower()
+    transient_tokens = [
+        "stream disconnected before completion",
+        "error sending request for url",
+        "network error",
+        "reconnecting...",
+        "timed out",
+        "429",
+        "rate limit",
+        "503",
+    ]
+    return any(tok in lowered for tok in transient_tokens)
 
 
 # Verification focus for each proof step
@@ -322,6 +396,9 @@ def run_codex_once(
     cwd: Path,
     schema_path: Path,
     prompt_text: str,
+    timeout_sec: int,
+    codex_home: Path,
+    retries: int,
 ) -> tuple[int, str, str]:
     """Run a single prompt through codex exec."""
     with tempfile.NamedTemporaryFile("w+", suffix=".txt", delete=False) as out_f:
@@ -329,7 +406,8 @@ def run_codex_once(
 
     instruction = (
         "You must answer exactly as one JSON object matching the required schema. "
-        "Do not wrap JSON in markdown fences. Do not add extra commentary.\n\n"
+        "Do not wrap JSON in markdown fences. Do not add extra commentary. "
+        "Do not perform shell/tool calls or emit progress updates; return only final JSON.\n\n"
         + prompt_text
     )
     cmd = [
@@ -342,13 +420,45 @@ def run_codex_once(
         "--output-last-message", str(out_path),
         "-",
     ]
-    proc = subprocess.run(cmd, input=instruction, text=True, capture_output=True)
+    env = os.environ.copy()
+    env["CODEX_HOME"] = str(codex_home)
+    attempts = max(1, retries + 1)
+    rc = 1
+    stderr_text = ""
+    stdout_text = ""
+    for attempt in range(1, attempts + 1):
+        try:
+            proc = subprocess.run(
+                cmd,
+                input=instruction,
+                text=True,
+                capture_output=True,
+                timeout=timeout_sec,
+                env=env,
+            )
+            rc = proc.returncode
+            stderr_text = proc.stderr.strip()
+            stdout_text = proc.stdout.strip()
+        except subprocess.TimeoutExpired as e:
+            rc = 124
+            stderr_text = f"codex exec timed out after {timeout_sec}s"
+            if e.stderr:
+                stderr_text += f"\n{e.stderr.strip()}"
+            stdout_text = (e.stdout or "").strip()
+
+        if attempt >= attempts or not _is_transient_codex_error(rc, stderr_text):
+            break
+        sleep_s = min(8, 2 ** (attempt - 1))
+        time.sleep(sleep_s)
+
     try:
         response_text = out_path.read_text(encoding="utf-8").strip()
     except FileNotFoundError:
         response_text = ""
     out_path.unlink(missing_ok=True)
-    return proc.returncode, response_text, proc.stderr.strip()
+    if not response_text and stdout_text:
+        response_text = stdout_text
+    return rc, response_text, stderr_text
 
 
 def main() -> int:
@@ -365,6 +475,12 @@ def main() -> int:
                     help="Generate prompts only, don't call Codex")
     ap.add_argument("--math-se-dir", type=Path, default=DEFAULT_MATH_SE_DIR,
                     help="Local processed StackExchange data directory (hinted to Codex prompts)")
+    ap.add_argument("--timeout-sec", type=int, default=240,
+                    help="Timeout per Codex call in seconds")
+    ap.add_argument("--retries", type=int, default=2,
+                    help="Retries per Codex call on transient network/timeouts")
+    ap.add_argument("--codex-home", type=Path, default=REPO_ROOT / ".codex-home",
+                    help="Writable CODEX_HOME used for codex exec session files")
     ap.add_argument("--repo-root", type=Path, default=REPO_ROOT)
     args = ap.parse_args()
 
@@ -423,6 +539,7 @@ def main() -> int:
 
     # Run through Codex
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.codex_home.mkdir(parents=True, exist_ok=True)
     verified = Counter()
     processed = 0
 
@@ -439,24 +556,25 @@ def main() -> int:
                     cwd=args.repo_root,
                     schema_path=schema_path,
                     prompt_text=rec["prompt"],
+                    timeout_sec=args.timeout_sec,
+                    codex_home=args.codex_home,
+                    retries=args.retries,
                 )
 
                 out = {"node_id": rec["node_id"]}
-                try:
-                    parsed = json.loads(raw_response)
-                    if isinstance(parsed, dict):
-                        out.update(parsed)
-                        v = parsed.get("claim_verified", "")
-                        if v in ("verified", "plausible", "gap", "error"):
-                            verified[v] += 1
-                    else:
-                        out["parse_error"] = True
-                        out["raw"] = raw_response
-                except Exception:
+                parsed, parse_problem = _parse_codex_response(raw_response, rec["node_id"])
+                if parsed is not None:
+                    out.update(parsed)
+                    v = parsed.get("claim_verified", "")
+                    if v in ("verified", "plausible", "gap", "error"):
+                        verified[v] += 1
+                else:
                     out["parse_error"] = True
                     parts = []
                     if raw_response:
                         parts.append(raw_response)
+                    if parse_problem:
+                        parts.append(f"[parse_issue] {parse_problem}")
                     if rc != 0:
                         parts.append(f"[codex_exit_code={rc}]")
                     if stderr_text:
