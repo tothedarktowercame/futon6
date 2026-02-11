@@ -22,6 +22,10 @@ Download + run (self-contained):
     # Dry run (shows plan, downloads nothing, processes nothing):
     python scripts/superpod-job.py ./se-data/math.stackexchange.com/Posts.xml --dry-run
 
+    # Moist run (CPU stages + prompt files for Codex/Claude handoff):
+    python scripts/superpod-job.py ./se-data/math.stackexchange.com/Posts.xml \\
+        --moist-run --site math.stackexchange
+
 All stages:
     0. Download + extract (optional, --download)
     1. Parse XML -> QA pairs (CPU, streaming)
@@ -29,6 +33,7 @@ All stages:
     3. LLM pattern tagging (GPU, Llama-3-8B)
     4. Clustering (CPU, HDBSCAN on embeddings)
     5. NER term spotting + scope detection (CPU, classical)
+    6. Reverse morphogenesis S<-Q<-A (LLM / prompt generation)
 
 Each stage writes its output independently -- if a stage fails, earlier
 outputs are still usable.
@@ -592,6 +597,141 @@ def cluster_embeddings(embeddings, min_cluster_size=50, max_clusters=500):
     return labels.tolist(), n_clusters, n_noise
 
 
+def build_reverse_morphogenesis_prompt(question_title, question_text, answer_text):
+    r"""Build the S <- Q <- A prompt for reverse morphogenesis.
+
+    Given a Q/A pair, asks the LLM to:
+    1. Identify the mathematical form (象) and desired understanding (香)
+    2. Classify question quality by failure mode (wrong 象, wrong 香, wrong ←)
+    3. Induce a fictitious situation S to which Q is the natural question
+    4. Verify by checking that S naturally produces Q
+
+    This is double reverse morphogenesis: S ← Q ← A.
+    """
+    q = question_text[:800]
+    a = answer_text[:1200]
+
+    return f"""You are a mathematics education researcher studying how questions arise from situations.
+
+Given this Q&A pair from math.stackexchange, perform reverse morphogenesis analysis.
+
+Question: {question_title}
+{q}
+
+Answer:
+{a}
+
+Tasks:
+
+1. IDENTIFY THE ← STRUCTURE:
+   - 象 (form): What is the mathematical object/structure the question is about?
+   - 香 (salience): What understanding does the questioner seek? What makes this worth asking?
+   - ← (constraint): What constraint does the question infer — i.e., what would you need to know/prove/construct for the form to yield that understanding?
+
+2. CLASSIFY QUESTION QUALITY:
+   Rate each dimension (good/weak/broken):
+   - 象 quality: Is the mathematical form well-specified?
+   - 香 quality: Is the salience signal grounded (does the questioner know WHY they want to know)?
+   - ← quality: Does the question actually connect form to understanding?
+
+3. INDUCE SITUATION S (reverse morphogenesis of Q):
+   Construct a concrete, vivid situation (could be fictional, pedagogical, or applied) from which this question would NATURALLY arise. The situation should make someone who encounters it think "hmm, I wonder..." and arrive at exactly this question.
+
+4. VERIFY (← round-trip):
+   Given your situation S, would a student/researcher encountering S naturally ask Q (or something equivalent)? If not, revise S.
+
+Reply as JSON:
+{{
+  "xiang_form": "<the mathematical form>",
+  "xiang_salience": "<what understanding is sought>",
+  "arrow_constraint": "<what the question infers>",
+  "quality": {{"form": "good|weak|broken", "salience": "good|weak|broken", "arrow": "good|weak|broken"}},
+  "situation_S": "<the induced situation>",
+  "roundtrip_check": "<does S -> Q hold? brief assessment>"
+}}"""
+
+
+def generate_moist_prompts(pairs, entities, outdir, stages=None):
+    """Generate prompt files for LLM stages (Codex/Claude handoff).
+
+    Instead of running Llama locally, writes JSONL files with one prompt per
+    line, ready for batch submission to Codex, Claude, or any API.
+
+    stages: list of stage names to generate. Default: all LLM stages.
+    """
+    if stages is None:
+        stages = ["pattern_tagging", "reverse_morphogenesis"]
+
+    prompt_dir = outdir / "moist-prompts"
+    prompt_dir.mkdir(parents=True, exist_ok=True)
+
+    generated = {}
+
+    if "pattern_tagging" in stages:
+        path = prompt_dir / "stage3-pattern-tagging.jsonl"
+        count = 0
+        with open(path, "w") as f:
+            for pair, entity in zip(pairs, entities):
+                prompt = build_pattern_prompt(
+                    pair.question.title,
+                    pair.question.body_text,
+                    pair.answer.body_text,
+                )
+                record = {
+                    "entity_id": entity["entity/id"],
+                    "question_id": pair.question.id,
+                    "stage": "pattern_tagging",
+                    "prompt": prompt,
+                }
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
+                count += 1
+        size_mb = os.path.getsize(path) / 1e6
+        print(f"       Written {path} ({count} prompts, {size_mb:.1f} MB)")
+        generated["pattern_tagging"] = {"path": str(path), "count": count}
+
+    if "reverse_morphogenesis" in stages:
+        path = prompt_dir / "stage6-reverse-morphogenesis.jsonl"
+        count = 0
+        with open(path, "w") as f:
+            for pair, entity in zip(pairs, entities):
+                prompt = build_reverse_morphogenesis_prompt(
+                    pair.question.title,
+                    pair.question.body_text,
+                    pair.answer.body_text,
+                )
+                record = {
+                    "entity_id": entity["entity/id"],
+                    "question_id": pair.question.id,
+                    "stage": "reverse_morphogenesis",
+                    "prompt": prompt,
+                }
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
+                count += 1
+        size_mb = os.path.getsize(path) / 1e6
+        print(f"       Written {path} ({count} prompts, {size_mb:.1f} MB)")
+        generated["reverse_morphogenesis"] = {"path": str(path), "count": count}
+
+    # Write a manifest for the moist-run
+    manifest = {
+        "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "mode": "moist-run",
+        "note": "Prompt files for Codex/Claude batch submission. "
+                "Each JSONL line has entity_id, question_id, stage, prompt.",
+        "stages": generated,
+        "usage": {
+            "codex": "codex --prompt-file <path.jsonl>",
+            "claude_api": "for line in open(path): send(json.loads(line)['prompt'])",
+            "manual": "Read prompt field, paste into LLM, save response",
+        },
+    }
+    manifest_path = prompt_dir / "manifest.json"
+    with open(manifest_path, "w") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False)
+    print(f"       Written {manifest_path}")
+
+    return generated
+
+
 def print_dry_run(args):
     """Print execution plan without running anything."""
     posts = Path(args.posts_xml)
@@ -663,11 +803,17 @@ def print_dry_run(args):
     else:
         print(f"  {'5. NER + scope detection (CPU)':<42s} {args.ner_kernel:<36s} {fmt(est_stage5_min)+' min':>10s}")
 
+    # Stage 6 is always present (CPU — prompt generation or LLM)
+    est_stage6_min = est_stage1_min  # roughly same as parse (just string formatting)
+    print(f"  {'6. Reverse morphogenesis S←Q←A (LLM)':<42s} {args.llm_model:<36s} {fmt(est_stage6_min)+' min':>10s}")
+
     print(f"  {'-'*42} {'-'*36} {'-'*10}")
 
     skipped = sum([args.skip_embeddings, args.skip_llm, args.skip_clustering, args.skip_ner])
-    active = 5 - skipped
-    print(f"  {'TOTAL':<42s} {f'{active}/5 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
+    active = 6 - skipped
+    if isinstance(est_total_min, (int, float)):
+        est_total_min += est_stage6_min
+    print(f"  {'TOTAL':<42s} {f'{active}/6 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
     print()
 
     print("  ESTIMATED OUTPUT:")
@@ -719,6 +865,20 @@ def print_dry_run(args):
         cmd_parts.append(f"  --skip-ner")
     print(f"    {' \\\\\n    '.join(cmd_parts)}")
     print()
+    print(f"  MOIST RUN (CPU stages + prompt files for Codex handoff):")
+    moist_parts = [f"python scripts/superpod-job.py {args.posts_xml}"]
+    moist_parts.append(f"  --moist-run")
+    moist_parts.append(f"  --output-dir {args.output_dir}")
+    moist_parts.append(f"  --site {args.site}")
+    if args.limit:
+        moist_parts.append(f"  --limit {args.limit}")
+    print(f"    {' \\\\\n    '.join(moist_parts)}")
+    print()
+    print(f"    Generates: moist-prompts/stage3-pattern-tagging.jsonl")
+    print(f"               moist-prompts/stage6-reverse-morphogenesis.jsonl")
+    print(f"    Each line is {{entity_id, question_id, stage, prompt}}")
+    print(f"    Feed to Codex, Claude API, or any LLM batch runner.")
+    print()
     print("=" * 64)
 
 
@@ -746,6 +906,8 @@ def main():
                         help="Max QA pairs to process")
     parser.add_argument("--dry-run", action="store_true",
                         help="Show execution plan without running anything")
+    parser.add_argument("--moist-run", action="store_true",
+                        help="Run CPU stages, output prompts for LLM stages (for Codex handoff)")
 
     # Embedding options
     parser.add_argument("--embed-model", default="BAAI/bge-large-en-v1.5",
@@ -796,10 +958,28 @@ def main():
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
 
+    # ========== Moist Run ==========
+    # Moist run: execute CPU stages normally, generate prompt files for LLM
+    # stages. This lets you run Stage 1 (parse) and Stage 5 (NER) on a laptop,
+    # then hand the prompt files to Codex/Claude for Stage 3 and Stage 6.
+    if args.moist_run:
+        args.skip_embeddings = True
+        args.skip_clustering = True
+        # We still parse (Stage 1) and run NER (Stage 5), but skip_llm
+        # is handled specially below — we generate prompts instead.
+        print("=" * 64)
+        print("MOIST RUN: CPU stages + prompt generation for Codex handoff")
+        print("  Stages 2,4 (GPU): skipped")
+        print("  Stage 3 (LLM):    prompt files generated")
+        print("  Stage 6 (S←Q←A):  prompt files generated")
+        print("=" * 64)
+        print()
+
     t0 = time.time()
 
+    n_stages = 6
     # ========== Stage 1: Parse ==========
-    print(f"[Stage 1/5] Parsing {args.posts_xml}...")
+    print(f"[Stage 1/{n_stages}] Parsing {args.posts_xml}...")
     pairs = build_qa_pairs_streaming(args.posts_xml, min_score=args.min_score)
     if args.limit and len(pairs) > args.limit:
         print(f"       Parsed {len(pairs)} pairs, limiting to {args.limit}")
@@ -831,7 +1011,7 @@ def main():
     # ========== Stage 2: Embeddings ==========
     if not args.skip_embeddings:
         t2 = time.time()
-        print(f"\n[Stage 2/5] Embeddings ({args.embed_model})...")
+        print(f"\n[Stage 2/6] Embeddings ({args.embed_model})...")
         embeddings = compute_qa_embeddings(
             pairs,
             model_name=args.embed_model,
@@ -844,15 +1024,22 @@ def main():
               f"saved {os.path.getsize(emb_path)/1e9:.2f} GB")
         print(f"       Stage 2 done in {time.time()-t2:.0f}s")
     else:
-        print(f"\n[Stage 2/5] Skipped (--skip-embeddings)")
+        print(f"\n[Stage 2/6] Skipped (--skip-embeddings)")
         embeddings = None
 
     # ========== Stage 3: LLM pattern tagging ==========
-    if not args.skip_llm:
+    if args.moist_run:
+        # Moist mode: generate prompts, don't run LLM
+        t3 = time.time()
+        print(f"\n[Stage 3/6] Generating pattern-tagging prompts (moist-run)...")
+        moist_result = generate_moist_prompts(
+            pairs, entities, outdir, stages=["pattern_tagging"])
+        print(f"       Stage 3 (moist) done in {time.time()-t3:.0f}s")
+    elif not args.skip_llm:
         t3 = time.time()
         global _llm_start
         _llm_start = t3
-        print(f"\n[Stage 3/5] LLM pattern tagging ({args.llm_model})...")
+        print(f"\n[Stage 3/6] LLM pattern tagging ({args.llm_model})...")
         pattern_tags = tag_patterns_llm_batch(
             pairs,
             model_name=args.llm_model,
@@ -870,12 +1057,12 @@ def main():
         for name, count in freq.most_common(10):
             print(f"         {name}: {count}")
     else:
-        print(f"\n[Stage 3/5] Skipped (--skip-llm)")
+        print(f"\n[Stage 3/6] Skipped (--skip-llm)")
 
     # ========== Stage 4: Clustering ==========
     if not args.skip_clustering and embeddings is not None:
         t4 = time.time()
-        print(f"\n[Stage 4/5] Clustering...")
+        print(f"\n[Stage 4/6] Clustering...")
         labels, n_clusters, n_noise = cluster_embeddings(
             embeddings, min_cluster_size=args.min_cluster_size)
 
@@ -891,17 +1078,17 @@ def main():
         write_json(outdir / "clusters.json", cluster_data)
         print(f"       Stage 4 done in {time.time()-t4:.0f}s")
     else:
-        print(f"\n[Stage 4/5] Skipped")
+        print(f"\n[Stage 4/6] Skipped")
 
     # ========== Stage 5: NER + Scope Detection ==========
     stage5_stats = None
     if not args.skip_ner:
         ner_path = Path(args.ner_kernel)
         if not ner_path.exists():
-            print(f"\n[Stage 5/5] Skipped (NER kernel not found: {ner_path})")
+            print(f"\n[Stage 5/6] Skipped (NER kernel not found: {ner_path})")
         else:
             t5 = time.time()
-            print(f"\n[Stage 5/5] NER term spotting + scope detection...")
+            print(f"\n[Stage 5/6] NER term spotting + scope detection...")
             print(f"       Kernel: {ner_path}")
             stage5_stats = run_stage5_ner_scopes(
                 entities, pairs, str(ner_path), outdir)
@@ -916,7 +1103,36 @@ def main():
                     print(f"         {stype}: {count}")
             print(f"       Stage 5 done in {time.time()-t5:.0f}s")
     else:
-        print(f"\n[Stage 5/5] Skipped (--skip-ner)")
+        print(f"\n[Stage 5/6] Skipped (--skip-ner)")
+
+    # ========== Stage 6: Reverse morphogenesis S←Q←A ==========
+    stage6_stats = None
+    if args.moist_run:
+        t6 = time.time()
+        print(f"\n[Stage 6/6] Generating reverse morphogenesis prompts (moist-run)...")
+        moist_s6 = generate_moist_prompts(
+            pairs, entities, outdir, stages=["reverse_morphogenesis"])
+        stage6_stats = {
+            "mode": "moist-run",
+            "prompts_generated": moist_s6.get("reverse_morphogenesis", {}).get("count", 0),
+        }
+        print(f"       Stage 6 (moist) done in {time.time()-t6:.0f}s")
+    elif not args.skip_llm:
+        # Full run: would use LLM for S←Q←A inference
+        # For now, generate prompts even in full mode (Stage 6 is new)
+        t6 = time.time()
+        print(f"\n[Stage 6/6] Reverse morphogenesis S←Q←A...")
+        print(f"       (LLM inference for Stage 6 not yet implemented;")
+        print(f"        generating prompt files for manual/API submission)")
+        moist_s6 = generate_moist_prompts(
+            pairs, entities, outdir, stages=["reverse_morphogenesis"])
+        stage6_stats = {
+            "mode": "prompt-generation",
+            "prompts_generated": moist_s6.get("reverse_morphogenesis", {}).get("count", 0),
+        }
+        print(f"       Stage 6 done in {time.time()-t6:.0f}s")
+    else:
+        print(f"\n[Stage 6/6] Skipped (--skip-llm)")
 
     # ========== Manifest ==========
     elapsed = time.time() - t0
@@ -932,14 +1148,18 @@ def main():
         "tag_count": len(tags),
         "relation_count": len(all_relations),
         "elapsed_seconds": round(elapsed),
+        "moist_run": args.moist_run,
         "stages_completed": [
             "parse",
             *([] if args.skip_embeddings else ["embeddings"]),
-            *([] if args.skip_llm else ["llm_pattern_tags"]),
+            *(["llm_pattern_tags_moist"] if args.moist_run else
+              ([] if args.skip_llm else ["llm_pattern_tags"])),
             *([] if args.skip_clustering or embeddings is None else ["clustering"]),
             *([] if args.skip_ner or stage5_stats is None else ["ner_scopes"]),
+            *([] if stage6_stats is None else ["reverse_morphogenesis"]),
         ],
         "stage5_stats": stage5_stats,
+        "stage6_stats": stage6_stats,
         "output_files": [f.name for f in outdir.iterdir() if f.is_file()],
         "patterns": PATTERN_NAMES,
     }
@@ -951,6 +1171,21 @@ def main():
     for f in sorted(outdir.iterdir()):
         if f.is_file():
             print(f"  {f.name:30s} {os.path.getsize(f)/1e6:8.1f} MB")
+        elif f.is_dir():
+            sub_files = list(f.iterdir())
+            sub_size = sum(sf.stat().st_size for sf in sub_files if sf.is_file())
+            print(f"  {f.name + '/':30s} {sub_size/1e6:8.1f} MB ({len(sub_files)} files)")
+    if args.moist_run:
+        prompt_dir = outdir / "moist-prompts"
+        if prompt_dir.exists():
+            print(f"\nMoist-run prompt files:")
+            for f in sorted(prompt_dir.iterdir()):
+                if f.suffix == ".jsonl":
+                    n_lines = sum(1 for _ in open(f))
+                    print(f"  {f.name:40s} {n_lines:>8,} prompts")
+            print(f"\nTo submit to Codex:")
+            print(f"  codex --prompt-file {prompt_dir}/stage3-pattern-tagging.jsonl")
+            print(f"  codex --prompt-file {prompt_dir}/stage6-reverse-morphogenesis.jsonl")
     print(f"\nTo upload: tar czf {outdir.name}.tar.gz {outdir.name}/")
 
 
