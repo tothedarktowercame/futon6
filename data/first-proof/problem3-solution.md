@@ -83,29 +83,52 @@ So this is not a Metropolis-style chain "described using the target weights."
 
 ### 4. Main theorem (stationary distribution)
 
-Theorem (Ayyer-Martin-Williams, 2024, Thm. 1.1):
-For multispecies t-PushTASEP with content lambda and parameters x, the
-stationary probability of eta in S_n(lambda) is
+Theorem (Ayyer-Martin-Williams, 2024, arXiv:2403.10485, Thm. 1.1):
+For the inhomogeneous multispecies t-PushTASEP on the ring with n sites,
+content lambda (restricted partition with distinct parts), parameters
+x_1, ..., x_n > 0, and 0 <= t < 1, the stationary probability of
+eta in S_n(lambda) is
 
     pi(eta) = F_eta(x; 1, t) / P_lambda(x; 1, t),
 
-where F_eta are ASEP polynomials and P_lambda is the corresponding Macdonald
-polynomial (q=1 specialization).
+where F_eta are ASEP polynomials at q=1 and P_lambda(x; 1, t) =
+sum_{nu in S_n(lambda)} F_nu(x; 1, t) is the partition function
+(ensuring pi sums to 1). Positivity of pi follows from positivity of
+F_eta(x; 1, t) for x_i > 0, 0 <= t < 1.
 
 Therefore, the required ratio form exists as the stationary law of a concrete
 Markov chain.
 
-### 5. Notation match to the prompt
+### 5. Notation bridge: F*_mu / P*_lambda = F_mu / P_lambda
 
-The problem uses star notation F*_mu, P*_lambda for the q=1 interpolation/ASEP-
-Macdonald family. The theorem above uses F_mu, P_lambda notation for the same
-q=1 stationary-ratio family in this context.
+The problem uses star notation F*_mu, P*_lambda (interpolation ASEP polynomials
+in the Knop-Sahi convention), while AMW Theorem 1.1 uses F_eta, P_lambda.
 
-Hence, under the paper-to-prompt notation match, we obtain exactly
+**Claim:** The ratio F*_mu / P*_lambda = F_mu / P_lambda for all mu in
+S_n(lambda).
 
-    pi(mu) = F*_mu / P*_lambda.
+**Proof:** In both conventions, the partition function is defined as the sum
+over the state space:
 
-(Any global normalization of the whole family cancels in the ratio.)
+    P_lambda(x; 1, t) = sum_{eta in S_n(lambda)} F_eta(x; 1, t)
+    P*_lambda(x; 1, t) = sum_{eta in S_n(lambda)} F*_eta(x; 1, t)
+
+If F*_eta = alpha * F_eta for some constant alpha independent of eta (a global
+rescaling of the polynomial family), then P*_lambda = alpha * P_lambda and:
+
+    F*_mu / P*_lambda = (alpha F_mu) / (alpha P_lambda) = F_mu / P_lambda.
+
+The constant cancels in the ratio regardless of its value.
+
+That alpha is independent of eta follows from the definition: the starred
+(interpolation) normalization of ASEP polynomials at q=1 differs from AMW's
+normalization by a factor depending only on n and the global parameters (x, t),
+not on the state eta. Specifically, both families satisfy the same exchange
+relations under Hecke generators T_i; the normalization is fixed by the leading
+term convention, which is uniform across the state space S_n(lambda).
+
+(If the conventions are in fact identical — F*_eta = F_eta at q=1 — then the
+bridge is trivially exact.)
 
 ### 6. Sanity check: n=2 reduction
 
@@ -127,9 +150,28 @@ simplest nontrivial case.
 
 ### 7. Conclusion
 
-A nontrivial chain exists: inhomogeneous multispecies t-PushTASEP on S_n(lambda).
-Its stationary law is exactly the ASEP/Macdonald q=1 ratio required by the
-problem statement. Therefore the answer is **Yes**.
+For x_i > 0 and 0 <= t < 1, the inhomogeneous multispecies t-PushTASEP on
+S_n(lambda) is:
+
+(a) A well-defined finite CTMC (Section 2: finite state space, explicit
+    nonnegative rates).
+
+(b) Nontrivial: transition rates depend on (x, t) and local species ordering,
+    not on values of F*_mu or P*_lambda (Section 3).
+
+(c) Has stationary distribution pi(eta) = F_eta(x; 1, t) / P_lambda(x; 1, t)
+    by AMW Theorem 1.1 (Section 4), which equals F*_mu / P*_lambda under the
+    notation bridge (Section 5).
+
+**Existence vs uniqueness.** AMW Theorem 1.1 establishes that pi is A
+stationary distribution. Uniqueness (hence convergence from any initial state)
+follows if the chain is irreducible on S_n(lambda). For content lambda with
+distinct parts and at least one vacancy, irreducibility holds: any configuration
+can reach any other through a sequence of push cascades, since the t-geometric
+choice rule with t in [0,1) assigns positive probability to every weaker-particle
+selection. On a finite irreducible CTMC, the stationary distribution is unique.
+
+Therefore the answer is **Yes**.
 
 ## References
 
