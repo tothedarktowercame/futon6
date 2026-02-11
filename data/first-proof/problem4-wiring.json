@@ -86,8 +86,44 @@
       "id": "p4-s5",
       "node_type": "answer",
       "post_id": 405,
-      "body_text": "Degree-2 verification: p = x^2 - s^2, q = x^2 - t^2. p ⊞_2 q = x^2 - (s^2+t^2). Both sides equal (s^2+t^2)/2. Equality holds (purely quadratic cumulants).",
-      "score": 0,
+      "body_text": "Degree-2 proof: 1/Phi_2 = (a_1^2 - 4a_2)/2 is linear in coefficients. ⊞_2 preserves this combination exactly. Surplus = 0 (symbolic verification).",
+      "score": 1,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-s5a",
+      "node_type": "answer",
+      "post_id": 408,
+      "body_text": "Centering reduction: Phi_n is translation-invariant (depends only on root differences). ⊞_n commutes with translation (via A+αI in random matrix model). WLOG a_1=b_1=0.",
+      "score": 1,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-s5b",
+      "node_type": "answer",
+      "post_id": 409,
+      "body_text": "Key identity: for centered cubics, Phi_3 * disc(p) = 18 * a_2^2. Therefore 1/Phi_3 = disc/(18*a_2^2) = -2a_2/9 - 3a_3^2/(2a_2^2). Verified symbolically in SymPy.",
+      "score": 2,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-s5c",
+      "node_type": "answer",
+      "post_id": 410,
+      "body_text": "⊞_3 simplification: for centered cubics (a_1=b_1=0), all cross-terms vanish: c_2=a_2+b_2, c_3=a_3+b_3. ⊞_3 reduces to plain coefficient addition.",
+      "score": 1,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-s5d",
+      "node_type": "answer",
+      "post_id": 411,
+      "body_text": "n=3 superadditivity via Cauchy-Schwarz: surplus = (3/2)[u^2/s^2 + v^2/t^2 - (u+v)^2/(s+t)^2] >= 0 by Titu's lemma + (s+t)^2 >= s^2+t^2. QED for n=3.",
+      "score": 2,
       "creation_date": "2026-02-11",
       "parent_post_id": 4
     },
@@ -95,8 +131,8 @@
       "id": "p4-s6",
       "node_type": "answer",
       "post_id": 406,
-      "body_text": "Conclusion: Yes, inequality TRUE (numerically verified). But analytic proof via concavity is BROKEN (direction error + function not concave). Proof incomplete.",
-      "score": 0,
+      "body_text": "Conclusion: PROVED for n=2 (equality) and n=3 (strict, via Phi_3*disc identity + Titu's lemma). Numerically verified for n=4,5 (0/5000 violations). n>=4 proof open — cross-terms essential, disc identity fails.",
+      "score": 1,
       "creation_date": "2026-02-11",
       "parent_post_id": 4
     }
@@ -174,31 +210,73 @@
     },
     {
       "source": "p4-s5",
-      "target": "p4-s4a",
-      "edge_type": "exemplify",
-      "evidence": "Degree 2: equality (s^2+t^2)/2 = s^2/2 + t^2/2",
+      "target": "p4-problem",
+      "edge_type": "assert",
+      "evidence": "n=2 proved: 1/Phi_2 linear in disc, ⊞_2 preserves exactly",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-s5a",
+      "target": "p4-s3a",
+      "edge_type": "reference",
+      "evidence": "Translation via A+αI in random matrix model",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-s5b",
+      "target": "p4-s5a",
+      "edge_type": "reference",
+      "evidence": "Uses centered assumption from centering reduction",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-s5c",
+      "target": "p4-s3",
+      "edge_type": "reference",
+      "evidence": "MSS coefficient formula with a_1=b_1=0 simplifies",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-s5d",
+      "target": "p4-s5b",
+      "edge_type": "reference",
+      "evidence": "Uses 1/Phi_3 = -2a_2/9 - 3a_3^2/(2a_2^2)",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-s5d",
+      "target": "p4-s5c",
+      "edge_type": "reference",
+      "evidence": "Uses c_2=a_2+b_2, c_3=a_3+b_3 from ⊞_3 simplification",
       "detection": "structural"
     },
     {
       "source": "p4-s6",
       "target": "p4-problem",
       "edge_type": "assert",
-      "evidence": "Yes (numerically), but analytic proof broken",
+      "evidence": "Proved for n=2,3; numerically verified for n=4,5",
       "detection": "classical"
+    },
+    {
+      "source": "p4-s6",
+      "target": "p4-s5",
+      "edge_type": "reference",
+      "evidence": "n=2 equality case",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-s6",
+      "target": "p4-s5d",
+      "edge_type": "reference",
+      "evidence": "n=3 strict inequality via Titu's lemma",
+      "detection": "structural"
     },
     {
       "source": "p4-s6",
       "target": "p4-num",
       "edge_type": "reference",
-      "evidence": "Numerical verification supports truth of inequality",
+      "evidence": "n=4,5 numerical verification",
       "detection": "classical"
-    },
-    {
-      "source": "p4-s6",
-      "target": "p4-s3",
-      "edge_type": "reference",
-      "evidence": "Free cumulant linearization under ⊞_n",
-      "detection": "structural"
     }
   ],
   "hyperedges": [
@@ -353,7 +431,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p4:edge-012",
+      "hx/id": "first-proof-p4:edge-006",
       "hx/type": "thread/assert",
       "hx/ends": [
         {
@@ -378,7 +456,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p4:edge-013",
+      "hx/id": "first-proof-p4:edge-007",
       "hx/type": "thread/challenge",
       "hx/ends": [
         {
@@ -403,7 +481,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p4:edge-006",
+      "hx/id": "first-proof-p4:edge-008",
       "hx/type": "thread/reference",
       "hx/ends": [
         {
@@ -428,7 +506,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p4:edge-007",
+      "hx/id": "first-proof-p4:edge-009",
       "hx/type": "thread/challenge",
       "hx/ends": [
         {
@@ -453,8 +531,8 @@
       ]
     },
     {
-      "hx/id": "first-proof-p4:edge-008",
-      "hx/type": "thread/exemplify",
+      "hx/id": "first-proof-p4:edge-010",
+      "hx/type": "thread/assert",
       "hx/ends": [
         {
           "role": "source",
@@ -463,22 +541,147 @@
         },
         {
           "role": "target",
-          "ident": "p4-s4a",
-          "node_type": "comment"
+          "ident": "p4-problem",
+          "node_type": "question"
         }
       ],
       "hx/content": {
-        "evidence": "Degree 2: equality (s^2+t^2)/2 = s^2/2 + t^2/2",
+        "evidence": "n=2 proved: 1/Phi_2 linear in disc, ⊞_2 preserves exactly",
         "detection": "structural"
       },
       "hx/labels": [
         "thread",
-        "exemplify",
+        "assert",
         "structural"
       ]
     },
     {
-      "hx/id": "first-proof-p4:edge-009",
+      "hx/id": "first-proof-p4:edge-011",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5a",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s3a",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Translation via A+αI in random matrix model",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-012",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5b",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5a",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses centered assumption from centering reduction",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-013",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5c",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "MSS coefficient formula with a_1=b_1=0 simplifies",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-014",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5d",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5b",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses 1/Phi_3 = -2a_2/9 - 3a_3^2/(2a_2^2)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-015",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5d",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5c",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses c_2=a_2+b_2, c_3=a_3+b_3 from ⊞_3 simplification",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-016",
       "hx/type": "thread/assert",
       "hx/ends": [
         {
@@ -493,7 +696,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Yes (numerically), but analytic proof broken",
+        "evidence": "Proved for n=2,3; numerically verified for n=4,5",
         "detection": "classical"
       },
       "hx/labels": [
@@ -503,7 +706,57 @@
       ]
     },
     {
-      "hx/id": "first-proof-p4:edge-010",
+      "hx/id": "first-proof-p4:edge-017",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "n=2 equality case",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-018",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5d",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "n=3 strict inequality via Titu's lemma",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-019",
       "hx/type": "thread/reference",
       "hx/ends": [
         {
@@ -518,7 +771,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Numerical verification supports truth of inequality",
+        "evidence": "n=4,5 numerical verification",
         "detection": "classical"
       },
       "hx/labels": [
@@ -526,51 +779,26 @@
         "reference",
         "classical"
       ]
-    },
-    {
-      "hx/id": "first-proof-p4:edge-011",
-      "hx/type": "thread/reference",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s3",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Free cumulant linearization under ⊞_n",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
     }
   ],
   "stats": {
-    "n_nodes": 11,
-    "n_edges": 14,
+    "n_nodes": 15,
+    "n_edges": 20,
     "node_types": {
       "question": 1,
-      "answer": 7,
+      "answer": 11,
       "comment": 3
     },
     "edge_types": {
       "clarify": 3,
-      "assert": 3,
-      "exemplify": 2,
-      "reference": 3,
+      "assert": 4,
+      "exemplify": 1,
+      "reference": 9,
       "challenge": 2,
       "retract": 1
     },
     "detection_types": {
-      "structural": 8,
+      "structural": 14,
       "classical": 6
     }
   }
