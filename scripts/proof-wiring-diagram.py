@@ -39,8 +39,9 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="question",
             post_id=10,
             body_text=(
-                "Given the mode-k subproblem [(Z⊗K)ᵀSS'(Z⊗K) + λ(Iᵣ⊗K)]vec(W) "
-                "= (Iᵣ⊗K)vec(B), explain how PCG solves this without O(N) computation."
+                "Given [(Z⊗K_tau)ᵀSS'(Z⊗K_tau) + λ(Iᵣ⊗K_tau)]vec(W) "
+                "= (Iᵣ⊗K_tau)vec(B), with K_tau = K + τI and λ>0, explain how "
+                "PCG solves this without O(N) computation."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -50,9 +51,9 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="answer",
             post_id=101,
             body_text=(
-                "Why direct methods fail: The system matrix A is nr×nr. Direct "
-                "solve costs O(n³r³). But forming A explicitly requires materializing "
-                "(Z⊗K) ∈ ℝ^{N×nr}, costing O(Nnr) — proportional to N. Infeasible."
+                "Why naive direct methods fail: A is nr×nr, so dense factorization "
+                "costs O(n³r³). The naive explicit route materializes (Z⊗K_tau) "
+                "in ℝ^{N×nr}, costing O(Nnr), which is N-dependent and infeasible."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -63,8 +64,9 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="answer",
             post_id=102,
             body_text=(
-                "The key insight: CG only requires the action v ↦ Av, never the "
-                "matrix A itself. We compute this in O(n²r + qr), independent of N."
+                "Key insight: with λ>0 and K_tau ≻ 0, PCG only needs v ↦ A v, "
+                "never A explicitly. The implicit matvec costs O(n²r + qr), "
+                "independent of N."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -89,8 +91,8 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             post_id=1022,
             body_text=(
                 "Adjoint map from sparse result: The sparse vector w ∈ ℝ^N maps "
-                "back via (Zᵀ⊗K)w = vec(KW'Z) where W' has q nonzeros. "
-                "W'Z: O(qr), K(W'Z): O(n²r). Total: O(qr + n²r)."
+                "back via (Zᵀ⊗K_tau)w = vec(K_tau W'Z) where nnz(W') = s ≤ q. "
+                "W'Z: O(sr), K_tau(W'Z): O(n²r). Total: O(qr + n²r)."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -101,7 +103,8 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="comment",
             post_id=1023,
             body_text=(
-                "Regularization term: λ(Iᵣ⊗K)vec(V) = λ·vec(KV). Cost: O(n²r)."
+                "Regularization term: λ(Iᵣ⊗K_tau)vec(V) = λ·vec(K_tau V). "
+                "Cost: O(n²r)."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -124,8 +127,8 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="answer",
             post_id=103,
             body_text=(
-                "Right-hand side: b = (Iᵣ⊗K)vec(B) where B = TZ. "
-                "T is sparse (q nonzeros), so TZ: O(qr), KB: O(n²r). "
+                "Right-hand side: b = (Iᵣ⊗K_tau)vec(B) where B = TZ. "
+                "T is sparse (q nonzeros), so TZ: O(qr), K_tau B: O(n²r). "
                 "Total: O(qr + n²r)."
             ),
             score=0,
@@ -137,9 +140,9 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="answer",
             post_id=104,
             body_text=(
-                "Preconditioner choice: P = (H⊗K) where H = ZᵀZ + λIᵣ. "
-                "Approximates A by replacing SSᵀ with I (full observation). "
-                "Captures kernel structure (K) and inter-factor coupling (ZᵀZ)."
+                "Preconditioner choice: after whitening by K_tau^{-1/2} and using "
+                "SSᵀ ≈ cI (c=q/N), choose P = (H⊗K_tau) with "
+                "H = c ZᵀZ + λIᵣ. This is a structured surrogate for A."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -163,9 +166,9 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="comment",
             post_id=1042,
             body_text=(
-                "Preconditioner solve: P⁻¹ = H⁻¹⊗K⁻¹. Precompute Cholesky of K "
-                "O(n³) and H O(r³). Each application: solve KYHᵀ = Z' via "
-                "triangular substitution. Cost per solve: O(n²r)."
+                "Preconditioner solve: P⁻¹ = H⁻¹⊗K_tau⁻¹. Precompute Cholesky of "
+                "K_tau (O(n³)) and H (O(r³)). Each application solves "
+                "K_tau Y Hᵀ = Z' via triangular substitution in O(n²r + nr²)."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -176,9 +179,10 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="answer",
             post_id=105,
             body_text=(
-                "Convergence: CG on P⁻¹A converges in t = O(√κ·log(1/ε)) "
-                "iterations. Since P ≈ A well when q/N is not too small, "
-                "practical convergence: t = O(r) to O(r√(n/q)·log(1/ε))."
+                "Convergence: PCG has t = O(√κ log(1/ε)) with "
+                "κ = cond(P^{-1/2} A P^{-1/2}). If "
+                "(1-δ)P ≼ A ≼ (1+δ)P for δ in (0,1), then "
+                "κ ≤ (1+δ)/(1-δ), giving a concrete fast-rate guarantee."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -189,10 +193,10 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="answer",
             post_id=106,
             body_text=(
-                "Complexity summary: Total per mode-k subproblem O(n³ + t(n²r + qr)) "
-                "where t ~ O(r). Compare direct solve O(n³r³ + Nnr). PCG replaces "
-                "N-dependent term with q-dependent, n³r³ with n³ + n²r². Since "
-                "n, r ≪ q ≪ N, this achieves the required complexity reduction."
+                "Complexity summary: total per mode-k subproblem is "
+                "O(n³ + r³ + t(n²r + qr + nr²)); for n >= r this is "
+                "O(n³ + t(n²r + qr)). Compare direct O(n³r³ + Nnr). "
+                "PCG removes explicit dependence on N."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -203,10 +207,9 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
             node_type="answer",
             post_id=107,
             body_text=(
-                "Algorithm: SETUP computes Cholesky factors and RHS. PCG iteration "
-                "applies implicit matvec and preconditioner solve per step. "
-                "MATVEC evaluates at observed entries only. "
-                "PRECOND_SOLVE uses Kronecker inverse structure."
+                "Algorithm: SETUP builds K_tau, H, and RHS; PCG then applies "
+                "implicit MATVEC on observed entries and PRECOND_SOLVE via "
+                "Kronecker factors each iteration."
             ),
             score=0,
             creation_date="2026-02-11",
@@ -225,7 +228,7 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
         ThreadEdge(
             source="p10-s1", target="p10-problem",
             edge_type="challenge",
-            evidence="Direct methods cost O(Nnr), proportional to N — infeasible",
+            evidence="Naive explicit direct methods incur O(Nnr) memory/work",
             detection="structural",
         ),
         # S2 reforms the problem: from forming A to implicit matvec
@@ -246,7 +249,7 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
         ThreadEdge(
             source="p10-s2b", target="p10-s2",
             edge_type="clarify",
-            evidence="Sparse W' has only q nonzeros; adjoint via (Zᵀ⊗K)",
+            evidence="Sparse W' has s<=q nonzeros; adjoint via (Zᵀ⊗K_tau)",
             detection="structural",
         ),
         # S2c clarifies S2: the regularization term
@@ -286,7 +289,7 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
         ThreadEdge(
             source="p10-s4", target="p10-s2",
             edge_type="reform",
-            evidence="P = (H⊗K) approximates A for faster convergence",
+            evidence="Whitened surrogate motivates P = (H⊗K_tau) for faster PCG",
             detection="structural",
         ),
         # S4-hadamard clarifies: why the preconditioner is cheap
@@ -300,21 +303,21 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
         ThreadEdge(
             source="p10-s4-solve", target="p10-s4",
             edge_type="exemplify",
-            evidence="P⁻¹ = H⁻¹⊗K⁻¹ via Cholesky; each solve O(n²r)",
+            evidence="P⁻¹ = H⁻¹⊗K_tau⁻¹ via Cholesky; solve cost O(n²r + nr²)",
             detection="structural",
         ),
         # S5 asserts convergence, depends on preconditioner quality
         ThreadEdge(
             source="p10-s5", target="p10-s4",
             edge_type="assert",
-            evidence="P ≈ A ⟹ κ(P⁻¹A) small ⟹ t = O(r) iterations",
+            evidence="Spectral equivalence bounds κ(P⁻¹A), giving PCG rate O(√κ log(1/ε))",
             detection="structural",
         ),
         # S6 asserts the final answer, aggregating all costs
         ThreadEdge(
             source="p10-s6", target="p10-problem",
             edge_type="assert",
-            evidence="O(n³ + t(n²r + qr)), no N-dependence, QED",
+            evidence="O(n³ + r³ + t(n²r + qr + nr²)); no explicit N-dependence",
             detection="structural",
         ),
         # S6 references the components it aggregates
@@ -327,13 +330,13 @@ def build_problem10_proof_diagram() -> ThreadWiringDiagram:
         ThreadEdge(
             source="p10-s6", target="p10-s4-solve",
             edge_type="reference",
-            evidence="Preconditioner solve O(n²r) per iteration",
+            evidence="Preconditioner solve O(n²r + nr²) per iteration",
             detection="structural",
         ),
         ThreadEdge(
             source="p10-s6", target="p10-s5",
             edge_type="reference",
-            evidence="t = O(r) iterations from convergence analysis",
+            evidence="Iteration count from standard PCG bound and κ(P⁻¹A)",
             detection="structural",
         ),
         # S7 exemplifies: the algorithm instantiates the analysis

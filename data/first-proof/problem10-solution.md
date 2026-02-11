@@ -3,205 +3,216 @@
 ## Problem Statement
 
 Given the mode-k subproblem of RKHS-constrained CP decomposition with
-missing data, the system to solve is:
+missing data, solve
 
-    [(Z x K)^T SS^T (Z x K) + l(I_r x K)] vec(W) = (I_r x K) vec(B)
+    [(Z x K)^T D (Z x K) + lambda (I_r x K)] vec(W) = (I_r x K) vec(B),
 
-where:
-- W in R^{n x r} is the unknown factor (A_k = KW)
-- K in R^{n x n} is the PSD RKHS kernel matrix
-- Z in R^{M x r} is the Khatri-Rao product of all other factors
-- S in R^{N x q} is the selection matrix (q observed entries out of N = nM)
-- B = TZ in R^{n x r} is the MTTKRP
-- l > 0 is the regularization parameter
-- n, r < q << N
+where D = S S^T is the observation projector (q observed entries out of
+N = nM), B = T Z, and n, r << q << N.
 
-Explain how PCG solves this without O(N) computation.
+## Assumptions Used (explicit)
+
+1. lambda > 0.
+2. For standard PCG and Cholesky-based preconditioning, use a PD kernel
+   K_tau = K + tau I_n with tau > 0 (or assume K is already PD).
+3. S is a selection operator, so D is diagonal/projector and sparse by index list.
+
+Then the solved system is
+
+    A_tau x = b_tau,
+    A_tau = (Z x K_tau)^T D (Z x K_tau) + lambda (I_r x K_tau),
+    x = vec(W),
+    b_tau = (I_r x K_tau) vec(B).
+
+Under these assumptions A_tau is SPD, so PCG applies.
 
 ## Solution
 
-### 1. Why direct methods fail
+### 1. Why naive direct methods fail
 
-The system matrix A = (Z x K)^T SS^T (Z x K) + l(I_r x K) is nr x nr.
-A direct solve costs O(n^3 r^3). But forming A explicitly requires
-materializing (Z x K) in R^{N x nr}, which costs O(Nnr) -- proportional
-to N. Since N = nM = n prod_i n_i can be enormous while only q entries
-are observed, this is infeasible.
+A_tau is an (nr) x (nr) system. Dense direct factorization costs
+O((nr)^3) = O(n^3 r^3).
 
-### 2. Implicit matrix-vector product (the key insight)
+A naive explicit route also materializes Phi = Z x K_tau in R^{N x nr},
+which costs O(N n r) memory/work before factorization. This is the
+N-dependent bottleneck we avoid with matrix-free PCG.
 
-CG only requires the action v -> Av, never the matrix A itself. We compute
-this in O(n^2 r + qr), independent of N.
+### 2. Implicit matrix-vector product in O(n^2 r + q r)
 
-Given v in R^{nr}, reshape as V in R^{n x r}.
+CG needs only y = A_tau x, not A_tau explicitly.
 
-**Step 2a: Forward map at observed entries only.**
+Given x = vec(V), V in R^{n x r}:
 
-By the Kronecker identity (A x B)vec(X) = vec(BXA^T):
+1. U = K_tau V. Cost O(n^2 r).
+2. Forward sampled action (only observed entries):
 
-    (Z x K) vec(V) = vec(KVZ^T)
+       (Z x K_tau) vec(V) = vec(K_tau V Z^T).
 
-The full result lives in R^N, but SS^T selects only q entries. Each
-observed entry l at position (i_l, j_l) in the n x M unfolding satisfies:
+   For each observed coordinate (i_l, j_l),
 
-    u_l = k_{i_l}^T V z_{j_l}
+       u_l = <U[i_l, :], Z[j_l, :]>.
 
-where k_i is row i of K and z_j is row j of Z. Grouping by row index i:
-- Compute k_i^T V once per unique row: O(nr) each, O(n^2 r) total
-- Dot with z_j per entry: O(r) each, O(qr) total
+   Total O(q r).
+3. Form sparse W' in R^{n x M} from u_l. Let s = nnz(W') <= q.
+4. Adjoint sampled action:
 
-Cost: O(n^2 r + qr).
+       (Z^T x K_tau) vec(W') = vec(K_tau W' Z).
 
-**Step 2b: Adjoint map from sparse result.**
+   Compute W' Z in O(s r) <= O(q r), then left-multiply by K_tau in O(n^2 r).
+5. Add regularization term lambda vec(K_tau V), cost O(n^2 r).
 
-The sparse vector w in R^N (q nonzeros) maps back via (Z x K)^T = (Z^T x K):
+Total per matvec:
 
-    (Z^T x K) w = vec(K W' Z)
+    O(n^2 r + q r),
 
-where W' in R^{n x M} has the q nonzero entries of w. Since W' is sparse:
-- W'Z touches only q nonzero entries: O(qr)
-- K(W'Z) is n x n times n x r: O(n^2 r)
-
-Cost: O(qr + n^2 r).
-
-**Step 2c: Regularization term.**
-
-    l(I_r x K) vec(V) = l vec(KV)
-
-Cost: O(n^2 r).
-
-**Total per matvec: O(n^2 r + qr).  No dependence on N.**
+with no O(N) term.
 
 ### 3. Right-hand side
 
-    b = (I_r x K) vec(B)  where  B = TZ
+B = T Z with T sparse (q nonzeros):
 
-T in R^{n x M} is the sparse mode-k unfolding (q nonzeros), so:
-- TZ: O(qr) via sparse-dense multiply
-- KB: O(n^2 r)
+1. T Z: O(q r)
+2. K_tau B: O(n^2 r)
 
-Cost: O(qr + n^2 r).
+So b_tau = (I_r x K_tau) vec(B) is formed in O(q r + n^2 r).
 
-### 4. Preconditioner
+### 4. Preconditioner that matches the corrected algebra
 
-**Choice:** P = (H x K) where H = Z^T Z + lI_r.
+Use D = S S^T and whiten by K_tau^{-1/2}:
 
-This approximates A by replacing SS^T with I (pretending full observation).
-It captures both the kernel structure (K) and inter-factor coupling (Z^T Z).
+    x = (I_r x K_tau^{-1/2}) y.
 
-**Why this structure?** The Khatri-Rao Hadamard property gives:
+Then
 
-    Z^T Z = (A_1^T A_1) * (A_2^T A_2) * ... * (A_d^T A_d)
+    Ahat = (I_r x K_tau^{-1/2}) A_tau (I_r x K_tau^{-1/2})
+         = (Z x K_tau^{1/2})^T D (Z x K_tau^{1/2}) + lambda I.
 
-(elementwise/Hadamard product, excluding mode k). Each A_i^T A_i is r x r
-and costs O(n_i r^2), so Z^T Z costs O(sum_i n_i r^2) -- vastly cheaper
-than the naive O(Mr^2).
+If sampling is roughly uniform, D ~ c I with c = q/N. Then
 
-**Preconditioner solve** P y = z uses the Kronecker inverse:
+    Ahat ~ c (Z^T Z x K_tau) + lambda I.
 
-    P^{-1} = H^{-1} x K^{-1}
+Choose Kron preconditioner in whitened coordinates:
 
-Precompute once:
-- Cholesky of K: O(n^3)
-- Cholesky of H (r x r): O(r^3)
+    Phat = (c Z^T Z + lambda I_r) x I_n.
 
-Each preconditioner application:
-- Reshape z to Z' in R^{n x r}
-- Solve K Y H^T = Z' via two triangular solves: O(n^2 r + nr^2)
+Mapping back gives
 
-Cost per solve: O(n^2 r).
+    P = (c Z^T Z + lambda I_r) x K_tau = H x K_tau,
+    H = c Z^T Z + lambda I_r.
 
-### 5. Convergence
+This is the missing justification for using H x K_tau (instead of claiming
+it is the exact D = I system).
 
-CG on the preconditioned system P^{-1}A converges in t iterations where:
+Khatri-Rao identity still gives efficient Gram formation:
 
-    t = O(sqrt(kappa) log(1/eps))
+    Z^T Z = Hadamard_i (A_i^T A_i),
 
-and kappa = cond(P^{-1}A). Since P approximates A well when q/N is not
-too small (the preconditioner assumes full observation), and the rank-r
-structure constrains the spectrum, practical convergence is:
+cost O(sum_i n_i r^2).
 
-    t = O(r)  to  O(r sqrt(n/q) log(1/eps))
+Preconditioner apply:
 
-in typical tensor completion regimes.
+    P^{-1} = H^{-1} x K_tau^{-1},
+
+implemented by solving K_tau Y H^T = Z' after reshape.
+Per application cost is O(n^2 r + n r^2) (often simplified to O(n^2 r)
+when n >> r).
+
+### 5. Convergence (tightened)
+
+For SPD A_tau and SPD P, standard PCG gives
+
+    ||e_t||_{A_tau} <= 2 ((sqrt(kappa)-1)/(sqrt(kappa)+1))^t ||e_0||_{A_tau},
+
+with kappa = cond(P^{-1/2} A_tau P^{-1/2}), so
+
+    t = O(sqrt(kappa) log(1/eps)).
+
+To claim "fast" convergence, add a spectral-equivalence hypothesis, e.g.
+
+    (1-delta) P <= A_tau <= (1+delta) P, 0 < delta < 1,
+
+which implies
+
+    kappa(P^{-1} A_tau) <= (1+delta)/(1-delta).
+
+Hence t is logarithmic in 1/eps with a modest sqrt(kappa) factor when
+delta is bounded away from 1. (No unsupported closed-form t = O(r sqrt(n/q))
+claim is needed.)
 
 ### 6. Complexity summary
 
-**Setup (once per ALS outer iteration):**
+Setup per ALS outer step:
 
-| Operation               | Cost                    |
-|------------------------|-------------------------|
-| Cholesky of K          | O(n^3)                  |
-| Z^T Z via Hadamard     | O(sum_i n_i r^2)        |
-| Cholesky of H          | O(r^3)                  |
-| RHS: TZ + KB           | O(qr + n^2 r)           |
+1. Cholesky(K_tau): O(n^3)
+2. Z^T Z via Hadamard Grams: O(sum_i n_i r^2)
+3. Cholesky(H): O(r^3)
+4. RHS: O(q r + n^2 r)
 
-**Per CG iteration:**
+Per PCG iteration:
 
-| Operation               | Cost                    |
-|------------------------|-------------------------|
-| Matvec with A          | O(n^2 r + qr)           |
-| Preconditioner solve   | O(n^2 r)                |
+1. Matvec: O(n^2 r + q r)
+2. Preconditioner apply: O(n^2 r + n r^2)
 
-**Total per mode-k subproblem:**
+Total:
 
-    O(n^3 + t(n^2 r + qr))
+    O(n^3 + r^3 + sum_i n_i r^2 + q r + n^2 r
+      + t (n^2 r + q r + n r^2)).
 
-where t = number of CG iterations (typically O(r)).
+In the common regime n >= r, this simplifies to
 
-**Compare with direct solve:** O(n^3 r^3 + Nnr).
+    O(n^3 + t (n^2 r + q r)),
 
-The PCG approach replaces the N-dependent term with q-dependent terms,
-and the n^3 r^3 cubic-in-r term with n^3 + n^2 r^2 (via t ~ r iterations).
-Since n, r < q << N, this achieves the required complexity reduction.
+with dependence on q (observed entries) rather than N (all entries).
 
 ### 7. Algorithm
 
-```
+```text
 SETUP:
-  L_K = cholesky(K)                          # O(n^3)
-  H = hadamard_product(A_i^T A_i for i != k) + l * I_r  # O(sum n_i r^2)
-  L_H = cholesky(H)                          # O(r^3)
-  B = sparse_mttkrp(T, Z)                    # O(qr)
-  b = vec(K @ B)                             # O(n^2 r)
+  K_tau = K + tau * I_n                    # tau > 0 if K is only PSD
+  L_K = cholesky(K_tau)                    # O(n^3)
+  G = hadamard_product(A_i^T A_i for i != k)  # O(sum_i n_i r^2)
+  c = q / N
+  H = c * G + lambda * I_r
+  L_H = cholesky(H)                        # O(r^3)
+  B = sparse_mttkrp(T, Z)                  # O(qr)
+  b = vec(K_tau @ B)                       # O(n^2 r)
 
-PCG ITERATION (solve Ax = b):
-  x_0 = 0
-  r_0 = b
-  z_0 = precond_solve(L_K, L_H, r_0)        # O(n^2 r)
-  p_0 = z_0
-  for i = 0, 1, 2, ...:
-    w = matvec(p_i)                          # O(n^2 r + qr)
-    alpha = (r_i^T z_i) / (p_i^T w)
-    x_{i+1} = x_i + alpha * p_i
-    r_{i+1} = r_i - alpha * w
-    if ||r_{i+1}|| < eps * ||b||: break
-    z_{i+1} = precond_solve(L_K, L_H, r_{i+1})  # O(n^2 r)
-    beta = (r_{i+1}^T z_{i+1}) / (r_i^T z_i)
-    p_{i+1} = z_{i+1} + beta * p_i
-
+PCG(A_tau x = b, preconditioner P = H x K_tau):
+  x0 = 0
+  r0 = b
+  z0 = precond_solve(L_K, L_H, r0)         # O(n^2 r + n r^2)
+  p0 = z0
+  repeat until convergence:
+    w = matvec_A_tau(p)                    # O(n^2 r + q r)
+    alpha = (r^T z) / (p^T w)
+    x = x + alpha * p
+    r_new = r - alpha * w
+    if ||r_new|| <= eps * ||b||: break
+    z_new = precond_solve(L_K, L_H, r_new)
+    beta = (r_new^T z_new) / (r^T z)
+    p = z_new + beta * p
+    r, z = r_new, z_new
   W = reshape(x, n, r)
 
-MATVEC(v):
+matvec_A_tau(v):
   V = reshape(v, n, r)
-  # Forward: evaluate at observed entries
-  for each observed entry (i_l, j_l):
-    u_l = k_{i_l}^T V z_{j_l}
-  # Adjoint: accumulate from observed entries
-  W' = sparse_matrix(n, M, entries u_l at positions (i_l, j_l))
-  result = vec(K @ (W' @ Z)) + l * vec(K @ V)
-  return result
+  U = K_tau @ V
+  for each observed (i_l, j_l):
+    u_l = dot(U[i_l, :], Z[j_l, :])
+  Wprime = sparse(n, M, entries u_l)
+  Y = K_tau @ (Wprime @ Z) + lambda * (K_tau @ V)
+  return vec(Y)
 
-PRECOND_SOLVE(L_K, L_H, z):
-  Z' = reshape(z, n, r)
-  solve L_K Y L_H^T = Z' by triangular substitution
+precond_solve(L_K, L_H, z):
+  Zp = reshape(z, n, r)
+  solve K_tau Y H^T = Zp using triangular solves with L_K, L_H
   return vec(Y)
 ```
 
 ## Key References from futon6 corpus
 
-- PlanetMath: "conjugate gradient algorithm", "method of conjugate gradients"
-- PlanetMath: "Kronecker product", "positive definite matrices"
-- PlanetMath: "properties of tensor product"
+- PlanetMath: conjugate gradient algorithm; method of conjugate gradients
+- PlanetMath: Kronecker product; positive definite matrices
+- PlanetMath: properties of tensor product
 - physics.SE #27466: iterative solvers for large systems in physics
-- physics.SE #27556: preconditioning for elliptic PDEs (Farago-Karatson)
+- physics.SE #27556: preconditioning for elliptic PDEs

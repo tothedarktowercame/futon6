@@ -53,6 +53,7 @@ RESPONSE_SCHEMA = {
                     "relevance": {"type": "string"},
                 },
                 "required": ["question_id", "title", "relevance"],
+                "additionalProperties": False,
             },
         },
         "suggested_improvement": {"type": "string"},
@@ -81,16 +82,19 @@ RESPONSE_SCHEMA = {
 # Verification focus for each proof step
 NODE_VERIFICATION_FOCUS = {
     "p10-problem": (
-        "Verify the problem is well-posed: the system matrix is SPD when K is PSD "
-        "and Z has full column rank. Confirm the dimensions are consistent."
+        "Verify the problem is well-posed with explicit assumptions: lambda > 0 and "
+        "K_tau = K + tau I is PD (or solve restricted to Range(K)). Confirm "
+        "dimensions are consistent and SPD conditions are stated correctly."
     ),
     "p10-s1": (
-        "Verify the complexity claim: direct solve of an nr×nr system costs O(n³r³). "
-        "Confirm that forming (Z⊗K) explicitly requires O(Nnr) storage/operations."
+        "Verify the complexity claim for the naive explicit route: direct solve of "
+        "an nr×nr dense system costs O(n³r³), and explicitly forming (Z⊗K_tau) "
+        "costs O(Nnr) storage/operations."
     ),
     "p10-s2": (
-        "Verify the CG applicability: the system matrix is SPD (required for CG). "
-        "Confirm the claimed O(n²r + qr) matvec cost is achievable."
+        "Verify PCG applicability under the stated assumptions (lambda>0, K_tau PD). "
+        "Confirm the claimed O(n²r + qr) implicit matvec is achievable without N-sized "
+        "materialization."
     ),
     "p10-s2a": (
         "Verify the Kronecker identity (A⊗B)vec(X) = vec(BXAᵀ). Confirm that "
@@ -98,11 +102,11 @@ NODE_VERIFICATION_FOCUS = {
         "row-grouping argument."
     ),
     "p10-s2b": (
-        "Verify the adjoint computation: (Zᵀ⊗K)w = vec(KW'Z) where W' is sparse. "
-        "Confirm the O(qr + n²r) cost. Check that sparsity of W' is exactly q."
+        "Verify the adjoint computation: (Zᵀ⊗K_tau)w = vec(K_tau W'Z) where W' is sparse. "
+        "Confirm O(qr + n²r) cost and check sparsity is s = nnz(W') <= q (not necessarily exactly q)."
     ),
     "p10-s2c": (
-        "Verify the regularization term: λ(Iᵣ⊗K)vec(V) = λ·vec(KV). "
+        "Verify the regularization term: λ(Iᵣ⊗K_tau)vec(V) = λ·vec(K_tau V). "
         "This is straightforward but confirm the Kronecker-vec identity."
     ),
     "p10-s2-total": (
@@ -111,11 +115,12 @@ NODE_VERIFICATION_FOCUS = {
     ),
     "p10-s3": (
         "Verify the RHS computation: B = TZ costs O(qr) when T is sparse with q "
-        "nonzeros, and KB costs O(n²r). Confirm dimensions: T ∈ ℝ^{n×M}, Z ∈ ℝ^{M×r}."
+        "nonzeros, and K_tau B costs O(n²r). Confirm dimensions: T ∈ ℝ^{n×M}, Z ∈ ℝ^{M×r}."
     ),
     "p10-s4": (
-        "Verify the preconditioner choice P = (H⊗K) where H = ZᵀZ + λIᵣ. "
-        "Confirm it approximates A when SSᵀ ≈ I. Check that P is SPD."
+        "Verify the preconditioner derivation via kernel whitening and SSᵀ ≈ cI: "
+        "P = (H⊗K_tau), H = c ZᵀZ + λIᵣ. Check the algebraic consistency and "
+        "the SPD conditions."
     ),
     "p10-s4-hadamard": (
         "Verify the Khatri-Rao Hadamard property: ZᵀZ = ∏ᵢ(AᵢᵀAᵢ) where ∏ "
@@ -123,17 +128,18 @@ NODE_VERIFICATION_FOCUS = {
         "identity in tensor decomposition — find math.SE references."
     ),
     "p10-s4-solve": (
-        "Verify the Kronecker inverse: (H⊗K)⁻¹ = H⁻¹⊗K⁻¹. Confirm this requires "
-        "K and H both invertible (K is PSD, H = ZᵀZ + λI is PD for λ>0). "
-        "Verify the Cholesky solve cost O(n²r + nr²)."
+        "Verify the Kronecker inverse: (H⊗K_tau)⁻¹ = H⁻¹⊗K_tau⁻¹. Confirm this "
+        "requires K_tau and H invertible (PD). Verify Cholesky-based apply cost "
+        "O(n²r + nr²)."
     ),
     "p10-s5": (
-        "Verify the CG convergence bound t = O(√κ·log(1/ε)). Assess the claim "
-        "that practical convergence is t = O(r) to O(r√(n/q)·log(1/ε)). "
-        "This is the weakest part of the proof — what assumptions are needed?"
+        "Verify the standard PCG convergence bound t = O(√κ·log(1/ε)) and the "
+        "spectral-equivalence implication: if (1-δ)P ≼ A ≼ (1+δ)P, then "
+        "κ(P⁻¹A) ≤ (1+δ)/(1-δ). Check assumptions needed for this."
     ),
     "p10-s6": (
-        "Verify the final complexity: O(n³ + t(n²r + qr)) vs direct O(n³r³ + Nnr). "
+        "Verify the final complexity: O(n³ + r³ + t(n²r + qr + nr²)) "
+        "(or simplified O(n³ + t(n²r + qr)) when n≥r) vs direct O(n³r³ + Nnr). "
         "Confirm the reduction holds when n, r ≪ q ≪ N."
     ),
 }
@@ -185,8 +191,8 @@ def build_node_prompt(node: dict, edges: list[dict], solution_text: str) -> str:
     lines.extend([
         "## Full Problem Context",
         "",
-        "The system is: [(Z⊗K)ᵀSSᵀ(Z⊗K) + λ(Iᵣ⊗K)]vec(W) = (Iᵣ⊗K)vec(B)",
-        "where W ∈ ℝ^{n×r}, K ∈ ℝ^{n×n} PSD kernel, Z ∈ ℝ^{M×r} Khatri-Rao product,",
+        "The system is: [(Z⊗K_tau)ᵀSSᵀ(Z⊗K_tau) + λ(Iᵣ⊗K_tau)]vec(W) = (Iᵣ⊗K_tau)vec(B)",
+        "where W ∈ ℝ^{n×r}, K_tau = K + tau I ∈ ℝ^{n×n} (PD for tau>0), Z ∈ ℝ^{M×r} Khatri-Rao product,",
         "S selects q observed entries from N = nM total, B = TZ is the MTTKRP.",
         "Regime: n, r ≪ q ≪ N.",
         "",
