@@ -36,6 +36,26 @@ class SEPost:
 
 
 @dataclass
+class SEComment:
+    """A StackExchange comment on a post."""
+    id: int
+    post_id: int       # which post (Q or A) this is on
+    text: str = ""
+    score: int = 0
+    creation_date: str = ""
+    user_id: int | None = None
+
+
+@dataclass
+class SEThread:
+    """A full thread: question + ALL answers + comments."""
+    question: SEPost
+    answers: list[SEPost] = field(default_factory=list)
+    comments: dict[int, list[SEComment]] = field(default_factory=dict)  # post_id -> comments
+    tags: list[str] = field(default_factory=list)
+
+
+@dataclass
 class SEQAPair:
     """A question with its accepted/top answer."""
     question: SEPost
@@ -294,6 +314,182 @@ def build_qa_pairs_streaming(xml_path: str, min_score: int = 0) -> list[SEQAPair
             ))
 
     return pairs
+
+
+# --- Comments XML streaming parser ---
+
+def iter_comments(xml_path: str):
+    """Stream-parse Comments.xml yielding SEComment objects.
+
+    Uses iterparse for constant memory usage.
+    """
+    for event, elem in iterparse(xml_path, events=("end",)):
+        if elem.tag != "row":
+            continue
+
+        attrs = elem.attrib
+        comment = SEComment(
+            id=int(attrs["Id"]),
+            post_id=int(attrs.get("PostId", 0)),
+            text=attrs.get("Text", ""),
+            score=int(attrs.get("Score", 0)),
+            creation_date=attrs.get("CreationDate", ""),
+            user_id=int(u) if (u := attrs.get("UserId")) else None,
+        )
+        yield comment
+        elem.clear()
+
+
+# --- Thread construction (3-pass streaming) ---
+
+def build_threads_streaming(
+    posts_xml_path: str,
+    comments_xml_path: str | None = None,
+    min_score: int = 0,
+    thread_limit: int | None = None,
+) -> list[SEThread]:
+    """Build full thread objects with a 3-pass streaming approach.
+
+    Pass 1 (Posts.xml): metadata index — question IDs, answer-to-question
+            mappings, keep ALL answers (not just accepted/top).
+    Pass 2 (Posts.xml): load full post bodies for indexed posts.
+    Pass 3 (Comments.xml): stream comments, keep only those on indexed posts.
+
+    Assembles SEThread objects, one per question.
+
+    Memory: O(threads) not O(all posts). Safe for large dumps.
+    """
+    import sys
+
+    # --- Pass 1: collect thread metadata ---
+    # {qid: (accepted_answer_id, tags)}
+    questions: dict[int, tuple[int | None, list[str]]] = {}
+    # {answer_id: (parent_qid, score)}
+    answer_to_q: dict[int, int] = {}
+    # {qid: [answer_id, ...]}
+    answers_by_q: dict[int, list[int]] = {}
+
+    for event, elem in iterparse(posts_xml_path, events=("end",)):
+        if elem.tag != "row":
+            continue
+        attrs = elem.attrib
+        post_type_id = int(attrs.get("PostTypeId", 0))
+        score = int(attrs.get("Score", 0))
+
+        if post_type_id == 1 and score >= min_score:
+            qid = int(attrs["Id"])
+            acc = int(a) if (a := attrs.get("AcceptedAnswerId")) else None
+            tags = parse_se_tags(attrs.get("Tags", ""))
+            questions[qid] = (acc, tags)
+        elif post_type_id == 2:
+            # Keep ALL answers (no min_score filter on answers — thread completeness)
+            parent = int(p) if (p := attrs.get("ParentId")) else None
+            if parent and parent in questions or parent:
+                aid = int(attrs["Id"])
+                answer_to_q[aid] = parent
+                answers_by_q.setdefault(parent, []).append(aid)
+        elem.clear()
+
+    # Apply thread_limit
+    if thread_limit and len(questions) > thread_limit:
+        # Keep only the first thread_limit questions (by ID order)
+        kept_qids = sorted(questions.keys())[:thread_limit]
+        questions = {qid: questions[qid] for qid in kept_qids}
+
+    # Filter answers to only those belonging to kept questions
+    answer_to_q = {aid: qid for aid, qid in answer_to_q.items()
+                   if qid in questions}
+    answers_by_q = {qid: aids for qid, aids in answers_by_q.items()
+                    if qid in questions}
+
+    # All post IDs we need to load
+    needed_ids = set(questions.keys()) | set(answer_to_q.keys())
+
+    print(f"       Pass 1: {len(questions)} questions, "
+          f"{len(answer_to_q)} answers, "
+          f"{len(needed_ids)} posts to load", file=sys.stderr)
+
+    # --- Pass 2: load full post bodies ---
+    loaded: dict[int, SEPost] = {}
+
+    for event, elem in iterparse(posts_xml_path, events=("end",)):
+        if elem.tag != "row":
+            continue
+        attrs = elem.attrib
+        pid = int(attrs.get("Id", 0))
+        if pid not in needed_ids:
+            elem.clear()
+            continue
+
+        post_type_id = int(attrs.get("PostTypeId", 0))
+        body_html = attrs.get("Body", "")
+        loaded[pid] = SEPost(
+            id=pid,
+            post_type="question" if post_type_id == 1 else "answer",
+            title=attrs.get("Title", ""),
+            body=body_html,
+            body_text=strip_html(body_html),
+            body_latex=extract_latex(body_html),
+            score=int(attrs.get("Score", 0)),
+            tags=parse_se_tags(attrs.get("Tags", "")),
+            answer_count=int(attrs.get("AnswerCount", 0)),
+            accepted_answer_id=int(a) if (a := attrs.get("AcceptedAnswerId")) else None,
+            parent_id=int(p) if (p := attrs.get("ParentId")) else None,
+            creation_date=attrs.get("CreationDate", ""),
+        )
+        elem.clear()
+
+        if len(loaded) == len(needed_ids):
+            break
+
+    print(f"       Pass 2: loaded {len(loaded)}/{len(needed_ids)} posts",
+          file=sys.stderr)
+
+    # --- Pass 3: load comments (if available) ---
+    comments_by_post: dict[int, list[SEComment]] = {}
+
+    if comments_xml_path and Path(comments_xml_path).exists():
+        comment_count = 0
+        for comment in iter_comments(comments_xml_path):
+            if comment.post_id in needed_ids:
+                comments_by_post.setdefault(comment.post_id, []).append(comment)
+                comment_count += 1
+        print(f"       Pass 3: {comment_count} comments on "
+              f"{len(comments_by_post)} posts", file=sys.stderr)
+    else:
+        print(f"       Pass 3: no Comments.xml provided, skipping",
+              file=sys.stderr)
+
+    # --- Assemble threads ---
+    threads = []
+    for qid in sorted(questions.keys()):
+        q = loaded.get(qid)
+        if not q:
+            continue
+
+        _, tags = questions[qid]
+        answer_ids = answers_by_q.get(qid, [])
+        answer_posts = [loaded[aid] for aid in answer_ids if aid in loaded]
+        # Sort answers by score descending
+        answer_posts.sort(key=lambda a: a.score, reverse=True)
+
+        # Collect comments for this thread (question + all answers)
+        thread_comments: dict[int, list[SEComment]] = {}
+        if qid in comments_by_post:
+            thread_comments[qid] = comments_by_post[qid]
+        for aid in answer_ids:
+            if aid in comments_by_post:
+                thread_comments[aid] = comments_by_post[aid]
+
+        threads.append(SEThread(
+            question=q,
+            answers=answer_posts,
+            comments=thread_comments,
+            tags=tags,
+        ))
+
+    print(f"       Assembled {len(threads)} threads", file=sys.stderr)
+    return threads
 
 
 # --- Conversion to F6 entities ---

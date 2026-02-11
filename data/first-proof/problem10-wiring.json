@@ -1,0 +1,797 @@
+{
+  "thread_id": "first-proof-p10",
+  "nodes": [
+    {
+      "id": "p10-problem",
+      "node_type": "question",
+      "post_id": 10,
+      "body_text": "Given the mode-k subproblem [(Z⊗K)ᵀSS'(Z⊗K) + λ(Iᵣ⊗K)]vec(W) = (Iᵣ⊗K)vec(B), explain how PCG solves this without O(N) computation.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": null
+    },
+    {
+      "id": "p10-s1",
+      "node_type": "answer",
+      "post_id": 101,
+      "body_text": "Why direct methods fail: The system matrix A is nr×nr. Direct solve costs O(n³r³). But forming A explicitly requires materializing (Z⊗K) ∈ ℝ^{N×nr}, costing O(Nnr) — proportional to N. Infeasible.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 10
+    },
+    {
+      "id": "p10-s2",
+      "node_type": "answer",
+      "post_id": 102,
+      "body_text": "The key insight: CG only requires the action v ↦ Av, never the matrix A itself. We compute this in O(n²r + qr), independent of N.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 10
+    },
+    {
+      "id": "p10-s2a",
+      "node_type": "comment",
+      "post_id": 1021,
+      "body_text": "Forward map at observed entries: By the Kronecker identity (A⊗B)vec(X) = vec(BXAᵀ), we get (Z⊗K)vec(V) = vec(KVZᵀ). SS'selects only q entries. Grouping by row: O(n²r + qr).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 102
+    },
+    {
+      "id": "p10-s2b",
+      "node_type": "comment",
+      "post_id": 1022,
+      "body_text": "Adjoint map from sparse result: The sparse vector w ∈ ℝ^N maps back via (Zᵀ⊗K)w = vec(KW'Z) where W' has q nonzeros. W'Z: O(qr), K(W'Z): O(n²r). Total: O(qr + n²r).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 102
+    },
+    {
+      "id": "p10-s2c",
+      "node_type": "comment",
+      "post_id": 1023,
+      "body_text": "Regularization term: λ(Iᵣ⊗K)vec(V) = λ·vec(KV). Cost: O(n²r).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 102
+    },
+    {
+      "id": "p10-s2-total",
+      "node_type": "comment",
+      "post_id": 1024,
+      "body_text": "Total per matvec: O(n²r + qr). No dependence on N. This is the central result that makes PCG feasible.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 102
+    },
+    {
+      "id": "p10-s3",
+      "node_type": "answer",
+      "post_id": 103,
+      "body_text": "Right-hand side: b = (Iᵣ⊗K)vec(B) where B = TZ. T is sparse (q nonzeros), so TZ: O(qr), KB: O(n²r). Total: O(qr + n²r).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 10
+    },
+    {
+      "id": "p10-s4",
+      "node_type": "answer",
+      "post_id": 104,
+      "body_text": "Preconditioner choice: P = (H⊗K) where H = ZᵀZ + λIᵣ. Approximates A by replacing SSᵀ with I (full observation). Captures kernel structure (K) and inter-factor coupling (ZᵀZ).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 10
+    },
+    {
+      "id": "p10-s4-hadamard",
+      "node_type": "comment",
+      "post_id": 1041,
+      "body_text": "Why this structure? The Khatri-Rao Hadamard property gives ZᵀZ = (A₁ᵀA₁)*(A₂ᵀA₂)*...*(Aₐᵀ Aₐ). Each Aᵢᵀ Aᵢ costs O(nᵢr²), so ZᵀZ costs O(Σᵢ nᵢr²) — vastly cheaper than O(Mr²).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 104
+    },
+    {
+      "id": "p10-s4-solve",
+      "node_type": "comment",
+      "post_id": 1042,
+      "body_text": "Preconditioner solve: P⁻¹ = H⁻¹⊗K⁻¹. Precompute Cholesky of K O(n³) and H O(r³). Each application: solve KYHᵀ = Z' via triangular substitution. Cost per solve: O(n²r).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 104
+    },
+    {
+      "id": "p10-s5",
+      "node_type": "answer",
+      "post_id": 105,
+      "body_text": "Convergence: CG on P⁻¹A converges in t = O(√κ·log(1/ε)) iterations. Since P ≈ A well when q/N is not too small, practical convergence: t = O(r) to O(r√(n/q)·log(1/ε)).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 10
+    },
+    {
+      "id": "p10-s6",
+      "node_type": "answer",
+      "post_id": 106,
+      "body_text": "Complexity summary: Total per mode-k subproblem O(n³ + t(n²r + qr)) where t ~ O(r). Compare direct solve O(n³r³ + Nnr). PCG replaces N-dependent term with q-dependent, n³r³ with n³ + n²r². Since n, r ≪ q ≪ N, this achieves the required complexity reduction.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 10
+    },
+    {
+      "id": "p10-s7",
+      "node_type": "answer",
+      "post_id": 107,
+      "body_text": "Algorithm: SETUP computes Cholesky factors and RHS. PCG iteration applies implicit matvec and preconditioner solve per step. MATVEC evaluates at observed entries only. PRECOND_SOLVE uses Kronecker inverse structure.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 10
+    }
+  ],
+  "edges": [
+    {
+      "source": "p10-s1",
+      "target": "p10-problem",
+      "edge_type": "challenge",
+      "evidence": "Direct methods cost O(Nnr), proportional to N — infeasible",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s2",
+      "target": "p10-s1",
+      "edge_type": "reform",
+      "evidence": "CG only requires v ↦ Av, never the matrix A itself",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s2a",
+      "target": "p10-s2",
+      "edge_type": "clarify",
+      "evidence": "Kronecker identity gives forward map; grouping by row avoids N",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s2b",
+      "target": "p10-s2",
+      "edge_type": "clarify",
+      "evidence": "Sparse W' has only q nonzeros; adjoint via (Zᵀ⊗K)",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s2c",
+      "target": "p10-s2",
+      "edge_type": "clarify",
+      "evidence": "Regularization is just λ·vec(KV), O(n²r)",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s2-total",
+      "target": "p10-s2a",
+      "edge_type": "assert",
+      "evidence": "Combining forward + adjoint + regularization: O(n²r + qr)",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s2-total",
+      "target": "p10-s2b",
+      "edge_type": "assert",
+      "evidence": "Combining forward + adjoint + regularization: O(n²r + qr)",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s2-total",
+      "target": "p10-s2c",
+      "edge_type": "agree",
+      "evidence": "Regularization absorbed into n²r term",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s3",
+      "target": "p10-problem",
+      "edge_type": "clarify",
+      "evidence": "RHS uses sparse T and Kronecker structure, same O(qr + n²r)",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s4",
+      "target": "p10-s2",
+      "edge_type": "reform",
+      "evidence": "P = (H⊗K) approximates A for faster convergence",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s4-hadamard",
+      "target": "p10-s4",
+      "edge_type": "clarify",
+      "evidence": "Khatri-Rao Hadamard: ZᵀZ = ∏(AᵢᵀAᵢ), O(Σnᵢr²) not O(Mr²)",
+      "detection": "classical"
+    },
+    {
+      "source": "p10-s4-solve",
+      "target": "p10-s4",
+      "edge_type": "exemplify",
+      "evidence": "P⁻¹ = H⁻¹⊗K⁻¹ via Cholesky; each solve O(n²r)",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s5",
+      "target": "p10-s4",
+      "edge_type": "assert",
+      "evidence": "P ≈ A ⟹ κ(P⁻¹A) small ⟹ t = O(r) iterations",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s6",
+      "target": "p10-problem",
+      "edge_type": "assert",
+      "evidence": "O(n³ + t(n²r + qr)), no N-dependence, QED",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s6",
+      "target": "p10-s2-total",
+      "edge_type": "reference",
+      "evidence": "Matvec cost O(n²r + qr) per iteration",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s6",
+      "target": "p10-s4-solve",
+      "edge_type": "reference",
+      "evidence": "Preconditioner solve O(n²r) per iteration",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s6",
+      "target": "p10-s5",
+      "edge_type": "reference",
+      "evidence": "t = O(r) iterations from convergence analysis",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s7",
+      "target": "p10-s6",
+      "edge_type": "exemplify",
+      "evidence": "Pseudocode instantiates the complexity analysis",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s7",
+      "target": "p10-s2",
+      "edge_type": "reference",
+      "evidence": "MATVEC subroutine implements implicit matvec",
+      "detection": "structural"
+    },
+    {
+      "source": "p10-s7",
+      "target": "p10-s4-solve",
+      "edge_type": "reference",
+      "evidence": "PRECOND_SOLVE subroutine implements Kronecker inverse",
+      "detection": "structural"
+    }
+  ],
+  "hyperedges": [
+    {
+      "hx/id": "first-proof-p10:edge-000",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s1",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Direct methods cost O(Nnr), proportional to N — infeasible",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-001",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "CG only requires v ↦ Av, never the matrix A itself",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-002",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s2a",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Kronecker identity gives forward map; grouping by row avoids N",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-003",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s2b",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Sparse W' has only q nonzeros; adjoint via (Zᵀ⊗K)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-004",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s2c",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Regularization is just λ·vec(KV), O(n²r)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-005",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s2-total",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s2a",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Combining forward + adjoint + regularization: O(n²r + qr)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-006",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s2-total",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s2b",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Combining forward + adjoint + regularization: O(n²r + qr)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-007",
+      "hx/type": "thread/agree",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s2-total",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s2c",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Regularization absorbed into n²r term",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "agree",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-008",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s3",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "RHS uses sparse T and Kronecker structure, same O(qr + n²r)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-009",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "P = (H⊗K) approximates A for faster convergence",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-010",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s4-hadamard",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Khatri-Rao Hadamard: ZᵀZ = ∏(AᵢᵀAᵢ), O(Σnᵢr²) not O(Mr²)",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-011",
+      "hx/type": "thread/exemplify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s4-solve",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "P⁻¹ = H⁻¹⊗K⁻¹ via Cholesky; each solve O(n²r)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "exemplify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-012",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "P ≈ A ⟹ κ(P⁻¹A) small ⟹ t = O(r) iterations",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-013",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "O(n³ + t(n²r + qr)), no N-dependence, QED",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-014",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s2-total",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Matvec cost O(n²r + qr) per iteration",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-015",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s4-solve",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Preconditioner solve O(n²r) per iteration",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-016",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s5",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "t = O(r) iterations from convergence analysis",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-017",
+      "hx/type": "thread/exemplify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s7",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s6",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Pseudocode instantiates the complexity analysis",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "exemplify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-018",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s7",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "MATVEC subroutine implements implicit matvec",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-019",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p10-s7",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p10-s4-solve",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "PRECOND_SOLVE subroutine implements Kronecker inverse",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    }
+  ],
+  "stats": {
+    "n_nodes": 14,
+    "n_edges": 20,
+    "node_types": {
+      "question": 1,
+      "answer": 7,
+      "comment": 6
+    },
+    "edge_types": {
+      "challenge": 1,
+      "reform": 2,
+      "clarify": 5,
+      "assert": 4,
+      "agree": 1,
+      "exemplify": 2,
+      "reference": 5
+    },
+    "detection_types": {
+      "structural": 19,
+      "classical": 1
+    }
+  }
+}

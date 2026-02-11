@@ -34,6 +34,7 @@ All stages:
     4. Clustering (CPU, HDBSCAN on embeddings)
     5. NER term spotting + scope detection (CPU, classical)
     6. Reverse morphogenesis S<-Q<-A (LLM / prompt generation)
+    7. Thread wiring diagrams + IATC performatives (CPU, classical + LLM)
 
 Each stage writes its output independently -- if a stage fails, earlier
 outputs are still usable.
@@ -62,11 +63,20 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from futon6.stackexchange import (
     build_qa_pairs_streaming,
+    build_threads_streaming,
     qa_to_entity,
     qa_to_relations,
     tag_entities,
     corpus_stats,
     compute_qa_embeddings,
+)
+from futon6.thread_performatives import (
+    build_thread_wiring_diagram,
+    build_thread_performative_prompt,
+    process_threads_to_diagrams,
+    diagram_to_dict,
+    merge_llm_edges,
+    write_thread_wiring_json,
 )
 
 # --- Downloadable SE data dumps (Internet Archive) ---
@@ -482,10 +492,11 @@ Reply with ONLY a JSON list of pattern numbers (1-25) that the answer clearly us
 If none apply clearly, reply: []"""
 
 
-def tag_patterns_llm_batch(pairs, model_name, batch_size=8, device="cuda"):
-    """Tag QA pairs with reasoning patterns using a local LLM.
+def _create_llm_pipeline(model_name, batch_size=8):
+    """Create a reusable LLM pipeline for text generation.
 
-    Uses transformers pipeline for batched inference.
+    Returns (pipe, tokenizer) tuple. The pipeline is created without
+    default max_new_tokens — callers pass it per-call.
     """
     from transformers import pipeline, AutoTokenizer
     import torch
@@ -500,11 +511,22 @@ def tag_patterns_llm_batch(pairs, model_name, batch_size=8, device="cuda"):
         model=model_name,
         tokenizer=tokenizer,
         torch_dtype=torch.float16,
-        device_map="auto",  # spread across available GPUs
-        max_new_tokens=64,
+        device_map="auto",
         do_sample=False,
         batch_size=batch_size,
     )
+    return pipe, tokenizer
+
+
+def tag_patterns_llm_batch(pairs, model_name=None, batch_size=8, device="cuda",
+                           pipe=None, tokenizer=None):
+    """Tag QA pairs with reasoning patterns using a local LLM.
+
+    Uses transformers pipeline for batched inference. If pipe/tokenizer
+    are provided, reuses them; otherwise creates a new pipeline.
+    """
+    if pipe is None:
+        pipe, tokenizer = _create_llm_pipeline(model_name, batch_size)
 
     results = []
     total = len(pairs)
@@ -518,18 +540,16 @@ def tag_patterns_llm_batch(pairs, model_name, batch_size=8, device="cuda"):
                 pair.question.body_text,
                 pair.answer.body_text,
             )
-            # Format for instruct model
             messages = [{"role": "user", "content": prompt}]
             formatted = tokenizer.apply_chat_template(
                 messages, tokenize=False, add_generation_prompt=True
             )
             prompts.append(formatted)
 
-        outputs = pipe(prompts, return_full_text=False)
+        outputs = pipe(prompts, return_full_text=False, max_new_tokens=64)
 
         for i, out in enumerate(outputs):
             text = out[0]["generated_text"].strip()
-            # Parse the JSON list from the response
             pattern_ids = _parse_pattern_response(text)
             results.append({
                 "entry_id": f"se-math-{batch[i].question.id}",
@@ -563,6 +583,153 @@ def _parse_pattern_response(text):
     # Fallback: find all integers
     nums = re.findall(r"\b(\d{1,2})\b", text)
     return [int(n) for n in nums if 1 <= int(n) <= 25]
+
+
+def _parse_json_object_response(text):
+    """Extract a JSON object from LLM response text."""
+    start = text.find('{')
+    if start == -1:
+        return {"raw": text, "parse_error": "no JSON object found"}
+
+    depth = 0
+    for i in range(start, len(text)):
+        if text[i] == '{':
+            depth += 1
+        elif text[i] == '}':
+            depth -= 1
+            if depth == 0:
+                try:
+                    return json.loads(text[start:i+1])
+                except json.JSONDecodeError:
+                    return {"raw": text[start:i+1], "parse_error": "invalid JSON"}
+
+    return {"raw": text, "parse_error": "unclosed JSON object"}
+
+
+def _parse_json_array_response(text):
+    """Extract a JSON array from LLM response text."""
+    start = text.find('[')
+    if start == -1:
+        return []
+
+    depth = 0
+    for i in range(start, len(text)):
+        if text[i] == '[':
+            depth += 1
+        elif text[i] == ']':
+            depth -= 1
+            if depth == 0:
+                try:
+                    result = json.loads(text[start:i+1])
+                    return result if isinstance(result, list) else []
+                except json.JSONDecodeError:
+                    return []
+
+    return []
+
+
+# --- Stage 6: Reverse morphogenesis LLM inference ---
+
+def run_reverse_morphogenesis_llm_batch(pairs, entities, pipe, tokenizer,
+                                        batch_size=4):
+    """Run reverse morphogenesis analysis using a local LLM.
+
+    For each QA pair, generates the S←Q←A prompt, runs inference, and
+    parses the JSON response. Smaller batch_size than Stage 3 because
+    prompts and responses are both larger.
+
+    Returns list of result dicts.
+    """
+    results = []
+    total = len(pairs)
+    t_start = time.time()
+
+    for start in range(0, total, batch_size):
+        batch_pairs = pairs[start:start + batch_size]
+        batch_entities = entities[start:start + batch_size]
+        prompts = []
+        for pair in batch_pairs:
+            prompt = build_reverse_morphogenesis_prompt(
+                pair.question.title,
+                pair.question.body_text,
+                pair.answer.body_text,
+            )
+            messages = [{"role": "user", "content": prompt}]
+            formatted = tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+            prompts.append(formatted)
+
+        outputs = pipe(prompts, return_full_text=False, max_new_tokens=512)
+
+        for i, out in enumerate(outputs):
+            text = out[0]["generated_text"].strip()
+            parsed = _parse_json_object_response(text)
+            results.append({
+                "entity_id": batch_entities[i]["entity/id"],
+                "question_id": batch_pairs[i].question.id,
+                "analysis": parsed,
+                "raw": text,
+            })
+
+        done = min(start + batch_size, total)
+        if done % 500 < batch_size or done == total:
+            elapsed = time.time() - t_start
+            rate = done / elapsed if elapsed > 0 else 0
+            eta = (total - done) / rate if rate > 0 else 0
+            print(f"       [{done}/{total}] {rate:.0f} pairs/s, "
+                  f"ETA {eta/60:.0f} min")
+
+    return results
+
+
+# --- Stage 7: Thread performative LLM classification ---
+
+def classify_thread_performatives_llm_batch(diagrams, pipe, tokenizer,
+                                            batch_size=2):
+    """Run LLM-based performative classification on thread wiring diagrams.
+
+    Enhances classical detection: for each diagram, generates a prompt,
+    runs the LLM, parses the JSON response, and merges LLM-classified
+    edge types back into the diagram (overriding classical/structural).
+
+    Smaller batch_size because thread prompts can be very long.
+
+    Returns count of diagrams where LLM provided new classifications.
+    """
+    total = len(diagrams)
+    llm_enhanced = 0
+    t_start = time.time()
+
+    for start in range(0, total, batch_size):
+        batch = diagrams[start:start + batch_size]
+        prompts = []
+        for diagram in batch:
+            prompt = build_thread_performative_prompt(diagram)
+            messages = [{"role": "user", "content": prompt}]
+            formatted = tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+            prompts.append(formatted)
+
+        outputs = pipe(prompts, return_full_text=False, max_new_tokens=512)
+
+        for i, out in enumerate(outputs):
+            text = out[0]["generated_text"].strip()
+            llm_edges = _parse_json_array_response(text)
+            if llm_edges:
+                merge_llm_edges(batch[i], llm_edges)
+                llm_enhanced += 1
+
+        done = min(start + batch_size, total)
+        if done % 100 < batch_size or done == total:
+            elapsed = time.time() - t_start
+            rate = done / elapsed if elapsed > 0 else 0
+            eta = (total - done) / rate if rate > 0 else 0
+            print(f"       [{done}/{total}] {rate:.0f} threads/s, "
+                  f"ETA {eta/60:.0f} min, {llm_enhanced} enhanced")
+
+    return llm_enhanced
 
 
 # --- Stage 4: Clustering ---
@@ -651,13 +818,14 @@ Reply as JSON:
 }}"""
 
 
-def generate_moist_prompts(pairs, entities, outdir, stages=None):
+def generate_moist_prompts(pairs, entities, outdir, stages=None, thread_diagrams=None):
     """Generate prompt files for LLM stages (Codex/Claude handoff).
 
     Instead of running Llama locally, writes JSONL files with one prompt per
     line, ready for batch submission to Codex, Claude, or any API.
 
     stages: list of stage names to generate. Default: all LLM stages.
+    thread_diagrams: list of ThreadWiringDiagram objects for stage 7.
     """
     if stages is None:
         stages = ["pattern_tagging", "reverse_morphogenesis"]
@@ -710,6 +878,25 @@ def generate_moist_prompts(pairs, entities, outdir, stages=None):
         size_mb = os.path.getsize(path) / 1e6
         print(f"       Written {path} ({count} prompts, {size_mb:.1f} MB)")
         generated["reverse_morphogenesis"] = {"path": str(path), "count": count}
+
+    if "thread_performatives" in stages and thread_diagrams:
+        path = prompt_dir / "stage7-thread-performatives.jsonl"
+        count = 0
+        with open(path, "w") as f:
+            for diagram in thread_diagrams:
+                prompt = build_thread_performative_prompt(diagram)
+                record = {
+                    "thread_id": diagram.thread_id,
+                    "stage": "thread_performatives",
+                    "n_nodes": len(diagram.nodes),
+                    "n_edges": len(diagram.edges),
+                    "prompt": prompt,
+                }
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
+                count += 1
+        size_mb = os.path.getsize(path) / 1e6
+        print(f"       Written {path} ({count} prompts, {size_mb:.1f} MB)")
+        generated["thread_performatives"] = {"path": str(path), "count": count}
 
     # Write a manifest for the moist-run
     manifest = {
@@ -807,13 +994,23 @@ def print_dry_run(args):
     est_stage6_min = est_stage1_min  # roughly same as parse (just string formatting)
     print(f"  {'6. Reverse morphogenesis S←Q←A (LLM)':<42s} {args.llm_model:<36s} {fmt(est_stage6_min)+' min':>10s}")
 
+    # Stage 7: Thread wiring diagrams
+    est_stage7_min = est_stage1_min * 1.5 if isinstance(est_stage1_min, float) else "?"
+    if args.skip_threads:
+        print(f"  {'7. Thread wiring diagrams':<42s} {'SKIPPED':>10s}")
+    else:
+        thread_limit_note = f" (limit={args.thread_limit})" if args.thread_limit else ""
+        print(f"  {'7. Thread wiring + performatives (CPU)':<42s} {'IATC regex bank':<36s} {fmt(est_stage7_min)+' min':>10s}")
+
     print(f"  {'-'*42} {'-'*36} {'-'*10}")
 
-    skipped = sum([args.skip_embeddings, args.skip_llm, args.skip_clustering, args.skip_ner])
-    active = 6 - skipped
+    skipped = sum([args.skip_embeddings, args.skip_llm, args.skip_clustering, args.skip_ner, args.skip_threads])
+    active = 7 - skipped
     if isinstance(est_total_min, (int, float)):
         est_total_min += est_stage6_min
-    print(f"  {'TOTAL':<42s} {f'{active}/6 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
+        if not args.skip_threads:
+            est_total_min += est_stage7_min if isinstance(est_stage7_min, float) else 0
+    print(f"  {'TOTAL':<42s} {f'{active}/7 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
     print()
 
     print("  ESTIMATED OUTPUT:")
@@ -828,6 +1025,8 @@ def print_dry_run(args):
         if not args.skip_ner:
             print(f"    ner-terms.json        ~{fmt(est_entities_mb * 0.4)} MB")
             print(f"    scopes.json           ~{fmt(est_entities_mb * 0.2)} MB")
+        if not args.skip_threads:
+            print(f"    thread-wiring.json    ~{fmt(est_entities_mb * 0.5)} MB")
         print(f"    {'':24s} --------")
         print(f"    {'TOTAL':24s} ~{fmt(est_total_gb)} GB")
     else:
@@ -863,6 +1062,10 @@ def print_dry_run(args):
         cmd_parts.append(f"  --skip-clustering")
     if args.skip_ner:
         cmd_parts.append(f"  --skip-ner")
+    if args.skip_threads:
+        cmd_parts.append(f"  --skip-threads")
+    if args.thread_limit:
+        cmd_parts.append(f"  --thread-limit {args.thread_limit}")
     print(f"    {' \\\\\n    '.join(cmd_parts)}")
     print()
     print(f"  MOIST RUN (CPU stages + prompt files for Codex handoff):")
@@ -876,6 +1079,7 @@ def print_dry_run(args):
     print()
     print(f"    Generates: moist-prompts/stage3-pattern-tagging.jsonl")
     print(f"               moist-prompts/stage6-reverse-morphogenesis.jsonl")
+    print(f"               moist-prompts/stage7-thread-performatives.jsonl")
     print(f"    Each line is {{entity_id, question_id, stage, prompt}}")
     print(f"    Feed to Codex, Claude API, or any LLM batch runner.")
     print()
@@ -937,6 +1141,14 @@ def main():
     parser.add_argument("--skip-ner", action="store_true",
                         help="Skip NER term spotting and scope detection")
 
+    # Thread wiring diagrams (Stage 7)
+    parser.add_argument("--comments-xml", default=None,
+                        help="Path to Comments.xml (auto-detected from Posts.xml dir)")
+    parser.add_argument("--skip-threads", action="store_true",
+                        help="Skip thread wiring diagram construction")
+    parser.add_argument("--thread-limit", type=int, default=None,
+                        help="Max threads to process in Stage 7")
+
     args = parser.parse_args()
 
     # ========== Download ==========
@@ -972,12 +1184,22 @@ def main():
         print("  Stages 2,4 (GPU): skipped")
         print("  Stage 3 (LLM):    prompt files generated")
         print("  Stage 6 (S←Q←A):  prompt files generated")
+        print("  Stage 7 (threads): classical + prompt files generated")
         print("=" * 64)
         print()
 
     t0 = time.time()
 
-    n_stages = 6
+    n_stages = 7
+
+    # Auto-detect Comments.xml if not provided
+    if not args.comments_xml and args.posts_xml:
+        comments_candidate = Path(args.posts_xml).parent / "Comments.xml"
+        if comments_candidate.exists():
+            args.comments_xml = str(comments_candidate)
+            print(f"  Auto-detected Comments.xml: {args.comments_xml}")
+        else:
+            print(f"  No Comments.xml found at {comments_candidate}")
     # ========== Stage 1: Parse ==========
     print(f"[Stage 1/{n_stages}] Parsing {args.posts_xml}...")
     pairs = build_qa_pairs_streaming(args.posts_xml, min_score=args.min_score)
@@ -1011,7 +1233,7 @@ def main():
     # ========== Stage 2: Embeddings ==========
     if not args.skip_embeddings:
         t2 = time.time()
-        print(f"\n[Stage 2/6] Embeddings ({args.embed_model})...")
+        print(f"\n[Stage 2/{n_stages}] Embeddings ({args.embed_model})...")
         embeddings = compute_qa_embeddings(
             pairs,
             model_name=args.embed_model,
@@ -1024,14 +1246,25 @@ def main():
               f"saved {os.path.getsize(emb_path)/1e9:.2f} GB")
         print(f"       Stage 2 done in {time.time()-t2:.0f}s")
     else:
-        print(f"\n[Stage 2/6] Skipped (--skip-embeddings)")
+        print(f"\n[Stage 2/{n_stages}] Skipped (--skip-embeddings)")
         embeddings = None
+
+    # ========== Shared LLM pipeline (lazy, created once) ==========
+    llm_pipe = None
+    llm_tokenizer = None
+
+    def _ensure_llm_pipeline():
+        nonlocal llm_pipe, llm_tokenizer
+        if llm_pipe is None:
+            llm_pipe, llm_tokenizer = _create_llm_pipeline(
+                args.llm_model, args.llm_batch_size)
+        return llm_pipe, llm_tokenizer
 
     # ========== Stage 3: LLM pattern tagging ==========
     if args.moist_run:
         # Moist mode: generate prompts, don't run LLM
         t3 = time.time()
-        print(f"\n[Stage 3/6] Generating pattern-tagging prompts (moist-run)...")
+        print(f"\n[Stage 3/{n_stages}] Generating pattern-tagging prompts (moist-run)...")
         moist_result = generate_moist_prompts(
             pairs, entities, outdir, stages=["pattern_tagging"])
         print(f"       Stage 3 (moist) done in {time.time()-t3:.0f}s")
@@ -1039,11 +1272,12 @@ def main():
         t3 = time.time()
         global _llm_start
         _llm_start = t3
-        print(f"\n[Stage 3/6] LLM pattern tagging ({args.llm_model})...")
+        print(f"\n[Stage 3/{n_stages}] LLM pattern tagging ({args.llm_model})...")
+        pipe, tok = _ensure_llm_pipeline()
         pattern_tags = tag_patterns_llm_batch(
             pairs,
-            model_name=args.llm_model,
             batch_size=args.llm_batch_size,
+            pipe=pipe, tokenizer=tok,
         )
         write_json(outdir / "pattern-tags.json", pattern_tags)
         print(f"       Stage 3 done in {time.time()-t3:.0f}s")
@@ -1057,12 +1291,12 @@ def main():
         for name, count in freq.most_common(10):
             print(f"         {name}: {count}")
     else:
-        print(f"\n[Stage 3/6] Skipped (--skip-llm)")
+        print(f"\n[Stage 3/{n_stages}] Skipped (--skip-llm)")
 
     # ========== Stage 4: Clustering ==========
     if not args.skip_clustering and embeddings is not None:
         t4 = time.time()
-        print(f"\n[Stage 4/6] Clustering...")
+        print(f"\n[Stage 4/{n_stages}] Clustering...")
         labels, n_clusters, n_noise = cluster_embeddings(
             embeddings, min_cluster_size=args.min_cluster_size)
 
@@ -1078,17 +1312,17 @@ def main():
         write_json(outdir / "clusters.json", cluster_data)
         print(f"       Stage 4 done in {time.time()-t4:.0f}s")
     else:
-        print(f"\n[Stage 4/6] Skipped")
+        print(f"\n[Stage 4/{n_stages}] Skipped")
 
     # ========== Stage 5: NER + Scope Detection ==========
     stage5_stats = None
     if not args.skip_ner:
         ner_path = Path(args.ner_kernel)
         if not ner_path.exists():
-            print(f"\n[Stage 5/6] Skipped (NER kernel not found: {ner_path})")
+            print(f"\n[Stage 5/{n_stages}] Skipped (NER kernel not found: {ner_path})")
         else:
             t5 = time.time()
-            print(f"\n[Stage 5/6] NER term spotting + scope detection...")
+            print(f"\n[Stage 5/{n_stages}] NER term spotting + scope detection...")
             print(f"       Kernel: {ner_path}")
             stage5_stats = run_stage5_ner_scopes(
                 entities, pairs, str(ner_path), outdir)
@@ -1103,13 +1337,13 @@ def main():
                     print(f"         {stype}: {count}")
             print(f"       Stage 5 done in {time.time()-t5:.0f}s")
     else:
-        print(f"\n[Stage 5/6] Skipped (--skip-ner)")
+        print(f"\n[Stage 5/{n_stages}] Skipped (--skip-ner)")
 
     # ========== Stage 6: Reverse morphogenesis S←Q←A ==========
     stage6_stats = None
     if args.moist_run:
         t6 = time.time()
-        print(f"\n[Stage 6/6] Generating reverse morphogenesis prompts (moist-run)...")
+        print(f"\n[Stage 6/{n_stages}] Generating reverse morphogenesis prompts (moist-run)...")
         moist_s6 = generate_moist_prompts(
             pairs, entities, outdir, stages=["reverse_morphogenesis"])
         stage6_stats = {
@@ -1118,21 +1352,93 @@ def main():
         }
         print(f"       Stage 6 (moist) done in {time.time()-t6:.0f}s")
     elif not args.skip_llm:
-        # Full run: would use LLM for S←Q←A inference
-        # For now, generate prompts even in full mode (Stage 6 is new)
         t6 = time.time()
-        print(f"\n[Stage 6/6] Reverse morphogenesis S←Q←A...")
-        print(f"       (LLM inference for Stage 6 not yet implemented;")
-        print(f"        generating prompt files for manual/API submission)")
-        moist_s6 = generate_moist_prompts(
-            pairs, entities, outdir, stages=["reverse_morphogenesis"])
+        print(f"\n[Stage 6/{n_stages}] Reverse morphogenesis S←Q←A ({args.llm_model})...")
+        pipe, tok = _ensure_llm_pipeline()
+        rm_results = run_reverse_morphogenesis_llm_batch(
+            pairs, entities, pipe, tok,
+            batch_size=max(1, args.llm_batch_size // 2),
+        )
+        write_json(outdir / "reverse-morphogenesis.json", rm_results)
+
+        # Quality summary
+        n_parsed = sum(1 for r in rm_results if "parse_error" not in r["analysis"])
         stage6_stats = {
-            "mode": "prompt-generation",
-            "prompts_generated": moist_s6.get("reverse_morphogenesis", {}).get("count", 0),
+            "mode": "llm-inference",
+            "total": len(rm_results),
+            "parsed_ok": n_parsed,
+            "parse_rate": n_parsed / len(rm_results) if rm_results else 0,
         }
+        print(f"       {n_parsed}/{len(rm_results)} responses parsed as JSON")
         print(f"       Stage 6 done in {time.time()-t6:.0f}s")
     else:
-        print(f"\n[Stage 6/6] Skipped (--skip-llm)")
+        print(f"\n[Stage 6/{n_stages}] Skipped (--skip-llm)")
+
+    # ========== Stage 7: Thread wiring diagrams + performatives ==========
+    stage7_stats = None
+    thread_diagrams = None
+    if not args.skip_threads:
+        t7 = time.time()
+        print(f"\n[Stage 7/{n_stages}] Thread wiring diagrams + IATC performatives...")
+
+        # Build full threads (3-pass streaming)
+        threads = build_threads_streaming(
+            args.posts_xml,
+            comments_xml_path=args.comments_xml,
+            min_score=args.min_score,
+            thread_limit=args.thread_limit,
+        )
+
+        if threads:
+            # Classical performative detection + wiring diagram construction
+            # (don't write to disk yet — LLM enhancement may follow)
+            thread_diagrams, stage7_stats = process_threads_to_diagrams(threads)
+
+            print(f"       {stage7_stats['threads_processed']} threads, "
+                  f"{stage7_stats['total_nodes']} nodes, "
+                  f"{stage7_stats['total_edges']} edges")
+            print(f"       Classical detection rate: "
+                  f"{stage7_stats['classical_edge_rate']:.0%} of edges")
+            print(f"       Threads with classical: "
+                  f"{stage7_stats['threads_with_classical']}/{stage7_stats['threads_processed']}")
+            if stage7_stats['performative_freq']:
+                print(f"       Performative types ({stage7_stats['unique_performatives']}):")
+                for ptype, count in stage7_stats['performative_freq'].items():
+                    print(f"         {ptype}: {count}")
+
+            # LLM enhancement (if available, runs after classical)
+            if not args.skip_llm and not args.moist_run:
+                print(f"       Running LLM performative classification...")
+                pipe, tok = _ensure_llm_pipeline()
+                llm_enhanced = classify_thread_performatives_llm_batch(
+                    thread_diagrams, pipe, tok,
+                    batch_size=max(1, args.llm_batch_size // 4),
+                )
+                stage7_stats["llm_enhanced_threads"] = llm_enhanced
+                stage7_stats["llm_enhance_rate"] = (
+                    llm_enhanced / len(thread_diagrams) if thread_diagrams else 0)
+                print(f"       LLM enhanced {llm_enhanced}/{len(thread_diagrams)} threads")
+
+            # Write final wiring diagrams (with both classical + LLM edges)
+            wiring_path = outdir / "thread-wiring.json"
+            write_thread_wiring_json(thread_diagrams, str(wiring_path))
+            print(f"       Written {wiring_path} "
+                  f"({os.path.getsize(wiring_path) / 1e6:.1f} MB)")
+
+            # Moist-run: generate LLM prompts for thread performatives
+            if args.moist_run:
+                print(f"       Generating thread performative prompts (moist-run)...")
+                generate_moist_prompts(
+                    pairs, entities, outdir,
+                    stages=["thread_performatives"],
+                    thread_diagrams=thread_diagrams)
+
+            print(f"       Stage 7 done in {time.time()-t7:.0f}s")
+        else:
+            print(f"       No threads built (0 qualifying questions)")
+            stage7_stats = {"threads_processed": 0}
+    else:
+        print(f"\n[Stage 7/{n_stages}] Skipped (--skip-threads)")
 
     # ========== Manifest ==========
     elapsed = time.time() - t0
@@ -1157,9 +1463,11 @@ def main():
             *([] if args.skip_clustering or embeddings is None else ["clustering"]),
             *([] if args.skip_ner or stage5_stats is None else ["ner_scopes"]),
             *([] if stage6_stats is None else ["reverse_morphogenesis"]),
+            *([] if stage7_stats is None else ["thread_wiring"]),
         ],
         "stage5_stats": stage5_stats,
         "stage6_stats": stage6_stats,
+        "stage7_stats": stage7_stats,
         "output_files": [f.name for f in outdir.iterdir() if f.is_file()],
         "patterns": PATTERN_NAMES,
     }
@@ -1186,6 +1494,7 @@ def main():
             print(f"\nTo submit to Codex:")
             print(f"  codex --prompt-file {prompt_dir}/stage3-pattern-tagging.jsonl")
             print(f"  codex --prompt-file {prompt_dir}/stage6-reverse-morphogenesis.jsonl")
+            print(f"  codex --prompt-file {prompt_dir}/stage7-thread-performatives.jsonl")
     print(f"\nTo upload: tar czf {outdir.name}.tar.gz {outdir.name}/")
 
 
