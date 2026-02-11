@@ -1,0 +1,388 @@
+{
+  "thread_id": "first-proof-p7",
+  "nodes": [
+    {
+      "id": "p7-problem",
+      "node_type": "question",
+      "post_id": 7,
+      "body_text": "Gamma uniform lattice in semi-simple group with 2-torsion. Can Gamma = pi_1(M) for closed M with rationally acyclic universal cover?",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": null
+    },
+    {
+      "id": "p7-s1",
+      "node_type": "answer",
+      "post_id": 701,
+      "body_text": "Torsion-free case: Gamma acts freely on X = G/K (contractible symmetric space), M = X/Gamma is aspherical. With torsion: X/Gamma is orbifold, not manifold.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 7
+    },
+    {
+      "id": "p7-s2",
+      "node_type": "answer",
+      "post_id": 702,
+      "body_text": "Gamma is rational PD group of dim d = dim(X). Orbifold X/Gamma satisfies rational Poincare duality. So H*(Gamma;Q) has PD structure.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 7
+    },
+    {
+      "id": "p7-s3",
+      "node_type": "answer",
+      "post_id": 703,
+      "body_text": "Surgery theory: existence of closed d-manifold M with pi_1=Gamma and rationally acyclic cover reduces to surgery obstruction in L_d(Z[Gamma]).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 7
+    },
+    {
+      "id": "p7-s3a",
+      "node_type": "comment",
+      "post_id": 7031,
+      "body_text": "Farrell-Jones conjecture (known for lattices in semi-simple groups, Bartels-Luck 2012) computes L_d(Z[Gamma]) from equivariant homology of X.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 703
+    },
+    {
+      "id": "p7-s4",
+      "node_type": "answer",
+      "post_id": 704,
+      "body_text": "Rational surgery obstruction vanishes for suitable choices: odd-dimensional hyperbolic lattices in SO(2k+1,1), k>=3. Parity kills the signature obstruction.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 7
+    },
+    {
+      "id": "p7-s5",
+      "node_type": "answer",
+      "post_id": 705,
+      "body_text": "Smith theory does NOT obstruct over Q: Z/2 acting freely on rationally acyclic space has no fixed-point constraint (2 invertible in Q). Only mod-2 Smith theory applies.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 7
+    },
+    {
+      "id": "p7-s6",
+      "node_type": "answer",
+      "post_id": 706,
+      "body_text": "Conclusion: Yes. Rational PD + Farrell-Jones + vanishing surgery obstruction + no Smith obstruction over Q => construction succeeds.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 7
+    }
+  ],
+  "edges": [
+    {
+      "source": "p7-s1",
+      "target": "p7-problem",
+      "edge_type": "clarify",
+      "evidence": "Torsion-free case works; torsion creates orbifold issue",
+      "detection": "structural"
+    },
+    {
+      "source": "p7-s2",
+      "target": "p7-s1",
+      "edge_type": "reform",
+      "evidence": "Reframe: Gamma is rational PD group, seek manifold realization",
+      "detection": "structural"
+    },
+    {
+      "source": "p7-s3",
+      "target": "p7-s2",
+      "edge_type": "assert",
+      "evidence": "Surgery theory reduces to L_d(Z[Gamma]) obstruction",
+      "detection": "structural"
+    },
+    {
+      "source": "p7-s3a",
+      "target": "p7-s3",
+      "edge_type": "clarify",
+      "evidence": "Farrell-Jones (proven for these lattices) computes L-groups",
+      "detection": "structural"
+    },
+    {
+      "source": "p7-s4",
+      "target": "p7-s3a",
+      "edge_type": "assert",
+      "evidence": "Rational obstruction vanishes for odd-dim hyperbolic lattices",
+      "detection": "structural"
+    },
+    {
+      "source": "p7-s5",
+      "target": "p7-problem",
+      "edge_type": "challenge",
+      "evidence": "Smith theory potential obstruction — but only over Z/2, not Q",
+      "detection": "structural"
+    },
+    {
+      "source": "p7-s6",
+      "target": "p7-problem",
+      "edge_type": "assert",
+      "evidence": "Yes: construction via surgery with Farrell-Jones",
+      "detection": "structural"
+    },
+    {
+      "source": "p7-s6",
+      "target": "p7-s4",
+      "edge_type": "reference",
+      "evidence": "Uses vanishing surgery obstruction for specific lattices",
+      "detection": "structural"
+    },
+    {
+      "source": "p7-s6",
+      "target": "p7-s5",
+      "edge_type": "reference",
+      "evidence": "No Q-coefficient Smith obstruction",
+      "detection": "structural"
+    }
+  ],
+  "hyperedges": [
+    {
+      "hx/id": "first-proof-p7:edge-000",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7-s1",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Torsion-free case works; torsion creates orbifold issue",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7:edge-001",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7-s2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Reframe: Gamma is rational PD group, seek manifold realization",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7:edge-002",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7-s3",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Surgery theory reduces to L_d(Z[Gamma]) obstruction",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7:edge-003",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7-s3a",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p7-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Farrell-Jones (proven for these lattices) computes L-groups",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7:edge-004",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7-s4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7-s3a",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Rational obstruction vanishes for odd-dim hyperbolic lattices",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7:edge-005",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Smith theory potential obstruction — but only over Z/2, not Q",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7:edge-006",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Yes: construction via surgery with Farrell-Jones",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7:edge-007",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses vanishing surgery obstruction for specific lattices",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7:edge-008",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7-s5",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "No Q-coefficient Smith obstruction",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    }
+  ],
+  "stats": {
+    "n_nodes": 8,
+    "n_edges": 9,
+    "node_types": {
+      "question": 1,
+      "answer": 6,
+      "comment": 1
+    },
+    "edge_types": {
+      "clarify": 2,
+      "reform": 1,
+      "assert": 3,
+      "challenge": 1,
+      "reference": 2
+    },
+    "detection_types": {
+      "structural": 9
+    }
+  }
+}

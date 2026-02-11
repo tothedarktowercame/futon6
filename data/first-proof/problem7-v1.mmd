@@ -1,0 +1,35 @@
+flowchart TD
+    %% first-proof-p7
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p7-problem{{"p7-problem<br/>Gamma uniform lattice in semi-simple group with 2-to..."}}
+    p7-s1["p7-s1<br/>Torsion-free case: Gamma acts freely on X = G/K (con..."]
+    p7-s2["p7-s2<br/>Gamma is rational PD group of dim d = dim(X). Orbifo..."]
+    p7-s3["p7-s3<br/>Surgery theory: existence of closed d-manifold M wit..."]
+    p7-s3a(["p7-s3a<br/>Farrell-Jones conjecture (known for lattices in semi..."])
+    p7-s4["p7-s4<br/>Rational surgery obstruction vanishes for suitable c..."]
+    p7-s5["p7-s5<br/>Smith theory does NOT obstruct over Q: Z/2 acting fr..."]
+    p7-s6["p7-s6<br/>Conclusion: Yes. Rational PD + Farrell-Jones + vanis..."]
+
+    %% Edges
+    p7-s1 -->|"🔵 clarify: Torsion-free case works; torsion crea..."| p7-problem
+    p7-s2 -->|"🟡 reform: Reframe: Gamma is rational PD group, ..."| p7-s1
+    p7-s3 ==>|"🟢 assert: Surgery theory reduces to L_d(Z[Gamma..."| p7-s2
+    p7-s3a -->|"🔵 clarify: Farrell-Jones (proven for these latti..."| p7-s3
+    p7-s4 ==>|"🟢 assert: Rational obstruction vanishes for odd..."| p7-s3a
+    p7-s5 -.->|"🔴 challenge: Smith theory potential obstruction — ..."| p7-problem
+    p7-s6 ==>|"🟢 assert: Yes: construction via surgery with Fa..."| p7-problem
+    p7-s6 -->|"⚪ reference: Uses vanishing surgery obstruction fo..."| p7-s4
+    p7-s6 -->|"⚪ reference: No Q-coefficient Smith obstruction"| p7-s5
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p7-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p7-s1,p7-s2,p7-s3,p7-s4,p7-s5,p7-s6 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p7-s3a comment
