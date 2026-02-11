@@ -57,7 +57,7 @@ RESPONSE_SCHEMA = {
                         "enum": ["math.stackexchange.com", "mathoverflow.net", "other", "unknown"],
                     },
                 },
-                "required": ["question_id", "title", "relevance"],
+                "required": ["question_id", "title", "relevance", "site"],
                 "additionalProperties": False,
             },
         },
@@ -218,14 +218,13 @@ def build_node_prompt(
         "## Instructions",
         "",
         "1. Verify the mathematical claim in this proof step.",
-        "2. Search math.SE/MO for relevant discussions (ASEP polynomials, Macdonald "
-        "polynomials at q=1, t-PushTASEP, multispecies exclusion processes, Hecke "
-        "algebra exchange relations, interpolation polynomials).",
-        "3. Identify any gaps, unstated assumptions, or potential errors.",
-        "4. Suggest improvements if the claim could be tightened or clarified.",
-        "5. For each reference, include `site` when known "
+        "2. Use the cited primary source and local proof text; avoid exhaustive corpus scans.",
+        "3. Do not run bulk queries over large dumps (e.g., `jq` over `*/entities.json`).",
+        "4. Identify any gaps, unstated assumptions, or potential errors.",
+        "5. Suggest improvements if the claim could be tightened or clarified.",
+        "6. For each reference, include `site` when known "
         "(e.g., `mathoverflow.net` or `math.stackexchange.com`).",
-        "6. Reply as a single JSON object matching the required schema.",
+        "7. Reply as a single JSON object matching the required schema.",
     ])
     if math_se_dir:
         lines.extend([
@@ -274,13 +273,12 @@ def build_synthesis_prompt(
         "4. The nontriviality claim (Section 3) could be challenged — is there "
         "a precise definition of 'nontrivial' in this context? Could someone argue "
         "that knowing the AMW theorem implicitly uses F*_mu in the design?",
-        "5. Search math.SE/MO for: multispecies ASEP stationary distribution, "
-        "t-PushTASEP Macdonald polynomial, interpolation ASEP polynomial q=1, "
-        "Hecke algebra exchange relation ASEP.",
-        "6. Suggest a tighter or more elegant statement of the main result.",
-        "7. For each reference, include `site` when known "
+        "5. Use the cited primary source and local proof text; avoid exhaustive corpus scans.",
+        "6. Do not run bulk queries over large dumps (e.g., `jq` over `*/entities.json`).",
+        "7. Suggest a tighter or more elegant statement of the main result.",
+        "8. For each reference, include `site` when known "
         "(e.g., `mathoverflow.net` or `math.stackexchange.com`).",
-        "8. Reply as a single JSON object matching the required schema. "
+        "9. Reply as a single JSON object matching the required schema. "
         "Use node_id='p3-synthesis' for the synthesis.",
     ]
     if math_se_dir:
@@ -296,6 +294,8 @@ def build_synthesis_prompt(
 def run_codex_once(
     codex_bin: str,
     model: str,
+    reasoning_effort: str,
+    web_search: str,
     cwd: Path,
     schema_path: Path,
     prompt_text: str,
@@ -315,6 +315,8 @@ def run_codex_once(
         "--cd", str(cwd),
         "--sandbox", "workspace-write",
         "--model", model,
+        "-c", f'model_reasoning_effort="{reasoning_effort}"',
+        "-c", f'web_search="{web_search}"',
         "--output-schema", str(schema_path),
         "--output-last-message", str(out_path),
         "-",
@@ -337,6 +339,12 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=None,
                     help="Max prompts to process (default: all generated prompts)")
     ap.add_argument("--model", default="gpt-5.3-codex")
+    ap.add_argument("--reasoning-effort", default="medium",
+                    choices=["minimal", "low", "medium", "high"],
+                    help="Codex reasoning effort (default: medium)")
+    ap.add_argument("--web-search", default="live",
+                    choices=["disabled", "cached", "live"],
+                    help="Codex web search mode (default: live)")
     ap.add_argument("--codex-bin", default="codex")
     ap.add_argument("--dry-run", action="store_true",
                     help="Generate prompts only, don't call Codex")
@@ -413,6 +421,8 @@ def main() -> int:
                 rc, raw_response, stderr_text = run_codex_once(
                     codex_bin=args.codex_bin,
                     model=args.model,
+                    reasoning_effort=args.reasoning_effort,
+                    web_search=args.web_search,
                     cwd=args.repo_root,
                     schema_path=schema_path,
                     prompt_text=rec["prompt"],
@@ -441,6 +451,7 @@ def main() -> int:
                     out["raw"] = "\n".join(parts).strip()
 
                 fout.write(json.dumps(out, ensure_ascii=False) + "\n")
+                fout.flush()
                 processed += 1
                 status = out.get("claim_verified", "parse_error" if out.get("parse_error") else "?")
                 print(f"[{processed:02d}/{run_limit}] {rec['node_id']:20s} -> {status}")
