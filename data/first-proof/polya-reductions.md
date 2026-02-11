@@ -188,3 +188,76 @@ composes it into the full answer.
 2. Confirm: the tom Dieck splitting Phi^H(G_+ wedge_H S^V) = S^{dim V}
    holds independently of any transfer system
 3. Clarify: what is rho_H^O for a specific incomplete T? (use C_{p^2} example)
+
+---
+
+## Codex Verification Notes (2026-02-11)
+
+### Problem 3 (computational)
+
+Status: **Partially verified with corrections**.
+
+1. **Exchange/Hecke relations at q=1 are verified in primary source form.**  
+   In the qKZ-family definition, the ASEP polynomials satisfy Hecke-generator relations
+   (including the q=1 specialization), and the companion relation for the opposite inequality:
+   - Definition 3.6, equations (3.5)-(3.7)
+   - Remark 3.8, equation (3.8)
+   Source: Ayyer-Martin-Williams (2024), arXiv:2403.10485.
+
+2. **n=2 composable check can be done explicitly for restricted partition length 2.**  
+   For a restricted partition of length 2, we necessarily have lambda=(a,0), so the two states are
+   (a,0) and (0,a). From the t-PushTASEP definition, jump rates are 1/x_1 and 1/x_2 respectively,
+   hence:
+   - pi(a,0)=x_1/(x_1+x_2)
+   - pi(0,a)=x_2/(x_1+x_2)
+   Therefore pi(0,a)/pi(a,0)=x_2/x_1.  
+   By Theorem 1.1 (same paper), this equals F_(0,a)(x;1,t)/F_(a,0)(x;1,t).
+
+3. **Correction to Reduction 3 (`t=0` degeneration).**  
+   The claim "stationary distribution concentrated on the sorted composition" is false for the
+   ring PushTASEP model used here. Proposition 2.4 gives a non-degenerate stationary law
+   already at t=0 in the single-species sector (weighted by products of x_i / elementary symmetric
+   polynomial), not a delta mass at a single sorted state.
+
+4. **Unresolved item.**  
+   A closed-form general F*_(a,b)(x_1,x_2;1,t) formula and direct c/d extraction were not found
+   in this pass; the verified reduction above gives a finite two-state rate ratio check in the
+   restricted n=2 case actually induced by the benchmark constraints.
+
+### Problem 5 (structural)
+
+Status: **Core structural claims verified; one definition corrected**.
+
+1. **C_2 complete-case slope check is consistent with modern slice criterion.**  
+   Hill-Yarnall give:
+   "X is slice n-connective iff for all H, Phi^H(X) is (n/|H|-1)-connective"
+   (equivalently with ceilings in integer indexing).  
+   For G=C_2 this gives the expected two-slope behavior (underlying vs C_2-fixed), matching the
+   intended sanity check up to indexing normalization.
+   Source: Hill-Yarnall (2017), arXiv:1703.10526.
+
+2. **Detection via geometric fixed points is independent of transfer systems.**  
+   Geometric fixed points are defined in the genuine equivariant stable category itself and used to
+   produce equivalences (e.g. rational decomposition by geometric fixed points), with no dependence
+   on an N_infinity transfer system parameter.
+   Source: Wimmer (2019), arXiv:1905.12420 (Theorem 3.10 and surrounding setup).
+
+3. **Correction: `rho_H^O` is not a standard object in N_infinity/transfer-system literature.**  
+   In the Blumberg-Hill framework, transfer systems/indexing systems control **which admissible
+   H-sets/transfers/norms exist**, not a modified "O-regular representation" replacing rho_H in the
+   usual slice-cell templates.
+   Source: Blumberg-Hill (2013), arXiv:1309.1750.
+
+4. **Working clarification for the C_{p^2} intermediate transfer system.**  
+   For T allowing e->C_p but excluding transfers to C_{p^2}, the robust interpretation is:
+   - keep standard representation inputs for slice-cell constructions (regular-representation based),
+   - restrict the subgroup-indexed cells checked/allowed by the transfer system.
+   I.e. the uncertainty is primarily in admissible subgroup indexing, not in inventing a new
+   representation rho_H^O.
+
+### Sources
+
+- https://arxiv.org/abs/2403.10485
+- https://arxiv.org/abs/1703.10526
+- https://arxiv.org/abs/1905.12420
+- https://arxiv.org/abs/1309.1750
