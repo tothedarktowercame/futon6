@@ -13,10 +13,11 @@ necessarily have a Lagrangian smoothing?
 
 ## Answer
 
-**Yes**, provided the surface is not contained in a hyperplane of R^4 —
-a condition that is automatic for any polyhedral Lagrangian surface that is a
-topological submanifold of R^4 (see Section 3 for the proof). Under this
-(automatically satisfied) hypothesis, K admits a Lagrangian smoothing.
+**Yes.** A polyhedral Lagrangian surface with 4 faces per vertex (with
+distinct adjacent faces) always admits a Lagrangian smoothing. The vertex
+spanning property ({e_1,...,e_4} spans R^4) is automatic — it follows from
+the Lagrangian and distinct-face conditions alone (Section 3), with no
+additional hypotheses needed.
 
 **Confidence: Medium-high.** The v2 argument (symplectic direct sum
 decomposition at each vertex) is verified numerically: 998/998 random valid
@@ -75,33 +76,42 @@ leaving only:
 basis — see the nondegeneracy hypothesis below.)
 
 **Lemma (vertex spanning).** At every vertex of a polyhedral Lagrangian
-surface K that is a topological submanifold of R^4, the 4 edge vectors
-{e_1, e_2, e_3, e_4} span R^4.
+surface with 4 faces per vertex (with distinct adjacent faces sharing
+1-dimensional edges), the 4 edge vectors {e_1, e_2, e_3, e_4} span R^4.
 
 *Proof.* Suppose for contradiction that the 4 edge vectors lie in a
 3-dimensional subspace H ⊂ R^4. Then all 4 faces L_i = span(e_{i-1,i},
-e_{i,i+1}) ⊂ H. But H carries the restricted form omega|_H, which has
-rank 2 (since omega is non-degenerate on R^4, its restriction to a
-codimension-1 subspace has a 1-dimensional kernel). A Lagrangian 2-plane
-L ⊂ H must satisfy omega|_L = 0, so L must contain ker(omega|_H) (a
-1-dimensional subspace ell ⊂ H): if L were transverse to ell, then L
-would project isomorphically onto a 2-plane in H/ell, but omega|_H
-descends to a non-degenerate form on H/ell ≅ R^2, and a 2-plane in R^2
-on which a non-degenerate 2-form vanishes cannot exist (it would have to
-be 0-dimensional). So every Lagrangian 2-plane in H contains ell.
+e_{i,i+1}) ⊂ H.
 
-This means all 4 faces contain the same line ell. But then all 4 faces
-share a common direction, so the surface K is ruled by ell — locally a
-product of ell with a curve in H/ell. Such a surface cannot be a compact
-topological submanifold of R^4 without boundary: the projection K → H/ell
-collapses K along ell, and since K is compact and connected, the image is
-a compact 1-manifold (closed curve) in the 2-plane H/ell, bounding a disk.
-Lifting back, K would bound a 3-dimensional region in H, contradicting the
-fact that K is a closed surface embedded in R^4 (not in H ≅ R^3; a compact
-surface in R^3 separates R^3 and cannot be Lagrangian as omega|_H is
-degenerate).
+**Step 1.** The restricted form omega|_H has rank 2: since omega is
+non-degenerate on R^4, its restriction to a codimension-1 subspace has a
+1-dimensional kernel ell = ker(omega|_H) ⊂ H.
 
-Therefore {e_1, e_2, e_3, e_4} must span R^4. ∎
+**Step 2.** Every Lagrangian 2-plane L ⊂ H contains ell. Proof: L is
+2-dimensional with omega|_L = 0. If L were transverse to ell (i.e.,
+L ∩ ell = {0}), then L would project isomorphically onto a 2-plane in
+H/ell ≅ R^2. But omega|_H descends to a non-degenerate 2-form on H/ell
+(since ell = ker(omega|_H)), and a 2-plane in R^2 on which a
+non-degenerate 2-form vanishes must be {0}. Contradiction. So ell ⊂ L.
+
+**Step 3 (key).** Each edge e_i is the intersection of two adjacent faces:
+e_1 = L_1 ∩ L_2, e_2 = L_2 ∩ L_3, etc. Since L_i and L_{i+1} are
+distinct 2-planes (distinct faces), their intersection is exactly
+1-dimensional: dim(L_i ∩ L_{i+1}) = 1, so L_i ∩ L_{i+1} = span(e_i).
+
+By Step 2, ell ⊂ L_i and ell ⊂ L_{i+1}, so ell ⊂ L_i ∩ L_{i+1} =
+span(e_i). Since both ell and span(e_i) are 1-dimensional subspaces and
+one contains the other, ell = span(e_i).
+
+Applying this to all four edges: span(e_1) = ell = span(e_2) = span(e_3) =
+span(e_4). That is, all four edge vectors are proportional.
+
+But then L_1 = span(e_4, e_1) = span(e_1) is 1-dimensional, contradicting
+the fact that L_1 is a 2-plane. ∎
+
+(Note: this argument is purely algebraic — it uses only that adjacent faces
+are distinct Lagrangian 2-planes sharing a 1-dimensional edge. No
+topological submanifold condition is needed.)
 
 In the reordered basis (e_1, e_3, e_2, e_4), the omega matrix is:
 
@@ -214,16 +224,40 @@ the 1-form is closed, and exact forms are closed.
 **Agreement:** For x_1 ≥ 2 eps, chi = 1 so S_eps = S_1 and the graph equals
 L_1. For x_1 ≤ eps, chi = 0 so S_eps = S_2 and the graph equals L_2.
 
-**C^1 estimate:** grad S_eps - grad S_i = O(|A_1 - A_2| · max(1, 1/eps)·eps)
-in the transition region. Since S_1 and S_2 are quadratic and agree along e,
-|grad S_1 - grad S_2| = O(|x_2|) (the difference vanishes on the x_1-axis).
-In the transition strip { eps ≤ x_1 ≤ 2eps }, the extra derivative from
-chi'(x_1/eps) · (1/eps) is bounded because the factor (A_1 - A_2)x =
-O(|x_2|) kills the 1/eps singularity at x_2 = 0. Precisely:
-|grad(chi(x_1/eps)(S_1 - S_2))| ≤ ||A_1 - A_2|| · (|x_2|/eps + |x|),
-which is bounded on compact sets and → 0 as eps → 0 uniformly on
-{ |x| ≤ R } ∩ { |x_2| ≤ delta } for any fixed delta. Therefore
-Sigma_eps → L_1 ∪ L_2 in C^1 as eps → 0. ∎
+**C^1 estimate.** Write Delta = A_1 - A_2, which has the form
+[[0, c], [c, d]] (since both planes contain e along the x_1-axis, so
+Delta has zero (1,1)-entry). The difference of generating functions is:
+
+    S_1(x) - S_2(x) = (1/2) x^T Delta x = c x_1 x_2 + (d/2) x_2^2
+
+Note this vanishes on the x_1-axis (x_2 = 0) and has grad(S_1 - S_2) =
+(c x_2, c x_1 + d x_2). Since S_eps = S_2 + chi(x_1/eps)(S_1 - S_2):
+
+    grad S_eps - grad S_2 = chi(x_1/eps) · Delta x
+                           + chi'(x_1/eps)/eps · (c x_1 x_2 + (d/2)x_2^2) · e_1
+
+In the transition strip {eps ≤ x_1 ≤ 2eps}, with ||chi'||_infty = C_chi:
+- First term: |Delta x| = O(|x_2| + eps) (bounded, using x_1 = O(eps))
+- Second term: (C_chi/eps) · |c · O(eps) · x_2 + (d/2) x_2^2|
+             = O(|c| · |x_2|) + O(|d| · x_2^2 / eps)
+
+The x_2^2/eps term does not go to zero as eps → 0 for fixed x_2 ≠ 0. So
+Sigma_eps does NOT converge to L_1 ∪ L_2 in C^1 globally. However, this
+does not affect the application:
+
+**Why the estimate suffices.** The crease smoothing is applied to each
+sheet (A = L_1 ∪ L_3, B = L_2 ∪ L_4) along their respective crease
+edges, which are at positive distance from the vertex v (the vertex is
+the crossing point, not the crease). The purpose is to produce two
+SMOOTH Lagrangian surfaces, not to approximate the creased surface. For
+any fixed eps > 0, Sigma_eps is a smooth Lagrangian surface (proved
+above) that agrees with L_1 for x_1 ≥ 2eps and with L_2 for x_1 ≤ eps.
+
+The transversality of the two smoothed sheets at v is unaffected: the
+crease smoothing modifies each sheet only along its crease (away from v),
+leaving the tangent planes at v unchanged. Since the original sheets cross
+transversally at v with the V_1 ⊕ V_2 decomposition, the smoothed sheets
+still cross transversally at v with Maslov index 0. ∎
 
 **Application to 4-valent vertices.** At a 4-valent vertex v with the
 V_1 ⊕ V_2 decomposition (Section 3), the two sheets A = L_1 ∪ L_3 and

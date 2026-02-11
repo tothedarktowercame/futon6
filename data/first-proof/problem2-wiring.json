@@ -32,7 +32,7 @@
       "id": "p2-s3",
       "node_type": "answer",
       "post_id": 203,
-      "body_text": "u_Q twist: R(u_Q)W nonzero (right translation is automorphism). GL_n-restriction lemma (BZ 1976, Thm 5.21 + Cor 5.22): nonzero W' restricts to nonzero function on diag(GL_n,1) because Kirillov model contains C_c^infty(N_n\\GL_n). So phi_Q(g) = W(diag(g,1)u_Q) is nonzero on GL_n.",
+      "body_text": "u_Q twist: R(u_Q) is automorphism of Whittaker model, so R(u_Q)W_0 nonzero. Direct computation: phi_Q(I_n) = W_0(u_Q) = psi^{-1}(Q) * W_0(I) = psi^{-1}(Q) nonzero (psi nontrivial, Q nonzero). So phi_Q nonzero on GL_n.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 2
@@ -41,7 +41,7 @@
       "id": "p2-s3a",
       "node_type": "answer",
       "post_id": 2031,
-      "body_text": "Fixed-W spanning lemma: for any nonzero phi in Kirillov model, integrals over V generate full fractional ideal. Proof: GL_n-equivariance of zeta integrals implies L_{R(g)phi} = L_phi for all g. Kirillov model irreducible => translates of phi span full model => L_phi = L(s, Pi x pi). PID structure on C[q^s,q^{-s}].",
+      "body_text": "Fixed-W spanning lemma: for any nonzero phi, integrals over V generate full fractional ideal. Direction 1: Phi(phi) in full ideal, so L(s,Pi x pi) | L_phi. Direction 2: GL_n-equivariance gives L_{R(g)phi} = L_phi; irreducibility gives phi' = sum c_i R(g_i)phi; linearity gives Phi(phi') in L_phi*R for all phi'; union = full ideal in L_phi*R, so L_phi | L(s,Pi x pi).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 203
