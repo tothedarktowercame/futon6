@@ -5,7 +5,7 @@
       "id": "p5-problem",
       "node_type": "question",
       "post_id": 5,
-      "body_text": "Define O-slice filtration for incomplete transfer system O and characterize O-slice connectivity of connective G-spectrum via geometric fixed points.",
+      "body_text": "Define O-slice filtration for incomplete transfer system O and characterize O-slice connectivity of connective F_O-local G-spectrum via geometric fixed points.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": null
@@ -41,7 +41,7 @@
       "id": "p5-s4",
       "node_type": "answer",
       "post_id": 504,
-      "body_text": "Characterization: for connective X, X in tau_{>=n}^O iff Phi^H X is (ceil(n/|H|)-1)-connected for all H in F_O, mirroring Hill-Yarnall Thm. A / Thm. 2.5 on the restricted subgroup family.",
+      "body_text": "Characterization: for connective F_O-local X, X in tau_{>=n}^O iff Phi^H X is (ceil(n/|H|)-1)-connected for all H in F_O, as the family-localized analogue of Hill-Yarnall Thm. A / Thm. 2.5.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 5
@@ -50,7 +50,7 @@
       "id": "p5-s5",
       "node_type": "answer",
       "post_id": 505,
-      "body_text": "Proof sketch: Phi^H(G_+ wedge_H S^{k rho_H}) ~= S^k, so vanishing maps from generators with k|H|<n is equivalent to vanishing pi_i(Phi^H X) for i<ceil(n/|H|).",
+      "body_text": "Proof sketch: Phi^H(G_+ wedge_H S^{k rho_H}) ~= W_G(H)_+ wedge S^k (finite wedge of S^k), so vanishing maps from generators with k|H|<n is equivalent to vanishing pi_i(Phi^H X) for i<ceil(n/|H|).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 5
@@ -59,7 +59,7 @@
       "id": "p5-s6",
       "node_type": "answer",
       "post_id": 506,
-      "body_text": "Special cases: complete transfer system recovers regular slice test; trivial system gives Postnikov; intermediate systems check only selected subgroup fixed points.",
+      "body_text": "Special cases: complete transfer system recovers regular slice test; trivial system gives Postnikov on F_O-local spectra; intermediate systems check only selected subgroup fixed points (for F_O-local spectra).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 5
@@ -98,7 +98,7 @@
       "source": "p5-s4",
       "target": "p5-problem",
       "edge_type": "assert",
-      "evidence": "Main criterion: connectivity via Phi^H only for H in F_O",
+      "evidence": "Main criterion: for connective F_O-local X, connectivity via Phi^H only for H in F_O",
       "detection": "structural"
     },
     {
@@ -112,7 +112,7 @@
       "source": "p5-s5",
       "target": "p5-s4",
       "edge_type": "assert",
-      "evidence": "Proof via geometric fixed point detection on regular slice cells",
+      "evidence": "Proof via geometric fixed point detection on regular slice cells, with Weyl-factor correction",
       "detection": "structural"
     },
     {
@@ -126,7 +126,7 @@
       "source": "p5-s6",
       "target": "p5-s4",
       "edge_type": "exemplify",
-      "evidence": "Complete/trivial/intermediate systems reduce as expected",
+      "evidence": "Complete/trivial/intermediate systems reduce as expected (under F_O-locality)",
       "detection": "structural"
     },
     {
@@ -254,7 +254,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Main criterion: connectivity via Phi^H only for H in F_O",
+        "evidence": "Main criterion: for connective F_O-local X, connectivity via Phi^H only for H in F_O",
         "detection": "structural"
       },
       "hx/labels": [
@@ -304,7 +304,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Proof via geometric fixed point detection on regular slice cells",
+        "evidence": "Proof via geometric fixed point detection on regular slice cells, with Weyl-factor correction",
         "detection": "structural"
       },
       "hx/labels": [
@@ -354,7 +354,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Complete/trivial/intermediate systems reduce as expected",
+        "evidence": "Complete/trivial/intermediate systems reduce as expected (under F_O-locality)",
         "detection": "structural"
       },
       "hx/labels": [
