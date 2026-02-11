@@ -25,9 +25,10 @@ def build_problem6_proof_diagram() -> ThreadWiringDiagram:
         ThreadNode(
             id="p6-problem", node_type="question", post_id=6,
             body_text=(
-                "Does there exist c > 0 such that for every graph G and every "
-                "epsilon in (0,1), V contains an epsilon-light subset S of size "
-                "at least c*epsilon*|V|? (epsilon-light: epsilon*L - L_S >= 0)"
+                "Does there exist universal c>0 such that for every finite "
+                "undirected graph G=(V,E,w) with nonnegative weights and every "
+                "epsilon in (0,1), there exists S subseteq V with |S|>=c*epsilon*|V| "
+                "and L_{G[S]}~ <= epsilon*L_G on R^V (where L_{G[S]}~ is zero-padded)?"
             ),
             score=0, creation_date="2026-02-11",
         ),
@@ -35,7 +36,7 @@ def build_problem6_proof_diagram() -> ThreadWiringDiagram:
             id="p6-s1", node_type="answer", post_id=601,
             body_text=(
                 "Laplacian decomposes edge-by-edge: L = sum L_e. "
-                "Condition epsilon*L - L_S >= 0 means internal edges are "
+                "Condition L_S <= epsilon*L means internal edges are "
                 "spectrally dominated. In effective-resistance frame: "
                 "||L^{+/2} L_S L^{+/2}|| <= epsilon."
             ),
@@ -55,7 +56,8 @@ def build_problem6_proof_diagram() -> ThreadWiringDiagram:
             body_text=(
                 "Probabilistic construction: include each vertex i.i.d. "
                 "with probability p = epsilon. E[|S|] = epsilon*n. "
-                "E[L_S] = epsilon^2 * L. Gap: epsilon(1-epsilon)*L > 0."
+                "E[L_S] = epsilon^2 * L, so E[epsilon*L - L_S] = "
+                "epsilon(1-epsilon)*L >= 0. This is expectation-only."
             ),
             score=0, creation_date="2026-02-11", parent_post_id=6,
         ),
@@ -72,7 +74,7 @@ def build_problem6_proof_diagram() -> ThreadWiringDiagram:
             body_text=(
                 "Spectral expectation: E[L_S] = p^2*L = epsilon^2*L. "
                 "Since epsilon^2 < epsilon for epsilon in (0,1), "
-                "E[L_S] < epsilon*L with multiplicative gap 1/epsilon."
+                "E[L_S] <= epsilon*L. Need concentration for a realized subset."
             ),
             score=0, creation_date="2026-02-11", parent_post_id=603,
         ),
@@ -89,37 +91,38 @@ def build_problem6_proof_diagram() -> ThreadWiringDiagram:
         ThreadNode(
             id="p6-s4a", node_type="comment", post_id=6041,
             body_text=(
-                "Star domination: 1[u in S]*1[v in S] <= 1[u in S] gives "
-                "L_S <= sum_v Z_v * L_v where L_v is star Laplacian. "
-                "RHS is sum of INDEPENDENT random PSD matrices."
+                "Star domination with explicit counting: "
+                "L_S = sum_{uv} Z_u Z_v L_uv <= (1/2) sum_v Z_v sum_{u~v} L_uv. "
+                "With independent Bernoulli Z_v, RHS is a sum of independent PSD matrices."
             ),
             score=0, creation_date="2026-02-11", parent_post_id=604,
         ),
         ThreadNode(
             id="p6-s4b", node_type="comment", post_id=6042,
             body_text=(
-                "Matrix Freedman inequality applied to vertex-reveal "
-                "martingale. Differences ||F_i|| <= R_i (effective "
-                "resistance sum at vertex i), sum R_i = 2(n-1)."
+                "Matrix Freedman/Bernstein setup: define vertex-reveal "
+                "martingale for centered sum X=sum_i (Z_i-p_i)A_i with self-adjoint "
+                "differences Delta_i, increment bound ||Delta_i||<=R_*, and predictable "
+                "quadratic variation W_n=sum E[Delta_i^2|F_{i-1}]."
             ),
             score=0, creation_date="2026-02-11", parent_post_id=604,
         ),
         ThreadNode(
             id="p6-s5", node_type="answer", post_id=605,
             body_text=(
-                "Iterated sampling for general graphs: Stage 1 removes "
-                "spectrally heavy vertices (R_v > alpha), Stage 2 applies "
-                "random sampling on remaining alpha-light graph where "
-                "martingale concentration works."
+                "General-graph step is an external dependency in this draft: "
+                "assume a published theorem providing universal c0>0 with "
+                "|S|>=c0*epsilon*n and L_S<=epsilon*L; this writeup does not "
+                "rederive that theorem."
             ),
             score=0, creation_date="2026-02-11", parent_post_id=6,
         ),
         ThreadNode(
             id="p6-s6", node_type="answer", post_id=606,
             body_text=(
-                "Conclusion: Yes, c >= 1/2. For all graphs, there exists "
-                "an epsilon-light subset of size >= c*epsilon*n. K_n shows "
-                "c <= 1 is tight."
+                "Conclusion in this draft: unconditionally we prove c<=1 via K_n "
+                "and a correct concentration framework; conditional on the external "
+                "general theorem (p6-s5), the full existential answer is yes."
             ),
             score=0, creation_date="2026-02-11", parent_post_id=6,
         ),
@@ -158,7 +161,7 @@ def build_problem6_proof_diagram() -> ThreadWiringDiagram:
         ThreadEdge(
             source="p6-s3b", target="p6-s3",
             edge_type="clarify",
-            evidence="E[L_S] = epsilon^2*L < epsilon*L",
+            evidence="E[L_S] = epsilon^2*L <= epsilon*L; still expectation-level",
             detection="structural",
         ),
         # S4 challenges: need per-realization bound
@@ -172,35 +175,35 @@ def build_problem6_proof_diagram() -> ThreadWiringDiagram:
         ThreadEdge(
             source="p6-s4a", target="p6-s4",
             edge_type="clarify",
-            evidence="Star domination converts dependent edges to independent vertices",
+            evidence="1/2-star domination converts dependent edges to independent vertices",
             detection="structural",
         ),
         # S4b references the concentration tool
         ThreadEdge(
             source="p6-s4b", target="p6-s4",
             edge_type="reference",
-            evidence="Matrix Freedman inequality (Tropp 2011)",
+            evidence="Matrix Freedman/Bernstein with explicit martingale parameters",
             detection="structural",
         ),
         # S4b uses effective resistance from S1
         ThreadEdge(
             source="p6-s4b", target="p6-s1",
             edge_type="reference",
-            evidence="Effective resistance frame: sum tau_e = n-1",
+            evidence="Effective-resistance normalization and leverage bounds",
             detection="structural",
         ),
         # S5 reforms for general graphs
         ThreadEdge(
             source="p6-s5", target="p6-s4",
             edge_type="reform",
-            evidence="Two-stage: remove heavy vertices, then sample on light graph",
+            evidence="Mark universal-existence theorem as explicit external dependency",
             detection="structural",
         ),
         # S6 asserts the final answer
         ThreadEdge(
             source="p6-s6", target="p6-problem",
             edge_type="assert",
-            evidence="Yes, c >= 1/2 for all graphs",
+            evidence="Unconditional: c<=1; conditional on p6-s5 dependency: existential yes",
             detection="structural",
         ),
         # S6 references the construction
@@ -214,7 +217,7 @@ def build_problem6_proof_diagram() -> ThreadWiringDiagram:
         ThreadEdge(
             source="p6-s6", target="p6-s5",
             edge_type="reference",
-            evidence="Iterated sampling handles all graph families",
+            evidence="Final existential claim depends on external theorem assumption",
             detection="structural",
         ),
         # S6 references tightness

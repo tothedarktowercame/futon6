@@ -2,190 +2,172 @@
 
 ## Problem Statement
 
-For a graph G = (V, E) and S a subset of V, let G_S = (V, E(S,S)) be the
-subgraph keeping only edges with both endpoints in S. Let L and L_S be the
-Laplacians of G and G_S respectively.
+Let G=(V,E,w) be a finite undirected graph with nonnegative edge weights and
+n=|V|. Its Laplacian is
 
-S is **epsilon-light** if epsilon*L - L_S is positive semidefinite (PSD).
+    L = sum_{e={u,v} in E} w_e (e_u-e_v)(e_u-e_v)^T.
 
-**Question (Nelson):** Does there exist a constant c > 0 such that for every
-graph G and every epsilon in (0,1), V contains an epsilon-light subset S of
-size at least c*epsilon*|V|?
+For S subseteq V, define the induced-subgraph Laplacian embedded to R^{VxV}:
 
-## Answer
+    L_S = sum_{e={u,v} in E, u,v in S} w_e (e_u-e_v)(e_u-e_v)^T,
 
-**Yes.** We prove this via the probabilistic method. The tight constant on
-the complete graph is c = 1 (achieved at |S| = epsilon*n); for general
-graphs c >= 1/2.
+with zeros outside S rows/columns.
 
-## Solution
+S is epsilon-light if
 
-### 1. Laplacian decomposition and the spectral condition
+    L_S <= epsilon L
 
-The graph Laplacian decomposes edge-by-edge:
+in Loewner order.
 
-    L = sum_{e in E} L_e,    L_e = (e_u - e_v)(e_u - e_v)^T
+Question: does there exist universal c>0 such that for every G and every
+epsilon in (0,1), there exists S with |S| >= c*epsilon*n and L_S <= epsilon L?
 
-For a vertex subset S:
+## Status of this writeup
 
-    L_S = sum_{e in E(S,S)} L_e
+This draft closes the internal algebraic gaps and separates proved facts from
+external dependencies:
 
-The condition epsilon*L - L_S >= 0 is equivalent to: for all x in R^V,
+1. Proved in-text: exact formulation, K_n upper bound c<=1, sampling identities,
+   and a correct matrix-concentration setup.
+2. External dependency: the universal lower bound c0>0 for all graphs is not
+   rederived here; it is treated as an imported theorem assumption.
 
-    sum_{(u,v) in E} 1[u,v in S] * (x_u - x_v)^2  <=  epsilon * sum_{(u,v) in E} (x_u - x_v)^2
+So the final existential answer is **conditional on that external theorem**.
 
-Working in the effective-resistance metric: define M = L^{+/2} L_S L^{+/2}
-where L^+ is the pseudoinverse. Then L_S <= epsilon*L iff ||M|| <= epsilon,
-and E[M] = p^2 * I_{n-1} when each vertex is sampled independently with
-probability p.
+## 1. Exact reformulation
 
-### 2. Verification on K_n (tight example)
+The PSD condition is equivalent to the quadratic form inequality
 
-For K_n with L = nI - J: an induced K_s on S of size s gives L_S with
-maximum eigenvalue s (on vectors in S perpendicular to 1_S). The condition
-L_S <= epsilon*L reduces to: for any x supported on S with sum x_i = 0,
+    for all x in R^V: x^T L_S x <= epsilon x^T L x.
 
-    s * ||x||^2  <=  epsilon * n * ||x||^2
+On im(L), with L^+ the Moore-Penrose pseudoinverse:
 
-i.e., s <= epsilon*n. So the maximum epsilon-light subset of K_n has size
-exactly floor(epsilon*n), giving c = 1.
+    L_S <= epsilon L  <=>  || L^{+/2} L_S L^{+/2} || <= epsilon.
 
-This is the tightest known case. Other graph families allow even larger
-epsilon-light sets (e.g., star graphs: S = all leaves, |S| = n-1, L_S = 0).
+## 2. Complete graph upper bound (rigorous)
 
-### 3. Probabilistic construction
+For G=K_n and S of size s, choose x supported on S with sum_{i in S} x_i = 0.
+Then
 
-**Construction:** Include each vertex independently with probability p.
+    x^T L_{K_n} x = n ||x||^2,
+    x^T L_S x = s ||x||^2.
 
-For each edge (u,v) in E:
+Hence L_S <= epsilon L_{K_n} implies s <= epsilon n.
+Therefore any universal constant must satisfy
 
-    Pr[(u,v) in E(S,S)] = Pr[u in S] * Pr[v in S] = p^2
+    c <= 1.
 
-since vertex inclusions are independent.
+This is an upper bound only.
 
-**Size:** E[|S|] = pn. By multiplicative Chernoff:
+## 3. Random sampling identities (expectation level)
 
-    Pr[|S| < pn/2] <= exp(-pn/8)
+Let Z_v ~ Bernoulli(p) independently and S={v: Z_v=1}.
 
-For pn >= 16 (i.e., p >= 16/n), |S| >= pn/2 with high probability.
+1. Size:
 
-**Spectral expectation:**
+    E|S| = pn,
+    Pr[|S| < pn/2] <= exp(-pn/8)  (Chernoff).
 
-    E[L_S] = sum_e p^2 * L_e = p^2 * L
+2. Spectral expectation:
 
-In the relative (effective-resistance) frame:
+    E[L_S] = p^2 L,
 
-    E[L^{+/2} L_S L^{+/2}] = p^2 * I_{n-1}
+since each edge survives with probability p^2.
 
-Setting p = epsilon: E[L_S] = epsilon^2 * L, and the spectral gap
-epsilon*L - E[L_S] = epsilon(1 - epsilon) * L is strictly positive definite
-on ker(L)^perp.
+Thus
 
-### 4. Concentration: the core technical step
+    E[epsilon L - L_S] = (epsilon - p^2)L.
 
-We need: with positive probability, L_S <= epsilon*L simultaneously for all
-directions. This is a matrix concentration problem for a degree-2 polynomial
-in independent Bernoulli variables.
+Setting p=epsilon gives E[L_S]=epsilon^2 L <= epsilon L. This is not yet a
+realization-level guarantee.
 
-**One-sided domination:** Since 1[u in S]*1[v in S] <= 1[u in S], we have
-the PSD inequality
+## 4. Concentration setup (gap-fixed formulation)
 
-    L_S <= sum_v 1[v in S] * L_v
+Define edge-normalized PSD matrices
 
-where L_v = sum_{u: (u,v) in E} L_{uv} is the "star Laplacian" of vertex v
-(spectral norm = degree d_v). The RHS is a sum of INDEPENDENT random PSD
-matrices with E[sum_v 1[v in S] L_v] = p * 2L.
+    X_e = L^{+/2} w_e b_e b_e^T L^{+/2},   b_e = e_u-e_v,
 
-This domination is too loose for our purposes (expectation 2p*L vs target
-epsilon*L requires p < epsilon/2, losing the quadratic advantage). But it
-converts the dependent-edge problem to independent-vertex form, enabling the
-matrix Freedman inequality.
+and leverage scores
 
-**Matrix martingale approach:** Reveal vertex inclusions Z_1, ..., Z_n
-sequentially. The martingale differences in the relative frame satisfy:
+    tau_e = tr(X_e) = w_e b_e^T L^+ b_e,
+    sum_e tau_e = n - k
 
-    ||F_i|| <= R_i (sum of effective resistances of edges at vertex i)
+(k = number of connected components).
 
-with sum_i R_i = 2(n-1). The matrix Freedman inequality (Tropp 2011) gives:
+### 4a. Star domination with correct counting
 
-    Pr[||L_S - epsilon^2 L|| > t * L]  <=  n * exp(-t^2 / (2p*sum R_i^2 + 2*R_max*t/3))
+Using Z_u Z_v <= Z_u and Z_u Z_v <= Z_v for each edge {u,v},
 
-For graphs where R_max = O(1) (bounded total effective resistance per vertex),
-this gives useful concentration. In particular:
+    L_S = sum_{uv in E} Z_u Z_v L_uv
+        <= (1/2) sum_v Z_v sum_{u~v} L_uv.
 
-- **Regular expanders:** R_i = d * (2/d) = 2 for all i (each edge has
-  effective resistance Theta(1/d), d edges per vertex). R_max = 2.
-  Concentration at rate exp(-Omega(epsilon^2 * n)).
+So in normalized coordinates
 
-- **Complete graph K_n:** R_i = (n-1)*(2/n) ≈ 2. Same as above.
+    L^{+/2} L_S L^{+/2} <= sum_v Z_v A_v,
+    A_v := (1/2) sum_{u~v} X_{uv} >= 0.
 
-- **Bounded-degree graphs:** R_i <= d (at most d edges, each tau <= 1).
-  R_max = d. Concentration at rate exp(-Omega(epsilon^2 / d)).
+Because Z_v are independent Bernoulli variables, the random matrices Z_v A_v
+are independent PSD summands.
 
-### 5. General graphs via iterated sampling
+### 4b. Freedman/Bernstein martingale parameters
 
-For graphs where the direct martingale bound is loose (e.g., high-degree
-vertices with large effective resistance sums), we use a two-stage approach:
+Let A_i be a fixed ordering of {A_v}, p_i=E[Z_i], and define the centered sum
 
-**Stage 1:** Remove "spectrally heavy" vertices. A vertex v is alpha-heavy if
-R_v = sum_{u: (u,v) in E} tau_{uv} > alpha. Since sum_v R_v = 2(n-1), at
-most 2(n-1)/alpha vertices are alpha-heavy. Removing them costs at most
-2(n-1)/alpha vertices.
+    X = sum_i (Z_i - p_i) A_i.
 
-**Stage 2:** On the remaining graph (all vertices alpha-light), apply the
-random sampling with p = epsilon. The martingale concentration with
-R_max = alpha gives:
+With filtration F_i = sigma(Z_1,...,Z_i), Doob martingale
 
-    Pr[L_S > epsilon * L] <= n * exp(-Omega(epsilon^2 / alpha))
+    Y_i = E[X | F_i],
+    Delta_i = Y_i - Y_{i-1}
 
-Set alpha = epsilon^2 / (C * log n) for a constant C. Then:
+has self-adjoint differences. For independent Bernoulli sampling,
 
-- Vertices removed in Stage 1: at most 2(n-1)*C*log(n)/epsilon^2
-- Probability of spectral failure: at most n * exp(-C*log n) = n^{1-C} < 1
+    Delta_i = (Z_i - p_i) A_i,
+    ||Delta_i|| <= ||A_i|| <= R_*  (R_* = max_i ||A_i||),
 
-For this to leave enough vertices: n - 2Cn*log(n)/epsilon^2 >= epsilon*n/2,
-which holds when n >= C'/epsilon^3 * log n. For any fixed epsilon, this holds
-for n large enough.
+and predictable quadratic variation
 
-For small n (n < C'/epsilon^3 * log n), we can use the trivial construction:
-take S = {any single vertex}. Then L_S = 0 (no internal edges), so S is
-epsilon-light, and |S| = 1. The condition |S| >= c*epsilon*n requires
-c <= 1/(epsilon*n), which is satisfied for c small enough when n is bounded.
+    W_n = sum_i E[Delta_i^2 | F_{i-1}] = sum_i p_i(1-p_i) A_i^2.
 
-**Combining:** There exists a universal constant c > 0 (independent of G and
-epsilon) such that every graph G on n vertices has an epsilon-light subset of
-size at least c*epsilon*n.
+Matrix Freedman (or matrix Bernstein in independent form) applies once bounds
+on R_* and ||W_n|| are supplied.
 
-### 6. Complexity and explicit constants
+This is the correct technical setup that was missing in the earlier draft.
 
-The probabilistic argument gives c = 1/2 for "most" graphs (those where the
-effective resistance structure is well-behaved). The iterated sampling argument
-works for all graphs but may give a smaller constant.
+## 5. External dependency for universal c0>0
 
-**Lower bound on c:** The complete graph K_n shows c <= 1 (tight). We conjecture
-c = 1/2 is achievable for all graphs, matching the Chernoff bound on |S|.
+To conclude a universal lower bound for all graphs, one needs an additional
+published theorem that controls leverage/pruning and proves:
 
-**Summary of per-graph-family results:**
+    exists c0>0 universal such that
+    for all G, epsilon in (0,1), exists S with |S|>=c0*epsilon*n and L_S<=epsilon L.
 
-| Graph family          | Max |S| (epsilon-light) | Effective c |
-|----------------------|---------------------|-------------|
-| K_n                   | epsilon*n            | 1           |
-| Star S_n              | n - 1                | ~1/epsilon  |
-| d-regular expander    | ~epsilon*n           | ~1          |
-| Path P_n              | ~epsilon*n           | ~1          |
-| Disjoint K_m copies   | epsilon*n            | 1           |
+This writeup does not reprove that theorem; it uses it as an explicit external
+dependency.
+
+## 6. Final conclusion (explicitly conditional)
+
+Unconditional conclusions from this text:
+
+1. The statement is well-posed in Laplacian PSD order.
+2. K_n implies universal upper bound c<=1.
+3. The concentration machinery is set up correctly with explicit martingale
+   increments and variance process.
+
+Conditional conclusion:
+
+- If the external universal theorem in Section 5 is assumed, then the answer to
+  the original problem is YES (some universal c0>0 exists).
 
 ## Key identities used
 
-1. **Edge-Laplacian decomposition:** L = sum_e L_e with L_e = (e_u - e_v)(e_u - e_v)^T
-2. **Effective resistance:** tau_e = (e_u - e_v)^T L^+ (e_u - e_v), with sum_e tau_e = n - 1
-3. **Independence structure:** Vertex inclusions independent => edge inclusion
-   indicators Z_u*Z_v are degree-2 polynomial in independent variables
-4. **Star domination:** L_S <= sum_v Z_v L_v (converts edge-dependent to vertex-independent)
+1. L = sum_e w_e b_e b_e^T
+2. L_S = sum_{e internal to S} w_e b_e b_e^T
+3. tau_e = w_e b_e^T L^+ b_e, sum_e tau_e = n-k
+4. L^{+/2} L_S L^{+/2} <= sum_v Z_v A_v with A_v=(1/2)sum_{u~v}X_{uv}
 
-## References from futon6 corpus
+## References (for concentration tools)
 
-- PlanetMath: "Laplacian matrix of a graph" (LaplacianMatrixOfAGraph)
-- PlanetMath: "algebraic connectivity of a graph" (AlgebraicConnectivityOfAGraph)
-- PlanetMath: "adjacency matrix" (AdjacencyMatrix)
-- PlanetMath: "positive definite matrices"
+- Tropp (2011), Freedman's inequality for matrix martingales
+- Standard matrix Bernstein inequality for sums of independent self-adjoint
+  random matrices
