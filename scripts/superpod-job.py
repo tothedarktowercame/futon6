@@ -3,39 +3,39 @@
 
 Self-contained job that reads a SE data dump and produces a single output
 directory with all computed artefacts. Designed for GPU-accelerated batch
-processing on a multi-GPU machine.
+processing on a multi-GPU machine, but CPU-only stages run fine on a laptop.
 
-Setup:
-    # Clone and install
-    git clone <futon6-repo> && cd futon6
-    pip install -e ".[gpu]"
-    # or: pip install sentence-transformers torch
+Download + run (self-contained):
+    python scripts/superpod-job.py --download math --data-dir ./se-data
+    python scripts/superpod-job.py ./se-data/math.stackexchange.com/Posts.xml \\
+        --output-dir ./math-se-processed --site math.stackexchange
 
-    # Extract SE dump
-    7z x math.stackexchange.com.7z -o./math-se-raw/
+    python scripts/superpod-job.py --download mathoverflow --data-dir ./se-data
+    python scripts/superpod-job.py ./se-data/mathoverflow.net/Posts.xml \\
+        --output-dir ./mo-processed --site mathoverflow
 
-Usage:
-    python scripts/superpod-job.py ./math-se-raw/Posts.xml \
-        --output-dir ./math-se-processed \
-        --llm-model meta-llama/Meta-Llama-3-8B-Instruct \
+    # CPU-only (no GPU required):
+    python scripts/superpod-job.py ./se-data/math.stackexchange.com/Posts.xml \\
+        --skip-embeddings --skip-llm --skip-clustering \\
         --site math.stackexchange
 
-    # Then tar and upload:
-    tar czf math-se-processed.tar.gz math-se-processed/
+    # Dry run (shows plan, downloads nothing, processes nothing):
+    python scripts/superpod-job.py ./se-data/math.stackexchange.com/Posts.xml --dry-run
 
 All stages:
-    1. Parse XML → QA pairs (CPU, streaming)
+    0. Download + extract (optional, --download)
+    1. Parse XML -> QA pairs (CPU, streaming)
     2. Dense embeddings (GPU, bge-large-en-v1.5)
     3. LLM pattern tagging (GPU, Llama-3-8B)
     4. Clustering (CPU, HDBSCAN on embeddings)
     5. NER term spotting + scope detection (CPU, classical)
 
-Each stage writes its output independently — if a stage fails, earlier
+Each stage writes its output independently -- if a stage fails, earlier
 outputs are still usable.
 
 Stage 5 output uses futon4-compatible hyperedge format for scope records:
   :hx/type, :hx/ends (with roles), :hx/content, :hx/labels
-This enables direct ingest into futon1/XTDB via the standard relation→hx
+This enables direct ingest into futon1/XTDB via the standard relation->hx
 conversion path. See futon1/apps/graph-memory for schema.
 """
 
@@ -47,6 +47,9 @@ import sys
 import time
 import uuid
 from pathlib import Path
+
+import shutil
+import subprocess
 
 import numpy as np
 
@@ -60,6 +63,123 @@ from futon6.stackexchange import (
     corpus_stats,
     compute_qa_embeddings,
 )
+
+# --- Downloadable SE data dumps (Internet Archive) ---
+
+SE_DUMPS = {
+    "math": {
+        "url": "https://archive.org/download/stackexchange/math.stackexchange.com.7z",
+        "site": "math.stackexchange",
+        "dirname": "math.stackexchange.com",
+        "description": "Math StackExchange (~3.4 GB compressed, ~567K QA pairs)",
+    },
+    "mathoverflow": {
+        "url": "https://archive.org/download/stackexchange/mathoverflow.net.7z",
+        "site": "mathoverflow",
+        "dirname": "mathoverflow.net",
+        "description": "MathOverflow (~500 MB compressed, ~100K QA pairs, research-level)",
+    },
+    "physics": {
+        "url": "https://archive.org/download/stackexchange/physics.stackexchange.com.7z",
+        "site": "physics.stackexchange",
+        "dirname": "physics.stackexchange.com",
+        "description": "Physics StackExchange (~1 GB compressed, ~114K QA pairs)",
+    },
+}
+
+
+def download_and_extract(dump_key, data_dir):
+    """Download a SE dump from Internet Archive and extract it.
+
+    Uses wget for download and 7z for extraction. Both must be installed.
+    """
+    if dump_key not in SE_DUMPS:
+        print(f"Unknown dump '{dump_key}'. Available: {', '.join(SE_DUMPS.keys())}")
+        sys.exit(1)
+
+    dump = SE_DUMPS[dump_key]
+    data_dir = Path(data_dir)
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    archive_name = dump["url"].split("/")[-1]
+    archive_path = data_dir / archive_name
+    extract_dir = data_dir / dump["dirname"]
+    posts_path = extract_dir / "Posts.xml"
+
+    print("=" * 64)
+    print(f"DOWNLOAD: {dump['description']}")
+    print("=" * 64)
+
+    # Check if already extracted
+    if posts_path.exists():
+        size = posts_path.stat().st_size / 1e9
+        print(f"\n  Already extracted: {posts_path} ({size:.1f} GB)")
+        print(f"  To re-download, remove {extract_dir}")
+        print(f"\n  Run with:")
+        print(f"    python scripts/superpod-job.py {posts_path} \\")
+        print(f"      --site {dump['site']} --output-dir {data_dir}/{dump_key}-processed")
+        return str(posts_path)
+
+    # Check tools
+    for tool in ["wget", "7z"]:
+        if not shutil.which(tool):
+            print(f"\n  ERROR: '{tool}' not found. Install it:")
+            if tool == "wget":
+                print(f"    apt install wget  # or: brew install wget")
+            else:
+                print(f"    apt install p7zip-full  # or: brew install p7zip")
+            sys.exit(1)
+
+    # Download
+    if archive_path.exists():
+        size = archive_path.stat().st_size / 1e9
+        print(f"\n  Archive exists: {archive_path} ({size:.2f} GB)")
+    else:
+        print(f"\n  Downloading {dump['url']}")
+        print(f"  To: {archive_path}")
+        print()
+        rc = subprocess.run(
+            ["wget", "-c", "--progress=bar:force:noscroll",
+             "-O", str(archive_path), dump["url"]],
+        ).returncode
+        if rc != 0:
+            print(f"\n  ERROR: wget failed (exit {rc})")
+            sys.exit(1)
+        size = archive_path.stat().st_size / 1e9
+        print(f"\n  Downloaded {size:.2f} GB")
+
+    # Extract
+    print(f"\n  Extracting to {extract_dir}/")
+    extract_dir.mkdir(parents=True, exist_ok=True)
+    rc = subprocess.run(
+        ["7z", "x", "-y", f"-o{extract_dir}", str(archive_path)],
+    ).returncode
+    if rc != 0:
+        print(f"\n  ERROR: 7z extraction failed (exit {rc})")
+        sys.exit(1)
+
+    if posts_path.exists():
+        size = posts_path.stat().st_size / 1e9
+        print(f"\n  Extracted: {posts_path} ({size:.1f} GB)")
+    else:
+        print(f"\n  WARNING: Posts.xml not found after extraction")
+        print(f"  Contents of {extract_dir}:")
+        for f in sorted(extract_dir.iterdir()):
+            print(f"    {f.name}")
+        sys.exit(1)
+
+    # Suggest next command
+    print(f"\n  Run with:")
+    print(f"    python scripts/superpod-job.py {posts_path} \\")
+    print(f"      --site {dump['site']} --output-dir {data_dir}/{dump_key}-processed")
+    print()
+    print(f"  CPU-only (no GPU):")
+    print(f"    python scripts/superpod-job.py {posts_path} \\")
+    print(f"      --skip-embeddings --skip-llm --skip-clustering \\")
+    print(f"      --site {dump['site']} --output-dir {data_dir}/{dump_key}-processed")
+
+    return str(posts_path)
+
 
 # --- The 25 math-informal patterns (baked in for self-containment) ---
 
@@ -604,8 +724,18 @@ def print_dry_run(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Superpod batch job: SE dump → F6 artefacts")
-    parser.add_argument("posts_xml", help="Path to Posts.xml")
+        description="Superpod batch job: SE dump -> F6 artefacts",
+        epilog="Available downloads: " + ", ".join(
+            f"{k} ({v['description']})" for k, v in SE_DUMPS.items()))
+    parser.add_argument("posts_xml", nargs="?", default=None,
+                        help="Path to Posts.xml (not needed with --download)")
+
+    # Download options
+    parser.add_argument("--download", choices=list(SE_DUMPS.keys()),
+                        help="Download + extract a SE dump from Internet Archive")
+    parser.add_argument("--data-dir", default="./se-data",
+                        help="Directory for downloaded dumps (default: ./se-data)")
+
     parser.add_argument("--output-dir", "-o", default="./math-se-processed",
                         help="Output directory for all artefacts")
     parser.add_argument("--site", default="math.stackexchange",
@@ -646,6 +776,17 @@ def main():
                         help="Skip NER term spotting and scope detection")
 
     args = parser.parse_args()
+
+    # ========== Download ==========
+    if args.download:
+        posts_path = download_and_extract(args.download, args.data_dir)
+        if not args.posts_xml:
+            # Just downloading, not processing
+            return
+        # If posts_xml was also given, continue to processing
+
+    if not args.posts_xml:
+        parser.error("posts_xml is required (or use --download to fetch data first)")
 
     # ========== Dry Run ==========
     if args.dry_run:
