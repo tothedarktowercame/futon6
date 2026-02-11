@@ -25,13 +25,14 @@ p, q of degree n:
 
 ## Answer
 
-**Yes** (numerically verified, proof incomplete). The inequality holds with
-0 violations in 8000 random trials for n = 2, 3, 4, 5. Equality holds
-exactly at n = 2 (where 1/Phi_2 is linear in the sole cumulant kappa_2).
-For n >= 3, the inequality is strict for generic polynomials.
+**Yes.** Proved analytically for n = 2 (equality) and n = 3 (strict inequality
+via Cauchy-Schwarz). Numerically verified with 0 violations in 8000+ random
+trials for n = 2, 3, 4, 5. The analytic proof for n >= 4 remains open.
 
-The original proof via "concavity of 1/Phi_n implies superadditivity"
-contains errors (see Section 5a). The analytic proof remains open.
+- n = 2: equality holds (1/Phi_2 is linear in the discriminant).
+- n = 3: **PROVED** via the identity Phi_3 * disc = 18 * a_2^2 and Titu's lemma.
+- n >= 4: numerically verified, proof incomplete. The n=3 identity does not
+  generalize; the ⊞_n cross-terms play an essential role.
 
 ## Solution
 
@@ -146,80 +147,130 @@ The polynomial coefficients a_k are NOT the finite free cumulants; they
 are finite free MOMENTS. The relationship involves a Möbius inversion on the
 lattice of non-crossing partitions.
 
-### 5a. What the proof requires (GAP)
+### 5a. Complete proof for n = 3
 
-To complete the proof via the cumulant approach, one would need to show that
-1/Phi_n, expressed as a function f(kappa_2^(n), ..., kappa_n^(n)) of the
-finite free cumulants, satisfies superadditivity:
+Verification script: `scripts/verify-p4-n3-proof.py`
 
-    f(kappa(p) + kappa(q)) >= f(kappa(p)) + f(kappa(q))
+**Step 1: Centering reduction.** Since Phi_n depends only on root differences
+(translation invariant), and ⊞_n commutes with translation (via the random
+matrix model: translating A by cI shifts all eigenvalues of A+QBQ* by c),
+we may assume WLOG that a_1 = b_1 = 0 (centered polynomials).
 
-**Note on direction:** Superadditivity of f follows if f is CONVEX with
-f(0) = 0. (Concavity + f(0) = 0 would give SUBadditivity, the wrong
-direction.) However, numerical experiments show that 1/Phi_n is neither
-globally convex nor concave in the polynomial coefficient space, and the
-superadditivity is specific to ⊞_n — it fails for plain coefficient-wise
-addition (~40% violation rate for n=3,4,5).
+**Step 2: ⊞_3 simplifies for centered cubics.** When a_1 = b_1 = 0, the
+MSS cross-terms in c_2 and c_3 vanish:
 
-**Status of this step:** The superadditivity of 1/Phi_n under ⊞_n is
-**numerically verified** (0 violations in 8000 random trials for n=2,3,4,5)
-but the analytic proof via convexity of f in finite free cumulant space
-remains open. A correct proof may require:
+    c_2 = a_2 + (2/3)*0*0 + b_2 = a_2 + b_2
+    c_3 = a_3 + (1/3)*a_2*0 + (1/3)*0*b_2 + b_3 = a_3 + b_3
 
-(a) Explicit computation of 1/Phi_n in finite free cumulant coordinates and
-    verification of convexity in that specific coordinate system, or
+So ⊞_3 reduces to plain coefficient addition for centered cubics.
 
-(b) A direct argument via the MSS random matrix model E_U[char(A + UBU*)]
-    using properties of Haar-random unitary conjugation, or
+**Step 3: The key identity.** For a centered cubic p(x) = x^3 + a_2*x + a_3
+with distinct real roots (requiring a_2 < 0 and disc = -4*a_2^3 - 27*a_3^2 > 0):
 
-(c) An electrostatic/log-gas argument that works with the specific bilinear
-    structure of ⊞_n rather than relying on global function properties.
+    Phi_3(p) * disc(p) = 18 * a_2^2     (EXACT)
+
+Equivalently:
+
+    1/Phi_3(p) = disc(p) / (18 * a_2^2)
+               = (-4*a_2^3 - 27*a_3^2) / (18 * a_2^2)
+               = -2*a_2/9 - 3*a_3^2 / (2*a_2^2)
+
+This identity was discovered numerically and verified symbolically in SymPy.
+It follows from the explicit formula Phi_3 = sum_i (3*l_i/(3*l_i^2 + e_2))^2
+(where e_1 = 0) combined with the discriminant = prod_{i<j}(l_i - l_j)^2.
+
+**Step 4: Superadditivity via Cauchy-Schwarz.** Write s = -a_2 > 0, t = -b_2 > 0,
+u = a_3, v = b_3. Then:
+
+    1/Phi(p) = 2s/9 - 3u^2/(2s^2)
+    1/Phi(q) = 2t/9 - 3v^2/(2t^2)
+    1/Phi(p ⊞_3 q) = 2(s+t)/9 - 3(u+v)^2/(2(s+t)^2)
+
+The surplus is:
+
+    surplus = 1/Phi(conv) - 1/Phi(p) - 1/Phi(q)
+            = (3/2) * [u^2/s^2 + v^2/t^2 - (u+v)^2/(s+t)^2]
+
+This is non-negative by Titu's lemma (Engel form of Cauchy-Schwarz):
+
+    u^2/s^2 + v^2/t^2 >= (u+v)^2/(s^2+t^2)    [Titu's lemma]
+
+and since s^2+t^2 <= (s+t)^2 (because 2st > 0):
+
+    (u+v)^2/(s^2+t^2) >= (u+v)^2/(s+t)^2
+
+Combining: surplus >= 0. Equality iff u/s^2 = v/t^2 and s = t or u = v = 0.
+
+**QED for n = 3.**
+
+### 5b. What the proof requires for n >= 4 (GAP)
+
+For n >= 4, the n=3 approach does not directly generalize:
+
+(a) The identity Phi_n * disc = const * a_2^2 FAILS for n >= 4. At n=4,
+    the product Phi_4 * disc depends on a_3 and a_4 as well.
+
+(b) ⊞_4 has a cross-term even for centered polynomials: c_4 = a_4 + (1/6)*a_2*b_2 + b_4.
+    Unlike n=3, centering does NOT reduce ⊞_4 to plain coefficient addition.
+
+(c) The cross-term is ESSENTIAL: plain coefficient addition fails superadditivity
+    ~29% of the time for centered quartics, while ⊞_4 gives 0 violations.
+
+A correct proof for n >= 4 likely requires exploiting the specific bilinear
+structure of the MSS convolution formula or the random matrix interpretation.
 
 ### 6. Verification for small cases
 
-**Degree 2:** p(x) = (x - a)(x - b), q(x) = (x - c)(x - d).
+**Degree 2 (proved — equality):** p(x) = x^2 + a_1*x + a_2.
 
-Phi_2(p) = [1/(a-b)]^2 + [1/(b-a)]^2 = 2/(a-b)^2.
-1/Phi_2(p) = (a-b)^2 / 2.
+    Phi_2(p) = 2/(a_1^2 - 4*a_2)
+    1/Phi_2(p) = (a_1^2 - 4*a_2)/2
 
-The finite free convolution for degree 2:
-(p ⊞_2 q)(x) = x^2 - (a+b+c+d)/2 * x + [ac + ad + bc + bd - (a+b)(c+d)/2 + ...]
+The ⊞_2 formula gives c_1 = a_1+b_1, c_2 = a_2 + a_1*b_1/2 + b_2. Then:
 
-For the specific case a = -b = s, c = -d = t (symmetric roots):
-p(x) = x^2 - s^2, q(x) = x^2 - t^2.
-p ⊞_2 q = x^2 - (s^2 + t^2) (by the cumulant addition for degree 2).
+    1/Phi_2(p⊞q) = (c_1^2 - 4*c_2)/2 = (a_1^2 - 4*a_2)/2 + (b_1^2 - 4*b_2)/2
 
-Phi_2(p ⊞_2 q) = 2/(s^2 + t^2).
-1/Phi_2(p ⊞_2 q) = (s^2 + t^2)/2.
+Surplus = 0 (symbolic verification). Equality for all degree-2 polynomials.
 
-1/Phi_2(p) + 1/Phi_2(q) = s^2/2 + t^2/2 = (s^2 + t^2)/2.
-
-Equality! This is consistent: for degree 2 symmetric polynomials, the
-inequality holds with equality (because the cumulant structure is purely
-quadratic).
+**Degree 3 (proved — strict inequality):** See Section 5a. The proof uses:
+- Translation invariance of Phi + translation compatibility of ⊞_3 to center
+- Identity Phi_3 * disc = 18 * a_2^2 (for centered cubics)
+- Titu's lemma (Cauchy-Schwarz) to bound the surplus
 
 ### 7. Summary and status
 
-**The inequality is TRUE** — numerically verified with 0 violations in 8000
-random trials for n = 2, 3, 4, 5, with LHS/RHS ratios ranging from 1.0
-(equality at n=2) to over 2000 (large surplus at n=5).
+**The inequality is TRUE.**
 
-**What is established:**
+| n | Status | Method |
+|---|--------|--------|
+| 2 | **PROVED** (equality) | 1/Phi_2 is linear in disc; ⊞_2 preserves exactly |
+| 3 | **PROVED** (strict ineq.) | Phi_3*disc=18a_2^2 identity + Titu's lemma |
+| 4 | Numerically verified | 0/3000 violations; cross-term a_2*b_2/6 essential |
+| 5 | Numerically verified | 0/2000 violations |
+
+**What is established analytically:**
 
 1. Finite free cumulants add under ⊞_n (Arizmendi-Perales 2018)
-2. 1/Phi_n is superadditive under ⊞_n (numerical, high confidence)
-3. Equality at n=2 (1/Phi_2 is linear in kappa_2)
-4. The superadditivity is SPECIFIC to ⊞_n — it fails under plain
-   coefficient addition (~40% violation rate)
+2. n=2: equality (1/Phi_2 linear in discriminant)
+3. n=3: strict superadditivity (Phi_3*disc identity + Cauchy-Schwarz)
+4. ⊞_n commutes with translation (random matrix argument)
+5. The superadditivity is SPECIFIC to ⊞_n — plain coefficient addition
+   fails ~40% (n=3 centered excluded: 0% because ⊞_3 = addition there)
 
-**What remains open:**
+**What remains open for n >= 4:**
 
-The analytic proof of superadditivity. The original argument claimed
-"concavity of 1/Phi_n in cumulants implies superadditivity," but this
-has two errors: (a) concavity + f(0)=0 gives SUBadditivity, not
-superadditivity, and (b) 1/Phi_n is neither globally convex nor concave.
-A correct proof likely needs to exploit the specific bilinear structure
-of the MSS convolution formula or the random matrix interpretation.
+The n=3 proof relies on Phi_3*disc = 18*a_2^2 being constant in a_3.
+This fails at n=4 (the product depends on all coefficients). The ⊞_4
+cross-term (1/6)*a_2*b_2 in c_4 is essential (plain addition fails 29%).
+A proof for n>=4 needs either:
+
+(a) A generalization of the Phi*disc identity that accounts for higher
+    coefficients, or
+
+(b) A direct random-matrix argument via the Haar orbit A+QBQ*, or
+
+(c) A proof via finite free cumulant coordinates (convexity on the
+    real-rooted image of cumulant space).
 
 ### 8. Numerical evidence
 
@@ -227,6 +278,8 @@ Verification scripts:
 - `scripts/verify-p4-inequality.py` (superadditivity + convexity)
 - `scripts/verify-p4-deeper.py` (coefficient addition + MSS structure)
 - `scripts/verify-p4-schur-majorization.py` (Schur/submodularity/paths)
+- `scripts/verify-p4-coefficient-route.py` (coefficient route, disc identity)
+- `scripts/verify-p4-n3-proof.py` (complete n=3 symbolic proof + n=4 exploration)
 
 **Superadditivity test** (2000 random real-rooted polynomial pairs per n):
 

@@ -1,7 +1,7 @@
 # Problem 4 Proof Strategy Skeleton
 
-Date: 2026-02-11  
-Status: Research synthesis only (no complete proof yet)
+Date: 2026-02-11
+Status: n=2 proved (equality), n=3 proved (Cauchy-Schwarz), n>=4 open
 
 ## Goal
 
@@ -113,17 +113,30 @@ occasional failures), but the combined surplus always covers the gap.
 
 **Two candidate proof routes from these findings:**
 
-**(i) Direct coefficient route.** For n=2, the proof works because
-\(1/\Phi_2 = (\text{disc})/4\) is linear in \(a_1^2 - 4a_2\), and the
-\(\boxplus_2\) formula preserves this combination exactly. For n ≥ 3,
-express \(\Phi_n\) in terms of resultants/discriminant-like coefficient
-expressions and show the \(\boxplus_n\) bilinear weights create a surplus.
+**(i) Direct coefficient route — SUCCESSFUL for n=3.**  For n=2, the proof
+works because \(1/\Phi_2 = \text{disc}/4\) is linear in \(a_1^2 - 4a_2\).
+For n=3, the identity \(\Phi_3 \cdot \text{disc} = 18a_2^2\) (centered case)
+reduces the inequality to Titu's lemma (Cauchy-Schwarz). See
+`scripts/verify-p4-n3-proof.py` for the complete symbolic proof.
 
-**(ii) Polynomial-averaging route.** Show that taking roots of
+**For n ≥ 4:** The identity \(\Phi_n \cdot \text{disc} = \text{const} \cdot a_2^2\)
+FAILS — the product depends on \(a_3, a_4\). Additionally \(\boxplus_4\) has a
+cross-term \((1/6)a_2 b_2\) in \(c_4\) even for centered quartics, and this
+cross-term is essential (plain addition fails 29% of the time at n=4).
+
+**(ii) Polynomial-averaging route — still open.**  Show that taking roots of
 \(\mathbb{E}[p_M(x)]\) (polynomial averaging) produces more regular roots
 than eigenvalue averaging \(\mathbb{E}[\text{eigs}(M)]\), and that this
 regularity enhancement controls \(1/\Phi_n\). This is the "why does the
 expected polynomial have lower Coulomb energy?" question.
+
+## Proof Summary
+
+| n | Status | Key identity | Method |
+|---|--------|-------------|--------|
+| 2 | **PROVED** | \(1/\Phi_2 = (a_1^2 - 4a_2)/2\) linear | ⊞_2 preserves disc |
+| 3 | **PROVED** | \(\Phi_3 \cdot \text{disc} = 18a_2^2\) | Titu's lemma |
+| ≥4 | Open | No clean disc identity | Cross-terms essential |
 
 ## Immediate Next Checks — COMPLETED
 
@@ -182,7 +195,34 @@ root coordinates.
   specific structure of how ⊞_n moves roots (regularization of spacing),
   not just the majorization inequality.
 
-**Most promising direction remains:** a Haar/random-matrix argument that
-directly controls Phi_n of the expected characteristic polynomial via
-properties of the unitary orbit A + QBQ*, exploiting that averaging over
-Q regularizes root spacing.
+**Most promising direction for n ≥ 4:** either a Haar/random-matrix argument
+that directly controls Phi_n of the expected characteristic polynomial, or
+a generalization of the Phi_n * disc identity that properly accounts for the
+bilinear cross-terms in ⊞_n at higher degrees.
+
+## Coefficient Route Findings
+
+Verification scripts: `scripts/verify-p4-coefficient-route.py`, `scripts/verify-p4-n3-proof.py`
+
+### The n=3 identity (PROVED)
+
+For centered cubics p(x) = x^3 + a_2*x + a_3 (with a_2 < 0, disc > 0):
+
+    Phi_3 * disc = 18 * a_2^2
+
+This gives 1/Phi_3 = -2*a_2/9 - 3*a_3^2/(2*a_2^2).
+
+Combined with the centering reduction (⊞_n commutes with translation) and
+the fact that ⊞_3 = plain coefficient addition for centered cubics, the
+superadditivity reduces to:
+
+    u^2/s^2 + v^2/t^2 >= (u+v)^2/(s+t)^2
+
+which follows from Titu's lemma + the inequality s^2+t^2 <= (s+t)^2.
+
+### Why n=4 is harder
+
+1. Phi_4 * disc is NOT of the form const * a_2^2 (depends on a_3, a_4)
+2. ⊞_4 for centered quartics: c_4 = a_4 + (1/6)*a_2*b_2 + b_4 (cross-term!)
+3. Plain coefficient addition fails 29% at n=4 (centered quartics)
+4. The cross-term (1/6)*a_2*b_2 is essential for superadditivity
