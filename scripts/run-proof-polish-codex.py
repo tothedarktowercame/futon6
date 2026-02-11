@@ -283,7 +283,7 @@ def main() -> int:
     ap.add_argument("--prompts-out", type=Path, default=DEFAULT_PROMPTS)
     ap.add_argument("--limit", type=int, default=15,
                     help="Max nodes to process (14 nodes + 1 synthesis = 15)")
-    ap.add_argument("--model", default="o3")
+    ap.add_argument("--model", default="gpt-5.3-codex")
     ap.add_argument("--codex-bin", default="codex")
     ap.add_argument("--dry-run", action="store_true",
                     help="Generate prompts only, don't call Codex")

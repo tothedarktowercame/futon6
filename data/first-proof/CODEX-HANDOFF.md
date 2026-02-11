@@ -52,7 +52,7 @@ python3 scripts/proof-wiring-diagram.py
 python3 scripts/run-proof-polish-codex.py --dry-run
 
 # 2. Run through Codex (all 15 prompts)
-python3 scripts/run-proof-polish-codex.py --model o3 --limit 15
+python3 scripts/run-proof-polish-codex.py --limit 15
 
 # 3. Check results
 python3 -c "
