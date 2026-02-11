@@ -223,7 +223,10 @@ of the MSS convolution formula or the random matrix interpretation.
 
 ### 8. Numerical evidence
 
-Verification script: `scripts/verify-p4-inequality.py`
+Verification scripts:
+- `scripts/verify-p4-inequality.py` (superadditivity + convexity)
+- `scripts/verify-p4-deeper.py` (coefficient addition + MSS structure)
+- `scripts/verify-p4-schur-majorization.py` (Schur/submodularity/paths)
 
 **Superadditivity test** (2000 random real-rooted polynomial pairs per n):
 

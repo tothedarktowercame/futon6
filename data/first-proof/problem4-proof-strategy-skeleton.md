@@ -58,12 +58,76 @@ This route is plausible but currently unsupported by theorem-level evidence.
 
 ## Open Lemmas (Current Gaps)
 
-1. A usable monotonicity principle linking \(F=1/\Phi_n\) to known majorization relations.
-2. A submodularity-style inequality directly for \(F\), analogous to largest-root transforms.
+1. ~~A usable monotonicity principle linking \(F=1/\Phi_n\) to known majorization relations.~~
+   **ELIMINATED**: F is not Schur-convex or Schur-concave. Majorization alone
+   does not control F.
+2. ~~A submodularity-style inequality directly for \(F\), analogous to largest-root transforms.~~
+   **ELIMINATED**: F is not submodular in root coordinates (~50% violation rate).
 3. A precise matrix/Haar identity turning \(\Phi_n\) into an expectation-controlled quantity.
+   **STILL OPEN** — this is now the critical path.
+4. (NEW) A **root-regularity** argument: show that ⊞_n increases the uniformity
+   of root spacing in a way that controls 1/Phi_n. This is the qualitative
+   mechanism (unevenly spaced roots have high Coulomb energy), but needs a
+   quantitative formulation.
 
-## Immediate Next Checks
+## Immediate Next Checks — COMPLETED
 
-1. Symbolic \(n=3,4\): compute \(F\) on majorization-comparable root tuples to test Schur behavior.
-2. Numerical path tests: interpolate between \(\lambda(p)+\lambda(q)\) and \(\lambda(p\boxplus_n q)\) and test discrete second differences of \(F\).
-3. Attempt a derived inequality from known submodularity transforms to bound \(F\) from below.
+Verification script: `scripts/verify-p4-schur-majorization.py`
+
+### Check 1: Schur-convexity/concavity (NEGATIVE)
+
+F = 1/Phi_n is **NEITHER Schur-convex NOR Schur-concave** in root coordinates.
+Tested 3000 pairs per n with doubly-stochastic majorization:
+
+| n | Schur-convex violations | Schur-concave violations |
+|---|------------------------|-------------------------|
+| 3 | 640 (21.3%)           | 2355 (78.5%)            |
+| 4 | 904 (30.1%)           | 2094 (69.8%)            |
+| 5 | 954 (31.8%)           | 2043 (68.1%)            |
+
+F **tends** toward Schur-convex behavior (more spread => larger F) but with
+significant exceptions. On the symmetric subfamily (-s, 0, s), F = 2s²/9 IS
+monotone increasing, but asymmetric root configurations break this — e.g.,
+(-2, 0.5, 1.5) has spread 6.5 but F=0.40, while (-1.5, 0, 1.5) has spread
+4.5 but F=0.50.
+
+**Key insight:** F depends on root REGULARITY (uniformity of spacing), not
+just total spread. Unevenly spaced roots have high Coulomb energy (close
+pairs dominate), giving small 1/Phi_n. This is exactly the pattern where
+⊞_n helps: free convolution regularizes root spacing.
+
+### Check 2: Interpolation paths (MIXED)
+
+Along the majorization path from λ(p⊞q) to λ(p)+λ(q):
+
+| n | monotone increasing | monotone decreasing | neither |
+|---|--------------------|--------------------|---------|
+| 3 | 833 (83.3%)        | 128 (12.8%)        | 39 (3.9%) |
+| 4 | 660 (66.0%)        | 196 (19.6%)        | 144 (14.4%) |
+| 5 | 532 (53.2%)        | 181 (18.1%)        | 287 (28.7%) |
+
+F mostly increases from convolution roots to componentwise sum (consistent
+with rough Schur-convexity along these paths), but this weakens at larger n.
+Path second differences are mixed — no clean convexity/concavity.
+
+### Check 3: Submodularity (NEGATIVE)
+
+~49-50% violations for all n — effectively random. F is NOT submodular in
+root coordinates.
+
+### Revised Assessment
+
+**Routes A and B+C both face obstacles from these results:**
+
+- **Route A (cumulant convexity):** Global Schur-convexity fails, so any
+  convexity argument must be domain-restricted (to the image of real-rooted
+  polynomials under the cumulant map).
+- **Route B+C (majorization):** The majorization λ(p⊞q) ≺ λ(p)+λ(q) alone
+  is insufficient because F is not Schur-monotone. The proof MUST use the
+  specific structure of how ⊞_n moves roots (regularization of spacing),
+  not just the majorization inequality.
+
+**Most promising direction remains:** a Haar/random-matrix argument that
+directly controls Phi_n of the expected characteristic polynomial via
+properties of the unitary orbit A + QBQ*, exploiting that averaging over
+Q regularizes root spacing.
