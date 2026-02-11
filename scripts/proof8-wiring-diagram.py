@@ -1,205 +1,84 @@
 #!/usr/bin/env python3
-"""Generate a wiring diagram for the Problem 8 (Lagrangian smoothing) proof.
+"""Generate a wiring diagram for Problem 8 (Lagrangian smoothing) v2.
 
-Usage:
-    python3 scripts/proof8-wiring-diagram.py
+v2 incorporates the symplectic direct sum decomposition argument.
 """
-
-import argparse
-import json
-import os
-import sys
-
+import argparse, json, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
 from futon6.thread_performatives import (
-    ThreadNode, ThreadEdge, ThreadWiringDiagram,
-    diagram_to_dict, diagram_stats,
+    ThreadNode, ThreadEdge, ThreadWiringDiagram, diagram_to_dict, diagram_stats,
 )
 
-
-def build_problem8_proof_diagram() -> ThreadWiringDiagram:
+def build_proof_diagram() -> ThreadWiringDiagram:
     diagram = ThreadWiringDiagram(thread_id="first-proof-p8")
-
-    nodes = [
-        ThreadNode(
-            id="p8-problem", node_type="question", post_id=8,
-            body_text=(
-                "Polyhedral Lagrangian surface K in R^4, 4 faces per vertex. "
-                "Does K necessarily have a Lagrangian smoothing "
-                "(Hamiltonian isotopy to smooth Lagrangian)?"
-            ),
-            score=0, creation_date="2026-02-11",
-        ),
-        ThreadNode(
-            id="p8-s1", node_type="answer", post_id=801,
-            body_text=(
-                "Lagrangian Grassmannian Lambda(2) = U(2)/O(2), pi_1 = Z "
-                "(Maslov class). Each face in a Lagrangian plane, edges are "
-                "creases, vertices are multi-plane singularities."
-            ),
-            score=0, creation_date="2026-02-11", parent_post_id=8,
-        ),
-        ThreadNode(
-            id="p8-s2", node_type="answer", post_id=802,
-            body_text=(
-                "4-valent vertex structure: 4 faces pair into two 'sheets' "
-                "(opposite faces). Two sheets cross transversally at vertex, "
-                "forming a Lagrangian crossing (transverse double point)."
-            ),
-            score=0, creation_date="2026-02-11", parent_post_id=8,
-        ),
-        ThreadNode(
-            id="p8-s3", node_type="answer", post_id=803,
-            body_text=(
-                "Maslov index of vertex loop L_1->L_2->L_3->L_4->L_1 is 0. "
-                "Transverse Lagrangian crossing has vanishing Maslov index. "
-                "The paired-sheet decomposition inherits this."
-            ),
-            score=0, creation_date="2026-02-11", parent_post_id=8,
-        ),
-        ThreadNode(
-            id="p8-s4", node_type="answer", post_id=804,
-            body_text=(
-                "Lagrangian surgery (Polterovich 1991, Lalonde-Sikorav 1991): "
-                "transverse double point of two Lagrangian disks can be "
-                "resolved by a smooth Lagrangian neck. Via generating function."
-            ),
-            score=0, creation_date="2026-02-11", parent_post_id=8,
-        ),
-        ThreadNode(
-            id="p8-s4a", node_type="comment", post_id=8041,
-            body_text=(
-                "Surgery in Darboux coords: L_1 = {y=0}, L_2 transverse. "
-                "Replace crossing with smooth y = grad S(x) neck; "
-                "omega|_{graph} = 0 automatically."
-            ),
-            score=0, creation_date="2026-02-11", parent_post_id=804,
-        ),
-        ThreadNode(
-            id="p8-s5", node_type="answer", post_id=805,
-            body_text=(
-                "Application: resolve vertices (Lagrangian surgery on paired "
-                "sheets), smooth edges (generating function interpolation), "
-                "compose Hamiltonian isotopies for global K_t."
-            ),
-            score=0, creation_date="2026-02-11", parent_post_id=8,
-        ),
-        ThreadNode(
-            id="p8-s5a", node_type="comment", post_id=8051,
-            body_text=(
-                "4-face condition is essential: odd valence prevents "
-                "sheet pairing; vertex Maslov index may be nonzero, "
-                "obstructing Lagrangian surgery."
-            ),
-            score=0, creation_date="2026-02-11", parent_post_id=805,
-        ),
-        ThreadNode(
-            id="p8-s6", node_type="answer", post_id=806,
-            body_text=(
-                "Conclusion: Yes, smoothing exists. 4-face => paired sheets "
-                "=> transverse crossing => Maslov 0 => surgery unobstructed "
-                "=> Hamiltonian isotopy to smooth Lagrangian."
-            ),
-            score=0, creation_date="2026-02-11", parent_post_id=8,
-        ),
+    diagram.nodes = [
+        ThreadNode(id="p8-problem", node_type="question", post_id=8,
+            body_text="Polyhedral Lagrangian K in R^4, 4 faces per vertex. Does K have a Lagrangian smoothing?",
+            score=0, creation_date="2026-02-11"),
+        ThreadNode(id="p8-s1", node_type="answer", post_id=801,
+            body_text="Lambda(2) = U(2)/O(2), pi_1 = Z (Maslov class). Each face Lagrangian, edges are creases, vertices are multi-plane singularities.",
+            score=0, creation_date="2026-02-11", parent_post_id=8),
+        ThreadNode(id="p8-s2", node_type="answer", post_id=802,
+            body_text="Edge-sharing: L_i = span(e_{i-1,i}, e_{i,i+1}). Lagrangian condition: omega(e_{i-1,i}, e_{i,i+1}) = 0 for each face. This kills 4 of 6 omega entries in edge basis.",
+            score=0, creation_date="2026-02-11", parent_post_id=8),
+        ThreadNode(id="p8-s3", node_type="answer", post_id=803,
+            body_text="SYMPLECTIC DIRECT SUM: remaining omega entries are a=omega(e1,e3), b=omega(e2,e4). In basis (e1,e3,e2,e4), omega is block diagonal. R^4 = V1 ⊕ V2 with V1=span(opposite edges).",
+            score=0, creation_date="2026-02-11", parent_post_id=8),
+        ThreadNode(id="p8-s4", node_type="answer", post_id=804,
+            body_text="Each L_i = (line in V1) ⊕ (line in V2). Maslov loop decomposes: mu = mu1 + mu2. Each mu_j = winding number in RP^1. Both trace back-and-forth (not winding). mu = 0 exactly.",
+            score=0, creation_date="2026-02-11", parent_post_id=8),
+        ThreadNode(id="p8-s5", node_type="answer", post_id=805,
+            body_text="Lagrangian surgery (Polterovich 1991): transverse crossing with Maslov 0 resolved by smooth neck. Darboux coords adapted to V1 ⊕ V2. Neck via generating function y = grad S(x).",
+            score=0, creation_date="2026-02-11", parent_post_id=8),
+        ThreadNode(id="p8-s6", node_type="answer", post_id=806,
+            body_text="Global smoothing: resolve vertices (surgery), smooth edges (generating function interpolation), compose Hamiltonian isotopies for K_t.",
+            score=0, creation_date="2026-02-11", parent_post_id=8),
+        ThreadNode(id="p8-s7", node_type="answer", post_id=807,
+            body_text="3-face impossible: 3 Lagrangian faces need omega=0 on all edge pairs (all adjacent = all pairs for 3). 3 isotropic vectors can't span 3D in R^4 (max isotropic dim = 2).",
+            score=0, creation_date="2026-02-11", parent_post_id=8),
+        ThreadNode(id="p8-c1", node_type="comment", post_id=8011,
+            body_text="Numerical: 998/998 valid 4-valent configs give mu=0. Without edge-sharing, only 55% give mu=0. The constraint is essential, not generic.",
+            score=0, creation_date="2026-02-11", parent_post_id=804),
     ]
-
-    edges = [
-        ThreadEdge(
-            source="p8-s1", target="p8-problem",
-            edge_type="clarify",
-            evidence="Lagrangian Grassmannian and Maslov class setup",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p8-s2", target="p8-s1",
-            edge_type="reform",
-            evidence="4 faces pair into two crossing sheets at each vertex",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p8-s3", target="p8-s2",
-            edge_type="assert",
-            evidence="Maslov index of transverse crossing is 0",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p8-s4", target="p8-problem",
-            edge_type="assert",
-            evidence="Lagrangian surgery resolves transverse double points",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p8-s4a", target="p8-s4",
-            edge_type="exemplify",
-            evidence="Darboux coordinates construction of surgery neck",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p8-s5", target="p8-s4",
-            edge_type="assert",
-            evidence="Compose vertex surgery + edge smoothing for global K_t",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p8-s5", target="p8-s3",
-            edge_type="reference",
-            evidence="Maslov 0 ensures surgery is unobstructed",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p8-s5a", target="p8-s5",
-            edge_type="challenge",
-            evidence="Odd valence breaks pairing; obstruction possible",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p8-s6", target="p8-problem",
-            edge_type="assert",
-            evidence="Yes: 4-face => paired sheets => surgery => smoothing",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p8-s6", target="p8-s5",
-            edge_type="reference",
-            evidence="Full smoothing pipeline from vertex + edge resolution",
-            detection="structural",
-        ),
+    diagram.edges = [
+        ThreadEdge(source="p8-s1", target="p8-problem", edge_type="clarify",
+            evidence="Lagrangian Grassmannian and Maslov class setup", detection="structural"),
+        ThreadEdge(source="p8-s2", target="p8-s1", edge_type="reform",
+            evidence="Edge-sharing kills omega entries in edge basis", detection="structural"),
+        ThreadEdge(source="p8-s3", target="p8-s2", edge_type="assert",
+            evidence="Block diagonal omega → symplectic direct sum V1 ⊕ V2", detection="structural"),
+        ThreadEdge(source="p8-s4", target="p8-s3", edge_type="assert",
+            evidence="Decomposed Maslov loop has winding 0 in each factor", detection="structural"),
+        ThreadEdge(source="p8-s5", target="p8-s4", edge_type="reference",
+            evidence="Maslov 0 is the hypothesis for Polterovich surgery", detection="structural"),
+        ThreadEdge(source="p8-s5", target="p8-problem", edge_type="assert",
+            evidence="Lagrangian surgery resolves transverse double points", detection="structural"),
+        ThreadEdge(source="p8-s6", target="p8-s5", edge_type="assert",
+            evidence="Compose vertex surgery + edge smoothing for global K_t", detection="structural"),
+        ThreadEdge(source="p8-s6", target="p8-problem", edge_type="assert",
+            evidence="Yes: 4-face → V1⊕V2 → Maslov 0 → surgery → smoothing", detection="structural"),
+        ThreadEdge(source="p8-s7", target="p8-s3", edge_type="challenge",
+            evidence="3-face: isotropic dimension bound prevents non-degenerate vertex", detection="structural"),
+        ThreadEdge(source="p8-c1", target="p8-s4", edge_type="exemplify",
+            evidence="998/998 numerical verification; comparison with non-edge-sharing", detection="classical"),
     ]
-
-    diagram.nodes = nodes
-    diagram.edges = edges
     return diagram
-
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", "-o",
-                        default="data/first-proof/problem8-wiring.json")
+    parser.add_argument("--output", "-o", default="data/first-proof/problem8-wiring.json")
     parser.add_argument("--quiet", "-q", action="store_true")
     args = parser.parse_args()
-
-    diagram = build_problem8_proof_diagram()
-
+    diagram = build_proof_diagram()
     if not args.quiet:
         stats = diagram_stats(diagram)
         print(f"=== Proof Wiring Diagram: {diagram.thread_id} ===")
         print(f"{stats['n_nodes']} nodes, {stats['n_edges']} edges")
         print(f"Edge types: {stats['edge_types']}")
-        print()
-        for edge in diagram.edges:
-            arrow = {"challenge": "~~>", "reform": "=>", "clarify": "-->",
-                     "assert": "==>", "exemplify": "..>", "reference": "-~>",
-                     "agree": "++>"}[edge.edge_type]
-            print(f"  {edge.source:12s} {arrow} {edge.target:12s}  [{edge.edge_type}]")
-
     os.makedirs(os.path.dirname(args.output), exist_ok=True)
-    out = diagram_to_dict(diagram)
     with open(args.output, "w") as f:
-        json.dump(out, f, indent=2, ensure_ascii=False)
+        json.dump(diagram_to_dict(diagram), f, indent=2, ensure_ascii=False)
     print(f"\nWrote {args.output}")
-
 
 if __name__ == "__main__":
     main()
