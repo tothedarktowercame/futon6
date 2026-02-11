@@ -1,0 +1,410 @@
+{
+  "thread_id": "first-proof-p5",
+  "nodes": [
+    {
+      "id": "p5-problem",
+      "node_type": "question",
+      "post_id": 5,
+      "body_text": "Define O-slice filtration for incomplete transfer system O and characterize O-slice connectivity of connective G-spectrum via geometric fixed points.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": null
+    },
+    {
+      "id": "p5-s1",
+      "node_type": "answer",
+      "post_id": 501,
+      "body_text": "Classical slice filtration (HHR): tau^{>n}_G localizing subcategories. Slice >= n iff Phi^H X is (n|G/H|-1)-connected for all H <= G.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 5
+    },
+    {
+      "id": "p5-s2",
+      "node_type": "answer",
+      "post_id": 502,
+      "body_text": "N_infinity operad O encodes partial commutative ring structure. Transfer system T_O specifies which norm maps N_H^K exist.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 5
+    },
+    {
+      "id": "p5-s3",
+      "node_type": "answer",
+      "post_id": 503,
+      "body_text": "O-slice cells: G_+ wedge_H S^{n rho_H^O} for H in T_O. rho_H^O = O-regular representation. Filtration coarser than classical when O incomplete.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 5
+    },
+    {
+      "id": "p5-s4",
+      "node_type": "answer",
+      "post_id": 504,
+      "body_text": "Theorem: X is O-slice >= n iff Phi^H X is (n * d_H^O - 1)-connected for all H in T_O, where d_H^O = dim_R(rho_H^O)/|H|.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 5
+    },
+    {
+      "id": "p5-s5",
+      "node_type": "answer",
+      "post_id": 505,
+      "body_text": "Proof: Slice cells detect connectivity (5a). Tom Dieck splitting gives Phi^H(G_+ wedge_H S^V) = S^{dim(V)} (5b). Connectivity equivalence (5c). Only H in T_O contribute (5d).",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 5
+    },
+    {
+      "id": "p5-s6",
+      "node_type": "answer",
+      "post_id": 506,
+      "body_text": "Special cases: Complete T -> classical HHR (d_H=1). Trivial T -> Postnikov filtration (only H=e). C_p intermediate cases interpolate.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 5
+    }
+  ],
+  "edges": [
+    {
+      "source": "p5-s1",
+      "target": "p5-problem",
+      "edge_type": "clarify",
+      "evidence": "Classical HHR slice filtration as baseline",
+      "detection": "structural"
+    },
+    {
+      "source": "p5-s2",
+      "target": "p5-problem",
+      "edge_type": "clarify",
+      "evidence": "N_infinity operads and incomplete transfer systems",
+      "detection": "structural"
+    },
+    {
+      "source": "p5-s3",
+      "target": "p5-s2",
+      "edge_type": "reform",
+      "evidence": "Recast transfer system as O-slice cells with O-regular representations",
+      "detection": "structural"
+    },
+    {
+      "source": "p5-s3",
+      "target": "p5-s1",
+      "edge_type": "reform",
+      "evidence": "Modify classical slice cells to account for incomplete transfers",
+      "detection": "structural"
+    },
+    {
+      "source": "p5-s4",
+      "target": "p5-problem",
+      "edge_type": "assert",
+      "evidence": "Main theorem: O-slice >= n iff Phi^H X (n*d_H^O - 1)-connected for H in T_O",
+      "detection": "structural"
+    },
+    {
+      "source": "p5-s4",
+      "target": "p5-s3",
+      "edge_type": "reference",
+      "evidence": "Uses O-slice cells and d_H^O from construction",
+      "detection": "structural"
+    },
+    {
+      "source": "p5-s5",
+      "target": "p5-s4",
+      "edge_type": "assert",
+      "evidence": "Proof via tom Dieck splitting and cell detection",
+      "detection": "structural"
+    },
+    {
+      "source": "p5-s5",
+      "target": "p5-s1",
+      "edge_type": "reference",
+      "evidence": "Parallels classical HHR proof structure",
+      "detection": "structural"
+    },
+    {
+      "source": "p5-s6",
+      "target": "p5-s4",
+      "edge_type": "exemplify",
+      "evidence": "Complete, trivial, and C_p cases verify theorem reduces correctly",
+      "detection": "structural"
+    },
+    {
+      "source": "p5-s6",
+      "target": "p5-s1",
+      "edge_type": "reference",
+      "evidence": "Complete case recovers classical HHR criterion",
+      "detection": "structural"
+    }
+  ],
+  "hyperedges": [
+    {
+      "hx/id": "first-proof-p5:edge-000",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s1",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Classical HHR slice filtration as baseline",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p5:edge-001",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "N_infinity operads and incomplete transfer systems",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p5:edge-002",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s3",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Recast transfer system as O-slice cells with O-regular representations",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p5:edge-003",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s3",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Modify classical slice cells to account for incomplete transfers",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p5:edge-004",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Main theorem: O-slice >= n iff Phi^H X (n*d_H^O - 1)-connected for H in T_O",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p5:edge-005",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses O-slice cells and d_H^O from construction",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p5:edge-006",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Proof via tom Dieck splitting and cell detection",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p5:edge-007",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Parallels classical HHR proof structure",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p5:edge-008",
+      "hx/type": "thread/exemplify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Complete, trivial, and C_p cases verify theorem reduces correctly",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "exemplify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p5:edge-009",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p5-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p5-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Complete case recovers classical HHR criterion",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    }
+  ],
+  "stats": {
+    "n_nodes": 7,
+    "n_edges": 10,
+    "node_types": {
+      "question": 1,
+      "answer": 6
+    },
+    "edge_types": {
+      "clarify": 2,
+      "reform": 2,
+      "assert": 2,
+      "reference": 3,
+      "exemplify": 1
+    },
+    "detection_types": {
+      "structural": 10
+    }
+  }
+}

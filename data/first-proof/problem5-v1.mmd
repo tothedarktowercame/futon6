@@ -1,0 +1,33 @@
+flowchart TD
+    %% first-proof-p5
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p5-problem{{"p5-problem<br/>Define O-slice filtration for incomplete transfer sy..."}}
+    p5-s1["p5-s1<br/>Classical slice filtration (HHR): tau^{>n}_G localiz..."]
+    p5-s2["p5-s2<br/>N_infinity operad O encodes partial commutative ring..."]
+    p5-s3["p5-s3<br/>O-slice cells: G_+ wedge_H S^{n rho_H^O} for H in T_..."]
+    p5-s4["p5-s4<br/>Theorem: X is O-slice >= n iff Phi^H X is (n * d_H^O..."]
+    p5-s5["p5-s5<br/>Proof: Slice cells detect connectivity (5a). Tom Die..."]
+    p5-s6["p5-s6<br/>Special cases: Complete T -> classical HHR (d_H=1). ..."]
+
+    %% Edges
+    p5-s1 -->|"🔵 clarify: Classical HHR slice filtration as bas..."| p5-problem
+    p5-s2 -->|"🔵 clarify: N_infinity operads and incomplete tra..."| p5-problem
+    p5-s3 -->|"🟡 reform: Recast transfer system as O-slice cel..."| p5-s2
+    p5-s3 -->|"🟡 reform: Modify classical slice cells to accou..."| p5-s1
+    p5-s4 ==>|"🟢 assert: Main theorem: O-slice >= n iff Phi^H ..."| p5-problem
+    p5-s4 -->|"⚪ reference: Uses O-slice cells and d_H^O from con..."| p5-s3
+    p5-s5 ==>|"🟢 assert: Proof via tom Dieck splitting and cel..."| p5-s4
+    p5-s5 -->|"⚪ reference: Parallels classical HHR proof structure"| p5-s1
+    p5-s6 -.->|"🟣 exemplify: Complete, trivial, and C_p cases veri..."| p5-s4
+    p5-s6 -->|"⚪ reference: Complete case recovers classical HHR ..."| p5-s1
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p5-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p5-s1,p5-s2,p5-s3,p5-s4,p5-s5,p5-s6 answer
