@@ -1,0 +1,32 @@
+flowchart TD
+    %% first-proof-p3
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p3-problem{{"p3-problem<br/>Nontrivial Markov chain on S_n(lambda) with stationa..."}}
+    p3-s1["p3-s1<br/>State space S_n(lambda) = n! rearrangements of lambd..."]
+    p3-s2["p3-s2<br/>Multispecies ASEP: nearest-neighbor swaps of adjacen..."]
+    p3-s3["p3-s3<br/>Hecke algebra rates: T_i generator gives M_i = (T_i ..."]
+    p3-s4["p3-s4<br/>Stationarity from exchange relations: T_i F*_mu = c ..."]
+    p3-s5["p3-s5<br/>Nontriviality: rates depend on (t, x_i), not F*_mu v..."]
+    p3-s6["p3-s6<br/>Conclusion: Yes. Multispecies ASEP with Hecke algebr..."]
+
+    %% Edges
+    p3-s1 -->|"🔵 clarify: S_n(lambda) = n! states; q=1 gives Ha..."| p3-problem
+    p3-s2 -->|"🟡 reform: Recast as multispecies exclusion proc..."| p3-problem
+    p3-s3 -->|"🔵 clarify: Hecke algebra gives transition rates"| p3-s2
+    p3-s4 ==>|"🟢 assert: Exchange relations + Hecke identity =..."| p3-s3
+    p3-s4 -->|"⚪ reference: Uses q=1 simplification of exchange c..."| p3-s1
+    p3-s5 ==>|"🟢 assert: Rates are local functions of (t, x_i)..."| p3-s2
+    p3-s6 ==>|"🟢 assert: Yes: multispecies ASEP with Hecke rates"| p3-problem
+    p3-s6 -->|"⚪ reference: Stationarity from exchange relations"| p3-s4
+    p3-s6 -->|"⚪ reference: Nontriviality from local rates"| p3-s5
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p3-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p3-s1,p3-s2,p3-s3,p3-s4,p3-s5,p3-s6 answer
