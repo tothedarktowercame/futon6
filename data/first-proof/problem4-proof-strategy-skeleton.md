@@ -64,11 +64,66 @@ This route is plausible but currently unsupported by theorem-level evidence.
 2. ~~A submodularity-style inequality directly for \(F\), analogous to largest-root transforms.~~
    **ELIMINATED**: F is not submodular in root coordinates (~50% violation rate).
 3. A precise matrix/Haar identity turning \(\Phi_n\) into an expectation-controlled quantity.
-   **STILL OPEN** — this is now the critical path.
+   **PARTIALLY RESOLVED** — see Haar orbit findings below.
 4. (NEW) A **root-regularity** argument: show that ⊞_n increases the uniformity
    of root spacing in a way that controls 1/Phi_n. This is the qualitative
    mechanism (unevenly spaced roots have high Coulomb energy), but needs a
    quantitative formulation.
+
+## Haar Orbit Findings (Lemma 3 exploration)
+
+Verification scripts: `scripts/verify-p4-haar-identity.py`, `scripts/verify-p4-haar-n2.py`
+
+### Key discovery: polynomial averaging enhances root regularity
+
+For \(M = A + QBQ^*\) with \(Q\) Haar-random unitary:
+
+| n | \(1/\Phi(\text{conv}) / \mathbb{E}[1/\Phi(M)]\) | std |
+|---|--------------------------------------------------|-----|
+| 2 | 1.002 | 0.020 |
+| 3 | 1.111 | 0.091 |
+| 4 | 1.259 | 0.092 |
+| 5 | 1.351 | 0.082 |
+
+**At n=2:** \(1/\Phi(p \boxplus_2 q) = \mathbb{E}_Q[1/\Phi(A+QBQ^*)]\) exactly.
+Both equal \(1/\Phi(p) + 1/\Phi(q)\). This works because \(1/\Phi_2\) is
+linear in the discriminant \(a_1^2 - 4a_2\), and \(\boxplus_2\) preserves
+this exactly.
+
+**At n ≥ 3:** \(1/\Phi(\text{conv}) > \mathbb{E}[1/\Phi(M)]\) systematically.
+The roots of the expected characteristic polynomial have LOWER Coulomb energy
+(more regular spacing) than the average realization's eigenvalues. The ratio
+grows with n.
+
+### Three-way ordering
+
+In most trials:
+\[
+1/\Phi(p \boxplus_n q) \;\ge\; \mathbb{E}_Q[1/\Phi(A+QBQ^*)] \;\gtrsim\; 1/\Phi(p) + 1/\Phi(q)
+\]
+- First inequality holds ~88% (n=3) to ~99% (n=4) of the time
+- Second inequality holds ~77% (n=3) to ~90% (n=4) of the time
+- The TARGET inequality (first ≥ last) holds 100% always
+- Correlation between \(1/\Phi(\text{conv})\) and \(\mathbb{E}[1/\Phi]\) is 0.99
+
+### What this means for the proof
+
+Neither step of the decomposition is individually sufficient (both have
+occasional failures), but the combined surplus always covers the gap.
+
+**Two candidate proof routes from these findings:**
+
+**(i) Direct coefficient route.** For n=2, the proof works because
+\(1/\Phi_2 = (\text{disc})/4\) is linear in \(a_1^2 - 4a_2\), and the
+\(\boxplus_2\) formula preserves this combination exactly. For n ≥ 3,
+express \(\Phi_n\) in terms of resultants/discriminant-like coefficient
+expressions and show the \(\boxplus_n\) bilinear weights create a surplus.
+
+**(ii) Polynomial-averaging route.** Show that taking roots of
+\(\mathbb{E}[p_M(x)]\) (polynomial averaging) produces more regular roots
+than eigenvalue averaging \(\mathbb{E}[\text{eigs}(M)]\), and that this
+regularity enhancement controls \(1/\Phi_n\). This is the "why does the
+expected polynomial have lower Coulomb energy?" question.
 
 ## Immediate Next Checks — COMPLETED
 
