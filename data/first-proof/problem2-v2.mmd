@@ -1,0 +1,45 @@
+flowchart TD
+    %% first-proof-p2 v2 — post-reviewer fixes
+    %% Changes from v1: new node p2-s3a (fixed-W spanning lemma),
+    %% updated p2-s3 (GL_n-restriction lemma replacing bare Kirillov injectivity),
+    %% p2-s3a (GL_n-equivariance argument replacing orbit claim),
+    %% p2-s2 (PID algebra), p2-s4 (references s3a), p2-s5 (Casselman-Shalika),
+    %% 2 new edges (s3a->s3, s4->s3a)
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p2-problem{{"p2-problem<br/>Must there exist W in W(Pi, psi^{-1}) such that for ..."}}
+    p2-s1["p2-s1<br/>Rankin-Selberg theory: I(s,W,V) converges for Re(s)>..."]
+    p2-s2["p2-s2<br/>Finite/nonzero for all s ⇔ monomial c·q^{-ks}. Frac..."]
+    p2-s3["p2-s3<br/>u_Q twist: GL_n-restriction lemma (BZ 1976 Thm 5.21..."]
+    p2-s3a["p2-s3a<br/>Fixed-W spanning: GL_n-equivariance of zeta integra..."]
+    p2-s4["p2-s4<br/>Nondegeneracy: nonzero phi_Q ⇒ integrals span full ..."]
+    p2-s5["p2-s5<br/>W_0 = new vector. Casselman-Shalika support: N·T^+·K..."]
+    p2-s6["p2-s6<br/>Conclusion: Yes. New vector W_0 is universal test ve..."]
+    p2-c1(["p2-c1<br/>Without u_Q twist, integral degenerates for highly r..."])
+
+    %% Edges
+    p2-s1 -->|"🔵 clarify: Rankin-Selberg integral theory and fr..."| p2-problem
+    p2-s2 -->|"🔵 clarify: Translates 'finite and nonzero for al..."| p2-s1
+    p2-s3 -->|"🟡 reform: Recast as Kirillov model nondegenerac..."| p2-problem
+    p2-s3a ==>|"🟢 assert: Fixed-W spanning: GL_n-equivariance +..."| p2-s3
+    p2-s4 -->|"⚪ reference: Nondegeneracy for fixed W uses the fi..."| p2-s3a
+    p2-s4 ==>|"🟢 assert: JPSS nondegeneracy: nonzero Kirillov ..."| p2-s3
+    p2-s4 -->|"⚪ reference: Uses fractional ideal structure from ..."| p2-s1
+    p2-s5 ==>|"🟢 assert: New vector satisfies nondegeneracy; u..."| p2-s4
+    p2-s5 -->|"⚪ reference: Uses monomial condition to choose V"| p2-s2
+    p2-s6 ==>|"🟢 assert: Yes: new vector is universal test vec..."| p2-problem
+    p2-s6 -->|"⚪ reference: Universality from new vector + conduc..."| p2-s5
+    p2-s6 -->|"⚪ reference: Nondegeneracy guarantees V exists for..."| p2-s4
+    p2-c1 -->|"🔵 clarify: Explains why u_Q twist is necessary: ..."| p2-s3
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p2-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p2-s1,p2-s2,p2-s3,p2-s3a,p2-s4,p2-s5,p2-s6 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p2-c1 comment

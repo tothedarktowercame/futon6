@@ -27,8 +27,10 @@ universal test vector, with the u_Q twist compensating for the conductor of pi.
 
 **Confidence: Medium-high.** The argument combines standard Rankin-Selberg
 theory (JPSS) with the Bernstein-Zelevinsky theory of the Kirillov model.
-The key nondegeneracy claim (Section 3a) is established via the irreducibility
-of the Kirillov model and the PID structure of the fractional ideal ring.
+The key nondegeneracy claim (Section 3a) uses GL_n-equivariance of the
+zeta-integral pairing together with irreducibility of the Kirillov model
+(any nonzero function generates the full module under GL_n-translates)
+and the PID structure of the fractional ideal ring.
 The "nonzero for all s" condition reduces to explicit Laurent polynomial
 algebra (Section 2).
 
@@ -84,26 +86,54 @@ P_{n+1} gives the Kirillov model, and the function:
 
 lies in the Kirillov model of Pi restricted to GL_n.
 
-Since Pi is generic and W is nonzero, R(u_Q)W is nonzero for all Q: right
-translation by the unipotent element u_Q preserves W(Pi, psi^{-1}) (the
-Whittaker model is stable under right translation by the unipotent radical
-of the mirabolic). More precisely, phi_Q is nonzero as a function on GL_n
-because the restriction map from the Whittaker model to the Kirillov model
-is injective for generic representations:
+We need phi_Q to be nonzero as a function on GL_n. This requires two
+separate facts:
 
-**Lemma (Kirillov injectivity).** For generic Pi, the map
-W -> W|_{P_{n+1}} from W(Pi, psi^{-1}) to the Kirillov model (restriction
-to the mirabolic subgroup P_{n+1} = GL_n ⋉ F^n) is injective.
+**Fact 1: R(u_Q)W is nonzero in W(Pi, psi^{-1}).** Right translation by
+u_Q preserves the Whittaker model (since u_Q lies in the unipotent radical
+of the standard maximal parabolic, which normalizes psi). The map
+W → R(u_Q)W is a linear automorphism of W(Pi, psi^{-1}) (with inverse
+R(u_Q^{-1})), so R(u_Q)W ≠ 0 whenever W ≠ 0.
 
-*Proof.* This is Bernstein-Zelevinsky (1976), Theorem 5.21 (see also
-Cogdell, *Lectures on L-functions*, 2004, Section 3.1). For a generic
-irreducible admissible Pi, the Whittaker model embeds faithfully into the
-space of functions on the mirabolic via restriction. In particular, a
-nonzero W in W(Pi, psi^{-1}) restricts to a nonzero function on P_{n+1},
-and therefore phi_Q(g) = W(diag(g,1) u_Q) is nonzero as a function of
-g in GL_n. ∎
+**Fact 2: If W' ≠ 0 in the Whittaker model, then g → W'(diag(g,1)) is
+nonzero as a function on GL_n.** This does NOT follow from Kirillov
+injectivity alone (which only gives W'|_{P_{n+1}} ≠ 0 on the full
+mirabolic, not on the specific subgroup diag(GL_n, 1)). The correct
+argument uses the Bernstein-Zelevinsky theory of the Kirillov model
+more precisely:
 
-Therefore phi_Q is a nonzero function in the Kirillov model for every Q.
+**Lemma (GL_n-restriction).** For generic irreducible Pi, every nonzero
+W' in W(Pi, psi^{-1}) satisfies: the function g → W'(diag(g,1)) is
+nonzero on GL_n(F).
+
+*Proof.* By Bernstein-Zelevinsky (1976), Theorem 5.21, the Kirillov model
+K(Pi) (the space of restrictions of Whittaker functions to P_{n+1}) contains
+the space C_c^infty(N_n\GL_n) of compactly supported smooth functions on
+N_n\GL_n(F) as a subspace. The mirabolic P_{n+1} = GL_n ⋉ F^n acts on
+K(Pi), and GL_n embeds in P_{n+1} via g → diag(g,1).
+
+Suppose W'(diag(g,1)) = 0 for all g in GL_n. Since W' is in the Whittaker
+model, W'(pk) = psi(p) W'(k) for p in N_{n+1}, so W' is determined by its
+values on coset representatives. The mirabolic P_{n+1} decomposes as a
+disjoint union of GL_n-cosets: P_{n+1} = ∐_v GL_n · n(v) where n(v) are
+representatives for the F^n factor. If W'|_{GL_n} = 0, then by the
+psi-equivariance, W'(g · n(v)) = W'(g) · (character factor depending on v).
+For v = 0 this gives W'|_{GL_n} = 0, but for v ≠ 0, the value
+W'(diag(g,1) · n(v)) involves W' evaluated at different mirabolic elements.
+The key point: the GL_n-representation on K(Pi)|_{GL_n} is the Kirillov
+model as a GL_n-module, and by BZ Corollary 5.22, this contains
+C_c^infty(N_n\GL_n). A nonzero element of C_c^infty(N_n\GL_n) is certainly
+nonzero on GL_n ⊂ P_{n+1} (it IS a function on N_n\GL_n). Since W' ≠ 0
+implies W'|_{P_{n+1}} ≠ 0 (Kirillov injectivity, BZ Theorem 5.21), and
+W'|_{P_{n+1}} lies in K(Pi), it has a nonzero GL_n-translate that lies in
+C_c^infty(N_n\GL_n). Explicitly: there exists g_0 in GL_n such that
+R(g_0)(W'|_{P_{n+1}}) has nonzero restriction to the identity coset of
+N_n\GL_n. But R(g_0)(W'|_{P_{n+1}})(g) = W'(diag(g g_0, 1)), which is
+nonzero for some g. This means g → W'(diag(g, 1)) is nonzero (take g · g_0
+at the nonvanishing point). ∎
+
+Applying Facts 1 and 2 to W' = R(u_Q)W: phi_Q(g) = R(u_Q)W(diag(g,1))
+is nonzero as a function on GL_n for every Q.
 
 ### 3a. Nondegeneracy for fixed W (closing the universality gap)
 
@@ -136,18 +166,39 @@ rank 1. Let L_phi(s) * C[q_F^s, q_F^{-s}] be this submodule, where L_phi
 divides L(s, Pi x pi).
 
 To show L_phi = L(s, Pi x pi) (i.e., fixed phi generates the FULL ideal):
-the JPSS theory shows that the full ideal is generated by letting both W and
-V vary. Since varying W corresponds to varying phi in the full Kirillov model,
-and the Kirillov model is irreducible as a GL_n-representation (for generic
-Pi), any nonzero phi generates the same GL_n-submodule as the full model. The
-L-factor, being an invariant of the pair (Pi, pi), does not depend on the
-choice of nonzero phi.
 
-More precisely: L_phi is independent of the choice of nonzero phi because L_phi
-is determined by the poles and zeros of the family of zeta integrals, which
-depend on the GL_n-orbit of phi. Since the Kirillov model is irreducible,
-all nonzero phi lie in the same orbit, giving L_phi = L(s, Pi x pi) for any
-nonzero phi. ∎
+The JPSS theory (1983, Section 2.7) shows that the full ideal is generated
+by letting both W and V vary. Varying W (with restriction to GL_n)
+corresponds to varying phi in the full Kirillov model K(Pi)|_{GL_n}. The
+ideal generated by ALL phi is L(s, Pi x pi) * R. We must show that a
+SINGLE nonzero phi already suffices.
+
+Consider the map Phi: K(Pi)|_{GL_n} → (fractional ideals of R) defined by
+Phi(phi) = { I(s, phi, V) : V in W(pi, psi) } · R. By the JPSS theory,
+∪_{phi} Phi(phi) generates L(s, Pi x pi) · R. Since R is a PID, Phi(phi)
+= L_phi · R for some L_phi dividing L(s, Pi x pi).
+
+**Key step.** Phi is GL_n-equivariant in the following sense: for g_0 in
+GL_n, the substitution g → g · g_0 in the integral gives
+I(s, R(g_0)phi, V) = |det g_0|^{1/2-s} · I(s, phi, R'(g_0)V) where R'
+denotes the contragredient action on W(pi, psi). Since R'(g_0) is an
+automorphism of W(pi, psi), the set of integrals { I(s, R(g_0)phi, V) :
+V in W(pi,psi) } equals { |det g_0|^{1/2-s} · I(s, phi, V) : V } =
+|det g_0|^{1/2-s} · Phi(phi). But |det g_0|^{1/2-s} = q_F^{-k·s} ·
+(unit in R) is a unit in the localization, so Phi(R(g_0)phi) and Phi(phi)
+generate the same fractional ideal. That is: L_{R(g_0)phi} = L_phi
+(up to units in R) for all g_0 in GL_n.
+
+Now, the Kirillov model K(Pi)|_{GL_n} is irreducible as a GL_n-
+representation (Bernstein-Zelevinsky 1976, Theorem 5.21). Therefore
+for any nonzero phi, the GL_n-translates { R(g_0)phi : g_0 in GL_n }
+span all of K(Pi)|_{GL_n}. Since L_{R(g_0)phi} = L_phi for all g_0,
+every phi' in K(Pi)|_{GL_n} (being a finite linear combination of
+translates) satisfies L_{phi'} | L_phi (the ideal can only get larger
+or stay the same when taking combinations). In particular, L_{phi'}
+divides L_phi for all phi'. But the union of all Phi(phi') generates
+L(s, Pi x pi) · R, so L(s, Pi x pi) divides L_phi. Combined with
+L_phi dividing L(s, Pi x pi), we get L_phi = L(s, Pi x pi). ∎
 
 **Application:** Taking phi = phi_Q (the restriction of R(u_Q)W_0, which is
 nonzero by the Kirillov injectivity lemma), the integrals over V generate the

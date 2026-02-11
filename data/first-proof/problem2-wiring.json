@@ -32,7 +32,7 @@
       "id": "p2-s3",
       "node_type": "answer",
       "post_id": 203,
-      "body_text": "u_Q twist: R(u_Q)W nonzero for all Q. Kirillov injectivity (BZ 1976, Thm 5.21): restriction W -> W|_{P_{n+1}} is injective for generic Pi. So phi_Q = W(diag(g,1)u_Q) is nonzero in Kirillov model.",
+      "body_text": "u_Q twist: R(u_Q)W nonzero (right translation is automorphism). GL_n-restriction lemma (BZ 1976, Thm 5.21 + Cor 5.22): nonzero W' restricts to nonzero function on diag(GL_n,1) because Kirillov model contains C_c^infty(N_n\\GL_n). So phi_Q(g) = W(diag(g,1)u_Q) is nonzero on GL_n.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 2
@@ -41,7 +41,7 @@
       "id": "p2-s3a",
       "node_type": "answer",
       "post_id": 2031,
-      "body_text": "Fixed-W spanning lemma: for any nonzero phi in Kirillov model, integrals over V generate full fractional ideal. Proof: Kirillov model irreducible as GL_n-rep (BZ 1976), so L_phi independent of nonzero phi. PID structure forces L_phi = L(s, Pi x pi).",
+      "body_text": "Fixed-W spanning lemma: for any nonzero phi in Kirillov model, integrals over V generate full fractional ideal. Proof: GL_n-equivariance of zeta integrals implies L_{R(g)phi} = L_phi for all g. Kirillov model irreducible => translates of phi span full model => L_phi = L(s, Pi x pi). PID structure on C[q^s,q^{-s}].",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 203
@@ -109,7 +109,7 @@
       "source": "p2-s3a",
       "target": "p2-s3",
       "edge_type": "assert",
-      "evidence": "Fixed-W spanning: Kirillov injectivity + irreducibility imply full ideal generation for any nonzero phi",
+      "evidence": "Fixed-W spanning: GL_n-equivariance + irreducibility imply full ideal generation for any nonzero phi",
       "detection": "structural"
     },
     {
@@ -268,7 +268,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Fixed-W spanning: Kirillov injectivity + irreducibility imply full ideal generation for any nonzero phi",
+        "evidence": "Fixed-W spanning: GL_n-equivariance + irreducibility imply full ideal generation for any nonzero phi",
         "detection": "structural"
       },
       "hx/labels": [

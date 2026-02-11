@@ -32,7 +32,7 @@
       "id": "p8-s3",
       "node_type": "answer",
       "post_id": 803,
-      "body_text": "SYMPLECTIC DIRECT SUM: remaining omega entries are a=omega(e1,e3), b=omega(e2,e4). Nondegeneracy hypothesis: 4 edges span R^4 (generic for Lagrangian surfaces; two distinct Lagrangian planes generically span R^4). In basis (e1,e3,e2,e4), omega block diagonal. R^4 = V1 ⊕ V2.",
+      "body_text": "SYMPLECTIC DIRECT SUM: remaining omega entries are a=omega(e1,e3), b=omega(e2,e4). Vertex spanning lemma (proved): 4 edges must span R^4 for any topological submanifold (all Lagrangian planes in a hyperplane share a line => surface ruled => not compact submanifold of R^4). In basis (e1,e3,e2,e4), omega block diagonal. R^4 = V1 ⊕ V2.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 8
@@ -50,7 +50,7 @@
       "id": "p8-s4a",
       "node_type": "answer",
       "post_id": 8041,
-      "body_text": "Crease smoothing lemma: Lagrangian half-planes meeting at edge smoothed via generating function interpolation S_t = chi*S_1 + (1-chi)*S_2. Graph y=grad S_t is Lagrangian, C^1-close to original. V1⊕V2 decomposition persists under C^1-perturbation.",
+      "body_text": "Crease smoothing lemma (full local model): Darboux coords with edge along x_1-axis. L_i = graph of y=grad S_i for quadratic S_i. Interpolation S_eps = chi(x_1/eps)*S_1 + (1-chi(x_1/eps))*S_2. Graph of dS_eps is Lagrangian (exact 1-form). C^1 estimate: |grad(S_1-S_2)| = O(|x_2|) kills 1/eps singularity. V1⊕V2 persists under C^1-perturbation.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 8

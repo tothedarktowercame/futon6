@@ -1,0 +1,45 @@
+flowchart TD
+    %% first-proof-p8 v3 — post-reviewer fixes
+    %% Changes from v2: new node p8-s4a (crease smoothing, full local model),
+    %% p8-s3 (vertex spanning lemma proved: topological submanifold => spanning),
+    %% p8-s4a (Darboux coords, generating function interpolation in x_1, C^1 estimate),
+    %% p8-s5 (references crease smoothing), p8-s6 (support control, McDuff-Salamon),
+    %% 2 new edges (s4a->s3, s5->s4a)
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p8-problem{{"p8-problem<br/>Polyhedral Lagrangian K in R^4, 4 faces per vertex. ..."}}
+    p8-s1["p8-s1<br/>Lambda(2) = U(2)/O(2), pi_1 = Z (Maslov class). Each..."]
+    p8-s2["p8-s2<br/>Edge-sharing: L_i = span(e_{i-1,i}, e_{i,i+1}). Lagr..."]
+    p8-s3["p8-s3<br/>SYMPLECTIC DIRECT SUM: Vertex spanning lemma (proved..."]
+    p8-s4["p8-s4<br/>Each L_i = (line in V1) ⊕ (line in V2). Maslov loop ..."]
+    p8-s4a["p8-s4a<br/>Crease smoothing (full local model): Darboux coords,..."]
+    p8-s5["p8-s5<br/>Lagrangian surgery (Polterovich 1991): after crease ..."]
+    p8-s6["p8-s6<br/>Global smoothing with support control: vertex surger..."]
+    p8-s7["p8-s7<br/>3-face impossible: 3 Lagrangian faces need omega=0 o..."]
+    p8-c1(["p8-c1<br/>Numerical: 998/998 valid 4-valent configs give mu=0...."])
+
+    %% Edges
+    p8-s1 -->|"🔵 clarify: Lagrangian Grassmannian and Maslov cl..."| p8-problem
+    p8-s2 -->|"🟡 reform: Edge-sharing kills omega entries in e..."| p8-s1
+    p8-s3 ==>|"🟢 assert: Block diagonal omega → symplectic dir..."| p8-s2
+    p8-s4 ==>|"🟢 assert: Decomposed Maslov loop has winding 0 ..."| p8-s3
+    p8-s4a ==>|"🟢 assert: Crease smoothing bridges polyhedral t..."| p8-s3
+    p8-s5 -->|"⚪ reference: Surgery applies after crease smoothin..."| p8-s4a
+    p8-s5 -->|"⚪ reference: Maslov 0 is the hypothesis for Polter..."| p8-s4
+    p8-s5 ==>|"🟢 assert: Lagrangian surgery resolves transvers..."| p8-problem
+    p8-s6 ==>|"🟢 assert: Compose vertex surgery + edge smoothi..."| p8-s5
+    p8-s6 ==>|"🟢 assert: Yes: 4-face → V1⊕V2 → Maslov 0 → surg..."| p8-problem
+    p8-s7 -.->|"🔴 challenge: 3-face: isotropic dimension bound pre..."| p8-s3
+    p8-c1 -.->|"🟣 exemplify: 998/998 numerical verification; compa..."| p8-s4
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p8-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p8-s1,p8-s2,p8-s3,p8-s4,p8-s4a,p8-s5,p8-s6,p8-s7 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p8-c1 comment

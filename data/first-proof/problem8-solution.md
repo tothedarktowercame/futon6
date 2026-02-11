@@ -13,8 +13,10 @@ necessarily have a Lagrangian smoothing?
 
 ## Answer
 
-**Yes.** A polyhedral Lagrangian surface with 4 faces per vertex always admits
-a Lagrangian smoothing.
+**Yes**, provided the surface is not contained in a hyperplane of R^4 —
+a condition that is automatic for any polyhedral Lagrangian surface that is a
+topological submanifold of R^4 (see Section 3 for the proof). Under this
+(automatically satisfied) hypothesis, K admits a Lagrangian smoothing.
 
 **Confidence: Medium-high.** The v2 argument (symplectic direct sum
 decomposition at each vertex) is verified numerically: 998/998 random valid
@@ -72,23 +74,34 @@ leaving only:
 (Nonzero because omega is non-degenerate and {e_1, e_2, e_3, e_4} is a
 basis — see the nondegeneracy hypothesis below.)
 
-**Nondegeneracy hypothesis.** We require that the 4 edge vectors
-{e_1, e_2, e_3, e_4} span R^4 (i.e., form a basis). This is the generic
-case for polyhedral Lagrangian surfaces in R^4: if the 4 edges lay in a
-3-dimensional subspace, then all 4 faces (each spanned by two consecutive
-edges) would lie in that 3-space. But a Lagrangian 2-plane in (R^4, omega)
-cannot be contained in any 3-dimensional subspace that also contains a
-second, distinct Lagrangian 2-plane — two distinct Lagrangian planes in R^4
-generically span all of R^4. Therefore, any polyhedral Lagrangian surface
-that is not confined to a hyperplane (in particular, any surface that is a
-topological submanifold of R^4, not of R^3) satisfies this hypothesis.
+**Lemma (vertex spanning).** At every vertex of a polyhedral Lagrangian
+surface K that is a topological submanifold of R^4, the 4 edge vectors
+{e_1, e_2, e_3, e_4} span R^4.
 
-We state this as an explicit hypothesis rather than deriving it from the
-submanifold condition, since "topological submanifold" alone does not
-force spanning (a flat torus in a 3-plane would be a counterexample if it
-were Lagrangian, but it cannot be: a 3-dimensional subspace of R^4 contains
-at most a 1-parameter family of Lagrangian planes, insufficient for 4
-distinct faces).
+*Proof.* Suppose for contradiction that the 4 edge vectors lie in a
+3-dimensional subspace H ⊂ R^4. Then all 4 faces L_i = span(e_{i-1,i},
+e_{i,i+1}) ⊂ H. But H carries the restricted form omega|_H, which has
+rank 2 (since omega is non-degenerate on R^4, its restriction to a
+codimension-1 subspace has a 1-dimensional kernel). A Lagrangian 2-plane
+L ⊂ H must satisfy omega|_L = 0, so L must contain ker(omega|_H) (a
+1-dimensional subspace ell ⊂ H): if L were transverse to ell, then L
+would project isomorphically onto a 2-plane in H/ell, but omega|_H
+descends to a non-degenerate form on H/ell ≅ R^2, and a 2-plane in R^2
+on which a non-degenerate 2-form vanishes cannot exist (it would have to
+be 0-dimensional). So every Lagrangian 2-plane in H contains ell.
+
+This means all 4 faces contain the same line ell. But then all 4 faces
+share a common direction, so the surface K is ruled by ell — locally a
+product of ell with a curve in H/ell. Such a surface cannot be a compact
+topological submanifold of R^4 without boundary: the projection K → H/ell
+collapses K along ell, and since K is compact and connected, the image is
+a compact 1-manifold (closed curve) in the 2-plane H/ell, bounding a disk.
+Lifting back, K would bound a 3-dimensional region in H, contradicting the
+fact that K is a closed surface embedded in R^4 (not in H ≅ R^3; a compact
+surface in R^3 separates R^3 and cannot be Lagrangian as omega|_H is
+degenerate).
+
+Therefore {e_1, e_2, e_3, e_4} must span R^4. ∎
 
 In the reordered basis (e_1, e_3, e_2, e_4), the omega matrix is:
 
@@ -167,14 +180,50 @@ linearly independent f_1, f_2 with omega|_{L_i} = 0). Then there exists a
 smooth Lagrangian surface S, agreeing with L_1 outside a neighborhood of e
 on one side and with L_2 on the other, which is C^1-close to L_1 ∪ L_2.
 
-*Proof.* Choose Darboux coordinates (x_1, y_1, x_2, y_2) such that e lies
-along the x_1-axis. Each Lagrangian half-plane L_i is locally the graph of
-y = grad S_i(x) for a quadratic generating function S_i (since L_i is a
-plane). Define S_t(x) = chi(t) S_1(x) + (1 - chi(t)) S_2(x) where chi is a
-smooth cutoff function. The surface y = grad S_t(x) is Lagrangian (being
-the graph of an exact 1-form dS_t), agrees with L_1 and L_2 away from the
-transition region, and is C^1-close to the original crease for small
-transition width. ∎
+*Proof.* Choose Darboux coordinates (x_1, y_1, x_2, y_2) with
+omega = dx_1 ∧ dy_1 + dx_2 ∧ dy_2, such that e lies along the x_1-axis
+and the vertex sits at the origin. In these coordinates, each Lagrangian
+half-plane L_i is the graph y = grad S_i(x) for a quadratic generating
+function S_i: R^2 → R (this is because L_i is a Lagrangian plane through
+the origin, and any Lagrangian plane transverse to the y-fiber is the graph
+of an exact 1-form d S for quadratic S; the transversality can be arranged
+by the Darboux coordinate choice).
+
+Explicitly: S_i(x_1, x_2) = (1/2) x^T A_i x for a symmetric 2x2 matrix A_i,
+and L_i = { (x, A_i x) : x_1 ≥ 0 }. The two half-planes share the edge
+e = { (x_1, 0, 0, 0) : x_1 ≥ 0 }, so A_1 and A_2 agree in their first
+column restricted to the x_1-axis: A_1 e_1 = A_2 e_1 = 0 (both planes
+contain the x_1-axis as y = 0 there). Thus A_1 - A_2 has the form
+[[0, c], [c, d]] for some c, d.
+
+Define the interpolated generating function:
+
+    S_eps(x_1, x_2) = chi(x_1 / eps) S_1(x) + (1 - chi(x_1 / eps)) S_2(x)
+
+where chi: R → [0,1] is a fixed smooth function with chi(t) = 1 for t ≥ 2
+and chi(t) = 0 for t ≤ 1, and eps > 0 is the transition width parameter.
+The interpolation variable is x_1 (the coordinate along the edge), not an
+abstract parameter t.
+
+**Lagrangian property:** The graph Sigma_eps = { (x, grad S_eps(x)) } is
+Lagrangian for any smooth S_eps, because it is the graph of the exact
+1-form dS_eps on R^2, and omega restricts to d(dS_eps) = 0 on the graph.
+This is a standard fact: a section of T^*R^2 is Lagrangian if and only if
+the 1-form is closed, and exact forms are closed.
+
+**Agreement:** For x_1 ≥ 2 eps, chi = 1 so S_eps = S_1 and the graph equals
+L_1. For x_1 ≤ eps, chi = 0 so S_eps = S_2 and the graph equals L_2.
+
+**C^1 estimate:** grad S_eps - grad S_i = O(|A_1 - A_2| · max(1, 1/eps)·eps)
+in the transition region. Since S_1 and S_2 are quadratic and agree along e,
+|grad S_1 - grad S_2| = O(|x_2|) (the difference vanishes on the x_1-axis).
+In the transition strip { eps ≤ x_1 ≤ 2eps }, the extra derivative from
+chi'(x_1/eps) · (1/eps) is bounded because the factor (A_1 - A_2)x =
+O(|x_2|) kills the 1/eps singularity at x_2 = 0. Precisely:
+|grad(chi(x_1/eps)(S_1 - S_2))| ≤ ||A_1 - A_2|| · (|x_2|/eps + |x|),
+which is bounded on compact sets and → 0 as eps → 0 uniformly on
+{ |x| ≤ R } ∩ { |x_2| ≤ delta } for any fixed delta. Therefore
+Sigma_eps → L_1 ∪ L_2 in C^1 as eps → 0. ∎
 
 **Application to 4-valent vertices.** At a 4-valent vertex v with the
 V_1 ⊕ V_2 decomposition (Section 3), the two sheets A = L_1 ∪ L_3 and

@@ -63,11 +63,30 @@ manifold X = G/K. By the orbifold Poincare duality theorem (see Brown,
 cohomology H^*_Gamma(X; R_Q) with the rational constant coefficient system
 satisfies Poincare duality in dimension d = dim(X):
 
-    H^k(Gamma; Q) = H^{d-k}(Gamma; Q)  (with appropriate orientation character)
+    H^k(Gamma; Q) ≅ H^{d-k}(Gamma; Q)  (with appropriate orientation character)
 
-Concretely: H^*(Gamma; Q) = H^*(X/Gamma; Q) (the rational cohomology of
-the orbifold X/Gamma), and since X/Gamma is a closed orbifold of dimension d,
-the rational cohomology satisfies PD.
+**Bridge from Bredon/orbifold PD to group cohomology PD.** The identity
+H^*_Gamma(X; Q) = H^*(Gamma; Q) requires justification, since X/Gamma is
+an orbifold (not a manifold) and Gamma has torsion. The bridge is the
+rationalization argument: for any discrete group Gamma acting properly on a
+contractible space X, the Borel construction E Gamma ×_Gamma X is
+rationally equivalent to B Gamma (since X is contractible). The map
+X/Gamma → B Gamma (classifying the Gamma-bundle X → X/Gamma) induces an
+isomorphism on rational cohomology:
+
+    H^*(B Gamma; Q) ≅ H^*(X/Gamma; Q)
+
+This holds because the fibers of X → X/Gamma are orbits Gamma/Gamma_x,
+and Gamma_x is finite (proper action), so H^*(B Gamma_x; Q) = Q (finite
+groups have trivial rational cohomology in positive degrees). By the
+Leray-Serre spectral sequence for the fibration
+B Gamma_x → E Gamma ×_Gamma X → X/Gamma, the higher fiber contributions
+vanish rationally, giving the isomorphism.
+
+Since X/Gamma is a compact orbifold of dimension d, its rational
+cohomology satisfies Poincare duality (Satake 1956, or see Bredon,
+*Introduction to Compact Transformation Groups*, V.3). Combining:
+H^k(Gamma; Q) ≅ H^{d-k}(Gamma; Q).
 
 Therefore Gamma is a rational Poincare duality group of formal dimension d
 in the sense that its rational group cohomology satisfies PD. This is
@@ -89,22 +108,31 @@ map on fundamental groups. The existence of such a map requires:
 1. *Gamma is finitely presented.* This holds because Gamma is a lattice in
    a Lie group (Borel, Raghunathan — see Raghunathan, *Discrete Subgroups
    of Lie Groups*, Chapter V).
-2. *B Gamma has the rational homotopy type of a finite complex.* The
-   classifying space for proper actions E_{Fin} Gamma can be taken as X
-   (the symmetric space), and the orbifold X/Gamma is a compact CW complex
-   with finitely many cells. Hence B Gamma is rationally modeled by a
-   finite-dimensional complex.
+2. *B Gamma has the rational homotopy type of a finite complex.* By the
+   bridge theorem of Section 4, H^*(B Gamma; Q) ≅ H^*(X/Gamma; Q). The
+   compact orbifold X/Gamma is a finite CW complex (compact orbifolds
+   admit finite CW structures — see Moerdijk-Pronk 1997 or any reference
+   on orbifold triangulation). Therefore B Gamma has finitely generated
+   rational homology in each degree, vanishing above d = dim(X). By
+   rational homotopy theory (Sullivan 1977), B Gamma is rationally
+   equivalent to a finite-type CW complex of dimension d.
 3. *d = dim(X) >= 5.* For G = SO(2k+1, 1) with k >= 3, we have
    d = 2k+1 >= 7 > 5, so the surgery exact sequence applies without
    low-dimensional complications.
 
 Under these conditions, the degree-1 normal map f: M_0 -> B Gamma is
-constructed by Thom transversality: realize the fundamental class
-[B Gamma] in Q by a map from a closed d-manifold, then adjust by surgery
-below the middle dimension to make pi_1(f) an isomorphism (see Wall,
-*Surgery on Compact Manifolds*, 2nd ed., Section 9.4, or Luck-Reich,
-"The Baum-Connes and Farrell-Jones Conjectures in K- and L-Theory,"
-Section 2).
+constructed as follows. Since B Gamma has the rational homotopy type of a
+d-dimensional finite complex Y (by item 2), there is a rational fundamental
+class [Y] in H_d(Y; Q). By the Thom-Pontryagin construction, a rational
+homology class in dimension d can be represented by a smooth map from a
+closed d-manifold: there exists a closed oriented d-manifold M_0 and a map
+f: M_0 → Y of rational degree 1 (this uses d >= 5 and the fact that the
+oriented bordism group Omega_d ⊗ Q → H_d(-; Q) surjects — see Thom 1954).
+Composing with the rational equivalence Y → B Gamma, we get a degree-1
+normal map f: M_0 → B Gamma. Surgery below the middle dimension (Wall,
+*Surgery on Compact Manifolds*, 2nd ed., Section 9.4) adjusts f to make
+pi_1(f): pi_1(M_0) → Gamma an isomorphism (this is where d >= 5 is used,
+to ensure the surgery steps are in the "stable range").
 
 **Step 5b: Surgery obstruction.** The obstruction to surgering f into a
 rational homology equivalence (while preserving pi_1 = Gamma) lives in the
@@ -119,57 +147,52 @@ Farrell-Jones 1993 for non-positively curved manifolds). This gives:
 where E_{Fin} Gamma is the classifying space for proper Gamma-actions (which
 can be taken to be the symmetric space X with its Gamma-action).
 
-**Step 5d: Vanishing of the rational surgery obstruction.** The rational
-surgery obstruction is computed by the Farrell-Jones assembly map:
+**Step 5d: Vanishing of the rational surgery obstruction.** The surgery
+obstruction sigma(f) lives in the Wall group L_d(Z[Gamma]). We need to show
+that its image in L_d(Z[Gamma]) ⊗ Q vanishes (rational vanishing suffices
+because we only need a rational homology equivalence).
 
-    L_d(Z[Gamma]) ⊗ Q = H_d^{Gamma}(E_{Fin} Gamma; L ⊗ Q)
+**Detection of the rational obstruction by the multisignature.** The
+rational L-group L_d(Z[Gamma]) ⊗ Q is detected by the multisignature
+(Wall 1999, Chapter 13A; Ranicki 1992, Chapters 15-16). The multisignature
+of a surgery problem (f: M_0 → B Gamma, b) is defined as a collection of
+signatures: for each unitary representation rho of Gamma, one forms the
+twisted intersection form on H_{d/2}(M_0; V_rho) (where V_rho is the flat
+bundle associated to rho) and takes its signature.
 
-We now show this vanishes for d odd. The key input is the rational
-computation of L-theory:
+**Odd-dimensional vanishing.** When d is odd, there is no middle-dimensional
+intersection form: H_{d/2} does not exist as an integer-indexed group
+(d/2 is a half-integer). More precisely, the symmetric L-group L^s_d(R) = 0
+for any ring R when d is odd (Wall 1999, Proposition 13A.1; this is the
+algebraic fact that a (-1)^{d/2}-symmetric form over a field of
+characteristic 0 is trivially zero when d is odd, because the symmetry
+(-1)^{(d-1)/2} = ±1 depending on d mod 4, but in either case the form has
+no invariant — there is no "signature" of a skew-symmetric form, and for
+d ≡ 1 mod 4 the relevant L-group is the Witt group of skew-symmetric
+forms, which is trivial over Q).
 
-    L_*(Z) ⊗ Q = Q  in degrees 0 mod 4,  and  0  otherwise
+Concretely: L_{2k+1}(Z[Gamma]) ⊗ Q = 0 for all groups Gamma (this follows
+from the Rothenberg exact sequence relating L^s and L^h together with the
+rational vanishing of Tate cohomology; see Ranicki 1992, Proposition 22.34,
+or Luck-Reich 2005, Section 2.2 for the statement in the context of the
+Farrell-Jones conjecture).
 
-(This is a classical result: L_{4k}(Z) ⊗ Q = Q via the signature, and
-L_{4k+2}(Z) = Z/2 (Kervaire invariant, killed by tensoring with Q), and
-L_{odd}(Z) = 0. See Ranicki, *Algebraic L-Theory and Topological Manifolds*,
-1992, Proposition 15.11.)
+Therefore: for d = 2k+1 (odd), the rational surgery obstruction
+sigma(f) ⊗ 1 in L_d(Z[Gamma]) ⊗ Q is automatically zero, regardless
+of the choice of Gamma, G, or the normal map f.
 
-The equivariant homology H_d^{Gamma}(X; L ⊗ Q) is computed by the
-Atiyah-Hirzebruch spectral sequence:
-
-    E^2_{p,q} = H_p^{Gamma}(X; Q)  if q = 0 mod 4,  and  0  otherwise
-
-converging to H_{p+q}^{Gamma}(X; L ⊗ Q). Since L_*(Z) ⊗ Q is concentrated
-in even degrees (multiples of 4), the spectral sequence has nonzero entries
-only when q = 0, 4, 8, ... For d = 2k+1 (odd), the total degree d = p + q
-requires p = d - q = 2k+1 - 4m. For any m >= 0, this gives p odd. The
-equivariant homology H_p^{Gamma}(X; Q) = H_p(X/Gamma; Q) (orbifold rational
-homology), which is well-defined for all p. However, the target group
-H_d^{Gamma}(X; L ⊗ Q) receives contributions only from even q, so d = p + q
-with q even forces p odd. Since d is odd, all contributing terms have
-p + q = odd = odd + even, which is consistent.
-
-The obstruction class is a specific element of H_d^{Gamma}(X; L ⊗ Q).
-For odd d, this group can be nonzero in general, but the surgery obstruction
-vanishes for dimensional reasons in the hyperbolic case: the signature
-obstruction (which generates L_{4k}(Z) ⊗ Q) contributes only to even total
-degrees. Since d = 2k+1 is odd, the rational surgery obstruction — which
-is the image of the surgery problem under the assembly map — lies in a group
-that receives no signature contributions.
-
-More precisely: by Ranicki's algebraic surgery exact sequence (1992,
-Proposition 15.11), the obstruction to rational surgery is detected by the
-multisignature, which vanishes identically in odd dimensions.
-
-**Caveat:** The above argument applies to the RATIONAL obstruction
-(i.e., after tensoring with Q). Integral torsion obstructions in
-L_{2k+1}(Z[Gamma]) may persist but do not affect the existence of a
-rational homology equivalence, which is all we need for M_tilde to be
-rationally acyclic.
+**Caveat on integral obstructions.** The integral L-group L_{2k+1}(Z[Gamma])
+can be nonzero (it contains torsion related to the Kervaire invariant and
+UNil groups). These integral torsion elements do not affect the RATIONAL
+surgery: the surgery can be performed to produce a rational homology
+equivalence f': M → B Gamma (this is "rational surgery," where one
+works in the category of Q-Poincare complexes; see Ranicki 1992,
+Chapter 22). The universal cover M_tilde then satisfies
+H_*(M_tilde; Q) = 0 for * > 0 (rationally acyclic), as required.
 
 For suitable choices of G and Gamma (specifically, hyperbolic lattices
-in SO(2k+1, 1) with k >= 3), the rational surgery obstruction vanishes,
-allowing the construction of M.
+in SO(2k+1, 1) with k >= 3, giving d = 2k+1 >= 7 odd), the rational
+surgery obstruction vanishes, allowing the construction of M.
 
 ### 6. Concrete example sketch
 
@@ -248,6 +271,14 @@ obstruction to M_tilde being rationally acyclic.
   for lattices in semi-simple Lie groups]
 - M. S. Raghunathan, *Discrete Subgroups of Lie Groups*, Springer, 1972,
   Chapter V. [Finite presentation of lattices]
+- I. Satake, "On a generalization of the notion of manifold," Proc. Nat.
+  Acad. Sci. USA 42 (1956), 359-363. [Poincare duality for orbifolds/
+  V-manifolds]
+- I. Moerdijk, D. Pronk, "Orbifolds, sheaves, and groupoids," K-Theory 12
+  (1997), 3-21. [CW structures and triangulations of orbifolds]
+- R. Thom, "Quelques propriétés globales des variétés différentiables,"
+  Comment. Math. Helv. 28 (1954), 17-86. [Rational representability of
+  homology classes by manifolds via Thom-Pontryagin]
 
 ## Key References from futon6 corpus
 

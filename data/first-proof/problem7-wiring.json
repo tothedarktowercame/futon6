@@ -23,7 +23,7 @@
       "id": "p7-s2",
       "node_type": "answer",
       "post_id": 702,
-      "body_text": "Gamma satisfies rational PD via Bredon cohomology (Brown Ch.VIII Thm 10.1, Luck Sec.6.6). Orbifold PD theorem: H^*_Gamma(X;R_Q) has PD in dim d=dim(X). H^k(Gamma;Q) = H^{d-k}(Gamma;Q).",
+      "body_text": "Rational PD via Bredon cohomology (Brown Ch.VIII Thm 10.1, Luck Sec.6.6). Bridge: H^*(BGamma;Q) = H^*(X/Gamma;Q) by Leray-Serre (finite stabilizers have trivial rational cohomology). Orbifold X/Gamma has PD (Satake 1956). So H^k(Gamma;Q) = H^{d-k}(Gamma;Q).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -32,7 +32,7 @@
       "id": "p7-s3",
       "node_type": "answer",
       "post_id": 703,
-      "body_text": "Surgery theory: Gamma finitely presented (Raghunathan), B Gamma rational finite complex, d>=5 for SO(2k+1,1) k>=3. Normal map via Thom transversality (Wall Sec.9.4). Obstruction in L_d(Z[Gamma]).",
+      "body_text": "Surgery theory: Gamma fin. pres. (Raghunathan), BGamma rational finite type via orbifold CW structure (Moerdijk-Pronk 1997), d>=5 for SO(2k+1,1) k>=3. Normal map via Thom-Pontryagin (rational bordism surjects onto homology). Obstruction in L_d(Z[Gamma]).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -50,7 +50,7 @@
       "id": "p7-s4",
       "node_type": "answer",
       "post_id": 704,
-      "body_text": "Rational obstruction vanishes for d odd: L_*(Z)⊗Q = Q in deg 0 mod 4 (Ranicki 1992 Prop 15.11). AHSS: contributions only at even q, so odd total degree d receives no signature terms. Multisignature vanishes in odd dim.",
+      "body_text": "Rational obstruction vanishes for d odd: L_{2k+1}(Z[Gamma])⊗Q = 0 for all Gamma (Ranicki 1992 Prop 22.34). Detection by multisignature, which requires middle-dim intersection form — nonexistent in odd dim. No AHSS needed; vanishing is unconditional in odd dimensions.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
