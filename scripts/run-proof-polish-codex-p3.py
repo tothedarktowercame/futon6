@@ -32,6 +32,7 @@ WIRING_JSON = REPO_ROOT / "data" / "first-proof" / "problem3-wiring.json"
 SOLUTION_MD = REPO_ROOT / "data" / "first-proof" / "problem3-solution.md"
 DEFAULT_OUTPUT = REPO_ROOT / "data" / "first-proof" / "problem3-codex-results.jsonl"
 DEFAULT_PROMPTS = REPO_ROOT / "data" / "first-proof" / "problem3-codex-prompts.jsonl"
+DEFAULT_MATH_SE_DIR = REPO_ROOT / "se-data" / "math-processed"
 
 
 RESPONSE_SCHEMA = {
@@ -51,6 +52,10 @@ RESPONSE_SCHEMA = {
                     "question_id": {"type": "integer"},
                     "title": {"type": "string"},
                     "relevance": {"type": "string"},
+                    "site": {
+                        "type": "string",
+                        "enum": ["math.stackexchange.com", "mathoverflow.net", "other", "unknown"],
+                    },
                 },
                 "required": ["question_id", "title", "relevance"],
                 "additionalProperties": False,
@@ -145,7 +150,12 @@ NODE_VERIFICATION_FOCUS = {
 }
 
 
-def build_node_prompt(node: dict, edges: list[dict], solution_text: str) -> str:
+def build_node_prompt(
+    node: dict,
+    edges: list[dict],
+    solution_text: str,
+    math_se_dir: Path | None = None,
+) -> str:
     """Build a verification prompt for a single proof node."""
     node_id = node["id"]
     focus = NODE_VERIFICATION_FOCUS.get(node_id, "Verify the mathematical claim.")
@@ -213,13 +223,26 @@ def build_node_prompt(node: dict, edges: list[dict], solution_text: str) -> str:
         "algebra exchange relations, interpolation polynomials).",
         "3. Identify any gaps, unstated assumptions, or potential errors.",
         "4. Suggest improvements if the claim could be tightened or clarified.",
-        "5. Reply as a single JSON object matching the required schema.",
+        "5. For each reference, include `site` when known "
+        "(e.g., `mathoverflow.net` or `math.stackexchange.com`).",
+        "6. Reply as a single JSON object matching the required schema.",
     ])
+    if math_se_dir:
+        lines.extend([
+            "",
+            "## Local Corpus Hint",
+            "",
+            f"Use local processed data if available under: {math_se_dir}",
+        ])
 
     return "\n".join(lines)
 
 
-def build_synthesis_prompt(solution_text: str, wiring: dict) -> str:
+def build_synthesis_prompt(
+    solution_text: str,
+    wiring: dict,
+    math_se_dir: Path | None = None,
+) -> str:
     """Build a synthesis prompt that reviews the entire proof."""
     stats = wiring.get("stats", {})
     return "\n".join([
@@ -255,9 +278,19 @@ def build_synthesis_prompt(solution_text: str, wiring: dict) -> str:
         "t-PushTASEP Macdonald polynomial, interpolation ASEP polynomial q=1, "
         "Hecke algebra exchange relation ASEP.",
         "6. Suggest a tighter or more elegant statement of the main result.",
-        "7. Reply as a single JSON object matching the required schema. "
+        "7. For each reference, include `site` when known "
+        "(e.g., `mathoverflow.net` or `math.stackexchange.com`).",
+        "8. Reply as a single JSON object matching the required schema. "
         "Use node_id='p3-synthesis' for the synthesis.",
     ])
+    if math_se_dir:
+        lines.extend([
+            "",
+            "## Local Corpus Hint",
+            "",
+            f"Use local processed data if available under: {math_se_dir}",
+        ])
+    return "\n".join(lines)
 
 
 def run_codex_once(
@@ -301,12 +334,14 @@ def main() -> int:
     ap.add_argument("--solution", type=Path, default=SOLUTION_MD)
     ap.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     ap.add_argument("--prompts-out", type=Path, default=DEFAULT_PROMPTS)
-    ap.add_argument("--limit", type=int, default=9,
-                    help="Max nodes to process (8 nodes + 1 synthesis = 9)")
+    ap.add_argument("--limit", type=int, default=None,
+                    help="Max prompts to process (default: all generated prompts)")
     ap.add_argument("--model", default="gpt-5.3-codex")
     ap.add_argument("--codex-bin", default="codex")
     ap.add_argument("--dry-run", action="store_true",
                     help="Generate prompts only, don't call Codex")
+    ap.add_argument("--math-se-dir", type=Path, default=DEFAULT_MATH_SE_DIR,
+                    help="Local processed StackExchange data directory (hinted to Codex prompts)")
     ap.add_argument("--repo-root", type=Path, default=REPO_ROOT)
     args = ap.parse_args()
 
@@ -328,7 +363,12 @@ def main() -> int:
     # Build prompts for each node
     prompts = []
     for node in nodes:
-        prompt_text = build_node_prompt(node, edges, solution_text)
+        prompt_text = build_node_prompt(
+            node,
+            edges,
+            solution_text,
+            math_se_dir=args.math_se_dir,
+        )
         prompts.append({
             "node_id": node["id"],
             "node_type": node["node_type"],
@@ -339,8 +379,9 @@ def main() -> int:
     prompts.append({
         "node_id": "p3-synthesis",
         "node_type": "synthesis",
-        "prompt": build_synthesis_prompt(solution_text, wiring),
+        "prompt": build_synthesis_prompt(solution_text, wiring, math_se_dir=args.math_se_dir),
     })
+    run_limit = len(prompts) if args.limit is None else min(args.limit, len(prompts))
 
     # Write prompts
     args.prompts_out.parent.mkdir(parents=True, exist_ok=True)
@@ -351,7 +392,7 @@ def main() -> int:
 
     if args.dry_run:
         print("Dry run -- not calling Codex.")
-        print(f"\nPrompt summary ({len(prompts)} prompts):")
+        print(f"\nPrompt summary ({len(prompts)} prompts, run_limit={run_limit}):")
         for p in prompts:
             lines = p["prompt"].count("\n") + 1
             print(f"  {p['node_id']:20s} [{p['node_type']:10s}] ~{lines} lines")
@@ -368,7 +409,7 @@ def main() -> int:
 
     try:
         with open(args.output, "w") as fout:
-            for rec in prompts[:args.limit]:
+            for rec in prompts[:run_limit]:
                 rc, raw_response, stderr_text = run_codex_once(
                     codex_bin=args.codex_bin,
                     model=args.model,
@@ -402,7 +443,7 @@ def main() -> int:
                 fout.write(json.dumps(out, ensure_ascii=False) + "\n")
                 processed += 1
                 status = out.get("claim_verified", "parse_error" if out.get("parse_error") else "?")
-                print(f"[{processed:02d}/{len(prompts)}] {rec['node_id']:20s} -> {status}")
+                print(f"[{processed:02d}/{run_limit}] {rec['node_id']:20s} -> {status}")
                 sys.stdout.flush()
     finally:
         schema_path.unlink(missing_ok=True)
