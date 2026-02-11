@@ -1,0 +1,52 @@
+flowchart TD
+    %% Problem 10 — after Codex polish
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p10-problem{{"p10-problem<br/>Given [(Z⊗K_tau)ᵀSS'(Z⊗K_tau) + λ(Iᵣ⊗K_tau)]vec(W) =..."}}
+    p10-s1["p10-s1<br/>Why naive direct methods fail: A is nr×nr, so dense ..."]
+    p10-s2["p10-s2<br/>Key insight: with λ>0 and K_tau ≻ 0, PCG only needs ..."]
+    p10-s2a(["p10-s2a<br/>Forward map at observed entries: By the Kronecker id..."])
+    p10-s2b(["p10-s2b<br/>Adjoint map from sparse result: The sparse vector w ..."])
+    p10-s2c(["p10-s2c<br/>Regularization term: λ(Iᵣ⊗K_tau)vec(V) = λ·vec(K_tau..."])
+    p10-s2-total(["p10-s2-total<br/>Total per matvec: O(n²r + qr). No dependence on N. T..."])
+    p10-s3["p10-s3<br/>Right-hand side: b = (Iᵣ⊗K_tau)vec(B) where B = TZ. ..."]
+    p10-s4["p10-s4<br/>Preconditioner choice: after whitening by K_tau^{-1/..."]
+    p10-s4-hadamard(["p10-s4-hadamard<br/>Why this structure? The Khatri-Rao Hadamard property..."])
+    p10-s4-solve(["p10-s4-solve<br/>Preconditioner solve: P⁻¹ = H⁻¹⊗K_tau⁻¹. Precompute ..."])
+    p10-s5["p10-s5<br/>Convergence: PCG has t = O(√κ log(1/ε)) with κ = con..."]
+    p10-s6["p10-s6<br/>Complexity summary: total per mode-k subproblem is O..."]
+    p10-s7["p10-s7<br/>Algorithm: SETUP builds K_tau, H, and RHS; PCG then ..."]
+
+    %% Edges
+    p10-s1 -.->|"🔴 challenge: Naive explicit direct methods incur O..."| p10-problem
+    p10-s2 -->|"🟡 reform: CG only requires v ↦ Av, never the ma..."| p10-s1
+    p10-s2a -->|"🔵 clarify: Kronecker identity gives forward map;..."| p10-s2
+    p10-s2b -->|"🔵 clarify: Sparse W' has s<=q nonzeros; adjoint ..."| p10-s2
+    p10-s2c -->|"🔵 clarify: Regularization is just λ·vec(KV), O(n²r)"| p10-s2
+    p10-s2-total ==>|"🟢 assert: Combining forward + adjoint + regular..."| p10-s2a
+    p10-s2-total ==>|"🟢 assert: Combining forward + adjoint + regular..."| p10-s2b
+    p10-s2-total ==>|"🟢 agree: Regularization absorbed into n²r term"| p10-s2c
+    p10-s3 -->|"🔵 clarify: RHS uses sparse T and Kronecker struc..."| p10-problem
+    p10-s4 -->|"🟡 reform: Whitened surrogate motivates P = (H⊗K..."| p10-s2
+    p10-s4-hadamard -->|"🔵 clarify: Khatri-Rao Hadamard: ZᵀZ = ∏(AᵢᵀAᵢ), ..."| p10-s4
+    p10-s4-solve -.->|"🟣 exemplify: P⁻¹ = H⁻¹⊗K_tau⁻¹ via Cholesky; solve..."| p10-s4
+    p10-s5 ==>|"🟢 assert: Spectral equivalence bounds κ(P⁻¹A), ..."| p10-s4
+    p10-s6 ==>|"🟢 assert: O(n³ + r³ + t(n²r + qr + nr²)); no ex..."| p10-problem
+    p10-s6 -->|"⚪ reference: Matvec cost O(n²r + qr) per iteration"| p10-s2-total
+    p10-s6 -->|"⚪ reference: Preconditioner solve O(n²r + nr²) per..."| p10-s4-solve
+    p10-s6 -->|"⚪ reference: Iteration count from standard PCG bou..."| p10-s5
+    p10-s7 -.->|"🟣 exemplify: Pseudocode instantiates the complexit..."| p10-s6
+    p10-s7 -->|"⚪ reference: MATVEC subroutine implements implicit..."| p10-s2
+    p10-s7 -->|"⚪ reference: PRECOND_SOLVE subroutine implements K..."| p10-s4-solve
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p10-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p10-s1,p10-s2,p10-s3,p10-s4,p10-s5,p10-s6,p10-s7 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p10-s2a,p10-s2b,p10-s2c,p10-s2-total,p10-s4-hadamard,p10-s4-solve comment
