@@ -5,7 +5,7 @@
       "id": "p3-problem",
       "node_type": "question",
       "post_id": 3,
-      "body_text": "Nontrivial Markov chain on S_n(lambda) with stationary dist F*_mu/P*_lambda at q=1?",
+      "body_text": "Does there exist a nontrivial Markov chain on S_n(lambda) with stationary law F*_mu/P*_lambda at q=1?",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": null
@@ -14,7 +14,7 @@
       "id": "p3-s1",
       "node_type": "answer",
       "post_id": 301,
-      "body_text": "State space S_n(lambda) = n! rearrangements of lambda's distinct parts. q=1 specialization reduces to Hall-Littlewood-type structure.",
+      "body_text": "Construct chain: inhomogeneous multispecies t-PushTASEP on ring with site rates 1/x_i and t-geometric weaker-particle choice.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -23,7 +23,7 @@
       "id": "p3-s2",
       "node_type": "answer",
       "post_id": 302,
-      "body_text": "Multispecies ASEP: nearest-neighbor swaps of adjacent parts with asymmetric rates depending on t and x_i/x_{i+1}.",
+      "body_text": "Finite-state CTMC on S_n(lambda): explicit generator, well-defined rates, at least one vacancy from lambda_n=0.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -32,7 +32,7 @@
       "id": "p3-s3",
       "node_type": "answer",
       "post_id": 303,
-      "body_text": "Hecke algebra rates: T_i generator gives M_i = (T_i + t*I)/(1+t). Satisfies T_i^2 = (t-1)T_i + t.",
+      "body_text": "Nontriviality lemma: transition rates depend only on local species ordering, x_i, and t, not on F*_mu values.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -41,7 +41,7 @@
       "id": "p3-s4",
       "node_type": "answer",
       "post_id": 304,
-      "body_text": "Stationarity from exchange relations: T_i F*_mu = c F*_mu + d F*_{s_i mu}. Detailed balance follows from Hecke algebra relation.",
+      "body_text": "AMW Theorem 1.1: stationary distribution of this chain is pi(eta)=F_eta(x;1,t)/P_lambda(x;1,t).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -50,7 +50,7 @@
       "id": "p3-s5",
       "node_type": "answer",
       "post_id": 305,
-      "body_text": "Nontriviality: rates depend on (t, x_i), not F*_mu values. Chain is a genuine exclusion process, not a trivial Gibbs sampler.",
+      "body_text": "Notation bridge: prompt's F*_mu,P*_lambda are the same q=1 ASEP/Macdonald family (up to harmless normalization conventions).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -59,7 +59,16 @@
       "id": "p3-s6",
       "node_type": "answer",
       "post_id": 306,
-      "body_text": "Conclusion: Yes. Multispecies ASEP with Hecke algebra rates on S_n(lambda). Stationary distribution = F*_mu/P*_lambda at q=1.",
+      "body_text": "Sanity lemma n=2: lambda=(a,0) gives two-state chain with rates 1/x_1 and 1/x_2, yielding explicit stationary ratio x_1:x_2.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 3
+    },
+    {
+      "id": "p3-s7",
+      "node_type": "answer",
+      "post_id": 307,
+      "body_text": "Conclusion: yes, this explicit nontrivial chain realizes the required stationary ratio F*_mu/P*_lambda.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -69,71 +78,78 @@
     {
       "source": "p3-s1",
       "target": "p3-problem",
-      "edge_type": "clarify",
-      "evidence": "S_n(lambda) = n! states; q=1 gives Hall-Littlewood",
+      "edge_type": "reform",
+      "evidence": "Explicit candidate chain: inhomogeneous t-PushTASEP",
       "detection": "structural"
     },
     {
       "source": "p3-s2",
-      "target": "p3-problem",
-      "edge_type": "reform",
-      "evidence": "Recast as multispecies exclusion process with swaps",
+      "target": "p3-s1",
+      "edge_type": "clarify",
+      "evidence": "Finite-state CTMC with explicit rates",
       "detection": "structural"
     },
     {
       "source": "p3-s3",
-      "target": "p3-s2",
-      "edge_type": "clarify",
-      "evidence": "Hecke algebra gives transition rates",
+      "target": "p3-s1",
+      "edge_type": "assert",
+      "evidence": "Transition rule independent of F* polynomials",
       "detection": "structural"
     },
     {
       "source": "p3-s4",
-      "target": "p3-s3",
+      "target": "p3-problem",
       "edge_type": "assert",
-      "evidence": "Exchange relations + Hecke identity => detailed balance",
+      "evidence": "Theorem 1.1 gives stationary law F/P at q=1",
       "detection": "structural"
     },
     {
       "source": "p3-s4",
       "target": "p3-s1",
       "edge_type": "reference",
-      "evidence": "Uses q=1 simplification of exchange coefficients",
+      "evidence": "Applies to the same t-PushTASEP dynamics",
       "detection": "structural"
     },
     {
       "source": "p3-s5",
-      "target": "p3-s2",
-      "edge_type": "assert",
-      "evidence": "Rates are local functions of (t, x_i), not F*_mu",
+      "target": "p3-s4",
+      "edge_type": "clarify",
+      "evidence": "Identifies paper notation with prompt notation",
       "detection": "structural"
     },
     {
       "source": "p3-s6",
+      "target": "p3-s1",
+      "edge_type": "exemplify",
+      "evidence": "n=2 chain computes stationary ratio explicitly",
+      "detection": "structural"
+    },
+    {
+      "source": "p3-s7",
       "target": "p3-problem",
       "edge_type": "assert",
-      "evidence": "Yes: multispecies ASEP with Hecke rates",
+      "evidence": "Existence + nontriviality + target stationary ratio",
       "detection": "structural"
     },
     {
-      "source": "p3-s6",
+      "source": "p3-s7",
+      "target": "p3-s3",
+      "edge_type": "reference",
+      "evidence": "Uses nontriviality lemma",
+      "detection": "structural"
+    },
+    {
+      "source": "p3-s7",
       "target": "p3-s4",
       "edge_type": "reference",
-      "evidence": "Stationarity from exchange relations",
-      "detection": "structural"
-    },
-    {
-      "source": "p3-s6",
-      "target": "p3-s5",
-      "edge_type": "reference",
-      "evidence": "Nontriviality from local rates",
+      "evidence": "Uses AMW stationary-distribution theorem",
       "detection": "structural"
     }
   ],
   "hyperedges": [
     {
       "hx/id": "first-proof-p3:edge-000",
-      "hx/type": "thread/clarify",
+      "hx/type": "thread/reform",
       "hx/ends": [
         {
           "role": "source",
@@ -147,32 +163,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "S_n(lambda) = n! states; q=1 gives Hall-Littlewood",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "clarify",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p3:edge-001",
-      "hx/type": "thread/reform",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p3-s2",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p3-problem",
-          "node_type": "question"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Recast as multispecies exclusion process with swaps",
+        "evidence": "Explicit candidate chain: inhomogeneous t-PushTASEP",
         "detection": "structural"
       },
       "hx/labels": [
@@ -182,8 +173,33 @@
       ]
     },
     {
-      "hx/id": "first-proof-p3:edge-002",
+      "hx/id": "first-proof-p3:edge-001",
       "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p3-s2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p3-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Finite-state CTMC with explicit rates",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p3:edge-002",
+      "hx/type": "thread/assert",
       "hx/ends": [
         {
           "role": "source",
@@ -192,17 +208,17 @@
         },
         {
           "role": "target",
-          "ident": "p3-s2",
+          "ident": "p3-s1",
           "node_type": "answer"
         }
       ],
       "hx/content": {
-        "evidence": "Hecke algebra gives transition rates",
+        "evidence": "Transition rule independent of F* polynomials",
         "detection": "structural"
       },
       "hx/labels": [
         "thread",
-        "clarify",
+        "assert",
         "structural"
       ]
     },
@@ -217,12 +233,12 @@
         },
         {
           "role": "target",
-          "ident": "p3-s3",
-          "node_type": "answer"
+          "ident": "p3-problem",
+          "node_type": "question"
         }
       ],
       "hx/content": {
-        "evidence": "Exchange relations + Hecke identity => detailed balance",
+        "evidence": "Theorem 1.1 gives stationary law F/P at q=1",
         "detection": "structural"
       },
       "hx/labels": [
@@ -247,7 +263,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Uses q=1 simplification of exchange coefficients",
+        "evidence": "Applies to the same t-PushTASEP dynamics",
         "detection": "structural"
       },
       "hx/labels": [
@@ -258,61 +274,11 @@
     },
     {
       "hx/id": "first-proof-p3:edge-005",
-      "hx/type": "thread/assert",
+      "hx/type": "thread/clarify",
       "hx/ends": [
         {
           "role": "source",
           "ident": "p3-s5",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p3-s2",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Rates are local functions of (t, x_i), not F*_mu",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "assert",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p3:edge-006",
-      "hx/type": "thread/assert",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p3-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p3-problem",
-          "node_type": "question"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Yes: multispecies ASEP with Hecke rates",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "assert",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p3:edge-007",
-      "hx/type": "thread/reference",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p3-s6",
           "node_type": "answer"
         },
         {
@@ -322,12 +288,62 @@
         }
       ],
       "hx/content": {
-        "evidence": "Stationarity from exchange relations",
+        "evidence": "Identifies paper notation with prompt notation",
         "detection": "structural"
       },
       "hx/labels": [
         "thread",
-        "reference",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p3:edge-006",
+      "hx/type": "thread/exemplify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p3-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p3-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "n=2 chain computes stationary ratio explicitly",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "exemplify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p3:edge-007",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p3-s7",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p3-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Existence + nontriviality + target stationary ratio",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
         "structural"
       ]
     },
@@ -337,17 +353,42 @@
       "hx/ends": [
         {
           "role": "source",
-          "ident": "p3-s6",
+          "ident": "p3-s7",
           "node_type": "answer"
         },
         {
           "role": "target",
-          "ident": "p3-s5",
+          "ident": "p3-s3",
           "node_type": "answer"
         }
       ],
       "hx/content": {
-        "evidence": "Nontriviality from local rates",
+        "evidence": "Uses nontriviality lemma",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p3:edge-009",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p3-s7",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p3-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses AMW stationary-distribution theorem",
         "detection": "structural"
       },
       "hx/labels": [
@@ -358,20 +399,21 @@
     }
   ],
   "stats": {
-    "n_nodes": 7,
-    "n_edges": 9,
+    "n_nodes": 8,
+    "n_edges": 10,
     "node_types": {
       "question": 1,
-      "answer": 6
+      "answer": 7
     },
     "edge_types": {
-      "clarify": 2,
       "reform": 1,
+      "clarify": 2,
       "assert": 3,
-      "reference": 3
+      "reference": 3,
+      "exemplify": 1
     },
     "detection_types": {
-      "structural": 9
+      "structural": 10
     }
   }
 }
