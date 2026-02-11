@@ -268,7 +268,7 @@ def build_synthesis_prompt(
 ) -> str:
     """Build a synthesis prompt that reviews the entire proof."""
     stats = wiring.get("stats", {})
-    return "\n".join([
+    lines = [
         "You are a mathematical proof verifier reviewing a complete proof.",
         "",
         "## Task",
@@ -305,7 +305,7 @@ def build_synthesis_prompt(
         "(e.g., `mathoverflow.net` or `math.stackexchange.com`).",
         "8. Reply as a single JSON object matching the required schema. "
         "Use node_id='p5-synthesis' for the synthesis.",
-    ])
+    ]
     if math_se_dir:
         lines.extend([
             "",
