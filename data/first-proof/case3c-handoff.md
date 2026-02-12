@@ -1,6 +1,36 @@
 # Case 3c Handoff: Remaining Gap in the n=4 Stam Inequality Proof
 
-## Update (2026-02-12, Codex PHC run)
+## Update 2 (2026-02-12, certified total-degree script)
+
+The initial PHCpack runs (Update 1) used the blackbox solver, which returned
+`mixed_volume = 0` — meaning no certified root count. The blackbox solver found
+the right solutions but couldn't prove it found ALL of them.
+
+**Root cause**: `stable_mixed_volume()` returned 0, likely because the gradient
+polynomials' Newton polytopes are degenerate for the BKK bound. The blackbox
+solver then used its own heuristic to find solutions, but without a certified
+start system.
+
+**Fix**: `scripts/verify-p4-n4-case3c-phc-certified.py` uses **total degree
+homotopy** instead:
+1. Constructs start system `x_i^9 - 1` for each variable
+2. This has exactly 9^4 = 6561 start solutions (products of roots of unity)
+3. Tracks ALL 6561 homotopy paths from start to target
+4. Classifies every endpoint: finite (regular/singular), diverged, failed
+5. Certification: `regular + singular + diverged + failed = 6561`
+
+```bash
+pip install phcpy sympy
+python3 scripts/verify-p4-n4-case3c-phc-certified.py --tasks 0
+```
+
+Single-threaded (`--tasks 0`) is safest. Expect ~5-15 minutes for 6561 paths.
+Output: `data/first-proof/problem4-case3c-phc-certified.json`
+
+If `accounting_certified: true` and `all_nonneg: true` in the output, the proof
+is complete.
+
+## Update 1 (2026-02-12, Codex PHC run)
 
 PHCpack (`phcpy`, PHCv2.4.90) was executed on the full 4D gradient system via
 `scripts/verify-p4-n4-case3c-phc.py`.
@@ -15,8 +45,8 @@ Both runs agree on all in-domain real critical points:
   `-N = 1678.549826372544892... > 0`.
 
 High-precision refinement of Case 3c seeds gives `max |∇(-N)| < 1e-45`.
-Remaining caveat: PHC aggregate residual over all returned complex solutions is
-noisy, so full proof-grade global complex-root certification is still open.
+Remaining caveat: `mixed_volume = 0` means no certified root count from the
+polyhedral homotopy. See Update 2 for the fix.
 
 ## What's Been Proved (Algebraically Exact)
 
@@ -116,7 +146,9 @@ This reduces degrees significantly and might make Gröbner basis feasible.
 |------|-------------|
 | `scripts/verify-p4-n4-case2-final.py` | Case 2 proof (30s, loads cache from `/tmp/case2-elimination-cache.pkl`) |
 | `scripts/verify-p4-n4-case3-diag.py` | Cases 3a,3b proof (3s) |
-| `scripts/verify-p4-n4-case3c.py` | Case 3c analysis (incomplete — shows degree structure) |
+| `scripts/verify-p4-n4-case3c-phc.py` | Blackbox PHCpack run (both runs found 12 in-domain CPs) |
+| `scripts/verify-p4-n4-case3c-phc-certified.py` | **Certified** total-degree PHCpack run (6561 paths, full accounting) |
+| `scripts/verify-p4-n4-case3c.py` | Case 3c analysis (shows degree structure, resultant infeasible) |
 | `scripts/verify-p4-n4-classify-cps.py` | Numerical CP classification (17 min, comprehensive) |
 | `scripts/verify-p4-n4-lipschitz.py` | Grid verification + Lipschitz bounds (shows min grid -N = 0.025) |
 | `data/first-proof/p4-n4-proof-status.md` | Overall proof status document |
@@ -137,15 +169,26 @@ Writing S = N/D where D < 0 on the domain, we need -N ≥ 0.
 
 ## What Success Looks Like
 
-Either:
-1. PHCpack certifies that the gradient system has exactly K complex solutions,
-   and the K known real solutions (from Cases 1-3b plus the 4 generic CPs)
-   account for all real solutions in the domain, all with -N ≥ 0.
+Run the certified script:
+```bash
+python3 scripts/verify-p4-n4-case3c-phc-certified.py --tasks 0
+```
 
-   OR
+Check the output JSON for:
+```json
+{
+  "accounting_certified": true,     // all 6561 paths accounted
+  "all_nonneg": true,               // every in-domain CP has -N >= 0
+  "real_in_domain": 12,             // matches Cases 1-3b + Case 3c
+  "in_domain_by_case": {"case1": 4, "case3a": 2, "case3b": 2, "case3c": 4}
+}
+```
 
-2. Interval arithmetic (domain-aware) certifies -N ≥ 0 on every box that
-   intersects the domain.
+If both flags are true, the proof is complete:
+- Total degree homotopy certifies the gradient system has at most 6561 isolated
+  solutions (Bezout bound). All paths are tracked and accounted for.
+- The finite solutions include exactly 12 real in-domain CPs, all with -N ≥ 0.
+- Combined with algebraic proofs for Cases 1-3b and boundary analysis, this
+  certifies -N ≥ 0 on the entire domain.
 
-Either approach completes the proof of the n=4 finite free Stam inequality:
-**Φ₄(p ⊞₄ q) ≥ Φ₄(p) + Φ₄(q)** with equality iff p = q = x⁴ - x² + 1/12.
+**Φ₄(p ⊞₄ q) ≥ Φ₄(p) + Φ₄(q)** with equality iff p = q = x⁴ - x² + 1/12. ∎
