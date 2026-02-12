@@ -253,6 +253,94 @@ finite-n result should follow from convergence estimates. If no,
 then our inequality is a genuinely finite-dimensional phenomenon
 and requires a different proof.
 
+## Web Research Findings (2026-02-12)
+
+### Q4.8 RESULT: The free Stam inequality EXISTS and is PROVED
+
+**Key finding:** Voiculescu (1998) proved the **free Stam inequality**:
+
+    1/Φ*(X+Y) >= 1/Φ*(X) + 1/Φ*(Y)
+
+when X, Y are freely independent. Equality holds iff X, Y are semicircular
+(the free analog of Gaussian). This is EXACTLY our inequality in the
+n → ∞ limit!
+
+References:
+- Voiculescu (1993), "Analogues of entropy and Fisher's information, I,"
+  CMP 155, 71-92. [Defines Φ*, proves free Cramer-Rao]
+- Voiculescu (1998), "Analogues of entropy and Fisher's information, V:
+  Noncommutative Hilbert transforms," Invent. Math. 132.
+  [Proves the free Stam inequality]
+
+**Implication for P4:** Our inequality 1/Phi_n(p ⊞_n q) >= 1/Phi_n(p) +
+1/Phi_n(q) is the FINITE ANALOG of a known theorem. The proof strategy
+should be:
+1. Understand Voiculescu's proof technique for the free Stam inequality
+2. Find the finite-n analog of each step
+3. Use quantitative convergence (Phi_n/n → Φ*) to check consistency
+
+The free Stam inequality is proved via free Brownian motion and
+stochastic calculus in the free setting. A finite-n analog would need
+a finite version of this — possibly the Dyson Brownian motion on
+eigenvalues of A + sqrt(t)·GUE.
+
+### Q4.12 RESULT: Differentiation DOES interact with ⊞_n
+
+**Key finding from Marcus (2021) arXiv:2108.07054:**
+- Differentiation preserves real-rootedness under finite free convolution
+- The relationship between convolutions of different grades is a key tool
+  in analytic proofs, which "induct on the degrees of the polynomials"
+- Bounds on roots at degree n can be obtained by "reducing to the equal
+  degree case by differentiating sufficiently many times"
+- Section 5.2 contains majorization relations on convolutions
+
+**Additional from arXiv:2505.01705v2 (Finite-free Convolution: Infinitesimal
+Distributions, 2025):**
+- Proposition 5.4 analyzes how infinitesimal distributions change under
+  polynomial differentiation
+- H-transform formalism connects derivatives to convolution structure
+- No energy functional or superadditivity result in this paper
+
+**Implication for P4:** The induction-via-differentiation route (Q4.12)
+has concrete structural support. Marcus uses degree reduction via
+differentiation as a proof technique for finite free convolution results.
+The missing piece: connecting Phi_n to Phi_{n-1} through differentiation.
+
+### Q4.10 RESULT: Strong Weingarten/HCIZ toolbox available
+
+The local MO/MSE mining (see problem4-ngeq4-library-findings.md) found
+6 relevant MO threads on Weingarten calculus and HCIZ integrals. Web
+search confirms these are well-developed tools. The gap: no one has
+applied them specifically to compute E_Q[1/Phi_n(A + QBQ*)] or to
+prove superadditivity of 1/Phi_n under the expected-characteristic-
+polynomial convolution.
+
+### Updated Priority Ranking
+
+1. **Q4.8 (FREE STAM — HIGHEST)**: The free Stam inequality IS our
+   inequality in the limit. Voiculescu's proof technique (free stochastic
+   calculus) should be the primary model for a finite-n proof. The Dyson
+   Brownian motion / matrix-valued SDE approach is the most promising
+   route.
+
+2. **Q4.12 (INDUCTION via DIFFERENTIATION)**: Marcus uses differentiation
+   as an induction tool for finite free convolution. If we can show
+   Phi_n relates to Phi_{n-1} of the derivative, we get induction from
+   the proved n=3 base case.
+
+3. **Q4.9 (MSS WEIGHTS)**: Algebraic route via MO 287724. Concrete but
+   requires finding a nonnegative decomposition.
+
+4. **Q4.10 (WEINGARTEN)**: Strong toolbox, needs connection to our
+   specific functional.
+
+5. **Q4.11 (SCALE SEPARATION)**: Diagnostic, not proof-generating.
+
+6. **Q4.7 (FINITE ENTROPY)**: Subsumed by Q4.8 — the free Stam inequality
+   is the infinite-n version of what we want.
+
+---
+
 ## Search Strategy Notes
 
 1. **MathOverflow strongly preferred.** This is research-level.
