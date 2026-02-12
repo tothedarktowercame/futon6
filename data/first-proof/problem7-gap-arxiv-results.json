@@ -1,0 +1,815 @@
+{
+  "scope": "problem7-gaps",
+  "queries": [
+    {
+      "id": "g1-01",
+      "text": "all:\"rational Poincare duality\" AND all:\"finite CW\"",
+      "gap": "G1"
+    },
+    {
+      "id": "g1-02",
+      "text": "all:\"Bredon Poincare duality\" AND all:\"group\"",
+      "gap": "G1"
+    },
+    {
+      "id": "g1-03",
+      "text": "all:\"orbifold\" AND all:\"Poincare duality\" AND all:\"rational\"",
+      "gap": "G1"
+    },
+    {
+      "id": "g1-04",
+      "text": "all:\"rationally acyclic\" AND all:\"universal cover\" AND all:\"Poincare\"",
+      "gap": "G1"
+    },
+    {
+      "id": "g2-01",
+      "text": "all:\"Spivak normal fibration\" AND all:\"Poincare complex\"",
+      "gap": "G2"
+    },
+    {
+      "id": "g2-02",
+      "text": "all:\"degree one normal map\" AND all:\"Poincare complex\"",
+      "gap": "G2"
+    },
+    {
+      "id": "g2-03",
+      "text": "all:\"rational surgery\" AND all:\"Poincare duality group\"",
+      "gap": "G2"
+    },
+    {
+      "id": "g2-04",
+      "text": "all:\"surgery obstruction\" AND all:\"normal invariant\"",
+      "gap": "G2"
+    },
+    {
+      "id": "g3-01",
+      "text": "all:\"transfer\" AND all:\"surgery obstruction\" AND all:\"finite index\"",
+      "gap": "G3"
+    },
+    {
+      "id": "u1-01",
+      "text": "all:\"equivariant homology\" AND all:\"isotropy filtration\" AND all:\"splitting\"",
+      "gap": "U1"
+    },
+    {
+      "id": "u2-01",
+      "text": "all:\"equivariant Thom isomorphism\" AND all:\"L-theory\"",
+      "gap": "U2"
+    },
+    {
+      "id": "u2-02",
+      "text": "all:\"equivariant L-theory\" AND all:\"Thom\"",
+      "gap": "U2"
+    },
+    {
+      "id": "u3-01",
+      "text": "all:\"twisted L-theory\" AND all:\"orientation character\"",
+      "gap": "U3"
+    },
+    {
+      "id": "u3-02",
+      "text": "all:\"L-groups\" AND all:\"orientation character\" AND all:\"Q\"",
+      "gap": "U3"
+    },
+    {
+      "id": "fj-01",
+      "text": "all:\"Farrell-Jones\" AND all:\"lattices\" AND all:\"Lie groups\"",
+      "gap": "FJ"
+    },
+    {
+      "id": "fj-02",
+      "text": "all:\"UNil\" AND all:\"infinite dihedral\" AND all:\"L-theory\"",
+      "gap": "FJ"
+    },
+    {
+      "id": "rat-01",
+      "text": "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\"",
+      "gap": "G3"
+    },
+    {
+      "id": "rat-02",
+      "text": "all:\"non-nilpotent\" AND all:\"rational homotopy\"",
+      "gap": "G3"
+    },
+    {
+      "id": "geom-01",
+      "text": "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed set\"",
+      "gap": "E2"
+    },
+    {
+      "id": "geom-02",
+      "text": "all:\"equivariant surgery\" AND all:\"Z/2\"",
+      "gap": "G2"
+    }
+  ],
+  "unique_results": 13,
+  "top_n": 20,
+  "top_results": [
+    {
+      "id": "1311.7629",
+      "title": "Bredon-Poincare Duality Groups",
+      "date": "2013-11-29",
+      "authors": [
+        "Simon St John-Green"
+      ],
+      "cats": [
+        "math.GR",
+        "math.AT"
+      ],
+      "summary": "If $G$ is a group which admits a manifold model for $\\mathrm{B}G$ then $G$ is a Poincar\u00e9 duality group. We study a generalisation of Poincar\u00e9 duality groups, introduced initially by Davis and Leary, motivated by groups $G$ with cocompact manifold models $M$ for $\\underline{\\mathrm{E}}G$ where $M^H$ is a contractible submanifold for all finite subgroups $H$ of $G$. We give several sources of examples and constructions of these Bredon-Poincar\u00e9 duality groups, including using the equivariant reflection group trick of Davis and Leary to construct examples of Bredon-Poincar\u00e9 duality groups arising from actions on manifolds $M$ where the dimensions of the submanifolds $M^H$ are specified. We classify Bredon-Poincar\u00e9 duality groups in low dimensions, and discuss behaviour under group extensions and graphs of groups.",
+      "url": "https://arxiv.org/abs/1311.7629",
+      "query_ids": [
+        "g1-02"
+      ],
+      "query_texts": [
+        "all:\"Bredon Poincare duality\" AND all:\"group\""
+      ],
+      "gaps": [
+        "G1"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 12
+    },
+    {
+      "id": "0606107",
+      "title": "Pro-algebraic homotopy types",
+      "date": "2006-06-05",
+      "authors": [
+        "J. P. Pridham"
+      ],
+      "cats": [
+        "math.AT",
+        "math.AG"
+      ],
+      "summary": "The purpose of this paper is to generalise Sullivan's rational homotopy theory to non-nilpotent spaces, providing an alternative approach to defining Toen's schematic homotopy types over any field k of characteristic zero. New features include an explicit description of homotopy groups using the Maurer-Cartan equations, convergent spectral sequences comparing schematic homotopy groups with cohomology of the universal semisimple local system, and a generalisation of the Baues-Lemaire conjecture. For compact Kaehler manifolds, the schematic homotopy groups can be described explicitly in terms of this cohomology ring, giving canonical weight decompositions. There are also notions of minimal models, unpointed homotopy types and algebraic automorphism groups. For a space with algebraically good fundamental group and higher homotopy groups of finite rank, the schematic homotopy groups are shown to be \u03c0_n(X)\\otimes k.",
+      "url": "https://arxiv.org/abs/0606107",
+      "query_ids": [
+        "rat-01",
+        "rat-02"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\"",
+        "all:\"non-nilpotent\" AND all:\"rational homotopy\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 2,
+      "gap_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1609.07468",
+      "title": "The A-theoretic Farrell-Jones Conjecture for virtually solvable groups",
+      "date": "2016-09-23",
+      "authors": [
+        "Daniel Kasprowski",
+        "Mark Ullmann",
+        "Christian Wegner",
+        "Christoph Winges"
+      ],
+      "cats": [
+        "math.KT",
+        "math.AT",
+        "math.GT"
+      ],
+      "summary": "We prove the A-theoretic Farrell-Jones Conjecture for virtually solvable groups. As a corollary, we obtain that the conjecture holds for S-arithmetic groups and lattices in almost connected Lie groups.",
+      "url": "https://arxiv.org/abs/1609.07468",
+      "query_ids": [
+        "fj-01"
+      ],
+      "query_texts": [
+        "all:\"Farrell-Jones\" AND all:\"lattices\" AND all:\"Lie groups\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1705.10909",
+      "title": "The equivariant Spivak normal bundle and equivariant surgery for compact Lie groups",
+      "date": "2017-05-31",
+      "authors": [
+        "Steven R. Costenoble",
+        "Stefan Waner"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "We generalize the results of a previous paper of ours to compact Lie groups. Using a recently developed ordinary equivariant homology and cohomology, we define equivariant Poincare complexes with the properties that (1) every compact G-manifold is an equivariant Poincare complex, (2) every finite equivariant Poincare complex (with some mild additional hypotheses) has an equivariant spherical Spivak normal fibration, and (3) the Pi-Pi Theorem holds for equivariant Poincare pairs under suitable gap hypotheses. The nice behavior of the ordinary equivariant homology and cohomology theories allows us to follow Wall's original line of argument closely.",
+      "url": "https://arxiv.org/abs/1705.10909",
+      "query_ids": [
+        "g2-01"
+      ],
+      "query_texts": [
+        "all:\"Spivak normal fibration\" AND all:\"Poincare complex\""
+      ],
+      "gaps": [
+        "G2"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "0304362",
+      "title": "Generalized Arf invariants in algebraic L-theory",
+      "date": "2003-04-23",
+      "authors": [
+        "Markus Banagl",
+        "Andrew Ranicki"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "The difference between the quadratic L-groups L_*(A) and the symmetric L-groups L^*(A) of a ring with involution A is detected by generalized Arf invariants. The special case A=Z[x] gives a complete set of invariants for the Cappell UNil-groups UNil_*(Z;Z,Z) for the infinite dihedral group D_{\\infty}=Z_2*Z_2, extending the results of Connolly and Ranicki (math.AT/0304016) and Connolly and Davis.",
+      "url": "https://arxiv.org/abs/0304362",
+      "query_ids": [
+        "fj-02"
+      ],
+      "query_texts": [
+        "all:\"UNil\" AND all:\"infinite dihedral\" AND all:\"L-theory\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "1607.06395",
+      "title": "On the Farrell-Jones Conjecture for Waldhausen's $A$-theory",
+      "date": "2016-07-21",
+      "authors": [
+        "Nils-Edvin Enkelmann",
+        "Wolfgang L\u00fcck",
+        "Malte Pieper",
+        "Mark Ullmann",
+        "Christoph Winges"
+      ],
+      "cats": [
+        "math.GT",
+        "math.KT"
+      ],
+      "summary": "We prove the Farrell-Jones Conjecture for (non-connective) $A$-theory with coefficients and finite wreath products for hyperbolic groups, CAT(0)-groups, cocompact lattices in almost connected Lie groups and fundamental groups of manifolds of dimension less or equal to three. Moreover, we prove inheritance properties such as passing to subgroups, colimits of direct systems of groups, finite direct products and finite free products. These results hold also for Whitehead spectra and spectra of stable pseudo-isotopies in the topological, piecewise linear and smooth category.",
+      "url": "https://arxiv.org/abs/1607.06395",
+      "query_ids": [
+        "fj-01"
+      ],
+      "query_texts": [
+        "all:\"Farrell-Jones\" AND all:\"lattices\" AND all:\"Lie groups\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "0810.0808",
+      "title": "Rational homotopy theory and differential graded category",
+      "date": "2008-10-05",
+      "authors": [
+        "Syunji Moriya"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "We propose a generalization of Sullivan's de Rham homotopy theory to non-simply connected spaces. The formulation is such that the real homotopy type of a manifold should be the closed tensor dg-category of flat bundles on it much the same as the real homotopy type of a simply connected manifold is the de Rham algebra in original Sullivan's theory. We prove the existence of a model category structure on the category of small closed tensor dg-categories and as a most simple case, confirm an equivalence between the homotopy category of spaces whose fundamental groups are finite and whose higher homotopy groups are finite dimensional rational vector spaces and the homotopy category of small closed tensor dg-categories satisfying certain conditions.",
+      "url": "https://arxiv.org/abs/0810.0808",
+      "query_ids": [
+        "rat-01"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "0903.2307",
+      "title": "Geometric and algebraic aspects of 1-formality",
+      "date": "2009-03-13",
+      "authors": [
+        "Stefan Papadima",
+        "Alexandru I. Suciu"
+      ],
+      "cats": [
+        "math.AT",
+        "math.AG"
+      ],
+      "summary": "Formality is a topological property, defined in terms of Sullivan's model for a space. In the simply-connected setting, a space is formal if its rational homotopy type is determined by the rational cohomology ring. In the general setting, the weaker 1-formality property allows one to reconstruct the rational pro-unipotent completion of the fundamental group, solely from the cup products of degree 1 cohomology classes. In this note, we survey various facets of formality, with emphasis on the geometric and algebraic implications of 1-formality, and its relations to the cohomology jump loci and the Bieri-Neumann-Strebel invariant. We also produce examples of 4-manifolds W such that, for every compact K\u00e4hler manifold M, the product M\\times W has the rational homotopy type of a K\u00e4hler manifold, yet M\\times W admits no K\u00e4hler metric.",
+      "url": "https://arxiv.org/abs/0903.2307",
+      "query_ids": [
+        "rat-01"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "1101.0469",
+      "title": "The Farrell-Jones Conjecture for cocompact lattices in virtually connected Lie groups",
+      "date": "2011-01-03",
+      "authors": [
+        "Arthur Bartels",
+        "F. T. Farrell",
+        "Wolfgang Lueck"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "Let G be a cocompact lattice in a virtually connected Lie group or the fundamental group of a 3-manifold. We prove the K-theoretic Farrell-Jones Conjecture (up to dimension one) and the L-theoretic Farrell-Jones Conjecture for G, where we allow coefficients in additive G-categories with (involution).",
+      "url": "https://arxiv.org/abs/1101.0469",
+      "query_ids": [
+        "fj-01"
+      ],
+      "query_texts": [
+        "all:\"Farrell-Jones\" AND all:\"lattices\" AND all:\"Lie groups\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "1401.0876",
+      "title": "The Farrell-Jones conjecture for arbitrary lattices in virtually connected Lie groups",
+      "date": "2014-01-05",
+      "authors": [
+        "Holger Kammeyer",
+        "Wolfgang Lueck",
+        "Henrik Rueping"
+      ],
+      "cats": [
+        "math.KT"
+      ],
+      "summary": "We prove the K- and the $L$-theoretic Farrell-Jones conjecture with coefficients in additive categories and with finite wreath products for arbitrary lattices in virtually connected Lie groups.",
+      "url": "https://arxiv.org/abs/1401.0876",
+      "query_ids": [
+        "fj-01"
+      ],
+      "query_texts": [
+        "all:\"Farrell-Jones\" AND all:\"lattices\" AND all:\"Lie groups\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2007.10844",
+      "title": "Representation homology of simply connected spaces",
+      "date": "2020-07-19",
+      "authors": [
+        "Yuri Berest",
+        "Ajay C. Ramadoss",
+        "Wai-Kit Yeung"
+      ],
+      "cats": [
+        "math.AT",
+        "math.KT",
+        "math.QA",
+        "math.RT"
+      ],
+      "summary": "Let $G$ be an affine algebraic group defined over field $k$ of characteristic zero. We study the derived moduli space of G-local systems on a pointed connected CW complex X trivialized at the basepoint of $X$. This derived moduli space is represented by an affine DG scheme RLoc$_G(X,*)$: we call the (co)homology of the structure sheaf of RLoc$_G(X,*)$ the representation homology of $X$ in $G$ and denote it by HR$_*(X,G)$. The HR$_0(X,G)$ is isomorphic to the coordinate ring of the representation variety Rep$_G[\u03c0_1(X)]$ of the fundamental group of $X$ in $G$ -- a well-known algebro-geometric invariant of $X$ with many applications in topology. The case when X is simply connected seems much less studied: in this case, the HR$_0(X,G)$ is trivial but the higher representation homology is still an interesting rational invariant of $X$ depending on the algebraic group $G$. In this paper, we use rational homotopy theory to compute the HR$_*(X,G)$ for an arbitrary simply connected space $X$ (of finite rational type) in terms of its Quillen and Sullivan algebraic models. When $G$ is reductive, we also compute the $G$-invariant part of representation homology, HR$_*(X,G)^G$, and study the question when HR$_*(X,G)^G$ is free of locally finite type as a graded commutative algebra. This question turns out to be closely related to the so-called Strong Macdonald Conjecture, a celebrated result in representation theory proposed (as a conjecture) by B. Feigin and P. Hanlon in the 1980s and proved by S. Fishel, I. Grojnowski and C. Teleman in 2008. Reformulating the Strong Macdonald Conjecture in topological terms, we give a simple characterization of spaces $X$ for which HR$_*(X,G)^G$ is a graded symmetric algebra for any complex reductive group $G$.",
+      "url": "https://arxiv.org/abs/2007.10844",
+      "query_ids": [
+        "rat-01"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2304.00880",
+      "title": "A note on non-simply connected rational homotopy models",
+      "date": "2023-04-03",
+      "authors": [
+        "Syunji Moriya"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "In their generalization of the rational homotopy theory to non-simply connected spaces, G\u00f3mez-Tato--Halperin--Tanr\u00e9 adopted local systems of commutative differential graded algebras (CDGA's) as algebraic models. As another non-simply connected rational model, a $\u03c0_1$-equivariant CDGA with a semi-simple action was introduced by Hain and studied by Katzarkov-Pantev-To\u00ebn and Pridham. These models have their own advantages and direct comparison might be important. In this note, we present an example of local system of CDGA's which is a non-nilpotent version of an example given by G\u00f3mez-Tato et al., and compute the corresponding $\u03c0_1$-equivariant CDGA. We also see how some homotopy invariants such as homotopy groups and twisted cohomology are algebraically recovered from the equivariant CDGA with this example. We also describe a general procedure to obtain the corresponding equivariant CDGA model from a local system model in the case of $\u03c0_1=\\mathbb{Z}\\times \\mathbb{Z}$.",
+      "url": "https://arxiv.org/abs/2304.00880",
+      "query_ids": [
+        "rat-02"
+      ],
+      "query_texts": [
+        "all:\"non-nilpotent\" AND all:\"rational homotopy\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2210.08310",
+      "title": "Formality and finiteness in rational homotopy theory",
+      "date": "2022-10-15",
+      "authors": [
+        "Alexander I. Suciu"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "We explore various formality and finiteness properties in the differential graded algebra models for the Sullivan algebra of piecewise polynomial rational forms on a space. The 1-formality property of the space may be reinterpreted in terms of the filtered and graded formality properties of the Malcev Lie algebra of its fundamental group, while some of the finiteness properties of the space are mirrored in the finiteness properties of algebraic models associated with it. In turn, the formality and finiteness properties of algebraic models have strong implications on the geometry of the cohomology jump loci of the space. We illustrate the theory with examples drawn from complex algebraic geometry, actions of compact Lie groups, and 3-dimensional manifolds.",
+      "url": "https://arxiv.org/abs/2210.08310",
+      "query_ids": [
+        "rat-01"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 7
+    }
+  ],
+  "results": [
+    {
+      "id": "1311.7629",
+      "title": "Bredon-Poincare Duality Groups",
+      "date": "2013-11-29",
+      "authors": [
+        "Simon St John-Green"
+      ],
+      "cats": [
+        "math.GR",
+        "math.AT"
+      ],
+      "summary": "If $G$ is a group which admits a manifold model for $\\mathrm{B}G$ then $G$ is a Poincar\u00e9 duality group. We study a generalisation of Poincar\u00e9 duality groups, introduced initially by Davis and Leary, motivated by groups $G$ with cocompact manifold models $M$ for $\\underline{\\mathrm{E}}G$ where $M^H$ is a contractible submanifold for all finite subgroups $H$ of $G$. We give several sources of examples and constructions of these Bredon-Poincar\u00e9 duality groups, including using the equivariant reflection group trick of Davis and Leary to construct examples of Bredon-Poincar\u00e9 duality groups arising from actions on manifolds $M$ where the dimensions of the submanifolds $M^H$ are specified. We classify Bredon-Poincar\u00e9 duality groups in low dimensions, and discuss behaviour under group extensions and graphs of groups.",
+      "url": "https://arxiv.org/abs/1311.7629",
+      "query_ids": [
+        "g1-02"
+      ],
+      "query_texts": [
+        "all:\"Bredon Poincare duality\" AND all:\"group\""
+      ],
+      "gaps": [
+        "G1"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 12
+    },
+    {
+      "id": "0606107",
+      "title": "Pro-algebraic homotopy types",
+      "date": "2006-06-05",
+      "authors": [
+        "J. P. Pridham"
+      ],
+      "cats": [
+        "math.AT",
+        "math.AG"
+      ],
+      "summary": "The purpose of this paper is to generalise Sullivan's rational homotopy theory to non-nilpotent spaces, providing an alternative approach to defining Toen's schematic homotopy types over any field k of characteristic zero. New features include an explicit description of homotopy groups using the Maurer-Cartan equations, convergent spectral sequences comparing schematic homotopy groups with cohomology of the universal semisimple local system, and a generalisation of the Baues-Lemaire conjecture. For compact Kaehler manifolds, the schematic homotopy groups can be described explicitly in terms of this cohomology ring, giving canonical weight decompositions. There are also notions of minimal models, unpointed homotopy types and algebraic automorphism groups. For a space with algebraically good fundamental group and higher homotopy groups of finite rank, the schematic homotopy groups are shown to be \u03c0_n(X)\\otimes k.",
+      "url": "https://arxiv.org/abs/0606107",
+      "query_ids": [
+        "rat-01",
+        "rat-02"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\"",
+        "all:\"non-nilpotent\" AND all:\"rational homotopy\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 2,
+      "gap_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1609.07468",
+      "title": "The A-theoretic Farrell-Jones Conjecture for virtually solvable groups",
+      "date": "2016-09-23",
+      "authors": [
+        "Daniel Kasprowski",
+        "Mark Ullmann",
+        "Christian Wegner",
+        "Christoph Winges"
+      ],
+      "cats": [
+        "math.KT",
+        "math.AT",
+        "math.GT"
+      ],
+      "summary": "We prove the A-theoretic Farrell-Jones Conjecture for virtually solvable groups. As a corollary, we obtain that the conjecture holds for S-arithmetic groups and lattices in almost connected Lie groups.",
+      "url": "https://arxiv.org/abs/1609.07468",
+      "query_ids": [
+        "fj-01"
+      ],
+      "query_texts": [
+        "all:\"Farrell-Jones\" AND all:\"lattices\" AND all:\"Lie groups\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1705.10909",
+      "title": "The equivariant Spivak normal bundle and equivariant surgery for compact Lie groups",
+      "date": "2017-05-31",
+      "authors": [
+        "Steven R. Costenoble",
+        "Stefan Waner"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "We generalize the results of a previous paper of ours to compact Lie groups. Using a recently developed ordinary equivariant homology and cohomology, we define equivariant Poincare complexes with the properties that (1) every compact G-manifold is an equivariant Poincare complex, (2) every finite equivariant Poincare complex (with some mild additional hypotheses) has an equivariant spherical Spivak normal fibration, and (3) the Pi-Pi Theorem holds for equivariant Poincare pairs under suitable gap hypotheses. The nice behavior of the ordinary equivariant homology and cohomology theories allows us to follow Wall's original line of argument closely.",
+      "url": "https://arxiv.org/abs/1705.10909",
+      "query_ids": [
+        "g2-01"
+      ],
+      "query_texts": [
+        "all:\"Spivak normal fibration\" AND all:\"Poincare complex\""
+      ],
+      "gaps": [
+        "G2"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "0304362",
+      "title": "Generalized Arf invariants in algebraic L-theory",
+      "date": "2003-04-23",
+      "authors": [
+        "Markus Banagl",
+        "Andrew Ranicki"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "The difference between the quadratic L-groups L_*(A) and the symmetric L-groups L^*(A) of a ring with involution A is detected by generalized Arf invariants. The special case A=Z[x] gives a complete set of invariants for the Cappell UNil-groups UNil_*(Z;Z,Z) for the infinite dihedral group D_{\\infty}=Z_2*Z_2, extending the results of Connolly and Ranicki (math.AT/0304016) and Connolly and Davis.",
+      "url": "https://arxiv.org/abs/0304362",
+      "query_ids": [
+        "fj-02"
+      ],
+      "query_texts": [
+        "all:\"UNil\" AND all:\"infinite dihedral\" AND all:\"L-theory\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "1607.06395",
+      "title": "On the Farrell-Jones Conjecture for Waldhausen's $A$-theory",
+      "date": "2016-07-21",
+      "authors": [
+        "Nils-Edvin Enkelmann",
+        "Wolfgang L\u00fcck",
+        "Malte Pieper",
+        "Mark Ullmann",
+        "Christoph Winges"
+      ],
+      "cats": [
+        "math.GT",
+        "math.KT"
+      ],
+      "summary": "We prove the Farrell-Jones Conjecture for (non-connective) $A$-theory with coefficients and finite wreath products for hyperbolic groups, CAT(0)-groups, cocompact lattices in almost connected Lie groups and fundamental groups of manifolds of dimension less or equal to three. Moreover, we prove inheritance properties such as passing to subgroups, colimits of direct systems of groups, finite direct products and finite free products. These results hold also for Whitehead spectra and spectra of stable pseudo-isotopies in the topological, piecewise linear and smooth category.",
+      "url": "https://arxiv.org/abs/1607.06395",
+      "query_ids": [
+        "fj-01"
+      ],
+      "query_texts": [
+        "all:\"Farrell-Jones\" AND all:\"lattices\" AND all:\"Lie groups\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "0810.0808",
+      "title": "Rational homotopy theory and differential graded category",
+      "date": "2008-10-05",
+      "authors": [
+        "Syunji Moriya"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "We propose a generalization of Sullivan's de Rham homotopy theory to non-simply connected spaces. The formulation is such that the real homotopy type of a manifold should be the closed tensor dg-category of flat bundles on it much the same as the real homotopy type of a simply connected manifold is the de Rham algebra in original Sullivan's theory. We prove the existence of a model category structure on the category of small closed tensor dg-categories and as a most simple case, confirm an equivalence between the homotopy category of spaces whose fundamental groups are finite and whose higher homotopy groups are finite dimensional rational vector spaces and the homotopy category of small closed tensor dg-categories satisfying certain conditions.",
+      "url": "https://arxiv.org/abs/0810.0808",
+      "query_ids": [
+        "rat-01"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "0903.2307",
+      "title": "Geometric and algebraic aspects of 1-formality",
+      "date": "2009-03-13",
+      "authors": [
+        "Stefan Papadima",
+        "Alexandru I. Suciu"
+      ],
+      "cats": [
+        "math.AT",
+        "math.AG"
+      ],
+      "summary": "Formality is a topological property, defined in terms of Sullivan's model for a space. In the simply-connected setting, a space is formal if its rational homotopy type is determined by the rational cohomology ring. In the general setting, the weaker 1-formality property allows one to reconstruct the rational pro-unipotent completion of the fundamental group, solely from the cup products of degree 1 cohomology classes. In this note, we survey various facets of formality, with emphasis on the geometric and algebraic implications of 1-formality, and its relations to the cohomology jump loci and the Bieri-Neumann-Strebel invariant. We also produce examples of 4-manifolds W such that, for every compact K\u00e4hler manifold M, the product M\\times W has the rational homotopy type of a K\u00e4hler manifold, yet M\\times W admits no K\u00e4hler metric.",
+      "url": "https://arxiv.org/abs/0903.2307",
+      "query_ids": [
+        "rat-01"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "1101.0469",
+      "title": "The Farrell-Jones Conjecture for cocompact lattices in virtually connected Lie groups",
+      "date": "2011-01-03",
+      "authors": [
+        "Arthur Bartels",
+        "F. T. Farrell",
+        "Wolfgang Lueck"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "Let G be a cocompact lattice in a virtually connected Lie group or the fundamental group of a 3-manifold. We prove the K-theoretic Farrell-Jones Conjecture (up to dimension one) and the L-theoretic Farrell-Jones Conjecture for G, where we allow coefficients in additive G-categories with (involution).",
+      "url": "https://arxiv.org/abs/1101.0469",
+      "query_ids": [
+        "fj-01"
+      ],
+      "query_texts": [
+        "all:\"Farrell-Jones\" AND all:\"lattices\" AND all:\"Lie groups\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "1401.0876",
+      "title": "The Farrell-Jones conjecture for arbitrary lattices in virtually connected Lie groups",
+      "date": "2014-01-05",
+      "authors": [
+        "Holger Kammeyer",
+        "Wolfgang Lueck",
+        "Henrik Rueping"
+      ],
+      "cats": [
+        "math.KT"
+      ],
+      "summary": "We prove the K- and the $L$-theoretic Farrell-Jones conjecture with coefficients in additive categories and with finite wreath products for arbitrary lattices in virtually connected Lie groups.",
+      "url": "https://arxiv.org/abs/1401.0876",
+      "query_ids": [
+        "fj-01"
+      ],
+      "query_texts": [
+        "all:\"Farrell-Jones\" AND all:\"lattices\" AND all:\"Lie groups\""
+      ],
+      "gaps": [
+        "FJ"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2007.10844",
+      "title": "Representation homology of simply connected spaces",
+      "date": "2020-07-19",
+      "authors": [
+        "Yuri Berest",
+        "Ajay C. Ramadoss",
+        "Wai-Kit Yeung"
+      ],
+      "cats": [
+        "math.AT",
+        "math.KT",
+        "math.QA",
+        "math.RT"
+      ],
+      "summary": "Let $G$ be an affine algebraic group defined over field $k$ of characteristic zero. We study the derived moduli space of G-local systems on a pointed connected CW complex X trivialized at the basepoint of $X$. This derived moduli space is represented by an affine DG scheme RLoc$_G(X,*)$: we call the (co)homology of the structure sheaf of RLoc$_G(X,*)$ the representation homology of $X$ in $G$ and denote it by HR$_*(X,G)$. The HR$_0(X,G)$ is isomorphic to the coordinate ring of the representation variety Rep$_G[\u03c0_1(X)]$ of the fundamental group of $X$ in $G$ -- a well-known algebro-geometric invariant of $X$ with many applications in topology. The case when X is simply connected seems much less studied: in this case, the HR$_0(X,G)$ is trivial but the higher representation homology is still an interesting rational invariant of $X$ depending on the algebraic group $G$. In this paper, we use rational homotopy theory to compute the HR$_*(X,G)$ for an arbitrary simply connected space $X$ (of finite rational type) in terms of its Quillen and Sullivan algebraic models. When $G$ is reductive, we also compute the $G$-invariant part of representation homology, HR$_*(X,G)^G$, and study the question when HR$_*(X,G)^G$ is free of locally finite type as a graded commutative algebra. This question turns out to be closely related to the so-called Strong Macdonald Conjecture, a celebrated result in representation theory proposed (as a conjecture) by B. Feigin and P. Hanlon in the 1980s and proved by S. Fishel, I. Grojnowski and C. Teleman in 2008. Reformulating the Strong Macdonald Conjecture in topological terms, we give a simple characterization of spaces $X$ for which HR$_*(X,G)^G$ is a graded symmetric algebra for any complex reductive group $G$.",
+      "url": "https://arxiv.org/abs/2007.10844",
+      "query_ids": [
+        "rat-01"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2304.00880",
+      "title": "A note on non-simply connected rational homotopy models",
+      "date": "2023-04-03",
+      "authors": [
+        "Syunji Moriya"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "In their generalization of the rational homotopy theory to non-simply connected spaces, G\u00f3mez-Tato--Halperin--Tanr\u00e9 adopted local systems of commutative differential graded algebras (CDGA's) as algebraic models. As another non-simply connected rational model, a $\u03c0_1$-equivariant CDGA with a semi-simple action was introduced by Hain and studied by Katzarkov-Pantev-To\u00ebn and Pridham. These models have their own advantages and direct comparison might be important. In this note, we present an example of local system of CDGA's which is a non-nilpotent version of an example given by G\u00f3mez-Tato et al., and compute the corresponding $\u03c0_1$-equivariant CDGA. We also see how some homotopy invariants such as homotopy groups and twisted cohomology are algebraically recovered from the equivariant CDGA with this example. We also describe a general procedure to obtain the corresponding equivariant CDGA model from a local system model in the case of $\u03c0_1=\\mathbb{Z}\\times \\mathbb{Z}$.",
+      "url": "https://arxiv.org/abs/2304.00880",
+      "query_ids": [
+        "rat-02"
+      ],
+      "query_texts": [
+        "all:\"non-nilpotent\" AND all:\"rational homotopy\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2210.08310",
+      "title": "Formality and finiteness in rational homotopy theory",
+      "date": "2022-10-15",
+      "authors": [
+        "Alexander I. Suciu"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "We explore various formality and finiteness properties in the differential graded algebra models for the Sullivan algebra of piecewise polynomial rational forms on a space. The 1-formality property of the space may be reinterpreted in terms of the filtered and graded formality properties of the Malcev Lie algebra of its fundamental group, while some of the finiteness properties of the space are mirrored in the finiteness properties of algebraic models associated with it. In turn, the formality and finiteness properties of algebraic models have strong implications on the geometry of the cohomology jump loci of the space. We illustrate the theory with examples drawn from complex algebraic geometry, actions of compact Lie groups, and 3-dimensional manifolds.",
+      "url": "https://arxiv.org/abs/2210.08310",
+      "query_ids": [
+        "rat-01"
+      ],
+      "query_texts": [
+        "all:\"Sullivan\" AND all:\"rational homotopy\" AND all:\"fundamental group\""
+      ],
+      "gaps": [
+        "G3"
+      ],
+      "query_hits": 1,
+      "gap_hits": 1,
+      "score": 7
+    }
+  ]
+}

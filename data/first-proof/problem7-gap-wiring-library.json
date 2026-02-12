@@ -1,0 +1,1545 @@
+{
+  "library_id": "problem7-gap-wiring-library",
+  "date": "2026-02-12",
+  "source_scope": "paper-mined wiring diagrams for Problem 7 gaps",
+  "target_gaps": [
+    "G1",
+    "G2",
+    "G3",
+    "U1",
+    "U2",
+    "U3",
+    "FJ",
+    "E2"
+  ],
+  "diagram_count": 22,
+  "similarity_schema": {
+    "node_roles": [
+      "Q: target subproblem",
+      "D: decomposition or data model",
+      "M: core mechanism",
+      "C: certificate theorem/tool",
+      "O: output statement",
+      "B: bridge status back to P7 gaps"
+    ],
+    "edge_pattern": [
+      "D -> Q (clarify)",
+      "M -> D (assert)",
+      "C -> M (reference)",
+      "O -> Q (assert)",
+      "B -> O (reform|challenge)"
+    ]
+  },
+  "gap_tag_counts": {
+    "E2": 6,
+    "FJ": 8,
+    "G1": 7,
+    "G2": 2,
+    "G3": 3,
+    "U3": 2
+  },
+  "diagrams": [
+    {
+      "id": "p7g-d01",
+      "title": "Fowler FH(Q) Fixed-Set Criterion",
+      "paper": "arXiv:1204.4667",
+      "gap_tags": [
+        "G1",
+        "E2"
+      ],
+      "bridge_status": "direct",
+      "nodes": [
+        {
+          "id": "p7g-d01-q",
+          "node_type": "question",
+          "body_text": "Place an orbifold extension group Gamma in FH(Q) via finite-action data."
+        },
+        {
+          "id": "p7g-d01-d",
+          "node_type": "answer",
+          "body_text": "Model Gamma as pi_1((EG x Bpi)/G) for finite G-action on finite Bpi."
+        },
+        {
+          "id": "p7g-d01-m",
+          "node_type": "answer",
+          "body_text": "Reduce finiteness obstruction to Euler-characteristic data on fixed components."
+        },
+        {
+          "id": "p7g-d01-c",
+          "node_type": "comment",
+          "body_text": "Main theorem: vanishing chi on nontrivial fixed components kills obstruction."
+        },
+        {
+          "id": "p7g-d01-o",
+          "node_type": "answer",
+          "body_text": "Existence of finite CW with pi_1=Gamma and rationally acyclic universal cover."
+        },
+        {
+          "id": "p7g-d01-b",
+          "node_type": "comment",
+          "body_text": "Directly discharges E2 when concrete Z/2 fixed-set checks are verified."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d01-d",
+          "target": "p7g-d01-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d01-m",
+          "target": "p7g-d01-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d01-c",
+          "target": "p7g-d01-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d01-o",
+          "target": "p7g-d01-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d01-b",
+          "target": "p7g-d01-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d02",
+      "title": "Avramidi Rational Manifold Model Pipeline",
+      "paper": "arXiv:1506.06293",
+      "gap_tags": [
+        "G2"
+      ],
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "p7g-d02-q",
+          "node_type": "question",
+          "body_text": "Upgrade rational duality/finiteness input to manifold-level realization."
+        },
+        {
+          "id": "p7g-d02-d",
+          "node_type": "answer",
+          "body_text": "Start from duality-group and finite-classifying-space hypotheses."
+        },
+        {
+          "id": "p7g-d02-m",
+          "node_type": "answer",
+          "body_text": "Construct rational surgery/normal-map pipeline through manifold-with-boundary stage."
+        },
+        {
+          "id": "p7g-d02-c",
+          "node_type": "comment",
+          "body_text": "Rational surgery interface theorems and reflection-group closure methods."
+        },
+        {
+          "id": "p7g-d02-o",
+          "node_type": "answer",
+          "body_text": "Manifold models with rationally acyclic universal covers in controlled ranges."
+        },
+        {
+          "id": "p7g-d02-b",
+          "node_type": "comment",
+          "body_text": "Potential route for G2, but requires careful pi_1-preservation in P7 setting."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d02-d",
+          "target": "p7g-d02-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d02-m",
+          "target": "p7g-d02-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d02-c",
+          "target": "p7g-d02-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d02-o",
+          "target": "p7g-d02-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d02-b",
+          "target": "p7g-d02-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d03",
+      "title": "Bredon-Poincare Duality Group Framework",
+      "paper": "arXiv:1311.7629",
+      "gap_tags": [
+        "G1"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d03-q",
+          "node_type": "question",
+          "body_text": "Interpret Poincare duality when torsion prevents classical PD-group framing."
+        },
+        {
+          "id": "p7g-d03-d",
+          "node_type": "answer",
+          "body_text": "Use proper actions/family language and Bredon module categories."
+        },
+        {
+          "id": "p7g-d03-m",
+          "node_type": "answer",
+          "body_text": "Translate geometric duality into Bredon cohomological duality statements."
+        },
+        {
+          "id": "p7g-d03-c",
+          "node_type": "comment",
+          "body_text": "Bredon-PD theorems and criteria for duality over families of subgroups."
+        },
+        {
+          "id": "p7g-d03-o",
+          "node_type": "answer",
+          "body_text": "Cohomological PD control for torsion-containing groups acting properly."
+        },
+        {
+          "id": "p7g-d03-b",
+          "node_type": "comment",
+          "body_text": "Supports G1 at homology/cohomology level, not chain-level Poincare complex by itself."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d03-d",
+          "target": "p7g-d03-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d03-m",
+          "target": "p7g-d03-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d03-c",
+          "target": "p7g-d03-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d03-o",
+          "target": "p7g-d03-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d03-b",
+          "target": "p7g-d03-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d04",
+      "title": "Orbifold Translation Groupoid Cohomology Scaffold",
+      "paper": "arXiv:0705.3249",
+      "gap_tags": [
+        "G1"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d04-q",
+          "node_type": "question",
+          "body_text": "Relate orbifold quotient geometry to computable equivariant invariants."
+        },
+        {
+          "id": "p7g-d04-d",
+          "node_type": "answer",
+          "body_text": "Encode orbifold actions by translation groupoids."
+        },
+        {
+          "id": "p7g-d04-m",
+          "node_type": "answer",
+          "body_text": "Compute invariants via Bredon-style/orbifold cohomological functors."
+        },
+        {
+          "id": "p7g-d04-c",
+          "node_type": "comment",
+          "body_text": "Groupoid-cohomology comparison theorems for orbifold invariants."
+        },
+        {
+          "id": "p7g-d04-o",
+          "node_type": "answer",
+          "body_text": "Formal bridge between quotient-orbifold language and equivariant homological data."
+        },
+        {
+          "id": "p7g-d04-b",
+          "node_type": "comment",
+          "body_text": "Useful infrastructure for G1 framing, but not a direct Poincare-complex proof."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d04-d",
+          "target": "p7g-d04-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d04-m",
+          "target": "p7g-d04-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d04-c",
+          "target": "p7g-d04-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d04-o",
+          "target": "p7g-d04-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d04-b",
+          "target": "p7g-d04-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d05",
+      "title": "Classifying Spaces for Families Toolkit",
+      "paper": "arXiv:math/0312378",
+      "gap_tags": [
+        "G1",
+        "FJ"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d05-q",
+          "node_type": "question",
+          "body_text": "Control transitions among E_Fin, E_VCyc and family-indexed assembly domains."
+        },
+        {
+          "id": "p7g-d05-d",
+          "node_type": "answer",
+          "body_text": "Model group actions with family-classifying spaces and orbit-category functors."
+        },
+        {
+          "id": "p7g-d05-m",
+          "node_type": "answer",
+          "body_text": "Use family filtration and equivariant homology functoriality."
+        },
+        {
+          "id": "p7g-d05-c",
+          "node_type": "comment",
+          "body_text": "General classifying-space theorems and family comparison machinery."
+        },
+        {
+          "id": "p7g-d05-o",
+          "node_type": "answer",
+          "body_text": "Reusable setup for obstruction-domain changes and assembly-map inputs."
+        },
+        {
+          "id": "p7g-d05-b",
+          "node_type": "comment",
+          "body_text": "Supports U1/FJ structure checks; no direct obstruction vanishing."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d05-d",
+          "target": "p7g-d05-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d05-m",
+          "target": "p7g-d05-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d05-c",
+          "target": "p7g-d05-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d05-o",
+          "target": "p7g-d05-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d05-b",
+          "target": "p7g-d05-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d06",
+      "title": "FJ with Coefficients Inheritance Template",
+      "paper": "arXiv:math/0510602",
+      "gap_tags": [
+        "FJ"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d06-q",
+          "node_type": "question",
+          "body_text": "Prove assembly isomorphism robustness under constructions relevant to lattices."
+        },
+        {
+          "id": "p7g-d06-d",
+          "node_type": "answer",
+          "body_text": "Work in additive-category-with-involution coefficient framework."
+        },
+        {
+          "id": "p7g-d06-m",
+          "node_type": "answer",
+          "body_text": "Exploit inheritance/closure properties under group extensions/actions."
+        },
+        {
+          "id": "p7g-d06-c",
+          "node_type": "comment",
+          "body_text": "Coefficient-form Farrell-Jones statements and transitivity principles."
+        },
+        {
+          "id": "p7g-d06-o",
+          "node_type": "answer",
+          "body_text": "Assembly reduction remains valid in broader categorical settings."
+        },
+        {
+          "id": "p7g-d06-b",
+          "node_type": "comment",
+          "body_text": "Strengthens FJ leg of S-branch; does not identify sigma(f)."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d06-d",
+          "target": "p7g-d06-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d06-m",
+          "target": "p7g-d06-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d06-c",
+          "target": "p7g-d06-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d06-o",
+          "target": "p7g-d06-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d06-b",
+          "target": "p7g-d06-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d07",
+      "title": "K/L-Theory of Group Rings Survey Pattern",
+      "paper": "arXiv:1003.5002",
+      "gap_tags": [
+        "FJ"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d07-q",
+          "node_type": "question",
+          "body_text": "Organize obstruction computations after assembly reduction."
+        },
+        {
+          "id": "p7g-d07-d",
+          "node_type": "answer",
+          "body_text": "Express target L-groups via equivariant homology and known decomposition pieces."
+        },
+        {
+          "id": "p7g-d07-m",
+          "node_type": "answer",
+          "body_text": "Use high-level computation templates and conjectural implications."
+        },
+        {
+          "id": "p7g-d07-c",
+          "node_type": "comment",
+          "body_text": "Survey-level statements linking FJ to explicit L-group calculations."
+        },
+        {
+          "id": "p7g-d07-o",
+          "node_type": "answer",
+          "body_text": "Roadmap for moving from abstract assembly to computable summands."
+        },
+        {
+          "id": "p7g-d07-b",
+          "node_type": "comment",
+          "body_text": "Method guidance only; needs problem-specific arithmetic/topological input."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d07-d",
+          "target": "p7g-d07-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d07-m",
+          "target": "p7g-d07-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d07-c",
+          "target": "p7g-d07-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d07-o",
+          "target": "p7g-d07-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d07-b",
+          "target": "p7g-d07-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d08",
+      "title": "Hyperbolic/Virtually Abelian L-Group Computation Pattern",
+      "paper": "arXiv:1007.0845",
+      "gap_tags": [
+        "FJ",
+        "U3"
+      ],
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "p7g-d08-q",
+          "node_type": "question",
+          "body_text": "Extract explicit L-group formulas in groups with VCyc structure."
+        },
+        {
+          "id": "p7g-d08-d",
+          "node_type": "answer",
+          "body_text": "Decompose by finite and virtually cyclic subgroup contributions."
+        },
+        {
+          "id": "p7g-d08-m",
+          "node_type": "answer",
+          "body_text": "Apply assembly plus nil-term analysis to obtain concrete group-ring formulas."
+        },
+        {
+          "id": "p7g-d08-c",
+          "node_type": "comment",
+          "body_text": "Computation theorems for K/L-theory in hyperbolic and related classes."
+        },
+        {
+          "id": "p7g-d08-o",
+          "node_type": "answer",
+          "body_text": "Explicit algebraic targets for obstruction classes in selected cases."
+        },
+        {
+          "id": "p7g-d08-b",
+          "node_type": "comment",
+          "body_text": "Informative for U3-style coefficient behavior but not directly P7 lattice-specific."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d08-d",
+          "target": "p7g-d08-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d08-m",
+          "target": "p7g-d08-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d08-c",
+          "target": "p7g-d08-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d08-o",
+          "target": "p7g-d08-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d08-b",
+          "target": "p7g-d08-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d09",
+      "title": "Assembly-Map Meta-Library",
+      "paper": "arXiv:1805.00226",
+      "gap_tags": [
+        "FJ"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d09-q",
+          "node_type": "question",
+          "body_text": "Choose safe assembly formulations and decorations for obstruction calculations."
+        },
+        {
+          "id": "p7g-d09-d",
+          "node_type": "answer",
+          "body_text": "Track model choices, decorations, and families in a unified assembly framework."
+        },
+        {
+          "id": "p7g-d09-m",
+          "node_type": "answer",
+          "body_text": "Map problem data to the appropriate assembly variant and comparison diagram."
+        },
+        {
+          "id": "p7g-d09-c",
+          "node_type": "comment",
+          "body_text": "Comprehensive assembly map taxonomy and compatibility results."
+        },
+        {
+          "id": "p7g-d09-o",
+          "node_type": "answer",
+          "body_text": "Reduced risk of decoration/family mismatches in L-theory arguments."
+        },
+        {
+          "id": "p7g-d09-b",
+          "node_type": "comment",
+          "body_text": "Quality-control module for S-branch rigor, not an existence theorem."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d09-d",
+          "target": "p7g-d09-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d09-m",
+          "target": "p7g-d09-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d09-c",
+          "target": "p7g-d09-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d09-o",
+          "target": "p7g-d09-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d09-b",
+          "target": "p7g-d09-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d10",
+      "title": "FJ for Cocompact Lattices",
+      "paper": "arXiv:1101.0469",
+      "gap_tags": [
+        "FJ"
+      ],
+      "bridge_status": "direct",
+      "nodes": [
+        {
+          "id": "p7g-d10-q",
+          "node_type": "question",
+          "body_text": "Establish FJ for the cocompact lattice class used in P7."
+        },
+        {
+          "id": "p7g-d10-d",
+          "node_type": "answer",
+          "body_text": "Identify Gamma as cocompact lattice in virtually connected Lie group."
+        },
+        {
+          "id": "p7g-d10-m",
+          "node_type": "answer",
+          "body_text": "Apply geometric-flow/control machinery to prove assembly isomorphism."
+        },
+        {
+          "id": "p7g-d10-c",
+          "node_type": "comment",
+          "body_text": "Main theorem covering K/L-theoretic FJ with coefficients for this class."
+        },
+        {
+          "id": "p7g-d10-o",
+          "node_type": "answer",
+          "body_text": "Valid reduction from L_n(Z[Gamma]) to equivariant homology of VCyc family."
+        },
+        {
+          "id": "p7g-d10-b",
+          "node_type": "comment",
+          "body_text": "Directly secures core FJ input in p7r-s3b."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d10-d",
+          "target": "p7g-d10-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d10-m",
+          "target": "p7g-d10-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d10-c",
+          "target": "p7g-d10-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d10-o",
+          "target": "p7g-d10-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d10-b",
+          "target": "p7g-d10-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d11",
+      "title": "FJ Extension to Arbitrary Lattices",
+      "paper": "arXiv:1401.0876",
+      "gap_tags": [
+        "FJ"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d11-q",
+          "node_type": "question",
+          "body_text": "Ensure FJ remains available beyond cocompact specialization choices."
+        },
+        {
+          "id": "p7g-d11-d",
+          "node_type": "answer",
+          "body_text": "Embed lattice cases into arbitrary-lattice class in virtually connected Lie groups."
+        },
+        {
+          "id": "p7g-d11-m",
+          "node_type": "answer",
+          "body_text": "Transfer cocompact arguments via broader inheritance and reduction steps."
+        },
+        {
+          "id": "p7g-d11-c",
+          "node_type": "comment",
+          "body_text": "Main theorem for arbitrary lattices."
+        },
+        {
+          "id": "p7g-d11-o",
+          "node_type": "answer",
+          "body_text": "Robust fallback if lattice family variations occur in later revisions."
+        },
+        {
+          "id": "p7g-d11-b",
+          "node_type": "comment",
+          "body_text": "Stability module for scope changes; not itself a gap closer."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d11-d",
+          "target": "p7g-d11-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d11-m",
+          "target": "p7g-d11-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d11-c",
+          "target": "p7g-d11-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d11-o",
+          "target": "p7g-d11-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d11-b",
+          "target": "p7g-d11-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d12",
+      "title": "Closed-Manifold vs Inertia Subgroup Interface",
+      "paper": "arXiv:0905.0104",
+      "gap_tags": [
+        "G3"
+      ],
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "p7g-d12-q",
+          "node_type": "question",
+          "body_text": "Relate algebraic surgery obstructions to realizability by closed manifolds."
+        },
+        {
+          "id": "p7g-d12-d",
+          "node_type": "answer",
+          "body_text": "Fix orientation character and compare closed-manifold and inertia subgroups in L-groups."
+        },
+        {
+          "id": "p7g-d12-m",
+          "node_type": "answer",
+          "body_text": "Use surgery exact-sequence interfaces and subgroup-identification theorems."
+        },
+        {
+          "id": "p7g-d12-c",
+          "node_type": "comment",
+          "body_text": "Theorems A/B relating these subgroups under hypotheses."
+        },
+        {
+          "id": "p7g-d12-o",
+          "node_type": "answer",
+          "body_text": "Criteria for when assembly/image elements correspond to closed-manifold realizations."
+        },
+        {
+          "id": "p7g-d12-b",
+          "node_type": "comment",
+          "body_text": "Potentially sharpens final S-branch closure after obstruction class is identified."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d12-d",
+          "target": "p7g-d12-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d12-m",
+          "target": "p7g-d12-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d12-c",
+          "target": "p7g-d12-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d12-o",
+          "target": "p7g-d12-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d12-b",
+          "target": "p7g-d12-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d13",
+      "title": "Infinite Dihedral Surgery Obstruction Computations",
+      "paper": "arXiv:math/0306054",
+      "gap_tags": [
+        "U3"
+      ],
+      "bridge_status": "direct",
+      "nodes": [
+        {
+          "id": "p7g-d13-q",
+          "node_type": "question",
+          "body_text": "Control UNil/torsion contributions in VCyc and dihedral pieces."
+        },
+        {
+          "id": "p7g-d13-d",
+          "node_type": "answer",
+          "body_text": "Model type-II VCyc subgroups through dihedral group-ring computations."
+        },
+        {
+          "id": "p7g-d13-m",
+          "node_type": "answer",
+          "body_text": "Compute surgery obstruction groups and identify torsion behavior."
+        },
+        {
+          "id": "p7g-d13-c",
+          "node_type": "comment",
+          "body_text": "Explicit calculation theorems for infinite-dihedral L-groups/UNil terms."
+        },
+        {
+          "id": "p7g-d13-o",
+          "node_type": "answer",
+          "body_text": "Evidence that problematic terms are 2-primary and vanish after rationalization."
+        },
+        {
+          "id": "p7g-d13-b",
+          "node_type": "comment",
+          "body_text": "Directly supports the E_Fin to E_VCyc rational comparison step."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d13-d",
+          "target": "p7g-d13-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d13-m",
+          "target": "p7g-d13-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d13-c",
+          "target": "p7g-d13-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d13-o",
+          "target": "p7g-d13-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d13-b",
+          "target": "p7g-d13-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d14",
+      "title": "Modern Wall Finiteness Obstruction View",
+      "paper": "arXiv:1707.07960",
+      "gap_tags": [
+        "G1"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d14-q",
+          "node_type": "question",
+          "body_text": "Understand finiteness obstruction semantics behind FH(Q) style statements."
+        },
+        {
+          "id": "p7g-d14-d",
+          "node_type": "answer",
+          "body_text": "Represent finite-domination questions through Wall obstruction classes."
+        },
+        {
+          "id": "p7g-d14-m",
+          "node_type": "answer",
+          "body_text": "Analyze vanishing criteria and categorical interpretations of obstruction."
+        },
+        {
+          "id": "p7g-d14-c",
+          "node_type": "comment",
+          "body_text": "Survey-style synthesis of Wall obstruction machinery."
+        },
+        {
+          "id": "p7g-d14-o",
+          "node_type": "answer",
+          "body_text": "Improved conceptual control over what FH(Q) does and does not guarantee."
+        },
+        {
+          "id": "p7g-d14-b",
+          "node_type": "comment",
+          "body_text": "Supports precise gap wording for G1 without closing chain-level PD."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d14-d",
+          "target": "p7g-d14-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d14-m",
+          "target": "p7g-d14-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d14-c",
+          "target": "p7g-d14-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d14-o",
+          "target": "p7g-d14-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d14-b",
+          "target": "p7g-d14-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d15",
+      "title": "Classical Wall Finiteness Obstruction Survey",
+      "paper": "arXiv:math/0008070",
+      "gap_tags": [
+        "G1"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d15-q",
+          "node_type": "question",
+          "body_text": "Track legacy finiteness-obstruction tools used in PD/FH transitions."
+        },
+        {
+          "id": "p7g-d15-d",
+          "node_type": "answer",
+          "body_text": "Package classical examples and obstruction calculations in Wall framework."
+        },
+        {
+          "id": "p7g-d15-m",
+          "node_type": "answer",
+          "body_text": "Map group/space data to obstruction-group elements."
+        },
+        {
+          "id": "p7g-d15-c",
+          "node_type": "comment",
+          "body_text": "Foundational survey references and computation templates."
+        },
+        {
+          "id": "p7g-d15-o",
+          "node_type": "answer",
+          "body_text": "Historical/technical base for careful finite-complex claims."
+        },
+        {
+          "id": "p7g-d15-b",
+          "node_type": "comment",
+          "body_text": "Background module; indirect value for G1 language hygiene."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d15-d",
+          "target": "p7g-d15-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d15-m",
+          "target": "p7g-d15-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d15-c",
+          "target": "p7g-d15-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d15-o",
+          "target": "p7g-d15-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d15-b",
+          "target": "p7g-d15-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d16",
+      "title": "Equivariant Spivak Bundle and Surgery",
+      "paper": "arXiv:1705.10909",
+      "gap_tags": [
+        "G2",
+        "G3"
+      ],
+      "bridge_status": "direct",
+      "nodes": [
+        {
+          "id": "p7g-d16-q",
+          "node_type": "question",
+          "body_text": "Construct normal-map data equivariantly so cover restriction is controlled."
+        },
+        {
+          "id": "p7g-d16-d",
+          "node_type": "answer",
+          "body_text": "Work with equivariant Spivak normal bundle for group actions."
+        },
+        {
+          "id": "p7g-d16-m",
+          "node_type": "answer",
+          "body_text": "Lift/compare equivariant normal structures through surgery setup."
+        },
+        {
+          "id": "p7g-d16-c",
+          "node_type": "comment",
+          "body_text": "Equivariant Spivak and equivariant surgery theorems."
+        },
+        {
+          "id": "p7g-d16-o",
+          "node_type": "answer",
+          "body_text": "Potential direct route to solve G2 and enforce G3 compatibility."
+        },
+        {
+          "id": "p7g-d16-b",
+          "node_type": "comment",
+          "body_text": "Highest-value method candidate for unresolved normal-map/transfer gaps."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d16-d",
+          "target": "p7g-d16-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d16-m",
+          "target": "p7g-d16-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d16-c",
+          "target": "p7g-d16-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d16-o",
+          "target": "p7g-d16-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d16-b",
+          "target": "p7g-d16-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d17",
+      "title": "Non-Simply-Connected Rational Homotopy Models",
+      "paper": "arXiv:2304.00880",
+      "gap_tags": [
+        "G1",
+        "G3"
+      ],
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "p7g-d17-q",
+          "node_type": "question",
+          "body_text": "Justify rational-homotopy comparisons for spaces with nontrivial pi_1."
+        },
+        {
+          "id": "p7g-d17-d",
+          "node_type": "answer",
+          "body_text": "Represent spaces by rational models adapted to non-simply-connected setting."
+        },
+        {
+          "id": "p7g-d17-m",
+          "node_type": "answer",
+          "body_text": "Use algebraic models to compare rational homotopy types beyond nilpotent defaults."
+        },
+        {
+          "id": "p7g-d17-c",
+          "node_type": "comment",
+          "body_text": "Model-construction and comparison statements in non-simply-connected rational homotopy."
+        },
+        {
+          "id": "p7g-d17-o",
+          "node_type": "answer",
+          "body_text": "Candidate citation path for replacing hand-wavy rational-equivalence claims."
+        },
+        {
+          "id": "p7g-d17-b",
+          "node_type": "comment",
+          "body_text": "Promising for G3 caveat cleanup; must verify applicability hypotheses."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d17-d",
+          "target": "p7g-d17-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d17-m",
+          "target": "p7g-d17-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d17-c",
+          "target": "p7g-d17-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d17-o",
+          "target": "p7g-d17-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d17-b",
+          "target": "p7g-d17-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d18",
+      "title": "Smith-Theory Constraints on Periodic Actions",
+      "paper": "arXiv:1106.1704",
+      "gap_tags": [
+        "E2"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d18-q",
+          "node_type": "question",
+          "body_text": "Filter impossible periodic-action scenarios in aspherical/lattice contexts."
+        },
+        {
+          "id": "p7g-d18-d",
+          "node_type": "answer",
+          "body_text": "Separate homotopically trivial periodic actions from geometric action data."
+        },
+        {
+          "id": "p7g-d18-m",
+          "node_type": "answer",
+          "body_text": "Apply Smith/L2-cohomology rigidity arguments."
+        },
+        {
+          "id": "p7g-d18-c",
+          "node_type": "comment",
+          "body_text": "No-homotopically-trivial-periodic-diffeomorphism theorems in specified settings."
+        },
+        {
+          "id": "p7g-d18-o",
+          "node_type": "answer",
+          "body_text": "Constraint layer preventing invalid fixed-point constructions."
+        },
+        {
+          "id": "p7g-d18-b",
+          "node_type": "comment",
+          "body_text": "Useful negative filter; not a positive constructor for P7."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d18-d",
+          "target": "p7g-d18-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d18-m",
+          "target": "p7g-d18-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d18-c",
+          "target": "p7g-d18-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d18-o",
+          "target": "p7g-d18-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d18-b",
+          "target": "p7g-d18-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d19",
+      "title": "Reflections in Congruence Hyperbolic Manifolds",
+      "paper": "arXiv:2506.23994",
+      "gap_tags": [
+        "E2"
+      ],
+      "bridge_status": "direct",
+      "nodes": [
+        {
+          "id": "p7g-d19-q",
+          "node_type": "question",
+          "body_text": "Produce explicit reflective involutions in cocompact arithmetic families."
+        },
+        {
+          "id": "p7g-d19-d",
+          "node_type": "answer",
+          "body_text": "Use arithmetic lattice with reflection and congruence-cover tower."
+        },
+        {
+          "id": "p7g-d19-m",
+          "node_type": "answer",
+          "body_text": "Induce manifold involutions with totally geodesic fixed hypersurfaces."
+        },
+        {
+          "id": "p7g-d19-c",
+          "node_type": "comment",
+          "body_text": "Theorem/remark package on reflective congruence manifolds and fixed sets."
+        },
+        {
+          "id": "p7g-d19-o",
+          "node_type": "answer",
+          "body_text": "Concrete E2 instantiation substrate for Z/2 action and fixed-set geometry."
+        },
+        {
+          "id": "p7g-d19-b",
+          "node_type": "comment",
+          "body_text": "Direct constructor feeding the successful p7r-s2b route."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d19-d",
+          "target": "p7g-d19-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d19-m",
+          "target": "p7g-d19-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d19-c",
+          "target": "p7g-d19-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d19-o",
+          "target": "p7g-d19-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d19-b",
+          "target": "p7g-d19-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d20",
+      "title": "Finite Groups as Isometry Groups of Hyperbolic Manifolds",
+      "paper": "arXiv:math/0406607",
+      "gap_tags": [
+        "E2"
+      ],
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "p7g-d20-q",
+          "node_type": "question",
+          "body_text": "Realize prescribed finite symmetry groups in compact hyperbolic settings."
+        },
+        {
+          "id": "p7g-d20-d",
+          "node_type": "answer",
+          "body_text": "Construct finite-index subgroups with targeted normalizer quotient."
+        },
+        {
+          "id": "p7g-d20-m",
+          "node_type": "answer",
+          "body_text": "Combine subgroup growth and lattice-commensurator control."
+        },
+        {
+          "id": "p7g-d20-c",
+          "node_type": "comment",
+          "body_text": "Main realization theorem for finite groups as full isometry groups."
+        },
+        {
+          "id": "p7g-d20-o",
+          "node_type": "answer",
+          "body_text": "Existence of compact hyperbolic manifolds with chosen finite symmetry group."
+        },
+        {
+          "id": "p7g-d20-b",
+          "node_type": "comment",
+          "body_text": "Good symmetry-existence backup, but fixed-set Euler data not automatic."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d20-d",
+          "target": "p7g-d20-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d20-m",
+          "target": "p7g-d20-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d20-c",
+          "target": "p7g-d20-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d20-o",
+          "target": "p7g-d20-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d20-b",
+          "target": "p7g-d20-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d21",
+      "title": "Finite Subgroup Counting in Lattices",
+      "paper": "arXiv:1209.2484",
+      "gap_tags": [
+        "E2"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d21-q",
+          "node_type": "question",
+          "body_text": "Control isotropy complexity in lattice/orbifold models."
+        },
+        {
+          "id": "p7g-d21-d",
+          "node_type": "answer",
+          "body_text": "Count maximal finite subgroups and isotropy classes versus covolume."
+        },
+        {
+          "id": "p7g-d21-m",
+          "node_type": "answer",
+          "body_text": "Use lattice geometry and subgroup-growth estimates."
+        },
+        {
+          "id": "p7g-d21-c",
+          "node_type": "comment",
+          "body_text": "Linear/sublinear bounds for finite subgroup conjugacy classes."
+        },
+        {
+          "id": "p7g-d21-o",
+          "node_type": "answer",
+          "body_text": "Quantitative isotropy control for families of orbifold quotients."
+        },
+        {
+          "id": "p7g-d21-b",
+          "node_type": "comment",
+          "body_text": "Auxiliary selection/filtering tool, not a direct P7 closure theorem."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d21-d",
+          "target": "p7g-d21-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d21-m",
+          "target": "p7g-d21-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d21-c",
+          "target": "p7g-d21-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d21-o",
+          "target": "p7g-d21-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d21-b",
+          "target": "p7g-d21-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7g-d22",
+      "title": "Homology Bounds for Hyperbolic Orbifolds",
+      "paper": "arXiv:2012.15322",
+      "gap_tags": [
+        "E2",
+        "FJ"
+      ],
+      "bridge_status": "support",
+      "nodes": [
+        {
+          "id": "p7g-d22-q",
+          "node_type": "question",
+          "body_text": "Estimate orbifold homology growth in arithmetic/nonuniform families."
+        },
+        {
+          "id": "p7g-d22-d",
+          "node_type": "answer",
+          "body_text": "Build efficient simplicial thick-part models for orbifolds."
+        },
+        {
+          "id": "p7g-d22-m",
+          "node_type": "answer",
+          "body_text": "Derive linear-volume homology/torsion bounds from geometric models."
+        },
+        {
+          "id": "p7g-d22-c",
+          "node_type": "comment",
+          "body_text": "Theorems bounding Betti numbers and torsion parts by volume."
+        },
+        {
+          "id": "p7g-d22-o",
+          "node_type": "answer",
+          "body_text": "Practical constraints on candidate families for obstruction-space dimensions."
+        },
+        {
+          "id": "p7g-d22-b",
+          "node_type": "comment",
+          "body_text": "Useful quantitative side-information for strategy A/B computations."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7g-d22-d",
+          "target": "p7g-d22-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7g-d22-m",
+          "target": "p7g-d22-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d22-c",
+          "target": "p7g-d22-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7g-d22-o",
+          "target": "p7g-d22-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7g-d22-b",
+          "target": "p7g-d22-o",
+          "edge_type": "reform"
+        }
+      ]
+    }
+  ]
+}
