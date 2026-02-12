@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "description": "Standoff annotations for proof-layer tcolorbox boxes. Apply with: python3 scripts/apply-proof-boxes.py",
+  "annotations": [
+    {
+      "file": "full/problem1-solution-full.tex",
+      "box": "processnote",
+      "title": "futon6 Corpus References",
+      "mode": "section",
+      "heading": "Key References from futon6 corpus"
+    },
+
+    {
+      "file": "full/problem2-solution-full.tex",
+      "box": "processnote",
+      "title": "Confidence",
+      "mode": "block",
+      "start_marker": "\\textbf{Confidence: Medium-high.}",
+      "end_before": "\\subsection{Solution}"
+    },
+    {
+      "file": "full/problem2-solution-full.tex",
+      "box": "revision",
+      "title": "Closing the Universality Gap",
+      "mode": "section",
+      "heading": "3a. Nondegeneracy for fixed W"
+    },
+    {
+      "file": "full/problem2-solution-full.tex",
+      "box": "processnote",
+      "title": "futon6 Corpus References",
+      "mode": "section",
+      "heading": "Key References from futon6 corpus"
+    },
+
+    {
+      "file": "full/problem3-solution-full.tex",
+      "box": "processnote",
+      "title": "Confidence",
+      "mode": "section",
+      "heading": "Confidence"
+    },
+
+    {
+      "file": "full/problem4-solution-full.tex",
+      "box": "openobligation",
+      "title": "What Remains Open for $n \\ge 4$",
+      "mode": "section",
+      "heading": "5b. What remains open for n"
+    },
+    {
+      "file": "full/problem4-solution-full.tex",
+      "box": "processnote",
+      "title": "Numerical Evidence",
+      "mode": "section",
+      "heading": "8. Numerical evidence"
+    },
+    {
+      "file": "full/problem4-solution-full.tex",
+      "box": "processnote",
+      "title": "futon6 Corpus References",
+      "mode": "section",
+      "heading": "Key References from futon6 corpus"
+    },
+
+    {
+      "file": "full/problem5-solution-full.tex",
+      "box": "processnote",
+      "title": "Confidence",
+      "mode": "section",
+      "heading": "Confidence"
+    },
+    {
+      "file": "full/problem5-solution-full.tex",
+      "box": "revision",
+      "title": "Important Correction",
+      "mode": "section",
+      "heading": "Important Correction"
+    },
+    {
+      "file": "full/problem5-solution-full.tex",
+      "box": "openobligation",
+      "title": "Scope Limitation",
+      "mode": "section",
+      "heading": "Scope / Caveat"
+    },
+    {
+      "file": "full/problem5-solution-full.tex",
+      "box": "processnote",
+      "title": "External Research File",
+      "mode": "block",
+      "start_marker": "\\texttt{data/first-proof/library-research-findings.md}",
+      "end_before": "\\end{itemize}"
+    },
+
+    {
+      "file": "full/problem6-solution-full.tex",
+      "box": "processnote",
+      "title": "Status of This Writeup",
+      "mode": "section",
+      "heading": "Status of this writeup"
+    },
+    {
+      "file": "full/problem6-solution-full.tex",
+      "box": "openobligation",
+      "title": "External Dependency for Universal $c_0 > 0$",
+      "mode": "section",
+      "heading": "5. External dependency for universal"
+    },
+    {
+      "file": "full/problem6-solution-full.tex",
+      "box": "openobligation",
+      "title": "Conditional Conclusion",
+      "mode": "block",
+      "start_marker": "Conditional/open conclusion:",
+      "end_before": "\\subsection{Key identities used}"
+    },
+
+    {
+      "file": "full/problem7-solution-full.tex",
+      "box": "processnote",
+      "title": "Status in This Writeup",
+      "mode": "section",
+      "heading": "Status in This Writeup"
+    },
+    {
+      "file": "full/problem7-solution-full.tex",
+      "box": "deadpath",
+      "title": "Approach II: Equivariant Surgery (Reflection Route)",
+      "mode": "section",
+      "heading": "Approach II: Equivariant surgery"
+    },
+    {
+      "file": "full/problem7-solution-full.tex",
+      "box": "deadpath",
+      "title": "Approach III: Orbifold Resolution",
+      "mode": "section",
+      "heading": "Approach III: Orbifold resolution"
+    },
+    {
+      "file": "full/problem7-solution-full.tex",
+      "box": "processnote",
+      "title": "Dimension-Parity Tension",
+      "mode": "section",
+      "heading": "Structural observation: dimension-parity tension"
+    },
+    {
+      "file": "full/problem7-solution-full.tex",
+      "box": "deadpath",
+      "title": "Deprioritized Approaches",
+      "mode": "block",
+      "start_marker": "\\textbf{Deprioritized paths:}",
+      "end_before": "\\subsection{References}"
+    },
+
+    {
+      "file": "full/problem8-solution-full.tex",
+      "box": "processnote",
+      "title": "Confidence",
+      "mode": "block",
+      "start_marker": "\\textbf{Confidence: Medium-high.}",
+      "end_before": "\\subsection{Solution}"
+    },
+    {
+      "file": "full/problem8-solution-full.tex",
+      "box": "revision",
+      "title": "Corrections from v1",
+      "mode": "section",
+      "heading": "Corrections from v1"
+    },
+    {
+      "file": "full/problem8-solution-full.tex",
+      "box": "processnote",
+      "title": "futon6 Corpus References",
+      "mode": "section",
+      "heading": "Key References from futon6 corpus"
+    },
+
+    {
+      "file": "full/problem9-solution-full.tex",
+      "box": "processnote",
+      "title": "futon6 Corpus References",
+      "mode": "section",
+      "heading": "Key References from futon6 corpus"
+    },
+
+    {
+      "file": "full/problem10-solution-full.tex",
+      "box": "processnote",
+      "title": "futon6 Corpus References",
+      "mode": "section",
+      "heading": "Key References from futon6 corpus"
+    }
+  ]
+}
