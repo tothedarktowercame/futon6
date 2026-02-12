@@ -1,0 +1,729 @@
+{
+  "library_id": "problem6-method-wiring-library",
+  "date": "2026-02-12",
+  "reduced_problem": {
+    "id": "rp-vls",
+    "nodes": [
+      {
+        "id": "rp-q",
+        "node_type": "question",
+        "body_text": "Does there exist universal c0>0 such that for every weighted graph G and epsilon in (0,1), some S subseteq V satisfies |S|>=c0*epsilon*n and L_{G[S]}<=epsilon L (induced, zero-padded, no reweighting)?"
+      },
+      {
+        "id": "rp-a1",
+        "node_type": "answer",
+        "body_text": "Equivalent spectral form: ||L^{+/2} L_{G[S]} L^{+/2}|| <= epsilon."
+      },
+      {
+        "id": "rp-a2",
+        "node_type": "answer",
+        "body_text": "Cardinality target: |S| >= c0*epsilon*n with universal c0."
+      },
+      {
+        "id": "rp-c1",
+        "node_type": "comment",
+        "body_text": "Edge sparsification with reweighting does not by itself imply induced-vertex selection."
+      },
+      {
+        "id": "rp-a3",
+        "node_type": "answer",
+        "body_text": "Reduced bridge problem: find theorem-level vertex-selection mechanism proving the universal constant."
+      }
+    ],
+    "edges": [
+      {
+        "source": "rp-a1",
+        "target": "rp-q",
+        "edge_type": "clarify",
+        "evidence": "Equivalent normalized objective"
+      },
+      {
+        "source": "rp-a2",
+        "target": "rp-q",
+        "edge_type": "clarify",
+        "evidence": "Size requirement"
+      },
+      {
+        "source": "rp-c1",
+        "target": "rp-q",
+        "edge_type": "challenge",
+        "evidence": "No automatic edge-to-vertex implication"
+      },
+      {
+        "source": "rp-a3",
+        "target": "rp-q",
+        "edge_type": "reform",
+        "evidence": "Exact reduced theorem target"
+      }
+    ]
+  },
+  "similarity_schema": {
+    "node_roles": [
+      "Q: objective",
+      "D: decomposition",
+      "M: mechanism",
+      "C: certificate",
+      "O: output guarantee",
+      "B: bridge-status to RP"
+    ],
+    "edge_pattern": [
+      "D -> Q (clarify)",
+      "M -> D (assert)",
+      "C -> M (reference)",
+      "O -> Q (assert)",
+      "B -> O (reform|challenge)"
+    ]
+  },
+  "diagrams": [
+    {
+      "id": "d1",
+      "title": "Effective-Resistance Edge Sampling",
+      "paper": "arXiv:0803.0929",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d1-q",
+          "node_type": "question",
+          "body_text": "Construct sparse H with L_H approx L."
+        },
+        {
+          "id": "d1-d",
+          "node_type": "answer",
+          "body_text": "Decompose by edge leverage scores tau_e."
+        },
+        {
+          "id": "d1-m",
+          "node_type": "answer",
+          "body_text": "Sample/reweight edges with probabilities from effective resistances."
+        },
+        {
+          "id": "d1-c",
+          "node_type": "comment",
+          "body_text": "Matrix concentration certifies spectral approximation."
+        },
+        {
+          "id": "d1-o",
+          "node_type": "answer",
+          "body_text": "Obtain sparse edge-weighted spectral sparsifier."
+        },
+        {
+          "id": "d1-b",
+          "node_type": "comment",
+          "body_text": "Output is not an induced vertex subset."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d1-d",
+          "target": "d1-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d1-m",
+          "target": "d1-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d1-c",
+          "target": "d1-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d1-o",
+          "target": "d1-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d1-b",
+          "target": "d1-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "title": "Barrier-Function Deterministic Sparsification",
+      "paper": "arXiv:0808.0163",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d2-q",
+          "node_type": "question",
+          "body_text": "Find linear-size spectral sparsifier deterministically."
+        },
+        {
+          "id": "d2-d",
+          "node_type": "answer",
+          "body_text": "PSD atom decomposition with tunable weights."
+        },
+        {
+          "id": "d2-m",
+          "node_type": "answer",
+          "body_text": "Iterative atom selection using upper/lower eigenvalue barriers."
+        },
+        {
+          "id": "d2-c",
+          "node_type": "comment",
+          "body_text": "Potential function controls barrier feasibility through updates."
+        },
+        {
+          "id": "d2-o",
+          "node_type": "answer",
+          "body_text": "Near-optimal edge support and spectral guarantee."
+        },
+        {
+          "id": "d2-b",
+          "node_type": "comment",
+          "body_text": "Edge reweighting theorem, not induced-vertex theorem."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d2-d",
+          "target": "d2-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d2-m",
+          "target": "d2-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d2-c",
+          "target": "d2-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d2-o",
+          "target": "d2-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d2-b",
+          "target": "d2-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "title": "Subgraph Sparsification and Ultrasparsifiers",
+      "paper": "arXiv:0912.1623",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d3-q",
+          "node_type": "question",
+          "body_text": "Sparsify under subgraph/augmentation constraints."
+        },
+        {
+          "id": "d3-d",
+          "node_type": "answer",
+          "body_text": "Separate base graph from limited augmentation budget."
+        },
+        {
+          "id": "d3-m",
+          "node_type": "answer",
+          "body_text": "Choose constrained edge set to optimize spectral condition."
+        },
+        {
+          "id": "d3-c",
+          "node_type": "comment",
+          "body_text": "Resistance-based and variational estimates certify quality."
+        },
+        {
+          "id": "d3-o",
+          "node_type": "answer",
+          "body_text": "Constrained sparse graph with bounded distortion."
+        },
+        {
+          "id": "d3-b",
+          "node_type": "comment",
+          "body_text": "Still edge-constrained, not induced-vertex selection."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d3-d",
+          "target": "d3-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d3-m",
+          "target": "d3-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d3-c",
+          "target": "d3-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d3-o",
+          "target": "d3-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d3-b",
+          "target": "d3-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "d4",
+      "title": "Restricted Invertibility via Barrier Method",
+      "paper": "arXiv:0911.1114",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d4-q",
+          "node_type": "question",
+          "body_text": "Select a large subset with controlled conditioning."
+        },
+        {
+          "id": "d4-d",
+          "node_type": "answer",
+          "body_text": "Represent objective as sum of rank-one PSD contributions."
+        },
+        {
+          "id": "d4-m",
+          "node_type": "answer",
+          "body_text": "Iterative selection preserving a lower spectral barrier."
+        },
+        {
+          "id": "d4-c",
+          "node_type": "comment",
+          "body_text": "Potential argument yields quantitative subset size."
+        },
+        {
+          "id": "d4-o",
+          "node_type": "answer",
+          "body_text": "Large selected subset with guaranteed invertibility."
+        },
+        {
+          "id": "d4-b",
+          "node_type": "comment",
+          "body_text": "Mechanism resembles RP-VLS but acts on vectors/columns."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d4-d",
+          "target": "d4-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d4-m",
+          "target": "d4-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d4-c",
+          "target": "d4-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d4-o",
+          "target": "d4-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d4-b",
+          "target": "d4-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "d5",
+      "title": "Interlacing Families / Mixed Characteristic Polynomial",
+      "paper": "arXiv:1306.3969",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d5-q",
+          "node_type": "question",
+          "body_text": "Show some combinatorial realization has strong spectral bound."
+        },
+        {
+          "id": "d5-d",
+          "node_type": "answer",
+          "body_text": "Encode each realization by characteristic polynomial."
+        },
+        {
+          "id": "d5-m",
+          "node_type": "answer",
+          "body_text": "Build an interlacing family over partial choices."
+        },
+        {
+          "id": "d5-c",
+          "node_type": "comment",
+          "body_text": "Real-rootedness/barrier control turns expectation into existence."
+        },
+        {
+          "id": "d5-o",
+          "node_type": "answer",
+          "body_text": "Existence of one branch with desired eigenvalue bound."
+        },
+        {
+          "id": "d5-b",
+          "node_type": "comment",
+          "body_text": "Potentially adaptable to direct vertex-subset existence if polynomial family is found."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d5-d",
+          "target": "d5-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d5-m",
+          "target": "d5-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d5-c",
+          "target": "d5-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d5-o",
+          "target": "d5-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d5-b",
+          "target": "d5-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "d6",
+      "title": "Unweighted Spectral Sparsification",
+      "paper": "arXiv:1410.4273",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d6-q",
+          "node_type": "question",
+          "body_text": "Get spectral sparsifier using unweighted or integer-like selections."
+        },
+        {
+          "id": "d6-d",
+          "node_type": "answer",
+          "body_text": "Start from weighted target and discretize selection."
+        },
+        {
+          "id": "d6-m",
+          "node_type": "answer",
+          "body_text": "Rounding/discrepancy style selection preserves spectrum."
+        },
+        {
+          "id": "d6-c",
+          "node_type": "comment",
+          "body_text": "Matrix concentration controls deviation after rounding."
+        },
+        {
+          "id": "d6-o",
+          "node_type": "answer",
+          "body_text": "Unweighted sparse edge subgraph approximates L."
+        },
+        {
+          "id": "d6-b",
+          "node_type": "comment",
+          "body_text": "No-reweighting edge result is closer, but still not induced-vertex."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d6-d",
+          "target": "d6-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d6-m",
+          "target": "d6-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d6-c",
+          "target": "d6-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d6-o",
+          "target": "d6-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d6-b",
+          "target": "d6-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "d7",
+      "title": "Matrix Chernoff for Strongly Rayleigh Distributions",
+      "paper": "arXiv:1810.08345",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d7-q",
+          "node_type": "question",
+          "body_text": "Can dependent subset sampling still satisfy matrix concentration?"
+        },
+        {
+          "id": "d7-d",
+          "node_type": "answer",
+          "body_text": "Associate PSD summands to sampled elements under negative dependence."
+        },
+        {
+          "id": "d7-m",
+          "node_type": "answer",
+          "body_text": "Sample from strongly Rayleigh laws (e.g., spanning trees)."
+        },
+        {
+          "id": "d7-c",
+          "node_type": "comment",
+          "body_text": "Adapted Chernoff/Freedman tail bounds survive dependence."
+        },
+        {
+          "id": "d7-o",
+          "node_type": "answer",
+          "body_text": "High-probability spectral bounds for dependent random structures."
+        },
+        {
+          "id": "d7-b",
+          "node_type": "comment",
+          "body_text": "Useful if RP-VLS vertex selector admits strongly Rayleigh model."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d7-d",
+          "target": "d7-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d7-m",
+          "target": "d7-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d7-c",
+          "target": "d7-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d7-o",
+          "target": "d7-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d7-b",
+          "target": "d7-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "d8",
+      "title": "Spectral Subspace Sparsification",
+      "paper": "arXiv:1810.03224",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d8-q",
+          "node_type": "question",
+          "body_text": "Preserve quadratic forms on a target subspace with few atoms."
+        },
+        {
+          "id": "d8-d",
+          "node_type": "answer",
+          "body_text": "Project objective onto subspace rather than full ambient space."
+        },
+        {
+          "id": "d8-m",
+          "node_type": "answer",
+          "body_text": "Select subset/weights minimizing subspace distortion."
+        },
+        {
+          "id": "d8-c",
+          "node_type": "comment",
+          "body_text": "Subspace-aware spectral inequalities tighten guarantees."
+        },
+        {
+          "id": "d8-o",
+          "node_type": "answer",
+          "body_text": "Sparse certificate valid on prescribed subspace."
+        },
+        {
+          "id": "d8-b",
+          "node_type": "comment",
+          "body_text": "Suggests relaxed RP-VLS route: prove induced bound first on key subspace."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d8-d",
+          "target": "d8-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d8-m",
+          "target": "d8-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d8-c",
+          "target": "d8-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d8-o",
+          "target": "d8-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d8-b",
+          "target": "d8-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "d9",
+      "title": "Schur Complement Cheeger Inequality",
+      "paper": "arXiv:1811.10834",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d9-q",
+          "node_type": "question",
+          "body_text": "Control spectral/cut behavior after eliminating vertices."
+        },
+        {
+          "id": "d9-d",
+          "node_type": "answer",
+          "body_text": "Use Schur complements as vertex-elimination summaries."
+        },
+        {
+          "id": "d9-m",
+          "node_type": "answer",
+          "body_text": "Analyze reduced graph conductance and eigen-structure."
+        },
+        {
+          "id": "d9-c",
+          "node_type": "comment",
+          "body_text": "Cheeger-type inequalities extend to Schur-complement setting."
+        },
+        {
+          "id": "d9-o",
+          "node_type": "answer",
+          "body_text": "Robust vertex-side reduction principle with spectral meaning."
+        },
+        {
+          "id": "d9-b",
+          "node_type": "comment",
+          "body_text": "Closest vertex geometry analog, but output is Schur complement not induced subgraph."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d9-d",
+          "target": "d9-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d9-m",
+          "target": "d9-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d9-c",
+          "target": "d9-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d9-o",
+          "target": "d9-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d9-b",
+          "target": "d9-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "d10",
+      "title": "Dynamic Spectral Vertex Sparsifiers",
+      "paper": "arXiv:1906.10530; arXiv:2005.02368",
+      "bridge_status": "partial",
+      "nodes": [
+        {
+          "id": "d10-q",
+          "node_type": "question",
+          "body_text": "Maintain compact vertex-side spectral summaries under graph updates."
+        },
+        {
+          "id": "d10-d",
+          "node_type": "answer",
+          "body_text": "Recursive separator/elimination decomposition."
+        },
+        {
+          "id": "d10-m",
+          "node_type": "answer",
+          "body_text": "Maintain approximate Schur-complement vertex sparsifiers dynamically."
+        },
+        {
+          "id": "d10-c",
+          "node_type": "comment",
+          "body_text": "Control additive/multiplicative error accumulation across recursion."
+        },
+        {
+          "id": "d10-o",
+          "node_type": "answer",
+          "body_text": "Fast updates/queries for cuts, distances, effective resistances."
+        },
+        {
+          "id": "d10-b",
+          "node_type": "comment",
+          "body_text": "Strong vertex-sparsifier toolbox, but not direct RP-VLS induced-subset theorem."
+        }
+      ],
+      "edges": [
+        {
+          "source": "d10-d",
+          "target": "d10-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "d10-m",
+          "target": "d10-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d10-c",
+          "target": "d10-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "d10-o",
+          "target": "d10-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "d10-b",
+          "target": "d10-o",
+          "edge_type": "challenge"
+        }
+      ]
+    }
+  ]
+}
