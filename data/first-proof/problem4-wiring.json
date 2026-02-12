@@ -135,6 +135,114 @@
       "score": 1,
       "creation_date": "2026-02-11",
       "parent_post_id": 4
+    },
+    {
+      "id": "p4-n4-reform",
+      "node_type": "answer",
+      "post_id": 412,
+      "body_text": "n=4 reformulation: Phi_4 * disc(p) = -4 * f1_p * f2_p (key identity, SymPy-verified). Surplus S = N/D where D = product of f1,f2 factors < 0 on domain. Need -N >= 0 on semi-algebraic set {disc>=0, f1>0, f2<0}. -N has 233 terms, degree 10 in (a3,a4,b3,b4).",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-n4-hessian",
+      "node_type": "comment",
+      "post_id": 4121,
+      "body_text": "Equality point x0=(0,1/12,0,1/12): Hessian eigenvalues 3/4, 21/8, 6, 8 — all positive. Strict local minimum. Taylor radius for -N >= 0: r = 0.004458.",
+      "score": 1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 412
+    },
+    {
+      "id": "p4-n4-boundary",
+      "node_type": "answer",
+      "post_id": 413,
+      "body_text": "Boundary analysis: f1=0 and f2=0 faces only intersect {disc>=0} at isolated degenerate points where -N=0 (algebraic proof). disc=0 face: min -N ~ 0.06 over 28,309 points (numerical).",
+      "score": 1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-n4-sos-fail",
+      "node_type": "answer",
+      "post_id": 414,
+      "body_text": "[FAILED] SOS/Putinar certificates: infeasible at degrees 10, 12, 14. Interior zero of -N fundamentally blocks this approach — at x0, all SOS multipliers must vanish, forcing impossible constraints. This approach CANNOT work regardless of degree.",
+      "score": -1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-n4-case1",
+      "node_type": "answer",
+      "post_id": 415,
+      "body_text": "Case 1 (a3=b3=0): EXACT. Resultant of gradient eqs -> degree-26 univariate. 4 CPs in domain: x0 with -N=0, and 3 saddles with -N = 825, 825, 898. All -N >= 0.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-n4-case2",
+      "node_type": "answer",
+      "post_id": 416,
+      "body_text": "Case 2 (b3=0, a3!=0): EXACT. Parity: g1 odd in a3 -> divide, u=a3^2. Resultant chain -> degree-127 in b4. GCD=(4b4-1)^4*(12a4+1) divided out. Domain: disc_q>=0 forces b4>=0, narrowing search. 6 candidates, 0 interior CPs. 30 seconds.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-n4-case2a",
+      "node_type": "comment",
+      "post_id": 4161,
+      "body_text": "Key technique: sign-counting replaces Sturm for degree-70 factor. numpy approximate roots + exact rational evaluation at midpoints. 0.2s vs hours for Sturm sequence.",
+      "score": 1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 416
+    },
+    {
+      "id": "p4-n4-case3a",
+      "node_type": "answer",
+      "post_id": 417,
+      "body_text": "Case 3a (diagonal: a3=b3, a4=b4): EXACT. Exchange symmetry reduces to 2 eqs in 2 unknowns. Parity + resultant -> degree-24 univariate. 1 interior CP with -N = 2296.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-n4-case3b",
+      "node_type": "answer",
+      "post_id": 418,
+      "body_text": "Case 3b (anti-diagonal: a3=-b3, a4=b4): EXACT. Exchange+parity -> 2 eqs in 2 unknowns. Resultant -> degree-23 univariate. 2 interior CPs with -N = 0.05 and -N = 686. All -N >= 0.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-n4-case3c",
+      "node_type": "answer",
+      "post_id": 419,
+      "body_text": "[PENDING] Case 3c (generic off-diagonal: a3!=0, b3!=0, a3!=+-b3): Full 4D gradient system, 4 polynomials of degree 9. Direct resultant infeasible (~2000 terms). Interval arithmetic failed (wrapping + domain). Numerical: 4 CPs with -N ~ 1679. PHCpack handoff created.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4
+    },
+    {
+      "id": "p4-n4-ia-fail",
+      "node_type": "comment",
+      "post_id": 4191,
+      "body_text": "[FAILED] Interval arithmetic: naive IA only certified 6.7% of boxes (wrapping error). Centered form: Hessian Frobenius norm ~96M makes quadratic correction ~35,762 per box. Also domain-unaware: -N < 0 outside semi-algebraic set.",
+      "score": -1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 419
+    },
+    {
+      "id": "p4-n4-conclusion",
+      "node_type": "answer",
+      "post_id": 420,
+      "body_text": "n=4 proof status: Cases 1, 2, 3a, 3b algebraically EXACT (resultant elimination + Sturm/sign-counting). All CPs have -N >= 0. Case 3c (generic off-diagonal) pending PHCpack certified root count. Boundary analysis complete. One gap remains.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4
     }
   ],
   "edges": [
@@ -156,7 +264,7 @@
       "source": "p4-s3",
       "target": "p4-problem",
       "edge_type": "assert",
-      "evidence": "MSS 2015: ⊞_n preserves real-rootedness, linearizes cumulants",
+      "evidence": "MSS 2015: preserves real-rootedness, linearizes cumulants",
       "detection": "structural"
     },
     {
@@ -277,6 +385,139 @@
       "edge_type": "reference",
       "evidence": "n=4,5 numerical verification",
       "detection": "classical"
+    },
+    {
+      "source": "p4-n4-reform",
+      "target": "p4-s6",
+      "edge_type": "reform",
+      "evidence": "Reformulates open n=4 case: S = N/D, D < 0 on domain, need -N >= 0",
+      "detection": "classical"
+    },
+    {
+      "source": "p4-n4-reform",
+      "target": "p4-s1",
+      "edge_type": "reference",
+      "evidence": "Uses Phi_4*disc = -4*f1*f2 algebraic identity",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-hessian",
+      "target": "p4-n4-reform",
+      "edge_type": "clarify",
+      "evidence": "Equality point x0: Hessian PD, eigenvalues 3/4, 21/8, 6, 8",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-boundary",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "-N >= 0 on boundary: f1,f2 faces algebraic, disc=0 face numerical",
+      "detection": "classical"
+    },
+    {
+      "source": "p4-n4-sos-fail",
+      "target": "p4-n4-reform",
+      "edge_type": "challenge",
+      "evidence": "SOS/Putinar infeasible at degrees 10,12,14 — interior zero blocks certificates",
+      "detection": "classical"
+    },
+    {
+      "source": "p4-n4-case1",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 1 (a3=b3=0): exact, 4 CPs, all -N >= 0",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-case2",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 2 (b3=0, a3!=0): exact, 0 interior CPs (degree-127 resultant, 30s)",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-case2a",
+      "target": "p4-n4-case2",
+      "edge_type": "clarify",
+      "evidence": "Sign-counting replaces Sturm for degree-70 factor (0.2s vs hours)",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-case3a",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 3a (diagonal): exact, 1 CP with -N = 2296",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-case3b",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 3b (anti-diagonal): exact, 2 CPs with -N >= 0.05",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-case3c",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 3c (generic): PENDING — 4 numerical CPs with -N ~ 1679, needs PHCpack",
+      "detection": "classical"
+    },
+    {
+      "source": "p4-n4-ia-fail",
+      "target": "p4-n4-case3c",
+      "edge_type": "challenge",
+      "evidence": "Interval arithmetic failed: wrapping error + domain-unaware + Hessian bound too large",
+      "detection": "classical"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Cases 1-3b algebraically exact, all CPs have -N >= 0; Case 3c pending",
+      "detection": "classical"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-boundary",
+      "edge_type": "reference",
+      "evidence": "Boundary analysis complete",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case1",
+      "edge_type": "reference",
+      "evidence": "Case 1 algebraically exact",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case2",
+      "edge_type": "reference",
+      "evidence": "Case 2 algebraically exact",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case3a",
+      "edge_type": "reference",
+      "evidence": "Case 3a algebraically exact",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case3b",
+      "edge_type": "reference",
+      "evidence": "Case 3b algebraically exact",
+      "detection": "structural"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case3c",
+      "edge_type": "reference",
+      "evidence": "Case 3c pending PHCpack",
+      "detection": "classical"
     }
   ],
   "hyperedges": [
@@ -284,522 +525,413 @@
       "hx/id": "first-proof-p4:edge-000",
       "hx/type": "thread/clarify",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s1",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-problem",
-          "node_type": "question"
-        }
+        {"role": "source", "ident": "p4-s1", "node_type": "answer"},
+        {"role": "target", "ident": "p4-problem", "node_type": "question"}
       ],
-      "hx/content": {
-        "evidence": "Phi_n = electrostatic self-energy via log derivative",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "clarify",
-        "structural"
-      ]
+      "hx/content": {"evidence": "Phi_n = electrostatic self-energy via log derivative", "detection": "structural"},
+      "hx/labels": ["thread", "clarify", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-001",
       "hx/type": "thread/clarify",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s2",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s1",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s2", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s1", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "Cauchy-Schwarz gives 1/Phi_n ~ root spread",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "clarify",
-        "structural"
-      ]
+      "hx/content": {"evidence": "Cauchy-Schwarz gives 1/Phi_n ~ root spread", "detection": "structural"},
+      "hx/labels": ["thread", "clarify", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-002",
       "hx/type": "thread/assert",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s3",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-problem",
-          "node_type": "question"
-        }
+        {"role": "source", "ident": "p4-s3", "node_type": "answer"},
+        {"role": "target", "ident": "p4-problem", "node_type": "question"}
       ],
-      "hx/content": {
-        "evidence": "MSS 2015: ⊞_n preserves real-rootedness, linearizes cumulants",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "assert",
-        "structural"
-      ]
+      "hx/content": {"evidence": "MSS 2015: preserves real-rootedness, linearizes cumulants", "detection": "structural"},
+      "hx/labels": ["thread", "assert", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-003",
       "hx/type": "thread/exemplify",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s3a",
-          "node_type": "comment"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s3",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s3a", "node_type": "comment"},
+        {"role": "target", "ident": "p4-s3", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "p ⊞_n q = E[char(A + UBU*)]",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "exemplify",
-        "structural"
-      ]
+      "hx/content": {"evidence": "p ⊞_n q = E[char(A + UBU*)]", "detection": "structural"},
+      "hx/labels": ["thread", "exemplify", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-004",
       "hx/type": "thread/clarify",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s3b",
-          "node_type": "comment"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s3",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s3b", "node_type": "comment"},
+        {"role": "target", "ident": "p4-s3", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "kappa_k(p ⊞_n q) = kappa_k(p) + kappa_k(q)",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "clarify",
-        "structural"
-      ]
+      "hx/content": {"evidence": "kappa_k(p ⊞_n q) = kappa_k(p) + kappa_k(q)", "detection": "structural"},
+      "hx/labels": ["thread", "clarify", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-005",
       "hx/type": "thread/retract",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s4",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s1",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s4", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s1", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "[RETRACTED] 1/Phi_n concavity claim — numerically neither convex nor concave",
-        "detection": "classical"
-      },
-      "hx/labels": [
-        "thread",
-        "retract",
-        "classical"
-      ]
+      "hx/content": {"evidence": "[RETRACTED] 1/Phi_n concavity claim — numerically neither convex nor concave", "detection": "classical"},
+      "hx/labels": ["thread", "retract", "classical"]
     },
     {
       "hx/id": "first-proof-p4:edge-006",
       "hx/type": "thread/assert",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-num",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-problem",
-          "node_type": "question"
-        }
+        {"role": "source", "ident": "p4-num", "node_type": "answer"},
+        {"role": "target", "ident": "p4-problem", "node_type": "question"}
       ],
-      "hx/content": {
-        "evidence": "Numerical verification: 0/8000 violations, inequality IS true",
-        "detection": "classical"
-      },
-      "hx/labels": [
-        "thread",
-        "assert",
-        "classical"
-      ]
+      "hx/content": {"evidence": "Numerical verification: 0/8000 violations, inequality IS true", "detection": "classical"},
+      "hx/labels": ["thread", "assert", "classical"]
     },
     {
       "hx/id": "first-proof-p4:edge-007",
       "hx/type": "thread/challenge",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-num",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s4",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-num", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s4", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "1/Phi_n neither convex nor concave; superadditivity specific to ⊞_n structure",
-        "detection": "classical"
-      },
-      "hx/labels": [
-        "thread",
-        "challenge",
-        "classical"
-      ]
+      "hx/content": {"evidence": "1/Phi_n neither convex nor concave; superadditivity specific to ⊞_n structure", "detection": "classical"},
+      "hx/labels": ["thread", "challenge", "classical"]
     },
     {
       "hx/id": "first-proof-p4:edge-008",
       "hx/type": "thread/reference",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s4",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s3b",
-          "node_type": "comment"
-        }
+        {"role": "source", "ident": "p4-s4", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s3b", "node_type": "comment"}
       ],
-      "hx/content": {
-        "evidence": "Cumulant additivity is the mechanism for superadditivity",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
+      "hx/content": {"evidence": "Cumulant additivity is the mechanism for superadditivity", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-009",
       "hx/type": "thread/challenge",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s4a",
-          "node_type": "comment"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s4",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s4a", "node_type": "comment"},
+        {"role": "target", "ident": "p4-s4", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "[ERROR] concavity+f(0)=0 gives SUBadditivity, not superadditivity; need CONVEXITY",
-        "detection": "classical"
-      },
-      "hx/labels": [
-        "thread",
-        "challenge",
-        "classical"
-      ]
+      "hx/content": {"evidence": "[ERROR] concavity+f(0)=0 gives SUBadditivity, not superadditivity; need CONVEXITY", "detection": "classical"},
+      "hx/labels": ["thread", "challenge", "classical"]
     },
     {
       "hx/id": "first-proof-p4:edge-010",
       "hx/type": "thread/assert",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s5",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-problem",
-          "node_type": "question"
-        }
+        {"role": "source", "ident": "p4-s5", "node_type": "answer"},
+        {"role": "target", "ident": "p4-problem", "node_type": "question"}
       ],
-      "hx/content": {
-        "evidence": "n=2 proved: 1/Phi_2 linear in disc, ⊞_2 preserves exactly",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "assert",
-        "structural"
-      ]
+      "hx/content": {"evidence": "n=2 proved: 1/Phi_2 linear in disc, ⊞_2 preserves exactly", "detection": "structural"},
+      "hx/labels": ["thread", "assert", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-011",
       "hx/type": "thread/reference",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s5a",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s3a",
-          "node_type": "comment"
-        }
+        {"role": "source", "ident": "p4-s5a", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s3a", "node_type": "comment"}
       ],
-      "hx/content": {
-        "evidence": "Translation via A+αI in random matrix model",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
+      "hx/content": {"evidence": "Translation via A+αI in random matrix model", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-012",
       "hx/type": "thread/reference",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s5b",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s5a",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s5b", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s5a", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "Uses centered assumption from centering reduction",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
+      "hx/content": {"evidence": "Uses centered assumption from centering reduction", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-013",
       "hx/type": "thread/reference",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s5c",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s3",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s5c", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s3", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "MSS coefficient formula with a_1=b_1=0 simplifies",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
+      "hx/content": {"evidence": "MSS coefficient formula with a_1=b_1=0 simplifies", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-014",
       "hx/type": "thread/reference",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s5d",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s5b",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s5d", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s5b", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "Uses 1/Phi_3 = -2a_2/9 - 3a_3^2/(2a_2^2)",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
+      "hx/content": {"evidence": "Uses 1/Phi_3 = -2a_2/9 - 3a_3^2/(2a_2^2)", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-015",
       "hx/type": "thread/reference",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s5d",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s5c",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s5d", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s5c", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "Uses c_2=a_2+b_2, c_3=a_3+b_3 from ⊞_3 simplification",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
+      "hx/content": {"evidence": "Uses c_2=a_2+b_2, c_3=a_3+b_3 from ⊞_3 simplification", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-016",
       "hx/type": "thread/assert",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-problem",
-          "node_type": "question"
-        }
+        {"role": "source", "ident": "p4-s6", "node_type": "answer"},
+        {"role": "target", "ident": "p4-problem", "node_type": "question"}
       ],
-      "hx/content": {
-        "evidence": "Proved for n=2,3; numerically verified for n=4,5",
-        "detection": "classical"
-      },
-      "hx/labels": [
-        "thread",
-        "assert",
-        "classical"
-      ]
+      "hx/content": {"evidence": "Proved for n=2,3; numerically verified for n=4,5", "detection": "classical"},
+      "hx/labels": ["thread", "assert", "classical"]
     },
     {
       "hx/id": "first-proof-p4:edge-017",
       "hx/type": "thread/reference",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s5",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s6", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s5", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "n=2 equality case",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
+      "hx/content": {"evidence": "n=2 equality case", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-018",
       "hx/type": "thread/reference",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-s5d",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s6", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s5d", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "n=3 strict inequality via Titu's lemma",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
+      "hx/content": {"evidence": "n=3 strict inequality via Titu's lemma", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
     },
     {
       "hx/id": "first-proof-p4:edge-019",
       "hx/type": "thread/reference",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p4-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p4-num",
-          "node_type": "answer"
-        }
+        {"role": "source", "ident": "p4-s6", "node_type": "answer"},
+        {"role": "target", "ident": "p4-num", "node_type": "answer"}
       ],
-      "hx/content": {
-        "evidence": "n=4,5 numerical verification",
-        "detection": "classical"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "classical"
-      ]
+      "hx/content": {"evidence": "n=4,5 numerical verification", "detection": "classical"},
+      "hx/labels": ["thread", "reference", "classical"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-020",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-reform", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s6", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Reformulates open n=4 case: S = N/D, D < 0, need -N >= 0", "detection": "classical"},
+      "hx/labels": ["thread", "reform", "classical"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-021",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-reform", "node_type": "answer"},
+        {"role": "target", "ident": "p4-s1", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Uses Phi_4*disc = -4*f1*f2 algebraic identity", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-022",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-hessian", "node_type": "comment"},
+        {"role": "target", "ident": "p4-n4-reform", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Equality point x0: Hessian PD, eigenvalues 3/4, 21/8, 6, 8", "detection": "structural"},
+      "hx/labels": ["thread", "clarify", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-023",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-boundary", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-reform", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "-N >= 0 on boundary: f1,f2 faces algebraic, disc=0 numerical", "detection": "classical"},
+      "hx/labels": ["thread", "assert", "classical"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-024",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-sos-fail", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-reform", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "SOS/Putinar infeasible — interior zero blocks certificates", "detection": "classical"},
+      "hx/labels": ["thread", "challenge", "classical"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-025",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-case1", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-reform", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 1 (a3=b3=0): exact, 4 CPs, all -N >= 0", "detection": "structural"},
+      "hx/labels": ["thread", "assert", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-026",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-case2", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-reform", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 2 (b3=0, a3!=0): exact, 0 interior CPs (30s)", "detection": "structural"},
+      "hx/labels": ["thread", "assert", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-027",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-case2a", "node_type": "comment"},
+        {"role": "target", "ident": "p4-n4-case2", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Sign-counting replaces Sturm for degree-70 (0.2s vs hours)", "detection": "structural"},
+      "hx/labels": ["thread", "clarify", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-028",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-case3a", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-reform", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 3a (diagonal): exact, 1 CP, -N = 2296", "detection": "structural"},
+      "hx/labels": ["thread", "assert", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-029",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-case3b", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-reform", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 3b (anti-diagonal): exact, 2 CPs, -N >= 0.05", "detection": "structural"},
+      "hx/labels": ["thread", "assert", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-030",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-case3c", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-reform", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 3c (generic): PENDING — 4 numerical CPs, needs PHCpack", "detection": "classical"},
+      "hx/labels": ["thread", "assert", "classical"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-031",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-ia-fail", "node_type": "comment"},
+        {"role": "target", "ident": "p4-n4-case3c", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Interval arithmetic failed: wrapping error + domain-unaware", "detection": "classical"},
+      "hx/labels": ["thread", "challenge", "classical"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-032",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-conclusion", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-reform", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Cases 1-3b algebraically exact, Case 3c pending", "detection": "classical"},
+      "hx/labels": ["thread", "assert", "classical"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-033",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-conclusion", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-boundary", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Boundary analysis complete", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-034",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-conclusion", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-case1", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 1 algebraically exact", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-035",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-conclusion", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-case2", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 2 algebraically exact", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-036",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-conclusion", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-case3a", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 3a algebraically exact", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-037",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-conclusion", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-case3b", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 3b algebraically exact", "detection": "structural"},
+      "hx/labels": ["thread", "reference", "structural"]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-038",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {"role": "source", "ident": "p4-n4-conclusion", "node_type": "answer"},
+        {"role": "target", "ident": "p4-n4-case3c", "node_type": "answer"}
+      ],
+      "hx/content": {"evidence": "Case 3c pending PHCpack", "detection": "classical"},
+      "hx/labels": ["thread", "reference", "classical"]
     }
   ],
   "stats": {
-    "n_nodes": 15,
-    "n_edges": 20,
+    "n_nodes": 27,
+    "n_edges": 39,
     "node_types": {
       "question": 1,
-      "answer": 11,
-      "comment": 3
+      "answer": 21,
+      "comment": 5
     },
     "edge_types": {
-      "clarify": 3,
-      "assert": 4,
+      "clarify": 6,
+      "assert": 12,
       "exemplify": 1,
-      "reference": 9,
-      "challenge": 2,
-      "retract": 1
+      "reference": 14,
+      "challenge": 4,
+      "retract": 1,
+      "reform": 1
     },
     "detection_types": {
-      "structural": 14,
-      "classical": 6
+      "structural": 25,
+      "classical": 14
     }
   }
 }

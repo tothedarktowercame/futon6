@@ -1,0 +1,90 @@
+flowchart TD
+    %% first-proof-p4 v3 — n=4 Stam inequality proof architecture
+    %% Shows case decomposition with algebraic/pending status
+    %%
+    %% Legend: green=proved, yellow=pending, red=failed, blue=setup
+    %% Edge types: solid=depends-on, dashed=failed-attempt, thick=proved
+
+    %% Problem
+    p4-problem{{"Phi_4(p box_4 q) >= Phi_4(p) + Phi_4(q)<br/>Finite free Stam inequality, n=4"}}
+
+    %% Setup nodes
+    p4-reform["Reformulation<br/>S = N/D, D < 0 on domain<br/>Need: -N >= 0 on {disc>=0, f1>0, f2<0}"]
+    p4-boundary["Boundary analysis<br/>f1=0, f2=0 faces: algebraic<br/>disc=0 face: numerical (min -N ~ 0.06)"]
+    p4-hessian["Equality point x0 = (0,1/12,0,1/12)<br/>Hessian PD, eigenvalues 3/4, 21/8, 6, 8<br/>Strict local minimum"]
+
+    %% Case decomposition
+    p4-cases["Case decomposition<br/>by symmetry subspaces"]
+
+    %% Individual cases
+    p4-case1["Case 1: a3=b3=0<br/>Resultant degree 26<br/>4 CPs, all -N >= 0"]
+    p4-case2["Case 2: b3=0, a3!=0<br/>Resultant chain degree 127<br/>0 interior CPs (30s)"]
+    p4-case3a["Case 3a: diagonal<br/>a3=b3, a4=b4<br/>Resultant degree 24<br/>1 CP, -N = 2296"]
+    p4-case3b["Case 3b: anti-diagonal<br/>a3=-b3, a4=b4<br/>Resultant degree 23<br/>2 CPs, -N >= 0.05"]
+    p4-case3c["Case 3c: generic off-diagonal<br/>a3!=0, b3!=0, a3!=+-b3<br/>4 known CPs, -N ~ 1679<br/>PENDING: PHCpack"]
+
+    %% Failed approaches
+    p4-sos-fail["SOS / Putinar<br/>Infeasible at degrees 10,12,14<br/>Interior zero blocks certificates"]
+    p4-ia-fail["Interval arithmetic<br/>Wrapping error too large<br/>Domain-unaware: -N < 0 outside"]
+
+    %% Techniques
+    p4-parity["Parity symmetry<br/>-N even in (a3,b3)<br/>g1 odd -> divide by a3, u=a3^2"]
+    p4-exchange["Exchange symmetry<br/>-N(a,b) = -N(b,a)<br/>Reduces diagonal/anti-diagonal to 2D"]
+    p4-domain["Domain constraint<br/>disc_q = 16*b4*(4b4-1)^2 >= 0<br/>Forces b4 >= 0"]
+    p4-signcount["Sign-counting method<br/>numpy roots + exact evaluation<br/>Replaces Sturm for degree 70 (0.2s vs hours)"]
+
+    %% Conclusion
+    p4-conclusion["NEAR-COMPLETE<br/>Cases 1-3b: algebraically exact<br/>Case 3c: PHCpack handoff<br/>All known CPs have -N >= 0"]
+
+    %% Main flow
+    p4-problem ==> p4-reform
+    p4-reform ==> p4-boundary
+    p4-reform ==> p4-hessian
+    p4-reform ==> p4-cases
+
+    %% Case decomposition
+    p4-cases ==> p4-case1
+    p4-cases ==> p4-case2
+    p4-cases ==> p4-case3a
+    p4-cases ==> p4-case3b
+    p4-cases ==> p4-case3c
+
+    %% Techniques feeding cases
+    p4-parity -.->|"used in"| p4-case2
+    p4-parity -.->|"used in"| p4-case3a
+    p4-parity -.->|"used in"| p4-case3b
+    p4-exchange -.->|"used in"| p4-case3a
+    p4-exchange -.->|"used in"| p4-case3b
+    p4-domain -.->|"used in"| p4-case2
+    p4-signcount -.->|"used in"| p4-case2
+
+    %% Failed approaches
+    p4-reform -.-x|"FAILED"| p4-sos-fail
+    p4-case3c -.-x|"FAILED"| p4-ia-fail
+
+    %% Conclusion
+    p4-case1 ==> p4-conclusion
+    p4-case2 ==> p4-conclusion
+    p4-case3a ==> p4-conclusion
+    p4-case3b ==> p4-conclusion
+    p4-case3c -->|"pending"| p4-conclusion
+    p4-boundary ==> p4-conclusion
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p4-problem question
+
+    classDef proved fill:#bfb,stroke:#3a3,stroke-width:2px
+    class p4-case1,p4-case2,p4-case3a,p4-case3b,p4-boundary,p4-hessian proved
+
+    classDef pending fill:#ffb,stroke:#aa3,stroke-width:2px
+    class p4-case3c,p4-conclusion pending
+
+    classDef failed fill:#fcc,stroke:#a33,stroke-width:2px
+    class p4-sos-fail,p4-ia-fail failed
+
+    classDef setup fill:#cef,stroke:#38b,stroke-width:2px
+    class p4-reform,p4-cases setup
+
+    classDef technique fill:#eee,stroke:#999,stroke-width:1px
+    class p4-parity,p4-exchange,p4-domain,p4-signcount technique

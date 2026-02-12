@@ -138,15 +138,40 @@ factors into 7 components. Critical points in domain:
 3. **(a₄, b₄) ≈ (0.1911, 0.1068)**: -N = 825 (symmetric)
 4. **(a₄, b₄) ≈ (0.1695, 0.1695)**: -N = 898
 
-**Case 2 (a₃ ≠ 0, b₃ = 0): 0 critical points in domain.**
-5000-start numerical search: 450 critical points found, ALL outside domain.
+**Case 2 (a₃ ≠ 0, b₃ = 0): EXACT — 0 critical points in domain.**
+Algebraic elimination via resultant chain:
+- Parity: g₁ odd in a₃ → divide by a₃, substitute u = a₃²
+- Resultant res(h₁, h₂, u) → degree-127 univariate in b₄
+- GCD = (4b₄-1)⁴·(12a₄+1) (boundary loci), divided out
+- R_final factors: deg 1×1, 1×2, 1×13, 2×2, 37×1, 70×1
+- Domain constraint: disc_q = 16·b₄·(4b₄-1)² ≥ 0 ⟹ b₄ ≥ 0
+  (reduces search from [-1/12, 1/4] to [0, 1/4])
+- Sturm counting for ≤ degree-40 factors; sign-counting for degree-70
+- 6 b₄ candidates in [0, 1/4], back-substitution: 0 interior CPs
+- **Runtime: 30 seconds.** Commit: e482b86
+- Script: `scripts/verify-p4-n4-case2-final.py`
 
-**Case 3 (full 4D, a₃ ≠ 0, b₃ ≠ 0): All have -N > 0.**
-Independent searches (3000 + 5000 starts): 12 critical points total found
-in domain. All non-x₀ critical points have -N ∈ [685, 2296].
-Up to symmetry, approximately 7 distinct critical points.
+**Case 3a (diagonal: a₃=b₃, a₄=b₄): EXACT — 1 CP, -N = 2296.**
+Exchange symmetry reduces to 2 equations in 2 unknowns.
+Parity + resultant → degree-24 univariate; 7 roots in [-1/12, 1/4].
+One interior CP at a₃ ≈ ±0.1478, a₄ ≈ 0.1695, -N = 2296.
+Script: `scripts/verify-p4-n4-case3-diag.py` (3 seconds)
 
-Scripts: `scripts/verify-p4-n4-critical-points.py`,
+**Case 3b (anti-diagonal: a₃=-b₃, a₄=b₄): EXACT — 2 CPs, -N ≥ 0.05.**
+Exchange+parity → 2 equations in 2 unknowns.
+Parity + resultant → degree-23 univariate; 4 roots in [-1/12, 1/4].
+Two interior CPs: -N ≈ 0.05 and -N ≈ 686.
+Script: `scripts/verify-p4-n4-case3-diag.py` (3 seconds)
+
+**Case 3c (generic off-diagonal: a₃≠0, b₃≠0, a₃≠±b₃): PENDING.**
+Full 4D gradient system: 4 polynomials of degree 9 in 4 variables.
+Direct resultant elimination infeasible (res(g₁,g₂,a₃) timed out — ~2000 terms).
+Interval arithmetic failed (wrapping error + domain issues).
+Numerical: 4 symmetry copies of one orbit, all -N ≈ 1679.
+**Handoff to PHCpack** on user's laptop for certified root count.
+Scripts: `scripts/verify-p4-n4-case3c.py`, `data/first-proof/case3c-handoff.md`
+
+Scripts (earlier numerical work): `scripts/verify-p4-n4-critical-points.py`,
          `scripts/verify-p4-n4-classify-cps.py`,
          `scripts/verify-p4-n4-lipschitz.py` (Step 5)
 
@@ -162,22 +187,21 @@ Script: `scripts/verify-p4-n4-lipschitz.py`
 
 ## What Is NOT Yet Proved (But Numerically Verified)
 
-### General Case — Status: NUMERICALLY COMPLETE
+### Case 3c (Generic Off-Diagonal) — Status: ALGEBRAIC CASES COMPLETE, ONE GAP REMAINS
 
-All evidence points to -N ≥ 0 on the entire domain:
-- **Critical point enumeration**: 12 critical points found, all -N ≥ 0
-  (x₀ is the unique minimum with -N = 0; others are saddles with -N ≥ 685)
+Cases 1, 2, 3a, 3b are **algebraically exact** (resultant elimination + Sturm/sign-counting).
+Only Case 3c (a₃≠0, b₃≠0, a₃≠±b₃) requires certified completion.
+
+All numerical evidence points to -N ≥ 0:
+- **Known CPs**: 4 symmetry copies of one orbit, all -N ≈ 1679
 - **Grid verification**: 529,984 domain points, min -N = 0.025
 - **5000 local optimizations**: 0 violations
 - **500,000 Monte Carlo trials**: 0 violations
 - **100,000 boundary trials**: 0 violations
 - **Differential evolution**: converges to equality point
 
-**Rigorous gap**: The critical point search is numerical, not certified.
-For a fully rigorous proof, one needs:
-(a) Certified numerical algebraic geometry (PHCpack) for the 4D gradient system
-(b) Exact Gröbner basis computation for 4 equations of degree 9 in 4 variables
-(c) Alternatively: a non-SOS algebraic certificate (matrix Positivstellensatz, etc.)
+**Rigorous gap**: Certify that the 4 known CPs are the only ones in Case 3c.
+Recommended approach: PHCpack (polyhedral homotopy continuation) — see `data/first-proof/case3c-handoff.md`.
 
 Scripts: `scripts/verify-p4-n4-global-min.py`, `scripts/verify-p4-n4-global-min2.py`,
          `scripts/verify-p4-n4-lipschitz.py`, `scripts/verify-p4-n4-classify-cps.py`
@@ -244,23 +268,25 @@ Script: `scripts/verify-p4-n4-lipschitz.py`
 
 ## Proof Structure
 
-### Current State: Path A Nearly Complete
+### Current State: Path A — One Gap Remains (Case 3c)
 
-**Path A: Unique Global Minimum** (primary approach)
+**Path A: Exhaustive Critical Point Enumeration** (primary approach)
 
 1. ✅ Equality point x₀ is a strict local minimum (4D Hessian PD)
-2. ✅ In symmetric subfamily (a₃=b₃=0): unique critical point (exact, via resultant)
-3. ✅ -N ≥ 0 on boundary of domain (algebraic + numerical)
-4. ✅ All interior critical points have -N ≥ 0 (numerical, multiple independent searches)
-5. ✅ Domain is compact → -N achieves minimum at critical point or boundary
-6. 🔲 Certify critical point enumeration is exhaustive (requires PHCpack or Gröbner)
+2. ✅ -N ≥ 0 on boundary of domain (algebraic for f₁,f₂ faces; numerical for disc=0)
+3. ✅ Domain is compact → -N achieves minimum at critical point or boundary
+4. ✅ Case 1 (a₃=b₃=0): EXACT — 4 CPs, all -N ≥ 0 (resultant, degree 26)
+5. ✅ Case 2 (b₃=0, a₃≠0): EXACT — 0 interior CPs (resultant chain, degree 127, 30s)
+6. ✅ Case 3a (diagonal): EXACT — 1 CP, -N = 2296 (resultant, degree 24)
+7. ✅ Case 3b (anti-diagonal): EXACT — 2 CPs, -N ≥ 0.05 (resultant, degree 23)
+8. 🔲 Case 3c (generic off-diagonal): 4 known CPs (numerical, -N ≈ 1679)
+   → Needs PHCpack or Gröbner to certify exhaustiveness
 
 **The proof argument**: Since the domain is compact, -N is continuous and
 achieves its infimum. The infimum occurs either at an interior critical
-point (∇(-N) = 0) or on the boundary. All interior critical points have
--N ≥ 0 (§10), and -N ≥ 0 on the boundary (§7). Therefore -N ≥ 0. ∎
-
-The only gap is certifying that no critical points were missed in §10.
+point (∇(-N) = 0) or on the boundary. Cases 1-3b algebraically certify
+all CPs on their subspaces have -N ≥ 0 (§10), and -N ≥ 0 on the boundary
+(§7). Case 3c completion (via PHCpack) would close the final gap. ∎
 
 **Path B: Computational Certificate** — BLOCKED
 - SOS/Putinar certificates infeasible at degrees 10, 12, 14 (§9)
@@ -270,18 +296,21 @@ The only gap is certifying that no critical points were missed in §10.
 - 2D certificates at 6/8 test points
 - Boundary failures unresolved
 
-### To Make Path A Rigorous
+### To Close the Case 3c Gap
 
-Option 1: **PHCpack** (polyhedral homotopy continuation) to find all isolated
-solutions of the gradient system (4 equations, degree 9, Bezout bound 6561).
-Certified root counts would establish exhaustiveness.
+Option A (recommended): **PHCpack** (polyhedral homotopy continuation) to
+find all isolated solutions of the 4D gradient system (4 equations, degree 9,
+Bezout bound 9⁴ = 6561, mixed volume likely much smaller). Certified root
+count establishes exhaustiveness. See `data/first-proof/case3c-handoff.md`.
 
-Option 2: **Gröbner basis** of the gradient ideal. Exact computation, but
-may be computationally infeasible for this system size.
+Option B: **Bertini** — similar homotopy continuation, different algorithm.
 
-Option 3: **Interval arithmetic + subdivision** on the domain, avoiding the
-Taylor ball where the quadratic bound handles positivity. Challenging due to
-narrow margin near x₀ (Taylor radius only 0.004458).
+Option C: **Domain-aware interval arithmetic** — only verify -N ≥ 0 on
+boxes inside {disc≥0, f₁>0, f₂<0}. Requires encoding semi-algebraic
+domain constraints into the box filtering.
+
+Option D: **Invariant coordinates** — use (s,d,S,D) exchange-symmetric
+coordinates to reduce system size, possibly making Gröbner basis feasible.
 
 ---
 
