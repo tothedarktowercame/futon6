@@ -8,7 +8,10 @@
       "body_text": "Problem 6 theorem target: find universal c0>0 such that for every weighted graph and epsilon in (0,1), there exists S with |S|>=c0*epsilon*n and L_{G[S]}<=epsilon*L (induced, no reweighting).",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": null
+      "parent_post_id": null,
+      "tags": {
+        "verification_status": "target"
+      }
     },
     {
       "id": "p6a-s1",
@@ -17,88 +20,130 @@
       "body_text": "Leverage threshold lemma: any epsilon-light S must avoid heavy edges (tau_e>epsilon), so S is independent in G_H.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6100
+      "parent_post_id": 6100,
+      "tags": {
+        "verification_status": "proved"
+      }
     },
     {
       "id": "p6a-s2",
       "node_type": "answer",
       "post_id": 6102,
-      "body_text": "Turan bound on heavy graph gives independent set I with |I|>=epsilon*n/3. Case split: Case 1 and Case 2a close; only Case 2b remains.",
+      "body_text": "Turan bound on heavy graph gives independent set I with |I|>=epsilon*n/3. Case split: Case 1 (I indep in G) and Case 2a (alpha_I<=epsilon) close with c0=1/3; only Case 2b (alpha_I>epsilon) remains.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6100
+      "parent_post_id": 6100,
+      "tags": {
+        "verification_status": "proved"
+      }
     },
     {
       "id": "p6a-s3",
       "node_type": "answer",
       "post_id": 6103,
-      "body_text": "Subsampling/trace route has sublinear ceiling in worst case; cannot prove universal linear-size c0*epsilon*n from current hypotheses.",
+      "body_text": "Six subsample/trace techniques exhaust: trace-Markov (sublinear), star domination (O(eps/log n)), decoupling+MSS 1-shot (O(eps^2)), recursive (O(sqrt eps)), greedy/chromatic (O(eps)), rank spreading (O(eps^2)). All hit quadratic-vs-linear wall. Trace-only ceiling proved.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6100
+      "parent_post_id": 6100,
+      "tags": {
+        "verification_status": "proved_negative"
+      }
     },
     {
       "id": "p6a-s4",
       "node_type": "answer",
       "post_id": 6104,
-      "body_text": "Core regularization + L1: extract I0 with bounded leverage degree; prove averaged drift bound for barrier-normalized grouped updates Y_t(v).",
+      "body_text": "Step 0 (core regularization): extract I0 with |I0|>=|I|/2 and leverage-degree ell_v<=12/epsilon. Step 1 (trace ceiling): greedy trace gives tr(M)<=D*t^2/(m0-t), sublinear. Both proved.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6100
+      "parent_post_id": 6100,
+      "tags": {
+        "verification_status": "proved"
+      }
+    },
+    {
+      "id": "p6a-s4b",
+      "node_type": "answer",
+      "post_id": 6109,
+      "body_text": "L1 (drift averaging): avg drift_t(v) <= (tD/r_t)*tr(B_t^2). Guarantees existence of low-drift vertex at each step. Proved.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6100,
+      "tags": {
+        "verification_status": "proved"
+      }
     },
     {
       "id": "p6a-s5",
       "node_type": "answer",
       "post_id": 6105,
-      "body_text": "Reduction layer: (i) L2+L3 imply linear-size closure; (ii) sharper: L2* alone already implies existence.",
+      "body_text": "Reduction: L2*+L3 imply linear-size closure via potential telescoping. Sharper: L2* alone suffices — if score_t(v)<=theta<1 then M_{t+1}<=(1-theta)M_t+theta*eps*I<=eps*I. Proved.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6100
+      "parent_post_id": 6100,
+      "tags": {
+        "verification_status": "proved"
+      }
     },
     {
       "id": "p6a-s6",
       "node_type": "answer",
       "post_id": 6106,
-      "body_text": "MSS/KS gap map: standard interlacing/paving/concentration tools do not directly prove the grouped fixed-block step needed for L2*.",
+      "body_text": "MSS/KS gap map: standard interlacing/paving/concentration tools do not directly prove the grouped fixed-block step needed for L2*. All optimize over partitions; GPL-H has a fixed partition.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6100
+      "parent_post_id": 6100,
+      "tags": {
+        "verification_status": "proved_negative"
+      }
     },
     {
       "id": "p6a-s7",
       "node_type": "answer",
       "post_id": 6107,
-      "body_text": "Open bridge formalized as GPL-H: from H1-H4 infer min_v ||Y_t(v)||<=theta for t<=c_step*epsilon*n.",
+      "body_text": "GPL-H (Assumption V): from H1 (light edges), H2 (bounded leverage degree), H3 (barrier M_t<=eps*I), H4 (|R_t|>=eta*eps*n), conclude min_v ||Y_t(v)||<=theta<1. OPEN.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6100
+      "parent_post_id": 6100,
+      "tags": {
+        "verification_status": "open"
+      }
     },
     {
       "id": "p6a-s8",
       "node_type": "answer",
       "post_id": 6108,
-      "body_text": "Current proof status: all preprocessing/reduction pieces are in place; single remaining open implication is GPL-H conclusion from H1-H4.",
+      "body_text": "Overall: all preprocessing and reduction layers proved. Single remaining open implication is GPL-H (H1-H4 => min-score).",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6100
+      "parent_post_id": 6100,
+      "tags": {
+        "verification_status": "summary"
+      }
     },
     {
       "id": "p6a-c1",
       "node_type": "comment",
       "post_id": 61081,
-      "body_text": "Empirical signal for L2*: baseline and randomized trajectories keep max_t min_v score_t(v) below 1 on tested Case-2b instances.",
+      "body_text": "Empirical: 313 baseline + 2040 randomized trajectories (n<=48), worst theta=0.667. Exhaustive n<=14: worst 0.476. No counterexample.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6108
+      "parent_post_id": 6108,
+      "tags": {
+        "verification_status": "empirical"
+      }
     },
     {
       "id": "p6a-c2",
       "node_type": "comment",
       "post_id": 61082,
-      "body_text": "Stronger sufficient condition sum_v Y_t(v)<=rho I with rho<1 fails in dense cases, so GPL-H needs finer anisotropic structure.",
+      "body_text": "Budget condition sum_v Y_t(v)<=rho*I with rho<1 fails in dense cases, so GPL-H needs finer anisotropic structure.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6108
+      "parent_post_id": 6108,
+      "tags": {
+        "verification_status": "proved_negative"
+      }
     }
   ],
   "edges": [
@@ -120,14 +165,14 @@
       "source": "p6a-s2",
       "target": "p6a-problem",
       "edge_type": "reform",
-      "evidence": "Reduce theorem to Case 2b after Cases 1/2a",
+      "evidence": "Reduce theorem to Case 2b after Cases 1/2a closed",
       "detection": "structural"
     },
     {
       "source": "p6a-s3",
       "target": "p6a-s2",
       "edge_type": "challenge",
-      "evidence": "Subsampling/trace cannot close Case 2b with universal c0",
+      "evidence": "Six subsample/trace techniques all hit quadratic-vs-linear wall",
       "detection": "structural"
     },
     {
@@ -138,8 +183,15 @@
       "detection": "structural"
     },
     {
-      "source": "p6a-s5",
+      "source": "p6a-s4b",
       "target": "p6a-s4",
+      "edge_type": "assert",
+      "evidence": "L1 drift averaging proved; controls drift not score",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s5",
+      "target": "p6a-s4b",
       "edge_type": "assert",
       "evidence": "Reductions show closure follows from L2* (L3 optional)",
       "detection": "structural"
@@ -254,7 +306,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Reduce theorem to Case 2b after Cases 1/2a",
+        "evidence": "Reduce theorem to Case 2b after Cases 1/2a closed",
         "detection": "structural"
       },
       "hx/labels": [
@@ -279,7 +331,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Subsampling/trace cannot close Case 2b with universal c0",
+        "evidence": "Six subsample/trace techniques all hit quadratic-vs-linear wall",
         "detection": "structural"
       },
       "hx/labels": [
@@ -319,12 +371,37 @@
       "hx/ends": [
         {
           "role": "source",
-          "ident": "p6a-s5",
+          "ident": "p6a-s4b",
           "node_type": "answer"
         },
         {
           "role": "target",
           "ident": "p6a-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "L1 drift averaging proved; controls drift not score",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-006",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s4b",
           "node_type": "answer"
         }
       ],
@@ -339,7 +416,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p6-attempt:edge-006",
+      "hx/id": "first-proof-p6-attempt:edge-007",
       "hx/type": "thread/challenge",
       "hx/ends": [
         {
@@ -364,7 +441,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p6-attempt:edge-007",
+      "hx/id": "first-proof-p6-attempt:edge-008",
       "hx/type": "thread/reform",
       "hx/ends": [
         {
@@ -389,7 +466,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p6-attempt:edge-008",
+      "hx/id": "first-proof-p6-attempt:edge-009",
       "hx/type": "thread/assert",
       "hx/ends": [
         {
@@ -414,7 +491,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p6-attempt:edge-009",
+      "hx/id": "first-proof-p6-attempt:edge-010",
       "hx/type": "thread/reference",
       "hx/ends": [
         {
@@ -439,7 +516,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p6-attempt:edge-010",
+      "hx/id": "first-proof-p6-attempt:edge-011",
       "hx/type": "thread/exemplify",
       "hx/ends": [
         {
@@ -464,7 +541,7 @@
       ]
     },
     {
-      "hx/id": "first-proof-p6-attempt:edge-011",
+      "hx/id": "first-proof-p6-attempt:edge-012",
       "hx/type": "thread/clarify",
       "hx/ends": [
         {
@@ -490,11 +567,11 @@
     }
   ],
   "stats": {
-    "n_nodes": 11,
-    "n_edges": 12,
+    "n_nodes": 12,
+    "n_edges": 13,
     "node_types": {
       "question": 1,
-      "answer": 8,
+      "answer": 9,
       "comment": 2
     },
     "edge_types": {
@@ -502,11 +579,19 @@
       "reference": 2,
       "reform": 3,
       "challenge": 2,
-      "assert": 2,
+      "assert": 3,
       "exemplify": 1
     },
     "detection_types": {
-      "structural": 12
+      "structural": 13
+    },
+    "verification_status": {
+      "target": 1,
+      "proved": 5,
+      "proved_negative": 3,
+      "open": 1,
+      "summary": 1,
+      "empirical": 1
     }
   }
 }

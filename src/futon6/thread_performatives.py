@@ -25,6 +25,7 @@ class ThreadNode:
     score: int
     creation_date: str
     parent_post_id: int | None = None
+    tags: dict[str, str] | None = None
 
 
 @dataclass

@@ -8,7 +8,10 @@
       "body_text": "GPL-H zoom target: from H1-H4, prove min_{v in R_t} ||Y_t(v)||<=theta<1 for t<=c_step*epsilon*n.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": null
+      "parent_post_id": null,
+      "tags": {
+        "verification_status": "open"
+      }
     },
     {
       "id": "p6z-a1",
@@ -17,7 +20,10 @@
       "body_text": "H1: all internal edges of I0 are light (tau_uv<=epsilon).",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6200
+      "parent_post_id": 6200,
+      "tags": {
+        "verification_status": "proved"
+      }
     },
     {
       "id": "p6z-a2",
@@ -26,7 +32,10 @@
       "body_text": "H2: core regularity bound ell_v<=D0/epsilon on I0 (coarse proved constant D0=12).",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6200
+      "parent_post_id": 6200,
+      "tags": {
+        "verification_status": "proved"
+      }
     },
     {
       "id": "p6z-a3",
@@ -35,16 +44,22 @@
       "body_text": "H3: barrier-valid prefix M_t<=epsilon I.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6200
+      "parent_post_id": 6200,
+      "tags": {
+        "verification_status": "proved"
+      }
     },
     {
       "id": "p6z-a4",
       "node_type": "answer",
       "post_id": 6204,
-      "body_text": "H4: residual pool size r_t>=eta*epsilon*n (enforced by choosing c_step small enough).",
+      "body_text": "H4: residual pool size r_t>=eta*epsilon*n (enforced by choosing c_step<=1/12).",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6200
+      "parent_post_id": 6200,
+      "tags": {
+        "verification_status": "proved"
+      }
     },
     {
       "id": "p6z-a5",
@@ -53,7 +68,10 @@
       "body_text": "Definitions: Y_t(v)=B_t^(1/2)C_t(v)B_t^(1/2), score_t(v)=||Y_t(v)||.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6200
+      "parent_post_id": 6200,
+      "tags": {
+        "verification_status": "definition"
+      }
     },
     {
       "id": "p6z-c1",
@@ -62,7 +80,10 @@
       "body_text": "Proved weak averaging bound: min_v score_t(v) <= (tD/r_t) tr(B_t); not enough for universal theta<1.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6205
+      "parent_post_id": 6205,
+      "tags": {
+        "verification_status": "proved_insufficient"
+      }
     },
     {
       "id": "p6z-c2",
@@ -71,16 +92,22 @@
       "body_text": "Strong budget condition sum_v Y_t(v)<=rho I (rho<1) fails in dense examples.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6205
+      "parent_post_id": 6205,
+      "tags": {
+        "verification_status": "proved_negative"
+      }
     },
     {
       "id": "p6z-a6",
       "node_type": "answer",
       "post_id": 6206,
-      "body_text": "If zoom target holds, pick such v_t each step; then C_t(v_t)<=theta(epsilon I-M_t), so barrier is preserved and |S|=Omega(epsilon n).",
+      "body_text": "Sufficiency: if score_t(v)<=theta<1 then M_{t+1}<=(1-theta)M_t+theta*eps*I<=eps*I. Barrier preserved, |S|=Omega(epsilon n). Proved.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6200
+      "parent_post_id": 6200,
+      "tags": {
+        "verification_status": "proved"
+      }
     },
     {
       "id": "p6z-open",
@@ -89,7 +116,10 @@
       "body_text": "Open implication: H1-H4 => min_v ||Y_t(v)||<=theta. This is the only missing theorem-level bridge.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6200
+      "parent_post_id": 6200,
+      "tags": {
+        "verification_status": "open"
+      }
     }
   ],
   "edges": [
@@ -104,28 +134,28 @@
       "source": "p6z-a1",
       "target": "p6z-q",
       "edge_type": "reference",
-      "evidence": "Hypothesis H1",
+      "evidence": "Hypothesis H1 (from leverage threshold lemma)",
       "detection": "structural"
     },
     {
       "source": "p6z-a2",
       "target": "p6z-q",
       "edge_type": "reference",
-      "evidence": "Hypothesis H2",
+      "evidence": "Hypothesis H2 (from core regularization Step 0)",
       "detection": "structural"
     },
     {
       "source": "p6z-a3",
       "target": "p6z-q",
       "edge_type": "reference",
-      "evidence": "Hypothesis H3",
+      "evidence": "Hypothesis H3 (inductive, maintained if good step exists)",
       "detection": "structural"
     },
     {
       "source": "p6z-a4",
       "target": "p6z-q",
       "edge_type": "reference",
-      "evidence": "Hypothesis H4",
+      "evidence": "Hypothesis H4 (from c_step<=1/12 and |I0|>=eps*n/6)",
       "detection": "structural"
     },
     {
@@ -206,7 +236,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Hypothesis H1",
+        "evidence": "Hypothesis H1 (from leverage threshold lemma)",
         "detection": "structural"
       },
       "hx/labels": [
@@ -231,7 +261,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Hypothesis H2",
+        "evidence": "Hypothesis H2 (from core regularization Step 0)",
         "detection": "structural"
       },
       "hx/labels": [
@@ -256,7 +286,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Hypothesis H3",
+        "evidence": "Hypothesis H3 (inductive, maintained if good step exists)",
         "detection": "structural"
       },
       "hx/labels": [
@@ -281,7 +311,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Hypothesis H4",
+        "evidence": "Hypothesis H4 (from c_step<=1/12 and |I0|>=eps*n/6)",
         "detection": "structural"
       },
       "hx/labels": [
@@ -433,6 +463,13 @@
     },
     "detection_types": {
       "structural": 10
+    },
+    "verification_status": {
+      "open": 2,
+      "proved": 5,
+      "definition": 1,
+      "proved_insufficient": 1,
+      "proved_negative": 1
     }
   }
 }
