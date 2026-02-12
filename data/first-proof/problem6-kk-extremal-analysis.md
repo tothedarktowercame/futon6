@@ -115,15 +115,97 @@ at each step.
 **The missing piece** is step 5: the symmetrization argument showing K_k is
 extremal. This is the remaining theorem needed to close GPL-H.
 
-## Empirical support
+## Key discovery: all scores ≤ 1 at c_step = 1/3
 
-| n range | nontrivial rows | max avg_score | max min_score |
-|---------|----------------|---------------|---------------|
-| 8-24 | 49 | 0.741 | 0.741 |
-| 8-48 | 177 | 0.741 | 0.668 |
-| 8-64 | 441 | 0.741 | 0.668 |
+At `c_step = 1/3`, **ALL** scores stay strictly below 1 for ALL nontrivial
+steps across ALL tested graph families up to `n = 96`. This means:
 
-The worst avg_score (0.741 = 20/27) does NOT grow with n.
+- `P_t = 0` (no above-1 vertices), so GL-Balance holds trivially.
+- GPL-H follows immediately: `min_v ‖Y_t(v)‖ ≤ max_v ‖Y_t(v)‖ < 1`.
+
+### Empirical support (extended to n = 96)
+
+| n range | nontrivial rows | worst max_score | worst dbar | rows with score > 1 |
+|---------|----------------|-----------------|------------|---------------------|
+| 8-24    | 1              | 0.278           | 0.278      | 0                   |
+| 8-48    | 39             | 0.501           | 0.536      | 0                   |
+| 8-64    | 157            | 0.607           | 0.594      | 0                   |
+| 8-96    | 569            | 0.675           | 0.683      | 0                   |
+
+**Zero violations across 569 nontrivial rows.**
+Worst max_score does NOT grow with n (oscillates 0.5-0.68).
+
+### Phase structure of the greedy
+
+The barrier greedy has a natural two-phase structure:
+
+**Phase 1 (M_t = 0):** The greedy selects vertices with no edges to S_t
+within I_0, keeping M_t = 0. Every such vertex has score 0 < 1. This phase
+covers the ENTIRE horizon for 64% of instances.
+
+**Phase 2 (all vertices active):** All remaining vertices have at least one
+edge to S_t. The minimum score is > 0 but empirically stays well below 1.
+
+Key finding: `|I_0| ≥ 2.7 × horizon` for ALL tested instances. So the
+greedy never runs out of vertices.
+
+Instances with earliest Phase 2: **complete graphs** `K_n`, where Phase 2
+starts at `t = 1`. But the K_k formula gives score ≤ 5/6 throughout.
+
+### Proof structure (what's proved vs what's open)
+
+**Proved unconditionally:**
+
+1. **Phase 1 closure:** If `∃ v ∈ R_t` with no edges to `S_t` in `I_0`,
+   that vertex has score 0 < 1. GPL-H holds trivially at this step.
+
+2. **First-step identity:** When `M_t = 0` and `v` has exactly one neighbor
+   in `S_t`: `score(v) = τ/ε < 1` by strict H1.
+
+3. **Ratio certificate:** `min_v s_v ≤ dbar/gbar` (deterministic, from
+   AR1). Combined with `gbar ≥ 1` (PSD rank gap), `dbar < 1 ⟹ GPL-H`.
+
+4. **K_k formula:** `score(t) = max((t+1)/(kε), 1/(kε-t))`. At `c_step =
+   1/3`: score ≤ 5/6 < 1 for all `K_k` under H1.
+
+**Open (the gap):**
+
+5. **General graph bound:** Prove that for ANY graph under H1-H4, within
+   the `c_step = 1/3` horizon, `min_v ‖Y_t(v)‖ < 1`.
+
+   Equivalent sufficient conditions (any one closes GPL-H):
+   - (a) Prove `dbar < 1` on all nontrivial steps.
+   - (b) Prove `K_k` is extremal (symmetrization lemma).
+   - (c) Prove `max_v ‖Y_t(v)‖ ≤ 1` directly (strongest, empirically true).
+
+### Why scalar bounds fail
+
+The trace-sum bound `dbar ≤ tr(Q)/(|A_t|·(ε - ‖M_t‖))` where
+`Q = Σ_{e crossing} X_e` gives `dbar ≤ ε/(ε - ‖M_t‖) ≥ 1` always,
+because it ignores the anisotropy between crossing edges and the barrier.
+
+The proof MUST use anisotropic structure: crossing edge directions `z_e`
+are not aligned with the top eigenvectors of `M_t` (which come from
+within-`S_t` edges). This orthogonality keeps `tr(B_t X_e)` close to
+`τ_e/ε` rather than `τ_e/(ε - ‖M_t‖)`.
+
+### Path to closing the gap
+
+The most promising routes (in priority order):
+
+**Route 1: Greedy-specific argument.** The greedy selects min-score vertices,
+which are spectrally "far" from `S_t`. This creates a barrier `M_t` whose
+top eigenvectors are orthogonal to the crossing edge directions. Formalize
+this as: the greedy maintains a "spectral spread" invariant that keeps
+all scores bounded.
+
+**Route 2: Interlacing on the average characteristic polynomial.** The
+average over `v ∈ R_t` of `det(xI - Y_t(v))` has computable largest root.
+If this root < 1, some `v` has `‖Y_t(v)‖ < 1`. This is the Xie-Xu approach
+from Attack Path C, restricted to the `c_step = 1/3` horizon.
+
+**Route 3: Symmetrization lemma.** Prove `K_k` maximizes `min_v score` among
+all H1-H4 graphs. Then the K_k formula (score ≤ 5/6) closes everything.
 
 ## Open question
 
@@ -143,3 +225,5 @@ If yes, GPL-H follows from the K_k formula with θ = 5/6, c_step = 1/3.
 - `data/first-proof/problem6-proof-attempt.md` — full proof (updated with
   ratio certificate and GL-Balance)
 - `scripts/verify-p6-gpl-h-aggregate-ratio.py` — aggregate ratio diagnostics
+- `scripts/verify-p6-allscores-bound.py` — all-scores bound verification
+- `scripts/verify-p6-phase-structure.py` — phase structure analysis
