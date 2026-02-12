@@ -1,32 +1,61 @@
 # Problem 7 Approach II/III Wiring Library
 
 Date: 2026-02-12
+Updated: 2026-02-12 (triage pass after reading 1705.10909 and 1106.1704)
 
-This library is focused on the new S-branch framing from `0fa4e82`:
-- Approach II: equivariant surgery on `(M, tau)`
-- Approach III: orbifold resolution with `pi_1` control
-- E2-odd-alt: cross-cutting fixed-set geometry for odd-dimensional alternatives
-- Interface: retained dependencies linking back to Approach I infrastructure
+This library is focused on the new S-branch framing from `0fa4e82`.
 
-Total diagrams: 22
+## Critical findings from paper reads
 
-## Counts by Track
-- `approach_ii`: 8
-- `approach_iii`: 4
-- `e2_odd_alt`: 6
-- `interface`: 4
+**1705.10909 (Costenoble-Waner):** Equivariant surgery requires a
+**codimension-2 gap hypothesis**. Our reflection construction has a
+codimension-1 fixed set, so Approach II (equivariant surgery on the
+reflection action) is **BLOCKED** for the current lattice family.
+However, if we switch to **rotational involutions** (codimension-2 fixed
+sets), the gap hypothesis is satisfied.
 
-## Counts by Tag
-- `Approach-I`: 4
-- `Approach-II`: 8
-- `Approach-III`: 4
-- `Cross`: 1
-- `E2`: 5
-- `E2-odd-alt`: 6
-- `FJ`: 1
-- `G1`: 3
-- `G2`: 2
-- `G3`: 2
+**1106.1704 (Avramidi):** The Smith-theoretic constraints work mod p, not
+over Q. The paper does not kill the odd-dim E2 alternative. However,
+**Gauss-Bonnet kills it for reflections**: even-dim closed hyperbolic
+manifolds always have chi != 0, so reflections in odd ambient dimension
+fail Fowler.
+
+**Combined insight:** The dimension-parity tension is inescapable for
+reflections. The resolution is to use **rotational involutions (codim-2)
+in odd ambient dimension**: fixed set is odd-dim (chi = 0), gap hypothesis
+is satisfied, and L-theory parity is favorable. See
+`problem7-hypothetical-wirings.md`, Diagram H1.
+
+## Triage
+
+**Read (high value):**
+- d01 (`1705.10909`) — READ. Codim-2 gap kills reflection Approach II but
+  enables rotation Approach II.
+- d15 (`1106.1704`) — READ. Smith/Gauss-Bonnet constraints clarified.
+- d02 (`1811.08794`) — Equivariant Pontrjagin-Thom for orbifold cobordism.
+  Bridges Approaches II and III. Worth reading.
+- d04 (`1112.2104`) — Proper discrete-group bordism with signatures.
+  Relevant if rotation route proceeds.
+
+**Skip (wrong setting, already consumed, or infrastructure only):**
+- d03 (`math/0412550`) — Equivariant bordism comparison. Too general.
+- d05 (`math/9910024`) — Complex equivariant bordism rings. Wrong setting.
+- d06 (`math/0512284`) — Positive scalar curvature with symmetry. Wrong problem.
+- d07 (`1305.2288`) — Circle actions and scalar curvature. Wrong problem.
+- d08 (`2002.02326`) — Corks and involutions. 4-manifold specific.
+- d09-d12 — Approach III infrastructure recycled from round 1. No
+  construction techniques found.
+- d13 (`2506.23994`) — Already consumed in E2.
+- d14 (`math/0406607`) — Already consumed. BUT relevant to rotation-route
+  lattice existence question.
+- d16-d18 — Fixed-set rigidity/finiteness. Constraint data, not constructive.
+- d19-d22 — Interface/Approach I. Already consumed.
+
+## Original counts (for reference)
+- `approach_ii`: 8 (1 read, 1 worth reading, 6 skip)
+- `approach_iii`: 4 (all skip — no construction techniques found)
+- `e2_odd_alt`: 6 (1 read, 5 skip/consumed)
+- `interface`: 4 (all skip/consumed)
 
 ## Diagram Index
 

@@ -145,34 +145,24 @@ it, and show the surgery obstruction vanishes.
 **Status.** This approach has three successive obstacles, each open.
 See `problem7r-s3a-setup.md` for the detailed analysis.
 
-### Approach II: Equivariant surgery on (M, tau)
+### Approach II: Equivariant surgery on (M, tau) — BLOCKED for reflections
 
 **Idea.** Work directly with the closed manifold `M` and the involution
 `tau`. Eliminate the fixed set `F` by equivariant surgery to obtain `M'`
 with a free Z/2-action. Then `M'/(Z/2)` is a closed manifold with
 `pi_1 = Gamma`.
 
-**Potential advantages.** Bypasses the FH(Q) complex entirely — no need
-for Poincare complex structure or Spivak reduction. Works with the concrete
-geometric data (M, tau, F).
+**Blocking obstruction.** The equivariant surgery framework of
+Costenoble-Waner (arXiv:1705.10909) requires a **codimension-2 gap
+hypothesis**: fixed sets of distinct isotropy subgroups must differ in
+dimension by at least 2 (Condition 3.4(3)). For our Z/2-action on `M^n`
+with codimension-1 fixed set `F^{n-1}`, this gap condition **fails**.
+The Dovermann-Schultz framework (Springer LNM 1443) similarly requires
+gap conditions.
 
-**Obstacles.**
-
-1. *Equivariant surgery obstruction.* The obstruction to eliminating
-   a codimension-1 fixed set by equivariant surgery is nontrivial
-   (Dovermann-Schultz, *Equivariant Surgery Theories*, Springer LNM 1443).
-   No computation has been done for this specific lattice action.
-
-2. *pi_1 control.* Equivariant surgery modifying `M` near `F` must
-   preserve the property that the quotient has `pi_1 = Gamma`. This
-   requires tracking the effect of equivariant handle operations on the
-   orbifold fundamental group.
-
-3. *Rational acyclicity.* The modified `M'` must still have rationally
-   acyclic universal cover. If the equivariant surgery only changes `M`
-   rationally trivially (e.g., by rational cobordism), this is preserved.
-
-**Status.** Not explored beyond this sketch.
+**Status.** Blocked for the reflection construction (codimension-1 fixed
+sets). However, the approach becomes viable for **rotational involutions**
+(codimension-2 fixed sets) — see Approach IV below.
 
 ### Approach III: Orbifold resolution
 
@@ -194,18 +184,58 @@ singularity. Resolve the singularity to produce a closed manifold with
 
 ### Structural observation: dimension-parity tension
 
-The E2 obligation requires `n` **even** (so the fixed set has odd dimension
-and Euler characteristic zero). But the surgery obstruction computation
-(Approach I) and the AHSS structure of `L_n(Z[Gamma]) tensor Q` have better
-vanishing properties when `n` is **odd** (the 4-periodicity of rational
-L-theory forces `p` odd in the contributing `E^2_{p,q}` terms). No
-vanishing result for odd `p` has been proved for these lattices, but the
-structural favorability is real. This tension between E2 and S is a central
-difficulty.
+The E2 obligation (for reflections) requires `n` **even** (so the fixed set
+has odd dimension and Euler characteristic zero). But the surgery obstruction
+computation (Approach I) and the AHSS structure of `L_n(Z[Gamma]) tensor Q`
+have better vanishing properties when `n` is **odd**. This tension between
+E2 and S is a central difficulty for the reflection construction.
 
-An alternative would be to find a lattice construction where E2 works in
-odd dimension (fixed set with even dimension but zero Euler characteristic).
-This has not been attempted.
+**Why reflections cannot work in odd dimension.** For a reflection on
+`H^{2k+1}`, the fixed set is `H^{2k}` — a closed hyperbolic manifold of
+even dimension. By the Gauss-Bonnet theorem, such manifolds have `chi != 0`.
+So Fowler's criterion fails. This is not an artifact of the construction; it
+is forced by Riemannian geometry.
+
+### Approach IV: Rotation route (resolves the parity tension)
+
+**Idea.** Replace the reflection (codimension-1 involution) with a
+**rotational involution** (codimension-2 fixed set) in **odd** ambient
+dimension. An order-2 isometry of `H^{2k+1}` that fixes `H^{2k-1}`
+(codimension 2) is a "rotation by pi" in a normal 2-plane.
+
+**Why this resolves the tension.** For `n = 2k+1` odd:
+
+- Fixed set `H^{2k-1}` has dimension `2k-1` (odd), so `chi = 0`. Fowler
+  criterion is satisfied: `Gamma in FH(Q)`.
+- Surgery obstruction lives in `L_{2k+1}(Z[Gamma]) tensor Q`, which has
+  favorable parity (odd total degree forces odd `p` in AHSS terms).
+- The codimension-2 gap hypothesis (required by equivariant surgery theories,
+  Costenoble-Waner arXiv:1705.10909) is **satisfied**, so Approach II
+  (equivariant surgery) becomes available as a method for the S-branch.
+
+**Obstacle.** The construction requires arithmetic uniform lattices in
+`Isom(H^{2k+1})` containing order-2 **rotations** (elements fixing a
+codimension-2 totally geodesic submanifold). The existing reflection-lattice
+construction (Douba-Vargas Pallete, arXiv:2506.23994) does not directly
+provide these. A rotational analogue is needed.
+
+**Candidate sources for lattice existence:**
+
+- Belolipetsky-Lubotzky (arXiv:math/0406607) guarantees Z/2 as the isometry
+  group of some closed hyperbolic manifold, but does not control the
+  codimension of the fixed set.
+- Arithmetic lattice constructions via quadratic forms: an order-2 rotation
+  corresponds to an involution of the defining quadratic form that negates a
+  2-dimensional subspace. Whether specific arithmetic lattices contain such
+  elements is a number-theoretic question.
+
+**Status.** Not explored beyond this analysis. See
+`problem7-hypothetical-wirings.md`, Diagram H1 for the full proof
+architecture.
+
+**This is the most promising remaining path for Problem 7.** It dissolves
+the dimension-parity tension, makes equivariant surgery available, and
+reduces the open problem to a single lattice-existence question.
 
 ## 5. Remark: Absence of Smith-Theory Obstruction
 
@@ -236,22 +266,30 @@ reflection lattice in `Isom(H^n)` with `n` even, `n >= 6`. Then:
 
 ## 7. Path to Full Closure
 
-Resolving obligation S requires completing any one of the three approaches
-in Section 4. The most concrete next steps:
+Resolving obligation S requires completing one of the approaches in
+Section 4. The recommended priority order (see
+`problem7-hypothetical-wirings.md` for full analysis):
 
-1. **For Approach I (Wall surgery):** resolve the Poincare complex structure
-   (obstacle 1), ideally by finding a reference for chain-level PD promotion
-   of finite complexes with rationally contractible universal covers.
+1. **Approach IV (rotation route, highest priority).** Determine whether
+   arithmetic uniform lattices in `Isom(H^{2k+1})` contain order-2
+   rotational involutions (codimension-2 fixed sets). This is a
+   number-theoretic / arithmetic-group question. If such lattices exist,
+   all structural tensions dissolve: E2 works (Fowler, odd-dim fixed set),
+   equivariant surgery is available (codim-2 gap satisfied), and L-theory
+   parity is favorable. The entire problem reduces to this lattice-existence
+   question plus a computable equivariant surgery obstruction.
 
-2. **For Approach II (equivariant surgery):** compute the equivariant
-   surgery obstruction to eliminating the fixed set F in (M, tau) for the
-   specific lattice. This requires engaging with the Dovermann-Schultz
-   framework.
+2. **Approach I (Wall surgery, if H1 fails).** Resolve the Poincare
+   complex structure (obstacle 1), ideally by finding a reference for
+   chain-level PD promotion of finite complexes with rationally contractible
+   universal covers.
 
-3. **For all approaches:** investigate whether an odd-dimensional E2
-   construction exists (lattice with 2-torsion where the fixed set has
-   even dimension but vanishing Euler characteristic), which would ease the
-   surgery obstruction computation.
+3. **Approach III (orbifold resolution, speculative).** Only pursue if a
+   specific resolution technique with pi_1 control is identified.
+
+4. **Approach II (equivariant surgery on reflection action).** Blocked
+   by the codimension-2 gap hypothesis (Costenoble-Waner, arXiv:1705.10909).
+   Not viable for codimension-1 fixed sets.
 
 ## References
 
@@ -269,6 +307,12 @@ in Section 4. The most concrete next steps:
   arXiv:0905.0104.
 - K. H. Dovermann, R. Schultz, *Equivariant Surgery Theories and Their
   Periodicity Properties*, Springer LNM 1443, 1990.
+- S. R. Costenoble, S. Waner, *The Equivariant Spivak Normal Bundle and
+  Equivariant Surgery for Compact Lie Groups*, arXiv:1705.10909.
+- G. Avramidi, *Smith Theory, L2 Cohomology, Isometries of Locally Symmetric
+  Manifolds, and Moduli Spaces of Curves*, arXiv:1106.1704.
+- M. Belolipetsky, A. Lubotzky, *Finite Groups and Hyperbolic Manifolds*,
+  arXiv:math/0406607.
 - A. Ranicki, *Algebraic L-Theory and Topological Manifolds*, Cambridge
   Tracts in Mathematics 102, 1992.
 - K. S. Brown, *Cohomology of Groups*, Springer GTM 87.

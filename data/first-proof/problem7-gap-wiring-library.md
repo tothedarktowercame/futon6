@@ -1,11 +1,28 @@
-# Problem 7 Gap Wiring Library
+# Problem 7 Gap Wiring Library (Round 1 — Approach I focused)
 
 Date: 2026-02-12
+Updated: 2026-02-12 (triage pass)
 
-This file mines proof/method patterns into wiring diagrams for the current
-Problem 7 gaps (`G1`, `G2`, `G3`, `U1-U3`) plus dependency branches (`FJ`, `E2`).
+This file mines proof/method patterns for Approach I gaps (`G1`, `G2`, `G3`,
+`U1-U3`) plus dependency branches (`FJ`, `E2`). **Approach I is in serious
+trouble** (see `problem7-hypothetical-wirings.md`); most diagrams here are
+low-priority. The rotation route (Diagram H1) is now the recommended path.
 
 Total diagrams: 22
+
+## Triage summary
+
+**High value (cross-approach):**
+- d16 (`1705.10909`) — Equivariant Spivak/surgery. READ. Codim-2 gap
+  hypothesis identified. Relevant to rotation route.
+
+**Medium value (if Approach I is revisited):**
+- d02 (`1506.06293`) — Avramidi rational manifold models. Partial bridge.
+- d03 (`1311.7629`) — Bredon-PD groups. Supports G1 understanding.
+
+**Already consumed or low value:** All others (d01, d04-d15, d17-d22).
+These are E2/FJ infrastructure already used, or Approach I support that
+doesn't close any gap.
 
 ## Shape Schema
 - `Q`: target subproblem

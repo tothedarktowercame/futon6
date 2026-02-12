@@ -155,35 +155,37 @@ The following are **conjectural sketches, not proofs**:
 
 ### S branch: open
 
-Obligation S (manifold upgrade) is an **open problem** with three candidate
-approaches, none completed. See `problem7-solution.md`, Section 4.
+Obligation S (manifold upgrade) is an **open problem**. Four approaches
+analyzed; one is the recommended path. See `problem7-solution.md`, Section 4
+and `problem7-hypothetical-wirings.md` for full analysis.
 
-3. `p7r-s3a` (Approach I setup): **Open** — three successive obstacles
-   (Poincare complex, normal map, obstruction vanishing).
-4. `p7r-s3b` (Approach I obstruction): **Open** — FJ reduction solid,
-   transfer and localization conjectural, obstruction vanishing unaddressed.
-5. `p7r-s5` (full closure): **Blocked** on resolving S via any approach.
+3. `p7r-s3a` (Approach I setup): **Open** — three successive obstacles.
+4. `p7r-s3b` (Approach I obstruction): **Open** — framework solid,
+   intermediates unverified.
+5. Approach II (reflection equivariant surgery): **Blocked** — codim-2 gap
+   hypothesis fails for codim-1 fixed sets (Costenoble-Waner 1705.10909).
+6. Approach III (orbifold resolution): **Unexplored** — no technique found.
+7. **Approach IV (rotation route): OPEN — most promising.** Requires
+   lattice existence for order-2 rotations in Isom(H^{2k+1}).
+8. `p7r-s5` (full closure): **Blocked** on resolving S via any approach.
 
-Approaches II (equivariant surgery) and III (orbifold resolution) are
-described in `problem7-solution.md` but have not been analyzed in detail.
+### Path forward (updated after reading 1705.10909 and 1106.1704)
 
-### Path forward
+**Priority 1 — Approach IV (rotation route).** Determine whether arithmetic
+uniform lattices in `Isom(H^{2k+1})` contain order-2 rotational involutions
+(codim-2 fixed sets). This is a number-theoretic question. If yes:
+- E2 works (Fowler: odd-dim fixed set has chi = 0)
+- Equivariant surgery available (codim-2 gap satisfied)
+- L-theory parity favorable (odd ambient dimension)
+- Everything collapses to lattice existence + equivariant surgery computation
 
-The most concrete next steps for each approach:
+**Priority 2 — Approach I (Wall surgery).** Only if rotation route fails.
+Resolve Poincare complex structure obstacle.
 
-**Approach I (Wall surgery):** Resolve the Poincare complex structure
-obstacle (P2). The chain-level promotion from homology PD is the first
-bottleneck; without it, the normal map and obstruction questions are moot.
+**Priority 3 — Approach III (orbifold resolution).** Only if a specific
+technique is identified.
 
-**Approach II (equivariant surgery):** Compute the equivariant surgery
-obstruction to eliminating the fixed set `F` in `(M, tau)` using the
-Dovermann-Schultz framework. This is unexplored.
+**Blocked — Approach II for reflections.** Codim-2 gap kills this.
 
-**Approach III (orbifold resolution):** Construct a resolution of the
-mirror singularity in `H^n/Gamma` that preserves `pi_1 = Gamma` and
-rational acyclicity. This is unexplored.
-
-**Cross-cutting:** Investigate whether an odd-dimensional E2 construction
-exists (fixed set with even dimension but zero Euler characteristic).
-This would ease the surgery obstruction for Approach I and potentially
-simplify Approach II.
+**Blocked — Odd-dim reflections.** Gauss-Bonnet: even-dim closed hyperbolic
+manifolds have chi != 0, so Fowler fails.
