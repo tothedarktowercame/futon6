@@ -46,8 +46,8 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
 |---|---|---|
 | E2-rot: lattice existence | **DISCHARGED** | Arithmetic lattice `SO(f, Z[sqrt(2)])` with `f = (1-sqrt(2))x_0^2 + x_1^2 + ... + x_n^2`, `n` odd. The involution `sigma = diag(1,-1,-1,1,...,1)` is an order-2 rotation with codim-2 fixed set. See `problem7r-rotation-lattice-construction.md`. |
 | Fowler application | **DISCHARGED** | Fixed set dim `n-2` is odd → `chi = 0`. Fowler Main Theorem gives `Gamma in FH(Q)`. |
-| S-rot-I: Wall surgery | **Open** | Same three obstacles as Approach I (Poincare complex, normal map, obstruction), but the obstruction computation benefits from odd parity. Fallback option. |
-| S-rot-II: Equivariant surgery | **Open (recommended)** | Codim-2 gap satisfied → Costenoble-Waner applies. Need to compute equivariant surgery obstruction for the `Z/2`-action on `(M^{2k+1}, sigma)` with fixed `F^{2k-1}`. |
+| S-rot-I: Wall surgery | **Open** | Same three obstacles as Approach I (Poincare complex, normal map, obstruction), but the obstruction computation benefits from odd parity: ker(res) = Q ⊕ H_1(F;Q) vs Q ⊕ H_3(F;Q) ⊕ H_1(F;Q) for reflections. Fallback option. |
+| S-rot-II: Equivariant surgery | **Open (recommended)** | "Cut and cap" method (Browder 1968, López de Medrano 1971): cut out N(F), cap off free boundary. π-π theorem does NOT apply (π_1(S(ν)) ⊊ π_1(M\F)). Genuine surgery obstruction in L_{2k+2}(Z[Γ]). See `problem7r-s-rot-obstruction-analysis.md`. |
 
 ### Why this is the most promising path
 
