@@ -139,8 +139,9 @@ If that lemma is proved, the potential telescopes and yields
 
 Codex also added a concrete conjectural target `L2*` with corrected horizon
 `t <= c_step * epsilon * n` (not `t <= gamma m0`) plus trajectory-level
-numerical evidence over 307 baseline Case-2b samples plus 2004 randomized
-trajectories (`max_t min_v score_t(v)` observed <= 0.833 in both runs).
+numerical evidence over 313 baseline Case-2b trajectories plus 2040 randomized
+trajectories (`max_t min_v score_t(v)` observed <= 0.667 in both runs), plus
+a small exhaustive-state check at n<=14 with worst observed score 0.476.
 
 Codex has now formalized this into explicit sublemmas in
 `problem6-proof-attempt.md`:

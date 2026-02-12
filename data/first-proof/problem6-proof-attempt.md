@@ -580,14 +580,18 @@ Empirical check (ad hoc, not proof):
 - Trajectory: greedy choose v minimizing score_t(v)
 - Horizon: t <= floor(0.5 * epsilon * n)
 
-Observed on 307 Case-2b samples:
-- max_t min_v score_t(v): median 0.538, 90th pct 0.667, max 0.833
-- all samples had max_t min_v score_t(v) <= 0.95
+Observed on 313 baseline Case-2b trajectories (greedy min-score updates):
+- max_t min_v score_t(v): median 0.347, 90th pct 0.521, 99th pct 0.667, max 0.667
+- all baseline trajectories had max_t min_v score_t(v) <= 0.95
 
-Additional stress test (2004 randomized trajectories, selecting randomly among
+Additional stress test (2040 randomized trajectories, choosing uniformly among
 the 5 best-score candidates each step):
-- max_t min_v score_t(v): median 0.556, 90th pct 0.694, max 0.833
-- all trajectories had max_t min_v score_t(v) <= 0.95
+- max_t min_v score_t(v): median 0.417, 90th pct 0.556, 99th pct 0.667, max 0.667
+- all randomized trajectories had max_t min_v score_t(v) <= 0.95
+
+Exhaustive small-state check (n <= 14, 13 Case-2b instances, all subsets S with
+|S| < floor(0.5*epsilon*n)):
+- worst observed min_v score_t(v): 0.476
 
 Caveat: this is trajectory-based evidence (along one greedy path), not a
 worst-case-over-all-S_t guarantee.
