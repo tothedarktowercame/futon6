@@ -1,50 +1,53 @@
-\chapter*{Introduction: Making of the First-Proof Cycle}
-\addcontentsline{toc}{chapter}{Introduction: Making of the First-Proof Cycle}
+\chapter*{Introduction: The Making of the First-Proof Cycle}
+\addcontentsline{toc}{chapter}{Introduction: The Making of the First-Proof Cycle}
 
-This monograph documents both mathematical outputs and process outputs from a
-compressed multi-agent proof cycle in \texttt{futon6}. The work started as
-infrastructure (knowledge ingestion, tagging, and wiring-diagram metatheory),
-then pivoted into rapid proof generation, adversarial review, and iterative
-repair.
+This monograph records both the mathematical results and the working process
+behind a compressed, multi-agent proof cycle in \texttt{futon6}. The project
+began as infrastructure---knowledge ingestion, tagging, and wiring-diagram
+metatheory---and then pivoted into a rapid proof sprint with iterative
+critique and repair.
 
 \section*{Snapshot}
 \begin{itemize}[leftmargin=1.5em]
-\item Initial proof-attempt burst: 10 problem writeups in under two hours.
-\item Total development trace (through the retrospective window): 89 commits in roughly one day of active proof sprinting, plus prior infrastructure work.
-\item Final project-level calibration from the making-of record: transition from optimistic ``all solved'' framing to explicit partition into proved / conditional / partial items.
-\item Methodological outcome: wiring-diagram-based verification outperformed plain narrative proof drafting for gap localization and repair.
+\item Ten initial proof attempts drafted in under two hours.
+\item Eighty-nine commits during roughly one day of active sprinting, in addition to earlier infrastructure development.
+\item A shift in framing over the course of the sprint: from an early ``all solved'' posture to a clearer partition into proved, conditional, and partial results.
+\item A methodological lesson: wiring-diagram--based verification localized gaps and inconsistencies more effectively than plain narrative drafting.
 \end{itemize}
 
-\section*{What Was New in the Process}
+\section*{What Changed in This Process}
 \begin{enumerate}[leftmargin=1.5em]
-\item \textbf{Proof structure as graph}: logical dependencies represented as typed edges (assert/reference/derive), so critiques could target claims precisely by node and edge type.
-\item \textbf{Generated verifier prompts}: Codex checks were dispatched per proof node, with local predecessor/successor context.
-\item \textbf{Adversarial review loops}: repeated critic--responder cycles exposed confidence laundering and citation mismatches.
-\item \textbf{Numerical honesty checks}: where claims were computationally testable (especially Problem 4), stress tests constrained overclaiming.
-\item \textbf{Research handoff artifacts}: unresolved branches were converted into explicit gap memos and next-step query plans instead of being silently deferred.
+\item \textbf{Proofs as graphs.} Logical dependencies were represented explicitly as typed edges (assert / reference / derive), allowing critiques to target specific claims rather than whole arguments.
+\item \textbf{Node-level verification.} Codex checks were issued per proof node, with local predecessor and successor context, rather than against entire drafts.
+\item \textbf{Adversarial loops.} Repeated critic--responder cycles surfaced overconfidence, weak citations, and unstated assumptions.
+\item \textbf{Numerical stress tests.} Where claims admitted computational checking (notably in Problem 4), targeted stress tests constrained overstatement.
+\item \textbf{Explicit research handoffs.} Open branches were turned into gap memos and concrete next-step queries instead of being silently deferred.
 \end{enumerate}
 
-\section*{Interpretive Theme}
-The making-of notes identify an asymmetry: generation is fast; trustworthy
-validation is expensive. The practical leverage came from structured
-verification infrastructure, not from single-pass drafting quality.
+\section*{Interpretive Thread}
+The working notes reveal a consistent asymmetry: generation is fast;
+trustworthy validation is slow.
 
-In that sense, this document should be read as a dual artifact:
+The real leverage came not from first-pass drafting quality, but from
+structured verification---tools that made weaknesses visible early and locally.
+
+This volume should therefore be read in two ways:
 \begin{itemize}[leftmargin=1.5em]
-\item \emph{mathematical}: a set of problem writeups with varying completion status;
-\item \emph{methodological}: a trace of how multi-agent proof systems stabilize claims under adversarial revision.
+\item \emph{Mathematical artifact}: a set of problem writeups at varying stages of completion.
+\item \emph{Methodological artifact}: a record of how multi-agent proof systems stabilize claims under structured adversarial revision.
 \end{itemize}
 
-\section*{Current Calibration for This Manuscript}
+\section*{Current Status}
 \begin{itemize}[leftmargin=1.5em]
-\item Problem with explicit remaining obligation (noted prominently in this volume): Problem 6.
-\item Problem 7 is treated here as closed via the updated rotation-route surgery chain in \texttt{problem7-solution.md}, with supporting theorem-number context tracked in \texttt{problem7-g2-theorem-chain.md}.
-\item Problem 4's higher-\(n\) branch is recorded as computationally closed in the repository's later postscript narrative, but still treated with explicit certification-context notes where appropriate.
+\item Problem 6 remains open, with a clearly stated outstanding obligation.
+\item Problem 7 is treated as closed via the updated rotation-route surgery chain (see \texttt{problem7-solution.md} and supporting theorem context in \texttt{problem7-g2-theorem-chain.md}).
+\item Problem 4's higher-\(n\) branch has computational closure artifacts in the repository postscript, while analytic framing remains explicitly documented in the chapter-level notes.
 \end{itemize}
 
-\section*{Reading Order}
+\section*{Suggested Reading Path}
 \begin{enumerate}[leftmargin=1.5em]
-\item \textbf{Part I} for concise, citation-heavy orientation and status framing.
-\item \textbf{Part II} for full draft arguments and technical detail.
-\item Return to Problem 6 status notes after reading its full chapter; this remains the primary proof-hardening target in this version.
+\item Begin with \textbf{Part I} for orientation and status framing.
+\item Continue to \textbf{Part II} for full arguments and technical detail.
+\item Use \textbf{Part III} as a provenance index for prompt-level pivot points and status changes.
+\item Revisit the Problem 6 notes after reading its chapter; it remains the primary proof-hardening target in this version.
 \end{enumerate}

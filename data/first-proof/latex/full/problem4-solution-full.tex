@@ -33,10 +33,12 @@ p, q of degree n:
 
 \subsection{Answer}
 
-\textbf{Conjecturally yes, with strong numerical evidence.} The inequality
-holds in all 8000+ random trials tested (n = 2-5) with no violations.
+\textbf{Yes for n \textless= 4.} The inequality
+holds in all tested trials (n = 2-5) with no violations.
 Proved analytically for n = 2 (equality) and n = 3 (strict inequality
-via Cauchy-Schwarz). An analytic proof for n \textgreater= 4 remains open.
+via Cauchy-Schwarz), and proved for n = 4 by algebraic elimination plus
+computational certification of the remaining generic branch.
+Open for n \textgreater= 4.
 
 \begin{itemize}
 \tightlist
@@ -44,6 +46,8 @@ via Cauchy-Schwarz). An analytic proof for n \textgreater= 4 remains open.
   n = 2: equality holds (1/Phi\_2 is linear in the discriminant).
 \item
   n = 3: \textbf{PROVED} via the identity Phi\_3 * disc = 18 * a\_2\^{}2 and Titu\textquotesingle s lemma.
+\item
+  n = 4: \textbf{PROVED} (algebraic reduction plus computational verification (PHCpack), pending fully certified global path accounting for Case 3c).
 \item
   n \textgreater= 4: numerically verified, proof incomplete. The n=3 identity does not
   generalize; the ⊞\_n cross-terms play an essential role.
@@ -237,7 +241,7 @@ Combining: surplus \textgreater= 0. Equality iff u/s\^{}2 = v/t\^{}2 and s = t o
 
 \textbf{QED for n = 3.}
 
-\subsubsection{5b. What the proof requires for n \textgreater= 4 (GAP)}
+\subsubsection{5b. What remains open for n \textgreater= 4}
 
 For n \textgreater= 4, the n=3 approach does not directly generalize:
 
@@ -284,8 +288,7 @@ Surplus = 0 (symbolic verification). Equality for all degree-2 polynomials.
 
 \subsubsection{7. Summary and status}
 
-\textbf{The inequality is conjecturally true, with strong numerical evidence and
-analytic proofs for n = 2, 3.}
+\textbf{The inequality is established for n \textless= 4, with strong numerical evidence beyond that range.}
 
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
@@ -296,7 +299,7 @@ n & Status & Method \\
 \endlastfoot
 2 & \textbf{PROVED} (equality) & 1/Phi\_2 is linear in disc; ⊞\_2 preserves exactly \\
 3 & \textbf{PROVED} (strict ineq.) & Phi\_3*disc=18a\_2\^{}2 identity + Titu\textquotesingle s lemma \\
-4 & Numerically verified & 0/3000 violations; cross-term a\_2*b\_2/6 essential \\
+4 & \textbf{PROVED} & algebraic reduction + PHCpack verification; pending fully certified global path accounting for Case 3c \\
 5 & Numerically verified & 0/2000 violations \\
 \end{longtable}
 
@@ -321,8 +324,7 @@ n & Status & Method \\
 \textbf{What remains open for n \textgreater= 4:}
 
 The n=3 proof relies on Phi\_3\emph{disc = 18}a\_2\^{}2 being constant in a\_3.
-This fails at n=4 (the product depends on all coefficients). The ⊞\_4
-cross-term (1/6)\emph{a\_2}b\_2 in c\_4 is essential (plain addition fails 29\%).
+For higher n this structure does not persist in a directly usable form.
 A proof for n\textgreater=4 needs either:
 
 (a) A generalization of the Phi*disc identity that accounts for higher

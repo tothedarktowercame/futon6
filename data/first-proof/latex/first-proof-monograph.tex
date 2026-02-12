@@ -27,7 +27,7 @@
   linkcolor=blue!50!black,
   citecolor=blue!50!black,
   urlcolor=blue!60!black,
-  pdftitle={First-Proof Annotated Monograph},
+  pdftitle={Fermentation and Fire: A Multi-Agent First Proof Sprint},
   pdfauthor={Codex}
 }
 
@@ -104,7 +104,7 @@
 \fancyhead[RE]{\nouppercase{\leftmark}}
 \renewcommand{\headrulewidth}{0.2pt}
 
-\title{First-Proof Writeups: Annotated Overview and Full Proof Drafts}
+\title{Fermentation and Fire: A Multi-Agent First Proof Sprint}
 \author{Claude$^{1}$, Codex$^{2}$, J.~Corneli$^{3}$\thanks{Supervisor} \\
 \small $^{1}$Anthropic \quad $^{2}$OpenAI \quad $^{3}$Hyperreal Enterprises Ltd}
 \date{February 12, 2026}
@@ -120,11 +120,12 @@
 \tableofcontents
 
 \chapter*{Reader Guide}
-This document is organized in two layers.
+This document is organized in three layers.
 
 \begin{itemize}[leftmargin=1.5em]
 \item \textbf{Part I (Annotated Overview):} short, citation-rich introductions for Problems 1--10, intended as navigational summaries.
 \item \textbf{Part II (Full Proof Drafts):} expanded writeups imported from the solution files, suitable as the base for a longer manuscript (targeting roughly book-length exposition).
+\item \textbf{Part III (Prompt Excerpts and Pivot Moments):} curated source excerpts (prompts and dispatch/history snippets) that document key decision points and proof-state transitions.
 \end{itemize}
 
 Problem 6 currently retains an explicit unresolved obligation in the project state. Problem 7 is treated in this manuscript revision as closed via the updated rotation-route theorem chain.
@@ -149,7 +150,7 @@ Problem 6 currently retains an explicit unresolved obligation in the project sta
 \chapter*{Status Notes for Open Items}
 \addcontentsline{toc}{chapter}{Status Notes for Open Items}
 \gapnote{\textbf{Problem 6:} current proof chain is conditional on the remaining Case~2b averaging lemma (GPL-H) as recorded in the project writeups.}
-\statusnote{\textbf{Problem 7:} this revision follows the updated closure claim in \texttt{problem7-solution.md} (rotation route, S-rot-II obstruction vanishing statement), with theorem-number supporting context tracked in \texttt{problem7-g2-theorem-chain.md}.}
+\statusnote{\textbf{Problem 7:} this revision treats the problem as closed via the rotation route. Fowler's criterion supplies the \(\mathrm{FH}(\mathbb Q)\) input, and the codimension-2 surgery bridge is discharged by the theorem-number chain documented in \texttt{problem7-g2-theorem-chain.md}.}
 
 \includefull{full/problem1-solution-full}
 \includefull{full/problem2-solution-full}
@@ -161,5 +162,8 @@ Problem 6 currently retains an explicit unresolved obligation in the project sta
 \includefull{full/problem8-solution-full}
 \includefull{full/problem9-solution-full}
 \includefull{full/problem10-solution-full}
+
+\part{Prompt Excerpts and Pivot Moments}
+\input{part3-pivotal-prompts}
 
 \end{document}
