@@ -125,28 +125,28 @@
       "source": "p8-s4a",
       "target": "p8-s3",
       "edge_type": "assert",
-      "evidence": "Crease smoothing bridges polyhedral to smooth setting; V1⊕V2 persists under C^1-perturbation",
+      "evidence": "Product smoothing: K = C_1 x C_2 near v; smooth corners in V_1, V_2 give smooth Lagrangian product",
       "detection": "structural"
     },
     {
       "source": "p8-s5",
       "target": "p8-s4a",
       "edge_type": "reference",
-      "evidence": "Surgery applies after crease smoothing produces smooth transverse crossing",
+      "evidence": "Edge crease smoothing applies between vertex neighborhoods where product smoothing already resolved vertices",
       "detection": "structural"
     },
     {
       "source": "p8-s5",
       "target": "p8-s4",
       "edge_type": "reference",
-      "evidence": "Maslov 0 is the hypothesis for Polterovich surgery",
+      "evidence": "Maslov 0 confirms vertex structure is compatible with product smoothing",
       "detection": "structural"
     },
     {
       "source": "p8-s5",
       "target": "p8-problem",
       "edge_type": "assert",
-      "evidence": "Lagrangian surgery resolves transverse double points",
+      "evidence": "Edge crease smoothing via generating function interpolation (graph of exact 1-form)",
       "detection": "structural"
     },
     {
@@ -295,7 +295,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Crease smoothing bridges polyhedral to smooth setting; V1⊕V2 persists under C^1-perturbation",
+        "evidence": "Product smoothing: K = C_1 x C_2 near v; smooth corners in V_1, V_2 give smooth Lagrangian product",
         "detection": "structural"
       },
       "hx/labels": [
@@ -320,7 +320,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Surgery applies after crease smoothing produces smooth transverse crossing",
+        "evidence": "Edge crease smoothing applies between vertex neighborhoods where product smoothing already resolved vertices",
         "detection": "structural"
       },
       "hx/labels": [
@@ -345,7 +345,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Maslov 0 is the hypothesis for Polterovich surgery",
+        "evidence": "Maslov 0 confirms vertex structure is compatible with product smoothing",
         "detection": "structural"
       },
       "hx/labels": [
@@ -370,7 +370,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Lagrangian surgery resolves transverse double points",
+        "evidence": "Edge crease smoothing via generating function interpolation (graph of exact 1-form)",
         "detection": "structural"
       },
       "hx/labels": [

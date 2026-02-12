@@ -27,10 +27,10 @@ flowchart TD
     p8-s2 -->|"🟡 reform: Edge-sharing kills omega entries in e..."| p8-s1
     p8-s3 ==>|"🟢 assert: Block diagonal omega → symplectic dir..."| p8-s2
     p8-s4 ==>|"🟢 assert: Decomposed Maslov loop has winding 0 ..."| p8-s3
-    p8-s4a ==>|"🟢 assert: Crease smoothing bridges polyhedral t..."| p8-s3
-    p8-s5 -->|"⚪ reference: Surgery applies after crease smoothin..."| p8-s4a
-    p8-s5 -->|"⚪ reference: Maslov 0 is the hypothesis for Polter..."| p8-s4
-    p8-s5 ==>|"🟢 assert: Lagrangian surgery resolves transvers..."| p8-problem
+    p8-s4a ==>|"🟢 assert: Product smoothing: K=C_1×C_2 near v;..."| p8-s3
+    p8-s5 -->|"⚪ reference: Edge smoothing applies between vertex..."| p8-s4a
+    p8-s5 -->|"⚪ reference: Maslov 0 confirms product structure c..."| p8-s4
+    p8-s5 ==>|"🟢 assert: Edge crease smoothing via generating ..."| p8-problem
     p8-s6 ==>|"🟢 assert: Compose vertex surgery + edge smoothi..."| p8-s5
     p8-s6 ==>|"🟢 assert: Yes: 4-face → V1⊕V2 → Maslov 0 → surg..."| p8-problem
     p8-s7 -.->|"🔴 challenge: 3-face: isotropic dimension bound pre..."| p8-s3
