@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ratchet checks for fixed-W normalization and W(pi,psi) Greek markup."""
+"""Ratchet checks for prose-to-math normalization and syntax-class rendering."""
 
 from __future__ import annotations
 
@@ -13,6 +13,12 @@ FIXED_W_SNIPPET = (
     "the full fractional ideal I = L(s, Pi x pi) * C[q_F^s, q_F^{-s}].\n"
 )
 W_PI_PSI_SNIPPET = "In the psi-Whittaker model W(pi, psi), choose V in W(pi,psi).\n"
+SYNTAX_CLASS_SNIPPET = (
+    "hence P in R.\n"
+    "equal to c * qF^{-ks}.\n"
+    "r in GLn+1 x GLn.\n"
+)
+DIAG_SNIPPET = "    I(s, W, V) = int_{N_n\\GL_n(F)} W(diag(g,1)) V(g) |det g|^{s-1/2} dg\n"
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -67,6 +73,10 @@ def main() -> int:
 
     _, out = render_snippet(repo, normalizer, lua_filter, FIXED_W_SNIPPET)
     normalized_w, out_w = render_snippet(repo, normalizer, lua_filter, W_PI_PSI_SNIPPET)
+    normalized_syntax, out_syntax = render_snippet(
+        repo, normalizer, lua_filter, SYNTAX_CLASS_SNIPPET
+    )
+    _, out_diag = render_snippet(repo, normalizer, lua_filter, DIAG_SNIPPET)
 
     if r"integrals over \(V\)" not in out:
         failures.append("missing inline math for V in 'integrals over V'")
@@ -95,6 +105,26 @@ def main() -> int:
     if "W(pi, psi)" in out_w or "W(pi,psi)" in out_w:
         failures.append("rendered output still contains raw W(pi, psi)")
 
+    if r"$P \in R$" not in normalized_syntax:
+        failures.append("normalizer did not convert 'P in R' to '$P \\in R$'")
+    if r"$c \ast q_F^{-ks}$" not in normalized_syntax:
+        failures.append("normalizer did not convert 'c * qF^{-ks}' to '$c \\ast q_F^{-ks}$'")
+    if r"$r \in \mathup{GL}_{n+1} \times \mathup{GL}_{n}$" not in normalized_syntax:
+        failures.append("normalizer did not convert GLn+1 x GLn into \\mathup{GL} product math")
+
+    if r"\(P \in R\)" not in out_syntax:
+        failures.append("rendered output missing inline math for 'P \\in R'")
+    if r"\(c \ast q_{F}^{-ks}\)" not in out_syntax and r"\(c \ast q_F^{-ks}\)" not in out_syntax:
+        failures.append("rendered output missing inline math for 'c \\ast q_F^{-ks}'")
+    if r"\operatorname{diag}(g,1)" not in out_diag:
+        failures.append("diag(g,1) was not rendered as \\operatorname{diag}(g,1)")
+    gl_variants = [
+        r"\(r \in \mathup{GL}_{n+1} \times \mathup{GL}_{n}\)",
+        r"\(r \in \mathup{GL}_{n + 1} \times \mathup{GL}_{n}\)",
+    ]
+    if not any(v in out_syntax for v in gl_variants):
+        failures.append("rendered output missing 'r \\in \\mathup{GL}_{n+1} \\times \\mathup{GL}_{n}'")
+
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:
         failures.append("math-proofread style does not preserve original \\ast")
@@ -110,7 +140,7 @@ def main() -> int:
             print(f"FAIL: {item}")
         return 1
 
-    print("Ratchet check passed: fixed-W and W(pi,psi) normalization are color-ready.")
+    print("Ratchet check passed: fixed-W, W(pi,psi), and syntax-class normalization are color-ready.")
     return 0
 
 

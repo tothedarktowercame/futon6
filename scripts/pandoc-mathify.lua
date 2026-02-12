@@ -78,6 +78,7 @@ local function normalize_expr(s)
   s = s:gsub("%-%>", "\\to ")
   s = s:gsub("<%-", "\\leftarrow ")
   s = s:gsub("([%w%)%}])%s*%*%s*([%w%(%{\\])", "%1 \\ast %2")
+  s = s:gsub("%f[%a]diag%s*%(", "\\operatorname{diag}(")
 
   -- Parenthesized exponents/subscripts (Q^(abgd) -> Q^{abgd}).
   s = s:gsub("%^%(([^()]+)%)", "^{%1}")
@@ -100,6 +101,12 @@ local function normalize_expr(s)
     prev = s
     s = s:gsub("([A-Za-z0-9{}])%s+[xX]%s+([A-Za-z0-9{])", "%1 \\times %2")
   end
+
+  -- Group names: GL_n, GL_{n+1}, GLn+1.
+  s = s:gsub("GL_%{([^}]+)%}", "\\mathup{GL}_{%1}")
+  s = s:gsub("GL_([A-Za-z0-9%+%-]+)", "\\mathup{GL}_{%1}")
+  s = s:gsub("GLn([%+%-]%d+)", "\\mathup{GL}_{n%1}")
+  s = s:gsub("GLn(%f[%A])", "\\mathup{GL}_{n}%1")
 
   s = replace_word(s, "in", "\\in")
   s = replace_word(s, "notin", "\\notin")
@@ -311,6 +318,116 @@ local function append_inlines(dst, src)
   end
 end
 
+local function is_space_like(el)
+  return el.t == "Space" or el.t == "SoftBreak"
+end
+
+local function parse_token_with_punct(s)
+  local core, punct = s:match("^(.-)([%.,;:]*)$")
+  if core == nil then
+    return nil, nil
+  end
+  return core, punct
+end
+
+local function extract_binary_side(el)
+  if el.t == "Math" and el.mathtype == "InlineMath" then
+    return el.text, "", true
+  end
+  if el.t ~= "Str" then
+    return nil, nil, nil
+  end
+  local core, punct = parse_token_with_punct(el.text)
+  if core == nil or core == "" then
+    return nil, nil, nil
+  end
+  if core:match("^[A-Za-z]$") then
+    return core, punct, false
+  end
+  if is_compound_math_token(core) then
+    return core, punct, false
+  end
+  if core:match("^GL_%b{}$") or core:match("^GL_[A-Za-z0-9%+%-]+$") or core:match("^GLn[%+%-]?%d*$") then
+    return core, punct, false
+  end
+  return nil, nil, nil
+end
+
+local function normalize_binary_side(raw, already_math)
+  if already_math then
+    return raw
+  end
+  if raw:match("^[A-Za-z]$") then
+    return raw
+  end
+  return normalize_expr(raw)
+end
+
+local function build_binary_expr(lhs, lhs_is_math, op, rhs, rhs_is_math)
+  local op_tex = nil
+  if op == "in" then
+    op_tex = "\\in"
+  elseif op == "x" or op == "X" then
+    op_tex = "\\times"
+  elseif op == "*" then
+    op_tex = "\\ast"
+  else
+    return nil
+  end
+  return normalize_binary_side(lhs, lhs_is_math) .. " " .. op_tex .. " " .. normalize_binary_side(rhs, rhs_is_math)
+end
+
+local function convert_binary_operator_sequences_once(inlines)
+  local out = {}
+  local i = 1
+  local changed = false
+  while i <= #inlines do
+    local a = inlines[i]
+    local b = inlines[i + 1]
+    local c = inlines[i + 2]
+    local d = inlines[i + 3]
+    local e = inlines[i + 4]
+    if a ~= nil and b ~= nil and c ~= nil and d ~= nil and e ~= nil
+      and is_space_like(b) and is_space_like(d)
+      and c.t == "Str" and (c.text == "in" or c.text == "x" or c.text == "X" or c.text == "*") then
+      local lhs, lpunct, lhs_is_math = extract_binary_side(a)
+      local rhs, rpunct, rhs_is_math = extract_binary_side(e)
+      if lhs ~= nil and rhs ~= nil and lpunct == "" then
+        local expr = build_binary_expr(lhs, lhs_is_math, c.text, rhs, rhs_is_math)
+        if expr ~= nil then
+          table.insert(out, pandoc.Math("InlineMath", expr))
+          if rpunct ~= "" then
+            table.insert(out, pandoc.Str(rpunct))
+          end
+          i = i + 5
+          changed = true
+        else
+          table.insert(out, a)
+          i = i + 1
+        end
+      else
+        table.insert(out, a)
+        i = i + 1
+      end
+    else
+      table.insert(out, a)
+      i = i + 1
+    end
+  end
+  return out, changed
+end
+
+local function convert_binary_operator_sequences(inlines)
+  local cur = inlines
+  while true do
+    local nxt, changed = convert_binary_operator_sequences_once(cur)
+    if not changed then
+      return nxt
+    end
+    cur = nxt
+  end
+end
+
 local function convert_simple_str_token_to_inlines(s)
   local greek, punct = s:match("^([A-Za-z]+)([%.,;:]*)$")
   if greek ~= nil and greek_token_names[greek] then
@@ -500,10 +617,12 @@ end
 
 function Para(el)
   el.content = convert_split_brace_math_inlines(el.content)
+  el.content = convert_binary_operator_sequences(el.content)
   return el
 end
 
 function Plain(el)
   el.content = convert_split_brace_math_inlines(el.content)
+  el.content = convert_binary_operator_sequences(el.content)
   return el
 end

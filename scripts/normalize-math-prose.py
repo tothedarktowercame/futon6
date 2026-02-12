@@ -37,6 +37,14 @@ UNICODE_TO_TEX = {
 N_DEP_RE = re.compile(r"\b([A-Z])-(dependent|independent)\b")
 WHITTAKER_W_RE = re.compile(r"\bW\(\s*pi\s*,\s*psi\s*\)")
 PSI_WHITTAKER_RE = re.compile(r"\bpsi-Whittaker\b")
+QF_RE = re.compile(r"\bqF(\^\{[^}]+\}|\^-?[A-Za-z0-9]+)")
+STAR_QF_RE = re.compile(r"\b([A-Za-z])\s*\*\s*(q_F(?:\^\{[^}]+\}|\^-?[A-Za-z0-9]+))")
+SINGLE_IN_RE = re.compile(r"\b([A-Za-z])\s+in\s+([A-Za-z])\b([.,;:]?)")
+GL_TOKEN_RE = r"GL(?:_\{?[A-Za-z0-9+\-]+\}?|[A-Za-z0-9+\-]+)"
+GL_MEMBERSHIP_PRODUCT_RE = re.compile(
+    rf"\b([A-Za-z])\s+in\s+({GL_TOKEN_RE})\s*[xX]\s*({GL_TOKEN_RE})\b"
+)
+GL_PRODUCT_RE = re.compile(rf"\b({GL_TOKEN_RE})\s*[xX]\s*({GL_TOKEN_RE})\b")
 FIXED_W_RE = re.compile(r"\bfor fixed\s+W\s*=\s*W_0\b")
 IDEAL_EQ_RE = re.compile(
     r"\bI\s*=\s*L\(s,\s*Pi\s*x\s*pi\)\s*\*\s*C\[q_F\^s,\s*q_F\^{-s}\]"
@@ -129,11 +137,51 @@ def _n_dep_repl(m: re.Match[str]) -> str:
     return f"${m.group(1)}$-{m.group(2)}"
 
 
+def _normalize_gl_token(token: str) -> str:
+    if token.startswith("GL_{") and token.endswith("}"):
+        idx = token[4:-1]
+    elif token.startswith("GL_"):
+        idx = token[3:]
+    elif token.startswith("GL"):
+        idx = token[2:]
+    else:
+        return token
+    return rf"\mathup{{GL}}_{{{idx}}}"
+
+
+def _single_in_repl(m: re.Match[str]) -> str:
+    lhs, rhs, punct = m.group(1), m.group(2), m.group(3)
+    return rf"${lhs} \in {rhs}$" + punct
+
+
+def _star_qf_repl(m: re.Match[str]) -> str:
+    lhs, rhs = m.group(1), m.group(2)
+    return rf"${lhs} \ast {rhs}$"
+
+
+def _gl_membership_product_repl(m: re.Match[str]) -> str:
+    var = m.group(1)
+    left = _normalize_gl_token(m.group(2))
+    right = _normalize_gl_token(m.group(3))
+    return rf"${var} \in {left} \times {right}$"
+
+
+def _gl_product_repl(m: re.Match[str]) -> str:
+    left = _normalize_gl_token(m.group(1))
+    right = _normalize_gl_token(m.group(2))
+    return rf"${left} \times {right}$"
+
+
 def process_plain_text_segment(s: str) -> str:
     s = _wrap_big_o_balanced(s)
     s = N_DEP_RE.sub(_n_dep_repl, s)
     s = PSI_WHITTAKER_RE.sub(r"$\\psi$-Whittaker", s)
     s = WHITTAKER_W_RE.sub(r"$W(\\pi, \\psi)$", s)
+    s = QF_RE.sub(r"q_F\1", s)
+    s = STAR_QF_RE.sub(_star_qf_repl, s)
+    s = SINGLE_IN_RE.sub(_single_in_repl, s)
+    s = GL_MEMBERSHIP_PRODUCT_RE.sub(_gl_membership_product_repl, s)
+    s = GL_PRODUCT_RE.sub(_gl_product_repl, s)
     s = re.sub(r"\bover V\b", r"over $V$", s)
     s = FIXED_W_RE.sub(r"for fixed $W = W_0$", s)
     s = IDEAL_EQ_RE.sub(
@@ -218,6 +266,10 @@ def run_self_test() -> None:
             "In the psi-Whittaker model W(pi, psi), choose V in W(pi,psi).",
             "In the $\\psi$-Whittaker model $W(\\pi, \\psi)$, choose V in $W(\\pi, \\psi)$.",
         ),
+        ("hence P in R.", r"hence $P \in R$."),
+        ("equal to c * qF^{-ks}", r"equal to $c \ast q_F^{-ks}$"),
+        ("r in GLn+1 x GLn", r"$r \in \mathup{GL}_{n+1} \times \mathup{GL}_{n}$"),
+        ("for GL_{n+1} x GL_n is", r"for $\mathup{GL}_{n+1} \times \mathup{GL}_{n}$ is"),
     ]
     for raw, want in cases:
         got = process_plain_text_segment(raw)
