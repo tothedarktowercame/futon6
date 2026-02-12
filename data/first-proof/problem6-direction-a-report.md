@@ -117,3 +117,50 @@ This suggests a concrete subtarget:
 Direction A did not close GPL-H in this cycle, but produced a concrete,
 better-focused next theorem target and a computational basis for prioritizing
 UST-style SR structure over product SR baselines.
+
+---
+
+## Follow-up: Theorem-shape stress test (UST transfer constant)
+
+To test the proposed theorem shape directly, we ran an expanded UST-only scan
+on Case-2b trajectories:
+
+`python3 - <<'PY' ... (using analyze_direction_a_on_instance with n<=40, eps in {0.1,0.12,0.15,0.2,0.25,0.3}, samples=40) ...`
+
+For each step row we defined:
+- `kappa_row := max( full_min / E[min_sampled], max_v full_v / E[sampled_v] )`
+- theorem-shape checks at constant `k`:
+  1. transfer: `kappa_row <= k`
+  2. barrier side: `E[min_sampled] < 1/k`
+  3. combined: both (1) and (2)
+
+### Aggregate results (UST, n<=40)
+
+- Case-2b instances: `151`
+- Step rows (UST): `271`
+- `kappa` quantiles:
+  - max: `2.7011`
+  - 90%: `1.6685`
+  - 95%: `1.8187`
+  - 99%: `2.2723`
+
+Combined feasibility by `k`:
+- `k=1.6`: transfer `0.8930`, barrier `0.6384`, both `0.5314`
+- `k=1.8`: transfer `0.9446`, barrier `0.5387`, both `0.4834`
+- `k=2.0`: transfer `0.9668`, barrier `0.4428`, both `0.4096`
+- `k=2.2`: transfer `0.9852`, barrier `0.3875`, both `0.3727`
+- `k=2.4`: transfer `0.9926`, barrier `0.3284`, both `0.3210`
+
+### Interpretation
+
+1. A uniform transfer constant is plausible empirically only at relatively large
+   `k` (about `2.2-2.4+`) once harder rows appear.
+2. But increasing `k` makes the barrier target `E[min_sampled] < 1/k` harder,
+   so combined success *decreases* as `k` grows in this regime.
+3. Therefore the current theorem shape is not yet globally closing: transfer can
+   be made near-uniform, but not together with the needed min-star barrier step
+   across all tested Case-2b rows.
+
+Hard failures concentrate in dense late-step rows (`K_n` and `ER p=0.5`,
+especially `n=36,40`, `eps=0.25,0.3`), with worst observed
+`kappa_row = 2.7011`.
