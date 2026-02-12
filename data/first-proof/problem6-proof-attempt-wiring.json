@@ -1,0 +1,512 @@
+{
+  "thread_id": "first-proof-p6-attempt",
+  "nodes": [
+    {
+      "id": "p6a-problem",
+      "node_type": "question",
+      "post_id": 6100,
+      "body_text": "Problem 6 theorem target: find universal c0>0 such that for every weighted graph and epsilon in (0,1), there exists S with |S|>=c0*epsilon*n and L_{G[S]}<=epsilon*L (induced, no reweighting).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": null
+    },
+    {
+      "id": "p6a-s1",
+      "node_type": "answer",
+      "post_id": 6101,
+      "body_text": "Leverage threshold lemma: any epsilon-light S must avoid heavy edges (tau_e>epsilon), so S is independent in G_H.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6100
+    },
+    {
+      "id": "p6a-s2",
+      "node_type": "answer",
+      "post_id": 6102,
+      "body_text": "Turan bound on heavy graph gives independent set I with |I|>=epsilon*n/3. Case split: Case 1 and Case 2a close; only Case 2b remains.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6100
+    },
+    {
+      "id": "p6a-s3",
+      "node_type": "answer",
+      "post_id": 6103,
+      "body_text": "Subsampling/trace route has sublinear ceiling in worst case; cannot prove universal linear-size c0*epsilon*n from current hypotheses.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6100
+    },
+    {
+      "id": "p6a-s4",
+      "node_type": "answer",
+      "post_id": 6104,
+      "body_text": "Core regularization + L1: extract I0 with bounded leverage degree; prove averaged drift bound for barrier-normalized grouped updates Y_t(v).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6100
+    },
+    {
+      "id": "p6a-s5",
+      "node_type": "answer",
+      "post_id": 6105,
+      "body_text": "Reduction layer: (i) L2+L3 imply linear-size closure; (ii) sharper: L2* alone already implies existence.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6100
+    },
+    {
+      "id": "p6a-s6",
+      "node_type": "answer",
+      "post_id": 6106,
+      "body_text": "MSS/KS gap map: standard interlacing/paving/concentration tools do not directly prove the grouped fixed-block step needed for L2*.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6100
+    },
+    {
+      "id": "p6a-s7",
+      "node_type": "answer",
+      "post_id": 6107,
+      "body_text": "Open bridge formalized as GPL-H: from H1-H4 infer min_v ||Y_t(v)||<=theta for t<=c_step*epsilon*n.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6100
+    },
+    {
+      "id": "p6a-s8",
+      "node_type": "answer",
+      "post_id": 6108,
+      "body_text": "Current proof status: all preprocessing/reduction pieces are in place; single remaining open implication is GPL-H conclusion from H1-H4.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6100
+    },
+    {
+      "id": "p6a-c1",
+      "node_type": "comment",
+      "post_id": 61081,
+      "body_text": "Empirical signal for L2*: baseline and randomized trajectories keep max_t min_v score_t(v) below 1 on tested Case-2b instances.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6108
+    },
+    {
+      "id": "p6a-c2",
+      "node_type": "comment",
+      "post_id": 61082,
+      "body_text": "Stronger sufficient condition sum_v Y_t(v)<=rho I with rho<1 fails in dense cases, so GPL-H needs finer anisotropic structure.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6108
+    }
+  ],
+  "edges": [
+    {
+      "source": "p6a-s1",
+      "target": "p6a-problem",
+      "edge_type": "clarify",
+      "evidence": "Reformulate feasibility via heavy-edge exclusion",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s2",
+      "target": "p6a-s1",
+      "edge_type": "reference",
+      "evidence": "Turan converts heavy-edge exclusion into large candidate set I",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s2",
+      "target": "p6a-problem",
+      "edge_type": "reform",
+      "evidence": "Reduce theorem to Case 2b after Cases 1/2a",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s3",
+      "target": "p6a-s2",
+      "edge_type": "challenge",
+      "evidence": "Subsampling/trace cannot close Case 2b with universal c0",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s4",
+      "target": "p6a-s3",
+      "edge_type": "reform",
+      "evidence": "Switch from trace-only to barrier/grouped-update framework",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s5",
+      "target": "p6a-s4",
+      "edge_type": "assert",
+      "evidence": "Reductions show closure follows from L2* (L3 optional)",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s6",
+      "target": "p6a-s5",
+      "edge_type": "challenge",
+      "evidence": "Existing MSS/KS templates do not directly provide L2*",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s7",
+      "target": "p6a-s6",
+      "edge_type": "reform",
+      "evidence": "State precise open theorem as GPL-H (H1-H4 => min-score)",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s8",
+      "target": "p6a-problem",
+      "edge_type": "assert",
+      "evidence": "Overall proof reduces to one open GPL-H implication",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-s8",
+      "target": "p6a-s7",
+      "edge_type": "reference",
+      "evidence": "Open bridge isolated at H1-H4 => conclusion step",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-c1",
+      "target": "p6a-s7",
+      "edge_type": "exemplify",
+      "evidence": "Trajectory tests support feasibility of theta<1 regime",
+      "detection": "structural"
+    },
+    {
+      "source": "p6a-c2",
+      "target": "p6a-s7",
+      "edge_type": "clarify",
+      "evidence": "Rules out overly strong budget route; narrows search space",
+      "detection": "structural"
+    }
+  ],
+  "hyperedges": [
+    {
+      "hx/id": "first-proof-p6-attempt:edge-000",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s1",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Reformulate feasibility via heavy-edge exclusion",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-001",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Turan converts heavy-edge exclusion into large candidate set I",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-002",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Reduce theorem to Case 2b after Cases 1/2a",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-003",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s3",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Subsampling/trace cannot close Case 2b with universal c0",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-004",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Switch from trace-only to barrier/grouped-update framework",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-005",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Reductions show closure follows from L2* (L3 optional)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-006",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s5",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Existing MSS/KS templates do not directly provide L2*",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-007",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s7",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s6",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "State precise open theorem as GPL-H (H1-H4 => min-score)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-008",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s8",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Overall proof reduces to one open GPL-H implication",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-009",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-s8",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s7",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Open bridge isolated at H1-H4 => conclusion step",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-010",
+      "hx/type": "thread/exemplify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-c1",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s7",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Trajectory tests support feasibility of theta<1 regime",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "exemplify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-attempt:edge-011",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6a-c2",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p6a-s7",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Rules out overly strong budget route; narrows search space",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    }
+  ],
+  "stats": {
+    "n_nodes": 11,
+    "n_edges": 12,
+    "node_types": {
+      "question": 1,
+      "answer": 8,
+      "comment": 2
+    },
+    "edge_types": {
+      "clarify": 2,
+      "reference": 2,
+      "reform": 3,
+      "challenge": 2,
+      "assert": 2,
+      "exemplify": 1
+    },
+    "detection_types": {
+      "structural": 12
+    }
+  }
+}

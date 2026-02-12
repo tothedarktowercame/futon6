@@ -195,3 +195,5 @@ No counterexample candidate has survived preliminary analysis.
 - `data/first-proof/problem6-method-wiring-library.md` — your method library (D1-D10)
 - `data/first-proof/problem6-method-wiring-library.json` — machine-readable version
 - `data/first-proof/problem6-wiring.json` — wiring diagram for prior solution
+- `data/first-proof/problem6-proof-attempt-wiring.json` — updated overall wiring for the proof-attempt structure
+- `data/first-proof/problem6-proof-attempt-gpl-zoom-wiring.json` — zoomed wiring focused on GPL-H (H1-H4 => min-score)

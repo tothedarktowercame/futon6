@@ -1,0 +1,438 @@
+{
+  "thread_id": "first-proof-p6-gpl-zoom",
+  "nodes": [
+    {
+      "id": "p6z-q",
+      "node_type": "question",
+      "post_id": 6200,
+      "body_text": "GPL-H zoom target: from H1-H4, prove min_{v in R_t} ||Y_t(v)||<=theta<1 for t<=c_step*epsilon*n.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": null
+    },
+    {
+      "id": "p6z-a1",
+      "node_type": "answer",
+      "post_id": 6201,
+      "body_text": "H1: all internal edges of I0 are light (tau_uv<=epsilon).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6200
+    },
+    {
+      "id": "p6z-a2",
+      "node_type": "answer",
+      "post_id": 6202,
+      "body_text": "H2: core regularity bound ell_v<=D0/epsilon on I0 (coarse proved constant D0=12).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6200
+    },
+    {
+      "id": "p6z-a3",
+      "node_type": "answer",
+      "post_id": 6203,
+      "body_text": "H3: barrier-valid prefix M_t<=epsilon I.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6200
+    },
+    {
+      "id": "p6z-a4",
+      "node_type": "answer",
+      "post_id": 6204,
+      "body_text": "H4: residual pool size r_t>=eta*epsilon*n (enforced by choosing c_step small enough).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6200
+    },
+    {
+      "id": "p6z-a5",
+      "node_type": "answer",
+      "post_id": 6205,
+      "body_text": "Definitions: Y_t(v)=B_t^(1/2)C_t(v)B_t^(1/2), score_t(v)=||Y_t(v)||.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6200
+    },
+    {
+      "id": "p6z-c1",
+      "node_type": "comment",
+      "post_id": 62051,
+      "body_text": "Proved weak averaging bound: min_v score_t(v) <= (tD/r_t) tr(B_t); not enough for universal theta<1.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6205
+    },
+    {
+      "id": "p6z-c2",
+      "node_type": "comment",
+      "post_id": 62052,
+      "body_text": "Strong budget condition sum_v Y_t(v)<=rho I (rho<1) fails in dense examples.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6205
+    },
+    {
+      "id": "p6z-a6",
+      "node_type": "answer",
+      "post_id": 6206,
+      "body_text": "If zoom target holds, pick such v_t each step; then C_t(v_t)<=theta(epsilon I-M_t), so barrier is preserved and |S|=Omega(epsilon n).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6200
+    },
+    {
+      "id": "p6z-open",
+      "node_type": "answer",
+      "post_id": 6207,
+      "body_text": "Open implication: H1-H4 => min_v ||Y_t(v)||<=theta. This is the only missing theorem-level bridge.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6200
+    }
+  ],
+  "edges": [
+    {
+      "source": "p6z-a5",
+      "target": "p6z-q",
+      "edge_type": "clarify",
+      "evidence": "Defines grouped barrier objects and score",
+      "detection": "structural"
+    },
+    {
+      "source": "p6z-a1",
+      "target": "p6z-q",
+      "edge_type": "reference",
+      "evidence": "Hypothesis H1",
+      "detection": "structural"
+    },
+    {
+      "source": "p6z-a2",
+      "target": "p6z-q",
+      "edge_type": "reference",
+      "evidence": "Hypothesis H2",
+      "detection": "structural"
+    },
+    {
+      "source": "p6z-a3",
+      "target": "p6z-q",
+      "edge_type": "reference",
+      "evidence": "Hypothesis H3",
+      "detection": "structural"
+    },
+    {
+      "source": "p6z-a4",
+      "target": "p6z-q",
+      "edge_type": "reference",
+      "evidence": "Hypothesis H4",
+      "detection": "structural"
+    },
+    {
+      "source": "p6z-c1",
+      "target": "p6z-q",
+      "edge_type": "challenge",
+      "evidence": "Trace averaging too weak to prove theta<1",
+      "detection": "structural"
+    },
+    {
+      "source": "p6z-c2",
+      "target": "p6z-q",
+      "edge_type": "challenge",
+      "evidence": "Strong PSD budget route fails empirically in dense cases",
+      "detection": "structural"
+    },
+    {
+      "source": "p6z-a6",
+      "target": "p6z-q",
+      "edge_type": "assert",
+      "evidence": "Zoom target is sufficient for linear-size existence",
+      "detection": "structural"
+    },
+    {
+      "source": "p6z-open",
+      "target": "p6z-q",
+      "edge_type": "reform",
+      "evidence": "Isolates single missing implication as theorem-level bridge",
+      "detection": "structural"
+    },
+    {
+      "source": "p6z-open",
+      "target": "p6z-a6",
+      "edge_type": "reference",
+      "evidence": "Once proved, closure follows by barrier-preserving selection",
+      "detection": "structural"
+    }
+  ],
+  "hyperedges": [
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-000",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-a5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Defines grouped barrier objects and score",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-001",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-a1",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Hypothesis H1",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-002",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-a2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Hypothesis H2",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-003",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-a3",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Hypothesis H3",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-004",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-a4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Hypothesis H4",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-005",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-c1",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Trace averaging too weak to prove theta<1",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-006",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-c2",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Strong PSD budget route fails empirically in dense cases",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-007",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-a6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Zoom target is sufficient for linear-size existence",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-008",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-open",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Isolates single missing implication as theorem-level bridge",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-gpl-zoom:edge-009",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6z-open",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6z-a6",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Once proved, closure follows by barrier-preserving selection",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    }
+  ],
+  "stats": {
+    "n_nodes": 10,
+    "n_edges": 10,
+    "node_types": {
+      "question": 1,
+      "answer": 7,
+      "comment": 2
+    },
+    "edge_types": {
+      "clarify": 1,
+      "reference": 5,
+      "challenge": 2,
+      "assert": 1,
+      "reform": 1
+    },
+    "detection_types": {
+      "structural": 10
+    }
+  }
+}
