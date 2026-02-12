@@ -54,7 +54,7 @@ But K_n is trivially solvable by symmetry (take any S of size epsilon*n).
 
 | Technique                    | c_0 bound     | Bottleneck                              |
 |------------------------------|---------------|-----------------------------------------|
-| Trace / Markov               | -> 0 (in n)   | ||M|| <= tr(M), loses dimension factor   |
+| Trace / Markov               | sublinear O(epsilon^(3/2)*sqrt(n)) (worst-case T_I=n) | ||M|| <= tr(M), loses dimension factor |
 | Star domination + Bernstein  | O(epsilon/log n) | Converts p^2 -> p, destroys headroom |
 | Decoupling + MSS (1-shot)    | O(epsilon^2)  | p_A = epsilon^2/12 to shrink atoms      |
 | Decoupling + MSS (recursive) | O(sqrt(epsilon)) | 4^k spectral vs 2^k vertex scaling   |
@@ -117,6 +117,32 @@ whose spectral contributions align. Possible attacks:
   plus the identity sum_{all e} X_e = I (the "budget constraint")
 
 No one has tried the structural attack on Case 2b directly.
+
+### Direction D: lambda_max barrier greedy on a regularized core (HIGH priority)
+
+Codex added a sharpened blueprint in `problem6-proof-attempt.md`:
+
+1. Deterministically extract `I0 subset I` with `|I0| >= |I|/2` and bounded
+   leverage degree `ell_v <= 4 T_I/|I|` (hence `<= 12/epsilon` from coarse
+   global bounds).
+2. Prove a trace-only ceiling: any argument that certifies via `tr(M)` alone
+   is sublinear, so trace/Markov cannot close Case 2b.
+3. Switch to barrier potential with
+   `B_t=(epsilon I-M_t)^(-1)`, `score(v)=||B_t^{1/2} C_v B_t^{1/2}||`,
+   `drift(v)=tr(B_t C_v B_t)`.
+4. Target a single operator-averaging lemma guaranteeing at each step an
+   available vertex with `score(v) <= theta < 1` and
+   `drift(v) <= K/(m0-t)`.
+
+If that lemma is proved, the potential telescopes and yields
+`|S| = Omega(|I0|) = Omega(epsilon n)`, i.e., universal `c0`.
+
+Codex has now formalized this into explicit sublemmas in
+`problem6-proof-attempt.md`:
+- `L1` (proved): averaged drift bound
+- `L2` (open): existence of a step with `score_t(v) <= theta`
+- `L3` (open): existence of a step with `drift_t(v) <= K/r_t`
+- proved reduction: `L2 + L3` imply linear-size Case 2b closure.
 
 ## Errors fixed (from your review)
 

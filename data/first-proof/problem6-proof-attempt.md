@@ -87,10 +87,21 @@ q² α_I, which is a LOWER bound, not useful for our upper bound goal.
 Instead, use Markov on the trace: E[tr(M_S)] = q² T_I where T_I = Σ_{f⊆I} τ_f.
 By Markov: Pr[tr(M_S) > ε] ≤ q² T_I / ε.
 Since ||M_S|| ≤ tr(M_S): Pr[||M_S|| > ε] ≤ q² T_I / ε.
-For this < 1 (so a good S exists): need q² T_I < ε, i.e., q < √(ε/T_I).
+For fixed I and q, if q² T_I ≤ ε/4 then Pr[||M_S|| ≤ ε] ≥ 3/4.
 
-With T_I ≤ n: q < √(ε/n). Expected size: E[|S|] = q|I| ≥ √(ε/n) · εn/3
-= ε^{3/2}√n / 3. For |S| ≥ c_0 εn: c_0 ≤ √(ε/n)/3 → 0 as n → ∞.
+To also enforce size, use Chernoff:
+
+    E[|S|] = q|I|,   Pr[|S| < q|I|/2] ≤ exp(-q|I|/8).
+
+So with positive probability both events hold provided q² T_I <= ε/4 and q|I|
+is at least a moderate constant.
+
+What this yields UNIFORMLY from only T_I ≤ n and |I| ≥ εn/3:
+- worst-case T_I = n forces q = O(√(ε/n)),
+- then q|I| = O(ε^{3/2}√n), i.e., sublinear in n.
+
+Hence the trace/Markov route, by itself and without extra structure on T_I,
+cannot reach a universal linear-size guarantee c_0*εn.
 
 The trace/Markov bound is too crude. A tighter approach: for random q-sampling,
 the expected number of internal edges is ≈ q² m_I, each with τ_f ≤ ε. So
@@ -107,7 +118,7 @@ bound on E[||M||].
 
 **In either case, c_0 is not universal.** The subsampling approach is
 inherently limited because:
-- The trace bound gives c_0 → 0 as n → ∞
+- The rigorous trace/Markov minimax scaling is sublinear (O(ε^{3/2}√n))
 - The heuristic spreading bound gives c_0 = O(√ε)
 - Both reflect the quadratic-vs-linear scaling mismatch
 
@@ -302,7 +313,7 @@ combinatorial (Case 2b can't arise given the leverage threshold).
 
 | Technique                    | c_0 bound  | Bottleneck                          |
 |------------------------------|------------|-------------------------------------|
-| Trace / Markov               | → 0 (n)   | ||M|| ≤ tr(M), loses dim factor n   |
+| Trace / Markov               | sublinear O(ε^{3/2}√n) (worst-case T_I=n) | ||M|| ≤ tr(M), loses dim factor n |
 | Star domination + Bernstein  | O(ε/log n) | Converts p² → p, destroys headroom |
 | Decoupling + MSS (1-shot)    | O(ε²)     | p_A = ε²/12 to shrink atoms; no recursion |
 | Decoupling + MSS (recursive) | O(√ε)     | 4^k spectral vs 2^k vertex scaling  |
@@ -324,6 +335,226 @@ Note: "1-shot" takes S = S_A only (avoids within-group terms but pays p_A = ε²
 3. **Spectral graph theory bypass**: bound ||L^{+/2} L_{G[S]} L^{+/2}||
    directly from graph-theoretic properties of S (expansion, conductance)
    without matrix concentration.
+
+## Case 2b Blueprint: Greedy Barrier + Core Regularization
+
+This section records what can be proved now, and the exact next lemmas needed.
+
+### Step 0 (proved): bounded-leverage core extraction
+
+Let I be the Turan independent set in G_H, m = |I|, and
+
+    T_I := sum_{f subseteq I} tau_f,      ell_v := sum_{u in I, u~v} tau_{uv}.
+
+Then
+
+    (1/m) sum_{v in I} ell_v = 2 T_I / m.
+
+By Markov, at least m/2 vertices satisfy
+
+    ell_v <= 4 T_I / m.
+
+So there exists I0 subseteq I with |I0| >= m/2 and
+
+    ell_v <= 4 T_I / m   for all v in I0.
+
+Using m >= epsilon*n/3 and T_I <= n gives the unconditional coarse bound
+ell_v <= 12/epsilon on I0.
+
+This is a deterministic regularization step; no probability used.
+
+### Step 1 (proved): trace-only greedy has a sublinear ceiling
+
+Suppose a greedy process builds S_t subseteq I0 one vertex at a time and, at
+step t, picks v minimizing the trace increment
+
+    Delta_t(v) := tr(C_v(S_t)),   C_v(S_t) := sum_{u in S_t, u~v} X_{uv}.
+
+Let D := max_{v in I0} ell_v. Then for R_t = I0 \\ S_t (|R_t| = m0 - t):
+
+    average_{v in R_t} Delta_t(v)
+    = (1/|R_t|) sum_{u in S_t, v in R_t} tau_{uv}
+    <= (1/|R_t|) sum_{u in S_t} ell_u
+    <= t D / (m0 - t),
+
+so the chosen vertex satisfies Delta_t <= t D/(m0-t). Summing:
+
+    tr(M_{S_t}) <= sum_{j=0}^{t-1} j D/(m0-j)
+                <= D * t^2/(m0-t).
+
+Hence this trace-only certificate class (q-subsampling + Markov/trace, or
+greedy rules whose control is only through tr(M) with the above averaging
+bound) cannot yield linear-size c0*epsilon*n in worst case from current
+hypotheses; it gives sublinear scaling.
+
+This isolates what must be improved: certify lambda_max directly, not via trace.
+
+### Step 2 (open target): lambda_max-aware barrier greedy
+
+Define (for fixed barrier u = epsilon and current M_t < u I):
+
+    B_t := (uI - M_t)^(-1),
+    Y_t(v) := B_t^(1/2) C_v(S_t) B_t^(1/2),
+    score(v) := ||Y_t(v)||,
+    drift(v) := tr(B_t C_v(S_t) B_t).
+
+Woodbury/Neumann gives the one-step bound
+
+    Phi_{t+1} - Phi_t <= drift(v)/(1 - score(v)),
+    Phi_t := tr(B_t),
+
+whenever score(v) < 1.
+
+So a viable route is:
+1. prove existence of v with score(v) <= theta < 1 and small drift(v),
+2. add such v repeatedly for Omega(m0) steps,
+3. maintain M_t <= epsilon I throughout.
+
+The missing theorem-level ingredient is an operator-valued averaging lemma on
+{C_v(S_t)} over remaining vertices that is stronger than trace averaging.
+
+### Minimal lemma that would close Case 2b
+
+It is enough to prove the following for some universal constants
+gamma, theta, K > 0:
+
+For every t <= gamma m0 and every S_t subseteq I0 with |S_t| = t and
+M_t <= epsilon I, there exists v in I0 \\ S_t such that
+
+    score(v) <= theta   and   drift(v) <= K/(m0 - t).
+
+Then the barrier potential telescopes and yields a set S of size
+|S| >= gamma m0 >= (gamma/6) * epsilon * n with M_S <= epsilon I.
+
+That gives universal c0 = gamma/6.
+
+### Empirical signal (quick probe; not part of proof)
+
+A small ad hoc numerical test (n <= 40, synthetic families, 89 Case-2b
+instances) using the greedy rule
+
+    choose v minimizing lambda_max(M_t + C_v(S_t))
+
+produced |S|/(epsilon*n) ratios:
+- min 0.778
+- median ~1.0 to 1.28 (family-dependent)
+
+No small-instance counterexample appeared. This supports focusing on
+lambda_max-aware (not trace-only) greedy.
+
+## Case 2b Formalization: Sublemmas and Reduction
+
+This section turns the "one missing lemma" statement into explicit components.
+
+### Setup
+
+Fix Case 2b data:
+- I independent in G_H, with |I| >= epsilon*n/3
+- all internal edges satisfy tau_f <= epsilon
+- alpha_I := ||sum_{f subseteq I} X_f|| > epsilon.
+
+Let I0 subseteq I be the regularized core from Step 0, with
+m0 := |I0| >= |I|/2 and leverage-degree bound
+
+    ell_v := sum_{u in I0, u~v} tau_{uv} <= D,   D := 4 T_I/|I| <= 12/epsilon.
+
+Greedy state at time t:
+- S_t subseteq I0, |S_t| = t
+- R_t := I0 \\ S_t, r_t := |R_t| = m0 - t
+- M_t := sum_{f subseteq S_t} X_f
+- for v in R_t:
+      C_t(v) := sum_{u in S_t, u~v} X_{uv}
+  so that M_{t+1} = M_t + C_t(v_t) if v_t is chosen.
+
+Barrier objects (u = epsilon):
+
+    B_t := (u I - M_t)^(-1),
+    score_t(v) := || B_t^(1/2) C_t(v) B_t^(1/2) ||,
+    drift_t(v) := tr(B_t C_t(v) B_t).
+
+### Sublemma L1 (proved): averaging bound for drift
+
+For every t < m0,
+
+    (1/r_t) sum_{v in R_t} drift_t(v)
+    <= (t D / r_t) * tr(B_t^2).
+
+Proof sketch:
+1. Define Q_t := sum_{v in R_t} C_t(v)
+             = sum_{u in S_t, v in R_t, u~v} X_{uv}.
+2. By PSD ordering:
+       Q_t <= sum_{u in S_t} sum_{v in I0, u~v} X_{uv} =: sum_{u in S_t} A_u^core.
+3. Each A_u^core is PSD with
+       ||A_u^core|| <= tr(A_u^core) = ell_u <= D,
+   hence A_u^core <= D I and Q_t <= t D I.
+4. Therefore
+       sum_{v in R_t} drift_t(v)
+     = tr(B_t Q_t B_t)
+     <= t D tr(B_t^2),
+   then divide by r_t.
+
+So there exists v in R_t with
+
+    drift_t(v) <= (t D / r_t) * tr(B_t^2).
+
+### Sublemma L2 (open): good-step score control
+
+There exist universal constants gamma in (0,1), theta in (0,1) such that:
+for every t <= gamma m0 with M_t <= epsilon I, there is some v in R_t with
+
+    score_t(v) <= theta.
+
+This is the first genuinely missing operator-valued statement.
+
+### Sublemma L3 (open): good-step drift control
+
+There is a universal K > 0 such that under the same hypotheses as L2, one can
+choose v in R_t (possibly among those from L2) with
+
+    drift_t(v) <= K / r_t.
+
+Combined with L2, this gives a controlled potential increment per step.
+
+### Reduction proposition (proved): L2 + L3 imply linear-size Case 2b closure
+
+Assume L2 and L3 hold with constants gamma, theta, K.
+Choose v_t at each step t <= gamma m0 satisfying both bounds.
+
+If score_t(v_t) < 1, Neumann-series expansion gives
+
+    (I - Y)^(-1) <= I + Y/(1-||Y||)     for Y := B_t^(1/2) C_t(v_t) B_t^(1/2),
+
+hence
+
+    Phi_{t+1} - Phi_t <= drift_t(v_t)/(1-score_t(v_t))
+                       <= K / ((1-theta) r_t),
+    Phi_t := tr(B_t).
+
+Summing for t = 0,...,T-1 (T <= gamma m0):
+
+    Phi_T <= Phi_0 + (K/(1-theta)) * sum_{j=m0-T+1}^{m0} (1/j)
+         <= Phi_0 + (K/(1-theta)) * log(m0/(m0-T)).
+
+All updates satisfy score_t(v_t) < 1, so M_t stays strictly below epsilon I.
+Thus M_T <= epsilon I and S_T is epsilon-light, with
+
+    |S_T| = T = floor(gamma m0) >= (gamma/6) * epsilon * n.
+
+Therefore universal c0 = gamma/6 follows.
+
+### What remains to prove (now explicit)
+
+Only L2 and L3 are open. L1 and the reduction proposition are complete.
+
+### Obstruction note (why coarse bounds are insufficient)
+
+Using only D and ||B_t|| gives
+
+    score_t(v) <= ||B_t|| * ||C_t(v)|| <= ||B_t|| * D,
+
+which is useless near the barrier because D <= 12/epsilon is large and
+||B_t|| can grow as M_t approaches epsilon I.
+So L2 must use anisotropic structure of {X_{uv}} beyond trace/leverage totals.
 
 ## Notation Reference
 
