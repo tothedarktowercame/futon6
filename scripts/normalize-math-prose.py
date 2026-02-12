@@ -35,6 +35,8 @@ UNICODE_TO_TEX = {
 }
 
 N_DEP_RE = re.compile(r"\b([A-Z])-(dependent|independent)\b")
+WHITTAKER_W_RE = re.compile(r"\bW\(\s*pi\s*,\s*psi\s*\)")
+PSI_WHITTAKER_RE = re.compile(r"\bpsi-Whittaker\b")
 FIXED_W_RE = re.compile(r"\bfor fixed\s+W\s*=\s*W_0\b")
 IDEAL_EQ_RE = re.compile(
     r"\bI\s*=\s*L\(s,\s*Pi\s*x\s*pi\)\s*\*\s*C\[q_F\^s,\s*q_F\^{-s}\]"
@@ -130,6 +132,8 @@ def _n_dep_repl(m: re.Match[str]) -> str:
 def process_plain_text_segment(s: str) -> str:
     s = _wrap_big_o_balanced(s)
     s = N_DEP_RE.sub(_n_dep_repl, s)
+    s = PSI_WHITTAKER_RE.sub(r"$\\psi$-Whittaker", s)
+    s = WHITTAKER_W_RE.sub(r"$W(\\pi, \\psi)$", s)
     s = re.sub(r"\bover V\b", r"over $V$", s)
     s = FIXED_W_RE.sub(r"for fixed $W = W_0$", s)
     s = IDEAL_EQ_RE.sub(
@@ -209,6 +213,10 @@ def run_self_test() -> None:
             "By Section 3a below, the integrals over $V$ (for fixed $W = W_0$) "
             "generate the full fractional ideal "
             "$I = L(s, \\Pi \\times \\pi)\\,\\ast\\,\\mathbb{C}[q_F^s, q_F^{-s}]$.",
+        ),
+        (
+            "In the psi-Whittaker model W(pi, psi), choose V in W(pi,psi).",
+            "In the $\\psi$-Whittaker model $W(\\pi, \\psi)$, choose V in $W(\\pi, \\psi)$.",
         ),
     ]
     for raw, want in cases:

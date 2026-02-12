@@ -199,7 +199,7 @@
     \renewcommand{\log}{\mFunction{\MP@orig@log}}
     \renewcommand{\exp}{\mFunction{\MP@orig@exp}}
 
-    \renewcommand{\pi}{\mNumber{\MP@orig@pi}}
+    \renewcommand{\pi}{\mGreek{\MP@orig@pi}}
   \fi
 }
 
@@ -355,7 +355,7 @@
     Arrows & \textcolor{MPSyntaxArrowColor}{TealBlue} & $f\mArrow{\to}g,\,P\mArrow{\Rightarrow}Q,\,x\mArrow{\mapsto}x^2,\,A\mArrow{\leftrightarrow}B$ \\
     Delimiters & \textcolor{MPSyntaxDelimiterColor}{CadetBlue} & $\mDelimiter{(}x\mDelimiter{)},\,\mDelimiter{[}x\mDelimiter{]},\,\langle x\rangle,\,|x|$ \\
     Functions & \textcolor{MPSyntaxFunctionColor}{Orchid} & $\mFunction{\sin}x,\,\mFunction{\cos}x,\,\mFunction{\log}x,\,\mFunction{\exp}x$ \\
-    Numbers/constants & \textcolor{MPSyntaxNumberColor}{Dandelion} & $\mNumber{0},\ldots,\mNumber{9},\,\mNumber{\pi},\,\mConstant{e}$ \\
+    Numbers/constants & \textcolor{MPSyntaxNumberColor}{Dandelion} & $\mNumber{0},\ldots,\mNumber{9},\,\mConstant{e}$ \\
   \end{tabular}
   \end{center}
   \endgroup
@@ -366,7 +366,7 @@
 \mLargeOperator{\sum}_{n=\mNumber{0}}^{\infty}
 \mFunction{\exp}\mDelimiter{(}-\alpha n\mDelimiter{)}
 \mArrow{\to}
-\mNumber{\pi}
+\mGreek{\pi}
 \mRel{\approx}
 \mFunction{\log}\mDelimiter{(}\EulerE\mDelimiter{)}.
 \]
