@@ -552,9 +552,35 @@ Up to integer rounding, this gives a universal linear bound
 for all epsilon*n >= 2 (the finite epsilon*n < 2 cases are absorbed by
 rounding/convention constants).
 
+### Sharper reduction (proved): L2* alone already gives existence
+
+For pure existence (not potential control), drift bounds are unnecessary.
+Assume L2* with constants c_step > 0 and theta < 1:
+
+    for every t <= c_step * epsilon * n with M_t <= epsilon I,
+    there exists v in R_t with score_t(v) <= theta.
+
+Then for such v:
+
+    B_t^(1/2) C_t(v) B_t^(1/2) <= theta I
+    => C_t(v) <= theta (epsilon I - M_t),
+
+so
+
+    M_{t+1} = M_t + C_t(v)
+            <= (1-theta) M_t + theta epsilon I
+            <= epsilon I.
+
+Hence the barrier is preserved inductively for T = floor(c_step * epsilon * n)
+steps (clamped by |I0| if needed). Therefore an epsilon-light set of size
+|S| = Omega(epsilon n) exists.
+
+So the theorem-level bridge can be reframed as proving L2* only; L3 is useful
+for quantitative potential tracking but not logically necessary for existence.
+
 ### What remains to prove (now explicit)
 
-Only L2 and L3 are open. L1 and the reduction proposition are complete.
+Core open statement: L2* (or L2 in a form implying L2*). L3 is optional.
 
 ### Candidate L2 (discrepancy-flavored) and current evidence
 
@@ -567,6 +593,27 @@ The natural quantitative target is:
 
 This is weaker than "for all t <= gamma m0", and correctly matches the theorem
 goal (we only need Omega(epsilon n) vertices, not a constant fraction of m0).
+
+Calibration note: this epsilon*n horizon is not cosmetic. Numerically and
+structurally, requiring good-score steps up to a constant fraction of m0 is too
+strong on dense examples, while t = Theta(epsilon n) matches the actual target
+size and is consistent with all tested instances.
+
+Attempted direct averaging bound (proved but too weak):
+
+For Y_v := B_t^(1/2) C_t(v) B_t^(1/2) (PSD),
+
+    min_{v in R_t} ||Y_v||
+    <= (1/r_t) sum_{v in R_t} ||Y_v||
+    <= (1/r_t) sum_{v in R_t} tr(Y_v)
+    = (1/r_t) tr(B_t Q_t)
+    <= (t D / r_t) tr(B_t),
+
+using Q_t <= t D I from L1 proof. This does not yield a universal theta<1
+because tr(B_t) can grow with n and barrier proximity.
+
+So any successful proof of L2* must use anisotropy/cancellation beyond scalar
+trace averaging.
 
 One possible route is a matrix discrepancy/paving statement on the family
 {B_t^(1/2) C_t(v) B_t^(1/2)}_{v in R_t}, giving a guaranteed low-norm member

@@ -146,9 +146,12 @@ a small exhaustive-state check at n<=14 with worst observed score 0.476.
 Codex has now formalized this into explicit sublemmas in
 `problem6-proof-attempt.md`:
 - `L1` (proved): averaged drift bound
-- `L2` (open): existence of a step with `score_t(v) <= theta`
-- `L3` (open): existence of a step with `drift_t(v) <= K/r_t`
-- proved reduction: `L2 + L3` imply linear-size Case 2b closure.
+- `L2` / `L2*` (open): good-step score control up to t = Theta(epsilon n)
+- `L3` (open/optional): drift control for potential-based quantitative tracking
+- proved reduction: `L2 + L3` imply closure, and a sharper reduction shows `L2*`
+  alone already implies linear-size existence.
+- proved-but-insufficient averaging bound for `L2*`: `min score_t <= (tD/r_t) tr(B_t)`,
+  which explains why scalar trace averaging cannot close the gap.
 
 ## Errors fixed (from your review)
 
