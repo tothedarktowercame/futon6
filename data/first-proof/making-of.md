@@ -227,22 +227,23 @@ diagram infrastructure. No collisions.
 | Research briefs | 3 | — |
 | Checkpoint/PAR notes | 3 | — |
 
-### The scorecard
+### The scorecard (final, after review)
 
 | Problem | Status | Method |
 |---------|--------|--------|
-| P1 | In review cycle | Phi^4_3 measure theory |
-| P2 | In review cycle (~2 rounds) | Rankin-Selberg / Kirillov model |
-| P3 | In review cycle | ASEP / Macdonald polynomials |
-| P4 n=2 | **PROVED** | Equality (disc linear in coefficients) |
-| P4 n=3 | **PROVED** | Phi_3*disc identity + Cauchy-Schwarz |
+| P1 | **Proved** (writeup done) | Phi^4_3 measure theory |
+| P2 | **Proved** (writeup done, 6 review rounds) | Rankin-Selberg / Kirillov model |
+| P3 | **Proved** (writeup done) | ASEP / Macdonald polynomials |
+| P4 n<=3 | **Proved** | Phi_3*disc identity + Cauchy-Schwarz |
 | P4 n>=4 | Open (3 strategies, research ongoing) | Finite free Stam inequality |
-| P5 | In review cycle | Equivariant homotopy |
-| P6 | In review cycle | Nelson epsilon-light subsets |
-| P7 | In review cycle (may need retreat) | Surgery theory / L-groups |
-| P8 | In review cycle (~1 round) | Symplectic Lagrangian |
-| P9 | In review cycle | Quadrifocal tensors |
-| P10 | In review cycle | PCG reasoning |
+| P5 | **Proved** (writeup done, with F_O-locality caveat) | Equivariant homotopy |
+| P6 | Conditional (vertex-subset BSS adaptation unproved) | Nelson epsilon-light subsets |
+| P7 | Partially reviewed (open findings remain) | Surgery theory / L-groups |
+| P8 | **Proved** (writeup done, 6 review rounds) | Symplectic Lagrangian |
+| P9 | **Proved** (writeup done) | Quadrifocal tensors |
+| P10 | **Proved** (writeup done) | PCG reasoning |
+
+**Final tally: 7 proved with clean writeups, 1 conditional, 1 partial, 1 open.**
 
 ### The system
 
@@ -290,6 +291,75 @@ Hessian of 1/Phi_n in cumulant space is indefinite, yet the inequality
 holds. Whatever the proof is, it's not the obvious one. That's what
 makes it a real problem.
 
+## What the review cycle revealed
+
+The scorecard above was preceded by an initial self-assessment (sent to a
+colleague ~4 hours before the review cycle completed) that claimed 10/10
+solved. The review process brought this to 7/10 proved — and exposed
+several instructive failure modes.
+
+### Confidence was anticorrelated with correctness
+
+| Problem | Initial confidence | Actual outcome |
+|---------|-------------------|----------------|
+| P4 | **High** | Wrong (n>=4 unproved) |
+| P9 | **High** | Had a critical bug (witness was rank-1) |
+| P3 | **Low** | Easily fixed (minor irreducibility rewrite) |
+| P5 | **Low** | Proved with modest caveat |
+
+The two "High confidence" self-assessments were the worst failures. P4's
+concavity argument had a fundamental gap for n>=4 that numerical testing
+couldn't find (because the conjecture is true — the *proof* is what's
+missing). P9's explicit witness used lambda=1 everywhere, which IS rank-1
+(u=v=w=x=1) — the witness satisfied the forward direction, not the
+converse. Meanwhile, the problems flagged "Low" needed only targeted fixes.
+
+### Specific bugs the review caught
+
+**P9 (Critical): The witness proved the wrong thing.** The converse argument
+needed a non-rank-1 lambda, but lambda_{abgd}=1 factors as 1*1*1*1. Fix:
+lambda=1 except lambda_{1234}=2, verified non-rank-1 by contradiction,
+det(M)=-24 by direct computation.
+
+**P6 (Major): Edge sparsification != vertex selection.** The proof cited
+Batson-Spielman-Srivastava (2012) for a vertex-subset guarantee, but BSS
+is an edge sparsification theorem. The "vertex-pruning variant follows"
+claim was unproved. Fix: honest conditional framing.
+
+**P3 (Major): Push cascades aren't adjacent transpositions.** The
+irreducibility argument treated adjacent swaps as direct moves, but the
+t-PushTASEP dynamics involves cascading displacements. Fix: vacancy-transport
+argument (the vacancy absorbs cascades in one step; composing vacancy moves
+reaches any permutation, 15-puzzle style).
+
+### Problem descriptions got scrambled
+
+The initial announcement to a colleague listed P6 as "Tensor decomposition
+complexity" (it's epsilon-light subsets) and P10 as "Persistent cohomology /
+Gromov-Hausdorff" with answer "No" (it's PCG for tensor CP, answer is a
+constructive algorithm). The git log confirms P10 was always the PCG problem
+from its first commit (`db9efc1`). The scrambled descriptions likely came
+from the generating session confabulating problem summaries.
+
+Solving the right problem matters. So does describing it correctly.
+
+### The review paradox
+
+Generation: 10 problems in 95 minutes. Review: ~4 hours to get 7 of them
+right. The ratio is roughly 1:16 (generation:verification per proved result).
+This matches the broader observation that LLM proof generation is cheap but
+LLM proof *validation* requires adversarial structure — the wiring diagrams,
+the typed edges, the node-level critique — to converge rather than
+confidence-launder.
+
+The three problems that didn't make it (P4, P6, P7) share a pattern: each
+has a step that *sounds right* but relies on a theorem that doesn't quite
+apply (P4: concavity that doesn't hold; P6: an edge theorem used for
+vertices; P7: citations that don't close the gap). The review catches these
+not by re-deriving the math but by checking whether each claim's *evidence
+type* matches its *edge type* in the wiring diagram. When an `assert` edge
+rests on a `reference` that doesn't exist, that's a structural tell.
+
 ---
 
 ## Timeline at a glance
@@ -302,6 +372,10 @@ Feb 11  ████████████████████████
 Feb 12  ████████████████        Understanding + research (16)
 ```
 
-89 commits in 4 days. From PlanetMath parser to open conjecture in
-finite free probability, with a working multi-agent verification system
-as a side effect.
+100+ commits across 5 days. From PlanetMath parser to 7 clean proofs,
+1 open conjecture in finite free probability, and 2 honest gaps — with
+a working multi-agent verification system as a side effect.
+
+The system's real output isn't the proofs. It's the calibrated map of
+what's proved, what's conditional, and what's open. That map didn't exist
+after generation. It exists after review.
