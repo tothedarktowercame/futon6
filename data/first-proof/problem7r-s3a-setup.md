@@ -50,36 +50,43 @@ Groups*, Theorem 6.15).
 
 ### P2. Finite Poincare complex of dimension `n`
 
-**Satisfied (rationally).** The FH(Q) condition gives a finite CW complex
-`Y` with `pi_1(Y) = Gamma` and `Y~` rationally acyclic. We claim `Y`
-satisfies rational Poincare duality in dimension `n`:
+**GAP (G1): not yet established.**
 
-- Since `pi < Gamma` is torsion-free of index 2, and `Bpi = H^n/pi` is a
-  closed oriented `n`-manifold (hence an integral Poincare complex), the
-  transfer argument gives `H^*(Gamma; Q) ~ H^*(pi; Q)^{Z/2}`, which
-  satisfies Poincare duality over `Q` in dimension `n`.
-- More precisely: `Gamma` acts properly and cocompactly on the contractible
-  `n`-manifold `H^n`, so the equivariant Bredon cohomology gives rational
-  PD in dimension `n` (see Section 2 of the solution file).
+FH(Q) gives a finite CW complex `Y` with `pi_1(Y) = Gamma` and `Y~`
+rationally acyclic. This does **not** automatically give `Y` the structure
+of a rational Poincare complex (which requires a fundamental class and
+chain-level cap product duality).
 
-**Integral vs. rational PD.** For Wall's surgery machinery in its standard
-form, integral Poincare duality is needed. Our `Y` only satisfies rational
-PD. Two approaches:
+**Partial justification.** The homology groups of `Y` do satisfy rational PD:
 
-**(a) Rational surgery (Avramidi framework).** Avramidi (arXiv:1506.06293,
-Theorems 14, 16, 17) develops surgery with rational coefficients for groups
-with finite classifying spaces. The obstruction then lives in
-`L_n(Z[Gamma]) tensor Q`. This is the natural framework for our problem
-since we only need `Q`-acyclicity of the universal cover.
+1. `Y~` is simply connected and rationally acyclic, so by rational Hurewicz,
+   `pi_*(Y~) tensor Q = 0` for all `* > 0`. Thus `Y~` is rationally
+   contractible.
+2. The Serre spectral sequence for `Y~ -> Y -> BGamma` collapses (since
+   `H_q(Y~; Q) = 0` for `q > 0`), giving `H_*(Y; Q) = H_*(Gamma; Q)`.
+3. `Gamma` has rational PD in dimension `n` (Bredon framework: `Gamma` acts
+   properly cocompactly on contractible `H^n`).
+4. Therefore `H_*(Y; Q)` satisfies rational Poincare duality in dimension `n`.
 
-**(b) Transfer to the torsion-free cover.** Since `[Gamma : pi] = 2`, any
-finite Poincare complex `Y` for `Gamma` has a double cover `Y_pi` which is
-a finite Poincare complex for `pi`. Since `pi` is a closed-manifold group
-(`Bpi = H^n/pi`), `Y_pi` is integrally PD. Surgery on `Y_pi` can be
-performed by standard methods, and the Z/2 action descends to the result if
-it is equivariant.
+**What remains.** This shows PD on the level of homology groups. Promoting
+this to a rational Poincare complex structure on `Y` (fundamental class with
+chain-level cap product duality) requires an additional argument. Possible
+approaches:
 
-We adopt approach (a) as the primary route, with (b) as a cross-check.
+**(a)** Use the equivariant diagonal on `Y~` to construct the chain-level
+duality map, leveraging the rational contractibility of `Y~`.
+
+**(b)** Show that any finite CW complex with rationally contractible
+universal cover and rational-PD fundamental group automatically inherits
+rational Poincare complex structure.
+
+**(c)** Bypass `Y` and work within Avramidi's rational surgery framework
+(arXiv:1506.06293), which may construct the rational Poincare complex
+directly from the group-theoretic PD data without relying on the specific
+CW complex from Fowler.
+
+**Gap status: open.** The homology-level PD is established; chain-level
+promotion needs a proof or reference.
 
 ### P3. Dimension `d >= 5`
 
@@ -88,19 +95,42 @@ We adopt approach (a) as the primary route, with (b) as a cross-check.
 
 ### P4. Existence of degree-1 normal map
 
-**Satisfied.** For any finite Poincare complex `Y` of dimension `n >= 5`,
+**GAP (G2): not yet established.**
+
+For any finite Poincare complex `Y` of dimension `n >= 5` (assuming G1),
 the Spivak normal fibration theorem guarantees a stable spherical fibration
-`nu_Y` over `Y`. The question is whether `nu_Y` lifts to a stable vector
-bundle (equivalently, a topological reduction).
+`nu_Y` over `Y`. A degree-1 normal map exists iff `nu_Y` lifts to a stable
+vector bundle (topological reduction).
 
-For our `Y`: the double cover `Y_pi` is homotopy equivalent to the closed
-manifold `M = H^n/pi`, which has a genuine stable normal bundle. The
-transfer of this structure to `Y` gives a topological reduction of `nu_Y`.
-Hence a degree-1 normal map `f: M_0 -> Y` exists.
+**Previous (incorrect) argument.** The prior version claimed that since the
+double cover `Y_pi` is homotopy equivalent to the closed manifold `M`, the
+stable normal bundle of `M` transfers to `Y`. This is insufficient:
 
-More concretely: the closed manifold `M` with its identity map `id: M -> M`
-is a degree-1 normal map for `pi`. The Z/2 equivariant version gives a
-normal map for `Gamma`.
+1. `Y_pi` has the same rational homology as `M` (by the spectral sequence
+   argument in P2), but `Y_pi` need not be homotopy equivalent to `M` —
+   only rationally homotopy equivalent (since `Y~` is rationally but not
+   necessarily integrally contractible).
+2. Even given a topological reduction on `Y_pi`, descent to `Y` through a
+   Z/2-quotient requires an explicit equivariant lifting of the stable
+   bundle structure through the covering map `Y_pi -> Y`. This equivariant
+   compatibility is not automatic.
+
+**Possible approaches:**
+
+**(a)** Construct the topological reduction directly by showing that the
+rational normal invariant `[Y, G/Top] tensor Q` is nonempty (which holds
+when rational Pontryagin classes can be defined on `Y`, using the PD
+structure).
+
+**(b)** Work within Avramidi's rational surgery framework, which may
+construct the degree-1 normal map as part of the rational surgery setup
+without requiring a separate Spivak/topological-reduction step.
+
+**(c)** Use the equivariant bordism structure of `M` with its Z/2-action
+to directly construct an equivariant normal map that descends to `Y`.
+
+**Gap status: open.** The descent argument needs to be replaced by one of
+the approaches above.
 
 ### P5. `pi_1` preservation through surgery
 
@@ -190,16 +220,17 @@ If the dimension-6 obstruction proves intractable, consider:
 ## Node-level status
 
 - P1 (finitely presented): **verified**
-- P2 (finite Poincare complex): **verified** (rationally; use Avramidi
-  rational surgery framework)
+- P2 (finite Poincare complex): **GAP (G1)** — homology-level PD
+  established, chain-level promotion open
 - P3 (dimension >= 5): **verified** (n = 6)
-- P4 (degree-1 normal map existence): **verified** (via torsion-free cover)
-- P5 (pi_1 preservation): **verified**
-- P6 (universal cover acyclicity preserved): **verified**
+- P4 (degree-1 normal map existence): **GAP (G2)** — descent argument
+  insufficient, needs replacement
+- P5 (pi_1 preservation): **verified** (conditional on P4)
+- P6 (universal cover acyclicity preserved): **verified** (conditional on P4)
 
-**p7r-s3a status: provisionally closed.** All surgery prerequisites are
-met. The single remaining obligation is the obstruction computation,
-which passes to `p7r-s3b`.
+**p7r-s3a status: OPEN.** Two gaps (G1, G2) remain in the surgery setup.
+These must be resolved before the obstruction computation in `p7r-s3b`
+becomes the sole remaining obligation.
 
 ## References
 

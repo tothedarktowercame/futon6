@@ -9,14 +9,16 @@ concrete lattice family from `p7r-s2b`, and determine whether it vanishes.
 
 ## Input from upstream
 
-From `p7r-s3a` (provisionally closed):
+From `p7r-s3a` (open — two gaps remain):
 
 - `Gamma = pi rtimes Z/2`, where `pi` is torsion-free cocompact in
   `Isom(H^n)`, `n` even `>= 6`. Concrete choice: `n = 6`.
-- Surgery prerequisites verified: finite presentation, finite rational
-  Poincare complex `Y` from E2, degree-1 normal map `f: M_0 -> Y`,
-  dimension `>= 5`.
-- The surgery obstruction is `sigma(f) in L_6(Z[Gamma]) tensor Q`.
+- Surgery prerequisites partially verified: finite presentation and
+  dimension confirmed; rational Poincare complex structure (G1) and
+  degree-1 normal map existence (G2) are open.
+- **Conditional assumption for this document**: we assume G1 and G2 are
+  resolved, so that a degree-1 normal map `f: M_0 -> Y` exists and the
+  surgery obstruction `sigma(f) in L_6(Z[Gamma]) tensor Q` is well-defined.
 - Farrell-Jones conjecture holds for `Gamma` (Bartels-Farrell-Luck,
   arXiv:1101.0469).
 
@@ -123,76 +125,100 @@ L_6(Z[pi]) tensor Q ~= H_6(M; L(Z) tensor Q) ~= H_6(M; Q) + H_2(M; Q)
 (using the AHSS collapse: `L_q(Z) tensor Q = Q` for `q = 0 mod 4`, else
 `0`; contributing terms `(p,q) = (6,0)` and `(2,4)` for total degree 6).
 
-**Critical observation.** The restriction of `sigma(f)` to `pi`:
+**Intended argument.** The restriction of `sigma(f)` to `pi`:
 
 ```
 res(sigma(f)) in L_6(Z[pi]) tensor Q
 ```
 
-is the surgery obstruction of the **restricted** surgery problem on the
-double cover `Y_pi` (the cover of `Y` corresponding to `pi < Gamma`).
+should be the surgery obstruction of the **restricted** surgery problem on
+the double cover `Y_pi` (the cover of `Y` corresponding to `pi < Gamma`).
 
-Since `Y_pi` is homotopy equivalent to `M` (the closed manifold `H^6/pi`),
-the restricted surgery problem is already solved: the identity map
-`id: M -> M` gives a homotopy equivalence, so `res(sigma(f)) = 0`.
+If the normal map `f: M_0 -> Y` is constructed compatibly with the covering
+structure — meaning that the restriction of `f` to the double cover gives
+a normal map `f_pi: M_{0,pi} -> Y_pi` that is normally cobordant to the
+identity on `M` — then `res(sigma(f)) = 0`.
 
-**Conclusion.** `sigma(f) in ker(res)`.
+**Gap (G3): compatibility of the normal map with the cover.** The previous
+version asserted `res(sigma(f)) = 0` from `Y_pi ~ M`, but this requires:
 
-## Step 4: Structure of `ker(res)`
+1. That `Y_pi` is rationally homotopy equivalent to `M` (established: both
+   have rationally contractible universal cover and `pi_1 = pi`, so they
+   agree in rational homotopy type).
+2. That the specific normal map `f` restricts on the double cover to a
+   normal map whose surgery obstruction is zero. For an **arbitrary** choice
+   of `f`, this need not hold — only a normal map constructed compatibly
+   with the covering data will have this property.
 
-The equivariant L-homology `H_6^{Z/2}(M; L tensor Q)` decomposes (via the
-isotropy stratification of the Z/2-action on `M`) into:
+If `f` is constructed via approach (c) of G2 (equivariant bordism descent
+from `M`), then the restriction to `Y_pi` is by construction cobordant to
+the identity on `M`, and `res(sigma(f)) = 0` follows.
+
+**Conditional conclusion.** If the normal map `f` is constructed compatibly
+with the covering (which is part of resolving G2), then
+`sigma(f) in ker(res)`.
+
+## Step 4: Conjectural structure of `ker(res)`
+
+**Status: the following analysis is a sketch, not a proof. The claimed
+decomposition relies on several intermediate steps that are not yet
+verified with references. It should be treated as a heuristic guide to
+the expected obstruction structure, not as an established result.**
+
+### Sketch of the decomposition
+
+The equivariant L-homology `H_6^{Z/2}(M; L tensor Q)` should decompose
+(via the isotropy stratification of the Z/2-action on `M`) into:
 
 - **Free stratum**: contributions from `M \ F` where Z/2 acts freely.
-  This maps isomorphically (up to factor 2) to `L_6(Z[pi])^{Z/2} tensor Q`
+  This should map (up to factor 2) to `L_6(Z[pi])^{Z/2} tensor Q`
   under the transfer.
 
 - **Fixed stratum**: contributions from the fixed set `F` with its
-  Z/2-isotropy. This maps to zero under the transfer.
+  Z/2-isotropy. This should map to zero under the transfer.
 
-Therefore:
+If this decomposition holds, then `ker(res) = (fixed stratum contribution)`.
 
-```
-ker(res) = (fixed stratum contribution)
-```
+### Unverified claims in the decomposition
 
-The fixed stratum contribution involves the equivariant Thom isomorphism
-applied to the normal bundle `nu_F` of `F` in `M`. Since `nu_F` is the
-1-dimensional sign representation of Z/2, the Thom isomorphism gives a
-degree shift and a twist:
+**(U1) Clean free/fixed splitting.** The decomposition of equivariant
+L-homology into free and fixed strata uses the isotropy filtration of the
+Z/2-action on `M`. For genuine equivariant homology theories (as opposed to
+Borel equivariant), this filtration gives a long exact sequence, but the
+claimed direct-sum splitting requires the connecting maps to vanish. This
+needs verification (e.g., via analysis of the relevant extension groups).
+
+**(U2) Equivariant Thom isomorphism.** The fixed stratum contribution
+involves the equivariant Thom isomorphism for the normal bundle `nu_F`
+(the 1-dimensional sign representation). The expected formula is:
 
 ```
 fixed contribution to H_6^{Z/2}(M; L tensor Q)
     ~= H_5(F; L^{R^-}(Z[Z/2]) tensor Q)
 ```
 
-where `L^{R^-}` denotes the L-theory spectrum twisted by the sign
-representation (equivalently, L-theory with the orientation character
-twisted by the sign character of Z/2).
+where `L^{R^-}` denotes L-theory twisted by the sign representation. The
+Thom isomorphism in equivariant L-theory is established in principle
+(see Luck, *Transformation Groups and Algebraic K-Theory*), but the
+specific coefficient computation needs careful verification.
 
-### Computing the twisted L-theory coefficients
+**(U3) Twisted L-theory coefficients.** The computation uses:
 
-The group ring `Q[Z/2] = Q x Q` splits into trivial and sign
-representations. The twisted L-theory `L_q^{R^-}(Z[Z/2]) tensor Q`
-involves:
+- `Q[Z/2] = Q x Q` (trivial and sign representations)
+- Trivial factor: `L_q(Q) = Q` for `q = 0 mod 4`, else `0`.
+- Sign factor: `L_q^{w}(Q) = Q` for `q = 2 mod 4`, else `0`
+  (where `w` is the nontrivial orientation character).
 
-- Trivial representation factor: `L_q(Q)` = Q for `q = 0 mod 4`, else 0.
-- Sign representation factor: `L_q^{w}(Q)` where `w` is the nontrivial
-  orientation character. Over Q: `L_q^{w}(Q)` = Q for `q = 2 mod 4`,
-  else 0.
+The claim about `L_q^w(Q)` — that twisting the orientation character shifts
+the nonvanishing degrees by 2 — is standard for symmetric L-theory over
+fields of characteristic 0, but needs an explicit reference (e.g., Ranicki,
+*Algebraic L-Theory*, Chapter 13, or Lueck-Schick for the equivariant
+version).
 
-So the twisted coefficients have nonzero values at `q = 0 mod 4` (from
-trivial) and `q = 2 mod 4` (from sign).
+### Conjectural AHSS computation
 
-### AHSS for `H_5(F; L^{R^-}(Z[Z/2]) tensor Q)`
-
-The Atiyah-Hirzebruch spectral sequence collapses rationally:
-
-```
-E^2_{p,q} = H_p(F; L_q^{R^-}(Z[Z/2]) tensor Q) => H_{p+q}(...)
-```
-
-Contributing terms for `p + q = 5`:
+Assuming (U1)-(U3), the AHSS for `H_5(F; L^{R^-}(Z[Z/2]) tensor Q)`
+collapses rationally with contributing terms for `p + q = 5`:
 
 | (p, q) | Coefficient | E^2 term |
 |---------|-------------|----------|
@@ -200,25 +226,30 @@ Contributing terms for `p + q = 5`:
 | (3, 2)  | Q (sign factor) | `H_3(F; Q)` |
 | (1, 4)  | Q (trivial factor) | `H_1(F; Q)` |
 
-So the fixed stratum contribution (= `ker(res)`) is:
+This would give:
 
 ```
-ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)
+ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)  (CONJECTURAL)
 ```
 
 where `F` is the closed hyperbolic 5-manifold (the fixed set of `tau` on
 `M`).
 
+**This formula is a target, not a theorem.** Verification of (U1)-(U3)
+would establish it. Without that verification, the claimed localization
+is unreliable and the actual obstruction space could be different.
+
 ## Step 5: Assessment of `sigma(f)`
 
-We have established:
+Conditional on resolving the upstream gaps (G1, G2, G3) and the unverified
+claims (U1-U3):
 
-1. `sigma(f) in ker(res)` (by the transfer argument, Step 3).
-2. `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)` (by the equivariant
-   decomposition, Step 4).
+1. `sigma(f) in ker(res)` (by the transfer argument, Step 3 — requires G3).
+2. `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)` (conjectural, Step 4 — requires
+   U1-U3).
 
-So the surgery obstruction `sigma(f)` is a specific element of
-`Q + H_3(F; Q) + H_1(F; Q)`.
+If both hold, then `sigma(f)` is a specific element of the conjectural
+target space `Q + H_3(F; Q) + H_1(F; Q)`.
 
 ### Does `sigma(f) = 0`?
 
@@ -355,31 +386,37 @@ space determined by the topology of the fixed set `F`.
 
 ## Summary and node status
 
-### What is proved
+### What is established
 
-1. `sigma(f)` lives in `ker(res: L_6(Z[Gamma]) tensor Q -> L_6(Z[pi]) tensor Q)`.
-2. This kernel is identified with `Q + H_3(F; Q) + H_1(F; Q)`, where `F`
-   is the fixed hypersurface.
-3. The obstruction is entirely localized at the fixed set of the Z/2-action.
-4. The dimension-parity tension between E2 and S is the fundamental
-   remaining obstacle.
+1. The Farrell-Jones reduction to equivariant L-homology (Step 1): solid.
+2. The `E_{Fin}` vs `E_{VCyc}` comparison via UNil rationalization (Step 1):
+   solid (Connolly-Davis).
+3. The model `H^6` for `E_{Fin}Gamma` and reduction to `H_6^{Z/2}(M; L tensor Q)`
+   (Step 2): solid.
+4. The dimension-parity tension between E2 and S (Step 6): structural
+   observation, solid.
 
-### What is not proved
+### What is conditional or conjectural
 
-1. Whether `sigma(f) = 0` for the specific normal map `f` from `p7r-s3a`.
-2. Whether `ker(res) = 0` for some specific lattice choice.
-3. Whether an odd-dimensional E2 construction exists.
+1. `sigma(f) in ker(res)` — requires compatible normal map construction
+   (G3, depends on G2).
+2. `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)` — conjectural, depends on
+   unverified claims U1-U3 (free/fixed splitting, equivariant Thom
+   isomorphism, twisted L-theory coefficients).
+3. Whether `sigma(f) = 0` — not addressed.
+4. Whether an odd-dimensional E2 construction exists — not addressed.
 
 ### Node status
 
-**`p7r-s3b`: open.** The obstruction computation is advanced but not
-closed. The proof remains conditional on `sigma(f) = 0`.
+**`p7r-s3b`: open.** The FJ reduction framework (Steps 1-2) is solid. The
+transfer argument (Step 3) and localization (Step 4) are sketched but rest
+on unproven intermediate lemmas (G3, U1-U3). The obstruction target space
+`Q + H_3(F; Q) + H_1(F; Q)` is a plausible but unverified conjecture.
 
-The conditional is substantially tighter than the original: instead of
-"assuming the surgery obstruction vanishes" (with no information about the
-obstruction group), we have localized the obstruction to a specific
-subspace (`Q + H_3(F; Q) + H_1(F; Q)`) determined by the fixed-set
-topology.
+The proof remains conditional on `sigma(f) = 0` (plus G1, G2, G3 from
+upstream). The FJ reduction and dimension-parity analysis represent genuine
+progress; the localization formula needs verification before it can be
+relied upon.
 
 ## References
 

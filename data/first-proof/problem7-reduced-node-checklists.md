@@ -94,18 +94,20 @@ range, and record:
   fundamental group unless extra control is shown. For reduced P7, any closure
   step must preserve final `pi_1 = Gamma`.
 
-### Status: PROVISIONALLY CLOSED
+### Status: OPEN (two gaps)
 
-All surgery prerequisites verified (`problem7r-s3a-setup.md`):
+Surgery prerequisites partially verified (`problem7r-s3a-setup.md`):
 
-- P1: finitely presented (lattice) — verified
-- P2: finite rational Poincare complex from E2 — verified
-- P3: dimension >= 5 (n = 6) — verified
-- P4: degree-1 normal map existence (via torsion-free cover) — verified
-- P5: pi_1 preservation (surgery below middle dimension) — verified
-- P6: rational acyclicity preserved — verified
-
-Single remaining obligation passes to `p7r-s3b`.
+- P1: finitely presented (lattice) — **verified**
+- P2: finite rational Poincare complex — **GAP (G1)**: homology-level PD
+  established (via spectral sequence collapse + Bredon PD), but chain-level
+  Poincare complex structure not yet proved
+- P3: dimension >= 5 (n = 6) — **verified**
+- P4: degree-1 normal map existence — **GAP (G2)**: descent from
+  torsion-free cover insufficient; needs equivariant lifting argument or
+  alternative construction
+- P5: pi_1 preservation — **verified** (conditional on P4)
+- P6: rational acyclicity preserved — **verified** (conditional on P4)
 
 ## `p7r-s3b` checklist (obstruction computation + closure)
 
@@ -145,38 +147,58 @@ vanishing in the selected lattice case.
   (dimension, decorations, orientation character, stabilization regime). Do not
   silently assume equality in unsupported settings.
 
-### Status: OPEN (advanced)
+### Status: OPEN (framework established, intermediate lemmas unverified)
 
-The FJ reduction is complete (`problem7r-s3b-obstruction.md`):
+The FJ reduction framework is solid (`problem7r-s3b-obstruction.md`):
 
 - UNil terms vanish rationally (Connolly-Davis), so `E_{Fin}` suffices.
 - Computation reduces to `H_6^{Z/2}(M; L tensor Q)`.
-- Transfer argument: `res(sigma(f)) = 0` (pi-level problem already solved).
-- Obstruction localized to fixed-set contribution:
-  `sigma(f) in Q + H_3(F; Q) + H_1(F; Q)`.
 - Dimension-parity tension identified: E2 needs even n, S prefers odd n.
 - Five resolution strategies proposed (A through E).
 
-Proof remains **conditional on `sigma(f) = 0`**, but the obstruction is now
-localized to a specific subspace determined by fixed-set topology.
+The following are **sketched but not yet proved**:
+
+- Transfer argument `res(sigma(f)) = 0` requires compatible normal map
+  construction (G3, depends on resolving G2).
+- Localization `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)` is conjectural,
+  relying on unverified claims about free/fixed splitting (U1),
+  equivariant Thom isomorphism (U2), and twisted L-theory coefficients
+  (U3).
+
+Proof remains **conditional on G1 + G2 + G3 + sigma(f) = 0**. The
+conjectural localization formula is a plausible target but not yet
+reliable.
 
 ## Fast execution order (recommended)
 
 1. `p7r-s2a`: lock theorem interface from Fowler Main Theorem. **Done.**
 2. `p7r-s2b`: produce true order-2 instantiation. **Done** (reflection route).
-3. `p7r-s3a`: fix surgery setup with `pi_1` control. **Done** (Wall framework).
-4. `p7r-s3b`: run FJ reduction plus obstruction computation. **Advanced**
-   (obstruction localized to fixed-set piece; not yet closed).
-5. Only then assert `p7r-s5`. **Blocked on s3b.**
+3. `p7r-s3a`: fix surgery setup with `pi_1` control. **Open** — two gaps
+   remain (G1: Poincare complex structure, G2: normal map existence).
+4. `p7r-s3b`: run FJ reduction plus obstruction computation. **Open** —
+   FJ framework solid, but transfer argument (G3) and localization formula
+   (U1-U3) are unverified.
+5. Only then assert `p7r-s5`. **Blocked on s3a and s3b.**
 
-## Current bottleneck
+## Current bottlenecks (ordered by priority)
 
-The obstruction `sigma(f) in Q + H_3(F; Q) + H_1(F; Q)` is the single
-remaining mathematical obligation. The most promising resolution paths are:
+**G1** (critical): show the FH(Q) complex `Y` admits rational Poincare
+complex structure. Homology-level PD is established; chain-level promotion
+needs a proof or reference.
 
-- **Strategy B** (lattice selection): find congruence subgroup with small
-  `b_1(F)`, `b_3(F)`.
-- **Strategy C** (equivariant signature): compute the equivariant signature
-  defect for the specific normal map.
-- **Strategy E** (conditional): accept the conditional statement with the
-  tightened obstruction characterization.
+**G2** (critical): construct a degree-1 normal map `f: M_0 -> Y`. The
+previous descent argument from the torsion-free cover was insufficient.
+Most promising approach: work within Avramidi's rational surgery framework
+or construct via equivariant bordism.
+
+**G3** (major): construct the normal map compatibly with the covering, so
+that `res(sigma(f)) = 0`. Likely resolves jointly with G2 if the right
+construction is used.
+
+**U1-U3** (major): verify the free/fixed splitting, equivariant Thom
+isomorphism, and twisted L-theory coefficient claims underlying the
+conjectural localization `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)`.
+
+**sigma(f) = 0** (hard): even after all the above, the obstruction itself
+must be shown to vanish. The dimension-parity tension (E2 needs even n,
+S prefers odd n) is the fundamental structural difficulty.

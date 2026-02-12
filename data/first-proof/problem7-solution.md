@@ -12,9 +12,10 @@ fundamental group of a closed manifold whose universal cover is acyclic over
 **Answer: conditional yes.** Obligation (E2) — placing `Gamma` in `FH(Q)` —
 is discharged unconditionally for a concrete reflection-lattice family.
 Obligation (S) — upgrading from finite CW complex to closed manifold — is
-conditional on vanishing of a specific rational surgery obstruction. The
-obstruction computation is outlined below; full closure requires either
-completing it or weakening to an explicitly conditional statement.
+conditional on three items: (G1) that the FH(Q) complex admits rational
+Poincare complex structure, (G2) that its Spivak normal fibration admits a
+topological reduction, and (S) that the rational surgery obstruction
+vanishes. The S-branch analysis is outlined below.
 
 ## 1. Baseline Geometry
 
@@ -99,27 +100,61 @@ with these properties. The upgrade to a closed manifold requires:
 ### 4a. Surgery Setup Interface (p7r-s3a)
 
 `Gamma` is finitely presented (it is a lattice in a Lie group). The finite
-CW complex from E2 serves as a finite Poincare complex for `Gamma`
-rationally.
+CW complex `Y` from E2 has `pi_1(Y) = Gamma` and `Y~` rationally acyclic.
+
+**Gap (G1): `Y` is not automatically a Poincare complex.** FH(Q) gives a
+finite CW complex with rationally acyclic universal cover, but does not
+directly endow `Y` with a (rational) Poincare complex structure (fundamental
+class + cap product duality). A separate argument is needed:
+
+- `Y~` is simply connected (universal cover) and rationally acyclic, so by
+  rational Hurewicz, `pi_*(Y~) tensor Q = 0` for all `* > 0`, meaning `Y~`
+  is rationally contractible.
+- The Serre spectral sequence for `Y~ -> Y -> BGamma` then collapses,
+  giving `H_*(Y; Q) = H_*(Gamma; Q)`.
+- `Gamma` has rational PD in dimension `n` (Section 2, Bredon framework).
+- So `H_*(Y; Q)` satisfies rational Poincare duality.
+
+However, this shows PD on homology groups, not that `Y` admits a geometric
+fundamental class with cap product duality at the chain level. Promoting
+this to a rational Poincare complex structure on `Y` requires either:
+(a) an explicit chain-level duality construction (e.g., via the equivariant
+    diagonal on `Y~`), or
+(b) a reference showing that finite CW complexes with rationally
+    contractible universal cover and rational-PD fundamental group inherit
+    rational Poincare complex structure.
+
+**This gap is currently open.** We proceed conditionally on `Y` admitting
+rational Poincare complex structure.
 
 For the surgery exact sequence to apply (Wall, *Surgery on Compact
-Manifolds*, Chapter 9), we need:
+Manifolds*, Chapter 9), we need (assuming G1 resolved):
 
 - `Gamma` finitely presented: **yes** (lattice).
-- A finite `d`-dimensional Poincare complex: **yes** (from E2, `d = n`).
+- A finite `d`-dimensional rational Poincare complex: **open** (G1).
 - `d >= 5`: **yes** when `n >= 6` (guaranteed by choosing `G = SO(n,1)` with
   `n = 6` or any even `n >= 6`).
 
-Under these conditions, a degree-1 normal map `f: M_0 -> BGamma` is
-constructed from Thom transversality on the finite Poincare complex
-representing `BGamma` rationally (Wall, Section 9.4; see also Luck-Reich,
-*The Baum-Connes and Farrell-Jones Conjectures*, Section 2).
+**Gap (G2): Existence of degree-1 normal map.** For Wall's machinery, a
+degree-1 normal map `f: M_0 -> Y` requires the Spivak normal fibration of
+`Y` to admit a topological reduction (lift to a stable vector bundle). The
+previous version claimed this follows by transfer from the double cover
+`Y_pi ~ M`, but that descent is nontrivial: the stable normal bundle of `M`
+does not automatically descend to a topological reduction of the Spivak
+fibration of `Y` without an explicit equivariant lifting argument.
 
-**Caveat.** The surgery setup must preserve `pi_1(M) = Gamma` through the
-upgrade. This is ensured by the `pi-pi` theorem when the surgery is
-performed below the middle dimension, which holds when `d >= 5` (Wall,
-Theorem 4.1). See `problem7r-s3a-setup.md` for the detailed interface
-specification.
+**This gap is currently open.** It requires either:
+(a) a direct construction of the topological reduction of `nu_Y`, or
+(b) an equivariant bordism argument showing the Z/2-equivariant normal
+    structure on `M` descends to `Y`, or
+(c) bypassing Spivak entirely by working within Avramidi's rational surgery
+    framework (arXiv:1506.06293), which may handle the normal map
+    construction differently for rational PD inputs.
+
+**pi_1 preservation.** Assuming a degree-1 normal map exists, surgery below
+the middle dimension preserves `pi_1` by general position when `d >= 5`
+(Wall, Proposition 1.2). See `problem7r-s3a-setup.md` for the detailed
+interface specification.
 
 ### 4b. Obstruction Computation (p7r-s3b)
 
@@ -193,12 +228,16 @@ reflection lattice in `Isom(H^n)` with `n` even, `n >= 6`. Then:
 (a) **(Unconditional)** `Gamma in FH(Q)`: there exists a finite CW complex
     `Y` with `pi_1(Y) = Gamma` and `H_*(Y_tilde; Q) = 0` for `* > 0`.
 
-(b) **(Conditional on S)** If the rational surgery obstruction
-    `sigma in L_n(Z[Gamma]) tensor Q` vanishes for the degree-1 normal map
-    from Section 4a, then there exists a **closed manifold** `M` with
+(b) **(Conditional on G1 + G2 + S)** If:
+    - (G1) `Y` admits rational Poincare complex structure,
+    - (G2) the Spivak normal fibration of `Y` admits a topological
+      reduction, and
+    - (S) the rational surgery obstruction `sigma in L_n(Z[Gamma]) tensor Q`
+      vanishes for the resulting degree-1 normal map,
+    then there exists a **closed manifold** `M` with
     `pi_1(M) = Gamma` and `H_*(M_tilde; Q) = 0` for `* > 0`.
 
-The answer to Problem 7 is **yes** assuming condition (S).
+The answer to Problem 7 is **yes** assuming conditions (G1), (G2), and (S).
 
 ## 7. Path to Full Closure
 
