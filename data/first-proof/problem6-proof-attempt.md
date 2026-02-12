@@ -820,34 +820,89 @@ This motivates the open nontrivial bridge:
 Together with the proved ratio certificate `min_v ||Y_t(v)|| <= dbar_t/gbar_t`,
 AR-NT would close GPL-H stepwise (trivial rows already satisfy min-score < 1).
 
-### Conditional bridge lemma for AR-NT (proved algebraic reduction)
 
-Fix a nontrivial step and active set `A_t`.
-Let `s_v=||Y_t(v)||`, `d_v=tr(Y_t(v))`, and split
+### Bridge lemmas for AR-NT (proved reductions)
 
-- `A_- = {v : s_v <= 1}`
-- `A_+ = {v : s_v > 1}`.
+Fix a nontrivial step and active set `A_t`, and write
 
-Define total drift `D = sum_{v in A_t} d_v`, above-1 drift fraction
+- `s_v := ||Y_t(v)|| > 0`,
+- `d_v := tr(Y_t(v)) > 0`,
+- `D := sum_{v in A_t} d_v`,
+- `w_v := d_v/D` (so `sum_v w_v = 1`).
 
-`rho_+ := (1/D) sum_{v in A_+} d_v`,
+#### Lemma AR1 (exact reciprocal form)
 
-and extremal scores
+`gbar_t - dbar_t = (D/|A_t|) ( sum_{v in A_t} w_v/s_v - 1 )`.
 
-`m_- := min_{v in A_-} s_v`, `M_+ := max_{v in A_+} s_v` (if `A_+` nonempty).
+So
 
-Then:
+`dbar_t < gbar_t  <=>  sum_{v in A_t} w_v/s_v > 1`.
 
-`gbar_t - dbar_t`
-`= (1/|A_t|) [ sum_{A_-} d_v(1/s_v - 1) - sum_{A_+} d_v(1 - 1/s_v) ]`.
+Proof: `dbar_t = D/|A_t|` and `gbar_t = (1/|A_t|) sum_v d_v/s_v`.
 
-Hence a sufficient condition for `dbar_t < gbar_t` is
+#### Lemma AR2 (exact two-mass threshold)
 
-`(1/m_- - 1)(1-rho_+) > (1 - 1/M_+)rho_+`.
+Split
 
-Equivalently (when `A_+` nonempty):
+- `A_- := {v : s_v <= 1}`,
+- `A_+ := {v : s_v > 1}`,
+- `rho_+ := sum_{v in A_+} w_v`.
 
-`rho_+ < rho_crit := ((1/m_-)-1) / (((1/m_-)-1) + (1-1/M_+))`.
+Assume `A_-` and `A_+` are both nonempty, and define
 
-So AR-NT reduces to proving an upper bound on above-1 drift mass `rho_+`.
-This isolates the bridge into a concrete "mass-above-1" control problem.
+- `alpha_- := (1/(1-rho_+)) sum_{v in A_-} w_v/s_v`,
+- `beta_+ := (1/rho_+) sum_{v in A_+} w_v/s_v`.
+
+Then
+
+`dbar_t < gbar_t  <=>  rho_+ < rho_exact := (alpha_- - 1)/(alpha_- - beta_+)`.
+
+Proof: from AR1,
+`sum_v w_v/s_v = (1-rho_+)alpha_- + rho_+ beta_+`; solve `>1` for `rho_+`.
+
+#### Lemma AR3 (valid extremal sufficient condition)
+
+Let
+
+- `M_- := max_{v in A_-} s_v` (so `M_- <= 1`),
+- `m_+ := min_{v in A_+} s_v` (so `m_+ > 1`).
+
+If
+
+`rho_+ < rho_safe := ((1/M_-) - 1) / (((1/M_-) - 1) + (1 - 1/m_+))`,
+
+then `dbar_t < gbar_t`.
+
+Proof: `alpha_- >= 1/M_-` and `beta_+ <= 1/m_+`, so
+`(1-rho_+)alpha_- + rho_+ beta_+ >= (1-rho_+)/M_- + rho_+/m_+`.
+The displayed bound on `rho_+` is exactly the condition that this lower bound
+exceeds `1`.
+
+#### Corollary AR4 (one-parameter sufficient condition)
+
+If `rho_+ < 1 - M_-`, then `dbar_t < gbar_t`.
+
+Reason: in AR3, `1 - 1/m_+ < 1`, so `rho_safe > 1 - M_-`.
+
+This gives a stricter but simpler bridge target with no `A_+` extremal.
+
+### Reduced bridge obligation after AR1-AR4
+
+The theorem-level bridge can now be targeted in equivalent/sufficient forms:
+
+1. exact: prove `rho_+ < rho_exact`,
+2. safe extremal: prove `rho_+ < rho_safe`,
+3. simple sufficient: prove `rho_+ < 1 - M_-`.
+
+Any of these implies AR-NT, and AR-NT plus the ratio certificate closes the
+step condition.
+
+### Empirical note for AR3 vs AR4 (`n<=48`)
+
+From `data/first-proof/problem6-aggregate-ratio-results.json`:
+
+- nontrivial rows violating `rho_+ < rho_safe`: `0`,
+- nontrivial rows violating `rho_+ < 1 - M_-`: `1`.
+
+So AR4 is a useful simplification target but should not replace AR3 as the
+primary bridge condition.

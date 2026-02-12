@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Diagnostics for the aggregate-ratio bridge in GPL-H.
+"""Diagnostics for aggregate-ratio bridge quantities in GPL-H.
 
 Per step (active vertices only):
   s_v = ||Y_t(v)||,
@@ -14,6 +14,12 @@ Define:
 Deterministic certificate:
   min_v s_v <= ratio.
 Hence ratio < 1 certifies a good step.
+
+This script also computes AR-bridge quantities from the writeup:
+  rho_+    = d-weight above score 1,
+  rho_exact (exact threshold, when A_- and A_+ both nonempty),
+  rho_safe  (extremal sufficient threshold),
+  rho_simple = 1 - M_- (one-parameter sufficient threshold).
 """
 
 from __future__ import annotations
@@ -23,6 +29,7 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
+
 import numpy as np
 
 
@@ -154,27 +161,57 @@ def analyze_instance(inst, c_step: float):
             below = s <= 1.0
 
             sum_d = float(np.sum(d))
-            rho_plus = float(np.sum(d[above]) / sum_d) if np.any(above) else 0.0
+            w = d / max(sum_d, 1e-15)
+            inv_s = 1.0 / s
+            inv_mean = float(np.sum(w * inv_s))
+
+            rho_plus = float(np.sum(w[above])) if np.any(above) else 0.0
 
             pos_mass = float(np.sum(d[below] * (1.0 / s[below] - 1.0))) if np.any(below) else 0.0
             neg_mass = float(np.sum(d[above] * (1.0 - 1.0 / s[above]))) if np.any(above) else 0.0
-            gap_margin = pos_mass - neg_mass  # |A|*(gbar-dbar)
+            gap_margin = pos_mass - neg_mass  # D * (inv_mean - 1) = |A|*(gbar-dbar)
 
-            m_minus = float(np.min(s[below])) if np.any(below) else None
+            min_below = float(np.min(s[below])) if np.any(below) else None
+            M_minus = float(np.max(s[below])) if np.any(below) else None
+            m_plus = float(np.min(s[above])) if np.any(above) else None
             M_plus = float(np.max(s[above])) if np.any(above) else None
 
-            rho_crit = None
-            rho_crit_lower = None
-            rho_margin = None
-            if m_minus is not None:
-                if M_plus is None:
-                    rho_crit = 1.0
-                else:
-                    a = (1.0 / m_minus) - 1.0
-                    b = 1.0 - (1.0 / M_plus)
-                    rho_crit = a / (a + b) if (a + b) > 0 else 1.0
-                rho_crit_lower = 1.0 - m_minus
-                rho_margin = rho_crit - rho_plus
+            alpha_minus = None
+            beta_plus = None
+            rho_exact = None
+            rho_safe = None
+            rho_simple = None
+
+            rho_exact_margin = None
+            rho_safe_margin = None
+            rho_simple_margin = None
+
+            if np.any(below):
+                w_minus = float(np.sum(w[below]))
+                alpha_minus = float(np.sum(w[below] * inv_s[below]) / max(w_minus, 1e-15))
+                rho_simple = 1.0 - M_minus
+                rho_simple_margin = rho_simple - rho_plus
+
+            if np.any(above):
+                w_plus = float(np.sum(w[above]))
+                beta_plus = float(np.sum(w[above] * inv_s[above]) / max(w_plus, 1e-15))
+
+            if np.any(above) and np.any(below):
+                denom = alpha_minus - beta_plus
+                if denom > 1e-15:
+                    rho_exact = (alpha_minus - 1.0) / denom
+                    rho_exact_margin = rho_exact - rho_plus
+
+                a_safe = (1.0 / M_minus) - 1.0
+                b_safe = 1.0 - (1.0 / m_plus)
+                if a_safe + b_safe > 1e-15:
+                    rho_safe = a_safe / (a_safe + b_safe)
+                    rho_safe_margin = rho_safe - rho_plus
+            elif np.any(below) and not np.any(above):
+                rho_exact = 1.0
+                rho_safe = 1.0
+                rho_exact_margin = 1.0 - rho_plus
+                rho_safe_margin = 1.0 - rho_plus
 
             rows.append({
                 "graph": inst.graph_name,
@@ -191,17 +228,25 @@ def analyze_instance(inst, c_step: float):
                 "gbar": gbar,
                 "ratio": ratio,
                 "ratio_margin": float(gbar - dbar),
+                "inv_mean_minus_1": inv_mean - 1.0,
                 "above1_frac": float(np.mean(above)),
                 "above1_drift_frac": rho_plus,
                 "above1_max_score": float(np.max(s[above])) if np.any(above) else 0.0,
                 "pos_mass": pos_mass,
                 "neg_mass": neg_mass,
                 "gap_margin": gap_margin,
-                "m_minus": m_minus,
+                "min_below": min_below,
+                "M_minus": M_minus,
+                "m_plus": m_plus,
                 "M_plus": M_plus,
-                "rho_crit": rho_crit,
-                "rho_crit_lower": rho_crit_lower,
-                "rho_margin": rho_margin,
+                "alpha_minus": alpha_minus,
+                "beta_plus": beta_plus,
+                "rho_exact": rho_exact,
+                "rho_safe": rho_safe,
+                "rho_simple": rho_simple,
+                "rho_exact_margin": rho_exact_margin,
+                "rho_safe_margin": rho_safe_margin,
+                "rho_simple_margin": rho_simple_margin,
             })
 
         if best_v is None:
@@ -221,8 +266,7 @@ def analyze_instance(inst, c_step: float):
 def main() -> None:
     ap = argparse.ArgumentParser(description="Aggregate ratio diagnostics for GPL-H")
     ap.add_argument("--nmax", type=int, default=48)
-    ap.add_argument("--eps", nargs="+", type=float,
-                    default=[0.1, 0.12, 0.15, 0.2, 0.25, 0.3])
+    ap.add_argument("--eps", nargs="+", type=float, default=[0.1, 0.12, 0.15, 0.2, 0.25, 0.3])
     ap.add_argument("--c-step", type=float, default=0.5)
     ap.add_argument("--seed", type=int, default=20260212)
     ap.add_argument("--output", default="data/first-proof/problem6-aggregate-ratio-results.json")
@@ -275,13 +319,42 @@ def main() -> None:
     print(f"  above1_frac:    mean={np.mean(above):.6f} p95={np.quantile(above,0.95):.6f} max={np.max(above):.6f}")
     print(f"  above1_drift:   mean={np.mean(above_d):.6f} p95={np.quantile(above_d,0.95):.6f} max={np.max(above_d):.6f}")
 
-    rho_margin_all = np.array([r["rho_margin"] for r in rows if r["rho_margin"] is not None], dtype=float)
-    rho_margin_non = np.array([r["rho_margin"] for r in rows if r["rho_margin"] is not None and r["min_score"] > 1e-12], dtype=float)
-    if rho_margin_all.size:
-        print("\nMass-threshold margin:")
-        print(f"  rho_margin all: mean={np.mean(rho_margin_all):.6f} p05={np.quantile(rho_margin_all,0.05):.6f} min={np.min(rho_margin_all):.6f}")
-    if rho_margin_non.size:
-        print(f"  rho_margin nontrivial: mean={np.mean(rho_margin_non):.6f} p05={np.quantile(rho_margin_non,0.05):.6f} min={np.min(rho_margin_non):.6f}")
+    def nontrivial_margins(key: str) -> np.ndarray:
+        return np.array(
+            [
+                r[key]
+                for r in rows
+                if r[key] is not None and r["min_score"] > 1e-12
+            ],
+            dtype=float,
+        )
+
+    exact_margin_non = nontrivial_margins("rho_exact_margin")
+    safe_margin_non = nontrivial_margins("rho_safe_margin")
+    simple_margin_non = nontrivial_margins("rho_simple_margin")
+
+    print("\nBridge margins on nontrivial rows:")
+    if exact_margin_non.size:
+        print(
+            "  rho_exact-rho_+: "
+            f"mean={np.mean(exact_margin_non):.6f} "
+            f"p05={np.quantile(exact_margin_non,0.05):.6f} "
+            f"min={np.min(exact_margin_non):.6f}"
+        )
+    if safe_margin_non.size:
+        print(
+            "  rho_safe-rho_+:  "
+            f"mean={np.mean(safe_margin_non):.6f} "
+            f"p05={np.quantile(safe_margin_non,0.05):.6f} "
+            f"min={np.min(safe_margin_non):.6f}"
+        )
+    if simple_margin_non.size:
+        print(
+            "  (1-M_-)-rho_+:   "
+            f"mean={np.mean(simple_margin_non):.6f} "
+            f"p05={np.quantile(simple_margin_non,0.05):.6f} "
+            f"min={np.min(simple_margin_non):.6f}"
+        )
 
     hard = sorted(rows, key=lambda r: r["ratio"], reverse=True)[:15]
     print("\nTop ratio rows:")
@@ -298,7 +371,12 @@ def main() -> None:
         rr = [r for r in rows if r["family"] == fam]
         rf = np.array([r["ratio"] for r in rr], dtype=float)
         nf = np.array([r["min_score"] > 1e-12 for r in rr], dtype=bool)
-        rho_m = np.array([r["rho_margin"] for r in rr if r["rho_margin"] is not None and r["min_score"] > 1e-12], dtype=float)
+
+        fam_simple_margin = np.array(
+            [r["rho_simple_margin"] for r in rr if r["rho_simple_margin"] is not None and r["min_score"] > 1e-12],
+            dtype=float,
+        )
+
         by_family[fam] = {
             "rows": len(rr),
             "ratio_mean": float(np.mean(rf)),
@@ -307,7 +385,7 @@ def main() -> None:
             "nontrivial_rows": int(np.sum(nf)),
             "nontrivial_ratio_max": float(np.max(rf[nf])) if np.any(nf) else None,
             "above1_drift_p95": float(np.quantile(np.array([r["above1_drift_frac"] for r in rr]), 0.95)),
-            "rho_margin_min": float(np.min(rho_m)) if rho_m.size else None,
+            "rho_simple_margin_min": float(np.min(fam_simple_margin)) if fam_simple_margin.size else None,
         }
 
     out = {
@@ -323,7 +401,12 @@ def main() -> None:
             "nontrivial_ratio_fail_rows": int(np.sum(ratio[nontrivial] >= 1.0 - 1e-12)) if np.any(nontrivial) else 0,
             "above1_frac_mean": float(np.mean(above)),
             "above1_drift_mean": float(np.mean(above_d)),
-            "rho_margin_min": float(np.min(rho_margin_non)) if rho_margin_non.size else None,
+            "rho_exact_margin_min": float(np.min(exact_margin_non)) if exact_margin_non.size else None,
+            "rho_safe_margin_min": float(np.min(safe_margin_non)) if safe_margin_non.size else None,
+            "rho_simple_margin_min": float(np.min(simple_margin_non)) if simple_margin_non.size else None,
+            "rho_exact_fail_rows": int(np.sum(exact_margin_non <= 1e-12)) if exact_margin_non.size else 0,
+            "rho_safe_fail_rows": int(np.sum(safe_margin_non <= 1e-12)) if safe_margin_non.size else 0,
+            "rho_simple_fail_rows": int(np.sum(simple_margin_non <= 1e-12)) if simple_margin_non.size else 0,
         },
         "by_family": by_family,
         "top_ratio_rows": hard,

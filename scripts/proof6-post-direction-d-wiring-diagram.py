@@ -4,7 +4,7 @@
 Current bridge focus:
 - proved ratio certificate: min score <= dbar/gbar
 - open AR-NT target: nontrivial => dbar<gbar
-- proved algebraic reduction: AR-NT follows from a bound on above-1 drift mass
+- proved AR lemmas: exact rho threshold and valid extremal sufficient threshold
 """
 
 from __future__ import annotations
@@ -35,16 +35,15 @@ def run_summary_text(run_path: Path) -> str:
     try:
         payload = json.loads(run_path.read_text())
         s = payload["summary"]
-        fr = s["fractions"]
-        rs = s["ratio_stats"]
         return (
-            "Empirical post-D diagnostics (n<=48): "
-            f"ratio_or_trivial={fr['ratio_or_trivial']:.3f}, "
-            f"nontrivial_ratio_fail={fr['nontrivial_ratio_fail']:.3f}, "
-            f"ratio_max_nontrivial={rs['nontrivial_ratio_max']:.3f}."
+            "Empirical AR diagnostics (n<=48): "
+            f"nontrivial_ratio_fail={s['nontrivial_ratio_fail_rows']}, "
+            f"rho_safe_fail={s['rho_safe_fail_rows']}, "
+            f"rho_simple_fail={s['rho_simple_fail_rows']}, "
+            f"rho_safe_margin_min={s['rho_safe_margin_min']:.3f}."
         )
     except Exception as exc:  # noqa: BLE001
-        return f"Could not parse split summary at {run_path}: {exc}"
+        return f"Could not parse aggregate-ratio summary at {run_path}: {exc}"
 
 
 def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
@@ -104,8 +103,8 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             node_type="answer",
             post_id=6304,
             body_text=(
-                "Conditional bridge (proved reduction): dbar<gbar follows from a bound "
-                "on above-1 drift mass rho_+ below explicit rho_crit(m_-,M_+)."
+                "Bridge lemmas (proved): AR1 exact reciprocal form, AR2 exact "
+                "rho_exact threshold, AR3 valid extremal sufficient threshold rho_safe(M_-,m_+)."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -117,7 +116,7 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             node_type="answer",
             post_id=6305,
             body_text=(
-                "Open bridge obligation: prove H1-H4 force rho_+ < rho_crit on nontrivial steps."
+                "Open bridge obligation: derive rho_+ < rho_exact (or rho_+ < rho_safe) from H1-H4 on nontrivial steps."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -159,6 +158,19 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             parent_post_id=6300,
             tags={"verification_status": "proved"},
         ),
+        ThreadNode(
+            id="p6d-o",
+            node_type="comment",
+            post_id=6309,
+            body_text=(
+                "Optional shortcut AR4 (rho_+ < 1-M_-) is only sufficient, not equivalent; "
+                "empirically it has one nontrivial miss at n<=48."
+            ),
+            score=0,
+            creation_date="2026-02-12",
+            parent_post_id=6300,
+            tags={"verification_status": "empirical"},
+        ),
     ]
 
     d.edges = [
@@ -187,14 +199,14 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             source="p6d-c",
             target="p6d-ar",
             edge_type="reference",
-            evidence="AR-NT reduced to above-1 drift mass inequality",
+            evidence="AR-NT reduced to exact/safe rho_+ threshold control",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-b",
             target="p6d-ar",
             edge_type="assert",
-            evidence="Remaining theorem-level bridge is rho_+ bound",
+            evidence="Remaining theorem-level bridge is proving rho_+ threshold from H1-H4",
             detection="structural",
         ),
         ThreadEdge(
@@ -208,7 +220,7 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             source="p6d-e",
             target="p6d-ar",
             edge_type="exemplify",
-            evidence="Empirics support AR-NT on tested nontrivial rows",
+            evidence="Empirics support AR-NT and the rho_safe bridge on tested nontrivial rows",
             detection="structural",
         ),
         ThreadEdge(
@@ -222,7 +234,14 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             source="p6d-r",
             target="p6d-c",
             edge_type="reference",
-            evidence="Conditional bridge is built on ratio certificate variables",
+            evidence="AR bridge lemmas are built on ratio-certificate variables",
+            detection="structural",
+        ),
+        ThreadEdge(
+            source="p6d-o",
+            target="p6d-c",
+            edge_type="challenge",
+            evidence="One-parameter shortcut is too strong to be the primary bridge",
             detection="structural",
         ),
     ]
@@ -253,8 +272,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Generate post-D wiring diagram")
     ap.add_argument(
         "--run-summary",
-        default="data/first-proof/problem6-post-d-regime-split-results.json",
-        help="Path to post-D run summary JSON",
+        default="data/first-proof/problem6-aggregate-ratio-results.json",
+        help="Path to aggregate-ratio run summary JSON",
     )
     ap.add_argument(
         "--out",

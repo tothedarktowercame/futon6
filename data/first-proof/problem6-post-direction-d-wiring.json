@@ -53,7 +53,7 @@
       "id": "p6d-c",
       "node_type": "answer",
       "post_id": 6304,
-      "body_text": "Conditional bridge (proved reduction): dbar<gbar follows from a bound on above-1 drift mass rho_+ below explicit rho_crit(m_-,M_+).",
+      "body_text": "Bridge lemmas (proved): AR1 exact reciprocal form, AR2 exact rho_exact threshold, AR3 valid extremal sufficient threshold rho_safe(M_-,m_+).",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": 6300,
@@ -65,7 +65,7 @@
       "id": "p6d-b",
       "node_type": "answer",
       "post_id": 6305,
-      "body_text": "Open bridge obligation: prove H1-H4 force rho_+ < rho_crit on nontrivial steps.",
+      "body_text": "Open bridge obligation: derive rho_+ < rho_exact (or rho_+ < rho_safe) from H1-H4 on nontrivial steps.",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": 6300,
@@ -89,7 +89,7 @@
       "id": "p6d-e",
       "node_type": "comment",
       "post_id": 6307,
-      "body_text": "Empirical post-D diagnostics (n<=48): ratio_or_trivial=1.000, nontrivial_ratio_fail=0.000, ratio_max_nontrivial=0.741.",
+      "body_text": "Empirical AR diagnostics (n<=48): nontrivial_ratio_fail=0, rho_safe_fail=0, rho_simple_fail=1, rho_safe_margin_min=0.037.",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": 6300,
@@ -107,6 +107,18 @@
       "parent_post_id": 6300,
       "tags": {
         "verification_status": "proved"
+      }
+    },
+    {
+      "id": "p6d-o",
+      "node_type": "comment",
+      "post_id": 6309,
+      "body_text": "Optional shortcut AR4 (rho_+ < 1-M_-) is only sufficient, not equivalent; empirically it has one nontrivial miss at n<=48.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "empirical"
       }
     }
   ],
@@ -136,14 +148,14 @@
       "source": "p6d-c",
       "target": "p6d-ar",
       "edge_type": "reference",
-      "evidence": "AR-NT reduced to above-1 drift mass inequality",
+      "evidence": "AR-NT reduced to exact/safe rho_+ threshold control",
       "detection": "structural"
     },
     {
       "source": "p6d-b",
       "target": "p6d-ar",
       "edge_type": "assert",
-      "evidence": "Remaining theorem-level bridge is rho_+ bound",
+      "evidence": "Remaining theorem-level bridge is proving rho_+ threshold from H1-H4",
       "detection": "structural"
     },
     {
@@ -157,7 +169,7 @@
       "source": "p6d-e",
       "target": "p6d-ar",
       "edge_type": "exemplify",
-      "evidence": "Empirics support AR-NT on tested nontrivial rows",
+      "evidence": "Empirics support AR-NT and the rho_safe bridge on tested nontrivial rows",
       "detection": "structural"
     },
     {
@@ -171,7 +183,14 @@
       "source": "p6d-r",
       "target": "p6d-c",
       "edge_type": "reference",
-      "evidence": "Conditional bridge is built on ratio certificate variables",
+      "evidence": "AR bridge lemmas are built on ratio-certificate variables",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-o",
+      "target": "p6d-c",
+      "edge_type": "challenge",
+      "evidence": "One-parameter shortcut is too strong to be the primary bridge",
       "detection": "structural"
     }
   ],
@@ -267,7 +286,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "AR-NT reduced to above-1 drift mass inequality",
+        "evidence": "AR-NT reduced to exact/safe rho_+ threshold control",
         "detection": "structural"
       },
       "hx/labels": [
@@ -292,7 +311,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Remaining theorem-level bridge is rho_+ bound",
+        "evidence": "Remaining theorem-level bridge is proving rho_+ threshold from H1-H4",
         "detection": "structural"
       },
       "hx/labels": [
@@ -342,7 +361,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Empirics support AR-NT on tested nontrivial rows",
+        "evidence": "Empirics support AR-NT and the rho_safe bridge on tested nontrivial rows",
         "detection": "structural"
       },
       "hx/labels": [
@@ -392,7 +411,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Conditional bridge is built on ratio certificate variables",
+        "evidence": "AR bridge lemmas are built on ratio-certificate variables",
         "detection": "structural"
       },
       "hx/labels": [
@@ -400,31 +419,56 @@
         "reference",
         "structural"
       ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-009",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-o",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-c",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "One-parameter shortcut is too strong to be the primary bridge",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "structural"
+      ]
     }
   ],
   "stats": {
-    "n_nodes": 9,
-    "n_edges": 9,
+    "n_nodes": 10,
+    "n_edges": 10,
     "node_types": {
       "question": 1,
       "answer": 7,
-      "comment": 1
+      "comment": 2
     },
     "edge_types": {
-      "challenge": 1,
+      "challenge": 2,
       "reform": 2,
       "reference": 3,
       "assert": 2,
       "exemplify": 1
     },
     "detection_types": {
-      "structural": 9
+      "structural": 10
     },
     "verification_status": {
       "open": 3,
       "proved_negative": 1,
       "proved": 4,
-      "empirical": 1
+      "empirical": 2
     }
   }
 }

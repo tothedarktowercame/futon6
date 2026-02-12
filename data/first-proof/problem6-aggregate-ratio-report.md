@@ -47,70 +47,45 @@ Equivalently in the tested range:
 
 > `min_score>0  =>  ratio<1`.
 
-## Structural detail
+## Correct bridge lemmas tracked by the script
 
-Rows with nontrivial steps are overwhelmingly below the score-1 threshold:
+For active vertices, with `s_v=||Y_t(v)||`, `d_v=tr(Y_t(v))`, `w_v=d_v/sum d`:
 
-- nontrivial `max_score` p95: `0.83496`
-- only 3 nontrivial rows have `max_score>1`, all in dense ER late steps,
-  but still `ratio<1`.
+- exact criterion: `dbar<gbar  <=>  sum_v w_v/s_v > 1`
+- exact threshold form (when both `A_-={s<=1}` and `A_+={s>1}` are nonempty):
+  - `rho_+ < rho_exact := (alpha_- - 1)/(alpha_- - beta_+)`
+  - `alpha_- = E_{w|A_-}[1/s]`, `beta_+ = E_{w|A_+}[1/s]`
+- valid extremal sufficient condition:
+  - `rho_+ < rho_safe := ((1/M_-) - 1)/(((1/M_-) - 1) + (1 - 1/m_+))`
+  - `M_- = max_{A_-} s`, `m_+ = min_{A_+} s`
+- stricter one-parameter sufficient condition:
+  - `rho_+ < 1 - M_-`
 
-Above-1 drift mass is tiny on nontrivial rows:
+## Margin results (`n<=48`)
 
-- mean `above1_drift_frac`: `8.38e-4`
-- max `above1_drift_frac`: `0.0650`
+On nontrivial rows:
+
+- `rho_exact - rho_+` min: `0.839219` (failures: `0`)
+- `rho_safe - rho_+` min: `0.036920` (failures: `0`)
+- `(1-M_-) - rho_+` min: `-0.041177` (failures: `1`)
+
+So the corrected extremal bridge (`rho_safe`) is empirically consistent on all
+sampled nontrivial rows. The one-parameter shortcut (`rho_+ < 1-M_-`) is not
+universally valid empirically (one counterexample row), so it should be treated
+as a stronger optional target, not the primary bridge.
 
 ## Implication for the proof program
 
-This suggests a sharper open theorem candidate:
+The current theorem-level bridge is now best framed as proving either:
 
-### AR-NT (aggregate ratio, nontrivial form) — open
+1. exact threshold control (`rho_+ < rho_exact`), or
+2. extremal sufficient control (`rho_+ < rho_safe`).
 
-Under H1-H4, if `min_v ||Y_t(v)|| > 0`, then
-
-`dbar_t / gbar_t < 1`.
-
-Combined with the proved ratio certificate, AR-NT implies a good step on every
-nontrivial row; trivial rows are already solved (`min=0`).
-
-So GPL-H is reduced to proving AR-NT (or an equivalent inequality forcing it).
+Either one implies AR-NT and closes the nontrivial step condition via the ratio
+certificate.
 
 ## Files
 
 - `scripts/verify-p6-gpl-h-aggregate-ratio.py`
 - `data/first-proof/problem6-aggregate-ratio-results.json`
 - `data/first-proof/problem6-aggregate-ratio-report.md`
-
-## Conditional bridge inequality (mass-above-1 form)
-
-For nontrivial rows, splitting active vertices by `s_v=||Y_t(v)||` into
-`A_-={s_v<=1}` and `A_+={s_v>1}`, we get
-
-`gbar - dbar = (1/|A|)[ sum_{A_-} d_v(1/s_v-1) - sum_{A_+} d_v(1-1/s_v) ]`.
-
-So `dbar<gbar` follows if
-
-`(1/m_- - 1)(1-rho_+) > (1 - 1/M_+)rho_+`,
-
-where
-- `m_- = min_{A_-} s_v`,
-- `M_+ = max_{A_+} s_v`,
-- `rho_+ = (sum_{A_+} d_v)/(sum_A d_v)`.
-
-Equivalent threshold form:
-
-`rho_+ < rho_crit = ((1/m_-)-1)/(((1/m_-)-1)+(1-1/M_+))`.
-
-### Empirical margin (`n<=48`)
-
-From `data/first-proof/problem6-aggregate-ratio-results.json` on nontrivial rows:
-
-- `rho_+` mean `8.38e-4`, max `0.0650`
-- `rho_crit` min `0.9655`
-- margin `rho_crit - rho_+` min `0.9005`
-- violations of threshold condition: `0`
-
-So in tested data, the bridge condition holds with very large slack.
-
-This suggests a plausible path to closure: prove a universal H1-H4 bound forcing
-`rho_+` far below `rho_crit`.
