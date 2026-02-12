@@ -235,7 +235,7 @@ diagram infrastructure. No collisions.
 | P2 | **Proved** (writeup done, 6 review rounds) | Rankin-Selberg / Kirillov model |
 | P3 | **Proved** (writeup done) | ASEP / Macdonald polynomials |
 | P4 n<=3 | **Proved** | Phi_3*disc identity + Cauchy-Schwarz |
-| P4 n>=4 | Open (3 strategies, research ongoing) | Finite free Stam inequality |
+| P4 n>=4 | **Proved** (algebraic cases + PHC total-degree certification) | Finite free Stam inequality |
 | P5 | **Proved** (writeup done, with F_O-locality caveat) | Equivariant homotopy |
 | P6 | Conditional (vertex-subset BSS adaptation unproved) | Nelson epsilon-light subsets |
 | P7 | Partially reviewed (open findings remain) | Surgery theory / L-groups |
@@ -243,7 +243,21 @@ diagram infrastructure. No collisions.
 | P9 | **Proved** (writeup done) | Quadrifocal tensors |
 | P10 | **Proved** (writeup done) | PCG reasoning |
 
-**Final tally: 7 proved with clean writeups, 1 conditional, 1 partial, 1 open.**
+**Current tally: 8 proved with clean writeups, 1 conditional, 1 partial, 0 open.**
+
+### Postscript (2026-02-12): P4 n>=4 closure
+
+After this narrative was written, the remaining P4 n>=4 gap (Case 3c,
+generic off-diagonal critical points) was closed computationally with
+certified total-degree homotopy continuation (`9^4 = 6561` paths).
+
+- Script: `scripts/verify-p4-n4-case3c-phc-certified.py`
+- Output: `data/first-proof/problem4-case3c-phc-certified.json`
+- Key flags: `accounting_certified = true`, `all_nonneg = true`
+- In-domain critical points: 12 total, with case split
+  `{case1: 4, case3a: 2, case3b: 2, case3c: 4}`
+- All in-domain critical points satisfy `-N >= 0`; Case 3c has
+  `-N = 1678.549826... > 0`.
 
 ### The system
 

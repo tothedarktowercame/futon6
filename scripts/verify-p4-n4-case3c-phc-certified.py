@@ -196,8 +196,15 @@ def main() -> int:
     failed = []
 
     for sol in end_sols:
-        d = strsol2dict(sol)
-        err, rco, res = diagnostics(sol)
+        try:
+            d = strsol2dict(sol)
+            err, rco, res = diagnostics(sol)
+        except Exception:
+            # Some PHCpack endpoint strings may contain non-literal diagnostics
+            # such as "NaN******", which strsol2dict/diagnostics cannot parse.
+            # Count these as failed endpoints for path accounting.
+            failed.append(sol)
+            continue
 
         # Check if t reached 1.0
         t_val = d.get("t", complex(0, 0))
@@ -254,8 +261,11 @@ def main() -> int:
 
     real_sols = []
     for sol in finite_regular + finite_singular:
-        d = strsol2dict(sol)
-        err, rco, res = diagnostics(sol)
+        try:
+            d = strsol2dict(sol)
+            err, rco, res = diagnostics(sol)
+        except Exception:
+            continue
         coords = {}
         is_real = True
         for k in ("a3", "a4", "b3", "b4"):
