@@ -5,7 +5,7 @@
       "id": "p6d-q",
       "node_type": "question",
       "post_id": 6300,
-      "body_text": "Post-D target: close GPL-H via regime split. Prove that at each Case-2b step, at least one branch certifies a vertex with ||Y_t(v)|| < 1.",
+      "body_text": "Post-D target: close GPL-H via branch disjunction under H1-H4.",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": null,
@@ -17,7 +17,7 @@
       "id": "p6d-a1",
       "node_type": "answer",
       "post_id": 6301,
-      "body_text": "Direction D finding: uniform near-rank-1 universality fails up to n<=48 (max rank gap > 2 in dense late steps).",
+      "body_text": "Direction D finding: uniform near-rank-1 universality fails up to n<=48 (dense late-step rows have rank gap > 2).",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": 6300,
@@ -26,15 +26,15 @@
       }
     },
     {
-      "id": "p6d-a2",
+      "id": "p6d-r",
       "node_type": "answer",
       "post_id": 6302,
-      "body_text": "Regime split template: low-gap branch + high-gap branch + trivial zero-score branch; glue by disjunction at each step.",
+      "body_text": "Ratio certificate (proved): on active vertices, letting m=min_v ||Y_t(v)||, dbar=avg tr(Y_t(v)), gbar=avg tr(Y_t(v))/||Y_t(v)||, we have m <= dbar/gbar. Hence dbar/gbar < 1 implies a good step.",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": 6300,
       "tags": {
-        "verification_status": "reformulation"
+        "verification_status": "proved"
       }
     },
     {
@@ -53,7 +53,7 @@
       "id": "p6d-h",
       "node_type": "answer",
       "post_id": 6304,
-      "body_text": "High-gap branch (open): if mean gap is large, convert drift control into score control using ||Y|| = tr(Y)/gap, yielding a good vertex.",
+      "body_text": "High-gap/ratio bridge (open): derive dbar/gbar < 1 from H1-H4 (possibly with explicit mild side condition).",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": 6300,
@@ -77,10 +77,10 @@
       "id": "p6d-e",
       "node_type": "comment",
       "post_id": 6306,
-      "body_text": "Empirical split diagnostics (n<=48): low=0.603, high=0.348, split=0.950, total=1.000; split misses=23 (max min_score=0.0).",
+      "body_text": "Empirical post-D diagnostics (n<=48): ratio_or_trivial=1.000, nontrivial_ratio_fail=0.000, ratio_max_nontrivial=0.741; split_plus_trivial=1.000.",
       "score": 0,
       "creation_date": "2026-02-12",
-      "parent_post_id": 6302,
+      "parent_post_id": 6300,
       "tags": {
         "verification_status": "empirical"
       }
@@ -89,7 +89,7 @@
       "id": "p6d-g",
       "node_type": "answer",
       "post_id": 6307,
-      "body_text": "Glue obligation (open): prove exhaustive either-or theorem so every step falls into low-gap, high-gap, or trivial branch with a certified good vertex.",
+      "body_text": "Glue obligation (open): prove that every nontrivial step satisfies either low-gap certification or ratio certification.",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": 6300,
@@ -115,77 +115,63 @@
       "source": "p6d-a1",
       "target": "p6d-q",
       "edge_type": "challenge",
-      "evidence": "Uniform near-rank-1 not valid globally; need split",
+      "evidence": "Uniform near-rank-1 failed; need split/ratio route",
       "detection": "structural"
     },
     {
-      "source": "p6d-a2",
+      "source": "p6d-r",
       "target": "p6d-q",
       "edge_type": "reform",
-      "evidence": "Replace universal Direction D with branch-wise theorem plan",
+      "evidence": "Reduce per-step success to proving dbar/gbar < 1",
       "detection": "structural"
     },
     {
       "source": "p6d-l",
-      "target": "p6d-a2",
-      "edge_type": "reference",
-      "evidence": "Low-gap theorem branch",
+      "target": "p6d-g",
+      "edge_type": "assert",
+      "evidence": "Low-gap certification branch",
       "detection": "structural"
     },
     {
       "source": "p6d-h",
-      "target": "p6d-a2",
-      "edge_type": "reference",
-      "evidence": "High-gap theorem branch",
+      "target": "p6d-g",
+      "edge_type": "assert",
+      "evidence": "High-gap/ratio certification branch",
       "detection": "structural"
     },
     {
       "source": "p6d-t",
-      "target": "p6d-a2",
-      "edge_type": "reference",
-      "evidence": "Zero-score trivial branch",
+      "target": "p6d-g",
+      "edge_type": "assert",
+      "evidence": "Trivial zero-score branch",
       "detection": "structural"
     },
     {
       "source": "p6d-e",
-      "target": "p6d-a2",
+      "target": "p6d-g",
       "edge_type": "exemplify",
-      "evidence": "Empirical branch coverage from post-D run",
+      "evidence": "Empirical branch behavior from post-D run",
       "detection": "structural"
     },
     {
       "source": "p6d-g",
       "target": "p6d-q",
       "edge_type": "reform",
-      "evidence": "Main missing theorem is an exhaustive branch disjunction",
+      "evidence": "Main missing theorem is branch disjunction for nontrivial steps",
       "detection": "structural"
     },
     {
       "source": "p6d-s",
       "target": "p6d-g",
       "edge_type": "reference",
-      "evidence": "Once branch theorem gives per-step good vertex, closure follows",
+      "evidence": "Per-step certification implies overall closure",
       "detection": "structural"
     },
     {
-      "source": "p6d-l",
-      "target": "p6d-g",
-      "edge_type": "assert",
-      "evidence": "Low-gap certification contributes to glue theorem",
-      "detection": "structural"
-    },
-    {
-      "source": "p6d-h",
-      "target": "p6d-g",
-      "edge_type": "assert",
-      "evidence": "High-gap certification contributes to glue theorem",
-      "detection": "structural"
-    },
-    {
-      "source": "p6d-t",
-      "target": "p6d-g",
-      "edge_type": "assert",
-      "evidence": "Trivial certification contributes to glue theorem",
+      "source": "p6d-r",
+      "target": "p6d-h",
+      "edge_type": "reference",
+      "evidence": "Ratio certificate is the endpoint of high-gap bridge",
       "detection": "structural"
     }
   ],
@@ -206,7 +192,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Uniform near-rank-1 not valid globally; need split",
+        "evidence": "Uniform near-rank-1 failed; need split/ratio route",
         "detection": "structural"
       },
       "hx/labels": [
@@ -221,7 +207,7 @@
       "hx/ends": [
         {
           "role": "source",
-          "ident": "p6d-a2",
+          "ident": "p6d-r",
           "node_type": "answer"
         },
         {
@@ -231,7 +217,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Replace universal Direction D with branch-wise theorem plan",
+        "evidence": "Reduce per-step success to proving dbar/gbar < 1",
         "detection": "structural"
       },
       "hx/labels": [
@@ -242,7 +228,7 @@
     },
     {
       "hx/id": "first-proof-p6-post-d:edge-002",
-      "hx/type": "thread/reference",
+      "hx/type": "thread/assert",
       "hx/ends": [
         {
           "role": "source",
@@ -251,23 +237,23 @@
         },
         {
           "role": "target",
-          "ident": "p6d-a2",
+          "ident": "p6d-g",
           "node_type": "answer"
         }
       ],
       "hx/content": {
-        "evidence": "Low-gap theorem branch",
+        "evidence": "Low-gap certification branch",
         "detection": "structural"
       },
       "hx/labels": [
         "thread",
-        "reference",
+        "assert",
         "structural"
       ]
     },
     {
       "hx/id": "first-proof-p6-post-d:edge-003",
-      "hx/type": "thread/reference",
+      "hx/type": "thread/assert",
       "hx/ends": [
         {
           "role": "source",
@@ -276,23 +262,23 @@
         },
         {
           "role": "target",
-          "ident": "p6d-a2",
+          "ident": "p6d-g",
           "node_type": "answer"
         }
       ],
       "hx/content": {
-        "evidence": "High-gap theorem branch",
+        "evidence": "High-gap/ratio certification branch",
         "detection": "structural"
       },
       "hx/labels": [
         "thread",
-        "reference",
+        "assert",
         "structural"
       ]
     },
     {
       "hx/id": "first-proof-p6-post-d:edge-004",
-      "hx/type": "thread/reference",
+      "hx/type": "thread/assert",
       "hx/ends": [
         {
           "role": "source",
@@ -301,17 +287,17 @@
         },
         {
           "role": "target",
-          "ident": "p6d-a2",
+          "ident": "p6d-g",
           "node_type": "answer"
         }
       ],
       "hx/content": {
-        "evidence": "Zero-score trivial branch",
+        "evidence": "Trivial zero-score branch",
         "detection": "structural"
       },
       "hx/labels": [
         "thread",
-        "reference",
+        "assert",
         "structural"
       ]
     },
@@ -326,12 +312,12 @@
         },
         {
           "role": "target",
-          "ident": "p6d-a2",
+          "ident": "p6d-g",
           "node_type": "answer"
         }
       ],
       "hx/content": {
-        "evidence": "Empirical branch coverage from post-D run",
+        "evidence": "Empirical branch behavior from post-D run",
         "detection": "structural"
       },
       "hx/labels": [
@@ -356,7 +342,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Main missing theorem is an exhaustive branch disjunction",
+        "evidence": "Main missing theorem is branch disjunction for nontrivial steps",
         "detection": "structural"
       },
       "hx/labels": [
@@ -381,7 +367,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Once branch theorem gives per-step good vertex, closure follows",
+        "evidence": "Per-step certification implies overall closure",
         "detection": "structural"
       },
       "hx/labels": [
@@ -392,83 +378,33 @@
     },
     {
       "hx/id": "first-proof-p6-post-d:edge-008",
-      "hx/type": "thread/assert",
+      "hx/type": "thread/reference",
       "hx/ends": [
         {
           "role": "source",
-          "ident": "p6d-l",
+          "ident": "p6d-r",
           "node_type": "answer"
         },
         {
           "role": "target",
-          "ident": "p6d-g",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Low-gap certification contributes to glue theorem",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "assert",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6-post-d:edge-009",
-      "hx/type": "thread/assert",
-      "hx/ends": [
-        {
-          "role": "source",
           "ident": "p6d-h",
           "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6d-g",
-          "node_type": "answer"
         }
       ],
       "hx/content": {
-        "evidence": "High-gap certification contributes to glue theorem",
+        "evidence": "Ratio certificate is the endpoint of high-gap bridge",
         "detection": "structural"
       },
       "hx/labels": [
         "thread",
-        "assert",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6-post-d:edge-010",
-      "hx/type": "thread/assert",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6d-t",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6d-g",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Trivial certification contributes to glue theorem",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "assert",
+        "reference",
         "structural"
       ]
     }
   ],
   "stats": {
     "n_nodes": 9,
-    "n_edges": 11,
+    "n_edges": 9,
     "node_types": {
       "question": 1,
       "answer": 7,
@@ -477,18 +413,17 @@
     "edge_types": {
       "challenge": 1,
       "reform": 2,
-      "reference": 4,
+      "assert": 3,
       "exemplify": 1,
-      "assert": 3
+      "reference": 2
     },
     "detection_types": {
-      "structural": 11
+      "structural": 9
     },
     "verification_status": {
       "open": 4,
       "proved_negative": 1,
-      "reformulation": 1,
-      "proved": 2,
+      "proved": 3,
       "empirical": 1
     }
   }

@@ -32,6 +32,7 @@ class StepRow:
     active: int
     min_score: float
     mean_score: float
+    mean_drift: float
     mean_gap: float
     p90_gap: float
     max_gap: float
@@ -125,6 +126,7 @@ def analyze_instance(inst, c_step: float):
 
         scores = []
         active_scores = []
+        active_drifts = []
         gaps = []
         rank1_ratios = []
 
@@ -150,6 +152,7 @@ def analyze_instance(inst, c_step: float):
                 rank1_ratio = (score_v * score_v / frob_sq) if frob_sq > 1e-14 else 1.0
 
                 active_scores.append(score_v)
+                active_drifts.append(drift_v)
                 gaps.append(gap_v)
                 rank1_ratios.append(rank1_ratio)
 
@@ -169,6 +172,7 @@ def analyze_instance(inst, c_step: float):
                     active=len(gaps),
                     min_score=float(min(scores)) if scores else 0.0,
                     mean_score=float(np.mean(active_scores)),
+                    mean_drift=float(np.mean(active_drifts)),
                     mean_gap=float(np.mean(gaps)),
                     p90_gap=float(np.percentile(gaps, 90)),
                     max_gap=float(np.max(gaps)),
@@ -204,6 +208,9 @@ def main():
     ap.add_argument("--json-out", type=str, default="")
     args = ap.parse_args()
 
+    # Base helper uses np.random.shuffle internally; seed global RNG for reproducibility.
+    np.random.seed(args.seed)
+
     repo_root = Path(__file__).resolve().parents[1]
     base = load_base_module(repo_root)
 
@@ -230,6 +237,7 @@ def main():
     rank1 = np.array([r.mean_rank1_ratio for r in rows], dtype=float)
     min_scores = np.array([r.min_score for r in rows], dtype=float)
     mean_scores = np.array([r.mean_score for r in rows], dtype=float)
+    mean_drifts = np.array([r.mean_drift for r in rows], dtype=float)
 
     print("=" * 86)
     print("Direction D: Near-rank-1 diagnostics for GPL-H trajectories")
@@ -247,6 +255,7 @@ def main():
           f"p05={q(rank1,0.05):.4f} min={np.min(rank1):.4f}")
     print(f"  min_score:  max={np.max(min_scores):.6f}")
     print(f"  mean_score: max={np.max(mean_scores):.6f}")
+    print(f"  mean_drift: mean={np.mean(mean_drifts):.6f} p95={q(mean_drifts,0.95):.6f} max={np.max(mean_drifts):.6f}")
     print()
 
     for th in [1.02, 1.05, 1.10, 1.20, 1.40]:
@@ -272,7 +281,7 @@ def main():
         print(
             f"  {r.graph:<16} n={r.n:>2} eps={r.eps:>4.2f} t={r.t:>2} "
             f"active={r.active:>2} mean_gap={r.mean_gap:.3f} "
-            f"max_gap={r.max_gap:.3f} mean_score={r.mean_score:.3f}"
+            f"max_gap={r.max_gap:.3f} mean_score={r.mean_score:.3f} mean_drift={r.mean_drift:.3f}"
         )
 
     if args.json_out:
@@ -291,6 +300,9 @@ def main():
                 "rank1_ratio_min": float(np.min(rank1)),
                 "min_score_max": float(np.max(min_scores)),
                 "mean_score_max": float(np.max(mean_scores)),
+                "mean_drift_mean": float(np.mean(mean_drifts)),
+                "mean_drift_p95": q(mean_drifts, 0.95),
+                "mean_drift_max": float(np.max(mean_drifts)),
             },
         }
         out_path = Path(args.json_out)

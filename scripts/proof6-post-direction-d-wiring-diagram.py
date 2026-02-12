@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Generate post-Direction-D wiring diagram for Problem 6.
 
-This diagram captures the post-D strategy split:
-- Low-gap perturbative shadow branch
-- High-gap drift-to-score branch
-- Trivial zero-score branch
-and the glue obligation to close GPL-H.
+This diagram captures the post-D strategy after extracting a proved ratio
+certificate:
+  min score <= (avg drift)/(avg gap).
 """
 
 from __future__ import annotations
@@ -37,12 +35,13 @@ def run_summary_text(run_path: Path) -> str:
         payload = json.loads(run_path.read_text())
         s = payload["summary"]
         fr = s["fractions"]
+        rs = s["ratio_stats"]
         return (
-            "Empirical split diagnostics (n<=48): "
-            f"low={fr['low']:.3f}, high={fr['high']:.3f}, "
-            f"split={fr['split_covered']:.3f}, total={fr['covered']:.3f}; "
-            f"split misses={s['counts']['split_miss_rows']} "
-            f"(max min_score={s['miss_stats']['split_miss_max_min_score']})."
+            "Empirical post-D diagnostics (n<=48): "
+            f"ratio_or_trivial={fr['ratio_or_trivial']:.3f}, "
+            f"nontrivial_ratio_fail={fr['nontrivial_ratio_fail']:.3f}, "
+            f"ratio_max_nontrivial={rs['nontrivial_ratio_max']:.3f}; "
+            f"split_plus_trivial={fr['split_plus_trivial']:.3f}."
         )
     except Exception as exc:  # noqa: BLE001
         return f"Could not parse split summary at {run_path}: {exc}"
@@ -57,9 +56,7 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             node_type="question",
             post_id=6300,
             body_text=(
-                "Post-D target: close GPL-H via regime split. Prove that at each "
-                "Case-2b step, at least one branch certifies a vertex with "
-                "||Y_t(v)|| < 1."
+                "Post-D target: close GPL-H via branch disjunction under H1-H4."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -71,7 +68,7 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             post_id=6301,
             body_text=(
                 "Direction D finding: uniform near-rank-1 universality fails up to "
-                "n<=48 (max rank gap > 2 in dense late steps)."
+                "n<=48 (dense late-step rows have rank gap > 2)."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -79,17 +76,18 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             tags={"verification_status": "proved_negative"},
         ),
         ThreadNode(
-            id="p6d-a2",
+            id="p6d-r",
             node_type="answer",
             post_id=6302,
             body_text=(
-                "Regime split template: low-gap branch + high-gap branch + trivial "
-                "zero-score branch; glue by disjunction at each step."
+                "Ratio certificate (proved): on active vertices, letting "
+                "m=min_v ||Y_t(v)||, dbar=avg tr(Y_t(v)), gbar=avg tr(Y_t(v))/||Y_t(v)||, "
+                "we have m <= dbar/gbar. Hence dbar/gbar < 1 implies a good step."
             ),
             score=0,
             creation_date="2026-02-12",
             parent_post_id=6300,
-            tags={"verification_status": "reformulation"},
+            tags={"verification_status": "proved"},
         ),
         ThreadNode(
             id="p6d-l",
@@ -110,8 +108,8 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             node_type="answer",
             post_id=6304,
             body_text=(
-                "High-gap branch (open): if mean gap is large, convert drift control "
-                "into score control using ||Y|| = tr(Y)/gap, yielding a good vertex."
+                "High-gap/ratio bridge (open): derive dbar/gbar < 1 from H1-H4 "
+                "(possibly with explicit mild side condition)."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -138,7 +136,7 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             body_text=run_summary_text(run_path),
             score=0,
             creation_date="2026-02-12",
-            parent_post_id=6302,
+            parent_post_id=6300,
             tags={"verification_status": "empirical"},
         ),
         ThreadNode(
@@ -146,9 +144,8 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             node_type="answer",
             post_id=6307,
             body_text=(
-                "Glue obligation (open): prove exhaustive either-or theorem so every "
-                "step falls into low-gap, high-gap, or trivial branch with a "
-                "certified good vertex."
+                "Glue obligation (open): prove that every nontrivial step satisfies "
+                "either low-gap certification or ratio certification."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -175,77 +172,63 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             source="p6d-a1",
             target="p6d-q",
             edge_type="challenge",
-            evidence="Uniform near-rank-1 not valid globally; need split",
+            evidence="Uniform near-rank-1 failed; need split/ratio route",
             detection="structural",
         ),
         ThreadEdge(
-            source="p6d-a2",
+            source="p6d-r",
             target="p6d-q",
             edge_type="reform",
-            evidence="Replace universal Direction D with branch-wise theorem plan",
+            evidence="Reduce per-step success to proving dbar/gbar < 1",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-l",
-            target="p6d-a2",
-            edge_type="reference",
-            evidence="Low-gap theorem branch",
+            target="p6d-g",
+            edge_type="assert",
+            evidence="Low-gap certification branch",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-h",
-            target="p6d-a2",
-            edge_type="reference",
-            evidence="High-gap theorem branch",
+            target="p6d-g",
+            edge_type="assert",
+            evidence="High-gap/ratio certification branch",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-t",
-            target="p6d-a2",
-            edge_type="reference",
-            evidence="Zero-score trivial branch",
+            target="p6d-g",
+            edge_type="assert",
+            evidence="Trivial zero-score branch",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-e",
-            target="p6d-a2",
+            target="p6d-g",
             edge_type="exemplify",
-            evidence="Empirical branch coverage from post-D run",
+            evidence="Empirical branch behavior from post-D run",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-g",
             target="p6d-q",
             edge_type="reform",
-            evidence="Main missing theorem is an exhaustive branch disjunction",
+            evidence="Main missing theorem is branch disjunction for nontrivial steps",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-s",
             target="p6d-g",
             edge_type="reference",
-            evidence="Once branch theorem gives per-step good vertex, closure follows",
+            evidence="Per-step certification implies overall closure",
             detection="structural",
         ),
         ThreadEdge(
-            source="p6d-l",
-            target="p6d-g",
-            edge_type="assert",
-            evidence="Low-gap certification contributes to glue theorem",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p6d-h",
-            target="p6d-g",
-            edge_type="assert",
-            evidence="High-gap certification contributes to glue theorem",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p6d-t",
-            target="p6d-g",
-            edge_type="assert",
-            evidence="Trivial certification contributes to glue theorem",
+            source="p6d-r",
+            target="p6d-h",
+            edge_type="reference",
+            evidence="Ratio certificate is the endpoint of high-gap bridge",
             detection="structural",
         ),
     ]

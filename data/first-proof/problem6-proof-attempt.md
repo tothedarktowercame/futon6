@@ -767,3 +767,38 @@ So the only open implication is: H1-H4 => min_v ||Y_t(v)|| <= theta.
 - G_H = (V, {e : τ_e > ε}): heavy edge subgraph
 - I: independent set in G_H
 - M = L^{+/2} L_{G[S]} L^{+/2}: normalized induced Laplacian
+
+### Post-D ratio certificate (proved)
+
+Let `A_t = { v in R_t : score_t(v) > 0 }` and define
+
+- `s_v := ||Y_t(v)||`
+- `d_v := tr(Y_t(v))`
+- `g_v := d_v / s_v`  (rank gap)
+- `m_t := min_{v in A_t} s_v`
+- `dbar_t := (1/|A_t|) sum_{v in A_t} d_v`
+- `gbar_t := (1/|A_t|) sum_{v in A_t} g_v`
+
+Then for every step with `A_t != emptyset`:
+
+`m_t <= dbar_t / gbar_t`.
+
+Proof: for each active `v`, `d_v = s_v g_v >= m_t g_v`. Averaging over `A_t` gives
+`dbar_t >= m_t gbar_t`, hence `m_t <= dbar_t / gbar_t`.
+
+Corollary (step certificate): if `dbar_t / gbar_t < 1`, then `m_t < 1`, so a good
+step exists.
+
+This is unconditional and uses only PSD identities.
+
+### Reduced open bridge after Direction D
+
+Using the ratio certificate, GPL-H reduces to proving a stepwise inequality of
+one of the following forms under H1-H4:
+
+1. `dbar_t / gbar_t < 1` for all nontrivial steps (`m_t > 0`), or
+2. a disjunction implying it (e.g. low-gap branch OR high-gap/ratio branch).
+
+So the current missing theorem is no longer direct control of
+`min_v ||Y_t(v)||` itself, but an inequality forcing `dbar_t < gbar_t` on
+nontrivial steps.
