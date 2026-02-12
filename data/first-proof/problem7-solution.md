@@ -9,13 +9,13 @@ fundamental group of a closed manifold whose universal cover is acyclic over
 
 ## Status in This Writeup
 
-**Answer: conditional yes.** Obligation (E2) — placing `Gamma` in `FH(Q)` —
-is discharged unconditionally for a concrete reflection-lattice family.
-Obligation (S) — upgrading from finite CW complex to closed manifold — is
-conditional on three items: (G1) that the FH(Q) complex admits rational
-Poincare complex structure, (G2) that its Spivak normal fibration admits a
-topological reduction, and (S) that the rational surgery obstruction
-vanishes. The S-branch analysis is outlined below.
+**Answer: conditional yes.**
+
+- Obligation (E2) — placing `Gamma` in `FH(Q)` — is **discharged
+  unconditionally** for a concrete reflection-lattice family.
+- Obligation (S) — upgrading from finite CW complex to closed manifold —
+  is **open**. We describe the available geometric data and three candidate
+  approaches, each with unresolved obstacles.
 
 ## 1. Baseline Geometry
 
@@ -86,126 +86,126 @@ The E2 obligation is discharged by the following construction (details in
 
 **E2 status: discharged** for this lattice family.
 
-## 4. The Remaining Gap: Obligation S (Manifold Upgrade)
+## 4. Obligation S: From Finite Complex to Closed Manifold (Open)
 
 Problem 7 asks for a **closed manifold** `M` with `pi1(M) = Gamma` and
-`H_*(M_tilde; Q) = 0` for `* > 0`. Obligation E2 gives a finite CW complex
-with these properties. The upgrade to a closed manifold requires:
+`H_*(M_tilde; Q) = 0` for `* > 0`. Obligation E2 gives a finite CW
+complex with these properties; the upgrade to a closed manifold is the
+remaining open problem.
 
-1. A surgery setup producing a degree-1 normal map to a finite Poincare
-   complex representing `Gamma`.
-2. Vanishing (or controlled membership) of the surgery obstruction in the
-   appropriate L-group.
+### Available geometric data
 
-### 4a. Surgery Setup Interface (p7r-s3a)
+The construction in Section 3b provides:
 
-`Gamma` is finitely presented (it is a lattice in a Lie group). The finite
-CW complex `Y` from E2 has `pi_1(Y) = Gamma` and `Y~` rationally acyclic.
+- `pi`: a torsion-free cocompact lattice in `Isom(H^n)`, with `n` even
+  `>= 6`.
+- `M = H^n/pi`: a closed hyperbolic `n`-manifold. `M` is a closed manifold
+  with `pi_1(M) = pi` and contractible universal cover.
+- `tau`: an involution on `M` with fixed set `F` — a closed, totally
+  geodesic `(n-1)`-manifold.
+- `Gamma = pi rtimes Z/2`: the target group (cocompact lattice with
+  order-2 torsion).
+- `Y`: a finite CW complex with `pi_1(Y) = Gamma` and `Y~` rationally
+  acyclic (from Fowler's theorem).
+- `H^n/Gamma`: a compact orbifold with `pi_1^{orb} = Gamma`, mirror
+  singularity along the image of `F`.
 
-**Gap (G1): `Y` is not automatically a Poincare complex.** FH(Q) gives a
-finite CW complex with rationally acyclic universal cover, but does not
-directly endow `Y` with a (rational) Poincare complex structure (fundamental
-class + cap product duality). A separate argument is needed:
+The torsion-free quotient `M` already solves the problem for `pi`. The
+difficulty is entirely in passing from `pi` to `Gamma` — from the
+torsion-free lattice to its Z/2-extension.
 
-- `Y~` is simply connected (universal cover) and rationally acyclic, so by
-  rational Hurewicz, `pi_*(Y~) tensor Q = 0` for all `* > 0`, meaning `Y~`
-  is rationally contractible.
-- The Serre spectral sequence for `Y~ -> Y -> BGamma` then collapses,
-  giving `H_*(Y; Q) = H_*(Gamma; Q)`.
-- `Gamma` has rational PD in dimension `n` (Section 2, Bredon framework).
-- So `H_*(Y; Q)` satisfies rational Poincare duality.
+### Approach I: Wall surgery via the FH(Q) complex
 
-However, this shows PD on homology groups, not that `Y` admits a geometric
-fundamental class with cap product duality at the chain level. Promoting
-this to a rational Poincare complex structure on `Y` requires either:
-(a) an explicit chain-level duality construction (e.g., via the equivariant
-    diagonal on `Y~`), or
-(b) a reference showing that finite CW complexes with rationally
-    contractible universal cover and rational-PD fundamental group inherit
-    rational Poincare complex structure.
+**Idea.** Use `Y` (the FH(Q) complex) as the target of a surgery problem.
+Promote `Y` to a rational Poincare complex, find a degree-1 normal map to
+it, and show the surgery obstruction vanishes.
 
-**This gap is currently open.** We proceed conditionally on `Y` admitting
-rational Poincare complex structure.
+**Obstacles.**
 
-For the surgery exact sequence to apply (Wall, *Surgery on Compact
-Manifolds*, Chapter 9), we need (assuming G1 resolved):
+1. *Poincare complex structure.* FH(Q) gives a finite CW complex `Y` with
+   rationally acyclic universal cover, but not a Poincare complex. Since
+   `Y~` is rationally contractible (by rational Hurewicz from rational
+   acyclicity + simple connectivity), the Serre spectral sequence collapses
+   and `H_*(Y; Q) = H_*(Gamma; Q)`, which satisfies rational PD
+   (Section 2). But promoting homology-level PD to a chain-level Poincare
+   complex structure on `Y` has not been done.
 
-- `Gamma` finitely presented: **yes** (lattice).
-- A finite `d`-dimensional rational Poincare complex: **open** (G1).
-- `d >= 5`: **yes** when `n >= 6` (guaranteed by choosing `G = SO(n,1)` with
-  `n = 6` or any even `n >= 6`).
+2. *Degree-1 normal map.* Even with Poincare complex structure, a degree-1
+   normal map `f: M_0 -> Y` requires the Spivak normal fibration of `Y` to
+   admit a topological reduction. No construction of this reduction has been
+   given.
 
-**Gap (G2): Existence of degree-1 normal map.** For Wall's machinery, a
-degree-1 normal map `f: M_0 -> Y` requires the Spivak normal fibration of
-`Y` to admit a topological reduction (lift to a stable vector bundle). The
-previous version claimed this follows by transfer from the double cover
-`Y_pi ~ M`, but that descent is nontrivial: the stable normal bundle of `M`
-does not automatically descend to a topological reduction of the Spivak
-fibration of `Y` without an explicit equivariant lifting argument.
+3. *Surgery obstruction.* The obstruction `sigma(f) in L_n(Z[Gamma]) tensor Q`
+   is not known to vanish. The Farrell-Jones conjecture (which holds for
+   `Gamma`) identifies this L-group with equivariant L-homology, but the
+   resulting computation has not been completed. See `problem7r-s3b-obstruction.md`
+   for the FJ reduction framework and a conjectural (but unverified)
+   localization of the obstruction.
 
-**This gap is currently open.** It requires either:
-(a) a direct construction of the topological reduction of `nu_Y`, or
-(b) an equivariant bordism argument showing the Z/2-equivariant normal
-    structure on `M` descends to `Y`, or
-(c) bypassing Spivak entirely by working within Avramidi's rational surgery
-    framework (arXiv:1506.06293), which may handle the normal map
-    construction differently for rational PD inputs.
+**Status.** This approach has three successive obstacles, each open.
+See `problem7r-s3a-setup.md` for the detailed analysis.
 
-**pi_1 preservation.** Assuming a degree-1 normal map exists, surgery below
-the middle dimension preserves `pi_1` by general position when `d >= 5`
-(Wall, Proposition 1.2). See `problem7r-s3a-setup.md` for the detailed
-interface specification.
+### Approach II: Equivariant surgery on (M, tau)
 
-### 4b. Obstruction Computation (p7r-s3b)
+**Idea.** Work directly with the closed manifold `M` and the involution
+`tau`. Eliminate the fixed set `F` by equivariant surgery to obtain `M'`
+with a free Z/2-action. Then `M'/(Z/2)` is a closed manifold with
+`pi_1 = Gamma`.
 
-The surgery obstruction lives in `L_d(Z[Gamma])`. By the Farrell-Jones
-isomorphism (Bartels-Farrell-Luck, arXiv:1101.0469, for cocompact lattices
-in virtually connected Lie groups), this reduces to an equivariant homology
-computation:
+**Potential advantages.** Bypasses the FH(Q) complex entirely — no need
+for Poincare complex structure or Spivak reduction. Works with the concrete
+geometric data (M, tau, F).
 
-`L_d(Z[Gamma]) tensor Q  ~=  H_d^{Gamma}(E_{VCyc}Gamma; L tensor Q)`
+**Obstacles.**
 
-where `E_{VCyc}Gamma` is the classifying space for the family of virtually
-cyclic subgroups.
+1. *Equivariant surgery obstruction.* The obstruction to eliminating
+   a codimension-1 fixed set by equivariant surgery is nontrivial
+   (Dovermann-Schultz, *Equivariant Surgery Theories*, Springer LNM 1443).
+   No computation has been done for this specific lattice action.
 
-The Atiyah-Hirzebruch spectral sequence for the equivariant homology
-`H_*^{Gamma}(E_{VCyc}Gamma; L tensor Q)` has `E^2_{p,q}` terms involving
-`H_p^{Gamma}(E_{VCyc}Gamma; L_q(Z) tensor Q)`. The rational L-theory
-spectrum satisfies `L_q(Z) tensor Q = Q` for `q = 0 mod 4` and `0`
-otherwise. The spectral sequence collapses rationally (Ranicki, *Algebraic
-L-Theory and Topological Manifolds*, Proposition 15.11).
+2. *pi_1 control.* Equivariant surgery modifying `M` near `F` must
+   preserve the property that the quotient has `pi_1 = Gamma`. This
+   requires tracking the effect of equivariant handle operations on the
+   orbifold fundamental group.
 
-For `d = n = 6`: the contributing terms are `E^2_{p,q}` with `p + q = 6`
-and `q = 0 mod 4`, giving `(p,q) = (6,0)` and `(2,4)`. These terms are
-potentially nonzero and the obstruction class lies in their sum.
+3. *Rational acyclicity.* The modified `M'` must still have rationally
+   acyclic universal cover. If the equivariant surgery only changes `M`
+   rationally trivially (e.g., by rational cobordism), this is preserved.
 
-**This does not automatically vanish.** The earlier claim of "vanishing by
-parity" was too coarse. Instead:
+**Status.** Not explored beyond this sketch.
 
-- For `d` odd (achievable if we work with `d = n + 1` via a product
-  `Gamma x Z` acting on `X x R`, or by choosing an odd-dimensional lattice
-  variant), the relevant `(p,q)` pairs with `p + q` odd and `q = 0 mod 4`
-  force `p` odd, and the obstruction is valued in `H_{odd}` of the
-  classifying space. This is heuristically favorable for vanishing, but a
-  proof that `H_{odd}` terms vanish for the specific lattices under
-  consideration has not been supplied and should not be assumed.
+### Approach III: Orbifold resolution
 
-- For `d = 6` as stated, the obstruction is potentially nonzero and requires
-  either:
-  (a) An explicit computation showing the assembly map sends the obstruction
-      class to zero in this case, or
-  (b) A dimension shift: work with `Gamma x Z` acting on `X x R` to move to
-      odd total dimension `7` where the obstruction vanishes, then extract
-      the closed `6`-manifold via restriction.
+**Idea.** The quotient `H^n/Gamma` is a compact orbifold with mirror
+singularity. Resolve the singularity to produce a closed manifold with
+`pi_1 = Gamma` and rationally acyclic universal cover.
 
-**Current status.** The obstruction computation for the specific
-Douba-Vargas Pallete lattice in dimension 6 is not yet complete. The proof
-is **conditional on vanishing of the rational surgery obstruction
-`sigma(f) in L_6(Z[Gamma]) tensor Q`** for the degree-1 normal map `f`
-from Section 4a.
+**Obstacles.**
 
-See `problem7r-s3b-obstruction.md` for the detailed computation attempt and
-remaining gaps.
+1. *pi_1 preservation.* Standard orbifold resolution (e.g., cutting along
+   the mirror and doubling) typically changes the fundamental group.
+   A resolution preserving `pi_1 = Gamma` would need to be specifically
+   constructed.
+
+2. *Rational acyclicity.* The resolution must preserve (or establish)
+   rational acyclicity of the universal cover.
+
+**Status.** Not explored beyond this sketch.
+
+### Structural observation: dimension-parity tension
+
+The E2 obligation requires `n` **even** (so the fixed set has odd dimension
+and Euler characteristic zero). But the surgery obstruction computation
+(Approach I) and the AHSS structure of `L_n(Z[Gamma]) tensor Q` have better
+vanishing properties when `n` is **odd** (the 4-periodicity of rational
+L-theory forces `p` odd in the contributing `E^2_{p,q}` terms). No
+vanishing result for odd `p` has been proved for these lattices, but the
+structural favorability is real. This tension between E2 and S is a central
+difficulty.
+
+An alternative would be to find a lattice construction where E2 works in
+odd dimension (fixed set with even dimension but zero Euler characteristic).
+This has not been attempted.
 
 ## 5. Remark: Absence of Smith-Theory Obstruction
 
@@ -220,7 +220,7 @@ This section addresses a natural objection and explains why it does not
 apply. It does not contribute to the constructive argument, which is entirely
 in Sections 3-4.
 
-## 6. Theorem (Conditional)
+## 6. Theorem
 
 **Theorem.** Let `Gamma` be the cocompact lattice extension
 `1 -> pi -> Gamma -> Z/2 -> 1` constructed in Section 3b from an arithmetic
@@ -229,34 +229,29 @@ reflection lattice in `Isom(H^n)` with `n` even, `n >= 6`. Then:
 (a) **(Unconditional)** `Gamma in FH(Q)`: there exists a finite CW complex
     `Y` with `pi_1(Y) = Gamma` and `H_*(Y_tilde; Q) = 0` for `* > 0`.
 
-(b) **(Conditional on G1 + G2 + S)** If:
-    - (G1) `Y` admits rational Poincare complex structure,
-    - (G2) the Spivak normal fibration of `Y` admits a topological
-      reduction, and
-    - (S) the rational surgery obstruction `sigma in L_n(Z[Gamma]) tensor Q`
-      vanishes for the resulting degree-1 normal map,
-    then there exists a **closed manifold** `M` with
-    `pi_1(M) = Gamma` and `H_*(M_tilde; Q) = 0` for `* > 0`.
-
-The answer to Problem 7 is **yes** assuming conditions (G1), (G2), and (S).
+(b) **(Open)** Whether there exists a **closed manifold** `M` with
+    `pi_1(M) = Gamma` and `H_*(M_tilde; Q) = 0` for `* > 0` remains
+    unresolved. Three approaches to the manifold-upgrade problem are
+    described in Section 4; none has been completed.
 
 ## 7. Path to Full Closure
 
-To remove the conditional:
+Resolving obligation S requires completing any one of the three approaches
+in Section 4. The most concrete next steps:
 
-1. **Dimension selection.** Determine whether an odd manifold dimension can
-   be achieved for this lattice family (which would give automatic vanishing
-   of the rational obstruction via the `L_q` periodicity argument).
+1. **For Approach I (Wall surgery):** resolve the Poincare complex structure
+   (obstacle 1), ideally by finding a reference for chain-level PD promotion
+   of finite complexes with rationally contractible universal covers.
 
-2. **Direct computation.** For `n = 6`: compute the assembly image of
-   `sigma` in `L_6(Z[Gamma]) tensor Q` using the Farrell-Jones reduction
-   and the specific structure of `Gamma` as a `Z/2`-extension of a
-   hyperbolic lattice.
+2. **For Approach II (equivariant surgery):** compute the equivariant
+   surgery obstruction to eliminating the fixed set F in (M, tau) for the
+   specific lattice. This requires engaging with the Dovermann-Schultz
+   framework.
 
-3. **Closed-manifold subgroup.** Apply Crowley-Luck-Macko
-   (arXiv:0905.0104, Theorems A/B) to determine whether the assembly image
-   lies in the closed-manifold realization subgroup for the given decorations
-   and dimension.
+3. **For all approaches:** investigate whether an odd-dimensional E2
+   construction exists (lattice with 2-torsion where the fixed set has
+   even dimension but vanishing Euler characteristic), which would ease the
+   surgery obstruction computation.
 
 ## References
 
@@ -272,6 +267,8 @@ To remove the conditional:
   Lattices in Virtually Connected Lie Groups*, arXiv:1401.0876.
 - D. Crowley, W. Luck, T. Macko, *Surgery Theory: Foundations*,
   arXiv:0905.0104.
+- K. H. Dovermann, R. Schultz, *Equivariant Surgery Theories and Their
+  Periodicity Properties*, Springer LNM 1443, 1990.
 - A. Ranicki, *Algebraic L-Theory and Topological Manifolds*, Cambridge
   Tracts in Mathematics 102, 1992.
 - K. S. Brown, *Cohomology of Groups*, Springer GTM 87.

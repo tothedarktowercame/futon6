@@ -1,22 +1,28 @@
-# Problem 7 Reduced: `p7r-s3b` Obstruction Computation and Closure
+# Problem 7 Reduced: `p7r-s3b` Obstruction Computation (Approach I)
 
 Date: 2026-02-12
 
-## Target Node
+## Scope
 
-`p7r-s3b`: compute or cite the rational surgery obstruction for the
-concrete lattice family from `p7r-s2b`, and determine whether it vanishes.
+This document analyzes the surgery obstruction computation that would be needed
+if **Approach I** (Wall surgery via the FH(Q) complex) were carried through.
+It is relevant only if the two upstream obstacles (Poincare complex structure,
+degree-1 normal map existence) from `p7r-s3a-setup.md` are resolved. Currently,
+**neither upstream obstacle has been overcome**, so the computation here is
+conditional.
 
-## Input from upstream
+For alternative approaches to obligation S that bypass this computation, see
+`problem7-solution.md`, Section 4 (Approaches II and III).
 
-From `p7r-s3a` (open — two gaps remain):
+**Status: OPEN.** The Farrell-Jones reduction framework (Steps 1-2) is solid.
+The transfer argument (Step 3) and localization (Step 4) are conjectural
+sketches with unverified intermediate steps.
+
+## Input (conditional)
 
 - `Gamma = pi rtimes Z/2`, where `pi` is torsion-free cocompact in
   `Isom(H^n)`, `n` even `>= 6`. Concrete choice: `n = 6`.
-- Surgery prerequisites partially verified: finite presentation and
-  dimension confirmed; rational Poincare complex structure (G1) and
-  degree-1 normal map existence (G2) are open.
-- **Conditional assumption for this document**: we assume G1 and G2 are
+- **Conditional assumption**: the two upstream obstacles from `p7r-s3a` are
   resolved, so that a degree-1 normal map `f: M_0 -> Y` exists and the
   surgery obstruction `sigma(f) in L_6(Z[Gamma]) tensor Q` is well-defined.
 - Farrell-Jones conjecture holds for `Gamma` (Bartels-Farrell-Luck,
@@ -392,9 +398,9 @@ applies to the full rationalized L-group.
 **Difficulty:** none for the broad conditional; moderate for the tightened
 version (requires U1-U3, G3).
 
-## Summary and node status
+## Summary
 
-### What is established
+### What is established (unconditional)
 
 1. The Farrell-Jones reduction to equivariant L-homology (Step 1): solid.
 2. The `E_{Fin}` vs `E_{VCyc}` comparison via UNil rationalization (Step 1):
@@ -404,27 +410,31 @@ version (requires U1-U3, G3).
 4. The dimension-parity tension between E2 and S (Step 6): structural
    observation, solid.
 
-### What is conditional or conjectural
+These results characterize the obstruction group. They do not resolve
+whether the obstruction vanishes.
 
-1. `sigma(f) in ker(res)` — requires compatible normal map construction
-   (G3, depends on G2).
-2. `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)` — conjectural, depends on
-   unverified claims U1-U3 (free/fixed splitting, equivariant Thom
-   isomorphism, twisted L-theory coefficients).
-3. Whether `sigma(f) = 0` — not addressed.
-4. Whether an odd-dimensional E2 construction exists — not addressed.
+### What is conjectural
 
-### Node status
+1. `sigma(f) in ker(res)` — requires the (unconstructed) normal map to be
+   compatible with the covering structure.
+2. `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)` — rests on three unverified
+   intermediate claims (U1-U3).
+3. Whether `sigma(f) = 0` — not addressed by any of the above.
 
-**`p7r-s3b`: open.** The FJ reduction framework (Steps 1-2) is solid. The
-transfer argument (Step 3) and localization (Step 4) are sketched but rest
-on unproven intermediate lemmas (G3, U1-U3). The obstruction target space
-`Q + H_3(F; Q) + H_1(F; Q)` is a plausible but unverified conjecture.
+### Relation to alternative approaches
 
-The proof remains conditional on `sigma(f) = 0` (plus G1, G2, G3 from
-upstream). The FJ reduction and dimension-parity analysis represent genuine
-progress; the localization formula needs verification before it can be
-relied upon.
+This entire document is specific to **Approach I** (Wall surgery). The two
+alternative approaches in `problem7-solution.md`, Section 4 face different
+obstacles:
+
+- **Approach II** (equivariant surgery on `(M, tau)`) would need to compute
+  the equivariant surgery obstruction to eliminating a codimension-1 fixed set
+  (Dovermann-Schultz framework). This is a different computation from the one
+  analyzed here.
+
+- **Approach III** (orbifold resolution) would need to control `pi_1` and
+  rational acyclicity through the resolution process. No obstruction-theoretic
+  computation is needed if a direct geometric construction succeeds.
 
 ## References
 

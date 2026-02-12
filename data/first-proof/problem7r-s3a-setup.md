@@ -1,12 +1,18 @@
-# Problem 7 Reduced: `p7r-s3a` Manifold-Upgrade Setup Interface
+# Problem 7 Reduced: `p7r-s3a` Approach I — Wall Surgery Setup
 
 Date: 2026-02-12
 
-## Target Node
+## Scope
 
-`p7r-s3a`: specify the surgery setup that upgrades the finite-CW realization
-from E2 (`Gamma in FH(Q)`) to a closed manifold with the same fundamental
-group and rationally acyclic universal cover.
+This document analyzes **Approach I** (Wall surgery via the FH(Q) complex) for
+the manifold-upgrade problem (obligation S) described in `problem7-solution.md`,
+Section 4. Two alternative approaches — equivariant surgery on `(M, tau)` and
+orbifold resolution — are sketched in the solution document but not analyzed in
+detail here.
+
+**Status: OPEN.** This approach has three successive unresolved obstacles
+(Poincare complex structure, degree-1 normal map, surgery obstruction). None
+has been overcome.
 
 ## Input from upstream nodes
 
@@ -28,17 +34,19 @@ From `p7r-s2b` (discharged):
 Produce a closed `n`-manifold `M` with `pi_1(M) = Gamma` and
 `H_*(M_tilde; Q) = 0` for `* > 0`.
 
-### Strategy
+### Strategy (Approach I)
 
-Use Wall's surgery exact sequence to upgrade the finite Poincare complex `Y`
-to a closed manifold. The plan:
+Use Wall's surgery exact sequence to upgrade the FH(Q) complex `Y` to a closed
+manifold. This requires:
 
-1. Establish that `Y` is a finite rational Poincare complex of dimension `n`.
-2. Construct a degree-1 normal map `f: M_0 -> Y` from a closed manifold.
-3. Perform surgery on `f` below the middle dimension to make it highly
-   connected while preserving `pi_1 = Gamma`.
-4. The remaining obstruction is `sigma(f) in L_n(Z[Gamma])`. If it vanishes
-   (rationally), the surgery succeeds.
+1. Establishing that `Y` is a finite rational Poincare complex of dimension `n`.
+2. Constructing a degree-1 normal map `f: M_0 -> Y` from a closed manifold.
+3. Performing surgery on `f` below the middle dimension, preserving
+   `pi_1 = Gamma`.
+4. Showing the surgery obstruction `sigma(f) in L_n(Z[Gamma])` vanishes
+   (rationally).
+
+Each of steps 1, 2, and 4 presents an unresolved obstacle.
 
 ## Verification of surgery prerequisites
 
@@ -152,7 +160,10 @@ equivalence. Since `Y_tilde` is rationally acyclic (by FH(Q)), so is
 
 ## Interface to p7r-s3b (obstruction computation)
 
-After this setup, the single remaining obligation is:
+**This interface is reached only if obstacles 1 and 2 above are resolved.**
+Currently, both are open.
+
+If P2 and P4 are established, the remaining obligation is:
 
 **Obstruction vanishing.** Show that the rational surgery obstruction
 
@@ -161,26 +172,7 @@ After this setup, the single remaining obligation is:
 vanishes for the degree-1 normal map `f: M_0 -> Y` from P4, with `n = 6`
 (or the chosen even dimension `n >= 6`).
 
-### What p7r-s3b receives
-
-- Group: `Gamma = pi rtimes Z/2`, where `pi` is a torsion-free cocompact
-  lattice in `Isom(H^n)`, n even >= 6.
-- Obstruction group: `L_n(Z[Gamma]) tensor Q`.
-- Farrell-Jones applies: `Gamma` is a cocompact lattice in a virtually
-  connected Lie group, so the K- and L-theoretic Farrell-Jones conjecture
-  holds (Bartels-Farrell-Luck, arXiv:1101.0469).
-- The specific normal map `f` comes from the Spivak normal fibration
-  lifted via the torsion-free double cover.
-
-### What p7r-s3b must produce
-
-Either:
-1. A proof that `sigma(f) = 0` in `L_n(Z[Gamma]) tensor Q`, or
-2. A computation of `L_n(Z[Gamma]) tensor Q` showing it is zero, or
-3. An explicit identification of the obstruction as an element that can be
-   shown to vanish by a specific argument, or
-4. An honest assessment that the obstruction is nonzero / unknown, with a
-   weakening to conditional.
+The obstruction computation is analyzed in `problem7r-s3b-obstruction.md`.
 
 ## Dimension selection analysis
 
@@ -217,20 +209,24 @@ If the dimension-6 obstruction proves intractable, consider:
    `L_6(Z[Gamma]) tensor Q` explicitly. This is the approach pursued in
    `p7r-s3b`.
 
-## Node-level status
+## Obstacle summary for Approach I
 
-- P1 (finitely presented): **verified**
-- P2 (finite Poincare complex): **GAP (G1)** — homology-level PD
-  established, chain-level promotion open
-- P3 (dimension >= 5): **verified** (n = 6)
-- P4 (degree-1 normal map existence): **GAP (G2)** — descent argument
-  insufficient, needs replacement
-- P5 (pi_1 preservation): **verified** (conditional on P4)
-- P6 (universal cover acyclicity preserved): **verified** (conditional on P4)
+| Prerequisite | Status | Obstacle |
+|---|---|---|
+| P1 (finitely presented) | Verified | — |
+| P2 (Poincare complex) | **Open** | Chain-level promotion from homology PD not proved |
+| P3 (dimension >= 5) | Verified | — |
+| P4 (degree-1 normal map) | **Open** | No construction; prior descent argument retracted |
+| P5 (pi_1 preservation) | Verified (if P4) | — |
+| P6 (rational acyclicity) | Verified (if P4) | — |
+| Obstruction vanishing | **Open** | See `p7r-s3b-obstruction.md` |
 
-**p7r-s3a status: OPEN.** Two gaps (G1, G2) remain in the surgery setup.
-These must be resolved before the obstruction computation in `p7r-s3b`
-becomes the sole remaining obligation.
+**Approach I status: OPEN.** Three successive obstacles (P2, P4, obstruction
+vanishing) are unresolved. Each blocks the next; none has been overcome.
+
+See `problem7-solution.md`, Section 4 for the two alternative approaches
+(equivariant surgery and orbifold resolution), which bypass the FH(Q) complex
+entirely.
 
 ## References
 

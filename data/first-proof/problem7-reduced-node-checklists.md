@@ -62,12 +62,18 @@ Completed via the even-dimensional reflection route
 
 See `problem7r-s2b-candidate-construction.md` for full details.
 
-## `p7r-s3a` checklist (manifold-upgrade setup interface)
+## `p7r-s3a` checklist (Approach I: Wall surgery setup)
+
+### Scope
+
+This node covers the Wall surgery approach to obligation S (Approach I in
+`problem7-solution.md`). Alternative approaches (equivariant surgery,
+orbifold resolution) are described in `problem7-solution.md`, Section 4.
 
 ### Target statement
 
-Set up a manifold realization step with explicit `pi_1` control for the chosen
-group family.
+Set up the surgery pipeline that upgrades the FH(Q) complex to a closed
+manifold with `pi_1 = Gamma` and rationally acyclic universal cover.
 
 ### Available theorem assets
 
@@ -80,65 +86,39 @@ group family.
    - Theorems 14/16 give rational `pi-pi` / rational surgery interfaces used
      to produce these manifold models.
 
-### Completion criterion
-
-Show all required hypotheses are met for the selected `Gamma` and dimension
-range, and record:
-1. exact `d`, `r`, and dimension constraints;
-2. finite-classifying-space and duality assumptions;
-3. explicit point where `pi_1` is fixed as `Gamma`.
-
 ### Critical caveat
 
 - Avramidi's closure to a closed manifold via reflection methods may alter the
   fundamental group unless extra control is shown. For reduced P7, any closure
   step must preserve final `pi_1 = Gamma`.
 
-### Status: OPEN (two gaps)
+### Status: OPEN (three obstacles)
 
-Surgery prerequisites partially verified (`problem7r-s3a-setup.md`):
+Surgery prerequisites analysis in `problem7r-s3a-setup.md`:
 
 - P1: finitely presented (lattice) — **verified**
-- P2: finite rational Poincare complex — **GAP (G1)**: homology-level PD
+- P2: finite rational Poincare complex — **open**: homology-level PD
   established (via spectral sequence collapse + Bredon PD), but chain-level
-  Poincare complex structure not yet proved
+  Poincare complex structure not proved
 - P3: dimension >= 5 (n = 6) — **verified**
-- P4: degree-1 normal map existence — **GAP (G2)**: descent from
-  torsion-free cover insufficient; needs equivariant lifting argument or
-  alternative construction
-- P5: pi_1 preservation — **verified** (conditional on P4)
-- P6: rational acyclicity preserved — **verified** (conditional on P4)
+- P4: degree-1 normal map existence — **open**: prior descent argument
+  retracted; no replacement construction
+- P5: pi_1 preservation — **verified** (if P4 holds)
+- P6: rational acyclicity preserved — **verified** (if P4 holds)
+- Surgery obstruction — **open**: see `p7r-s3b`
 
-## `p7r-s3b` checklist (obstruction computation + closure)
+## `p7r-s3b` checklist (Approach I: obstruction computation)
+
+### Scope
+
+This node covers the surgery obstruction computation for Approach I. It is
+relevant only if the upstream obstacles (P2, P4) from `p7r-s3a` are resolved.
+Currently they are not. See `problem7r-s3b-obstruction.md` for full analysis.
 
 ### Target statement
 
 Compute/cite the relevant surgery obstruction group/class and prove the needed
 vanishing in the selected lattice case.
-
-### Available theorem assets
-
-1. Farrell-Jones lattice coverage:
-   - `1101.0469`: cocompact lattices in virtually connected Lie groups satisfy
-     K/L-theoretic FJ (with additive-category coefficients, `VCyc` family).
-   - `1401.0876`: extends to arbitrary lattices in virtually connected Lie
-     groups.
-2. Assembly/L-theory reduction framework:
-   - surveys and computation templates (`1003.5002`, `1007.0845`, `1805.00226`,
-     `math/0510602`, `1204.2418`).
-3. Closed-manifold subgroup interface:
-   - `0905.0104` Theorem A/B relate inertia/closed-manifold subgroups and
-     assembly images under stated dimension/decoration conditions.
-
-### Completion criterion
-
-1. Identify the exact obstruction group (decoration and orientation character
-   included) for the chosen dimension.
-2. Use FJ to reduce to an assembly/equivariant-homology calculation in the
-   allowed family.
-3. Prove vanishing (or required membership) of the specific obstruction class.
-4. Verify that this implies realizability in the closed-manifold category for
-   the same `Gamma`.
 
 ### Critical caveats
 
@@ -146,59 +126,64 @@ vanishing in the selected lattice case.
 - Assembly image vs closed-manifold subgroup equality depends on hypotheses
   (dimension, decorations, orientation character, stabilization regime). Do not
   silently assume equality in unsupported settings.
+- This computation is specific to Approach I. The alternative approaches
+  (Approaches II and III in `problem7-solution.md`) face different obstacles.
 
 ### Status: OPEN (framework established, intermediate lemmas unverified)
 
-The FJ reduction framework is solid (`problem7r-s3b-obstruction.md`):
+The FJ reduction framework is solid:
 
 - UNil terms vanish rationally (Connolly-Davis), so `E_{Fin}` suffices.
 - Computation reduces to `H_6^{Z/2}(M; L tensor Q)`.
 - Dimension-parity tension identified: E2 needs even n, S prefers odd n.
-- Five resolution strategies proposed (A through E).
 
-The following are **sketched but not yet proved**:
+The following are **conjectural sketches, not proofs**:
 
-- Transfer argument `res(sigma(f)) = 0` requires compatible normal map
-  construction (G3, depends on resolving G2).
-- Localization `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)` is conjectural,
-  relying on unverified claims about free/fixed splitting (U1),
-  equivariant Thom isomorphism (U2), and twisted L-theory coefficients
-  (U3).
+- Transfer argument `res(sigma(f)) = 0` requires an unconstructed compatible
+  normal map.
+- Localization `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)` rests on three
+  unverified intermediate claims (free/fixed splitting, equivariant Thom
+  isomorphism, twisted L-theory coefficients).
+- Even if the localization holds, whether `sigma(f) = 0` is not addressed.
 
-Proof remains **conditional on G1 + G2 + G3 + sigma(f) = 0**. The
-conjectural localization formula is a plausible target but not yet
-reliable.
+## Overall status
 
-## Fast execution order (recommended)
+### E2 branch: discharged
 
-1. `p7r-s2a`: lock theorem interface from Fowler Main Theorem. **Done.**
-2. `p7r-s2b`: produce true order-2 instantiation. **Done** (reflection route).
-3. `p7r-s3a`: fix surgery setup with `pi_1` control. **Open** — two gaps
-   remain (G1: Poincare complex structure, G2: normal map existence).
-4. `p7r-s3b`: run FJ reduction plus obstruction computation. **Open** —
-   FJ framework solid, but transfer argument (G3) and localization formula
-   (U1-U3) are unverified.
-5. Only then assert `p7r-s5`. **Blocked on s3a and s3b.**
+1. `p7r-s2a`: Fowler criterion interface locked. **Done.**
+2. `p7r-s2b`: reflection-lattice instantiation. **Done.**
 
-## Current bottlenecks (ordered by priority)
+### S branch: open
 
-**G1** (critical): show the FH(Q) complex `Y` admits rational Poincare
-complex structure. Homology-level PD is established; chain-level promotion
-needs a proof or reference.
+Obligation S (manifold upgrade) is an **open problem** with three candidate
+approaches, none completed. See `problem7-solution.md`, Section 4.
 
-**G2** (critical): construct a degree-1 normal map `f: M_0 -> Y`. The
-previous descent argument from the torsion-free cover was insufficient.
-Most promising approach: work within Avramidi's rational surgery framework
-or construct via equivariant bordism.
+3. `p7r-s3a` (Approach I setup): **Open** — three successive obstacles
+   (Poincare complex, normal map, obstruction vanishing).
+4. `p7r-s3b` (Approach I obstruction): **Open** — FJ reduction solid,
+   transfer and localization conjectural, obstruction vanishing unaddressed.
+5. `p7r-s5` (full closure): **Blocked** on resolving S via any approach.
 
-**G3** (major): construct the normal map compatibly with the covering, so
-that `res(sigma(f)) = 0`. Likely resolves jointly with G2 if the right
-construction is used.
+Approaches II (equivariant surgery) and III (orbifold resolution) are
+described in `problem7-solution.md` but have not been analyzed in detail.
 
-**U1-U3** (major): verify the free/fixed splitting, equivariant Thom
-isomorphism, and twisted L-theory coefficient claims underlying the
-conjectural localization `ker(res) ~= Q + H_3(F; Q) + H_1(F; Q)`.
+### Path forward
 
-**sigma(f) = 0** (hard): even after all the above, the obstruction itself
-must be shown to vanish. The dimension-parity tension (E2 needs even n,
-S prefers odd n) is the fundamental structural difficulty.
+The most concrete next steps for each approach:
+
+**Approach I (Wall surgery):** Resolve the Poincare complex structure
+obstacle (P2). The chain-level promotion from homology PD is the first
+bottleneck; without it, the normal map and obstruction questions are moot.
+
+**Approach II (equivariant surgery):** Compute the equivariant surgery
+obstruction to eliminating the fixed set `F` in `(M, tau)` using the
+Dovermann-Schultz framework. This is unexplored.
+
+**Approach III (orbifold resolution):** Construct a resolution of the
+mirror singularity in `H^n/Gamma` that preserves `pi_1 = Gamma` and
+rational acyclicity. This is unexplored.
+
+**Cross-cutting:** Investigate whether an odd-dimensional E2 construction
+exists (fixed set with even dimension but zero Euler characteristic).
+This would ease the surgery obstruction for Approach I and potentially
+simplify Approach II.
