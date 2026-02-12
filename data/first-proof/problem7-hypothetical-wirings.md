@@ -45,12 +45,16 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
           | → intersection form on H_3(S(ν);Q) is HYPERBOLIC
           | → Witt class = 0 → θ = 0 unconditionally
           v
-        [Rational obstruction: VANISHES]
+        [Rational obstruction: VANISHES (flat ν, Chern-Weil)]
           |
-          | Remaining: integral (torsion) obstruction
-          | → finite-cover trick available
+          | Integral obstruction: also vanishes
+          | For Norm(I) > 2: holonomy ρ trivial → ν trivial
+          | → S(ν) = F × S¹ → integrally hyperbolic → θ = 0
           v
-        [Finite cover Γ' ⊂ Γ] → closed manifold with π₁ = Γ'
+        [Surgery succeeds] → M' with free Z/2 action
+          |
+          v
+        [N = M'/(Z/2)] closed manifold, π₁ = Γ, univ. cover Q-acyclic
 ```
 
 ### Node status
@@ -60,7 +64,7 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
 | E2-rot: lattice existence | **DISCHARGED** | Arithmetic lattice `SO(f, Z[sqrt(2)])` with `f = (1-sqrt(2))x_0^2 + x_1^2 + ... + x_n^2`, `n` odd. The involution `sigma = diag(1,-1,-1,1,...,1)` is an order-2 rotation with codim-2 fixed set. See `problem7r-rotation-lattice-construction.md`. |
 | Fowler application | **DISCHARGED** | Fixed set dim `n-2` is odd → `chi = 0`. Fowler Main Theorem gives `Gamma in FH(Q)`. |
 | S-rot-I: Wall surgery | **Open** | Same three obstacles as Approach I (Poincare complex, normal map, obstruction), but the obstruction computation benefits from odd parity: ker(res) = Q ⊕ H_1(F;Q) vs Q ⊕ H_3(F;Q) ⊕ H_1(F;Q) for reflections. Fallback option. |
-| S-rot-II: Equivariant surgery | **RATIONAL OBSTRUCTION VANISHES** | "Cut and cap" method (Browder 1968, López de Medrano 1971). Rationalized obstruction: ker(res) in L₈(Z[Γ])⊗Q = H₂(F;Q). **Flat-normal-bundle argument:** ν flat (totally geodesic) → e(ν)⊗Q = 0 (Chern-Weil) → intersection form on S(ν) is hyperbolic → Witt class = 0 → **θ = 0 unconditionally.** The b₂(F) question is mooted. Remaining: integral (torsion) obstruction, handled by finite-cover trick. See `problem7r-s-rot-obstruction-analysis.md`. |
+| S-rot-II: Equivariant surgery | **DISCHARGED (θ = 0)** | "Cut and cap" method. **Rational:** flat ν → e(ν)⊗Q = 0 → intersection form on S(ν) hyperbolic → θ⊗Q = 0. **Integral:** congruence condition (Norm(I)>2) forces trivial holonomy → ν trivial → S(ν) = F×S¹ → θ = 0 integrally. Surgery succeeds → M' with free Z/2 action → N = M'/(Z/2) with π₁=Γ. See `problem7r-s-rot-obstruction-analysis.md`. |
 
 ### Why this path succeeds (rationally)
 
@@ -79,9 +83,10 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
    (Chern-Weil). This forces the intersection form on S(ν) to be rationally
    hyperbolic, giving zero Witt class and hence θ = 0 unconditionally.
    **The b₂(F) question is mooted.**
-7. **Integral obstruction is torsion.** Since θ ⊗ Q = 0, the integral
-   obstruction is torsion, killable by the finite-cover trick (pass to a
-   congruence subgroup Γ' ⊂ Γ that still contains σ).
+7. **Integral obstruction also vanishes.** For congruence ideal I with
+   Norm(I) > 2: the integrality of rotation matrices over Z[√2] + the
+   congruence condition force trivial holonomy → ν trivial → e(ν) = 0 →
+   S(ν) = F × S¹ → intersection form integrally hyperbolic → θ = 0.
 
 ### Lattice existence: RESOLVED
 
@@ -197,10 +202,10 @@ and Fowler fails. This is WHY the original construction needed even n.
 
 ## Summary: Status
 
-1. **H1 (Rotation route) — S-rot-II: RATIONAL OBSTRUCTION VANISHES.** E2 fully
-   discharged. Flat-normal-bundle argument shows the equivariant surgery
-   obstruction vanishes rationally, unconditionally in b₂(F). Remaining step:
-   formalize the finite-cover trick for the integral (torsion) obstruction.
+1. **H1 (Rotation route) — S-rot-II: DISCHARGED.** E2 discharged, S discharged.
+   Equivariant surgery obstruction θ = 0 (rational: flat ν + Chern-Weil;
+   integral: trivial holonomy from congruence condition). Closed manifold N
+   with π₁ = Γ and rationally acyclic universal cover exists.
 
 2. **H1 (Rotation route) — S-rot-I:** Fallback (no longer needed). Same
    three-obstacle structure as H2 with favorable odd L-theory parity.

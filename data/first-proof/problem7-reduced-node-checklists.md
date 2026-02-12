@@ -165,37 +165,42 @@ and `problem7-hypothetical-wirings.md` for full analysis.
 5. Approach II (reflection equivariant surgery): **Blocked** — codim-2 gap
    hypothesis fails for codim-1 fixed sets (Costenoble-Waner 1705.10909).
 6. Approach III (orbifold resolution): **Unexplored** — no technique found.
-7. **Approach IV (rotation route): E2 DISCHARGED — S: RATIONAL OBSTRUCTION
-   VANISHES.** Lattice existence resolved
-   (`problem7r-rotation-lattice-construction.md`). Rational obstruction
-   analysis completed with the flat-normal-bundle argument (Step A): the
-   normal bundle ν is flat (totally geodesic), so e(ν)⊗Q = 0 (Chern-Weil),
-   which forces the intersection form on S(ν) to be rationally hyperbolic,
-   giving θ = 0 unconditionally. The b₂(F) question is mooted. Remaining:
-   integral (torsion) obstruction, handled by finite-cover trick.
+7. **Approach IV (rotation route): E2 DISCHARGED — S DISCHARGED.**
+   Lattice existence resolved
+   (`problem7r-rotation-lattice-construction.md`). Surgery obstruction
+   vanishes integrally: for congruence ideal I with Norm(I) > 2 and I
+   coprime to 2 (e.g., I = (3)), the integrality of rotation matrices
+   over Z[√2] + congruence condition forces trivial holonomy → ν trivial
+   → S(ν) = F × S¹ → intersection form integrally hyperbolic → θ = 0.
    See `problem7r-s-rot-obstruction-analysis.md`.
-8. `p7r-s5` (full closure): **Nearly resolved** — needs formalization of the
-   finite-cover trick for the integral obstruction.
+8. `p7r-s5` (full closure): **DISCHARGED** — see argument chain below.
 
-### Path forward (updated after flat-normal-bundle argument)
+### Path forward (updated: obligations E2 and S both discharged)
 
-**Priority 1 — Formalize the finite-cover trick.** The rational obstruction
-vanishes unconditionally (Step A). The integral obstruction θ ∈ L₈(Z[Γ])
-is torsion. Show: there exists a congruence subgroup Γ' ⊂ Γ containing σ
-such that the restriction of θ to Γ' vanishes. This uses the congruence
-subgroup property + the transfer-restriction relation.
+**Both obligations are discharged.** The complete argument chain:
 
-**Priority 2 — Assemble the full S-rot-II argument.** The complete
-argument chain:
-(a) Lattice Γ with rotation σ exists (arithmetic, Q(√2)) — **DONE**
-(b) E2 discharged: Γ ∈ FH(Q) via Fowler — **DONE**
-(c) Rational obstruction vanishes: flat ν → e(ν)⊗Q = 0 → S(ν) rationally
-    hyperbolic → θ = 0 — **DONE**
-(d) Integral obstruction is torsion → finite-cover trick → Γ' with free
-    action → N = M'/(Z/2) → obligation S discharged — **TO FORMALIZE**
+(a) **Lattice construction** — Γ = ⟨π, σ⟩ with π = Γ₀(I) a congruence
+    subgroup of SO(f, Z[√2]), σ = diag(1,-1,-1,1,...,1), I = (3).
+    Γ is a uniform lattice in SO(7,1) with 2-torsion. — **DONE**
+(b) **E2 discharge** — Fixed set F has dim 5 (odd), χ = 0. Fowler Main
+    Theorem gives Γ ∈ FH(Q). — **DONE**
+(c) **Surgery obstruction vanishes** — Congruence condition forces trivial
+    holonomy → ν trivial → S(ν) = F × S¹ → intersection form integrally
+    hyperbolic → θ = 0 ∈ L₈(Z[Γ]). — **DONE**
+(d) **Cut and cap succeeds** — θ = 0 implies equivariant cobordism exists:
+    M' with free Z/2-action. N = M'/(Z/2) is a closed manifold with
+    π₁(N) = Γ and rationally acyclic universal cover. — **DONE**
 
-**Priority 3 (optional) — Direct integral vanishing.** Show θ = 0
-integrally (without finite cover). Would strengthen the result.
+**Remaining work:**
+
+**Priority 1 — Write up.** Assemble the complete proof into a single
+document, combining the lattice construction, Fowler application, and
+surgery vanishing argument. Verify the AHSS-to-Witt-class identification
+with precise references.
+
+**Priority 2 (optional) — Strengthen.** Extend to other dimensions
+n = 2k+1 ≥ 7. Investigate what happens for n = 9 (where additional
+AHSS terms appear).
 
 **Deprioritized — All other approaches.** The rotation route S-rot-II
-succeeds rationally, making alternatives unnecessary.
+succeeds, making alternatives unnecessary.

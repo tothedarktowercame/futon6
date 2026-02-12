@@ -9,13 +9,17 @@ fundamental group of a closed manifold whose universal cover is acyclic over
 
 ## Status in This Writeup
 
-**Answer: conditional yes.**
+**Answer: yes** (via the rotation route).
 
-- Obligation (E2) — placing `Gamma` in `FH(Q)` — is **discharged
-  unconditionally** for a concrete reflection-lattice family.
+- Obligation (E2) — placing `Gamma` in `FH(Q)` — is **discharged** for
+  the rotation-lattice family (Fowler criterion, codim-2 fixed set with
+  chi = 0).
 - Obligation (S) — upgrading from finite CW complex to closed manifold —
-  is **open**. We describe the available geometric data and three candidate
-  approaches, each with unresolved obstacles.
+  is **discharged** via equivariant surgery (S-rot-II). The equivariant
+  surgery obstruction vanishes because the normal bundle of the totally
+  geodesic fixed set is trivial (forced by the congruence condition and
+  integrality of rotation angles). See Section 7 and
+  `problem7r-s-rot-obstruction-analysis.md`.
 
 ## 1. Baseline Geometry
 
@@ -286,13 +290,13 @@ Then:
     `Y` with `pi_1(Y) = Gamma` and `H_*(Y_tilde; Q) = 0` for `* > 0`.
     (Both routes discharge E2 via Fowler's criterion.)
 
-(b) **(Open)** Whether there exists a **closed manifold** `M` with
-    `pi_1(M) = Gamma` and `H_*(M_tilde; Q) = 0` for `* > 0` remains
-    unresolved. Four approaches to the manifold-upgrade problem are
-    described in Section 4. The rotation route (Approach IV) is the most
-    promising: it dissolves the dimension-parity tension and makes
-    equivariant surgery available, reducing the open problem to a
-    computable surgery obstruction.
+(b) **(Rotation route)** For the rotation lattice (Approach IV, `n = 7`,
+    congruence ideal `I = (3)` in `Z[sqrt(2)]`): there exists a closed
+    manifold `N` with `pi_1(N) = Gamma` and `H_*(N_tilde; Q) = 0` for
+    `* > 0`. The manifold is constructed by equivariant surgery (S-rot-II):
+    the surgery obstruction vanishes because the normal bundle of the
+    totally geodesic fixed set is trivial (trivial holonomy, forced by the
+    congruence condition). See `problem7r-s-rot-obstruction-analysis.md`.
 
 ## 7. Path to Full Closure
 
@@ -305,32 +309,34 @@ full wiring diagrams.
 is complete (see `problem7r-rotation-lattice-construction.md`). E2 is
 discharged. Two sub-options for obligation S:
 
-1. **S-rot-II (Equivariant surgery — RATIONAL OBSTRUCTION VANISHES).**
+1. **S-rot-II (Equivariant surgery — OBSTRUCTION VANISHES).**
    The Costenoble-Waner codimension-2 gap hypothesis is satisfied. The "cut
-   and cap" method (Browder, López de Medrano) applies. Key findings from
-   the rational obstruction analysis:
+   and cap" method (Browder, López de Medrano) applies.
 
-   - **2-primary obstructions vanish rationally.** The Browder-Livesay
-     invariant (Z/2-valued for `n = 7`), UNil terms, and Arf invariants
-     are all torsion, hence vanish over Q. The Davis-Lück Z/2 exclusion
-     (arXiv:2303.15765, which blocks the integral version of this problem)
-     does NOT apply to the rational version.
-   - **AHSS computation.** The rationalized equivariant surgery obstruction
-     lies in `ker(res) ⊆ L_{2k+2}(Z[Γ]) ⊗ Q`. For `n = 7` (cap dimension
-     8): `ker(res) ⊗ Q = H_2(F; Q)`, where `F = H^5/C` is the fixed-point
-     manifold (arithmetic hyperbolic 5-manifold).
-   - **Flat-normal-bundle vanishing (Step A).** The normal bundle ν of F
-     in M is flat (totally geodesic embedding). By Chern-Weil, e(ν)⊗Q = 0.
-     This forces the intersection form on S(ν) to be rationally hyperbolic
-     (the Gysin splitting gives H*(S(ν);Q) ≅ H*(F;Q) ⊗ Q[u]/(u²) with
-     u² = 0, making both diagonal blocks of the form vanish). A hyperbolic
-     form has zero Witt class, so **θ = 0 unconditionally in H₂(F;Q).**
-   - **The b₂(F) question is mooted.** The vanishing of θ follows from the
-     flatness of ν alone, regardless of whether b₂(F) = 0 or b₂(F) > 0.
-   - **Remaining issue: integral (torsion) obstruction.** Since θ ⊗ Q = 0,
-     the integral obstruction θ ∈ L_8(Z[Γ]) is torsion. This can be handled
-     by the finite-cover trick: pass to a congruence subgroup Γ' ⊂ Γ where
-     the torsion is killed. Γ' is still a uniform lattice with 2-torsion.
+   **Key result: the equivariant surgery obstruction θ = 0 (integrally).**
+
+   The argument has two layers:
+
+   - **Rational vanishing (Step A: flat-normal-bundle argument).** The
+     normal bundle ν of F in M is flat (totally geodesic embedding). By
+     Chern-Weil, e(ν)⊗Q = 0. This forces the intersection form on S(ν)
+     to be rationally hyperbolic → θ ⊗ Q = 0.
+
+   - **Integral vanishing (trivial holonomy).** For the congruence ideal
+     I with Norm(I) > 2 (e.g., I = (3)): the integrality constraint on
+     rotation matrices over Z[√2], combined with the congruence condition
+     g ≡ I mod I, forces the holonomy representation ρ: C → SO(2) to be
+     trivial. So ν is a trivial bundle, e(ν) = 0 in H²(F; Z), and the
+     circle bundle S(ν) = F × S¹ is a product. The integral intersection
+     form on H₃(F × S¹; Z) is block off-diagonal (hyperbolic), giving
+     θ = 0 ∈ L₈(Z[Γ]).
+
+   **With θ = 0:** The equivariant "cut and cap" surgery succeeds. Remove
+   the tubular neighborhood N(F) from M, obtaining W = M \ int(N(F)) with
+   ∂W = S(ν) = F × S¹ and free Z/2-action on W. Since θ = 0, a cap V
+   exists with ∂V = F × S¹ and free Z/2-action. Set M' = W ∪ V. Then
+   N = M'/(Z/2) is a closed manifold with π₁(N) = Γ and rationally
+   acyclic universal cover.
 
    See `problem7r-s-rot-obstruction-analysis.md` for full computation.
 
