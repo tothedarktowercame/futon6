@@ -7,6 +7,43 @@ began as infrastructure---knowledge ingestion, tagging, and wiring-diagram
 metatheory---and then pivoted into a rapid proof sprint with iterative
 critique and repair.
 
+The working process turned out to resemble Lakatos's \emph{Proofs and
+Refutations}~\cite{lakatos1976} more than we expected.  In Lakatos's
+dialogue, a conjecture is proposed, counterexamples surface, the conjecture
+is patched, and the cycle repeats---with each iteration sharpening both the
+theorem and the participants' understanding of the domain.  Our sprint
+followed the same rhythm, except that the interlocutors were a human
+dispatcher, multiple Claude instances (provers), and Codex (critic and
+research assistant).  Conjectures were drafted quickly; adversarial review
+surfaced overclaims and gaps; targeted repair narrowed the open obligations.
+The wiring-diagram decomposition---which represents each proof as a typed
+graph of claims and dependencies---served as the shared epistemic artefact
+that Lakatos's blackboard served in his fictional classroom.
+
+The title of this monograph alludes to Pease et
+al.~\cite{pease2017}, which formalised Lakatos's informal logic of
+mathematical discovery as a dialogue game over argumentation structures,
+implemented in a system capable of mixed-initiative human--AI collaboration.
+That paper asked whether computers could participate in mathematical
+reasoning the way humans do---through conjecture, critique, and reform.
+The present work is, in a sense, a large-scale empirical answer: ten
+problems attempted by AI agents under human supervision, with the
+Lakatosian cycle running at machine speed.
+
+This connection is not accidental.  Corneli et al.~\cite{corneli2017}
+developed a computational model of mathematical question-and-answer dialogues
+grounded in Lakatos's framework, using Inference Anchoring Theory with
+Computation (IATC) to annotate MathOverflow threads with performative types
+(assert, challenge, reform, clarify, etc.).  The IATC vocabulary reappears in
+this project's Stage~7 thread-wiring pipeline (see Part~III, Act~VI), where
+StackExchange threads are parsed into wiring diagrams whose edges carry the
+same performative labels.  The earlier work on peer-produced mathematical
+knowledge~\cite{corneli2013} established the empirical base: PlanetMath as a
+community-maintained proof ecosystem, studied through the lens of paragogy
+(peer-produced peer learning).  The present sprint can be read as a
+machine-accelerated instance of the same phenomenon: collaborative,
+incremental proof construction with explicit argumentation structure.
+
 \section*{Snapshot}
 \begin{itemize}[leftmargin=1.5em]
 \item Ten initial proof attempts drafted in under two hours.
@@ -26,15 +63,24 @@ critique and repair.
 
 \section*{Interpretive Thread}
 The working notes reveal a consistent asymmetry: generation is fast;
-trustworthy validation is slow.
+trustworthy validation is slow.  This is the same asymmetry Lakatos
+identified in his classroom: conjectures are cheap, but understanding
+\emph{why} a conjecture fails (or holds) is the real mathematical work.
 
 The real leverage came not from first-pass drafting quality, but from
 structured verification---tools that made weaknesses visible early and locally.
+In Lakatosian terms, the wiring diagrams served as \emph{proof analyses}:
+decompositions of the argument into lemmas and sub-conjectures, each of
+which could be independently attacked or defended.
 
-This volume should therefore be read in two ways:
+This volume should therefore be read in three ways:
 \begin{itemize}[leftmargin=1.5em]
 \item \emph{Mathematical artifact}: a set of problem writeups at varying stages of completion.
 \item \emph{Methodological artifact}: a record of how multi-agent proof systems stabilize claims under structured adversarial revision.
+\item \emph{Continuation of a research programme}: the computational
+  argumentation models of~\cite{corneli2017} and the peer-production
+  ethnography of~\cite{corneli2013}, now instantiated with AI agents
+  operating at sprint pace rather than community pace.
 \end{itemize}
 
 \section*{Current Status}

@@ -20,6 +20,7 @@
 \usepackage{textcomp}
 \usepackage{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[most]{tcolorbox}
 \usepackage{microtype}
 
 \hypersetup{
@@ -27,7 +28,7 @@
   linkcolor=blue!50!black,
   citecolor=blue!50!black,
   urlcolor=blue!60!black,
-  pdftitle={Fermentation and Fire: A Multi-Agent First Proof Sprint},
+  pdftitle={First Proof, Lakatos-Style},
   pdfauthor={Codex}
 }
 
@@ -91,6 +92,39 @@
   }%
   \par\medskip
 }
+% --- Dialogue boxes for Part III ---
+\newtcolorbox{joebox}[1][]{%
+  colback=orange!4, colframe=orange!50!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Joe}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt,
+  before skip=6pt, after skip=2pt
+}
+\newtcolorbox{claudebox}[1][]{%
+  colback=blue!3, colframe=blue!40!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Claude}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt,
+  before skip=2pt, after skip=2pt
+}
+\newtcolorbox{codexbox}[1][]{%
+  colback=green!3, colframe=green!40!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Codex}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt,
+  before skip=2pt, after skip=2pt
+}
+\newcommand{\pivot}[1]{%
+  \par\smallskip
+  \noindent{\small\sffamily\color{black!60}%
+    \textbf{Pivot:}\space #1}%
+  \par\smallskip
+}
+% --- End dialogue boxes ---
+
 \newcommand{\includeannotated}[1]{%
   \begingroup
   \let\origsection\section
@@ -128,7 +162,7 @@
 \fancyhead[RE]{\nouppercase{\leftmark}}
 \renewcommand{\headrulewidth}{0.2pt}
 
-\title{Fermentation and Fire: A Multi-Agent First Proof Sprint}
+\title{First Proof, Lakatos-Style}
 \author{Claude$^{1}$, Codex$^{2}$, J.~Corneli$^{3}$\thanks{Supervisor} \\
 \small $^{1}$Anthropic \quad $^{2}$OpenAI \quad $^{3}$Hyperreal Enterprises Ltd}
 \date{February 12, 2026}
@@ -189,5 +223,66 @@ Problem 6 currently retains an explicit unresolved obligation in the project sta
 
 \part{Prompt Excerpts and Pivot Moments}
 \input{part3-pivotal-prompts}
+
+\backmatter
+\begin{thebibliography}{99}
+
+\bibitem{lakatos1976}
+I.~Lakatos,
+\emph{Proofs and Refutations: The Logic of Mathematical Discovery},
+Cambridge University Press, 1976.
+
+\bibitem{pease2017}
+A.~Pease, J.~Lawrence, K.~Budzynska, J.~Corneli, and C.~Reed,
+``Lakatos-style collaborative mathematics through dialectical,
+structured and abstract argumentation,''
+\emph{Artificial Intelligence} \textbf{246} (2017), 181--219.
+
+\bibitem{corneli2017}
+J.~Corneli, U.~Martin, D.~Murray-Rust, and A.~Pease,
+``Towards mathematical AI via a model of the content and process of
+mathematical question and answer dialogues,''
+in \emph{Proc.\ CICM 2017}, Springer LNCS, 2017.
+
+\bibitem{corneli2013}
+J.~Corneli,
+\emph{Peer Produced Peer Learning: A Mathematics Case Study},
+PhD thesis, The Open University, 2014.
+
+\bibitem{fowler2012}
+J.~Fowler,
+``Finiteness properties of rational Poincar\'e duality groups,''
+\texttt{arXiv:1204.4667}, 2012.
+
+\bibitem{bartels2014}
+A.~Bartels, F.\,T.~Farrell, and W.~L\"uck,
+``The Farrell--Jones conjecture for cocompact lattices in virtually
+connected Lie groups,''
+\emph{J.~Amer.\ Math.\ Soc.} \textbf{27} (2014), 339--388;
+\texttt{arXiv:1101.0469}.
+
+\bibitem{hughesWeinberger2001}
+B.~Hughes and S.~Weinberger,
+``Surgery and stratified spaces,''
+in \emph{Surveys on Surgery Theory}, Vol.~2,
+Ann.\ of Math.\ Studies 149, 2001;
+\texttt{arXiv:math/9807156}.
+
+\bibitem{lopezdeMedrano1971}
+S.~L\'opez de Medrano,
+\emph{Involutions on Manifolds},
+Ergebnisse der Mathematik \textbf{73}, Springer, 1971.
+
+\bibitem{ranicki1998}
+A.~Ranicki,
+\emph{High-Dimensional Knot Theory: Algebraic Surgery in Codimension~2},
+Springer Monographs in Mathematics, 1998.
+
+\bibitem{wall1999}
+C.\,T.\,C.~Wall,
+\emph{Surgery on Compact Manifolds},
+2nd ed., Mathematical Surveys and Monographs \textbf{69}, AMS, 1999.
+
+\end{thebibliography}
 
 \end{document}

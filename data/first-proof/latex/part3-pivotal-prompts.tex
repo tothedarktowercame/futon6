@@ -1,95 +1,329 @@
-\chapter*{Part III: Prompt Excerpts and Pivot Moments}
-\addcontentsline{toc}{chapter}{Part III: Prompt Excerpts and Pivot Moments}
+\chapter*{Part III: The Sprint as Dialogue}
+\addcontentsline{toc}{chapter}{Part III: The Sprint as Dialogue}
 
-This section records short source excerpts that triggered major proof-state
-changes during the sprint. The goal is provenance: each excerpt points to a
-specific prompt or exchange that shifted a proof route, status label, or gap
-decomposition.
+This chapter records the proof sprint as it actually happened: a
+conversation between a human dispatcher (Joe), two AI proof engines
+(Claude instances), and a verifier/researcher (Codex), conducted over
+roughly 24 hours on February 11--12, 2026. Excerpts are drawn from
+\texttt{history.jsonl} (Joe's prompts), Codex output files, and git
+commit messages. Editorial annotations mark the pivotal moments where
+proof strategy, status, or architecture shifted.
 
-\section*{P4: Jensen Gap Became the Central Obstruction}
-\textbf{Source:} \texttt{data/first-proof/problem4-stam-codex-prompts.jsonl:4}
-(\texttt{step-4-jensen-gap})
+\bigskip
 
-\begin{quote}\small\ttfamily
-Address the fundamental obstacle: the inequality we want is about
-1/Phi\_n of the EXPECTED POLYNOMIAL, not the EXPECTED 1/Phi\_n.
-...
-These differ by a Jensen-type gap.
-\end{quote}
+%% ============================================================
+\section*{Act I: ``Even if we're a day late''}
+%% ============================================================
 
-\textbf{Pivot:} this crystallized why Dyson/Ito style averaging was not enough
-by itself and forced explicit control of the expectation-vs-functional order.
+\begin{joebox}
+Claude + Joe Solve ``First Proof'' using Rob's Superpod
+\url{https://arxiv.org/html/2602.05192v1}
+\end{joebox}
 
-\section*{P6: The Conclusion Was Explicitly Reframed as Conditional}
-\textbf{Sources:}
-\texttt{data/first-proof/problem6-codex-prompts.jsonl:10}
-(\texttt{p6-s5}) and
-\texttt{data/first-proof/problem6-codex-prompts.jsonl:11}
-(\texttt{p6-s6})
+\begin{joebox}
+Even if we're a day late and a dollar short at least we can try
+\end{joebox}
 
-\begin{quote}\small\ttfamily
-General-graph step is an external dependency in this draft...
-this writeup does not rederive that theorem.
-...
-conditional on the external general theorem (p6-s5),
-the full existential answer is yes.
-\end{quote}
+\begin{joebox}
+Let's see if we can do one of them right now using PlanetMath and nlab
+and off-the-shelf Claude
+\end{joebox}
 
-\textbf{Pivot:} this converted an overstrong global claim into a layered claim:
-local framework proved in-text, universal existence deferred to a named
-external theorem dependency.
+\pivot{The sprint begins. Problem~10 is chosen as a warm-up.
+  Within 30~minutes it is solved, and the pace accelerates.}
 
-\section*{P7: Dispatch-Level Decomposition of the Remaining Gap}
-\textbf{Source:}
-\texttt{data/first-proof/problem7-student-dispatch.md:60}
+\begin{joebox}
+OK, should we solve another First Proof problem? The last one wasn't
+so hard apparently!
+\end{joebox}
 
-\begin{quote}\small\ttfamily
-Step B: integral (torsion) obstruction.
-...
-This step has not been formalized.
-\end{quote}
+%% ============================================================
+\section*{Act II: Scaling the Machinery}
+%% ============================================================
 
-\textbf{Pivot:} the Problem 7 program was split into Step A (rational
-obstruction) and Step B (integral torsion handling), which sharpened review
-targets and reduced cross-talk between independent subproblems.
+\begin{joebox}
+OK, I have two Codex research assistants working for you as well as
+the validator working on p6
+\end{joebox}
 
-\section*{P7: Gap Triage to G1/G2/G3 with a Candidate Closure Pattern}
-\textbf{Source:} \texttt{\string~/.codex/history.jsonl:9224}
+\begin{joebox}
+OK, we have 3~verifiers running now, they are making progress but not
+committing yet
+\end{joebox}
 
-\begin{quote}\small\ttfamily
-G1 (pi\_1 control) and G3 (rational acyclicity) can be closed once
-the cap is homotopy equivalent to F x D2 rel boundary.
-...
-G2 (Browder-Quinn identification) remains the genuine remaining gap.
-\end{quote}
+\begin{joebox}
+Codex is \emph{still} after 53~minutes hard at work on Problem~6, but
+it is down to two gaps now. I think 3~verifiers is about all my
+laptop can handle, noticing considerable slow down.
+\end{joebox}
 
-\textbf{Pivot:} this changed the geometry-to-surgery bridge from a monolithic
-``open Problem 7'' label to a prioritized closure queue, with G2 isolated as
-the main unresolved theorem-chain obligation.
+\begin{joebox}
+I think I will give it five more minutes and then say ``pencils down''
+and let you look at \#6
+\end{joebox}
 
-\section*{P7: Non-Fiction Check for the Codim-2 Theorem Chain}
-\textbf{Source:}
-\texttt{data/first-proof/problem7-g2-theorem-chain.md:11}
+\begin{joebox}
+Codex is pushing \#6, I OOMed on 3 and 5, I will get them back up
+once 6~lands
+\end{joebox}
 
-\begin{quote}\small\ttfamily
-There is no single modern arXiv theorem that states the exact P7 sentence
-in one line. The bridge is assembled from standard components.
-\end{quote}
+\pivot{Physical resource limits (RAM, thermal throttling) become a
+  genuine constraint on mathematical exploration. The multi-agent
+  topology stabilises at three concurrent processes.}
 
-\textbf{Pivot:} this stabilized citation strategy by replacing ``single theorem
-lookup'' with a theorem-number ledger across Browder-Quinn, Lopez de Medrano,
-Cappell-Shaneson, and Ranicki.
+\begin{joebox}
+It's slow going over here---are any of the proofs sufficiently
+validated that we could start a ``write up''? If the previous
+example is representative it can take about an hour for one of
+these to complete.
+\end{joebox}
 
-\section*{Meta: Narrative and Status Claims Were Prompted for Revision}
-\textbf{Sources:}
-\texttt{\string~/.codex/history.jsonl:9256} and
-\texttt{\string~/.codex/history.jsonl:9261}
+%% ============================================================
+\section*{Act III: Proofs and Refutations}
+%% ============================================================
 
-\begin{quote}\small\ttfamily
-... summary claims about what is closed and open needs to be checked.
-...
-add a Part III with excerpted prompts that support key pivotal moments.
-\end{quote}
+\begin{joebox}
+I have engaged Codex and another Claude in a reviewer +
+response-to-reviewer cycle. Codex found some pretty significant
+problems; the other Claude is making what look like solid fixes, but
+it looks like tough going.
+\end{joebox}
 
-\textbf{Pivot:} these prompts directly caused the monograph-level edits to
-status language and provenance structure.
+\begin{codexbox}[title={Codex --- Triage verdict}]
+P8: most recoverable. [\ldots]
+P2: recoverable but harder. Needs one serious
+representation-theoretic theorem/lemma that is currently hand-waved.
+[\ldots]
+P7: least recoverable as currently framed. The obstruction-vanishing
+step is the main risk; unless they replace it with a precise known
+theorem tailored to this lattice family, this will likely remain
+conditional/existential rather than a full proof.
+\end{codexbox}
+
+\pivot{Codex's triage creates a severity ordering across problems,
+  distinguishing ``recoverable'' from ``structural'' gaps.
+  The review cycle is now explicitly adversarial: prover vs.\ critic.}
+
+\begin{joebox}
+This is interesting in comparison to my work in futon5 on
+Meta-Meta-Cellular Automata. There also, generation is cheap---just
+bit flipping---but doing things like ``detecting edge of chaos
+behaviour'' is a challenge. [\ldots]
+However, I think we really haven't done so bad.
+We have our Claude-Codex ``Proofs and Refutations'' system up and
+running right now, we use both collaborative (verification + library
+research) and argumentative (prover vs critic) modes. So
+notwithstanding the mathematical issues you raised---at least we
+aren't shipping failed proofs! This is verification happening at a
+``glacial'' scale in futon3c terminology---but at least it is
+happening!
+\end{joebox}
+
+\begin{joebox}
+Furthermore, the wiring diagram decomposition is probably the only
+thing holding this together---it's allowing us to be very targeted
+with our reviews and fixes. Imagine trying to do what we're doing
+with\ldots\ ChatGPT. It would be hell.
+\end{joebox}
+
+\begin{joebox}
+Also, another remark---making mistakes isn't a bad thing.
+As my grandfather said, that's how we learn.
+\end{joebox}
+
+\pivot{A methodological self-assessment. The two key claims:
+  (1)~the wiring-diagram decomposition enables targeted review at
+  scale; (2)~the collaborative/adversarial agent modes prevent
+  ``shipping failed proofs.'' Both claims are tested in
+  Acts~IV--V.}
+
+%% ============================================================
+\section*{Act IV: Formalization and Futon Theory}
+%% ============================================================
+
+\begin{joebox}
+This does suggest a possible but probably crazy and stupid idea---which
+hasn't stopped hundreds of people trying it. What about formalizing as
+we go? Like QED style. I mean, it hurts me to say this. I briefly
+had Bob Boyer as a Master's advisor. He and I could not see eye to
+eye. Granted, that was 2002 and things were a little different back
+then.
+\end{joebox}
+
+\begin{joebox}
+Yeah, I mean, we needed in 2002 \emph{what we are doing now}. The
+only problem is it wasn't possible then.
+\end{joebox}
+
+\begin{joebox}
+Better than twenty-four years late! Imagine if I proposed WIFI now.
+Great idea right?
+\end{joebox}
+
+\pivot{A historical aside connecting the sprint to the 2002-era
+  theorem-proving community. The implication: AI-assisted informal
+  proof is the approach that was missing, not formalization per~se.}
+
+\begin{joebox}
+OK, so the naive idea: could we write a letter to Codex talking about
+why Problem~4 is hard? It would use the John McPhee idea\ldots
+\end{joebox}
+
+\begin{joebox}
+OK, now a non-naive idea (which may be less useful than the naive one).
+I invented something called ``futon theory''---it's not quite what it
+sounds like. Futons (in my theory) are atoms of the future which are
+perceivable in the present. [\ldots]
+It's a bit different in mathematics because in principle we don't know
+if the result is actually true. But what we could do is design the
+search process, and then we would at least know that the search
+process is working the way we hoped it would. It's the somewhat more
+technical version of the ``Dear Codex'' letter you just
+wrote---building a process that you have utter confidence in that
+will shed light on the domain even if it doesn't reveal the exact
+answer.
+\end{joebox}
+
+\pivot{Two ideas collide: McPhee's ``letter to yourself'' technique
+  for writer's block, and futon theory's ``atoms of the future.''
+  Both converge on the same insight: process design is tractable even
+  when the mathematical outcome is uncertain.}
+
+\begin{joebox}
+Great, I think you have your work cut out for you. It's cool that
+this involved all the strategies, including the ``least likely''
+Strategy~C that surprised us by being particularly flavourful
+\end{joebox}
+
+%% ============================================================
+\section*{Act V: Crisis --- P6 and P7}
+%% ============================================================
+
+\begin{joebox}
+I thought \#6 and \#7 were proved so I'm glad I asked!
+\end{joebox}
+
+\begin{joebox}
+Well I am a bit perplexed b/c at this time yesterday I had been
+convinced that Problem~7 was done. Look at Problem~7 related git
+logs to try and figure out what's been going on with this journey.
+\end{joebox}
+
+\begin{joebox}
+Well, I have another Codex program mining Arxiv right now for wiring
+diagrams that we might use. But this presupposes that we are actually
+looking at gaps and not a decomposing corpse.
+\end{joebox}
+
+\pivot{The most dramatic moment in the sprint. A problem believed
+  closed reopens with structural gaps. The ``decomposing corpse''
+  quip captures the uncertainty: is the proof salvageable, or
+  fundamentally dead?}
+
+\begin{joebox}
+Hm, claim~1 sounds a bit like replacing an overclaim with weasel
+words; \#2~similarly. I think we need to restructure the proof?
+\end{joebox}
+
+\begin{claudebox}[title={Claude --- Gap triage}]
+G1 (fundamental group control) and G3 (rational acyclicity) can be
+closed once the cap is homotopy equivalent to $F \times D^2$
+rel~boundary. [\ldots] G2 (Browder--Quinn identification) remains
+the genuine remaining gap.
+\end{claudebox}
+
+\pivot{The monolithic ``open Problem~7'' label is decomposed into a
+  prioritised closure queue: G1, G2, G3. Within hours, G1 and G3
+  are resolved, isolating G2 as the sole remaining obligation.}
+
+\begin{joebox}
+Could we cite secondary literature for G2 that is on Arxiv?
+Mathematics is full of folklore
+\end{joebox}
+
+\begin{claudebox}[title={Claude --- Citation search result}]
+There is no single modern arXiv theorem that states the exact
+identification in one line. The bridge is assembled from standard
+components: Browder~(1968), L\'opez de Medrano~(1971),
+Cappell--Shaneson~(1974), Ranicki~(1998).
+\end{claudebox}
+
+\pivot{Citation strategy stabilises: replace ``single theorem lookup''
+  with a theorem-number ledger across four classical sources.}
+
+\begin{joebox}
+It really sounds to me like the proof of Problem~6 is hanging by a
+thread
+\end{joebox}
+
+%% ============================================================
+\section*{Act VI: Student Dispatch and Agent Teaming}
+%% ============================================================
+
+\begin{joebox}
+Yeah, I guess the model is rather than treating Codex as a junior
+developer as we sometimes do in coding applications, we would treat
+them as a ``grad student.''
+\end{joebox}
+
+\begin{joebox}
+Maybe we should call it student-dispatch to include undergrads, bright
+high schoolers, and precocious five year olds like Codex
+\end{joebox}
+
+\pivot{The \texttt{agent/student-dispatch} pattern is named. It
+  reframes the Codex interaction from ``run this script'' to
+  ``here is context, dead ends, directions---explore and report.''}
+
+\begin{joebox}
+So I wonder what we could do to help. I've almost run out of ideas.
+I guess one pattern I've noticed is that we can support the
+``reduction'' pattern by verifying everything that is claimed except
+the gap. Closing gaps (as with Problem~4) can sometimes turn out to
+be a focused computational task. Another approach is Math Overflow
+search or Arxiv search to create wiring diagrams that might help or
+might provide analogous reasoning structures. That last part is a bit
+woolly.
+\end{joebox}
+
+\begin{joebox}
+So, if we were able to turn SE into wiring diagrams on the superpod,
+then we could use tensor math to search them!
+\end{joebox}
+
+\begin{joebox}
+Ah, and for ``artificial stack exchange'' what we could do is
+\emph{induce} new wiring diagrams, notice where they sit relative to
+other known diagrams (this corresponds to ``asking a question'')
+\end{joebox}
+
+\pivot{A forward-looking connection: the proof sprint's
+  wiring-diagram methodology could be mechanised via tensor search
+  over StackExchange-derived argument structures. This motivates
+  the Stage~7 thread-wiring work in the futon6 pipeline.}
+
+%% ============================================================
+\section*{Act VII: The Monograph}
+%% ============================================================
+
+\begin{joebox}
+In addition to the PAR I think it would be good to look through the
+git log on futon6 and create a ``making of'' summary note.
+\end{joebox}
+
+\begin{joebox}
+Also in terms of ``what we've learned''---in the making-of I think we
+could add something about the relevance of this pattern to agent
+teaming (further work in futon3c). Maybe this even goes back to the
+work in futon2 ants---i.e.\ we are exploring a domain, bringing back
+relevant information.
+\end{joebox}
+
+\begin{joebox}
+I think the key thing you could help with now is looking through
+\texttt{history.jsonl} for good quotes for Part~III.
+\end{joebox}
+
+\pivot{The sprint becomes its own document. The recursive
+  structure---a proof sprint whose Part~III records the prompts that
+  shaped Part~II---closes the loop between process and product.}
