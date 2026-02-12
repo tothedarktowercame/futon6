@@ -279,11 +279,6 @@ should be:
 2. Find the finite-n analog of each step
 3. Use quantitative convergence (Phi_n/n → Φ*) to check consistency
 
-The free Stam inequality is proved via free Brownian motion and
-stochastic calculus in the free setting. A finite-n analog would need
-a finite version of this — possibly the Dyson Brownian motion on
-eigenvalues of A + sqrt(t)·GUE.
-
 ### Q4.12 RESULT: Differentiation DOES interact with ⊞_n
 
 **Key finding from Marcus (2021) arXiv:2108.07054:**
@@ -315,24 +310,26 @@ applied them specifically to compute E_Q[1/Phi_n(A + QBQ*)] or to
 prove superadditivity of 1/Phi_n under the expected-characteristic-
 polynomial convolution.
 
-### Updated Priority Ranking
+### Updated Priority Ranking (revised after Codex Strategy A results)
 
 1. **Q4.8 (FREE STAM — HIGHEST)**: The free Stam inequality IS our
-   inequality in the limit. Voiculescu's proof technique (free stochastic
-   calculus) should be the primary model for a finite-n proof. The Dyson
-   Brownian motion / matrix-valued SDE approach is the most promising
-   route.
+   inequality in the limit. **Voiculescu's actual proof mechanism** is
+   conditional expectation + L²-contractivity on conjugate variables,
+   NOT Dyson BM monotonicity (see Codex results below). The finite-n
+   proof should finitize the projection/orthogonality mechanism, not
+   the heat flow.
 
-2. **Q4.12 (INDUCTION via DIFFERENTIATION)**: Marcus uses differentiation
-   as an induction tool for finite free convolution. If we can show
-   Phi_n relates to Phi_{n-1} of the derivative, we get induction from
-   the proved n=3 base case.
+2. **Q4.12 (INDUCTION via DIFFERENTIATION)**: Differentiation commutes
+   EXACTLY with ⊞_n (proved algebraically + numerically). But naive
+   induction is blocked: 1/Phi_n < 1/Phi_{n-1}(p'/n) always (wrong
+   direction). May work with a different functional or corrected chain.
 
 3. **Q4.9 (MSS WEIGHTS)**: Algebraic route via MO 287724. Concrete but
    requires finding a nonnegative decomposition.
 
-4. **Q4.10 (WEINGARTEN)**: Strong toolbox, needs connection to our
-   specific functional.
+4. **Q4.10 (WEINGARTEN/HCIZ)**: Strong toolbox. Codex Step 3 confirms
+   HCIZ gives principled route to E_U[f(eigs(A+UBU*))], but no Jensen
+   direction without convexity. May feed into the projection approach.
 
 5. **Q4.11 (SCALE SEPARATION)**: Diagnostic, not proof-generating.
 
@@ -361,3 +358,113 @@ polynomial convolution.
 5. **Read Marcus (2021) arXiv:2108.07054 carefully** — it's a survey
    by one of the creators of ⊞_n and may contain exactly the structural
    results we need (differentiation, energy functionals, open problems).
+
+---
+
+## Codex Strategy A Results (2026-02-12, commit cd8396f)
+
+Six-step research pipeline via `scripts/run-research-codex-p4-stam.py`.
+Full results in `data/first-proof/problem4-stam-codex-results.jsonl`.
+
+### Step 1 — Voiculescu's proof mechanism (plausible)
+
+**CRITICAL FINDING: Voiculescu does NOT use Dyson/heat-flow monotonicity.**
+
+The free Stam inequality is proved via **conjugate variables and L²
+projection**, not free Brownian motion:
+
+1. Define conjugate variable J(X) with Φ*(X) = ‖J(X)‖²
+2. Conditional expectation: J(X+Y) = E_{W*(X+Y)}[αJ(X:Y) + (1-α)J(Y:X)]
+3. L²-contractivity: Φ*(X+Y) ≤ ‖αJ(X:Y) + (1-α)J(Y:X)‖²
+4. Freeness: J(X:Y) = J(X), J(Y:X) = J(Y), and mixed inner product = 0
+5. Expand: Φ*(X+Y) ≤ α²Φ*(X) + (1-α)²Φ*(Y)
+6. Optimize α = Φ*(Y)/(Φ*(X)+Φ*(Y)) → harmonic mean → Stam
+
+**Implication:** The finite-n proof should look for:
+- A finite conjugate variable (root-force field S_i is the candidate)
+- A finite conditional-expectation / projection surrogate for ⊞_n
+- Finite orthogonality or controlled cross-term bound
+
+This completely reframes Strategy A away from Dyson monotonicity.
+
+### Step 2 — Dyson Itô calculus for Φ_n (established)
+
+Explicit formulas derived. Key identities:
+- Φ_n = 2 Σ_{i<j} (λ_i - λ_j)^{-2} (triple cross-terms cancel)
+- ∂_k Φ_n = -4U_k, ∂_{kk} Φ_n = 12V_k
+- Full drift formula for L(1/Φ_n) under Dyson generator
+
+**Result: L(1/Φ_n) is NOT sign-definite.**
+Counterexample: n=3, λ=(-1,0,1) gives L(1/Φ_n) = -1/27 < 0.
+Confirms our numerical finding that E[1/Φ_n] is not monotone along Dyson BM.
+
+### Step 3 — Connection to ⊞_n (plausible)
+
+- A+UBU* is NOT a stopped Dyson process (hard obstruction: tr((X-A)^k)
+  is deterministic for orbital sum, random for Dyson)
+- HCIZ gives principled route to E_U[f(eigs(A+UBU*))] but is
+  computationally difficult for general n
+- No finite-n subordination in full generality; Marcus's finite free
+  cumulants provide algebraic (not analytic) linearization
+- Jensen direction between E_U[1/Φ_n] and 1/Φ_n(p ⊞_n q) unknown
+  without convexity/concavity
+
+### Step 4 — Jensen gap analysis (TIMED OUT at 180s)
+
+Parse error. This was the most computationally demanding step. The Jensen
+gap question is now somewhat secondary since the Dyson route itself is
+not the right mechanism.
+
+### Step 5 — Finite Stam proof attempt (gap)
+
+Attempted Dyson/Itô and convexity routes; both fail:
+- Dyson route: no closed SDE/PDE for roots of the averaged polynomial
+  (Φ_n acts on roots of E_U[det(...)], not on sample eigenvalues)
+- Convexity route: 1/Φ_n has no global concavity certificate for n≥4
+
+**Exact obstruction identified:** The missing ingredient is the
+finite-dimensional analog of {free score, subordination, de Bruijn}.
+These three pieces work together in Voiculescu's framework and have no
+known finite-n counterparts.
+
+### Step 6 — Synthesis (gap, but informative)
+
+**Proof viability:** 25-40% unconditional; ~70% conditional theorem;
+>90% for verified small-n cases.
+
+**Four precise blockers:**
+
+| Blocker | What's needed | Likely true? |
+|---------|--------------|-------------|
+| A: Finite de Bruijn | H_n with d/dt H_n(p_t) = -Φ_n(p_t) along finite heat flow | medium-high |
+| B: Finite score/projection | Inequality playing role of free-score projection for ⊞_n | medium |
+| C: Monotonicity step | d/dt[1/Φ_n(r_t) - 1/Φ_n(p_t) - 1/Φ_n(q_t)] ≥ 0 | medium (if A+B) |
+| D: n=4 algebraic positivity | Δ_4(p,q) ≥ 0 via SOS/CAD after normalization | high |
+
+**Recommended program:**
+- Track A: Conditional finite Stam theorem with explicit lemma dependencies
+- Track B: Exact n=4 positivity certificate (symbolic computation)
+
+**Fallback positions:** conditional theorem, n=4 exact proof, asymptotic
+liminf result, restricted-class proofs (one factor near-Gaussian).
+
+### Local exploration results (same session)
+
+**Strategy B (induction via differentiation):**
+- Differentiation commutes EXACTLY with ⊞_n: (p ⊞_n q)'/n = (p'/n) ⊞_{n-1} (q'/n)
+  (algebraic proof + numerical verification, error < 10^{-13})
+- BUT: naive induction chain FAILS at Step A — 1/Phi_n(p) < 1/Phi_{n-1}(p'/n)
+  in 100% of tests (wrong direction)
+- Steps B and C of the chain hold 100%
+
+**Strategy A (convexity in cumulants):**
+- Cumulant additivity confirmed exact: κ_4 = a_4 - (1/12)a_2² under ⊞_4
+- 1/Phi_4 is NEITHER convex NOR concave in cumulant space (82.4%/17.6% split)
+- Hessian is INDEFINITE in 100% of trials (75/75)
+- Superadditivity HOLDS despite non-convexity (0 violations)
+- Dyson BM E[1/Φ_n] is NOT monotone in t (44-54% decreasing steps)
+- 1D ray superadditivity holds (0 violations in 62 trials)
+
+**Key insight:** 1/Φ_n is superadditive in cumulant space WITHOUT being
+convex. The proof must exploit structure beyond definiteness — possibly the
+real-rootedness constraint on the domain.
