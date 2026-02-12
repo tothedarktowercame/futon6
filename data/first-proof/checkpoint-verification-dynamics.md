@@ -122,3 +122,28 @@ in both settings.
 
 We are not shipping failed proofs. The system catches problems. This is
 verification at glacial scale — but at least it is happening.
+
+## Why wiring diagrams hold this together
+
+The wiring diagram decomposition is probably the single most important
+piece of infrastructure in the review cycle. It gives you **addressable
+nodes** — you can say "the claim at p7-s4 is unsupported" and every agent
+(prover, critic, responder) knows exactly what's being disputed.
+
+Without that structure, you're doing whole-document review. That's how you
+get the "fix one gap, introduce two more" failure mode: a rewrite that
+addresses one criticism while silently promoting other claims. With the
+wiring diagram, each edge has a **type** (`assert`, `reference`, `derive`)
+and each node has a **body**. The critic can say "edge p7-s4 -> p7-s3a is
+typed `assert` but should be `assume`" — that's a precise, actionable
+finding that doesn't trigger a whole-proof rewrite.
+
+This is also what makes the Codex polish scripts work: they walk the proof
+chain node by node, generating focused verification prompts per step.
+Each prompt knows its predecessors and successors in the wiring diagram.
+The alternative — feeding a 200-line proof to a chatbot and asking "is this
+right?" — produces exactly the kind of vague, whole-document feedback that
+enables confidence laundering.
+
+The wiring diagram turns proof review from a literary exercise into a
+graph traversal with typed edges. That's the structural advantage.
