@@ -81,19 +81,35 @@ In sub-case 2b, we need S ⊆ I with |S| ≥ c_0 ε n and ||Σ_{f⊆S} X_f|| ≤
 
 **Random subsampling at rate q:** Include each vertex of I with probability q.
 
-    E[||Σ_{f⊆S} X_f||] ≤ q² α_I
+Note: since operator norm is convex, Jensen gives E[||M_S||] ≥ ||E[M_S]|| =
+q² α_I, which is a LOWER bound, not useful for our upper bound goal.
 
-For E[...] ≤ ε: need q ≤ √(ε/α_I).
-Expected size: E[|S|] = q|I| ≥ q · εn/3.
-For |S| ≥ c_0 εn: need q ≥ 3c_0.
+Instead, use Markov on the trace: E[tr(M_S)] = q² T_I where T_I = Σ_{f⊆I} τ_f.
+By Markov: Pr[tr(M_S) > ε] ≤ q² T_I / ε.
+Since ||M_S|| ≤ tr(M_S): Pr[||M_S|| > ε] ≤ q² T_I / ε.
+For this < 1 (so a good S exists): need q² T_I < ε, i.e., q < √(ε/T_I).
 
-Combining: 3c_0 ≤ √(ε/α_I). Since α_I ≤ 1: c_0 ≤ √ε/3.
+With T_I ≤ n: q < √(ε/n). Expected size: E[|S|] = q|I| ≥ √(ε/n) · εn/3
+= ε^{3/2}√n / 3. For |S| ≥ c_0 εn: c_0 ≤ √(ε/n)/3 → 0 as n → ∞.
 
-**This gives c_0 = Θ(√ε), not a universal constant.** The subsampling approach
-is inherently limited because:
-- Expected spectral norm scales as q² (quadratic in sampling rate)
-- Expected size scales as q (linear in sampling rate)
-- Balancing gives q = √ε, hence |S| = √ε · |I| ≈ ε^{3/2} n
+The trace/Markov bound is too crude. A tighter approach: for random q-sampling,
+the expected number of internal edges is ≈ q² m_I, each with τ_f ≤ ε. So
+E[tr(M_S)] = q² T_I. And tr(M_S)/rank(M_S) ≤ ||M_S|| ≤ tr(M_S). For K_n,
+||M_S|| = |S|/n ≪ tr(M_S) = |S|²/n — the gap is a factor of |S| from
+eigenvalue spreading. The subsampling argument cannot exploit this spreading.
+
+**Operational bound (heuristic, not rigorous):** If we ASSUME ||M_S|| behaves
+like E[M_S] (i.e., spreading holds), then ||M_S|| ≈ q² α_I, and setting
+q = √(ε/α_I) ≤ √ε gives |S| ≈ √ε · |I| ≈ ε^{3/2}n, i.e., c_0 = O(√ε).
+This heuristic bound is consistent with the trace/Markov bound but NOT
+rigorously derived — the Jensen inequality goes the wrong way for an upper
+bound on E[||M||].
+
+**In either case, c_0 is not universal.** The subsampling approach is
+inherently limited because:
+- The trace bound gives c_0 → 0 as n → ∞
+- The heuristic spreading bound gives c_0 = O(√ε)
+- Both reflect the quadratic-vs-linear scaling mismatch
 
 ## Why the Complete Graph Escapes This Bound
 
@@ -114,15 +130,20 @@ average eigenvalue by a factor related to the spectral structure.
 The Marcus-Spielman-Srivastava theorem on interlacing families could give
 existence of a good assignment with better bounds than random subsampling.
 
-For independent Bernoulli variables ε_v and PSD atoms X_f, MSS shows existence
-of an assignment achieving:
+**Heuristic extrapolation (NOT a theorem):** If an MSS-type bound existed for
+quadratic chaos — i.e., for independent Bernoulli ε_v and PSD atoms X_f, an
+existence result of the form:
 
     λ_max(Σ ε_u ε_v X_f) ≤ (√μ + √R)²
 
-where μ = expected operator norm and R = max atom norm.
+where μ = ||E[Σ ε_u ε_v X_f]|| and R = max ||X_f|| — then in our setting
+(R = ε, μ = q²α_I): bound = (√(q²α_I) + √ε)².
+For this ≤ ε: q√α_I + √ε ≤ √ε, requiring q = 0. Not useful directly.
 
-In our setting (R = ε, μ = q²α_I): bound = (√(q²α_I) + √ε)².
-For this ≤ ε: q√α_I + √ε ≤ √ε, which requires q = 0. Not useful directly.
+**Caveat:** Classical MSS/interlacing families apply to LINEAR sums Σ ε_i A_i,
+not quadratic products Σ ε_u ε_v X_f. No published result directly gives the
+above bound for the quadratic case. The extrapolation is used here only to
+illustrate why even an optimistic MSS-type bound would not immediately help.
 
 **The issue:** MSS gives bounds in terms of (√μ + √R)², which is always ≥ R.
 Since R = max τ_f can be up to ε (for light edges), the bound is ≥ ε. No room.
@@ -180,9 +201,14 @@ align with specific edges.
    contribution (||Σ X_f^I|| ≤ ε), c_0 = 1/3 works with S = I.
 
 5. **Star domination critique:** The existing writeup's approach via
-   A_v = (1/2)Σ_{u~v} X_{uv} is provably unable to yield a universal c_0
-   because it converts the quadratic p² dependence to linear p, destroying
-   the headroom needed for concentration.
+   A_v = (1/2)Σ_{u~v} X_{uv} converts the quadratic p² dependence to linear
+   p, severely degrading the concentration headroom. This is demonstrated
+   (not formally proved impossible) by the star graph example, where star
+   domination gives ||A_v|| = 1/2 for all vertices, making standard matrix
+   concentration unable to achieve ε-lightness despite the problem being
+   trivially solvable. Whether a cleverer use of star domination could
+   still yield universal c_0 is not ruled out, but appears unlikely given
+   the structural mismatch in scaling.
 
 ### Remains open:
 
@@ -213,8 +239,9 @@ methods can then be applied to:
   our iterative peeling (Strategy C). The quantitative subset size from D4
   might adapt to give universal c_0.
 
-- **D9 (Schur complement):** The relationship L_{G[S]} ≤ L[S,S] ≤ Schur(L,S)
-  might give a cleaner spectral bound that avoids the concentration issues.
+- **D9 (Schur complement):** The chain L_{G[S]} ≤ L[S,S] and Schur(L,S) ≤ L[S,S]
+  (Schur complement subtracts a PSD term from L[S,S]) might give a cleaner
+  spectral bound that avoids the concentration issues.
 
 ## Strategy 3 Analysis: Decoupling + Conditional MSS (Formalized)
 
@@ -275,12 +302,15 @@ combinatorial (Case 2b can't arise given the leverage threshold).
 
 | Technique                    | c_0 bound  | Bottleneck                          |
 |------------------------------|------------|-------------------------------------|
-| Trace / Markov               | O(√ε)     | ||M|| ≤ tr(M), loses dim factor     |
+| Trace / Markov               | → 0 (n)   | ||M|| ≤ tr(M), loses dim factor n   |
 | Star domination + Bernstein  | O(ε/log n) | Converts p² → p, destroys headroom |
-| Decoupling + MSS             | O(ε²)     | Within-group terms recreate problem |
+| Decoupling + MSS (1-shot)    | O(ε²)     | p_A = ε²/12 to shrink atoms; no recursion |
+| Decoupling + MSS (recursive) | O(√ε)     | 4^k spectral vs 2^k vertex scaling  |
 | Greedy / chromatic number    | O(ε)      | IS in d≈1/ε graph has size ε·|I|   |
 | Rank spreading heuristic     | O(ε²)     | tr/rank is lower bound, not upper   |
-| Recursive bipartition        | O(√ε)     | 4^k spectral vs 2^k vertex scaling  |
+
+Note: "1-shot" takes S = S_A only (avoids within-group terms but pays p_A = ε²).
+"Recursive" applies bipartition repeatedly, recovering the √ε subsampling bound.
 
 ### What Would Close It
 
