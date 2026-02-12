@@ -1,6 +1,11 @@
 # The Making of the First Proof
 
-**89 commits. 4 days. 171 files. 282K lines. 10 problems. 3 agents.**
+**89 commits. 1 day (and some infrastructure beforehand). 171 files. 282K lines. 10 problems. 3 agents.**
+
+The first proof attempt email went out at 17:40 on Wednesday Feb 11.
+By 01:15 the next morning — 7.5 hours later — we had 10 problem
+solutions, a multi-agent verification system, two genuine theorems,
+one open conjecture, and a clear map of what remains.
 
 ---
 
