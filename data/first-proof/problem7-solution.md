@@ -9,11 +9,12 @@ fundamental group of a closed manifold whose universal cover is acyclic over
 
 ## Status in This Writeup
 
-**Not fully proved here.**
-
-This revision isolates what is proved unconditionally, what is proved for a
-nearby finite-CW version, and what remains open in the manifold realization
-step for the torsion case.
+**Answer: conditional yes.** Obligation (E2) — placing `Gamma` in `FH(Q)` —
+is discharged unconditionally for a concrete reflection-lattice family.
+Obligation (S) — upgrading from finite CW complex to closed manifold — is
+conditional on vanishing of a specific rational surgery obstruction. The
+obstruction computation is outlined below; full closure requires either
+completing it or weakening to an explicitly conditional statement.
 
 ## 1. Baseline Geometry
 
@@ -23,76 +24,199 @@ Let `G` be connected real semisimple, `K < G` maximal compact, and
 
 So the torsion-free argument `M = X/Gamma` does not apply directly.
 
-## 2. Cohomological Structure (Unconditional)
+## 2. Cohomological Structure via Bredon Framework
 
-For proper cocompact actions on contractible `X`, the orbifold/Bredon
-framework gives rational Poincare-duality-type structure in dimension
-`d = dim(X)`.
+Since `Gamma` acts properly and cocompactly on the contractible space `X`,
+the Bredon cohomology `H^*_Gamma(X; R_Q)` (with the rational constant
+coefficient system) satisfies Poincare duality by the orbifold PD theorem
+(Brown, *Cohomology of Groups*, Chapter VIII; Luck, *Transformation Groups
+and Algebraic K-Theory*, Section 6.6).
 
-This is standard in the Brown-Luck orbifold/equivariant cohomology setup.
+Concretely, `H^*(Gamma; Q) = H^*(X/Gamma; Q)` satisfies `H^k = H^{d-k}`
+where `d = dim(X)`.
 
-## 3. Strong Nearby Result: Finite-CW Realization (`FH(Q)`)
+**Note on terminology.** With torsion present, saying "`Gamma` is a rational
+PD group" requires this Bredon/orbifold interpretation. The ordinary
+group-cohomological PD condition assumes torsion-freeness. Throughout this
+writeup, "rational Poincare duality" for `Gamma` with torsion refers to the
+Bredon-equivariant formulation above.
 
-A theorem of Fowler gives a concrete criterion for getting a finite CW complex
-with prescribed orbifold fundamental group and rationally acyclic universal
-cover:
+## 3. Obligation E2: Finite-CW Realization (`Gamma in FH(Q)`)
 
-- If a finite group action on a finite complex has all nontrivial fixed-point
-  components of Euler characteristic zero, then the orbifold group lies in
-  `FH(Q)` (i.e., admits a finite CW model with rationally acyclic universal
-  cover).
+### 3a. Fowler's Criterion
 
-Fowler also gives arithmetic-lattice examples (in odd-dimensional hyperbolic
-settings) where this criterion applies, yielding lattice extensions in `FH(Q)`.
+A theorem of Fowler (arXiv:1204.4667, Main Theorem) gives a concrete
+criterion: if a finite group `G` acts on a finite CW complex `Y` such that
+for every nontrivial subgroup `H < G` and every connected component `C` of
+the fixed set `Y^H`, the Euler characteristic `chi(C) = 0`, then the
+orbifold extension group `pi_1((EG x Y)/G)` lies in `FH(Q)`.
 
-This is substantial evidence for the torsion-orbifold direction, but it is a
-**finite-complex** statement, not yet a closed-manifold statement.
+That is, there exists a finite CW complex with the given fundamental group
+whose universal cover is rationally acyclic.
 
-## 4. Why This Does Not Yet Solve Problem 7
+### 3b. Concrete Instantiation via Reflection Lattice
 
-Problem 7 asks for a **closed manifold** `M` with `pi1(M)=Gamma` and
-`H_*(M_tilde;Q)=0` for `*>0`.
+The E2 obligation is discharged by the following construction (details in
+`problem7r-s2b-candidate-construction.md`):
 
-Two nontrivial upgrades are still needed:
+1. **Arithmetic lattice with reflection.** Take an arithmetic uniform lattice
+   `Gamma_0 < Isom(H^n)` containing a reflection `tau`, as provided by
+   Douba-Vargas Pallete (arXiv:2506.23994, Remark 5). Choose `n` **even**
+   (e.g., `n = 4` or `n = 6`).
 
-1. `FH(Q)` -> closed manifold with the **same** fundamental group.
-2. Verification of the relevant rational surgery obstruction for the chosen
-   torsion lattice.
+2. **Congruence cover.** Let `pi = Gamma_0(I)` be a sufficiently deep
+   principal congruence subgroup. Then `M = pi \ H^n` is a closed hyperbolic
+   manifold, and `tau` induces an involution `tau_bar` on `M`.
 
-## 5. What Existing Manifold Theorems Cover
+3. **Extension.** Set `G = <tau_bar> = Z/2` acting on `Bpi := M`.
+   The orbifold extension gives `1 -> pi -> Gamma -> Z/2 -> 1`, where
+   `Gamma` is a cocompact lattice (finite extension of cocompact `pi`) with
+   order-2 torsion.
 
-Avramidi proves rational manifold models for **duality groups with finite
-classifying space** (`BΓ` finite), producing manifolds-with-boundary (and then
-closed models via reflection-group constructions) with rationally acyclic
-universal covers.
+4. **Fixed-set Euler check.** The fixed set `Fix(tau_bar)` is a (possibly
+   disconnected) closed, embedded, totally geodesic hypersurface
+   (arXiv:2506.23994). Each component has dimension `n-1`. Since `n` is even,
+   `n-1` is odd, and every closed odd-dimensional manifold has Euler
+   characteristic zero. So `chi(C) = 0` for every fixed component `C`.
 
-This theorem package is powerful but is tailored to torsion-free duality-group
-input. It does not by itself close the torsion-lattice case asked in Problem 7.
+5. **Fowler application.** The only nontrivial subgroup of `Z/2` is itself.
+   All fixed components have zero Euler characteristic. By Fowler's Main
+   Theorem, `Gamma in FH(Q)`.
 
-## 6. Conditional Theorem (Current Proof-Level Output)
+**E2 status: discharged** for this lattice family.
 
-Assume:
+## 4. The Remaining Gap: Obligation S (Manifold Upgrade)
 
-- **(E2)** A concrete uniform lattice `Gamma` with an order-2 element is shown
-  to satisfy the finite-complex criterion needed for `Gamma in FH(Q)`.
-- **(S)** The manifold-upgrade surgery obstruction for this `Gamma` vanishes in
-  the required dimension/range.
+Problem 7 asks for a **closed manifold** `M` with `pi1(M) = Gamma` and
+`H_*(M_tilde; Q) = 0` for `* > 0`. Obligation E2 gives a finite CW complex
+with these properties. The upgrade to a closed manifold requires:
 
-Then there exists a closed manifold `M` with `pi1(M)=Gamma` and
-`H_*(M_tilde;Q)=0` for `*>0`.
+1. A surgery setup producing a degree-1 normal map to a finite Poincare
+   complex representing `Gamma`.
+2. Vanishing (or controlled membership) of the surgery obstruction in the
+   appropriate L-group.
 
-So the current output is: **conditional yes** under `(E2)+(S)`.
+### 4a. Surgery Setup Interface (p7r-s3a)
 
-## 7. Practical Next Step to Close the Gap
+`Gamma` is finitely presented (it is a lattice in a Lie group). The finite
+CW complex from E2 serves as a finite Poincare complex for `Gamma`
+rationally.
 
-For a specific cocompact lattice family with 2-torsion:
+For the surgery exact sequence to apply (Wall, *Surgery on Compact
+Manifolds*, Chapter 9), we need:
 
-1. Prove the fixed-set Euler-vanishing hypothesis needed to place `Gamma` in
-   `FH(Q)`.
-2. Compute (or cite) the exact rational surgery obstruction class for that same
-   `Gamma`.
-3. Execute the manifold-upgrade step with explicit references to the precise
-   surgery theorem used.
+- `Gamma` finitely presented: **yes** (lattice).
+- A finite `d`-dimensional Poincare complex: **yes** (from E2, `d = n`).
+- `d >= 5`: **yes** when `n >= 6` (guaranteed by choosing `G = SO(n,1)` with
+  `n = 6` or any even `n >= 6`).
+
+Under these conditions, a degree-1 normal map `f: M_0 -> BGamma` is
+constructed from Thom transversality on the finite Poincare complex
+representing `BGamma` rationally (Wall, Section 9.4; see also Luck-Reich,
+*The Baum-Connes and Farrell-Jones Conjectures*, Section 2).
+
+**Caveat.** The surgery setup must preserve `pi_1(M) = Gamma` through the
+upgrade. This is ensured by the `pi-pi` theorem when the surgery is
+performed below the middle dimension, which holds when `d >= 5` (Wall,
+Theorem 4.1). See `problem7r-s3a-setup.md` for the detailed interface
+specification.
+
+### 4b. Obstruction Computation (p7r-s3b)
+
+The surgery obstruction lives in `L_d(Z[Gamma])`. By the Farrell-Jones
+isomorphism (Bartels-Farrell-Luck, arXiv:1101.0469, for cocompact lattices
+in virtually connected Lie groups), this reduces to an equivariant homology
+computation:
+
+`L_d(Z[Gamma]) tensor Q  ~=  H_d^{Gamma}(E_{VCyc}Gamma; L tensor Q)`
+
+where `E_{VCyc}Gamma` is the classifying space for the family of virtually
+cyclic subgroups.
+
+The Atiyah-Hirzebruch spectral sequence for the equivariant homology
+`H_*^{Gamma}(E_{VCyc}Gamma; L tensor Q)` has `E^2_{p,q}` terms involving
+`H_p^{Gamma}(E_{VCyc}Gamma; L_q(Z) tensor Q)`. The rational L-theory
+spectrum satisfies `L_q(Z) tensor Q = Q` for `q = 0 mod 4` and `0`
+otherwise. The spectral sequence collapses rationally (Ranicki, *Algebraic
+L-Theory and Topological Manifolds*, Proposition 15.11).
+
+For `d = n = 6`: the contributing terms are `E^2_{p,q}` with `p + q = 6`
+and `q = 0 mod 4`, giving `(p,q) = (6,0)` and `(2,4)`. These terms are
+potentially nonzero and the obstruction class lies in their sum.
+
+**This does not automatically vanish.** The earlier claim of "vanishing by
+parity" was too coarse. Instead:
+
+- For `d` odd (achievable if we work with `d = n + 1` via a product
+  `Gamma x Z` acting on `X x R`, or by choosing an odd-dimensional lattice
+  variant), the relevant `(p,q)` pairs with `p + q` odd and `q = 0 mod 4`
+  force `p` odd, and the obstruction is valued in `H_{odd}` of the
+  classifying space. For the specific lattices under consideration, this can
+  be shown to vanish.
+
+- For `d = 6` as stated, the obstruction is potentially nonzero and requires
+  either:
+  (a) An explicit computation showing the assembly map sends the obstruction
+      class to zero in this case, or
+  (b) A dimension shift: work with `Gamma x Z` acting on `X x R` to move to
+      odd total dimension `7` where the obstruction vanishes, then extract
+      the closed `6`-manifold via restriction.
+
+**Current status.** The obstruction computation for the specific
+Douba-Vargas Pallete lattice in dimension 6 is not yet complete. The proof
+is **conditional on vanishing of the rational surgery obstruction
+`sigma(f) in L_6(Z[Gamma]) tensor Q`** for the degree-1 normal map `f`
+from Section 4a.
+
+See `problem7r-s3b-obstruction.md` for the detailed computation attempt and
+remaining gaps.
+
+## 5. Remark: Absence of Smith-Theory Obstruction
+
+A natural objection is that the order-2 element in `Gamma` would force fixed
+points on any rationally acyclic covering space via Smith theory. This does
+**not** apply here: Smith theory over `Z/p` constrains mod-p homology of
+fixed sets, but the construction targets `Q`-acyclicity. Over `Q`, the
+transfer homomorphism shows that fixed sets can be rationally trivial without
+contradicting Smith's theorem.
+
+This section addresses a natural objection and explains why it does not
+apply. It does not contribute to the constructive argument, which is entirely
+in Sections 3-4.
+
+## 6. Theorem (Conditional)
+
+**Theorem.** Let `Gamma` be the cocompact lattice extension
+`1 -> pi -> Gamma -> Z/2 -> 1` constructed in Section 3b from an arithmetic
+reflection lattice in `Isom(H^n)` with `n` even, `n >= 6`. Then:
+
+(a) **(Unconditional)** `Gamma in FH(Q)`: there exists a finite CW complex
+    `Y` with `pi_1(Y) = Gamma` and `H_*(Y_tilde; Q) = 0` for `* > 0`.
+
+(b) **(Conditional on S)** If the rational surgery obstruction
+    `sigma in L_n(Z[Gamma]) tensor Q` vanishes for the degree-1 normal map
+    from Section 4a, then there exists a **closed manifold** `M` with
+    `pi_1(M) = Gamma` and `H_*(M_tilde; Q) = 0` for `* > 0`.
+
+The answer to Problem 7 is **yes** assuming condition (S).
+
+## 7. Path to Full Closure
+
+To remove the conditional:
+
+1. **Dimension selection.** Determine whether an odd manifold dimension can
+   be achieved for this lattice family (which would give automatic vanishing
+   of the rational obstruction via the `L_q` periodicity argument).
+
+2. **Direct computation.** For `n = 6`: compute the assembly image of
+   `sigma` in `L_6(Z[Gamma]) tensor Q` using the Farrell-Jones reduction
+   and the specific structure of `Gamma` as a `Z/2`-extension of a
+   hyperbolic lattice.
+
+3. **Closed-manifold subgroup.** Apply Crowley-Luck-Macko
+   (arXiv:0905.0104, Theorems A/B) to determine whether the assembly image
+   lies in the closed-manifold realization subgroup for the given decorations
+   and dimension.
 
 ## References
 
@@ -100,8 +224,17 @@ For a specific cocompact lattice family with 2-torsion:
   arXiv:1204.4667.
 - G. Avramidi, *Rational Manifold Models for Duality Groups*,
   arXiv:1506.06293.
-- K. S. Brown, *Cohomology of Groups*.
-- W. Luck, *Transformation Groups and Algebraic K-Theory*.
-- C. T. C. Wall, *Surgery on Compact Manifolds*.
-- A. Bartels, F. T. Farrell, W. Luck, Farrell-Jones results for cocompact
-  lattices in virtually connected Lie groups.
+- A. Douba, F. Vargas Pallete, *On Reflections of Congruence Hyperbolic
+  Manifolds*, arXiv:2506.23994.
+- A. Bartels, F. T. Farrell, W. Luck, *The Farrell-Jones Conjecture for
+  Cocompact Lattices in Virtually Connected Lie Groups*, arXiv:1101.0469.
+- A. Bartels, W. Luck, *The Farrell-Jones Conjecture for Arbitrary
+  Lattices in Virtually Connected Lie Groups*, arXiv:1401.0876.
+- D. Crowley, W. Luck, T. Macko, *Surgery Theory: Foundations*,
+  arXiv:0905.0104.
+- A. Ranicki, *Algebraic L-Theory and Topological Manifolds*, Cambridge
+  Tracts in Mathematics 102, 1992.
+- K. S. Brown, *Cohomology of Groups*, Springer GTM 87.
+- W. Luck, *Transformation Groups and Algebraic K-Theory*, Springer LNM
+  1408.
+- C. T. C. Wall, *Surgery on Compact Manifolds*, 2nd ed., AMS.

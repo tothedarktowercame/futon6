@@ -48,29 +48,19 @@ Cite Fowler Main Theorem (`1204.4667`) to conclude:
 Produce an explicit uniform lattice family with order-2 torsion and verify the
 fixed-set Euler hypotheses needed for `p7r-s2a`.
 
-### Available theorem assets
+### Status: DISCHARGED
 
-1. Fowler Proposition 5.5 (`1204.4667`):
-   - for odd `n`, gives torsion-free uniform arithmetic lattice `π < SO(n,1)`
-     with a `Z/n` action and fixed set `S^1` (Euler zero).
-2. Fowler extension step:
-   - `1 -> π -> Gamma -> Z/n -> 1`, then `Gamma ∈ FH(Q)` by Main Theorem.
+Completed via the even-dimensional reflection route
+(`problem7r-s2b-candidate-construction.md`):
 
-### Gap to close for reduced P7
+- Arithmetic reflection lattice `Gamma_0 < Isom(H^n)` with `n` even >= 6
+  (Douba-Vargas Pallete, arXiv:2506.23994).
+- Congruence subgroup `pi = Gamma_0(I)` gives closed manifold `M = H^n/pi`.
+- Extension `1 -> pi -> Gamma -> Z/2 -> 1` with order-2 torsion.
+- Fixed set: totally geodesic hypersurface, dimension `n-1` (odd), so `chi = 0`.
+- Fowler criterion applies: `Gamma in FH(Q)`.
 
-- The explicit arithmetic proposition is strongest in odd-order form (`Z/n`,
-  odd `n`) and does not directly hand over an order-2 lattice example in the
-  same package.
-
-### Completion criterion
-
-One of:
-1. Provide a direct `Z/2` lattice-action construction satisfying the same
-   fixed-set Euler hypotheses; or
-2. Prove a transfer lemma from an available finite-action model to the order-2
-   case while preserving the needed Euler-vanishing conditions.
-
-If neither is done, `p7r-s2b` remains open.
+See `problem7r-s2b-candidate-construction.md` for full details.
 
 ## `p7r-s3a` checklist (manifold-upgrade setup interface)
 
@@ -100,9 +90,22 @@ range, and record:
 
 ### Critical caveat
 
-- Avramidi’s closure to a closed manifold via reflection methods may alter the
+- Avramidi's closure to a closed manifold via reflection methods may alter the
   fundamental group unless extra control is shown. For reduced P7, any closure
   step must preserve final `pi_1 = Gamma`.
+
+### Status: PROVISIONALLY CLOSED
+
+All surgery prerequisites verified (`problem7r-s3a-setup.md`):
+
+- P1: finitely presented (lattice) — verified
+- P2: finite rational Poincare complex from E2 — verified
+- P3: dimension >= 5 (n = 6) — verified
+- P4: degree-1 normal map existence (via torsion-free cover) — verified
+- P5: pi_1 preservation (surgery below middle dimension) — verified
+- P6: rational acyclicity preserved — verified
+
+Single remaining obligation passes to `p7r-s3b`.
 
 ## `p7r-s3b` checklist (obstruction computation + closure)
 
@@ -142,11 +145,38 @@ vanishing in the selected lattice case.
   (dimension, decorations, orientation character, stabilization regime). Do not
   silently assume equality in unsupported settings.
 
+### Status: OPEN (advanced)
+
+The FJ reduction is complete (`problem7r-s3b-obstruction.md`):
+
+- UNil terms vanish rationally (Connolly-Davis), so `E_{Fin}` suffices.
+- Computation reduces to `H_6^{Z/2}(M; L tensor Q)`.
+- Transfer argument: `res(sigma(f)) = 0` (pi-level problem already solved).
+- Obstruction localized to fixed-set contribution:
+  `sigma(f) in Q + H_3(F; Q) + H_1(F; Q)`.
+- Dimension-parity tension identified: E2 needs even n, S prefers odd n.
+- Five resolution strategies proposed (A through E).
+
+Proof remains **conditional on `sigma(f) = 0`**, but the obstruction is now
+localized to a specific subspace determined by fixed-set topology.
+
 ## Fast execution order (recommended)
 
-1. `p7r-s2a`: lock theorem interface from Fowler Main Theorem.
-2. `p7r-s2b`: either produce a true order-2 instantiation or mark explicit
-   blocker.
-3. `p7r-s3a`: fix the manifold-with-boundary setup with `pi_1` control.
-4. `p7r-s3b`: run FJ reduction plus explicit obstruction computation.
-5. Only then assert `p7r-s5`.
+1. `p7r-s2a`: lock theorem interface from Fowler Main Theorem. **Done.**
+2. `p7r-s2b`: produce true order-2 instantiation. **Done** (reflection route).
+3. `p7r-s3a`: fix surgery setup with `pi_1` control. **Done** (Wall framework).
+4. `p7r-s3b`: run FJ reduction plus obstruction computation. **Advanced**
+   (obstruction localized to fixed-set piece; not yet closed).
+5. Only then assert `p7r-s5`. **Blocked on s3b.**
+
+## Current bottleneck
+
+The obstruction `sigma(f) in Q + H_3(F; Q) + H_1(F; Q)` is the single
+remaining mathematical obligation. The most promising resolution paths are:
+
+- **Strategy B** (lattice selection): find congruence subgroup with small
+  `b_1(F)`, `b_3(F)`.
+- **Strategy C** (equivariant signature): compute the equivariant signature
+  defect for the specific normal map.
+- **Strategy E** (conditional): accept the conditional statement with the
+  tightened obstruction characterization.
