@@ -1,0 +1,373 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{math-proofread-style}[2026/02/12 v0.8 Stable syntax-class color map]
+
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{array}
+
+\colorlet{MPSyntaxGreekColor}{Mulberry}
+\colorlet{MPSyntaxOperatorColor}{Purple}
+\colorlet{MPSyntaxRelationColor}{RoyalPurple}
+\colorlet{MPSyntaxLargeOperatorColor}{BlueViolet}
+\colorlet{MPSyntaxArrowColor}{TealBlue}
+\colorlet{MPSyntaxDelimiterColor}{CadetBlue}
+\colorlet{MPSyntaxFunctionColor}{Orchid}
+\colorlet{MPSyntaxNumberColor}{Dandelion}
+
+\newcommand{\mGreek}[1]{{\color{MPSyntaxGreekColor}#1}}
+\newcommand{\mOperator}[1]{{\color{MPSyntaxOperatorColor}#1}}
+\newcommand{\mRelation}[1]{{\color{MPSyntaxRelationColor}#1}}
+\newcommand{\mLargeOperator}[1]{{\color{MPSyntaxLargeOperatorColor}#1}}
+\newcommand{\mArrow}[1]{{\color{MPSyntaxArrowColor}#1}}
+\newcommand{\mDelimiter}[1]{{\color{MPSyntaxDelimiterColor}#1}}
+\newcommand{\mFunction}[1]{{\color{MPSyntaxFunctionColor}#1}}
+\newcommand{\mNumber}[1]{{\color{MPSyntaxNumberColor}#1}}
+\newcommand{\mConstant}[1]{{\color{MPSyntaxNumberColor}#1}}
+\newcommand{\mBin}[1]{\mathbin{\mOperator{#1}}}
+\newcommand{\mRel}[1]{\mathrel{\mRelation{#1}}}
+\newcommand{\mDelim}[1]{\mathopen{}\mDelimiter{#1}\mathclose{}}
+\newcommand{\mExponent}[1]{{\color{MPSyntaxNumberColor}#1}}
+\newcommand{\mSubscript}[1]{{\color{MPSyntaxDelimiterColor}#1}}
+\newcommand{\mVariable}[1]{#1}
+\newcommand{\mQuantifier}[1]{#1}
+\newcommand{\mPow}[2]{#1^{\mExponent{#2}}}
+\newcommand{\mIdx}[2]{#1_{\mSubscript{#2}}}
+\newcommand{\mTensor}[3]{#1_{\mSubscript{#2}}^{\mExponent{#3}}}
+\newcommand{\EulerE}{\mConstant{e}}
+
+\makeatletter
+\newif\ifMPProofreadColorsEnabled
+\MPProofreadColorsEnabledfalse
+\newif\ifMPRawMathCharsActivated
+\MPRawMathCharsActivatedfalse
+
+\let\MP@orig@alpha\alpha
+\let\MP@orig@beta\beta
+\let\MP@orig@gamma\gamma
+\let\MP@orig@delta\delta
+\let\MP@orig@epsilon\epsilon
+\let\MP@orig@varepsilon\varepsilon
+\let\MP@orig@zeta\zeta
+\let\MP@orig@eta\eta
+\let\MP@orig@theta\theta
+\let\MP@orig@vartheta\vartheta
+\let\MP@orig@iota\iota
+\let\MP@orig@kappa\kappa
+\let\MP@orig@lambda\lambda
+\let\MP@orig@mu\mu
+\let\MP@orig@nu\nu
+\let\MP@orig@xi\xi
+\let\MP@orig@rho\rho
+\let\MP@orig@sigma\sigma
+\let\MP@orig@tau\tau
+\let\MP@orig@upsilon\upsilon
+\let\MP@orig@phi\phi
+\let\MP@orig@chi\chi
+\let\MP@orig@psi\psi
+\let\MP@orig@omega\omega
+\let\MP@orig@Gamma\Gamma
+\let\MP@orig@Delta\Delta
+\let\MP@orig@Theta\Theta
+\let\MP@orig@Lambda\Lambda
+\let\MP@orig@Xi\Xi
+\let\MP@orig@Pi\Pi
+\let\MP@orig@Sigma\Sigma
+\let\MP@orig@Upsilon\Upsilon
+\let\MP@orig@Phi\Phi
+\let\MP@orig@Psi\Psi
+\let\MP@orig@Omega\Omega
+
+\let\MP@orig@times\times
+\let\MP@orig@ast\ast
+\let\MP@orig@cup\cup
+\let\MP@orig@otimes\otimes
+\let\MP@orig@oplus\oplus
+\let\MP@orig@le\le
+\let\MP@orig@leq\leq
+\let\MP@orig@approx\approx
+\let\MP@orig@in\in
+\let\MP@orig@subseteq\subseteq
+\let\MP@orig@neq\neq
+\let\MP@orig@sum\sum
+\let\MP@orig@prod\prod
+\let\MP@orig@int\int
+\let\MP@orig@lim\lim
+\let\MP@orig@to\to
+\let\MP@orig@Rightarrow\Rightarrow
+\let\MP@orig@mapsto\mapsto
+\let\MP@orig@leftrightarrow\leftrightarrow
+\let\MP@orig@sin\sin
+\let\MP@orig@cos\cos
+\let\MP@orig@log\log
+\let\MP@orig@exp\exp
+\let\MP@orig@pi\pi
+\let\MP@orig@langle\langle
+\let\MP@orig@rangle\rangle
+\let\MP@orig@vert\vert
+\let\MP@orig@lvert\lvert
+\let\MP@orig@rvert\rvert
+
+\begingroup\catcode`\+=\active\gdef+{\mathbin{\color{MPSyntaxOperatorColor}\mathchar"202B}}\endgroup
+\begingroup\catcode`\==\active\gdef={\mathrel{\color{MPSyntaxRelationColor}\mathchar"303D}}\endgroup
+
+\newcommand{\MP@ActivateRawMathChars}{%
+  \ifMPRawMathCharsActivated\else
+    \MPRawMathCharsActivatedtrue
+    \mathcode`+="8000
+    \mathcode`=="8000
+  \fi
+}
+
+\newcommand{\MP@DeactivateRawMathChars}{%
+  \ifMPRawMathCharsActivated
+    \MPRawMathCharsActivatedfalse
+    \mathcode`+="202B
+    \mathcode`=="303D
+  \fi
+}
+
+\newcommand{\EnableMathProofColors}{%
+  \ifMPProofreadColorsEnabled\else
+    \MPProofreadColorsEnabledtrue
+
+    \renewcommand{\alpha}{\mGreek{\MP@orig@alpha}}
+    \renewcommand{\beta}{\mGreek{\MP@orig@beta}}
+    \renewcommand{\gamma}{\mGreek{\MP@orig@gamma}}
+    \renewcommand{\delta}{\mGreek{\MP@orig@delta}}
+    \renewcommand{\epsilon}{\mGreek{\MP@orig@epsilon}}
+    \renewcommand{\varepsilon}{\mGreek{\MP@orig@varepsilon}}
+    \renewcommand{\zeta}{\mGreek{\MP@orig@zeta}}
+    \renewcommand{\eta}{\mGreek{\MP@orig@eta}}
+    \renewcommand{\theta}{\mGreek{\MP@orig@theta}}
+    \renewcommand{\vartheta}{\mGreek{\MP@orig@vartheta}}
+    \renewcommand{\iota}{\mGreek{\MP@orig@iota}}
+    \renewcommand{\kappa}{\mGreek{\MP@orig@kappa}}
+    \renewcommand{\lambda}{\mGreek{\MP@orig@lambda}}
+    \renewcommand{\mu}{\mGreek{\MP@orig@mu}}
+    \renewcommand{\nu}{\mGreek{\MP@orig@nu}}
+    \renewcommand{\xi}{\mGreek{\MP@orig@xi}}
+    \renewcommand{\rho}{\mGreek{\MP@orig@rho}}
+    \renewcommand{\sigma}{\mGreek{\MP@orig@sigma}}
+    \renewcommand{\tau}{\mGreek{\MP@orig@tau}}
+    \renewcommand{\upsilon}{\mGreek{\MP@orig@upsilon}}
+    \renewcommand{\phi}{\mGreek{\MP@orig@phi}}
+    \renewcommand{\chi}{\mGreek{\MP@orig@chi}}
+    \renewcommand{\psi}{\mGreek{\MP@orig@psi}}
+    \renewcommand{\omega}{\mGreek{\MP@orig@omega}}
+    \renewcommand{\Gamma}{\mGreek{\MP@orig@Gamma}}
+    \renewcommand{\Delta}{\mGreek{\MP@orig@Delta}}
+    \renewcommand{\Theta}{\mGreek{\MP@orig@Theta}}
+    \renewcommand{\Lambda}{\mGreek{\MP@orig@Lambda}}
+    \renewcommand{\Xi}{\mGreek{\MP@orig@Xi}}
+    \renewcommand{\Pi}{\mGreek{\MP@orig@Pi}}
+    \renewcommand{\Sigma}{\mGreek{\MP@orig@Sigma}}
+    \renewcommand{\Upsilon}{\mGreek{\MP@orig@Upsilon}}
+    \renewcommand{\Phi}{\mGreek{\MP@orig@Phi}}
+    \renewcommand{\Psi}{\mGreek{\MP@orig@Psi}}
+    \renewcommand{\Omega}{\mGreek{\MP@orig@Omega}}
+
+    \renewcommand{\times}{\mOperator{\MP@orig@times}}
+    \renewcommand{\ast}{\mOperator{\MP@orig@ast}}
+    \renewcommand{\cup}{\mOperator{\MP@orig@cup}}
+    \renewcommand{\otimes}{\mOperator{\MP@orig@otimes}}
+    \renewcommand{\oplus}{\mOperator{\MP@orig@oplus}}
+
+    \renewcommand{\le}{\mRelation{\MP@orig@le}}
+    \renewcommand{\leq}{\mRelation{\MP@orig@leq}}
+    \renewcommand{\approx}{\mRelation{\MP@orig@approx}}
+    \renewcommand{\in}{\mRelation{\MP@orig@in}}
+    \renewcommand{\subseteq}{\mRelation{\MP@orig@subseteq}}
+    \renewcommand{\neq}{\mRelation{\MP@orig@neq}}
+
+    \renewcommand{\sum}{\mLargeOperator{\MP@orig@sum}}
+    \renewcommand{\prod}{\mLargeOperator{\MP@orig@prod}}
+    \renewcommand{\int}{\mLargeOperator{\MP@orig@int}}
+    \renewcommand{\lim}{\mLargeOperator{\MP@orig@lim}}
+
+    \renewcommand{\to}{\mArrow{\MP@orig@to}}
+    \renewcommand{\Rightarrow}{\mArrow{\MP@orig@Rightarrow}}
+    \renewcommand{\mapsto}{\mArrow{\MP@orig@mapsto}}
+    \renewcommand{\leftrightarrow}{\mArrow{\MP@orig@leftrightarrow}}
+
+    \renewcommand{\langle}{\mDelimiter{\MP@orig@langle}}
+    \renewcommand{\rangle}{\mDelimiter{\MP@orig@rangle}}
+    \renewcommand{\vert}{\mDelimiter{\MP@orig@vert}}
+    \renewcommand{\lvert}{\mDelimiter{\MP@orig@lvert}}
+    \renewcommand{\rvert}{\mDelimiter{\MP@orig@rvert}}
+
+    \renewcommand{\sin}{\mFunction{\MP@orig@sin}}
+    \renewcommand{\cos}{\mFunction{\MP@orig@cos}}
+    \renewcommand{\log}{\mFunction{\MP@orig@log}}
+    \renewcommand{\exp}{\mFunction{\MP@orig@exp}}
+
+    \renewcommand{\pi}{\mNumber{\MP@orig@pi}}
+  \fi
+}
+
+\newcommand{\DisableMathProofColors}{%
+  \ifMPProofreadColorsEnabled
+    \MPProofreadColorsEnabledfalse
+
+    \let\alpha\MP@orig@alpha
+    \let\beta\MP@orig@beta
+    \let\gamma\MP@orig@gamma
+    \let\delta\MP@orig@delta
+    \let\epsilon\MP@orig@epsilon
+    \let\varepsilon\MP@orig@varepsilon
+    \let\zeta\MP@orig@zeta
+    \let\eta\MP@orig@eta
+    \let\theta\MP@orig@theta
+    \let\vartheta\MP@orig@vartheta
+    \let\iota\MP@orig@iota
+    \let\kappa\MP@orig@kappa
+    \let\lambda\MP@orig@lambda
+    \let\mu\MP@orig@mu
+    \let\nu\MP@orig@nu
+    \let\xi\MP@orig@xi
+    \let\rho\MP@orig@rho
+    \let\sigma\MP@orig@sigma
+    \let\tau\MP@orig@tau
+    \let\upsilon\MP@orig@upsilon
+    \let\phi\MP@orig@phi
+    \let\chi\MP@orig@chi
+    \let\psi\MP@orig@psi
+    \let\omega\MP@orig@omega
+    \let\Gamma\MP@orig@Gamma
+    \let\Delta\MP@orig@Delta
+    \let\Theta\MP@orig@Theta
+    \let\Lambda\MP@orig@Lambda
+    \let\Xi\MP@orig@Xi
+    \let\Pi\MP@orig@Pi
+    \let\Sigma\MP@orig@Sigma
+    \let\Upsilon\MP@orig@Upsilon
+    \let\Phi\MP@orig@Phi
+    \let\Psi\MP@orig@Psi
+    \let\Omega\MP@orig@Omega
+
+    \let\times\MP@orig@times
+    \let\ast\MP@orig@ast
+    \let\cup\MP@orig@cup
+    \let\otimes\MP@orig@otimes
+    \let\oplus\MP@orig@oplus
+    \let\le\MP@orig@le
+    \let\leq\MP@orig@leq
+    \let\approx\MP@orig@approx
+    \let\in\MP@orig@in
+    \let\subseteq\MP@orig@subseteq
+    \let\neq\MP@orig@neq
+    \let\sum\MP@orig@sum
+    \let\prod\MP@orig@prod
+    \let\int\MP@orig@int
+    \let\lim\MP@orig@lim
+    \let\to\MP@orig@to
+    \let\Rightarrow\MP@orig@Rightarrow
+    \let\mapsto\MP@orig@mapsto
+    \let\leftrightarrow\MP@orig@leftrightarrow
+    \let\sin\MP@orig@sin
+    \let\cos\MP@orig@cos
+    \let\log\MP@orig@log
+    \let\exp\MP@orig@exp
+    \let\pi\MP@orig@pi
+    \let\langle\MP@orig@langle
+    \let\rangle\MP@orig@rangle
+    \let\vert\MP@orig@vert
+    \let\lvert\MP@orig@lvert
+    \let\rvert\MP@orig@rvert
+
+    \MP@DeactivateRawMathChars
+  \fi
+}
+
+\AtBeginDocument{%
+  \ifMPProofreadColorsEnabled
+    \MP@ActivateRawMathChars
+  \fi
+  \@ifpackageloaded{hyperref}{%
+    \pdfstringdefDisableCommands{%
+      \def\color#1{}%
+      \def\textcolor#1#2{#2}%
+      \let\alpha\MP@orig@alpha
+      \let\beta\MP@orig@beta
+      \let\gamma\MP@orig@gamma
+      \let\delta\MP@orig@delta
+      \let\epsilon\MP@orig@epsilon
+      \let\varepsilon\MP@orig@varepsilon
+      \let\zeta\MP@orig@zeta
+      \let\eta\MP@orig@eta
+      \let\theta\MP@orig@theta
+      \let\lambda\MP@orig@lambda
+      \let\mu\MP@orig@mu
+      \let\nu\MP@orig@nu
+      \let\pi\MP@orig@pi
+      \let\Phi\MP@orig@Phi
+      \let\sum\MP@orig@sum
+      \let\prod\MP@orig@prod
+      \let\int\MP@orig@int
+      \let\to\MP@orig@to
+      \let\Rightarrow\MP@orig@Rightarrow
+      \let\mapsto\MP@orig@mapsto
+      \let\leftrightarrow\MP@orig@leftrightarrow
+      \let\le\MP@orig@le
+      \let\leq\MP@orig@leq
+      \let\approx\MP@orig@approx
+      \let\in\MP@orig@in
+      \let\subseteq\MP@orig@subseteq
+      \let\neq\MP@orig@neq
+      \let\times\MP@orig@times
+      \let\ast\MP@orig@ast
+      \let\cup\MP@orig@cup
+      \let\otimes\MP@orig@otimes
+      \let\sin\MP@orig@sin
+      \let\cos\MP@orig@cos
+      \let\log\MP@orig@log
+      \let\exp\MP@orig@exp
+      \def\mGreek#1{#1}%
+      \def\mOperator#1{#1}%
+      \def\mRelation#1{#1}%
+      \def\mLargeOperator#1{#1}%
+      \def\mArrow#1{#1}%
+      \def\mDelimiter#1{#1}%
+      \def\mFunction#1{#1}%
+      \def\mNumber#1{#1}%
+      \def\mConstant#1{#1}%
+      \def\mBin#1{#1}%
+      \def\mRel#1{#1}%
+      \def\mDelim#1{#1}%
+      \def\mPow#1#2{#1^#2}%
+      \def\mIdx#1#2{#1_#2}%
+      \def\mTensor#1#2#3{#1_#2^#3}%
+      \def\EulerE{e}%
+    }%
+  }{}%
+}
+\makeatother
+
+\newcommand{\MathProofreadColorLegend}{%
+  \begingroup
+  \renewcommand{\arraystretch}{1.2}%
+  \setlength{\tabcolsep}{8pt}%
+  \begin{center}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.42\linewidth}}
+    \textbf{Syntax class} & \textbf{Colour} & \textbf{Examples} \\
+    Greek letters & \textcolor{MPSyntaxGreekColor}{Mulberry} & $\mGreek{\alpha},\,\mGreek{\beta},\,\mGreek{\Gamma}$ \\
+    Binary operators & \textcolor{MPSyntaxOperatorColor}{Purple} & $a\mBin{+}b,\,x\mOperator{\times}y,\,u\mOperator{\ast}v,\,U\mOperator{\cup}V,\,A\mOperator{\otimes}B$ \\
+    Relation operators & \textcolor{MPSyntaxRelationColor}{RoyalPurple} & $x\mRel{=}y,\,x\mRel{\le}y,\,x\mRel{\approx}y,\,x\mRel{\in}S,\,A\mRel{\subseteq}B$ \\
+    Large operators & \textcolor{MPSyntaxLargeOperatorColor}{BlueViolet} & $\mLargeOperator{\sum},\,\mLargeOperator{\prod},\,\mLargeOperator{\int},\,\mLargeOperator{\lim}$ \\
+    Arrows & \textcolor{MPSyntaxArrowColor}{TealBlue} & $f\mArrow{\to}g,\,P\mArrow{\Rightarrow}Q,\,x\mArrow{\mapsto}x^2,\,A\mArrow{\leftrightarrow}B$ \\
+    Delimiters & \textcolor{MPSyntaxDelimiterColor}{CadetBlue} & $\mDelimiter{(}x\mDelimiter{)},\,\mDelimiter{[}x\mDelimiter{]},\,\langle x\rangle,\,|x|$ \\
+    Functions & \textcolor{MPSyntaxFunctionColor}{Orchid} & $\mFunction{\sin}x,\,\mFunction{\cos}x,\,\mFunction{\log}x,\,\mFunction{\exp}x$ \\
+    Numbers/constants & \textcolor{MPSyntaxNumberColor}{Dandelion} & $\mNumber{0},\ldots,\mNumber{9},\,\mNumber{\pi},\,\mConstant{e}$ \\
+  \end{tabular}
+  \end{center}
+  \endgroup
+}
+
+\newcommand{\MathProofreadDemoEquation}{%
+\[
+\mLargeOperator{\sum}_{n=\mNumber{0}}^{\infty}
+\mFunction{\exp}\mDelimiter{(}-\alpha n\mDelimiter{)}
+\mArrow{\to}
+\mNumber{\pi}
+\mRel{\approx}
+\mFunction{\log}\mDelimiter{(}\EulerE\mDelimiter{)}.
+\]
+}
