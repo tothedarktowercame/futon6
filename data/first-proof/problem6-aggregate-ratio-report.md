@@ -89,3 +89,33 @@ certificate.
 - `scripts/verify-p6-gpl-h-aggregate-ratio.py`
 - `data/first-proof/problem6-aggregate-ratio-results.json`
 - `data/first-proof/problem6-aggregate-ratio-report.md`
+
+## Extended stress (`n<=64`)
+
+Command:
+
+`python3 scripts/verify-p6-gpl-h-aggregate-ratio.py --nmax 64 --eps 0.1 0.12 0.15 0.2 0.25 0.3 --c-step 0.5 --seed 20260212 --output data/first-proof/problem6-aggregate-ratio-results-n64.json`
+
+Summary:
+
+- Case-2b instances: `357`
+- Step rows: `1003`
+- Nontrivial rows: `440`
+- nontrivial ratio failures (`ratio>=1`): `0`
+- nontrivial `rho_safe` failures: `0`
+
+Gain/loss decomposition on nontrivial rows:
+
+- `G_t := sum_{s<=1} d_v(1/s_v-1)`
+- `P_t := sum_{s>1} d_v(1-1/s_v)`
+- identity: `|A_t|(gbar-dbar)=G_t-P_t`
+
+Observed:
+
+- rows with `|A_+|>0`: `5`
+- rows with `|A_+|>1`: `1` (max `3`)
+- `max(P_t/G_t) = 0.00934`
+- `min((G_t-P_t)/D_t) = 0.3445`, where `D_t=sum d_v`
+
+This supports using `G_t > P_t` as the primary bridge formulation (GL-Balance)
+rather than direct min-score control.

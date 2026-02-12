@@ -89,7 +89,7 @@
       "id": "p6d-e",
       "node_type": "comment",
       "post_id": 6307,
-      "body_text": "Empirical AR diagnostics (n<=48): nontrivial_ratio_fail=0, rho_safe_fail=0, rho_simple_fail=1, rho_safe_margin_min=0.037.",
+      "body_text": "Empirical AR diagnostics: rows=1003, nontrivial=440, nontrivial_ratio_fail=0, rho_safe_fail=0, rho_safe_margin_min=0.037.",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": 6300,
@@ -113,7 +113,43 @@
       "id": "p6d-o",
       "node_type": "comment",
       "post_id": 6309,
-      "body_text": "Optional shortcut AR4 (rho_+ < 1-M_-) is only sufficient, not equivalent; empirically it has one nontrivial miss at n<=48.",
+      "body_text": "Optional shortcut AR4 (rho_+ < 1-M_-) is only sufficient, not equivalent; empirically it has nontrivial misses.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "empirical"
+      }
+    },
+    {
+      "id": "p6d-gl",
+      "node_type": "answer",
+      "post_id": 6310,
+      "body_text": "GL identity (proved): defining G_t=sum_{s<=1} d_v(1/s_v-1), P_t=sum_{s>1} d_v(1-1/s_v), we have |A_t|(gbar-dbar)=G_t-P_t.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "proved"
+      }
+    },
+    {
+      "id": "p6d-gb",
+      "node_type": "answer",
+      "post_id": 6311,
+      "body_text": "Open GL-Balance bridge: prove G_t > P_t from H1-H4 on all nontrivial steps.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "open"
+      }
+    },
+    {
+      "id": "p6d-e2",
+      "node_type": "comment",
+      "post_id": 6312,
+      "body_text": "n<=64 stress signal: on 440 nontrivial rows, only 5 have any above-1 mass, max(P_t/G_t)=0.00934, and G_t-P_t is always positive.",
       "score": 0,
       "creation_date": "2026-02-12",
       "parent_post_id": 6300,
@@ -191,6 +227,27 @@
       "target": "p6d-c",
       "edge_type": "challenge",
       "evidence": "One-parameter shortcut is too strong to be the primary bridge",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-gl",
+      "target": "p6d-ar",
+      "edge_type": "reference",
+      "evidence": "AR-NT is equivalent to GL-Balance inequality G_t>P_t",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-gb",
+      "target": "p6d-ar",
+      "edge_type": "assert",
+      "evidence": "Open bridge reformulated as proving GL-Balance from H1-H4",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-e2",
+      "target": "p6d-gb",
+      "edge_type": "exemplify",
+      "evidence": "Stress data supports strong gain-dominance regime",
       "detection": "structural"
     }
   ],
@@ -444,31 +501,106 @@
         "challenge",
         "structural"
       ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-010",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-gl",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-ar",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "AR-NT is equivalent to GL-Balance inequality G_t>P_t",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-011",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-gb",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-ar",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Open bridge reformulated as proving GL-Balance from H1-H4",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-012",
+      "hx/type": "thread/exemplify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-e2",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-gb",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Stress data supports strong gain-dominance regime",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "exemplify",
+        "structural"
+      ]
     }
   ],
   "stats": {
-    "n_nodes": 10,
-    "n_edges": 10,
+    "n_nodes": 13,
+    "n_edges": 13,
     "node_types": {
       "question": 1,
-      "answer": 7,
-      "comment": 2
+      "answer": 9,
+      "comment": 3
     },
     "edge_types": {
       "challenge": 2,
       "reform": 2,
-      "reference": 3,
-      "assert": 2,
-      "exemplify": 1
+      "reference": 4,
+      "assert": 3,
+      "exemplify": 2
     },
     "detection_types": {
-      "structural": 10
+      "structural": 13
     },
     "verification_status": {
-      "open": 3,
+      "open": 4,
       "proved_negative": 1,
-      "proved": 4,
-      "empirical": 2
+      "proved": 5,
+      "empirical": 3
     }
   }
 }

@@ -5,6 +5,7 @@ Current bridge focus:
 - proved ratio certificate: min score <= dbar/gbar
 - open AR-NT target: nontrivial => dbar<gbar
 - proved AR lemmas: exact rho threshold and valid extremal sufficient threshold
+- proved gain/loss identity: |A|(gbar-dbar)=G_t-P_t
 """
 
 from __future__ import annotations
@@ -36,11 +37,11 @@ def run_summary_text(run_path: Path) -> str:
         payload = json.loads(run_path.read_text())
         s = payload["summary"]
         return (
-            "Empirical AR diagnostics (n<=48): "
-            f"nontrivial_ratio_fail={s['nontrivial_ratio_fail_rows']}, "
-            f"rho_safe_fail={s['rho_safe_fail_rows']}, "
-            f"rho_simple_fail={s['rho_simple_fail_rows']}, "
-            f"rho_safe_margin_min={s['rho_safe_margin_min']:.3f}."
+            "Empirical AR diagnostics: "
+            f"rows={s.get('rows')}, nontrivial={s.get('nontrivial_rows')}, "
+            f"nontrivial_ratio_fail={s.get('nontrivial_ratio_fail_rows')}, "
+            f"rho_safe_fail={s.get('rho_safe_fail_rows')}, "
+            f"rho_safe_margin_min={s.get('rho_safe_margin_min'):.3f}."
         )
     except Exception as exc:  # noqa: BLE001
         return f"Could not parse aggregate-ratio summary at {run_path}: {exc}"
@@ -164,7 +165,45 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             post_id=6309,
             body_text=(
                 "Optional shortcut AR4 (rho_+ < 1-M_-) is only sufficient, not equivalent; "
-                "empirically it has one nontrivial miss at n<=48."
+                "empirically it has nontrivial misses."
+            ),
+            score=0,
+            creation_date="2026-02-12",
+            parent_post_id=6300,
+            tags={"verification_status": "empirical"},
+        ),
+        ThreadNode(
+            id="p6d-gl",
+            node_type="answer",
+            post_id=6310,
+            body_text=(
+                "GL identity (proved): defining G_t=sum_{s<=1} d_v(1/s_v-1), "
+                "P_t=sum_{s>1} d_v(1-1/s_v), we have |A_t|(gbar-dbar)=G_t-P_t."
+            ),
+            score=0,
+            creation_date="2026-02-12",
+            parent_post_id=6300,
+            tags={"verification_status": "proved"},
+        ),
+        ThreadNode(
+            id="p6d-gb",
+            node_type="answer",
+            post_id=6311,
+            body_text=(
+                "Open GL-Balance bridge: prove G_t > P_t from H1-H4 on all nontrivial steps."
+            ),
+            score=0,
+            creation_date="2026-02-12",
+            parent_post_id=6300,
+            tags={"verification_status": "open"},
+        ),
+        ThreadNode(
+            id="p6d-e2",
+            node_type="comment",
+            post_id=6312,
+            body_text=(
+                "n<=64 stress signal: on 440 nontrivial rows, only 5 have any above-1 mass, "
+                "max(P_t/G_t)=0.00934, and G_t-P_t is always positive."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -244,6 +283,27 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             evidence="One-parameter shortcut is too strong to be the primary bridge",
             detection="structural",
         ),
+        ThreadEdge(
+            source="p6d-gl",
+            target="p6d-ar",
+            edge_type="reference",
+            evidence="AR-NT is equivalent to GL-Balance inequality G_t>P_t",
+            detection="structural",
+        ),
+        ThreadEdge(
+            source="p6d-gb",
+            target="p6d-ar",
+            edge_type="assert",
+            evidence="Open bridge reformulated as proving GL-Balance from H1-H4",
+            detection="structural",
+        ),
+        ThreadEdge(
+            source="p6d-e2",
+            target="p6d-gb",
+            edge_type="exemplify",
+            evidence="Stress data supports strong gain-dominance regime",
+            detection="structural",
+        ),
     ]
 
     return d
@@ -272,7 +332,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Generate post-D wiring diagram")
     ap.add_argument(
         "--run-summary",
-        default="data/first-proof/problem6-aggregate-ratio-results.json",
+        default="data/first-proof/problem6-aggregate-ratio-results-n64.json",
         help="Path to aggregate-ratio run summary JSON",
     )
     ap.add_argument(

@@ -906,3 +906,69 @@ From `data/first-proof/problem6-aggregate-ratio-results.json`:
 
 So AR4 is a useful simplification target but should not replace AR3 as the
 primary bridge condition.
+
+### Bridge Attempt v2: gain-loss formulation (Direction F style)
+
+This section rewrites the AR-bridge into a single signed-balance inequality
+that is directly aligned with the nontrivial diagnostics.
+
+Fix a nontrivial step and active set `A_t`, with `s_v=||Y_t(v)||`,
+`d_v=tr(Y_t(v))`, and split `A_t=A_- \cup A_+` where
+`A_-={s_v<=1}`, `A_+={s_v>1}`.
+Define
+
+- `G_t := sum_{v in A_-} d_v(1/s_v - 1)`  (below-1 gain),
+- `P_t := sum_{v in A_+} d_v(1 - 1/s_v)`  (above-1 penalty).
+
+Then (from AR1 decomposition):
+
+`|A_t| (gbar_t - dbar_t) = G_t - P_t`.
+
+So AR-NT is equivalent to the single bridge inequality:
+
+> **GL-Balance:** `G_t > P_t` on every nontrivial step.
+
+This is equivalent to AR-NT but often easier to reason about than `rho_+`
+thresholds, because both sides are explicit weighted superlevel/sublevel masses.
+
+#### Proposed lemma stack for GL-Balance (open)
+
+A clean route is to prove two inequalities from H1-H4:
+
+1. **GL1 (penalty ceiling):** `P_t <= U_t`.
+2. **GL2 (gain floor):** `G_t >= L_t`.
+
+with `L_t > U_t` uniformly on the allowed horizon `t <= c_step*epsilon*n`.
+
+Any pair of explicit `L_t, U_t` with this strict separation closes AR-NT.
+
+A natural normalized form is to divide by `D_t := sum_{v in A_t} d_v` and prove
+
+- `P_t / D_t <= u_t`,
+- `G_t / D_t >= l_t`,
+- `l_t > u_t`.
+
+This avoids needing direct control of `min_v ||Y_t(v)||`.
+
+#### Stress-test signal supporting GL-Balance
+
+From `data/first-proof/problem6-aggregate-ratio-results-n64.json`
+(`n<=64`, nontrivial rows only):
+
+- rows: `440`
+- rows with any `A_+` mass (`|A_+|>0`): `5`
+- rows with `|A_+|>1`: `1` (max `|A_+|=3`)
+- rows with `P_t>0`: `5`
+- `max(P_t/G_t) = 0.00934`
+- `min(G_t-P_t) = 5.6667`
+- `min((G_t-P_t)/D_t) = 0.3445`
+
+So empirically `G_t` dominates `P_t` by large margin on all tested nontrivial
+rows. The theorem gap is now to derive this dominance from H1-H4.
+
+#### Concrete next target
+
+Prove a superlevel-mass theorem under H1-H4 that yields
+`P_t/D_t <= u_t` with `u_t` small (or sparse `A_+`), together with a
+sublevel-gain theorem yielding `G_t/D_t >= l_t` bounded away from zero.
+Then `l_t>u_t` gives GL-Balance, hence AR-NT, hence GPL-H closure.
