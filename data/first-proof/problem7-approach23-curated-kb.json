@@ -1,0 +1,424 @@
+{
+  "scope": "problem7-approach23-curated",
+  "count": 22,
+  "papers": [
+    {
+      "id": "1705.10909",
+      "title": "The equivariant Spivak normal bundle and equivariant surgery for compact Lie groups",
+      "date": "2017-05-31",
+      "authors": [
+        "Steven R. Costenoble",
+        "Stefan Waner"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "We generalize the results of a previous paper of ours to compact Lie groups. Using a recently developed ordinary equivariant homology and cohomology, we define equivariant Poincare complexes with the properties that (1) every compact G-manifold is an equivariant Poincare complex, (2) every finite equivariant Poincare complex (with some mild additional hypotheses) has an equivariant spherical Spivak normal fibration, and (3) the Pi-Pi Theorem holds for equivariant Poincare pairs under suitable gap hypotheses. The nice behavior of the ordinary equivariant homology and cohomology theories allows us to follow Wall's original line of argument closely.",
+      "url": "https://arxiv.org/abs/1705.10909",
+      "tags": [
+        "Approach-II",
+        "G2",
+        "G3"
+      ],
+      "why": "Core candidate for equivariant Spivak + surgery normal-structure control."
+    },
+    {
+      "id": "1811.08794",
+      "title": "Cobordisms of global quotient orbifolds and an equivariant Pontrjagin-Thom construction",
+      "date": "2018-11-21",
+      "authors": [
+        "Daniel Grady"
+      ],
+      "cats": [
+        "math.AT",
+        "math.DG",
+        "math.GT"
+      ],
+      "summary": "We introduce an equivariant Pontrjagin-Thom construction which identifies equivariant cohomotopy classes with certain fixed point bordism classes. This provides a concrete geometric model for equivariant cohomotopy which works for any compact Lie group G. In the special case when G is finite or a torus, we show that our construction recovers the construction of Wasserman, providing a new perspective on equivariant bordism. We connect the results with bordisms of global quotient orbifolds, utilizing the machinery of Gepner-Henriques to describe bordisms of framed orbifolds in terms of equivariant cohomotopy. We also illustrate the utility of the theory by applying our results to M-theory, thus connecting with recent work of Huerta, Sati and Schreiber.",
+      "url": "https://arxiv.org/abs/1811.08794",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Global quotient orbifold cobordism / equivariant Pontrjagin-Thom framework."
+    },
+    {
+      "id": "math/0412550",
+      "title": "Geometric versus homotopy theoretic equivariant bordism",
+      "date": "2004-12-31",
+      "authors": [
+        "Bernhard Hanke"
+      ],
+      "cats": [
+        "math.AT",
+        "math.GT"
+      ],
+      "summary": "By results of Loeffler and Comezana, the Pontrjagin-Thom map from geometric G-equivariant bordism to homotopy theoretic equivariant bordism is injective for compact abelian G. If G = S^1 x ... x S^1, we prove that the associated fixed point square is a pull back square, thus confirming a recent conjecture of D. Sinha. This is used in order to determine the image of the Pontrjagin-Thom map for toral G.",
+      "url": "https://arxiv.org/abs/math/0412550",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Equivariant bordism comparison tools useful for surgery-entry arguments."
+    },
+    {
+      "id": "1112.2104",
+      "title": "Bordisms of manifolds with proper action of a discrete group: signatures and descriptions of $G$-bundles",
+      "date": "2011-12-09",
+      "authors": [
+        "A. S. Mishchenko",
+        "Quitzeh Morales Mel\u00e9ndez"
+      ],
+      "cats": [
+        "math.AT",
+        "math.KT"
+      ],
+      "summary": "In this work the equivariant signature of a manifold with proper action of a discrete group is defined as an invariant of equivariant bordisms. It is shown that the computation of this signature can be reduced to its computation on fixed points sets equipped with their tubular neighborhoods. It is given a description of the equivariant vector bundles with action of a discrete group $G$ for the case when the action over the base is proper quasi-free, i.e. the stationary subgroup of any point is finite. The description is given in terms of some classifying space.",
+      "url": "https://arxiv.org/abs/1112.2104",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Bordism with proper discrete-group actions; signatures and bundle control."
+    },
+    {
+      "id": "math/9910024",
+      "title": "Computations of Complex Equivariant Bordism Rings",
+      "date": "1999-10-05",
+      "authors": [
+        "Dev Sinha"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "In this paper we compute homotopical bordism rings $MU^G_*$ for abelian compact Lie groups G, giving explicit generators and relations. The key constructions are operations on equivariant bordism which should play an important role in equivariant stable homotopy theory more generally. The main technique used is localization of the theory by inverting Euler classes. Applications to homotopy theory include analysis of the completion map from $MU^G_*$ to $MU^*(BG)$. Applications to geometry include classification up to cobordism of S^1 actions on stably complex four-manifolds with precisely three fixed points, answering a question of Bott.",
+      "url": "https://arxiv.org/abs/math/9910024",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Computational equivariant bordism ring background."
+    },
+    {
+      "id": "math/0512284",
+      "title": "Positive scalar curvature with symmetry",
+      "date": "2005-12-13",
+      "authors": [
+        "Bernhard Hanke"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We show an equivariant bordism principle for constructing metrics of positive scalar curvature that are invariant under a given group action. Furthermore, we develop a new codimension-2 surgery technique which removes singular strata from fixed point free $S^1$-manifolds while preserving equivariant positive scalar curvature. These results are applied to derive the following generalization of a result of Gromov and Lawson: Each closed fixed point free $S^1$-manifold of dimension at least 6 whose isotropy groups have odd order and whose union of maximal orbits is simply connected and not spin carries an $S^1$-invariant metric of positive scalar curvature.",
+      "url": "https://arxiv.org/abs/math/0512284",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Surgery-with-symmetry pattern; potentially reusable obstruction mechanics."
+    },
+    {
+      "id": "1305.2288",
+      "title": "Circle actions and scalar curvature",
+      "date": "2013-05-10",
+      "authors": [
+        "Michael Wiemeler"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We construct metrics of positive scalar curvature on manifolds with circle actions. One of our main results is that there exist $S^1$-invariant metrics of positive scalar curvature on every $S^1$-manifold which has a fixed point component of codimension 2. As a consequence we can prove that there are non-invariant metrics of positive scalar curvature on many manifolds with circle actions. Results from equivariant bordism allow us to show that there is an invariant metric of positive scalar curvature on the connected sum of two copies of a simply connected semi-free $S^1$-manifold $M$ of dimension at least six provided that $M$ is not $\\text{spin}$ or that $M$ is $\\text{spin}$ and the $S^1$-action is of odd type. If $M$ is spin and the $S^1$-action of even type then there is a $k>0$ such that the equivariant connected sum of $2^k$ copies of $M$ admits an invariant metric of positive scalar curvature if and only if a generalized $\\hat{A}$-genus of $M/S^1$ vanishes.",
+      "url": "https://arxiv.org/abs/1305.2288",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Group-action surgery/symmetry techniques; lower direct relevance but still useful."
+    },
+    {
+      "id": "2002.02326",
+      "title": "Corks, involutions, and Heegaard Floer homology",
+      "date": "2020-02-06",
+      "authors": [
+        "Irving Dai",
+        "Matthew Hedden",
+        "Abhishek Mallick"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "Building on the algebraic framework developed by Hendricks, Manolescu, and Zemke, we introduce and study a set of Floer-theoretic invariants aimed at detecting corks. Our invariants obstruct the extension of a given involution over any homology ball, rather than a particular contractible manifold. Unlike previous approaches, we do not utilize any closed 4-manifold topology or contact topology. Instead, we adapt the formalism of local equivalence coming from involutive Heegaard Floer homology. As an application, we define a modification $\u0398^\u03c4_{\\mathbb{Z}}$ of the homology cobordism group which takes into account an involution on each homology sphere, and prove that this admits a $\\mathbb{Z}^\\infty$-subgroup of strongly non-extendable corks. The group $\u0398^\u03c4_{\\mathbb{Z}}$ can also be viewed as a refinement of the bordism group of diffeomorphisms. Using our invariants, we furthermore establish several new families of corks and prove that various known examples are strongly non-extendable. Our main computational tool is a monotonicity theorem which constrains the behavior of our invariants under equivariant negative-definite cobordisms, and an explicit method of constructing such cobordisms via equivariant surgery.",
+      "url": "https://arxiv.org/abs/2002.02326",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Involution-centric 4-manifold techniques; heuristic transfer ideas."
+    },
+    {
+      "id": "0705.3249",
+      "title": "Translation Groupoids and Orbifold Bredon Cohomology",
+      "date": "2007-05-22",
+      "authors": [
+        "Dorette Pronk",
+        "Laura Scull"
+      ],
+      "cats": [
+        "math.AT",
+        "math.CT"
+      ],
+      "summary": "We show that the bicategory of (representable) orbifolds and good maps is equivalent to the bicategory of orbifold translation groupoids and generalized equivariant maps. We use this result to define an orbifold version of Bredon cohomology.",
+      "url": "https://arxiv.org/abs/0705.3249",
+      "tags": [
+        "Approach-III",
+        "G1"
+      ],
+      "why": "Orbifold groupoid/Bredon infrastructure for quotient-to-manifold translation."
+    },
+    {
+      "id": "math/0312378",
+      "title": "Survey on Classifying Spaces for Families of Subgroups",
+      "date": "2003-12-19",
+      "authors": [
+        "Wolfgang Lueck"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "We define for a topological group G and a family of subgroups F two versions for the classifying space for the family F, the G-CW-version E_F(G) and the numerable G-space version J_F(G). They agree if G is discrete, or if G is a Lie group and each element in F compact, or if F is the family of compact subgroups. We discuss special geometric models for these spaces for the family of compact open groups in special cases such as almost connected groups G and word hyperbolic groups G. We deal with the question whether there are finite models, models of finite type, finite dimensional models. We also discuss the relevance of these spaces for the Baum-Connes Conjecture about the topological K-theory of the reduced group C^*-algebra, for the Farrell-Jones Conjecture about the algebraic K- and L-theory of group rings, for Completion Theorems and for classifying spaces for equivariant vector bundles and for other situations.",
+      "url": "https://arxiv.org/abs/math/0312378",
+      "tags": [
+        "Approach-III",
+        "FJ"
+      ],
+      "why": "Families/classifying-space machinery for orbifold/family control."
+    },
+    {
+      "id": "2012.15322",
+      "title": "Homology bounds for hyperbolic orbifolds",
+      "date": "2020-12-30",
+      "authors": [
+        "Hartwig Senska"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AT"
+      ],
+      "summary": "We will provide bounds on both the Betti numbers and the torsion part of the homology of hyperbolic orbifolds. These bounds are linear in the volume and are a direct consequence of an efficient simplicial model of the thick part, which we will construct as well. The homology statements complement previous work of Bader, Gelander and Sauer (torsion homology of manifolds), Samet (Betti numbers of orbifolds) and a classical theorem of Gromov (Betti numbers of manifolds). For arithmetic, non-compact hyperbolic orbifolds -- i.e. in the case of arithmetic, non-uniform lattices in $\\operatorname{Isom}(\\mathbb{H}^n)$ -- the strongest results will be obtained.",
+      "url": "https://arxiv.org/abs/2012.15322",
+      "tags": [
+        "Approach-III",
+        "E2"
+      ],
+      "why": "Hyperbolic orbifold homology bounds and geometric models."
+    },
+    {
+      "id": "1209.2484",
+      "title": "On the number of finite subgroups of a lattice",
+      "date": "2012-09-12",
+      "authors": [
+        "Iddo Samet"
+      ],
+      "cats": [
+        "math.GR",
+        "math.DG"
+      ],
+      "summary": "We show that the number of conjugacy classes of maximal finite subgroups of a lattice in a semisimple Lie group is linearly bounded by the covolume of the lattice. Moreover, for higher rank groups, we show that this number grows sublinearly with covolume. We obtain similar results for isotropy subgroups in lattices. Geometrically, this yields volume bounds for the number of strata in the natural stratification of a finite-volume locally symmetric orbifold.",
+      "url": "https://arxiv.org/abs/1209.2484",
+      "tags": [
+        "Approach-III",
+        "E2"
+      ],
+      "why": "Finite subgroup/isotropy complexity bounds in lattices/orbifolds."
+    },
+    {
+      "id": "2506.23994",
+      "title": "On reflections of congruence hyperbolic manifolds",
+      "date": "2025-06-30",
+      "authors": [
+        "Sami Douba",
+        "Franco Vargas Pallete"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We show that the standard method for constructing closed hyperbolic manifolds of arbitrary dimension possessing reflective symmetries typically produces reflections whose fixed point sets are nonseparating.",
+      "url": "https://arxiv.org/abs/2506.23994",
+      "tags": [
+        "E2-odd-alt",
+        "E2"
+      ],
+      "why": "Reflections + fixed hypersurface geometry in congruence hyperbolic manifolds."
+    },
+    {
+      "id": "math/0406607",
+      "title": "Finite Groups and Hyperbolic Manifolds",
+      "date": "2004-06-29",
+      "authors": [
+        "M. Belolipetsky",
+        "A. Lubotzky"
+      ],
+      "cats": [
+        "math.GR",
+        "math.GT"
+      ],
+      "summary": "The isometry group of a compact n-dimensional hyperbolic manifold is known to be finite. We show that for every n > 2, every finite group is realized as the full isometry group of some compact hyperbolic n-manifold. The cases n = 2 and n = 3 have been proven by Greenberg and Kojima, respectively. Our proof is non constructive: it uses counting results from subgroup growth theory and the strong approximation theorem to show that such manifolds exist.",
+      "url": "https://arxiv.org/abs/math/0406607",
+      "tags": [
+        "E2-odd-alt",
+        "E2"
+      ],
+      "why": "Finite-group hyperbolic symmetry realization backup."
+    },
+    {
+      "id": "1106.1704",
+      "title": "Smith theory, L2 cohomology, isometries of locally symmetric manifolds and moduli spaces of curves",
+      "date": "2011-06-09",
+      "authors": [
+        "Grigori Avramidi"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AT"
+      ],
+      "summary": "We investigate periodic diffeomorphisms of non-compact aspherical manifolds (and orbifolds) and describe a class of spaces that have no homotopically trivial periodic diffeomorphisms. Prominent examples are moduli spaces of curves and aspherical locally symmetric spaces with non-vanishing Euler characteristic. In the irreducible locally symmetric case, we show that no complete metric has more symmetry than the locally symmetric metric. In the moduli space case, we build on work of Farb and Weinberger and prove an analogue of Royden's theorem for complete finite volume metrics.",
+      "url": "https://arxiv.org/abs/1106.1704",
+      "tags": [
+        "E2-odd-alt",
+        "Cross"
+      ],
+      "why": "Smith/L2 constraints on periodic actions in locally symmetric settings."
+    },
+    {
+      "id": "2408.03430",
+      "title": "Finiteness of totally geodesic hypersurfaces",
+      "date": "2024-08-06",
+      "authors": [
+        "Simion Filip",
+        "David Fisher",
+        "Ben Lowe"
+      ],
+      "cats": [
+        "math.DG",
+        "math.DS",
+        "math.GT"
+      ],
+      "summary": "We prove that a closed negatively curved analytic Riemannian manifold that contains infinitely many totally geodesic hypersurfaces is isometric to an arithmetic hyperbolic manifold. Equivalently, any closed analytic Riemannian manifold with negative sectional curvature has only finitely many totally geodesic hypersurfaces, unless it has constant curvature.",
+      "url": "https://arxiv.org/abs/2408.03430",
+      "tags": [
+        "E2-odd-alt"
+      ],
+      "why": "Finiteness/rigidity constraints for totally geodesic hypersurfaces."
+    },
+    {
+      "id": "2306.01254",
+      "title": "Rigidity of Totally Geodesic Hypersurfaces in Negative Curvature",
+      "date": "2023-06-02",
+      "authors": [
+        "Ben Lowe"
+      ],
+      "cats": [
+        "math.DG",
+        "math.DS"
+      ],
+      "summary": "Let $M$ be a closed hyperbolic manifold containing a totally geodesic hypersurface $S$, and let $N$ be a closed Riemannian manifold homotopy equivalent to $M$ with sectional curvature bounded above by $-1$. Then it follows from the work of Besson-Courtois-Gallot that $\u03c0_1(S)$ can be represented by a hypersurface $S'$ in $N$ with volume less than or equal to that of $S$. We study the equality case: if $\u03c0_1(S)$ cannot be represented by a hypersurface $S'$ in $N$ with volume strictly smaller than that of $S$, then must $N$ be isometric to $M$? We show that many such $S$ are rigid in the sense that the answer to this question is positive. On the other hand, we construct examples of $S$ for which the answer is negative.",
+      "url": "https://arxiv.org/abs/2306.01254",
+      "tags": [
+        "E2-odd-alt"
+      ],
+      "why": "Rigidity of totally geodesic hypersurfaces in negative curvature."
+    },
+    {
+      "id": "1806.02360",
+      "title": "Effective virtual and residual properties of some arithmetic hyperbolic 3-manifolds",
+      "date": "2018-06-06",
+      "authors": [
+        "Jason DeBlois",
+        "Nicholas Miller",
+        "Priyam Patel"
+      ],
+      "cats": [
+        "math.GT",
+        "math.GR"
+      ],
+      "summary": "We give an effective upper bound, for certain arithmetic hyperbolic 3-manifold groups obtained from a quadratic form construction, on the minimal index of a subgroup that embeds in a fixed 6-dimensional right-angled reflection group, stabilizing a totally geodesic subspace. In particular, for manifold groups in any fixed commensurability class we show that the index of such a subgroup is asymptotically smaller than any fractional power of the volume of the manifold. We also give effective bounds on the geodesic residual finiteness growths of closed hyperbolic manifolds that totally geodesically immerse in non-compact right-angled reflection orbifolds, extending work of the third author from the compact case. The first result gives examples to which the second applies, and for these we give explicit bounds on geodesic residual finiteness growth.",
+      "url": "https://arxiv.org/abs/1806.02360",
+      "tags": [
+        "E2-odd-alt"
+      ],
+      "why": "Arithmetic hyperbolic residual/congruence control with reflection context."
+    },
+    {
+      "id": "1204.4667",
+      "title": "Finiteness properties for some rational Poincar\u00e9 duality groups",
+      "date": "2012-04-20",
+      "authors": [
+        "Jim Fowler"
+      ],
+      "cats": [
+        "math.GT",
+        "math.GR"
+      ],
+      "summary": "A combination of Bestvina--Brady Morse theory and an acyclic reflection group trick produces a torsion-free finitely presented Q-Poincar\u00e9 duality group which is not the fundamental group of an aspherical closed ANR Q-homology manifold. The acyclic construction suggests asking which Q-Poincar\u00e9 duality groups act freely on Q-acyclic spaces, i.e., which groups are FH(Q). For example, the orbifold fundamental group \u0393 of a good orbifold satisfies Q-Poincar\u00e9 duality, and we show \u0393 is FH(Q) if the Euler characteristics of certain fixed sets vanish.",
+      "url": "https://arxiv.org/abs/1204.4667",
+      "tags": [
+        "Approach-I",
+        "G1",
+        "E2"
+      ],
+      "why": "FH(Q) criterion and fixed-set Euler mechanism."
+    },
+    {
+      "id": "1506.06293",
+      "title": "Rational manifold models for duality groups",
+      "date": "2015-06-20",
+      "authors": [
+        "Grigori Avramidi"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "We show that a finite type duality group of dimension $d>2$ is the fundamental group of a $(d+3)$-manifold with rationally acyclic universal cover. We use this to find closed manifolds with rationally acyclic universal cover and some nonvanishing $L^2$-Betti numbers outside the middle dimension, which contradicts a rational analogue of a conjecture of Singer.",
+      "url": "https://arxiv.org/abs/1506.06293",
+      "tags": [
+        "Approach-I",
+        "G2"
+      ],
+      "why": "Rational surgery/manifold model route; partial bridge."
+    },
+    {
+      "id": "1311.7629",
+      "title": "Bredon-Poincare Duality Groups",
+      "date": "2013-11-29",
+      "authors": [
+        "Simon St John-Green"
+      ],
+      "cats": [
+        "math.GR",
+        "math.AT"
+      ],
+      "summary": "If $G$ is a group which admits a manifold model for $\\mathrm{B}G$ then $G$ is a Poincar\u00e9 duality group. We study a generalisation of Poincar\u00e9 duality groups, introduced initially by Davis and Leary, motivated by groups $G$ with cocompact manifold models $M$ for $\\underline{\\mathrm{E}}G$ where $M^H$ is a contractible submanifold for all finite subgroups $H$ of $G$. We give several sources of examples and constructions of these Bredon-Poincar\u00e9 duality groups, including using the equivariant reflection group trick of Davis and Leary to construct examples of Bredon-Poincar\u00e9 duality groups arising from actions on manifolds $M$ where the dimensions of the submanifolds $M^H$ are specified. We classify Bredon-Poincar\u00e9 duality groups in low dimensions, and discuss behaviour under group extensions and graphs of groups.",
+      "url": "https://arxiv.org/abs/1311.7629",
+      "tags": [
+        "Approach-I",
+        "G1"
+      ],
+      "why": "Bredon-PD framing for torsion groups."
+    },
+    {
+      "id": "0905.0104",
+      "title": "Surgery obstructions on closed manifolds and the Inertia subgroup",
+      "date": "2009-05-01",
+      "authors": [
+        "Ian Hambleton"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AT"
+      ],
+      "summary": "The Wall surgery obstruction groups have two interesting geometrically defined subgroups, consisting of the surgery obstructions between closed manifolds, and the inertial elements. We show that the inertia group $I_{n+1}(\u03c0,w)$ and the closed manifold subgroup $C_{n+1}(\u03c0,w)$ are equal in dimensions $n+1\\geq 6$, for any finitely-presented group $\u03c0$ and any orientation character $w\\colon \u03c0\\to \\cy 2$.",
+      "url": "https://arxiv.org/abs/0905.0104",
+      "tags": [
+        "Approach-I",
+        "G3"
+      ],
+      "why": "Closed-manifold subgroup/inertia interface in surgery obstruction groups."
+    }
+  ]
+}

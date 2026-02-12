@@ -1,0 +1,1620 @@
+{
+  "library_id": "problem7-approach23-wiring-library",
+  "date": "2026-02-12",
+  "focus": "Approach II and Approach III methods (with E2-odd-alt and interface dependencies)",
+  "source": "data/first-proof/problem7-approach23-curated-kb.json",
+  "diagram_count": 22,
+  "schema": {
+    "node_roles": [
+      "Q: target subproblem",
+      "D: decomposition/data model",
+      "M: main method",
+      "C: certificate theorem/tool",
+      "O: output capability",
+      "B: bridge verdict to P7 obligations"
+    ],
+    "edge_pattern": [
+      "D -> Q (clarify)",
+      "M -> D (assert)",
+      "C -> M (reference)",
+      "O -> Q (assert)",
+      "B -> O (reform|challenge)"
+    ]
+  },
+  "track_counts": {
+    "approach_ii": 8,
+    "approach_iii": 4,
+    "e2_odd_alt": 6,
+    "interface": 4
+  },
+  "tag_counts": {
+    "Approach-I": 4,
+    "Approach-II": 8,
+    "Approach-III": 4,
+    "Cross": 1,
+    "E2": 5,
+    "E2-odd-alt": 6,
+    "FJ": 1,
+    "G1": 3,
+    "G2": 2,
+    "G3": 2
+  },
+  "diagrams": [
+    {
+      "id": "p7a23-d01",
+      "title": "The equivariant Spivak normal bundle and equivariant surgery for compact Lie groups",
+      "paper": "1705.10909",
+      "url": "https://arxiv.org/abs/1705.10909",
+      "date": "2017-05-31",
+      "track": "approach_ii",
+      "tags": [
+        "Approach-II",
+        "G2",
+        "G3"
+      ],
+      "why": "Core candidate for equivariant Spivak + surgery normal-structure control.",
+      "nodes": [
+        {
+          "id": "p7a23-d01-q",
+          "node_type": "question",
+          "body_text": "Construct equivariant normal data for group actions so fixed-set surgery can be controlled."
+        },
+        {
+          "id": "p7a23-d01-d",
+          "node_type": "answer",
+          "body_text": "Model manifold action with equivariant Spivak normal bundle rather than only ordinary normal data."
+        },
+        {
+          "id": "p7a23-d01-m",
+          "node_type": "answer",
+          "body_text": "Use equivariant surgery input to build/compare normal maps compatible with the action."
+        },
+        {
+          "id": "p7a23-d01-c",
+          "node_type": "comment",
+          "body_text": "Equivariant Spivak bundle and equivariant surgery theorems for compact Lie group actions."
+        },
+        {
+          "id": "p7a23-d01-o",
+          "node_type": "answer",
+          "body_text": "Concrete route to repair Approach II normal-structure and transfer-compatibility gaps."
+        },
+        {
+          "id": "p7a23-d01-b",
+          "node_type": "comment",
+          "body_text": "High-priority bridge for Approach II and for G2/G3-style compatibility constraints."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d01-d",
+          "target": "p7a23-d01-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d01-m",
+          "target": "p7a23-d01-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d01-c",
+          "target": "p7a23-d01-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d01-o",
+          "target": "p7a23-d01-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d01-b",
+          "target": "p7a23-d01-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d02",
+      "title": "Cobordisms of global quotient orbifolds and an equivariant Pontrjagin-Thom construction",
+      "paper": "1811.08794",
+      "url": "https://arxiv.org/abs/1811.08794",
+      "date": "2018-11-21",
+      "track": "approach_ii",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Global quotient orbifold cobordism / equivariant Pontrjagin-Thom framework.",
+      "nodes": [
+        {
+          "id": "p7a23-d02-q",
+          "node_type": "question",
+          "body_text": "Translate global-quotient orbifold data into equivariant bordism information usable for manifold upgrades."
+        },
+        {
+          "id": "p7a23-d02-d",
+          "node_type": "answer",
+          "body_text": "Treat orbifolds as global quotients with equivariant Pontrjagin-Thom models."
+        },
+        {
+          "id": "p7a23-d02-m",
+          "node_type": "answer",
+          "body_text": "Compute orbifold cobordism classes via equivariant collapse maps and quotient structures."
+        },
+        {
+          "id": "p7a23-d02-c",
+          "node_type": "comment",
+          "body_text": "Equivariant Pontrjagin-Thom construction for global quotient orbifolds."
+        },
+        {
+          "id": "p7a23-d02-o",
+          "node_type": "answer",
+          "body_text": "Potential mechanism for Approach III resolution while tracking quotient/fundamental-group behavior."
+        },
+        {
+          "id": "p7a23-d02-b",
+          "node_type": "comment",
+          "body_text": "Strong cross-over module between Approach II equivariant surgery and Approach III orbifold route."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d02-d",
+          "target": "p7a23-d02-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d02-m",
+          "target": "p7a23-d02-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d02-c",
+          "target": "p7a23-d02-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d02-o",
+          "target": "p7a23-d02-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d02-b",
+          "target": "p7a23-d02-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d03",
+      "title": "Geometric versus homotopy theoretic equivariant bordism",
+      "paper": "math/0412550",
+      "url": "https://arxiv.org/abs/math/0412550",
+      "date": "2004-12-31",
+      "track": "approach_ii",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Equivariant bordism comparison tools useful for surgery-entry arguments.",
+      "nodes": [
+        {
+          "id": "p7a23-d03-q",
+          "node_type": "question",
+          "body_text": "Advance Approach II: remove or control involution fixed-set effects while preserving target quotient group."
+        },
+        {
+          "id": "p7a23-d03-d",
+          "node_type": "answer",
+          "body_text": "Represent data in an equivariant bordism/surgery model of manifolds with group action."
+        },
+        {
+          "id": "p7a23-d03-m",
+          "node_type": "answer",
+          "body_text": "Apply method pattern from 'Geometric versus homotopy theoretic equivariant bordism' to fixed-set surgery or action-preserving modification steps."
+        },
+        {
+          "id": "p7a23-d03-c",
+          "node_type": "comment",
+          "body_text": "Use the paper's equivariant topology/cobordism/surgery theorem package as certificate."
+        },
+        {
+          "id": "p7a23-d03-o",
+          "node_type": "answer",
+          "body_text": "Candidate subroutine for action-compatible manifold upgrades in Approach II."
+        },
+        {
+          "id": "p7a23-d03-b",
+          "node_type": "comment",
+          "body_text": "Equivariant bordism comparison tools useful for surgery-entry arguments."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d03-d",
+          "target": "p7a23-d03-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d03-m",
+          "target": "p7a23-d03-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d03-c",
+          "target": "p7a23-d03-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d03-o",
+          "target": "p7a23-d03-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d03-b",
+          "target": "p7a23-d03-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d04",
+      "title": "Bordisms of manifolds with proper action of a discrete group: signatures and descriptions of $G$-bundles",
+      "paper": "1112.2104",
+      "url": "https://arxiv.org/abs/1112.2104",
+      "date": "2011-12-09",
+      "track": "approach_ii",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Bordism with proper discrete-group actions; signatures and bundle control.",
+      "nodes": [
+        {
+          "id": "p7a23-d04-q",
+          "node_type": "question",
+          "body_text": "Track signatures and bundle data in bordisms with proper discrete-group actions."
+        },
+        {
+          "id": "p7a23-d04-d",
+          "node_type": "answer",
+          "body_text": "Model manifolds with proper actions via equivariant bordism and G-bundle descriptors."
+        },
+        {
+          "id": "p7a23-d04-m",
+          "node_type": "answer",
+          "body_text": "Use bordism invariants to constrain allowable surgery transformations under group actions."
+        },
+        {
+          "id": "p7a23-d04-c",
+          "node_type": "comment",
+          "body_text": "Signature/bundle classification statements for proper-action bordisms."
+        },
+        {
+          "id": "p7a23-d04-o",
+          "node_type": "answer",
+          "body_text": "Potential mechanism for proving Approach II surgeries preserve required global invariants."
+        },
+        {
+          "id": "p7a23-d04-b",
+          "node_type": "comment",
+          "body_text": "Method candidate for rigorous action-preserving surgery bookkeeping."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d04-d",
+          "target": "p7a23-d04-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d04-m",
+          "target": "p7a23-d04-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d04-c",
+          "target": "p7a23-d04-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d04-o",
+          "target": "p7a23-d04-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d04-b",
+          "target": "p7a23-d04-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d05",
+      "title": "Computations of Complex Equivariant Bordism Rings",
+      "paper": "math/9910024",
+      "url": "https://arxiv.org/abs/math/9910024",
+      "date": "1999-10-05",
+      "track": "approach_ii",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Computational equivariant bordism ring background.",
+      "nodes": [
+        {
+          "id": "p7a23-d05-q",
+          "node_type": "question",
+          "body_text": "Advance Approach II: remove or control involution fixed-set effects while preserving target quotient group."
+        },
+        {
+          "id": "p7a23-d05-d",
+          "node_type": "answer",
+          "body_text": "Represent data in an equivariant bordism/surgery model of manifolds with group action."
+        },
+        {
+          "id": "p7a23-d05-m",
+          "node_type": "answer",
+          "body_text": "Apply method pattern from 'Computations of Complex Equivariant Bordism Rings' to fixed-set surgery or action-preserving modification steps."
+        },
+        {
+          "id": "p7a23-d05-c",
+          "node_type": "comment",
+          "body_text": "Use the paper's equivariant topology/cobordism/surgery theorem package as certificate."
+        },
+        {
+          "id": "p7a23-d05-o",
+          "node_type": "answer",
+          "body_text": "Candidate subroutine for action-compatible manifold upgrades in Approach II."
+        },
+        {
+          "id": "p7a23-d05-b",
+          "node_type": "comment",
+          "body_text": "Computational equivariant bordism ring background."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d05-d",
+          "target": "p7a23-d05-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d05-m",
+          "target": "p7a23-d05-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d05-c",
+          "target": "p7a23-d05-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d05-o",
+          "target": "p7a23-d05-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d05-b",
+          "target": "p7a23-d05-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d06",
+      "title": "Positive scalar curvature with symmetry",
+      "paper": "math/0512284",
+      "url": "https://arxiv.org/abs/math/0512284",
+      "date": "2005-12-13",
+      "track": "approach_ii",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Surgery-with-symmetry pattern; potentially reusable obstruction mechanics.",
+      "nodes": [
+        {
+          "id": "p7a23-d06-q",
+          "node_type": "question",
+          "body_text": "Advance Approach II: remove or control involution fixed-set effects while preserving target quotient group."
+        },
+        {
+          "id": "p7a23-d06-d",
+          "node_type": "answer",
+          "body_text": "Represent data in an equivariant bordism/surgery model of manifolds with group action."
+        },
+        {
+          "id": "p7a23-d06-m",
+          "node_type": "answer",
+          "body_text": "Apply method pattern from 'Positive scalar curvature with symmetry' to fixed-set surgery or action-preserving modification steps."
+        },
+        {
+          "id": "p7a23-d06-c",
+          "node_type": "comment",
+          "body_text": "Use the paper's equivariant topology/cobordism/surgery theorem package as certificate."
+        },
+        {
+          "id": "p7a23-d06-o",
+          "node_type": "answer",
+          "body_text": "Candidate subroutine for action-compatible manifold upgrades in Approach II."
+        },
+        {
+          "id": "p7a23-d06-b",
+          "node_type": "comment",
+          "body_text": "Surgery-with-symmetry pattern; potentially reusable obstruction mechanics."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d06-d",
+          "target": "p7a23-d06-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d06-m",
+          "target": "p7a23-d06-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d06-c",
+          "target": "p7a23-d06-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d06-o",
+          "target": "p7a23-d06-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d06-b",
+          "target": "p7a23-d06-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d07",
+      "title": "Circle actions and scalar curvature",
+      "paper": "1305.2288",
+      "url": "https://arxiv.org/abs/1305.2288",
+      "date": "2013-05-10",
+      "track": "approach_ii",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Group-action surgery/symmetry techniques; lower direct relevance but still useful.",
+      "nodes": [
+        {
+          "id": "p7a23-d07-q",
+          "node_type": "question",
+          "body_text": "Advance Approach II: remove or control involution fixed-set effects while preserving target quotient group."
+        },
+        {
+          "id": "p7a23-d07-d",
+          "node_type": "answer",
+          "body_text": "Represent data in an equivariant bordism/surgery model of manifolds with group action."
+        },
+        {
+          "id": "p7a23-d07-m",
+          "node_type": "answer",
+          "body_text": "Apply method pattern from 'Circle actions and scalar curvature' to fixed-set surgery or action-preserving modification steps."
+        },
+        {
+          "id": "p7a23-d07-c",
+          "node_type": "comment",
+          "body_text": "Use the paper's equivariant topology/cobordism/surgery theorem package as certificate."
+        },
+        {
+          "id": "p7a23-d07-o",
+          "node_type": "answer",
+          "body_text": "Candidate subroutine for action-compatible manifold upgrades in Approach II."
+        },
+        {
+          "id": "p7a23-d07-b",
+          "node_type": "comment",
+          "body_text": "Group-action surgery/symmetry techniques; lower direct relevance but still useful."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d07-d",
+          "target": "p7a23-d07-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d07-m",
+          "target": "p7a23-d07-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d07-c",
+          "target": "p7a23-d07-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d07-o",
+          "target": "p7a23-d07-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d07-b",
+          "target": "p7a23-d07-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d08",
+      "title": "Corks, involutions, and Heegaard Floer homology",
+      "paper": "2002.02326",
+      "url": "https://arxiv.org/abs/2002.02326",
+      "date": "2020-02-06",
+      "track": "approach_ii",
+      "tags": [
+        "Approach-II"
+      ],
+      "why": "Involution-centric 4-manifold techniques; heuristic transfer ideas.",
+      "nodes": [
+        {
+          "id": "p7a23-d08-q",
+          "node_type": "question",
+          "body_text": "Advance Approach II: remove or control involution fixed-set effects while preserving target quotient group."
+        },
+        {
+          "id": "p7a23-d08-d",
+          "node_type": "answer",
+          "body_text": "Represent data in an equivariant bordism/surgery model of manifolds with group action."
+        },
+        {
+          "id": "p7a23-d08-m",
+          "node_type": "answer",
+          "body_text": "Apply method pattern from 'Corks, involutions, and Heegaard Floer homology' to fixed-set surgery or action-preserving modification steps."
+        },
+        {
+          "id": "p7a23-d08-c",
+          "node_type": "comment",
+          "body_text": "Use the paper's equivariant topology/cobordism/surgery theorem package as certificate."
+        },
+        {
+          "id": "p7a23-d08-o",
+          "node_type": "answer",
+          "body_text": "Candidate subroutine for action-compatible manifold upgrades in Approach II."
+        },
+        {
+          "id": "p7a23-d08-b",
+          "node_type": "comment",
+          "body_text": "Involution-centric 4-manifold techniques; heuristic transfer ideas."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d08-d",
+          "target": "p7a23-d08-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d08-m",
+          "target": "p7a23-d08-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d08-c",
+          "target": "p7a23-d08-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d08-o",
+          "target": "p7a23-d08-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d08-b",
+          "target": "p7a23-d08-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d09",
+      "title": "Translation Groupoids and Orbifold Bredon Cohomology",
+      "paper": "0705.3249",
+      "url": "https://arxiv.org/abs/0705.3249",
+      "date": "2007-05-22",
+      "track": "approach_iii",
+      "tags": [
+        "Approach-III",
+        "G1"
+      ],
+      "why": "Orbifold groupoid/Bredon infrastructure for quotient-to-manifold translation.",
+      "nodes": [
+        {
+          "id": "p7a23-d09-q",
+          "node_type": "question",
+          "body_text": "Represent orbifold quotient constructions in a cohomological language compatible with group-action invariants."
+        },
+        {
+          "id": "p7a23-d09-d",
+          "node_type": "answer",
+          "body_text": "Use translation groupoids to encode orbifold action data and isotropy structure."
+        },
+        {
+          "id": "p7a23-d09-m",
+          "node_type": "answer",
+          "body_text": "Compute orbifold/Bredon invariants via groupoid-level functorial machinery."
+        },
+        {
+          "id": "p7a23-d09-c",
+          "node_type": "comment",
+          "body_text": "Translation-groupoid and orbifold Bredon cohomology comparison framework."
+        },
+        {
+          "id": "p7a23-d09-o",
+          "node_type": "answer",
+          "body_text": "Formal infrastructure for Approach III pi_1-aware resolution bookkeeping."
+        },
+        {
+          "id": "p7a23-d09-b",
+          "node_type": "comment",
+          "body_text": "Framework module: clarifies semantics but does not itself construct the closed manifold."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d09-d",
+          "target": "p7a23-d09-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d09-m",
+          "target": "p7a23-d09-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d09-c",
+          "target": "p7a23-d09-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d09-o",
+          "target": "p7a23-d09-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d09-b",
+          "target": "p7a23-d09-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d10",
+      "title": "Survey on Classifying Spaces for Families of Subgroups",
+      "paper": "math/0312378",
+      "url": "https://arxiv.org/abs/math/0312378",
+      "date": "2003-12-19",
+      "track": "approach_iii",
+      "tags": [
+        "Approach-III",
+        "FJ"
+      ],
+      "why": "Families/classifying-space machinery for orbifold/family control.",
+      "nodes": [
+        {
+          "id": "p7a23-d10-q",
+          "node_type": "question",
+          "body_text": "Control family-level classifying spaces needed in orbifold and assembly transitions."
+        },
+        {
+          "id": "p7a23-d10-d",
+          "node_type": "answer",
+          "body_text": "Parameterize subgroup families with E_F models and orbit-category functors."
+        },
+        {
+          "id": "p7a23-d10-m",
+          "node_type": "answer",
+          "body_text": "Move between family domains (Fin, VCyc, etc.) while preserving homological meaning."
+        },
+        {
+          "id": "p7a23-d10-c",
+          "node_type": "comment",
+          "body_text": "Classifying-space-for-families toolkit and comparison results."
+        },
+        {
+          "id": "p7a23-d10-o",
+          "node_type": "answer",
+          "body_text": "Reliable domain control for Approach III orbifold/family transitions and cross-checks."
+        },
+        {
+          "id": "p7a23-d10-b",
+          "node_type": "comment",
+          "body_text": "Infrastructure bridge supporting both Approach III and fallback assembly verifications."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d10-d",
+          "target": "p7a23-d10-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d10-m",
+          "target": "p7a23-d10-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d10-c",
+          "target": "p7a23-d10-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d10-o",
+          "target": "p7a23-d10-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d10-b",
+          "target": "p7a23-d10-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d11",
+      "title": "Homology bounds for hyperbolic orbifolds",
+      "paper": "2012.15322",
+      "url": "https://arxiv.org/abs/2012.15322",
+      "date": "2020-12-30",
+      "track": "approach_iii",
+      "tags": [
+        "Approach-III",
+        "E2"
+      ],
+      "why": "Hyperbolic orbifold homology bounds and geometric models.",
+      "nodes": [
+        {
+          "id": "p7a23-d11-q",
+          "node_type": "question",
+          "body_text": "Advance Approach III: resolve orbifold singular structure without losing pi_1 control."
+        },
+        {
+          "id": "p7a23-d11-d",
+          "node_type": "answer",
+          "body_text": "Model quotient/orbifold structure via groupoid/family-level descriptors."
+        },
+        {
+          "id": "p7a23-d11-m",
+          "node_type": "answer",
+          "body_text": "Use 'Homology bounds for hyperbolic orbifolds' techniques to connect orbifold invariants and manifold replacement operations."
+        },
+        {
+          "id": "p7a23-d11-c",
+          "node_type": "comment",
+          "body_text": "Invoke orbifold/topological-stack/family comparison results as certificate step."
+        },
+        {
+          "id": "p7a23-d11-o",
+          "node_type": "answer",
+          "body_text": "Potential resolution component with explicit orbifold bookkeeping."
+        },
+        {
+          "id": "p7a23-d11-b",
+          "node_type": "comment",
+          "body_text": "Hyperbolic orbifold homology bounds and geometric models."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d11-d",
+          "target": "p7a23-d11-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d11-m",
+          "target": "p7a23-d11-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d11-c",
+          "target": "p7a23-d11-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d11-o",
+          "target": "p7a23-d11-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d11-b",
+          "target": "p7a23-d11-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d12",
+      "title": "On the number of finite subgroups of a lattice",
+      "paper": "1209.2484",
+      "url": "https://arxiv.org/abs/1209.2484",
+      "date": "2012-09-12",
+      "track": "approach_iii",
+      "tags": [
+        "Approach-III",
+        "E2"
+      ],
+      "why": "Finite subgroup/isotropy complexity bounds in lattices/orbifolds.",
+      "nodes": [
+        {
+          "id": "p7a23-d12-q",
+          "node_type": "question",
+          "body_text": "Advance Approach III: resolve orbifold singular structure without losing pi_1 control."
+        },
+        {
+          "id": "p7a23-d12-d",
+          "node_type": "answer",
+          "body_text": "Model quotient/orbifold structure via groupoid/family-level descriptors."
+        },
+        {
+          "id": "p7a23-d12-m",
+          "node_type": "answer",
+          "body_text": "Use 'On the number of finite subgroups of a lattice' techniques to connect orbifold invariants and manifold replacement operations."
+        },
+        {
+          "id": "p7a23-d12-c",
+          "node_type": "comment",
+          "body_text": "Invoke orbifold/topological-stack/family comparison results as certificate step."
+        },
+        {
+          "id": "p7a23-d12-o",
+          "node_type": "answer",
+          "body_text": "Potential resolution component with explicit orbifold bookkeeping."
+        },
+        {
+          "id": "p7a23-d12-b",
+          "node_type": "comment",
+          "body_text": "Finite subgroup/isotropy complexity bounds in lattices/orbifolds."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d12-d",
+          "target": "p7a23-d12-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d12-m",
+          "target": "p7a23-d12-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d12-c",
+          "target": "p7a23-d12-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d12-o",
+          "target": "p7a23-d12-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d12-b",
+          "target": "p7a23-d12-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d13",
+      "title": "On reflections of congruence hyperbolic manifolds",
+      "paper": "2506.23994",
+      "url": "https://arxiv.org/abs/2506.23994",
+      "date": "2025-06-30",
+      "track": "e2_odd_alt",
+      "tags": [
+        "E2-odd-alt",
+        "E2"
+      ],
+      "why": "Reflections + fixed hypersurface geometry in congruence hyperbolic manifolds.",
+      "nodes": [
+        {
+          "id": "p7a23-d13-q",
+          "node_type": "question",
+          "body_text": "Control fixed-hypersurface geometry in congruence hyperbolic manifolds under reflections/involutions."
+        },
+        {
+          "id": "p7a23-d13-d",
+          "node_type": "answer",
+          "body_text": "Start from arithmetic reflective lattice and pass to congruence manifold covers."
+        },
+        {
+          "id": "p7a23-d13-m",
+          "node_type": "answer",
+          "body_text": "Track induced involutions and geometric properties of fixed totally geodesic hypersurfaces."
+        },
+        {
+          "id": "p7a23-d13-c",
+          "node_type": "comment",
+          "body_text": "Reflection/nonseparating fixed-set theorems in congruence hyperbolic settings."
+        },
+        {
+          "id": "p7a23-d13-o",
+          "node_type": "answer",
+          "body_text": "Concrete geometric substrate for E2 and for odd-dimension alternative hunts."
+        },
+        {
+          "id": "p7a23-d13-b",
+          "node_type": "comment",
+          "body_text": "Directly informs fixed-set side constraints needed before either Approach II or III closure."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d13-d",
+          "target": "p7a23-d13-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d13-m",
+          "target": "p7a23-d13-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d13-c",
+          "target": "p7a23-d13-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d13-o",
+          "target": "p7a23-d13-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d13-b",
+          "target": "p7a23-d13-o",
+          "edge_type": "reform"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d14",
+      "title": "Finite Groups and Hyperbolic Manifolds",
+      "paper": "math/0406607",
+      "url": "https://arxiv.org/abs/math/0406607",
+      "date": "2004-06-29",
+      "track": "e2_odd_alt",
+      "tags": [
+        "E2-odd-alt",
+        "E2"
+      ],
+      "why": "Finite-group hyperbolic symmetry realization backup.",
+      "nodes": [
+        {
+          "id": "p7a23-d14-q",
+          "node_type": "question",
+          "body_text": "Realize prescribed finite symmetries in compact hyperbolic manifolds for action-construction flexibility."
+        },
+        {
+          "id": "p7a23-d14-d",
+          "node_type": "answer",
+          "body_text": "Encode target finite symmetry as a normalizer quotient in finite-index lattice subgroups."
+        },
+        {
+          "id": "p7a23-d14-m",
+          "node_type": "answer",
+          "body_text": "Use subgroup growth and commensurator control to force chosen finite isometry groups."
+        },
+        {
+          "id": "p7a23-d14-c",
+          "node_type": "comment",
+          "body_text": "Finite-group realization theorem for compact hyperbolic manifold isometry groups."
+        },
+        {
+          "id": "p7a23-d14-o",
+          "node_type": "answer",
+          "body_text": "Symmetry-existence supply for building candidate involution/reflection action models."
+        },
+        {
+          "id": "p7a23-d14-b",
+          "node_type": "comment",
+          "body_text": "Useful constructor for alternate E2 branches, but fixed-set Euler behavior is not automatic."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d14-d",
+          "target": "p7a23-d14-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d14-m",
+          "target": "p7a23-d14-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d14-c",
+          "target": "p7a23-d14-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d14-o",
+          "target": "p7a23-d14-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d14-b",
+          "target": "p7a23-d14-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d15",
+      "title": "Smith theory, L2 cohomology, isometries of locally symmetric manifolds and moduli spaces of curves",
+      "paper": "1106.1704",
+      "url": "https://arxiv.org/abs/1106.1704",
+      "date": "2011-06-09",
+      "track": "e2_odd_alt",
+      "tags": [
+        "E2-odd-alt",
+        "Cross"
+      ],
+      "why": "Smith/L2 constraints on periodic actions in locally symmetric settings.",
+      "nodes": [
+        {
+          "id": "p7a23-d15-q",
+          "node_type": "question",
+          "body_text": "Find odd-dimensional E2 alternatives where fixed sets can have chi=0 despite even dimension."
+        },
+        {
+          "id": "p7a23-d15-d",
+          "node_type": "answer",
+          "body_text": "Parameterize hyperbolic involution/reflection models by fixed-set geometry and arithmetic constraints."
+        },
+        {
+          "id": "p7a23-d15-m",
+          "node_type": "answer",
+          "body_text": "Extract fixed-set construction/rigidity behavior from 'Smith theory, L2 cohomology, isometries of locally symmetric manifolds and moduli spaces of curves'."
+        },
+        {
+          "id": "p7a23-d15-c",
+          "node_type": "comment",
+          "body_text": "Use geometric fixed-set theorems/constraints as certificate."
+        },
+        {
+          "id": "p7a23-d15-o",
+          "node_type": "answer",
+          "body_text": "Constraint map for viable odd-dimensional E2 candidate families."
+        },
+        {
+          "id": "p7a23-d15-b",
+          "node_type": "comment",
+          "body_text": "Smith/L2 constraints on periodic actions in locally symmetric settings."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d15-d",
+          "target": "p7a23-d15-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d15-m",
+          "target": "p7a23-d15-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d15-c",
+          "target": "p7a23-d15-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d15-o",
+          "target": "p7a23-d15-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d15-b",
+          "target": "p7a23-d15-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d16",
+      "title": "Finiteness of totally geodesic hypersurfaces",
+      "paper": "2408.03430",
+      "url": "https://arxiv.org/abs/2408.03430",
+      "date": "2024-08-06",
+      "track": "e2_odd_alt",
+      "tags": [
+        "E2-odd-alt"
+      ],
+      "why": "Finiteness/rigidity constraints for totally geodesic hypersurfaces.",
+      "nodes": [
+        {
+          "id": "p7a23-d16-q",
+          "node_type": "question",
+          "body_text": "Find odd-dimensional E2 alternatives where fixed sets can have chi=0 despite even dimension."
+        },
+        {
+          "id": "p7a23-d16-d",
+          "node_type": "answer",
+          "body_text": "Parameterize hyperbolic involution/reflection models by fixed-set geometry and arithmetic constraints."
+        },
+        {
+          "id": "p7a23-d16-m",
+          "node_type": "answer",
+          "body_text": "Extract fixed-set construction/rigidity behavior from 'Finiteness of totally geodesic hypersurfaces'."
+        },
+        {
+          "id": "p7a23-d16-c",
+          "node_type": "comment",
+          "body_text": "Use geometric fixed-set theorems/constraints as certificate."
+        },
+        {
+          "id": "p7a23-d16-o",
+          "node_type": "answer",
+          "body_text": "Constraint map for viable odd-dimensional E2 candidate families."
+        },
+        {
+          "id": "p7a23-d16-b",
+          "node_type": "comment",
+          "body_text": "Finiteness/rigidity constraints for totally geodesic hypersurfaces."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d16-d",
+          "target": "p7a23-d16-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d16-m",
+          "target": "p7a23-d16-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d16-c",
+          "target": "p7a23-d16-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d16-o",
+          "target": "p7a23-d16-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d16-b",
+          "target": "p7a23-d16-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d17",
+      "title": "Rigidity of Totally Geodesic Hypersurfaces in Negative Curvature",
+      "paper": "2306.01254",
+      "url": "https://arxiv.org/abs/2306.01254",
+      "date": "2023-06-02",
+      "track": "e2_odd_alt",
+      "tags": [
+        "E2-odd-alt"
+      ],
+      "why": "Rigidity of totally geodesic hypersurfaces in negative curvature.",
+      "nodes": [
+        {
+          "id": "p7a23-d17-q",
+          "node_type": "question",
+          "body_text": "Find odd-dimensional E2 alternatives where fixed sets can have chi=0 despite even dimension."
+        },
+        {
+          "id": "p7a23-d17-d",
+          "node_type": "answer",
+          "body_text": "Parameterize hyperbolic involution/reflection models by fixed-set geometry and arithmetic constraints."
+        },
+        {
+          "id": "p7a23-d17-m",
+          "node_type": "answer",
+          "body_text": "Extract fixed-set construction/rigidity behavior from 'Rigidity of Totally Geodesic Hypersurfaces in Negative Curvature'."
+        },
+        {
+          "id": "p7a23-d17-c",
+          "node_type": "comment",
+          "body_text": "Use geometric fixed-set theorems/constraints as certificate."
+        },
+        {
+          "id": "p7a23-d17-o",
+          "node_type": "answer",
+          "body_text": "Constraint map for viable odd-dimensional E2 candidate families."
+        },
+        {
+          "id": "p7a23-d17-b",
+          "node_type": "comment",
+          "body_text": "Rigidity of totally geodesic hypersurfaces in negative curvature."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d17-d",
+          "target": "p7a23-d17-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d17-m",
+          "target": "p7a23-d17-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d17-c",
+          "target": "p7a23-d17-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d17-o",
+          "target": "p7a23-d17-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d17-b",
+          "target": "p7a23-d17-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d18",
+      "title": "Effective virtual and residual properties of some arithmetic hyperbolic 3-manifolds",
+      "paper": "1806.02360",
+      "url": "https://arxiv.org/abs/1806.02360",
+      "date": "2018-06-06",
+      "track": "e2_odd_alt",
+      "tags": [
+        "E2-odd-alt"
+      ],
+      "why": "Arithmetic hyperbolic residual/congruence control with reflection context.",
+      "nodes": [
+        {
+          "id": "p7a23-d18-q",
+          "node_type": "question",
+          "body_text": "Find odd-dimensional E2 alternatives where fixed sets can have chi=0 despite even dimension."
+        },
+        {
+          "id": "p7a23-d18-d",
+          "node_type": "answer",
+          "body_text": "Parameterize hyperbolic involution/reflection models by fixed-set geometry and arithmetic constraints."
+        },
+        {
+          "id": "p7a23-d18-m",
+          "node_type": "answer",
+          "body_text": "Extract fixed-set construction/rigidity behavior from 'Effective virtual and residual properties of some arithmetic hyperbolic 3-manifolds'."
+        },
+        {
+          "id": "p7a23-d18-c",
+          "node_type": "comment",
+          "body_text": "Use geometric fixed-set theorems/constraints as certificate."
+        },
+        {
+          "id": "p7a23-d18-o",
+          "node_type": "answer",
+          "body_text": "Constraint map for viable odd-dimensional E2 candidate families."
+        },
+        {
+          "id": "p7a23-d18-b",
+          "node_type": "comment",
+          "body_text": "Arithmetic hyperbolic residual/congruence control with reflection context."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d18-d",
+          "target": "p7a23-d18-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d18-m",
+          "target": "p7a23-d18-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d18-c",
+          "target": "p7a23-d18-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d18-o",
+          "target": "p7a23-d18-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d18-b",
+          "target": "p7a23-d18-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d19",
+      "title": "Finiteness properties for some rational Poincar\u00e9 duality groups",
+      "paper": "1204.4667",
+      "url": "https://arxiv.org/abs/1204.4667",
+      "date": "2012-04-20",
+      "track": "interface",
+      "tags": [
+        "Approach-I",
+        "G1",
+        "E2"
+      ],
+      "why": "FH(Q) criterion and fixed-set Euler mechanism.",
+      "nodes": [
+        {
+          "id": "p7a23-d19-q",
+          "node_type": "question",
+          "body_text": "Provide interface support between Approach II/III work and legacy Approach I machinery."
+        },
+        {
+          "id": "p7a23-d19-d",
+          "node_type": "answer",
+          "body_text": "Express assumptions/results in family-level or surgery-obstruction language."
+        },
+        {
+          "id": "p7a23-d19-m",
+          "node_type": "answer",
+          "body_text": "Leverage 'Finiteness properties for some rational Poincar\u00e9 duality groups' as an interface theorem linking constructions to obstruction frameworks."
+        },
+        {
+          "id": "p7a23-d19-c",
+          "node_type": "comment",
+          "body_text": "Use foundational assembly/PD/surgery statements from the paper."
+        },
+        {
+          "id": "p7a23-d19-o",
+          "node_type": "answer",
+          "body_text": "Compatibility checks preventing hidden hypothesis mismatches."
+        },
+        {
+          "id": "p7a23-d19-b",
+          "node_type": "comment",
+          "body_text": "FH(Q) criterion and fixed-set Euler mechanism."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d19-d",
+          "target": "p7a23-d19-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d19-m",
+          "target": "p7a23-d19-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d19-c",
+          "target": "p7a23-d19-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d19-o",
+          "target": "p7a23-d19-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d19-b",
+          "target": "p7a23-d19-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d20",
+      "title": "Rational manifold models for duality groups",
+      "paper": "1506.06293",
+      "url": "https://arxiv.org/abs/1506.06293",
+      "date": "2015-06-20",
+      "track": "interface",
+      "tags": [
+        "Approach-I",
+        "G2"
+      ],
+      "why": "Rational surgery/manifold model route; partial bridge.",
+      "nodes": [
+        {
+          "id": "p7a23-d20-q",
+          "node_type": "question",
+          "body_text": "Provide interface support between Approach II/III work and legacy Approach I machinery."
+        },
+        {
+          "id": "p7a23-d20-d",
+          "node_type": "answer",
+          "body_text": "Express assumptions/results in family-level or surgery-obstruction language."
+        },
+        {
+          "id": "p7a23-d20-m",
+          "node_type": "answer",
+          "body_text": "Leverage 'Rational manifold models for duality groups' as an interface theorem linking constructions to obstruction frameworks."
+        },
+        {
+          "id": "p7a23-d20-c",
+          "node_type": "comment",
+          "body_text": "Use foundational assembly/PD/surgery statements from the paper."
+        },
+        {
+          "id": "p7a23-d20-o",
+          "node_type": "answer",
+          "body_text": "Compatibility checks preventing hidden hypothesis mismatches."
+        },
+        {
+          "id": "p7a23-d20-b",
+          "node_type": "comment",
+          "body_text": "Rational surgery/manifold model route; partial bridge."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d20-d",
+          "target": "p7a23-d20-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d20-m",
+          "target": "p7a23-d20-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d20-c",
+          "target": "p7a23-d20-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d20-o",
+          "target": "p7a23-d20-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d20-b",
+          "target": "p7a23-d20-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d21",
+      "title": "Bredon-Poincare Duality Groups",
+      "paper": "1311.7629",
+      "url": "https://arxiv.org/abs/1311.7629",
+      "date": "2013-11-29",
+      "track": "interface",
+      "tags": [
+        "Approach-I",
+        "G1"
+      ],
+      "why": "Bredon-PD framing for torsion groups.",
+      "nodes": [
+        {
+          "id": "p7a23-d21-q",
+          "node_type": "question",
+          "body_text": "Provide interface support between Approach II/III work and legacy Approach I machinery."
+        },
+        {
+          "id": "p7a23-d21-d",
+          "node_type": "answer",
+          "body_text": "Express assumptions/results in family-level or surgery-obstruction language."
+        },
+        {
+          "id": "p7a23-d21-m",
+          "node_type": "answer",
+          "body_text": "Leverage 'Bredon-Poincare Duality Groups' as an interface theorem linking constructions to obstruction frameworks."
+        },
+        {
+          "id": "p7a23-d21-c",
+          "node_type": "comment",
+          "body_text": "Use foundational assembly/PD/surgery statements from the paper."
+        },
+        {
+          "id": "p7a23-d21-o",
+          "node_type": "answer",
+          "body_text": "Compatibility checks preventing hidden hypothesis mismatches."
+        },
+        {
+          "id": "p7a23-d21-b",
+          "node_type": "comment",
+          "body_text": "Bredon-PD framing for torsion groups."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d21-d",
+          "target": "p7a23-d21-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d21-m",
+          "target": "p7a23-d21-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d21-c",
+          "target": "p7a23-d21-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d21-o",
+          "target": "p7a23-d21-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d21-b",
+          "target": "p7a23-d21-o",
+          "edge_type": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "p7a23-d22",
+      "title": "Surgery obstructions on closed manifolds and the Inertia subgroup",
+      "paper": "0905.0104",
+      "url": "https://arxiv.org/abs/0905.0104",
+      "date": "2009-05-01",
+      "track": "interface",
+      "tags": [
+        "Approach-I",
+        "G3"
+      ],
+      "why": "Closed-manifold subgroup/inertia interface in surgery obstruction groups.",
+      "nodes": [
+        {
+          "id": "p7a23-d22-q",
+          "node_type": "question",
+          "body_text": "Provide interface support between Approach II/III work and legacy Approach I machinery."
+        },
+        {
+          "id": "p7a23-d22-d",
+          "node_type": "answer",
+          "body_text": "Express assumptions/results in family-level or surgery-obstruction language."
+        },
+        {
+          "id": "p7a23-d22-m",
+          "node_type": "answer",
+          "body_text": "Leverage 'Surgery obstructions on closed manifolds and the Inertia subgroup' as an interface theorem linking constructions to obstruction frameworks."
+        },
+        {
+          "id": "p7a23-d22-c",
+          "node_type": "comment",
+          "body_text": "Use foundational assembly/PD/surgery statements from the paper."
+        },
+        {
+          "id": "p7a23-d22-o",
+          "node_type": "answer",
+          "body_text": "Compatibility checks preventing hidden hypothesis mismatches."
+        },
+        {
+          "id": "p7a23-d22-b",
+          "node_type": "comment",
+          "body_text": "Closed-manifold subgroup/inertia interface in surgery obstruction groups."
+        }
+      ],
+      "edges": [
+        {
+          "source": "p7a23-d22-d",
+          "target": "p7a23-d22-q",
+          "edge_type": "clarify"
+        },
+        {
+          "source": "p7a23-d22-m",
+          "target": "p7a23-d22-d",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d22-c",
+          "target": "p7a23-d22-m",
+          "edge_type": "reference"
+        },
+        {
+          "source": "p7a23-d22-o",
+          "target": "p7a23-d22-q",
+          "edge_type": "assert"
+        },
+        {
+          "source": "p7a23-d22-b",
+          "target": "p7a23-d22-o",
+          "edge_type": "challenge"
+        }
+      ]
+    }
+  ]
+}

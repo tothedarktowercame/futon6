@@ -1,0 +1,1289 @@
+{
+  "scope": "problem7-approach23",
+  "queries": [
+    {
+      "id": "a2-01",
+      "text": "all:\"equivariant surgery\" AND all:\"fixed point set\"",
+      "focus": "Approach-II"
+    },
+    {
+      "id": "a2-02",
+      "text": "all:\"equivariant surgery\" AND all:\"codimension one\"",
+      "focus": "Approach-II"
+    },
+    {
+      "id": "a2-03",
+      "text": "all:\"equivariant surgery\" AND all:\"involution\"",
+      "focus": "Approach-II"
+    },
+    {
+      "id": "a2-04",
+      "text": "all:\"Dovermann\" AND all:\"Schultz\" AND all:\"equivariant surgery\"",
+      "focus": "Approach-II"
+    },
+    {
+      "id": "a2-05",
+      "text": "all:\"equivariant Spivak\" AND all:\"surgery\"",
+      "focus": "Approach-II"
+    },
+    {
+      "id": "a2-06",
+      "text": "all:\"equivariant bordism\" AND all:\"fixed points\"",
+      "focus": "Approach-II"
+    },
+    {
+      "id": "a2-07",
+      "text": "all:\"G-manifold\" AND all:\"fixed set\" AND all:\"surgery\"",
+      "focus": "Approach-II"
+    },
+    {
+      "id": "a3-01",
+      "text": "all:\"orbifold resolution\" AND all:\"fundamental group\"",
+      "focus": "Approach-III"
+    },
+    {
+      "id": "a3-02",
+      "text": "all:\"resolution of orbifold singularities\" AND all:\"fundamental group\"",
+      "focus": "Approach-III"
+    },
+    {
+      "id": "a3-03",
+      "text": "all:\"hyperbolic orbifold\" AND all:\"resolution\"",
+      "focus": "Approach-III"
+    },
+    {
+      "id": "a3-04",
+      "text": "all:\"aspherical orbifold\" AND all:\"manifold\"",
+      "focus": "Approach-III"
+    },
+    {
+      "id": "a3-05",
+      "text": "all:\"orbifold fundamental group\" AND all:\"manifold\" AND all:\"surgery\"",
+      "focus": "Approach-III"
+    },
+    {
+      "id": "a3-06",
+      "text": "all:\"Borel conjecture\" AND all:\"orbifold\"",
+      "focus": "Approach-III"
+    },
+    {
+      "id": "e2o-01",
+      "text": "all:\"hyperbolic manifold\" AND all:\"involution\" AND all:\"fixed hypersurface\"",
+      "focus": "E2-odd-alt"
+    },
+    {
+      "id": "e2o-02",
+      "text": "all:\"fixed set\" AND all:\"Euler characteristic\" AND all:\"hyperbolic manifold\"",
+      "focus": "E2-odd-alt"
+    },
+    {
+      "id": "e2o-03",
+      "text": "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\"",
+      "focus": "E2-odd-alt"
+    },
+    {
+      "id": "e2o-04",
+      "text": "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\"",
+      "focus": "E2-odd-alt"
+    },
+    {
+      "id": "e2o-05",
+      "text": "all:\"nonseparating fixed point set\" AND all:\"hyperbolic\"",
+      "focus": "E2-odd-alt"
+    },
+    {
+      "id": "e2o-06",
+      "text": "all:\"finite group action\" AND all:\"hyperbolic manifold\" AND all:\"fixed set\"",
+      "focus": "E2-odd-alt"
+    },
+    {
+      "id": "x-01",
+      "text": "all:\"Smith theory\" AND all:\"aspherical\" AND all:\"periodic diffeomorphisms\"",
+      "focus": "Cross"
+    },
+    {
+      "id": "x-02",
+      "text": "all:\"orbifold\" AND all:\"equivariant surgery\"",
+      "focus": "Cross"
+    }
+  ],
+  "unique_results": 24,
+  "top_n": 20,
+  "top_results": [
+    {
+      "id": "1609.03046",
+      "title": "Properly convex bending of hyperbolic manifolds",
+      "date": "2016-09-10",
+      "authors": [
+        "Samuel A. Ballas",
+        "Ludovic Marquis"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG",
+        "math.GR"
+      ],
+      "summary": "In this paper we show that bending a finite volume hyperbolic $d$-manifold $M$ along a totally geodesic hypersurface $\u03a3$ results in a properly convex projective structure on $M$ with finite volume. We also discuss various geometric properties of bent manifolds and algebraic properties of their fundamental groups. We then use this result to show in each dimension $d\\geq 3$ there are examples finite volume, but non-compact, properly convex $d$-manifolds. Furthermore, we show that the examples can be chosen to be either strictly convex or non-strictly convex.",
+      "url": "https://arxiv.org/abs/1609.03046",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 11
+    },
+    {
+      "id": "1806.02360",
+      "title": "Effective virtual and residual properties of some arithmetic hyperbolic 3-manifolds",
+      "date": "2018-06-06",
+      "authors": [
+        "Jason DeBlois",
+        "Nicholas Miller",
+        "Priyam Patel"
+      ],
+      "cats": [
+        "math.GT",
+        "math.GR"
+      ],
+      "summary": "We give an effective upper bound, for certain arithmetic hyperbolic 3-manifold groups obtained from a quadratic form construction, on the minimal index of a subgroup that embeds in a fixed 6-dimensional right-angled reflection group, stabilizing a totally geodesic subspace. In particular, for manifold groups in any fixed commensurability class we show that the index of such a subgroup is asymptotically smaller than any fractional power of the volume of the manifold. We also give effective bounds on the geodesic residual finiteness growths of closed hyperbolic manifolds that totally geodesically immerse in non-compact right-angled reflection orbifolds, extending work of the third author from the compact case. The first result gives examples to which the second applies, and for these we give explicit bounds on geodesic residual finiteness growth.",
+      "url": "https://arxiv.org/abs/1806.02360",
+      "query_ids": [
+        "e2o-03"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 11
+    },
+    {
+      "id": "1106.1704",
+      "title": "Smith theory, L2 cohomology, isometries of locally symmetric manifolds and moduli spaces of curves",
+      "date": "2011-06-09",
+      "authors": [
+        "Grigori Avramidi"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AT"
+      ],
+      "summary": "We investigate periodic diffeomorphisms of non-compact aspherical manifolds (and orbifolds) and describe a class of spaces that have no homotopically trivial periodic diffeomorphisms. Prominent examples are moduli spaces of curves and aspherical locally symmetric spaces with non-vanishing Euler characteristic. In the irreducible locally symmetric case, we show that no complete metric has more symmetry than the locally symmetric metric. In the moduli space case, we build on work of Farb and Weinberger and prove an analogue of Royden's theorem for complete finite volume metrics.",
+      "url": "https://arxiv.org/abs/1106.1704",
+      "query_ids": [
+        "x-01"
+      ],
+      "query_texts": [
+        "all:\"Smith theory\" AND all:\"aspherical\" AND all:\"periodic diffeomorphisms\""
+      ],
+      "focuses": [
+        "Cross"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1108.5944",
+      "title": "The diversity of symplectic Calabi-Yau six-manifolds",
+      "date": "2011-08-30",
+      "authors": [
+        "Joel Fine",
+        "Dmitri Panov"
+      ],
+      "cats": [
+        "math.SG",
+        "math.DG"
+      ],
+      "summary": "Given an integer b and a finitely presented group G we produce a compact symplectic six-manifold with c_1 = 0, b_2 > b, b_3 > b and fundamental group G. In the simply-connected case we can also arrange for b_3 = 0; in particular these examples are not diffeomorphic to K\u00e4hler manifolds with c_1 = 0. The construction begins with a certain orientable four-dimensional hyperbolic orbifold assembled from right-angled 120-cells. The twistor space of the hyperbolic orbifold is a symplectic Calabi-Yau orbifold; a crepant resolution of this last orbifold produces a smooth symplectic manifold with the required properties.",
+      "url": "https://arxiv.org/abs/1108.5944",
+      "query_ids": [
+        "a3-03"
+      ],
+      "query_texts": [
+        "all:\"hyperbolic orbifold\" AND all:\"resolution\""
+      ],
+      "focuses": [
+        "Approach-III"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1412.0792",
+      "title": "Tractor calculus, BGG complexes, and the cohomology of Kleinian groups",
+      "date": "2014-12-02",
+      "authors": [
+        "A. Rod Gover",
+        "Callum Sleigh"
+      ],
+      "cats": [
+        "math.DG",
+        "math.GR",
+        "math.GT"
+      ],
+      "summary": "For a compact, oriented, hyperbolic $n$-manifold $(M,g)$, realised as $M= \u0393\\backslash \\mathbb{H}^{n}$ where $\u0393$ is a torsion-free cocompact subgroup of $SO(n,1)$, we establish and study a relationship between differential geometric cohomology on $M$ and algebraic invariants of the group $\u0393$. In particular for $\\mathbb{F}$ an irreducible $SO(n,1)$-module, we show that the group cohomology with coefficients $H^{\\bullet}(\u0393, \\mathbb{F})$ is isomorphic to the cohomology of an appropriate projective BGG complex on $M$. This yields the geometric interpretation that $H^{\\bullet}(\u0393, \\mathbb{F})$ parameterises solutions to certain distinguished natural PDEs of Riemannian geometry, modulo the range of suitable differential coboundary operators. Viewed in another direction, the construction shows one way that non-trivial cohomology can arise in a BGG complex, and sheds considerable light on its geometric meaning. We also use the tools developed to give a new proof that $H^{1} (\u0393, S_{0}^{k} \\mathbb{R}^{n+1}) \\neq 0$ whenever $M$ contains a compact, orientable, totally geodesic hypersurface. All constructions use another result that we establish, namely that the canonical flat connection on a hyperbolic manifold coincides with the tractor connection of projective differential geometry.",
+      "url": "https://arxiv.org/abs/1412.0792",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1601.05697",
+      "title": "Geodesics and nodal sets of Laplace eigenfunctions on hyperbolic manifolds",
+      "date": "2016-01-21",
+      "authors": [
+        "Chris Judge",
+        "Sugata Mondal"
+      ],
+      "cats": [
+        "math.DG",
+        "math.SP"
+      ],
+      "summary": "Let X be a manifold equipped with a complete Riemannian metric of constant negative curvature and finite volume. We demonstrate the finiteness of the collection of totally geodesic immersed hypersurfaces in X that lie in the zero-level set of some Laplace eigenfunction. For surfaces, we show that the number can be bounded just in terms of the area of the surface. We also provide constructions of geodesics in hyperbolic surfaces that lie in a nodal set but that do not lie in the fixed point set of a reflection symmetry.",
+      "url": "https://arxiv.org/abs/1601.05697",
+      "query_ids": [
+        "e2o-03"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1811.08794",
+      "title": "Cobordisms of global quotient orbifolds and an equivariant Pontrjagin-Thom construction",
+      "date": "2018-11-21",
+      "authors": [
+        "Daniel Grady"
+      ],
+      "cats": [
+        "math.AT",
+        "math.DG",
+        "math.GT"
+      ],
+      "summary": "We introduce an equivariant Pontrjagin-Thom construction which identifies equivariant cohomotopy classes with certain fixed point bordism classes. This provides a concrete geometric model for equivariant cohomotopy which works for any compact Lie group G. In the special case when G is finite or a torus, we show that our construction recovers the construction of Wasserman, providing a new perspective on equivariant bordism. We connect the results with bordisms of global quotient orbifolds, utilizing the machinery of Gepner-Henriques to describe bordisms of framed orbifolds in terms of equivariant cohomotopy. We also illustrate the utility of the theory by applying our results to M-theory, thus connecting with recent work of Huerta, Sati and Schreiber.",
+      "url": "https://arxiv.org/abs/1811.08794",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "2506.23994",
+      "title": "On reflections of congruence hyperbolic manifolds",
+      "date": "2025-06-30",
+      "authors": [
+        "Sami Douba",
+        "Franco Vargas Pallete"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We show that the standard method for constructing closed hyperbolic manifolds of arbitrary dimension possessing reflective symmetries typically produces reflections whose fixed point sets are nonseparating.",
+      "url": "https://arxiv.org/abs/2506.23994",
+      "query_ids": [
+        "e2o-03"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "math/9207211",
+      "title": "Generalizing the hyperbolic collar lemma",
+      "date": "1992-07-01",
+      "authors": [
+        "Ara Basmajian"
+      ],
+      "cats": [
+        "math.DG",
+        "math.GT"
+      ],
+      "summary": "We discuss two generalizations of the collar lemma. The first is the stable neighborhood theorem which says that a (not necessarily simple) closed geodesic in a hyperbolic surface has a \\lq\\lq stable neighborhood\\rq\\rq whose width only depends on the length of the geodesic. As an application, we show that there is a lower bound for the length of a closed geodesic having crossing number $k$ on a hyperbolic surface. This lower bound tends to infinity with $k$. Our second generalization is to totally geodesic hypersurfaces of hyperbolic manifolds. Namely, we construct a tubular neighborhood function and show that an embedded closed totally geodesic hypersurface in a hyperbolic manifold has a tubular neighborhood whose width only depends on the area of the hypersurface (and hence not on the geometry of the ambient manifold). The implications of this result for volumes of hyperbolic manifolds is discussed. We also derive a (hyperbolic) quantitative version of the Klein-Maskit combination theorem (in all dimensions) for free products of fuchsian groups. Using this last theorem, we construct examples to illustrate the qualitative sharpness of the tubular neighborhood function.",
+      "url": "https://arxiv.org/abs/math/9207211",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "math/0512284",
+      "title": "Positive scalar curvature with symmetry",
+      "date": "2005-12-13",
+      "authors": [
+        "Bernhard Hanke"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We show an equivariant bordism principle for constructing metrics of positive scalar curvature that are invariant under a given group action. Furthermore, we develop a new codimension-2 surgery technique which removes singular strata from fixed point free $S^1$-manifolds while preserving equivariant positive scalar curvature. These results are applied to derive the following generalization of a result of Gromov and Lawson: Each closed fixed point free $S^1$-manifold of dimension at least 6 whose isotropy groups have odd order and whose union of maximal orbits is simply connected and not spin carries an $S^1$-invariant metric of positive scalar curvature.",
+      "url": "https://arxiv.org/abs/math/0512284",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "1305.2288",
+      "title": "Circle actions and scalar curvature",
+      "date": "2013-05-10",
+      "authors": [
+        "Michael Wiemeler"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We construct metrics of positive scalar curvature on manifolds with circle actions. One of our main results is that there exist $S^1$-invariant metrics of positive scalar curvature on every $S^1$-manifold which has a fixed point component of codimension 2. As a consequence we can prove that there are non-invariant metrics of positive scalar curvature on many manifolds with circle actions. Results from equivariant bordism allow us to show that there is an invariant metric of positive scalar curvature on the connected sum of two copies of a simply connected semi-free $S^1$-manifold $M$ of dimension at least six provided that $M$ is not $\\text{spin}$ or that $M$ is $\\text{spin}$ and the $S^1$-action is of odd type. If $M$ is spin and the $S^1$-action of even type then there is a $k>0$ such that the equivariant connected sum of $2^k$ copies of $M$ admits an invariant metric of positive scalar curvature if and only if a generalized $\\hat{A}$-genus of $M/S^1$ vanishes.",
+      "url": "https://arxiv.org/abs/1305.2288",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "1612.08489",
+      "title": "Involutions on surfaces",
+      "date": "2016-12-27",
+      "authors": [
+        "Daniel Dugger"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AT"
+      ],
+      "summary": "We use equivariant surgery to classify all involutions on closed surfaces, up to isomorphism. Work on this problem is classical, dating back to the nineteenth century, but some questions seem to have been left unanswered. We give a modern treatment that leads to a complete classification.",
+      "url": "https://arxiv.org/abs/1612.08489",
+      "query_ids": [
+        "a2-03"
+      ],
+      "query_texts": [
+        "all:\"equivariant surgery\" AND all:\"involution\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "2408.03430",
+      "title": "Finiteness of totally geodesic hypersurfaces",
+      "date": "2024-08-06",
+      "authors": [
+        "Simion Filip",
+        "David Fisher",
+        "Ben Lowe"
+      ],
+      "cats": [
+        "math.DG",
+        "math.DS",
+        "math.GT"
+      ],
+      "summary": "We prove that a closed negatively curved analytic Riemannian manifold that contains infinitely many totally geodesic hypersurfaces is isometric to an arithmetic hyperbolic manifold. Equivalently, any closed analytic Riemannian manifold with negative sectional curvature has only finitely many totally geodesic hypersurfaces, unless it has constant curvature.",
+      "url": "https://arxiv.org/abs/2408.03430",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "math/0412550",
+      "title": "Geometric versus homotopy theoretic equivariant bordism",
+      "date": "2004-12-31",
+      "authors": [
+        "Bernhard Hanke"
+      ],
+      "cats": [
+        "math.AT",
+        "math.GT"
+      ],
+      "summary": "By results of Loeffler and Comezana, the Pontrjagin-Thom map from geometric G-equivariant bordism to homotopy theoretic equivariant bordism is injective for compact abelian G. If G = S^1 x ... x S^1, we prove that the associated fixed point square is a pull back square, thus confirming a recent conjecture of D. Sinha. This is used in order to determine the image of the Pontrjagin-Thom map for toral G.",
+      "url": "https://arxiv.org/abs/math/0412550",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "0712.4322",
+      "title": "Spectral resolution in hyperbolic orbifolds, quantum chaos, and cosmology",
+      "date": "2007-12-28",
+      "authors": [
+        "H. Then"
+      ],
+      "cats": [
+        "nlin.CD"
+      ],
+      "summary": "We present a few subjects from physics that have one in common: the spectral resolution of the Laplacian.",
+      "url": "https://arxiv.org/abs/0712.4322",
+      "query_ids": [
+        "a3-03"
+      ],
+      "query_texts": [
+        "all:\"hyperbolic orbifold\" AND all:\"resolution\""
+      ],
+      "focuses": [
+        "Approach-III"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "1705.10909",
+      "title": "The equivariant Spivak normal bundle and equivariant surgery for compact Lie groups",
+      "date": "2017-05-31",
+      "authors": [
+        "Steven R. Costenoble",
+        "Stefan Waner"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "We generalize the results of a previous paper of ours to compact Lie groups. Using a recently developed ordinary equivariant homology and cohomology, we define equivariant Poincare complexes with the properties that (1) every compact G-manifold is an equivariant Poincare complex, (2) every finite equivariant Poincare complex (with some mild additional hypotheses) has an equivariant spherical Spivak normal fibration, and (3) the Pi-Pi Theorem holds for equivariant Poincare pairs under suitable gap hypotheses. The nice behavior of the ordinary equivariant homology and cohomology theories allows us to follow Wall's original line of argument closely.",
+      "url": "https://arxiv.org/abs/1705.10909",
+      "query_ids": [
+        "a2-05"
+      ],
+      "query_texts": [
+        "all:\"equivariant Spivak\" AND all:\"surgery\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2002.02326",
+      "title": "Corks, involutions, and Heegaard Floer homology",
+      "date": "2020-02-06",
+      "authors": [
+        "Irving Dai",
+        "Matthew Hedden",
+        "Abhishek Mallick"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "Building on the algebraic framework developed by Hendricks, Manolescu, and Zemke, we introduce and study a set of Floer-theoretic invariants aimed at detecting corks. Our invariants obstruct the extension of a given involution over any homology ball, rather than a particular contractible manifold. Unlike previous approaches, we do not utilize any closed 4-manifold topology or contact topology. Instead, we adapt the formalism of local equivalence coming from involutive Heegaard Floer homology. As an application, we define a modification $\u0398^\u03c4_{\\mathbb{Z}}$ of the homology cobordism group which takes into account an involution on each homology sphere, and prove that this admits a $\\mathbb{Z}^\\infty$-subgroup of strongly non-extendable corks. The group $\u0398^\u03c4_{\\mathbb{Z}}$ can also be viewed as a refinement of the bordism group of diffeomorphisms. Using our invariants, we furthermore establish several new families of corks and prove that various known examples are strongly non-extendable. Our main computational tool is a monotonicity theorem which constrains the behavior of our invariants under equivariant negative-definite cobordisms, and an explicit method of constructing such cobordisms via equivariant surgery.",
+      "url": "https://arxiv.org/abs/2002.02326",
+      "query_ids": [
+        "a2-03"
+      ],
+      "query_texts": [
+        "all:\"equivariant surgery\" AND all:\"involution\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2306.01254",
+      "title": "Rigidity of Totally Geodesic Hypersurfaces in Negative Curvature",
+      "date": "2023-06-02",
+      "authors": [
+        "Ben Lowe"
+      ],
+      "cats": [
+        "math.DG",
+        "math.DS"
+      ],
+      "summary": "Let $M$ be a closed hyperbolic manifold containing a totally geodesic hypersurface $S$, and let $N$ be a closed Riemannian manifold homotopy equivalent to $M$ with sectional curvature bounded above by $-1$. Then it follows from the work of Besson-Courtois-Gallot that $\u03c0_1(S)$ can be represented by a hypersurface $S'$ in $N$ with volume less than or equal to that of $S$. We study the equality case: if $\u03c0_1(S)$ cannot be represented by a hypersurface $S'$ in $N$ with volume strictly smaller than that of $S$, then must $N$ be isometric to $M$? We show that many such $S$ are rigid in the sense that the answer to this question is positive. On the other hand, we construct examples of $S$ for which the answer is negative.",
+      "url": "https://arxiv.org/abs/2306.01254",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "math/9910024",
+      "title": "Computations of Complex Equivariant Bordism Rings",
+      "date": "1999-10-05",
+      "authors": [
+        "Dev Sinha"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "In this paper we compute homotopical bordism rings $MU^G_*$ for abelian compact Lie groups G, giving explicit generators and relations. The key constructions are operations on equivariant bordism which should play an important role in equivariant stable homotopy theory more generally. The main technique used is localization of the theory by inverting Euler classes. Applications to homotopy theory include analysis of the completion map from $MU^G_*$ to $MU^*(BG)$. Applications to geometry include classification up to cobordism of S^1 actions on stably complex four-manifolds with precisely three fixed points, answering a question of Bott.",
+      "url": "https://arxiv.org/abs/math/9910024",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 7
+    },
+    {
+      "id": "1112.2104",
+      "title": "Bordisms of manifolds with proper action of a discrete group: signatures and descriptions of $G$-bundles",
+      "date": "2011-12-09",
+      "authors": [
+        "A. S. Mishchenko",
+        "Quitzeh Morales Mel\u00e9ndez"
+      ],
+      "cats": [
+        "math.AT",
+        "math.KT"
+      ],
+      "summary": "In this work the equivariant signature of a manifold with proper action of a discrete group is defined as an invariant of equivariant bordisms. It is shown that the computation of this signature can be reduced to its computation on fixed points sets equipped with their tubular neighborhoods. It is given a description of the equivariant vector bundles with action of a discrete group $G$ for the case when the action over the base is proper quasi-free, i.e. the stationary subgroup of any point is finite. The description is given in terms of some classifying space.",
+      "url": "https://arxiv.org/abs/1112.2104",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 7
+    }
+  ],
+  "results": [
+    {
+      "id": "1609.03046",
+      "title": "Properly convex bending of hyperbolic manifolds",
+      "date": "2016-09-10",
+      "authors": [
+        "Samuel A. Ballas",
+        "Ludovic Marquis"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG",
+        "math.GR"
+      ],
+      "summary": "In this paper we show that bending a finite volume hyperbolic $d$-manifold $M$ along a totally geodesic hypersurface $\u03a3$ results in a properly convex projective structure on $M$ with finite volume. We also discuss various geometric properties of bent manifolds and algebraic properties of their fundamental groups. We then use this result to show in each dimension $d\\geq 3$ there are examples finite volume, but non-compact, properly convex $d$-manifolds. Furthermore, we show that the examples can be chosen to be either strictly convex or non-strictly convex.",
+      "url": "https://arxiv.org/abs/1609.03046",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 11
+    },
+    {
+      "id": "1806.02360",
+      "title": "Effective virtual and residual properties of some arithmetic hyperbolic 3-manifolds",
+      "date": "2018-06-06",
+      "authors": [
+        "Jason DeBlois",
+        "Nicholas Miller",
+        "Priyam Patel"
+      ],
+      "cats": [
+        "math.GT",
+        "math.GR"
+      ],
+      "summary": "We give an effective upper bound, for certain arithmetic hyperbolic 3-manifold groups obtained from a quadratic form construction, on the minimal index of a subgroup that embeds in a fixed 6-dimensional right-angled reflection group, stabilizing a totally geodesic subspace. In particular, for manifold groups in any fixed commensurability class we show that the index of such a subgroup is asymptotically smaller than any fractional power of the volume of the manifold. We also give effective bounds on the geodesic residual finiteness growths of closed hyperbolic manifolds that totally geodesically immerse in non-compact right-angled reflection orbifolds, extending work of the third author from the compact case. The first result gives examples to which the second applies, and for these we give explicit bounds on geodesic residual finiteness growth.",
+      "url": "https://arxiv.org/abs/1806.02360",
+      "query_ids": [
+        "e2o-03"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 11
+    },
+    {
+      "id": "1106.1704",
+      "title": "Smith theory, L2 cohomology, isometries of locally symmetric manifolds and moduli spaces of curves",
+      "date": "2011-06-09",
+      "authors": [
+        "Grigori Avramidi"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AT"
+      ],
+      "summary": "We investigate periodic diffeomorphisms of non-compact aspherical manifolds (and orbifolds) and describe a class of spaces that have no homotopically trivial periodic diffeomorphisms. Prominent examples are moduli spaces of curves and aspherical locally symmetric spaces with non-vanishing Euler characteristic. In the irreducible locally symmetric case, we show that no complete metric has more symmetry than the locally symmetric metric. In the moduli space case, we build on work of Farb and Weinberger and prove an analogue of Royden's theorem for complete finite volume metrics.",
+      "url": "https://arxiv.org/abs/1106.1704",
+      "query_ids": [
+        "x-01"
+      ],
+      "query_texts": [
+        "all:\"Smith theory\" AND all:\"aspherical\" AND all:\"periodic diffeomorphisms\""
+      ],
+      "focuses": [
+        "Cross"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1108.5944",
+      "title": "The diversity of symplectic Calabi-Yau six-manifolds",
+      "date": "2011-08-30",
+      "authors": [
+        "Joel Fine",
+        "Dmitri Panov"
+      ],
+      "cats": [
+        "math.SG",
+        "math.DG"
+      ],
+      "summary": "Given an integer b and a finitely presented group G we produce a compact symplectic six-manifold with c_1 = 0, b_2 > b, b_3 > b and fundamental group G. In the simply-connected case we can also arrange for b_3 = 0; in particular these examples are not diffeomorphic to K\u00e4hler manifolds with c_1 = 0. The construction begins with a certain orientable four-dimensional hyperbolic orbifold assembled from right-angled 120-cells. The twistor space of the hyperbolic orbifold is a symplectic Calabi-Yau orbifold; a crepant resolution of this last orbifold produces a smooth symplectic manifold with the required properties.",
+      "url": "https://arxiv.org/abs/1108.5944",
+      "query_ids": [
+        "a3-03"
+      ],
+      "query_texts": [
+        "all:\"hyperbolic orbifold\" AND all:\"resolution\""
+      ],
+      "focuses": [
+        "Approach-III"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1412.0792",
+      "title": "Tractor calculus, BGG complexes, and the cohomology of Kleinian groups",
+      "date": "2014-12-02",
+      "authors": [
+        "A. Rod Gover",
+        "Callum Sleigh"
+      ],
+      "cats": [
+        "math.DG",
+        "math.GR",
+        "math.GT"
+      ],
+      "summary": "For a compact, oriented, hyperbolic $n$-manifold $(M,g)$, realised as $M= \u0393\\backslash \\mathbb{H}^{n}$ where $\u0393$ is a torsion-free cocompact subgroup of $SO(n,1)$, we establish and study a relationship between differential geometric cohomology on $M$ and algebraic invariants of the group $\u0393$. In particular for $\\mathbb{F}$ an irreducible $SO(n,1)$-module, we show that the group cohomology with coefficients $H^{\\bullet}(\u0393, \\mathbb{F})$ is isomorphic to the cohomology of an appropriate projective BGG complex on $M$. This yields the geometric interpretation that $H^{\\bullet}(\u0393, \\mathbb{F})$ parameterises solutions to certain distinguished natural PDEs of Riemannian geometry, modulo the range of suitable differential coboundary operators. Viewed in another direction, the construction shows one way that non-trivial cohomology can arise in a BGG complex, and sheds considerable light on its geometric meaning. We also use the tools developed to give a new proof that $H^{1} (\u0393, S_{0}^{k} \\mathbb{R}^{n+1}) \\neq 0$ whenever $M$ contains a compact, orientable, totally geodesic hypersurface. All constructions use another result that we establish, namely that the canonical flat connection on a hyperbolic manifold coincides with the tractor connection of projective differential geometry.",
+      "url": "https://arxiv.org/abs/1412.0792",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1601.05697",
+      "title": "Geodesics and nodal sets of Laplace eigenfunctions on hyperbolic manifolds",
+      "date": "2016-01-21",
+      "authors": [
+        "Chris Judge",
+        "Sugata Mondal"
+      ],
+      "cats": [
+        "math.DG",
+        "math.SP"
+      ],
+      "summary": "Let X be a manifold equipped with a complete Riemannian metric of constant negative curvature and finite volume. We demonstrate the finiteness of the collection of totally geodesic immersed hypersurfaces in X that lie in the zero-level set of some Laplace eigenfunction. For surfaces, we show that the number can be bounded just in terms of the area of the surface. We also provide constructions of geodesics in hyperbolic surfaces that lie in a nodal set but that do not lie in the fixed point set of a reflection symmetry.",
+      "url": "https://arxiv.org/abs/1601.05697",
+      "query_ids": [
+        "e2o-03"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "1811.08794",
+      "title": "Cobordisms of global quotient orbifolds and an equivariant Pontrjagin-Thom construction",
+      "date": "2018-11-21",
+      "authors": [
+        "Daniel Grady"
+      ],
+      "cats": [
+        "math.AT",
+        "math.DG",
+        "math.GT"
+      ],
+      "summary": "We introduce an equivariant Pontrjagin-Thom construction which identifies equivariant cohomotopy classes with certain fixed point bordism classes. This provides a concrete geometric model for equivariant cohomotopy which works for any compact Lie group G. In the special case when G is finite or a torus, we show that our construction recovers the construction of Wasserman, providing a new perspective on equivariant bordism. We connect the results with bordisms of global quotient orbifolds, utilizing the machinery of Gepner-Henriques to describe bordisms of framed orbifolds in terms of equivariant cohomotopy. We also illustrate the utility of the theory by applying our results to M-theory, thus connecting with recent work of Huerta, Sati and Schreiber.",
+      "url": "https://arxiv.org/abs/1811.08794",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "2506.23994",
+      "title": "On reflections of congruence hyperbolic manifolds",
+      "date": "2025-06-30",
+      "authors": [
+        "Sami Douba",
+        "Franco Vargas Pallete"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We show that the standard method for constructing closed hyperbolic manifolds of arbitrary dimension possessing reflective symmetries typically produces reflections whose fixed point sets are nonseparating.",
+      "url": "https://arxiv.org/abs/2506.23994",
+      "query_ids": [
+        "e2o-03"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 10
+    },
+    {
+      "id": "math/9207211",
+      "title": "Generalizing the hyperbolic collar lemma",
+      "date": "1992-07-01",
+      "authors": [
+        "Ara Basmajian"
+      ],
+      "cats": [
+        "math.DG",
+        "math.GT"
+      ],
+      "summary": "We discuss two generalizations of the collar lemma. The first is the stable neighborhood theorem which says that a (not necessarily simple) closed geodesic in a hyperbolic surface has a \\lq\\lq stable neighborhood\\rq\\rq whose width only depends on the length of the geodesic. As an application, we show that there is a lower bound for the length of a closed geodesic having crossing number $k$ on a hyperbolic surface. This lower bound tends to infinity with $k$. Our second generalization is to totally geodesic hypersurfaces of hyperbolic manifolds. Namely, we construct a tubular neighborhood function and show that an embedded closed totally geodesic hypersurface in a hyperbolic manifold has a tubular neighborhood whose width only depends on the area of the hypersurface (and hence not on the geometry of the ambient manifold). The implications of this result for volumes of hyperbolic manifolds is discussed. We also derive a (hyperbolic) quantitative version of the Klein-Maskit combination theorem (in all dimensions) for free products of fuchsian groups. Using this last theorem, we construct examples to illustrate the qualitative sharpness of the tubular neighborhood function.",
+      "url": "https://arxiv.org/abs/math/9207211",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "math/0512284",
+      "title": "Positive scalar curvature with symmetry",
+      "date": "2005-12-13",
+      "authors": [
+        "Bernhard Hanke"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We show an equivariant bordism principle for constructing metrics of positive scalar curvature that are invariant under a given group action. Furthermore, we develop a new codimension-2 surgery technique which removes singular strata from fixed point free $S^1$-manifolds while preserving equivariant positive scalar curvature. These results are applied to derive the following generalization of a result of Gromov and Lawson: Each closed fixed point free $S^1$-manifold of dimension at least 6 whose isotropy groups have odd order and whose union of maximal orbits is simply connected and not spin carries an $S^1$-invariant metric of positive scalar curvature.",
+      "url": "https://arxiv.org/abs/math/0512284",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "1305.2288",
+      "title": "Circle actions and scalar curvature",
+      "date": "2013-05-10",
+      "authors": [
+        "Michael Wiemeler"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We construct metrics of positive scalar curvature on manifolds with circle actions. One of our main results is that there exist $S^1$-invariant metrics of positive scalar curvature on every $S^1$-manifold which has a fixed point component of codimension 2. As a consequence we can prove that there are non-invariant metrics of positive scalar curvature on many manifolds with circle actions. Results from equivariant bordism allow us to show that there is an invariant metric of positive scalar curvature on the connected sum of two copies of a simply connected semi-free $S^1$-manifold $M$ of dimension at least six provided that $M$ is not $\\text{spin}$ or that $M$ is $\\text{spin}$ and the $S^1$-action is of odd type. If $M$ is spin and the $S^1$-action of even type then there is a $k>0$ such that the equivariant connected sum of $2^k$ copies of $M$ admits an invariant metric of positive scalar curvature if and only if a generalized $\\hat{A}$-genus of $M/S^1$ vanishes.",
+      "url": "https://arxiv.org/abs/1305.2288",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "1612.08489",
+      "title": "Involutions on surfaces",
+      "date": "2016-12-27",
+      "authors": [
+        "Daniel Dugger"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AT"
+      ],
+      "summary": "We use equivariant surgery to classify all involutions on closed surfaces, up to isomorphism. Work on this problem is classical, dating back to the nineteenth century, but some questions seem to have been left unanswered. We give a modern treatment that leads to a complete classification.",
+      "url": "https://arxiv.org/abs/1612.08489",
+      "query_ids": [
+        "a2-03"
+      ],
+      "query_texts": [
+        "all:\"equivariant surgery\" AND all:\"involution\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "2408.03430",
+      "title": "Finiteness of totally geodesic hypersurfaces",
+      "date": "2024-08-06",
+      "authors": [
+        "Simion Filip",
+        "David Fisher",
+        "Ben Lowe"
+      ],
+      "cats": [
+        "math.DG",
+        "math.DS",
+        "math.GT"
+      ],
+      "summary": "We prove that a closed negatively curved analytic Riemannian manifold that contains infinitely many totally geodesic hypersurfaces is isometric to an arithmetic hyperbolic manifold. Equivalently, any closed analytic Riemannian manifold with negative sectional curvature has only finitely many totally geodesic hypersurfaces, unless it has constant curvature.",
+      "url": "https://arxiv.org/abs/2408.03430",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 9
+    },
+    {
+      "id": "math/0412550",
+      "title": "Geometric versus homotopy theoretic equivariant bordism",
+      "date": "2004-12-31",
+      "authors": [
+        "Bernhard Hanke"
+      ],
+      "cats": [
+        "math.AT",
+        "math.GT"
+      ],
+      "summary": "By results of Loeffler and Comezana, the Pontrjagin-Thom map from geometric G-equivariant bordism to homotopy theoretic equivariant bordism is injective for compact abelian G. If G = S^1 x ... x S^1, we prove that the associated fixed point square is a pull back square, thus confirming a recent conjecture of D. Sinha. This is used in order to determine the image of the Pontrjagin-Thom map for toral G.",
+      "url": "https://arxiv.org/abs/math/0412550",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "0712.4322",
+      "title": "Spectral resolution in hyperbolic orbifolds, quantum chaos, and cosmology",
+      "date": "2007-12-28",
+      "authors": [
+        "H. Then"
+      ],
+      "cats": [
+        "nlin.CD"
+      ],
+      "summary": "We present a few subjects from physics that have one in common: the spectral resolution of the Laplacian.",
+      "url": "https://arxiv.org/abs/0712.4322",
+      "query_ids": [
+        "a3-03"
+      ],
+      "query_texts": [
+        "all:\"hyperbolic orbifold\" AND all:\"resolution\""
+      ],
+      "focuses": [
+        "Approach-III"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "1705.10909",
+      "title": "The equivariant Spivak normal bundle and equivariant surgery for compact Lie groups",
+      "date": "2017-05-31",
+      "authors": [
+        "Steven R. Costenoble",
+        "Stefan Waner"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "We generalize the results of a previous paper of ours to compact Lie groups. Using a recently developed ordinary equivariant homology and cohomology, we define equivariant Poincare complexes with the properties that (1) every compact G-manifold is an equivariant Poincare complex, (2) every finite equivariant Poincare complex (with some mild additional hypotheses) has an equivariant spherical Spivak normal fibration, and (3) the Pi-Pi Theorem holds for equivariant Poincare pairs under suitable gap hypotheses. The nice behavior of the ordinary equivariant homology and cohomology theories allows us to follow Wall's original line of argument closely.",
+      "url": "https://arxiv.org/abs/1705.10909",
+      "query_ids": [
+        "a2-05"
+      ],
+      "query_texts": [
+        "all:\"equivariant Spivak\" AND all:\"surgery\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2002.02326",
+      "title": "Corks, involutions, and Heegaard Floer homology",
+      "date": "2020-02-06",
+      "authors": [
+        "Irving Dai",
+        "Matthew Hedden",
+        "Abhishek Mallick"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "Building on the algebraic framework developed by Hendricks, Manolescu, and Zemke, we introduce and study a set of Floer-theoretic invariants aimed at detecting corks. Our invariants obstruct the extension of a given involution over any homology ball, rather than a particular contractible manifold. Unlike previous approaches, we do not utilize any closed 4-manifold topology or contact topology. Instead, we adapt the formalism of local equivalence coming from involutive Heegaard Floer homology. As an application, we define a modification $\u0398^\u03c4_{\\mathbb{Z}}$ of the homology cobordism group which takes into account an involution on each homology sphere, and prove that this admits a $\\mathbb{Z}^\\infty$-subgroup of strongly non-extendable corks. The group $\u0398^\u03c4_{\\mathbb{Z}}$ can also be viewed as a refinement of the bordism group of diffeomorphisms. Using our invariants, we furthermore establish several new families of corks and prove that various known examples are strongly non-extendable. Our main computational tool is a monotonicity theorem which constrains the behavior of our invariants under equivariant negative-definite cobordisms, and an explicit method of constructing such cobordisms via equivariant surgery.",
+      "url": "https://arxiv.org/abs/2002.02326",
+      "query_ids": [
+        "a2-03"
+      ],
+      "query_texts": [
+        "all:\"equivariant surgery\" AND all:\"involution\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "2306.01254",
+      "title": "Rigidity of Totally Geodesic Hypersurfaces in Negative Curvature",
+      "date": "2023-06-02",
+      "authors": [
+        "Ben Lowe"
+      ],
+      "cats": [
+        "math.DG",
+        "math.DS"
+      ],
+      "summary": "Let $M$ be a closed hyperbolic manifold containing a totally geodesic hypersurface $S$, and let $N$ be a closed Riemannian manifold homotopy equivalent to $M$ with sectional curvature bounded above by $-1$. Then it follows from the work of Besson-Courtois-Gallot that $\u03c0_1(S)$ can be represented by a hypersurface $S'$ in $N$ with volume less than or equal to that of $S$. We study the equality case: if $\u03c0_1(S)$ cannot be represented by a hypersurface $S'$ in $N$ with volume strictly smaller than that of $S$, then must $N$ be isometric to $M$? We show that many such $S$ are rigid in the sense that the answer to this question is positive. On the other hand, we construct examples of $S$ for which the answer is negative.",
+      "url": "https://arxiv.org/abs/2306.01254",
+      "query_ids": [
+        "e2o-04"
+      ],
+      "query_texts": [
+        "all:\"totally geodesic hypersurface\" AND all:\"hyperbolic manifold\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 8
+    },
+    {
+      "id": "math/9910024",
+      "title": "Computations of Complex Equivariant Bordism Rings",
+      "date": "1999-10-05",
+      "authors": [
+        "Dev Sinha"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "In this paper we compute homotopical bordism rings $MU^G_*$ for abelian compact Lie groups G, giving explicit generators and relations. The key constructions are operations on equivariant bordism which should play an important role in equivariant stable homotopy theory more generally. The main technique used is localization of the theory by inverting Euler classes. Applications to homotopy theory include analysis of the completion map from $MU^G_*$ to $MU^*(BG)$. Applications to geometry include classification up to cobordism of S^1 actions on stably complex four-manifolds with precisely three fixed points, answering a question of Bott.",
+      "url": "https://arxiv.org/abs/math/9910024",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 7
+    },
+    {
+      "id": "1112.2104",
+      "title": "Bordisms of manifolds with proper action of a discrete group: signatures and descriptions of $G$-bundles",
+      "date": "2011-12-09",
+      "authors": [
+        "A. S. Mishchenko",
+        "Quitzeh Morales Mel\u00e9ndez"
+      ],
+      "cats": [
+        "math.AT",
+        "math.KT"
+      ],
+      "summary": "In this work the equivariant signature of a manifold with proper action of a discrete group is defined as an invariant of equivariant bordisms. It is shown that the computation of this signature can be reduced to its computation on fixed points sets equipped with their tubular neighborhoods. It is given a description of the equivariant vector bundles with action of a discrete group $G$ for the case when the action over the base is proper quasi-free, i.e. the stationary subgroup of any point is finite. The description is given in terms of some classifying space.",
+      "url": "https://arxiv.org/abs/1112.2104",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 7
+    },
+    {
+      "id": "1310.0733",
+      "title": "Local inverse scattering at fixed energy in spherically symmetric asymptotically hyperbolic manifolds",
+      "date": "2013-10-02",
+      "authors": [
+        "Thierry Daude",
+        "Damien Gobin",
+        "Fran\u00e7ois Nicoleau"
+      ],
+      "cats": [
+        "math-ph"
+      ],
+      "summary": "In this paper, we adapt the well-known \\emph{local} uniqueness results of Borg-Marchenko type in the inverse problems for one dimensional Schr{\u00f6}dinger equation to prove \\emph{local} uniqueness results in the setting of inverse \\emph{metric} problems. More specifically, we consider a class of spherically symmetric manifolds having two asymptotically hyperbolic ends and study the scattering properties of massless Dirac waves evolving on such manifolds. Using the spherical symmetry of the model, the stationary scattering is encoded by a countable family of one-dimensional Dirac equations. This allows us to define the corresponding transmission coefficients $T(\u03bb,n)$ and reflection coefficients $L(\u03bb,n)$ and $R(\u03bb,n)$ of a Dirac wave having a fixed energy $\u03bb$ and angular momentum $n$. For instance, the reflection coefficients $L(\u03bb,n)$ correspond to the scattering experiment in which a wave is sent from the \\emph{left} end in the remote past and measured in the same left end in the future. The main result of this paper is an inverse uniqueness result local in nature. Namely, we prove that for a fixed $\u03bb\\not=0$, the knowledge of the reflection coefficients $L(\u03bb,n)$ (resp. $R(\u03bb,n)$) - up to a precise error term of the form $O(e^{-2nB})$ with $B\\textgreater{}0$ - determines the manifold in a neighbourhood of the left (resp. right) end, the size of this neighbourhood depending on the magnitude $B$ of the error term. The crucial ingredients in the proof of this result are the Complex Angular Momentum method as well as some useful uniqueness results for Laplace transforms.",
+      "url": "https://arxiv.org/abs/1310.0733",
+      "query_ids": [
+        "e2o-03"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "focuses": [
+        "E2-odd-alt"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 7
+    },
+    {
+      "id": "2111.02693",
+      "title": "Oriented and unitary equivariant bordism of surfaces",
+      "date": "2021-11-04",
+      "authors": [
+        "Andr\u00e9s Angel",
+        "Eric Samperton",
+        "Carlos Segovia",
+        "Bernardo Uribe"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "Fix a finite group $G$. We study $\u03a9^{SO,G}_2$ and $\u03a9^{U,G}_2$, the unitary and oriented bordism groups of smooth $G$-equivariant compact surfaces, respectively, and we calculate them explicitly. Their ranks are determined by the possible representations around fixed points, while their torsion subgroups are isomorphic to the direct sum of the Bogomolov multipliers of the Weyl groups of representatives of conjugacy classes of all subgroups of $G$. We present an alternative proof of the fact that surfaces with free actions which induce non-trivial elements in the Bogomolov multiplier of the group cannot equivariantly bound. This result permits us to show that the 2-dimensional SK-groups (Schneiden und Kleben, or ``cut and paste\") of the classifying spaces of a finite group can be understood in terms of the bordism group of free equivariant surfaces modulo the ones that bound arbitrary actions.",
+      "url": "https://arxiv.org/abs/2111.02693",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 7
+    },
+    {
+      "id": "2504.09988",
+      "title": "Equivariant bordism classification of five-dimensional $(\\mathbb{Z}_2)^3$-manifolds with isolated fixed points",
+      "date": "2025-04-14",
+      "authors": [
+        "Yuanxin Guan",
+        "Zhi L\u00fc"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "Denote by $\\mathcal{Z}_5((\\mathbb{Z}_2)^3)$ the group, which is also a vector space over $\\mathbb{Z}_2$, generated by equivariant unoriented bordism classes of all five-dimensional closed smooth manifolds with effective smooth $(\\mathbb{Z}_2)^3$-actions fixing isolated points. We show that $\\dim_{\\mathbb{Z}_2} \\mathcal{Z}_5((\\mathbb{Z}_2)^3) = 77$ and determine a basis of $\\mathcal{Z}_5((\\mathbb{Z}_2)^3)$, each of which is explicitly chosen as the projectivization of a real vector bundle. Thus this gives a complete classification up to equivariant unoriented bordism of all five-dimensional closed smooth manifolds with effective smooth $(\\mathbb{Z}_2)^3$-actions with isolated fixed points.",
+      "url": "https://arxiv.org/abs/2504.09988",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 7
+    },
+    {
+      "id": "2601.13807",
+      "title": "Non-finitely generated $(\\mathbb{Z}_2)^k$-equivariant bordism ring",
+      "date": "2026-01-20",
+      "authors": [
+        "Yuanxin Guan",
+        "Zhi L\u00fc"
+      ],
+      "cats": [
+        "math.AT"
+      ],
+      "summary": "In 1998, Mukherjee and Sankaran posed two problems concerning the algebraic structure of the equivariant bordism ring of smooth closed $(\\mathbb{Z}_2)^k$-manifolds with only isolated fixed points. One is the property of being finitely generated as a $\\mathbb{Z}_2$-algebra, and the other is the existence of indecomposable elements. This paper definitively resolves both problems for the fully effective case. Specifically, let $\\mathcal{Z}_*((\\mathbb{Z}_2)^k)$ denote the equivariant bordism ring of smooth closed manifolds equipped with fully effective smooth $(\\mathbb{Z}_2)^k$-actions having only isolated fixed points. We prove that $\\mathcal{Z}_*((\\mathbb{Z}_2)^k)$ is not finitely generated as a $\\mathbb{Z}_2$-algebra for all $k\\geqslant 3$. Moreover, the proof explicitly constructs an infinite family of indecomposable elements with unbounded degrees, thereby settling the second problem simultaneously.",
+      "url": "https://arxiv.org/abs/2601.13807",
+      "query_ids": [
+        "a2-06"
+      ],
+      "query_texts": [
+        "all:\"equivariant bordism\" AND all:\"fixed points\""
+      ],
+      "focuses": [
+        "Approach-II"
+      ],
+      "query_hits": 1,
+      "focus_hits": 1,
+      "score": 7
+    }
+  ]
+}
