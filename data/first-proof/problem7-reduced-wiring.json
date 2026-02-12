@@ -1,0 +1,544 @@
+{
+  "thread_id": "first-proof-p7-reduced",
+  "nodes": [
+    {
+      "id": "p7r-problem",
+      "node_type": "question",
+      "post_id": 7000,
+      "body_text": "Reduced Problem 7: for a uniform lattice Gamma in a real semisimple Lie group with an order-2 element, prove the conditional theorem (E2 + S => existence of closed M with pi_1(M)=Gamma and H_*(M_tilde;Q)=0 for *>0).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": null
+    },
+    {
+      "id": "p7r-s1",
+      "node_type": "answer",
+      "post_id": 7001,
+      "body_text": "Decompose into two proof obligations: (E2) place Gamma in FH(Q) via an equivariant finiteness criterion, and (S) perform a manifold-upgrade step with pi_1 control and vanishing rational surgery obstruction.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7000
+    },
+    {
+      "id": "p7r-s2",
+      "node_type": "answer",
+      "post_id": 7002,
+      "body_text": "Obligation E2 (finite-complex realization): construct/identify a finite CW complex Y with pi_1(Y)=Gamma and Q-acyclic universal cover, i.e. Gamma in FH(Q).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7000
+    },
+    {
+      "id": "p7r-s2a",
+      "node_type": "comment",
+      "post_id": 70021,
+      "body_text": "Fowler template: if an orbifold-group extension from a finite group action has fixed-set Euler characteristics zero on nontrivial subgroups/components, then the orbifold group is in FH(Q).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7002
+    },
+    {
+      "id": "p7r-s2b",
+      "node_type": "comment",
+      "post_id": 70022,
+      "body_text": "Instantiation subtask: choose a concrete cocompact lattice family with 2-torsion and verify the fixed-set Euler-vanishing hypotheses for the corresponding finite-group action.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7002
+    },
+    {
+      "id": "p7r-s3",
+      "node_type": "answer",
+      "post_id": 7003,
+      "body_text": "Obligation S (manifold upgrade): from the finite-complex model, produce a closed manifold M with the SAME fundamental group Gamma and Q-acyclic universal cover.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7000
+    },
+    {
+      "id": "p7r-s3a",
+      "node_type": "comment",
+      "post_id": 70031,
+      "body_text": "Surgery setup interface: identify required dimension/finiteness conditions, normal map data, and explicit pi_1-isomorphism control for the target lattice family.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7003
+    },
+    {
+      "id": "p7r-s3b",
+      "node_type": "comment",
+      "post_id": 70032,
+      "body_text": "Obstruction interface: compute/cite the relevant class in L_d(Z[Gamma]) (or equivalent surgery obstruction group) and prove its rational vanishing for the chosen family.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7003
+    },
+    {
+      "id": "p7r-s4",
+      "node_type": "answer",
+      "post_id": 7004,
+      "body_text": "Side constraint: Smith theory over Z/2 is not a Q-coefficient obstruction; this rules out a common false negative but does not construct M.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7000
+    },
+    {
+      "id": "p7r-s5",
+      "node_type": "answer",
+      "post_id": 7005,
+      "body_text": "Reduced conditional theorem: if obligations E2 and S are both discharged for a concrete 2-torsion lattice Gamma, then there exists a closed manifold M with pi_1(M)=Gamma and H_*(M_tilde;Q)=0 for *>0.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7000
+    },
+    {
+      "id": "p7r-s6",
+      "node_type": "answer",
+      "post_id": 7006,
+      "body_text": "Mining target for papers: extract reusable proof modules matching nodes p7r-s2a/p7r-s2b (FH(Q) placement) and p7r-s3a/p7r-s3b (manifold-upgrade plus obstruction vanishing).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 7000
+    }
+  ],
+  "edges": [
+    {
+      "source": "p7r-s1",
+      "target": "p7r-problem",
+      "edge_type": "clarify",
+      "evidence": "Split the reduced theorem into E2 and S obligations",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s2",
+      "target": "p7r-s1",
+      "edge_type": "assert",
+      "evidence": "E2 is the finite-CW (FH(Q)) obligation",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s2a",
+      "target": "p7r-s2",
+      "edge_type": "reference",
+      "evidence": "Fowler fixed-set Euler criterion as a strategy template",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s2b",
+      "target": "p7r-s2",
+      "edge_type": "exemplify",
+      "evidence": "Concrete lattice-family verification task for E2",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s3",
+      "target": "p7r-s1",
+      "edge_type": "assert",
+      "evidence": "S is the manifold-upgrade with pi_1-preservation obligation",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s3a",
+      "target": "p7r-s3",
+      "edge_type": "clarify",
+      "evidence": "Specify surgery setup and pi_1-control interface",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s3b",
+      "target": "p7r-s3",
+      "edge_type": "reference",
+      "evidence": "Specify obstruction computation and vanishing interface",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s4",
+      "target": "p7r-problem",
+      "edge_type": "challenge",
+      "evidence": "Eliminates the false Smith-theory obstruction over Q",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s5",
+      "target": "p7r-problem",
+      "edge_type": "assert",
+      "evidence": "Conditional existence follows after E2 and S are discharged",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s5",
+      "target": "p7r-s2",
+      "edge_type": "reference",
+      "evidence": "Depends on FH(Q) realization of Gamma",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s5",
+      "target": "p7r-s3",
+      "edge_type": "reference",
+      "evidence": "Depends on manifold-upgrade and obstruction closure",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s5",
+      "target": "p7r-s4",
+      "edge_type": "reference",
+      "evidence": "Uses Smith discussion only as anti-obstruction context",
+      "detection": "structural"
+    },
+    {
+      "source": "p7r-s6",
+      "target": "p7r-s5",
+      "edge_type": "reform",
+      "evidence": "Convert theorem obligations into paper-mining module targets",
+      "detection": "structural"
+    }
+  ],
+  "hyperedges": [
+    {
+      "hx/id": "first-proof-p7-reduced:edge-000",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s1",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Split the reduced theorem into E2 and S obligations",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-001",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "E2 is the finite-CW (FH(Q)) obligation",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-002",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s2a",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Fowler fixed-set Euler criterion as a strategy template",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-003",
+      "hx/type": "thread/exemplify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s2b",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Concrete lattice-family verification task for E2",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "exemplify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-004",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s3",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "S is the manifold-upgrade with pi_1-preservation obligation",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-005",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s3a",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Specify surgery setup and pi_1-control interface",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-006",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s3b",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Specify obstruction computation and vanishing interface",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-007",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Eliminates the false Smith-theory obstruction over Q",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-008",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Conditional existence follows after E2 and S are discharged",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-009",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Depends on FH(Q) realization of Gamma",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-010",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Depends on manifold-upgrade and obstruction closure",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-011",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses Smith discussion only as anti-obstruction context",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p7-reduced:edge-012",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p7r-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p7r-s5",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Convert theorem obligations into paper-mining module targets",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    }
+  ],
+  "stats": {
+    "n_nodes": 11,
+    "n_edges": 13,
+    "node_types": {
+      "question": 1,
+      "answer": 6,
+      "comment": 4
+    },
+    "edge_types": {
+      "clarify": 2,
+      "assert": 3,
+      "reference": 5,
+      "exemplify": 1,
+      "challenge": 1,
+      "reform": 1
+    },
+    "detection_types": {
+      "structural": 13
+    }
+  }
+}

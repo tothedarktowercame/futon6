@@ -1,0 +1,42 @@
+flowchart TD
+    %% first-proof-p7-reduced
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p7r-problem{{"p7r-problem<br/>Reduced Problem 7: for a uniform lattice Gamma in a ..."}}
+    p7r-s1["p7r-s1<br/>Decompose into two proof obligations: (E2) place Gam..."]
+    p7r-s2["p7r-s2<br/>Obligation E2 (finite-complex realization): construc..."]
+    p7r-s2a(["p7r-s2a<br/>Fowler template: if an orbifold-group extension from..."])
+    p7r-s2b(["p7r-s2b<br/>Instantiation subtask: choose a concrete cocompact l..."])
+    p7r-s3["p7r-s3<br/>Obligation S (manifold upgrade): from the finite-com..."]
+    p7r-s3a(["p7r-s3a<br/>Surgery setup interface: identify required dimension..."])
+    p7r-s3b(["p7r-s3b<br/>Obstruction interface: compute/cite the relevant cla..."])
+    p7r-s4["p7r-s4<br/>Side constraint: Smith theory over Z/2 is not a Q-co..."]
+    p7r-s5["p7r-s5<br/>Reduced conditional theorem: if obligations E2 and S..."]
+    p7r-s6["p7r-s6<br/>Mining target for papers: extract reusable proof mod..."]
+
+    %% Edges
+    p7r-s1 -->|"🔵 clarify: Split the reduced theorem into E2 and..."| p7r-problem
+    p7r-s2 ==>|"🟢 assert: E2 is the finite-CW (FH(Q)) obligation"| p7r-s1
+    p7r-s2a -->|"⚪ reference: Fowler fixed-set Euler criterion as a..."| p7r-s2
+    p7r-s2b -.->|"🟣 exemplify: Concrete lattice-family verification ..."| p7r-s2
+    p7r-s3 ==>|"🟢 assert: S is the manifold-upgrade with pi_1-p..."| p7r-s1
+    p7r-s3a -->|"🔵 clarify: Specify surgery setup and pi_1-contro..."| p7r-s3
+    p7r-s3b -->|"⚪ reference: Specify obstruction computation and v..."| p7r-s3
+    p7r-s4 -.->|"🔴 challenge: Eliminates the false Smith-theory obs..."| p7r-problem
+    p7r-s5 ==>|"🟢 assert: Conditional existence follows after E..."| p7r-problem
+    p7r-s5 -->|"⚪ reference: Depends on FH(Q) realization of Gamma"| p7r-s2
+    p7r-s5 -->|"⚪ reference: Depends on manifold-upgrade and obstr..."| p7r-s3
+    p7r-s5 -->|"⚪ reference: Uses Smith discussion only as anti-ob..."| p7r-s4
+    p7r-s6 -->|"🟡 reform: Convert theorem obligations into pape..."| p7r-s5
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p7r-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p7r-s1,p7r-s2,p7r-s3,p7r-s4,p7r-s5,p7r-s6 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p7r-s2a,p7r-s2b,p7r-s3a,p7r-s3b comment
