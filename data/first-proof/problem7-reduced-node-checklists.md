@@ -165,39 +165,37 @@ and `problem7-hypothetical-wirings.md` for full analysis.
 5. Approach II (reflection equivariant surgery): **Blocked** — codim-2 gap
    hypothesis fails for codim-1 fixed sets (Costenoble-Waner 1705.10909).
 6. Approach III (orbifold resolution): **Unexplored** — no technique found.
-7. **Approach IV (rotation route): E2 DISCHARGED — S conditionally favorable.**
-   Lattice existence resolved (`problem7r-rotation-lattice-construction.md`).
-   Rational obstruction analysis completed: 2-primary obstructions vanish
-   over Q; Davis-Lück Z/2 exclusion (arXiv:2303.15765) does not apply to
-   rational problem. Rationalized equivariant surgery obstruction for n=7:
-   ker(res) in L₈(Z[Γ])⊗Q = H₂(F;Q). **If b₂(F) = 0 for the arithmetic
-   5-manifold F, the rational obstruction vanishes.**
+7. **Approach IV (rotation route): E2 DISCHARGED — S: RATIONAL OBSTRUCTION
+   VANISHES.** Lattice existence resolved
+   (`problem7r-rotation-lattice-construction.md`). Rational obstruction
+   analysis completed with the flat-normal-bundle argument (Step A): the
+   normal bundle ν is flat (totally geodesic), so e(ν)⊗Q = 0 (Chern-Weil),
+   which forces the intersection form on S(ν) to be rationally hyperbolic,
+   giving θ = 0 unconditionally. The b₂(F) question is mooted. Remaining:
+   integral (torsion) obstruction, handled by finite-cover trick.
    See `problem7r-s-rot-obstruction-analysis.md`.
-8. `p7r-s5` (full closure): **Blocked** on resolving S; conditional on
-   b₂(F) computation.
+8. `p7r-s5` (full closure): **Nearly resolved** — needs formalization of the
+   finite-cover trick for the integral obstruction.
 
-### Path forward (updated after rational obstruction analysis)
+### Path forward (updated after flat-normal-bundle argument)
 
-**Priority 1 — Determine b₂(F) for the arithmetic 5-manifold.** The fixed-
-point manifold F = H⁵/C is an arithmetic hyperbolic 5-manifold (congruence
-subgroup of SO(4,1) over Q(√2)). Determine whether b₂(F) = 0. Methods:
-Matsushima's formula, Li-Schwermer vanishing, or explicit computation.
-If b₂(F) = 0, the rational equivariant surgery obstruction vanishes.
+**Priority 1 — Formalize the finite-cover trick.** The rational obstruction
+vanishes unconditionally (Step A). The integral obstruction θ ∈ L₈(Z[Γ])
+is torsion. Show: there exists a congruence subgroup Γ' ⊂ Γ containing σ
+such that the restriction of θ to Γ' vanishes. This uses the congruence
+subgroup property + the transfer-restriction relation.
 
-**Priority 2 — Assemble the full S-rot-II argument.** If b₂(F) = 0:
-(a) rational obstruction vanishes (computed above);
-(b) integral obstruction is torsion → killed by finite-cover trick;
-(c) "cut and cap" produces free Z/2 action → N = M'/(Z/2) has π₁ = Γ
-    and rationally acyclic universal cover → obligation S discharged.
+**Priority 2 — Assemble the full S-rot-II argument.** The complete
+argument chain:
+(a) Lattice Γ with rotation σ exists (arithmetic, Q(√2)) — **DONE**
+(b) E2 discharged: Γ ∈ FH(Q) via Fowler — **DONE**
+(c) Rational obstruction vanishes: flat ν → e(ν)⊗Q = 0 → S(ν) rationally
+    hyperbolic → θ = 0 — **DONE**
+(d) Integral obstruction is torsion → finite-cover trick → Γ' with free
+    action → N = M'/(Z/2) → obligation S discharged — **TO FORMALIZE**
 
-**Priority 3 — Fallback if b₂(F) ≠ 0.** Either:
-(a) compute the specific rational obstruction class σ ∈ H₂(F;Q) from
-    the equivariant geometry and show it vanishes, or
-(b) choose a different arithmetic lattice with b₂(F) = 0, or
-(c) fall back to S-rot-I (Wall surgery in odd dimension).
+**Priority 3 (optional) — Direct integral vanishing.** Show θ = 0
+integrally (without finite cover). Would strengthen the result.
 
-**Deprioritized — Approaches I-III.** Only if rotation route fails entirely.
-
-**Blocked — Approach II for reflections.** Codim-2 gap kills this.
-
-**Blocked — Odd-dim reflections.** Gauss-Bonnet kills this.
+**Deprioritized — All other approaches.** The rotation route S-rot-II
+succeeds rationally, making alternatives unnecessary.

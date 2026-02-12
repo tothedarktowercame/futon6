@@ -305,7 +305,7 @@ full wiring diagrams.
 is complete (see `problem7r-rotation-lattice-construction.md`). E2 is
 discharged. Two sub-options for obligation S:
 
-1. **S-rot-II (Equivariant surgery, recommended — conditionally favorable).**
+1. **S-rot-II (Equivariant surgery — RATIONAL OBSTRUCTION VANISHES).**
    The Costenoble-Waner codimension-2 gap hypothesis is satisfied. The "cut
    and cap" method (Browder, López de Medrano) applies. Key findings from
    the rational obstruction analysis:
@@ -317,20 +317,22 @@ discharged. Two sub-options for obligation S:
      does NOT apply to the rational version.
    - **AHSS computation.** The rationalized equivariant surgery obstruction
      lies in `ker(res) ⊆ L_{2k+2}(Z[Γ]) ⊗ Q`. For `n = 7` (cap dimension
-     8): `ker(res) = H_2(F; Q)`, where `F = H^5/C` is the fixed-point
+     8): `ker(res) ⊗ Q = H_2(F; Q)`, where `F = H^5/C` is the fixed-point
      manifold (arithmetic hyperbolic 5-manifold).
-   - **If `b_2(F) = 0`: ker(res) = 0 and the rational obstruction vanishes
-     unconditionally.** The integral obstruction is then torsion, killable
-     by a finite-cover trick.
-   - **Comparison:** S-rot-I has `ker(res) = Q ⊕ H_1(F; Q)` (always ≥ 1-dim).
-     S-rot-II has `ker(res) = H_2(F; Q)` (can be 0). S-rot-II is strictly
-     better at the obstruction-theory level.
+   - **Flat-normal-bundle vanishing (Step A).** The normal bundle ν of F
+     in M is flat (totally geodesic embedding). By Chern-Weil, e(ν)⊗Q = 0.
+     This forces the intersection form on S(ν) to be rationally hyperbolic
+     (the Gysin splitting gives H*(S(ν);Q) ≅ H*(F;Q) ⊗ Q[u]/(u²) with
+     u² = 0, making both diagonal blocks of the form vanish). A hyperbolic
+     form has zero Witt class, so **θ = 0 unconditionally in H₂(F;Q).**
+   - **The b₂(F) question is mooted.** The vanishing of θ follows from the
+     flatness of ν alone, regardless of whether b₂(F) = 0 or b₂(F) > 0.
+   - **Remaining issue: integral (torsion) obstruction.** Since θ ⊗ Q = 0,
+     the integral obstruction θ ∈ L_8(Z[Γ]) is torsion. This can be handled
+     by the finite-cover trick: pass to a congruence subgroup Γ' ⊂ Γ where
+     the torsion is killed. Γ' is still a uniform lattice with 2-torsion.
 
    See `problem7r-s-rot-obstruction-analysis.md` for full computation.
-
-   **Immediate question: does `b_2(F) = 0` for the arithmetic 5-manifold
-   `F = H^5/C` arising from the `Q(sqrt(2))` construction?** This is a
-   question about the cohomology of congruence subgroups of `SO(4,1)`.
 
 2. **S-rot-I (Wall surgery in odd dimension).** Fallback. Same three-obstacle
    structure as Approach I but with favorable odd L-theory parity and

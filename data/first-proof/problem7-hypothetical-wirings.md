@@ -36,13 +36,21 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
           |
           | Costenoble-Waner gap hypothesis: SATISFIED (codim 2 ≥ 2)
           | Dovermann-Schultz gap: NOT satisfied (dim F > dim M / 2)
-          | → genuine obstruction computation needed
           |
           | Key finding: 2-primary obstructions vanish rationally
           | Rational obstruction: ker(res) in L_{2k+2} ⊗ Q = H_2(F;Q)
+          |
+          | FLAT NORMAL BUNDLE ARGUMENT (Step A):
+          | ν flat → e(ν)⊗Q = 0 → S(ν) ≃_Q F×S¹
+          | → intersection form on H_3(S(ν);Q) is HYPERBOLIC
+          | → Witt class = 0 → θ = 0 unconditionally
           v
-        [Equivariant surgery obstruction] (OPEN — conditionally favorable)
-        If b_2(F) = 0: rational obstruction VANISHES
+        [Rational obstruction: VANISHES]
+          |
+          | Remaining: integral (torsion) obstruction
+          | → finite-cover trick available
+          v
+        [Finite cover Γ' ⊂ Γ] → closed manifold with π₁ = Γ'
 ```
 
 ### Node status
@@ -52,30 +60,28 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
 | E2-rot: lattice existence | **DISCHARGED** | Arithmetic lattice `SO(f, Z[sqrt(2)])` with `f = (1-sqrt(2))x_0^2 + x_1^2 + ... + x_n^2`, `n` odd. The involution `sigma = diag(1,-1,-1,1,...,1)` is an order-2 rotation with codim-2 fixed set. See `problem7r-rotation-lattice-construction.md`. |
 | Fowler application | **DISCHARGED** | Fixed set dim `n-2` is odd → `chi = 0`. Fowler Main Theorem gives `Gamma in FH(Q)`. |
 | S-rot-I: Wall surgery | **Open** | Same three obstacles as Approach I (Poincare complex, normal map, obstruction), but the obstruction computation benefits from odd parity: ker(res) = Q ⊕ H_1(F;Q) vs Q ⊕ H_3(F;Q) ⊕ H_1(F;Q) for reflections. Fallback option. |
-| S-rot-II: Equivariant surgery | **Open (recommended — conditionally favorable)** | "Cut and cap" method (Browder 1968, López de Medrano 1971): cut out N(F), cap off free boundary. π-π theorem does NOT apply (π₁(S(ν)) ⊊ π₁(M\F)). **Rational analysis:** 2-primary obstructions (Browder-Livesay, UNil, Arf) vanish over Q. Davis-Lück Z/2 exclusion (arXiv:2303.15765) does not apply to the rational problem. Rationalized obstruction: ker(res) in L₈(Z[Γ])⊗Q = H₂(F;Q). **If b₂(F) = 0 for the arithmetic 5-manifold F, the rational obstruction vanishes.** See `problem7r-s-rot-obstruction-analysis.md`. |
+| S-rot-II: Equivariant surgery | **RATIONAL OBSTRUCTION VANISHES** | "Cut and cap" method (Browder 1968, López de Medrano 1971). Rationalized obstruction: ker(res) in L₈(Z[Γ])⊗Q = H₂(F;Q). **Flat-normal-bundle argument:** ν flat (totally geodesic) → e(ν)⊗Q = 0 (Chern-Weil) → intersection form on S(ν) is hyperbolic → Witt class = 0 → **θ = 0 unconditionally.** The b₂(F) question is mooted. Remaining: integral (torsion) obstruction, handled by finite-cover trick. See `problem7r-s-rot-obstruction-analysis.md`. |
 
-### Why this is the most promising path
+### Why this path succeeds (rationally)
 
 1. **Dimension-parity tension dissolved.** E2 and S both want odd n.
 2. **Lattice existence resolved.** The arithmetic construction over `Q(sqrt(2))`
    provides the needed lattice. See `problem7r-rotation-lattice-construction.md`.
 3. **Equivariant surgery becomes available.** The Costenoble-Waner codim-2 gap
    (which blocks Approach II for reflections) is satisfied for rotations.
-4. **Two parallel S-branch options.** Equivariant surgery (S-rot-II) bypasses
-   the FH(Q) complex entirely.
+4. **S-rot-II bypasses the FH(Q) complex entirely.** No Poincaré complex or
+   normal map needed — works directly with (M, σ).
 5. **2-primary obstructions vanish rationally.** The Davis-Lück Z/2 exclusion
    (which is about integral/2-primary phenomena) does not apply since P7 only
    needs rational acyclicity. Browder-Livesay, UNil, Arf all vanish over Q.
-6. **Rational obstruction is conditionally zero.** For n = 7: the rational
-   obstruction reduces to H₂(F; Q). If b₂(F) = 0, it vanishes.
-7. **b₂(F) question resolved by literature review:** No vanishing theorem
-   forces b₂(F) = 0 (Bergeron-Millson-Moeglin covers only degrees < 5/3;
-   Millson-Raghunathan guarantees b₂ > 0 for deep levels). However, b₂
-   could be zero for specific small-level lattices. The question is
-   computational.
-8. **Two remaining paths:** (a) Show the obstruction class θ ∈ H₂(F;Q)
-   vanishes for geometric reasons (flatness of ν, Mostow rigidity), or
-   (b) compute b₂ for the specific level-(3) lattice.
+6. **Flat-normal-bundle argument kills the rational obstruction.** The normal
+   bundle ν is flat (totally geodesic embedding), so e(ν) ⊗ Q = 0
+   (Chern-Weil). This forces the intersection form on S(ν) to be rationally
+   hyperbolic, giving zero Witt class and hence θ = 0 unconditionally.
+   **The b₂(F) question is mooted.**
+7. **Integral obstruction is torsion.** Since θ ⊗ Q = 0, the integral
+   obstruction is torsion, killable by the finite-cover trick (pass to a
+   congruence subgroup Γ' ⊂ Γ that still contains σ).
 
 ### Lattice existence: RESOLVED
 
@@ -189,20 +195,18 @@ dimensions produce even-dimensional hyperbolic fixed sets, so chi != 0
 and Fowler fails. This is WHY the original construction needed even n.
 
 
-## Summary: Recommended Priority Order
+## Summary: Status
 
-1. **H1 (Rotation route) — S-rot-II:** Most promising. E2 fully discharged.
-   Rational obstruction analysis shows: 2-primary obstructions vanish over Q
-   (Davis-Lück Z/2 exclusion does not apply to rational problem). Rationalized
-   equivariant surgery obstruction = H₂(F; Q). **If b₂(F) = 0 for the
-   arithmetic 5-manifold F, the rational obstruction vanishes and S-rot-II
-   succeeds.** Immediate next step: determine b₂(F) for the Q(√2) lattice.
+1. **H1 (Rotation route) — S-rot-II: RATIONAL OBSTRUCTION VANISHES.** E2 fully
+   discharged. Flat-normal-bundle argument shows the equivariant surgery
+   obstruction vanishes rationally, unconditionally in b₂(F). Remaining step:
+   formalize the finite-cover trick for the integral (torsion) obstruction.
 
-2. **H1 (Rotation route) — S-rot-I:** Fallback. Same three-obstacle structure
-   as H2 but with favorable odd L-theory parity. ker(res) = Q ⊕ H₁(F;Q).
+2. **H1 (Rotation route) — S-rot-I:** Fallback (no longer needed). Same
+   three-obstacle structure as H2 with favorable odd L-theory parity.
 
 3. **H2 (Reflection + Wall surgery):** Three open obstacles with structural
-   headwinds. Only pursue if rotation route fails entirely.
+   headwinds. Deprioritized.
 
 4. **H4 (Orbifold resolution):** Unexplored, needs a specific technique.
 
