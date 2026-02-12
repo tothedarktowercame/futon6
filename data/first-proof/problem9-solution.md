@@ -113,16 +113,21 @@ generic cameras.
     A^(4) = [[0,1,1,1],[1,0,1,1],[1,1,0,1]]
     A^(5) = [[1,2,3,4],[4,3,2,1],[1,1,1,1]]
 
-Choose a non-rank-1 scaling: lambda_{abgd} = 1 for all non-identical (a,b,g,d).
-Fix gamma = 4, delta = 5, k = 1, l = 1. Choose row triples
-(alpha_m, i_m) = (1,1), (2,1), (3,1) and column triples
-(beta_n, j_n) = (1,2), (2,2), (3,2). Compute:
+Choose a non-rank-1 scaling: lambda_{abgd} = 1 for all non-identical (a,b,g,d)
+except lambda_{1,2,3,4} = 2.
 
-    Q^(alpha_m, beta_n, 4, 5)_{i_m, j_n, 1, 1} = det[A^(alpha_m)(i_m,:); A^(beta_n)(j_n,:); A^(4)(1,:); A^(5)(1,:)]
+**Non-rank-1 verification.** If lambda were rank-1, then lambda_{abgd} = u_a v_b w_g x_d.
+From lambda_{1,2,3,4} = 2 and lambda_{2,2,3,4} = 1 we get u_1/u_2 = 2. But from
+lambda_{1,1,3,4} = 1 and lambda_{2,1,3,4} = 1 we get u_1/u_2 = 1. Contradiction.
 
-Each entry is a 4x4 determinant of rational matrices. The resulting 3x3
-matrix M has entries that are rational numbers, and det(M) != 0 (verified
-by direct computation). This exhibits P as not the zero polynomial.
+Fix gamma = 3, delta = 4, k = 1, l = 1. Choose row triples
+(alpha_m, i_m) = (1,1), (2,1), (5,1) and column triples
+(beta_n, j_n) = (2,1), (5,1), (1,2). The 3x3 Lambda matrix has entries
+lambda_{alpha_m, beta_n, 3, 4}; specifically Lambda_{11} = lambda_{1,2,3,4} = 2
+with all other entries equal to 1. The Omega matrix (unscaled Q values) has
+det(Omega) = 0 (confirming rank-2), but the Hadamard product M = Lambda ∘ Omega
+satisfies det(M) = -24 != 0 (verified by direct computation of nine 4x4
+determinants). This exhibits P as not the zero polynomial.
 
 **Remark (Hadamard product interpretation).** The matrix M_{mn} is the
 Hadamard product Lambda ∘ Omega, where Lambda carries the scaling entries

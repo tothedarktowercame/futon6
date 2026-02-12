@@ -1,0 +1,38 @@
+flowchart TD
+    %% first-proof-p3 v2 — post-reviewer fixes
+    %% Changes from v1: p3-s4 updated (AMW Thm 1.1 positivity cite),
+    %% p3-s5 updated (CMW Section 3 notation bridge + n=2 verification),
+    %% p3-s7 updated (vacancy transport irreducibility replacing
+    %% adjacent transposition claim)
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p3-problem{{"p3-problem<br/>Does there exist a nontrivial Markov chain on S_n(la..."}}
+    p3-s1["p3-s1<br/>Construct chain: inhomogeneous multispecies t-PushTA..."]
+    p3-s2["p3-s2<br/>Finite-state CTMC on S_n(lambda): explicit generator..."]
+    p3-s3["p3-s3<br/>Nontriviality lemma: transition rates depend only on..."]
+    p3-s4["p3-s4<br/>AMW Theorem 1.1: stationary distribution pi(eta) = ..."]
+    p3-s5["p3-s5<br/>Notation bridge: F*_eta = F_eta at q=1 (CMW Section..."]
+    p3-s6["p3-s6<br/>Sanity lemma n=2: lambda=(a,0) gives two-state chain..."]
+    p3-s7["p3-s7<br/>Conclusion: yes. Irreducibility via vacancy transpor..."]
+
+    %% Edges
+    p3-s1 -->|"🟡 reform: Explicit candidate chain: inhomogeneo..."| p3-problem
+    p3-s2 -->|"🔵 clarify: Finite-state CTMC with explicit rates"| p3-s1
+    p3-s3 ==>|"🟢 assert: Transition rule independent of F* pol..."| p3-s1
+    p3-s4 ==>|"🟢 assert: AMW Thm 1.1 gives stationary law F/P..."| p3-problem
+    p3-s4 -->|"⚪ reference: Applies to the same t-PushTASEP dynamics"| p3-s1
+    p3-s5 -->|"🔵 clarify: CMW Sec. 3: both normalizations match..."| p3-s4
+    p3-s6 -.->|"🟣 exemplify: n=2 chain computes stationary ratio e..."| p3-s1
+    p3-s7 ==>|"🟢 assert: Existence + nontriviality + vacancy-t..."| p3-problem
+    p3-s7 -->|"⚪ reference: Uses nontriviality lemma"| p3-s3
+    p3-s7 -->|"⚪ reference: Uses AMW stationary-distribution theorem"| p3-s4
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p3-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p3-s1,p3-s2,p3-s3,p3-s4,p3-s5,p3-s6,p3-s7 answer

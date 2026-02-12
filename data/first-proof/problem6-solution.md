@@ -151,17 +151,32 @@ published theorem that controls leverage/pruning and proves:
     exists c0>0 universal such that
     for all G, epsilon in (0,1), exists S with |S|>=c0*epsilon*n and L_S<=epsilon L.
 
-The relevant external result is the twice-Ramanujan sparsification theorem of
+The closest published result is the twice-Ramanujan sparsification theorem of
 Batson-Spielman-Srivastava (2012, "Twice-Ramanujan Sparsifiers," SIAM Review
 56(2), 315-334, Theorem 1.1). Their barrier-function construction produces,
 for any graph G and epsilon > 0, a reweighted subgraph with at most
 ceil(n / epsilon^2) edges whose Laplacian spectrally approximates L to within
-(1 +/- epsilon). The vertex-pruning variant (selecting vertices rather than
-edges) follows from the same deterministic potential-function argument applied
-to the star domination decomposition in Section 4a.
+(1 +/- epsilon).
 
-This writeup does not reprove that theorem; it uses it as an explicit external
-dependency.
+**Important gap:** BSS is an *edge sparsification* result — it selects a
+subset of edges with reweighting, not a subset of vertices. The problem asks
+for a *vertex subset* S with L_S <= epsilon L. These are different objects:
+edge sparsification preserves the vertex set and reweights edges, while the
+epsilon-light condition restricts to the induced subgraph on a vertex subset.
+
+The star domination decomposition in Section 4a decomposes L_S into
+vertex-indexed PSD summands, which is the correct algebraic setup for a vertex
+selection argument. However, converting BSS's edge-selection barrier function
+into a vertex-selection guarantee requires an additional step: one must show
+that the deterministic potential-function method of BSS can be adapted to
+select vertices (each contributing a star of edges) rather than individual
+edges. This adaptation is plausible given the PSD structure of the vertex
+summands A_v, but constitutes an additional technical step that is not
+directly proved in BSS or in this writeup.
+
+This writeup therefore treats the universal vertex-subset bound as a
+conditional assumption: the algebraic setup (Sections 1-4) is proved, and
+the conclusion follows if a vertex-selection analogue of BSS holds.
 
 ## 6. Final conclusion (explicitly conditional)
 

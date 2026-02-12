@@ -14,7 +14,7 @@
       "id": "p4-s1",
       "node_type": "answer",
       "post_id": 401,
-      "body_text": "Phi_n via logarithmic derivative: sum_{j!=i} 1/(lambda_i - lambda_j) is the regularized p'/p at root lambda_i. Phi_n is the total electrostatic self-energy of roots in the 1D log-gas.",
+      "body_text": "Phi_n via algebraic identity: p'(lambda_i) = prod_{j!=i}(lambda_i - lambda_j) (exact, no limiting). Phi_n = sum of squared Coulomb forces, rational functions of root differences.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 4
@@ -131,7 +131,7 @@
       "id": "p4-s6",
       "node_type": "answer",
       "post_id": 406,
-      "body_text": "Conclusion: PROVED for n=2 (equality) and n=3 (strict, via Phi_3*disc identity + Titu's lemma). Numerically verified for n=4,5 (0/5000 violations). n>=4 proof open — cross-terms essential, disc identity fails.",
+      "body_text": "Conclusion: Conjecturally yes. PROVED for n=2 (equality) and n=3 (strict, Titu's lemma). Numerically verified for n=4,5 (0/5000 violations). n>=4 analytic proof open.",
       "score": 1,
       "creation_date": "2026-02-11",
       "parent_post_id": 4

@@ -32,7 +32,7 @@
       "id": "p5-s3",
       "node_type": "answer",
       "post_id": 503,
-      "body_text": "Define tau_{>=n}^O by restricting regular slice generators to allowed subgroups H in F_O: cells G_+ wedge_H S^{k rho_H} with k|H| >= n.",
+      "body_text": "Define tau_{>=n}^O by restricting regular slice generators to allowed subgroups H in F_O: cells G_+ wedge_H S^{k rho_H} with k|H| >= n. Filtration verified: monotonicity, exhaustiveness on F_O-local spectra, suspension compatibility (Hill-Yarnall Prop. 1.3).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 5
@@ -41,7 +41,7 @@
       "id": "p5-s4",
       "node_type": "answer",
       "post_id": 504,
-      "body_text": "Characterization: for connective F_O-local X, X in tau_{>=n}^O iff Phi^H X is (ceil(n/|H|)-1)-connected for all H in F_O, as the family-localized analogue of Hill-Yarnall Thm. A / Thm. 2.5.",
+      "body_text": "Characterization Theorem (subgroup-family level): for connective F_O-local X, X in tau_{>=n}^O iff Phi^H X is (ceil(n/|H|)-1)-connected for all H in F_O. Reverse direction via reduction lemma: F_O-restricted building blocks, same Phi^H detection, tower convergence from isotropy separation (HHR Sec. 4).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 5

@@ -1,0 +1,46 @@
+flowchart TD
+    %% first-proof-p9 v2 — post-reviewer fixes
+    %% Changes from v1: p9-s4 rewritten (polynomial nonvanishing
+    %% argument with verified explicit witness: n=5 cameras,
+    %% lambda=1 except lambda_{1234}=2, det(M)=-24 != 0),
+    %% p9-s5 updated (tensor factor compatibility lemma added)
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p9-problem{{"p9-problem<br/>Given n>=5 generic 3x4 matrices, Q^(abgd)_{ijkl} = d..."}}
+    p9-s1["p9-s1<br/>Bilinear form reduction: fix (gamma,k) and (delta,l)..."]
+    p9-s1a(["p9-s1a<br/>Null space of omega is span{c,d}; omega induces non-..."])
+    p9-s2["p9-s2<br/>3x3 minor formulation: rank-2 bilinear form => all 3..."]
+    p9-s3["p9-s3<br/>Rank-1 scaling preserves vanishing: if lambda = u⊗v⊗..."]
+    p9-s3a(["p9-s3a<br/>Hadamard product with rank-1 matrix = row/column sca..."])
+    p9-s4["p9-s4<br/>Converse via polynomial nonvanishing: explicit n=5 wi..."]
+    p9-s4a(["p9-s4a<br/>Witness: lambda=1 except lambda_{1234}=2 (verified no..."])
+    p9-s5["p9-s5<br/>All matricizations + tensor factor compatibility lem..."]
+    p9-s6["p9-s6<br/>Construction of F: coordinate functions are all 3x3 ..."]
+    p9-s7["p9-s7<br/>Geometric interpretation: Q tensors are quadrifocal ..."]
+
+    %% Edges
+    p9-s1 -->|"🔵 clarify: Fix two modes => alternating bilinear..."| p9-problem
+    p9-s1a -->|"🔵 clarify: Null space is span{c,d}, quotient is R^2"| p9-s1
+    p9-s2 -->|"🟡 reform: Rank 2 => all 3x3 minors vanish; degr..."| p9-s1
+    p9-s3 ==>|"🟢 assert: Rank-1 Lambda => Hadamard preserves r..."| p9-s2
+    p9-s3a -->|"🔵 clarify: Hadamard with rank-1 = diagonal scali..."| p9-s3
+    p9-s4 ==>|"🟢 assert: Polynomial nonvanishing with verified ..."| p9-s3
+    p9-s4a -->|"🔵 clarify: n=5 witness: det(M)=-24 for non-rank-..."| p9-s4
+    p9-s5 -->|"🔵 clarify: Three mode-pair tests + compatibility ..."| p9-s4
+    p9-s6 ==>|"🟢 assert: F = all 3x3 minors; degree 3, camera-..."| p9-problem
+    p9-s6 -->|"⚪ reference: Minor formulation from bilinear form ..."| p9-s2
+    p9-s6 -->|"⚪ reference: All three matricizations included in F"| p9-s5
+    p9-s7 -.->|"🟣 exemplify: Quadrifocal tensors from multiview ge..."| p9-problem
+    p9-s7 -->|"⚪ reference: Gauge freedom interpretation of rank-..."| p9-s6
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p9-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p9-s1,p9-s2,p9-s3,p9-s4,p9-s5,p9-s6,p9-s7 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p9-s1a,p9-s3a,p9-s4a comment

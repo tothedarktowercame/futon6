@@ -86,7 +86,7 @@
       "id": "p6-s5",
       "node_type": "answer",
       "post_id": 605,
-      "body_text": "General-graph step is an external dependency in this draft: assume a published theorem providing universal c0>0 with |S|>=c0*epsilon*n and L_S<=epsilon*L; this writeup does not rederive that theorem.",
+      "body_text": "External dependency: BSS 2012 is edge sparsification (not vertex-subset). Vertex-selection analogue via star domination is plausible but constitutes an additional unproved step. Conclusion is conditional on this adaptation.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 6

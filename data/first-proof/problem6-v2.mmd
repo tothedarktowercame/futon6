@@ -1,0 +1,47 @@
+flowchart TD
+    %% first-proof-p6 v2 — post-reviewer fixes
+    %% Changes from v1: p6-s5 rewritten (honest gap: BSS is edge
+    %% sparsification, not vertex-subset; vertex-pruning adaptation
+    %% is an unproved additional step), p6-s6 weakened to conditional
+    %% conclusion, removed claim of c >= 1/2
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p6-problem{{"p6-problem<br/>Does there exist c > 0 such that for every graph G a..."}}
+    p6-s1["p6-s1<br/>Laplacian decomposes edge-by-edge: L = sum L_e. Cond..."]
+    p6-s2["p6-s2<br/>K_n tight example: induced K_s has max eigenvalue s...."]
+    p6-s3["p6-s3<br/>Probabilistic construction: include each vertex i.i...."]
+    p6-s3a(["p6-s3a<br/>Size concentration: Chernoff gives |S| >= epsilon*n/..."])
+    p6-s3b(["p6-s3b<br/>Spectral expectation: E[L_S] = p^2*L = epsilon^2*L. ..."])
+    p6-s4["p6-s4<br/>Core technical step: matrix concentration for degree..."]
+    p6-s4a(["p6-s4a<br/>Star domination: vertex-indexed PSD summands A_v = (..."])
+    p6-s4b(["p6-s4b<br/>Matrix Freedman/Bernstein: self-adjoint differences,..."])
+    p6-s5["p6-s5<br/>External dependency: BSS 2012 is edge sparsification..."]
+    p6-s6["p6-s6<br/>Conditional conclusion: unconditionally c<=1 (K_n) a..."]
+
+    %% Edges
+    p6-s1 -->|"🔵 clarify: Rewrite condition in effective-resist..."| p6-problem
+    p6-s2 -.->|"🟣 exemplify: K_n tight example: s <= epsilon*n, c = 1"| p6-problem
+    p6-s3 ==>|"🟢 assert: Random vertex sampling with p = epsilon"| p6-problem
+    p6-s3a -->|"🔵 clarify: Chernoff: |S| >= epsilon*n/2 w.h.p."| p6-s3
+    p6-s3b -->|"🔵 clarify: E[L_S] = epsilon^2*L < epsilon*L"| p6-s3
+    p6-s4 -.->|"🔴 challenge: Expectation insufficient; need concen..."| p6-s3b
+    p6-s4a -->|"🔵 clarify: Star domination converts to vertex-in..."| p6-s4
+    p6-s4b -->|"⚪ reference: Matrix Freedman inequality (Tropp 2011)"| p6-s4
+    p6-s4b -->|"⚪ reference: Effective resistance frame: sum tau_e..."| p6-s1
+    p6-s5 -->|"🟡 reform: BSS edge sparsification; vertex adapta..."| p6-s4
+    p6-s6 ==>|"🟢 assert: Conditional yes: algebraic setup prove..."| p6-problem
+    p6-s6 -->|"⚪ reference: Probabilistic construction with p = e..."| p6-s3
+    p6-s6 -->|"⚪ reference: Conditional on vertex-subset BSS adapt..."| p6-s5
+    p6-s6 -->|"⚪ reference: K_n shows c <= 1 is tight upper bound"| p6-s2
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p6-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p6-s1,p6-s2,p6-s3,p6-s4,p6-s5,p6-s6 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p6-s3a,p6-s3b,p6-s4a,p6-s4b comment

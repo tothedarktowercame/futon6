@@ -104,7 +104,7 @@
       "id": "p10-s5",
       "node_type": "answer",
       "post_id": 105,
-      "body_text": "Convergence: PCG has t = O(√κ log(1/ε)) with κ = cond(P^{-1/2} A P^{-1/2}). If (1-δ)P ≼ A ≼ (1+δ)P for δ in (0,1), then κ ≤ (1+δ)/(1-δ), giving a concrete fast-rate guarantee.",
+      "body_text": "Convergence: PCG has t = O(√κ log(1/ε)) with κ = cond(P^{-1/2} A P^{-1/2}). Sufficient conditions: δ = O(√(n log n / q)) via Tropp 2011 Thm 1.6 matrix concentration on SS'-cI. Requires q >> n log n.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 10
@@ -113,7 +113,7 @@
       "id": "p10-s6",
       "node_type": "answer",
       "post_id": 106,
-      "body_text": "Complexity summary: total per mode-k subproblem is O(n³ + r³ + t(n²r + qr + nr²)); for n >= r this is O(n³ + t(n²r + qr)). Compare direct O(n³r³ + Nnr). PCG removes explicit dependence on N.",
+      "body_text": "Complexity summary: total per mode-k subproblem is O(n³ + r³ + t(n²r + qr + nr²)). Compare direct O(n³r³ + Nnr). PCG removes N-dependence. Regime caveat: when n³ Cholesky dominates, consider Nystrom/iterative alternatives.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 10

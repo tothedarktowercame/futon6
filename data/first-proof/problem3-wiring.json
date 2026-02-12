@@ -50,7 +50,7 @@
       "id": "p3-s5",
       "node_type": "answer",
       "post_id": 305,
-      "body_text": "Notation bridge: prompt's F*_mu,P*_lambda are the same q=1 ASEP/Macdonald family (up to harmless normalization conventions).",
+      "body_text": "Notation bridge: F*_eta = F_eta at q=1 (CMW Section 3; Hecke exchange relations fix normalization uniformly). Verified at n=2: both give site weights.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -68,7 +68,7 @@
       "id": "p3-s7",
       "node_type": "answer",
       "post_id": 307,
-      "body_text": "Conclusion: yes, this explicit nontrivial chain realizes the required stationary ratio F*_mu/P*_lambda.",
+      "body_text": "Conclusion: yes. Irreducibility via vacancy transport (vacancy-adjacent swaps each have positive rate 1/[m]_t > 0; compose to reach any permutation). Unique stationary distribution F*_mu/P*_lambda.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3

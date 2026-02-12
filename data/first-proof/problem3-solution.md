@@ -173,16 +173,29 @@ S_n(lambda) is:
 stationary distribution. Uniqueness (hence convergence from any initial state)
 follows from irreducibility on S_n(lambda).
 
-**Irreducibility proof (constructive).** Given any two configurations
-eta, eta' in S_n(lambda), eta can reach eta' through adjacent transpositions.
-Each adjacent transposition (j, j+1) occurs when the clock at site j rings
-(rate 1/x_j > 0) and the t-geometric choice selects the particle at site j+1.
-Since t in [0,1) and all parts are distinct, each selection has probability
-t^k / [m]_t > 0 for some k < m. Hence every adjacent transposition has
-positive rate, giving a positive-probability path between any two states
-via a sorting sequence (e.g., bubble sort requires at most n(n-1)/2
-transpositions). This is a standard argument for multispecies exclusion
-processes (see Ayyer-Martin-Williams, Section 3.2 for the analogous claim).
+**Irreducibility proof (via vacancy transport).** Since lambda_n = 0, every
+configuration has exactly one vacancy (species 0). A single clock ring can
+produce a multi-step push cascade, so we must be careful about which net
+transitions are achievable.
+
+The key observation: when a non-vacancy particle at site j is adjacent to
+the vacancy at site j+1 (cyclically), and the clock at j rings, one possible
+outcome of the t-geometric choice is that the active particle selects the
+vacancy (the nearest weaker-species particle clockwise). This selection has
+probability 1/[m]_t > 0 (the k=0 term in the t-geometric distribution, where
+m >= 1 counts weaker particles). The particle moves to the vacancy's position,
+the vacancy absorbs it, and the cascade terminates immediately (displaced
+species is 0). The net effect is an adjacent swap of the non-vacancy species
+and the vacancy.
+
+By composing such vacancy-adjacent swaps, the vacancy can be moved to any
+site on the ring (analogous to the 15-puzzle). Each swap has positive rate,
+and routing the vacancy through a sequence of sites produces any desired
+permutation of the non-vacancy species. Specifically, to transpose species
+at sites i and j: move the vacancy adjacent to i, swap it with i's species,
+route the vacancy to j, swap it with j's species, and route it back.
+This requires at most O(n) vacancy-adjacent swaps, each of positive rate.
+Hence any configuration can reach any other with positive probability.
 
 On a finite irreducible CTMC, the stationary distribution is unique.
 

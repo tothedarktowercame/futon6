@@ -23,7 +23,7 @@
       "id": "p1-s2",
       "node_type": "answer",
       "post_id": 102,
-      "body_text": "mu ~ mu_0 (equivalent to GFF): density exp(-V) > 0 a.s. and in L^1(mu_0). So mu and mu_0 have the same null sets.",
+      "body_text": "mu ~ mu_0 (BG2020 Thm 1.1): E[exp(-V)] < inf gives mu << mu_0 with positive density; exp(-V) > 0 a.s. gives mu_0 << mu.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 1
@@ -59,7 +59,7 @@
       "id": "p1-s5",
       "node_type": "answer",
       "post_id": 105,
-      "body_text": "Integrability: exp(cubic perturbation) in L^1(mu) by log-Sobolev inequality (Barashkov-Gubinelli 2020). Quartic coercivity dominates cubic.",
+      "body_text": "Integrability: E_mu[exp(t|int psi :phi^3:|)] < inf for |t| < t_0 (BG2020 Section 4, Polchinski flow). Quartic coercivity dominates cubic in a neighborhood.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 1

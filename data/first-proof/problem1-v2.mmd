@@ -1,0 +1,38 @@
+flowchart TD
+    %% first-proof-p1 v2 — post-reviewer fixes
+    %% Changes from v1: p1-s2 updated (BG2020 Thm 1.1 citation),
+    %% p1-s5 updated (weakened integrability to |t| < t_0),
+    %% p1-s4 updated (Hairer/GIP formula references for counterterm shift)
+
+    %% Edge type legend:
+    %% assert=solid thick  challenge=dashed red  reform=solid yellow
+    %% clarify=solid blue  exemplify=dashed purple  reference=solid gray
+
+    %% Nodes
+    p1-problem{{"p1-problem<br/>Are mu (Phi^4_3 measure) and T_psi^* mu equivalent (..."}}
+    p1-s1["p1-s1<br/>Phi^4_3 measure: dmu = Z^{-1} exp(-V) dmu_0 where V ..."]
+    p1-s2["p1-s2<br/>mu ~ mu_0 (BG2020 Thm 1.1): variational constructio..."]
+    p1-s3["p1-s3<br/>Cameron-Martin: psi smooth => psi in H^1 = CM space ..."]
+    p1-s4["p1-s4<br/>Shifted interaction: V(phi-psi) - V(phi) involves 4*..."]
+    p1-s4a(["p1-s4a<br/>Regularity: :phi^3: in C^{-3/2-eps}, psi smooth => i..."])
+    p1-s5["p1-s5<br/>Integrability: E_mu[exp(t|int psi :phi^3:|)] < inf ..."]
+    p1-s6["p1-s6<br/>Conclusion: Yes, mu ~ T_psi^* mu. Chain: mu ~ mu_0, ..."]
+
+    %% Edges
+    p1-s1 -->|"🔵 clarify: Phi^4_3 construction via renormalized..."| p1-problem
+    p1-s2 ==>|"🟢 assert: BG2020 Thm 1.1: exp(-V) > 0 a.s. giv..."| p1-s1
+    p1-s3 ==>|"🟢 assert: Cameron-Martin: smooth psi in H^1, sh..."| p1-problem
+    p1-s4 -->|"🟡 reform: Reduce to: is V(phi-psi)-V(phi) well-..."| p1-s2
+    p1-s4a -->|"🔵 clarify: Regularity of Wick powers allows pair..."| p1-s4
+    p1-s5 ==>|"🟢 assert: Polchinski flow + quartic coercivity =..."| p1-s4
+    p1-s6 ==>|"🟢 assert: Yes: mu ~ mu_0 ~ T_psi^* mu_0, RN der..."| p1-problem
+    p1-s6 -->|"⚪ reference: Cameron-Martin equivalence for GFF"| p1-s3
+    p1-s6 -->|"⚪ reference: Integrability from BG2020 Section 4"| p1-s5
+
+    %% Styling
+    classDef question fill:#f9e,stroke:#c06,stroke-width:3px
+    class p1-problem question
+    classDef answer fill:#cef,stroke:#38b,stroke-width:2px
+    class p1-s1,p1-s2,p1-s3,p1-s4,p1-s5,p1-s6 answer
+    classDef comment fill:#eee,stroke:#999,stroke-width:1px
+    class p1-s4a comment

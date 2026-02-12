@@ -59,7 +59,7 @@
       "id": "p9-s4",
       "node_type": "answer",
       "post_id": 904,
-      "body_text": "Converse: non-rank-1 lambda => some 3x3 minor nonzero. For generic cameras, projected vectors f_bar in R^2 are in general position; Hadamard product with rank>=2 Lambda generically gives rank-3 minor.",
+      "body_text": "Converse via polynomial nonvanishing: define P(cameras) = det(Lambda∘Omega). Explicit witness (n=5, lambda=1 except lambda_{1234}=2, verified non-rank-1) gives det(M)=-24≠0, so P is not the zero polynomial. Zariski genericity completes the converse.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 9
