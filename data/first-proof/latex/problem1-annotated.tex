@@ -1,0 +1,26 @@
+\section{Problem 1: Measure Equivalence Under Smooth Shifts of the $\Phi^4_3$ Measure}
+
+\subsection*{Problem statement}
+Given the renormalized $\Phi^4_3$ measure $\mu$ on $\mathbb{T}^3$, and a smooth nonzero shift $\psi$, determine whether $\mu$ and the shifted measure $T_\psi^*\mu$ are equivalent.
+
+\subsection*{Answer}
+Yes: $\mu \sim T_\psi^*\mu$.
+
+\subsection*{Annotated proof sketch}
+\begin{enumerate}[leftmargin=1.5em]
+\item Use absolute continuity of $\mu$ with respect to the Gaussian reference measure $\mu_0$ from variational construction results for $\Phi^4_3$\footnote{Barashkov--Gubinelli, arXiv: \url{https://arxiv.org/abs/2003.10529}.}.
+\item Apply Cameron--Martin to the Gaussian part: smooth shifts lie in the relevant Cameron--Martin space and preserve equivalence\footnote{Background discussion: \url{https://mathoverflow.net/questions/194307/cameron-martin-theorem-non-gaussian-shift}.}.
+\item Control the interaction change $V(\phi-\psi)-V(\phi)$ using Wick expansion and exponential integrability for the cubic perturbation. This is the renormalized step tied to regularity structures / paracontrolled technology\footnote{Hairer, arXiv: \url{https://arxiv.org/abs/1303.5113}; Gubinelli--Imkeller--Perkowski, arXiv: \url{https://arxiv.org/abs/1210.2684}.}.
+\end{enumerate}
+
+The Radon--Nikodym derivative is strictly positive and integrable in both directions, so mutual absolute continuity follows.
+
+\subsection*{Selected citations}
+\begin{itemize}[leftmargin=1.5em]
+\item Variational $\Phi^4_3$: \url{https://arxiv.org/abs/2003.10529}
+\item Regularity structures: \url{https://arxiv.org/abs/1303.5113}
+\item Paracontrolled distributions: \url{https://arxiv.org/abs/1210.2684}
+\item Cameron--Martin discussion: \url{https://mathoverflow.net/questions/194307/cameron-martin-theorem-non-gaussian-shift}
+\end{itemize}
+
+\clearpage

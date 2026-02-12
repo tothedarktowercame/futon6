@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage{microtype}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!60!black,
+  pdftitle={Annotated First-Proof Writeups},
+  pdfauthor={Codex}
+}
+
+\newcommand{\gapnote}[1]{%
+  \par\medskip
+  \noindent\fcolorbox{red!60!black}{red!4}{%
+    \parbox{0.96\linewidth}{\textbf{Open Gap / Conditional Step.} #1}%
+  }%
+  \par\medskip
+}
+\newcommand{\statusnote}[1]{%
+  \par\medskip
+  \noindent\fcolorbox{green!50!black}{green!4}{%
+    \parbox{0.96\linewidth}{\textbf{Status Note.} #1}%
+  }%
+  \par\medskip
+}
+
+\title{Annotated First-Proof Writeups\\\large Problems 1--10 (LaTeX Edition)}
+\author{Corneli$^{1}$\thanks{Supervisor}, Claude$^{2}$, Codex$^{3}$ \\
+\small $^{1}$Hyperreal Enterprises Ltd \quad $^{2}$Anthropic \quad $^{3}$OpenAI}
+\date{February 12, 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip
+
+\input{problem1-annotated}
+\input{problem2-annotated}
+\input{problem3-annotated}
+\input{problem4-annotated}
+\input{problem5-annotated}
+\input{problem6-annotated}
+\input{problem7-annotated}
+\input{problem8-annotated}
+\input{problem9-annotated}
+\input{problem10-annotated}
+
+\end{document}

@@ -1,0 +1,26 @@
+\section{Problem 2: Universal Test Vector for Rankin--Selberg Integrals}
+
+\subsection*{Problem statement}
+For generic irreducible admissible representations $\Pi$ of $\mathrm{GL}_{n+1}(F)$ and $\pi$ of $\mathrm{GL}_n(F)$ over a non-archimedean local field, ask whether one can fix a single Whittaker vector $W$ in $\Pi$ such that some $V$ in $\pi$ makes the twisted local Rankin--Selberg integral finite and nonzero for all complex $s$.
+
+\subsection*{Answer}
+Yes: the essential/new Whittaker vector $W_0$ serves as a universal test vector.
+
+\subsection*{Annotated proof sketch}
+\begin{enumerate}[leftmargin=1.5em]
+\item The set of local zeta integrals spans a fractional ideal in $\mathbb{C}[q_F^{\pm s}]$, which is a PID\footnote{PID refresher: \url{https://planetmath.org/principalidealdomain}.}. Hence a monomial reduction criterion is available.
+\item Evaluate the twisted Kirillov function $\phi_Q(g)=W_0(\mathrm{diag}(g,1)u_Q)$ at $g=I_n$ to prove nontriviality; this uses the Whittaker transformation law.
+\item Use $\mathrm{GL}_n$-equivariance and irreducibility of the Kirillov model restriction to show that fixing any nonzero $\phi$ (hence $\phi_Q$) still generates the full local $L$-factor ideal.
+\end{enumerate}
+
+This yields existence of $V$ with integral equal to a nonzero monomial in $q_F^{-s}$, so it is finite and nonvanishing for all $s$.
+
+\subsection*{Selected citations}
+\begin{itemize}[leftmargin=1.5em]
+\item Jacquet--Piatetski-Shapiro--Shalika (Rankin--Selberg local theory): \url{https://www.jstor.org/stable/2374430}
+\item Bernstein--Zelevinsky (representations of $\mathrm{GL}(n,F)$): \url{http://mi.mathnet.ru/eng/rm4200}
+\item MathOverflow reference thread on local test vectors: \url{https://mathoverflow.net/questions/469865/reference-request-test-vectors-for-local-rankin-selberg-l-factors-in-ramified-c}
+\item Rankin--Selberg overview thread: \url{https://mathoverflow.net/questions/223233/jacquets-approach-to-rankin-selberg-l-functions}
+\end{itemize}
+
+\clearpage

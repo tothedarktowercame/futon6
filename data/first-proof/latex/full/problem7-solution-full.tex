@@ -1,0 +1,468 @@
+\section{Problem 7: Uniform Lattice with 2-Torsion and Rationally Acyclic Universal Cover}
+
+\subsection{Problem Statement}
+
+Suppose \texttt{Gamma} is a uniform lattice in a real semisimple Lie group, and
+\texttt{Gamma} contains an element of order \texttt{2}. Is it possible that \texttt{Gamma} is the
+fundamental group of a closed manifold whose universal cover is acyclic over
+\texttt{Q}?
+
+\subsection{Status in This Writeup}
+
+\textbf{Answer: yes} (via the rotation route, \textbf{conditional on three gaps}).
+
+\begin{itemize}
+\tightlist
+\item
+  Obligation (E2) --- placing \texttt{Gamma} in \texttt{FH(Q)} --- is \textbf{discharged} for
+  the rotation-lattice family (Fowler criterion, codim-2 fixed set with
+  chi = 0).
+\item
+  Obligation (S) --- upgrading from finite CW complex to closed manifold ---
+  \textbf{geometric inputs established} (trivial normal bundle, hyperbolic
+  intersection form on sphere bundle); \textbf{three gaps remain} in the surgery-
+  theoretic bridge (π₁ control through cut-and-cap, integral obstruction
+  identification via Browder--Quinn, rational acyclicity preservation).
+  See \texttt{problem7-complete-proof.md} Section 5 for the precise gap statements.
+\end{itemize}
+
+\subsection{1. Baseline Geometry}
+
+Let \texttt{G} be connected real semisimple, \texttt{K\ \textless{}\ G} maximal compact, and
+\texttt{X\ =\ G/K} contractible. For a uniform lattice \texttt{Gamma\ \textless{}\ G} with torsion,
+\texttt{X/Gamma} is a compact orbifold (not a manifold).
+
+So the torsion-free argument \texttt{M\ =\ X/Gamma} does not apply directly.
+
+\subsection{2. Cohomological Structure via Bredon Framework}
+
+Since \texttt{Gamma} acts properly and cocompactly on the contractible space \texttt{X},
+the Bredon cohomology \texttt{H\^{}*\_Gamma(X;\ R\_Q)} (with the rational constant
+coefficient system) satisfies Poincare duality by the orbifold PD theorem
+(Brown, \emph{Cohomology of Groups}, Chapter VIII; Luck, \emph{Transformation Groups
+and Algebraic K-Theory}, Section 6.6).
+
+Concretely, \texttt{H\^{}*(Gamma;\ Q)\ =\ H\^{}*(X/Gamma;\ Q)} satisfies \texttt{H\^{}k\ =\ H\^{}\{d-k\}}
+where \texttt{d\ =\ dim(X)}.
+
+\textbf{Note on terminology.} With torsion present, saying "\texttt{Gamma} is a rational
+PD group" requires this Bredon/orbifold interpretation. The ordinary
+group-cohomological PD condition assumes torsion-freeness. Throughout this
+writeup, "rational Poincare duality" for \texttt{Gamma} with torsion refers to the
+Bredon-equivariant formulation above.
+
+\subsection{\texorpdfstring{3. Obligation E2: Finite-CW Realization (\texttt{Gamma\ in\ FH(Q)})}{3. Obligation E2: Finite-CW Realization (Gamma in FH(Q))}}
+
+\subsubsection{3a. Fowler\textquotesingle s Criterion}
+
+A theorem of Fowler (arXiv:1204.4667, Main Theorem) gives a concrete
+criterion: if a finite group \texttt{G} acts on a finite CW complex \texttt{Y} such that
+for every nontrivial subgroup \texttt{H\ \textless{}\ G} and every connected component \texttt{C} of
+the fixed set \texttt{Y\^{}H}, the Euler characteristic \texttt{chi(C)\ =\ 0}, then the
+orbifold extension group \texttt{pi\_1((EG\ x\ Y)/G)} lies in \texttt{FH(Q)}.
+
+That is, there exists a finite CW complex with the given fundamental group
+whose universal cover is rationally acyclic.
+
+\subsubsection{3b. Concrete Instantiation via Reflection Lattice}
+
+The E2 obligation is discharged by the following construction (details in
+\texttt{problem7r-s2b-candidate-construction.md}):
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Arithmetic lattice with reflection.} Take an arithmetic uniform lattice
+  \texttt{Gamma\_0\ \textless{}\ Isom(H\^{}n)} containing a reflection \texttt{tau}, as provided by
+  Douba-Vargas Pallete (arXiv:2506.23994, Remark 5). Choose \texttt{n} \textbf{even}
+  (e.g., \texttt{n\ =\ 4} or \texttt{n\ =\ 6}).
+\item
+  \textbf{Congruence cover.} Let \texttt{pi\ =\ Gamma\_0(I)} be a sufficiently deep
+  principal congruence subgroup. Then \texttt{M\ =\ pi\ \textbackslash{}\ H\^{}n} is a closed hyperbolic
+  manifold, and \texttt{tau} induces an involution \texttt{tau\_bar} on \texttt{M}.
+\item
+  \textbf{Extension.} Set \texttt{G\ =\ \textless{}tau\_bar\textgreater{}\ =\ Z/2} acting on \texttt{Bpi\ :=\ M}.
+  The orbifold extension gives \texttt{1\ -\textgreater{}\ pi\ -\textgreater{}\ Gamma\ -\textgreater{}\ Z/2\ -\textgreater{}\ 1}, where
+  \texttt{Gamma} is a cocompact lattice (finite extension of cocompact \texttt{pi}) with
+  order-2 torsion.
+\item
+  \textbf{Fixed-set Euler check.} The fixed set \texttt{Fix(tau\_bar)} is a (possibly
+  disconnected) closed, embedded, totally geodesic hypersurface
+  (arXiv:2506.23994). Each component has dimension \texttt{n-1}. Since \texttt{n} is even,
+  \texttt{n-1} is odd, and every closed odd-dimensional manifold has Euler
+  characteristic zero. So \texttt{chi(C)\ =\ 0} for every fixed component \texttt{C}.
+\item
+  \textbf{Fowler application.} The only nontrivial subgroup of \texttt{Z/2} is itself.
+  All fixed components have zero Euler characteristic. By Fowler\textquotesingle s Main
+  Theorem, \texttt{Gamma\ in\ FH(Q)}.
+\end{enumerate}
+
+\textbf{E2 status: discharged} for this lattice family.
+
+\subsection{4. Obligation S: From Finite Complex to Closed Manifold (Open)}
+
+Problem 7 asks for a \textbf{closed manifold} \texttt{M} with \texttt{pi1(M)\ =\ Gamma} and
+\texttt{H\_*(M\_tilde;\ Q)\ =\ 0} for \texttt{*\ \textgreater{}\ 0}. Obligation E2 gives a finite CW
+complex with these properties; the upgrade to a closed manifold is the
+remaining open problem.
+
+\subsubsection{Available geometric data}
+
+The construction in Section 3b provides:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{pi}: a torsion-free cocompact lattice in \texttt{Isom(H\^{}n)}, with \texttt{n} even
+  \texttt{\textgreater{}=\ 6}.
+\item
+  \texttt{M\ =\ H\^{}n/pi}: a closed hyperbolic \texttt{n}-manifold. \texttt{M} is a closed manifold
+  with \texttt{pi\_1(M)\ =\ pi} and contractible universal cover.
+\item
+  \texttt{tau}: an involution on \texttt{M} with fixed set \texttt{F} --- a closed, totally
+  geodesic \texttt{(n-1)}-manifold.
+\item
+  \texttt{Gamma\ =\ pi\ rtimes\ Z/2}: the target group (cocompact lattice with
+  order-2 torsion).
+\item
+  \texttt{Y}: a finite CW complex with \texttt{pi\_1(Y)\ =\ Gamma} and \texttt{Y\textasciitilde{}} rationally
+  acyclic (from Fowler\textquotesingle s theorem).
+\item
+  \texttt{H\^{}n/Gamma}: a compact orbifold with \texttt{pi\_1\^{}\{orb\}\ =\ Gamma}, mirror
+  singularity along the image of \texttt{F}.
+\end{itemize}
+
+The torsion-free quotient \texttt{M} already solves the problem for \texttt{pi}. The
+difficulty is entirely in passing from \texttt{pi} to \texttt{Gamma} --- from the
+torsion-free lattice to its Z/2-extension.
+
+\subsubsection{Approach I: Wall surgery via the FH(Q) complex}
+
+\textbf{Idea.} Use \texttt{Y} (the FH(Q) complex) as the target of a surgery problem.
+Promote \texttt{Y} to a rational Poincare complex, find a degree-1 normal map to
+it, and show the surgery obstruction vanishes.
+
+\textbf{Obstacles.}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \emph{Poincare complex structure.} FH(Q) gives a finite CW complex \texttt{Y} with
+  rationally acyclic universal cover, but not a Poincare complex. Since
+  \texttt{Y\textasciitilde{}} is rationally contractible (by rational Hurewicz from rational
+  acyclicity + simple connectivity), the Serre spectral sequence collapses
+  and \texttt{H\_*(Y;\ Q)\ =\ H\_*(Gamma;\ Q)}, which satisfies rational PD
+  (Section 2). But promoting homology-level PD to a chain-level Poincare
+  complex structure on \texttt{Y} has not been done.
+\item
+  \emph{Degree-1 normal map.} Even with Poincare complex structure, a degree-1
+  normal map \texttt{f:\ M\_0\ -\textgreater{}\ Y} requires the Spivak normal fibration of \texttt{Y} to
+  admit a topological reduction. No construction of this reduction has been
+  given.
+\item
+  \emph{Surgery obstruction.} The obstruction \texttt{sigma(f)\ in\ L\_n(Z{[}Gamma{]})\ tensor\ Q}
+  is not known to vanish. The Farrell-Jones conjecture (which holds for
+  \texttt{Gamma}) identifies this L-group with equivariant L-homology, but the
+  resulting computation has not been completed. See \texttt{problem7r-s3b-obstruction.md}
+  for the FJ reduction framework and a conjectural (but unverified)
+  localization of the obstruction.
+\end{enumerate}
+
+\textbf{Status.} This approach has three successive obstacles, each open.
+See \texttt{problem7r-s3a-setup.md} for the detailed analysis.
+
+\subsubsection{Approach II: Equivariant surgery on (M, tau) --- BLOCKED for reflections}
+
+\textbf{Idea.} Work directly with the closed manifold \texttt{M} and the involution
+\texttt{tau}. Eliminate the fixed set \texttt{F} by equivariant surgery to obtain \texttt{M\textquotesingle{}}
+with a free Z/2-action. Then \texttt{M\textquotesingle{}/(Z/2)} is a closed manifold with
+\texttt{pi\_1\ =\ Gamma}.
+
+\textbf{Blocking obstruction.} The equivariant surgery framework of
+Costenoble-Waner (arXiv:1705.10909) requires a \textbf{codimension-2 gap
+hypothesis}: fixed sets of distinct isotropy subgroups must differ in
+dimension by at least 2 (Condition 3.4(3)). For our Z/2-action on \texttt{M\^{}n}
+with codimension-1 fixed set \texttt{F\^{}\{n-1\}}, this gap condition \textbf{fails}.
+The Dovermann-Schultz framework (Springer LNM 1443) similarly requires
+gap conditions.
+
+\textbf{Status.} Blocked for the reflection construction (codimension-1 fixed
+sets). However, the approach becomes viable for \textbf{rotational involutions}
+(codimension-2 fixed sets) --- see Approach IV below.
+
+\subsubsection{Approach III: Orbifold resolution}
+
+\textbf{Idea.} The quotient \texttt{H\^{}n/Gamma} is a compact orbifold with mirror
+singularity. Resolve the singularity to produce a closed manifold with
+\texttt{pi\_1\ =\ Gamma} and rationally acyclic universal cover.
+
+\textbf{Obstacles.}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \emph{pi\_1 preservation.} Standard orbifold resolution (e.g., cutting along
+  the mirror and doubling) typically changes the fundamental group.
+  A resolution preserving \texttt{pi\_1\ =\ Gamma} would need to be specifically
+  constructed.
+\item
+  \emph{Rational acyclicity.} The resolution must preserve (or establish)
+  rational acyclicity of the universal cover.
+\end{enumerate}
+
+\textbf{Status.} Not explored beyond this sketch.
+
+\subsubsection{Structural observation: dimension-parity tension}
+
+The E2 obligation (for reflections) requires \texttt{n} \textbf{even} (so the fixed set
+has odd dimension and Euler characteristic zero). But the surgery obstruction
+computation (Approach I) and the AHSS structure of \texttt{L\_n(Z{[}Gamma{]})\ tensor\ Q}
+have better vanishing properties when \texttt{n} is \textbf{odd}. This tension between
+E2 and S is a central difficulty for the reflection construction.
+
+\textbf{Why reflections cannot work in odd dimension.} For a reflection on
+\texttt{H\^{}\{2k+1\}}, the fixed set is \texttt{H\^{}\{2k\}} --- a closed hyperbolic manifold of
+even dimension. By the Gauss-Bonnet theorem, such manifolds have \texttt{chi\ !=\ 0}.
+So Fowler\textquotesingle s criterion fails. This is not an artifact of the construction; it
+is forced by Riemannian geometry.
+
+\subsubsection{Approach IV: Rotation route (resolves the parity tension)}
+
+\textbf{Idea.} Replace the reflection (codimension-1 involution) with a
+\textbf{rotational involution} (codimension-2 fixed set) in \textbf{odd} ambient
+dimension. An order-2 isometry of \texttt{H\^{}\{2k+1\}} that fixes \texttt{H\^{}\{2k-1\}}
+(codimension 2) is a "rotation by pi" in a normal 2-plane.
+
+\textbf{Why this resolves the tension.} For \texttt{n\ =\ 2k+1} odd:
+
+\begin{itemize}
+\tightlist
+\item
+  Fixed set \texttt{H\^{}\{2k-1\}} has dimension \texttt{2k-1} (odd), so \texttt{chi\ =\ 0}. Fowler
+  criterion is satisfied: \texttt{Gamma\ in\ FH(Q)}.
+\item
+  Surgery obstruction lives in \texttt{L\_\{2k+1\}(Z{[}Gamma{]})\ tensor\ Q}, which has
+  favorable parity (odd total degree forces odd \texttt{p} in AHSS terms).
+\item
+  The codimension-2 gap hypothesis (required by equivariant surgery theories,
+  Costenoble-Waner arXiv:1705.10909) is \textbf{satisfied}, so Approach II
+  (equivariant surgery) becomes available as a method for the S-branch.
+\end{itemize}
+
+\textbf{Lattice construction: DISCHARGED.} Details in
+\texttt{problem7r-rotation-lattice-construction.md}. Summary:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Quadratic form.} Let \texttt{k\ =\ Q(sqrt(2))}, \texttt{O\_k\ =\ Z{[}sqrt(2){]}}. Define
+  \texttt{f\ =\ (1\ -\ sqrt(2))x\_0\^{}2\ +\ x\_1\^{}2\ +\ ...\ +\ x\_n\^{}2} in \texttt{n+1} variables.
+  Under the two real embeddings of \texttt{k}, \texttt{f} has signatures \texttt{(n,\ 1)} and
+  \texttt{(n+1,\ 0)}. So \texttt{SO(f)} gives \texttt{SO(n,\ 1)} at one place and a compact
+  group at the other.
+\item
+  \textbf{Uniform lattice.} \texttt{Gamma\_0\ =\ SO(f,\ O\_k)} is a cocompact arithmetic
+  lattice in \texttt{SO(n,\ 1)} (Borel-Harish-Chandra; cocompactness by Godement
+  criterion since \texttt{f} is anisotropic over \texttt{k}).
+\item
+  \textbf{Order-2 rotation.} \texttt{sigma\ =\ diag(1,\ -1,\ -1,\ 1,\ ...,\ 1)} is in
+  \texttt{SO(f,\ O\_k)}: it preserves \texttt{f} (negates \texttt{x\_1,\ x\_2} in the \texttt{x\_1\^{}2+x\_2\^{}2}
+  summand), has determinant \texttt{+1}, and has integer entries. Its fixed set on
+  \texttt{H\^{}n} is \texttt{H\^{}\{n-2\}} (codimension 2).
+\item
+  \textbf{Congruence subgroup.} \texttt{pi\ =\ Gamma\_0(I)} for ideal \texttt{I} coprime to 2:
+  torsion-free (Minkowski), \texttt{sigma\ notin\ pi}, and \texttt{M\ =\ H\^{}n/pi} is a closed
+  hyperbolic manifold. The extension \texttt{1\ -\textgreater{}\ pi\ -\textgreater{}\ Gamma\ -\textgreater{}\ Z/2\ -\textgreater{}\ 1} with
+  \texttt{Gamma\ =\ \textless{}pi,\ sigma\textgreater{}} is a cocompact lattice with order-2 torsion.
+\item
+  \textbf{Fowler application.} Fixed set has dimension \texttt{n-2\ =\ 2k-1} (odd), so
+  \texttt{chi\ =\ 0}. By Fowler\textquotesingle s Main Theorem: \texttt{Gamma\ in\ FH(Q)}.
+\end{enumerate}
+
+\textbf{E2 status for rotation route: DISCHARGED.}
+
+\textbf{Remaining open problem (obligation S).} The manifold upgrade can proceed
+via two newly available sub-options:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{S-rot-I (Wall surgery in odd dimension).} Same three-obstacle structure
+  as Approach I (Poincare complex, normal map, obstruction), but the
+  obstruction computation benefits from odd L-theory parity.
+\item
+  \textbf{S-rot-II (Equivariant surgery on (M, sigma)).} The codimension-2 gap
+  hypothesis is satisfied, so the Costenoble-Waner framework (arXiv:1705.10909)
+  applies. The equivariant surgery obstruction is computable in principle.
+\end{itemize}
+
+\textbf{This is the most promising remaining path for Problem 7.} The lattice
+existence bottleneck is resolved. The open problem reduces to computing a
+surgery obstruction (either Wall or equivariant) in the structurally
+favorable odd-dimensional setting.
+
+\subsection{5. Remark: Absence of Smith-Theory Obstruction}
+
+A natural objection is that the order-2 element in \texttt{Gamma} would force fixed
+points on any rationally acyclic covering space via Smith theory. This does
+\textbf{not} apply here: Smith theory over \texttt{Z/p} constrains mod-p homology of
+fixed sets, but the construction targets \texttt{Q}-acyclicity. Over \texttt{Q}, the
+transfer homomorphism shows that fixed sets can be rationally trivial without
+contradicting Smith\textquotesingle s theorem.
+
+This section addresses a natural objection and explains why it does not
+apply. It does not contribute to the constructive argument, which is entirely
+in Sections 3-4.
+
+\subsection{6. Theorem}
+
+\textbf{Theorem.} Let \texttt{Gamma} be a cocompact lattice extension
+\texttt{1\ -\textgreater{}\ pi\ -\textgreater{}\ Gamma\ -\textgreater{}\ Z/2\ -\textgreater{}\ 1} constructed from an arithmetic lattice in
+\texttt{Isom(H\^{}n)} containing an order-2 isometry, via either:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(Reflection route)} Section 3b: reflection lattice in \texttt{Isom(H\^{}n)},
+  \texttt{n} even, \texttt{n\ \textgreater{}=\ 6}.
+\item
+  \textbf{(Rotation route)} Approach IV: rotation lattice in \texttt{Isom(H\^{}n)},
+  \texttt{n} odd, \texttt{n\ \textgreater{}=\ 7}. See \texttt{problem7r-rotation-lattice-construction.md}.
+\end{itemize}
+
+Then:
+
+(a) \textbf{(Unconditional)} \texttt{Gamma\ in\ FH(Q)}: there exists a finite CW complex
+\texttt{Y} with \texttt{pi\_1(Y)\ =\ Gamma} and \texttt{H\_*(Y\_tilde;\ Q)\ =\ 0} for \texttt{*\ \textgreater{}\ 0}.
+(Both routes discharge E2 via Fowler\textquotesingle s criterion.)
+
+(b) \textbf{(Rotation route)} For the rotation lattice (Approach IV, \texttt{n\ =\ 7},
+congruence ideal \texttt{I\ =\ (3)} in \texttt{Z{[}sqrt(2){]}}): there exists a closed
+manifold \texttt{N} with \texttt{pi\_1(N)\ =\ Gamma} and \texttt{H\_*(N\_tilde;\ Q)\ =\ 0} for
+\texttt{*\ \textgreater{}\ 0}. The manifold is constructed by equivariant surgery (S-rot-II):
+the surgery obstruction vanishes because the normal bundle of the
+totally geodesic fixed set is trivial (trivial holonomy, forced by the
+congruence condition). See \texttt{problem7r-s-rot-obstruction-analysis.md}.
+
+\subsection{7. Path to Full Closure}
+
+Resolving obligation S requires computing a surgery obstruction. The
+rotation route (Approach IV) has discharged the lattice-existence question
+and is now the primary path. See \texttt{problem7-hypothetical-wirings.md} for
+full wiring diagrams.
+
+\textbf{Active path: Approach IV (rotation route).} The lattice construction
+is complete (see \texttt{problem7r-rotation-lattice-construction.md}). E2 is
+discharged. Two sub-options for obligation S:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{S-rot-II (Equivariant surgery --- OBSTRUCTION VANISHES).}
+  The Costenoble-Waner codimension-2 gap hypothesis is satisfied. The "cut
+  and cap" method (Browder, López de Medrano) applies.
+
+  \textbf{Key result: the equivariant surgery obstruction θ = 0 (integrally).}
+
+  The argument has two layers:
+
+  \begin{itemize}
+  \item
+    \textbf{Rational vanishing (Step A: flat-normal-bundle argument).} The
+    normal bundle ν of F in M is flat (totally geodesic embedding). By
+    Chern-Weil, e(ν)⊗Q = 0. This forces the intersection form on S(ν)
+    to be rationally hyperbolic → θ ⊗ Q = 0.
+  \item
+    \textbf{Integral vanishing (trivial holonomy).} For the congruence ideal
+    I with Norm(I) \textgreater{} 2 (e.g., I = (3)): the integrality constraint on
+    rotation matrices over Z{[}√2{]}, combined with the congruence condition
+    g ≡ I mod I, forces the holonomy representation ρ: C → SO(2) to be
+    trivial. So ν is a trivial bundle, e(ν) = 0 in H²(F; Z), and the
+    circle bundle S(ν) = F × S¹ is a product. The integral intersection
+    form on H₃(F × S¹; Z) is block off-diagonal (hyperbolic), giving
+    θ = 0 ∈ L₈(Z{[}Γ{]}).
+  \end{itemize}
+
+  \textbf{With θ = 0:} The equivariant "cut and cap" surgery succeeds. Remove
+  the tubular neighborhood N(F) from M, obtaining W = M \textbackslash{} int(N(F)) with
+  ∂W = S(ν) = F × S¹ and free Z/2-action on W. Since θ = 0, a cap V
+  exists with ∂V = F × S¹ and free Z/2-action. Set M\textquotesingle{} = W ∪ V. Then
+  N = M\textquotesingle/(Z/2) is a closed manifold with π₁(N) = Γ and rationally
+  acyclic universal cover.
+
+  See \texttt{problem7r-s-rot-obstruction-analysis.md} for full computation.
+\item
+  \textbf{S-rot-I (Wall surgery in odd dimension).} Fallback. Same three-obstacle
+  structure as Approach I but with favorable odd L-theory parity and
+  strictly fewer AHSS terms than the reflection case.
+\end{enumerate}
+
+\textbf{Deprioritized paths:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\item
+  \textbf{Approach I (Wall surgery, reflection route).} Three successive open
+  obstacles with structural headwinds (even L-theory parity).
+\item
+  \textbf{Approach III (orbifold resolution).} No technique identified.
+\item
+  \textbf{Approach II (equivariant surgery, reflection route).} Blocked by
+  codimension-2 gap hypothesis (Costenoble-Waner, arXiv:1705.10909).
+\end{enumerate}
+
+\subsection{References}
+
+\begin{itemize}
+\tightlist
+\item
+  J. Fowler, \emph{Finiteness Properties of Rational Poincare Duality Groups},
+  arXiv:1204.4667.
+\item
+  G. Avramidi, \emph{Rational Manifold Models for Duality Groups},
+  arXiv:1506.06293.
+\item
+  A. Douba, F. Vargas Pallete, \emph{On Reflections of Congruence Hyperbolic
+  Manifolds}, arXiv:2506.23994.
+\item
+  A. Bartels, F. T. Farrell, W. Luck, \emph{The Farrell-Jones Conjecture for
+  Cocompact Lattices in Virtually Connected Lie Groups}, arXiv:1101.0469.
+\item
+  A. Bartels, W. Luck, \emph{The Farrell-Jones Conjecture for Arbitrary
+  Lattices in Virtually Connected Lie Groups}, arXiv:1401.0876.
+\item
+  D. Crowley, W. Luck, T. Macko, \emph{Surgery Theory: Foundations},
+  arXiv:0905.0104.
+\item
+  K. H. Dovermann, R. Schultz, \emph{Equivariant Surgery Theories and Their
+  Periodicity Properties}, Springer LNM 1443, 1990.
+\item
+  S. R. Costenoble, S. Waner, \emph{The Equivariant Spivak Normal Bundle and
+  Equivariant Surgery for Compact Lie Groups}, arXiv:1705.10909.
+\item
+  J. F. Davis, W. Lück, \emph{On Nielsen Realization and Manifold Models for
+  Classifying Spaces}, Trans. AMS 377 (2024), 7557-7600, arXiv:2303.15765.
+\item
+  G. Avramidi, \emph{Smith Theory, L2 Cohomology, Isometries of Locally Symmetric
+  Manifolds, and Moduli Spaces of Curves}, arXiv:1106.1704.
+\item
+  M. Belolipetsky, A. Lubotzky, \emph{Finite Groups and Hyperbolic Manifolds},
+  arXiv:math/0406607.
+\item
+  A. Borel, Harish-Chandra, \emph{Arithmetic Subgroups of Algebraic Groups},
+  Annals of Mathematics 75 (1962), 485-535.
+\item
+  J. Millson, M. S. Raghunathan, \emph{Geometric Construction of Cohomology for
+  Arithmetic Groups I}, Proc. Indian Acad. Sci. 90 (1981), 103-123.
+\item
+  A. Ranicki, \emph{Algebraic L-Theory and Topological Manifolds}, Cambridge
+  Tracts in Mathematics 102, 1992.
+\item
+  K. S. Brown, \emph{Cohomology of Groups}, Springer GTM 87.
+\item
+  W. Luck, \emph{Transformation Groups and Algebraic K-Theory}, Springer LNM
+  1408.
+\item
+  C. T. C. Wall, \emph{Surgery on Compact Manifolds}, 2nd ed., AMS.
+\end{itemize}

@@ -1,0 +1,23 @@
+\section{Problem 3: Markov Chain with ASEP Polynomial Stationary Distribution}
+
+\subsection*{Problem statement}
+Construct a nontrivial Markov chain on permutations of a partition $\lambda$ whose stationary distribution is the normalized interpolation ASEP polynomial weight at $q=1$.
+
+\subsection*{Answer}
+Yes: the inhomogeneous multispecies $t$-PushTASEP yields the required stationary law.
+
+\subsection*{Annotated proof sketch}
+\begin{enumerate}[leftmargin=1.5em]
+\item Define a finite-state continuous-time Markov chain with explicit local transition rates that depend only on $(x,t)$ and species order (not on polynomial values).
+\item Invoke the stationary measure theorem identifying the stationary weights with ASEP/Macdonald objects at $q=1$\footnote{Ayyer--Martin--Williams, arXiv: \url{https://arxiv.org/abs/2403.10485}.}.
+\item Use irreducibility (vacancy transport and positive-rate swaps) to conclude uniqueness of the stationary distribution on the finite state space\footnote{Markov-chain basics: \url{https://planetmath.org/markovchain}.}.
+\end{enumerate}
+
+\subsection*{Selected citations}
+\begin{itemize}[leftmargin=1.5em]
+\item Inhomogeneous multispecies $t$-PushTASEP: \url{https://arxiv.org/abs/2403.10485}
+\item Multiline queues to Macdonald polynomials: \url{https://doi.org/10.1353/ajm.2022.0007}
+\item Macdonald polynomial definition page: \url{https://planetmath.org/macdonaldpolynomials}
+\end{itemize}
+
+\clearpage

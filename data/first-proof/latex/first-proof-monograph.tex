@@ -1,0 +1,160 @@
+\documentclass[12pt,oneside]{book}
+\usepackage[margin=1in]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+  \setmainfont{Latin Modern Roman}
+\fi
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{longtable,booktabs}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{xurl}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage{microtype}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!60!black,
+  pdftitle={First-Proof Annotated Monograph},
+  pdfauthor={Codex}
+}
+
+\Urlmuskip=0mu plus 1mu
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+\setlength{\parskip}{0.2em}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{itemsep=0.3em,topsep=0.3em}
+\setlist[enumerate]{itemsep=0.3em,topsep=0.3em}
+\setstretch{1.08}
+
+\providecommand{\tightlist}{}
+\ifPDFTeX
+  \DeclareUnicodeCharacter{2218}{\ensuremath{\circ}}
+  \DeclareUnicodeCharacter{2297}{\ensuremath{\otimes}}
+  \DeclareUnicodeCharacter{2713}{\ensuremath{\checkmark}}
+  \DeclareUnicodeCharacter{2202}{\ensuremath{\partial}}
+  \DeclareUnicodeCharacter{2245}{\ensuremath{\cong}}
+  \DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+  \DeclareUnicodeCharacter{2295}{\ensuremath{\oplus}}
+  \DeclareUnicodeCharacter{2229}{\ensuremath{\cap}}
+  \DeclareUnicodeCharacter{220E}{\ensuremath{\square}}
+\fi
+
+\newcommand{\gapnote}[1]{%
+  \par\medskip
+  \noindent\fcolorbox{red!60!black}{red!4}{%
+    \parbox{0.96\linewidth}{\textbf{Open Gap / Conditional Step.} #1}%
+  }%
+  \par\medskip
+}
+\newcommand{\statusnote}[1]{%
+  \par\medskip
+  \noindent\fcolorbox{green!50!black}{green!4}{%
+    \parbox{0.96\linewidth}{\textbf{Status Note.} #1}%
+  }%
+  \par\medskip
+}
+\newcommand{\includeannotated}[1]{%
+  \begingroup
+  \let\origsection\section
+  \let\origsubsection\subsection
+  \let\origsubsubsection\subsubsection
+  \let\section\chapter
+  \let\subsection\origsection
+  \let\subsubsection\origsubsection
+  \input{#1}
+  \endgroup
+}
+\newcommand{\includefull}[1]{%
+  \begingroup
+  \let\origsection\section
+  \let\origsubsection\subsection
+  \let\origsubsubsection\subsubsection
+  \let\section\chapter
+  \let\subsection\origsection
+  \let\subsubsection\origsubsection
+  \input{#1}
+  \endgroup
+}
+
+\titleformat{\chapter}[display]
+  {\bfseries\Large}
+  {\filright\large\chaptername\ \thechapter}
+  {0.6em}
+  {\filright}
+\titlespacing*{\chapter}{0pt}{-6pt}{18pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\nouppercase{\rightmark}}
+\fancyhead[RE]{\nouppercase{\leftmark}}
+\renewcommand{\headrulewidth}{0.2pt}
+
+\title{First-Proof Writeups: Annotated Overview and Full Proof Drafts}
+\author{Corneli$^{1}$\thanks{Supervisor}, Claude$^{2}$, Codex$^{3}$ \\
+\small $^{1}$Hyperreal Enterprises Ltd \quad $^{2}$Anthropic \quad $^{3}$OpenAI}
+\date{February 12, 2026}
+
+\begin{document}
+\frontmatter
+\maketitle
+\tableofcontents
+
+\chapter*{Reader Guide}
+This document is organized in two layers.
+
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{Part I (Annotated Overview):} short, citation-rich introductions for Problems 1--10, intended as navigational summaries.
+\item \textbf{Part II (Full Proof Drafts):} expanded writeups imported from the solution files, suitable as the base for a longer manuscript (targeting roughly book-length exposition).
+\end{itemize}
+
+Problem 6 currently retains an explicit unresolved obligation in the project state. Problem 7 is treated in this manuscript revision as closed via the updated rotation-route theorem chain.
+\input{intro-making-of}
+
+\mainmatter
+
+\part{Annotated Overview}
+\includeannotated{problem1-annotated}
+\includeannotated{problem2-annotated}
+\includeannotated{problem3-annotated}
+\includeannotated{problem4-annotated}
+\includeannotated{problem5-annotated}
+\includeannotated{problem6-annotated}
+\includeannotated{problem7-annotated}
+\includeannotated{problem8-annotated}
+\includeannotated{problem9-annotated}
+\includeannotated{problem10-annotated}
+
+\part{Full Proof Drafts}
+
+\chapter*{Status Notes for Open Items}
+\addcontentsline{toc}{chapter}{Status Notes for Open Items}
+\gapnote{\textbf{Problem 6:} current proof chain is conditional on the remaining Case~2b averaging lemma (GPL-H) as recorded in the project writeups.}
+\statusnote{\textbf{Problem 7:} this revision follows the updated closure claim in \texttt{problem7-solution.md} (rotation route, S-rot-II obstruction vanishing statement), with theorem-number supporting context tracked in \texttt{problem7-g2-theorem-chain.md}.}
+
+\includefull{full/problem1-solution-full}
+\includefull{full/problem2-solution-full}
+\includefull{full/problem3-solution-full}
+\includefull{full/problem4-solution-full}
+\includefull{full/problem5-solution-full}
+\includefull{full/problem6-solution-full}
+\includefull{full/problem7-solution-full}
+\includefull{full/problem8-solution-full}
+\includefull{full/problem9-solution-full}
+\includefull{full/problem10-solution-full}
+
+\end{document}

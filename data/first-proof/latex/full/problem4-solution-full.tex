@@ -1,0 +1,434 @@
+\section{Problem 4: Root Separation Under Finite Free Convolution}
+
+\subsection{Problem Statement}
+
+Two monic polynomials of degree n:
+
+\begin{verbatim}
+p(x) = sum_{k=0}^{n} a_k x^{n-k},  a_0 = 1
+q(x) = sum_{k=0}^{n} b_k x^{n-k},  b_0 = 1
+\end{verbatim}
+
+The \textbf{finite free additive convolution} p ⊞\_n q has coefficients:
+
+\begin{verbatim}
+c_k = sum_{i+j=k} [(n-i)!(n-j)! / (n!(n-k)!)] a_i b_j
+\end{verbatim}
+
+The \textbf{root separation energy}:
+
+\begin{verbatim}
+Phi_n(p) = sum_i (sum_{j != i} 1/(lambda_i - lambda_j))^2
+\end{verbatim}
+
+where lambda\_1, ..., lambda\_n are the roots of p. (Phi\_n = infinity if p has
+repeated roots.)
+
+\textbf{Question (Spielman):} Is it true that for monic real-rooted polynomials
+p, q of degree n:
+
+\begin{verbatim}
+1/Phi_n(p ⊞_n q) >= 1/Phi_n(p) + 1/Phi_n(q)  ?
+\end{verbatim}
+
+\subsection{Answer}
+
+\textbf{Conjecturally yes, with strong numerical evidence.} The inequality
+holds in all 8000+ random trials tested (n = 2-5) with no violations.
+Proved analytically for n = 2 (equality) and n = 3 (strict inequality
+via Cauchy-Schwarz). An analytic proof for n \textgreater= 4 remains open.
+
+\begin{itemize}
+\tightlist
+\item
+  n = 2: equality holds (1/Phi\_2 is linear in the discriminant).
+\item
+  n = 3: \textbf{PROVED} via the identity Phi\_3 * disc = 18 * a\_2\^{}2 and Titu\textquotesingle s lemma.
+\item
+  n \textgreater= 4: numerically verified, proof incomplete. The n=3 identity does not
+  generalize; the ⊞\_n cross-terms play an essential role.
+\end{itemize}
+
+\subsection{Solution}
+
+\subsubsection{1. Interpreting Phi\_n algebraically}
+
+For a monic polynomial p(x) = prod\_i (x - lambda\_i) with distinct roots,
+the derivative at each root is given by the exact algebraic identity:
+
+\begin{verbatim}
+p'(lambda_i) = prod_{j != i} (lambda_i - lambda_j)
+\end{verbatim}
+
+(no limiting procedure needed --- this is immediate from the product rule).
+Therefore the inner sum in Phi\_n is:
+
+\begin{verbatim}
+sum_{j != i} 1/(lambda_i - lambda_j)
+    = [sum_{j != i} prod_{k != i, k != j} (lambda_i - lambda_k)] / p'(lambda_i)
+\end{verbatim}
+
+which is a rational function of the root differences alone. The root
+separation energy is:
+
+\begin{verbatim}
+Phi_n(p) = sum_i (sum_{j != i} 1/(lambda_i - lambda_j))^2
+\end{verbatim}
+
+This is the sum of squared "Coulomb forces" at each root --- the total
+electrostatic self-energy of the root configuration (in the 1D log-gas
+picture). All expressions are exact rational functions of root differences,
+with no regularization or limiting procedure required (assuming distinct roots,
+which is guaranteed since Phi\_n = infinity for repeated roots).
+
+\subsubsection{2. Connection to the discriminant}
+
+The discriminant of p is:
+
+\begin{verbatim}
+disc(p) = prod_{i < j} (lambda_i - lambda_j)^2
+\end{verbatim}
+
+By the AM-QM inequality applied to 1/(lambda\_i - lambda\_j):
+
+\begin{verbatim}
+Phi_n(p) >= n(n-1)^2 / sum_{i<j} (lambda_i - lambda_j)^2
+\end{verbatim}
+
+(Cauchy-Schwarz). So 1/Phi\_n is related to the "spread" of roots.
+Specifically:
+
+\begin{verbatim}
+1/Phi_n(p) <= sum_{i<j} (lambda_i - lambda_j)^2 / (n(n-1)^2)
+\end{verbatim}
+
+\subsubsection{3. Finite free convolution and root behavior}
+
+The operation ⊞\_n was introduced by Marcus, Spielman, and Srivastava (2015)
+as a finite-dimensional analogue of Voiculescu\textquotesingle s free additive convolution.
+Key properties:
+
+(a) \textbf{Real-rootedness preservation:} If p, q are real-rooted monic polynomials
+of degree n, then p ⊞\_n q is also real-rooted.
+
+(b) \textbf{Expected characteristic polynomial:} If A, B are n x n Hermitian with
+char. poly. p\_A, p\_B, then for a uniformly random conjugation U:
+
+\begin{verbatim}
+E_U[char. poly. of A + UBU*] = p_A ⊞_n p_B
+\end{verbatim}
+
+(c) \textbf{Linearization of cumulants:} In the n -\textgreater{} infinity limit, the finite
+free cumulants linearize (R-transform additivity).
+
+(d) \textbf{Root spreading:} Free convolution generally spreads roots apart.
+Convolving with a non-degenerate q increases the minimum root gap.
+
+\subsubsection{4. The inequality via the random matrix model}
+
+Using property (b), interpret p ⊞\_n q as the expected characteristic
+polynomial of A + UBU* where char(A) = p, char(B) = q.
+
+\textbf{Phi\_n via the random matrix model.}
+
+For Hermitian A with eigenvalues lambda\_1, ..., lambda\_n, the root separation
+energy Phi\_n(char(A)) = sum\_i (sum\_\{j != i\} 1/(lambda\_i - lambda\_j))\^{}2 is
+an algebraic function of the eigenvalue gaps (see Section 1). The connection
+to log \textbar det(xI - A)\textbar{} is conceptual: away from roots, F\_A\textquotesingle\textquotesingle(x) = -sum\_i 1/(x - lambda\_i)\^{}2,
+and Phi\_n captures the "residue" version at each root. But the definition of
+Phi\_n uses only the exact algebraic expressions from Section 1.
+
+\subsubsection{5. Finite free cumulants and the bilinear structure}
+
+\textbf{The MSS coefficient formula.} The ⊞\_n operation acts on coefficients as:
+
+\begin{verbatim}
+c_k = sum_{i+j=k} [(n-i)!(n-j)! / (n!(n-k)!)] a_i b_j
+\end{verbatim}
+
+This is bilinear but NOT simply additive in the a\_k. For example, at n=3:
+
+\begin{verbatim}
+c_1 = a_1 + b_1                     (additive)
+c_2 = a_2 + (2/3)*a_1*b_1 + b_2     (cross-term!)
+c_3 = a_3 + (1/3)*a_2*b_1 + (1/3)*a_1*b_2 + b_3
+\end{verbatim}
+
+\textbf{Finite free cumulants.} Following Arizmendi-Perales (2018), there exist
+finite free cumulants kappa\_k\^{}(n) related to the a\_k by a nonlinear
+moment-cumulant formula (via non-crossing partitions with falling-factorial
+weights) such that:
+
+\begin{verbatim}
+kappa_k^(n)(p ⊞_n q) = kappa_k^(n)(p) + kappa_k^(n)(q)
+\end{verbatim}
+
+The polynomial coefficients a\_k are NOT the finite free cumulants; they
+are finite free MOMENTS. The relationship involves a Möbius inversion on the
+lattice of non-crossing partitions.
+
+\subsubsection{5a. Complete proof for n = 3}
+
+Verification script: \texttt{scripts/verify-p4-n3-proof.py}
+
+\textbf{Step 1: Centering reduction.} Since Phi\_n depends only on root differences
+(translation invariant), and ⊞\_n commutes with translation (via the random
+matrix model: translating A by cI shifts all eigenvalues of A+QBQ* by c),
+we may assume WLOG that a\_1 = b\_1 = 0 (centered polynomials).
+
+\textbf{Step 2: ⊞\_3 simplifies for centered cubics.} When a\_1 = b\_1 = 0, the
+MSS cross-terms in c\_2 and c\_3 vanish:
+
+\begin{verbatim}
+c_2 = a_2 + (2/3)*0*0 + b_2 = a_2 + b_2
+c_3 = a_3 + (1/3)*a_2*0 + (1/3)*0*b_2 + b_3 = a_3 + b_3
+\end{verbatim}
+
+So ⊞\_3 reduces to plain coefficient addition for centered cubics.
+
+\textbf{Step 3: The key identity.} For a centered cubic p(x) = x\^{}3 + a\_2\emph{x + a\_3
+with distinct real roots (requiring a\_2 \textless{} 0 and disc = -4}a\_2\^{}3 - 27*a\_3\^{}2 \textgreater{} 0):
+
+\begin{verbatim}
+Phi_3(p) * disc(p) = 18 * a_2^2     (EXACT)
+\end{verbatim}
+
+Equivalently:
+
+\begin{verbatim}
+1/Phi_3(p) = disc(p) / (18 * a_2^2)
+           = (-4*a_2^3 - 27*a_3^2) / (18 * a_2^2)
+           = -2*a_2/9 - 3*a_3^2 / (2*a_2^2)
+\end{verbatim}
+
+This identity was discovered numerically and verified symbolically in SymPy.
+It follows from the explicit formula Phi\_3 = sum\_i (3\emph{l\_i/(3}l\_i\^{}2 + e\_2))\^{}2
+(where e\_1 = 0) combined with the discriminant = prod\_\{i\textless j\}(l\_i - l\_j)\^{}2.
+
+\textbf{Step 4: Superadditivity via Cauchy-Schwarz.} Write s = -a\_2 \textgreater{} 0, t = -b\_2 \textgreater{} 0,
+u = a\_3, v = b\_3. Then:
+
+\begin{verbatim}
+1/Phi(p) = 2s/9 - 3u^2/(2s^2)
+1/Phi(q) = 2t/9 - 3v^2/(2t^2)
+1/Phi(p ⊞_3 q) = 2(s+t)/9 - 3(u+v)^2/(2(s+t)^2)
+\end{verbatim}
+
+The surplus is:
+
+\begin{verbatim}
+surplus = 1/Phi(conv) - 1/Phi(p) - 1/Phi(q)
+        = (3/2) * [u^2/s^2 + v^2/t^2 - (u+v)^2/(s+t)^2]
+\end{verbatim}
+
+This is non-negative by Titu\textquotesingle s lemma (Engel form of Cauchy-Schwarz):
+
+\begin{verbatim}
+u^2/s^2 + v^2/t^2 >= (u+v)^2/(s^2+t^2)    [Titu's lemma]
+\end{verbatim}
+
+and since s\^{}2+t\^{}2 \textless= (s+t)\^{}2 (because 2st \textgreater{} 0):
+
+\begin{verbatim}
+(u+v)^2/(s^2+t^2) >= (u+v)^2/(s+t)^2
+\end{verbatim}
+
+Combining: surplus \textgreater= 0. Equality iff u/s\^{}2 = v/t\^{}2 and s = t or u = v = 0.
+
+\textbf{QED for n = 3.}
+
+\subsubsection{5b. What the proof requires for n \textgreater= 4 (GAP)}
+
+For n \textgreater= 4, the n=3 approach does not directly generalize:
+
+(a) The identity Phi\_n * disc = const * a\_2\^{}2 FAILS for n \textgreater= 4. At n=4,
+the product Phi\_4 * disc depends on a\_3 and a\_4 as well.
+
+(b) ⊞\_4 has a cross-term even for centered polynomials: c\_4 = a\_4 + (1/6)\emph{a\_2}b\_2 + b\_4.
+Unlike n=3, centering does NOT reduce ⊞\_4 to plain coefficient addition.
+
+(c) The cross-term is ESSENTIAL: plain coefficient addition fails superadditivity
+\textasciitilde29\% of the time for centered quartics, while ⊞\_4 gives 0 violations.
+
+A correct proof for n \textgreater= 4 likely requires exploiting the specific bilinear
+structure of the MSS convolution formula or the random matrix interpretation.
+
+\subsubsection{6. Verification for small cases}
+
+\textbf{Degree 2 (proved --- equality):} p(x) = x\^{}2 + a\_1*x + a\_2.
+
+\begin{verbatim}
+Phi_2(p) = 2/(a_1^2 - 4*a_2)
+1/Phi_2(p) = (a_1^2 - 4*a_2)/2
+\end{verbatim}
+
+The ⊞\_2 formula gives c\_1 = a\_1+b\_1, c\_2 = a\_2 + a\_1*b\_1/2 + b\_2. Then:
+
+\begin{verbatim}
+1/Phi_2(p⊞q) = (c_1^2 - 4*c_2)/2 = (a_1^2 - 4*a_2)/2 + (b_1^2 - 4*b_2)/2
+\end{verbatim}
+
+Surplus = 0 (symbolic verification). Equality for all degree-2 polynomials.
+
+\textbf{Degree 3 (proved --- strict inequality):} See Section 5a. The proof uses:
+
+\begin{itemize}
+\tightlist
+\item
+  Translation invariance of Phi + translation compatibility of ⊞\_3 to center
+\item
+  Identity Phi\_3 * disc = 18 * a\_2\^{}2 (for centered cubics)
+\item
+  Titu\textquotesingle s lemma (Cauchy-Schwarz) to bound the surplus
+\end{itemize}
+
+\subsubsection{7. Summary and status}
+
+\textbf{The inequality is conjecturally true, with strong numerical evidence and
+analytic proofs for n = 2, 3.}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+n & Status & Method \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+2 & \textbf{PROVED} (equality) & 1/Phi\_2 is linear in disc; ⊞\_2 preserves exactly \\
+3 & \textbf{PROVED} (strict ineq.) & Phi\_3*disc=18a\_2\^{}2 identity + Titu\textquotesingle s lemma \\
+4 & Numerically verified & 0/3000 violations; cross-term a\_2*b\_2/6 essential \\
+5 & Numerically verified & 0/2000 violations \\
+\end{longtable}
+
+\textbf{What is established analytically:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Finite free cumulants add under ⊞\_n (Arizmendi-Perales 2018)
+\item
+  n=2: equality (1/Phi\_2 linear in discriminant)
+\item
+  n=3: strict superadditivity (Phi\_3*disc identity + Cauchy-Schwarz)
+\item
+  ⊞\_n commutes with translation (random matrix argument)
+\item
+  The superadditivity is SPECIFIC to ⊞\_n --- plain coefficient addition
+  fails \textasciitilde40\% (n=3 centered excluded: 0\% because ⊞\_3 = addition there)
+\end{enumerate}
+
+\textbf{What remains open for n \textgreater= 4:}
+
+The n=3 proof relies on Phi\_3\emph{disc = 18}a\_2\^{}2 being constant in a\_3.
+This fails at n=4 (the product depends on all coefficients). The ⊞\_4
+cross-term (1/6)\emph{a\_2}b\_2 in c\_4 is essential (plain addition fails 29\%).
+A proof for n\textgreater=4 needs either:
+
+(a) A generalization of the Phi*disc identity that accounts for higher
+coefficients, or
+
+(b) A direct random-matrix argument via the Haar orbit A+QBQ*, or
+
+(c) A proof via finite free cumulant coordinates (convexity on the
+real-rooted image of cumulant space).
+
+\subsubsection{8. Numerical evidence}
+
+Verification scripts:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{scripts/verify-p4-inequality.py} (superadditivity + convexity)
+\item
+  \texttt{scripts/verify-p4-deeper.py} (coefficient addition + MSS structure)
+\item
+  \texttt{scripts/verify-p4-schur-majorization.py} (Schur/submodularity/paths)
+\item
+  \texttt{scripts/verify-p4-coefficient-route.py} (coefficient route, disc identity)
+\item
+  \texttt{scripts/verify-p4-n3-proof.py} (complete n=3 symbolic proof + n=4 exploration)
+\end{itemize}
+
+\textbf{Superadditivity test} (2000 random real-rooted polynomial pairs per n):
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+n & violations & min ratio & mean ratio & max ratio \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+2 & 0/2000 & 1.000000 & 1.000000 & 1.000000 \\
+3 & 0/2000 & 1.000082 & 3.031736 & 162.446 \\
+4 & 0/2000 & 1.003866 & 9.549935 & 2268.065 \\
+5 & 0/2000 & 1.032848 & 14.457013 & 2119.743 \\
+\end{longtable}
+
+Ratio = LHS/RHS = {[}1/Phi\_n(p⊞q){]} / {[}1/Phi\_n(p) + 1/Phi\_n(q){]}; ratio \textgreater= 1
+means inequality holds. Strict inequality for n \textgreater= 3.
+
+\textbf{Convexity/concavity test} (midpoint test in coefficient space):
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+n & convex violations & concave violations & total tests \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+3 & 757 (50.6\%) & 738 (49.4\%) & 1495 \\
+4 & 648 (65.7\%) & 338 (34.3\%) & 986 \\
+5 & 433 (72.9\%) & 161 (27.1\%) & 594 \\
+\end{longtable}
+
+1/Phi\_n is NEITHER convex NOR concave in coefficient space.
+
+\textbf{Plain coefficient addition test} (NOT ⊞\_n):
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+n & violations & total \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+3 & 240 & 609 \\
+4 & 159 & 373 \\
+5 & 116 & 218 \\
+\end{longtable}
+
+Superadditivity FAILS under plain addition --- the inequality is specific
+to the MSS bilinear structure of ⊞\_n.
+
+\subsection{Key References from futon6 corpus}
+
+\begin{itemize}
+\tightlist
+\item
+  PlanetMath: "monic polynomial" (Monic1)
+\item
+  PlanetMath: "discriminant" (Discriminant)
+\item
+  PlanetMath: "resultant" (Resultant, DerivationOfSylvestersMatrixForTheResultant)
+\item
+  PlanetMath: "logarithmic derivative" (LogarithmicDerivative)
+\item
+  PlanetMath: "partial fraction decomposition" (ALectureOnThePartialFractionDecompositionMethod)
+\item
+  PlanetMath: "cumulant generating function" (CumulantGeneratingFunction)
+\end{itemize}
+
+\subsection{External References}
+
+\begin{itemize}
+\item
+  Marcus, Spielman, Srivastava (2015), "Interlacing Families II: Mixed Characteristic
+  Polynomials and the Kadison-Singer Problem," Annals of Math 182(1), 327-350.
+  {[}Defines ⊞\_n, proves real-rootedness preservation, random matrix interpretation{]}
+\item
+  Arizmendi, Perales (2018), "Cumulants for finite free convolution," J. Combinatorial
+  Theory Ser. A 155, 244-266. arXiv:1702.04761.
+  {[}Defines finite free cumulants that linearize under ⊞\_n{]}
+\end{itemize}

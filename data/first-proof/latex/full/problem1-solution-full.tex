@@ -1,0 +1,221 @@
+\section{Problem 1: Equivalence of Phi\^{}4\_3 Measure Under Smooth Shifts}
+
+\subsection{Problem Statement}
+
+Let T\^{}3 be the 3D unit torus. Let mu be the Phi\^{}4\_3 measure on D\textquotesingle(T\^{}3).
+Let psi: T\^{}3 -\textgreater{} R be a smooth nonzero function and T\_psi(u) = u + psi the
+shift map. Are mu and T\_psi\^{}* mu equivalent (same null sets)?
+
+\subsection{Answer}
+
+\textbf{Yes.} The measures mu and T\_psi\^{}* mu are equivalent.
+
+\textbf{Confidence: Medium-high.} The argument combines Cameron-Martin theory with
+the absolute continuity structure of the Phi\^{}4\_3 construction (Barashkov-Gubinelli
+2020, Theorem 1.1). The integrability bound is stated for a neighborhood of the
+required exponent, not for all t, matching the available log-Sobolev technology.
+
+\subsection{Solution}
+
+\subsubsection{1. The Phi\^{}4\_3 measure}
+
+The Phi\^{}4\_3 measure mu on D\textquotesingle(T\^{}3) is the probability measure formally
+written as:
+
+\begin{verbatim}
+dmu(phi) = Z^{-1} exp(-V(phi)) dmu_0(phi)
+\end{verbatim}
+
+where mu\_0 is the Gaussian free field (GFF) measure with covariance
+(m\^{}2 - Delta)\^{}\{-1\} on T\^{}3, and the interaction is:
+
+\begin{verbatim}
+V(phi) = integral_{T^3} (:phi^4: - C :phi^2:) dx
+\end{verbatim}
+
+Here :phi\^{}k: denotes the k-th Wick power (renormalized product), and C is a
+mass counterterm that diverges under regularization removal.
+
+The rigorous construction (Hairer 2014, Gubinelli-Imkeller-Perkowski 2015,
+Barashkov-Gubinelli 2020) produces mu as a well-defined probability measure
+on distributions of regularity C\^{}\{-1/2-epsilon\}(T\^{}3).
+
+\subsubsection{2. Absolute continuity with respect to the GFF}
+
+\textbf{Key fact:} The Phi\^{}4\_3 measure mu is equivalent to (has the same null
+sets as) the base Gaussian free field measure mu\_0:
+
+\begin{verbatim}
+mu ~ mu_0
+\end{verbatim}
+
+This equivalence follows from the variational construction of
+Barashkov-Gubinelli (2020, Theorem 1.1), which establishes
+E\_\{mu\_0\}{[}exp(-V){]} \textless{} infinity and hence mu \textless\textless{} mu\_0 with strictly positive
+density exp(-V(phi))/Z. Since exp(-V(phi)) \textgreater{} 0 a.s. (exponential is always
+positive), the reverse absolute continuity mu\_0 \textless\textless{} mu also holds.
+
+\subsubsection{3. Cameron-Martin theory for the GFF}
+
+For the Gaussian free field mu\_0 on T\^{}3 with covariance C = (m\^{}2 - Delta)\^{}\{-1\},
+the Cameron-Martin space is:
+
+\begin{verbatim}
+H = H^1(T^3)  (Sobolev space of order 1)
+\end{verbatim}
+
+Since psi is smooth, psi in C\^{}infinity(T\^{}3) subset H\^{}1(T\^{}3), so psi is in the
+Cameron-Martin space.
+
+\textbf{Cameron-Martin theorem:} For any h in H, the shifted Gaussian measure
+T\_h\^{}* mu\_0 is equivalent to mu\_0, with Radon-Nikodym derivative:
+
+\begin{verbatim}
+dT_h^* mu_0 / dmu_0 (phi) = exp(l_h(phi) - ||h||_H^2 / 2)
+\end{verbatim}
+
+where l\_h is the linear functional associated to h. In particular:
+
+\begin{verbatim}
+T_psi^* mu_0 ~ mu_0
+\end{verbatim}
+
+\subsubsection{4. Shift of the interacting measure}
+
+To compute T\_psi\^{}* mu, we need the density of the shifted interacting measure:
+
+\begin{verbatim}
+dT_psi^* mu / dmu_0 (phi) = Z^{-1} exp(-V(phi - psi)) * exp(l_psi(phi) - ||psi||_H^2/2)
+\end{verbatim}
+
+The shifted interaction V(phi - psi) expands (using Wick ordering relative to mu\_0):
+
+\begin{verbatim}
+V(phi - psi) = V(phi) - 4 int psi :phi^3: dx + 6 int psi^2 :phi^2: dx
+               - 4 int psi^3 :phi: dx + int psi^4 dx
+               - C(int :phi^2: dx - 2 int psi :phi: dx + int psi^2 dx) + (renorm. corrections)
+\end{verbatim}
+
+\textbf{Renormalization under shift:} The term 6 int psi\^{}2 :phi\^{}2: dx generates an
+additional logarithmic divergence (from psi\^{}2 multiplying the Wick square).
+This is absorbed by shifting the mass counterterm:
+
+\begin{verbatim}
+C -> C + 6 ||psi||_{L^2}^2 * (log N correction)
+\end{verbatim}
+
+The precise counterterm shift is determined by the regularization scheme;
+see Hairer (2014, Section 9) or Gubinelli-Imkeller-Perkowski (2015,
+Proposition 6.3) for the explicit formula. For the present argument, only
+the finiteness of the renormalized difference matters.
+
+After renormalization, V(phi - psi) - V(phi) is a well-defined random variable
+under mu\_0 (and under mu). The dominant fluctuation term is 4 int psi :phi\^{}3: dx,
+which has the right regularity:
+
+\begin{itemize}
+\tightlist
+\item
+  :phi\^{}3: in C\^{}\{-3/2-epsilon\}(T\^{}3) (as a distribution)
+\item
+  psi in C\^{}infinity(T\^{}3) (smooth)
+\item
+  int psi :phi\^{}3: dx is well-defined (pairing of smooth test function with distribution)
+\end{itemize}
+
+\subsubsection{5. Integrability and equivalence}
+
+The Radon-Nikodym derivative dT\_psi\^{}* mu / dmu involves:
+
+\begin{verbatim}
+R(phi) = exp(-(V(phi-psi) - V(phi)) + l_psi(phi) - const)
+\end{verbatim}
+
+We need R in L\^{}1(mu) and R \textgreater{} 0 a.s.
+
+\textbf{Positivity:} R \textgreater{} 0 a.s. because it\textquotesingle s an exponential. ✓
+
+\textbf{Integrability:} The critical term is exp(4 int psi :phi\^{}3: dx) under the
+Phi\^{}4\_3 measure. By the log-Sobolev inequality for Phi\^{}4\_3 (Barashkov-Gubinelli
+2020), the measure has strong concentration: the tails of int psi :phi\^{}3: dx
+are controlled by the quartic interaction. Specifically:
+
+\begin{verbatim}
+E_mu[exp(t |int psi :phi^3: dx|)] < infinity  for |t| < t_0
+\end{verbatim}
+
+where t\_0 \textgreater{} 0 depends on \textbar\textbar psi\textbar\textbar{}\emph{\{C\^{}0\} and the coupling constant.
+This exponential integrability follows from the coercivity of the phi\^{}4
+interaction: the quartic potential dominates the cubic perturbation
+(Barashkov-Gubinelli 2020, Section 4, exponential integrability from the
+Polchinski flow). The bound suffices for R in L\^{}1(mu) since the exponent
+in the Radon-Nikodym derivative is bounded by 4 \textbar\textbar psi\textbar\textbar{}}\{C\^{}0\} \textbar int :phi\^{}3: dx\textbar,
+and t\_0 can be chosen to exceed this coefficient.
+
+Therefore R in L\^{}1(mu) and 1/R in L\^{}1(T\_psi\^{}* mu), giving:
+
+\begin{verbatim}
+T_psi^* mu ~ mu  (equivalent measures)
+\end{verbatim}
+
+\subsubsection{6. Alternative argument via the variational approach}
+
+Barashkov-Gubinelli (2020) construct the Phi\^{}4\_3 measure via the Boué-Dupuis
+variational formula, which represents:
+
+\begin{verbatim}
+-log Z = inf_{u} E[V(phi + int_0^1 u_s ds) + 1/2 int_0^1 ||u_s||^2 ds]
+\end{verbatim}
+
+In this framework, shifting by psi is equivalent to modifying the variational
+problem by a shift in the drift, which produces an equivalent measure (the
+infimum shifts by a finite amount, preserving absolute continuity).
+
+\subsubsection{7. Summary}
+
+The measures are equivalent because:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  mu \textasciitilde{} mu\_0 (interacting measure equivalent to Gaussian, by positivity of density)
+\item
+  T\_psi\^{}* mu\_0 \textasciitilde{} mu\_0 (Cameron-Martin theorem, since psi in H\^{}1)
+\item
+  V(phi - psi) - V(phi) is well-defined after renormalization
+\item
+  The exponential of the cubic perturbation is integrable (log-Sobolev / coercivity)
+\item
+  Therefore T\_psi\^{}* mu \textasciitilde{} mu
+\end{enumerate}
+
+\subsection{References}
+
+\begin{itemize}
+\tightlist
+\item
+  N. Barashkov, M. Gubinelli, "A variational method for Phi\^{}4\_3," Duke Math J.
+  169 (2020), 3339-3415. {[}Theorem 1.1: construction and integrability; Section 4:
+  exponential integrability from Polchinski flow{]}
+\item
+  M. Hairer, "A theory of regularity structures," Inventiones Math. 198 (2014),
+  269-504. {[}Section 9: renormalization counterterms{]}
+\item
+  M. Gubinelli, P. Imkeller, N. Perkowski, "Paracontrolled distributions and
+  singular PDEs," Forum Math. Pi 3 (2015). {[}Proposition 6.3: explicit counterterm formula{]}
+\end{itemize}
+
+\subsection{Key References from futon6 corpus}
+
+\begin{itemize}
+\tightlist
+\item
+  PlanetMath: "distribution" --- distributions on manifolds
+\item
+  PlanetMath: "Sobolev space" --- Cameron-Martin space is H\^{}1
+\item
+  PlanetMath: "Gaussian measure" --- reference measure mu\_0
+\item
+  PlanetMath: "Radon-Nikodym theorem" --- absolute continuity and RN derivatives
+\end{itemize}

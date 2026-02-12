@@ -1,0 +1,26 @@
+\section{Problem 10: PCG for RKHS-Constrained Tensor CP Decomposition}
+
+\subsection*{Problem statement}
+Explain why preconditioned conjugate gradient (PCG) solves the mode-$k$ RKHS CP subproblem without $O(N)$ per-iteration cost, where $N$ is the full ambient sample size.
+
+\subsection*{Answer}
+Use implicit Kronecker/Khatri--Rao matrix-vector products and a Kronecker preconditioner built from expected sampling geometry.
+
+\subsection*{Annotated proof sketch}
+\begin{enumerate}[leftmargin=1.5em]
+\item Never form the full system matrix; compute $Ax$ through structured operations:
+  kernel multiplies, sparse sampling/restriction, and Khatri--Rao contractions.
+\item Build $b$ by the same structure, again avoiding dense $N$-scale tensors.
+\item Precondition with $P=H\otimes K_\tau$ from replacing sparse sampling by its expectation; invert $P$ via two small Cholesky solves.
+\item Apply standard PCG convergence bounds in terms of condition number $\kappa(P^{-1/2}AP^{-1/2})$ and matrix concentration for random sampling.
+\end{enumerate}
+
+\subsection*{Selected citations}
+\begin{itemize}[leftmargin=1.5em]
+\item Matrix concentration / Freedman-style bound context: \url{https://arxiv.org/abs/1110.1379}
+\item FALKON large-scale kernel method: \url{https://arxiv.org/abs/1705.10958}
+\item Kronecker product definition: \url{https://planetmath.org/kroneckerproduct}
+\item Conjugate gradient method definition: \url{https://planetmath.org/conjugategradientmethod}
+\end{itemize}
+
+\clearpage

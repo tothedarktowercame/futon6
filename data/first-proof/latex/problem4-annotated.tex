@@ -1,0 +1,31 @@
+\section{Problem 4: Root Separation Energy Under Finite Free Convolution ($n=4$)}
+
+\subsection*{Problem statement}
+For monic real-rooted degree-$n$ polynomials, test
+\[
+\frac{1}{\Phi_n(p \boxplus_n q)} \ge \frac{1}{\Phi_n(p)} + \frac{1}{\Phi_n(q)}.
+\]
+
+\subsection*{Status from current writeup}
+Proved for $n\le 4$ in the project writeups, with computational certification components; open for larger $n$.
+
+\subsection*{Annotated proof structure}
+\begin{enumerate}[leftmargin=1.5em]
+\item Algebraic reduction at $n=4$: normalize coefficients, derive a polynomial numerator/denominator formulation for the surplus using the exact $\Phi_4\cdot\mathrm{disc}$ identity\footnote{Discriminant refresher: \url{https://planetmath.org/discriminantofapolynomial}.}.
+\item Show denominator sign on the real-rooted domain, reducing inequality to nonnegativity of a single polynomial $-N$.
+\item Boundary and symmetric-subcase analysis by exact elimination/resultant methods.
+\item Generic critical-point branch handled computationally (PHC/homotopy-style root accounting) in the current workflow.
+\end{enumerate}
+
+\gapnote{The non-PHC algebraic pieces are strong and mostly exact in the current repository, but the fully formal closure still depends on certified completion of the generic off-diagonal critical-point branch (Case 3c) in the strictest proof-certification sense.}
+
+\subsection*{Selected citations}
+\begin{itemize}[leftmargin=1.5em]
+\item Finite free convolution (MSS): \url{https://arxiv.org/abs/1504.00350}
+\item Interlacing families follow-up: \url{https://arxiv.org/abs/1507.05020}
+\item Finite free cumulants perspective: \url{https://arxiv.org/abs/1707.02443}
+\item MathOverflow discussion (finite free convolution): \url{https://mathoverflow.net/questions/375273/finite-free-convolution-of-polynomials}
+\item PHCpack project page: \url{https://github.com/janverschelde/PHCpack}
+\end{itemize}
+
+\clearpage

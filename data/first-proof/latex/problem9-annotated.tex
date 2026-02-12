@@ -1,0 +1,25 @@
+\section{Problem 9: Polynomial Detection of Rank-1 Scaling for Quadrifocal Tensors}
+
+\subsection*{Problem statement}
+Given generic camera matrices and quadrifocal tensors $Q^{(\alpha\beta\gamma\delta)}$, construct a polynomial map $F$ of degree bounded independently of $n$ that vanishes exactly on rank-1 separable scaling tensors $\lambda_{\alpha\beta\gamma\delta}=u_\alpha v_\beta w_\gamma x_\delta$.
+
+\subsection*{Answer}
+Yes: one can use degree-3 determinant constraints (all relevant $3\times 3$ minors).
+
+\subsection*{Annotated proof sketch}
+\begin{enumerate}[leftmargin=1.5em]
+\item For fixed $(\gamma,\delta,k,\ell)$, the determinant pairing defines an alternating bilinear form of rank $2$ on $\mathbb R^4$, so all induced $3\times 3$ minors vanish.
+\item If $\lambda$ is rank-1 separable, Hadamard-diagonal scaling preserves the rank-$\le 2$ property, hence all these minors vanish.
+\item Conversely, vanishing of all minors across the three matricization patterns forces each matricization rank to be $1$, and compatibility implies full tensor separability.
+\item Collect all such minors into $F$; each coordinate has degree $3$ and no dependence on camera parameters.
+\end{enumerate}
+
+\subsection*{Selected citations}
+\begin{itemize}[leftmargin=1.5em]
+\item Segre embedding (rank-1 tensor variety): \url{https://planetmath.org/segreembedding}
+\item Determinantal varieties: \url{https://planetmath.org/determinantalvariety}
+\item Tensor rank definition: \url{https://planetmath.org/tensorrank}
+\item Multiple-view geometry reference text: \url{https://www.robots.ox.ac.uk/~vgg/hzbook/}
+\end{itemize}
+
+\clearpage

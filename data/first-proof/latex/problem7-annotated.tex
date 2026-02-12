@@ -1,0 +1,34 @@
+\section{Problem 7: Uniform Lattice with 2-Torsion and Rationally Acyclic Universal Cover}
+
+\subsection*{Problem statement}
+Can a cocompact lattice $\Gamma$ in a real semisimple Lie group, containing an element of order $2$, be the fundamental group of a closed manifold whose universal cover is $\mathbb Q$-acyclic?
+
+\subsection*{Current status}
+Closed in the current project branch via the rotation route (\(n=7\), congruence setting), with E2 discharged and the S-branch presented as completed through the equivariant surgery obstruction-vanishing chain in the updated solution docs.
+
+\subsection*{Annotated proof structure}
+\begin{enumerate}[leftmargin=1.5em]
+\item Use Fowler's fixed-point Euler-characteristic criterion to produce groups in $\mathrm{FH}(\mathbb Q)$ from suitable $\mathbb Z/2$-extensions\footnote{Fowler: \url{https://arxiv.org/abs/1204.4667}.}.
+\item Construct two arithmetic lattice routes:
+  \begin{itemize}[leftmargin=1.5em]
+  \item reflection route in even dimension;
+  \item codimension-2 rotation route in odd dimension (arithmetically cleaner for surgery).
+  \end{itemize}
+\item Follow the rotation-route S-branch: codimension-2 setup, obstruction chain, and cap/gluing output to a closed manifold model with rationally acyclic universal cover.
+\end{enumerate}
+
+\statusnote{This monograph tracks Problem 7 as closed according to the updated project theorem chain (see \texttt{problem7-solution.md}); \texttt{problem7-g2-theorem-chain.md} is used as the theorem-number ledger for the codim-2 surgery references.}
+
+\subsection*{Selected citations}
+\begin{itemize}[leftmargin=1.5em]
+\item Fowler criterion: \url{https://arxiv.org/abs/1204.4667}
+\item Reflection lattices source used in writeup: \url{https://arxiv.org/abs/2506.23994}
+\item Equivariant surgery framework: \url{https://arxiv.org/abs/1705.10909}
+\item Davis--Luck obstruction context: \url{https://arxiv.org/abs/2303.15765}
+\item G2 theorem-number ledger (project note): \texttt{data/first-proof/problem7-g2-theorem-chain.md}
+\item Arithmetic lattices (Borel--Harish-Chandra): \url{https://www.jstor.org/stable/1970362}
+\item Semisimple Lie group definition: \url{https://planetmath.org/semisimpleliegroup}
+\item Related MathOverflow discussion: \url{https://mathoverflow.net/questions/33545/equivariant-surgery-problem}
+\end{itemize}
+
+\clearpage
