@@ -202,8 +202,8 @@ Conditional conclusion:
 ## References
 
 - Batson, Spielman, Srivastava (2012), "Twice-Ramanujan Sparsifiers," SIAM
-  Review 56(2), 315-334. [Theorem 1.1: deterministic spectral sparsification
-  with universal vertex/edge bounds]
+  Review 56(2), 315-334. [Theorem 1.1: deterministic edge sparsification
+  with universal bounds on number of edges]
 - Tropp (2011), Freedman's inequality for matrix martingales
 - Standard matrix Bernstein inequality for sums of independent self-adjoint
   random matrices

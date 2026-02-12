@@ -182,7 +182,7 @@ The key observation: when a non-vacancy particle at site j is adjacent to
 the vacancy at site j+1 (cyclically), and the clock at j rings, one possible
 outcome of the t-geometric choice is that the active particle selects the
 vacancy (the nearest weaker-species particle clockwise). This selection has
-probability 1/[m]_t > 0 (the k=0 term in the t-geometric distribution, where
+probability 1/[m]_t > 0 (the k=1 term in the t-geometric distribution, where
 m >= 1 counts weaker particles). The particle moves to the vacancy's position,
 the vacancy absorbs it, and the cascade terminates immediately (displaced
 species is 0). The net effect is an adjacent swap of the non-vacancy species
