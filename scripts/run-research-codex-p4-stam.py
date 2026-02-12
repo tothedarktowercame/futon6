@@ -20,9 +20,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 
@@ -58,7 +60,7 @@ RESPONSE_SCHEMA = {
                                  "arxiv.org", "textbook", "other"],
                     },
                 },
-                "required": ["citation", "relevance"],
+                "required": ["citation", "relevance", "site"],
                 "additionalProperties": False,
             },
         },
@@ -390,6 +392,9 @@ def run_codex_once(
     cwd: Path,
     schema_path: Path,
     prompt_text: str,
+    timeout_sec: int,
+    codex_home: Path | None,
+    retries: int,
 ) -> tuple[int, str, str]:
     """Run a single prompt through codex exec."""
     with tempfile.NamedTemporaryFile("w+", suffix=".txt", delete=False) as out_f:
@@ -397,7 +402,8 @@ def run_codex_once(
 
     instruction = (
         "You must answer exactly as one JSON object matching the required schema. "
-        "Do not wrap JSON in markdown fences. Do not add extra commentary.\n\n"
+        "Do not wrap JSON in markdown fences. Do not add extra commentary. "
+        "Do not perform shell/tool calls or emit progress updates; return only final JSON.\n\n"
         + prompt_text
     )
     cmd = [
@@ -410,13 +416,61 @@ def run_codex_once(
         "--output-last-message", str(out_path),
         "-",
     ]
-    proc = subprocess.run(cmd, input=instruction, text=True, capture_output=True)
+    env = os.environ.copy()
+    if codex_home is not None:
+        env["CODEX_HOME"] = str(codex_home)
+    attempts = max(1, retries + 1)
+    rc = 1
+    stderr_text = ""
+    stdout_text = ""
+    for attempt in range(1, attempts + 1):
+        try:
+            proc = subprocess.run(
+                cmd,
+                input=instruction,
+                text=True,
+                capture_output=True,
+                timeout=timeout_sec,
+                env=env,
+            )
+            rc = proc.returncode
+            stderr_text = proc.stderr.strip()
+            stdout_text = proc.stdout.strip()
+        except subprocess.TimeoutExpired as e:
+            rc = 124
+            stderr_text = f"codex exec timed out after {timeout_sec}s"
+            stdout_text = (e.stdout or "").strip()
+
+        if attempt >= attempts or not _is_transient_codex_error(rc, stderr_text):
+            break
+        sleep_s = min(8, 2 ** (attempt - 1))
+        time.sleep(sleep_s)
+
     try:
         response_text = out_path.read_text(encoding="utf-8").strip()
     except FileNotFoundError:
         response_text = ""
     out_path.unlink(missing_ok=True)
-    return proc.returncode, response_text, proc.stderr.strip()
+    if not response_text and stdout_text:
+        response_text = stdout_text
+    return rc, response_text, stderr_text
+
+
+def _is_transient_codex_error(rc: int, stderr_text: str) -> bool:
+    if rc == 124:
+        return True
+    lowered = stderr_text.lower()
+    transient_tokens = [
+        "stream disconnected before completion",
+        "error sending request for url",
+        "network error",
+        "reconnecting...",
+        "timed out",
+        "429",
+        "rate limit",
+        "503",
+    ]
+    return any(tok in lowered for tok in transient_tokens)
 
 
 def main() -> int:
@@ -430,6 +484,12 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true",
                     help="Generate prompts only, don't call Codex")
     ap.add_argument("--math-se-dir", type=Path, default=DEFAULT_MATH_SE_DIR)
+    ap.add_argument("--timeout-sec", type=int, default=90,
+                    help="Timeout per Codex call in seconds")
+    ap.add_argument("--retries", type=int, default=0,
+                    help="Retries per Codex call on transient network/timeouts")
+    ap.add_argument("--codex-home", type=Path, default=None,
+                    help="Optional writable CODEX_HOME used for codex exec session files")
     ap.add_argument("--repo-root", type=Path, default=REPO_ROOT)
     args = ap.parse_args()
 
@@ -450,7 +510,7 @@ def main() -> int:
     with open(args.prompts_out, "w") as f:
         for rec in prompts:
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
-    print(f"Wrote {len(prompts)} prompts to {args.prompts_out}")
+    print(f"Wrote {len(prompts)} prompts to {args.prompts_out}", flush=True)
 
     if args.dry_run:
         print("Dry run -- not calling Codex.")
@@ -471,12 +531,17 @@ def main() -> int:
     try:
         with open(args.output, "w") as fout:
             for rec in prompts[:run_limit]:
+                print(f"Running {rec['step_id']}...", flush=True)
+                step_started = time.time()
                 rc, raw_response, stderr_text = run_codex_once(
                     codex_bin=args.codex_bin,
                     model=args.model,
                     cwd=args.repo_root,
                     schema_path=schema_path,
                     prompt_text=rec["prompt"],
+                    timeout_sec=args.timeout_sec,
+                    codex_home=args.codex_home,
+                    retries=args.retries,
                 )
 
                 out = {"step_id": rec["step_id"]}
@@ -484,6 +549,8 @@ def main() -> int:
                     parsed = json.loads(raw_response)
                     if isinstance(parsed, dict):
                         out.update(parsed)
+                        # Never trust model-emitted IDs; preserve the run record key.
+                        out["step_id"] = rec["step_id"]
                     else:
                         out["parse_error"] = True
                         out["raw"] = raw_response
@@ -501,7 +568,11 @@ def main() -> int:
                 fout.write(json.dumps(out, ensure_ascii=False) + "\n")
                 processed += 1
                 status = out.get("status", "parse_error" if out.get("parse_error") else "?")
-                print(f"[{processed:02d}/{run_limit}] {rec['step_id']:30s} -> {status}")
+                elapsed = time.time() - step_started
+                print(
+                    f"[{processed:02d}/{run_limit}] {rec['step_id']:30s} "
+                    f"-> {status} (rc={rc}, {elapsed:.1f}s)"
+                )
                 sys.stdout.flush()
     finally:
         schema_path.unlink(missing_ok=True)
