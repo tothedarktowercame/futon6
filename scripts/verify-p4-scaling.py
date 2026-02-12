@@ -8,6 +8,7 @@ Key questions:
 """
 import numpy as np
 from scipy.optimize import minimize
+import argparse
 import sys, os, warnings
 warnings.filterwarnings('ignore')
 
@@ -48,7 +49,13 @@ def surplus_ratio(roots_p, roots_q):
     return (1/pc) / rhs
 
 
-def find_adversarial_min(n, n_starts=60):
+def find_adversarial_min(
+    n,
+    n_starts=60,
+    maxiter=5000,
+    xatol=1e-10,
+    fatol=1e-12,
+):
     """Find the minimum surplus ratio at degree n via optimization."""
     best_ratio = float('inf')
     best_p = None
@@ -79,7 +86,7 @@ def find_adversarial_min(n, n_starts=60):
 
         try:
             res = minimize(objective, x0, method='Nelder-Mead',
-                          options={'maxiter': 5000, 'xatol': 1e-10, 'fatol': 1e-12})
+                          options={'maxiter': maxiter, 'xatol': xatol, 'fatol': fatol})
             if res.fun < best_ratio and res.fun < 90:
                 best_ratio = res.fun
                 best_p = np.sort(res.x[:n])
@@ -153,8 +160,33 @@ def test_scale_separation(n, n_trials=2000):
     return min_ratio, best_scale
 
 
-if __name__ == "__main__":
-    np.random.seed(42)
+def parse_n_list(raw):
+    return [int(x.strip()) for x in raw.split(",") if x.strip()]
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--adversarial-ns", default="3,4,5,6,7,8,10")
+    ap.add_argument("--adversarial-starts-small", type=int, default=80)
+    ap.add_argument("--adversarial-starts-large", type=int, default=40)
+    ap.add_argument("--adversarial-small-cutoff", type=int, default=6)
+    ap.add_argument("--nm-maxiter", type=int, default=5000)
+    ap.add_argument("--nm-xatol", type=float, default=1e-10)
+    ap.add_argument("--nm-fatol", type=float, default=1e-12)
+    ap.add_argument("--scale-ns", default="4,5,6,7,8")
+    ap.add_argument("--scale-trials", type=int, default=3000)
+    ap.add_argument("--random-ns", default="3,4,5,6,7,8,10,12,15")
+    ap.add_argument("--random-trials-small", type=int, default=5000)
+    ap.add_argument("--random-trials-large", type=int, default=2000)
+    ap.add_argument("--random-small-cutoff", type=int, default=8)
+    args = ap.parse_args()
+
+    np.random.seed(args.seed)
+
+    adversarial_ns = parse_n_list(args.adversarial_ns)
+    scale_ns = parse_n_list(args.scale_ns)
+    random_ns = parse_n_list(args.random_ns)
 
     print("=" * 70)
     print("Problem 4: Scaling analysis of minimum surplus")
@@ -166,9 +198,15 @@ if __name__ == "__main__":
           f"{'spread_q':>10s} {'scale_ratio':>12s} {'gap_cv_p':>10s} {'gap_cv_q':>10s}")
 
     adv_results = {}
-    for n in [3, 4, 5, 6, 7, 8, 10]:
-        starts = 80 if n <= 6 else 40
-        ratio, rp, rq = find_adversarial_min(n, n_starts=starts)
+    for n in adversarial_ns:
+        starts = args.adversarial_starts_small if n <= args.adversarial_small_cutoff else args.adversarial_starts_large
+        ratio, rp, rq = find_adversarial_min(
+            n,
+            n_starts=starts,
+            maxiter=args.nm_maxiter,
+            xatol=args.nm_xatol,
+            fatol=args.nm_fatol,
+        )
         if rp is not None:
             stats = analyze_tight_case(rp, rq)
             surplus = ratio - 1.0
@@ -187,8 +225,8 @@ if __name__ == "__main__":
     # Part 2: Scale separation analysis
     print("\n--- Scale separation: how tight can we get? ---")
     print(f"{'n':>4s} {'min_ratio':>16s} {'best_scale':>12s}")
-    for n in [4, 5, 6, 7, 8]:
-        mr, bs = test_scale_separation(n, n_trials=3000)
+    for n in scale_ns:
+        mr, bs = test_scale_separation(n, n_trials=args.scale_trials)
         print(f"{n:4d} {mr:16.12f} {bs:12.4f}")
 
     # Part 3: Random percentiles vs n (systematic)
@@ -196,8 +234,8 @@ if __name__ == "__main__":
     print(f"{'n':>4s} {'p0 (min)':>14s} {'p1':>10s} {'p5':>10s} "
           f"{'p25':>10s} {'p50':>10s} {'valid':>6s}")
 
-    for n in [3, 4, 5, 6, 7, 8, 10, 12, 15]:
-        trials = 5000 if n <= 8 else 2000
+    for n in random_ns:
+        trials = args.random_trials_small if n <= args.random_small_cutoff else args.random_trials_large
         ratios = []
         for _ in range(trials):
             rp = np.sort(np.random.randn(n) * 2)
@@ -235,3 +273,7 @@ if __name__ == "__main__":
         print(f"    gaps_q: {gaps_q}")
         print(f"    gaps_p uniform? cv={np.std(gaps_p)/np.mean(gaps_p):.4f}")
         print(f"    gaps_q uniform? cv={np.std(gaps_q)/np.mean(gaps_q):.4f}")
+
+
+if __name__ == "__main__":
+    main()
