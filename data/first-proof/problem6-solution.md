@@ -32,7 +32,8 @@ external dependencies:
 2. External dependency: the universal lower bound c0>0 for all graphs is not
    rederived here; it is treated as an imported theorem assumption.
 
-So the final existential answer is **conditional on that external theorem**.
+So the final existential answer is **conditional/open in this writeup**:
+without Assumption V, the universal-c claim is unresolved here.
 
 ## 1. Exact reformulation
 
@@ -146,17 +147,25 @@ This is the correct technical setup that was missing in the earlier draft.
 ## 5. External dependency for universal c0>0
 
 To conclude a universal lower bound for all graphs, one needs an additional
-published theorem that controls leverage/pruning and proves:
+theorem (not proved in this writeup) that controls leverage/pruning and proves:
 
     exists c0>0 universal such that
     for all G, epsilon in (0,1), exists S with |S|>=c0*epsilon*n and L_S<=epsilon L.
 
-The closest published result is the twice-Ramanujan sparsification theorem of
+We state this explicitly as an assumption:
+
+    Assumption V (vertex-light selection theorem):
+    There exists c0>0 such that for every weighted graph G and epsilon in (0,1),
+    one can choose S subseteq V with |S| >= c0*epsilon*n and L_S <= epsilon L.
+
+Literature check in this cycle (MO/MSE local corpus plus the standard
+sparsification references) did not locate a theorem matching Assumption V in
+this exact vertex-induced, no-reweighting form.
+
+Related evidence comes from the twice-Ramanujan sparsification theorem of
 Batson-Spielman-Srivastava (2012, "Twice-Ramanujan Sparsifiers," SIAM Review
-56(2), 315-334, Theorem 1.1). Their barrier-function construction produces,
-for any graph G and epsilon > 0, a reweighted subgraph with at most
-ceil(n / epsilon^2) edges whose Laplacian spectrally approximates L to within
-(1 +/- epsilon).
+56(2), 315-334, Theorem 1.1), but that theorem is about edge selection
+with reweighting, not induced subgraphs from vertex subsets.
 
 **Important gap:** BSS is an *edge sparsification* result — it selects a
 subset of edges with reweighting, not a subset of vertices. The problem asks
@@ -165,18 +174,13 @@ edge sparsification preserves the vertex set and reweights edges, while the
 epsilon-light condition restricts to the induced subgraph on a vertex subset.
 
 The star domination decomposition in Section 4a decomposes L_S into
-vertex-indexed PSD summands, which is the correct algebraic setup for a vertex
-selection argument. However, converting BSS's edge-selection barrier function
-into a vertex-selection guarantee requires an additional step: one must show
-that the deterministic potential-function method of BSS can be adapted to
-select vertices (each contributing a star of edges) rather than individual
-edges. This adaptation is plausible given the PSD structure of the vertex
-summands A_v, but constitutes an additional technical step that is not
-directly proved in BSS or in this writeup.
+vertex-indexed PSD summands, which is the right algebraic setup for a
+vertex-selection proof strategy. But the adaptation from edge sparsification
+to vertex-induced sparsification is exactly the missing step.
 
-This writeup therefore treats the universal vertex-subset bound as a
-conditional assumption: the algebraic setup (Sections 1-4) is proved, and
-the conclusion follows if a vertex-selection analogue of BSS holds.
+This writeup therefore treats the universal vertex-subset bound as conditional:
+Sections 1-4 are proved in-text, and the existential claim is left open unless
+Assumption V is supplied from outside.
 
 ## 6. Final conclusion (explicitly conditional)
 
@@ -187,10 +191,12 @@ Unconditional conclusions from this text:
 3. The concentration machinery is set up correctly with explicit martingale
    increments and variance process.
 
-Conditional conclusion:
+Conditional/open conclusion:
 
-- If the external universal theorem in Section 5 is assumed, then the answer to
-  the original problem is YES (some universal c0>0 exists).
+- Under Assumption V, one obtains a positive existential result (some universal
+  c0>0 exists).
+- Without Assumption V, this writeup does not prove existence of such a
+  universal c0; the problem remains open here.
 
 ## Key identities used
 
@@ -202,8 +208,8 @@ Conditional conclusion:
 ## References
 
 - Batson, Spielman, Srivastava (2012), "Twice-Ramanujan Sparsifiers," SIAM
-  Review 56(2), 315-334. [Theorem 1.1: deterministic edge sparsification
-  with universal bounds on number of edges]
+  Review 56(2), 315-334. [Theorem 1.1: deterministic edge sparsification;
+  related but not equivalent to vertex-induced selection]
 - Tropp (2011), Freedman's inequality for matrix martingales
 - Standard matrix Bernstein inequality for sums of independent self-adjoint
   random matrices

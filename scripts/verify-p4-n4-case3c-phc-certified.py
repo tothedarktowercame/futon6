@@ -158,8 +158,8 @@ def main() -> int:
         print(f"  g{i}: {len(p)} chars")
 
     # --- Compute degrees and Bezout bound ---
-    from phcpy.solver import total_degree, total_degree_start_system
-    from phcpy.trackers import track
+    from phcpy.starters import total_degree, total_degree_start_system
+    from phcpy.trackers import double_track, double_double_track, quad_double_track
     from phcpy.solutions import strsol2dict, diagnostics
 
     bezout = total_degree(pols)
@@ -178,8 +178,12 @@ def main() -> int:
     # --- Track ALL paths ---
     print(f"\nTracking {bezout} paths (this may take a while)...")
     t2 = time.time()
-    end_sols = track(pols, start_sys, start_sols,
-                     precision=args.precision, tasks=args.tasks)
+    if args.precision == "d":
+        _, end_sols = double_track(pols, start_sys, start_sols, tasks=args.tasks)
+    elif args.precision == "dd":
+        _, end_sols = double_double_track(pols, start_sys, start_sols, tasks=args.tasks)
+    else:
+        _, end_sols = quad_double_track(pols, start_sys, start_sols, tasks=args.tasks)
     n_end = len(end_sols)
     track_time = time.time() - t2
     print(f"  Endpoints returned: {n_end} ({track_time:.1f}s)")

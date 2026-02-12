@@ -20,7 +20,7 @@ flowchart TD
     p6-s4a(["p6-s4a<br/>Star domination: vertex-indexed PSD summands A_v = (..."])
     p6-s4b(["p6-s4b<br/>Matrix Freedman/Bernstein: self-adjoint differences,..."])
     p6-s5["p6-s5<br/>External dependency: BSS 2012 is edge sparsification..."]
-    p6-s6["p6-s6<br/>Conditional conclusion: unconditionally c<=1 (K_n) a..."]
+    p6-s6["p6-s6<br/>Conditional/open conclusion: unconditionally c<=1 (..."]
 
     %% Edges
     p6-s1 -->|"🔵 clarify: Rewrite condition in effective-resist..."| p6-problem
@@ -33,9 +33,9 @@ flowchart TD
     p6-s4b -->|"⚪ reference: Matrix Freedman inequality (Tropp 2011)"| p6-s4
     p6-s4b -->|"⚪ reference: Effective resistance frame: sum tau_e..."| p6-s1
     p6-s5 -->|"🟡 reform: BSS edge sparsification; vertex adapta..."| p6-s4
-    p6-s6 ==>|"🟢 assert: Conditional yes: algebraic setup prove..."| p6-problem
+    p6-s6 ==>|"🟢 assert: c<=1 proven; universal existence needs ex..."| p6-problem
     p6-s6 -->|"⚪ reference: Probabilistic construction with p = e..."| p6-s3
-    p6-s6 -->|"⚪ reference: Conditional on vertex-subset BSS adapt..."| p6-s5
+    p6-s6 -->|"⚪ reference: Universal existence depends on p6-s5 as..."| p6-s5
     p6-s6 -->|"⚪ reference: K_n shows c <= 1 is tight upper bound"| p6-s2
 
     %% Styling

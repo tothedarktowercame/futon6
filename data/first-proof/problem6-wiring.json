@@ -95,7 +95,7 @@
       "id": "p6-s6",
       "node_type": "answer",
       "post_id": 606,
-      "body_text": "Conclusion in this draft: unconditionally we prove c<=1 via K_n and a correct concentration framework; conditional on the external general theorem (p6-s5), the full existential answer is yes.",
+      "body_text": "Conclusion in this draft: unconditionally we prove c<=1 via K_n and a correct concentration framework; the universal existential claim is conditional on the external theorem (p6-s5) and otherwise remains open in this writeup.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 6
@@ -176,7 +176,7 @@
       "source": "p6-s6",
       "target": "p6-problem",
       "edge_type": "assert",
-      "evidence": "Unconditional: c<=1; conditional on p6-s5 dependency: existential yes",
+      "evidence": "Unconditional: c<=1; universal existence is conditional on p6-s5 and otherwise open in this writeup",
       "detection": "structural"
     },
     {
@@ -190,7 +190,7 @@
       "source": "p6-s6",
       "target": "p6-s5",
       "edge_type": "reference",
-      "evidence": "Final existential claim depends on external theorem assumption",
+      "evidence": "Universal existential claim depends on external theorem assumption",
       "detection": "structural"
     },
     {
@@ -468,7 +468,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Unconditional: c<=1; conditional on p6-s5 dependency: existential yes",
+        "evidence": "Unconditional: c<=1; universal existence is conditional on p6-s5 and otherwise open in this writeup",
         "detection": "structural"
       },
       "hx/labels": [
@@ -518,7 +518,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Final existential claim depends on external theorem assumption",
+        "evidence": "Universal existential claim depends on external theorem assumption",
         "detection": "structural"
       },
       "hx/labels": [
