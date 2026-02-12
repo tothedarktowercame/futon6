@@ -16,11 +16,11 @@ ambient dimension. This dissolves the dimension-parity tension: E2 works
 and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
 
 ```
-[E2-rot] Lattice with order-2 rotation in Isom(H^{2k+1})
+[E2-rot] Lattice with order-2 rotation in Isom(H^{2k+1})  -- DISCHARGED
     |
     | Fixed set: H^{2k-1} (codim 2, odd-dim, chi = 0)
     v
-[Fowler] chi(C) = 0 for all fixed components --> Gamma in FH(Q)
+[Fowler] chi(C) = 0 for all fixed components --> Gamma in FH(Q)  -- DISCHARGED
     |
     v
 [S-branch: two sub-options]
@@ -32,7 +32,7 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
     |     v
     |   [Obstruction] sigma(f) = 0?  (OPEN — but structurally favorable)
     |
-    +--[S-rot-II] Equivariant surgery on (M, tau)
+    +--[S-rot-II] Equivariant surgery on (M, sigma)  -- RECOMMENDED
           |
           | Codim-2 gap hypothesis: SATISFIED
           | Costenoble-Waner framework applies
@@ -44,40 +44,34 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
 
 | Node | Status | Detail |
 |---|---|---|
-| E2-rot: lattice existence | **OPEN (key question)** | Need arithmetic lattice in Isom(H^{2k+1}) with order-2 rotation. Belolipetsky-Lubotzky (math/0406607) guarantees Z/2 as isometry group, but does not control codimension of fixed set. Douba-VP constructs reflections specifically. Need a "rotational" analogue. |
-| Fowler application | **Solid (if E2-rot)** | Same Fowler criterion; chi = 0 for odd-dim fixed set is automatic. |
-| S-rot-I: Wall surgery | **Open** | Same three obstacles as Approach I (Poincare complex, normal map, obstruction), but the obstruction computation benefits from odd parity. Whether the first two obstacles are easier in odd dim is unclear. |
-| S-rot-II: Equivariant surgery | **Open (newly viable)** | Codim-2 gap satisfied → Costenoble-Waner applies. Need to compute equivariant surgery obstruction for this specific action. |
+| E2-rot: lattice existence | **DISCHARGED** | Arithmetic lattice `SO(f, Z[sqrt(2)])` with `f = (1-sqrt(2))x_0^2 + x_1^2 + ... + x_n^2`, `n` odd. The involution `sigma = diag(1,-1,-1,1,...,1)` is an order-2 rotation with codim-2 fixed set. See `problem7r-rotation-lattice-construction.md`. |
+| Fowler application | **DISCHARGED** | Fixed set dim `n-2` is odd → `chi = 0`. Fowler Main Theorem gives `Gamma in FH(Q)`. |
+| S-rot-I: Wall surgery | **Open** | Same three obstacles as Approach I (Poincare complex, normal map, obstruction), but the obstruction computation benefits from odd parity. Fallback option. |
+| S-rot-II: Equivariant surgery | **Open (recommended)** | Codim-2 gap satisfied → Costenoble-Waner applies. Need to compute equivariant surgery obstruction for the `Z/2`-action on `(M^{2k+1}, sigma)` with fixed `F^{2k-1}`. |
 
 ### Why this is the most promising path
 
 1. **Dimension-parity tension dissolved.** E2 and S both want odd n.
-2. **Equivariant surgery becomes available.** The codim-2 gap (which blocks
+2. **Lattice existence resolved.** The arithmetic construction over `Q(sqrt(2))`
+   provides the needed lattice. See `problem7r-rotation-lattice-construction.md`.
+3. **Equivariant surgery becomes available.** The codim-2 gap (which blocks
    Approach II for reflections) is satisfied for rotational involutions.
-3. **Two parallel S-branch options.** If equivariant surgery is computable,
+4. **Two parallel S-branch options.** If equivariant surgery is computable,
    it bypasses the FH(Q) complex entirely.
-4. **Single remaining bottleneck: lattice existence.** Everything reduces to
-   finding the right arithmetic lattice.
+5. **Single remaining open problem: surgery obstruction computation.**
 
-### Key question for lattice existence
+### Lattice existence: RESOLVED
 
-An order-2 rotation in SO(2k+1, 1) acts on H^{2k+1} with fixed set H^{2k-1}
-(codimension 2). Algebraically, this corresponds to an element conjugate to
-diag(-1, -1, 1, ..., 1) in the defining representation. The question: do
-arithmetic uniform lattices in SO(2k+1, 1) contain such elements?
+The construction uses a quadratic form `f = (1-sqrt(2))x_0^2 + x_1^2 + ... + x_n^2`
+over `Q(sqrt(2))`. The two real embeddings give signatures `(n,1)` and `(n+1,0)`,
+so `SO(f, Z[sqrt(2)])` is a cocompact arithmetic lattice in `SO(n,1)` (Borel-
+Harish-Chandra; cocompactness by Godement criterion via anisotropy). The element
+`sigma = diag(1, -1, -1, 1, ..., 1)` is in `SO(f, Z[sqrt(2)])`, has order 2,
+and fixes `H^{n-2}` (codimension 2). A congruence subgroup `pi = Gamma_0(I)`
+with `I` coprime to 2 gives a torsion-free normal subgroup with `sigma notin pi`,
+yielding the extension `1 -> pi -> Gamma -> Z/2 -> 1`.
 
-Candidate sources:
-- Belolipetsky-Lubotzky (math/0406607): any finite group as isometry group,
-  but fixed-set codimension not controlled.
-- Arithmetic lattice constructions via quadratic forms over number fields:
-  an element of order 2 in the lattice corresponds to an involution of the
-  quadratic form. Reflections negate one coordinate; rotations negate two.
-  The arithmetic existence question is whether the lattice contains such
-  a "2-rotation."
-- Possibly simpler: products. If Gamma_0 < Isom(H^{2k-1}) is a cocompact
-  lattice and we embed H^{2k-1} -> H^{2k+1} totally geodesically, can we
-  find a lattice in Isom(H^{2k+1}) that contains both Gamma_0 (stabilizing
-  H^{2k-1}) and a rotation exchanging the two normal directions?
+Full details: `problem7r-rotation-lattice-construction.md`.
 
 
 ## Diagram H2: Reflection Route, Approach I (CURRENT — in trouble)
@@ -180,13 +174,15 @@ and Fowler fails. This is WHY the original construction needed even n.
 
 ## Summary: Recommended Priority Order
 
-1. **H1 (Rotation route):** Most promising. Dissolves all known tensions.
-   Single bottleneck is lattice existence (arithmetic question). Investigate
-   whether order-2 rotations exist in arithmetic lattices of Isom(H^{2k+1}).
+1. **H1 (Rotation route):** Most promising. E2 fully discharged (lattice
+   existence resolved). **The only remaining open problem is the surgery
+   obstruction computation** (either S-rot-I or S-rot-II). S-rot-II
+   (equivariant surgery via Costenoble-Waner) is recommended as the
+   primary path.
 
-2. **H2 (Reflection + Wall surgery):** Current approach, documented in
-   detail. Three open obstacles with structural headwinds. Only pursue if
-   a reference resolves obstacles 1-2 simultaneously.
+2. **H2 (Reflection + Wall surgery):** Documented in detail. Three open
+   obstacles with structural headwinds. Only pursue if a reference resolves
+   obstacles 1-2 simultaneously.
 
 3. **H4 (Orbifold resolution):** Unexplored, needs a specific technique.
    Low priority unless a resolution-with-pi_1-control method is found.

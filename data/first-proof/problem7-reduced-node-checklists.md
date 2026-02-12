@@ -165,25 +165,30 @@ and `problem7-hypothetical-wirings.md` for full analysis.
 5. Approach II (reflection equivariant surgery): **Blocked** — codim-2 gap
    hypothesis fails for codim-1 fixed sets (Costenoble-Waner 1705.10909).
 6. Approach III (orbifold resolution): **Unexplored** — no technique found.
-7. **Approach IV (rotation route): OPEN — most promising.** Requires
-   lattice existence for order-2 rotations in Isom(H^{2k+1}).
+7. **Approach IV (rotation route): E2 DISCHARGED — S open.** Lattice
+   existence resolved (`problem7r-rotation-lattice-construction.md`).
+   Remaining: compute equivariant surgery obstruction (S-rot-II) or
+   Wall surgery obstruction (S-rot-I).
 8. `p7r-s5` (full closure): **Blocked** on resolving S via any approach.
 
-### Path forward (updated after reading 1705.10909 and 1106.1704)
+### Path forward (updated after rotation lattice construction)
 
-**Priority 1 — Approach IV (rotation route).** Determine whether arithmetic
-uniform lattices in `Isom(H^{2k+1})` contain order-2 rotational involutions
-(codim-2 fixed sets). This is a number-theoretic question. If yes:
-- E2 works (Fowler: odd-dim fixed set has chi = 0)
-- Equivariant surgery available (codim-2 gap satisfied)
-- L-theory parity favorable (odd ambient dimension)
-- Everything collapses to lattice existence + equivariant surgery computation
+**Priority 1 — Approach IV, S-rot-II (equivariant surgery).** Lattice
+existence is resolved. The `Q(sqrt(2))` arithmetic construction gives a
+cocompact lattice in `SO(n,1)` with order-2 rotation `sigma` having
+codim-2 fixed set. E2 is discharged (Fowler). The Costenoble-Waner
+equivariant surgery framework applies (codim-2 gap satisfied). The task
+is to compute the equivariant surgery obstruction for `(M^{2k+1}, sigma)`
+with fixed `F^{2k-1}`.
 
-**Priority 2 — Approach I (Wall surgery).** Only if rotation route fails.
-Resolve Poincare complex structure obstacle.
+**Priority 2 — Approach IV, S-rot-I (Wall surgery in odd dim).** Fallback
+if equivariant surgery computation is intractable. Same three-obstacle
+structure as Approach I but with favorable odd L-theory parity.
 
-**Priority 3 — Approach III (orbifold resolution).** Only if a specific
-technique is identified.
+**Priority 3 — Approach I (Wall surgery, reflection route).** Only if
+rotation route surgery computations both fail.
+
+**Deprioritized — Approach III (orbifold resolution).** No technique found.
 
 **Blocked — Approach II for reflections.** Codim-2 gap kills this.
 

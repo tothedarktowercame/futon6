@@ -213,29 +213,48 @@ dimension. An order-2 isometry of `H^{2k+1}` that fixes `H^{2k-1}`
   Costenoble-Waner arXiv:1705.10909) is **satisfied**, so Approach II
   (equivariant surgery) becomes available as a method for the S-branch.
 
-**Obstacle.** The construction requires arithmetic uniform lattices in
-`Isom(H^{2k+1})` containing order-2 **rotations** (elements fixing a
-codimension-2 totally geodesic submanifold). The existing reflection-lattice
-construction (Douba-Vargas Pallete, arXiv:2506.23994) does not directly
-provide these. A rotational analogue is needed.
+**Lattice construction: DISCHARGED.** Details in
+`problem7r-rotation-lattice-construction.md`. Summary:
 
-**Candidate sources for lattice existence:**
+1. **Quadratic form.** Let `k = Q(sqrt(2))`, `O_k = Z[sqrt(2)]`. Define
+   `f = (1 - sqrt(2))x_0^2 + x_1^2 + ... + x_n^2` in `n+1` variables.
+   Under the two real embeddings of `k`, `f` has signatures `(n, 1)` and
+   `(n+1, 0)`. So `SO(f)` gives `SO(n, 1)` at one place and a compact
+   group at the other.
 
-- Belolipetsky-Lubotzky (arXiv:math/0406607) guarantees Z/2 as the isometry
-  group of some closed hyperbolic manifold, but does not control the
-  codimension of the fixed set.
-- Arithmetic lattice constructions via quadratic forms: an order-2 rotation
-  corresponds to an involution of the defining quadratic form that negates a
-  2-dimensional subspace. Whether specific arithmetic lattices contain such
-  elements is a number-theoretic question.
+2. **Uniform lattice.** `Gamma_0 = SO(f, O_k)` is a cocompact arithmetic
+   lattice in `SO(n, 1)` (Borel-Harish-Chandra; cocompactness by Godement
+   criterion since `f` is anisotropic over `k`).
 
-**Status.** Not explored beyond this analysis. See
-`problem7-hypothetical-wirings.md`, Diagram H1 for the full proof
-architecture.
+3. **Order-2 rotation.** `sigma = diag(1, -1, -1, 1, ..., 1)` is in
+   `SO(f, O_k)`: it preserves `f` (negates `x_1, x_2` in the `x_1^2+x_2^2`
+   summand), has determinant `+1`, and has integer entries. Its fixed set on
+   `H^n` is `H^{n-2}` (codimension 2).
 
-**This is the most promising remaining path for Problem 7.** It dissolves
-the dimension-parity tension, makes equivariant surgery available, and
-reduces the open problem to a single lattice-existence question.
+4. **Congruence subgroup.** `pi = Gamma_0(I)` for ideal `I` coprime to 2:
+   torsion-free (Minkowski), `sigma notin pi`, and `M = H^n/pi` is a closed
+   hyperbolic manifold. The extension `1 -> pi -> Gamma -> Z/2 -> 1` with
+   `Gamma = <pi, sigma>` is a cocompact lattice with order-2 torsion.
+
+5. **Fowler application.** Fixed set has dimension `n-2 = 2k-1` (odd), so
+   `chi = 0`. By Fowler's Main Theorem: `Gamma in FH(Q)`.
+
+**E2 status for rotation route: DISCHARGED.**
+
+**Remaining open problem (obligation S).** The manifold upgrade can proceed
+via two newly available sub-options:
+
+- **S-rot-I (Wall surgery in odd dimension).** Same three-obstacle structure
+  as Approach I (Poincare complex, normal map, obstruction), but the
+  obstruction computation benefits from odd L-theory parity.
+- **S-rot-II (Equivariant surgery on (M, sigma)).** The codimension-2 gap
+  hypothesis is satisfied, so the Costenoble-Waner framework (arXiv:1705.10909)
+  applies. The equivariant surgery obstruction is computable in principle.
+
+**This is the most promising remaining path for Problem 7.** The lattice
+existence bottleneck is resolved. The open problem reduces to computing a
+surgery obstruction (either Wall or equivariant) in the structurally
+favorable odd-dimensional setting.
 
 ## 5. Remark: Absence of Smith-Theory Obstruction
 
@@ -252,44 +271,58 @@ in Sections 3-4.
 
 ## 6. Theorem
 
-**Theorem.** Let `Gamma` be the cocompact lattice extension
-`1 -> pi -> Gamma -> Z/2 -> 1` constructed in Section 3b from an arithmetic
-reflection lattice in `Isom(H^n)` with `n` even, `n >= 6`. Then:
+**Theorem.** Let `Gamma` be a cocompact lattice extension
+`1 -> pi -> Gamma -> Z/2 -> 1` constructed from an arithmetic lattice in
+`Isom(H^n)` containing an order-2 isometry, via either:
+
+- **(Reflection route)** Section 3b: reflection lattice in `Isom(H^n)`,
+  `n` even, `n >= 6`.
+- **(Rotation route)** Approach IV: rotation lattice in `Isom(H^n)`,
+  `n` odd, `n >= 7`. See `problem7r-rotation-lattice-construction.md`.
+
+Then:
 
 (a) **(Unconditional)** `Gamma in FH(Q)`: there exists a finite CW complex
     `Y` with `pi_1(Y) = Gamma` and `H_*(Y_tilde; Q) = 0` for `* > 0`.
+    (Both routes discharge E2 via Fowler's criterion.)
 
 (b) **(Open)** Whether there exists a **closed manifold** `M` with
     `pi_1(M) = Gamma` and `H_*(M_tilde; Q) = 0` for `* > 0` remains
-    unresolved. Three approaches to the manifold-upgrade problem are
-    described in Section 4; none has been completed.
+    unresolved. Four approaches to the manifold-upgrade problem are
+    described in Section 4. The rotation route (Approach IV) is the most
+    promising: it dissolves the dimension-parity tension and makes
+    equivariant surgery available, reducing the open problem to a
+    computable surgery obstruction.
 
 ## 7. Path to Full Closure
 
-Resolving obligation S requires completing one of the approaches in
-Section 4. The recommended priority order (see
-`problem7-hypothetical-wirings.md` for full analysis):
+Resolving obligation S requires computing a surgery obstruction. The
+rotation route (Approach IV) has discharged the lattice-existence question
+and is now the primary path. See `problem7-hypothetical-wirings.md` for
+full wiring diagrams.
 
-1. **Approach IV (rotation route, highest priority).** Determine whether
-   arithmetic uniform lattices in `Isom(H^{2k+1})` contain order-2
-   rotational involutions (codimension-2 fixed sets). This is a
-   number-theoretic / arithmetic-group question. If such lattices exist,
-   all structural tensions dissolve: E2 works (Fowler, odd-dim fixed set),
-   equivariant surgery is available (codim-2 gap satisfied), and L-theory
-   parity is favorable. The entire problem reduces to this lattice-existence
-   question plus a computable equivariant surgery obstruction.
+**Active path: Approach IV (rotation route).** The lattice construction
+is complete (see `problem7r-rotation-lattice-construction.md`). E2 is
+discharged. Two sub-options for obligation S:
 
-2. **Approach I (Wall surgery, if H1 fails).** Resolve the Poincare
-   complex structure (obstacle 1), ideally by finding a reference for
-   chain-level PD promotion of finite complexes with rationally contractible
-   universal covers.
+1. **S-rot-II (Equivariant surgery, recommended).** The codimension-2 gap
+   hypothesis is satisfied, so the Costenoble-Waner equivariant surgery
+   framework applies. The task is to compute the equivariant surgery
+   obstruction for the specific `Z/2`-action `(M^{2k+1}, sigma)` with
+   codimension-2 fixed set. This is a concrete computation.
 
-3. **Approach III (orbifold resolution, speculative).** Only pursue if a
-   specific resolution technique with pi_1 control is identified.
+2. **S-rot-I (Wall surgery in odd dimension).** Fallback. Same three-obstacle
+   structure as Approach I but with favorable odd L-theory parity.
 
-4. **Approach II (equivariant surgery on reflection action).** Blocked
-   by the codimension-2 gap hypothesis (Costenoble-Waner, arXiv:1705.10909).
-   Not viable for codimension-1 fixed sets.
+**Deprioritized paths:**
+
+3. **Approach I (Wall surgery, reflection route).** Three successive open
+   obstacles with structural headwinds (even L-theory parity).
+
+4. **Approach III (orbifold resolution).** No technique identified.
+
+5. **Approach II (equivariant surgery, reflection route).** Blocked by
+   codimension-2 gap hypothesis (Costenoble-Waner, arXiv:1705.10909).
 
 ## References
 
@@ -313,6 +346,10 @@ Section 4. The recommended priority order (see
   Manifolds, and Moduli Spaces of Curves*, arXiv:1106.1704.
 - M. Belolipetsky, A. Lubotzky, *Finite Groups and Hyperbolic Manifolds*,
   arXiv:math/0406607.
+- A. Borel, Harish-Chandra, *Arithmetic Subgroups of Algebraic Groups*,
+  Annals of Mathematics 75 (1962), 485-535.
+- J. Millson, M. S. Raghunathan, *Geometric Construction of Cohomology for
+  Arithmetic Groups I*, Proc. Indian Acad. Sci. 90 (1981), 103-123.
 - A. Ranicki, *Algebraic L-Theory and Topological Manifolds*, Cambridge
   Tracts in Mathematics 102, 1992.
 - K. S. Brown, *Cohomology of Groups*, Springer GTM 87.
