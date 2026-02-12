@@ -802,3 +802,52 @@ one of the following forms under H1-H4:
 So the current missing theorem is no longer direct control of
 `min_v ||Y_t(v)||` itself, but an inequality forcing `dbar_t < gbar_t` on
 nontrivial steps.
+
+### Aggregate-ratio nontrivial target (AR-NT)
+
+Deep-dive diagnostics (`scripts/verify-p6-gpl-h-aggregate-ratio.py`) suggest a
+sharper theorem candidate than the earlier low/high split:
+
+- In tested range (`n<=48`), every row with `dbar_t/gbar_t >= 1` has
+  `min_v ||Y_t(v)|| = 0` (trivial good step).
+- Equivalently, all nontrivial rows (`min_v ||Y_t(v)|| > 0`) satisfy
+  `dbar_t/gbar_t < 1`.
+
+This motivates the open nontrivial bridge:
+
+> **AR-NT:** under H1-H4, if `min_v ||Y_t(v)|| > 0`, then `dbar_t < gbar_t`.
+
+Together with the proved ratio certificate `min_v ||Y_t(v)|| <= dbar_t/gbar_t`,
+AR-NT would close GPL-H stepwise (trivial rows already satisfy min-score < 1).
+
+### Conditional bridge lemma for AR-NT (proved algebraic reduction)
+
+Fix a nontrivial step and active set `A_t`.
+Let `s_v=||Y_t(v)||`, `d_v=tr(Y_t(v))`, and split
+
+- `A_- = {v : s_v <= 1}`
+- `A_+ = {v : s_v > 1}`.
+
+Define total drift `D = sum_{v in A_t} d_v`, above-1 drift fraction
+
+`rho_+ := (1/D) sum_{v in A_+} d_v`,
+
+and extremal scores
+
+`m_- := min_{v in A_-} s_v`, `M_+ := max_{v in A_+} s_v` (if `A_+` nonempty).
+
+Then:
+
+`gbar_t - dbar_t`
+`= (1/|A_t|) [ sum_{A_-} d_v(1/s_v - 1) - sum_{A_+} d_v(1 - 1/s_v) ]`.
+
+Hence a sufficient condition for `dbar_t < gbar_t` is
+
+`(1/m_- - 1)(1-rho_+) > (1 - 1/M_+)rho_+`.
+
+Equivalently (when `A_+` nonempty):
+
+`rho_+ < rho_crit := ((1/m_-)-1) / (((1/m_-)-1) + (1-1/M_+))`.
+
+So AR-NT reduces to proving an upper bound on above-1 drift mass `rho_+`.
+This isolates the bridge into a concrete "mass-above-1" control problem.

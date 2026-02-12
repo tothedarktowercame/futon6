@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Generate post-Direction-D wiring diagram for Problem 6.
 
-This diagram captures the post-D strategy after extracting a proved ratio
-certificate:
-  min score <= (avg drift)/(avg gap).
+Current bridge focus:
+- proved ratio certificate: min score <= dbar/gbar
+- open AR-NT target: nontrivial => dbar<gbar
+- proved algebraic reduction: AR-NT follows from a bound on above-1 drift mass
 """
 
 from __future__ import annotations
@@ -27,7 +28,7 @@ from futon6.thread_performatives import (
 def run_summary_text(run_path: Path) -> str:
     if not run_path.exists():
         return (
-            "Post-D split run not loaded yet. Expected output at "
+            "Post-D ratio run not loaded yet. Expected output at "
             f"{run_path}."
         )
 
@@ -40,8 +41,7 @@ def run_summary_text(run_path: Path) -> str:
             "Empirical post-D diagnostics (n<=48): "
             f"ratio_or_trivial={fr['ratio_or_trivial']:.3f}, "
             f"nontrivial_ratio_fail={fr['nontrivial_ratio_fail']:.3f}, "
-            f"ratio_max_nontrivial={rs['nontrivial_ratio_max']:.3f}; "
-            f"split_plus_trivial={fr['split_plus_trivial']:.3f}."
+            f"ratio_max_nontrivial={rs['nontrivial_ratio_max']:.3f}."
         )
     except Exception as exc:  # noqa: BLE001
         return f"Could not parse split summary at {run_path}: {exc}"
@@ -55,9 +55,7 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             id="p6d-q",
             node_type="question",
             post_id=6300,
-            body_text=(
-                "Post-D target: close GPL-H via branch disjunction under H1-H4."
-            ),
+            body_text="Post-D target: close GPL-H from H1-H4.",
             score=0,
             creation_date="2026-02-12",
             tags={"verification_status": "open"},
@@ -67,8 +65,8 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             node_type="answer",
             post_id=6301,
             body_text=(
-                "Direction D finding: uniform near-rank-1 universality fails up to "
-                "n<=48 (dense late-step rows have rank gap > 2)."
+                "Direction D finding: uniform near-rank-1 universality fails "
+                "at n<=48 (dense late-step rows have rank gap > 2)."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -80,9 +78,9 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             node_type="answer",
             post_id=6302,
             body_text=(
-                "Ratio certificate (proved): on active vertices, letting "
-                "m=min_v ||Y_t(v)||, dbar=avg tr(Y_t(v)), gbar=avg tr(Y_t(v))/||Y_t(v)||, "
-                "we have m <= dbar/gbar. Hence dbar/gbar < 1 implies a good step."
+                "Ratio certificate (proved): with active-set averages "
+                "dbar=avg tr(Y_t(v)), gbar=avg tr(Y_t(v))/||Y_t(v)||, "
+                "we have min_v ||Y_t(v)|| <= dbar/gbar."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -90,13 +88,11 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             tags={"verification_status": "proved"},
         ),
         ThreadNode(
-            id="p6d-l",
+            id="p6d-ar",
             node_type="answer",
             post_id=6303,
             body_text=(
-                "Low-gap branch (open): if p90 gap is small, prove perturbative "
-                "shadow transfer from Y_t(v) to rank-1 proxy sigma_v q_v q_v^T, "
-                "then certify min_v ||Y_t(v)|| < 1."
+                "AR-NT target (open): under H1-H4, if min-score > 0 then dbar < gbar."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -104,12 +100,24 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             tags={"verification_status": "open"},
         ),
         ThreadNode(
-            id="p6d-h",
+            id="p6d-c",
             node_type="answer",
             post_id=6304,
             body_text=(
-                "High-gap/ratio bridge (open): derive dbar/gbar < 1 from H1-H4 "
-                "(possibly with explicit mild side condition)."
+                "Conditional bridge (proved reduction): dbar<gbar follows from a bound "
+                "on above-1 drift mass rho_+ below explicit rho_crit(m_-,M_+)."
+            ),
+            score=0,
+            creation_date="2026-02-12",
+            parent_post_id=6300,
+            tags={"verification_status": "proved"},
+        ),
+        ThreadNode(
+            id="p6d-b",
+            node_type="answer",
+            post_id=6305,
+            body_text=(
+                "Open bridge obligation: prove H1-H4 force rho_+ < rho_crit on nontrivial steps."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -119,10 +127,9 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
         ThreadNode(
             id="p6d-t",
             node_type="answer",
-            post_id=6305,
+            post_id=6306,
             body_text=(
-                "Trivial branch (proved): if min_v score_t(v)=0 then GPL-H step is "
-                "immediate for any theta>0."
+                "Trivial branch (proved): if min-score = 0, step is already good for any theta>0."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -132,7 +139,7 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
         ThreadNode(
             id="p6d-e",
             node_type="comment",
-            post_id=6306,
+            post_id=6307,
             body_text=run_summary_text(run_path),
             score=0,
             creation_date="2026-02-12",
@@ -140,25 +147,12 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             tags={"verification_status": "empirical"},
         ),
         ThreadNode(
-            id="p6d-g",
-            node_type="answer",
-            post_id=6307,
-            body_text=(
-                "Glue obligation (open): prove that every nontrivial step satisfies "
-                "either low-gap certification or ratio certification."
-            ),
-            score=0,
-            creation_date="2026-02-12",
-            parent_post_id=6300,
-            tags={"verification_status": "open"},
-        ),
-        ThreadNode(
             id="p6d-s",
             node_type="answer",
             post_id=6308,
             body_text=(
-                "Existing sufficiency (proved): if each step has score_t(v)<=theta<1, "
-                "barrier closes and yields |S| = Omega(epsilon n)."
+                "Existing sufficiency (proved): per-step min-score < 1 implies barrier closure "
+                "and |S| = Omega(epsilon n)."
             ),
             score=0,
             creation_date="2026-02-12",
@@ -172,63 +166,63 @@ def build_post_d_diagram(run_path: Path) -> ThreadWiringDiagram:
             source="p6d-a1",
             target="p6d-q",
             edge_type="challenge",
-            evidence="Uniform near-rank-1 failed; need split/ratio route",
+            evidence="Uniform near-rank-1 route fails as unconditional bridge",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-r",
             target="p6d-q",
             edge_type="reform",
-            evidence="Reduce per-step success to proving dbar/gbar < 1",
+            evidence="Reduce min-score control to aggregate ratio dbar/gbar",
             detection="structural",
         ),
         ThreadEdge(
-            source="p6d-l",
-            target="p6d-g",
-            edge_type="assert",
-            evidence="Low-gap certification branch",
+            source="p6d-ar",
+            target="p6d-q",
+            edge_type="reform",
+            evidence="Current open target is AR-NT (nontrivial dbar<gbar)",
             detection="structural",
         ),
         ThreadEdge(
-            source="p6d-h",
-            target="p6d-g",
+            source="p6d-c",
+            target="p6d-ar",
+            edge_type="reference",
+            evidence="AR-NT reduced to above-1 drift mass inequality",
+            detection="structural",
+        ),
+        ThreadEdge(
+            source="p6d-b",
+            target="p6d-ar",
             edge_type="assert",
-            evidence="High-gap/ratio certification branch",
+            evidence="Remaining theorem-level bridge is rho_+ bound",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-t",
-            target="p6d-g",
+            target="p6d-ar",
             edge_type="assert",
-            evidence="Trivial zero-score branch",
+            evidence="Trivial min-score=0 rows are already solved",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-e",
-            target="p6d-g",
+            target="p6d-ar",
             edge_type="exemplify",
-            evidence="Empirical branch behavior from post-D run",
-            detection="structural",
-        ),
-        ThreadEdge(
-            source="p6d-g",
-            target="p6d-q",
-            edge_type="reform",
-            evidence="Main missing theorem is branch disjunction for nontrivial steps",
+            evidence="Empirics support AR-NT on tested nontrivial rows",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-s",
-            target="p6d-g",
+            target="p6d-ar",
             edge_type="reference",
-            evidence="Per-step certification implies overall closure",
+            evidence="AR-NT + ratio certificate implies full step closure",
             detection="structural",
         ),
         ThreadEdge(
             source="p6d-r",
-            target="p6d-h",
+            target="p6d-c",
             edge_type="reference",
-            evidence="Ratio certificate is the endpoint of high-gap bridge",
+            evidence="Conditional bridge is built on ratio certificate variables",
             detection="structural",
         ),
     ]
