@@ -1,5 +1,23 @@
 # Case 3c Handoff: Remaining Gap in the n=4 Stam Inequality Proof
 
+## Update (2026-02-12, Codex PHC run)
+
+PHCpack (`phcpy`, PHCv2.4.90) was executed on the full 4D gradient system via
+`scripts/verify-p4-n4-case3c-phc.py`.
+
+Produced:
+- `data/first-proof/problem4-case3c-phc-results.json` (tasks=8)
+- `data/first-proof/problem4-case3c-phc-results-singlethread.json` (tasks=0)
+
+Both runs agree on all in-domain real critical points:
+- 12 total in-domain CPs, split as case1=4, case3a=2, case3b=2, case3c=4.
+- Case 3c points are the expected symmetry orbit, with
+  `-N = 1678.549826372544892... > 0`.
+
+High-precision refinement of Case 3c seeds gives `max |∇(-N)| < 1e-45`.
+Remaining caveat: PHC aggregate residual over all returned complex solutions is
+noisy, so full proof-grade global complex-root certification is still open.
+
 ## What's Been Proved (Algebraically Exact)
 
 | Case | Subspace | Method | CPs in domain | -N values | Time |
