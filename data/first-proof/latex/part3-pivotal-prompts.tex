@@ -1,0 +1,95 @@
+\chapter*{Part III: Prompt Excerpts and Pivot Moments}
+\addcontentsline{toc}{chapter}{Part III: Prompt Excerpts and Pivot Moments}
+
+This section records short source excerpts that triggered major proof-state
+changes during the sprint. The goal is provenance: each excerpt points to a
+specific prompt or exchange that shifted a proof route, status label, or gap
+decomposition.
+
+\section*{P4: Jensen Gap Became the Central Obstruction}
+\textbf{Source:} \texttt{data/first-proof/problem4-stam-codex-prompts.jsonl:4}
+(\texttt{step-4-jensen-gap})
+
+\begin{quote}\small\ttfamily
+Address the fundamental obstacle: the inequality we want is about
+1/Phi\_n of the EXPECTED POLYNOMIAL, not the EXPECTED 1/Phi\_n.
+...
+These differ by a Jensen-type gap.
+\end{quote}
+
+\textbf{Pivot:} this crystallized why Dyson/Ito style averaging was not enough
+by itself and forced explicit control of the expectation-vs-functional order.
+
+\section*{P6: The Conclusion Was Explicitly Reframed as Conditional}
+\textbf{Sources:}
+\texttt{data/first-proof/problem6-codex-prompts.jsonl:10}
+(\texttt{p6-s5}) and
+\texttt{data/first-proof/problem6-codex-prompts.jsonl:11}
+(\texttt{p6-s6})
+
+\begin{quote}\small\ttfamily
+General-graph step is an external dependency in this draft...
+this writeup does not rederive that theorem.
+...
+conditional on the external general theorem (p6-s5),
+the full existential answer is yes.
+\end{quote}
+
+\textbf{Pivot:} this converted an overstrong global claim into a layered claim:
+local framework proved in-text, universal existence deferred to a named
+external theorem dependency.
+
+\section*{P7: Dispatch-Level Decomposition of the Remaining Gap}
+\textbf{Source:}
+\texttt{data/first-proof/problem7-student-dispatch.md:60}
+
+\begin{quote}\small\ttfamily
+Step B: integral (torsion) obstruction.
+...
+This step has not been formalized.
+\end{quote}
+
+\textbf{Pivot:} the Problem 7 program was split into Step A (rational
+obstruction) and Step B (integral torsion handling), which sharpened review
+targets and reduced cross-talk between independent subproblems.
+
+\section*{P7: Gap Triage to G1/G2/G3 with a Candidate Closure Pattern}
+\textbf{Source:} \texttt{\string~/.codex/history.jsonl:9224}
+
+\begin{quote}\small\ttfamily
+G1 (pi\_1 control) and G3 (rational acyclicity) can be closed once
+the cap is homotopy equivalent to F x D2 rel boundary.
+...
+G2 (Browder-Quinn identification) remains the genuine remaining gap.
+\end{quote}
+
+\textbf{Pivot:} this changed the geometry-to-surgery bridge from a monolithic
+``open Problem 7'' label to a prioritized closure queue, with G2 isolated as
+the main unresolved theorem-chain obligation.
+
+\section*{P7: Non-Fiction Check for the Codim-2 Theorem Chain}
+\textbf{Source:}
+\texttt{data/first-proof/problem7-g2-theorem-chain.md:11}
+
+\begin{quote}\small\ttfamily
+There is no single modern arXiv theorem that states the exact P7 sentence
+in one line. The bridge is assembled from standard components.
+\end{quote}
+
+\textbf{Pivot:} this stabilized citation strategy by replacing ``single theorem
+lookup'' with a theorem-number ledger across Browder-Quinn, Lopez de Medrano,
+Cappell-Shaneson, and Ranicki.
+
+\section*{Meta: Narrative and Status Claims Were Prompted for Revision}
+\textbf{Sources:}
+\texttt{\string~/.codex/history.jsonl:9256} and
+\texttt{\string~/.codex/history.jsonl:9261}
+
+\begin{quote}\small\ttfamily
+... summary claims about what is closed and open needs to be checked.
+...
+add a Part III with excerpted prompts that support key pivotal moments.
+\end{quote}
+
+\textbf{Pivot:} these prompts directly caused the monograph-level edits to
+status language and provenance structure.
