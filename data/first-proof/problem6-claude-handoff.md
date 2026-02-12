@@ -155,6 +155,9 @@ Codex has now formalized this into explicit sublemmas in
 - MSS/KS mapping section added: explicit template-to-gap analysis (why
   interlacing, paving, and matrix concentration do not directly imply L2*),
   plus a precise new target conjecture `GPL` (grouped paving lemma).
+- theorem-style `GPL-H` package added: explicit hypotheses H1-H4,
+  conclusion, and status map (proved vs open), reducing the bridge to a
+  single implication H1-H4 => min_v ||Y_t(v)|| <= theta.
 
 ## Errors fixed (from your review)
 

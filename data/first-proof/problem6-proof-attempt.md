@@ -716,6 +716,46 @@ sum_e X_e=I, and leverage-degree regularization on I0).
 
 This is precisely the theorem-level bridge needed for an unconditional proof.
 
+### GPL in theorem form (H1-H4)
+
+Theorem template (GPL-H).
+For universal constants c_step>0 and theta in (0,1), fix any Case-2b
+state (I0,S_t,M_t) with t <= c_step*epsilon*n and define
+
+    B_t = (epsilon I - M_t)^(-1),
+    Y_t(v) = B_t^(1/2) C_t(v) B_t^(1/2),   v in R_t := I0 \ S_t.
+
+Assume:
+
+H1. (Light-edge regime on I0) Every edge internal to I0 satisfies
+    tau_uv <= epsilon.
+H2. (Core regularity) ell_v := sum_{u in I0, u~v} tau_uv <= D0/epsilon
+    for all v in I0, with universal D0.
+H3. (Barrier-valid prefix) M_t <= epsilon I.
+H4. (Residual size) r_t := |R_t| >= eta*epsilon*n for a universal eta>0.
+
+Conclusion:
+
+    min_{v in R_t} ||Y_t(v)|| <= theta.
+
+Status of H1-H4 in current draft:
+
+- H1: proved (from I independent in G_H).
+- H2: proved in coarse form (Step 0 gives D0=12).
+- H3: maintained inductively whenever a good step exists.
+- H4: reduced to choosing c_step <= 1/12 (since |I0|>=epsilon*n/6).
+
+So the only open implication is: H1-H4 => min_v ||Y_t(v)|| <= theta.
+
+### Why this formulation helps
+
+- It cleanly separates graph preprocessing (H1-H2) from barrier dynamics
+  (H3-H4).
+- It gives a precise theorem-search target: a grouped-paving statement with
+  fixed groups Y_t(v) and no repartition freedom.
+- It exposes where existing tools fail: MSS/KS results do not directly yield
+  the H1-H4 => conclusion step for pre-grouped PSD sums.
+
 ## Notation Reference
 
 - L: graph Laplacian, L = Σ_e w_e b_e b_e^T
