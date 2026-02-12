@@ -175,32 +175,37 @@ and `problem7-hypothetical-wirings.md` for full analysis.
    See `problem7r-s-rot-obstruction-analysis.md`.
 8. `p7r-s5` (full closure): **DISCHARGED** — see argument chain below.
 
-### Path forward (updated: obligations E2 and S both discharged)
+### Path forward (updated: geometric inputs proved, surgery bridge has gaps)
 
-**Both obligations are discharged.** The complete argument chain:
+**E2 is discharged. Geometric inputs for S are established. Three gaps
+remain in the surgery-theoretic bridge.** See `problem7-complete-proof.md`,
+Section 5 for the precise gap statements.
 
-(a) **Lattice construction** — Γ = ⟨π, σ⟩ with π = Γ₀(I) a congruence
-    subgroup of SO(f, Z[√2]), σ = diag(1,-1,-1,1,...,1), I = (3).
-    Γ is a uniform lattice in SO(7,1) with 2-torsion. — **DONE**
-(b) **E2 discharge** — Fixed set F has dim 5 (odd), χ = 0. Fowler Main
-    Theorem gives Γ ∈ FH(Q). — **DONE**
-(c) **Surgery obstruction vanishes** — Congruence condition forces trivial
-    holonomy → ν trivial → S(ν) = F × S¹ → intersection form integrally
-    hyperbolic → θ = 0 ∈ L₈(Z[Γ]). — **DONE**
-(d) **Cut and cap succeeds** — θ = 0 implies equivariant cobordism exists:
-    M' with free Z/2-action. N = M'/(Z/2) is a closed manifold with
-    π₁(N) = Γ and rationally acyclic universal cover. — **DONE**
+(a) **Lattice construction** — **DONE**
+(b) **E2 discharge** — **DONE**
+(c) **Normal bundle trivial, intersection form hyperbolic** — **DONE**
+    (Geometric computation, unconditional.)
+(d) **θ = 0 ∈ L₈(Z[Γ])** — **GAP G2**: Browder–Quinn identification
+    of the Witt class with the full integral surgery obstruction is
+    sketched but not rigorously verified for this setting.
+(e) **Cut and cap with π₁ = Γ** — **GAP G1**: codim-2 removal adds a
+    meridian; the cap must kill it. Plausible (trivial ν → obvious cap
+    F × D²) but not proved.
+(f) **Rational acyclicity preserved** — **GAP G3**: Mayer–Vietoris
+    argument needed.
 
-**Remaining work:**
+**Priority 1 — Close Gap G1.** Cite López de Medrano for the explicit
+cap construction with trivial normal bundle and verify the free Z/2-action
+extends.
 
-**Priority 1 — Write up.** Assemble the complete proof into a single
-document, combining the lattice construction, Fowler application, and
-surgery vanishing argument. Verify the AHSS-to-Witt-class identification
-with precise references.
+**Priority 2 — Close Gap G2.** Locate a precise theorem in
+Browder/López de Medrano/Ranicki identifying the equivariant surgery
+obstruction with the Witt class on S(ν), integrally, for semi-free Z/2
+actions with codim-2 fixed set and trivial normal bundle. Verify
+2-primary components are captured.
 
-**Priority 2 (optional) — Strengthen.** Extend to other dimensions
-n = 2k+1 ≥ 7. Investigate what happens for n = 9 (where additional
-AHSS terms appear).
+**Priority 3 — Close Gap G3.** Write the Mayer–Vietoris argument for
+rational acyclicity of the universal cover.
 
-**Deprioritized — All other approaches.** The rotation route S-rot-II
-succeeds, making alternatives unnecessary.
+**Priority 4 (optional) — Strengthen.** Extend to other dimensions
+n = 2k+1 ≥ 7.

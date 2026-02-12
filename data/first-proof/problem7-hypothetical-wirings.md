@@ -202,10 +202,12 @@ and Fowler fails. This is WHY the original construction needed even n.
 
 ## Summary: Status
 
-1. **H1 (Rotation route) — S-rot-II: DISCHARGED.** E2 discharged, S discharged.
-   Equivariant surgery obstruction θ = 0 (rational: flat ν + Chern-Weil;
-   integral: trivial holonomy from congruence condition). Closed manifold N
-   with π₁ = Γ and rationally acyclic universal cover exists.
+1. **H1 (Rotation route) — S-rot-II: GEOMETRIC INPUTS PROVED, SURGERY
+   BRIDGE HAS GAPS.** E2 discharged. Geometric inputs for S established
+   (trivial ν, hyperbolic intersection form). Three gaps in surgery-
+   theoretic bridge: π₁ control (G1), integral obstruction identification
+   (G2), rational acyclicity preservation (G3). See
+   `problem7-complete-proof.md`, Section 5.
 
 2. **H1 (Rotation route) — S-rot-I:** Fallback (no longer needed). Same
    three-obstacle structure as H2 with favorable odd L-theory parity.

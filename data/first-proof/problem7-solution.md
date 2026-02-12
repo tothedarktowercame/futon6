@@ -9,17 +9,17 @@ fundamental group of a closed manifold whose universal cover is acyclic over
 
 ## Status in This Writeup
 
-**Answer: yes** (via the rotation route).
+**Answer: yes** (via the rotation route, **conditional on three gaps**).
 
 - Obligation (E2) — placing `Gamma` in `FH(Q)` — is **discharged** for
   the rotation-lattice family (Fowler criterion, codim-2 fixed set with
   chi = 0).
 - Obligation (S) — upgrading from finite CW complex to closed manifold —
-  is **discharged** via equivariant surgery (S-rot-II). The equivariant
-  surgery obstruction vanishes because the normal bundle of the totally
-  geodesic fixed set is trivial (forced by the congruence condition and
-  integrality of rotation angles). See Section 7 and
-  `problem7r-s-rot-obstruction-analysis.md`.
+  **geometric inputs established** (trivial normal bundle, hyperbolic
+  intersection form on sphere bundle); **three gaps remain** in the surgery-
+  theoretic bridge (π₁ control through cut-and-cap, integral obstruction
+  identification via Browder–Quinn, rational acyclicity preservation).
+  See `problem7-complete-proof.md` Section 5 for the precise gap statements.
 
 ## 1. Baseline Geometry
 
