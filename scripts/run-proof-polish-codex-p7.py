@@ -57,7 +57,7 @@ RESPONSE_SCHEMA = {
                         "enum": ["math.stackexchange.com", "mathoverflow.net", "other", "unknown"],
                     },
                 },
-                "required": ["question_id", "title", "relevance"],
+                "required": ["question_id", "title", "relevance", "site"],
                 "additionalProperties": False,
             },
         },
@@ -120,44 +120,26 @@ NODE_VERIFICATION_FOCUS = {
         "Poincare duality group lattice torsion'."
     ),
     "p7-s3": (
-        "Verify the surgery-theoretic reduction. (a) The claim: existence of a closed "
-        "d-manifold M with pi_1(M) = Gamma and H_*(M; Q) = H_*(Gamma; Q) reduces to "
-        "a surgery obstruction in L_d(Z[Gamma]). Verify the precise statement — is this "
-        "Wall's surgery exact sequence? What form: simple, decorated, or projective? "
-        "(b) The starting point is a degree-1 normal map f: M_0 -> B Gamma. Does such "
-        "a normal map exist? This requires Gamma to be finitely presented with a finite "
-        "rational classifying space — confirm for uniform lattices. (c) The dimension "
-        "constraint d >= 5 is needed for surgery to work. For the concrete example "
-        "(d = 2k+1, k >= 3, so d >= 7), this is satisfied. (d) Is the target rationally "
-        "acyclic cover, or rationally equivalent to B Gamma? These are different claims "
-        "— verify which one the surgery produces."
+        "Verify the finite-complex step. (a) The claim now uses Fowler's equivariant "
+        "finiteness theorem (arXiv:1204.4667): under fixed-set Euler-vanishing "
+        "hypotheses, orbifold groups lie in FH(Q). Confirm this theorem and hypotheses. "
+        "(b) Check that FH(Q) means existence of a finite CW complex Y with pi_1(Y)=Gamma "
+        "and rationally acyclic universal cover. (c) Verify this is a finite-CW result, "
+        "not yet a closed manifold realization."
     ),
     "p7-s3a": (
-        "Verify the Farrell-Jones conjecture claim. (a) Is the Farrell-Jones conjecture "
-        "KNOWN (proved, not conjectured) for uniform lattices in semi-simple Lie groups? "
-        "The proof cites Bartels-Luck 2012. Confirm: the paper is Bartels-Luck 'The "
-        "Borel conjecture for hyperbolic and CAT(0)-groups' (2012), and/or "
-        "Bartels-Farrell-Luck 'The Farrell-Jones conjecture for cocompact lattices in "
-        "virtually connected Lie groups' (JAMS 2014). Which paper covers THIS case? "
-        "(b) The FJ isomorphism gives L_d(Z[Gamma]) = H_d^Gamma(E_Fin Gamma; L^<-infty>). "
-        "Verify: E_Fin Gamma can be taken as the symmetric space X with its Gamma-action "
-        "(since isotropy groups of X under Gamma are finite). (c) Does FJ give the "
-        "L-theory isomorphism, the K-theory isomorphism, or both? Surgery needs L-theory. "
-        "Confirm the L-theory version is what's proved."
+        "Verify the arithmetic-lattice example claim from Fowler Section 5. "
+        "(a) Check that explicit lattice extensions in FH(Q) are given there. "
+        "(b) Confirm what torsion orders are covered in the explicit arithmetic "
+        "example(s), and whether order-2 torsion is directly produced. "
+        "(c) Verify this step is evidence/support, not a complete proof of the final "
+        "manifold statement."
     ),
     "p7-s4": (
-        "Verify the vanishing of the rational surgery obstruction for odd-dimensional "
-        "hyperbolic lattices. (a) The claim: for Gamma < SO(2k+1, 1) with k >= 3, the "
-        "rational surgery obstruction vanishes. The argument is 'parity kills the "
-        "signature obstruction'. Verify: L_n(Z) tensor Q is Q in degrees 0 mod 4, and "
-        "0 otherwise. For d = 2k+1 (odd), the relevant L-groups are odd-dimensional, "
-        "so the rational obstruction is zero. (b) But wait: is L_d(Z[Gamma]) tensor Q "
-        "the same as L_d(Z) tensor Q? NO — the Farrell-Jones assembly map is needed. "
-        "The equivariant homology H_d^Gamma(E_Fin; L tensor Q) involves contributions "
-        "from finite subgroups. Verify that these contributions ALSO vanish in odd "
-        "dimensions. (c) For the concrete lattices SO(2k+1,1): do cocompact arithmetic "
-        "lattices with 2-torsion actually exist? Reference: Borel's construction of "
-        "arithmetic lattices, or Vinberg's examples."
+        "Verify the remaining-gap statement. (a) Is it correct that FH(Q) does NOT by "
+        "itself give a closed manifold with the same pi_1? (b) Is a separate manifold-"
+        "upgrade/surgery step needed? (c) Check whether the writeup correctly marks the "
+        "obstruction computation as unresolved rather than claimed solved."
     ),
     "p7-s5": (
         "Verify the Smith theory argument. (a) Classical Smith theory: if Z/p acts on a "
@@ -176,18 +158,16 @@ NODE_VERIFICATION_FOCUS = {
     ),
     "p7-s6": (
         "Verify the conclusion composes correctly. (a) The chain of reasoning: "
-        "rational PD (s2) + surgery reduction (s3) + Farrell-Jones (s3a) + vanishing "
-        "obstruction (s4) + no Smith obstruction (s5) => construction succeeds. "
+        "rational PD (s2) + FH(Q) finite-complex realization (s3,s3a) + unresolved "
+        "manifold-upgrade obstruction (s4) + no Smith obstruction (s5) => conditional "
+        "existence statement. "
         "Check for gaps: (i) Is the surgery obstruction the ONLY obstruction, or are "
         "there further obstructions (e.g., from the normal invariant, from Pi-Pi theorem)? "
         "(ii) Does the proof actually construct M, or only show it's not obstructed? "
-        "(iii) The answer says 'Yes, exists' — but is it 'Yes, for specific choices of "
-        "G and Gamma' or 'Yes, for ALL uniform lattices with 2-torsion'? The proof only "
-        "handles specific examples (SO(2k+1,1), k >= 3). Is there a counterexample for "
-        "other groups? (b) Verify completeness: does every node in the wiring diagram "
-        "contribute to the conclusion? Are there dangling nodes? (c) The confidence is "
-        "'medium-low' — is this appropriate given the reliance on surgery theory and "
-        "FJ conjecture (both proven for this case)?"
+        "(iii) The answer is now conditional: is that appropriately scoped? "
+        "(b) Verify completeness: does every node in the wiring diagram contribute to "
+        "the conditional conclusion? Are there dangling nodes? (c) Is the confidence "
+        "level now calibrated to the unresolved manifold-upgrade step?"
     ),
 }
 
@@ -208,17 +188,19 @@ def build_node_prompt(
 
     lines = [
         "You are a mathematical proof verifier with expertise in "
-        "geometric group theory, surgery theory, Farrell-Jones conjecture, "
-        "lattices in Lie groups, Smith theory, Poincare duality groups.",
+        "geometric group theory, surgery theory, equivariant finiteness "
+        "obstructions, lattices in Lie groups, Smith theory, and "
+        "Poincare duality groups.",
         "",
         "## Task",
         "",
         "Verify one step of a proof that a uniform lattice Gamma (with 2-torsion) "
         "in a semi-simple Lie group can be realized as pi_1(M) for a closed manifold "
-        "M with rationally acyclic universal cover. The proof uses surgery theory, "
-        "the Farrell-Jones conjecture, and a Smith theory analysis. "
+        "M with rationally acyclic universal cover. The proof uses orbifold/Bredon "
+        "duality, equivariant finiteness (FH(Q)), surgery-theoretic upgrades, and a "
+        "Smith theory analysis. "
         "Cross-reference with math.SE/MO discussions and primary sources "
-        "(Bartels-Luck 2012/2014, Farrell-Jones 1993, Wall surgery theory) "
+        "(Fowler 2012, Avramidi 2015, Wall surgery theory) "
         "when possible.",
         "",
         "## Proof Step Under Review",
@@ -253,23 +235,20 @@ def build_node_prompt(
         "the fundamental group of a compact manifold without boundary whose universal "
         "cover is acyclic over Q?",
         "",
-        "The answer is: Yes. For suitable choices of G and Gamma (e.g., cocompact "
-        "arithmetic lattices in SO(2k+1,1) with k >= 3 containing an involution), "
-        "surgery theory produces a closed manifold M with pi_1(M) = Gamma and "
-        "rationally acyclic universal cover. The key ingredients are: (1) Gamma is a "
-        "rational Poincare duality group, (2) Farrell-Jones conjecture (known for "
-        "these lattices) computes L-groups, (3) rational surgery obstruction vanishes "
-        "in odd dimensions, (4) Smith theory does not obstruct over Q.",
+        "Current status in the writeup: conditional, not unconditional. "
+        "The proof chain now establishes rational PD context and a nearby finite-CW "
+        "result via Fowler's FH(Q) theorem, then isolates the remaining manifold-upgrade "
+        "surgery obstruction step for the torsion lattice case.",
         "",
-        "Key references: Bartels-Luck (2012), Bartels-Farrell-Luck (JAMS 2014), "
-        "Farrell-Jones (1993), Wall 'Surgery on Compact Manifolds' (1999 2nd ed), "
-        "Borel-Serre 'Corners and arithmetic groups' (1973).",
+        "Key references: Fowler (arXiv:1204.4667), Avramidi (arXiv:1506.06293), "
+        "Wall 'Surgery on Compact Manifolds' (1999 2nd ed), Brown and Luck on "
+        "group/orbifold cohomology.",
         "",
         "## Instructions",
         "",
         "1. Verify the mathematical claim in this proof step.",
         "2. Search math.SE/MO for relevant discussions (lattices in Lie groups, "
-        "surgery theory, Farrell-Jones conjecture, rational Poincare duality, "
+        "surgery theory, FH(Q), rational Poincare duality, "
         "Smith theory, L-groups, Wall surgery obstruction, orbifolds).",
         "3. Identify any gaps, unstated assumptions, or potential errors.",
         "4. Suggest improvements if the claim could be tightened or clarified.",
@@ -318,30 +297,27 @@ def build_synthesis_prompt(
         "",
         "1. Is the proof complete? Does the answer follow from the stated steps?",
         "2. Are there unstated assumptions (e.g., about the specific Lie group G, "
-        "the arithmetic construction of Gamma, the dimension constraint d >= 5, "
-        "the orientation character for Poincare duality)?",
-        "3. The surgery-theoretic step (Section 5) is the most delicate — verify: "
-        "(a) Does a degree-1 normal map to B Gamma exist? (b) Is the surgery "
-        "obstruction correctly identified in L_d(Z[Gamma])? (c) Does the "
-        "Farrell-Jones isomorphism apply to THIS Gamma? (d) Does the parity "
-        "argument for vanishing actually work when finite subgroup contributions "
-        "are included?",
-        "4. The Smith theory argument (Section 7) could be challenged — is the "
+        "the arithmetic construction of Gamma, and the orientation character for "
+        "Poincare duality)?",
+        "3. Verify the finite-complex/manifold distinction: does the argument only "
+        "establish Gamma in FH(Q), or does it actually produce a closed manifold "
+        "with pi_1=Gamma?",
+        "4. The manifold-upgrade surgery step is the delicate part — verify what is "
+        "still missing (normal map setup, obstruction computation, pi_1 control).",
+        "5. The Smith theory argument (Section 7) could be challenged — is the "
         "distinction between mod-2 acyclicity and rational acyclicity correctly "
         "drawn? Could someone construct a counterexample using integral Smith "
         "theory?",
-        "5. The concrete example (SO(2k+1,1), k >= 3) — do cocompact arithmetic "
-        "lattices with 2-torsion in these groups actually exist? Reference: "
-        "Borel's construction, Vinberg's examples, or Agol's virtual fibering.",
-        "6. Is the confidence 'medium-low' appropriate? The Farrell-Jones conjecture "
-        "IS proved for these lattices — should confidence be higher?",
-        "7. Search math.SE/MO for: 'uniform lattice 2-torsion manifold', "
-        "'rational Poincare duality group surgery', 'Farrell-Jones lattice "
-        "semi-simple', 'Smith theory rational acyclic', 'L-groups lattice "
-        "computation'.",
-        "8. For each reference, include `site` when known "
+        "6. Check whether the concrete arithmetic examples in Fowler directly give "
+        "order-2 torsion, or only nearby torsion cases.",
+        "7. Is the confidence level calibrated to the remaining unresolved "
+        "manifold-upgrade step?",
+        "8. Search math.SE/MO for: 'uniform lattice 2-torsion manifold', "
+        "'FH(Q) lattices', 'rational Poincare duality group surgery', "
+        "'Smith theory rational acyclic'.",
+        "9. For each reference, include `site` when known "
         "(e.g., `mathoverflow.net` or `math.stackexchange.com`).",
-        "9. Reply as a single JSON object matching the required schema. "
+        "10. Reply as a single JSON object matching the required schema. "
         "Use node_id='p7-synthesis' for the synthesis.",
     ]
     if math_se_dir:

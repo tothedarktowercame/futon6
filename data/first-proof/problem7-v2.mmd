@@ -1,10 +1,5 @@
 flowchart TD
-    %% first-proof-p7 v2 — post-reviewer fixes
-    %% Changes from v1: p7-s2 now includes Leray-Serre bridge theorem
-    %% (Bredon PD → group cohomology PD via rationalization of finite stabilizers),
-    %% p7-s3 (Thom-Pontryagin for normal map, orbifold CW structure),
-    %% p7-s4 (unconditional odd-dim vanishing L_{odd}⊗Q=0, no AHSS needed),
-    %% p7-s5 (remark label). No structural changes.
+    %% first-proof-p7
 
     %% Edge type legend:
     %% assert=solid thick  challenge=dashed red  reform=solid yellow
@@ -13,22 +8,22 @@ flowchart TD
     %% Nodes
     p7-problem{{"p7-problem<br/>Gamma uniform lattice in semi-simple group with 2-to..."}}
     p7-s1["p7-s1<br/>Torsion-free case: Gamma acts freely on X = G/K (con..."]
-    p7-s2["p7-s2<br/>Rational PD: Leray-Serre bridge (finite stabilizers ..."]
-    p7-s3["p7-s3<br/>Surgery: fin. pres., BGamma rational finite type (or..."]
-    p7-s3a(["p7-s3a<br/>Farrell-Jones conjecture (known for lattices, Bartel..."])
-    p7-s4["p7-s4<br/>L_{2k+1}(Z[Gamma])⊗Q = 0 unconditionally (Ranicki P..."]
-    p7-s5["p7-s5<br/>REMARK (anti-obstruction): Smith theory does NOT obs..."]
-    p7-s6["p7-s6<br/>Conclusion: Yes. Rational PD + Farrell-Jones + vanis..."]
+    p7-s2["p7-s2<br/>Rational PD structure comes from orbifold/Bredon coh..."]
+    p7-s3["p7-s3<br/>Fowler's equivariant finiteness theorem gives a fini..."]
+    p7-s3a(["p7-s3a<br/>Fowler's arithmetic-lattice constructions supply con..."])
+    p7-s4["p7-s4<br/>Open step: upgrade FH(Q) to a closed manifold with t..."]
+    p7-s5["p7-s5<br/>Smith theory does NOT obstruct over Q: Z/2 acting fr..."]
+    p7-s6["p7-s6<br/>Conditional conclusion: if a 2-torsion lattice Gamma..."]
 
     %% Edges
     p7-s1 -->|"🔵 clarify: Torsion-free case works; torsion crea..."| p7-problem
     p7-s2 -->|"🟡 reform: Reframe: Gamma is rational PD group, ..."| p7-s1
-    p7-s3 ==>|"🟢 assert: Surgery theory reduces to L_d(Z[Gamma..."| p7-s2
-    p7-s3a -->|"🔵 clarify: Farrell-Jones (proven for these latti..."| p7-s3
-    p7-s4 ==>|"🟢 assert: Rational obstruction vanishes for odd..."| p7-s3a
+    p7-s3 ==>|"🟢 assert: Equivariant finiteness gives finite-C..."| p7-s2
+    p7-s3a -->|"🔵 clarify: Arithmetic-lattice examples show the ..."| p7-s3
+    p7-s4 ==>|"🟢 assert: Remaining gap is manifold-upgrade wit..."| p7-s3a
     p7-s5 -.->|"🔴 challenge: Smith theory potential obstruction — ..."| p7-problem
-    p7-s6 ==>|"🟢 assert: Yes: construction via surgery with Fa..."| p7-problem
-    p7-s6 -->|"⚪ reference: Uses vanishing surgery obstruction fo..."| p7-s4
+    p7-s6 ==>|"🟢 assert: Conditional yes after FH(Q) realizati..."| p7-problem
+    p7-s6 -->|"⚪ reference: Depends on closing the manifold-upgra..."| p7-s4
     p7-s6 -->|"⚪ reference: No Q-coefficient Smith obstruction"| p7-s5
 
     %% Styling

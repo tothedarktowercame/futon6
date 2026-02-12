@@ -23,7 +23,7 @@
       "id": "p7-s2",
       "node_type": "answer",
       "post_id": 702,
-      "body_text": "Rational PD via Bredon cohomology (Brown Ch.VIII Thm 10.1, Luck Sec.6.6). Bridge: H^*(BGamma;Q) = H^*(X/Gamma;Q) by Leray-Serre (finite stabilizers have trivial rational cohomology). Orbifold X/Gamma has PD (Satake 1956). So H^k(Gamma;Q) = H^{d-k}(Gamma;Q).",
+      "body_text": "Rational PD structure comes from orbifold/Bredon cohomology for proper cocompact Gamma-action on X=G/K, with formal dimension d=dim(X).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -32,7 +32,7 @@
       "id": "p7-s3",
       "node_type": "answer",
       "post_id": 703,
-      "body_text": "Surgery theory: Gamma fin. pres. (Raghunathan), BGamma rational finite type via orbifold CW structure (Moerdijk-Pronk 1997), d>=5 for SO(2k+1,1) k>=3. Normal map via Thom-Pontryagin (rational bordism surjects onto homology). Obstruction in L_d(Z[Gamma]).",
+      "body_text": "Fowler's equivariant finiteness theorem gives a finite-CW result: under fixed-set Euler-vanishing hypotheses, the orbifold group Gamma lies in FH(Q).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -41,7 +41,7 @@
       "id": "p7-s3a",
       "node_type": "comment",
       "post_id": 7031,
-      "body_text": "Farrell-Jones conjecture (known for lattices in semi-simple groups, Bartels-Luck 2012) computes L_d(Z[Gamma]) from equivariant homology of X.",
+      "body_text": "Fowler's arithmetic-lattice constructions supply concrete lattice extensions in FH(Q), but these are finite-complex outputs, not yet closed manifolds.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 703
@@ -50,7 +50,7 @@
       "id": "p7-s4",
       "node_type": "answer",
       "post_id": 704,
-      "body_text": "Rational obstruction vanishes for d odd: L_{2k+1}(Z[Gamma])⊗Q = 0 for all Gamma (Ranicki 1992 Prop 22.34). Detection by multisignature, which requires middle-dim intersection form — nonexistent in odd dim. No AHSS needed; vanishing is unconditional in odd dimensions.",
+      "body_text": "Open step: upgrade FH(Q) to a closed manifold with the SAME pi_1=Gamma and verify the needed rational surgery obstruction vanishing for the selected 2-torsion lattice.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -59,7 +59,7 @@
       "id": "p7-s5",
       "node_type": "answer",
       "post_id": 705,
-      "body_text": "REMARK (anti-obstruction only): Smith theory does NOT obstruct over Q. Z/2 on rationally acyclic space has no fixed-point constraint (2 invertible in Q). Does not contribute to construction; only rules out potential objection.",
+      "body_text": "Smith theory does NOT obstruct over Q: Z/2 acting freely on rationally acyclic space has no fixed-point constraint (2 invertible in Q). Only mod-2 Smith theory applies.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -68,7 +68,7 @@
       "id": "p7-s6",
       "node_type": "answer",
       "post_id": 706,
-      "body_text": "Conclusion: Yes. Rational PD + Farrell-Jones + vanishing surgery obstruction + no Smith obstruction over Q => construction succeeds.",
+      "body_text": "Conditional conclusion: if a 2-torsion lattice Gamma is placed in FH(Q) and the manifold-upgrade surgery obstruction vanishes, then the desired closed manifold exists.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 7
@@ -93,21 +93,21 @@
       "source": "p7-s3",
       "target": "p7-s2",
       "edge_type": "assert",
-      "evidence": "Surgery theory reduces to L_d(Z[Gamma]) obstruction",
+      "evidence": "Equivariant finiteness gives finite-CW rationally acyclic models (FH(Q)) under fixed-set Euler criteria",
       "detection": "structural"
     },
     {
       "source": "p7-s3a",
       "target": "p7-s3",
       "edge_type": "clarify",
-      "evidence": "Farrell-Jones (proven for these lattices) computes L-groups",
+      "evidence": "Arithmetic-lattice examples show the theorem is not purely abstract",
       "detection": "structural"
     },
     {
       "source": "p7-s4",
       "target": "p7-s3a",
       "edge_type": "assert",
-      "evidence": "Rational obstruction vanishes for odd-dim hyperbolic lattices",
+      "evidence": "Remaining gap is manifold-upgrade with pi_1 control plus explicit obstruction computation",
       "detection": "structural"
     },
     {
@@ -121,14 +121,14 @@
       "source": "p7-s6",
       "target": "p7-problem",
       "edge_type": "assert",
-      "evidence": "Yes: construction via surgery with Farrell-Jones",
+      "evidence": "Conditional yes after FH(Q) realization plus manifold-upgrade obstruction vanishing",
       "detection": "structural"
     },
     {
       "source": "p7-s6",
       "target": "p7-s4",
       "edge_type": "reference",
-      "evidence": "Uses vanishing surgery obstruction for specific lattices",
+      "evidence": "Depends on closing the manifold-upgrade and obstruction gap",
       "detection": "structural"
     },
     {
@@ -206,7 +206,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Surgery theory reduces to L_d(Z[Gamma]) obstruction",
+        "evidence": "Equivariant finiteness gives finite-CW rationally acyclic models (FH(Q)) under fixed-set Euler criteria",
         "detection": "structural"
       },
       "hx/labels": [
@@ -231,7 +231,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Farrell-Jones (proven for these lattices) computes L-groups",
+        "evidence": "Arithmetic-lattice examples show the theorem is not purely abstract",
         "detection": "structural"
       },
       "hx/labels": [
@@ -256,7 +256,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Rational obstruction vanishes for odd-dim hyperbolic lattices",
+        "evidence": "Remaining gap is manifold-upgrade with pi_1 control plus explicit obstruction computation",
         "detection": "structural"
       },
       "hx/labels": [
@@ -306,7 +306,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Yes: construction via surgery with Farrell-Jones",
+        "evidence": "Conditional yes after FH(Q) realization plus manifold-upgrade obstruction vanishing",
         "detection": "structural"
       },
       "hx/labels": [
@@ -331,7 +331,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Uses vanishing surgery obstruction for specific lattices",
+        "evidence": "Depends on closing the manifold-upgrade and obstruction gap",
         "detection": "structural"
       },
       "hx/labels": [
