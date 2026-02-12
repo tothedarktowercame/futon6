@@ -137,6 +137,11 @@ Codex added a sharpened blueprint in `problem6-proof-attempt.md`:
 If that lemma is proved, the potential telescopes and yields
 `|S| = Omega(|I0|) = Omega(epsilon n)`, i.e., universal `c0`.
 
+Codex also added a concrete conjectural target `L2*` with corrected horizon
+`t <= c_step * epsilon * n` (not `t <= gamma m0`) plus trajectory-level
+numerical evidence over 307 baseline Case-2b samples plus 2004 randomized
+trajectories (`max_t min_v score_t(v)` observed <= 0.833 in both runs).
+
 Codex has now formalized this into explicit sublemmas in
 `problem6-proof-attempt.md`:
 - `L1` (proved): averaged drift bound

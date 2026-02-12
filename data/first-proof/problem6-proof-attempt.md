@@ -500,7 +500,8 @@ So there exists v in R_t with
 ### Sublemma L2 (open): good-step score control
 
 There exist universal constants gamma in (0,1), theta in (0,1) such that:
-for every t <= gamma m0 with M_t <= epsilon I, there is some v in R_t with
+for every t <= gamma * epsilon * n with M_t <= epsilon I, there is some
+v in R_t with
 
     score_t(v) <= theta.
 
@@ -518,7 +519,11 @@ Combined with L2, this gives a controlled potential increment per step.
 ### Reduction proposition (proved): L2 + L3 imply linear-size Case 2b closure
 
 Assume L2 and L3 hold with constants gamma, theta, K.
-Choose v_t at each step t <= gamma m0 satisfying both bounds.
+Define gamma0 := min(gamma, 1/6), and set T := floor(gamma0 * epsilon * n).
+Since m0 >= epsilon*n/6, we have T <= gamma0*epsilon*n <= m0, so T steps are
+admissible.
+
+Choose v_t at each step t = 0,...,T-1 satisfying both bounds.
 
 If score_t(v_t) < 1, Neumann-series expansion gives
 
@@ -530,7 +535,7 @@ hence
                        <= K / ((1-theta) r_t),
     Phi_t := tr(B_t).
 
-Summing for t = 0,...,T-1 (T <= gamma m0):
+Summing for t = 0,...,T-1:
 
     Phi_T <= Phi_0 + (K/(1-theta)) * sum_{j=m0-T+1}^{m0} (1/j)
          <= Phi_0 + (K/(1-theta)) * log(m0/(m0-T)).
@@ -538,13 +543,54 @@ Summing for t = 0,...,T-1 (T <= gamma m0):
 All updates satisfy score_t(v_t) < 1, so M_t stays strictly below epsilon I.
 Thus M_T <= epsilon I and S_T is epsilon-light, with
 
-    |S_T| = T = floor(gamma m0) >= (gamma/6) * epsilon * n.
+    |S_T| = T = floor(gamma0 * epsilon * n).
 
-Therefore universal c0 = gamma/6 follows.
+Up to integer rounding, this gives a universal linear bound
+
+    |S_T| >= c0 * epsilon * n,   c0 = gamma0/2,
+
+for all epsilon*n >= 2 (the finite epsilon*n < 2 cases are absorbed by
+rounding/convention constants).
 
 ### What remains to prove (now explicit)
 
 Only L2 and L3 are open. L1 and the reduction proposition are complete.
+
+### Candidate L2 (discrepancy-flavored) and current evidence
+
+The natural quantitative target is:
+
+    Conjecture L2*.
+    There exist universal constants c_step > 0 and theta < 1 such that
+    for every Case-2b state with M_t <= epsilon I and t <= c_step * epsilon * n,
+    there exists v in R_t with score_t(v) <= theta.
+
+This is weaker than "for all t <= gamma m0", and correctly matches the theorem
+goal (we only need Omega(epsilon n) vertices, not a constant fraction of m0).
+
+One possible route is a matrix discrepancy/paving statement on the family
+{B_t^(1/2) C_t(v) B_t^(1/2)}_{v in R_t}, giving a guaranteed low-norm member
+without relying only on trace averages.
+
+Empirical check (ad hoc, not proof):
+- Graph families: Erdos-Renyi, complete, dumbbell
+- n in {24, 32, 40, 48, 64}
+- epsilon in {0.12, 0.15, 0.2, 0.25, 0.3}
+- Case-2b filter: alpha_I > epsilon
+- Trajectory: greedy choose v minimizing score_t(v)
+- Horizon: t <= floor(0.5 * epsilon * n)
+
+Observed on 307 Case-2b samples:
+- max_t min_v score_t(v): median 0.538, 90th pct 0.667, max 0.833
+- all samples had max_t min_v score_t(v) <= 0.95
+
+Additional stress test (2004 randomized trajectories, selecting randomly among
+the 5 best-score candidates each step):
+- max_t min_v score_t(v): median 0.556, 90th pct 0.694, max 0.833
+- all trajectories had max_t min_v score_t(v) <= 0.95
+
+Caveat: this is trajectory-based evidence (along one greedy path), not a
+worst-case-over-all-S_t guarantee.
 
 ### Obstruction note (why coarse bounds are insufficient)
 
