@@ -152,6 +152,9 @@ Codex has now formalized this into explicit sublemmas in
   alone already implies linear-size existence.
 - proved-but-insufficient averaging bound for `L2*`: `min score_t <= (tD/r_t) tr(B_t)`,
   which explains why scalar trace averaging cannot close the gap.
+- MSS/KS mapping section added: explicit template-to-gap analysis (why
+  interlacing, paving, and matrix concentration do not directly imply L2*),
+  plus a precise new target conjecture `GPL` (grouped paving lemma).
 
 ## Errors fixed (from your review)
 

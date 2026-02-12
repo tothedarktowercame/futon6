@@ -653,6 +653,69 @@ which is useless near the barrier because D <= 12/epsilon is large and
 ||B_t|| can grow as M_t approaches epsilon I.
 So L2 must use anisotropic structure of {X_{uv}} beyond trace/leverage totals.
 
+## MSS/KS Mapping Attempt (for L2*)
+
+We now map L2* against standard interlacing/paving templates to isolate
+exactly what new theorem is needed.
+
+### Grouped-atom formulation at step t
+
+Define barrier-normalized edge atoms and fixed vertex groups:
+
+    A_{u,v}^{(t)} := B_t^(1/2) X_{uv} B_t^(1/2)   (PSD),
+    C_t(v) = sum_{u in S_t, u~v} X_{uv},
+    Y_t(v) := B_t^(1/2) C_t(v) B_t^(1/2) = sum_{u in S_t, u~v} A_{u,v}^{(t)}.
+
+L2* asks for a universal theta<1 such that for all t<=c_step*epsilon*n:
+
+    exists v in R_t with ||Y_t(v)|| <= theta.
+
+### Template comparison
+
+1) MSS interlacing (rank-1 random sum): controls one realization of
+   sum_i xi_i A_i from expectation + atom bounds.
+   Gap: L2* is not a random-sum existence question; it is a fixed-group
+   minimum-over-v question on grouped sums Y_t(v).
+
+2) Kadison-Singer/Weaver paving: partition a family of atoms into blocks
+   with controlled block norm.
+   Gap: block assignment is optimized by the theorem, but in L2* blocks are
+   pre-determined by vertex v (no repartition freedom).
+
+3) Matrix Chernoff/Freedman: concentration for random subset sums.
+   Gap: gives high-probability bounds for sampled sums, but L2* needs
+   deterministic existence of one low-norm group at every step.
+
+### Proved but insufficient averaging bounds
+
+- From L1 and trace averaging:
+
+      min_v ||Y_t(v)|| <= (tD/r_t) tr(B_t),
+
+  not enough for universal theta<1 because tr(B_t) may scale with dimension
+  and barrier proximity.
+
+- Strong sufficient condition tested and falsified numerically in general:
+
+      sum_{v in R_t} Y_t(v) <= rho I with rho<1.
+
+  In sampled Case-2b trajectories, ||sum_v Y_t(v)|| is often >>1 (dense cases),
+  while min_v ||Y_t(v)|| remains <1. So L2* cannot rely on this strong budget
+  condition.
+
+### Candidate missing theorem (grouped paving lemma)
+
+Conjecture GPL (step-wise grouped paving):
+There exist universal c_step>0 and theta<1 such that for every Case-2b state
+at time t<=c_step*epsilon*n, the fixed family {Y_t(v)}_{v in R_t} satisfies
+
+    min_{v in R_t} ||Y_t(v)|| <= theta.
+
+with assumptions only from the problem setup (tau_f<=epsilon on I,
+sum_e X_e=I, and leverage-degree regularization on I0).
+
+This is precisely the theorem-level bridge needed for an unconditional proof.
+
 ## Notation Reference
 
 - L: graph Laplacian, L = Σ_e w_e b_e b_e^T
