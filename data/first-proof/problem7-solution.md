@@ -305,14 +305,36 @@ full wiring diagrams.
 is complete (see `problem7r-rotation-lattice-construction.md`). E2 is
 discharged. Two sub-options for obligation S:
 
-1. **S-rot-II (Equivariant surgery, recommended).** The codimension-2 gap
-   hypothesis is satisfied, so the Costenoble-Waner equivariant surgery
-   framework applies. The task is to compute the equivariant surgery
-   obstruction for the specific `Z/2`-action `(M^{2k+1}, sigma)` with
-   codimension-2 fixed set. This is a concrete computation.
+1. **S-rot-II (Equivariant surgery, recommended — conditionally favorable).**
+   The Costenoble-Waner codimension-2 gap hypothesis is satisfied. The "cut
+   and cap" method (Browder, López de Medrano) applies. Key findings from
+   the rational obstruction analysis:
+
+   - **2-primary obstructions vanish rationally.** The Browder-Livesay
+     invariant (Z/2-valued for `n = 7`), UNil terms, and Arf invariants
+     are all torsion, hence vanish over Q. The Davis-Lück Z/2 exclusion
+     (arXiv:2303.15765, which blocks the integral version of this problem)
+     does NOT apply to the rational version.
+   - **AHSS computation.** The rationalized equivariant surgery obstruction
+     lies in `ker(res) ⊆ L_{2k+2}(Z[Γ]) ⊗ Q`. For `n = 7` (cap dimension
+     8): `ker(res) = H_2(F; Q)`, where `F = H^5/C` is the fixed-point
+     manifold (arithmetic hyperbolic 5-manifold).
+   - **If `b_2(F) = 0`: ker(res) = 0 and the rational obstruction vanishes
+     unconditionally.** The integral obstruction is then torsion, killable
+     by a finite-cover trick.
+   - **Comparison:** S-rot-I has `ker(res) = Q ⊕ H_1(F; Q)` (always ≥ 1-dim).
+     S-rot-II has `ker(res) = H_2(F; Q)` (can be 0). S-rot-II is strictly
+     better at the obstruction-theory level.
+
+   See `problem7r-s-rot-obstruction-analysis.md` for full computation.
+
+   **Immediate question: does `b_2(F) = 0` for the arithmetic 5-manifold
+   `F = H^5/C` arising from the `Q(sqrt(2))` construction?** This is a
+   question about the cohomology of congruence subgroups of `SO(4,1)`.
 
 2. **S-rot-I (Wall surgery in odd dimension).** Fallback. Same three-obstacle
-   structure as Approach I but with favorable odd L-theory parity.
+   structure as Approach I but with favorable odd L-theory parity and
+   strictly fewer AHSS terms than the reflection case.
 
 **Deprioritized paths:**
 
@@ -342,6 +364,8 @@ discharged. Two sub-options for obligation S:
   Periodicity Properties*, Springer LNM 1443, 1990.
 - S. R. Costenoble, S. Waner, *The Equivariant Spivak Normal Bundle and
   Equivariant Surgery for Compact Lie Groups*, arXiv:1705.10909.
+- J. F. Davis, W. Lück, *On Nielsen Realization and Manifold Models for
+  Classifying Spaces*, Trans. AMS 377 (2024), 7557-7600, arXiv:2303.15765.
 - G. Avramidi, *Smith Theory, L2 Cohomology, Isometries of Locally Symmetric
   Manifolds, and Moduli Spaces of Curves*, arXiv:1106.1704.
 - M. Belolipetsky, A. Lubotzky, *Finite Groups and Hyperbolic Manifolds*,

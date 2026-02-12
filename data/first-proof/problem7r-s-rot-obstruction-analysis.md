@@ -328,6 +328,201 @@ The specific obstruction group depends on the formulation:
 **Status: OPEN.** The obstruction group is identified. The specific
 obstruction for our hyperbolic-manifold action has not been computed.
 
+### Gap hypothesis: clarification of two distinct conditions
+
+Two different "gap hypotheses" appear in the equivariant surgery literature.
+They are often conflated but have very different content:
+
+**Costenoble-Waner gap hypothesis** (arXiv:1705.10909): For distinct isotropy
+subgroups H ⊂ K, the fixed sets X^K and X^H must differ in dimension by ≥ 2.
+In our case: isotropy subgroups are {1} and Z/2, with fixed sets M^{2k+1}
+and F^{2k-1}. Codimension = 2 ≥ 2. **SATISFIED (with equality).**
+
+**Dovermann-Schultz gap hypothesis** (LNM 1443): The fixed set must lie below
+the middle dimension: `dim F < (dim M)/2`. In our case: dim F = 2k-1,
+(dim M)/2 = (2k+1)/2 = k + 1/2. For k ≥ 2, we have 2k-1 ≥ 3 > 5/2, so
+**NOT SATISFIED.** The fixed set is *above* the middle dimension.
+
+**Consequence:** The Costenoble-Waner equivariant surgery *framework* applies
+(formal setup, equivariant Spivak bundles, surgery exact sequence). But the
+Dovermann-Schultz "surgery below the middle dimension" technique does NOT
+apply — equivariant surgery below the middle dimension cannot handle the
+obstruction because the fixed set is too large. A genuine obstruction
+computation is needed; the obstruction cannot be killed by dimension counting.
+
+### Davis-Lück manifold model theorem and the Z/2 exclusion
+
+**Theorem** (J. F. Davis, W. Lück, Trans. AMS 377 (2024), arXiv:2303.15765):
+Let Γ be a virtually torsion-free group containing a normal torsion-free
+subgroup π such that π is hyperbolic, is the fundamental group of an
+aspherical closed manifold of dimension ≥ 5, and Γ/π is a **finite cyclic
+group of odd order**. Then there exists a cocompact proper topological
+Γ-manifold that is equivariantly homotopy equivalent to E_{Fin}(Γ).
+
+**Why this solves the analogous problem for odd G = Γ/π:** If such a manifold
+model M exists, then M/Γ is a closed manifold with π_1 = Γ and contractible
+universal cover (since M ≃ E_{Fin}(Γ), which is contractible when Γ is
+torsion-free in the relevant sense).
+
+**Why Z/2 is explicitly excluded:** The proof uses equivariant surgery to
+modify a manifold with G-action to become a proper manifold model. For
+odd-order G, the 2-primary surgery obstructions vanish (L-groups at odd
+primes are simpler). For G = Z/2:
+- UNil_{4k+2}(Z) is infinitely generated (Cappell, Inventiones 1976)
+- The Browder-Livesay invariant is non-trivial (Z/2 in dimensions ≡ 3(4),
+  Z in dimensions ≡ 1(4))
+- 2-primary Arf invariant phenomena create obstructions
+
+These are all **integral** (2-primary) obstructions. They are the reason
+the Davis-Lück theorem cannot handle Z/2.
+
+### Critical observation: we only need rational acyclicity
+
+The key insight that may circumvent the Davis-Lück exclusion:
+
+**Problem 7 requires only rational acyclicity** — `H_*(Ñ; Q) = 0` for
+`* > 0` — **not contractibility** of the universal cover.
+
+This changes the obstruction theory fundamentally:
+
+1. **UNil vanishes rationally.** Connolly-Davis: UNil_*(Z; Z, Z) ⊗ Q = 0.
+   The infinitely generated UNil_{4k+2}(Z) contributes nothing over Q.
+
+2. **Browder-Livesay invariant vanishes rationally.** For n = 2k+1 ≡ 3(4)
+   (our case with k odd, e.g., n = 7): the Browder-Livesay invariant takes
+   values in Z/2. Tensoring with Q: Z/2 ⊗ Q = 0.
+
+3. **Arf invariant vanishes rationally.** The Arf invariant (and all
+   secondary Browder-Livesay obstructions) are 2-torsion.
+
+4. **The rational surgery obstruction is computable.** By FJC + AHSS, the
+   rationalized L-groups L_*(Z[Γ]) ⊗ Q are explicit (computed in the
+   S-rot-I section above). The rational equivariant surgery obstruction
+   lies in these computable groups.
+
+**Conclusion:** The 2-primary phenomena that block Davis-Lück for Z/2
+**vanish entirely** when we only need rational acyclicity. The rational
+equivariant surgery obstruction is all that matters for Problem 7.
+
+### Rational equivariant surgery: the argument
+
+**Setup.** (M^{2k+1}, σ) with "cut and cap" producing (W, ∂W = S(ν)) with
+free Z/2 action. The integral surgery obstruction to capping off W lies in
+some group Θ.
+
+**Why the obstruction lies in ker(res).** The "equivariant desurgery"
+problem asks for an equivariant cobordism (W^{2k+2}; M, M') where M' has
+a free Z/2 action. The surgery obstruction θ for this cobordism lies in
+L_{2k+2}(Z[Γ]). The restriction res(θ) ∈ L_{2k+2}(Z[π]) measures the
+non-equivariant (underlying) surgery obstruction. Since M is already a
+genuine closed manifold (not just a Poincaré complex), the underlying
+non-equivariant surgery problem has zero obstruction. Therefore
+**θ ∈ ker(res)**.
+
+**Step 1.** Decompose ker(res) = ker(res)_{free} ⊕ ker(res)_{2-torsion}
+⊕ ker(res)_{odd-torsion}. Rationally: ker(res) ⊗ Q = ker(res)_{free} ⊗ Q.
+
+**Step 2.** The 2-torsion part contains the Browder-Livesay invariant, Arf
+invariants, and UNil contributions. All vanish after ⊗ Q.
+
+**Step 3.** The rationalized obstruction lies in ker(res) ⊗ Q, computable
+via FJC + AHSS. The "capping cobordism" has dimension 2k+2, giving:
+
+```
+ker(res) ⊗ Q ⊆ L_{2k+2}(Z[Γ]) ⊗ Q
+```
+
+The AHSS for L_{2k+2}(Z[Γ]) ⊗ Q: total degree p + q = 2k+2 with
+q ≡ 0(4), so all p values are **even**.
+
+**Augmentation factor** (free stratum, maps injectively under res):
+
+| (p, q) | Term |
+|---------|------|
+| (2k+2, 0)  | H_{2k+2}(M; Q)^σ = 0 (dim M = 2k+1) |
+| (2k-2, 4)  | H_{2k-2}(M; Q)^σ |
+| ...     | ... |
+| (0, 4⌊(k+1)/2⌋) | H_0(M; Q)^σ = Q |
+
+**Sign factor** (fixed stratum, Thom-shifted by codim 2, maps to 0 under res):
+
+| (p, q) | Term |
+|---------|------|
+| (2k, 0)    | H_{2k-2}(F; Q) |
+| (2k-4, 4)  | H_{2k-6}(F; Q) |
+| ...     | ... |
+
+Since the augmentation factor maps injectively under res and the sign factor
+maps to zero:
+
+```
+ker(res) ⊗ Q = sign factor = ⊕_{j≥0} H_{p_j - 2}(F; Q)
+```
+
+where the sum is over AHSS positions (p_j, q_j) with p_j + q_j = 2k+2,
+q_j ≡ 0(4), and p_j - 2 ≥ 0.
+
+For n = 7 (k = 3, cap dimension 8). The sign factor (Thom-shifted by
+codim 2): H_p^{Z/2}(M; M_q^{sign}) = H_{p-2}(F; Q) for q ≡ 0(4).
+
+At total degree 8:
+- (8, 0): H_6(F; Q) = 0 (dim F = 5)
+- (4, 4): H_2(F; Q)
+- (0, 8): H_{-2}(F; Q) = 0
+
+So **ker(res) ⊗ Q = H_2(F; Q)**.
+
+For an arithmetic hyperbolic 5-manifold F, b_2(F) depends on the lattice.
+**If b_2(F) = 0: ker(res) ⊗ Q = 0, so the rationalized obstruction
+vanishes unconditionally.** Since θ ∈ ker(res) and ker(res) ⊗ Q = 0,
+the obstruction θ is torsion.
+
+**Comparison with S-rot-I.** The S-rot-I obstruction lies in ker(res) of
+L_{2k+1}(Z[Γ]) ⊗ Q:
+
+```
+ker(res) in L_7 = Q ⊕ H_1(F; Q)    (always ≥ 1-dimensional)
+ker(res) in L_8 = H_2(F; Q)          (can be 0)
+```
+
+**S-rot-II is strictly better.** For n = 7, the sign-factor contributions
+to ker(res) are:
+
+- **L_7 (S-rot-I):** sign factor at (7, 0) → H_5(F; Q) = Q [fundamental
+  class], and at (3, 4) → H_1(F; Q). Net: **Q ⊕ H_1(F; Q).** Always at
+  least 1-dimensional (the Q from the fundamental class cannot be eliminated).
+- **L_8 (S-rot-II):** sign factor at (4, 4) → H_2(F; Q). Net: **H_2(F; Q).**
+  Can be zero if b_2(F) = 0.
+
+The critical difference: S-rot-I always has a nonzero rational obstruction
+group (the Q factor from the fundamental class of the fixed-point manifold F
+is inescapable). S-rot-II eliminates this factor entirely by working one
+dimension higher in the L-group.
+
+**Step 4.** If b_2(F) = 0: ker(res) ⊗ Q = 0, so θ is torsion. By passing
+to a finite cover (or by performing surgery modulo torsion in Avramidi's
+rational surgery framework), we can achieve a manifold with rationally
+acyclic universal cover.
+
+More precisely: if θ has order d, let Γ' be a normal subgroup of Γ of
+index coprime to d (available by the congruence subgroup property). Then the
+restriction of θ to Γ' vanishes, and the surgery can be performed over Γ'.
+The resulting manifold N' has π_1(N') = Γ' (a finite-index subgroup of Γ
+with 2-torsion) and rationally acyclic universal cover — this suffices
+for Problem 7 (which asks about uniform lattices with 2-torsion, not
+specifically about Γ itself).
+
+**Caveat:** The passage from "rational obstruction vanishes" to "rational
+surgery can be performed" requires either:
+(a) The integral obstruction is itself zero (strongest), or
+(b) A rational surgery theory that replaces integral Poincaré duality
+    with rational Poincaré duality (Avramidi's framework), or
+(c) A finite-cover trick: replace (M, σ) by a finite-index sublattice
+    to kill the torsion obstruction.
+
+Options (b) and (c) are both available. Option (c) is straightforward: if
+θ has order d, pass to a normal subgroup of Γ of index coprime to d.
+
 ### Key advantage of S-rot-II over S-rot-I
 
 S-rot-II avoids all three obstacles of S-rot-I (P2, P4, and the
@@ -337,11 +532,13 @@ removing the fixed set. This is more tractable because:
 
 1. The starting data is completely explicit: (M, σ) is a specific Riemannian
    manifold with a specific isometric involution.
-2. The equivariant surgery theory is formally applicable (gap hypothesis
-   satisfied, Costenoble-Waner 1705.10909).
+2. The equivariant surgery theory is formally applicable (Costenoble-Waner
+   gap hypothesis satisfied, 1705.10909).
 3. The classical "cut and cap" framework (Browder, López de Medrano) applies.
 4. The obstruction is computable in principle from the equivariant topology
    of (M, σ, F) and the normal bundle ν.
+5. **The rational obstruction may vanish outright** for suitable lattice
+   choices (specifically: if b_2(F) = 0 for the fixed-point manifold).
 
 ### Normal bundle structure
 
@@ -379,23 +576,86 @@ the codimension-2 fixed set of a semi-free Z/2-action on a closed
 odd-dimensional manifold.
 
 **S-rot-II is the narrower bottleneck.** It replaces three open obstacles
-with one.
+with one. Moreover:
 
-### Recommended next step
+- The 2-primary obstructions (Browder-Livesay, UNil, Arf) that block the
+  Davis-Lück approach for Z/2 all vanish rationally.
+- The rationalized obstruction lies in ker(res) ⊆ L_{2k+2}(Z[Γ]) ⊗ Q.
+- For n = 7: ker(res) = H_2(F; Q), which vanishes if b_2(F) = 0.
+- **If b_2(F) = 0 for the arithmetic 5-manifold F, the rational
+  obstruction vanishes and S-rot-II succeeds.**
 
-Compute the equivariant surgery obstruction for the specific action
-(M^{2k+1}, σ) with:
-- M a closed hyperbolic manifold
-- σ an isometric involution fixing F^{2k-1} (totally geodesic, codim 2)
-- Normal bundle: ν = R²_- (sign representation)
+### The b_2(F) question: what the literature says
 
-Literature to consult:
-- Wall, Surgery on Compact Manifolds, Chapter 14 (surgery on involutions)
-- Dovermann-Schultz, LNM 1443 (equivariant surgery periodicity)
-- Costenoble-Waner, arXiv:1705.10909 (equivariant Spivak bundle, surgery)
-- López de Medrano, Involutions on Manifolds (classical surgery on involutions)
-- Weinberger, The Topological Classification of Stratified Spaces (surgery
-  on stratified spaces, relevant for orbifold quotients)
+**Research finding (Vogan-Zuckerman + Matsushima + Millson-Raghunathan):**
+
+The fixed-point manifold F = H^5/C is an arithmetic hyperbolic 5-manifold
+of **simplest type** (arising from the quadratic form g = (1-√2)x_0^2 +
+x_3^2 + x_4^2 + x_5^2 + x_6^2 + x_7^2 over Q(√2), a congruence
+subgroup of SO(5,1)).
+
+By Matsushima's formula, b_2(F) = m(π_2), the multiplicity of the A_q
+module with Levi factor SO(2) × SO(3,1) in the automorphic spectrum of C.
+
+**b_2 = 0 is NOT forced by any known vanishing theorem:**
+
+1. **Property (T) does not apply.** SO(n,1) is rank 1, no property (T).
+2. **Li-Schwermer vanishing** requires regular (non-trivial) coefficients;
+   we use trivial coefficients.
+3. **Bergeron-Millson-Moeglin** (IMRN 2017) covers degrees < n/3 = 5/3,
+   so only degrees 0 and 1 — **degree 2 is in the gap**.
+4. **Higher Kazhdan property** gives nothing for rank 1 groups.
+
+**b_2 > 0 for sufficiently deep congruence covers:**
+
+By Millson-Raghunathan (1979/1981) and Kudla-Millson (theta lifts):
+for simplest-type arithmetic lattices in SO(5,1), sufficiently deep
+congruence subgroups have b_2 > 0 (via non-trivial Poincaré duals
+of totally geodesic H^3 ⊂ H^5).
+
+The limit multiplicity formula (Bergeron-Clozel): b_2/vol → c_2 > 0 as
+the congruence level grows, confirming asymptotic non-vanishing.
+
+**For the specific level (3):** Whether b_2(F) = 0 for C at level I = (3)
+is a concrete computational question (requires trace formula or explicit
+spectral decomposition). For very small levels, b_2 could be zero because
+the volume is too small for the A_q representation to appear. But this
+is not guaranteed by theory.
+
+**Assessment:** The b_2 = 0 approach is **uncertain** — it cannot be ruled
+out for specific small-level lattices, but no vanishing theorem guarantees
+it. The argument should not rely on b_2 = 0.
+
+### Recommended next steps (revised)
+
+**Step A (primary: geometric vanishing of the obstruction class).**
+Even if H_2(F; Q) ≠ 0, the specific obstruction class θ ∈ H_2(F; Q) might
+vanish for geometric reasons. The class θ is determined by the equivariant
+intersection form and the flat normal bundle data of the totally geodesic
+embedding F ⊂ M. Investigate whether the rigidity of the hyperbolic
+structure (Mostow rigidity) and the flatness of ν force θ = 0.
+
+This is the strongest approach: it would work regardless of b_2(F).
+
+Key tools:
+- The equivariant surgery obstruction formula (Browder-Petrie, Dovermann)
+- The relationship between θ and the linking form on S(ν)
+- The flatness of ν (consequence of the totally geodesic embedding)
+- Mostow rigidity constraints on the equivariant topology
+
+**Step B (secondary: small-level computation).** Determine b_2(F) for the
+specific congruence subgroup C at level I = (3) in SO(g, Z[√2]). This is
+a concrete spectral computation. If b_2 = 0 for this level, the rational
+obstruction vanishes automatically. Methods:
+- Trace formula computation for SO(5,1) at level (3)
+- Selberg zeta function methods
+- Direct enumeration (if the quotient is small enough)
+
+**Step C (integral obstruction / finite-cover trick).** If the rational
+obstruction vanishes (by either Step A or B), determine whether the
+integral obstruction is torsion. If so, pass to a finite-index sublattice.
+
+**Step D (write up).** Assemble the full proof of obligation S.
 
 ## Appendix: Why the Branched Double Cover Quotient Fails
 
@@ -422,23 +682,48 @@ Equivariant surgery is needed precisely to avoid this π_1 problem.
 
 ## References
 
-- A. Bartels, F. T. Farrell, W. Luck, arXiv:1101.0469.
+- A. Bartels, F. T. Farrell, W. Luck, *The Farrell-Jones Conjecture for
+  cocompact lattices in virtually connected Lie groups*, JAMS 2014,
+  arXiv:1101.0469.
+- S. E. Cappell, *A Splitting Theorem for Manifolds*, Inventiones Math. 33
+  (1976), 69-170. (UNil groups, splitting obstructions.)
+- F. Connolly, J. F. Davis, *On the calculation of UNil*, arXiv:math/0304016.
+- S. R. Costenoble, S. Waner, arXiv:1705.10909.
+- J. F. Davis, W. Lück, *On Nielsen Realization and Manifold Models for
+  Classifying Spaces*, Trans. AMS 377 (2024), 7557-7600, arXiv:2303.15765.
+  (Manifold model theorem for odd-order quotients; Z/2 excluded.)
+- K. H. Dovermann, R. Schultz, *Equivariant Surgery Theories and Their
+  Periodicity Properties*, LNM 1443, 1990.
+- K. H. Dovermann, T. Petrie, *G-Surgery II*, Memoirs AMS 37 (1982), No. 260.
+- R. H. Fox, *Covering Spaces with Singularities*, in A Symposium in Honour
+  of S. Lefschetz, Princeton Univ. Press, 1957.
 - W. Browder, *Surgery and the Theory of Differentiable Transformation
   Groups*, Proc. Conf. Transformation Groups (New Orleans, 1967), Springer,
   1968, pp. 1-46.
 - W. Browder, T. Petrie, *Diffeomorphisms of manifolds and semifree actions
   on homotopy spheres*, Bull. AMS 77 (1971), 160-163.
-- F. Connolly, J. F. Davis, *L-theory of the infinite dihedral group*,
-  Forum Math. 16 (2004), 687-699.
-- S. R. Costenoble, S. Waner, arXiv:1705.10909.
-- K. H. Dovermann, R. Schultz, *Equivariant Surgery Theories and Their
-  Periodicity Properties*, LNM 1443, 1990.
-- R. H. Fox, *Covering Spaces with Singularities*, in A Symposium in Honour
-  of S. Lefschetz, Princeton Univ. Press, 1957.
+- B. Hughes, S. Weinberger, *Surgery and Stratified Spaces*, in Surveys on
+  Surgery Theory Vol. 2, 2001, arXiv:math/9807156.
 - S. López de Medrano, *Involutions on Manifolds*, Ergebnisse der Mathematik
-  73, Springer, 1971.
+  73, Springer, 1971. (Classical "cut and cap" for codimension-2 fixed sets.)
+- S. López de Medrano, *Invariant Knots and Surgery in Codimension 2*, Proc.
+  ICM 1970.
 - A. Ranicki, *Algebraic and Geometric Surgery*, Oxford Univ. Press, 2002.
+- A. Ranicki, *High-Dimensional Knot Theory: Algebraic Surgery in Codimension
+  2*, Springer, 1998. (Algebraic codim-2 surgery, Γ-groups.)
 - C. T. C. Wall, *Surgery on Compact Manifolds*, 2nd ed., AMS, 1999.
-  (π-π theorem: Chapters 3-4.)
+  (π-π theorem: Chs. 3-4; LN-groups for splitting: Chs. 12-14.)
+- S. Weinberger, *Variations on a Theme of Borel*, Cambridge Tracts in
+  Mathematics 213, 2020. (Borel conjecture, surgery for lattices.)
 - S. Weinberger, *The Topological Classification of Stratified Spaces*,
   Chicago Lectures in Mathematics, 1994.
+- N. Bergeron, L. Clozel, *Spectre automorphe des variétés hyperboliques
+  et applications topologiques*, Astérisque 303, 2005.
+- N. Bergeron, J. Millson, C. Moeglin, *Hodge Type Theorems for Arithmetic
+  Manifolds Associated to Orthogonal Groups*, IMRN 2017(15), 4495-4624.
+  (Special cycles generate H^j for j < n/3.)
+- J. Millson, M. S. Raghunathan, *Geometric Construction of Cohomology for
+  Arithmetic Groups I*, Proc. Indian Acad. Sci. 90 (1981), 103-123.
+  (b_2 > 0 for deep congruence covers.)
+- D. A. Vogan, G. Zuckerman, *Unitary Representations with Non-Zero
+  Cohomology*, Compositio Math. 53 (1984), 51-90.

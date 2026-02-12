@@ -34,10 +34,15 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
     |
     +--[S-rot-II] Equivariant surgery on (M, sigma)  -- RECOMMENDED
           |
-          | Codim-2 gap hypothesis: SATISFIED
-          | Costenoble-Waner framework applies
+          | Costenoble-Waner gap hypothesis: SATISFIED (codim 2 ≥ 2)
+          | Dovermann-Schultz gap: NOT satisfied (dim F > dim M / 2)
+          | → genuine obstruction computation needed
+          |
+          | Key finding: 2-primary obstructions vanish rationally
+          | Rational obstruction: ker(res) in L_{2k+2} ⊗ Q = H_2(F;Q)
           v
-        [Equivariant surgery obstruction] (OPEN — computable)
+        [Equivariant surgery obstruction] (OPEN — conditionally favorable)
+        If b_2(F) = 0: rational obstruction VANISHES
 ```
 
 ### Node status
@@ -47,18 +52,30 @@ and the codimension-2 gap hypothesis is satisfied for equivariant surgery.
 | E2-rot: lattice existence | **DISCHARGED** | Arithmetic lattice `SO(f, Z[sqrt(2)])` with `f = (1-sqrt(2))x_0^2 + x_1^2 + ... + x_n^2`, `n` odd. The involution `sigma = diag(1,-1,-1,1,...,1)` is an order-2 rotation with codim-2 fixed set. See `problem7r-rotation-lattice-construction.md`. |
 | Fowler application | **DISCHARGED** | Fixed set dim `n-2` is odd → `chi = 0`. Fowler Main Theorem gives `Gamma in FH(Q)`. |
 | S-rot-I: Wall surgery | **Open** | Same three obstacles as Approach I (Poincare complex, normal map, obstruction), but the obstruction computation benefits from odd parity: ker(res) = Q ⊕ H_1(F;Q) vs Q ⊕ H_3(F;Q) ⊕ H_1(F;Q) for reflections. Fallback option. |
-| S-rot-II: Equivariant surgery | **Open (recommended)** | "Cut and cap" method (Browder 1968, López de Medrano 1971): cut out N(F), cap off free boundary. π-π theorem does NOT apply (π_1(S(ν)) ⊊ π_1(M\F)). Genuine surgery obstruction in L_{2k+2}(Z[Γ]). See `problem7r-s-rot-obstruction-analysis.md`. |
+| S-rot-II: Equivariant surgery | **Open (recommended — conditionally favorable)** | "Cut and cap" method (Browder 1968, López de Medrano 1971): cut out N(F), cap off free boundary. π-π theorem does NOT apply (π₁(S(ν)) ⊊ π₁(M\F)). **Rational analysis:** 2-primary obstructions (Browder-Livesay, UNil, Arf) vanish over Q. Davis-Lück Z/2 exclusion (arXiv:2303.15765) does not apply to the rational problem. Rationalized obstruction: ker(res) in L₈(Z[Γ])⊗Q = H₂(F;Q). **If b₂(F) = 0 for the arithmetic 5-manifold F, the rational obstruction vanishes.** See `problem7r-s-rot-obstruction-analysis.md`. |
 
 ### Why this is the most promising path
 
 1. **Dimension-parity tension dissolved.** E2 and S both want odd n.
 2. **Lattice existence resolved.** The arithmetic construction over `Q(sqrt(2))`
    provides the needed lattice. See `problem7r-rotation-lattice-construction.md`.
-3. **Equivariant surgery becomes available.** The codim-2 gap (which blocks
-   Approach II for reflections) is satisfied for rotational involutions.
-4. **Two parallel S-branch options.** If equivariant surgery is computable,
-   it bypasses the FH(Q) complex entirely.
-5. **Single remaining open problem: surgery obstruction computation.**
+3. **Equivariant surgery becomes available.** The Costenoble-Waner codim-2 gap
+   (which blocks Approach II for reflections) is satisfied for rotations.
+4. **Two parallel S-branch options.** Equivariant surgery (S-rot-II) bypasses
+   the FH(Q) complex entirely.
+5. **2-primary obstructions vanish rationally.** The Davis-Lück Z/2 exclusion
+   (which is about integral/2-primary phenomena) does not apply since P7 only
+   needs rational acyclicity. Browder-Livesay, UNil, Arf all vanish over Q.
+6. **Rational obstruction is conditionally zero.** For n = 7: the rational
+   obstruction reduces to H₂(F; Q). If b₂(F) = 0, it vanishes.
+7. **b₂(F) question resolved by literature review:** No vanishing theorem
+   forces b₂(F) = 0 (Bergeron-Millson-Moeglin covers only degrees < 5/3;
+   Millson-Raghunathan guarantees b₂ > 0 for deep levels). However, b₂
+   could be zero for specific small-level lattices. The question is
+   computational.
+8. **Two remaining paths:** (a) Show the obstruction class θ ∈ H₂(F;Q)
+   vanishes for geometric reasons (flatness of ν, Mostow rigidity), or
+   (b) compute b₂ for the specific level-(3) lattice.
 
 ### Lattice existence: RESOLVED
 
@@ -174,22 +191,24 @@ and Fowler fails. This is WHY the original construction needed even n.
 
 ## Summary: Recommended Priority Order
 
-1. **H1 (Rotation route):** Most promising. E2 fully discharged (lattice
-   existence resolved). **The only remaining open problem is the surgery
-   obstruction computation** (either S-rot-I or S-rot-II). S-rot-II
-   (equivariant surgery via Costenoble-Waner) is recommended as the
-   primary path.
+1. **H1 (Rotation route) — S-rot-II:** Most promising. E2 fully discharged.
+   Rational obstruction analysis shows: 2-primary obstructions vanish over Q
+   (Davis-Lück Z/2 exclusion does not apply to rational problem). Rationalized
+   equivariant surgery obstruction = H₂(F; Q). **If b₂(F) = 0 for the
+   arithmetic 5-manifold F, the rational obstruction vanishes and S-rot-II
+   succeeds.** Immediate next step: determine b₂(F) for the Q(√2) lattice.
 
-2. **H2 (Reflection + Wall surgery):** Documented in detail. Three open
-   obstacles with structural headwinds. Only pursue if a reference resolves
-   obstacles 1-2 simultaneously.
+2. **H1 (Rotation route) — S-rot-I:** Fallback. Same three-obstacle structure
+   as H2 but with favorable odd L-theory parity. ker(res) = Q ⊕ H₁(F;Q).
 
-3. **H4 (Orbifold resolution):** Unexplored, needs a specific technique.
-   Low priority unless a resolution-with-pi_1-control method is found.
+3. **H2 (Reflection + Wall surgery):** Three open obstacles with structural
+   headwinds. Only pursue if rotation route fails entirely.
 
-4. **H3 (Reflection + equivariant surgery):** Blocked by gap hypothesis.
+4. **H4 (Orbifold resolution):** Unexplored, needs a specific technique.
 
-5. **H5 (Odd-dim reflection):** Blocked by Gauss-Bonnet.
+5. **H3 (Reflection + equivariant surgery):** Blocked by gap hypothesis.
+
+6. **H5 (Odd-dim reflection):** Blocked by Gauss-Bonnet.
 
 
 ## Key References for H1 (Rotation Route)

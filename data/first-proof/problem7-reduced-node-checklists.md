@@ -165,32 +165,39 @@ and `problem7-hypothetical-wirings.md` for full analysis.
 5. Approach II (reflection equivariant surgery): **Blocked** — codim-2 gap
    hypothesis fails for codim-1 fixed sets (Costenoble-Waner 1705.10909).
 6. Approach III (orbifold resolution): **Unexplored** — no technique found.
-7. **Approach IV (rotation route): E2 DISCHARGED — S open.** Lattice
-   existence resolved (`problem7r-rotation-lattice-construction.md`).
-   Remaining: compute equivariant surgery obstruction (S-rot-II) or
-   Wall surgery obstruction (S-rot-I).
-8. `p7r-s5` (full closure): **Blocked** on resolving S via any approach.
+7. **Approach IV (rotation route): E2 DISCHARGED — S conditionally favorable.**
+   Lattice existence resolved (`problem7r-rotation-lattice-construction.md`).
+   Rational obstruction analysis completed: 2-primary obstructions vanish
+   over Q; Davis-Lück Z/2 exclusion (arXiv:2303.15765) does not apply to
+   rational problem. Rationalized equivariant surgery obstruction for n=7:
+   ker(res) in L₈(Z[Γ])⊗Q = H₂(F;Q). **If b₂(F) = 0 for the arithmetic
+   5-manifold F, the rational obstruction vanishes.**
+   See `problem7r-s-rot-obstruction-analysis.md`.
+8. `p7r-s5` (full closure): **Blocked** on resolving S; conditional on
+   b₂(F) computation.
 
-### Path forward (updated after rotation lattice construction)
+### Path forward (updated after rational obstruction analysis)
 
-**Priority 1 — Approach IV, S-rot-II (equivariant surgery).** Lattice
-existence is resolved. The `Q(sqrt(2))` arithmetic construction gives a
-cocompact lattice in `SO(n,1)` with order-2 rotation `sigma` having
-codim-2 fixed set. E2 is discharged (Fowler). The Costenoble-Waner
-equivariant surgery framework applies (codim-2 gap satisfied). The task
-is to compute the equivariant surgery obstruction for `(M^{2k+1}, sigma)`
-with fixed `F^{2k-1}`.
+**Priority 1 — Determine b₂(F) for the arithmetic 5-manifold.** The fixed-
+point manifold F = H⁵/C is an arithmetic hyperbolic 5-manifold (congruence
+subgroup of SO(4,1) over Q(√2)). Determine whether b₂(F) = 0. Methods:
+Matsushima's formula, Li-Schwermer vanishing, or explicit computation.
+If b₂(F) = 0, the rational equivariant surgery obstruction vanishes.
 
-**Priority 2 — Approach IV, S-rot-I (Wall surgery in odd dim).** Fallback
-if equivariant surgery computation is intractable. Same three-obstacle
-structure as Approach I but with favorable odd L-theory parity.
+**Priority 2 — Assemble the full S-rot-II argument.** If b₂(F) = 0:
+(a) rational obstruction vanishes (computed above);
+(b) integral obstruction is torsion → killed by finite-cover trick;
+(c) "cut and cap" produces free Z/2 action → N = M'/(Z/2) has π₁ = Γ
+    and rationally acyclic universal cover → obligation S discharged.
 
-**Priority 3 — Approach I (Wall surgery, reflection route).** Only if
-rotation route surgery computations both fail.
+**Priority 3 — Fallback if b₂(F) ≠ 0.** Either:
+(a) compute the specific rational obstruction class σ ∈ H₂(F;Q) from
+    the equivariant geometry and show it vanishes, or
+(b) choose a different arithmetic lattice with b₂(F) = 0, or
+(c) fall back to S-rot-I (Wall surgery in odd dimension).
 
-**Deprioritized — Approach III (orbifold resolution).** No technique found.
+**Deprioritized — Approaches I-III.** Only if rotation route fails entirely.
 
 **Blocked — Approach II for reflections.** Codim-2 gap kills this.
 
-**Blocked — Odd-dim reflections.** Gauss-Bonnet: even-dim closed hyperbolic
-manifolds have chi != 0, so Fowler fails.
+**Blocked — Odd-dim reflections.** Gauss-Bonnet kills this.
