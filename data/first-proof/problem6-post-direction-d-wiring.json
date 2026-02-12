@@ -1,0 +1,495 @@
+{
+  "thread_id": "first-proof-p6-post-d",
+  "nodes": [
+    {
+      "id": "p6d-q",
+      "node_type": "question",
+      "post_id": 6300,
+      "body_text": "Post-D target: close GPL-H via regime split. Prove that at each Case-2b step, at least one branch certifies a vertex with ||Y_t(v)|| < 1.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": null,
+      "tags": {
+        "verification_status": "open"
+      }
+    },
+    {
+      "id": "p6d-a1",
+      "node_type": "answer",
+      "post_id": 6301,
+      "body_text": "Direction D finding: uniform near-rank-1 universality fails up to n<=48 (max rank gap > 2 in dense late steps).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "proved_negative"
+      }
+    },
+    {
+      "id": "p6d-a2",
+      "node_type": "answer",
+      "post_id": 6302,
+      "body_text": "Regime split template: low-gap branch + high-gap branch + trivial zero-score branch; glue by disjunction at each step.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "reformulation"
+      }
+    },
+    {
+      "id": "p6d-l",
+      "node_type": "answer",
+      "post_id": 6303,
+      "body_text": "Low-gap branch (open): if p90 gap is small, prove perturbative shadow transfer from Y_t(v) to rank-1 proxy sigma_v q_v q_v^T, then certify min_v ||Y_t(v)|| < 1.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "open"
+      }
+    },
+    {
+      "id": "p6d-h",
+      "node_type": "answer",
+      "post_id": 6304,
+      "body_text": "High-gap branch (open): if mean gap is large, convert drift control into score control using ||Y|| = tr(Y)/gap, yielding a good vertex.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "open"
+      }
+    },
+    {
+      "id": "p6d-t",
+      "node_type": "answer",
+      "post_id": 6305,
+      "body_text": "Trivial branch (proved): if min_v score_t(v)=0 then GPL-H step is immediate for any theta>0.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "proved"
+      }
+    },
+    {
+      "id": "p6d-e",
+      "node_type": "comment",
+      "post_id": 6306,
+      "body_text": "Empirical split diagnostics (n<=48): low=0.603, high=0.348, split=0.950, total=1.000; split misses=23 (max min_score=0.0).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6302,
+      "tags": {
+        "verification_status": "empirical"
+      }
+    },
+    {
+      "id": "p6d-g",
+      "node_type": "answer",
+      "post_id": 6307,
+      "body_text": "Glue obligation (open): prove exhaustive either-or theorem so every step falls into low-gap, high-gap, or trivial branch with a certified good vertex.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "open"
+      }
+    },
+    {
+      "id": "p6d-s",
+      "node_type": "answer",
+      "post_id": 6308,
+      "body_text": "Existing sufficiency (proved): if each step has score_t(v)<=theta<1, barrier closes and yields |S| = Omega(epsilon n).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6300,
+      "tags": {
+        "verification_status": "proved"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "p6d-a1",
+      "target": "p6d-q",
+      "edge_type": "challenge",
+      "evidence": "Uniform near-rank-1 not valid globally; need split",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-a2",
+      "target": "p6d-q",
+      "edge_type": "reform",
+      "evidence": "Replace universal Direction D with branch-wise theorem plan",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-l",
+      "target": "p6d-a2",
+      "edge_type": "reference",
+      "evidence": "Low-gap theorem branch",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-h",
+      "target": "p6d-a2",
+      "edge_type": "reference",
+      "evidence": "High-gap theorem branch",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-t",
+      "target": "p6d-a2",
+      "edge_type": "reference",
+      "evidence": "Zero-score trivial branch",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-e",
+      "target": "p6d-a2",
+      "edge_type": "exemplify",
+      "evidence": "Empirical branch coverage from post-D run",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-g",
+      "target": "p6d-q",
+      "edge_type": "reform",
+      "evidence": "Main missing theorem is an exhaustive branch disjunction",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-s",
+      "target": "p6d-g",
+      "edge_type": "reference",
+      "evidence": "Once branch theorem gives per-step good vertex, closure follows",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-l",
+      "target": "p6d-g",
+      "edge_type": "assert",
+      "evidence": "Low-gap certification contributes to glue theorem",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-h",
+      "target": "p6d-g",
+      "edge_type": "assert",
+      "evidence": "High-gap certification contributes to glue theorem",
+      "detection": "structural"
+    },
+    {
+      "source": "p6d-t",
+      "target": "p6d-g",
+      "edge_type": "assert",
+      "evidence": "Trivial certification contributes to glue theorem",
+      "detection": "structural"
+    }
+  ],
+  "hyperedges": [
+    {
+      "hx/id": "first-proof-p6-post-d:edge-000",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-a1",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uniform near-rank-1 not valid globally; need split",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-001",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-a2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Replace universal Direction D with branch-wise theorem plan",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-002",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-l",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-a2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Low-gap theorem branch",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-003",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-h",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-a2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "High-gap theorem branch",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-004",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-t",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-a2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Zero-score trivial branch",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-005",
+      "hx/type": "thread/exemplify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-e",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-a2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Empirical branch coverage from post-D run",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "exemplify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-006",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-g",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-q",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Main missing theorem is an exhaustive branch disjunction",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-007",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-s",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-g",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Once branch theorem gives per-step good vertex, closure follows",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-008",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-l",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-g",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Low-gap certification contributes to glue theorem",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-009",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-h",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-g",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "High-gap certification contributes to glue theorem",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p6-post-d:edge-010",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p6d-t",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p6d-g",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Trivial certification contributes to glue theorem",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    }
+  ],
+  "stats": {
+    "n_nodes": 9,
+    "n_edges": 11,
+    "node_types": {
+      "question": 1,
+      "answer": 7,
+      "comment": 1
+    },
+    "edge_types": {
+      "challenge": 1,
+      "reform": 2,
+      "reference": 4,
+      "exemplify": 1,
+      "assert": 3
+    },
+    "detection_types": {
+      "structural": 11
+    },
+    "verification_status": {
+      "open": 4,
+      "proved_negative": 1,
+      "reformulation": 1,
+      "proved": 2,
+      "empirical": 1
+    }
+  }
+}
