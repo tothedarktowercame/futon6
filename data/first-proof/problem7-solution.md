@@ -186,8 +186,9 @@ parity" was too coarse. Instead:
   `Gamma x Z` acting on `X x R`, or by choosing an odd-dimensional lattice
   variant), the relevant `(p,q)` pairs with `p + q` odd and `q = 0 mod 4`
   force `p` odd, and the obstruction is valued in `H_{odd}` of the
-  classifying space. For the specific lattices under consideration, this can
-  be shown to vanish.
+  classifying space. This is heuristically favorable for vanishing, but a
+  proof that `H_{odd}` terms vanish for the specific lattices under
+  consideration has not been supplied and should not be assumed.
 
 - For `d = 6` as stated, the obstruction is potentially nonzero and requires
   either:

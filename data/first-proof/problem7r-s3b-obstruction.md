@@ -142,9 +142,15 @@ identity on `M` — then `res(sigma(f)) = 0`.
 **Gap (G3): compatibility of the normal map with the cover.** The previous
 version asserted `res(sigma(f)) = 0` from `Y_pi ~ M`, but this requires:
 
-1. That `Y_pi` is rationally homotopy equivalent to `M` (established: both
-   have rationally contractible universal cover and `pi_1 = pi`, so they
-   agree in rational homotopy type).
+1. That `Y_pi` is rationally homotopy equivalent to `M`. Both have
+   `pi_1 = pi` and rationally contractible universal cover, which is
+   heuristically strong evidence for agreement in rational homotopy type.
+   However, the implication "shared `pi_1` + rationally contractible
+   universal covers => rational homotopy equivalence" for finite CW
+   complexes is nontrivial and needs a reference (e.g., via Sullivan's
+   rational homotopy theory for nilpotent spaces, noting both spaces are
+   nilpotent since their universal covers are simply connected). This
+   should be treated as plausible but not yet cited.
 2. That the specific normal map `f` restricts on the double cover to a
    normal map whose surgery obstruction is zero. For an **arbitrary** choice
    of `f`, this need not hold — only a normal map constructed compatibly
@@ -306,7 +312,9 @@ Choose a specific arithmetic reflection lattice (from Douba-Vargas Pallete)
 with `n = 6` and compute:
 
 1. The Betti numbers `b_1(F)`, `b_3(F)` of the fixed hypersurface `F`.
-2. The specific value of `sigma(f)` in `Q + H_3(F; Q) + H_1(F; Q)`.
+2. The specific value of `sigma(f)` in the obstruction target space
+   (conjectured to be `Q + H_3(F; Q) + H_1(F; Q)` pending U1-U3; if
+   U1-U3 fail, the actual target may differ).
 
 This requires explicit knowledge of the lattice and its fixed set. For
 arithmetic hyperbolic manifolds, Betti numbers can sometimes be computed
@@ -374,15 +382,15 @@ odd-dimensional parity vanishing.
 Accept the conditional and state the theorem as:
 
 "For the specific lattice family constructed in Section 3b, the answer to
-Problem 7 is yes if `sigma(f) = 0` in `Q + H_3(F; Q) + H_1(F; Q)`. This
-obstruction is localized to the equivariant fixed-point contribution and
-vanishes under the transfer to the torsion-free cover."
+Problem 7 is yes if `sigma(f) = 0` in `L_6(Z[Gamma]) tensor Q`."
 
-This is already a substantial narrowing of the problem: from an arbitrary
-element of `L_6(Z[Gamma]) tensor Q` to a specific element of a much smaller
-space determined by the topology of the fixed set `F`.
+If U1-U3 and G3 are verified, the conditional can be tightened to:
+"`sigma(f) = 0` in `Q + H_3(F; Q) + H_1(F; Q)`" (the conjectural
+fixed-point target space). Without that verification, the conditional
+applies to the full rationalized L-group.
 
-**Difficulty:** none (already achieved).
+**Difficulty:** none for the broad conditional; moderate for the tightened
+version (requires U1-U3, G3).
 
 ## Summary and node status
 
