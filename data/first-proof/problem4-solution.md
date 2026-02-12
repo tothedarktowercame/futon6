@@ -25,9 +25,10 @@ p, q of degree n:
 
 ## Answer
 
-**Yes.** Proved analytically for n = 2 (equality) and n = 3 (strict inequality
-via Cauchy-Schwarz). Numerically verified with 0 violations in 8000+ random
-trials for n = 2, 3, 4, 5. The analytic proof for n >= 4 remains open.
+**Conjecturally yes, with strong numerical evidence.** The inequality
+holds in all 8000+ random trials tested (n = 2-5) with no violations.
+Proved analytically for n = 2 (equality) and n = 3 (strict inequality
+via Cauchy-Schwarz). An analytic proof for n >= 4 remains open.
 
 - n = 2: equality holds (1/Phi_2 is linear in the discriminant).
 - n = 3: **PROVED** via the identity Phi_3 * disc = 18 * a_2^2 and Titu's lemma.
@@ -36,42 +37,29 @@ trials for n = 2, 3, 4, 5. The analytic proof for n >= 4 remains open.
 
 ## Solution
 
-### 1. Interpreting Phi_n via the logarithmic derivative
+### 1. Interpreting Phi_n algebraically
 
-For a monic polynomial p(x) = prod_i (x - lambda_i), the logarithmic
-derivative is:
-
-    p'(x)/p(x) = sum_i 1/(x - lambda_i)
-
-Evaluating at a root lambda_i:
-
-    (p'(x)/p(x)) at x -> lambda_i  gives  sum_{j != i} 1/(lambda_i - lambda_j)
-
-(the sum diverges, but the finite sum over j != i is exactly the residue).
-More precisely, by L'Hôpital:
+For a monic polynomial p(x) = prod_i (x - lambda_i) with distinct roots,
+the derivative at each root is given by the exact algebraic identity:
 
     p'(lambda_i) = prod_{j != i} (lambda_i - lambda_j)
 
-So:
+(no limiting procedure needed — this is immediate from the product rule).
+Therefore the inner sum in Phi_n is:
 
-    sum_{j != i} 1/(lambda_i - lambda_j) = [d/dx log p(x)]_{x=lambda_i, regularized}
-                                          = (d^2/dx^2 log p) contribution
+    sum_{j != i} 1/(lambda_i - lambda_j)
+        = [sum_{j != i} prod_{k != i, k != j} (lambda_i - lambda_k)] / p'(lambda_i)
 
-**Key identity:**
-
-    Phi_n(p) = sum_i [p'(lambda_i)]^{-2} * [sum_{j != i} (lambda_i - lambda_j)^{-1} * prod_{k != i} (lambda_i - lambda_k)]^2
-
-This simplifies via the relation to the **second logarithmic derivative**:
-
-    [p'/p]'(x) = -sum_i 1/(x - lambda_i)^2
-
-and evaluated at a root:
+which is a rational function of the root differences alone. The root
+separation energy is:
 
     Phi_n(p) = sum_i (sum_{j != i} 1/(lambda_i - lambda_j))^2
 
 This is the sum of squared "Coulomb forces" at each root — the total
 electrostatic self-energy of the root configuration (in the 1D log-gas
-picture).
+picture). All expressions are exact rational functions of root differences,
+with no regularization or limiting procedure required (assuming distinct roots,
+which is guaranteed since Phi_n = infinity for repeated roots).
 
 ### 2. Connection to the discriminant
 
@@ -113,16 +101,14 @@ Key properties:
 Using property (b), interpret p ⊞_n q as the expected characteristic
 polynomial of A + UBU* where char(A) = p, char(B) = q.
 
-**Phi_n as curvature of the log-characteristic polynomial.**
+**Phi_n via the random matrix model.**
 
-Define F_A(x) = log |det(xI - A)| = sum_i log|x - lambda_i|. Then:
-
-    F_A''(x) = -sum_i 1/(x - lambda_i)^2
-
-At the roots: Phi_n(p) = -sum_i F_A''(lambda_i) (with appropriate signs).
-
-More precisely, Phi_n(p) = sum_i [F_A'(lambda_i)]^2 where F_A' is the
-regularized derivative (sum_{j != i} 1/(lambda_i - lambda_j)).
+For Hermitian A with eigenvalues lambda_1, ..., lambda_n, the root separation
+energy Phi_n(char(A)) = sum_i (sum_{j != i} 1/(lambda_i - lambda_j))^2 is
+an algebraic function of the eigenvalue gaps (see Section 1). The connection
+to log |det(xI - A)| is conceptual: away from roots, F_A''(x) = -sum_i 1/(x - lambda_i)^2,
+and Phi_n captures the "residue" version at each root. But the definition of
+Phi_n uses only the exact algebraic expressions from Section 1.
 
 ### 5. Finite free cumulants and the bilinear structure
 
@@ -239,7 +225,8 @@ Surplus = 0 (symbolic verification). Equality for all degree-2 polynomials.
 
 ### 7. Summary and status
 
-**The inequality is TRUE.**
+**The inequality is conjecturally true, with strong numerical evidence and
+analytic proofs for n = 2, 3.**
 
 | n | Status | Method |
 |---|--------|--------|

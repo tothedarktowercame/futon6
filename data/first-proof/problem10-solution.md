@@ -139,6 +139,15 @@ Hence t is logarithmic in 1/eps with a modest sqrt(kappa) factor when
 delta is bounded away from 1. (No unsupported closed-form t = O(r sqrt(n/q))
 claim is needed.)
 
+**Sufficient conditions for bounded delta.** The spectral equivalence
+(1-delta)P <= A_tau <= (1+delta)P holds with delta bounded away from 1 when
+the sampling pattern satisfies a restricted isometry-type condition:
+||D - (q/N)I|| is small relative to lambda. For uniform random sampling
+with q >= C n log n (for a universal constant C), matrix concentration
+results (Tropp 2011, Theorem 1.6) give delta = O(sqrt(n log n / q)) with
+high probability. Under this regime, kappa = O(1) and PCG converges in
+O(log(1/eps)) iterations.
+
 ### 6. Complexity summary
 
 Setup per ALS outer step:
@@ -163,6 +172,16 @@ In the common regime n >= r, this simplifies to
     O(n^3 + t (n^2 r + q r)),
 
 with dependence on q (observed entries) rather than N (all entries).
+
+**Regime caveat.** When n is large enough that the O(n^3) Cholesky setup
+dominates (i.e., n^3 > t(n^2 r + q r)), the per-ALS-step cost is effectively
+O(n^3). In this regime, low-rank kernel approximations (e.g., Nystrom
+approximation with rank p << n, reducing the kernel factorization to O(n p^2))
+or iterative inner solves (conjugate gradient on K_tau y = z, cost O(n^2)
+per inner iteration) can replace the exact Cholesky, reducing the setup to
+O(n p^2 + t(n p r + q r)). This is a well-known practical optimization
+(see Rudi-Calandriello-Rosasco 2017) and is compatible with the PCG framework
+as presented.
 
 ### 7. Algorithm
 

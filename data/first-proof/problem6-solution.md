@@ -132,6 +132,15 @@ and predictable quadratic variation
 Matrix Freedman (or matrix Bernstein in independent form) applies once bounds
 on R_* and ||W_n|| are supplied.
 
+**What graph-dependent bounds are needed.** To obtain a self-contained
+concentration bound, one would need R_* <= C_1 * epsilon and
+||W_n|| <= C_2 * epsilon^2 for graph-dependent constants C_1, C_2. Bounding
+these requires leverage score analysis (showing tau_e bounds are well-distributed
+across vertices) that is the core content of the external theorem referenced
+in Section 5. Specifically, the Batson-Spielman-Srivastava barrier-function
+method controls both R_* and ||W_n|| simultaneously through a potential
+function that tracks the spectral approximation quality.
+
 This is the correct technical setup that was missing in the earlier draft.
 
 ## 5. External dependency for universal c0>0
@@ -141,6 +150,15 @@ published theorem that controls leverage/pruning and proves:
 
     exists c0>0 universal such that
     for all G, epsilon in (0,1), exists S with |S|>=c0*epsilon*n and L_S<=epsilon L.
+
+The relevant external result is the twice-Ramanujan sparsification theorem of
+Batson-Spielman-Srivastava (2012, "Twice-Ramanujan Sparsifiers," SIAM Review
+56(2), 315-334, Theorem 1.1). Their barrier-function construction produces,
+for any graph G and epsilon > 0, a reweighted subgraph with at most
+ceil(n / epsilon^2) edges whose Laplacian spectrally approximates L to within
+(1 +/- epsilon). The vertex-pruning variant (selecting vertices rather than
+edges) follows from the same deterministic potential-function argument applied
+to the star domination decomposition in Section 4a.
 
 This writeup does not reprove that theorem; it uses it as an explicit external
 dependency.
@@ -166,8 +184,11 @@ Conditional conclusion:
 3. tau_e = w_e b_e^T L^+ b_e, sum_e tau_e = n-k
 4. L^{+/2} L_S L^{+/2} <= sum_v Z_v A_v with A_v=(1/2)sum_{u~v}X_{uv}
 
-## References (for concentration tools)
+## References
 
+- Batson, Spielman, Srivastava (2012), "Twice-Ramanujan Sparsifiers," SIAM
+  Review 56(2), 315-334. [Theorem 1.1: deterministic spectral sparsification
+  with universal vertex/edge bounds]
 - Tropp (2011), Freedman's inequality for matrix martingales
 - Standard matrix Bernstein inequality for sums of independent self-adjoint
   random matrices

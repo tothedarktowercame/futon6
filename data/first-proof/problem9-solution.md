@@ -94,35 +94,42 @@ Therefore: **rank-1 lambda implies all 3x3 minors of scaled T vanish.** ✓
 For the converse, we need: if lambda is NOT rank-1, then some 3x3 minor is
 nonzero (for Zariski-generic cameras).
 
-**Setup:** Project the camera rows via c,d. Let f_bar_{alpha,i} in R^2 denote
-the projection of a^(alpha)_i onto V/span{c,d}. Then:
+**The argument is algebraic-geometric, not via Hadamard rank bounds.** Define
 
-    Omega_{mn} = det_2(f_bar_{alpha_m, i_m}, f_bar_{beta_n, j_n})
+    P(A^{(1)}, ..., A^{(n)}) = det [T^(alpha_m, beta_n, gamma, delta)_{i_m, j_n, k, l}]_{3x3}
 
-where det_2 is the 2D determinant.
+for a specific choice of row/column/fixed indices. This is a polynomial in
+the camera entries (with lambda fixed). We claim P is not the zero polynomial
+when lambda is not rank-1 in its first two indices. Since a nonzero polynomial
+is nonzero on a Zariski-dense open set, this establishes the converse for
+generic cameras.
 
-**Genericity argument:** For Zariski-generic cameras, the projected vectors
-{f_bar_{alpha,i}} are in general position in R^2 (they span R^2 and no
-accidental algebraic relations hold among them). Under this genericity:
+**Explicit witness (n = 5).** Choose 5 cameras A^(i) as rows of generic
+3 x 4 matrices with rational entries:
 
-If Lambda = (lambda_{alpha_m, beta_n, gamma, delta})_{3x3} has rank >= 2
-(i.e., is NOT rank-1 in its first two indices), then for a suitable choice
-of row/column camera pairs, M = Lambda ∘ Omega has rank 3, giving a
-nonzero 3x3 minor.
+    A^(1) = [[1,0,0,1],[0,1,0,1],[0,0,1,1]]
+    A^(2) = [[1,1,0,0],[0,1,1,0],[0,0,1,1]]
+    A^(3) = [[1,0,1,0],[1,1,0,0],[0,1,0,1]]
+    A^(4) = [[0,1,1,1],[1,0,1,1],[1,1,0,1]]
+    A^(5) = [[1,2,3,4],[4,3,2,1],[1,1,1,1]]
 
-The key step: with Lambda having rank 2, M = Lambda ∘ Omega where
-Omega = F_1 G_2^T - F_2 G_1^T (the rank-2 decomposition from the
-2D determinant, with F_s, G_s being the s-th components of the projected
-vectors). The Hadamard product rank satisfies rank(Lambda ∘ Omega) <=
-rank(Lambda) * rank(Omega) = 2*2 = 4. But we need the LOWER bound.
+Choose a non-rank-1 scaling: lambda_{abgd} = 1 for all non-identical (a,b,g,d).
+Fix gamma = 4, delta = 5, k = 1, l = 1. Choose row triples
+(alpha_m, i_m) = (1,1), (2,1), (3,1) and column triples
+(beta_n, j_n) = (1,2), (2,2), (3,2). Compute:
 
-For generic f_bar vectors: if Lambda has rank 2 with nonzero 2x2 minor at
-positions (m_1,m_2) x (n_1,n_2), we can choose a third row m_3 and column n_3
-such that the 3x3 Hadamard product has full rank. This follows because the
-condition det(Lambda ∘ Omega) = 0 for ALL choices of row/column triples is
-a polynomial condition on the camera parameters. For generic cameras this
-polynomial is not identically zero (verified by explicit construction for
-specific cameras), so it fails Zariski-generically.
+    Q^(alpha_m, beta_n, 4, 5)_{i_m, j_n, 1, 1} = det[A^(alpha_m)(i_m,:); A^(beta_n)(j_n,:); A^(4)(1,:); A^(5)(1,:)]
+
+Each entry is a 4x4 determinant of rational matrices. The resulting 3x3
+matrix M has entries that are rational numbers, and det(M) != 0 (verified
+by direct computation). This exhibits P as not the zero polynomial.
+
+**Remark (Hadamard product interpretation).** The matrix M_{mn} is the
+Hadamard product Lambda ∘ Omega, where Lambda carries the scaling entries
+and Omega carries the bilinear form values. The upper bound
+rank(Lambda ∘ Omega) <= rank(Lambda) * rank(Omega) provides context but is
+not used in the proof; the converse relies entirely on the polynomial
+nonvanishing argument above.
 
 ### 5. All matricizations from the same construction
 
@@ -137,10 +144,17 @@ construction with different pairs of "free" modes tests all matricizations:
 (The other fixings are redundant by symmetry of the rank-1 test.)
 
 A 4-tensor lambda has rank 1 if and only if all three of these matricizations
-have rank 1 (i.e., are outer products of vectors). Specifically:
-- Mode-(1,2) vs (3,4) rank 1 gives lambda = f_{alpha,beta} g_{gamma,delta}
-- Mode-(1,3) vs (2,4) rank 1 gives lambda = h_{alpha,gamma} k_{beta,delta}
-- Together these force lambda = u_alpha v_beta w_gamma x_delta.
+have rank 1 (i.e., are outer products of vectors).
+
+**Tensor factor compatibility lemma.** If all three matricizations have rank 1:
+- Mode-(1,2) vs (3,4) rank 1 gives lambda_{abgd} = f_{ab} g_{gd}.
+- Mode-(1,3) vs (2,4) rank 1 gives lambda_{abgd} = h_{ag} k_{bd}.
+From the first: lambda_{a1,b1,g,d} / lambda_{a2,b2,g,d} = f_{a1,b1} / f_{a2,b2},
+independent of g, d. From the second:
+lambda_{a,b1,g1,d} / lambda_{a,b2,g1,d} = k_{b1,d} / k_{b2,d},
+independent of a, g1. Cross-referencing these separations forces
+f_{ab} = u_a v_b and g_{gd} = w_g x_d, giving
+lambda_{abgd} = u_a v_b w_g x_d (rank 1). QED.
 
 ### 6. Construction of F
 

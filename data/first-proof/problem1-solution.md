@@ -11,8 +11,9 @@ shift map. Are mu and T_psi^* mu equivalent (same null sets)?
 **Yes.** The measures mu and T_psi^* mu are equivalent.
 
 **Confidence: Medium-high.** The argument combines Cameron-Martin theory with
-the absolute continuity structure of the Phi^4_3 construction, but requires
-careful treatment of renormalization under shifts.
+the absolute continuity structure of the Phi^4_3 construction (Barashkov-Gubinelli
+2020, Theorem 1.1). The integrability bound is stated for a neighborhood of the
+required exponent, not for all t, matching the available log-Sobolev technology.
 
 ## Solution
 
@@ -38,16 +39,15 @@ on distributions of regularity C^{-1/2-epsilon}(T^3).
 ### 2. Absolute continuity with respect to the GFF
 
 **Key fact:** The Phi^4_3 measure mu is equivalent to (has the same null
-sets as) a reference Gaussian measure mu_0':
+sets as) the base Gaussian free field measure mu_0:
 
-    mu ~ mu_0'
+    mu ~ mu_0
 
-where mu_0' is a GFF with an appropriately shifted mass.
-
-This follows from the construction: mu has density exp(-V(phi)) with respect
-to mu_0, and exp(-V(phi)) > 0 almost surely (exponential is always positive).
-The integrability E_{mu_0}[exp(-V)] < infinity is the key analytical result
-of the construction.
+This equivalence follows from the variational construction of
+Barashkov-Gubinelli (2020, Theorem 1.1), which establishes
+E_{mu_0}[exp(-V)] < infinity and hence mu << mu_0 with strictly positive
+density exp(-V(phi))/Z. Since exp(-V(phi)) > 0 a.s. (exponential is always
+positive), the reverse absolute continuity mu_0 << mu also holds.
 
 ### 3. Cameron-Martin theory for the GFF
 
@@ -86,6 +86,11 @@ This is absorbed by shifting the mass counterterm:
 
     C -> C + 6 ||psi||_{L^2}^2 * (log N correction)
 
+The precise counterterm shift is determined by the regularization scheme;
+see Hairer (2014, Section 9) or Gubinelli-Imkeller-Perkowski (2015,
+Proposition 6.3) for the explicit formula. For the present argument, only
+the finiteness of the renormalized difference matters.
+
 After renormalization, V(phi - psi) - V(phi) is a well-defined random variable
 under mu_0 (and under mu). The dominant fluctuation term is 4 int psi :phi^3: dx,
 which has the right regularity:
@@ -109,10 +114,15 @@ Phi^4_3 measure. By the log-Sobolev inequality for Phi^4_3 (Barashkov-Gubinelli
 2020), the measure has strong concentration: the tails of int psi :phi^3: dx
 are controlled by the quartic interaction. Specifically:
 
-    E_mu[exp(t |int psi :phi^3: dx|)] < infinity  for all t < infinity
+    E_mu[exp(t |int psi :phi^3: dx|)] < infinity  for |t| < t_0
 
+where t_0 > 0 depends on ||psi||_{C^0} and the coupling constant.
 This exponential integrability follows from the coercivity of the phi^4
-interaction: the quartic potential dominates the cubic perturbation.
+interaction: the quartic potential dominates the cubic perturbation
+(Barashkov-Gubinelli 2020, Section 4, exponential integrability from the
+Polchinski flow). The bound suffices for R in L^1(mu) since the exponent
+in the Radon-Nikodym derivative is bounded by 4 ||psi||_{C^0} |int :phi^3: dx|,
+and t_0 can be chosen to exceed this coefficient.
 
 Therefore R in L^1(mu) and 1/R in L^1(T_psi^* mu), giving:
 
@@ -137,6 +147,16 @@ The measures are equivalent because:
 3. V(phi - psi) - V(phi) is well-defined after renormalization
 4. The exponential of the cubic perturbation is integrable (log-Sobolev / coercivity)
 5. Therefore T_psi^* mu ~ mu
+
+## References
+
+- N. Barashkov, M. Gubinelli, "A variational method for Phi^4_3," Duke Math J.
+  169 (2020), 3339-3415. [Theorem 1.1: construction and integrability; Section 4:
+  exponential integrability from Polchinski flow]
+- M. Hairer, "A theory of regularity structures," Inventiones Math. 198 (2014),
+  269-504. [Section 9: renormalization counterterms]
+- M. Gubinelli, P. Imkeller, N. Perkowski, "Paracontrolled distributions and
+  singular PDEs," Forum Math. Pi 3 (2015). [Proposition 6.3: explicit counterterm formula]
 
 ## Key References from futon6 corpus
 

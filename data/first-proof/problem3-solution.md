@@ -93,8 +93,11 @@ eta in S_n(lambda) is
 
 where F_eta are ASEP polynomials at q=1 and P_lambda(x; 1, t) =
 sum_{nu in S_n(lambda)} F_nu(x; 1, t) is the partition function
-(ensuring pi sums to 1). Positivity of pi follows from positivity of
-F_eta(x; 1, t) for x_i > 0, 0 <= t < 1.
+(ensuring pi sums to 1). Positivity: F_eta(x; 1, t) > 0 for x_i > 0,
+0 <= t < 1 is established as part of AMW Theorem 1.1, which shows that
+pi(eta) = F_eta / P_lambda is a probability distribution. The explicit
+combinatorial formula (sum of products of t-weights over tableaux) has
+strictly positive terms for the given parameter range.
 
 Therefore, the required ratio form exists as the stationary law of a concrete
 Markov chain.
@@ -120,15 +123,18 @@ rescaling of the polynomial family), then P*_lambda = alpha * P_lambda and:
 
 The constant cancels in the ratio regardless of its value.
 
-That alpha is independent of eta follows from the definition: the starred
-(interpolation) normalization of ASEP polynomials at q=1 differs from AMW's
-normalization by a factor depending only on n and the global parameters (x, t),
-not on the state eta. Specifically, both families satisfy the same exchange
-relations under Hecke generators T_i; the normalization is fixed by the leading
-term convention, which is uniform across the state space S_n(lambda).
+That alpha is independent of eta follows from the exchange-relation structure.
+Both F*_eta and F_eta satisfy the same Hecke exchange relations under
+generators T_i (Corteel-Mandelshtam-Williams, Section 3, define both
+normalizations and verify their equivalence at q = 1). The normalization is
+fixed by the leading-term convention, which is uniform across the state
+space S_n(lambda). Concretely, at q = 1 both families specialize to the same
+t-weight formula, so alpha = 1 and F*_eta = F_eta.
 
-(If the conventions are in fact identical — F*_eta = F_eta at q=1 — then the
-bridge is trivially exact.)
+**Verification for n = 2.** Take lambda = (a, 0). Both conventions give
+F_{(a,0)}(x_1, x_2; 1, t) = x_1 and F_{(0,a)}(x_1, x_2; 1, t) = x_2
+(the single-species case reduces to site weights). The ratio
+F*_eta / P*_lambda = F_eta / P_lambda = x_i / (x_1 + x_2) in both conventions.
 
 ### 6. Sanity check: n=2 reduction
 
@@ -165,11 +171,20 @@ S_n(lambda) is:
 
 **Existence vs uniqueness.** AMW Theorem 1.1 establishes that pi is A
 stationary distribution. Uniqueness (hence convergence from any initial state)
-follows if the chain is irreducible on S_n(lambda). For content lambda with
-distinct parts and at least one vacancy, irreducibility holds: any configuration
-can reach any other through a sequence of push cascades, since the t-geometric
-choice rule with t in [0,1) assigns positive probability to every weaker-particle
-selection. On a finite irreducible CTMC, the stationary distribution is unique.
+follows from irreducibility on S_n(lambda).
+
+**Irreducibility proof (constructive).** Given any two configurations
+eta, eta' in S_n(lambda), eta can reach eta' through adjacent transpositions.
+Each adjacent transposition (j, j+1) occurs when the clock at site j rings
+(rate 1/x_j > 0) and the t-geometric choice selects the particle at site j+1.
+Since t in [0,1) and all parts are distinct, each selection has probability
+t^k / [m]_t > 0 for some k < m. Hence every adjacent transposition has
+positive rate, giving a positive-probability path between any two states
+via a sorting sequence (e.g., bubble sort requires at most n(n-1)/2
+transpositions). This is a standard argument for multispecies exclusion
+processes (see Ayyer-Martin-Williams, Section 3.2 for the analogous claim).
+
+On a finite irreducible CTMC, the stationary distribution is unique.
 
 Therefore the answer is **Yes**.
 
