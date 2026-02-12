@@ -111,7 +111,12 @@
 
 \begin{document}
 \frontmatter
+\begingroup
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 \maketitle
+\endgroup
+\setcounter{footnote}{0}
+\renewcommand{\thefootnote}{\arabic{footnote}}
 \tableofcontents
 
 \chapter*{Reader Guide}
