@@ -396,11 +396,6 @@ The smoothing exists because:
 
 ## References
 
-- L. Polterovich, "The surgery of Lagrange submanifolds," GAFA 1 (1991),
-  198-210. [Lagrangian surgery at transverse double points with Maslov index 0]
-- F. Lalonde, J.-C. Sikorav, "Sous-variétés lagrangiennes et lagrangiennes
-  exactes des fibrés cotangents," Comment. Math. Helv. 66 (1991), 18-33.
-  [Lagrangian surgery, complementary to Polterovich]
 - D. McDuff, D. Salamon, *Introduction to Symplectic Topology*, 3rd ed.,
   Oxford University Press, 2017, Proposition 3.17. [Composition of compactly
   supported Hamiltonian isotopies]
