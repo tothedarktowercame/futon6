@@ -153,14 +153,14 @@
       "source": "p8-s6",
       "target": "p8-s5",
       "edge_type": "assert",
-      "evidence": "Compose vertex surgery + edge smoothing for global K_t",
+      "evidence": "Compose vertex product-smoothing + edge crease-smoothing for global K_t",
       "detection": "structural"
     },
     {
       "source": "p8-s6",
       "target": "p8-problem",
       "edge_type": "assert",
-      "evidence": "Yes: 4-face → V1⊕V2 → Maslov 0 → surgery → smoothing",
+      "evidence": "Yes: 4-face → V1⊕V2 → Maslov 0 → product smoothing (vertices) + generating function (edges)",
       "detection": "structural"
     },
     {
@@ -395,7 +395,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Compose vertex surgery + edge smoothing for global K_t",
+        "evidence": "Compose vertex product-smoothing + edge crease-smoothing for global K_t",
         "detection": "structural"
       },
       "hx/labels": [
@@ -420,7 +420,7 @@
         }
       ],
       "hx/content": {
-        "evidence": "Yes: 4-face → V1⊕V2 → Maslov 0 → surgery → smoothing",
+        "evidence": "Yes: 4-face → V1⊕V2 → Maslov 0 → product smoothing (vertices) + generating function (edges)",
         "detection": "structural"
       },
       "hx/labels": [

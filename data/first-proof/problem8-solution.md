@@ -342,7 +342,8 @@ Flux: pi_1(Symp) → H^1(L; R) is trivial (no non-Hamiltonian symplectic
 isotopies exist). Concretely: the velocity field d/dt of the isotopy
 C_j^{sm}(t) is a symplectic vector field along C_j^{sm}(t); contracting
 with omega_j gives a closed 1-form on C_j^{sm}(t), which is exact because
-H^1(C_j^{sm}(t); R) = 0 (curves in R^2 are contractible). The primitive
+H^1(C_j^{sm}(t); R) = 0 (each C_j^{sm}(t) is a noncompact embedded arc
+in R^2 — the smoothed corner — hence contractible). The primitive
 is the Hamiltonian H_j(t). The product isotopy on V_1 × V_2 is Hamiltonian
 with generating function H_1(t) + H_2(t) (see McDuff-Salamon, 3rd ed.,
 Exercise 3.18: product of Hamiltonian isotopies is Hamiltonian).
