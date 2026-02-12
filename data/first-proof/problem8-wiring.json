@@ -50,7 +50,7 @@
       "id": "p8-s4a",
       "node_type": "answer",
       "post_id": 8041,
-      "body_text": "Crease smoothing lemma (full local model): Darboux coords with edge along x_1-axis. L_i = graph of y=grad S_i for quadratic S_i. Interpolation S_eps = chi(x_1/eps)*S_1 + (1-chi(x_1/eps))*S_2. Graph of dS_eps is Lagrangian (exact 1-form). Smoothing localized along crease edges (away from vertex), so tangent planes at crossing point v unchanged; transversality + Maslov 0 preserved.",
+      "body_text": "Vertex smoothing via product structure: K near v = C_1 x C_2 (product of corners in V_1, V_2). Replace corners with smooth curves: K^sm = C_1^sm x C_2^sm. Product of curves in symplectic factors is automatically Lagrangian (omega = 0 on 1-dim). Smooth immersion (tangent vectors in complementary V_j). Edge creases between vertices smoothed by generating function interpolation.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 8
@@ -59,7 +59,7 @@
       "id": "p8-s5",
       "node_type": "answer",
       "post_id": 805,
-      "body_text": "Lagrangian surgery (Polterovich 1991): after crease smoothing (Sec 5a), sheets cross transversally with Maslov 0. Resolved by smooth neck. Darboux coords adapted to V1 ⊕ V2. Neck via generating function y = grad S(x).",
+      "body_text": "Edge crease smoothing between vertices: generating function interpolation S_eps = chi(x_1/eps)*S_1 + (1-chi)*S_2. Graph of dS_eps is Lagrangian. Applied to edge arcs between vertex neighborhoods (where product smoothing already resolved vertices).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 8
@@ -68,7 +68,7 @@
       "id": "p8-s6",
       "node_type": "answer",
       "post_id": 806,
-      "body_text": "Global smoothing with support control: vertex surgeries in disjoint balls B_i (commute by disjoint support). Edge smoothings on remaining crease arcs. Composition of compactly supported Hamiltonian isotopies (McDuff-Salamon Prop 3.17). K_t -> K_0 in C^0.",
+      "body_text": "Global smoothing: vertex product-smoothings in disjoint balls B_i (commute). Edge crease smoothings in disjoint tubular neighborhoods. Compatible at boundaries (both flat on overlap). Composition of Hamiltonian isotopies (McDuff-Salamon Prop 3.17). K_t -> K_0 in C^0.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 8
