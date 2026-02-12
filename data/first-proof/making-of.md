@@ -379,3 +379,108 @@ a working multi-agent verification system as a side effect.
 The system's real output isn't the proofs. It's the calibrated map of
 what's proved, what's conditional, and what's open. That map didn't exist
 after generation. It exists after review.
+
+---
+
+## Postscript: Agents as foragers (Feb 12, evening)
+
+The proof work continued past the initial "89 commits" burst. P4 n=4
+progressed through 24 scripts, 5 failed approaches, and a multi-agent
+handoff to PHCpack. P6 was reduced to a single operator-averaging lemma.
+P7 discharged its lattice-existence bottleneck via a rotation construction
+and narrowed the S obligation to a computable surgery obstruction. The
+scorecard updated to 8 proved (P4 n=4 closing), 1 conditional (P6), 1
+partial (P7).
+
+What emerged from the extended proof work — beyond the mathematical
+results — was a pattern in how agents collaborate on research problems.
+It connects back through the futon ecosystem in a way that wasn't planned.
+
+### The ant parallel
+
+In futon2, AIF ants explore a 2D grid. They leave pheromone trails —
+positive ("food here") and negative ("dead end") — and other ants use
+those trails to explore more efficiently. The colony's knowledge is an
+emergent property of many agents exploring and signaling.
+
+The proof journey followed the same structure at a higher level:
+
+- **Positive pheromone**: handoff notes ("resultant elimination works for
+  symmetry-stratified subspaces"), method wiring libraries ("D2's barrier
+  technique transfers, but the atom structure differs"), proved reductions
+  ("GPL-H with these 4 hypotheses implies the theorem").
+- **Negative pheromone**: dead-end theorems ("SOS is structurally blocked
+  by interior zeros"), exhaustion results ("6 trace-based techniques all
+  hit the quadratic-vs-linear wall"), parametric tensions ("E2 needs even
+  n but surgery wants odd n").
+
+The negative pheromone is the less obvious but more valuable signal. When
+Claude proved that Putinar certificates are structurally impossible for P4
+(7 scripts → one theorem), that theorem prevented every subsequent agent
+from re-attempting SOS. When the 6-technique exhaustion was proved for P6,
+it eliminated an entire technique class. The dead-end theorems compressed
+hours of exploration into transmissible facts.
+
+### From verification to exploration
+
+The initial agent coordination pattern was **verification dispatch**: Claude
+writes a proof, Codex confirms it. This is useful but asymmetric — it
+treats Codex as a reviewer, not an explorer. The return is 1 bit per
+dispatch: confirmed or not.
+
+The more productive pattern that emerged over the extended proof work is
+**student dispatch** (see `futon3/library/agent/student-dispatch.flexiarg`):
+give the agent the problem context, the dead ends with reasons, candidate
+directions, and a structured report format. Let them discover rather than
+confirm.
+
+The P4 PHCpack run was the clearest example: Codex wasn't told "verify that
+there are 12 critical points." It was told "find all critical points of this
+system using homotopy continuation." It returned 12 CPs with full case
+classification, discovered the mixed_volume=0 issue independently, and
+provided results that updated the proof status in ways Claude hadn't
+predicted. The exploration dispatch produced richer results per unit effort
+than any verification dispatch.
+
+### Connection to futon3c
+
+The agent teaming infrastructure being built in futon3c — forum-based
+coordination with detach/reattach, PAR checkpoints, and the ping-pong
+protocol — now has a concrete use case beyond code coordination. The proof
+journey shows what multi-agent research teaming looks like:
+
+1. **Decompose** the problem into cases or directions (split-into-cases,
+   hypothetical-proof-architecture)
+2. **Dispatch** each direction to an agent with negative-knowledge transfer
+   (student-dispatch)
+3. **Collect** structured reports (not pass/fail but findings + surprises)
+4. **Synthesize** results, update the dead-end list, re-dispatch
+
+This is the AIF cycle — observe, orient, decide, act — applied to
+research. The "orient" step is where the pheromone trail matters: the
+accumulated dead-end theorems and technique-landscape maps are the
+colony's shared knowledge base.
+
+The futon5 proof bridge (`futon5-proof-bridge.md`) takes this further:
+if argument structures can be embedded as tensors, then "finding a
+relevant prior result" becomes a nearest-neighbor search in embedding
+space — the computational equivalent of an ant following a pheromone
+gradient. The gradient points toward argument shapes that have resolved
+similar gaps before.
+
+### The reflexive observation
+
+The proof attempt set out to prove 10 mathematics problems. Along the
+way it also demonstrated something about agent teaming: that multi-agent
+research collaboration is structurally analogous to foraging, that
+negative knowledge transfer is the key efficiency mechanism, and that
+the infrastructure for representing and sharing structured findings
+(wiring diagrams, typed edges, handoff notes) is the equivalent of the
+pheromone trail system.
+
+The ants in futon2 don't know they're doing category theory. The agents
+in this proof attempt didn't know they were doing ant colony optimization.
+But the patterns are isomorphic — and recognizing the isomorphism suggests
+that the futon ecosystem's architecture (futon2's AIF agents, futon3's
+pattern library, futon3c's coordination layer, futon5's tensor math,
+futon6's knowledge base) may be more convergent than it appeared.
