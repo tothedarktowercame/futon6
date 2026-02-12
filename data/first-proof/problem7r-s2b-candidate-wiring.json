@@ -1,0 +1,120 @@
+{
+  "library_id": "problem7r-s2b-candidate-wiring",
+  "date": "2026-02-12",
+  "target_node": "p7r-s2b",
+  "reduced_shape": {
+    "nodes": [
+      {
+        "id": "q",
+        "node_type": "question",
+        "body_text": "Build explicit cocompact lattice extension 1->pi->Gamma->Z/2->1 with order-2 torsion."
+      },
+      {
+        "id": "a",
+        "node_type": "answer",
+        "body_text": "Realize a Z/2 action on finite Bpi (preferably closed hyperbolic manifold)."
+      },
+      {
+        "id": "f",
+        "node_type": "answer",
+        "body_text": "Identify connected components of fixed set (Bpi)^{Z/2}."
+      },
+      {
+        "id": "e",
+        "node_type": "answer",
+        "body_text": "Verify chi(C)=0 for every fixed component C."
+      },
+      {
+        "id": "o",
+        "node_type": "answer",
+        "body_text": "Apply Fowler criterion to conclude Gamma in FH(Q)."
+      },
+      {
+        "id": "b",
+        "node_type": "comment",
+        "body_text": "Confirm this Gamma matches the targeted uniform lattice family for Problem 7."
+      }
+    ],
+    "edges": [
+      {
+        "source": "a",
+        "target": "q",
+        "edge_type": "clarify",
+        "evidence": "Action data defines the extension model"
+      },
+      {
+        "source": "f",
+        "target": "a",
+        "edge_type": "assert",
+        "evidence": "Fixed locus determined by chosen involution"
+      },
+      {
+        "source": "e",
+        "target": "f",
+        "edge_type": "assert",
+        "evidence": "Euler checks are componentwise"
+      },
+      {
+        "source": "o",
+        "target": "e",
+        "edge_type": "reference",
+        "evidence": "Fowler theorem consumes Euler-vanishing hypothesis"
+      },
+      {
+        "source": "b",
+        "target": "o",
+        "edge_type": "reform",
+        "evidence": "Translate FH(Q) result back to P7 lattice objective"
+      }
+    ]
+  },
+  "strategy_modules": [
+    {
+      "id": "s2b-m1",
+      "paper": "arXiv:1204.4667",
+      "name": "Fowler fixed-set Euler criterion",
+      "bridge_status": "direct",
+      "role": "e -> o"
+    },
+    {
+      "id": "s2b-m2",
+      "paper": "arXiv:2506.23994",
+      "name": "Reflection congruence family in uniform hyperbolic lattices",
+      "bridge_status": "direct",
+      "role": "q -> a -> f"
+    },
+    {
+      "id": "s2b-m3",
+      "paper": "arXiv:math/0406607",
+      "name": "Finite group realization as full isometry group",
+      "bridge_status": "partial",
+      "role": "alternative q/a constructor"
+    },
+    {
+      "id": "s2b-m4",
+      "paper": "arXiv:2501.11610",
+      "name": "Involution fixed-set formulas",
+      "bridge_status": "support",
+      "role": "fixed-set sanity checks"
+    },
+    {
+      "id": "s2b-m5",
+      "paper": "arXiv:1106.1704",
+      "name": "Periodic-action constraints on locally symmetric spaces",
+      "bridge_status": "filter",
+      "role": "eliminate incompatible action models"
+    }
+  ],
+  "preferred_route": {
+    "id": "r1",
+    "name": "Even-dimensional reflection route",
+    "steps": [
+      "Use arithmetic uniform lattice with reflection (2506.23994).",
+      "Pass to deep principal congruence manifold cover M with induced involution.",
+      "Take n even so fixed hypersurface components have odd dimension n-1.",
+      "Conclude chi(component)=0 and apply Fowler (1204.4667).",
+      "Deduce extension group Gamma in FH(Q) with order-2 torsion."
+    ],
+    "status": "candidate-complete-for-p7r-s2b"
+  }
+}

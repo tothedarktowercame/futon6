@@ -1,0 +1,34 @@
+graph TD
+    q([Q: Build explicit cocompact lattice extension 1->pi->Gamma->Z/2->1])
+    a([A: Z/2 action on finite Bpi = compact hyperbolic manifold M])
+    f([F: Identify fixed components of action])
+    e([E: Prove chi(C)=0 for each fixed component C])
+    o([O: Apply Fowler -> Gamma in FH(Q)])
+    b([B: Verify Gamma is the target order-2 lattice family])
+
+    m1([M1: Fowler 1204.4667])
+    m2([M2: Reflection congruence family 2506.23994])
+    m3([M3: BL finite-group realization 0406607 (fallback)])
+    m4([M4: Involution fixed-set formulas 2501.11610 (support)])
+    m5([M5: Smith/L2 periodic-action constraints 1106.1704 (filter)])
+
+    q --> a
+    a --> f
+    f --> e
+    e --> o
+    o --> b
+
+    m2 -.constructs.-> q
+    m2 -.gives.-> a
+    m2 -.gives.-> f
+    m1 -.criterion.-> o
+    m3 -.alt route.-> q
+    m4 -.sanity.-> e
+    m5 -.filter.-> a
+
+    subgraph R1[Route R1 (preferred)]
+      r1a([Pick even n])
+      r1b([Fix(tau_bar) components have dim n-1 odd])
+      r1c([Each component has chi=0])
+      r1a --> r1b --> r1c --> e
+    end

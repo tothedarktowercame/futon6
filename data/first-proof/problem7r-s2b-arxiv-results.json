@@ -1,0 +1,495 @@
+{
+  "scope": "p7r-s2b",
+  "queries": [
+    {
+      "id": "core-01",
+      "text": "all:\"Finite Groups and Hyperbolic Manifolds\""
+    },
+    {
+      "id": "core-02",
+      "text": "all:\"Belolipetsky\" AND all:\"Lubotzky\""
+    },
+    {
+      "id": "core-03",
+      "text": "all:\"uniform lattice\" AND all:\"order 2\" AND all:\"SO(n,1)\""
+    },
+    {
+      "id": "core-04",
+      "text": "all:\"arithmetic lattice\" AND all:\"SO(n,1)\" AND (all:\"involution\" OR all:\"Z/2\")"
+    },
+    {
+      "id": "geom-01",
+      "text": "all:\"finite group actions\" AND all:\"hyperbolic manifolds\""
+    },
+    {
+      "id": "geom-02",
+      "text": "all:\"involution\" AND all:\"hyperbolic manifold\" AND all:\"fixed points\""
+    },
+    {
+      "id": "geom-03",
+      "text": "all:\"compact hyperbolic\" AND all:\"involution\""
+    },
+    {
+      "id": "geom-04",
+      "text": "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+    },
+    {
+      "id": "orb-01",
+      "text": "all:\"orbifold fundamental group\" AND all:\"finite group action\" AND all:\"Euler characteristic\""
+    },
+    {
+      "id": "orb-02",
+      "text": "all:\"uniform lattice\" AND all:\"torsion\" AND all:\"orbifold\""
+    },
+    {
+      "id": "aux-01",
+      "text": "all:\"On the number of finite subgroups of a lattice\""
+    },
+    {
+      "id": "aux-02",
+      "text": "all:\"Smith theory\" AND all:\"locally symmetric manifolds\""
+    }
+  ],
+  "unique_results": 19,
+  "results": [
+    {
+      "id": "0406607",
+      "title": "Finite Groups and Hyperbolic Manifolds",
+      "date": "2004-06-29",
+      "authors": [
+        "M. Belolipetsky",
+        "A. Lubotzky"
+      ],
+      "cats": [
+        "math.GR",
+        "math.GT"
+      ],
+      "summary": "The isometry group of a compact n-dimensional hyperbolic manifold is known to be finite. We show that for every n > 2, every finite group is realized as the full isometry group of some compact hyperbolic n-manifold. The cases n = 2 and n = 3 have been proven by Greenberg and Kojima, respectively. Our proof is non constructive: it uses counting results from subgroup growth theory and the strong approximation theorem to show that such manifolds exist.",
+      "url": "https://arxiv.org/abs/0406607",
+      "query_ids": [
+        "core-01",
+        "core-02"
+      ],
+      "query_texts": [
+        "all:\"Belolipetsky\" AND all:\"Lubotzky\"",
+        "all:\"Finite Groups and Hyperbolic Manifolds\""
+      ],
+      "query_hits": 2,
+      "score": 8
+    },
+    {
+      "id": "1806.02360",
+      "title": "Effective virtual and residual properties of some arithmetic hyperbolic 3-manifolds",
+      "date": "2018-06-06",
+      "authors": [
+        "Jason DeBlois",
+        "Nicholas Miller",
+        "Priyam Patel"
+      ],
+      "cats": [
+        "math.GT",
+        "math.GR"
+      ],
+      "summary": "We give an effective upper bound, for certain arithmetic hyperbolic 3-manifold groups obtained from a quadratic form construction, on the minimal index of a subgroup that embeds in a fixed 6-dimensional right-angled reflection group, stabilizing a totally geodesic subspace. In particular, for manifold groups in any fixed commensurability class we show that the index of such a subgroup is asymptotically smaller than any fractional power of the volume of the manifold. We also give effective bounds on the geodesic residual finiteness growths of closed hyperbolic manifolds that totally geodesically immerse in non-compact right-angled reflection orbifolds, extending work of the third author from the compact case. The first result gives examples to which the second applies, and for these we give explicit bounds on geodesic residual finiteness growth.",
+      "url": "https://arxiv.org/abs/1806.02360",
+      "query_ids": [
+        "geom-04"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "query_hits": 1,
+      "score": 7
+    },
+    {
+      "id": "0811.2482",
+      "title": "Counting arithmetic lattices and surfaces",
+      "date": "2008-11-15",
+      "authors": [
+        "Mikhail Belolipetsky",
+        "Tsachik Gelander",
+        "Alex Lubotzky",
+        "Aner Shalev"
+      ],
+      "cats": [
+        "math.GR",
+        "math.GT",
+        "math.NT"
+      ],
+      "summary": "We give estimates on the number $AL_H(x)$ of arithmetic lattices $\u0393$ of covolume at most $x$ in a simple Lie group $H$. In particular, we obtain a first concrete estimate on the number of arithmetic 3-manifolds of volume at most $x$. Our main result is for the classical case $H=PSL(2,R)$ where we compute the limit of $\\log AL_H(x) / x\\log x$ when $x\\to\\infty$. The proofs use several different techniques: geometric (bounding the number of generators of $\u0393$ as a function of its covolume), number theoretic (bounding the number of maximal such $\u0393$) and sharp estimates on the character values of the symmetric groups (to bound the subgroup growth of $\u0393$).",
+      "url": "https://arxiv.org/abs/0811.2482",
+      "query_ids": [
+        "core-02"
+      ],
+      "query_texts": [
+        "all:\"Belolipetsky\" AND all:\"Lubotzky\""
+      ],
+      "query_hits": 1,
+      "score": 6
+    },
+    {
+      "id": "2012.15322",
+      "title": "Homology bounds for hyperbolic orbifolds",
+      "date": "2020-12-30",
+      "authors": [
+        "Hartwig Senska"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AT"
+      ],
+      "summary": "We will provide bounds on both the Betti numbers and the torsion part of the homology of hyperbolic orbifolds. These bounds are linear in the volume and are a direct consequence of an efficient simplicial model of the thick part, which we will construct as well. The homology statements complement previous work of Bader, Gelander and Sauer (torsion homology of manifolds), Samet (Betti numbers of orbifolds) and a classical theorem of Gromov (Betti numbers of manifolds). For arithmetic, non-compact hyperbolic orbifolds -- i.e. in the case of arithmetic, non-uniform lattices in $\\operatorname{Isom}(\\mathbb{H}^n)$ -- the strongest results will be obtained.",
+      "url": "https://arxiv.org/abs/2012.15322",
+      "query_ids": [
+        "orb-02"
+      ],
+      "query_texts": [
+        "all:\"uniform lattice\" AND all:\"torsion\" AND all:\"orbifold\""
+      ],
+      "query_hits": 1,
+      "score": 6
+    },
+    {
+      "id": "2501.11610",
+      "title": "Non-cobordant hyperbolic manifolds",
+      "date": "2025-01-20",
+      "authors": [
+        "Jacopo G. Chen"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "In all dimensions $n \\ge 4$ not of the form $4m+3$, we show that there exists a closed hyperbolic $n$-manifold which is not the boundary of a compact $(n+1)$-manifold. The proof relies on the relationship between the cobordism class and the fixed point set of an involution on the manifold, together with a geodesic embedding of Kolpakov, Reid and Slavich. We also outline a possible approach to cover the dimensions $4m+3 \\ne 2^k-1$.",
+      "url": "https://arxiv.org/abs/2501.11610",
+      "query_ids": [
+        "geom-02"
+      ],
+      "query_texts": [
+        "all:\"involution\" AND all:\"hyperbolic manifold\" AND all:\"fixed points\""
+      ],
+      "query_hits": 1,
+      "score": 6
+    },
+    {
+      "id": "0806.0596",
+      "title": "Local-global principles for embedding of fields with involution into simple algebras with involution",
+      "date": "2008-06-03",
+      "authors": [
+        "Gopal Prasad",
+        "Andrei S. Rapinchuk"
+      ],
+      "cats": [
+        "math.NT",
+        "math.GR"
+      ],
+      "summary": "In this paper we prove local-global principles for embedding of fields with involution into central simple algebras with involution over a global field. These should be of interest in study of classical groups over global fields. We deduce from our results that in a group of type D_n, n>4 even, two weakly commensurable Zariski-dense S-arithmetic subgroups are actually commensurable. A consequence of this result is that given an absolutely simple algebraic K-group G of type D_n, n>4 even, K a number field, any K-form G' of G having the same set of isomorphism classes of maximal K-tori as G, is necessarily K-isomorphic to G. These results lead to results about isolength and isospectral compact hyperbolic spaces of dimension 2n-1 with n even.",
+      "url": "https://arxiv.org/abs/0806.0596",
+      "query_ids": [
+        "geom-03"
+      ],
+      "query_texts": [
+        "all:\"compact hyperbolic\" AND all:\"involution\""
+      ],
+      "query_hits": 1,
+      "score": 5
+    },
+    {
+      "id": "0905.1841",
+      "title": "Manifolds counting and class field towers",
+      "date": "2009-05-12",
+      "authors": [
+        "Mikhail Belolipetsky",
+        "Alex Lubotzky"
+      ],
+      "cats": [
+        "math.GR",
+        "math.NT"
+      ],
+      "summary": "In [BGLM] and [GLNP] it was conjectured that if $H$ is a simple Lie group of real rank at least 2, then the number of conjugacy classes of (arithmetic) lattices in $H$ of covolume at most $x$ is $x^{(\u03b3(H)+o(1))\\log x/\\log\\log x}$ where $\u03b3(H)$ is an explicit constant computable from the (absolute) root system of $H$. In this paper we prove that this conjecture is false. In fact, we show that the growth is at rate $x^{c\\log x}$. A crucial ingredient of the proof is the existence of towers of field extensions with bounded root discriminant which follows from the seminal work of Golod and Shafarevich on class field towers.",
+      "url": "https://arxiv.org/abs/0905.1841",
+      "query_ids": [
+        "core-02"
+      ],
+      "query_texts": [
+        "all:\"Belolipetsky\" AND all:\"Lubotzky\""
+      ],
+      "query_hits": 1,
+      "score": 5
+    },
+    {
+      "id": "1106.1704",
+      "title": "Smith theory, L2 cohomology, isometries of locally symmetric manifolds and moduli spaces of curves",
+      "date": "2011-06-09",
+      "authors": [
+        "Grigori Avramidi"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AT"
+      ],
+      "summary": "We investigate periodic diffeomorphisms of non-compact aspherical manifolds (and orbifolds) and describe a class of spaces that have no homotopically trivial periodic diffeomorphisms. Prominent examples are moduli spaces of curves and aspherical locally symmetric spaces with non-vanishing Euler characteristic. In the irreducible locally symmetric case, we show that no complete metric has more symmetry than the locally symmetric metric. In the moduli space case, we build on work of Farb and Weinberger and prove an analogue of Royden's theorem for complete finite volume metrics.",
+      "url": "https://arxiv.org/abs/1106.1704",
+      "query_ids": [
+        "aux-02"
+      ],
+      "query_texts": [
+        "all:\"Smith theory\" AND all:\"locally symmetric manifolds\""
+      ],
+      "query_hits": 1,
+      "score": 5
+    },
+    {
+      "id": "1209.2484",
+      "title": "On the number of finite subgroups of a lattice",
+      "date": "2012-09-12",
+      "authors": [
+        "Iddo Samet"
+      ],
+      "cats": [
+        "math.GR",
+        "math.DG"
+      ],
+      "summary": "We show that the number of conjugacy classes of maximal finite subgroups of a lattice in a semisimple Lie group is linearly bounded by the covolume of the lattice. Moreover, for higher rank groups, we show that this number grows sublinearly with covolume. We obtain similar results for isotropy subgroups in lattices. Geometrically, this yields volume bounds for the number of strata in the natural stratification of a finite-volume locally symmetric orbifold.",
+      "url": "https://arxiv.org/abs/1209.2484",
+      "query_ids": [
+        "aux-01"
+      ],
+      "query_texts": [
+        "all:\"On the number of finite subgroups of a lattice\""
+      ],
+      "query_hits": 1,
+      "score": 5
+    },
+    {
+      "id": "1706.02180",
+      "title": "Counting non-uniform lattices",
+      "date": "2017-06-06",
+      "authors": [
+        "Mikhail Belolipetsky",
+        "Alex Lubotzky"
+      ],
+      "cats": [
+        "math.GR",
+        "math.NT"
+      ],
+      "summary": "In [BGLM] and [GLNP] it was conjectured that if $H$ is a simple Lie group of real rank at least 2, then the number of conjugacy classes of (arithmetic) lattices in $H$ of covolume at most $x$ is $x^{(\u03b3(H)+o(1))\\log x/\\log\\log x}$ where $\u03b3(H)$ is an explicit constant computable from the (absolute) root system of $H$. In [BLu] we disproved this conjecture. In this paper we prove that for most groups $H$ the conjecture is actually true if we restrict to counting only non-uniform lattices.",
+      "url": "https://arxiv.org/abs/1706.02180",
+      "query_ids": [
+        "core-02"
+      ],
+      "query_texts": [
+        "all:\"Belolipetsky\" AND all:\"Lubotzky\""
+      ],
+      "query_hits": 1,
+      "score": 5
+    },
+    {
+      "id": "1804.03777",
+      "title": "Equivariant hyperbolization of $3$-manifolds via homology cobordisms",
+      "date": "2018-04-11",
+      "authors": [
+        "Dave Auckly",
+        "Hee Jung Kim",
+        "Paul Melvin",
+        "Daniel Ruberman"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "The main result of this paper is that any $3$-dimensional manifold with a finite group action is equivariantly, invertibly homology cobordant to a hyperbolic manifold; this result holds with suitable twisted coefficients as well. The following two consequences motivated this work. First, there are hyperbolic equivariant corks (as defined in previous work of the authors) for a wide class of finite groups. Second, any finite group that acts on a homology $3$-sphere also acts on a hyperbolic homology $3$-sphere. The theorem has other applications, including establishing the existence of an infinite number of hyperbolic homology spheres with a free $Z_p$ action that does not extend to any contractible manifold. A non-equivariant version yields an infinite number of hyperbolic integer homology spheres that bound integer homology balls but do not bound contractible manifolds. In passing, it is shown that the invertible homology cobordism relation on $3$-manifolds is antisymmetric.",
+      "url": "https://arxiv.org/abs/1804.03777",
+      "query_ids": [
+        "geom-01"
+      ],
+      "query_texts": [
+        "all:\"finite group actions\" AND all:\"hyperbolic manifolds\""
+      ],
+      "query_hits": 1,
+      "score": 5
+    },
+    {
+      "id": "1903.03351",
+      "title": "On large orientation-reversing finite group-actions on 3-manifolds and equivariant Heegaard decompositions",
+      "date": "2019-03-08",
+      "authors": [
+        "Bruno P. Zimmermann"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "We consider finite group-actions on closed, orientable and nonorientable 3-manifolds; such a finite group-action leaves invariant the two handlebodies of a Heegaard splitting of M of some genus g. The maximal possible order of a finite group-action of an orientable or nonorientable handlebody of genus g > 1 is 24(g-1), and in the present paper we characterize the 3-manifolds M and groups G for which the maximal possible order |G| = 24(g-1) is obtained, for some G-invariant Heegaard splitting of genus g > 1. If M is reducible then it is obtained by doubling an action of maximal possible order 24(g-1) on a handlebody of genus g. If M is irreducible then it is a spherical, Euclidean or hyperbolic manifold obtained as a quotient of one of the three geometries by a normal subgroup of finite index of a Coxeter group associated to a Coxeter tetrahedron, or of a twisted version of such a Coxeter group.",
+      "url": "https://arxiv.org/abs/1903.03351",
+      "query_ids": [
+        "geom-01"
+      ],
+      "query_texts": [
+        "all:\"finite group actions\" AND all:\"hyperbolic manifolds\""
+      ],
+      "query_hits": 1,
+      "score": 5
+    },
+    {
+      "id": "2506.23994",
+      "title": "On reflections of congruence hyperbolic manifolds",
+      "date": "2025-06-30",
+      "authors": [
+        "Sami Douba",
+        "Franco Vargas Pallete"
+      ],
+      "cats": [
+        "math.GT",
+        "math.DG"
+      ],
+      "summary": "We show that the standard method for constructing closed hyperbolic manifolds of arbitrary dimension possessing reflective symmetries typically produces reflections whose fixed point sets are nonseparating.",
+      "url": "https://arxiv.org/abs/2506.23994",
+      "query_ids": [
+        "geom-04"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "query_hits": 1,
+      "score": 5
+    },
+    {
+      "id": "2512.19505",
+      "title": "Finite groups and complex projective surfaces",
+      "date": "2025-12-22",
+      "authors": [
+        "Alexander Lubotzky",
+        "Matthew Stover"
+      ],
+      "cats": [
+        "math.GT",
+        "math.AG",
+        "math.GR"
+      ],
+      "summary": "In response to a question raised by Belolipetsky and the first author, we prove that for every finite group $G$ there are infinitely many isomorphism classes of compact complex hyperbolic $2$-manifolds with automorphism group isomorphic to $G$.",
+      "url": "https://arxiv.org/abs/2512.19505",
+      "query_ids": [
+        "core-02"
+      ],
+      "query_texts": [
+        "all:\"Belolipetsky\" AND all:\"Lubotzky\""
+      ],
+      "query_hits": 1,
+      "score": 5
+    },
+    {
+      "id": "1601.05697",
+      "title": "Geodesics and nodal sets of Laplace eigenfunctions on hyperbolic manifolds",
+      "date": "2016-01-21",
+      "authors": [
+        "Chris Judge",
+        "Sugata Mondal"
+      ],
+      "cats": [
+        "math.DG",
+        "math.SP"
+      ],
+      "summary": "Let X be a manifold equipped with a complete Riemannian metric of constant negative curvature and finite volume. We demonstrate the finiteness of the collection of totally geodesic immersed hypersurfaces in X that lie in the zero-level set of some Laplace eigenfunction. For surfaces, we show that the number can be bounded just in terms of the area of the surface. We also provide constructions of geodesics in hyperbolic surfaces that lie in a nodal set but that do not lie in the fixed point set of a reflection symmetry.",
+      "url": "https://arxiv.org/abs/1601.05697",
+      "query_ids": [
+        "geom-04"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "query_hits": 1,
+      "score": 4
+    },
+    {
+      "id": "1610.03870",
+      "title": "Systole of congruence coverings of arithmetic hyperbolic manifolds",
+      "date": "2016-10-12",
+      "authors": [
+        "Plinio G. P. Murillo"
+      ],
+      "cats": [
+        "math.DG",
+        "math.NT",
+        "math.RA"
+      ],
+      "summary": "In this paper we prove that, for any arithmetic hyperbolic $n$-manifold $M$ of the first type, the systole of most of the principal congruence coverings $M_{I}$ satisfy $$sys_{1}(M_{I})\\geq \\frac{8}{n(n+1)}\\log(vol(M_{I}))-c,$$ where $c$ is a constant independent of $I$. This generalizes previous work of Buser and Sarnak, and Katz, Schaps and Vishne in dimension 2 and 3. As applications, we obtain explicit estimates for systolic genus of hyperbolic manifolds studied by Belolipetsky and the distance of homological codes constructed by Guth and Lubotzky. In an appendix together with Cayo D\u00f3ria we prove that the constant $\\frac{8}{n(n+1)}$ is sharp.",
+      "url": "https://arxiv.org/abs/1610.03870",
+      "query_ids": [
+        "core-02"
+      ],
+      "query_texts": [
+        "all:\"Belolipetsky\" AND all:\"Lubotzky\""
+      ],
+      "query_hits": 1,
+      "score": 4
+    },
+    {
+      "id": "1901.00815",
+      "title": "Symmetries of exotic negatively curved manifolds",
+      "date": "2019-01-03",
+      "authors": [
+        "Mauricio Bustamante",
+        "Bena Tshishiku"
+      ],
+      "cats": [
+        "math.GT"
+      ],
+      "summary": "Let $N$ be a smooth manifold that is homeomorphic but not diffeomorphic to a closed hyperbolic manifold $M$. In this paper, we study the extent to which $N$ admits as much symmetry as $M$. Our main results are examples of $N$ that exhibit two extremes of behavior. On the one hand, we find $N$ with maximal symmetry, i.e. Isom($M$) acts on $N$ by isometries with respect to some negatively curved metric on $N$. For these examples, Isom($M$) can be made arbitrarily large. On the other hand, we find $N$ with little symmetry, i.e. no subgroup of Isom($M$) of \"small\" index acts by diffeomorphisms of $N$. The construction of these examples incorporates a variety of techniques including smoothing theory and the Belolipetsky-Lubotzky method for constructing hyperbolic manifolds with a prescribed isometry group.",
+      "url": "https://arxiv.org/abs/1901.00815",
+      "query_ids": [
+        "core-02"
+      ],
+      "query_texts": [
+        "all:\"Belolipetsky\" AND all:\"Lubotzky\""
+      ],
+      "query_hits": 1,
+      "score": 4
+    },
+    {
+      "id": "1310.0733",
+      "title": "Local inverse scattering at fixed energy in spherically symmetric asymptotically hyperbolic manifolds",
+      "date": "2013-10-02",
+      "authors": [
+        "Thierry Daude",
+        "Damien Gobin",
+        "Fran\u00e7ois Nicoleau"
+      ],
+      "cats": [
+        "math-ph"
+      ],
+      "summary": "In this paper, we adapt the well-known \\emph{local} uniqueness results of Borg-Marchenko type in the inverse problems for one dimensional Schr{\u00f6}dinger equation to prove \\emph{local} uniqueness results in the setting of inverse \\emph{metric} problems. More specifically, we consider a class of spherically symmetric manifolds having two asymptotically hyperbolic ends and study the scattering properties of massless Dirac waves evolving on such manifolds. Using the spherical symmetry of the model, the stationary scattering is encoded by a countable family of one-dimensional Dirac equations. This allows us to define the corresponding transmission coefficients $T(\u03bb,n)$ and reflection coefficients $L(\u03bb,n)$ and $R(\u03bb,n)$ of a Dirac wave having a fixed energy $\u03bb$ and angular momentum $n$. For instance, the reflection coefficients $L(\u03bb,n)$ correspond to the scattering experiment in which a wave is sent from the \\emph{left} end in the remote past and measured in the same left end in the future. The main result of this paper is an inverse uniqueness result local in nature. Namely, we prove that for a fixed $\u03bb\\not=0$, the knowledge of the reflection coefficients $L(\u03bb,n)$ (resp. $R(\u03bb,n)$) - up to a precise error term of the form $O(e^{-2nB})$ with $B\\textgreater{}0$ - determines the manifold in a neighbourhood of the left (resp. right) end, the size of this neighbourhood depending on the magnitude $B$ of the error term. The crucial ingredients in the proof of this result are the Complex Angular Momentum method as well as some useful uniqueness results for Laplace transforms.",
+      "url": "https://arxiv.org/abs/1310.0733",
+      "query_ids": [
+        "geom-04"
+      ],
+      "query_texts": [
+        "all:\"reflection\" AND all:\"hyperbolic manifold\" AND all:\"fixed\""
+      ],
+      "query_hits": 1,
+      "score": 3
+    },
+    {
+      "id": "1604.03849",
+      "title": "Counting isospectral manifolds",
+      "date": "2016-04-13",
+      "authors": [
+        "Mikhail Belolipetsky",
+        "Benjamin Linowitz"
+      ],
+      "cats": [
+        "math.DG",
+        "math.GR",
+        "math.NT"
+      ],
+      "summary": "Given a simple Lie group $H$ of real rank at least $2$ we show that the maximum cardinality of a set of isospectral non-isometric $H$-locally symmetric spaces of volume at most $x$ grows at least as fast as $x^{c\\log x/ (\\log\\log x)^2}$ where $c = c(H)$ is a positive constant. In contrast with the real rank $1$ case, this bound comes surprisingly close to the total number of such spaces as estimated in a previous work of Belolipetsky and Lubotzky [BL]. Our proof uses Sunada's method, results of [BL], and some deep results from number theory. We also discuss an open number-theoretical problem which would imply an even faster growth estimate.",
+      "url": "https://arxiv.org/abs/1604.03849",
+      "query_ids": [
+        "core-02"
+      ],
+      "query_texts": [
+        "all:\"Belolipetsky\" AND all:\"Lubotzky\""
+      ],
+      "query_hits": 1,
+      "score": 3
+    }
+  ]
+}
