@@ -116,17 +116,17 @@ Use \(D = S S^{T}\) and whiten by \(K_{\tau}^{-\mNumber{1}/\mNumber{2}}\):
 Then
 
 \[\begin{aligned}
-Ahat = (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) A_{\tau} (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) \\
+\hat{A} = (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) A_{\tau} (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) \\
 = (Z \times K_{\tau}^{\mNumber{1}/\mNumber{2}})^{T} D (Z \times K_{\tau}^{\mNumber{1}/\mNumber{2}}) + \lambda I.
 \end{aligned}\]
 
 If sampling is roughly uniform, D \textasciitilde{} c I with c = q/N. Then
 
-\[Ahat ~ c (Z^{T} Z \times K_{\tau}) + \lambda I.\]
+\[\hat{A} ~ c (Z^{T} Z \times K_{\tau}) + \lambda I.\]
 
 Choose Kron preconditioner in whitened coordinates:
 
-\[Phat = (c Z^{T} Z + \lambda I_{r}) \times I_{n}.\]
+\[\hat{P} = (c Z^{T} Z + \lambda I_{r}) \times I_{n}.\]
 
 Mapping back gives
 

@@ -75,6 +75,9 @@ ESCAPED_SCRIPT_SNIPPET = (
     r"Q\^{}(a,b)\_\{i,j\} and p ⊞\_n q and omega\textbar\_\{L_i\}."
     "\n"
 )
+HAT_TOKEN_SNIPPET = (
+    "Set Ahat = Phat and use phat in the preconditioner.\n"
+)
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -174,6 +177,9 @@ def main() -> int:
     _, out_escaped_script = render_snippet(
         repo, normalizer, lua_filter, ESCAPED_SCRIPT_SNIPPET
     )
+    _, out_hat = render_snippet(
+        repo, normalizer, lua_filter, HAT_TOKEN_SNIPPET
+    )
     out_plus_star_raw = out_plus_star
 
     out = strip_mnumber(out)
@@ -202,6 +208,7 @@ def main() -> int:
     normalized_mu_dmu = strip_mnumber(normalized_mu_dmu)
     out_mu_dmu = strip_mnumber(out_mu_dmu)
     out_escaped_script = strip_mnumber(out_escaped_script)
+    out_hat = strip_mnumber(out_hat)
 
     if r"integrals over \(V\)" not in out:
         failures.append("missing inline math for V in 'integrals over V'")
@@ -432,6 +439,12 @@ def main() -> int:
         failures.append("rendered output still contains empty escaped-caret artifact \\^{}")
     if "textasciicircum" in out_escaped_script:
         failures.append("rendered output still contains textasciicircum escape artifact")
+    if r"\hat{A}" not in out_hat:
+        failures.append("Ahat token was not normalized to \\hat{A}")
+    if r"\hat{P}" not in out_hat:
+        failures.append("Phat token was not normalized to \\hat{P}")
+    if r"\hat{p}" not in out_hat:
+        failures.append("phat token was not normalized to \\hat{p}")
 
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:

@@ -391,6 +391,12 @@ local function normalize_expr(s)
     s = replace_word(s, pair[1], pair[2])
   end
 
+  -- Explicit hat-token normalization (domain vocabulary).
+  s = replace_word(s, "Ahat", "\\hat{A}")
+  s = replace_word(s, "Phat", "\\hat{P}")
+  s = replace_word(s, "phat", "\\hat{p}")
+  s = replace_word(s, "ahat", "\\hat{a}")
+
   -- Prevent glued prose after Greek commands: \muare -> \mu are.
   local greek_cmds = {
     "Gamma", "Delta", "Theta", "Lambda", "Xi", "Pi", "Sigma", "Upsilon", "Phi", "Psi", "Omega",
@@ -837,6 +843,21 @@ local function merge_adjacent_math_fragments(inlines)
 end
 
 local function convert_simple_str_token_to_inlines(s)
+  local hat_core, hat_punct = s:match("^([A-Za-z]+)([%.,;:]*)$")
+  local hat_map = {
+    Ahat = "\\hat{A}",
+    Phat = "\\hat{P}",
+    phat = "\\hat{p}",
+    ahat = "\\hat{a}",
+  }
+  if hat_core ~= nil and hat_map[hat_core] ~= nil then
+    local out = {pandoc.Math("InlineMath", hat_map[hat_core])}
+    if hat_punct ~= "" then
+      table.insert(out, pandoc.Str(hat_punct))
+    end
+    return out
+  end
+
   local esc_core, esc_punct = s:match("^(.-)([%.,;:]*)$")
   if esc_core ~= nil and (
       esc_core:find("\\_", 1, true) or
