@@ -587,3 +587,45 @@ the stationarity is present in the data but invisible to the
 monitor.  The MMCA provides the detection mechanism; the peripheral
 model provides the intervention; the AIF graph provides the
 representation that connects them.
+
+\subsection{Postscript: when the averaging argument itself is false}
+
+The sidebar above describes an intervention that reframed
+$\bar{d}_t < 1$ from a universal bound to a two-regime argument.
+Cycle~7 (several days later) produced a stronger result: the
+Barrier Maintenance Invariant ($\bar{d}_t < 1$ at every step) is
+\emph{false} for general graphs.  Twelve base-suite configurations
+have $\bar{d} \ge 1$ (worst: 1.739).  The pigeonhole argument
+that converted $\bar{d} < 1$ to ``$\exists v$ with $\|Y_t(v)\| < 1$''
+is valid but unreachable---its hypothesis fails.
+
+And yet the construction still works.  Zero skips in 1,111 runs.
+The leverage-ordered greedy processes feasible vertices first,
+not because the average is below~1, but because leverage ordering
+concentrates small contributions at the front of the queue.  The
+gap shifted from an averaging statement (BMI) to a vertex-level
+feasibility statement: the \textbf{No-Skip Conjecture} (at each
+step, the next leverage-ordered vertex is feasible).
+
+This is a second-order layer switch.  The E+F hybrid from the
+sidebar was a layer switch within the averaging framework: split
+the average by regime.  The BMI falsification is a layer switch
+\emph{away from averaging entirely}: the proof must work at the
+vertex level, not the average level.  The sidebar's intervention
+was correct in spirit (``the stuck approach is stuck; reframe'')
+but still within the same layer.  A monitor that tracked not just
+stationarity but \emph{falsification}---detecting that a hypothesis
+is not merely unproved but disproved---would have triggered the
+larger reframing earlier.
+
+The practical implication for the proposed infrastructure: the
+$(\text{layer}, \text{status})$ monitor should distinguish three
+status values: \textsc{open} (no evidence either way),
+\textsc{stuck} (repeated attempts, no progress), and
+\textsc{falsified} (counterexample found).  The response to
+\textsc{stuck} is a reflect hop (reframe within the current
+approach).  The response to \textsc{falsified} is a layer switch
+(abandon the current approach).  The Problem~6 continuation
+demonstrates both transitions: five hours of \textsc{stuck}
+before the sidebar's reflect hop, then several more cycles before
+Cycle~7's \textsc{falsified} forced the larger reframing.

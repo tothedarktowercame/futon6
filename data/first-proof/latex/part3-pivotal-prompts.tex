@@ -417,3 +417,207 @@ I think the key thing you could help with now is looking through
 \pivot{The sprint becomes its own document. The recursive
   structure---a proof sprint whose Part~III records the prompts that
   shaped Part~II---closes the loop between process and product.}
+
+%% ============================================================
+\section*{Act IX: The Continuation Cycles (Problems 4 and 6)}
+%% ============================================================
+
+The monograph was written during the sprint, not after it. The
+sprint continued. Problems~4 and~6 entered multi-cycle proof
+engineering phases that lasted days beyond the initial 48-hour
+window---each cycle a dispatch, handoff, verification, and
+reassessment. These cycles are the sprint's methodology running
+at sustained pace rather than compressed urgency.
+
+\subsection*{Problem 4: From Wrong Proof to Algebraic Engineering}
+
+\begin{claudebox}[title={Claude --- Initial draft (Feb 11)}]
+Proof by concavity of $1/\Phi_n$ in cumulant coordinates.
+Since free cumulants are additive under $\boxplus$, Jensen's
+inequality gives $1/\Phi_n(p \boxplus q) \ge 1/\Phi_n(p) +
+1/\Phi_n(q)$.
+\end{claudebox}
+
+\pivot{The proof is wrong. $1/\Phi_n$ is superadditive in
+  cumulant space WITHOUT being convex---the Hessian is indefinite.
+  35,000 numerical trials confirm the conjecture but the argument
+  is structurally broken. Numerical verification caught the
+  conjecture but hid the proof error.}
+
+\begin{claudebox}[title={Claude --- Key identity (Feb 12, commit \texttt{03c1f8d})}]
+$\Phi_4(p) \cdot \operatorname{disc}(p)
+  = -4(a_2^2 + 12a_4)(2a_2^3 - 8a_2 a_4 + 9a_3^2)$.
+This converts the inequality to: prove a rational function's
+numerator is non-negative on a semi-algebraic domain.
+\end{claudebox}
+
+\pivot{The first layer switch for Problem~4. Instead of hoping for
+  a clever inequality (concavity, Schur-convexity, Cauchy--Schwarz),
+  the problem is reduced to computational algebra: case
+  decomposition by symmetry subspaces, resultant elimination,
+  sign-counting. The identity itself is a publishable result---a
+  finite analogue of Stam's inequality.}
+
+\begin{claudebox}[title={Claude --- 3-piece Cauchy--Schwarz (commit \texttt{269fddd})}]
+BREAKTHROUGH: the surplus decomposes into three pieces $T_1 + T_2
++ R$ where $T_1 \le 0$ (proved), and $T_2, R$ have
+mutual-compensation structure. When $T_2 < 0$, $R$ compensates.
+This reduces the full $n = 4$ proof to a degree-6 polynomial
+inequality: $K_{T2R} \ge 0$.
+\end{claudebox}
+
+\pivot{A second layer switch within the algebraic layer.
+  Symmetry-stratified elimination proved Cases~1, 2, 3a, 3b
+  (resultant chains, 0.2--30 seconds each). Case~3c (generic, 4D)
+  was handed to Codex with PHCpack. Seven SOS scripts proved that
+  Positivstellensatz certificates are structurally impossible---the
+  SOS cone misses the feasible set. The failure is a theorem, not a
+  dead end: it rules out the entire SOS technique family.}
+
+\subsection*{Problem 6: When Averaging Fails}
+
+\begin{claudebox}[title={Claude --- Codex Cycle~7 (commit \texttt{a7b0e3e})}]
+The Barrier Maintenance Invariant is \textbf{falsified}. 12
+base-suite steps have $\bar{d} \ge 1$ (worst: 1.739, Reg\_100\_d10,
+$\varepsilon = 0.5$, $t = 16$). The pigeonhole argument
+($\bar{d} < 1 \Rightarrow \exists v$ with $\|Y_t(v)\| < 1$)
+cannot close the construction.
+\end{claudebox}
+
+\pivot{The most dramatic moment in the continuation cycles. The
+  averaging argument that the elementary proof relied on---the very
+  argument whose discovery was the Act~VII breakthrough---turns out
+  to be \emph{false} for general graphs. $\bar{d}_t < 1$ holds for
+  $K_n$ but not universally. The construction still works (0~skips
+  in 1,111 runs) because leverage-ordered vertices have small
+  \emph{individual} contributions even when the average exceeds~1.
+  The gap shifts from an averaging statement to a vertex-level
+  feasibility statement: the \textbf{No-Skip Conjecture}.}
+
+\begin{joebox}
+I have engaged Codex in a systematic verification cycle on
+Problem~6. Seven cycles so far. Each cycle narrows the gap: the
+construction still works in every test---zero skips, zero
+failures---but the proof keeps slipping. The trajectory is: method
+wiring library $\to$ leverage threshold $\to$ barrier greedy
+$\to$ BMI falsified $\to$ No-Skip Conjecture. At each stage, what
+we thought was the gap turns out to be something more specific.
+\end{joebox}
+
+\pivot{The continuation cycles exhibit the same pattern as the
+  original sprint: repeated refinement of what is actually open.
+  The lemma that was GPL-H became BMI became the No-Skip
+  Conjecture. Each reformulation is a genuine narrowing, not a
+  retreat. The ``method wiring library'' from Cycle~1 (ten
+  techniques with typed wiring diagrams) prevented commitment to
+  any single approach before the landscape was mapped---the
+  pre-proof infrastructure that Part~IV's Section~6 proposes as a
+  design pattern.}
+
+\subsection*{The Exhaustion-as-Theorem Pattern}
+
+\begin{claudebox}[title={Claude --- Six techniques, one wall}]
+All six subsample-and-concentrate techniques hit the same
+quantitative wall: spectral contribution scales as $q^2$ while
+set size scales as $q$. Trace/Markov: sublinear. Star domination:
+$O(\varepsilon/\log n)$. Decoupling + MSS: $O(\varepsilon^2)$.
+Greedy: $O(\varepsilon)$. Rank spreading: $O(\varepsilon^2)$.
+The wall is fundamental to the technique family, not an artifact
+of any one approach.
+\end{claudebox}
+
+\pivot{When multiple methods fail at the same step, prove a
+  theorem about the step. This is the cross-problem pattern
+  identified in Part~IV (Section~5) now demonstrated in the
+  continuation: the exhaustion of a technique family produces a
+  structural understanding that redirects effort. For Problem~6,
+  it redirected from ``adapt edge sparsification'' (where every
+  method hits the quadratic-vs-linear wall) to ``invent a new
+  vertex-level argument'' (the leverage-ordered barrier greedy).
+  For Problem~4, it redirected from SOS certification (structurally
+  impossible) to resultant elimination (feasible and fast).}
+
+%% ============================================================
+\section*{Act X: The Gauntlet Connection}
+%% ============================================================
+
+\begin{joebox}
+Also in terms of ``what we've learned''---in the making-of I think we
+could add something about the relevance of this pattern to agent
+teaming (further work in futon3c).
+\end{joebox}
+
+The sprint and its continuation are a slow-motion demonstration of
+the infrastructure that the \texttt{futon3c} peripheral gauntlet
+(M-peripheral-gauntlet) proposes to build. Every placental function
+that the gauntlet enumerates was performed by a human during the
+sprint:
+
+\begin{description}
+\item[Sensory gating.] Joe chose which problems to look at, which
+  Codex outputs to read, which Claude sessions to trust. Gate~1
+  (umwelt) would make this an agent capability.
+
+\item[Belief correction.] ``That's replacing an overclaim with
+  weasel words.'' ``I thought \#6 and \#7 were proved so I'm glad
+  I asked!'' Gate~4 (AIF as environment) would make confidence
+  state visible to agents without human narration.
+
+\item[Policy selection.] ``Think out of the box---what kind of
+  problem is this?'' The coaching intervention is a human-supplied
+  policy switch. Gate~4 (AIF modeline) would let the agent perceive
+  its own stuckness and trigger layer enumeration autonomously.
+
+\item[Inter-agent routing.] ``I have two Codex research assistants
+  working for you.'' Joe manually coordinated three concurrent
+  processes, hitting OOM limits. Gate~0 (arena) and Gate~3
+  (co-presence) would make agent activity structurally visible.
+
+\item[Stall detection.] ``Codex is still after 53~minutes hard at
+  work\ldots\ I will give it five more minutes and then say pencils
+  down.'' Tickle---the watchdog agent proposed in the gauntlet---is
+  exactly this function automated: detect stall, page the agent,
+  escalate to human if the page fails.
+
+\item[Confidence calibration.] ``Problem~6 has not brought out the
+  best in Claude.'' The human's morning-after assessment that the
+  gap-filling missions were running without valid confidence signals.
+  Gate~5 (modeline persistence) would carry this calibration across
+  sessions.
+
+\item[Discovery surfacing.] ``It's so cool that this is the same
+  basic solution we have used to overcome continual shoring up of
+  bad design in futon3.'' Gate~7 (teaching inversion) would
+  structure this insight---the cross-domain analogy between proof
+  strategy and software design---as a discoverable pattern rather
+  than a conversational aside.
+\end{description}
+
+The continuation cycles add a specific design insight: the
+\textbf{($\text{layer}, \text{status}$) stationarity monitor}
+proposed in Part~IV (Section~\ref{sec:learning}) \emph{is} the
+proof-domain instance of Tickle. Problem~6's failed phase (six
+dispatch-and-fail cycles over eight hours, all targeting the
+sparsification layer) has the same $(\text{layer}, \text{status})$
+signature as a stalled coding agent repeating the same approach:
+stripes in the spacetime diagram. The monitor that detects
+stationarity and triggers a reflect hop is Tickle for proofs.
+The monitor that detects agent silence on IRC and pages it awake
+is Tickle for coordination. Same pattern, same gate, different
+timescale.
+
+\pivot{The connection between the proof sprint and the gauntlet is
+  not metaphorical. The sprint is evidence for the gauntlet: it
+  demonstrates what autonomous multi-agent operation looks like when
+  the infrastructure doesn't exist, and therefore what the
+  infrastructure must provide. Every human intervention documented
+  in this Part~III is a placental function. Every pivot annotation
+  is a moment where that function transferred knowledge. The
+  gauntlet's measure of success is that the pivots happen without
+  the human---not because the human is excluded, but because the
+  infrastructure carries the function. When that works, the human
+  converges to the slow-timescale preference layer: choosing which
+  problems to attempt, which proofs to trust, which discoveries to
+  pursue. Everything else---stall detection, layer enumeration,
+  confidence calibration, co-presence, modeline persistence---is
+  infrastructure.}
