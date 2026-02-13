@@ -63,7 +63,7 @@ the Cameron-Martin space is:
 
 \[H = H^\mNumber{1}(T^\mNumber{3}) (Sobolev space of order \mNumber{1})\]
 
-Since \(\psi\) is smooth, \(\psi \in C^{infinity}(T^\mNumber{3})\) subset \(H^\mNumber{1}(T^\mNumber{3})\), so \(\psi\) is in the
+Since \(\psi\) is smooth, \(\psi \in C^{\infty}(T^\mNumber{3})\) subset \(H^\mNumber{1}(T^\mNumber{3})\), so \(\psi\) is in the
 Cameron-Martin space.
 
 \textbf{Cameron-Martin theorem:} For any \(h \in H\), the shifted Gaussian measure
@@ -85,9 +85,9 @@ To compute \(T_{\psi}^{\mDualStar} \mu,\) we need the density of the shifted int
 The shifted interaction V(phi - psi) expands (using Wick ordering relative to \(\mu_\mNumber{0}\)):
 
 \[\begin{aligned}
-V(\phi - \psi) = V(\phi) - \mNumber{4} int \psi :\phi^\mNumber{3}: dx + \mNumber{6} int \psi^\mNumber{2} :\phi^\mNumber{2}: dx \\
-- \mNumber{4} int \psi^\mNumber{3} :\phi: dx + int \psi^\mNumber{4} dx \\
-- C(int :\phi^\mNumber{2}: dx - \mNumber{2} int \psi :\phi: dx + int \psi^\mNumber{2} dx) + (renorm. corrections)
+V(\phi - \psi) = V(\phi) - \mNumber{4} \Integral \psi :\phi^\mNumber{3}:\,dx + \mNumber{6} \Integral \psi^\mNumber{2} :\phi^\mNumber{2}:\,dx \\
+- \mNumber{4} \Integral \psi^\mNumber{3} :\phi:\,dx + \Integral \psi^\mNumber{4}\,dx \\
+- C(\Integral :\phi^\mNumber{2}:\,dx - \mNumber{2} \Integral \psi :\phi:\,dx + \Integral \psi^\mNumber{2}\,dx) + (renorm. corrections)
 \end{aligned}\]
 
 \textbf{Renormalization under shift:} The term 6 int \(\psi^{\mNumber{2}} :\phi^{\mNumber{2}}\): dx generates an
@@ -110,7 +110,7 @@ which has the right regularity:
 \item
   \(:\phi^\mNumber{3}\): in \(C^{-\mNumber{3}/\mNumber{2}-\epsilon}(T^{\mNumber{3}})\) (as a distribution)
 \item
-  \(\psi \in C^{infinity}(T^\mNumber{3})\) (smooth)
+  \(\psi \in C^{\infty}(T^\mNumber{3})\) (smooth)
 \item
   int \(\psi :\phi^{\mNumber{3}}\): dx is well-defined (pairing of smooth test function with distribution)
 \end{itemize}
@@ -131,14 +131,14 @@ We need \(R \in L^{\mNumber{1}}(\mu)\) and \(R > \mNumber{0}\) a.s.
 2020), the measure has strong concentration: the tails of int \(\psi :\phi^{\mNumber{3}}\): dx
 are controlled by the quartic interaction. Specifically:
 
-\[E_{\mu}[\exp(t |int \psi :\phi^\mNumber{3}: dx|)] < infinity \text{for} |t| < t_\mNumber{0}\]
+\[E_{\mu}[\exp(t |\Integral \psi :\phi^\mNumber{3}:\,dx|)] < \infty \text{for} |t| < t_\mNumber{0}\]
 
-where \(t_\mNumber{0} > \mNumber{0}\) depends on \textbar\textbar psi\textbar\textbar{}\emph{\{\(\mathbb{C}^{\mNumber{0}}\)\} and the coupling constant.
+where \(t_\mNumber{0} > \mNumber{0}\) depends on \(\|\psi\|_{C^\mNumber{0}}\) and the coupling constant.
 This exponential integrability follows from the coercivity of the \(\phi^\mNumber{4}\)
 interaction: the quartic potential dominates the cubic perturbation
 (Barashkov-Gubinelli 2020, Section 4, exponential integrability from the
 Polchinski flow). The bound suffices for \(R \in L^{\mNumber{1}}(\mu)\) since the exponent
-in the Radon-Nikodym derivative is bounded by 4 \textbar\textbar psi\textbar\textbar{}}\{\(\mathbb{C}^{\mNumber{0}}\)\} \textbar int \(:\phi^\mNumber{3}\): dx\textbar,
+in the Radon-Nikodym derivative is bounded by 4 \(\|\psi\|_{C^{\mNumber{0}}} |\Integral :\phi^{\mNumber{3}}:\,dx|,\)
 and \(t_\mNumber{0}\) can be chosen to exceed this coefficient.
 
 Therefore \(R \in L^{\mNumber{1}}(\mu)\) and 1/\(R \in L\)\^{}1(\(T_{\psi}\)\^{}* mu), giving:

@@ -102,8 +102,8 @@ PHI_SET_RE = re.compile(
     r"V\s+in\s+W\(\s*pi\s*,\s*psi\s*\)\s*\}\s*·\s*([A-Za-z])"
 )
 COMPLEX_RING_RE = re.compile(r"\bC\[\s*([^\]]+)\]")
-FIELD_POWER_RE = re.compile(r"\b([RCZQ])\^([0-9]+|[A-Za-z])\b")
-COTANGENT_FIELD_RE = re.compile(r"\bT\^\\?\*\s*([RCZQ])\^([0-9]+|[A-Za-z])\b")
+FIELD_POWER_RE = re.compile(r"\b([RCZQ])\^([1-9][0-9]*|[A-Za-z])\b")
+COTANGENT_FIELD_RE = re.compile(r"\bT\^\\?\*\s*([RCZQ])\^([1-9][0-9]*|[A-Za-z])\b")
 COTANGENT_TOKEN_RE = re.compile(r"\bT\^\\?\*\s*([A-Za-z][A-Za-z0-9_]*)\b")
 OP_CALL_TEXT_RE = re.compile(r"\b(span|ker|rank|dim|codim|trace)\(([^()]+)\)")
 OMEGA_RESTRICT_RE = re.compile(r"\bomega\|_([A-Za-z0-9]+)\b")
@@ -129,6 +129,16 @@ SN_ALL_PERMS_RE = re.compile(
     r"\bS_?n\(\s*(?:lambda|\\lambda|λ)\s*\)\s*=\s*\{\s*all\s+permutations\s+of\s+the\s+parts\s+of\s*(?:lambda|\\lambda|λ)\s*\}\s*([.?!,;:]?)",
     re.IGNORECASE,
 )
+NORM_SUBSCRIPT_RE = re.compile(
+    r"\|\|\s*([A-Za-z\\][A-Za-z0-9\\]*)\s*\|\|\s*"
+    r"(?:_\s*(\{[^}]+\}|[A-Za-z0-9\\^+\-]+)|\{\s*([^}]+)\s*\})"
+    r"(?:\s*\^\s*(\{[^}]+\}|[A-Za-z0-9+\-]+))?(\s*)"
+)
+NORM_POWER_RE = re.compile(
+    r"\|\|\s*([A-Za-z\\][A-Za-z0-9\\]*)\s*\|\|\s*\^\s*(\{[^}]+\}|[A-Za-z0-9+\-]+)(\s*)"
+)
+NORM_BARE_RE = re.compile(r"\|\|\s*([A-Za-z\\][A-Za-z0-9\\]*)\s*\|\|")
+ABS_INT_COLON_DX_RE = re.compile(r"\|int\s+:([A-Za-z]+)(?:\^([0-9]+))?:\s*dx\|")
 
 
 def _unicode_math_char_repl(m: re.Match[str]) -> str:
@@ -205,6 +215,56 @@ def _tpsi_star_repl(m: re.Match[str]) -> str:
 def _sn_all_perms_repl(m: re.Match[str]) -> str:
     punct = m.group(1) or ""
     return r"$S_n(\lambda) = \{\text{all permutations of the parts of } \lambda\}$" + punct
+
+
+def _strip_outer_braces(s: str) -> str:
+    s = s.strip()
+    if len(s) >= 2 and s.startswith("{") and s.endswith("}"):
+        return s[1:-1].strip()
+    return s
+
+
+def _normalize_norm_subscript(s: str) -> str:
+    s = _strip_outer_braces(s).replace(" ", "")
+    # Common function-space shorthand: C0/L2/H1 -> C^0/L^2/H^1.
+    s = re.sub(r"^([CLHW])([0-9]+)$", r"\1^\2", s)
+    return _texify_token(s).replace("\\\\", "\\")
+
+
+def _normalize_norm_power(s: str) -> str:
+    s = _strip_outer_braces(s).replace(" ", "")
+    return _texify_token(s).replace("\\\\", "\\")
+
+
+def _norm_subscript_repl(m: re.Match[str]) -> str:
+    var = _texify_token(m.group(1)).replace("\\\\", "\\")
+    sub = _normalize_norm_subscript(m.group(2) or m.group(3) or "")
+    power = m.group(4)
+    trail = m.group(5) or ""
+    if power:
+        pow_tex = _normalize_norm_power(power)
+        return rf"$\|{var}\|_{{{sub}}}^{{{pow_tex}}}$" + trail
+    return rf"$\|{var}\|_{{{sub}}}$" + trail
+
+
+def _norm_power_repl(m: re.Match[str]) -> str:
+    var = _texify_token(m.group(1)).replace("\\\\", "\\")
+    pow_tex = _normalize_norm_power(m.group(2))
+    trail = m.group(3) or ""
+    return rf"$\|{var}\|^{{{pow_tex}}}$" + trail
+
+
+def _norm_bare_repl(m: re.Match[str]) -> str:
+    var = _texify_token(m.group(1)).replace("\\\\", "\\")
+    return rf"$\|{var}\|$"
+
+
+def _abs_int_colon_dx_repl(m: re.Match[str]) -> str:
+    sym = _texify_token(m.group(1)).replace("\\\\", "\\")
+    power = m.group(2)
+    if power:
+        return rf"$|\Integral :{sym}^{{{power}}}:\,dx|$"
+    return rf"$|\Integral :{sym}:\,dx|$"
 
 
 def split_inline_code(s: str) -> list[tuple[str, str]]:
@@ -498,6 +558,10 @@ def process_plain_text_segment(s: str) -> str:
     s = OP_CALL_TEXT_RE.sub(_op_call_text_repl, s)
     s = OMEGA_RESTRICT_RE.sub(r"$\\omega|_{\1}$", s)
     s = OMEGA_EQ_RE.sub(r"$\\omega(\1) = \2$", s)
+    s = NORM_SUBSCRIPT_RE.sub(_norm_subscript_repl, s)
+    s = NORM_POWER_RE.sub(_norm_power_repl, s)
+    s = NORM_BARE_RE.sub(_norm_bare_repl, s)
+    s = ABS_INT_COLON_DX_RE.sub(_abs_int_colon_dx_repl, s)
     s = UNICODE_MATH_CHAR_RE.sub(_unicode_math_char_repl, s)
     return s
 
@@ -645,6 +709,18 @@ def run_self_test() -> None:
         (
             "S_n(lambda) = {all permutations of the parts of lambda}.",
             r"$S_n(\lambda) = \{\text{all permutations of the parts of } \lambda\}$.",
+        ),
+        (
+            "where t_0 > 0 depends on ||psi||_{C^0} and the coupling constant.",
+            r"where $t_0 > 0$ depends on $\|\psi\|_{C^0}$ and the coupling constant.",
+        ),
+        (
+            "bound by 4 ||psi||{C0 } with ||x||^2 control.",
+            r"bound by 4 $\|\psi\|_{C^0}$ with $\|x\|^{2}$ control.",
+        ),
+        (
+            "bounded by 4 ||psi||_{C^0} |int :phi^3: dx|.",
+            r"bounded by 4 $\|\psi\|_{C^0}$ $|\Integral :\phi^{3}:\,dx|$.",
         ),
     ]
     for raw, want in cases:
