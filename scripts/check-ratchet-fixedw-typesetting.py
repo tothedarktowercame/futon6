@@ -506,6 +506,10 @@ def main() -> int:
         failures.append("math-proofread style does not set integer/number color to Red")
     if r"\colorlet{MPSyntaxDelimiterColor}{Magenta}" not in style:
         failures.append("math-proofread style does not set delimiters to Magenta")
+    if r"\definecolor{MPSyntaxBlueBlack}{RGB}{10,24,48}" not in style:
+        failures.append("math-proofread style does not define blue-black default math color")
+    if r"\colorlet{MPSyntaxDefaultMathColor}{MPSyntaxBlueBlack}" not in style:
+        failures.append("math-proofread style does not set default math color to blue-black")
     if r"\let\MP@orig@textlbrace\{" not in style:
         failures.append("math-proofread style does not preserve original text left brace (\\{)")
     if r"\let\MP@orig@textrbrace\}" not in style:
