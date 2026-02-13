@@ -156,6 +156,42 @@
 }
 % --- End dialogue boxes ---
 
+% --- Proof-layer boxes (Part II) ---
+% Readers who want only the clean proof can skip all coloured boxes.
+\newtcolorbox{deadpath}[1][]{%
+  colback=black!3, colframe=black!40,
+  fonttitle=\bfseries\sffamily\small,
+  title={Dead Path}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt, breakable,
+  before skip=6pt, after skip=6pt
+}
+\newtcolorbox{revision}[1][]{%
+  colback=yellow!5, colframe=yellow!60!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Revision}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt, breakable,
+  before skip=6pt, after skip=6pt
+}
+\newtcolorbox{openobligation}[1][]{%
+  colback=red!4, colframe=red!60!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Open Obligation}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt, breakable,
+  before skip=6pt, after skip=6pt
+}
+\newtcolorbox{processnote}[1][]{%
+  colback=blue!3, colframe=blue!30!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Process Note}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt, breakable,
+  before skip=6pt, after skip=6pt
+}
+% --- End proof-layer boxes ---
+
 \newcommand{\includeannotated}[1]{%
   \begingroup
   \let\origsection\section
@@ -236,21 +272,53 @@ Problem 6 currently retains an explicit unresolved obligation in the project sta
 
 \part{Full Proof Drafts}
 
+\chapter*{Reading Convention}
+\addcontentsline{toc}{chapter}{Reading Convention}
+
+Each proof chapter in this part uses coloured boxes to separate the
+mathematical argument from the surrounding process record.
+
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{Unboxed text} is the proof proper. A reader following the
+  five-page-per-problem brief can read only the unboxed text and obtain a
+  self-contained argument (or, where an argument is incomplete, a clearly
+  stated conditional result).
+\item \begin{deadpath}[title={Dead Path}]
+  Abandoned approaches, wrong turns, strategies that were tried and
+  discarded. Retained for the process record.
+  \end{deadpath}
+\item \begin{revision}[title={Revision}]
+  Corrections applied during the sprint---patches to earlier overclaims,
+  definition fixes, tightened hypotheses.
+  \end{revision}
+\item \begin{openobligation}[title={Open Obligation}]
+  Gaps that remain open. The proof is conditional on these steps.
+  \end{openobligation}
+\item \begin{processnote}[title={Process Note}]
+  Confidence assessments, status summaries, reviewer context,
+  and methodological commentary.
+  \end{processnote}
+\end{itemize}
+
 \chapter*{Status Notes for Open Items}
 \addcontentsline{toc}{chapter}{Status Notes for Open Items}
-\gapnote{\textbf{Problem 6:} current proof chain is conditional on the remaining Case~2b averaging lemma (GPL-H) as recorded in the project writeups.}
-\statusnote{\textbf{Problem 7:} this revision treats the problem as closed via the rotation route. Fowler's criterion supplies the \(\mathrm{FH}(\mathbb Q)\) input, and the codimension-2 surgery bridge is discharged by the theorem-number chain documented in \texttt{problem7-g2-theorem-chain.md}.}
+\begin{openobligation}[title={Open Obligation --- Problem 6}]
+Current proof chain is conditional on the remaining Case~2b averaging lemma (GPL-H) as recorded in the project writeups.
+\end{openobligation}
+\begin{processnote}[title={Process Note --- Problem 7}]
+This revision treats the problem as closed via the rotation route. Fowler's criterion supplies the \(\mathrm{FH}(\mathbb Q)\) input, and the codimension-2 surgery bridge is discharged by the theorem-number chain documented in \texttt{problem7-g2-theorem-chain.md}.
+\end{processnote}
 
-\includefull{full/problem1-solution-full}
-\includefull{full/problem2-solution-full}
-\includefull{full/problem3-solution-full}
-\includefull{full/problem4-solution-full}
-\includefull{full/problem5-solution-full}
-\includefull{full/problem6-solution-full}
-\includefull{full/problem7-solution-full}
-\includefull{full/problem8-solution-full}
-\includefull{full/problem9-solution-full}
-\includefull{full/problem10-solution-full}
+\includefull{full-boxed/problem1-solution-full}
+\includefull{full-boxed/problem2-solution-full}
+\includefull{full-boxed/problem3-solution-full}
+\includefull{full-boxed/problem4-solution-full}
+\includefull{full-boxed/problem5-solution-full}
+\includefull{full-boxed/problem6-solution-full}
+\includefull{full-boxed/problem7-solution-full}
+\includefull{full-boxed/problem8-solution-full}
+\includefull{full-boxed/problem9-solution-full}
+\includefull{full-boxed/problem10-solution-full}
 
 \part{Prompt Excerpts and Pivot Moments}
 \input{part3-pivotal-prompts}
