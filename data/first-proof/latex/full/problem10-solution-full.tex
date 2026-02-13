@@ -19,10 +19,10 @@ N = nM), \(B = T\) Z, and n, r \textless\textless{} q \textless\textless{} N.
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(\lambda\) \textgreater{} 0.
+  \(\lambda > \mNumber{0}\).
 \item
   For standard PCG and Cholesky-based preconditioning, use a PD kernel
-  \(K_{\tau} = K\) + \(\tau\) \(I_{n}\) with \(\tau\) \textgreater{} 0 (or assume K is already PD).
+  \(K_{\tau} = K \mBridgeOperator{+} \tau\) \(I_{n}\) with \(\tau > \mNumber{0}\) (or assume K is already PD).
 \item
   S is a selection operator, so D is diagonal/projector and sparse by index list.
 \end{enumerate}
@@ -45,14 +45,14 @@ Under these assumptions \(A_{\tau}\) is SPD, so PCG applies.
 \subsubsection{1. Why naive direct methods fail}\label{1-why-naive-direct-methods-fail}}
 
 \(A_{\tau}\) is an (nr) x (nr) system. Dense direct factorization costs
-\(O((nr)^3) = O(n^3 r^3)\).
+\(O((nr)^\mNumber{3}) = O(n^\mNumber{3} r^\mNumber{3})\).
 
 A naive explicit route also materializes \(\Phi = Z \times K_{\tau} \in R^{N \times nr}\),
 which costs \(O(N n r)\) memory/work before factorization. This is the
 \(N\)-dependent bottleneck we avoid with matrix-free PCG.
 
 \hypertarget{2-implicit-matrix-vector-product-in-on2-r--q-r}{%
-\subsubsection{\texorpdfstring{2. Implicit matrix-vector product in \(O(n^2 r + q r)\)}{2. Implicit matrix-vector product in O(n\^{}2 r + q r)}}\label{2-implicit-matrix-vector-product-in-on2-r--q-r}}
+\subsubsection{\texorpdfstring{2. Implicit matrix-vector product in \(O(n^\mNumber{2} r + q r)\)}{2. Implicit matrix-vector product in O(n\^{}\textbackslash mNumber\{2\} r + q r)}}\label{2-implicit-matrix-vector-product-in-on2-r--q-r}}
 
 CG needs only \(y = A_{\tau}\) x, not \(A_{\tau}\) explicitly.
 
@@ -61,7 +61,7 @@ Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \(U = K_{\tau}\) V. Cost \(O(n^2 r)\).
+  \(U = K_{\tau}\) V. Cost \(O(n^\mNumber{2} r)\).
 \item
   Forward sampled action (only observed entries):
 
@@ -79,14 +79,14 @@ Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
 
   \[(Z^{T} \times K_{\tau}) vec(W') = vec(K_{\tau} W' Z).\]
 
-  Compute W\textquotesingle{} \(Z \in O(s r) \le O(q r)\), then left-multiply by \(K_{\tau} \in O(n^2 r)\).
+  Compute W\textquotesingle{} \(Z \in O(s r) \le O(q r)\), then left-multiply by \(K_{\tau} \in O(n^\mNumber{2} r)\).
 \item
-  Add regularization term \(\lambda\) vec(\(K_{\tau}\) V), cost \(O(n^2 r)\).
+  Add regularization term \(\lambda\) vec(\(K_{\tau}\) V), cost \(O(n^\mNumber{2} r)\).
 \end{enumerate}
 
 Total per matvec:
 
-\[O(n^2 r + q r),\]
+\[O(n^\mNumber{2} r + q r),\]
 
 with no \(O(N)\) term.
 
@@ -101,23 +101,23 @@ with no \(O(N)\) term.
 \item
   T Z: \(O(q r)\)
 \item
-  \(K_{\tau}\) B: \(O(n^2 r)\)
+  \(K_{\tau}\) B: \(O(n^\mNumber{2} r)\)
 \end{enumerate}
 
-So \(b_{\tau}\) = (\(I_{r} \times K_{\tau}\)) vec(B) is formed in \(O(q r + n^2 r)\).
+So \(b_{\tau}\) = (\(I_{r} \times K_{\tau}\)) vec(B) is formed in \(O(q r + n^\mNumber{2} r)\).
 
 \hypertarget{4-preconditioner-that-matches-the-corrected-algebra}{%
 \subsubsection{4. Preconditioner that matches the corrected algebra}\label{4-preconditioner-that-matches-the-corrected-algebra}}
 
-Use \(D = S\) \(S^{T}\) and whiten by \(K_{\tau}^{-1/2}:\)
+Use \(D = S\) \(S^{T}\) and whiten by \(K_{\tau}^{-\mNumber{1}/\mNumber{2}}:\)
 
-\[x = (I_{r} \times K_{\tau}^{-1/2}) y.\]
+\[x = (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) y.\]
 
 Then
 
 \[\begin{aligned}
-Ahat = (I_{r} \times K_{\tau}^{-1/2}) A_{\tau} (I_{r} \times K_{\tau}^{-1/2}) \\
-= (Z \times K_{\tau}^{1/2})^{T} D (Z \times K_{\tau}^{1/2}) + \lambda I.
+Ahat = (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) A_{\tau} (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) \\
+= (Z \times K_{\tau}^{\mNumber{1}/\mNumber{2}})^{T} D (Z \times K_{\tau}^{\mNumber{1}/\mNumber{2}}) + \lambda I.
 \end{aligned}\]
 
 If sampling is roughly uniform, D \textasciitilde{} c I with c = q/N. Then
@@ -142,14 +142,14 @@ Khatri-Rao identity still gives efficient Gram formation:
 
 \[Z^{T} Z = Hadamard_{i} (A_{i}^{T} A_{i}),\]
 
-cost \(O(sum_{i} n_{i} r^2)\).
+cost \(O(sum_{i} n_{i} r^\mNumber{2})\).
 
 Preconditioner apply:
 
-\[P^{-1} = H^{-1} \times K_{\tau}^{-1},\]
+\[P^{-\mNumber{1}} = H^{-\mNumber{1}} \times K_{\tau}^{-\mNumber{1}},\]
 
 implemented by solving \(K_{\tau}\) Y \(H^{T}\) = Z\textquotesingle{} after reshape.
-Per application cost is \(O(n^2 r + n r^2)\) (often simplified to \(O(n^2 r)\)
+Per application cost is \(O(n^\mNumber{2} r + n r^\mNumber{2})\) (often simplified to \(O(n^\mNumber{2} r)\)
 when n \textgreater\textgreater{} r).
 
 \hypertarget{5-convergence-tightened}{%
@@ -157,19 +157,19 @@ when n \textgreater\textgreater{} r).
 
 For SPD \(A_{\tau}\) and SPD P, standard PCG gives
 
-\[||e_{t}||_{A_{\tau}} \le 2 ((sqrt(\kappa)-1)/(sqrt(\kappa)+1))^{t} ||e_0||_{A_{\tau}},\]
+\[||e_{t}||_{A_{\tau}} \le \mNumber{2} ((sqrt(\kappa)-\mNumber{1})/(sqrt(\kappa)+\mNumber{1}))^{t} ||e_\mNumber{0}||_{A_{\tau}},\]
 
-with \(\kappa\) = cond(\(P^{-1/2}\) \(A_{\tau}\) \(P^{-1/2}\)), so
+with \(\kappa\) = cond(\(P^{-\mNumber{1}/\mNumber{2}}\) \(A_{\tau}\) \(P^{-\mNumber{1}/\mNumber{2}}\)), so
 
-\[t = O(sqrt(\kappa) log(1/eps)).\]
+\[t = O(sqrt(\kappa) log(\mNumber{1}/eps)).\]
 
 To claim "fast" convergence, add a spectral-equivalence hypothesis, e.g.
 
-\[(1-\delta) P \le A_{\tau} \le (1+\delta) P, 0 < \delta < 1,\]
+\[(\mNumber{1}-\delta) P \le A_{\tau} \le (\mNumber{1}+\delta) P, \mNumber{0} < \delta < \mNumber{1},\]
 
 which implies
 
-\[\kappa(P^{-1} A_{\tau}) \le (1+\delta)/(1-\delta).\]
+\[\kappa(P^{-\mNumber{1}} A_{\tau}) \le (\mNumber{1}+\delta)/(\mNumber{1}-\delta).\]
 
 Hence t is logarithmic in 1/eps with a modest sqrt(kappa) factor when
 \(\delta\) is bounded away from 1. (No unsupported closed-form \(t = O(r sqrt(n/q))\)
@@ -181,8 +181,8 @@ the sampling pattern satisfies a restricted isometry-type condition:
 \textbar\textbar D - (q/N)I\textbar\textbar{} is small relative to \(\lambda\). For uniform random sampling
 with \(q \ge C\) n log n (for a universal constant C), matrix concentration
 results (Tropp 2011, Theorem 1.6) give \(\delta = O(sqrt(n log n / q))\) with
-high probability. Under this regime, \(\kappa = O(1)\) and PCG converges in
-\(O(log(1/eps))\) iterations.
+high probability. Under this regime, \(\kappa = O(\mNumber{1})\) and PCG converges in
+\(O(log(\mNumber{1}/eps))\) iterations.
 
 \hypertarget{6-complexity-summary}{%
 \subsubsection{6. Complexity summary}\label{6-complexity-summary}}
@@ -193,13 +193,13 @@ Setup per ALS outer step:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(Cholesky(K_{\tau}):\) \(O(n^3)\)
+  \(Cholesky(K_{\tau}):\) \(O(n^\mNumber{3})\)
 \item
-  \(Z^{T}\) Z via Hadamard Grams: \(O(sum_{i} n_{i} r^2)\)
+  \(Z^{T}\) Z via Hadamard Grams: \(O(sum_{i} n_{i} r^\mNumber{2})\)
 \item
-  Cholesky(H): \(O(r^3)\)
+  Cholesky(H): \(O(r^\mNumber{3})\)
 \item
-  RHS: \(O(q r + n^2 r)\)
+  RHS: \(O(q r + n^\mNumber{2} r)\)
 \end{enumerate}
 
 Per PCG iteration:
@@ -208,31 +208,31 @@ Per PCG iteration:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Matvec: \(O(n^2 r + q r)\)
+  Matvec: \(O(n^\mNumber{2} r + q r)\)
 \item
-  Preconditioner apply: \(O(n^2 r + n r^2)\)
+  Preconditioner apply: \(O(n^\mNumber{2} r + n r^\mNumber{2})\)
 \end{enumerate}
 
 Total:
 
 \[\begin{aligned}
-O(n^3 + r^3 + sum_{i} n_{i} r^2 + q r + n^2 r \\
-+ t (n^2 r + q r + n r^2)).
+O(n^\mNumber{3} + r^\mNumber{3} + sum_{i} n_{i} r^\mNumber{2} + q r + n^\mNumber{2} r \\
++ t (n^\mNumber{2} r + q r + n r^\mNumber{2})).
 \end{aligned}\]
 
 In the common regime \(n \ge r\), this simplifies to
 
-\[O(n^3 + t (n^2 r + q r)),\]
+\[O(n^\mNumber{3} + t (n^\mNumber{2} r + q r)),\]
 
 with dependence on q (observed entries) rather than N (all entries).
 
-\textbf{Regime caveat.} When n is large enough that the \(O(n^3)\) Cholesky setup
-dominates (i.e., \(n^3\) \textgreater{} t(\(n^2\) r + q r)), the per-ALS-step cost is effectively
-\(O(n^3)\). In this regime, low-rank kernel approximations (e.g., Nystrom
-approximation with rank p \textless\textless{} n, reducing the kernel factorization to \(O(n p^2)\))
-or iterative inner solves (conjugate gradient on \(K_{\tau}\) \(y = z\), cost \(O(n^2)\)
+\textbf{Regime caveat.} When n is large enough that the \(O(n^\mNumber{3})\) Cholesky setup
+dominates (i.e., \(n^\mNumber{3}\) \textgreater{} t(\(n^\mNumber{2}\) \(r \mBridgeOperator{+} q\) r)), the per-ALS-step cost is effectively
+\(O(n^\mNumber{3})\). In this regime, low-rank kernel approximations (e.g., Nystrom
+approximation with rank p \textless\textless{} n, reducing the kernel factorization to \(O(n p^\mNumber{2})\))
+or iterative inner solves (conjugate gradient on \(K_{\tau}\) \(y = z\), cost \(O(n^\mNumber{2})\)
 per inner iteration) can replace the exact Cholesky, reducing the setup to
-\(O(n p^2 + t(n p r + q r))\). This is a well-known practical optimization
+\(O(n p^\mNumber{2} + t(n p r + q r))\). This is a well-known practical optimization
 (see Rudi-Calandriello-Rosasco 2017) and is compatible with the PCG framework
 as presented.
 
@@ -241,21 +241,21 @@ as presented.
 
 \[\begin{aligned}
 SETUP: \\
-K_{\tau} = K + \tau \ast I_{n} \# \tau > 0 if K is only PSD \\
-L_{K} = cholesky(K_{\tau}) \# O(n^3) \\
-G = hadamard_{product}(A_{i}^{T} A_{i} for i \neq k) \# O(sum_{i} n_{i} r^2) \\
+K_{\tau} = K + \tau \ast I_{n} \# \tau > \mNumber{0} if K is only PSD \\
+L_{K} = cholesky(K_{\tau}) \# O(n^\mNumber{3}) \\
+G = hadamard_{product}(A_{i}^{T} A_{i} for i \neq k) \# O(sum_{i} n_{i} r^\mNumber{2}) \\
 c = q / N \\
 H = c \ast G + \lambda \ast I_{r} \\
-L_{H} = cholesky(H) \# O(r^3) \\
+L_{H} = cholesky(H) \# O(r^\mNumber{3}) \\
 B = sparse_{mttkrp}(T, Z) \# O(qr) \\
-b = vec(K_{\tau} @ B) \# O(n^2 r) \\
+b = vec(K_{\tau} @ B) \# O(n^\mNumber{2} r) \\
 PCG(A_{\tau} x = b, preconditioner P = H \times K_{\tau}): \\
-x0 = 0 \\
-r0 = b \\
-z0 = precond_{solve}(L_{K}, L_{H}, r0) \# O(n^2 r + n r^2) \\
-p0 = z0 \\
+x\mNumber{0} = \mNumber{0} \\
+r\mNumber{0} = b \\
+z\mNumber{0} = precond_{solve}(L_{K}, L_{H}, r\mNumber{0}) \# O(n^\mNumber{2} r + n r^\mNumber{2}) \\
+p\mNumber{0} = z\mNumber{0} \\
 repeat until convergence: \\
-w = matvec_{A,\tau}(p) \# O(n^2 r + q r) \\
+w = matvec_{A,\tau}(p) \# O(n^\mNumber{2} r + q r) \\
 \alpha = (r^{T} z) / (p^{T} w) \\
 x = x + \alpha \ast p \\
 r_{new} = r - \alpha \ast w \\

@@ -9,18 +9,20 @@
 \colorlet{MPSyntaxGreekColor}{Mulberry}
 \colorlet{MPSyntaxDefaultMathColor}{CornflowerBlue}
 \colorlet{MPSyntaxOperatorColor}{Purple}
+\colorlet{MPSyntaxBridgeOperatorColor}{SpringGreen}
 \colorlet{MPSyntaxRelationColor}{RoyalPurple}
 \definecolor{MPSyntaxComparisonColor}{RGB}{0,66,37}
 \colorlet{MPSyntaxLargeOperatorColor}{BlueViolet}
 \colorlet{MPSyntaxArrowColor}{TealBlue}
 \colorlet{MPSyntaxDelimiterColor}{CadetBlue}
 \colorlet{MPSyntaxFunctionColor}{Orchid}
-\colorlet{MPSyntaxNumberColor}{Dandelion}
+\colorlet{MPSyntaxNumberColor}{Red}
 \colorlet{MPSyntaxMathTextColor}{Sepia}
 \colorlet{MPSyntaxMathItalicColor}{OliveGreen}
 
 \newcommand{\mGreek}[1]{{\color{MPSyntaxGreekColor}#1}}
 \newcommand{\mOperator}[1]{{\color{MPSyntaxOperatorColor}#1}}
+\newcommand{\mBridgeOperator}[1]{{\color{MPSyntaxBridgeOperatorColor}#1}}
 \newcommand{\mRelation}[1]{{\color{MPSyntaxRelationColor}#1}}
 \newcommand{\mCompare}[1]{{\color{MPSyntaxComparisonColor}#1}}
 \newcommand{\mLargeOperator}[1]{{\color{MPSyntaxLargeOperatorColor}#1}}
@@ -121,7 +123,6 @@
 \let\MP@orig@lvert\lvert
 \let\MP@orig@rvert\rvert
 
-\begingroup\catcode`\+=\active\gdef+{\mathbin{\color{MPSyntaxOperatorColor}\mathchar"202B}}\endgroup
 \begingroup\catcode`\<\active\gdef<{\mathrel{\color{MPSyntaxComparisonColor}\mathchar"313C}}\endgroup
 \begingroup\catcode`\>\active\gdef>{\mathrel{\color{MPSyntaxComparisonColor}\mathchar"313E}}\endgroup
 \begingroup\catcode`\==\active\gdef={\mathrel{\color{MPSyntaxComparisonColor}\mathchar"303D}}\endgroup
@@ -129,7 +130,6 @@
 \newcommand{\MP@ActivateRawMathChars}{%
   \ifMPRawMathCharsActivated\else
     \MPRawMathCharsActivatedtrue
-    \mathcode`+="202B
     \mathcode`<="8000
     \mathcode`>="8000
     \mathcode`=="8000
@@ -139,7 +139,6 @@
 \newcommand{\MP@DeactivateRawMathChars}{%
   \ifMPRawMathCharsActivated
     \MPRawMathCharsActivatedfalse
-    \mathcode`+="202B
     \mathcode`<="313C
     \mathcode`>="313E
     \mathcode`=="303D
@@ -191,7 +190,7 @@
     \renewcommand{\Omega}{\mGreek{\MP@orig@Omega}}
 
     \renewcommand{\times}{\mOperator{\MP@orig@times}}
-    \renewcommand{\ast}{\mOperator{\MP@orig@ast}}
+    \renewcommand{\ast}{\mBridgeOperator{\MP@orig@ast}}
     \renewcommand{\cup}{\mOperator{\MP@orig@cup}}
     \renewcommand{\otimes}{\mOperator{\MP@orig@otimes}}
     \renewcommand{\oplus}{\mOperator{\MP@orig@oplus}}
@@ -359,6 +358,7 @@
       \let\prime\MP@orig@prime
       \def\mGreek#1{#1}%
       \def\mOperator#1{#1}%
+      \def\mBridgeOperator#1{#1}%
       \def\mRelation#1{#1}%
       \def\mCompare#1{#1}%
       \def\mLargeOperator#1{#1}%
@@ -389,14 +389,15 @@
   \begin{tabular}{>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.42\linewidth}}
     \textbf{Syntax class} & \textbf{Colour} & \textbf{Examples} \\
     Greek letters & \textcolor{MPSyntaxGreekColor}{Mulberry} & $\mGreek{\alpha},\,\mGreek{\beta},\,\mGreek{\Gamma}$ \\
-    Binary operators & \textcolor{MPSyntaxOperatorColor}{Purple} & $a\mBin{+}b,\,x\mOperator{\times}y,\,u\mOperator{\ast}v,\,U\mOperator{\cup}V,\,A\mOperator{\otimes}B$ \\
+    Binary operators & \textcolor{MPSyntaxOperatorColor}{Purple} & $x\mOperator{\times}y,\,U\mOperator{\cup}V,\,A\mOperator{\otimes}B$ \\
+    Additive/product bridges & \textcolor{MPSyntaxBridgeOperatorColor}{SpringGreen} & $a+b,\,u\mBridgeOperator{\ast}v$ \\
     Comparison operators & \textcolor{MPSyntaxComparisonColor}{BritishRacingGreen} & $x\mCompare{=}y,\,x\mCompare{\le}y,\,x\mCompare{\neq}y,\,x\mCompare{\approx}y$ \\
     Relation operators & \textcolor{MPSyntaxRelationColor}{RoyalPurple} & $x\mRel{\in}S,\,A\mRel{\subseteq}B$ \\
     Large operators & \textcolor{MPSyntaxLargeOperatorColor}{BlueViolet} & $\mLargeOperator{\sum},\,\mLargeOperator{\prod},\,\mLargeOperator{\int},\,\mLargeOperator{\lim}$ \\
     Arrows & \textcolor{MPSyntaxArrowColor}{TealBlue} & $f\mArrow{\to}g,\,P\mArrow{\Rightarrow}Q,\,x\mArrow{\mapsto}x^2,\,A\mArrow{\leftrightarrow}B$ \\
     Delimiters & \textcolor{MPSyntaxDelimiterColor}{CadetBlue} & $\mDelimiter{(}x\mDelimiter{)},\,\mDelimiter{[}x\mDelimiter{]},\,\langle x\rangle,\,|x|$ \\
     Functions & \textcolor{MPSyntaxFunctionColor}{Orchid} & $\mFunction{\sin}x,\,\mFunction{\cos}x,\,\mFunction{\log}x,\,\mFunction{\exp}x,\,\mFunction{\det}A$ \\
-    Numbers/constants & \textcolor{MPSyntaxNumberColor}{Dandelion} & $\mNumber{0},\ldots,\mNumber{9},\,\mConstant{e}$ \\
+    Numbers/constants & \textcolor{MPSyntaxNumberColor}{Red} & $\mNumber{0},\ldots,\mNumber{9},\,\mConstant{e}$ \\
   \end{tabular}
   \end{center}
   \endgroup

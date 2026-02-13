@@ -39,6 +39,10 @@ local function trim(s)
   return (s:gsub("^%s+", ""):gsub("%s+$", ""))
 end
 
+local function mark_integer_literals(s)
+  return (s:gsub("(%f[%d]%d+%f[%D])", "\\mNumber{%1}"))
+end
+
 local function replace_word(s, w, repl)
   s = s:gsub("^" .. w .. "%f[%A]", repl)
   s = s:gsub("([^\\%a])" .. w .. "%f[%A]", "%1" .. repl)
@@ -251,6 +255,8 @@ local function normalize_expr(s)
   for _, pair in ipairs(greek_words) do
     s = replace_word(s, pair[1], pair[2])
   end
+
+  s = mark_integer_literals(s)
 
   s = s:gsub("#", "\\#")
   s = s:gsub("%%", "\\%%")
@@ -479,6 +485,9 @@ local function extract_binary_side(el)
   if core:match("^[A-Za-z]$") then
     return core, punct, false
   end
+  if core:match("^%d+$") then
+    return core, punct, false
+  end
   if is_compound_math_token(core) then
     return core, punct, false
   end
@@ -504,6 +513,8 @@ local function build_binary_expr(lhs, lhs_is_math, op, rhs, rhs_is_math)
     op_tex = "\\in"
   elseif op == "x" or op == "X" then
     op_tex = "\\times"
+  elseif op == "+" then
+    op_tex = "\\mBridgeOperator{+}"
   elseif op == "*" then
     op_tex = "\\ast"
   elseif op == "=" then
@@ -531,7 +542,7 @@ local function extract_binary_operator(el)
     return nil
   end
   if el.t == "Str" then
-    if el.text == "in" or el.text == "x" or el.text == "X" or el.text == "*" then
+    if el.text == "in" or el.text == "x" or el.text == "X" or el.text == "+" or el.text == "*" then
       return el.text
     end
     if el.text == "=" or el.text == "<" or el.text == ">" or el.text == "<=" or el.text == ">=" or el.text == "!=" then
@@ -544,7 +555,7 @@ local function extract_binary_operator(el)
   end
   if el.t == "Math" and el.mathtype == "InlineMath" then
     local txt = trim(el.text)
-    if txt == "=" or txt == "<" or txt == ">" then
+    if txt == "+" or txt == "=" or txt == "<" or txt == ">" then
       return txt
     end
     if txt == "\\le" or txt == "\\leq" then

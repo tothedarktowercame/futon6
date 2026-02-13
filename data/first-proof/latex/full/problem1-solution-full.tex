@@ -1,11 +1,11 @@
 \hypertarget{problem-1-equivalence-of-phi4_3-measure-under-smooth-shifts}{%
-\section{\texorpdfstring{Problem 1: Equivalence of \(\Phi^4_3\) Measure Under Smooth Shifts}{Problem 1: Equivalence of \textbackslash Phi\^{}4\_3 Measure Under Smooth Shifts}}\label{problem-1-equivalence-of-phi4_3-measure-under-smooth-shifts}}
+\section{\texorpdfstring{Problem 1: Equivalence of \(\Phi^\mNumber{4}_\mNumber{3}\) Measure Under Smooth Shifts}{Problem 1: Equivalence of \textbackslash Phi\^{}\textbackslash mNumber\{4\}\_\textbackslash mNumber\{3\} Measure Under Smooth Shifts}}\label{problem-1-equivalence-of-phi4_3-measure-under-smooth-shifts}}
 
 \hypertarget{problem-statement}{%
 \subsection{Problem Statement}\label{problem-statement}}
 
-Let \(T^3\) be the 3D unit torus. Let \(\mu\) be the \(\Phi^4_3\) measure on D\textquotesingle(\(T^3\)).
-Let \(\psi\): \(T^3\) -\textgreater{} R be a smooth nonzero function and \(T_{\psi}(u) = u\) + \(\psi\) the
+Let \(T^\mNumber{3}\) be the 3D unit torus. Let \(\mu\) be the \(\Phi^\mNumber{4}_\mNumber{3}\) measure on D\textquotesingle(\(T^\mNumber{3}\)).
+Let \(\psi\): \(T^\mNumber{3}\) -\textgreater{} R be a smooth nonzero function and \(T_{\psi}(u) = u \mBridgeOperator{+} \psi\) the
 shift map. Are \(\mu\) and \(T_{\psi}^*\) \(\mu\) equivalent (same null sets)?
 
 \hypertarget{answer}{%
@@ -14,7 +14,7 @@ shift map. Are \(\mu\) and \(T_{\psi}^*\) \(\mu\) equivalent (same null sets)?
 \textbf{Yes.} The measures \(\mu\) and \(T_{\psi}^*\) \(\mu\) are equivalent.
 
 \textbf{Confidence: Medium-high.} The argument combines Cameron-Martin theory with
-the absolute continuity structure of the \(\Phi^4_3\) construction (Barashkov-Gubinelli
+the absolute continuity structure of the \(\Phi^\mNumber{4}_\mNumber{3}\) construction (Barashkov-Gubinelli
 2020, Theorem 1.1). The integrability bound is stated for a neighborhood of the
 required exponent, not for all t, matching the available log-Sobolev technology.
 
@@ -22,79 +22,79 @@ required exponent, not for all t, matching the available log-Sobolev technology.
 \subsection{Solution}\label{solution}}
 
 \hypertarget{1-the-phi4_3-measure}{%
-\subsubsection{\texorpdfstring{1. The \(\Phi^4_3\) measure}{1. The \textbackslash Phi\^{}4\_3 measure}}\label{1-the-phi4_3-measure}}
+\subsubsection{\texorpdfstring{1. The \(\Phi^\mNumber{4}_\mNumber{3}\) measure}{1. The \textbackslash Phi\^{}\textbackslash mNumber\{4\}\_\textbackslash mNumber\{3\} measure}}\label{1-the-phi4_3-measure}}
 
-The \(\Phi^4_3\) measure \(\mu\) on D\textquotesingle(\(T^3\)) is the probability measure formally
+The \(\Phi^\mNumber{4}_\mNumber{3}\) measure \(\mu\) on D\textquotesingle(\(T^\mNumber{3}\)) is the probability measure formally
 written as:
 
-\[dmu(\phi) = Z^{-1} exp(-V(\phi)) dmu_0(\phi)\]
+\[dmu(\phi) = Z^{-\mNumber{1}} exp(-V(\phi)) dmu_\mNumber{0}(\phi)\]
 
-where \(\mu_0\) is the Gaussian free field (GFF) measure with covariance
-(\(m^2\) - Delta)\^{}\{-1\} on \(T^3,\) and the interaction is:
+where \(\mu_\mNumber{0}\) is the Gaussian free field (GFF) measure with covariance
+(\(m^\mNumber{2}\) - Delta)\^{}\{-1\} on \(T^\mNumber{3},\) and the interaction is:
 
-\[V(\phi) = integral_{T^3} (:\phi^4: - C :\phi^2:) dx\]
+\[V(\phi) = integral_{T^\mNumber{3}} (:\phi^\mNumber{4}: - C :\phi^\mNumber{2}:) dx\]
 
 Here \(:\phi^{k}:\) denotes the k-th Wick power (renormalized product), and C is a
 mass counterterm that diverges under regularization removal.
 
 The rigorous construction (Hairer 2014, Gubinelli-Imkeller-Perkowski 2015,
 Barashkov-Gubinelli 2020) produces \(\mu\) as a well-defined probability measure
-on distributions of regularity \(C^{-1/2-\epsilon}\)(\(T^3\)).
+on distributions of regularity \(C^{-\mNumber{1}/\mNumber{2}-\epsilon}\)(\(T^\mNumber{3}\)).
 
 \hypertarget{2-absolute-continuity-with-respect-to-the-gff}{%
 \subsubsection{2. Absolute continuity with respect to the GFF}\label{2-absolute-continuity-with-respect-to-the-gff}}
 
-\textbf{Key fact:} The \(\Phi^4_3\) measure \(\mu\) is equivalent to (has the same null
-sets as) the base Gaussian free field measure \(\mu_0:\)
+\textbf{Key fact:} The \(\Phi^\mNumber{4}_\mNumber{3}\) measure \(\mu\) is equivalent to (has the same null
+sets as) the base Gaussian free field measure \(\mu_\mNumber{0}:\)
 
-\[\mu ~ \mu_0\]
+\[\mu ~ \mu_\mNumber{0}\]
 
 This equivalence follows from the variational construction of
 Barashkov-Gubinelli (2020, Theorem 1.1), which establishes
-\(E_{\mu_0}\){[}exp(-V){]} \textless{} infinity and hence \(\mu\) \textless\textless{} \(\mu_0\) with strictly positive
+\(E_{\mu_\mNumber{0}}\){[}exp(-V){]} \textless{} infinity and hence \(\mu\) \textless\textless{} \(\mu_\mNumber{0}\) with strictly positive
 density exp(-V(phi))/Z. Since exp(-V(phi)) \textgreater{} 0 a.s. (exponential is always
-positive), the reverse absolute continuity \(\mu_0\) \textless\textless{} \(\mu\) also holds.
+positive), the reverse absolute continuity \(\mu_\mNumber{0}\) \textless\textless{} \(\mu\) also holds.
 
 \hypertarget{3-cameron-martin-theory-for-the-gff}{%
 \subsubsection{3. Cameron-Martin theory for the GFF}\label{3-cameron-martin-theory-for-the-gff}}
 
-For the Gaussian free field \(\mu_0\) on \(T^3\) with covariance C = (\(m^2\) - Delta)\^{}\{-1\},
+For the Gaussian free field \(\mu_\mNumber{0}\) on \(T^\mNumber{3}\) with covariance C = (\(m^\mNumber{2}\) - Delta)\^{}\{-1\},
 the Cameron-Martin space is:
 
-\[H = H^1(T^3) (Sobolev space of order 1)\]
+\[H = H^\mNumber{1}(T^\mNumber{3}) (Sobolev space of order \mNumber{1})\]
 
-Since \(\psi\) is smooth, \(\psi \in C^{infinity}(T^3)\) subset \(H^1(T^3),\) so \(\psi\) is in the
+Since \(\psi\) is smooth, \(\psi \in C^{infinity}(T^\mNumber{3})\) subset \(H^\mNumber{1}(T^\mNumber{3}),\) so \(\psi\) is in the
 Cameron-Martin space.
 
 \textbf{Cameron-Martin theorem:} For any \(h \in H\), the shifted Gaussian measure
-\(T_{h}^*\) \(\mu_0\) is equivalent to \(\mu_0,\) with Radon-Nikodym derivative:
+\(T_{h}^*\) \(\mu_\mNumber{0}\) is equivalent to \(\mu_\mNumber{0},\) with Radon-Nikodym derivative:
 
-\[dT_{h}^ \ast \mu_0 / dmu_0 (\phi) = exp(l_{h}(\phi) - ||h||_H^2 / 2)\]
+\[dT_{h}^ \ast \mu_\mNumber{0} / dmu_\mNumber{0} (\phi) = exp(l_{h}(\phi) - ||h||_H^\mNumber{2} / \mNumber{2})\]
 
 where \(l_{h}\) is the linear functional associated to h. In particular:
 
-\[T_{\psi}^ \ast \mu_0 ~ \mu_0\]
+\[T_{\psi}^ \ast \mu_\mNumber{0} ~ \mu_\mNumber{0}\]
 
 \hypertarget{4-shift-of-the-interacting-measure}{%
 \subsubsection{4. Shift of the interacting measure}\label{4-shift-of-the-interacting-measure}}
 
 To compute \(T_{\psi}^*\) \(\mu\), we need the density of the shifted interacting measure:
 
-\[dT_{\psi}^ \ast \mu / dmu_0 (\phi) = Z^{-1} exp(-V(\phi - \psi)) \ast exp(l_{\psi}(\phi) - ||\psi||_H^2/2)\]
+\[dT_{\psi}^ \ast \mu / dmu_\mNumber{0} (\phi) = Z^{-\mNumber{1}} exp(-V(\phi - \psi)) \ast exp(l_{\psi}(\phi) - ||\psi||_H^\mNumber{2}/\mNumber{2})\]
 
-The shifted interaction V(phi - psi) expands (using Wick ordering relative to \(\mu_0\)):
+The shifted interaction V(phi - psi) expands (using Wick ordering relative to \(\mu_\mNumber{0}\)):
 
 \[\begin{aligned}
-V(\phi - \psi) = V(\phi) - 4 int \psi :\phi^3: dx + 6 int \psi^2 :\phi^2: dx \\
-- 4 int \psi^3 :\phi: dx + int \psi^4 dx \\
-- C(int :\phi^2: dx - 2 int \psi :\phi: dx + int \psi^2 dx) + (renorm. corrections)
+V(\phi - \psi) = V(\phi) - \mNumber{4} int \psi :\phi^\mNumber{3}: dx + \mNumber{6} int \psi^\mNumber{2} :\phi^\mNumber{2}: dx \\
+- \mNumber{4} int \psi^\mNumber{3} :\phi: dx + int \psi^\mNumber{4} dx \\
+- C(int :\phi^\mNumber{2}: dx - \mNumber{2} int \psi :\phi: dx + int \psi^\mNumber{2} dx) + (renorm. corrections)
 \end{aligned}\]
 
-\textbf{Renormalization under shift:} The term 6 int \(\psi^2\) \(:\phi^2:\) dx generates an
-additional logarithmic divergence (from \(\psi^2\) multiplying the Wick square).
+\textbf{Renormalization under shift:} The term 6 int \(\psi^\mNumber{2}\) \(:\phi^\mNumber{2}:\) dx generates an
+additional logarithmic divergence (from \(\psi^\mNumber{2}\) multiplying the Wick square).
 This is absorbed by shifting the mass counterterm:
 
-\[C \to C + 6 ||\psi||_{L^2}^2 \ast (log N correction)\]
+\[C \to C + \mNumber{6} ||\psi||_{L^\mNumber{2}}^\mNumber{2} \ast (log N correction)\]
 
 The precise counterterm shift is determined by the regularization scheme;
 see Hairer (2014, Section 9) or Gubinelli-Imkeller-Perkowski (2015,
@@ -102,17 +102,17 @@ Proposition 6.3) for the explicit formula. For the present argument, only
 the finiteness of the renormalized difference matters.
 
 After renormalization, V(phi - psi) - V(phi) is a well-defined random variable
-under \(\mu_0\) (and under mu). The dominant fluctuation term is 4 int \(\psi\) \(:\phi^3:\) dx,
+under \(\mu_\mNumber{0}\) (and under mu). The dominant fluctuation term is 4 int \(\psi\) \(:\phi^\mNumber{3}:\) dx,
 which has the right regularity:
 
 \begin{itemize}
 \tightlist
 \item
-  \(:\phi^3: \in C^{-3/2-\epsilon}\)(\(T^3\)) (as a distribution)
+  \(:\phi^\mNumber{3}: \in C^{-\mNumber{3}/\mNumber{2}-\epsilon}\)(\(T^\mNumber{3}\)) (as a distribution)
 \item
-  \(\psi \in C^{infinity}(T^3)\) (smooth)
+  \(\psi \in C^{infinity}(T^\mNumber{3})\) (smooth)
 \item
-  int \(\psi\) \(:\phi^3:\) dx is well-defined (pairing of smooth test function with distribution)
+  int \(\psi\) \(:\phi^\mNumber{3}:\) dx is well-defined (pairing of smooth test function with distribution)
 \end{itemize}
 
 \hypertarget{5-integrability-and-equivalence}{%
@@ -122,36 +122,36 @@ The Radon-Nikodym derivative \(dT_{\psi}^*\) \(\mu\) / dmu involves:
 
 \[R(\phi) = exp(-(V(\phi-\psi) - V(\phi)) + l_{\psi}(\phi) - const)\]
 
-We need \(R \in L\)\(^1(\mu)\) and R \textgreater{} 0 a.s.
+We need \(R \in L\)\(^\mNumber{1}(\mu)\) and \(R > \mNumber{0}\) a.s.
 
-\textbf{Positivity:} R \textgreater{} 0 a.s. because it\textquotesingle s an exponential. ✓
+\textbf{Positivity:} \(R > \mNumber{0}\) a.s. because it\textquotesingle s an exponential. ✓
 
-\textbf{Integrability:} The critical term is exp(4 int \(\psi\) \(:\phi^3:\) dx) under the
-\(\Phi^4_3\) measure. By the log-Sobolev inequality for \(\Phi^4_3\) (Barashkov-Gubinelli
-2020), the measure has strong concentration: the tails of int \(\psi\) \(:\phi^3:\) dx
+\textbf{Integrability:} The critical term is exp(4 int \(\psi\) \(:\phi^\mNumber{3}:\) dx) under the
+\(\Phi^\mNumber{4}_\mNumber{3}\) measure. By the log-Sobolev inequality for \(\Phi^\mNumber{4}_\mNumber{3}\) (Barashkov-Gubinelli
+2020), the measure has strong concentration: the tails of int \(\psi\) \(:\phi^\mNumber{3}:\) dx
 are controlled by the quartic interaction. Specifically:
 
-\[E_{\mu}[exp(t |int \psi :\phi^3: dx|)] < infinity for |t| < t_0\]
+\[E_{\mu}[exp(t |int \psi :\phi^\mNumber{3}: dx|)] < infinity for |t| < t_\mNumber{0}\]
 
-where \(t_0\) \textgreater{} 0 depends on \textbar\textbar psi\textbar\textbar{}\emph{\({C^0}\) and the coupling constant.
-This exponential integrability follows from the coercivity of the \(\phi^4\)
+where \(t_\mNumber{0} > \mNumber{0}\) depends on \textbar\textbar psi\textbar\textbar{}\emph{\({C^\mNumber{0}}\) and the coupling constant.
+This exponential integrability follows from the coercivity of the \(\phi^\mNumber{4}\)
 interaction: the quartic potential dominates the cubic perturbation
 (Barashkov-Gubinelli 2020, Section 4, exponential integrability from the
-Polchinski flow). The bound suffices for \(R \in L\)\(^1(\mu)\) since the exponent
-in the Radon-Nikodym derivative is bounded by 4 \textbar\textbar psi\textbar\textbar{}}\({C^0}\) \textbar int \(:\phi^3:\) dx\textbar,
-and \(t_0\) can be chosen to exceed this coefficient.
+Polchinski flow). The bound suffices for \(R \in L\)\(^\mNumber{1}(\mu)\) since the exponent
+in the Radon-Nikodym derivative is bounded by 4 \textbar\textbar psi\textbar\textbar{}}\({C^\mNumber{0}}\) \textbar int \(:\phi^\mNumber{3}:\) dx\textbar,
+and \(t_\mNumber{0}\) can be chosen to exceed this coefficient.
 
-Therefore \(R \in L\)\(^1(\mu)\) and 1/\(R \in L\)\^{}1(\(T_{\psi}\)\^{}* mu), giving:
+Therefore \(R \in L\)\(^\mNumber{1}(\mu)\) and 1/\(R \in L\)\^{}1(\(T_{\psi}\)\^{}* mu), giving:
 
 \[T_{\psi}^ \ast \mu ~ \mu (equivalent measures)\]
 
 \hypertarget{6-alternative-argument-via-the-variational-approach}{%
 \subsubsection{6. Alternative argument via the variational approach}\label{6-alternative-argument-via-the-variational-approach}}
 
-Barashkov-Gubinelli (2020) construct the \(\Phi^4_3\) measure via the Boué-Dupuis
+Barashkov-Gubinelli (2020) construct the \(\Phi^\mNumber{4}_\mNumber{3}\) measure via the Boué-Dupuis
 variational formula, which represents:
 
-\[-log Z = inf_{u} E[V(\phi + int_0^1 u_{s} ds) + 1/2 int_0^1 ||u_{s}||^2 ds]\]
+\[-log Z = inf_{u} E[V(\phi + int_\mNumber{0}^\mNumber{1} u_{s} ds) + \mNumber{1}/\mNumber{2} int_\mNumber{0}^\mNumber{1} ||u_{s}||^\mNumber{2} ds]\]
 
 In this framework, shifting by \(\psi\) is equivalent to modifying the variational
 problem by a shift in the drift, which produces an equivalent measure (the
@@ -166,9 +166,9 @@ The measures are equivalent because:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(\mu\) \textasciitilde{} \(\mu_0\) (interacting measure equivalent to Gaussian, by positivity of density)
+  \(\mu\) \textasciitilde{} \(\mu_\mNumber{0}\) (interacting measure equivalent to Gaussian, by positivity of density)
 \item
-  \(T_{\psi}^*\) \(\mu_0\) \textasciitilde{} \(\mu_0\) (Cameron-Martin theorem, since \(\psi \in H^1\))
+  \(T_{\psi}^*\) \(\mu_\mNumber{0}\) \textasciitilde{} \(\mu_\mNumber{0}\) (Cameron-Martin theorem, since \(\psi \in H^\mNumber{1}\))
 \item
   V(phi - psi) - V(phi) is well-defined after renormalization
 \item
@@ -183,7 +183,7 @@ The measures are equivalent because:
 \begin{itemize}
 \tightlist
 \item
-  N. Barashkov, M. Gubinelli, "A variational method for \(\Phi^4_3\)," Duke Math J.
+  N. Barashkov, M. Gubinelli, "A variational method for \(\Phi^\mNumber{4}_\mNumber{3}\)," Duke Math J.
   169 (2020), 3339-3415. {[}Theorem 1.1: construction and integrability; Section 4:
   exponential integrability from Polchinski flow{]}
 \item
@@ -202,9 +202,9 @@ The measures are equivalent because:
 \item
   PlanetMath: "distribution" --- distributions on manifolds
 \item
-  PlanetMath: "Sobolev space" --- Cameron-Martin space is \(H^1\)
+  PlanetMath: "Sobolev space" --- Cameron-Martin space is \(H^\mNumber{1}\)
 \item
-  PlanetMath: "Gaussian measure" --- reference measure \(\mu_0\)
+  PlanetMath: "Gaussian measure" --- reference measure \(\mu_\mNumber{0}\)
 \item
   PlanetMath: "Radon-Nikodym theorem" --- absolute continuity and RN derivatives
 \end{itemize}

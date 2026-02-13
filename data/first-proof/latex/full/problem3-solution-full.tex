@@ -4,11 +4,11 @@
 \hypertarget{problem-statement}{%
 \subsection{Problem Statement}\label{problem-statement}}
 
-Let \(\lambda\) = (\(\lambda_1\) \textgreater{} ... \textgreater{} \(\lambda_{n}\) \textgreater= 0) be a restricted partition with
+Let \(\lambda\) = (\(\lambda_\mNumber{1}\) \textgreater{} ... \textgreater{} \(\lambda_{n}\) \textgreater= 0) be a restricted partition with
 distinct parts (unique part of size 0, no part of size 1). Does there exist a
 nontrivial Markov chain on \(S_{n}(\lambda)\) whose stationary distribution is
 
-\[\pi(\mu) = F^{\prime}_{\mu}(x_1, ..., x_{n}; q=1, t) / P^{\prime}_{\lambda}(x_1, ..., x_{n}; q=1, t)\]
+\[\pi(\mu) = F^{\prime}_{\mu}(x_\mNumber{1}, ..., x_{n}; q=\mNumber{1}, t) / P^{\prime}_{\lambda}(x_\mNumber{1}, ..., x_{n}; q=\mNumber{1}, t)\]
 
 where \(F^{\prime}_{\mu}\) are interpolation ASEP polynomials and \(P^{\prime}_{\lambda}\) is the
 interpolation Macdonald polynomial?
@@ -19,12 +19,12 @@ interpolation Macdonald polynomial?
 Yes.
 
 Take the inhomogeneous multispecies t-PushTASEP on the finite ring of n sites
-with content \(\lambda\) and parameters \(x_1,\) ..., \(x_{n}.\) This is a concrete continuous-
+with content \(\lambda\) and parameters \(x_\mNumber{1},\) ..., \(x_{n}.\) This is a concrete continuous-
 time Markov chain defined directly from local species comparisons and ringing
-rates \(1/x_{i}\) (no use of \(F^{\prime}_{\mu}\) in the transition rule). A theorem of
+rates \(\mNumber{1}/x_{i}\) (no use of \(F^{\prime}_{\mu}\) in the transition rule). A theorem of
 Ayyer-Martin-Williams identifies its stationary distribution as
 
-\[\pi(\mu) = F_{\mu}(x; 1, t) / P_{\lambda}(x; 1, t),\]
+\[\pi(\mu) = F_{\mu}(x; \mNumber{1}, t) / P_{\lambda}(x; \mNumber{1}, t),\]
 
 which is the ratio required in the problem statement (same q=1 ASEP/Macdonald
 family, up to notation conventions).
@@ -55,16 +55,16 @@ dynamics with one particle species per part value.
 
 Define a continuous-time Markov chain \(X_{t}\) on \(S_{n}(\lambda)\) as follows.
 
-Fix parameters \(x_1,\) ..., \(x_{n}\) \textgreater{} 0 and t in {[}0,1). At each site j, an exponential
-clock of rate \(1/x_{j}\) rings.
+Fix parameters \(x_\mNumber{1},\) ..., \(x_{n} > \mNumber{0}\) and t in {[}0,1). At each site j, an exponential
+clock of rate \(\mNumber{1}/x_{j}\) rings.
 
 If site j is a vacancy (species 0), nothing happens. If site j has species
-\(r_0\) \textgreater{} 0, that particle becomes active. Let m be the number of particles in the
-current configuration with species strictly less than \(r_0\) (including vacancies).
+\(r_\mNumber{0} > \mNumber{0}\), that particle becomes active. Let m be the number of particles in the
+current configuration with species strictly less than \(r_\mNumber{0}\) (including vacancies).
 Moving clockwise, the active particle chooses the k-th weaker particle with
 probability
 
-\[t^{k-1} / [m]_t, where [m]_t = 1 + t + ... + t^{m-1},\]
+\[t^{k-\mNumber{1}} / [m]_t, where [m]_t = \mNumber{1} + t + ... + t^{m-\mNumber{1}},\]
 
 and swaps into that position. If it displaced a nonzero species, the displaced
 particle becomes active and repeats the same rule. The cascade ends when a
@@ -93,7 +93,7 @@ The chain above is nontrivial in the sense asked by the problem:
 \begin{itemize}
 \tightlist
 \item
-  Transition rates are defined from site rates \(1/x_{i},\) species inequalities, and
+  Transition rates are defined from site rates \(\mNumber{1}/x_{i},\) species inequalities, and
   t-geometric choice weights.
 \item
   No transition probability is defined using values of \(F^{\prime}_{\mu}\) or \(P^{\prime}_{\lambda}.\)
@@ -107,15 +107,15 @@ So this is not a Metropolis-style chain "described using the target weights."
 Theorem (Ayyer-Martin-Williams, 2024, arXiv:2403.10485, Thm. 1.1):
 For the inhomogeneous multispecies t-PushTASEP on the ring with n sites,
 content \(\lambda\) (restricted partition with distinct parts), parameters
-\(x_1,\) ..., \(x_{n}\) \textgreater{} 0, and 0 \textless= t \textless{} 1, the stationary probability of
+\(x_\mNumber{1},\) ..., \(x_{n} > \mNumber{0}\), and \(\mNumber{0} \le t < \mNumber{1}\), the stationary probability of
 \(\eta \in S_{n}(\lambda)\) is
 
-\[\pi(\eta) = F_{\eta}(x; 1, t) / P_{\lambda}(x; 1, t),\]
+\[\pi(\eta) = F_{\eta}(x; \mNumber{1}, t) / P_{\lambda}(x; \mNumber{1}, t),\]
 
 where \(F_{\eta}\) are ASEP polynomials at q=1 and \(P_{\lambda}\)(x; 1, t) =
 \(sum_{\nu \in S_{n}(\lambda)}\) \(F_{\nu}\)(x; 1, t) is the partition function
-(ensuring \(\pi\) sums to 1). Positivity: \(F_{\eta}\)(x; 1, t) \textgreater{} 0 for \(x_{i}\) \textgreater{} 0,
-0 \textless= t \textless{} 1 is established as part of AMW Theorem 1.1, which shows that
+(ensuring \(\pi\) sums to 1). Positivity: \(F_{\eta}\)(x; 1, t) \textgreater{} 0 for \(x_{i} > \mNumber{0}\),
+\(\mNumber{0} \le t < \mNumber{1}\) is established as part of AMW Theorem 1.1, which shows that
 \(\pi(\eta) = F_{\eta}\) / \(P_{\lambda}\) is a probability distribution. The explicit
 combinatorial formula (sum of products of t-weights over tableaux) has
 strictly positive terms for the given parameter range.
@@ -135,8 +135,8 @@ in the Knop-Sahi convention), while AMW Theorem 1.1 uses \(F_{\eta},\) \(P_{\lam
 over the state space:
 
 \[\begin{aligned}
-P_{\lambda}(x; 1, t) = sum_{\eta \in S_{n}(\lambda)} F_{\eta}(x; 1, t) \\
-P^{\prime}_{\lambda}(x; 1, t) = sum_{\eta \in S_{n}(\lambda)} F^{\prime}_{\eta}(x; 1, t)
+P_{\lambda}(x; \mNumber{1}, t) = sum_{\eta \in S_{n}(\lambda)} F_{\eta}(x; \mNumber{1}, t) \\
+P^{\prime}_{\lambda}(x; \mNumber{1}, t) = sum_{\eta \in S_{n}(\lambda)} F^{\prime}_{\eta}(x; \mNumber{1}, t)
 \end{aligned}\]
 
 If \(F^{\prime}_{\eta} = \alpha \ast F_{\eta}\) for some constant \(\alpha\) independent of \(\eta\) (a global
@@ -151,31 +151,31 @@ Both \(F^{\prime}_{\eta}\) and \(F_{\eta}\) satisfy the same Hecke exchange rela
 generators \(T_{i}\) (Corteel-Mandelshtam-Williams, Section 3, define both
 normalizations and verify their equivalence at q = 1). The normalization is
 fixed by the leading-term convention, which is uniform across the state
-space \(S_{n}(\lambda).\) Concretely, at q = 1 both families specialize to the same
-t-weight formula, so \(\alpha\) = 1 and \(F^{\prime}_{\eta} = F_{\eta}.\)
+space \(S_{n}(\lambda).\) Concretely, at \(q = \mNumber{1}\) both families specialize to the same
+t-weight formula, so \(\alpha = \mNumber{1}\) and \(F^{\prime}_{\eta} = F_{\eta}.\)
 
-\textbf{Verification for n = 2.} Take \(\lambda\) = (a, 0). Both conventions give
-\(F_{(a,0)}\)(\(x_1\), \(x_2\); 1, t) = \(x_1\) and \(F_{(0,a)}\)(\(x_1\), \(x_2\); 1, t) = \(x_2\)
+\textbf{Verification for \(n = \mNumber{2}\).} Take \(\lambda\) = (a, 0). Both conventions give
+\(F_{(a,\mNumber{0})}\)(\(x_\mNumber{1}\), \(x_\mNumber{2}\); 1, t) = \(x_\mNumber{1}\) and \(F_{(\mNumber{0},a)}\)(\(x_\mNumber{1}\), \(x_\mNumber{2}\); 1, t) = \(x_\mNumber{2}\)
 (the single-species case reduces to site weights). The ratio
-\(F^{\prime}_{\eta}\) / \(P^{\prime}_{\lambda} = F_{\eta}\) / \(P_{\lambda} = x_{i}\) / (\(x_1\) + \(x_2\)) in both conventions.
+\(F^{\prime}_{\eta}\) / \(P^{\prime}_{\lambda} = F_{\eta}\) / \(P_{\lambda} = x_{i}\) / (\(x_\mNumber{1} \mBridgeOperator{+} x_\mNumber{2}\)) in both conventions.
 
 \hypertarget{6-sanity-check-n2-reduction}{%
 \subsubsection{6. Sanity check: n=2 reduction}\label{6-sanity-check-n2-reduction}}
 
 Take lambda=(a,0), state space \{(a,0),(0,a)\}. There is one non-vacancy and one
-vacancy. Bells ring at rates \(1/x_1\) and \(1/x_2.\)
+vacancy. Bells ring at rates \(\mNumber{1}/x_\mNumber{1}\) and \(\mNumber{1}/x_\mNumber{2}.\)
 
 \begin{itemize}
 \tightlist
 \item
-  (a,0) -\textgreater{} (0,a) at rate \(1/x_1\)
+  (a,0) -\textgreater{} (0,a) at rate \(\mNumber{1}/x_\mNumber{1}\)
 \item
-  (0,a) -\textgreater{} (a,0) at rate \(1/x_2\)
+  (0,a) -\textgreater{} (a,0) at rate \(\mNumber{1}/x_\mNumber{2}\)
 \end{itemize}
 
 So the stationary distribution is
 
-\[\pi(a,0) = x_1/(x_1+x_2), \pi(0,a) = x_2/(x_1+x_2),\]
+\[\pi(a,\mNumber{0}) = x_\mNumber{1}/(x_\mNumber{1}+x_\mNumber{2}), \pi(\mNumber{0},a) = x_\mNumber{2}/(x_\mNumber{1}+x_\mNumber{2}),\]
 
 which is consistent with the single-species stationary law in the same paper
 (Proposition 2.4, via recoloring reduction).
@@ -186,7 +186,7 @@ simplest nontrivial case.
 \hypertarget{7-conclusion}{%
 \subsubsection{7. Conclusion}\label{7-conclusion}}
 
-For \(x_{i}\) \textgreater{} 0 and 0 \textless= t \textless{} 1, the inhomogeneous multispecies t-PushTASEP on
+For \(x_{i} > \mNumber{0}\) and \(\mNumber{0} \le t < \mNumber{1}\), the inhomogeneous multispecies t-PushTASEP on
 \(S_{n}(\lambda)\) is:
 
 (a) A well-defined finite CTMC (Section 2: finite state space, explicit
@@ -203,7 +203,7 @@ notation bridge (Section 5).
 stationary distribution. Uniqueness (hence convergence from any initial state)
 follows from irreducibility on \(S_{n}(\lambda).\)
 
-\textbf{Irreducibility proof (via vacancy transport).} Since \(\lambda_{n}\) = 0, every
+\textbf{Irreducibility proof (via vacancy transport).} Since \(\lambda_{n} = \mNumber{0}\), every
 configuration has exactly one vacancy (species 0). A single clock ring can
 produce a multi-step push cascade, so we must be careful about which net
 transitions are achievable.
@@ -213,7 +213,7 @@ the vacancy at site j+1 (cyclically), and the clock at j rings, one possible
 outcome of the t-geometric choice is that the active particle selects the
 vacancy (the nearest weaker-species particle clockwise). This selection has
 probability 1/{[}m{]}\_t \textgreater{} 0 (the k=1 term in the t-geometric distribution, where
-m \textgreater= 1 counts weaker particles). The particle moves to the vacancy\textquotesingle s position,
+\(m \ge \mNumber{1}\) counts weaker particles). The particle moves to the vacancy\textquotesingle s position,
 the vacancy absorbs it, and the cascade terminates immediately (displaced
 species is 0). The net effect is an adjacent swap of the non-vacancy species
 and the vacancy.

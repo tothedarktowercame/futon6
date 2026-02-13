@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import subprocess
 import tempfile
 from pathlib import Path
@@ -42,10 +43,19 @@ COMPARISON_UNIFY_SNIPPET = (
     "$a$ $=$ $b$. "
     "$x+y$ $\\le$ $z+w$.\n"
 )
+PLUS_STAR_UNIFY_SNIPPET = (
+    "a + b and c * d and n + 12 and 3 * k. "
+    "$a$ $+$ $b$. "
+    "$c$ $*$ $d$.\n"
+)
 
 
 def run(cmd: list[str], cwd: Path) -> None:
     subprocess.run(cmd, cwd=cwd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
+def strip_mnumber(text: str) -> str:
+    return re.sub(r"\\mNumber\{([^{}]+)\}", r"\1", text)
 
 
 def render_snippet(repo: Path, normalizer: Path, lua_filter: Path, snippet: str) -> tuple[str, str]:
@@ -116,6 +126,29 @@ def main() -> int:
     _, out_compare = render_snippet(
         repo, normalizer, lua_filter, COMPARISON_UNIFY_SNIPPET
     )
+    _, out_plus_star = render_snippet(
+        repo, normalizer, lua_filter, PLUS_STAR_UNIFY_SNIPPET
+    )
+    out_plus_star_raw = out_plus_star
+
+    out = strip_mnumber(out)
+    normalized_w = strip_mnumber(normalized_w)
+    out_w = strip_mnumber(out_w)
+    normalized_syntax = strip_mnumber(normalized_syntax)
+    out_syntax = strip_mnumber(out_syntax)
+    out_diag = strip_mnumber(out_diag)
+    normalized_noncolor = strip_mnumber(normalized_noncolor)
+    out_noncolor = strip_mnumber(out_noncolor)
+    normalized_map = strip_mnumber(normalized_map)
+    out_map = strip_mnumber(out_map)
+    normalized_phi_action = strip_mnumber(normalized_phi_action)
+    out_phi_action = strip_mnumber(out_phi_action)
+    normalized_hybrid_suffix = strip_mnumber(normalized_hybrid_suffix)
+    out_hybrid_suffix = strip_mnumber(out_hybrid_suffix)
+    normalized_prime_single = strip_mnumber(normalized_prime_single)
+    out_prime_single = strip_mnumber(out_prime_single)
+    out_compare = strip_mnumber(out_compare)
+    out_plus_star = strip_mnumber(out_plus_star)
 
     if r"integrals over \(V\)" not in out:
         failures.append("missing inline math for V in 'integrals over V'")
@@ -258,12 +291,28 @@ def main() -> int:
         failures.append("comparison unifier regressed to split '$a$ $=$ $b$' form")
     if r"\(x+y \le z+w\)" not in out_compare and r"\(x + y \le z + w\)" not in out_compare:
         failures.append("comparison unifier did not merge math globs around \\le")
+    plus_variants = [
+        r"\(a + b\)",
+        r"\(a \mBridgeOperator{+} b\)",
+    ]
+    if not any(v in out_plus_star for v in plus_variants):
+        failures.append("rendered output missing inline math for plus expression")
+    if r"\(c \ast d\)" not in out_plus_star:
+        failures.append("rendered output missing inline math for star expression")
+    if r"\mNumber{12}" not in out_plus_star_raw or r"\mNumber{3}" not in out_plus_star_raw:
+        failures.append("rendered output missing integer-to-\\mNumber wrapping")
+    if r"\(a\) \(+\) \(b\)" in out_plus_star:
+        failures.append("operator unifier regressed to split '$a$ $+$ $b$' form")
+    if r"\(c\) \(\ast\) \(d\)" in out_plus_star:
+        failures.append("operator unifier regressed to split '$c$ $*$ $d$' form")
 
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:
         failures.append("math-proofread style does not preserve original \\ast")
-    if r"\renewcommand{\ast}{\mOperator{\MP@orig@ast}}" not in style:
-        failures.append("math-proofread style does not colorize \\ast as operator")
+    if r"\renewcommand{\ast}{\mBridgeOperator{\MP@orig@ast}}" not in style:
+        failures.append("math-proofread style does not colorize \\ast as bridge operator")
+    if r"\colorlet{MPSyntaxBridgeOperatorColor}{SpringGreen}" not in style:
+        failures.append("math-proofread style does not define bright green bridge-operator color")
     if r"\renewcommand{\pi}{\mGreek{\MP@orig@pi}}" not in style:
         failures.append("math-proofread style does not colorize \\pi as Greek")
     if r"\renewcommand{\pi}{\mNumber{\MP@orig@pi}}" in style:
@@ -282,6 +331,8 @@ def main() -> int:
         failures.append("math-proofread style does not colorize \\text payloads")
     if r"\renewcommand{\mathit}[1]{\mMathItalic{\MP@orig@mathit{##1}}}" not in style:
         failures.append("math-proofread style does not colorize \\mathit payloads")
+    if r"\colorlet{MPSyntaxNumberColor}{Red}" not in style:
+        failures.append("math-proofread style does not set integer/number color to Red")
 
     if failures:
         for item in failures:

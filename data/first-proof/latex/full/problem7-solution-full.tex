@@ -65,8 +65,8 @@ Bredon-equivariant formulation above.
 A theorem of Fowler (arXiv:1204.4667, Main Theorem) gives a concrete
 criterion: if a finite group \texttt{G} acts on a finite CW complex \texttt{Y} such that
 for every nontrivial subgroup \(H < G\) and every connected component \texttt{C} of
-the fixed set \(Y^{H}\), the Euler characteristic \(\chi(C) = 0\), then the
-orbifold extension group \(\pi_1((EG \times Y)/G)\) lies in \(FH(Q)\).
+the fixed set \(Y^{H}\), the Euler characteristic \(\chi(C) = \mNumber{0}\), then the
+orbifold extension group \(\pi_\mNumber{1}((EG \times Y)/G)\) lies in \(FH(Q)\).
 
 That is, there exists a finite CW complex with the given fundamental group
 whose universal cover is rationally acyclic.
@@ -81,26 +81,26 @@ The E2 obligation is discharged by the following construction (details in
 \def\labelenumi{\arabic{enumi}.}
 \item
   \textbf{Arithmetic lattice with reflection.} Take an arithmetic uniform lattice
-  \(\Gamma_0 < Isom(H^{n})\) containing a reflection \(\tau\), as provided by
+  \(\Gamma_\mNumber{0} < Isom(H^{n})\) containing a reflection \(\tau\), as provided by
   Douba-Vargas Pallete (arXiv:2506.23994, Remark 5). Choose \texttt{n} \textbf{even}
-  (e.g., \(n = 4\) or \(n = 6\)).
+  (e.g., \(n = \mNumber{4}\) or \(n = \mNumber{6}\)).
 \item
-  \textbf{Congruence cover.} Let \(\pi = \Gamma_0(I)\) be a sufficiently deep
+  \textbf{Congruence cover.} Let \(\pi = \Gamma_\mNumber{0}(I)\) be a sufficiently deep
   principal congruence subgroup. Then \(M = \pi \ H^{n}\) is a closed hyperbolic
   manifold, and \(\tau\) induces an involution \(\tau_{bar}\) on \texttt{M}.
 \item
-  \textbf{Extension.} Set \(G = <\tau_{bar}> = Z/2\) acting on \(Bpi := M\).
-  The orbifold extension gives \(1 \to \pi \to \Gamma \to Z/2 \to 1\), where
+  \textbf{Extension.} Set \(G = <\tau_{bar}> = Z/\mNumber{2}\) acting on \(Bpi := M\).
+  The orbifold extension gives \(\mNumber{1} \to \pi \to \Gamma \to Z/\mNumber{2} \to \mNumber{1}\), where
   \(\Gamma\) is a cocompact lattice (finite extension of cocompact \(\pi\)) with
   order-2 torsion.
 \item
   \textbf{Fixed-set Euler check.} The fixed set \(Fix(\tau_{bar})\) is a (possibly
   disconnected) closed, embedded, totally geodesic hypersurface
-  (arXiv:2506.23994). Each component has dimension \(n-1\). Since \texttt{n} is even,
-  \(n-1\) is odd, and every closed odd-dimensional manifold has Euler
-  characteristic zero. So \(\chi(C) = 0\) for every fixed component \texttt{C}.
+  (arXiv:2506.23994). Each component has dimension \(n-\mNumber{1}\). Since \texttt{n} is even,
+  \(n-\mNumber{1}\) is odd, and every closed odd-dimensional manifold has Euler
+  characteristic zero. So \(\chi(C) = \mNumber{0}\) for every fixed component \texttt{C}.
 \item
-  \textbf{Fowler application.} The only nontrivial subgroup of \(Z/2\) is itself.
+  \textbf{Fowler application.} The only nontrivial subgroup of \(Z/\mNumber{2}\) is itself.
   All fixed components have zero Euler characteristic. By Fowler\textquotesingle s Main
   Theorem, \(\Gamma \in FH(Q)\).
 \end{enumerate}
@@ -110,8 +110,8 @@ The E2 obligation is discharged by the following construction (details in
 \hypertarget{4-obligation-s-from-finite-complex-to-closed-manifold-open}{%
 \subsection{4. Obligation S: From Finite Complex to Closed Manifold (Open)}\label{4-obligation-s-from-finite-complex-to-closed-manifold-open}}
 
-Problem 7 asks for a \textbf{closed manifold} \texttt{M} with \(\pi1(M) = \Gamma\) and
-\(H_ \ast (M_{tilde}; Q) = 0\) for \(* > 0\). Obligation E2 gives a finite CW
+Problem 7 asks for a \textbf{closed manifold} \texttt{M} with \(\pi\mNumber{1}(M) = \Gamma\) and
+\(H_ \ast (M_{tilde}; Q) = \mNumber{0}\) for \(* > \mNumber{0}\). Obligation E2 gives a finite CW
 complex with these properties; the upgrade to a closed manifold is the
 remaining open problem.
 
@@ -124,21 +124,21 @@ The construction in Section 3b provides:
 \tightlist
 \item
   \(\pi\): a torsion-free cocompact lattice in \(Isom(H^{n})\), with \texttt{n} even
-  \(\ge 6\).
+  \(\ge \mNumber{6}\).
 \item
   \(M = H^{n}/\pi\): a closed hyperbolic \texttt{n}-manifold. \texttt{M} is a closed manifold
-  with \(\pi_1(M) = \pi\) and contractible universal cover.
+  with \(\pi_\mNumber{1}(M) = \pi\) and contractible universal cover.
 \item
   \(\tau\): an involution on \texttt{M} with fixed set \texttt{F} --- a closed, totally
-  geodesic \((n-1)\)-manifold.
+  geodesic \((n-\mNumber{1})\)-manifold.
 \item
-  \(\Gamma = \pi \rtimes Z/2\): the target group (cocompact lattice with
+  \(\Gamma = \pi \rtimes Z/\mNumber{2}\): the target group (cocompact lattice with
   order-2 torsion).
 \item
-  \texttt{Y}: a finite CW complex with \(\pi_1(Y) = \Gamma\) and \texttt{Y\textasciitilde{}} rationally
+  \texttt{Y}: a finite CW complex with \(\pi_\mNumber{1}(Y) = \Gamma\) and \texttt{Y\textasciitilde{}} rationally
   acyclic (from Fowler\textquotesingle s theorem).
 \item
-  \(H^{n}/\Gamma\): a compact orbifold with \(\pi_1^{orb} = \Gamma\), mirror
+  \(H^{n}/\Gamma\): a compact orbifold with \(\pi_\mNumber{1}^{orb} = \Gamma\), mirror
   singularity along the image of \texttt{F}.
 \end{itemize}
 
@@ -167,7 +167,7 @@ it, and show the surgery obstruction vanishes.
   complex structure on \texttt{Y} has not been done.
 \item
   \emph{Degree-1 normal map.} Even with Poincare complex structure, a degree-1
-  normal map \(f: M_0 \to Y\) requires the Spivak normal fibration of \texttt{Y} to
+  normal map \(f: M_\mNumber{0} \to Y\) requires the Spivak normal fibration of \texttt{Y} to
   admit a topological reduction. No construction of this reduction has been
   given.
 \item
@@ -187,14 +187,14 @@ See \texttt{problem7r-s3a-setup.md} for the detailed analysis.
 
 \textbf{Idea.} Work directly with the closed manifold \texttt{M} and the involution
 \(\tau\). Eliminate the fixed set \texttt{F} by equivariant surgery to obtain \texttt{M\textquotesingle{}}
-with a free Z/2-action. Then \(M'/(Z/2)\) is a closed manifold with
-\(\pi_1 = \Gamma\).
+with a free Z/2-action. Then \(M'/(Z/\mNumber{2})\) is a closed manifold with
+\(\pi_\mNumber{1} = \Gamma\).
 
 \textbf{Blocking obstruction.} The equivariant surgery framework of
 Costenoble-Waner (arXiv:1705.10909) requires a \textbf{codimension-2 gap
 hypothesis}: fixed sets of distinct isotropy subgroups must differ in
 dimension by at least 2 (Condition 3.4(3)). For our Z/2-action on \(M^{n}\)
-with codimension-1 fixed set \(F^{n-1}\), this gap condition \textbf{fails}.
+with codimension-1 fixed set \(F^{n-\mNumber{1}}\), this gap condition \textbf{fails}.
 The Dovermann-Schultz framework (Springer LNM 1443) similarly requires
 gap conditions.
 
@@ -207,16 +207,16 @@ sets). However, the approach becomes viable for \textbf{rotational involutions}
 
 \textbf{Idea.} The quotient \(H^{n}/\Gamma\) is a compact orbifold with mirror
 singularity. Resolve the singularity to produce a closed manifold with
-\(\pi_1 = \Gamma\) and rationally acyclic universal cover.
+\(\pi_\mNumber{1} = \Gamma\) and rationally acyclic universal cover.
 
 \textbf{Obstacles.}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \emph{\(\pi_1\) preservation.} Standard orbifold resolution (e.g., cutting along
+  \emph{\(\pi_\mNumber{1}\) preservation.} Standard orbifold resolution (e.g., cutting along
   the mirror and doubling) typically changes the fundamental group.
-  A resolution preserving \(\pi_1 = \Gamma\) would need to be specifically
+  A resolution preserving \(\pi_\mNumber{1} = \Gamma\) would need to be specifically
   constructed.
 \item
   \emph{Rational acyclicity.} The resolution must preserve (or establish)
@@ -235,8 +235,8 @@ have better vanishing properties when \texttt{n} is \textbf{odd}. This tension b
 E2 and S is a central difficulty for the reflection construction.
 
 \textbf{Why reflections cannot work in odd dimension.} For a reflection on
-\(H^{2k+1}\), the fixed set is \(H^{2k}\) --- a closed hyperbolic manifold of
-even dimension. By the Gauss-Bonnet theorem, such manifolds have \(\chi \neq 0\).
+\(H^{\mNumber{2}k+\mNumber{1}}\), the fixed set is \(H^{\mNumber{2}k}\) --- a closed hyperbolic manifold of
+even dimension. By the Gauss-Bonnet theorem, such manifolds have \(\chi \neq \mNumber{0}\).
 So Fowler\textquotesingle s criterion fails. This is not an artifact of the construction; it
 is forced by Riemannian geometry.
 
@@ -245,18 +245,18 @@ is forced by Riemannian geometry.
 
 \textbf{Idea.} Replace the reflection (codimension-1 involution) with a
 \textbf{rotational involution} (codimension-2 fixed set) in \textbf{odd} ambient
-dimension. An order-2 isometry of \(H^{2k+1}\) that fixes \(H^{2k-1}\)
+dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(H^{\mNumber{2}k-\mNumber{1}}\)
 (codimension 2) is a "rotation by pi" in a normal 2-plane.
 
-\textbf{Why this resolves the tension.} For \(n = 2k+1\) odd:
+\textbf{Why this resolves the tension.} For \(n = \mNumber{2}k+\mNumber{1}\) odd:
 
 \begin{itemize}
 \tightlist
 \item
-  Fixed set \(H^{2k-1}\) has dimension \(2k-1\) (odd), so \(\chi = 0\). Fowler
+  Fixed set \(H^{\mNumber{2}k-\mNumber{1}}\) has dimension \(\mNumber{2}k-\mNumber{1}\) (odd), so \(\chi = \mNumber{0}\). Fowler
   criterion is satisfied: \(\Gamma \in FH(Q)\).
 \item
-  Surgery obstruction lives in \(L_{2k+1}(Z[\Gamma]) tensor Q\), which has
+  Surgery obstruction lives in \(L_{\mNumber{2}k+\mNumber{1}}(Z[\Gamma]) tensor Q\), which has
   favorable parity (odd total degree forces odd \texttt{p} in AHSS terms).
 \item
   The codimension-2 gap hypothesis (required by equivariant surgery theories,
@@ -270,28 +270,28 @@ dimension. An order-2 isometry of \(H^{2k+1}\) that fixes \(H^{2k-1}\)
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \textbf{Quadratic form.} Let \(k = Q(sqrt(2))\), \(O_{k} = Z[sqrt(2)]\). Define
-  \(f = (1 - sqrt(2))x_0^2 + x_1^2 + ... + x_{n}^2 \in n+1\) variables.
-  Under the two real embeddings of \texttt{k}, \texttt{f} has signatures \((n, 1)\) and
-  \((n+1, 0)\). So \(SO(f)\) gives \(SO(n, 1)\) at one place and a compact
+  \textbf{Quadratic form.} Let \(k = Q(sqrt(\mNumber{2}))\), \(O_{k} = Z[sqrt(\mNumber{2})]\). Define
+  \(f = (\mNumber{1} - sqrt(\mNumber{2}))x_\mNumber{0}^\mNumber{2} + x_\mNumber{1}^\mNumber{2} + ... + x_{n}^\mNumber{2} \in n+\mNumber{1}\) variables.
+  Under the two real embeddings of \texttt{k}, \texttt{f} has signatures \((n, \mNumber{1})\) and
+  \((n+\mNumber{1}, \mNumber{0})\). So \(SO(f)\) gives \(SO(n, \mNumber{1})\) at one place and a compact
   group at the other.
 \item
-  \textbf{Uniform lattice.} \(\Gamma_0 = SO(f, O_{k})\) is a cocompact arithmetic
-  lattice in \(SO(n, 1)\) (Borel-Harish-Chandra; cocompactness by Godement
+  \textbf{Uniform lattice.} \(\Gamma_\mNumber{0} = SO(f, O_{k})\) is a cocompact arithmetic
+  lattice in \(SO(n, \mNumber{1})\) (Borel-Harish-Chandra; cocompactness by Godement
   criterion since \texttt{f} is anisotropic over \texttt{k}).
 \item
-  \textbf{Order-2 rotation.} \(\sigma = \operatorname{diag}(1, -1, -1, 1, ..., 1)\) is in
-  \(SO(f, O_{k})\): it preserves \texttt{f} (negates \(x_1, x_2\) in the \(x_1^2+x_2^2\)
-  summand), has determinant \(+1\), and has integer entries. Its fixed set on
-  \(H^{n}\) is \(H^{n-2}\) (codimension 2).
+  \textbf{Order-2 rotation.} \(\sigma = \operatorname{diag}(\mNumber{1}, -\mNumber{1}, -\mNumber{1}, \mNumber{1}, ..., \mNumber{1})\) is in
+  \(SO(f, O_{k})\): it preserves \texttt{f} (negates \(x_\mNumber{1}, x_\mNumber{2}\) in the \(x_\mNumber{1}^\mNumber{2}+x_\mNumber{2}^\mNumber{2}\)
+  summand), has determinant \(+\mNumber{1}\), and has integer entries. Its fixed set on
+  \(H^{n}\) is \(H^{n-\mNumber{2}}\) (codimension 2).
 \item
-  \textbf{Congruence subgroup.} \(\pi = \Gamma_0(I)\) for ideal \texttt{I} coprime to 2:
+  \textbf{Congruence subgroup.} \(\pi = \Gamma_\mNumber{0}(I)\) for ideal \texttt{I} coprime to 2:
   torsion-free (Minkowski), \(\sigma \notin \pi\), and \(M = H^{n}/\pi\) is a closed
-  hyperbolic manifold. The extension \(1 \to \pi \to \Gamma \to Z/2 \to 1\) with
+  hyperbolic manifold. The extension \(\mNumber{1} \to \pi \to \Gamma \to Z/\mNumber{2} \to \mNumber{1}\) with
   \(\Gamma = <\pi, \sigma>\) is a cocompact lattice with order-2 torsion.
 \item
-  \textbf{Fowler application.} Fixed set has dimension \(n-2 = 2k-1\) (odd), so
-  \(\chi = 0\). By Fowler\textquotesingle s Main Theorem: \(\Gamma \in FH(Q)\).
+  \textbf{Fowler application.} Fixed set has dimension \(n-\mNumber{2} = \mNumber{2}k-\mNumber{1}\) (odd), so
+  \(\chi = \mNumber{0}\). By Fowler\textquotesingle s Main Theorem: \(\Gamma \in FH(Q)\).
 \end{enumerate}
 
 \textbf{E2 status for rotation route: DISCHARGED.}
@@ -334,29 +334,29 @@ in Sections 3-4.
 \subsection{6. Theorem}\label{6-theorem}}
 
 \textbf{Theorem.} Let \(\Gamma\) be a cocompact lattice extension
-\(1 \to \pi \to \Gamma \to Z/2 \to 1\) constructed from an arithmetic lattice in
+\(\mNumber{1} \to \pi \to \Gamma \to Z/\mNumber{2} \to \mNumber{1}\) constructed from an arithmetic lattice in
 \(Isom(H^{n})\) containing an order-2 isometry, via either:
 
 \begin{itemize}
 \tightlist
 \item
   \textbf{(Reflection route)} Section 3b: reflection lattice in \(Isom(H^{n})\),
-  \texttt{n} even, \(n \ge 6\).
+  \texttt{n} even, \(n \ge \mNumber{6}\).
 \item
   \textbf{(Rotation route)} Approach IV: rotation lattice in \(Isom(H^{n})\),
-  \texttt{n} odd, \(n \ge 7\). See \texttt{problem7r-rotation-lattice-construction.md}.
+  \texttt{n} odd, \(n \ge \mNumber{7}\). See \texttt{problem7r-rotation-lattice-construction.md}.
 \end{itemize}
 
 Then:
 
 (a) \textbf{(Unconditional)} \(\Gamma \in FH(Q)\): there exists a finite CW complex
-\texttt{Y} with \(\pi_1(Y) = \Gamma\) and \(H_ \ast (Y_{tilde}; Q) = 0\) for \(* > 0\).
+\texttt{Y} with \(\pi_\mNumber{1}(Y) = \Gamma\) and \(H_ \ast (Y_{tilde}; Q) = \mNumber{0}\) for \(* > \mNumber{0}\).
 (Both routes discharge E2 via Fowler\textquotesingle s criterion.)
 
-(b) \textbf{(Rotation route)} For the rotation lattice (Approach IV, \(n = 7\),
-congruence ideal \(I = (3) \in Z[sqrt(2)]\)): there exists a closed
-manifold \texttt{N} with \(\pi_1(N) = \Gamma\) and \(H_ \ast (N_{tilde}; Q) = 0\) for
-\(* > 0\). The manifold is constructed by equivariant surgery (S-rot-II):
+(b) \textbf{(Rotation route)} For the rotation lattice (Approach IV, \(n = \mNumber{7}\),
+congruence ideal \(I = (\mNumber{3}) \in Z[sqrt(\mNumber{2})]\)): there exists a closed
+manifold \texttt{N} with \(\pi_\mNumber{1}(N) = \Gamma\) and \(H_ \ast (N_{tilde}; Q) = \mNumber{0}\) for
+\(* > \mNumber{0}\). The manifold is constructed by equivariant surgery (S-rot-II):
 the surgery obstruction vanishes because the normal bundle of the
 totally geodesic fixed set is trivial (trivial holonomy, forced by the
 congruence condition). See \texttt{problem7r-s-rot-obstruction-analysis.md}.
@@ -389,11 +389,11 @@ discharged. Two sub-options for obligation S:
     \textbf{Rational vanishing (Step A: flat-normal-bundle argument).} The
     normal bundle ν of \(F \in M\) is flat (totally geodesic embedding). By
     Chern-Weil, e(ν)⊗Q = 0. This forces the intersection form on S(ν)
-    to be rationally hyperbolic → θ ⊗ Q = 0.
+    to be rationally hyperbolic → θ ⊗ \(Q = \mNumber{0}\).
   \item
     \textbf{Integral vanishing (trivial holonomy).} For the congruence ideal
     I with Norm(I) \textgreater{} 2 (e.g., I = (3)): the integrality constraint on
-    rotation matrices over \(\mathbb{Z}[\sqrt{2}]\), combined with the congruence condition
+    rotation matrices over \(\mathbb{Z}[\sqrt{\mNumber{2}}]\), combined with the congruence condition
     g ≡ I mod I, forces the holonomy representation ρ: C → SO(2) to be
     trivial. So ν is a trivial bundle, e(ν) = 0 in H²(F; Z), and the
     circle bundle S(ν) = F × S¹ is a product. The integral intersection
