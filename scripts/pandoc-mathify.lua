@@ -2,21 +2,27 @@
 
 local greek_words = {
   {"Gamma", "\\Gamma"}, {"Delta", "\\Delta"}, {"Theta", "\\Theta"},
-  {"Lambda", "\\Lambda"}, {"Pi", "\\Pi"}, {"Sigma", "\\Sigma"},
-  {"Phi", "\\Phi"}, {"Omega", "\\Omega"},
+  {"Lambda", "\\Lambda"}, {"Xi", "\\Xi"}, {"Pi", "\\Pi"}, {"Sigma", "\\Sigma"},
+  {"Upsilon", "\\Upsilon"}, {"Phi", "\\Phi"}, {"Psi", "\\Psi"}, {"Omega", "\\Omega"},
   {"alpha", "\\alpha"}, {"beta", "\\beta"}, {"gamma", "\\gamma"},
-  {"delta", "\\delta"}, {"theta", "\\theta"}, {"lambda", "\\lambda"},
-  {"pi", "\\pi"}, {"sigma", "\\sigma"}, {"tau", "\\tau"},
+  {"delta", "\\delta"}, {"epsilon", "\\epsilon"}, {"varepsilon", "\\varepsilon"},
+  {"zeta", "\\zeta"}, {"eta", "\\eta"}, {"theta", "\\theta"}, {"vartheta", "\\vartheta"},
+  {"iota", "\\iota"}, {"kappa", "\\kappa"}, {"lambda", "\\lambda"}, {"mu", "\\mu"},
+  {"nu", "\\nu"}, {"xi", "\\xi"}, {"pi", "\\pi"}, {"rho", "\\rho"},
+  {"sigma", "\\sigma"}, {"tau", "\\tau"}, {"upsilon", "\\upsilon"},
   {"phi", "\\phi"}, {"chi", "\\chi"}, {"omega", "\\omega"},
-  {"mu", "\\mu"}, {"kappa", "\\kappa"}, {"psi", "\\psi"},
+  {"psi", "\\psi"},
 }
 
 local greek_token_names = {
-  alpha = true, beta = true, gamma = true, delta = true, theta = true,
-  lambda = true, pi = true, sigma = true, tau = true, phi = true,
-  chi = true, omega = true, mu = true, kappa = true, psi = true,
+  alpha = true, beta = true, gamma = true, delta = true, epsilon = true,
+  varepsilon = true, zeta = true, eta = true, theta = true, vartheta = true,
+  iota = true, kappa = true, lambda = true, mu = true, nu = true, xi = true,
+  pi = true, rho = true, sigma = true, tau = true, upsilon = true, phi = true,
+  chi = true, psi = true, omega = true,
   Alpha = true, Beta = true, Gamma = true, Delta = true, Theta = true,
-  Lambda = true, Pi = true, Sigma = true, Phi = true, Omega = true,
+  Lambda = true, Xi = true, Pi = true, Sigma = true, Upsilon = true,
+  Phi = true, Psi = true, Omega = true,
 }
 
 local unicode_ops = {
@@ -34,7 +40,134 @@ local function trim(s)
 end
 
 local function replace_word(s, w, repl)
-  return s:gsub("%f[%a]" .. w .. "%f[%A]", repl)
+  s = s:gsub("^" .. w .. "%f[%A]", repl)
+  s = s:gsub("([^\\%a])" .. w .. "%f[%A]", "%1" .. repl)
+  return s
+end
+
+local function is_latex_cmd_atom(atom)
+  return atom:match("^\\[%a]+$") ~= nil
+end
+
+local math_word_stop = {
+  ["and"] = true, ["or"] = true, ["for"] = true, ["all"] = true, ["the"] = true,
+  ["is"] = true, ["are"] = true, ["mod"] = true, ["let"] = true,
+}
+
+local relation_cmds = {
+  ["\\in"] = true, ["\\notin"] = true, ["\\le"] = true, ["\\leq"] = true,
+  ["\\ge"] = true, ["\\geq"] = true, ["\\neq"] = true, ["\\subseteq"] = true,
+  ["\\approx"] = true, ["\\to"] = true, ["\\leftarrow"] = true,
+  ["\\Rightarrow"] = true, ["\\mapsto"] = true, ["\\leftrightarrow"] = true,
+  ["\\Leftrightarrow"] = true,
+}
+
+local function is_relation_cmd(atom)
+  return relation_cmds[atom] == true
+end
+
+local function is_math_atom(atom)
+  if atom == nil or atom == "" then
+    return false
+  end
+  if is_latex_cmd_atom(atom) then
+    return true
+  end
+  if atom:match("^\\mathup%b{}_%b{}$") then
+    return true
+  end
+  if atom:match("^[A-Za-z][A-Za-z0-9]*%b()$") then
+    return true
+  end
+  if atom:match("^[%d]+$") then
+    return true
+  end
+  if atom:match("^[A-Za-z]$") then
+    return true
+  end
+  if greek_token_names[atom] then
+    return true
+  end
+  if atom:match("^[A-Za-z][A-Za-z0-9]*_[{%w]") or atom:match("^[A-Za-z][A-Za-z0-9]*%^") then
+    return true
+  end
+  if atom:match("^GL_%b{}$") or atom:match("^GL_[A-Za-z0-9%+%-]+$") or atom:match("^GLn[%+%-]?%d*$") then
+    return true
+  end
+  if atom:match("^[A-Za-z][A-Za-z0-9]?[A-Za-z0-9]?$") then
+    local low = atom:lower()
+    if not math_word_stop[low] then
+      return true
+    end
+  end
+  if atom:match("^%b()$") or atom:match("^%b[]$") then
+    return true
+  end
+  if atom:match("[\\{}_^]") then
+    return true
+  end
+  return false
+end
+
+local function normalize_infix_ops(s)
+  local function strip_unmatched_trailing(core, close_ch, open_ch)
+    local suffix = ""
+    while core:sub(-1) == close_ch do
+      if core:find(open_ch, 1, true) then
+        break
+      end
+      core = core:sub(1, -2)
+      suffix = close_ch .. suffix
+    end
+    return core, suffix
+  end
+
+  local function split_atom_edges(atom)
+    local prefix = atom:match("^([%(%[%{]*)") or ""
+    local core = atom:sub(#prefix + 1)
+    local punct = core:match("([%.,;:]*)$") or ""
+    core = core:sub(1, #core - #punct)
+    local s1, s2, s3
+    core, s1 = strip_unmatched_trailing(core, ")", "(")
+    core, s2 = strip_unmatched_trailing(core, "]", "[")
+    core, s3 = strip_unmatched_trailing(core, "}", "{")
+    local suffix = (s1 or "") .. (s2 or "") .. (s3 or "") .. punct
+    if core == "" then
+      core = atom
+      prefix = ""
+      suffix = ""
+    end
+    return prefix, core, suffix
+  end
+
+  local function repl(op_tex)
+    return function(a, b)
+      local ap, ac, as = split_atom_edges(a)
+      local bp, bc, bs = split_atom_edges(b)
+      if op_tex == "\\times" and (is_relation_cmd(ac) or is_relation_cmd(bc) or bc == "is") then
+        return a .. " x " .. b
+      end
+      if is_math_atom(ac) and is_math_atom(bc) then
+        return ap .. ac .. as .. " " .. op_tex .. " " .. bp .. bc .. bs
+      end
+      return a .. " " .. (op_tex == "\\times" and "x" or (op_tex == "\\ast" and "*" or "in")) .. " " .. b
+    end
+  end
+
+  -- Tight products without spaces.
+  s = s:gsub("([%w%)%}])%*([%w%(%{\\])", "%1 \\ast %2")
+
+  -- Compact dimension form: 3x3 -> 3 \times 3
+  s = s:gsub("(%f[%d]%d+)%s*[xX]%s*(%d+%f[%D])", "%1 \\times %2")
+
+  local prev = nil
+  while prev ~= s do
+    prev = s
+    s = s:gsub("(%S+)%s+[xX]%s+(%S+)", repl("\\times"))
+    s = s:gsub("(%S+)%s*%*%s*(%S+)", repl("\\ast"))
+    s = s:gsub("(%S+)%s+in%s+(%S+)", repl("\\in"))
+  end
+  return s
 end
 
 local function has_balanced_delimiters(s)
@@ -77,7 +210,6 @@ local function normalize_expr(s)
   s = s:gsub("<=", "\\le ")
   s = s:gsub("%-%>", "\\to ")
   s = s:gsub("<%-", "\\leftarrow ")
-  s = s:gsub("([%w%)%}])%s*%*%s*([%w%(%{\\])", "%1 \\ast %2")
   s = s:gsub("%f[%a]diag%s*%(", "\\operatorname{diag}(")
 
   -- Parenthesized exponents/subscripts (Q^(abgd) -> Q^{abgd}).
@@ -95,18 +227,17 @@ local function normalize_expr(s)
   s = s:gsub("}%^\\([A-Za-z]+)", "}^{\\%1}")
   s = s:gsub("([A-Za-z][A-Za-z0-9]*)_{([^}]+)}_{([^}]+)}", "%1_{%2,%3}")
 
-  -- Dimension separators: n x n -> n \times n
-  local prev = nil
-  while prev ~= s do
-    prev = s
-    s = s:gsub("([A-Za-z0-9{}])%s+[xX]%s+([A-Za-z0-9{])", "%1 \\times %2")
-  end
-
   -- Group names: GL_n, GL_{n+1}, GLn+1.
   s = s:gsub("GL_%{([^}]+)%}", "\\mathup{GL}_{%1}")
   s = s:gsub("GL_([A-Za-z0-9%+%-]+)", "\\mathup{GL}_{%1}")
   s = s:gsub("GLn([%+%-]%d+)", "\\mathup{GL}_{n%1}")
   s = s:gsub("GLn(%f[%A])", "\\mathup{GL}_{n}%1")
+
+  -- Parenthesized products: (A x B), (A * B)
+  s = s:gsub("%(([%w\\{}_%^%+%-]+)%s+[xX]%s+([%w\\{}_%^%+%-]+)%)", "(%1 \\times %2)")
+  s = s:gsub("%(([%w\\{}_%^%+%-]+)%s*%*%s*([%w\\{}_%^%+%-]+)%)", "(%1 \\ast %2)")
+
+  s = normalize_infix_ops(s)
 
   s = replace_word(s, "in", "\\in")
   s = replace_word(s, "notin", "\\notin")
@@ -115,11 +246,6 @@ local function normalize_expr(s)
   for _, pair in ipairs(greek_words) do
     s = replace_word(s, pair[1], pair[2])
   end
-
-  s = replace_word(s, "Q", "\\mathbb{Q}")
-  s = replace_word(s, "R", "\\mathbb{R}")
-  s = replace_word(s, "Z", "\\mathbb{Z}")
-  s = replace_word(s, "C", "\\mathbb{C}")
 
   s = s:gsub("#", "\\#")
   s = s:gsub("%%", "\\%%")
@@ -429,6 +555,52 @@ local function convert_binary_operator_sequences(inlines)
 end
 
 local function convert_simple_str_token_to_inlines(s)
+  local gfn, gargs, gpunct = s:match("^([A-Za-z]+)%(([^()]*)%)([%.,;:]*)$")
+  if gfn ~= nil and greek_token_names[gfn] then
+    local out = {pandoc.Math("InlineMath", normalize_expr(gfn .. "(" .. gargs .. ")"))}
+    if gpunct ~= "" then
+      table.insert(out, pandoc.Str(gpunct))
+    end
+    return out
+  end
+
+  local gopen, gtail = s:match("^([A-Za-z]+)%((.*)$")
+  if gopen ~= nil and greek_token_names[gopen] then
+    return {pandoc.Math("InlineMath", normalize_expr(gopen)), pandoc.Str("(" .. gtail)}
+  end
+
+  local pre_diag, diag_args_any, post_diag = s:match("^(.-)diag%(([^()]*)%)(.*)$")
+  if diag_args_any ~= nil and (pre_diag == "" or not pre_diag:match("[%a]$")) then
+    local out = {}
+    if pre_diag ~= "" then
+      table.insert(out, pandoc.Str(pre_diag))
+    end
+    table.insert(out, pandoc.Math("InlineMath", "\\operatorname{diag}(" .. normalize_expr(diag_args_any) .. ")"))
+    if post_diag ~= "" then
+      table.insert(out, pandoc.Str(post_diag))
+    end
+    return out
+  end
+
+  local pdiag_args, pdiag_punct = s:match("^%((diag%([^()]*%))([%.,;:]*)$")
+  if pdiag_args ~= nil then
+    local inner = pdiag_args:match("^diag%(([^()]*)%)$")
+    local out = {pandoc.Str("("), pandoc.Math("InlineMath", "\\operatorname{diag}(" .. normalize_expr(inner) .. ")")}
+    if pdiag_punct ~= "" then
+      table.insert(out, pandoc.Str(pdiag_punct))
+    end
+    return out
+  end
+
+  local diag_args, dpunct = s:match("^diag%(([^()]*)%)([%.,;:]*)$")
+  if diag_args ~= nil then
+    local out = {pandoc.Math("InlineMath", "\\operatorname{diag}(" .. normalize_expr(diag_args) .. ")")}
+    if dpunct ~= "" then
+      table.insert(out, pandoc.Str(dpunct))
+    end
+    return out
+  end
+
   local greek, punct = s:match("^([A-Za-z]+)([%.,;:]*)$")
   if greek ~= nil and greek_token_names[greek] then
     local out = {pandoc.Math("InlineMath", normalize_expr(greek))}
@@ -582,6 +754,10 @@ function Code(el)
     return pandoc.Math("InlineMath", normalize_expr(s))
   end
   return nil
+end
+
+function Math(el)
+  return pandoc.Math(el.mathtype, normalize_expr(el.text))
 end
 
 function CodeBlock(el)

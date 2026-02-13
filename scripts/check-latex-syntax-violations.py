@@ -54,8 +54,8 @@ MATH_BARE_GREEK_RE = re.compile(rf"(?<!\\)\b(?:{GREEK_NAMES})\b")
 MATH_BARE_DIAG_RE = re.compile(r"(?<!\\)\bdiag\s*\(")
 MATH_BARE_GL_RE = re.compile(r"(?<![\\{])\bGL(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+|n[+\-]?\d*)\b")
 MATH_BARE_IN_RE = re.compile(r"([A-Za-z\\][A-Za-z0-9_{}\\^]*)\s+in\s+([A-Za-z\\][A-Za-z0-9_{}\\^]*)")
-MATH_BARE_X_RE = re.compile(r"([A-Za-z0-9}\\)])\s+[xX]\s+([A-Za-z0-9\\{(])")
 MATH_BARE_STAR_RE = re.compile(r"([A-Za-z0-9}\\)])\s*\*\s*([A-Za-z0-9\\{(])")
+MATH_X_CAND_RE = re.compile(r"(\S+)\s+x\s+(\S+)")
 
 NONMATH_SINGLE_IN_RE = re.compile(r"\b([A-Za-z])\s+in\s+([A-Za-z])\b")
 NONMATH_QF_RE = re.compile(r"\bqF(?:\^\{[^}]+\}|\^-?[A-Za-z0-9]+)\b")
@@ -63,7 +63,21 @@ NONMATH_DIAG_RE = re.compile(r"\bdiag\s*\(")
 NONMATH_GL_X_RE = re.compile(
     r"\bGL(?:_\{?[A-Za-z0-9+\-]+\}?|n[+\-]?\d*)\s*[xX]\s*GL(?:_\{?[A-Za-z0-9+\-]+\}?|n[+\-]?\d*)\b"
 )
-NONMATH_GREEK_RE = re.compile(rf"\b(?:{GREEK_NAMES})\b")
+NONMATH_GREEK_SCRIPT_RE = re.compile(
+    rf"\b(?:{GREEK_NAMES})(?:_\{{[^}}]+\}}|_[A-Za-z0-9]+|\^\{{[^}}]+\}}|\^[A-Za-z0-9]+|\([^)]+\))"
+)
+
+MATH_WORD_STOP = {
+    "and",
+    "or",
+    "for",
+    "all",
+    "the",
+    "is",
+    "are",
+    "mod",
+    "let",
+}
 
 
 @dataclass
@@ -196,6 +210,8 @@ def collect_findings(path: Path) -> list[Finding]:
     lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
 
     for lineno, raw in enumerate(lines, 1):
+        if "\\texorpdfstring{" in raw or raw.lstrip().startswith("\\hypertarget{"):
+            continue
         line = strip_comments(raw)
         math_text, nonmath_text = split_math_nonmath(line, st)
 
@@ -207,7 +223,7 @@ def collect_findings(path: Path) -> list[Finding]:
             findings.append(Finding(path, lineno, "math", "bare-gl", "GL token should be \\mathup{GL}_{...}"))
         if MATH_BARE_IN_RE.search(math_text):
             findings.append(Finding(path, lineno, "math", "bare-in", "bare 'in' should be \\in"))
-        if MATH_BARE_X_RE.search(math_text):
+        if has_bare_x(math_text):
             findings.append(Finding(path, lineno, "math", "bare-x", "bare 'x' should be \\times"))
         if MATH_BARE_STAR_RE.search(math_text):
             findings.append(Finding(path, lineno, "math", "bare-star", "bare '*' should be \\ast"))
@@ -220,10 +236,76 @@ def collect_findings(path: Path) -> list[Finding]:
             findings.append(Finding(path, lineno, "text", "diag-text", "diag(...) appears outside math"))
         if NONMATH_GL_X_RE.search(nonmath_text):
             findings.append(Finding(path, lineno, "text", "gl-x-text", "GL... x GL... should be math with \\times"))
-        if NONMATH_GREEK_RE.search(nonmath_text):
-            findings.append(Finding(path, lineno, "text", "greek-text", "Greek symbol name appears outside math"))
+        if NONMATH_GREEK_SCRIPT_RE.search(nonmath_text):
+            findings.append(
+                Finding(path, lineno, "text", "greek-script-text", "Greek/script token appears outside math")
+            )
 
     return findings
+
+
+def _strip_edge(tok: str) -> str:
+    tok = tok.strip("()[]{}.,;:")
+    return tok
+
+
+def _is_relation(tok: str) -> bool:
+    return tok in {
+        r"\in",
+        r"\notin",
+        r"\le",
+        r"\leq",
+        r"\ge",
+        r"\geq",
+        r"\neq",
+        r"\subseteq",
+        r"\approx",
+        r"\to",
+        r"\leftarrow",
+        r"\Rightarrow",
+        r"\mapsto",
+        r"\leftrightarrow",
+        r"\Leftrightarrow",
+    }
+
+
+def _is_mathish(tok: str) -> bool:
+    if not tok:
+        return False
+    if _is_relation(tok):
+        return False
+    if re.search(r"[\\_^{}0-9]", tok):
+        return True
+    if re.fullmatch(r"[A-Za-z]", tok):
+        return tok.lower() not in MATH_WORD_STOP
+    if re.fullmatch(r"[A-Za-z]{2,3}", tok):
+        return tok.lower() not in MATH_WORD_STOP
+    if re.fullmatch(r"[A-Za-z][A-Za-z0-9]*\([^)]*\)", tok):
+        return True
+    return False
+
+
+def _is_mul_side(tok: str) -> bool:
+    if not tok or _is_relation(tok):
+        return False
+    if tok in {r"\ast", r"\times", "+", "-", "=", r"\cdot"}:
+        return False
+    if re.search(r"[\\_^{}0-9]", tok):
+        return True
+    if re.fullmatch(r"[nmrqNMRQ]", tok):
+        return True
+    if re.fullmatch(r"(?:nr|rn|nm|mn|qr|rq|mr|rm|nM|Nm|nR|Nr|nQ|Nq)", tok):
+        return True
+    return False
+
+
+def has_bare_x(math_text: str) -> bool:
+    for m in MATH_X_CAND_RE.finditer(math_text):
+        left = _strip_edge(m.group(1))
+        right = _strip_edge(m.group(2))
+        if _is_mul_side(left) and _is_mul_side(right):
+            return True
+    return False
 
 
 def main() -> int:

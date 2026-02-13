@@ -5,6 +5,7 @@
 \RequirePackage{array}
 
 \colorlet{MPSyntaxGreekColor}{Mulberry}
+\colorlet{MPSyntaxDefaultMathColor}{CornflowerBlue}
 \colorlet{MPSyntaxOperatorColor}{Purple}
 \colorlet{MPSyntaxRelationColor}{RoyalPurple}
 \colorlet{MPSyntaxLargeOperatorColor}{BlueViolet}
@@ -39,6 +40,8 @@
 \MPProofreadColorsEnabledfalse
 \newif\ifMPRawMathCharsActivated
 \MPRawMathCharsActivatedfalse
+\newtoks\MP@orig@everymath
+\newtoks\MP@orig@everydisplay
 
 \let\MP@orig@alpha\alpha
 \let\MP@orig@beta\beta
@@ -128,6 +131,10 @@
 \newcommand{\EnableMathProofColors}{%
   \ifMPProofreadColorsEnabled\else
     \MPProofreadColorsEnabledtrue
+    \MP@orig@everymath=\expandafter{\the\everymath}%
+    \MP@orig@everydisplay=\expandafter{\the\everydisplay}%
+    \everymath\expandafter{\the\MP@orig@everymath\color{MPSyntaxDefaultMathColor}}%
+    \everydisplay\expandafter{\the\MP@orig@everydisplay\color{MPSyntaxDefaultMathColor}}%
 
     \renewcommand{\alpha}{\mGreek{\MP@orig@alpha}}
     \renewcommand{\beta}{\mGreek{\MP@orig@beta}}
@@ -206,6 +213,8 @@
 \newcommand{\DisableMathProofColors}{%
   \ifMPProofreadColorsEnabled
     \MPProofreadColorsEnabledfalse
+    \everymath\expandafter{\the\MP@orig@everymath}%
+    \everydisplay\expandafter{\the\MP@orig@everydisplay}%
 
     \let\alpha\MP@orig@alpha
     \let\beta\MP@orig@beta
