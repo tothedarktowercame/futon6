@@ -21,6 +21,7 @@
 \section*{Materials and Methods}
 \begin{itemize}[leftmargin=1.5em]
 \item \textbf{Model/runtime split.} Claude Max runs on a remote Linode host; Codex Pro runs on the local laptop workspace (\texttt{/home/joe/code/futon6}).
+\item \textbf{Software/toolchain summary.} Computational checks used Python 3 scripts with NumPy/SciPy for numerical linear algebra and optimization, SymPy for symbolic algebra, mpmath for selected high-precision checks, and PHCpack via \texttt{phcpy} for polynomial-system solving/certification in Problem~4 (Case~3c). Document production and consistency checks used LaTeX (\texttt{pdflatex}) and repository scripts (including \texttt{check-latex-text-truth.py}, wiring-diagram generators, and \texttt{validate-ct.py}).
 \item \textbf{Codex Pro token accounting (local, log-derived).} From \texttt{\~{}/.codex/sessions/*} telemetry (records where the event type is \emph{token\_count}), over the 50-hour window ending 2026-02-13 21:41 UTC (window start: 2026-02-11 19:41 UTC), there were 333 futon6-related Codex rollout traces out of 334 local rollout traces (99.7\%). Aggregated futon6 usage totals: total tokens 965{,}714{,}475; input tokens 961{,}719{,}044 (including cached input tokens 912{,}686{,}208, so non-cached input \(\approx 49{,}032{,}836\)); output tokens 3{,}995{,}431; reasoning-output tokens 2{,}072{,}289.
 \item \textbf{Claude Max token estimate (remote, pending).} To be inserted from Linode-side logs/usage data; local laptop artifacts are not treated as authoritative for Claude usage accounting.
 \end{itemize}
