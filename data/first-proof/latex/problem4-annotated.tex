@@ -6,7 +6,13 @@ For monic real-rooted degree-$n$ polynomials, test
 \frac{1}{\Phi_n(p \boxplus_n q)} \ge \frac{1}{\Phi_n(p)} + \frac{1}{\Phi_n(q)}.
 \]
 
-Partial: proved analytically for $n \le 3$; the $n=4$ branch has algebraic reduction plus computational verification, with one certification step still pending; higher $n$ remains open.
+\subsection*{Answer}
+Partial result: proved analytically for $n \le 3$; the $n=4$ branch has
+algebraic reduction plus computational verification, with one certification
+step still pending; higher $n$ remains open.
+
+\phantomsection\label{sn:p4}
+\statusnote{Problem 4 is proved for $n \le 3$ analytically (Cauchy--Schwarz); the $n=4$ case has algebraic reduction plus computational verification (PHCpack) but full certification of Case~3c path accounting is pending. Higher $n$ remains open.}
 
 \subsection*{Annotated proof structure}
 \begin{enumerate}[leftmargin=1.5em]
@@ -15,9 +21,6 @@ Partial: proved analytically for $n \le 3$; the $n=4$ branch has algebraic reduc
 \item Boundary and symmetric-subcase analysis by exact elimination/resultant methods.
 \item Generic critical-point branch handled computationally (PHC/homotopy-style root accounting) in the current workflow.
 \end{enumerate}
-
-\phantomsection\label{sn:p4}
-\statusnote{Problem 4 is proved for $n \le 3$ analytically (Cauchy--Schwarz); the $n=4$ case has algebraic reduction plus computational verification (PHCpack) but full certification of Case~3c path accounting is pending. Higher $n$ remains open.}
 
 \subsection*{Selected citations}
 \begin{itemize}[leftmargin=1.5em]
