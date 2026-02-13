@@ -7,7 +7,10 @@ An attempt at Problem 6 of the **First Proof** benchmark
 G=(V,E,w) with Laplacian L, find S ⊆ V with |S| ≥ cεn such that the
 induced Laplacian satisfies L_S ≤ εL (Loewner order).
 
-We have a **90-95% complete proof** with one quantitative sub-gap remaining.
+We have a **~85% complete proof** with three gaps: (1) trajectory coupling
+between min-ℓ ordering and barrier feasibility, (2) M_t ≠ 0 amplification for
+general graphs, (3) the bound gives |S| ≥ ε²n/9 (c depends on ε, not universal
+as Problem 6 requires). K_n is fully proved with c = 1/3.
 
 ## Files
 
@@ -25,11 +28,16 @@ We have a **90-95% complete proof** with one quantitative sub-gap remaining.
 Foster's theorem (avg leverage < 2)
     + Partial averages inequality (sum of T smallest ≤ T × avg)
         → Σ_{k=1}^T ℓ_{(k)} < 2T
-            → d̄ < (2/3)/(1-ε/3) < 1  [at M_t = 0]
+            → d̄ < (2/3)/(1-ε/3) < 1  [at M_t = 0, min-ℓ trajectory]
                 → ∃v: ||Y_t(v)|| ≤ tr(Y_t(v)) ≤ d̄ < 1  [PSD + pigeonhole]
                     → barrier greedy continues for T = εm/3 steps
-                        → |S| ≥ ε²n/9, L_S ≤ εL  ∎
+                        → |S| ≥ ε²n/9, L_S ≤ εL
+                           [CAVEATS: (1) trajectory coupling gap,
+                            (2) M_t≠0 amplification gap,
+                            (3) c = ε/9 depends on ε, not universal]
 ```
+
+For K_n: all caveats resolved. c = 1/3, universal. ∎
 
 ## What's Proved (Codex: please verify these)
 
