@@ -1,6 +1,4 @@
-\chapter*{Introduction: The Making of the First-Proof Cycle}
-\addcontentsline{toc}{chapter}{Introduction: The Making of the First-Proof Cycle}
-
+\clearpage
 \section*{Highlights}
 \begin{itemize}[leftmargin=1.5em]
 \item Dependency-graph representations of proofs enabled local gap isolation and targeted repair across all ten problems.
@@ -97,6 +95,69 @@ identified in his classroom: conjectures are cheap, but understanding
 In practice, the strongest leverage came from structured verification---tools
 that made weaknesses visible early and locally.
 
+\section*{Current Status}
+\noindent\textbf{Outcome summary (status code [M|V]).} \(\mathbf{M}\in\{\mathbf{C},\mathbf{P},\mathbf{?}\}\) with \(\mathbf{C}=\)closed, \(\mathbf{P}=\)partial, \(\mathbf{?}=\)conditional; \(V\in\{\checkmark,\sim,\mathbf{?}\}\) with \(\checkmark=\)validation-complete, \(\sim=\)partial validation, \(\mathbf{?}=\)not yet fully validated.
+
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{P1, P2, P8, P9 [P|\(\sim\)].} Node-level validation artifacts exist,\footnote{Per-problem verifier outputs are tracked in \url{https://github.com/tothedarktowercame/futon6/tree/master/data/first-proof} under filenames matching \texttt{problem*-codex-results.jsonl}.} but unresolved verifier gaps remain.
+\item \textbf{P7 [C|\(\sim\)].} Provisionally closed mathematically via the rotation route; QC validation remains open pending independent ledger re-check and closure of flagged nodes.
+\item \textbf{P3 [C|\(\checkmark\)].} Validation-complete existence path under the scoped criterion (current run: 2 verified, 7 plausible, 0 gaps). Uniqueness/irreducibility is treated as optional and out of scope for the core existence claim.
+\item \textbf{P5 [C|?].} Solved in a scope-limited form for $F_O$-local connective spectra.
+\item \textbf{P6 [P|?].} $K_n$ case proved ($c_0 = 1/3$); one technical gap remains in the general-graph argument (formal $\bar{d} < 1$ bound at $M_t \ne 0$).
+\item \textbf{P4 [P|?].} Proved analytically for $n \le 3$; the $n=4$ branch has strong computational support with one certification step pending; higher $n$ remains open.
+\item \textbf{P10 [?|?].} Conditional under explicitly stated assumptions, with explicit necessity counterexamples for assumption violations.
+\item Cross-problem closure-vs-validation inventory.\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/closure-validation-audit.md}}
+\end{itemize}
+
+\par
+\normalcolor
+\section*{Materials and Methods}
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{Model/runtime split.} Claude Max runs on a remote Linode host; Codex Pro runs on the local laptop workspace (\texttt{/home/joe/code/futon6}).
+\item \textbf{Software/toolchain summary.} Computational checks used Python 3 scripts with NumPy/SciPy for numerical linear algebra and optimization, SymPy for symbolic algebra, mpmath for selected high-precision checks, and PHCpack via \texttt{phcpy} for polynomial-system solving/certification in Problem~4 (Case~3c). Document production and consistency checks used LaTeX (\texttt{pdflatex}) and repository scripts (including \texttt{check-latex-text-truth.py}, wiring-diagram generators, and \texttt{validate-ct.py}).
+\item \textbf{Codex Pro token accounting (local, log-derived).} From local Codex session telemetry (\path{~/.codex/sessions/*}, event type \emph{token\_count}), over the 50-hour window ending 2026-02-13 21:41 UTC (window start: 2026-02-11 19:41 UTC), there were 333 futon6-related Codex rollout traces out of 334 local rollout traces (99.7\%).
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrc@{}}
+\toprule
+Metric & Total & Per rollout (avg) & \% of total \\
+\midrule
+\textbf{Total tokens} & 965{,}714{,}475 & 2{,}900{,}043 & 100\% \\
+\textbf{Input tokens (all)} & 961{,}719{,}044 & 2{,}887{,}445 & 99.6\% \\
+\quad Cached input & 912{,}686{,}208 & 2{,}740{,}800 & 94.5\% \\
+\quad Non-cached input & 49{,}032{,}836 & 147{,}246 & 5.1\% \\
+\textbf{Output tokens} & 3{,}995{,}431 & 11{,}997 & 0.4\% \\
+\textbf{Reasoning-output tokens} & 2{,}072{,}289 & 6{,}223 & --- \\
+\bottomrule
+\end{tabular}
+\normalsize
+\end{center}
+Interpretation (inference): the large cached-input share likely reflects repeated reuse of stable local context across rollouts, including processed Math StackExchange/MathOverflow corpora and derived prompt artifacts such as \path{se-data/math-processed}, \path{math-se-processed}, \path{mo-processed}, and Codex workflows using \path{--math-se-dir}.
+
+\item \textbf{Claude Max token accounting (Linode, log-derived).} From Linode session files (\path{~/.claude/projects/*/}), 9 futon6-related Claude~Code sessions were identified; 8 sessions contributed within the 50-hour Codex-comparable window ending 2026-02-13 21:41 UTC.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrc@{}}
+\toprule
+Metric & Total & Per session (avg) & \% of total \\
+\midrule
+\textbf{Total tokens (50h window)} & 791{,}980{,}382 & 98{,}997{,}548 & 100\% \\
+\textbf{Input tokens (all)} & 789{,}643{,}774 & 98{,}705{,}472 & 99.7\% \\
+\quad Cached-read input & 752{,}300{,}790 & 94{,}037{,}599 & 95.0\% \\
+\quad Cache-creation input & 37{,}221{,}978 & 4{,}652{,}747 & 4.7\% \\
+\quad Non-cached input & 121{,}006 & 15{,}126 & 0.0\% \\
+\textbf{Output tokens} & 2{,}336{,}608 & 292{,}076 & 0.3\% \\
+\bottomrule
+\end{tabular}
+\normalsize
+\end{center}
+Model: \texttt{claude-opus-4-6}; assistant messages: 7{,}754. Full-window totals (9 sessions, 2026-02-08 through 2026-02-13): total tokens 1{,}021{,}665{,}524; output tokens 2{,}798{,}074.
+\end{itemize}
+
+\clearpage
+\normalcolor
 \section*{Reader Guide}
 This document is organized in five parts.
 
@@ -116,30 +177,3 @@ This document is organized in five parts.
 \item[MSS] Marcus--Spielman--Srivastava interlacing families framework.
 \item[PSD] Positive semi-definite (for matrices).
 \end{description}
-
-\section*{Current Status}
-\noindent\textbf{Status legend.}
-Each problem is tagged on two axes:
-\textbf{Closed/Partial/Conditional} for mathematical status and
-\textbf{Validation-complete/Partial validation} for QC-validation status.
-
-\medskip
-\noindent\textbf{Outcome summary.}
-Problem~3 is closed for the scoped existence target and validation-complete;
-Problem~5 is closed in a scope-limited form;
-Problem~10 is conditional under stated assumptions;
-Problems~4 and~6 are partial with explicit remaining obligations;
-Problem~7 is provisionally closed mathematically (rotation route), with QC
-review still active; and Problems~1,~2,~7,~8, and~9 are partial-validation at
-node level due to unresolved verifier gaps.
-
-\begin{itemize}[leftmargin=1.5em]
-\item Problems 1, 2, 8, and 9 now have node-level validation artifacts.\footnote{Per-problem verifier outputs are tracked in \url{https://github.com/tothedarktowercame/futon6/tree/master/data/first-proof} under filenames matching \texttt{problem*-codex-results.jsonl}.} Each currently remains in \emph{partial validation} due to unresolved node-level gaps flagged by the verifier.
-\item Problem 7 is treated as provisionally closed mathematically via the rotation route, while remaining in \emph{partial validation} at QC level pending independent ledger re-check and closure of verifier-flagged nodes.
-\item Problem 3 now has a validation-complete existence path under the scoped criterion used here (current run: 2 verified, 7 plausible, 0 gaps). Uniqueness/irreducibility is treated as optional and out of scope for the core existence claim.
-\item Problem 10 is conditional under explicitly stated assumptions, with explicit necessity counterexamples for assumption violations.
-\item Problem 5 is solved in a scope-limited form for $F_O$-local connective spectra.
-\item Problem 6 is partial: the $K_n$ case is proved ($c_0 = 1/3$), with one remaining technical gap in the general-graph argument (formal $\bar{d} < 1$ bound at $M_t \ne 0$).
-\item Problem 4 is partial: proved analytically for $n \le 3$; the $n=4$ branch has strong computational support with one certification step still pending; higher $n$ remains open.
-\item Cross-problem closure-vs-validation inventory.\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/closure-validation-audit.md}}
-\end{itemize}

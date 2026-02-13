@@ -26,15 +26,21 @@ pdflatex -interaction=nonstopmode first-proof-monograph.tex
 
 (If `latexmk` is available, use `latexmk -pdf first-proof-monograph.tex`.)
 
-## Regenerate full-solution LaTeX from markdown
+## Regenerate full-solution LaTeX from markdown (source-safe)
 
 ```bash
 cd /home/joe/code/futon6
-mkdir -p data/first-proof/latex/full
-for n in 1 2 3 4 5 6 7 8 9 10; do
-  pandoc data/first-proof/problem${n}-solution.md -f gfm -t latex --wrap=preserve \
-    -o data/first-proof/latex/full/problem${n}-solution-full.tex
-done
+./scripts/regenerate-full-tex-safe.sh
+```
+
+This script normalizes temporary copies and renders from those copies, so
+`data/first-proof/problem*-solution.md` is never modified during typesetting.
+
+If you intentionally want to rewrite source markdown with the normalizer, both
+flags are required:
+
+```bash
+python3 scripts/normalize-math-prose.py --write --allow-in-place data/first-proof/problem*-solution.md
 ```
 
 ## Project-status notes
