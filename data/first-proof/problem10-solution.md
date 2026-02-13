@@ -16,6 +16,9 @@ N = nM), B = T Z, and n, r << q << N.
 2. For standard PCG and Cholesky-based preconditioning, use a PD kernel
    K_tau = K + tau I_n with tau > 0 (or assume K is already PD).
 3. S is a selection operator, so D is diagonal/projector and sparse by index list.
+4. Necessity checks are explicit: dropping (2) can break SPD; dropping
+   sampling regularity can preserve SPD but destroy fast conditioning. See
+   `data/first-proof/problem10-necessity-counterexamples.md`.
 
 Then the solved system is
 

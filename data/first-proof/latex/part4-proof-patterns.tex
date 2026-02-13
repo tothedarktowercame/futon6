@@ -13,8 +13,10 @@ Every open problem in a sprint has one of three honest outcomes:
 
 \begin{enumerate}
 \item \textbf{Closed.} A complete proof (possibly with minor caveats).
-  Problems 1--5, 7--10; Problem~6 for $K_n$ (with a narrow technical
-  gap for general graphs).
+  In the current QC pass, Problems 1, 2, 7, 8, and 9 are provisionally
+  closed pending node-level validation; Problem~3 has unresolved validator
+  gaps; Problem~10 is conditional under stated assumptions; Problem~5 is
+  solved in a scope-limited form.
 \item \textbf{Reduced.} A conditional result with clearly stated
   assumptions.
 \item \textbf{Mapped.} The obstruction is characterized and adjacent
@@ -24,9 +26,10 @@ Every open problem in a sprint has one of three honest outcomes:
 All three are legitimate outcomes. Outcome~2 is not a defect of
 outcome~1; it is a different kind of contribution.  The failure mode
 is treating outcome~2 as something to repair rather than something
-to state clearly.  Problem~6 spent eight hours as outcome~2 before
-a coaching intervention moved it to outcome~1---the layer switch,
-not additional effort, made the difference.
+to state clearly. Problem~6 spent eight hours as outcome~2 before
+a coaching intervention moved it to a strong partial closure (complete
+for key classes, with one explicit remaining general-case gap)---the
+layer switch, not additional effort, made the difference.
 
 \section{Success Pattern: Layer-Switching (Problem 7)}
 
@@ -226,6 +229,12 @@ $\bar{d} = 0.714$, amplification ratio $\le 1.30$) but one
 quantitative estimate---bounding the $H_t^{-1}$ amplification
 when $M_t \ne 0$---remains open.
 
+\textit{Postscript (Feb 13 update):} the open bridge was further
+localized via an E+F hybrid reduction
+(\texttt{7e03174}): an E-regime (graph-adaptive transfer)
+plus an F-regime (gain-loss balance) suffices for full stepwise
+closure.  The reduction itself is proved; two regime lemmas remain.
+
 No interlacing families.  No Borcea--Br\"and\'en.  No MSS theorem.
 Just Foster's theorem $+$ partial averages $+$ PSD trace bound $+$
 pigeonhole $+$ Tur\'an.  A three-line argument (PSD $\to$ pigeonhole
@@ -360,9 +369,9 @@ identity discovered, a closure achieved.  The connections between
 moves---``this obstruction motivated that layer switch''---are
 implicit in the temporal ordering but not represented explicitly.
 
-This is a degenerate form of the Argument Interchange Format
-(AIF)~\cite{pease2017}, in which argument moves are nodes and
-inferential, conflict, and preference relations are typed edges.
+This is a degenerate form of the Active Inference Framework
+(AIF), in which argument moves are represented as typed states and
+policy-relevant transitions (inferential, conflict, and preference edges).
 The git log provides the nodes (commits) but not the edges
 (argumentative relations).
 
@@ -412,7 +421,7 @@ subgraph.  Five nodes suffice:
   layer---enumerate alternatives to sparsification.'' (coaching
   intervention)
 \item[$n_4$:] \textsc{Claim}: ``Tur\'an $+$ Foster $+$ pigeonhole
-  gives an elementary proof.'' (\texttt{9f88fe4})
+  gives an elementary proof.'' (\texttt{73aa112})
 \item[$n_5$:] \textsc{Inference}: $n_4$ resolves the problem that
   $n_2$ blocked in $n_1$.
 \end{description}
@@ -429,7 +438,7 @@ $n_5 \xrightarrow{\text{supports}} n_4$.  In S-expression form:
    :content "edge-to-vertex obstruction is structural")
  (node n3 :type preference
    :content "switch to combinatorial layer")
- (node n4 :type claim :ref "9f88fe4"
+ (node n4 :type claim :ref "73aa112"
    :content "Turan + Foster + pigeonhole proof")
  (node n5 :type inference
    :content "n4 resolves what n2 blocked in n1")
