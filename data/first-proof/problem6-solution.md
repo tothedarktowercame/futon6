@@ -396,6 +396,25 @@ requires either:
 (b) Establishing that Q is real-rooted (via interlacing families),
     giving max root <= dbar via Vieta.
 
+### Diagnosis
+
+The remaining gap is not "we don't know enough math"; it is "we are
+near the limit of this proof architecture." The architecture (barrier
+greedy + PSD trace bound + pigeonhole) is correct — it proves K_n
+exactly and works numerically on every tested graph. The limit is that
+the amplification factor when M_t != 0 makes the naive bound on dbar
+exceed 1, while the greedy's self-correcting property (selecting
+vertices whose contributions are orthogonal to M_t's large eigenspace)
+is not yet captured by the formal analysis.
+
+Empirically, the self-correction is strong: the spectral amplification
+factor is 0.52 (vs the scalar worst-case of 1.0), and the W-M_t
+alignment is <= 0.25 across all 351 Phase 2 steps. Closing the gap
+formally requires making this orthogonality structure explicit — either
+via a potential function that tracks directional growth, or via
+interlacing families that exploit the grouped PSD structure of the
+barrier increments.
+
 ### Summary
 
 The existential answer is **YES** for K_n with c = 1/3 (proved),
