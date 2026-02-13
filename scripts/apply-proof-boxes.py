@@ -41,6 +41,18 @@ HEADING_LEVEL = {
 }
 
 
+def is_pandoc_heading_wrapper(line):
+    """True for pandoc anchor wrapper lines like: \\hypertarget{...}{%"""
+    return ("\\hypertarget{" in line) and ("{%" in line)
+
+
+def wrapped_heading_start(lines, idx):
+    """If heading at idx is wrapped by a pandoc anchor on previous line, return wrapper idx."""
+    if idx > 0 and is_pandoc_heading_wrapper(lines[idx - 1]):
+        return idx - 1
+    return idx
+
+
 def parse_heading(line):
     """Return (level, heading_text) if line contains a section heading, else None."""
     m = HEADING_RE.search(line)
@@ -69,6 +81,32 @@ def parse_heading(line):
     return None
 
 
+def parse_heading_at(lines, idx):
+    """Return heading parse at idx, supporting pandoc wrapper + heading layout."""
+    parsed = parse_heading(lines[idx])
+    if parsed is not None:
+        return parsed
+    if (
+        is_pandoc_heading_wrapper(lines[idx])
+        and idx + 1 < len(lines)
+    ):
+        return parse_heading(lines[idx + 1])
+    return None
+
+
+def heading_line_index(lines, idx):
+    """Return the index of the actual heading command for a section anchor."""
+    if parse_heading(lines[idx]) is not None:
+        return idx
+    if (
+        is_pandoc_heading_wrapper(lines[idx])
+        and idx + 1 < len(lines)
+        and parse_heading(lines[idx + 1]) is not None
+    ):
+        return idx + 1
+    return None
+
+
 def find_heading_line(lines, heading_substr):
     """Find the line index containing a section/subsection/subsubsection
     whose heading text contains heading_substr."""
@@ -77,21 +115,24 @@ def find_heading_line(lines, heading_substr):
         if parsed is not None:
             _, text = parsed
             if heading_substr in text:
-                return i
+                return wrapped_heading_start(lines, i)
     return None
 
 
 def find_section_end(lines, start_idx):
     """Find the end of a section starting at start_idx.
     Returns the index of the next heading at same or higher level, or len(lines)."""
-    parsed = parse_heading(lines[start_idx])
+    parsed = parse_heading_at(lines, start_idx)
     if parsed is None:
         return len(lines)
     start_level = parsed[0]
-    for i in range(start_idx + 1, len(lines)):
+    start_heading_idx = heading_line_index(lines, start_idx)
+    if start_heading_idx is None:
+        return len(lines)
+    for i in range(start_heading_idx + 1, len(lines)):
         parsed_i = parse_heading(lines[i])
         if parsed_i is not None and parsed_i[0] <= start_level:
-            return i
+            return wrapped_heading_start(lines, i)
     return len(lines)
 
 
@@ -126,6 +167,11 @@ def apply_annotations(lines, annotations, filename, dry_run=False):
             if start is None:
                 print(f"  WARNING: heading '{heading}' not found in {filename}", file=sys.stderr)
                 continue
+            replace_span = 2 if (
+                start + 1 < len(lines)
+                and is_pandoc_heading_wrapper(lines[start])
+                and parse_heading(lines[start + 1]) is not None
+            ) else 1
             end = find_section_end(lines, start)
             resolved.append({
                 "start": start,
@@ -134,6 +180,7 @@ def apply_annotations(lines, annotations, filename, dry_run=False):
                 "box": box,
                 "full_title": full_title,
                 "desc": f"section '{heading}'",
+                "replace_span": replace_span,
             })
         elif mode == "block":
             start_marker = ann["start_marker"]
@@ -142,11 +189,15 @@ def apply_annotations(lines, annotations, filename, dry_run=False):
             if start is None:
                 print(f"  WARNING: start_marker '{start_marker}' not found in {filename}", file=sys.stderr)
                 continue
+            if parse_heading(lines[start]) is not None:
+                start = wrapped_heading_start(lines, start)
             if end_before:
                 end = find_marker_line(lines, end_before, start_from=start + 1)
                 if end is None:
                     print(f"  WARNING: end_before '{end_before}' not found after line {start} in {filename}", file=sys.stderr)
                     continue
+                if parse_heading(lines[end]) is not None:
+                    end = wrapped_heading_start(lines, end)
             else:
                 end = len(lines)
             resolved.append({
@@ -164,8 +215,12 @@ def apply_annotations(lines, annotations, filename, dry_run=False):
     if not resolved:
         return lines, 0
 
-    # Sort by start position descending (bottom-to-top)
-    resolved.sort(key=lambda r: r["start"], reverse=True)
+    # Sort by start position descending (bottom-to-top).
+    # Tie-break at same start: apply section replacements before block insertions.
+    resolved.sort(
+        key=lambda r: (r["start"], 1 if r["mode"] == "section" else 0),
+        reverse=True,
+    )
 
     if dry_run:
         for r in reversed(resolved):
@@ -192,8 +247,11 @@ def apply_annotations(lines, annotations, filename, dry_run=False):
             modified.append(end_line)
 
         if r["mode"] == "section":
-            # Replace the heading line with \begin{box}
+            # Replace heading (and optional pandoc wrapper) with \begin{box}.
+            # Keep line count stable to preserve pre-resolved insertion indices.
             modified[start] = begin_line
+            if r.get("replace_span", 1) > 1:
+                modified[start + 1] = "%\n"
         else:
             # Block mode: insert \begin{box} before the start line
             modified.insert(start, begin_line)
