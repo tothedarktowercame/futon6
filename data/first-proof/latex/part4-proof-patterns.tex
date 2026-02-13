@@ -284,14 +284,29 @@ a strategy checklist for open problems:
   If not, state the conditional result and the open assumptions.
 \end{enumerate}
 
-This is case-based reasoning applied to proof strategy.  The ``cases''
-are the other problems in the sprint (or, with a larger corpus, the
-indexed literature).  The transfer is at the strategy level, not the
-mathematical level---it is not that Problem~7's rotation trick applies
-to Problem~6, but that Problem~7's \emph{layer-switching} strategy
-might.
+This is case-based reasoning (CBR) applied to proof strategy.  The
+``cases'' are the other problems in the sprint (or, with a larger
+corpus, the indexed literature).  We call the key property
+\textbf{strategy-level analogy}: the transfer operates at the level of
+proof strategy, not mathematical content.  It is not that Problem~7's
+rotation trick applies to Problem~6, but that Problem~7's
+\emph{layer-switching strategy} might.  Strategy-level analogy is
+what makes the checklist above actionable---a shared mathematical
+technique would only transfer between cognate problems, but a shared
+strategy pattern transfers between any problems with similar
+obstruction profiles.
+
+CBR has a well-known failure mode: \emph{superficial indexing}.  Within
+a ten-problem sprint the case base is small enough that a human can
+browse it exhaustively.  Scaling to the indexed literature requires a
+retrieval mechanism, and the indexing question---what features of a
+proof strategy are retrievable?---is itself a research problem.  The
+checklist above implicitly proposes an index schema (layer structure,
+obstruction type, resolution pattern), but whether these features
+support effective retrieval at scale remains open.
 
 \section{Learning from Success, Not Just Failure}
+\label{sec:learning}
 
 A recurring theme: the sessions that closed problems did so by
 finding the right \emph{frame}, not by working harder within
@@ -322,6 +337,20 @@ For future sprints---human or AI---the design implications are:
   For Problem~6, the elementary core \emph{was} the proof.
 \end{enumerate}
 
+These three principles describe a \textbf{metacognitive interrupt}---a
+mechanism that detects a TryHarder loop and triggers reframing.  In
+reinforcement-learning terms, it is the difference between exploiting
+within a fixed policy and switching policies.  The CS question is
+whether the interrupt can fire automatically.  The git log provides
+the detection signal: repeated commits within the same layer with no
+status change is exactly the TryHarder signature.  Problem~6's failed
+phase exhibits this pattern clearly---six dispatch-and-fail cycles
+over eight hours, all targeting the sparsification layer, none
+changing the layer assessment.  A monitor that tracks
+$(\text{layer}, \text{status})$ pairs across commits and flags
+stationarity after $k$ cycles would have triggered the reframing
+prompt automatically.
+
 \section{Toward Real-Time Argumentation Structure}
 
 The git hashes cited above constitute a post-hoc reconstruction of
@@ -350,13 +379,200 @@ Three infrastructure pieces converge on this:
 \begin{enumerate}
 \item \textbf{Arxana} (futon5) provides the typed-edge graph substrate.
 \item \textbf{The peripheral model} (futon3c) provides scoped contexts
-  in which moves are recorded as they happen.
+  in which moves are recorded as they happen.  A peripheral is not a
+  separate process---it is a \emph{constrained execution environment}
+  for the same agent, defined by a restricted tool set and scope.
+  The agent hops between peripherals (explore, edit, test, deploy,
+  reflect), and each hop transfers context while enforcing new
+  constraints.  Real-time capture works by interleaving reflect
+  hops with action hops: explore $\to$ reflect $\to$ edit $\to$
+  reflect $\to$ test $\to$ reflect.  The reflect peripheral permits
+  only log-reading---no editing, no deploying---so the agent
+  produces argumentative annotation because that is the only
+  permitted action.  The constraint is what makes reflection
+  generative rather than reflexive.  This addresses the
+  metacognitive overhead problem not by delegating to a separate
+  scribe, but by repeatedly returning the agent to a mode where
+  annotation is all it can do, while the work is still fresh.
 \item \textbf{S-expression canonical form} provides the representation
   in which argument structure and mathematical content coexist
   without a separate annotation layer.
 \end{enumerate}
 
-With all three, the sprint's argumentative structure would be captured
-as it unfolds---not reconstructed from git hashes months later.
-The distance from the present chapter to that system is a tooling
-gap, not a conceptual one.
+To make this concrete, consider Problem~6's layer switch as an AIF
+subgraph.  Five nodes suffice:
+
+\begin{description}
+\item[$n_1$:] \textsc{Claim}: ``BSS edge sparsification adapts to
+  vertex selection.''
+\item[$n_2$:] \textsc{Conflict}: ``Edge-to-vertex obstruction is
+  structural: multi-rank atoms vs.\ rank-1 atoms.''
+  (\texttt{cc11834})
+\item[$n_3$:] \textsc{Preference}: ``Switch to the combinatorial
+  layer---enumerate alternatives to sparsification.'' (coaching
+  intervention)
+\item[$n_4$:] \textsc{Claim}: ``Tur\'an $+$ Foster $+$ pigeonhole
+  gives an elementary proof.'' (\texttt{9f88fe4})
+\item[$n_5$:] \textsc{Inference}: $n_4$ resolves the problem that
+  $n_2$ blocked in $n_1$.
+\end{description}
+
+\noindent The typed edges are: $n_2 \xrightarrow{\text{attacks}} n_1$,
+$n_3 \xrightarrow{\text{preference}} n_4$ over $n_1$,
+$n_5 \xrightarrow{\text{supports}} n_4$.  In S-expression form:
+
+\begin{verbatim}
+(aif:graph
+ (node n1 :type claim
+   :content "BSS adapts to vertex selection")
+ (node n2 :type conflict :ref "cc11834"
+   :content "edge-to-vertex obstruction is structural")
+ (node n3 :type preference
+   :content "switch to combinatorial layer")
+ (node n4 :type claim :ref "9f88fe4"
+   :content "Turan + Foster + pigeonhole proof")
+ (node n5 :type inference
+   :content "n4 resolves what n2 blocked in n1")
+ (edge n2 n1 :type attacks)
+ (edge n3 n4 :type preference :over n1)
+ (edge n5 n4 :type supports))
+\end{verbatim}
+
+\noindent This is a five-node graph with three typed edges.  Arxana
+stores it; the peripheral model would have produced these nodes
+incrementally---$n_2$ during a reflect hop after the counterexample
+commit, $n_3$ after the coaching intervention, $n_4$ after the
+elementary proof landed---each time the agent hopped into reflect
+and annotated its recent trace while the reasoning was still fresh.  The S-expression representation
+makes the mathematical content (\texttt{:content}) and the
+argumentative structure (\texttt{:type}, \texttt{:over}) cohabit
+without a separate annotation layer.
+
+With all three pieces, the sprint's argumentative structure would be
+captured as it unfolds---not reconstructed from git hashes months
+later.  The distance from the present chapter to that system is a
+tooling gap, not a conceptual one---and the worked example above
+shows that the gap is small.
+
+This chapter is itself a case study for the infrastructure it
+proposes.  Most of the ten problems were genuinely ``local''---they
+yielded to focused work within a single layer, and the right
+approach closed them quickly once found.  That track record creates
+a disposition toward local play: attack the problem, find the trick,
+close it.  Problem~6 was the exception that required whole-board
+awareness, but by the time its hard phase began, nine successful
+local closures had trained the expectation that persistence within
+one approach would suffice.  The success pattern became the trap.
+
+Problem~6's later phase---after the elementary proof
+landed---spent several hours exploring trajectory coupling,
+amplification bounds, and spectral spread, all within a single
+layer.  The $(\text{layer}, \text{status})$ monitor described in
+Section~\ref{sec:learning} would have flagged stationarity and
+forced a reflect hop that included external literature search.
+When that search was finally performed (ad hoc, by dispatching a
+second agent to scan MathOverflow), it returned several alternative
+routes---including approaches that build on the existing partial
+result but constitute a genuine layer switch.  The reflect hop
+worked; it was just five hours late.  In Go, the analogous concept is \emph{whole-board play}: weaker
+players get absorbed in local fights while stronger players
+recognize when a local position is stalemated and play
+\emph{tenuki}---elsewhere, where there are bigger points.  But in
+true whole-board play there is no tenuki, because the player never
+lost awareness of the whole board.  The same holds here: if reflect
+hops are interleaved as the normal operating mode, there is no
+TryHarder loop to break out of---the agent maintains whole-board
+awareness throughout, and the layer switch happens as part of
+ordinary play, not as a rescue.
+
+\subsection{Sidebar: the layer switch that happened while writing this chapter}
+
+The self-referential case study deserves an explicit account, because
+it validates the chapter's prescriptions more concretely than any
+retrospective analysis could.
+
+\medskip
+
+\textbf{The stuck phase.}  After Problem~6's elementary proof landed
+(Tur\'an $+$ Foster $+$ pigeonhole, proved for $K_n$), the remaining
+gap was a single quantitative estimate: bounding the $H_t^{-1}$
+amplification when the accumulated barrier matrix $M_t \ne 0$.  Two
+agents spent several hours exploring this gap from within the same
+layer---trajectory coupling, Neumann expansion bounds, spectral
+spread analysis, amplification ratios.  Each cycle produced empirical
+confirmation (440/440 greedy steps pass, amplification $\le 1.30$,
+$\bar{d} \le 0.714$) but no proof.  The $(\text{layer},
+\text{status})$ pair was stationary: barrier-greedy amplification,
+open.
+
+\textbf{The intervention.}  During the writing of this chapter---while
+editing the very paragraphs about metacognitive interrupts and
+whole-board play---a second agent was dispatched to scan
+152{,}893 MathOverflow questions across six independent strategy tracks
+(A--F), each with its own keyword bundle and contextual anchoring.
+
+\textbf{The result.}  Track~E (expansion, conductance, spectral
+geometry) dominated with 60 anchored-strong hits, versus 8 for the
+next-best track.  The returning agent proposed a structural
+reformulation: instead of proving a single universal bound
+$\bar{d}_t < 1$ (the stuck approach), split the proof into two
+regimes based on a graph-structural parameter---the maximum
+cross-degree $\deg_{R,\max}$ of remaining vertices in the barrier
+greedy:
+
+\begin{description}
+\item[E-regime] ($\deg_{R,\max} \le 2$): the local graph structure
+  is sparse enough that the minimum spectral score $m_t$ stays below
+  a universal threshold $\theta < 1$.  This is the regime where the
+  existing Foster/partial-averages machinery is likely sufficient.
+\item[F-regime] ($\deg_{R,\max} \ge 3$): high cross-degree gives
+  structural control over the gain-loss decomposition.  A
+  deterministic inequality $G_t > P_t$ (gain exceeds penalty) then
+  certifies $m_t < 1$ via the proved ratio certificate and AR
+  identity.
+\end{description}
+
+\noindent The formal reduction---if both regime lemmas hold at every
+step, then GPL-H closes with a universal constant---is itself proved.
+The open work is now two explicit lemmas tied to a concrete regime
+separator, not an amorphous gap.  Empirical validation on graphs up
+to $n = 40$ shows $\deg_{R,\max}$ has 0.973 correlation with the
+hard transfer rows and separates them perfectly at threshold~3.
+
+\textbf{What this demonstrates.}  The MathOverflow scan is
+structurally a reflect hop: a constrained task (read external
+literature, do not edit the proof) that returned with annotation
+(here are the alternative approaches, ranked by precedent).  It
+produced a genuine layer switch---from ``prove a universal
+amplification bound'' to ``split by graph-adaptive regime and prove
+two targeted lemmas.''  The new approach builds on the existing
+partial result (the ratio certificate, the AR identity, the
+pigeonhole mechanism) but reframes the open problem in a way that
+the previous five hours of local play did not.
+
+The layer switch happened \emph{during the writing of the chapter
+that prescribes it}.  The chapter argued that a peripheral model
+with interleaved reflect hops would prevent TryHarder loops.  The
+sprint then demonstrated exactly that: a reflect hop (dispatched ad
+hoc, but functionally identical to a scheduled peripheral
+transition) broke a multi-hour stationary phase and produced a
+changed approach within thirty minutes.  The prescriptive content
+of the chapter and the lived experience of writing it converged on
+the same point---not because the chapter caused the intervention,
+but because both are responses to the same structural pattern.
+The infrastructure this chapter proposes would make such
+interventions automatic rather than accidental.
+
+The stationarity detection problem has a direct analogue in the
+meta-meta-cellular automata of futon5: when a CA rule produces
+static or periodic behavior, the spacetime diagram shows
+\emph{stripes}---identical states repeating across timesteps.
+The meta-level rule fires when stripes are detected, replacing the
+CA rule itself.  The git log of a TryHarder loop is a spacetime
+diagram with stripes: the same layer and status repeating across
+commits.  The AIF annotation proposed above is what makes the
+stripes visible---without typed edges labeling each commit's layer,
+the stationarity is present in the data but invisible to the
+monitor.  The MMCA provides the detection mechanism; the peripheral
+model provides the intervention; the AIF graph provides the
+representation that connects them.
