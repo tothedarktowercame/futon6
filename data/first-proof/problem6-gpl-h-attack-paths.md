@@ -629,6 +629,50 @@ consistent with the new data.
 The 36% empirical margin (max dbar 0.641) suggests substantial room for
 any of these approaches.
 
+## UPDATE 2026-02-13: Compensation + Charpoly Findings
+
+### Filter-dbar tension resolved
+
+The partial averages approach (Theorem 4.2 in proof draft) bypasses the
+C_lev / Markov tension entirely. Instead of filtering by leverage degree,
+it sorts by leverage degree and uses: avg of t smallest ≤ overall avg < 2.
+This gives d̄_all ≤ (2/3)/(1-ε/3) < 1 at M_t = 0 WITHOUT any filtering.
+
+### New structural results (PROVED)
+
+1. **Compensation identity:** 2M_t + F_t = Λ_t, where F_t = cross-edges,
+   M_t = internal edges, Λ_t = total leverage of S_t. Self-balancing.
+
+2. **F_t + M_t ≤ Π** (proved): edge subset sum. Implies ||F_t|| ≤ 1.
+
+3. **Determinantal pigeonhole identity (proved):**
+   det(I - Y_t(v)) = det(εI - M_t - C_t(v))/det(εI - M_t).
+
+### New empirical results (275 steps, 30+ graphs × 4 epsilons)
+
+| Quantity | Result | Status |
+|----------|--------|--------|
+| d̄_all < 1 | 275/275, max 0.720 | Empirical |
+| Charpoly root < 1 | 275/275, max 0.432 | Empirical (44% tighter) |
+| Determinantal avg > 0 | 275/275 | Empirical |
+| Effective rank ρ ≥ r/2 | 57% pass | TOO STRONG |
+| ||Λ_t|| < 2ε | 25% pass | TOO STRONG |
+| ||F_t|| ≤ 1 | 275/275 | PROVED |
+
+### Current best path to closure
+
+The characteristic polynomial root is at most 0.432 — far below 1. The
+improvement over d̄_all (0.720) comes from using ALL spectral moments, not
+just the trace. For K_n: charpoly root = t/n → 1/3, while d̄_all → 5/6.
+
+Three routes remain viable:
+1. **Prove d̄_all < 1 at M_t ≠ 0** (trace route, simplest)
+2. **Prove avg det(I-Y_v) > 0** (determinantal route, tighter)
+3. **Prove charpoly root < 1** (interlacing route, tightest)
+
+The gap is the same in all three: bounding the amplification from
+B_t = (εI - M_t)^{-1} when M_t ≠ 0 and potentially anisotropic.
+
 ## Files
 
 - `data/first-proof/problem6-gpl-h-counterexample.md` — Counterexample documentation
