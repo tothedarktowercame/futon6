@@ -320,6 +320,26 @@ residual statistics, so this run is strong computational closure of Case 3c,
 but not yet a formal proof-grade *global* certification of the complete complex
 solution set.
 
+### Update (2026-02-13): Task B Alpha Certification of Case 3c Roots
+
+Executed Smale alpha-theory checks on the 4 PHC Case 3c seeds:
+
+- Script: `scripts/verify-p4-n4-case3c-alpha.py`
+- Outputs:
+  - `data/first-proof/problem4-case3c-alpha-certification.json`
+  - `data/first-proof/problem4-case3c-certified-v2.json`
+  - `data/first-proof/p4-n4-case3c-task-b-alpha.md`
+
+Results:
+
+1. 4/4 roots pass `alpha_upper < 0.157671`.
+2. Residual norms after refinement are approximately `1e-116`.
+3. All 4 roots are in-domain and satisfy `-N > 0` with
+   `-N = 1678.549826372544892...`.
+
+This closes Task B (root certification for known roots), but does not by itself
+resolve the global exhaustiveness gap from failed PHC paths.
+
 **Path B: Computational Certificate** — BLOCKED
 - SOS/Putinar certificates infeasible at degrees 10, 12, 14 (§9)
 - Interior zero fundamentally blocks this approach
