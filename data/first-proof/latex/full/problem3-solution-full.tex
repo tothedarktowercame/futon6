@@ -26,7 +26,7 @@ Ayyer-Martin-Williams identifies its stationary distribution as
 
 \[\pi(\mu) = F_{\mu}(x; \mNumber{1}, t) / P_{\lambda}(x; \mNumber{1}, t),\]
 
-which is the ratio required in the problem statement (same q=1 ASEP/Macdonald
+which is the ratio required in the problem statement (same \(q = \mNumber{1}\) ASEP/Macdonald
 family, up to notation conventions).
 
 \hypertarget{confidence}{%
@@ -45,7 +45,7 @@ Let
 
 \[S_{n}(\lambda) = \{\text{all permutations of the parts of } \lambda\}.\]
 
-Because \(\lambda\) has distinct parts, \(|S_{n}(\lambda)|\) = n!.
+Because \(\lambda\) has distinct parts, \(|S_{n}(\lambda)| =\) n!.
 
 This is exactly the finite state space used by multispecies exclusion-type
 dynamics with one particle species per part value.
@@ -112,9 +112,8 @@ content \(\lambda\) (restricted partition with distinct parts), parameters
 
 \[\pi(\eta) = F_{\eta}(x; \mNumber{1}, t) / P_{\lambda}(x; \mNumber{1}, t),\]
 
-where \(F_{\eta}\) are ASEP polynomials at q=1 and \(P_{\lambda}\)(x; 1, t) =
-\(\sum_{\nu \in S_{n}(\lambda)} F_{\nu}\)(x; 1, t) is the partition function
-(ensuring \(\pi\) sums to 1). Positivity: \(F_{\eta}\)(x; 1, t) \textgreater{} 0 for \(x_{i} > \mNumber{0}, \mNumber{0} \le t < \mNumber{1}\) is established as part of AMW Theorem 1.1, which shows that
+where \(F_{\eta}\) are ASEP polynomials at \(q = \mNumber{1}\) and \(P_{\lambda}\)(x; 1, t) \(= \sum_{\nu \in S_{n}(\lambda)} F_{\nu}\)(x; 1, t) is the partition function
+(ensuring \(\pi\) sums to 1). Positivity: \(F_{\eta}\)(x; 1, t) \(>\) 0 for \(x_{i} > \mNumber{0}, \mNumber{0} \le t < \mNumber{1}\) is established as part of AMW Theorem 1.1, which shows that
 \(\pi(\eta) = F_{\eta} / P_{\lambda}\) is a probability distribution. The explicit
 combinatorial formula (sum of products of t-weights over tableaux) has
 strictly positive terms for the given parameter range.
@@ -148,18 +147,18 @@ The constant cancels in the ratio regardless of its value.
 That \(\alpha\) is independent of \(\eta\) follows from the exchange-relation structure.
 Both \(F^{\prime}_{\eta}\) and \(F_{\eta}\) satisfy the same Hecke exchange relations under
 generators \(T_{i}\) (Corteel-Mandelshtam-Williams, Section 3, define both
-normalizations and verify their equivalence at q = 1). The normalization is
+normalizations and verify their equivalence at q \(=\) 1). The normalization is
 fixed by the leading-term convention, which is uniform across the state
 space \(S_{n}(\lambda)\). Concretely, at \(q = \mNumber{1}\) both families specialize to the same
 t-weight formula, so \(\alpha = \mNumber{1}\) and \(F^{\prime}_{\eta} = F_{\eta}\).
 
-\textbf{Verification for \(n = \mNumber{2}\).} Take \(\lambda\) = (a, 0). Both conventions give
-\(F_{(a,\mNumber{0})}(x_{\mNumber{1}}, x_{\mNumber{2}}\); 1, t) = \(x_\mNumber{1}\) and \(F_{(\mNumber{0},a)}(x_{\mNumber{1}}, x_{\mNumber{2}}\); 1, t) = \(x_\mNumber{2}\)
+\textbf{Verification for \(n = \mNumber{2}\).} Take \(\lambda =\) (a, 0). Both conventions give
+\(F_{(a,\mNumber{0})}(x_{\mNumber{1}}, x_{\mNumber{2}}\); 1, t) \(= x_{\mNumber{1}}\) and \(F_{(\mNumber{0},a)}(x_{\mNumber{1}}, x_{\mNumber{2}}\); 1, t) \(= x_{\mNumber{2}}\)
 (the single-species case reduces to site weights). The ratio
 \(F^{\prime}_{\eta} / P^{\prime}_{\lambda} = F_{\eta} / P_{\lambda} = x_{i} / (x_{\mNumber{1}} \mBridgeOperator{+} x_{\mNumber{2}})\) in both conventions.
 
 \hypertarget{6-sanity-check-n2-reduction}{%
-\subsubsection{6. Sanity check: n=2 reduction}\label{6-sanity-check-n2-reduction}}
+\subsubsection{\texorpdfstring{6. Sanity check: \(n = \mNumber{2}\) reduction}{6. Sanity check: n = \textbackslash mNumber\{2\} reduction}}\label{6-sanity-check-n2-reduction}}
 
 Take lambda=(a,0), state space \(\{(a,\mNumber{0}),(\mNumber{0},a)\}\). There is one non-vacancy and one
 vacancy. Bells ring at rates \(\mNumber{1}/x_\mNumber{1}\) and \(\mNumber{1}/x_\mNumber{2}\).
@@ -167,9 +166,9 @@ vacancy. Bells ring at rates \(\mNumber{1}/x_\mNumber{1}\) and \(\mNumber{1}/x_\
 \begin{itemize}
 \tightlist
 \item
-  (a,0) -\textgreater{} (0,a) at rate \(\mNumber{1}/x_\mNumber{1}\)
+  (a,0) \(\to\) (0,a) at rate \(\mNumber{1}/x_\mNumber{1}\)
 \item
-  (0,a) -\textgreater{} (a,0) at rate \(\mNumber{1}/x_\mNumber{2}\)
+  (0,a) \(\to\) (a,0) at rate \(\mNumber{1}/x_\mNumber{2}\)
 \end{itemize}
 
 So the stationary distribution is
@@ -211,7 +210,7 @@ The key observation: when a non-vacancy particle at site j is adjacent to
 the vacancy at site \(j + \mNumber{1}\) (cyclically), and the clock at j rings, one possible
 outcome of the t-geometric choice is that the active particle selects the
 vacancy (the nearest weaker-species particle clockwise). This selection has
-probability \(\mNumber{1}/[m]_t > \mNumber{0}\) (the k=1 term in the t-geometric distribution, where
+probability \(\mNumber{1}/[m]_t > \mNumber{0}\) (the \(k = \mNumber{1}\) term in the t-geometric distribution, where
 \(m \ge \mNumber{1}\) counts weaker particles). The particle moves to the vacancy\textquotesingle s position,
 the vacancy absorbs it, and the cascade terminates immediately (displaced
 species is 0). The net effect is an adjacent swap of the non-vacancy species

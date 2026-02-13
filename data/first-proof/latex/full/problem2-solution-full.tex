@@ -6,7 +6,7 @@
 
 Let F be a non-archimedean local field with ring of integers o. Let \(N_{r}\)
 denote the subgroup of \(\mathup{GL}_{r}(F)\) consisting of upper-triangular unipotent
-elements. Let \(\psi\): F -\textgreater{} \(\mathbb{C}^{x}\) be a nontrivial additive character of conductor o,
+elements. Let \(\psi\): \(F \to \mathbb{C}^{x}\) be a nontrivial additive character of conductor o,
 identified with a generic character of \(N_{r}\).
 
 Let \(\Pi\) be a generic irreducible admissible representation of \(\mathup{GL}_{n+\mNumber{1}}(F)\),
@@ -46,8 +46,8 @@ The local Rankin-Selberg \(\Integral I(s, W, V)\) for \(\mathup{GL}_{n+\mNumber{
 
 \[I(s, W, V) = \Integral_{N_{n} \backslash \mathup{GL}_{n}(F)} W(\operatorname{diag}(g,\mNumber{1})) V(g) |\det g|^{s-\mNumber{1}/\mNumber{2}} \mathrm{d}g\]
 
-This converges for Re(s) \textgreater\textgreater{} 0 and extends to a rational function of \(q_{F}^{-s}\)
-(where \(q_{F}\) = \textbar o/p\textbar). The set of all such integrals as (W, V) vary generates
+This converges for Re(s) \(\gg\) 0 and extends to a rational function of \(q_{F}^{-s}\)
+(where \(q_{F} =\) \textbar o/p\textbar). The set of all such integrals as (W, V) vary generates
 a fractional ideal of \(\mathbb{C}[q_{F}^{s}, q_{F}^{-s}]\), whose generator is the local
 L-factor \(L(s, \Pi \times \pi)\).
 
@@ -97,10 +97,10 @@ separate facts:
 \textbf{Fact 1: \(R(u_{Q})W\) is nonzero in \(W(\Pi, \psi^{-\mNumber{1}})\).} Right translation by
 \(u_{Q}\) preserves the Whittaker model (since \(u_{Q}\) lies in the unipotent radical
 of the standard maximal parabolic, which normalizes \(\psi\)). The map
-W \(\to R(u_{Q})W\) is a linear automorphism of \(W(\Pi, \psi^{-\mNumber{1}})\) (with inverse
+\(W \to R(u_{Q})W\) is a linear automorphism of \(W(\Pi, \psi^{-\mNumber{1}})\) (with inverse
 R(\(u_{Q}^{-\mNumber{1}}\))), so \(R(u_{Q})W \ne\) 0 whenever W \(\ne\) 0.
 
-\textbf{Fact 2: \(\phi_{Q}(g) = W_\mNumber{0}(\operatorname{diag}(g,\mNumber{1})u_{Q})\) is nonzero for \(W_\mNumber{0}\) = new vector.}
+\textbf{Fact 2: \(\phi_{Q}(g) = W_\mNumber{0}(\operatorname{diag}(g,\mNumber{1})u_{Q})\) is nonzero for \(W_{\mNumber{0}} =\) new vector.}
 This is verified by direct evaluation at \(g = I_{n}\):
 
 \[\phi_{Q}(I_{n}) = W_\mNumber{0}(\operatorname{diag}(I_{n}, \mNumber{1}) · u_{Q}) = W_\mNumber{0}(u_{Q})\]
@@ -120,7 +120,7 @@ The generic character \(\psi\) of \(N_{n+\mNumber{1}}\) evaluates on superdiagon
 Since \(\psi\) is a nontrivial character of F and Q \(\ne\) 0 (Q generates \(q^{-\mNumber{1}}), \psi^{-\mNumber{1}}(Q)\) is a nonzero complex number (it lies on the unit circle).
 Therefore \(\phi_{Q}(I_{n}) \ne \mNumber{0},\) so \(\phi_{Q}\) is nonzero as a function on \(\mathup{GL}_{n}\). ∎
 
-(Note: this argument is specific to \(W_\mNumber{0}\) = new vector with \(W_\mNumber{0}(I) = \mNumber{1}\).
+(Note: this argument is specific to \(W_{\mNumber{0}} =\) new vector with \(W_\mNumber{0}(I) = \mNumber{1}\).
 For the universality claim we only need \(\phi_{Q}\) nonzero for this particular
 \(W_\mNumber{0}\), so the direct computation suffices.)
 
@@ -167,12 +167,11 @@ Consider the map \(\Phi: K(\Pi)|_{\mathup{GL}_{n}} \to (\text{fractional ideals 
 \(\Phi(\phi) = \{ I(s, \phi, V) : V \in W(\pi, \psi) \} \cdot R\). By the JPSS theory,
 \(\bigcup_{\phi} \Phi(\phi)\) generates \(L(s, \Pi \times \pi)\) · R. Since R is a PID, \(\Phi(\phi) = L_{\phi}\) · R for some \(L_{\phi}\) dividing \(L(s, \Pi \times \pi)\).
 
-\textbf{Key step.} \(\Phi\) is \(\mathup{GL}_{n}\)-equivariant in the following sense: for \(g_\mNumber{0} \in \mathup{GL}_{n}\), the substitution g \(\to\) g · \(g_\mNumber{0}\) in the \(\Integral\) gives
-I(s, \(R(g_\mNumber{0})\phi\), V) = \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\) · I(s, \(\phi\), R\textquotesingle(\(g_\mNumber{0}\))V) where R\textquotesingle{}
+\textbf{Key step.} \(\Phi\) is \(\mathup{GL}_{n}\)-equivariant in the following sense: for \(g_\mNumber{0} \in \mathup{GL}_{n}\), the substitution \(g \to g\) · \(g_\mNumber{0}\) in the \(\Integral\) gives
+I(s, \(R(g_\mNumber{0})\phi\), V) \(= |\det g_{\mNumber{0}}|^{\mNumber{1}/\mNumber{2}-s}\) · I(s, \(\phi\), R\textquotesingle(\(g_\mNumber{0}\))V) where R\textquotesingle{}
 denotes the contragredient action on \(W(\pi, \psi)\). Since \(R'(g_\mNumber{0})\) is an
 automorphism of \(W(\pi, \psi)\), the set of integrals \{ I(s, \(R(g_\mNumber{0})\phi\), V) :
-\(V \in W(\pi, \psi)\) \} equals \{ \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\) · \(I(s, \\phi, V)\) : V \} =
-\(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\) · \(\Phi(\phi)\). But \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s} = q_{F}^{-k·s}\) ·
+\(V \in W(\pi, \psi)\) \} equals \{ \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\) · \(I(s, \\phi, V)\) : V \} \(= |\det g_{\mNumber{0}}|^{\mNumber{1}/\mNumber{2}-s}\) · \(\Phi(\phi)\). But \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s} = q_{F}^{-k·s}\) ·
 (unit in R) is a unit in the localization, so \(\Phi(R(g_\mNumber{0})\,\phi)\) and \(\Phi(\phi)\)
 generate the same fractional ideal. That is: \(L_{R(g_\mNumber{0})\phi} = L_{\phi}\)
 (up to units in R) for all \(g_\mNumber{0} \in \mathup{GL}_{n}\).
@@ -269,7 +268,7 @@ new vector \(W_\mNumber{0}\) of \(\Pi\) has support contained in
 
 where \(T^+\) is the dominant cone in the diagonal torus. Right translation by
 \(u_{Q} = I \mBridgeOperator{+} Q E_{n,n+\mNumber{1}}\) shifts the \((n, n + \mNumber{1})\)-matrix entry by \(Q = \pi_{F}^{-c(\pi)}\).
-In the Iwasawa decomposition g = nak, this modifies the diagonal component
+In the Iwasawa decomposition g \(=\) nak, this modifies the diagonal component
 at scale Q. Concretely, the support of the twisted function
 
 \[g |\to W_\mNumber{0}(\operatorname{diag}(g,\mNumber{1}) u_{Q})\]
@@ -288,8 +287,7 @@ that the integrand \(W_\mNumber{0}(\operatorname{diag}(g,\mNumber{1})u_{Q})\) * 
 \hypertarget{7-verification-in-special-cases}{%
 \subsubsection{7. Verification in special cases}\label{7-verification-in-special-cases}}
 
-\textbf{Both unramified (c(Pi) = c(pi) = 0):} \(u_{Q} = I \mBridgeOperator{+} E_{n,n+\mNumber{1}}\) (Q = 1).
-\(W_\mNumber{0}\) is the spherical vector. The \(\Integral\) with \(V_\mNumber{0}\) (spherical for pi)
+\textbf{Both unramified (c(Pi) \(=\) c(pi) \(=\) 0):} \(u_{Q} = I \mBridgeOperator{+} E_{n,n+\mNumber{1}}\) (Q \(= \mNumber{1}). W_{\mNumber{0}}\) is the spherical vector. The \(\Integral\) with \(V_\mNumber{0}\) (spherical for pi)
 gives \(L(s, \Pi \times \pi)\) * (correction factor). Choose V to cancel the L-factor.
 
 \textbf{\(\Pi\) unramified, \(\pi\) ramified:} \(u_{Q}\) has \(Q = \pi_{F}^{-c(\pi)}\). The twist
