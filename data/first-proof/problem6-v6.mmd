@@ -1,0 +1,100 @@
+flowchart TD
+    %% Problem 6 v6: Operator bound reduction (Cycle 4)
+    %% Green = proved, Yellow = open gap, Cyan = proved-cycle4,
+    %% Gray = empirical, Red = deleted/blocked, Orange = resolved
+
+    %% Target
+    p6q{{"P6 TARGET<br/>Universal c>0: for every G, eps,<br/>exists S with |S|>=c*eps*n, L_S<=eps*L"}}
+
+    %% === PROVED CHAIN (unchanged) ===
+
+    p6-turan["5a. TURAN (proved)<br/>Heavy/light split at tau=eps.<br/>I_0 >= eps*n/3,<br/>all internal edges light"]
+
+    p6-greedy["5c. BARRIER GREEDY (proved)<br/>Greedy on I_0 directly.<br/>T = eps*m_0/3 steps.<br/>Need: exists v with ||Y_t(v)|| < 1"]
+
+    p6-pigeonhole["5d. PIGEONHOLE + PSD (proved)<br/>||Y|| <= tr(Y), min <= avg = dbar<br/>If dbar < 1 then exists v OK"]
+
+    p6-foster["5e. FOSTER (proved at M_t=0)<br/>Foster: sum tau_e = n-1<br/>At M_t=0: dbar^0 <= 2/3"]
+
+    p6-kn-formula["K_n EXACT (proved)<br/>d̄ = (t-1)/(m₀ε-t) + (t+1)/(m₀ε)<br/>At horizon: d̄ → 5/6 < 1"]
+
+    p6-size["5f. SIZE (proved if dbar<1)<br/>|S| = eps*m_0/3 >= eps²n/9"]
+
+    %% === NEUMANN + CYCLE 4 REDUCTION ===
+
+    p6-neumann["NEUMANN SERIES (proved)<br/>dbar = dbar^0 * (1 + Σ ρ_k x^k)<br/>x = ||M_t||/ε<br/>If ρ_k ≤ ½: dbar ≤ dbar^0·(2-x)/(2(1-x))"]
+
+    p6-mono["MONOTONICITY (proved, C4)<br/>ρ_k ≤ ρ_1 for all k ≥ 1<br/>Proof: λ_i^(k+1) ≤ λ_i^k for λ∈[0,1]<br/>Suffices to bound ρ_1 only"]
+
+    p6-opbound["OPERATOR BOUND (proved, C4)<br/>ρ_1 ≤ Σμ_i(1-μ_i) / (μ_max·tr(F))<br/>Proof: F+M≤Π ⟹ tr(MF)≤tr(M-M²)<br/>For K_n: = (t-1)/(2t) < ½"]
+
+    p6-tracegap{{"TRACE GAP (remaining)<br/>Prove: tr(F) > 2·Σμ_i(1-μ_i)/μ_max<br/>Equiv: α = tr(P_M F)/tr(F) < ½<br/>Margin: 8% (K_n) to 251% (ER)"}}
+
+    p6-assembly["ASSEMBLY (if trace gap closes)<br/>ρ_k < ½ ⟹ dbar ≤ (2/3)·(2-x)/(2(1-x))<br/>At x=1/3: dbar ≤ 5/6 < 1<br/>CLOSES GPL-H"]
+
+    %% === BLOCKED / RESOLVED ===
+
+    p6-trft-resolved(["tr(F)=2(t-τ) RESOLVED<br/>Codex C3: FALSE (err=12 on Star)<br/>Correct: tr(F)=Σℓ_u - 2τ<br/>Original proof route blocked"])
+
+    p6-schur-blocked>"SCHUR NAIVE (blocked)<br/>Codex C2: concentrate-top<br/>exceeds uniform"]
+
+    %% === EVIDENCE ===
+
+    p6-empirical(["NUMERICS (empirical)<br/>440+ steps, 7 families, n≤80<br/>dbar < 1 at ALL steps<br/>Max dbar: 0.718"])
+
+    p6-alpha-data(["ALPHA/RHO DATA (C4)<br/>max α = 0.4615 = 6/13 (K_80)<br/>max ρ_1 = 0.4615 = 6/13<br/>max op_bound = 0.4615<br/>All < 0.5 on full suite"])
+
+    p6-result["RESULT<br/>K_n: PROVED, c = 1/3<br/>General: trace inequality gap<br/>|S| >= ε²n/9"]
+
+    %% === PROOF FLOW ===
+
+    p6-turan -->|"I_0 >= eps*n/3"| p6q
+    p6-greedy -->|"greedy on I_0"| p6-turan
+    p6-pigeonhole ==>|"closes barrier step"| p6-greedy
+    p6-foster ==>|"dbar^0 ≤ 2/3"| p6-pigeonhole
+    p6-kn-formula ==>|"exact at M_t≠0"| p6-foster
+    p6-size -->|"|S| = ε²n/9"| p6-greedy
+
+    %% Neumann chain
+    p6-neumann ==>|"amplification bound"| p6-pigeonhole
+    p6-mono ==>|"reduces to ρ_1"| p6-neumann
+    p6-opbound ==>|"bounds ρ_1"| p6-mono
+    p6-opbound ==>|"K_n: (t-1)/(2t)"| p6-kn-formula
+
+    %% Gap and assembly
+    p6-tracegap -->|"needed for general G"| p6-opbound
+    p6-assembly ==>|"CLOSES GPL-H"| p6q
+    p6-opbound -->|"ρ proven"| p6-assembly
+    p6-foster -->|"dbar^0 input"| p6-assembly
+
+    %% Resolved/blocked
+    p6-trft-resolved -.->|"blocked original route"| p6-neumann
+    p6-schur-blocked -.->|"was candidate"| p6-neumann
+
+    %% Evidence
+    p6-empirical -.->|"all steps pass"| p6-assembly
+    p6-alpha-data -.->|"α < 0.5 verified"| p6-tracegap
+
+    %% Result
+    p6-result ==>|"K_n closed"| p6q
+    p6-result -->|"proved"| p6-kn-formula
+    p6-result -->|"gap"| p6-tracegap
+
+    %% === STYLING ===
+    classDef target fill:#f9e,stroke:#c06,stroke-width:3px
+    classDef proved fill:#cfc,stroke:#393,stroke-width:2px
+    classDef cycle4 fill:#cef,stroke:#39c,stroke-width:2px
+    classDef open fill:#ffc,stroke:#cc3,stroke-width:3px
+    classDef empirical fill:#eee,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5
+    classDef blocked fill:#fdd,stroke:#c66,stroke-width:1px,stroke-dasharray: 3 3
+    classDef resolved fill:#fed,stroke:#c93,stroke-width:1px,stroke-dasharray: 3 3
+    classDef summary fill:#ccf,stroke:#66c,stroke-width:2px
+
+    class p6q target
+    class p6-turan,p6-greedy,p6-pigeonhole,p6-foster,p6-kn-formula,p6-size,p6-neumann proved
+    class p6-mono,p6-opbound,p6-assembly cycle4
+    class p6-tracegap open
+    class p6-empirical,p6-alpha-data empirical
+    class p6-schur-blocked blocked
+    class p6-trft-resolved resolved
+    class p6-result summary
