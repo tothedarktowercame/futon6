@@ -101,13 +101,13 @@ which has the right regularity:
 
 ### 5. Integrability and equivalence
 
-The Radon-Nikodym derivative dT_psi^* mu / dmu involves:
+The Radon-Nikodym derivative dT_psi^* mu / $d\mu$ involves:
 
     R(phi) = exp(-(V(phi-psi) - V(phi)) + l_psi(phi) - const)
 
-We need $R \in L$^1(mu) and R > 0 a.s.
+We need $R \in L$^1(mu) and $R > 0$ a.s.
 
-**Positivity:** R > 0 a.s. because it's an exponential. ✓
+**Positivity:** $R > 0$ a.s. because it's an exponential. ✓
 
 **Integrability:** The critical term is exp(4 int psi :phi^3: dx) under the
 Phi^4_3 measure. By the log-Sobolev inequality for Phi^4_3 (Barashkov-Gubinelli
@@ -116,12 +116,12 @@ are controlled by the quartic interaction. Specifically:
 
     E_mu[exp(t |int psi :phi^3: dx|)] < infinity  for |t| < t_0
 
-where t_0 > 0 depends on ||psi||_{C^0} and the coupling constant.
+where $t_0 > 0$ depends on $\|\psi\|_{C^0}$ and the coupling constant.
 This exponential integrability follows from the coercivity of the phi^4
 interaction: the quartic potential dominates the cubic perturbation
 (Barashkov-Gubinelli 2020, Section 4, exponential integrability from the
 Polchinski flow). The bound suffices for $R \in L$^1(mu) since the exponent
-in the Radon-Nikodym derivative is bounded by 4 ||psi||_{C^0} |int :phi^3: dx|,
+in the Radon-Nikodym derivative is bounded by 4 $\|\psi\|_{C^0}$ |int :phi^3: dx|,
 and t_0 can be chosen to exceed this coefficient.
 
 Therefore $R \in L$^1(mu) and 1/$R \in L$^1(T_psi^* mu), giving:

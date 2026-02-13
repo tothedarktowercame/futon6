@@ -344,6 +344,11 @@ local function normalize_expr(s)
   s = s:gsub("<=", "\\le ")
   s = s:gsub("%-%>", "\\to ")
   s = s:gsub("<%-", "\\leftarrow ")
+  s = s:gsub("([_%^])%s*{?infinity}?", "%1{\\infty}")
+  s = replace_word(s, "infinity", "\\infty")
+  s = s:gsub("%f[%a]int%s+(.-)%s+dx%f[%A]", function(body)
+    return "\\Integral " .. trim(body) .. "\\,dx"
+  end)
   s = s:gsub("%f[%a]diag%s*%(", "\\operatorname{diag}(")
   s = s:gsub("%f[%a]span%s*%(", "\\mOpName{span}(")
   s = s:gsub("%f[%a]ker%s*%(", "\\mOpName{ker}(")
@@ -429,7 +434,7 @@ local function normalize_expr(s)
   local prose_words = {
     "for", "and", "such", "that", "there", "exists", "where", "with",
     "all", "every", "each", "is", "so", "to", "can", "one", "outside", "through",
-    "internal",
+    "internal", "the", "The", "There", "transfer", "Transfer", "allowed", "Allowed",
   }
   local prose_masked, prose_slots = mask_text_macros(s)
   for _, w in ipairs(prose_words) do
