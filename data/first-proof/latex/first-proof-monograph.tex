@@ -116,13 +116,6 @@
   }%
   \par\medskip
 }
-\newcommand{\statusnote}[1]{%
-  \par\medskip
-  \noindent\fcolorbox{green!50!black}{green!4}{%
-    \parbox{0.96\linewidth}{\textbf{Status Note.} #1}%
-  }%
-  \par\medskip
-}
 % --- Dialogue boxes for Part III ---
 \newtcolorbox{joebox}[1][]{%
   colback=orange!4, colframe=orange!50!black,
@@ -190,7 +183,7 @@
   boxrule=0.5pt, arc=2pt, breakable,
   before skip=6pt, after skip=6pt
 }
-\renewcommand{\statusnote}[1]{%
+\newcommand{\statusnote}[1]{%
   \begin{processnote}[title={Status Note}]
   #1
   \end{processnote}
