@@ -167,11 +167,18 @@ Consider the map \(\Phi: K(\Pi)|_{\mathup{GL}_{n}} \to (\text{fractional ideals 
 \(\Phi(\phi) = \{ I(s, \phi, V) : V \in W(\pi, \psi) \} \cdot R\). By the JPSS theory,
 \(\bigcup_{\phi} \Phi(\phi)\) generates \(L(s, \Pi \times \pi)\) · R. Since R is a PID, \(\Phi(\phi) = L_{\phi}\) · R for some \(L_{\phi}\) dividing \(L(s, \Pi \times \pi)\).
 
-\textbf{Key step.} \(\Phi\) is \(\mathup{GL}_{n}\)-equivariant in the following sense: for \(g_\mNumber{0} \in \mathup{GL}_{n}\), the substitution \(g \to g\) · \(g_\mNumber{0}\) in the \(\Integral\) gives
-I(s, \(R(g_{\mNumber{0}})\phi,\) V) \(= |\det g_{\mNumber{0}}|^{\mNumber{1}/\mNumber{2}-s}\) · I(s, \(\phi\), R\textquotesingle(\(g_\mNumber{0}\))V) where R\textquotesingle{}
-denotes the contragredient action on \(W(\pi, \psi)\). Since \(R'(g_\mNumber{0})\) is an
-automorphism of \(W(\pi, \psi)\), the set of integrals \{ I(s, \(R(g_{\mNumber{0}})\phi,\) V) :
-\(V \in W(\pi, \psi)\) \} equals \{ \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\) · \(I(s, \\phi, V)\) : V \(} = |\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\) · \(\Phi(\phi)\). But \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s} = q_{F}^{-k·s}\) ·
+\textbf{Key step.} \(\Phi\) is \(\mathup{GL}_{n}\)-equivariant in the following sense: for \(g_\mNumber{0} \in \mathup{GL}_{n}\), the substitution \(g \to g \cdot g_\mNumber{0}\) in the \(\Integral\) gives
+\[
+I(s, R(g_\mNumber{0})\phi, V) = |\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\cdot I(s, \phi, R'(g_\mNumber{0})V),
+\]
+where \(R'\) denotes the contragredient action on \(W(\pi, \psi)\). Since \(R'(g_\mNumber{0})\) is an
+automorphism of \(W(\pi, \psi)\), the set of integrals
+\[
+\{ I(s, R(g_\mNumber{0})\phi, V) : V \in W(\pi, \psi) \}
+= \{ |\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\cdot I(s, \phi, V) : V \in W(\pi, \psi) \}
+= |\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\cdot \Phi(\phi).
+\]
+But \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s} = q_{F}^{-k\cdot s}\) ·
 (unit in R) is a unit in the localization, so \(\Phi(R(g_\mNumber{0})\,\phi)\) and \(\Phi(\phi)\)
 generate the same fractional ideal. That is: \(L_{R(g_\mNumber{0})\phi} = L_{\phi}\)
 (up to units in \(R\)) for all \(g_\mNumber{0} \in \mathup{GL}_{n}\).
