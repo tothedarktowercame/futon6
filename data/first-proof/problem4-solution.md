@@ -28,8 +28,9 @@ p, q of degree n:
 **Conjecturally yes, with strong numerical evidence.** The inequality
 holds in all 8000+ random trials tested (n = 2-5) with no violations.
 Proved analytically for n = 2 (equality) and n = 3 (nonnegative surplus
-for all centered cubics, with strict inequality generically, via
-Cauchy-Schwarz). An analytic proof for n >= 4 remains open.
+for all centered cubics via Cauchy-Schwarz; in centered coordinates
+equality occurs exactly at u = v = 0). An analytic proof for n >= 4
+remains open.
 
 - n = 2: equality holds (1/Phi_2 is linear in the discriminant).
 - n = 3: **PROVED** via the identity Phi_3 * disc = 18 * a_2^2 and Titu's lemma.
@@ -136,7 +137,9 @@ lattice of non-crossing partitions.
 
 ### 5a. Complete proof for n = 3
 
-Verification script: `scripts/verify-p4-n3-proof.py`
+Verification scripts:
+- `scripts/verify-p4-n3-proof.py`
+- `scripts/verify-p4-n3-cauchy-sos.py` (Task D: explicit matching-average and SOS-ready n=3 surplus)
 
 **Step 1: Centering reduction.** Since Phi_n depends only on root differences
 (translation invariant), and ⊞_n commutes with translation (via the random
@@ -186,7 +189,20 @@ and since s^2+t^2 <= (s+t)^2 (because 2st > 0):
 
     (u+v)^2/(s^2+t^2) >= (u+v)^2/(s+t)^2
 
-Combining: surplus >= 0. Equality iff u/s^2 = v/t^2 and s = t or u = v = 0.
+Combining: surplus >= 0.
+
+Equality characterization (with s,t > 0): the chain uses two inequalities.
+For equality in the final bound, both must be tight:
+
+1. Titu tightness: u/s^2 = v/t^2.
+2. Denominator comparison tightness:
+   (u+v)^2/(s^2+t^2) = (u+v)^2/(s+t)^2, which forces u+v = 0
+   (because (s+t)^2 > s^2+t^2 for s,t>0).
+
+Together these imply u = v = 0. Conversely u = v = 0 gives surplus = 0.
+Hence, for centered cubics with s,t>0:
+
+    surplus = 0  iff  u = v = 0.
 
 **QED for n = 3.**
 
@@ -219,10 +235,11 @@ The ⊞_2 formula gives c_1 = a_1+b_1, c_2 = a_2 + a_1*b_1/2 + b_2. Then:
 
 Surplus = 0 (symbolic verification). Equality for all degree-2 polynomials.
 
-**Degree 3 (proved — strict inequality):** See Section 5a. The proof uses:
+**Degree 3 (proved — superadditivity):** See Section 5a. The proof uses:
 - Translation invariance of Phi + translation compatibility of ⊞_3 to center
 - Identity Phi_3 * disc = 18 * a_2^2 (for centered cubics)
 - Titu's lemma (Cauchy-Schwarz) to bound the surplus
+- Equality condition in centered coordinates: u = v = 0
 
 ### 7. Summary and status
 
@@ -232,7 +249,7 @@ analytic proofs for n = 2, 3.**
 | n | Status | Method |
 |---|--------|--------|
 | 2 | **PROVED** (equality) | 1/Phi_2 is linear in disc; ⊞_2 preserves exactly |
-| 3 | **PROVED** (strict ineq.) | Phi_3*disc=18a_2^2 identity + Titu's lemma |
+| 3 | **PROVED** (superadditivity) | Phi_3*disc=18a_2^2 identity + Titu's lemma |
 | 4 | Numerically verified | 0/3000 violations; cross-term a_2*b_2/6 essential |
 | 5 | Numerically verified | 0/2000 violations |
 
@@ -240,7 +257,8 @@ analytic proofs for n = 2, 3.**
 
 1. Finite free cumulants add under ⊞_n (Arizmendi-Perales 2018)
 2. n=2: equality (1/Phi_2 linear in discriminant)
-3. n=3: strict superadditivity (Phi_3*disc identity + Cauchy-Schwarz)
+3. n=3: superadditivity (Phi_3*disc identity + Cauchy-Schwarz), with
+   equality at u=v=0 in centered coordinates
 4. ⊞_n commutes with translation (random matrix argument)
 5. The superadditivity is SPECIFIC to ⊞_n — plain coefficient addition
    fails ~40% (n=3 centered excluded: 0% because ⊞_3 = addition there)
@@ -268,6 +286,7 @@ Verification scripts:
 - `scripts/verify-p4-schur-majorization.py` (Schur/submodularity/paths)
 - `scripts/verify-p4-coefficient-route.py` (coefficient route, disc identity)
 - `scripts/verify-p4-n3-proof.py` (complete n=3 symbolic proof + n=4 exploration)
+- `scripts/verify-p4-n3-cauchy-sos.py` (Task D handoff closure: centered n=3 polynomial certificate)
 
 **Superadditivity test** (2000 random real-rooted polynomial pairs per n):
 
