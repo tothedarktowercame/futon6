@@ -53,6 +53,7 @@ GREEK_NAMES = (
 MATH_BARE_GREEK_RE = re.compile(rf"(?<!\\)\b(?:{GREEK_NAMES})\b")
 MATH_BARE_DIAG_RE = re.compile(r"(?<!\\)\bdiag\s*\(")
 MATH_BARE_GL_RE = re.compile(r"(?<![\\{])\bGL(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+|n[+\-]?\d*)\b")
+MATH_BARE_OPERATOR_WORD_RE = re.compile(r"(?<!\\)\b(?:sum|prod|lim)\b")
 MATH_BARE_IN_RE = re.compile(r"([A-Za-z\\][A-Za-z0-9_{}\\^]*)\s+in\s+([A-Za-z\\][A-Za-z0-9_{}\\^]*)")
 MATH_BARE_STAR_RE = re.compile(r"([A-Za-z0-9}\\)])\s*\*\s*([A-Za-z0-9\\{(])")
 MATH_X_CAND_RE = re.compile(r"(\S+)\s+x\s+(\S+)")
@@ -62,6 +63,12 @@ NONMATH_QF_RE = re.compile(r"\bqF(?:\^\{[^}]+\}|\^-?[A-Za-z0-9]+)\b")
 NONMATH_DIAG_RE = re.compile(r"\bdiag\s*\(")
 NONMATH_GL_X_RE = re.compile(
     r"\bGL(?:_\{?[A-Za-z0-9+\-]+\}?|n[+\-]?\d*)\s*[xX]\s*GL(?:_\{?[A-Za-z0-9+\-]+\}?|n[+\-]?\d*)\b"
+)
+NONMATH_OPERATOR_SCRIPT_RE = re.compile(
+    r"\b(?:sum|prod|lim)\s*(?:\\_|_|\\\^|\^)\s*(?:\\?\{[^}]*|[A-Za-z0-9])"
+)
+NONMATH_ESCAPED_SCRIPT_RE = re.compile(
+    r"\b[A-Za-z][A-Za-z0-9]*\\[_^](?:\\?\{|[A-Za-z0-9])"
 )
 NONMATH_GREEK_SCRIPT_RE = re.compile(
     rf"\b(?:{GREEK_NAMES})(?:_\{{[^}}]+\}}|_[A-Za-z0-9]+|\^\{{[^}}]+\}}|\^[A-Za-z0-9]+|\([^)]+\))"
@@ -221,6 +228,8 @@ def collect_findings(path: Path) -> list[Finding]:
             findings.append(Finding(path, lineno, "math", "bare-diag", "diag(...) should be \\operatorname{diag}(...)"))
         if MATH_BARE_GL_RE.search(math_text):
             findings.append(Finding(path, lineno, "math", "bare-gl", "GL token should be \\mathup{GL}_{...}"))
+        if MATH_BARE_OPERATOR_WORD_RE.search(math_text):
+            findings.append(Finding(path, lineno, "math", "bare-operator-word", "bare operator word in math"))
         if MATH_BARE_IN_RE.search(math_text):
             findings.append(Finding(path, lineno, "math", "bare-in", "bare 'in' should be \\in"))
         if has_bare_x(math_text):
@@ -236,6 +245,14 @@ def collect_findings(path: Path) -> list[Finding]:
             findings.append(Finding(path, lineno, "text", "diag-text", "diag(...) appears outside math"))
         if NONMATH_GL_X_RE.search(nonmath_text):
             findings.append(Finding(path, lineno, "text", "gl-x-text", "GL... x GL... should be math with \\times"))
+        if NONMATH_OPERATOR_SCRIPT_RE.search(nonmath_text):
+            findings.append(
+                Finding(path, lineno, "text", "operator-script-text", "operator token with script appears outside math")
+            )
+        if NONMATH_ESCAPED_SCRIPT_RE.search(nonmath_text):
+            findings.append(
+                Finding(path, lineno, "text", "escaped-script-text", "escaped _/^ token appears outside math")
+            )
         if NONMATH_GREEK_SCRIPT_RE.search(nonmath_text):
             findings.append(
                 Finding(path, lineno, "text", "greek-script-text", "Greek/script token appears outside math")

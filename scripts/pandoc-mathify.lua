@@ -393,11 +393,16 @@ local function normalize_expr(s)
   s = s:gsub("%f[%a]codim%s*%(", "\\mOpName{codim}(")
   s = s:gsub("%f[%a]Tr%s*%(", "\\mOpName{Tr}(")
   s = s:gsub("%f[%a]trace%s*%(", "\\mOpName{trace}(")
-  s = s:gsub("%f[%a]int%s*_", "\\int_")
-  s = s:gsub("%f[%a]integral%s*_", "\\Integral_")
-  s = s:gsub("%f[%a]integral%f[%A]", "\\Integral")
-  s = s:gsub("%f[%a]sum%s*_", "\\sum_")
-  s = s:gsub("%f[%a]prod%s*_", "\\prod_")
+  s = s:gsub("^int%s*_", "\\int_")
+  s = s:gsub("([^\\%a])int%s*_", "%1\\int_")
+  s = s:gsub("^integral%s*_", "\\Integral_")
+  s = s:gsub("([^\\%a])integral%s*_", "%1\\Integral_")
+  s = s:gsub("^integral%f[%A]", "\\Integral")
+  s = s:gsub("([^\\%a])integral%f[%A]", "%1\\Integral")
+  s = s:gsub("^sum%s*_", "\\sum_")
+  s = s:gsub("([^\\%a])sum%s*_", "%1\\sum_")
+  s = s:gsub("^prod%s*_", "\\prod_")
+  s = s:gsub("([^\\%a])prod%s*_", "%1\\prod_")
   s = s:gsub("%f[%a]exp%s*%(", "\\exp(")
   s = s:gsub("%f[%a]log%s*%(", "\\log(")
   s = s:gsub("%f[%a]det%s*%(", "\\det(")
@@ -673,6 +678,36 @@ local function brace_delta(s)
   return d
 end
 
+local function paren_delta(s)
+  local d = 0
+  for i = 1, #s do
+    local ch = s:sub(i, i)
+    if ch == "(" then
+      d = d + 1
+    elseif ch == ")" then
+      d = d - 1
+    end
+  end
+  return d
+end
+
+local function extract_unclosed_script_start_token(s)
+  -- Accept prefixes like "(", "1/(", "-" before a split script token.
+  -- Example: "(sum_{j" -> prefix "(", core "sum_{j".
+  local normalized = normalize_escaped_script_artifacts(s)
+  local prefix, core = normalized:match("^(.-)([%a][%w]-[_%^][{].*)$")
+  if core == nil then
+    return nil, nil
+  end
+  if core:find("}", 1, true) then
+    return nil, nil
+  end
+  if prefix:match("%a") then
+    return nil, nil
+  end
+  return prefix, core
+end
+
 local function is_comma_varlist(s)
   local saw_comma = false
   local expect_letter = true
@@ -880,10 +915,17 @@ local function is_symbolic_glue_str(s)
   if s == nil or s == "" then
     return false
   end
+  if s:match("^%d+$") then
+    return false
+  end
+  -- Allow compact fraction starters like "1/(x" to glue into adjacent math.
+  if s:match("^%d+/%([A-Za-z]$") then
+    return true
+  end
   if s:match("[A-Za-z]") then
     return false
   end
-  return s:match("^[%s%(%[%{%)%]%,%+%-%*/=<>'`|\\]+$") ~= nil
+  return s:match("^[%s%(%[%{%)%]%,%+%-%*/=<>'`|\\%^_%d%.]+$") ~= nil
 end
 
 local function merge_adjacent_math_fragments(inlines)
@@ -1118,27 +1160,37 @@ local function convert_split_brace_math_inlines(inlines)
   local i = 1
   while i <= #inlines do
     local el = inlines[i]
+    local start_prefix = nil
+    local start_core = nil
+    if el.t == "Str" then
+      start_prefix, start_core = extract_unclosed_script_start_token(el.text)
+    end
 
-    if el.t == "Str" and (el.text:match("^[A-Za-z][A-Za-z0-9]*%^%{[^}]*$") or el.text:match("^[A-Za-z][A-Za-z0-9]*_%{[^}]*$")) then
-      local parts = {el.text}
+    if start_core ~= nil then
+      local first = (start_prefix or "") .. start_core
+      local parts = {first}
       local j = i + 1
-      local depth = brace_delta(el.text)
-      local closed = depth <= 0
+      local depth = brace_delta(first)
+      local pdepth = paren_delta(first)
+      local closed = (depth <= 0 and pdepth <= 0)
 
       while j <= #inlines and not closed do
         local ej = inlines[j]
         if ej.t == "Space" or ej.t == "SoftBreak" then
           table.insert(parts, " ")
         elseif ej.t == "Str" then
-          table.insert(parts, ej.text)
-          depth = depth + brace_delta(ej.text)
-          if depth <= 0 then
+          local piece = normalize_escaped_script_artifacts(ej.text)
+          table.insert(parts, piece)
+          depth = depth + brace_delta(piece)
+          pdepth = pdepth + paren_delta(piece)
+          if depth <= 0 and pdepth <= 0 then
             closed = true
           end
         elseif ej.t == "Math" and ej.mathtype == "InlineMath" then
           table.insert(parts, ej.text)
           depth = depth + brace_delta(ej.text)
-          if depth <= 0 then
+          pdepth = pdepth + paren_delta(ej.text)
+          if depth <= 0 and pdepth <= 0 then
             closed = true
           end
         else

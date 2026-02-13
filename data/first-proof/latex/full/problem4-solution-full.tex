@@ -19,7 +19,7 @@ The \textbf{root separation energy}:
 
 \[\Phi_{n}(p) = \sum_{i} (\sum_{j \neq i} \mNumber{1}/(\lambda_{i} - \lambda_{j}))^\mNumber{2}\]
 
-where \(\lambda_\mNumber{1}\), ..., \(\lambda_{n}\) are the roots of p. (\(\Phi_{n}\) = infinity if p has
+where \(\lambda_{\mNumber{1}}, ..., \lambda_{n}\) are the roots of p. (\(\Phi_{n}\) = infinity if p has
 repeated roots.)
 
 \textbf{Question (Spielman):} Is it true that for monic real-rooted polynomials
@@ -121,10 +121,10 @@ polynomial of A + UBU* where char(A) = p, char(B) = q.
 
 \textbf{\(\Phi_{n}\) via the random matrix model.}
 
-For Hermitian A with eigenvalues \(\lambda_\mNumber{1}\), ..., \(\lambda_{n}\), the root separation
-energy \(\Phi_{n}(\mOpName{char}(A)) = \sum_{i}\) (sum\_\{j != i\} 1/(\(\lambda_{i} - \lambda_{j}\)))\^{}2 is
+For Hermitian A with eigenvalues \(\lambda_{\mNumber{1}}, ..., \lambda_{n},\) the root separation
+energy \(\Phi_{n}(\mOpName{char}(A)) = \sum_{i} (\sum_{j \neq i} \mNumber{1}/(\lambda_{i} - \lambda_{j}))^{\mNumber{2}}\) is
 an algebraic function of the eigenvalue gaps (see Section 1). The connection
-to log \textbar det(xI - A)\textbar{} is conceptual: away from roots, \(F_{A}''(x) = -\\sum_{i}\) 1/(x - \(\lambda_{i}\))\^{}2,
+to log \textbar det(xI - A)\textbar{} is conceptual: away from roots, \(F_{A}''(x) = -\sum_{i} \mNumber{1}/(x - \lambda_{i})^\mNumber{2},\)
 and \(\Phi_{n}\) captures the "residue" version at each root. But the definition of
 \(\Phi_{n}\) uses only the exact algebraic expressions from Section 1.
 
@@ -189,9 +189,9 @@ Equivalently:
 
 This identity was discovered numerically and verified symbolically in SymPy.
 It follows from the explicit formula \(\Phi_\mNumber{3} = \sum_{i}\) (3\emph{\(l_{i}\)/(3}\(l_{i}^\mNumber{2} \mBridgeOperator{+} e_\mNumber{2}\)))\^{}2
-(where \(e_\mNumber{1}\) = 0) combined with the discriminant = prod\_\{\(i < j\)\}(\(l_{i} - l_{j}\))\^{}2.
+(where \(e_\mNumber{1}\) = 0) combined with the discriminant = \(\prod_{i < j}(l_{i} - l_{j})^\mNumber{2}.\)
 
-\textbf{Step 4: Superadditivity via Cauchy-Schwarz.} Write s = -\(a_\mNumber{2} > \mNumber{0}\), t = -\(b_{\mNumber{2}} > \mNumber{0}, u = a_{\mNumber{3}}, v = b_{\mNumber{3}}\). Then:
+\textbf{Step 4: Superadditivity via Cauchy-Schwarz.} Write s = -\(a_\mNumber{2} > \mNumber{0}\), t = -\(b_{\mNumber{2}} > \mNumber{0}, u = a_{\mNumber{3}}, v = b_{\mNumber{3}}.\) Then:
 
 \[\begin{aligned}
 \mNumber{1}/\Phi(p) = \mNumber{2}s/\mNumber{9} - \mNumber{3}u^\mNumber{2}/(\mNumber{2}s^\mNumber{2}) \\
@@ -245,7 +245,7 @@ structure of the MSS convolution formula or the random matrix interpretation.
 \mNumber{1}/\Phi_\mNumber{2}(p) = (a_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast a_\mNumber{2})/\mNumber{2}
 \end{aligned}\]
 
-The \(\boxplus_\mNumber{2}\) formula gives \(c_{\mNumber{1}} = a_{\mNumber{1}}+b_{\mNumber{1}}, c_{\mNumber{2}} = a_{\mNumber{2}} \mBridgeOperator{+} a_{\mNumber{1}} \ast b_{\mNumber{1}}/\mNumber{2} \mBridgeOperator{+} b_{\mNumber{2}}\). Then:
+The \(\boxplus_\mNumber{2}\) formula gives \(c_{\mNumber{1}} = a_{\mNumber{1}}+b_{\mNumber{1}}, c_{\mNumber{2}} = a_{\mNumber{2}} \mBridgeOperator{+} a_{\mNumber{1}} \ast b_{\mNumber{1}}/\mNumber{2} \mBridgeOperator{+} b_{\mNumber{2}}.\) Then:
 
 \[\mNumber{1}/\Phi_\mNumber{2}(p\boxplus q) = (c_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast c_\mNumber{2})/\mNumber{2} = (a_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast a_\mNumber{2})/\mNumber{2} + (b_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast b_\mNumber{2})/\mNumber{2}\]
 

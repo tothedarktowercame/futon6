@@ -18,7 +18,7 @@ necessarily have a Lagrangian smoothing?
 
 \textbf{Yes.} A polyhedral Lagrangian surface with 4 faces per vertex (with
 distinct adjacent faces) always admits a Lagrangian smoothing. The vertex
-spanning property (\{\(e_\mNumber{1}\),...,\(e_\mNumber{4}\)\} spans \(\mathbb{R}^{\mNumber{4}}\)) is automatic --- it follows from
+spanning property (\{\(e_{\mNumber{1}},...,e_{\mNumber{4}}\)\} spans \(\mathbb{R}^{\mNumber{4}}\)) is automatic --- it follows from
 the Lagrangian and distinct-face conditions alone (Section 3), with no
 additional hypotheses needed.
 
@@ -36,7 +36,7 @@ theorem (edges) and the vanishing flux in simply-connected \(\mathbb{R}^{\mNumbe
 \hypertarget{1-setup-lagrangian-planes-in-mathbbr4}{%
 \subsubsection{\texorpdfstring{1. Setup: Lagrangian planes in \(\mathbb{R}^{\mNumber{4}}\)}{1. Setup: Lagrangian planes in \textbackslash mathbb\{R\}\^{}\{\textbackslash mNumber\{4\}\}}}\label{1-setup-lagrangian-planes-in-mathbbr4}}
 
-Identify \(\mathbb{R}^{\mNumber{4}} = \mathbb{C}^{\mNumber{2}}\) with symplectic form \(\omega = \mathrm{d}x_{\mNumber{1}} \wedge \mathrm{d}y_{\mNumber{1}} \mBridgeOperator{+} \mathrm{d}x_{\mNumber{2}} \wedge \mathrm{d}y_{\mNumber{2}}\).
+Identify \(\mathbb{R}^{\mNumber{4}} = \mathbb{C}^{\mNumber{2}}\) with symplectic form \(\omega = \mathrm{d}x_{\mNumber{1}} \wedge \mathrm{d}y_{\mNumber{1}} \mBridgeOperator{+} \mathrm{d}x_{\mNumber{2}} \wedge \mathrm{d}y_{\mNumber{2}}.\)
 A Lagrangian plane is a 2-dimensional subspace L where \(\omega|_{L} = \mNumber{0}\). The space
 of Lagrangian planes (the Lagrangian Grassmannian) is:
 
@@ -74,7 +74,7 @@ a symplectic direct sum decomposition:
 where \(V_\mNumber{1} = \mOpName{span}(e_\mNumber{1}, e_\mNumber{3})\) and \(V_\mNumber{2} = \mOpName{span}(e_\mNumber{2}, e_\mNumber{4})\) are symplectic 2-planes
 with omega\textbar\_\{\(V_\mNumber{1} \times V_\mNumber{2}\)\} = 0.
 
-\textbf{Proof.} Write the \(\omega\) matrix in the basis (\(e_{\mNumber{1}}, e_{\mNumber{2}}, e_{\mNumber{3}}, e_{\mNumber{4}}\)). The
+\textbf{Proof.} Write the \(\omega\) matrix in the basis (\(e_{\mNumber{1}}, e_{\mNumber{2}}, e_{\mNumber{3}}, e_{\mNumber{4}}).\) The
 conditions \(\omega(e_{i}, e_{i+\mNumber{1}}) = \mNumber{0}\) kill 4 of the 6 independent entries,
 leaving only:
 
@@ -88,7 +88,7 @@ surface with 4 faces per vertex (with distinct adjacent faces sharing
 1-dimensional edges), the 4 edge vectors \{\(e_{\mNumber{1}}, e_{\mNumber{2}}, e_{\mNumber{3}}, e_{\mNumber{4}}\)\} span \(\mathbb{R}^{\mNumber{4}}\).
 
 \emph{Proof.} Suppose for contradiction that the 4 edge vectors lie in a
-3-dimensional subspace H \(\subset \mathbb{R}^{\mNumber{4}}\). Then all 4 faces \(L_{i}\) = span(\(e_{i-\mNumber{1},i}, e_{i,i+\mNumber{1}}) \subset\) H.
+3-dimensional subspace H \(\subset \mathbb{R}^{\mNumber{4}}.\) Then all 4 faces \(L_{i}\) = span(\(e_{i-\mNumber{1},i}, e_{i,i+\mNumber{1}}) \subset\) H.
 
 \textbf{Step 1.} The restricted form \(\omega|_{H}\) has rank 2: since \(\omega\) is
 non-degenerate on \(\mathbb{R}^{\mNumber{4}}\), its restriction to a codimension-1 subspace has a
@@ -221,7 +221,7 @@ C_\mNumber{2} = {(u, \mNumber{0}) : u \ge \mNumber{0}} ∪ {(\mNumber{0}, v) : v
 
 \emph{Verification:} A point (p, q) with \(p \in C_\mNumber{1}\) and \(q \in C_\mNumber{2}\) has p = (x, 0) or
 (0, y) and q = (u, 0) or (0, v), giving 4 cases --- exactly the 4 faces
-\(L_\mNumber{1}\), ..., \(L_\mNumber{4}\) listed above. ∎
+\(L_{\mNumber{1}}, ..., L_{\mNumber{4}}\) listed above. ∎
 
 \textbf{Smoothing.} Replace each corner \(C_{j}\) with a smooth curve \(C_{j}^{sm} \subset V_{j}\)
 that agrees with \(C_{j}\) outside a ball of radius \(\delta\) around the origin:
@@ -234,7 +234,7 @@ C_\mNumber{2}^{sm}: \text{analogous} \in V_\mNumber{2}
 \end{aligned}\]
 
 Explicitly: parameterize \(C_\mNumber{1}^{sm}\) as \(\gamma_\mNumber{1}(t)\) for \(t \in R\), where
-\(\gamma_\mNumber{1}(t)\) = (t, 0) for \(t \ge \delta, \gamma_{\mNumber{1}}(t) =\) (0, -t) for t \(\le\) -delta,
+\(\gamma_\mNumber{1}(t)\) = (t, 0) for \(t \ge \delta, \gamma_{\mNumber{1}}(t) = (\mNumber{0},\) -t) for t \(\le\) -delta,
 and \(\gamma_\mNumber{1}\) is a smooth embedded curve for t \(\in\) {[}-delta, delta{]}. (Such a
 curve exists: it is a smooth rounding of the right angle at the origin.)
 Define \(\gamma_\mNumber{2}(t)\) analogously for \(C_\mNumber{2}^{sm}\).
@@ -279,7 +279,7 @@ from any vertex). Then there exists a smooth Lagrangian surface agreeing with
 
 \emph{Proof.} Choose Darboux coordinates (\(x_{\mNumber{1}}, y_{\mNumber{1}}, x_{\mNumber{2}}, y_{\mNumber{2}})\) with e along the
 \(x_\mNumber{1}\)-axis. Each \(L_{i}\) is locally the graph y = grad \(S_{i}(x)\) for quadratic \(S_{i}\).
-Define \(S_{\epsilon}(x) = \chi(x_{\mNumber{1}}/\epsilon) S_{\mNumber{1}}(x) +\) (1 - \(\chi(x_{\mNumber{1}}\)/eps)) \(S_\mNumber{2}(x)\) for a
+Define \(S_{\epsilon}(x) = \chi(x_{\mNumber{1}}/\epsilon) S_{\mNumber{1}}(x) + (\mNumber{1} - \chi(x_{\mNumber{1}}\)/eps)) \(S_\mNumber{2}(x)\) for a
 smooth cutoff \(\chi\). The graph y = grad \(S_{\epsilon}\) is Lagrangian (graph of the
 exact 1-form \(\mathrm{d}S_{\epsilon}\)). For any fixed \(\epsilon > \mNumber{0}\), this gives a smooth Lagrangian
 surface replacing the crease along e. ∎
@@ -344,7 +344,7 @@ isotopy on {[}0, 1{]}. It remains to show \(K_{t}\) is a \emph{Hamiltonian} isot
 for \(t > \mNumber{0}\).
 
 \textbf{Edge smoothings are Hamiltonian.} The family of generating functions
-\(S_{t}(x) = \chi(x_{\mNumber{1}}/t) S_{\mNumber{1}}(x) +\) (1 - \(\chi(x_{\mNumber{1}}\)/t)) \(S_\mNumber{2}(x)\) defines a smooth
+\(S_{t}(x) = \chi(x_{\mNumber{1}}/t) S_{\mNumber{1}}(x) + (\mNumber{1} - \chi(x_{\mNumber{1}}\)/t)) \(S_\mNumber{2}(x)\) defines a smooth
 1-parameter family of Lagrangian graphs y = grad \(S_{t}(x) \in T^{\mDualStar} \mathbb{R}^{\mNumber{2}}\). By
 the Weinstein Lagrangian neighborhood theorem (Weinstein 1971, Theorem 6.1),
 a smooth family of exact Lagrangian submanifolds in an exact symplectic

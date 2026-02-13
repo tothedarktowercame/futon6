@@ -4,7 +4,7 @@
 \hypertarget{problem-statement}{%
 \subsection{Problem Statement}\label{problem-statement}}
 
-Let \(\lambda = (\lambda_{\mNumber{1}} >\) ... \textgreater{} \(\lambda_{n}\) \textgreater= 0) be a restricted partition with
+Let \(\lambda = (\lambda_{\mNumber{1}} > ... > \lambda_{n} \ge \mNumber{0})\) be a restricted partition with
 distinct parts (unique part of size 0, no part of size 1). Does there exist a
 nontrivial Markov chain on \(S_{n}(\lambda)\) whose stationary distribution is
 
@@ -19,7 +19,7 @@ interpolation Macdonald polynomial?
 Yes.
 
 Take the inhomogeneous multispecies t-PushTASEP on the finite ring of n sites
-with content \(\lambda\) and parameters \(x_\mNumber{1}\), ..., \(x_{n}\). This is a concrete continuous-
+with content \(\lambda\) and parameters \(x_{\mNumber{1}}, ..., x_{n}.\) This is a concrete continuous-
 time Markov chain defined directly from local species comparisons and ringing
 rates \(\mNumber{1}/x_{i}\) (no use of \(F^{\prime}_{\mu}\) in the transition rule). A theorem of
 Ayyer-Martin-Williams identifies its stationary distribution as
@@ -55,7 +55,7 @@ dynamics with one particle species per part value.
 
 Define a continuous-time Markov chain \(X_{t}\) on \(S_{n}(\lambda)\) as follows.
 
-Fix parameters \(x_\mNumber{1}\), ..., \(x_{n} > \mNumber{0}\) and t in {[}0,1). At each site j, an exponential
+Fix parameters \(x_{\mNumber{1}}, ..., x_{n} > \mNumber{0}\) and t in {[}0,1). At each site j, an exponential
 clock of rate \(\mNumber{1}/x_{j}\) rings.
 
 If site j is a vacancy (species 0), nothing happens. If site j has species
@@ -107,13 +107,13 @@ So this is not a Metropolis-style chain "described using the target weights."
 Theorem (Ayyer-Martin-Williams, 2024, arXiv:2403.10485, Thm. 1.1):
 For the inhomogeneous multispecies t-PushTASEP on the ring with n sites,
 content \(\lambda\) (restricted partition with distinct parts), parameters
-\(x_\mNumber{1}\), ..., \(x_{n} > \mNumber{0}\), and \(\mNumber{0} \le t < \mNumber{1}\), the stationary probability of
+\(x_{\mNumber{1}}, ..., x_{n} > \mNumber{0},\) and \(\mNumber{0} \le t < \mNumber{1}\), the stationary probability of
 \(\eta \in S_{n}(\lambda)\) is
 
 \[\pi(\eta) = F_{\eta}(x; \mNumber{1}, t) / P_{\lambda}(x; \mNumber{1}, t),\]
 
 where \(F_{\eta}\) are ASEP polynomials at q=1 and \(P_{\lambda}\)(x; 1, t) =
-\(\\sum_{\nu \in S_{n}(\lambda)} F_{\nu}\)(x; 1, t) is the partition function
+\(\sum_{\nu \in S_{n}(\lambda)} F_{\nu}\)(x; 1, t) is the partition function
 (ensuring \(\pi\) sums to 1). Positivity: \(F_{\eta}\)(x; 1, t) \textgreater{} 0 for \(x_{i} > \mNumber{0}, \mNumber{0} \le t < \mNumber{1}\) is established as part of AMW Theorem 1.1, which shows that
 \(\pi(\eta) = F_{\eta} / P_{\lambda}\) is a probability distribution. The explicit
 combinatorial formula (sum of products of t-weights over tableaux) has
@@ -126,7 +126,7 @@ Markov chain.
 \subsubsection{\texorpdfstring{5. Notation bridge: \(F^{\prime}_{\mu} / P^{\prime}_{\lambda} = F_{\mu} / P_{\lambda}\)}{5. Notation bridge: F\^{}\{\textbackslash prime\}\_\{\textbackslash mu\} / P\^{}\{\textbackslash prime\}\_\{\textbackslash lambda\} = F\_\{\textbackslash mu\} / P\_\{\textbackslash lambda\}}}\label{5-notation-bridge-f_mu--p_lambda--f_mu--p_lambda}}
 
 The problem uses star notation \(F^{\prime}_{\mu}, P^{\prime}_{\lambda}\) (interpolation ASEP polynomials
-in the Knop-Sahi convention), while AMW Theorem 1.1 uses \(F_{\eta}, P_{\lambda}\).
+in the Knop-Sahi convention), while AMW Theorem 1.1 uses \(F_{\eta}, P_{\lambda}.\)
 
 \textbf{Claim:} The ratio \(F^{\prime}_{\mu} / P^{\prime}_{\lambda} = F_{\mu} / P_{\lambda}\) for all \(\mu \in S_{n}(\lambda)\).
 
