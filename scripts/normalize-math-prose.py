@@ -237,6 +237,32 @@ L_FACTOR_CORRECTION_RE = re.compile(
 )
 INLINE_DOLLAR_STAR_PAREN_RE = re.compile(r"\$([^$]+)\$\s*\*\s*\(([^)]+)\)")
 BARE_DIAG_INLINE_RE = re.compile(r"(?<!\\)\bdiag\(([^()]+)\)")
+SITE_SINGLE_RE = re.compile(r"\bsite ([A-Za-z](?:\+\d+)?)\b")
+SITES_PAIR_RE = re.compile(r"\bsites ([A-Za-z]) and ([A-Za-z])\b")
+SINGLE_IS_ADJ_RE = re.compile(r"\b([A-Za-z]) is adjacent\b")
+CLOCK_AT_SINGLE_RE = re.compile(r"\bclock at ([A-Za-z])\b")
+ADJACENT_TO_SINGLE_RE = re.compile(r"\badjacent to ([A-Za-z])\b")
+TO_SINGLE_BEFORE_SWAP_RE = re.compile(r"\bto ([A-Za-z]),\s+swap it with\b")
+SINGLE_POSSESSIVE_RE = re.compile(r"\b([A-Za-z])'s\b")
+SINGLE_HYPHEN_MATH_WORD_RE = re.compile(
+    r"\b([A-Za-z])-(geometric|rooted|dependent|independent|indexed|valued)\b"
+)
+IF_SINGLE_PAIR_ARE_RE = re.compile(r"\bIf ([A-Za-z]), ([A-Za-z]) are\b")
+POLY_PAIR_DEGREE_RE = re.compile(r"\bpolynomials ([A-Za-z]), ([A-Za-z]) of degree ([A-Za-z])\b")
+OF_DEGREE_SINGLE_RE = re.compile(r"\bof degree ([A-Za-z])\b")
+PAREN_VAR_EQ_RANGE_RE = re.compile(r"\(\s*([A-Za-z])\s*=\s*([0-9]+\s*[-–]\s*[0-9]+)\s*\)")
+PAIRS_PER_SINGLE_RE = re.compile(r"\bpairs per ([A-Za-z])\)")
+RATIO_COMPARE_RE = re.compile(r"\bratio\s*(?:>=|≥)\s*([0-9]+)\b")
+BOXPLUS_INLINE_RE = re.compile(
+    r"\b([A-Za-z])\s*⊞\s*(?:_?\{?\s*([A-Za-z0-9]+)\s*\}?)?\s*([A-Za-z])\b"
+)
+CHAR_POLY_OF_SINGLE_RE = re.compile(r"\bchar\.\s*poly\.\s*of\s*([A-Za-z])\b")
+CHAR_POLY_PAIR_RE = re.compile(
+    r"\bchar\.\s*poly\.\s*([A-Za-z][A-Za-z0-9_]*),\s*([A-Za-z][A-Za-z0-9_]*)([.,;:]?)"
+)
+LOG_DET_ABS_RE = re.compile(r"\blog\s*\|\s*det\(\s*([^()]+?)\s*\)\s*\|")
+A_PLUS_ADJOINT_RE = re.compile(r"\b([A-Za-z])\s*\+\s*([A-Z][A-Z0-9]{1,})\*")
+JAMMED_TRANSFER_RE = re.compile(r"\bthetransfere→Hisallowed∈TO\b")
 
 
 def _unicode_math_char_repl(m: re.Match[str]) -> str:
@@ -584,6 +610,107 @@ def _normalize_straight_double_quotes(s: str) -> str:
     return "".join(out)
 
 
+def _site_single_repl(m: re.Match[str]) -> str:
+    tok = m.group(1)
+    plus = re.fullmatch(r"([A-Za-z])\+(\d+)", tok)
+    if plus:
+        left = _texify_token(plus.group(1))
+        right = _texify_token(plus.group(2))
+        return rf"site ${left} + {right}$"
+    return f"site ${_texify_token(tok)}$"
+
+
+def _sites_pair_repl(m: re.Match[str]) -> str:
+    return f"sites ${_texify_token(m.group(1))}$ and ${_texify_token(m.group(2))}$"
+
+
+def _single_is_adj_repl(m: re.Match[str]) -> str:
+    return f"${_texify_token(m.group(1))}$ is adjacent"
+
+
+def _clock_at_single_repl(m: re.Match[str]) -> str:
+    return f"clock at ${_texify_token(m.group(1))}$"
+
+
+def _adjacent_to_single_repl(m: re.Match[str]) -> str:
+    return f"adjacent to ${_texify_token(m.group(1))}$"
+
+
+def _to_single_before_swap_repl(m: re.Match[str]) -> str:
+    return f"to ${_texify_token(m.group(1))}$, swap it with"
+
+
+def _single_possessive_repl(m: re.Match[str]) -> str:
+    return f"${_texify_token(m.group(1))}$'s"
+
+
+def _single_hyphen_math_word_repl(m: re.Match[str]) -> str:
+    return f"${_texify_token(m.group(1))}$-{m.group(2)}"
+
+
+def _if_single_pair_are_repl(m: re.Match[str]) -> str:
+    return rf"If ${_texify_token(m.group(1))}$, ${_texify_token(m.group(2))}$ are"
+
+
+def _poly_pair_degree_repl(m: re.Match[str]) -> str:
+    p = _texify_token(m.group(1))
+    q = _texify_token(m.group(2))
+    n = _texify_token(m.group(3))
+    return rf"polynomials ${p}$, ${q}$ of degree ${n}$"
+
+
+def _of_degree_single_repl(m: re.Match[str]) -> str:
+    return rf"of degree ${_texify_token(m.group(1))}$"
+
+
+def _paren_var_eq_range_repl(m: re.Match[str]) -> str:
+    var = _texify_token(m.group(1))
+    rhs = re.sub(r"\s+", "", m.group(2))
+    return rf"(${var} = {rhs}$)"
+
+
+def _pairs_per_single_repl(m: re.Match[str]) -> str:
+    return rf"pairs per ${_texify_token(m.group(1))}$)"
+
+
+def _ratio_compare_repl(m: re.Match[str]) -> str:
+    rhs = _texify_token(m.group(1))
+    return rf"$\mathup{{ratio}} \ge {rhs}$"
+
+
+def _boxplus_inline_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    sub = m.group(2)
+    rhs = _texify_token(m.group(3))
+    if sub:
+        sub_tex = _texify_script_text(sub)
+        return rf"${lhs} \boxplus_{{{sub_tex}}} {rhs}$"
+    return rf"${lhs} \boxplus {rhs}$"
+
+
+def _char_poly_of_single_repl(m: re.Match[str]) -> str:
+    obj = _texify_token(m.group(1))
+    return rf"$\text{{char.~poly.~of}} {obj}$"
+
+
+def _char_poly_pair_repl(m: re.Match[str]) -> str:
+    p = _texify_token(m.group(1))
+    q = _texify_token(m.group(2))
+    punct = m.group(3) or ""
+    return rf"char. poly. ${p}$, ${q}$" + punct
+
+
+def _log_det_abs_repl(m: re.Match[str]) -> str:
+    arg = _texify_script_text(m.group(1))
+    return rf"$\log |\det({arg})|$"
+
+
+def _a_plus_adjoint_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    rhs = _texify_token(m.group(2))
+    return rf"${lhs} + {rhs}^{{\mDualStar}}$"
+
+
 def _sub_outside_inline_dollar(
     s: str,
     pattern: re.Pattern[str],
@@ -868,11 +995,31 @@ def _phi_set_repl(m: re.Match[str]) -> str:
 def process_plain_text_segment(s: str) -> str:
     s = s.replace(r"\$", "$")
     s = _normalize_straight_double_quotes(s)
+    s = JAMMED_TRANSFER_RE.sub(r"the transfer $e \\to H$ is allowed in $T_O$", s)
     s = s.replace("Rankin-/-Selberg", "Rankin-Selberg").replace("Rankin-\\/-Selberg", "Rankin-Selberg")
     s = RANKIN_DOUBLE_DASH_RE.sub("Rankin-Selberg", s)
     s = re.sub(r"\bcontinuous-\s+time\b", "continuous-time", s)
     s = re.sub(r"\bSobolevspaceoforder1\b", "Sobolev space of order 1", s)
     s = re.sub(r"\bequivalentmeasures\b", "equivalent measures", s)
+    s = CHAR_POLY_OF_SINGLE_RE.sub(_char_poly_of_single_repl, s)
+    s = CHAR_POLY_PAIR_RE.sub(_char_poly_pair_repl, s)
+    s = SITE_SINGLE_RE.sub(_site_single_repl, s)
+    s = SITES_PAIR_RE.sub(_sites_pair_repl, s)
+    s = SINGLE_IS_ADJ_RE.sub(_single_is_adj_repl, s)
+    s = CLOCK_AT_SINGLE_RE.sub(_clock_at_single_repl, s)
+    s = ADJACENT_TO_SINGLE_RE.sub(_adjacent_to_single_repl, s)
+    s = TO_SINGLE_BEFORE_SWAP_RE.sub(_to_single_before_swap_repl, s)
+    s = SINGLE_POSSESSIVE_RE.sub(_single_possessive_repl, s)
+    s = SINGLE_HYPHEN_MATH_WORD_RE.sub(_single_hyphen_math_word_repl, s)
+    s = IF_SINGLE_PAIR_ARE_RE.sub(_if_single_pair_are_repl, s)
+    s = POLY_PAIR_DEGREE_RE.sub(_poly_pair_degree_repl, s)
+    s = OF_DEGREE_SINGLE_RE.sub(_of_degree_single_repl, s)
+    s = PAREN_VAR_EQ_RANGE_RE.sub(_paren_var_eq_range_repl, s)
+    s = PAIRS_PER_SINGLE_RE.sub(_pairs_per_single_repl, s)
+    s = RATIO_COMPARE_RE.sub(_ratio_compare_repl, s)
+    s = BOXPLUS_INLINE_RE.sub(_boxplus_inline_repl, s)
+    s = LOG_DET_ABS_RE.sub(_log_det_abs_repl, s)
+    s = A_PLUS_ADJOINT_RE.sub(_a_plus_adjoint_repl, s)
     s = LAMBDA_ASSIGN_TUPLE_RE.sub(_lambda_assign_tuple_repl, s)
     s = TUPLE_SET_RE.sub(_tuple_set_repl, s)
     s = RING_HYPHEN_WORD_RE.sub(_ring_hyphen_word_repl, s)
@@ -1217,6 +1364,70 @@ def run_self_test() -> None:
         (
             "\"A variational method, ”",
             "``A variational method, ''",
+        ),
+        (
+            "when a particle at site j is adjacent to the vacancy.",
+            "when a particle at site $j$ is adjacent to the vacancy.",
+        ),
+        (
+            "and the clock at j rings.",
+            "and the clock at $j$ rings.",
+        ),
+        (
+            "move the vacancy adjacent to i, swap it with i's species, route the vacancy to j, swap it with j's species.",
+            "move the vacancy adjacent to $i$, swap it with $i$'s species, route the vacancy to $j$, swap it with $j$'s species.",
+        ),
+        (
+            "the t-geometric choice gives mass.",
+            "the $t$-geometric choice gives mass.",
+        ),
+        (
+            "swap it with j's species at sites i and j.",
+            "swap it with $j$'s species at sites $i$ and $j$.",
+        ),
+        (
+            "If p, q are real-rooted monic polynomials.",
+            "If $p$, $q$ are real-rooted monic polynomials.",
+        ),
+        (
+            "for monic real-rooted polynomials p, q of degree n:",
+            "for monic real-rooted polynomials $p$, $q$ of degree $n$:",
+        ),
+        (
+            "char. poly. p_A, p_B, then continue.",
+            "char. poly. $p_A$, $p_B$, then continue.",
+        ),
+        (
+            "char. poly. of A",
+            r"$\text{char.~poly.~of} A$",
+        ),
+        (
+            "tested (n = 2-5) with no violations.",
+            "tested ($n = 2-5$) with no violations.",
+        ),
+        (
+            "using p ⊞_n q and log |det(xI - A)|.",
+            r"using $p \boxplus_{n} q$ and $\log |\det(xI - A)|$.",
+        ),
+        (
+            "using p ⊞n q.",
+            r"using $p \boxplus_{n} q$.",
+        ),
+        (
+            "matrix model A+QBQ* is stable.",
+            r"matrix model $A + QBQ^{\mDualStar}$ is stable.",
+        ),
+        (
+            "random polynomial pairs per n).",
+            "random polynomial pairs per $n$).",
+        ),
+        (
+            "ratio ≥ 1 means success.",
+            r"$\mathup{ratio} \ge 1$ means success.",
+        ),
+        (
+            "thetransfere→Hisallowed∈TO",
+            r"the transfer $e \to H$ is allowed in $T_O$",
         ),
     ]
     for raw, want in cases:

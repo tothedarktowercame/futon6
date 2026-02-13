@@ -180,8 +180,11 @@ local function merge_adjacent_text_macros(s)
   while prev ~= s do
     prev = s
     s = s:gsub("\\text%s*{([^{}]*)}%s+\\text%s*{([^{}]*)}", "\\text{%1 %2}")
+    s = s:gsub("\\text%s*{([^{}]*)}%s*%-%s*\\text%s*{([^{}]*)}", "\\text{%1-%2}")
     s = s:gsub("\\mathit%s*{([^{}]*)}%s+\\mathit%s*{([^{}]*)}", "\\mathit{%1 %2}")
+    s = s:gsub("\\mathit%s*{([^{}]*)}%s*%-%s*\\mathit%s*{([^{}]*)}", "\\mathit{%1-%2}")
     s = s:gsub("\\mathup%s*{([^{}]*)}%s+\\mathup%s*{([^{}]*)}", "\\mathup{%1 %2}")
+    s = s:gsub("\\mathup%s*{([^{}]*)}%s*%-%s*\\mathup%s*{([^{}]*)}", "\\mathup{%1-%2}")
     s = s:gsub("\\mOpName%s*{([^{}]*)}%s+\\mOpName%s*{([^{}]*)}", "\\mOpName{%1 %2}")
   end
   return s
@@ -377,6 +380,7 @@ end
 local function normalize_expr(s)
   s = trim(s)
   s = s:gsub("%$", "")
+  s = s:gsub("thetransfere→Hisallowed∈TO", "the transfer e -> H is allowed in T_O")
   s = normalize_escaped_script_artifacts(s)
   -- Collapse doubled escaping artifacts (e.g., \\omega, \\$, \\)).
   local prev_esc = nil
@@ -460,6 +464,15 @@ local function normalize_expr(s)
   s = replace_word(s, "vec", "\\mOpName{vec}")
   s = replace_word(s, "tr", "\\mOpName{tr}")
   s = s:gsub("%f[%a]diag%s*%(", "\\operatorname{diag}(")
+  s = s:gsub("\\mOpName{char}%s*%.%s*\\text{poly}%s*%.%s*\\text{of}%s*([A-Za-z])", "\\text{char.~poly.~of} %1")
+  s = s:gsub("\\mOpName{char}%s*%.%s*~?poly%s*%.%s*~?of%s*([A-Za-z])", "\\text{char.~poly.~of} %1")
+  s = s:gsub("\\text{%s*\\mOpName{char}%s*%.%s*~?poly%s*%.%s*~?of%s*}", "\\text{char.~poly.~of}")
+  s = s:gsub("char%.%s*poly%.%s*of%s*([A-Za-z])", "\\text{char.~poly.~of} %1")
+  s = s:gsub("\\mOpName{char}%s*%.%s*\\text{poly}%s*%.%s*([A-Za-z][A-Za-z0-9_{}\\]+)%s*,%s*([A-Za-z][A-Za-z0-9_{}\\]+)", "\\text{char.~poly.} %1, %2")
+  s = s:gsub("char%.%s*poly%.%s*([A-Za-z][A-Za-z0-9_{}\\]+)%s*,%s*([A-Za-z][A-Za-z0-9_{}\\]+)", "\\text{char.~poly.} %1, %2")
+  s = s:gsub("([A-Za-z])%s*%+%s*([A-Z][A-Z0-9]+)%*", "%1 + %2^{\\mDualStar}")
+  s = s:gsub("(\\mathup{%u[%u%d]*})%s*%*", "%1^{\\mDualStar}")
+  s = s:gsub("%(cross%s*[%-%−]%s*term!%)", "(\\text{cross-term!})")
   s = s:gsub("%f[%a]span%s*%(", "\\mOpName{span}(")
   s = s:gsub("%f[%a]ker%s*%(", "\\mOpName{ker}(")
   s = s:gsub("%f[%a]rank%s*%(", "\\mOpName{rank}(")

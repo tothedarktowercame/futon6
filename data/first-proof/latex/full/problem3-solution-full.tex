@@ -55,10 +55,10 @@ dynamics with one particle species per part value.
 
 Define a continuous-time Markov chain \(X_{t}\) on \(S_{n}(\lambda)\) as follows.
 
-Fix parameters \(x_{\mNumber{1}}, ..., x_{n} > \mNumber{0}\) and t in {[}0,1). At each site j, an exponential
+Fix parameters \(x_{\mNumber{1}}, ..., x_{n} > \mNumber{0}\) and t in {[}0,1). At each site \(j\), an exponential
 clock of rate \(\mNumber{1}/x_{j}\) rings.
 
-If site j is a vacancy (species 0), nothing happens. If site j has species
+If site \(j\) is a vacancy (species 0), nothing happens. If site \(j\) has species
 \(r_\mNumber{0} > \mNumber{0}\), that particle becomes active. Let m be the number of particles in the
 current configuration with species strictly less than \(r_\mNumber{0}\) (including vacancies).
 Moving clockwise, the active particle chooses the k-th weaker particle with
@@ -94,7 +94,7 @@ The chain above is nontrivial in the sense asked by the problem:
 \tightlist
 \item
   Transition rates are defined from site rates \(\mNumber{1}/x_{i}\), species inequalities, and
-  t-geometric choice weights.
+  \(t\)-geometric choice weights.
 \item
   No transition probability is defined using values of \(F^{\prime}_{\mu}\) or \(P^{\prime}_{\lambda}\).
 \end{itemize}
@@ -208,11 +208,11 @@ configuration has exactly one vacancy (species 0). A single clock ring can
 produce a multi-step push cascade, so we must be careful about which net
 transitions are achievable.
 
-The key observation: when a non-vacancy particle at site j is adjacent to
-the vacancy at site \(j + \mNumber{1}\) (cyclically), and the clock at j rings, one possible
-outcome of the t-geometric choice is that the active particle selects the
+The key observation: when a non-vacancy particle at site \(j\) is adjacent to
+the vacancy at site \(j + \mNumber{1}\) (cyclically), and the clock at \(j\) rings, one possible
+outcome of the \(t\)-geometric choice is that the active particle selects the
 vacancy (the nearest weaker-species particle clockwise). This selection has
-probability \(\mNumber{1}/[m]_t > \mNumber{0}\) (the \(k = \mNumber{1}\) term in the t-geometric distribution, where
+probability \(\mNumber{1}/[m]_t > \mNumber{0}\) (the \(k = \mNumber{1}\) term in the \(t\)-geometric distribution, where
 \(m \ge \mNumber{1}\) counts weaker particles). The particle moves to the vacancy\textquotesingle s position,
 the vacancy absorbs it, and the cascade terminates immediately (displaced
 species is 0). The net effect is an adjacent swap of the non-vacancy species
@@ -222,8 +222,8 @@ By composing such vacancy-adjacent swaps, the vacancy can be moved to any
 site on the ring (analogous to the 15-puzzle). Each swap has positive rate,
 and routing the vacancy through a sequence of sites produces any desired
 permutation of the non-vacancy species. Specifically, to transpose species
-at sites i and j: move the vacancy adjacent to i, swap it with i\textquotesingle s species,
-route the vacancy to j, swap it with j\textquotesingle s species, and route it back.
+at sites \(i\) and \(j\): move the vacancy adjacent to \(i\), swap it with \(i\)\textquotesingle s species,
+route the vacancy to \(j\), swap it with \(j\)\textquotesingle s species, and route it back.
 This requires at most \(O(n)\) vacancy-adjacent swaps, each of positive rate.
 Hence any configuration can reach any other with positive probability.
 
