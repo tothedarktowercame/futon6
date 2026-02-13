@@ -17,11 +17,14 @@ This directory now contains a two-layer manuscript:
 
 ```bash
 cd data/first-proof/latex
-xelatex -interaction=nonstopmode first-proof-monograph.tex
-xelatex -interaction=nonstopmode first-proof-monograph.tex
+# Regenerate boxed files first (standoff annotations):
+python3 ../../../scripts/apply-proof-boxes.py
+# Then build PDF (pdflatex or xelatex both work):
+pdflatex -interaction=nonstopmode first-proof-monograph.tex
+pdflatex -interaction=nonstopmode first-proof-monograph.tex
 ```
 
-(If `latexmk` is available, use `latexmk -xelatex first-proof-monograph.tex`.)
+(If `latexmk` is available, use `latexmk -pdf first-proof-monograph.tex`.)
 
 ## Regenerate full-solution LaTeX from markdown
 

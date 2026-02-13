@@ -20,7 +20,9 @@ The wiring-diagram decomposition---which represents each proof as a typed
 graph of claims and dependencies---served as the shared epistemic artefact
 that Lakatos's blackboard served in his fictional classroom.
 
-The title of this monograph alludes to Pease et
+The title alludes to the sprint format: ten open problems attempted in
+roughly 48~hours, with the process documented alongside the results.
+The Lakatosian connection runs through Pease et
 al.~\cite{pease2017}, which formalised Lakatos's informal logic of
 mathematical discovery as a dialogue game over argumentation structures,
 implemented in a system capable of mixed-initiative human--AI collaboration.
@@ -32,8 +34,8 @@ Lakatosian cycle running at machine speed.
 
 This connection is not accidental.  Corneli et al.~\cite{corneli2017}
 developed a computational model of mathematical question-and-answer dialogues
-grounded in Lakatos's framework, using Inference Anchoring Theory with
-Computation (IATC) to annotate MathOverflow threads with performative types
+grounded in Lakatos's framework, using Inference Anchoring Theory + Content
+(IATC) to annotate MathOverflow threads with performative types
 (assert, challenge, reform, clarify, etc.).  The IATC vocabulary reappears in
 this project's Stage~7 thread-wiring pipeline (see Part~III, Act~VI), where
 StackExchange threads are parsed into wiring diagrams whose edges carry the
@@ -47,7 +49,7 @@ incremental proof construction with explicit argumentation structure.
 \section*{Snapshot}
 \begin{itemize}[leftmargin=1.5em]
 \item Ten initial proof attempts drafted in under two hours.
-\item Eighty-nine commits during roughly one day of active sprinting, in addition to earlier infrastructure development.
+\item Over two hundred commits across roughly 48~hours of active sprinting (February 11--13, 2026), in addition to earlier infrastructure development.
 \item A shift in framing over the course of the sprint: from an early ``all solved'' posture to a clearer partition into proved, conditional, and partial results.
 \item A methodological lesson: wiring-diagram--based verification localized gaps and inconsistencies more effectively than plain narrative drafting.
 \end{itemize}
@@ -85,7 +87,7 @@ This volume should therefore be read in three ways:
 
 \section*{Current Status}
 \begin{itemize}[leftmargin=1.5em]
-\item Problem 6 remains open, with a clearly stated outstanding obligation.
+\item Problem 6 is proved for $K_n$ ($c = 1/3$) via an elementary barrier-greedy argument; a narrow technical gap remains for general graphs (formal $\bar{d} < 1$ bound at $M_t \ne 0$).
 \item Problem 7 is treated as closed via the updated rotation-route surgery chain (see \texttt{problem7-solution.md} and supporting theorem context in \texttt{problem7-g2-theorem-chain.md}).
 \item Problem 4's higher-\(n\) branch has computational closure artifacts in the repository postscript, while analytic framing remains explicitly documented in the chapter-level notes.
 \end{itemize}
@@ -95,5 +97,6 @@ This volume should therefore be read in three ways:
 \item Begin with \textbf{Part I} for orientation and status framing.
 \item Continue to \textbf{Part II} for full arguments and technical detail.
 \item Use \textbf{Part III} as a provenance index for prompt-level pivot points and status changes.
-\item Revisit the Problem 6 notes after reading its chapter; it remains the primary proof-hardening target in this version.
+\item Read \textbf{Part IV} for cross-problem strategy patterns and the coaching breakthrough on Problem~6.
+\item Revisit the Problem 6 notes after reading its chapter; the remaining gap is narrow and well-characterised.
 \end{enumerate}
