@@ -677,18 +677,110 @@ other feasible vertices exist.
 
 This is weaker than No-Skip (doesn't require the NEXT vertex to be
 feasible, just SOME vertex). It replaces BMI as the single remaining
-gap. Possible attack routes:
-- Direct bound on ||Y_t(v)|| for the vertex with lowest ell^{I_0} in R_t
-- Potential function tracking max_{v in R} ||Y_t(v)|| (not the average)
-- Probabilistic: random vertex has ||Y_t(v)|| < 1 w.h.p., derandomize
-- Leverage-monotonicity: if v has lower ell^{I_0} than w, then
-  ||Y_t(v)|| <= ||Y_t(w)|| (ordering preserved under barrier amplification)
+gap.
+
+**UPDATE (Cycle 8):** GPL-V reduces to two sub-questions:
+
+(a) **Isolation route (covers 83% of steps):** At each step, exists
+    v in R with deg_S(v) = 0 → normY(v) = 0 < 1 trivially. This is
+    a purely combinatorial statement: S_t is not a dominating set in G[I_0].
+    At all 7 dbar >= 1 steps, isolation holds.
+
+(b) **Eigenspace separation (covers the remaining 17%):** When every
+    R-vertex has at least one edge to S, the cross-degree bound
+    normY(v) <= deg_S(v) * max_e(z_e^T B_t z_e) is exact for deg_S=1.
+    Feasible vertices have 26x lower eigenspace overlap with B_t's
+    high-amplification direction than infeasible ones.
+
+See Section 5n for the full C8 analysis.
 
 **BSS potential (C7 Task 5):** The resolvent identity
 Phi_{t+1} - Phi_t = tr(B_{t+1} C_t(v) B_t) is numerically exact
 (max error 7e-13). The naive formula tr(B_{t+1} C_t(v)) is wrong
 (max error 116). This gives an exact potential update but doesn't
 directly bound individual ||Y_t(v)||.
+
+### 5n. Full R-scan, cross-degree bound, and isolation argument (Cycle 8)
+
+Codex C8 computed ||Y_t(v)|| for ALL vertices in R (not just the selected
+one) at every step of the modified greedy.
+
+**GPL-V confirmed:** At every step of every run (731 base + 232 adversarial),
+at least 12 feasible vertices exist in R. Minimum feasible fraction ~72%.
+
+**The isolation argument dominates.** At 83.2% of all steps, the minimum
+normY is achieved by a vertex with deg_S(v) = 0 (no edges to S), giving
+normY = 0 trivially. Even at the 7 worst dbar >= 1 steps, deg_S = 0
+vertices exist (15-51% of R):
+
+| Graph | eps | t | dbar | Feasible/|R| | deg_S=0 frac |
+|-------|-----|---|------|-------------|--------------|
+| Reg_100_d10 | 0.50 | 15 | 1.641 | 68/85 (80%) | 15.3% |
+| C5b_Reg_n80_d6 | 0.50 | 12 | 1.200 | 49/68 (72%) | 42.7% |
+| Reg_100_d6 | 0.50 | 15 | 1.208 | 63/85 (74%) | 36.5% |
+
+**Cross-degree bound (exact for rank 1):**
+
+    ||Y_t(v)|| <= deg_S(v) * max_{e: v~S} z_e^T B_t z_e
+
+Tested on 78,619 vertex-step pairs: **0 violations**, max ratio 1.000.
+For deg_S = 1 vertices, this is an equality: normY = z_e^T B_t z_e exactly.
+
+**But single-edge cost can exceed 1:** max z_e^T B_t z_e = 7.3 (Reg_100_d10,
+eps=0.5). So deg_S = 1 does NOT guarantee feasibility. Among 10,563
+deg_S = 1 vertex-step pairs: 97.8% feasible, 230 (2.2%) infeasible.
+
+**Eigenspace separation confirmed (C8 Task 3):**
+- Feasible vertices: mean high-overlap fraction 0.55%
+- Infeasible vertices: mean high-overlap fraction 14.6%
+- Feasible: mean high-norm fraction 1.3%
+- Infeasible: mean high-norm fraction 56.3%
+
+Infeasible vertices have 26x higher eigenspace overlap with B_t's
+high-amplification direction. This confirms the mechanism: vertices
+that fail are those whose edges to S project strongly onto M_t's
+near-saturated eigenspace.
+
+**Threshold reconciliation (C8 Task 2):** Strict vs loose thresholds
+give IDENTICAL results on the C8 suite (0 differences in I_0, horizon,
+or skip counts). The C7 skip discrepancy may have been from earlier
+code differences, not the threshold parameter itself.
+
+**Proof route crystallization: the Isolation Lemma.**
+
+GPL-V reduces to showing: at each step t <= T of the modified greedy,
+there exists v in R_t with deg_S(v) = 0 in G[I_0].
+
+Equivalently: S_t is NOT a dominating set in G[I_0]. Since
+|S_t| = t <= T = eps*m/3 and the minimum domination number of G[I_0]
+is gamma(G[I_0]), we need gamma(G[I_0]) > eps*m/3.
+
+For the ~17% of steps where no deg_S = 0 vertex achieves the minimum:
+feasible vertices still exist (min feasible count >= 12), but proving
+this requires the eigenspace separation or cross-degree argument.
+
+**Proposed Lemma 8 (Isolation):** For the leverage-ordered prefix
+S_t = {v_1, ..., v_t} with t <= eps*m/3, there exists v in R_t with
+no I_0-internal edges to any vertex in S_t.
+
+*Proof sketch:* Each v in S_t has at most ell_v^{I_0}/tau_min internal
+edges. The total number of I_0-internal edges incident to S_t is at most
+sum_{v in S_t} deg_{I_0}(v). A vertex in R is "dominated" by S_t iff it
+has at least one I_0-edge to S_t. The number of dominated R-vertices is
+at most sum_{v in S_t} deg_{I_0}(v) (counting with multiplicity). If
+this sum < |R_t| = m - t, then some R-vertex is undominated (deg_S = 0).
+
+The partial averages bound gives: sum_{v in S_t} ell_v^{I_0} <= 2t(m-1)/m.
+Since each I_0-internal edge has tau_e < eps, the graph degree
+deg_{I_0}(v) >= ell_v^{I_0} / eps (each edge contributes at most eps to
+ell_v). So the bound on dominated vertices is:
+
+    sum deg_{I_0}(v) >= sum ell_v / eps ... (goes wrong direction)
+
+This needs refinement — the graph degree can be much larger than the
+leverage degree. For sparse graphs (bounded degree), the argument may
+close. For dense graphs, the isolation may fail at late steps but the
+eigenspace argument takes over. **Full formalization pending.**
 
 ## 6. Final conclusion
 

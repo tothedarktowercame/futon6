@@ -261,37 +261,73 @@ The eigenvalue analysis (C7) shows the mechanism:
 - The leverage ordering precisely selects the vertices that avoid the
   blow-up eigenspace.
 
-### Empirical evidence (Cycles 6+7)
+### Empirical evidence (Cycles 6+7+8)
 
 | Quantity | Worst case | Where |
 |----------|-----------|-------|
 | dbar0 (modified greedy) | 0.7333 | K_50_50, eps=0.3 |
-| **dbar (full barrier)** | **1.739** | Reg_100_d10, eps=0.5, t=16 |
-| ||M||/eps (modified) | 0.9866 | Reg_100_d10, eps=0.5 |
-| ||Y_t(v)|| for selected v | 0.937 | various |
-| Skips (modified greedy) | **0** | all 148 runs |
+| **dbar (full barrier)** | **1.641** | Reg_100_d10, eps=0.5, t=15 |
+| ||M||/eps | 0.9866 | Reg_100_d10, eps=0.5 |
+| ||Y_t(v)|| for selected v | 0.954 | various |
+| Min feasible count in R | **12** | worst step across all runs |
+| Feasible fraction of R | 72-100% | all steps |
+| deg_S=0 fraction of R | 15-100% | even at dbar >= 1 steps |
+| Skips (strict threshold) | 5/116 runs | max 2 skips before selection |
 | Adversarial max dbar | 0.926 | Barbell_40_40_b3 |
 
-### Proposed attack routes (Cycle 8)
+### The Isolation Argument (Cycle 8)
 
-1. **Direct vertex bound:** For the lowest-ell vertex v in R_t, bound
-   ||Y_t(v)|| using: (a) ell_v^{I_0} bounds the total leverage of v's
-   edges to S, (b) B_t's amplification is concentrated on specific
-   eigenspaces, (c) low-ell vertices have small projection onto those
-   eigenspaces.
+**Key finding:** At 83.2% of all steps, the minimum normY is achieved
+by a vertex with deg_S(v) = 0 (normY = 0, trivially feasible). At ALL
+7 dbar >= 1 steps, deg_S = 0 vertices exist (15-51% of R).
 
-2. **Eigenspace-leverage separation:** Prove that C_t(v)'s eigenspace
-   overlaps with B_t's high-amplification eigenspace are small for
-   low-leverage v. The induced Foster bound constrains the total
-   leverage in each eigenspace.
+**GPL-V via isolation:** If at each step t, there exists v in R_t with
+no I_0-internal edges to S_t, then normY(v) = 0 < 1 and GPL-V holds.
 
-3. **Leverage-monotonicity:** Prove ||Y_t(v)|| is (approximately)
-   monotone in ell_v^{I_0}. Then No-Skip follows from the minimum-
-   leverage vertex being feasible.
+This is a purely combinatorial statement: S_t is not a dominating set
+in G[I_0]. Since |S_t| <= T = eps*m/3, we need the minimum domination
+number gamma(G[I_0]) > eps*m/3.
 
-4. **Probabilistic derandomization:** Show E[||Y_t(v)||] < 1 for a
-   random R-vertex (different from dbar < 1, which is E[tr(Y_t(v))]),
-   then derandomize via conditional expectations.
+### Cross-Degree Bound (Cycle 8)
+
+**Lemma (Cross-Degree Bound).** For any v in R_t:
+
+    ||Y_t(v)|| <= deg_S(v) * max_{e: v~S_t} z_e^T B_t z_e.
+
+**Proof.** Y_t(v) = sum_{e: v~S_t} w_e w_e^T where w_e = B_t^{1/2} z_e.
+This is a sum of deg_S(v) PSD rank-1 matrices. Triangle inequality:
+||Y_t(v)|| <= sum_e ||w_e||^2 = tr(Y_t(v)). Also:
+||Y_t(v)|| <= deg_S(v) * max_e ||w_e||^2. QED.
+
+**Empirical:** 78,619 vertex-step pairs, 0 violations, max ratio 1.000.
+For deg_S = 1: normY = z_e^T B_t z_e exactly (equality holds).
+But: max z_e^T B_t z_e = 7.3, so single-edge cost CAN exceed 1.
+
+### Eigenspace Separation (Cycle 8)
+
+Feasible vertices have mean 0.55% high-overlap fraction with B_t's
+high-amplification eigenspace. Infeasible: 14.6%. Ratio: 26x.
+
+This confirms: vertices whose edges to S project onto M_t's
+near-saturated eigenspace become infeasible. Vertices that avoid
+this eigenspace remain feasible.
+
+### Proposed closure routes (Cycle 9)
+
+1. **Isolation Lemma (primary):** Prove gamma(G[I_0]) > eps*m/3 for
+   the graphs arising from the Turan step. This requires bounding the
+   domination number of G[I_0] from below. The key constraints:
+   I_0 is independent in the heavy graph, so all G[I_0] edges are
+   light (tau_e < eps). The induced Foster bound gives |E(I_0)| <=
+   (m-1)/tau_min. For bounded-degree G[I_0], gamma >= m/Delta.
+
+2. **Eigenspace separation (backup):** For the ~17% of steps where
+   isolation fails, prove that the minimum-deg_S vertex has low
+   eigenspace overlap with B_t's high-amplification direction.
+
+3. **Hybrid argument:** Isolation at early steps (S small → most R
+   vertices have no edges to S), eigenspace separation at late steps
+   (barrier is constrained → amplification is bounded).
 
 ## No-Skip Conjecture
 

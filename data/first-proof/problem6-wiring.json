@@ -313,6 +313,32 @@
       "status": "OPEN — the true remaining gap (replaces p6-bmi-gap)"
     },
     {
+      "id": "p6-isolation",
+      "node_type": "answer",
+      "post_id": 657,
+      "body_text": "IDENTIFIED (Cycle 8): Isolation argument for GPL-V. At 83.2% of steps, min normY achieved by deg_S=0 vertex (normY=0, trivially feasible). At ALL 7 dbar>=1 steps, deg_S=0 vertices exist (15-51% of R). GPL-V reduces to: S_t is not a dominating set in G[I_0], i.e., gamma(G[I_0]) > eps*m/3. This is a purely combinatorial question — no spectral analysis needed.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 656,
+      "c8_data": {
+        "deg_s0_covers_percent": 83.2,
+        "min_feasible_count": 12,
+        "cross_degree_bound_violations": 0,
+        "cross_degree_bound_vertex_rows": 78619,
+        "max_single_edge_cost": 7.3,
+        "eigenspace_overlap_ratio": 26
+      }
+    },
+    {
+      "id": "p6-cross-degree-bound",
+      "node_type": "answer",
+      "post_id": 658,
+      "body_text": "PROVED (Cycle 8): Cross-degree bound. normY(v) <= deg_S(v) * max_e(z_e^T B_t z_e). Triangle inequality on PSD rank-1 sum. Exact for deg_S=1: normY = z_e^T B_t z_e. Verified on 78,619 vertex-step pairs (0 violations, max ratio 1.000). BUT: single-edge cost can reach 7.3, so deg_S=1 does NOT guarantee feasibility.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 657
+    },
+    {
       "id": "p6-bridge-c",
       "node_type": "comment",
       "post_id": 654,
@@ -616,8 +642,22 @@
       "source": "p6-gpl-v",
       "target": "p6-bridge-b",
       "edge_type": "challenge",
-      "evidence": "No-Skip is the single remaining gap for Construction B. Must prove vertex-level feasibility directly, not via averaging.",
+      "evidence": "GPL-V is the single remaining gap for Construction B. Must prove vertex-level feasibility directly, not via averaging.",
       "detection": "identified-cycle7"
+    },
+    {
+      "source": "p6-isolation",
+      "target": "p6-gpl-v",
+      "edge_type": "assert",
+      "evidence": "Isolation covers 83% of GPL-V: deg_S=0 vertex exists (normY=0). Reduces gap to combinatorial domination bound on G[I_0].",
+      "detection": "identified-cycle8"
+    },
+    {
+      "source": "p6-cross-degree-bound",
+      "target": "p6-isolation",
+      "edge_type": "assert",
+      "evidence": "Cross-degree bound normY<=deg_S*max(z^T B z). Proved. Exact for deg_S=1. Covers backup case when isolation fails.",
+      "detection": "proved-cycle8"
     }
   ],
   "hyperedges": [
@@ -709,12 +749,12 @@
     }
   ],
   "stats": {
-    "n_nodes": 32,
-    "n_edges": 42,
+    "n_nodes": 34,
+    "n_edges": 44,
     "n_hyperedges": 5,
     "node_types": {
       "question": 1,
-      "answer": 23,
+      "answer": 25,
       "comment": 8
     },
     "proved_cycle4": ["p6-monotonicity", "p6-operator-bound", "p6-blocking"],
@@ -724,6 +764,8 @@
     "refined_cycle6": ["p6-dbar0-gap -> p6-bmi-gap (dbar0<1 proved, refined to full dbar<1)"],
     "falsified_cycle7": ["p6-bmi-gap (dbar<1 FALSE, 12 violations, worst 1.739)", "p6-kn-extremal (max ratio 2.28)"],
     "refined_cycle7": ["p6-bmi-gap -> p6-gpl-v (BMI falsified, gap promoted to vertex-level feasibility)"],
+    "proved_cycle8": ["p6-cross-degree-bound (normY<=deg_S*max, 0/78619 violations)"],
+    "identified_cycle8": ["p6-isolation (deg_S=0 covers 83% of GPL-V, reduces to domination bound)"],
     "remaining_gap": "p6-gpl-v",
     "empirical_summary": {
       "max_dbar0_modified": 0.7333,
@@ -734,7 +776,7 @@
       "max_alpha_dbar0": 0.328,
       "max_M_norm_over_eps": 0.9866,
       "max_kn_ratio": 2.28,
-      "skips_modified_greedy": 0,
+      "skips_modified_greedy": "5/116 runs (strict threshold)",
       "bridge_c_failures": 0,
       "max_selected_normY": 0.937,
       "adversarial_max_dbar": 0.926,
