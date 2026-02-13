@@ -10,7 +10,7 @@ missing data, solve
 \[[(Z \times K)^{T} D (Z \times K) + \lambda (I_{r} \times K)] \mOpName{vec}(W) = (I_{r} \times K) \mOpName{vec}(B),\]
 
 where \(D = S S^{T}\) is the observation projector (q observed entries out of
-N = nM), \(B = T\) Z, and n, r \textless\textless{} q \textless\textless{} N.
+N \(=\) nM), \(B = T\) Z, and n, \(r \ll q \ll N\).
 
 \hypertarget{assumptions-used-explicit}{%
 \subsection{Assumptions Used (explicit)}\label{assumptions-used-explicit}}
@@ -56,7 +56,7 @@ which costs \(O(N n r)\) memory/work before factorization. This is the
 
 CG needs only \(y = A_{\tau}\) x, not \(A_{\tau}\) explicitly.
 
-Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
+Given x \(=\) vec(V), \(V \in R\)\^{}\{n x r\}:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -73,7 +73,7 @@ Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
 
   Total \(O(q r)\).
 \item
-  Form sparse W\textquotesingle{} in \(R^{n \times M}\) from \(u_{l}\). Let s = nnz(W\textquotesingle) \textless= q.
+  Form sparse W\textquotesingle{} in \(R^{n \times M}\) from \(u_{l}\). Let s \(=\) nnz(W\textquotesingle) \(\le\) q.
 \item
   Adjoint sampled action:
 
@@ -120,7 +120,7 @@ Then
 = (Z \times K_{\tau}^{\mNumber{1}/\mNumber{2}})^{T} D (Z \times K_{\tau}^{\mNumber{1}/\mNumber{2}}) + \lambda I.
 \end{aligned}\]
 
-If sampling is roughly uniform, D \textasciitilde{} c I with c = q/N. Then
+If sampling is roughly uniform, D \textasciitilde{} c I with \(c = q/N\). Then
 
 \[\hat{A} ~ c (Z^{T} Z \times K_{\tau}) + \lambda I.\]
 
@@ -148,9 +148,9 @@ Preconditioner apply:
 
 \[P^{-\mNumber{1}} = H^{-\mNumber{1}} \times K_{\tau}^{-\mNumber{1}},\]
 
-implemented by solving \(K_{\tau}\) Y \(H^{T}\) = Z\textquotesingle{} after reshape.
+implemented by solving \(K_{\tau}\) Y \(H^{T} =\) Z\textquotesingle{} after reshape.
 Per application cost is \(O(n^\mNumber{2} r + n r^\mNumber{2})\) (often simplified to \(O(n^\mNumber{2} r)\)
-when n \textgreater\textgreater{} r).
+when n \(\gg\) r).
 
 \hypertarget{5-convergence-tightened}{%
 \subsubsection{5. Convergence (tightened)}\label{5-convergence-tightened}}
@@ -159,7 +159,7 @@ For SPD \(A_{\tau}\) and SPD P, standard PCG gives
 
 \[||e_{t}||_{A_{\tau}} \le \mNumber{2} ((\sqrt(\kappa)-\mNumber{1})/(\sqrt(\kappa)+\mNumber{1}))^{t} ||e_\mNumber{0}||_{A_{\tau}},\]
 
-with \(\kappa\) = cond(\(P^{-\mNumber{1}/\mNumber{2}} A_{\tau} P^{-\mNumber{1}/\mNumber{2}}),\) so
+with \(\kappa =\) cond(\(P^{-\mNumber{1}/\mNumber{2}} A_{\tau} P^{-\mNumber{1}/\mNumber{2}}),\) so
 
 \[t = O(\sqrt(\kappa) \\log(\mNumber{1}/\epsilon)).\]
 
@@ -176,7 +176,7 @@ Hence t is logarithmic in 1/eps with a modest sqrt(kappa) factor when
 claim is needed.)
 
 \textbf{Sufficient conditions for bounded \(\delta\).} The spectral equivalence
-(1-delta)P \textless= \(A_{\tau}\) \textless= (1+delta)P holds with \(\delta\) bounded away from 1 when
+(1-delta)P \(\le A_{\tau} \le\) (1+delta)P holds with \(\delta\) bounded away from 1 when
 the sampling pattern satisfies a restricted isometry-type condition:
 \textbar\textbar D - (q/N)I\textbar\textbar{} is small relative to \(\lambda\). For uniform random sampling
 with \(q \ge C\) n log n (for a universal constant C), matrix concentration
@@ -229,7 +229,7 @@ with dependence on q (observed entries) rather than N (all entries).
 \textbf{Regime caveat.} When n is large enough that the \(O(n^\mNumber{3})\) Cholesky setup
 dominates (i.e., \(n^{\mNumber{3}} > t(n^{\mNumber{2}} r \mBridgeOperator{+} q\) r)), the per-ALS-step cost is effectively
 \(O(n^\mNumber{3})\). In this regime, low-rank kernel approximations (e.g., Nystrom
-approximation with rank p \textless\textless{} n, reducing the kernel factorization to \(O(n p^\mNumber{2})\))
+approximation with rank \(p \ll n\), reducing the kernel factorization to \(O(n p^\mNumber{2})\))
 or iterative inner solves (conjugate gradient on \(K_{\tau} y = z,\) cost \(O(n^\mNumber{2})\)
 per inner iteration) can replace the exact Cholesky, reducing the setup to
 \(O(n p^\mNumber{2} + t(n p r + q r))\). This is a well-known practical optimization

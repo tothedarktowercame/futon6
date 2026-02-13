@@ -124,11 +124,13 @@ COMPACT_PLUS_TUPLE_RE = re.compile(
 COMPACT_PLUS_RE = re.compile(
     r"(?<![$\\_^{}.,])\b([A-Za-z])\+(\d+)\b"
 )
+COMPACT_STAR_PRODUCT_RE = re.compile(r"([A-Za-z0-9\)\}])\*([A-Za-z0-9\(\{\\])")
 TPSI_STAR_RE = re.compile(r"T([ψΨ])([∗*])")
 SN_ALL_PERMS_RE = re.compile(
     r"\bS_?n\(\s*(?:lambda|\\lambda|λ)\s*\)\s*=\s*\{\s*all\s+permutations\s+of\s+the\s+parts\s+of\s*(?:lambda|\\lambda|λ)\s*\}\s*([.?!,;:]?)",
     re.IGNORECASE,
 )
+PAREN_SUP_SUB_TOKEN_RE = re.compile(r"\b([A-Za-z]+)\^\(([^)]+)\)(?:_\{([^}]+)\})?")
 NORM_SUBSCRIPT_RE = re.compile(
     r"\|\|\s*([A-Za-z\\][A-Za-z0-9\\]*)\s*\|\|\s*"
     r"(?:_\s*(\{[^}]+\}|[A-Za-z0-9\\^+\-]+)|\{\s*([^}]+)\s*\})"
@@ -207,6 +209,14 @@ def _compact_plus_repl(m: re.Match[str]) -> str:
     return rf"${lhs} + {rhs}$"
 
 
+def _expand_compact_star_products(s: str) -> str:
+    prev = None
+    while s != prev:
+        prev = s
+        s = COMPACT_STAR_PRODUCT_RE.sub(r"\1 * \2", s)
+    return s
+
+
 def _tpsi_star_repl(m: re.Match[str]) -> str:
     psi = r"\Psi" if m.group(1) == "Ψ" else r"\psi"
     return rf"$T_{{{psi}}}^{{\mDualStar}}$"
@@ -215,6 +225,29 @@ def _tpsi_star_repl(m: re.Match[str]) -> str:
 def _sn_all_perms_repl(m: re.Match[str]) -> str:
     punct = m.group(1) or ""
     return r"$S_n(\lambda) = \{\text{all permutations of the parts of } \lambda\}$" + punct
+
+
+def _texify_script_text(s: str) -> str:
+    def _tok(m: re.Match[str]) -> str:
+        return _texify_token(m.group(0))
+
+    out = re.sub(r"\b[A-Za-z][A-Za-z0-9_]*\b", _tok, s.strip())
+    out = re.sub(
+        r"\b(alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|vartheta|iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega)(?=_)",
+        lambda m: "\\" + m.group(1),
+        out,
+    )
+    return out
+
+
+def _paren_sup_sub_token_repl(m: re.Match[str]) -> str:
+    base = _texify_token(m.group(1))
+    sup = _texify_script_text(m.group(2))
+    sub = m.group(3)
+    expr = rf"{base}^{{({sup})}}"
+    if sub:
+        expr += rf"_{{{_texify_script_text(sub)}}}"
+    return rf"${expr}$"
 
 
 def _strip_outer_braces(s: str) -> str:
@@ -436,12 +469,46 @@ def _texify_symbol(token: str) -> str:
 
 def _texify_token(token: str) -> str:
     token = _texify_symbol(token.strip())
-    token = re.sub(r"\bPi\b", r"\\Pi", token)
-    token = re.sub(r"\bPhi\b", r"\\Phi", token)
-    token = re.sub(r"\bPsi\b", r"\\Psi", token)
-    token = re.sub(r"\bpi\b", r"\\pi", token)
-    token = re.sub(r"\bphi\b", r"\\phi", token)
-    token = re.sub(r"\bpsi\b", r"\\psi", token)
+    greek = {
+        "Gamma": r"\Gamma",
+        "Delta": r"\Delta",
+        "Theta": r"\Theta",
+        "Lambda": r"\Lambda",
+        "Xi": r"\Xi",
+        "Pi": r"\Pi",
+        "Sigma": r"\Sigma",
+        "Upsilon": r"\Upsilon",
+        "Phi": r"\Phi",
+        "Psi": r"\Psi",
+        "Omega": r"\Omega",
+        "alpha": r"\alpha",
+        "beta": r"\beta",
+        "gamma": r"\gamma",
+        "delta": r"\delta",
+        "epsilon": r"\epsilon",
+        "varepsilon": r"\varepsilon",
+        "zeta": r"\zeta",
+        "eta": r"\eta",
+        "theta": r"\theta",
+        "vartheta": r"\vartheta",
+        "iota": r"\iota",
+        "kappa": r"\kappa",
+        "lambda": r"\lambda",
+        "mu": r"\mu",
+        "nu": r"\nu",
+        "xi": r"\xi",
+        "pi": r"\pi",
+        "rho": r"\rho",
+        "sigma": r"\sigma",
+        "tau": r"\tau",
+        "upsilon": r"\upsilon",
+        "phi": r"\phi",
+        "chi": r"\chi",
+        "psi": r"\psi",
+        "omega": r"\omega",
+    }
+    for src, dst in greek.items():
+        token = re.sub(rf"\b{src}\b", lambda _m, d=dst: d, token)
     return token
 
 
@@ -496,6 +563,8 @@ def _phi_set_repl(m: re.Match[str]) -> str:
 
 def process_plain_text_segment(s: str) -> str:
     s = SN_ALL_PERMS_RE.sub(_sn_all_perms_repl, s)
+    s = PAREN_SUP_SUB_TOKEN_RE.sub(_paren_sup_sub_token_repl, s)
+    s = _expand_compact_star_products(s)
     s = MAP_SIGNATURE_RE.sub(_map_signature_repl, s)
     s = PHI_SET_RE.sub(_phi_set_repl, s)
     s = Z_SQRT_RING_RE.sub(
@@ -717,6 +786,14 @@ def run_self_test() -> None:
         (
             "bound by 4 ||psi||{C0 } with ||x||^2 control.",
             r"bound by 4 $\|\psi\|_{C^0}$ with $\|x\|^{2}$ control.",
+        ),
+        (
+            "for centered n=4 terms c_4 = a_4 + (1/6)*a_2*b_2 + b_4.",
+            r"for centered n=4 terms c_4 = a_4 + (1/6) * a_2 * b_2 + b_4.",
+        ),
+        (
+            "construct Q^(alpha beta gamma delta) and Omega_{mn} = Q^(alpha_m, beta_n, gamma, delta)_{i_m, j_n, k, l}.",
+            r"construct $Q^{(\alpha \beta \gamma \delta)}$ and Omega_{mn} = $Q^{(\alpha_m, \beta_n, \gamma, \delta)}_{i_m, j_n, k, l}$.",
         ),
         (
             "bounded by 4 ||psi||_{C^0} |int :phi^3: dx|.",

@@ -204,6 +204,9 @@ local function is_math_atom(atom)
   if atom:match("^[%d]+$") then
     return true
   end
+  if atom:match("^[%d]+/[%d]+$") then
+    return true
+  end
   if atom:match("^[A-Za-z]$") then
     return true
   end
@@ -266,7 +269,20 @@ local function normalize_infix_ops(s)
     return function(a, b)
       local ap, ac, as = split_atom_edges(a)
       local bp, bc, bs = split_atom_edges(b)
-      if op_tex == "\\times" and (is_relation_cmd(ac) or is_relation_cmd(bc) or bc == "is") then
+      local function is_operator_atom(atom)
+        if atom == "\\ast" or atom == "\\times" or atom == "\\cdot" then
+          return true
+        end
+        if atom:match("^\\mBridgeOperator%b{}$") then
+          return true
+        end
+        return false
+      end
+      if op_tex == "\\times" and (
+          is_relation_cmd(ac) or is_relation_cmd(bc) or
+          is_operator_atom(ac) or is_operator_atom(bc) or
+          bc == "is"
+        ) then
         return a .. " x " .. b
       end
       if is_math_atom(ac) and is_math_atom(bc) then
@@ -278,6 +294,7 @@ local function normalize_infix_ops(s)
 
   -- Tight products without spaces (exclude star-subscript forms like F*_mu).
   s = s:gsub("([A-Za-z0-9%)%}])%*([A-Za-z0-9%(%{\\])", "%1 \\ast %2")
+  s = s:gsub("([A-Za-z0-9%)%}])%s*%*%s*([A-Za-z0-9%(%{\\])", "%1 \\ast %2")
 
   -- Compact dimension form: 3x3 -> 3 \times 3
   s = s:gsub("(%f[%d]%d+)%s*[xX]%s*(%d+%f[%D])", "%1 \\times %2")
@@ -344,6 +361,8 @@ local function normalize_expr(s)
   s = s:gsub("!=", "\\neq ")
   s = s:gsub(">=", "\\ge ")
   s = s:gsub("<=", "\\le ")
+  s = s:gsub(">>", "\\gg ")
+  s = s:gsub("<<", "\\ll ")
   s = s:gsub("%-%>", "\\to ")
   s = s:gsub("<%-", "\\leftarrow ")
   s = replace_word(s, "eps", "\\epsilon")
@@ -764,6 +783,12 @@ local function extract_binary_side(el)
   if core:match("^%d+$") then
     return core, punct, false
   end
+  if core:match("^[A-Za-z0-9]+/[A-Za-z0-9]+$") then
+    return core, punct, false
+  end
+  if core == "infinity" or core == "Infinity" or core == "inf" then
+    return core, punct, false
+  end
   if is_compound_math_token(core) then
     return core, punct, false
   end
@@ -803,6 +828,16 @@ local function build_binary_expr(lhs, lhs_is_math, op, rhs, rhs_is_math)
     op_tex = "\\le"
   elseif op == ">=" then
     op_tex = "\\ge"
+  elseif op == "<<" then
+    op_tex = "\\ll"
+  elseif op == ">>" then
+    op_tex = "\\gg"
+  elseif op == "->" then
+    op_tex = "\\to"
+  elseif op == "<-" then
+    op_tex = "\\leftarrow"
+  elseif op == "<=>" then
+    op_tex = "\\Leftrightarrow"
   elseif op == "!=" then
     op_tex = "\\neq"
   elseif op == "approx" then
@@ -821,7 +856,9 @@ local function extract_binary_operator(el)
     if el.text == "in" or el.text == "x" or el.text == "X" or el.text == "+" or el.text == "*" then
       return el.text
     end
-    if el.text == "=" or el.text == "<" or el.text == ">" or el.text == "<=" or el.text == ">=" or el.text == "!=" then
+    if el.text == "=" or el.text == "<" or el.text == ">" or el.text == "<=" or el.text == ">=" or
+       el.text == "!=" or el.text == "<<" or el.text == ">>" or el.text == "->" or el.text == "<-" or
+       el.text == "<=>" then
       return el.text
     end
     if el.text == "≈" then
@@ -839,6 +876,21 @@ local function extract_binary_operator(el)
     end
     if txt == "\\ge" or txt == "\\geq" then
       return ">="
+    end
+    if txt == "\\ll" then
+      return "<<"
+    end
+    if txt == "\\gg" then
+      return ">>"
+    end
+    if txt == "\\to" then
+      return "->"
+    end
+    if txt == "\\leftarrow" then
+      return "<-"
+    end
+    if txt == "\\Leftrightarrow" then
+      return "<=>"
     end
     if txt == "\\neq" then
       return "!="
@@ -975,6 +1027,55 @@ local function merge_adjacent_math_fragments(inlines)
 end
 
 local function convert_simple_str_token_to_inlines(s)
+  local op_tex = ({
+    ["->"] = "\\to",
+    ["<-"] = "\\leftarrow",
+    ["<=>"] = "\\Leftrightarrow",
+    ["<<"] = "\\ll",
+    [">>"] = "\\gg",
+    ["<"] = "<",
+    [">"] = ">",
+    ["="] = "=",
+    ["<="] = "\\le",
+    [">="] = "\\ge",
+    ["!="] = "\\neq",
+    ["≈"] = "\\approx",
+  })[s]
+  if op_tex ~= nil then
+    return {pandoc.Math("InlineMath", op_tex)}
+  end
+
+  local abs_inner, abs_punct = s:match("^|([^|]+)|([%.,;:]*)$")
+  if abs_inner ~= nil and abs_inner:match("^[%w\\_%^%+%-%s]+$") then
+    local out = {pandoc.Math("InlineMath", "|" .. normalize_expr(trim(abs_inner)) .. "|")}
+    if abs_punct ~= "" then
+      table.insert(out, pandoc.Str(abs_punct))
+    end
+    return out
+  end
+
+  local compact_core, compact_punct = s:match("^(.-)([%.,;:]*)$")
+  if compact_core ~= nil then
+    local compact_ops = {"<=>", "->", "<-", "<<", ">>", "<=", ">=", "!=", "=", "<", ">"}
+    for _, op in ipairs(compact_ops) do
+      local idx = compact_core:find(op, 1, true)
+      if idx ~= nil and idx > 1 and idx <= (#compact_core - #op + 1) then
+        local lhs = compact_core:sub(1, idx - 1)
+        local rhs = compact_core:sub(idx + #op)
+        if lhs ~= "" and rhs ~= "" and lhs:match("^[%w\\{}_^%(%)[%]/|%-]+$") and rhs:match("^[%w\\{}_^%(%)[%]/|%-]+$") then
+          local expr = build_binary_expr(lhs, false, op, rhs, false)
+          if expr ~= nil then
+            local out = {pandoc.Math("InlineMath", expr)}
+            if compact_punct ~= "" then
+              table.insert(out, pandoc.Str(compact_punct))
+            end
+            return out
+          end
+        end
+      end
+    end
+  end
+
   local hat_core, hat_punct = s:match("^([A-Za-z]+)([%.,;:]*)$")
   local hat_map = {
     Ahat = "\\hat{A}",

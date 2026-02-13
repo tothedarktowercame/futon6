@@ -4,9 +4,8 @@
 \hypertarget{problem-statement}{%
 \subsection{Problem Statement}\label{problem-statement}}
 
-Let \(n \ge \mNumber{5}\). Let \(A^{\mNumber{1}}, ..., A^{n} \in R^{\mNumber{3} \times \mNumber{4}}\) be Zariski-generic matrices.
-For \(\alpha, \beta, \gamma, \delta \in [n],\) construct Q\^{}(alpha \(\beta \gamma\) delta) in
-\(R^{\mNumber{3} \times \mNumber{3}x\mNumber{3} \times \mNumber{3}}\) with entry:
+Let \(n \ge \mNumber{5}\). Let \(A^{(\mNumber{1})}, ..., A^{(n)} \in R^{\mNumber{3} \times \mNumber{4}}\) be Zariski-generic matrices.
+For \(\alpha, \beta, \gamma, \delta \in [n],\) construct \(Q^{(\alpha \beta \gamma \delta)} \in R^{\mNumber{3} \times \mNumber{3}x\mNumber{3} \times \mNumber{3}}\) with entry:
 
 \[Q^{abgd}_{ijkl} = \det[A^{a}(i,:); A^{b}(j,:); A^{g}(k,:); A^{d}(l,:)]\]
 
@@ -19,13 +18,13 @@ Does there exist a polynomial map F: \(R^{\mNumber{81} \ast n^{\mNumber{4}}} \to
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  F does not depend on \(A^{\mNumber{1}}, ..., A^{n}\)
+  F does not depend on \(A^{(\mNumber{1})}, ..., A^{(n)}\)
 \item
   The degrees of the coordinate functions of F do not depend on n
 \item
   For \(\lambda \in R^{n \times n \times n \times n}\) with \(\lambda_{abgd} \neq \mNumber{0}\) precisely when
   \(a,b,g,d\) are not all identical:
-  F(\(\lambda_{abgd} Q^{abgd}\) : \(a,b,g,d\) in {[}n{]}) = 0
+  F(\(\lambda_{abgd} Q^{(abgd)}\) : \(a,b,g,d\) in {[}n{]}) \(=\) 0
   if and only if there exist \(u,v,w,x \in (R \ast )^{n}\) such that
   \(\lambda_{abgd} = u_{a} v_{b} w_{g} x_{d}\) for all non-identical \(a,b,g,d\).
 \end{enumerate}
@@ -41,12 +40,12 @@ Does there exist a polynomial map F: \(R^{\mNumber{81} \ast n^{\mNumber{4}}} \to
 \hypertarget{1-the-quadrifocal-tensor-as-a-bilinear-form}{%
 \subsubsection{1. The quadrifocal tensor as a bilinear form}\label{1-the-quadrifocal-tensor-as-a-bilinear-form}}
 
-The entry \(Q^{abgd}_{ijkl} = \det[a^{a}_{i}\); \(a^{b}_{j}\); \(a^{g}_{k}\); \(a^{d}_{l}]\) is
+The entry \(Q^{(abgd)}_{ijkl} =\) det{[}\(a^{(a)}_{i}\); \(a^{(b)}_{j}\); \(a^{(g)}_{k}\); \(a^{(d)}_{l}]\) is
 the evaluation of the volume form (the unique up-to-scale alternating 4-linear
 form on \(\mathbb{R}^{\mNumber{4}}\)) on four camera row vectors.
 
 \textbf{Key observation (bilinear form reduction):} Fix two camera-row pairs
-(gamma, k) and (delta, l), giving vectors \(c = a^{\gamma}_{k}\) and \(d = a^{\delta}_{l} \in \mathbb{R}^{\mNumber{4}}\). Then the map:
+(gamma, k) and (delta, l), giving vectors \(c = a^{(\gamma)}_{k}\) and \(d = a^{(\delta)}_{l} \in \mathbb{R}^{\mNumber{4}}.\) Then the map:
 
 \[\omega(p, q) = \det[p; q; c; d]\]
 
@@ -55,7 +54,7 @@ the Hodge dual *(c wedge d) is also simple, so \(\omega\) has \textbf{rank 2} as
 bilinear form.
 
 Equivalently: the null space of \(\omega\) is span\{c, d\} (2-dimensional), and
-\(\omega\) induces a non-degenerate alternating form on V/span\{c,d\} = \(\mathbb{R}^{\mNumber{2}}\).
+\(\omega\) induces a non-degenerate alternating form on V/span\{c,d\} \(= \mathbb{R}^{\mNumber{2}}.\)
 
 \hypertarget{2-the-rank-2-constraint-and-its-3x3-minor-formulation}{%
 \subsubsection{2. The rank-2 constraint and its 3x3 minor formulation}\label{2-the-rank-2-constraint-and-its-3x3-minor-formulation}}
@@ -71,8 +70,8 @@ Since \(\omega\) has rank 2, for ANY choice of 3 vectors \(p_{\mNumber{1}}, p_{\
 
 (A rank-2 bilinear form has all 3x3 minors vanishing.)
 
-In terms of the Q tensors: choosing \(p_{m} = a^{\alpha_{m}}\)\emph{\(\{i_{m}\}\) and
-\(q_{n} = a^{\beta_{n}}\)}\(\{j_{n}\}\), this becomes:
+In terms of the Q tensors: choosing \(p_{m} = a^{(\alpha_{m})}_{i_{m}}\) and
+\(q_{n} = a^{(\beta_{n})}_{j_{n}}\), this becomes:
 
 \[\det [Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}} = \mNumber{0}\]
 
@@ -84,7 +83,7 @@ This is a \textbf{degree-3 polynomial} in the Q entries, independent of the came
 \hypertarget{3-effect-of-rank-1-scaling-on-the-3x3-minor}{%
 \subsubsection{3. Effect of rank-1 scaling on the 3x3 minor}\label{3-effect-of-rank-1-scaling-on-the-3x3-minor}}
 
-Now consider the scaled tensors \(T^{abgd} = \lambda_{abgd} Q^{abgd}.\)
+Now consider the scaled tensors \(T^{(abgd)} = \lambda_{abgd} Q^{(abgd)}.\)
 The 3x3 matrix becomes:
 
 \[M_{mn} = \lambda_{\alpha_{m}, \beta_{n}, \gamma, \delta} \ast Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}\]
@@ -96,7 +95,7 @@ This is the Hadamard (entrywise) product of two 3x3 matrices:
 \item
   \(\Lambda_{mn} = \lambda_{\alpha_{m}, \beta_{n}, \gamma, \delta}\) (depends on camera indices only)
 \item
-  \(\Omega_{mn}\) = Q\^{}(\(\alpha_{m}, \beta_{n}, \gamma,\) delta)\_\{\(i_{m}, j_{n},\) k, l\} (the bilinear form)
+  \(\Omega_{mn} = Q^{(\alpha_{m}, \beta_{n}, \gamma, \delta)}_{i_{m}, j_{n}, k, l}\) (the bilinear form)
 \end{itemize}
 
 \textbf{If \(\lambda\) is rank-1:} \(\lambda_{abgd} = u_{a} v_{b} w_{g} x_{d},\) so
@@ -106,7 +105,7 @@ So \(\Lambda\) has matrix rank 1.
 
 For a rank-1 matrix \(\Lambda\), the Hadamard product \(M = \Lambda \circ \Omega\) equals
 \(\operatorname{diag}(u) \ast \Omega \ast \operatorname{diag}(v)\) (up to the scalar \(w_{\gamma} x_{\delta}).\) Since similar
-transformations preserve rank: \(\mOpName{rank}(M) = \mOpName{rank}(\Omega) = \mNumber{2} < \mNumber{3}\), so det(M) = 0.
+transformations preserve rank: \(\mOpName{rank}(M) = \mOpName{rank}(\Omega) = \mNumber{2} < \mNumber{3}\), so det(M) \(=\) 0.
 
 Therefore: \textbf{rank-1 \(\lambda\) implies all 3x3 minors of scaled T vanish.} ✓
 
@@ -126,7 +125,7 @@ when \(\lambda\) is not rank-1 in its first two indices. Since a nonzero polynom
 is nonzero on a Zariski-dense open set, this establishes the converse for
 generic cameras.
 
-\textbf{Explicit witness (n = 5).} Choose 5 cameras \(A^{i}\) as rows of generic
+\textbf{Explicit witness (n \(=\) 5).} Choose 5 cameras \(A^{(i)}\) as rows of generic
 \(\mNumber{3} \times \mNumber{4}\) matrices with rational entries:
 
 \[\begin{aligned}
@@ -149,14 +148,14 @@ Fix \(\gamma = \mNumber{3}, \delta = \mNumber{4}, k = \mNumber{1}, l = \mNumber{
 (\(\beta_{n}, j_{n}) = (\mNumber{2},\mNumber{1}), (\mNumber{5},\mNumber{1}), (\mNumber{1},\mNumber{2}).\) The 3x3 \(\Lambda\) matrix has entries
 \(\lambda_{\alpha_{m}, \beta_{n}, \mNumber{3}, \mNumber{4}}\); specifically \(\Lambda_{\mNumber{11}} = \lambda_{\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{2}\)
 with all other entries equal to 1. The \(\Omega\) matrix (unscaled Q values) has
-det(Omega) = 0 (confirming rank-2), but the Hadamard product \(M = \Lambda \circ \Omega\)
-satisfies det(M) = -24 != 0 (verified by direct computation of nine 4x4
+det(Omega) \(=\) 0 (confirming rank-2), but the Hadamard product \(M = \Lambda \circ \Omega\)
+satisfies det(M) \(= -\mNumber{24} \neq\) 0 (verified by direct computation of nine 4x4
 determinants). This exhibits P as not the zero polynomial.
 
 \textbf{Remark (Hadamard product interpretation).} The matrix \(M_{mn}\) is the
 Hadamard product \(\Lambda \circ \Omega,\) where \(\Lambda\) carries the scaling entries
 and \(\Omega\) carries the bilinear form values. The upper bound
-\$\textbackslash mOpName\{rank\}(Lambda \(\circ\) Omega)\$ \textless= \(\mOpName{rank}(\Lambda) \ast \mOpName{rank}(\Omega)\) provides context but is
+\$\textbackslash mOpName\{rank\}(Lambda \(\circ\) Omega)\$ \(\le \mOpName{rank}(\Lambda) \ast \mOpName{rank}(\Omega)\) provides context but is
 not used in the proof; the converse relies entirely on the polynomial
 nonvanishing argument above.
 
@@ -210,9 +209,9 @@ taken over all choices of:
 \begin{itemize}
 \tightlist
 \item
-  Three "row" camera-row pairs (\(\alpha_{m}, i_{m})\) for m = 1,2,3
+  Three "row" camera-row pairs (\(\alpha_{m}, i_{m})\) for m \(=\) 1,2,3
 \item
-  Three "column" camera-row pairs (\(\beta_{n}, j_{n})\) for n = 1,2,3
+  Three "column" camera-row pairs (\(\beta_{n}, j_{n})\) for n \(=\) 1,2,3
 \item
   Fixed camera-row pairs (gamma, k) and (delta, l)
 \end{itemize}
