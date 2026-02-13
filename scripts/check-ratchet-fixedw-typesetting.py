@@ -490,6 +490,12 @@ def main() -> int:
         failures.append("math-proofread style does not preserve original \\ast")
     if r"\renewcommand{\ast}{\mBridgeOperator{\MP@orig@ast}}" not in style:
         failures.append("math-proofread style does not colorize \\ast as bridge operator")
+    if r'\begingroup\catcode`\+=\active\gdef+{{\color{MPSyntaxBridgeOperatorColor}\mathchar"202B}}\endgroup' not in style:
+        failures.append("math-proofread style does not colorize raw '+' as bridge operator")
+    if r'\mathcode`+="8000' not in style:
+        failures.append("math-proofread style does not activate raw '+' in math mode")
+    if r'\mathcode`+="202B' not in style:
+        failures.append("math-proofread style does not restore default raw '+' mathcode on disable")
     if r"\colorlet{MPSyntaxBridgeOperatorColor}{SeaGreen}" not in style:
         failures.append("math-proofread style does not define medium green bridge-operator color")
     if r"\colorlet{MPSyntaxNamedOperatorColor}{BurntOrange}" not in style:

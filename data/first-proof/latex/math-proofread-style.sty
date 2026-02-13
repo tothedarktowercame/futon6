@@ -139,6 +139,7 @@
 \begingroup\catcode`\<\active\gdef<{\mathrel{\color{MPSyntaxComparisonColor}\mathchar"313C}}\endgroup
 \begingroup\catcode`\>\active\gdef>{\mathrel{\color{MPSyntaxComparisonColor}\mathchar"313E}}\endgroup
 \begingroup\catcode`\==\active\gdef={\mathrel{\color{MPSyntaxComparisonColor}\mathchar"303D}}\endgroup
+\begingroup\catcode`\+=\active\gdef+{{\color{MPSyntaxBridgeOperatorColor}\mathchar"202B}}\endgroup
 \begingroup\catcode`\[=\active\gdef[{\mathopen{\color{MPSyntaxDelimiterColor}\mathchar"405B}}\endgroup
 \begingroup\catcode`\]=\active\gdef]{\mathclose{\color{MPSyntaxDelimiterColor}\mathchar"505D}}\endgroup
 
@@ -148,6 +149,7 @@
     \mathcode`<="8000
     \mathcode`>="8000
     \mathcode`=="8000
+    \mathcode`+="8000
     \mathcode`[="8000
     \mathcode`]="8000
   \fi
@@ -159,6 +161,7 @@
     \mathcode`<="313C
     \mathcode`>="313E
     \mathcode`=="303D
+    \mathcode`+="202B
     \mathcode`[="405B
     \mathcode`]="505D
   \fi
