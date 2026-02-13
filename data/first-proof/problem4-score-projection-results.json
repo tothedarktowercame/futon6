@@ -1,0 +1,175 @@
+{
+  "conclusion_hint": "Low error would support linear projection route; high error falsifies simple linear/affine models.",
+  "results_by_n": {
+    "3": {
+      "best_scalar_per_sample_test": {
+        "alpha_max": 39.893455500882965,
+        "alpha_mean": 0.5082708634062271,
+        "alpha_min": -8.998916849102184,
+        "alpha_p05": -0.22266976485226667,
+        "alpha_p95": 1.2428963722178161,
+        "rel_err_max": 102.93937712243026,
+        "rel_err_mean": 0.44670860635585485,
+        "rel_err_p95": 1.37797867849966
+      },
+      "diag_projection_test": {
+        "alpha_max": 0.9971051032634388,
+        "alpha_mean": 0.7160215598735279,
+        "alpha_min": 0.16731614376714524,
+        "beta_norm": 8.305282394121205,
+        "rel_err_max": 12425.354476202654,
+        "rel_err_mean": 19.48702886841877,
+        "rel_err_p95": 29.15742087855327
+      },
+      "global_affine_test": {
+        "bias_norm": 1.2844026148249401,
+        "fro_A_plus_B_minus_I": 1.7301265760956441,
+        "r2": 0.009059499861947984,
+        "rel_err_max": 7.335811498873455,
+        "rel_err_mean": 0.8698129305545149,
+        "rel_err_p95": 2.148986855220182,
+        "samples": 8000
+      },
+      "global_affine_train": {
+        "bias_norm": 1.2867118398158308,
+        "fro_A_plus_B_minus_I": 1.7300939656696737,
+        "r2": 0.02093401095043168,
+        "rel_err_max": 13.996855482865485,
+        "rel_err_mean": 0.8792670705229546,
+        "rel_err_p95": 2.1796051731160495,
+        "samples": 32000
+      },
+      "samples_test": 8000,
+      "samples_total": 40000,
+      "samples_train": 32000
+    },
+    "4": {
+      "best_scalar_per_sample_test": {
+        "alpha_max": 8.31873498391184,
+        "alpha_mean": 0.4951846553820224,
+        "alpha_min": -11.258875207056535,
+        "alpha_p05": -0.14360641375882732,
+        "alpha_p95": 1.149780413956569,
+        "rel_err_max": 64.56435215972813,
+        "rel_err_mean": 0.965290422353052,
+        "rel_err_p95": 3.1135923072381493
+      },
+      "diag_projection_test": {
+        "alpha_max": 0.9839787082088686,
+        "alpha_mean": 0.8571306009948727,
+        "alpha_min": 0.6292316628704508,
+        "beta_norm": 13.429904502224765,
+        "rel_err_max": 23403.583036411634,
+        "rel_err_mean": 24.366090046706834,
+        "rel_err_p95": 31.565002255518163
+      },
+      "global_affine_test": {
+        "bias_norm": 1.9101468559543608,
+        "fro_A_plus_B_minus_I": 1.9993007509620973,
+        "r2": 0.010496497253440706,
+        "rel_err_max": 4.461016014811997,
+        "rel_err_mean": 0.7990136382960704,
+        "rel_err_p95": 1.7220085415513469,
+        "samples": 8000
+      },
+      "global_affine_train": {
+        "bias_norm": 1.924043508884923,
+        "fro_A_plus_B_minus_I": 1.99920357160251,
+        "r2": 0.003899967356543854,
+        "rel_err_max": 8.95038054743396,
+        "rel_err_mean": 0.7964265520369312,
+        "rel_err_p95": 1.7030756206627804,
+        "samples": 32000
+      },
+      "samples_test": 8000,
+      "samples_total": 40000,
+      "samples_train": 32000
+    },
+    "5": {
+      "best_scalar_per_sample_test": {
+        "alpha_max": 7.569092246164587,
+        "alpha_mean": 0.49790780640938326,
+        "alpha_min": -4.6464083315568345,
+        "alpha_p05": -0.09574868516413787,
+        "alpha_p95": 1.0952061821430745,
+        "rel_err_max": 124.04269299897702,
+        "rel_err_mean": 1.4956142265103558,
+        "rel_err_p95": 4.470373298447984
+      },
+      "diag_projection_test": {
+        "alpha_max": 0.9960887585137488,
+        "alpha_mean": 0.8064018204925028,
+        "alpha_min": 0.504669445552086,
+        "beta_norm": 12.51409590500106,
+        "rel_err_max": 2929.7607203248726,
+        "rel_err_mean": 15.939225921370326,
+        "rel_err_p95": 40.73372993736937
+      },
+      "global_affine_test": {
+        "bias_norm": 2.4447756997040404,
+        "fro_A_plus_B_minus_I": 2.2307194362990983,
+        "r2": 0.024154832904095036,
+        "rel_err_max": 5.05757147906344,
+        "rel_err_mean": 0.7310574188993416,
+        "rel_err_p95": 1.4081786940614724,
+        "samples": 8000
+      },
+      "global_affine_train": {
+        "bias_norm": 2.5647172535686185,
+        "fro_A_plus_B_minus_I": 2.2346818125043195,
+        "r2": 0.006747687312840478,
+        "rel_err_max": 5.691103614413286,
+        "rel_err_mean": 0.747073876282855,
+        "rel_err_p95": 1.479856675236993,
+        "samples": 32000
+      },
+      "samples_test": 8000,
+      "samples_total": 40000,
+      "samples_train": 32000
+    },
+    "6": {
+      "best_scalar_per_sample_test": {
+        "alpha_max": 5.5457727350416635,
+        "alpha_mean": 0.4958528043525122,
+        "alpha_min": -4.919867080831458,
+        "alpha_p05": -0.07525113067346742,
+        "alpha_p95": 1.0800810411114599,
+        "rel_err_max": 84.44043685579985,
+        "rel_err_mean": 1.8947799788176516,
+        "rel_err_p95": 5.712880116938928
+      },
+      "diag_projection_test": {
+        "alpha_max": 0.862754157628774,
+        "alpha_mean": 0.5068170284646404,
+        "alpha_min": 0.057497371665207936,
+        "beta_norm": 17.03816881298642,
+        "rel_err_max": 6841.802034695153,
+        "rel_err_mean": 19.071670415501742,
+        "rel_err_p95": 48.512727758931334
+      },
+      "global_affine_test": {
+        "bias_norm": 3.155421812633961,
+        "fro_A_plus_B_minus_I": 2.4441187349757088,
+        "r2": 0.02179291440750597,
+        "rel_err_max": 4.2827486423892385,
+        "rel_err_mean": 0.7115551388394507,
+        "rel_err_p95": 1.341468752762957,
+        "samples": 8000
+      },
+      "global_affine_train": {
+        "bias_norm": 3.347667989818232,
+        "fro_A_plus_B_minus_I": 2.4489001951862526,
+        "r2": 0.00767069750660454,
+        "rel_err_max": 8.044286036435489,
+        "rel_err_mean": 0.7282466950970118,
+        "rel_err_p95": 1.3965792579909566,
+        "samples": 32000
+      },
+      "samples_test": 8000,
+      "samples_total": 40000,
+      "samples_train": 32000
+    }
+  },
+  "task": "Task2_score_decomposition",
+  "trials_requested": 40000
+}

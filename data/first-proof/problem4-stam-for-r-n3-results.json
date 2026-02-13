@@ -1,0 +1,65 @@
+{
+  "best_min": {
+    "method": "differential_evolution",
+    "min_value": -1.1102230246251565e-16,
+    "point": [
+      3.220619382293677e-09,
+      2.2467133096837344e-05,
+      -0.00012657712515184993
+    ]
+  },
+  "closed_form": {
+    "A": "6",
+    "B": "-81",
+    "inv_r_a2_a3": "-A2*(4*A2**3 + 27*A3**2)/(6*A2**3 - 81*A3**2)",
+    "inv_r_s_u": "s*(4*s**3 - 27*u**2)/(3*(2*s**3 + 27*u**2))",
+    "r_a2_a3": "3*(-2*A2**3 + 27*A3**2)/(A2*(4*A2**3 + 27*A3**2))",
+    "r_s_u": "3*(2*s**3 + 27*u**2)/(s*(4*s**3 - 27*u**2))"
+  },
+  "global_min_lower_bound_observed": -1.1102230246251565e-16,
+  "min_checks": [
+    {
+      "method": "differential_evolution",
+      "min_value": -1.1102230246251565e-16,
+      "point": [
+        3.220619382293677e-09,
+        2.2467133096837344e-05,
+        -0.00012657712515184993
+      ]
+    },
+    {
+      "method": "random_search_3m",
+      "min_value": 3.2873578779496137e-08,
+      "point": [
+        0.9999998173498904,
+        -0.02713296973017232,
+        -0.3279930583511772
+      ]
+    },
+    {
+      "method": "line_x0_y0",
+      "min_value": -1.1102230246251565e-16,
+      "point": [
+        0.0023,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "method": "dense_xy_slice",
+      "min_value": -3.700742533091202e-17,
+      "point": [
+        0.9999998173498904,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "reduced_expression": {
+    "F_den": "3*(2*x**2 + 1)*(2*y**2 + 1)*(-4*lam**(5/2)*x*y*sqrt(1 - lam) + 4*lam**(3/2)*x*y*sqrt(1 - lam) + 2*lam**3*x**2 - 2*lam**3*y**2 + 6*lam**2*y**2 - 6*lam*y**2 + 2*y**2 + 1)",
+    "F_num": "-24*lam**(7/2)*x**3*y*sqrt(1 - lam) + 24*lam**(7/2)*x*y**3*sqrt(1 - lam) + 48*lam**(5/2)*x**3*y*sqrt(1 - lam) - 24*lam**(5/2)*x*y**3*sqrt(1 - lam) + 12*lam**(5/2)*x*y*sqrt(1 - lam) - 24*lam**(3/2)*x**3*y*sqrt(1 - lam) - 12*lam**(3/2)*x*y*sqrt(1 - lam) + 12*lam**4*x**4 - 24*lam**4*x**2*y**2 + 12*lam**4*y**4 - 12*lam**3*x**4 + 48*lam**3*x**2*y**2 - 6*lam**3*x**2 - 36*lam**3*y**4 + 6*lam**3*y**2 - 72*lam**2*x**2*y**2 + 36*lam**2*y**4 - 18*lam**2*y**2 + 48*lam*x**2*y**2 + 6*lam*x**2 - 12*lam*y**4 + 12*lam*y**2",
+    "claim": "F(lam,x,y) >= 0 on lam in [0,1], x,y in [-1,1]"
+  },
+  "status": "no_negative_found",
+  "task": "Task1_n3_symbolic_stam_for_r"
+}
