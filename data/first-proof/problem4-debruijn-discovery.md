@@ -1,7 +1,7 @@
 # Problem 4: Finite De Bruijn Identity — Discovery Report
 
 **Date:** 2026-02-13
-**Status:** NUMERICALLY VERIFIED to machine precision. Proof pending.
+**Status:** PROVED. Rigorous algebraic proof via backward heat equation.
 
 ---
 
@@ -130,7 +130,7 @@ de Bruijn identity d/dt χ(μ_t) = ½Φ*(μ_t).
 ### What's still needed
 
 To go from de Bruijn to Stam, the classical/free proof uses:
-1. De Bruijn identity (PROVED, pending rigorous verification of Coulomb flow)
+1. De Bruijn identity (PROVED — backward heat equation proof, see above)
 2. Entropy superadditivity or entropy power inequality
 3. Monotonicity / coupling argument
 
@@ -157,57 +157,79 @@ and the flow's monotonicity.
 
 ---
 
-## Proof Sketch for the Coulomb Flow Theorem
+## Rigorous Proof of the Coulomb Flow Theorem
 
-### Required ingredients
+### Key Insight: Backward Heat Equation
 
-1. The MSS coefficient formula for p ⊞_n He_t
-2. Implicit differentiation: roots of p_t satisfy p_t(γ_k) = 0, so
-   (dp_t/dt)(γ_k) + p_t'(γ_k) · γ_k' = 0, giving
-   γ_k' = -(dp_t/dt)(γ_k) / p_t'(γ_k)
-3. Show that (dp_t/dt)(γ_k) / p_t'(γ_k) = -S_k(γ)
+The proof pivots on a single beautiful identity:
 
-### Key identity needed
+**Lemma (Backward Heat Equation).** p_t = p ⊞_n He_t satisfies
+∂p_t/∂t = -(1/2) ∂²p_t/∂x².
 
-At the root γ_k of p_t:
+This is the finite polynomial analog of the classical backward heat equation.
 
-    (d/dt p_t)(γ_k) = -p_t'(γ_k) · S_k(γ)
+### Step 1: Hermite backward heat equation
 
-This is equivalent to:
+He_t(x) = Σ_{m=0}^{⌊n/2⌋} C_m t^m x^{n-2m} where C_m = (-1)^m n!/(m! 2^m (n-2m)!).
 
-    [(d/dt)(p ⊞_n He_t)](x) |_{x=γ_k} = -p_t'(γ_k) · [Σ_{j≠k} 1/(γ_k - γ_j)]
+Direct computation: dHe_t/dt has coefficient m·C_m·t^{m-1} for x^{n-2m},
+while -(1/2)He_t'' has coefficient -(1/2)(n-2m+2)(n-2m+1)·C_{m-1}·t^{m-1}
+for x^{n-2m}.
 
-The LHS involves the t-derivative of the MSS convolution coefficients.
-The RHS involves the x-derivative of p_t at its own roots.
+The Hermite recurrence gives C_m/C_{m-1} = -(n-2m+2)(n-2m+1)/(2m),
+so m·C_m = -(1/2)(n-2m+2)(n-2m+1)·C_{m-1}. Therefore d/dt He_t = -(1/2)He_t''.
 
-### Route to proof
+Verified symbolically for n = 2, ..., 7.
 
-The MSS coefficients of p ⊞_n He_t are:
-    c_m(t) = Σ_{i+j=m} w(n,i,j) · a_i · h_j(t)
+### Step 2: MSS weight identity lifts to the convolution
 
-where h_j(t) are the coefficients of He_t. The t-derivative dc_m/dt
-involves dh_j/dt, which can be computed from the Hermite recurrence.
+Write p_t(x) = x^n + Σ_k c_k(t) x^{n-k} where c_k = Σ_{i+j=k} w(n,i,j) a_i h_j(t).
 
-The key step is to relate Σ_m (dc_m/dt) · γ_k^{n-m} to p_t'(γ_k) · S_k(γ_k).
+Computing dc_k/dt (using Step 1 for dh_j/dt) and the coefficient of x^{n-k}
+in -(1/2)p_t'', equality reduces to a single algebraic identity:
 
-This likely involves the Hermite ODE He_n'' - x He_n' + n He_n = 0 and
-the specific combinatorial structure of the MSS weights w(n,i,j).
+**MSS Weight Identity:**
+    w(n,i,j) · (n-j+2)(n-j+1) = (n-i-j+2)(n-i-j+1) · w(n,i,j-2)
 
-### Codex task
+**Proof.** Both sides equal (n-i)!(n-j+2)! / (n!(n-i-j)!).
 
-A rigorous proof requires:
-1. Symbolic computation of dc_m/dt for general Hermite heat kernel
-2. Verification that the implicit differentiation formula gives S_k
-3. Identification of which algebraic identities (Hermite ODE, MSS weight
-   properties) are needed
+LHS: w(n,i,j)·(n-j+2)(n-j+1) = [(n-i)!(n-j)!/(n!(n-i-j)!)]·(n-j+2)(n-j+1)
+   = (n-i)!(n-j+2)! / (n!(n-i-j)!)
 
-This is a good Codex task: algebraically intensive, requires careful
-bookkeeping, benefits from symbolic computation (SymPy).
+RHS: (n-i-j+2)(n-i-j+1)·w(n,i,j-2)
+   = (n-i-j+2)(n-i-j+1)·(n-i)!(n-j+2)! / (n!(n-i-j+2)!)
+   = (n-i)!(n-j+2)! / (n!(n-i-j)!)   since (n-i-j+2)!/((n-i-j+2)(n-i-j+1)) = (n-i-j)!.
+
+Verified exhaustively for n = 2, ..., 9.
+Verified symbolically (SymPy) for n = 2, ..., 6 with generic polynomial coefficients.
+
+### Step 3: From backward heat equation to Coulomb flow
+
+At root γ_k(t) of p_t, implicit differentiation of p_t(γ_k(t), t) = 0 gives:
+
+    γ_k' = -(∂p_t/∂t)(γ_k) / p_t'(γ_k) = (1/2) p_t''(γ_k) / p_t'(γ_k)
+
+Standard root identity: for p(x) = Π_j(x-γ_j), we have p''(γ_k) = 2p'(γ_k)·S_k(γ).
+
+Proof: p'(x) = Σ_i Π_{j≠i}(x-γ_j), so p''(x) = Σ_{i≠j} Π_{l≠i,j}(x-γ_l).
+At x = γ_k, only terms with k ∈ {i,j} survive:
+p''(γ_k) = 2 Σ_{j≠k} Π_{l≠k,j}(γ_k-γ_l) = 2 p'(γ_k) Σ_{j≠k} 1/(γ_k-γ_j) = 2p'(γ_k)S_k.
+
+Therefore: γ_k' = (1/2)·2·p_t'(γ_k)·S_k / p_t'(γ_k) = S_k(γ).  ∎
+
+### Verification
+
+Script: `scripts/prove-p4-coulomb-flow.py`
+- Step 1: Symbolic ✓ for n=2..7
+- Step 2: Exhaustive ✓ for n=2..9, Symbolic ✓ for n=2..6
+- Step 3: Numerical ✓ (max error < 10⁻¹¹)
+- End-to-end: backward heat eq coeff error < 10⁻⁷, Coulomb flow error < 10⁻⁸
 
 ---
 
 ## Files
 
+- `scripts/prove-p4-coulomb-flow.py` — Complete symbolic + numerical proof verification
 - `scripts/verify-p4-conditional-stam.py` — Tests A1, A2, B1, B2
 - `scripts/verify-p4-debruijn-proof.py` — Kernel-dependence tests
 - `scripts/verify-p4-root-velocity.py` — Root velocity = S_k test
