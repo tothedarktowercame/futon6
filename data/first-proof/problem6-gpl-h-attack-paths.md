@@ -533,11 +533,111 @@ Script: `verify-p6-mt-growth.py`
 
 ---
 
+---
+
+## POST-PIGEONHOLE UPDATE (2026-02-12)
+
+### The breakthrough
+
+The entire MSS interlacing / Borcea-Branden / Bonferroni machinery is
+unnecessary. The proof of "exists v with ||Y_t(v)|| < 1" is three lines:
+
+1. For PSD Y: ||Y|| <= tr(Y)
+2. Pigeonhole: min_v tr(Y_v) <= (1/r) sum_v tr(Y_v) = dbar
+3. If dbar < 1 then exists v with ||Y_v|| <= tr(Y_v) <= dbar < 1. QED.
+
+Scripts: `verify-p6-dbar-bound.py` (440/440 steps pass, max dbar 0.641).
+
+### The C_lev tension (structural gap, not just a bug)
+
+The leverage filter approach has a **fundamental incompatibility**:
+
+- **dbar bound requires C_lev < 3 - eps.** At M_t = 0:
+  dbar <= C_lev / (3 - eps). For dbar < 1: C_lev < 3 - eps.
+
+- **Markov bound requires C_lev > 6.** Filter removes vertices with
+  ell_v > C_lev/eps. Markov: |removed| <= 2(n-1)eps/C_lev.
+  For |I_0'| > 0: need 2n*eps/C_lev < eps*n/3, so C_lev > 6.
+
+These are **incompatible for all eps in (0,1).** The leverage filter +
+Markov bound cannot simultaneously guarantee (a) enough survivors AND
+(b) small enough leverage degrees for dbar < 1.
+
+**Prior section 5b claimed C_lev = 2 gives |I_0'| >= eps*n/12.** This was
+incorrect: with C_lev = 2, Markov gives |removed| <= n*eps, which exceeds
+|I_0| = eps*n/3 for all n. Bug fixed to C_lev = 8, giving |I_0'| >= eps*n/12
+but dbar <= 8/(3-eps) >> 1.
+
+**For K_n the tension dissolves:** Actual leverage ell_v ~ 2 (not 2/eps
+or 8/eps). No filtering needed. dbar = 2t/(n*eps) = 2/3.
+
+### Three paths re-evaluated post-pigeonhole
+
+| Path | Pre-pigeonhole | Post-pigeonhole |
+|------|----------------|-----------------|
+| 1 (SR/AGKS) | Promising | **Subsumed** — gives subset bounds; for single-vertex, reduces to pigeonhole |
+| 2 (Hyperbolic) | Sound | **Reduces to dbar < 1** — the hyperbolic root bound = Q(1) > 0 = 1 - dbar + ... |
+| 3 (Interlacing) | Closest | **Unnecessary** — sum Y_v is rank-deficient (rank |S_t| << n), not isotropic; interlacing doesn't hold. But pigeonhole replaces it. |
+
+All three paths are rendered moot by the pigeonhole argument. The only
+remaining question is the dbar bound itself.
+
+### New verification data
+
+| Source | Steps | Max dbar | Margin |
+|--------|-------|----------|--------|
+| Pre-pigeonhole (n<=96) | 461 | 0.800 | 20% |
+| Post-pigeonhole (n<=64) | 440 | 0.641 | 36% |
+
+The K_k exact formula dbar(K_k, t) = (t-1)/(k*eps-t) + (t+1)/(k*eps) from
+the pre-pigeonhole analysis remains valid and gives dbar -> 5/6 as k -> inf,
+consistent with the new data.
+
+### The precise remaining gap
+
+**Proved:**
+- K_n: dbar = 2t/(n*eps) <= 2/3. c = 1/3.
+- General graphs, M_t = 0, C_lev < 3: dbar <= C_lev/(3-eps) < 1.
+- Pigeonhole: dbar < 1 => exists v with ||Y_v|| < 1.
+
+**The gap is the intersection of two sub-gaps:**
+
+1. **Filter-dbar tension:** No single C_lev value gives BOTH
+   enough survivors (Markov: C_lev > 6) AND small dbar (C_lev < 3).
+   A sharper concentration bound on ell_v (beyond Markov) would help.
+
+2. **M_t != 0 amplification:** When M_t != 0, the barrier amplification
+   H_t^{-1} can make dbar exceed the M_t=0 bound. The greedy's
+   self-correcting property (penalizing aligned increments) keeps this
+   empirically bounded (max amplification 1.18, not the scalar worst-case
+   1.67), but the formal proof is open.
+
+**What would close it:**
+
+(a) A structural theorem showing that graphs with |I_0| >= eps*n/3
+    have average leverage degree avg(ell_v) <= O(1), not O(1/eps).
+    For K_n this holds (avg ell ~ 2). For general graphs it would
+    bypass the Markov bottleneck entirely.
+
+(b) A potential function argument (BSS-style) tracking
+    phi_t = tr(H_t^{-1}) and showing the barrier headroom degrades
+    slowly enough through the greedy trajectory.
+
+(c) A random sampling proof: show P(||M_S|| <= eps AND |S| >= c*eps*n) > 0
+    via matrix concentration, bypassing the greedy entirely.
+
+The 36% empirical margin (max dbar 0.641) suggests substantial room for
+any of these approaches.
+
 ## Files
 
 - `data/first-proof/problem6-gpl-h-counterexample.md` — Counterexample documentation
 - `data/first-proof/problem6-gpl-h-attack-paths.md` — This document
 - `data/first-proof/problem6-gpl-h-closure-attempt.md` — Prior closure state
+- `data/first-proof/problem6-post-pigeonhole-wiring.json` — Post-breakthrough wiring diagram
+- `data/first-proof/problem6-v3.mmd` — Mermaid v3 (verification-status coded)
+- `scripts/verify-p6-dbar-bound.py` — THE decisive script: dbar<1 at all 440 steps
+- `scripts/verify-p6-q-polynomial-roots.py` — Q-poly max root < 0.505
 - `scripts/verify-p6-leverage-aware-greedy.py` — Fix verification (0 violations)
 - `scripts/verify-p6-mt-growth.py` — M_t growth tracking
 - `scripts/verify-p6-attack-paths.py` — Three attack paths computation

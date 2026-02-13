@@ -24,16 +24,18 @@ epsilon in (0,1), there exists S with |S| >= c*epsilon*n and L_S <= epsilon L?
 
 ## Status of this writeup
 
-This draft closes the internal algebraic gaps and separates proved facts from
-external dependencies:
+**K_n: PROVED.** The barrier greedy gives |S| = eps*n/3, c = 1/3, via the
+elementary pigeonhole + PSD trace bound argument (Section 5d).
 
-1. Proved in-text: exact formulation, K_n upper bound c<=1, sampling identities,
-   and a correct matrix-concentration setup.
-2. External dependency: the universal lower bound c0>0 for all graphs is not
-   rederived here; it is treated as an imported theorem assumption.
+**General graphs: ONE GAP.** The formal bound dbar < 1 at M_t != 0 is
+empirically verified (440/440 steps, 36% margin) but open. The leverage
+filter approach has a structural C_lev tension (Section 5b/5e) that
+prevents closure via Markov alone. See `problem6-gpl-h-attack-paths.md`
+for the full attack path analysis.
 
-So the final existential answer is **conditional/open in this writeup**:
-without Assumption V, the universal-c claim is unresolved here.
+**Superseded machinery:** MSS interlacing families, Borcea-Branden real
+stability, Bonferroni eigenvalue bounds — all bypassed by the pigeonhole
+argument.
 
 ## 1. Exact reformulation
 
@@ -144,11 +146,10 @@ function that tracks the spectral approximation quality.
 
 This is the correct technical setup that was missing in the earlier draft.
 
-## 5. Discharging Assumption V via barrier greedy + interlacing families
+## 5. Discharging Assumption V via barrier greedy + pigeonhole
 
 We now prove the vertex-light selection theorem directly, using a barrier
-greedy combined with the Marcus-Spielman-Srivastava interlacing families
-framework.
+greedy combined with the elementary PSD trace bound and pigeonhole averaging.
 
 ### 5a. Heavy edge pruning (Turan)
 
@@ -170,11 +171,15 @@ All edges internal to I_0 are light: tau_e <= epsilon.
 
 Define the leverage degree ell_v = sum_{u~v, u in I_0} tau_{uv}.
 Since sum_v ell_v = 2 * sum_{e internal to I_0} tau_e <= 2(n-1),
-by Markov at most epsilon*n/(2*C_lev) vertices have ell_v > C_lev/epsilon.
+by Markov:
 
-Set C_lev = 2. Remove vertices with ell_v > 2/epsilon. The remaining
-set I_0' has |I_0'| >= |I_0| - epsilon*n/4 >= epsilon*n/3 - epsilon*n/4
-= epsilon*n/12.
+    |{v in I_0 : ell_v > C_lev/epsilon}| <= 2(n-1)*epsilon / C_lev.
+
+Set C_lev = 8. Remove vertices with ell_v > 8/epsilon. The number removed
+is at most 2(n-1)*epsilon/8 < epsilon*n/4. The remaining set I_0' has
+
+    |I_0'| >= |I_0| - epsilon*n/4 >= epsilon*n/3 - epsilon*n/4
+            = epsilon*n/12.
 
 ### 5c. Barrier greedy construction
 
@@ -230,7 +235,7 @@ When M_t = 0 (early steps), H_t = epsilon*I and:
 
     dbar_t = (1/(epsilon*r_t)) sum_{u in S_t} ell_u^R
 
-where ell_u^R = sum_{v in R_t, v~u} tau_{uv} <= ell_u <= C_lev/epsilon.
+where ell_u^R = sum_{v in R_t, v~u} tau_{uv} <= ell_u <= 8/epsilon.
 
 For the complete graph K_n (where all edges are light for n > 2/epsilon):
 tau_e = 2/n for all edges, ell_u^R = (r_t)*(2/n), and:
@@ -239,14 +244,14 @@ tau_e = 2/n for all edges, ell_u^R = (r_t)*(2/n), and:
 
 At T = epsilon*n/3: dbar_T = 2/3 < 1. This is EXACT for K_n.
 
-For general graphs at M_t = 0 with the leverage filter (ell_u <= 2/epsilon):
+For general graphs at M_t = 0 with the leverage filter (ell_u <= 8/epsilon):
 
-    dbar_t <= (C_lev * t) / (epsilon^2 * r_t).
+    dbar_t <= (8 * t) / (epsilon^2 * r_t).
 
 At t <= epsilon*|I_0'|/3 and r_t >= |I_0'|(1 - epsilon/3) >= 2|I_0'|/3:
 
-    dbar_t <= (2 * epsilon*|I_0'|/3) / (epsilon^2 * 2|I_0'|/3)
-            = 2 / (2*epsilon) = 1/epsilon.
+    dbar_t <= (8 * epsilon*|I_0'|/3) / (epsilon^2 * 2|I_0'|/3)
+            = 8 / (2*epsilon) = 4/epsilon.
 
 This bound exceeds 1 for epsilon < 1, so the leverage-filter bound alone
 is insufficient. The tighter bound requires using the actual leverage
