@@ -32,7 +32,7 @@ written as:
 where \(\mu_\mNumber{0}\) is the Gaussian free field (GFF) measure with covariance
 (\(m^\mNumber{2}\) - Delta)\^{}\{-1\} on \(T^\mNumber{3}\), and the interaction is:
 
-\[V(\phi) = \Integral_{T^\mNumber{3}} (:\phi^\mNumber{4}: - C :\phi^\mNumber{2}:) dx\]
+\[V(\phi) = \Integral_{T^\mNumber{3}} (:\phi^\mNumber{4}: - C :\phi^\mNumber{2}:) \mathrm{d}x\]
 
 Here \(:\phi^{k}\): denotes the k-th Wick power (renormalized product), and C is a
 mass counterterm that diverges under regularization removal.
@@ -61,7 +61,7 @@ positive), the reverse absolute continuity \(\mu_{\mNumber{0}} << \mu\) also hol
 For the Gaussian free field \(\mu_\mNumber{0}\) on \(T^\mNumber{3}\) with covariance C = (\(m^\mNumber{2}\) - Delta)\^{}\{-1\},
 the Cameron-Martin space is:
 
-\[H = H^\mNumber{1}(T^\mNumber{3}) (Sobolev space of order \mNumber{1})\]
+\[H = H^\mNumber{1}(T^\mNumber{3}) (\text{Sobolev} space of order \mNumber{1})\]
 
 Since \(\psi\) is smooth, \(\psi \in C^{\infty}(T^\mNumber{3})\) subset \(H^\mNumber{1}(T^\mNumber{3})\), so \(\psi\) is in the
 Cameron-Martin space.
@@ -69,7 +69,7 @@ Cameron-Martin space.
 \textbf{Cameron-Martin theorem:} For any \(h \in H\), the shifted Gaussian measure
 \(T_{h}^{\mDualStar} \mu_{\mNumber{0}}\) is equivalent to \(\mu_\mNumber{0}\), with Radon-Nikodym derivative:
 
-\[dT_{h}^{\mDualStar} \mu_\mNumber{0} / d\mu_\mNumber{0} (\phi) = \exp(l_{h}(\phi) - ||h||_H^\mNumber{2} / \mNumber{2})\]
+\[\mathrm{d}T_{h}^{\mDualStar} \mu_\mNumber{0} / d\mu_\mNumber{0} (\phi) = \exp(l_{h}(\phi) - ||h||_H^\mNumber{2} / \mNumber{2})\]
 
 where \(l_{h}\) is the linear functional associated to h. In particular:
 
@@ -80,14 +80,14 @@ where \(l_{h}\) is the linear functional associated to h. In particular:
 
 To compute \(T_{\psi}^{\mDualStar} \mu,\) we need the density of the shifted interacting measure:
 
-\[dT_{\psi}^{\mDualStar} \mu / d\mu_\mNumber{0} (\phi) = Z^{-\mNumber{1}} \exp(-V(\phi - \psi)) \ast \exp(l_{\psi}(\phi) - ||\psi||_H^\mNumber{2}/\mNumber{2})\]
+\[\mathrm{d}T_{\psi}^{\mDualStar} \mu / d\mu_\mNumber{0} (\phi) = Z^{-\mNumber{1}} \exp(-V(\phi - \psi)) \ast \exp(l_{\psi}(\phi) - ||\psi||_H^\mNumber{2}/\mNumber{2})\]
 
 The shifted interaction V(phi - psi) expands (using Wick ordering relative to \(\mu_\mNumber{0}\)):
 
 \[\begin{aligned}
-V(\phi - \psi) = V(\phi) - \mNumber{4} \Integral \psi :\phi^\mNumber{3}:\,dx + \mNumber{6} \Integral \psi^\mNumber{2} :\phi^\mNumber{2}:\,dx \\
-- \mNumber{4} \Integral \psi^\mNumber{3} :\phi:\,dx + \Integral \psi^\mNumber{4}\,dx \\
-- C(\Integral :\phi^\mNumber{2}:\,dx - \mNumber{2} \Integral \psi :\phi:\,dx + \Integral \psi^\mNumber{2}\,dx) + (renorm. corrections)
+V(\phi - \psi) = V(\phi) - \mNumber{4} int \psi :\phi^\mNumber{3}: \mathrm{d}x + \mNumber{6} int \psi^\mNumber{2} :\phi^\mNumber{2}: \mathrm{d}x \\
+- \mNumber{4} int \psi^\mNumber{3} :\phi: \mathrm{d}x + int \psi^\mNumber{4} \mathrm{d}x \\
+- C(int :\phi^\mNumber{2}: \mathrm{d}x - \mNumber{2} int \psi :\phi: \mathrm{d}x + int \psi^\mNumber{2} \mathrm{d}x) + (renorm. corrections)
 \end{aligned}\]
 
 \textbf{Renormalization under shift:} The term 6 int \(\psi^{\mNumber{2}} :\phi^{\mNumber{2}}\): dx generates an
@@ -118,7 +118,7 @@ which has the right regularity:
 \hypertarget{5-integrability-and-equivalence}{%
 \subsubsection{5. Integrability and equivalence}\label{5-integrability-and-equivalence}}
 
-The Radon-Nikodym derivative \(dT_{\psi}^{\mDualStar} \mu / d\mu\) involves:
+The Radon-Nikodym derivative \(\mathrm{d}T_{\psi}^{\mDualStar} \mu / d\mu\) involves:
 
 \[R(\phi) = \exp(-(V(\phi-\psi) - V(\phi)) + l_{\psi}(\phi) - const)\]
 
@@ -131,14 +131,14 @@ We need \(R \in L^{\mNumber{1}}(\mu)\) and \(R > \mNumber{0}\) a.s.
 2020), the measure has strong concentration: the tails of int \(\psi :\phi^{\mNumber{3}}\): dx
 are controlled by the quartic interaction. Specifically:
 
-\[E_{\mu}[\exp(t |\Integral \psi :\phi^\mNumber{3}:\,dx|)] < \infty \text{for} |t| < t_\mNumber{0}\]
+\[E_{\mu}[\exp(t |int \psi :\phi^\mNumber{3}: \mathrm{d}x|)] < \infty \text{for} |t| < t_\mNumber{0}\]
 
 where \(t_\mNumber{0} > \mNumber{0}\) depends on \(\|\psi\|_{C^\mNumber{0}}\) and the coupling constant.
 This exponential integrability follows from the coercivity of the \(\phi^\mNumber{4}\)
 interaction: the quartic potential dominates the cubic perturbation
 (Barashkov-Gubinelli 2020, Section 4, exponential integrability from the
 Polchinski flow). The bound suffices for \(R \in L^{\mNumber{1}}(\mu)\) since the exponent
-in the Radon-Nikodym derivative is bounded by 4 \(\|\psi\|_{C^{\mNumber{0}}} |\Integral :\phi^{\mNumber{3}}:\,dx|,\)
+in the Radon-Nikodym derivative is bounded by 4 \(\|\psi\|_{C^{\mNumber{0}}} |\Integral :\phi^{\mNumber{3}}:\,\mathrm{d}x|,\)
 and \(t_\mNumber{0}\) can be chosen to exceed this coefficient.
 
 Therefore \(R \in L^{\mNumber{1}}(\mu)\) and 1/\(R \in L\)\^{}1(\(T_{\psi}\)\^{}* mu), giving:
@@ -151,7 +151,7 @@ Therefore \(R \in L^{\mNumber{1}}(\mu)\) and 1/\(R \in L\)\^{}1(\(T_{\psi}\)\^{}
 Barashkov-Gubinelli (2020) construct the \(\Phi^\mNumber{4}_\mNumber{3}\) measure via the Boué-Dupuis
 variational formula, which represents:
 
-\[-log Z = inf_{u} E[V(\phi + \int_\mNumber{0}^\mNumber{1} u_{s} ds) + \mNumber{1}/\mNumber{2} \int_\mNumber{0}^\mNumber{1} ||u_{s}||^\mNumber{2} ds]\]
+\[-log Z = inf_{u} E[V(\phi + \int_\mNumber{0}^\mNumber{1} u_{s} \mathrm{d}s) + \mNumber{1}/\mNumber{2} \int_\mNumber{0}^\mNumber{1} ||u_{s}||^\mNumber{2} \mathrm{d}s]\]
 
 In this framework, shifting by \(\psi\) is equivalent to modifying the variational
 problem by a shift in the drift, which produces an equivalent measure (the

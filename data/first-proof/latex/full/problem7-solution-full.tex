@@ -17,7 +17,7 @@ fundamental group of a closed manifold whose universal cover is acyclic over
 \begin{itemize}
 \tightlist
 \item
-  Obligation (E2) --- placing \(\Gamma \in FH(Q)\) --- is \textbf{discharged} for
+  Obligation (E2) --- placing \(\Gamma \in \mathup{FH}(Q)\) --- is \textbf{discharged} for
   the rotation-lattice family (Fowler criterion, codim-2 fixed set with
   \(\chi\) = 0).
 \item
@@ -57,7 +57,7 @@ writeup, "rational Poincare duality" for \(\Gamma\) with torsion refers to the
 Bredon-equivariant formulation above.
 
 \hypertarget{3-obligation-e2-finite-cw-realization-gamma-in-fhq}{%
-\subsection{\texorpdfstring{3. Obligation E2: Finite-CW Realization (\(\Gamma \in FH(Q)\))}{3. Obligation E2: Finite-CW Realization (\textbackslash Gamma \textbackslash in FH(Q))}}\label{3-obligation-e2-finite-cw-realization-gamma-in-fhq}}
+\subsection{\texorpdfstring{3. Obligation E2: Finite-CW Realization (\(\Gamma \in \mathup{FH}(Q)\))}{3. Obligation E2: Finite-CW Realization (\textbackslash Gamma \textbackslash in \textbackslash mathup\{FH\}(Q))}}\label{3-obligation-e2-finite-cw-realization-gamma-in-fhq}}
 
 \hypertarget{3a-fowlers-criterion}{%
 \subsubsection{3a. Fowler\textquotesingle s Criterion}\label{3a-fowlers-criterion}}
@@ -66,7 +66,7 @@ A theorem of Fowler (arXiv:1204.4667, Main Theorem) gives a concrete
 criterion: if a finite group \texttt{G} acts on a finite CW complex \texttt{Y} such that
 for every nontrivial subgroup \(H < G\) and every connected component \texttt{C} of
 the fixed set \(Y^{H}\), the Euler characteristic \(\chi(C) = \mNumber{0}\), then the
-orbifold extension group \(\pi_\mNumber{1}((EG \times Y)/G)\) lies in \(FH(Q)\).
+orbifold extension group \(\pi_\mNumber{1}((\mathup{EG} \times Y)/G)\) lies in \(\mathup{FH}(Q)\).
 
 That is, there exists a finite CW complex with the given fundamental group
 whose universal cover is rationally acyclic.
@@ -81,7 +81,7 @@ The E2 obligation is discharged by the following construction (details in
 \def\labelenumi{\arabic{enumi}.}
 \item
   \textbf{Arithmetic lattice with reflection.} Take an arithmetic uniform lattice
-  \(\Gamma_\mNumber{0} < Isom(H^{n})\) containing a reflection \(\tau\), as provided by
+  \(\Gamma_\mNumber{0} < \mathup{Isom}(H^{n})\) containing a reflection \(\tau\), as provided by
   Douba-Vargas Pallete (arXiv:2506.23994, Remark 5). Choose \texttt{n} \textbf{even}
   (e.g., \(n = \mNumber{4}\) or \(n = \mNumber{6}\)).
 \item
@@ -89,12 +89,12 @@ The E2 obligation is discharged by the following construction (details in
   principal congruence subgroup. Then \(M = \pi \ H^{n}\) is a closed hyperbolic
   manifold, and \(\tau\) induces an involution \(\tau_{bar}\) on \texttt{M}.
 \item
-  \textbf{Extension.} Set \(G = <\tau_{bar}> = Z/\mNumber{2}\) acting on \(Bpi := M\).
+  \textbf{Extension.} Set \(G = <\tau_{bar}> = Z/\mNumber{2}\) acting on \(B_{\pi} := M\).
   The orbifold extension gives \(\mNumber{1} \to \pi \to \Gamma \to Z/\mNumber{2} \to \mNumber{1}\), where
   \(\Gamma\) is a cocompact lattice (finite extension of cocompact \(\pi\)) with
   order-2 torsion.
 \item
-  \textbf{Fixed-set Euler check.} The fixed set \(Fix(\tau_{bar})\) is a (possibly
+  \textbf{Fixed-set Euler check.} The fixed set \(\mOpName{Fix}(\tau_{bar})\) is a (possibly
   disconnected) closed, embedded, totally geodesic hypersurface
   (arXiv:2506.23994). Each component has dimension \(n-\mNumber{1}\). Since \texttt{n} is even,
   \(n-\mNumber{1}\) is odd, and every closed odd-dimensional manifold has Euler
@@ -102,7 +102,7 @@ The E2 obligation is discharged by the following construction (details in
 \item
   \textbf{Fowler application.} The only nontrivial subgroup of \(Z/\mNumber{2}\) is itself.
   All fixed components have zero Euler characteristic. By Fowler\textquotesingle s Main
-  Theorem, \(\Gamma \in FH(Q)\).
+  Theorem, \(\Gamma \in \mathup{FH}(Q)\).
 \end{enumerate}
 
 \textbf{E2 status: discharged} for this lattice family.
@@ -123,7 +123,7 @@ The construction in Section 3b provides:
 \begin{itemize}
 \tightlist
 \item
-  \(\pi\): a torsion-free cocompact lattice in \(Isom(H^{n})\), with \texttt{n} even
+  \(\pi\): a torsion-free cocompact lattice in \(\mathup{Isom}(H^{n})\), with \texttt{n} even
   \(\ge \mNumber{6}\).
 \item
   \(M = H^{n}/\pi\): a closed hyperbolic \texttt{n}-manifold. \texttt{M} is a closed manifold
@@ -254,7 +254,7 @@ dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(
 \tightlist
 \item
   Fixed set \(H^{\mNumber{2}k-\mNumber{1}}\) has dimension \(\mNumber{2}k-\mNumber{1}\) (odd), so \(\chi = \mNumber{0}\). Fowler
-  criterion is satisfied: \(\Gamma \in FH(Q)\).
+  criterion is satisfied: \(\Gamma \in \mathup{FH}(Q)\).
 \item
   Surgery obstruction lives in \(L_{\mNumber{2}k+\mNumber{1}}(Z[\Gamma]) tensor Q\), which has
   favorable parity (odd total degree forces odd \texttt{p} in AHSS terms).
@@ -273,15 +273,15 @@ dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(
   \textbf{Quadratic form.} Let \(k = Q(sqrt(\mNumber{2})), O_{k} = Z[sqrt(\mNumber{2})]\). Define
   \(f = (\mNumber{1} - sqrt(\mNumber{2}))x_\mNumber{0}^\mNumber{2} + x_\mNumber{1}^\mNumber{2} + ... + x_{n}^\mNumber{2} \in n+\mNumber{1}\) variables.
   Under the two real embeddings of \texttt{k}, \texttt{f} has signatures \((n, \mNumber{1})\) and
-  \((n+\mNumber{1}, \mNumber{0})\). So \(SO(f)\) gives \(SO(n, \mNumber{1})\) at one place and a compact
+  \((n+\mNumber{1}, \mNumber{0})\). So \(\mathup{SO}(f)\) gives \(\mathup{SO}(n, \mNumber{1})\) at one place and a compact
   group at the other.
 \item
-  \textbf{Uniform lattice.} \(\Gamma_\mNumber{0} = SO(f, O_{k})\) is a cocompact arithmetic
-  lattice in \(SO(n, \mNumber{1})\) (Borel-Harish-Chandra; cocompactness by Godement
+  \textbf{Uniform lattice.} \(\Gamma_\mNumber{0} = \mathup{SO}(f, O_{k})\) is a cocompact arithmetic
+  lattice in \(\mathup{SO}(n, \mNumber{1})\) (Borel-Harish-Chandra; cocompactness by Godement
   criterion since \texttt{f} is anisotropic over \texttt{k}).
 \item
   \textbf{Order-2 rotation.} \(\sigma = \operatorname{diag}(\mNumber{1}, -\mNumber{1}, -\mNumber{1}, \mNumber{1}, ..., \mNumber{1})\) is in
-  \(SO(f, O_{k})\): it preserves \texttt{f} (negates \(x_\mNumber{1}, x_\mNumber{2}\) in the \(x_\mNumber{1}^\mNumber{2}+x_\mNumber{2}^\mNumber{2}\)
+  \(\mathup{SO}(f, O_{k})\): it preserves \texttt{f} (negates \(x_\mNumber{1}, x_\mNumber{2}\) in the \(x_\mNumber{1}^\mNumber{2}+x_\mNumber{2}^\mNumber{2}\)
   summand), has determinant \(+\mNumber{1}\), and has integer entries. Its fixed set on
   \(H^{n}\) is \(H^{n-\mNumber{2}}\) (codimension 2).
 \item
@@ -291,7 +291,7 @@ dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(
   \(\Gamma = <\pi, \sigma>\) is a cocompact lattice with order-2 torsion.
 \item
   \textbf{Fowler application.} Fixed set has dimension \(n-\mNumber{2} = \mNumber{2}k-\mNumber{1}\) (odd), so
-  \(\chi = \mNumber{0}\). By Fowler\textquotesingle s Main Theorem: \(\Gamma \in FH(Q)\).
+  \(\chi = \mNumber{0}\). By Fowler\textquotesingle s Main Theorem: \(\Gamma \in \mathup{FH}(Q)\).
 \end{enumerate}
 
 \textbf{E2 status for rotation route: DISCHARGED.}
@@ -335,21 +335,21 @@ in Sections 3-4.
 
 \textbf{Theorem.} Let \(\Gamma\) be a cocompact lattice extension
 \(\mNumber{1} \to \pi \to \Gamma \to Z/\mNumber{2} \to \mNumber{1}\) constructed from an arithmetic lattice in
-\(Isom(H^{n})\) containing an order-2 isometry, via either:
+\(\mathup{Isom}(H^{n})\) containing an order-2 isometry, via either:
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{(Reflection route)} Section 3b: reflection lattice in \(Isom(H^{n})\),
+  \textbf{(Reflection route)} Section 3b: reflection lattice in \(\mathup{Isom}(H^{n})\),
   \texttt{n} even, \(n \ge \mNumber{6}\).
 \item
-  \textbf{(Rotation route)} Approach IV: rotation lattice in \(Isom(H^{n})\),
+  \textbf{(Rotation route)} Approach IV: rotation lattice in \(\mathup{Isom}(H^{n})\),
   \texttt{n} odd, \(n \ge \mNumber{7}\). See \texttt{problem7r-rotation-lattice-construction.md}.
 \end{itemize}
 
 Then:
 
-(a) \textbf{(Unconditional)} \(\Gamma \in FH(Q)\): there exists a finite CW complex
+(a) \textbf{(Unconditional)} \(\Gamma \in \mathup{FH}(Q)\): there exists a finite CW complex
 \texttt{Y} with \(\pi_\mNumber{1}(Y) = \Gamma\) and \(H_{\mDualStar}(Y_{tilde}; Q) = \mNumber{0}\) for \(* > \mNumber{0}\).
 (Both routes discharge E2 via Fowler\textquotesingle s criterion.)
 
