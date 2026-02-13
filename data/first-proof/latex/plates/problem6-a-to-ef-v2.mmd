@@ -1,0 +1,62 @@
+flowchart TD
+    %% Problem 6 strategy flow v2: full 9-cycle evolution
+    %% Replaces the linear A->L dispatch from 7e03174
+
+    A["GPL-H Attack Dispatch<br/><i>5289ca8</i>"]
+    B["Turán + Leverage Split<br/>I₀ ≥ εn/3 (proved)"]
+    C["Barrier Greedy + Pigeonhole<br/>dbar &lt; 1 → feasible v (proved)"]
+    D["Neumann Series + Operator Bound<br/>ρ₁ &lt; ½ at Kₙ (proved, C4)"]
+    E["BR1–BR4 Blocking Results<br/>standard toolkit insufficient<br/>at ½ threshold (proved, C4)"]
+    F["Threshold Relaxation<br/>any c &lt; 1 suffices (proved, C5)"]
+    G["Assembly Decomposition<br/>dbar = dbar⁰ + correction<br/>α &lt; 1 + product bound (proved, C5)"]
+    H["Bridge B: Leverage-Ordered Greedy<br/>+ Induced Foster → dbar⁰ &lt; 1<br/>for prefix (proved, C6)"]
+    I["BMI FALSIFIED<br/>dbar ≥ 1 at 12 steps<br/>(worst 1.739, C7)"]
+    J["Gap → GPL-V<br/>vertex-level feasibility<br/>(reformulated, C7)"]
+    K["Isolation Argument<br/>deg_S = 0 covers 83%<br/>of GPL-V steps (C8)"]
+    L["Sparse Dichotomy PROVED<br/>Δ(G[I₀]) &lt; 3/ε−1 → GPL-V<br/>via domination bound (C9)"]
+    M["Strong Dichotomy CONJECTURED<br/>isolation OR dbar &lt; 1 at each step<br/>0/148 counterexamples (C9)"]
+    N["Kₙ CLOSED<br/>c₀ = 1/3"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E -->|"pivots approach"| F
+    F --> G
+    G --> H
+    H --> I
+    I -->|"major pivot"| J
+    J --> K
+    K --> L
+    L --> M
+
+    %% K_n closure side-branch
+    D -->|"exact formula"| N
+
+    %% Lemma chain feeding into dichotomy
+    subgraph "Cycle 9 Lemmas"
+        L8["Lem 8: Π_{I₀} ≤ I<br/>(Rayleigh mono.)"]
+        L11["Lem 11: rank(Y(v)) = deg_S(v)"]
+        L12["Lem 12: Projection<br/>pigeonhole"]
+    end
+    L8 --> L
+    L11 --> L
+    L12 --> M
+
+    %% Styling
+    classDef proved fill:#c7f9cc,stroke:#2d6a4f,stroke-width:2px
+    classDef pivot fill:#ffe9a8,stroke:#8f6b00,stroke-width:2px
+    classDef falsified fill:#fdd,stroke:#c66,stroke-width:2px,stroke-dasharray: 5 5
+    classDef open fill:#ffc,stroke:#cc3,stroke-width:3px
+    classDef closure fill:#c7f9cc,stroke:#2d6a4f,stroke-width:3px
+    classDef lemma fill:#e8f0fe,stroke:#3d5a80,stroke-width:1px
+
+    class A proved
+    class B,C,D,F,G,H proved
+    class E,I pivot
+    class I falsified
+    class J open
+    class K,L proved
+    class M open
+    class N closure
+    class L8,L11,L12 lemma
