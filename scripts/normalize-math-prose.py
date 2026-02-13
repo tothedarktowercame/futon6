@@ -38,6 +38,13 @@ UNICODE_TO_TEX = {
     "⊂": r"\subset",
     "∈": r"\in",
     "∞": r"\infty",
+    "μ": r"\mu",
+    "µ": r"\mu",
+    "ψ": r"\psi",
+    "Ψ": r"\Psi",
+    "π": r"\pi",
+    "Π": r"\Pi",
+    "∗": r"\ast",
 }
 UNICODE_MATH_CHAR_RE = re.compile("|".join(re.escape(k) for k in UNICODE_TO_TEX))
 
@@ -101,6 +108,17 @@ COTANGENT_TOKEN_RE = re.compile(r"\bT\^\\?\*\s*([A-Za-z][A-Za-z0-9_]*)\b")
 OP_CALL_TEXT_RE = re.compile(r"\b(span|ker|rank|dim|codim|trace)\(([^()]+)\)")
 OMEGA_RESTRICT_RE = re.compile(r"\bomega\|_([A-Za-z0-9]+)\b")
 OMEGA_EQ_RE = re.compile(r"\bomega\(([^()]+)\)\s*=\s*([0-9]+)\b")
+MU_GLUE_RE = re.compile(r"([μµ])([A-Za-z])")
+DMU_TOKEN_RE = re.compile(
+    r"(?<![A-Za-z0-9_])dmu(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+)?(?=[^A-Za-z0-9_]|$)"
+)
+INTEGRAL_TOKEN_RE = re.compile(
+    r"(?<![A-Za-z0-9_])integral(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+)?(?=[^A-Za-z0-9_]|$)"
+)
+SIMPLE_COMPARISON_RE = re.compile(
+    r"(?<![$\\])\b([A-Za-z][A-Za-z0-9_]*|\d+)\s*([<>])\s*([A-Za-z][A-Za-z0-9_]*|\d+)\b"
+)
+TPSI_STAR_RE = re.compile(r"T([ψΨ])([∗*])")
 
 
 def _unicode_math_char_repl(m: re.Match[str]) -> str:
@@ -135,6 +153,30 @@ def _op_call_text_repl(m: re.Match[str]) -> str:
     args = m.group(2)
     args = re.sub(r"\bomega\|_([A-Za-z0-9]+)\b", r"\\omega|_{\1}", args)
     return rf"$\mOpName{{{op}}}({args})$"
+
+
+def _dmu_token_repl(m: re.Match[str]) -> str:
+    tok = m.group(0)
+    suffix = tok[3:]
+    return rf"$d\mu{suffix}$"
+
+
+def _integral_token_repl(m: re.Match[str]) -> str:
+    tok = m.group(0)
+    suffix = tok[len("integral") :]
+    return rf"$\Integral{suffix}$"
+
+
+def _simple_comparison_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    op = m.group(2)
+    rhs = _texify_token(m.group(3))
+    return rf"${lhs} {op} {rhs}$"
+
+
+def _tpsi_star_repl(m: re.Match[str]) -> str:
+    psi = r"\Psi" if m.group(1) == "Ψ" else r"\psi"
+    return rf"$T_{{{psi}}}^{{\mDualStar}}$"
 
 
 def split_inline_code(s: str) -> list[tuple[str, str]]:
@@ -411,7 +453,13 @@ def process_plain_text_segment(s: str) -> str:
     s = s.replace("{[}", "[").replace("{]}", "]")
     s = s.replace("\\textbar{}", "|").replace("\\textbar", "|")
     s = s.replace("\\textless{}", "<").replace("\\textgreater{}", ">")
+    s = s.replace("\\textless", "<").replace("\\textgreater", ">")
+    s = MU_GLUE_RE.sub(r"\1 \2", s)
+    s = TPSI_STAR_RE.sub(_tpsi_star_repl, s)
     s = re.sub(r"\^\\?\*(?=[A-Za-z0-9(])", r"^\\*", s)
+    s = DMU_TOKEN_RE.sub(_dmu_token_repl, s)
+    s = INTEGRAL_TOKEN_RE.sub(_integral_token_repl, s)
+    s = SIMPLE_COMPARISON_RE.sub(_simple_comparison_repl, s)
     s = COMPLEX_RING_RE.sub(_complex_ring_repl, s)
     s = COTANGENT_FIELD_RE.sub(_cotangent_field_repl, s)
     s = COTANGENT_TOKEN_RE.sub(_cotangent_token_repl, s)
@@ -544,6 +592,10 @@ def run_self_test() -> None:
         ("rotation matrices over Z[√2]", r"rotation matrices over $\mathbb{Z}[\sqrt{2}]$"),
         ("theta = 0 in L_8(Z[Γ])", r"theta = 0 in L_8($\mathbb{Z}[\Gamma]$)"),
         ("graphs in T^*R^2 are exact.", r"graphs in $T^{\mDualStar} \mathbb{R}^{2}$ are exact."),
+        (
+            "Yes. The measures µ and Tψ∗ µare equivalent. Use dmu_0 and integral_{T^3}. n < m and m > 0.",
+            r"Yes. The measures $\mu$ and $T_{\psi}^{\mDualStar}$ $\mu$ are equivalent. Use $d\mu_0$ and $\Integral_{T^3}$. $n < m$ and $m > 0$.",
+        ),
         (
             "Consider the map Phi: K(Pi)|_{GL_n} → (fractional ideals of R) defined by "
             "Phi(phi) = { I(s, phi, V) : V in W(pi, psi) } · R. "

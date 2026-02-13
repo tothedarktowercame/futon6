@@ -66,6 +66,11 @@ ALGO_BLOCK_SNIPPET = (
 COTANGENT_STAR_SNIPPET = (
     "The graph lies in T^*R^2 and dual vectors live in T^*V.\n"
 )
+MU_DMU_INTEGRAL_SNIPPET = (
+    "Yes. The measures µ and Tψ∗ µare equivalent. "
+    "Use dmu_0 and integral_{T^3}. "
+    "Also n < m and m > 0. Consider [n] and {0,1}.\n"
+)
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -159,6 +164,9 @@ def main() -> int:
     normalized_cotangent, out_cotangent = render_snippet(
         repo, normalizer, lua_filter, COTANGENT_STAR_SNIPPET
     )
+    normalized_mu_dmu, out_mu_dmu = render_snippet(
+        repo, normalizer, lua_filter, MU_DMU_INTEGRAL_SNIPPET
+    )
     out_plus_star_raw = out_plus_star
 
     out = strip_mnumber(out)
@@ -184,6 +192,8 @@ def main() -> int:
     out_unicode_escape = strip_mnumber(out_unicode_escape)
     normalized_cotangent = strip_mnumber(normalized_cotangent)
     out_cotangent = strip_mnumber(out_cotangent)
+    normalized_mu_dmu = strip_mnumber(normalized_mu_dmu)
+    out_mu_dmu = strip_mnumber(out_mu_dmu)
 
     if r"integrals over \(V\)" not in out:
         failures.append("missing inline math for V in 'integrals over V'")
@@ -376,6 +386,26 @@ def main() -> int:
         failures.append("rendered output missing inline math for T^*R^2 cotangent expression")
     if r"\(T^{\mDualStar} V\)" not in out_cotangent:
         failures.append("rendered output missing inline math for T^*V dual expression")
+    if r"$\mu$ are equivalent" not in normalized_mu_dmu:
+        failures.append("normalizer did not repair missing space after mu (muare -> mu are)")
+    if r"$d\mu_0$" not in normalized_mu_dmu:
+        failures.append("normalizer did not convert dmu_0 into d\\mu_0 math")
+    if r"$\Integral_{T^3}$" not in normalized_mu_dmu:
+        failures.append("normalizer did not convert integral_{...} into \\Integral_{...} math")
+    if r"$n < m$" not in normalized_mu_dmu or r"$m > 0$" not in normalized_mu_dmu:
+        failures.append("normalizer did not convert < and > comparisons into math")
+    if r"\muare" in out_mu_dmu:
+        failures.append("rendered output still contains glued \\muare token")
+    if r"\(d\mu_{0}\)" not in out_mu_dmu and r"\(d\mu_0\)" not in out_mu_dmu:
+        failures.append("rendered output missing inline math for d\\mu_0")
+    if r"\(\Integral_{T^{3}}\)" not in out_mu_dmu and r"\(\Integral_{T^3}\)" not in out_mu_dmu:
+        failures.append("rendered output missing inline math for \\Integral_{T^3}")
+    if r"\(n < m\)" not in out_mu_dmu or r"\(m > 0\)" not in out_mu_dmu:
+        failures.append("rendered output missing inline math for < or > comparisons")
+    if r"\([n]\)" not in out_mu_dmu:
+        failures.append("rendered output missing inline math for bracket token [n]")
+    if r"\(\{0,1\}\)" not in out_mu_dmu and r"\(\{0, 1\}\)" not in out_mu_dmu:
+        failures.append("rendered output missing inline math for brace token {0,1}")
 
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:
@@ -388,6 +418,8 @@ def main() -> int:
         failures.append("math-proofread style does not define named-operator color class")
     if r"\newcommand{\mOpName}[1]" not in style:
         failures.append("math-proofread style does not define \\mOpName macro")
+    if r"\providecommand{\Integral}{\int}" not in style:
+        failures.append("math-proofread style does not provide \\Integral alias")
     if r"\colorlet{MPSyntaxDualMarkerColor}{Turquoise}" not in style:
         failures.append("math-proofread style does not define dual-marker color class")
     if r"\newcommand{\mDualStar}" not in style:
@@ -412,6 +444,8 @@ def main() -> int:
         failures.append("math-proofread style does not colorize \\mathit payloads")
     if r"\colorlet{MPSyntaxNumberColor}{Red}" not in style:
         failures.append("math-proofread style does not set integer/number color to Red")
+    if r"\colorlet{MPSyntaxDelimiterColor}{Magenta}" not in style:
+        failures.append("math-proofread style does not set delimiters to Magenta")
 
     if failures:
         for item in failures:

@@ -9,7 +9,7 @@ missing data, solve
 
 \[[(Z \times K)^{T} D (Z \times K) + \lambda (I_{r} \times K)] vec(W) = (I_{r} \times K) vec(B),\]
 
-where \(D = S S^{T}\)is the observation projector (q observed entries out of
+where \(D = S S^{T}\) is the observation projector (q observed entries out of
 N = nM), \(B = T\) Z, and n, r \textless\textless{} q \textless\textless{} N.
 
 \hypertarget{assumptions-used-explicit}{%
@@ -22,7 +22,7 @@ N = nM), \(B = T\) Z, and n, r \textless\textless{} q \textless\textless{} N.
   \(\lambda > \mNumber{0}\).
 \item
   For standard PCG and Cholesky-based preconditioning, use a PD kernel
-  \(K_{\tau} = K \mBridgeOperator{+} \tau I_{n}\)with \(\tau > \mNumber{0}\) (or assume K is already PD).
+  \(K_{\tau} = K \mBridgeOperator{+} \tau I_{n}\) with \(\tau > \mNumber{0}\) (or assume K is already PD).
 \item
   S is a selection operator, so D is diagonal/projector and sparse by index list.
 \end{enumerate}
@@ -104,12 +104,12 @@ with no \(O(N)\) term.
   \(K_{\tau}\) B: \(O(n^\mNumber{2} r)\)
 \end{enumerate}
 
-So \(b_{\tau} = (I_{r} \times K_{\tau})\)vec(B) is formed in \(O(q r + n^\mNumber{2} r)\).
+So \(b_{\tau} = (I_{r} \times K_{\tau})\) vec(B) is formed in \(O(q r + n^\mNumber{2} r)\).
 
 \hypertarget{4-preconditioner-that-matches-the-corrected-algebra}{%
 \subsubsection{4. Preconditioner that matches the corrected algebra}\label{4-preconditioner-that-matches-the-corrected-algebra}}
 
-Use \(D = S S^{T}\)and whiten by \(K_{\tau}^{-\mNumber{1}/\mNumber{2}}:\)
+Use \(D = S S^{T}\) and whiten by \(K_{\tau}^{-\mNumber{1}/\mNumber{2}}:\)
 
 \[x = (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) y.\]
 
@@ -159,7 +159,7 @@ For SPD \(A_{\tau}\) and SPD P, standard PCG gives
 
 \[||e_{t}||_{A_{\tau}} \le \mNumber{2} ((sqrt(\kappa)-\mNumber{1})/(sqrt(\kappa)+\mNumber{1}))^{t} ||e_\mNumber{0}||_{A_{\tau}},\]
 
-with \(\kappa\) = cond(\(P^{-\mNumber{1}/\mNumber{2}} A_{\tau} P^{-\mNumber{1}/\mNumber{2}}),\)so
+with \(\kappa\) = cond(\(P^{-\mNumber{1}/\mNumber{2}} A_{\tau} P^{-\mNumber{1}/\mNumber{2}}),\) so
 
 \[t = O(sqrt(\kappa) \log(\mNumber{1}/eps)).\]
 
@@ -227,10 +227,10 @@ In the common regime \(n \ge r\), this simplifies to
 with dependence on q (observed entries) rather than N (all entries).
 
 \textbf{Regime caveat.} When n is large enough that the \(O(n^\mNumber{3})\) Cholesky setup
-dominates (i.e., \(n^\mNumber{3}\) \textgreater{} t(\(n^{\mNumber{2}} r \mBridgeOperator{+} q\)r)), the per-ALS-step cost is effectively
+dominates (i.e., \(n^{\mNumber{3}} > t(n^{\mNumber{2}} r \mBridgeOperator{+} q\) r)), the per-ALS-step cost is effectively
 \(O(n^\mNumber{3})\). In this regime, low-rank kernel approximations (e.g., Nystrom
 approximation with rank p \textless\textless{} n, reducing the kernel factorization to \(O(n p^\mNumber{2})\))
-or iterative inner solves (conjugate gradient on \(K_{\tau} y = z,\)cost \(O(n^\mNumber{2})\)
+or iterative inner solves (conjugate gradient on \(K_{\tau} y = z,\) cost \(O(n^\mNumber{2})\)
 per inner iteration) can replace the exact Cholesky, reducing the setup to
 \(O(n p^\mNumber{2} + t(n p r + q r))\). This is a well-known practical optimization
 (see Rudi-Calandriello-Rosasco 2017) and is compatible with the PCG framework

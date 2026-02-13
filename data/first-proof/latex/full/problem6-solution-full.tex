@@ -21,7 +21,7 @@ S is \(\epsilon\)-light if
 
 in Loewner order.
 
-Question: does there exist universal c\textgreater0 such that for every G and every
+Question: does there exist universal \(c > \mNumber{0}\) such that for every G and every
 \(\epsilon\) in (0,1), there exists S with \textbar S\textbar{} \textgreater= c\emph{\(\epsilon\)}n and \(L_{S} \le \epsilon\) L?
 
 \hypertarget{status-of-this-writeup}{%
@@ -37,7 +37,7 @@ external dependencies:
   Proved in-text: exact formulation, \(K_{n}\) upper bound c\textless=1, sampling identities,
   and a correct matrix-concentration setup.
 \item
-  External dependency: the universal lower bound c0\textgreater0 for all graphs is not
+  External dependency: the universal lower bound \(c\mNumber{0} > \mNumber{0}\) for all graphs is not
   rederived here; it is treated as an imported theorem assumption.
 \end{enumerate}
 
@@ -68,7 +68,7 @@ x^{T} L_{K_{n}} x = n ||x||^\mNumber{2}, \\
 x^{T} L_{S} x = s ||x||^\mNumber{2}.
 \end{aligned}\]
 
-Hence \(L_{S} \le \epsilon L_{K_{n}}\)implies \(s \le \epsilon\) n.
+Hence \(L_{S} \le \epsilon L_{K_{n}}\) implies \(s \le \epsilon\) n.
 Therefore any universal constant must satisfy
 
 \[c \le \mNumber{1}.\]
@@ -90,7 +90,7 @@ Let \(Z_{v}\) \textasciitilde{} Bernoulli(p) independently and S=\{v: \(Z_{v}\)=
 \item
   Spectral expectation:
 
-  E{[}\(L_{S}] = p^{\mNumber{2}}\)L,
+  E{[}\(L_{S}] = p^{\mNumber{2}}\) L,
 \end{enumerate}
 
 since each edge survives with probability \(p^\mNumber{2}.\)
@@ -99,7 +99,7 @@ Thus
 
 \[E[\epsilon L - L_{S}] = (\epsilon - p^\mNumber{2})L.\]
 
-Setting p=epsilon gives E{[}\(L_{S}]=\epsilon^{\mNumber{2}} L \le \epsilon\)L. This is not yet a
+Setting p=epsilon gives E{[}\(L_{S}]=\epsilon^{\mNumber{2}} L \le \epsilon\) L. This is not yet a
 realization-level guarantee.
 
 \hypertarget{4-concentration-setup-gap-fixed-formulation}{%
@@ -121,7 +121,7 @@ and leverage scores
 \hypertarget{4a-star-domination-with-correct-counting}{%
 \subsubsection{4a. Star domination with correct counting}\label{4a-star-domination-with-correct-counting}}
 
-Using \(Z_{u} Z_{v} \le Z_{u}\)and \(Z_{u} Z_{v} \le Z_{v}\)for each edge \{u,v\},
+Using \(Z_{u} Z_{v} \le Z_{u}\) and \(Z_{u} Z_{v} \le Z_{v}\) for each edge \(\{u,v\}\),
 
 \[\begin{aligned}
 L_{S} = \sum_{uv \in E} Z_{u} Z_{v} L_{uv} \\
@@ -135,12 +135,13 @@ L^{+/\mNumber{2}} L_{S} L^{+/\mNumber{2}} \le \sum_{v} Z_{v} A_{v}, \\
 A_{v} := (\mNumber{1}/\mNumber{2}) \sum_{u~v} X_{uv} \ge \mNumber{0}.
 \end{aligned}\]
 
-Because \(Z_{v}\) are independent Bernoulli variables, the random matrices \(Z_{v} A_{v}\)are independent PSD summands.
+Because \(Z_{v}\) are independent Bernoulli variables, the random matrices \(Z_{v} A_{v}\)
+are independent PSD summands.
 
 \hypertarget{4b-freedmanbernstein-martingale-parameters}{%
 \subsubsection{4b. Freedman/Bernstein martingale parameters}\label{4b-freedmanbernstein-martingale-parameters}}
 
-Let \(A_{i}\) be a fixed ordering of \({A_{v}}, p_{i}\)=E{[}\(Z_{i}\){]}, and define the centered sum
+Let \(A_{i}\) be a fixed ordering of \(\{A_{v}\}, p_{i}\)=E{[}\(Z_{i}\){]}, and define the centered sum
 
 \[X = \sum_{i} (Z_{i} - p_{i}) A_{i}.\]
 
@@ -167,7 +168,7 @@ on \(R_{\mDualStar}\) and \textbar\textbar{}\(W_{n}\)\textbar\textbar{} are supp
 
 \textbf{What graph-dependent bounds are needed.} To obtain a self-contained
 concentration bound, one would need \(R_{\mDualStar} \le C_\mNumber{1} \ast \epsilon\) and
-\textbar\textbar{}\(W_{n}|| \le C_{\mNumber{2}} \ast \epsilon^{\mNumber{2}}\)for graph-dependent constants \(C_{\mNumber{1}}, C_{\mNumber{2}}.\)Bounding
+\textbar\textbar{}\(W_{n}|| \le C_{\mNumber{2}} \ast \epsilon^{\mNumber{2}}\) for graph-dependent constants \(C_{\mNumber{1}}, C_{\mNumber{2}}.\) Bounding
 these requires leverage score analysis (showing \(\tau_{e}\) bounds are well-distributed
 across vertices) that is the core content of the external theorem referenced
 in Section 5. Specifically, the Batson-Spielman-Srivastava barrier-function
@@ -176,14 +177,14 @@ function that tracks the spectral approximation quality.
 
 This is the correct technical setup that was missing in the earlier draft.
 
-\hypertarget{5-external-dependency-for-universal-c00}{%
-\subsection{5. External dependency for universal c0\textgreater0}\label{5-external-dependency-for-universal-c00}}
+\hypertarget{5-external-dependency-for-universal-c0--0}{%
+\subsection{\texorpdfstring{5. External dependency for universal \(c\mNumber{0} > \mNumber{0}\)}{5. External dependency for universal c\textbackslash mNumber\{0\} \textgreater{} \textbackslash mNumber\{0\}}}\label{5-external-dependency-for-universal-c0--0}}
 
 To conclude a universal lower bound for all graphs, one needs an additional
 theorem (not proved in this writeup) that controls leverage/pruning and proves:
 
 \begin{verbatim}
-exists c0>0 universal such that
+exists $c0 > 0$ universal such that
 for all G, epsilon in (0,1), exists S with |S|>=c0*epsilon*n and L_S<=epsilon L.
 \end{verbatim}
 
@@ -191,7 +192,7 @@ We state this explicitly as an assumption:
 
 \[\begin{aligned}
 Assumption V (vertex-light selection theorem): \\
-There exists c\mNumber{0}>\mNumber{0} such that for every weighted graph G and \epsilon \in (\mNumber{0},\mNumber{1}), \\
+There exists c\mNumber{0} > \mNumber{0} such that for every weighted graph G and \epsilon \in (\mNumber{0},\mNumber{1}), \\
 one can choose S subseteq V with |S| \ge c\mNumber{0} \ast \epsilon \ast n and L_{S} \le \epsilon L.
 \end{aligned}\]
 
@@ -242,7 +243,7 @@ Conditional/open conclusion:
 \tightlist
 \item
   Under Assumption V, one obtains a positive existential result (some universal
-  c0\textgreater0 exists).
+  \(c\mNumber{0} > \mNumber{0}\) exists).
 \item
   Without Assumption V, this writeup does not prove existence of such a
   universal c0; the problem remains open here.
@@ -259,9 +260,9 @@ Conditional/open conclusion:
 \item
   \(L_{S} = \\sum_{e internal to S} w_{e} b_{e} b_{e}^{T}\)
 \item
-  \(\tau_{e} = w_{e} b_{e}^{T} L^+ b_{e}, \\sum_{e} \tau_{e} =\)n-k
+  \(\tau_{e} = w_{e} b_{e}^{T} L^+ b_{e}, \\sum_{e} \tau_{e} =\) n-k
 \item
-  \(L^{+/\mNumber{2}} L_{S} L^{+/\mNumber{2}} \le \\sum_{v} Z_{v} A_{v}\)with \(A_{v}\)=(1/2)\(\\sum_{u~v}X_{uv}\)
+  \(L^{+/\mNumber{2}} L_{S} L^{+/\mNumber{2}} \le \\sum_{v} Z_{v} A_{v}\) with \(A_{v}\)=(1/2)\(\\sum_{u~v}X_{uv}\)
 \end{enumerate}
 
 \hypertarget{references}{%

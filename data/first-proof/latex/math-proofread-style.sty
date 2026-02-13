@@ -5,6 +5,8 @@
 \RequirePackage{array}
 \providecommand{\mathup}[1]{\mathrm{#1}}
 \providecommand{\text}[1]{\mathrm{#1}}
+\providecommand{\Integral}{\int}
+\providecommand{\integral}{\Integral}
 
 \colorlet{MPSyntaxGreekColor}{Mulberry}
 \colorlet{MPSyntaxDefaultMathColor}{CornflowerBlue}
@@ -16,7 +18,7 @@
 \definecolor{MPSyntaxComparisonColor}{RGB}{0,66,37}
 \colorlet{MPSyntaxLargeOperatorColor}{BlueViolet}
 \colorlet{MPSyntaxArrowColor}{TealBlue}
-\colorlet{MPSyntaxDelimiterColor}{CadetBlue}
+\colorlet{MPSyntaxDelimiterColor}{Magenta}
 \colorlet{MPSyntaxFunctionColor}{Orchid}
 \colorlet{MPSyntaxNumberColor}{Red}
 \colorlet{MPSyntaxMathTextColor}{Sepia}
@@ -126,10 +128,16 @@
 \let\MP@orig@vert\vert
 \let\MP@orig@lvert\lvert
 \let\MP@orig@rvert\rvert
+\let\MP@orig@lbrace\lbrace
+\let\MP@orig@rbrace\rbrace
+\let\MP@orig@lbrack\lbrack
+\let\MP@orig@rbrack\rbrack
 
 \begingroup\catcode`\<\active\gdef<{\mathrel{\color{MPSyntaxComparisonColor}\mathchar"313C}}\endgroup
 \begingroup\catcode`\>\active\gdef>{\mathrel{\color{MPSyntaxComparisonColor}\mathchar"313E}}\endgroup
 \begingroup\catcode`\==\active\gdef={\mathrel{\color{MPSyntaxComparisonColor}\mathchar"303D}}\endgroup
+\begingroup\catcode`\[=\active\gdef[{\mathopen{\color{MPSyntaxDelimiterColor}\mathchar"405B}}\endgroup
+\begingroup\catcode`\]=\active\gdef]{\mathclose{\color{MPSyntaxDelimiterColor}\mathchar"505D}}\endgroup
 
 \newcommand{\MP@ActivateRawMathChars}{%
   \ifMPRawMathCharsActivated\else
@@ -137,6 +145,8 @@
     \mathcode`<="8000
     \mathcode`>="8000
     \mathcode`=="8000
+    \mathcode`[="8000
+    \mathcode`]="8000
   \fi
 }
 
@@ -146,6 +156,8 @@
     \mathcode`<="313C
     \mathcode`>="313E
     \mathcode`=="303D
+    \mathcode`[="405B
+    \mathcode`]="505D
   \fi
 }
 
@@ -221,6 +233,10 @@
     \renewcommand{\vert}{\mDelimiter{\MP@orig@vert}}
     \renewcommand{\lvert}{\mDelimiter{\MP@orig@lvert}}
     \renewcommand{\rvert}{\mDelimiter{\MP@orig@rvert}}
+    \renewcommand{\lbrace}{\mDelimiter{\MP@orig@lbrace}}
+    \renewcommand{\rbrace}{\mDelimiter{\MP@orig@rbrace}}
+    \renewcommand{\lbrack}{\mDelimiter{\MP@orig@lbrack}}
+    \renewcommand{\rbrack}{\mDelimiter{\MP@orig@rbrack}}
 
     \renewcommand{\sin}{\mFunction{\MP@orig@sin}}
     \renewcommand{\cos}{\mFunction{\MP@orig@cos}}
@@ -310,6 +326,10 @@
     \let\vert\MP@orig@vert
     \let\lvert\MP@orig@lvert
     \let\rvert\MP@orig@rvert
+    \let\lbrace\MP@orig@lbrace
+    \let\rbrace\MP@orig@rbrace
+    \let\lbrack\MP@orig@lbrack
+    \let\rbrack\MP@orig@rbrack
 
     \MP@DeactivateRawMathChars
   \fi
@@ -360,6 +380,7 @@
       \let\exp\MP@orig@exp
       \let\det\MP@orig@det
       \let\prime\MP@orig@prime
+      \let\integral\int
       \def\mGreek#1{#1}%
       \def\mOperator#1{#1}%
       \def\mBridgeOperator#1{#1}%
@@ -403,7 +424,7 @@
     Relation operators & \textcolor{MPSyntaxRelationColor}{RoyalPurple} & $x\mRel{\in}S,\,A\mRel{\subseteq}B$ \\
     Large operators & \textcolor{MPSyntaxLargeOperatorColor}{BlueViolet} & $\mLargeOperator{\sum},\,\mLargeOperator{\prod},\,\mLargeOperator{\int},\,\mLargeOperator{\lim}$ \\
     Arrows & \textcolor{MPSyntaxArrowColor}{TealBlue} & $f\mArrow{\to}g,\,P\mArrow{\Rightarrow}Q,\,x\mArrow{\mapsto}x^2,\,A\mArrow{\leftrightarrow}B$ \\
-    Delimiters & \textcolor{MPSyntaxDelimiterColor}{CadetBlue} & $\mDelimiter{(}x\mDelimiter{)},\,\mDelimiter{[}x\mDelimiter{]},\,\langle x\rangle,\,|x|$ \\
+    Delimiters & \textcolor{MPSyntaxDelimiterColor}{Magenta} & $\mDelimiter{(}x\mDelimiter{)},\,\mDelimiter{[}x\mDelimiter{]},\,\mDelimiter{\{}x\mDelimiter{\}},\,\langle x\rangle,\,|x|$ \\
     Functions & \textcolor{MPSyntaxFunctionColor}{Orchid} & $\mFunction{\sin}x,\,\mFunction{\cos}x,\,\mFunction{\log}x,\,\mFunction{\exp}x,\,\mFunction{\det}A$ \\
     Numbers/constants & \textcolor{MPSyntaxNumberColor}{Red} & $\mNumber{0},\ldots,\mNumber{9},\,\mConstant{e}$ \\
   \end{tabular}

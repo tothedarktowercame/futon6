@@ -275,6 +275,7 @@ end
 
 local function normalize_expr(s)
   s = trim(s)
+  s = s:gsub("%$", "")
 
   s = s:gsub("{%[}", "[")
   s = s:gsub("{%]}", "]")
@@ -284,9 +285,12 @@ local function normalize_expr(s)
   s = s:gsub("\\textbar", "|")
   s = s:gsub("\\textless%s*{}", "<")
   s = s:gsub("\\textgreater%s*{}", ">")
+  s = s:gsub("\\textless", "<")
+  s = s:gsub("\\textgreater", ">")
+  s = s:gsub("(\\+)integral", "\\integral")
 
-  -- Handle literal backslash separators like N_n\GL_n.
-  s = s:gsub("([%w%)%}])\\([%w%(])", "%1 \\backslash %2")
+  -- Handle literal backslash separators like N_n\GL_n, but avoid LaTeX commands.
+  s = s:gsub("([%w%)%}])\\([A-Z])", "%1 \\backslash %2")
 
   for _, pair in ipairs(unicode_ops) do
     s = s:gsub(pair[1], pair[2])
@@ -307,6 +311,8 @@ local function normalize_expr(s)
   s = s:gsub("%f[%a]Tr%s*%(", "\\mOpName{Tr}(")
   s = s:gsub("%f[%a]trace%s*%(", "\\mOpName{trace}(")
   s = s:gsub("%f[%a]int%s*_", "\\int_")
+  s = s:gsub("%f[%a]integral%s*_", "\\Integral_")
+  s = s:gsub("%f[%a]integral%f[%A]", "\\Integral")
   s = s:gsub("%f[%a]sum%s*_", "\\sum_")
   s = s:gsub("%f[%a]prod%s*_", "\\prod_")
   s = s:gsub("%f[%a]exp%s*%(", "\\exp(")
@@ -314,6 +320,11 @@ local function normalize_expr(s)
   s = s:gsub("%f[%a]det%s*%(", "\\det(")
   s = s:gsub("%f[%a]mod%s+(\\mNumber{%d+})", "\\mOpName{mod} %1")
   s = s:gsub("%f[%a]mod%s+(%d+)", "\\mOpName{mod} \\mNumber{%1}")
+
+  -- Measure notation: dmu, dmu_0 -> d\mu, d\mu_0.
+  s = s:gsub("%f[%a]dmu_%{([^}]+)%}", "d\\mu_{%1}")
+  s = s:gsub("%f[%a]dmu_([A-Za-z0-9%+%-]+)", "d\\mu_%1")
+  s = s:gsub("%f[%a]dmu%f[%A]", "d\\mu")
 
   -- Parenthesized exponents/subscripts (Q^(abgd) -> Q^{abgd}).
   s = s:gsub("%^%(([^()]+)%)", "^{%1}")
@@ -361,6 +372,16 @@ local function normalize_expr(s)
 
   for _, pair in ipairs(greek_words) do
     s = replace_word(s, pair[1], pair[2])
+  end
+
+  -- Prevent glued prose after Greek commands: \muare -> \mu are.
+  local greek_cmds = {
+    "Gamma", "Delta", "Theta", "Lambda", "Xi", "Pi", "Sigma", "Upsilon", "Phi", "Psi", "Omega",
+    "alpha", "beta", "gamma", "delta", "epsilon", "varepsilon", "zeta", "eta", "theta", "vartheta",
+    "iota", "kappa", "lambda", "mu", "nu", "xi", "pi", "rho", "sigma", "tau", "upsilon", "phi", "chi", "psi", "omega",
+  }
+  for _, cmd in ipairs(greek_cmds) do
+    s = s:gsub("\\" .. cmd .. "([A-Za-z])", "\\" .. cmd .. " %1")
   end
 
   s = mark_integer_literals(s)
@@ -768,8 +789,13 @@ local function merge_adjacent_math_fragments(inlines)
           math_count = math_count + 1
           j = j + 1
         elseif nxt.t == "Space" or nxt.t == "SoftBreak" then
-          table.insert(pieces, " ")
-          j = j + 1
+          local look = inlines[j + 1]
+          if look ~= nil and ((look.t == "Math" and look.mathtype == "InlineMath") or (look.t == "Str" and is_symbolic_glue_str(look.text))) then
+            table.insert(pieces, " ")
+            j = j + 1
+          else
+            break
+          end
         elseif nxt.t == "Str" and is_symbolic_glue_str(nxt.text) then
           table.insert(pieces, nxt.text)
           j = j + 1
@@ -794,6 +820,37 @@ local function merge_adjacent_math_fragments(inlines)
 end
 
 local function convert_simple_str_token_to_inlines(s)
+  local relcore, relpunct = s:match("^(.-)([%.,;:]*)$")
+  if relcore ~= nil and (
+      relcore:find("\\textless", 1, true) or
+      relcore:find("\\textgreater", 1, true) or
+      relcore:find("\\textbar", 1, true)
+    ) then
+    local out = {pandoc.Math("InlineMath", normalize_expr(relcore))}
+    if relpunct ~= "" then
+      table.insert(out, pandoc.Str(relpunct))
+    end
+    return out
+  end
+
+  local binner, bpunct = s:match("^%[([^%[%]]+)%]([%.,;:]*)$")
+  if binner ~= nil and binner:match("[%w\\_%^%+%-%s,]+") then
+    local out = {pandoc.Math("InlineMath", "[" .. normalize_expr(trim(binner)) .. "]")}
+    if bpunct ~= "" then
+      table.insert(out, pandoc.Str(bpunct))
+    end
+    return out
+  end
+
+  local sinner, spunct = s:match("^%{([^{}]+)%}([%.,;:]*)$")
+  if sinner ~= nil and sinner:match("[%w\\_%^%+%-%s,]+") then
+    local out = {pandoc.Math("InlineMath", "\\{" .. normalize_expr(trim(sinner)) .. "\\}")}
+    if spunct ~= "" then
+      table.insert(out, pandoc.Str(spunct))
+    end
+    return out
+  end
+
   local gfn, gargs, gpunct = s:match("^([A-Za-z]+)%(([^()]*)%)([%.,;:]*)$")
   if gfn ~= nil and greek_token_names[gfn] then
     local out = {pandoc.Math("InlineMath", normalize_expr(gfn .. "(" .. gargs .. ")"))}
