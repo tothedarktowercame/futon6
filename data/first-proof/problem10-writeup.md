@@ -65,6 +65,10 @@ For uniform random sampling with q >= C n log n, matrix concentration
 (Tropp 2011, Theorem 1.6) gives delta = O(sqrt(n log n / q)), so kappa = O(1)
 and PCG converges in O(log(1/eps)) iterations.
 
+Necessity note:
+- Small explicit counterexamples showing why these assumptions are necessary
+  are recorded in `data/first-proof/problem10-necessity-counterexamples.md`.
+
 ### 5. Total complexity
 
 Setup: O(n^3 + r^3 + sum_i n_i r^2 + qr + n^2 r).

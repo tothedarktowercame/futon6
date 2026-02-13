@@ -57,7 +57,7 @@ Reference requirements: `data/first-proof/proof-strategy-cycle-requirements.md`.
 | SR-1 Boundary Lock | PASS | Canonical objective remains stable and explicit. | `data/first-proof/problem10-solution.md` |
 | SR-2 Explicit Gap Ledger | PASS | Named gap ledger is present with stable IDs and statuses. | `data/first-proof/problem10-solution.md` |
 | SR-3 Dependency DAG | PASS | Dependency structure exists via the wiring graph. | `data/first-proof/problem10-wiring.json` |
-| SR-4 Counterexample-First Testing | FAIL | No explicit falsification artifact for convergence assumptions is recorded. | `data/first-proof/CODEX-HANDOFF.md`, `data/first-proof/problem10-codex-results.jsonl` |
+| SR-4 Counterexample-First Testing | PARTIAL | Explicit necessity counterexamples now exist; a larger empirical stress-test suite is still missing. | `data/first-proof/problem10-necessity-counterexamples.md` |
 | SR-5 Proof/Evidence Separation | PASS | Closure is explicitly conditional, not overstated. | `data/first-proof/problem10-solution.md` |
 | SR-6 Route Selection by Blocker Impact | PASS | Convergence risk was identified and targeted. | `data/first-proof/CODEX-HANDOFF.md` |
 | SR-7 Artifact Minimum | PASS | Theorem delta, rationale, cycle record, prompts, and results are explicit. | `data/first-proof/problem10-solution.md`, `data/first-proof/problem10-codex-prompts.jsonl`, `data/first-proof/problem10-codex-results.jsonl` |
@@ -91,8 +91,8 @@ Status labels: `proved`, `partial`, `open`, `false`, `numerically verified`.
 
 2. `P10-G2` - Convergence claim strength under sampling assumptions
 - Status: `partial`.
-- Evidence: `data/first-proof/problem10-solution.md`, `data/first-proof/problem10-codex-results.jsonl`.
-- Note: Closure remains conditional on spectral-equivalence and sampling regularity assumptions.
+- Evidence: `data/first-proof/problem10-solution.md`, `data/first-proof/problem10-necessity-counterexamples.md`, `data/first-proof/problem10-codex-results.jsonl`.
+- Note: Necessity is now evidenced by explicit toy failures; sufficiency bounds remain conditional.
 
 3. `P10-G3` - Named gap ledger and cycle record discipline
 - Status: `proved`.
@@ -102,7 +102,7 @@ Status labels: `proved`, `partial`, `open`, `false`, `numerically verified`.
 
 ## 7) Next Remediation Cycle (Minimal)
 
-1. Add a falsification-oriented convergence stress test artifact for SR-4.
+1. Expand from toy counterexamples to a reproducible empirical stress-test sweep (sampling patterns and coherence).
 2. Tighten the sampling/coherence assumptions for the `P10-G2` convergence-rate statement.
 3. Keep the theorem classification as **Conditional (closed under stated assumptions)** until `P10-G2` is strengthened.
 

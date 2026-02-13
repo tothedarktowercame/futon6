@@ -149,6 +149,20 @@ assumptions and sufficient sampling scaling with model dimension,
 concentration yields delta bounded away from 1 with high probability. Under this regime, kappa = $O(1)$ and PCG converges in
 $O(log(1/eps))$ iterations.
 
+### 5a. Necessity checks (counterexamples)
+
+Two explicit toy counterexamples are recorded in:
+
+- `data/first-proof/problem10-necessity-counterexamples.md`
+
+Summary:
+
+1. If `K_tau` is not PD (e.g., `tau = 0` with singular `K`), `A_tau` can lose
+   SPD, so the standard PCG guarantee does not apply.
+2. If sampling regularity fails, `A_tau` may remain SPD but
+   `kappa(P^{-1}A_tau)` can become large, invalidating the fast-convergence
+   interpretation.
+
 ### 6. Complexity summary
 
 Setup per ALS outer step:
@@ -244,7 +258,7 @@ Status labels follow `proved | partial | open | false | numerically verified`.
 | ID | Item | Status | Why | Evidence artifact |
 |---|---|---|---|---|
 | P10-G1 | Node-level external verifier run integrity | proved | Supported-model rerun completed with parseable outputs for all nodes (`15/15`; `8 verified`, `7 plausible`, `0 gap`, `0 error`). | `data/first-proof/problem10-codex-results.jsonl` |
-| P10-G2 | Convergence-rate strength under sampling assumptions | partial | The fast-rate claim is conditional on spectral equivalence and sampling regularity assumptions. | Section 5 (`(1-delta)P <= A_tau <= (1+delta)P`) |
+| P10-G2 | Convergence-rate strength under sampling assumptions | partial | Necessity counterexamples now show why assumptions matter; sufficiency bounds are still conditional and not fully tightened. | Section 5; `data/first-proof/problem10-necessity-counterexamples.md` |
 | P10-G3 | Explicit cycle record and named-gap discipline | proved | This section and Section 9 provide named gaps and cycle metadata. | This file (Sections 8-9) |
 
 Interpretation:
