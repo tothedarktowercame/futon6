@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "date": "2026-02-13",
+    "script": "scripts/explore-p4-path2-codex-handoff2.py",
+    "runtime_sec": 32.022
+  },
+  "claim1": {
+    "My_terms": 23,
+    "L_terms": 10,
+    "My_minus_4L_terms": 23,
+    "My_minus_4L_factor": "(3*x + 1)*(3*y + 1)**2*(3*r**2*y + r**2 + 4*r + 3*x + 1)",
+    "identity_holds": true,
+    "Mx_minus_4rL_factor": "(3*x + 1)**2*(3*y + 1)*(3*r**2*y + r**2 + 4*r + 3*x + 1)",
+    "Mx_identity_holds": true,
+    "combo_rMy_plus_Mx_minus_4rL_terms": 32,
+    "combo_rMy_plus_Mx_minus_4rL_min_coeff": 1,
+    "conclusion": "My >= 4L exactly, with matching q-side identity Mx >= 4rL; both support C1 >= 0 under the handoff bounds."
+  },
+  "claim2": {
+    "delta1_factor": "24*(3*r**2*y - 3*r**2 - 4*r + 3*x - 3)*(81*r**4*x*y**3 + 81*r**4*x*y**2 + 27*r**4*x*y + 3*r**4*x + 27*r**4*y**3 + 27*r**4*y**2 + 9*r**4*y + r**4 + 216*r**3*x*y**2 + 252*r**3*x*y + 12*r**3*x + 36*r**3*y**2 + 60*r**3*y + 162*r**2*x**2*y**2 + 108*r**2*x**2*y - 18*r**2*x**2 + 108*r**2*x*y**2 + 432*r**2*x*y + 60*r**2*x - 18*r**2*y**2 + 60*r**2*y + 2*r**2 + 216*r*x**2*y + 36*r*x**2 + 252*r*x*y + 60*r*x + 12*r*y + 81*x**3*y + 27*x**3 + 81*x**2*y + 27*x**2 + 27*x*y + 9*x + 3*y + 1)",
+    "f0_factor": "-32*r**4*(x - 1)*(y - 1)*(3*r**2*y - 3*r**2 - 4*r + 3*x - 3)*(81*r**2*x**2*y**2 + 54*r**2*x**2*y + 9*r**2*x**2 + 81*r**2*x*y**3 + 27*r**2*x*y**2 - 117*r**2*x*y + 9*r**2*x + 27*r**2*y**3 + 36*r**2*y**2 - 21*r**2*y + 6*r**2 + 108*r*x**2*y + 72*r*x**2 + 108*r*x*y**2 - 216*r*x*y - 12*r*x + 72*r*y**2 - 12*r*y + 8*r + 81*x**3*y + 27*x**3 + 81*x**2*y**2 + 27*x**2*y + 36*x**2 + 54*x*y**2 - 117*x*y - 21*x + 9*y**2 + 9*y + 6)/27",
+    "fP_factor": "32*(r + 1)*(x - 1)*(3*x + 1)**2*(3*y + 1)*(-r**3*y + r**3 + x - 1)*(3*r**2*y - 3*r**2 - 4*r + 3*x - 3)*(3*r**2*y + r**2 + 4*r + 3*x + 1)/27",
+    "fQ_factor": "-32*r**4*(r + 1)*(3*x + 1)*(y - 1)*(3*y + 1)**2*(-r**3*y + r**3 + x - 1)*(3*r**2*y - 3*r**2 - 4*r + 3*x - 3)*(3*r**2*y + r**2 + 4*r + 3*x + 1)/27",
+    "fP_identity_holds": true,
+    "fQ_identity_holds": true,
+    "D_definition": "D = r^3*(1-y) - (1-x) = (9/2)*(Qmax-Pmax)",
+    "endpoint_sign_rule": {
+      "fP_sign": "sign(D)",
+      "fQ_sign": "-sign(D)"
+    },
+    "numeric_sanity": {
+      "tested": 300000,
+      "bad_endpoint_rule": 0,
+      "bad_interval_rule": 0,
+      "min_endpoint": 2.2897012110256745e-21,
+      "min_interval": 2.2897012910192616e-21
+    },
+    "conclusion": "Since f is concave (delta1<0), minimum on [0,tmax] is at an endpoint; f(0)>=0 and selected endpoint by min(Pmax,Qmax) is >=0."
+  }
+}
