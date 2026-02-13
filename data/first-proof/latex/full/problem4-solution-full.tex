@@ -81,7 +81,7 @@ which is guaranteed since \(\Phi_{n}\) = infinity for repeated roots).
 
 The discriminant of p is:
 
-\[disc(p) = \prod_{i < j} (\lambda_{i} - \lambda_{j})^\mNumber{2}\]
+\[\mOpName{disc}(p) = \prod_{i < j} (\lambda_{i} - \lambda_{j})^\mNumber{2}\]
 
 By the AM-QM inequality applied to 1/(\(\lambda_{i} - \lambda_{j}\)):
 
@@ -105,7 +105,7 @@ of degree n, then p \(\boxplus_{n}\) q is also real-rooted.
 (b) \textbf{Expected characteristic polynomial:} If A, B are \(n \times n\) Hermitian with
 char. poly. \(p_{A}, p_{B},\) then for a uniformly random conjugation U:
 
-\[E_{U}[char. poly. of A + \mathup{UBU} * ] = p_{A} \boxplus_{n} p_{B}\]
+\[E_{U}[\mOpName{char}. \text{poly}. \text{of} A + \mathup{UBU} * ] = p_{A} \boxplus_{n} p_{B}\]
 
 (c) \textbf{Linearization of cumulants:} In the n -\textgreater{} infinity limit, the finite
 free cumulants linearize (R-transform additivity).
@@ -122,7 +122,7 @@ polynomial of A + UBU* where char(A) = p, char(B) = q.
 \textbf{\(\Phi_{n}\) via the random matrix model.}
 
 For Hermitian A with eigenvalues \(\lambda_\mNumber{1}\), ..., \(\lambda_{n}\), the root separation
-energy \(\Phi_{n}(char(A)) = \sum_{i}\) (sum\_\{j != i\} 1/(\(\lambda_{i} - \lambda_{j}\)))\^{}2 is
+energy \(\Phi_{n}(\mOpName{char}(A)) = \sum_{i}\) (sum\_\{j != i\} 1/(\(\lambda_{i} - \lambda_{j}\)))\^{}2 is
 an algebraic function of the eigenvalue gaps (see Section 1). The connection
 to log \textbar det(xI - A)\textbar{} is conceptual: away from roots, \(F_{A}''(x) = -\\sum_{i}\) 1/(x - \(\lambda_{i}\))\^{}2,
 and \(\Phi_{n}\) captures the "residue" version at each root. But the definition of
@@ -138,8 +138,8 @@ and \(\Phi_{n}\) captures the "residue" version at each root. But the definition
 This is bilinear but NOT simply additive in the \(a_{k}\). For example, at n=3:
 
 \[\begin{aligned}
-c_\mNumber{1} = a_\mNumber{1} + b_\mNumber{1} (additive) \\
-c_\mNumber{2} = a_\mNumber{2} + (\mNumber{2}/\mNumber{3}) \ast a_\mNumber{1} \ast b_\mNumber{1} + b_\mNumber{2} (cross-term!) \\
+c_\mNumber{1} = a_\mNumber{1} + b_\mNumber{1} (\text{additive}) \\
+c_\mNumber{2} = a_\mNumber{2} + (\mNumber{2}/\mNumber{3}) \ast a_\mNumber{1} \ast b_\mNumber{1} + b_\mNumber{2} (\text{cross}-\text{term}!) \\
 c_\mNumber{3} = a_\mNumber{3} + (\mNumber{1}/\mNumber{3}) \ast a_\mNumber{2} \ast b_\mNumber{1} + (\mNumber{1}/\mNumber{3}) \ast a_\mNumber{1} \ast b_\mNumber{2} + b_\mNumber{3}
 \end{aligned}\]
 
@@ -177,12 +177,12 @@ So \(\boxplus_\mNumber{3}\) reduces to plain coefficient addition for centered c
 \textbf{Step 3: The key identity.} For a centered cubic p(x) = \(x^\mNumber{3} \mBridgeOperator{+} a_\mNumber{2}\)\emph{\(x \mBridgeOperator{+} a_\mNumber{3}\)
 with distinct real roots (requiring \(a_\mNumber{2} < \mNumber{0}\) and disc = -4}\(a_{\mNumber{2}}^{\mNumber{3}} - \mNumber{27} \ast a_{\mNumber{3}}^{\mNumber{2}} > \mNumber{0}\)):
 
-\[\Phi_\mNumber{3}(p) \ast disc(p) = \mNumber{18} \ast a_\mNumber{2}^\mNumber{2} (\text{EXACT})\]
+\[\Phi_\mNumber{3}(p) \ast \mOpName{disc}(p) = \mNumber{18} \ast a_\mNumber{2}^\mNumber{2} (\text{EXACT})\]
 
 Equivalently:
 
 \[\begin{aligned}
-\mNumber{1}/\Phi_\mNumber{3}(p) = disc(p) / (\mNumber{18} \ast a_\mNumber{2}^\mNumber{2}) \\
+\mNumber{1}/\Phi_\mNumber{3}(p) = \mOpName{disc}(p) / (\mNumber{18} \ast a_\mNumber{2}^\mNumber{2}) \\
 = (-\mNumber{4} \ast a_\mNumber{2}^\mNumber{3} - \mNumber{27} \ast a_\mNumber{3}^\mNumber{2}) / (\mNumber{18} \ast a_\mNumber{2}^\mNumber{2}) \\
 = -\mNumber{2} \ast a_\mNumber{2}/\mNumber{9} - \mNumber{3} \ast a_\mNumber{3}^\mNumber{2} / (\mNumber{2} \ast a_\mNumber{2}^\mNumber{2})
 \end{aligned}\]
@@ -202,13 +202,13 @@ It follows from the explicit formula \(\Phi_\mNumber{3} = \sum_{i}\) (3\emph{\(l
 The surplus is:
 
 \[\begin{aligned}
-surplus = \mNumber{1}/\Phi(conv) - \mNumber{1}/\Phi(p) - \mNumber{1}/\Phi(q) \\
+\text{surplus} = \mNumber{1}/\Phi(\text{conv}) - \mNumber{1}/\Phi(p) - \mNumber{1}/\Phi(q) \\
 = (\mNumber{3}/\mNumber{2}) * [u^\mNumber{2}/s^\mNumber{2} + v^\mNumber{2}/t^\mNumber{2} - (u+v)^\mNumber{2}/(s+t)^\mNumber{2}]
 \end{aligned}\]
 
 This is non-negative by Titu\textquotesingle s lemma (Engel form of Cauchy-Schwarz):
 
-\[u^\mNumber{2}/s^\mNumber{2} + v^\mNumber{2}/t^\mNumber{2} \ge (u+v)^\mNumber{2}/(s^\mNumber{2}+t^\mNumber{2}) [\text{Titu}'s lemma]\]
+\[u^\mNumber{2}/s^\mNumber{2} + v^\mNumber{2}/t^\mNumber{2} \ge (u+v)^\mNumber{2}/(s^\mNumber{2}+t^\mNumber{2}) [\text{Titu}'s \text{lemma}]\]
 
 and since \(s^\mNumber{2}+t^\mNumber{2} \le (s+t)^\mNumber{2}\) (because 2st \textgreater{} 0):
 
@@ -277,7 +277,7 @@ n & Status & Method \\
 \bottomrule\noalign{}
 \endlastfoot
 2 & \textbf{PROVED} (equality) & \(\mNumber{1}/\Phi_\mNumber{2}\) is linear in disc; \(\boxplus_\mNumber{2}\) preserves exactly \\
-3 & \textbf{PROVED} (strict ineq.) & \(\Phi_\mNumber{3} \ast disc=\mNumber{18}a_\mNumber{2}^\mNumber{2}\) identity + Titu\textquotesingle s lemma \\
+3 & \textbf{PROVED} (strict ineq.) & \(\Phi_\mNumber{3} \ast \mOpName{disc}=\mNumber{18}a_\mNumber{2}^\mNumber{2}\) identity + Titu\textquotesingle s lemma \\
 4 & Numerically verified & 0/3000 violations; cross-term \(a_\mNumber{2} \ast b_\mNumber{2}/\mNumber{6}\) essential \\
 5 & Numerically verified & 0/2000 violations \\
 \end{longtable}

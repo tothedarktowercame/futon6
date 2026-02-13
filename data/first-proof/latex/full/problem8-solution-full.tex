@@ -204,17 +204,17 @@ in Section 3. This can always be arranged by a linear symplectomorphism.)
 The 4 faces in these coordinates are:
 
 \[\begin{aligned}
-L_\mNumber{1} = \mOpName{span}(e_\mNumber{4}, e_\mNumber{1}) = {y = \mNumber{0}, u = \mNumber{0}}, sector x > \mNumber{0}, v > \mNumber{0} \\
-L_\mNumber{2} = \mOpName{span}(e_\mNumber{1}, e_\mNumber{2}) = {y = \mNumber{0}, v = \mNumber{0}}, sector x > \mNumber{0}, u > \mNumber{0} \\
-L_\mNumber{3} = \mOpName{span}(e_\mNumber{2}, e_\mNumber{3}) = {x = \mNumber{0}, v = \mNumber{0}}, sector y > \mNumber{0}, u > \mNumber{0} \\
-L_\mNumber{4} = \mOpName{span}(e_\mNumber{3}, e_\mNumber{4}) = {x = \mNumber{0}, u = \mNumber{0}}, sector y > \mNumber{0}, v > \mNumber{0}
+L_\mNumber{1} = \mOpName{span}(e_\mNumber{4}, e_\mNumber{1}) = {y = \mNumber{0}, u = \mNumber{0}}, \text{sector} x > \mNumber{0}, v > \mNumber{0} \\
+L_\mNumber{2} = \mOpName{span}(e_\mNumber{1}, e_\mNumber{2}) = {y = \mNumber{0}, v = \mNumber{0}}, \text{sector} x > \mNumber{0}, u > \mNumber{0} \\
+L_\mNumber{3} = \mOpName{span}(e_\mNumber{2}, e_\mNumber{3}) = {x = \mNumber{0}, v = \mNumber{0}}, \text{sector} y > \mNumber{0}, u > \mNumber{0} \\
+L_\mNumber{4} = \mOpName{span}(e_\mNumber{3}, e_\mNumber{4}) = {x = \mNumber{0}, u = \mNumber{0}}, \text{sector} y > \mNumber{0}, v > \mNumber{0}
 \end{aligned}\]
 
 Define the "corner" curves in each factor:
 
 \[\begin{aligned}
-C_\mNumber{1} = {(x, \mNumber{0}) : x \ge \mNumber{0}} ∪ {(\mNumber{0}, y) : y \ge \mNumber{0}} \subset V_\mNumber{1} (positive x \text{and} y axes) \\
-C_\mNumber{2} = {(u, \mNumber{0}) : u \ge \mNumber{0}} ∪ {(\mNumber{0}, v) : v \ge \mNumber{0}} \subset V_\mNumber{2} (positive u \text{and} v axes)
+C_\mNumber{1} = {(x, \mNumber{0}) : x \ge \mNumber{0}} ∪ {(\mNumber{0}, y) : y \ge \mNumber{0}} \subset V_\mNumber{1} (\text{positive} x \text{and} y \text{axes}) \\
+C_\mNumber{2} = {(u, \mNumber{0}) : u \ge \mNumber{0}} ∪ {(\mNumber{0}, v) : v \ge \mNumber{0}} \subset V_\mNumber{2} (\text{positive} u \text{and} v \text{axes})
 \end{aligned}\]
 
 \textbf{Claim:} K ∩ B(v, r) = \(C_\mNumber{1} \times C_\mNumber{2}\) (product of the two corners) for small r.
@@ -227,10 +227,10 @@ C_\mNumber{2} = {(u, \mNumber{0}) : u \ge \mNumber{0}} ∪ {(\mNumber{0}, v) : v
 that agrees with \(C_{j}\) outside a ball of radius \(\delta\) around the origin:
 
 \[\begin{aligned}
-C_\mNumber{1}^{sm}: smooth curve \in V_\mNumber{1}, = {(x, \mNumber{0})} \text{for} x > \delta, = {(\mNumber{0}, y)} \text{for} y > \delta, \\
-smooth \text{through} \text{the} origin (e.g., \text{the} curve (cos \theta, sin \theta) \\
-reparameterized \text{to} match \text{the} axes \text{outside} \text{the} transition) \\
-C_\mNumber{2}^{sm}: analogous \in V_\mNumber{2}
+C_\mNumber{1}^{sm}: \text{smooth} \text{curve} \in V_\mNumber{1}, = {(x, \mNumber{0})} \text{for} x > \delta, = {(\mNumber{0}, y)} \text{for} y > \delta, \\
+\text{smooth} \text{through} \text{the} \text{origin} (e.g., \text{the} \text{curve} (\cos \theta, \sin \theta) \\
+\text{reparameterized} \text{to} \text{match} \text{the} \text{axes} \text{outside} \text{the} \text{transition}) \\
+C_\mNumber{2}^{sm}: \text{analogous} \in V_\mNumber{2}
 \end{aligned}\]
 
 Explicitly: parameterize \(C_\mNumber{1}^{sm}\) as \(\gamma_\mNumber{1}(t)\) for \(t \in R\), where
@@ -354,7 +354,7 @@ so the isotopy is Hamiltonian with generating function \(H_{t} = \mathrm{d}S_{t}
 evaluated on the Lagrangian.
 
 \textbf{Vertex smoothings are Hamiltonian.} The vertex smoothing is a product:
-\(K_{t}^{vertex} = C_\mNumber{1}^{sm}(t) \times C_\mNumber{2}^{sm}(t) \in V_\mNumber{1} \times V_\mNumber{2}\). Each \(C_{j}^{sm}(t)\)
+\(K_{t}^{\text{vertex}} = C_\mNumber{1}^{sm}(t) \times C_\mNumber{2}^{sm}(t) \in V_\mNumber{1} \times V_\mNumber{2}\). Each \(C_{j}^{sm}(t)\)
 is a smooth 1-parameter family of curves in (\(V_{j}, \omega_{j})\) ≅ (\(\mathbb{R}^{\mNumber{2}}\), dx\(\wedge\)dy).
 In a 2-dimensional exact symplectic manifold, EVERY isotopy of compact
 (or compactly supported) Lagrangian submanifolds is Hamiltonian. This is
