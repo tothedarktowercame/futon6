@@ -36,6 +36,7 @@ of a successful strategy pivot.
 \item[Obstruction:] The surgery obligation (S) was blocked.
   Equivariant surgery requires a codimension-2 gap hypothesis;
   reflections give codimension-1 fixed sets.  Blocked.
+  (\texttt{0fa4e82}: ``restructure S-branch as open problem with three approaches'')
 \item[Characterization:] Instead of pushing harder on reflections,
   the obstruction was characterized structurally: a dimension-parity
   tension between E2 (needs even $n$) and S (better in odd $n$).
@@ -43,8 +44,12 @@ of a successful strategy pivot.
   (codimension~2).  Now $n$ is odd, E2 still works (fixed set has
   odd dimension, $\chi = 0$), and the codimension-2 gap hypothesis
   is satisfied.
+  (\texttt{287a41c}: ``rotation route (Approach~IV), paper reads, triage'';
+   \texttt{620ed57}: ``resolve rotation lattice existence, discharge E2'')
 \item[Closure:] The surgery obstruction vanishes (trivial normal
   bundle from the congruence condition).
+  (\texttt{8ce9771}: ``flat-normal-bundle argument---rational obstruction vanishes'';
+   \texttt{158bc4f}: ``integral obstruction vanishes---obligation~S discharged'')
 \end{description}
 
 \textbf{Transferable principle:} When blocked in one layer,
@@ -67,10 +72,16 @@ of reductions:
 \end{enumerate}
 
 Step~2 was the creative step---an identity discovered numerically
-and verified symbolically.  The key was that the identity was
+and verified symbolically
+(\texttt{9db6b4f}: ``Haar orbit exploration and key identity finding'';
+ \texttt{0003300}: ``Prove P4 superadditivity for $n=3$ via $\Phi_3 \cdot \mathrm{disc}$
+ identity + Cauchy--Schwarz'').
+The key was that the identity was
 \emph{sought} because the reduction strategy demanded an algebraic
 relationship between $\Phi_n$ and known invariants.  The strategy
-shaped the search.
+shaped the search.  The subsequent extension to $n = 4$ followed a
+different route---algebraic elimination plus computational certification
+(\texttt{84c0041}: ``harden PHC parsing and record $n \ge 4$ certified closure'').
 
 \textbf{Transferable principle:} Reductions create demand for
 specific identities or lemmas.  The demand makes the search
@@ -81,9 +92,13 @@ targeted rather than exploratory.
 Problem~8 (Lagrangian smoothing of polyhedral surfaces) was stuck
 until the symplectic direct sum decomposition was discovered:
 the 4-face Lagrangian condition forces $\mathbb{R}^4 = V_1 \oplus V_2$.
-This single structural insight unlocked everything---Maslov index
-vanishing, vertex smoothing via product structure, and the
-Hamiltonian isotopy property.
+This single structural insight
+(\texttt{09e23db}: ``symplectic direct sum forces Maslov index exactly~0'')
+unlocked everything---Maslov index
+vanishing, vertex smoothing via product structure
+(\texttt{a5a4fbe}: ``replace crease smoothing + Lagrangian surgery with product smoothing''),
+and the Hamiltonian isotopy property
+(\texttt{de3e2ac}: ``justify Hamiltonian isotopy'').
 
 \textbf{Transferable principle:} Look for structural decompositions
 that simplify the problem globally, not just local fixes for individual
@@ -92,7 +107,13 @@ obstacles.
 \section{Failure Pattern: The TryHarder Loop (Problem 6)}
 
 Problem~6 (epsilon-light subsets) generated six or more handoff
-and dispatch documents across multiple sessions.  The pattern:
+and dispatch documents across multiple sessions, from the initial
+dispatch (\texttt{5289ca8}: ``GPL-H attack dispatch'') through
+Directions~A--D (\texttt{63a23ba}, \texttt{22c091f}, \texttt{b6a7625},
+\texttt{d64fd13}) to closure attempts
+(\texttt{78d94bc}: ``GPL-H closure attempt---all scores $< 1$'')
+and counterexamples (\texttt{cc11834}: ``$K_{t,r}$ counterexample'').
+The pattern:
 
 \begin{enumerate}
 \item Identify the gap (Assumption~V: vertex-induced selection).
@@ -180,3 +201,42 @@ For future sprints---human or AI---the design implication is:
 An agent stuck on a problem should be prompted to consult the
 strategy traces of problems that closed, not just its own history
 of failed attempts.  Rumination is not learning.  Analogy is.
+
+\section{Toward Real-Time Argumentation Structure}
+
+The git hashes cited above constitute a post-hoc reconstruction of
+the argumentative structure of the sprint.  Each pivotal commit
+records a move: an obstruction identified, a layer switched, an
+identity discovered, a closure achieved.  The connections between
+moves---``this obstruction motivated that layer switch''---are
+implicit in the temporal ordering but not represented explicitly.
+
+This is a degenerate form of the Argument Interchange Format
+(AIF)~\cite{pease2017}, in which argument moves are nodes and
+inferential, conflict, and preference relations are typed edges.
+The git log provides the nodes (commits) but not the edges
+(argumentative relations).
+
+The gap between post-hoc annotation and real-time capture is
+precisely the gap between this chapter and a live AIF graph.
+In a real-time system, each proof step, obstruction, and strategy
+shift would be recorded as an AIF node at the moment it occurs,
+with edges to its premises, targets, and alternatives.  The
+``proof patterns'' analysis would then be a graph query, not
+a retrospective essay.
+
+Three infrastructure pieces converge on this:
+
+\begin{enumerate}
+\item \textbf{Arxana} (futon5) provides the typed-edge graph substrate.
+\item \textbf{The peripheral model} (futon3c) provides scoped contexts
+  in which moves are recorded as they happen.
+\item \textbf{S-expression canonical form} provides the representation
+  in which argument structure and mathematical content coexist
+  without a separate annotation layer.
+\end{enumerate}
+
+With all three, the sprint's argumentative structure would be captured
+as it unfolds---not reconstructed from git hashes months later.
+The distance from the present chapter to that system is a tooling
+gap, not a conceptual one.
