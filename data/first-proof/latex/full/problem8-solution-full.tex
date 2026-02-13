@@ -4,7 +4,7 @@
 \hypertarget{problem-statement}{%
 \subsection{Problem Statement}\label{problem-statement}}
 
-A \textbf{polyhedral Lagrangian surface} \(K \in R\)\^{}4 is a finite polyhedral complex all
+A \textbf{polyhedral Lagrangian surface} \(K \in R^{\mNumber{4}}\) is a finite polyhedral complex all
 of whose faces are Lagrangian 2-planes, which is a topological submanifold of
 \(\mathbb{R}^{\mNumber{4}}\). A \textbf{Lagrangian smoothing} of K is a Hamiltonian isotopy \(K_{t}\) of smooth
 Lagrangian submanifolds for t in (0,1{]}, extending to a topological isotopy on
@@ -36,7 +36,7 @@ theorem (edges) and the vanishing flux in simply-connected \(\mathbb{R}^{\mNumbe
 \hypertarget{1-setup-lagrangian-planes-in-mathbbr4}{%
 \subsubsection{\texorpdfstring{1. Setup: Lagrangian planes in \(\mathbb{R}^{\mNumber{4}}\)}{1. Setup: Lagrangian planes in \textbackslash mathbb\{R\}\^{}\{\textbackslash mNumber\{4\}\}}}\label{1-setup-lagrangian-planes-in-mathbbr4}}
 
-Identify \(\mathbb{R}^{\mNumber{4}} = \mathbb{C}^{\mNumber{2}}\) with symplectic form \(\omega = dx_{\mNumber{1}} \wedge dy_{\mNumber{1}} \mBridgeOperator{+} dx_{\mNumber{2}} \wedge dy_{\mNumber{2}}.\)
+Identify \(\mathbb{R}^{\mNumber{4}} = \mathbb{C}^{\mNumber{2}}\) with symplectic form \(\omega = dx_{\mNumber{1}} \wedge dy_{\mNumber{1}} \mBridgeOperator{+} dx_{\mNumber{2}} \wedge dy_{\mNumber{2}}\).
 A Lagrangian plane is a 2-dimensional subspace L where \(\omega|_{L} = \mNumber{0}\). The space
 of Lagrangian planes (the Lagrangian Grassmannian) is:
 
@@ -59,7 +59,7 @@ These 4 edges are rays from v. Each face is spanned by its two boundary edges:
 
 \[L_{i} = \mOpName{span}(e_{i-\mNumber{1},i}, e_{i,i+\mNumber{1}})\]
 
-The Lagrangian condition omega\textbar\_\{\(L_{i}\)\} = 0 requires:
+The Lagrangian condition \(\omega|_{L_{i}} = \mNumber{0}\) requires:
 
 \[\omega(e_{i-\mNumber{1},i}, e_{i,i+\mNumber{1}}) = \mNumber{0} for each i (\mOpName{mod} \mNumber{4})\]
 
@@ -102,7 +102,7 @@ H/ell ≅ \(\mathbb{R}^{\mNumber{2}}\). But \(\omega|_{H}\) descends to a non-de
 non-degenerate 2-form vanishes must be \(\{\mNumber{0}\}\). Contradiction. So ell \(\subset\) L.
 
 \textbf{Step 3 (key).} Each edge \(e_{i}\) is the intersection of two adjacent faces:
-\(e_\mNumber{1} = L_\mNumber{1}\) ∩ \(L_{\mNumber{2}}, e_{\mNumber{2}} = L_{\mNumber{2}}\) ∩ \(L_\mNumber{3},\) etc. Since \(L_{i}\) and \(L_{i+\mNumber{1}}\) are
+\(e_\mNumber{1} = L_\mNumber{1}\) ∩ \(L_{\mNumber{2}}, e_{\mNumber{2}} = L_{\mNumber{2}}\) ∩ \(L_\mNumber{3}\), etc. Since \(L_{i}\) and \(L_{i+\mNumber{1}}\) are
 distinct 2-planes (distinct faces), their intersection is exactly
 1-dimensional: \(\mOpName{dim}(L_{i} \cap L_{i+\mNumber{1}}) = \mNumber{1}\), so \(L_{i}\) ∩ \(L_{i+\mNumber{1}} = \mOpName{span}(e_{i})\).
 
@@ -133,7 +133,7 @@ L_\mNumber{3} = \mOpName{span}(e_\mNumber{2}) \oplus \mOpName{span}(e_\mNumber{3
 L_\mNumber{4} = \mOpName{span}(e_\mNumber{3}) \oplus \mOpName{span}(e_\mNumber{4}) \subset V_\mNumber{1} \oplus V_\mNumber{2}
 \end{aligned}\]
 
-Each \(L_{i}\) takes one line from \(V_\mNumber{1}\) and one from \(V_\mNumber{2},\) which is automatically
+Each \(L_{i}\) takes one line from \(V_\mNumber{1}\) and one from \(V_\mNumber{2}\), which is automatically
 Lagrangian in \(V_{\mNumber{1}} \oplus V_{\mNumber{2}}\) (omega restricted to a line is zero).
 
 \hypertarget{4-maslov-index-vanishes-exactly}{%
@@ -143,7 +143,7 @@ The Maslov index of the vertex loop \(L_{\mNumber{1}} \to L_{\mNumber{2}} \to L_
 
 \[\mu = \mu_\mNumber{1} + \mu_\mNumber{2}\]
 
-where \(\mu_{j}\) is the winding number of the component loop in \(V_{j}.\)
+where \(\mu_{j}\) is the winding number of the component loop in \(V_{j}\).
 
 \textbf{In \(V_\mNumber{1} = \mOpName{span}(e_\mNumber{1}, e_\mNumber{3})\):} The loop traces
 \(\mOpName{span}(e_\mNumber{1})\) → \(\mOpName{span}(e_\mNumber{1})\) → \(\mOpName{span}(e_\mNumber{3})\) → \(\mOpName{span}(e_\mNumber{3})\) → \(\mOpName{span}(e_\mNumber{1})\)
@@ -192,7 +192,7 @@ each vertex v a product structure, enabling a direct smoothing that bypasses
 both crease smoothing and Lagrangian surgery.
 
 \textbf{Product decomposition of K near v.} Choose Darboux coordinates adapted to
-\(V_{\mNumber{1}} \oplus V_{\mNumber{2}}:\) let \(V_\mNumber{1}\) have coordinates (x, y) with \(\omega_\mNumber{1}\) = dx \(\wedge\) dy, and \(V_\mNumber{2}\)
+\(V_{\mNumber{1}} \oplus V_{\mNumber{2}}\): let \(V_\mNumber{1}\) have coordinates (x, y) with \(\omega_\mNumber{1}\) = dx \(\wedge\) dy, and \(V_\mNumber{2}\)
 have coordinates (u, v) with \(\omega_\mNumber{2}\) = du \(\wedge\) dv (so \(\omega = \omega_\mNumber{1} \mBridgeOperator{+} \omega_\mNumber{2}\)).
 Orient the edge vectors so that:
 
@@ -221,7 +221,7 @@ C_\mNumber{2} = {(u, \mNumber{0}) : u \ge \mNumber{0}} ∪ {(\mNumber{0}, v) : v
 
 \emph{Verification:} A point (p, q) with \(p \in C_\mNumber{1}\) and \(q \in C_\mNumber{2}\) has p = (x, 0) or
 (0, y) and q = (u, 0) or (0, v), giving 4 cases --- exactly the 4 faces
-\(L_\mNumber{1},\) ..., \(L_\mNumber{4}\) listed above. ∎
+\(L_\mNumber{1}\), ..., \(L_\mNumber{4}\) listed above. ∎
 
 \textbf{Smoothing.} Replace each corner \(C_{j}\) with a smooth curve \(C_{j}^{sm} \subset V_{j}\)
 that agrees with \(C_{j}\) outside a ball of radius \(\delta\) around the origin:
@@ -237,7 +237,7 @@ Explicitly: parameterize \(C_\mNumber{1}^{sm}\) as \(\gamma_\mNumber{1}(t)\) for
 \(\gamma_\mNumber{1}(t)\) = (t, 0) for \(t \ge \delta, \gamma_{\mNumber{1}}(t) =\) (0, -t) for t \(\le\) -delta,
 and \(\gamma_\mNumber{1}\) is a smooth embedded curve for t \(\in\) {[}-delta, delta{]}. (Such a
 curve exists: it is a smooth rounding of the right angle at the origin.)
-Define \(\gamma_\mNumber{2}(t)\) analogously for \(C_\mNumber{2}^{sm}.\)
+Define \(\gamma_\mNumber{2}(t)\) analogously for \(C_\mNumber{2}^{sm}\).
 
 \textbf{Lagrangian property of the product:} The smoothed surface
 \(K^{sm} = C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm}\) is a product of smooth curves in the
@@ -246,7 +246,7 @@ always Lagrangian (its dimension is 1 = half of 2, and \(\omega\) restricted
 to a 1-submanifold is zero for dimensional reasons). The product of
 Lagrangian submanifolds in (\(V_{\mNumber{1}}, \omega_{\mNumber{1}}) \times (V_{\mNumber{2}}, \omega_{\mNumber{2}})\) is Lagrangian
 in (\(V_{\mNumber{1}} \oplus V_{\mNumber{2}}, \omega_{\mNumber{1}} \mBridgeOperator{+} \omega_{\mNumber{2}}\)): for tangent vectors (\(u_{\mNumber{1}}, u_{\mNumber{2}})\) and
-(\(w_{\mNumber{1}}, w_{\mNumber{2}})\) to \(C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm},\) we have
+(\(w_{\mNumber{1}}, w_{\mNumber{2}})\) to \(C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm}\), we have
 
 \[\omega((u_\mNumber{1}, u_\mNumber{2}), (w_\mNumber{1}, w_\mNumber{2})) = \omega_\mNumber{1}(u_\mNumber{1}, w_\mNumber{1}) + \omega_\mNumber{2}(u_\mNumber{2}, w_\mNumber{2}) = \mNumber{0} + \mNumber{0} = \mNumber{0}\]
 
@@ -257,7 +257,7 @@ are tangent to \(C_\mNumber{2}^{sm}\) (1-dimensional in \(V_\mNumber{2}\)). ∎
 map (\(t_{\mNumber{1}}, t_{\mNumber{2}}) \to (\gamma_{\mNumber{1}}(t_{\mNumber{1}}), \gamma_{\mNumber{2}}(t_{\mNumber{2}})),\) which is a smooth immersion
 (the tangent vectors d \(\gamma_\mNumber{1}/dt_\mNumber{1}\) and d \(\gamma_\mNumber{2}/dt_\mNumber{2}\) are nonzero and lie
 in complementary subspaces \(V_\mNumber{1}\) and \(V_\mNumber{2}\)). So \(K^{sm}\) is a smooth Lagrangian
-surface, including at \(v = \gamma_\mNumber{1}(\mNumber{0}) \times \gamma_\mNumber{2}(\mNumber{0}).\) ∎
+surface, including at \(v = \gamma_\mNumber{1}(\mNumber{0}) \times \gamma_\mNumber{2}(\mNumber{0})\). ∎
 
 \textbf{Agreement:} \(K^{sm} = C_\mNumber{1} \times C_\mNumber{2} = K\) outside the region where either
 factor was modified (\textbar p\textbar{} \(\le \delta \in V_{\mNumber{1}}\) or \textbar q\textbar{} \(\le \delta \in V_{\mNumber{2}}),\) so \(K^{sm}\)
@@ -278,7 +278,7 @@ from any vertex). Then there exists a smooth Lagrangian surface agreeing with
 \(L_\mNumber{1}\) on one side and \(L_\mNumber{2}\) on the other.
 
 \emph{Proof.} Choose Darboux coordinates (\(x_{\mNumber{1}}, y_{\mNumber{1}}, x_{\mNumber{2}}, y_{\mNumber{2}})\) with e along the
-\(x_\mNumber{1}\)-axis. Each \(L_{i}\) is locally the graph y = grad \(S_{i}(x)\) for quadratic \(S_{i}.\)
+\(x_\mNumber{1}\)-axis. Each \(L_{i}\) is locally the graph y = grad \(S_{i}(x)\) for quadratic \(S_{i}\).
 Define \(S_{eps}(x) = \chi(x_{\mNumber{1}}/eps) S_{\mNumber{1}}(x) +\) (1 - \(\chi(x_{\mNumber{1}}\)/eps)) \(S_\mNumber{2}(x)\) for a
 smooth cutoff \(\chi\). The graph y = grad \(S_{eps}\) is Lagrangian (graph of the
 exact 1-form \(dS_{eps}\)). For any fixed \(eps > \mNumber{0}\), this gives a smooth Lagrangian
@@ -294,21 +294,21 @@ in thin tubular neighborhoods of the edge arcs.)
 \hypertarget{7-global-smoothing}{%
 \subsubsection{7. Global smoothing}\label{7-global-smoothing}}
 
-\textbf{Step 7a: Resolve vertices.} For each 4-valent vertex \(v_{i},\) choose a ball
-\(B_{i}\) of radius \(r_{i}\) centered at \(v_{i},\) where \(r_{i}\) is small enough that:
+\textbf{Step 7a: Resolve vertices.} For each 4-valent vertex \(v_{i}\), choose a ball
+\(B_{i}\) of radius \(r_{i}\) centered at \(v_{i}\), where \(r_{i}\) is small enough that:
 
 \begin{itemize}
 \tightlist
 \item
   \(B_{i}\) contains no other vertex \(v_{j} (j \neq i),\) and
 \item
-  \(B_{i}\) intersects only the edges and faces incident to \(v_{i}.\)
+  \(B_{i}\) intersects only the edges and faces incident to \(v_{i}\).
 \end{itemize}
 
 Such radii exist because the vertex set is finite and discrete in \(\mathbb{R}^{\mNumber{4}}\).
-Within each \(B_{i},\) apply the product smoothing (Section 5a) using the
+Within each \(B_{i}\), apply the product smoothing (Section 5a) using the
 \(V_{\mNumber{1}} \oplus V_{\mNumber{2}}\) decomposition from Section 3. This replaces K ∩ \(B_{i} = C_\mNumber{1} \times C_\mNumber{2}\)
-with the smooth Lagrangian surface \(C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm}.\)
+with the smooth Lagrangian surface \(C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm}\).
 
 \textbf{Commutativity:} Since the balls \(\{B_{i}\}\) are pairwise disjoint, the
 vertex smoothings have disjoint support and commute.
@@ -323,14 +323,14 @@ interpolation of Section 6.
 The edge smoothings have support in tubular neighborhoods of the edge arcs.
 These neighborhoods can be chosen to be disjoint from each other (since the
 edges are disjoint away from vertices, which have already been resolved) and
-from the vertex balls (since the edge arcs start at ∂\(B_{i}\), outside \(B_{i}\)).
+from the vertex balls (since the edge arcs start at \(∂B_{i}\), outside \(B_{i}\)).
 Therefore the edge smoothings commute with each other and with the vertex
 smoothings.
 
-\textbf{Compatibility at ∂\(B_{i}\).} The vertex smoothing (Section 5a) agrees with
+\textbf{Compatibility at \(∂B_{i}\).} The vertex smoothing (Section 5a) agrees with
 the original polyhedral K outside a neighborhood of \(v_{i}\) of radius \(\delta < r_{i}\).
-So on ∂\(B_{i}\), the surface is still polyhedral (two flat faces meeting at an
-edge). The edge crease smoothing (Section 6) begins at ∂\(B_{i}\), where the
+So on \(∂B_{i}\), the surface is still polyhedral (two flat faces meeting at an
+edge). The edge crease smoothing (Section 6) begins at \(∂B_{i}\), where the
 surface is already flat. Since both the vertex smoothing (product of smooth
 curves) and the edge smoothing (graph of exact 1-form) produce Lagrangian
 surfaces, and they agree on the overlap (both equal the original flat faces
@@ -349,23 +349,23 @@ for \(t > \mNumber{0}\).
 the Weinstein Lagrangian neighborhood theorem (Weinstein 1971, Theorem 6.1),
 a smooth family of exact Lagrangian submanifolds in an exact symplectic
 manifold (here \(T^{\mDualStar} \mathbb{R}^{\mNumber{2}}\) with \(\lambda = y\) dx) is generated by a Hamiltonian:
-the 1-form \(i_{d/dt}\)(omega)\textbar{}\emph{\(\{K_{t}\}\) is exact (it equals d(\(S_{t}\)\textbar{}}\{\(K_{t}\)\})),
+the 1-form \(i_{d/dt}(\omega)|\)\emph{\(\{K_{t}\}\) is exact (it equals d(\(S_{t}\)\textbar{}}\{\(K_{t}\)\})),
 so the isotopy is Hamiltonian with generating function \(H_{t} = dS_{t}/dt\)
 evaluated on the Lagrangian.
 
 \textbf{Vertex smoothings are Hamiltonian.} The vertex smoothing is a product:
-\(K_{t}^{vertex} = C_\mNumber{1}^{sm}(t) \times C_\mNumber{2}^{sm}(t) \in V_\mNumber{1} \times V_\mNumber{2}.\) Each \(C_{j}^{sm}(t)\)
+\(K_{t}^{vertex} = C_\mNumber{1}^{sm}(t) \times C_\mNumber{2}^{sm}(t) \in V_\mNumber{1} \times V_\mNumber{2}\). Each \(C_{j}^{sm}(t)\)
 is a smooth 1-parameter family of curves in (\(V_{j}, \omega_{j})\) ≅ (\(\mathbb{R}^{\mNumber{2}}\), dx\(\wedge\)dy).
 In a 2-dimensional exact symplectic manifold, EVERY isotopy of compact
 (or compactly supported) Lagrangian submanifolds is Hamiltonian. This is
 because \(V_{j} = \mathbb{R}^{\mNumber{2}}\) is simply connected, so the flux homomorphism
 Flux: \(\pi_{\mNumber{1}}(Symp) \to H^{\mNumber{1}}\)(L; R) is trivial (no non-Hamiltonian symplectic
 isotopies exist). Concretely: the velocity field d/dt of the isotopy
-\(C_{j}^{sm}(t)\) is a symplectic vector field along \(C_{j}^{sm}\)(t); contracting
-with \(\omega_{j}\) gives a closed 1-form on \(C_{j}^{sm}(t),\) which is exact because
+\(C_{j}^{sm}(t)\) is a symplectic vector field along \(C_{j}^{sm}(t)\); contracting
+with \(\omega_{j}\) gives a closed 1-form on \(C_{j}^{sm}(t)\), which is exact because
 \(H^{\mNumber{1}}(C_{j}^{sm}\)(t); R) = 0 (each \(C_{j}^{sm}(t)\) is a noncompact embedded arc
 in \(\mathbb{R}^{\mNumber{2}}\) --- the smoothed corner --- hence contractible). The primitive
-is the Hamiltonian \(H_{j}(t).\) The product isotopy on \(V_\mNumber{1} \times V_\mNumber{2}\) is Hamiltonian
+is the Hamiltonian \(H_{j}(t)\). The product isotopy on \(V_\mNumber{1} \times V_\mNumber{2}\) is Hamiltonian
 with generating function \(H_\mNumber{1}(t) \mBridgeOperator{+} H_\mNumber{2}(t)\) (see McDuff-Salamon, 3rd ed.,
 Exercise 3.18: product of Hamiltonian isotopies is Hamiltonian).
 
@@ -404,7 +404,7 @@ The smoothing exists because:
   This decomposition forces Maslov index exactly 0 (algebraic, not just generic)
 \item
   Near each vertex, \(K = C_\mNumber{1} \times C_\mNumber{2}\) (product of corners). Smoothing each corner
-  gives \(K^{sm} = C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm},\) a smooth Lagrangian surface (product of
+  gives \(K^{sm} = C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm}\), a smooth Lagrangian surface (product of
   curves in symplectic factors). No Lagrangian surgery needed at vertices.
 \item
   Edge creases (between vertices) are smoothed by generating function interpolation

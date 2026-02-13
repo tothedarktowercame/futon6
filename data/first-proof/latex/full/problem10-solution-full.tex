@@ -73,7 +73,7 @@ Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
 
   Total \(O(q r)\).
 \item
-  Form sparse W\textquotesingle{} in \(R^{n \times M}\) from \(u_{l}.\) Let s = nnz(W\textquotesingle) \textless= q.
+  Form sparse W\textquotesingle{} in \(R^{n \times M}\) from \(u_{l}\). Let s = nnz(W\textquotesingle) \textless= q.
 \item
   Adjoint sampled action:
 
@@ -109,7 +109,7 @@ So \(b_{\tau} = (I_{r} \times K_{\tau})\) vec(B) is formed in \(O(q r + n^\mNumb
 \hypertarget{4-preconditioner-that-matches-the-corrected-algebra}{%
 \subsubsection{4. Preconditioner that matches the corrected algebra}\label{4-preconditioner-that-matches-the-corrected-algebra}}
 
-Use \(D = S S^{T}\) and whiten by \(K_{\tau}^{-\mNumber{1}/\mNumber{2}}:\)
+Use \(D = S S^{T}\) and whiten by \(K_{\tau}^{-\mNumber{1}/\mNumber{2}}\):
 
 \[x = (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) y.\]
 
@@ -193,7 +193,7 @@ Setup per ALS outer step:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(Cholesky(K_{\tau}): O(n^{\mNumber{3}})\)
+  \(Cholesky(K_{\tau})\): \(O(n^\mNumber{3})\)
 \item
   \(\mathbb{Z}^{T}\) Z via Hadamard Grams: \(O(\sum_{i} n_{i} r^\mNumber{2})\)
 \item

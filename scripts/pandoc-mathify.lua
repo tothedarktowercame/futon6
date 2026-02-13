@@ -39,6 +39,19 @@ local function trim(s)
   return (s:gsub("^%s+", ""):gsub("%s+$", ""))
 end
 
+local function normalize_escaped_script_artifacts(s)
+  -- Undo escaped-text artifacts when a token should be parsed as math.
+  s = s:gsub("\\textasciicircum%s*{}", "^")
+  s = s:gsub("\\textasciicircum", "^")
+  s = s:gsub("\\%^%s*%{%s*%}", "^")
+  s = s:gsub("\\%^", "^")
+  s = s:gsub("\\_", "_")
+  s = s:gsub("([_%^])\\%{([^{}]-)\\%}", "%1{%2}")
+  s = s:gsub("\\%(", "(")
+  s = s:gsub("\\%)", ")")
+  return s
+end
+
 local function find_matching_brace(s, open_idx)
   if s:sub(open_idx, open_idx) ~= "{" then
     return nil
@@ -276,6 +289,7 @@ end
 local function normalize_expr(s)
   s = trim(s)
   s = s:gsub("%$", "")
+  s = normalize_escaped_script_artifacts(s)
 
   s = s:gsub("{%[}", "[")
   s = s:gsub("{%]}", "]")
@@ -327,8 +341,11 @@ local function normalize_expr(s)
   s = s:gsub("%f[%a]dmu%f[%A]", "d\\mu")
 
   -- Parenthesized exponents/subscripts (Q^(abgd) -> Q^{abgd}).
+  s = s:gsub("%^%{%}%(([^()]+)%)", "^{%1}")
+  s = s:gsub("_%{%}%(([^()]+)%)", "_{%1}")
   s = s:gsub("%^%(([^()]+)%)", "^{%1}")
   s = s:gsub("_%(([^()]+)%)", "_{%1}")
+  s = s:gsub("(\\[%a]+)%s+([_%^])", "%1%2")
 
   -- Normalize bare subscripts/superscripts from pseudo-code (A_tau -> A_{tau}).
   s = s:gsub("([%a%)%}])_([A-Za-z][A-Za-z0-9]*)", "%1_{%2}")
@@ -420,7 +437,7 @@ local function is_compound_math_token(s)
   if not s:match("[_%^]") then
     return false
   end
-  if not s:match("[%a]") then
+  if not s:match("[%a%d]") then
     return false
   end
   -- Keep prose suffixes outside math: GL_n-equivariant -> $GL_n$-equivariant.
@@ -430,7 +447,7 @@ local function is_compound_math_token(s)
   if not has_balanced_delimiters(s) then
     return false
   end
-  return s:match("^[A-Za-z0-9_%^{}%*%+%-%/%.:,()]+$") ~= nil
+  return s:match("^[^%s]+$") ~= nil
 end
 
 local function push_str(out, s)
@@ -820,6 +837,22 @@ local function merge_adjacent_math_fragments(inlines)
 end
 
 local function convert_simple_str_token_to_inlines(s)
+  local esc_core, esc_punct = s:match("^(.-)([%.,;:]*)$")
+  if esc_core ~= nil and (
+      esc_core:find("\\_", 1, true) or
+      esc_core:find("\\^", 1, true) or
+      esc_core:find("\\textasciicircum", 1, true)
+    ) then
+    local normalized = normalize_escaped_script_artifacts(esc_core)
+    if normalized:match("[_%^]") then
+      local out = {pandoc.Math("InlineMath", normalize_expr(normalized))}
+      if esc_punct ~= "" then
+        table.insert(out, pandoc.Str(esc_punct))
+      end
+      return out
+    end
+  end
+
   local relcore, relpunct = s:match("^(.-)([%.,;:]*)$")
   if relcore ~= nil and (
       relcore:find("\\textless", 1, true) or
@@ -950,8 +983,13 @@ local function convert_simple_str_token_to_inlines(s)
     return nil
   end
 
-  if is_compound_math_token(s) then
-    return {pandoc.Math("InlineMath", normalize_expr(s))}
+  local comp_core, comp_punct = parse_token_with_punct(s)
+  if comp_core ~= nil and comp_core ~= "" and is_compound_math_token(comp_core) then
+    local out = {pandoc.Math("InlineMath", normalize_expr(comp_core))}
+    if comp_punct ~= "" then
+      table.insert(out, pandoc.Str(comp_punct))
+    end
+    return out
   end
 
   if s:match("[_%^]") then

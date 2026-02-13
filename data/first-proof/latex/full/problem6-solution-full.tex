@@ -9,7 +9,7 @@ n=\textbar V\textbar. Its Laplacian is
 
 \[L = \sum_{e={u,v} \in E} w_{e} (e_{u}-e_{v})(e_{u}-e_{v})^{T}.\]
 
-For S subseteq V, define the induced-subgraph Laplacian embedded to \(R^{VxV}:\)
+For S subseteq V, define the induced-subgraph Laplacian embedded to \(R^{VxV}\):
 
 \[L_{S} = \sum_{e={u,v} \in E, u,v \in S} w_{e} (e_{u}-e_{v})(e_{u}-e_{v})^{T},\]
 
@@ -60,7 +60,7 @@ On im(L), with \(L^+\) the Moore-Penrose pseudoinverse:
 \hypertarget{2-complete-graph-upper-bound-rigorous}{%
 \subsection{2. Complete graph upper bound (rigorous)}\label{2-complete-graph-upper-bound-rigorous}}
 
-For G=\(K_{n}\) and S of size s, choose x supported on S with \(\\sum_{i \in S} x_{i} = \mNumber{0}\).
+For \(G=K_{n}\) and S of size s, choose x supported on S with \(\\sum_{i \in S} x_{i} = \mNumber{0}\).
 Then
 
 \[\begin{aligned}
@@ -90,16 +90,16 @@ Let \(Z_{v}\) \textasciitilde{} Bernoulli(p) independently and S=\{v: \(Z_{v}\)=
 \item
   Spectral expectation:
 
-  E{[}\(L_{S}] = p^{\mNumber{2}}\) L,
+  \(E[L_{S}] = p^\mNumber{2}\) L,
 \end{enumerate}
 
-since each edge survives with probability \(p^\mNumber{2}.\)
+since each edge survives with probability \(p^\mNumber{2}\).
 
 Thus
 
 \[E[\epsilon L - L_{S}] = (\epsilon - p^\mNumber{2})L.\]
 
-Setting p=epsilon gives E{[}\(L_{S}]=\epsilon^{\mNumber{2}} L \le \epsilon\) L. This is not yet a
+Setting p=epsilon gives \(E[L_{S}]=\epsilon^{\mNumber{2}} L \le \epsilon\) L. This is not yet a
 realization-level guarantee.
 
 \hypertarget{4-concentration-setup-gap-fixed-formulation}{%
@@ -141,7 +141,7 @@ are independent PSD summands.
 \hypertarget{4b-freedmanbernstein-martingale-parameters}{%
 \subsubsection{4b. Freedman/Bernstein martingale parameters}\label{4b-freedmanbernstein-martingale-parameters}}
 
-Let \(A_{i}\) be a fixed ordering of \(\{A_{v}\}, p_{i}\)=E{[}\(Z_{i}\){]}, and define the centered sum
+Let \(A_{i}\) be a fixed ordering of \(\{A_{v}\}, p_{i}=E[Z_{i}],\) and define the centered sum
 
 \[X = \sum_{i} (Z_{i} - p_{i}) A_{i}.\]
 
@@ -164,15 +164,15 @@ and predictable quadratic variation
 \[W_{n} = \sum_{i} E[\Delta_{i}^\mNumber{2} | F_{i-\mNumber{1}}] = \sum_{i} p_{i}(\mNumber{1}-p_{i}) A_{i}^\mNumber{2}.\]
 
 Matrix Freedman (or matrix Bernstein in independent form) applies once bounds
-on \(R_{\mDualStar}\) and \textbar\textbar{}\(W_{n}\)\textbar\textbar{} are supplied.
+on \(R_{\mDualStar}\) and \(||W_{n}||\) are supplied.
 
 \textbf{What graph-dependent bounds are needed.} To obtain a self-contained
 concentration bound, one would need \(R_{\mDualStar} \le C_\mNumber{1} \ast \epsilon\) and
-\textbar\textbar{}\(W_{n}|| \le C_{\mNumber{2}} \ast \epsilon^{\mNumber{2}}\) for graph-dependent constants \(C_{\mNumber{1}}, C_{\mNumber{2}}.\) Bounding
+\(||W_{n}|| \le C_\mNumber{2} \ast \epsilon^\mNumber{2}\) for graph-dependent constants \(C_{\mNumber{1}}, C_{\mNumber{2}}\). Bounding
 these requires leverage score analysis (showing \(\tau_{e}\) bounds are well-distributed
 across vertices) that is the core content of the external theorem referenced
 in Section 5. Specifically, the Batson-Spielman-Srivastava barrier-function
-method controls both \(R_{\mDualStar}\) and \textbar\textbar{}\(W_{n}\)\textbar\textbar{} simultaneously through a potential
+method controls both \(R_{\mDualStar}\) and \(||W_{n}||\) simultaneously through a potential
 function that tracks the spectral approximation quality.
 
 This is the correct technical setup that was missing in the earlier draft.
@@ -262,7 +262,7 @@ Conditional/open conclusion:
 \item
   \(\tau_{e} = w_{e} b_{e}^{T} L^+ b_{e}, \\sum_{e} \tau_{e} =\) n-k
 \item
-  \(L^{+/\mNumber{2}} L_{S} L^{+/\mNumber{2}} \le \\sum_{v} Z_{v} A_{v}\) with \(A_{v}\)=(1/2)\(\\sum_{u~v}X_{uv}\)
+  \(L^{+/\mNumber{2}} L_{S} L^{+/\mNumber{2}} \le \\sum_{v} Z_{v} A_{v}\) with \(A_{v}=(\mNumber{1}/\mNumber{2})\sum_{u~v}X_{uv}\)
 \end{enumerate}
 
 \hypertarget{references}{%

@@ -71,6 +71,10 @@ MU_DMU_INTEGRAL_SNIPPET = (
     "Use dmu_0 and integral_{T^3}. "
     "Also n < m and m > 0. Consider [n] and {0,1}.\n"
 )
+ESCAPED_SCRIPT_SNIPPET = (
+    r"Q\^{}(a,b)\_\{i,j\} and p ⊞\_n q and omega\textbar\_\{L_i\}."
+    "\n"
+)
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -167,6 +171,9 @@ def main() -> int:
     normalized_mu_dmu, out_mu_dmu = render_snippet(
         repo, normalizer, lua_filter, MU_DMU_INTEGRAL_SNIPPET
     )
+    _, out_escaped_script = render_snippet(
+        repo, normalizer, lua_filter, ESCAPED_SCRIPT_SNIPPET
+    )
     out_plus_star_raw = out_plus_star
 
     out = strip_mnumber(out)
@@ -194,6 +201,7 @@ def main() -> int:
     out_cotangent = strip_mnumber(out_cotangent)
     normalized_mu_dmu = strip_mnumber(normalized_mu_dmu)
     out_mu_dmu = strip_mnumber(out_mu_dmu)
+    out_escaped_script = strip_mnumber(out_escaped_script)
 
     if r"integrals over \(V\)" not in out:
         failures.append("missing inline math for V in 'integrals over V'")
@@ -406,6 +414,24 @@ def main() -> int:
         failures.append("rendered output missing inline math for bracket token [n]")
     if r"\(\{0,1\}\)" not in out_mu_dmu and r"\(\{0, 1\}\)" not in out_mu_dmu:
         failures.append("rendered output missing inline math for brace token {0,1}")
+    q_variants = [
+        r"\(Q^{a,b}_{i,j}\)",
+        r"\(Q^{(a,b)}_{i,j}\)",
+        r"\(Q^{a,b}_{i, j}\)",
+        r"\(Q^{(a,b)}_{i, j}\)",
+    ]
+    if not any(v in out_escaped_script for v in q_variants):
+        failures.append("escaped script artifacts were not normalized to a clean Q superscript/subscript form")
+    if r"\(\boxplus_n\)" not in out_escaped_script and r"\(\boxplus_{n}\)" not in out_escaped_script:
+        failures.append("escaped unicode-script token ⊞\\_n was not normalized to a math \\boxplus subscript")
+    if r"\(\omega|_{L_i}\)" not in out_escaped_script and r"\(\omega|_{L_{i}}\)" not in out_escaped_script:
+        failures.append("escaped omega|_{L_i} token was not normalized to math")
+    if r"\_" in out_escaped_script:
+        failures.append("rendered output still contains literal \\_ escape artifact")
+    if r"\^{}" in out_escaped_script:
+        failures.append("rendered output still contains empty escaped-caret artifact \\^{}")
+    if "textasciicircum" in out_escaped_script:
+        failures.append("rendered output still contains textasciicircum escape artifact")
 
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:
