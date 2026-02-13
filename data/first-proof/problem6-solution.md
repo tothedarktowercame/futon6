@@ -49,7 +49,7 @@ On im(L), with L^+ the Moore-Penrose pseudoinverse:
 
 ## 2. Complete graph upper bound (rigorous)
 
-For G=K_n and S of size s, choose x supported on S with sum_{i in S} x_i = 0.
+For G=K_n and S of size s, choose x supported on S with sum_{$i \in S$} x_i = 0.
 Then
 
     x^T L_{K_n} x = n ||x||^2,

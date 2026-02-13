@@ -31,19 +31,19 @@ Under these assumptions A_tau is SPD, so PCG applies.
 ### 1. Why naive direct methods fail
 
 A_tau is an (nr) x (nr) system. Dense direct factorization costs
-O((nr)^3) = O(n^3 r^3).
+$O((nr)^3)$ = $O(n^3 r^3)$.
 
 A naive explicit route also materializes Phi = Z x K_tau in R^{N x nr},
-which costs O(N n r) memory/work before factorization. This is the
-N-dependent bottleneck we avoid with matrix-free PCG.
+which costs $O(N n r)$ memory/work before factorization. This is the
+$N$-dependent bottleneck we avoid with matrix-free PCG.
 
-### 2. Implicit matrix-vector product in O(n^2 r + q r)
+### 2. Implicit matrix-vector product in $O(n^2 r + q r)$
 
 CG needs only y = A_tau x, not A_tau explicitly.
 
-Given x = vec(V), V in R^{n x r}:
+Given x = vec(V), $V \in R$^{n x r}:
 
-1. U = K_tau V. Cost O(n^2 r).
+1. U = K_tau V. Cost $O(n^2 r)$.
 2. Forward sampled action (only observed entries):
 
        (Z x K_tau) vec(V) = vec(K_tau V Z^T).
@@ -52,29 +52,29 @@ Given x = vec(V), V in R^{n x r}:
 
        u_l = <U[i_l, :], Z[j_l, :]>.
 
-   Total O(q r).
+   Total $O(q r)$.
 3. Form sparse W' in R^{n x M} from u_l. Let s = nnz(W') <= q.
 4. Adjoint sampled action:
 
        (Z^T x K_tau) vec(W') = vec(K_tau W' Z).
 
-   Compute W' Z in O(s r) <= O(q r), then left-multiply by K_tau in O(n^2 r).
-5. Add regularization term lambda vec(K_tau V), cost O(n^2 r).
+   Compute W' Z in $O(s r)$ <= $O(q r)$, then left-multiply by K_tau in $O(n^2 r)$.
+5. Add regularization term lambda vec(K_tau V), cost $O(n^2 r)$.
 
 Total per matvec:
 
     O(n^2 r + q r),
 
-with no O(N) term.
+with no $O(N)$ term.
 
 ### 3. Right-hand side
 
 B = T Z with T sparse (q nonzeros):
 
-1. T Z: O(q r)
-2. K_tau B: O(n^2 r)
+1. T Z: $O(q r)$
+2. K_tau B: $O(n^2 r)$
 
-So b_tau = (I_r x K_tau) vec(B) is formed in O(q r + n^2 r).
+So b_tau = (I_r x K_tau) vec(B) is formed in $O(q r + n^2 r)$.
 
 ### 4. Preconditioner that matches the corrected algebra
 
@@ -107,14 +107,14 @@ Khatri-Rao identity still gives efficient Gram formation:
 
     Z^T Z = Hadamard_i (A_i^T A_i),
 
-cost O(sum_i n_i r^2).
+cost $O(sum_i n_i r^2)$.
 
 Preconditioner apply:
 
     P^{-1} = H^{-1} x K_tau^{-1},
 
 implemented by solving K_tau Y H^T = Z' after reshape.
-Per application cost is O(n^2 r + n r^2) (often simplified to O(n^2 r)
+Per application cost is $O(n^2 r + n r^2)$ (often simplified to $O(n^2 r)$
 when n >> r).
 
 ### 5. Convergence (tightened)
@@ -136,7 +136,7 @@ which implies
     kappa(P^{-1} A_tau) <= (1+delta)/(1-delta).
 
 Hence t is logarithmic in 1/eps with a modest sqrt(kappa) factor when
-delta is bounded away from 1. (No unsupported closed-form t = O(r sqrt(n/q))
+delta is bounded away from 1. (No unsupported closed-form t = $O(r sqrt(n/q))$
 claim is needed.)
 
 **Sufficient conditions for bounded delta.** The spectral equivalence
@@ -144,23 +144,23 @@ claim is needed.)
 the sampling pattern satisfies a restricted isometry-type condition:
 ||D - (q/N)I|| is small relative to lambda. For uniform random sampling
 with q >= C n log n (for a universal constant C), matrix concentration
-results (Tropp 2011, Theorem 1.6) give delta = O(sqrt(n log n / q)) with
-high probability. Under this regime, kappa = O(1) and PCG converges in
-O(log(1/eps)) iterations.
+results (Tropp 2011, Theorem 1.6) give delta = $O(sqrt(n log n / q))$ with
+high probability. Under this regime, kappa = $O(1)$ and PCG converges in
+$O(log(1/eps))$ iterations.
 
 ### 6. Complexity summary
 
 Setup per ALS outer step:
 
-1. Cholesky(K_tau): O(n^3)
-2. Z^T Z via Hadamard Grams: O(sum_i n_i r^2)
-3. Cholesky(H): O(r^3)
-4. RHS: O(q r + n^2 r)
+1. Cholesky(K_tau): $O(n^3)$
+2. Z^T Z via Hadamard Grams: $O(sum_i n_i r^2)$
+3. Cholesky(H): $O(r^3)$
+4. RHS: $O(q r + n^2 r)$
 
 Per PCG iteration:
 
-1. Matvec: O(n^2 r + q r)
-2. Preconditioner apply: O(n^2 r + n r^2)
+1. Matvec: $O(n^2 r + q r)$
+2. Preconditioner apply: $O(n^2 r + n r^2)$
 
 Total:
 
@@ -173,13 +173,13 @@ In the common regime n >= r, this simplifies to
 
 with dependence on q (observed entries) rather than N (all entries).
 
-**Regime caveat.** When n is large enough that the O(n^3) Cholesky setup
+**Regime caveat.** When n is large enough that the $O(n^3)$ Cholesky setup
 dominates (i.e., n^3 > t(n^2 r + q r)), the per-ALS-step cost is effectively
-O(n^3). In this regime, low-rank kernel approximations (e.g., Nystrom
-approximation with rank p << n, reducing the kernel factorization to O(n p^2))
-or iterative inner solves (conjugate gradient on K_tau y = z, cost O(n^2)
+$O(n^3)$. In this regime, low-rank kernel approximations (e.g., Nystrom
+approximation with rank p << n, reducing the kernel factorization to $O(n p^2)$)
+or iterative inner solves (conjugate gradient on K_tau y = z, cost $O(n^2)$
 per inner iteration) can replace the exact Cholesky, reducing the setup to
-O(n p^2 + t(n p r + q r)). This is a well-known practical optimization
+$O(n p^2 + t(n p r + q r))$. This is a well-known practical optimization
 (see Rudi-Calandriello-Rosasco 2017) and is compatible with the PCG framework
 as presented.
 

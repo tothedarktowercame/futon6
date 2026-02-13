@@ -1,34 +1,31 @@
-\section{Problem 6: Epsilon-Light Subsets of Graphs}
+\hypertarget{problem-6-epsilon-light-subsets-of-graphs}{%
+\section{Problem 6: Epsilon-Light Subsets of Graphs}\label{problem-6-epsilon-light-subsets-of-graphs}}
 
-\subsection{Problem Statement}
+\hypertarget{problem-statement}{%
+\subsection{Problem Statement}\label{problem-statement}}
 
 Let G=(V,E,w) be a finite undirected graph with nonnegative edge weights and
 n=\textbar V\textbar. Its Laplacian is
 
-\begin{verbatim}
-L = sum_{e={u,v} in E} w_e (e_u-e_v)(e_u-e_v)^T.
-\end{verbatim}
+\[L = \sum_{e={u,v} \in E} w_{e} (e_{u}-e_{v})(e_{u}-e_{v})^{T}.\]
 
-For S subseteq V, define the induced-subgraph Laplacian embedded to R\^{}\{VxV\}:
+For S subseteq V, define the induced-subgraph Laplacian embedded to \(R^{VxV}\):
 
-\begin{verbatim}
-L_S = sum_{e={u,v} in E, u,v in S} w_e (e_u-e_v)(e_u-e_v)^T,
-\end{verbatim}
+\[L_{S} = \sum_{e={u,v} \in E, u,v \in S} w_{e} (e_{u}-e_{v})(e_{u}-e_{v})^{T},\]
 
 with zeros outside S rows/columns.
 
-S is epsilon-light if
+S is \(\epsilon\)-light if
 
-\begin{verbatim}
-L_S <= epsilon L
-\end{verbatim}
+\[L_{S} \le \epsilon L\]
 
 in Loewner order.
 
-Question: does there exist universal c\textgreater0 such that for every G and every
-epsilon in (0,1), there exists S with \textbar S\textbar{} \textgreater= c\emph{epsilon}n and L\_S \textless= epsilon L?
+Question: does there exist universal \(c > \mNumber{0}\) such that for every G and every
+\(\epsilon\) in (0,1), there exists S with \textbar S\textbar{} \textgreater= c\emph{\(\epsilon\)}n and \(L_{S} \le \epsilon\) L?
 
-\subsection{Status of this writeup}
+\hypertarget{status-of-this-writeup}{%
+\subsection{Status of this writeup}\label{status-of-this-writeup}}
 
 This draft closes the internal algebraic gaps and separates proved facts from
 external dependencies:
@@ -37,17 +34,18 @@ external dependencies:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Proved in-text: exact formulation, K\_n upper bound c\textless=1, sampling identities,
+  Proved in-text: exact formulation, \(K_{n}\) upper bound c\textless=1, sampling identities,
   and a correct matrix-concentration setup.
 \item
-  External dependency: the universal lower bound c0\textgreater0 for all graphs is not
+  External dependency: the universal lower bound \(c\mNumber{0} > \mNumber{0}\) for all graphs is not
   rederived here; it is treated as an imported theorem assumption.
 \end{enumerate}
 
 So the final existential answer is \textbf{conditional/open in this writeup}:
 without Assumption V, the universal-c claim is unresolved here.
 
-\subsection{1. Exact reformulation}
+\hypertarget{1-exact-reformulation}{%
+\subsection{1. Exact reformulation}\label{1-exact-reformulation}}
 
 The PSD condition is equivalent to the quadratic form inequality
 
@@ -55,34 +53,32 @@ The PSD condition is equivalent to the quadratic form inequality
 for all x in R^V: x^T L_S x <= epsilon x^T L x.
 \end{verbatim}
 
-On im(L), with L\^{}+ the Moore-Penrose pseudoinverse:
+On im(L), with \(L^+\) the Moore-Penrose pseudoinverse:
 
-\begin{verbatim}
-L_S <= epsilon L  <=>  || L^{+/2} L_S L^{+/2} || <= epsilon.
-\end{verbatim}
+\[L_{S} \le \epsilon L \Leftrightarrow || L^{+/\mNumber{2}} L_{S} L^{+/\mNumber{2}} || \le \epsilon.\]
 
-\subsection{2. Complete graph upper bound (rigorous)}
+\hypertarget{2-complete-graph-upper-bound-rigorous}{%
+\subsection{2. Complete graph upper bound (rigorous)}\label{2-complete-graph-upper-bound-rigorous}}
 
-For G=K\_n and S of size s, choose x supported on S with sum\_\{i in S\} x\_i = 0.
+For \(G=K_{n}\) and S of size s, choose x supported on S with \(\\sum_{i \in S} x_{i} = \mNumber{0}\).
 Then
 
-\begin{verbatim}
-x^T L_{K_n} x = n ||x||^2,
-x^T L_S x = s ||x||^2.
-\end{verbatim}
+\[\begin{aligned}
+x^{T} L_{K_{n}} x = n ||x||^\mNumber{2}, \\
+x^{T} L_{S} x = s ||x||^\mNumber{2}.
+\end{aligned}\]
 
-Hence L\_S \textless= epsilon L\_\{K\_n\} implies s \textless= epsilon n.
+Hence \(L_{S} \le \epsilon L_{K_{n}}\) implies \(s \le \epsilon\) n.
 Therefore any universal constant must satisfy
 
-\begin{verbatim}
-c <= 1.
-\end{verbatim}
+\[c \le \mNumber{1}.\]
 
 This is an upper bound only.
 
-\subsection{3. Random sampling identities (expectation level)}
+\hypertarget{3-random-sampling-identities-expectation-level}{%
+\subsection{3. Random sampling identities (expectation level)}\label{3-random-sampling-identities-expectation-level}}
 
-Let Z\_v \textasciitilde{} Bernoulli(p) independently and S=\{v: Z\_v=1\}.
+Let \(Z_{v}\) \textasciitilde{} Bernoulli(p) independently and S=\{v: \(Z_{v}\)=1\}.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -94,115 +90,111 @@ Let Z\_v \textasciitilde{} Bernoulli(p) independently and S=\{v: Z\_v=1\}.
 \item
   Spectral expectation:
 
-  E{[}L\_S{]} = p\^{}2 L,
+  \(E[L_{S}] = p^\mNumber{2}\) L,
 \end{enumerate}
 
-since each edge survives with probability p\^{}2.
+since each edge survives with probability \(p^\mNumber{2}\).
 
 Thus
 
-\begin{verbatim}
-E[epsilon L - L_S] = (epsilon - p^2)L.
-\end{verbatim}
+\[E[\epsilon L - L_{S}] = (\epsilon - p^\mNumber{2})L.\]
 
-Setting p=epsilon gives E{[}L\_S{]}=epsilon\^{}2 L \textless= epsilon L. This is not yet a
+Setting p=epsilon gives \(E[L_{S}]=\epsilon^{\mNumber{2}} L \le \epsilon\) L. This is not yet a
 realization-level guarantee.
 
-\subsection{4. Concentration setup (gap-fixed formulation)}
+\hypertarget{4-concentration-setup-gap-fixed-formulation}{%
+\subsection{4. Concentration setup (gap-fixed formulation)}\label{4-concentration-setup-gap-fixed-formulation}}
 
 Define edge-normalized PSD matrices
 
-\begin{verbatim}
-X_e = L^{+/2} w_e b_e b_e^T L^{+/2},   b_e = e_u-e_v,
-\end{verbatim}
+\[X_{e} = L^{+/\mNumber{2}} w_{e} b_{e} b_{e}^{T} L^{+/\mNumber{2}}, b_{e} = e_{u}-e_{v},\]
 
 and leverage scores
 
-\begin{verbatim}
-tau_e = tr(X_e) = w_e b_e^T L^+ b_e,
-sum_e tau_e = n - k
-\end{verbatim}
+\[\begin{aligned}
+\tau_{e} = tr(X_{e}) = w_{e} b_{e}^{T} L^+ b_{e}, \\
+\sum_{e} \tau_{e} = n - k
+\end{aligned}\]
 
 (k = number of connected components).
 
-\subsubsection{4a. Star domination with correct counting}
+\hypertarget{4a-star-domination-with-correct-counting}{%
+\subsubsection{4a. Star domination with correct counting}\label{4a-star-domination-with-correct-counting}}
 
-Using Z\_u Z\_v \textless= Z\_u and Z\_u Z\_v \textless= Z\_v for each edge \{u,v\},
+Using \(Z_{u} Z_{v} \le Z_{u}\) and \(Z_{u} Z_{v} \le Z_{v}\) for each edge \(\{u,v\}\),
 
-\begin{verbatim}
-L_S = sum_{uv in E} Z_u Z_v L_uv
-    <= (1/2) sum_v Z_v sum_{u~v} L_uv.
-\end{verbatim}
+\[\begin{aligned}
+L_{S} = \sum_{uv \in E} Z_{u} Z_{v} L_{uv} \\
+\le (\mNumber{1}/\mNumber{2}) \sum_{v} Z_{v} \sum_{u~v} L_{uv}.
+\end{aligned}\]
 
 So in normalized coordinates
 
-\begin{verbatim}
-L^{+/2} L_S L^{+/2} <= sum_v Z_v A_v,
-A_v := (1/2) sum_{u~v} X_{uv} >= 0.
-\end{verbatim}
+\[\begin{aligned}
+L^{+/\mNumber{2}} L_{S} L^{+/\mNumber{2}} \le \sum_{v} Z_{v} A_{v}, \\
+A_{v} := (\mNumber{1}/\mNumber{2}) \sum_{u~v} X_{uv} \ge \mNumber{0}.
+\end{aligned}\]
 
-Because Z\_v are independent Bernoulli variables, the random matrices Z\_v A\_v
+Because \(Z_{v}\) are independent Bernoulli variables, the random matrices \(Z_{v} A_{v}\)
 are independent PSD summands.
 
-\subsubsection{4b. Freedman/Bernstein martingale parameters}
+\hypertarget{4b-freedmanbernstein-martingale-parameters}{%
+\subsubsection{4b. Freedman/Bernstein martingale parameters}\label{4b-freedmanbernstein-martingale-parameters}}
 
-Let A\_i be a fixed ordering of \{A\_v\}, p\_i=E{[}Z\_i{]}, and define the centered sum
+Let \(A_{i}\) be a fixed ordering of \(\{A_{v}\}, p_{i}=E[Z_{i}],\) and define the centered sum
 
-\begin{verbatim}
-X = sum_i (Z_i - p_i) A_i.
-\end{verbatim}
+\[X = \sum_{i} (Z_{i} - p_{i}) A_{i}.\]
 
-With filtration F\_i = sigma(Z\_1,...,Z\_i), Doob martingale
+With filtration \(F_{i} = \sigma(Z_\mNumber{1},...,Z_{i})\), Doob martingale
 
-\begin{verbatim}
-Y_i = E[X | F_i],
-Delta_i = Y_i - Y_{i-1}
-\end{verbatim}
+\[\begin{aligned}
+Y_{i} = E[X | F_{i}], \\
+\Delta_{i} = Y_{i} - Y_{i-\mNumber{1}}
+\end{aligned}\]
 
 has self-adjoint differences. For independent Bernoulli sampling,
 
-\begin{verbatim}
-Delta_i = (Z_i - p_i) A_i,
-||Delta_i|| <= ||A_i|| <= R_*  (R_* = max_i ||A_i||),
-\end{verbatim}
+\[\begin{aligned}
+\Delta_{i} = (Z_{i} - p_{i}) A_{i}, \\
+||\Delta_{i}|| \le ||A_{i}|| \le R_{\mDualStar} (R_{\mDualStar} = max_{i} ||A_{i}||),
+\end{aligned}\]
 
 and predictable quadratic variation
 
-\begin{verbatim}
-W_n = sum_i E[Delta_i^2 | F_{i-1}] = sum_i p_i(1-p_i) A_i^2.
-\end{verbatim}
+\[W_{n} = \sum_{i} E[\Delta_{i}^\mNumber{2} | F_{i-\mNumber{1}}] = \sum_{i} p_{i}(\mNumber{1}-p_{i}) A_{i}^\mNumber{2}.\]
 
 Matrix Freedman (or matrix Bernstein in independent form) applies once bounds
-on R\_* and \textbar\textbar W\_n\textbar\textbar{} are supplied.
+on \(R_{\mDualStar}\) and \(||W_{n}||\) are supplied.
 
 \textbf{What graph-dependent bounds are needed.} To obtain a self-contained
-concentration bound, one would need R\_* \textless= C\_1 * epsilon and
-\textbar\textbar W\_n\textbar\textbar{} \textless= C\_2 * epsilon\^{}2 for graph-dependent constants C\_1, C\_2. Bounding
-these requires leverage score analysis (showing tau\_e bounds are well-distributed
+concentration bound, one would need \(R_{\mDualStar} \le C_\mNumber{1} \ast \epsilon\) and
+\(||W_{n}|| \le C_\mNumber{2} \ast \epsilon^\mNumber{2}\) for graph-dependent constants \(C_{\mNumber{1}}, C_{\mNumber{2}}\). Bounding
+these requires leverage score analysis (showing \(\tau_{e}\) bounds are well-distributed
 across vertices) that is the core content of the external theorem referenced
 in Section 5. Specifically, the Batson-Spielman-Srivastava barrier-function
-method controls both R\_* and \textbar\textbar W\_n\textbar\textbar{} simultaneously through a potential
+method controls both \(R_{\mDualStar}\) and \(||W_{n}||\) simultaneously through a potential
 function that tracks the spectral approximation quality.
 
 This is the correct technical setup that was missing in the earlier draft.
 
-\subsection{5. External dependency for universal c0\textgreater0}
+\hypertarget{5-external-dependency-for-universal-c0--0}{%
+\subsection{\texorpdfstring{5. External dependency for universal \(c\mNumber{0} > \mNumber{0}\)}{5. External dependency for universal c\textbackslash mNumber\{0\} \textgreater{} \textbackslash mNumber\{0\}}}\label{5-external-dependency-for-universal-c0--0}}
 
 To conclude a universal lower bound for all graphs, one needs an additional
 theorem (not proved in this writeup) that controls leverage/pruning and proves:
 
 \begin{verbatim}
-exists c0>0 universal such that
+exists $c0 > 0$ universal such that
 for all G, epsilon in (0,1), exists S with |S|>=c0*epsilon*n and L_S<=epsilon L.
 \end{verbatim}
 
 We state this explicitly as an assumption:
 
-\begin{verbatim}
-Assumption V (vertex-light selection theorem):
-There exists c0>0 such that for every weighted graph G and epsilon in (0,1),
-one can choose S subseteq V with |S| >= c0*epsilon*n and L_S <= epsilon L.
-\end{verbatim}
+\[\begin{aligned}
+Assumption V (vertex-light selection theorem): \\
+There \text{exists} c\mNumber{0} > \mNumber{0} \text{such} \text{that} \text{for} \text{every} weighted graph G \text{and} \epsilon \in (\mNumber{0},\mNumber{1}), \\
+\text{one} \text{can} choose S subseteq V \text{with} |S| \ge c\mNumber{0} \ast \epsilon \ast n \text{and} L_{S} \le \epsilon L.
+\end{aligned}\]
 
 Literature check in this cycle (MO/MSE local corpus plus the standard
 sparsification references) did not locate a theorem matching Assumption V in
@@ -215,11 +207,11 @@ with reweighting, not induced subgraphs from vertex subsets.
 
 \textbf{Important gap:} BSS is an \emph{edge sparsification} result --- it selects a
 subset of edges with reweighting, not a subset of vertices. The problem asks
-for a \emph{vertex subset} S with L\_S \textless= epsilon L. These are different objects:
+for a \emph{vertex subset} S with \(L_{S} \le \epsilon\) L. These are different objects:
 edge sparsification preserves the vertex set and reweights edges, while the
-epsilon-light condition restricts to the induced subgraph on a vertex subset.
+\(\epsilon\)-light condition restricts to the induced subgraph on a vertex subset.
 
-The star domination decomposition in Section 4a decomposes L\_S into
+The star domination decomposition in Section 4a decomposes \(L_{S}\) into
 vertex-indexed PSD summands, which is the right algebraic setup for a
 vertex-selection proof strategy. But the adaptation from edge sparsification
 to vertex-induced sparsification is exactly the missing step.
@@ -228,7 +220,8 @@ This writeup therefore treats the universal vertex-subset bound as conditional:
 Sections 1-4 are proved in-text, and the existential claim is left open unless
 Assumption V is supplied from outside.
 
-\subsection{6. Final conclusion (explicitly conditional)}
+\hypertarget{6-final-conclusion-explicitly-conditional}{%
+\subsection{6. Final conclusion (explicitly conditional)}\label{6-final-conclusion-explicitly-conditional}}
 
 Unconditional conclusions from this text:
 
@@ -238,7 +231,7 @@ Unconditional conclusions from this text:
 \item
   The statement is well-posed in Laplacian PSD order.
 \item
-  K\_n implies universal upper bound c\textless=1.
+  \(K_{n}\) implies universal upper bound c\textless=1.
 \item
   The concentration machinery is set up correctly with explicit martingale
   increments and variance process.
@@ -250,28 +243,30 @@ Conditional/open conclusion:
 \tightlist
 \item
   Under Assumption V, one obtains a positive existential result (some universal
-  c0\textgreater0 exists).
+  \(c\mNumber{0} > \mNumber{0}\) exists).
 \item
   Without Assumption V, this writeup does not prove existence of such a
   universal c0; the problem remains open here.
 \end{itemize}
 
-\subsection{Key identities used}
+\hypertarget{key-identities-used}{%
+\subsection{Key identities used}\label{key-identities-used}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  L = sum\_e w\_e b\_e b\_e\^{}T
+  \(L = \\sum_{e} w_{e} b_{e} b_{e}^{T}\)
 \item
-  L\_S = sum\_\{e internal to S\} w\_e b\_e b\_e\^{}T
+  \(L_{S} = \\sum_{e \text{internal} \text{to} S} w_{e} b_{e} b_{e}^{T}\)
 \item
-  tau\_e = w\_e b\_e\^{}T L\^{}+ b\_e, sum\_e tau\_e = n-k
+  \(\tau_{e} = w_{e} b_{e}^{T} L^+ b_{e}, \\sum_{e} \tau_{e} =\) n-k
 \item
-  L\^{}\{+/2\} L\_S L\^{}\{+/2\} \textless= sum\_v Z\_v A\_v with A\_v=(1/2)sum\_\{u\textasciitilde v\}X\_\{uv\}
+  \(L^{+/\mNumber{2}} L_{S} L^{+/\mNumber{2}} \le \\sum_{v} Z_{v} A_{v}\) with \(A_{v}=(\mNumber{1}/\mNumber{2})\sum_{u~v}X_{uv}\)
 \end{enumerate}
 
-\subsection{References}
+\hypertarget{references}{%
+\subsection{References}\label{references}}
 
 \begin{itemize}
 \tightlist

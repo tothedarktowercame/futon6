@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-A **polyhedral Lagrangian surface** K in R^4 is a finite polyhedral complex all
+A **polyhedral Lagrangian surface** $K \in R$^4 is a finite polyhedral complex all
 of whose faces are Lagrangian 2-planes, which is a topological submanifold of
 R^4. A **Lagrangian smoothing** of K is a Hamiltonian isotopy K_t of smooth
 Lagrangian submanifolds for t in (0,1], extending to a topological isotopy on
@@ -248,7 +248,7 @@ surface, including at v = gamma_1(0) × gamma_2(0). ∎
 
 **Agreement:** K^{sm} = C_1 × C_2 = K outside the region where either
 factor was modified (|p| ≤ delta in V_1 or |q| ≤ delta in V_2), so K^{sm}
-agrees with K outside a neighborhood of v of radius O(delta).
+agrees with K outside a neighborhood of v of radius $O(delta)$.
 
 ### 6. Edge smoothing (crease smoothing along edges between vertices)
 
@@ -281,7 +281,7 @@ in thin tubular neighborhoods of the edge arcs.)
 
 **Step 7a: Resolve vertices.** For each 4-valent vertex v_i, choose a ball
 B_i of radius r_i centered at v_i, where r_i is small enough that:
-- B_i contains no other vertex v_j (j != i), and
+- B_i contains no other vertex v_j $(j \neq i)$, and
 - B_i intersects only the edges and faces incident to v_i.
 
 Such radii exist because the vertex set is finite and discrete in R^4.

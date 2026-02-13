@@ -1,187 +1,185 @@
-\section{Problem 9: Polynomial Detection of Rank-1 Scaling for Quadrifocal Tensors}
+\hypertarget{problem-9-polynomial-detection-of-rank-1-scaling-for-quadrifocal-tensors}{%
+\section{Problem 9: Polynomial Detection of Rank-1 Scaling for Quadrifocal Tensors}\label{problem-9-polynomial-detection-of-rank-1-scaling-for-quadrifocal-tensors}}
 
-\subsection{Problem Statement}
+\hypertarget{problem-statement}{%
+\subsection{Problem Statement}\label{problem-statement}}
 
-Let n \textgreater= 5. Let A\^{}(1), ..., A\^{}(n) in R\^{}\{3x4\} be Zariski-generic matrices.
-For alpha, beta, gamma, delta in {[}n{]}, construct Q\^{}(alpha beta gamma delta) in
-R\^{}\{3x3x3x3\} with entry:
+Let \(n \ge \mNumber{5}\). Let \(A^{\mNumber{1}}\), ..., \(A^{n} \in R^{\mNumber{3} \times \mNumber{4}}\) be Zariski-generic matrices.
+For \(\alpha, \beta, \gamma, \delta \in [n],\) construct Q\^{}(alpha \(\beta \gamma\) delta) in
+\(R^{\mNumber{3} \times \mNumber{3}x\mNumber{3} \times \mNumber{3}}\) with entry:
 
-\begin{verbatim}
-Q^(abgd)_{ijkl} = det[A^(a)(i,:); A^(b)(j,:); A^(g)(k,:); A^(d)(l,:)]
-\end{verbatim}
+\[Q^{abgd}_{ijkl} = det[A^{a}(i,:); A^{b}(j,:); A^{g}(k,:); A^{d}(l,:)]\]
 
 (the 4x4 determinant of a matrix formed by stacking rows i, j, k, l from
-cameras alpha, beta, gamma, delta respectively).
+cameras \(\alpha, \beta, \gamma, \delta\) respectively).
 
-Does there exist a polynomial map F: R\^{}\{81*n\^{}4\} -\textgreater{} R\^{}N satisfying:
+Does there exist a polynomial map F: \(R^{\mNumber{81} \ast n^{\mNumber{4}}} \to \mathbb{R}^{N}\) satisfying:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  F does not depend on A\^{}(1), ..., A\^{}(n)
+  F does not depend on \(A^{\mNumber{1}}\), ..., \(A^{n}\)
 \item
   The degrees of the coordinate functions of F do not depend on n
 \item
-  For lambda in R\^{}\{n x n x n x n\} with lambda\_\{abgd\} != 0 precisely when
-  a,b,g,d are not all identical:
-  F(lambda\_\{abgd\} Q\^{}(abgd) : a,b,g,d in {[}n{]}) = 0
-  if and only if there exist u,v,w,x in (R*)\^{}n such that
-  lambda\_\{abgd\} = u\_a v\_b w\_g x\_d for all non-identical a,b,g,d.
+  For \(\lambda \in R^{n \times n \times n \times n}\) with \(\lambda_{abgd} \neq \mNumber{0}\) precisely when
+  \(a,b,g,d\) are not all identical:
+  F(\(\lambda_{abgd} Q^{abgd}\) : \(a,b,g,d\) in {[}n{]}) = 0
+  if and only if there exist \(u,v,w,x \in (R \ast )^{n}\) such that
+  \(\lambda_{abgd} = u_{a} v_{b} w_{g} x_{d}\) for all non-identical \(a,b,g,d\).
 \end{enumerate}
 
-\subsection{Answer}
+\hypertarget{answer}{%
+\subsection{Answer}\label{answer}}
 
 \textbf{Yes.} Such a polynomial map F exists, with coordinate functions of degree 3.
 
-\subsection{Solution}
+\hypertarget{solution}{%
+\subsection{Solution}\label{solution}}
 
-\subsubsection{1. The quadrifocal tensor as a bilinear form}
+\hypertarget{1-the-quadrifocal-tensor-as-a-bilinear-form}{%
+\subsubsection{1. The quadrifocal tensor as a bilinear form}\label{1-the-quadrifocal-tensor-as-a-bilinear-form}}
 
-The entry Q\^{}(abgd)\_\{ijkl\} = det{[}a\^{}(a)\_i; a\^{}(b)\_j; a\^{}(g)\_k; a\^{}(d)\_l{]} is
+The entry \(Q^{abgd}_{ijkl} = det[a^{a}_{i}\); \(a^{b}_{j}\); \(a^{g}_{k}\); \(a^{d}_{l}]\) is
 the evaluation of the volume form (the unique up-to-scale alternating 4-linear
-form on R\^{}4) on four camera row vectors.
+form on \(\mathbb{R}^{\mNumber{4}}\)) on four camera row vectors.
 
 \textbf{Key observation (bilinear form reduction):} Fix two camera-row pairs
-(gamma, k) and (delta, l), giving vectors c = a\^{}(gamma)\_k and d = a\^{}(delta)\_l
-in R\^{}4. Then the map:
+(gamma, k) and (delta, l), giving vectors \(c = a^{\gamma}_{k}\) and \(d = a^{\delta}_{l} \in \mathbb{R}^{\mNumber{4}}\). Then the map:
 
-\begin{verbatim}
-omega(p, q) = det[p; q; c; d]
-\end{verbatim}
+\[\omega(p, q) = det[p; q; c; d]\]
 
-is an alternating bilinear form on R\^{}4. Since c wedge d is a simple 2-form,
-the Hodge dual *(c wedge d) is also simple, so omega has \textbf{rank 2} as a
+is an alternating bilinear form on \(\mathbb{R}^{\mNumber{4}}\). Since c wedge d is a simple 2-form,
+the Hodge dual *(c wedge d) is also simple, so \(\omega\) has \textbf{rank 2} as a
 bilinear form.
 
-Equivalently: the null space of omega is span\{c, d\} (2-dimensional), and
-omega induces a non-degenerate alternating form on V/span\{c,d\} = R\^{}2.
+Equivalently: the null space of \(\omega\) is span\{c, d\} (2-dimensional), and
+\(\omega\) induces a non-degenerate alternating form on V/span\{c,d\} = \(\mathbb{R}^{\mNumber{2}}\).
 
-\subsubsection{2. The rank-2 constraint and its 3x3 minor formulation}
+\hypertarget{2-the-rank-2-constraint-and-its-3x3-minor-formulation}{%
+\subsubsection{2. The rank-2 constraint and its 3x3 minor formulation}\label{2-the-rank-2-constraint-and-its-3x3-minor-formulation}}
 
-Since omega has rank 2, for ANY choice of 3 vectors p\_1, p\_2, p\_3 and
-3 vectors q\_1, q\_2, q\_3 in R\^{}4:
+Since \(\omega\) has rank 2, for ANY choice of 3 vectors \(p_{\mNumber{1}}, p_{\mNumber{2}}, p_{\mNumber{3}}\) and
+3 vectors \(q_{\mNumber{1}}, q_{\mNumber{2}}, q_{\mNumber{3}} \in \mathbb{R}^{\mNumber{4}}\):
 
-\begin{verbatim}
-det | omega(p_1,q_1)  omega(p_1,q_2)  omega(p_1,q_3) |
-    | omega(p_2,q_1)  omega(p_2,q_2)  omega(p_2,q_3) | = 0
-    | omega(p_3,q_1)  omega(p_3,q_2)  omega(p_3,q_3) |
-\end{verbatim}
+\[\begin{aligned}
+det | \omega(p_\mNumber{1},q_\mNumber{1}) \omega(p_\mNumber{1},q_\mNumber{2}) \omega(p_\mNumber{1},q_\mNumber{3}) | \\
+| \omega(p_\mNumber{2},q_\mNumber{1}) \omega(p_\mNumber{2},q_\mNumber{2}) \omega(p_\mNumber{2},q_\mNumber{3}) | = \mNumber{0} \\
+| \omega(p_\mNumber{3},q_\mNumber{1}) \omega(p_\mNumber{3},q_\mNumber{2}) \omega(p_\mNumber{3},q_\mNumber{3}) |
+\end{aligned}\]
 
 (A rank-2 bilinear form has all 3x3 minors vanishing.)
 
-In terms of the Q tensors: choosing p\_m = a\^{}(alpha\_m)\emph{\{i\_m\} and
-q\_n = a\^{}(beta\_n)}\{j\_n\}, this becomes:
+In terms of the Q tensors: choosing \(p_{m} = a^{\alpha_{m}}\)\emph{\(\{i_{m}\}\) and
+\(q_{n} = a^{\beta_{n}}\)}\(\{j_{n}\}\), this becomes:
 
-\begin{verbatim}
-det [Q^(alpha_m, beta_n, gamma, delta)_{i_m, j_n, k, l}]_{3x3} = 0
-\end{verbatim}
+\[det [Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}} = \mNumber{0}\]
 
-for any choice of (alpha\_1,i\_1), (alpha\_2,i\_2), (alpha\_3,i\_3) and
-(beta\_1,j\_1), (beta\_2,j\_2), (beta\_3,j\_3) and fixed (gamma,k), (delta,l).
+for any choice of \((\alpha_{\mNumber{1}},i_{\mNumber{1}}), (\alpha_{\mNumber{2}},i_{\mNumber{2}}), (\alpha_{\mNumber{3}},i_{\mNumber{3}})\) and
+\((\beta_{\mNumber{1}},j_{\mNumber{1}}), (\beta_{\mNumber{2}},j_{\mNumber{2}}), (\beta_{\mNumber{3}},j_{\mNumber{3}})\) and fixed (gamma,k), (delta,l).
 
 This is a \textbf{degree-3 polynomial} in the Q entries, independent of the cameras.
 
-\subsubsection{3. Effect of rank-1 scaling on the 3x3 minor}
+\hypertarget{3-effect-of-rank-1-scaling-on-the-3x3-minor}{%
+\subsubsection{3. Effect of rank-1 scaling on the 3x3 minor}\label{3-effect-of-rank-1-scaling-on-the-3x3-minor}}
 
-Now consider the scaled tensors T\^{}(abgd) = lambda\_\{abgd\} Q\^{}(abgd).
+Now consider the scaled tensors \(T^{abgd} = \lambda_{abgd} Q^{abgd}\).
 The 3x3 matrix becomes:
 
-\begin{verbatim}
-M_{mn} = lambda_{alpha_m, beta_n, gamma, delta} * Q^(alpha_m, beta_n, gamma, delta)_{i_m, j_n, k, l}
-\end{verbatim}
+\[M_{mn} = \lambda_{\alpha_{m}, \beta_{n}, \gamma, \delta} \ast Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}\]
 
 This is the Hadamard (entrywise) product of two 3x3 matrices:
 
 \begin{itemize}
 \tightlist
 \item
-  Lambda\_\{mn\} = lambda\_\{alpha\_m, beta\_n, gamma, delta\} (depends on camera indices only)
+  \(\Lambda_{mn} = \lambda_{\alpha_{m}, \beta_{n}, \gamma, \delta}\) (depends on camera indices only)
 \item
-  Omega\_\{mn\} = Q\^{}(alpha\_m, beta\_n, gamma, delta)\_\{i\_m, j\_n, k, l\} (the bilinear form)
+  \(\Omega_{mn}\) = Q\^{}(\(\alpha_{m}, \beta_{n}, \gamma,\) delta)\_\{\(i_{m}, j_{n},\) k, l\} (the bilinear form)
 \end{itemize}
 
-\textbf{If lambda is rank-1:} lambda\_\{abgd\} = u\_a v\_b w\_g x\_d, so
-Lambda\_\{mn\} = u\_\{alpha\_m\} v\_\{beta\_n\} w\_gamma x\_delta. This factors as
-Lambda = (u\_\{alpha\_m\})\emph{m * (v}\{beta\_n\})\_n\^{}T (scaled by the constant w\_gamma x\_delta).
-So Lambda has matrix rank 1.
+\textbf{If \(\lambda\) is rank-1:} \(\lambda_{abgd} = u_{a} v_{b} w_{g} x_{d},\) so
+\(\Lambda_{mn} = u_{\alpha_{m}} v_{\beta_{n}} w_{\gamma} x_{\delta}\). This factors as
+\(\Lambda = (u_{\alpha_{m}})\)\emph{m * (v}\{\(\beta_{n}\)\})\_\(n^{T}\) (scaled by the constant \(w_{\gamma} x_{\delta}\)).
+So \(\Lambda\) has matrix rank 1.
 
-For a rank-1 matrix Lambda, the Hadamard product M = Lambda ∘ Omega equals
-diag(u) * Omega * diag(v) (up to the scalar w\_gamma x\_delta). Since similar
-transformations preserve rank: rank(M) = rank(Omega) = 2 \textless{} 3, so det(M) = 0.
+For a rank-1 matrix \(\Lambda\), the Hadamard product \(M = \Lambda \circ \Omega\) equals
+\(\operatorname{diag}(u) \ast \Omega \ast \operatorname{diag}(v)\) (up to the scalar \(w_{\gamma} x_{\delta}\)). Since similar
+transformations preserve rank: \(\mOpName{rank}(M) = \mOpName{rank}(\Omega) = \mNumber{2} < \mNumber{3}\), so det(M) = 0.
 
-Therefore: \textbf{rank-1 lambda implies all 3x3 minors of scaled T vanish.} ✓
+Therefore: \textbf{rank-1 \(\lambda\) implies all 3x3 minors of scaled T vanish.} ✓
 
-\subsubsection{4. Converse: non-rank-1 lambda gives nonzero minors (for generic cameras)}
+\hypertarget{4-converse-non-rank-1-lambda-gives-nonzero-minors-for-generic-cameras}{%
+\subsubsection{\texorpdfstring{4. Converse: non-rank-1 \(\lambda\) gives nonzero minors (for generic cameras)}{4. Converse: non-rank-1 \textbackslash lambda gives nonzero minors (for generic cameras)}}\label{4-converse-non-rank-1-lambda-gives-nonzero-minors-for-generic-cameras}}
 
-For the converse, we need: if lambda is NOT rank-1, then some 3x3 minor is
+For the converse, we need: if \(\lambda\) is NOT rank-1, then some 3x3 minor is
 nonzero (for Zariski-generic cameras).
 
 \textbf{The argument is algebraic-geometric, not via Hadamard rank bounds.} Define
 
-\begin{verbatim}
-P(A^{(1)}, ..., A^{(n)}) = det [T^(alpha_m, beta_n, gamma, delta)_{i_m, j_n, k, l}]_{3x3}
-\end{verbatim}
+\[P(A^{(\mNumber{1})}, ..., A^{(n)}) = det [T^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}}\]
 
 for a specific choice of row/column/fixed indices. This is a polynomial in
-the camera entries (with lambda fixed). We claim P is not the zero polynomial
-when lambda is not rank-1 in its first two indices. Since a nonzero polynomial
+the camera entries (with \(\lambda\) fixed). We claim P is not the zero polynomial
+when \(\lambda\) is not rank-1 in its first two indices. Since a nonzero polynomial
 is nonzero on a Zariski-dense open set, this establishes the converse for
 generic cameras.
 
-\textbf{Explicit witness (n = 5).} Choose 5 cameras A\^{}(i) as rows of generic
-3 x 4 matrices with rational entries:
+\textbf{Explicit witness (n = 5).} Choose 5 cameras \(A^{i}\) as rows of generic
+\(\mNumber{3} \times \mNumber{4}\) matrices with rational entries:
 
-\begin{verbatim}
-A^(1) = [[1,0,0,1],[0,1,0,1],[0,0,1,1]]
-A^(2) = [[1,1,0,0],[0,1,1,0],[0,0,1,1]]
-A^(3) = [[1,0,1,0],[1,1,0,0],[0,1,0,1]]
-A^(4) = [[0,1,1,1],[1,0,1,1],[1,1,0,1]]
-A^(5) = [[1,2,3,4],[4,3,2,1],[1,1,1,1]]
-\end{verbatim}
+\[\begin{aligned}
+A^{\mNumber{1}} = [[\mNumber{1},\mNumber{0},\mNumber{0},\mNumber{1}],[\mNumber{0},\mNumber{1},\mNumber{0},\mNumber{1}],[\mNumber{0},\mNumber{0},\mNumber{1},\mNumber{1}]] \\
+A^{\mNumber{2}} = [[\mNumber{1},\mNumber{1},\mNumber{0},\mNumber{0}],[\mNumber{0},\mNumber{1},\mNumber{1},\mNumber{0}],[\mNumber{0},\mNumber{0},\mNumber{1},\mNumber{1}]] \\
+A^{\mNumber{3}} = [[\mNumber{1},\mNumber{0},\mNumber{1},\mNumber{0}],[\mNumber{1},\mNumber{1},\mNumber{0},\mNumber{0}],[\mNumber{0},\mNumber{1},\mNumber{0},\mNumber{1}]] \\
+A^{\mNumber{4}} = [[\mNumber{0},\mNumber{1},\mNumber{1},\mNumber{1}],[\mNumber{1},\mNumber{0},\mNumber{1},\mNumber{1}],[\mNumber{1},\mNumber{1},\mNumber{0},\mNumber{1}]] \\
+A^{\mNumber{5}} = [[\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}],[\mNumber{4},\mNumber{3},\mNumber{2},\mNumber{1}],[\mNumber{1},\mNumber{1},\mNumber{1},\mNumber{1}]]
+\end{aligned}\]
 
-Choose a non-rank-1 scaling: lambda\_\{abgd\} = 1 for all non-identical (a,b,g,d)
-except lambda\_\{1,2,3,4\} = 2.
+Choose a non-rank-1 scaling: \(\lambda_{abgd} = \mNumber{1}\) for all non-identical (\(a,b,g,d\))
+except \(\lambda_{\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{2}\).
 
-\textbf{Non-rank-1 verification.} If lambda were rank-1, then lambda\_\{abgd\} = u\_a v\_b w\_g x\_d.
-From lambda\_\{1,2,3,4\} = 2 and lambda\_\{2,2,3,4\} = 1 we get u\_1/u\_2 = 2. But from
-lambda\_\{1,1,3,4\} = 1 and lambda\_\{2,1,3,4\} = 1 we get u\_1/u\_2 = 1. Contradiction.
+\textbf{Non-rank-1 verification.} If \(\lambda\) were rank-1, then \(\lambda_{abgd} = u_{a} v_{b} w_{g} x_{d}\).
+From \(\lambda_{\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{2}\) and \(\lambda_{\mNumber{2},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{1}\) we get \(u_\mNumber{1}/u_\mNumber{2} = \mNumber{2}\). But from
+\(\lambda_{\mNumber{1},\mNumber{1},\mNumber{3},\mNumber{4}} = \mNumber{1}\) and \(\lambda_{\mNumber{2},\mNumber{1},\mNumber{3},\mNumber{4}} = \mNumber{1}\) we get \(u_\mNumber{1}/u_\mNumber{2} = \mNumber{1}\). Contradiction.
 
-Fix gamma = 3, delta = 4, k = 1, l = 1. Choose row triples
-(alpha\_m, i\_m) = (1,1), (2,1), (5,1) and column triples
-(beta\_n, j\_n) = (2,1), (5,1), (1,2). The 3x3 Lambda matrix has entries
-lambda\_\{alpha\_m, beta\_n, 3, 4\}; specifically Lambda\_\{11\} = lambda\_\{1,2,3,4\} = 2
-with all other entries equal to 1. The Omega matrix (unscaled Q values) has
-det(Omega) = 0 (confirming rank-2), but the Hadamard product M = Lambda ∘ Omega
+Fix \(\gamma = \mNumber{3}, \delta = \mNumber{4}, k = \mNumber{1}, l = \mNumber{1}\). Choose row triples
+(\(\alpha_{m}, i_{m}) =\) (1,1), (2,1), (5,1) and column triples
+(\(\beta_{n}, j_{n}) =\) (2,1), (5,1), (1,2). The 3x3 \(\Lambda\) matrix has entries
+\(\lambda_{\alpha_{m}, \beta_{n}, \mNumber{3}, \mNumber{4}}\); specifically \(\Lambda_{\mNumber{11}} = \lambda_{\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{2}\)
+with all other entries equal to 1. The \(\Omega\) matrix (unscaled Q values) has
+det(Omega) = 0 (confirming rank-2), but the Hadamard product \(M = \Lambda \circ \Omega\)
 satisfies det(M) = -24 != 0 (verified by direct computation of nine 4x4
 determinants). This exhibits P as not the zero polynomial.
 
-\textbf{Remark (Hadamard product interpretation).} The matrix M\_\{mn\} is the
-Hadamard product Lambda ∘ Omega, where Lambda carries the scaling entries
-and Omega carries the bilinear form values. The upper bound
-rank(Lambda ∘ Omega) \textless= rank(Lambda) * rank(Omega) provides context but is
+\textbf{Remark (Hadamard product interpretation).} The matrix \(M_{mn}\) is the
+Hadamard product \(\Lambda \circ \Omega,\) where \(\Lambda\) carries the scaling entries
+and \(\Omega\) carries the bilinear form values. The upper bound
+\$\textbackslash mOpName\{rank\}(Lambda \(\circ\) Omega)\$ \textless= \(\mOpName{rank}(\Lambda) \ast \mOpName{rank}(\Omega)\) provides context but is
 not used in the proof; the converse relies entirely on the polynomial
 nonvanishing argument above.
 
-\subsubsection{5. All matricizations from the same construction}
+\hypertarget{5-all-matricizations-from-the-same-construction}{%
+\subsubsection{5. All matricizations from the same construction}\label{5-all-matricizations-from-the-same-construction}}
 
 The construction in Section 2-4 tests the rank-1 condition on the (1,2)-
-matricization of lambda (fixing modes 3,4). By symmetry, applying the same
+matricization of \(\lambda\) (fixing modes 3,4). By symmetry, applying the same
 construction with different pairs of "free" modes tests all matricizations:
 
 \begin{itemize}
 \tightlist
 \item
-  Fix modes (3,4), vary modes (1,2): test lambda\_\{(alpha,beta),(gamma,delta)\}
+  Fix modes (3,4), vary modes (1,2): test \(\lambda_{(\alpha,\beta),(\gamma,\delta)}\)
 \item
-  Fix modes (2,4), vary modes (1,3): test lambda\_\{(alpha,gamma),(beta,delta)\}
+  Fix modes (2,4), vary modes (1,3): test \(\lambda_{(\alpha,\gamma),(\beta,\delta)}\)
 \item
-  Fix modes (2,3), vary modes (1,4): test lambda\_\{(alpha,delta),(beta,gamma)\}
+  Fix modes (2,3), vary modes (1,4): test \(\lambda_{(\alpha,\delta),(\beta,\gamma)}\)
 \end{itemize}
 
 (The other fixings are redundant by symmetry of the rank-1 test.)
 
-A 4-tensor lambda has rank 1 if and only if all three of these matricizations
+A 4-tensor \(\lambda\) has rank 1 if and only if all three of these matricizations
 have rank 1 (i.e., are outer products of vectors).
 
 \textbf{Tensor factor compatibility lemma.} If all three matricizations have rank 1:
@@ -189,33 +187,32 @@ have rank 1 (i.e., are outer products of vectors).
 \begin{itemize}
 \tightlist
 \item
-  Mode-(1,2) vs (3,4) rank 1 gives lambda\_\{abgd\} = f\_\{ab\} g\_\{gd\}.
+  Mode-(1,2) vs (3,4) rank 1 gives \(\lambda_{abgd} = f_{ab} g_{gd}\).
 \item
-  Mode-(1,3) vs (2,4) rank 1 gives lambda\_\{abgd\} = h\_\{ag\} k\_\{bd\}.
-  From the first: lambda\_\{a1,b1,g,d\} / lambda\_\{a2,b2,g,d\} = f\_\{a1,b1\} / f\_\{a2,b2\},
+  Mode-(1,3) vs (2,4) rank 1 gives \(\lambda_{abgd} = h_{ag} k_{bd}\).
+  From the first: \(\lambda_{a\mNumber{1},b\mNumber{1},g,d} / \lambda_{a\mNumber{2},b\mNumber{2},g,d} = f_{a\mNumber{1},b\mNumber{1}} / f_{a\mNumber{2},b\mNumber{2}},\)
   independent of g, d. From the second:
-  lambda\_\{a,b1,g1,d\} / lambda\_\{a,b2,g1,d\} = k\_\{b1,d\} / k\_\{b2,d\},
+  \(\lambda_{a,b\mNumber{1},g\mNumber{1},d} / \lambda_{a,b\mNumber{2},g\mNumber{1},d} = k_{b\mNumber{1},d} / k_{b\mNumber{2},d},\)
   independent of a, g1. Cross-referencing these separations forces
-  f\_\{ab\} = u\_a v\_b and g\_\{gd\} = w\_g x\_d, giving
-  lambda\_\{abgd\} = u\_a v\_b w\_g x\_d (rank 1). QED.
+  \(f_{ab} = u_{a} v_{b}\) and \(g_{gd} = w_{g} x_{d},\) giving
+  \(\lambda_{abgd} = u_{a} v_{b} w_{g} x_{d}\) (rank 1). QED.
 \end{itemize}
 
-\subsubsection{6. Construction of F}
+\hypertarget{6-construction-of-f}{%
+\subsubsection{6. Construction of F}\label{6-construction-of-f}}
 
 \textbf{Definition of F:} The coordinate functions of F are all 3x3 minors:
 
-\begin{verbatim}
-F_{choice} = det [T^(alpha_m, beta_n, gamma, delta)_{i_m, j_n, k, l}]_{m,n=1,2,3}
-\end{verbatim}
+\[F_{choice} = det [T^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{m,n=\mNumber{1},\mNumber{2},\mNumber{3}}\]
 
 taken over all choices of:
 
 \begin{itemize}
 \tightlist
 \item
-  Three "row" camera-row pairs (alpha\_m, i\_m) for m = 1,2,3
+  Three "row" camera-row pairs (\(\alpha_{m}, i_{m})\) for m = 1,2,3
 \item
-  Three "column" camera-row pairs (beta\_n, j\_n) for n = 1,2,3
+  Three "column" camera-row pairs (\(\beta_{n}, j_{n})\) for n = 1,2,3
 \item
   Fixed camera-row pairs (gamma, k) and (delta, l)
 \end{itemize}
@@ -228,29 +225,30 @@ different pairs of modes and varying the others).
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \textbf{Camera-independent:} Each F\_\{choice\} is a degree-3 polynomial in the
+  \textbf{Camera-independent:} Each \(F_{choice}\) is a degree-3 polynomial in the
   T entries. The coefficient is ±1 (from the determinant expansion). No
   camera parameters appear.
 \item
   \textbf{Degree independent of n:} Each coordinate function has degree exactly 3.
 \item
-  \textbf{Characterization:} F = 0 iff all three matricizations of lambda have
-  rank 1, iff lambda is rank-1, for Zariski-generic cameras (by Sections 3-5).
+  \textbf{Characterization:} \(F = \mNumber{0}\) iff all three matricizations of \(\lambda\) have
+  rank 1, iff \(\lambda\) is rank-1, for Zariski-generic cameras (by Sections 3-5).
 \end{enumerate}
 
 \textbf{Codimension count:} The number of coordinate functions N grows with n
-(there are O(n\^{}8) choices for the 3x3 minors from the (1,2) vs (3,4)
+(there are \(O(n^\mNumber{8})\) choices for the 3x3 minors from the (1,2) vs (3,4)
 matricization alone), but the degree stays fixed at 3.
 
-\subsubsection{7. Geometric interpretation}
+\hypertarget{7-geometric-interpretation}{%
+\subsubsection{7. Geometric interpretation}\label{7-geometric-interpretation}}
 
 The Q tensors are the \textbf{quadrifocal tensors} from multiview geometry (the
 4-view analog of the fundamental matrix and trifocal tensor). The rank-2
 bilinear form structure is the classical rank constraint from projective
-geometry: four collinear points in P\^{}3 impose a codimension constraint on
+geometry: four collinear points in \(P^\mNumber{3}\) impose a codimension constraint on
 the stacked camera rows.
 
-The rank-1 scaling lambda = u ⊗ v ⊗ w ⊗ x corresponds to the natural
+The rank-1 scaling \(\lambda = u \otimes\) v \(\otimes\) w \(\otimes\) x corresponds to the natural
 gauge freedom in multiview geometry: rescaling each camera\textquotesingle s contribution
 independently for each of the four "roles" (which row selection it
 contributes). The polynomial map F detects when a putative rescaling is
@@ -260,7 +258,8 @@ The Zariski-genericity requirement on the cameras ensures that the
 quadrifocal variety is "non-degenerate" --- the Q tensors carry enough
 information to distinguish rank-1 from higher-rank scalings.
 
-\subsection{Key References from futon6 corpus}
+\hypertarget{key-references-from-futon6-corpus}{%
+\subsection{Key References from futon6 corpus}\label{key-references-from-futon6-corpus}}
 
 \begin{itemize}
 \tightlist

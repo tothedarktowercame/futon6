@@ -105,7 +105,7 @@ is nonzero on a Zariski-dense open set, this establishes the converse for
 generic cameras.
 
 **Explicit witness (n = 5).** Choose 5 cameras A^(i) as rows of generic
-3 x 4 matrices with rational entries:
+$3 \times 4$ matrices with rational entries:
 
     A^(1) = [[1,0,0,1],[0,1,0,1],[0,0,1,1]]
     A^(2) = [[1,1,0,0],[0,1,1,0],[0,0,1,1]]
@@ -186,7 +186,7 @@ different pairs of modes and varying the others).
    rank 1, iff lambda is rank-1, for Zariski-generic cameras (by Sections 3-5).
 
 **Codimension count:** The number of coordinate functions N grows with n
-(there are O(n^8) choices for the 3x3 minors from the (1,2) vs (3,4)
+(there are $O(n^8)$ choices for the 3x3 minors from the (1,2) vs (3,4)
 matricization alone), but the degree stays fixed at 3.
 
 ### 7. Geometric interpretation

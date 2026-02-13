@@ -318,13 +318,13 @@ discharged. Two sub-options for obligation S:
    The argument has two layers:
 
    - **Rational vanishing (Step A: flat-normal-bundle argument).** The
-     normal bundle ν of F in M is flat (totally geodesic embedding). By
+     normal bundle ν of $F \in M$ is flat (totally geodesic embedding). By
      Chern-Weil, e(ν)⊗Q = 0. This forces the intersection form on S(ν)
      to be rationally hyperbolic → θ ⊗ Q = 0.
 
    - **Integral vanishing (trivial holonomy).** For the congruence ideal
      I with Norm(I) > 2 (e.g., I = (3)): the integrality constraint on
-     rotation matrices over Z[√2], combined with the congruence condition
+     rotation matrices over $\mathbb{Z}[\sqrt{2}]$, combined with the congruence condition
      g ≡ I mod I, forces the holonomy representation ρ: C → SO(2) to be
      trivial. So ν is a trivial bundle, e(ν) = 0 in H²(F; Z), and the
      circle bundle S(ν) = F × S¹ is a product. The integral intersection
