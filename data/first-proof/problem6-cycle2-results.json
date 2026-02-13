@@ -1,0 +1,11 @@
+{
+  "kn_exact_extremal": false,
+  "max_exact_ratio": 1.004656788277622,
+  "max_uniform_ratio": 1.1999999999999993,
+  "max_dbar": 0.7199999999999995,
+  "n_steps": 218,
+  "phi_analysis": {
+    "mean_normalized_ratio": 0.5509091592654749,
+    "max_normalized_ratio": 0.9581093940107621
+  }
+}
