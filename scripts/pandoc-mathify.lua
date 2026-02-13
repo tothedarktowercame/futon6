@@ -376,6 +376,8 @@ local function normalize_expr(s)
   s = replace_word(s, "log", "\\log")
   s = replace_word(s, "bigcup", "\\bigcup")
   s = replace_word(s, "subseteq", "\\subseteq")
+  s = replace_word(s, "subset", "\\subset")
+  s = replace_word(s, "prec", "\\prec")
   s = replace_word(s, "wedge", "\\wedge")
   s = replace_word(s, "char", "\\mOpName{char}")
   s = replace_word(s, "disc", "\\mOpName{disc}")
@@ -422,9 +424,12 @@ local function normalize_expr(s)
   s = s:gsub("([^\\%a])sum%s*_", "%1\\sum_")
   s = s:gsub("^prod%s*_", "\\prod_")
   s = s:gsub("([^\\%a])prod%s*_", "%1\\prod_")
-  s = s:gsub("%f[%a]exp%s*%(", "\\exp(")
-  s = s:gsub("%f[%a]log%s*%(", "\\log(")
-  s = s:gsub("%f[%a]det%s*%(", "\\det(")
+  s = s:gsub("^exp%s*%(", "\\exp(")
+  s = s:gsub("([^\\%a])exp%s*%(", "%1\\exp(")
+  s = s:gsub("^log%s*%(", "\\log(")
+  s = s:gsub("([^\\%a])log%s*%(", "%1\\log(")
+  s = s:gsub("^det%s*%(", "\\det(")
+  s = s:gsub("([^\\%a])det%s*%(", "%1\\det(")
   s = s:gsub("%f[%a]mod%s+(\\mNumber{%d+})", "\\mOpName{mod} %1")
   s = s:gsub("%f[%a]mod%s+(%d+)", "\\mOpName{mod} \\mNumber{%1}")
 
@@ -521,6 +526,11 @@ local function normalize_expr(s)
     "iota", "kappa", "lambda", "mu", "nu", "xi", "pi", "rho", "sigma", "tau", "upsilon", "phi", "chi", "psi", "omega",
   }
   for _, cmd in ipairs(greek_cmds) do
+    s = s:gsub("\\" .. cmd .. "([A-Za-z])", "\\" .. cmd .. " %1")
+  end
+  -- Prevent glued operator commands (\otimesQ -> \otimes Q).
+  local op_cmds = {"otimes", "oplus", "times", "ast", "cdot", "wedge", "cap", "cup"}
+  for _, cmd in ipairs(op_cmds) do
     s = s:gsub("\\" .. cmd .. "([A-Za-z])", "\\" .. cmd .. " %1")
   end
 

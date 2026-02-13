@@ -119,6 +119,14 @@ INTEGRAL_TOKEN_RE = re.compile(
 SIMPLE_COMPARISON_RE = re.compile(
     r"(?<![$\\])\b([A-Za-z][A-Za-z0-9_]*|\d+)\s*([<>])\s*([A-Za-z][A-Za-z0-9_]*|\d+)\b"
 )
+COMPOUND_COMPARISON_RE = re.compile(
+    r"(?<![$\\])\b([A-Za-z][A-Za-z0-9_']*(?:\([^)]*\))?)\s*(<=|>=|=|<|>)\s*"
+    r"([A-Za-z0-9_']+(?:\s*\*\s*[A-Za-z0-9_']+)*(?:/[A-Za-z0-9_']+)?)"
+    r"(?=\s+\b(?:and|or|with|for)\b|[.,;:)]|$)"
+)
+TEXT_RELATION_WORD_RE = re.compile(
+    r"\b([A-Za-z][A-Za-z0-9_']*)\s+(subset|prec)\s+([A-Za-z0-9_']+(?:\s*\*\s*[A-Za-z0-9_']+)?)"
+)
 COMPACT_PLUS_TUPLE_RE = re.compile(
     r"(?<![$\\{_])\(\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*,\s*([A-Za-z])\+(\d+)\s*\)"
 )
@@ -145,6 +153,16 @@ NORM_POWER_RE = re.compile(
 )
 NORM_BARE_RE = re.compile(r"\|\|\s*([A-Za-z\\][A-Za-z0-9\\]*)\s*\|\|")
 ABS_INT_COLON_DX_RE = re.compile(r"\|int\s+:([A-Za-z]+)(?:\^([0-9]+))?:\s*dx\|")
+E_ABS_RE = re.compile(r"\bE\|([A-Za-z][A-Za-z0-9_]*)\|")
+PROB_COMPARE_WRAP_RE = re.compile(
+    r"\b((?:P\([^()\n]*\)|Pr\[[^\]\n]*\]|E\[[^\]\n]*\])\s*(?:<=|>=|<|>|=)\s*[^.;,\n]*?)"
+    r"(?=\s+\b(?:for|if|with|where|when)\b|\s{2,}\(|[.;,:]|$)"
+)
+BAR_COMPARE_WRAP_RE = re.compile(
+    r"(?:(?<=\s)|^)((?:\|\|[^|\n]+\|\||\|[^|\n]+\|)\s*(?:<=|>=|<|>|=)\s*[^.;,\n]*?)"
+    r"(?=\s+\b(?:for|if|with|where|when|and|or)\b|\s{2,}\(|[.;,:]|$)"
+)
+MIN_NORM_TOKEN_RE = re.compile(r"\bmin\s+\|\|([^|\n]+)\|\|")
 
 
 def _unicode_math_char_repl(m: re.Match[str]) -> str:
@@ -205,6 +223,24 @@ def _simple_comparison_repl(m: re.Match[str]) -> str:
     op = m.group(2)
     rhs = _texify_token(m.group(3))
     return rf"${lhs} {op} {rhs}$"
+
+
+def _compound_comparison_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    op_raw = m.group(2)
+    rhs = _texify_token(m.group(3).replace(" ", ""))
+    rhs = rhs.replace("*", r" \ast ")
+    op = {"<=": r"\le", ">=": r"\ge"}.get(op_raw, op_raw)
+    return rf"${lhs} {op} {rhs}$"
+
+
+def _text_relation_word_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    rel_raw = m.group(2)
+    rhs = _texify_token(m.group(3).replace(" ", ""))
+    rhs = rhs.replace("*", r" \ast ")
+    rel = {"subset": r"\subset", "prec": r"\prec"}[rel_raw]
+    return rf"${lhs} {rel} {rhs}$"
 
 
 def _compact_plus_tuple_repl(m: re.Match[str]) -> str:
@@ -322,6 +358,46 @@ def _abs_int_colon_dx_repl(m: re.Match[str]) -> str:
     if power:
         return rf"$|\Integral :{sym}^{{{power}}}:\,dx|$"
     return rf"$|\Integral :{sym}:\,dx|$"
+
+
+def _normalize_logic_ops(expr: str) -> str:
+    expr = re.sub(r"\bAND\b", r"\\land", expr)
+    expr = re.sub(r"\bOR\b", r"\\lor", expr)
+    return re.sub(r"\s+", " ", expr).strip()
+
+
+def _wrap_math_expr(expr: str) -> str:
+    expr = _normalize_logic_ops(expr)
+    if expr.startswith("$") and expr.endswith("$"):
+        return expr
+    return f"${expr}$"
+
+
+def _prob_compare_wrap_repl(m: re.Match[str]) -> str:
+    return _wrap_math_expr(m.group(1))
+
+
+def _bar_compare_wrap_repl(m: re.Match[str]) -> str:
+    return _wrap_math_expr(m.group(1))
+
+
+def _min_norm_token_repl(m: re.Match[str]) -> str:
+    body = _texify_script_text(m.group(1))
+    return rf"$\min \|{body}\|$"
+
+
+def _sub_outside_inline_dollar(
+    s: str,
+    pattern: re.Pattern[str],
+    repl: re.Callable[[re.Match[str]], str],
+) -> str:
+    out_parts: list[str] = []
+    for kind_math, part in split_inline_math_dollar(s):
+        if kind_math == "math":
+            out_parts.append(part)
+        else:
+            out_parts.append(pattern.sub(repl, part))
+    return "".join(out_parts)
 
 
 def split_inline_code(s: str) -> list[tuple[str, str]]:
@@ -657,6 +733,12 @@ def process_plain_text_segment(s: str) -> str:
     s = NORM_POWER_RE.sub(_norm_power_repl, s)
     s = NORM_BARE_RE.sub(_norm_bare_repl, s)
     s = ABS_INT_COLON_DX_RE.sub(_abs_int_colon_dx_repl, s)
+    s = E_ABS_RE.sub(r"E[|\1|]", s)
+    s = PROB_COMPARE_WRAP_RE.sub(_prob_compare_wrap_repl, s)
+    s = _sub_outside_inline_dollar(s, BAR_COMPARE_WRAP_RE, _bar_compare_wrap_repl)
+    s = _sub_outside_inline_dollar(s, COMPOUND_COMPARISON_RE, _compound_comparison_repl)
+    s = _sub_outside_inline_dollar(s, TEXT_RELATION_WORD_RE, _text_relation_word_repl)
+    s = MIN_NORM_TOKEN_RE.sub(_min_norm_token_repl, s)
     s = UNICODE_MATH_CHAR_RE.sub(_unicode_math_char_repl, s)
     return s
 
@@ -716,16 +798,10 @@ def process_file(path: Path, write: bool) -> bool:
             code_like = re.match(
                 r"(?:```|~~~|[#>{}\[\]$\\]|[A-Za-z_][A-Za-z0-9_]*\s*[:=]|"
                 r"[A-Za-z_][A-Za-z0-9_]*\([^)]*\)\s*=|"
-                r"(?:def|class|for|while|if|elif|else|return|import|from)\b)",
+                r"(?:def|class|for|while|if|elif|else|return|import|from|solve|repeat|break)\b)",
                 stripped_indent,
             ) is not None
-            has_formula_symbol = re.search(r"(?:\||->|<-|→|←|\^|_)", stripped_indent) is not None
-            if (
-                code_like
-                or ("\\" in stripped_indent)
-                or ("=" in stripped_indent)
-                or has_formula_symbol
-            ):
+            if code_like or ("\\" in stripped_indent):
                 out_lines.append(ln)
                 continue
             # Indented markdown continuations in lists are prose, not code.
@@ -833,6 +909,22 @@ def run_self_test() -> None:
             "with omega|_{V_1 x V_2} = 0.",
             r"with $\omega|_{V_1 \times V_2}$ = 0.",
         ),
+        (
+            "P(|S| >= epsilon*n/6) >= 1 - exp(-epsilon*n/18).",
+            r"$P(|S| >= epsilon * n/6) >= 1 - exp(-epsilon * n/18)$.",
+        ),
+        (
+            "P(||M_S|| <= epsilon AND |S| >= epsilon*n/6) > 0 for all tested graphs.",
+            r"$P(||M_S|| <= epsilon \land |S| >= epsilon * n/6) > 0$ for all tested graphs.",
+        ),
+        (
+            "selection criterion (min ||Y_t(v)||).",
+            r"selection criterion ($\min \|Y_t(v)\|$).",
+        ),
+        (
+            "L_S <= epsilon*L and S subset I_0' with M_S prec epsilon*I.",
+            r"$L_S \le \epsilon \ast L$ and $S \subset I_0'$ with $M_S \prec \epsilon \ast I$.",
+        ),
     ]
     for raw, want in cases:
         got = process_plain_text_segment(raw)
@@ -874,6 +966,18 @@ def run_self_test() -> None:
         want = "    $S_n(\\lambda) = \\{\\text{all permutations of the parts of } \\lambda\\}$.\n"
         if want not in got:
             raise AssertionError("self-test failed: indented S_n(lambda) set-definition was not normalized")
+
+    indented_prob = (
+        "1. item\n"
+        "    Pr[|S| < pn/2] <= exp(-pn/8)  (Chernoff).\n"
+    )
+    with tempfile.NamedTemporaryFile("w+", suffix=".md", delete=True, encoding="utf-8") as tmp:
+        tmp.write(indented_prob)
+        tmp.flush()
+        process_file(Path(tmp.name), write=True)
+        got = Path(tmp.name).read_text(encoding="utf-8")
+        if "    $Pr[|S| < pn/2] <= exp(-pn/8)$  (Chernoff).\n" not in got:
+            raise AssertionError("self-test failed: indented probability line was not normalized")
 
 
 def main() -> int:
