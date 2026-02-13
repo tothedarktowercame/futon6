@@ -52,7 +52,7 @@ Write p as x⁴ + se₂x² - e₃x + e₄ (centered quartic). Use variables:
 Then:
 - S = s + t  (= -E₂)
 - U = u + v  (= E₃)
-- A = a + b - st/6  (= E₄, absorbing the cross term)
+- A = a + b + st/6  (= E₄, absorbing the cross term)
 
 And Stam becomes:
 
