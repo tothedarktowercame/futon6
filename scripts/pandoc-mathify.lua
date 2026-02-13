@@ -137,6 +137,34 @@ local function replace_word(s, w, repl)
   return s
 end
 
+local function wrap_prose_word(s, w)
+  return replace_word(s, w, "\\text{" .. w .. "}")
+end
+
+local function mask_text_macros(s)
+  local slots = {}
+  local masked = s:gsub("\\text%b{}", function(m)
+    table.insert(slots, m)
+    return "@@MPTEXT" .. tostring(#slots) .. "@@"
+  end)
+  return masked, slots
+end
+
+local function unmask_text_macros(s, slots)
+  return s:gsub("@@MPTEXT(%d+)@@", function(idx)
+    return slots[tonumber(idx)] or ""
+  end)
+end
+
+local function flatten_nested_text_macros(s)
+  local prev = nil
+  while prev ~= s do
+    prev = s
+    s = s:gsub("\\text%s*{%s*\\text%s*{([^{}]*)}%s*}", "\\text{%1}")
+  end
+  return s
+end
+
 local function is_latex_cmd_atom(atom)
   return atom:match("^\\[%a]+$") ~= nil
 end
@@ -396,6 +424,19 @@ local function normalize_expr(s)
   s = replace_word(s, "Phat", "\\hat{P}")
   s = replace_word(s, "phat", "\\hat{p}")
   s = replace_word(s, "ahat", "\\hat{a}")
+
+  -- Prose connectors should not remain as bare words in math.
+  local prose_words = {
+    "for", "and", "such", "that", "there", "exists", "where", "with",
+    "all", "every", "each", "is", "so", "to", "can", "one", "outside", "through",
+    "internal",
+  }
+  local prose_masked, prose_slots = mask_text_macros(s)
+  for _, w in ipairs(prose_words) do
+    prose_masked = wrap_prose_word(prose_masked, w)
+  end
+  s = unmask_text_macros(prose_masked, prose_slots)
+  s = flatten_nested_text_macros(s)
 
   -- Prevent glued prose after Greek commands: \muare -> \mu are.
   local greek_cmds = {

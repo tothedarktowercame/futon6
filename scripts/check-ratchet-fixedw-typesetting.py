@@ -78,6 +78,9 @@ ESCAPED_SCRIPT_SNIPPET = (
 HAT_TOKEN_SNIPPET = (
     "Set Ahat = Phat and use phat in the preconditioner.\n"
 )
+PROSE_CONNECTOR_MATH_SNIPPET = (
+    "$x = y for each z and there exists w such that w = z$.\n"
+)
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -180,6 +183,9 @@ def main() -> int:
     _, out_hat = render_snippet(
         repo, normalizer, lua_filter, HAT_TOKEN_SNIPPET
     )
+    _, out_prose_math = render_snippet(
+        repo, normalizer, lua_filter, PROSE_CONNECTOR_MATH_SNIPPET
+    )
     out_plus_star_raw = out_plus_star
 
     out = strip_mnumber(out)
@@ -209,6 +215,7 @@ def main() -> int:
     out_mu_dmu = strip_mnumber(out_mu_dmu)
     out_escaped_script = strip_mnumber(out_escaped_script)
     out_hat = strip_mnumber(out_hat)
+    out_prose_math = strip_mnumber(out_prose_math)
 
     if r"integrals over \(V\)" not in out:
         failures.append("missing inline math for V in 'integrals over V'")
@@ -445,6 +452,20 @@ def main() -> int:
         failures.append("Phat token was not normalized to \\hat{P}")
     if r"\hat{p}" not in out_hat:
         failures.append("phat token was not normalized to \\hat{p}")
+    if r"\text{for}" not in out_prose_math:
+        failures.append("math prose connector 'for' was not wrapped as \\text{for}")
+    if r"\text{each}" not in out_prose_math:
+        failures.append("math prose connector 'each' was not wrapped as \\text{each}")
+    if r"\text{and}" not in out_prose_math:
+        failures.append("math prose connector 'and' was not wrapped as \\text{and}")
+    if r"\text{there}" not in out_prose_math:
+        failures.append("math prose connector 'there' was not wrapped as \\text{there}")
+    if r"\text{exists}" not in out_prose_math:
+        failures.append("math prose connector 'exists' was not wrapped as \\text{exists}")
+    if r"\text{such}" not in out_prose_math:
+        failures.append("math prose connector 'such' was not wrapped as \\text{such}")
+    if r"\text{that}" not in out_prose_math:
+        failures.append("math prose connector 'that' was not wrapped as \\text{that}")
 
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:
