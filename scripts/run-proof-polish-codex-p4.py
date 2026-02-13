@@ -57,7 +57,7 @@ RESPONSE_SCHEMA = {
                         "enum": ["math.stackexchange.com", "mathoverflow.net", "other", "unknown"],
                     },
                 },
-                "required": ["question_id", "title", "relevance"],
+                "required": ["question_id", "title", "relevance", "site"],
                 "additionalProperties": False,
             },
         },

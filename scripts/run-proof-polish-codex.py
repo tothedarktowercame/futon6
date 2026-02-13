@@ -51,8 +51,12 @@ RESPONSE_SCHEMA = {
                     "question_id": {"type": "integer"},
                     "title": {"type": "string"},
                     "relevance": {"type": "string"},
+                    "site": {
+                        "type": "string",
+                        "enum": ["math.stackexchange.com", "mathoverflow.net", "other", "unknown"],
+                    },
                 },
-                "required": ["question_id", "title", "relevance"],
+                "required": ["question_id", "title", "relevance", "site"],
                 "additionalProperties": False,
             },
         },
