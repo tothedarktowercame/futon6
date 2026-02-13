@@ -118,6 +118,12 @@ INTEGRAL_TOKEN_RE = re.compile(
 SIMPLE_COMPARISON_RE = re.compile(
     r"(?<![$\\])\b([A-Za-z][A-Za-z0-9_]*|\d+)\s*([<>])\s*([A-Za-z][A-Za-z0-9_]*|\d+)\b"
 )
+COMPACT_PLUS_TUPLE_RE = re.compile(
+    r"(?<![$\\{_])\(\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*,\s*([A-Za-z])\+(\d+)\s*\)"
+)
+COMPACT_PLUS_RE = re.compile(
+    r"(?<![$\\_^{}.,])\b([A-Za-z])\+(\d+)\b"
+)
 TPSI_STAR_RE = re.compile(r"T([ψΨ])([∗*])")
 
 
@@ -172,6 +178,19 @@ def _simple_comparison_repl(m: re.Match[str]) -> str:
     op = m.group(2)
     rhs = _texify_token(m.group(3))
     return rf"${lhs} {op} {rhs}$"
+
+
+def _compact_plus_tuple_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    rhs_left = _texify_token(m.group(2))
+    rhs_right = _texify_token(m.group(3))
+    return rf"$({lhs}, {rhs_left} + {rhs_right})$"
+
+
+def _compact_plus_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    rhs = _texify_token(m.group(2))
+    return rf"${lhs} + {rhs}$"
 
 
 def _tpsi_star_repl(m: re.Match[str]) -> str:
@@ -459,6 +478,8 @@ def process_plain_text_segment(s: str) -> str:
     s = re.sub(r"\^\\?\*(?=[A-Za-z0-9(])", r"^\\*", s)
     s = DMU_TOKEN_RE.sub(_dmu_token_repl, s)
     s = INTEGRAL_TOKEN_RE.sub(_integral_token_repl, s)
+    s = COMPACT_PLUS_TUPLE_RE.sub(_compact_plus_tuple_repl, s)
+    s = COMPACT_PLUS_RE.sub(_compact_plus_repl, s)
     s = SIMPLE_COMPARISON_RE.sub(_simple_comparison_repl, s)
     s = COMPLEX_RING_RE.sub(_complex_ring_repl, s)
     s = COTANGENT_FIELD_RE.sub(_cotangent_field_repl, s)
@@ -589,6 +610,8 @@ def run_self_test() -> None:
         ("W_0(diag(g,1) u_Q)", r"$W_0(\operatorname{diag}(g,1)u_Q)$"),
         ("(j != i)", r"$(j \neq i)$"),
         ("3 x 4 matrices", r"$3 \times 4$ matrices"),
+        ("site j+1", r"site $j + 1$"),
+        ("position (n, n+1)", r"position $(n, n + 1)$"),
         ("rotation matrices over Z[√2]", r"rotation matrices over $\mathbb{Z}[\sqrt{2}]$"),
         ("theta = 0 in L_8(Z[Γ])", r"theta = 0 in L_8($\mathbb{Z}[\Gamma]$)"),
         ("graphs in T^*R^2 are exact.", r"graphs in $T^{\mDualStar} \mathbb{R}^{2}$ are exact."),

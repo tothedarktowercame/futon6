@@ -48,6 +48,9 @@ PLUS_STAR_UNIFY_SNIPPET = (
     "$a$ $+$ $b$. "
     "$c$ $*$ $d$.\n"
 )
+COMPACT_PLUS_SNIPPET = (
+    "the vacancy at site j+1 and position (n, n+1).\n"
+)
 OPNAME_MERGE_SNIPPET = (
     "L_i = span(e_{i-1,i}, e_{i,i+1}) and ell = ker(omega|_L). "
     "Then omega(e_i, e_{i+1}) = 0.\n"
@@ -162,6 +165,9 @@ def main() -> int:
     _, out_plus_star = render_snippet(
         repo, normalizer, lua_filter, PLUS_STAR_UNIFY_SNIPPET
     )
+    normalized_compact_plus, out_compact_plus = render_snippet(
+        repo, normalizer, lua_filter, COMPACT_PLUS_SNIPPET
+    )
     _, out_opname_merge = render_snippet(
         repo, normalizer, lua_filter, OPNAME_MERGE_SNIPPET
     )
@@ -206,6 +212,8 @@ def main() -> int:
     out_prime_single = strip_mnumber(out_prime_single)
     out_compare = strip_mnumber(out_compare)
     out_plus_star = strip_mnumber(out_plus_star)
+    normalized_compact_plus = strip_mnumber(normalized_compact_plus)
+    out_compact_plus = strip_mnumber(out_compact_plus)
     out_opname_merge = strip_mnumber(out_opname_merge)
     normalized_unicode_escape = strip_mnumber(normalized_unicode_escape)
     out_unicode_escape = strip_mnumber(out_unicode_escape)
@@ -372,6 +380,16 @@ def main() -> int:
         failures.append("operator unifier regressed to split '$a$ $+$ $b$' form")
     if r"\(c\) \(\ast\) \(d\)" in out_plus_star:
         failures.append("operator unifier regressed to split '$c$ $*$ $d$' form")
+    if "site $j + 1$" not in normalized_compact_plus:
+        failures.append("normalizer did not convert compact plus token 'j+1' into inline math")
+    if "position $(n, n + 1)$" not in normalized_compact_plus:
+        failures.append("normalizer did not convert tuple token '(n, n+1)' into inline math")
+    compact_plus_render_variants = [
+        r"site \(j + 1\) and position \((n, n + 1)\).",
+        r"site \(j + 1\) and position \((n, n+1)\).",
+    ]
+    if not any(v in out_compact_plus for v in compact_plus_render_variants):
+        failures.append("rendered output missing compact-plus normalization for j+1 / (n, n+1)")
     if r"\mOpName{span}" not in out_opname_merge:
         failures.append("rendered output missing \\mOpName{span} for span(...)")
     if r"\mOpName{ker}" not in out_opname_merge:
@@ -472,8 +490,8 @@ def main() -> int:
         failures.append("math-proofread style does not preserve original \\ast")
     if r"\renewcommand{\ast}{\mBridgeOperator{\MP@orig@ast}}" not in style:
         failures.append("math-proofread style does not colorize \\ast as bridge operator")
-    if r"\colorlet{MPSyntaxBridgeOperatorColor}{SpringGreen}" not in style:
-        failures.append("math-proofread style does not define bright green bridge-operator color")
+    if r"\colorlet{MPSyntaxBridgeOperatorColor}{SeaGreen}" not in style:
+        failures.append("math-proofread style does not define medium green bridge-operator color")
     if r"\colorlet{MPSyntaxNamedOperatorColor}{BurntOrange}" not in style:
         failures.append("math-proofread style does not define named-operator color class")
     if r"\newcommand{\mOpName}[1]" not in style:
