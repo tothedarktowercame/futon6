@@ -125,6 +125,10 @@ COMPACT_PLUS_RE = re.compile(
     r"(?<![$\\_^{}.,])\b([A-Za-z])\+(\d+)\b"
 )
 TPSI_STAR_RE = re.compile(r"T([ψΨ])([∗*])")
+SN_ALL_PERMS_RE = re.compile(
+    r"\bS_?n\(\s*(?:lambda|\\lambda|λ)\s*\)\s*=\s*\{\s*all\s+permutations\s+of\s+the\s+parts\s+of\s*(?:lambda|\\lambda|λ)\s*\}\s*([.?!,;:]?)",
+    re.IGNORECASE,
+)
 
 
 def _unicode_math_char_repl(m: re.Match[str]) -> str:
@@ -196,6 +200,11 @@ def _compact_plus_repl(m: re.Match[str]) -> str:
 def _tpsi_star_repl(m: re.Match[str]) -> str:
     psi = r"\Psi" if m.group(1) == "Ψ" else r"\psi"
     return rf"$T_{{{psi}}}^{{\mDualStar}}$"
+
+
+def _sn_all_perms_repl(m: re.Match[str]) -> str:
+    punct = m.group(1) or ""
+    return r"$S_n(\lambda) = \{\text{all permutations of the parts of } \lambda\}$" + punct
 
 
 def split_inline_code(s: str) -> list[tuple[str, str]]:
@@ -426,6 +435,7 @@ def _phi_set_repl(m: re.Match[str]) -> str:
 
 
 def process_plain_text_segment(s: str) -> str:
+    s = SN_ALL_PERMS_RE.sub(_sn_all_perms_repl, s)
     s = MAP_SIGNATURE_RE.sub(_map_signature_repl, s)
     s = PHI_SET_RE.sub(_phi_set_repl, s)
     s = Z_SQRT_RING_RE.sub(
@@ -538,6 +548,11 @@ def process_file(path: Path, write: bool) -> bool:
 
         if ln.startswith("    ") or ln.startswith("\t"):
             stripped_indent = ln.lstrip(" \t")
+            if SN_ALL_PERMS_RE.search(stripped_indent):
+                indent_len = len(ln) - len(stripped_indent)
+                prefix = ln[:indent_len]
+                out_lines.append(prefix + process_line(stripped_indent))
+                continue
             # Keep true code-like blocks untouched.
             code_like = re.match(
                 r"(?:```|~~~|[#>{}\[\]$\\]|[A-Za-z_][A-Za-z0-9_]*\s*[:=]|"
@@ -627,6 +642,10 @@ def run_self_test() -> None:
             r"$\Phi(\phi) = \{ I(s, \phi, V) : V \in W(\pi, \psi) \} \cdot R$. "
             r"By the JPSS theory, $\bigcup_{\phi}$ $\Phi(\phi)$ generates $L(s, \Pi \times \pi)$ · R.",
         ),
+        (
+            "S_n(lambda) = {all permutations of the parts of lambda}.",
+            r"$S_n(\lambda) = \{\text{all permutations of the parts of } \lambda\}$.",
+        ),
     ]
     for raw, want in cases:
         got = process_plain_text_segment(raw)
@@ -658,6 +677,16 @@ def run_self_test() -> None:
             raise AssertionError("self-test failed: indented prose continuation was not normalized")
         if "`L_n(Z[Gamma]) tensor Q`" not in got:
             raise AssertionError("self-test failed: inline code in indented prose was modified")
+
+    indented_equation = "1. item\n    S_n(lambda) = {all permutations of the parts of lambda}.\n"
+    with tempfile.NamedTemporaryFile("w+", suffix=".md", delete=True, encoding="utf-8") as tmp:
+        tmp.write(indented_equation)
+        tmp.flush()
+        process_file(Path(tmp.name), write=True)
+        got = Path(tmp.name).read_text(encoding="utf-8")
+        want = "    $S_n(\\lambda) = \\{\\text{all permutations of the parts of } \\lambda\\}$.\n"
+        if want not in got:
+            raise AssertionError("self-test failed: indented S_n(lambda) set-definition was not normalized")
 
 
 def main() -> int:
