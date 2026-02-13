@@ -116,8 +116,10 @@ over the state space:
     P_lambda(x; 1, t) = sum_{eta in S_n(lambda)} F_eta(x; 1, t)
     P*_lambda(x; 1, t) = sum_{eta in S_n(lambda)} F*_eta(x; 1, t)
 
-If F*_eta = alpha * F_eta for some constant alpha independent of eta (a global
-rescaling of the polynomial family), then P*_lambda = alpha * P_lambda and:
+Only ratio-invariance is needed: if conventions differ by an eta-independent
+normalization (for fixed lambda), then F*_mu / P*_lambda = F_mu / P_lambda.
+Concretely, if F*_eta = alpha * F_eta for some constant alpha independent
+of eta, then P*_lambda = alpha * P_lambda and:
 
     F*_mu / P*_lambda = (alpha F_mu) / (alpha P_lambda) = F_mu / P_lambda.
 
@@ -169,7 +171,7 @@ S_n(lambda) is:
     by AMW Theorem 1.1 (Section 4), which equals F*_mu / P*_lambda under the
     notation bridge (Section 5).
 
-**Existence vs uniqueness.** AMW Theorem 1.1 establishes that pi is A
+**Existence vs uniqueness.** AMW Theorem 1.1 establishes that pi is a
 stationary distribution. Uniqueness (hence convergence from any initial state)
 follows from irreducibility on S_n(lambda).
 

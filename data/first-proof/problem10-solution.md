@@ -142,10 +142,11 @@ claim is needed.)
 **Sufficient conditions for bounded delta.** The spectral equivalence
 (1-delta)P <= A_tau <= (1+delta)P holds with delta bounded away from 1 when
 the sampling pattern satisfies a restricted isometry-type condition:
-||D - (q/N)I|| is small relative to lambda. For uniform random sampling
-with q >= C n log n (for a universal constant C), matrix concentration
-results (Tropp 2011, Theorem 1.6) give delta = $O(sqrt(n log n / q))$ with
-high probability. Under this regime, kappa = $O(1)$ and PCG converges in
+the restricted isometry holds for the column space of Z ⊗ K_tau^{1/2},
+i.e. (Z ⊗ K_tau^{1/2})^T (D - cI) (Z ⊗ K_tau^{1/2}) is small in
+operator norm relative to lambda. Under standard leverage/coherence
+assumptions and sufficient sampling scaling with model dimension,
+concentration yields delta bounded away from 1 with high probability. Under this regime, kappa = $O(1)$ and PCG converges in
 $O(log(1/eps))$ iterations.
 
 ### 6. Complexity summary

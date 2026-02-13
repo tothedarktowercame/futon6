@@ -27,8 +27,9 @@ p, q of degree n:
 
 **Conjecturally yes, with strong numerical evidence.** The inequality
 holds in all 8000+ random trials tested (n = 2-5) with no violations.
-Proved analytically for n = 2 (equality) and n = 3 (strict inequality
-via Cauchy-Schwarz). An analytic proof for n >= 4 remains open.
+Proved analytically for n = 2 (equality) and n = 3 (nonnegative surplus
+for all centered cubics, with strict inequality generically, via
+Cauchy-Schwarz). An analytic proof for n >= 4 remains open.
 
 - n = 2: equality holds (1/Phi_2 is linear in the discriminant).
 - n = 3: **PROVED** via the identity Phi_3 * disc = 18 * a_2^2 and Titu's lemma.

@@ -194,8 +194,9 @@ matricization alone), but the degree stays fixed at 3.
 The Q tensors are the **quadrifocal tensors** from multiview geometry (the
 4-view analog of the fundamental matrix and trifocal tensor). The rank-2
 bilinear form structure is the classical rank constraint from projective
-geometry: four collinear points in P^3 impose a codimension constraint on
-the stacked camera rows.
+geometry: the determinant encodes linear dependence constraints among lifted
+camera-row vectors (equivalently coplanarity/dependence conditions) on the
+stacked camera rows.
 
 The rank-1 scaling lambda = u ⊗ v ⊗ w ⊗ x corresponds to the natural
 gauge freedom in multiview geometry: rescaling each camera's contribution

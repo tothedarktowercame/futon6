@@ -174,9 +174,8 @@ The 4-face condition is precisely the right valence: it gives enough edges to
 span R^4 while the cyclic omega-orthogonality creates the symplectic direct
 sum that forces Maslov index 0.
 
-For 5 or more faces: the omega-orthogonality conditions are over-determined
-and generically have no solution with the edges spanning R^4. The 4-face case
-is the generic sweet spot.
+We do not claim a general obstruction for valence >= 5 here; the proof
+establishes sufficiency for valence 4.
 
 ### 5a. Vertex smoothing via the product structure
 
@@ -335,8 +334,8 @@ evaluated on the Lagrangian.
 **Vertex smoothings are Hamiltonian.** The vertex smoothing is a product:
 K_t^{vertex} = C_1^{sm}(t) × C_2^{sm}(t) in V_1 × V_2. Each C_j^{sm}(t)
 is a smooth 1-parameter family of curves in (V_j, omega_j) ≅ (R^2, dx∧dy).
-In a 2-dimensional exact symplectic manifold, EVERY isotopy of compact
-(or compactly supported) Lagrangian submanifolds is Hamiltonian. This is
+For the contractible arc family used here, the induced closed 1-forms are
+exact, so this local isotopy is Hamiltonian. This is
 because V_j = R^2 is simply connected, so the flux homomorphism
 Flux: pi_1(Symp) → H^1(L; R) is trivial (no non-Hamiltonian symplectic
 isotopies exist). Concretely: the velocity field d/dt of the isotopy

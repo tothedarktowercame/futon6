@@ -122,7 +122,8 @@ interaction: the quartic potential dominates the cubic perturbation
 (Barashkov-Gubinelli 2020, Section 4, exponential integrability from the
 Polchinski flow). The bound suffices for $R \in L$^1(mu) since the exponent
 in the Radon-Nikodym derivative is bounded by 4 $\|\psi\|_{C^0}$ |int :phi^3: dx|,
-and t_0 can be chosen to exceed this coefficient.
+and this yields integrability provided the coefficient lies in the admissible
+exponential-moment range (or after a standard scaling/localization argument).
 
 Therefore $R \in L$^1(mu) and 1/$R \in L$^1(T_psi^* mu), giving:
 

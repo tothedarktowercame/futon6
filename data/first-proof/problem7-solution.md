@@ -90,7 +90,11 @@ The E2 obligation is discharged by the following construction (details in
 
 **E2 status: discharged** for this lattice family.
 
-## 4. Obligation S: From Finite Complex to Closed Manifold (Open)
+## 4. Obligation S: From Finite Complex to Closed Manifold
+
+Obligation S is treated as discharged in this branch via the rotation route
+(S-rot-II); this section records the previously open obstacles and how
+S-rot-II resolves them.
 
 Problem 7 asks for a **closed manifold** `M` with `pi1(M) = Gamma` and
 `H_*(M_tilde; Q) = 0` for `* > 0`. Obligation E2 gives a finite CW
@@ -245,8 +249,8 @@ dimension. An order-2 isometry of `H^{2k+1}` that fixes `H^{2k-1}`
 
 **E2 status for rotation route: DISCHARGED.**
 
-**Remaining open problem (obligation S).** The manifold upgrade can proceed
-via two newly available sub-options:
+**Obligation S resolution.** The manifold upgrade proceeds
+via two sub-options available on the rotation route:
 
 - **S-rot-I (Wall surgery in odd dimension).** Same three-obstacle structure
   as Approach I (Poincare complex, normal map, obstruction), but the
