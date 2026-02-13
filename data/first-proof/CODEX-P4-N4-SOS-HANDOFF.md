@@ -130,14 +130,61 @@ decompose into individually non-negative terms.
 
 ---
 
+---
+
+## NEW: Symmetric Quartic Case (e₃ = 0) — Already Reduced
+
+Script: `explore-p4-n4-symmetric-quartic.py`
+
+For e₃ = 0 (symmetric quartics with roots ±α, ±β), everything factors:
+
+```
+disc(s, 0, e₄) = 16·e₄·(s² - 4e₄)²
+P(s, 0, e₄) = -8·(-s)·(s² + 12e₄)·(s² - 4e₄)
+1/Φ₄(s, 0, e₄) = 2·e₄·(s² - 4e₄) / [s·(s² + 12e₄)]
+```
+
+The Stam surplus numerator has **30 terms** (degree 10 in s,t,a,b) compared to
+233 monomials in root coordinates (Codex Task 4). The denominator is fully factored
+and positive: `9st(12a+s²)(12b+t²)(s+t)(12a+12b+s²+4st+t²)`.
+
+Self-convolution (s=t, a=b) factors **manifestly non-negative**:
+```
+2s²(s² - 12a)²(12a + s²)(12a + 5s²)
+```
+
+**Priority approach:** Prove the 30-term numerator ≥ 0 first (symmetric quartics),
+then tackle the full 6-variable case.
+
+Convolution is automatically real-rooted when both inputs are (no extra constraint).
+
+Feasibility region: s, t > 0, 0 < 4a < s², 0 < 4b < t².
+
+### Concrete numerator to certify
+
+```
+N = 10368·a³bt² + 864·a³t⁴ + 10368·a²b²s² + 10368·a²b²t²
+  + 864·a²bs²t² + 3456·a²bst³ + 1728·a²bt⁴ + 288·a²s²t⁴
+  + 576·a²st⁵ + 72·a²t⁶ + 10368·ab³s² + 1728·ab²s⁴
+  + 3456·ab²s³t + 864·ab²s²t² - 936·abs⁴t² - 1728·abs³t³
+  - 936·abs²t⁴ - 42·as⁴t⁴ - 24·as³t⁵ + 18·as²t⁶
+  + 864·b³s⁴ + 72·b²s⁶ + 576·b²s⁵t + 288·b²s⁴t²
+  + 18·bs⁶t² - 24·bs⁵t³ - 42·bs⁴t⁴ + 3·s⁶t⁴ + 4·s⁵t⁵ + 3·s⁴t⁶
+```
+
+Some coefficients are negative (the ab·s⁴t² etc. terms). Need SOS or
+Positivstellensatz on the cone {s,t > 0, 4a < s², 4b < t²}.
+
+---
+
 ## Deliverable
 
 A sympy script that:
-1. Verifies both identities symbolically
-2. Computes the surplus polynomial (numerator after clearing denominators)
-3. Reports the degree and number of terms
-4. Attempts SOS decomposition (or identifies the obstruction)
-5. Handles the e₃ = 0 special case if full SOS is too large
+1. Verifies the Φ₄·disc identity symbolically (from roots)
+2. For the **e₃ = 0 case**: produces SOS certificate for the 30-term numerator
+3. For the **general case**: computes surplus numerator and reports structure
+4. If SDP tooling is available (cvxpy/scs), attempts automated SOS
+5. If not, tries Titu/AM-GM/Schur decomposition by hand
 
 ---
 
