@@ -87,18 +87,20 @@ This volume should therefore be read in three ways:
 
 \section*{Terminology}
 \begin{description}[leftmargin=1.5em,style=nextline]
-\item[AIF] Argument Interchange Format---a graph-based standard for representing argumentation structure (nodes = claims/moves, edges = inferential/conflict/preference relations).
+\item[AIF] Active Inference Framework---used here as a conceptual lens for agent roles, intervention points, and coordination state; a full AIF policy loop for proof search is proposed future work, not yet implemented in this sprint.
 \item[BSS] Batson--Spielman--Srivastava spectral sparsification framework.
-\item[IATC] Inference Anchoring Theory + Content---an annotation scheme for mathematical dialogues, extending AIF with content-level anchoring~\cite{corneli2017}.
+\item[IATC] Inference Anchoring Theory + Content---an annotation scheme for mathematical dialogues used here to type dialogue moves and content links within the AIF process model~\cite{corneli2017}.
 \item[MSS] Marcus--Spielman--Srivastava interlacing families framework.
 \item[PSD] Positive semi-definite (for matrices).
 \end{description}
 
 \section*{Current Status}
 \begin{itemize}[leftmargin=1.5em]
-\item Problem 6 is proved for $K_n$ ($c = 1/3$) via an elementary barrier-greedy argument; a narrow technical gap remains for general graphs (formal $\bar{d} < 1$ bound at $M_t \ne 0$).
-\item Problem 7 is treated as closed via the updated rotation-route surgery chain (see \texttt{problem7-solution.md} and supporting theorem context in \texttt{problem7-g2-theorem-chain.md}).
-\item Problem 4's higher-\(n\) branch has computational closure artifacts in the repository postscript, while analytic framing remains explicitly documented in the chapter-level notes.
+\item Problems 1, 2, 3, 7, 8, and 9 are considered closed and fully solved.
+\item Problem 10 is closed under explicitly stated standard assumptions.
+\item Problem 5 is solved in a scope-limited form for $F_O$-local connective spectra.
+\item Problem 6 is partial: the $K_n$ case is proved ($c_0 = 1/3$), with one remaining technical gap in the general-graph argument (formal $\bar{d} < 1$ bound at $M_t \ne 0$).
+\item Problem 4 is partial: proved analytically for $n \le 3$; the $n=4$ branch has strong computational support with one certification step still pending; higher $n$ remains open.
 \end{itemize}
 
 \section*{Suggested Reading Path}
