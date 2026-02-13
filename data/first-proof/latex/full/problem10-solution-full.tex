@@ -7,7 +7,7 @@
 Given the mode-k subproblem of RKHS-constrained CP decomposition with
 missing data, solve
 
-\[[(Z \times K)^{T} D (Z \times K) + \lambda (I_{r} \times K)] vec(W) = (I_{r} \times K) vec(B),\]
+\[[(Z \times K)^{T} D (Z \times K) + \lambda (I_{r} \times K)] \mOpName{vec}(W) = (I_{r} \times K) \mOpName{vec}(B),\]
 
 where \(D = S S^{T}\) is the observation projector (q observed entries out of
 N = nM), \(B = T\) Z, and n, r \textless\textless{} q \textless\textless{} N.
@@ -32,8 +32,8 @@ Then the solved system is
 \[\begin{aligned}
 A_{\tau} x = b_{\tau}, \\
 A_{\tau} = (Z \times K_{\tau})^{T} D (Z \times K_{\tau}) + \lambda (I_{r} \times K_{\tau}), \\
-x = vec(W), \\
-b_{\tau} = (I_{r} \times K_{\tau}) vec(B).
+x = \mOpName{vec}(W), \\
+b_{\tau} = (I_{r} \times K_{\tau}) \mOpName{vec}(B).
 \end{aligned}\]
 
 Under these assumptions \(A_{\tau}\) is SPD, so PCG applies.
@@ -65,7 +65,7 @@ Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
 \item
   Forward sampled action (only observed entries):
 
-  \[(Z \times K_{\tau}) vec(V) = vec(K_{\tau} V Z^{T}).\]
+  \[(Z \times K_{\tau}) \mOpName{vec}(V) = \mOpName{vec}(K_{\tau} V Z^{T}).\]
 
   For each observed coordinate (\(i_{l}, j_{l}),\)
 
@@ -77,7 +77,7 @@ Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
 \item
   Adjoint sampled action:
 
-  \[(Z^{T} \times K_{\tau}) vec(W') = vec(K_{\tau} W' Z).\]
+  \[(Z^{T} \times K_{\tau}) \mOpName{vec}(W') = \mOpName{vec}(K_{\tau} W' Z).\]
 
   Compute W\textquotesingle{} \(Z \in O(s r) \le O(q r)\), then left-multiply by \(K_{\tau} \in O(n^\mNumber{2} r)\).
 \item
@@ -140,7 +140,7 @@ it is the exact \(D = I\) system).
 
 Khatri-Rao identity still gives efficient Gram formation:
 
-\[Z^{T} Z = Hadamard_{i} (A_{i}^{T} A_{i}),\]
+\[Z^{T} Z = \text{Hadamard}_{i} (A_{i}^{T} A_{i}),\]
 
 cost \(O(\sum_{i} n_{i} r^\mNumber{2})\).
 
@@ -161,7 +161,7 @@ For SPD \(A_{\tau}\) and SPD P, standard PCG gives
 
 with \(\kappa\) = cond(\(P^{-\mNumber{1}/\mNumber{2}} A_{\tau} P^{-\mNumber{1}/\mNumber{2}}),\) so
 
-\[t = O(sqrt(\kappa) \log(\mNumber{1}/eps)).\]
+\[t = O(sqrt(\kappa) \log(\mNumber{1}/\epsilon)).\]
 
 To claim "fast" convergence, add a spectral-equivalence hypothesis, e.g.
 
@@ -182,7 +182,7 @@ the sampling pattern satisfies a restricted isometry-type condition:
 with \(q \ge C\) n log n (for a universal constant C), matrix concentration
 results (Tropp 2011, Theorem 1.6) give \(\delta = O(sqrt(n log n / q))\) with
 high probability. Under this regime, \(\kappa = O(\mNumber{1})\) and PCG converges in
-\(O(\log(\mNumber{1}/eps))\) iterations.
+\(O(\log(\mNumber{1}/\epsilon))\) iterations.
 
 \hypertarget{6-complexity-summary}{%
 \subsubsection{6. Complexity summary}\label{6-complexity-summary}}
@@ -193,7 +193,7 @@ Setup per ALS outer step:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(Cholesky(K_{\tau})\): \(O(n^\mNumber{3})\)
+  \(\text{Cholesky}(K_{\tau})\): \(O(n^\mNumber{3})\)
 \item
   \(\mathbb{Z}^{T}\) Z via Hadamard Grams: \(O(\sum_{i} n_{i} r^\mNumber{2})\)
 \item

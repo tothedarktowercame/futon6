@@ -161,6 +161,8 @@ local function flatten_nested_text_macros(s)
   while prev ~= s do
     prev = s
     s = s:gsub("\\text%s*{%s*\\text%s*{([^{}]*)}%s*}", "\\text{%1}")
+    s = s:gsub("\\mathup%s*{%s*\\mathup%s*{([^{}]*)}%s*}", "\\mathup{%1}")
+    s = s:gsub("\\mOpName%s*{%s*\\mOpName%s*{([^{}]*)}%s*}", "\\mOpName{%1}")
   end
   return s
 end
@@ -344,11 +346,32 @@ local function normalize_expr(s)
   s = s:gsub("<=", "\\le ")
   s = s:gsub("%-%>", "\\to ")
   s = s:gsub("<%-", "\\leftarrow ")
+  s = replace_word(s, "eps", "\\epsilon")
+  s = replace_word(s, "dx", "\\mathrm{d}x")
+  s = replace_word(s, "dy", "\\mathrm{d}y")
+  s = replace_word(s, "dt", "\\mathrm{d}t")
+  s = replace_word(s, "ds", "\\mathrm{d}s")
+  s = replace_word(s, "dg", "\\mathrm{d}g")
+  s = s:gsub("%f[%a]d([A-Z])", "\\mathrm{d}%1")
   s = s:gsub("([_%^])%s*{?infinity}?", "%1{\\infty}")
   s = replace_word(s, "infinity", "\\infty")
   s = s:gsub("%f[%a]int%s+(.-)%s+dx%f[%A]", function(body)
     return "\\Integral " .. trim(body) .. "\\,dx"
   end)
+  s = replace_word(s, "SO", "\\mathup{SO}")
+  s = replace_word(s, "Isom", "\\mathup{Isom}")
+  s = replace_word(s, "FH", "\\mathup{FH}")
+  s = replace_word(s, "SH", "\\mathup{SH}")
+  s = replace_word(s, "EG", "\\mathup{EG}")
+  s = replace_word(s, "Bpi", "B_{\\pi}")
+  s = replace_word(s, "BPI", "\\mathup{BPI}")
+  s = replace_word(s, "TITU", "\\mathup{TITU}")
+  s = replace_word(s, "UBU", "\\mathup{UBU}")
+  s = replace_word(s, "Symp", "\\mathup{Symp}")
+  s = replace_word(s, "Ham", "\\mathup{Ham}")
+  s = replace_word(s, "Fix", "\\mOpName{Fix}")
+  s = replace_word(s, "vec", "\\mOpName{vec}")
+  s = replace_word(s, "tr", "\\mOpName{tr}")
   s = s:gsub("%f[%a]diag%s*%(", "\\operatorname{diag}(")
   s = s:gsub("%f[%a]span%s*%(", "\\mOpName{span}(")
   s = s:gsub("%f[%a]ker%s*%(", "\\mOpName{ker}(")
@@ -435,6 +458,9 @@ local function normalize_expr(s)
     "for", "and", "such", "that", "there", "exists", "where", "with",
     "all", "every", "each", "is", "so", "to", "can", "one", "outside", "through",
     "internal", "the", "The", "There", "transfer", "Transfer", "allowed", "Allowed",
+    "assumption", "exact", "eg", "fix", "sobolev", "hadamard", "symp", "ham",
+    "titu", "ubu", "bpi", "cholesky", "Assumption", "EXACT", "Sobolev", "Cholesky",
+    "Hadamard", "Titu",
   }
   local prose_masked, prose_slots = mask_text_macros(s)
   for _, w in ipairs(prose_words) do
