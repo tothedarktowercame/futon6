@@ -36,7 +36,19 @@ UNICODE_TO_TEX = {
 
 N_DEP_RE = re.compile(r"\b([A-Z])-(dependent|independent)\b")
 WHITTAKER_W_RE = re.compile(r"\bW\(\s*pi\s*,\s*psi\s*\)")
+WHITTAKER_W_ANY_RE = re.compile(
+    r"\bW\(\s*(Pi|pi)\s*,\s*psi(?:\^\{(-?1)\}|\^(-?1))?\s*\)"
+)
 PSI_WHITTAKER_RE = re.compile(r"\bpsi-Whittaker\b")
+PSI_CALL_RE = re.compile(r"\bpsi\(([^()]+)\)")
+NORMALIZES_PSI_RE = re.compile(r"\bnormalizes psi\b")
+CHARACTER_PSI_RE = re.compile(r"\bcharacter psi\b")
+DET_ABS_RE = re.compile(r"\|det\s+([A-Za-z0-9_]+)\|\^\{([^}]+)\}")
+DIAG_CALL_RE = re.compile(
+    r"\b([A-Za-z][A-Za-z0-9_]*)\(\s*diag\(\s*([^()]*)\s*\)\s*([A-Za-z0-9_\\^{}+\-]+)\s*\)"
+)
+NEQ_PAREN_RE = re.compile(r"\((\s*[A-Za-z0-9_]+\s*)!=(\s*[A-Za-z0-9_]+\s*)\)")
+DIM_NUM_RE = re.compile(r"\b(\d+)\s+[xX]\s+(\d+)\b")
 QF_RE = re.compile(r"\bqF(\^\{[^}]+\}|\^-?[A-Za-z0-9]+)")
 STAR_QF_RE = re.compile(r"\b([A-Za-z])\s*\*\s*(q_F(?:\^\{[^}]+\}|\^-?[A-Za-z0-9]+))")
 SINGLE_IN_RE = re.compile(r"\b([A-Za-z])\s+in\s+([A-Za-z])\b([.,;:]?)")
@@ -137,6 +149,19 @@ def _n_dep_repl(m: re.Match[str]) -> str:
     return f"${m.group(1)}$-{m.group(2)}"
 
 
+def _whittaker_any_repl(m: re.Match[str]) -> str:
+    rep = m.group(1)
+    inv = m.group(2) or m.group(3)
+    rep_tex = r"\Pi" if rep == "Pi" else r"\pi"
+    psi_tex = r"\psi^{-1}" if inv else r"\psi"
+    return rf"$W({rep_tex}, {psi_tex})$"
+
+
+def _diag_call_repl(m: re.Match[str]) -> str:
+    fn, args, rhs = m.group(1), m.group(2), m.group(3)
+    return rf"${fn}(\operatorname{{diag}}({args}){rhs})$"
+
+
 def _normalize_gl_token(token: str) -> str:
     if token.startswith("GL_{") and token.endswith("}"):
         idx = token[4:-1]
@@ -177,6 +202,14 @@ def process_plain_text_segment(s: str) -> str:
     s = N_DEP_RE.sub(_n_dep_repl, s)
     s = PSI_WHITTAKER_RE.sub(r"$\\psi$-Whittaker", s)
     s = WHITTAKER_W_RE.sub(r"$W(\\pi, \\psi)$", s)
+    s = WHITTAKER_W_ANY_RE.sub(_whittaker_any_repl, s)
+    s = DIAG_CALL_RE.sub(_diag_call_repl, s)
+    s = DET_ABS_RE.sub(r"$|\\det \1|^{\2}$", s)
+    s = PSI_CALL_RE.sub(r"$\\psi(\1)$", s)
+    s = NORMALIZES_PSI_RE.sub(r"normalizes $\\psi$", s)
+    s = CHARACTER_PSI_RE.sub(r"character $\\psi$", s)
+    s = NEQ_PAREN_RE.sub(r"$(\1\\neq\2)$", s)
+    s = DIM_NUM_RE.sub(r"$\1 \\times \2$", s)
     s = QF_RE.sub(r"q_F\1", s)
     s = STAR_QF_RE.sub(_star_qf_repl, s)
     s = SINGLE_IN_RE.sub(_single_in_repl, s)
@@ -270,6 +303,17 @@ def run_self_test() -> None:
         ("equal to c * qF^{-ks}", r"equal to $c \ast q_F^{-ks}$"),
         ("r in GLn+1 x GLn", r"$r \in \mathup{GL}_{n+1} \times \mathup{GL}_{n}$"),
         ("for GL_{n+1} x GL_n is", r"for $\mathup{GL}_{n+1} \times \mathup{GL}_{n}$ is"),
+        (
+            "realized in W(Pi, psi^{-1}) and some V in W(pi, psi).",
+            r"realized in $W(\Pi, \psi^{-1})$ and some V in $W(\pi, \psi)$.",
+        ),
+        ("which normalizes psi.", r"which normalizes $\psi$."),
+        ("the generic character psi of N_n.", r"the generic character $\psi$ of N_n."),
+        ("psi(u_Q) = psi(Q)", r"$\psi(u_Q)$ = $\psi(Q)$"),
+        ("|det g_0|^{1/2-s}", r"$|\det g_0|^{1/2-s}$"),
+        ("W_0(diag(g,1) u_Q)", r"$W_0(\operatorname{diag}(g,1)u_Q)$"),
+        ("(j != i)", r"$(j \neq i)$"),
+        ("3 x 4 matrices", r"$3 \times 4$ matrices"),
     ]
     for raw, want in cases:
         got = process_plain_text_segment(raw)

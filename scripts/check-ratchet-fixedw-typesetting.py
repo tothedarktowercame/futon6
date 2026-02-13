@@ -19,6 +19,10 @@ SYNTAX_CLASS_SNIPPET = (
     "r in GLn+1 x GLn.\n"
 )
 DIAG_SNIPPET = "    I(s, W, V) = int_{N_n\\GL_n(F)} W(diag(g,1)) V(g) |det g|^{s-1/2} dg\n"
+NON_COLOR_SNIPPET = (
+    "realized in W(Pi, psi^{-1}); map normalizes psi; "
+    "|det g_0|^{1/2-s}; W_0(diag(g,1) u_Q); (j != i); 3 x 4 matrices.\n"
+)
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -77,6 +81,9 @@ def main() -> int:
         repo, normalizer, lua_filter, SYNTAX_CLASS_SNIPPET
     )
     _, out_diag = render_snippet(repo, normalizer, lua_filter, DIAG_SNIPPET)
+    normalized_noncolor, out_noncolor = render_snippet(
+        repo, normalizer, lua_filter, NON_COLOR_SNIPPET
+    )
 
     if r"integrals over \(V\)" not in out:
         failures.append("missing inline math for V in 'integrals over V'")
@@ -125,6 +132,32 @@ def main() -> int:
     if not any(v in out_syntax for v in gl_variants):
         failures.append("rendered output missing 'r \\in \\mathup{GL}_{n+1} \\times \\mathup{GL}_{n}'")
 
+    if "$W(\\Pi, \\psi^{-1})$" not in normalized_noncolor:
+        failures.append("normalizer did not convert W(Pi, psi^{-1}) into math")
+    if "normalizes $\\psi$" not in normalized_noncolor:
+        failures.append("normalizer did not convert bare psi to math in 'normalizes psi'")
+    if "$|\\det g_0|^{1/2-s}$" not in normalized_noncolor:
+        failures.append("normalizer did not convert |det g_0|^{1/2-s} into math")
+    if "$W_0(\\operatorname{diag}(g,1)u_Q)$" not in normalized_noncolor:
+        failures.append("normalizer did not convert W_0(diag(g,1) u_Q) into math")
+    if "$(j \\neq i)$" not in normalized_noncolor:
+        failures.append("normalizer did not convert (j != i) into math")
+    if "$3 \\times 4$ matrices" not in normalized_noncolor:
+        failures.append("normalizer did not convert numeric dimension '3 x 4' into math")
+
+    if r"\(W(\Pi, \psi^{-1})\)" not in out_noncolor:
+        failures.append("rendered output missing inline math W(\\Pi, \\psi^{-1})")
+    if r"normalizes \(\psi\)" not in out_noncolor:
+        failures.append("rendered output missing inline math for psi in 'normalizes psi'")
+    if r"\(|\det g_0|^{1/2-s}\)" not in out_noncolor:
+        failures.append("rendered output missing inline math for |det g_0|^{1/2-s}")
+    if r"\(W_0(\operatorname{diag}(g,1)u_{Q})\)" not in out_noncolor and r"\(W_0(\operatorname{diag}(g,1)u_Q)\)" not in out_noncolor:
+        failures.append("rendered output missing inline math W_0(\\operatorname{diag}(g,1)u_Q)")
+    if r"\((j \neq i)\)" not in out_noncolor:
+        failures.append("rendered output missing inline math for (j \\neq i)")
+    if r"\(3 \times 4\) matrices" not in out_noncolor:
+        failures.append("rendered output missing inline math for 3 \\times 4")
+
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:
         failures.append("math-proofread style does not preserve original \\ast")
@@ -134,13 +167,15 @@ def main() -> int:
         failures.append("math-proofread style does not colorize \\pi as Greek")
     if r"\renewcommand{\pi}{\mNumber{\MP@orig@pi}}" in style:
         failures.append("math-proofread style still categorizes \\pi as Number")
+    if r"\renewcommand{\det}{\mFunction{\MP@orig@det}}" not in style:
+        failures.append("math-proofread style does not colorize \\det as function")
 
     if failures:
         for item in failures:
             print(f"FAIL: {item}")
         return 1
 
-    print("Ratchet check passed: fixed-W, W(pi,psi), and syntax-class normalization are color-ready.")
+    print("Ratchet check passed: fixed-W, W(pi,psi), and non-coloring syntax leaks are color-ready.")
     return 0
 
 

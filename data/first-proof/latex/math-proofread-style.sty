@@ -102,6 +102,7 @@
 \let\MP@orig@cos\cos
 \let\MP@orig@log\log
 \let\MP@orig@exp\exp
+\let\MP@orig@det\det
 \let\MP@orig@pi\pi
 \let\MP@orig@langle\langle
 \let\MP@orig@rangle\rangle
@@ -205,6 +206,7 @@
     \renewcommand{\cos}{\mFunction{\MP@orig@cos}}
     \renewcommand{\log}{\mFunction{\MP@orig@log}}
     \renewcommand{\exp}{\mFunction{\MP@orig@exp}}
+    \renewcommand{\det}{\mFunction{\MP@orig@det}}
 
     \renewcommand{\pi}{\mGreek{\MP@orig@pi}}
   \fi
@@ -275,6 +277,7 @@
     \let\cos\MP@orig@cos
     \let\log\MP@orig@log
     \let\exp\MP@orig@exp
+    \let\det\MP@orig@det
     \let\pi\MP@orig@pi
     \let\langle\MP@orig@langle
     \let\rangle\MP@orig@rangle
@@ -329,6 +332,7 @@
       \let\cos\MP@orig@cos
       \let\log\MP@orig@log
       \let\exp\MP@orig@exp
+      \let\det\MP@orig@det
       \def\mGreek#1{#1}%
       \def\mOperator#1{#1}%
       \def\mRelation#1{#1}%
@@ -363,7 +367,7 @@
     Large operators & \textcolor{MPSyntaxLargeOperatorColor}{BlueViolet} & $\mLargeOperator{\sum},\,\mLargeOperator{\prod},\,\mLargeOperator{\int},\,\mLargeOperator{\lim}$ \\
     Arrows & \textcolor{MPSyntaxArrowColor}{TealBlue} & $f\mArrow{\to}g,\,P\mArrow{\Rightarrow}Q,\,x\mArrow{\mapsto}x^2,\,A\mArrow{\leftrightarrow}B$ \\
     Delimiters & \textcolor{MPSyntaxDelimiterColor}{CadetBlue} & $\mDelimiter{(}x\mDelimiter{)},\,\mDelimiter{[}x\mDelimiter{]},\,\langle x\rangle,\,|x|$ \\
-    Functions & \textcolor{MPSyntaxFunctionColor}{Orchid} & $\mFunction{\sin}x,\,\mFunction{\cos}x,\,\mFunction{\log}x,\,\mFunction{\exp}x$ \\
+    Functions & \textcolor{MPSyntaxFunctionColor}{Orchid} & $\mFunction{\sin}x,\,\mFunction{\cos}x,\,\mFunction{\log}x,\,\mFunction{\exp}x,\,\mFunction{\det}A$ \\
     Numbers/constants & \textcolor{MPSyntaxNumberColor}{Dandelion} & $\mNumber{0},\ldots,\mNumber{9},\,\mConstant{e}$ \\
   \end{tabular}
   \end{center}
