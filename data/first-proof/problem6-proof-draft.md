@@ -283,31 +283,63 @@ The d̄ < 1 bound (Theorem 4.2) assumes S_t consists of the t vertices
 with smallest global leverage degree ℓ_v. The barrier greedy (§2e) picks
 argmin_{v ∈ R_t} ||Y_t(v)||. We need these to be compatible.
 
-**At M_t = 0:** For v ∈ R_t, tr(Y_t(v)) = (1/ε) Σ_{u ∈ S_t, u~v} τ_{uv}
-= ℓ_v^{S_t}/ε, where ℓ_v^{S_t} is the leverage degree of v toward the
-*already-selected* set S_t. This is NOT the same as the global ℓ_v.
+**At M_t = 0:** For v ∈ R_t, tr(Y_t(v)) = ℓ_v^{S_t}/ε, where
+ℓ_v^{S_t} = Σ_{u ∈ S_t, u~v} τ_{uv} is the leverage toward the
+*already-selected* set S_t. This is NOT the global ℓ_v.
 
 **The tension:** Partial averages bounds Σ_{k=1}^t ℓ_{(k)} (sum of t
-smallest global ℓ values), which gives d̄ < 1 for the *hypothetical*
-min-ℓ trajectory. But d̄ < 1 guarantees some v ∈ R_t with tr(Y_t(v)) < 1,
-and the barrier greedy can select that v. The vertex selected may NOT be
-the next smallest-ℓ vertex. If the greedy deviates from the min-ℓ ordering,
-the partial averages bound no longer applies to future steps.
+smallest global ℓ values), giving d̄ < 1 for the *hypothetical* min-ℓ
+trajectory. But d̄ < 1 guarantees some v with tr(Y(v)) < 1 (pigeonhole);
+the barrier greedy picks that v. If this v differs from the next min-ℓ
+vertex, the trajectory deviates and partial averages may not apply at
+future steps.
+
+**Key empirical findings** (100 test cases: K_n, K_{a,b}, Barbell, ER,
+across ε ∈ {0.15, 0.2, 0.3, 0.5, 0.7}):
+
+1. **The min-ℓ greedy achieves d̄ < 1 at every step** (0/100 failures,
+   max d̄ = 0.72). Partial averages correctly bounds d̄ along the
+   min-ℓ trajectory.
+
+2. **The min-ℓ vertex always has ||Y|| < 1** (0/100 failures), so the
+   min-ℓ ordering IS barrier-feasible — the min-ℓ greedy never needs to
+   deviate. The coupling is empirically perfect.
+
+3. **BUT: the min-ℓ vertex can have tr(Y) > 1.** On ER(80,0.5) at ε=0.2,
+   ℓ^{S_t}/ε reaches 1.28 (trace exceeds 1). On Barbell_30 at ε=0.5,
+   ℓ^{S_t}/ε reaches 1.07. The vertex is still feasible because
+   ||Y|| < tr(Y) — the edge matrices X_{uv} for different neighbors
+   u ∈ S_t point in different spectral directions, spreading eigenvalues.
+
+4. **Adversarial orderings fail.** Max-ℓ greedy gets STUCK on K_{10,90}
+   (exhausts the high-ℓ A-side; every remaining B-vertex has ||Y|| ≥ 1).
+   The "trajectory-free invariant d̄ < 1 for any barrier-feasible S_t"
+   is FALSE — it requires an ordering constraint.
 
 **What IS established:**
-- If the min-ℓ vertex at step t has ℓ_{v*}^{S_t} < ε (leverage toward S_t
-  is small), then tr(Y_t(v*)) < 1 and the min-ℓ ordering works.
-- For bipartite graphs (K_{a,b}), trees, cycles, and graphs where I_0 is
-  sparse: selected vertices have no edges between them, so ℓ_v^{S_t} = ℓ_v
-  for all v, and min-ℓ = min-trace exactly. The trajectory coupling holds.
-- For K_n: the exact formula (§3b) proves d̄ < 1 independently of ordering.
+- d̄ < 1 along the min-ℓ trajectory (Theorem 4.2).
+- Min-ℓ vertex always has ||Y|| < 1 empirically (spectral spread margin).
+- For bipartite graphs: min-ℓ vertices form an independent set
+  (ℓ^{S_t} = 0), so coupling is exact.
+- For K_n: symmetry makes all orderings equivalent.
+- For sparse graphs: few edges between selected vertices, M_t ≈ 0.
 
-**What remains open:** For general dense graphs where the min-ℓ greedy
-trajectory encounters M_t ≠ 0 early, the coupling between global ℓ ordering
-and barrier feasibility is not established. The d̄ < 1 bound is proved for
-the min-ℓ trajectory at M_t = 0; extending it to the actual barrier greedy
-trajectory requires either (a) showing min-ℓ vertices have small ℓ^{S_t},
-or (b) proving d̄ < 1 for any barrier-feasible trajectory of size t.
+**What remains open:** A formal proof that the min-ℓ vertex has ||Y|| < 1.
+This requires a **spectral spread bound**: showing ||Σ_{u ∈ S_t ∩ N(v)} X_{uv}||
+is strictly less than Σ τ_{uv} when the edges come from distinct spectral
+directions (different b_e vectors). Three routes to close:
+
+(a) **Spectral spread for rank-1 PSD sums:** For PSD rank-1 matrices
+    X_i = τ_i q_i q_i^T with Σ τ_i = σ, show ||Σ X_i|| ≤ max τ_i + f(σ)
+    for some f < σ when the q_i are sufficiently spread.
+
+(b) **BSS potential function:** Track φ_t = tr(H_t^{-1}) or log det(H_t).
+    The potential argument is ordering-independent.
+
+(c) **Use the barrier greedy directly:** Prove that the barrier greedy
+    trajectory (argmin ||Y||) maintains d̄ < 1. The barrier greedy picks
+    the lowest-||Y|| vertex at each step, which tends to be a low-ℓ vertex;
+    a Lyapunov argument may show the leverage sum stays bounded.
 
 ### 4e. Sub-gap 2: M_t ≠ 0 amplification (PARTIALLY RESOLVED)
 
@@ -464,11 +496,12 @@ At horizon t = εk/3: d̄ → 5/6 < 1 as k → ∞.
 ### What remains
 
 **Sub-gap 1 (trajectory coupling, partially resolved):** The partial averages
-bound (Theorem 4.2) assumes the min-ℓ ordering. The barrier greedy may deviate
-from this ordering when the min-ℓ vertex has high leverage toward S_t. Resolved
-for: bipartite graphs (min-ℓ vertices form independent set → M_t = 0 → exact
-coincidence), K_n (exact formula), sparse graphs (no edges between I_0 vertices).
-Open for: general dense graphs. See §4d.
+bound (Theorem 4.2) gives d̄ < 1 along the min-ℓ trajectory. Empirically,
+the min-ℓ vertex always has ||Y|| < 1 (0/100 failures), so the min-ℓ greedy
+IS a valid barrier greedy. But the min-ℓ vertex can have tr(Y) > 1 (up to
+1.28 on ER graphs) — it is feasible due to spectral spread (||Y|| < tr(Y)).
+Formally closed for: bipartite (independence), K_n (symmetry), sparse graphs.
+Open for: general dense graphs. Requires a spectral spread bound. See §4d.
 
 **Sub-gap 2 (M_t ≠ 0 amplification, open):** After step 1,
 H_t = εI - M_t has H_t^{-1} ≻ (1/ε)I, amplifying traces unevenly.
