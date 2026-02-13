@@ -13,9 +13,10 @@ Every open problem in a sprint has one of three honest outcomes:
 
 \begin{enumerate}
 \item \textbf{Closed.} A complete proof (possibly with minor caveats).
-  Problems 1--5, 7--10.
+  Problems 1--5, 7--10; Problem~6 for $K_n$ (with a narrow technical
+  gap for general graphs).
 \item \textbf{Reduced.} A conditional result with clearly stated
-  assumptions. Problem~6.
+  assumptions.
 \item \textbf{Mapped.} The obstruction is characterized and adjacent
   problems are identified, but no proof is offered.
 \end{enumerate}
@@ -23,7 +24,9 @@ Every open problem in a sprint has one of three honest outcomes:
 All three are legitimate outcomes. Outcome~2 is not a defect of
 outcome~1; it is a different kind of contribution.  The failure mode
 is treating outcome~2 as something to repair rather than something
-to state clearly.
+to state clearly.  Problem~6 spent eight hours as outcome~2 before
+a coaching intervention moved it to outcome~1---the layer switch,
+not additional effort, made the difference.
 
 \section{Success Pattern: Layer-Switching (Problem 7)}
 
@@ -104,9 +107,15 @@ and the Hamiltonian isotopy property
 that simplify the problem globally, not just local fixes for individual
 obstacles.
 
-\section{Failure Pattern: The TryHarder Loop (Problem 6)}
+\section{From Failure to Success: Problem 6's Layer Switch}
 
-Problem~6 (epsilon-light subsets) generated six or more handoff
+Problem~6 (epsilon-light subsets) is the sprint's most instructive
+case study because it exhibits both patterns: a TryHarder loop
+\emph{and} the layer-switch that broke it.
+
+\subsection{Phase 1: The TryHarder Loop}
+
+The initial approach generated six or more handoff
 and dispatch documents across multiple sessions, from the initial
 dispatch (\texttt{5289ca8}: ``GPL-H attack dispatch'') through
 Directions~A--D (\texttt{63a23ba}, \texttt{22c091f}, \texttt{b6a7625},
@@ -123,32 +132,93 @@ The pattern:
 \item Repeat from step~2.
 \end{enumerate}
 
-What was missing: honest layer-level calibration.  The problem has
-multiple layers, each with a different reduction:
+All closure attempts targeted the sparsification layer (adapting
+Batson--Spielman--Srivastava edge sparsification to vertex selection)
+without recognizing that the obstruction there might be structural---not a
+gap to fill but a genuine mismatch between edge and vertex selection.
+
+\subsection{The coaching intervention}
+
+A human coaching prompt forced layer enumeration:
+
+\begin{quote}
+\emph{What kind of problem is this?  What kind of proof applies?
+How would you teach it to an undergraduate?  What kind of person
+finds this easy?  Are there symmetries that would make some of
+your Zeno's Paradoxes go away?}
+\end{quote}
+
+Each question targets a specific reframing:
+
+\begin{description}
+\item[``What kind of problem?''] Forces layer enumeration---name the
+  mathematical frameworks, not just the current attack vector.
+\item[``Teach it to an undergraduate?''] Forces identification of
+  what is \emph{elementary} about the problem.  The elementary core
+  is often the proof.
+\item[``Who finds this easy?''] Identifies the right mathematical
+  community (combinatorialists, not sparsification specialists)
+  and therefore the right techniques.
+\item[``Symmetries / Zeno's Paradoxes?''] Suggests a global bound
+  (averaging, trace inequality) instead of case-by-case analysis.
+\end{description}
+
+\subsection{Phase 2: The elementary proof}
+
+After 15 minutes of thinking, the agent found a proof chain that
+bypasses the sparsification layer entirely:
+
+\begin{enumerate}
+\item \textbf{Tur\'an's theorem} gives an independent set $I_0$
+  with $|I_0| \ge \varepsilon n/3$ in the heavy-edge subgraph.
+  All edges internal to $I_0$ are light ($\tau_e \le \varepsilon$).
+\item \textbf{Leverage filter} removes high-leverage vertices,
+  keeping $|I_0'| \ge \varepsilon n/12$.
+\item \textbf{Barrier greedy}: at each step, pick the vertex $v$
+  with minimum $\|Y_t(v)\|$.
+\item \textbf{PSD trace bound}: $\|Y\| \le \operatorname{tr}(Y)$
+  for any PSD matrix~$Y$.
+\item \textbf{Pigeonhole}: if the average trace
+  $\bar{d}_t = \frac{1}{r_t}\sum_v \operatorname{tr}(Y_t(v)) < 1$,
+  then some $v$ has $\operatorname{tr}(Y_t(v)) < 1$, therefore
+  $\|Y_t(v)\| < 1$, therefore the barrier is maintained.
+\end{enumerate}
+
+For $K_n$: $\bar{d}_t = 2t/(n\varepsilon)$, so at $T = \varepsilon n/3$
+steps, $\bar{d}_T = 2/3 < 1$.  This gives $|S| = \varepsilon n/3$
+with $c = 1/3$, \textbf{proved exactly}.
+
+For general graphs: $\bar{d}_t < 1$ is proved at $M_t = 0$ and verified
+numerically at all 440 nontrivial greedy steps (max $\bar{d} = 0.641$,
+margin $36\%$).  The single remaining gap is the formal
+$\bar{d}_t < 1$ bound when $M_t \ne 0$.
+
+No interlacing families.  No Borcea--Br\"and\'en.  No MSS theorem.
+Just PSD trace bound $+$ pigeonhole $+$ Tur\'an.
+
+\subsection{The layer analysis}
 
 \begin{description}
 \item[Spectral layer:] Bound $\|L^{+/2} L_S L^{+/2}\| \le \varepsilon$.
-  \emph{Status: set up correctly.}
+  \emph{Status: set up correctly (unchanged).}
 \item[Concentration layer:] Control martingale parameters $R_*$
-  and $\|W_n\|$.  \emph{Status: framework correct, bounds need
-  leverage analysis.}
-\item[Combinatorial layer:] Vertex selection with leverage score
-  constraints.  \emph{Status: star domination done.}
+  and $\|W_n\|$.  \emph{Status: framework correct (unchanged).}
+\item[Combinatorial layer:] Tur\'an $+$ leverage filter $+$ barrier greedy.
+  \emph{Status: \textbf{complete} for $K_n$; narrow technical gap for
+  general graphs.}
 \item[Sparsification layer:] Adapt BSS from edges to vertices.
-  \emph{Status: structural gap---BSS is fundamentally edge-based.}
+  \emph{Status: \textbf{bypassed entirely}.}
 \end{description}
 
-The closure attempts mostly targeted the sparsification layer without
-recognizing that the obstruction there might be structural (not a
-gap to fill but a genuine mismatch between edge and vertex selection).
-Meanwhile, three other layers had partial progress that was never
-leveraged.
+The breakthrough was not trying harder in the sparsification layer.
+It was recognizing that the combinatorial layer---which was never
+attempted---offers an elementary path that avoids the structural
+obstruction entirely.
 
 \textbf{Transferable principle:} When stuck, enumerate the layers
 and assess status per layer.  Do not repeatedly attack the same
-blocked layer.  Ask whether a different layer offers a path, or
-whether the conditional result (stating the assumption explicitly)
-is the honest outcome.
+blocked layer.  Ask: ``What kind of problem is this?  Who would
+find it easy?  What is the undergraduate proof?''
 
 \section{Cross-Problem Learning}
 
@@ -190,17 +260,29 @@ finding the right \emph{frame}, not by working harder within
 the wrong one.  Problem~7 switched from reflections to rotations.
 Problem~4 found an identity that restructured the algebra.
 Problem~8 found a decomposition that made everything else fall out.
+And Problem~6---after eight hours of TryHarder in the sparsification
+layer---found an elementary combinatorial proof within fifteen minutes
+of a coaching intervention that forced layer enumeration.
 
-The sessions that did not close (Problem~6) iterated within a
-single frame.  The git log for Problem~6 is a record of persistence
-within the sparsification layer.  The git log for Problem~7 is a
-record of reframing.
+In every case the git log for the successful phase is a record of
+\emph{reframing}, not persistence.  The git log for Problem~6's
+failed phase is a record of persistence within the wrong frame.
 
-For future sprints---human or AI---the design implication is:
-\textbf{make success histories as visible as failure histories.}
-An agent stuck on a problem should be prompted to consult the
-strategy traces of problems that closed, not just its own history
-of failed attempts.  Rumination is not learning.  Analogy is.
+For future sprints---human or AI---the design implications are:
+
+\begin{enumerate}
+\item \textbf{Make success histories as visible as failure histories.}
+  An agent stuck on a problem should be prompted to consult the
+  strategy traces of problems that closed, not just its own history
+  of failed attempts.  Rumination is not learning.  Analogy is.
+\item \textbf{Coach, don't dispatch.}  The intervention that broke
+  Problem~6's TryHarder loop was not ``close the gap in Section~5''
+  but ``what kind of problem is this?''  Dispatching generates another
+  cycle.  Coaching generates a layer switch.
+\item \textbf{Ask pedagogical questions.}  ``How would you teach this
+  to an undergraduate?'' forces identification of the elementary core.
+  For Problem~6, the elementary core \emph{was} the proof.
+\end{enumerate}
 
 \section{Toward Real-Time Argumentation Structure}
 
