@@ -14,7 +14,7 @@ realized in its \(\psi^{-\mNumber{1}}\)-Whittaker model \(W(\Pi, \psi^{-\mNumber
 \(W \in W(\Pi, \psi^{-\mNumber{1}})\) with the following property?
 
 For any generic irreducible admissible representation \(\pi\) of \(\mathup{GL}_{n}(F)\) in its
-\(\psi\)-Whittaker model \(W(\pi, \psi)\), let q be the conductor ideal of \(\pi, Q \in F^{\times}\) a generator of \(q^{-\mNumber{1}}\), and \(u_{Q}\) := \(I_{n+\mNumber{1}} \mBridgeOperator{+} Q E_{n,n+\mNumber{1}}.\) Then for
+\(\psi\)-Whittaker model \(W(\pi, \psi)\), let q be the conductor ideal of \(\pi, Q \in F^{\times} a\) generator of \(q^{-\mNumber{1}}\), and \(u_{Q}\) := \(I_{n+\mNumber{1}} \mBridgeOperator{+} Q E_{n,n+\mNumber{1}}.\) Then for
 some \(V \in W(\pi, \psi)\), the local Rankin-Selberg \(\Integral\)
 
 \[\Integral_{N_{n} \backslash \mathup{GL}_{n}(F)} W(\operatorname{diag}(g,\mNumber{1}) u_{Q}) V(g) |\det g|^{s-\mNumber{1}/\mNumber{2}} \mathrm{d}g\]
@@ -30,7 +30,7 @@ universal test vector, with the \(u_{Q}\) twist compensating for the conductor o
 \textbf{Confidence: Medium-high.} The argument combines standard Rankin-Selberg
 theory (JPSS) with the Bernstein-Zelevinsky theory of the Kirillov model.
 The key nondegeneracy claim (Section 3a) uses \(\mathup{GL}_{n}\)-equivariance of the
-zeta-\(\Integral\) pairing together with irreducibility of the Kirillov model
+\(\zeta-\Integral\) pairing together with irreducibility of the Kirillov model
 (any nonzero function generates the full module under \(\mathup{GL}_{n}\)-translates)
 and the PID structure of the fractional ideal ring.
 The "nonzero for all s" condition reduces to explicit Laurent polynomial
@@ -46,7 +46,7 @@ The local Rankin-Selberg \(\Integral I(s, W, V)\) for \(\mathup{GL}_{n+\mNumber{
 
 \[I(s, W, V) = \Integral_{N_{n} \backslash \mathup{GL}_{n}(F)} W(\operatorname{diag}(g,\mNumber{1})) V(g) |\det g|^{s-\mNumber{1}/\mNumber{2}} \mathrm{d}g\]
 
-This converges for Re(s) \(\gg\) 0 and extends to a rational function of \(q_{F}^{-s}\)
+This converges for \(Re(s) \gg \mNumber{0}\) and extends to a rational function of \(q_{F}^{-s}\)
 (where \(q_{F} =\) \textbar o/p\textbar). The set of all such integrals as (W, V) vary generates
 a fractional ideal of \(\mathbb{C}[q_{F}^{s}, q_{F}^{-s}]\), whose generator is the local
 L-factor \(L(s, \Pi \times \pi)\).
@@ -76,7 +76,7 @@ of \(I\) of the form \(c \ast q_{F}^{-ks}\) (a monomial --- no poles or zeros). 
 
 where \(P = c \ast q_{F}^{-ks} \ast L(s, \Pi \times \pi)^{-\mNumber{1}}.\) Since \(L(s, \Pi \times \pi)^{-\mNumber{1}}\)
 is a polynomial in \(q_{F}^{-s}\) (the local L-factor for \(\mathup{GL}_{n+\mNumber{1}} \times \mathup{GL}_{n}\) is a
-product of terms (1 - \(\alpha_{i} q_{F}^{-s}\))\^{}\{-1\}, so its reciprocal is a
+product of terms (1 - \(\alpha_{i} q_{F}^{-s})^{-\mNumber{1}},\) so its reciprocal is a
 polynomial), P is a Laurent polynomial in \(q_{F}^{-s}\) --- hence \(P \in R\).
 Therefore \(c \ast q_{F}^{-ks} \in I\), and by the spanning property, some \(V \in W(\pi, \psi)\) realizes this element as its Rankin-Selberg \(\Integral\) against \(W_\mNumber{0}\).
 
@@ -87,7 +87,7 @@ The key role of \(u_{Q}\): right-translating W by \(u_{Q}\) gives a new Whittake
 \(R(u_{Q})W \in W(\Pi, \psi^{-\mNumber{1}})\). The restriction to the mirabolic subgroup
 \(P_{n+\mNumber{1}}\) gives the Kirillov model, and the function:
 
-\[\phi_{Q}(g) := W(\operatorname{diag}(g,\mNumber{1}) u_{Q}) = (R(u_{Q})W)(\operatorname{diag}(g,\mNumber{1}))\]
+\[\phi_{Q}(g) := W(\operatorname{diag}(g,\mNumber{1})u_{Q}) = (R(u_{Q})W)(\operatorname{diag}(g,\mNumber{1}))\]
 
 lies in the Kirillov model of \(\Pi\) restricted to \(\mathup{GL}_{n}\).
 
@@ -98,7 +98,7 @@ separate facts:
 \(u_{Q}\) preserves the Whittaker model (since \(u_{Q}\) lies in the unipotent radical
 of the standard maximal parabolic, which normalizes \(\psi\)). The map
 \(W \to R(u_{Q})W\) is a linear automorphism of \(W(\Pi, \psi^{-\mNumber{1}})\) (with inverse
-R(\(u_{Q}^{-\mNumber{1}}\))), so \(R(u_{Q})W \ne\) 0 whenever W \(\ne\) 0.
+R(\(u_{Q}^{-\mNumber{1}}\))), so \(R(u_{Q})W \ne \mNumber{0}\) whenever W \(\ne\) 0.
 
 \textbf{Fact 2: \(\phi_{Q}(g) = W_\mNumber{0}(\operatorname{diag}(g,\mNumber{1})u_{Q})\) is nonzero for \(W_{\mNumber{0}} =\) new vector.}
 This is verified by direct evaluation at \(g = I_{n}\):
@@ -168,34 +168,36 @@ Consider the map \(\Phi: K(\Pi)|_{\mathup{GL}_{n}} \to (\text{fractional ideals 
 \(\bigcup_{\phi} \Phi(\phi)\) generates \(L(s, \Pi \times \pi)\) · R. Since R is a PID, \(\Phi(\phi) = L_{\phi}\) · R for some \(L_{\phi}\) dividing \(L(s, \Pi \times \pi)\).
 
 \textbf{Key step.} \(\Phi\) is \(\mathup{GL}_{n}\)-equivariant in the following sense: for \(g_\mNumber{0} \in \mathup{GL}_{n}\), the substitution \(g \to g\) · \(g_\mNumber{0}\) in the \(\Integral\) gives
-I(s, \(R(g_\mNumber{0})\phi\), V) \(= |\det g_{\mNumber{0}}|^{\mNumber{1}/\mNumber{2}-s}\) · I(s, \(\phi\), R\textquotesingle(\(g_\mNumber{0}\))V) where R\textquotesingle{}
+I(s, \(R(g_{\mNumber{0}})\phi,\) V) \(= |\det g_{\mNumber{0}}|^{\mNumber{1}/\mNumber{2}-s}\) · I(s, \(\phi\), R\textquotesingle(\(g_\mNumber{0}\))V) where R\textquotesingle{}
 denotes the contragredient action on \(W(\pi, \psi)\). Since \(R'(g_\mNumber{0})\) is an
-automorphism of \(W(\pi, \psi)\), the set of integrals \{ I(s, \(R(g_\mNumber{0})\phi\), V) :
-\(V \in W(\pi, \psi)\) \} equals \{ \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\) · \(I(s, \\phi, V)\) : V \} \(= |\det g_{\mNumber{0}}|^{\mNumber{1}/\mNumber{2}-s}\) · \(\Phi(\phi)\). But \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s} = q_{F}^{-k·s}\) ·
+automorphism of \(W(\pi, \psi)\), the set of integrals \{ I(s, \(R(g_{\mNumber{0}})\phi,\) V) :
+\(V \in W(\pi, \psi)\) \} equals \{ \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\) · \(I(s, \\phi, V)\) : V \(} = |\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s}\) · \(\Phi(\phi)\). But \(|\det g_\mNumber{0}|^{\mNumber{1}/\mNumber{2}-s} = q_{F}^{-k·s}\) ·
 (unit in R) is a unit in the localization, so \(\Phi(R(g_\mNumber{0})\,\phi)\) and \(\Phi(\phi)\)
 generate the same fractional ideal. That is: \(L_{R(g_\mNumber{0})\phi} = L_{\phi}\)
 (up to units in R) for all \(g_\mNumber{0} \in \mathup{GL}_{n}\).
 
 Now, the Kirillov model \(K(\Pi)|_{\mathup{GL}_{n}}\) is irreducible as a \(\mathup{GL}_{n}-\)
 representation (Bernstein-Zelevinsky 1976, Theorem 5.21). Therefore
-for any nonzero \(\phi\), the \(\mathup{GL}_{n}\)-translates \{ \(R(g_\mNumber{0})\phi\) : \(g_\mNumber{0} \in \mathup{GL}_{n}\) \}
+for any nonzero \(\phi\), the \(\mathup{GL}_{n}\)-translates \{ \(R(g_{\mNumber{0}})\phi\) : \(g_\mNumber{0} \in \mathup{GL}_{n}\) \}
 span all of \(K(\Pi)|_{\mathup{GL}_{n}}\). We use this in two directions:
 
 \textbf{Direction 1 (\(L_{\phi}\) divides \(L(s, \Pi \times \pi)\)):} \(\Phi(\phi)\) ⊆ \(\Phi_{full}\)
-(the full ideal generated by all W and V), so \(L_{\phi}\) · R ⊆ \(L(s, \Pi \times \pi)\) · R,
-giving \(L(s, \Pi \times \pi) | L_{\phi}\) (in a PID, (a) ⊆ (b) iff b \textbar{} a).
+(the full ideal generated by all W and V), so \(L_{\phi}\) · R ⊆ \(L(s, \Pi \times \pi)\) · R.
+Since \(L_{\phi}\) · R ⊆ \(L(s, \Pi \times \pi)\) · R, we get \(L_{\phi}\) divides \(L(s, \Pi \times \pi)\)
+in the PID R (in a PID, (a) ⊆ (b) iff b \textbar{} a).
 
 \textbf{Direction 2 (\(L(s, \Pi \times \pi)\) divides \(L_{\phi}\)):} For any nonzero \(\phi' \in K(\Pi)|_{\mathup{GL}_{n}}\), write \(\phi' = \sum_{i} c_{i} R(g_{i}) \phi\) (finite linear combination
 of \(\mathup{GL}_{n}\)-translates, possible by irreducibility). For each \(V\):
 
 \[I(s, \phi', V) = \sum_{i} c_{i} · I(s, R(g_{i})\phi, V)\]
 
-By the equivariance in the key step, I(s, \(R(g_{i})\phi\), V) lies in \(L_{\phi}\) · R
+By the equivariance in the key step, I(s, \(R(g_{i})\phi,\) V) lies in \(L_{\phi}\) · R
 for each \(i\) (since \(\Phi(R(g_{i})\,\phi) = L_{R(g_{i})\phi}\) · \(R = L_{\phi}\) · R). The sum
 of elements of \(L_{\phi}\) · R lies in \(L_{\phi}\) · R (it\textquotesingle s a module). Therefore
 \(\Phi(\phi')\) ⊆ \(L_{\phi}\) · R for every nonzero \(\phi'\).
 
-Taking the union over all \(\phi'\): the full ideal \(L(s, \Pi \times \pi)\) · \(R = \bigcup_{\phi'} \Phi(\phi')\) ⊆ \(L_{\phi}\) · R. So \(L_{\phi} | L(s, \Pi \times \pi).\)
+The R-submodule generated by all \(\Phi(\phi')\) equals the full Rankin-\/-Selberg
+ideal \(L(s, \Pi \times \pi)\) · R ⊆ \(L_{\phi}\) · R. So \(L_{\phi} | L(s, \Pi \times \pi).\)
 
 Combining both directions: \(L_{\phi} = L(s, \Pi \times \pi)\) (up to units in R). ∎
 
@@ -223,14 +225,14 @@ generate the full fractional ideal \(L(s, \Pi \times \pi) \ast \mathbb{C}[q_{F}^
 
 \textbf{Choice:} Let \(W_\mNumber{0}\) be the new vector (essential Whittaker function) of \(\Pi\),
 i.e., the vector in \(W(\Pi, \psi^{-\mNumber{1}})\) fixed by the congruence subgroup
-\(K_\mNumber{1}(p^{c(\Pi)})\) where c(Pi) is the conductor exponent of \(\Pi\).
+\(K_{\mNumber{1}}(p^{c(\Pi)})\) where c(\(\Pi\)) is the conductor exponent of \(\Pi\).
 
 \textbf{Properties of \(W_\mNumber{0}\):}
 
 \begin{itemize}
 \tightlist
 \item
-  \(W_\mNumber{0}\) is nonzero (Pi is generic)
+  \(W_\mNumber{0}\) is nonzero (\(\Pi\) is generic)
 \item
   \(W_\mNumber{0}(I_{n+\mNumber{1}}) = \mNumber{1}\) (standard normalization)
 \item
@@ -258,7 +260,7 @@ i.e., the vector in \(W(\Pi, \psi^{-\mNumber{1}})\) fixed by the congruence subg
 
 The insertion of \(u_{Q} = I \mBridgeOperator{+} Q E_{n,n+\mNumber{1}}\) is essential: it compensates for the
 conductor of \(\pi\). Without this twist, for highly ramified \(\pi\), the \(\Integral\)
-might degenerate (the new vector of \(\Pi\) would not "see" the ramification of pi).
+might degenerate (the new vector of \(\Pi\) would not "see" the ramification of \(\pi\)).
 
 \textbf{Support analysis via the Casselman-Shalika formula.} By the
 Casselman-Shalika formula (Shintani 1976, Casselman-Shalika 1980), the
@@ -267,30 +269,30 @@ new vector \(W_\mNumber{0}\) of \(\Pi\) has support contained in
 \[N_{n+\mNumber{1}} \ast T^+ \ast K_\mNumber{1}(p^{c(\Pi)})\]
 
 where \(T^+\) is the dominant cone in the diagonal torus. Right translation by
-\(u_{Q} = I \mBridgeOperator{+} Q E_{n,n+\mNumber{1}}\) shifts the \((n, n + \mNumber{1})\)-matrix entry by \(Q = \pi_{F}^{-c(\pi)}\).
-In the Iwasawa decomposition g \(=\) nak, this modifies the diagonal component
+\(u_{Q} = I \mBridgeOperator{+} Q E_{n,n+\mNumber{1}}\) shifts the \((n, n + \mNumber{1})\)-matrix entry by \(Q = \pi_{F}^{-c(\pi)}.\)
+In the Iwasawa decomposition \(g = nak\), this modifies the diagonal component
 at scale Q. Concretely, the support of the twisted function
 
-\[g |\to W_\mNumber{0}(\operatorname{diag}(g,\mNumber{1}) u_{Q})\]
+\[g |\to W_\mNumber{0}(\operatorname{diag}(g,\mNumber{1})u_{Q})\]
 
-intersects the support of \(K_\mNumber{1}(p^{c(\pi)})\)-fixed vectors in \(W(\pi, \psi)\)
+intersects the support of \(K_{\mNumber{1}}(p^{c(\pi)})-fixed\) vectors in \(W(\pi, \psi)\)
 nontrivially, because the Q-shift matches the conductor scale of \(\pi\) exactly:
-the new vector of \(\pi\) is supported on \(N_{n} \ast T^+ \ast K_\mNumber{1}(p^{c(\pi)})\) (by the
+the new vector of \(\pi\) is supported on \(N_{n} \ast T^+ \ast K_{\mNumber{1}}(p^{c(\pi)})\) (by the
 analogous Casselman-Shalika result for \(\mathup{GL}_{n}\)), and the \(u_{Q}\) twist aligns the
 two conductor levels (see Jacquet-Piatetski-Shapiro-Shalika 1981, Section 5,
 for the precise support computation in the Rankin-Selberg setting).
 
 This support matching is what makes the \(\Integral\) nondegenerate: it ensures
-that the integrand \(W_\mNumber{0}(\operatorname{diag}(g,\mNumber{1})u_{Q})\) * V(g) is not identically zero on
+that the integrand \(W_\mNumber{0}(\operatorname{diag}(g,\mNumber{1})u_{Q}) \ast V(g)\) is not identically zero on
 \(N_{n} \backslash \mathup{GL}_{n}(F)\) for appropriate V.
 
 \hypertarget{7-verification-in-special-cases}{%
 \subsubsection{7. Verification in special cases}\label{7-verification-in-special-cases}}
 
-\textbf{Both unramified (c(Pi) \(=\) c(pi) \(=\) 0):} \(u_{Q} = I \mBridgeOperator{+} E_{n,n+\mNumber{1}}\) (Q \(= \mNumber{1}). W_{\mNumber{0}}\) is the spherical vector. The \(\Integral\) with \(V_\mNumber{0}\) (spherical for pi)
+\textbf{Both unramified (c(\(\Pi) = c(\pi) = \mNumber{0}\)):} \(u_{Q} = I \mBridgeOperator{+} E_{n,n+\mNumber{1}} (Q = \mNumber{1}). W_{\mNumber{0}}\) is the spherical vector. The \(\Integral\) with \(V_\mNumber{0}\) (spherical for \(\pi\))
 gives \(L(s, \Pi \times \pi)\) * (correction factor). Choose V to cancel the L-factor.
 
-\textbf{\(\Pi\) unramified, \(\pi\) ramified:} \(u_{Q}\) has \(Q = \pi_{F}^{-c(\pi)}\). The twist
+\textbf{\(\Pi\) unramified, \(\pi\) ramified:} \(u_{Q}\) has \(Q = \pi_{F}^{-c(\pi)}.\) The twist
 shifts the support of the spherical vector to match the ramification of \(\pi\).
 This is the classical "conductor-lowering" mechanism.
 

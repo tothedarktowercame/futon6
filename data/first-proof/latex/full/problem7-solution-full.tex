@@ -19,7 +19,7 @@ fundamental group of a closed manifold whose universal cover is acyclic over
 \item
   Obligation (E2) --- placing \(\Gamma \in \mathup{FH}(Q)\) --- is \textbf{discharged} for
   the rotation-lattice family (Fowler criterion, codim-2 fixed set with
-  \(\chi = \mNumber{0}).\)
+  \(\chi = \mNumber{0}\)).
 \item
   Obligation (S) --- upgrading from finite CW complex to closed manifold --- is
   treated as discharged in this branch: the geometric inputs are established
@@ -115,9 +115,9 @@ Obligation S is treated as discharged in this branch via the rotation route
 S-rot-II resolves them.
 
 Problem 7 asks for a \textbf{closed manifold} \texttt{M} with \(\pi\mNumber{1}(M) = \Gamma\) and
-\(H_{\mDualStar}(M_{tilde}; Q) = \mNumber{0}\) for \(* > \mNumber{0}\). Obligation E2 gives a finite CW
-complex with these properties; the upgrade to a closed manifold was the
-remaining obstacle.
+\(H_{\mDualStar}(M_{tilde}; Q) = \mNumber{0}\) for \(\ast > \mNumber{0}\). Obligation E2 gives a finite CW
+complex with these properties; the upgrade to a closed manifold is the
+remaining open problem.
 
 \hypertarget{available-geometric-data}{%
 \subsubsection{Available geometric data}\label{available-geometric-data}}
@@ -187,7 +187,7 @@ it, and show the surgery obstruction vanishes.
 See \texttt{problem7r-s3a-setup.md} for the detailed analysis.
 
 \hypertarget{approach-ii-equivariant-surgery-on-m-tau--blocked-for-reflections}{%
-\subsubsection{Approach II: Equivariant surgery on (M, tau) --- BLOCKED for reflections}\label{approach-ii-equivariant-surgery-on-m-tau--blocked-for-reflections}}
+\subsubsection{\texorpdfstring{Approach II: Equivariant surgery on (M, \(\tau\)) --- BLOCKED for reflections}{Approach II: Equivariant surgery on (M, \textbackslash tau) --- BLOCKED for reflections}}\label{approach-ii-equivariant-surgery-on-m-tau--blocked-for-reflections}}
 
 \textbf{Idea.} Work directly with the closed manifold \texttt{M} and the involution
 \(\tau\). Eliminate the fixed set \texttt{F} by equivariant surgery to obtain \texttt{M\textquotesingle{}}
@@ -250,7 +250,7 @@ is forced by Riemannian geometry.
 \textbf{Idea.} Replace the reflection (codimension-1 involution) with a
 \textbf{rotational involution} (codimension-2 fixed set) in \textbf{odd} ambient
 dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(H^{\mNumber{2}k-\mNumber{1}}\)
-(codimension 2) is a "rotation by pi" in a normal 2-plane.
+(codimension 2) is a "rotation by \(\pi\)" in a normal 2-plane.
 
 \textbf{Why this resolves the tension.} For \(n = \mNumber{2}k+\mNumber{1}\) odd:
 
@@ -300,8 +300,8 @@ dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(
 
 \textbf{E2 status for rotation route: DISCHARGED.}
 
-\textbf{Remaining open problem (obligation S).} The manifold upgrade can proceed
-via two newly available sub-options:
+\textbf{Obligation S resolution.} The manifold upgrade proceeds
+via two sub-options available on the rotation route:
 
 \begin{itemize}
 \tightlist
@@ -310,7 +310,7 @@ via two newly available sub-options:
   as Approach I (Poincare complex, normal map, obstruction), but the
   obstruction computation benefits from odd L-theory parity.
 \item
-  \textbf{S-rot-II (Equivariant surgery on (M, sigma)).} The codimension-2 gap
+  \textbf{S-rot-II (Equivariant surgery on (M, \(\sigma\))).} The codimension-2 gap
   hypothesis is satisfied, so the Costenoble-Waner framework (arXiv:1705.10909)
   applies. The equivariant surgery obstruction is computable in principle.
 \end{itemize}
@@ -354,13 +354,13 @@ in Sections 3-4.
 Then:
 
 (a) \textbf{(Unconditional)} \(\Gamma \in \mathup{FH}(Q)\): there exists a finite CW complex
-\texttt{Y} with \(\pi_\mNumber{1}(Y) = \Gamma\) and \(H_{\mDualStar}(Y_{tilde}; Q) = \mNumber{0}\) for \(* > \mNumber{0}\).
+\texttt{Y} with \(\pi_\mNumber{1}(Y) = \Gamma\) and \(H_{\mDualStar}(Y_{tilde}; Q) = \mNumber{0}\) for \(\ast > \mNumber{0}\).
 (Both routes discharge E2 via Fowler\textquotesingle s criterion.)
 
 (b) \textbf{(Rotation route)} For the rotation lattice (Approach IV, \(n = \mNumber{7}\),
 congruence ideal \(I = (\mNumber{3}) \in Z[\sqrt(\mNumber{2})]\)): there exists a closed
 manifold \texttt{N} with \(\pi_\mNumber{1}(N) = \Gamma\) and \(H_{\mDualStar}(N_{tilde}; Q) = \mNumber{0}\) for
-\(* > \mNumber{0}\). The manifold is constructed by equivariant surgery (S-rot-II):
+\(\ast > \mNumber{0}\). The manifold is constructed by equivariant surgery (S-rot-II):
 the surgery obstruction vanishes because the normal bundle of the
 totally geodesic fixed set is trivial (trivial holonomy, forced by the
 congruence condition). See \texttt{problem7r-s-rot-obstruction-analysis.md}.
@@ -384,7 +384,7 @@ discharged. Two sub-options for obligation S:
   The Costenoble-Waner codimension-2 gap hypothesis is satisfied. The "cut
   and cap" method (Browder, López de Medrano) applies.
 
-  \textbf{Key result: the equivariant surgery obstruction θ \(=\) 0 (integrally).}
+  \textbf{Key result: the equivariant surgery obstruction \(\theta = \mNumber{0}\) (integrally).}
 
   The argument has two layers:
 
@@ -392,24 +392,24 @@ discharged. Two sub-options for obligation S:
   \item
     \textbf{Rational vanishing (Step A: flat-normal-bundle argument).} The
     normal bundle ν of \(F \in M\) is flat (totally geodesic embedding). By
-    Chern-Weil, e(ν)⊗Q \(=\) 0. This forces the intersection form on S(ν)
-    to be rationally hyperbolic → θ ⊗ \(Q = \mNumber{0}\).
+    Chern-Weil, e(\(\nu)\otimes Q = \mNumber{0}.\) This forces the intersection form on S(\(\nu\))
+    to be rationally hyperbolic \(\to \theta \otimes Q = \mNumber{0}.\)
   \item
     \textbf{Integral vanishing (trivial holonomy).} For the congruence ideal
-    I with Norm(I) \(>\) 2 (e.g., I \(=\) (3)): the integrality constraint on
+    I with \(Norm(I) > \mNumber{2}\) (e.g., I \(=\) (3)): the integrality constraint on
     rotation matrices over \(\mathbb{Z}[\sqrt{\mNumber{2}}]\), combined with the congruence condition
-    g ≡ I mod I, forces the holonomy representation ρ: C → SO(2) to be
-    trivial. So ν is a trivial bundle, e(ν) \(=\) 0 in H²(F; Z), and the
-    circle bundle S(ν) \(=\) F × S¹ is a product. The integral intersection
+    g ≡ I mod I, forces the holonomy representation \(\rho\): \(C \to \mathup{SO}(\mNumber{2})\) to be
+    trivial. So \(\nu\) is a trivial bundle, e(\(\nu) = \mNumber{0}\) in H²(F; Z), and the
+    circle bundle S(\(\nu) = F \times\) S¹ is a product. The \(\Integral\) intersection
     form on H₃(F \(\times\) S¹; Z) is block off-diagonal (hyperbolic), giving
-    θ \(=\) 0 ∈ L₈(Z{[}Γ{]}).
+    \(\theta = \mNumber{0} \in\) L₈(\(\mathbb{Z}[\Gamma]\)).
   \end{itemize}
 
-  \textbf{With θ \(=\) 0:} The equivariant "cut and cap" surgery succeeds. Remove
+  \textbf{With \(\theta = \mNumber{0}\):} The equivariant "cut and cap" surgery succeeds. Remove
   the tubular neighborhood N(F) from M, obtaining \(W = M\) \textbackslash{} int(N(F)) with
-  ∂W \(=\) S(ν) \(=\) F \(\times\) S¹ and free Z/2-action on W. Since θ \(=\) 0, a cap V
-  exists with ∂V \(=\) F \(\times\) S¹ and free Z/2-action. Set M\textquotesingle{} \(=\) W ∪ V. Then
-  N \(=\) M\textquotesingle/(Z/2) is a closed manifold with \(\pi\)₁(N) \(=\) Γ and rationally
+  ∂W \(=\) S(\(\nu) = F \times\) S¹ and free Z/2-action on W. Since \(\theta = \mNumber{0}\), a cap V
+  exists with ∂V \(= F \times\) S¹ and free Z/2-action. Set M\textquotesingle{} \(=\) W ∪ V. Then
+  N \(=\) M\textquotesingle/(Z/2) is a closed manifold with \(\pi\)₁(N) \(= \Gamma\) and rationally
   acyclic universal cover.
 
   See \texttt{problem7r-s-rot-obstruction-analysis.md} for full computation.

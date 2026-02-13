@@ -10,7 +10,7 @@ missing data, solve
 \[[(Z \times K)^{T} D (Z \times K) + \lambda (I_{r} \times K)] \mOpName{vec}(W) = (I_{r} \times K) \mOpName{vec}(B),\]
 
 where \(D = S S^{T}\) is the observation projector (q observed entries out of
-N \(=\) nM), \(B = T\) Z, and n, \(r \ll q \ll N\).
+\(N = nM), B = T Z,\) and n, \(r \ll q \ll N\).
 
 \hypertarget{assumptions-used-explicit}{%
 \subsection{Assumptions Used (explicit)}\label{assumptions-used-explicit}}
@@ -44,28 +44,28 @@ Under these assumptions \(A_{\tau}\) is SPD, so PCG applies.
 \hypertarget{1-why-naive-direct-methods-fail}{%
 \subsubsection{1. Why naive direct methods fail}\label{1-why-naive-direct-methods-fail}}
 
-\(A_{\tau}\) is an (nr) x (nr) system. Dense direct factorization costs
-\(O((\text{nr})^\mNumber{3}) = O(n^\mNumber{3} r^\mNumber{3})\).
+\(A_{\tau}\) is an \((nr) \times (nr)\) system. Dense direct factorization costs
+\(O((nr)^\mNumber{3}) = O(n^\mNumber{3} r^\mNumber{3})\).
 
-A naive explicit route also materializes \(\Phi = Z \times K_{\tau} \in R^{N \times \text{nr}}\),
+A naive explicit route also materializes \(\Phi = Z \times K_{\tau} \in R^{N \times nr},\)
 which costs \(O(N n r)\) memory/work before factorization. This is the
 \(N\)-dependent bottleneck we avoid with matrix-free PCG.
 
 \hypertarget{2-implicit-matrix-vector-product-in-on2-r--q-r}{%
 \subsubsection{\texorpdfstring{2. Implicit matrix-vector product in \(O(n^\mNumber{2} r + q r)\)}{2. Implicit matrix-vector product in O(n\^{}\textbackslash mNumber\{2\} r + q r)}}\label{2-implicit-matrix-vector-product-in-on2-r--q-r}}
 
-CG needs only \(y = A_{\tau}\) x, not \(A_{\tau}\) explicitly.
+CG needs only \(y = A_{\tau} x\), not \(A_{\tau}\) explicitly.
 
-Given x \(=\) vec(V), \(V \in R\)\^{}\{n x r\}:
+Given \(x = \mOpName{vec}(V), V \in R^{n \times r}:\)
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \(U = K_{\tau}\) V. Cost \(O(n^\mNumber{2} r)\).
+  \(U = K_{\tau} V\). Cost \(O(n^\mNumber{2} r)\).
 \item
   Forward sampled action (only observed entries):
 
-  \[(Z \times K_{\tau}) \mOpName{vec}(V) = \mOpName{vec}(K_{\tau} V Z^{T}).\]
+  \[(Z \times K_{\tau}) \mOpName{vec}(V) = \mOpName{vec}(K_{\tau} V \mathbb{Z}^{T}).\]
 
   For each observed coordinate (\(i_{l}, j_{l}),\)
 
@@ -73,11 +73,11 @@ Given x \(=\) vec(V), \(V \in R\)\^{}\{n x r\}:
 
   Total \(O(q r)\).
 \item
-  Form sparse W\textquotesingle{} in \(R^{n \times M}\) from \(u_{l}\). Let s \(=\) nnz(W\textquotesingle) \(\le\) q.
+  Form sparse W\textquotesingle{} in \(R^{n \times M}\) from \(u_{l}\). Let \(s = nnz(W') \le q\).
 \item
   Adjoint sampled action:
 
-  \[(Z^{T} \times K_{\tau}) \mOpName{vec}(W') = \mOpName{vec}(K_{\tau} W' Z).\]
+  \[(\mathbb{Z}^{T} \times K_{\tau}) \mOpName{vec}(W') = \mOpName{vec}(K_{\tau} W' Z).\]
 
   Compute W\textquotesingle{} \(Z \in O(s r) \le O(q r)\), then left-multiply by \(K_{\tau} \in O(n^\mNumber{2} r)\).
 \item
@@ -93,7 +93,7 @@ with no \(O(N)\) term.
 \hypertarget{3-right-hand-side}{%
 \subsubsection{3. Right-hand side}\label{3-right-hand-side}}
 
-\(B = T\) Z with T sparse (q nonzeros):
+\(B = T Z\) with T sparse (q nonzeros):
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -101,10 +101,10 @@ with no \(O(N)\) term.
 \item
   T Z: \(O(q r)\)
 \item
-  \(K_{\tau}\) B: \(O(n^\mNumber{2} r)\)
+  \(K_{\tau} B: O(n^{\mNumber{2}} r)\)
 \end{enumerate}
 
-So \(b_{\tau} = (I_{r} \times K_{\tau})\) vec(B) is formed in \(O(q r + n^\mNumber{2} r)\).
+So \(b_{\tau} = (I_{r} \times K_{\tau}) \mOpName{vec}(B)\) is formed in \(O(q r + n^\mNumber{2} r)\).
 
 \hypertarget{4-preconditioner-that-matches-the-corrected-algebra}{%
 \subsubsection{4. Preconditioner that matches the corrected algebra}\label{4-preconditioner-that-matches-the-corrected-algebra}}
@@ -122,7 +122,7 @@ Then
 
 If sampling is roughly uniform, D \textasciitilde{} c I with \(c = q/N\). Then
 
-\[\hat{A} ~ c (Z^{T} Z \times K_{\tau}) + \lambda I.\]
+\[\hat{A} ~ c (\mathbb{Z}^{T} Z \times K_{\tau}) + \lambda I.\]
 
 Choose Kron preconditioner in whitened coordinates:
 
@@ -140,7 +140,7 @@ it is the exact \(D = I\) system).
 
 Khatri-Rao identity still gives efficient Gram formation:
 
-\[Z^{T} Z = \text{Hadamard}_{i} (A_{i}^{T} A_{i}),\]
+\[\mathbb{Z}^{T} Z = \text{Hadamard}_{i} (A_{i}^{T} A_{i}),\]
 
 cost \(O(\sum_{i} n_{i} r^\mNumber{2})\).
 
@@ -148,7 +148,7 @@ Preconditioner apply:
 
 \[P^{-\mNumber{1}} = H^{-\mNumber{1}} \times K_{\tau}^{-\mNumber{1}},\]
 
-implemented by solving \(K_{\tau}\) Y \(H^{T} =\) Z\textquotesingle{} after reshape.
+implemented by solving \(K_{\tau} Y H^{T} =\) Z\textquotesingle{} after reshape.
 Per application cost is \(O(n^\mNumber{2} r + n r^\mNumber{2})\) (often simplified to \(O(n^\mNumber{2} r)\)
 when n \(\gg\) r).
 
@@ -161,7 +161,7 @@ For SPD \(A_{\tau}\) and SPD P, standard PCG gives
 
 with \(\kappa =\) cond(\(P^{-\mNumber{1}/\mNumber{2}} A_{\tau} P^{-\mNumber{1}/\mNumber{2}}),\) so
 
-\[t = O(\sqrt(\kappa) \\log(\mNumber{1}/\epsilon)).\]
+\[t = O(\sqrt(\kappa) \log(\mNumber{1}/\epsilon)).\]
 
 To claim "fast" convergence, add a spectral-equivalence hypothesis, e.g.
 
@@ -171,18 +171,19 @@ which implies
 
 \[\kappa(P^{-\mNumber{1}} A_{\tau}) \le (\mNumber{1}+\delta)/(\mNumber{1}-\delta).\]
 
-Hence t is logarithmic in 1/eps with a modest sqrt(kappa) factor when
+Hence t is logarithmic in 1/eps with a modest sqrt(\(\kappa\)) factor when
 \(\delta\) is bounded away from 1. (No unsupported closed-form \(t = O(r \sqrt(n/q))\)
 claim is needed.)
 
 \textbf{Sufficient conditions for bounded \(\delta\).} The spectral equivalence
-(1-delta)P \(\le A_{\tau} \le\) (1+delta)P holds with \(\delta\) bounded away from 1 when
+(1-\(\delta\))P \(\le A_{\tau} \le (\mNumber{1}+\delta\))P holds with \(\delta\) bounded away from 1 when
 the sampling pattern satisfies a restricted isometry-type condition:
-\textbar\textbar D - (q/N)I\textbar\textbar{} is small relative to \(\lambda\). For uniform random sampling
-with \(q \ge C\) n log n (for a universal constant C), matrix concentration
-results (Tropp 2011, Theorem 1.6) give \(\delta = O(\sqrt(n \log n / q))\) with
-high probability. Under this regime, \(\kappa = O(\mNumber{1})\) and PCG converges in
-\(O(\\log(\mNumber{1}/\epsilon))\) iterations.
+the restricted isometry holds for the column space of Z \(\otimes K_{\tau}^{\mNumber{1}/\mNumber{2}},\)
+i.e. (Z \(\otimes K_{\tau}^{\mNumber{1}/\mNumber{2}})^{T}\) (D - cI) (Z \(\otimes K_{\tau}^{\mNumber{1}/\mNumber{2}})\) is small in
+operator norm relative to \(\lambda\). Under standard leverage/coherence
+assumptions and sufficient sampling scaling with model dimension,
+concentration yields \(\delta\) bounded away from 1 with high probability. Under this regime, \(\kappa = O(\mNumber{1})\) and PCG converges in
+\(O(\log(\mNumber{1}/\epsilon))\) iterations.
 
 \hypertarget{6-complexity-summary}{%
 \subsubsection{6. Complexity summary}\label{6-complexity-summary}}

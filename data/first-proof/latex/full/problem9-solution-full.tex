@@ -7,7 +7,7 @@
 Let \(n \ge \mNumber{5}\). Let \(A^{(\mNumber{1})}, ..., A^{(n)} \in R^{\mNumber{3} \times \mNumber{4}}\) be Zariski-generic matrices.
 For \(\alpha, \beta, \gamma, \delta \in [n],\) construct \(Q^{(\alpha \beta \gamma \delta)} \in R^{\mNumber{3} \times \mNumber{3}x\mNumber{3} \times \mNumber{3}}\) with entry:
 
-\[Q^{abgd}_{ijkl} = \det[A^{a}(i,:); A^{b}(j,:); A^{g}(k,:); A^{d}(l,:)]\]
+\[Q^{(abgd)}_{ijkl} = \det[A^{(a)}(i,:); A^{(b)}(j,:); A^{(g)}(k,:); A^{(d)}(l,:)]\]
 
 (the 4x4 determinant of a matrix formed by stacking rows i, j, k, l from
 cameras \(\alpha, \beta, \gamma, \delta\) respectively).
@@ -45,7 +45,7 @@ the evaluation of the volume form (the unique up-to-scale alternating 4-linear
 form on \(\mathbb{R}^{\mNumber{4}}\)) on four camera row vectors.
 
 \textbf{Key observation (bilinear form reduction):} Fix two camera-row pairs
-(gamma, k) and (delta, l), giving vectors \(c = a^{(\gamma)}_{k}\) and \(d = a^{(\delta)}_{l} \in \mathbb{R}^{\mNumber{4}}.\) Then the map:
+(\(\gamma\), k) and (\(\delta\), l), giving vectors \(c = a^{(\gamma)}_{k}\) and \(d = a^{(\delta)}_{l} \in \mathbb{R}^{\mNumber{4}}.\) Then the map:
 
 \[\omega(p, q) = \det[p; q; c; d]\]
 
@@ -54,7 +54,7 @@ the Hodge dual *(c wedge d) is also simple, so \(\omega\) has \textbf{rank 2} as
 bilinear form.
 
 Equivalently: the null space of \(\omega\) is span\{c, d\} (2-dimensional), and
-\(\omega\) induces a non-degenerate alternating form on V/span\{c,d\} \(= \mathbb{R}^{\mNumber{2}}.\)
+\(\omega\) induces a non-degenerate alternating form on \(V/span{c,d} = \mathbb{R}^{\mNumber{2}}\).
 
 \hypertarget{2-the-rank-2-constraint-and-its-3x3-minor-formulation}{%
 \subsubsection{2. The rank-2 constraint and its 3x3 minor formulation}\label{2-the-rank-2-constraint-and-its-3x3-minor-formulation}}
@@ -73,10 +73,10 @@ Since \(\omega\) has rank 2, for ANY choice of 3 vectors \(p_{\mNumber{1}}, p_{\
 In terms of the Q tensors: choosing \(p_{m} = a^{(\alpha_{m})}_{i_{m}}\) and
 \(q_{n} = a^{(\beta_{n})}_{j_{n}}\), this becomes:
 
-\[\det [Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}} = \mNumber{0}\]
+\[\det [Q^{(\alpha_{m}, \beta_{n}, \gamma, \delta)}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}} = \mNumber{0}\]
 
 for any choice of \((\alpha_{\mNumber{1}},i_{\mNumber{1}}), (\alpha_{\mNumber{2}},i_{\mNumber{2}}), (\alpha_{\mNumber{3}},i_{\mNumber{3}})\) and
-\((\beta_{\mNumber{1}},j_{\mNumber{1}}), (\beta_{\mNumber{2}},j_{\mNumber{2}}), (\beta_{\mNumber{3}},j_{\mNumber{3}})\) and fixed (gamma,k), (delta,l).
+\((\beta_{\mNumber{1}},j_{\mNumber{1}}), (\beta_{\mNumber{2}},j_{\mNumber{2}}), (\beta_{\mNumber{3}},j_{\mNumber{3}})\) and fixed (\(\gamma\),k), (\(\delta\),l).
 
 This is a \textbf{degree-3 polynomial} in the Q entries, independent of the cameras.
 
@@ -86,7 +86,7 @@ This is a \textbf{degree-3 polynomial} in the Q entries, independent of the came
 Now consider the scaled tensors \(T^{(abgd)} = \lambda_{abgd} Q^{(abgd)}.\)
 The 3x3 matrix becomes:
 
-\[M_{mn} = \lambda_{\alpha_{m}, \beta_{n}, \gamma, \delta} \ast Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}\]
+\[M_{mn} = \lambda_{\alpha_{m}, \beta_{n}, \gamma, \delta} \ast Q^{(\alpha_{m}, \beta_{n}, \gamma, \delta)}_{i_{m}, j_{n}, k, l}\]
 
 This is the Hadamard (entrywise) product of two 3x3 matrices:
 
@@ -100,12 +100,12 @@ This is the Hadamard (entrywise) product of two 3x3 matrices:
 
 \textbf{If \(\lambda\) is rank-1:} \(\lambda_{abgd} = u_{a} v_{b} w_{g} x_{d},\) so
 \(\Lambda_{mn} = u_{\alpha_{m}} v_{\beta_{n}} w_{\gamma} x_{\delta}.\) This factors as
-\(\Lambda = (u_{\alpha_{m}})\)\emph{m * (v}\{\(\beta_{n}\)\})\_\(n^{T}\) (scaled by the constant \(w_{\gamma} x_{\delta}).\)
+\(\Lambda = (u_{\alpha_{m}})\)\emph{m * (v}\{\(\beta_{n}})_{n}^{T}\) (scaled by the constant \(w_{\gamma} x_{\delta}).\)
 So \(\Lambda\) has matrix rank 1.
 
-For a rank-1 matrix \(\Lambda\), the Hadamard product \(M = \Lambda \circ \Omega\) equals
+For a rank-1 matrix \(\Lambda\), the Hadamard product \(M = \Lambda\) ∘ \(\Omega\) equals
 \(\operatorname{diag}(u) \ast \Omega \ast \operatorname{diag}(v)\) (up to the scalar \(w_{\gamma} x_{\delta}).\) Since similar
-transformations preserve rank: \(\mOpName{rank}(M) = \mOpName{rank}(\Omega) = \mNumber{2} < \mNumber{3}\), so det(M) \(=\) 0.
+transformations preserve rank: \(\mOpName{rank}(M) = \mOpName{rank}(\Omega) = \mNumber{2} < \mNumber{3}\), so \(\det(M) = \mNumber{0}\).
 
 Therefore: \textbf{rank-1 \(\lambda\) implies all 3x3 minors of scaled T vanish.} ✓
 
@@ -117,7 +117,7 @@ nonzero (for Zariski-generic cameras).
 
 \textbf{The argument is algebraic-geometric, not via Hadamard rank bounds.} Define
 
-\[P(A^{(\mNumber{1})}, ..., A^{(n)}) = \det [T^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}}\]
+\[P(A^{(\mNumber{1})}, ..., A^{(n)}) = \det [T^{(\alpha_{m}, \beta_{n}, \gamma, \delta)}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}}\]
 
 for a specific choice of row/column/fixed indices. This is a polynomial in
 the camera entries (with \(\lambda\) fixed). We claim P is not the zero polynomial
@@ -125,37 +125,37 @@ when \(\lambda\) is not rank-1 in its first two indices. Since a nonzero polynom
 is nonzero on a Zariski-dense open set, this establishes the converse for
 generic cameras.
 
-\textbf{Explicit witness (n \(=\) 5).} Choose 5 cameras \(A^{(i)}\) as rows of generic
+\textbf{Explicit witness (\(n = \mNumber{5}\)).} Choose 5 cameras \(A^{(i)}\) as rows of generic
 \(\mNumber{3} \times \mNumber{4}\) matrices with rational entries:
 
 \[\begin{aligned}
-A^{\mNumber{1}} = [[\mNumber{1},\mNumber{0},\mNumber{0},\mNumber{1}],[\mNumber{0},\mNumber{1},\mNumber{0},\mNumber{1}],[\mNumber{0},\mNumber{0},\mNumber{1},\mNumber{1}]] \\
-A^{\mNumber{2}} = [[\mNumber{1},\mNumber{1},\mNumber{0},\mNumber{0}],[\mNumber{0},\mNumber{1},\mNumber{1},\mNumber{0}],[\mNumber{0},\mNumber{0},\mNumber{1},\mNumber{1}]] \\
-A^{\mNumber{3}} = [[\mNumber{1},\mNumber{0},\mNumber{1},\mNumber{0}],[\mNumber{1},\mNumber{1},\mNumber{0},\mNumber{0}],[\mNumber{0},\mNumber{1},\mNumber{0},\mNumber{1}]] \\
-A^{\mNumber{4}} = [[\mNumber{0},\mNumber{1},\mNumber{1},\mNumber{1}],[\mNumber{1},\mNumber{0},\mNumber{1},\mNumber{1}],[\mNumber{1},\mNumber{1},\mNumber{0},\mNumber{1}]] \\
-A^{\mNumber{5}} = [[\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}],[\mNumber{4},\mNumber{3},\mNumber{2},\mNumber{1}],[\mNumber{1},\mNumber{1},\mNumber{1},\mNumber{1}]]
+A^{(\mNumber{1})} = [[\mNumber{1},\mNumber{0},\mNumber{0},\mNumber{1}],[\mNumber{0},\mNumber{1},\mNumber{0},\mNumber{1}],[\mNumber{0},\mNumber{0},\mNumber{1},\mNumber{1}]] \\
+A^{(\mNumber{2})} = [[\mNumber{1},\mNumber{1},\mNumber{0},\mNumber{0}],[\mNumber{0},\mNumber{1},\mNumber{1},\mNumber{0}],[\mNumber{0},\mNumber{0},\mNumber{1},\mNumber{1}]] \\
+A^{(\mNumber{3})} = [[\mNumber{1},\mNumber{0},\mNumber{1},\mNumber{0}],[\mNumber{1},\mNumber{1},\mNumber{0},\mNumber{0}],[\mNumber{0},\mNumber{1},\mNumber{0},\mNumber{1}]] \\
+A^{(\mNumber{4})} = [[\mNumber{0},\mNumber{1},\mNumber{1},\mNumber{1}],[\mNumber{1},\mNumber{0},\mNumber{1},\mNumber{1}],[\mNumber{1},\mNumber{1},\mNumber{0},\mNumber{1}]] \\
+A^{(\mNumber{5})} = [[\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}],[\mNumber{4},\mNumber{3},\mNumber{2},\mNumber{1}],[\mNumber{1},\mNumber{1},\mNumber{1},\mNumber{1}]]
 \end{aligned}\]
 
 Choose a non-rank-1 scaling: \(\lambda_{abgd} = \mNumber{1}\) for all non-identical (\(a,b,g,d\))
 except \(\lambda_{\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{2}\).
 
 \textbf{Non-rank-1 verification.} If \(\lambda\) were rank-1, then \(\lambda_{abgd} = u_{a} v_{b} w_{g} x_{d}.\)
-From \(\lambda_{\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{2}\) and \(\lambda_{\mNumber{2},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{1}\) we get \(u_\mNumber{1}/u_\mNumber{2} = \mNumber{2}\). But from
-\(\lambda_{\mNumber{1},\mNumber{1},\mNumber{3},\mNumber{4}} = \mNumber{1}\) and \(\lambda_{\mNumber{2},\mNumber{1},\mNumber{3},\mNumber{4}} = \mNumber{1}\) we get \(u_\mNumber{1}/u_\mNumber{2} = \mNumber{1}\). Contradiction.
+From \(\lambda_{\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{2}\) and \(\lambda_{\mNumber{2},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{1}\) we get \(u_{\mNumber{1}}/u_{\mNumber{2}} = \mNumber{2}.\) But from
+\(\lambda_{\mNumber{1},\mNumber{1},\mNumber{3},\mNumber{4}} = \mNumber{1}\) and \(\lambda_{\mNumber{2},\mNumber{1},\mNumber{3},\mNumber{4}} = \mNumber{1}\) we get \(u_{\mNumber{1}}/u_{\mNumber{2}} = \mNumber{1}.\) Contradiction.
 
 Fix \(\gamma = \mNumber{3}, \delta = \mNumber{4}, k = \mNumber{1}, l = \mNumber{1}.\) Choose row triples
 (\(\alpha_{m}, i_{m}) = (\mNumber{1},\mNumber{1}), (\mNumber{2},\mNumber{1}), (\mNumber{5},\mNumber{1})\) and column triples
 (\(\beta_{n}, j_{n}) = (\mNumber{2},\mNumber{1}), (\mNumber{5},\mNumber{1}), (\mNumber{1},\mNumber{2}).\) The 3x3 \(\Lambda\) matrix has entries
 \(\lambda_{\alpha_{m}, \beta_{n}, \mNumber{3}, \mNumber{4}}\); specifically \(\Lambda_{\mNumber{11}} = \lambda_{\mNumber{1},\mNumber{2},\mNumber{3},\mNumber{4}} = \mNumber{2}\)
 with all other entries equal to 1. The \(\Omega\) matrix (unscaled Q values) has
-det(Omega) \(=\) 0 (confirming rank-2), but the Hadamard product \(M = \Lambda \circ \Omega\)
-satisfies det(M) \(= -\mNumber{24} \neq\) 0 (verified by direct computation of nine 4x4
+det(\(\Omega) = \mNumber{0}\) (confirming rank-2), but the Hadamard product \(M = \Lambda\) ∘ \(\Omega\)
+satisfies det(M) \(= -\mNumber{24} \neq \mNumber{0}\) (verified by direct computation of nine 4x4
 determinants). This exhibits P as not the zero polynomial.
 
 \textbf{Remark (Hadamard product interpretation).} The matrix \(M_{mn}\) is the
-Hadamard product \(\Lambda \circ \Omega,\) where \(\Lambda\) carries the scaling entries
+Hadamard product \(\Lambda\) ∘ \(\Omega\), where \(\Lambda\) carries the scaling entries
 and \(\Omega\) carries the bilinear form values. The upper bound
-\$\textbackslash mOpName\{rank\}(Lambda \(\circ\) Omega)\$ \(\le \mOpName{rank}(\Lambda) \ast \mOpName{rank}(\Omega)\) provides context but is
+\(\mOpName{rank}(\Lambda ∘ \Omega) \le \mOpName{rank}(\Lambda) \ast \mOpName{rank}(\Omega)\) provides context but is
 not used in the proof; the converse relies entirely on the polynomial
 nonvanishing argument above.
 
@@ -202,18 +202,18 @@ have rank 1 (i.e., are outer products of vectors).
 
 \textbf{Definition of F:} The coordinate functions of F are all 3x3 minors:
 
-\[F_{choice} = \det [T^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{m,n=\mNumber{1},\mNumber{2},\mNumber{3}}\]
+\[F_{choice} = \det [T^{(\alpha_{m}, \beta_{n}, \gamma, \delta)}_{i_{m}, j_{n}, k, l}]_{m,n = \mNumber{1},\mNumber{2},\mNumber{3}}\]
 
 taken over all choices of:
 
 \begin{itemize}
 \tightlist
 \item
-  Three "row" camera-row pairs (\(\alpha_{m}, i_{m})\) for m \(=\) 1,2,3
+  Three "row" camera-row pairs (\(\alpha_{m}, i_{m})\) for \(m = \mNumber{1}\),2,3
 \item
-  Three "column" camera-row pairs (\(\beta_{n}, j_{n})\) for n \(=\) 1,2,3
+  Three "column" camera-row pairs (\(\beta_{n}, j_{n})\) for \(n = \mNumber{1}\),2,3
 \item
-  Fixed camera-row pairs (gamma, k) and (delta, l)
+  Fixed camera-row pairs (\(\gamma\), k) and (\(\delta\), l)
 \end{itemize}
 
 And the analogous minors for the other two matricization pairs (fixing
@@ -244,10 +244,11 @@ matricization alone), but the degree stays fixed at 3.
 The Q tensors are the \textbf{quadrifocal tensors} from multiview geometry (the
 4-view analog of the fundamental matrix and trifocal tensor). The rank-2
 bilinear form structure is the classical rank constraint from projective
-geometry: four collinear points in \(P^\mNumber{3}\) impose a codimension constraint on
-the stacked camera rows.
+geometry: the determinant encodes linear dependence constraints among lifted
+camera-row vectors (equivalently coplanarity/dependence conditions) on the
+stacked camera rows.
 
-The rank-1 scaling \(\lambda = u \otimes\) v \(\otimes\) w \(\otimes\) x corresponds to the natural
+The rank-1 scaling \(\lambda = u \otimes v \otimes w \otimes x\) corresponds to the natural
 gauge freedom in multiview geometry: rescaling each camera\textquotesingle s contribution
 independently for each of the four "roles" (which row selection it
 contributes). The polynomial map F detects when a putative rescaling is

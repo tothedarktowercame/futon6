@@ -25,13 +25,25 @@ import tempfile
 from pathlib import Path
 
 UNICODE_TO_TEX = {
+    "α": r"\alpha",
+    "β": r"\beta",
+    "γ": r"\gamma",
+    "δ": r"\delta",
+    "ε": r"\epsilon",
+    "ϵ": r"\epsilon",
+    "ζ": r"\zeta",
+    "η": r"\eta",
+    "θ": r"\theta",
+    "ϑ": r"\vartheta",
+    "ι": r"\iota",
+    "κ": r"\kappa",
+    "λ": r"\lambda",
     "≤": r"\le",
     "≥": r"\ge",
     "≠": r"\ne",
     "×": r"\times",
     "⊗": r"\otimes",
     "⊕": r"\oplus",
-    "∘": r"\circ",
     "→": r"\to",
     "←": r"\leftarrow",
     "∧": r"\wedge",
@@ -40,10 +52,26 @@ UNICODE_TO_TEX = {
     "∞": r"\infty",
     "μ": r"\mu",
     "µ": r"\mu",
+    "ν": r"\nu",
+    "ξ": r"\xi",
+    "ρ": r"\rho",
+    "σ": r"\sigma",
+    "τ": r"\tau",
+    "φ": r"\phi",
+    "χ": r"\chi",
     "ψ": r"\psi",
     "Ψ": r"\Psi",
+    "ω": r"\omega",
     "π": r"\pi",
     "Π": r"\Pi",
+    "Γ": r"\Gamma",
+    "Δ": r"\Delta",
+    "Θ": r"\Theta",
+    "Λ": r"\Lambda",
+    "Ξ": r"\Xi",
+    "Σ": r"\Sigma",
+    "Φ": r"\Phi",
+    "Ω": r"\Omega",
     "∗": r"\ast",
 }
 UNICODE_MATH_CHAR_RE = re.compile("|".join(re.escape(k) for k in UNICODE_TO_TEX))
@@ -135,6 +163,33 @@ COMPACT_PLUS_RE = re.compile(
 )
 COMPACT_STAR_PRODUCT_RE = re.compile(r"([A-Za-z0-9\)\}])\*([A-Za-z0-9\(\{\\])")
 TPSI_STAR_RE = re.compile(r"T([ψΨ])([∗*])")
+DIRECT_SUM_TUPLE_RE = re.compile(
+    r"\(\s*([A-Za-z][A-Za-z0-9_]*)\s*,\s*([A-Za-z][A-Za-z0-9_]*)\s*\)\s*[⊕]\s*"
+    r"\(\s*([A-Za-z][A-Za-z0-9_]*)\s*,\s*([A-Za-z][A-Za-z0-9_]*)\s*\)([.,;:]?)"
+)
+PAREN_DIM_PRODUCT_RE = re.compile(
+    r"\(\s*([A-Za-z0-9][A-Za-z0-9_]*)\s*\)\s*[xX]\s*\(\s*([A-Za-z0-9][A-Za-z0-9_]*)\s*\)"
+)
+CHAINED_COMPARE_FUNC_RE = re.compile(
+    r"\b([A-Za-z][A-Za-z0-9_']*)\s*=\s*([A-Za-z][A-Za-z0-9_']*\([^()\n]*\))\s*(<=|>=|<|>)\s*([A-Za-z0-9_']+)\b"
+)
+SUP_DIM_PRODUCT_RE = re.compile(
+    r"\^\{\s*([A-Za-z0-9_]+)\s*[xX]\s*([A-Za-z0-9_]+)\s*\}"
+)
+ASSIGN_PRODUCT_RE = re.compile(
+    r"\b([A-Za-z][A-Za-z0-9_']*)\s*=\s*([A-Za-z][A-Za-z0-9_']*)\s+([A-Za-z][A-Za-z0-9_']*)\b"
+)
+IOTA_OMEGA_RESTRICT_RE = re.compile(
+    r"\bi_\{d/dt\}\(\s*omega\s*\)\s*\|_\{([^}]+)\}"
+)
+D_OF_RESTRICT_RE = re.compile(r"\bd\(\s*([A-Za-z][A-Za-z0-9_]*)\s*\|_\{([^}]+)\}\s*\)")
+BARE_GREEK_WRAP_RE = re.compile(
+    r"(?<![\\$])\b("
+    r"Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|"
+    r"alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|vartheta|"
+    r"iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega"
+    r")\b"
+)
 SN_ALL_PERMS_RE = re.compile(
     r"\bS_?n\(\s*(?:lambda|\\lambda|λ)\s*\)\s*=\s*\{\s*all\s+permutations\s+of\s+the\s+parts\s+of\s*(?:lambda|\\lambda|λ)\s*\}\s*([.?!,;:]?)",
     re.IGNORECASE,
@@ -267,6 +322,65 @@ def _expand_compact_star_products(s: str) -> str:
 def _tpsi_star_repl(m: re.Match[str]) -> str:
     psi = r"\Psi" if m.group(1) == "Ψ" else r"\psi"
     return rf"$T_{{{psi}}}^{{\mDualStar}}$"
+
+
+def _direct_sum_tuple_repl(m: re.Match[str]) -> str:
+    v1 = _texify_token(m.group(1))
+    a = _texify_token(m.group(2))
+    v2 = _texify_token(m.group(3))
+    b = _texify_token(m.group(4))
+    punct = m.group(5) or ""
+    return rf"$({v1}, {a}) \oplus ({v2}, {b})$" + punct
+
+
+def _paren_dim_product_repl(m: re.Match[str]) -> str:
+    left = _texify_script_text(m.group(1))
+    right = _texify_script_text(m.group(2))
+    return rf"$({left}) \times ({right})$"
+
+
+def _chained_compare_func_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    mid = _texify_token(m.group(2))
+    op_raw = m.group(3)
+    rhs = _texify_token(m.group(4))
+    op = {"<=": r"\le", ">=": r"\ge"}.get(op_raw, op_raw)
+    return rf"${lhs} = {mid} {op} {rhs}$"
+
+
+def _assign_product_repl(m: re.Match[str]) -> str:
+    lhs_raw, mid_raw, rhs_raw = m.group(1), m.group(2), m.group(3)
+    # Restrict to algebraic-looking assignment products (avoid prose like "A = very good").
+    if "_" not in mid_raw and not re.search(r"[A-Z]", mid_raw):
+        return m.group(0)
+    if len(rhs_raw) > 2 and "_" not in rhs_raw and rhs_raw.lower() not in {"x", "y", "z"}:
+        return m.group(0)
+    lhs = _texify_token(lhs_raw)
+    mid = _texify_token(mid_raw)
+    rhs = _texify_token(rhs_raw)
+    return rf"${lhs} = {mid} {rhs}$"
+
+
+def _sup_dim_product_repl(m: re.Match[str]) -> str:
+    left = _texify_script_text(m.group(1))
+    right = _texify_script_text(m.group(2))
+    return rf"^{{{left} \times {right}}}"
+
+
+def _iota_omega_restrict_repl(m: re.Match[str]) -> str:
+    sub = _texify_script_text(m.group(1))
+    return rf"$\iota_{{d/dt}}(\omega)|_{{{sub}}}$"
+
+
+def _d_of_restrict_repl(m: re.Match[str]) -> str:
+    var = _texify_token(m.group(1))
+    sub = _texify_script_text(m.group(2))
+    return rf"$d({var}|_{{{sub}}})$"
+
+
+def _bare_greek_wrap_repl(m: re.Match[str]) -> str:
+    tok = _texify_token(m.group(1))
+    return rf"${tok}$"
 
 
 def _sn_all_perms_repl(m: re.Match[str]) -> str:
@@ -609,7 +723,7 @@ def _texify_token(token: str) -> str:
     }
     for src, dst in greek.items():
         token = re.sub(rf"\b{src}\b", lambda _m, d=dst: d, token)
-    return token
+    return token.replace("\\\\", "\\")
 
 
 def _greek_prime_repl(m: re.Match[str]) -> str:
@@ -662,10 +776,18 @@ def _phi_set_repl(m: re.Match[str]) -> str:
 
 
 def process_plain_text_segment(s: str) -> str:
+    s = s.replace(r"\$", "$")
     s = SN_ALL_PERMS_RE.sub(_sn_all_perms_repl, s)
     s = PAREN_SUP_SUB_TOKEN_RE.sub(_paren_sup_sub_token_repl, s)
     s = SET_BUILDER_RE.sub(_set_builder_repl, s)
     s = _expand_compact_star_products(s)
+    s = DIRECT_SUM_TUPLE_RE.sub(_direct_sum_tuple_repl, s)
+    s = PAREN_DIM_PRODUCT_RE.sub(_paren_dim_product_repl, s)
+    s = SUP_DIM_PRODUCT_RE.sub(_sup_dim_product_repl, s)
+    s = CHAINED_COMPARE_FUNC_RE.sub(_chained_compare_func_repl, s)
+    s = ASSIGN_PRODUCT_RE.sub(_assign_product_repl, s)
+    s = IOTA_OMEGA_RESTRICT_RE.sub(_iota_omega_restrict_repl, s)
+    s = D_OF_RESTRICT_RE.sub(_d_of_restrict_repl, s)
     s = MAP_SIGNATURE_RE.sub(_map_signature_repl, s)
     s = PHI_SET_RE.sub(_phi_set_repl, s)
     s = Z_SQRT_RING_RE.sub(
@@ -738,6 +860,7 @@ def process_plain_text_segment(s: str) -> str:
     s = _sub_outside_inline_dollar(s, BAR_COMPARE_WRAP_RE, _bar_compare_wrap_repl)
     s = _sub_outside_inline_dollar(s, COMPOUND_COMPARISON_RE, _compound_comparison_repl)
     s = _sub_outside_inline_dollar(s, TEXT_RELATION_WORD_RE, _text_relation_word_repl)
+    s = _sub_outside_inline_dollar(s, BARE_GREEK_WRAP_RE, _bare_greek_wrap_repl)
     s = MIN_NORM_TOKEN_RE.sub(_min_norm_token_repl, s)
     s = UNICODE_MATH_CHAR_RE.sub(_unicode_math_char_repl, s)
     return s
@@ -823,7 +946,7 @@ def run_self_test() -> None:
     cases = [
         ("Total O(q r) work.", r"Total $O(q r)$ work."),
         ("N-dependent bounds", r"$N$-dependent bounds"),
-        ("CG needs only y = A_tau x.", "CG needs only y = A_tau x."),
+        ("CG needs only y = A_tau x.", "CG needs only $y = A_tau x$."),
         ("Use lambda_{abgd} and a,b,g,d.", "Use lambda_{abgd} and a,b,g,d."),
         (
             "By Section 3a below, the integrals over V (for fixed W = W_0) "
@@ -838,7 +961,7 @@ def run_self_test() -> None:
         ),
         (
             "realized in psi^{-1}-Whittaker; Phi is GL_n-equivariant with GL_n-translates.",
-            r"realized in $\psi^{-1}$-Whittaker; Phi is $\mathup{GL}_{n}$-equivariant with $\mathup{GL}_{n}$-translates.",
+            r"realized in $\psi^{-1}$-Whittaker; $\Phi$ is $\mathup{GL}_{n}$-equivariant with $\mathup{GL}_{n}$-translates.",
         ),
         ("for each V, there exists I such that I(s, W, V) = c * qF^{-ks}.",
          r"for each $V$, there exists $I$ such that $I(s, W, V)$ = $c \ast q_F^{-ks}$."),
@@ -863,7 +986,7 @@ def run_self_test() -> None:
         ("site j+1", r"site $j + 1$"),
         ("position (n, n+1)", r"position $(n, n + 1)$"),
         ("rotation matrices over Z[√2]", r"rotation matrices over $\mathbb{Z}[\sqrt{2}]$"),
-        ("theta = 0 in L_8(Z[Γ])", r"theta = 0 in L_8($\mathbb{Z}[\Gamma]$)"),
+        ("theta = 0 in L_8(Z[Γ])", r"$\theta$ = 0 in L_8($\mathbb{Z}[\Gamma]$)"),
         ("graphs in T^*R^2 are exact.", r"graphs in $T^{\mDualStar} \mathbb{R}^{2}$ are exact."),
         (
             "Yes. The measures µ and Tψ∗ µare equivalent. Use dmu_0 and integral_{T^3}. n < m and m > 0.",
@@ -924,6 +1047,34 @@ def run_self_test() -> None:
         (
             "L_S <= epsilon*L and S subset I_0' with M_S prec epsilon*I.",
             r"$L_S \le \epsilon \ast L$ and $S \subset I_0'$ with $M_S \prec \epsilon \ast I$.",
+        ),
+        (
+            "A_tau is an (nr) x (nr) system.",
+            r"A_tau is an $(nr) \times (nr)$ system.",
+        ),
+        (
+            "Let s = nnz(W') <= q.",
+            r"Let $s = nnz(W') \le q$.",
+        ),
+        (
+            "(V1, a) ⊕ (V2, b),",
+            r"$(V1, a) \oplus (V2, b)$,",
+        ),
+        (
+            "the 1-form i_{d/dt}(omega)|_{K_t} is exact.",
+            r"the 1-form $\iota_{d/dt}(\omega)|_{K_t}$ is exact.",
+        ),
+        (
+            "CG needs only y = A_tau x, not A_tau explicitly.",
+            r"CG needs only $y = A_tau x$, not A_tau explicitly.",
+        ),
+        (
+            "Set U = K_tau V and continue.",
+            r"Set $U = K_tau V$ and continue.",
+        ),
+        (
+            "in R^{N x nr} with indexing.",
+            r"in R^{N \times nr} with indexing.",
         ),
     ]
     for raw, want in cases:

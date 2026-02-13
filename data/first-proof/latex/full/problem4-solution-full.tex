@@ -32,8 +32,9 @@ p, q of degree n:
 
 \textbf{Conjecturally yes, with strong numerical evidence.} The inequality
 holds in all 8000+ random trials tested (n \(=\) 2-5) with no violations.
-Proved analytically for \(n = \mNumber{2}\) (equality) and \(n = \mNumber{3}\) (strict inequality
-via Cauchy-Schwarz). An analytic proof for \(n \ge \mNumber{4}\) remains open.
+Proved analytically for \(n = \mNumber{2}\) (equality) and \(n = \mNumber{3}\) (nonnegative surplus
+for all centered cubics, with strict inequality generically, via
+Cauchy-Schwarz). An analytic proof for \(n \ge \mNumber{4}\) remains open.
 
 \begin{itemize}
 \tightlist
@@ -52,7 +53,7 @@ via Cauchy-Schwarz). An analytic proof for \(n \ge \mNumber{4}\) remains open.
 \hypertarget{1-interpreting-phi_n-algebraically}{%
 \subsubsection{\texorpdfstring{1. Interpreting \(\Phi_{n}\) algebraically}{1. Interpreting \textbackslash Phi\_\{n\} algebraically}}\label{1-interpreting-phi_n-algebraically}}
 
-For a monic polynomial p(x) \(= \prod_{i}\) (x - \(\lambda_{i}\)) with distinct roots,
+For a monic polynomial \(p(x) = \prod_{i}\) (x - \(\lambda_{i}\)) with distinct roots,
 the derivative at each root is given by the exact algebraic identity:
 
 \[p'(\lambda_{i}) = \prod_{j \neq i} (\lambda_{i} - \lambda_{j})\]
@@ -85,12 +86,12 @@ The discriminant of p is:
 
 By the AM-QM inequality applied to 1/(\(\lambda_{i} - \lambda_{j}\)):
 
-\[\Phi_{n}(p) \ge n(n-\mNumber{1})^\mNumber{2} / \sum_{i<j} (\lambda_{i} - \lambda_{j})^\mNumber{2}\]
+\[\Phi_{n}(p) \ge n(n-\mNumber{1})^\mNumber{2} / \sum_{i < j} (\lambda_{i} - \lambda_{j})^\mNumber{2}\]
 
 (Cauchy-Schwarz). So \(\mNumber{1}/\Phi_{n}\) is related to the "spread" of roots.
 Specifically:
 
-\[\mNumber{1}/\Phi_{n}(p) \le \sum_{i<j} (\lambda_{i} - \lambda_{j})^\mNumber{2} / (n(n-\mNumber{1})^\mNumber{2})\]
+\[\mNumber{1}/\Phi_{n}(p) \le \sum_{i < j} (\lambda_{i} - \lambda_{j})^\mNumber{2} / (n(n-\mNumber{1})^\mNumber{2})\]
 
 \hypertarget{3-finite-free-convolution-and-root-behavior}{%
 \subsubsection{3. Finite free convolution and root behavior}\label{3-finite-free-convolution-and-root-behavior}}
@@ -117,7 +118,7 @@ Convolving with a non-degenerate q increases the minimum root gap.
 \subsubsection{4. The inequality via the random matrix model}\label{4-the-inequality-via-the-random-matrix-model}}
 
 Using property (b), interpret p \(\boxplus_{n}\) q as the expected characteristic
-polynomial of A + UBU* where char(A) \(=\) p, char(B) \(=\) q.
+polynomial of A + UBU* where \(\mOpName{char}(A) = p, \mOpName{char}(B) = q.\)
 
 \textbf{\(\Phi_{n}\) via the random matrix model.}
 
@@ -174,7 +175,7 @@ c_\mNumber{3} = a_\mNumber{3} + (\mNumber{1}/\mNumber{3}) \ast a_\mNumber{2} \as
 
 So \(\boxplus_\mNumber{3}\) reduces to plain coefficient addition for centered cubics.
 
-\textbf{Step 3: The key identity.} For a centered cubic p(x) \(= x^{\mNumber{3}} \mBridgeOperator{+} a_{\mNumber{2}} \ast x \mBridgeOperator{+} a_{\mNumber{3}}\)
+\textbf{Step 3: The key identity.} For a centered cubic \(p(x) = x^\mNumber{3} \mBridgeOperator{+} a_\mNumber{2} \ast x \mBridgeOperator{+} a_\mNumber{3}\)
 with distinct real roots (requiring \(a_\mNumber{2} < \mNumber{0}\) and disc \(= -\mNumber{4} \ast a_{\mNumber{2}}^{\mNumber{3}} - \mNumber{27} \ast a_{\mNumber{3}}^{\mNumber{2}} > \mNumber{0}\)):
 
 \[\Phi_\mNumber{3}(p) \ast \mOpName{disc}(p) = \mNumber{18} \ast a_\mNumber{2}^\mNumber{2} (\text{EXACT})\]
@@ -189,9 +190,9 @@ Equivalently:
 
 This identity was discovered numerically and verified symbolically in SymPy.
 It follows from the explicit formula \(\Phi_{\mNumber{3}} = \sum_{i} (\mNumber{3} \ast l_{i}/(\mNumber{3} \ast l_{i}^{\mNumber{2}} \mBridgeOperator{+} e_{\mNumber{2}}))^\mNumber{2}\)
-(where \(e_{\mNumber{1}} = \mNumber{0})\) combined with the discriminant \(= \prod_{i < j}(l_{i} - l_{j})^{\mNumber{2}}.\)
+(where \(e_\mNumber{1} = \mNumber{0}\)) combined with the discriminant \(= \prod_{i < j}(l_{i} - l_{j})^{\mNumber{2}}.\)
 
-\textbf{Step 4: Superadditivity via Cauchy-Schwarz.} Write s \(= -a_{\mNumber{2}} > \mNumber{0},\) t \(= -b_{\mNumber{2}} > \mNumber{0}, u = a_{\mNumber{3}}, v = b_{\mNumber{3}}.\) Then:
+\textbf{Step 4: Superadditivity via Cauchy-Schwarz.} Write s \(= -a_{\mNumber{2}} > \mNumber{0}, t = -b_{\mNumber{2}} > \mNumber{0}, u = a_{\mNumber{3}}, v = b_{\mNumber{3}}.\) Then:
 
 \[\begin{aligned}
 \mNumber{1}/\Phi(p) = \mNumber{2}s/\mNumber{9} - \mNumber{3}u^\mNumber{2}/(\mNumber{2}s^\mNumber{2}) \\
@@ -214,7 +215,7 @@ and since \(s^\mNumber{2}+t^\mNumber{2} \le (s+t)^\mNumber{2}\) (because 2st \(>
 
 \[(u+v)^\mNumber{2}/(s^\mNumber{2}+t^\mNumber{2}) \ge (u+v)^\mNumber{2}/(s+t)^\mNumber{2}\]
 
-Combining: surplus \(\ge\) 0. Equality iff \(u/s^\mNumber{2} = v/t^\mNumber{2}\) and \(s = t\) or \(u = v = \mNumber{0}\).
+Combining: \(\text{surplus} \ge \mNumber{0}\). Equality iff \(u/s^\mNumber{2} = v/t^\mNumber{2}\) and \(s = t\) or \(u = v = \mNumber{0}\).
 
 \textbf{QED for \(n = \mNumber{3}\).}
 
@@ -226,7 +227,7 @@ For \(n \ge \mNumber{4}\), the \(n = \mNumber{3}\) approach does not directly ge
 (a) The identity \(\Phi_{n}\) * disc \(=\) const * \(a_\mNumber{2}^\mNumber{2}\) FAILS for \(n \ge \mNumber{4}\). At \(n = \mNumber{4}\),
 the product \(\Phi_\mNumber{4}\) * disc depends on \(a_\mNumber{3}\) and \(a_\mNumber{4}\) as well.
 
-(b) \(\boxplus_\mNumber{4}\) has a cross-term even for centered polynomials: \(c_{\mNumber{4}} = a_{\mNumber{4}} + (\mNumber{1}/\mNumber{6}) \ast a_{\mNumber{2}} \ast b_{\mNumber{2}} \mBridgeOperator{+} b_{\mNumber{4}}.\)
+(b) \(\boxplus_\mNumber{4}\) has a cross-term even for centered polynomials: \(c_\mNumber{4} = a_\mNumber{4} \mBridgeOperator{+} (\mNumber{1}/\mNumber{6}) \ast a_\mNumber{2} \ast b_\mNumber{2} \mBridgeOperator{+} b_\mNumber{4}\).
 Unlike \(n = \mNumber{3}\), centering does NOT reduce \(\boxplus_\mNumber{4}\) to plain coefficient addition.
 
 (c) The cross-term is ESSENTIAL: plain coefficient addition fails superadditivity
@@ -381,7 +382,7 @@ is \textbf{not viable}. The remaining gap for $n \ge 4$ requires either:
 \hypertarget{6-verification-for-small-cases}{%
 \subsubsection{6. Verification for small cases}\label{6-verification-for-small-cases}}
 
-\textbf{Degree 2 (proved --- equality):} p(x) \(= x^{\mNumber{2}} \mBridgeOperator{+} a_{\mNumber{1}} \ast x \mBridgeOperator{+} a_{\mNumber{2}}.\)
+\textbf{Degree 2 (proved --- equality):} \(p(x) = x^\mNumber{2} \mBridgeOperator{+} a_\mNumber{1} \ast x \mBridgeOperator{+} a_\mNumber{2}\).
 
 \[\begin{aligned}
 \Phi_\mNumber{2}(p) = \mNumber{2}/(a_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast a_\mNumber{2}) \\
@@ -513,7 +514,7 @@ n & violations & min ratio & mean ratio & max ratio \\
 5 & 0/2000 & 1.032848 & 14.457013 & 2119.743 \\
 \end{longtable}
 
-Ratio \(= LHS/RHS = [\mNumber{1}/\Phi_{n}(p\boxplus q)] / [\mNumber{1}/\Phi_{n}(p) \mBridgeOperator{+} \mNumber{1}/\Phi_{n}(q)]\); ratio \(\ge\) 1
+Ratio \(= LHS/RHS = [\mNumber{1}/\Phi_{n}(p\boxplus q)] / [\mNumber{1}/\Phi_{n}(p) \mBridgeOperator{+} \mNumber{1}/\Phi_{n}(q)]\); \(ratio \ge \mNumber{1}\)
 means inequality holds. Strict inequality for \(n \ge \mNumber{3}\).
 
 \textbf{Convexity/concavity test} (midpoint test in coefficient space):

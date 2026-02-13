@@ -30,9 +30,17 @@ local unicode_ops = {
   {"⊂", "\\subset "}, {"⊕", "\\oplus "}, {"⊗", "\\otimes "},
   {"≠", "\\neq "}, {"≤", "\\le "}, {"≥", "\\ge "},
   {"→", "\\to "}, {"←", "\\leftarrow "}, {"∞", "\\infty "},
+  {"α", "\\alpha "}, {"β", "\\beta "}, {"γ", "\\gamma "},
+  {"δ", "\\delta "}, {"ε", "\\epsilon "}, {"ϵ", "\\epsilon "},
+  {"ζ", "\\zeta "}, {"η", "\\eta "}, {"θ", "\\theta "},
+  {"λ", "\\lambda "}, {"ν", "\\nu "}, {"ξ", "\\xi "},
+  {"ρ", "\\rho "}, {"σ", "\\sigma "}, {"τ", "\\tau "},
+  {"φ", "\\phi "}, {"χ", "\\chi "},
   {"×", "\\times "}, {"π", "\\pi "}, {"Γ", "\\Gamma "},
-  {"Φ", "\\Phi "}, {"μ", "\\mu "}, {"λ", "\\lambda "},
-  {"ω", "\\omega "}, {"χ", "\\chi "}, {"√", "\\sqrt "},
+  {"Φ", "\\Phi "}, {"μ", "\\mu "}, {"ω", "\\omega "},
+  {"Δ", "\\Delta "}, {"Θ", "\\Theta "}, {"Λ", "\\Lambda "},
+  {"Ξ", "\\Xi "}, {"Σ", "\\Sigma "}, {"Ω", "\\Omega "},
+  {"√", "\\sqrt "},
 }
 
 local function trim(s)
@@ -167,6 +175,18 @@ local function flatten_nested_text_macros(s)
   return s
 end
 
+local function merge_adjacent_text_macros(s)
+  local prev = nil
+  while prev ~= s do
+    prev = s
+    s = s:gsub("\\text%s*{([^{}]*)}%s+\\text%s*{([^{}]*)}", "\\text{%1 %2}")
+    s = s:gsub("\\mathit%s*{([^{}]*)}%s+\\mathit%s*{([^{}]*)}", "\\mathit{%1 %2}")
+    s = s:gsub("\\mathup%s*{([^{}]*)}%s+\\mathup%s*{([^{}]*)}", "\\mathup{%1 %2}")
+    s = s:gsub("\\mOpName%s*{([^{}]*)}%s+\\mOpName%s*{([^{}]*)}", "\\mOpName{%1 %2}")
+  end
+  return s
+end
+
 local function is_latex_cmd_atom(atom)
   return atom:match("^\\[%a]+$") ~= nil
 end
@@ -220,9 +240,21 @@ local function is_math_atom(atom)
     return true
   end
   if atom:match("^[A-Za-z][A-Za-z0-9]?[A-Za-z0-9]?$") then
-    local low = atom:lower()
-    if not math_word_stop[low] then
+    if #atom == 1 then
       return true
+    end
+    if atom:match("^%u[%u%d]+$") then
+      return true
+    end
+    if atom:match("%d") then
+      return true
+    end
+    local low = atom:lower()
+    if greek_token_names[low] then
+      return true
+    end
+    if math_word_stop[low] then
+      return false
     end
   end
   if atom:match("^%b()$") or atom:match("^%b[]$") then
@@ -348,7 +380,11 @@ local function normalize_expr(s)
   s = s:gsub("\\textgreater%s*{}", ">")
   s = s:gsub("\\textless", "<")
   s = s:gsub("\\textgreater", ">")
+  s = s:gsub("\\%$", "$")
   s = s:gsub("(\\+)integral", "\\integral")
+  s = s:gsub("i_%{d/dt%}", "\\iota_{d/dt}")
+  s = s:gsub("i_\\{d/dt\\}", "\\iota_{d/dt}")
+  s = s:gsub("i_d/dt", "\\iota_{d/dt}")
 
   -- Handle literal backslash separators like N_n\GL_n, but avoid LaTeX commands.
   s = s:gsub("([%w%)%}])\\([A-Z])", "%1 \\backslash %2")
@@ -507,7 +543,7 @@ local function normalize_expr(s)
     "titu", "ubu", "bpi", "cholesky", "Assumption", "EXACT", "Sobolev", "Cholesky",
     "Hadamard", "Titu", "additive", "admissible", "analogous", "axes", "choose",
     "connected", "const", "conv", "correction", "corrections", "cross", "curve",
-    "equivalent", "graph", "lemma", "light", "local", "match", "measures", "nr",
+    "equivalent", "graph", "lemma", "light", "local", "match", "measures",
     "of", "order", "origin", "poly", "positive", "renorm", "reparameterized",
     "sector", "selection", "smooth", "space", "subgroups", "surplus", "tensor",
     "term", "theorem", "transition", "vertex", "weighted", "ceil",
@@ -518,6 +554,7 @@ local function normalize_expr(s)
   end
   s = unmask_text_macros(prose_masked, prose_slots)
   s = flatten_nested_text_macros(s)
+  s = merge_adjacent_text_macros(s)
 
   -- Prevent glued prose after Greek commands: \muare -> \mu are.
   local greek_cmds = {
@@ -779,6 +816,20 @@ local function parse_token_with_punct(s)
   return core, punct
 end
 
+local function is_mathy_str_token(s)
+  local core, _ = parse_token_with_punct(s)
+  if core == nil or core == "" then
+    return false
+  end
+  if core:match("^%b()$") then
+    local inner = core:sub(2, -2)
+    if inner ~= "" and not inner:find("%s") then
+      return true
+    end
+  end
+  return is_math_atom(core)
+end
+
 local function extract_binary_side(el)
   if el.t == "Math" and el.mathtype == "InlineMath" then
     return el.text, "", true
@@ -806,6 +857,15 @@ local function extract_binary_side(el)
     return core, punct, false
   end
   if core:match("^GL_%b{}$") or core:match("^GL_[A-Za-z0-9%+%-]+$") or core:match("^GLn[%+%-]?%d*$") then
+    return core, punct, false
+  end
+  if core:match("^%b()$") then
+    local inner = core:sub(2, -2)
+    if inner ~= "" and not inner:find("%s") then
+      return core, punct, false
+    end
+  end
+  if is_math_atom(core) then
     return core, punct, false
   end
   return nil, nil, nil
@@ -1010,13 +1070,16 @@ local function merge_adjacent_math_fragments(inlines)
           j = j + 1
         elseif nxt.t == "Space" or nxt.t == "SoftBreak" then
           local look = inlines[j + 1]
-          if look ~= nil and ((look.t == "Math" and look.mathtype == "InlineMath") or (look.t == "Str" and is_symbolic_glue_str(look.text))) then
+          if look ~= nil and (
+              (look.t == "Math" and look.mathtype == "InlineMath") or
+              (look.t == "Str" and (is_symbolic_glue_str(look.text) or is_mathy_str_token(look.text)))
+            ) then
             table.insert(pieces, " ")
             j = j + 1
           else
             break
           end
-        elseif nxt.t == "Str" and is_symbolic_glue_str(nxt.text) then
+        elseif nxt.t == "Str" and (is_symbolic_glue_str(nxt.text) or is_mathy_str_token(nxt.text)) then
           table.insert(pieces, nxt.text)
           j = j + 1
         else
