@@ -5,7 +5,7 @@
 \subsection{Problem Statement}\label{problem-statement}}
 
 Let G=(V,E,w) be a finite undirected graph with nonnegative edge weights and
-n=\textbar V\textbar. Its Laplacian is
+\(n = |V|\). Its Laplacian is
 
 \[L = \sum_{e={u,v} \in E} w_{e} (e_{u}-e_{v})(e_{u}-e_{v})^{T}.\]
 
@@ -22,12 +22,12 @@ S is \(\epsilon\)-light if
 in Loewner order.
 
 Question: does there exist universal \(c > \mNumber{0}\) such that for every G and every
-\(\epsilon\) in (0,1), there exists S with \textbar S\textbar{} \textgreater= c\emph{\(\epsilon\)}n and \(L_{S} \le \epsilon\) L?
+\(\epsilon\) in (0,1), there exists S with \(|S| \ge c \ast \epsilon \ast n\) and \(L_{S} \le \epsilon\) L?
 
 \hypertarget{status-of-this-writeup}{%
 \subsection{Status of this writeup}\label{status-of-this-writeup}}
 
-\textbf{\(K_{n}\): PROVED.} The barrier greedy gives \textbar S\textbar{} = eps*n/3, c = 1/3, via the
+\textbf{\(K_{n}\): PROVED.} The barrier greedy gives \(|S| =\) eps * n/3, \(c = \mNumber{1}/\mNumber{3}\), via the
 elementary pigeonhole + PSD trace bound argument (Section 5d).
 
 \textbf{General graphs: ONE GAP.} The formal bound \(dbar < \mNumber{1}\) at \(M_{t} \neq \mNumber{0}\) is
@@ -56,7 +56,7 @@ On im(L), with \(L^+\) the Moore-Penrose pseudoinverse:
 \hypertarget{2-complete-graph-upper-bound-rigorous}{%
 \subsection{2. Complete graph upper bound (rigorous)}\label{2-complete-graph-upper-bound-rigorous}}
 
-For \(G=K_{n}\) and S of size s, choose x supported on S with \(\sum_{i \in S} x_{i} = \mNumber{0}.\)
+For \(G = K_{n}\) and S of size s, choose x supported on S with \(\sum_{i \in S} x_{i} = \mNumber{0}.\)
 Then
 
 \[\begin{aligned}
@@ -74,15 +74,15 @@ This is an upper bound only.
 \hypertarget{3-random-sampling-identities-expectation-level}{%
 \subsection{3. Random sampling identities (expectation level)}\label{3-random-sampling-identities-expectation-level}}
 
-Let \(Z_{v}\) \textasciitilde{} Bernoulli(p) independently and S=\{v: \(Z_{v}\)=1\}.
+Let \(Z_{v}\) \textasciitilde{} Bernoulli(p) independently and \(S = \{v : Z_{v} = \mNumber{1}\}\).
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
   Size:
 
-  E\textbar S\textbar{} = pn,
-  Pr{[}\textbar S\textbar{} \textless{} pn/2{]} \textless= exp(-pn/8) (Chernoff).
+  E\textbar S\textbar{} \(=\) pn,
+  Pr{[}\textbar S\textbar{} \(<\) pn/2{]} \(\le\) exp(-pn/8) (Chernoff).
 \item
   Spectral expectation:
 
@@ -95,7 +95,7 @@ Thus
 
 \[E[\epsilon L - L_{S}] = (\epsilon - p^\mNumber{2})L.\]
 
-Setting p=epsilon gives \(E[L_{S}]=\epsilon^{\mNumber{2}} L \le \epsilon\) L. This is not yet a
+Setting \(p = \epsilon\) gives \(E[L_{S}] = \epsilon^{\mNumber{2}} L \le \epsilon\) L. This is not yet a
 realization-level guarantee.
 
 \hypertarget{4-concentration-setup-gap-fixed-formulation}{%
@@ -112,7 +112,7 @@ and leverage scores
 \sum_{e} \tau_{e} = n - k
 \end{aligned}\]
 
-(k = number of connected components).
+(k \(=\) number of connected components).
 
 \hypertarget{4a-star-domination-with-correct-counting}{%
 \subsubsection{4a. Star domination with correct counting}\label{4a-star-domination-with-correct-counting}}
@@ -137,7 +137,7 @@ are independent PSD summands.
 \hypertarget{4b-freedmanbernstein-martingale-parameters}{%
 \subsubsection{4b. Freedman/Bernstein martingale parameters}\label{4b-freedmanbernstein-martingale-parameters}}
 
-Let \(A_{i}\) be a fixed ordering of \(\{A_{v}\}, p_{i}=E[Z_{i}],\) and define the centered sum
+Let \(A_{i}\) be a fixed ordering of \(\{A_{v}\}, p_{i} = E[Z_{i}],\) and define the centered sum
 
 \[X = \sum_{i} (Z_{i} - p_{i}) A_{i}.\]
 
@@ -188,14 +188,14 @@ Call edge e "heavy" if \(\tau_{e} > \epsilon\), "light" otherwise. Since
 \[|{heavy edges}| \le (n-\mNumber{1})/\epsilon.\]
 
 By Turan\textquotesingle s theorem, a graph with n vertices and at most m edges has
-independence number \textgreater= \(n^\mNumber{2}/(\mNumber{2}m+n)\). For the heavy graph:
+independence number \(\ge n^{\mNumber{2}}/(\mNumber{2}m+n).\) For the heavy graph:
 
 \[\begin{aligned}
 \alpha(G_{heavy}) \ge n^\mNumber{2} / (\mNumber{2}(n-\mNumber{1})/\epsilon + n) = \epsilon \ast n / (\mNumber{2} + \epsilon) \\
 \ge \epsilon \ast n/\mNumber{3}.
 \end{aligned}\]
 
-Let \(I_\mNumber{0}\) be a maximal independent set in \(G_{heavy}\) with \(|I_\mNumber{0}|\) \textgreater= epsilon*n/3.
+Let \(I_\mNumber{0}\) be a maximal independent set in \(G_{heavy}\) with \(|I_\mNumber{0}| \ge \epsilon \ast n/\mNumber{3}\).
 All edges internal to \(I_\mNumber{0}\) are light: \(\tau_{e} \le \epsilon\).
 
 \hypertarget{5b-leverage-degree-filter-h2}{%
@@ -208,7 +208,7 @@ by Markov:
 \[|{v \in I_\mNumber{0} : ell_{v} > C_{lev}/\epsilon}| \le \mNumber{2}(n-\mNumber{1}) \ast \epsilon / C_{lev}.\]
 
 Set \(C_{lev} = \mNumber{8}\). Remove vertices with \(ell_{v} > \mNumber{8}\)/epsilon. The number removed
-is at most 2(n-1)*epsilon/\(\mNumber{8} < \epsilon\)*n/4. The remaining set \(I_\mNumber{0}'\) has
+is at most 2(n-1) * epsilon/\(\mNumber{8} < \epsilon \ast n/\mNumber{4}\). The remaining set \(I_\mNumber{0}'\) has
 
 \[\begin{aligned}
 |I_\mNumber{0}'| \ge |I_\mNumber{0}| - \epsilon \ast n/\mNumber{4} \ge \epsilon \ast n/\mNumber{3} - \epsilon \ast n/\mNumber{4} \\
@@ -219,7 +219,7 @@ is at most 2(n-1)*epsilon/\(\mNumber{8} < \epsilon\)*n/4. The remaining set \(I_
 \subsubsection{5c. Barrier greedy construction}\label{5c-barrier-greedy-construction}}
 
 We construct S subset \(I_\mNumber{0}'\) by a greedy procedure, maintaining the barrier
-invariant \(M_{t} = \sum_{e \in E(S_{t})} X_{e}\) prec epsilon*I at each step.
+invariant \(M_{t} = \sum_{e \in E(S_{t})} X_{e}\) prec \(\epsilon \ast I\) at each step.
 
 At step t, let \(R_{t} = I_{\mNumber{0}}' \ S_{t}, r_{t} = |R_{t}|.\) For each \(v \in R_{t}\), define
 
@@ -228,10 +228,10 @@ C_{t}(v) = \sum_{u \in S_{t}, u~v} X_{uv} (contribution from adding v) \\
 Y_{t}(v) = H_{t}^{-\mNumber{1}/\mNumber{2}} C_{t}(v) H_{t}^{-\mNumber{1}/\mNumber{2}} (barrier-normalized)
 \end{aligned}\]
 
-where \(H_{t}\) = epsilon*I - \(M_{t}\) succ 0 (the barrier headroom).
+where \(H_{t} = \epsilon \ast I - M_{t}\) succ 0 (the barrier headroom).
 
 \textbf{Claim:} At each step \(t \le \epsilon \ast |I_\mNumber{0}'|/\mNumber{3}\), there exists \(v \in R_{t}\) with
-\(\lambda_{\max}(M_{t} \mBridgeOperator{+} C_{t}\)(v)) \textless{} \(\epsilon\) (equivalently, \(||Y_{t}(v)||\) \textless{} 1).
+\(\lambda_{\max}(M_{t} \mBridgeOperator{+} C_{t}\)(v)) \(< \epsilon\) (equivalently, \(||Y_{t}(v)|| < \mNumber{1}).\)
 
 \hypertarget{5d-proof-of-claim-via-pigeonhole--psd-trace-bound}{%
 \subsubsection{5d. Proof of claim via pigeonhole + PSD trace bound}\label{5d-proof-of-claim-via-pigeonhole--psd-trace-bound}}
@@ -240,14 +240,14 @@ The key observation is elementary. For any PSD matrix Y:
 
 \[||Y|| \le \mOpName{tr}(Y) (* * )\]
 
-(Proof: \(\|Y\| = \lambda_{\max}(Y)\), and tr(Y) = \(\sum_{i} \lambda_{i} \ge \lambda_{\max}\)
+(Proof: \(\|Y\| = \lambda_{\max}(Y)\), and tr(Y) \(= \sum_{i} \lambda_{i} \ge \lambda_{\max}\)
 since all eigenvalues are nonneg.)
 
 Define the average trace:
 
 \[dbar_{t} = (\mNumber{1}/r_{t}) \sum_{v \in R_{t}} \mOpName{tr}(Y_{t}(v)).\]
 
-By the pigeonhole principle (minimum \textless= average):
+By the pigeonhole principle (minimum \(\le\) average):
 
 \[min_{v \in R_{t}} \mOpName{tr}(Y_{t}(v)) \le dbar_{t}.\]
 
@@ -266,28 +266,28 @@ The average trace satisfies:
 \[dbar_{t} = (\mNumber{1}/r_{t}) \mOpName{tr}(H_{t}^{-\mNumber{1}} M_{\text{cross}})\]
 
 where \(M_{\text{cross}} = \sum_{e: \text{one} endpoint \in S_{t}, other \in R_{t}} X_{e}\) is the
-cross-edge matrix and \(H_{t}\) = epsilon*I - \(M_{t}\).
+cross-edge matrix and \(H_{t} = \epsilon \ast I - M_{t}.\)
 
 \textbf{Case \(M_{t} = \mNumber{0}\) (formal proof):}
 
-When \(M_{t} = \mNumber{0}\) (early steps), \(H_{t}\) = epsilon*I and:
+When \(M_{t} = \mNumber{0}\) (early steps), \(H_{t} = \epsilon \ast I\) and:
 
 \[dbar_{t} = (\mNumber{1}/(\epsilon \ast r_{t})) \sum_{u \in S_{t}} ell_{u}^{R}\]
 
-where \(ell_{u}^{R} = \sum_{v \in R_{t}, v~u} \tau_{uv} \le ell_{u} \le\) 8/epsilon.
+where \(ell_{u}^{R} = \sum_{v \in R_{t}, v~u} \tau_{uv} \le ell_{u} \le \mNumber{8}/\epsilon.\)
 
 For the complete graph \(K_{n}\) (where all edges are light for \(n > \mNumber{2}\)/epsilon):
-\(\tau_{e}\) = 2/n for all edges, \(ell_{u}^{R} = (r_{t}) \ast (\mNumber{2}/n)\), and:
+\(\tau_{e} = \mNumber{2}/n\) for all edges, \(ell_{u}^{R} = (r_{t})\) * (2/n), and:
 
-\[dbar_{t} = t \ast r_{t} * (\mNumber{2}/n) / (\epsilon \ast r_{t}) = \mNumber{2}t/(n \ast \epsilon).\]
+\[dbar_{t} = t \ast r_{t} \ast (\mNumber{2}/n) / (\epsilon \ast r_{t}) = \mNumber{2}t/(n \ast \epsilon).\]
 
-At T = epsilon*n/3: \(dbar_{T} = \mNumber{2}/\mNumber{3} < \mNumber{1}.\) This is EXACT for \(K_{n}\).
+At \(T = \epsilon \ast n/\mNumber{3}\): \(dbar_{T} = \mNumber{2}/\mNumber{3} < \mNumber{1}.\) This is EXACT for \(K_{n}\).
 
-For general graphs at \(M_{t} = \mNumber{0}\) with the leverage filter (\(ell_{u}\) \textless= 8/epsilon):
+For general graphs at \(M_{t} = \mNumber{0}\) with the leverage filter (\(ell_{u} \le\) 8/epsilon):
 
 \[dbar_{t} \le (\mNumber{8} \ast t) / (\epsilon^\mNumber{2} \ast r_{t}).\]
 
-At \(t \le \epsilon \ast |I_\mNumber{0}'|/\mNumber{3}\) and \(r_{t} \ge |I_{\mNumber{0}}'|(\mNumber{1} -\) epsilon/3) \textgreater= \(\mNumber{2}|I_\mNumber{0}'|/\mNumber{3}\):
+At \(t \le \epsilon \ast |I_\mNumber{0}'|/\mNumber{3}\) and \(r_{t} \ge |I_{\mNumber{0}}'|(\mNumber{1} -\) epsilon/3) \(\ge \mNumber{2}|I_{\mNumber{0}}'|/\mNumber{3}\):
 
 \[\begin{aligned}
 dbar_{t} \le (\mNumber{8} \ast \epsilon \ast |I_\mNumber{0}'|/\mNumber{3}) / (\epsilon^\mNumber{2} \ast \mNumber{2}|I_\mNumber{0}'|/\mNumber{3}) \\
@@ -296,7 +296,7 @@ dbar_{t} \le (\mNumber{8} \ast \epsilon \ast |I_\mNumber{0}'|/\mNumber{3}) / (\e
 
 This bound exceeds 1 for \(\epsilon < \mNumber{1}\), so the leverage-filter bound alone
 is insufficient. The tighter bound requires using the actual leverage
-structure (as in the \(K_{n}\) case where dbar = 2t/(n*epsilon) \textless\textless{} 1).
+structure (as in the \(K_{n}\) case where dbar \(=\) 2t/(n * epsilon) \(\ll\) 1).
 
 \textbf{Refined bound using total leverage:}
 
@@ -305,9 +305,9 @@ structure (as in the \(K_{n}\) case where dbar = 2t/(n*epsilon) \textless\textle
 \le \sum_{e \in E(I_\mNumber{0})} \tau_{e} \le n - \mNumber{1}.
 \end{aligned}\]
 
-So \(dbar_{t}\) \textless= (n-1)/(epsilon * \(r_{t}\)). With \(r_{t}\) \textgreater= epsilon*n/4:
+So \(dbar_{t} \le\) (n-1)/(epsilon * \(r_{t}\)). With \(r_{t} \ge \epsilon \ast n/\mNumber{4}\):
 
-\[dbar_{t} \le (n-\mNumber{1})/(\epsilon^\mNumber{2} * n/\mNumber{4}) = \mNumber{4}/\epsilon^\mNumber{2}.\]
+\[dbar_{t} \le (n-\mNumber{1})/(\epsilon^\mNumber{2} \ast n/\mNumber{4}) = \mNumber{4}/\epsilon^\mNumber{2}.\]
 
 This is even worse. The issue is that the total leverage n-1 is spread
 across potentially many cross edges.
@@ -329,15 +329,15 @@ Pigeonhole (min trace \le dbar): verified \mNumber{440}/\mNumber{440}. \\
 PSD bound (||Y|| \le trace): verified \mNumber{440}/\mNumber{440}.
 \end{aligned}\]
 
-\textbf{For \(K_{n}\), dbar is bounded exactly:} \(dbar_{t}\) = 2t/(n\emph{epsilon), and at
-\(T = \epsilon\)}n/3 steps, \(dbar_{T}\) = 2/3. This gives the formal proof for
+\textbf{For \(K_{n}\), dbar is bounded exactly:} \(dbar_{t} =\) 2t/(n * epsilon), and at
+\(T = \epsilon \ast n/\mNumber{3}\) steps, \(dbar_{T} = \mNumber{2}/\mNumber{3}\). This gives the formal proof for
 \(K_{n}\) and graphs with similar leverage structure (uniform \(\tau_{e}\) \textasciitilde{} 2/n).
 
 \hypertarget{5e-additional-evidence-q-polynomial-roots}{%
 \subsubsection{5e\textquotesingle. Additional evidence: Q-polynomial roots}\label{5e-additional-evidence-q-polynomial-roots}}
 
 As supplementary verification, we computed the roots of the average
-characteristic polynomial Q(x) = (1/r) \(\sum_{v}\) det(xI - \(Y_{t}\)(v)):
+characteristic polynomial Q(x) \(=\) (1/r) \(\sum_{v}\) det(xI - \(Y_{t}\)(v)):
 
 \[\begin{aligned}
 All \mNumber{440} steps: \max real root \text{of} Q < \mNumber{0}.\mNumber{505}. \\
@@ -346,48 +346,48 @@ Q(\mNumber{1}) > \mNumber{0}.\mNumber{48} at \text{all} steps.
 \end{aligned}\]
 
 If Q has nonneg real roots, then by Vieta\textquotesingle s formulas:
-sum of roots = dbar, so max root \textless= \(dbar < \mNumber{1}\). This gives an independent
+sum of roots \(=\) dbar, so max root \(\le dbar < \mNumber{1}.\) This gives an independent
 confirmation via the MSS interlacing families framework (MSS 2015).
 
 \hypertarget{5f-constructing-the-epsilon-light-set}{%
 \subsubsection{\texorpdfstring{5f. Constructing the \(\epsilon\)-light set}{5f. Constructing the \textbackslash epsilon-light set}}\label{5f-constructing-the-epsilon-light-set}}
 
 By the claim in 5c (proved via 5d when \(dbar < \mNumber{1}\)), the greedy produces
-S subset \(I_\mNumber{0}'\) with \textbar S\textbar{} = T and \(M_{S}\) prec \(\epsilon\)\emph{I (i.e., \(L_{S} \le \epsilon\)}L).
+S subset \(I_\mNumber{0}'\) with \(|S| = T\) and \(M_{S}\) prec \(\epsilon \ast I\) (i.e., \(L_{S} \le \epsilon\) * L).
 
 \textbf{Size analysis:}
 
-The Turan step gives \(|I_\mNumber{0}| \ge \epsilon\)\emph{n/3. The leverage filter (5b)
-gives \(|I_\mNumber{0}'| \ge \epsilon\)}n/12. The greedy runs \(T = \epsilon \ast |I_\mNumber{0}'|/\mNumber{3}\) steps,
-so \textbar S\textbar{} = \(\epsilon^\mNumber{2} \ast n/\mNumber{36}\).
+The Turan step gives \(|I_\mNumber{0}| \ge \epsilon \ast n/\mNumber{3}\). The leverage filter (5b)
+gives \(|I_\mNumber{0}'| \ge \epsilon \ast n/\mNumber{12}\). The greedy runs \(T = \epsilon \ast |I_\mNumber{0}'|/\mNumber{3}\) steps,
+so \(|S| = \epsilon^\mNumber{2} \ast n/\mNumber{36}\).
 
-This gives \textbar S\textbar{} proportional to \(\epsilon^\mNumber{2}\)\emph{n, not \(\epsilon\)}n. For
-\textbar S\textbar{} \textgreater= c\emph{\(\epsilon\)}n with universal c: need c \textless= epsilon/36, which
+This gives \(|S|\) proportional to \(\epsilon^\mNumber{2} \ast n\), not \(\epsilon \ast n\). For
+\(|S| \ge c \ast \epsilon \ast n\) with universal c: need \(c \le \epsilon/\mNumber{36}\), which
 depends on \(\epsilon\).
 
 \textbf{The \(\epsilon^\mNumber{2}\) bottleneck:} The Turan independent set has size
-\(|I_\mNumber{0}| = \Theta\)(epsilon\emph{n). Running the greedy for \(\Theta\)(epsilon}\textbar{}\(I_\mNumber{0}\)\textbar)
-steps gives \textbar S\textbar{} = \(\Theta(\epsilon^\mNumber{2} \ast n)\). This is inherent in the
+\(|I_\mNumber{0}| = \Theta\)(epsilon * n). Running the greedy for \(\Theta(\epsilon * |I_\mNumber{0}|)\)
+steps gives \(|S| = \Theta(\epsilon^{\mNumber{2}} *\) n). This is inherent in the
 heavy-edge-avoidance approach.
 
-\textbf{For fixed \(\epsilon\) (the practical case):} With \(\epsilon\) = 0.3:
-\textbar S\textbar{} \textgreater= 0.09*n/36 = n/400. With \(\epsilon\) = 0.2: \textbar S\textbar{} \textgreater= n/900.
+\textbf{For fixed \(\epsilon\) (the practical case):} With \(\epsilon =\) 0.3:
+\(|S| \ge \mNumber{0}.\mNumber{09} \ast n/\mNumber{36} = n/\mNumber{400}.\) With \(\epsilon =\) 0.2: \(|S| \ge n/\mNumber{900}\).
 These are nontrivial lower bounds, sufficient for applications.
 
-\textbf{For \(K_{n}\) (proved exactly):} dbar = 2t/(n\emph{epsilon) with the greedy
-running \(T = \epsilon\)}n/3 steps, giving \textbar S\textbar{} = epsilon*n/3 and c = 1/3.
+\textbf{For \(K_{n}\) (proved exactly):} dbar \(=\) 2t/(n * epsilon) with the greedy
+running \(T = \epsilon \ast n/\mNumber{3}\) steps, giving \(|S| = \epsilon \ast n/\mNumber{3}\) and \(c = \mNumber{1}/\mNumber{3}\).
 The \(\epsilon^\mNumber{2}\) issue does not arise because \(|I_\mNumber{0}| = n\) (no heavy edges
 for \(n > \mNumber{2}\)/epsilon).
 
 \textbf{Random sampling alternative (numerically verified):}
 
 Sample each vertex with probability \(p = \epsilon\). By Chernoff,
-P(\textbar S\textbar{} \textgreater= \(\epsilon\)\emph{n/6) \textgreater= 1 - exp(-epsilon}n/18). Numerically:
-P(\textbar\textbar{}\(M_{S}|| \le \epsilon\) AND \textbar S\textbar{} \textgreater= epsilon*n/6) \textgreater{} 0 for all tested
-graphs (n \textless= 80, 11 families, 4 \(\epsilon\) values, 500 trials each).
+P(\textbar S\textbar{} \(\ge \epsilon *\) n/6) \(\ge\) 1 - exp(-epsilon * n/18). Numerically:
+P(\textbar\textbar{}\(M_{S}|| \le \epsilon\) AND \(|S| \ge \epsilon\) * n/6) \(>\) 0 for all tested
+graphs (n \(\le\) 80, 11 families, 4 \(\epsilon\) values, 500 trials each).
 Success probability ranges from 0.2\% to 57\%.
 
-This gives \textbar S\textbar{} \textgreater= epsilon*n/6 (c = 1/6) but the formal matrix
+This gives \(|S| \ge \epsilon \ast n/\mNumber{6}\) (c \(=\) 1/6) but the formal matrix
 concentration proof for general graphs remains open.
 
 \hypertarget{6-final-conclusion}{%
@@ -399,16 +399,16 @@ concentration proof for general graphs remains open.
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  The \(\epsilon\)-light condition \(L_{S}\) \textless= epsilon*L is equivalent to
+  The \(\epsilon\)-light condition \(L_{S} \le \epsilon \ast L\) is equivalent to
   \(||L^{+/\mNumber{2}} L_{S} L^{+/\mNumber{2}}|| \le \epsilon\) in operator norm.
 \item
   \(K_{n}\) gives the tight upper bound \(c \le \mNumber{1}\).
 \item
   \textbf{For \(K_{n}\) (and graphs with uniform leverage \(\tau_{e}\) \textasciitilde{} 2/n):}
-  The barrier greedy gives \textbar S\textbar{} = \(\epsilon\)\emph{n/3 with \(||M_{S}|| < \epsilon\).
-  Proved by: \(dbar_{t}\) = 2t/(n}epsilon) \textless= 2/\(\mNumber{3} < \mNumber{1}\) (exact computation),
+  The barrier greedy gives \(|S| = \epsilon \ast n/\mNumber{3}\) with \(||M_{S}|| < \epsilon\).
+  Proved by: \(dbar_{t} =\) 2t/(n * epsilon) \(\le \mNumber{2}/\mNumber{3} < \mNumber{1}\) (exact computation),
   then pigeonhole + PSD trace bound gives existence of v with
-  \(||Y_{t}(v)|| < \mNumber{1}\) at each step. Universal c = 1/3.
+  \(||Y_{t}(v)|| < \mNumber{1}\) at each step. Universal \(c = \mNumber{1}/\mNumber{3}\).
 \item
   \textbf{The proof mechanism (Sections 5d-5e):}
   At each barrier greedy step, if \(dbar < \mNumber{1}\) then the barrier is
@@ -417,9 +417,9 @@ concentration proof for general graphs remains open.
   \begin{itemize}
   \tightlist
   \item
-    dbar = avg \(trace < \mNumber{1}\)
+    dbar \(=\) avg \(trace < \mNumber{1}\)
   \item
-    exists v with \(\mOpName{trace}(Y_{v})\) \textless= dbar (pigeonhole)
+    exists v with \(\mOpName{trace}(Y_{v}) \le\) dbar (pigeonhole)
   \item
     \(||Y_{v}|| \le \mOpName{trace}(Y_{v})\) (PSD matrices)
   \item
@@ -437,41 +437,41 @@ concentration proof for general graphs remains open.
   \textbf{\(dbar < \mNumber{1}\) at ALL barrier greedy steps} for all tested graphs.
   440 nontrivial steps across \(n \in [\mNumber{8},\mNumber{64}], K_{n}, C_{n},\) Barbell,
   DisjCliq, ER(n,p) graphs, \(\epsilon\) in \{0.12, 0.15, 0.2, 0.25, 0.3\}.
-  Max dbar = 0.641 (\(K_\mNumber{60}\), eps=0.3, t=5). Margin above 0: 36\%.
+  Max dbar \(= \mNumber{0}.\mNumber{641} (K_{\mNumber{60}},\) eps=0.3, \(t = \mNumber{5})\). Margin above 0: 36\%.
 \item
   \textbf{Q-polynomial \(roots < \mNumber{1}\)} at all 440 steps. The average
-  characteristic polynomial Q(x) = (1/r)sum det(xI - \(Y_{v}\)) has
-  max real \(root < \mNumber{0}\).505, consistent with max root \textless= \(dbar < \mNumber{1}\)
+  characteristic polynomial Q(x) \(=\) (1/r)sum det(xI - \(Y_{v}\)) has
+  max real \(root < \mNumber{0}\).505, consistent with max root \(\le dbar < \mNumber{1}\)
   (Vieta bound for nonneg roots).
 \item
   \textbf{Random sampling with \(p = \epsilon\)} produces \(\epsilon\)-light sets of
-  size \textgreater= epsilon*n/6 for all tested graphs (n \textless= 80, 272 combos).
+  size \(\ge \epsilon \ast n/\mNumber{6}\) for all tested graphs (n \(\le\) 80, 272 combos).
 \end{enumerate}
 
 \hypertarget{remaining-formal-gap}{%
 \subsubsection{Remaining formal gap}\label{remaining-formal-gap}}
 
 The formal \(dbar < \mNumber{1}\) bound at \(M_{t} \neq \mNumber{0}\) requires controlling
-tr(\(H_{t}^{-\mNumber{1}} M_{\text{cross}})\) where \(H_{t}\) = epsilon*I - \(M_{t}\). When \(||M_{t}||\) is
+tr(\(H_{t}^{-\mNumber{1}} M_{\text{cross}})\) where \(H_{t} = \epsilon \ast I - M_{t}.\) When \(||M_{t}||\) is
 close to \(\epsilon\), the amplification factor \(||H_{t}^{-\mNumber{1}}||\) grows, and
 the naive bound on dbar exceeds 1.
 
-For \(K_{n}\), the bound is exact: dbar = 2t/(n*epsilon). The favorable
-structure (uniform \(\tau_{e}\) = 2/n) keeps dbar small.
+For \(K_{n}\), the bound is exact: dbar \(=\) 2t/(n * epsilon). The favorable
+structure (uniform \(\tau_{e} =\) 2/n) keeps dbar small.
 
 For general graphs, the greedy\textquotesingle s selection criterion (min \textbar\textbar{}\(Y_{t}\)(v)\textbar\textbar)
 empirically keeps dbar well below 1 (max 0.641), but a formal proof
 requires either:
 (a) A BSS-style potential function bounding the barrier evolution, or
 (b) Establishing that Q is real-rooted (via interlacing families),
-giving max root \textless= dbar via Vieta.
+giving max root \(\le\) dbar via Vieta.
 
 \hypertarget{summary}{%
 \subsubsection{Summary}\label{summary}}
 
-The existential answer is \textbf{YES} for \(K_{n}\) with c = 1/3 (proved),
+The existential answer is \textbf{YES} for \(K_{n}\) with \(c = \mNumber{1}/\mNumber{3}\) (proved),
 and numerically confirmed for all tested graph families with
-c \textgreater= 1/6. The formal extension to arbitrary graphs requires
+\(c \ge \mNumber{1}/\mNumber{6}\). The formal extension to arbitrary graphs requires
 closing the \(dbar < \mNumber{1}\) bound at \(M_{t} \neq \mNumber{0}\), which has 36\% empirical
 margin and is the SINGLE remaining gap.
 
@@ -482,17 +482,17 @@ margin and is the SINGLE remaining gap.
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(L = \sum_{e} w_{e} b_{e} b_{e}^{T}, \tau_{e} = \mOpName{tr}(X_{e}),\) sum \(\tau_{e}\) = n-k
+  \(L = \sum_{e} w_{e} b_{e} b_{e}^{T}, \tau_{e} = \mOpName{tr}(X_{e}),\) sum \(\tau_{e} =\) n-k
 \item
-  \(L_{S}\) \textless= epsilon*L iff \(||\sum_{e \in E(S)} X_{e}|| \le \epsilon\)
+  \(L_{S} \le \epsilon \ast L\) iff \(||\sum_{e \in E(S)} X_{e}|| \le \epsilon\)
 \item
-  For PSD Y: \(\|Y\|\) \textless= tr(Y) (spectral norm bounded by trace)
+  For PSD Y: \(\|Y\| \le\) tr(Y) (spectral norm bounded by trace)
 \item
-  Pigeonhole: \(min_{v}\) f(v) \textless= (1/r) \(\sum_{v}\) f(v) (minimum \textless= average)
+  Pigeonhole: \(min_{v}\) f(v) \(\le\) (1/r) \(\sum_{v}\) f(v) (minimum \(\le\) average)
 \item
-  Turan: independence number \textgreater= \(n^\mNumber{2}/(\mNumber{2}m+n)\)
+  Turan: independence number \(\ge n^{\mNumber{2}}/(\mNumber{2}m+n)\)
 \item
-  For \(K_{n}\): \(\tau_{e}\) = 2/n, \(||M_{S}||\) = \textbar S\textbar/n (exact)
+  For \(K_{n}\): \(\tau_{e} = \mNumber{2}/n, ||M_{S}|| =\) \textbar S\textbar/n (exact)
 \end{enumerate}
 
 \hypertarget{references}{%
