@@ -40,6 +40,7 @@ WHITTAKER_W_ANY_RE = re.compile(
     r"\bW\(\s*(Pi|pi)\s*,\s*psi(?:\^\{(-?1)\}|\^(-?1))?\s*\)"
 )
 PSI_WHITTAKER_RE = re.compile(r"\bpsi-Whittaker\b")
+PSI_INV_WHITTAKER_RE = re.compile(r"\bpsi(?:\^\{-?1\}|\^-?1)-Whittaker\b")
 PSI_CALL_RE = re.compile(r"\bpsi\(([^()]+)\)")
 NORMALIZES_PSI_RE = re.compile(r"\bnormalizes psi\b")
 CHARACTER_PSI_RE = re.compile(r"\bcharacter psi\b")
@@ -57,11 +58,18 @@ GL_MEMBERSHIP_PRODUCT_RE = re.compile(
     rf"\b([A-Za-z])\s+in\s+({GL_TOKEN_RE})\s*[xX]\s*({GL_TOKEN_RE})\b"
 )
 GL_PRODUCT_RE = re.compile(rf"\b({GL_TOKEN_RE})\s*[xX]\s*({GL_TOKEN_RE})\b")
+GL_HYPHEN_WORD_RE = re.compile(rf"\b({GL_TOKEN_RE})-([A-Za-z][A-Za-z-]+)\b")
 FIXED_W_RE = re.compile(r"\bfor fixed\s+W\s*=\s*W_0\b")
 IDEAL_EQ_RE = re.compile(
     r"\bI\s*=\s*L\(s,\s*Pi\s*x\s*pi\)\s*\*\s*C\[q_F\^s,\s*q_F\^{-s}\]"
 )
 L_FACTOR_RE = re.compile(r"L\(s,\s*Pi\s*x\s*pi\)")
+GREEK_PRIME_TOKEN_RE = re.compile(r"\b(Phi|Pi|Psi|phi|pi|psi)(['*])(?=[^A-Za-z0-9_]|$)")
+EXISTS_SINGLE_RE = re.compile(r"\b(there exists)\s+([A-Za-z])\s+such that\b", re.IGNORECASE)
+FOR_EACH_SINGLE_RE = re.compile(r"\b(for each)\s+([A-Za-z])\b", re.IGNORECASE)
+I_S_CALL_RE = re.compile(
+    r"\bI\(\s*s\s*,\s*([A-Za-z][A-Za-z0-9_']*)\s*,\s*([A-Za-z][A-Za-z0-9_']*)\s*\)"
+)
 Z_SQRT_RING_RE = re.compile(r"\bZ\[\s*(?:sqrt\(\s*([0-9]+)\s*\)|√\s*([0-9]+))\s*\]")
 Z_GAMMA_RING_RE = re.compile(r"\bZ\[\s*(?:Gamma|Γ)\s*\]")
 KIRILLOV_MODEL_RE = re.compile(
@@ -214,6 +222,21 @@ def _gl_product_repl(m: re.Match[str]) -> str:
     return rf"${left} \times {right}$"
 
 
+def _gl_hyphen_word_repl(m: re.Match[str]) -> str:
+    gl, word = m.group(1), m.group(2)
+    return rf"${_normalize_gl_token(gl)}$-{word}"
+
+
+def _exists_single_repl(m: re.Match[str]) -> str:
+    lead, var = m.group(1), m.group(2)
+    return f"{lead} ${var}$ such that"
+
+
+def _for_each_single_repl(m: re.Match[str]) -> str:
+    lead, var = m.group(1), m.group(2)
+    return f"{lead} ${var}$"
+
+
 def _texify_symbol(token: str) -> str:
     token = token.strip()
     m = re.fullmatch(r"([A-Za-z]+)(['`]*)", token)
@@ -231,6 +254,29 @@ def _texify_symbol(token: str) -> str:
     if base in greek:
         return greek[base] + primes
     return base + primes
+
+
+def _texify_token(token: str) -> str:
+    token = _texify_symbol(token.strip())
+    token = re.sub(r"\bPi\b", r"\\Pi", token)
+    token = re.sub(r"\bPhi\b", r"\\Phi", token)
+    token = re.sub(r"\bPsi\b", r"\\Psi", token)
+    token = re.sub(r"\bpi\b", r"\\pi", token)
+    token = re.sub(r"\bphi\b", r"\\phi", token)
+    token = re.sub(r"\bpsi\b", r"\\psi", token)
+    return token
+
+
+def _greek_prime_repl(m: re.Match[str]) -> str:
+    base = _texify_symbol(m.group(1))
+    # Treat bare '*' suffix as ascii-art prime.
+    return rf"${base}'$"
+
+
+def _i_s_call_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    rhs = _texify_token(m.group(2))
+    return rf"$I(s, {lhs}, {rhs})$"
 
 
 def _kirillov_model_repl(m: re.Match[str]) -> str:
@@ -279,6 +325,7 @@ def process_plain_text_segment(s: str) -> str:
     s = Z_GAMMA_RING_RE.sub(lambda _m: r"$\mathbb{Z}[\Gamma]$", s)
     s = _wrap_big_o_balanced(s)
     s = N_DEP_RE.sub(_n_dep_repl, s)
+    s = PSI_INV_WHITTAKER_RE.sub(r"$\\psi^{-1}$-Whittaker", s)
     s = PSI_WHITTAKER_RE.sub(r"$\\psi$-Whittaker", s)
     s = WHITTAKER_W_RE.sub(r"$W(\\pi, \\psi)$", s)
     s = WHITTAKER_W_ANY_RE.sub(_whittaker_any_repl, s)
@@ -292,11 +339,17 @@ def process_plain_text_segment(s: str) -> str:
     s = QF_RE.sub(r"q_F\1", s)
     s = STAR_QF_RE.sub(_star_qf_repl, s)
     s = SINGLE_IN_RE.sub(_single_in_repl, s)
+    s = re.sub(r"\$([A-Za-z]) \\in ([A-Za-z])\$\^([A-Za-z0-9]+)", r"$\1 \\in \2^\3$", s)
+    s = EXISTS_SINGLE_RE.sub(_exists_single_repl, s)
+    s = FOR_EACH_SINGLE_RE.sub(_for_each_single_repl, s)
+    s = I_S_CALL_RE.sub(_i_s_call_repl, s)
     s = GL_MEMBERSHIP_PRODUCT_RE.sub(_gl_membership_product_repl, s)
     s = GL_PRODUCT_RE.sub(_gl_product_repl, s)
+    s = GL_HYPHEN_WORD_RE.sub(_gl_hyphen_word_repl, s)
     s = KIRILLOV_MODEL_RE.sub(_kirillov_model_repl, s)
     s = PHI_CALL_RE.sub(_phi_call_repl, s)
     s = UNION_SUB_RE.sub(_union_sub_repl, s)
+    s = GREEK_PRIME_TOKEN_RE.sub(_greek_prime_repl, s)
     s = re.sub(r"\bover V\b", r"over $V$", s)
     s = FIXED_W_RE.sub(r"for fixed $W = W_0$", s)
     s = IDEAL_EQ_RE.sub(
@@ -304,6 +357,9 @@ def process_plain_text_segment(s: str) -> str:
         s,
     )
     s = L_FACTOR_RE.sub(r"$L(s, \\Pi \\times \\pi)$", s)
+    s = re.sub(r"\bfractional ideal I\b", r"fractional ideal $I$", s)
+    s = re.sub(r"\bI is a free rank-1 module\b", r"$I$ is a free rank-1 module", s)
+    s = re.sub(r"\bof I of the form\b", r"of $I$ of the form", s)
     return s
 
 
@@ -401,6 +457,15 @@ def run_self_test() -> None:
             "In the psi-Whittaker model W(pi, psi), choose V in W(pi,psi).",
             "In the $\\psi$-Whittaker model $W(\\pi, \\psi)$, choose V in $W(\\pi, \\psi)$.",
         ),
+        (
+            "realized in psi^{-1}-Whittaker; Phi is GL_n-equivariant with GL_n-translates.",
+            r"realized in $\psi^{-1}$-Whittaker; Phi is $\mathup{GL}_{n}$-equivariant with $\mathup{GL}_{n}$-translates.",
+        ),
+        ("for each V, there exists I such that I(s, W, V) = c * qF^{-ks}.",
+         r"for each $V$, there exists $I$ such that $I(s, W, V)$ = $c \ast q_F^{-ks}$."),
+        ("for any nonzero phi' in K(Pi)|_{GL_n}.",
+         r"for any nonzero $\phi'$ in $K(\Pi)|_{\mathup{GL}_{n}}$."),
+        ("choose Q in F^x.", r"choose $Q \in F^x$."),
         ("hence P in R.", r"hence $P \in R$."),
         ("equal to c * qF^{-ks}", r"equal to $c \ast q_F^{-ks}$"),
         ("r in GLn+1 x GLn", r"$r \in \mathup{GL}_{n+1} \times \mathup{GL}_{n}$"),

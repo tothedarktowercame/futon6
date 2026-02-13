@@ -4,6 +4,7 @@
 \RequirePackage[dvipsnames]{xcolor}
 \RequirePackage{array}
 \providecommand{\mathup}[1]{\mathrm{#1}}
+\providecommand{\text}[1]{\mathrm{#1}}
 
 \colorlet{MPSyntaxGreekColor}{Mulberry}
 \colorlet{MPSyntaxDefaultMathColor}{CornflowerBlue}
@@ -14,6 +15,8 @@
 \colorlet{MPSyntaxDelimiterColor}{CadetBlue}
 \colorlet{MPSyntaxFunctionColor}{Orchid}
 \colorlet{MPSyntaxNumberColor}{Dandelion}
+\colorlet{MPSyntaxMathTextColor}{Sepia}
+\colorlet{MPSyntaxMathItalicColor}{OliveGreen}
 
 \newcommand{\mGreek}[1]{{\color{MPSyntaxGreekColor}#1}}
 \newcommand{\mOperator}[1]{{\color{MPSyntaxOperatorColor}#1}}
@@ -23,6 +26,8 @@
 \newcommand{\mDelimiter}[1]{{\color{MPSyntaxDelimiterColor}#1}}
 \newcommand{\mFunction}[1]{{\color{MPSyntaxFunctionColor}#1}}
 \newcommand{\mNumber}[1]{{\color{MPSyntaxNumberColor}#1}}
+\newcommand{\mMathText}[1]{{\color{MPSyntaxMathTextColor}#1}}
+\newcommand{\mMathItalic}[1]{{\color{MPSyntaxMathItalicColor}#1}}
 \newcommand{\mConstant}[1]{{\color{MPSyntaxNumberColor}#1}}
 \newcommand{\mBin}[1]{\mathbin{\mOperator{#1}}}
 \newcommand{\mRel}[1]{\mathrel{\mRelation{#1}}}
@@ -105,6 +110,9 @@
 \let\MP@orig@exp\exp
 \let\MP@orig@det\det
 \let\MP@orig@pi\pi
+\let\MP@orig@prime\prime
+\let\MP@orig@text\text
+\let\MP@orig@mathit\mathit
 \let\MP@orig@langle\langle
 \let\MP@orig@rangle\rangle
 \let\MP@orig@vert\vert
@@ -208,6 +216,9 @@
     \renewcommand{\log}{\mFunction{\MP@orig@log}}
     \renewcommand{\exp}{\mFunction{\MP@orig@exp}}
     \renewcommand{\det}{\mFunction{\MP@orig@det}}
+    \renewcommand{\prime}{\mOperator{\MP@orig@prime}}
+    \renewcommand{\text}[1]{\mMathText{\MP@orig@text{##1}}}
+    \renewcommand{\mathit}[1]{\mMathItalic{\MP@orig@mathit{##1}}}
 
     \renewcommand{\pi}{\mGreek{\MP@orig@pi}}
   \fi
@@ -279,6 +290,9 @@
     \let\log\MP@orig@log
     \let\exp\MP@orig@exp
     \let\det\MP@orig@det
+    \let\prime\MP@orig@prime
+    \let\text\MP@orig@text
+    \let\mathit\MP@orig@mathit
     \let\pi\MP@orig@pi
     \let\langle\MP@orig@langle
     \let\rangle\MP@orig@rangle
@@ -334,6 +348,7 @@
       \let\log\MP@orig@log
       \let\exp\MP@orig@exp
       \let\det\MP@orig@det
+      \let\prime\MP@orig@prime
       \def\mGreek#1{#1}%
       \def\mOperator#1{#1}%
       \def\mRelation#1{#1}%
@@ -342,6 +357,8 @@
       \def\mDelimiter#1{#1}%
       \def\mFunction#1{#1}%
       \def\mNumber#1{#1}%
+      \def\mMathText#1{#1}%
+      \def\mMathItalic#1{#1}%
       \def\mConstant#1{#1}%
       \def\mBin#1{#1}%
       \def\mRel#1{#1}%

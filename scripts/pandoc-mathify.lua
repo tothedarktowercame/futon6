@@ -154,8 +154,8 @@ local function normalize_infix_ops(s)
     end
   end
 
-  -- Tight products without spaces.
-  s = s:gsub("([%w%)%}])%*([%w%(%{\\])", "%1 \\ast %2")
+  -- Tight products without spaces (exclude star-subscript forms like F*_mu).
+  s = s:gsub("([A-Za-z0-9%)%}])%*([A-Za-z0-9%(%{\\])", "%1 \\ast %2")
 
   -- Compact dimension form: 3x3 -> 3 \times 3
   s = s:gsub("(%f[%d]%d+)%s*[xX]%s*(%d+%f[%D])", "%1 \\times %2")
@@ -233,6 +233,11 @@ local function normalize_expr(s)
   s = s:gsub("GLn([%+%-]%d+)", "\\mathup{GL}_{n%1}")
   s = s:gsub("GLn(%f[%A])", "\\mathup{GL}_{n}%1")
 
+  -- Treat a bare '*' suffix as ascii-art prime in symbolic tokens.
+  s = s:gsub("([A-Za-z\\][A-Za-z0-9\\]*)%*_%{([^}]+)%}", "%1^{\\prime}_{%2}")
+  s = s:gsub("([A-Za-z\\][A-Za-z0-9\\]*)%*_([A-Za-z0-9]+)", "%1^{\\prime}_{%2}")
+  s = s:gsub("([A-Za-z\\][A-Za-z0-9\\]*)%*(%f[%A])", "%1^{\\prime}%2")
+
   -- Parenthesized products: (A x B), (A * B)
   s = s:gsub("%(([%w\\{}_%^%+%-]+)%s+[xX]%s+([%w\\{}_%^%+%-]+)%)", "(%1 \\times %2)")
   s = s:gsub("%(([%w\\{}_%^%+%-]+)%s*%*%s*([%w\\{}_%^%+%-]+)%)", "(%1 \\ast %2)")
@@ -282,6 +287,10 @@ local function is_compound_math_token(s)
     return false
   end
   if not s:match("[%a]") then
+    return false
+  end
+  -- Keep prose suffixes outside math: GL_n-equivariant -> $GL_n$-equivariant.
+  if s:match("%-[A-Za-z][A-Za-z][A-Za-z]") then
     return false
   end
   if not has_balanced_delimiters(s) then
@@ -625,6 +634,28 @@ local function convert_simple_str_token_to_inlines(s)
       table.insert(out, pandoc.Str(pvpunct))
     end
     return out
+  end
+
+  local hy_math, hy_word, hy_punct = s:match("^(.-)%-([A-Za-z][A-Za-z][A-Za-z][A-Za-z%-]*)([%.,;:]*)$")
+  if hy_math ~= nil and hy_math ~= "" then
+    local mathy_prefix = false
+    if greek_token_names[hy_math] then
+      mathy_prefix = true
+    elseif is_compound_math_token(hy_math) then
+      mathy_prefix = true
+    elseif hy_math:match("^GL_%b{}$") or hy_math:match("^GL_[A-Za-z0-9%+%-]+$") or hy_math:match("^GLn[%+%-]?%d*$") then
+      mathy_prefix = true
+    end
+    if mathy_prefix then
+      local out = {
+        pandoc.Math("InlineMath", normalize_expr(hy_math)),
+        pandoc.Str("-" .. hy_word),
+      }
+      if hy_punct ~= "" then
+        table.insert(out, pandoc.Str(hy_punct))
+      end
+      return out
+    end
   end
 
   -- Let block-level combiner handle split brace patterns like lambda_{alpha_m,

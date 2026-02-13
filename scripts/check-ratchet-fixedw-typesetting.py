@@ -29,6 +29,14 @@ MAP_CLASS_SNIPPET = (
     "By the JPSS theory, ∪_{phi} Phi(phi) generates L(s, Pi x pi) · R.\n"
 )
 PHI_ACTION_SNIPPET = "so Phi(R(g_0)phi) and Phi(phi) generate the same ideal.\n"
+HYBRID_SUFFIX_SNIPPET = (
+    "Phi is GL_n-equivariant and GL_n-translates span K(Pi)|_{GL_n}. "
+    "Work in the psi^{-1}-Whittaker model.\n"
+)
+PRIME_AND_SINGLE_SNIPPET = (
+    "for any nonzero phi' in K(Pi)|_{GL_n}. "
+    "for each V, there exists I such that I(s, W, V) = c * qF^{-ks}.\n"
+)
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -93,6 +101,12 @@ def main() -> int:
     normalized_map, out_map = render_snippet(repo, normalizer, lua_filter, MAP_CLASS_SNIPPET)
     normalized_phi_action, out_phi_action = render_snippet(
         repo, normalizer, lua_filter, PHI_ACTION_SNIPPET
+    )
+    normalized_hybrid_suffix, out_hybrid_suffix = render_snippet(
+        repo, normalizer, lua_filter, HYBRID_SUFFIX_SNIPPET
+    )
+    normalized_prime_single, out_prime_single = render_snippet(
+        repo, normalizer, lua_filter, PRIME_AND_SINGLE_SNIPPET
     )
 
     if r"integrals over \(V\)" not in out:
@@ -189,6 +203,38 @@ def main() -> int:
     if r"\backslash \phi" in out_phi_action:
         failures.append("rendered output regressed to '\\backslash \\phi' for Phi(R(g_0)phi)")
 
+    if r"$\mathup{GL}_{n}$-equivariant" not in normalized_hybrid_suffix:
+        failures.append("normalizer did not split GL_n-equivariant as math-prefix plus prose suffix")
+    if r"$\mathup{GL}_{n}$-translates" not in normalized_hybrid_suffix:
+        failures.append("normalizer did not split GL_n-translates as math-prefix plus prose suffix")
+    if r"$\psi^{-1}$-Whittaker" not in normalized_hybrid_suffix:
+        failures.append("normalizer did not split psi^{-1}-Whittaker as math-prefix plus prose suffix")
+    if r"\(\mathup{GL}_{n}-equivariant\)" in out_hybrid_suffix:
+        failures.append("rendered output still has non-math word inside GL_n-equivariant math span")
+    if r"\(\mathup{GL}_{n}-translates\)" in out_hybrid_suffix:
+        failures.append("rendered output still has non-math word inside GL_n-translates math span")
+    if r"\(\psi^{-1}-Whittaker\)" in out_hybrid_suffix:
+        failures.append("rendered output still has non-math word inside psi^{-1}-Whittaker math span")
+    if r"\(\mathup{GL}_{n}\)-equivariant" not in out_hybrid_suffix:
+        failures.append("rendered output missing split form '(GL_n)-equivariant'")
+    if r"\(\mathup{GL}_{n}\)-translates" not in out_hybrid_suffix:
+        failures.append("rendered output missing split form '(GL_n)-translates'")
+    if r"\(\psi^{-1}\)-Whittaker" not in out_hybrid_suffix:
+        failures.append("rendered output missing split form '(psi^{-1})-Whittaker'")
+
+    if r"for any nonzero $\phi'$ in $K(\Pi)|_{\mathup{GL}_{n}}$." not in normalized_prime_single:
+        failures.append("normalizer did not convert phi' and K(Pi)|_{GL_n} in quantifier sentence")
+    if r"for each $V$, there exists $I$ such that $I(s, W, V)$ = $c \ast q_F^{-ks}$." not in normalized_prime_single:
+        failures.append("normalizer did not convert quantifier single letters and I(s,W,V) call")
+    prime_render_variants = [
+        r"for any nonzero \(\phi'\) in \(K(\Pi)|_{\mathup{GL}_{n}}\).",
+        r"for any nonzero \(\phi' \in K(\Pi)|_{\mathup{GL}_{n}}\).",
+    ]
+    if not any(v in out_prime_single for v in prime_render_variants):
+        failures.append("rendered output missing inline math for phi' / K(Pi)|_{GL_n}")
+    if r"for each \(V\), there exists \(I\) such that \(I(s, W, V)\) = \(c \ast q_{F}^{-ks}\)." not in out_prime_single and r"for each \(V\), there exists \(I\) such that \(I(s, W, V)\) = \(c \ast q_F^{-ks}\)." not in out_prime_single:
+        failures.append("rendered output missing inline math for V/I/I(s,W,V) sentence")
+
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:
         failures.append("math-proofread style does not preserve original \\ast")
@@ -200,6 +246,12 @@ def main() -> int:
         failures.append("math-proofread style still categorizes \\pi as Number")
     if r"\renewcommand{\det}{\mFunction{\MP@orig@det}}" not in style:
         failures.append("math-proofread style does not colorize \\det as function")
+    if r"\renewcommand{\prime}{\mOperator{\MP@orig@prime}}" not in style:
+        failures.append("math-proofread style does not colorize \\prime as operator")
+    if r"\renewcommand{\text}[1]{\mMathText{\MP@orig@text{##1}}}" not in style:
+        failures.append("math-proofread style does not colorize \\text payloads")
+    if r"\renewcommand{\mathit}[1]{\mMathItalic{\MP@orig@mathit{##1}}}" not in style:
+        failures.append("math-proofread style does not colorize \\mathit payloads")
 
     if failures:
         for item in failures:
