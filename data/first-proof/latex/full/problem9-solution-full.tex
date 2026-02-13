@@ -8,7 +8,7 @@ Let \(n \ge \mNumber{5}\). Let \(A^{\mNumber{1}}\), ..., \(A^{n} \in R^{\mNumber
 For \(\alpha, \beta, \gamma, \delta \in [n],\) construct Q\^{}(alpha \(\beta \gamma\) delta) in
 \(R^{\mNumber{3} \times \mNumber{3}x\mNumber{3} \times \mNumber{3}}\) with entry:
 
-\[Q^{abgd}_{ijkl} = det[A^{a}(i,:); A^{b}(j,:); A^{g}(k,:); A^{d}(l,:)]\]
+\[Q^{abgd}_{ijkl} = \det[A^{a}(i,:); A^{b}(j,:); A^{g}(k,:); A^{d}(l,:)]\]
 
 (the 4x4 determinant of a matrix formed by stacking rows i, j, k, l from
 cameras \(\alpha, \beta, \gamma, \delta\) respectively).
@@ -41,14 +41,14 @@ Does there exist a polynomial map F: \(R^{\mNumber{81} \ast n^{\mNumber{4}}} \to
 \hypertarget{1-the-quadrifocal-tensor-as-a-bilinear-form}{%
 \subsubsection{1. The quadrifocal tensor as a bilinear form}\label{1-the-quadrifocal-tensor-as-a-bilinear-form}}
 
-The entry \(Q^{abgd}_{ijkl} = det[a^{a}_{i}\); \(a^{b}_{j}\); \(a^{g}_{k}\); \(a^{d}_{l}]\) is
+The entry \(Q^{abgd}_{ijkl} = \det[a^{a}_{i}\); \(a^{b}_{j}\); \(a^{g}_{k}\); \(a^{d}_{l}]\) is
 the evaluation of the volume form (the unique up-to-scale alternating 4-linear
 form on \(\mathbb{R}^{\mNumber{4}}\)) on four camera row vectors.
 
 \textbf{Key observation (bilinear form reduction):} Fix two camera-row pairs
 (gamma, k) and (delta, l), giving vectors \(c = a^{\gamma}_{k}\) and \(d = a^{\delta}_{l} \in \mathbb{R}^{\mNumber{4}}\). Then the map:
 
-\[\omega(p, q) = det[p; q; c; d]\]
+\[\omega(p, q) = \det[p; q; c; d]\]
 
 is an alternating bilinear form on \(\mathbb{R}^{\mNumber{4}}\). Since c wedge d is a simple 2-form,
 the Hodge dual *(c wedge d) is also simple, so \(\omega\) has \textbf{rank 2} as a
@@ -64,7 +64,7 @@ Since \(\omega\) has rank 2, for ANY choice of 3 vectors \(p_{\mNumber{1}}, p_{\
 3 vectors \(q_{\mNumber{1}}, q_{\mNumber{2}}, q_{\mNumber{3}} \in \mathbb{R}^{\mNumber{4}}\):
 
 \[\begin{aligned}
-det | \omega(p_\mNumber{1},q_\mNumber{1}) \omega(p_\mNumber{1},q_\mNumber{2}) \omega(p_\mNumber{1},q_\mNumber{3}) | \\
+\det | \omega(p_\mNumber{1},q_\mNumber{1}) \omega(p_\mNumber{1},q_\mNumber{2}) \omega(p_\mNumber{1},q_\mNumber{3}) | \\
 | \omega(p_\mNumber{2},q_\mNumber{1}) \omega(p_\mNumber{2},q_\mNumber{2}) \omega(p_\mNumber{2},q_\mNumber{3}) | = \mNumber{0} \\
 | \omega(p_\mNumber{3},q_\mNumber{1}) \omega(p_\mNumber{3},q_\mNumber{2}) \omega(p_\mNumber{3},q_\mNumber{3}) |
 \end{aligned}\]
@@ -74,7 +74,7 @@ det | \omega(p_\mNumber{1},q_\mNumber{1}) \omega(p_\mNumber{1},q_\mNumber{2}) \o
 In terms of the Q tensors: choosing \(p_{m} = a^{\alpha_{m}}\)\emph{\(\{i_{m}\}\) and
 \(q_{n} = a^{\beta_{n}}\)}\(\{j_{n}\}\), this becomes:
 
-\[det [Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}} = \mNumber{0}\]
+\[\det [Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}} = \mNumber{0}\]
 
 for any choice of \((\alpha_{\mNumber{1}},i_{\mNumber{1}}), (\alpha_{\mNumber{2}},i_{\mNumber{2}}), (\alpha_{\mNumber{3}},i_{\mNumber{3}})\) and
 \((\beta_{\mNumber{1}},j_{\mNumber{1}}), (\beta_{\mNumber{2}},j_{\mNumber{2}}), (\beta_{\mNumber{3}},j_{\mNumber{3}})\) and fixed (gamma,k), (delta,l).
@@ -118,7 +118,7 @@ nonzero (for Zariski-generic cameras).
 
 \textbf{The argument is algebraic-geometric, not via Hadamard rank bounds.} Define
 
-\[P(A^{(\mNumber{1})}, ..., A^{(n)}) = det [T^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}}\]
+\[P(A^{(\mNumber{1})}, ..., A^{(n)}) = \det [T^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{\mNumber{3} \times \mNumber{3}}\]
 
 for a specific choice of row/column/fixed indices. This is a polynomial in
 the camera entries (with \(\lambda\) fixed). We claim P is not the zero polynomial
@@ -203,7 +203,7 @@ have rank 1 (i.e., are outer products of vectors).
 
 \textbf{Definition of F:} The coordinate functions of F are all 3x3 minors:
 
-\[F_{choice} = det [T^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{m,n=\mNumber{1},\mNumber{2},\mNumber{3}}\]
+\[F_{choice} = \det [T^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{m,n=\mNumber{1},\mNumber{2},\mNumber{3}}\]
 
 taken over all choices of:
 

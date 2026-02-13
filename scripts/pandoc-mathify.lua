@@ -347,6 +347,19 @@ local function normalize_expr(s)
   s = s:gsub("%-%>", "\\to ")
   s = s:gsub("<%-", "\\leftarrow ")
   s = replace_word(s, "eps", "\\epsilon")
+  s = replace_word(s, "int", "\\Integral")
+  s = replace_word(s, "det", "\\det")
+  s = replace_word(s, "max", "\\max")
+  s = replace_word(s, "inf", "\\inf")
+  s = replace_word(s, "sqrt", "\\sqrt")
+  s = replace_word(s, "sin", "\\sin")
+  s = replace_word(s, "cos", "\\cos")
+  s = replace_word(s, "log", "\\log")
+  s = replace_word(s, "bigcup", "\\bigcup")
+  s = replace_word(s, "subseteq", "\\subseteq")
+  s = replace_word(s, "wedge", "\\wedge")
+  s = replace_word(s, "char", "\\mOpName{char}")
+  s = replace_word(s, "disc", "\\mOpName{disc}")
   s = replace_word(s, "dx", "\\mathrm{d}x")
   s = replace_word(s, "dy", "\\mathrm{d}y")
   s = replace_word(s, "dt", "\\mathrm{d}t")
@@ -460,7 +473,12 @@ local function normalize_expr(s)
     "internal", "the", "The", "There", "transfer", "Transfer", "allowed", "Allowed",
     "assumption", "exact", "eg", "fix", "sobolev", "hadamard", "symp", "ham",
     "titu", "ubu", "bpi", "cholesky", "Assumption", "EXACT", "Sobolev", "Cholesky",
-    "Hadamard", "Titu",
+    "Hadamard", "Titu", "additive", "admissible", "analogous", "axes", "choose",
+    "connected", "const", "conv", "correction", "corrections", "cross", "curve",
+    "equivalent", "graph", "lemma", "light", "local", "match", "measures", "nr",
+    "of", "order", "origin", "poly", "positive", "renorm", "reparameterized",
+    "sector", "selection", "smooth", "space", "subgroups", "surplus", "tensor",
+    "term", "theorem", "transition", "vertex", "weighted", "ceil",
   }
   local prose_masked, prose_slots = mask_text_macros(s)
   for _, w in ipairs(prose_words) do
