@@ -1,6 +1,31 @@
 \chapter*{Introduction: The Making of the First-Proof Cycle}
 \addcontentsline{toc}{chapter}{Introduction: The Making of the First-Proof Cycle}
 
+\section*{Highlights}
+\begin{itemize}[leftmargin=1.5em]
+\item Dependency-graph representations of proofs enabled local gap isolation and targeted repair across all ten problems.
+\item Node-level verification with predecessor/successor context improved calibration relative to whole-draft review.
+\item Adversarial critic--responder iteration converted early overclaims into explicit closed, partial, or conditional outcomes.
+\item Targeted computational stress tests constrained speculative branches, especially in the \(n=4\) branch of Problem~4.
+\item Structured handoff memos preserved unresolved obligations as named, testable next steps rather than implicit deferrals.
+\end{itemize}
+
+\section*{Snapshot}
+\begin{itemize}[leftmargin=1.5em]
+\item Ten initial proof attempts drafted in under two hours.
+\item Over two hundred commits across roughly 48~hours of active sprinting (February 11--13, 2026), in addition to earlier infrastructure development.
+\item A shift in framing over the course of the sprint: from an early ``all solved'' posture to a clearer partition into proved, conditional, and partial results.
+\item A methodological lesson: wiring-diagram--based verification localized gaps and inconsistencies more effectively than plain narrative drafting.
+\end{itemize}
+
+\section*{Materials and Methods}
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{Model/runtime split.} Claude Max runs on a remote Linode host; Codex Pro runs on the local laptop workspace (\texttt{/home/joe/code/futon6}).
+\item \textbf{Codex Pro token accounting (local, log-derived).} From \texttt{\~{}/.codex/sessions/*} telemetry (records where the event type is \emph{token\_count}), over the 50-hour window ending 2026-02-13 21:41 UTC (window start: 2026-02-11 19:41 UTC), there were 333 futon6-related Codex rollout traces out of 334 local rollout traces (99.7\%). Aggregated futon6 usage totals: total tokens 965{,}714{,}475; input tokens 961{,}719{,}044 (including cached input tokens 912{,}686{,}208, so non-cached input \(\approx 49{,}032{,}836\)); output tokens 3{,}995{,}431; reasoning-output tokens 2{,}072{,}289.
+\item \textbf{Claude Max token estimate (remote, pending).} To be inserted from Linode-side logs/usage data; local laptop artifacts are not treated as authoritative for Claude usage accounting.
+\end{itemize}
+
+\section*{Introduction}
 This monograph records both the mathematical results and the working process
 behind a compressed, multi-agent proof cycle in \texttt{futon6}.\footnote{Source repository: \url{https://github.com/tothedarktowercame/futon6}} The project
 began as infrastructure---knowledge ingestion, tagging, and wiring-diagram
@@ -8,13 +33,13 @@ metatheory---and then pivoted into a rapid proof sprint with iterative
 critique and repair.
 
 The working process turned out to resemble Lakatos's \emph{Proofs and
-Refutations}~\cite{lakatos1976} more than we expected.  In Lakatos's
+Refutations}~\cite{lakatos1976} more than we expected. In Lakatos's
 dialogue, a conjecture is proposed, counterexamples surface, the conjecture
 is patched, and the cycle repeats---with each iteration sharpening both the
-theorem and the participants' understanding of the domain.  Our sprint
+theorem and the participants' understanding of the domain. Our sprint
 followed the same rhythm, except that the interlocutors were a human
 dispatcher, multiple Claude instances (provers), and Codex (critic and
-research assistant).  Conjectures were drafted quickly; adversarial review
+research assistant). Conjectures were drafted quickly; adversarial review
 surfaced overclaims and gaps; targeted repair narrowed the open obligations.
 The wiring-diagram decomposition---which represents each proof as a typed
 graph of claims and dependencies---served as the shared epistemic artefact
@@ -32,57 +57,36 @@ The present work is, in a sense, a large-scale empirical answer: ten
 problems attempted by AI agents under human supervision, with the
 Lakatosian cycle running at machine speed.
 
-This connection is not accidental.  Corneli et al.~\cite{corneli2017}
+This connection is not accidental. Corneli et al.~\cite{corneli2017}
 developed a computational model of mathematical question-and-answer dialogues
 grounded in Lakatos's framework, using Inference Anchoring Theory + Content
 (IATC) to annotate MathOverflow threads with performative types
-(assert, challenge, reform, clarify, etc.).  The IATC vocabulary reappears in
+(assert, challenge, reform, clarify, etc.). The IATC vocabulary reappears in
 this project's Stage~7 thread-wiring pipeline (see Part~III, Act~VI), where
 StackExchange threads are parsed into wiring diagrams whose edges carry the
-same performative labels.  The earlier work on peer-produced mathematical
+same performative labels. The earlier work on peer-produced mathematical
 knowledge~\cite{corneli2013} established the empirical base: PlanetMath as a
 community-maintained proof ecosystem, studied through the lens of paragogy
-(peer-produced peer learning).  The present sprint can be read as a
+(peer-produced peer learning). The present sprint can be read as a
 machine-accelerated instance of the same phenomenon: collaborative,
 incremental proof construction with explicit argumentation structure.
 
-\section*{Snapshot}
-\begin{itemize}[leftmargin=1.5em]
-\item Ten initial proof attempts drafted in under two hours.
-\item Over two hundred commits across roughly 48~hours of active sprinting (February 11--13, 2026), in addition to earlier infrastructure development.
-\item A shift in framing over the course of the sprint: from an early ``all solved'' posture to a clearer partition into proved, conditional, and partial results.
-\item A methodological lesson: wiring-diagram--based verification localized gaps and inconsistencies more effectively than plain narrative drafting.
-\end{itemize}
-
-\section*{What Changed in This Process}
-\begin{enumerate}[leftmargin=1.5em]
-\item \textbf{Proofs as graphs.} Logical dependencies were represented explicitly as typed edges (assert / reference / derive), allowing critiques to target specific claims rather than whole arguments.
-\item \textbf{Node-level verification.} Codex checks were issued per proof node, with local predecessor and successor context, rather than against entire drafts.
-\item \textbf{Adversarial loops.} Repeated critic--responder cycles surfaced overconfidence, weak citations, and unstated assumptions.
-\item \textbf{Numerical stress tests.} Where claims admitted computational checking (notably in Problem 4), targeted stress tests constrained overstatement.
-\item \textbf{Explicit research handoffs.} Open branches were turned into gap memos and concrete next-step queries instead of being silently deferred.
-\end{enumerate}
-
-\section*{Interpretive Thread}
 The working notes reveal a consistent asymmetry: generation is fast;
-trustworthy validation is slow.  This is the same asymmetry Lakatos
+trustworthy validation is slow. This is the same asymmetry Lakatos
 identified in his classroom: conjectures are cheap, but understanding
 \emph{why} a conjecture fails (or holds) is the real mathematical work.
+In practice, the strongest leverage came from structured verification---tools
+that made weaknesses visible early and locally.
 
-The real leverage came not from first-pass drafting quality, but from
-structured verification---tools that made weaknesses visible early and locally.
-In Lakatosian terms, the wiring diagrams served as \emph{proof analyses}:
-decompositions of the argument into lemmas and sub-conjectures, each of
-which could be independently attacked or defended.
+\section*{Reader Guide}
+This document is organized in five parts.
 
-This volume should therefore be read in three ways:
 \begin{itemize}[leftmargin=1.5em]
-\item \emph{Mathematical artifact}: a set of problem writeups at varying stages of completion.
-\item \emph{Methodological artifact}: a record of how multi-agent proof systems stabilize claims under structured adversarial revision.
-\item \emph{Continuation of a research programme}: the computational
-  argumentation models of~\cite{corneli2017} and the peer-production
-  ethnography of~\cite{corneli2013}, now instantiated with AI agents
-  operating at sprint pace rather than community pace.
+\item \textbf{Part I (Annotated Overview):} short, citation-rich introductions for Problems 1--10, intended as navigational summaries.
+\item \textbf{Part II (Full Proof Drafts):} expanded writeups imported from the solution files, suitable as the base for a longer manuscript (targeting roughly book-length exposition). Coloured boxes separate the proof proper from process annotations (dead paths, revisions, open obligations).
+\item \textbf{Part III (Prompt Excerpts and Pivot Moments):} curated source excerpts (prompts and dispatch/history snippets) that document key decision points and proof-state transitions.
+\item \textbf{Part IV (Proof Patterns):} a cross-problem analysis of strategy patterns---what worked (layer-switching, creative reduction, structural decomposition), what didn't (the TryHarder loop), and how a coaching intervention broke a stuck problem open.
+\item \textbf{Part V (Color Plates):} syntax-coloured renderings of the proof files, produced by automated math-mode normalization.
 \end{itemize}
 
 \section*{Terminology}
@@ -95,21 +99,28 @@ This volume should therefore be read in three ways:
 \end{description}
 
 \section*{Current Status}
+\noindent\textbf{Status legend.}
+Each problem is tagged on two axes:
+\textbf{Closed/Partial/Conditional} for mathematical status and
+\textbf{Validation-complete/Partial validation} for QC-validation status.
+
+\medskip
+\noindent\textbf{Outcome summary.}
+Problem~3 is closed for the scoped existence target and validation-complete;
+Problem~5 is closed in a scope-limited form;
+Problem~10 is conditional under stated assumptions;
+Problems~4 and~6 are partial with explicit remaining obligations;
+Problem~7 is provisionally closed mathematically (rotation route), with QC
+review still active; and Problems~1,~2,~7,~8, and~9 are partial-validation at
+node level due to unresolved verifier gaps.
+
 \begin{itemize}[leftmargin=1.5em]
-\item Problems 1, 2, 7, 8, and 9 now have node-level validation artifacts (\texttt{problemN-codex-results.jsonl}); each currently remains in \emph{partial validation} due to unresolved node-level gaps flagged by the verifier.
+\item Problems 1, 2, 8, and 9 now have node-level validation artifacts.\footnote{Per-problem verifier outputs are tracked in \url{https://github.com/tothedarktowercame/futon6/tree/master/data/first-proof} under filenames matching \texttt{problem*-codex-results.jsonl}.} Each currently remains in \emph{partial validation} due to unresolved node-level gaps flagged by the verifier.
+\item Problem 7 is treated as provisionally closed mathematically via the rotation route, while remaining in \emph{partial validation} at QC level pending independent ledger re-check and closure of verifier-flagged nodes.
 \item Problem 3 now has a validation-complete existence path under the scoped criterion used here (current run: 2 verified, 7 plausible, 0 gaps). Uniqueness/irreducibility is treated as optional and out of scope for the core existence claim.
 \item Problem 10 is conditional under explicitly stated assumptions, with explicit necessity counterexamples for assumption violations.
 \item Problem 5 is solved in a scope-limited form for $F_O$-local connective spectra.
 \item Problem 6 is partial: the $K_n$ case is proved ($c_0 = 1/3$), with one remaining technical gap in the general-graph argument (formal $\bar{d} < 1$ bound at $M_t \ne 0$).
 \item Problem 4 is partial: proved analytically for $n \le 3$; the $n=4$ branch has strong computational support with one certification step still pending; higher $n$ remains open.
-\item Cross-problem closure-vs-validation inventory: \texttt{data/first-proof/closure-validation-audit.md}.
+\item Cross-problem closure-vs-validation inventory.\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/closure-validation-audit.md}}
 \end{itemize}
-
-\section*{Suggested Reading Path}
-\begin{enumerate}[leftmargin=1.5em]
-\item Begin with \textbf{Part I} for orientation and status framing.
-\item Continue to \textbf{Part II} for full arguments and technical detail.
-\item Use \textbf{Part III} as a provenance index for prompt-level pivot points and status changes.
-\item Read \textbf{Part IV} for cross-problem strategy patterns and the coaching breakthrough on Problem~6.
-\item Revisit the Problem 6 notes after reading its chapter; the remaining gap is narrow and well-characterised.
-\end{enumerate}

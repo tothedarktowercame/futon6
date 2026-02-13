@@ -13,17 +13,19 @@ Every open problem in a sprint has one of three honest outcomes:
 
 \begin{enumerate}
 \item \textbf{Closed.} A complete proof (possibly with minor caveats).
-  In the current QC pass, Problems 1, 2, 7, 8, and 9 have completed
-  node-level validation runs but still carry unresolved verifier gaps
-  (so they remain partial-validation at QC level); Problem~3 has a validation-complete
-  existence path under a scoped criterion (uniqueness/irreducibility optional);
-  Problem~10 is conditional under stated assumptions; Problem~5 is
-  solved in a scope-limited form.
+  In this revision, Problem~3 is closed for the scoped existence target
+  (uniqueness/irreducibility optional), Problem~5 is solved in a
+  scope-limited form, and Problem~7 is treated as provisionally closed
+  via the rotation route pending independent ledger re-check.
 \item \textbf{Reduced.} A conditional result with clearly stated
   assumptions.
 \item \textbf{Mapped.} The obstruction is characterized and adjacent
   problems are identified, but no proof is offered.
 \end{enumerate}
+
+These labels describe \emph{mathematical status}. QC-validation status is
+tracked separately: Problems~1,~2,~7,~8, and~9 have node-level validation
+artifacts but still carry unresolved verifier gaps.
 
 All three are legitimate outcomes. Outcome~2 is not a defect of
 outcome~1; it is a different kind of contribution.  The failure mode
@@ -55,7 +57,8 @@ of a successful strategy pivot.
   (\texttt{287a41c}: ``rotation route (Approach~IV), paper reads, triage'';
    \texttt{620ed57}: ``resolve rotation lattice existence, discharge E2'')
 \item[Closure:] The surgery obstruction vanishes (trivial normal
-  bundle from the congruence condition).
+  bundle from the congruence condition), yielding a provisional closure
+  chain pending independent theorem-ledger re-check.
   (\texttt{8ce9771}: ``flat-normal-bundle argument---rational obstruction vanishes'';
    \texttt{158bc4f}: ``integral obstruction vanishes---obligation~S discharged'')
 \end{description}

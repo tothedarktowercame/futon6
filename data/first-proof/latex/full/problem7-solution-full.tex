@@ -24,9 +24,7 @@ fundamental group of a closed manifold whose universal cover is acyclic over
   Obligation (S) --- upgrading from finite CW complex to closed manifold --- is
   treated as discharged in this branch: the geometric inputs are established
   (trivial normal bundle, hyperbolic boundary form), and the codim-2 surgery
-  identification is closed by the theorem-numbered reference chain in
-  \texttt{problem7-g2-theorem-chain.md} (with closure summary in
-  \texttt{problem7-complete-proof.md}, Section 5).
+  identification is closed by the theorem-numbered reference chain\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7-g2-theorem-chain.md}} (with closure summary in a companion note,\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7-complete-proof.md}} Section 5).
 \end{itemize}
 
 \hypertarget{1-baseline-geometry}{%
@@ -72,7 +70,7 @@ whose universal cover is rationally acyclic.
 \subsubsection{3b. Concrete Instantiation via Reflection Lattice}\label{3b-concrete-instantiation-via-reflection-lattice}}
 
 The E2 obligation is discharged by the following construction (details in
-\texttt{problem7r-s2b-candidate-construction.md}):
+the candidate-construction note\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7r-s2b-candidate-construction.md}}):
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -175,13 +173,13 @@ it, and show the surgery obstruction vanishes.
   \emph{Surgery obstruction.} The obstruction \(\sigma(f) \in L_{n}(Z[\Gamma]) \text{tensor} Q\)
   is not known to vanish. The Farrell-Jones conjecture (which holds for
   \(\Gamma\)) identifies this L-group with equivariant L-homology, but the
-  resulting computation has not been completed. See \texttt{problem7r-s3b-obstruction.md}
+  resulting computation has not been completed. See the obstruction-analysis note\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7r-s3b-obstruction.md}}
   for the FJ reduction framework and a conjectural (but unverified)
   localization of the obstruction.
 \end{enumerate}
 
 \textbf{Status.} This approach has three successive obstacles, each open.
-See \texttt{problem7r-s3a-setup.md} for the detailed analysis.
+See the setup note\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7r-s3a-setup.md}} for the detailed analysis.
 
 \hypertarget{approach-ii-equivariant-surgery-on-m-tau--blocked-for-reflections}{%
 \subsubsection{\texorpdfstring{Approach II: Equivariant surgery on \((M, \tau)\) --- BLOCKED for reflections}{Approach II: Equivariant surgery on (M, \textbackslash tau) --- BLOCKED for reflections}}\label{approach-ii-equivariant-surgery-on-m-tau--blocked-for-reflections}}
@@ -265,8 +263,8 @@ dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(
   (equivariant surgery) becomes available as a method for the S-branch.
 \end{itemize}
 
-\textbf{Lattice construction: DISCHARGED.} Details in
-\texttt{problem7r-rotation-lattice-construction.md}. Summary:
+\textbf{Lattice construction: DISCHARGED.} Details in the rotation-lattice
+construction note.\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7r-rotation-lattice-construction.md}} Summary:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -345,7 +343,7 @@ in Sections 3-4.
   \texttt{n} even, \(n \ge \mNumber{6}\).
 \item
   \textbf{(Rotation route)} Approach IV: rotation lattice in \(\mathup{Isom}(H^{n})\),
-  \texttt{n} odd, \(n \ge \mNumber{7}\). See \texttt{problem7r-rotation-lattice-construction.md}.
+  \texttt{n} odd, \(n \ge \mNumber{7}\). See the rotation-lattice construction note.\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7r-rotation-lattice-construction.md}}
 \end{itemize}
 
 Then:
@@ -360,18 +358,18 @@ manifold \texttt{N} with \(\pi_\mNumber{1}(N) = \Gamma\) and \(H_{\mDualStar}(N_
 \(\ast > \mNumber{0}\). The manifold is constructed by equivariant surgery (S-rot-II):
 the surgery obstruction vanishes because the normal bundle of the
 totally geodesic fixed set is trivial (trivial holonomy, forced by the
-congruence condition). See \texttt{problem7r-s-rot-obstruction-analysis.md}.
+congruence condition). See the S-rotation obstruction analysis.\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7r-s-rot-obstruction-analysis.md}}
 
 \hypertarget{7-path-to-full-closure}{%
 \subsection{7. Path to Full Closure}\label{7-path-to-full-closure}}
 
 Resolving obligation S requires computing a surgery obstruction. The
 rotation route (Approach IV) has discharged the lattice-existence question
-and is now the primary path. See \texttt{problem7-hypothetical-wirings.md} for
+and is now the primary path. See the hypothetical-wirings note\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7-hypothetical-wirings.md}} for
 full wiring diagrams.
 
 \textbf{Active path: Approach IV (rotation route).} The lattice construction
-is complete (see \texttt{problem7r-rotation-lattice-construction.md}). E2 is
+is complete (see the rotation-lattice construction note\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7r-rotation-lattice-construction.md}}). E2 is
 discharged. Two sub-options for obligation S:
 
 \begin{enumerate}
@@ -408,7 +406,7 @@ discharged. Two sub-options for obligation S:
   N \(=\) M\textquotesingle/(Z/2) is a closed manifold with \(\pi\)₁(N) \(= \Gamma\) and rationally
   acyclic universal cover.
 
-  See \texttt{problem7r-s-rot-obstruction-analysis.md} for full computation.
+  See the S-rotation obstruction analysis\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7r-s-rot-obstruction-analysis.md}} for full computation.
 \item
   \textbf{S-rot-I (Wall surgery in odd dimension).} Fallback. Same three-obstacle
   structure as Approach I but with favorable odd L-theory parity and

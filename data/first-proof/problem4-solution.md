@@ -338,4 +338,4 @@ to the MSS bilinear structure of ⊞_n.
 
 - Arizmendi, Perales (2018), "Cumulants for finite free convolution," J. Combinatorial
   Theory Ser. A 155, 244-266. arXiv:1702.04761.
-  [Defines finite free cumulants that linearize under ⊞_n]
+  (Defines finite free cumulants that linearize under ⊞_n.)

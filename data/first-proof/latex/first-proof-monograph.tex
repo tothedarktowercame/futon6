@@ -32,7 +32,7 @@
   citecolor=blue!50!black,
   urlcolor=blue!60!black,
   pdftitle={A First Proof Sprint},
-  pdfauthor={Codex}
+  pdfauthor={J. Corneli}
 }
 
 \Urlmuskip=0mu plus 1mu
@@ -235,8 +235,8 @@
 \setlength{\headheight}{14.5pt}
 
 \title{A First Proof Sprint}
-\author{Claude$^{1}$, Codex$^{2}$, J.~Corneli$^{3}$\thanks{Supervisor, corresponding author: \texttt{joseph.corneli@hyperreal.enterprises}} \\
-\small $^{1}$Anthropic \quad $^{2}$OpenAI \quad $^{3}$Hyperreal Enterprises Ltd}
+\author{J.~Corneli\thanks{Corresponding author: \texttt{joseph.corneli@hyperreal.enterprises}} \\
+\small Hyperreal Enterprises Ltd}
 \date{February 11--13, 2026}
 
 \begin{document}
@@ -251,7 +251,7 @@
 \renewcommand{\thefootnote}{\arabic{footnote}}
 \vfill
 \noindent{\small\sffamily Reproducibility: built \today{} from
-\texttt{futon6} commit \texttt{74ee898}.\\
+\texttt{futon6} version-controlled git history (HEAD at build time).\\
 Source: \url{https://github.com/tothedarktowercame/futon6}}
 \clearpage
 \setcounter{page}{2}
@@ -262,39 +262,23 @@ problems, combining rapid draft generation with adversarial verification,
 targeted repair, and explicit provenance. The workflow uses wiring-diagram
 decompositions of claim dependencies to localize gaps and coordinate
 reviewer-driven revisions. Final outcomes are heterogeneous but explicit:
-Problems 1, 2, 7, 8, and 9 now have node-level validation artifacts, but those
-runs still contain unresolved verifier gaps; Problem 3 now has a
+the manuscript distinguishes \emph{mathematical status} from
+\emph{QC-validation status}. Mathematically, Problem~3 has a
 validation-complete existence path under the scoped criterion used here
-(uniqueness/irreducibility treated as optional); Problem 10 is
-conditional under clearly stated assumptions, with
-explicit necessity counterexamples when those assumptions are dropped; Problems 4 and
-6 are partial, with named remaining obligations in the general case (including
-an unconditional $K_n$ result for Problem 6 with $c_0 = 1/3$); and Problem 5 is
-solved in a scope-limited form for $F_O$-local connective spectra. The main
+(uniqueness/irreducibility treated as optional), Problem~5 is solved in a
+scope-limited form for $F_O$-local connective spectra, Problem~10 is
+conditional under clearly stated assumptions (with explicit necessity
+counterexamples when assumptions are dropped), and Problems~4 and~6 are partial
+with named remaining obligations in the general case (including an
+unconditional $K_n$ result for Problem~6 with $c_0 = 1/3$). Problem~7 is
+treated as provisionally closed via the rotation-route theorem chain, pending
+independent ledger re-check. At the QC layer, Problems~1,~2,~7,~8, and~9 have
+node-level validation artifacts but still contain unresolved verifier gaps. The main
 methodological result is that structure-aware verification and layer-switching
 strategies improve reliability and calibration in compressed proof sprints.
 \clearpage
 \tableofcontents
 
-\chapter*{Reader Guide}
-This document is organized in five parts.
-
-\begin{itemize}[leftmargin=1.5em]
-\item \textbf{Part I (Annotated Overview):} short, citation-rich introductions for Problems 1--10, intended as navigational summaries.
-\item \textbf{Part II (Full Proof Drafts):} expanded writeups imported from the solution files, suitable as the base for a longer manuscript (targeting roughly book-length exposition). Coloured boxes separate the proof proper from process annotations (dead paths, revisions, open obligations).
-\item \textbf{Part III (Prompt Excerpts and Pivot Moments):} curated source excerpts (prompts and dispatch/history snippets) that document key decision points and proof-state transitions.
-\item \textbf{Part IV (Proof Patterns):} a cross-problem analysis of strategy patterns---what worked (layer-switching, creative reduction, structural decomposition), what didn't (the TryHarder loop), and how a coaching intervention broke a stuck problem open.
-\item \textbf{Part V (Color Plates):} syntax-coloured renderings of the proof files, produced by automated math-mode normalization.
-\end{itemize}
-
-\medskip
-\noindent\textbf{Status legend.}
-Each problem carries one of three designations:
-\textbf{Closed}~(considered fully solved);
-\textbf{Partial}~(proved in key cases, with explicit remaining obligations);
-\textbf{Conditional}~(closed under clearly stated assumptions).
-
-Current outcome summary: Problems 1, 2, 7, 8, and 9 now have node-level validation artifacts but still include unresolved verifier gaps; Problem 3 has a validation-complete existence path under the scoped criterion used here (uniqueness/irreducibility treated as optional); Problem 10 is conditional under stated assumptions (with explicit necessity counterexamples for assumption violations); Problem 5 is solved in a scope-limited form; and Problems 4 and 6 are partial with explicit remaining obligations in the general case.
 \input{intro-making-of}
 
 \mainmatter
@@ -344,10 +328,15 @@ mathematical argument from the surrounding process record.
 \chapter*{Status Notes for Open Items}
 \addcontentsline{toc}{chapter}{Status Notes for Open Items}
 \begin{openobligation}[title={Open Obligation --- Problem 6}]
-Current proof chain is conditional on the remaining Case~2b averaging lemma (GPL-H) as recorded in the project writeups.
+Current proof chain is conditional on the remaining barrier-maintenance step
+(BMI): prove the full \(\bar d_t < 1\) bound in the \(M_t \ne 0\) regime.
+The current E/F reduction isolates this to two explicit regime lemmas.
 \end{openobligation}
 \begin{processnote}[title={Process Note --- Problem 7}]
-This revision treats the problem as closed via the rotation route. Fowler's criterion supplies the \(\mathrm{FH}(\mathbb Q)\) input, and the codimension-2 surgery bridge is discharged by the theorem-number chain documented in \texttt{problem7-g2-theorem-chain.md}.
+This revision treats the rotation route as the primary closure candidate.
+Fowler's criterion supplies the \(\mathrm{FH}(\mathbb Q)\) input, and the
+codimension-2 surgery bridge is documented by the theorem-number chain.\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/problem7-g2-theorem-chain.md}} Final confidence remains contingent on
+independent line-by-line re-check of that ledger.
 \end{processnote}
 
 \includefull{full-boxed/problem1-solution-full}

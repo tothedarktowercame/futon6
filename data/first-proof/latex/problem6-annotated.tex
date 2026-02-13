@@ -7,17 +7,25 @@ Find a universal constant $c_0>0$ such that every weighted graph and every $\var
 \]
 
 \subsection*{Current status}
-Conditional. Cases 1 and 2a are proved with $c_0=1/3$; Case 2b is reduced to one remaining operator-averaging conjecture (GPL-H).
+Partial (general case conditional). The $K_n$ case is proved with $c_0=1/3$;
+for general graphs, the remaining issue is the Barrier Maintenance Invariant
+(BMI): prove the full barrier-degree bound $\bar d_t<1$ when $M_t\neq 0$.
+The current E/F regime reduction isolates this to two explicit lemmas.
 
 \subsection*{Annotated proof structure}
 \begin{enumerate}[leftmargin=1.5em]
 \item Use leverage scores $\tau_e=w_eR_{\mathrm{eff}}(u,v)$ to define the heavy-edge graph and show any $\varepsilon$-light set must be independent there.
 \item Apply the leverage-score trace identity and Turan's theorem to extract a large candidate set.
 \item Resolve easy branches (independent-in-$G$ and directly bounded spectral sum) unconditionally.
-\item Reduce the hard branch to a barrier-style iterative selection claim (GPL-H), with substantial computational evidence but no final general proof.
+\item Reduce the hard branch to barrier maintenance (BMI), then split by a
+graph-adaptive E/F regime decomposition; substantial computational evidence is
+available, but the final general proof still requires two regime lemmas.
 \end{enumerate}
 
-\gapnote{The only unresolved logical step is GPL-H in Case 2b. The writeup already isolates this as a single conjectural averaging bound. Until GPL-H (or an equivalent replacement lemma) is proved, the universal-constant theorem remains conditional.}
+\gapnote{The unresolved step is the full BMI bound in the $M_t\neq 0$ regime.
+The writeup reduces this to two explicit E/F regime lemmas. Until those lemmas
+are proved (or replaced by an equivalent closure argument), the
+universal-constant theorem remains conditional.}
 
 \subsection*{Selected citations}
 \begin{itemize}[leftmargin=1.5em]
