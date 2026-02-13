@@ -659,19 +659,39 @@ This gives d̄_all ≤ (2/3)/(1-ε/3) < 1 at M_t = 0 WITHOUT any filtering.
 | ||Λ_t|| < 2ε | 25% pass | TOO STRONG |
 | ||F_t|| ≤ 1 | 275/275 | PROVED |
 
+### LP bound framework (NEW 2026-02-13)
+
+Major structural advance: in M_t's eigenbasis, d̄_all is a linear program:
+
+  d̄_all = (1/r_t) Σ_i f_i/(ε - μ_i)
+
+with constraints f_i ∈ [0, π_i-μ_i], Σf_i ≤ 2t-2tr(M_t).
+
+**K_n exact formula (PROVED):** d̄(K_n) = c(2-c)/(1-c) where c = t/(εn).
+At horizon c = 1/3: d̄ = 5/6. Critical threshold: c = (3-√5)/2 ≈ 0.382.
+LP is TIGHT for K_n (allocation matches actual F_t distribution).
+
+**LP bound < 1 for all greedy spectra:** 117/117 M_t≠0 steps, max 0.90.
+For adversarial spectra (not from greedy), LP can exceed 1.
+
+**K_n majorization:** d̄(G) ≤ d̄(K_{m_0}) at 247/251 (98.4%) configs.
+4 violations at small c (Barbell, Reg). Max ratio near horizon: 1.024.
+Inflation factor α × 5/6 at c=1/3: max ≈ 0.998 < 1.
+
 ### Current best path to closure
 
-The characteristic polynomial root is at most 0.432 — far below 1. The
-improvement over d̄_all (0.720) comes from using ALL spectral moments, not
-just the trace. For K_n: charpoly root = t/n → 1/3, while d̄_all → 5/6.
+The LP framework makes the problem algebraically precise. d̄ < 1 reduces to:
 
-Three routes remain viable:
-1. **Prove d̄_all < 1 at M_t ≠ 0** (trace route, simplest)
-2. **Prove avg det(I-Y_v) > 0** (determinantal route, tighter)
-3. **Prove charpoly root < 1** (interlacing route, tightest)
+1. **K_n maximality (cleanest):** Prove d̄(G) ≤ d̄(K_{m_0}) at the horizon.
+   This gives d̄ ≤ 5/6 < 1. Nearly verified (247/251).
 
-The gap is the same in all three: bounding the amplification from
-B_t = (εI - M_t)^{-1} when M_t ≠ 0 and potentially anisotropic.
+2. **LP spectral bound:** Show LP < r_t for spectra arising along the
+   min-ℓ greedy. Requires bounding F_t's alignment with M_t.
+
+3. **Direct c(2-c)/(1-c):** Show d̄ ≤ c(2-c)/(1-c) for all graphs.
+
+All three reduce to: cross-edge leverage F_t can't concentrate in M_t's
+principal direction, because min-ℓ vertices have spread connectivity.
 
 ## Files
 
