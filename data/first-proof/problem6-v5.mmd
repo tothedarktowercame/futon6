@@ -1,0 +1,95 @@
+flowchart TD
+    %% Problem 6 v5: Neumann alignment attack on GPL-H
+    %% Green = proved, Yellow = open gap, Cyan = candidate closure,
+    %% Gray = empirical, Red = deleted/blocked
+
+    %% Target
+    p6q{{"P6 TARGET<br/>Universal c>0: for every G, eps,<br/>exists S with |S|>=c*eps*n, L_S<=eps*L"}}
+
+    %% === PROVED CHAIN ===
+
+    p6-turan["5a. TURAN (proved)<br/>Heavy/light split at tau=eps.<br/>I_0 >= eps*n/3,<br/>all internal edges light"]
+
+    p6-greedy["5c. BARRIER GREEDY (proved)<br/>Greedy on I_0 directly.<br/>T = eps*m_0/3 steps.<br/>Need: exists v with ||Y_t(v)|| < 1"]
+
+    p6-pigeonhole["5d. PIGEONHOLE + PSD (proved)<br/>||Y|| <= tr(Y), min <= avg = dbar<br/>If dbar < 1 then exists v OK"]
+
+    p6-foster["5e. FOSTER (proved at M_t=0)<br/>Foster: sum tau_e = n-1<br/>At M_t=0: dbar^0 <= 2/3"]
+
+    p6-kn-formula["K_n EXACT (proved)<br/>d̄ = (t-1)/(m₀ε-t) + (t+1)/(m₀ε)<br/>At horizon: d̄ → 5/6 < 1"]
+
+    p6-size["5f. SIZE (proved if dbar<1)<br/>|S| = eps*m_0/3 >= eps²n/9"]
+
+    %% === NEUMANN ATTACK (candidate closure) ===
+
+    p6-neumann["NEUMANN SERIES<br/>dbar = dbar^0 * (1 + sum rho_k x^k)<br/>x = ||M_t||/eps<br/>If rho_k<=1/2: dbar <= dbar^0*(2-x)/(2(1-x))"]
+
+    p6-rho["rho_k <= 1/2 (candidate)<br/>Proof sketch:<br/>F_t <= Pi - M_t (compensation)<br/>rank(M_t) <= t-1<br/>=> tr(M^k F) <= mu_max^k*(t-tau)<br/>=> rho_k <= (t-tau)/tr(F_t)"]
+
+    p6-trft{{"KEY IDENTITY (to verify)<br/>tr(F_t) = 2(t - tau) ?<br/>Codex C3 Task 1"}}
+
+    p6-xbound["x BOUND (to prove)<br/>Need x = ||M_t||/eps bounded<br/>at horizon, e.g. x <= 1/3<br/>Self-consistent: dbar<1 limits x growth"]
+
+    p6-assembly["ASSEMBLY (if rho+x hold)<br/>dbar <= (2/3)*(2-x)/(2(1-x))<br/>At x=1/3: dbar = 5/6 < 1<br/>CLOSES GPL-H"]
+
+    %% === BLOCKED PATHS ===
+
+    p6-schur-blocked>"SCHUR NAIVE (blocked)<br/>Codex C2: objective linear in w<br/>at M_t!=0, concentrate-top<br/>exceeds uniform"]
+
+    p6-kn-extremal(["K_n EXTREMALITY (empirical)<br/>Codex C2: ratio up to 1.011<br/>at n=500, not monotone<br/>But 1.011*5/6 = 0.843 < 1"])
+
+    %% === EVIDENCE ===
+
+    p6-empirical(["NUMERICS (empirical)<br/>440+ steps, 7 families, n<=1000<br/>dbar < 1 at ALL steps<br/>Max dbar: 0.718"])
+
+    p6-result["RESULT<br/>K_n: PROVED, c = 1/3<br/>General: Neumann attack in progress<br/>|S| >= eps²n/9"]
+
+    %% === PROOF FLOW ===
+
+    p6-turan -->|"I_0 >= eps*n/3"| p6q
+    p6-greedy -->|"greedy on I_0"| p6-turan
+    p6-pigeonhole ==>|"closes barrier step"| p6-greedy
+    p6-foster ==>|"dbar^0 <= 2/3"| p6-pigeonhole
+    p6-kn-formula ==>|"exact at M_t!=0"| p6-foster
+    p6-size -->|"|S| = eps²n/9"| p6-greedy
+
+    %% Neumann attack flow
+    p6-neumann ==>|"amplification bound"| p6-pigeonhole
+    p6-rho ==>|"alignment <= 1/2"| p6-neumann
+    p6-trft -->|"needed for rho proof"| p6-rho
+    p6-xbound -->|"bounds amplification"| p6-neumann
+    p6-assembly ==>|"CLOSES GPL-H"| p6q
+
+    %% Assembly depends on both
+    p6-rho -->|"rho_k proven"| p6-assembly
+    p6-xbound -->|"x bounded"| p6-assembly
+    p6-foster -->|"dbar^0 input"| p6-assembly
+
+    %% Blocked paths
+    p6-schur-blocked -.->|"was candidate (a)"| p6-rho
+    p6-kn-extremal -.->|"empirical support"| p6-assembly
+
+    %% Evidence
+    p6-empirical -.->|"all steps pass"| p6-assembly
+
+    %% Result
+    p6-result ==>|"K_n closed"| p6q
+    p6-result -->|"proved"| p6-kn-formula
+    p6-result -->|"in progress"| p6-assembly
+
+    %% === STYLING ===
+    classDef target fill:#f9e,stroke:#c06,stroke-width:3px
+    classDef proved fill:#cfc,stroke:#393,stroke-width:2px
+    classDef candidate fill:#cef,stroke:#39c,stroke-width:2px
+    classDef open fill:#ffc,stroke:#cc3,stroke-width:3px
+    classDef empirical fill:#eee,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5
+    classDef blocked fill:#fdd,stroke:#c66,stroke-width:1px,stroke-dasharray: 3 3
+    classDef summary fill:#ccf,stroke:#66c,stroke-width:2px
+
+    class p6q target
+    class p6-turan,p6-greedy,p6-pigeonhole,p6-foster,p6-kn-formula,p6-size proved
+    class p6-neumann,p6-rho,p6-assembly,p6-xbound candidate
+    class p6-trft open
+    class p6-kn-extremal,p6-empirical empirical
+    class p6-schur-blocked blocked
+    class p6-result summary

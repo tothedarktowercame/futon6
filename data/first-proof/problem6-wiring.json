@@ -1,11 +1,14 @@
 {
   "thread_id": "first-proof-p6",
+  "version": "v5-neumann",
+  "last_updated": "2026-02-13",
+  "notes": "Post Codex C2: Schur naive blocked, Neumann alignment attack rho_k<=1/2 candidate",
   "nodes": [
     {
       "id": "p6-problem",
       "node_type": "question",
       "post_id": 6,
-      "body_text": "Does there exist universal c>0 such that for every finite undirected graph G=(V,E,w) with nonnegative weights and every epsilon in (0,1), there exists S subseteq V with |S|>=c*epsilon*|V| and L_{G[S]}~ <= epsilon*L_G on R^V (where L_{G[S]}~ is zero-padded)?",
+      "body_text": "Does there exist universal c>0 such that for every finite undirected graph G=(V,E,w) with nonnegative weights and every epsilon in (0,1), there exists S subseteq V with |S|>=c*epsilon*|V| and L_{G[S]}~ <= epsilon*L_G on R^V?",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": null
@@ -29,75 +32,141 @@
       "parent_post_id": 6
     },
     {
-      "id": "p6-s3",
+      "id": "p6-turan",
       "node_type": "answer",
-      "post_id": 603,
-      "body_text": "Probabilistic construction: include each vertex i.i.d. with probability p = epsilon. E[|S|] = epsilon*n. E[L_S] = epsilon^2 * L, so E[epsilon*L - L_S] = epsilon(1-epsilon)*L >= 0. This is expectation-only.",
-      "score": 0,
-      "creation_date": "2026-02-11",
+      "post_id": 610,
+      "body_text": "Section 5a: Heavy edge pruning via Turan. Edges with tau_e > epsilon are heavy. At most (n-1)/epsilon heavy edges. Turan gives independent set I_0 >= epsilon*n/3 in the heavy graph. All edges internal to I_0 are light (tau_e <= epsilon).",
+      "score": 1,
+      "creation_date": "2026-02-13",
       "parent_post_id": 6
     },
     {
-      "id": "p6-s3a",
+      "id": "p6-filter-deleted",
       "node_type": "comment",
-      "post_id": 6031,
-      "body_text": "Size concentration: Chernoff gives |S| >= epsilon*n/2 with probability >= 1 - exp(-epsilon*n/8).",
-      "score": 0,
-      "creation_date": "2026-02-11",
-      "parent_post_id": 603
+      "post_id": 611,
+      "body_text": "Section 5b DELETED (Cycle 3 Q1): Leverage degree filter is unnecessary. Foster's theorem controls avg leverage degree globally. Removing the filter improves the constant from |I_0'| >= eps*n/12 to |I_0| >= eps*n/3 (4x improvement). Verified: dbar < 1 at all 149 unfiltered steps.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 610
     },
     {
-      "id": "p6-s3b",
-      "node_type": "comment",
-      "post_id": 6032,
-      "body_text": "Spectral expectation: E[L_S] = p^2*L = epsilon^2*L. Since epsilon^2 < epsilon for epsilon in (0,1), E[L_S] <= epsilon*L. Need concentration for a realized subset.",
-      "score": 0,
-      "creation_date": "2026-02-11",
-      "parent_post_id": 603
-    },
-    {
-      "id": "p6-s4",
+      "id": "p6-greedy",
       "node_type": "answer",
-      "post_id": 604,
-      "body_text": "Core technical step: matrix concentration for degree-2 polynomial in independent Bernoulli variables. Star domination: L_S <= sum_v Z_v L_v converts edge-dependent to vertex-independent form.",
-      "score": 0,
-      "creation_date": "2026-02-11",
+      "post_id": 612,
+      "body_text": "Section 5c: Barrier greedy on I_0. Maintain M_t = sum X_e prec epsilon*I. At each step, need exists v in R_t with ||Y_t(v)|| < 1 where Y_t(v) = H_t^{-1/2} C_t(v) H_t^{-1/2}. Runs for T = epsilon*m_0/3 steps.",
+      "score": 1,
+      "creation_date": "2026-02-13",
       "parent_post_id": 6
     },
     {
-      "id": "p6-s4a",
-      "node_type": "comment",
-      "post_id": 6041,
-      "body_text": "Star domination with explicit counting: L_S = sum_{uv} Z_u Z_v L_uv <= (1/2) sum_v Z_v sum_{u~v} L_uv. With independent Bernoulli Z_v, RHS is a sum of independent PSD matrices.",
-      "score": 0,
-      "creation_date": "2026-02-11",
-      "parent_post_id": 604
-    },
-    {
-      "id": "p6-s4b",
-      "node_type": "comment",
-      "post_id": 6042,
-      "body_text": "Matrix Freedman/Bernstein setup: define vertex-reveal martingale for centered sum X=sum_i (Z_i-p_i)A_i with self-adjoint differences Delta_i, increment bound ||Delta_i||<=R_*, and predictable quadratic variation W_n=sum E[Delta_i^2|F_{i-1}].",
-      "score": 0,
-      "creation_date": "2026-02-11",
-      "parent_post_id": 604
-    },
-    {
-      "id": "p6-s5",
+      "id": "p6-pigeonhole",
       "node_type": "answer",
-      "post_id": 605,
-      "body_text": "External dependency: BSS 2012 is edge sparsification (not vertex-subset). Vertex-selection analogue via star domination is plausible but constitutes an additional unproved step. Conclusion is conditional on this adaptation.",
-      "score": 0,
-      "creation_date": "2026-02-11",
+      "post_id": 613,
+      "body_text": "Section 5d: Pigeonhole + PSD trace bound. For PSD Y: ||Y|| <= tr(Y). Define dbar = (1/r_t) sum tr(Y_t(v)). By pigeonhole: min tr(Y_t(v)) <= dbar. If dbar < 1 then exists v with ||Y_t(v)|| < 1. Elementary — no interlacing, no real stability.",
+      "score": 1,
+      "creation_date": "2026-02-13",
       "parent_post_id": 6
     },
     {
-      "id": "p6-s6",
+      "id": "p6-foster",
       "node_type": "answer",
-      "post_id": 606,
-      "body_text": "Conclusion in this draft: unconditionally we prove c<=1 via K_n and a correct concentration framework; the universal existential claim is conditional on the external theorem (p6-s5) and otherwise remains open in this writeup.",
+      "post_id": 614,
+      "body_text": "Section 5e (Foster mechanism): Foster's theorem gives sum tau_e = n-1, so avg leverage degree < 2. At M_t = 0: dbar = tr(F_t)/(eps*r_t). For K_n this is 2t/(n*eps) = 2/3 at horizon. The mechanism is Foster controlling the total cross-leverage, not per-vertex filtering.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 6
+    },
+    {
+      "id": "p6-kn-formula",
+      "node_type": "answer",
+      "post_id": 615,
+      "body_text": "Section 5e (K_n exact formula, Cycle 2): d̄_Kn(t) = (t-1)/(m_0*eps - t) + (t+1)/(m_0*eps). Derived from eigenstructure of M_t and F_t in K_n. At horizon T = eps*m_0/3: d̄ -> 5/6 = 0.833 < 1. Verified to machine precision.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 6
+    },
+    {
+      "id": "p6-kn-extremal",
+      "node_type": "comment",
+      "post_id": 616,
+      "body_text": "K_n extremality (Cycle 2+Codex C2): NOT monotonically shrinking with n. ER_500_r1 gives 1.011 at t=5 (worse than ER_60 at 1.005). At n=1000 t>=2 drops to 0.06%. Seed-dependent, not structural. Worst case: 1.011 * 5/6 = 0.843 < 1, so barrier safe regardless.",
       "score": 0,
-      "creation_date": "2026-02-11",
+      "creation_date": "2026-02-13",
+      "parent_post_id": 615,
+      "codex_c2_signals": {
+        "kn_derivation": "VERIFIED (machine precision, exact rational)",
+        "large_n_extremality": "NEGATIVE — not monotone, ER_500 r1 gives 1.1% overshoot at t>=2",
+        "er_outlier": "REPRODUCED — leverage CV=0.072, but corr with overshoot only 0.11",
+        "schur_probe": "BLOCKED — M_t=0 flat, M_t!=0 linear in w so concentrate-top exceeds uniform"
+      }
+    },
+    {
+      "id": "p6-size",
+      "node_type": "answer",
+      "post_id": 617,
+      "body_text": "Section 5f: Size bound. |S| = T = eps*m_0/3 >= eps*(eps*n/3)/3 = eps^2*n/9. The eps^2 bottleneck is structural (Cycle 3 Q3): Star graphs break without Turan. Two factors: Turan gives Theta(eps*n), greedy runs Theta(eps*|I_0|) steps.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 6
+    },
+    {
+      "id": "p6-gpl-h",
+      "node_type": "answer",
+      "post_id": 618,
+      "body_text": "GPL-H (remaining gap): Prove dbar < 1 for general G at M_t != 0. Codex C2 blocked naive Schur. New candidate: Neumann alignment attack (rho_k <= 1/2).",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 6,
+      "attack_path_status": {
+        "a_schur_naive": "BLOCKED (Codex C2 Task 4: concentrate-top exceeds uniform)",
+        "b_logdet": "OPEN (subsumed by Neumann if rho_k works)",
+        "c_interlacing": "OPEN",
+        "e_neumann_alignment": "CANDIDATE — rho_k<=1/2 sketch, pending Codex C3 verification"
+      }
+    },
+    {
+      "id": "p6-neumann",
+      "node_type": "answer",
+      "post_id": 620,
+      "body_text": "Neumann series attack: expand B_t = sum M_t^k/eps^{k+1}. Define rho_k = tr(M^k F)/(||M||^k tr(F)). If rho_k <= 1/2 for all k, then dbar <= dbar^0 * (2-x)/(2(1-x)) where x=||M||/eps. At x=1/3 (K_n horizon): amplification = 5/4, dbar = (2/3)(5/4) = 5/6 exactly.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 6
+    },
+    {
+      "id": "p6-rho-proof",
+      "node_type": "answer",
+      "post_id": 621,
+      "body_text": "Proof sketch for rho_k <= 1/2: (1) F_t <= Pi - M_t (compensation). (2) tr(M^k F) <= tr(M^k(Pi-M)) = sum mu_i^k(1-mu_i). (3) sum mu_i^k(1-mu_i) <= mu_max^{k-1}(tau - ||M||_F^2). (4) rank(M) <= t-1 gives tau - ||M||_F^2 <= mu_max*(t-tau). (5) Therefore tr(M^k F) <= mu_max^k*(t-tau). (6) rho_k <= (t-tau)/tr(F_t). KEY DEPENDENCY: need tr(F_t) >= 2(t-tau).",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 620
+    },
+    {
+      "id": "p6-trft-identity",
+      "node_type": "comment",
+      "post_id": 622,
+      "body_text": "KEY IDENTITY TO VERIFY: tr(F_t) = 2(t - tau)? Or tr(F_t) >= 2(t-tau)? This is the critical dependency in the rho_k proof. Codex C3 Task 1 will check numerically.",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 621
+    },
+    {
+      "id": "p6-x-bound",
+      "node_type": "comment",
+      "post_id": 623,
+      "body_text": "Second piece: need x = ||M_t||/eps bounded at horizon. For K_n: x = t/(n*eps) = 1/3 at horizon. For general G: self-consistent — dbar<1 limits per-step gap shrinkage, which limits x growth. May need separate inductive argument.",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 620
+    },
+    {
+      "id": "p6-result",
+      "node_type": "answer",
+      "post_id": 619,
+      "body_text": "K_n: PROVED, c = 1/3. General: Neumann alignment attack in progress (rho_k <= 1/2 candidate). Proof chain: Turan -> greedy -> Foster + Neumann -> pigeonhole -> |S| = eps^2*n/9. Codex C3 verifying key identity.",
+      "score": 1,
+      "creation_date": "2026-02-13",
       "parent_post_id": 6
     }
   ],
@@ -117,460 +186,219 @@
       "detection": "structural"
     },
     {
-      "source": "p6-s3",
+      "source": "p6-turan",
       "target": "p6-problem",
       "edge_type": "assert",
-      "evidence": "Random vertex sampling with p = epsilon",
+      "evidence": "Heavy/light split, Turan independent set I_0 >= eps*n/3",
       "detection": "structural"
     },
     {
-      "source": "p6-s3a",
-      "target": "p6-s3",
-      "edge_type": "clarify",
-      "evidence": "Chernoff: |S| >= epsilon*n/2 w.h.p.",
-      "detection": "structural"
-    },
-    {
-      "source": "p6-s3b",
-      "target": "p6-s3",
-      "edge_type": "clarify",
-      "evidence": "E[L_S] = epsilon^2*L <= epsilon*L; still expectation-level",
-      "detection": "structural"
-    },
-    {
-      "source": "p6-s4",
-      "target": "p6-s3b",
-      "edge_type": "challenge",
-      "evidence": "Expectation insufficient; need concentration for all directions",
-      "detection": "structural"
-    },
-    {
-      "source": "p6-s4a",
-      "target": "p6-s4",
-      "edge_type": "clarify",
-      "evidence": "1/2-star domination converts dependent edges to independent vertices",
-      "detection": "structural"
-    },
-    {
-      "source": "p6-s4b",
-      "target": "p6-s4",
-      "edge_type": "reference",
-      "evidence": "Matrix Freedman/Bernstein with explicit martingale parameters",
-      "detection": "structural"
-    },
-    {
-      "source": "p6-s4b",
-      "target": "p6-s1",
-      "edge_type": "reference",
-      "evidence": "Effective-resistance normalization and leverage bounds",
-      "detection": "structural"
-    },
-    {
-      "source": "p6-s5",
-      "target": "p6-s4",
+      "source": "p6-filter-deleted",
+      "target": "p6-turan",
       "edge_type": "reform",
-      "evidence": "Mark universal-existence theorem as explicit external dependency",
+      "evidence": "Leverage filter unnecessary — Foster controls avg leverage degree globally. 4x constant improvement.",
+      "detection": "empirical-cycle3"
+    },
+    {
+      "source": "p6-greedy",
+      "target": "p6-turan",
+      "edge_type": "reference",
+      "evidence": "Barrier greedy runs on I_0 (directly, no filter)",
       "detection": "structural"
     },
     {
-      "source": "p6-s6",
+      "source": "p6-pigeonhole",
+      "target": "p6-greedy",
+      "edge_type": "assert",
+      "evidence": "If dbar < 1 then exists v with ||Y_t(v)|| < 1 — closes barrier step",
+      "detection": "structural"
+    },
+    {
+      "source": "p6-foster",
+      "target": "p6-pigeonhole",
+      "edge_type": "assert",
+      "evidence": "Foster's theorem: avg leverage degree < 2 implies dbar controlled. At M_t=0: dbar = 2t/(n*eps) for K_n.",
+      "detection": "structural"
+    },
+    {
+      "source": "p6-kn-formula",
+      "target": "p6-foster",
+      "edge_type": "assert",
+      "evidence": "K_n exact formula d̄(t) = (t-1)/(m_0*eps-t) + (t+1)/(m_0*eps) -> 5/6 at horizon",
+      "detection": "derived-cycle2"
+    },
+    {
+      "source": "p6-kn-extremal",
+      "target": "p6-kn-formula",
+      "edge_type": "clarify",
+      "evidence": "d̄_G/d̄_Kn <= 1.005 empirically. K_n is the hardest case.",
+      "detection": "empirical-cycle2"
+    },
+    {
+      "source": "p6-size",
+      "target": "p6-greedy",
+      "edge_type": "assert",
+      "evidence": "|S| = eps*m_0/3 >= eps^2*n/9. eps^2 structural (Star breaks without Turan).",
+      "detection": "structural"
+    },
+    {
+      "source": "p6-gpl-h",
+      "target": "p6-kn-extremal",
+      "edge_type": "challenge",
+      "evidence": "Need formal proof that d̄_G <= d̄_Kn. Empirical margin: 0.5%.",
+      "detection": "structural"
+    },
+    {
+      "source": "p6-gpl-h",
+      "target": "p6-pigeonhole",
+      "edge_type": "challenge",
+      "evidence": "Formal dbar < 1 for general G requires K_n extremality or alternative bound",
+      "detection": "structural"
+    },
+    {
+      "source": "p6-result",
       "target": "p6-problem",
       "edge_type": "assert",
-      "evidence": "Unconditional: c<=1; universal existence is conditional on p6-s5 and otherwise open in this writeup",
+      "evidence": "K_n PROVED c=1/3. General: one gap (K_n extremality). |S| >= eps^2*n/9.",
       "detection": "structural"
     },
     {
-      "source": "p6-s6",
-      "target": "p6-s3",
+      "source": "p6-result",
+      "target": "p6-kn-formula",
       "edge_type": "reference",
-      "evidence": "Probabilistic construction with p = epsilon",
+      "evidence": "K_n closed via exact formula -> 5/6 < 1",
       "detection": "structural"
     },
     {
-      "source": "p6-s6",
-      "target": "p6-s5",
+      "source": "p6-result",
+      "target": "p6-gpl-h",
       "edge_type": "reference",
-      "evidence": "Universal existential claim depends on external theorem assumption",
+      "evidence": "General graphs conditional on GPL-H closure",
       "detection": "structural"
     },
     {
-      "source": "p6-s6",
-      "target": "p6-s2",
-      "edge_type": "reference",
-      "evidence": "K_n shows c = 1 is tight",
-      "detection": "structural"
+      "source": "p6-neumann",
+      "target": "p6-pigeonhole",
+      "edge_type": "assert",
+      "evidence": "Neumann amplification bound: dbar <= dbar^0 * (2-x)/(2(1-x)) where x=||M||/eps",
+      "detection": "derived-cycle3+"
+    },
+    {
+      "source": "p6-rho-proof",
+      "target": "p6-neumann",
+      "edge_type": "assert",
+      "evidence": "rho_k <= 1/2 via F<=Pi-M, rank<=t-1, Cauchy-Schwarz. Gives geometric series bound.",
+      "detection": "derived-cycle3+"
+    },
+    {
+      "source": "p6-trft-identity",
+      "target": "p6-rho-proof",
+      "edge_type": "challenge",
+      "evidence": "Need tr(F_t) >= 2(t-tau) to close rho_k <= 1/2. Codex C3 Task 1.",
+      "detection": "pending-verification"
+    },
+    {
+      "source": "p6-x-bound",
+      "target": "p6-neumann",
+      "edge_type": "challenge",
+      "evidence": "Need x=||M_t||/eps bounded at horizon. Self-consistent with dbar<1.",
+      "detection": "pending-verification"
+    },
+    {
+      "source": "p6-neumann",
+      "target": "p6-gpl-h",
+      "edge_type": "reform",
+      "evidence": "Neumann attack replaces K_n extremality comparison with direct amplification bound",
+      "detection": "derived-cycle3+"
     }
   ],
   "hyperedges": [
     {
-      "hx/id": "first-proof-p6:edge-000",
-      "hx/type": "thread/clarify",
+      "hx/id": "first-proof-p6:proof-chain",
+      "hx/type": "thread/proof-chain",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s1",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6-problem",
-          "node_type": "question"
-        }
+        {"role": "step-1", "ident": "p6-turan", "node_type": "answer"},
+        {"role": "step-2-deleted", "ident": "p6-filter-deleted", "node_type": "comment"},
+        {"role": "step-3", "ident": "p6-greedy", "node_type": "answer"},
+        {"role": "step-4", "ident": "p6-pigeonhole", "node_type": "answer"},
+        {"role": "step-5a", "ident": "p6-foster", "node_type": "answer"},
+        {"role": "step-5b", "ident": "p6-kn-formula", "node_type": "answer"},
+        {"role": "step-6", "ident": "p6-size", "node_type": "answer"}
       ],
       "hx/content": {
-        "evidence": "Rewrite condition in effective-resistance frame",
+        "evidence": "Simplified proof chain: Turan -> greedy -> Foster + K_n -> pigeonhole -> eps^2*n/9",
         "detection": "structural"
       },
-      "hx/labels": [
-        "thread",
-        "clarify",
-        "structural"
-      ]
+      "hx/labels": ["thread", "proof-chain", "structural", "simplified-cycle3"]
     },
     {
-      "hx/id": "first-proof-p6:edge-001",
-      "hx/type": "thread/exemplify",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s2",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6-problem",
-          "node_type": "question"
-        }
-      ],
-      "hx/content": {
-        "evidence": "K_n tight example: s <= epsilon*n, c = 1",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "exemplify",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-002",
+      "hx/id": "first-proof-p6:kn-closure",
       "hx/type": "thread/assert",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s3",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6-problem",
-          "node_type": "question"
-        }
+        {"role": "source", "ident": "p6-kn-formula", "node_type": "answer"},
+        {"role": "via", "ident": "p6-pigeonhole", "node_type": "answer"},
+        {"role": "target", "ident": "p6-problem", "node_type": "question"}
       ],
       "hx/content": {
-        "evidence": "Random vertex sampling with p = epsilon",
-        "detection": "structural"
+        "evidence": "K_n closed: d̄ = (t-1)/(n*eps-t) + (t+1)/(n*eps) -> 5/6 < 1, pigeonhole gives vertex, c = 1/3",
+        "detection": "derived-cycle2"
       },
-      "hx/labels": [
-        "thread",
-        "assert",
-        "structural"
-      ]
+      "hx/labels": ["thread", "assert", "proved"]
     },
     {
-      "hx/id": "first-proof-p6:edge-003",
-      "hx/type": "thread/clarify",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s3a",
-          "node_type": "comment"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s3",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Chernoff: |S| >= epsilon*n/2 w.h.p.",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "clarify",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-004",
-      "hx/type": "thread/clarify",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s3b",
-          "node_type": "comment"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s3",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "E[L_S] = epsilon^2*L <= epsilon*L; still expectation-level",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "clarify",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-005",
+      "hx/id": "first-proof-p6:gpl-h-gap",
       "hx/type": "thread/challenge",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s4",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s3b",
-          "node_type": "comment"
-        }
+        {"role": "gap", "ident": "p6-gpl-h", "node_type": "answer"},
+        {"role": "evidence", "ident": "p6-kn-extremal", "node_type": "comment"},
+        {"role": "blocks", "ident": "p6-result", "node_type": "answer"}
       ],
       "hx/content": {
-        "evidence": "Expectation insufficient; need concentration for all directions",
+        "evidence": "GPL-H: prove d̄_G <= d̄_Kn. Single remaining gap. 0.5% empirical margin.",
         "detection": "structural"
       },
-      "hx/labels": [
-        "thread",
-        "challenge",
-        "structural"
-      ]
+      "hx/labels": ["thread", "challenge", "open-gap"]
     },
     {
-      "hx/id": "first-proof-p6:edge-006",
-      "hx/type": "thread/clarify",
+      "hx/id": "first-proof-p6:neumann-attack",
+      "hx/type": "thread/candidate-closure",
       "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s4a",
-          "node_type": "comment"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s4",
-          "node_type": "answer"
-        }
+        {"role": "mechanism", "ident": "p6-neumann", "node_type": "answer"},
+        {"role": "proof", "ident": "p6-rho-proof", "node_type": "answer"},
+        {"role": "dependency-1", "ident": "p6-trft-identity", "node_type": "comment"},
+        {"role": "dependency-2", "ident": "p6-x-bound", "node_type": "comment"},
+        {"role": "closes", "ident": "p6-gpl-h", "node_type": "answer"}
       ],
       "hx/content": {
-        "evidence": "1/2-star domination converts dependent edges to independent vertices",
-        "detection": "structural"
+        "evidence": "Neumann alignment: rho_k<=1/2 + x-bound -> dbar <= (2/3)(2-x)/(2(1-x)) < 1. Pending Codex C3 verification of tr(F_t) identity and x trajectory.",
+        "detection": "derived-cycle3+"
       },
-      "hx/labels": [
-        "thread",
-        "clarify",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-007",
-      "hx/type": "thread/reference",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s4b",
-          "node_type": "comment"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s4",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Matrix Freedman/Bernstein with explicit martingale parameters",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-008",
-      "hx/type": "thread/reference",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s4b",
-          "node_type": "comment"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s1",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Effective-resistance normalization and leverage bounds",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-009",
-      "hx/type": "thread/reform",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s5",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s4",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Mark universal-existence theorem as explicit external dependency",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reform",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-010",
-      "hx/type": "thread/assert",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6-problem",
-          "node_type": "question"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Unconditional: c<=1; universal existence is conditional on p6-s5 and otherwise open in this writeup",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "assert",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-011",
-      "hx/type": "thread/reference",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s3",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Probabilistic construction with p = epsilon",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-012",
-      "hx/type": "thread/reference",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s5",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "Universal existential claim depends on external theorem assumption",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
-    },
-    {
-      "hx/id": "first-proof-p6:edge-013",
-      "hx/type": "thread/reference",
-      "hx/ends": [
-        {
-          "role": "source",
-          "ident": "p6-s6",
-          "node_type": "answer"
-        },
-        {
-          "role": "target",
-          "ident": "p6-s2",
-          "node_type": "answer"
-        }
-      ],
-      "hx/content": {
-        "evidence": "K_n shows c = 1 is tight",
-        "detection": "structural"
-      },
-      "hx/labels": [
-        "thread",
-        "reference",
-        "structural"
-      ]
+      "hx/labels": ["thread", "candidate-closure", "pending-verification"]
     }
   ],
   "stats": {
-    "n_nodes": 11,
-    "n_edges": 14,
+    "n_nodes": 18,
+    "n_edges": 20,
     "node_types": {
       "question": 1,
-      "answer": 6,
-      "comment": 4
+      "answer": 14,
+      "comment": 3
     },
     "edge_types": {
-      "clarify": 4,
+      "clarify": 2,
       "exemplify": 1,
-      "assert": 2,
-      "challenge": 1,
-      "reference": 5,
-      "reform": 1
+      "assert": 8,
+      "reform": 2,
+      "reference": 3,
+      "challenge": 4
     },
     "detection_types": {
-      "structural": 14
+      "structural": 10,
+      "empirical-cycle2": 1,
+      "empirical-cycle3": 1,
+      "derived-cycle2": 2,
+      "derived-cycle3+": 4,
+      "pending-verification": 2
     }
   }
 }

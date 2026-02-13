@@ -1,0 +1,85 @@
+flowchart TD
+    %% Problem 6 v4: Post Cycle 3 — simplified proof chain
+    %% Leverage filter deleted. Foster + K_n exact formula.
+    %% Green = proved, Yellow = open gap, Gray = empirical, Red = deleted
+
+    %% Target
+    p6q{{"P6 TARGET<br/>Universal c>0: for every G, eps,<br/>exists S with |S|>=c*eps*n, L_S<=eps*L"}}
+
+    %% Proof chain
+    p6-turan["5a. TURAN (proved)<br/>Heavy/light split at tau=eps.<br/>Indep set I_0 >= eps*n/3,<br/>all internal edges light"]
+
+    p6-filter-del>"5b. FILTER DELETED<br/>Leverage filter unnecessary.<br/>Foster controls avg leverage.<br/>4x constant improvement"]
+
+    p6-greedy["5c. BARRIER GREEDY (proved)<br/>Greedy on I_0 directly.<br/>T = eps*m_0/3 steps.<br/>Need: exists v with ||Y_t(v)|| < 1"]
+
+    p6-pigeonhole["5d. PIGEONHOLE + PSD (proved)<br/>PSD: ||Y|| <= tr(Y)<br/>Pigeonhole: min <= avg = dbar<br/>If dbar < 1 then exists v OK"]
+
+    p6-foster["5e. FOSTER MECHANISM (proved)<br/>Foster: sum tau_e = n-1<br/>avg leverage degree < 2<br/>At M_t=0: dbar = 2t/(n*eps)"]
+
+    p6-kn-formula["5e. K_n EXACT FORMULA (proved)<br/>d̄ = (t-1)/(m₀ε-t) + (t+1)/(m₀ε)<br/>At horizon: d̄ → 5/6 = 0.833 < 1<br/>Verified to machine precision"]
+
+    p6-kn-extremal(["K_n EXTREMALITY (empirical)<br/>d̄_G / d̄_Kn <= 1.005<br/>Mean ratio: 0.962<br/>K_n is the hardest case"])
+
+    p6-size["5f. SIZE BOUND (proved if dbar<1)<br/>|S| = eps*m_0/3 >= eps²n/9<br/>eps² bottleneck structural<br/>(Star breaks without Turan)"]
+
+    p6-gpl-h{{"GPL-H (single gap)<br/>Prove d̄_G <= d̄_Kn for all G.<br/>Would give dbar <= 5/6 < 1.<br/>Margin: 0.5% empirically"}}
+
+    p6-result["RESULT<br/>K_n: PROVED, c = 1/3<br/>General: one gap (K_n extremality)<br/>|S| >= eps²n/9"]
+
+    %% Supplementary evidence
+    p6-qpoly(["Q-POLY ROOTS (empirical)<br/>Max root < 0.505 across 440 steps<br/>Vieta: max root <= dbar"])
+
+    p6-empirical(["NUMERICS (empirical)<br/>440+ steps, 7 families, n<=80<br/>dbar < 1 at ALL steps<br/>Max dbar: 0.718"])
+
+    p6-superseded(["SUPERSEDED<br/>MSS interlacing, Borcea-Branden,<br/>Bonferroni, leverage filter<br/>all bypassed"])
+
+    p6-random(["RANDOM SAMPLING (empirical)<br/>p=eps gives success for<br/>all 272 tested combos<br/>|S| >= eps*n/6 possible"])
+
+    %% === Proof flow ===
+
+    %% Main chain (top to bottom)
+    p6-turan -->|"I_0 >= eps*n/3"| p6q
+    p6-filter-del -.->|"deleted from chain"| p6-turan
+    p6-greedy -->|"greedy on I_0"| p6-turan
+    p6-pigeonhole ==>|"closes barrier step"| p6-greedy
+    p6-foster ==>|"controls dbar"| p6-pigeonhole
+    p6-kn-formula ==>|"exact: d̄ → 5/6"| p6-foster
+    p6-size -->|"|S| = eps²n/9"| p6-greedy
+
+    %% K_n extremality and gap
+    p6-kn-extremal -.->|"ratio <= 1.005"| p6-kn-formula
+    p6-gpl-h -->|"SINGLE GAP"| p6-kn-extremal
+    p6-gpl-h -->|"blocks general closure"| p6-pigeonhole
+
+    %% Evidence
+    p6-qpoly -.->|"confirms via Vieta"| p6-kn-extremal
+    p6-empirical -.->|"440+ steps pass"| p6-kn-extremal
+
+    %% Alternative path
+    p6-random -.->|"bypasses greedy"| p6q
+
+    %% Superseded
+    p6-superseded -.->|"replaced by Foster + pigeonhole"| p6-foster
+
+    %% Result
+    p6-result ==>|"K_n closed"| p6q
+    p6-result -->|"proved"| p6-kn-formula
+    p6-result -->|"conditional"| p6-gpl-h
+
+    %% === Styling ===
+    classDef target fill:#f9e,stroke:#c06,stroke-width:3px
+    classDef proved fill:#cfc,stroke:#393,stroke-width:2px
+    classDef open fill:#ffc,stroke:#cc3,stroke-width:3px
+    classDef empirical fill:#eee,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5
+    classDef superseded fill:#fee,stroke:#c99,stroke-width:1px,stroke-dasharray: 5 5
+    classDef deleted fill:#fdd,stroke:#c66,stroke-width:1px,stroke-dasharray: 3 3
+    classDef summary fill:#ccf,stroke:#66c,stroke-width:2px
+
+    class p6q target
+    class p6-turan,p6-greedy,p6-pigeonhole,p6-foster,p6-kn-formula,p6-size proved
+    class p6-gpl-h open
+    class p6-kn-extremal,p6-qpoly,p6-empirical,p6-random empirical
+    class p6-superseded superseded
+    class p6-filter-del deleted
+    class p6-result summary
