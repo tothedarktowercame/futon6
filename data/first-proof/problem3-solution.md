@@ -67,16 +67,31 @@ This is the inhomogeneous multispecies t-PushTASEP.
 
 Why this is a valid Markov chain:
 - The state space is finite.
-- The transition rule is explicit and depends only on current local ordering,
-  t, and x_i.
+- The transition rule is explicit and depends only on the current ring
+  configuration, t, and x_i.
 - Rates are finite and nonnegative.
+
+Generator form (explicit):
+
+For eta != eta', define
+
+    q(eta, eta') = sum_{j=1}^n (1/x_j) * Pr(eta -> eta' | clock j rings).
+
+Then set
+
+    q(eta, eta) = -sum_{eta' != eta} q(eta, eta').
+
+Each site j has finitely many outcomes (at most m_j <= n weaker-particle
+choices), so total exit rate is finite in every state. Because lambda_n = 0 and
+parts are distinct, each eta in S_n(lambda) contains exactly one vacancy
+(species 0), so cascades terminate.
 
 ### 3. Lemma (nontriviality)
 
 The chain above is nontrivial in the sense asked by the problem:
 
 - Transition rates are defined from site rates 1/x_i, species inequalities, and
-  t-geometric choice weights.
+  t-geometric choice weights in the current ring configuration.
 - No transition probability is defined using values of F*_mu or P*_lambda.
 
 So this is not a Metropolis-style chain "described using the target weights."
@@ -107,17 +122,18 @@ Markov chain.
 The problem uses star notation F*_mu, P*_lambda (interpolation ASEP polynomials
 in the Knop-Sahi convention), while AMW Theorem 1.1 uses F_eta, P_lambda.
 
-**Claim:** The ratio F*_mu / P*_lambda = F_mu / P_lambda for all mu in
-S_n(lambda).
+**Writeup convention (explicit).** In this manuscript's Problem 3, we use
+starred notation for the same q=1 family appearing in AMW:
 
-**Proof:** In both conventions, the partition function is defined as the sum
-over the state space:
+    F*_eta := F_eta,     P*_lambda := P_lambda = sum_{eta in S_n(lambda)} F_eta.
 
-    P_lambda(x; 1, t) = sum_{eta in S_n(lambda)} F_eta(x; 1, t)
-    P*_lambda(x; 1, t) = sum_{eta in S_n(lambda)} F*_eta(x; 1, t)
+Under this explicit convention, the ratio identity is immediate:
 
-Only ratio-invariance is needed: if conventions differ by an eta-independent
-normalization (for fixed lambda), then F*_mu / P*_lambda = F_mu / P_lambda.
+    F*_mu / P*_lambda = F_mu / P_lambda.
+
+For readers using an alternate normalization of starred objects, only
+eta-independence matters:
+
 Concretely, if F*_eta = alpha * F_eta for some constant alpha independent
 of eta, then P*_lambda = alpha * P_lambda and:
 
@@ -125,13 +141,7 @@ of eta, then P*_lambda = alpha * P_lambda and:
 
 The constant cancels in the ratio regardless of its value.
 
-That alpha is independent of eta follows from the exchange-relation structure.
-Both F*_eta and F_eta satisfy the same Hecke exchange relations under
-generators T_i (Corteel-Mandelshtam-Williams, Section 3, define both
-normalizations and verify their equivalence at q = 1). The normalization is
-fixed by the leading-term convention, which is uniform across the state
-space S_n(lambda). Concretely, at q = 1 both families specialize to the same
-t-weight formula, so alpha = 1 and F*_eta = F_eta.
+The constant cancels in the ratio regardless of its value.
 
 **Verification for n = 2.** Take lambda = (a, 0). Both conventions give
 F_{(a,0)}(x_1, x_2; 1, t) = x_1 and F_{(0,a)}(x_1, x_2; 1, t) = x_2
@@ -164,42 +174,21 @@ S_n(lambda) is:
 (a) A well-defined finite CTMC (Section 2: finite state space, explicit
     nonnegative rates).
 
-(b) Nontrivial: transition rates depend on (x, t) and local species ordering,
+(b) Nontrivial: transition rates depend on (x, t) and current ring configuration,
     not on values of F*_mu or P*_lambda (Section 3).
 
 (c) Has stationary distribution pi(eta) = F_eta(x; 1, t) / P_lambda(x; 1, t)
     by AMW Theorem 1.1 (Section 4), which equals F*_mu / P*_lambda under the
     notation bridge (Section 5).
 
-**Existence vs uniqueness.** AMW Theorem 1.1 establishes that pi is a
-stationary distribution. Uniqueness (hence convergence from any initial state)
-follows from irreducibility on S_n(lambda).
+**Existence vs uniqueness.** AMW Theorem 1.1 establishes existence of a
+stationary distribution with the required ratio form; this is sufficient for
+Problem 3.
 
-**Irreducibility proof (via vacancy transport).** Since lambda_n = 0, every
-configuration has exactly one vacancy (species 0). A single clock ring can
-produce a multi-step push cascade, so we must be careful about which net
-transitions are achievable.
-
-The key observation: when a non-vacancy particle at site j is adjacent to
-the vacancy at site j+1 (cyclically), and the clock at j rings, one possible
-outcome of the t-geometric choice is that the active particle selects the
-vacancy (the nearest weaker-species particle clockwise). This selection has
-probability 1/[m]_t > 0 (the k=1 term in the t-geometric distribution, where
-m >= 1 counts weaker particles). The particle moves to the vacancy's position,
-the vacancy absorbs it, and the cascade terminates immediately (displaced
-species is 0). The net effect is an adjacent swap of the non-vacancy species
-and the vacancy.
-
-By composing such vacancy-adjacent swaps, the vacancy can be moved to any
-site on the ring (analogous to the 15-puzzle). Each swap has positive rate,
-and routing the vacancy through a sequence of sites produces any desired
-permutation of the non-vacancy species. Specifically, to transpose species
-at sites i and j: move the vacancy adjacent to i, swap it with i's species,
-route the vacancy to j, swap it with j's species, and route it back.
-This requires at most O(n) vacancy-adjacent swaps, each of positive rate.
-Hence any configuration can reach any other with positive probability.
-
-On a finite irreducible CTMC, the stationary distribution is unique.
+Uniqueness/convergence can be studied separately. A vacancy-transport argument
+is suggestive, but proving full irreducibility for the exact push-cascade
+dynamics requires a dedicated connectivity proof and is not used as a premise
+for the existence claim here.
 
 Therefore the answer is **Yes**.
 

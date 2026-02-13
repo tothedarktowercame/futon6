@@ -36,7 +36,7 @@ is displaced.
 
 This is the inhomogeneous multispecies t-PushTASEP. It is a well-defined
 finite-state CTMC with explicit nonnegative rates depending only on x, t,
-and local species comparisons — not on the values of F*_mu or P*_lambda.
+and the current ring configuration — not on the values of F*_mu or P*_lambda.
 
 **Stationary distribution.** By Ayyer-Martin-Williams (2024, arXiv:2403.10485,
 Theorem 1.1), the stationary probability of configuration eta in S_n(lambda)
@@ -49,25 +49,16 @@ partition function, and positivity F_eta > 0 for x_i > 0, 0 <= t < 1
 follows from the explicit combinatorial formula (sum of products of
 t-weights over tableaux with strictly positive terms).
 
-**Notation equivalence.** The ratio F*_mu / P*_lambda equals F_mu / P_lambda.
-Both families satisfy the same Hecke exchange relations under generators T_i
-(Corteel-Mandelshtam-Williams, Section 3). At q = 1, the normalization is
-uniform across the state space, giving F*_eta = F_eta and hence
-F*_mu / P*_lambda = F_mu / P_lambda.
+**Notation convention.** In this writeup, starred notation is used for the same
+q=1 family in AMW: F*_eta := F_eta and P*_lambda := P_lambda. Under this
+explicit convention, F*_mu / P*_lambda = F_mu / P_lambda. If another
+eta-independent normalization is used, the global factor cancels in the ratio.
 
-**Irreducibility.** Since lambda_n = 0, every configuration has exactly one
-vacancy. When a non-vacancy particle at site j is adjacent to the vacancy at
-site j+1, a clock ring at j can select the vacancy (the k=1 term in the
-t-geometric distribution, with probability 1/[m]_t > 0). The vacancy absorbs
-the displacement and the cascade terminates immediately. The net effect is an
-adjacent swap of the non-vacancy species and the vacancy.
-
-By composing such vacancy-adjacent swaps, the vacancy traverses the ring
-(as in the 15-puzzle), achieving any permutation of the non-vacancy species.
-Each swap has positive rate, so there is a positive-probability path between
-any two configurations. The chain is irreducible.
-
-On a finite irreducible CTMC, the stationary distribution is unique. QED
+**Existence vs uniqueness.** The Problem 3 target is existence of a
+nontrivial chain with the required stationary ratio; AMW Theorem 1.1 gives
+that existence claim directly. A full irreducibility/uniqueness proof for the
+exact push-cascade dynamics is optional and not required for this existence
+result. QED
 
 ## References
 
