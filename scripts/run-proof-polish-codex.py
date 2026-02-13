@@ -282,6 +282,7 @@ def build_node_prompt(
     edges: list[dict],
     solution_text: str,
     profile: dict,
+    require_math_se_search: bool = True,
 ) -> str:
     """Build a verification prompt for a single proof node."""
     node_id = node["id"]
@@ -292,12 +293,18 @@ def build_node_prompt(
     incoming = [e for e in edges if e["target"] == node_id]
     outgoing = [e for e in edges if e["source"] == node_id]
 
+    task_line = profile["task"]
+    if require_math_se_search:
+        task_line += " Cross-reference with relevant math.SE discussions when possible."
+    else:
+        task_line += " Use only provided local context; do not perform web search."
+
     lines = [
         profile["role"],
         "",
         "## Task",
         "",
-        profile["task"] + " Cross-reference with relevant math.SE discussions when possible.",
+        task_line,
         "",
         "## Proof Step Under Review",
         "",
@@ -331,27 +338,48 @@ def build_node_prompt(
         "## Instructions",
         "",
         "1. Verify the mathematical claim in this proof step.",
-        f"2. Search math.SE for relevant discussions ({profile['search_topics']}).",
-        "3. Identify any gaps, unstated assumptions, or potential errors.",
-        "4. Suggest improvements if the claim could be tightened or clarified.",
-        "5. Reply as a single JSON object matching the required schema.",
     ])
+    if require_math_se_search:
+        lines.extend([
+            f"2. Search math.SE for relevant discussions ({profile['search_topics']}).",
+            "3. Identify any gaps, unstated assumptions, or potential errors.",
+            "4. Suggest improvements if the claim could be tightened or clarified.",
+            "5. Reply as a single JSON object matching the required schema.",
+        ])
+    else:
+        lines.extend([
+            "2. Use only the provided local context to identify gaps, unstated assumptions, or potential errors.",
+            "3. Suggest improvements if the claim could be tightened or clarified.",
+            "4. Reply as a single JSON object matching the required schema.",
+        ])
 
     return "\n".join(lines)
 
 
-def build_synthesis_prompt(solution_text: str, wiring: dict, profile: dict) -> str:
+def build_synthesis_prompt(
+    solution_text: str,
+    wiring: dict,
+    profile: dict,
+    require_math_se_search: bool = True,
+) -> str:
     """Build a synthesis prompt that reviews the entire proof."""
     stats = wiring.get("stats", {})
     synthesis_points = profile.get("synthesis_points", [])
     instructions = []
     for i, point in enumerate(synthesis_points, start=1):
         instructions.append(f"{i}. {point}")
-    instructions.extend([
-        f"{len(instructions)+1}. Search math.SE for references relevant to this proof domain.",
-        f"{len(instructions)+1}. Reply as a single JSON object matching the required schema. "
-        f"Use node_id='{profile['synthesis_node_id']}' for the synthesis.",
-    ])
+    if require_math_se_search:
+        instructions.extend([
+            f"{len(instructions)+1}. Search math.SE for references relevant to this proof domain.",
+            f"{len(instructions)+1}. Reply as a single JSON object matching the required schema. "
+            f"Use node_id='{profile['synthesis_node_id']}' for the synthesis.",
+        ])
+    else:
+        instructions.extend([
+            f"{len(instructions)+1}. Use only the provided local proof text and wiring context (no web search).",
+            f"{len(instructions)+1}. Reply as a single JSON object matching the required schema. "
+            f"Use node_id='{profile['synthesis_node_id']}' for the synthesis.",
+        ])
     return "\n".join([
         "You are a mathematical proof verifier reviewing a complete proof.",
         "",
@@ -380,6 +408,7 @@ def run_codex_once(
     cwd: Path,
     schema_path: Path,
     prompt_text: str,
+    timeout_sec: int | None = None,
 ) -> tuple[int, str, str]:
     """Run a single prompt through codex exec."""
     with tempfile.NamedTemporaryFile("w+", suffix=".txt", delete=False) as out_f:
@@ -400,13 +429,27 @@ def run_codex_once(
         "--output-last-message", str(out_path),
         "-",
     ]
-    proc = subprocess.run(cmd, input=instruction, text=True, capture_output=True)
+    try:
+        proc = subprocess.run(
+            cmd,
+            input=instruction,
+            text=True,
+            capture_output=True,
+            timeout=timeout_sec,
+        )
+        rc = proc.returncode
+        stderr_text = proc.stderr.strip()
+    except subprocess.TimeoutExpired as e:
+        rc = 124
+        stderr_text = f"timeout after {timeout_sec}s"
+        if e.stderr:
+            stderr_text = f"{stderr_text}\n{e.stderr}"
     try:
         response_text = out_path.read_text(encoding="utf-8").strip()
     except FileNotFoundError:
         response_text = ""
     out_path.unlink(missing_ok=True)
-    return proc.returncode, response_text, proc.stderr.strip()
+    return rc, response_text, stderr_text
 
 
 def main() -> int:
@@ -419,6 +462,17 @@ def main() -> int:
                     help="Max nodes to process (14 nodes + 1 synthesis = 15)")
     ap.add_argument("--model", default="gpt-5.3-codex")
     ap.add_argument("--codex-bin", default="codex")
+    ap.add_argument(
+        "--skip-math-se-search",
+        action="store_true",
+        help="Do not request math.SE/web lookups; keep verification local-context only.",
+    )
+    ap.add_argument(
+        "--per-call-timeout-sec",
+        type=int,
+        default=120,
+        help="Timeout in seconds per codex invocation (prevents indefinite hangs).",
+    )
     ap.add_argument("--dry-run", action="store_true",
                     help="Generate prompts only, don't call Codex")
     ap.add_argument("--repo-root", type=Path, default=REPO_ROOT)
@@ -448,6 +502,7 @@ def main() -> int:
             edges=edges,
             solution_text=solution_text,
             profile=profile,
+            require_math_se_search=not args.skip_math_se_search,
         )
         prompts.append({
             "node_id": node["id"],
@@ -459,7 +514,12 @@ def main() -> int:
     prompts.append({
         "node_id": profile["synthesis_node_id"],
         "node_type": "synthesis",
-        "prompt": build_synthesis_prompt(solution_text, wiring, profile),
+        "prompt": build_synthesis_prompt(
+            solution_text,
+            wiring,
+            profile,
+            require_math_se_search=not args.skip_math_se_search,
+        ),
     })
 
     # Write prompts
@@ -495,6 +555,7 @@ def main() -> int:
                     cwd=args.repo_root,
                     schema_path=schema_path,
                     prompt_text=rec["prompt"],
+                    timeout_sec=args.per_call_timeout_sec,
                 )
 
                 out = {"node_id": rec["node_id"]}

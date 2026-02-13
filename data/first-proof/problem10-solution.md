@@ -236,3 +236,38 @@ precond_solve(L_K, L_H, z):
 - PlanetMath: properties of tensor product
 - physics.SE #27466: iterative solvers for large systems in physics
 - physics.SE #27556: preconditioning for elliptic PDEs
+
+## 8. Gap Ledger (Requirement Compliant)
+
+Status labels follow `proved | partial | open | false | numerically verified`.
+
+| ID | Item | Status | Why | Evidence artifact |
+|---|---|---|---|---|
+| P10-G1 | Node-level external verifier run integrity | proved | Supported-model rerun completed with parseable outputs for all nodes (`15/15`; `8 verified`, `7 plausible`, `0 gap`, `0 error`). | `data/first-proof/problem10-codex-results.jsonl` |
+| P10-G2 | Convergence-rate strength under sampling assumptions | partial | The fast-rate claim is conditional on spectral equivalence and sampling regularity assumptions. | Section 5 (`(1-delta)P <= A_tau <= (1+delta)P`) |
+| P10-G3 | Explicit cycle record and named-gap discipline | proved | This section and Section 9 provide named gaps and cycle metadata. | This file (Sections 8-9) |
+
+Interpretation:
+- The mathematical writeup is **conditionally closed** under stated assumptions.
+- The process-integrity blocker (`P10-G1`) is resolved; remaining work is substantive convergence-strength evidence (`P10-G2`).
+
+## 9. Cycle Record (2026-02-13 Remediation)
+
+```text
+cycle_id: P10-remediation-2026-02-13
+problem_id: P10
+blocker_id: P10-G1
+hypothesis: Rerunning node-level verifier with a supported model restores valid machine-readable verification artifacts.
+stop_conditions: either (a) results regenerate with parseable JSON outputs, or (b) runtime/tooling failure is explicitly recorded with reproducible stderr evidence.
+execution_artifact_paths:
+  - data/first-proof/problem10-codex-prompts.jsonl
+  - data/first-proof/problem10-codex-results.jsonl
+validation_artifact_paths:
+  - data/first-proof/problem10-codex-results.jsonl
+result_status: completed
+status_change: P10-G1 moved from false to proved via supported-model rerun with fully parseable outputs.
+validation_summary: 15/15 parseable; 8 verified; 7 plausible; 0 gap; 0 error.
+failure_point: none observed in this remediation cycle; unresolved risk remains convergence-strength assumptions (P10-G2).
+next_blocker: P10-G2
+commit_hash: pending
+```
