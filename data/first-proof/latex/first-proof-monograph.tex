@@ -190,6 +190,11 @@
   boxrule=0.5pt, arc=2pt, breakable,
   before skip=6pt, after skip=6pt
 }
+\renewcommand{\statusnote}[1]{%
+  \begin{processnote}[title={Status Note}]
+  #1
+  \end{processnote}
+}
 % --- End proof-layer boxes ---
 
 \newcommand{\includeannotated}[1]{%
