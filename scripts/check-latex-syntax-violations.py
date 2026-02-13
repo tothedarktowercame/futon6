@@ -40,6 +40,15 @@ MATH_ENVS = {
     "cases",
 }
 
+SKIP_ENVS = {
+    "Shaded",
+    "Highlighting",
+    "Verbatim",
+    "verbatim",
+    "lstlisting",
+    "minted",
+}
+
 BEGIN_ENV_RE = re.compile(r"\\begin\{([^}]+)\}")
 END_ENV_RE = re.compile(r"\\end\{([^}]+)\}")
 
@@ -94,6 +103,7 @@ class MathState:
     in_inline_paren: bool = False
     in_inline_dollar: bool = False
     math_env_depth: int = 0
+    skip_env_depth: int = 0
 
 
 @dataclass
@@ -144,16 +154,28 @@ def split_math_nonmath(line: str, st: MathState) -> tuple[str, str]:
     while i < n:
         mb = BEGIN_ENV_RE.match(line, i)
         if mb:
-            if mb.group(1) in MATH_ENVS:
+            env = mb.group(1)
+            if env in MATH_ENVS:
                 st.math_env_depth += 1
+            if env in SKIP_ENVS:
+                st.skip_env_depth += 1
             i = mb.end()
             continue
 
         me = END_ENV_RE.match(line, i)
         if me:
-            if me.group(1) in MATH_ENVS and st.math_env_depth > 0:
+            env = me.group(1)
+            if env in MATH_ENVS and st.math_env_depth > 0:
                 st.math_env_depth -= 1
+            if env in SKIP_ENVS and st.skip_env_depth > 0:
+                st.skip_env_depth -= 1
             i = me.end()
+            continue
+
+        if st.skip_env_depth > 0:
+            math_out.append(" ")
+            nonmath_out.append(" ")
+            i += 1
             continue
 
         in_math = (
@@ -304,6 +326,8 @@ def _is_mathish(tok: str) -> bool:
 
 def _is_mul_side(tok: str) -> bool:
     if not tok or _is_relation(tok):
+        return False
+    if tok.startswith(r"\text{") or tok.startswith(r"\mTextToken{") or tok.startswith(r"\operatorname{"):
         return False
     if tok in {r"\ast", r"\times", "+", "-", "=", r"\cdot"}:
         return False

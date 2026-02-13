@@ -302,7 +302,7 @@ local function normalize_infix_ops(s)
   local prev = nil
   while prev ~= s do
     prev = s
-    s = s:gsub("(%S+)%s+[xX]%s+(%S+)", repl("\\times"))
+    s = s:gsub("(%S+)%s+x%s+(%S+)", repl("\\times"))
     s = s:gsub("(%S+)%s*%*%s*(%S+)", repl("\\ast"))
     s = s:gsub("(%S+)%s+in%s+(%S+)", repl("\\in"))
   end
@@ -475,6 +475,9 @@ local function normalize_expr(s)
   s = s:gsub("%(([%w\\{}_%^%+%-]+)%s*%*%s*([%w\\{}_%^%+%-]+)%)", "(%1 \\ast %2)")
 
   s = normalize_infix_ops(s)
+  -- Fallback for split fragments where '*' lands at a segment edge.
+  s = s:gsub("(%S)%s+%*$", "%1 \\ast")
+  s = s:gsub("^%*%s+(%S)", "\\ast %1")
 
   s = replace_word(s, "in", "\\in")
   s = replace_word(s, "notin", "\\notin")
@@ -812,7 +815,7 @@ local function build_binary_expr(lhs, lhs_is_math, op, rhs, rhs_is_math)
   local op_tex = nil
   if op == "in" then
     op_tex = "\\in"
-  elseif op == "x" or op == "X" then
+  elseif op == "x" then
     op_tex = "\\times"
   elseif op == "+" then
     op_tex = "\\mBridgeOperator{+}"
@@ -853,7 +856,7 @@ local function extract_binary_operator(el)
     return nil
   end
   if el.t == "Str" then
-    if el.text == "in" or el.text == "x" or el.text == "X" or el.text == "+" or el.text == "*" then
+    if el.text == "in" or el.text == "x" or el.text == "+" or el.text == "*" then
       return el.text
     end
     if el.text == "=" or el.text == "<" or el.text == ">" or el.text == "<=" or el.text == ">=" or

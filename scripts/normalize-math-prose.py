@@ -107,6 +107,7 @@ COTANGENT_FIELD_RE = re.compile(r"\bT\^\\?\*\s*([RCZQ])\^([1-9][0-9]*|[A-Za-z])\
 COTANGENT_TOKEN_RE = re.compile(r"\bT\^\\?\*\s*([A-Za-z][A-Za-z0-9_]*)\b")
 OP_CALL_TEXT_RE = re.compile(r"\b(span|ker|rank|dim|codim|trace)\(([^()]+)\)")
 OMEGA_RESTRICT_RE = re.compile(r"\bomega\|_([A-Za-z0-9]+)\b")
+OMEGA_RESTRICT_BRACED_RE = re.compile(r"\bomega\|_\{([^}]+)\}")
 OMEGA_EQ_RE = re.compile(r"\bomega\(([^()]+)\)\s*=\s*([0-9]+)\b")
 MU_GLUE_RE = re.compile(r"([μµ])([A-Za-z])")
 DMU_TOKEN_RE = re.compile(
@@ -178,6 +179,13 @@ def _op_call_text_repl(m: re.Match[str]) -> str:
     args = m.group(2)
     args = re.sub(r"\bomega\|_([A-Za-z0-9]+)\b", r"\\omega|_{\1}", args)
     return rf"$\mOpName{{{op}}}({args})$"
+
+
+def _omega_restrict_braced_repl(m: re.Match[str]) -> str:
+    body = _texify_script_text(m.group(1))
+    body = re.sub(r"\s*[xX]\s*", r" \\times ", body)
+    body = re.sub(r"\s+", " ", body).strip()
+    return rf"$\omega|_{{{body}}}$"
 
 
 def _dmu_token_repl(m: re.Match[str]) -> str:
@@ -642,6 +650,7 @@ def process_plain_text_segment(s: str) -> str:
     s = COTANGENT_TOKEN_RE.sub(_cotangent_token_repl, s)
     s = FIELD_POWER_RE.sub(_field_power_repl, s)
     s = OP_CALL_TEXT_RE.sub(_op_call_text_repl, s)
+    s = OMEGA_RESTRICT_BRACED_RE.sub(_omega_restrict_braced_repl, s)
     s = OMEGA_RESTRICT_RE.sub(r"$\\omega|_{\1}$", s)
     s = OMEGA_EQ_RE.sub(r"$\\omega(\1) = \2$", s)
     s = NORM_SUBSCRIPT_RE.sub(_norm_subscript_repl, s)
@@ -819,6 +828,10 @@ def run_self_test() -> None:
         (
             "bounded by 4 ||psi||_{C^0} |int :phi^3: dx|.",
             r"bounded by 4 $\|\psi\|_{C^0}$ $|\Integral :\phi^{3}:\,dx|$.",
+        ),
+        (
+            "with omega|_{V_1 x V_2} = 0.",
+            r"with $\omega|_{V_1 \times V_2}$ = 0.",
         ),
     ]
     for raw, want in cases:
