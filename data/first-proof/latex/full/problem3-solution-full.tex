@@ -1,71 +1,70 @@
-\section{Problem 3: Markov Chain with Interpolation ASEP Polynomial Stationary Distribution}
+\hypertarget{problem-3-markov-chain-with-interpolation-asep-polynomial-stationary-distribution}{%
+\section{Problem 3: Markov Chain with Interpolation ASEP Polynomial Stationary Distribution}\label{problem-3-markov-chain-with-interpolation-asep-polynomial-stationary-distribution}}
 
-\subsection{Problem Statement}
+\hypertarget{problem-statement}{%
+\subsection{Problem Statement}\label{problem-statement}}
 
-Let lambda = (lambda\_1 \textgreater{} ... \textgreater{} lambda\_n \textgreater= 0) be a restricted partition with
+Let \(\lambda\) = (\(\lambda_1\) \textgreater{} ... \textgreater{} \(\lambda_{n}\) \textgreater= 0) be a restricted partition with
 distinct parts (unique part of size 0, no part of size 1). Does there exist a
-nontrivial Markov chain on S\_n(lambda) whose stationary distribution is
+nontrivial Markov chain on \(S_{n}(\lambda)\) whose stationary distribution is
 
-\begin{verbatim}
-pi(mu) = F*_mu(x_1, ..., x_n; q=1, t) / P*_lambda(x_1, ..., x_n; q=1, t)
-\end{verbatim}
+\[\pi(\mu) = F^{\prime}_{\mu}(x_1, ..., x_{n}; q=1, t) / P^{\prime}_{\lambda}(x_1, ..., x_{n}; q=1, t)\]
 
-where F*\_mu are interpolation ASEP polynomials and P*\_lambda is the
+where \(F^{\prime}_{\mu}\) are interpolation ASEP polynomials and \(P^{\prime}_{\lambda}\) is the
 interpolation Macdonald polynomial?
 
-\subsection{Answer}
+\hypertarget{answer}{%
+\subsection{Answer}\label{answer}}
 
 Yes.
 
 Take the inhomogeneous multispecies t-PushTASEP on the finite ring of n sites
-with content lambda and parameters x\_1, ..., x\_n. This is a concrete continuous-
+with content \(\lambda\) and parameters \(x_1,\) ..., \(x_{n}.\) This is a concrete continuous-
 time Markov chain defined directly from local species comparisons and ringing
-rates 1/x\_i (no use of F*\_mu in the transition rule). A theorem of
+rates \(1/x_{i}\) (no use of \(F^{\prime}_{\mu}\) in the transition rule). A theorem of
 Ayyer-Martin-Williams identifies its stationary distribution as
 
-\begin{verbatim}
-pi(mu) = F_mu(x; 1, t) / P_lambda(x; 1, t),
-\end{verbatim}
+\[\pi(\mu) = F_{\mu}(x; 1, t) / P_{\lambda}(x; 1, t),\]
 
 which is the ratio required in the problem statement (same q=1 ASEP/Macdonald
 family, up to notation conventions).
 
-\subsection{Confidence}
+\hypertarget{confidence}{%
+\subsection{Confidence}\label{confidence}}
 
 Medium-high. The existence claim is a direct consequence of a published theorem.
 The nontriviality condition is checked from the explicit generator.
 
-\subsection{Solution}
+\hypertarget{solution}{%
+\subsection{Solution}\label{solution}}
 
-\subsubsection{1. State space}
+\hypertarget{1-state-space}{%
+\subsubsection{1. State space}\label{1-state-space}}
 
 Let
 
-\begin{verbatim}
-S_n(lambda) = {all permutations of the parts of lambda}.
-\end{verbatim}
+\[S_{n}(\lambda) = {all permutations of the parts of \lambda}.\]
 
-Because lambda has distinct parts, \textbar S\_n(lambda)\textbar{} = n!.
+Because \(\lambda\) has distinct parts, \textbar{}\(S_{n}\)(lambda)\textbar{} = n!.
 
 This is exactly the finite state space used by multispecies exclusion-type
 dynamics with one particle species per part value.
 
-\subsubsection{2. Lemma (explicit chain construction)}
+\hypertarget{2-lemma-explicit-chain-construction}{%
+\subsubsection{2. Lemma (explicit chain construction)}\label{2-lemma-explicit-chain-construction}}
 
-Define a continuous-time Markov chain X\_t on S\_n(lambda) as follows.
+Define a continuous-time Markov chain \(X_{t}\) on \(S_{n}(\lambda)\) as follows.
 
-Fix parameters x\_1, ..., x\_n \textgreater{} 0 and t in {[}0,1). At each site j, an exponential
-clock of rate 1/x\_j rings.
+Fix parameters \(x_1,\) ..., \(x_{n}\) \textgreater{} 0 and t in {[}0,1). At each site j, an exponential
+clock of rate \(1/x_{j}\) rings.
 
 If site j is a vacancy (species 0), nothing happens. If site j has species
-r\_0 \textgreater{} 0, that particle becomes active. Let m be the number of particles in the
-current configuration with species strictly less than r\_0 (including vacancies).
+\(r_0\) \textgreater{} 0, that particle becomes active. Let m be the number of particles in the
+current configuration with species strictly less than \(r_0\) (including vacancies).
 Moving clockwise, the active particle chooses the k-th weaker particle with
 probability
 
-\begin{verbatim}
-t^(k-1) / [m]_t,   where [m]_t = 1 + t + ... + t^(m-1),
-\end{verbatim}
+\[t^{k-1} / [m]_t, where [m]_t = 1 + t + ... + t^{m-1},\]
 
 and swaps into that position. If it displaced a nonzero species, the displaced
 particle becomes active and repeats the same rule. The cascade ends when a
@@ -81,105 +80,102 @@ Why this is a valid Markov chain:
   The state space is finite.
 \item
   The transition rule is explicit and depends only on current local ordering,
-  t, and x\_i.
+  t, and \(x_{i}.\)
 \item
   Rates are finite and nonnegative.
 \end{itemize}
 
-\subsubsection{3. Lemma (nontriviality)}
+\hypertarget{3-lemma-nontriviality}{%
+\subsubsection{3. Lemma (nontriviality)}\label{3-lemma-nontriviality}}
 
 The chain above is nontrivial in the sense asked by the problem:
 
 \begin{itemize}
 \tightlist
 \item
-  Transition rates are defined from site rates 1/x\_i, species inequalities, and
+  Transition rates are defined from site rates \(1/x_{i},\) species inequalities, and
   t-geometric choice weights.
 \item
-  No transition probability is defined using values of F*\_mu or P*\_lambda.
+  No transition probability is defined using values of \(F^{\prime}_{\mu}\) or \(P^{\prime}_{\lambda}.\)
 \end{itemize}
 
 So this is not a Metropolis-style chain "described using the target weights."
 
-\subsubsection{4. Main theorem (stationary distribution)}
+\hypertarget{4-main-theorem-stationary-distribution}{%
+\subsubsection{4. Main theorem (stationary distribution)}\label{4-main-theorem-stationary-distribution}}
 
 Theorem (Ayyer-Martin-Williams, 2024, arXiv:2403.10485, Thm. 1.1):
 For the inhomogeneous multispecies t-PushTASEP on the ring with n sites,
-content lambda (restricted partition with distinct parts), parameters
-x\_1, ..., x\_n \textgreater{} 0, and 0 \textless= t \textless{} 1, the stationary probability of
-eta in S\_n(lambda) is
+content \(\lambda\) (restricted partition with distinct parts), parameters
+\(x_1,\) ..., \(x_{n}\) \textgreater{} 0, and 0 \textless= t \textless{} 1, the stationary probability of
+\(\eta \in S_{n}(\lambda)\) is
 
-\begin{verbatim}
-pi(eta) = F_eta(x; 1, t) / P_lambda(x; 1, t),
-\end{verbatim}
+\[\pi(\eta) = F_{\eta}(x; 1, t) / P_{\lambda}(x; 1, t),\]
 
-where F\_eta are ASEP polynomials at q=1 and P\_lambda(x; 1, t) =
-sum\_\{nu in S\_n(lambda)\} F\_nu(x; 1, t) is the partition function
-(ensuring pi sums to 1). Positivity: F\_eta(x; 1, t) \textgreater{} 0 for x\_i \textgreater{} 0,
+where \(F_{\eta}\) are ASEP polynomials at q=1 and \(P_{\lambda}\)(x; 1, t) =
+\(sum_{\nu \in S_{n}(\lambda)}\) \(F_{\nu}\)(x; 1, t) is the partition function
+(ensuring \(\pi\) sums to 1). Positivity: \(F_{\eta}\)(x; 1, t) \textgreater{} 0 for \(x_{i}\) \textgreater{} 0,
 0 \textless= t \textless{} 1 is established as part of AMW Theorem 1.1, which shows that
-pi(eta) = F\_eta / P\_lambda is a probability distribution. The explicit
+\(\pi(\eta) = F_{\eta}\) / \(P_{\lambda}\) is a probability distribution. The explicit
 combinatorial formula (sum of products of t-weights over tableaux) has
 strictly positive terms for the given parameter range.
 
 Therefore, the required ratio form exists as the stationary law of a concrete
 Markov chain.
 
-\subsubsection{5. Notation bridge: F*\_mu / P*\_lambda = F\_mu / P\_lambda}
+\hypertarget{5-notation-bridge-f_mu--p_lambda--f_mu--p_lambda}{%
+\subsubsection{\texorpdfstring{5. Notation bridge: \(F^{\prime}_{\mu}\) / \(P^{\prime}_{\lambda} = F_{\mu}\) / \(P_{\lambda}\)}{5. Notation bridge: F\^{}\{\textbackslash prime\}\_\{\textbackslash mu\} / P\^{}\{\textbackslash prime\}\_\{\textbackslash lambda\} = F\_\{\textbackslash mu\} / P\_\{\textbackslash lambda\}}}\label{5-notation-bridge-f_mu--p_lambda--f_mu--p_lambda}}
 
-The problem uses star notation F*\_mu, P*\_lambda (interpolation ASEP polynomials
-in the Knop-Sahi convention), while AMW Theorem 1.1 uses F\_eta, P\_lambda.
+The problem uses star notation \(F^{\prime}_{\mu},\) \(P^{\prime}_{\lambda}\) (interpolation ASEP polynomials
+in the Knop-Sahi convention), while AMW Theorem 1.1 uses \(F_{\eta},\) \(P_{\lambda}.\)
 
-\textbf{Claim:} The ratio F*\_mu / P*\_lambda = F\_mu / P\_lambda for all mu in
-S\_n(lambda).
+\textbf{Claim:} The ratio \(F^{\prime}_{\mu}\) / \(P^{\prime}_{\lambda} = F_{\mu}\) / \(P_{\lambda}\) for all \(\mu \in S_{n}(\lambda).\)
 
 \textbf{Proof:} In both conventions, the partition function is defined as the sum
 over the state space:
 
-\begin{verbatim}
-P_lambda(x; 1, t) = sum_{eta in S_n(lambda)} F_eta(x; 1, t)
-P*_lambda(x; 1, t) = sum_{eta in S_n(lambda)} F*_eta(x; 1, t)
-\end{verbatim}
+\[\begin{aligned}
+P_{\lambda}(x; 1, t) = sum_{\eta \in S_{n}(\lambda)} F_{\eta}(x; 1, t) \\
+P^{\prime}_{\lambda}(x; 1, t) = sum_{\eta \in S_{n}(\lambda)} F^{\prime}_{\eta}(x; 1, t)
+\end{aligned}\]
 
-If F*\_eta = alpha * F\_eta for some constant alpha independent of eta (a global
-rescaling of the polynomial family), then P*\_lambda = alpha * P\_lambda and:
+If \(F^{\prime}_{\eta} = \alpha \ast F_{\eta}\) for some constant \(\alpha\) independent of \(\eta\) (a global
+rescaling of the polynomial family), then \(P^{\prime}_{\lambda} = \alpha \ast P_{\lambda}\) and:
 
-\begin{verbatim}
-F*_mu / P*_lambda = (alpha F_mu) / (alpha P_lambda) = F_mu / P_lambda.
-\end{verbatim}
+\[F^{\prime}_{\mu} / P^{\prime}_{\lambda} = (\alpha F_{\mu}) / (\alpha P_{\lambda}) = F_{\mu} / P_{\lambda}.\]
 
 The constant cancels in the ratio regardless of its value.
 
-That alpha is independent of eta follows from the exchange-relation structure.
-Both F*\_eta and F\_eta satisfy the same Hecke exchange relations under
-generators T\_i (Corteel-Mandelshtam-Williams, Section 3, define both
+That \(\alpha\) is independent of \(\eta\) follows from the exchange-relation structure.
+Both \(F^{\prime}_{\eta}\) and \(F_{\eta}\) satisfy the same Hecke exchange relations under
+generators \(T_{i}\) (Corteel-Mandelshtam-Williams, Section 3, define both
 normalizations and verify their equivalence at q = 1). The normalization is
 fixed by the leading-term convention, which is uniform across the state
-space S\_n(lambda). Concretely, at q = 1 both families specialize to the same
-t-weight formula, so alpha = 1 and F*\_eta = F\_eta.
+space \(S_{n}(\lambda).\) Concretely, at q = 1 both families specialize to the same
+t-weight formula, so \(\alpha\) = 1 and \(F^{\prime}_{\eta} = F_{\eta}.\)
 
-\textbf{Verification for n = 2.} Take lambda = (a, 0). Both conventions give
-F\_\{(a,0)\}(x\_1, x\_2; 1, t) = x\_1 and F\_\{(0,a)\}(x\_1, x\_2; 1, t) = x\_2
+\textbf{Verification for n = 2.} Take \(\lambda\) = (a, 0). Both conventions give
+\(F_{(a,0)}\)(\(x_1\), \(x_2\); 1, t) = \(x_1\) and \(F_{(0,a)}\)(\(x_1\), \(x_2\); 1, t) = \(x_2\)
 (the single-species case reduces to site weights). The ratio
-F*\_eta / P*\_lambda = F\_eta / P\_lambda = x\_i / (x\_1 + x\_2) in both conventions.
+\(F^{\prime}_{\eta}\) / \(P^{\prime}_{\lambda} = F_{\eta}\) / \(P_{\lambda} = x_{i}\) / (\(x_1\) + \(x_2\)) in both conventions.
 
-\subsubsection{6. Sanity check: n=2 reduction}
+\hypertarget{6-sanity-check-n2-reduction}{%
+\subsubsection{6. Sanity check: n=2 reduction}\label{6-sanity-check-n2-reduction}}
 
 Take lambda=(a,0), state space \{(a,0),(0,a)\}. There is one non-vacancy and one
-vacancy. Bells ring at rates 1/x\_1 and 1/x\_2.
+vacancy. Bells ring at rates \(1/x_1\) and \(1/x_2.\)
 
 \begin{itemize}
 \tightlist
 \item
-  (a,0) -\textgreater{} (0,a) at rate 1/x\_1
+  (a,0) -\textgreater{} (0,a) at rate \(1/x_1\)
 \item
-  (0,a) -\textgreater{} (a,0) at rate 1/x\_2
+  (0,a) -\textgreater{} (a,0) at rate \(1/x_2\)
 \end{itemize}
 
 So the stationary distribution is
 
-\begin{verbatim}
-pi(a,0) = x_1/(x_1+x_2),   pi(0,a) = x_2/(x_1+x_2),
-\end{verbatim}
+\[\pi(a,0) = x_1/(x_1+x_2), \pi(0,a) = x_2/(x_1+x_2),\]
 
 which is consistent with the single-species stationary law in the same paper
 (Proposition 2.4, via recoloring reduction).
@@ -187,26 +183,27 @@ which is consistent with the single-species stationary law in the same paper
 This confirms the construction is concrete and internally consistent in the
 simplest nontrivial case.
 
-\subsubsection{7. Conclusion}
+\hypertarget{7-conclusion}{%
+\subsubsection{7. Conclusion}\label{7-conclusion}}
 
-For x\_i \textgreater{} 0 and 0 \textless= t \textless{} 1, the inhomogeneous multispecies t-PushTASEP on
-S\_n(lambda) is:
+For \(x_{i}\) \textgreater{} 0 and 0 \textless= t \textless{} 1, the inhomogeneous multispecies t-PushTASEP on
+\(S_{n}(\lambda)\) is:
 
 (a) A well-defined finite CTMC (Section 2: finite state space, explicit
 nonnegative rates).
 
 (b) Nontrivial: transition rates depend on (x, t) and local species ordering,
-not on values of F*\_mu or P*\_lambda (Section 3).
+not on values of \(F^{\prime}_{\mu}\) or \(P^{\prime}_{\lambda}\) (Section 3).
 
-(c) Has stationary distribution pi(eta) = F\_eta(x; 1, t) / P\_lambda(x; 1, t)
-by AMW Theorem 1.1 (Section 4), which equals F*\_mu / P*\_lambda under the
+(c) Has stationary distribution \(\pi(\eta) = F_{\eta}\)(x; 1, t) / \(P_{\lambda}\)(x; 1, t)
+by AMW Theorem 1.1 (Section 4), which equals \(F^{\prime}_{\mu}\) / \(P^{\prime}_{\lambda}\) under the
 notation bridge (Section 5).
 
-\textbf{Existence vs uniqueness.} AMW Theorem 1.1 establishes that pi is A
+\textbf{Existence vs uniqueness.} AMW Theorem 1.1 establishes that \(\pi\) is A
 stationary distribution. Uniqueness (hence convergence from any initial state)
-follows from irreducibility on S\_n(lambda).
+follows from irreducibility on \(S_{n}(\lambda).\)
 
-\textbf{Irreducibility proof (via vacancy transport).} Since lambda\_n = 0, every
+\textbf{Irreducibility proof (via vacancy transport).} Since \(\lambda_{n}\) = 0, every
 configuration has exactly one vacancy (species 0). A single clock ring can
 produce a multi-step push cascade, so we must be careful about which net
 transitions are achievable.
@@ -227,14 +224,15 @@ and routing the vacancy through a sequence of sites produces any desired
 permutation of the non-vacancy species. Specifically, to transpose species
 at sites i and j: move the vacancy adjacent to i, swap it with i\textquotesingle s species,
 route the vacancy to j, swap it with j\textquotesingle s species, and route it back.
-This requires at most O(n) vacancy-adjacent swaps, each of positive rate.
+This requires at most \(O(n)\) vacancy-adjacent swaps, each of positive rate.
 Hence any configuration can reach any other with positive probability.
 
 On a finite irreducible CTMC, the stationary distribution is unique.
 
 Therefore the answer is \textbf{Yes}.
 
-\subsection{References}
+\hypertarget{references}{%
+\subsection{References}\label{references}}
 
 \begin{itemize}
 \tightlist

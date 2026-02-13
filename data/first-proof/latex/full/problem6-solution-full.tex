@@ -22,7 +22,7 @@ S is \(\epsilon\)-light if
 in Loewner order.
 
 Question: does there exist universal c\textgreater0 such that for every G and every
-\(\epsilon\) in (0,1), there exists S with \textbar S\textbar{} \textgreater= c\emph{\(\epsilon\)}n and \(L_{S}\) \textless= \(\epsilon\) L?
+\(\epsilon\) in (0,1), there exists S with \textbar S\textbar{} \textgreater= c\emph{\(\epsilon\)}n and \(L_{S} \le \epsilon\) L?
 
 \hypertarget{status-of-this-writeup}{%
 \subsection{Status of this writeup}\label{status-of-this-writeup}}
@@ -66,7 +66,7 @@ x^{T} L_{K_{n}} x = n ||x||^2, \\
 x^{T} L_{S} x = s ||x||^2.
 \end{aligned}\]
 
-Hence \(L_{S}\) \textless= \(\epsilon\) \(L_{K_{n}}\) implies s \textless= \(\epsilon\) n.
+Hence \(L_{S} \le \epsilon\) \(L_{K_{n}}\) implies \(s \le \epsilon\) n.
 Therefore any universal constant must satisfy
 
 \[c \le 1.\]
@@ -97,7 +97,7 @@ Thus
 
 \[E[\epsilon L - L_{S}] = (\epsilon - p^2)L.\]
 
-Setting p=epsilon gives E{[}\(L_{S}\){]}=\(\epsilon^2\) L \textless= \(\epsilon\) L. This is not yet a
+Setting p=epsilon gives E{[}\(L_{S}\){]}=\(\epsilon^2\) \(L \le \epsilon\) L. This is not yet a
 realization-level guarantee.
 
 \hypertarget{4-concentration-setup-gap-fixed-formulation}{%
@@ -119,7 +119,7 @@ sum_{e} \tau_{e} = n - k
 \hypertarget{4a-star-domination-with-correct-counting}{%
 \subsubsection{4a. Star domination with correct counting}\label{4a-star-domination-with-correct-counting}}
 
-Using \(Z_{u}\) \(Z_{v}\) \textless= \(Z_{u}\) and \(Z_{u}\) \(Z_{v}\) \textless= \(Z_{v}\) for each edge \{u,v\},
+Using \(Z_{u}\) \(Z_{v} \le Z_{u}\) and \(Z_{u}\) \(Z_{v} \le Z_{v}\) for each edge \{u,v\},
 
 \[\begin{aligned}
 L_{S} = sum_{uv \in E} Z_{u} Z_{v} L_{uv} \\
@@ -143,7 +143,7 @@ Let \(A_{i}\) be a fixed ordering of \({A_{v}},\) \(p_{i}\)=E{[}\(Z_{i}\){]}, an
 
 \[X = sum_{i} (Z_{i} - p_{i}) A_{i}.\]
 
-With filtration \(F_{i}\) = \(\sigma(Z_1,...,Z_{i})\), Doob martingale
+With filtration \(F_{i} = \sigma(Z_1,...,Z_{i})\), Doob martingale
 
 \[\begin{aligned}
 Y_{i} = E[X | F_{i}], \\
@@ -165,7 +165,7 @@ Matrix Freedman (or matrix Bernstein in independent form) applies once bounds
 on \(R_*\) and \textbar\textbar{}\(W_{n}\)\textbar\textbar{} are supplied.
 
 \textbf{What graph-dependent bounds are needed.} To obtain a self-contained
-concentration bound, one would need \(R_*\) \textless= \(C_1 \ast \epsilon\) and
+concentration bound, one would need \(R_* \le C_1 \ast \epsilon\) and
 \textbar\textbar{}\(W_{n}\)\textbar\textbar{} \textless= \(C_2 \ast \epsilon^2\) for graph-dependent constants \(C_1,\) \(C_2.\) Bounding
 these requires leverage score analysis (showing \(\tau_{e}\) bounds are well-distributed
 across vertices) that is the core content of the external theorem referenced
@@ -205,7 +205,7 @@ with reweighting, not induced subgraphs from vertex subsets.
 
 \textbf{Important gap:} BSS is an \emph{edge sparsification} result --- it selects a
 subset of edges with reweighting, not a subset of vertices. The problem asks
-for a \emph{vertex subset} S with \(L_{S}\) \textless= \(\epsilon\) L. These are different objects:
+for a \emph{vertex subset} S with \(L_{S} \le \epsilon\) L. These are different objects:
 edge sparsification preserves the vertex set and reweights edges, while the
 \(\epsilon\)-light condition restricts to the induced subgraph on a vertex subset.
 
@@ -254,13 +254,13 @@ Conditional/open conclusion:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  L = \(sum_{e}\) \(w_{e}\) \(b_{e}\) \(b_{e}^{T}\)
+  \(L = sum_{e}\) \(w_{e}\) \(b_{e}\) \(b_{e}^{T}\)
 \item
-  \(L_{S}\) = \(sum_{e internal to S}\) \(w_{e}\) \(b_{e}\) \(b_{e}^{T}\)
+  \(L_{S} = sum_{e internal to S}\) \(w_{e}\) \(b_{e}\) \(b_{e}^{T}\)
 \item
-  \(\tau_{e}\) = \(w_{e}\) \(b_{e}^{T}\) \(L^+\) \(b_{e},\) \(sum_{e}\) \(\tau_{e}\) = n-k
+  \(\tau_{e} = w_{e}\) \(b_{e}^{T}\) \(L^+\) \(b_{e},\) \(sum_{e}\) \(\tau_{e}\) = n-k
 \item
-  \(L^{+/2}\) \(L_{S}\) \(L^{+/2}\) \textless= \(sum_{v}\) \(Z_{v}\) \(A_{v}\) with \(A_{v}\)=(1/2)\(sum_{u~v}\)\(X_{uv}\)
+  \(L^{+/2}\) \(L_{S}\) \(L^{+/2} \le sum_{v}\) \(Z_{v}\) \(A_{v}\) with \(A_{v}\)=(1/2)\(sum_{u~v}\)\(X_{uv}\)
 \end{enumerate}
 
 \hypertarget{references}{%

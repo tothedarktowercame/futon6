@@ -27,7 +27,7 @@ Does there exist a polynomial map F: \(R^{81 \ast n^4}\) -\textgreater{} \(R^{N}
   \(a,b,g,d\) are not all identical:
   F(\(\lambda_{abgd}\) \(Q^{abgd}\) : \(a,b,g,d\) in {[}n{]}) = 0
   if and only if there exist \(u,v,w,x \in (R \ast )^{n}\) such that
-  \(\lambda_{abgd}\) = \(u_{a}\) \(v_{b}\) \(w_{g}\) \(x_{d}\) for all non-identical \(a,b,g,d\).
+  \(\lambda_{abgd} = u_{a}\) \(v_{b}\) \(w_{g}\) \(x_{d}\) for all non-identical \(a,b,g,d\).
 \end{enumerate}
 
 \hypertarget{answer}{%
@@ -46,7 +46,7 @@ the evaluation of the volume form (the unique up-to-scale alternating 4-linear
 form on \(R^4\)) on four camera row vectors.
 
 \textbf{Key observation (bilinear form reduction):} Fix two camera-row pairs
-(gamma, k) and (delta, l), giving vectors c = \(a^{\gamma}_{k}\) and d = \(a^{\delta}_{l} \in R^4.\) Then the map:
+(gamma, k) and (delta, l), giving vectors \(c = a^{\gamma}_{k}\) and \(d = a^{\delta}_{l} \in R^4.\) Then the map:
 
 \[\omega(p, q) = det[p; q; c; d]\]
 
@@ -71,8 +71,8 @@ det | \omega(p_1,q_1) \omega(p_1,q_2) \omega(p_1,q_3) | \\
 
 (A rank-2 bilinear form has all 3x3 minors vanishing.)
 
-In terms of the Q tensors: choosing \(p_{m}\) = \(a^{\alpha_{m}}\)\emph{\({i_{m}}\) and
-\(q_{n}\) = \(a^{\beta_{n}}\)}\({j_{n}},\) this becomes:
+In terms of the Q tensors: choosing \(p_{m} = a^{\alpha_{m}}\)\emph{\({i_{m}}\) and
+\(q_{n} = a^{\beta_{n}}\)}\({j_{n}},\) this becomes:
 
 \[det [Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}]_{3 \times 3} = 0\]
 
@@ -84,7 +84,7 @@ This is a \textbf{degree-3 polynomial} in the Q entries, independent of the came
 \hypertarget{3-effect-of-rank-1-scaling-on-the-3x3-minor}{%
 \subsubsection{3. Effect of rank-1 scaling on the 3x3 minor}\label{3-effect-of-rank-1-scaling-on-the-3x3-minor}}
 
-Now consider the scaled tensors \(T^{abgd}\) = \(\lambda_{abgd}\) \(Q^{abgd}.\)
+Now consider the scaled tensors \(T^{abgd} = \lambda_{abgd}\) \(Q^{abgd}.\)
 The 3x3 matrix becomes:
 
 \[M_{mn} = \lambda_{\alpha_{m}, \beta_{n}, \gamma, \delta} \ast Q^{\alpha_{m}, \beta_{n}, \gamma, \delta}_{i_{m}, j_{n}, k, l}\]
@@ -94,17 +94,17 @@ This is the Hadamard (entrywise) product of two 3x3 matrices:
 \begin{itemize}
 \tightlist
 \item
-  \(\Lambda_{mn}\) = \(\lambda_{\alpha_{m}, \beta_{n}, \gamma, \delta}\) (depends on camera indices only)
+  \(\Lambda_{mn} = \lambda_{\alpha_{m}, \beta_{n}, \gamma, \delta}\) (depends on camera indices only)
 \item
   \(\Omega_{mn}\) = Q\^{}(\(\alpha_{m}\), \(\beta_{n},\) \(\gamma\), delta)\_\{\(i_{m}\), \(j_{n},\) k, l\} (the bilinear form)
 \end{itemize}
 
-\textbf{If \(\lambda\) is rank-1:} \(\lambda_{abgd}\) = \(u_{a}\) \(v_{b}\) \(w_{g}\) \(x_{d},\) so
-\(\Lambda_{mn}\) = \(u_{\alpha_{m}}\) \(v_{\beta_{n}}\) \(w_{\gamma}\) \(x_{\delta}.\) This factors as
-\(\Lambda\) = \((u_{\alpha_{m}})\)\emph{m * (v}\{\(\beta_{n}\)\})\_\(n^{T}\) (scaled by the constant \(w_{\gamma}\) \(x_{\delta}\)).
+\textbf{If \(\lambda\) is rank-1:} \(\lambda_{abgd} = u_{a}\) \(v_{b}\) \(w_{g}\) \(x_{d},\) so
+\(\Lambda_{mn} = u_{\alpha_{m}}\) \(v_{\beta_{n}}\) \(w_{\gamma}\) \(x_{\delta}.\) This factors as
+\(\Lambda = (u_{\alpha_{m}})\)\emph{m * (v}\{\(\beta_{n}\)\})\_\(n^{T}\) (scaled by the constant \(w_{\gamma}\) \(x_{\delta}\)).
 So \(\Lambda\) has matrix rank 1.
 
-For a rank-1 matrix \(\Lambda\), the Hadamard product M = \(\Lambda\) ∘ \(\Omega\) equals
+For a rank-1 matrix \(\Lambda\), the Hadamard product \(M = \Lambda\) ∘ \(\Omega\) equals
 \(\operatorname{diag}(u) \ast \Omega \ast \operatorname{diag}(v)\) (up to the scalar \(w_{\gamma}\) \(x_{\delta}\)). Since similar
 transformations preserve rank: rank(M) = rank(Omega) = 2 \textless{} 3, so det(M) = 0.
 
@@ -140,16 +140,16 @@ A^{5} = [[1,2,3,4],[4,3,2,1],[1,1,1,1]]
 Choose a non-rank-1 scaling: \(\lambda_{abgd}\) = 1 for all non-identical (\(a,b,g,d\))
 except \(\lambda_{1,2,3,4}\) = 2.
 
-\textbf{Non-rank-1 verification.} If \(\lambda\) were rank-1, then \(\lambda_{abgd}\) = \(u_{a}\) \(v_{b}\) \(w_{g}\) \(x_{d}.\)
+\textbf{Non-rank-1 verification.} If \(\lambda\) were rank-1, then \(\lambda_{abgd} = u_{a}\) \(v_{b}\) \(w_{g}\) \(x_{d}.\)
 From \(\lambda_{1,2,3,4}\) = 2 and \(\lambda_{2,2,3,4}\) = 1 we get \(u_1/u_2\) = 2. But from
 \(\lambda_{1,1,3,4}\) = 1 and \(\lambda_{2,1,3,4}\) = 1 we get \(u_1/u_2\) = 1. Contradiction.
 
 Fix \(\gamma\) = 3, \(\delta\) = 4, k = 1, l = 1. Choose row triples
 (\(\alpha_{m}\), \(i_{m}\)) = (1,1), (2,1), (5,1) and column triples
 (\(\beta_{n}\), \(j_{n}\)) = (2,1), (5,1), (1,2). The 3x3 \(\Lambda\) matrix has entries
-\(\lambda_{\alpha_{m}, \beta_{n}, 3, 4}\); specifically \(\Lambda_{11}\) = \(\lambda_{1,2,3,4}\) = 2
+\(\lambda_{\alpha_{m}, \beta_{n}, 3, 4}\); specifically \(\Lambda_{11} = \lambda_{1,2,3,4}\) = 2
 with all other entries equal to 1. The \(\Omega\) matrix (unscaled Q values) has
-det(Omega) = 0 (confirming rank-2), but the Hadamard product M = \(\Lambda\) ∘ \(\Omega\)
+det(Omega) = 0 (confirming rank-2), but the Hadamard product \(M = \Lambda\) ∘ \(\Omega\)
 satisfies det(M) = -24 != 0 (verified by direct computation of nine 4x4
 determinants). This exhibits P as not the zero polynomial.
 
@@ -187,15 +187,15 @@ have rank 1 (i.e., are outer products of vectors).
 \begin{itemize}
 \tightlist
 \item
-  Mode-(1,2) vs (3,4) rank 1 gives \(\lambda_{abgd}\) = \(f_{ab}\) \(g_{gd}.\)
+  Mode-(1,2) vs (3,4) rank 1 gives \(\lambda_{abgd} = f_{ab}\) \(g_{gd}.\)
 \item
-  Mode-(1,3) vs (2,4) rank 1 gives \(\lambda_{abgd}\) = \(h_{ag}\) \(k_{bd}.\)
-  From the first: \(\lambda_{a1,b1,g,d}\) / \(\lambda_{a2,b2,g,d}\) = \(f_{a1,b1}\) / \(f_{a2,b2},\)
+  Mode-(1,3) vs (2,4) rank 1 gives \(\lambda_{abgd} = h_{ag}\) \(k_{bd}.\)
+  From the first: \(\lambda_{a1,b1,g,d}\) / \(\lambda_{a2,b2,g,d} = f_{a1,b1}\) / \(f_{a2,b2},\)
   independent of g, d. From the second:
-  \(\lambda_{a,b1,g1,d}\) / \(\lambda_{a,b2,g1,d}\) = \(k_{b1,d}\) / \(k_{b2,d},\)
+  \(\lambda_{a,b1,g1,d}\) / \(\lambda_{a,b2,g1,d} = k_{b1,d}\) / \(k_{b2,d},\)
   independent of a, g1. Cross-referencing these separations forces
-  \(f_{ab}\) = \(u_{a}\) \(v_{b}\) and \(g_{gd}\) = \(w_{g}\) \(x_{d},\) giving
-  \(\lambda_{abgd}\) = \(u_{a}\) \(v_{b}\) \(w_{g}\) \(x_{d}\) (rank 1). QED.
+  \(f_{ab} = u_{a}\) \(v_{b}\) and \(g_{gd} = w_{g}\) \(x_{d},\) giving
+  \(\lambda_{abgd} = u_{a}\) \(v_{b}\) \(w_{g}\) \(x_{d}\) (rank 1). QED.
 \end{itemize}
 
 \hypertarget{6-construction-of-f}{%
@@ -248,7 +248,7 @@ bilinear form structure is the classical rank constraint from projective
 geometry: four collinear points in \(P^3\) impose a codimension constraint on
 the stacked camera rows.
 
-The rank-1 scaling \(\lambda\) = u ⊗ v ⊗ w ⊗ x corresponds to the natural
+The rank-1 scaling \(\lambda = u\) ⊗ v ⊗ w ⊗ x corresponds to the natural
 gauge freedom in multiview geometry: rescaling each camera\textquotesingle s contribution
 independently for each of the four "roles" (which row selection it
 contributes). The polynomial map F detects when a putative rescaling is

@@ -52,7 +52,7 @@ This converges for Re(s) \textgreater\textgreater{} 0 and extends to a rational 
 a fractional ideal of C{[}\(q_{F}^{s}\), \(q_{F}^{-s}\){]}, whose generator is the local
 L-factor \(L(s, \Pi \times \pi)\).
 
-The problem modifies this by inserting \(u_{Q}\) = \(I_{n+1}\) + Q \(E_{n,n+1}\) into the
+The problem modifies this by inserting \(u_{Q} = I_{n+1}\) + Q \(E_{n,n+1}\) into the
 argument of W, giving the "twisted" Rankin-Selberg integral.
 
 \hypertarget{2-the-condition-finite-and-nonzero-for-all-s}{%
@@ -60,10 +60,10 @@ argument of W, giving the "twisted" Rankin-Selberg integral.
 
 For a rational function \(f(q_{F}^{-s})\) to be "finite and nonzero for all \(s \in C\),"
 it must have no poles and no zeros when viewed as a function of
-X = \(q_{F}^{-s} \in C^{x}.\) Such a rational function must be \(c \ast X^{k}\) = \(c \ast q_{F}^{-ks}\)
+\(X = q_{F}^{-s} \in C^{x}.\) Such a rational function must be \(c \ast X^{k} = c \ast q_{F}^{-ks}\)
 for some nonzero c and integer k.
 
-So the condition requires: there exists \(V\) such that \(I(s, W, V)\) = \(c \ast q_{F}^{-ks}\)
+So the condition requires: there exists \(V\) such that \(I(s, W, V) = c \ast q_{F}^{-ks}\)
 for some nonzero constant c and integer k.
 
 By Section 3a below, the integrals over \(V\) (for fixed \(W = W_0\)) generate the
@@ -75,7 +75,7 @@ of \(I\) of the form \(c \ast q_{F}^{-ks}\) (a monomial --- no poles or zeros). 
 
 \[c \ast q_{F}^{-ks} = L(s, \Pi \times \pi) \ast P(q_{F}^{-s})\]
 
-where P = \(c \ast q_{F}^{-ks} \ast L(s, \Pi \times \pi)\)\^{}\{-1\}. Since \(L(s, \Pi \times \pi)\)\^{}\{-1\}
+where \(P = c \ast q_{F}^{-ks} \ast L(s, \Pi \times \pi)\)\^{}\{-1\}. Since \(L(s, \Pi \times \pi)\)\^{}\{-1\}
 is a polynomial in \(q_{F}^{-s}\) (the local L-factor for \(\mathup{GL}_{n+1} \times \mathup{GL}_{n}\) is a
 product of terms (1 - \(\alpha_{i}\) \(q_{F}^{-s}\))\^{}\{-1\}, so its reciprocal is a
 polynomial), P is a Laurent polynomial in \(q_{F}^{-s}\) --- hence \(P \in R\).
@@ -101,19 +101,19 @@ of the standard maximal parabolic, which normalizes \(\psi\)). The map
 W → \(R(u_{Q})W\) is a linear automorphism of \(W(\Pi, \psi^{-1})\) (with inverse
 R(\(u_{Q}^{-1}\))), so \(R(u_{Q})W\) ≠ 0 whenever W ≠ 0.
 
-\textbf{Fact 2: \(\phi_{Q}(g)\) = \(W_0(\operatorname{diag}(g,1)u_{Q})\) is nonzero for \(W_0\) = new vector.}
-This is verified by direct evaluation at g = \(I_{n}:\)
+\textbf{Fact 2: \(\phi_{Q}(g) = W_0(\operatorname{diag}(g,1)u_{Q})\) is nonzero for \(W_0\) = new vector.}
+This is verified by direct evaluation at \(g = I_{n}:\)
 
 \[\phi_{Q}(I_{n}) = W_0(\operatorname{diag}(I_{n}, 1) · u_{Q}) = W_0(u_{Q})\]
 
-Now \(u_{Q}\) = \(I_{n+1}\) + Q \(E_{n,n+1}\) is an element of the upper-triangular
+Now \(u_{Q} = I_{n+1}\) + Q \(E_{n,n+1}\) is an element of the upper-triangular
 unipotent subgroup \(N_{n+1}\) (its only off-diagonal entry is Q in position
 (n, n+1)). By the Whittaker-model transformation rule:
 
 \[W_0(u_{Q}) = \psi^{-1}(u_{Q}) · W_0(I_{n+1})\]
 
 The generic character \(\psi\) of \(N_{n+1}\) evaluates on superdiagonal entries:
-\(\psi(u_{Q})\) = \(\psi(Q)\) (the only superdiagonal entry of \(u_{Q}\) is Q in position
+\(\psi(u_{Q}) = \psi(Q)\) (the only superdiagonal entry of \(u_{Q}\) is Q in position
 (n, n+1)). With the standard normalization \(W_0(I_{n+1})\) = 1:
 
 \[\phi_{Q}(I_{n}) = \psi^{-1}(Q) · 1 = \psi^{-1}(Q)\]
@@ -132,7 +132,7 @@ For the universality claim we only need \(\phi_{Q}\) nonzero for this particular
 The standard JPSS nondegeneracy result (Section 2.7) states that as BOTH W
 and V vary, the integrals \(I(s, W, V)\) generate the full fractional ideal
 \(L(s, \Pi \times \pi)\) * C{[}\(q_{F}^{s}\), \(q_{F}^{-s}\){]}. For the universality claim, we need
-this to hold for FIXED W = \(W_0.\) This requires the following:
+this to hold for FIXED \(W = W_0.\) This requires the following:
 
 \textbf{Lemma (fixed-W spanning).} Let \(\Pi\) be a generic irreducible admissible
 representation of \(\mathup{GL}_{n+1}(F),\) and let \(\phi\) be any nonzero function in the
@@ -157,7 +157,7 @@ Since C{[}\(q_{F}^{s}\), \(q_{F}^{-s}\){]} is a PID (a Laurent polynomial ring i
 rank 1. Let \(L_{\phi}(s)\) * C{[}\(q_{F}^{s}\), \(q_{F}^{-s}\){]} be this submodule, where \(L_{\phi}\)
 divides \(L(s, \Pi \times \pi)\).
 
-To show \(L_{\phi}\) = \(L(s, \Pi \times \pi)\) (i.e., fixed \(\phi\) generates the FULL ideal):
+To show \(L_{\phi} = L(s, \Pi \times \pi)\) (i.e., fixed \(\phi\) generates the FULL ideal):
 
 The JPSS theory (1983, Section 2.7) shows that the full ideal is generated
 by letting both W and V vary. Varying W (with restriction to \(\mathup{GL}_{n}\))
@@ -167,17 +167,16 @@ SINGLE nonzero \(\phi\) already suffices.
 
 Consider the map \(\Phi: K(\Pi)|_{\mathup{GL}_{n}} \to (\text{fractional ideals of } R)\) defined by
 \(\Phi(\phi) = \{ I(s, \phi, V) : V \in W(\pi, \psi) \} \cdot R\). By the JPSS theory,
-\(\bigcup_{\phi}\) \(\Phi(\phi)\) generates \(L(s, \Pi \times \pi)\) · R. Since R is a PID, \(\Phi(\phi)\)
-= \(L_{\phi}\) · R for some \(L_{\phi}\) dividing \(L(s, \Pi \times \pi)\).
+\(\bigcup_{\phi}\) \(\Phi(\phi)\) generates \(L(s, \Pi \times \pi)\) · R. Since R is a PID, \(\Phi(\phi) = L_{\phi}\) · R for some \(L_{\phi}\) dividing \(L(s, \Pi \times \pi)\).
 
 \textbf{Key step.} \(\Phi\) is \(\mathup{GL}_{n}\)-equivariant in the following sense: for \(g_0 \in \mathup{GL}_{n},\) the substitution g → g · \(g_0\) in the integral gives
 I(s, \(R(g_0)\phi,\) V) = \(|\det g_0|^{1/2-s}\) · I(s, \(\phi\), R\textquotesingle(\(g_0\))V) where R\textquotesingle{}
 denotes the contragredient action on \(W(\pi, \psi)\). Since R\textquotesingle(\(g_0\)) is an
 automorphism of \(W(\pi, \psi)\), the set of integrals \{ I(s, \(R(g_0)\phi,\) V) :
 \(V \in W(\pi, \psi)\) \} equals \{ \(|\det g_0|^{1/2-s}\) · \(I(s, \\phi, V)\) : V \} =
-\(|\det g_0|^{1/2-s}\) · \(\Phi(\phi)\). But \(|\det g_0|^{1/2-s}\) = \(q_{F}^{-k·s}\) ·
+\(|\det g_0|^{1/2-s}\) · \(\Phi(\phi)\). But \(|\det g_0|^{1/2-s} = q_{F}^{-k·s}\) ·
 (unit in R) is a unit in the localization, so \(\Phi(R(g_0)\,\phi)\) and \(\Phi(\phi)\)
-generate the same fractional ideal. That is: \(L_{R(g_0)\phi}\) = \(L_{\phi}\)
+generate the same fractional ideal. That is: \(L_{R(g_0)\phi} = L_{\phi}\)
 (up to units in R) for all \(g_0 \in \mathup{GL}_{n}.\)
 
 Now, the Kirillov model \(K(\Pi)|_{\mathup{GL}_{n}}\) is irreducible as a \(\mathup{GL}_{n}-\)
@@ -189,22 +188,21 @@ span all of \(K(\Pi)|_{\mathup{GL}_{n}}\). We use this in two directions:
 (the full ideal generated by all W and V), so \(L_{\phi}\) · R ⊆ \(L(s, \Pi \times \pi)\) · R,
 giving \(L(s, \Pi \times \pi)\) \textbar{} \(L_{\phi}\) (in a PID, (a) ⊆ (b) iff b \textbar{} a).
 
-\textbf{Direction 2 (\(L(s, \Pi \times \pi)\) divides \(L_{\phi}\)):} For any nonzero \(\phi' \in K(\Pi)|_{\mathup{GL}_{n}}\), write \(\phi'\) = \(sum_{i}\) \(c_{i}\) \(R(g_{i})\) \(\phi\) (finite linear combination
+\textbf{Direction 2 (\(L(s, \Pi \times \pi)\) divides \(L_{\phi}\)):} For any nonzero \(\phi' \in K(\Pi)|_{\mathup{GL}_{n}}\), write \(\phi' = sum_{i}\) \(c_{i}\) \(R(g_{i})\) \(\phi\) (finite linear combination
 of \(\mathup{GL}_{n}\)-translates, possible by irreducibility). For each \(V\):
 
 \[I(s, \phi', V) = sum_{i} c_{i} · I(s, R(g_{i})\phi, V)\]
 
 By the equivariance in the key step, I(s, \(R(g_{i})\phi,\) V) lies in \(L_{\phi}\) · R
-for each \(i\) (since \(\Phi(R(g_{i})\,\phi)\) = \(L_{R(g_{i})\phi}\) · R = \(L_{\phi}\) · R). The sum
+for each \(i\) (since \(\Phi(R(g_{i})\,\phi) = L_{R(g_{i})\phi}\) · \(R = L_{\phi}\) · R). The sum
 of elements of \(L_{\phi}\) · R lies in \(L_{\phi}\) · R (it\textquotesingle s a module). Therefore
 \(\Phi(\phi')\) ⊆ \(L_{\phi}\) · R for every nonzero \(\phi'\).
 
-Taking the union over all \(\phi'\): the full ideal \(L(s, \Pi \times \pi)\) · R =
-\(\bigcup_{\phi'}\) \(\Phi(\phi')\) ⊆ \(L_{\phi}\) · R. So \(L_{\phi}\) \textbar{} \(L(s, \Pi \times \pi)\).
+Taking the union over all \(\phi'\): the full ideal \(L(s, \Pi \times \pi)\) · \(R = \bigcup_{\phi'}\) \(\Phi(\phi')\) ⊆ \(L_{\phi}\) · R. So \(L_{\phi}\) \textbar{} \(L(s, \Pi \times \pi)\).
 
-Combining both directions: \(L_{\phi}\) = \(L(s, \Pi \times \pi)\) (up to units in R). ∎
+Combining both directions: \(L_{\phi} = L(s, \Pi \times \pi)\) (up to units in R). ∎
 
-\textbf{Application:} Taking \(\phi\) = \(\phi_{Q}\) (the restriction of \(R(u_{Q})W_0,\) which is
+\textbf{Application:} Taking \(\phi = \phi_{Q}\) (the restriction of \(R(u_{Q})W_0,\) which is
 nonzero by the Kirillov injectivity lemma), the integrals over \(V\) generate the
 full fractional ideal for our fixed \(W_0.\) This closes the universality gap
 identified by the reviewer.
@@ -249,7 +247,7 @@ i.e., the vector in \(W(\Pi, \psi^{-1})\) fixed by the congruence subgroup
 \item
   Let Q generate \(q^{-1}\)
 \item
-  The function \(\phi_{Q}(g)\) = \(W_0(\operatorname{diag}(g,1)u_{Q})\) is nonzero in the Kirillov model
+  The function \(\phi_{Q}(g) = W_0(\operatorname{diag}(g,1)u_{Q})\) is nonzero in the Kirillov model
 \item
   By the nondegeneracy (Step 4), there exists \(V \in W(\pi, \psi)\) such that
   \(I(s, W_0, V)\) is a nonzero element of \(L(s, \Pi \times \pi)\) * C{[}\(q_{F}^{s}\), \(q_{F}^{-s}\){]}
@@ -261,7 +259,7 @@ i.e., the vector in \(W(\Pi, \psi^{-1})\) fixed by the congruence subgroup
 \hypertarget{6-the-role-of-u_q-in-conductor-matching}{%
 \subsubsection{\texorpdfstring{6. The role of \(u_{Q}\) in conductor matching}{6. The role of u\_\{Q\} in conductor matching}}\label{6-the-role-of-u_q-in-conductor-matching}}
 
-The insertion of \(u_{Q}\) = I + Q \(E_{n,n+1}\) is essential: it compensates for the
+The insertion of \(u_{Q} = I\) + Q \(E_{n,n+1}\) is essential: it compensates for the
 conductor of \(\pi\). Without this twist, for highly ramified \(\pi\), the integral
 might degenerate (the new vector of \(\Pi\) would not "see" the ramification of pi).
 
@@ -272,7 +270,7 @@ new vector \(W_0\) of \(\Pi\) has support contained in
 \[N_{n+1} \ast T^+ \ast K_1(p^{c(\Pi)})\]
 
 where \(T^+\) is the dominant cone in the diagonal torus. Right translation by
-\(u_{Q}\) = I + Q \(E_{n,n+1}\) shifts the (n, n+1)-matrix entry by Q = \(\pi_{F}^{-c(\pi)}.\)
+\(u_{Q} = I\) + Q \(E_{n,n+1}\) shifts the (n, n+1)-matrix entry by \(Q = \pi_{F}^{-c(\pi)}.\)
 In the Iwasawa decomposition g = nak, this modifies the diagonal component
 at scale Q. Concretely, the support of the twisted function
 
@@ -292,11 +290,11 @@ that the integrand \(W_0(\operatorname{diag}(g,1)u_{Q})\) * V(g) is not identica
 \hypertarget{7-verification-in-special-cases}{%
 \subsubsection{7. Verification in special cases}\label{7-verification-in-special-cases}}
 
-\textbf{Both unramified (c(Pi) = c(pi) = 0):} \(u_{Q}\) = I + \(E_{n,n+1}\) (Q = 1).
+\textbf{Both unramified (c(Pi) = c(pi) = 0):} \(u_{Q} = I\) + \(E_{n,n+1}\) (Q = 1).
 \(W_0\) is the spherical vector. The integral with \(V_0\) (spherical for pi)
 gives \(L(s, \Pi \times \pi)\) * (correction factor). Choose V to cancel the L-factor.
 
-\textbf{\(\Pi\) unramified, \(\pi\) ramified:} \(u_{Q}\) has Q = \(\pi_{F}^{-c(\pi)}.\) The twist
+\textbf{\(\Pi\) unramified, \(\pi\) ramified:} \(u_{Q}\) has \(Q = \pi_{F}^{-c(\pi)}.\) The twist
 shifts the support of the spherical vector to match the ramification of \(\pi\).
 This is the classical "conductor-lowering" mechanism.
 

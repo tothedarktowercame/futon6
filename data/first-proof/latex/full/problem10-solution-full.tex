@@ -9,8 +9,8 @@ missing data, solve
 
 \[[(Z \times K)^{T} D (Z \times K) + \lambda (I_{r} \times K)] vec(W) = (I_{r} \times K) vec(B),\]
 
-where D = S \(S^{T}\) is the observation projector (q observed entries out of
-N = nM), B = T Z, and n, r \textless\textless{} q \textless\textless{} N.
+where \(D = S\) \(S^{T}\) is the observation projector (q observed entries out of
+N = nM), \(B = T\) Z, and n, r \textless\textless{} q \textless\textless{} N.
 
 \hypertarget{assumptions-used-explicit}{%
 \subsection{Assumptions Used (explicit)}\label{assumptions-used-explicit}}
@@ -22,7 +22,7 @@ N = nM), B = T Z, and n, r \textless\textless{} q \textless\textless{} N.
   \(\lambda\) \textgreater{} 0.
 \item
   For standard PCG and Cholesky-based preconditioning, use a PD kernel
-  \(K_{\tau}\) = K + \(\tau\) \(I_{n}\) with \(\tau\) \textgreater{} 0 (or assume K is already PD).
+  \(K_{\tau} = K\) + \(\tau\) \(I_{n}\) with \(\tau\) \textgreater{} 0 (or assume K is already PD).
 \item
   S is a selection operator, so D is diagonal/projector and sparse by index list.
 \end{enumerate}
@@ -45,23 +45,23 @@ Under these assumptions \(A_{\tau}\) is SPD, so PCG applies.
 \subsubsection{1. Why naive direct methods fail}\label{1-why-naive-direct-methods-fail}}
 
 \(A_{\tau}\) is an (nr) x (nr) system. Dense direct factorization costs
-\(O((nr)^3)\) = \(O(n^3 r^3)\).
+\(O((nr)^3) = O(n^3 r^3)\).
 
-A naive explicit route also materializes \(\Phi\) = \(Z \times K_{\tau} \in R^{N \times nr}\),
+A naive explicit route also materializes \(\Phi = Z \times K_{\tau} \in R^{N \times nr}\),
 which costs \(O(N n r)\) memory/work before factorization. This is the
 \(N\)-dependent bottleneck we avoid with matrix-free PCG.
 
 \hypertarget{2-implicit-matrix-vector-product-in-on2-r--q-r}{%
 \subsubsection{\texorpdfstring{2. Implicit matrix-vector product in \(O(n^2 r + q r)\)}{2. Implicit matrix-vector product in O(n\^{}2 r + q r)}}\label{2-implicit-matrix-vector-product-in-on2-r--q-r}}
 
-CG needs only y = \(A_{\tau}\) x, not \(A_{\tau}\) explicitly.
+CG needs only \(y = A_{\tau}\) x, not \(A_{\tau}\) explicitly.
 
 Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  U = \(K_{\tau}\) V. Cost \(O(n^2 r)\).
+  \(U = K_{\tau}\) V. Cost \(O(n^2 r)\).
 \item
   Forward sampled action (only observed entries):
 
@@ -79,7 +79,7 @@ Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
 
   \[(Z^{T} \times K_{\tau}) vec(W') = vec(K_{\tau} W' Z).\]
 
-  Compute W\textquotesingle{} \(Z \in O(s r)\) \textless= \(O(q r)\), then left-multiply by \(K_{\tau} \in O(n^2 r)\).
+  Compute W\textquotesingle{} \(Z \in O(s r) \le O(q r)\), then left-multiply by \(K_{\tau} \in O(n^2 r)\).
 \item
   Add regularization term \(\lambda\) vec(\(K_{\tau}\) V), cost \(O(n^2 r)\).
 \end{enumerate}
@@ -93,7 +93,7 @@ with no \(O(N)\) term.
 \hypertarget{3-right-hand-side}{%
 \subsubsection{3. Right-hand side}\label{3-right-hand-side}}
 
-B = T Z with T sparse (q nonzeros):
+\(B = T\) Z with T sparse (q nonzeros):
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -109,7 +109,7 @@ So \(b_{\tau}\) = (\(I_{r} \times K_{\tau}\)) vec(B) is formed in \(O(q r + n^2 
 \hypertarget{4-preconditioner-that-matches-the-corrected-algebra}{%
 \subsubsection{4. Preconditioner that matches the corrected algebra}\label{4-preconditioner-that-matches-the-corrected-algebra}}
 
-Use D = S \(S^{T}\) and whiten by \(K_{\tau}^{-1/2}:\)
+Use \(D = S\) \(S^{T}\) and whiten by \(K_{\tau}^{-1/2}:\)
 
 \[x = (I_{r} \times K_{\tau}^{-1/2}) y.\]
 
@@ -136,7 +136,7 @@ H = c Z^{T} Z + \lambda I_{r}.
 \end{aligned}\]
 
 This is the missing justification for using \(H \times K_{\tau}\) (instead of claiming
-it is the exact D = I system).
+it is the exact \(D = I\) system).
 
 Khatri-Rao identity still gives efficient Gram formation:
 
@@ -172,16 +172,16 @@ which implies
 \[\kappa(P^{-1} A_{\tau}) \le (1+\delta)/(1-\delta).\]
 
 Hence t is logarithmic in 1/eps with a modest sqrt(kappa) factor when
-\(\delta\) is bounded away from 1. (No unsupported closed-form t = \(O(r sqrt(n/q))\)
+\(\delta\) is bounded away from 1. (No unsupported closed-form \(t = O(r sqrt(n/q))\)
 claim is needed.)
 
 \textbf{Sufficient conditions for bounded \(\delta\).} The spectral equivalence
 (1-delta)P \textless= \(A_{\tau}\) \textless= (1+delta)P holds with \(\delta\) bounded away from 1 when
 the sampling pattern satisfies a restricted isometry-type condition:
 \textbar\textbar D - (q/N)I\textbar\textbar{} is small relative to \(\lambda\). For uniform random sampling
-with q \textgreater= C n log n (for a universal constant C), matrix concentration
-results (Tropp 2011, Theorem 1.6) give \(\delta\) = \(O(sqrt(n log n / q))\) with
-high probability. Under this regime, \(\kappa\) = \(O(1)\) and PCG converges in
+with \(q \ge C\) n log n (for a universal constant C), matrix concentration
+results (Tropp 2011, Theorem 1.6) give \(\delta = O(sqrt(n log n / q))\) with
+high probability. Under this regime, \(\kappa = O(1)\) and PCG converges in
 \(O(log(1/eps))\) iterations.
 
 \hypertarget{6-complexity-summary}{%
@@ -220,7 +220,7 @@ O(n^3 + r^3 + sum_{i} n_{i} r^2 + q r + n^2 r \\
 + t (n^2 r + q r + n r^2)).
 \end{aligned}\]
 
-In the common regime n \textgreater= r, this simplifies to
+In the common regime \(n \ge r\), this simplifies to
 
 \[O(n^3 + t (n^2 r + q r)),\]
 
@@ -230,7 +230,7 @@ with dependence on q (observed entries) rather than N (all entries).
 dominates (i.e., \(n^3\) \textgreater{} t(\(n^2\) r + q r)), the per-ALS-step cost is effectively
 \(O(n^3)\). In this regime, low-rank kernel approximations (e.g., Nystrom
 approximation with rank p \textless\textless{} n, reducing the kernel factorization to \(O(n p^2)\))
-or iterative inner solves (conjugate gradient on \(K_{\tau}\) y = z, cost \(O(n^2)\)
+or iterative inner solves (conjugate gradient on \(K_{\tau}\) \(y = z\), cost \(O(n^2)\)
 per inner iteration) can replace the exact Cholesky, reducing the setup to
 \(O(n p^2 + t(n p r + q r))\). This is a well-known practical optimization
 (see Rudi-Calandriello-Rosasco 2017) and is compatible with the PCG framework

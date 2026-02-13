@@ -37,6 +37,11 @@ PRIME_AND_SINGLE_SNIPPET = (
     "for any nonzero phi' in K(Pi)|_{GL_n}. "
     "for each V, there exists I such that I(s, W, V) = c * qF^{-ks}.\n"
 )
+COMPARISON_UNIFY_SNIPPET = (
+    "a = b and a <= b and a != b. "
+    "$a$ $=$ $b$. "
+    "$x+y$ $\\le$ $z+w$.\n"
+)
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -107,6 +112,9 @@ def main() -> int:
     )
     normalized_prime_single, out_prime_single = render_snippet(
         repo, normalizer, lua_filter, PRIME_AND_SINGLE_SNIPPET
+    )
+    _, out_compare = render_snippet(
+        repo, normalizer, lua_filter, COMPARISON_UNIFY_SNIPPET
     )
 
     if r"integrals over \(V\)" not in out:
@@ -232,8 +240,24 @@ def main() -> int:
     ]
     if not any(v in out_prime_single for v in prime_render_variants):
         failures.append("rendered output missing inline math for phi' / K(Pi)|_{GL_n}")
-    if r"for each \(V\), there exists \(I\) such that \(I(s, W, V)\) = \(c \ast q_{F}^{-ks}\)." not in out_prime_single and r"for each \(V\), there exists \(I\) such that \(I(s, W, V)\) = \(c \ast q_F^{-ks}\)." not in out_prime_single:
+    if (
+        r"for each \(V\), there exists \(I\) such that \(I(s, W, V)\) = \(c \ast q_{F}^{-ks}\)." not in out_prime_single
+        and r"for each \(V\), there exists \(I\) such that \(I(s, W, V)\) = \(c \ast q_F^{-ks}\)." not in out_prime_single
+        and r"for each \(V\), there exists \(I\) such that \(I(s, W, V) = c \ast q_{F}^{-ks}\)." not in out_prime_single
+        and r"for each \(V\), there exists \(I\) such that \(I(s, W, V) = c \ast q_F^{-ks}\)." not in out_prime_single
+    ):
         failures.append("rendered output missing inline math for V/I/I(s,W,V) sentence")
+
+    if r"\(a = b\)" not in out_compare:
+        failures.append("rendered output missing inline math for equality comparison")
+    if r"\(a \le b\)" not in out_compare:
+        failures.append("rendered output missing inline math for <= comparison")
+    if r"\(a \neq b\)" not in out_compare:
+        failures.append("rendered output missing inline math for != comparison")
+    if r"\(a\) \(=\) \(b\)" in out_compare:
+        failures.append("comparison unifier regressed to split '$a$ $=$ $b$' form")
+    if r"\(x+y \le z+w\)" not in out_compare and r"\(x + y \le z + w\)" not in out_compare:
+        failures.append("comparison unifier did not merge math globs around \\le")
 
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:
@@ -246,6 +270,12 @@ def main() -> int:
         failures.append("math-proofread style still categorizes \\pi as Number")
     if r"\renewcommand{\det}{\mFunction{\MP@orig@det}}" not in style:
         failures.append("math-proofread style does not colorize \\det as function")
+    if r"\definecolor{MPSyntaxComparisonColor}{RGB}{0,66,37}" not in style:
+        failures.append("math-proofread style does not define comparison color (British racing green)")
+    if r"\renewcommand{\le}{\mCompare{\MP@orig@le}}" not in style:
+        failures.append("math-proofread style does not colorize \\le as comparison")
+    if r"\renewcommand{\neq}{\mCompare{\MP@orig@neq}}" not in style:
+        failures.append("math-proofread style does not colorize \\neq as comparison")
     if r"\renewcommand{\prime}{\mOperator{\MP@orig@prime}}" not in style:
         failures.append("math-proofread style does not colorize \\prime as operator")
     if r"\renewcommand{\text}[1]{\mMathText{\MP@orig@text{##1}}}" not in style:

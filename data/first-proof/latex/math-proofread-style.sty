@@ -10,6 +10,7 @@
 \colorlet{MPSyntaxDefaultMathColor}{CornflowerBlue}
 \colorlet{MPSyntaxOperatorColor}{Purple}
 \colorlet{MPSyntaxRelationColor}{RoyalPurple}
+\definecolor{MPSyntaxComparisonColor}{RGB}{0,66,37}
 \colorlet{MPSyntaxLargeOperatorColor}{BlueViolet}
 \colorlet{MPSyntaxArrowColor}{TealBlue}
 \colorlet{MPSyntaxDelimiterColor}{CadetBlue}
@@ -21,6 +22,7 @@
 \newcommand{\mGreek}[1]{{\color{MPSyntaxGreekColor}#1}}
 \newcommand{\mOperator}[1]{{\color{MPSyntaxOperatorColor}#1}}
 \newcommand{\mRelation}[1]{{\color{MPSyntaxRelationColor}#1}}
+\newcommand{\mCompare}[1]{{\color{MPSyntaxComparisonColor}#1}}
 \newcommand{\mLargeOperator}[1]{{\color{MPSyntaxLargeOperatorColor}#1}}
 \newcommand{\mArrow}[1]{{\color{MPSyntaxArrowColor}#1}}
 \newcommand{\mDelimiter}[1]{{\color{MPSyntaxDelimiterColor}#1}}
@@ -120,7 +122,7 @@
 \let\MP@orig@rvert\rvert
 
 \begingroup\catcode`\+=\active\gdef+{\mathbin{\color{MPSyntaxOperatorColor}\mathchar"202B}}\endgroup
-\begingroup\catcode`\==\active\gdef={\mathrel{\color{MPSyntaxRelationColor}\mathchar"303D}}\endgroup
+\begingroup\catcode`\==\active\gdef={\mathrel{\color{MPSyntaxComparisonColor}\mathchar"303D}}\endgroup
 
 \newcommand{\MP@ActivateRawMathChars}{%
   \ifMPRawMathCharsActivated\else
@@ -188,12 +190,12 @@
     \renewcommand{\otimes}{\mOperator{\MP@orig@otimes}}
     \renewcommand{\oplus}{\mOperator{\MP@orig@oplus}}
 
-    \renewcommand{\le}{\mRelation{\MP@orig@le}}
-    \renewcommand{\leq}{\mRelation{\MP@orig@leq}}
-    \renewcommand{\approx}{\mRelation{\MP@orig@approx}}
+    \renewcommand{\le}{\mCompare{\MP@orig@le}}
+    \renewcommand{\leq}{\mCompare{\MP@orig@leq}}
+    \renewcommand{\approx}{\mCompare{\MP@orig@approx}}
     \renewcommand{\in}{\mRelation{\MP@orig@in}}
     \renewcommand{\subseteq}{\mRelation{\MP@orig@subseteq}}
-    \renewcommand{\neq}{\mRelation{\MP@orig@neq}}
+    \renewcommand{\neq}{\mCompare{\MP@orig@neq}}
 
     \renewcommand{\sum}{\mLargeOperator{\MP@orig@sum}}
     \renewcommand{\prod}{\mLargeOperator{\MP@orig@prod}}
@@ -352,6 +354,7 @@
       \def\mGreek#1{#1}%
       \def\mOperator#1{#1}%
       \def\mRelation#1{#1}%
+      \def\mCompare#1{#1}%
       \def\mLargeOperator#1{#1}%
       \def\mArrow#1{#1}%
       \def\mDelimiter#1{#1}%
@@ -381,7 +384,8 @@
     \textbf{Syntax class} & \textbf{Colour} & \textbf{Examples} \\
     Greek letters & \textcolor{MPSyntaxGreekColor}{Mulberry} & $\mGreek{\alpha},\,\mGreek{\beta},\,\mGreek{\Gamma}$ \\
     Binary operators & \textcolor{MPSyntaxOperatorColor}{Purple} & $a\mBin{+}b,\,x\mOperator{\times}y,\,u\mOperator{\ast}v,\,U\mOperator{\cup}V,\,A\mOperator{\otimes}B$ \\
-    Relation operators & \textcolor{MPSyntaxRelationColor}{RoyalPurple} & $x\mRel{=}y,\,x\mRel{\le}y,\,x\mRel{\approx}y,\,x\mRel{\in}S,\,A\mRel{\subseteq}B$ \\
+    Comparison operators & \textcolor{MPSyntaxComparisonColor}{BritishRacingGreen} & $x\mCompare{=}y,\,x\mCompare{\le}y,\,x\mCompare{\neq}y,\,x\mCompare{\approx}y$ \\
+    Relation operators & \textcolor{MPSyntaxRelationColor}{RoyalPurple} & $x\mRel{\in}S,\,A\mRel{\subseteq}B$ \\
     Large operators & \textcolor{MPSyntaxLargeOperatorColor}{BlueViolet} & $\mLargeOperator{\sum},\,\mLargeOperator{\prod},\,\mLargeOperator{\int},\,\mLargeOperator{\lim}$ \\
     Arrows & \textcolor{MPSyntaxArrowColor}{TealBlue} & $f\mArrow{\to}g,\,P\mArrow{\Rightarrow}Q,\,x\mArrow{\mapsto}x^2,\,A\mArrow{\leftrightarrow}B$ \\
     Delimiters & \textcolor{MPSyntaxDelimiterColor}{CadetBlue} & $\mDelimiter{(}x\mDelimiter{)},\,\mDelimiter{[}x\mDelimiter{]},\,\langle x\rangle,\,|x|$ \\

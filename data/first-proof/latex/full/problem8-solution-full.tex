@@ -8,7 +8,7 @@ A \textbf{polyhedral Lagrangian surface} \(K \in R\)\^{}4 is a finite polyhedral
 of whose faces are Lagrangian 2-planes, which is a topological submanifold of
 \(R^4.\) A \textbf{Lagrangian smoothing} of K is a Hamiltonian isotopy \(K_{t}\) of smooth
 Lagrangian submanifolds for t in (0,1{]}, extending to a topological isotopy on
-{[}0,1{]}, with \(K_0\) = K.
+{[}0,1{]}, with \(K_0 = K\).
 
 \textbf{Question:} If K has exactly 4 faces meeting at every vertex, does K
 necessarily have a Lagrangian smoothing?
@@ -36,13 +36,13 @@ theorem (edges) and the vanishing flux in simply-connected \(R^2\) (vertices).
 \hypertarget{1-setup-lagrangian-planes-in-r4}{%
 \subsubsection{\texorpdfstring{1. Setup: Lagrangian planes in \(R^4\)}{1. Setup: Lagrangian planes in R\^{}4}}\label{1-setup-lagrangian-planes-in-r4}}
 
-Identify \(R^4\) = \(C^2\) with symplectic form \(\omega\) = \(dx_1\) ∧ \(dy_1\) + \(dx_2\) ∧ \(dy_2.\)
+Identify \(R^4 = C^2\) with symplectic form \(\omega = dx_1\) ∧ \(dy_1\) + \(dx_2\) ∧ \(dy_2.\)
 A Lagrangian plane is a 2-dimensional subspace L where omega\textbar\_L = 0. The space
 of Lagrangian planes (the Lagrangian Grassmannian) is:
 
 \[\Lambda(2) = U(2)/O(2)\]
 
-This is a manifold of dimension 3 with \(\pi_1(\Lambda(2))\) = Z (the Maslov class).
+This is a manifold of dimension 3 with \(\pi_1(\Lambda(2)) = Z\) (the Maslov class).
 
 Each face of K lies in a Lagrangian plane. At each edge, two Lagrangian faces
 meet at a dihedral angle. At each vertex, 4 Lagrangian faces meet.
@@ -66,8 +66,8 @@ The Lagrangian condition omega\textbar\_\{\(L_{i}\)\} = 0 requires:
 \hypertarget{3-the-symplectic-direct-sum-decomposition-key-new-argument}{%
 \subsubsection{3. The symplectic direct sum decomposition (key new argument)}\label{3-the-symplectic-direct-sum-decomposition-key-new-argument}}
 
-\textbf{Theorem (v2).} The 4 edge vectors \(e_1\) = \(e_{12},\) \(e_2\) = \(e_{23},\) \(e_3\) = \(e_{34},\)
-\(e_4\) = \(e_{41}\) satisfy \(\omega\)(\(e_{i}\), \(e_{i+1}\)) = 0 for all i (mod 4). This forces
+\textbf{Theorem (v2).} The 4 edge vectors \(e_1 = e_{12},\) \(e_2 = e_{23},\) \(e_3 = e_{34},\)
+\(e_4 = e_{41}\) satisfy \(\omega\)(\(e_{i}\), \(e_{i+1}\)) = 0 for all i (mod 4). This forces
 a symplectic direct sum decomposition:
 
 \[R^4 = V_1 \oplus V_2\]
@@ -104,16 +104,14 @@ H/ell ≅ \(R^2.\) But omega\textbar\_H descends to a non-degenerate 2-form on H
 non-degenerate 2-form vanishes must be \{0\}. Contradiction. So ell ⊂ L.
 
 \textbf{Step 3 (key).} Each edge \(e_{i}\) is the intersection of two adjacent faces:
-\(e_1\) = \(L_1\) ∩ \(L_2,\) \(e_2\) = \(L_2\) ∩ \(L_3,\) etc. Since \(L_{i}\) and \(L_{i+1}\) are
+\(e_1 = L_1\) ∩ \(L_2,\) \(e_2 = L_2\) ∩ \(L_3,\) etc. Since \(L_{i}\) and \(L_{i+1}\) are
 distinct 2-planes (distinct faces), their intersection is exactly
-1-dimensional: dim(\(L_{i}\) ∩ \(L_{i+1}\)) = 1, so \(L_{i}\) ∩ \(L_{i+1}\) = \(span(e_{i}).\)
+1-dimensional: dim(\(L_{i}\) ∩ \(L_{i+1}\)) = 1, so \(L_{i}\) ∩ \(L_{i+1} = span(e_{i}).\)
 
-By Step 2, ell ⊂ \(L_{i}\) and ell ⊂ \(L_{i+1},\) so ell ⊂ \(L_{i}\) ∩ \(L_{i+1}\) =
-\(span(e_{i}).\) Since both ell and \(span(e_{i})\) are 1-dimensional subspaces and
+By Step 2, ell ⊂ \(L_{i}\) and ell ⊂ \(L_{i+1},\) so ell ⊂ \(L_{i}\) ∩ \(L_{i+1} = span(e_{i}).\) Since both ell and \(span(e_{i})\) are 1-dimensional subspaces and
 one contains the other, ell = \(span(e_{i}).\)
 
-Applying this to all four edges: \(span(e_1)\) = ell = \(span(e_2)\) = \(span(e_3)\) =
-\(span(e_4).\) That is, all four edge vectors are proportional.
+Applying this to all four edges: \(span(e_1)\) = ell = \(span(e_2) = span(e_3) = span(e_4).\) That is, all four edge vectors are proportional.
 
 But then \(L_1\) = span(\(e_4\), \(e_1\)) = \(span(e_1)\) is 1-dimensional, contradicting
 the fact that \(L_1\) is a 2-plane. ∎
@@ -197,7 +195,7 @@ both crease smoothing and Lagrangian surgery.
 
 \textbf{Product decomposition of K near v.} Choose Darboux coordinates adapted to
 \(V_1\) ⊕ \(V_2:\) let \(V_1\) have coordinates (x, y) with \(\omega_1\) = dx ∧ dy, and \(V_2\)
-have coordinates (u, v) with \(\omega_2\) = du ∧ dv (so \(\omega\) = \(\omega_1\) + \(\omega_2\)).
+have coordinates (u, v) with \(\omega_2\) = du ∧ dv (so \(\omega = \omega_1\) + \(\omega_2\)).
 Orient the edge vectors so that:
 
 \[e_1 = (1,0,0,0), e_2 = (0,0,1,0), e_3 = (0,1,0,0), e_4 = (0,0,0,1)\]
@@ -244,7 +242,7 @@ curve exists: it is a smooth rounding of the right angle at the origin.)
 Define \(\gamma_2(t)\) analogously for \(C_2^{sm}.\)
 
 \textbf{Lagrangian property of the product:} The smoothed surface
-\(K^{sm}\) = \(C_1^{sm}\) × \(C_2^{sm}\) is a product of smooth curves in the
+\(K^{sm} = C_1^{sm}\) × \(C_2^{sm}\) is a product of smooth curves in the
 symplectic factors. A curve in a 2-dimensional symplectic manifold is
 always Lagrangian (its dimension is 1 = half of 2, and \(\omega\) restricted
 to a 1-submanifold is zero for dimensional reasons). The product of
@@ -257,13 +255,13 @@ in (\(V_1\) ⊕ \(V_2,\) \(\omega_1\) + \(\omega_2\)): for tangent vectors (\(u_
 since \(u_1,\) \(w_1\) are tangent to \(C_1^{sm}\) (1-dimensional in \(V_1\)) and \(u_2,\) \(w_2\)
 are tangent to \(C_2^{sm}\) (1-dimensional in \(V_2\)). ∎
 
-\textbf{Smoothness:} \(K^{sm}\) = \(C_1^{sm}\) × \(C_2^{sm}\) is the image of the smooth
+\textbf{Smoothness:} \(K^{sm} = C_1^{sm}\) × \(C_2^{sm}\) is the image of the smooth
 map (\(t_1\), \(t_2\)) → (\(\gamma_1\)(\(t_1\)), \(\gamma_2\)(\(t_2\))), which is a smooth immersion
 (the tangent vectors d \(\gamma_1/dt_1\) and d \(\gamma_2/dt_2\) are nonzero and lie
 in complementary subspaces \(V_1\) and \(V_2\)). So \(K^{sm}\) is a smooth Lagrangian
-surface, including at v = \(\gamma_1(0)\) × \(\gamma_2(0).\) ∎
+surface, including at \(v = \gamma_1(0)\) × \(\gamma_2(0).\) ∎
 
-\textbf{Agreement:} \(K^{sm}\) = \(C_1\) × \(C_2\) = K outside the region where either
+\textbf{Agreement:} \(K^{sm} = C_1\) × \(C_2 = K\) outside the region where either
 factor was modified (\textbar p\textbar{} ≤ \(\delta \in V_1\) or \textbar q\textbar{} ≤ \(\delta \in V_2\)), so \(K^{sm}\)
 agrees with K outside a neighborhood of v of radius \(O(\delta)\).
 
@@ -283,7 +281,7 @@ from any vertex). Then there exists a smooth Lagrangian surface agreeing with
 
 \emph{Proof.} Choose Darboux coordinates (\(x_1\), \(y_1,\) \(x_2,\) \(y_2\)) with e along the
 \(x_1\)-axis. Each \(L_{i}\) is locally the graph y = grad \(S_{i}(x)\) for quadratic \(S_{i}.\)
-Define \(S_{eps}(x)\) = \(\chi(x_1/eps)\) \(S_1(x)\) + (1 - \(\chi\)(\(x_1\)/eps)) \(S_2(x)\) for a
+Define \(S_{eps}(x) = \chi(x_1/eps)\) \(S_1(x)\) + (1 - \(\chi\)(\(x_1\)/eps)) \(S_2(x)\) for a
 smooth cutoff \(\chi\). The graph y = grad \(S_{eps}\) is Lagrangian (graph of the
 exact 1-form \(dS_{eps}\)). For any fixed eps \textgreater{} 0, this gives a smooth Lagrangian
 surface replacing the crease along e. ∎
@@ -311,7 +309,7 @@ in thin tubular neighborhoods of the edge arcs.)
 
 Such radii exist because the vertex set is finite and discrete in \(R^4.\)
 Within each \(B_{i},\) apply the product smoothing (Section 5a) using the
-\(V_1\) ⊕ \(V_2\) decomposition from Section 3. This replaces K ∩ \(B_{i}\) = \(C_1\) × \(C_2\)
+\(V_1\) ⊕ \(V_2\) decomposition from Section 3. This replaces K ∩ \(B_{i} = C_1\) × \(C_2\)
 with the smooth Lagrangian surface \(C_1^{sm}\) × \(C_2^{sm}.\)
 
 \textbf{Commutativity:} Since the balls \({B_{i}}\) are pairwise disjoint, the
@@ -332,7 +330,7 @@ Therefore the edge smoothings commute with each other and with the vertex
 smoothings.
 
 \textbf{Compatibility at ∂\(B_{i}\).} The vertex smoothing (Section 5a) agrees with
-the original polyhedral K outside a neighborhood of \(v_{i}\) of radius \(\delta\) \textless{} \(r_{i}.\)
+the original polyhedral K outside a neighborhood of \(v_{i}\) of radius \(\delta < r_{i}.\)
 So on ∂\(B_{i}\), the surface is still polyhedral (two flat faces meeting at an
 edge). The edge crease smoothing (Section 6) begins at ∂\(B_{i}\), where the
 surface is already flat. Since both the vertex smoothing (product of smooth
@@ -343,26 +341,26 @@ Lagrangian surface.
 
 \textbf{Step 7c: Global Hamiltonian isotopy.} Each smoothing is parameterized by
 a width parameter t (delta for vertices, eps for edges). As t → 0, the
-smoothing region shrinks and \(K_{t}\) → K = \(K_0 \in C^0,\) giving the topological
+smoothing region shrinks and \(K_{t}\) → \(K = K_0 \in C^0,\) giving the topological
 isotopy on {[}0, 1{]}. It remains to show \(K_{t}\) is a \emph{Hamiltonian} isotopy
 for t \textgreater{} 0.
 
 \textbf{Edge smoothings are Hamiltonian.} The family of generating functions
-\(S_{t}(x)\) = \(\chi(x_1/t)\) \(S_1(x)\) + (1 - \(\chi\)(\(x_1\)/t)) \(S_2(x)\) defines a smooth
+\(S_{t}(x) = \chi(x_1/t)\) \(S_1(x)\) + (1 - \(\chi\)(\(x_1\)/t)) \(S_2(x)\) defines a smooth
 1-parameter family of Lagrangian graphs y = grad \(S_{t}(x) \in T^ \ast R^2.\) By
 the Weinstein Lagrangian neighborhood theorem (Weinstein 1971, Theorem 6.1),
 a smooth family of exact Lagrangian submanifolds in an exact symplectic
-manifold (here \(T^ \ast R^2\) with \(\lambda\) = y dx) is generated by a Hamiltonian:
+manifold (here \(T^ \ast R^2\) with \(\lambda = y\) dx) is generated by a Hamiltonian:
 the 1-form \(i_{d/dt}\)(omega)\textbar{}\emph{\({K_{t}}\) is exact (it equals d(\(S_{t}\)\textbar{}}\{\(K_{t}\)\})),
-so the isotopy is Hamiltonian with generating function \(H_{t}\) = \(dS_{t}/dt\)
+so the isotopy is Hamiltonian with generating function \(H_{t} = dS_{t}/dt\)
 evaluated on the Lagrangian.
 
 \textbf{Vertex smoothings are Hamiltonian.} The vertex smoothing is a product:
-\(K_{t}^{vertex}\) = \(C_1^{sm}(t)\) × \(C_2^{sm}(t) \in V_1\) × \(V_2.\) Each \(C_{j}^{sm}(t)\)
+\(K_{t}^{vertex} = C_1^{sm}(t)\) × \(C_2^{sm}(t) \in V_1\) × \(V_2.\) Each \(C_{j}^{sm}(t)\)
 is a smooth 1-parameter family of curves in (\(V_{j}\), \(\omega_{j}\)) ≅ (\(R^2\), dx∧dy).
 In a 2-dimensional exact symplectic manifold, EVERY isotopy of compact
 (or compactly supported) Lagrangian submanifolds is Hamiltonian. This is
-because \(V_{j}\) = \(R^2\) is simply connected, so the flux homomorphism
+because \(V_{j} = R^2\) is simply connected, so the flux homomorphism
 Flux: \(\pi_1(Symp)\) → \(H^1\)(L; R) is trivial (no non-Hamiltonian symplectic
 isotopies exist). Concretely: the velocity field d/dt of the isotopy
 \(C_{j}^{sm}(t)\) is a symplectic vector field along \(C_{j}^{sm}\)(t); contracting
@@ -386,7 +384,7 @@ is a group under composition).
 
 For K to be a compact topological submanifold with 4 faces per vertex,
 Euler\textquotesingle s formula constrains the topology. For quadrilateral faces:
-V - E + F = \(\chi(K)\), with 4F = 2E and 4V = 2E, giving \(\chi\) = 0.
+V - E + \(F = \chi(K)\), with 4F = 2E and 4V = 2E, giving \(\chi\) = 0.
 So K is topologically a torus or Klein bottle.
 
 For non-quadrilateral faces with 4 per vertex, other topologies are possible
@@ -401,14 +399,14 @@ The smoothing exists because:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  The 4-face + Lagrangian condition forces a symplectic direct sum \(R^4\) = \(V_1\) ⊕ \(V_2\)
+  The 4-face + Lagrangian condition forces a symplectic direct sum \(R^4 = V_1\) ⊕ \(V_2\)
   at each vertex (vertex spanning is proved algebraically; opposite edges span
   complementary symplectic 2-planes)
 \item
   This decomposition forces Maslov index exactly 0 (algebraic, not just generic)
 \item
-  Near each vertex, K = \(C_1\) × \(C_2\) (product of corners). Smoothing each corner
-  gives \(K^{sm}\) = \(C_1^{sm}\) × \(C_2^{sm},\) a smooth Lagrangian surface (product of
+  Near each vertex, \(K = C_1\) × \(C_2\) (product of corners). Smoothing each corner
+  gives \(K^{sm} = C_1^{sm}\) × \(C_2^{sm},\) a smooth Lagrangian surface (product of
   curves in symplectic factors). No Lagrangian surgery needed at vertices.
 \item
   Edge creases (between vertices) are smoothed by generating function interpolation

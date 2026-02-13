@@ -506,10 +506,70 @@ local function build_binary_expr(lhs, lhs_is_math, op, rhs, rhs_is_math)
     op_tex = "\\times"
   elseif op == "*" then
     op_tex = "\\ast"
+  elseif op == "=" then
+    op_tex = "="
+  elseif op == "<" then
+    op_tex = "<"
+  elseif op == ">" then
+    op_tex = ">"
+  elseif op == "<=" then
+    op_tex = "\\le"
+  elseif op == ">=" then
+    op_tex = "\\ge"
+  elseif op == "!=" then
+    op_tex = "\\neq"
+  elseif op == "approx" then
+    op_tex = "\\approx"
   else
     return nil
   end
   return normalize_binary_side(lhs, lhs_is_math) .. " " .. op_tex .. " " .. normalize_binary_side(rhs, rhs_is_math)
+end
+
+local function extract_binary_operator(el)
+  if el == nil then
+    return nil
+  end
+  if el.t == "Str" then
+    if el.text == "in" or el.text == "x" or el.text == "X" or el.text == "*" then
+      return el.text
+    end
+    if el.text == "=" or el.text == "<" or el.text == ">" or el.text == "<=" or el.text == ">=" or el.text == "!=" then
+      return el.text
+    end
+    if el.text == "≈" then
+      return "approx"
+    end
+    return nil
+  end
+  if el.t == "Math" and el.mathtype == "InlineMath" then
+    local txt = trim(el.text)
+    if txt == "=" or txt == "<" or txt == ">" then
+      return txt
+    end
+    if txt == "\\le" or txt == "\\leq" then
+      return "<="
+    end
+    if txt == "\\ge" or txt == "\\geq" then
+      return ">="
+    end
+    if txt == "\\neq" then
+      return "!="
+    end
+    if txt == "\\approx" then
+      return "approx"
+    end
+    if txt == "\\in" then
+      return "in"
+    end
+    if txt == "\\times" then
+      return "x"
+    end
+    if txt == "\\ast" then
+      return "*"
+    end
+  end
+  return nil
 end
 
 local function convert_binary_operator_sequences_once(inlines)
@@ -522,13 +582,14 @@ local function convert_binary_operator_sequences_once(inlines)
     local c = inlines[i + 2]
     local d = inlines[i + 3]
     local e = inlines[i + 4]
+    local op = extract_binary_operator(c)
     if a ~= nil and b ~= nil and c ~= nil and d ~= nil and e ~= nil
       and is_space_like(b) and is_space_like(d)
-      and c.t == "Str" and (c.text == "in" or c.text == "x" or c.text == "X" or c.text == "*") then
+      and op ~= nil then
       local lhs, lpunct, lhs_is_math = extract_binary_side(a)
       local rhs, rpunct, rhs_is_math = extract_binary_side(e)
       if lhs ~= nil and rhs ~= nil and lpunct == "" then
-        local expr = build_binary_expr(lhs, lhs_is_math, c.text, rhs, rhs_is_math)
+        local expr = build_binary_expr(lhs, lhs_is_math, op, rhs, rhs_is_math)
         if expr ~= nil then
           table.insert(out, pandoc.Math("InlineMath", expr))
           if rpunct ~= "" then
@@ -832,4 +893,42 @@ function Plain(el)
   el.content = convert_split_brace_math_inlines(el.content)
   el.content = convert_binary_operator_sequences(el.content)
   return el
+end
+
+local function normalize_inline_container(el)
+  el.content = convert_split_brace_math_inlines(el.content)
+  el.content = convert_binary_operator_sequences(el.content)
+  return el
+end
+
+function Header(el)
+  return normalize_inline_container(el)
+end
+
+function Emph(el)
+  return normalize_inline_container(el)
+end
+
+function Strong(el)
+  return normalize_inline_container(el)
+end
+
+function Strikeout(el)
+  return normalize_inline_container(el)
+end
+
+function Superscript(el)
+  return normalize_inline_container(el)
+end
+
+function Subscript(el)
+  return normalize_inline_container(el)
+end
+
+function SmallCaps(el)
+  return normalize_inline_container(el)
+end
+
+function Span(el)
+  return normalize_inline_container(el)
 end
