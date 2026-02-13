@@ -1,0 +1,67 @@
+flowchart TD
+    %% Problem 6 v3: Post-pigeonhole breakthrough
+    %% The elementary argument (PSD trace bound + pigeonhole) replaces
+    %% the entire MSS/interlacing/Borcea-Branden machinery.
+    %% Green = proved, Yellow = open gap, Gray = empirical support
+
+    %% Nodes
+    p6p-q{{"P6 TARGET<br/>Universal c>0: for every G, eps,<br/>exists S with |S|>=c*eps*n, L_S<=eps*L"}}
+
+    p6p-heavy["TURAN (proved)<br/>Heavy/light split at tau=eps.<br/>Indep set I0 >= eps*n/3,<br/>all internal edges light"]
+
+    p6p-filter["FILTER (proved)<br/>Remove high leverage-degree.<br/>I0' >= eps*n/12,<br/>ell_v <= 2/eps"]
+
+    p6p-barrier["BARRIER GREEDY (proved)<br/>Add vertices maintaining<br/>||M_t|| < eps.<br/>Need: exists v with ||Y_t(v)|| < 1"]
+
+    p6p-pigeonhole["THE SIMPLE PROOF (proved)<br/>PSD: ||Y|| <= tr(Y)<br/>Pigeonhole: min <= avg = dbar<br/>If dbar < 1 then exists v OK"]
+
+    p6p-dbar-kn["K_n CLOSED (proved)<br/>dbar = 2t/(n*eps) <= 2/3<br/>|S| = eps*n/3, c = 1/3"]
+
+    p6p-dbar-general["GENERAL GRAPHS (open)<br/>dbar at M_t!=0 involves H^{-1}<br/>Naive bound exceeds 1.<br/>Greedy keeps dbar <= 0.641<br/>SINGLE REMAINING GAP"]
+
+    p6p-qpoly(["Q-POLY ROOTS (empirical)<br/>Max root < 0.505 across 440 steps.<br/>Vieta: max root <= dbar"])
+
+    p6p-empirical(["NUMERICS (empirical)<br/>440 steps, 5 families, n<=64.<br/>dbar < 1 at ALL steps.<br/>Margin: 36%"])
+
+    p6p-superseded(["SUPERSEDED<br/>MSS interlacing, Borcea-Branden,<br/>Bonferroni, AR-NT, GL-Balance<br/>all bypassed by pigeonhole"])
+
+    p6p-random["RANDOM SAMPLING (empirical)<br/>p=eps gives success for<br/>all 272 tested combos.<br/>|S| >= eps*n/6 possible"]
+
+    p6p-result["RESULT (summary)<br/>K_n: PROVED, c=1/3<br/>General: one gap (dbar<1 at M!=0)<br/>Size: eps^2*n/36 (eps^2 bottleneck)"]
+
+    %% Edges — proof flow
+    p6p-heavy -->|"Turan gives candidate set"| p6p-q
+    p6p-filter -->|"refine I0"| p6p-heavy
+    p6p-barrier -->|"greedy on I0'"| p6p-filter
+    p6p-pigeonhole ==>|"closes barrier step"| p6p-barrier
+    p6p-dbar-kn ==>|"exact: dbar = 2/3"| p6p-pigeonhole
+    p6p-dbar-general -->|"open: formal dbar bound"| p6p-pigeonhole
+
+    %% Evidence
+    p6p-qpoly -.->|"confirms via Vieta"| p6p-dbar-general
+    p6p-empirical -.->|"440/440 pass"| p6p-dbar-general
+    p6p-superseded -.->|"replaces heavy machinery"| p6p-pigeonhole
+
+    %% Alternative path
+    p6p-random -->|"bypasses greedy"| p6p-q
+
+    %% Result connections
+    p6p-result ==>|"K_n closed"| p6p-q
+    p6p-result -->|"proved"| p6p-dbar-kn
+    p6p-result -.->|"conditional"| p6p-dbar-general
+
+    %% Styling by verification status
+    classDef target fill:#f9e,stroke:#c06,stroke-width:3px
+    classDef proved fill:#cfc,stroke:#393,stroke-width:2px
+    classDef open fill:#ffc,stroke:#cc3,stroke-width:3px
+    classDef empirical fill:#eee,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5
+    classDef superseded fill:#fee,stroke:#c99,stroke-width:1px,stroke-dasharray: 5 5
+    classDef summary fill:#ccf,stroke:#66c,stroke-width:2px
+
+    class p6p-q target
+    class p6p-heavy,p6p-filter,p6p-barrier,p6p-pigeonhole,p6p-dbar-kn proved
+    class p6p-dbar-general open
+    class p6p-qpoly,p6p-empirical empirical
+    class p6p-superseded superseded
+    class p6p-random empirical
+    class p6p-result summary

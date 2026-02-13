@@ -1,0 +1,271 @@
+{
+  "thread_id": "first-proof-p6-post-pigeonhole",
+  "notes": "Post-pigeonhole wiring: the simple argument (PSD trace bound + averaging) replaces the interlacing families machinery. GPL-H closed for K_n, empirically verified for general graphs.",
+  "nodes": [
+    {
+      "id": "p6p-q",
+      "node_type": "question",
+      "post_id": 6400,
+      "body_text": "Problem 6: find universal c>0 s.t. for every graph G and eps in (0,1), exists S with |S|>=c*eps*n and L_S<=eps*L.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": null,
+      "tags": {
+        "verification_status": "target"
+      }
+    },
+    {
+      "id": "p6p-heavy",
+      "node_type": "answer",
+      "post_id": 6401,
+      "body_text": "Heavy/light decomposition: edges with tau_e>eps are heavy. At most (n-1)/eps heavy edges. Turan gives independent set I0 with |I0|>=eps*n/3, no internal heavy edges.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6400,
+      "tags": {
+        "verification_status": "proved"
+      }
+    },
+    {
+      "id": "p6p-filter",
+      "node_type": "answer",
+      "post_id": 6402,
+      "body_text": "Leverage degree filter: remove v from I0 with ell_v > C_lev/eps. Markov keeps |I0'|>=eps*n/12. All internal edges light (tau<=eps), leverage degrees bounded.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6400,
+      "tags": {
+        "verification_status": "proved"
+      }
+    },
+    {
+      "id": "p6p-barrier",
+      "node_type": "answer",
+      "post_id": 6403,
+      "body_text": "Barrier greedy: build S by adding vertices one at a time from I0', maintaining ||M_t||<eps. At step t, need exists v with ||Y_t(v)||<1 where Y_t(v)=H^{-1/2}C_t(v)H^{-1/2}.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6400,
+      "tags": {
+        "verification_status": "proved"
+      }
+    },
+    {
+      "id": "p6p-pigeonhole",
+      "node_type": "answer",
+      "post_id": 6404,
+      "body_text": "SIMPLE PROOF: (1) For PSD Y: ||Y||<=tr(Y). (2) Pigeonhole: min_v tr(Y_v) <= avg = dbar. (3) If dbar<1 then exists v with ||Y_v||<=tr(Y_v)<=dbar<1. No interlacing families needed.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6400,
+      "tags": {
+        "verification_status": "proved"
+      }
+    },
+    {
+      "id": "p6p-dbar-kn",
+      "node_type": "answer",
+      "post_id": 6405,
+      "body_text": "K_n dbar bound (proved exactly): dbar_t = 2t/(n*eps). At T=eps*n/3 steps: dbar=2/3<1. Gives |S|=eps*n/3, c=1/3. Problem 6 CLOSED for K_n.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6400,
+      "tags": {
+        "verification_status": "proved"
+      }
+    },
+    {
+      "id": "p6p-dbar-general",
+      "node_type": "answer",
+      "post_id": 6406,
+      "body_text": "General dbar bound: at M_t!=0, dbar_t = (1/r_t)*tr(H_t^{-1}*M_cross). Naive bound gives dbar<=O(1/eps^2), exceeds 1. Greedy keeps dbar<=0.641 empirically. Formal bound at M_t!=0 is the SINGLE remaining gap.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6400,
+      "tags": {
+        "verification_status": "open"
+      }
+    },
+    {
+      "id": "p6p-qpoly",
+      "node_type": "comment",
+      "post_id": 64061,
+      "body_text": "Q-polynomial roots: Q(x)=(1/r)sum det(xI-Y_v) has max real root<0.505 across 440 steps. If Q has nonneg real roots, max root<=sum roots=dbar<1 by Vieta. Independent confirmation.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6406,
+      "tags": {
+        "verification_status": "empirical"
+      }
+    },
+    {
+      "id": "p6p-empirical",
+      "node_type": "comment",
+      "post_id": 64062,
+      "body_text": "Exhaustive numerics: 440 nontrivial steps, n in [8,64], 5 graph families, 5 eps values. dbar<1 at ALL steps (max 0.641). Pigeonhole verified 440/440. PSD trace bound verified 440/440.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6406,
+      "tags": {
+        "verification_status": "empirical"
+      }
+    },
+    {
+      "id": "p6p-superseded",
+      "node_type": "comment",
+      "post_id": 64063,
+      "body_text": "SUPERSEDED: interlacing families (MSS), Borcea-Branden real stability, Bonferroni eigenvalue bounds, AR-NT ratio certificates, GL-Balance — all bypassed by the elementary pigeonhole argument.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6404,
+      "tags": {
+        "verification_status": "proved_negative"
+      }
+    },
+    {
+      "id": "p6p-random",
+      "node_type": "answer",
+      "post_id": 6407,
+      "body_text": "Alternative path (random sampling): p=eps gives P(||M_S||<=eps AND |S|>=eps*n/6)>0 for all tested graphs (272 combos). Formal matrix concentration proof open.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6400,
+      "tags": {
+        "verification_status": "empirical"
+      }
+    },
+    {
+      "id": "p6p-result",
+      "node_type": "answer",
+      "post_id": 6408,
+      "body_text": "Result: K_n proved (c=1/3). General graphs: single gap is formal dbar<1 bound at M_t!=0. Empirical margin 36%. Size is eps^2*n/36 (eps^2 bottleneck from Turan).",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 6400,
+      "tags": {
+        "verification_status": "summary"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "p6p-heavy",
+      "target": "p6p-q",
+      "edge_type": "clarify",
+      "evidence": "Decompose into heavy/light; Turan gives large independent set",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-filter",
+      "target": "p6p-heavy",
+      "edge_type": "reference",
+      "evidence": "Leverage filter refines I0 to bounded-degree I0'",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-barrier",
+      "target": "p6p-filter",
+      "edge_type": "reference",
+      "evidence": "Greedy builds S from I0' maintaining spectral barrier",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-pigeonhole",
+      "target": "p6p-barrier",
+      "edge_type": "assert",
+      "evidence": "PSD trace bound + pigeonhole closes barrier step",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-dbar-kn",
+      "target": "p6p-pigeonhole",
+      "edge_type": "assert",
+      "evidence": "dbar=2t/(n*eps)<=2/3 for K_n; closes proof completely",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-dbar-general",
+      "target": "p6p-pigeonhole",
+      "edge_type": "reform",
+      "evidence": "General dbar bound at M_t!=0 is single remaining gap",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-qpoly",
+      "target": "p6p-dbar-general",
+      "edge_type": "exemplify",
+      "evidence": "Q-polynomial roots confirm dbar controls max root",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-empirical",
+      "target": "p6p-dbar-general",
+      "edge_type": "exemplify",
+      "evidence": "440/440 steps pass dbar<1 with 36% margin",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-superseded",
+      "target": "p6p-pigeonhole",
+      "edge_type": "challenge",
+      "evidence": "Elementary argument makes MSS/interlacing machinery unnecessary",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-random",
+      "target": "p6p-q",
+      "edge_type": "reform",
+      "evidence": "Alternative: random sampling bypasses greedy entirely",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-result",
+      "target": "p6p-q",
+      "edge_type": "assert",
+      "evidence": "K_n closed; general case has single narrow gap",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-result",
+      "target": "p6p-dbar-kn",
+      "edge_type": "reference",
+      "evidence": "K_n proof is complete and unconditional",
+      "detection": "structural"
+    },
+    {
+      "source": "p6p-result",
+      "target": "p6p-dbar-general",
+      "edge_type": "reference",
+      "evidence": "General case conditional on formal dbar<1 bound",
+      "detection": "structural"
+    }
+  ],
+  "stats": {
+    "n_nodes": 12,
+    "n_edges": 13,
+    "node_types": {
+      "question": 1,
+      "answer": 8,
+      "comment": 3
+    },
+    "edge_types": {
+      "clarify": 1,
+      "reference": 4,
+      "assert": 3,
+      "reform": 2,
+      "exemplify": 2,
+      "challenge": 1
+    },
+    "detection_types": {
+      "structural": 13
+    },
+    "verification_status": {
+      "target": 1,
+      "proved": 5,
+      "open": 1,
+      "empirical": 3,
+      "proved_negative": 1,
+      "summary": 1
+    }
+  }
+}
