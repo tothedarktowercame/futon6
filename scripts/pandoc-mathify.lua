@@ -369,6 +369,14 @@ local function normalize_expr(s)
   s = trim(s)
   s = s:gsub("%$", "")
   s = normalize_escaped_script_artifacts(s)
+  -- Collapse doubled escaping artifacts (e.g., \\omega, \\$, \\)).
+  local prev_esc = nil
+  while prev_esc ~= s do
+    prev_esc = s
+    s = s:gsub("\\\\([%$%(%)_%^{}])", "\\%1")
+    s = s:gsub("\\\\(alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|vartheta|iota|kappa|lambda|mu|nu|xi|rho|sigma|tau|upsilon|phi|chi|psi|omega)", "\\%1")
+    s = s:gsub("\\\\(Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega)", "\\%1")
+  end
 
   s = s:gsub("{%[}", "[")
   s = s:gsub("{%]}", "]")
