@@ -106,15 +106,14 @@
       "box": "openobligation",
       "title": "External Dependency for Universal $c_0 > 0$",
       "mode": "section",
-      "heading": "5. External dependency for universal"
+      "heading": "Remaining formal gap"
     },
     {
       "file": "full/problem6-solution-full.tex",
       "box": "openobligation",
       "title": "Conditional Conclusion",
-      "mode": "block",
-      "start_marker": "Conditional/open conclusion:",
-      "end_before": "\\subsection{Key identities used}"
+      "mode": "section",
+      "heading": "6. Final conclusion"
     },
 
     {
