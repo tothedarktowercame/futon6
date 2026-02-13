@@ -62,6 +62,23 @@ IDEAL_EQ_RE = re.compile(
     r"\bI\s*=\s*L\(s,\s*Pi\s*x\s*pi\)\s*\*\s*C\[q_F\^s,\s*q_F\^{-s}\]"
 )
 L_FACTOR_RE = re.compile(r"L\(s,\s*Pi\s*x\s*pi\)")
+Z_SQRT_RING_RE = re.compile(r"\bZ\[\s*(?:sqrt\(\s*([0-9]+)\s*\)|√\s*([0-9]+))\s*\]")
+Z_GAMMA_RING_RE = re.compile(r"\bZ\[\s*(?:Gamma|Γ)\s*\]")
+KIRILLOV_MODEL_RE = re.compile(
+    r"K\(\s*Pi\s*\)\s*\|\s*(?:_\{\s*([^}]+)\s*\}|([A-Za-z0-9_+\-]+))"
+)
+MAP_SIGNATURE_RE = re.compile(
+    r"Phi:\s*K\(\s*Pi\s*\)\s*\|\s*(?:_\{\s*([^}]+)\s*\}|([A-Za-z0-9_+\-]+))"
+    r"\s*→\s*\(fractional ideals of\s+([A-Za-z])\)"
+)
+UNION_SUB_RE = re.compile(r"∪_\{\s*([^}]+)\s*\}")
+PHI_CALL_RE = re.compile(
+    r"(?<!\\)\bPhi\(\s*([A-Za-z0-9_\\]+(?:\([^()]*\)[A-Za-z0-9_\\]*)?)\s*\)"
+)
+PHI_SET_RE = re.compile(
+    r"Phi\(\s*phi\s*\)\s*=\s*\{\s*I\(\s*s\s*,\s*phi\s*,\s*V\s*\)\s*:\s*"
+    r"V\s+in\s+W\(\s*pi\s*,\s*psi\s*\)\s*\}\s*·\s*([A-Za-z])"
+)
 
 
 def split_inline_code(s: str) -> list[tuple[str, str]]:
@@ -197,7 +214,69 @@ def _gl_product_repl(m: re.Match[str]) -> str:
     return rf"${left} \times {right}$"
 
 
+def _texify_symbol(token: str) -> str:
+    token = token.strip()
+    m = re.fullmatch(r"([A-Za-z]+)(['`]*)", token)
+    if not m:
+        return token
+    base, primes = m.group(1), m.group(2)
+    greek = {
+        "Phi": r"\Phi",
+        "Pi": r"\Pi",
+        "Psi": r"\Psi",
+        "phi": r"\phi",
+        "pi": r"\pi",
+        "psi": r"\psi",
+    }
+    if base in greek:
+        return greek[base] + primes
+    return base + primes
+
+
+def _kirillov_model_repl(m: re.Match[str]) -> str:
+    gl = m.group(1) or m.group(2) or ""
+    return rf"$K(\Pi)|_{{{_normalize_gl_token(gl)}}}$"
+
+
+def _map_signature_repl(m: re.Match[str]) -> str:
+    gl = m.group(1) or m.group(2) or ""
+    ring = m.group(3)
+    return (
+        rf"$\Phi: K(\Pi)|_{{{_normalize_gl_token(gl)}}} \to "
+        rf"(\text{{fractional ideals of }} {ring})$"
+    )
+
+
+def _union_sub_repl(m: re.Match[str]) -> str:
+    idx = _texify_symbol(m.group(1))
+    return rf"$\bigcup_{{{idx}}}$"
+
+
+def _phi_call_repl(m: re.Match[str]) -> str:
+    expr = m.group(1).strip()
+    expr = re.sub(r"\bPi\b", r"\\Pi", expr)
+    expr = re.sub(r"\bphi\b", r"\\phi", expr)
+    expr = re.sub(r"\bpsi\b", r"\\psi", expr)
+    expr = re.sub(r"\bpi\b", r"\\pi", expr)
+    expr = re.sub(r"R\(\s*([A-Za-z0-9_]+)\s*\)\s*\\phi", r"R(\1)\\,\\phi", expr)
+    return rf"$\Phi({expr})$"
+
+
+def _phi_set_repl(m: re.Match[str]) -> str:
+    ring = m.group(1)
+    return (
+        r"$\Phi(\phi) = \{ I(s, \phi, V) : V \in W(\pi, \psi) \} "
+        rf"\cdot {ring}$"
+    )
+
+
 def process_plain_text_segment(s: str) -> str:
+    s = MAP_SIGNATURE_RE.sub(_map_signature_repl, s)
+    s = PHI_SET_RE.sub(_phi_set_repl, s)
+    s = Z_SQRT_RING_RE.sub(
+        lambda m: rf"$\mathbb{{Z}}[\sqrt{{{m.group(1) or m.group(2)}}}]$", s
+    )
+    s = Z_GAMMA_RING_RE.sub(lambda _m: r"$\mathbb{Z}[\Gamma]$", s)
     s = _wrap_big_o_balanced(s)
     s = N_DEP_RE.sub(_n_dep_repl, s)
     s = PSI_WHITTAKER_RE.sub(r"$\\psi$-Whittaker", s)
@@ -215,6 +294,9 @@ def process_plain_text_segment(s: str) -> str:
     s = SINGLE_IN_RE.sub(_single_in_repl, s)
     s = GL_MEMBERSHIP_PRODUCT_RE.sub(_gl_membership_product_repl, s)
     s = GL_PRODUCT_RE.sub(_gl_product_repl, s)
+    s = KIRILLOV_MODEL_RE.sub(_kirillov_model_repl, s)
+    s = PHI_CALL_RE.sub(_phi_call_repl, s)
+    s = UNION_SUB_RE.sub(_union_sub_repl, s)
     s = re.sub(r"\bover V\b", r"over $V$", s)
     s = FIXED_W_RE.sub(r"for fixed $W = W_0$", s)
     s = IDEAL_EQ_RE.sub(
@@ -270,7 +352,27 @@ def process_file(path: Path, write: bool) -> bool:
             continue
 
         if ln.startswith("    ") or ln.startswith("\t"):
-            out_lines.append(ln)
+            stripped_indent = ln.lstrip(" \t")
+            # Keep true code-like blocks untouched.
+            code_like = re.match(
+                r"(?:```|~~~|[#>{}\[\]$\\]|[A-Za-z_][A-Za-z0-9_]*\s*[:=]|"
+                r"[A-Za-z_][A-Za-z0-9_]*\([^)]*\)\s*=|"
+                r"(?:def|class|for|while|if|elif|else|return|import|from)\b)",
+                stripped_indent,
+            ) is not None
+            has_formula_symbol = re.search(r"(?:\||->|<-|→|←|\^|_)", stripped_indent) is not None
+            if (
+                code_like
+                or ("\\" in stripped_indent)
+                or ("=" in stripped_indent)
+                or has_formula_symbol
+            ):
+                out_lines.append(ln)
+                continue
+            # Indented markdown continuations in lists are prose, not code.
+            indent_len = len(ln) - len(stripped_indent)
+            prefix = ln[:indent_len]
+            out_lines.append(prefix + process_line(stripped_indent))
             continue
 
         out_lines.append(process_line(ln))
@@ -314,6 +416,16 @@ def run_self_test() -> None:
         ("W_0(diag(g,1) u_Q)", r"$W_0(\operatorname{diag}(g,1)u_Q)$"),
         ("(j != i)", r"$(j \neq i)$"),
         ("3 x 4 matrices", r"$3 \times 4$ matrices"),
+        ("rotation matrices over Z[√2]", r"rotation matrices over $\mathbb{Z}[\sqrt{2}]$"),
+        ("theta = 0 in L_8(Z[Γ])", r"theta = 0 in L_8($\mathbb{Z}[\Gamma]$)"),
+        (
+            "Consider the map Phi: K(Pi)|_{GL_n} → (fractional ideals of R) defined by "
+            "Phi(phi) = { I(s, phi, V) : V in W(pi, psi) } · R. "
+            "By the JPSS theory, ∪_{phi} Phi(phi) generates L(s, Pi x pi) · R.",
+            r"Consider the map $\Phi: K(\Pi)|_{\mathup{GL}_{n}} \to (\text{fractional ideals of } R)$ defined by "
+            r"$\Phi(\phi) = \{ I(s, \phi, V) : V \in W(\pi, \psi) \} \cdot R$. "
+            r"By the JPSS theory, $\bigcup_{\phi}$ $\Phi(\phi)$ generates $L(s, \Pi \times \pi)$ · R.",
+        ),
     ]
     for raw, want in cases:
         got = process_plain_text_segment(raw)
@@ -330,6 +442,21 @@ def run_self_test() -> None:
         got = Path(tmp.name).read_text(encoding="utf-8")
         if changed or got != sample:
             raise AssertionError("self-test failed: display-math block should remain unchanged")
+
+    indented = (
+        "1. item\n"
+        "   - note with `L_n(Z[Gamma]) tensor Q`\n"
+        "     rotation matrices over Z[√2]\n"
+    )
+    with tempfile.NamedTemporaryFile("w+", suffix=".md", delete=True, encoding="utf-8") as tmp:
+        tmp.write(indented)
+        tmp.flush()
+        process_file(Path(tmp.name), write=True)
+        got = Path(tmp.name).read_text(encoding="utf-8")
+        if "rotation matrices over $\\mathbb{Z}[\\sqrt{2}]$" not in got:
+            raise AssertionError("self-test failed: indented prose continuation was not normalized")
+        if "`L_n(Z[Gamma]) tensor Q`" not in got:
+            raise AssertionError("self-test failed: inline code in indented prose was modified")
 
 
 def main() -> int:

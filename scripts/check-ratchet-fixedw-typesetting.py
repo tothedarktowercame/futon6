@@ -23,6 +23,12 @@ NON_COLOR_SNIPPET = (
     "realized in W(Pi, psi^{-1}); map normalizes psi; "
     "|det g_0|^{1/2-s}; W_0(diag(g,1) u_Q); (j != i); 3 x 4 matrices.\n"
 )
+MAP_CLASS_SNIPPET = (
+    "Consider the map Phi: K(Pi)|_{GL_n} → (fractional ideals of R) defined by "
+    "Phi(phi) = { I(s, phi, V) : V in W(pi, psi) } · R. "
+    "By the JPSS theory, ∪_{phi} Phi(phi) generates L(s, Pi x pi) · R.\n"
+)
+PHI_ACTION_SNIPPET = "so Phi(R(g_0)phi) and Phi(phi) generate the same ideal.\n"
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -83,6 +89,10 @@ def main() -> int:
     _, out_diag = render_snippet(repo, normalizer, lua_filter, DIAG_SNIPPET)
     normalized_noncolor, out_noncolor = render_snippet(
         repo, normalizer, lua_filter, NON_COLOR_SNIPPET
+    )
+    normalized_map, out_map = render_snippet(repo, normalizer, lua_filter, MAP_CLASS_SNIPPET)
+    normalized_phi_action, out_phi_action = render_snippet(
+        repo, normalizer, lua_filter, PHI_ACTION_SNIPPET
     )
 
     if r"integrals over \(V\)" not in out:
@@ -157,6 +167,27 @@ def main() -> int:
         failures.append("rendered output missing inline math for (j \\neq i)")
     if r"\(3 \times 4\) matrices" not in out_noncolor:
         failures.append("rendered output missing inline math for 3 \\times 4")
+
+    if r"$\Phi: K(\Pi)|_{\mathup{GL}_{n}} \to (\text{fractional ideals of } R)$" not in normalized_map:
+        failures.append("normalizer did not convert map signature to inline math")
+    if r"$\Phi(\phi) = \{ I(s, \phi, V) : V \in W(\pi, \psi) \} \cdot R$" not in normalized_map:
+        failures.append("normalizer did not convert map set-expression to inline math")
+    if r"$\bigcup_{\phi}$" not in normalized_map:
+        failures.append("normalizer did not convert ∪_{phi} into \\bigcup_{\\phi}")
+
+    if r"\(\Phi: K(\Pi)|_{\mathup{GL}_{n}} \to (\text{fractional ideals of } R)\)" not in out_map:
+        failures.append("rendered output missing inline math map signature")
+    if r"\(\Phi(\phi) = \{ I(s, \phi, V) : V \in W(\pi, \psi) \} \cdot R\)" not in out_map:
+        failures.append("rendered output missing inline math map set-expression")
+    if r"\(\bigcup_{\phi}\)" not in out_map:
+        failures.append("rendered output missing inline math for \\bigcup_{\\phi}")
+
+    if r"$\Phi(R(g_0)\,\phi)$" not in normalized_phi_action:
+        failures.append("normalizer did not convert Phi(R(g_0)phi) into stable inline math")
+    if r"\(\Phi(R(g_0)\,\phi)\)" not in out_phi_action:
+        failures.append("rendered output missing inline math for Phi(R(g_0)\\,\\phi)")
+    if r"\backslash \phi" in out_phi_action:
+        failures.append("rendered output regressed to '\\backslash \\phi' for Phi(R(g_0)phi)")
 
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:

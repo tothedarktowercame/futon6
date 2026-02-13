@@ -3,6 +3,7 @@
 
 \RequirePackage[dvipsnames]{xcolor}
 \RequirePackage{array}
+\providecommand{\mathup}[1]{\mathrm{#1}}
 
 \colorlet{MPSyntaxGreekColor}{Mulberry}
 \colorlet{MPSyntaxDefaultMathColor}{CornflowerBlue}
@@ -116,7 +117,7 @@
 \newcommand{\MP@ActivateRawMathChars}{%
   \ifMPRawMathCharsActivated\else
     \MPRawMathCharsActivatedtrue
-    \mathcode`+="8000
+    \mathcode`+="202B
     \mathcode`=="8000
   \fi
 }
