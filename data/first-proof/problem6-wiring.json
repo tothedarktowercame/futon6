@@ -1,8 +1,8 @@
 {
   "thread_id": "first-proof-p6",
-  "version": "v9-bmi-falsified",
+  "version": "v10-dichotomy",
   "last_updated": "2026-02-13",
-  "notes": "Post Cycle 7: BMI (dbar_t<1) FALSIFIED — 12 violations, worst 1.739 (Reg_100_d10 eps=0.5). K_n extremality also falsified (max ratio 2.28). Construction still works: 0 skips in 148 runs. Gap promoted from BMI to No-Skip/GPL-V (vertex-level feasibility). Proof critical path simplified: Turan -> induced Foster -> dbar0<1 -> [No-Skip] -> size.",
+  "notes": "Post Cycle 9: Formal dichotomy for GPL-V. Lemmas 8-12 proved: Pi<=I (Rayleigh-monotonicity), cross-degree bound, isolation, rank, projection pigeonhole. Sparse Dichotomy PROVED: Delta(G[I_0])<3/eps-1 implies GPL-V via isolation. Strong Dichotomy CONJECTURED: at each step, either isolation or dbar<1. Sub-gap identified: dense non-symmetric case where isolation fails AND barrier is concentrated. Three attack paths set up: Strongly Rayleigh/KS, hyperbolic barrier, interlacing families (MSS).",
   "nodes": [
     {
       "id": "p6-problem",
@@ -355,6 +355,52 @@
       "score": 1,
       "creation_date": "2026-02-13",
       "parent_post_id": 610
+    },
+    {
+      "id": "p6-rayleigh-monotonicity",
+      "node_type": "answer",
+      "post_id": 659,
+      "body_text": "PROVED (Cycle 9, Lemma 8): Pi_{I_0} = L^{+/2} L_{I_0} L^{+/2} <= I on im(L), by Rayleigh monotonicity (L_{I_0}<=L). Consequences: (a) ||C_t(v)||<=1 for all v,t; (b) F_t <= I - M_t; (c) f_j = u_j^T F_t u_j <= 1-lambda_j (F_t has LESS energy where M_t is large).",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 656
+    },
+    {
+      "id": "p6-rank-lemma",
+      "node_type": "answer",
+      "post_id": 660,
+      "body_text": "PROVED (Cycle 9, Lemma 11): rank(Y_t(v)) = deg_S(v). The z_e vectors for distinct cross-edges incident to v are linearly independent (from incidence matrix structure + L^{+/2} injective on im(L)). B_t^{1/2} preserves independence.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 658
+    },
+    {
+      "id": "p6-projection-pigeonhole",
+      "node_type": "answer",
+      "post_id": 661,
+      "body_text": "PROVED (Cycle 9, Lemma 12): For any unit u: min_v u^T C_t(v) u <= 1/r_t (from F_t<=I). In dangerous eigenspace (lambda_max ~ eps-delta): min_v u_max^T Y_t(v) u_max <= (1-eps)/(r_t*delta). When delta~1/r_t: this is ~(1-eps)<1. Controls one eigenspace but not all simultaneously.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 656
+    },
+    {
+      "id": "p6-sparse-dichotomy",
+      "node_type": "answer",
+      "post_id": 662,
+      "body_text": "PROVED (Cycle 9): Sparse Dichotomy theorem. If Delta(G[I_0]) < 3/eps - 1, then gamma(G[I_0]) >= m/(1+Delta) > eps*m/3 >= T. So S_t cannot dominate I_0 at any step t<=T, and isolation (Lemma 10) gives GPL-V. Scope: eps=0.5 needs Delta<5; eps=0.3 needs Delta<9; eps=0.1 needs Delta<29.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 656
+    },
+    {
+      "id": "p6-strong-dichotomy",
+      "node_type": "comment",
+      "post_id": 663,
+      "body_text": "CONJECTURED (Cycle 9): Strong Dichotomy. At each step t<=T, either (A) isolated vertex exists in R_t (Lemma 10), or (B) dbar_t < 1 (Lemma 6 pigeonhole). Evidence: 0/148 runs show dbar>=1 without isolated vertices. Sub-gap: proving that when isolation fails AND barrier is concentrated (one eigenvalue near eps), the remaining eigenspace contributions don't push min_v ||Y_t(v)|| above 1.",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 662,
+      "status": "CONJECTURED — narrower gap than GPL-V, supported by 148/148 test runs"
     }
   ],
   "edges": [
@@ -658,6 +704,62 @@
       "edge_type": "assert",
       "evidence": "Cross-degree bound normY<=deg_S*max(z^T B z). Proved. Exact for deg_S=1. Covers backup case when isolation fails.",
       "detection": "proved-cycle8"
+    },
+    {
+      "source": "p6-rayleigh-monotonicity",
+      "target": "p6-induced-foster",
+      "edge_type": "assert",
+      "evidence": "Rayleigh monotonicity (L_{I_0}<=L) gives Pi_{I_0}<=I: matrix-level generalization of induced Foster. Key new corollary: f_j <= 1-lambda_j.",
+      "detection": "proved-cycle9"
+    },
+    {
+      "source": "p6-rayleigh-monotonicity",
+      "target": "p6-cross-degree-bound",
+      "edge_type": "assert",
+      "evidence": "||C_t(v)||<=1 is prerequisite for cross-degree bound analysis and rank lemma.",
+      "detection": "proved-cycle9"
+    },
+    {
+      "source": "p6-projection-pigeonhole",
+      "target": "p6-rayleigh-monotonicity",
+      "edge_type": "assert",
+      "evidence": "Projection pigeonhole uses F_t<=I (from Pi<=I). Controls dangerous eigenspace: min_v u_max^T Y_t(v) u_max <= (1-eps) when delta~1/r.",
+      "detection": "proved-cycle9"
+    },
+    {
+      "source": "p6-sparse-dichotomy",
+      "target": "p6-isolation",
+      "edge_type": "assert",
+      "evidence": "Sparse Dichotomy: Delta<3/eps-1 implies gamma>T implies isolation at every step. PROVED.",
+      "detection": "proved-cycle9"
+    },
+    {
+      "source": "p6-sparse-dichotomy",
+      "target": "p6-gpl-v",
+      "edge_type": "assert",
+      "evidence": "Closes GPL-V for sparse G[I_0] (bounded degree). First partial closure of the gap.",
+      "detection": "proved-cycle9"
+    },
+    {
+      "source": "p6-strong-dichotomy",
+      "target": "p6-gpl-v",
+      "edge_type": "assert",
+      "evidence": "Strong Dichotomy would close GPL-V completely: isolation covers sparse case, pigeonhole covers dense case. CONJECTURED (0 counterexamples in 148 runs).",
+      "detection": "conjectured-cycle9"
+    },
+    {
+      "source": "p6-strong-dichotomy",
+      "target": "p6-sparse-dichotomy",
+      "edge_type": "reference",
+      "evidence": "Sparse Dichotomy is the proved sub-case. Strong Dichotomy extends to all G[I_0] by adding the dbar<1 fallback.",
+      "detection": "conjectured-cycle9"
+    },
+    {
+      "source": "p6-strong-dichotomy",
+      "target": "p6-pigeonhole",
+      "edge_type": "reference",
+      "evidence": "Case (B) of Strong Dichotomy uses pigeonhole (Lemma 6: dbar<1 implies feasible v exists).",
+      "detection": "conjectured-cycle9"
     }
   ],
   "hyperedges": [
@@ -742,20 +844,20 @@
         {"role": "dead-branch-2", "ident": "p6-pigeonhole", "node_type": "answer"}
       ],
       "hx/content": {
-        "evidence": "Bridge B chain (revised C7): Turan -> induced Foster -> dbar0<1 (PROVED) -> modified greedy -> [No-Skip GAP] -> size. Dead branch: alpha<1 -> assembly -> BMI (FALSIFIED) -> pigeonhole (unreachable).",
-        "detection": "revised-cycle7"
+        "evidence": "Bridge B chain (revised C9): Turan -> induced Foster -> dbar0<1 (PROVED) -> modified greedy -> [GPL-V GAP: Strong Dichotomy CONJECTURED] -> size. Sparse Dichotomy PROVED: Delta<3/eps-1 closes GPL-V via isolation. Five new lemmas (8-12) constrain the dense case. Dead branch: BMI (FALSIFIED) -> pigeonhole (unreachable directly, but revived as Case B of Strong Dichotomy).",
+        "detection": "revised-cycle9"
       },
-      "hx/labels": ["thread", "proof-chain", "partial-cycle7"]
+      "hx/labels": ["thread", "proof-chain", "partial-cycle9"]
     }
   ],
   "stats": {
-    "n_nodes": 34,
-    "n_edges": 44,
+    "n_nodes": 39,
+    "n_edges": 52,
     "n_hyperedges": 5,
     "node_types": {
       "question": 1,
-      "answer": 25,
-      "comment": 8
+      "answer": 29,
+      "comment": 9
     },
     "proved_cycle4": ["p6-monotonicity", "p6-operator-bound", "p6-blocking"],
     "proved_cycle5": ["p6-alpha-lt-1", "p6-threshold-relax", "p6-product-bound", "p6-assembly-decomp"],
@@ -766,7 +868,14 @@
     "refined_cycle7": ["p6-bmi-gap -> p6-gpl-v (BMI falsified, gap promoted to vertex-level feasibility)"],
     "proved_cycle8": ["p6-cross-degree-bound (normY<=deg_S*max, 0/78619 violations)"],
     "identified_cycle8": ["p6-isolation (deg_S=0 covers 83% of GPL-V, reduces to domination bound)"],
-    "remaining_gap": "p6-gpl-v",
+    "proved_cycle9": [
+      "p6-rayleigh-monotonicity (Pi<=I, ||C_t(v)||<=1, F_t<=I-M_t, f_j<=1-lambda_j)",
+      "p6-rank-lemma (rank(Y_t(v))=deg_S(v))",
+      "p6-projection-pigeonhole (min_v u^T C_t(v) u <= 1/r_t)",
+      "p6-sparse-dichotomy (Delta<3/eps-1 implies GPL-V via isolation)"
+    ],
+    "conjectured_cycle9": ["p6-strong-dichotomy (isolation OR dbar<1 at each step, 0 counterexamples)"],
+    "remaining_gap": "p6-gpl-v (narrowed: Strong Dichotomy conjectured, Sparse Dichotomy proved)",
     "empirical_summary": {
       "max_dbar0_modified": 0.7333,
       "max_dbar_full": 1.739,

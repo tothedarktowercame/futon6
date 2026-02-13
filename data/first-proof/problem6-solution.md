@@ -810,7 +810,10 @@ eigenspace argument takes over. **Full formalization pending.**
    (j) Product bound: alpha*dbar0 <= 1/3, assembly decomposition
    (k) dbar0 < 1 for the pure leverage-degree prefix (Cycle 6, PROVED)
    (l) BMI (dbar_t < 1): **FALSIFIED** (Cycle 7, 12 violations, worst 1.739)
-   (m) **GAP: No-Skip / GPL-V** (vertex-level feasibility for leverage-ordered v)
+   (m) **GAP: GPL-V** (vertex-level feasibility — exists feasible v at each step)
+   (n) Pi_{I_0} <= I, hence ||C_t(v)|| <= 1 and F_t <= I - M_t (Cycle 9, PROVED)
+   (o) Sparse Dichotomy: Delta(G[I_0]) < 3/eps - 1 implies GPL-V (Cycle 9, PROVED)
+   (p) Strong Dichotomy: isolation OR dbar < 1 at each step (CONJECTURED, 0 counterexamples)
 
 5. **Neumann analysis (Cycles 3-4):**
    - Monotonicity: rho_k <= rho_1 for all k >= 1 (proved)
@@ -897,18 +900,29 @@ leverage. The amplification from B_t = (eps*I - M_t)^{-1} is concentrated
 on specific eigenspaces (those where lambda_j ≈ eps), but these eigenspaces
 may have low overlap with C_t(v) for the low-leverage vertex.
 
-**Proposed closure routes (Cycle 8):**
-1. **Direct vertex bound:** Bound ||Y_t(v)|| for the lowest-ell vertex in R,
-   using ell_v^{I_0} and properties of B_t.
-2. **Leverage-monotonicity:** Prove ||Y_t(v)|| is monotone (or approximately
-   monotone) in ell_v^{I_0}. Then the first vertex in order is feasible iff
-   the minimum-leverage vertex is feasible.
-3. **Eigenspace separation:** The high-amplification eigenspace (where
-   lambda ≈ eps) has low overlap with the low-leverage vertex's contribution.
-   Formalize via the induced Foster bound on projections.
-4. **Probabilistic derandomization:** Show a random R-vertex has
-   ||Y_t(v)|| < 1 with positive probability, then use method of conditional
-   expectations with ell^{I_0} as the conditional ordering.
+**Formal dichotomy (Cycle 9 — see problem6-bridge-b-formalization.md):**
+
+New Lemmas 8-12 proved in the formalization document:
+- **Lemma 8 (Rayleigh-Monotonicity):** Pi_{I_0} <= I, hence ||C_t(v)|| <= 1
+  and F_t <= I - M_t. The key spectral constraint: f_j <= 1 - lambda_j.
+- **Lemma 9 (Cross-Degree Bound):** ||Y_t(v)|| <= deg_S(v) * max_e(z_e^T B_t z_e).
+- **Lemma 10 (Isolation):** deg_S(v) = 0 implies ||Y_t(v)|| = 0.
+- **Lemma 11 (Rank):** rank(Y_t(v)) = deg_S(v).
+- **Lemma 12 (Projection Pigeonhole):** min_v u^T C_t(v) u <= 1/r_t for
+  any unit u. In the dangerous eigenspace: min_v u_max^T Y_t(v) u_max <=
+  (1-eps)/(r_t * (eps-lambda_max)) which is ~ (1-eps) < 1 when eps-lambda_max ~ 1/r_t.
+
+**Sparse Dichotomy (Proved):** If Delta(G[I_0]) < 3/eps - 1, then
+gamma(G[I_0]) > T and isolation gives GPL-V at every step.
+
+**Strong Dichotomy (Conjectured):** At each step, either isolation holds OR
+dbar < 1 (so pigeonhole applies). Empirical: never observed dbar >= 1 without
+isolated vertices (0/148 runs). The sub-gap is in the dense non-symmetric case:
+proving that the vertex with minimum dangerous-eigenspace projection also has
+bounded contributions from the remaining eigenspaces.
+
+Three formal attack paths identified: Strongly Rayleigh / KS, hyperbolic
+barrier, and interlacing families (Xie-Xu / MSS style).
 
 ### If GPL-V is proved
 

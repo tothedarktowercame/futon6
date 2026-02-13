@@ -275,59 +275,259 @@ The eigenvalue analysis (C7) shows the mechanism:
 | Skips (strict threshold) | 5/116 runs | max 2 skips before selection |
 | Adversarial max dbar | 0.926 | Barbell_40_40_b3 |
 
-### The Isolation Argument (Cycle 8)
+### Lemma 8: Rayleigh-Monotonicity Matrix Bound
 
-**Key finding:** At 83.2% of all steps, the minimum normY is achieved
-by a vertex with deg_S(v) = 0 (normY = 0, trivially feasible). At ALL
-7 dbar >= 1 steps, deg_S = 0 vertices exist (15-51% of R).
+**Lemma.** Define the I_0-internal edge matrix:
 
-**GPL-V via isolation:** If at each step t, there exists v in R_t with
-no I_0-internal edges to S_t, then normY(v) = 0 < 1 and GPL-V holds.
+    Pi_{I_0} = sum_{e in E(I_0)} X_e = L^{+/2} L_{I_0} L^{+/2}.
 
-This is a purely combinatorial statement: S_t is not a dominating set
-in G[I_0]. Since |S_t| <= T = eps*m/3, we need the minimum domination
-number gamma(G[I_0]) > eps*m/3.
+Then Pi_{I_0} <= I on im(L). Consequently:
 
-### Cross-Degree Bound (Cycle 8)
+(a) ||C_t(v)|| <= 1 for all v in R_t, all t.
+(b) F_t <= I - M_t for all t.
+(c) For each eigenvalue direction u_j of M_t: u_j^T F_t u_j <= 1 - lambda_j.
 
-**Lemma (Cross-Degree Bound).** For any v in R_t:
+**Proof.** Since G[I_0] is a subgraph of G, removing the edges
+E \ E(I_0) can only decrease the quadratic form (Rayleigh monotonicity):
+
+    L_{I_0} <= L.
+
+Conjugating both sides by L^{+/2} (which is PSD):
+
+    L^{+/2} L_{I_0} L^{+/2} <= L^{+/2} L L^{+/2} = Proj_{im(L)} <= I.
+
+This gives Pi_{I_0} <= I.
+
+For (a): C_t(v) = sum_{e: v~S_t} X_e is a partial sum of the PSD
+terms composing Pi_{I_0}. Since 0 <= C_t(v) <= Pi_{I_0} <= I, we
+have ||C_t(v)|| <= 1.
+
+For (b): Pi_{I_0} = M_t + F_t + Pi_{R_t} where Pi_{R_t} = sum of X_e
+for edges internal to R_t. All three terms are PSD. So:
+F_t <= Pi_{I_0} - M_t <= I - M_t.
+
+For (c): u_j^T F_t u_j <= u_j^T (I - M_t) u_j = 1 - lambda_j. QED.
+
+**Remark.** Part (c) is the key spectral constraint: the cross-edge
+matrix F_t has LESS energy in the eigenspaces where M_t is large.
+This is the algebraic reason why high barrier amplification (from
+eigenvalues lambda_j near eps) does not automatically cause dbar to
+blow up — the numerator f_j = u_j^T F_t u_j shrinks as lambda_j grows.
+
+### Lemma 9: Cross-Degree Bound
+
+**Lemma.** For any v in R_t:
 
     ||Y_t(v)|| <= deg_S(v) * max_{e: v~S_t} z_e^T B_t z_e.
 
-**Proof.** Y_t(v) = sum_{e: v~S_t} w_e w_e^T where w_e = B_t^{1/2} z_e.
-This is a sum of deg_S(v) PSD rank-1 matrices. Triangle inequality:
-||Y_t(v)|| <= sum_e ||w_e||^2 = tr(Y_t(v)). Also:
-||Y_t(v)|| <= deg_S(v) * max_e ||w_e||^2. QED.
+**Proof.** Write Y_t(v) = sum_{e: v~S_t} w_e w_e^T where w_e =
+B_t^{1/2} z_e. This is a sum of deg_S(v) PSD rank-1 matrices.
+By the triangle inequality for PSD matrices:
 
-**Empirical:** 78,619 vertex-step pairs, 0 violations, max ratio 1.000.
-For deg_S = 1: normY = z_e^T B_t z_e exactly (equality holds).
-But: max z_e^T B_t z_e = 7.3, so single-edge cost CAN exceed 1.
+    ||Y_t(v)|| <= sum_e ||w_e w_e^T|| = sum_e ||w_e||^2
+               = sum_e z_e^T B_t z_e
+               <= deg_S(v) * max_e z_e^T B_t z_e. QED.
 
-### Eigenspace Separation (Cycle 8)
+**Empirical (C8):** 78,619 vertex-step pairs, 0 violations, max
+ratio normY/bound = 1.000. For deg_S = 1: exact equality. But
+max z_e^T B_t z_e = 7.3, so single-edge cost CAN exceed 1.
+
+### Lemma 10: Isolation Implies Feasibility
+
+**Lemma.** If v in R_t has deg_S(v) = 0 (no I_0-internal edges to
+S_t), then C_t(v) = 0 and ||Y_t(v)|| = 0 < 1.
+
+**Proof.** C_t(v) = sum_{e: v~S_t, e in E(I_0)} X_e. With zero terms
+in the sum: C_t(v) = 0. Hence Y_t(v) = B_t^{1/2} 0 B_t^{1/2} = 0. QED.
+
+**Empirical (C8):** At 83.2% of all steps, the minimum normY is
+achieved by a vertex with deg_S = 0. At ALL 7 dbar >= 1 steps,
+deg_S = 0 vertices exist (15-51% of R_t).
+
+### Lemma 11: Rank of Barrier Contribution
+
+**Lemma.** For connected G: rank(Y_t(v)) = deg_S(v).
+
+**Proof.** The edges e_1, ..., e_k incident to v with other endpoints
+w_1, ..., w_k in S_t have incidence vectors b_{e_j} = sqrt(w_{e_j})
+(e_v - e_{w_j}). Since v, w_1, ..., w_k are distinct vertices, the
+vectors e_v - e_{w_1}, ..., e_v - e_{w_k} are linearly independent
+(as columns of the incidence matrix). The map L^{+/2} is injective
+on im(L) (which contains all b_e for connected G), so z_{e_1}, ...,
+z_{e_k} are linearly independent. B_t^{1/2} is invertible on im(L)
+(since eps - lambda_j > 0), so w_{e_1}, ..., w_{e_k} are linearly
+independent. Therefore:
+
+    rank(Y_t(v)) = rank(sum_j w_{e_j} w_{e_j}^T) = k = deg_S(v). QED.
+
+### Lemma 12: Projection Pigeonhole
+
+**Lemma.** For any unit vector u in im(L):
+
+    min_{v in R_t} u^T C_t(v) u <= 1/r_t.
+
+If u = u_j (eigenvector of M_t with eigenvalue lambda_j):
+
+    min_{v in R_t} u_j^T Y_t(v) u_j <= (1 - lambda_j) / (r_t * (eps - lambda_j)).
+
+**Proof.** By averaging: sum_{v in R_t} u^T C_t(v) u = u^T F_t u <= 1
+(from F_t <= Pi_{I_0} <= I). So the minimum is <= 1/r_t.
+
+For the amplified version: u_j^T Y_t(v) u_j = u_j^T C_t(v) u_j /
+(eps - lambda_j). By Lemma 8(c): sum_v u_j^T C_t(v) u_j <= 1 - lambda_j.
+So: min_v u_j^T Y_t(v) u_j <= (1-lambda_j)/(r_t(eps-lambda_j)). QED.
+
+**Remark.** For the most dangerous direction (lambda_j = ||M_t|| =
+eps - delta): the bound gives min_v u_max^T Y_t(v) u_max <=
+(1-eps+delta)/(r_t * delta). For delta ~ 1/r_t: this is approximately
+(1-eps) * r_t / r_t = 1-eps < 1. So in the dominant eigenspace, the
+pigeonhole gives a vertex with bounded contribution. The difficulty
+is that this vertex may have large contributions in OTHER eigenspaces.
+
+### Theorem (Sparse Dichotomy — Proved)
+
+**Theorem.** If Delta(G[I_0]) < 3/eps - 1, then GPL-V holds at every
+step t <= T of Construction B.
+
+**Proof.** The minimum domination number satisfies gamma(G[I_0]) >=
+m/(1 + Delta). With Delta < 3/eps - 1:
+
+    gamma >= m/(1 + Delta) > m/(3/eps) = m*eps/3 >= T.
+
+So |S_t| = t <= T < gamma(G[I_0]), meaning S_t cannot dominate all
+of I_0. There exists v in R_t with no I_0-neighbor in S_t, i.e.,
+deg_S(v) = 0. By Lemma 10: ||Y_t(v)|| = 0 < 1. QED.
+
+**Scope:** For eps = 0.5: Delta < 5. For eps = 0.3: Delta < 9.
+For eps = 0.1: Delta < 29. This covers sparse G[I_0] but not dense.
+
+### Theorem (Dense Feasibility — Partial, Sub-Gap Identified)
+
+**Claim.** When G[I_0] is dense (isolation may fail), the constraints
+Pi_{I_0} <= I and dbar0 < 1 together force GPL-V. More precisely:
+
+**Conjecture (Strong Dichotomy).** At each step t <= T, at least one
+of the following holds:
+
+(A) There exists v in R_t with deg_S(v) = 0 (isolation — Lemma 10).
+(B) dbar_t < 1 (pigeonhole — Lemma 6 gives a feasible v).
+
+**Evidence:** In 148 test runs (731+232 steps), at EVERY step where
+dbar >= 1, isolated vertices exist (Case A). Case B with dbar >= 1
+and no isolated vertex was NEVER observed.
+
+**Partial proof — why dense graphs resist dbar blowup:**
+
+When G[I_0] is dense, each vertex v has many I_0-edges with small
+leverages (all tau_e < eps). The induced Foster bound forces:
+
+    average tau_e over E(I_0) <= (m-1)/|E(I_0)|.
+
+For |E(I_0)| large: average tau is tiny. This has two consequences:
+
+1. **Isotropic barrier.** Many small-leverage edges build an M_t whose
+   eigenvalues are spread out (no single direction is near-saturated).
+   Formally: rank(M_t) >= tr(M_t)/||M_t||. For dense graphs with
+   tr(M_t) moderate and ||M_t|| < eps: rank is proportional to tr/eps.
+   With many eigenvalues sharing the budget, each eps - lambda_j is
+   bounded away from 0, limiting amplification.
+
+2. **Small per-edge cost.** The cross-degree bound (Lemma 9) gives
+   ||Y_t(v)|| <= deg_S(v) * max_e(z_e^T B_t z_e). With an isotropic
+   barrier (B_t approx (1/eps)I), each z_e^T B_t z_e approx tau_e/eps
+   < 1. So even vertices with high deg_S have bounded ||Y_t(v)||.
+
+**Where the formal argument has a gap:**
+
+The difficulty is in a mixed regime: G[I_0] is dense enough that
+isolation fails (some steps have all R-vertices dominated), but NOT
+uniform enough that the barrier stays isotropic. Specifically:
+
+- If M_t concentrates its spectrum (one eigenvalue lambda_1 near eps),
+  the amplification 1/(eps - lambda_1) is large.
+- The constraint f_1 = u_1^T F_t u_1 <= 1 - lambda_1 (Lemma 8c)
+  limits the F_t energy in this direction.
+- The amplified contribution from this eigenspace:
+  f_1/(eps - lambda_1) <= (1-lambda_1)/(eps-lambda_1) = 1 + (1-eps)/(eps-lambda_1).
+- For the remaining eigenspaces (lambda_j << eps): f_j/(eps-lambda_j)
+  approx f_j/eps, contributing approximately dbar0 < 1.
+
+So: dbar <= 1 + (1-eps)/(eps-lambda_1) + dbar0_rest.
+
+For dbar >= 1: we need the "amplified spike" term (1-eps)/(eps-lambda_1)
+to overcome the fact that dbar0 < 1. This requires eps - lambda_1 to
+be O(1/r). But when eps - lambda_1 = O(1/r), the barrier is extremely
+concentrated, and the Projection Pigeonhole (Lemma 12) shows that
+SOME vertex v has small overlap with the dangerous eigenspace:
+
+    u_1^T C_t(v) u_1 <= (1-lambda_1)/r_t ~ (1-eps)/r_t.
+
+For that vertex, the dangerous-direction contribution to ||Y_t(v)|| is:
+
+    u_1^T Y_t(v) u_1 <= (1-eps)/(r_t * (eps-lambda_1)) ~ (1-eps)/1 = 1-eps < 1.
+
+**But:** the same vertex v may have large contributions in other
+eigenspaces. Its total ||Y_t(v)|| depends on ALL eigenspace projections
+simultaneously, and the pigeonhole only controls one direction at a time.
+
+**The precise sub-gap:** Prove that for the vertex v minimizing
+u_1^T C_t(v) u_1 (low dangerous-direction projection), the contributions
+from the remaining eigenspaces do not push ||Y_t(v)|| above 1. The
+constraint is: sum_{j>=2} (u_j^T C_t(v) u_j)/(eps-lambda_j) < 1 -
+u_1^T Y_t(v) u_1. Since the remaining eigenspaces have eps-lambda_j
+bounded away from 0, the remaining contribution is bounded by
+tr(C_t(v))/(eps-lambda_2). With ||C_t(v)|| <= 1 (Lemma 8a):
+tr(C_t(v)) <= rank(C_t(v)) = deg_S(v).
+
+For the sub-gap to close, we need either:
+(i) deg_S(v) is bounded (then remaining contribution ~ deg_S/(eps-lambda_2) and
+    the total is < 1 when deg_S is small and lambda_2 is not too close to eps), OR
+(ii) when deg_S(v) is large, the contributions are spread across many eigenvalues
+     and no single direction exceeds 1 (using the rank equality, Lemma 11).
+
+Neither (i) nor (ii) follows from the current lemmas alone.
+
+### Eigenspace Separation (Cycle 8 — Empirical)
 
 Feasible vertices have mean 0.55% high-overlap fraction with B_t's
 high-amplification eigenspace. Infeasible: 14.6%. Ratio: 26x.
 
-This confirms: vertices whose edges to S project onto M_t's
-near-saturated eigenspace become infeasible. Vertices that avoid
-this eigenspace remain feasible.
+This confirms the mechanism behind the sub-gap: vertices whose edges
+to S project onto M_t's near-saturated eigenspace become infeasible.
+Vertices that avoid this eigenspace remain feasible. The leverage
+ordering naturally selects vertices that avoid the dangerous eigenspace,
+because the dangerous eigenspace was BUILT from previously-added
+(higher-leverage) vertices' edge contributions.
 
-### Proposed closure routes (Cycle 9)
+### Three Attack Paths for Formal Closure
 
-1. **Isolation Lemma (primary):** Prove gamma(G[I_0]) > eps*m/3 for
-   the graphs arising from the Turan step. This requires bounding the
-   domination number of G[I_0] from below. The key constraints:
-   I_0 is independent in the heavy graph, so all G[I_0] edges are
-   light (tau_e < eps). The induced Foster bound gives |E(I_0)| <=
-   (m-1)/tau_min. For bounded-degree G[I_0], gamma >= m/Delta.
+**Attack Path 1: Strongly Rayleigh on vertex indicators.**
+Define a strongly Rayleigh distribution on vertex subsets of R_t
+(e.g., via DPP with kernel related to leverage scores). Apply the
+Anari-Gharan Kadison-Singer-for-SR theorem: if atoms are small
+(||C_t(v)|| <= 1 from Lemma 8) and marginals bounded, some
+realization has bounded spectral norm. The atom bound ||C_t(v)|| <= 1
+is a natural input; the difficulty is constructing the right SR
+measure that "sees" the amplification by B_t.
 
-2. **Eigenspace separation (backup):** For the ~17% of steps where
-   isolation fails, prove that the minimum-deg_S vertex has low
-   eigenspace overlap with B_t's high-amplification direction.
+**Attack Path 2: Hyperbolic barrier in hyperbolicity cone.**
+Write the barrier determinant det(eps*I - M_t - sum_v x_v C_t(v))
+as a hyperbolic polynomial in {x_v}. Apply Brändén's higher-rank
+KS extension: hyperbolicity cone yields interlacing yields root bound.
+Setting x_v = 1 for one vertex and 0 for the rest gives ||Y_t(v)||
+as the largest root. The mixed hyperbolic polynomial may have a
+computable root bound from the F_t <= I - M_t constraint.
 
-3. **Hybrid argument:** Isolation at early steps (S small → most R
-   vertices have no edges to S), eigenspace separation at late steps
-   (barrier is constrained → amplification is bounded).
+**Attack Path 3: Interlacing families (Xie-Xu / MSS style).**
+Consider the average characteristic polynomial:
+p(x) = (1/r_t) sum_{v in R_t} det(xI - Y_t(v)).
+If the polynomials {det(xI - Y_t(v))} form an interlacing family,
+then some v has largest root <= largest root of p(x). The largest
+root of p(x) equals the expected spectral norm in a distributional
+sense. The key computation: bound the largest root of p using the
+constraints F_t <= I - M_t and dbar0 < 1. This is the most promising
+path because it naturally incorporates the averaging AND spectral
+structure simultaneously.
 
 ## No-Skip Conjecture
 
@@ -466,9 +666,16 @@ eigenvector of M_t with largest eigenvalue).
 | Alpha < 1 | **Proved** (Lemma 4) — not in critical path |
 | Assembly decomposition | **Proved** (Lemma 5) — not in critical path |
 | Product bound | **Proved** — not in critical path |
-| Existence lemma | **Proved** (Lemma 6) — unreachable (BMI false) |
+| Existence lemma | **Proved** (Lemma 6) — revived as Case B of dichotomy |
 | Size guarantee | **Proved** (Lemma 7) |
-| GPL-V (exists feasible v) | **Conjectured** (0/148 completion failures) — **THE GAP** |
+| Rayleigh-monotonicity matrix bound | **Proved** (Lemma 8) — Pi<=I, F<=I-M, f_j<=1-lambda_j |
+| Cross-degree bound | **Proved** (Lemma 9) — normY <= deg_S * max(z^T B z) |
+| Isolation implies feasibility | **Proved** (Lemma 10) — deg_S=0 gives normY=0 |
+| Rank of barrier contribution | **Proved** (Lemma 11) — rank(Y_t(v)) = deg_S(v) |
+| Projection pigeonhole | **Proved** (Lemma 12) — min_v u^T C_t(v) u <= 1/r |
+| **Sparse Dichotomy** | **Proved** — Delta<3/eps-1 implies GPL-V via isolation |
+| **Strong Dichotomy** | **Conjectured** (0/148 failures) — isolation OR dbar<1 |
+| GPL-V (exists feasible v) | **Narrowed** — Sparse case proved, dense case conjectured |
 | No-Skip (NEXT v feasible) | **Weakened** (5/116 runs have skips with strict threshold) |
 | BMI (dbar_t < 1) | **FALSIFIED** (12 violations, worst 1.739) |
 | K_n extremality | **FALSIFIED** (max ratio 2.28) |
@@ -476,10 +683,27 @@ eigenvector of M_t with largest eigenvalue).
 | K_n case | **Proved** (exact formula, dbar = 5/6) |
 
 The proof is complete modulo GPL-V. The critical path is now:
-Turan → Induced Foster → **[GPL-V]** → dbar0 < 1 (with skip correction) → Size.
+Turan → Induced Foster → **[GPL-V: Strong Dichotomy]** → Size.
 
-The alpha < 1, assembly, product bound, and existence lemma machinery
-(Lemmas 4-6) remains mathematically valid but is no longer needed —
-it was infrastructure for the BMI route, which is now dead. The proof
-has simplified: the gap is purely about existence of a feasible vertex
-at each step, not about the average barrier degree.
+**Gap status (Cycle 9):** GPL-V is now attacked from two directions:
+- **Sparse case (PROVED):** Delta(G[I_0]) < 3/eps - 1 → isolation → GPL-V.
+- **Dense case (CONJECTURED):** When isolation fails, dbar < 1 → pigeonhole → GPL-V.
+
+The sub-gap is in the dense non-symmetric case: proving that when S_t
+dominates R_t in G[I_0] AND the barrier has concentrated spectrum
+(one eigenvalue near eps), the pigeonhole on the dominant eigenspace
+(Lemma 12) combined with the F <= I - M constraint (Lemma 8) forces
+min_v ||Y_t(v)|| < 1. The difficulty: the pigeonhole controls one
+eigenspace at a time, but ||Y_t(v)|| depends on all eigenspaces
+simultaneously.
+
+Three attack paths for closing the sub-gap:
+1. **Strongly Rayleigh / KS** — use ||C_t(v)|| <= 1 as atom bound
+2. **Hyperbolic barrier** — det(eps*I - M_t - x_v C_t(v)) as hyperbolic polynomial
+3. **Interlacing families (MSS)** — average characteristic polynomial (most promising)
+
+The alpha < 1, assembly, product bound machinery (Lemmas 4-5) remains
+valid and is revived: Lemma 6 (pigeonhole) is now Case B of the Strong
+Dichotomy, applicable when dbar < 1 (which we conjecture holds whenever
+isolation fails). The dead branch is narrower than before: only the BMI
+claim (dbar < 1 UNIVERSALLY) is dead. The CONDITIONAL pigeonhole is alive.
