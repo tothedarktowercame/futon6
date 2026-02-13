@@ -39,8 +39,83 @@ local function trim(s)
   return (s:gsub("^%s+", ""):gsub("%s+$", ""))
 end
 
+local function find_matching_brace(s, open_idx)
+  if s:sub(open_idx, open_idx) ~= "{" then
+    return nil
+  end
+  local depth = 1
+  local i = open_idx + 1
+  while i <= #s do
+    local ch = s:sub(i, i)
+    if ch == "{" then
+      depth = depth + 1
+    elseif ch == "}" then
+      depth = depth - 1
+      if depth == 0 then
+        return i
+      end
+    end
+    i = i + 1
+  end
+  return nil
+end
+
 local function mark_integer_literals(s)
-  return (s:gsub("(%f[%d]%d+%f[%D])", "\\mNumber{%1}"))
+  local out = {}
+  local i = 1
+  local cmd = "\\mNumber"
+  local cmd_len = #cmd
+
+  while i <= #s do
+    if s:sub(i, i + cmd_len - 1) == cmd and s:sub(i + cmd_len, i + cmd_len) == "{" then
+      local close_idx = find_matching_brace(s, i + cmd_len)
+      if close_idx ~= nil then
+        table.insert(out, s:sub(i, close_idx))
+        i = close_idx + 1
+      else
+        table.insert(out, s:sub(i, i))
+        i = i + 1
+      end
+    else
+      local ch = s:sub(i, i)
+      if ch:match("%d") then
+        local j = i
+        while j <= #s and s:sub(j, j):match("%d") do
+          j = j + 1
+        end
+        table.insert(out, "\\mNumber{" .. s:sub(i, j - 1) .. "}")
+        i = j
+      else
+        table.insert(out, ch)
+        i = i + 1
+      end
+    end
+  end
+
+  return table.concat(out)
+end
+
+local function looks_like_algorithm_line(line)
+  if line:find("@", 1, true) then
+    return true
+  end
+  if line:find("#", 1, true) then
+    return true
+  end
+  local low = line:lower()
+  if low:match("^%s*if%s+") or low:match("^%s*for%s+") or low:match("^%s*while%s+") then
+    return true
+  end
+  if low:match("^%s*return%s+") or low:match("^%s*solve%s+") then
+    return true
+  end
+  if low:find("break", 1, true) then
+    return true
+  end
+  if low:find("sparse(", 1, true) then
+    return true
+  end
+  return false
 end
 
 local function replace_word(s, w, repl)
@@ -201,6 +276,15 @@ end
 local function normalize_expr(s)
   s = trim(s)
 
+  s = s:gsub("{%[}", "[")
+  s = s:gsub("{%]}", "]")
+  s = s:gsub("\\textbar%s*_%s*", "|_")
+  s = s:gsub("\\textbar%s*%^%s*", "|^")
+  s = s:gsub("\\textbar%s*{}", "|")
+  s = s:gsub("\\textbar", "|")
+  s = s:gsub("\\textless%s*{}", "<")
+  s = s:gsub("\\textgreater%s*{}", ">")
+
   -- Handle literal backslash separators like N_n\GL_n.
   s = s:gsub("([%w%)%}])\\([%w%(])", "%1 \\backslash %2")
 
@@ -215,6 +299,21 @@ local function normalize_expr(s)
   s = s:gsub("%-%>", "\\to ")
   s = s:gsub("<%-", "\\leftarrow ")
   s = s:gsub("%f[%a]diag%s*%(", "\\operatorname{diag}(")
+  s = s:gsub("%f[%a]span%s*%(", "\\mOpName{span}(")
+  s = s:gsub("%f[%a]ker%s*%(", "\\mOpName{ker}(")
+  s = s:gsub("%f[%a]rank%s*%(", "\\mOpName{rank}(")
+  s = s:gsub("%f[%a]dim%s*%(", "\\mOpName{dim}(")
+  s = s:gsub("%f[%a]codim%s*%(", "\\mOpName{codim}(")
+  s = s:gsub("%f[%a]Tr%s*%(", "\\mOpName{Tr}(")
+  s = s:gsub("%f[%a]trace%s*%(", "\\mOpName{trace}(")
+  s = s:gsub("%f[%a]int%s*_", "\\int_")
+  s = s:gsub("%f[%a]sum%s*_", "\\sum_")
+  s = s:gsub("%f[%a]prod%s*_", "\\prod_")
+  s = s:gsub("%f[%a]exp%s*%(", "\\exp(")
+  s = s:gsub("%f[%a]log%s*%(", "\\log(")
+  s = s:gsub("%f[%a]det%s*%(", "\\det(")
+  s = s:gsub("%f[%a]mod%s+(\\mNumber{%d+})", "\\mOpName{mod} %1")
+  s = s:gsub("%f[%a]mod%s+(%d+)", "\\mOpName{mod} \\mNumber{%1}")
 
   -- Parenthesized exponents/subscripts (Q^(abgd) -> Q^{abgd}).
   s = s:gsub("%^%(([^()]+)%)", "^{%1}")
@@ -225,10 +324,18 @@ local function normalize_expr(s)
   s = s:gsub("([%a%)%}])%^([A-Za-z][A-Za-z0-9]*)", "%1^{%2}")
   s = s:gsub("}_([A-Za-z][A-Za-z0-9]*)", "}_{%1}")
   s = s:gsub("}%^([A-Za-z][A-Za-z0-9]*)", "}^{%1}")
+  s = s:gsub("([%a%)%}])_\\([A-Za-z]+)(%b{})", "%1_{\\%2%3}")
+  s = s:gsub("([%a%)%}])%^\\([A-Za-z]+)(%b{})", "%1^{\\%2%3}")
+  s = s:gsub("}_\\([A-Za-z]+)(%b{})", "}_{\\%1%2}")
+  s = s:gsub("}%^\\([A-Za-z]+)(%b{})", "}^{\\%1%2}")
   s = s:gsub("([%a%)%}])_\\([A-Za-z]+)", "%1_{\\%2}")
   s = s:gsub("([%a%)%}])%^\\([A-Za-z]+)", "%1^{\\%2}")
   s = s:gsub("}_\\([A-Za-z]+)", "}_{\\%1}")
   s = s:gsub("}%^\\([A-Za-z]+)", "}^{\\%1}")
+  s = s:gsub("%^\\%*", "^{\\mDualStar}")
+  s = s:gsub("%^%*", "^{\\mDualStar}")
+  s = s:gsub("_\\%*", "_{\\mDualStar}")
+  s = s:gsub("_%*", "_{\\mDualStar}")
   s = s:gsub("([A-Za-z][A-Za-z0-9]*)_{([^}]+)}_{([^}]+)}", "%1_{%2,%3}")
 
   -- Group names: GL_n, GL_{n+1}, GLn+1.
@@ -635,6 +742,57 @@ local function convert_binary_operator_sequences(inlines)
   end
 end
 
+local function is_symbolic_glue_str(s)
+  if s == nil or s == "" then
+    return false
+  end
+  if s:match("[A-Za-z]") then
+    return false
+  end
+  return s:match("^[%s%(%[%{%)%]%,%+%-%*/=<>'`|\\]+$") ~= nil
+end
+
+local function merge_adjacent_math_fragments(inlines)
+  local out = {}
+  local i = 1
+  while i <= #inlines do
+    local cur = inlines[i]
+    if cur ~= nil and cur.t == "Math" and cur.mathtype == "InlineMath" then
+      local pieces = {cur.text}
+      local j = i + 1
+      local math_count = 1
+      while j <= #inlines do
+        local nxt = inlines[j]
+        if nxt.t == "Math" and nxt.mathtype == "InlineMath" then
+          table.insert(pieces, nxt.text)
+          math_count = math_count + 1
+          j = j + 1
+        elseif nxt.t == "Space" or nxt.t == "SoftBreak" then
+          table.insert(pieces, " ")
+          j = j + 1
+        elseif nxt.t == "Str" and is_symbolic_glue_str(nxt.text) then
+          table.insert(pieces, nxt.text)
+          j = j + 1
+        else
+          break
+        end
+      end
+
+      if math_count >= 2 then
+        table.insert(out, pandoc.Math("InlineMath", normalize_expr(table.concat(pieces))))
+        i = j
+      else
+        table.insert(out, cur)
+        i = i + 1
+      end
+    else
+      table.insert(out, cur)
+      i = i + 1
+    end
+  end
+  return out
+end
+
 local function convert_simple_str_token_to_inlines(s)
   local gfn, gargs, gpunct = s:match("^([A-Za-z]+)%(([^()]*)%)([%.,;:]*)$")
   if gfn ~= nil and greek_token_names[gfn] then
@@ -874,6 +1032,12 @@ function CodeBlock(el)
     return nil
   end
 
+  for line in txt:gmatch("[^\n]+") do
+    if looks_like_algorithm_line(line) then
+      return nil
+    end
+  end
+
   local lines = {}
   for line in txt:gmatch("[^\n]+") do
     line = trim(line)
@@ -897,18 +1061,21 @@ end
 function Para(el)
   el.content = convert_split_brace_math_inlines(el.content)
   el.content = convert_binary_operator_sequences(el.content)
+  el.content = merge_adjacent_math_fragments(el.content)
   return el
 end
 
 function Plain(el)
   el.content = convert_split_brace_math_inlines(el.content)
   el.content = convert_binary_operator_sequences(el.content)
+  el.content = merge_adjacent_math_fragments(el.content)
   return el
 end
 
 local function normalize_inline_container(el)
   el.content = convert_split_brace_math_inlines(el.content)
   el.content = convert_binary_operator_sequences(el.content)
+  el.content = merge_adjacent_math_fragments(el.content)
   return el
 end
 

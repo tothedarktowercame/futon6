@@ -15,13 +15,16 @@
 \usepackage{setspace}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
-\usepackage{xcolor}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{xurl}
 \usepackage{textcomp}
 \usepackage{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \usepackage[most]{tcolorbox}
 \usepackage{microtype}
+\usepackage{framed}
+\usepackage{fancyvrb}
+\usepackage{math-proofread-style}
 
 \hypersetup{
   colorlinks=true,
@@ -40,8 +43,36 @@
 \setlist[itemize]{itemsep=0.3em,topsep=0.3em}
 \setlist[enumerate]{itemsep=0.3em,topsep=0.3em}
 \setstretch{1.08}
+\EnableMathProofColors
 
 \providecommand{\tightlist}{}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\providecommand{\NormalTok}[1]{#1}
+\providecommand{\KeywordTok}[1]{#1}
+\providecommand{\StringTok}[1]{#1}
+\providecommand{\CommentTok}[1]{#1}
+\providecommand{\FunctionTok}[1]{#1}
+\providecommand{\VariableTok}[1]{#1}
+\providecommand{\ControlFlowTok}[1]{#1}
+\providecommand{\OperatorTok}[1]{#1}
+\providecommand{\BuiltInTok}[1]{#1}
+\providecommand{\DecValTok}[1]{#1}
+\providecommand{\FloatTok}[1]{#1}
+\providecommand{\ConstantTok}[1]{#1}
+\providecommand{\ErrorTok}[1]{#1}
+\providecommand{\PreprocessorTok}[1]{#1}
+\providecommand{\ExtensionTok}[1]{#1}
+\providecommand{\SpecialCharTok}[1]{#1}
+\providecommand{\CharTok}[1]{#1}
+\providecommand{\ImportTok}[1]{#1}
+\providecommand{\DocumentationTok}[1]{#1}
+\providecommand{\AnnotationTok}[1]{#1}
+\providecommand{\AttributeTok}[1]{#1}
+\providecommand{\InformationTok}[1]{#1}
+\providecommand{\WarningTok}[1]{#1}
+%
 \ifPDFTeX
   \DeclareUnicodeCharacter{2218}{\ensuremath{\circ}}
   \DeclareUnicodeCharacter{2297}{\ensuremath{\otimes}}
@@ -223,6 +254,9 @@ Problem 6 currently retains an explicit unresolved obligation in the project sta
 
 \part{Prompt Excerpts and Pivot Moments}
 \input{part3-pivotal-prompts}
+
+\part{Color Plates}
+\input{color-plates}
 
 \backmatter
 \begin{thebibliography}{99}

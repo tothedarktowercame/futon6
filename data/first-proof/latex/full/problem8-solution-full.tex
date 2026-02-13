@@ -6,7 +6,7 @@
 
 A \textbf{polyhedral Lagrangian surface} \(K \in R\)\^{}4 is a finite polyhedral complex all
 of whose faces are Lagrangian 2-planes, which is a topological submanifold of
-\(R^\mNumber{4}.\) A \textbf{Lagrangian smoothing} of K is a Hamiltonian isotopy \(K_{t}\) of smooth
+\(\mathbb{R}^{\mNumber{4}}\). A \textbf{Lagrangian smoothing} of K is a Hamiltonian isotopy \(K_{t}\) of smooth
 Lagrangian submanifolds for t in (0,1{]}, extending to a topological isotopy on
 {[}0,1{]}, with \(K_\mNumber{0} = K\).
 
@@ -18,7 +18,7 @@ necessarily have a Lagrangian smoothing?
 
 \textbf{Yes.} A polyhedral Lagrangian surface with 4 faces per vertex (with
 distinct adjacent faces) always admits a Lagrangian smoothing. The vertex
-spanning property (\{\(e_\mNumber{1}\),...,\(e_\mNumber{4}\)\} spans \(R^\mNumber{4}\)) is automatic --- it follows from
+spanning property (\{\(e_\mNumber{1}\),...,\(e_\mNumber{4}\)\} spans \(\mathbb{R}^{\mNumber{4}}\)) is automatic --- it follows from
 the Lagrangian and distinct-face conditions alone (Section 3), with no
 additional hypotheses needed.
 
@@ -28,16 +28,15 @@ decomposition at each vertex) is verified numerically: 998/998 random valid
 is algebraic (not just heuristic). Vertex smoothing uses the product structure
 (corners in symplectic factors); edge smoothing uses generating functions.
 The Hamiltonian isotopy property is established via the Weinstein neighborhood
-theorem (edges) and the vanishing flux in simply-connected \(R^\mNumber{2}\) (vertices).
+theorem (edges) and the vanishing flux in simply-connected \(\mathbb{R}^{\mNumber{2}}\) (vertices).
 
 \hypertarget{solution}{%
 \subsection{Solution}\label{solution}}
 
-\hypertarget{1-setup-lagrangian-planes-in-r4}{%
-\subsubsection{\texorpdfstring{1. Setup: Lagrangian planes in \(R^\mNumber{4}\)}{1. Setup: Lagrangian planes in R\^{}\textbackslash mNumber\{4\}}}\label{1-setup-lagrangian-planes-in-r4}}
+\hypertarget{1-setup-lagrangian-planes-in-mathbbr4}{%
+\subsubsection{\texorpdfstring{1. Setup: Lagrangian planes in \(\mathbb{R}^{\mNumber{4}}\)}{1. Setup: Lagrangian planes in \textbackslash mathbb\{R\}\^{}\{\textbackslash mNumber\{4\}\}}}\label{1-setup-lagrangian-planes-in-mathbbr4}}
 
-Identify \(R^\mNumber{4} = C^\mNumber{2}\) with symplectic form \(\omega = dx_\mNumber{1}\) ∧ \(dy_\mNumber{1} \mBridgeOperator{+} dx_\mNumber{2}\) ∧ \(dy_\mNumber{2}.\)
-A Lagrangian plane is a 2-dimensional subspace L where omega\textbar\_L = 0. The space
+Identify \(\mathbb{R}^{\mNumber{4}} = \mathbb{C}^{\mNumber{2}}\) with symplectic form \(\omega = dx_{\mNumber{1}} \wedge dy_{\mNumber{1}} \mBridgeOperator{+} dx_{\mNumber{2}} \wedge dy_{\mNumber{2}}.\)A Lagrangian plane is a 2-dimensional subspace L where \(\omega|_{L} = \mNumber{0}\). The space
 of Lagrangian planes (the Lagrangian Grassmannian) is:
 
 \[\Lambda(\mNumber{2}) = U(\mNumber{2})/O(\mNumber{2})\]
@@ -50,111 +49,109 @@ meet at a dihedral angle. At each vertex, 4 Lagrangian faces meet.
 \hypertarget{2-local-structure-at-a-4-valent-vertex}{%
 \subsubsection{2. Local structure at a 4-valent vertex}\label{2-local-structure-at-a-4-valent-vertex}}
 
-At a vertex v, the 4 faces \(L_\mNumber{1},\) \(L_\mNumber{2},\) \(L_\mNumber{3},\) \(L_\mNumber{4}\) (in cyclic order around v) are
+At a vertex v, the 4 faces \(L_{\mNumber{1}}, L_{\mNumber{2}}, L_{\mNumber{3}}, L_{\mNumber{4}}\)(in cyclic order around v) are
 Lagrangian half-planes meeting along edges:
 
 \[e_{\mNumber{12}} = L_\mNumber{1} \cap L_\mNumber{2}, e_{\mNumber{23}} = L_\mNumber{2} \cap L_\mNumber{3}, e_{\mNumber{34}} = L_\mNumber{3} \cap L_\mNumber{4}, e_{\mNumber{41}} = L_\mNumber{4} \cap L_\mNumber{1}\]
 
 These 4 edges are rays from v. Each face is spanned by its two boundary edges:
 
-\[L_{i} = span(e_{i-\mNumber{1},i}, e_{i,i+\mNumber{1}})\]
+\[L_{i} = \mOpName{span}(e_{i-\mNumber{1},i}, e_{i,i+\mNumber{1}})\]
 
 The Lagrangian condition omega\textbar\_\{\(L_{i}\)\} = 0 requires:
 
-\[\omega(e_{i-\mNumber{1},i}, e_{i,i+\mNumber{1}}) = \mNumber{0} for each i (mod \mNumber{4})\]
+\[\omega(e_{i-\mNumber{1},i}, e_{i,i+\mNumber{1}}) = \mNumber{0} for each i (\mOpName{mod} \mNumber{4})\]
 
 \hypertarget{3-the-symplectic-direct-sum-decomposition-key-new-argument}{%
 \subsubsection{3. The symplectic direct sum decomposition (key new argument)}\label{3-the-symplectic-direct-sum-decomposition-key-new-argument}}
 
-\textbf{Theorem (v2).} The 4 edge vectors \(e_\mNumber{1} = e_{\mNumber{12}},\) \(e_\mNumber{2} = e_{\mNumber{23}},\) \(e_\mNumber{3} = e_{\mNumber{34}},\)
-\(e_\mNumber{4} = e_{\mNumber{41}}\) satisfy \(\omega\)(\(e_{i}\), \(e_{i+\mNumber{1}}\)) = 0 for all i (mod 4). This forces
+\textbf{Theorem (v2).} The 4 edge vectors \(e_{\mNumber{1}} = e_{\mNumber{12}}, e_{\mNumber{2}} = e_{\mNumber{23}}, e_{\mNumber{3}} = e_{\mNumber{34}}, e_{\mNumber{4}} = e_{\mNumber{41}}\)satisfy \(\omega(e_{i}, e_{i+\mNumber{1}}) = \mNumber{0}\) for all i (mod 4). This forces
 a symplectic direct sum decomposition:
 
 \[R^\mNumber{4} = V_\mNumber{1} \oplus V_\mNumber{2}\]
 
-where \(V_\mNumber{1}\) = span(\(e_\mNumber{1}\), \(e_\mNumber{3}\)) and \(V_\mNumber{2}\) = span(\(e_\mNumber{2}\), \(e_\mNumber{4}\)) are symplectic 2-planes
+where \(V_\mNumber{1} = \mOpName{span}(e_\mNumber{1}, e_\mNumber{3})\) and \(V_\mNumber{2} = \mOpName{span}(e_\mNumber{2}, e_\mNumber{4})\) are symplectic 2-planes
 with omega\textbar\_\{\(V_\mNumber{1} \times V_\mNumber{2}\)\} = 0.
 
-\textbf{Proof.} Write the \(\omega\) matrix in the basis (\(e_\mNumber{1}\), \(e_\mNumber{2},\) \(e_\mNumber{3},\) \(e_\mNumber{4}\)). The
-conditions \(\omega\)(\(e_{i}\), \(e_{i+\mNumber{1}}\)) = 0 kill 4 of the 6 independent entries,
+\textbf{Proof.} Write the \(\omega\) matrix in the basis (\(e_{\mNumber{1}}, e_{\mNumber{2}}, e_{\mNumber{3}}, e_{\mNumber{4}}\)). The
+conditions \(\omega(e_{i}, e_{i+\mNumber{1}}) = \mNumber{0}\) kill 4 of the 6 independent entries,
 leaving only:
 
 \[a = \omega(e_\mNumber{1}, e_\mNumber{3}) \neq \mNumber{0}, b = \omega(e_\mNumber{2}, e_\mNumber{4}) \neq \mNumber{0}\]
 
-(Nonzero because \(\omega\) is non-degenerate and \{\(e_\mNumber{1}\), \(e_\mNumber{2},\) \(e_\mNumber{3},\) \(e_\mNumber{4}\)\} is a
+(Nonzero because \(\omega\) is non-degenerate and \{\(e_{\mNumber{1}}, e_{\mNumber{2}}, e_{\mNumber{3}}, e_{\mNumber{4}}\)\} is a
 basis --- see the nondegeneracy hypothesis below.)
 
 \textbf{Lemma (vertex spanning).} At every vertex of a polyhedral Lagrangian
 surface with 4 faces per vertex (with distinct adjacent faces sharing
-1-dimensional edges), the 4 edge vectors \{\(e_\mNumber{1}\), \(e_\mNumber{2},\) \(e_\mNumber{3},\) \(e_\mNumber{4}\)\} span \(R^\mNumber{4}.\)
+1-dimensional edges), the 4 edge vectors \{\(e_{\mNumber{1}}, e_{\mNumber{2}}, e_{\mNumber{3}}, e_{\mNumber{4}}\)\} span \(\mathbb{R}^{\mNumber{4}}\).
 
 \emph{Proof.} Suppose for contradiction that the 4 edge vectors lie in a
-3-dimensional subspace H ⊂ \(R^\mNumber{4}.\) Then all 4 faces \(L_{i}\) = span(\(e_{i-\mNumber{1},i}\),
-\(e_{i,i+\mNumber{1}}\)) ⊂ H.
+3-dimensional subspace H \(\subset \mathbb{R}^{\mNumber{4}}\). Then all 4 faces \(L_{i}\) = span(\(e_{i-\mNumber{1},i}, e_{i,i+\mNumber{1}}) \subset\)H.
 
-\textbf{Step 1.} The restricted form omega\textbar\_H has rank 2: since \(\omega\) is
-non-degenerate on \(R^\mNumber{4},\) its restriction to a codimension-1 subspace has a
-1-dimensional kernel ell = ker(omega\textbar\_H) ⊂ H.
+\textbf{Step 1.} The restricted form \(\omega|_{H}\) has rank 2: since \(\omega\) is
+non-degenerate on \(\mathbb{R}^{\mNumber{4}}\), its restriction to a codimension-1 subspace has a
+1-dimensional kernel ell = \(\mOpName{ker}(\omega|_{H}) \subset\)H.
 
-\textbf{Step 2.} Every Lagrangian 2-plane L ⊂ H contains ell. Proof: L is
-2-dimensional with omega\textbar\_L = 0. If L were transverse to ell (i.e.,
+\textbf{Step 2.} Every Lagrangian 2-plane L \(\subset\) H contains ell. Proof: L is
+2-dimensional with \(\omega|_{L} = \mNumber{0}\). If L were transverse to ell (i.e.,
 L ∩ ell = \{0\}), then L would project isomorphically onto a 2-plane in
-H/ell ≅ \(R^\mNumber{2}.\) But omega\textbar\_H descends to a non-degenerate 2-form on H/ell
-(since ell = ker(omega\textbar\_H)), and a 2-plane in \(R^\mNumber{2}\) on which a
-non-degenerate 2-form vanishes must be \{0\}. Contradiction. So ell ⊂ L.
+H/ell ≅ \(\mathbb{R}^{\mNumber{2}}\). But \(\omega|_{H}\) descends to a non-degenerate 2-form on H/ell
+(since ell = \(\mOpName{ker}(\omega|_{H})\)), and a 2-plane in \(\mathbb{R}^{\mNumber{2}}\) on which a
+non-degenerate 2-form vanishes must be \{0\}. Contradiction. So ell \(\subset\) L.
 
 \textbf{Step 3 (key).} Each edge \(e_{i}\) is the intersection of two adjacent faces:
-\(e_\mNumber{1} = L_\mNumber{1}\) ∩ \(L_\mNumber{2},\) \(e_\mNumber{2} = L_\mNumber{2}\) ∩ \(L_\mNumber{3},\) etc. Since \(L_{i}\) and \(L_{i+\mNumber{1}}\) are
+\(e_\mNumber{1} = L_\mNumber{1}\) ∩ \(L_{\mNumber{2}}, e_{\mNumber{2}} = L_{\mNumber{2}}\)∩ \(L_\mNumber{3},\) etc. Since \(L_{i}\) and \(L_{i+\mNumber{1}}\) are
 distinct 2-planes (distinct faces), their intersection is exactly
-1-dimensional: dim(\(L_{i}\) ∩ \(L_{i+\mNumber{1}}\)) = 1, so \(L_{i}\) ∩ \(L_{i+\mNumber{1}} = span(e_{i}).\)
+1-dimensional: \(\mOpName{dim}(L_{i} \cap L_{i+\mNumber{1}}) = \mNumber{1}\), so \(L_{i}\) ∩ \(L_{i+\mNumber{1}} = \mOpName{span}(e_{i})\).
 
-By Step 2, ell ⊂ \(L_{i}\) and ell ⊂ \(L_{i+\mNumber{1}},\) so ell ⊂ \(L_{i}\) ∩ \(L_{i+\mNumber{1}} = span(e_{i}).\) Since both ell and \(span(e_{i})\) are 1-dimensional subspaces and
-one contains the other, ell = \(span(e_{i}).\)
+By Step 2, ell \(\subset L_{i}\)and ell \(\subset L_{i+\mNumber{1}},\)so ell \(\subset L_{i}\)∩ \(L_{i+\mNumber{1}} = \mOpName{span}(e_{i})\). Since both ell and \(\mOpName{span}(e_{i})\) are 1-dimensional subspaces and
+one contains the other, ell = \(\mOpName{span}(e_{i})\).
 
-Applying this to all four edges: \(span(e_\mNumber{1})\) = ell = \(span(e_\mNumber{2}) = span(e_\mNumber{3}) = span(e_\mNumber{4}).\) That is, all four edge vectors are proportional.
+Applying this to all four edges: \(\mOpName{span}(e_\mNumber{1})\) = ell = \(\mOpName{span}(e_\mNumber{2}) = \mOpName{span}(e_\mNumber{3}) = \mOpName{span}(e_\mNumber{4})\). That is, all four edge vectors are proportional.
 
-But then \(L_\mNumber{1}\) = span(\(e_\mNumber{4}\), \(e_\mNumber{1}\)) = \(span(e_\mNumber{1})\) is 1-dimensional, contradicting
+But then \(L_\mNumber{1} = \mOpName{span}(e_\mNumber{4}, e_\mNumber{1}) = \mOpName{span}(e_\mNumber{1})\) is 1-dimensional, contradicting
 the fact that \(L_\mNumber{1}\) is a 2-plane. ∎
 
 (Note: this argument is purely algebraic --- it uses only that adjacent faces
 are distinct Lagrangian 2-planes sharing a 1-dimensional edge. No
 topological submanifold condition is needed.)
 
-In the reordered basis (\(e_\mNumber{1}\), \(e_\mNumber{3},\) \(e_\mNumber{2},\) \(e_\mNumber{4}\)), the \(\omega\) matrix is:
+In the reordered basis (\(e_{\mNumber{1}}, e_{\mNumber{3}}, e_{\mNumber{2}}, e_{\mNumber{4}}),\)the \(\omega\) matrix is:
 
 \[[[\mNumber{0}, a, \mNumber{0}, \mNumber{0}], [-a, \mNumber{0}, \mNumber{0}, \mNumber{0}], [\mNumber{0}, \mNumber{0}, \mNumber{0}, b], [\mNumber{0}, \mNumber{0}, -b, \mNumber{0}]]\]
 
-This is block diagonal: (\(V_\mNumber{1}\), a) ⊕ (\(V_\mNumber{2}\), b), a symplectic direct sum. ∎
+This is block diagonal: (\(V_\mNumber{1}\), a) \(\oplus (V_{\mNumber{2}},\)b), a symplectic direct sum. ∎
 
 \textbf{Consequence:} Each Lagrangian face decomposes as a direct sum of lines:
 
 \[\begin{aligned}
-L_\mNumber{1} = span(e_\mNumber{4}) \oplus span(e_\mNumber{1}) \subset V_\mNumber{2} \oplus V_\mNumber{1} \\
-L_\mNumber{2} = span(e_\mNumber{1}) \oplus span(e_\mNumber{2}) \subset V_\mNumber{1} \oplus V_\mNumber{2} \\
-L_\mNumber{3} = span(e_\mNumber{2}) \oplus span(e_\mNumber{3}) \subset V_\mNumber{2} \oplus V_\mNumber{1} \\
-L_\mNumber{4} = span(e_\mNumber{3}) \oplus span(e_\mNumber{4}) \subset V_\mNumber{1} \oplus V_\mNumber{2}
+L_\mNumber{1} = \mOpName{span}(e_\mNumber{4}) \oplus \mOpName{span}(e_\mNumber{1}) \subset V_\mNumber{2} \oplus V_\mNumber{1} \\
+L_\mNumber{2} = \mOpName{span}(e_\mNumber{1}) \oplus \mOpName{span}(e_\mNumber{2}) \subset V_\mNumber{1} \oplus V_\mNumber{2} \\
+L_\mNumber{3} = \mOpName{span}(e_\mNumber{2}) \oplus \mOpName{span}(e_\mNumber{3}) \subset V_\mNumber{2} \oplus V_\mNumber{1} \\
+L_\mNumber{4} = \mOpName{span}(e_\mNumber{3}) \oplus \mOpName{span}(e_\mNumber{4}) \subset V_\mNumber{1} \oplus V_\mNumber{2}
 \end{aligned}\]
 
 Each \(L_{i}\) takes one line from \(V_\mNumber{1}\) and one from \(V_\mNumber{2},\) which is automatically
-Lagrangian in \(V_\mNumber{1}\) ⊕ \(V_\mNumber{2}\) (omega restricted to a line is zero).
+Lagrangian in \(V_{\mNumber{1}} \oplus V_{\mNumber{2}}\)(omega restricted to a line is zero).
 
 \hypertarget{4-maslov-index-vanishes-exactly}{%
 \subsubsection{4. Maslov index vanishes exactly}\label{4-maslov-index-vanishes-exactly}}
 
-The Maslov index of the vertex loop \(L_\mNumber{1}\) → \(L_\mNumber{2}\) → \(L_\mNumber{3}\) → \(L_\mNumber{4}\) → \(L_\mNumber{1} \in \Lambda(\mNumber{2})\) decomposes via the direct sum:
+The Maslov index of the vertex loop \(L_{\mNumber{1}} \to L_{\mNumber{2}} \to L_{\mNumber{3}} \to L_{\mNumber{4}} \to L_{\mNumber{1}} \in \Lambda(\mNumber{2})\)decomposes via the direct sum:
 
 \[\mu = \mu_\mNumber{1} + \mu_\mNumber{2}\]
 
 where \(\mu_{j}\) is the winding number of the component loop in \(V_{j}.\)
 
-\textbf{In \(V_\mNumber{1}\) = span(\(e_\mNumber{1}\), \(e_\mNumber{3}\)):} The loop traces
-\(span(e_\mNumber{1})\) → \(span(e_\mNumber{1})\) → \(span(e_\mNumber{3})\) → \(span(e_\mNumber{3})\) → \(span(e_\mNumber{1})\)
+\textbf{In \(V_\mNumber{1} = \mOpName{span}(e_\mNumber{1}, e_\mNumber{3})\):} The loop traces
+\(\mOpName{span}(e_\mNumber{1})\) → \(\mOpName{span}(e_\mNumber{1})\) → \(\mOpName{span}(e_\mNumber{3})\) → \(\mOpName{span}(e_\mNumber{3})\) → \(\mOpName{span}(e_\mNumber{1})\)
 
-This is a back-and-forth path (\(e_\mNumber{1}\) → \(e_\mNumber{1}\) → \(e_\mNumber{3}\) → \(e_\mNumber{3}\) → \(e_\mNumber{1}\)), not a
+This is a back-and-forth path (\(e_{\mNumber{1}} \to e_{\mNumber{1}} \to e_{\mNumber{3}} \to e_{\mNumber{3}} \to e_{\mNumber{1}}),\)not a
 winding loop. The winding number is 0.
 
-\textbf{In \(V_\mNumber{2}\) = span(\(e_\mNumber{2}\), \(e_\mNumber{4}\)):} Similarly:
-\(span(e_\mNumber{4})\) → \(span(e_\mNumber{2})\) → \(span(e_\mNumber{2})\) → \(span(e_\mNumber{4})\) → \(span(e_\mNumber{4})\)
+\textbf{In \(V_\mNumber{2} = \mOpName{span}(e_\mNumber{2}, e_\mNumber{4})\):} Similarly:
+\(\mOpName{span}(e_\mNumber{4})\) → \(\mOpName{span}(e_\mNumber{2})\) → \(\mOpName{span}(e_\mNumber{2})\) → \(\mOpName{span}(e_\mNumber{4})\) → \(\mOpName{span}(e_\mNumber{4})\)
 
 Winding number 0.
 
@@ -168,48 +165,48 @@ the time (see scripts/verify-p8-maslov-v2.py).
 \hypertarget{5-why-4-is-special-the-3-face-obstruction}{%
 \subsubsection{5. Why 4 is special: the 3-face obstruction}\label{5-why-4-is-special-the-3-face-obstruction}}
 
-For a 3-face vertex, the 3 edge vectors \(e_\mNumber{1},\) \(e_\mNumber{2},\) \(e_\mNumber{3}\) must satisfy:
+For a 3-face vertex, the 3 edge vectors \(e_{\mNumber{1}}, e_{\mNumber{2}}, e_{\mNumber{3}}\)must satisfy:
 
 \[\omega(e_\mNumber{1}, e_\mNumber{2}) = \omega(e_\mNumber{2}, e_\mNumber{3}) = \omega(e_\mNumber{3}, e_\mNumber{1}) = \mNumber{0}\]
 
 This means \(\omega\) vanishes on ALL pairs --- the span is an isotropic subspace.
-But in (\(R^\mNumber{4}\), omega), the maximum isotropic dimension is 2 (= half the
+But in (\(\mathbb{R}^{\mNumber{4}}\), omega), the maximum isotropic dimension is 2 (= half the
 dimension). Three independent isotropic vectors cannot exist.
 
-\textbf{Therefore: a non-degenerate 3-face Lagrangian vertex is impossible in \(R^\mNumber{4}.\)}
+\textbf{Therefore: a non-degenerate 3-face Lagrangian vertex is impossible in \(\mathbb{R}^{\mNumber{4}}\).}
 
 The 4-face condition is precisely the right valence: it gives enough edges to
-span \(R^\mNumber{4}\) while the cyclic \(\omega\)-orthogonality creates the symplectic direct
+span \(\mathbb{R}^{\mNumber{4}}\) while the cyclic \(\omega\)-orthogonality creates the symplectic direct
 sum that forces Maslov index 0.
 
 For 5 or more faces: the \(\omega\)-orthogonality conditions are over-determined
-and generically have no solution with the edges spanning \(R^\mNumber{4}.\) The 4-face case
+and generically have no solution with the edges spanning \(\mathbb{R}^{\mNumber{4}}\). The 4-face case
 is the generic sweet spot.
 
 \hypertarget{5a-vertex-smoothing-via-the-product-structure}{%
 \subsubsection{5a. Vertex smoothing via the product structure}\label{5a-vertex-smoothing-via-the-product-structure}}
 
-The key observation: the \(V_\mNumber{1}\) ⊕ \(V_\mNumber{2}\) decomposition (Section 3) gives K near
+The key observation: the \(V_{\mNumber{1}} \oplus V_{\mNumber{2}}\)decomposition (Section 3) gives K near
 each vertex v a product structure, enabling a direct smoothing that bypasses
 both crease smoothing and Lagrangian surgery.
 
 \textbf{Product decomposition of K near v.} Choose Darboux coordinates adapted to
-\(V_\mNumber{1}\) ⊕ \(V_\mNumber{2}:\) let \(V_\mNumber{1}\) have coordinates (x, y) with \(\omega_\mNumber{1}\) = dx ∧ dy, and \(V_\mNumber{2}\)
-have coordinates (u, v) with \(\omega_\mNumber{2}\) = du ∧ dv (so \(\omega = \omega_\mNumber{1} \mBridgeOperator{+} \omega_\mNumber{2}\)).
+\(V_{\mNumber{1}} \oplus V_{\mNumber{2}}:\)let \(V_\mNumber{1}\) have coordinates (x, y) with \(\omega_\mNumber{1}\) = dx \(\wedge\) dy, and \(V_\mNumber{2}\)
+have coordinates (u, v) with \(\omega_\mNumber{2}\) = du \(\wedge\) dv (so \(\omega = \omega_\mNumber{1} \mBridgeOperator{+} \omega_\mNumber{2}\)).
 Orient the edge vectors so that:
 
 \[e_\mNumber{1} = (\mNumber{1},\mNumber{0},\mNumber{0},\mNumber{0}), e_\mNumber{2} = (\mNumber{0},\mNumber{0},\mNumber{1},\mNumber{0}), e_\mNumber{3} = (\mNumber{0},\mNumber{1},\mNumber{0},\mNumber{0}), e_\mNumber{4} = (\mNumber{0},\mNumber{0},\mNumber{0},\mNumber{1})\]
 
-(Here \(e_\mNumber{1},\) \(e_\mNumber{3}\) ∈ \(V_\mNumber{1}\) and \(e_\mNumber{2},\) \(e_\mNumber{4}\) ∈ \(V_\mNumber{2},\) consistent with the decomposition
+(Here \(e_{\mNumber{1}}, e_{\mNumber{3}} \in V_{\mNumber{1}}\)and \(e_{\mNumber{2}}, e_{\mNumber{4}} \in V_{\mNumber{2}},\)consistent with the decomposition
 in Section 3. This can always be arranged by a linear symplectomorphism.)
 
 The 4 faces in these coordinates are:
 
 \[\begin{aligned}
-L_\mNumber{1} = span(e_\mNumber{4}, e_\mNumber{1}) = {y = \mNumber{0}, u = \mNumber{0}}, sector x > \mNumber{0}, v > \mNumber{0} \\
-L_\mNumber{2} = span(e_\mNumber{1}, e_\mNumber{2}) = {y = \mNumber{0}, v = \mNumber{0}}, sector x > \mNumber{0}, u > \mNumber{0} \\
-L_\mNumber{3} = span(e_\mNumber{2}, e_\mNumber{3}) = {x = \mNumber{0}, v = \mNumber{0}}, sector y > \mNumber{0}, u > \mNumber{0} \\
-L_\mNumber{4} = span(e_\mNumber{3}, e_\mNumber{4}) = {x = \mNumber{0}, u = \mNumber{0}}, sector y > \mNumber{0}, v > \mNumber{0}
+L_\mNumber{1} = \mOpName{span}(e_\mNumber{4}, e_\mNumber{1}) = {y = \mNumber{0}, u = \mNumber{0}}, sector x > \mNumber{0}, v > \mNumber{0} \\
+L_\mNumber{2} = \mOpName{span}(e_\mNumber{1}, e_\mNumber{2}) = {y = \mNumber{0}, v = \mNumber{0}}, sector x > \mNumber{0}, u > \mNumber{0} \\
+L_\mNumber{3} = \mOpName{span}(e_\mNumber{2}, e_\mNumber{3}) = {x = \mNumber{0}, v = \mNumber{0}}, sector y > \mNumber{0}, u > \mNumber{0} \\
+L_\mNumber{4} = \mOpName{span}(e_\mNumber{3}, e_\mNumber{4}) = {x = \mNumber{0}, u = \mNumber{0}}, sector y > \mNumber{0}, v > \mNumber{0}
 \end{aligned}\]
 
 Define the "corner" curves in each factor:
@@ -219,14 +216,13 @@ C_\mNumber{1} = {(x, \mNumber{0}) : x \ge \mNumber{0}} ∪ {(\mNumber{0}, y) : y
 C_\mNumber{2} = {(u, \mNumber{0}) : u \ge \mNumber{0}} ∪ {(\mNumber{0}, v) : v \ge \mNumber{0}} \subset V_\mNumber{2} (positive u and v axes)
 \end{aligned}\]
 
-\textbf{Claim:} K ∩ B(v, r) = \(C_\mNumber{1}\) × \(C_\mNumber{2}\) (product of the two corners) for small r.
+\textbf{Claim:} K ∩ B(v, r) = \(C_\mNumber{1} \times C_\mNumber{2}\) (product of the two corners) for small r.
 
-\emph{Verification:} A point (p, q) with p ∈ \(C_\mNumber{1}\) and q ∈ \(C_\mNumber{2}\) has p = (x, 0) or
+\emph{Verification:} A point (p, q) with \(p \in C_\mNumber{1}\) and \(q \in C_\mNumber{2}\) has p = (x, 0) or
 (0, y) and q = (u, 0) or (0, v), giving 4 cases --- exactly the 4 faces
 \(L_\mNumber{1},\) ..., \(L_\mNumber{4}\) listed above. ∎
 
-\textbf{Smoothing.} Replace each corner \(C_{j}\) with a smooth curve \(C_{j}^{sm}\) ⊂ \(V_{j}\)
-that agrees with \(C_{j}\) outside a ball of radius \(\delta\) around the origin:
+\textbf{Smoothing.} Replace each corner \(C_{j}\) with a smooth curve \(C_{j}^{sm} \subset V_{j}\)that agrees with \(C_{j}\) outside a ball of radius \(\delta\) around the origin:
 
 \[\begin{aligned}
 C_\mNumber{1}^{sm}: smooth curve \in V_\mNumber{1}, = {(x, \mNumber{0})} for x > \delta, = {(\mNumber{0}, y)} for y > \delta, \\
@@ -235,34 +231,33 @@ reparameterized to match the axes outside the transition) \\
 C_\mNumber{2}^{sm}: analogous \in V_\mNumber{2}
 \end{aligned}\]
 
-Explicitly: parameterize \(C_\mNumber{1}^{sm}\) as \(\gamma_\mNumber{1}(t)\) for t ∈ R, where
-\(\gamma_\mNumber{1}(t)\) = (t, 0) for t ≥ \(\delta\), \(\gamma_\mNumber{1}(t)\) = (0, -t) for t ≤ -delta,
-and \(\gamma_\mNumber{1}\) is a smooth embedded curve for t ∈ {[}-delta, delta{]}. (Such a
+Explicitly: parameterize \(C_\mNumber{1}^{sm}\) as \(\gamma_\mNumber{1}(t)\) for \(t \in R\), where
+\(\gamma_\mNumber{1}(t)\) = (t, 0) for \(t \ge \delta, \gamma_{\mNumber{1}}(t) =\)(0, -t) for t \(\le\) -delta,
+and \(\gamma_\mNumber{1}\) is a smooth embedded curve for t \(\in\) {[}-delta, delta{]}. (Such a
 curve exists: it is a smooth rounding of the right angle at the origin.)
 Define \(\gamma_\mNumber{2}(t)\) analogously for \(C_\mNumber{2}^{sm}.\)
 
 \textbf{Lagrangian property of the product:} The smoothed surface
-\(K^{sm} = C_\mNumber{1}^{sm}\) × \(C_\mNumber{2}^{sm}\) is a product of smooth curves in the
+\(K^{sm} = C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm}\) is a product of smooth curves in the
 symplectic factors. A curve in a 2-dimensional symplectic manifold is
 always Lagrangian (its dimension is 1 = half of 2, and \(\omega\) restricted
 to a 1-submanifold is zero for dimensional reasons). The product of
-Lagrangian submanifolds in (\(V_\mNumber{1}\), \(\omega_\mNumber{1}\)) × (\(V_\mNumber{2}\), \(\omega_\mNumber{2}\)) is Lagrangian
-in (\(V_\mNumber{1}\) ⊕ \(V_\mNumber{2},\) \(\omega_\mNumber{1} \mBridgeOperator{+} \omega_\mNumber{2}\)): for tangent vectors (\(u_\mNumber{1}\), \(u_\mNumber{2}\)) and
-(\(w_\mNumber{1}\), \(w_\mNumber{2}\)) to \(C_\mNumber{1}^{sm}\) × \(C_\mNumber{2}^{sm},\) we have
+Lagrangian submanifolds in (\(V_{\mNumber{1}}, \omega_{\mNumber{1}}) \times (V_{\mNumber{2}}, \omega_{\mNumber{2}})\)is Lagrangian
+in (\(V_{\mNumber{1}} \oplus V_{\mNumber{2}}, \omega_{\mNumber{1}} \mBridgeOperator{+} \omega_{\mNumber{2}}\)): for tangent vectors (\(u_{\mNumber{1}}, u_{\mNumber{2}})\)and
+(\(w_{\mNumber{1}}, w_{\mNumber{2}})\)to \(C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm},\) we have
 
 \[\omega((u_\mNumber{1}, u_\mNumber{2}), (w_\mNumber{1}, w_\mNumber{2})) = \omega_\mNumber{1}(u_\mNumber{1}, w_\mNumber{1}) + \omega_\mNumber{2}(u_\mNumber{2}, w_\mNumber{2}) = \mNumber{0} + \mNumber{0} = \mNumber{0}\]
 
-since \(u_\mNumber{1},\) \(w_\mNumber{1}\) are tangent to \(C_\mNumber{1}^{sm}\) (1-dimensional in \(V_\mNumber{1}\)) and \(u_\mNumber{2},\) \(w_\mNumber{2}\)
-are tangent to \(C_\mNumber{2}^{sm}\) (1-dimensional in \(V_\mNumber{2}\)). ∎
+since \(u_{\mNumber{1}}, w_{\mNumber{1}}\)are tangent to \(C_\mNumber{1}^{sm}\) (1-dimensional in \(V_\mNumber{1}\)) and \(u_{\mNumber{2}}, w_{\mNumber{2}}\)are tangent to \(C_\mNumber{2}^{sm}\) (1-dimensional in \(V_\mNumber{2}\)). ∎
 
-\textbf{Smoothness:} \(K^{sm} = C_\mNumber{1}^{sm}\) × \(C_\mNumber{2}^{sm}\) is the image of the smooth
-map (\(t_\mNumber{1}\), \(t_\mNumber{2}\)) → (\(\gamma_\mNumber{1}\)(\(t_\mNumber{1}\)), \(\gamma_\mNumber{2}\)(\(t_\mNumber{2}\))), which is a smooth immersion
+\textbf{Smoothness:} \(K^{sm} = C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm}\) is the image of the smooth
+map (\(t_{\mNumber{1}}, t_{\mNumber{2}}) \to (\gamma_{\mNumber{1}}(t_{\mNumber{1}}), \gamma_{\mNumber{2}}(t_{\mNumber{2}})),\)which is a smooth immersion
 (the tangent vectors d \(\gamma_\mNumber{1}/dt_\mNumber{1}\) and d \(\gamma_\mNumber{2}/dt_\mNumber{2}\) are nonzero and lie
 in complementary subspaces \(V_\mNumber{1}\) and \(V_\mNumber{2}\)). So \(K^{sm}\) is a smooth Lagrangian
-surface, including at \(v = \gamma_\mNumber{1}(\mNumber{0})\) × \(\gamma_\mNumber{2}(\mNumber{0}).\) ∎
+surface, including at \(v = \gamma_\mNumber{1}(\mNumber{0}) \times \gamma_\mNumber{2}(\mNumber{0}).\) ∎
 
-\textbf{Agreement:} \(K^{sm} = C_\mNumber{1}\) × \(C_\mNumber{2} = K\) outside the region where either
-factor was modified (\textbar p\textbar{} ≤ \(\delta \in V_\mNumber{1}\) or \textbar q\textbar{} ≤ \(\delta \in V_\mNumber{2}\)), so \(K^{sm}\)
+\textbf{Agreement:} \(K^{sm} = C_\mNumber{1} \times C_\mNumber{2} = K\) outside the region where either
+factor was modified (\textbar p\textbar{} \(\le \delta \in V_{\mNumber{1}}\)or \textbar q\textbar{} \(\le \delta \in V_{\mNumber{2}}),\)so \(K^{sm}\)
 agrees with K outside a neighborhood of v of radius \(O(\delta)\).
 
 \hypertarget{6-edge-smoothing-crease-smoothing-along-edges-between-vertices}{%
@@ -274,19 +269,19 @@ neighborhoods. Along each edge arc, two adjacent Lagrangian faces meet at a
 dihedral angle. These creases are smoothed by the standard generating-function
 interpolation:
 
-\textbf{Lemma (edge crease smoothing).} Let \(L_\mNumber{1},\) \(L_\mNumber{2}\) be two Lagrangian half-planes
+\textbf{Lemma (edge crease smoothing).} Let \(L_{\mNumber{1}}, L_{\mNumber{2}}\)be two Lagrangian half-planes
 meeting along a compact edge arc e (a segment of a common boundary ray, away
 from any vertex). Then there exists a smooth Lagrangian surface agreeing with
 \(L_\mNumber{1}\) on one side and \(L_\mNumber{2}\) on the other.
 
-\emph{Proof.} Choose Darboux coordinates (\(x_\mNumber{1}\), \(y_\mNumber{1},\) \(x_\mNumber{2},\) \(y_\mNumber{2}\)) with e along the
+\emph{Proof.} Choose Darboux coordinates (\(x_{\mNumber{1}}, y_{\mNumber{1}}, x_{\mNumber{2}}, y_{\mNumber{2}})\)with e along the
 \(x_\mNumber{1}\)-axis. Each \(L_{i}\) is locally the graph y = grad \(S_{i}(x)\) for quadratic \(S_{i}.\)
-Define \(S_{eps}(x) = \chi(x_\mNumber{1}/eps)\) \(S_\mNumber{1}(x)\) + (1 - \(\chi\)(\(x_\mNumber{1}\)/eps)) \(S_\mNumber{2}(x)\) for a
+Define \(S_{eps}(x) = \chi(x_{\mNumber{1}}/eps) S_{\mNumber{1}}(x) +\)(1 - \(\chi(x_{\mNumber{1}}\)/eps)) \(S_\mNumber{2}(x)\) for a
 smooth cutoff \(\chi\). The graph y = grad \(S_{eps}\) is Lagrangian (graph of the
 exact 1-form \(dS_{eps}\)). For any fixed eps \textgreater{} 0, this gives a smooth Lagrangian
 surface replacing the crease along e. ∎
 
-(The \(C^\mNumber{1}\) control issues noted in earlier drafts do not arise here: the
+(The \(\mathbb{C}^{\mNumber{1}}\) control issues noted in earlier drafts do not arise here: the
 crease smoothing is applied only along edge arcs that are INTERIOR to edges
 (between vertex neighborhoods), not at vertices. Since the edge arcs are at
 positive distance from all vertices, and the smoothing width eps can be
@@ -302,15 +297,15 @@ in thin tubular neighborhoods of the edge arcs.)
 \begin{itemize}
 \tightlist
 \item
-  \(B_{i}\) contains no other vertex \(v_{j}\) \((j \neq i)\), and
+  \(B_{i}\) contains no other vertex \(v_{j} (j \neq i),\)and
 \item
   \(B_{i}\) intersects only the edges and faces incident to \(v_{i}.\)
 \end{itemize}
 
-Such radii exist because the vertex set is finite and discrete in \(R^\mNumber{4}.\)
+Such radii exist because the vertex set is finite and discrete in \(\mathbb{R}^{\mNumber{4}}\).
 Within each \(B_{i},\) apply the product smoothing (Section 5a) using the
-\(V_\mNumber{1}\) ⊕ \(V_\mNumber{2}\) decomposition from Section 3. This replaces K ∩ \(B_{i} = C_\mNumber{1}\) × \(C_\mNumber{2}\)
-with the smooth Lagrangian surface \(C_\mNumber{1}^{sm}\) × \(C_\mNumber{2}^{sm}.\)
+\(V_{\mNumber{1}} \oplus V_{\mNumber{2}}\)decomposition from Section 3. This replaces K ∩ \(B_{i} = C_\mNumber{1} \times C_\mNumber{2}\)
+with the smooth Lagrangian surface \(C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm}.\)
 
 \textbf{Commutativity:} Since the balls \({B_{i}}\) are pairwise disjoint, the
 vertex smoothings have disjoint support and commute.
@@ -340,34 +335,34 @@ on the annular region \(\delta\) \textless{} \textbar x\textbar{} \textless{} \(
 Lagrangian surface.
 
 \textbf{Step 7c: Global Hamiltonian isotopy.} Each smoothing is parameterized by
-a width parameter t (delta for vertices, eps for edges). As t → 0, the
-smoothing region shrinks and \(K_{t}\) → \(K = K_\mNumber{0} \in C^\mNumber{0},\) giving the topological
+a width parameter t (delta for vertices, eps for edges). As t \(\to\) 0, the
+smoothing region shrinks and \(K_{t} \to K = K_{\mNumber{0}} \in \mathbb{C}^{\mNumber{0}},\)giving the topological
 isotopy on {[}0, 1{]}. It remains to show \(K_{t}\) is a \emph{Hamiltonian} isotopy
 for \(t > \mNumber{0}\).
 
 \textbf{Edge smoothings are Hamiltonian.} The family of generating functions
-\(S_{t}(x) = \chi(x_\mNumber{1}/t)\) \(S_\mNumber{1}(x)\) + (1 - \(\chi\)(\(x_\mNumber{1}\)/t)) \(S_\mNumber{2}(x)\) defines a smooth
-1-parameter family of Lagrangian graphs y = grad \(S_{t}(x) \in T^ \ast R^\mNumber{2}.\) By
+\(S_{t}(x) = \chi(x_{\mNumber{1}}/t) S_{\mNumber{1}}(x) +\)(1 - \(\chi(x_{\mNumber{1}}\)/t)) \(S_\mNumber{2}(x)\) defines a smooth
+1-parameter family of Lagrangian graphs y = grad \(S_{t}(x) \in T^{\mDualStar} \mathbb{R}^{\mNumber{2}}\). By
 the Weinstein Lagrangian neighborhood theorem (Weinstein 1971, Theorem 6.1),
 a smooth family of exact Lagrangian submanifolds in an exact symplectic
-manifold (here \(T^ \ast R^\mNumber{2}\) with \(\lambda = y\) dx) is generated by a Hamiltonian:
+manifold (here \(T^{\mDualStar} \mathbb{R}^{\mNumber{2}}\) with \(\lambda = y\) dx) is generated by a Hamiltonian:
 the 1-form \(i_{d/dt}\)(omega)\textbar{}\emph{\({K_{t}}\) is exact (it equals d(\(S_{t}\)\textbar{}}\{\(K_{t}\)\})),
 so the isotopy is Hamiltonian with generating function \(H_{t} = dS_{t}/dt\)
 evaluated on the Lagrangian.
 
 \textbf{Vertex smoothings are Hamiltonian.} The vertex smoothing is a product:
-\(K_{t}^{vertex} = C_\mNumber{1}^{sm}(t)\) × \(C_\mNumber{2}^{sm}(t) \in V_\mNumber{1}\) × \(V_\mNumber{2}.\) Each \(C_{j}^{sm}(t)\)
-is a smooth 1-parameter family of curves in (\(V_{j}\), \(\omega_{j}\)) ≅ (\(R^\mNumber{2}\), dx∧dy).
+\(K_{t}^{vertex} = C_\mNumber{1}^{sm}(t) \times C_\mNumber{2}^{sm}(t) \in V_\mNumber{1} \times V_\mNumber{2}.\) Each \(C_{j}^{sm}(t)\)
+is a smooth 1-parameter family of curves in (\(V_{j}, \omega_{j})\)≅ (\(\mathbb{R}^{\mNumber{2}}\), dx\(\wedge\)dy).
 In a 2-dimensional exact symplectic manifold, EVERY isotopy of compact
 (or compactly supported) Lagrangian submanifolds is Hamiltonian. This is
-because \(V_{j} = R^\mNumber{2}\) is simply connected, so the flux homomorphism
-Flux: \(\pi_\mNumber{1}(Symp)\) → \(H^\mNumber{1}\)(L; R) is trivial (no non-Hamiltonian symplectic
+because \(V_{j} = \mathbb{R}^{\mNumber{2}}\) is simply connected, so the flux homomorphism
+Flux: \(\pi_{\mNumber{1}}(Symp) \to H^{\mNumber{1}}\)(L; R) is trivial (no non-Hamiltonian symplectic
 isotopies exist). Concretely: the velocity field d/dt of the isotopy
 \(C_{j}^{sm}(t)\) is a symplectic vector field along \(C_{j}^{sm}\)(t); contracting
 with \(\omega_{j}\) gives a closed 1-form on \(C_{j}^{sm}(t),\) which is exact because
-\(H^\mNumber{1}\)(\(C_{j}^{sm}\)(t); R) = 0 (each \(C_{j}^{sm}(t)\) is a noncompact embedded arc
-in \(R^\mNumber{2}\) --- the smoothed corner --- hence contractible). The primitive
-is the Hamiltonian \(H_{j}(t).\) The product isotopy on \(V_\mNumber{1}\) × \(V_\mNumber{2}\) is Hamiltonian
+\(H^{\mNumber{1}}(C_{j}^{sm}\)(t); R) = 0 (each \(C_{j}^{sm}(t)\) is a noncompact embedded arc
+in \(\mathbb{R}^{\mNumber{2}}\) --- the smoothed corner --- hence contractible). The primitive
+is the Hamiltonian \(H_{j}(t).\) The product isotopy on \(V_\mNumber{1} \times V_\mNumber{2}\) is Hamiltonian
 with generating function \(H_\mNumber{1}(t) \mBridgeOperator{+} H_\mNumber{2}(t)\) (see McDuff-Salamon, 3rd ed.,
 Exercise 3.18: product of Hamiltonian isotopies is Hamiltonian).
 
@@ -399,14 +394,13 @@ The smoothing exists because:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  The 4-face + Lagrangian condition forces a symplectic direct sum \(R^\mNumber{4} = V_\mNumber{1}\) ⊕ \(V_\mNumber{2}\)
-  at each vertex (vertex spanning is proved algebraically; opposite edges span
+  The 4-face + Lagrangian condition forces a symplectic direct sum \(\mathbb{R}^{\mNumber{4}} = V_{\mNumber{1}} \oplus V_{\mNumber{2}}\)at each vertex (vertex spanning is proved algebraically; opposite edges span
   complementary symplectic 2-planes)
 \item
   This decomposition forces Maslov index exactly 0 (algebraic, not just generic)
 \item
-  Near each vertex, \(K = C_\mNumber{1}\) × \(C_\mNumber{2}\) (product of corners). Smoothing each corner
-  gives \(K^{sm} = C_\mNumber{1}^{sm}\) × \(C_\mNumber{2}^{sm},\) a smooth Lagrangian surface (product of
+  Near each vertex, \(K = C_\mNumber{1} \times C_\mNumber{2}\) (product of corners). Smoothing each corner
+  gives \(K^{sm} = C_\mNumber{1}^{sm} \times C_\mNumber{2}^{sm},\) a smooth Lagrangian surface (product of
   curves in symplectic factors). No Lagrangian surgery needed at vertices.
 \item
   Edge creases (between vertices) are smoothed by generating function interpolation
@@ -426,11 +420,11 @@ The smoothing exists because:
   \textbf{v1 claimed} Maslov index vanishes by "alternating orientations relative
   to J." \textbf{Replaced} with the precise symplectic direct sum argument: the
   edge-sharing constraint forces \(\omega\) to be block diagonal in the
-  (\(e_\mNumber{1}\), \(e_\mNumber{3},\) \(e_\mNumber{2},\) \(e_\mNumber{4}\)) basis, giving \(\mu = \mNumber{0}\) algebraically.
+  (\(e_{\mNumber{1}}, e_{\mNumber{3}}, e_{\mNumber{2}}, e_{\mNumber{4}})\)basis, giving \(\mu = \mNumber{0}\) algebraically.
 \item
   \textbf{v1 stated} the 3-face obstruction as "nonzero Maslov index."
   \textbf{Corrected:} 3-face Lagrangian vertices don\textquotesingle t have nonzero Maslov index ---
-  they\textquotesingle re impossible (3 isotropic vectors can\textquotesingle t span 3D in \(R^\mNumber{4}\)).
+  they\textquotesingle re impossible (3 isotropic vectors can\textquotesingle t span 3D in \(\mathbb{R}^{\mNumber{4}}\)).
 \item
   \textbf{v1 lacked} numerical verification. \textbf{Added} via verify-p8-maslov-v2.py:
   998/998 valid configurations give \(\mu = \mNumber{0}\); comparison with non-edge-sharing

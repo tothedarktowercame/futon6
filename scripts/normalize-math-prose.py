@@ -32,7 +32,14 @@ UNICODE_TO_TEX = {
     "⊗": r"\otimes",
     "⊕": r"\oplus",
     "∘": r"\circ",
+    "→": r"\to",
+    "←": r"\leftarrow",
+    "∧": r"\wedge",
+    "⊂": r"\subset",
+    "∈": r"\in",
+    "∞": r"\infty",
 }
+UNICODE_MATH_CHAR_RE = re.compile("|".join(re.escape(k) for k in UNICODE_TO_TEX))
 
 N_DEP_RE = re.compile(r"\b([A-Z])-(dependent|independent)\b")
 WHITTAKER_W_RE = re.compile(r"\bW\(\s*pi\s*,\s*psi\s*\)")
@@ -87,6 +94,47 @@ PHI_SET_RE = re.compile(
     r"Phi\(\s*phi\s*\)\s*=\s*\{\s*I\(\s*s\s*,\s*phi\s*,\s*V\s*\)\s*:\s*"
     r"V\s+in\s+W\(\s*pi\s*,\s*psi\s*\)\s*\}\s*·\s*([A-Za-z])"
 )
+COMPLEX_RING_RE = re.compile(r"\bC\[\s*([^\]]+)\]")
+FIELD_POWER_RE = re.compile(r"\b([RCZQ])\^([0-9]+|[A-Za-z])\b")
+COTANGENT_FIELD_RE = re.compile(r"\bT\^\\?\*\s*([RCZQ])\^([0-9]+|[A-Za-z])\b")
+COTANGENT_TOKEN_RE = re.compile(r"\bT\^\\?\*\s*([A-Za-z][A-Za-z0-9_]*)\b")
+OP_CALL_TEXT_RE = re.compile(r"\b(span|ker|rank|dim|codim|trace)\(([^()]+)\)")
+OMEGA_RESTRICT_RE = re.compile(r"\bomega\|_([A-Za-z0-9]+)\b")
+OMEGA_EQ_RE = re.compile(r"\bomega\(([^()]+)\)\s*=\s*([0-9]+)\b")
+
+
+def _unicode_math_char_repl(m: re.Match[str]) -> str:
+    return f"${UNICODE_TO_TEX[m.group(0)]}$"
+
+
+def _complex_ring_repl(m: re.Match[str]) -> str:
+    inner = m.group(1).strip()
+    inner = inner.replace("qF", "q_F")
+    return rf"$\mathbb{{C}}[{inner}]$"
+
+
+def _field_power_repl(m: re.Match[str]) -> str:
+    letter = m.group(1)
+    exp = m.group(2)
+    return rf"$\mathbb{{{letter}}}^{{{exp}}}$"
+
+
+def _cotangent_field_repl(m: re.Match[str]) -> str:
+    letter = m.group(1)
+    exp = m.group(2)
+    return rf"$T^{{\mDualStar}} \mathbb{{{letter}}}^{{{exp}}}$"
+
+
+def _cotangent_token_repl(m: re.Match[str]) -> str:
+    token = _texify_token(m.group(1))
+    return rf"$T^{{\mDualStar}} {token}$"
+
+
+def _op_call_text_repl(m: re.Match[str]) -> str:
+    op = m.group(1)
+    args = m.group(2)
+    args = re.sub(r"\bomega\|_([A-Za-z0-9]+)\b", r"\\omega|_{\1}", args)
+    return rf"$\mOpName{{{op}}}({args})$"
 
 
 def split_inline_code(s: str) -> list[tuple[str, str]]:
@@ -360,6 +408,18 @@ def process_plain_text_segment(s: str) -> str:
     s = re.sub(r"\bfractional ideal I\b", r"fractional ideal $I$", s)
     s = re.sub(r"\bI is a free rank-1 module\b", r"$I$ is a free rank-1 module", s)
     s = re.sub(r"\bof I of the form\b", r"of $I$ of the form", s)
+    s = s.replace("{[}", "[").replace("{]}", "]")
+    s = s.replace("\\textbar{}", "|").replace("\\textbar", "|")
+    s = s.replace("\\textless{}", "<").replace("\\textgreater{}", ">")
+    s = re.sub(r"\^\\?\*(?=[A-Za-z0-9(])", r"^\\*", s)
+    s = COMPLEX_RING_RE.sub(_complex_ring_repl, s)
+    s = COTANGENT_FIELD_RE.sub(_cotangent_field_repl, s)
+    s = COTANGENT_TOKEN_RE.sub(_cotangent_token_repl, s)
+    s = FIELD_POWER_RE.sub(_field_power_repl, s)
+    s = OP_CALL_TEXT_RE.sub(_op_call_text_repl, s)
+    s = OMEGA_RESTRICT_RE.sub(r"$\\omega|_{\1}$", s)
+    s = OMEGA_EQ_RE.sub(r"$\\omega(\1) = \2$", s)
+    s = UNICODE_MATH_CHAR_RE.sub(_unicode_math_char_repl, s)
     return s
 
 
@@ -483,6 +543,7 @@ def run_self_test() -> None:
         ("3 x 4 matrices", r"$3 \times 4$ matrices"),
         ("rotation matrices over Z[√2]", r"rotation matrices over $\mathbb{Z}[\sqrt{2}]$"),
         ("theta = 0 in L_8(Z[Γ])", r"theta = 0 in L_8($\mathbb{Z}[\Gamma]$)"),
+        ("graphs in T^*R^2 are exact.", r"graphs in $T^{\mDualStar} \mathbb{R}^{2}$ are exact."),
         (
             "Consider the map Phi: K(Pi)|_{GL_n} → (fractional ideals of R) defined by "
             "Phi(phi) = { I(s, phi, V) : V in W(pi, psi) } · R. "

@@ -9,7 +9,7 @@ missing data, solve
 
 \[[(Z \times K)^{T} D (Z \times K) + \lambda (I_{r} \times K)] vec(W) = (I_{r} \times K) vec(B),\]
 
-where \(D = S\) \(S^{T}\) is the observation projector (q observed entries out of
+where \(D = S S^{T}\)is the observation projector (q observed entries out of
 N = nM), \(B = T\) Z, and n, r \textless\textless{} q \textless\textless{} N.
 
 \hypertarget{assumptions-used-explicit}{%
@@ -22,7 +22,7 @@ N = nM), \(B = T\) Z, and n, r \textless\textless{} q \textless\textless{} N.
   \(\lambda > \mNumber{0}\).
 \item
   For standard PCG and Cholesky-based preconditioning, use a PD kernel
-  \(K_{\tau} = K \mBridgeOperator{+} \tau\) \(I_{n}\) with \(\tau > \mNumber{0}\) (or assume K is already PD).
+  \(K_{\tau} = K \mBridgeOperator{+} \tau I_{n}\)with \(\tau > \mNumber{0}\) (or assume K is already PD).
 \item
   S is a selection operator, so D is diagonal/projector and sparse by index list.
 \end{enumerate}
@@ -67,7 +67,7 @@ Given x = vec(V), \(V \in R\)\^{}\{n x r\}:
 
   \[(Z \times K_{\tau}) vec(V) = vec(K_{\tau} V Z^{T}).\]
 
-  For each observed coordinate (\(i_{l}\), \(j_{l}\)),
+  For each observed coordinate (\(i_{l}, j_{l}),\)
 
   \[u_{l} = <U[i_{l}, :], Z[j_{l}, :]>.\]
 
@@ -104,12 +104,12 @@ with no \(O(N)\) term.
   \(K_{\tau}\) B: \(O(n^\mNumber{2} r)\)
 \end{enumerate}
 
-So \(b_{\tau}\) = (\(I_{r} \times K_{\tau}\)) vec(B) is formed in \(O(q r + n^\mNumber{2} r)\).
+So \(b_{\tau} = (I_{r} \times K_{\tau})\)vec(B) is formed in \(O(q r + n^\mNumber{2} r)\).
 
 \hypertarget{4-preconditioner-that-matches-the-corrected-algebra}{%
 \subsubsection{4. Preconditioner that matches the corrected algebra}\label{4-preconditioner-that-matches-the-corrected-algebra}}
 
-Use \(D = S\) \(S^{T}\) and whiten by \(K_{\tau}^{-\mNumber{1}/\mNumber{2}}:\)
+Use \(D = S S^{T}\)and whiten by \(K_{\tau}^{-\mNumber{1}/\mNumber{2}}:\)
 
 \[x = (I_{r} \times K_{\tau}^{-\mNumber{1}/\mNumber{2}}) y.\]
 
@@ -142,7 +142,7 @@ Khatri-Rao identity still gives efficient Gram formation:
 
 \[Z^{T} Z = Hadamard_{i} (A_{i}^{T} A_{i}),\]
 
-cost \(O(sum_{i} n_{i} r^\mNumber{2})\).
+cost \(O(\sum_{i} n_{i} r^\mNumber{2})\).
 
 Preconditioner apply:
 
@@ -159,9 +159,9 @@ For SPD \(A_{\tau}\) and SPD P, standard PCG gives
 
 \[||e_{t}||_{A_{\tau}} \le \mNumber{2} ((sqrt(\kappa)-\mNumber{1})/(sqrt(\kappa)+\mNumber{1}))^{t} ||e_\mNumber{0}||_{A_{\tau}},\]
 
-with \(\kappa\) = cond(\(P^{-\mNumber{1}/\mNumber{2}}\) \(A_{\tau}\) \(P^{-\mNumber{1}/\mNumber{2}}\)), so
+with \(\kappa\) = cond(\(P^{-\mNumber{1}/\mNumber{2}} A_{\tau} P^{-\mNumber{1}/\mNumber{2}}),\)so
 
-\[t = O(sqrt(\kappa) log(\mNumber{1}/eps)).\]
+\[t = O(sqrt(\kappa) \log(\mNumber{1}/eps)).\]
 
 To claim "fast" convergence, add a spectral-equivalence hypothesis, e.g.
 
@@ -182,7 +182,7 @@ the sampling pattern satisfies a restricted isometry-type condition:
 with \(q \ge C\) n log n (for a universal constant C), matrix concentration
 results (Tropp 2011, Theorem 1.6) give \(\delta = O(sqrt(n log n / q))\) with
 high probability. Under this regime, \(\kappa = O(\mNumber{1})\) and PCG converges in
-\(O(log(\mNumber{1}/eps))\) iterations.
+\(O(\log(\mNumber{1}/eps))\) iterations.
 
 \hypertarget{6-complexity-summary}{%
 \subsubsection{6. Complexity summary}\label{6-complexity-summary}}
@@ -193,9 +193,9 @@ Setup per ALS outer step:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(Cholesky(K_{\tau}):\) \(O(n^\mNumber{3})\)
+  \(Cholesky(K_{\tau}): O(n^{\mNumber{3}})\)
 \item
-  \(Z^{T}\) Z via Hadamard Grams: \(O(sum_{i} n_{i} r^\mNumber{2})\)
+  \(\mathbb{Z}^{T}\) Z via Hadamard Grams: \(O(\sum_{i} n_{i} r^\mNumber{2})\)
 \item
   Cholesky(H): \(O(r^\mNumber{3})\)
 \item
@@ -216,7 +216,7 @@ Per PCG iteration:
 Total:
 
 \[\begin{aligned}
-O(n^\mNumber{3} + r^\mNumber{3} + sum_{i} n_{i} r^\mNumber{2} + q r + n^\mNumber{2} r \\
+O(n^\mNumber{3} + r^\mNumber{3} + \sum_{i} n_{i} r^\mNumber{2} + q r + n^\mNumber{2} r \\
 + t (n^\mNumber{2} r + q r + n r^\mNumber{2})).
 \end{aligned}\]
 
@@ -227,10 +227,10 @@ In the common regime \(n \ge r\), this simplifies to
 with dependence on q (observed entries) rather than N (all entries).
 
 \textbf{Regime caveat.} When n is large enough that the \(O(n^\mNumber{3})\) Cholesky setup
-dominates (i.e., \(n^\mNumber{3}\) \textgreater{} t(\(n^\mNumber{2}\) \(r \mBridgeOperator{+} q\) r)), the per-ALS-step cost is effectively
+dominates (i.e., \(n^\mNumber{3}\) \textgreater{} t(\(n^{\mNumber{2}} r \mBridgeOperator{+} q\)r)), the per-ALS-step cost is effectively
 \(O(n^\mNumber{3})\). In this regime, low-rank kernel approximations (e.g., Nystrom
 approximation with rank p \textless\textless{} n, reducing the kernel factorization to \(O(n p^\mNumber{2})\))
-or iterative inner solves (conjugate gradient on \(K_{\tau}\) \(y = z\), cost \(O(n^\mNumber{2})\)
+or iterative inner solves (conjugate gradient on \(K_{\tau} y = z,\)cost \(O(n^\mNumber{2})\)
 per inner iteration) can replace the exact Cholesky, reducing the setup to
 \(O(n p^\mNumber{2} + t(n p r + q r))\). This is a well-known practical optimization
 (see Rudi-Calandriello-Rosasco 2017) and is compatible with the PCG framework
@@ -239,45 +239,50 @@ as presented.
 \hypertarget{7-algorithm}{%
 \subsubsection{7. Algorithm}\label{7-algorithm}}
 
-\[\begin{aligned}
-SETUP: \\
-K_{\tau} = K + \tau \ast I_{n} \# \tau > \mNumber{0} if K is only PSD \\
-L_{K} = cholesky(K_{\tau}) \# O(n^\mNumber{3}) \\
-G = hadamard_{product}(A_{i}^{T} A_{i} for i \neq k) \# O(sum_{i} n_{i} r^\mNumber{2}) \\
-c = q / N \\
-H = c \ast G + \lambda \ast I_{r} \\
-L_{H} = cholesky(H) \# O(r^\mNumber{3}) \\
-B = sparse_{mttkrp}(T, Z) \# O(qr) \\
-b = vec(K_{\tau} @ B) \# O(n^\mNumber{2} r) \\
-PCG(A_{\tau} x = b, preconditioner P = H \times K_{\tau}): \\
-x\mNumber{0} = \mNumber{0} \\
-r\mNumber{0} = b \\
-z\mNumber{0} = precond_{solve}(L_{K}, L_{H}, r\mNumber{0}) \# O(n^\mNumber{2} r + n r^\mNumber{2}) \\
-p\mNumber{0} = z\mNumber{0} \\
-repeat until convergence: \\
-w = matvec_{A,\tau}(p) \# O(n^\mNumber{2} r + q r) \\
-\alpha = (r^{T} z) / (p^{T} w) \\
-x = x + \alpha \ast p \\
-r_{new} = r - \alpha \ast w \\
-if ||r_{new}|| \le eps * ||b||: break \\
-z_{new} = precond_{solve}(L_{K}, L_{H}, r_{new}) \\
-\beta = (r_{new}^{T} z_{new}) / (r^{T} z) \\
-p = z_{new} + \beta \ast p \\
-r, z = r_{new}, z_{new} \\
-W = reshape(x, n, r) \\
-matvec_{A,\tau}(v): \\
-V = reshape(v, n, r) \\
-U = K_{\tau} @ V \\
-for each observed (i_{l}, j_{l}): \\
-u_{l} = dot(U[i_{l}, :], Z[j_{l}, :]) \\
-Wprime = sparse(n, M, entries u_{l}) \\
-Y = K_{\tau} @ (Wprime @ Z) + \lambda \ast (K_{\tau} @ V) \\
-return vec(Y) \\
-precond_{solve}(L_{K}, L_{H}, z): \\
-Zp = reshape(z, n, r) \\
-solve K_{\tau} Y H^{T} = Zp using triangular solves with L_{K}, L_{H} \\
-return vec(Y)
-\end{aligned}\]
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{SETUP:}
+\NormalTok{  K\_tau = K + tau * I\_n                    \# tau \textgreater{} 0 if K is only PSD}
+\NormalTok{  L\_K = cholesky(K\_tau)                    \# O(n\^{}3)}
+\NormalTok{  G = hadamard\_product(A\_i\^{}T A\_i for i != k)  \# O(sum\_i n\_i r\^{}2)}
+\NormalTok{  c = q / N}
+\NormalTok{  H = c * G + lambda * I\_r}
+\NormalTok{  L\_H = cholesky(H)                        \# O(r\^{}3)}
+\NormalTok{  B = sparse\_mttkrp(T, Z)                  \# O(qr)}
+\NormalTok{  b = vec(K\_tau @ B)                       \# O(n\^{}2 r)}
+
+\NormalTok{PCG(A\_tau x = b, preconditioner P = H x K\_tau):}
+\NormalTok{  x0 = 0}
+\NormalTok{  r0 = b}
+\NormalTok{  z0 = precond\_solve(L\_K, L\_H, r0)         \# O(n\^{}2 r + n r\^{}2)}
+\NormalTok{  p0 = z0}
+\NormalTok{  repeat until convergence:}
+\NormalTok{    w = matvec\_A\_tau(p)                    \# O(n\^{}2 r + q r)}
+\NormalTok{    alpha = (r\^{}T z) / (p\^{}T w)}
+\NormalTok{    x = x + alpha * p}
+\NormalTok{    r\_new = r {-} alpha * w}
+\NormalTok{    if ||r\_new|| \textless{}= eps * ||b||: break}
+\NormalTok{    z\_new = precond\_solve(L\_K, L\_H, r\_new)}
+\NormalTok{    beta = (r\_new\^{}T z\_new) / (r\^{}T z)}
+\NormalTok{    p = z\_new + beta * p}
+\NormalTok{    r, z = r\_new, z\_new}
+\NormalTok{  W = reshape(x, n, r)}
+
+\NormalTok{matvec\_A\_tau(v):}
+\NormalTok{  V = reshape(v, n, r)}
+\NormalTok{  U = K\_tau @ V}
+\NormalTok{  for each observed (i\_l, j\_l):}
+\NormalTok{    u\_l = dot(U[i\_l, :], Z[j\_l, :])}
+\NormalTok{  Wprime = sparse(n, M, entries u\_l)}
+\NormalTok{  Y = K\_tau @ (Wprime @ Z) + lambda * (K\_tau @ V)}
+\NormalTok{  return vec(Y)}
+
+\NormalTok{precond\_solve(L\_K, L\_H, z):}
+\NormalTok{  Zp = reshape(z, n, r)}
+\NormalTok{  solve K\_tau Y H\^{}T = Zp using triangular solves with L\_K, L\_H}
+\NormalTok{  return vec(Y)}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{key-references-from-futon6-corpus}{%
 \subsection{Key References from futon6 corpus}\label{key-references-from-futon6-corpus}}

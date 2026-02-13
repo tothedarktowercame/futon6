@@ -48,6 +48,24 @@ PLUS_STAR_UNIFY_SNIPPET = (
     "$a$ $+$ $b$. "
     "$c$ $*$ $d$.\n"
 )
+OPNAME_MERGE_SNIPPET = (
+    "L_i = span(e_{i-1,i}, e_{i,i+1}) and ell = ker(omega|_L). "
+    "Then omega(e_i, e_{i+1}) = 0.\n"
+)
+UNICODE_ESCAPE_SNIPPET = (
+    "In R^4 = C^2, we have u ∈ V → W and A ⊂ B. "
+    "Also R = C[q_F^s, q_F^{-s}].\n"
+)
+ALGO_BLOCK_SNIPPET = (
+    "```text\n"
+    "if ||r_new|| <= eps * ||b||: break\n"
+    "Y = K_tau @ (Wprime @ Z) + lambda * (K_tau @ V)\n"
+    "return vec(Y)\n"
+    "```\n"
+)
+COTANGENT_STAR_SNIPPET = (
+    "The graph lies in T^*R^2 and dual vectors live in T^*V.\n"
+)
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -129,6 +147,18 @@ def main() -> int:
     _, out_plus_star = render_snippet(
         repo, normalizer, lua_filter, PLUS_STAR_UNIFY_SNIPPET
     )
+    _, out_opname_merge = render_snippet(
+        repo, normalizer, lua_filter, OPNAME_MERGE_SNIPPET
+    )
+    normalized_unicode_escape, out_unicode_escape = render_snippet(
+        repo, normalizer, lua_filter, UNICODE_ESCAPE_SNIPPET
+    )
+    _, out_algo_block = render_snippet(
+        repo, normalizer, lua_filter, ALGO_BLOCK_SNIPPET
+    )
+    normalized_cotangent, out_cotangent = render_snippet(
+        repo, normalizer, lua_filter, COTANGENT_STAR_SNIPPET
+    )
     out_plus_star_raw = out_plus_star
 
     out = strip_mnumber(out)
@@ -149,6 +179,11 @@ def main() -> int:
     out_prime_single = strip_mnumber(out_prime_single)
     out_compare = strip_mnumber(out_compare)
     out_plus_star = strip_mnumber(out_plus_star)
+    out_opname_merge = strip_mnumber(out_opname_merge)
+    normalized_unicode_escape = strip_mnumber(normalized_unicode_escape)
+    out_unicode_escape = strip_mnumber(out_unicode_escape)
+    normalized_cotangent = strip_mnumber(normalized_cotangent)
+    out_cotangent = strip_mnumber(out_cotangent)
 
     if r"integrals over \(V\)" not in out:
         failures.append("missing inline math for V in 'integrals over V'")
@@ -234,7 +269,7 @@ def main() -> int:
         failures.append("rendered output missing inline math map signature")
     if r"\(\Phi(\phi) = \{ I(s, \phi, V) : V \in W(\pi, \psi) \} \cdot R\)" not in out_map:
         failures.append("rendered output missing inline math map set-expression")
-    if r"\(\bigcup_{\phi}\)" not in out_map:
+    if r"\(\bigcup_{\phi}\)" not in out_map and r"\(\bigcup_{\phi}" not in out_map:
         failures.append("rendered output missing inline math for \\bigcup_{\\phi}")
 
     if r"$\Phi(R(g_0)\,\phi)$" not in normalized_phi_action:
@@ -305,6 +340,42 @@ def main() -> int:
         failures.append("operator unifier regressed to split '$a$ $+$ $b$' form")
     if r"\(c\) \(\ast\) \(d\)" in out_plus_star:
         failures.append("operator unifier regressed to split '$c$ $*$ $d$' form")
+    if r"\mOpName{span}" not in out_opname_merge:
+        failures.append("rendered output missing \\mOpName{span} for span(...)")
+    if r"\mOpName{ker}" not in out_opname_merge:
+        failures.append("rendered output missing \\mOpName{ker} for ker(...)")
+    if r"\(\omega\)\(" in out_opname_merge:
+        failures.append("math-fragment merger regressed to nested '\\(\\omega\\)(' output")
+    if r"\(omega(e_i, e_{i+1}) = 0\)" in out_opname_merge:
+        failures.append("omega(...) expression was not TeX-normalized to \\omega")
+    omega_variants = [
+        r"\(\omega(e_i, e_{i+1}) = 0\)",
+        r"\(\omega(e_i, e_{i + 1}) = 0\)",
+        r"\(\omega(e_{i}, e_{i+1}) = 0\)",
+        r"\(\omega(e_{i}, e_{i + 1}) = 0\)",
+    ]
+    if not any(v in out_opname_merge for v in omega_variants):
+        failures.append("rendered output missing merged omega(e_i, e_{i+1}) = 0 expression")
+    if r"$\mathbb{R}^{4}$" not in normalized_unicode_escape:
+        failures.append("normalizer did not convert R^4 into $\\mathbb{R}^{4}$")
+    if r"$\mathbb{C}^{2}$" not in normalized_unicode_escape:
+        failures.append("normalizer did not convert C^2 into $\\mathbb{C}^{2}$")
+    if r"$\mathbb{C}[q_F^s, q_F^{-s}]$" not in normalized_unicode_escape:
+        failures.append("normalizer did not convert C[q_F^s, q_F^{-s}] into mathbb form")
+    if any(ch in out_unicode_escape for ch in ("∈", "→", "⊂")):
+        failures.append("rendered output still contains raw unicode math symbols")
+    if "C{[}" in out_unicode_escape or "{]}" in out_unicode_escape:
+        failures.append("rendered output still contains escaped bracket artifacts")
+    if r"\begin{aligned}" in out_algo_block:
+        failures.append("algorithm-like code block was incorrectly converted into display math")
+    if r"$T^{\mDualStar} \mathbb{R}^{2}$" not in normalized_cotangent:
+        failures.append("normalizer did not convert T^*R^2 into dual-star cotangent math")
+    if r"$T^{\mDualStar} V$" not in normalized_cotangent:
+        failures.append("normalizer did not convert T^*V into dual-star cotangent math")
+    if r"\(T^{\mDualStar} \mathbb{R}^{2}\)" not in out_cotangent:
+        failures.append("rendered output missing inline math for T^*R^2 cotangent expression")
+    if r"\(T^{\mDualStar} V\)" not in out_cotangent:
+        failures.append("rendered output missing inline math for T^*V dual expression")
 
     style = style_file.read_text(encoding="utf-8")
     if r"\let\MP@orig@ast\ast" not in style:
@@ -313,6 +384,14 @@ def main() -> int:
         failures.append("math-proofread style does not colorize \\ast as bridge operator")
     if r"\colorlet{MPSyntaxBridgeOperatorColor}{SpringGreen}" not in style:
         failures.append("math-proofread style does not define bright green bridge-operator color")
+    if r"\colorlet{MPSyntaxNamedOperatorColor}{BurntOrange}" not in style:
+        failures.append("math-proofread style does not define named-operator color class")
+    if r"\newcommand{\mOpName}[1]" not in style:
+        failures.append("math-proofread style does not define \\mOpName macro")
+    if r"\colorlet{MPSyntaxDualMarkerColor}{Turquoise}" not in style:
+        failures.append("math-proofread style does not define dual-marker color class")
+    if r"\newcommand{\mDualStar}" not in style:
+        failures.append("math-proofread style does not define \\mDualStar macro")
     if r"\renewcommand{\pi}{\mGreek{\MP@orig@pi}}" not in style:
         failures.append("math-proofread style does not colorize \\pi as Greek")
     if r"\renewcommand{\pi}{\mNumber{\MP@orig@pi}}" in style:

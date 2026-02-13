@@ -42,13 +42,13 @@ So the torsion-free argument \(M = X/\Gamma\) does not apply directly.
 \subsection{2. Cohomological Structure via Bredon Framework}\label{2-cohomological-structure-via-bredon-framework}}
 
 Since \(\Gamma\) acts properly and cocompactly on the contractible space \texttt{X},
-the Bredon cohomology \(H^ \ast _\Gamma(X; R_{Q})\) (with the rational constant
+the Bredon cohomology \(H^{\mDualStar}_\Gamma(X; R_{Q})\) (with the rational constant
 coefficient system) satisfies Poincare duality by the orbifold PD theorem
 (Brown, \emph{Cohomology of Groups}, Chapter VIII; Luck, \emph{Transformation Groups
 and Algebraic K-Theory}, Section 6.6).
 
-Concretely, \(H^ \ast (\Gamma; Q) = H^ * (X/\Gamma; Q)\) satisfies \(H^{k} = H^{d-k}\)
-where \(d = dim(X)\).
+Concretely, \(H^{\mDualStar}(\Gamma; Q) = H^{\mDualStar}(X/\Gamma; Q)\) satisfies \(H^{k} = H^{d-k}\)
+where \(d = \mOpName{dim}(X)\).
 
 \textbf{Note on terminology.} With torsion present, saying "\(\Gamma\) is a rational
 PD group" requires this Bredon/orbifold interpretation. The ordinary
@@ -111,7 +111,7 @@ The E2 obligation is discharged by the following construction (details in
 \subsection{4. Obligation S: From Finite Complex to Closed Manifold (Open)}\label{4-obligation-s-from-finite-complex-to-closed-manifold-open}}
 
 Problem 7 asks for a \textbf{closed manifold} \texttt{M} with \(\pi\mNumber{1}(M) = \Gamma\) and
-\(H_ \ast (M_{tilde}; Q) = \mNumber{0}\) for \(* > \mNumber{0}\). Obligation E2 gives a finite CW
+\(H_{\mDualStar}(M_{tilde}; Q) = \mNumber{0}\) for \(* > \mNumber{0}\). Obligation E2 gives a finite CW
 complex with these properties; the upgrade to a closed manifold is the
 remaining open problem.
 
@@ -162,7 +162,7 @@ it, and show the surgery obstruction vanishes.
   rationally acyclic universal cover, but not a Poincare complex. Since
   \texttt{Y\textasciitilde{}} is rationally contractible (by rational Hurewicz from rational
   acyclicity + simple connectivity), the Serre spectral sequence collapses
-  and \(H_ \ast (Y; Q) = H_ \ast (\Gamma; Q)\), which satisfies rational PD
+  and \(H_{\mDualStar}(Y; Q) = H_{\mDualStar}(\Gamma; Q)\), which satisfies rational PD
   (Section 2). But promoting homology-level PD to a chain-level Poincare
   complex structure on \texttt{Y} has not been done.
 \item
@@ -270,7 +270,7 @@ dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \textbf{Quadratic form.} Let \(k = Q(sqrt(\mNumber{2}))\), \(O_{k} = Z[sqrt(\mNumber{2})]\). Define
+  \textbf{Quadratic form.} Let \(k = Q(sqrt(\mNumber{2})), O_{k} = Z[sqrt(\mNumber{2})]\). Define
   \(f = (\mNumber{1} - sqrt(\mNumber{2}))x_\mNumber{0}^\mNumber{2} + x_\mNumber{1}^\mNumber{2} + ... + x_{n}^\mNumber{2} \in n+\mNumber{1}\) variables.
   Under the two real embeddings of \texttt{k}, \texttt{f} has signatures \((n, \mNumber{1})\) and
   \((n+\mNumber{1}, \mNumber{0})\). So \(SO(f)\) gives \(SO(n, \mNumber{1})\) at one place and a compact
@@ -350,12 +350,12 @@ in Sections 3-4.
 Then:
 
 (a) \textbf{(Unconditional)} \(\Gamma \in FH(Q)\): there exists a finite CW complex
-\texttt{Y} with \(\pi_\mNumber{1}(Y) = \Gamma\) and \(H_ \ast (Y_{tilde}; Q) = \mNumber{0}\) for \(* > \mNumber{0}\).
+\texttt{Y} with \(\pi_\mNumber{1}(Y) = \Gamma\) and \(H_{\mDualStar}(Y_{tilde}; Q) = \mNumber{0}\) for \(* > \mNumber{0}\).
 (Both routes discharge E2 via Fowler\textquotesingle s criterion.)
 
 (b) \textbf{(Rotation route)} For the rotation lattice (Approach IV, \(n = \mNumber{7}\),
 congruence ideal \(I = (\mNumber{3}) \in Z[sqrt(\mNumber{2})]\)): there exists a closed
-manifold \texttt{N} with \(\pi_\mNumber{1}(N) = \Gamma\) and \(H_ \ast (N_{tilde}; Q) = \mNumber{0}\) for
+manifold \texttt{N} with \(\pi_\mNumber{1}(N) = \Gamma\) and \(H_{\mDualStar}(N_{tilde}; Q) = \mNumber{0}\) for
 \(* > \mNumber{0}\). The manifold is constructed by equivariant surgery (S-rot-II):
 the surgery obstruction vanishes because the normal bundle of the
 totally geodesic fixed set is trivial (trivial holonomy, forced by the
@@ -397,14 +397,14 @@ discharged. Two sub-options for obligation S:
     g ≡ I mod I, forces the holonomy representation ρ: C → SO(2) to be
     trivial. So ν is a trivial bundle, e(ν) = 0 in H²(F; Z), and the
     circle bundle S(ν) = F × S¹ is a product. The integral intersection
-    form on H₃(F × S¹; Z) is block off-diagonal (hyperbolic), giving
+    form on H₃(F \(\times\) S¹; Z) is block off-diagonal (hyperbolic), giving
     θ = 0 ∈ L₈(Z{[}Γ{]}).
   \end{itemize}
 
   \textbf{With θ = 0:} The equivariant "cut and cap" surgery succeeds. Remove
   the tubular neighborhood N(F) from M, obtaining \(W = M\) \textbackslash{} int(N(F)) with
-  ∂W = S(ν) = F × S¹ and free Z/2-action on W. Since θ = 0, a cap V
-  exists with ∂V = F × S¹ and free Z/2-action. Set M\textquotesingle{} = W ∪ V. Then
+  ∂W = S(ν) = F \(\times\) S¹ and free Z/2-action on W. Since θ = 0, a cap V
+  exists with ∂V = F \(\times\) S¹ and free Z/2-action. Set M\textquotesingle{} = W ∪ V. Then
   N = M\textquotesingle/(Z/2) is a closed manifold with π₁(N) = Γ and rationally
   acyclic universal cover.
 
