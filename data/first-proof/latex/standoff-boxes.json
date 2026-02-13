@@ -45,8 +45,9 @@
       "file": "full/problem4-solution-full.tex",
       "box": "openobligation",
       "title": "What Remains Open for $n \\ge 4$",
-      "mode": "section",
-      "heading": "5b. What remains open for n"
+      "mode": "block",
+      "start_marker": "\\textbf{What remains open for",
+      "end_before": "\\subsubsection{8. Numerical evidence}"
     },
     {
       "file": "full/problem4-solution-full.tex",
