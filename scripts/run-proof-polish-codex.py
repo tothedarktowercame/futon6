@@ -196,6 +196,45 @@ P6_NODE_VERIFICATION_FOCUS = {
     ),
 }
 
+P3_NODE_VERIFICATION_FOCUS = {
+    "p3-problem": (
+        "Verify the existence claim scope: nontrivial CTMC on S_n(lambda) with "
+        "stationary ratio F*_mu/P*_lambda at q=1."
+    ),
+    "p3-s1": (
+        "Verify the chain construction is explicit: ring dynamics, site rates 1/x_i, "
+        "and t-geometric weaker-particle choice."
+    ),
+    "p3-s2": (
+        "Verify finite-state CTMC validity from the explicit generator definition "
+        "q(eta,eta') and diagonal convention q(eta,eta)=-sum_{eta'!=eta}q(eta,eta'). "
+        "Check finite exit rates and vacancy interpretation from lambda_n=0."
+    ),
+    "p3-s3": (
+        "Verify nontriviality means transition rates depend only on (x,t) and current "
+        "configuration dynamics, not on values of F*_mu or P*_lambda."
+    ),
+    "p3-s4": (
+        "Verify AMW Theorem 1.1 is applied with matching hypotheses/domain "
+        "(ring model, q=1, parameter range) to obtain stationary ratio F/P."
+    ),
+    "p3-s5": (
+        "Verify the notation convention/bridge is explicit and logically sufficient: "
+        "either F*_eta := F_eta by definition in this writeup, or an eta-independent "
+        "normalization factor cancels in F*/P*."
+    ),
+    "p3-s6": (
+        "Verify n=2 sanity calculation: two-state CTMC rates 1/x_1 and 1/x_2 produce "
+        "stationary ratio x_1:x_2."
+    ),
+    "p3-s7": (
+        "Verify the final composition for the existence scope only: from explicit "
+        "nontrivial chain construction plus AMW stationary-law theorem plus notation "
+        "convention, conclude existence of a CTMC with stationary ratio F*_mu/P*_lambda."
+        " Treat uniqueness/irreducibility as optional and out-of-scope unless explicitly claimed."
+    ),
+}
+
 
 PROOF_PROFILES = {
     "first-proof-p10": {
@@ -249,6 +288,32 @@ PROOF_PROFILES = {
             "Is the conditional status of the existential conclusion stated clearly?",
             "Are concentration assumptions and martingale parameters explicit and valid?",
             "Are any remaining claims stronger than what is actually proved in-text?",
+        ],
+    },
+    "first-proof-p3": {
+        "role": (
+            "You are a mathematical proof verifier with expertise in Markov chains, "
+            "interacting particle systems, and ASEP/Macdonald polynomial interfaces."
+        ),
+        "task": (
+            "Verify one step of a proof that an explicit nontrivial CTMC has "
+            "stationary ratio F*_mu/P*_lambda at q=1."
+        ),
+        "search_topics": (
+            "t-PushTASEP, finite-state CTMC irreducibility, stationary distributions, "
+            "ASEP/Macdonald polynomial notation conventions."
+        ),
+        "problem_context": [
+            "State space: S_n(lambda), permutations of a restricted partition lambda with distinct parts and lambda_n=0.",
+            "Candidate dynamics: inhomogeneous multispecies t-PushTASEP on an n-site ring with rates 1/x_i and t-geometric weaker-particle choice.",
+            "Target: existence of nontrivial chain with stationary distribution proportional to q=1 ASEP polynomial weights.",
+        ],
+        "node_focus": P3_NODE_VERIFICATION_FOCUS,
+        "synthesis_node_id": "p3-synthesis",
+        "synthesis_points": [
+            "Is the proof complete for existence and nontriviality of the chain?",
+            "Are assumptions and notation conventions explicit and sufficient?",
+            "Are remaining weaknesses theorem-level or validation/citation-level for the existence claim?",
         ],
     },
 }

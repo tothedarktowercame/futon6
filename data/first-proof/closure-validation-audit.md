@@ -20,7 +20,7 @@ Criteria used in this audit:
 |---|---|---|---|---|
 | P1 | closed / fully solved | none found | pending validation | proof text exists; no current codex-results artifact |
 | P2 | closed / fully solved | none found | pending validation | proof text exists; no current codex-results artifact |
-| P3 | closed / fully solved | `problem3-codex-results.jsonl` | partial validation | 9 outputs: 1 verified, 6 plausible, 2 gap |
+| P3 | closed / fully solved | `problem3-codex-results.jsonl` | validated (existence scope) | 9 outputs: 2 verified, 7 plausible, 0 gap, 0 error |
 | P4 | partial | `problem4-lt4-codex-results.jsonl` | partial validation | status already partial; validator includes gaps/errors |
 | P5 | scope-limited | `problem5-codex-results.jsonl` | partial validation | status already limited; validator includes gaps |
 | P6 | partial | `problem6-codex-results.jsonl` (empty) | pending validation | file exists but no outputs |
@@ -34,7 +34,7 @@ Criteria used in this audit:
 Current high-level manuscript labels should distinguish:
 - `provisionally closed in manuscript form, validation pending`
   (P1, P2, P7, P8, P9);
-- `provisionally closed but validator gaps remain`
+- `existence path validated under scoped criterion (no remaining validator gaps in current run)`
   (P3);
 - `conditional with completed node-level verification artifact`
   (P10).

@@ -5,7 +5,7 @@
       "id": "p3-problem",
       "node_type": "question",
       "post_id": 3,
-      "body_text": "Does there exist a nontrivial Markov chain on S_n(lambda) with stationary law F*_mu/P*_lambda at q=1?",
+      "body_text": "For x_i>0 and 0<=t<1, does there exist a nontrivial finite-state CTMC on S_n(lambda) (lambda restricted with lambda_n=0) whose stationary law is pi(mu)=F*_mu(x;1,t)/P*_lambda(x;1,t), where P*_lambda is the sector normalization sum?",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": null
@@ -14,7 +14,7 @@
       "id": "p3-s1",
       "node_type": "answer",
       "post_id": 301,
-      "body_text": "Construct chain: inhomogeneous multispecies t-PushTASEP on ring with site rates 1/x_i and t-geometric weaker-particle choice.",
+      "body_text": "Construct chain explicitly: inhomogeneous multispecies t-PushTASEP on an n-site ring. Site j rings at rate 1/x_j. If species r>0 is active, choose the k-th weaker species clockwise with truncated normalized probability t^(k-1)/[m]_t (m weaker choices), swap, and continue push-cascade until species 0 is displaced; this defines the event update map.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -23,7 +23,7 @@
       "id": "p3-s2",
       "node_type": "answer",
       "post_id": 302,
-      "body_text": "Finite-state CTMC on S_n(lambda): explicit generator, well-defined rates, at least one vacancy from lambda_n=0.",
+      "body_text": "Finite-state CTMC on S_n(lambda) with explicit generator q(eta,eta') = sum_j (1/x_j) Pr(eta->eta' | bell at j); q(eta,eta) = -sum_{eta'!=eta} q(eta,eta'). Rates are nonnegative, finite, and lambda_n=0 gives exactly one vacancy (species 0).",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -32,7 +32,7 @@
       "id": "p3-s3",
       "node_type": "answer",
       "post_id": 303,
-      "body_text": "Nontriviality lemma: transition rates depend only on local species ordering, x_i, and t, not on F*_mu values.",
+      "body_text": "Nontriviality lemma: transition rates are functions of (x,t) and the current ring configuration only (site rates and t-geometric weaker-particle rule), with no dependence on F*_mu values.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -41,7 +41,7 @@
       "id": "p3-s4",
       "node_type": "answer",
       "post_id": 304,
-      "body_text": "AMW Theorem 1.1: stationary distribution of this chain is pi(eta)=F_eta(x;1,t)/P_lambda(x;1,t).",
+      "body_text": "AMW Theorem 1.1 (q=1 ring model, x_i>0, 0<=t<1, fixed content sector) gives stationary distribution pi(eta)=F_eta(x;1,t)/P_lambda(x;1,t), where P_lambda=sum_{nu in sector}F_nu is finite positive normalization.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -50,7 +50,7 @@
       "id": "p3-s5",
       "node_type": "answer",
       "post_id": 305,
-      "body_text": "Notation bridge: F*_eta = F_eta at q=1 (CMW Section 3; Hecke exchange relations fix normalization uniformly). Verified at n=2: both give site weights.",
+      "body_text": "Notation convention for this writeup: at q=1 we set F*_eta := F_eta and P*_lambda := P_lambda; hence F*_mu/P*_lambda = F_mu/P_lambda. If an eta-independent normalization factor is used, it cancels in the ratio.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
@@ -68,7 +68,7 @@
       "id": "p3-s7",
       "node_type": "answer",
       "post_id": 307,
-      "body_text": "Conclusion: yes. Irreducibility via vacancy transport (vacancy-adjacent swaps each have positive rate 1/[m]_t > 0; compose to reach any permutation). Unique stationary distribution F*_mu/P*_lambda.",
+      "body_text": "Conclusion (existence claim): yes. By p3-s4 plus notation convention in p3-s5, there exists a nontrivial finite-state CTMC on S_n(lambda) with stationary ratio F*_mu/P*_lambda at q=1. Uniqueness/irreducibility is optional and not used for the existence conclusion.",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 3
