@@ -662,12 +662,22 @@ weighted bipartite, planted dense) stays below 1 (worst 0.926).
    vertices are processed first, and these have small barrier contributions
    individually even when the barrier is nearly saturated.
 
-**The new gap: No-Skip / vertex-level feasibility (GPL-V).**
+**C6/C7 threshold discrepancy:** C6 used `heavy_ge=False` (heavy if
+tau > eps), C7 used `heavy_ge=True` (heavy if tau >= eps). The strict
+threshold is correct (fixes K_10 knife-edge) but gives smaller I_0 sets.
+With strict threshold: **5/116 runs have skips** (max 3 per run, infeasible
+normY up to 6.68). The No-Skip conjecture as originally stated is FALSE
+with the strict threshold, but the construction still completes because
+other feasible vertices exist.
 
-> At each step t of Construction B, the next vertex v_{t+1} in
-> ell^{I_0}-sorted order satisfies ||Y_t(v_{t+1})|| < 1.
+**The new gap: vertex-level feasibility (GPL-V).**
 
-This replaces BMI as the single remaining gap. Possible attack routes:
+> At each step t of the modified greedy (strict threshold), there
+> **exists** v in R_t with ||Y_t(v)|| < 1.
+
+This is weaker than No-Skip (doesn't require the NEXT vertex to be
+feasible, just SOME vertex). It replaces BMI as the single remaining
+gap. Possible attack routes:
 - Direct bound on ||Y_t(v)|| for the vertex with lowest ell^{I_0} in R_t
 - Potential function tracking max_{v in R} ||Y_t(v)|| (not the average)
 - Probabilistic: random vertex has ||Y_t(v)|| < 1 w.h.p., derandomize
@@ -808,15 +818,20 @@ may have low overlap with C_t(v) for the low-leverage vertex.
    ||Y_t(v)|| < 1 with positive probability, then use method of conditional
    expectations with ell^{I_0} as the conditional ordering.
 
-### If No-Skip is proved
+### If GPL-V is proved
 
-The proof closes completely:
+The proof closes:
 1. Turan: I_0 >= eps*n/3, all I_0-edges strictly light (**proved**)
 2. Sort by ell^{I_0} nondecreasing (**construction**)
-3. No-Skip: v_{t+1} is always barrier-feasible (**the gap**)
-4. S_t = prefix of size t (**follows from No-Skip**)
-5. dbar0 < 1 for the prefix (**proved**, Lemma 3)
+3. GPL-V: exists feasible v in R_t at each step (**the gap**)
+4. Greedy selects such a v (possibly skipping some) (**construction**)
+5. dbar0 < 1: needs adaptation for non-prefix S_t (minor, see below)
 6. |S| = T >= eps^2*n/9 (**proved**, Lemma 7)
+
+**dbar0 with skips:** If S_t has s skips, the partial averages bound
+loosens from 2(m-1)/(m(3-eps)) to 2(m-1)(t+s)/(mt(3-eps)*correction).
+With s <= 3 (max observed) and t ~ eps*m/3 ~ 16, the correction is
+~20% — dbar0 remains < 1 comfortably. Formal verification needed.
 
 Note: the pigeonhole lemma (Lemma 6) and the assembly decomposition
 (Lemma 5) remain valid mathematical facts, but are no longer in the
