@@ -16,32 +16,6 @@
 \item A methodological lesson: wiring-diagram--based verification localized gaps and inconsistencies more effectively than plain narrative drafting.
 \end{itemize}
 
-\section*{Materials and Methods}
-\begin{itemize}[leftmargin=1.5em]
-\item \textbf{Model/runtime split.} Claude Max runs on a remote Linode host; Codex Pro runs on the local laptop workspace (\texttt{/home/joe/code/futon6}).
-\item \textbf{Software/toolchain summary.} Computational checks used Python 3 scripts with NumPy/SciPy for numerical linear algebra and optimization, SymPy for symbolic algebra, mpmath for selected high-precision checks, and PHCpack via \texttt{phcpy} for polynomial-system solving/certification in Problem~4 (Case~3c). Document production and consistency checks used LaTeX (\texttt{pdflatex}) and repository scripts (including \texttt{check-latex-text-truth.py}, wiring-diagram generators, and \texttt{validate-ct.py}).
-\item \textbf{Codex Pro token accounting (local, log-derived).} From \texttt{\~{}/.codex/sessions/*} telemetry (records where the event type is \emph{token\_count}), over the 50-hour window ending 2026-02-13 21:41 UTC (window start: 2026-02-11 19:41 UTC), there were 333 futon6-related Codex rollout traces out of 334 local rollout traces (99.7\%).
-
-\begin{center}
-\small
-\begin{tabular}{@{}lrrc@{}}
-\toprule
-Metric & Total & Per rollout (avg) & \% of total \\
-\midrule
-\textbf{Total tokens} & 965{,}714{,}475 & 2{,}900{,}043 & 100\% \\
-\textbf{Input tokens (all)} & 961{,}719{,}044 & 2{,}887{,}445 & 99.6\% \\
-\quad Cached input & 912{,}686{,}208 & 2{,}740{,}800 & 94.5\% \\
-\quad Non-cached input & 49{,}032{,}836 & 147{,}246 & 5.1\% \\
-\textbf{Output tokens} & 3{,}995{,}431 & 11{,}997 & 0.4\% \\
-\textbf{Reasoning-output tokens} & 2{,}072{,}289 & 6{,}223 & --- \\
-\bottomrule
-\end{tabular}
-\normalsize
-\end{center}
-Interpretation (inference): the large cached-input share likely reflects repeated reuse of stable local context across rollouts, including processed Math StackExchange/MathOverflow corpora and derived prompt artifacts (e.g., \texttt{se-data/math-processed}, \texttt{math-se-processed}/\texttt{mo-processed}, and \texttt{--math-se-dir} workflows in the Codex proof-polish scripts).
-\item \textbf{Claude Max token accounting (Linode, log-derived).} From \texttt{\~{}/.claude/projects/*/} session files on the Linode host, 9 futon6-related Claude~Code sessions were identified (8 contributing within the 50-hour Codex-comparable window). Over the same 50-hour window ending 2026-02-13 21:41 UTC (window start: 2026-02-11 19:41 UTC), aggregated futon6 usage totals: total tokens 791{,}980{,}382; input tokens 789{,}643{,}774 (including cached-read input tokens 752{,}300{,}790, cache-creation input tokens 37{,}221{,}978, non-cached input \(\approx 121{,}006\)); output tokens 2{,}336{,}608. Model: \texttt{claude-opus-4-6} (7{,}754 assistant messages). Full-window totals (9~sessions, 2026-02-08 through 2026-02-13): total tokens 1{,}021{,}665{,}524; output tokens 2{,}798{,}074.
-\end{itemize}
-
 \section*{Introduction}
 This monograph records both the mathematical results and the working process
 behind a compressed, multi-agent proof cycle in \texttt{futon6}.\footnote{Source repository: \url{https://github.com/tothedarktowercame/futon6}} The project
@@ -99,16 +73,16 @@ that made weaknesses visible early and locally.
 \noindent\textbf{Outcome summary (status code [M|V]).} \(\mathbf{M}\in\{\mathbf{C},\mathbf{P},\mathbf{?}\}\) with \(\mathbf{C}=\)closed, \(\mathbf{P}=\)partial, \(\mathbf{?}=\)conditional; \(V\in\{\checkmark,\sim,\mathbf{?}\}\) with \(\checkmark=\)validation-complete, \(\sim=\)partial validation, \(\mathbf{?}=\)not yet fully validated.
 
 \begin{itemize}[leftmargin=1.5em]
-\item \textbf{P1 [C|\(\sim\)].} Mathematical claim is treated as closed; QC uncertainty is mainly verification-track alignment (unified repair vs.\ legacy node ledger). See \hyperref[sn:p1]{\mbox{Status Note P1}} (p.~\pageref{sn:p1}).
-\item \textbf{P2 [C|\(\sim\)].} Local algebraic chain is treated as repaired; result still depends on the cited newvector/test-vector theorem input and ledger alignment. See \hyperref[sn:p2]{\mbox{Status Note P2}} (p.~\pageref{sn:p2}).
+\item \textbf{P1 [C|\(\sim\)].} Mathematical claim is treated as closed; QC uncertainty is mainly verification-track alignment (unified repair vs.\ legacy node ledger). See \hyperref[sn:p1]{\mbox{\textsf{Status~Note~P1}}} (p.~\pageref{sn:p1}).
+\item \textbf{P2 [C|\(\sim\)].} Local algebraic chain is treated as repaired; result still depends on the cited newvector/test-vector theorem input and ledger alignment. See \hyperref[sn:p2]{\mbox{\textsf{Status~Note~P2}}} (p.~\pageref{sn:p2}).
 \item \textbf{P3 [C|\(\checkmark\)].} Validation-complete existence path under the scoped criterion (current run: 2 verified, 7 plausible, 0 gaps). Uniqueness/irreducibility is treated as optional and out of scope for the core existence claim.
-\item \textbf{P4 [P|?].} Proved analytically for $n \le 3$; the $n=4$ branch has strong computational support with one certification step pending; higher $n$ remains open. See \hyperref[sn:p4]{\mbox{Status Note P4}} (p.~\pageref{sn:p4}).
-\item \textbf{P5 [C|\(\sim\)].} Closed in the declared local scope for $F_O$-local connective spectra; indexing-system-level extension remains open. See \hyperref[sn:p5]{\mbox{Status Note P5}} (p.~\pageref{sn:p5}).
-\item \textbf{P6 [P|?].} $K_n$ case proved ($c_0 = 1/3$); one technical gap remains in the general-graph argument (formal $\bar{d} < 1$ bound at $M_t \ne 0$). See \hyperref[sn:p6]{\mbox{Status Note P6}} (p.~\pageref{sn:p6}).
-\item \textbf{P7 [C|\(\sim\)].} Provisionally closed mathematically via the rotation route; independent theorem-ledger re-check remains the main QC holdout. See \hyperref[sn:p7]{\mbox{Status Note P7}} (p.~\pageref{sn:p7}).
-\item \textbf{P8 [C|\(\sim\)].} Geometric closure is treated as repaired, with remaining risk concentrated in canonical ledger synchronization. See \hyperref[sn:p8]{\mbox{Status Note P8}} (p.~\pageref{sn:p8}).
-\item \textbf{P9 [P|\(\sim\)].} Strong computational evidence exists, but the universal converse step is not yet cleanly closed algebraically. See \hyperref[sn:p9]{\mbox{Status Note P9}} (p.~\pageref{sn:p9}).
-\item \textbf{P10 [?|?].} Conditional under explicitly stated assumptions; assumption necessity is explicit, while final closure/validation remains open. See \hyperref[sn:p10]{\mbox{Status Note P10}} (p.~\pageref{sn:p10}).
+\item \textbf{P4 [P|?].} Proved analytically for $n \le 3$; the $n=4$ branch has strong computational support with one certification step pending; higher $n$ remains open. See \hyperref[sn:p4]{\mbox{\textsf{Status~Note~P4}}} (p.~\pageref{sn:p4}).
+\item \textbf{P5 [C|\(\sim\)].} Closed in the declared local scope for $F_O$-local connective spectra; indexing-system-level extension remains open. See \hyperref[sn:p5]{\mbox{\textsf{Status~Note~P5}}} (p.~\pageref{sn:p5}).
+\item \textbf{P6 [P|?].} $K_n$ case proved ($c_0 = 1/3$); one technical gap remains in the general-graph argument (formal $\bar{d} < 1$ bound at $M_t \ne 0$). See \hyperref[sn:p6]{\mbox{\textsf{Status~Note~P6}}} (p.~\pageref{sn:p6}).
+\item \textbf{P7 [C|\(\sim\)].} Provisionally closed mathematically via the rotation route; independent theorem-ledger re-check remains the main QC holdout. See \hyperref[sn:p7]{\mbox{\textsf{Status~Note~P7}}} (p.~\pageref{sn:p7}).
+\item \textbf{P8 [C|\(\sim\)].} Geometric closure is treated as repaired, with remaining risk concentrated in canonical ledger synchronization. See \hyperref[sn:p8]{\mbox{\textsf{Status~Note~P8}}} (p.~\pageref{sn:p8}).
+\item \textbf{P9 [P|\(\sim\)].} Strong computational evidence exists, but the universal converse step is not yet cleanly closed algebraically. See \hyperref[sn:p9]{\mbox{\textsf{Status~Note~P9}}} (p.~\pageref{sn:p9}).
+\item \textbf{P10 [?|?].} Conditional under explicitly stated assumptions; assumption necessity is explicit, while final closure/validation remains open. See \hyperref[sn:p10]{\mbox{\textsf{Status~Note~P10}}} (p.~\pageref{sn:p10}).
 \item Node-level validator outputs and legacy gap flags are tracked under \url{https://github.com/tothedarktowercame/futon6/tree/master/data/first-proof} (files matching \texttt{problem*-codex-results.jsonl}).
 \item Cross-problem closure-vs-validation inventory.\footnote{\url{https://github.com/tothedarktowercame/futon6/blob/master/data/first-proof/closure-validation-audit.md}}
 \end{itemize}
@@ -118,7 +92,7 @@ that made weaknesses visible early and locally.
 \section*{Materials and Methods}
 \begin{itemize}[leftmargin=1.5em]
 \item \textbf{Model/runtime split.} Claude Max runs on a remote Linode host; Codex Pro runs on the local laptop workspace (\texttt{/home/joe/code/futon6}).
-\item \textbf{Software/toolchain summary.} Computational checks used Python 3 scripts with NumPy/SciPy for numerical linear algebra and optimization, SymPy for symbolic algebra, mpmath for selected high-precision checks, and PHCpack via \texttt{phcpy} for polynomial-system solving/certification in Problem~4 (Case~3c). Document production and consistency checks used LaTeX (\texttt{pdflatex}) and repository scripts (including \texttt{check-latex-text-truth.py}, wiring-diagram generators, and \texttt{validate-ct.py}).
+\item \textbf{Software/toolchain summary.} Computational checks used Python~3 scripts with NumPy/SciPy for numerical linear algebra and optimization, SymPy for symbolic algebra (resultants, Sturm sequences, Gr\"obner bases), mpmath for selected high-precision checks, PHCpack via \texttt{phcpy} for polynomial-system solving/certification in Problem~4 (Case~3c), and cvxpy for SDP-based sum-of-squares certificate attempts. Proof-structure analysis used wiring-diagram generators (nine scripts producing JSON and Mermaid flowcharts via the internal \texttt{thread\_performatives} module) and \texttt{validate-ct.py} for classical NER and scope extraction over PlanetMath entries. Pattern tagging and term spotting used Babashka (Clojure) scripts operating on EDN data formats. Document production used \LaTeX{} (\texttt{pdflatex}) with repository consistency-checking scripts (\texttt{check-latex-text-truth.py}, \texttt{check-latex-syntax-violations.py}, \texttt{check-ratchet-fixedw-typesetting.py}).
 \item \textbf{Codex Pro token accounting (local, log-derived).} From local Codex session telemetry (\path{~/.codex/sessions/*}, event type \emph{token\_count}), over the 50-hour window ending 2026-02-13 21:41 UTC (window start: 2026-02-11 19:41 UTC), there were 333 futon6-related Codex rollout traces out of 334 local rollout traces (99.7\%).
 
 \begin{center}
