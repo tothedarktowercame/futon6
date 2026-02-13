@@ -360,14 +360,23 @@ for the Stam inequality. The classical proof of Stam's inequality uses:
 \item Entropy superadditivity: $H'_n(p \boxplus q) \ge H'_n(p) + H'_n(q)$
 \end{enumerate}
 
-Condition (3) is verified numerically for $n \ge 4$ (0 violations in 100 tests each)
-but fails at $n = 3$ (3/100 violations). The Stam inequality for $n = 3$ is already
-proved by direct algebraic methods (Section 5a), so the gap is formal only.
+Condition (3) is \textbf{scale-dependent} and does \textbf{not} hold universally:
+log-discriminant superadditivity fails at all tested $n$ when root spread is large.
+The surplus $H'_n(p \boxplus q) - H'_n(p) - H'_n(q)$ shifts by
+$-\tfrac{n(n-1)}{2}\log c$ when both polynomials are scaled by $c$, making
+violations common for $c > 1$. (At spread $\sigma = 1$: 3.9\% violations for $n=3$,
+1.4\% for $n=4$; at spread $\sigma = 2$: 40\% and 35\% respectively.)
 
-For $n \ge 4$, a proof of the log-discriminant superadditivity (3) would complete
-the Stam inequality proof via the de Bruijn route. The remaining step is a
-``score decomposition'' or ``entropy projection'' argument --- the finite analog
-of the free Cauchy-Schwarz on conjugate variables in Voiculescu (1998).
+Therefore the ``de Bruijn $+$ log-disc superadditivity $\Rightarrow$ Stam'' route
+is \textbf{not viable}. The remaining gap for $n \ge 4$ requires either:
+\begin{itemize}\tightlist
+\item A \textbf{scale-invariant entropy functional} (replacing $H'_n$) that IS
+  superadditive under $\boxplus_n$, or
+\item A \textbf{score decomposition / projection} argument --- the finite analog
+  of Voiculescu's conjugate-variable Cauchy-Schwarz (1998), or
+\item A \textbf{direct algebraic approach} (SOS certificate, Lorentzian polynomial
+  cone restriction) that bypasses the de Bruijn route entirely.
+\end{itemize}
 
 \hypertarget{6-verification-for-small-cases}{%
 \subsubsection{6. Verification for small cases}\label{6-verification-for-small-cases}}

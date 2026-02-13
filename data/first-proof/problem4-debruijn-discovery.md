@@ -134,12 +134,14 @@ To go from de Bruijn to Stam, the classical/free proof uses:
 2. Entropy superadditivity or entropy power inequality
 3. Monotonicity / coupling argument
 
-Our tests show that H'_n is NOT superadditive at n=3 (3/100 violations)
-but IS at n ≥ 4 (0/100 violations). So the naive "de Bruijn + superadditivity
-⟹ Stam" route works for n ≥ 4 but not n=3.
+CORRECTION: H'_n superadditivity is SCALE-DEPENDENT and fails for all n.
+The surplus shifts by -n(n-1)/2 · log(c) when both polynomials are scaled by c.
+At spread σ=1: ~4% violations (n=3), ~1.4% (n=4), ~0.1% (n=5).
+At spread σ=2: ~40% violations for all tested n.
 
-For n=3, the Stam inequality is already proved by direct algebraic methods.
-So the gap is only formal, not mathematical.
+The de Bruijn + log-disc superadditivity route is NOT viable for proving Stam.
+The remaining gap requires a different mechanism: either a scale-invariant
+entropy functional, a score projection argument, or a direct algebraic approach.
 
 ### The Coulomb flow as a proof tool
 
