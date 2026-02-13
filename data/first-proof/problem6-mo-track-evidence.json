@@ -1,0 +1,982 @@
+{
+  "generated": "2026-02-13T04:09:32.394763+00:00",
+  "posts_path": "se-data/mathoverflow.net/Posts.xml",
+  "total_questions": 152893,
+  "tracks": [
+    {
+      "id": "A",
+      "name": "Strongly Rayleigh / edge-negative-dependence transfer",
+      "terms": [
+        "strongly rayleigh",
+        "real stable",
+        "negative dependence",
+        "negative association",
+        "determinantal point process",
+        "determinantal",
+        "random spanning tree",
+        "uniform spanning tree",
+        "matroid basis"
+      ],
+      "weak_hits": 143,
+      "strong_hits": 11,
+      "anchored_weak_hits": 84,
+      "anchored_strong_hits": 6,
+      "prior_signal": "low",
+      "top_hits": [
+        {
+          "post_id": 81840,
+          "year": 2011,
+          "score": 2,
+          "title": "Negatively associated point processes",
+          "tags": "|pr.probability|stochastic-processes|",
+          "matched_terms": [
+            "determinantal",
+            "negative association",
+            "negative dependence"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 455995,
+          "year": 2023,
+          "score": 9,
+          "title": "Is there a determinantal point process proof of the Keating-Snaith formula for the cumulants of the log characteristic polynomial of a random matrix?",
+          "tags": "|reference-request|pr.probability|random-matrices|determinants|cumulants|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 87686,
+          "year": 2012,
+          "score": 7,
+          "title": "Extracting particles from a determinantal point process",
+          "tags": "|pr.probability|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 199624,
+          "year": 2015,
+          "score": 4,
+          "title": "Approximate determinantal point process",
+          "tags": "|pr.probability|probability-distributions|determinants|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 451077,
+          "year": 2023,
+          "score": 2,
+          "title": "Discrete approximation of continuous determinantal point processes",
+          "tags": "|stochastic-processes|determinants|approximation-algorithms|simulation|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 351172,
+          "year": 2020,
+          "score": 1,
+          "title": "A determinantal mixture of probability densities",
+          "tags": "|fa.functional-analysis|pr.probability|ca.classical-analysis-and-odes|st.statistics|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 71306,
+          "year": 2011,
+          "score": 39,
+          "title": "When should we expect Tracy-Widom?",
+          "tags": "|pr.probability|random-matrices|probability-distributions|statistical-physics|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 257562,
+          "year": 2016,
+          "score": 17,
+          "title": "A determinant inequality",
+          "tags": "|inequalities|determinants|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 199109,
+          "year": 2015,
+          "score": 14,
+          "title": "What is the reason the eigenvalues of GUE and CUE matrices tend locally to the same distribution?",
+          "tags": "|random-matrices|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 311314,
+          "year": 2018,
+          "score": 4,
+          "title": "integral kernel function for the SU(N) group",
+          "tags": "|fa.functional-analysis|random-matrices|determinants|integral-kernel|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 362946,
+          "year": 2020,
+          "score": 0,
+          "title": "Theorem 5.3 ([Okounkov-01]) in Borodin and Gorin's lecture note",
+          "tags": "|pr.probability|cv.complex-variables|schur-functions|",
+          "matched_terms": [
+            "determinantal",
+            "determinantal point process"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 210239,
+          "year": 2015,
+          "score": 35,
+          "title": "A curious determinantal inequality",
+          "tags": "|linear-algebra|matrices|inequalities|matrix-analysis|",
+          "matched_terms": [
+            "determinantal"
+          ],
+          "title_or_tags_hits": 1
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Hyperbolic barrier / hyperbolicity cone",
+      "terms": [
+        "hyperbolic polynomial",
+        "hyperbolicity cone",
+        "garding inequality",
+        "self-concordant barrier",
+        "log-det barrier"
+      ],
+      "weak_hits": 12,
+      "strong_hits": 1,
+      "anchored_weak_hits": 8,
+      "anchored_strong_hits": 1,
+      "prior_signal": "low",
+      "top_hits": [
+        {
+          "post_id": 230689,
+          "year": 2016,
+          "score": 7,
+          "title": "Upper bound on the number of convex connected components of the complement of the zero set of a polynomial",
+          "tags": "|convex-geometry|real-algebraic-geometry|hyperbolic-pde|",
+          "matched_terms": [
+            "hyperbolic polynomial",
+            "hyperbolicity cone"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 238487,
+          "year": 2016,
+          "score": 1,
+          "title": "Easy Garding Inequality",
+          "tags": "|fa.functional-analysis|ap.analysis-of-pdes|fourier-analysis|pseudo-differential-operators|",
+          "matched_terms": [
+            "garding inequality"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 459835,
+          "year": 2023,
+          "score": 0,
+          "title": "Characterization of functions whose epigraph has a self-concordant barrier",
+          "tags": "|convex-optimization|",
+          "matched_terms": [
+            "self-concordant barrier"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 41771,
+          "year": 2010,
+          "score": 29,
+          "title": "PDEs as a tool in other domains in mathematics",
+          "tags": "|big-list|ap.analysis-of-pdes|",
+          "matched_terms": [
+            "hyperbolic polynomial"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 461818,
+          "year": 2024,
+          "score": 16,
+          "title": "The determinant as a differential operator",
+          "tags": "|dg.differential-geometry|ap.analysis-of-pdes|differential-operators|determinants|hyperbolic-pde|",
+          "matched_terms": [
+            "hyperbolic polynomial"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 153872,
+          "year": 2014,
+          "score": 10,
+          "title": "Faltings-Riemann-Roch Theorem",
+          "tags": "|ag.algebraic-geometry|cohomology|algebraic-k-theory|grothendieck-riemann-roch|",
+          "matched_terms": [
+            "garding inequality"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 31848,
+          "year": 2010,
+          "score": 5,
+          "title": "Characteristic surface for systems of PDE",
+          "tags": "|ag.algebraic-geometry|linear-algebra|ap.analysis-of-pdes|",
+          "matched_terms": [
+            "hyperbolic polynomial"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 211987,
+          "year": 2015,
+          "score": 5,
+          "title": "Self-concordant function for dual cone",
+          "tags": "|convex-optimization|convex-analysis|",
+          "matched_terms": [
+            "self-concordant barrier"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 182929,
+          "year": 2014,
+          "score": 2,
+          "title": "Hlawka inequality for Lorentz quadratic form",
+          "tags": "|inequalities|hyperbolic-geometry|quadratic-forms|",
+          "matched_terms": [
+            "hyperbolic polynomial"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 278925,
+          "year": 2017,
+          "score": 2,
+          "title": "Coarse grid correction",
+          "tags": "|na.numerical-analysis|matrix-analysis|numerical-linear-algebra|numerical-analysis-of-pde|",
+          "matched_terms": [
+            "garding inequality"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 243988,
+          "year": 2016,
+          "score": 2,
+          "title": "Leray-Ohya Hyperbolic System of PDEs",
+          "tags": "|ap.analysis-of-pdes|hyperbolic-pde|",
+          "matched_terms": [
+            "hyperbolic polynomial"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 415569,
+          "year": 2022,
+          "score": 1,
+          "title": "Cofactor an geometrical mean in $\\mathit{SPD}_3$: a G\u00e5rding-like inequality",
+          "tags": "|ra.rings-and-algebras|matrix-analysis|positivity|",
+          "matched_terms": [
+            "hyperbolic polynomial"
+          ],
+          "title_or_tags_hits": 0
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Interlacing / KS / mixed-characteristic",
+      "terms": [
+        "interlacing polynomial",
+        "interlacing families",
+        "mixed characteristic polynomial",
+        "kadison-singer",
+        "weaver",
+        "real-rooted",
+        "ramanujan graph"
+      ],
+      "weak_hits": 73,
+      "strong_hits": 8,
+      "anchored_weak_hits": 38,
+      "anchored_strong_hits": 8,
+      "prior_signal": "low",
+      "top_hits": [
+        {
+          "post_id": 162056,
+          "year": 2014,
+          "score": 1,
+          "title": "k-th largest root in common interlacing polynomials",
+          "tags": "|real-analysis|polynomials|",
+          "matched_terms": [
+            "interlacing families",
+            "kadison-singer",
+            "real-rooted"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 410787,
+          "year": 2021,
+          "score": 4,
+          "title": "Can resolution of the Kadison-Singer Problem provide progress on the Komlos Conjecture?",
+          "tags": "|reference-request|co.combinatorics|spectral-graph-theory|extremal-combinatorics|discrepancy-theory|",
+          "matched_terms": [
+            "interlacing families",
+            "kadison-singer"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 197975,
+          "year": 2015,
+          "score": 2,
+          "title": "Real-rooted polynomials and higher rank matrices",
+          "tags": "|ag.algebraic-geometry|cv.complex-variables|polynomials|real-algebraic-geometry|multilinear-algebra|",
+          "matched_terms": [
+            "kadison-singer",
+            "real-rooted"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 438200,
+          "year": 2023,
+          "score": 8,
+          "title": "Explicit constructions of Ramanujan graphs",
+          "tags": "|nt.number-theory|graph-theory|spectral-graph-theory|expander-graphs|ramanujan|",
+          "matched_terms": [
+            "interlacing families",
+            "ramanujan graph"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 220321,
+          "year": 2015,
+          "score": 6,
+          "title": "Is there a decomposition strengthening of the Sauer-Shelah Lemma?",
+          "tags": "|co.combinatorics|fa.functional-analysis|computational-complexity|discrete-geometry|",
+          "matched_terms": [
+            "kadison-singer",
+            "weaver"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 243251,
+          "year": 2016,
+          "score": 6,
+          "title": "Equivalence of questions regarding restrictions of pure states",
+          "tags": "|fa.functional-analysis|oa.operator-algebras|banach-spaces|",
+          "matched_terms": [
+            "kadison-singer",
+            "weaver"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 447487,
+          "year": 2023,
+          "score": 2,
+          "title": "Ramanujan graphs in Polynomial time",
+          "tags": "|algebraic-number-theory|algorithms|bipartite-graphs|",
+          "matched_terms": [
+            "interlacing families",
+            "ramanujan graph"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 349822,
+          "year": 2020,
+          "score": 1,
+          "title": "How to prove the rational polynomial is nonincreasing?",
+          "tags": "|cv.complex-variables|polynomials|",
+          "matched_terms": [
+            "kadison-singer",
+            "real-rooted"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 264433,
+          "year": 2017,
+          "score": 13,
+          "title": "$f$ real-rooted forbid truncated $\\frac1f$ to be so?",
+          "tags": "|real-analysis|cv.complex-variables|polynomials|",
+          "matched_terms": [
+            "real-rooted"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 191494,
+          "year": 2014,
+          "score": 13,
+          "title": "What is a \"Ramanujan Graph\"?",
+          "tags": "|co.combinatorics|graph-theory|sp.spectral-theory|spectral-graph-theory|",
+          "matched_terms": [
+            "ramanujan graph"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 248816,
+          "year": 2016,
+          "score": 12,
+          "title": "A criterion for real-rooted polynomials with nonnegative coefficients",
+          "tags": "|polynomials|quadratic-forms|",
+          "matched_terms": [
+            "real-rooted"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 351987,
+          "year": 2020,
+          "score": 12,
+          "title": "Yet another real-rooted polynomial",
+          "tags": "|co.combinatorics|ca.classical-analysis-and-odes|cv.complex-variables|binomial-coefficients|hypergeometric-functions|",
+          "matched_terms": [
+            "real-rooted"
+          ],
+          "title_or_tags_hits": 1
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Near-rank-1 reformulation",
+      "terms": [
+        "rank one matrix",
+        "rank-1 matrix",
+        "best rank one approximation",
+        "rank one perturbation",
+        "principal eigenvector",
+        "top eigenvector",
+        "effective rank",
+        "stable rank"
+      ],
+      "weak_hits": 48,
+      "strong_hits": 0,
+      "anchored_weak_hits": 24,
+      "anchored_strong_hits": 0,
+      "prior_signal": "low",
+      "top_hits": [
+        {
+          "post_id": 396596,
+          "year": 2021,
+          "score": 12,
+          "title": "Group ring with infinite stable rank",
+          "tags": "|gr.group-theory|ra.rings-and-algebras|kt.k-theory-and-homology|algebraic-k-theory|group-rings|",
+          "matched_terms": [
+            "stable rank"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 151774,
+          "year": 2013,
+          "score": 11,
+          "title": "Groups with reduced C*-algebras of stable rank 1",
+          "tags": "|gr.group-theory|oa.operator-algebras|",
+          "matched_terms": [
+            "stable rank"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 381637,
+          "year": 2021,
+          "score": 10,
+          "title": "Stable rank one and corners of $C^\\ast$-algebras",
+          "tags": "|oa.operator-algebras|kt.k-theory-and-homology|c-star-algebras|algebraic-k-theory|",
+          "matched_terms": [
+            "stable rank"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 322280,
+          "year": 2019,
+          "score": 6,
+          "title": "Real rank 0 implies stable rank 1 on $C^\\ast$-algebras?",
+          "tags": "|oa.operator-algebras|c-star-algebras|von-neumann-algebras|noncommutative-geometry|dimension-theory|",
+          "matched_terms": [
+            "stable rank"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 139563,
+          "year": 2013,
+          "score": 6,
+          "title": "Best rank one approximation",
+          "tags": "|matrix-analysis|matrix-inverse|",
+          "matched_terms": [
+            "best rank one approximation"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 221221,
+          "year": 2015,
+          "score": 5,
+          "title": "connected stable rank",
+          "tags": "|at.algebraic-topology|fa.functional-analysis|ra.rings-and-algebras|matrix-analysis|banach-algebras|",
+          "matched_terms": [
+            "stable rank"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 193527,
+          "year": 2015,
+          "score": 4,
+          "title": "About adding a negative definite rank-1 matrix to a symmetric matrix",
+          "tags": "|linear-algebra|matrices|sp.spectral-theory|determinants|",
+          "matched_terms": [
+            "rank-1 matrix"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 135751,
+          "year": 2013,
+          "score": 4,
+          "title": "Nontrivial examples of rings of relative stable rank 1",
+          "tags": "|ac.commutative-algebra|ra.rings-and-algebras|",
+          "matched_terms": [
+            "stable rank"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 198816,
+          "year": 2015,
+          "score": 3,
+          "title": "Spectral radius of a column stochastic matrix perturbed by a rank-1 matrix",
+          "tags": "|matrices|sp.spectral-theory|matrix-analysis|markov-chains|",
+          "matched_terms": [
+            "rank-1 matrix"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 299010,
+          "year": 2018,
+          "score": 3,
+          "title": "How to compute the Eigen values of diagonal plus a rank one matrix?",
+          "tags": "|linear-algebra|eigenvalues|",
+          "matched_terms": [
+            "rank one matrix"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 239258,
+          "year": 2016,
+          "score": 3,
+          "title": "On the principal eigenvector of an elliptic operator",
+          "tags": "|reference-request|fa.functional-analysis|ap.analysis-of-pdes|elliptic-pde|",
+          "matched_terms": [
+            "principal eigenvector"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 319173,
+          "year": 2018,
+          "score": 3,
+          "title": "Principal eigenvector of non-negative symmetric block matrix is approximated by a linear combination of the principal eigenvectors of the blocks",
+          "tags": "|linear-algebra|eigenvalues|spectral-graph-theory|eigenvector|",
+          "matched_terms": [
+            "principal eigenvector"
+          ],
+          "title_or_tags_hits": 1
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Graph-adaptive transfer constant (expansion/spectral geometry)",
+      "terms": [
+        "expander",
+        "expansion",
+        "conductance",
+        "cheeger",
+        "spectral gap",
+        "algebraic connectivity",
+        "effective resistance",
+        "laplacian eigenvalue",
+        "isoperimetric"
+      ],
+      "weak_hits": 2194,
+      "strong_hits": 67,
+      "anchored_weak_hits": 444,
+      "anchored_strong_hits": 60,
+      "prior_signal": "medium",
+      "top_hits": [
+        {
+          "post_id": 365113,
+          "year": 2020,
+          "score": 1,
+          "title": "Cheeger constant of truncated hypercube",
+          "tags": "|reference-request|co.combinatorics|graph-theory|spectral-graph-theory|isoperimetric-problems|",
+          "matched_terms": [
+            "cheeger",
+            "conductance",
+            "expander",
+            "isoperimetric",
+            "spectral gap"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 254997,
+          "year": 2016,
+          "score": 9,
+          "title": "Does it make sense to talk about expansion in irregular graphs?",
+          "tags": "|graph-theory|expander-graphs|",
+          "matched_terms": [
+            "expander",
+            "expansion",
+            "spectral gap"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 209413,
+          "year": 2015,
+          "score": 8,
+          "title": "Cheeger Numbers for 3-regular Graphs",
+          "tags": "|co.combinatorics|graph-theory|expander-graphs|",
+          "matched_terms": [
+            "cheeger",
+            "expander",
+            "isoperimetric"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 278663,
+          "year": 2017,
+          "score": 3,
+          "title": "The algebraic connectivity of graphs with large isoperimetric number",
+          "tags": "|graph-theory|spectral-graph-theory|",
+          "matched_terms": [
+            "algebraic connectivity",
+            "cheeger",
+            "isoperimetric"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 348809,
+          "year": 2019,
+          "score": 3,
+          "title": "Reference request: maximal Cheeger constant for 3-regular graphs",
+          "tags": "|graph-theory|spectral-graph-theory|expander-graphs|",
+          "matched_terms": [
+            "cheeger",
+            "expander",
+            "isoperimetric"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 255213,
+          "year": 2016,
+          "score": 1,
+          "title": "How should one define expansion for irregular graphs?",
+          "tags": "|graph-theory|expander-graphs|",
+          "matched_terms": [
+            "expander",
+            "expansion",
+            "spectral gap"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 278744,
+          "year": 2017,
+          "score": 0,
+          "title": "The Algebraic Connectivity vs. Isoperimetric Number",
+          "tags": "|graph-theory|spectral-graph-theory|",
+          "matched_terms": [
+            "algebraic connectivity",
+            "cheeger",
+            "isoperimetric"
+          ],
+          "title_or_tags_hits": 2
+        },
+        {
+          "post_id": 426750,
+          "year": 2022,
+          "score": 6,
+          "title": "Arbitrary-dimensional expanders?",
+          "tags": "|fa.functional-analysis|graph-theory|mg.metric-geometry|simplicial-stuff|expander-graphs|",
+          "matched_terms": [
+            "expander",
+            "expansion",
+            "spectral gap"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 381892,
+          "year": 2021,
+          "score": 5,
+          "title": "An Indepth Look at Isoperimetry in the Cayley Graph Generated by All Transpositions",
+          "tags": "|reference-request|co.combinatorics|gr.group-theory|permutations|isoperimetric-problems|",
+          "matched_terms": [
+            "expansion",
+            "isoperimetric",
+            "spectral gap"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 313570,
+          "year": 2018,
+          "score": 1,
+          "title": "Tight upper and lower bounds for unbalanced left-regular expander graphs",
+          "tags": "|reference-request|graph-theory|expander-graphs|",
+          "matched_terms": [
+            "expander",
+            "expansion",
+            "spectral gap"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 465887,
+          "year": 2024,
+          "score": 1,
+          "title": "Clique complex of expander graphs simply connected?",
+          "tags": "|graph-theory|gt.geometric-topology|expander-graphs|",
+          "matched_terms": [
+            "cheeger",
+            "expander",
+            "spectral gap"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 318985,
+          "year": 2018,
+          "score": 1,
+          "title": "Expander mixing lemma in combinatoric expanders",
+          "tags": "|spectral-graph-theory|expander-graphs|",
+          "matched_terms": [
+            "expander",
+            "expansion",
+            "isoperimetric"
+          ],
+          "title_or_tags_hits": 1
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "name": "Potential-budget greedy barrier (BSS-like trajectory)",
+      "terms": [
+        "batson",
+        "spielman",
+        "srivastava",
+        "sparsifier",
+        "sparsification",
+        "bss sparsifier",
+        "sherman morrison",
+        "matrix freedman",
+        "matrix bernstein",
+        "matrix martingale"
+      ],
+      "weak_hits": 34,
+      "strong_hits": 8,
+      "anchored_weak_hits": 18,
+      "anchored_strong_hits": 4,
+      "prior_signal": "low",
+      "top_hits": [
+        {
+          "post_id": 191494,
+          "year": 2014,
+          "score": 13,
+          "title": "What is a \"Ramanujan Graph\"?",
+          "tags": "|co.combinatorics|graph-theory|sp.spectral-theory|spectral-graph-theory|",
+          "matched_terms": [
+            "batson",
+            "spielman",
+            "srivastava"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 96782,
+          "year": 2012,
+          "score": 51,
+          "title": "vector balancing problem",
+          "tags": "|co.combinatorics|linear-algebra|oa.operator-algebras|open-problems|combinatorial-geometry|",
+          "matched_terms": [
+            "spielman",
+            "srivastava"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 146233,
+          "year": 2013,
+          "score": 17,
+          "title": "Operator Valued Kadison--Singer Problem",
+          "tags": "|fa.functional-analysis|oa.operator-algebras|",
+          "matched_terms": [
+            "spielman",
+            "srivastava"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 108661,
+          "year": 2012,
+          "score": 8,
+          "title": "approximate uncertainty principle for finite abelian groups",
+          "tags": "|harmonic-analysis|open-problems|",
+          "matched_terms": [
+            "spielman",
+            "srivastava"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 438200,
+          "year": 2023,
+          "score": 8,
+          "title": "Explicit constructions of Ramanujan graphs",
+          "tags": "|nt.number-theory|graph-theory|spectral-graph-theory|expander-graphs|ramanujan|",
+          "matched_terms": [
+            "spielman",
+            "srivastava"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 193658,
+          "year": 2015,
+          "score": 4,
+          "title": "The Bilu-Linial conjecture and Ramanujan graphs",
+          "tags": "|nt.number-theory|graph-theory|sp.spectral-theory|spectral-graph-theory|expander-graphs|",
+          "matched_terms": [
+            "spielman",
+            "srivastava"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 447487,
+          "year": 2023,
+          "score": 2,
+          "title": "Ramanujan graphs in Polynomial time",
+          "tags": "|algebraic-number-theory|algorithms|bipartite-graphs|",
+          "matched_terms": [
+            "spielman",
+            "srivastava"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 162056,
+          "year": 2014,
+          "score": 1,
+          "title": "k-th largest root in common interlacing polynomials",
+          "tags": "|real-analysis|polynomials|",
+          "matched_terms": [
+            "spielman",
+            "srivastava"
+          ],
+          "title_or_tags_hits": 0
+        },
+        {
+          "post_id": 348657,
+          "year": 2019,
+          "score": 4,
+          "title": "Bivariate polynomial divisibility test of Spielman",
+          "tags": "|reference-request|polynomials|finite-fields|",
+          "matched_terms": [
+            "spielman"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 308401,
+          "year": 2018,
+          "score": 1,
+          "title": "Matrix Bernstein for spherical random variables",
+          "tags": "|reference-request|pr.probability|random-matrices|matrix-theory|measure-concentration|",
+          "matched_terms": [
+            "matrix bernstein"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 393275,
+          "year": 2021,
+          "score": 1,
+          "title": "Concentration inequality for matrix martingale with dynamic upper bounds",
+          "tags": "|pr.probability|matrices|measure-concentration|",
+          "matched_terms": [
+            "matrix martingale"
+          ],
+          "title_or_tags_hits": 1
+        },
+        {
+          "post_id": 448066,
+          "year": 2023,
+          "score": 1,
+          "title": "matrix bernstein's inequality: from tail probability to expectation",
+          "tags": "|pr.probability|random-matrices|measure-concentration|",
+          "matched_terms": [
+            "matrix bernstein"
+          ],
+          "title_or_tags_hits": 1
+        }
+      ]
+    }
+  ]
+}

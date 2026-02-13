@@ -513,6 +513,26 @@ Empirically: 440/440 steps pass across all tested graph families.
 c(ε) = ε/9. Problem 6 asks for universal c. This is proved for K_n (c = 1/3)
 but NOT for general graphs. See §4f.
 
+### E+F hybrid reduction (new)
+
+We now have a formal reduction that isolates the remaining closure to a
+two-regime bridge package:
+
+- E-regime: a graph-adaptive condition certifies `m_t = min_v ||Y_t(v)|| < 1`
+- F-regime: a gain-loss inequality `G_t > P_t` certifies `m_t < 1` via
+  the proved AR identity and ratio certificate.
+
+The theorem-level implication chain is now proved in
+`problem6-direction-e-f-proof.md`:
+
+1. If either E-regime or F-regime certificate holds at every step `t<T`,
+   then every step has a good vertex.
+2. Therefore barrier greedy runs to `T = floor(c_step * epsilon * n)`.
+3. Hence `|S| = Omega(epsilon n)` and `L_{G[S]} <= epsilon L`.
+
+So the open work is narrowed to proving the E/F regime lemmas, not the
+trajectory-level reduction itself.
+
 ### Approaches to close Sub-gap 2
 
 **(a) BSS potential function.** Track φ_t = log det(εI - M_t). The BSS
