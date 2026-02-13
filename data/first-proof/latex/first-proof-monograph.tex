@@ -200,6 +200,8 @@
   \let\section\chapter
   \let\subsection\origsection
   \let\subsubsection\origsubsection
+  \renewcommand{\label}[1]{}
+  \renewcommand{\hypertarget}[2]{##2}
   \input{#1}
   \endgroup
 }
@@ -211,6 +213,8 @@
   \let\section\chapter
   \let\subsection\origsection
   \let\subsubsection\origsubsection
+  \renewcommand{\label}[1]{}
+  \renewcommand{\hypertarget}[2]{##2}
   \input{#1}
   \endgroup
 }
@@ -228,6 +232,7 @@
 \fancyhead[LO]{\nouppercase{\rightmark}}
 \fancyhead[RE]{\nouppercase{\leftmark}}
 \renewcommand{\headrulewidth}{0.2pt}
+\setlength{\headheight}{14.5pt}
 
 \title{A First Proof Sprint}
 \author{Claude$^{1}$, Codex$^{2}$, J.~Corneli$^{3}$\thanks{Supervisor, corresponding author: \texttt{joseph.corneli@hyperreal.enterprises}} \\
@@ -236,19 +241,35 @@
 
 \begin{document}
 \frontmatter
+\hypersetup{pageanchor=false}
 \begingroup
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 \maketitle
 \endgroup
+\hypersetup{pageanchor=true}
 \setcounter{footnote}{0}
 \renewcommand{\thefootnote}{\arabic{footnote}}
-
 \vfill
 \noindent{\small\sffamily Reproducibility: built \today{} from
 \texttt{futon6} commit \texttt{74ee898}.\\
 Source: \url{https://github.com/tothedarktowercame/futon6}}
 \clearpage
-
+\setcounter{page}{2}
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+This monograph reports a multi-agent proof sprint on ten research-level
+problems, combining rapid draft generation with adversarial verification,
+targeted repair, and explicit provenance. The workflow uses wiring-diagram
+decompositions of claim dependencies to localize gaps and coordinate
+reviewer-driven revisions. Final outcomes are heterogeneous but explicit:
+Problems 1, 2, 3, 7, 8, and 9 are considered closed and fully solved;
+Problem 10 is closed under clearly stated standard assumptions; Problems 4 and
+6 are partial, with named remaining obligations in the general case (including
+an unconditional $K_n$ result for Problem 6 with $c_0 = 1/3$); and Problem 5 is
+solved in a scope-limited form for $F_O$-local connective spectra. The main
+methodological result is that structure-aware verification and layer-switching
+strategies improve reliability and calibration in compressed proof sprints.
+\clearpage
 \tableofcontents
 
 \chapter*{Reader Guide}
@@ -265,11 +286,11 @@ This document is organized in five parts.
 \medskip
 \noindent\textbf{Status legend.}
 Each problem carries one of three designations:
-\textbf{Proved}~(complete argument, possibly with minor caveats);
-\textbf{Conditional}~(result depends on a clearly stated assumption);
-\textbf{Open}~(obstruction characterized, no proof offered).
-Problem~6 is proved for $K_n$ ($c = 1/3$) with a narrow technical gap remaining for general graphs.
-Problem~7 is treated as closed via the rotation-route theorem chain.
+\textbf{Closed}~(considered fully solved);
+\textbf{Partial}~(proved in key cases, with explicit remaining obligations);
+\textbf{Conditional}~(closed under clearly stated assumptions).
+
+Current outcome summary: Problems 1, 2, 3, 7, 8, and 9 are treated as fully solved; Problem 10 is closed under stated assumptions; Problem 5 is solved in a scope-limited form; and Problems 4 and 6 are partial with explicit remaining obligations in the general case.
 \input{intro-making-of}
 
 \mainmatter
@@ -342,8 +363,12 @@ This revision treats the problem as closed via the rotation route. Fowler's crit
 \part{Proof Patterns}
 \input{part4-proof-patterns}
 
-% \part{Color Plates}
-% \input{color-plates}  % uncomment when color-plates.tex exists
+\IfFileExists{color-plates.tex}{
+  \part{Color Plates}
+  \input{color-plates}
+}{
+  \typeout{[first-proof-monograph] color-plates.tex not found; skipping Color Plates part.}
+}
 
 \backmatter
 \begin{thebibliography}{99}
