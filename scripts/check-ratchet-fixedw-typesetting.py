@@ -446,6 +446,18 @@ def main() -> int:
         failures.append("math-proofread style does not set integer/number color to Red")
     if r"\colorlet{MPSyntaxDelimiterColor}{Magenta}" not in style:
         failures.append("math-proofread style does not set delimiters to Magenta")
+    if r"\let\MP@orig@textlbrace\{" not in style:
+        failures.append("math-proofread style does not preserve original text left brace (\\{)")
+    if r"\let\MP@orig@textrbrace\}" not in style:
+        failures.append("math-proofread style does not preserve original text right brace (\\})")
+    if r"\renewcommand{\{}{{\color{MPSyntaxDelimiterColor}\MP@orig@textlbrace}}" not in style:
+        failures.append("math-proofread style does not colorize text left brace (\\{) as delimiter")
+    if r"\renewcommand{\}}{{\color{MPSyntaxDelimiterColor}\MP@orig@textrbrace}}" not in style:
+        failures.append("math-proofread style does not colorize text right brace (\\}) as delimiter")
+    if r"\let\{\MP@orig@textlbrace" not in style:
+        failures.append("math-proofread style does not restore original text left brace on disable")
+    if r"\let\}\MP@orig@textrbrace" not in style:
+        failures.append("math-proofread style does not restore original text right brace on disable")
 
     if failures:
         for item in failures:

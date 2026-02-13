@@ -132,6 +132,8 @@
 \let\MP@orig@rbrace\rbrace
 \let\MP@orig@lbrack\lbrack
 \let\MP@orig@rbrack\rbrack
+\let\MP@orig@textlbrace\{
+\let\MP@orig@textrbrace\}
 
 \begingroup\catcode`\<\active\gdef<{\mathrel{\color{MPSyntaxComparisonColor}\mathchar"313C}}\endgroup
 \begingroup\catcode`\>\active\gdef>{\mathrel{\color{MPSyntaxComparisonColor}\mathchar"313E}}\endgroup
@@ -237,6 +239,8 @@
     \renewcommand{\rbrace}{\mDelimiter{\MP@orig@rbrace}}
     \renewcommand{\lbrack}{\mDelimiter{\MP@orig@lbrack}}
     \renewcommand{\rbrack}{\mDelimiter{\MP@orig@rbrack}}
+    \renewcommand{\{}{{\color{MPSyntaxDelimiterColor}\MP@orig@textlbrace}}
+    \renewcommand{\}}{{\color{MPSyntaxDelimiterColor}\MP@orig@textrbrace}}
 
     \renewcommand{\sin}{\mFunction{\MP@orig@sin}}
     \renewcommand{\cos}{\mFunction{\MP@orig@cos}}
@@ -330,6 +334,8 @@
     \let\rbrace\MP@orig@rbrace
     \let\lbrack\MP@orig@lbrack
     \let\rbrack\MP@orig@rbrack
+    \let\{\MP@orig@textlbrace
+    \let\}\MP@orig@textrbrace
 
     \MP@DeactivateRawMathChars
   \fi
