@@ -99,7 +99,7 @@ The chain above is nontrivial in the sense asked by the problem:
   No transition probability is defined using values of \(F^{\prime}_{\mu}\) or \(P^{\prime}_{\lambda}\).
 \end{itemize}
 
-So this is not a Metropolis-style chain "described using the target weights."
+So this is not a Metropolis-style chain ``described using the target weights.''
 
 \hypertarget{4-main-theorem-stationary-distribution}{%
 \subsubsection{4. Main theorem (stationary distribution)}\label{4-main-theorem-stationary-distribution}}
@@ -154,7 +154,7 @@ fixed by the leading-term convention, which is uniform across the state
 space \(S_{n}(\lambda).\) Concretely, at \(q = \mNumber{1}\) both families specialize to the same
 t-weight formula, so \(\alpha = \mNumber{1}\) and \(F^{\prime}_{\eta} = F_{\eta}\).
 
-\textbf{Verification for \(n = \mNumber{2}\).} Take \(\lambda =\) (a, 0). Both conventions give
+\textbf{Verification for \(n = \mNumber{2}\).} Take \(\lambda = (a, \mNumber{0})\). Both conventions give
 \(F_{(a,\mNumber{0})}(x_{\mNumber{1}}, x_{\mNumber{2}}\); 1, t) \(= x_{\mNumber{1}}\) and \(F_{(\mNumber{0},a)}(x_{\mNumber{1}}, x_{\mNumber{2}}\); 1, t) \(= x_{\mNumber{2}}\)
 (the single-species case reduces to site weights). The ratio
 \(F^{\prime}_{\eta} / P^{\prime}_{\lambda} = F_{\eta} / P_{\lambda} = x_{i} / (x_{\mNumber{1}} \mBridgeOperator{+} x_{\mNumber{2}})\) in both conventions.
@@ -162,15 +162,15 @@ t-weight formula, so \(\alpha = \mNumber{1}\) and \(F^{\prime}_{\eta} = F_{\eta}
 \hypertarget{6-sanity-check-n2-reduction}{%
 \subsubsection{\texorpdfstring{6. Sanity check: \(n = \mNumber{2}\) reduction}{6. Sanity check: n = \textbackslash mNumber\{2\} reduction}}\label{6-sanity-check-n2-reduction}}
 
-Take \(\lambda\)=(a,0), state space \(\{(a,\mNumber{0}),(\mNumber{0},a)\}\). There is one non-vacancy and one
+Take \(\lambda = (a, \mNumber{0})\), state space \(\{(a, \mNumber{0}), (\mNumber{0}, a)\}\). There is one non-vacancy and one
 vacancy. Bells ring at rates \(\mNumber{1}/x_\mNumber{1}\) and \(\mNumber{1}/x_\mNumber{2}\).
 
 \begin{itemize}
 \tightlist
 \item
-  \((a,\mNumber{0}) \to (\mNumber{0},a)\) at rate \(\mNumber{1}/x_\mNumber{1}\)
+  \((a, \mNumber{0}) \to (\mNumber{0}, a)\) at rate \(\mNumber{1}/x_\mNumber{1}\)
 \item
-  \((\mNumber{0},a) \to (a,\mNumber{0})\) at rate \(\mNumber{1}/x_\mNumber{2}\)
+  \((\mNumber{0}, a) \to (a, \mNumber{0})\) at rate \(\mNumber{1}/x_\mNumber{2}\)
 \end{itemize}
 
 So the stationary distribution is
@@ -192,7 +192,7 @@ For \(x_{i} > \mNumber{0}\) and \(\mNumber{0} \le t < \mNumber{1}\), the inhomog
 (a) A well-defined finite CTMC (Section 2: finite state space, explicit
 nonnegative rates).
 
-(b) Nontrivial: transition rates depend on (x, t) and local species ordering,
+(b) Nontrivial: transition rates depend on \((x, t)\) and local species ordering,
 not on values of \(F^{\prime}_{\mu}\) or \(P^{\prime}_{\lambda}\) (Section 3).
 
 (c) Has stationary distribution \(\pi(\eta) = F_{\eta}\)(x; 1, t) / \(P_{\lambda}\)(x; 1, t)
@@ -238,9 +238,9 @@ Therefore the answer is \textbf{Yes}.
 \tightlist
 \item
   Arvind Ayyer, James Martin, Lauren Williams,
-  "The Inhomogeneous t-PushTASEP and Macdonald Polynomials at q=1",
+  ``The Inhomogeneous t-PushTASEP and Macdonald Polynomials at q=1",
   arXiv:2403.10485, Theorem 1.1 and Proposition 2.4.
 \item
   Sylvie Corteel, Olya Mandelshtam, Lauren Williams,
-  "From multiline queues to Macdonald polynomials", for ASEP polynomial context.
+  ``From multiline queues to Macdonald polynomials'', for ASEP polynomial context.
 \end{itemize}

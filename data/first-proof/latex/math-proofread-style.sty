@@ -1,10 +1,11 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{math-proofread-style}[2026/02/12 v0.8 Stable syntax-class color map]
+\ProvidesPackage{math-proofread-style}[2026/02/13 v0.9 Stable syntax-class color map]
 
 \RequirePackage[dvipsnames]{xcolor}
 \RequirePackage{array}
+\RequirePackage{amsmath}
 \providecommand{\mathup}[1]{\mathrm{#1}}
-\providecommand{\text}[1]{\mathrm{#1}}
+\providecommand{\text}[1]{\mbox{#1}}
 \providecommand{\Integral}{\int}
 \providecommand{\integral}{\Integral}
 
@@ -427,7 +428,7 @@
     \textbf{Syntax class} & \textbf{Colour} & \textbf{Examples} \\
     Greek letters & \textcolor{MPSyntaxGreekColor}{Mulberry} & $\mGreek{\alpha},\,\mGreek{\beta},\,\mGreek{\Gamma}$ \\
     Binary operators & \textcolor{MPSyntaxOperatorColor}{Purple} & $x\mOperator{\times}y,\,U\mOperator{\cup}V,\,A\mOperator{\otimes}B$ \\
-    Additive/product bridges & \textcolor{MPSyntaxBridgeOperatorColor}{SeaGreen} & $a+b,\,u\mBridgeOperator{\ast}v$ \\
+    Additive/product bridges & \textcolor{MPSyntaxBridgeOperatorColor}{SeaGreen} & $a+b,\,a-b,\,u\mBridgeOperator{\ast}v$ \\
     Named operators & \textcolor{MPSyntaxNamedOperatorColor}{BurntOrange} & $\mOpName{span}(v_1,v_2),\,\mOpName{ker}(T),\,\mOpName{rank}(A),\,\mOpName{dim}(V)$ \\
     Dual/cotangent marker & \textcolor{MPSyntaxDualMarkerColor}{Turquoise} & $T^{\mDualStar}M,\,E^{\mDualStar}$ \\
     Comparison operators & \textcolor{MPSyntaxComparisonColor}{BritishRacingGreen} & $x\mCompare{=}y,\,x\mCompare{\le}y,\,x\mCompare{\neq}y,\,x\mCompare{\approx}y$ \\

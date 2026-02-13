@@ -320,7 +320,15 @@ local function normalize_infix_ops(s)
       if is_math_atom(ac) and is_math_atom(bc) then
         return ap .. ac .. as .. " " .. op_tex .. " " .. bp .. bc .. bs
       end
-      return a .. " " .. (op_tex == "\\times" and "x" or (op_tex == "\\ast" and "*" or "in")) .. " " .. b
+      local fallback = "in"
+      if op_tex == "\\times" then
+        fallback = "x"
+      elseif op_tex == "\\ast" then
+        fallback = "*"
+      elseif op_tex == "\\mBridgeOperator{-}" then
+        fallback = "-"
+      end
+      return a .. " " .. fallback .. " " .. b
     end
   end
 
@@ -336,6 +344,7 @@ local function normalize_infix_ops(s)
     prev = s
     s = s:gsub("(%S+)%s+x%s+(%S+)", repl("\\times"))
     s = s:gsub("(%S+)%s*%*%s*(%S+)", repl("\\ast"))
+    s = s:gsub("(%S+)%s+%-%s+(%S+)", repl("\\mBridgeOperator{-}"))
     s = s:gsub("(%S+)%s+in%s+(%S+)", repl("\\in"))
   end
   return s
@@ -897,6 +906,8 @@ local function build_binary_expr(lhs, lhs_is_math, op, rhs, rhs_is_math)
     op_tex = "\\times"
   elseif op == "+" then
     op_tex = "\\mBridgeOperator{+}"
+  elseif op == "-" then
+    op_tex = "\\mBridgeOperator{-}"
   elseif op == "*" then
     op_tex = "\\ast"
   elseif op == "=" then
@@ -934,7 +945,7 @@ local function extract_binary_operator(el)
     return nil
   end
   if el.t == "Str" then
-    if el.text == "in" or el.text == "x" or el.text == "+" or el.text == "*" then
+    if el.text == "in" or el.text == "x" or el.text == "+" or el.text == "-" or el.text == "*" then
       return el.text
     end
     if el.text == "=" or el.text == "<" or el.text == ">" or el.text == "<=" or el.text == ">=" or
@@ -949,8 +960,11 @@ local function extract_binary_operator(el)
   end
   if el.t == "Math" and el.mathtype == "InlineMath" then
     local txt = trim(el.text)
-    if txt == "+" or txt == "=" or txt == "<" or txt == ">" then
+    if txt == "+" or txt == "-" or txt == "=" or txt == "<" or txt == ">" then
       return txt
+    end
+    if txt == "\\mBridgeOperator{-}" then
+      return "-"
     end
     if txt == "\\le" or txt == "\\leq" then
       return "<="
@@ -1435,6 +1449,9 @@ end
 
 function Str(el)
   local s = el.text
+  if s == "Rankin--Selberg" or s == "Rankin-/-Selberg" or s == "Rankin-\\/-Selberg" then
+    return pandoc.Str("Rankin-Selberg")
+  end
   if keep_inline_code(s) then
     return nil
   end

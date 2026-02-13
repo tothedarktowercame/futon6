@@ -30,9 +30,9 @@ written as:
 \[d\mu(\phi) = Z^{-\mNumber{1}} \exp(-V(\phi)) d\mu_\mNumber{0}(\phi)\]
 
 where \(\mu_\mNumber{0}\) is the Gaussian free field (GFF) measure with covariance
-(\(m^{\mNumber{2}} - \Delta)^{-\mNumber{1}}\) on \(T^\mNumber{3}\), and the interaction is:
+(\(m^\mNumber{2} \mBridgeOperator{-} \Delta\))\^{}\{-1\} on \(T^\mNumber{3}\), and the interaction is:
 
-\[V(\phi) = \Integral_{T^\mNumber{3}} (:\phi^\mNumber{4}: - C :\phi^\mNumber{2}:) \mathrm{d}x\]
+\[V(\phi) = \Integral_{T^\mNumber{3}} (:\phi^\mNumber{4}: \mBridgeOperator{-} C :\phi^\mNumber{2}:) \mathrm{d}x\]
 
 Here :\(\phi^{k}\): denotes the k-th Wick power (renormalized product), and C is a
 mass counterterm that diverges under regularization removal.
@@ -58,7 +58,7 @@ positive), the reverse absolute continuity \(\mu_\mNumber{0} \ll \mu\) also hold
 \hypertarget{3-cameron-martin-theory-for-the-gff}{%
 \subsubsection{3. Cameron-Martin theory for the GFF}\label{3-cameron-martin-theory-for-the-gff}}
 
-For the Gaussian free field \(\mu_\mNumber{0}\) on \(T^\mNumber{3}\) with covariance C \(= (m^{\mNumber{2}} - \Delta)^{-\mNumber{1}},\)
+For the Gaussian free field \(\mu_\mNumber{0}\) on \(T^\mNumber{3}\) with covariance C \(= (m^{\mNumber{2}} \mBridgeOperator{-} \Delta)^{-\mNumber{1}},\)
 the Cameron-Martin space is:
 
 \[H = H^\mNumber{1}(T^\mNumber{3}) (\text{Sobolev space of order} \mNumber{1})\]
@@ -69,7 +69,7 @@ Cameron-Martin space.
 \textbf{Cameron-Martin theorem:} For any \(h \in H\), the shifted Gaussian measure
 \(T_{h}^{\mDualStar} \mu_{\mNumber{0}}\) is equivalent to \(\mu_\mNumber{0}\), with Radon-Nikodym derivative:
 
-\[\mathrm{d}T_{h}^{\mDualStar} \mu_\mNumber{0} / d\mu_\mNumber{0} (\phi) = \exp(l_{h}(\phi) - \|h\|_{H^\mNumber{2}} / \mNumber{2})\]
+\[\mathrm{d}T_{h}^{\mDualStar} \mu_\mNumber{0} / d\mu_\mNumber{0} (\phi) = \exp(l_{h}(\phi) \mBridgeOperator{-} \|h\|_{H^\mNumber{2}} / \mNumber{2})\]
 
 where \(l_{h}\) is the linear functional associated to h. In particular:
 
@@ -80,28 +80,28 @@ where \(l_{h}\) is the linear functional associated to h. In particular:
 
 To compute \(T_{\psi}^{\mDualStar} \mu,\) we need the density of the shifted interacting measure:
 
-\[\mathrm{d}T_{\psi}^{\mDualStar} \mu / d\mu_\mNumber{0} (\phi) = Z^{-\mNumber{1}} \exp(-V(\phi - \psi)) \ast \exp(l_{\psi}(\phi) - \|\psi\|_{H^\mNumber{2}}/\mNumber{2})\]
+\[\mathrm{d}T_{\psi}^{\mDualStar} \mu / d\mu_\mNumber{0} (\phi) = Z^{-\mNumber{1}} \exp(-V(\phi \mBridgeOperator{-} \psi)) \ast \exp(l_{\psi}(\phi) \mBridgeOperator{-} \|\psi\|_{H^\mNumber{2}}/\mNumber{2})\]
 
-The shifted interaction V(\(\phi - \psi)\) expands (using Wick ordering relative to \(\mu_\mNumber{0}\)):
+The shifted interaction V(\(\phi \mBridgeOperator{-} \psi\)) expands (using Wick ordering relative to \(\mu_\mNumber{0}\)):
 
 \[\begin{aligned}
-V(\phi - \psi) = V(\phi) - \mNumber{4} \Integral \psi :\phi^\mNumber{3}: \mathrm{d}x + \mNumber{6} \Integral \psi^\mNumber{2} :\phi^\mNumber{2}: \mathrm{d}x \\
+V(\phi - \psi) = V(\phi) \mBridgeOperator{-} \mNumber{4} \Integral \psi :\phi^\mNumber{3}: \mathrm{d}x + \mNumber{6} \Integral \psi^\mNumber{2} :\phi^\mNumber{2}: \mathrm{d}x \\
 - \mNumber{4} \Integral \psi^\mNumber{3} :\phi: \mathrm{d}x + \Integral \psi^\mNumber{4} \mathrm{d}x \\
-- C(\Integral :\phi^\mNumber{2}: \mathrm{d}x - \mNumber{2} \Integral \psi :\phi: \mathrm{d}x + \Integral \psi^\mNumber{2} \mathrm{d}x) + (\text{renorm}. \text{corrections})
+- C(\Integral :\phi^\mNumber{2}: \mathrm{d}x \mBridgeOperator{-} \mNumber{2} \Integral \psi :\phi: \mathrm{d}x + \Integral \psi^\mNumber{2} \mathrm{d}x) + (\text{renorm}. \text{corrections})
 \end{aligned}\]
 
 \textbf{Renormalization under shift:} The term 6 int \(\psi^{\mNumber{2}}\) :\(\phi^{\mNumber{2}}\): dx generates an
 additional logarithmic divergence (from \(\psi^{\mNumber{2}}\) multiplying the Wick square).
 This is absorbed by shifting the mass counterterm:
 
-\[C \to C + \mNumber{6} \|\psi\|_{L^\mNumber{2}}^{\mNumber{2}} \ast (\log N \text{correction})\]
+\[C \to C + \mNumber{6} \|\psi\|_{L^\mNumber{2}}^{\mNumber{2}} \ast (\text{\log N correction})\]
 
 The precise counterterm shift is determined by the regularization scheme;
 see Hairer (2014, Section 9) or Gubinelli-Imkeller-Perkowski (2015,
 Proposition 6.3) for the explicit formula. For the present argument, only
 the finiteness of the renormalized difference matters.
 
-After renormalization, V(\(\phi - \psi) -\) V(\(\phi\)) is a well-defined random variable
+After renormalization, V(\(\phi \mBridgeOperator{-} \psi\)) - V(\(\phi\)) is a well-defined random variable
 under \(\mu_\mNumber{0}\) (and under \(\mu\)). The dominant fluctuation term is 4 int \(\psi\) :\(\phi^{\mNumber{3}}\): dx,
 which has the right regularity:
 
@@ -171,7 +171,7 @@ The measures are equivalent because:
 \item
   \(T_{\psi}^{\mDualStar} \mu_{\mNumber{0}}\) \textasciitilde{} \(\mu_\mNumber{0}\) (Cameron-Martin theorem, since \(\psi \in H^\mNumber{1}\))
 \item
-  V(\(\phi - \psi) -\) V(\(\phi\)) is well-defined after renormalization
+  V(\(\phi \mBridgeOperator{-} \psi\)) - V(\(\phi\)) is well-defined after renormalization
 \item
   The exponential of the cubic perturbation is integrable (log-Sobolev / coercivity)
 \item
@@ -184,15 +184,14 @@ The measures are equivalent because:
 \begin{itemize}
 \tightlist
 \item
-  N. Barashkov, M. Gubinelli, "A variational method for \(\Phi^{\mNumber{4}}_{\mNumber{3}},"\) Duke Math J.
+  N. Barashkov, M. Gubinelli, ``A variational method for \(\Phi^{\mNumber{4}}_{\mNumber{3}}\),'' Duke Math J.
   169 (2020), 3339-3415. {[}Theorem 1.1: construction and integrability; Section 4:
   exponential integrability from Polchinski flow{]}
 \item
-  M. Hairer, "A theory of regularity structures," Inventiones Math. 198 (2014),
+  M. Hairer, ``A theory of regularity structures,'' Inventiones Math. 198 (2014),
   269-504. {[}Section 9: renormalization counterterms{]}
 \item
-  M. Gubinelli, P. Imkeller, N. Perkowski, "Paracontrolled distributions and
-  singular PDEs," Forum Math. \(\Pi\) 3 (2015). {[}Proposition 6.3: explicit counterterm formula{]}
+  M. Gubinelli, P. Imkeller, N. Perkowski, \texttt{Paracontrolled\ distributions\ and\ singular\ PDEs,} Forum Math. \(\Pi\) 3 (2015). {[}Proposition 6.3: explicit counterterm formula{]}
 \end{itemize}
 
 \hypertarget{key-references-from-futon6-corpus}{%
@@ -201,11 +200,11 @@ The measures are equivalent because:
 \begin{itemize}
 \tightlist
 \item
-  PlanetMath: "distribution" --- distributions on manifolds
+  PlanetMath: ``distribution'' --- distributions on manifolds
 \item
-  PlanetMath: "Sobolev space" --- Cameron-Martin space is \(H^\mNumber{1}\)
+  PlanetMath: ``Sobolev space'' --- Cameron-Martin space is \(H^\mNumber{1}\)
 \item
-  PlanetMath: "Gaussian measure" --- reference measure \(\mu_\mNumber{0}\)
+  PlanetMath: ``Gaussian measure'' --- reference measure \(\mu_\mNumber{0}\)
 \item
-  PlanetMath: "Radon-Nikodym theorem" --- absolute continuity and RN derivatives
+  PlanetMath: ``Radon-Nikodym theorem'' --- absolute continuity and RN derivatives
 \end{itemize}

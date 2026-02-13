@@ -50,10 +50,7 @@ and Algebraic K-Theory}, Section 6.6).
 Concretely, \(H^{\mDualStar}(\Gamma; Q) = H^{\mDualStar}(X/\Gamma; Q)\) satisfies \(H^{k} = H^{d-k}\)
 where \(d = \mOpName{dim}(X)\).
 
-\textbf{Note on terminology.} With torsion present, saying "\(\Gamma\) is a rational
-PD group" requires this Bredon/orbifold interpretation. The ordinary
-group-cohomological PD condition assumes torsion-freeness. Throughout this
-writeup, "rational Poincare duality" for \(\Gamma\) with torsion refers to the
+\textbf{Note on terminology.} With torsion present, saying ```Gamma\(\text{is} a rational PD group`` requires this Bredon/orbifold interpretation. \text{The} ordinary group-cohomological PD condition assumes torsion-freeness. Throughout this writeup, ``rational Poincare duality'' \text{for}\)Gamma` with torsion refers to the
 Bredon-equivariant formulation above.
 
 \hypertarget{3-obligation-e2-finite-cw-realization-gamma-in-fhq}{%
@@ -187,7 +184,7 @@ it, and show the surgery obstruction vanishes.
 See \texttt{problem7r-s3a-setup.md} for the detailed analysis.
 
 \hypertarget{approach-ii-equivariant-surgery-on-m-tau--blocked-for-reflections}{%
-\subsubsection{\texorpdfstring{Approach II: Equivariant surgery on (M, \(\tau\)) --- BLOCKED for reflections}{Approach II: Equivariant surgery on (M, \textbackslash tau) --- BLOCKED for reflections}}\label{approach-ii-equivariant-surgery-on-m-tau--blocked-for-reflections}}
+\subsubsection{\texorpdfstring{Approach II: Equivariant surgery on \((M, \tau)\) --- BLOCKED for reflections}{Approach II: Equivariant surgery on (M, \textbackslash tau) --- BLOCKED for reflections}}\label{approach-ii-equivariant-surgery-on-m-tau--blocked-for-reflections}}
 
 \textbf{Idea.} Work directly with the closed manifold \texttt{M} and the involution
 \(\tau\). Eliminate the fixed set \texttt{F} by equivariant surgery to obtain \texttt{M\textquotesingle{}}
@@ -250,7 +247,7 @@ is forced by Riemannian geometry.
 \textbf{Idea.} Replace the reflection (codimension-1 involution) with a
 \textbf{rotational involution} (codimension-2 fixed set) in \textbf{odd} ambient
 dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(H^{\mNumber{2}k-\mNumber{1}}\)
-(codimension 2) is a "rotation by \(\pi\)" in a normal 2-plane.
+(codimension 2) is a ``rotation by \(\pi'\)\textquotesingle{} in a normal 2-plane.
 
 \textbf{Why this resolves the tension.} For \(n = \mNumber{2}k+\mNumber{1}\) odd:
 
@@ -275,7 +272,7 @@ dimension. An order-2 isometry of \(H^{\mNumber{2}k+\mNumber{1}}\) that fixes \(
 \def\labelenumi{\arabic{enumi}.}
 \item
   \textbf{Quadratic form.} Let \(k = Q(\sqrt(\mNumber{2})), O_{k} = Z[\sqrt(\mNumber{2})].\) Define
-  \(f = (\mNumber{1} - \sqrt(\mNumber{2}))x_\mNumber{0}^\mNumber{2} + x_\mNumber{1}^\mNumber{2} + ... + x_{n}^\mNumber{2} \in n+\mNumber{1}\) variables.
+  \(f = (\mNumber{1} \mBridgeOperator{-} \sqrt(\mNumber{2}))x_\mNumber{0}^\mNumber{2} + x_\mNumber{1}^\mNumber{2} + ... + x_{n}^\mNumber{2} \in n+\mNumber{1}\) variables.
   Under the two real embeddings of \texttt{k}, \texttt{f} has signatures \((n, \mNumber{1})\) and
   \((n+\mNumber{1}, \mNumber{0})\). So \(\mathup{SO}(f)\) gives \(\mathup{SO}(n, \mNumber{1})\) at one place and a compact
   group at the other.
@@ -310,7 +307,7 @@ via two sub-options available on the rotation route:
   as Approach I (Poincare complex, normal map, obstruction), but the
   obstruction computation benefits from odd L-theory parity.
 \item
-  \textbf{S-rot-II (Equivariant surgery on (M, \(\sigma\))).} The codimension-2 gap
+  \textbf{S-rot-II (Equivariant surgery on \((M, \sigma)\)).} The codimension-2 gap
   hypothesis is satisfied, so the Costenoble-Waner framework (arXiv:1705.10909)
   applies. The equivariant surgery obstruction is computable in principle.
 \end{itemize}
@@ -381,8 +378,7 @@ discharged. Two sub-options for obligation S:
 \def\labelenumi{\arabic{enumi}.}
 \item
   \textbf{S-rot-II (Equivariant surgery --- OBSTRUCTION VANISHES).}
-  The Costenoble-Waner codimension-2 gap hypothesis is satisfied. The "cut
-  and cap" method (Browder, López de Medrano) applies.
+  The Costenoble-Waner codimension-2 gap hypothesis is satisfied. The \texttt{cut\ and\ cap} method (Browder, López de Medrano) applies.
 
   \textbf{Key result: the equivariant surgery obstruction \(\theta = \mNumber{0}\) (integrally).}
 
@@ -405,7 +401,7 @@ discharged. Two sub-options for obligation S:
     \(\theta = \mNumber{0} \in\) L₈(\(\mathbb{Z}[\Gamma]\)).
   \end{itemize}
 
-  \textbf{With \(\theta = \mNumber{0}\):} The equivariant "cut and cap" surgery succeeds. Remove
+  \textbf{With \(\theta = \mNumber{0}\):} The equivariant ``cut and cap'' surgery succeeds. Remove
   the tubular neighborhood N(F) from M, obtaining \(W = M\) \textbackslash{} int(N(F)) with
   ∂W \(=\) S(\(\nu) = F \times\) S¹ and free Z/2-action on W. Since \(\theta = \mNumber{0}\), a cap V
   exists with ∂V \(= F \times\) S¹ and free Z/2-action. Set M\textquotesingle{} \(=\) W ∪ V. Then

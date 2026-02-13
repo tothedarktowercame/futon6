@@ -218,6 +218,25 @@ BAR_COMPARE_WRAP_RE = re.compile(
     r"(?=\s+\b(?:for|if|with|where|when|and|or)\b|\s{2,}\(|[.;,:]|$)"
 )
 MIN_NORM_TOKEN_RE = re.compile(r"\bmin\s+\|\|([^|\n]+)\|\|")
+RING_HYPHEN_WORD_RE = re.compile(r"\b([A-Z])-(submodule|module|algebra|equivariant|valued)\b")
+UNITS_IN_RING_PAREN_RE = re.compile(r"\(\s*up to units in ([A-Za-z])\s*\)")
+UNITS_IN_RING_RE = re.compile(r"\bup to units in ([A-Za-z])\b")
+RANKIN_DOUBLE_DASH_RE = re.compile(r"\bRankin\s*--\s*Selberg\b")
+LAMBDA_ASSIGN_TUPLE_RE = re.compile(
+    r"\blambda\s*=\s*\(\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*,\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*\)"
+)
+BARE_TUPLE_RE = re.compile(
+    r"(?<!_\{)(?<!\^\{)(?<![A-Za-z\\])\(\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*,\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*\)"
+)
+TUPLE_SET_RE = re.compile(
+    r"\{\s*\(\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*,\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*\)\s*,\s*"
+    r"\(\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*,\s*([A-Za-z][A-Za-z0-9_]*|\d+)\s*\)\s*\}"
+)
+L_FACTOR_CORRECTION_RE = re.compile(
+    r"\$?L\(s,\s*(?:\\Pi|Pi)\s*(?:\\times|x)\s*(?:\\pi|pi)\)\$?\s*\*\s*\(([^)]+)\)"
+)
+INLINE_DOLLAR_STAR_PAREN_RE = re.compile(r"\$([^$]+)\$\s*\*\s*\(([^)]+)\)")
+BARE_DIAG_INLINE_RE = re.compile(r"(?<!\\)\bdiag\(([^()]+)\)")
 
 
 def _unicode_math_char_repl(m: re.Match[str]) -> str:
@@ -500,6 +519,71 @@ def _min_norm_token_repl(m: re.Match[str]) -> str:
     return rf"$\min \|{body}\|$"
 
 
+def _ring_hyphen_word_repl(m: re.Match[str]) -> str:
+    ring = _texify_token(m.group(1))
+    word = m.group(2)
+    return rf"${ring}$-{word}"
+
+
+def _units_in_ring_repl(m: re.Match[str]) -> str:
+    ring = _texify_token(m.group(1))
+    return rf"up to units in ${ring}$"
+
+
+def _lambda_assign_tuple_repl(m: re.Match[str]) -> str:
+    left = _texify_token("lambda")
+    a = _texify_token(m.group(1))
+    b = _texify_token(m.group(2))
+    return rf"${left} = ({a}, {b})$"
+
+
+def _bare_tuple_repl(m: re.Match[str]) -> str:
+    left = _texify_token(m.group(1))
+    right = _texify_token(m.group(2))
+    return rf"$({left}, {right})$"
+
+
+def _tuple_set_repl(m: re.Match[str]) -> str:
+    a1 = _texify_token(m.group(1))
+    a2 = _texify_token(m.group(2))
+    b1 = _texify_token(m.group(3))
+    b2 = _texify_token(m.group(4))
+    return rf"$\{{({a1}, {a2}), ({b1}, {b2})\}}$"
+
+
+def _l_factor_correction_repl(m: re.Match[str]) -> str:
+    body = re.sub(r"\s+", " ", m.group(1).strip())
+    return rf"$L(s, \Pi \times \pi) \ast (\text{{{body}}})$"
+
+
+def _diag_inline_repl(m: re.Match[str]) -> str:
+    args = _texify_script_text(m.group(1))
+    return rf"$\operatorname{{diag}}({args})$"
+
+
+def _normalize_straight_double_quotes(s: str) -> str:
+    # Canonicalize and emit TeX-style paired quotes to keep left/right matching stable.
+    s = s.replace("“", '"').replace("”", '"')
+    if '"' not in s:
+        return s
+    out: list[str] = []
+    open_quote = True
+    n = len(s)
+    for i, ch in enumerate(s):
+        if ch != '"':
+            out.append(ch)
+            continue
+        prev = s[i - 1] if i > 0 else ""
+        nxt = s[i + 1] if i + 1 < n else ""
+        # Keep likely inch/prime markers untouched (e.g., 6" or 5".).
+        if prev.isdigit() and (not nxt or nxt.isspace() or nxt in ".,;:!?)]}"):
+            out.append(ch)
+            continue
+        out.append("``" if open_quote else "''")
+        open_quote = not open_quote
+    return "".join(out)
+
+
 def _sub_outside_inline_dollar(
     s: str,
     pattern: re.Pattern[str],
@@ -512,6 +596,12 @@ def _sub_outside_inline_dollar(
         else:
             out_parts.append(pattern.sub(repl, part))
     return "".join(out_parts)
+
+
+def _inline_dollar_star_paren_repl(m: re.Match[str]) -> str:
+    expr = m.group(1).strip()
+    body = re.sub(r"\s+", " ", m.group(2).strip())
+    return rf"${expr} \ast (\text{{{body}}})$"
 
 
 def split_inline_code(s: str) -> list[tuple[str, str]]:
@@ -777,6 +867,18 @@ def _phi_set_repl(m: re.Match[str]) -> str:
 
 def process_plain_text_segment(s: str) -> str:
     s = s.replace(r"\$", "$")
+    s = _normalize_straight_double_quotes(s)
+    s = s.replace("Rankin-/-Selberg", "Rankin-Selberg").replace("Rankin-\\/-Selberg", "Rankin-Selberg")
+    s = RANKIN_DOUBLE_DASH_RE.sub("Rankin-Selberg", s)
+    s = re.sub(r"\bcontinuous-\s+time\b", "continuous-time", s)
+    s = re.sub(r"\bSobolevspaceoforder1\b", "Sobolev space of order 1", s)
+    s = re.sub(r"\bequivalentmeasures\b", "equivalent measures", s)
+    s = LAMBDA_ASSIGN_TUPLE_RE.sub(_lambda_assign_tuple_repl, s)
+    s = TUPLE_SET_RE.sub(_tuple_set_repl, s)
+    s = RING_HYPHEN_WORD_RE.sub(_ring_hyphen_word_repl, s)
+    s = UNITS_IN_RING_PAREN_RE.sub(lambda m: f"({_units_in_ring_repl(m)})", s)
+    s = UNITS_IN_RING_RE.sub(_units_in_ring_repl, s)
+    s = L_FACTOR_CORRECTION_RE.sub(_l_factor_correction_repl, s)
     s = SN_ALL_PERMS_RE.sub(_sn_all_perms_repl, s)
     s = PAREN_SUP_SUB_TOKEN_RE.sub(_paren_sup_sub_token_repl, s)
     s = SET_BUILDER_RE.sub(_set_builder_repl, s)
@@ -801,6 +903,7 @@ def process_plain_text_segment(s: str) -> str:
     s = WHITTAKER_W_RE.sub(r"$W(\\pi, \\psi)$", s)
     s = WHITTAKER_W_ANY_RE.sub(_whittaker_any_repl, s)
     s = DIAG_CALL_RE.sub(_diag_call_repl, s)
+    s = _sub_outside_inline_dollar(s, BARE_DIAG_INLINE_RE, _diag_inline_repl)
     s = DET_ABS_RE.sub(r"$|\\det \1|^{\2}$", s)
     s = PSI_CALL_RE.sub(r"$\\psi(\1)$", s)
     s = NORMALIZES_PSI_RE.sub(r"normalizes $\\psi$", s)
@@ -842,6 +945,7 @@ def process_plain_text_segment(s: str) -> str:
     s = INTEGRAL_TOKEN_RE.sub(_integral_token_repl, s)
     s = COMPACT_PLUS_TUPLE_RE.sub(_compact_plus_tuple_repl, s)
     s = COMPACT_PLUS_RE.sub(_compact_plus_repl, s)
+    s = _sub_outside_inline_dollar(s, BARE_TUPLE_RE, _bare_tuple_repl)
     s = SIMPLE_COMPARISON_RE.sub(_simple_comparison_repl, s)
     s = COMPLEX_RING_RE.sub(_complex_ring_repl, s)
     s = COTANGENT_FIELD_RE.sub(_cotangent_field_repl, s)
@@ -877,7 +981,9 @@ def process_line(line: str) -> str:
                 out_parts.append(sub)
             else:
                 out_parts.append(process_plain_text_segment(sub))
-    return "".join(out_parts)
+    out = "".join(out_parts)
+    out = INLINE_DOLLAR_STAR_PAREN_RE.sub(_inline_dollar_star_paren_repl, out)
+    return out
 
 
 def _count_unescaped_dollar2(line: str) -> int:
@@ -1075,6 +1181,42 @@ def run_self_test() -> None:
         (
             "in R^{N x nr} with indexing.",
             r"in R^{N \times nr} with indexing.",
+        ),
+        (
+            "The R-submodule generated is unchanged.",
+            r"The $R$-submodule generated is unchanged.",
+        ),
+        (
+            "Combining both directions (up to units in R).",
+            r"Combining both directions (up to units in $R$).",
+        ),
+        (
+            "The full Rankin--Selberg ideal appears here.",
+            r"The full Rankin-Selberg ideal appears here.",
+        ),
+        (
+            "Take lambda=(a,0), then track (x, t).",
+            r"Take $\lambda = (a, 0)$, then track $(x, t)$.",
+        ),
+        (
+            "state space {(a,0),(0,a)}.",
+            r"state space $\{(a, 0), (0, a)\}$.",
+        ),
+        (
+            "This is a continuous- time process.",
+            r"This is a continuous-time process.",
+        ),
+        (
+            "gives L(s, Pi x pi) * (correction factor).",
+            r"gives $L(s, \Pi \times \pi) \ast (\text{correction factor})$.",
+        ),
+        (
+            "\"A theory of regularity structures,\"",
+            "``A theory of regularity structures,''",
+        ),
+        (
+            "\"A variational method, ”",
+            "``A variational method, ''",
         ),
     ]
     for raw, want in cases:

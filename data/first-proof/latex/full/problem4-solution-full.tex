@@ -17,7 +17,7 @@ The \textbf{finite free additive convolution} p \(\boxplus_{n}\) q has coefficie
 
 The \textbf{root separation energy}:
 
-\[\Phi_{n}(p) = \sum_{i} (\sum_{j \neq i} \mNumber{1}/(\lambda_{i} - \lambda_{j}))^\mNumber{2}\]
+\[\Phi_{n}(p) = \sum_{i} (\sum_{j \neq i} \mNumber{1}/(\lambda_{i} \mBridgeOperator{-} \lambda_{j}))^\mNumber{2}\]
 
 where \(\lambda_{\mNumber{1}}, ..., \lambda_{n}\) are the roots of p. (\(\Phi_{n} = \infty\) if p has
 repeated roots.)
@@ -56,22 +56,22 @@ Cauchy-Schwarz). An analytic proof for \(n \ge \mNumber{4}\) remains open.
 For a monic polynomial \(p(x) = \prod_{i}\) (x - \(\lambda_{i}\)) with distinct roots,
 the derivative at each root is given by the exact algebraic identity:
 
-\[p'(\lambda_{i}) = \prod_{j \neq i} (\lambda_{i} - \lambda_{j})\]
+\[p'(\lambda_{i}) = \prod_{j \neq i} (\lambda_{i} \mBridgeOperator{-} \lambda_{j})\]
 
 (no limiting procedure needed --- this is immediate from the product rule).
 Therefore the inner sum in \(\Phi_{n}\) is:
 
 \[\begin{aligned}
-\sum_{j \neq i} \mNumber{1}/(\lambda_{i} - \lambda_{j}) \\
-= [\sum_{j \neq i} \prod_{k \neq i, k \neq j} (\lambda_{i} - \lambda_{k})] / p'(\lambda_{i})
+\sum_{j \neq i} \mNumber{1}/(\lambda_{i} \mBridgeOperator{-} \lambda_{j}) \\
+= [\sum_{j \neq i} \prod_{k \neq i, k \neq j} (\lambda_{i} \mBridgeOperator{-} \lambda_{k})] / p'(\lambda_{i})
 \end{aligned}\]
 
 which is a rational function of the root differences alone. The root
 separation energy is:
 
-\[\Phi_{n}(p) = \sum_{i} (\sum_{j \neq i} \mNumber{1}/(\lambda_{i} - \lambda_{j}))^\mNumber{2}\]
+\[\Phi_{n}(p) = \sum_{i} (\sum_{j \neq i} \mNumber{1}/(\lambda_{i} \mBridgeOperator{-} \lambda_{j}))^\mNumber{2}\]
 
-This is the sum of squared "Coulomb forces" at each root --- the total
+This is the sum of squared ``Coulomb forces'' at each root --- the total
 electrostatic self-energy of the root configuration (in the 1D log-gas
 picture). All expressions are exact rational functions of root differences,
 with no regularization or limiting procedure required (assuming distinct roots,
@@ -82,16 +82,16 @@ which is guaranteed since \(\Phi_{n} = \infty\) for repeated roots).
 
 The discriminant of p is:
 
-\[\mOpName{disc}(p) = \prod_{i < j} (\lambda_{i} - \lambda_{j})^\mNumber{2}\]
+\[\mOpName{disc}(p) = \prod_{i < j} (\lambda_{i} \mBridgeOperator{-} \lambda_{j})^\mNumber{2}\]
 
-By the AM-QM inequality applied to 1/(\(\lambda_{i} - \lambda_{j}\)):
+By the AM-QM inequality applied to 1/(\(\lambda_{i} \mBridgeOperator{-} \lambda_{j}\)):
 
-\[\Phi_{n}(p) \ge n(n-\mNumber{1})^\mNumber{2} / \sum_{i < j} (\lambda_{i} - \lambda_{j})^\mNumber{2}\]
+\[\Phi_{n}(p) \ge n(n-\mNumber{1})^\mNumber{2} / \sum_{i < j} (\lambda_{i} \mBridgeOperator{-} \lambda_{j})^\mNumber{2}\]
 
-(Cauchy-Schwarz). So \(\mNumber{1}/\Phi_{n}\) is related to the "spread" of roots.
+(Cauchy-Schwarz). So \(\mNumber{1}/\Phi_{n}\) is related to the ``spread'' of roots.
 Specifically:
 
-\[\mNumber{1}/\Phi_{n}(p) \le \sum_{i < j} (\lambda_{i} - \lambda_{j})^\mNumber{2} / (n(n-\mNumber{1})^\mNumber{2})\]
+\[\mNumber{1}/\Phi_{n}(p) \le \sum_{i < j} (\lambda_{i} \mBridgeOperator{-} \lambda_{j})^\mNumber{2} / (n(n-\mNumber{1})^\mNumber{2})\]
 
 \hypertarget{3-finite-free-convolution-and-root-behavior}{%
 \subsubsection{3. Finite free convolution and root behavior}\label{3-finite-free-convolution-and-root-behavior}}
@@ -123,10 +123,10 @@ polynomial of A + UBU* where \(\mOpName{char}(A) = p, \mOpName{char}(B) = q.\)
 \textbf{\(\Phi_{n}\) via the random matrix model.}
 
 For Hermitian A with eigenvalues \(\lambda_{\mNumber{1}}, ..., \lambda_{n},\) the root separation
-energy \(\Phi_{n}(\mOpName{char}(A)) = \sum_{i} (\sum_{j \neq i} \mNumber{1}/(\lambda_{i} - \lambda_{j}))^{\mNumber{2}}\) is
+energy \(\Phi_{n}(\mOpName{char}(A)) = \sum_{i} (\sum_{j \neq i} \mNumber{1}/(\lambda_{i} \mBridgeOperator{-} \lambda_{j}))^{\mNumber{2}}\) is
 an algebraic function of the eigenvalue gaps (see Section 1). The connection
 to log \textbar det(xI - A)\textbar{} is conceptual: away from roots, \(F_{A}''(x) = -\sum_{i} \mNumber{1}/(x - \lambda_{i})^\mNumber{2},\)
-and \(\Phi_{n}\) captures the "residue" version at each root. But the definition of
+and \(\Phi_{n}\) captures the ``residue'' version at each root. But the definition of
 \(\Phi_{n}\) uses only the exact algebraic expressions from Section 1.
 
 \hypertarget{5-finite-free-cumulants-and-the-bilinear-structure}{%
@@ -176,7 +176,7 @@ c_\mNumber{3} = a_\mNumber{3} + (\mNumber{1}/\mNumber{3}) \ast a_\mNumber{2} \as
 So \(\boxplus_\mNumber{3}\) reduces to plain coefficient addition for centered cubics.
 
 \textbf{Step 3: The key identity.} For a centered cubic \(p(x) = x^\mNumber{3} \mBridgeOperator{+} a_\mNumber{2} \ast x \mBridgeOperator{+} a_\mNumber{3}\)
-with distinct real roots (requiring \(a_\mNumber{2} < \mNumber{0}\) and disc \(= -\mNumber{4} \ast a_{\mNumber{2}}^{\mNumber{3}} - \mNumber{27} \ast a_{\mNumber{3}}^{\mNumber{2}} > \mNumber{0}\)):
+with distinct real roots (requiring \(a_\mNumber{2} < \mNumber{0}\) and disc \(= -\mNumber{4} \ast a_{\mNumber{2}}^{\mNumber{3}} \mBridgeOperator{-} \mNumber{27} \ast a_{\mNumber{3}}^{\mNumber{2}} > \mNumber{0}\)):
 
 \[\Phi_\mNumber{3}(p) \ast \mOpName{disc}(p) = \mNumber{18} \ast a_\mNumber{2}^\mNumber{2} (\text{EXACT})\]
 
@@ -184,13 +184,13 @@ Equivalently:
 
 \[\begin{aligned}
 \mNumber{1}/\Phi_\mNumber{3}(p) = \mOpName{disc}(p) / (\mNumber{18} \ast a_\mNumber{2}^\mNumber{2}) \\
-= (-\mNumber{4} \ast a_\mNumber{2}^\mNumber{3} - \mNumber{27} \ast a_\mNumber{3}^\mNumber{2}) / (\mNumber{18} \ast a_\mNumber{2}^\mNumber{2}) \\
-= -\mNumber{2} \ast a_\mNumber{2}/\mNumber{9} - \mNumber{3} \ast a_\mNumber{3}^\mNumber{2} / (\mNumber{2} \ast a_\mNumber{2}^\mNumber{2})
+= (-\mNumber{4} \ast a_\mNumber{2}^\mNumber{3} \mBridgeOperator{-} \mNumber{27} \ast a_\mNumber{3}^\mNumber{2}) / (\mNumber{18} \ast a_\mNumber{2}^\mNumber{2}) \\
+= -\mNumber{2} \ast a_\mNumber{2}/\mNumber{9} \mBridgeOperator{-} \mNumber{3} \ast a_\mNumber{3}^\mNumber{2} / (\mNumber{2} \ast a_\mNumber{2}^\mNumber{2})
 \end{aligned}\]
 
 This identity was discovered numerically and verified symbolically in SymPy.
 It follows from the explicit formula \(\Phi_{\mNumber{3}} = \sum_{i} (\mNumber{3} \ast l_{i}/(\mNumber{3} \ast l_{i}^{\mNumber{2}} \mBridgeOperator{+} e_{\mNumber{2}}))^\mNumber{2}\)
-(where \(e_\mNumber{1} = \mNumber{0}\)) combined with the discriminant \(= \prod_{i < j}(l_{i} - l_{j})^{\mNumber{2}}.\)
+(where \(e_\mNumber{1} = \mNumber{0}\)) combined with the discriminant \(= \prod_{i < j}(l_{i} \mBridgeOperator{-} l_{j})^{\mNumber{2}}.\)
 
 \textbf{Step 4: Superadditivity via Cauchy-Schwarz.} Write s \(= -a_{\mNumber{2}} > \mNumber{0}, t = -b_{\mNumber{2}} > \mNumber{0}, u = a_{\mNumber{3}}, v = b_{\mNumber{3}}.\) Then:
 
@@ -204,7 +204,7 @@ The surplus is:
 
 \[\begin{aligned}
 \text{surplus} = \mNumber{1}/\Phi(\text{conv}) - \mNumber{1}/\Phi(p) - \mNumber{1}/\Phi(q) \\
-= (\mNumber{3}/\mNumber{2}) \ast [u^\mNumber{2}/s^\mNumber{2} + v^\mNumber{2}/t^\mNumber{2} - (u+v)^\mNumber{2}/(s+t)^\mNumber{2}]
+= (\mNumber{3}/\mNumber{2}) \ast [u^\mNumber{2}/s^\mNumber{2} + v^\mNumber{2}/t^\mNumber{2} \mBridgeOperator{-} (u+v)^\mNumber{2}/(s+t)^\mNumber{2}]
 \end{aligned}\]
 
 This is non-negative by Titu\textquotesingle s lemma (Engel form of Cauchy-Schwarz):
@@ -385,13 +385,13 @@ is \textbf{not viable}. The remaining gap for $n \ge 4$ requires either:
 \textbf{Degree 2 (proved --- equality):} \(p(x) = x^\mNumber{2} \mBridgeOperator{+} a_\mNumber{1} \ast x \mBridgeOperator{+} a_\mNumber{2}\).
 
 \[\begin{aligned}
-\Phi_\mNumber{2}(p) = \mNumber{2}/(a_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast a_\mNumber{2}) \\
-\mNumber{1}/\Phi_\mNumber{2}(p) = (a_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast a_\mNumber{2})/\mNumber{2}
+\Phi_\mNumber{2}(p) = \mNumber{2}/(a_\mNumber{1}^\mNumber{2} \mBridgeOperator{-} \mNumber{4} \ast a_\mNumber{2}) \\
+\mNumber{1}/\Phi_\mNumber{2}(p) = (a_\mNumber{1}^\mNumber{2} \mBridgeOperator{-} \mNumber{4} \ast a_\mNumber{2})/\mNumber{2}
 \end{aligned}\]
 
 The \(\boxplus_\mNumber{2}\) formula gives \(c_{\mNumber{1}} = a_{\mNumber{1}}+b_{\mNumber{1}}, c_{\mNumber{2}} = a_{\mNumber{2}} \mBridgeOperator{+} a_{\mNumber{1}} \ast b_{\mNumber{1}}/\mNumber{2} \mBridgeOperator{+} b_{\mNumber{2}}.\) Then:
 
-\[\mNumber{1}/\Phi_\mNumber{2}(p\boxplus q) = (c_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast c_\mNumber{2})/\mNumber{2} = (a_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast a_\mNumber{2})/\mNumber{2} + (b_\mNumber{1}^\mNumber{2} - \mNumber{4} \ast b_\mNumber{2})/\mNumber{2}\]
+\[\mNumber{1}/\Phi_\mNumber{2}(p\boxplus q) = (c_\mNumber{1}^\mNumber{2} \mBridgeOperator{-} \mNumber{4} \ast c_\mNumber{2})/\mNumber{2} = (a_\mNumber{1}^\mNumber{2} \mBridgeOperator{-} \mNumber{4} \ast a_\mNumber{2})/\mNumber{2} + (b_\mNumber{1}^\mNumber{2} \mBridgeOperator{-} \mNumber{4} \ast b_\mNumber{2})/\mNumber{2}\]
 
 Surplus \(=\) 0 (symbolic verification). Equality for all degree-2 polynomials.
 
@@ -556,17 +556,17 @@ to the MSS bilinear structure of \(\boxplus_{n}\).
 \begin{itemize}
 \tightlist
 \item
-  PlanetMath: "monic polynomial" (Monic1)
+  PlanetMath: ``monic polynomial'' (Monic1)
 \item
-  PlanetMath: "discriminant" (Discriminant)
+  PlanetMath: ``discriminant'' (Discriminant)
 \item
-  PlanetMath: "resultant" (Resultant, DerivationOfSylvestersMatrixForTheResultant)
+  PlanetMath: ``resultant'' \((Resultant, DerivationOfSylvestersMatrixForTheResultant)\)
 \item
-  PlanetMath: "logarithmic derivative" (LogarithmicDerivative)
+  PlanetMath: ``logarithmic derivative'' (LogarithmicDerivative)
 \item
-  PlanetMath: "partial fraction decomposition" (ALectureOnThePartialFractionDecompositionMethod)
+  PlanetMath: ``partial fraction decomposition'' (ALectureOnThePartialFractionDecompositionMethod)
 \item
-  PlanetMath: "cumulant generating function" (CumulantGeneratingFunction)
+  PlanetMath: ``cumulant generating function'' (CumulantGeneratingFunction)
 \end{itemize}
 
 \hypertarget{external-references}{%

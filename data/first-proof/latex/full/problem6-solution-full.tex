@@ -22,7 +22,7 @@ S is \(\epsilon\)-light if
 in Loewner order.
 
 Question: does there exist universal \(c > \mNumber{0}\) such that for every G and every
-\(\epsilon \in (\mNumber{0},\mNumber{1})\), there exists S with \(|S| \ge c \ast \epsilon \ast n\) and \(L_{S} \le \epsilon\) L?
+\(\epsilon \in (\mNumber{0}, \mNumber{1})\), there exists S with \(|S| \ge c \ast \epsilon \ast n\) and \(L_{S} \le \epsilon\) L?
 
 \hypertarget{status-of-this-writeup}{%
 \subsection{Status of this writeup}\label{status-of-this-writeup}}
@@ -92,7 +92,7 @@ since each edge survives with probability \(p^\mNumber{2}\).
 
 Thus
 
-\[E[\epsilon L - L_{S}] = (\epsilon - p^\mNumber{2})L.\]
+\[E[\epsilon L \mBridgeOperator{-} L_{S}] = (\epsilon \mBridgeOperator{-} p^\mNumber{2})L.\]
 
 Setting p=\(\epsilon\) gives \(E[L_{S}]=\epsilon^\mNumber{2} L \le \epsilon L\). This is not yet a
 realization-level guarantee.
@@ -108,7 +108,7 @@ and leverage scores
 
 \[\begin{aligned}
 \tau_{e} = \mOpName{tr}(X_{e}) = w_{e} b_{e}^{T} L^+ b_{e}, \\
-\sum_{e} \tau_{e} = n - k
+\sum_{e} \tau_{e} = n \mBridgeOperator{-} k
 \end{aligned}\]
 
 (k \(=\) number of connected components).
@@ -138,19 +138,19 @@ are independent PSD summands.
 
 Let \(A_{i}\) be a fixed ordering of \(\{A_{v}\}, p_{i} = E[Z_{i}],\) and define the centered sum
 
-\[X = \sum_{i} (Z_{i} - p_{i}) A_{i}.\]
+\[X = \sum_{i} (Z_{i} \mBridgeOperator{-} p_{i}) A_{i}.\]
 
 With filtration \(F_{i} = \sigma(Z_{\mNumber{1}},...,Z_{i}),\) Doob martingale
 
 \[\begin{aligned}
 Y_{i} = E[X | F_{i}], \\
-\Delta_{i} = Y_{i} - Y_{i-\mNumber{1}}
+\Delta_{i} = Y_{i} \mBridgeOperator{-} Y_{i-\mNumber{1}}
 \end{aligned}\]
 
 has self-adjoint differences. For independent Bernoulli sampling,
 
 \[\begin{aligned}
-\Delta_{i} = (Z_{i} - p_{i}) A_{i}, \\
+\Delta_{i} = (Z_{i} \mBridgeOperator{-} p_{i}) A_{i}, \\
 ||\Delta_{i}|| \le ||A_{i}|| \le R_{\mDualStar} (R_{\mDualStar} = \max_{i} ||A_{i}||),
 \end{aligned}\]
 
@@ -181,7 +181,7 @@ greedy combined with the elementary PSD trace bound and pigeonhole averaging.
 \hypertarget{5a-heavy-edge-pruning-turan}{%
 \subsubsection{5a. Heavy edge pruning (Turan)}\label{5a-heavy-edge-pruning-turan}}
 
-Call edge e "heavy" if \(\tau_{e} > \epsilon\), "light" otherwise. Since
+Call edge e \(heavy'' if \tau_{e} > \epsilon,\)light'' otherwise. Since
 \(\sum_{e} \tau_{e} =\) n-1 and each heavy edge has \(\tau_{e} > \epsilon\):
 
 \[|{heavy edges}| \le (n-\mNumber{1})/\epsilon.\]
@@ -210,7 +210,7 @@ Set \(C_{lev} = \mNumber{8}\). Remove vertices with \(ell_{v} > \mNumber{8}/\eps
 is at most 2(n-1) * \(\epsilon/\mNumber{8} < \epsilon \ast n/\mNumber{4}.\) The remaining set \(I_\mNumber{0}'\) has
 
 \[\begin{aligned}
-|I_\mNumber{0}'| \ge |I_\mNumber{0}| - \epsilon \ast n/\mNumber{4} \ge \epsilon \ast n/\mNumber{3} - \epsilon \ast n/\mNumber{4} \\
+|I_\mNumber{0}'| \ge |I_\mNumber{0}| \mBridgeOperator{-} \epsilon \ast n/\mNumber{4} \ge \epsilon \ast n/\mNumber{3} - \epsilon \ast n/\mNumber{4} \\
 = \epsilon \ast n/\mNumber{12}.
 \end{aligned}\]
 
@@ -227,7 +227,7 @@ C_{t}(v) = \sum_{u \in S_{t}, u~v} X_{uv} (contribution from adding v) \\
 Y_{t}(v) = H_{t}^{-\mNumber{1}/\mNumber{2}} C_{t}(v) H_{t}^{-\mNumber{1}/\mNumber{2}} (barrier-normalized)
 \end{aligned}\]
 
-where \(H_{t} = \epsilon \ast I - M_{t}\) succ 0 (the barrier headroom).
+where \(H_{t} = \epsilon \ast I \mBridgeOperator{-} M_{t}\) succ 0 (the barrier headroom).
 
 \textbf{Claim:} At each step \(t \le \epsilon \ast |I_{\mNumber{0}}'|/\mNumber{3},\) there exists \(v \in R_{t}\) with
 \(\lambda_{\max}(M_{t} \mBridgeOperator{+} C_{t}\)(v)) \(< \epsilon\) (equivalently, \(||Y_{t}(v)|| < \mNumber{1})\).
@@ -265,7 +265,7 @@ The average trace satisfies:
 \[dbar_{t} = (\mNumber{1}/r_{t}) \mOpName{tr}(H_{t}^{-\mNumber{1}} M_{\text{cross}})\]
 
 where \(M_{\text{cross}} = \sum_{e: \text{one} endpoint \in S_{t}, other \in R_{t}} X_{e}\) is the
-cross-edge matrix and \(H_{t} = \epsilon \ast I - M_{t}.\)
+cross-edge matrix and \(H_{t} = \epsilon \ast I \mBridgeOperator{-} M_{t}\).
 
 \textbf{Case \(M_{t} = \mNumber{0}\) (formal proof):}
 
@@ -286,7 +286,7 @@ For general graphs at \(M_{t} = \mNumber{0}\) with the leverage filter (\(ell_{u
 
 \[dbar_{t} \le (\mNumber{8} \ast t) / (\epsilon^\mNumber{2} \ast r_{t}).\]
 
-At \(t \le \epsilon \ast |I_{\mNumber{0}}'|/\mNumber{3}\) and \(r_{t} \ge |I_{\mNumber{0}}'|(\mNumber{1} - \epsilon/\mNumber{3}) \ge \mNumber{2}|I_{\mNumber{0}}'|/\mNumber{3}\):
+At \(t \le \epsilon \ast |I_{\mNumber{0}}'|/\mNumber{3}\) and \(r_{t} \ge |I_{\mNumber{0}}'|(\mNumber{1} \mBridgeOperator{-} \epsilon/\mNumber{3}) \ge \mNumber{2}|I_{\mNumber{0}}'|/\mNumber{3}\):
 
 \[\begin{aligned}
 dbar_{t} \le (\mNumber{8} \ast \epsilon \ast |I_\mNumber{0}'|/\mNumber{3}) / (\epsilon^\mNumber{2} \ast \mNumber{2}|I_\mNumber{0}'|/\mNumber{3}) \\
@@ -301,7 +301,7 @@ structure (as in the \(K_{n}\) case where dbar \(=\) 2t/(n * \(\epsilon) \ll \mN
 
 \[\begin{aligned}
 \sum_{u \in S_{t}} ell_{u}^{R} \le \sum_{e \in E_{\text{cross}}} \tau_{e} \\
-\le \sum_{e \in E(I_\mNumber{0})} \tau_{e} \le n - \mNumber{1}.
+\le \sum_{e \in E(I_\mNumber{0})} \tau_{e} \le n \mBridgeOperator{-} \mNumber{1}.
 \end{aligned}\]
 
 So \(dbar_{t} \le\) (n-1)/(\(\epsilon \ast r_{t}\)). With \(r_{t} \ge \epsilon \ast n/\mNumber{4}\):
@@ -380,7 +380,7 @@ for \(n > \mNumber{2}/\epsilon).\)
 \textbf{Random sampling alternative (numerically verified):}
 
 Sample each vertex with probability \(p = \epsilon\). By Chernoff,
-\(P(|S| \ge \epsilon \ast n/\mNumber{6}) \ge \mNumber{1} - \exp(-\epsilon \ast n/\mNumber{18})\). Numerically:
+\(P(|S| \ge \epsilon \ast n/\mNumber{6}) \ge \mNumber{1} \mBridgeOperator{-} \exp(-\epsilon \ast n/\mNumber{18})\). Numerically:
 \(P(||M_{S}|| \le \epsilon \land |S| \ge \epsilon \ast n/\mNumber{6}) > \mNumber{0}\) for all tested
 graphs (\(n \le \mNumber{80}\), 11 families, 4 \(\epsilon\) values, 500 trials each).
 Success probability ranges from 0.2\% to 57\%.
@@ -450,7 +450,7 @@ concentration proof for general graphs remains open.
 \subsubsection{Remaining formal gap}\label{remaining-formal-gap}}
 
 The formal \(dbar < \mNumber{1}\) bound at \(M_{t} \neq \mNumber{0}\) requires controlling
-tr(\(H_{t}^{-\mNumber{1}} M_{\text{cross}})\) where \(H_{t} = \epsilon \ast I - M_{t}.\) When \(||M_{t}||\) is
+tr(\(H_{t}^{-\mNumber{1}} M_{\text{cross}})\) where \(H_{t} = \epsilon \ast I \mBridgeOperator{-} M_{t}\). When \(||M_{t}||\) is
 close to \(\epsilon\), the amplification factor \(||H_{t}^{-\mNumber{1}}||\) grows, and
 the naive bound on dbar exceeds 1.
 
@@ -467,8 +467,8 @@ giving max root \(\le\) dbar via Vieta.
 \hypertarget{diagnosis}{%
 \subsubsection{Diagnosis}\label{diagnosis}}
 
-The remaining gap is not "we don\textquotesingle t know enough math"; it is "we are
-near the limit of this proof architecture." The architecture (barrier
+The remaining gap is not \texttt{we\ don\textquotesingle{}t\ know\ enough\ math\textquotesingle{}\textquotesingle{};\ it\ is\ }we are
+near the limit of this proof architecture.`` The architecture (barrier
 greedy + PSD trace bound + pigeonhole) is correct --- it proves \(K_{n}\)
 exactly and works numerically on every tested graph. The limit is that
 the amplification factor when \(M_{t} \neq \mNumber{0}\) makes the naive bound on dbar
@@ -519,15 +519,13 @@ margin and is the SINGLE remaining gap.
 \begin{itemize}
 \tightlist
 \item
-  Batson, Spielman, Srivastava (2012), "Twice-Ramanujan Sparsifiers," SIAM
+  Batson, Spielman, Srivastava (2012), ``Twice-Ramanujan Sparsifiers,'' SIAM
   Review 56(2), 315-334.
 \item
-  Marcus, Spielman, Srivastava (2015), "Interlacing Families II: Mixed
-  Characteristic Polynomials and the Kadison-Singer Problem," Annals of
+  Marcus, Spielman, Srivastava (2015), \(Interlacing Families II: Mixed Characteristic Polynomials \text{and the} Kadison-Singer Problem,\) Annals of
   Mathematics 182(1), 327-350.
 \item
-  Borcea, Branden (2009), "The Lee-Yang and Polya-Schur programs. I.
-  Linear operators preserving stability," Inventiones Math. 177, 541-569.
+  Borcea, Branden (2009), \(\text{The} Lee-Yang \text{and} Polya-Schur programs. I. Linear operators preserving stability,\) Inventiones Math. 177, 541-569.
 \item
   Tropp (2011), Freedman\textquotesingle s inequality for matrix martingales.
 \item
