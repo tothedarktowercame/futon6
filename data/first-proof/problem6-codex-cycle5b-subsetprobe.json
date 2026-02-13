@@ -1,0 +1,320 @@
+{
+  "num_rows": 24,
+  "max_row": {
+    "graph": "BipRand_40_40_p0.2",
+    "eps": 0.5,
+    "m0": 80,
+    "horizon": 13,
+    "max_dbar0": 0.7341613659327422,
+    "witness": {
+      "t": 13,
+      "r": 67,
+      "trF": 24.594405758746863,
+      "m0": 80,
+      "horizon": 13
+    }
+  },
+  "count_ge_1": 0,
+  "rows": [
+    {
+      "graph": "K_40",
+      "eps": 0.2,
+      "m0": 40,
+      "horizon": 2,
+      "max_dbar0": 0.5000000000000001,
+      "witness": {
+        "t": 2,
+        "r": 38,
+        "trF": 3.8000000000000007,
+        "m0": 40,
+        "horizon": 2
+      }
+    },
+    {
+      "graph": "K_40",
+      "eps": 0.3,
+      "m0": 40,
+      "horizon": 4,
+      "max_dbar0": 0.6666666666666659,
+      "witness": {
+        "t": 4,
+        "r": 36,
+        "trF": 7.19999999999999,
+        "m0": 40,
+        "horizon": 4
+      }
+    },
+    {
+      "graph": "K_40",
+      "eps": 0.5,
+      "m0": 40,
+      "horizon": 6,
+      "max_dbar0": 0.6000000000000011,
+      "witness": {
+        "t": 6,
+        "r": 34,
+        "trF": 10.200000000000019,
+        "m0": 40,
+        "horizon": 6
+      }
+    },
+    {
+      "graph": "K_80",
+      "eps": 0.2,
+      "m0": 80,
+      "horizon": 5,
+      "max_dbar0": 0.6250000000000047,
+      "witness": {
+        "t": 5,
+        "r": 75,
+        "trF": 9.37500000000007,
+        "m0": 80,
+        "horizon": 5
+      }
+    },
+    {
+      "graph": "K_80",
+      "eps": 0.3,
+      "m0": 80,
+      "horizon": 8,
+      "max_dbar0": 0.6666666666666735,
+      "witness": {
+        "t": 8,
+        "r": 72,
+        "trF": 14.400000000000146,
+        "m0": 80,
+        "horizon": 8
+      }
+    },
+    {
+      "graph": "K_80",
+      "eps": 0.5,
+      "m0": 80,
+      "horizon": 13,
+      "max_dbar0": 0.6499999999999951,
+      "witness": {
+        "t": 13,
+        "r": 67,
+        "trF": 21.77499999999984,
+        "m0": 80,
+        "horizon": 13
+      }
+    },
+    {
+      "graph": "K_100",
+      "eps": 0.2,
+      "m0": 100,
+      "horizon": 6,
+      "max_dbar0": 0.599999999999998,
+      "witness": {
+        "t": 6,
+        "r": 94,
+        "trF": 11.279999999999962,
+        "m0": 100,
+        "horizon": 6
+      }
+    },
+    {
+      "graph": "K_100",
+      "eps": 0.3,
+      "m0": 100,
+      "horizon": 10,
+      "max_dbar0": 0.6666666666666593,
+      "witness": {
+        "t": 10,
+        "r": 90,
+        "trF": 17.9999999999998,
+        "m0": 100,
+        "horizon": 10
+      }
+    },
+    {
+      "graph": "K_100",
+      "eps": 0.5,
+      "m0": 100,
+      "horizon": 16,
+      "max_dbar0": 0.6399999999999911,
+      "witness": {
+        "t": 16,
+        "r": 84,
+        "trF": 26.87999999999963,
+        "m0": 100,
+        "horizon": 16
+      }
+    },
+    {
+      "graph": "ER_80_p0.5_rep0",
+      "eps": 0.2,
+      "m0": 80,
+      "horizon": 5,
+      "max_dbar0": 0.6732830849528263,
+      "witness": {
+        "t": 5,
+        "r": 75,
+        "trF": 10.099246274292394,
+        "m0": 80,
+        "horizon": 5
+      }
+    },
+    {
+      "graph": "ER_80_p0.5_rep0",
+      "eps": 0.3,
+      "m0": 80,
+      "horizon": 8,
+      "max_dbar0": 0.7104532391206055,
+      "witness": {
+        "t": 8,
+        "r": 72,
+        "trF": 15.345789965005078,
+        "m0": 80,
+        "horizon": 8
+      }
+    },
+    {
+      "graph": "ER_80_p0.5_rep0",
+      "eps": 0.5,
+      "m0": 80,
+      "horizon": 13,
+      "max_dbar0": 0.6812696186970365,
+      "witness": {
+        "t": 13,
+        "r": 67,
+        "trF": 22.822532226350724,
+        "m0": 80,
+        "horizon": 13
+      }
+    },
+    {
+      "graph": "Reg_80_d6",
+      "eps": 0.2,
+      "m0": 22,
+      "horizon": 1,
+      "max_dbar0": 0.0,
+      "witness": null
+    },
+    {
+      "graph": "Reg_80_d6",
+      "eps": 0.3,
+      "m0": 22,
+      "horizon": 2,
+      "max_dbar0": 0.0,
+      "witness": null
+    },
+    {
+      "graph": "Reg_80_d6",
+      "eps": 0.5,
+      "m0": 80,
+      "horizon": 13,
+      "max_dbar0": 0.7090415974165002,
+      "witness": {
+        "t": 13,
+        "r": 67,
+        "trF": 23.752893513452758,
+        "m0": 80,
+        "horizon": 13
+      }
+    },
+    {
+      "graph": "Reg_80_d20",
+      "eps": 0.2,
+      "m0": 80,
+      "horizon": 5,
+      "max_dbar0": 0.658472149336948,
+      "witness": {
+        "t": 5,
+        "r": 75,
+        "trF": 9.87708224005422,
+        "m0": 80,
+        "horizon": 5
+      }
+    },
+    {
+      "graph": "Reg_80_d20",
+      "eps": 0.3,
+      "m0": 80,
+      "horizon": 8,
+      "max_dbar0": 0.7134711436132936,
+      "witness": {
+        "t": 8,
+        "r": 72,
+        "trF": 15.41097670204714,
+        "m0": 80,
+        "horizon": 8
+      }
+    },
+    {
+      "graph": "Reg_80_d20",
+      "eps": 0.5,
+      "m0": 80,
+      "horizon": 13,
+      "max_dbar0": 0.6958067739611001,
+      "witness": {
+        "t": 13,
+        "r": 67,
+        "trF": 23.309526927696854,
+        "m0": 80,
+        "horizon": 13
+      }
+    },
+    {
+      "graph": "BipRand_40_40_p0.2",
+      "eps": 0.2,
+      "m0": 24,
+      "horizon": 1,
+      "max_dbar0": 0.0,
+      "witness": null
+    },
+    {
+      "graph": "BipRand_40_40_p0.2",
+      "eps": 0.3,
+      "m0": 55,
+      "horizon": 5,
+      "max_dbar0": 0.5926570660706361,
+      "witness": {
+        "t": 5,
+        "r": 50,
+        "trF": 8.889855991059541,
+        "m0": 55,
+        "horizon": 5
+      }
+    },
+    {
+      "graph": "BipRand_40_40_p0.2",
+      "eps": 0.5,
+      "m0": 80,
+      "horizon": 13,
+      "max_dbar0": 0.7341613659327422,
+      "witness": {
+        "t": 13,
+        "r": 67,
+        "trF": 24.594405758746863,
+        "m0": 80,
+        "horizon": 13
+      }
+    },
+    {
+      "graph": "Tree_prufer_80",
+      "eps": 0.2,
+      "m0": 42,
+      "horizon": 2,
+      "max_dbar0": 0.0,
+      "witness": null
+    },
+    {
+      "graph": "Tree_prufer_80",
+      "eps": 0.3,
+      "m0": 42,
+      "horizon": 4,
+      "max_dbar0": 0.0,
+      "witness": null
+    },
+    {
+      "graph": "Tree_prufer_80",
+      "eps": 0.5,
+      "m0": 42,
+      "horizon": 7,
+      "max_dbar0": 0.0,
+      "witness": null
+    }
+  ]
+}

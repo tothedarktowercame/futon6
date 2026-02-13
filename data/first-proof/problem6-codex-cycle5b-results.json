@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "date": "2026-02-13",
+    "agent": "Codex",
+    "base_commit": "f82cdcb",
+    "handoff": "data/first-proof/problem6-codex-cycle5b-handoff.md",
+    "scope": "Cycle 5b targeted literature search and sub-lemma proof attempt for dbar0 < 1"
+  },
+  "literature": {
+    "problem_alias_scan": {
+      "found_exact_match": false,
+      "closest_named_areas": [
+        "spectral sparsification by effective resistance",
+        "vertex sparsifiers via terminal Schur complements",
+        "uniform spanning tree transfer-current / determinantal formulations"
+      ],
+      "assessment": "No source found with the exact induced-subgraph condition L_S <= eps L and linear-in-eps vertex-size guarantee |S| >= c eps n."
+    },
+    "matrix_inequality_scan": {
+      "target": "tr(MF) <= (1/2)||M|| tr(F) under M,F >= 0 and M+F <= Pi",
+      "found_direct_theorem": false,
+      "assessment": "Only generic trace/spectral bounds were found; no published sharp 1/2 inequality with this exact hypothesis was located."
+    },
+    "references": [
+      {
+        "id": "spielman-srivastava-2008",
+        "type": "primary",
+        "title": "Graph Sparsification by Effective Resistances",
+        "url": "https://arxiv.org/abs/0803.0929",
+        "relevance": "Leverage/effective-resistance edge scores and Foster-style trace budget context."
+      },
+      {
+        "id": "bss-2008",
+        "type": "primary",
+        "title": "Twice-Ramanujan Sparsifiers",
+        "url": "https://arxiv.org/abs/0808.0163",
+        "relevance": "Barrier/potential method foundation; useful template but edge-atom setting differs from vertex-block updates."
+      },
+      {
+        "id": "burton-pemantle-1993",
+        "type": "primary",
+        "title": "Local Characteristics, Entropy and Limit Theorems for Spanning Trees and Domino Tilings via Transfer-Impedances",
+        "url": "https://arxiv.org/abs/math/0404048",
+        "relevance": "Transfer-current machinery for UST marginals; supports tau_e = P[e in UST] viewpoint."
+      },
+      {
+        "id": "lyons-dpp-2002",
+        "type": "primary",
+        "title": "Determinantal probability measures",
+        "url": "https://arxiv.org/abs/math/0204325",
+        "relevance": "UST edge-set determinantal/negative-dependence framework; useful for probabilistic reinterpretation of tr(F)."
+      },
+      {
+        "id": "moitra-charikar-li-leighton-2010",
+        "type": "primary",
+        "title": "Vertex Sparsifiers and Abstract Rounding Algorithms",
+        "url": "https://arxiv.org/abs/1006.4536",
+        "relevance": "Clarifies standard meaning of vertex sparsifier (terminal-preservation), distinct from induced epsilon-light subset objective."
+      },
+      {
+        "id": "goranci-henzinger-peng-2018",
+        "type": "primary",
+        "title": "Dynamic Effective Resistances and Approximate Schur Complement on Separable Graphs",
+        "url": "https://arxiv.org/abs/1802.09111",
+        "relevance": "Schur-complement effective-resistance preservation tools; relevant for possible elimination-based bounds but not a direct closure."
+      },
+      {
+        "id": "durfee-gao-goranci-peng-2019",
+        "type": "primary",
+        "title": "Fully Dynamic Spectral Vertex Sparsifiers and Applications",
+        "url": "https://arxiv.org/abs/1906.10530",
+        "relevance": "Modern spectral-vertex-sparsifier terminology, again terminal/schur-complement objective, not induced L_S <= eps L."
+      },
+      {
+        "id": "mo-81251-81282",
+        "type": "secondary-local",
+        "title": "MathOverflow: Number of spanning trees which contain a given edge",
+        "url": "https://mathoverflow.net/questions/81251/number-of-spanning-trees-which-contain-a-given-edge",
+        "relevance": "Contains the standard tau_e = effective resistance = UST edge-inclusion probability statement and degree-based bounds."
+      },
+      {
+        "id": "mo-100209-100328",
+        "type": "secondary-local",
+        "title": "MathOverflow: Probability of an edge appearing in a spanning tree",
+        "url": "https://mathoverflow.net/questions/100209/probability-of-an-edge-appearing-in-a-spanning-tree",
+        "relevance": "Kirchhoff/Cramer computational perspective for edge-inclusion probabilities in weighted spanning trees."
+      },
+      {
+        "id": "lyons-peres-ch4",
+        "type": "secondary",
+        "title": "Probability on Trees and Networks, Chapter 4 (Uniform Spanning Trees)",
+        "url": "https://www.cambridge.org/core/books/probability-on-trees-and-networks/uniform-spanning-trees/BFA6F964AA1A8EFA013D5A8AFA4CE4AA",
+        "relevance": "Canonical reference for electrical-network and UST identities used in translation of dbar0 to expected cut-tree-edge count."
+      }
+    ]
+  },
+  "proof_attempts": {
+    "ust_translation": {
+      "status": "partial",
+      "identity": "dbar0 = E[|delta_T(S,R)|] / (r eps), T ~ UST",
+      "result": "Confirmed as a clean reformulation from tau_e = P[e in T].",
+      "blocker": "Need a universal upper bound on expected UST cut-edge count in terms of r eps; no direct theorem found."
+    },
+    "induced_foster_decomposition": {
+      "status": "partial",
+      "identity": "F + tau + L_R <= m - kappa for partition I0 = S U R (m=|I0|)",
+      "result": "Useful bookkeeping identity, but still requires a lower bound on L_R (or equivalent) to force F < r eps."
+    },
+    "ordered_low_leverage_prefix_route": {
+      "status": "conditional_proof",
+      "statement_proved": "If S is the prefix of size t in nondecreasing leverage-degree order on I0 and t <= floor(eps m/3), then dbar0 < 1.",
+      "main_bound": "dbar0 <= 2 t (m-1) / (m eps (m-t)) <= 2 (m-1) / (3 (m-t)) < 1",
+      "dependencies": [
+        "induced Foster bound on total leverage degree in I0",
+        "partial averages inequality"
+      ],
+      "limitation": "Does not yet imply dbar0 < 1 for arbitrary S or for the exact barrier-greedy trajectory without an order-comparison lemma."
+    },
+    "matrix_inequality_route": {
+      "status": "open",
+      "target": "derive dbar0 < 1 via a direct PSD inequality without graph-specific combinatorics",
+      "result": "No direct inequality found; remains open."
+    }
+  },
+  "numerics": {
+    "cycle5_existing": {
+      "source": "data/first-proof/problem6-codex-cycle5-results.json",
+      "num_runs": 60,
+      "num_steps": 678,
+      "max_dbar0": 0.7551632665892649,
+      "any_dbar0_ge_1": false
+    },
+    "cycle5b_randomstress": {
+      "source": "data/first-proof/problem6-codex-cycle5b-randomstress.json",
+      "num_runs": 560,
+      "max_dbar0": 0.8273274244848219,
+      "count_ge_1": 0,
+      "worst_case": {
+        "graph": "BIP_n60_p0.467_i38",
+        "eps": 0.5,
+        "step": 10,
+        "horizon": 10
+      }
+    },
+    "cycle5b_subsetprobe": {
+      "source": "data/first-proof/problem6-codex-cycle5b-subsetprobe.json",
+      "note": "Random subset probe inside I0 (not only greedy path)",
+      "num_rows": 24,
+      "max_dbar0": 0.7341613659327422,
+      "count_ge_1": 0
+    },
+    "cycle5b_exhaustive_small": {
+      "source": "data/first-proof/problem6-codex-cycle5b-exhaustive-small.json",
+      "note": "Exhaustive subset scan for small n suite",
+      "num_rows": 72,
+      "count_ge_1": 0,
+      "max_dbar0": 0.9999999999999994,
+      "max_case": {
+        "graph": "K_10",
+        "eps": 0.2,
+        "t": 1,
+        "horizon": 1
+      }
+    }
+  },
+  "caveats": [
+    "Near-equality dbar0 ~= 1 appears at knife-edge parameter choices where leverage can numerically hit eps exactly (implementation uses heavy if tau_e > eps).",
+    "For strict theorem statements requiring dbar0 < 1, a strict-light condition tau_e < eps or a small slack margin should be tracked explicitly.",
+    "No counterexample with dbar0 > 1 was found in Cycle 5 + Cycle 5b scans, but this is numerical evidence, not a formal proof."
+  ],
+  "assessment": {
+    "status": "open_but_narrowed",
+    "best_current_path": "Promote the ordered-low-leverage-prefix proof to the actual trajectory (or revise trajectory to that order) and carry strict-light epsilon slack explicitly.",
+    "bottom_line": "Cycle 5b found no literature shortcut that closes the sub-lemma automatically; the closure remains a bespoke proof step."
+  }
+}

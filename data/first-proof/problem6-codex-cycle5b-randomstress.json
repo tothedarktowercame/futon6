@@ -1,0 +1,138 @@
+{
+  "seed": 20260213,
+  "num_runs": 560,
+  "best": {
+    "graph": "BIP_n60_p0.467_i38",
+    "n": 60,
+    "kind": "BIP",
+    "eps": 0.5,
+    "m0": 60,
+    "horizon": 10,
+    "max_dbar0": 0.8273274244848219,
+    "step": 10,
+    "x_at_max": 0.0,
+    "r_t_at_max": 50
+  },
+  "top10": [
+    {
+      "graph": "BIP_n60_p0.467_i38",
+      "n": 60,
+      "kind": "BIP",
+      "eps": 0.5,
+      "m0": 60,
+      "horizon": 10,
+      "max_dbar0": 0.8273274244848219,
+      "step": 10,
+      "x_at_max": 0.0,
+      "r_t_at_max": 50
+    },
+    {
+      "graph": "BIP_n60_p0.501_i70",
+      "n": 60,
+      "kind": "BIP",
+      "eps": 0.5,
+      "m0": 60,
+      "horizon": 10,
+      "max_dbar0": 0.8197254007961,
+      "step": 10,
+      "x_at_max": 0.0,
+      "r_t_at_max": 50
+    },
+    {
+      "graph": "BIP_n80_p0.178_i42",
+      "n": 80,
+      "kind": "BIP",
+      "eps": 0.5,
+      "m0": 76,
+      "horizon": 12,
+      "max_dbar0": 0.816636079030487,
+      "step": 12,
+      "x_at_max": 0.0,
+      "r_t_at_max": 64
+    },
+    {
+      "graph": "BIP_n120_p0.480_i110",
+      "n": 120,
+      "kind": "BIP",
+      "eps": 0.5,
+      "m0": 120,
+      "horizon": 20,
+      "max_dbar0": 0.8149206847755062,
+      "step": 20,
+      "x_at_max": 0.0,
+      "r_t_at_max": 100
+    },
+    {
+      "graph": "BIP_n60_p0.467_i38",
+      "n": 60,
+      "kind": "BIP",
+      "eps": 0.3,
+      "m0": 60,
+      "horizon": 6,
+      "max_dbar0": 0.8138737212237436,
+      "step": 6,
+      "x_at_max": 0.0,
+      "r_t_at_max": 54
+    },
+    {
+      "graph": "BIP_n60_p0.595_i46",
+      "n": 60,
+      "kind": "BIP",
+      "eps": 0.5,
+      "m0": 60,
+      "horizon": 10,
+      "max_dbar0": 0.8133048835629825,
+      "step": 10,
+      "x_at_max": 0.0,
+      "r_t_at_max": 50
+    },
+    {
+      "graph": "BIP_n60_p0.331_i58",
+      "n": 60,
+      "kind": "BIP",
+      "eps": 0.5,
+      "m0": 60,
+      "horizon": 10,
+      "max_dbar0": 0.8116653267223153,
+      "step": 10,
+      "x_at_max": 0.0,
+      "r_t_at_max": 50
+    },
+    {
+      "graph": "BIP_n120_p0.162_i106",
+      "n": 120,
+      "kind": "BIP",
+      "eps": 0.5,
+      "m0": 120,
+      "horizon": 20,
+      "max_dbar0": 0.8084438632940111,
+      "step": 20,
+      "x_at_max": 0.0,
+      "r_t_at_max": 100
+    },
+    {
+      "graph": "BIP_n120_p0.379_i2",
+      "n": 120,
+      "kind": "BIP",
+      "eps": 0.5,
+      "m0": 120,
+      "horizon": 20,
+      "max_dbar0": 0.8043158615213152,
+      "step": 20,
+      "x_at_max": 0.0,
+      "r_t_at_max": 100
+    },
+    {
+      "graph": "BIP_n120_p0.341_i94",
+      "n": 120,
+      "kind": "BIP",
+      "eps": 0.5,
+      "m0": 120,
+      "horizon": 20,
+      "max_dbar0": 0.7999860214483542,
+      "step": 20,
+      "x_at_max": 0.0,
+      "r_t_at_max": 100
+    }
+  ]
+}
