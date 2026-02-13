@@ -131,6 +131,9 @@ SN_ALL_PERMS_RE = re.compile(
     re.IGNORECASE,
 )
 PAREN_SUP_SUB_TOKEN_RE = re.compile(r"\b([A-Za-z]+)\^\(([^)]+)\)(?:_\{([^}]+)\})?")
+SET_BUILDER_RE = re.compile(
+    r"\b([A-Za-z][A-Za-z0-9_]*)\s*=\s*\{\s*([A-Za-z][A-Za-z0-9_]*)\s*:\s*([^{}\n]+?)\s*\}"
+)
 NORM_SUBSCRIPT_RE = re.compile(
     r"\|\|\s*([A-Za-z\\][A-Za-z0-9\\]*)\s*\|\|\s*"
     r"(?:_\s*(\{[^}]+\}|[A-Za-z0-9\\^+\-]+)|\{\s*([^}]+)\s*\})"
@@ -248,6 +251,19 @@ def _paren_sup_sub_token_repl(m: re.Match[str]) -> str:
     if sub:
         expr += rf"_{{{_texify_script_text(sub)}}}"
     return rf"${expr}$"
+
+
+def _set_builder_repl(m: re.Match[str]) -> str:
+    lhs = _texify_token(m.group(1))
+    var = _texify_token(m.group(2))
+    cond = _texify_script_text(m.group(3))
+    cond = re.sub(r"\s*=\s*", " = ", cond)
+    cond = re.sub(r"\s*<=\s*", lambda _m: r" \le ", cond)
+    cond = re.sub(r"\s*>=\s*", lambda _m: r" \ge ", cond)
+    cond = re.sub(r"\s*<\s*", " < ", cond)
+    cond = re.sub(r"\s*>\s*", " > ", cond)
+    cond = re.sub(r"\s+", " ", cond).strip()
+    return rf"${lhs} = \{{{var} : {cond}\}}$"
 
 
 def _strip_outer_braces(s: str) -> str:
@@ -564,6 +580,7 @@ def _phi_set_repl(m: re.Match[str]) -> str:
 def process_plain_text_segment(s: str) -> str:
     s = SN_ALL_PERMS_RE.sub(_sn_all_perms_repl, s)
     s = PAREN_SUP_SUB_TOKEN_RE.sub(_paren_sup_sub_token_repl, s)
+    s = SET_BUILDER_RE.sub(_set_builder_repl, s)
     s = _expand_compact_star_products(s)
     s = MAP_SIGNATURE_RE.sub(_map_signature_repl, s)
     s = PHI_SET_RE.sub(_phi_set_repl, s)
@@ -794,6 +811,10 @@ def run_self_test() -> None:
         (
             "construct Q^(alpha beta gamma delta) and Omega_{mn} = Q^(alpha_m, beta_n, gamma, delta)_{i_m, j_n, k, l}.",
             r"construct $Q^{(\alpha \beta \gamma \delta)}$ and Omega_{mn} = $Q^{(\alpha_m, \beta_n, \gamma, \delta)}_{i_m, j_n, k, l}$.",
+        ),
+        (
+            "Let Z_v ~ Bernoulli(p) independently and S={v: Z_v=1}.",
+            r"Let Z_v ~ Bernoulli(p) independently and $S = \{v : Z_v = 1\}$.",
         ),
         (
             "bounded by 4 ||psi||_{C^0} |int :phi^3: dx|.",
