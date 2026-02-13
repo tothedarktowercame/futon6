@@ -15,6 +15,16 @@ the absolute continuity structure of the Phi^4_3 construction (Barashkov-Gubinel
 2020, Theorem 1.1). The integrability bound is stated for a neighborhood of the
 required exponent, not for all t, matching the available log-Sobolev technology.
 
+## Assumptions Used (explicit)
+
+1. Spatial domain is T^3 (periodic, no boundary), with massive covariance
+   C = (m^2 - Delta)^(-1), m^2 > 0.
+2. The renormalized interaction V is defined by a fixed cutoff scheme, with
+   V finite mu_0-a.s. and Z = E_{mu_0}[exp(-V)] in (0, infinity).
+3. psi is smooth on T^3, hence psi in H^1(T^3), the Cameron-Martin space.
+4. The renormalized increment Delta_psi V = V(phi-psi) - V(phi) is finite
+   mu-a.s. and admits the exponential-moment window needed by the RN density.
+
 ## Solution
 
 ### 1. The Phi^4_3 measure
@@ -49,6 +59,14 @@ E_{mu_0}[exp(-V)] < infinity and hence mu << mu_0 with strictly positive
 density exp(-V(phi))/Z. Since exp(-V(phi)) > 0 a.s. (exponential is always
 positive), the reverse absolute continuity mu_0 << mu also holds.
 
+**Lemma 2.1 (strictly positive finite density implies equivalence).**  
+Let mu and nu be probability measures on the same measurable space, and
+assume mu = f nu with f measurable and 0 < f < infinity nu-a.s. Then mu ~ nu.
+
+*Proof.* mu << nu is immediate. If mu(A)=0, then int_A f dnu = 0. Since f>0
+nu-a.s., nu(A)=0. Hence nu << mu. Therefore mu ~ nu. Applying this with
+nu = mu_0 and f = Z^(-1)exp(-V) gives mu ~ mu_0. ∎
+
 ### 3. Cameron-Martin theory for the GFF
 
 For the Gaussian free field mu_0 on T^3 with covariance C = (m^2 - Delta)^{-1},
@@ -58,6 +76,8 @@ the Cameron-Martin space is:
 
 Since psi is smooth, psi in C^infinity(T^3) subset H^1(T^3), so psi is in the
 Cameron-Martin space.
+
+On T^3 this is the correct space directly (no H_0^1 boundary-condition issue).
 
 **Cameron-Martin theorem:** For any $h \in H$, the shifted Gaussian measure
 T_h^* mu_0 is equivalent to mu_0, with Radon-Nikodym derivative:
@@ -125,6 +145,16 @@ in the Radon-Nikodym derivative is bounded by 4 $\|\psi\|_{C^0}$ |int :phi^3: dx
 and this yields integrability provided the coefficient lies in the admissible
 exponential-moment range (or after a standard scaling/localization argument).
 
+**Lemma 5.1 (cubic term controlled by quartic coercivity).**  
+For any epsilon > 0 and x in R, |x|^3 <= epsilon x^4 + C_epsilon. After
+integration/pairing against bounded psi this yields
+
+    |int psi :phi^3: dx| <= epsilon int w(x):phi^4: dx + C(epsilon, psi),
+
+for a bounded weight w from the fixed renormalization setup. Therefore any
+exponential-moment bound for the quartic term implies an exponential-moment
+window for int psi :phi^3: dx at sufficiently small coefficient.
+
 Therefore $R \in L$^1(mu) and 1/$R \in L$^1(T_psi^* mu), giving:
 
     T_psi^* mu ~ mu  (equivalent measures)
@@ -139,6 +169,10 @@ variational formula, which represents:
 In this framework, shifting by psi is equivalent to modifying the variational
 problem by a shift in the drift, which produces an equivalent measure (the
 infimum shifts by a finite amount, preserving absolute continuity).
+
+**Lemma 6.1 (equivalence chain under pushforward).**  
+If mu ~ mu_0 then T_psi^*mu ~ T_psi^*mu_0. If also T_psi^*mu_0 ~ mu_0, then
+T_psi^*mu ~ mu_0. Combined with mu ~ mu_0, transitivity gives T_psi^*mu ~ mu.
 
 ### 7. Summary
 

@@ -7,19 +7,30 @@ Suppose `Gamma` is a uniform lattice in a real semisimple Lie group, and
 fundamental group of a closed manifold whose universal cover is acyclic over
 `Q`?
 
+Here "acyclic over Q" means H_i(M_tilde; Q) = 0 for all i > 0 (and
+H_0(M_tilde; Q) = Q).
+
 ## Status in This Writeup
 
-**Answer: yes** (via the rotation route; closed in this branch via the standard codim-2 surgery theorem chain).
+**Answer in this writeup: conditional/partial.**
 
 - Obligation (E2) — placing `Gamma` in `FH(Q)` — is **discharged** for
   the rotation-lattice family (Fowler criterion, codim-2 fixed set with
   chi = 0).
 - Obligation (S) — upgrading from finite CW complex to closed manifold — is
-  treated as discharged in this branch: the geometric inputs are established
-  (trivial normal bundle, hyperbolic boundary form), and the codim-2 surgery
-  identification is closed by the theorem-numbered reference chain in
-  `problem7-g2-theorem-chain.md` (with closure summary in
-  `problem7-complete-proof.md`, Section 5).
+  **not fully validated in this document**. We present a strong rotation-route
+  candidate chain (normal-bundle triviality and codim-2 surgery framework),
+  but treat the final manifold-upgrade verification as an explicit remaining
+  validation item.
+
+## Assumptions Used (explicit)
+
+1. `Gamma` is a cocompact lattice with finite isotropy on `X = G/K`; the
+   relevant duality is Bredon/orbifold rational duality.
+2. Fowler's criterion is applied only after checking the fixed-set
+   Euler-vanishing hypothesis for nontrivial finite subgroups.
+3. The manifold-upgrade step (S) requires an additional surgery theorem chain;
+   unless each hypothesis is checked in full, S is treated as conditional.
 
 ## 1. Baseline Geometry
 
@@ -92,9 +103,8 @@ The E2 obligation is discharged by the following construction (details in
 
 ## 4. Obligation S: From Finite Complex to Closed Manifold
 
-Obligation S is treated as discharged in this branch via the rotation route
-(S-rot-II); this section records the previously open obstacles and how
-S-rot-II resolves them.
+Obligation S is not claimed as fully closed in this file; this section records
+the open obstacles and the strongest current candidate route (S-rot-II).
 
 Problem 7 asks for a **closed manifold** `M` with `pi1(M) = Gamma` and
 `H_*(M_tilde; Q) = 0` for `* > 0`. Obligation E2 gives a finite CW
@@ -277,7 +287,7 @@ This section addresses a natural objection and explains why it does not
 apply. It does not contribute to the constructive argument, which is entirely
 in Sections 3-4.
 
-## 6. Theorem
+## 6. Theorem (scoped)
 
 **Theorem.** Let `Gamma` be a cocompact lattice extension
 `1 -> pi -> Gamma -> Z/2 -> 1` constructed from an arithmetic lattice in
@@ -294,13 +304,13 @@ Then:
     `Y` with `pi_1(Y) = Gamma` and `H_*(Y_tilde; Q) = 0` for `* > 0`.
     (Both routes discharge E2 via Fowler's criterion.)
 
-(b) **(Rotation route)** For the rotation lattice (Approach IV, `n = 7`,
-    congruence ideal `I = (3)` in `Z[sqrt(2)]`): there exists a closed
-    manifold `N` with `pi_1(N) = Gamma` and `H_*(N_tilde; Q) = 0` for
-    `* > 0`. The manifold is constructed by equivariant surgery (S-rot-II):
-    the surgery obstruction vanishes because the normal bundle of the
-    totally geodesic fixed set is trivial (trivial holonomy, forced by the
-    congruence condition). See `problem7r-s-rot-obstruction-analysis.md`.
+(b) **(Rotation route, conditional S-step)** For the rotation lattice
+    (Approach IV, `n = 7`, congruence ideal `I = (3)` in `Z[sqrt(2)]`):
+    if the S-rot-II theorem chain hypotheses are fully verified (including
+    trivial-holonomy normal-bundle identification and the exact obstruction
+    vanishing in the relevant L-group), then one obtains a closed manifold
+    `N` with `pi_1(N) = Gamma` and `H_*(N_tilde; Q) = 0` for `* > 0`.
+    In this file we treat this as a candidate conditional closure path.
 
 ## 7. Path to Full Closure
 
@@ -313,11 +323,12 @@ full wiring diagrams.
 is complete (see `problem7r-rotation-lattice-construction.md`). E2 is
 discharged. Two sub-options for obligation S:
 
-1. **S-rot-II (Equivariant surgery — OBSTRUCTION VANISHES).**
+1. **S-rot-II (Equivariant surgery — candidate vanishing path).**
    The Costenoble-Waner codimension-2 gap hypothesis is satisfied. The "cut
    and cap" method (Browder, López de Medrano) applies.
 
-   **Key result: the equivariant surgery obstruction θ = 0 (integrally).**
+   **Candidate result to validate:** equivariant surgery obstruction
+   theta = 0 (integrally), via the two-layer argument below.
 
    The argument has two layers:
 
@@ -335,11 +346,11 @@ discharged. Two sub-options for obligation S:
      form on H₃(F × S¹; Z) is block off-diagonal (hyperbolic), giving
      θ = 0 ∈ L₈(Z[Γ]).
 
-   **With θ = 0:** The equivariant "cut and cap" surgery succeeds. Remove
+   **If theta = 0:** The equivariant "cut and cap" surgery succeeds. Remove
    the tubular neighborhood N(F) from M, obtaining W = M \ int(N(F)) with
    ∂W = S(ν) = F × S¹ and free Z/2-action on W. Since θ = 0, a cap V
    exists with ∂V = F × S¹ and free Z/2-action. Set M' = W ∪ V. Then
-   N = M'/(Z/2) is a closed manifold with π₁(N) = Γ and rationally
+   N = M'/(Z/2) is a closed manifold with pi_1(N) = Gamma and rationally
    acyclic universal cover.
 
    See `problem7r-s-rot-obstruction-analysis.md` for full computation.

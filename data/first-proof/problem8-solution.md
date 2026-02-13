@@ -27,6 +27,17 @@ is algebraic (not just heuristic). Vertex smoothing uses the product structure
 The Hamiltonian isotopy property is established via the Weinstein neighborhood
 theorem (edges) and the vanishing flux in simply-connected R^2 (vertices).
 
+## Assumptions Used (explicit)
+
+1. K is an embedded finite PL 2-complex in (R^4, omega_std), with each face a
+   Lagrangian affine 2-plane.
+2. Adjacent faces are distinct and meet in 1-dimensional edges; exactly four
+   faces meet at each vertex.
+3. Vertex balls and edge tubes are chosen with disjoint-support smoothing
+   neighborhoods, so local Hamiltonian patches compose globally.
+4. Numerical evidence is supplementary only; the proof path is algebraic plus
+   local symplectic smoothing lemmas.
+
 ## Solution
 
 ### 1. Setup: Lagrangian planes in R^4
@@ -157,6 +168,12 @@ Winding number 0.
 (with edge-sharing enforced) give Maslov index exactly 0. In contrast,
 random quadruples without edge-sharing give nonzero Maslov index ~45% of
 the time (see scripts/verify-p8-maslov-v2.py).
+
+**Numerical protocol note.** "Valid 4-valent configurations" in the script are
+samples of quadruples of edge vectors satisfying the adjacency isotropy
+constraints omega(e_i, e_{i+1}) = 0, nondegenerate spanning in R^4, and
+distinct-face incidence. The 998/998 figure is an empirical sanity check,
+not a theorem substitute.
 
 ### 5. Why 4 is special: the 3-face obstruction
 
@@ -304,6 +321,12 @@ edges are disjoint away from vertices, which have already been resolved) and
 from the vertex balls (since the edge arcs start at ∂B_i, outside B_i).
 Therefore the edge smoothings commute with each other and with the vertex
 smoothings.
+
+**Lemma 7.1 (global gluing with disjoint Hamiltonian supports).**
+If local Hamiltonian isotopies are compactly supported in pairwise disjoint
+subsets of a symplectic manifold, then their time-t maps commute and their
+composition is Hamiltonian with generator equal to the sum of pulled-back local
+Hamiltonians. This is the mechanism used here for vertex and edge patches.
 
 **Compatibility at ∂B_i.** The vertex smoothing (Section 5a) agrees with
 the original polyhedral K outside a neighborhood of v_i of radius delta < r_i.

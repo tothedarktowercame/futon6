@@ -25,6 +25,19 @@ Does there exist a polynomial map F: R^{81*n^4} -> R^N satisfying:
 
 **Yes.** Such a polynomial map F exists, with coordinate functions of degree 3.
 
+## Assumptions Used (explicit)
+
+1. Base field is characteristic 0 (R or C); Zariski-generic means outside a
+   proper algebraic subset after complexification.
+2. "Detect" means an iff statement on the admissible index set
+   {(a,b,g,d): not all equal}, with lambda nonzero on that set.
+3. All three 2|2 matricizations are included; rank-1 means CP rank 1
+   (outer product u tensor v tensor w tensor x).
+4. For n > 5, the converse reduction uses restriction to a chosen 5-camera
+   subset; extra cameras do not affect that witness minor.
+5. In Section 1, fixed rows c,d are taken from a generic camera tuple, so
+   c,d are linearly independent and c wedge d != 0.
+
 ## Solution
 
 ### 1. The quadrifocal tensor as a bilinear form
@@ -43,8 +56,18 @@ is an alternating bilinear form on R^4. Since c wedge d is a simple 2-form,
 the Hodge dual *(c wedge d) is also simple, so omega has **rank 2** as a
 bilinear form.
 
+Here we use the generic case c wedge d != 0; if c and d were dependent, the
+form would drop rank and that nongeneric case is excluded by assumption.
+
 Equivalently: the null space of omega is span{c, d} (2-dimensional), and
 omega induces a non-degenerate alternating form on V/span{c,d} = R^2.
+
+**Lemma 1.1 (kernel identification).** If c,d are linearly independent in R^4
+and omega(p,q) = det[p;q;c;d], then ker(omega) = span{c,d}.
+
+*Proof sketch.* If p in span{c,d}, rows are dependent so omega(p,q)=0 for all q.
+Conversely, if p notin span{c,d}, pick q so (p,q,c,d) is a basis; then the
+determinant is nonzero. Hence exactly span{c,d} is the kernel.
 
 ### 2. The rank-2 constraint and its 3x3 minor formulation
 
@@ -86,6 +109,9 @@ So Lambda has matrix rank 1.
 For a rank-1 matrix Lambda, the Hadamard product M = Lambda ∘ Omega equals
 diag(u) * Omega * diag(v) (up to the scalar w_gamma x_delta). Since similar
 transformations preserve rank: rank(M) = rank(Omega) = 2 < 3, so det(M) = 0.
+
+More generally rank(M) <= rank(Omega) = 2 always; equality uses nonzero
+diagonal factors on the chosen triples.
 
 Therefore: **rank-1 lambda implies all 3x3 minors of scaled T vanish.** ✓
 
@@ -136,6 +162,12 @@ rank(Lambda ∘ Omega) <= rank(Lambda) * rank(Omega) provides context but is
 not used in the proof; the converse relies entirely on the polynomial
 nonvanishing argument above.
 
+**Lemma 4.1 (extension from n = 5 to n >= 5).** If one 3x3 minor built from a
+5-index subset is nonzero for a given lambda and camera tuple, the same minor
+persists as a coordinate of F for every ambient n >= 5 by freezing all choices
+to that subset. Therefore a nonvanishing witness at n=5 is sufficient to
+establish non-identity of the converse polynomial condition in general n>=5.
+
 ### 5. All matricizations from the same construction
 
 The construction in Section 2-4 tests the rank-1 condition on the (1,2)-
@@ -150,6 +182,9 @@ construction with different pairs of "free" modes tests all matricizations:
 
 A 4-tensor lambda has rank 1 if and only if all three of these matricizations
 have rank 1 (i.e., are outer products of vectors).
+
+Scope note: for the zero tensor, replace "rank 1" by "rank <= 1"; throughout
+we use the nonzero lambda setting from the problem statement.
 
 **Tensor factor compatibility lemma.** If all three matricizations have rank 1:
 - Mode-(1,2) vs (3,4) rank 1 gives lambda_{abgd} = f_{ab} g_{gd}.
