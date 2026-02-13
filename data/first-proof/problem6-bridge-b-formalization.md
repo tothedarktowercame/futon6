@@ -11,14 +11,18 @@ every eps in (0,1), there exists S ⊆ V with
 
     |S| >= eps^2 * n / 9    and    L_S <= eps * L
 
-provided that the **Barrier Maintenance Invariant** (BMI) holds.
+provided that the **No-Skip Conjecture** holds.
 
-**BMI:** At every step t of the modified leverage-order barrier greedy
-on I_0 (Construction B below), the full barrier degree satisfies
+**No-Skip Conjecture:** At every step t of the modified leverage-order
+barrier greedy on I_0 (Construction B below), the next vertex v_{t+1}
+in ell^{I_0}-sorted order satisfies ||Y_t(v_{t+1})|| < 1.
 
-    dbar_t := (1/r_t) * tr(B_t F_t) < 1
-
-where B_t = (eps*I - M_t)^{-1}, F_t = cross-edge matrix, r_t = |R_t|.
+**NOTE (Cycle 7):** The original conditioning was on the **Barrier
+Maintenance Invariant** (BMI): dbar_t < 1 at each step. BMI is now
+**FALSIFIED** — 12 base-suite steps have dbar >= 1 (worst: 1.739,
+Reg_100_d10 eps=0.5 t=16). The pigeonhole argument (dbar < 1 →
+exists feasible v) cannot close the construction. The No-Skip
+Conjecture replaces BMI as the essential gap.
 
 ## Proof Architecture
 
@@ -31,15 +35,16 @@ Turan (5a) ──> I_0 >= eps*n/3, all I_0-edges strictly light
                     │
          Conditional dbar0 < 1 (Lemma 3) ──> base degree < 2/(3-eps) < 1
                     │
-         Alpha < 1 (Lemma 4) ──> alignment strictly below 1
-                    │
-         Assembly (Lemma 5) ──> dbar = dbar0 + correction
-                    │
-         BMI (Conjecture) ──> full dbar_t < 1 at each step
-                    │
-         Existence (Lemma 6) ──> feasible vertex at each step
+         No-Skip (Conjecture) ──> v_{t+1} feasible at each step
                     │
          Size (Lemma 7) ──> |S| = T = eps*m/3 >= eps^2*n/9
+
+    ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+    DEAD BRANCH (Cycle 7 — BMI falsified):
+         Alpha < 1 (Lemma 4) ──> alignment < 1       (proved, not needed)
+         Assembly (Lemma 5) ──> dbar = dbar0 + ...   (identity, not useful)
+         BMI ──> dbar_t < 1                           (FALSE: worst 1.739)
+         Existence (Lemma 6) ──> pigeonhole           (valid but unreachable)
 ```
 
 ## Construction B: Modified Leverage-Order Barrier Greedy
@@ -203,72 +208,86 @@ stopping, then |S| = T >= eps^2*n/9.
 |S| = T >= eps*m/3 - 1 >= eps*(eps*n/3)/3 - 1 = eps^2*n/9 - 1.
 For n >= 9/eps^2: |S| >= eps^2*n/9 - 1 >= 0. QED.
 
-## The Remaining Gap: Barrier Maintenance Invariant (BMI)
+## The Remaining Gap: No-Skip / Vertex-Level Feasibility (GPL-V)
 
-**Conjecture (BMI).** At every step t <= T of Construction B on any
-connected graph G:
+### BMI is FALSIFIED (Cycle 7)
 
-    dbar_t = (1/r_t) tr(B_t F_t) < 1.
+**Conjecture (BMI, DEAD).** ~~dbar_t < 1 at every step.~~
 
-### What's proved toward BMI
+Codex C7 computed the full dbar = (1/r) tr(B_t F_t) for the first time
+(prior cycles only computed dbar0). Result: **12 base-suite steps have
+dbar >= 1**, worst 1.739 (Reg_100_d10, eps=0.5, t=16). K_n extremality
+also falsified (max ratio 2.28). All three direct bounds fail universally.
 
-1. **dbar0_t < 1** for the pure prefix (Lemma 3).
-   This is the base (M=0) component of dbar_t. It establishes
-   dbar0 < 2/(3-eps) < 1.
+| Graph | eps | t | dbar | dbar0 | x | ||Y_t(v)|| |
+|-------|-----|---|------|-------|---|------------|
+| Reg_100_d10 | 0.50 | 16 | **1.739** | 0.584 | 0.987 | 0.622 |
+| Reg_100_d10 | 0.50 | 15 | **1.641** | 0.549 | 0.987 | 0.910 |
+| Reg_100_d10 | 0.30 | 10 | **1.402** | 0.657 | 0.937 | 0.937 |
 
-2. **Assembly structure** (Lemma 5):
-   dbar_t = dbar0_t * (1 + alpha_t * x_t/(1-x_t)).
-   With dbar0 < 1, alpha < 1, x < 1: dbar_t is finite.
-   But the assembly bound dbar_t <= dbar0/(1-x) diverges as x → 1.
+Note: **the selected vertex is feasible in every case** (||Y_t(v)|| < 1).
 
-3. **Product bound** (Lemma 5 supplement):
-   alpha*dbar0 <= 1/(3-eps). This is tight at K_n.
+The pigeonhole argument (Lemma 6: dbar < 1 → exists feasible v) is valid
+math but **unreachable** because its hypothesis fails. The proof cannot
+go through the average.
 
-4. **Combined bound** (substituting):
-   dbar_t <= 2/(3-eps) + (1/(3-eps)) * x/(1-x) = (2(1-x)+x)/((3-eps)(1-x))
-           = (2-x)/((3-eps)(1-x)).
-   For this < 1: need (2-x)/(1-x) < 3-eps, i.e., 1 + 1/(1-x) < 3-eps,
-   i.e., 1/(1-x) < 2-eps, i.e., x < (1-eps)/(2-eps).
-   At eps=0.5: x < 1/3. At eps=0.9: x < 1/11.
-   **These bounds close for small x but fail near barrier saturation.**
+### The actual gap: No-Skip Conjecture
 
-5. **K_n exact:** dbar_Kn(T) = 5/6 < 1 with 17% margin. Proved
-   analytically via the eigenstructure formula.
+**Conjecture (No-Skip, GPL-V).** At every step t <= T of Construction B
+on any connected graph G, the next vertex v_{t+1} in ell^{I_0}-sorted
+order satisfies ||Y_t(v_{t+1})|| < 1.
 
-### Why the crude bounds don't close
+**Evidence:** 0 skips in 148 runs (116 base + 32 adversarial), 1111
+total steps.
 
-The bounds dbar0 <= 2/(3-eps) and alpha*dbar0 <= 1/(3-eps) are each
-approximately tight for K_n at the horizon, but at DIFFERENT
-configurations. K_n at the horizon has:
+### Why the construction works despite dbar > 1
 
-    dbar0 = 2/3  (not 2/(3-eps) = 0.8 at eps=0.5)
-    alpha*dbar0 = 1/3 (not 1/(3-eps) = 0.4 at eps=0.5)
-    x = 1/3
+The average tr(Y_t(v)) over R can exceed 1, but the MINIMUM over R stays
+below 1. More precisely, the leverage-ordering ensures the first vertex
+processed has low leverage degree, hence small C_t(v), hence small
+||Y_t(v)|| — even when the barrier B_t has high amplification.
 
-The upper bounds BOTH overestimate by ~20%, and combining them pushes
-the assembly bound to exactly 1. The actual dbar is 5/6 with 17% margin.
+The eigenvalue analysis (C7) shows the mechanism:
+- When x → 1, a single eigenvalue lambda_max ≈ eps creates enormous
+  amplification 1/(eps-lambda_max) ~ 150x in one eigenspace.
+- HIGH-leverage vertices have large overlap with this eigenspace →
+  their ||Y_t(v)|| blows up.
+- LOW-leverage vertices (processed first) have small overlap → their
+  ||Y_t(v)|| stays bounded.
+- The leverage ordering precisely selects the vertices that avoid the
+  blow-up eigenspace.
 
-The missing ingredient: **complementarity.** When dbar0 is close to its
-maximum (many cross-edges, few internal), alpha is small (little
-alignment with col(M)). When x is large (M nearly saturated), F has
-little mass in col(M) directions. The product alpha*x stays bounded,
-but our bounds don't capture this joint structure.
-
-### Empirical evidence
-
-From Codex C6 verification (116 runs, 29 graph families, 4 eps values):
+### Empirical evidence (Cycles 6+7)
 
 | Quantity | Worst case | Where |
 |----------|-----------|-------|
-| dbar0 (modified greedy) | 0.7333 | K_50_50, eps=0.3, t=10 |
-| dbar0 (standard greedy) | 0.8081 | various |
-| ||M||/eps (modified) | 0.9866 | Reg_100_d10, eps=0.5, t=16 |
-| Skips (modified greedy) | **0** | all 116 runs |
-| Bridge C: Delta_t < rhs_t | **0 failures** | all 726 steps |
-| Bridge C: max recurrence error | 8.53e-14 | numerical precision |
+| dbar0 (modified greedy) | 0.7333 | K_50_50, eps=0.3 |
+| **dbar (full barrier)** | **1.739** | Reg_100_d10, eps=0.5, t=16 |
+| ||M||/eps (modified) | 0.9866 | Reg_100_d10, eps=0.5 |
+| ||Y_t(v)|| for selected v | 0.937 | various |
+| Skips (modified greedy) | **0** | all 148 runs |
+| Adversarial max dbar | 0.926 | Barbell_40_40_b3 |
 
-**Key finding:** The modified greedy NEVER skips a vertex. The
-trajectory IS the pure prefix in all tested cases.
+### Proposed attack routes (Cycle 8)
+
+1. **Direct vertex bound:** For the lowest-ell vertex v in R_t, bound
+   ||Y_t(v)|| using: (a) ell_v^{I_0} bounds the total leverage of v's
+   edges to S, (b) B_t's amplification is concentrated on specific
+   eigenspaces, (c) low-ell vertices have small projection onto those
+   eigenspaces.
+
+2. **Eigenspace-leverage separation:** Prove that C_t(v)'s eigenspace
+   overlaps with B_t's high-amplification eigenspace are small for
+   low-leverage v. The induced Foster bound constrains the total
+   leverage in each eigenspace.
+
+3. **Leverage-monotonicity:** Prove ||Y_t(v)|| is (approximately)
+   monotone in ell_v^{I_0}. Then No-Skip follows from the minimum-
+   leverage vertex being feasible.
+
+4. **Probabilistic derandomization:** Show E[||Y_t(v)||] < 1 for a
+   random R-vertex (different from dbar < 1, which is E[tr(Y_t(v))]),
+   then derandomize via conditional expectations.
 
 ## No-Skip Conjecture
 
@@ -334,64 +353,66 @@ complementarity gap described above.
 
 ## The Complete Closure Path
 
-If both conjectures hold (No-Skip + BMI), the proof closes:
+If No-Skip holds, the proof closes:
 
 1. **Turan** (proved): I_0 >= eps*n/3, all internal edges strictly light.
 2. **Sort** by ell_v^{I_0} nondecreasing.
 3. **Greedy** processes in sorted order, adding barrier-feasible vertices.
 4. **No-Skip** (conjecture): greedy adds every vertex in order → S_t = prefix.
 5. **dbar0_t < 1** (Lemma 3, proved): conditional proof for the prefix.
-6. **BMI** (conjecture): dbar_t < 1 at each step.
-7. **Existence** (Lemma 6, proved): feasible v in R_t → greedy continues.
-8. **Size** (Lemma 7, proved): |S| = T >= eps^2*n/9. QED.
+6. **Size** (Lemma 7, proved): |S| = T >= eps^2*n/9. QED.
 
-Note: Steps 4 and 6 together imply each other in a sense: if the
-greedy adds the (t+1)-th vertex at each step (No-Skip), then dbar_t < 1
-follows from step 5 + assembly. Conversely, if BMI holds, the greedy
-finds SOME feasible vertex (possibly not the next in order). The gap
-is in proving that the specific vertex (next in leverage order) is
-feasible, or that dbar < 1 holds regardless of which vertex is chosen.
+Note: BMI (dbar < 1, Lemma 6's hypothesis) is no longer in the critical path.
+The proof goes directly from No-Skip → S_t is prefix → dbar0 < 1 → size bound.
+The pigeonhole argument (Lemma 6) is a valid side result but cannot provide
+the inductive step because its hypothesis (dbar < 1) is empirically false.
 
-## Proposed Next Steps (Cycle 7)
+## Proposed Next Steps (Cycle 8)
 
-### Task 1: Complementarity Formalization
+### Task 1: Direct Vertex Bound for Low-Leverage v
 
-Formalize the joint constraint on dbar0 and alpha*x/(1-x):
+**Goal:** Prove ||Y_t(v)|| < 1 for v = argmin_{w in R_t} ell_w^{I_0}.
 
-The identity F + M + L_R = Pi_{I_0} constrains the eigenvalue
-distribution of B_t F_t. When M_t has eigenvalues close to eps
-(large x), Pi_{I_0} - M_t is small, forcing F_t to be small in
-col(M) directions, reducing alpha. Prove:
+Key ingredients:
+- C_t(v) = sum_{e: v~S_t} X_e has rank <= deg_S(v).
+- ||Y_t(v)|| = ||B_t^{1/2} C_t(v) B_t^{1/2}|| <= ||B_t|| * ||C_t(v)||
+  when C_t(v) is rank 1 (single edge). For multiple edges, need sharper.
+- tr(C_t(v)) = ell_v^{S_t} <= ell_v^{I_0} <= 2(m-1)/m (by sorting).
+- The amplification ||B_t|| = 1/(eps - ||M_t||) can be huge, but
+  the DIRECTION of C_t(v) matters: if C_t(v) has small projection onto
+  B_t's high eigenspaces, ||Y_t(v)|| stays bounded.
 
-    dbar_t = sum_j (pi_j - lambda_j) / (eps - lambda_j)
+**Numerical target:** Extract the eigenspace overlap between C_t(v)
+and B_t's high-amplification eigenspace for the worst-case steps.
 
-where pi_j = u_j^T Pi_{I_0} u_j and lambda_j = eigenvalues of M_t.
-Bound this sum by exploiting pi_j <= 1 and lambda_j < eps.
+### Task 2: Leverage-Monotonicity Conjecture
 
-### Task 2: Potential Function Approach
+**Goal:** Prove or falsify: ||Y_t(v)|| <= ||Y_t(w)|| whenever
+ell_v^{I_0} <= ell_w^{I_0} and both v, w in R_t.
 
-Define a BSS-style potential Phi_t = tr(B_t) = sum 1/(eps-lambda_j).
-Track Phi_t through vertex-block updates. Show that the potential stays
-bounded (Phi_T < some function of m, eps) while also maintaining
-dbar_t < 1. The BSS barrier argument handles rank-1 updates; extend
-to vertex-block (multi-edge) updates.
+If true, the minimum-ell vertex minimizes ||Y_t(v)|| in R_t. Combined
+with empirical feasibility (always holds), this would reduce No-Skip to
+a statement about the minimum-leverage vertex.
 
-### Task 3: K_n Extremality via Complementarity
+### Task 3: Probabilistic Approach
 
-Prove that K_n maximizes dbar_t among all graphs, using the
-complementarity structure. For K_n, the eigenvalues of M_t are
-uniform (all equal to t/n), giving the exact formula
-dbar = (t-1)/(n*eps-t) + (t+1)/(n*eps). Show that non-uniform
-eigenvalue distributions give lower dbar (this requires the CONCAVITY
-of the combined expression, not just of individual terms — which is
-why BR4 doesn't apply directly).
+**Goal:** Show Pr_{v ~ Uniform(R_t)}[||Y_t(v)|| < 1] > 0.
 
-### Task 4: Numerical Stress Test of Complementarity
+This is WEAKER than dbar < 1 (which controls traces, not spectral norms)
+but may be provable when dbar > 1. If the distribution of ||Y_t(v)||
+across R_t is concentrated (most vertices near the median), then
+dbar > 1 is compatible with most vertices having ||Y_t(v)|| < 1.
 
-For the worst-case configurations (high x near barrier saturation),
-extract the eigenvalue distribution of M_t and the projections pi_j.
-Verify that sum (pi_j - lambda_j)/(eps - lambda_j) < r_t at ALL
-steps. Identify the tightest case and the margin.
+### Task 4: Eigenspace-Leverage Separation
+
+**Goal:** Show that low-leverage vertices have small overlap with the
+high-amplification eigenspace of B_t.
+
+The high-amplification eigenspace is the one where lambda_j ≈ eps
+(contributing ~150x to the barrier sum). This eigenspace corresponds
+to the direction where M_t is nearly saturated. Prove: if v has low
+ell_v^{I_0}, then u_{max}^T C_t(v) u_{max} is small (u_{max} = the
+eigenvector of M_t with largest eigenvalue).
 
 ## Summary
 
@@ -400,17 +421,22 @@ steps. Identify the tightest case and the margin.
 | Turan step | **Proved** |
 | Induced Foster bound | **Proved** (Lemma 1) |
 | Conditional dbar0 < 1 (prefix) | **Proved** (Lemma 3) |
-| Alpha < 1 | **Proved** (Lemma 4) |
-| Assembly decomposition | **Proved** (Lemma 5) |
-| Product bound | **Proved** (alpha*dbar0 <= 1/(3-eps)) |
-| Existence lemma | **Proved** (Lemma 6) |
+| Alpha < 1 | **Proved** (Lemma 4) — not in critical path |
+| Assembly decomposition | **Proved** (Lemma 5) — not in critical path |
+| Product bound | **Proved** — not in critical path |
+| Existence lemma | **Proved** (Lemma 6) — unreachable (BMI false) |
 | Size guarantee | **Proved** (Lemma 7) |
-| No-Skip Conjecture | **Conjectured** (0/116 failures) |
-| BMI (dbar_t < 1) | **Conjectured** (0/726 failures) |
+| No-Skip Conjecture | **Conjectured** (0/1111 failures) — **THE GAP** |
+| BMI (dbar_t < 1) | **FALSIFIED** (12 violations, worst 1.739) |
+| K_n extremality | **FALSIFIED** (max ratio 2.28) |
 | Bridge C (large m) | **Proved for dbar0** (m > Theta(1/(eps(1-eps)))) |
 | K_n case | **Proved** (exact formula, dbar = 5/6) |
 
-The proof is complete modulo the BMI. The BMI is numerically robust
-(worst margin: 17% at K_n) and has a clear structural explanation
-(complementarity between dbar0 and alpha*x/(1-x)). Formalizing the
-complementarity is the one remaining task.
+The proof is complete modulo No-Skip. The critical path is now:
+Turan → Induced Foster → dbar0 < 1 → **[No-Skip]** → Size.
+
+The alpha < 1, assembly, product bound, and existence lemma machinery
+(Lemmas 4-6) remains mathematically valid but is no longer needed —
+it was infrastructure for the BMI route, which is now dead. The proof
+has simplified: the gap is purely about individual vertex feasibility
+in leverage order, not about the average barrier degree.
