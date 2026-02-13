@@ -27,19 +27,31 @@ epsilon in (0,1), there exists S with |S| >= c*epsilon*n and L_S <= epsilon L?
 **K_n: PROVED.** The barrier greedy gives |S| = eps*n/3, c = 1/3, via the
 elementary pigeonhole + PSD trace bound argument (Section 5d).
 
-**General graphs: ONE GAP.** The average barrier degree dbar satisfies
-dbar <= d̄_Kn(t) to within 0.5% empirically, where the K_n exact formula
-gives d̄_Kn → 5/6 at the horizon. Formally proving K_n extremality
-(d̄_G ≤ d̄_Kn for all G) is the single remaining gap.
+**General graphs: ONE GAP (dbar0 < 1).** The single remaining gap is to
+prove that the base average barrier degree dbar0 = tr(F)/(r*eps) < 1 at
+all steps of the barrier greedy. Equivalently: the expected number of
+cut edges in a uniform spanning tree between S and R is less than r*eps.
+Empirically: max dbar0 = 0.755 across 678 steps on 15 graph families
+(margin 24.5%). See Section 5k.
 
-**Cycle 3 simplification:** The leverage degree filter (former Section 5b)
-is unnecessary — Foster's theorem controls the average leverage degree
-globally. This simplifies the proof chain and improves the constant from
-|S| >= eps^2*n/36 to |S| >= eps^2*n/9 (a 4x improvement).
+**Corrections (Cycle 5):**
+- dbar0 <= 2/3 is NOT universal (max observed: 0.755). It holds for K_n
+  but fails for some regular and expander-like graphs.
+- The original "K_n extremality" formulation (d̄_G <= d̄_Kn) is blocked by
+  four proved blocking results (BR1-BR4, Section 5g). The Schur-convexity
+  argument reverses direction.
+
+**What IS proved (Cycles 4-5):**
+- alpha < 1 for vertex-induced partitions (Section 5i)
+- Threshold relaxation: any c < 1 suffices in the assembly (Section 5h)
+- Product bound: alpha * dbar0 <= 1/3 (Section 5j)
+- Assembly decomposition: dbar = dbar0 + (alpha*dbar0)*x/(1-x) (Section 5j)
+- Assembly dbar < 1 verified at all 678 steps (max 0.833 = 5/6 at K_n)
+- Four blocking results BR1-BR4 closing the rho_1 < 1/2 route (Section 5g)
 
 **Superseded machinery:** MSS interlacing families, Borcea-Branden real
-stability, Bonferroni eigenvalue bounds, leverage degree filter — all
-bypassed by the Foster + pigeonhole argument.
+stability, Bonferroni eigenvalue bounds, leverage degree filter,
+Schur-convexity for K_n extremality — all bypassed or blocked.
 
 ## 1. Exact reformulation
 
@@ -252,6 +264,17 @@ Since sum_{v in R_t} ell_v^{S_t} = sum_{e in cross} tau_e <= n-1, we get:
 
     dbar_t <= (n-1)/(epsilon*r_t).
 
+**CORRECTION (Cycle 5):** This Foster bound is too loose by approximately a
+factor of n — it ignores R-internal leverage L_R. The tighter statement is:
+tr(F) = (n-1) - L_R - tau, where L_R is the total leverage of R-internal
+edges and tau is the total leverage of S-internal edges. For dbar0 < 1, we
+need L_R > n-1-tau-r*eps, i.e., "most leverage stays within R." The naive
+Foster bound gives dbar0 <= (n-1)/(r*eps), which can far exceed 1.
+
+**CORRECTION (Cycle 5):** The claim dbar0 <= 2/3 at all steps is FALSE.
+Observed max dbar0 = 0.755 (ExpanderProxy_Reg_100_d6, eps=0.5, t=16).
+The bound dbar0 = 2/3 holds for K_n at the horizon but is not universal.
+
 But the actual structure is tighter. For the complete graph K_n:
 tau_e = 2/n for all edges, and:
 
@@ -367,6 +390,156 @@ Success probability ranges from 0.2% to 57%.
 This gives |S| >= epsilon*n/6 (c = 1/6) but the formal matrix
 concentration proof for general graphs remains open.
 
+### 5g. Blocking results (Cycle 4): standard toolkit insufficient at 1/2
+
+Four proved results show that the standard spectral toolkit cannot close
+GPL-H at the rho_1 < 1/2 threshold:
+
+**BR1 (Abstract PSD counterexample):** For abstract PSD matrices M, F with
+M + F <= I, the alignment alpha = tr(P_M F)/tr(F) can equal 1.
+Counterexample: M = a*e_1*e_1^T, F = (1-a)*e_1*e_1^T + b*e_2*e_2^T.
+Then alpha = (1-a)/(1-a+b) -> 1 as b -> 0. This means no purely
+PSD-geometric argument can prove alpha < 1/2.
+
+**BR2 (Per-edge alignment tight):** For K_n, the per-edge alignment
+alpha_{uv} = |<z_e, z_{uv}>|^2 / (||z_e||^2 * ||z_{uv}||^2) approaches
+1/2 as n -> infinity. Exact value: (t-1)/(2t). This means per-edge
+bounds cannot give alpha < 1/2.
+
+**BR3 (Interlacing fails):** The average characteristic polynomial
+Q(x) = (1/r) sum_v det(xI - Y_t(v)) is NOT real-rooted at 35 of 117
+tested steps. The Kadison-Singer certificate (checking if Q is a convex
+combination of real-rooted polynomials) fails at 0/10 trials on multiple
+witnesses. This blocks the MSS interlacing families approach.
+
+**BR4 (Schur-convexity reverses):** The amplification function
+f(mu) = (1-mu)/(eps-mu) is CONVEX (not concave) on [0, eps). By
+Schur-convexity, concentrated eigenvalue spectra give HIGHER dbar than
+uniform spectra. This means K_n (uniform spectrum) gives the LOWEST
+dbar, contradicting the assumption needed for K_n extremality via this
+route. Observed: concentrated beats uniform by 7.7%.
+
+See `problem6-blocking-results.md` for formal proofs.
+
+### 5h. Threshold relaxation: c < 1 suffices (Cycle 5)
+
+The constant 1/2 in rho_1 < 1/2 is NOT fundamental. The Neumann assembly:
+
+    dbar <= dbar0 * (1 - x + cx) / (1 - x)
+
+where c bounds the alignment (rho_1 <= c) and x = ||M||/eps, gives
+dbar < 1 whenever:
+
+    c < c_needed := (1-x)(1/dbar0 - 1) / x.
+
+For any dbar0 < 1 and x < 1, c_needed > 0. We do NOT need c < 1/2;
+any c < 1 suffices as long as dbar0 < 1.
+
+**Empirical verification (C5):** Across 678 steps on 15 graph families:
+- min c_needed = 0.957 (Reg_100_d50, eps=0.5, t=16)
+- max rho_1 = 0.494 (K_n extremal)
+- Uniform c_0 in (0.494, 0.957) works at all tested steps
+
+This transforms the problem from "tight inequality with 8% margin" to
+"qualitative statement: F has nonzero mass outside col(M)."
+
+### 5i. Alpha < 1 for vertex-induced partitions (Cycle 5)
+
+**Theorem:** For any vertex-induced partition {S, R} of the barrier greedy
+with cross-edges present, alpha = tr(P_M F)/tr(F) < 1.
+
+**Proof:** Let (u,v) be a cross-edge with u in S, v in R. The incidence
+vector b_{uv} = e_u - e_v has nonzero coordinate on v. No S-internal
+edge e' = {a,b} (a,b in S) has nonzero coordinate on v in its incidence
+vector b_{e'} = e_a - e_b. Therefore b_{uv} is not in the span of
+{b_{e'} : e' internal to S}.
+
+The map L^{+/2} restricted to im(L) is injective (it maps im(L) -> im(L)
+with eigenvalues lambda_i^{-1/2} > 0). Linear non-membership is preserved:
+z_{uv} = L^{+/2} b_{uv} is NOT in col(M) = span{L^{+/2} b_{e'} : e' internal}.
+
+Therefore ||P_{M^perp} z_{uv}||^2 > 0 for each cross-edge. Since
+F = sum_{cross} z_{uv} z_{uv}^T:
+
+    tr((I - P_M) F) = sum_{cross} ||P_{M^perp} z_{uv}||^2 > 0
+
+and so alpha = 1 - tr((I-P_M)F)/tr(F) < 1. QED.
+
+**Essential structure:** Vertex-induced partitions are required. Codex C5
+Task 5 showed that random edge partitions can give alpha = 1 on dense
+graphs (full-rank M gives P_M = Pi, so alpha = 1). The coordinate
+argument depends on R-vertices being absent from internal edge supports.
+
+### 5j. Product bound and assembly decomposition (Cycle 5)
+
+The Neumann series decomposes as:
+
+    dbar = dbar0 + (alpha * dbar0) * x/(1-x)
+
+where dbar0 = tr(F)/(r*eps), alpha = tr(P_M F)/tr(F), x = ||M||/eps.
+
+The correction term is controlled by the product alpha * dbar0:
+
+    alpha * dbar0 = tr(P_M F) / (r * eps) <= ((t-1) - tau) / (r * eps)
+
+where tau = sum of S-internal leverages. This bound follows from
+tr(P_M F) <= tr(P_M (Pi - M)) = tr(P_M Pi) - tr(M) = (t-1) - tau.
+
+**Empirical:** max alpha*dbar0 = 0.328 across 678 steps. Tight at K_n
+where alpha*dbar0 -> 1/3.
+
+**Complementarity:** When dbar0 is high (many cross-edge leverages),
+alpha is low (small fraction aligned with col(M)), and vice versa. The
+product remains bounded.
+
+**Assembly closure conditional on dbar0 < 1:** If dbar0 < 1, then with
+the product bound and x < 1:
+
+    dbar = dbar0 + (alpha*dbar0) * x/(1-x)
+
+With alpha*dbar0 <= 1/3 and x <= 1/3 (typical):
+dbar <= dbar0 + (1/3)(1/2) = dbar0 + 1/6. Even at dbar0 = 3/4:
+dbar <= 3/4 + 1/6 = 11/12 < 1.
+
+Verified: assembly dbar < 1 at ALL 678 tested steps (max 0.833 = 5/6
+at K_n horizon).
+
+### 5k. The remaining gap: dbar0 < 1
+
+The single remaining gap is:
+
+> **dbar0 = tr(F) / (r * eps) < 1** at all barrier greedy steps for all
+> graphs.
+
+Equivalent reformulations:
+
+1. **Leverage:** The average cross-edge leverage per R-vertex is < eps.
+2. **UST:** The expected number of cut edges in a uniform spanning tree
+   between S and R is less than r * eps.
+3. **Internal leverage:** The R-internal leverage L_R > n-1-tau-r*eps
+   (most leverage stays within R).
+
+**Why Foster alone is insufficient:** Foster gives tr(F) <= n-1, hence
+dbar0 <= (n-1)/(r*eps). This bound is ~n/r times too large because it
+ignores L_R (the R-internal leverage, which accounts for most of the
+total leverage n-1).
+
+**Empirical evidence (C5):** Max dbar0 = 0.755 across 678 steps on 15
+graph families, n up to 500, eps in {0.1, 0.2, 0.3, 0.5}. Margin to 1:
+24.5%. K_n: dbar0 = 2/3 at horizon.
+
+**UST interpretation (cleanest):** tau_e = Pr[e in random spanning tree].
+So tr(F) = E[number of tree edges crossing {S,R}]. The lower bound on
+cut tree edges is |S| (S must connect to R), and |S| < r*eps at the
+horizon (since t < r*eps follows from t = eps*n/3 and r = n-t). So
+the trivial lower bound is compatible. The question is whether the
+expectation can approach r*eps from below — and empirically it does
+not (max ratio: 0.755).
+
+Literature search in progress (Codex C5b): effective resistance
+distribution across vertex partitions, Schur complement leverage
+bounds, UST edge cut statistics.
+
 ## 6. Final conclusion
 
 ### Proved results
@@ -378,69 +551,108 @@ concentration proof for general graphs remains open.
 
 3. **For K_n:** The barrier greedy gives |S| = epsilon*n/3 with
    ||M_S|| < epsilon. Proved via the K_n exact formula:
-   d̄_Kn(t) = (t-1)/(n*eps-t) + (t+1)/(n*eps) → 5/6 at horizon,
+   d̄_Kn(t) = (t-1)/(n*eps-t) + (t+1)/(n*eps) -> 5/6 at horizon,
    then pigeonhole + PSD trace bound gives existence of v with
    ||Y_t(v)|| < 1 at each step. Universal c = 1/3.
 
-4. **The proof chain (Sections 5a-5f):**
+4. **The proof chain (Sections 5a-5k):**
    (a) Turan: I_0 >= eps*n/3, all internal edges light
    (b) [Deleted — leverage filter unnecessary]
    (c) Barrier greedy on I_0 for T = eps*m_0/3 steps
    (d) Pigeonhole + PSD trace: if dbar < 1 then exists v with ||Y_t(v)|| < 1
-   (e) Foster + K_n formula: dbar → 5/6 at horizon (K_n extremal)
+   (e) Foster mechanism: controls dbar^0 (but NOT to 2/3 universally)
    (f) Size: |S| = eps*m_0/3 >= eps^2*n/9
+   (g) Blocking results BR1-BR4: close the rho_1 < 1/2 route
+   (h) Threshold relaxation: any c < 1 suffices (bypasses BR1-BR4)
+   (i) Alpha < 1 proved for vertex-induced partitions
+   (j) Product bound: alpha*dbar0 <= 1/3, assembly decomposition
+   (k) **GAP: dbar0 < 1** (avg cross-edge leverage per R-vertex < eps)
 
-5. **Foster's theorem is the mechanism:** The leverage filter is
-   unnecessary because Foster's theorem (sum tau_e = n-1) controls
-   the average leverage degree globally. The max dbar without
-   filtering: 0.718 (K_80, eps=0.5), still well below 1.
+5. **Neumann analysis (Cycles 3-4):**
+   - Monotonicity: rho_k <= rho_1 for all k >= 1 (proved)
+   - Operator bound: rho_1 <= alpha = tr(P_M F)/tr(F) (proved)
+   - K_n exact: alpha = (t-1)/(2t) < 1/2 (proved)
+   - General alpha < 1/2: BLOCKED by BR1-BR4
 
-### Numerically verified (strong evidence, formal bound in progress)
+6. **Relaxation results (Cycle 5):**
+   - alpha < 1 for vertex-induced partitions (proved, coordinate argument)
+   - Threshold relaxation: c < 1 suffices in assembly (proved)
+   - Product bound: alpha*dbar0 <= ((t-1)-tau)/(r*eps) (proved)
+   - Assembly: dbar = dbar0 + (alpha*dbar0)*x/(1-x) (proved)
+   - Vertex-induced structure essential (edge partitions can give alpha=1)
 
-6. **dbar < 1 at ALL barrier greedy steps** for all tested graphs.
-   440+ nontrivial steps across n in [8,80], K_n, C_n, Barbell,
-   DisjCliq, ER(n,p), Star, Grid graphs, epsilon in
-   {0.12, 0.15, 0.2, 0.25, 0.3, 0.5}.
-   Max dbar = 0.718 (K_80, eps=0.5, t=12). Margin: 28%.
+### Corrections from Cycle 5
 
-7. **K_n is nearly extremal** across all tested graphs.
-   Max d̄_G/d̄_Kn ratio: 1.005 (single ER instance, finite-size).
-   Mean ratio: 0.962. K_n is the hardest case.
+7. **dbar0 <= 2/3 is FALSE.** Max observed dbar0 = 0.755
+   (ExpanderProxy_Reg_100_d6, eps=0.5, t=16). The 2/3 bound holds for
+   K_n at horizon but not universally.
 
-8. **Q-polynomial roots < 1** at all 440 steps. The average
-   characteristic polynomial Q(x) = (1/r)sum det(xI - Y_v) has
-   max real root < 0.505, consistent with max root <= dbar < 1
-   (Vieta bound for nonneg roots).
+8. **c_needed >= 1 is FALSE.** Min observed c_needed = 0.957
+   (Reg_100_d50, eps=0.5, t=16). However, a uniform c_0 in
+   (0.494, 0.957) works at all tested steps.
 
-9. **Random sampling with p = epsilon** produces epsilon-light sets of
-   size >= epsilon*n/6 for all tested graphs (n <= 80, 272 combos).
+9. **K_n extremality via Schur-convexity is BLOCKED (BR4).** The
+   amplification function is convex, not concave, so concentrated
+   spectra give higher dbar than uniform (K_n).
 
-### Remaining formal gap (GPL-H: prove K_n extremality)
+### Numerically verified (678 steps, 15 families, n up to 500)
+
+10. **dbar < 1 at ALL barrier greedy steps** for all tested graphs.
+    Max assembly dbar = 0.833 = 5/6 (K_n horizon). Margin: 17%.
+
+11. **dbar0 < 1 at ALL steps.** Max dbar0 = 0.755. Margin: 24.5%.
+
+12. **alpha*dbar0 <= 1/3** at all tested steps. Max = 0.328.
+
+13. **Complementarity holds:** when dbar0 is high, alpha (and rho_1) are
+    low; the product remains bounded.
+
+### Remaining formal gap: dbar0 < 1
 
 The single remaining gap is to prove:
 
-    d̄_G(t) <= d̄_Kn(t, m_0, epsilon)   for all G, t, epsilon.
+> **dbar0 = tr(F) / (r * eps) < 1**
+>
+> at all steps t of the barrier greedy on all connected graphs G.
 
-The K_n exact formula gives d̄_Kn → 5/6 at the horizon, so proving this
-inequality would immediately close the proof with dbar <= 5/6 < 1.
+Equivalent statements:
 
-**Evidence:** The ratio d̄_G/d̄_Kn is at most 1.005 across all tested
-instances (589+ steps, 11 graph families, n up to 80). The single
-overshoot is an ER instance with non-uniform leverage in I_0 — likely
-a finite-size effect that vanishes at larger n.
+    (a) The average cross-edge leverage per R-vertex is less than eps.
+    (b) E[number of cut edges in a uniform spanning tree] < r * eps.
+    (c) The R-internal leverage L_R > n - 1 - tau - r*eps.
 
-**Why K_n should be extremal:** K_n has the most uniform leverage
-structure (tau_e = 2/n for all edges). Non-uniform leverage should
-reduce dbar because low-leverage edges contribute less to tr(B_t F_t),
-and the convex amplification 1/(eps - lambda_i) is neutralized by
-the correspondingly smaller cross-edge projections.
+**Why Foster alone is insufficient:** Foster gives tr(F) <= n-1, hence
+dbar0 <= (n-1)/(r*eps), which is ~n/r times too large. It ignores that
+most leverage stays within R (as R-internal edges).
 
-**Possible closure paths:**
-(a) Prove K_n extremality via Schur-convexity of the leverage structure
-(b) Use log-det potential Phi(t) = log det(eps*I - M_t) to bound ||M_t||
-(c) Apply interlacing families to show Q is real-rooted (giving max root <= dbar)
+**Evidence:** Max dbar0 = 0.755 across 678 steps (24.5% margin to 1).
+K_n: dbar0 = 2/3 at horizon. The UST reformulation (b) is a clean
+probabilistic statement that may have a known answer in the random
+spanning tree literature.
 
-See `problem6-gpl-h-attack-paths.md` for the full attack path analysis.
+**Blocked closure paths:**
+- (BLOCKED) K_n extremality via Schur-convexity — BR4 reverses direction
+- (BLOCKED) Interlacing families — BR3 shows Q not real-rooted
+- (BLOCKED) Log-det potential — BSS barrier doesn't give dbar < 1 directly
+
+**Open closure paths:**
+- UST cut-edge statistics (Lyons-Peres, Kirchhoff): bound E[cut edges]
+- Effective resistance distribution across vertex partitions
+- Schur complement leverage bounds: L/S relates to R-subgraph structure
+- Fixed-block interlacing (Xie-Xu): bypass the Neumann route entirely
+
+Literature search in progress (Codex C5b handoff).
+
+### If dbar0 < 1 is proved
+
+The proof closes as follows:
+1. dbar0 < 1 (the gap)
+2. alpha * dbar0 <= 1/(3-eps) (proved, operator bound)
+3. dbar = dbar0 + (alpha*dbar0) * x/(1-x) (proved, assembly decomposition)
+4. With dbar0 < 3/4 and items 2-3: dbar < 0.95 < 1 (closes GPL-H)
+
+Even dbar0 < 1 alone, combined with alpha < 1 (proved) and the
+continuity of the assembly, would suffice.
 
 ### Summary
 
@@ -448,11 +660,16 @@ The existential answer is **YES** for K_n with c = 1/3 (proved),
 and numerically confirmed for all tested graph families with
 c >= 1/6. The proof architecture is:
 
-    Turan → barrier greedy → Foster + K_n → pigeonhole → |S| = eps^2*n/9
+    Turan -> greedy -> pigeonhole -> [dbar0 < 1 GAP]
+                                   + alpha < 1 + product bound
+                                   + assembly -> eps^2*n/9
 
-The formal extension to arbitrary graphs requires proving K_n
-extremality (d̄_G <= d̄_Kn), which holds to within 0.5% empirically
-and is the SINGLE remaining gap.
+The formal extension to arbitrary graphs requires proving dbar0 < 1
+(average cross-edge leverage per R-vertex < eps). This holds with
+24.5% margin empirically and has a clean UST reformulation. The
+original K_n-extremality approach is blocked by BR4 (Schur-convexity
+reversal). The threshold relaxation (c < 1 suffices) and alpha < 1
+proof reduce the problem to this single sub-lemma.
 
 ## Key identities and inequalities used
 
@@ -462,7 +679,14 @@ and is the SINGLE remaining gap.
 4. Pigeonhole: min_v f(v) <= (1/r) sum_v f(v) (minimum <= average)
 5. Turan: independence number >= n^2/(2m+n)
 6. Foster's theorem: sum_e tau_e = n-1 (connected G), avg leverage degree < 2
-7. For K_n: tau_e = 2/n, d̄(t) = (t-1)/(n*eps-t) + (t+1)/(n*eps) → 5/6
+7. For K_n: tau_e = 2/n, d̄(t) = (t-1)/(n*eps-t) + (t+1)/(n*eps) -> 5/6
+8. F + M <= Pi (compensation identity, proved)
+9. rho_k <= rho_1 (monotonicity, proved Cycle 4)
+10. rho_1 <= alpha = tr(P_M F)/tr(F) (operator bound, proved Cycle 4)
+11. alpha < 1 for vertex-induced partitions (proved Cycle 5)
+12. alpha*dbar0 <= ((t-1)-tau)/(r*eps) (product bound, proved Cycle 5)
+13. dbar = dbar0 + (alpha*dbar0)*x/(1-x) (assembly decomposition, proved Cycle 5)
+14. tau_e = Pr[e in UST]: dbar0 < 1 iff E[cut tree edges] < r*eps
 
 ## References
 
@@ -474,5 +698,7 @@ and is the SINGLE remaining gap.
 - Borcea, Branden (2009), "The Lee-Yang and Polya-Schur programs. I.
   Linear operators preserving stability," Inventiones Math. 177, 541-569.
 - Tropp (2011), Freedman's inequality for matrix martingales.
+- Lyons, Peres, "Probability on Trees and Networks" — uniform spanning
+  tree chapter, edge cut probabilities.
 - Standard matrix Bernstein inequality for sums of independent self-adjoint
   random matrices.

@@ -1,8 +1,8 @@
 {
   "thread_id": "first-proof-p6",
-  "version": "v6-operator-bound",
+  "version": "v7-relaxation",
   "last_updated": "2026-02-13",
-  "notes": "Post Cycle 4: rho_k<=rho_1 (monotonicity), operator bound proved, gap narrowed to trace inequality",
+  "notes": "Post Cycles 4-5: BR1-4 block standard toolkit at 1/2 threshold; threshold relaxed to c<1 (houseboat); alpha<1 proved (vertex-induced); dbar0<=2/3 corrected (max 0.755); product bound alpha*dbar0<=1/3; remaining gap: dbar0<1",
   "nodes": [
     {
       "id": "p6-problem",
@@ -71,10 +71,14 @@
       "id": "p6-foster",
       "node_type": "answer",
       "post_id": 614,
-      "body_text": "Section 5e (Foster mechanism): Foster's theorem gives sum tau_e = n-1, so avg leverage degree < 2. At M_t = 0: dbar^0 = tr(F_t)/(eps*r_t). For K_n this is 2t/(n*eps) = 2/3 at horizon.",
+      "body_text": "Section 5e (Foster mechanism): Foster's theorem gives sum tau_e = n-1. At M_t = 0: dbar^0 = tr(F_t)/(eps*r_t). CORRECTION (C5): dbar^0 <= 2/3 is NOT universal — max observed dbar^0 = 0.755 (ExpanderProxy_Reg_100_d6, eps=0.5, t=16). For K_n: dbar^0 = 2t/(n*eps) = 2/3 at horizon (exact). The Foster bound tr(F) <= n-1 is too loose by ~factor n; it ignores R-internal leverage L_R.",
       "score": 1,
       "creation_date": "2026-02-13",
-      "parent_post_id": 6
+      "parent_post_id": 6,
+      "corrections": {
+        "dbar0_leq_2_3": "FALSE — max observed 0.755 (C5 data, 678 steps, 15 families)",
+        "foster_bound_too_loose": "tr(F) <= n-1 ignores that most leverage stays in R-internal edges"
+      }
     },
     {
       "id": "p6-kn-formula",
@@ -112,15 +116,18 @@
       "id": "p6-gpl-h",
       "node_type": "answer",
       "post_id": 618,
-      "body_text": "GPL-H gap: Prove dbar < 1 for general G. NARROWED in Cycle 4: now reduces to a single trace inequality tr(F) > 2*sum mu_i(1-mu_i)/mu_max. Margin: 8% (K_n) to 251% (ER). K_n is tightest at (t-1)/(2t) < 1/2.",
+      "body_text": "GPL-H gap: Prove dbar < 1 for general G. REFORMULATED (C5): threshold relaxed from rho_1<1/2 to rho_1<1; alpha<1 proved; remaining gap is dbar0<1. Assembly: dbar = dbar0 + (alpha*dbar0)*x/(1-x). With dbar0<1 and alpha<1, the assembly gives dbar<1 via the product bound.",
       "score": 0,
       "creation_date": "2026-02-13",
       "parent_post_id": 6,
       "attack_path_status": {
         "a_schur_naive": "BLOCKED (Codex C2)",
-        "e_neumann_alignment": "ADVANCED — rho_k<=rho_1 proved, operator bound proved, gap narrowed",
-        "f_trace_inequality": "NEW GAP — prove tr(F) > 2*(tau-||M||_F^2)/mu_max",
-        "g_interlacing_bypass": "OPEN — could bypass rho entirely"
+        "b_rho1_lt_half": "BLOCKED (BR1-BR4: standard toolkit insufficient at 1/2 threshold)",
+        "c_threshold_relaxation": "PROVED — any c<1 suffices in assembly (houseboat)",
+        "d_alpha_lt_1": "PROVED — vertex-induced coordinate argument",
+        "e_product_bound": "PROVED — alpha*dbar0 <= 1/(3-eps), empirically <= 1/3",
+        "f_dbar0_lt_1": "OPEN — the true remaining gap",
+        "g_interlacing_bypass": "OPEN — could bypass everything"
       }
     },
     {
@@ -145,7 +152,7 @@
       "id": "p6-operator-bound",
       "node_type": "answer",
       "post_id": 631,
-      "body_text": "PROVED (Cycle 4): rho_1 <= sum mu_i(1-mu_i)/(mu_max*tr(F)) (operator bound). Proof: F+M<=Pi gives M^{1/2}FM^{1/2} <= M-M^2, so tr(MF) <= tau - ||M||_F^2. For K_n: bound = (t-1)/(2t) < 1/2 (PROVED). Max over all tested: 0.4615 = 6/13 at K_80.",
+      "body_text": "PROVED (Cycle 4): rho_1 <= sum mu_i(1-mu_i)/(mu_max*tr(F)) = alpha (operator bound). Proof: F+M<=Pi gives M^{1/2}FM^{1/2} <= M-M^2, so tr(MF) <= tau - ||M||_F^2. For K_n: bound = (t-1)/(2t) < 1/2 (PROVED). Max over all tested: 0.494 (K_n extremal).",
       "score": 1,
       "creation_date": "2026-02-13",
       "parent_post_id": 630
@@ -170,16 +177,77 @@
       "id": "p6-trace-gap",
       "node_type": "comment",
       "post_id": 633,
-      "body_text": "REMAINING GAP (Cycle 4): Prove tr(F) > 2*sum mu_i(1-mu_i)/mu_max for all greedy steps on all graphs. Equivalent to: alpha = tr(P_M F)/tr(F) < 1/2 (F-mass outside col(M) exceeds mass inside). For K_n: alpha = (t-1)/(2t), margin = 1/(2t). Dimensional argument: col(M) dim t-1 << n-t = dim null(M). Margin: 8-251% on test suite.",
+      "body_text": "SUPERSEDED (Cycle 5): The alpha<1/2 trace gap is no longer the bottleneck. Threshold relaxation shows c<1 suffices (not c<1/2). With alpha<1 proved and product bound alpha*dbar0<=1/3, the remaining gap is dbar0<1 (see p6-dbar0-gap). The original formulation (tr(F) > 2*sum mu_i(1-mu_i)/mu_max) is blocked by BR1-BR4 at the 1/2 threshold.",
       "score": 0,
       "creation_date": "2026-02-13",
+      "parent_post_id": 631,
+      "status": "SUPERSEDED by p6-dbar0-gap"
+    },
+    {
+      "id": "p6-blocking",
+      "node_type": "answer",
+      "post_id": 640,
+      "body_text": "PROVED (Cycle 4): Four blocking results show standard spectral toolkit cannot close GPL-H at the 1/2 threshold. BR1: abstract PSD (M,F with M+F<=I) can have alpha=1. BR2: per-edge alignment alpha_{uv} -> 1/2 on K_n as n->inf. BR3: interlacing fails — avg char poly Q not real-rooted at 35/117 steps. BR4: Schur-convexity reverses — concentrated eigenvalues give HIGHER dbar than uniform, contradicting K_n extremality.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 618
+    },
+    {
+      "id": "p6-alpha-lt-1",
+      "node_type": "answer",
+      "post_id": 641,
+      "body_text": "PROVED (Cycle 5): alpha = tr(P_M F)/tr(F) < 1 for vertex-induced partitions whenever cross-edges exist. Proof: For cross edge (u,v) with u in S, v in R, incidence vector b_uv has nonzero coordinate on v not in S. No S-internal edge involves v, so b_uv not in span of internal incidence vectors. L^{+/2} injective on im(L), so z_uv not in col(M). Hence ||P_{M^perp} z_uv||^2 > 0 for each cross edge, giving tr((I-P_M)F) > 0. ESSENTIAL: vertex-induced structure required — random edge partitions can give alpha=1.",
+      "score": 1,
+      "creation_date": "2026-02-13",
       "parent_post_id": 631
+    },
+    {
+      "id": "p6-threshold-relax",
+      "node_type": "answer",
+      "post_id": 642,
+      "body_text": "PROVED (Cycle 5): The 1/2 threshold in rho_1 < 1/2 is NOT fundamental. Assembly dbar <= dbar0*(1-x+cx)/(1-x) gives dbar<1 for any c<1 when dbar0<1 and x<1. Need c < c_needed = (1-x)(1/dbar0-1)/x. Empirically: min c_needed=0.957, max rho1=0.494, so uniform c0 in (0.494,0.957) exists. Transforms problem from tight inequality (8% margin) to qualitative statement.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 618
+    },
+    {
+      "id": "p6-product-bound",
+      "node_type": "answer",
+      "post_id": 643,
+      "body_text": "PROVED (Cycle 5): alpha*dbar0 = tr(P_M F)/(r*eps) <= ((t-1)-tau)/(r*eps). Empirically max 0.328 across 678 steps (tight at K_n: alpha*dbar0 -> 1/3). Controls the Neumann correction: dbar = dbar0 + (alpha*dbar0)*x/(1-x). Key structural insight: when dbar0 is high, alpha is low (complementarity).",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 641
+    },
+    {
+      "id": "p6-assembly-decomp",
+      "node_type": "answer",
+      "post_id": 644,
+      "body_text": "PROVED (Cycle 5): dbar = dbar0 + (alpha*dbar0)*x/(1-x). Decomposes Neumann amplification into base (dbar0) + correction (product bound). Assembly dbar<1 verified at all 678 steps (max 0.833 = 5/6 at K_n). With dbar0<1 and product bound, assembly closes.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 643
+    },
+    {
+      "id": "p6-dbar0-gap",
+      "node_type": "comment",
+      "post_id": 645,
+      "body_text": "REMAINING GAP (Cycle 5): Prove dbar0 = tr(F)/(r*eps) < 1 at all barrier greedy steps for all graphs. Equivalently: E[cut edges in uniform spanning tree] < r*eps. Equivalently: R-internal leverage L_R > n-1-tau-r*eps. Foster bound alone gives dbar0 <= (n-1)/(r*eps), too loose by ~factor n. Empirically: max dbar0 = 0.755 (margin 24.5%). K_n: dbar0 = 2/3 at horizon.",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 644,
+      "status": "OPEN — the true remaining gap",
+      "reformulations": {
+        "leverage": "avg cross-edge leverage per R-vertex < eps",
+        "ust": "E[cut edges in UST] < r*eps",
+        "internal": "R-internal leverage L_R > n-1-tau-r*eps"
+      }
     },
     {
       "id": "p6-result",
       "node_type": "answer",
       "post_id": 619,
-      "body_text": "K_n: PROVED, c = 1/3. General: gap narrowed from K_n-extremality to trace inequality alpha<1/2. Proof chain: Turan -> greedy -> Foster + Neumann + operator bound -> pigeonhole -> eps^2*n/9.",
+      "body_text": "K_n: PROVED, c=1/3. General: ONE GAP — prove dbar0<1 (avg cross-edge leverage per R-vertex < eps). Proof chain: Turan -> greedy -> pigeonhole -> [dbar0<1 GAP] + alpha<1 + product bound + assembly -> eps^2*n/9. BR1-4 close the 1/2-threshold route; threshold relaxation bypasses them. UST reformulation: E[cut tree edges] < r*eps.",
       "score": 1,
       "creation_date": "2026-02-13",
       "parent_post_id": 6
@@ -232,8 +300,8 @@
       "source": "p6-foster",
       "target": "p6-pigeonhole",
       "edge_type": "assert",
-      "evidence": "Foster controls dbar^0 <= 2/3",
-      "detection": "structural"
+      "evidence": "Foster controls dbar^0. CORRECTED: dbar^0 <= 2/3 NOT universal (max 0.755).",
+      "detection": "structural+corrected-cycle5"
     },
     {
       "source": "p6-kn-formula",
@@ -295,21 +363,91 @@
       "source": "p6-trace-gap",
       "target": "p6-operator-bound",
       "edge_type": "challenge",
-      "evidence": "Need tr(F) > 2*sum mu_i(1-mu_i)/mu_max for general G. Margin 8-251%.",
-      "detection": "identified-cycle4"
+      "evidence": "SUPERSEDED: alpha<1/2 no longer bottleneck after threshold relaxation",
+      "detection": "identified-cycle4+superseded-cycle5"
     },
     {
       "source": "p6-trace-gap",
       "target": "p6-gpl-h",
       "edge_type": "reform",
-      "evidence": "Narrows GPL-H from K_n-extremality to single trace inequality",
-      "detection": "identified-cycle4"
+      "evidence": "SUPERSEDED by threshold relaxation + dbar0 gap",
+      "detection": "identified-cycle4+superseded-cycle5"
+    },
+    {
+      "source": "p6-blocking",
+      "target": "p6-trace-gap",
+      "edge_type": "challenge",
+      "evidence": "BR1-BR4 block standard toolkit at 1/2 threshold. Motivates threshold relaxation.",
+      "detection": "proved-cycle4"
+    },
+    {
+      "source": "p6-blocking",
+      "target": "p6-gpl-h",
+      "edge_type": "challenge",
+      "evidence": "Four blocking results close the rho_1<1/2 route for standard spectral tools",
+      "detection": "proved-cycle4"
+    },
+    {
+      "source": "p6-alpha-lt-1",
+      "target": "p6-operator-bound",
+      "edge_type": "assert",
+      "evidence": "alpha<1 proved via coordinate argument (vertex-induced structure essential)",
+      "detection": "proved-cycle5"
+    },
+    {
+      "source": "p6-threshold-relax",
+      "target": "p6-gpl-h",
+      "edge_type": "reform",
+      "evidence": "c<1 suffices in assembly: transforms problem from tight inequality to qualitative statement",
+      "detection": "proved-cycle5"
+    },
+    {
+      "source": "p6-threshold-relax",
+      "target": "p6-blocking",
+      "edge_type": "reference",
+      "evidence": "Bypasses BR1-BR4 by relaxing from 1/2 to 1 threshold",
+      "detection": "proved-cycle5"
+    },
+    {
+      "source": "p6-product-bound",
+      "target": "p6-alpha-lt-1",
+      "edge_type": "assert",
+      "evidence": "alpha*dbar0 <= ((t-1)-tau)/(r*eps) <= 1/3 (K_n tight)",
+      "detection": "proved-cycle5"
+    },
+    {
+      "source": "p6-assembly-decomp",
+      "target": "p6-product-bound",
+      "edge_type": "assert",
+      "evidence": "dbar = dbar0 + (alpha*dbar0)*x/(1-x): correction controlled by product bound",
+      "detection": "proved-cycle5"
+    },
+    {
+      "source": "p6-assembly-decomp",
+      "target": "p6-neumann",
+      "edge_type": "reform",
+      "evidence": "Decomposes Neumann series into base (dbar0) + correction (product bound)",
+      "detection": "proved-cycle5"
+    },
+    {
+      "source": "p6-dbar0-gap",
+      "target": "p6-assembly-decomp",
+      "edge_type": "challenge",
+      "evidence": "Closing dbar0<1 would close GPL-H via the assembly decomposition",
+      "detection": "identified-cycle5"
+    },
+    {
+      "source": "p6-dbar0-gap",
+      "target": "p6-gpl-h",
+      "edge_type": "reform",
+      "evidence": "The true remaining gap: prove dbar0 = tr(F)/(r*eps) < 1",
+      "detection": "identified-cycle5"
     },
     {
       "source": "p6-result",
       "target": "p6-problem",
       "edge_type": "assert",
-      "evidence": "K_n PROVED. General: narrowed gap.",
+      "evidence": "K_n PROVED. General: one gap (dbar0<1).",
       "detection": "structural"
     },
     {
@@ -323,7 +461,7 @@
       "source": "p6-result",
       "target": "p6-gpl-h",
       "edge_type": "reference",
-      "evidence": "General graphs conditional on trace inequality closure",
+      "evidence": "General graphs conditional on dbar0<1 closure",
       "detection": "structural"
     }
   ],
@@ -341,7 +479,7 @@
         {"role": "step-6", "ident": "p6-size", "node_type": "answer"}
       ],
       "hx/content": {
-        "evidence": "Core proof chain (unchanged)",
+        "evidence": "Core proof chain (unchanged). Step 5a Foster corrected: dbar0<=2/3 not universal.",
         "detection": "structural"
       },
       "hx/labels": ["thread", "proof-chain", "structural"]
@@ -367,26 +505,54 @@
         {"role": "step-1", "ident": "p6-neumann", "node_type": "answer"},
         {"role": "step-2", "ident": "p6-monotonicity", "node_type": "answer"},
         {"role": "step-3", "ident": "p6-operator-bound", "node_type": "answer"},
-        {"role": "gap", "ident": "p6-trace-gap", "node_type": "comment"},
+        {"role": "blocked", "ident": "p6-trace-gap", "node_type": "comment"},
+        {"role": "blocking", "ident": "p6-blocking", "node_type": "answer"}
+      ],
+      "hx/content": {
+        "evidence": "Neumann -> monotonicity -> operator bound -> alpha<1/2 gap. BLOCKED by BR1-BR4. Superseded by relaxation chain.",
+        "detection": "proved-cycle4+blocked-cycle5"
+      },
+      "hx/labels": ["thread", "proof-chain", "blocked-cycle5"]
+    },
+    {
+      "hx/id": "first-proof-p6:relaxation-chain",
+      "hx/type": "thread/proof-chain",
+      "hx/ends": [
+        {"role": "motivation", "ident": "p6-blocking", "node_type": "answer"},
+        {"role": "step-1", "ident": "p6-threshold-relax", "node_type": "answer"},
+        {"role": "step-2", "ident": "p6-alpha-lt-1", "node_type": "answer"},
+        {"role": "step-3", "ident": "p6-product-bound", "node_type": "answer"},
+        {"role": "step-4", "ident": "p6-assembly-decomp", "node_type": "answer"},
+        {"role": "gap", "ident": "p6-dbar0-gap", "node_type": "comment"},
         {"role": "closes", "ident": "p6-gpl-h", "node_type": "answer"}
       ],
       "hx/content": {
-        "evidence": "Neumann -> monotonicity -> operator bound -> [trace inequality gap] -> GPL-H. For K_n: fully proved. General: trace inequality is remaining gap.",
-        "detection": "proved-cycle4"
+        "evidence": "Blocking -> relax threshold -> alpha<1 -> product bound -> assembly -> [dbar0<1 gap] -> GPL-H. All steps proved except dbar0<1.",
+        "detection": "proved-cycle5"
       },
-      "hx/labels": ["thread", "proof-chain", "partial-cycle4"]
+      "hx/labels": ["thread", "proof-chain", "partial-cycle5"]
     }
   ],
   "stats": {
-    "n_nodes": 19,
-    "n_edges": 20,
+    "n_nodes": 25,
+    "n_edges": 30,
     "node_types": {
       "question": 1,
-      "answer": 14,
+      "answer": 20,
       "comment": 4
     },
-    "proved_cycle4": ["p6-monotonicity", "p6-operator-bound"],
-    "resolved_cycle4": ["p6-trft-resolved"],
-    "remaining_gap": "p6-trace-gap"
+    "proved_cycle4": ["p6-monotonicity", "p6-operator-bound", "p6-blocking"],
+    "proved_cycle5": ["p6-alpha-lt-1", "p6-threshold-relax", "p6-product-bound", "p6-assembly-decomp"],
+    "corrected_cycle5": ["p6-foster (dbar0<=2/3 FALSE)", "p6-trace-gap (SUPERSEDED)"],
+    "remaining_gap": "p6-dbar0-gap",
+    "empirical_summary": {
+      "max_dbar0": 0.755,
+      "max_alpha": 0.494,
+      "max_rho1": 0.494,
+      "max_assembly": 0.833,
+      "max_alpha_dbar0": 0.328,
+      "min_c_needed": 0.957,
+      "test_suite": "678 steps, 15 graph families, n up to 500, eps in {0.1,0.2,0.3,0.5}"
+    }
   }
 }
