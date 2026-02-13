@@ -107,7 +107,7 @@ and the Hamiltonian isotopy property
 that simplify the problem globally, not just local fixes for individual
 obstacles.
 
-\section{From Failure to Success: Problem 6's Layer Switch}
+\section{From Failure to Progress: Problem 6's Layer Switch}
 
 Problem~6 (epsilon-light subsets) is the sprint's most instructive
 case study because it exhibits both patterns: a TryHarder loop
@@ -172,8 +172,6 @@ bypasses the sparsification layer entirely:
 \item \textbf{Tur\'an's theorem} gives an independent set $I_0$
   with $|I_0| \ge \varepsilon n/3$ in the heavy-edge subgraph.
   All edges internal to $I_0$ are light ($\tau_e \le \varepsilon$).
-\item \textbf{Leverage filter} removes high-leverage vertices,
-  keeping $|I_0'| \ge \varepsilon n/12$.
 \item \textbf{Barrier greedy}: at each step, pick the vertex $v$
   with minimum $\|Y_t(v)\|$.
 \item \textbf{PSD trace bound}: $\|Y\| \le \operatorname{tr}(Y)$
@@ -188,24 +186,60 @@ For $K_n$: $\bar{d}_t = 2t/(n\varepsilon)$, so at $T = \varepsilon n/3$
 steps, $\bar{d}_T = 2/3 < 1$.  This gives $|S| = \varepsilon n/3$
 with $c = 1/3$, \textbf{proved exactly}.
 
-For general graphs: $\bar{d}_t < 1$ is proved at $M_t = 0$ and verified
-numerically at all 440 nontrivial greedy steps (max $\bar{d} = 0.641$,
-margin $36\%$).  The single remaining gap is the formal
-$\bar{d}_t < 1$ bound when $M_t \ne 0$.
+\subsection{Phase 3: The partial averages breakthrough}
+
+The initial proof attempt required a ``leverage filter'' step removing
+vertices with leverage degree $\ell_v > C$.  This created an
+irreconcilable tension: the Markov bound needed $C > 2$ to retain
+enough vertices, but $\bar{d} < 1$ needed $C < 2$.  Testing on
+$K_{a,b}$ confirmed this was not just a technical gap---up to $80\%$
+of $I_0$ can have $\ell_v \ge 2$.
+
+The resolution came from switching from a \emph{maximum-based} bound
+to a \emph{sum-based} bound.  The \textbf{partial averages inequality}
+observes that the average of the $T$ smallest leverage degrees cannot
+exceed the overall average:
+\[
+  \frac{1}{T}\sum_{k=1}^{T} \ell_{(k)}
+    \;\le\; \operatorname{avg}(\ell)
+    \;<\; 2 \quad\text{(Foster on $I_0$)}.
+\]
+A ``min-$\ell$ greedy'' that selects vertices in order of increasing
+leverage degree therefore accumulates $\sum \ell < 2T$, giving
+\[
+  \bar{d}_t \;\le\; \frac{2/3}{1 - \varepsilon/3} \;<\; 1
+  \quad\text{for all $\varepsilon \in (0,1)$,\; at $M_t = 0$.}
+\]
+
+This eliminates the leverage filter entirely---no threshold $C$ needed,
+no Markov bound, no structural assumption on maximum leverage degree.
+
+\subsection{What remains}
+
+For general graphs, the $\bar{d}_t < 1$ bound is proved when
+$M_t = 0$ (the accumulated barrier matrix vanishes).  This covers
+$K_n$, $K_{a,b}$ with $a \ne b$, cycles, grids, and sparse graphs.
+For dense graphs where $M_t \ne 0$, the bound is verified
+numerically at all 440 nontrivial greedy steps (max
+$\bar{d} = 0.714$, amplification ratio $\le 1.30$) but one
+quantitative estimate---bounding the $H_t^{-1}$ amplification
+when $M_t \ne 0$---remains open.
 
 No interlacing families.  No Borcea--Br\"and\'en.  No MSS theorem.
-Just PSD trace bound $+$ pigeonhole $+$ Tur\'an.
+Just Foster's theorem $+$ partial averages $+$ PSD trace bound $+$
+pigeonhole $+$ Tur\'an.  A three-line argument (PSD $\to$ pigeonhole
+$\to$ existence) replaces the entire real stability machinery.
 
 \subsection{The layer analysis}
 
 \begin{description}
 \item[Spectral layer:] Bound $\|L^{+/2} L_S L^{+/2}\| \le \varepsilon$.
   \emph{Status: set up correctly (unchanged).}
-\item[Concentration layer:] Control martingale parameters $R_*$
-  and $\|W_n\|$.  \emph{Status: framework correct (unchanged).}
-\item[Combinatorial layer:] Tur\'an $+$ leverage filter $+$ barrier greedy.
-  \emph{Status: \textbf{complete} for $K_n$; narrow technical gap for
-  general graphs.}
+\item[Combinatorial layer:] Tur\'an $+$ Foster $+$ partial averages
+  $+$ barrier greedy.
+  \emph{Status: \textbf{complete} for $K_n$, $K_{a,b}$, cycles,
+  grids, sparse graphs.  One quantitative gap ($M_t \ne 0$
+  amplification) for dense general graphs.}
 \item[Sparsification layer:] Adapt BSS from edges to vertices.
   \emph{Status: \textbf{bypassed entirely}.}
 \end{description}
@@ -213,7 +247,10 @@ Just PSD trace bound $+$ pigeonhole $+$ Tur\'an.
 The breakthrough was not trying harder in the sparsification layer.
 It was recognizing that the combinatorial layer---which was never
 attempted---offers an elementary path that avoids the structural
-obstruction entirely.
+obstruction entirely.  The \emph{second} breakthrough (partial averages)
+came from recognizing that the leverage filter's Markov-based approach
+was the wrong tool---the sum of selected leverage degrees matters, not
+the maximum.
 
 \textbf{Transferable principle:} When stuck, enumerate the layers
 and assess status per layer.  Do not repeatedly attack the same
