@@ -6,6 +6,12 @@ Explain why preconditioned conjugate gradient (PCG) solves the mode-$k$ RKHS CP 
 \subsection*{Answer}
 Use implicit Kronecker/Khatri--Rao matrix-vector products and a Kronecker preconditioner built from expected sampling geometry.
 
+\subsection*{Status and assumptions}
+This result is \textbf{conditional}: it is closed under explicit assumptions
+($\lambda>0$, $K_\tau \succ 0$, and sampling/coherence conditions controlling
+preconditioned conditioning). Necessity counterexamples are recorded in the
+full writeup when these assumptions are dropped.
+
 \subsection*{Annotated proof sketch}
 \begin{enumerate}[leftmargin=1.5em]
 \item Never form the full system matrix; compute $Ax$ through structured operations:
