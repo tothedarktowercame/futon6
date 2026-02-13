@@ -27,27 +27,34 @@ epsilon in (0,1), there exists S with |S| >= c*epsilon*n and L_S <= epsilon L?
 **K_n: PROVED.** The barrier greedy gives |S| = eps*n/3, c = 1/3, via the
 elementary pigeonhole + PSD trace bound argument (Section 5d).
 
-**General graphs: ONE GAP (dbar0 < 1).** The single remaining gap is to
-prove that the base average barrier degree dbar0 = tr(F)/(r*eps) < 1 at
-all steps of the barrier greedy. Equivalently: the expected number of
-cut edges in a uniform spanning tree between S and R is less than r*eps.
-Empirically: max dbar0 = 0.755 across 678 steps on 15 graph families
-(margin 24.5%). See Section 5k.
+**General graphs: ONE GAP (BMI).** The base component dbar0 < 1 is now
+PROVED for the pure leverage-degree prefix (Section 5l, Cycle 6) via the
+induced Foster bound and partial averages: dbar0 <= 2(m-1)/(m(3-eps)) < 1.
+The modified greedy produces this prefix with zero skips (116/116 runs).
+The single remaining gap is the **Barrier Maintenance Invariant (BMI)**:
+the full barrier degree dbar_t = (1/r) tr(B_t F_t) < 1 (stronger than
+dbar0 < 1 due to amplification by B_t). Empirically: max dbar = 0.833 =
+5/6 at K_n horizon (margin 17%). See Section 5l and the formalization
+in `problem6-bridge-b-formalization.md`.
 
 **Corrections (Cycle 5):**
-- dbar0 <= 2/3 is NOT universal (max observed: 0.755). It holds for K_n
+- dbar0 <= 2/3 is NOT universal (max observed: 0.808). It holds for K_n
   but fails for some regular and expander-like graphs.
 - The original "K_n extremality" formulation (d̄_G <= d̄_Kn) is blocked by
   four proved blocking results (BR1-BR4, Section 5g). The Schur-convexity
   argument reverses direction.
 
-**What IS proved (Cycles 4-5):**
-- alpha < 1 for vertex-induced partitions (Section 5i)
+**What IS proved (Cycles 4-6):**
+- Induced Foster: sum tau_e over E(I_0) <= m-1 (Section 5l, Cycle 6)
+- Conditional dbar0 < 1 for the prefix: dbar0 <= 2/(3-eps) < 1 (Section 5l, Cycle 6)
+- alpha < 1 for vertex-induced partitions (Section 5i, Cycle 5)
 - Threshold relaxation: any c < 1 suffices in the assembly (Section 5h)
 - Product bound: alpha * dbar0 <= 1/3 (Section 5j)
 - Assembly decomposition: dbar = dbar0 + (alpha*dbar0)*x/(1-x) (Section 5j)
-- Assembly dbar < 1 verified at all 678 steps (max 0.833 = 5/6 at K_n)
+- Assembly dbar < 1 verified at all 726+ steps (max 0.833 = 5/6 at K_n)
 - Four blocking results BR1-BR4 closing the rho_1 < 1/2 route (Section 5g)
+- Bridge C (direct induction) proved for prefix with large m (Cycle 6)
+- Strict threshold fix: tau_e >= eps heavy, resolves knife-edge (Cycle 6)
 
 **Superseded machinery:** MSS interlacing families, Borcea-Branden real
 stability, Bonferroni eigenvalue bounds, leverage degree filter,
@@ -536,9 +543,52 @@ the trivial lower bound is compatible. The question is whether the
 expectation can approach r*eps from below — and empirically it does
 not (max ratio: 0.755).
 
-Literature search in progress (Codex C5b): effective resistance
-distribution across vertex partitions, Schur complement leverage
-bounds, UST edge cut statistics.
+Literature search completed (Codex C5b): no direct closure found.
+
+### 5l. Bridge B: Modified leverage-order barrier greedy (Cycle 6)
+
+Codex C6 tested three bridge strategies and identified the winning path.
+
+**Construction B (modified greedy):** Sort I_0 by I_0-internal leverage
+degree ell_v^{I_0} = sum_{e={v,w}, w in I_0} tau_e in nondecreasing
+order. Process vertices in this order, adding v to S iff barrier-feasible
+(||Y_t(v)|| < 1) and |S| < T.
+
+**Induced Foster bound (new, C6):** sum_{e in E(I_0)} tau_e <= m-1.
+Proof: by Rayleigh monotonicity, removing edges from G to form G[I_0]
+increases effective resistances. So tau_e^{G[I_0]} >= tau_e^G. Foster
+for G[I_0] gives sum tau_e^{G[I_0]} = m-kappa. Hence sum tau_e^G <= m-1.
+
+**Conditional dbar0 < 1 (new, C6):** For the pure prefix S = {v_1,...,v_t}
+sorted by ell_v^{I_0}, with t <= eps*m/3:
+    dbar0 <= 2t(m-1)/(m*r*eps) <= 2(m-1)/(m(3-eps)) < 2/(3-eps) < 1.
+Uses: induced Foster (sum ell^{I_0} <= 2(m-1)) + partial averages.
+
+**Bridge B results (C6, 116 runs, 29 graphs, 4 eps values):**
+- Modified greedy reaches horizon in **all 116 runs** (0 failures).
+- **Zero skips** in all runs: trajectory IS the pure prefix.
+- Worst dbar0 = 0.7333 (K_50_50, eps=0.3, t=10). Margin: 27%.
+- Barrier maintained: worst ||M||/eps = 0.9866.
+
+**Bridge A is DEAD:** Standard barrier greedy violates partial-averages
+bound at 187 step instances. Greedy selects vertices by barrier score,
+not leverage degree, breaking the prefix structure.
+
+**Bridge C (direct induction) also works numerically:** Delta_t < rhs_t
+at all 726 steps (0 failures). For the pure prefix with large m,
+Bridge C is proved when m > (6+eps)/(eps*(1-eps)).
+
+**Strict threshold fix (C6):** Defining heavy as tau_e >= eps (not just >)
+fixes the K_10 knife-edge (dbar0 = 1.0 becomes vacuous: I_0 = 1 vertex,
+T = 0). Exhaustive small-n scan: 0 dbar0 >= 1 cases with strict threshold.
+
+**Remaining formal gap (refined, C6):** The gap is now the **Barrier
+Maintenance Invariant (BMI)**: dbar_t = (1/r_t) tr(B_t F_t) < 1 at
+each step. This is stronger than dbar0 < 1 (which IS proved for the
+prefix). The crude assembly bound diverges when ||M||/eps approaches 1.
+The actual dbar stays bounded by complementarity (high dbar0 → low alpha,
+high x → small F in col(M) directions), but formalizing this is the gap.
+See `problem6-bridge-b-formalization.md` for the full analysis.
 
 ## 6. Final conclusion
 
@@ -555,10 +605,10 @@ bounds, UST edge cut statistics.
    then pigeonhole + PSD trace bound gives existence of v with
    ||Y_t(v)|| < 1 at each step. Universal c = 1/3.
 
-4. **The proof chain (Sections 5a-5k):**
-   (a) Turan: I_0 >= eps*n/3, all internal edges light
+4. **The proof chain (Sections 5a-5l):**
+   (a) Turan: I_0 >= eps*n/3, all internal edges strictly light (tau_e < eps)
    (b) [Deleted — leverage filter unnecessary]
-   (c) Barrier greedy on I_0 for T = eps*m_0/3 steps
+   (c) Modified leverage-order barrier greedy on I_0 for T = eps*m_0/3 steps
    (d) Pigeonhole + PSD trace: if dbar < 1 then exists v with ||Y_t(v)|| < 1
    (e) Foster mechanism: controls dbar^0 (but NOT to 2/3 universally)
    (f) Size: |S| = eps*m_0/3 >= eps^2*n/9
@@ -566,7 +616,8 @@ bounds, UST edge cut statistics.
    (h) Threshold relaxation: any c < 1 suffices (bypasses BR1-BR4)
    (i) Alpha < 1 proved for vertex-induced partitions
    (j) Product bound: alpha*dbar0 <= 1/3, assembly decomposition
-   (k) **GAP: dbar0 < 1** (avg cross-edge leverage per R-vertex < eps)
+   (k) dbar0 < 1 for the pure leverage-degree prefix (Cycle 6, PROVED)
+   (l) **GAP: BMI** (full dbar_t < 1, not just dbar0_t < 1)
 
 5. **Neumann analysis (Cycles 3-4):**
    - Monotonicity: rho_k <= rho_1 for all k >= 1 (proved)
@@ -607,69 +658,82 @@ bounds, UST edge cut statistics.
 13. **Complementarity holds:** when dbar0 is high, alpha (and rho_1) are
     low; the product remains bounded.
 
-### Remaining formal gap: dbar0 < 1
+### Remaining formal gap: Barrier Maintenance Invariant (BMI)
 
-The single remaining gap is to prove:
+**UPDATE (Cycle 6):** The gap has been refined. dbar0 < 1 is now
+PROVED for the pure leverage-degree prefix (Section 5l, Lemma 3 of the
+Bridge B formalization). The remaining gap is the **full** barrier
+degree dbar_t < 1 (not just dbar0_t).
 
-> **dbar0 = tr(F) / (r * eps) < 1**
->
-> at all steps t of the barrier greedy on all connected graphs G.
+The refined gap:
 
-Equivalent statements:
+> **dbar_t = (1/r_t) tr(B_t F_t) < 1** at all steps of Construction B.
 
-    (a) The average cross-edge leverage per R-vertex is less than eps.
-    (b) E[number of cut edges in a uniform spanning tree] < r * eps.
-    (c) The R-internal leverage L_R > n - 1 - tau - r*eps.
+This requires bounding the amplification by B_t = (eps*I - M_t)^{-1}.
+The assembly decomposition gives
+dbar = dbar0 + alpha*dbar0*x/(1-x) where x = ||M||/eps. The crude bound
+dbar <= dbar0/(1-x) diverges as x → 1 and doesn't close for eps > 0.7.
 
-**Why Foster alone is insufficient:** Foster gives tr(F) <= n-1, hence
-dbar0 <= (n-1)/(r*eps), which is ~n/r times too large. It ignores that
-most leverage stays within R (as R-internal edges).
+**What IS proved:**
+- dbar0 < 2/(3-eps) < 1 for the prefix (Lemma 3, proved C6)
+- alpha < 1 for vertex-induced partitions (proved C5)
+- alpha*dbar0 <= 1/(3-eps) (proved C5)
+- K_n: dbar = 5/6 < 1 (proved exactly)
+- Bridge C (dbar0 induction) for large m (proved C6)
+- No-Skip: 0 skips in 116 runs (modified greedy = pure prefix)
 
-**Evidence:** Max dbar0 = 0.755 across 678 steps (24.5% margin to 1).
-K_n: dbar0 = 2/3 at horizon. The UST reformulation (b) is a clean
-probabilistic statement that may have a known answer in the random
-spanning tree literature.
+**Evidence (C5+C6, 116+60 runs):** dbar < 1 at ALL tested steps.
+Worst dbar0 = 0.7333 (modified greedy), 0.808 (standard greedy).
+Worst assembly dbar = 0.833 = 5/6 (K_n). Margin: 17%.
 
-**Blocked closure paths:**
-- (BLOCKED) K_n extremality via Schur-convexity — BR4 reverses direction
-- (BLOCKED) Interlacing families — BR3 shows Q not real-rooted
-- (BLOCKED) Log-det potential — BSS barrier doesn't give dbar < 1 directly
+**The complementarity gap:** The product alpha*x/(1-x) is bounded
+because high x (M saturated) forces low alpha (F has little mass in
+col(M) directions). But the formal proof requires controlling the
+joint distribution of eigenvalues of M_t and projections of F_t onto
+M_t's eigenspaces. The identity F + M + L_R = Pi_{I_0} (the I_0
+edge sum) constrains this, but the analysis is graph-dependent.
 
-**Open closure paths:**
-- UST cut-edge statistics (Lyons-Peres, Kirchhoff): bound E[cut edges]
-- Effective resistance distribution across vertex partitions
-- Schur complement leverage bounds: L/S relates to R-subgraph structure
-- Fixed-block interlacing (Xie-Xu): bypass the Neumann route entirely
+**Proposed closure routes (Cycle 7):**
+- Complementarity formalization: bound sum (pi_j - lambda_j)/(eps-lambda_j) directly
+- BSS-style potential for vertex-block updates
+- K_n extremality via concavity of the combined (not individual) expression
 
-Literature search in progress (Codex C5b handoff).
+### If BMI is proved
 
-### If dbar0 < 1 is proved
+The proof closes completely:
+1. dbar0 < 1 for the prefix (**proved**, Lemma 3)
+2. No-Skip (**conjectured**, 0/116 failures; implied by BMI)
+3. BMI: dbar < 1 at each step (**the gap**)
+4. Existence of feasible vertex at each step (Lemma 6, **proved** given BMI)
+5. |S| = T >= eps^2*n/9 (Lemma 7, **proved**)
 
-The proof closes as follows:
-1. dbar0 < 1 (the gap)
-2. alpha * dbar0 <= 1/(3-eps) (proved, operator bound)
-3. dbar = dbar0 + (alpha*dbar0) * x/(1-x) (proved, assembly decomposition)
-4. With dbar0 < 3/4 and items 2-3: dbar < 0.95 < 1 (closes GPL-H)
+Alternatively, if the No-Skip Conjecture is proved independently:
+1. S_t = prefix (No-Skip)
+2. dbar0 < 1 (**proved**)
+3. Need: dbar0 < 1 → dbar < 1 (assembly closure, the complementarity gap)
 
-Even dbar0 < 1 alone, combined with alpha < 1 (proved) and the
-continuity of the assembly, would suffice.
+The two gaps (No-Skip and assembly closure) are related: BMI implies
+the greedy finds feasible vertices, and the modified greedy's leverage
+ordering makes the prefix structure available for the dbar0 bound.
 
 ### Summary
 
 The existential answer is **YES** for K_n with c = 1/3 (proved),
 and numerically confirmed for all tested graph families with
-c >= 1/6. The proof architecture is:
+c >= 1/6. The proof architecture (updated Cycle 6) is:
 
-    Turan -> greedy -> pigeonhole -> [dbar0 < 1 GAP]
-                                   + alpha < 1 + product bound
-                                   + assembly -> eps^2*n/9
+    Turan -> sort by ell^{I_0} -> modified greedy -> [BMI GAP]
+             + induced Foster -> dbar0 < 1 (PROVED for prefix)
+             + alpha < 1 + product bound + assembly -> eps^2*n/9
 
-The formal extension to arbitrary graphs requires proving dbar0 < 1
-(average cross-edge leverage per R-vertex < eps). This holds with
-24.5% margin empirically and has a clean UST reformulation. The
-original K_n-extremality approach is blocked by BR4 (Schur-convexity
-reversal). The threshold relaxation (c < 1 suffices) and alpha < 1
-proof reduce the problem to this single sub-lemma.
+**Progress since C5:** The gap has been reduced from "dbar0 < 1 for
+arbitrary greedy trajectory" to "BMI: dbar_t < 1 for the modified
+greedy trajectory (which = pure prefix empirically)." The base
+component dbar0 < 1 is now proved via the induced Foster bound and
+partial averages (Lemma 3). The remaining gap is the amplification
+by B_t in the assembly.
+
+Full formalization: `problem6-bridge-b-formalization.md`.
 
 ## Key identities and inequalities used
 
@@ -687,6 +751,8 @@ proof reduce the problem to this single sub-lemma.
 12. alpha*dbar0 <= ((t-1)-tau)/(r*eps) (product bound, proved Cycle 5)
 13. dbar = dbar0 + (alpha*dbar0)*x/(1-x) (assembly decomposition, proved Cycle 5)
 14. tau_e = Pr[e in UST]: dbar0 < 1 iff E[cut tree edges] < r*eps
+15. Induced Foster: sum_{e in E(I_0)} tau_e <= m-1 (Rayleigh monotonicity, Cycle 6)
+16. For prefix S sorted by ell^{I_0}: dbar0 <= 2(m-1)/(m(3-eps)) < 1 (Cycle 6)
 
 ## References
 

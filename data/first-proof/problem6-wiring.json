@@ -1,8 +1,8 @@
 {
   "thread_id": "first-proof-p6",
-  "version": "v7-relaxation",
+  "version": "v8-bridge-b",
   "last_updated": "2026-02-13",
-  "notes": "Post Cycles 4-5: BR1-4 block standard toolkit at 1/2 threshold; threshold relaxed to c<1 (houseboat); alpha<1 proved (vertex-induced); dbar0<=2/3 corrected (max 0.755); product bound alpha*dbar0<=1/3; remaining gap: dbar0<1",
+  "notes": "Post Cycle 6: Bridge B (modified leverage-order barrier greedy) identified as winning path. dbar0<1 PROVED for pure prefix via induced Foster + partial averages. 0 skips in 116 runs. Remaining gap refined to BMI (full dbar_t<1, not just dbar0). Bridge A dead (187 violations). Bridge C works numerically (726/726). Strict threshold fixes knife-edge.",
   "nodes": [
     {
       "id": "p6-problem",
@@ -247,10 +247,65 @@
       "id": "p6-result",
       "node_type": "answer",
       "post_id": 619,
-      "body_text": "K_n: PROVED, c=1/3. General: ONE GAP — prove dbar0<1 (avg cross-edge leverage per R-vertex < eps). Proof chain: Turan -> greedy -> pigeonhole -> [dbar0<1 GAP] + alpha<1 + product bound + assembly -> eps^2*n/9. BR1-4 close the 1/2-threshold route; threshold relaxation bypasses them. UST reformulation: E[cut tree edges] < r*eps.",
+      "body_text": "K_n: PROVED, c=1/3. General: ONE GAP — BMI (full dbar_t<1). Proof chain: Turan -> sort by ell^{I_0} -> modified greedy -> [BMI GAP] + induced Foster -> dbar0<1 (PROVED for prefix) + alpha<1 + product bound + assembly -> eps^2*n/9.",
       "score": 1,
       "creation_date": "2026-02-13",
       "parent_post_id": 6
+    },
+    {
+      "id": "p6-induced-foster",
+      "node_type": "answer",
+      "post_id": 650,
+      "body_text": "PROVED (Cycle 6): Induced Foster bound. sum_{e in E(I_0)} tau_e <= m-1 where m=|I_0|. Proof: Rayleigh monotonicity gives R_eff^{G[I_0]}(u,v) >= R_eff^G(u,v), so tau_e^{subgraph} >= tau_e^G. Foster for G[I_0] gives sum tau_e^{subgraph} = m-kappa. Hence sum tau_e^G <= m-1. Corollary: sum ell_v^{I_0} <= 2(m-1).",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 614
+    },
+    {
+      "id": "p6-conditional-dbar0",
+      "node_type": "answer",
+      "post_id": 651,
+      "body_text": "PROVED (Cycle 6): For the pure prefix S = {v_1,...,v_t} sorted by ell_v^{I_0} nondecreasing, with t <= eps*m/3: dbar0 <= 2t(m-1)/(m*r*eps) <= 2(m-1)/(m(3-eps)) < 2/(3-eps) < 1. Uses induced Foster (sum ell^{I_0} <= 2(m-1)) + partial averages (prefix sum <= t*total/m). This is the BASE component of the barrier degree — the M=0 version.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 650
+    },
+    {
+      "id": "p6-bridge-b",
+      "node_type": "answer",
+      "post_id": 652,
+      "body_text": "CONSTRUCTION B (Cycle 6): Modified leverage-order barrier greedy. Sort I_0 by ell_v^{I_0} nondecreasing. Process in order, add v iff barrier-feasible (||Y_t(v)||<1) and |S|<T. Codex C6 results: reaches horizon in ALL 116 runs. ZERO skips — trajectory IS the pure prefix. Worst dbar0 = 0.7333 (27% margin). Bridge A (standard greedy) DEAD: 187 partial-averages violations.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 612
+    },
+    {
+      "id": "p6-bmi-gap",
+      "node_type": "comment",
+      "post_id": 653,
+      "body_text": "REFINED GAP (Cycle 6): Barrier Maintenance Invariant (BMI). Need dbar_t = (1/r_t) tr(B_t F_t) < 1 at each step. This is STRONGER than dbar0<1 (which is proved for the prefix). The assembly dbar = dbar0 + alpha*dbar0*x/(1-x) diverges as x->1. The crude bound closes only for eps<0.7. The actual dbar stays bounded by complementarity (high x -> low alpha), but formalizing this is the gap. Empirically: dbar<1 at ALL 726+ steps (worst 5/6 at K_n).",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 645,
+      "status": "OPEN — the refined remaining gap (replaces p6-dbar0-gap)"
+    },
+    {
+      "id": "p6-bridge-c",
+      "node_type": "comment",
+      "post_id": 654,
+      "body_text": "Bridge C (Cycle 6): Direct induction on dbar0. Delta_t = ell_v^{R_{t+1}} - ell_v^{S_t} < rhs_t = (r_t-1)*eps - tr(F_t) gives dbar0_{t+1}<1. Numerically verified at ALL 726 steps (0 failures). For pure prefix with large m (m > (6+eps)/(eps*(1-eps))): PROVED formally. But Bridge C only establishes dbar0<1, not the full BMI (dbar<1).",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 651
+    },
+    {
+      "id": "p6-strict-threshold",
+      "node_type": "comment",
+      "post_id": 655,
+      "body_text": "FIXED (Cycle 6): Strict-light threshold. Heavy := tau_e >= eps (not just >). Fixes K_10 knife-edge where tau_e = eps exactly gave dbar0 = 1.0. With strict threshold: K_10 eps=0.2 has I_0=1 vertex, T=0 (vacuously true). Exhaustive small-n scan: 0 cases with dbar0>=1.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 610
     }
   ],
   "edges": [
@@ -461,8 +516,71 @@
       "source": "p6-result",
       "target": "p6-gpl-h",
       "edge_type": "reference",
-      "evidence": "General graphs conditional on dbar0<1 closure",
+      "evidence": "General graphs conditional on BMI closure",
       "detection": "structural"
+    },
+    {
+      "source": "p6-induced-foster",
+      "target": "p6-foster",
+      "edge_type": "assert",
+      "evidence": "Induced Foster: sum tau_e over E(I_0) <= m-1 via Rayleigh monotonicity",
+      "detection": "proved-cycle6"
+    },
+    {
+      "source": "p6-conditional-dbar0",
+      "target": "p6-induced-foster",
+      "edge_type": "assert",
+      "evidence": "Prefix dbar0 < 2/(3-eps) < 1 via induced Foster + partial averages",
+      "detection": "proved-cycle6"
+    },
+    {
+      "source": "p6-conditional-dbar0",
+      "target": "p6-dbar0-gap",
+      "edge_type": "reform",
+      "evidence": "dbar0<1 PROVED for the prefix. Gap refined from dbar0<1 to BMI (full dbar<1).",
+      "detection": "proved-cycle6"
+    },
+    {
+      "source": "p6-bridge-b",
+      "target": "p6-greedy",
+      "edge_type": "reform",
+      "evidence": "Modified greedy: sort by ell^{I_0}, add if feasible. Replaces standard barrier greedy.",
+      "detection": "construction-cycle6"
+    },
+    {
+      "source": "p6-bridge-b",
+      "target": "p6-conditional-dbar0",
+      "edge_type": "reference",
+      "evidence": "Modified greedy produces pure prefix (0 skips), enabling conditional dbar0 proof",
+      "detection": "empirical-cycle6"
+    },
+    {
+      "source": "p6-bmi-gap",
+      "target": "p6-dbar0-gap",
+      "edge_type": "reform",
+      "evidence": "Refined gap: BMI (full dbar<1) replaces dbar0<1 (now proved for prefix)",
+      "detection": "identified-cycle6"
+    },
+    {
+      "source": "p6-bmi-gap",
+      "target": "p6-assembly-decomp",
+      "edge_type": "challenge",
+      "evidence": "Assembly dbar = dbar0 + correction diverges as x->1. Complementarity gap.",
+      "detection": "identified-cycle6"
+    },
+    {
+      "source": "p6-bridge-c",
+      "target": "p6-conditional-dbar0",
+      "edge_type": "assert",
+      "evidence": "Direct induction: Delta_t < rhs_t gives dbar0_{t+1}<1. Proved for prefix (large m).",
+      "detection": "proved-cycle6"
+    },
+    {
+      "source": "p6-strict-threshold",
+      "target": "p6-turan",
+      "edge_type": "reform",
+      "evidence": "Heavy := tau_e >= eps (strict light). Fixes K_10 knife-edge.",
+      "detection": "fixed-cycle6"
     }
   ],
   "hyperedges": [
@@ -531,28 +649,55 @@
         "detection": "proved-cycle5"
       },
       "hx/labels": ["thread", "proof-chain", "partial-cycle5"]
+    },
+    {
+      "hx/id": "first-proof-p6:bridge-b-chain",
+      "hx/type": "thread/proof-chain",
+      "hx/ends": [
+        {"role": "step-1", "ident": "p6-turan", "node_type": "answer"},
+        {"role": "step-1b", "ident": "p6-strict-threshold", "node_type": "comment"},
+        {"role": "step-2", "ident": "p6-induced-foster", "node_type": "answer"},
+        {"role": "step-3", "ident": "p6-conditional-dbar0", "node_type": "answer"},
+        {"role": "step-4", "ident": "p6-bridge-b", "node_type": "answer"},
+        {"role": "step-5", "ident": "p6-alpha-lt-1", "node_type": "answer"},
+        {"role": "step-6", "ident": "p6-assembly-decomp", "node_type": "answer"},
+        {"role": "gap", "ident": "p6-bmi-gap", "node_type": "comment"},
+        {"role": "step-7", "ident": "p6-pigeonhole", "node_type": "answer"},
+        {"role": "step-8", "ident": "p6-size", "node_type": "answer"}
+      ],
+      "hx/content": {
+        "evidence": "Bridge B chain: Turan -> induced Foster -> dbar0<1 (PROVED) -> modified greedy (0 skips) -> alpha<1 -> assembly -> [BMI gap] -> pigeonhole -> size. All steps proved except BMI.",
+        "detection": "proved-cycle6+gap"
+      },
+      "hx/labels": ["thread", "proof-chain", "partial-cycle6"]
     }
   ],
   "stats": {
-    "n_nodes": 25,
-    "n_edges": 30,
+    "n_nodes": 31,
+    "n_edges": 40,
+    "n_hyperedges": 5,
     "node_types": {
       "question": 1,
-      "answer": 20,
-      "comment": 4
+      "answer": 23,
+      "comment": 7
     },
     "proved_cycle4": ["p6-monotonicity", "p6-operator-bound", "p6-blocking"],
     "proved_cycle5": ["p6-alpha-lt-1", "p6-threshold-relax", "p6-product-bound", "p6-assembly-decomp"],
+    "proved_cycle6": ["p6-induced-foster", "p6-conditional-dbar0", "p6-bridge-c", "p6-strict-threshold"],
     "corrected_cycle5": ["p6-foster (dbar0<=2/3 FALSE)", "p6-trace-gap (SUPERSEDED)"],
-    "remaining_gap": "p6-dbar0-gap",
+    "refined_cycle6": ["p6-dbar0-gap -> p6-bmi-gap (dbar0<1 proved, refined to full dbar<1)"],
+    "remaining_gap": "p6-bmi-gap",
     "empirical_summary": {
-      "max_dbar0": 0.755,
+      "max_dbar0_modified": 0.7333,
+      "max_dbar0_standard": 0.808,
       "max_alpha": 0.494,
-      "max_rho1": 0.494,
-      "max_assembly": 0.833,
+      "max_assembly_dbar": 0.833,
       "max_alpha_dbar0": 0.328,
-      "min_c_needed": 0.957,
-      "test_suite": "678 steps, 15 graph families, n up to 500, eps in {0.1,0.2,0.3,0.5}"
+      "max_M_norm_over_eps": 0.9866,
+      "skips_modified_greedy": 0,
+      "bridge_c_failures": 0,
+      "test_suite_c6": "116 runs (29 graphs x 4 eps), 726 steps",
+      "test_suite_c5": "678 steps, 15 graph families, n up to 500"
     }
   }
 }
