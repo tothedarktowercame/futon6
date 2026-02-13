@@ -228,9 +228,10 @@ P3_NODE_VERIFICATION_FOCUS = {
         "stationary ratio x_1:x_2."
     ),
     "p3-s7": (
-        "Verify the final composition and uniqueness claim: irreducibility by "
-        "positive-rate vacancy-adjacent swaps generating permutations on S_n(lambda), "
-        "then uniqueness on finite irreducible CTMC."
+        "Verify the final composition for the existence scope only: from explicit "
+        "nontrivial chain construction plus AMW stationary-law theorem plus notation "
+        "convention, conclude existence of a CTMC with stationary ratio F*_mu/P*_lambda."
+        " Treat uniqueness/irreducibility as optional and out-of-scope unless explicitly claimed."
     ),
 }
 
@@ -312,7 +313,7 @@ PROOF_PROFILES = {
         "synthesis_points": [
             "Is the proof complete for existence and nontriviality of the chain?",
             "Are assumptions and notation conventions explicit and sufficient?",
-            "Are remaining weaknesses theorem-level or validation/citation-level?",
+            "Are remaining weaknesses theorem-level or validation/citation-level for the existence claim?",
         ],
     },
 }
