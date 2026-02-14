@@ -544,7 +544,7 @@ of any one approach.
   impossible) to resultant elimination (feasible and fast).}
 
 %% ============================================================
-\section*{Act X: The Gauntlet Connection}
+\section*{Act X: The Gauntlet Connection (Future Work)}
 %% ============================================================
 
 \begin{joebox}
@@ -553,11 +553,21 @@ could add something about the relevance of this pattern to agent
 teaming (further work in futon3c).
 \end{joebox}
 
+\begin{processnote}[title={Process Note --- Scope}]
+Act~X is a sketch, not a completed analysis. The mapping below
+identifies correspondences between human interventions documented in
+Acts~I--IX and infrastructure components proposed in the
+\texttt{futon3c} peripheral gauntlet (M-peripheral-gauntlet). A
+proper treatment would ground each claim in specific commit evidence
+and evaluate which correspondences are structural versus superficial.
+That work remains to be done.
+\end{processnote}
+
 The sprint and its continuation are a slow-motion demonstration of
 the infrastructure that the \texttt{futon3c} peripheral gauntlet
-(M-peripheral-gauntlet) proposes to build. Every placental function
+proposes to build. Every placental function
 that the gauntlet enumerates was performed by a human during the
-sprint:
+sprint. The following correspondences are provisional:
 
 \begin{description}
 \item[Sensory gating.] Joe chose which problems to look at, which
@@ -599,31 +609,21 @@ sprint:
   than a conversational aside.
 \end{description}
 
-The continuation cycles add a specific design insight: the
+The continuation cycles suggest a specific design hypothesis: the
 \textbf{($\text{layer}, \text{status}$) stationarity monitor}
-proposed in Part~IV (Section~\ref{sec:learning}) \emph{is} the
+proposed in Part~IV (Section~\ref{sec:learning}) may be the
 proof-domain instance of Tickle. Problem~6's failed phase (six
 dispatch-and-fail cycles over eight hours, all targeting the
 sparsification layer) has the same $(\text{layer}, \text{status})$
-signature as a stalled coding agent repeating the same approach:
-stripes in the spacetime diagram. The monitor that detects
-stationarity and triggers a reflect hop is Tickle for proofs.
-The monitor that detects agent silence on IRC and pages it awake
-is Tickle for coordination. Same pattern, same gate, different
-timescale.
+signature as a stalled coding agent repeating the same approach.
+Whether this analogy is deep enough to share implementation---or
+merely suggestive---is an open question for futon3c.
 
-\pivot{The connection between the proof sprint and the gauntlet is
-  not metaphorical. The sprint is evidence for the gauntlet: it
-  demonstrates what autonomous multi-agent operation looks like when
-  the infrastructure doesn't exist, and therefore what the
-  infrastructure must provide. Every human intervention documented
-  in this Part~III is a placental function. Every pivot annotation
-  is a moment where that function transferred knowledge. The
-  gauntlet's measure of success is that the pivots happen without
-  the human---not because the human is excluded, but because the
-  infrastructure carries the function. When that works, the human
-  converges to the slow-timescale preference layer: choosing which
-  problems to attempt, which proofs to trust, which discoveries to
-  pursue. Everything else---stall detection, layer enumeration,
-  confidence calibration, co-presence, modeline persistence---is
-  infrastructure.}
+\pivot{The correspondences above are hypotheses, not conclusions.
+  The sprint provides \emph{candidate evidence} for the gauntlet
+  design: it shows what human-in-the-loop multi-agent operation looks
+  like when the infrastructure doesn't exist, and therefore what the
+  infrastructure might need to provide. Validating these
+  correspondences---and distinguishing structural matches from
+  superficial ones---is the work that Act~X, properly written, would
+  do.}
