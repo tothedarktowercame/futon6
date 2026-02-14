@@ -353,19 +353,25 @@ you finding the answer in 30~minutes?
   (``tricks / symmetries''), and honest calibration (``why not
   30~minutes?'').}
 
-\begin{codexbox}[title={Codex --- 15 minutes later}]
+\begin{claudebox}[title={Claude --- 15 minutes later}]
 The proof for $K_n$ is complete. $\bar{d} = 2t/(n\varepsilon) \le 2/3$
 at $T = \varepsilon n/3$ steps. Pigeonhole gives $\exists v$ with
 $\operatorname{tr}(Y) \le 2/3$, and $\|Y\| \le \operatorname{tr}(Y)$
 for PSD matrices. The barrier is maintained at every step.
 Result: $|S| = \varepsilon n/3$, $c = 1/3$.
-\end{codexbox}
+\end{claudebox}
 
-\begin{codexbox}[title={Codex --- The irony}]
+\begin{claudebox}[title={Claude --- The irony}]
 The irony: this entire proof is elementary---no interlacing families,
 no Borcea--Br\"and\'en, no MSS theorem needed. Just PSD trace bound
 $+$ pigeonhole $+$ Tur\'an.
-\end{codexbox}
+
+\smallskip
+\noindent\emph{[With the benefit of hindsight: the elementary proof
+closes $K_n$ but the averaging step ($\bar{d} < 1$) that it relies on
+is false for general graphs---see Act~IX.  The irony has a second
+layer.]}
+\end{claudebox}
 
 \pivot{The layer switch lands. Eight hours of sparsification-layer
   attacks are bypassed by an elementary combinatorial proof discovered
