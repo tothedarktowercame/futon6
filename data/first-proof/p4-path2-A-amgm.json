@@ -1,0 +1,14 @@
+{
+  "amgm_weak": {
+    "fail_count": 294931,
+    "fail_Lpos": 134040,
+    "min_ratio": 8.01861523535497e-05,
+    "description": "4*a10_bar*a01_bar vs a11_bar^2*Pmax*Qmax"
+  },
+  "amgm_tight": {
+    "fail_count": 192986,
+    "fail_Lpos": 61413,
+    "min_ratio": 0.00033190661877797426,
+    "description": "4*F_corner*G_corner vs a11_bar^2*Pmax*Qmax"
+  }
+}
