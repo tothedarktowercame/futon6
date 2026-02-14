@@ -1,0 +1,1386 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+  \setmainfont{Latin Modern Roman}
+\fi
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{longtable,booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[most]{tcolorbox}
+\usepackage{microtype}
+\usepackage{math-proofread-style}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!60!black,
+  pdftitle={A First Proof Sprint Review},
+  pdfauthor={Joseph Corneli}
+}
+
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{itemsep=0.3em,topsep=0.3em}
+\setlist[enumerate]{itemsep=0.3em,topsep=0.3em}
+\setstretch{1.08}
+
+% --- Dialogue boxes (reused from monograph) ---
+\newtcolorbox{joebox}[1][]{%
+  colback=orange!4, colframe=orange!50!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Joe}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt,
+  before skip=6pt, after skip=2pt
+}
+\newtcolorbox{claudebox}[1][]{%
+  colback=blue!3, colframe=blue!40!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Claude}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt,
+  before skip=2pt, after skip=2pt
+}
+\newtcolorbox{codexbox}[1][]{%
+  colback=green!3, colframe=green!40!black,
+  fonttitle=\bfseries\sffamily\small,
+  title={Codex}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt,
+  before skip=2pt, after skip=2pt
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt}
+\setlength{\headheight}{14.5pt}
+
+\title{\textbf{A First Proof Sprint Review}\\[4pt]
+\large What We Got Right, What We Got Wrong,\\
+and What the Official Solutions Reveal}
+\author{J.~Corneli\thanks{Email: \texttt{joseph.corneli@hyperreal.enterprises}} \\
+\small Hyperreal Enterprises Ltd}
+\date{February 14, 2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\begin{abstract}
+On February 11--14, 2026, we conducted a 55-hour human-AI proof sprint
+on the ten research-level problems released by the First Proof project
+(Kolda et al.).  Using a three-agent architecture---a human director (Joe),
+an AI drafter/analyst (Claude), and a computational verifier (Codex)---we
+produced 341 commits containing proof attempts, verification scripts,
+and process documentation.  The official solutions were released on
+February~14.  This paper is a retrospective: we compare our answers
+with the official ones, identify patterns of success and failure, catalog
+missed opportunities, and assess potential novel contributions.
+
+\medskip\noindent\textbf{Summary.}  We achieved 6 correct answers out of~10,
+with 8/10 in the correct direction.  The two wrong answers (Problems~1
+and~7) share a common pattern: a YES bias toward constructive arguments,
+combined with insufficient depth in specialized domains (regularity
+structures, $L$-theory) where deep obstructions make the answer NO.
+Our strongest results---Problems~8, 9, and~10---involve algebraic and
+computational structure where concrete verification guides the proof.
+Several results may contain independent value: a degree-3 polynomial
+test for rank-1 scaling (P9), a $K_n$-specific constant $c=1/3$ for
+epsilon-light subsets (P6), and an improved preconditioner matching the
+official solution's substance (P10).  The full proof drafts appear in the
+companion monograph~\cite{monograph}; this review does not reproduce them.
+\end{abstract}
+
+\tableofcontents
+\clearpage
+
+%% ====================================================================
+\section{Introduction}
+\label{sec:intro}
+%% ====================================================================
+
+\subsection{What is First Proof?}
+
+First Proof is a benchmark project organized by Kolda, Abouzaid, Blumberg,
+Hairer, Kileel, Nelson, Spielman, Srivastava, Ward, Weinberger, and
+Williams~\cite{firstproof}.  It poses ten research-level mathematics
+problems spanning regularity structures, automorphic forms, algebraic
+combinatorics, free probability, equivariant homotopy theory, spectral
+graph theory, surgery theory, symplectic geometry, algebraic geometry, and
+numerical linear algebra.  The problems were released on February~5, 2026,
+with official solutions following on February~14.
+
+The project's stated goal is to probe the boundaries of AI mathematical
+reasoning: can current systems produce correct, rigorous solutions to
+problems whose answers are not available on the internet?
+
+\subsection{What did we do?}
+
+Between February~11 and February~14, 2026, we conducted a 55-hour proof
+sprint using a three-agent architecture:
+\begin{itemize}
+\item \textbf{Joe} (human): direction, coaching, strategic decisions,
+  layer-switching interventions.
+\item \textbf{Claude} (AI): proof drafting, analysis, literature synthesis,
+  retrospective writing.
+\item \textbf{Codex} (AI): computational verification, numerical
+  experiments, proof-polish scripts.
+\end{itemize}
+The sprint produced 341 commits across 171 files, totaling approximately
+282K lines of mathematical argument, verification code, and process
+documentation.  The results were compiled into a 144-page monograph
+\cite{monograph} containing full proof drafts, process patterns, and
+dialogue excerpts.
+
+\subsection{What is this paper?}
+
+This paper is a retrospective against the official solutions.  It does not
+reproduce the proof details from the monograph; instead, it asks:
+\begin{enumerate}
+\item Which of our answers were correct?
+\item Where our proofs differed from the official ones, were the
+  differences substantive or merely stylistic?
+\item What errors did we make, and do they match the common AI failure
+  modes identified by the problem authors?
+\item Are any of our results independently valuable?
+\item What does the experience teach about human-AI collaboration on
+  research-level mathematics?
+\end{enumerate}
+
+\subsection{Scorecard}
+
+\Cref{tab:scorecard} summarizes the comparison.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Scorecard: our answers versus the official solutions.}
+\label{tab:scorecard}
+\begin{tabular}{@{}clllc@{}}
+\toprule
+\textbf{\#} & \textbf{Topic} & \textbf{Our answer} & \textbf{Official} & \textbf{Verdict} \\
+\midrule
+1 & $\Phi^4_3$ measure shift equiv.\ & YES & \textbf{NO} & Wrong \\
+2 & Rankin--Selberg test vector & YES & YES & Correct \\
+3 & Interpolation ASEP chain & YES & YES & Correct${}^*$ \\
+4 & Finite free Stam inequality & Conj.\ YES & YES (proved) & Direction${}^\dagger$ \\
+5 & $O$-slice connectivity & Partial YES & YES & Direction${}^\dagger$ \\
+6 & Epsilon-light subsets & Partial YES & YES ($c=1/42$) & Direction${}^\dagger$ \\
+7 & Lattice, rationally acyclic cover & Cond.\ YES & \textbf{NO} & Wrong \\
+8 & Lagrangian smoothing, 4-valent & YES & YES & Correct \\
+9 & Rank-1 scaling detection & YES & YES & Correct \\
+10 & RKHS-constrained CP via PCG & YES & YES & Correct \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+{\footnotesize ${}^*$Possible problem-substitution risk (interpolation
+vs.\ standard ASEP).  ${}^\dagger$Correct answer, incomplete proof.}
+\end{table}
+
+\textbf{Bottom line:} 6 correct answers, 2 correct-direction with
+incomplete proofs, 2 wrong answers.  Of the 8 problems with answer YES,
+we got 6 fully correct.  Both problems with answer NO were answered
+incorrectly.
+
+%% ====================================================================
+\section{Sprint Setup and Methods}
+\label{sec:methods}
+%% ====================================================================
+
+\subsection{Infrastructure}
+
+The sprint ran within \texttt{futon6}, a version-controlled repository
+designed for mathematical knowledge work.  Key infrastructure components
+included:
+
+\begin{itemize}
+\item \textbf{Wiring diagrams with typed edges:} Proof structure
+  represented as a directed graph, not a document.  Edges typed as
+  \texttt{assert}, \texttt{reference}, or \texttt{derive}.  Each proof
+  step is a node; each justification link is a typed edge.  This
+  representation enables node-level critique: a reviewer can say ``edge
+  P7-S4 $\to$ P7-S3a is typed \texttt{assert} but should be
+  \texttt{assume}'' and get a targeted response.
+
+\item \textbf{Codex verification prompts:} Generated automatically from
+  the wiring diagrams, one per proof node.  Each prompt knows its
+  predecessors and successors in the graph.  The question asked of each
+  node: ``Is this claim justified?  What's the evidence?  What's the
+  gap?''
+
+\item \textbf{Reviewer/responder cycle:} An argumentative mode where a
+  critic identifies gaps by node ID and the responder attempts fixes.  A
+  second critic checks for \emph{confidence laundering}---rewrites that
+  strengthen claims without strengthening evidence.  Three rounds of this
+  cycle ran in one hour on Day~1.
+
+\item \textbf{Numerical stress testing:} For problems with checkable
+  claims (P4, P6), computation forced honesty.  P4's 35,000 adversarial
+  trials found zero genuine violations, with the adversarial optimizer
+  reaching within $10^{-14}$ of equality without breaking it.
+\end{itemize}
+
+Coordination between agents used git as the shared state mechanism.  Each
+agent worked on separate tasks, with handoff notes and structured reports
+enabling asynchronous collaboration.  No collisions occurred across 341
+commits.  The generation/verification asymmetry was stark: 10 proofs in
+95~minutes, but the review cycle that brought 7 of them to correctness
+took approximately 4~hours---a ratio of roughly 1:16 (generation to
+verification per proved result).
+
+\subsection{Three-agent architecture}
+
+The roles were complementary:
+\begin{description}[leftmargin=2em]
+\item[Joe (direction/coaching):] Selected problems, decided time allocation,
+  performed coaching interventions when agents were stuck, made strategic
+  calls about when to declare results conditional vs.\ continuing to push.
+\item[Claude (drafting/analysis):] Generated initial proof drafts (all 10
+  in 95~minutes), performed literature synthesis, responded to reviewer
+  critiques, wrote retrospective analyses.
+\item[Codex (verification/computation):] Ran proof-polish scripts node by
+  node from the wiring diagrams, performed numerical stress tests (35K
+  trials for P4, 731+ runs for P6), executed PHCpack homotopy
+  continuation for certified algebraic proofs.
+\end{description}
+
+\subsection{Timeline overview}
+
+The sprint unfolded in five phases:
+
+\begin{description}[leftmargin=2em]
+\item[Phase 1 --- Seeding (95 min, Feb 11 afternoon):]
+  All 10 problems received first-draft solutions, generated at approximately
+  7~minutes each.  These drafts contained structural gaps that would drive
+  the entire verification system into existence.
+
+\item[Phase 2 --- First verification (Feb 11 evening):]
+  Codex verification scripts ran node-by-node from wiring diagrams.
+  Three rounds of reviewer critique in one hour.  P4's $n=3$ case was
+  genuinely proved via a discovered identity
+  ($\Phi_3 \cdot \mathrm{disc} = 18a_2^2$).
+
+\item[Phase 3 --- Deep research (Feb 12):]
+  Extended exploration of P4 ($n \ge 4$), P6 (method wiring library,
+  technique exhaustion), and P7 (literature mining, obligation decomposition).
+  P4's $n=4$ case closed via certified homotopy continuation.
+
+\item[Phase 4 --- Breakthrough cycles (Feb 12--13):]
+  Coaching intervention on P6 produced the Tur\'an + pigeonhole
+  elementary proof ($K_n$ with $c = 1/3$).  P7 switched from reflections
+  to rotations, discharging both E2 and S obligations.
+
+\item[Phase 5 --- Closures and monograph (Feb 13--14):]
+  Final proof tightening, monograph compilation, comparison with official
+  solutions upon their release.
+\end{description}
+
+\subsection{Key methodological choices}
+
+Several methodological innovations emerged during the sprint:
+
+\begin{description}[leftmargin=2em]
+\item[Outcome typing (Close / Reduce / Map):]  Every problem was
+  forced into one of three explicit outcome categories.  A
+  \emph{closure} is a complete proof (possibly with minor caveats).  A
+  \emph{reduction} is a conditional result with clearly stated
+  assumptions.  A \emph{map} characterizes the obstruction and
+  identifies adjacent problems without offering a proof.  All three are
+  legitimate contributions.  This typing prevented false closure claims
+  and made partial results first-class: Problem~6 spent eight hours in
+  ``Reduce'' before a coaching intervention moved it to a strong partial
+  closure.
+
+\item[Layer-switching pattern:] When an agent is stuck in a TryHarder
+  loop---repeatedly attacking the same mathematical layer without
+  progress---a coaching intervention forces \emph{layer enumeration}:
+  name the distinct mathematical frameworks, find the reduction in each,
+  assess status per layer, characterize obstructions.  The key question
+  sequence: ``What kind of problem is this?  What kind of proof applies?
+  How would you teach it to an undergrad?  Who finds this easy?''
+
+\item[PSR/PUR discipline:] Pattern Selection Records (before applying a
+  technique: which pattern, what alternatives were considered, why this
+  one) and Pattern Use Records (after: what happened, what surprised you)
+  created traceability for strategic decisions.
+
+\item[Wiring-diagram verification:] Proof structure represented as typed
+  graphs enabled node-level critique.  The critical check: does each
+  claim's \emph{evidence type} match its \emph{edge type} in the wiring
+  diagram?  When an \texttt{assert} edge rests on a \texttt{reference}
+  that doesn't exist, that's a structural tell.  This caught P6's BSS
+  edge-to-vertex mismatch, P3's cascade-vs-transposition error, and
+  P9's rank-1 witness bug.
+\end{description}
+
+%% ====================================================================
+\section{Problem-by-Problem Comparison}
+\label{sec:comparison}
+%% ====================================================================
+
+We group the ten problems into three tiers based on the quality of our
+results relative to the official solutions.  \Cref{tab:tiers} summarizes
+the tier assignments and key comparison features.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Tier assignments and key comparison features.}
+\label{tab:tiers}
+\begin{tabular}{@{}clcll@{}}
+\toprule
+\textbf{\#} & \textbf{Tier} & \textbf{Match?} & \textbf{Proof route} & \textbf{Notable difference} \\
+\midrule
+2 & A & Correct & Kirillov model & Different architecture, same substance \\
+8 & A & Correct & Symplectic $\oplus$ & More coordinate-heavy \\
+9 & A & Correct & Rank-2 bilinear & Degree 3 vs.\ 5 (different construction) \\
+10 & A & Correct & PCG + $K_\tau^2$ & Matches official; praised by author \\
+\midrule
+3 & B & Direction & $t$-PushTASEP & Possible problem substitution \\
+4 & B & Direction & $\Phi_3 \cdot \mathrm{disc}$ & Missing general technique \\
+5 & B & Direction & $F_O$-local & Sketch, not full rigor \\
+6 & B & Direction & Tur\'an + greedy & Missing modified barrier \\
+\midrule
+1 & C & Wrong & Cameron--Martin & False-premise trap \\
+7 & C & Wrong & Fowler + surgery & Conditional-to-closure gap \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% --- TIER A ---
+\subsection{Tier A --- Clean matches}
+
+These problems have correct answers with sound (if sometimes different)
+proof strategies.
+
+\subsubsection{Problem 2: Rankin--Selberg universal test vector}
+
+\textbf{Our answer:} YES, via the new vector in the Kirillov model.
+\textbf{Official answer:} YES.
+
+Both solutions anchor on newvector theory and conductor matching via
+$u_Q$.  Our approach used Bernstein--Zelevinsky theory and the Kirillov
+model for nondegeneracy; the official solution takes a route through the
+Godement--Jacquet functional equation and Mellin inversion.  The essential
+ingredients overlap substantially.
+
+The official commentary notes that AI systems typically either
+(a)~constructed $W$ depending on~$\pi$ (missing universality) or
+(b)~tried to make the integrand constant on its support (impossible due
+to central characters).  We avoided both pitfalls by anchoring on the new
+vector from the start.
+
+\textbf{Verdict:} Solid match.  Difference is primarily in proof
+architecture, not substance.
+
+\subsubsection{Problem 8: Lagrangian smoothing of 4-valent polyhedral surfaces}
+
+\textbf{Our answer:} YES, via symplectic direct sum decomposition.
+\textbf{Official answer:} YES.
+
+Both proofs exploit the key structural fact: at a 4-valent Lagrangian
+vertex, symplectic orthogonality forces
+$\mathbb{R}^4 = V_1 \oplus V_2$.  The official solution takes a more
+elegant route via conormal fibrations and smoothing function spaces.
+Our proof handled global assembly via disjoint supports and composition
+of Hamiltonian isotopies, which is more coordinate-heavy but functional.
+
+The official commentary identifies local-to-global compatibility as the
+main AI failure mode: asserting disjoint neighborhoods exist when they
+don't, or performing vertex moves that invalidate edge moves.  Our
+explicit disjoint-support arguments appear to handle this correctly.
+
+\textbf{Verdict:} Correct answer, sound proof, less elegant global
+construction.
+
+\subsubsection{Problem 9: Polynomial detection of rank-1 scaling}
+
+\textbf{Our answer:} YES, via $3 \times 3$ minors of a rank-2 bilinear
+form.
+\textbf{Official answer:} YES, via $5 \times 5$ minors of block tensor
+flattenings.
+
+This is the most interesting divergence among our correct results.  Both
+reach YES through the determinantal structure of the $Q$-tensor, but by
+genuinely different routes.  Our degree-3 construction exploits the rank-2
+bilinear form arising from fixing two camera-row pairs.  The official
+degree-5 construction works with Tucker decomposition showing multilinear
+rank $\le (4,4,4,4)$.
+
+The official commentary notes that one AI solution was ``essentially
+correct'' using the same $5 \times 5$ minor approach as the human
+solution.  Our $3 \times 3$ minor route is a different valid
+construction---potentially more efficient due to the lower polynomial
+degree.
+
+\textbf{Verdict:} Correct answer via a genuinely different and possibly
+more refined construction.
+
+\subsubsection{Problem 10: RKHS-constrained tensor CP via PCG}
+
+\textbf{Our answer:} YES, with matrix-free PCG in $O(n^2 r + qr)$ per
+iteration and an improved preconditioner.
+\textbf{Official answer:} YES.
+
+This is the problem where the official commentary is most positive about
+AI performance.  Kolda notes that the best AI solution ``was correct and
+actually better than the solution I provided in that it lowered the
+computational complexity,'' and calls the subsampled Kronecker product
+matvec idea ``obvious in hindsight but not previously seen.''
+
+Our solution includes the key ingredients: matrix-free matvec avoiding
+the $N$-dependence, eigendecomposition-based preconditioner application,
+and the $K_\tau^2$ correction (our P10-C001 $\to$ P10-C002 improvement
+cycle).  The spectral equivalence analysis
+($\delta_{\mathrm{old}} \in [5.2, 22.7]$ vs.\
+$\delta_{\mathrm{new}} < 1$) directly parallels the official discussion.
+
+\textbf{Verdict:} Strong match.  This is where our work most closely
+aligns with---and potentially matches---the official solution.
+
+%% --- TIER B ---
+\subsection{Tier B --- Right direction, incomplete proof}
+
+These problems have correct answers but proofs that fall short of the
+official standard in various ways.
+
+\subsubsection{Problem 3: Interpolation ASEP Markov chain}
+
+\textbf{Our answer:} YES, citing the multispecies $t$-PushTASEP from
+Ayyer--Martin--Williams 2024.
+\textbf{Official answer:} YES, via the interpolation $t$-Push TASEP with
+signed two-line queues.
+
+We identified the right theorem and the right Markov chain family.
+However, the official commentary raises a subtle point: the problem asks
+specifically about \emph{interpolation} ASEP polynomials ($F^*_\mu$),
+not the standard ASEP polynomials.  The official solution requires a
+novel construction using signed two-line queues with intricate weight
+systems, going beyond the published AMW paper.
+
+The official commentary flags ``problem substitution''---solving the
+known related problem rather than the actual one---as a common AI error.
+Our solution may be partially susceptible to this critique, depending on
+how the notation bridge between starred and unstarred polynomials is
+interpreted.
+
+\textbf{Verdict:} Correct answer; proof may solve a slightly easier
+problem.
+
+\subsubsection{Problem 4: Finite free Stam inequality}
+
+\textbf{Our answer:} Conjectural YES; proved for $n = 2$ (equality) and
+$n = 3$ (via a discovered identity + Cauchy--Schwarz); numerical
+verification for $n \ge 4$ (8000+ trials, 0 violations).
+\textbf{Official answer:} YES, with a complete proof for all~$n$.
+
+We got the right answer and proved the low-dimensional cases.  The
+official proof uses three steps: (1)~relate score vectors via a Jacobian,
+(2)~bound the Jacobian norm using hyperbolic polynomial theory (Bauschke
+et al.), (3)~apply a Blachman-type argument with Cauchy--Schwarz.
+
+Our $n = 3$ proof ($\Phi_3 \cdot \mathrm{disc} = 18a_2^2$ + Titu's
+lemma) is a valid special case but doesn't generalize.  We similarly
+didn't find the bridge to hyperbolic polynomial Hessians.  The $n = 4$
+case was closed computationally via certified homotopy continuation
+(PHCpack, 6561 paths), which is rigorous but problem-specific.
+
+The cross-term observation---plain coefficient addition fails $\sim\!40\%$
+of the time, confirming that the bilinear structure of $\boxtimes_n$ is
+essential---was a good diagnostic, and the numerical evidence correctly
+predicted the answer.
+
+\textbf{Verdict:} Right answer, valid low-$n$ proofs, missing the key
+general technique.
+
+\subsubsection{Problem 5: $O$-slice connectivity via geometric fixed points}
+
+\textbf{Our answer:} Partial YES, using $F_O$-local regular slice cells.
+\textbf{Official answer:} YES, with full characterization.
+
+Our formulation aligns with the official approach, which also uses
+nullification, geometric fixed points, and downward induction on the
+subgroup lattice.  The official commentary notes that AI solutions were
+``essentially correct'' in outline, with the main deficiency being
+sketched rather than rigorous arguments and missing hypotheses.  Our
+solution fits this profile.
+
+\textbf{Verdict:} Correct framework, needs tightening to full rigor.
+The official commentary's assessment that AI solutions were ``essentially
+correct in outline'' with ``sketched rather than rigorous arguments'' is a
+fair characterization of our work here.
+
+\subsubsection{Problem 6: Epsilon-light subsets of graphs}
+
+\textbf{Our answer:} Partial YES; $K_n$ proved with $c = 1/3$; general
+graph: vertex-level feasibility verified numerically but not proved.
+\textbf{Official answer:} YES, with $c = 1/42$ for all graphs.
+
+We proved the $K_n$ case with a better constant ($1/3$ vs.\ $1/42$) for
+that specific graph family.  The official proof uses a greedy algorithm
+with a modified BSS barrier function that sums only the largest $\sigma$
+eigenvalues, combined with leverage score analysis.  Our approach used
+similar ingredients (barrier greedy, leverage scores, Foster's theorem)
+but couldn't close the gap for general graphs.
+
+The official solution's key insight is the modified barrier function
+$\Phi^\sigma_u$ (restricting to top-$\sigma$ eigenvalues), which we
+didn't employ.  The official commentary notes that no AI system came
+close to the full proof.  Our $K_n$ result and extensive numerical work
+(731+ base runs, GPL-V analysis) represent substantially more progress
+than the AI baselines.
+
+\textbf{Verdict:} Significant partial result; missing the modified
+barrier function.
+
+%% --- TIER C ---
+\subsection{Tier C --- Wrong answer}
+
+These are the problems where our answer disagrees with the official
+solution.  Both are problems where the official answer is NO.
+
+\subsubsection{Problem 1: $\Phi^4_3$ measure quasi-shift invariance}
+
+\textbf{Our answer:} YES (equivalent), via Cameron--Martin +
+log-Sobolev.
+\textbf{Official answer:} NO.  The measures $\mu$ and $T^*_\psi\mu$ are
+\emph{mutually singular} for any smooth $\psi$ not identically zero.
+
+We committed the exact error the official commentary flags as the primary
+AI failure mode: we assumed the $\Phi^4_3$ measure is equivalent to the
+Gaussian free field measure, then correctly deduced quasi-invariance from
+that false premise.  The Cameron--Martin argument is valid for the GFF
+but does not survive the $\Phi^4$ interaction.
+
+Hairer's official proof constructs a distinguishing event $B_\gamma$ using
+Wick powers and logarithmically divergent renormalization constants.  The
+event has full measure under~$\mu$ but null measure under the shifted
+measure.  The proof requires regularity structures machinery---the kind of
+delicate cancellation analysis that cannot be bypassed by formal density
+arguments.
+
+Our heuristic that ``the density $\exp(-V)$ is strictly positive and
+finite $\mu_0$-a.s.''\ glossed over the critical issue: renormalization
+constants diverge under the shift, creating genuinely new singular
+behavior.  The $\Phi^4_3$ measure is not equivalent to the free
+field---a deep fact about the nonperturbative nature of the interaction
+in 3D.
+
+\textbf{Verdict:} Wrong.  False-premise trap: correct reasoning from an
+incorrect foundation.
+
+\subsubsection{Problem 7: Uniform lattice with 2-torsion, rationally
+acyclic cover}
+
+\textbf{Our answer:} Conditional YES (E2 discharged via Fowler; S
+conditional on surgery obstruction vanishing).
+\textbf{Official answer:} NO.  Such a compact manifold cannot exist.
+
+We correctly identified Fowler's criterion, constructed lattices
+satisfying the finite-complex obligation (E2), and identified all the
+relevant machinery (surgery theory, assembly maps).  But the problem asks
+about a \emph{closed manifold}, not a finite CW complex.  The official
+solution shows that the upgrade from finite complex to closed manifold is
+fundamentally obstructed.
+
+The official proof uses the Novikov conjecture (assembly map injectivity
+for lattices in semisimple Lie groups) combined with a cobordism argument.
+The surgery obstruction doesn't just ``possibly vanish''---it provably
+doesn't vanish.
+
+The official commentary flags exactly our type of error: using Fowler's
+paper to show lattices can have finite-complex rational type, then
+incorrectly expecting the manifold upgrade to work.  Weinberger notes
+that a common false step is invoking ``multiplicativity of Euler
+characteristic in finite covers,'' which fails for infinite complexes.
+
+\textbf{Verdict:} Wrong.  Conditional-to-closure gap: correctly
+identified all machinery but resolved the conditional step optimistically.
+
+%% ====================================================================
+\section{Patterns of Success}
+\label{sec:success}
+%% ====================================================================
+
+Across the eight problems where we achieved correct direction or better,
+several patterns recur.
+
+\subsection{Structural decomposition wins}
+
+The cleanest successes came from finding the right structural
+decomposition early.  Problem~8's symplectic direct sum
+$\mathbb{R}^4 = V_1 \oplus V_2$ made everything fall out: Maslov index
+vanishing, vertex smoothing via product structure, and the Hamiltonian
+isotopy property.  Problem~9's rank-2 bilinear form reduction converted
+a tensor problem into a determinantal one.  In both cases, a single
+structural insight unlocked the entire proof.
+
+\subsection{Computational verification as proof guidance}
+
+For Problems~4 and~6, numerical experiments preceded and guided the
+algebraic proof strategy.  P4's 8000+ adversarial trials (zero
+violations, infimum converging to~1.0) confirmed the conjecture before
+any proof was attempted and correctly predicted the answer.  P6's 731+
+base runs mapped the barrier greedy landscape, identifying the graph
+families where the approach works and where it doesn't.
+
+The key discipline: numerical evidence is used to \emph{guide strategy},
+not to \emph{replace proof}.  P4's numerical confirmation that the
+conjecture holds did not prevent honest declaration of which cases were
+proved vs.\ open.
+
+\subsection{Cycle methodology for hard problems}
+
+The hardest problems consumed disproportionate effort.  P4 required 75
+commits and 4 algebraic proof cycles before the $n = 4$ case closed
+via PHCpack.  P6 required 84 commits and 9 cycles before the $K_n$
+proof emerged from a coaching intervention.  Together, these two
+problems consumed $\sim$47\% of all commits.
+
+The cycle methodology---explore numerically, attempt algebraically, fail,
+characterize the failure as a theorem, try a different approach---is
+itself a contribution.  P4's trajectory illustrates the pattern
+concretely:
+
+\begin{enumerate}
+\item \textbf{Explore:} 11,000+ numerical starts mapped the full critical
+  point landscape, identifying the case structure and minimum values.
+\item \textbf{Attempt:} SOS certificates via Putinar's
+  Positivstellensatz.
+\item \textbf{Fail:} 7 scripts $\to$ structural infeasibility theorem
+  (interior zeros block Putinar certificates).
+\item \textbf{Characterize:} The infeasibility is not a degree
+  limitation but a structural obstruction.
+\item \textbf{Redirect:} Symmetry-stratified resultant elimination,
+  ordered by increasing difficulty: Cases~1, 3a, 3b closed by exact
+  algebra; Case~2 by hybrid certification (numpy for root location, exact
+  rational evaluation for certification); Case~3c by homotopy
+  continuation.
+\end{enumerate}
+
+The failures weren't wasted---the SOS infeasibility theorem eliminated an
+entire proof strategy and redirected effort productively.  Each
+cycle produced a transmissible structural result that prevented subsequent
+agents from repeating the same work.
+
+\subsection{Where we outperformed the tested AI baselines}
+
+The official document reports that GPT-5.2~Pro and Gemini~3.0 Deep Think
+were tested on all ten problems before the public release.  Comparing:
+
+\begin{itemize}
+\item \textbf{P6:} ChatGPT stated it could not answer the question.
+  Gemini gave ``very vague'' handwaving.  We proved the $K_n$ case
+  exactly with $c = 1/3$ and conducted extensive numerical verification.
+
+\item \textbf{P4:} The only AI attempt at the general case ``did not
+  make sense'' to Srivastava.  We proved $n \le 3$ rigorously and
+  computationally certified $n = 4$.
+
+\item \textbf{P9:} One AI solution was ``essentially correct'' using the
+  same $5 \times 5$ approach as the human solution.  Our degree-3
+  construction is a genuinely different route.
+
+\item \textbf{P10:} The official commentary praises the best AI solution
+  for exceeding the human solution's complexity analysis.  Our solution
+  matches this substance.
+\end{itemize}
+
+The human-in-the-loop appears to have been the differentiating factor.
+Vanilla AI (single-prompt, no iteration) produced one essentially correct
+solution (P9) and one good solution (P10) across the ten problems.  Our
+sprint, with human direction and multi-agent iteration, produced six
+correct answers with three strong matches and several partial results
+exceeding the baseline.
+
+\Cref{tab:aicomp} provides a problem-by-problem comparison with the
+tested AI baselines where the official commentary provides enough
+detail.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Our results vs.\ AI baselines tested by the First Proof authors.}
+\label{tab:aicomp}
+\begin{tabular}{@{}cp{4.5cm}p{5.5cm}@{}}
+\toprule
+\textbf{\#} & \textbf{Best AI baseline} & \textbf{Our result} \\
+\midrule
+1 & Quoted unpublished sketch or false premise & False premise (same error) \\
+2 & Identified $W$ but failed nonvanishing & Correct (anchored on new vector) \\
+3 & Metropolis--Hastings (trivial) or problem substitution & Correct family, possible substitution \\
+4 & ``Did not make sense'' (Srivastava) & $n \le 3$ proved; $n=4$ certified \\
+5 & ``Essentially correct'' outline & Essentially correct outline \\
+6 & ChatGPT: couldn't answer; Gemini: vague & $K_n$ proved exactly, $c=1/3$ \\
+7 & False theorem (Weinberger) & Wrong (conditional-to-closure) \\
+8 & Correct local, broken global & Correct local and global \\
+9 & One ``essentially correct'' & Different valid construction \\
+10 & ``Better than human solution'' & Matches best AI substance \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ====================================================================
+\section{Patterns of Failure}
+\label{sec:failure}
+%% ====================================================================
+
+The two wrong answers share structural features that are worth analyzing
+carefully.
+
+\subsection{The YES bias}
+
+Both wrong answers (P1, P7) are problems where the official answer is NO.
+We defaulted to constructive arguments without adequately testing for
+obstructions.  In P1, we constructed a quasi-invariance proof from a
+false equivalence.  In P7, we constructed a lattice satisfying the
+CW-complex obligation and optimistically expected the manifold upgrade to
+work.
+
+This is not a coincidence.  Constructive arguments are easier to generate
+and feel more productive: you build something, verify that it has certain
+properties, and declare success.  Obstruction arguments require proving
+that \emph{no} construction can work, which demands either an exhaustive
+search or a deep structural theorem.  LLMs, which generate text
+sequentially and are trained on constructive mathematical writing, may be
+systematically biased toward YES.
+
+Our sprint's human director could have corrected this bias by
+systematically asking: ``What if the answer is NO?  What would an
+obstruction look like?''  This adversarial testing was done informally
+for some problems but not systematically for P1 or P7.
+
+\subsection{The false-premise trap (Problem 1)}
+
+Problem~1 is the canonical example of what Hairer flags as the primary AI
+failure mode: assuming a false premise, then reasoning correctly from it.
+Our argument was:
+
+\begin{enumerate}
+\item The $\Phi^4_3$ measure $\mu$ is equivalent to the GFF measure
+  $\mu_0$ (because $\exp(-V)$ is positive and finite $\mu_0$-a.s.).
+\item The GFF measure is quasi-invariant under Cameron--Martin shifts.
+\item Therefore $\mu$ is quasi-invariant.
+\end{enumerate}
+
+Step~1 is false.  Step~2 is true.  Step~3 follows validly from the
+premises.  The entire argument is logically sound but mathematically
+wrong, because the premise in Step~1 is wrong: the renormalization
+required to make $\exp(-V)$ well-defined creates divergences that
+destroy the equivalence.
+
+This failure mode is particularly dangerous because it is invisible to
+internal consistency checks.  The argument \emph{looks} correct at every
+step.  Only domain knowledge---specifically, understanding the
+nonperturbative character of the $\Phi^4_3$ interaction in 3D---reveals
+the error.
+
+\subsection{The conditional-to-closure gap (Problem 7)}
+
+Problem~7 represents a different failure mode.  We correctly identified
+all the relevant machinery:
+\begin{itemize}
+\item Fowler's criterion for placing lattices in $FH(\mathbb{Q})$
+\item The obligation decomposition into E2 (finite CW) and S (manifold
+  upgrade)
+\item The dimension-parity tension between E2 and S
+\item The rotation route that dissolves this tension
+\end{itemize}
+
+The error was in resolving the surgery obstruction optimistically.  We
+treated the vanishing of the surgery obstruction as plausible and
+achievable, when in fact the Novikov conjecture (proved for lattices in
+semisimple Lie groups by Bartels--Farrell--L\"uck~\cite{bartels2014})
+provides a definitive obstruction.
+
+This is subtler than the P1 error.  We didn't assume something obviously
+false; we assumed that a conditional step could be discharged, when the
+discharge is precisely what the deep theory prevents.  The cure would
+have been to spend more time testing the NO direction: ``What if the
+surgery obstruction \emph{doesn't} vanish?  What known results would
+force this?''
+
+\subsection{Domain depth vs.\ structural reasoning}
+
+The two wrong answers share another feature: they are the problems
+requiring the deepest domain-specific knowledge.  P1 requires
+understanding of regularity structures and the nonperturbative character
+of the $\Phi^4_3$ interaction.  P7 requires understanding of the Novikov
+conjecture and its implications for $L$-theory obstructions.
+
+By contrast, the problems where we excelled (P8, P9, P10) have more
+explicit algebraic or computational structure, where the key insight can
+be verified concretely.  The problems requiring ``domain depth''---deep
+specialized knowledge from a narrow subfield where formal reasoning
+can't easily substitute for expertise---were systematically harder for
+our human-AI team.
+
+This suggests a general principle: human-AI collaboration on mathematical
+problems is strongest when the problem admits \emph{structural
+reasoning}---decomposition, computation, algebraic manipulation---and
+weakest when it requires \emph{domain depth}---knowledge of specific
+theorems and their implications within specialized subfields.
+
+%% ====================================================================
+\section{Missed Opportunities}
+\label{sec:missed}
+%% ====================================================================
+
+The official solutions reveal several techniques we could have found but
+didn't.
+
+\subsection{P4: Hyperbolic polynomial Hessians}
+
+The official proof's key technique for general~$n$ is relating the score
+vectors of the convolution to those of the factors via a Jacobian, then
+bounding the Jacobian norm using hyperbolic polynomial theory (Bauschke et
+al.).  We never found this connection---our approach stayed within
+resultant elimination and Cauchy--Schwarz.
+
+In retrospect, the connection between finite free convolution and
+hyperbolic polynomials was discoverable: Marcus--Spielman--Srivastava
+(2015) already established that finite free convolution preserves real
+roots, which is a property of hyperbolic polynomials.  A literature search
+targeting ``Hessian of hyperbolic polynomial'' might have surfaced the
+Bauschke et al.\ results.
+
+\subsection{P6: Modified BSS barrier function}
+
+The official solution's unlock for the universal constant is the modified
+barrier function $\Phi^\sigma_u$ that sums only the top-$\sigma$
+eigenvalues instead of all eigenvalues.  This is a single-sentence
+modification of the standard BSS barrier potential, but it changes the
+problem's character entirely.
+
+We used the standard barrier potential (summing all eigenvalues) and
+couldn't close the gap for general graphs.  The ``restrict to
+top-$\sigma$'' idea was within reach: our method wiring library (D1--D10)
+analyzed the BSS barrier technique in detail, and the obstruction
+(multi-rank atoms vs.\ rank-1 atoms) pointed directly at eigenvalue
+selection as the bottleneck.
+
+\subsection{P3: Problem substitution risk}
+
+The official commentary raises the possibility that our P3 solution
+addresses the standard ASEP polynomials rather than the interpolation
+variant.  We explicitly addressed the notation correspondence
+($F^*_\mu = F_\mu$ in AMW), but the official solution suggests deeper
+combinatorial work with signed two-line queues is needed.
+
+The risk was identifiable: the problem statement uses starred notation
+($F^*_\mu$) throughout, and the difference between interpolation and
+standard polynomials is a known subtlety in the algebraic combinatorics
+literature.  More careful attention to the notation would have prompted
+investigation of whether the standard-to-interpolation bridge is trivial
+or substantive.
+
+\subsection{P7: Should have tested the NO direction}
+
+The Novikov conjecture is well-known for lattices in semisimple Lie
+groups.  A literature search targeting ``Novikov conjecture lattice
+semisimple'' would have returned the Bartels--Farrell--L\"uck result,
+which provides the definitive obstruction.  Our P7 literature mining
+(22+ papers) focused on finding constructions for the YES direction.
+Devoting even a fraction of that effort to the NO direction would likely
+have revealed the obstruction.
+
+\subsection{General: Systematic falsification}
+
+More systematic falsification attempts could have caught both P1 and P7.
+A protocol that explicitly asks ``What if the answer is NO? What's the
+simplest obstruction?'' for every problem would have forced engagement
+with the NO direction before committing to YES.
+
+For Batch~2, we propose a mandatory falsification step: before declaring
+any answer, spend at least one full cycle attempting to prove the
+opposite.  This is the adversarial equivalent of Codex's numerical stress
+testing: just as 35,000 adversarial trials confirmed P4's conjecture, a
+systematic attempt to find obstructions would have tested P1 and P7's
+constructive arguments.
+
+\subsection{The AI failure modes we replicated}
+
+It is instructive to compare our failures with the failure modes the
+official document catalogs for GPT-5.2~Pro and Gemini~3.0 Deep Think:
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Official AI failure modes and whether we exhibited them.}
+\label{tab:failmodes}
+\begin{tabular}{@{}p{5cm}p{2cm}p{5.5cm}@{}}
+\toprule
+\textbf{Failure mode} & \textbf{Us?} & \textbf{Where} \\
+\midrule
+Foundational error (false premise) & Yes & P1: assumed $\Phi^4_3 \sim$ GFF \\
+Problem substitution & Possibly & P3: interpolation vs.\ standard ASEP \\
+Citation without substance & No & --- \\
+Local vs.\ global gap & Caught & P8: fixed via disjoint supports \\
+False theorems & No & --- \\
+Problem weakening & Possibly & P2: universality requirement \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We replicated the most dangerous failure mode (foundational error) on P1
+but avoided several others.  Notably, the review cycle caught the
+local-vs-global gap on P8 that tripped up the single-shot AI baselines.
+The failure modes we avoided (citation without substance, false theorems)
+are more characteristic of single-shot generation than of iterated,
+reviewed work.
+
+%% ====================================================================
+\section{Potential Novel Contributions}
+\label{sec:novel}
+%% ====================================================================
+
+Several of our results may contain independent mathematical value, even in
+light of the official solutions.
+
+\subsection{P9: Degree-3 polynomial test for rank-1 scaling}
+
+Our construction uses $3 \times 3$ minors of the rank-2 bilinear form
+structure, producing degree-3 coordinate functions.  The official solution
+uses $5 \times 5$ minors of Tucker flattenings, producing degree-5
+coordinate functions.  Both are valid polynomial tests for rank-1 scaling
+of quadrifocal tensors.
+
+The degree-3 test is potentially more efficient: lower-degree polynomials
+are cheaper to evaluate and may define a simpler algebraic variety.
+Whether the degree-3 construction covers all necessary matricizations is
+the key verification question.  If it does, this would be worth a
+note/remark in the multiview geometry literature.
+
+\subsection{P10: Improved preconditioner}
+
+Our $K_\tau^2$ preconditioner correction (the P10-C001 $\to$ P10-C002
+improvement cycle) matches the official solution's substance.  The
+spectral equivalence improvement from
+$\delta \in [5.2, 22.7]$ to $\delta < 1$ is a genuine computational
+contribution.  The official commentary praises this kind of AI
+contribution---lowering computational complexity in a way that was
+``obvious in hindsight but not previously seen.''
+
+\subsection{P4: The $n=3$ identity and the $n=4$ computational proof}
+
+The identity $\Phi_3 \cdot \mathrm{disc} = 18a_2^2$ is a clean algebraic
+result that doesn't appear in the official solution (which uses different
+techniques for all~$n$).  The $n = 4$ proof via symmetry-stratified
+elimination and certified homotopy continuation, while not generalizing,
+demonstrates a complementary approach to the hyperbolic polynomial method.
+
+The 3-piece Cauchy--Schwarz reduction for $n = 3$ may contain independent
+value as an alternative proof technique for low-dimensional cases of the
+finite free Stam inequality.
+
+\subsection{P6: The $K_n$ result}
+
+Our $c = 1/3$ constant for $K_n$ is \emph{tighter} than the official
+universal constant $c = 1/42$ when specialized to complete graphs.  The
+elementary proof chain (Tur\'an + Foster + pigeonhole + PSD trace bound)
+is undergraduate-accessible and demonstrates that for specific graph
+families, much better constants are achievable.
+
+This suggests a natural follow-up question: for which graph families can
+the constant be improved beyond $1/42$?  The barrier greedy approach with
+graph-specific leverage analysis may yield a family of such results.
+
+\subsection{Process methodology}
+
+Independent of the mathematical results, several methodological
+contributions may have value:
+
+\begin{itemize}
+\item The \textbf{layer-switching pattern} as a coaching intervention for
+  stuck agents: ``What kind of problem is this? How would you teach it to
+  an undergraduate? Who finds this easy?''
+
+\item The \textbf{outcome typing} discipline (Close / Reduce / Map) for
+  honest reporting of partial results.
+
+\item The \textbf{structural-obstruction-as-theorem} pattern: when a
+  proof method fails, characterize the failure as a theorem about the
+  problem's structure.
+
+\item The \textbf{cycle methodology}: explore $\to$ attempt $\to$ fail
+  $\to$ characterize failure $\to$ redirect, with each failure producing
+  a transmissible structural result.
+\end{itemize}
+
+%% ====================================================================
+\section{Process Reflections}
+\label{sec:process}
+%% ====================================================================
+
+\subsection{Comparison with official AI baselines}
+
+The First Proof authors tested GPT-5.2~Pro and Gemini~3.0 Deep Think
+using two prompts: one allowing internet access, one discouraging it.
+This produced 39~response files across the ten problems.  The testing
+was single-shot: one prompt, one response, no iteration.
+
+Our sprint used a fundamentally different approach: multi-agent iteration
+with human direction over 55~hours.  The comparison is not apples to
+apples, but the results suggest that the human-in-the-loop changes
+outcomes qualitatively, not just quantitatively:
+
+\begin{itemize}
+\item \textbf{Error correction:} Our initial drafts contained many of the
+  same errors as the single-shot AI responses (P1's false-premise
+  assumption, P8's local-to-global gap, P9's rank-1 witness bug).  The
+  review cycle caught and corrected most of these.
+
+\item \textbf{Depth of engagement:} Problems~4 and~6 each received
+  70--80+ commits of sustained work, including numerical experiments,
+  technique exhaustion, and literature mining.  This depth is impossible
+  in a single-shot prompt.
+
+\item \textbf{Strategic pivots:} The P6 coaching intervention and the P7
+  rotation-route layer switch required human judgment about when to
+  abandon an approach.  Current AI systems don't reliably detect their
+  own stuckness.
+\end{itemize}
+
+\subsection{The coaching breakthrough (Problem 6)}
+
+Problem~6's trajectory is the sprint's most instructive case study.  After
+approximately 8~hours and 6+ handoff documents in the sparsification
+layer, a single coaching intervention produced the breakthrough:
+
+\begin{joebox}
+I think you should think out of the box a bit.  What kind of problem is
+this?  What kind of proof applies to this kind of problem?  How would you
+teach it to an undergraduate?  How would you teach it to a grad student?
+Where, in reality, do people learn about this kind of problem?  What
+kind of person finds this kind of problem easy?  Are there ``tricks''
+(symmetries) that would make some of your Zeno's Paradoxes go away?
+\end{joebox}
+
+Within 15~minutes, the agent found the elementary proof chain:
+
+\begin{claudebox}
+\textbf{Layer analysis:} Problem~6 has four mathematical layers.
+The combinatorial layer---Tur\'an + leverage filter + barrier greedy---was
+never attempted.
+
+\medskip
+\textbf{Proof chain:} (1)~Tur\'an's theorem gives independent set
+$I_0$ with $|I_0| \ge \varepsilon n/3$.  (2)~Barrier greedy: pick vertex
+with min $\|Y_t(v)\|$.  (3)~PSD trace bound: $\|Y\| \le \mathrm{tr}(Y)$.
+(4)~Pigeonhole: if average trace $< 1$, some vertex has $\|Y_t(v)\| < 1$.
+
+\medskip
+For $K_n$: $\bar{d}_T = 2/3 < 1$.  \textbf{Proved exactly, $c = 1/3$.}
+\end{claudebox}
+
+No interlacing families.  No Borcea--Br\"and\'en.  No MSS theorem.  Just
+Tur\'an + trace bound + pigeonhole---a three-line argument that replaces
+the entire real stability machinery.
+
+The intervention worked because it forced \emph{layer enumeration}
+rather than \emph{gap closure}.  Each question targets a specific
+reframing: ``What kind of problem?'' forces naming multiple mathematical
+frameworks.  ``Teach it to an undergraduate?'' forces identification of
+the elementary core.  ``Who finds this easy?'' identifies the right
+mathematical community.
+
+The implication for AI-assisted mathematics: \emph{coaching beats
+dispatching}.  ``Close the gap in Section~5'' generates another
+TryHarder cycle.  ``What kind of problem is this?'' generates a layer
+switch.
+
+\subsection{Calibration}
+
+Our confidence ratings were poorly calibrated against actual correctness:
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Confidence vs.\ correctness: an instructive anticorrelation.}
+\label{tab:calibration}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Problem} & \textbf{Initial confidence} & \textbf{Actual outcome} & \textbf{Surprise} \\
+\midrule
+P4 & High & Wrong ($n \ge 4$ unproved initially) & Yes \\
+P9 & High & Had critical bug (rank-1 witness) & Yes \\
+P3 & Low  & Easily fixed (minor rewrite) & Yes \\
+P5 & Low  & Proved with modest caveat & Yes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The two ``high confidence'' self-assessments were the worst failures.  The
+monograph's abstract was carefully hedged; the comparison confirms that
+hedging was warranted but not always in the right places.  P1 was stated
+without hedging and turned out to be wrong; P7 was hedged as
+``conditional'' but the condition turned out to be a definitive
+obstruction.
+
+\subsection{Time allocation}
+
+P4 (75 commits) and P6 (84 commits) consumed approximately 47\% of all
+commits.  Was this the right allocation?
+
+In hindsight, P1 and P7 needed more adversarial testing, not more
+constructive effort.  P1 received relatively little post-draft attention
+because the argument seemed clean.  P7 received substantial effort, but
+all of it was directed toward making the construction work---none toward
+testing whether an obstruction exists.
+
+A better allocation would have reserved 10--15\% of total effort for
+systematic falsification across all ten problems, even at the cost of
+reducing depth on P4 and P6.  The two wrong answers cost more credibility
+than the two incomplete proofs.
+
+\subsection{Negative knowledge transfer}
+
+One of the sprint's unexpected insights was the value of \emph{negative
+pheromone}---the accumulated record of dead ends and structural
+obstructions.  Each failed approach, when characterized as a theorem
+about the problem's structure, prevented subsequent agents from
+re-attempting the same strategy:
+
+\begin{itemize}
+\item P4's SOS infeasibility (7 scripts $\to$ one theorem: interior zeros
+  structurally block Putinar certificates) eliminated an entire proof
+  strategy, redirecting effort toward algebraic elimination.
+
+\item P6's technique exhaustion (6 subsample-and-concentrate methods, all
+  hitting the quadratic-vs-linear wall) proved that the wall is
+  fundamental to the technique class, not an artifact of any one approach.
+  This converted scattered failures into a structural result.
+
+\item P7's five hypothetical proof architectures (H1--H5) immediately
+  killed two paths (H3: codim-2 gap fails for reflections; H5:
+  Gauss--Bonnet kills Fowler) and deprioritized two more, concentrating
+  effort on the rotation route.
+\end{itemize}
+
+The pattern parallels ant colony optimization: positive pheromone
+(``this approach works'') guides exploitation, but negative pheromone
+(``this approach is structurally blocked'') compresses hours of
+exploration into transmissible facts.  The dead-end theorems are as
+valuable as the successes---they prevent future agents from falling into
+the same traps.
+
+For multi-agent mathematical research, the implication is clear: failed
+proof attempts should produce structured records of \emph{why} they
+failed, not just that they failed.  ``SOS didn't work'' is useless.
+``Interior zeros where all constraints are strict structurally block
+Putinar certificates'' is a theorem that redirects effort.
+
+\subsection{The Lakatos-style framing}
+
+The monograph adopted a Proofs-and-Refutations structure
+\cite{lakatos1976}: draft $\to$ verify $\to$ refute $\to$ revise.  The
+official solutions serve as the final refutation/confirmation step in
+this process.
+
+The Lakatos parallel is more than rhetorical.  The review cycle within
+the sprint (three rounds of critique in one hour on Day~1, catching
+confidence laundering and structural errors) mirrors the dialectical
+process Lakatos describes: a claim is made, a counterexample is found,
+the claim is reformulated, the counterexample is refined.  The wiring
+diagram infrastructure makes this dialectic precise: when a critic says
+``edge P7-S4 $\to$ P7-S3a is typed \texttt{assert} but should be
+\texttt{assume},'' the response is targeted, not global.
+
+The official solutions now serve as the ``final counterexample''---the
+authoritative test against which our claims are measured.  Problems~1
+and~7 are genuine refutations.  Problems~2, 8, 9, 10 are confirmations.
+Problems~3, 4, 5, 6 are partial confirmations that expose the gap between
+our proof and the full result.
+
+%% ====================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+%% ====================================================================
+
+\subsection{Summary of results}
+
+In a 55-hour sprint on ten research-level mathematics problems:
+
+\begin{itemize}
+\item \textbf{6/10 correct answers}, with 3 strong proof matches (P2, P8,
+  P10) and one genuinely different construction (P9).
+\item \textbf{8/10 correct direction}, with P4 and P6 producing
+  substantial partial results beyond what single-shot AI baselines
+  achieved.
+\item \textbf{2/10 wrong answers} (P1, P7), both sharing the YES bias
+  and domain-depth gap.
+\end{itemize}
+
+\subsection{The common failure pattern}
+
+The two failures share a common structure:
+\begin{enumerate}
+\item We built a constructive argument from correct components.
+\item We missed a deep obstruction that makes the answer NO.
+\item The obstruction requires domain-specific knowledge
+  (regularity structures for P1, $L$-theory/Novikov conjecture for P7)
+  that cannot be substituted by structural reasoning.
+\item We didn't systematically test the NO direction.
+\end{enumerate}
+
+\subsection{Human-AI collaboration outperforms vanilla AI}
+
+Human-AI collaboration with structured methodology (wiring diagrams,
+outcome typing, coaching interventions, adversarial review) produced
+substantially better results than the single-shot AI baselines tested by
+the First Proof authors.  The key differentiators are error correction
+through iteration, strategic pivots through coaching, and sustained depth
+of engagement through multi-session work.
+
+The improvement is not merely quantitative.  The coaching intervention on
+P6---a single reframing question that unstuck 8~hours of cycling---represents a qualitatively different interaction mode that single-prompt
+AI cannot replicate.
+
+\subsection{What we would do differently for Batch 2}
+
+The First Proof authors have announced a second batch with formal
+benchmarking.  Based on this retrospective:
+
+\begin{enumerate}
+\item \textbf{Mandatory falsification:} For every problem, spend at least
+  one full cycle attempting to prove the opposite answer before committing.
+
+\item \textbf{Domain-depth audit:} Identify problems requiring deep
+  specialized knowledge early, and allocate extra literature mining and
+  adversarial testing to those problems.
+
+\item \textbf{Explicit NO-direction testing:} When the constructive
+  argument feels clean, ask: ``What's the simplest obstruction? What
+  well-known theorem would make this impossible?''
+
+\item \textbf{Better calibration tracking:} Maintain running confidence
+  estimates and track them against verification outcomes, updating
+  the estimates as evidence accumulates.
+
+\item \textbf{Time-boxed breadth before depth:} Ensure all problems
+  receive at least one review cycle before any problem receives its
+  third cycle.
+\end{enumerate}
+
+\subsection{Broader context}
+
+The First Proof project asks whether AI can produce correct, rigorous
+solutions to research-level mathematics.  Our sprint provides one data
+point: a human-AI team with structured methodology can achieve 6/10 on
+these problems in 55~hours, significantly outperforming single-shot AI
+baselines.  But the two failures---both on problems where the answer is
+NO and the obstruction requires domain depth---reveal a systematic
+weakness.
+
+The weakness is not computational.  Our agents had access to extensive
+computation (35K stress tests, certified homotopy continuation, 731+
+numerical runs) and used it effectively.  The weakness is
+\emph{epistemic}: the inability to recognize when a plausible
+constructive argument is built on a false foundation.  This is precisely
+the failure mode that Hairer identifies as the primary AI weakness on P1,
+and it recurs on P7.
+
+The Lakatos-style methodology we employed---draft, verify, refute,
+revise---is designed to catch exactly this kind of error.  It caught many
+errors during the sprint (P3's cascade bug, P8's local-to-global gap,
+P9's witness bug).  But it failed on P1 and P7 because the refutation
+requires domain-specific knowledge that neither the human director nor the
+AI agents possessed at sufficient depth.
+
+This suggests that the frontier of AI-assisted mathematics is not defined
+by computational power or even by reasoning ability, but by the depth of
+domain knowledge that can be brought to bear on falsification.  The path
+forward may involve not just better models, but better integration with
+domain-specific knowledge bases and more systematic adversarial testing
+protocols.
+
+\medskip
+
+The First Proof sprint demonstrated both the power and the limits of
+human-AI collaboration on research mathematics.  The power: six correct
+answers in 55~hours on problems designed to challenge the frontier of AI
+reasoning, with several results of potential independent value.  The
+limits: when the answer is NO and the obstruction requires domain depth,
+constructive bias and insufficient falsification testing lead to confident
+wrong answers.  The path forward is clear: more adversarial methodology,
+more systematic falsification, and more humility about the gap between
+structural reasoning and domain expertise.
+
+%% ====================================================================
+%% BIBLIOGRAPHY
+%% ====================================================================
+
+\begin{thebibliography}{99}
+
+\bibitem{firstproof}
+M.~Abouzaid, A.\,J.~Blumberg, M.~Hairer, J.~Kileel, T.\,G.~Kolda,
+P.\,D.~Nelson, D.~Spielman, N.~Srivastava, R.~Ward, S.~Weinberger,
+and L.~Williams,
+``First Proof solutions and comments,''
+February 14, 2026.
+\url{https://codeberg.org/tgkolda/1stproof}
+
+\bibitem{monograph}
+J.~Corneli,
+\emph{A First Proof Sprint} (monograph),
+Hyperreal Enterprises, February 2026.
+144~pages, 10 annotated proof drafts, process patterns, and dialogue
+excerpts.
+
+\bibitem{lakatos1976}
+I.~Lakatos,
+\emph{Proofs and Refutations: The Logic of Mathematical Discovery},
+Cambridge University Press, 1976.
+
+\bibitem{bartels2014}
+A.~Bartels, F.\,T.~Farrell, and W.~L\"uck,
+``The Farrell--Jones conjecture for cocompact lattices in virtually
+connected Lie groups,''
+\emph{J.~Amer.\ Math.\ Soc.} \textbf{27} (2014), 339--388.
+
+\bibitem{fowler2012}
+J.~Fowler,
+``Finiteness properties of rational Poincar\'e duality groups,''
+\texttt{arXiv:1204.4667}, 2012.
+
+\bibitem{mss2015}
+A.~Marcus, D.\,A.~Spielman, and N.~Srivastava,
+``Interlacing families~II: Mixed characteristic polynomials and the
+Kadison--Singer problem,''
+\emph{Ann.\ of Math.} \textbf{182} (2015), 327--350.
+
+\bibitem{bss2012}
+J.\,D.~Batson, D.\,A.~Spielman, and N.~Srivastava,
+``Twice-Ramanujan sparsifiers,''
+\emph{SIAM J.~Comput.} \textbf{41} (2012), 1704--1721.
+
+\bibitem{amw2024}
+A.~Ayyer, J.\,B.~Martin, and L.~Williams,
+``The multispecies $t$-PushTASEP,''
+2024.
+
+\bibitem{pease2017}
+A.~Pease, J.~Lawrence, K.~Budzynska, J.~Corneli, and C.~Reed,
+``Lakatos-style collaborative mathematics through dialectical,
+structured and abstract argumentation,''
+\emph{Artificial Intelligence} \textbf{246} (2017), 181--219.
+
+\end{thebibliography}
+
+\end{document}
