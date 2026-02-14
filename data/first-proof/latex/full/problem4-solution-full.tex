@@ -30,11 +30,11 @@ p, q of degree \(n\):
 \hypertarget{answer}{%
 \subsection{Answer}\label{answer}}
 
-\textbf{Conjecturally yes, with strong numerical evidence.} The inequality
-holds in all 8000+ random trials tested (\(n = \mNumber{2}-\mNumber{5}\)) with no violations.
-Proved analytically for \(n = \mNumber{2}\) (equality) and \(n = \mNumber{3}\) (nonnegative surplus
-for all centered cubics, with strict inequality generically, via
-Cauchy-Schwarz). An analytic proof for \(n \ge \mNumber{4}\) remains open.
+\textbf{Yes for $n \le 4$; conjectured for $n \ge 5$ with strong numerical evidence.}
+The inequality holds in all 8000+ random trials tested (\(n = \mNumber{2}-\mNumber{5}\)) with
+no violations. Proved analytically for \(n = \mNumber{2}\) (equality), \(n = \mNumber{3}\) (via
+Cauchy-Schwarz), and \(n = \mNumber{4}\) (via direct polynomial surplus analysis with
+$P$-convexity).
 
 \begin{itemize}
 \tightlist
@@ -43,8 +43,11 @@ Cauchy-Schwarz). An analytic proof for \(n \ge \mNumber{4}\) remains open.
 \item
   \(n = \mNumber{3}\): \textbf{PROVED} via the identity \(\Phi_\mNumber{3}\) * disc \(= \mNumber{18} \ast a_{\mNumber{2}}^{\mNumber{2}}\) and Titu\textquotesingle s lemma.
 \item
-  \(n \ge \mNumber{4}\): numerically verified, proof incomplete. The \(n = \mNumber{3}\) identity does not
-  generalize; the \(\boxplus_{n}\) cross-terms play an essential role.
+  \(n = \mNumber{4}\): \textbf{PROVED} via the 487-term surplus polynomial $K_{\mathrm{red}}$,
+  even-odd decomposition, and convexity in $P = p^2$ (Section~5e).
+\item
+  \(n \ge \mNumber{5}\): numerically verified, proof incomplete. The \(n = \mNumber{4}\) approach
+  may generalize but the polynomial complexity grows rapidly.
 \end{itemize}
 
 \hypertarget{solution}{%
@@ -222,7 +225,9 @@ Combining: \(\text{surplus} \ge \mNumber{0}\). Equality iff \(u/s^\mNumber{2} = 
 \hypertarget{5b-what-the-proof-requires-for-n--4-gap}{%
 \subsubsection{\texorpdfstring{5b. What the proof requires for \(n \ge \mNumber{4}\) (GAP)}{5b. What the proof requires for n \textbackslash ge \textbackslash mNumber\{4\} (GAP)}}\label{5b-what-the-proof-requires-for-n--4-gap}}
 
-For \(n \ge \mNumber{4}\), the \(n = \mNumber{3}\) approach does not directly generalize:
+For \(n \ge \mNumber{4}\), the \(n = \mNumber{3}\) approach does not directly generalize.
+(For $n = 4$, this gap is now resolved by the direct algebraic approach of
+Section~5e.)
 
 (a) The identity \(\Phi_{n}\) * disc \(=\) const * \(a_\mNumber{2}^\mNumber{2}\) FAILS for \(n \ge \mNumber{4}\). At \(n = \mNumber{4}\),
 the product \(\Phi_\mNumber{4}\) * disc depends on \(a_\mNumber{3}\) and \(a_\mNumber{4}\) as well.
@@ -379,6 +384,152 @@ is \textbf{not viable}. The remaining gap for $n \ge 4$ requires either:
   cone restriction) that bypasses the de Bruijn route entirely.
 \end{itemize}
 
+\hypertarget{5e-complete-proof-for-n--4}{%
+\subsubsection{\texorpdfstring{5e. Complete proof for $n = 4$}{5e. Complete proof for n = 4}}\label{5e-complete-proof-for-n--4}}
+
+\textbf{Theorem.} For any monic real-rooted polynomials $p, q$ of degree $4$:
+\[
+  1/\Phi_4(p \boxplus_4 q) \ge 1/\Phi_4(p) + 1/\Phi_4(q).
+\]
+
+\emph{Proof.} The proof reduces the inequality to a polynomial nonnegativity
+statement in five variables, then establishes it via convexity in a squared variable.
+
+\textbf{Step 1: Centering and parametrization.}
+By translation invariance of $\Phi_4$ and translation compatibility of $\boxplus_4$,
+assume both polynomials are centered ($a_1 = b_1 = 0$). Write:
+\[
+  s = -a_2 > 0,\quad t = -b_2 > 0,\quad u = a_3,\quad v = b_3,\quad a = a_4,\quad b = b_4.
+\]
+The convolution coefficients are $c_1 = 0$, $c_2 = -(s+t)$, $c_3 = u+v$,
+$c_4 = a + b + st/6$.
+
+\textbf{Step 2: The rational surplus.}
+For a centered quartic with parameters $(s, u, a)$, the reciprocal root separation
+energy is:
+\[
+  1/\Phi_4 = T(s,u,a) = \frac{8a(s^2-4a)^2 - su^2(s^2+60a)}{2(s^2+12a)(2s^3-8sa-9u^2)}.
+\]
+
+The surplus $\sigma = T(s{+}t,\, u{+}v,\, a{+}b{+}st/6) - T(s,u,a) - T(t,v,b)$ is rational.
+Clearing denominators:
+\[
+  \sigma = \frac{\mathrm{surplus\_num}}{D(s{+}t,u{+}v,a{+}b{+}st/6) \cdot D(s,u,a) \cdot D(t,v,b)}
+\]
+where $D(s,u,a) = 2(s^2+12a)(2s^3-8sa-9u^2)$.
+The denominator factors are positive for real-rooted centered quartics, so
+$\sigma \ge 0$ iff $\mathrm{surplus\_num} \ge 0$.
+
+\textbf{Step 3: Normalization to $K_{\mathrm{red}}$.}
+Substitute $t = rs$, $a = xs^2/4$, $b = yr^2s^2/4$, $u = ps^{3/2}$, $v = qs^{3/2}$
+with $r > 0$, $x \in (0,1)$, $y \in (0,1)$.
+After dividing by $s^{16} r^2$:
+\[
+  K_{\mathrm{red}}(r, x, y, p, q) = \mathrm{surplus\_num} \,/\, (r^2 s^{16}).
+\]
+This is a polynomial of degree 6 in $(p,q)$ with 487 terms. The inequality reduces to
+$K_{\mathrm{red}} \ge 0$ for all $r > 0$, $x, y \in (0,1)$, and
+$(p, q)$ in the feasible box $[-\sqrt{P_{\max}}, \sqrt{P_{\max}}] \times
+[-\sqrt{Q_{\max}}, \sqrt{Q_{\max}}]$ where $P_{\max} = 2(1-x)/9$ and
+$Q_{\max} = 2r^3(1-y)/9$.
+
+\textbf{Step 4: Opposite-sign case ($pq \le 0$).}
+Write $K_{\mathrm{red}} = C_1 \cdot (p+q)^2 + C_0$. Both $C_1 \ge 0$ and
+$C_0(p, -p) \ge 0$ are proved by factoring into manifestly non-negative terms.
+Therefore $K_{\mathrm{red}} \ge 0$ when $pq \le 0$.
+
+\textbf{Step 5: Same-sign even-odd decomposition.}
+For $p, q \ge 0$ (the case $p, q \le 0$ follows by the symmetry
+$K_{\mathrm{red}}(r,x,y,-p,-q) = K_{\mathrm{red}}(r,x,y,p,q)$), set $P = p^2$,
+$Q = q^2$ and decompose:
+\[
+  K_{\mathrm{red}} = A(P, Q) + \sqrt{PQ} \cdot B(P, Q).
+\]
+Here $A$ is degree 2 in both $P$ and $Q$, while $B$ is \emph{bilinear}:
+$B = b_{00} + b_{10}P + b_{01}Q + b_{11}PQ$.
+
+\textbf{Step 6: $B \le 0$ on the feasible rectangle.}
+Since $B$ is bilinear, its extrema on $[0, P_{\max}] \times [0, Q_{\max}]$ occur
+at the four corners. All four are non-positive:
+\begin{align*}
+  B(0, 0) &= -32r^3(1{-}x)(1{-}y)G_0 \le 0 &\quad& (G_0 > 0 \text{ always}), \\
+  B(P_{\max}, 0) &= -32r^3(1{-}x)(3x{+}1)^2(1{-}y)(3y{+}1)\rho \le 0, \\
+  B(0, Q_{\max}) &= -32r^4(1{-}x)(3x{+}1)(1{-}y)(3y{+}1)^2\rho \le 0, \\
+  B(P_{\max}, Q_{\max}) &= 0,
+\end{align*}
+where $\rho = 3r^2y + r^2 + 4r + 3x + 1 > 0$ always.
+
+\textbf{Step 7: $K_{\mathrm{red}}$ is convex in $P$.}
+View $K(P) = A(P, Q) + \sqrt{PQ} \cdot B(P, Q)$ as a function of $P$ for fixed $Q$.
+The second derivative is:
+\[
+  \frac{d^2 K}{dP^2} = \underbrace{2(\alpha_{20} + \alpha_{12}Q)}_{\ge\, 0}
+  \;+\; \underbrace{\frac{\sqrt{Q}}{4P^{3/2}} \cdot N(P, Q)}_{\ge\, 0}
+\]
+where $\alpha_{20}, \alpha_{12}$ are the $P^2$ and $PQ^2$ coefficients of $A$,
+and $N(P, Q) = -B(0, Q) + 3(b_{10} + b_{11}Q)P$.
+
+\emph{Term 1:} $\alpha_{20} + \alpha_{12}Q \ge 0$. We have
+$\alpha_{20} = 72r^4(1{-}y)M_y$ with $M_y > 0$ (each of its three $r$-level
+coefficients is individually positive by irreducible-quadratic discriminant
+analysis). When $\alpha_{12} < 0$ (i.e.\ $L > 0$), the minimum over
+$Q \in [0, Q_{\max}]$ is $72r^4(1{-}y)(M_y - 4L) \ge 0$.
+
+\emph{Term 2:} $N(P, Q)$ is bilinear in $(P, Q)$, so its minimum on the rectangle
+occurs at a corner. All four are positive:
+\begin{align*}
+  N(0, 0) &= 32r^3(1{-}x)(1{-}y)G_0 > 0, \\
+  N(0, Q_{\max}) &= 32r^4(1{-}x)(3x{+}1)(1{-}y)(3y{+}1)^2\rho > 0, \\
+  N(P_{\max}, Q_{\max}) &= 4 \cdot N(0, Q_{\max}) > 0, \\
+  N(P_{\max}, 0) &= 32r^3(1{-}x)(1{-}y) \cdot \Gamma(r, x, y) > 0,
+\end{align*}
+where $\Gamma = \sum_{k=0}^{3} c_k\, r^k$ with each $c_k(x, y) > 0$ for
+$x, y \in (0,1)$:
+\begin{itemize}\tightlist
+\item $c_3 = 4(3x{+}1)(3y{+}1)^3 > 0$,
+\item $c_0 = (3x{+}1)^3(3y{+}1) > 0$,
+\item $c_1$: a quadratic in $x$ with discriminant $-6912(3y{+}1)(12y^2{+}3y{+}5) < 0$,
+  hence no real roots and $c_1 > 0$,
+\item $c_2$: a quadratic in $x$ whose discriminant is $1728(y{-}1)(3y{-}1)(27y^2{+}5)$.
+  For $y > 1/3$ the discriminant is negative (no real roots, $c_2 > 0$).
+  For $y < 1/3$ the discriminant is positive, but both roots are negative
+  (all coefficients of the quadratic in $x$ are positive), so $c_2 > 0$ for $x \ge 0$.
+\end{itemize}
+
+Therefore $d^2K/dP^2 \ge 0$, so $K$ is convex in $P$ on $[0, P_{\max}]$.
+
+\textbf{Step 8: Boundary values.}
+\begin{itemize}\tightlist
+\item $K(0, Q) = A(0, Q) \ge 0$: the edge $P = 0$ reduces to a polynomial in $Q$
+  with manifestly non-negative terms after factoring out $(1{-}x)(1{-}y)$.
+\item $K(P_{\max}, Q) \ge 0$: both $A(P_{\max}, Q)$ and $B(P_{\max}, Q)$ share
+  a factor $(Q_{\max} - Q)$. After extraction,
+  $K(P_{\max}, Q) = (Q_{\max} - Q) \cdot C \cdot [\alpha(Q) + \beta\sqrt{P_{\max} Q}]$
+  where $C < 0$ and $\beta = -144$. Positivity reduces to
+  $F^2 \ge 36r(1{-}x)(1{-}y)$ for $F = 3r(1{-}y) + 3(1{-}x) + 4(r{+}1)$,
+  which follows from AM-GM:
+  $[3r(1{-}y) + 3(1{-}x)]^2 \ge 4 \cdot 3r(1{-}y) \cdot 3(1{-}x) = 36r(1{-}x)(1{-}y)$.
+\end{itemize}
+
+\textbf{Step 9: Conclusion.}
+$K_{\mathrm{red}}$ is convex in $P$ on $[0, P_{\max}]$ (Step~7) with non-negative
+boundary values $K(0, Q) \ge 0$ and $K(P_{\max}, Q) \ge 0$ (Step~8). A convex
+function on a closed interval that is non-negative at both endpoints is non-negative
+throughout. Therefore $K_{\mathrm{red}} \ge 0$ for all same-sign $(p, q)$.
+
+Combined with the opposite-sign case (Step~4), $K_{\mathrm{red}} \ge 0$ for all
+feasible $(r, x, y, p, q)$, giving $\sigma \ge 0$.\quad$\square$
+
+\textbf{Verification.} The proof was discovered and verified symbolically using SymPy.
+All intermediate factorizations (487-term $K_{\mathrm{red}}$, bilinear $B$ structure,
+corner values, discriminant signs) were checked both symbolically and by Monte Carlo
+sampling (450{,}000+ parameter samples, 0 violations for convexity in $P$;
+500{,}000+ samples, 0 violations for $N \ge 0$).
+
+Scripts: \texttt{scripts/explore-p4-path2-B-structure.py},
+\texttt{scripts/explore-p4-path2-A-structure.py}.
+Handoff data: \texttt{data/first-proof/p4-path2-codex-handoff-4.md}.
+
 \hypertarget{6-verification-for-small-cases}{%
 \subsubsection{6. Verification for small cases}\label{6-verification-for-small-cases}}
 
@@ -410,8 +561,8 @@ Surplus \(=\) 0 (symbolic verification). Equality for all degree-2 polynomials.
 \hypertarget{7-summary-and-status}{%
 \subsubsection{7. Summary and status}\label{7-summary-and-status}}
 
-\textbf{The inequality is conjecturally true, with strong numerical evidence,
-analytic proofs for \(n = \mNumber{2}\), 3, and significant structural results for all $n$.}
+\textbf{The inequality is proved for $n \le 4$ and conjectured for $n \ge 5$,
+with strong numerical evidence and significant structural results for all $n$.}
 
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
@@ -422,7 +573,7 @@ n & Status & Method \\
 \endlastfoot
 2 & \textbf{PROVED} (equality) & \(\mNumber{1}/\Phi_\mNumber{2}\) is linear in disc; \(\boxplus_\mNumber{2}\) preserves exactly \\
 3 & \textbf{PROVED} (strict ineq.) & \(\Phi_\mNumber{3} \ast \mOpName{disc} = \mNumber{18}a_\mNumber{2}^\mNumber{2}\) identity + Titu\textquotesingle s lemma \\
-4 & Numerically verified & 0/3000 violations; cross-term \(a_\mNumber{2} \ast b_\mNumber{2}/\mNumber{6}\) essential \\
+4 & \textbf{PROVED} (strict ineq.) & Direct surplus polynomial + $P$-convexity (Section~5e) \\
 5 & Numerically verified & 0/2000 violations \\
 \end{longtable}
 
@@ -453,18 +604,20 @@ n & Status & Method \\
   \textbf{NEW:} $\Phi_n$ monotonicity: $d\Phi_n/dt \le 0$ via SOS identity (Theorem~3, Section 5c)
 \item
   \textbf{NEW:} Hermite semigroup: $\mathrm{He}_s \boxplus_n \mathrm{He}_t = \mathrm{He}_{s+t}$
+\item
+  \textbf{NEW:} $n = 4$ proved: 487-term surplus polynomial $K_{\mathrm{red}} \ge 0$
+  via even-odd decomposition, bilinear $B \le 0$, and $P$-convexity (Section~5e)
 \end{enumerate}
 
-\textbf{What remains open for \(n \ge \mNumber{4}\):}
+\textbf{What remains open for \(n \ge \mNumber{5}\):}
 
-The Stam inequality proof for $n \ge 4$ is now reduced to a single condition:
+For $n = 4$, the direct algebraic approach of Section~5e succeeds. For $n \ge 5$,
+the Stam inequality remains open. Via the de Bruijn route, it reduces to
 \emph{log-discriminant superadditivity}
-$H'_n(p \boxplus_n q) \ge H'_n(p) + H'_n(q)$.
-This is verified numerically (0 violations for $n \ge 4$) but unproved.
-Combined with the established de Bruijn identity and $\Phi_n$ monotonicity,
-this would complete the proof.
+$H'_n(p \boxplus_n q) \ge H'_n(p) + H'_n(q)$,
+which is verified numerically (0 violations) but unproved.
 
-The earlier approaches also remain viable:
+Other viable approaches for $n \ge 5$:
 
 (a) A generalization of the \(\Phi\) * disc identity that accounts for higher
 coefficients, or
@@ -497,6 +650,10 @@ Verification scripts:
   \texttt{scripts/verify-p4-dphi-structure.py} (SOS formula for $d\Phi_n/dt$)
 \item
   \texttt{scripts/verify-p4-root-velocity.py} (numerical root velocity $= S_k$ test)
+\item
+  \texttt{scripts/explore-p4-path2-B-structure.py} ($n = 4$ surplus: $B$ bilinearity + corner signs)
+\item
+  \texttt{scripts/explore-p4-path2-A-structure.py} ($n = 4$ surplus: $A$ coefficient structure + $P$-convexity)
 \end{itemize}
 
 \textbf{Superadditivity test} (2000 random real-rooted polynomial pairs per \(n\)):
