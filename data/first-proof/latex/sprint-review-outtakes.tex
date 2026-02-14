@@ -1,0 +1,209 @@
+%% sprint-review-outtakes.tex
+%% Material moved out of sprint-review.tex during compression toward ~25 pages.
+
+\section*{Sprint Review Outtakes}
+
+\subsection*{Potential Novel Contributions}
+
+Several of our results may contain independent mathematical value, even in
+light of the official solutions.
+
+\subsubsection*{P9: Degree-3 polynomial test for rank-1 scaling}
+
+Our construction uses $3 \times 3$ minors of the rank-2 bilinear form
+structure, producing degree-3 coordinate functions.  The official solution
+uses $5 \times 5$ minors of Tucker flattenings, producing degree-5
+coordinate functions.  Both are valid polynomial tests for rank-1 scaling
+of quadrifocal tensors.
+
+The degree-3 test is potentially more efficient: lower-degree polynomials
+are cheaper to evaluate and may define a simpler algebraic variety.
+Whether the degree-3 construction covers all necessary matricizations is
+the key verification question.  If it does, this would be worth a
+note/remark in the multiview geometry literature.
+
+\subsubsection*{P10: Improved preconditioner}
+
+Our $K_\tau^2$ preconditioner correction (the P10-C001 $\to$ P10-C002
+improvement cycle) matches the official solution's substance.  The
+spectral equivalence improvement from
+$\delta \in [5.2, 22.7]$ to $\delta < 1$ is a genuine computational
+contribution.  The official commentary praises this kind of AI
+contribution---lowering computational complexity in a way that was
+``obvious in hindsight but not previously seen.''
+
+\subsubsection*{P4: The $n=3$ identity and the $n=4$ computational proof}
+
+The identity $\Phi_3 \cdot \mathrm{disc} = 18a_2^2$ is a clean algebraic
+result that doesn't appear in the official solution (which uses different
+techniques for all~$n$).  The $n = 4$ proof via symmetry-stratified
+elimination and certified homotopy continuation, while not generalizing,
+demonstrates a complementary approach to the hyperbolic polynomial method.
+
+The 3-piece Cauchy--Schwarz reduction for $n = 3$ may contain independent
+value as an alternative proof technique for low-dimensional cases of the
+finite free Stam inequality.
+
+\subsubsection*{P6: The $K_n$ result}
+
+Our $c = 1/3$ constant for $K_n$ is \emph{tighter} than the official
+universal constant $c = 1/42$ when specialized to complete graphs.  The
+elementary proof chain (Tur\'an + Foster + pigeonhole + PSD trace bound)
+is undergraduate-accessible and demonstrates that for specific graph
+families, much better constants are achievable.
+
+This suggests a natural follow-up question: for which graph families can
+the constant be improved beyond $1/42$?  The barrier greedy approach with
+graph-specific leverage analysis may yield a family of such results.
+
+\subsubsection*{Process methodology}
+
+Independent of the mathematical results, several methodological
+contributions may have value:
+
+\begin{itemize}
+\item The \textbf{layer-switching pattern} as a coaching intervention for
+  stuck agents: ``What kind of problem is this? How would you teach it to
+  an undergraduate? Who finds this easy?''
+\item The \textbf{outcome typing} discipline (Close / Reduce / Map) for
+  honest reporting of partial results.
+\item The \textbf{PSR/PUR protocol} as a near-term upgrade: we did not
+  apply it consistently in this sprint, but the retrospective makes a
+  strong case for adopting it explicitly in the next batch.
+\item The \textbf{structural-obstruction-as-theorem} pattern: when a
+  proof method fails, characterize the failure as a theorem about the
+  problem's structure.
+\item The \textbf{cycle methodology}: explore $\to$ attempt $\to$ fail
+  $\to$ characterize failure $\to$ redirect, with each failure producing
+  a transmissible structural result.
+\end{itemize}
+
+\subsection*{Process Reflection Outtakes}
+
+\subsubsection*{Comparison with official AI baselines}
+
+The First Proof authors tested GPT-5.2~Pro and Gemini~3.0 Deep Think
+using two prompts: one allowing internet access, one discouraging it.
+This produced 39~response files across the ten problems.  The testing
+was single-shot: one prompt, one response, no iteration.
+
+Our sprint used a fundamentally different approach: multi-agent iteration
+over 55~hours with explicit review loops and tool-based verification.  The
+comparison is not apples to apples, but the results suggest that the
+protocol changes outcomes qualitatively, not just quantitatively:
+
+\begin{itemize}
+\item \textbf{Error correction:} Our initial drafts contained many of the
+  same errors as the single-shot AI responses (P1's false-premise
+  assumption, P8's local-to-global gap, P9's rank-1 witness bug).  The
+  review cycle caught and corrected most of these.
+\item \textbf{Depth of engagement:} Problems~4 and~6 each received
+  70--80+ commits of sustained work, including numerical experiments,
+  technique exhaustion, and literature mining.  This depth is impossible
+  in a single-shot prompt.
+\item \textbf{Strategic pivots:} The P6 reframing intervention and the P7
+  rotation-route layer switch required a ``stop-and-reframe'' control move.
+  Current pipelines do not reliably detect and trigger this move
+  automatically.
+\end{itemize}
+
+\subsubsection*{Calibration}
+
+Our confidence ratings were poorly calibrated against actual correctness:
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Confidence vs.\ correctness: an instructive anticorrelation.}
+\label{tab:calibration}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Problem} & \textbf{Initial confidence} & \textbf{Actual outcome} & \textbf{Surprise} \\
+\midrule
+P4 & High & Wrong ($n \ge 4$ unproved initially) & Yes \\
+P9 & High & Had critical bug (rank-1 witness) & Yes \\
+P3 & Low  & Easily fixed (minor rewrite) & Yes \\
+P5 & Low  & Proved with modest caveat & Yes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The two ``high confidence'' self-assessments were the worst failures.  The
+monograph's abstract was carefully hedged; the comparison confirms that
+hedging was warranted but not always in the right places.  P1 was stated
+without hedging and turned out to be wrong; P7 was hedged as
+``conditional'' but the condition turned out to be a definitive
+obstruction.
+
+\subsubsection*{Time allocation}
+
+P4 (75 commits) and P6 (84 commits) consumed approximately 47\% of all
+commits.  Was this the right allocation?
+
+In hindsight, P1 and P7 needed more adversarial testing, not more
+constructive effort.  P1 received relatively little post-draft attention
+because the argument seemed clean.  P7 received substantial effort, but
+all of it was directed toward making the construction work---none toward
+testing whether an obstruction exists.
+
+A better allocation would have reserved 10--15\% of total effort for
+systematic falsification across all ten problems, even at the cost of
+reducing depth on P4 and P6.  The two wrong answers cost more credibility
+than the two incomplete proofs.
+
+\subsubsection*{Negative knowledge transfer}
+
+One of the sprint's unexpected insights was the value of \emph{negative
+pheromone}---the accumulated record of dead ends and structural
+obstructions.  Each failed approach, when characterized as a theorem
+about the problem's structure, prevented subsequent agents from
+re-attempting the same strategy:
+
+\begin{itemize}
+\item P4's SOS infeasibility (7 scripts $\to$ one theorem: interior zeros
+  structurally block Putinar certificates) eliminated an entire proof
+  strategy, redirecting effort toward algebraic elimination.
+\item P6's technique exhaustion (6 subsample-and-concentrate methods, all
+  hitting the quadratic-vs-linear wall) proved that the wall is
+  fundamental to the technique class, not an artifact of any one approach.
+  This converted scattered failures into a structural result.
+\item P7's five hypothetical proof architectures (H1--H5) immediately
+  killed two paths (H3: codim-2 gap fails for reflections; H5:
+  Gauss--Bonnet kills Fowler) and deprioritized two more, concentrating
+  effort on the rotation route.
+\end{itemize}
+
+The pattern parallels ant colony optimization: positive pheromone
+(``this approach works'') guides exploitation, but negative pheromone
+(``this approach is structurally blocked'') compresses hours of
+exploration into transmissible facts.  The dead-end theorems are as
+valuable as the successes---they prevent future agents from falling into
+the same traps.
+
+For multi-agent mathematical research, the implication is clear: failed
+proof attempts should produce structured records of \emph{why} they
+failed, not just that they failed.  ``SOS didn't work'' is useless.
+``Interior zeros where all constraints are strict structurally block
+Putinar certificates'' is a theorem that redirects effort.
+
+\subsubsection*{The Lakatos-style framing}
+
+The monograph adopted a Proofs-and-Refutations structure
+\cite{lakatos1976}: draft $\to$ verify $\to$ refute $\to$ revise.  The
+official solutions serve as the final refutation/confirmation step in
+this process.
+
+The Lakatos parallel is more than rhetorical.  The review cycle within
+the sprint (three rounds of critique in one hour on Day~1, catching
+confidence laundering and structural errors) mirrors the dialectical
+process Lakatos describes: a claim is made, a counterexample is found,
+the claim is reformulated, the counterexample is refined.  The wiring
+diagram infrastructure makes this dialectic precise: when a critic says
+``edge P7-S4 $\to$ P7-S3a is typed \texttt{assert} but should be
+\texttt{assume},'' the response is targeted, not global.
+
+The official solutions now serve as the ``final counterexample''---the
+authoritative test against which our claims are measured.  Problems~1
+and~7 are genuine refutations.  Problems~2, 8, 9, 10 are confirmations.
+Problems~3, 4, 5, 6 are partial confirmations that expose the gap between
+our proof and the full result.

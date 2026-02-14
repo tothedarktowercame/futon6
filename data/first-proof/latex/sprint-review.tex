@@ -104,6 +104,8 @@ test for rank-1 scaling (P9), a $K_n$-specific constant $c=1/3$ for
 epsilon-light subsets (P6), and an improved preconditioner matching the
 official solution's substance (P10).  The full proof drafts appear in the
 companion monograph~\cite{monograph}; this review does not reproduce them.
+This paper should be read as a structured self-audit against external
+ground truth, not as a blinded benchmark study.
 \end{abstract}
 
 \tableofcontents
@@ -315,10 +317,12 @@ Several methodological innovations emerged during the sprint:
   sequence: ``What kind of problem is this?  What kind of proof applies?
   How would you teach it to an undergrad?  Who finds this easy?''
 
-\item[PSR/PUR discipline:] Pattern Selection Records (before applying a
-  technique: which pattern, what alternatives were considered, why this
-  one) and Pattern Use Records (after: what happened, what surprised you)
-  created traceability for strategic decisions.
+\item[PSR/PUR discipline (proposed):] Pattern Selection Records (before
+  applying a technique: which pattern, what alternatives were considered,
+  why this one) and Pattern Use Records (after: what happened, what
+  surprised you) are the protocol we should formalize for Batch~2.
+  In this sprint we used partial analogues (handoff notes and post-hoc
+  reviews), but not a consistent PSR/PUR ledger.
 
 \item[Wiring-diagram verification:] Proof structure represented as typed
   graphs enabled node-level critique.  The critical check: does each
@@ -702,12 +706,15 @@ were tested on all ten problems before the public release.  Comparing:
   matches this substance.
 \end{itemize}
 
-The human-in-the-loop appears to have been the differentiating factor.
-Vanilla AI (single-prompt, no iteration) produced one essentially correct
-solution (P9) and one good solution (P10) across the ten problems.  Our
-sprint, with human direction and multi-agent iteration, produced six
+The differentiating factor appears to be the \emph{iterative protocol},
+not ``human presence'' per se.  Vanilla AI (single-prompt, no iteration)
+produced one essentially correct solution (P9) and one good solution
+(P10) across the ten problems.  Our sprint used repeated verify/revise
+cycles, numerical stress testing, and structured handoffs, and produced six
 correct answers with three strong matches and several partial results
-exceeding the baseline.
+exceeding the baseline.  In this run, human input was real but often
+lightweight (task routing, reframing prompts, editorial integration), and
+many of these functions are plausible automation targets.
 
 \Cref{tab:aicomp} provides a problem-by-problem comparison with the
 tested AI baselines where the official commentary provides enough
@@ -845,35 +852,115 @@ theorems and their implications within specialized subfields.
 The official solutions reveal several techniques we could have found but
 didn't.
 
-\subsection{P4: Hyperbolic polynomial Hessians}
+\subsection{P4 Deep Dive: Why We Missed the All-$n$ Bridge}
 
-The official proof's key technique for general~$n$ is relating the score
-vectors of the convolution to those of the factors via a Jacobian, then
-bounding the Jacobian norm using hyperbolic polynomial theory (Bauschke et
-al.).  We never found this connection---our approach stayed within
-resultant elimination and Cauchy--Schwarz.
+P4 is the clearest ``near miss'' of the sprint.  We were repeatedly
+orbiting the right endgame---a Blachman-style Cauchy--Schwarz closure---but
+we kept working at the wrong mathematical level for the crucial middle step.
+The official all-$n$ route can be summarized as:
+\emph{score relation \(\to\) Jacobian contraction \(\to\) Cauchy--Schwarz}.
+Our sprint had the last step in view, but not the contraction mechanism.
 
-In retrospect, the connection between finite free convolution and
-hyperbolic polynomials was discoverable: Marcus--Spielman--Srivastava
-(2015) already established that finite free convolution preserves real
-roots, which is a property of hyperbolic polynomials.  A literature search
-targeting ``Hessian of hyperbolic polynomial'' might have surfaced the
-Bauschke et al.\ results.
+What made this a near miss rather than a blind miss is that we did identify
+the right geometry in low dimension.  For \(n=3\), the centered
+coefficient-addition identity gave a clean four-variable surplus where
+Cauchy--Schwarz (Titu form) closes the inequality directly.  For \(n=4\), we
+obtained a rigorous computational closure by reducing to a large explicit
+surplus polynomial and certifying nonnegativity on the admissible region.
+So we had strong evidence that the inequality's shape was real and stable.
 
-\subsection{P6: Modified BSS barrier function}
+The gap was structural: we searched for a scalar functional route
+(de Bruijn, log-discriminant superadditivity, direct SOS, coefficient
+elimination), while the official proof's scalable step is an
+\emph{operator-level} norm bound on a Jacobian tied to hyperbolic polynomial
+Hessian control.  In other words, we kept trying to prove positivity of a
+surplus directly, whereas the official route controls the map that transports
+scores before the surplus is even written.
 
-The official solution's unlock for the universal constant is the modified
-barrier function $\Phi^\sigma_u$ that sums only the top-$\sigma$
-eigenvalues instead of all eigenvalues.  This is a single-sentence
-modification of the standard BSS barrier potential, but it changes the
-problem's character entirely.
+\begin{table}[ht]
+\centering
+\small
+\caption{P4 near miss: what we had vs.\ what was missing for all \(n\).}
+\begin{tabular}{@{}p{3.6cm}p{5.0cm}p{5.2cm}@{}}
+\toprule
+\textbf{Layer} & \textbf{What we had} & \textbf{Missing bridge} \\
+\midrule
+Endgame inequality & Repeated Cauchy--Schwarz framing (Blachman-style intuition) & A proved contraction inequality that makes the Cauchy step valid uniformly in \(n\) \\
+Low-dimensional control & \(n=3\) exact symbolic closure; \(n=4\) certified algebraic closure & A structural mechanism independent of explicit elimination/certification \\
+Dynamics route & Finite de Bruijn and \(\Phi_n\)-monotonicity results; strong numerics & The specific Jacobian/Hessian estimate from hyperbolic polynomial theory \\
+Search strategy & Intensive free-probability and algebraic exploration & Targeted retrieval on hyperbolic Hessian contraction tools \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-We used the standard barrier potential (summing all eigenvalues) and
-couldn't close the gap for general graphs.  The ``restrict to
-top-$\sigma$'' idea was within reach: our method wiring library (D1--D10)
-analyzed the BSS barrier technique in detail, and the obstruction
-(multi-rank atoms vs.\ rank-1 atoms) pointed directly at eigenvalue
-selection as the bottleneck.
+Why didn't we jump?  Two process factors:
+\begin{enumerate}
+\item \textbf{Object mismatch under pressure:} once \(n=3\) closed by direct
+  surplus algebra, we prioritized finding higher-$n$ analogues of the same
+  object (explicit numerators, SOS, elimination), not changing objects to a
+  Jacobian map.
+\item \textbf{Query mismatch:} our literature probes were rich on
+  free-Stam/de Bruijn language, but comparatively weak on
+  hyperbolic-Hessian contraction keywords.  The missing paper family sat
+  just outside the query cone we used.
+\end{enumerate}
+
+The practical lesson is not ``we ignored Cauchy--Schwarz''; it is almost the
+opposite.  We used Cauchy--Schwarz often, but as a terminal inequality.
+The official proof shows that for all \(n\), the decisive work is proving the
+\emph{pre-Cauchy} contraction statement.  For Batch~2, P4 gives a concrete
+protocol rule: when a proof repeatedly ends at the same inequality pattern,
+force a search for the missing operator inequality that justifies that
+pattern globally.
+
+\subsection{P6 Deep Dive: A Second Near Miss of the Same Type}
+\label{sec:p6-deep-dive}
+
+P6 shows a failure mode closely parallel to P4: we were repeatedly ending
+at the right inequality pattern, but with the wrong intermediate object.
+In P6, our recurrent endpoint was an average-to-existence transfer
+(``if the average score is \(<1\), some vertex is feasible''), while the
+official all-graph proof closes by changing the barrier itself:
+\(\Phi_u \rightsquigarrow \Phi_u^\sigma\), i.e., track only the top
+\(\sigma\) eigenvalues.
+
+As with P4, this is not a blind miss.  We obtained a real theorem on a
+nontrivial family (\(K_n\), \(c=1/3\)), built extensive computational
+evidence for general graphs, and diagnosed several dead directions
+precisely.  The near miss is that these pieces were assembled around the
+full-spectrum barrier, so the final universal bridge never became
+available.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{P6 near miss: what we had vs.\ what was missing for all graphs.}
+\begin{tabular}{@{}p{3.6cm}p{5.0cm}p{5.2cm}@{}}
+\toprule
+\textbf{Layer} & \textbf{What we had} & \textbf{Missing bridge} \\
+\midrule
+Endgame inequality & Repeated average-to-existence/pigeonhole endpoint (\(\bar d < 1 \Rightarrow\) feasible vertex) & A barrier definition whose dynamics make the endpoint provable uniformly \\
+Partial closure & Exact \(K_n\) theorem (\(c=1/3\)), strong numerics on broad families & Universal control in general graphs \\
+Technique stack & Barrier greedy, leverage-style reasoning, stress testing, obstruction mapping & The \(\Phi_u^\sigma\) top-spectrum potential used in the official proof \\
+Search strategy & Intensive work inside the standard BSS potential & Early branch into restricted-spectrum barrier variants \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Process-wise, the similarity with P4 is tight:
+\begin{enumerate}
+\item \textbf{Endpoint fixation:} once a plausible final inequality pattern
+  appears, we keep improving estimates near that endpoint instead of
+  questioning whether the controlling state variable is wrong.
+\item \textbf{Object inertia:} we stayed in the ``sum all eigenvalues''
+  state space after evidence already suggested anisotropy/top-spectrum
+  effects were driving hard instances.
+\end{enumerate}
+
+So the Batch~2 lesson mirrors P4 almost verbatim: when the same terminal
+inequality recurs but closure stalls, force a deliberate ``state-variable
+hop'' cycle (new potential/barrier definitions) before spending more effort
+on sharpening constants within the old variable.
 
 \subsection{P3: Problem substitution risk}
 
@@ -945,83 +1032,8 @@ The failure modes we avoided (citation without substance, false theorems)
 are more characteristic of single-shot generation than of iterated,
 reviewed work.
 
-%% ====================================================================
-\section{Potential Novel Contributions}
-\label{sec:novel}
-%% ====================================================================
-
-Several of our results may contain independent mathematical value, even in
-light of the official solutions.
-
-\subsection{P9: Degree-3 polynomial test for rank-1 scaling}
-
-Our construction uses $3 \times 3$ minors of the rank-2 bilinear form
-structure, producing degree-3 coordinate functions.  The official solution
-uses $5 \times 5$ minors of Tucker flattenings, producing degree-5
-coordinate functions.  Both are valid polynomial tests for rank-1 scaling
-of quadrifocal tensors.
-
-The degree-3 test is potentially more efficient: lower-degree polynomials
-are cheaper to evaluate and may define a simpler algebraic variety.
-Whether the degree-3 construction covers all necessary matricizations is
-the key verification question.  If it does, this would be worth a
-note/remark in the multiview geometry literature.
-
-\subsection{P10: Improved preconditioner}
-
-Our $K_\tau^2$ preconditioner correction (the P10-C001 $\to$ P10-C002
-improvement cycle) matches the official solution's substance.  The
-spectral equivalence improvement from
-$\delta \in [5.2, 22.7]$ to $\delta < 1$ is a genuine computational
-contribution.  The official commentary praises this kind of AI
-contribution---lowering computational complexity in a way that was
-``obvious in hindsight but not previously seen.''
-
-\subsection{P4: The $n=3$ identity and the $n=4$ computational proof}
-
-The identity $\Phi_3 \cdot \mathrm{disc} = 18a_2^2$ is a clean algebraic
-result that doesn't appear in the official solution (which uses different
-techniques for all~$n$).  The $n = 4$ proof via symmetry-stratified
-elimination and certified homotopy continuation, while not generalizing,
-demonstrates a complementary approach to the hyperbolic polynomial method.
-
-The 3-piece Cauchy--Schwarz reduction for $n = 3$ may contain independent
-value as an alternative proof technique for low-dimensional cases of the
-finite free Stam inequality.
-
-\subsection{P6: The $K_n$ result}
-
-Our $c = 1/3$ constant for $K_n$ is \emph{tighter} than the official
-universal constant $c = 1/42$ when specialized to complete graphs.  The
-elementary proof chain (Tur\'an + Foster + pigeonhole + PSD trace bound)
-is undergraduate-accessible and demonstrates that for specific graph
-families, much better constants are achievable.
-
-This suggests a natural follow-up question: for which graph families can
-the constant be improved beyond $1/42$?  The barrier greedy approach with
-graph-specific leverage analysis may yield a family of such results.
-
-\subsection{Process methodology}
-
-Independent of the mathematical results, several methodological
-contributions may have value:
-
-\begin{itemize}
-\item The \textbf{layer-switching pattern} as a coaching intervention for
-  stuck agents: ``What kind of problem is this? How would you teach it to
-  an undergraduate? Who finds this easy?''
-
-\item The \textbf{outcome typing} discipline (Close / Reduce / Map) for
-  honest reporting of partial results.
-
-\item The \textbf{structural-obstruction-as-theorem} pattern: when a
-  proof method fails, characterize the failure as a theorem about the
-  problem's structure.
-
-\item The \textbf{cycle methodology}: explore $\to$ attempt $\to$ fail
-  $\to$ characterize failure $\to$ redirect, with each failure producing
-  a transmissible structural result.
-\end{itemize}
+Detailed novelty claims and process-methodology notes have been moved to
+\path{sprint-review-outtakes.tex} for this compressed draft.
 
 %% ====================================================================
 \section{Process Reflections}
@@ -1030,38 +1042,15 @@ contributions may have value:
 
 \subsection{Comparison with official AI baselines}
 
-The First Proof authors tested GPT-5.2~Pro and Gemini~3.0 Deep Think
-using two prompts: one allowing internet access, one discouraging it.
-This produced 39~response files across the ten problems.  The testing
-was single-shot: one prompt, one response, no iteration.
+Detailed baseline-comparison discussion is moved to
+\texttt{sprint-review-outtakes.tex}; the main paper keeps only the
+protocol-level conclusions.
 
-Our sprint used a fundamentally different approach: multi-agent iteration
-with human direction over 55~hours.  The comparison is not apples to
-apples, but the results suggest that the human-in-the-loop changes
-outcomes qualitatively, not just quantitatively:
-
-\begin{itemize}
-\item \textbf{Error correction:} Our initial drafts contained many of the
-  same errors as the single-shot AI responses (P1's false-premise
-  assumption, P8's local-to-global gap, P9's rank-1 witness bug).  The
-  review cycle caught and corrected most of these.
-
-\item \textbf{Depth of engagement:} Problems~4 and~6 each received
-  70--80+ commits of sustained work, including numerical experiments,
-  technique exhaustion, and literature mining.  This depth is impossible
-  in a single-shot prompt.
-
-\item \textbf{Strategic pivots:} The P6 coaching intervention and the P7
-  rotation-route layer switch required human judgment about when to
-  abandon an approach.  Current AI systems don't reliably detect their
-  own stuckness.
-\end{itemize}
-
-\subsection{The coaching breakthrough (Problem 6)}
+\subsection{The coaching intervention (Problem 6): real progress, not full closure}
 
 Problem~6's trajectory is the sprint's most instructive case study.  After
 approximately 8~hours and 6+ handoff documents in the sparsification
-layer, a single coaching intervention produced the breakthrough:
+layer, a single coaching intervention produced a major trajectory shift:
 
 \begin{joebox}
 I think you should think out of the box a bit.  What kind of problem is
@@ -1100,113 +1089,40 @@ frameworks.  ``Teach it to an undergraduate?'' forces identification of
 the elementary core.  ``Who finds this easy?'' identifies the right
 mathematical community.
 
+Crucially, this did \emph{not} solve the full problem.  It produced a
+correct and valuable partial result (\(K_n\), \(c=1/3\)) and clarified the
+general-graph bottleneck, but the universal constant route remained open.
+
 The implication for AI-assisted mathematics: \emph{coaching beats
 dispatching}.  ``Close the gap in Section~5'' generates another
 TryHarder cycle.  ``What kind of problem is this?'' generates a layer
 switch.
 
+\begin{codexbox}[title={Codex (critical review from rollout record)}]
+\emph{Commit \texttt{a7b0e3e}:} ``P6 Cycle 7: BMI falsified, gap promoted to
+No-Skip/GPL-V.'' \\
+\emph{Commit \texttt{d8d6958} handoff:} ``No-Skip (strict threshold): FALSE,
+5/116 runs have skips.''
+\end{codexbox}
+
+Coaching helped the process get unstuck, but was not by itself enough to
+find the full general-graph solution (see \Cref{sec:p6-deep-dive}).
+
 \subsection{Calibration}
 
-Our confidence ratings were poorly calibrated against actual correctness:
-
-\begin{table}[ht]
-\centering
-\small
-\caption{Confidence vs.\ correctness: an instructive anticorrelation.}
-\label{tab:calibration}
-\begin{tabular}{@{}llll@{}}
-\toprule
-\textbf{Problem} & \textbf{Initial confidence} & \textbf{Actual outcome} & \textbf{Surprise} \\
-\midrule
-P4 & High & Wrong ($n \ge 4$ unproved initially) & Yes \\
-P9 & High & Had critical bug (rank-1 witness) & Yes \\
-P3 & Low  & Easily fixed (minor rewrite) & Yes \\
-P5 & Low  & Proved with modest caveat & Yes \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The two ``high confidence'' self-assessments were the worst failures.  The
-monograph's abstract was carefully hedged; the comparison confirms that
-hedging was warranted but not always in the right places.  P1 was stated
-without hedging and turned out to be wrong; P7 was hedged as
-``conditional'' but the condition turned out to be a definitive
-obstruction.
+Calibration takeaway: our strongest-confidence calls were not the most
+reliable, and confidence tracking should be treated as an explicit protocol
+artifact rather than an informal impression.  The detailed calibration table
+and commentary are moved to \texttt{sprint-review-outtakes.tex}.
 
 \subsection{Time allocation}
 
-P4 (75 commits) and P6 (84 commits) consumed approximately 47\% of all
-commits.  Was this the right allocation?
+The sprint likely over-allocated depth to P4/P6 relative to systematic
+falsification effort on P1/P7.  Detailed allocation commentary is moved to
+\texttt{sprint-review-outtakes.tex}.
 
-In hindsight, P1 and P7 needed more adversarial testing, not more
-constructive effort.  P1 received relatively little post-draft attention
-because the argument seemed clean.  P7 received substantial effort, but
-all of it was directed toward making the construction work---none toward
-testing whether an obstruction exists.
-
-A better allocation would have reserved 10--15\% of total effort for
-systematic falsification across all ten problems, even at the cost of
-reducing depth on P4 and P6.  The two wrong answers cost more credibility
-than the two incomplete proofs.
-
-\subsection{Negative knowledge transfer}
-
-One of the sprint's unexpected insights was the value of \emph{negative
-pheromone}---the accumulated record of dead ends and structural
-obstructions.  Each failed approach, when characterized as a theorem
-about the problem's structure, prevented subsequent agents from
-re-attempting the same strategy:
-
-\begin{itemize}
-\item P4's SOS infeasibility (7 scripts $\to$ one theorem: interior zeros
-  structurally block Putinar certificates) eliminated an entire proof
-  strategy, redirecting effort toward algebraic elimination.
-
-\item P6's technique exhaustion (6 subsample-and-concentrate methods, all
-  hitting the quadratic-vs-linear wall) proved that the wall is
-  fundamental to the technique class, not an artifact of any one approach.
-  This converted scattered failures into a structural result.
-
-\item P7's five hypothetical proof architectures (H1--H5) immediately
-  killed two paths (H3: codim-2 gap fails for reflections; H5:
-  Gauss--Bonnet kills Fowler) and deprioritized two more, concentrating
-  effort on the rotation route.
-\end{itemize}
-
-The pattern parallels ant colony optimization: positive pheromone
-(``this approach works'') guides exploitation, but negative pheromone
-(``this approach is structurally blocked'') compresses hours of
-exploration into transmissible facts.  The dead-end theorems are as
-valuable as the successes---they prevent future agents from falling into
-the same traps.
-
-For multi-agent mathematical research, the implication is clear: failed
-proof attempts should produce structured records of \emph{why} they
-failed, not just that they failed.  ``SOS didn't work'' is useless.
-``Interior zeros where all constraints are strict structurally block
-Putinar certificates'' is a theorem that redirects effort.
-
-\subsection{The Lakatos-style framing}
-
-The monograph adopted a Proofs-and-Refutations structure
-\cite{lakatos1976}: draft $\to$ verify $\to$ refute $\to$ revise.  The
-official solutions serve as the final refutation/confirmation step in
-this process.
-
-The Lakatos parallel is more than rhetorical.  The review cycle within
-the sprint (three rounds of critique in one hour on Day~1, catching
-confidence laundering and structural errors) mirrors the dialectical
-process Lakatos describes: a claim is made, a counterexample is found,
-the claim is reformulated, the counterexample is refined.  The wiring
-diagram infrastructure makes this dialectic precise: when a critic says
-``edge P7-S4 $\to$ P7-S3a is typed \texttt{assert} but should be
-\texttt{assume},'' the response is targeted, not global.
-
-The official solutions now serve as the ``final counterexample''---the
-authoritative test against which our claims are measured.  Problems~1
-and~7 are genuine refutations.  Problems~2, 8, 9, 10 are confirmations.
-Problems~3, 4, 5, 6 are partial confirmations that expose the gap between
-our proof and the full result.
+Further reflective notes (negative knowledge transfer and Lakatos framing)
+are moved to \texttt{sprint-review-outtakes.tex} to keep the main narrative compact.
 
 %% ====================================================================
 \section{Conclusion}
@@ -1239,18 +1155,21 @@ The two failures share a common structure:
 \item We didn't systematically test the NO direction.
 \end{enumerate}
 
-\subsection{Human-AI collaboration outperforms vanilla AI}
+\subsection{Iterative protocol outperforms single-shot baselines}
 
-Human-AI collaboration with structured methodology (wiring diagrams,
-outcome typing, coaching interventions, adversarial review) produced
-substantially better results than the single-shot AI baselines tested by
-the First Proof authors.  The key differentiators are error correction
-through iteration, strategic pivots through coaching, and sustained depth
-of engagement through multi-session work.
+Structured methodology (wiring diagrams, outcome typing, coaching-style
+reframing, adversarial review) produced substantially better results than
+the single-shot AI baselines tested by the First Proof authors.  The key
+differentiators are error correction through iteration, strategic pivots
+through reframing, and sustained depth of engagement through multi-session
+work.
 
 The improvement is not merely quantitative.  The coaching intervention on
-P6---a single reframing question that unstuck 8~hours of cycling---represents a qualitatively different interaction mode that single-prompt
-AI cannot replicate.
+P6---a single reframing question that unstuck 8~hours of cycling---shows a
+control-policy move that improved trajectory quality, even though it did
+not produce full general-graph closure.  In future runs, this should be
+treated as a schedulable protocol primitive (detect stagnation \(\to\)
+trigger reframing), not as an inherently human-only act.
 
 \subsection{What we would do differently for Batch 2}
 
@@ -1277,6 +1196,40 @@ benchmarking.  Based on this retrospective:
   receive at least one review cycle before any problem receives its
   third cycle.
 \end{enumerate}
+
+\subsection{Threats to validity in this retrospective}
+
+This review is stronger than an anecdotal postmortem, but it still has
+important validity limits:
+
+\begin{enumerate}
+\item \textbf{Non-blinded evaluation:} the same team that produced the
+  sprint artifacts also classifies many outcomes.  This can inflate
+  ``direction-correct'' judgments unless tied to explicit criteria.
+\item \textbf{Category granularity:} labels such as ``correct direction''
+  collapse different states (near-complete proof vs.\ speculative route).
+  The final version should keep answer-level and proof-level status as
+  separate axes throughout.
+\item \textbf{Baseline comparability:} comparisons with single-shot AI
+  runs are informative but not controlled.  We used iteration, tools, and
+  human coaching over 55 hours, so claims should be framed as
+  ``different protocol, better outcomes'' rather than strict model ranking.
+\item \textbf{Attribution uncertainty:} this sprint does not isolate the
+  causal contribution of the human operator versus the protocol itself.
+  Several interventions (routing, stagnation detection, reframing prompts)
+  are likely automatable and should be tested as such in Batch~2.
+\item \textbf{Novelty claims:} potential contributions (especially P9, P6)
+  are plausible but require independent checking and literature placement
+  before being presented as research contributions.
+\end{enumerate}
+
+These limits do not weaken the main empirical narrative, but they should
+be made explicit so the paper reads as calibrated evidence rather than a
+victory report.
+
+Editorial reduction roadmap moved to the companion technical note
+\path{data/first-proof/technote-first-proof-retro1.md}, as the first
+step toward cutting this manuscript to the 25-page target.
 
 \subsection{Broader context}
 
