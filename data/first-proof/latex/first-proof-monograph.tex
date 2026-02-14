@@ -220,6 +220,7 @@
   \input{#1}
   \endgroup
 }
+\providecommand{\BuildGitHash}{HEAD at build time}
 
 \titleformat{\chapter}[display]
   {\bfseries\Large}
@@ -253,7 +254,7 @@
 \renewcommand{\thefootnote}{\arabic{footnote}}
 \vfill
 \noindent{\small\sffamily Reproducibility: built \today{} from
-\texttt{futon6} version-controlled git history (HEAD at build time).\\
+\texttt{futon6} version-controlled git history (\BuildGitHash).\\
 Source: \url{https://github.com/tothedarktowercame/futon6}}
 \clearpage
 \setcounter{page}{2}
@@ -265,19 +266,20 @@ targeted repair, and explicit provenance. The workflow uses wiring-diagram
 decompositions of claim dependencies to localize gaps and coordinate
 reviewer-driven revisions. Final outcomes are heterogeneous but explicit:
 the manuscript distinguishes \emph{mathematical status} from
-\emph{QC-validation status}. Mathematically, Problem~3 has a
-validation-complete existence path under the scoped criterion used here
-(uniqueness/irreducibility treated as optional), Problem~5 is solved in a
-scope-limited form for $F_O$-local connective spectra, Problem~10 is
-conditional under clearly stated assumptions (with explicit necessity
-counterexamples when assumptions are dropped), and Problems~4 and~6 are partial
-with named remaining obligations in the general case (including an
-unconditional $K_n$ result for Problem~6 with $c_0 = 1/3$). Problem~7 is
-treated as provisionally closed via the rotation-route theorem chain, pending
-independent ledger re-check. At the QC layer, Problems~7 and~9 have
-node-level validation artifacts but still contain unresolved verifier gaps. The main
-methodological result is that structure-aware verification and layer-switching
-strategies improve reliability and calibration in compressed proof sprints.
+\emph{QC-validation status}. In the current ledger, Problems~1, 2, 3, and~8
+are treated as mathematically closed with validation-complete records
+(Problem~2 still depends on the cited newvector/test-vector theorem input);
+Problems~5 and~7 are mathematically closed with partial QC status (scope-limited
+closure for Problem~5, and an independent theorem-ledger re-check pending for
+Problem~7). Problem~4 is partial: proved analytically for \(n \le 3\), and
+proved for \(n=4\) via the Path~2 algebraic certificate, with higher \(n\)
+open. Problem~6 is partial: the \(K_n\) case is proved with \(c_0 = 1/3\), while
+the general-graph bridge remains open (formal \(\bar d < 1\) bound at
+\(M_t \ne 0\)). Problem~9 has strong computational evidence but lacks a clean
+algebraic closure of the universal converse step. Problem~10 remains
+conditional under explicitly stated assumptions. The main methodological result
+is that structure-aware verification and layer-switching strategies improve
+reliability and calibration in compressed proof sprints.
 \clearpage
 \tableofcontents
 
