@@ -708,11 +708,18 @@ prompt automatically.
 
 \section{Summary}
 
-The argument of this chapter is not a single chain of reasoning but a
-directed acyclic graph with fan-out at the claim and fan-in at the
-conclusion.  The following summary linearises it on the page; the
-wiring diagram (Figure~\ref{fig:the-argument}) preserves the parallel
-structure.
+\noindent\textbf{Thesis statement.}  Proof strategy should be
+represented as a first-class typed graph object, because this makes
+argument structure explicit, and supports effective validation.
+
+\medskip
+
+The structure of this monograph is, clearly, not a single chain of
+reasoning; however, it can rather naturally be expressed as a directed
+acyclic graph.  This summary necessarily linearises that structure on
+the page; the associated wiring diagram
+(Figure~\ref{fig:the-argument}) preserves more of it; the git
+repository serves as the version of record.
 
 \medskip
 
@@ -726,59 +733,77 @@ commit record.
 
 \medskip
 
-\noindent\textbf{The canonical episode} (Problem~6) grounds the claim
-in a fully worked case: six dispatch-and-fail cycles over eight hours
-in a single layer, followed by a coaching-induced layer switch that
-produced an elementary proof within fifteen minutes.
+\noindent\textbf{An illustrative episode} (Problem~6) grounds the
+claim in a fully worked case: six dispatch-and-fail cycles over eight
+hours in a single layer, followed by a coaching-induced layer switch
+that produced an elementary proof within fifteen minutes.  Later, a
+problem was found in that proof and various new proofs were attempted,
+eventually leading to an interesting-looking partial result.
 
 \medskip
 
-\noindent\textbf{Four independent paths} then lead from this claim to
-the same prescriptive conclusion---the metacognitive interrupt.
+\noindent\textbf{Four independent paths} then lead from this
+experience to the same prescriptive conclusion---the metacognitive
+interrupt.
 
 \begin{enumerate}
-\item \textbf{Formalisation.}  The P6~episode recasts as a five-node
-  AIF graph (claim, conflict, preference, inference) with three typed
-  edges, expressible as S-expressions.  The typing makes argumentative
-  relations machine-queryable and points to two existing infrastructure
-  components: a typed-edge graph store (Arxana) and a peripheral model
-  whose reflect hops produce argumentative annotation by constraining
-  what the agent may do.  Together these imply a stationarity monitor:
-  track $(\text{layer}, \text{status})$ pairs across commits and flag
-  when the same pair repeats without progress.
+\item \textbf{Formalisation.}  The P6~episode can be thought of as a
+  five-node AIF-style graph (claim, conflict, preference, inference,
+  action) with typed edges, expressible as S-expressions.  The typing
+  makes the argumentative relations machine-queryable and points to
+  two existing infrastructure components: a typed-edge (hyper)graph
+  store and a model of computational agency we refer to as
+  peripherals, whereby processes of action and reflection produce
+  argumentative structures driven by generation under constraint.
+  Agents acting interacting via peripherals can backed by a monitor
+  that tracks $(\text{layer}, \text{status})$ pairs across commits and
+  flag when the same pair repeats without progress.  (In the current
+  effort, we worked with a much reduced version of this architecture,
+  in which the author played the role of monitor to agents with fewer
+  native reflective abilities.)
 
-\item \textbf{Live demonstration.}  While writing the paragraphs above
-  about metacognitive interrupts, the authors experienced one.  A second
-  agent ran a MathOverflow scan---structurally a reflect hop---that
-  returned a regime split (E-track vs.\ F-track) replacing the stuck
-  single-bound target.  The coaching-induced layer switch produced an
-  elementary proof in thirty minutes after five hours of local play.
-  The chapter about layer-switching validated itself.
+\item \textbf{Live demonstrations.}  While writing about metacognitive
+  interrupts, the agents relatively routinely produced them; one
+  example we've cited above was a MathOverflow scan—an intuitive
+  example of an as-if peripheral hop—which returned a regime split
+  (E-track vs.\ F-track) that got the proof process unstuck from its
+  single-bound target.  Prompting similarly produced changes in proof
+  behaviour, as did the Lakatosian proofs-and-refutations style of
+  working.  Our layer-switching claim was validated many times over
+  during the sprint.
 
-\item \textbf{Falsification.}  The same intervention revealed that the
-  barrier-monotonicity inequality fails for general graphs---the only
-  \emph{challenge} edge in the wiring diagram.  This motivates a
-  three-state status code (Open\,/\,Stuck\,/\,Falsified) and a control
-  rule: \textsc{Falsified} means abandon the layer entirely, not merely
-  reframe.  The argument preserves its own failure as structurally
-  load-bearing evidence.
+\item \textbf{Falsification.}  The same intervention led to the
+  conclusion that the barrier-monotonicity inequality fails for
+  general graphs---an exemplary \emph{challenge} in the wiring
+  diagram, which stands in for a broader process language.  One
+  possibility would be a three-state status code
+  (Open\,/\,Stuck\,/\,Falsified) and a control rule:
+  \textsc{Falsified} means abandon the layer entirely, not merely
+  reframe.  The work as a whole retains failure as as a structurally
+  load-bearing way of gaining evidence; naturally any successes in
+  this project were built on many more failures!
 
-\item \textbf{Cross-problem transfer.}  The patterns are not specific to
-  Problem~6.  Problems~4, 7, and~8 exhibit the same dynamics---strategy
-  transfers between problems at the strategy level, not the content
-  level.  The operational principle: make success histories visible to
-  stuck agents; coach with reframing questions, do not dispatch another
-  attack vector.
+\item \textbf{Cross-problem transfer.}  The patterns are not specific
+  to Problem~6.  Problems~4, 7, and~8 exhibit similar
+  dynamics---strategy transfers between problems at the strategy
+  level, not the content level.  The operational principle: make
+  success histories visible to stuck agents; coach with reframing
+  questions, do always not dispatch another attack vector, and don't
+  think of proof as a linear process, because it isn't.
 \end{enumerate}
 
-\noindent\textbf{Convergence.}
-All four paths arrive at the metacognitive interrupt: when argument
-structure is explicit and monitored, the system can detect its own
-stuckness and intervene.  Two conclusions follow.  The descriptive
-conclusion (T0): the sprint's argumentative structure was
-recoverable---19~commit attestations ground 27~typed edges across
-23~nodes.  The prescriptive conclusion (T1): build the live system
-where this capture happens in real time, not post-hoc.  T1 requires
-three components converging: the argument itself, the graph substrate,
-and the peripheral model.  The distance between the two conclusions is
-a tooling gap, not a conceptual one.
+\noindent\textbf{Convergence.}  All four paths arrive at the
+metacognitive interrupt, at which point the sprint mirrors the First
+Proof provocation.  When argument structure is explicit and monitored,
+the system can detect its own stuckness and intervene.  Two
+conclusions follow.  A descriptive conclusion (\textbf{T0}): the
+sprint's argumentative structure is recoverable by a structured
+simplification across the the ten proof attempts.  Some
+19~commit-attestations ground 27~typed edges across 23~nodes.  A
+prescriptive conclusion (\textbf{T1}): build a system where this
+capture happens in real time, not post-hoc.  That requires three
+components converging: the argument we have developed, which becomes a
+mission statement, the graph substrate which allows us to model
+mathematical knowledge, and the peripheral model of computational
+agency which allows us to work with such knowledge effectively.  The
+distance between the two conclusions is a question of implementation.
