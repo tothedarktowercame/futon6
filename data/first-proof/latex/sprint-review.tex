@@ -19,6 +19,7 @@
 \usepackage{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \usepackage[most]{tcolorbox}
+\usepackage{tikz}
 \usepackage{microtype}
 \usepackage{math-proofread-style}
 
@@ -199,6 +200,30 @@ vs.\ standard ASEP).  ${}^\dagger$Correct answer, incomplete proof.}
 incomplete proofs, 2 wrong answers.  Of the 8 problems with answer YES,
 we got 6 fully correct.  Both problems with answer NO were answered
 incorrectly.
+
+\subsection{Paper structure}
+
+\Cref{fig:wiring} shows the argument wiring diagram for this paper:
+the logical dependencies between empirical claims, pattern
+identifications, and the central thesis.  The diagram follows the
+AIF (Argument Interchange Format) conventions used for the monograph's
+proof-level wiring diagrams, applied here at the paper level.
+Dashed red arrows denote challenges (threats to validity) directed at
+specific claims.
+
+\begin{figure}[p]
+\centering
+\input{plates/sprint-review-wiring-tikz.tex}
+\caption{Argument wiring diagram for this paper.  Nodes are typed by
+  role (data, method, evidence, synthesis, challenge, prescription,
+  outcome); edges by epistemic relation.  The flow runs top to bottom:
+  empirical base $\to$ tier decomposition $\to$ success/failure patterns
+  $\to$ near-miss analysis and prescriptions $\to$ thesis.  Threat
+  nodes (red) challenge the strength of specific claims.  The full
+  node and edge specifications are in
+  \texttt{sprint-review-wiring.json}.}
+\label{fig:wiring}
+\end{figure}
 
 %% ====================================================================
 \section{Sprint Setup and Methods}
