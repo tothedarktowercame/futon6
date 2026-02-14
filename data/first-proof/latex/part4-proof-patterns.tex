@@ -707,10 +707,78 @@ stationarity after $k$ cycles would have triggered the reframing
 prompt automatically.
 
 \section{Summary}
-At a structural level, the argument is simple: generation is fast, while
-validation and stabilization are slower; git logs record states and transitions
-but not argumentative relations; those relations can be typed and represented
-explicitly as a graph; once the structure is explicit, stagnation and policy
-shifts become machine-detectable; and once stagnation is detectable, automated
-metacognitive interrupts become possible.  The design conclusion follows:
-proof strategy should be represented as a first-class typed graph object.
+
+The argument of this chapter is not a single chain of reasoning but a
+directed acyclic graph with fan-out at the claim and fan-in at the
+conclusion.  The following summary linearises it on the page; the
+wiring diagram (Figure~\ref{fig:the-argument}) preserves the parallel
+structure.
+
+\medskip
+
+\noindent\textbf{Root.}
+A ten-problem proof sprint generated a commit trace---git hashes,
+diffs, session logs---with no argumentative structure.  Post-hoc
+organisation of this trace into five evidence ledgers (three to five
+pivotal commits per pattern, tagged by role) constitutes the
+descriptive claim: strategy-level causality is recoverable from the
+commit record.
+
+\medskip
+
+\noindent\textbf{The canonical episode} (Problem~6) grounds the claim
+in a fully worked case: six dispatch-and-fail cycles over eight hours
+in a single layer, followed by a coaching-induced layer switch that
+produced an elementary proof within fifteen minutes.
+
+\medskip
+
+\noindent\textbf{Four independent paths} then lead from this claim to
+the same prescriptive conclusion---the metacognitive interrupt.
+
+\begin{enumerate}
+\item \textbf{Formalisation.}  The P6~episode recasts as a five-node
+  AIF graph (claim, conflict, preference, inference) with three typed
+  edges, expressible as S-expressions.  The typing makes argumentative
+  relations machine-queryable and points to two existing infrastructure
+  components: a typed-edge graph store (Arxana) and a peripheral model
+  whose reflect hops produce argumentative annotation by constraining
+  what the agent may do.  Together these imply a stationarity monitor:
+  track $(\text{layer}, \text{status})$ pairs across commits and flag
+  when the same pair repeats without progress.
+
+\item \textbf{Live demonstration.}  While writing the paragraphs above
+  about metacognitive interrupts, the authors experienced one.  A second
+  agent ran a MathOverflow scan---structurally a reflect hop---that
+  returned a regime split (E-track vs.\ F-track) replacing the stuck
+  single-bound target.  The coaching-induced layer switch produced an
+  elementary proof in thirty minutes after five hours of local play.
+  The chapter about layer-switching validated itself.
+
+\item \textbf{Falsification.}  The same intervention revealed that the
+  barrier-monotonicity inequality fails for general graphs---the only
+  \emph{challenge} edge in the wiring diagram.  This motivates a
+  three-state status code (Open\,/\,Stuck\,/\,Falsified) and a control
+  rule: \textsc{Falsified} means abandon the layer entirely, not merely
+  reframe.  The argument preserves its own failure as structurally
+  load-bearing evidence.
+
+\item \textbf{Cross-problem transfer.}  The patterns are not specific to
+  Problem~6.  Problems~4, 7, and~8 exhibit the same dynamics---strategy
+  transfers between problems at the strategy level, not the content
+  level.  The operational principle: make success histories visible to
+  stuck agents; coach with reframing questions, do not dispatch another
+  attack vector.
+\end{enumerate}
+
+\noindent\textbf{Convergence.}
+All four paths arrive at the metacognitive interrupt: when argument
+structure is explicit and monitored, the system can detect its own
+stuckness and intervene.  Two conclusions follow.  The descriptive
+conclusion (T0): the sprint's argumentative structure was
+recoverable---19~commit attestations ground 27~typed edges across
+23~nodes.  The prescriptive conclusion (T1): build the live system
+where this capture happens in real time, not post-hoc.  T1 requires
+three components converging: the argument itself, the graph substrate,
+and the peripheral model.  The distance between the two conclusions is
+a tooling gap, not a conceptual one.
