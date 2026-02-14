@@ -1,0 +1,465 @@
+{
+  "thread_id": "sprint-review-retro",
+  "description": "Argument wiring diagram for sprint-review.tex: the retrospective's claim structure. Central thesis: iterative protocol outperforms single-shot AI on research math, with systematic failures on NO-answer problems due to YES bias + domain-depth gap. The frontier is epistemic (falsification depth), not computational.",
+  "nodes": [
+    {
+      "id": "ret-D0",
+      "node_type": "data",
+      "section": "1",
+      "body_text": "Sprint data: 341 commits, 55 hours, 3 agents (Joe/Claude/Codex), 10 research-level problems from First Proof (Kolda et al.).",
+      "score": 0
+    },
+    {
+      "id": "ret-D1",
+      "node_type": "data",
+      "section": "1",
+      "body_text": "Ground truth: official solutions released Feb 14, 2026, by the problem authors. 68-page document with human solutions and AI commentary.",
+      "score": 0
+    },
+    {
+      "id": "ret-D2",
+      "node_type": "data",
+      "section": "1.4",
+      "body_text": "Scorecard: 6 correct, 2 correct-direction (incomplete proof), 2 wrong. Both wrong answers are on problems where official answer is NO.",
+      "score": 1
+    },
+    {
+      "id": "ret-M0",
+      "node_type": "method",
+      "section": "2",
+      "body_text": "Infrastructure: wiring diagrams with typed edges, Codex verification prompts generated per node, reviewer/responder cycle, numerical stress testing. Generation/verification ratio ~1:16.",
+      "score": 1
+    },
+    {
+      "id": "ret-M1",
+      "node_type": "method",
+      "section": "2.4",
+      "body_text": "Key methodological choices: outcome typing (Close/Reduce/Map), layer-switching pattern, PSR/PUR discipline (proposed), wiring-diagram verification.",
+      "score": 1
+    },
+    {
+      "id": "ret-TA",
+      "node_type": "evidence",
+      "section": "3.1",
+      "body_text": "Tier A (P2, P8, P9, P10): clean matches. Correct answer, sound proof. P9 uses genuinely different construction (degree-3 vs degree-5). P10 praised by official author.",
+      "score": 2
+    },
+    {
+      "id": "ret-TB",
+      "node_type": "evidence",
+      "section": "3.2",
+      "body_text": "Tier B (P3, P4, P5, P6): right direction, incomplete proof. P3: possible problem substitution. P4: missing hyperbolic Hessian bridge. P6: missing modified barrier. P5: sketch not full rigor.",
+      "score": 1
+    },
+    {
+      "id": "ret-TC",
+      "node_type": "evidence",
+      "section": "3.3",
+      "body_text": "Tier C (P1, P7): wrong answer. P1: false-premise trap (assumed Phi^4_3 ~ GFF). P7: conditional-to-closure gap (Novikov conjecture blocks manifold upgrade).",
+      "score": 2
+    },
+    {
+      "id": "ret-S1",
+      "node_type": "synthesis",
+      "section": "4.1",
+      "body_text": "Success pattern: structural decomposition. P8's symplectic direct sum, P9's rank-2 bilinear form — single structural insight unlocks entire proof.",
+      "score": 1
+    },
+    {
+      "id": "ret-S2",
+      "node_type": "synthesis",
+      "section": "4.2",
+      "body_text": "Success pattern: computational verification as proof guidance. P4's 8000+ trials, P6's 731+ runs. Numerical evidence guides strategy, doesn't replace proof.",
+      "score": 1
+    },
+    {
+      "id": "ret-S3",
+      "node_type": "synthesis",
+      "section": "4.3",
+      "body_text": "Success pattern: cycle methodology. Explore -> attempt -> fail -> characterize failure as theorem -> redirect. P4's SOS infeasibility theorem (7 scripts) eliminated entire strategy class.",
+      "score": 2
+    },
+    {
+      "id": "ret-S4",
+      "node_type": "synthesis",
+      "section": "4.4",
+      "body_text": "Claim: iterative protocol outperforms single-shot AI baselines. 6/10 correct vs AI baselines that got ~1-2 essentially correct. Differentiator is iteration, error correction, and strategic pivots.",
+      "score": 2
+    },
+    {
+      "id": "ret-F1",
+      "node_type": "synthesis",
+      "section": "5.1",
+      "body_text": "Failure pattern: YES bias. Both wrong answers (P1, P7) are NO problems. Constructive arguments easier to generate; obstruction arguments require deep structural theorems. LLMs may be systematically biased toward YES.",
+      "score": 3
+    },
+    {
+      "id": "ret-F2",
+      "node_type": "synthesis",
+      "section": "5.2",
+      "body_text": "Failure pattern: false-premise trap (P1). Assumed Phi^4_3 ~ GFF (false), then correctly deduced quasi-invariance. Logically sound, mathematically wrong. Invisible to internal consistency checks.",
+      "score": 2
+    },
+    {
+      "id": "ret-F3",
+      "node_type": "synthesis",
+      "section": "5.3",
+      "body_text": "Failure pattern: conditional-to-closure gap (P7). Correctly identified all machinery (Fowler, surgery, assembly maps) but resolved conditional step optimistically. Novikov conjecture provides definitive obstruction we didn't test for.",
+      "score": 2
+    },
+    {
+      "id": "ret-F4",
+      "node_type": "synthesis",
+      "section": "5.4",
+      "body_text": "Structural observation: domain depth vs structural reasoning. Failures require deep specialized knowledge (regularity structures, L-theory). Successes admit algebraic/computational verification. Human-AI team strongest on structural reasoning, weakest on domain depth.",
+      "score": 3
+    },
+    {
+      "id": "ret-N1",
+      "node_type": "synthesis",
+      "section": "5.5",
+      "body_text": "P4 near miss: endpoint fixation + query mismatch. We repeatedly ended at Cauchy-Schwarz but worked at wrong mathematical level for the middle step. Searched free-Stam/de Bruijn language, not hyperbolic-Hessian contraction keywords.",
+      "score": 2
+    },
+    {
+      "id": "ret-N2",
+      "node_type": "synthesis",
+      "section": "5.6",
+      "body_text": "P6 near miss: same pattern as P4. Endpoint fixation (average-to-existence transfer) + object inertia (stayed in full-spectrum barrier space). Official proof changes the barrier itself (top-sigma eigenvalues).",
+      "score": 2
+    },
+    {
+      "id": "ret-P1",
+      "node_type": "synthesis",
+      "section": "7.2",
+      "body_text": "Coaching beats dispatching (P6 case study). 'Close the gap in Section 5' generates TryHarder cycle. 'What kind of problem is this?' generates layer switch. 15-minute reframing vs 8-hour persistence. But: coaching did NOT solve the full problem.",
+      "score": 2
+    },
+    {
+      "id": "ret-P2",
+      "node_type": "synthesis",
+      "section": "outtakes",
+      "body_text": "Negative knowledge transfer: dead-end theorems are as valuable as successes. P4's SOS infeasibility, P6's technique exhaustion, P7's five hypothetical architectures. Failed proof attempts should produce structured records of WHY they failed.",
+      "score": 1
+    },
+    {
+      "id": "ret-V1",
+      "node_type": "challenge",
+      "section": "7.6",
+      "body_text": "Threat: non-blinded evaluation. Same team classifies outcomes. Can inflate 'direction-correct' judgments unless tied to explicit criteria.",
+      "score": 1
+    },
+    {
+      "id": "ret-V2",
+      "node_type": "challenge",
+      "section": "7.6",
+      "body_text": "Threat: baseline comparability. Comparison with single-shot AI is informative but not controlled. 55 hours + iteration + tools + human coaching vs single prompt. Claims should be 'different protocol, better outcomes' not strict model ranking.",
+      "score": 2
+    },
+    {
+      "id": "ret-V3",
+      "node_type": "challenge",
+      "section": "7.6",
+      "body_text": "Threat: attribution uncertainty. Sprint does not isolate causal contribution of human operator vs protocol itself. Several interventions (routing, stagnation detection, reframing) are plausible automation targets.",
+      "score": 1
+    },
+    {
+      "id": "ret-R1",
+      "node_type": "prescription",
+      "section": "7.4",
+      "body_text": "Batch 2 protocol: mandatory falsification. For every problem, spend at least one full cycle attempting to prove the opposite answer before committing.",
+      "score": 2
+    },
+    {
+      "id": "ret-R2",
+      "node_type": "prescription",
+      "section": "7.4",
+      "body_text": "Batch 2 protocol: domain-depth audit. Identify problems requiring deep specialized knowledge early, allocate extra literature mining and adversarial testing.",
+      "score": 1
+    },
+    {
+      "id": "ret-R3",
+      "node_type": "prescription",
+      "section": "5.5-5.6",
+      "body_text": "Batch 2 protocol: state-variable hop. When the same terminal inequality recurs but closure stalls, force deliberate 'state-variable hop' cycle (new potential/barrier definitions) before sharpening constants within old variable.",
+      "score": 2
+    },
+    {
+      "id": "ret-C0",
+      "node_type": "outcome",
+      "section": "7.7",
+      "body_text": "The epistemic weakness: inability to recognize when a plausible constructive argument is built on a false foundation. Invisible to internal consistency checks. Only domain knowledge reveals the error.",
+      "score": 3
+    },
+    {
+      "id": "ret-C1",
+      "node_type": "outcome",
+      "section": "7.7",
+      "body_text": "THESIS: The frontier of AI-assisted mathematics is defined by the depth of domain knowledge brought to bear on falsification, not by computational power or reasoning ability. Path forward: better integration with domain-specific knowledge bases + systematic adversarial testing.",
+      "score": 3
+    }
+  ],
+  "edges": [
+    {
+      "source": "ret-D0",
+      "target": "ret-D2",
+      "edge_type": "assert",
+      "evidence": "Sprint artifacts (341 commits) compared against official solutions to produce scorecard"
+    },
+    {
+      "source": "ret-D1",
+      "target": "ret-D2",
+      "edge_type": "assert",
+      "evidence": "Official solutions provide ground truth for scoring"
+    },
+    {
+      "source": "ret-M0",
+      "target": "ret-S4",
+      "edge_type": "reference",
+      "evidence": "Infrastructure (wiring diagrams, verification prompts, reviewer cycle) enables the iterative protocol that differentiates us from baselines"
+    },
+    {
+      "source": "ret-M1",
+      "target": "ret-S3",
+      "edge_type": "reference",
+      "evidence": "Outcome typing and layer-switching pattern underpin the cycle methodology"
+    },
+    {
+      "source": "ret-D2",
+      "target": "ret-TA",
+      "edge_type": "classify",
+      "evidence": "Scorecard decomposed into three tiers by match quality"
+    },
+    {
+      "source": "ret-D2",
+      "target": "ret-TB",
+      "edge_type": "classify",
+      "evidence": "Scorecard decomposed into three tiers by match quality"
+    },
+    {
+      "source": "ret-D2",
+      "target": "ret-TC",
+      "edge_type": "classify",
+      "evidence": "Scorecard decomposed into three tiers by match quality"
+    },
+    {
+      "source": "ret-TA",
+      "target": "ret-S1",
+      "edge_type": "assert",
+      "evidence": "P8 (symplectic direct sum) and P9 (rank-2 bilinear) exemplify structural decomposition wins"
+    },
+    {
+      "source": "ret-TB",
+      "target": "ret-S2",
+      "edge_type": "assert",
+      "evidence": "P4 (8000+ trials) and P6 (731+ runs) exemplify computational verification as proof guidance"
+    },
+    {
+      "source": "ret-TB",
+      "target": "ret-S3",
+      "edge_type": "assert",
+      "evidence": "P4's 4-cycle trajectory (explore -> SOS fail -> characterize -> resultant elimination) exemplifies cycle methodology"
+    },
+    {
+      "source": "ret-TA",
+      "target": "ret-S4",
+      "edge_type": "assert",
+      "evidence": "4 clean matches (P2, P8, P9, P10) vs AI baselines that got ~1-2 essentially correct"
+    },
+    {
+      "source": "ret-TB",
+      "target": "ret-S4",
+      "edge_type": "assert",
+      "evidence": "Partial results on P4 and P6 exceed single-shot AI baselines (P6: ChatGPT couldn't answer; P4: AI attempt 'did not make sense')"
+    },
+    {
+      "source": "ret-TC",
+      "target": "ret-F1",
+      "edge_type": "assert",
+      "evidence": "Both wrong answers are NO problems; we defaulted to constructive YES arguments without testing for obstructions"
+    },
+    {
+      "source": "ret-TC",
+      "target": "ret-F2",
+      "edge_type": "exemplify",
+      "evidence": "P1 exemplifies false-premise trap: assumed Phi^4_3 ~ GFF, correctly deduced quasi-invariance from false foundation"
+    },
+    {
+      "source": "ret-TC",
+      "target": "ret-F3",
+      "edge_type": "exemplify",
+      "evidence": "P7 exemplifies conditional-to-closure gap: identified all machinery but resolved conditional step optimistically"
+    },
+    {
+      "source": "ret-F1",
+      "target": "ret-F4",
+      "edge_type": "assert",
+      "evidence": "YES bias correlates with domain depth: NO answers require deep obstruction theorems from specialized subfields"
+    },
+    {
+      "source": "ret-F2",
+      "target": "ret-F4",
+      "edge_type": "assert",
+      "evidence": "P1 requires regularity structures expertise to detect the false premise"
+    },
+    {
+      "source": "ret-F3",
+      "target": "ret-F4",
+      "edge_type": "assert",
+      "evidence": "P7 requires L-theory/Novikov conjecture expertise to detect the definitive obstruction"
+    },
+    {
+      "source": "ret-TB",
+      "target": "ret-N1",
+      "edge_type": "exemplify",
+      "evidence": "P4 near miss: had Cauchy-Schwarz endpoint, n=3 closure, n=4 certification, but missed the Jacobian/Hessian contraction mechanism for all-n"
+    },
+    {
+      "source": "ret-TB",
+      "target": "ret-N2",
+      "edge_type": "exemplify",
+      "evidence": "P6 near miss: had K_n theorem (c=1/3), barrier greedy, leverage reasoning, but stayed in full-spectrum barrier space instead of top-sigma variant"
+    },
+    {
+      "source": "ret-N1",
+      "target": "ret-N2",
+      "edge_type": "reference",
+      "evidence": "P6 failure mode closely parallels P4: endpoint fixation + object inertia. Same process lesson."
+    },
+    {
+      "source": "ret-N1",
+      "target": "ret-R3",
+      "edge_type": "assert",
+      "evidence": "P4's endpoint fixation motivates state-variable hop protocol: when terminal inequality recurs, force new potential/barrier definitions"
+    },
+    {
+      "source": "ret-N2",
+      "target": "ret-R3",
+      "edge_type": "assert",
+      "evidence": "P6's object inertia confirms the state-variable hop rule mirrors P4 almost verbatim"
+    },
+    {
+      "source": "ret-P1",
+      "target": "ret-S4",
+      "edge_type": "assert",
+      "evidence": "P6 coaching case study: 15-minute reframing produced K_n proof after 8-hour TryHarder loop. But did NOT produce full general-graph closure."
+    },
+    {
+      "source": "ret-S3",
+      "target": "ret-P2",
+      "edge_type": "assert",
+      "evidence": "Cycle methodology produces negative knowledge transfer: each failed cycle generates a structural obstruction theorem"
+    },
+    {
+      "source": "ret-V1",
+      "target": "ret-S4",
+      "edge_type": "challenge",
+      "evidence": "Non-blinded evaluation may inflate 'correct direction' judgments"
+    },
+    {
+      "source": "ret-V2",
+      "target": "ret-S4",
+      "edge_type": "challenge",
+      "evidence": "55-hour iterative protocol is not comparable to single-shot prompts; claims should be 'different protocol, better outcomes'"
+    },
+    {
+      "source": "ret-V3",
+      "target": "ret-P1",
+      "edge_type": "challenge",
+      "evidence": "Human coaching contribution is not isolated from protocol effect; reframing prompts are plausible automation targets"
+    },
+    {
+      "source": "ret-F1",
+      "target": "ret-R1",
+      "edge_type": "assert",
+      "evidence": "YES bias directly motivates mandatory falsification: spend one full cycle on the opposite answer before committing"
+    },
+    {
+      "source": "ret-F4",
+      "target": "ret-R2",
+      "edge_type": "assert",
+      "evidence": "Domain-depth gap motivates domain-depth audit: identify specialized-knowledge problems early, allocate extra adversarial testing"
+    },
+    {
+      "source": "ret-F2",
+      "target": "ret-C0",
+      "edge_type": "assert",
+      "evidence": "P1's false-premise trap is the canonical instance: argument looks correct at every step, only domain knowledge reveals the error"
+    },
+    {
+      "source": "ret-F3",
+      "target": "ret-C0",
+      "edge_type": "assert",
+      "evidence": "P7's conditional-to-closure gap is a subtler instance: the conditional step's discharge is what deep theory prevents"
+    },
+    {
+      "source": "ret-F4",
+      "target": "ret-C0",
+      "edge_type": "assert",
+      "evidence": "Domain-depth gap explains why the epistemic weakness is systematic, not accidental"
+    },
+    {
+      "source": "ret-S4",
+      "target": "ret-C1",
+      "edge_type": "assert",
+      "evidence": "Protocol advantage demonstrates that computational power and iteration help, but don't address the epistemic frontier"
+    },
+    {
+      "source": "ret-C0",
+      "target": "ret-C1",
+      "edge_type": "assert",
+      "evidence": "The epistemic weakness (false premises invisible to internal checks) defines the frontier: depth of domain knowledge for falsification"
+    },
+    {
+      "source": "ret-R1",
+      "target": "ret-C1",
+      "edge_type": "reference",
+      "evidence": "Mandatory falsification is the operational response to the frontier thesis"
+    },
+    {
+      "source": "ret-R2",
+      "target": "ret-C1",
+      "edge_type": "reference",
+      "evidence": "Domain-depth audit is the strategic response to the frontier thesis"
+    },
+    {
+      "source": "ret-R3",
+      "target": "ret-C1",
+      "edge_type": "reference",
+      "evidence": "State-variable hop protocol addresses the near-miss pattern that prevented full closure on YES problems"
+    }
+  ],
+  "stats": {
+    "n_nodes": 28,
+    "n_edges": 38,
+    "node_types": {
+      "data": 3,
+      "method": 2,
+      "evidence": 3,
+      "synthesis": 12,
+      "challenge": 3,
+      "prescription": 3,
+      "outcome": 2
+    },
+    "edge_types": {
+      "assert": 24,
+      "classify": 3,
+      "exemplify": 4,
+      "reference": 7,
+      "challenge": 3
+    },
+    "regions": {
+      "empirical_base": ["ret-D0", "ret-D1", "ret-D2"],
+      "methodology": ["ret-M0", "ret-M1"],
+      "tier_decomposition": ["ret-TA", "ret-TB", "ret-TC"],
+      "success_patterns": ["ret-S1", "ret-S2", "ret-S3", "ret-S4"],
+      "failure_patterns": ["ret-F1", "ret-F2", "ret-F3", "ret-F4"],
+      "near_misses": ["ret-N1", "ret-N2"],
+      "process_claims": ["ret-P1", "ret-P2"],
+      "threats_to_validity": ["ret-V1", "ret-V2", "ret-V3"],
+      "prescriptions": ["ret-R1", "ret-R2", "ret-R3"],
+      "convergence": ["ret-C0", "ret-C1"]
+    },
+    "argument_flow": "D0+D1 -> D2 -> {TA,TB,TC} -> {success,failure} patterns -> {near-misses, epistemic weakness} -> prescriptions + thesis. Threats challenge the strength claims."
+  }
+}
