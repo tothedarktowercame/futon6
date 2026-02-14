@@ -21,6 +21,8 @@
 \usepackage{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \usepackage[most]{tcolorbox}
+\usepackage{paracol}
+\usepackage{wrapfig}
 \usepackage{microtype}
 \usepackage{framed}
 \usepackage{fancyvrb}
@@ -169,7 +171,10 @@
 }
 \newtcolorbox{openobligation}[1][]{%
   colback=red!4, colframe=red!60!black,
+  colbacktitle=red!70!black, coltitle=white,
   fonttitle=\bfseries\sffamily\small,
+  before title={\begingroup\DisableMathProofColors\color{white}},
+  after title={\endgroup},
   title={Open Obligation}, #1,
   left=6pt, right=6pt, top=4pt, bottom=4pt,
   boxrule=0.5pt, arc=2pt, breakable,
@@ -269,7 +274,7 @@ counterexamples when assumptions are dropped), and Problems~4 and~6 are partial
 with named remaining obligations in the general case (including an
 unconditional $K_n$ result for Problem~6 with $c_0 = 1/3$). Problem~7 is
 treated as provisionally closed via the rotation-route theorem chain, pending
-independent ledger re-check. At the QC layer, Problems~1,~2,~7,~8, and~9 have
+independent ledger re-check. At the QC layer, Problems~7 and~9 have
 node-level validation artifacts but still contain unresolved verifier gaps. The main
 methodological result is that structure-aware verification and layer-switching
 strategies improve reliability and calibration in compressed proof sprints.
@@ -297,29 +302,22 @@ strategies improve reliability and calibration in compressed proof sprints.
 \chapter*{Reading Convention}
 \addcontentsline{toc}{chapter}{Reading Convention}
 
-Each proof chapter in this part uses coloured boxes to separate the
-mathematical argument from the surrounding process record.
+This manuscript uses boxed annotations selectively. In the current revision,
+the full proof chapters are primarily unboxed; process boxes appear only where
+there is substantive process context to preserve.
 
 \begin{itemize}[leftmargin=1.5em]
 \item \textbf{Unboxed text} is the proof proper. A reader following the
   five-page-per-problem brief can read only the unboxed text and obtain a
   self-contained argument (or, where an argument is incomplete, a clearly
   stated conditional result).
-\item \begin{deadpath}[title={Dead Path}]
-  Abandoned approaches, wrong turns, strategies that were tried and
-  discarded. Retained for the process record.
-  \end{deadpath}
-\item \begin{revision}[title={Revision}]
-  Corrections applied during the sprint---patches to earlier overclaims,
-  definition fixes, tightened hypotheses.
-  \end{revision}
-\item \begin{openobligation}[title={Open Obligation}]
-  Gaps that remain open. The proof is conditional on these steps.
-  \end{openobligation}
-\item \begin{processnote}[title={Process Note}]
-  Confidence assessments, status summaries, reviewer context,
-  and methodological commentary.
-  \end{processnote}
+\item \textbf{Status Note boxes} appear in the annotated overview chapters to
+  summarize closure/QC state for each problem.
+\item \textbf{Process Note boxes} appear in process-facing parts (for example,
+  prompt excerpts) when methodological scope or reviewer context is needed.
+\item Dead-path / revision / open-obligation semantics are maintained in the
+  tooling vocabulary, but are not instantiated as standalone boxed blocks in
+  the current full-proof chapter text.
 \end{itemize}
 
 \includefull{full-boxed/problem1-solution-full}

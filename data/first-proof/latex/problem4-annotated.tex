@@ -7,19 +7,23 @@ For monic real-rooted degree-$n$ polynomials, test
 \]
 
 \subsection*{Answer}
-Partial result: proved analytically for $n \le 3$; the $n=4$ branch has
-algebraic reduction plus computational verification, with one certification
-step still pending; higher $n$ remains open.
+Partial result: proved analytically for $n \le 3$, and now proved for $n=4$
+via the Path 2 algebraic certificate (3-piece Cauchy--Schwarz with
+P-convexity of $K_{\mathrm{red}}$); higher $n$ remains open.
 
 \phantomsection\label{sn:p4}
-\statusnote{Problem 4 is proved for $n \le 3$ analytically (Cauchy--Schwarz); the $n=4$ case has algebraic reduction plus computational verification (PHCpack) but full certification of Case~3c path accounting is pending. Higher $n$ remains open.}
+\statusnote{Problem 4 is proved for $n \le 3$ analytically (Cauchy--Schwarz),
+and proved for $n=4$ via the Path 2 algebraic certificate (3-piece
+Cauchy--Schwarz + P-convexity of $K_{\mathrm{red}}$). Higher $n$ remains open.}
 
 \subsection*{Annotated proof structure}
 \begin{enumerate}[leftmargin=1.5em]
 \item Algebraic reduction at $n=4$: normalize coefficients, derive a polynomial numerator/denominator formulation for the surplus using the exact $\Phi_4\cdot\mathrm{disc}$ identity\footnote{Discriminant refresher: \url{https://planetmath.org/discriminantofapolynomial}.}.
 \item Show denominator sign on the real-rooted domain, reducing inequality to nonnegativity of a single polynomial $-N$.
 \item Boundary and symmetric-subcase analysis by exact elimination/resultant methods.
-\item Generic critical-point branch handled computationally (PHC/homotopy-style root accounting) in the current workflow.
+\item Path 2 closure for $n=4$: prove $T_2+R$ surplus nonnegative via
+P-convexity/boundary analysis of $K_{\mathrm{red}}$, which supersedes the
+case-by-case critical-point accounting branch.
 \end{enumerate}
 
 \subsection*{Selected citations}

@@ -83,6 +83,17 @@ these to complete.
 %% ============================================================
 
 \begin{joebox}
+Yeah let's do some Proofs and Refutations---you can be Critic
+\end{joebox}
+
+\begin{codexbox}[title={Codex --- Critic mode, round 1}]
+Excellent. Critic mode, round 1: I attacked P2 and P7 as the most
+vulnerable. [\ldots] Verdict: plausible direction, not a completed
+proof (P2). [\ldots] Verdict: currently not proof-grade; too many deep
+steps are asserted, not established (P7).
+\end{codexbox}
+
+\begin{joebox}
 I have engaged Codex and another Claude in a reviewer +
 response-to-reviewer cycle. Codex found some pretty significant
 problems; the other Claude is making what look like solid fixes, but
@@ -260,6 +271,17 @@ Cappell--Shaneson~(1974), Ranicki~(1998).
 It really sounds to me like the proof of Problem~6 is hanging by a
 thread
 \end{joebox}
+
+\begin{codexbox}[title={Codex --- P6 reality check}]
+Problem~6: not a full proof yet; it is now an honest conditional
+argument. The core universal vertex-selection theorem is still
+imported, not proved.
+\end{codexbox}
+
+\begin{codexbox}[title={Codex --- P7 hard stop}]
+Pulled and reviewed \texttt{3138721}. This is not yet a valid full
+proof.
+\end{codexbox}
 
 %% ============================================================
 \section*{Act VI: Student Dispatch and Agent Teaming}
@@ -472,6 +494,12 @@ This reduces the full $n = 4$ proof to a degree-6 polynomial
 inequality: $K_{T2R} \ge 0$.
 \end{claudebox}
 
+\begin{codexbox}[title={Codex --- P4 route selection}]
+That was the strongest direct technical hit for Problem~4 because it
+uses the bilinearity/induction structure of finite free convolution,
+which is exactly the algebraic backbone for a plausible proof route.
+\end{codexbox}
+
 \pivot{A second layer switch within the algebraic layer.
   Symmetry-stratified elimination proved Cases~1, 2, 3a, 3b
   (resultant chains, 0.2--30 seconds each). Case~3c (generic, 4D)
@@ -479,6 +507,11 @@ inequality: $K_{T2R} \ge 0$.
   Positivstellensatz certificates are structurally impossible---the
   SOS cone misses the feasible set. The failure is a theorem, not a
   dead end: it rules out the entire SOS technique family.}
+
+\begin{codexbox}[title={Codex --- P4 Case~3c check}]
+Case~3c PHC task is done. In-domain real critical points: 12; case
+split: 4, 2, 2, 4. Case~3c values satisfy $-N = 1678.5498\ldots > 0$.
+\end{codexbox}
 
 \subsection*{Problem 6: When Averaging Fails}
 
@@ -509,6 +542,12 @@ wiring library $\to$ leverage threshold $\to$ barrier greedy
 $\to$ BMI falsified $\to$ No-Skip Conjecture. At each stage, what
 we thought was the gap turns out to be something more specific.
 \end{joebox}
+
+\begin{codexbox}[title={Codex --- P6 handoff criteria}]
+No unsupported ``edge sparsification $\Rightarrow$ vertex-induced
+subset'' leap. Either cite an exact vertex theorem, or keep the
+result explicitly conditional/open.
+\end{codexbox}
 
 \pivot{The continuation cycles exhibit the same pattern as the
   original sprint: repeated refinement of what is actually open.
@@ -542,88 +581,3 @@ of any one approach.
   vertex-level argument'' (the leverage-ordered barrier greedy).
   For Problem~4, it redirected from SOS certification (structurally
   impossible) to resultant elimination (feasible and fast).}
-
-%% ============================================================
-\section*{Act X: The Gauntlet Connection (Future Work)}
-%% ============================================================
-
-\begin{joebox}
-Also in terms of ``what we've learned''---in the making-of I think we
-could add something about the relevance of this pattern to agent
-teaming (further work in futon3c).
-\end{joebox}
-
-\begin{processnote}[title={Process Note --- Scope}]
-Act~X is a sketch, not a completed analysis. The mapping below
-identifies correspondences between human interventions documented in
-Acts~I--IX and infrastructure components proposed in the
-\texttt{futon3c} peripheral gauntlet (M-peripheral-gauntlet). A
-proper treatment would ground each claim in specific commit evidence
-and evaluate which correspondences are structural versus superficial.
-That work remains to be done.
-\end{processnote}
-
-The sprint and its continuation are a slow-motion demonstration of
-the infrastructure that the \texttt{futon3c} peripheral gauntlet
-proposes to build. Every placental function
-that the gauntlet enumerates was performed by a human during the
-sprint. The following correspondences are provisional:
-
-\begin{description}
-\item[Sensory gating.] Joe chose which problems to look at, which
-  Codex outputs to read, which Claude sessions to trust. Gate~1
-  (umwelt) would make this an agent capability.
-
-\item[Belief correction.] ``That's replacing an overclaim with
-  weasel words.'' ``I thought \#6 and \#7 were proved so I'm glad
-  I asked!'' Gate~4 (AIF as environment) would make confidence
-  state visible to agents without human narration.
-
-\item[Policy selection.] ``Think out of the box---what kind of
-  problem is this?'' The coaching intervention is a human-supplied
-  policy switch. Gate~4 (AIF modeline) would let the agent perceive
-  its own stuckness and trigger layer enumeration autonomously.
-
-\item[Inter-agent routing.] ``I have two Codex research assistants
-  working for you.'' Joe manually coordinated three concurrent
-  processes, hitting OOM limits. Gate~0 (arena) and Gate~3
-  (co-presence) would make agent activity structurally visible.
-
-\item[Stall detection.] ``Codex is still after 53~minutes hard at
-  work\ldots\ I will give it five more minutes and then say pencils
-  down.'' Tickle---the watchdog agent proposed in the gauntlet---is
-  exactly this function automated: detect stall, page the agent,
-  escalate to human if the page fails.
-
-\item[Confidence calibration.] ``Problem~6 has not brought out the
-  best in Claude.'' The human's morning-after assessment that the
-  gap-filling missions were running without valid confidence signals.
-  Gate~5 (modeline persistence) would carry this calibration across
-  sessions.
-
-\item[Discovery surfacing.] ``It's so cool that this is the same
-  basic solution we have used to overcome continual shoring up of
-  bad design in futon3.'' Gate~7 (teaching inversion) would
-  structure this insight---the cross-domain analogy between proof
-  strategy and software design---as a discoverable pattern rather
-  than a conversational aside.
-\end{description}
-
-The continuation cycles suggest a specific design hypothesis: the
-\textbf{($\text{layer}, \text{status}$) stationarity monitor}
-proposed in Part~IV (Section~\ref{sec:learning}) may be the
-proof-domain instance of Tickle. Problem~6's failed phase (six
-dispatch-and-fail cycles over eight hours, all targeting the
-sparsification layer) has the same $(\text{layer}, \text{status})$
-signature as a stalled coding agent repeating the same approach.
-Whether this analogy is deep enough to share implementation---or
-merely suggestive---is an open question for futon3c.
-
-\pivot{The correspondences above are hypotheses, not conclusions.
-  The sprint provides \emph{candidate evidence} for the gauntlet
-  design: it shows what human-in-the-loop multi-agent operation looks
-  like when the infrastructure doesn't exist, and therefore what the
-  infrastructure might need to provide. Validating these
-  correspondences---and distinguishing structural matches from
-  superficial ones---is the work that Act~X, properly written, would
-  do.}

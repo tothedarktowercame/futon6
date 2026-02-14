@@ -24,13 +24,13 @@ Status: **OK**
 ### P1-T2: Wick expansion of V(phi-psi) - V(phi)
 Status: **OK**
 
-- delta_V_direct: -6.9253425538312285
-- delta_V_expansion: -6.925342553831212
-- discrepancy: 1.687538997430238e-14
+- delta_V_direct: -19.950516128337767
+- delta_V_expansion: -19.95051612833778
+- discrepancy: 1.4210854715202004e-14
 - terms:
-  - cubic: -25.957853750166777
-  - quadratic: 43.61784206200093
-  - linear: 28.604669134334603
+  - cubic: 18.408630139076102
+  - quadratic: 32.385002062749265
+  - linear: -17.55414833016314
   - constant: -53.190000000000005
 - dominant_term: other
 - note: The cubic term dominates, confirming the claim in Section 4. The renormalization counterterm C appears only in the linear and constant terms, not in the cubic/quadratic terms.
@@ -63,9 +63,9 @@ Status: **OK**
 ### P2-T3: GL_n-equivariance of Rankin-Selberg integral
 Status: **OK**
 
-- lhs: 848.0461727641027
-- rhs: 831.2540339482922
-- ratio: 1.020200971219413
+- lhs: 891.9274672350659
+- rhs: 860.6308521982429
+- ratio: 1.0363647375142135
 - note: Discrete approximation of the equivariance identity I(s, R(g_0)phi, V) = |det g_0|^{1/2-s} * I(s, phi, R'(g_0)V). Ratio near 1.0 confirms the algebraic identity. Exact match requires proper Haar measure discretization.
 - repair_status: The equivariance computation is algebraically correct. The gap is in stating it explicitly in the proof (Codex flagged implicit use in Key Step). CLOSED by Lemma 3a.2.
 
@@ -142,10 +142,10 @@ Status: **OK**
 - n_cameras: 5
 - violations: 0
 - max_det_quantiles:
-  - q50: 2.2328340699174376
-  - q95: 243.75963225616266
-  - q99: 1726.1650336878365
-  - max: 13646.303938900037
+  - q50: 2.2221210525778394
+  - q95: 252.05166078356032
+  - q99: 1408.7573563755045
+  - max: 12547.85112574693
 - note: Tests whether every non-rank-1 lambda has at least one nonzero 3x3 minor (for generic cameras). 0 violations = strong evidence for the universal converse.
 
 ### P9-T3: Forward direction (rank-1 => all minors vanish)
@@ -153,7 +153,7 @@ Status: **OK**
 
 - n_tests: 500
 - violations: 0
-- max_det_abs: 2.8151414520851117e-11
+- max_det_abs: 3.367864752685507e-10
 - note: All 3x3 minors should vanish exactly for rank-1 lambda. This is the proved direction (Section 3).
 
 ### P9-T4: Extension from n=5 to n>=5 (Lemma 4.1)

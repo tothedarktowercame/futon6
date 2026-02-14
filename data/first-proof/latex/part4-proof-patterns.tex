@@ -7,35 +7,53 @@ This chapter extracts the transferable strategy patterns---what
 worked, what didn't, and what an agent stuck on one problem
 could learn from the successes of another.
 
-\section{Three Sprint Outcomes}
+\section{Design Pattern: \textnormal{\textsc{Outcome Typing}} (Close, Reduce, Map)}
 
-Every open problem in a sprint has one of three honest outcomes:
+For sprint reporting, force every problem into one of three explicit
+outcome types:
 
 \begin{enumerate}
-\item \textbf{Closed.} A complete proof (possibly with minor caveats).
+\item \textbf{Close.} A complete proof (possibly with minor caveats).
   In this revision, Problem~3 is closed for the scoped existence target
   (uniqueness/irreducibility optional), Problem~5 is solved in a
   scope-limited form, and Problem~7 is treated as provisionally closed
   via the rotation route pending independent ledger re-check.
-\item \textbf{Reduced.} A conditional result with clearly stated
+\item \textbf{Reduce.} A conditional result with clearly stated
   assumptions.
-\item \textbf{Mapped.} The obstruction is characterized and adjacent
+\item \textbf{Map.} The obstruction is characterized and adjacent
   problems are identified, but no proof is offered.
 \end{enumerate}
 
 These labels describe \emph{mathematical status}. QC-validation status is
-tracked separately: Problems~1,~2,~7,~8, and~9 have node-level validation
-artifacts but still carry unresolved verifier gaps.
+tracked separately: Problems~7 and~9 currently have node-level validation
+artifacts that still carry unresolved verifier gaps.
 
-All three are legitimate outcomes. Outcome~2 is not a defect of
-outcome~1; it is a different kind of contribution.  The failure mode
-is treating outcome~2 as something to repair rather than something
-to state clearly. Problem~6 spent eight hours as outcome~2 before
-a coaching intervention moved it to a strong partial closure (complete
-for key classes, with one explicit remaining general-case gap)---the
-layer switch, not additional effort, made the difference.
+All three are legitimate contributions.  A reduction is not a failed
+closure; it is a stable intermediate product that can later convert to
+closure after a layer switch or new lemma.  Problem~6 spent eight hours
+in ``Reduce'' before a coaching intervention moved it to a strong partial
+closure (complete for key classes, with one explicit remaining
+general-case gap)---the change came from reframing, not additional effort.
 
-\section{Success Pattern: Layer-Switching (Problem 7)}
+\medskip
+\noindent\textbf{Evidence ledger for Outcome Typing (top commits).}
+\begin{center}
+\small
+\begin{tabular}{@{}p{1.3cm}p{4.8cm}p{7.0cm}@{}}
+\toprule
+Commit & Role in pattern & Primary artifacts \\
+\midrule
+\texttt{c557899} & Align closure language with evidence (separate math-status and QC-status axes) & \texttt{closure-validation-audit.md} + Part IV status text updates \\
+\texttt{2c734cb} & Scope-aware closure typing for P3 (existence-scope clarified; QC status explicit) & P3 solution/writeup + \texttt{closure-validation-audit.md} \\
+\texttt{cc11834} & ``Map'' outcome exemplar: counterexample + attack-path map instead of false closure & \texttt{problem6-gpl-h-counterexample.md} + \texttt{problem6-gpl-h-attack-paths.md} \\
+\texttt{9aaf8fa} & Promote scoped result to ``Close'' after targeted gap closure and validation update & P3 prompts/results refresh + \texttt{closure-validation-audit.md} \\
+\texttt{90b6dd6} & Reprocessed verifier summary results (15/15) to harden QC tracking independently of proof-status labels & \texttt{codex-unified-repair-results.json} + \texttt{codex-unified-repair-verification.md} \\
+\bottomrule
+\end{tabular}
+\normalsize
+\end{center}
+
+\section{Design Pattern: \textnormal{\textsc{Layer-Switching}} (Problem 7)}
 
 Problem~7 (uniform lattice with 2-torsion) is the clearest example
 of a successful strategy pivot.
@@ -68,7 +86,24 @@ characterize the obstruction structurally before attempting to
 overcome it.  The characterization may reveal that a different
 layer avoids the obstruction entirely.
 
-\section{Success Pattern: Creative Reduction (Problem 4)}
+\medskip
+\noindent\textbf{Evidence ledger for Layer-Switching (top commits).}
+\begin{center}
+\small
+\begin{tabular}{@{}p{1.3cm}p{4.8cm}p{7.0cm}@{}}
+\toprule
+Commit & Role in pattern & Primary artifacts \\
+\midrule
+\texttt{0fa4e82} & Explicitly re-labels S as open and decomposes approaches & P7 solution + S-branch setup notes \\
+\texttt{287a41c} & Rotation-route pivot and triage framing & Rotation-route wiring + P7 solution updates \\
+\texttt{620ed57} & Discharges E2 under rotation route & Rotation-lattice construction note + P7 status update \\
+\texttt{5c7388a} & Narrows to single remaining gap (G2) & Consolidated P7 complete-proof draft \\
+\bottomrule
+\end{tabular}
+\normalsize
+\end{center}
+
+\section{Design Pattern: \textnormal{\textsc{Creative Reduction}} (Problem 4)}
 
 Problem~4 (root separation under finite free convolution)
 progressed from numerical evidence to proof via a sequence
@@ -99,7 +134,24 @@ verification''); full certification of one sub-case remains pending.
 specific identities or lemmas.  The demand makes the search
 targeted rather than exploratory.
 
-\section{Success Pattern: Structural Decomposition (Problem 8)}
+\medskip
+\noindent\textbf{Evidence ledger for Creative Reduction (top commits).}
+\begin{center}
+\small
+\begin{tabular}{@{}p{1.3cm}p{4.8cm}p{7.0cm}@{}}
+\toprule
+Commit & Role in pattern & Primary artifacts \\
+\midrule
+\texttt{03c1f8d} & Discovers the key $\Phi_4 \cdot \mathrm{disc}$ identity & P4 invariant-exploration script \\
+\texttt{269fddd} & 3-piece Cauchy--Schwarz reduction breakthrough & T2/R surplus proof script + P4 proof-state log \\
+\texttt{9640d80} & Eliminates SOS route as global method (\(K\) not globally SOS) & Gram-matrix and \(K_8\)-factor analysis scripts \\
+\texttt{fef7da1} & Path-2 closure claim for \(n=4\) via \(K_{\mathrm{red}}\ge 0\) & Path-2 structure artifact + handoff note \\
+\bottomrule
+\end{tabular}
+\normalsize
+\end{center}
+
+\section{Design Pattern: \textnormal{\textsc{Structural Decomposition}} (Problem 8)}
 
 Problem~8 (Lagrangian smoothing of polyhedral surfaces) was stuck
 until the symplectic direct sum decomposition was discovered:
@@ -116,7 +168,23 @@ and the Hamiltonian isotopy property
 that simplify the problem globally, not just local fixes for individual
 obstacles.
 
-\section{From Failure to Progress: Problem 6's Layer Switch}
+\medskip
+\noindent\textbf{Evidence ledger for Structural Decomposition (top commits).}
+\begin{center}
+\small
+\begin{tabular}{@{}p{1.3cm}p{4.8cm}p{7.0cm}@{}}
+\toprule
+Commit & Role in pattern & Primary artifacts \\
+\midrule
+\texttt{09e23db} & Structural decomposition step (\(\mathbb{R}^4 = V_1 \oplus V_2\), Maslov control) & P8 solution + wiring update \\
+\texttt{a5a4fbe} & Replaces surgery framing with product smoothing & P8 solution + v3 diagram refresh \\
+\texttt{de3e2ac} & Adds Hamiltonian-isotopy justification and consistency cleanup & P8 solution + wiring consistency patch \\
+\bottomrule
+\end{tabular}
+\normalsize
+\end{center}
+
+\section{Design Pattern: \textnormal{\textsc{Layer Switch Under Coaching}} (Problem 6)}
 
 Problem~6 (epsilon-light subsets) is the sprint's most instructive
 case study because it exhibits both patterns: a TryHarder loop
@@ -272,98 +340,26 @@ and assess status per layer.  Do not repeatedly attack the same
 blocked layer.  Ask: ``What kind of problem is this?  Who would
 find it easy?  What is the undergraduate proof?''
 
-\section{Cross-Problem Learning}
+\begin{samepage}
+\medskip
+\noindent\textbf{Evidence ledger for Problem 6 Layer Switch (top commits).}
+\begin{center}
+\small
+\begin{tabular}{@{}p{1.3cm}p{4.8cm}p{7.0cm}@{}}
+\toprule
+Commit & Role in pattern & Primary artifacts \\
+\midrule
+\texttt{5289ca8} & Starts the dispatch-driven GPL-H attack loop & Initial GPL-H dispatch note \\
+\texttt{cc11834} & Counterexample + strategy split; blocks naive closure path & Counterexample note + verifier batch scripts \\
+\texttt{73aa112} & Coaching-induced layer switch to elementary proof chain & P6 solution rewrite + layer-switch design note \\
+\texttt{7e03174} & E+F hybrid reduction localizes remaining bridge & Direction E+F proof draft + MO evidence summary \\
+\bottomrule
+\end{tabular}
+\normalsize
+\end{center}
+\end{samepage}
 
-An agent working on Problem~6 that could see Problem~7's history
-would find: \emph{Problem~7 was blocked in one layer (codimension-1
-surgery), characterized the obstruction, switched to a different
-layer (codimension-2 surgery), and closed.}  This is directly
-transferable advice.
-
-More generally, the proof patterns across the ten problems suggest
-a strategy checklist for open problems:
-
-\begin{enumerate}
-\item \textbf{Enumerate layers.}  What are the distinct mathematical
-  frameworks in which this problem can be stated?
-\item \textbf{Find the reduction in each layer.}  What does the problem
-  reduce to from each perspective?
-\item \textbf{Assess status per layer.}  Which reductions are complete,
-  partial, or blocked?
-\item \textbf{Characterize obstructions.}  For blocked layers, is the
-  obstruction structural or technical?  Is there a known workaround?
-\item \textbf{Look for analogues.}  Which other problems had a similar
-  layer profile?  What strategy succeeded there?
-\item \textbf{Decide the outcome.}  Is closure feasible from any layer?
-  If not, state the conditional result and the open assumptions.
-\end{enumerate}
-
-This is case-based reasoning (CBR) applied to proof strategy.  The
-``cases'' are the other problems in the sprint (or, with a larger
-corpus, the indexed literature).  We call the key property
-\textbf{strategy-level analogy}: the transfer operates at the level of
-proof strategy, not mathematical content.  It is not that Problem~7's
-rotation trick applies to Problem~6, but that Problem~7's
-\emph{layer-switching strategy} might.  Strategy-level analogy is
-what makes the checklist above actionable---a shared mathematical
-technique would only transfer between cognate problems, but a shared
-strategy pattern transfers between any problems with similar
-obstruction profiles.
-
-CBR has a well-known failure mode: \emph{superficial indexing}.  Within
-a ten-problem sprint the case base is small enough that a human can
-browse it exhaustively.  Scaling to the indexed literature requires a
-retrieval mechanism, and the indexing question---what features of a
-proof strategy are retrievable?---is itself a research problem.  The
-checklist above implicitly proposes an index schema (layer structure,
-obstruction type, resolution pattern), but whether these features
-support effective retrieval at scale remains open.
-
-\section{Learning from Success, Not Just Failure}
-\label{sec:learning}
-
-A recurring theme: the sessions that closed problems did so by
-finding the right \emph{frame}, not by working harder within
-the wrong one.  Problem~7 switched from reflections to rotations.
-Problem~4 found an identity that restructured the algebra.
-Problem~8 found a decomposition that made everything else fall out.
-And Problem~6---after eight hours of TryHarder in the sparsification
-layer---found an elementary combinatorial proof within fifteen minutes
-of a coaching intervention that forced layer enumeration.
-
-In every case the git log for the successful phase is a record of
-\emph{reframing}, not persistence.  The git log for Problem~6's
-failed phase is a record of persistence within the wrong frame.
-
-For future sprints---human or AI---the design implications are:
-
-\begin{enumerate}
-\item \textbf{Make success histories as visible as failure histories.}
-  An agent stuck on a problem should be prompted to consult the
-  strategy traces of problems that closed, not just its own history
-  of failed attempts.  Rumination is not learning.  Analogy is.
-\item \textbf{Coach, don't dispatch.}  The intervention that broke
-  Problem~6's TryHarder loop was not ``close the gap in Section~5''
-  but ``what kind of problem is this?''  Dispatching generates another
-  cycle.  Coaching generates a layer switch.
-\item \textbf{Ask pedagogical questions.}  ``How would you teach this
-  to an undergraduate?'' forces identification of the elementary core.
-  For Problem~6, the elementary core \emph{was} the proof.
-\end{enumerate}
-
-These three principles describe a \textbf{metacognitive interrupt}---a
-mechanism that detects a TryHarder loop and triggers reframing.  In
-reinforcement-learning terms, it is the difference between exploiting
-within a fixed policy and switching policies.  The CS question is
-whether the interrupt can fire automatically.  The git log provides
-the detection signal: repeated commits within the same layer with no
-status change is exactly the TryHarder signature.  Problem~6's failed
-phase exhibits this pattern clearly---six dispatch-and-fail cycles
-over eight hours, all targeting the sparsification layer, none
-changing the layer assessment.  A monitor that tracks
-$(\text{layer}, \text{status})$ pairs across commits and flags
-stationarity after $k$ cycles would have triggered the reframing
-prompt automatically.
+\chapter{Conclusion}
 
 \section{Toward Real-Time Argumentation Structure}
 
@@ -478,6 +474,9 @@ awareness, but by the time its hard phase began, nine successful
 local closures had trained the expectation that persistence within
 one approach would suffice.  The success pattern became the trap.
 
+\columnratio{0.56}
+\begin{paracol}{2}
+
 Problem~6's later phase---after the elementary proof
 landed---spent several hours exploring trajectory coupling,
 amplification bounds, and spectral spread, all within a single
@@ -499,7 +498,8 @@ TryHarder loop to break out of---the agent maintains whole-board
 awareness throughout, and the layer switch happens as part of
 ordinary play, not as a rescue.
 
-\subsection{Sidebar: the layer switch that happened while writing this chapter}
+\switchcolumn
+\begin{processnote}[title={Sidebar: the layer switch that happened while writing this chapter}]
 
 The self-referential case study deserves an explicit account, because
 it validates the chapter's prescriptions more concretely than any
@@ -564,71 +564,144 @@ partial result (the ratio certificate, the AR identity, the
 pigeonhole mechanism) but reframes the open problem in a way that
 the previous five hours of local play did not.
 
+\medskip
+\begin{wrapfigure}{r}{0.42\linewidth}
+\vspace{-0.8\baselineskip}
+\begin{tcolorbox}[
+  title={Sub-sidebar: Postscript},
+  colback=white,
+  colframe=blue!45!black,
+  boxrule=0.4pt,
+  arc=1.5pt,
+  left=3pt,
+  right=3pt,
+  top=2pt,
+  bottom=2pt,
+  fontupper=\scriptsize,
+  fonttitle=\bfseries\sffamily\tiny,
+  width=\linewidth
+]
+Cycle~7 falsified BMI ($\bar{d}_t<1$) in general graphs.
+The construction still works; the target shifts to
+vertex-level feasibility (No-Skip).
+
+Operationally, the monitor should track \textsc{open}, \textsc{stuck},
+and \textsc{falsified}.  A \textsc{falsified} state should trigger
+layer abandonment, not just reframing.
+\end{tcolorbox}
+\vspace{-0.9\baselineskip}
+\end{wrapfigure}
+
 The layer switch happened \emph{during the writing of the chapter
-that prescribes it}.  The chapter argued that a peripheral model
-with interleaved reflect hops would prevent TryHarder loops.  The
-sprint then demonstrated exactly that: a reflect hop (dispatched ad
-hoc, but functionally identical to a scheduled peripheral
-transition) broke a multi-hour stationary phase and produced a
-changed approach within thirty minutes.  The prescriptive content
-of the chapter and the lived experience of writing it converged on
-the same point---not because the chapter caused the intervention,
-but because both are responses to the same structural pattern.
-The infrastructure this chapter proposes would make such
-interventions automatic rather than accidental.
+that prescribes it}.  A reflect hop (dispatched ad hoc, but
+functionally equivalent to a scheduled peripheral transition) broke
+a multi-hour stationary phase and changed the proof policy quickly.
+This is the chapter's claim: metacognitive
+interrupts convert persistence-in-one-layer into layer switching.
 
-The stationarity detection problem has a direct analogue in the
-meta-meta-cellular automata of futon5: when a CA rule produces
-static or periodic behavior, the spacetime diagram shows
-\emph{stripes}---identical states repeating across timesteps.
-The meta-level rule fires when stripes are detected, replacing the
-CA rule itself.  The git log of a TryHarder loop is a spacetime
-diagram with stripes: the same layer and status repeating across
-commits.  The AIF annotation proposed above is what makes the
-stripes visible---without typed edges labeling each commit's layer,
-the stationarity is present in the data but invisible to the
-monitor.  The MMCA provides the detection mechanism; the peripheral
-model provides the intervention; the AIF graph provides the
-representation that connects them.
+\medskip
+The same pattern appears in futon5 cellular automata: repeating
+stripes trigger rule changes.  TryHarder loops are analogous.  Typed
+layer/status annotation makes stationarity machine-visible, so the
+monitor can trigger policy change automatically.
+\par\WFclear
+\end{processnote}
 
-\subsection{Postscript: when the averaging argument itself is false}
+\switchcolumn
+\section{Cross-Problem Learning}
 
-The sidebar above describes an intervention that reframed
-$\bar{d}_t < 1$ from a universal bound to a two-regime argument.
-Cycle~7 (several days later) produced a stronger result: the
-Barrier Maintenance Invariant ($\bar{d}_t < 1$ at every step) is
-\emph{false} for general graphs.  Twelve base-suite configurations
-have $\bar{d} \ge 1$ (worst: 1.739).  The pigeonhole argument
-that converted $\bar{d} < 1$ to ``$\exists v$ with $\|Y_t(v)\| < 1$''
-is valid but unreachable---its hypothesis fails.
+An agent working on Problem~6 that could see Problem~7's history
+would find: \emph{Problem~7 was blocked in one layer (codimension-1
+surgery), characterized the obstruction, switched to a different
+layer (codimension-2 surgery), and closed.}  This is directly
+transferable advice.
 
-And yet the construction still works.  Zero skips in 1,111 runs.
-The leverage-ordered greedy processes feasible vertices first,
-not because the average is below~1, but because leverage ordering
-concentrates small contributions at the front of the queue.  The
-gap shifted from an averaging statement (BMI) to a vertex-level
-feasibility statement: the \textbf{No-Skip Conjecture} (at each
-step, the next leverage-ordered vertex is feasible).
+More generally, the proof patterns across the ten problems suggest
+a strategy checklist for open problems:
 
-This is a second-order layer switch.  The E+F hybrid from the
-sidebar was a layer switch within the averaging framework: split
-the average by regime.  The BMI falsification is a layer switch
-\emph{away from averaging entirely}: the proof must work at the
-vertex level, not the average level.  The sidebar's intervention
-was correct in spirit (``the stuck approach is stuck; reframe'')
-but still within the same layer.  A monitor that tracked not just
-stationarity but \emph{falsification}---detecting that a hypothesis
-is not merely unproved but disproved---would have triggered the
-larger reframing earlier.
+\begin{enumerate}
+\item \textbf{Enumerate layers.}  What are the distinct mathematical
+  frameworks in which this problem can be stated?
+\item \textbf{Find the reduction in each layer.}  What does the problem
+  reduce to from each perspective?
+\item \textbf{Assess status per layer.}  Which reductions are complete,
+  partial, or blocked?
+\item \textbf{Characterize obstructions.}  For blocked layers, is the
+  obstruction structural or technical?  Is there a known workaround?
+\item \textbf{Look for analogues.}  Which other problems had a similar
+  layer profile?  What strategy succeeded there?
+\item \textbf{Decide the outcome.}  Is closure feasible from any layer?
+  If not, state the conditional result and the open assumptions.
+\end{enumerate}
 
-The practical implication for the proposed infrastructure: the
-$(\text{layer}, \text{status})$ monitor should distinguish three
-status values: \textsc{open} (no evidence either way),
-\textsc{stuck} (repeated attempts, no progress), and
-\textsc{falsified} (counterexample found).  The response to
-\textsc{stuck} is a reflect hop (reframe within the current
-approach).  The response to \textsc{falsified} is a layer switch
-(abandon the current approach).  The Problem~6 continuation
-demonstrates both transitions: five hours of \textsc{stuck}
-before the sidebar's reflect hop, then several more cycles before
-Cycle~7's \textsc{falsified} forced the larger reframing.
+This is case-based reasoning (CBR) applied to proof strategy.  The
+``cases'' are the other problems in the sprint (or, with a larger
+corpus, the indexed literature).  We call the key property
+\textbf{strategy-level analogy}: the transfer operates at the level of
+proof strategy, not mathematical content.  It is not that Problem~7's
+rotation trick applies to Problem~6, but that Problem~7's
+\emph{layer-switching strategy} might.  Strategy-level analogy is
+what makes the checklist above actionable---a shared mathematical
+technique would only transfer between cognate problems, but a shared
+strategy pattern transfers between any problems with similar
+obstruction profiles.
+
+CBR has a well-known failure mode: \emph{superficial indexing}.  Within
+a ten-problem sprint the case base is small enough that a human can
+browse it exhaustively.  Scaling to the indexed literature requires a
+retrieval mechanism, and the indexing question---what features of a
+proof strategy are retrievable?---is itself a research problem.  The
+checklist above implicitly proposes an index schema (layer structure,
+obstruction type, resolution pattern), but whether these features
+support effective retrieval at scale remains open.
+\section{Learning from Success, Not Just Failure}
+\label{sec:learning}
+
+A recurring theme: the sessions that closed problems did so by
+finding the right \emph{frame}, not by working harder within
+the wrong one.  Problem~7 switched from reflections to rotations.
+Problem~4 found an identity that restructured the algebra.
+Problem~8 found a decomposition that made everything else fall out.
+And Problem~6---after eight hours of TryHarder in the sparsification
+layer---found an elementary combinatorial proof within fifteen minutes
+of a coaching intervention that forced layer enumeration.
+
+In every case the git log for the successful phase is a record of
+\emph{reframing}, not persistence.  The git log for Problem~6's
+failed phase is a record of persistence within the wrong frame.
+
+For future sprints---human or AI---the design implications are:
+
+\begin{enumerate}
+\item \textbf{Make success histories as visible as failure histories.}
+  An agent stuck on a problem should be prompted to consult the
+  strategy traces of problems that closed, not just its own history
+  of failed attempts.  Rumination is not learning.  Analogy is.
+\item \textbf{Coach, don't dispatch.}  The intervention that broke
+  Problem~6's TryHarder loop was not ``close the gap in Section~5''
+  but ``what kind of problem is this?''  Dispatching generates another
+  cycle.  Coaching generates a layer switch.
+\end{enumerate}
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item \textbf{Ask pedagogical questions.}  ``How would you teach this
+  to an undergraduate?'' forces identification of the elementary core.
+  For Problem~6, the elementary core \emph{was} the proof.
+\end{enumerate}
+
+\end{paracol}
+
+These three principles describe a \textbf{metacognitive interrupt}---a
+mechanism that detects a TryHarder loop and triggers reframing.  In
+reinforcement-learning terms, it is the difference between exploiting
+within a fixed policy and switching policies.  The CS question is
+whether the interrupt can fire automatically.  The git log provides
+the detection signal: repeated commits within the same layer with no
+status change is exactly the TryHarder signature.  Problem~6's failed
+phase exhibits this pattern clearly---six dispatch-and-fail cycles
+over eight hours, all targeting the sparsification layer, none
+changing the layer assessment.  A monitor that tracks
+$(\text{layer}, \text{status})$ pairs across commits and flags
+stationarity after $k$ cycles would have triggered the reframing
+prompt automatically.

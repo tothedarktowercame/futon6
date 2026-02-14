@@ -43,6 +43,14 @@ flowchart TD
     L11 --> L
     L12 --> M
 
+    %% Relation to companion plate
+    subgraph "How this relates to Fig. 21.2"
+        Z1["Fig. 21.2 is a technical zoom of Cycle 4,<br/>centered on node D (Neumann/operator-bound)."]
+        Z2["Fig. 21.1 then continues the macro storyline:<br/>C5 threshold relaxation through C9 dichotomy."]
+    end
+    D -.->|"zoomed in Fig. 21.2"| Z1
+    Z1 --> Z2
+
     %% Styling
     classDef proved fill:#c7f9cc,stroke:#2d6a4f,stroke-width:2px
     classDef pivot fill:#ffe9a8,stroke:#8f6b00,stroke-width:2px
@@ -50,6 +58,7 @@ flowchart TD
     classDef open fill:#ffc,stroke:#cc3,stroke-width:3px
     classDef closure fill:#c7f9cc,stroke:#2d6a4f,stroke-width:3px
     classDef lemma fill:#e8f0fe,stroke:#3d5a80,stroke-width:1px
+    classDef legend fill:#f5f5f5,stroke:#666,stroke-width:1px
 
     class A proved
     class B,C,D,F,G,H proved
@@ -60,3 +69,4 @@ flowchart TD
     class M open
     class N closure
     class L8,L11,L12 lemma
+    class Z1,Z2 legend
