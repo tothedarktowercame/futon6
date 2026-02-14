@@ -20,54 +20,56 @@
 This monograph records both the mathematical results and the working process
 behind a compressed, multi-agent proof cycle in \texttt{futon6}.\footnote{Source repository: \url{https://github.com/tothedarktowercame/futon6}} The project
 began as infrastructure---knowledge ingestion, tagging, and wiring-diagram
-metatheory---and then pivoted into a rapid proof sprint with iterative
+metatheory---and then pivoted into a rapid proof sprint marked by iterative
 critique and repair.
 
-The working process turned out to resemble Lakatos's \emph{Proofs and
-Refutations}~\cite{lakatos1976} more than we expected. In Lakatos's
-dialogue, a conjecture is proposed, counterexamples surface, the conjecture
-is patched, and the cycle repeats---with each iteration sharpening both the
-theorem and the participants' understanding of the domain. Our sprint
-followed the same rhythm, except that the interlocutors were a human
-dispatcher, multiple Claude instances (provers), and Codex (critic and
-research assistant). Conjectures were drafted quickly; adversarial review
-surfaced overclaims and gaps; targeted repair narrowed the open obligations.
-The wiring-diagram decomposition---which represents each proof as a typed
-graph of claims and dependencies---served as the shared epistemic artefact
-that Lakatos's blackboard served in his fictional classroom.
+The working process came to resemble Lakatos's \emph{Proofs and
+Refutations}~\cite{lakatos1976} more closely than anticipated. In Lakatos's
+dialogue, a conjecture is proposed, counterexamples emerge, the conjecture is
+revised, and the cycle repeats. Each iteration sharpens both the statement and
+the participants' understanding. Our sprint followed a similar rhythm, except
+that the interlocutors were a human dispatcher, multiple Claude instances
+(provers), and Codex (critic and research assistant). Conjectures were drafted
+rapidly; adversarial review exposed overclaims and hidden gaps; targeted repair
+narrowed the remaining obligations.
+
+The wiring-diagram decomposition---representing each proof as a typed graph of
+claims and dependencies---served as the shared epistemic artefact. Where
+Lakatos's fictional classroom had a blackboard, this project had a structured
+proof graph. That graph made disagreements local and repairable.
 
 The title alludes to the sprint format: ten open problems attempted in
-roughly 55~hours wall-clock, with the process documented alongside the results.
-The Lakatosian connection runs through Pease et
+roughly 55~hours wall-clock, with both process and outcomes documented.
+The Lakatosian connection also runs through Pease et
 al.~\cite{pease2017}, which formalised Lakatos's informal logic of
 mathematical discovery as a dialogue game over argumentation structures,
 implemented in a system capable of mixed-initiative human--AI collaboration.
-That paper asked whether computers could participate in mathematical
-reasoning the way humans do---through conjecture, critique, and reform.
-The present work is, in a sense, a large-scale empirical answer: ten
-problems attempted by AI agents under human supervision, with the
-Lakatosian cycle running at machine speed.
+That paper asked whether computers could participate in mathematical reasoning
+through conjecture, critique, and reform. The present work can be read as an
+empirical extension of that question: ten research problems attempted by AI
+agents under human supervision, with the Lakatosian cycle unfolding at machine
+speed.
 
-This connection is not accidental. Corneli et al.~\cite{corneli2017}
+In a related strand of work, Corneli et al.~\cite{corneli2017},
 developed a computational model of mathematical question-and-answer dialogues
-grounded in Lakatos's framework, using Inference Anchoring Theory + Content
-(IATC) to annotate MathOverflow threads with performative types
-(assert, challenge, reform, clarify, etc.). The IATC vocabulary reappears in
+using Inference Anchoring Theory + Content (IATC) to annotate MathOverflow
+threads with performative types
+(assert, challenge, reform, clarify, etc.). The same vocabulary reappears in
 this project's Stage~7 thread-wiring pipeline (see Part~III, Act~VI), where
 StackExchange threads are parsed into wiring diagrams whose edges carry the
-same performative labels. The earlier work on peer-produced mathematical
+same performative labels. Earlier work on peer-produced mathematical
 knowledge~\cite{corneli2013} established the empirical base: PlanetMath as a
 community-maintained proof ecosystem, studied through the lens of paragogy
 (peer-produced peer learning). The present sprint can be read as a
 machine-accelerated instance of the same phenomenon: collaborative,
 incremental proof construction with explicit argumentation structure.
 
-The working notes reveal a consistent asymmetry: generation is fast;
-trustworthy validation is slow. This is the same asymmetry Lakatos
-identified in his classroom: conjectures are cheap, but understanding
-\emph{why} a conjecture fails (or holds) is the real mathematical work.
-In practice, the strongest leverage came from structured verification---tools
-that made weaknesses visible early and locally.
+The working notes reveal a persistent asymmetry: generation is fast;
+trustworthy validation is slow. Lakatos identified the same imbalance in his
+classroom: conjectures are cheap, but understanding \emph{why} they fail (or
+hold) is the real work. In this sprint, the strongest leverage came not from
+first-pass drafting quality, but from structured verification---tools that made
+weaknesses visible early, locally, and precisely.
 
 \section*{Current Status}
 \noindent\textbf{Outcome summary (status code [M|V]).} \(\mathbf{M}\in\{\mathbf{C},\mathbf{P},\mathbf{?}\}\) with \(\mathbf{C}=\)closed, \(\mathbf{P}=\)partial, \(\mathbf{?}=\)conditional; \(V\in\{\checkmark,\sim,\mathbf{?}\}\) with \(\checkmark=\)validation-complete, \(\sim=\)partial validation, \(\mathbf{?}=\)not yet fully validated.

@@ -84,4 +84,4 @@ universally for all pi. QED
 - H. Jacquet, I. I. Piatetski-Shapiro, J. A. Shalika, "Rankin-Selberg
   convolutions," Amer. J. Math. 105 (1983), 367-464, Section 2.7.
 - W. Casselman, J. Shalika, "The unramified principal series of p-adic
-  groups II," Compositio Math. 41 (1980), 207-231.
+  groups II: the Whittaker function," Compositio Math. 41 (1980), 207--231.

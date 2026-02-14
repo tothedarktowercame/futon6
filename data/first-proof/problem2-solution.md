@@ -348,7 +348,7 @@ conductor of pi. Nondegeneracy follows from the general JPSS theory.
   représentations du groupe linéaire," Math. Ann. 256 (1981), 199-214,
   Section 5. [Support of new vectors and conductor matching]
 - W. Casselman, J. Shalika, "The unramified principal series of p-adic
-  groups II: the Whittaker function," Compositio Math. 41 (1980), 207-231.
+  groups II: the Whittaker function," Compositio Math. 41 (1980), 207--231.
   [Casselman-Shalika formula for Whittaker function support]
 
 ## Key References from futon6 corpus
