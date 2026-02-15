@@ -1,0 +1,2468 @@
+{
+  "wiring_id": "first-proof-p4",
+  "timestamp": "2026-02-15T20:23:51.642121+00:00",
+  "summary": {
+    "edges_checked": 41,
+    "categorical_consistent": 0,
+    "port_compatible": 24,
+    "iatc_aligned": 15,
+    "completeness_mean": 0.0,
+    "overall_score": 0.2378
+  },
+  "edge_reports": [
+    {
+      "edge": {
+        "source": "p4-s1",
+        "target": "p4-problem",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "2/2 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s1:eq-out-000",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s1:eq-out-001",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s2",
+        "target": "p4-s1",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "2/2 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s2:eq-out-000",
+              "target_port": "p4-s1:eq-in-000",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            },
+            {
+              "source_port": "p4-s2:eq-out-000",
+              "target_port": "p4-s1:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s3",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s3a",
+        "target": "p4-s3",
+        "iatc": "exemplify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "exemplify needs example-like discourse"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s3b",
+        "target": "p4-s3",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s4",
+        "target": "p4-s1",
+        "iatc": "retract"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "retract needs correction-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-num",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "1/1 compatible",
+          "matches": [
+            {
+              "source_port": "p4-num:eq-out-000",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-num",
+        "target": "p4-s4",
+        "iatc": "challenge"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "challenge needs interrogative/adversative source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s4",
+        "target": "p4-s3b",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s4a",
+        "target": "p4-s4",
+        "iatc": "challenge"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "challenge needs interrogative/adversative source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "2/2 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s5:eq-out-000",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s5:eq-out-001",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5a",
+        "target": "p4-s3a",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "1/1 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s5a:eq-out-000",
+              "target_port": "p4-s3a:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5b",
+        "target": "p4-s5a",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "2/2 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s5b:eq-out-000",
+              "target_port": "p4-s5a:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s5b:eq-out-001",
+              "target_port": "p4-s5a:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5c",
+        "target": "p4-s3",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5d",
+        "target": "p4-s5b",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "2/2 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s5d:eq-out-000",
+              "target_port": "p4-s5b:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s5d:eq-out-000",
+              "target_port": "p4-s5b:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5d",
+        "target": "p4-s5c",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "1/1 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s5d:eq-out-000",
+              "target_port": "p4-s5c:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s6",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "3/3 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s6:eq-out-000",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s6:eq-out-001",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s6:eq-out-002",
+              "target_port": "p4-problem:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s6",
+        "target": "p4-s5",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "4/4 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s6:eq-out-000",
+              "target_port": "p4-s5:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s6:eq-out-000",
+              "target_port": "p4-s5:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s6:eq-out-001",
+              "target_port": "p4-s5:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s6:eq-out-001",
+              "target_port": "p4-s5:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s6",
+        "target": "p4-s5d",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "4/4 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s6:eq-out-000",
+              "target_port": "p4-s5d:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s6:eq-out-001",
+              "target_port": "p4-s5d:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s6:eq-out-002",
+              "target_port": "p4-s5d:eq-in-000",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            },
+            {
+              "source_port": "p4-s6:eq-out-002",
+              "target_port": "p4-s5d:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s6",
+        "target": "p4-num",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "3/3 compatible",
+          "matches": [
+            {
+              "source_port": "p4-s6:eq-out-000",
+              "target_port": "p4-num:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s6:eq-out-001",
+              "target_port": "p4-num:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-s6:eq-out-002",
+              "target_port": "p4-num:eq-in-000",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-reform",
+        "target": "p4-s6",
+        "iatc": "reform"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "7/7 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-reform:eq-out-000",
+              "target_port": "p4-s6:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-reform:eq-out-000",
+              "target_port": "p4-s6:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-reform:eq-out-001",
+              "target_port": "p4-s6:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-reform:eq-out-000",
+              "target_port": "p4-s6:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-reform:eq-out-001",
+              "target_port": "p4-s6:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-reform:eq-out-002",
+              "target_port": "p4-s6:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-reform:eq-out-003",
+              "target_port": "p4-s6:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "reform needs rephrasing/clarifying marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-reform",
+        "target": "p4-s1",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "4/4 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-reform:eq-out-001",
+              "target_port": "p4-s1:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-reform:eq-out-000",
+              "target_port": "p4-s1:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-reform:eq-out-000",
+              "target_port": "p4-s1:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-reform:eq-out-001",
+              "target_port": "p4-s1:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-hessian",
+        "target": "p4-n4-reform",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "9/9 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-hessian:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-hessian:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-hessian:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-hessian:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-hessian:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-hessian:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-hessian:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-hessian:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-hessian:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-boundary",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "11/11 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-boundary:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-boundary:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-sos-fail",
+        "target": "p4-n4-reform",
+        "iatc": "challenge"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "challenge needs interrogative/adversative source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case1",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "8/8 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-case1:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case1:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case1:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case1:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case1:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case1:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case1:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-case1:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case2",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "12/12 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-case2:eq-out-003",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-003",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-004",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-004",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-003",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            },
+            {
+              "source_port": "p4-n4-case2:eq-out-004",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case2a",
+        "target": "p4-n4-case2",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case3a",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "4/4 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-case3a:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3a:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3a:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3a:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case3b",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "11/11 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-case3b:eq-out-003",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-003",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-case3b:eq-out-003",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case3c",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-ia-fail",
+        "target": "p4-n4-case3c",
+        "iatc": "challenge"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "challenge needs interrogative/adversative source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "12/12 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-005",
+              "target_port": "p4-n4-reform:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-005",
+              "target_port": "p4-n4-reform:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-reform:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-reform:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-boundary",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "12/12 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-boundary:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-boundary:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-boundary:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-boundary:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-boundary:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-005",
+              "target_port": "p4-n4-boundary:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-boundary:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-boundary:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-boundary:eq-in-000",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-boundary:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-boundary:eq-in-000",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-boundary:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case1",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "9/11 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case1:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case1:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-case1:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-case1:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-005",
+              "target_port": "p4-n4-case1:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case1:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case1:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case1:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-004",
+              "target_port": "p4-n4-case1:eq-in-002",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-006",
+              "target_port": "p4-n4-case1:eq-in-000",
+              "source_type": "wire/consequential",
+              "target_type": "bind/let",
+              "pass": false,
+              "detail": "incompatible: wire/consequential -> bind/let"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-006",
+              "target_port": "p4-n4-case1:eq-in-001",
+              "source_type": "wire/consequential",
+              "target_type": "bind/let",
+              "pass": false,
+              "detail": "incompatible: wire/consequential -> bind/let"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case2",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "12/12 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case2:eq-in-003",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case2:eq-in-004",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-case2:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-case2:eq-in-004",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-case2:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-case2:eq-in-004",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-005",
+              "target_port": "p4-n4-case2:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-005",
+              "target_port": "p4-n4-case2:eq-in-004",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case2:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case2:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case2:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case2:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case3a",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "4/6 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case3a:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case3a:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case3a:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case3a:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-006",
+              "target_port": "p4-n4-case3a:eq-in-000",
+              "source_type": "wire/consequential",
+              "target_type": "bind/let",
+              "pass": false,
+              "detail": "incompatible: wire/consequential -> bind/let"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-006",
+              "target_port": "p4-n4-case3a:eq-in-001",
+              "source_type": "wire/consequential",
+              "target_type": "bind/let",
+              "pass": false,
+              "detail": "incompatible: wire/consequential -> bind/let"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case3b",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": true,
+          "detail": "12/12 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case3b:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case3b:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case3b:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case3b:eq-in-003",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-case3b:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-case3b:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-005",
+              "target_port": "p4-n4-case3b:eq-in-003",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-000",
+              "target_port": "p4-n4-case3b:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case3b:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-001",
+              "target_port": "p4-n4-case3b:eq-in-002",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-002",
+              "target_port": "p4-n4-case3b:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            },
+            {
+              "source_port": "p4-n4-conclusion:eq-out-003",
+              "target_port": "p4-n4-case3b:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "co-occurs in CT discourse signature"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case3c",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-path2-proof",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "10/12 compatible",
+          "matches": [
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-006",
+              "target_port": "p4-problem:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-000",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-001",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-001",
+              "target_port": "p4-problem:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-002",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-003",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "bind/let",
+              "target_type": "bind/let",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-003",
+              "target_port": "p4-problem:eq-in-001",
+              "source_type": "bind/let",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "bind output feeds assumption/constraint"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-005",
+              "target_port": "p4-problem:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-008",
+              "target_port": "p4-problem:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-009",
+              "target_port": "p4-problem:eq-in-001",
+              "source_type": "constrain/such-that",
+              "target_type": "constrain/such-that",
+              "pass": true,
+              "detail": "exact type match"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-010",
+              "target_port": "p4-problem:eq-in-000",
+              "source_type": "wire/consequential",
+              "target_type": "bind/let",
+              "pass": false,
+              "detail": "incompatible: wire/consequential -> bind/let"
+            },
+            {
+              "source_port": "p4-n4-path2-proof:eq-out-010",
+              "target_port": "p4-problem:eq-in-001",
+              "source_type": "wire/consequential",
+              "target_type": "constrain/such-that",
+              "pass": false,
+              "detail": "incompatible: wire/consequential -> constrain/such-that"
+            }
+          ]
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-path2-proof",
+        "target": "p4-n4-case3c",
+        "iatc": "supersede"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "no strict rule for iatc=supersede"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    }
+  ],
+  "node_reports": []
+}

@@ -1,0 +1,5725 @@
+{
+  "thread_id": "first-proof-p4",
+  "nodes": [
+    {
+      "id": "p4-problem",
+      "node_type": "question",
+      "post_id": 4,
+      "body_text": "Is 1/Phi_n(p \u229e_n q) >= 1/Phi_n(p) + 1/Phi_n(q) for monic real-rooted polynomials p, q of degree n? Phi_n(p) = sum_i (sum_{j!=i} 1/(lambda_i - lambda_j))^2.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": null,
+      "discourse": [
+        {
+          "hx/id": "p4-problem:eq-constrain-001",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "_n q) >= 1/Phi_n(p) + 1/Phi_n(q) for monic real-ro",
+            "position": 14
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-problem:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "Phi_n(p) = sum_i (sum_{j!=i} 1/(lambda_i - lambda_j))^2",
+            "position": 99
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-problem:eq-in-001",
+          "type": "constrain/such-that",
+          "label": "_n q) >= 1/Phi_n(p) + 1/Phi_n(q) for monic real-ro",
+          "text": "_n q) >= 1/Phi_n(p) + 1/Phi_n(q) for monic real-ro",
+          "position": 14
+        },
+        {
+          "id": "p4-problem:eq-in-000",
+          "type": "bind/let",
+          "label": "Phi_n(p) = sum_i (sum_{j!=i} 1/(lambda_i - lambda_j))^2",
+          "text": "Phi_n(p) = sum_i (sum_{j!=i} 1/(lambda_i - lambda_j))^2",
+          "position": 99
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-problem:eq-out-001",
+          "type": "constrain/such-that",
+          "label": "_n q) >= 1/Phi_n(p) + 1/Phi_n(q) for monic real-ro",
+          "text": "_n q) >= 1/Phi_n(p) + 1/Phi_n(q) for monic real-ro",
+          "position": 14
+        },
+        {
+          "id": "p4-problem:eq-out-000",
+          "type": "bind/let",
+          "label": "Phi_n(p) = sum_i (sum_{j!=i} 1/(lambda_i - lambda_j))^2",
+          "text": "Phi_n(p) = sum_i (sum_{j!=i} 1/(lambda_i - lambda_j))^2",
+          "position": 99
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "degree",
+          "term_lower": "degree",
+          "canon": "OrderAndDegreeOfPolynomial"
+        },
+        {
+          "term": "monic",
+          "term_lower": "monic",
+          "canon": "Monic1"
+        }
+      ],
+      "text_length": 155
+    },
+    {
+      "id": "p4-s1",
+      "node_type": "answer",
+      "post_id": 401,
+      "body_text": "Phi_n via algebraic identity: p'(lambda_i) = prod_{j!=i}(lambda_i - lambda_j) (exact, no limiting). Phi_n = sum of squared Coulomb forces, rational functions of root differences.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s1:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 28
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s1:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "lambda_i) = prod_{j!=i}(lambda_i - lambda_j) (exact, no limiting)",
+            "position": 33
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-s1:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "Phi_n = sum of squared Coulomb forces, rational functions of root differences",
+            "position": 100
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s1:eq-in-000",
+          "type": "bind/let",
+          "label": "lambda_i) = prod_{j!=i}(lambda_i - lambda_j) (exact, no limiting)",
+          "text": "lambda_i) = prod_{j!=i}(lambda_i - lambda_j) (exact, no limiting)",
+          "position": 33
+        },
+        {
+          "id": "p4-s1:eq-in-001",
+          "type": "bind/let",
+          "label": "Phi_n = sum of squared Coulomb forces, rational functions of root differences",
+          "text": "Phi_n = sum of squared Coulomb forces, rational functions of root differences",
+          "position": 100
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s1:eq-out-000",
+          "type": "bind/let",
+          "label": "lambda_i) = prod_{j!=i}(lambda_i - lambda_j) (exact, no limiting)",
+          "text": "lambda_i) = prod_{j!=i}(lambda_i - lambda_j) (exact, no limiting)",
+          "position": 33
+        },
+        {
+          "id": "p4-s1:eq-out-001",
+          "type": "bind/let",
+          "label": "Phi_n = sum of squared Coulomb forces, rational functions of root differences",
+          "text": "Phi_n = sum of squared Coulomb forces, rational functions of root differences",
+          "position": 100
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "algebraic",
+          "term_lower": "algebraic",
+          "canon": "Algebraic1"
+        },
+        {
+          "term": "forces",
+          "term_lower": "forces",
+          "canon": "ForcingRelation"
+        },
+        {
+          "term": "identity",
+          "term_lower": "identity",
+          "canon": "Equality"
+        },
+        {
+          "term": "rational",
+          "term_lower": "rational",
+          "canon": "RationalNumber"
+        },
+        {
+          "term": "rational function",
+          "term_lower": "rational function",
+          "canon": "RationalFunction"
+        },
+        {
+          "term": "root",
+          "term_lower": "root",
+          "canon": "Root"
+        },
+        {
+          "term": "sum",
+          "term_lower": "sum",
+          "canon": "Summation"
+        }
+      ],
+      "text_length": 178
+    },
+    {
+      "id": "p4-s2",
+      "node_type": "answer",
+      "post_id": 402,
+      "body_text": "Discriminant connection: by Cauchy-Schwarz, Phi_n >= n(n-1)^2 / sum_{i<j}(lambda_i - lambda_j)^2. So 1/Phi_n measures root spread.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s2:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 23
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s2:eq-constrain-000",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "Phi_n >= n(n-1)^2 / sum_{i<j}(lambda_i - lambda_j)",
+            "position": 44
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s2:eq-in-000",
+          "type": "constrain/such-that",
+          "label": "Phi_n >= n(n-1)^2 / sum_{i<j}(lambda_i - lambda_j)",
+          "text": "Phi_n >= n(n-1)^2 / sum_{i<j}(lambda_i - lambda_j)",
+          "position": 44
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s2:eq-out-000",
+          "type": "constrain/such-that",
+          "label": "Phi_n >= n(n-1)^2 / sum_{i<j}(lambda_i - lambda_j)",
+          "text": "Phi_n >= n(n-1)^2 / sum_{i<j}(lambda_i - lambda_j)",
+          "position": 44
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "connection",
+          "term_lower": "connection",
+          "canon": "DoubleGroupoidWithConnection"
+        },
+        {
+          "term": "discriminant",
+          "term_lower": "discriminant",
+          "canon": "Discriminant"
+        },
+        {
+          "term": "root",
+          "term_lower": "root",
+          "canon": "Root"
+        }
+      ],
+      "text_length": 130
+    },
+    {
+      "id": "p4-s3",
+      "node_type": "answer",
+      "post_id": 403,
+      "body_text": "Finite free convolution \u229e_n (Marcus-Spielman-Srivastava 2015): preserves real-rootedness, equals E[char poly of A + UBU*], linearizes finite free cumulants.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s3:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 61
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        }
+      ],
+      "input_ports": [],
+      "output_ports": [],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "convolution",
+          "term_lower": "convolution",
+          "canon": "Convolution"
+        },
+        {
+          "term": "finite",
+          "term_lower": "finite",
+          "canon": "ExtendedRealNumbers"
+        }
+      ],
+      "text_length": 156
+    },
+    {
+      "id": "p4-s3a",
+      "node_type": "comment",
+      "post_id": 4031,
+      "body_text": "Random matrix model: p \u229e_n q = E_U[char(A + UBU*)] where char(A) = p, char(B) = q, U uniform over unitaries.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 403,
+      "discourse": [
+        {
+          "hx/id": "p4-s3a:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 19
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s3a:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "q = E_U[char(A + UBU*)] where char(A) = p, char(B) = q, U uniform over unitaries",
+            "position": 27
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s3a:eq-in-000",
+          "type": "bind/let",
+          "label": "q = E_U[char(A + UBU*)] where char(A) = p, char(B) = q, U uniform over unitaries",
+          "text": "q = E_U[char(A + UBU*)] where char(A) = p, char(B) = q, U uniform over unitaries",
+          "position": 27
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s3a:eq-out-000",
+          "type": "bind/let",
+          "label": "q = E_U[char(A + UBU*)] where char(A) = p, char(B) = q, U uniform over unitaries",
+          "text": "q = E_U[char(A + UBU*)] where char(A) = p, char(B) = q, U uniform over unitaries",
+          "position": 27
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "matrix",
+          "term_lower": "matrix",
+          "canon": "Matrix"
+        },
+        {
+          "term": "matrix model",
+          "term_lower": "matrix model",
+          "canon": "36"
+        },
+        {
+          "term": "model",
+          "term_lower": "model",
+          "canon": "Model"
+        },
+        {
+          "term": "random matrix",
+          "term_lower": "random matrix",
+          "canon": "RandomVector"
+        }
+      ],
+      "text_length": 108
+    },
+    {
+      "id": "p4-s3b",
+      "node_type": "comment",
+      "post_id": 4032,
+      "body_text": "Cumulant additivity: kappa_k(p \u229e_n q) = kappa_k(p) + kappa_k(q). Finite free cumulants defined via non-crossing partitions.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 403,
+      "discourse": [
+        {
+          "hx/id": "p4-s3b:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 19
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s3b:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "q) = kappa_k(p) + kappa_k(q)",
+            "position": 35
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s3b:eq-in-000",
+          "type": "bind/let",
+          "label": "q) = kappa_k(p) + kappa_k(q)",
+          "text": "q) = kappa_k(p) + kappa_k(q)",
+          "position": 35
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s3b:eq-out-000",
+          "type": "bind/let",
+          "label": "q) = kappa_k(p) + kappa_k(q)",
+          "text": "q) = kappa_k(p) + kappa_k(q)",
+          "position": 35
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "additivity",
+          "term_lower": "additivity",
+          "canon": "Additive"
+        },
+        {
+          "term": "finite",
+          "term_lower": "finite",
+          "canon": "ExtendedRealNumbers"
+        }
+      ],
+      "text_length": 123
+    },
+    {
+      "id": "p4-s4",
+      "node_type": "answer",
+      "post_id": 404,
+      "body_text": "[ERROR] Original claim: 1/Phi_n is concave in cumulants. Numerical tests show 1/Phi_n is NEITHER convex NOR concave in coefficient space. The concavity claim is unproven.",
+      "score": -1,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s4:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/adversative",
+          "hx/content": {
+            "match": "[ERROR]",
+            "position": 0
+          },
+          "hx/labels": [
+            "wire",
+            "adversative"
+          ]
+        },
+        {
+          "hx/id": "p4-s4:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 22
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        }
+      ],
+      "input_ports": [],
+      "output_ports": [],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "coefficient",
+          "term_lower": "coefficient",
+          "canon": "Polynomial"
+        },
+        {
+          "term": "concave",
+          "term_lower": "concave",
+          "canon": "ConvexFunction"
+        },
+        {
+          "term": "convex",
+          "term_lower": "convex",
+          "canon": "ConvexSet"
+        },
+        {
+          "term": "NOR",
+          "term_lower": "nor",
+          "canon": "ShefferStroke"
+        },
+        {
+          "term": "space",
+          "term_lower": "space",
+          "canon": "283"
+        }
+      ],
+      "text_length": 170
+    },
+    {
+      "id": "p4-s4a",
+      "node_type": "comment",
+      "post_id": 4041,
+      "body_text": "[ERROR] Direction wrong: concavity + f(0)=0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity. For superadditivity need CONVEXITY + f(0)=0.",
+      "score": -1,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 404,
+      "discourse": [
+        {
+          "hx/id": "p4-s4a:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/adversative",
+          "hx/content": {
+            "match": "[ERROR]",
+            "position": 0
+          },
+          "hx/labels": [
+            "wire",
+            "adversative"
+          ]
+        },
+        {
+          "hx/id": "p4-s4a:proof-wire-002",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 23
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s4a:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "f(0)=0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+            "position": 37
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-s4a:eq-constrain-001",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+            "position": 42
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-s4a:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "gives",
+            "position": 44
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s4a:eq-in-000",
+          "type": "bind/let",
+          "label": "f(0) = 0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+          "text": "f(0)=0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+          "position": 37
+        },
+        {
+          "id": "p4-s4a:eq-in-001",
+          "type": "constrain/such-that",
+          "label": "0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+          "text": "0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+          "position": 42
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s4a:eq-out-000",
+          "type": "bind/let",
+          "label": "f(0) = 0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+          "text": "f(0)=0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+          "position": 37
+        },
+        {
+          "id": "p4-s4a:eq-out-001",
+          "type": "constrain/such-that",
+          "label": "0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+          "text": "0 gives SUBadditivity f(a+b) <= f(a)+f(b), not superadditivity",
+          "position": 42
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "subadditivity",
+          "term_lower": "subadditivity",
+          "canon": "Subadditivity"
+        },
+        {
+          "term": "superadditivity",
+          "term_lower": "superadditivity",
+          "canon": "Superadditivity"
+        }
+      ],
+      "text_length": 150
+    },
+    {
+      "id": "p4-num",
+      "node_type": "answer",
+      "post_id": 407,
+      "body_text": "Numerical verification: 0/8000 violations for n=2,3,4,5. Inequality IS true. Superadditivity specific to \u229e_n (fails ~40% under plain coeff addition). Analytic proof remains open.",
+      "score": 2,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-num:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "verification",
+            "position": 10
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        },
+        {
+          "hx/id": "p4-num:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 22
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-num:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "n=2,3,4,5",
+            "position": 46
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-num:eq-in-000",
+          "type": "bind/let",
+          "label": "n = 2,3,4,5",
+          "text": "n=2,3,4,5",
+          "position": 46
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-num:eq-out-000",
+          "type": "bind/let",
+          "label": "n = 2,3,4,5",
+          "text": "n=2,3,4,5",
+          "position": 46
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "addition",
+          "term_lower": "addition",
+          "canon": "Addition"
+        },
+        {
+          "term": "analytic",
+          "term_lower": "analytic",
+          "canon": "Analytic"
+        },
+        {
+          "term": "inequality",
+          "term_lower": "inequality",
+          "canon": "InequalitiesForRealNumbers"
+        },
+        {
+          "term": "open",
+          "term_lower": "open",
+          "canon": "TopologicalSpace"
+        },
+        {
+          "term": "superadditivity",
+          "term_lower": "superadditivity",
+          "canon": "Superadditivity"
+        }
+      ],
+      "text_length": 178
+    },
+    {
+      "id": "p4-s5",
+      "node_type": "answer",
+      "post_id": 405,
+      "body_text": "Degree-2 proof: 1/Phi_2 = (a_1^2 - 4a_2)/2 is linear in coefficients. \u229e_2 preserves this combination exactly. Surplus = 0 (symbolic verification).",
+      "score": 1,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s5:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 14
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s5:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "1/Phi_2 = (a_1^2 - 4a_2)/2 is linear in coefficients",
+            "position": 16
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-s5:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "Surplus = 0 (symbolic verification)",
+            "position": 110
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-s5:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "verification",
+            "position": 132
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s5:eq-in-000",
+          "type": "bind/let",
+          "label": "1/Phi_2 = (a_1^2 - 4a_2)/2 is linear in coefficients",
+          "text": "1/Phi_2 = (a_1^2 - 4a_2)/2 is linear in coefficients",
+          "position": 16
+        },
+        {
+          "id": "p4-s5:eq-in-001",
+          "type": "bind/let",
+          "label": "Surplus = 0 (symbolic verification)",
+          "text": "Surplus = 0 (symbolic verification)",
+          "position": 110
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s5:eq-out-000",
+          "type": "bind/let",
+          "label": "1/Phi_2 = (a_1^2 - 4a_2)/2 is linear in coefficients",
+          "text": "1/Phi_2 = (a_1^2 - 4a_2)/2 is linear in coefficients",
+          "position": 16
+        },
+        {
+          "id": "p4-s5:eq-out-001",
+          "type": "bind/let",
+          "label": "Surplus = 0 (symbolic verification)",
+          "text": "Surplus = 0 (symbolic verification)",
+          "position": 110
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "combination",
+          "term_lower": "combination",
+          "canon": "CombinatoryLogic"
+        }
+      ],
+      "text_length": 146
+    },
+    {
+      "id": "p4-s5a",
+      "node_type": "answer",
+      "post_id": 408,
+      "body_text": "Centering reduction: Phi_n is translation-invariant (depends only on root differences). \u229e_n commutes with translation (via A+\u03b1I in random matrix model). WLOG a_1=b_1=0.",
+      "score": 1,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s5a:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 19
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s5a:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "WLOG",
+            "position": 153
+          },
+          "hx/labels": [
+            "wire",
+            "such-that"
+          ]
+        },
+        {
+          "hx/id": "p4-s5a:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "a_1=b_1=0",
+            "position": 158
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s5a:eq-in-000",
+          "type": "bind/let",
+          "label": "a_1 = b_1=0",
+          "text": "a_1=b_1=0",
+          "position": 158
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s5a:eq-out-000",
+          "type": "bind/let",
+          "label": "a_1 = b_1=0",
+          "text": "a_1=b_1=0",
+          "position": 158
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "matrix",
+          "term_lower": "matrix",
+          "canon": "Matrix"
+        },
+        {
+          "term": "matrix model",
+          "term_lower": "matrix model",
+          "canon": "36"
+        },
+        {
+          "term": "model",
+          "term_lower": "model",
+          "canon": "Model"
+        },
+        {
+          "term": "random matrix",
+          "term_lower": "random matrix",
+          "canon": "RandomVector"
+        },
+        {
+          "term": "reduction",
+          "term_lower": "reduction",
+          "canon": "ReducedWord"
+        },
+        {
+          "term": "root",
+          "term_lower": "root",
+          "canon": "Root"
+        },
+        {
+          "term": "translation",
+          "term_lower": "translation",
+          "canon": "AffineTransformation"
+        },
+        {
+          "term": "WLOG",
+          "term_lower": "wlog",
+          "canon": "WLOG"
+        }
+      ],
+      "text_length": 168
+    },
+    {
+      "id": "p4-s5b",
+      "node_type": "answer",
+      "post_id": 409,
+      "body_text": "Key identity: for centered cubics, Phi_3 * disc(p) = 18 * a_2^2. Therefore 1/Phi_3 = disc/(18*a_2^2) = -2a_2/9 - 3a_3^2/(2a_2^2). Verified symbolically in SymPy.",
+      "score": 2,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s5b:proof-wire-002",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 12
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s5b:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "disc(p) = 18 * a_2^2",
+            "position": 43
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-s5b:wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/parent": null,
+          "hx/content": {
+            "match": "Therefore",
+            "position": 65
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        },
+        {
+          "hx/id": "p4-s5b:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "Therefore",
+            "position": 65
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        },
+        {
+          "hx/id": "p4-s5b:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "1/Phi_3 = disc/(18*a_2^2) = -2a_2/9 - 3a_3^2/(2a_2^2)",
+            "position": 75
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-s5b:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "Verified",
+            "position": 130
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s5b:eq-in-000",
+          "type": "bind/let",
+          "label": "disc(p) = 18 * a_2^2",
+          "text": "disc(p) = 18 * a_2^2",
+          "position": 43
+        },
+        {
+          "id": "p4-s5b:eq-in-001",
+          "type": "bind/let",
+          "label": "1/Phi_3 = disc/(18*a_2^2) = -2a_2/9 - 3a_3^2/(2a_2^2)",
+          "text": "1/Phi_3 = disc/(18*a_2^2) = -2a_2/9 - 3a_3^2/(2a_2^2)",
+          "position": 75
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s5b:eq-out-000",
+          "type": "bind/let",
+          "label": "disc(p) = 18 * a_2^2",
+          "text": "disc(p) = 18 * a_2^2",
+          "position": 43
+        },
+        {
+          "id": "p4-s5b:eq-out-001",
+          "type": "bind/let",
+          "label": "1/Phi_3 = disc/(18*a_2^2) = -2a_2/9 - 3a_3^2/(2a_2^2)",
+          "text": "1/Phi_3 = disc/(18*a_2^2) = -2a_2/9 - 3a_3^2/(2a_2^2)",
+          "position": 75
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "identity",
+          "term_lower": "identity",
+          "canon": "Equality"
+        },
+        {
+          "term": "key",
+          "term_lower": "key",
+          "canon": "Cryptography"
+        }
+      ],
+      "text_length": 161
+    },
+    {
+      "id": "p4-s5c",
+      "node_type": "answer",
+      "post_id": 410,
+      "body_text": "\u229e_3 simplification: for centered cubics (a_1=b_1=0), all cross-terms vanish: c_2=a_2+b_2, c_3=a_3+b_3. \u229e_3 reduces to plain coefficient addition.",
+      "score": 1,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s5c:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 18
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s5c:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "a_1=b_1=0), all cross-terms vanish: c_2=a_2+b_2, c_3=a_3+b_3",
+            "position": 41
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s5c:eq-in-000",
+          "type": "bind/let",
+          "label": "a_1 = b_1=0), all cross-terms vanish: c_2=a_2+b_2, c_3=a_3+b_3",
+          "text": "a_1=b_1=0), all cross-terms vanish: c_2=a_2+b_2, c_3=a_3+b_3",
+          "position": 41
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s5c:eq-out-000",
+          "type": "bind/let",
+          "label": "a_1 = b_1=0), all cross-terms vanish: c_2=a_2+b_2, c_3=a_3+b_3",
+          "text": "a_1=b_1=0), all cross-terms vanish: c_2=a_2+b_2, c_3=a_3+b_3",
+          "position": 41
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "addition",
+          "term_lower": "addition",
+          "canon": "Addition"
+        },
+        {
+          "term": "coefficient",
+          "term_lower": "coefficient",
+          "canon": "Polynomial"
+        },
+        {
+          "term": "vanish",
+          "term_lower": "vanish",
+          "canon": "ZeroOfAFunction"
+        }
+      ],
+      "text_length": 145
+    },
+    {
+      "id": "p4-s5d",
+      "node_type": "answer",
+      "post_id": 411,
+      "body_text": "n=3 superadditivity via Cauchy-Schwarz: surplus = (3/2)[u^2/s^2 + v^2/t^2 - (u+v)^2/(s+t)^2] >= 0 by Titu's lemma + (s+t)^2 >= s^2+t^2. QED for n=3.",
+      "score": 2,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s5d:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "n=3 superadditivity via Cauchy-Schwarz: surplus = (3/2)[u^2/s^2 + v^2/t^2 - (u+v)^2/(s+t)^2] >= 0 by Titu's lemma + (s+t",
+            "position": 0
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-s5d:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 38
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s5d:eq-constrain-001",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "s lemma + (s+t)^2 >= s^2+t^2",
+            "position": 106
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-s5d:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "QED",
+            "position": 136
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s5d:eq-in-000",
+          "type": "bind/let",
+          "label": "n = 3 superadditivity via Cauchy-Schwarz: surplus = (3/2)[u^2/s^2 + v^2/t^2 - (u+v)^2/(s+t)^2] >= 0 by Titu's lemma + (s+t)^",
+          "text": "n=3 superadditivity via Cauchy-Schwarz: surplus = (3/2)[u^2/s^2 + v^2/t^2 - (u+v)^2/(s+t)^2] >= 0 by Titu's lemma + (s+t",
+          "position": 0
+        },
+        {
+          "id": "p4-s5d:eq-in-001",
+          "type": "constrain/such-that",
+          "label": "s lemma + (s+t)^2 >= s^2+t^2",
+          "text": "s lemma + (s+t)^2 >= s^2+t^2",
+          "position": 106
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s5d:eq-out-000",
+          "type": "bind/let",
+          "label": "n = 3 superadditivity via Cauchy-Schwarz: surplus = (3/2)[u^2/s^2 + v^2/t^2 - (u+v)^2/(s+t)^2] >= 0 by Titu's lemma + (s+t)^",
+          "text": "n=3 superadditivity via Cauchy-Schwarz: surplus = (3/2)[u^2/s^2 + v^2/t^2 - (u+v)^2/(s+t)^2] >= 0 by Titu's lemma + (s+t",
+          "position": 0
+        },
+        {
+          "id": "p4-s5d:eq-out-001",
+          "type": "constrain/such-that",
+          "label": "s lemma + (s+t)^2 >= s^2+t^2",
+          "text": "s lemma + (s+t)^2 >= s^2+t^2",
+          "position": 106
+        },
+        {
+          "id": "p4-s5d:eq-out-002",
+          "type": "wire/consequential",
+          "label": "+t)^2] >= 0 by Titu's lemma + (s+t)^2 >= s^2+t^2. QED for n=3.",
+          "text": "QED",
+          "position": 136
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "lemma",
+          "term_lower": "lemma",
+          "canon": "Lemma"
+        },
+        {
+          "term": "QED",
+          "term_lower": "qed",
+          "canon": "QED"
+        },
+        {
+          "term": "superadditivity",
+          "term_lower": "superadditivity",
+          "canon": "Superadditivity"
+        }
+      ],
+      "text_length": 148
+    },
+    {
+      "id": "p4-s6",
+      "node_type": "answer",
+      "post_id": 406,
+      "body_text": "Conclusion: PROVED for n=2 (equality), n=3 (strict, Titu's lemma), and n=4 (strict, P-convexity of K_red via 3-piece Cauchy-Schwarz). Numerically verified for n=5 (0/2000 violations). n>=5 analytic proof open.",
+      "score": 1,
+      "creation_date": "2026-02-11",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-s6:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 10
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-s6:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "n=2 (equality), n=3 (strict, Titu's lemma), and n=4 (strict, P-convexity of K_red via 3-piece Cauchy-Schwarz)",
+            "position": 23
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-s6:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "verified",
+            "position": 146
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        },
+        {
+          "hx/id": "p4-s6:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "n=5 (0/2000 violations)",
+            "position": 159
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-s6:eq-constrain-002",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "n>=5 analytic proof open",
+            "position": 184
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-s6:eq-in-000",
+          "type": "bind/let",
+          "label": "n = 2 (equality), n=3 (strict, Titu's lemma), and n=4 (strict, P-convexity of K_red via 3-piece Cauchy-Schwarz)",
+          "text": "n=2 (equality), n=3 (strict, Titu's lemma), and n=4 (strict, P-convexity of K_red via 3-piece Cauchy-Schwarz)",
+          "position": 23
+        },
+        {
+          "id": "p4-s6:eq-in-001",
+          "type": "bind/let",
+          "label": "n = 5 (0/2000 violations)",
+          "text": "n=5 (0/2000 violations)",
+          "position": 159
+        },
+        {
+          "id": "p4-s6:eq-in-002",
+          "type": "constrain/such-that",
+          "label": "n >= 5 analytic proof open",
+          "text": "n>=5 analytic proof open",
+          "position": 184
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-s6:eq-out-000",
+          "type": "bind/let",
+          "label": "n = 2 (equality), n=3 (strict, Titu's lemma), and n=4 (strict, P-convexity of K_red via 3-piece Cauchy-Schwarz)",
+          "text": "n=2 (equality), n=3 (strict, Titu's lemma), and n=4 (strict, P-convexity of K_red via 3-piece Cauchy-Schwarz)",
+          "position": 23
+        },
+        {
+          "id": "p4-s6:eq-out-001",
+          "type": "bind/let",
+          "label": "n = 5 (0/2000 violations)",
+          "text": "n=5 (0/2000 violations)",
+          "position": 159
+        },
+        {
+          "id": "p4-s6:eq-out-002",
+          "type": "constrain/such-that",
+          "label": "n >= 5 analytic proof open",
+          "text": "n>=5 analytic proof open",
+          "position": 184
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "analytic",
+          "term_lower": "analytic",
+          "canon": "Analytic"
+        },
+        {
+          "term": "conclusion",
+          "term_lower": "conclusion",
+          "canon": "Sequent"
+        },
+        {
+          "term": "equality",
+          "term_lower": "equality",
+          "canon": "Equality"
+        },
+        {
+          "term": "lemma",
+          "term_lower": "lemma",
+          "canon": "Lemma"
+        },
+        {
+          "term": "open",
+          "term_lower": "open",
+          "canon": "TopologicalSpace"
+        },
+        {
+          "term": "strict",
+          "term_lower": "strict",
+          "canon": "Strict"
+        }
+      ],
+      "text_length": 209
+    },
+    {
+      "id": "p4-n4-reform",
+      "node_type": "answer",
+      "post_id": 412,
+      "body_text": "n=4 reformulation: Phi_4 * disc(p) = -4 * f1_p * f2_p (key identity, SymPy-verified). Surplus S = N/D where D = product of f1,f2 factors < 0 on domain. Need -N >= 0 on semi-algebraic set {disc>=0, f1>0, f2<0}. -N has 233 terms, degree 10 in (a3,a4,b3,b4).",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-reform:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "n=4 reformulation: Phi_4 * disc(p) = -4 * f1_p * f2_p (key identity, SymPy-verified)",
+            "position": 0
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-reform:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 17
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-reform:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "verified",
+            "position": 75
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-reform:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "S = N/D where D = product of f1,f2 factors < 0 on domain",
+            "position": 94
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-reform:eq-constrain-002",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "Need -N >= 0",
+            "position": 152
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-reform:eq-constrain-003",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "disc>=0",
+            "position": 188
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-n4-reform:eq-in-000",
+          "type": "bind/let",
+          "label": "n = 4 reformulation: Phi_4 * disc(p) = -4 * f1_p * f2_p (key identity, SymPy-verified)",
+          "text": "n=4 reformulation: Phi_4 * disc(p) = -4 * f1_p * f2_p (key identity, SymPy-verified)",
+          "position": 0
+        },
+        {
+          "id": "p4-n4-reform:eq-in-001",
+          "type": "bind/let",
+          "label": "S = N/D where D = product of f1,f2 factors < 0 on domain",
+          "text": "S = N/D where D = product of f1,f2 factors < 0 on domain",
+          "position": 94
+        },
+        {
+          "id": "p4-n4-reform:eq-in-002",
+          "type": "constrain/such-that",
+          "label": "Need -N >= 0",
+          "text": "Need -N >= 0",
+          "position": 152
+        },
+        {
+          "id": "p4-n4-reform:eq-in-003",
+          "type": "constrain/such-that",
+          "label": "disc >= 0",
+          "text": "disc>=0",
+          "position": 188
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-n4-reform:eq-out-000",
+          "type": "bind/let",
+          "label": "n = 4 reformulation: Phi_4 * disc(p) = -4 * f1_p * f2_p (key identity, SymPy-verified)",
+          "text": "n=4 reformulation: Phi_4 * disc(p) = -4 * f1_p * f2_p (key identity, SymPy-verified)",
+          "position": 0
+        },
+        {
+          "id": "p4-n4-reform:eq-out-001",
+          "type": "bind/let",
+          "label": "S = N/D where D = product of f1,f2 factors < 0 on domain",
+          "text": "S = N/D where D = product of f1,f2 factors < 0 on domain",
+          "position": 94
+        },
+        {
+          "id": "p4-n4-reform:eq-out-002",
+          "type": "constrain/such-that",
+          "label": "Need -N >= 0",
+          "text": "Need -N >= 0",
+          "position": 152
+        },
+        {
+          "id": "p4-n4-reform:eq-out-003",
+          "type": "constrain/such-that",
+          "label": "disc >= 0",
+          "text": "disc>=0",
+          "position": 188
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "degree",
+          "term_lower": "degree",
+          "canon": "OrderAndDegreeOfPolynomial"
+        },
+        {
+          "term": "domain",
+          "term_lower": "domain",
+          "canon": "Domain"
+        },
+        {
+          "term": "identity",
+          "term_lower": "identity",
+          "canon": "Equality"
+        },
+        {
+          "term": "key",
+          "term_lower": "key",
+          "canon": "Cryptography"
+        },
+        {
+          "term": "product",
+          "term_lower": "product",
+          "canon": "ProductTopology"
+        }
+      ],
+      "text_length": 255
+    },
+    {
+      "id": "p4-n4-hessian",
+      "node_type": "comment",
+      "post_id": 4121,
+      "body_text": "Equality point x0=(0,1/12,0,1/12): Hessian eigenvalues 3/4, 21/8, 6, 8 \u2014 all positive. Strict local minimum. Taylor radius for -N >= 0: r = 0.004458.",
+      "score": 1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 412,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-hessian:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "x0=(0,1/12,0,1/12): Hessian eigenvalues 3/4, 21/8, 6, 8 \u2014 all positive",
+            "position": 15
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-hessian:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 33
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-hessian:eq-constrain-002",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "Taylor radius for -N >= 0",
+            "position": 109
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-hessian:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "r = 0",
+            "position": 136
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-n4-hessian:eq-in-000",
+          "type": "bind/let",
+          "label": "x0 = (0,1/12,0,1/12): Hessian eigenvalues 3/4, 21/8, 6, 8 \u2014 all positive",
+          "text": "x0=(0,1/12,0,1/12): Hessian eigenvalues 3/4, 21/8, 6, 8 \u2014 all positive",
+          "position": 15
+        },
+        {
+          "id": "p4-n4-hessian:eq-in-002",
+          "type": "constrain/such-that",
+          "label": "Taylor radius for -N >= 0",
+          "text": "Taylor radius for -N >= 0",
+          "position": 109
+        },
+        {
+          "id": "p4-n4-hessian:eq-in-001",
+          "type": "bind/let",
+          "label": "r = 0",
+          "text": "r = 0",
+          "position": 136
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-n4-hessian:eq-out-000",
+          "type": "bind/let",
+          "label": "x0 = (0,1/12,0,1/12): Hessian eigenvalues 3/4, 21/8, 6, 8 \u2014 all positive",
+          "text": "x0=(0,1/12,0,1/12): Hessian eigenvalues 3/4, 21/8, 6, 8 \u2014 all positive",
+          "position": 15
+        },
+        {
+          "id": "p4-n4-hessian:eq-out-002",
+          "type": "constrain/such-that",
+          "label": "Taylor radius for -N >= 0",
+          "text": "Taylor radius for -N >= 0",
+          "position": 109
+        },
+        {
+          "id": "p4-n4-hessian:eq-out-001",
+          "type": "bind/let",
+          "label": "r = 0",
+          "text": "r = 0",
+          "position": 136
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "eigenvalues",
+          "term_lower": "eigenvalues",
+          "canon": "CharacteristicValuesAndVectorsofAMatrix"
+        },
+        {
+          "term": "equality",
+          "term_lower": "equality",
+          "canon": "Equality"
+        },
+        {
+          "term": "Hessian",
+          "term_lower": "hessian",
+          "canon": "HessianMatrix"
+        },
+        {
+          "term": "local minimum",
+          "term_lower": "local minimum",
+          "canon": "Extremum"
+        },
+        {
+          "term": "point",
+          "term_lower": "point",
+          "canon": "IncidenceStructure"
+        },
+        {
+          "term": "positive",
+          "term_lower": "positive",
+          "canon": "Positive"
+        },
+        {
+          "term": "radius",
+          "term_lower": "radius",
+          "canon": "Sphere"
+        },
+        {
+          "term": "strict",
+          "term_lower": "strict",
+          "canon": "Strict"
+        },
+        {
+          "term": "strict local minimum",
+          "term_lower": "strict local minimum",
+          "canon": "Extremum"
+        }
+      ],
+      "text_length": 149
+    },
+    {
+      "id": "p4-n4-boundary",
+      "node_type": "answer",
+      "post_id": 413,
+      "body_text": "Boundary analysis: f1=0 and f2=0 faces only intersect {disc>=0} at isolated degenerate points where -N=0 (algebraic proof). disc=0 face: min -N ~ 0.06 over 28,309 points (numerical).",
+      "score": 1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-boundary:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 17
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-boundary:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "f1=0 and f2=0 faces only intersect {disc>=0} at isolated degenerate points where -N=0 (algebraic proof)",
+            "position": 19
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-boundary:eq-constrain-002",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "disc>=0",
+            "position": 55
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-boundary:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "disc=0 face: min -N ~ 0",
+            "position": 124
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-n4-boundary:eq-in-000",
+          "type": "bind/let",
+          "label": "f1 = 0 and f2=0 faces only intersect {disc>=0} at isolated degenerate points where -N=0 (algebraic proof)",
+          "text": "f1=0 and f2=0 faces only intersect {disc>=0} at isolated degenerate points where -N=0 (algebraic proof)",
+          "position": 19
+        },
+        {
+          "id": "p4-n4-boundary:eq-in-002",
+          "type": "constrain/such-that",
+          "label": "disc >= 0",
+          "text": "disc>=0",
+          "position": 55
+        },
+        {
+          "id": "p4-n4-boundary:eq-in-001",
+          "type": "bind/let",
+          "label": "disc = 0 face: min -N ~ 0",
+          "text": "disc=0 face: min -N ~ 0",
+          "position": 124
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-n4-boundary:eq-out-000",
+          "type": "bind/let",
+          "label": "f1 = 0 and f2=0 faces only intersect {disc>=0} at isolated degenerate points where -N=0 (algebraic proof)",
+          "text": "f1=0 and f2=0 faces only intersect {disc>=0} at isolated degenerate points where -N=0 (algebraic proof)",
+          "position": 19
+        },
+        {
+          "id": "p4-n4-boundary:eq-out-002",
+          "type": "constrain/such-that",
+          "label": "disc >= 0",
+          "text": "disc>=0",
+          "position": 55
+        },
+        {
+          "id": "p4-n4-boundary:eq-out-001",
+          "type": "bind/let",
+          "label": "disc = 0 face: min -N ~ 0",
+          "text": "disc=0 face: min -N ~ 0",
+          "position": 124
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "algebraic",
+          "term_lower": "algebraic",
+          "canon": "Algebraic1"
+        },
+        {
+          "term": "analysis",
+          "term_lower": "analysis",
+          "canon": "TopicEntryOnAnalysis"
+        },
+        {
+          "term": "boundary",
+          "term_lower": "boundary",
+          "canon": "BoundaryFrontier"
+        },
+        {
+          "term": "face",
+          "term_lower": "face",
+          "canon": "FaceOfAConvexSetAlternativeDefinitionOf"
+        },
+        {
+          "term": "isolated",
+          "term_lower": "isolated",
+          "canon": "Isolated"
+        }
+      ],
+      "text_length": 182
+    },
+    {
+      "id": "p4-n4-sos-fail",
+      "node_type": "answer",
+      "post_id": 414,
+      "body_text": "[FAILED] SOS/Putinar certificates: infeasible at degrees 10, 12, 14. Interior zero of -N fundamentally blocks this approach \u2014 at x0, all SOS multipliers must vanish, forcing impossible constraints. This approach CANNOT work regardless of degree.",
+      "score": -1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-sos-fail:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/adversative",
+          "hx/content": {
+            "match": "[FAILED]",
+            "position": 0
+          },
+          "hx/labels": [
+            "wire",
+            "adversative"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-sos-fail:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 33
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        }
+      ],
+      "input_ports": [],
+      "output_ports": [],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "degree",
+          "term_lower": "degree",
+          "canon": "OrderAndDegreeOfPolynomial"
+        },
+        {
+          "term": "forcing",
+          "term_lower": "forcing",
+          "canon": "Forcing"
+        },
+        {
+          "term": "interior",
+          "term_lower": "interior",
+          "canon": "Interior"
+        },
+        {
+          "term": "vanish",
+          "term_lower": "vanish",
+          "canon": "ZeroOfAFunction"
+        },
+        {
+          "term": "work",
+          "term_lower": "work",
+          "canon": "1350"
+        },
+        {
+          "term": "zero",
+          "term_lower": "zero",
+          "canon": "Root"
+        }
+      ],
+      "text_length": 245
+    },
+    {
+      "id": "p4-n4-case1",
+      "node_type": "answer",
+      "post_id": 415,
+      "body_text": "Case 1 (a3=b3=0): EXACT. Resultant of gradient eqs -> degree-26 univariate. 4 CPs in domain: x0 with -N=0, and 3 saddles with -N = 825, 825, 898. All -N >= 0.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-case1:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "a3=b3=0): EXACT",
+            "position": 8
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case1:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 16
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case1:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "N=0, and 3 saddles with -N = 825, 825, 898",
+            "position": 102
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case1:eq-constrain-002",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "All -N >= 0",
+            "position": 146
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-n4-case1:eq-in-000",
+          "type": "bind/let",
+          "label": "a3 = b3=0): EXACT",
+          "text": "a3=b3=0): EXACT",
+          "position": 8
+        },
+        {
+          "id": "p4-n4-case1:eq-in-001",
+          "type": "bind/let",
+          "label": "N = 0, and 3 saddles with -N = 825, 825, 898",
+          "text": "N=0, and 3 saddles with -N = 825, 825, 898",
+          "position": 102
+        },
+        {
+          "id": "p4-n4-case1:eq-in-002",
+          "type": "constrain/such-that",
+          "label": "All -N >= 0",
+          "text": "All -N >= 0",
+          "position": 146
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-n4-case1:eq-out-000",
+          "type": "bind/let",
+          "label": "a3 = b3=0): EXACT",
+          "text": "a3=b3=0): EXACT",
+          "position": 8
+        },
+        {
+          "id": "p4-n4-case1:eq-out-001",
+          "type": "bind/let",
+          "label": "N = 0, and 3 saddles with -N = 825, 825, 898",
+          "text": "N=0, and 3 saddles with -N = 825, 825, 898",
+          "position": 102
+        },
+        {
+          "id": "p4-n4-case1:eq-out-002",
+          "type": "constrain/such-that",
+          "label": "All -N >= 0",
+          "text": "All -N >= 0",
+          "position": 146
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "domain",
+          "term_lower": "domain",
+          "canon": "Domain"
+        },
+        {
+          "term": "gradient",
+          "term_lower": "gradient",
+          "canon": "Gradient"
+        },
+        {
+          "term": "resultant",
+          "term_lower": "resultant",
+          "canon": "Resultant"
+        }
+      ],
+      "text_length": 158
+    },
+    {
+      "id": "p4-n4-case2",
+      "node_type": "answer",
+      "post_id": 416,
+      "body_text": "Case 2 (b3=0, a3!=0): EXACT. Parity: g1 odd in a3 -> divide, u=a3^2. Resultant chain -> degree-127 in b4. GCD=(4b4-1)^4*(12a4+1) divided out. Domain: disc_q>=0 forces b4>=0, narrowing search. 6 candidates, 0 interior CPs. 30 seconds.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-case2:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "b3=0, a3!=0): EXACT",
+            "position": 8
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case2:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 20
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case2:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "u=a3^2",
+            "position": 61
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case2:eq-scope-002",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "GCD=(4b4-1)^4*(12a4+1) divided out",
+            "position": 106
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case2:eq-constrain-003",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "disc_q>=0",
+            "position": 150
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case2:eq-constrain-004",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "forces b4>=0",
+            "position": 160
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-n4-case2:eq-in-000",
+          "type": "bind/let",
+          "label": "b3 = 0, a3!=0): EXACT",
+          "text": "b3=0, a3!=0): EXACT",
+          "position": 8
+        },
+        {
+          "id": "p4-n4-case2:eq-in-001",
+          "type": "bind/let",
+          "label": "u = a3^2",
+          "text": "u=a3^2",
+          "position": 61
+        },
+        {
+          "id": "p4-n4-case2:eq-in-002",
+          "type": "bind/let",
+          "label": "GCD = (4b4-1)^4*(12a4+1) divided out",
+          "text": "GCD=(4b4-1)^4*(12a4+1) divided out",
+          "position": 106
+        },
+        {
+          "id": "p4-n4-case2:eq-in-003",
+          "type": "constrain/such-that",
+          "label": "disc_q >= 0",
+          "text": "disc_q>=0",
+          "position": 150
+        },
+        {
+          "id": "p4-n4-case2:eq-in-004",
+          "type": "constrain/such-that",
+          "label": "forces b4 >= 0",
+          "text": "forces b4>=0",
+          "position": 160
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-n4-case2:eq-out-000",
+          "type": "bind/let",
+          "label": "b3 = 0, a3!=0): EXACT",
+          "text": "b3=0, a3!=0): EXACT",
+          "position": 8
+        },
+        {
+          "id": "p4-n4-case2:eq-out-001",
+          "type": "bind/let",
+          "label": "u = a3^2",
+          "text": "u=a3^2",
+          "position": 61
+        },
+        {
+          "id": "p4-n4-case2:eq-out-002",
+          "type": "bind/let",
+          "label": "GCD = (4b4-1)^4*(12a4+1) divided out",
+          "text": "GCD=(4b4-1)^4*(12a4+1) divided out",
+          "position": 106
+        },
+        {
+          "id": "p4-n4-case2:eq-out-003",
+          "type": "constrain/such-that",
+          "label": "disc_q >= 0",
+          "text": "disc_q>=0",
+          "position": 150
+        },
+        {
+          "id": "p4-n4-case2:eq-out-004",
+          "type": "constrain/such-that",
+          "label": "forces b4 >= 0",
+          "text": "forces b4>=0",
+          "position": 160
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "chain",
+          "term_lower": "chain",
+          "canon": "Nchain"
+        },
+        {
+          "term": "domain",
+          "term_lower": "domain",
+          "canon": "Domain"
+        },
+        {
+          "term": "forces",
+          "term_lower": "forces",
+          "canon": "ForcingRelation"
+        },
+        {
+          "term": "interior",
+          "term_lower": "interior",
+          "canon": "Interior"
+        },
+        {
+          "term": "odd",
+          "term_lower": "odd",
+          "canon": "EvenNumber"
+        },
+        {
+          "term": "parity",
+          "term_lower": "parity",
+          "canon": "SignatureOfAPermutation"
+        },
+        {
+          "term": "resultant",
+          "term_lower": "resultant",
+          "canon": "Resultant"
+        }
+      ],
+      "text_length": 233
+    },
+    {
+      "id": "p4-n4-case2a",
+      "node_type": "comment",
+      "post_id": 4161,
+      "body_text": "Key technique: sign-counting replaces Sturm for degree-70 factor. numpy approximate roots + exact rational evaluation at midpoints. 0.2s vs hours for Sturm sequence.",
+      "score": 1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 416,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-case2a:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 13
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        }
+      ],
+      "input_ports": [],
+      "output_ports": [],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "factor",
+          "term_lower": "factor",
+          "canon": "Divisibility"
+        },
+        {
+          "term": "key",
+          "term_lower": "key",
+          "canon": "Cryptography"
+        },
+        {
+          "term": "rational",
+          "term_lower": "rational",
+          "canon": "RationalNumber"
+        },
+        {
+          "term": "sequence",
+          "term_lower": "sequence",
+          "canon": "Sequence"
+        },
+        {
+          "term": "Sturm Sequence",
+          "term_lower": "sturm sequence",
+          "canon": "SturmsTheorem"
+        }
+      ],
+      "text_length": 165
+    },
+    {
+      "id": "p4-n4-case3a",
+      "node_type": "answer",
+      "post_id": 417,
+      "body_text": "Case 3a (diagonal: a3=b3, a4=b4): EXACT. Exchange symmetry reduces to 2 eqs in 2 unknowns. Parity + resultant -> degree-24 univariate. 1 interior CP with -N = 2296.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-case3a:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 17
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case3a:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "a3=b3, a4=b4): EXACT",
+            "position": 19
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case3a:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "N = 2296",
+            "position": 155
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-n4-case3a:eq-in-000",
+          "type": "bind/let",
+          "label": "a3 = b3, a4=b4): EXACT",
+          "text": "a3=b3, a4=b4): EXACT",
+          "position": 19
+        },
+        {
+          "id": "p4-n4-case3a:eq-in-001",
+          "type": "bind/let",
+          "label": "N = 2296",
+          "text": "N = 2296",
+          "position": 155
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-n4-case3a:eq-out-000",
+          "type": "bind/let",
+          "label": "a3 = b3, a4=b4): EXACT",
+          "text": "a3=b3, a4=b4): EXACT",
+          "position": 19
+        },
+        {
+          "id": "p4-n4-case3a:eq-out-001",
+          "type": "bind/let",
+          "label": "N = 2296",
+          "text": "N = 2296",
+          "position": 155
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "diagonal",
+          "term_lower": "diagonal",
+          "canon": "Diagonal"
+        },
+        {
+          "term": "interior",
+          "term_lower": "interior",
+          "canon": "Interior"
+        },
+        {
+          "term": "parity",
+          "term_lower": "parity",
+          "canon": "SignatureOfAPermutation"
+        },
+        {
+          "term": "resultant",
+          "term_lower": "resultant",
+          "canon": "Resultant"
+        },
+        {
+          "term": "symmetry",
+          "term_lower": "symmetry",
+          "canon": "SymmetricRelation"
+        }
+      ],
+      "text_length": 164
+    },
+    {
+      "id": "p4-n4-case3b",
+      "node_type": "answer",
+      "post_id": 418,
+      "body_text": "Case 3b (anti-diagonal: a3=-b3, a4=b4): EXACT. Exchange+parity -> 2 eqs in 2 unknowns. Resultant -> degree-23 univariate. 2 interior CPs with -N = 0.05 and -N = 686. All -N >= 0.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-case3b:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 22
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case3b:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "a3=-b3, a4=b4): EXACT",
+            "position": 24
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case3b:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "N = 0",
+            "position": 143
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case3b:eq-scope-002",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "N = 686",
+            "position": 157
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case3b:eq-constrain-003",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "All -N >= 0",
+            "position": 166
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-n4-case3b:eq-in-000",
+          "type": "bind/let",
+          "label": "a3 = -b3, a4=b4): EXACT",
+          "text": "a3=-b3, a4=b4): EXACT",
+          "position": 24
+        },
+        {
+          "id": "p4-n4-case3b:eq-in-001",
+          "type": "bind/let",
+          "label": "N = 0",
+          "text": "N = 0",
+          "position": 143
+        },
+        {
+          "id": "p4-n4-case3b:eq-in-002",
+          "type": "bind/let",
+          "label": "N = 686",
+          "text": "N = 686",
+          "position": 157
+        },
+        {
+          "id": "p4-n4-case3b:eq-in-003",
+          "type": "constrain/such-that",
+          "label": "All -N >= 0",
+          "text": "All -N >= 0",
+          "position": 166
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-n4-case3b:eq-out-000",
+          "type": "bind/let",
+          "label": "a3 = -b3, a4=b4): EXACT",
+          "text": "a3=-b3, a4=b4): EXACT",
+          "position": 24
+        },
+        {
+          "id": "p4-n4-case3b:eq-out-001",
+          "type": "bind/let",
+          "label": "N = 0",
+          "text": "N = 0",
+          "position": 143
+        },
+        {
+          "id": "p4-n4-case3b:eq-out-002",
+          "type": "bind/let",
+          "label": "N = 686",
+          "text": "N = 686",
+          "position": 157
+        },
+        {
+          "id": "p4-n4-case3b:eq-out-003",
+          "type": "constrain/such-that",
+          "label": "All -N >= 0",
+          "text": "All -N >= 0",
+          "position": 166
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "interior",
+          "term_lower": "interior",
+          "canon": "Interior"
+        },
+        {
+          "term": "resultant",
+          "term_lower": "resultant",
+          "canon": "Resultant"
+        }
+      ],
+      "text_length": 178
+    },
+    {
+      "id": "p4-n4-case3c",
+      "node_type": "answer",
+      "post_id": 419,
+      "body_text": "[PENDING] Case 3c (generic off-diagonal: a3!=0, b3!=0, a3!=+-b3): Full 4D gradient system, 4 polynomials of degree 9. Direct resultant infeasible (~2000 terms). Interval arithmetic failed (wrapping + domain). Numerical: 4 CPs with -N ~ 1679. PHCpack handoff created.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-case3c:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/tentative",
+          "hx/content": {
+            "match": "[PENDING]",
+            "position": 0
+          },
+          "hx/labels": [
+            "wire",
+            "tentative"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-case3c:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 39
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        }
+      ],
+      "input_ports": [],
+      "output_ports": [],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "arithmetic",
+          "term_lower": "arithmetic",
+          "canon": "ArithmeticalHierarchy"
+        },
+        {
+          "term": "degree",
+          "term_lower": "degree",
+          "canon": "OrderAndDegreeOfPolynomial"
+        },
+        {
+          "term": "domain",
+          "term_lower": "domain",
+          "canon": "Domain"
+        },
+        {
+          "term": "generic",
+          "term_lower": "generic",
+          "canon": "GenericPoint"
+        },
+        {
+          "term": "gradient",
+          "term_lower": "gradient",
+          "canon": "Gradient"
+        },
+        {
+          "term": "gradient system",
+          "term_lower": "gradient system",
+          "canon": "GradientSystem"
+        },
+        {
+          "term": "interval",
+          "term_lower": "interval",
+          "canon": "Interval"
+        },
+        {
+          "term": "resultant",
+          "term_lower": "resultant",
+          "canon": "Resultant"
+        }
+      ],
+      "text_length": 266
+    },
+    {
+      "id": "p4-n4-ia-fail",
+      "node_type": "comment",
+      "post_id": 4191,
+      "body_text": "[FAILED] Interval arithmetic: naive IA only certified 6.7% of boxes (wrapping error). Centered form: Hessian Frobenius norm ~96M makes quadratic correction ~35,762 per box. Also domain-unaware: -N < 0 outside semi-algebraic set.",
+      "score": -1,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 419,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-ia-fail:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/adversative",
+          "hx/content": {
+            "match": "[FAILED]",
+            "position": 0
+          },
+          "hx/labels": [
+            "wire",
+            "adversative"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-ia-fail:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 28
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        }
+      ],
+      "input_ports": [],
+      "output_ports": [],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "arithmetic",
+          "term_lower": "arithmetic",
+          "canon": "ArithmeticalHierarchy"
+        },
+        {
+          "term": "Frobenius norm",
+          "term_lower": "frobenius norm",
+          "canon": "FrobeniusProduct"
+        },
+        {
+          "term": "Hessian",
+          "term_lower": "hessian",
+          "canon": "HessianMatrix"
+        },
+        {
+          "term": "interval",
+          "term_lower": "interval",
+          "canon": "Interval"
+        },
+        {
+          "term": "norm",
+          "term_lower": "norm",
+          "canon": "Norm"
+        }
+      ],
+      "text_length": 228
+    },
+    {
+      "id": "p4-n4-conclusion",
+      "node_type": "answer",
+      "post_id": 420,
+      "body_text": "n=4 proof COMPLETE via Path 2: 3-piece Cauchy-Schwarz decomposition 1/Phi_4 = T1+T2+R. T1_surplus >= 0 by Titu's lemma. T2+R surplus = K_red (487 terms) >= 0 by P-convexity: K_red = A(P,Q)+sqrt(PQ)*B(P,Q), B<=0 (bilinear corners), d\u00b2K/dP\u00b2 >= 0 (two non-negative terms), boundary K >= 0 (AM-GM). Bypasses case-by-case critical point analysis entirely.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-conclusion:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "n=4 proof COMPLETE via Path 2: 3-piece Cauchy-Schwarz decomposition 1/Phi_4 = T1+T2+R",
+            "position": 0
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-conclusion:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "COMPLETE",
+            "position": 10
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-conclusion:proof-wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/clarifying",
+          "hx/content": {
+            "match": ":",
+            "position": 29
+          },
+          "hx/labels": [
+            "wire",
+            "clarifying"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-conclusion:eq-constrain-002",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "T1_surplus >= 0",
+            "position": 87
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-conclusion:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "surplus = K_red (487 terms) >= 0 by P-convexity: K_red = A(P,Q)+sqrt(PQ)*B(P,Q), B<=0 (bilinear corners), d\u00b2K/dP\u00b2 >= 0 (",
+            "position": 125
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-conclusion:eq-constrain-003",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "K_red (487 terms) >= 0",
+            "position": 135
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-conclusion:eq-constrain-004",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "B<=0",
+            "position": 206
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-conclusion:eq-constrain-005",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "boundary K >= 0",
+            "position": 270
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-n4-conclusion:eq-in-000",
+          "type": "bind/let",
+          "label": "n = 4 proof COMPLETE via Path 2: 3-piece Cauchy-Schwarz decomposition 1/Phi_4 = T1+T2+R",
+          "text": "n=4 proof COMPLETE via Path 2: 3-piece Cauchy-Schwarz decomposition 1/Phi_4 = T1+T2+R",
+          "position": 0
+        },
+        {
+          "id": "p4-n4-conclusion:eq-in-002",
+          "type": "constrain/such-that",
+          "label": "T1_surplus >= 0",
+          "text": "T1_surplus >= 0",
+          "position": 87
+        },
+        {
+          "id": "p4-n4-conclusion:eq-in-001",
+          "type": "bind/let",
+          "label": "surplus = K_red (487 terms) >= 0 by P-convexity: K_red = A(P,Q)+sqrt(PQ)*B(P,Q), B<=0 (bilinear corners), d\u00b2K/dP\u00b2 >= 0 (two non-ne",
+          "text": "surplus = K_red (487 terms) >= 0 by P-convexity: K_red = A(P,Q)+sqrt(PQ)*B(P,Q), B<=0 (bilinear corners), d\u00b2K/dP\u00b2 >= 0 (",
+          "position": 125
+        },
+        {
+          "id": "p4-n4-conclusion:eq-in-003",
+          "type": "constrain/such-that",
+          "label": "K_red (487 terms) >= 0",
+          "text": "K_red (487 terms) >= 0",
+          "position": 135
+        },
+        {
+          "id": "p4-n4-conclusion:eq-in-004",
+          "type": "constrain/such-that",
+          "label": "B <= 0",
+          "text": "B<=0",
+          "position": 206
+        },
+        {
+          "id": "p4-n4-conclusion:eq-in-005",
+          "type": "constrain/such-that",
+          "label": "boundary K >= 0",
+          "text": "boundary K >= 0",
+          "position": 270
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-n4-conclusion:eq-out-000",
+          "type": "bind/let",
+          "label": "n = 4 proof COMPLETE via Path 2: 3-piece Cauchy-Schwarz decomposition 1/Phi_4 = T1+T2+R",
+          "text": "n=4 proof COMPLETE via Path 2: 3-piece Cauchy-Schwarz decomposition 1/Phi_4 = T1+T2+R",
+          "position": 0
+        },
+        {
+          "id": "p4-n4-conclusion:eq-out-006",
+          "type": "wire/consequential",
+          "label": "n=4 proof COMPLETE via Path 2: 3-piece Cauchy-Schwarz decomposition 1/Phi_4 = T1+T2+R. T",
+          "text": "COMPLETE",
+          "position": 10
+        },
+        {
+          "id": "p4-n4-conclusion:eq-out-002",
+          "type": "constrain/such-that",
+          "label": "T1_surplus >= 0",
+          "text": "T1_surplus >= 0",
+          "position": 87
+        },
+        {
+          "id": "p4-n4-conclusion:eq-out-001",
+          "type": "bind/let",
+          "label": "surplus = K_red (487 terms) >= 0 by P-convexity: K_red = A(P,Q)+sqrt(PQ)*B(P,Q), B<=0 (bilinear corners), d\u00b2K/dP\u00b2 >= 0 (two non-ne",
+          "text": "surplus = K_red (487 terms) >= 0 by P-convexity: K_red = A(P,Q)+sqrt(PQ)*B(P,Q), B<=0 (bilinear corners), d\u00b2K/dP\u00b2 >= 0 (",
+          "position": 125
+        },
+        {
+          "id": "p4-n4-conclusion:eq-out-003",
+          "type": "constrain/such-that",
+          "label": "K_red (487 terms) >= 0",
+          "text": "K_red (487 terms) >= 0",
+          "position": 135
+        },
+        {
+          "id": "p4-n4-conclusion:eq-out-004",
+          "type": "constrain/such-that",
+          "label": "B <= 0",
+          "text": "B<=0",
+          "position": 206
+        },
+        {
+          "id": "p4-n4-conclusion:eq-out-005",
+          "type": "constrain/such-that",
+          "label": "boundary K >= 0",
+          "text": "boundary K >= 0",
+          "position": 270
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "analysis",
+          "term_lower": "analysis",
+          "canon": "TopicEntryOnAnalysis"
+        },
+        {
+          "term": "bilinear",
+          "term_lower": "bilinear",
+          "canon": "BilinearForm"
+        },
+        {
+          "term": "boundary",
+          "term_lower": "boundary",
+          "canon": "BoundaryFrontier"
+        },
+        {
+          "term": "complete",
+          "term_lower": "complete",
+          "canon": "OrdersInANumberField"
+        },
+        {
+          "term": "critical point",
+          "term_lower": "critical point",
+          "canon": "SardsTheorem"
+        },
+        {
+          "term": "decomposition",
+          "term_lower": "decomposition",
+          "canon": "ComplementarySubspace"
+        },
+        {
+          "term": "lemma",
+          "term_lower": "lemma",
+          "canon": "Lemma"
+        },
+        {
+          "term": "path",
+          "term_lower": "path",
+          "canon": "Path"
+        },
+        {
+          "term": "point",
+          "term_lower": "point",
+          "canon": "IncidenceStructure"
+        }
+      ],
+      "text_length": 350
+    },
+    {
+      "id": "p4-n4-path2-proof",
+      "node_type": "answer",
+      "post_id": 421,
+      "body_text": "[PROVED] n=4 Path 2 algebraic certificate. K_red = A(P,Q) + sqrt(PQ)*B(P,Q) where P=p^2, Q=q^2. B bilinear with all 4 corners <= 0. d\u00b2K/dP\u00b2 = 2(a20+a12Q) + sqrt(Q)*N(P,Q)/(4P^{3/2}), both terms >= 0. N bilinear with 4 positive corners; hardest corner N(Pmax,0) proved via inner polynomial decomposition by r-powers (discriminant analysis of irreducible quadratics, including case split at y=1/3). Boundary K(0,Q) >= 0 and K(Pmax,Q) >= 0 (AM-GM on F^2 >= 36r(1-x)(1-y)). Convexity + boundary => K >= 0 on full rectangle. Opposite-sign case by C1*(p+q)^2+C0 decomposition.",
+      "score": 3,
+      "creation_date": "2026-02-14",
+      "parent_post_id": 4,
+      "discourse": [
+        {
+          "hx/id": "p4-n4-path2-proof:proof-wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "[PROVED]",
+            "position": 0
+          },
+          "hx/labels": [
+            "wire",
+            "consequential"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "n=4 Path 2 algebraic certificate",
+            "position": 9
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "K_red = A(P,Q) + sqrt(PQ)*B(P,Q) where P=p^2, Q=q^2",
+            "position": 43
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-constrain-004",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "B bilinear with all 4 corners <= 0",
+            "position": 96
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-constrain-005",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "both terms >= 0",
+            "position": 183
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-scope-002",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "y=1/3)",
+            "position": 389
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-constrain-006",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "Q) >= 0",
+            "position": 410
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-constrain-007",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "Q) >= 0",
+            "position": 429
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-constrain-008",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "AM-GM on F^2 >= 36r(1-x)(1-y))",
+            "position": 438
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-scope-003",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "boundary => K >= 0 on full rectangle",
+            "position": 482
+          },
+          "hx/labels": [
+            "scope",
+            "equation"
+          ]
+        },
+        {
+          "hx/id": "p4-n4-path2-proof:eq-constrain-009",
+          "hx/role": "component",
+          "hx/type": "constrain/such-that",
+          "hx/content": {
+            "match": "K >= 0",
+            "position": 494
+          },
+          "hx/labels": [
+            "scope",
+            "inequality"
+          ]
+        }
+      ],
+      "input_ports": [
+        {
+          "id": "p4-n4-path2-proof:eq-in-000",
+          "type": "bind/let",
+          "label": "n = 4 Path 2 algebraic certificate",
+          "text": "n=4 Path 2 algebraic certificate",
+          "position": 9
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-in-001",
+          "type": "bind/let",
+          "label": "K_red = A(P,Q) + sqrt(PQ)*B(P,Q) where P=p^2, Q=q^2",
+          "text": "K_red = A(P,Q) + sqrt(PQ)*B(P,Q) where P=p^2, Q=q^2",
+          "position": 43
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-in-004",
+          "type": "constrain/such-that",
+          "label": "B bilinear with all 4 corners <= 0",
+          "text": "B bilinear with all 4 corners <= 0",
+          "position": 96
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-in-005",
+          "type": "constrain/such-that",
+          "label": "both terms >= 0",
+          "text": "both terms >= 0",
+          "position": 183
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-in-002",
+          "type": "bind/let",
+          "label": "y = 1/3)",
+          "text": "y=1/3)",
+          "position": 389
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-in-006",
+          "type": "constrain/such-that",
+          "label": "Q) >= 0",
+          "text": "Q) >= 0",
+          "position": 410
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-in-008",
+          "type": "constrain/such-that",
+          "label": "AM-GM on F^2 >= 36r(1-x)(1-y))",
+          "text": "AM-GM on F^2 >= 36r(1-x)(1-y))",
+          "position": 438
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-in-003",
+          "type": "bind/let",
+          "label": "boundary = > K >= 0 on full rectangle",
+          "text": "boundary => K >= 0 on full rectangle",
+          "position": 482
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-in-009",
+          "type": "constrain/such-that",
+          "label": "K >= 0",
+          "text": "K >= 0",
+          "position": 494
+        }
+      ],
+      "output_ports": [
+        {
+          "id": "p4-n4-path2-proof:eq-out-010",
+          "type": "wire/consequential",
+          "label": "[PROVED] n=4 Path 2 algebraic certificate. K_red = A(P,Q) + sqrt(PQ)*B(P,Q) wh",
+          "text": "[PROVED]",
+          "position": 0
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-out-000",
+          "type": "bind/let",
+          "label": "n = 4 Path 2 algebraic certificate",
+          "text": "n=4 Path 2 algebraic certificate",
+          "position": 9
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-out-001",
+          "type": "bind/let",
+          "label": "K_red = A(P,Q) + sqrt(PQ)*B(P,Q) where P=p^2, Q=q^2",
+          "text": "K_red = A(P,Q) + sqrt(PQ)*B(P,Q) where P=p^2, Q=q^2",
+          "position": 43
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-out-004",
+          "type": "constrain/such-that",
+          "label": "B bilinear with all 4 corners <= 0",
+          "text": "B bilinear with all 4 corners <= 0",
+          "position": 96
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-out-005",
+          "type": "constrain/such-that",
+          "label": "both terms >= 0",
+          "text": "both terms >= 0",
+          "position": 183
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-out-002",
+          "type": "bind/let",
+          "label": "y = 1/3)",
+          "text": "y=1/3)",
+          "position": 389
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-out-006",
+          "type": "constrain/such-that",
+          "label": "Q) >= 0",
+          "text": "Q) >= 0",
+          "position": 410
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-out-008",
+          "type": "constrain/such-that",
+          "label": "AM-GM on F^2 >= 36r(1-x)(1-y))",
+          "text": "AM-GM on F^2 >= 36r(1-x)(1-y))",
+          "position": 438
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-out-003",
+          "type": "bind/let",
+          "label": "boundary = > K >= 0 on full rectangle",
+          "text": "boundary => K >= 0 on full rectangle",
+          "position": 482
+        },
+        {
+          "id": "p4-n4-path2-proof:eq-out-009",
+          "type": "constrain/such-that",
+          "label": "K >= 0",
+          "text": "K >= 0",
+          "position": 494
+        }
+      ],
+      "categorical": [],
+      "ner_terms": [
+        {
+          "term": "algebraic",
+          "term_lower": "algebraic",
+          "canon": "Algebraic1"
+        },
+        {
+          "term": "analysis",
+          "term_lower": "analysis",
+          "canon": "TopicEntryOnAnalysis"
+        },
+        {
+          "term": "bilinear",
+          "term_lower": "bilinear",
+          "canon": "BilinearForm"
+        },
+        {
+          "term": "boundary",
+          "term_lower": "boundary",
+          "canon": "BoundaryFrontier"
+        },
+        {
+          "term": "certificate",
+          "term_lower": "certificate",
+          "canon": "NondeterministicTuringMachine"
+        },
+        {
+          "term": "decomposition",
+          "term_lower": "decomposition",
+          "canon": "ComplementarySubspace"
+        },
+        {
+          "term": "discriminant",
+          "term_lower": "discriminant",
+          "canon": "Discriminant"
+        },
+        {
+          "term": "inner",
+          "term_lower": "inner",
+          "canon": "InnerAutomorphism"
+        },
+        {
+          "term": "irreducible",
+          "term_lower": "irreducible",
+          "canon": "JoinIrreducibility"
+        },
+        {
+          "term": "path",
+          "term_lower": "path",
+          "canon": "Path"
+        },
+        {
+          "term": "polynomial",
+          "term_lower": "polynomial",
+          "canon": "PolynomialRing"
+        },
+        {
+          "term": "positive",
+          "term_lower": "positive",
+          "canon": "Positive"
+        },
+        {
+          "term": "rectangle",
+          "term_lower": "rectangle",
+          "canon": "SpecialElementsInARelationAlgebra"
+        }
+      ],
+      "text_length": 570
+    }
+  ],
+  "edges": [
+    {
+      "source": "p4-s1",
+      "target": "p4-problem",
+      "edge_type": "clarify",
+      "evidence": "Phi_n = electrostatic self-energy via log derivative",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-s1:eq-out-000",
+          "p4-problem:eq-in-000",
+          2
+        ],
+        [
+          "p4-s1:eq-out-001",
+          "p4-problem:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "clarify"
+    },
+    {
+      "source": "p4-s2",
+      "target": "p4-s1",
+      "edge_type": "clarify",
+      "evidence": "Cauchy-Schwarz gives 1/Phi_n ~ root spread",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-s2:eq-out-000",
+          "p4-s1:eq-in-000",
+          2
+        ],
+        [
+          "p4-s2:eq-out-000",
+          "p4-s1:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "clarify"
+    },
+    {
+      "source": "p4-s3",
+      "target": "p4-problem",
+      "edge_type": "assert",
+      "evidence": "MSS 2015: preserves real-rootedness, linearizes cumulants",
+      "detection": "structural",
+      "port_matches": [],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-s3a",
+      "target": "p4-s3",
+      "edge_type": "exemplify",
+      "evidence": "p \u229e_n q = E[char(A + UBU*)]",
+      "detection": "structural",
+      "port_matches": [],
+      "iatc": "exemplify"
+    },
+    {
+      "source": "p4-s3b",
+      "target": "p4-s3",
+      "edge_type": "clarify",
+      "evidence": "kappa_k(p \u229e_n q) = kappa_k(p) + kappa_k(q)",
+      "detection": "structural",
+      "port_matches": [],
+      "iatc": "clarify"
+    },
+    {
+      "source": "p4-s4",
+      "target": "p4-s1",
+      "edge_type": "retract",
+      "evidence": "[RETRACTED] 1/Phi_n concavity claim \u2014 numerically neither convex nor concave",
+      "detection": "classical",
+      "port_matches": [],
+      "iatc": "retract"
+    },
+    {
+      "source": "p4-num",
+      "target": "p4-problem",
+      "edge_type": "assert",
+      "evidence": "Numerical verification: 0/8000 violations, inequality IS true",
+      "detection": "classical",
+      "port_matches": [
+        [
+          "p4-num:eq-out-000",
+          "p4-problem:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-num",
+      "target": "p4-s4",
+      "edge_type": "challenge",
+      "evidence": "1/Phi_n neither convex nor concave; superadditivity specific to \u229e_n structure",
+      "detection": "classical",
+      "port_matches": [],
+      "iatc": "challenge"
+    },
+    {
+      "source": "p4-s4",
+      "target": "p4-s3b",
+      "edge_type": "reference",
+      "evidence": "Cumulant additivity is the mechanism for superadditivity",
+      "detection": "structural",
+      "port_matches": [],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-s4a",
+      "target": "p4-s4",
+      "edge_type": "challenge",
+      "evidence": "[ERROR] concavity+f(0)=0 gives SUBadditivity, not superadditivity; need CONVEXITY",
+      "detection": "classical",
+      "port_matches": [],
+      "iatc": "challenge"
+    },
+    {
+      "source": "p4-s5",
+      "target": "p4-problem",
+      "edge_type": "assert",
+      "evidence": "n=2 proved: 1/Phi_2 linear in disc, \u229e_2 preserves exactly",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-s5:eq-out-000",
+          "p4-problem:eq-in-000",
+          2
+        ],
+        [
+          "p4-s5:eq-out-001",
+          "p4-problem:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-s5a",
+      "target": "p4-s3a",
+      "edge_type": "reference",
+      "evidence": "Translation via A+\u03b1I in random matrix model",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-s5a:eq-out-000",
+          "p4-s3a:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-s5b",
+      "target": "p4-s5a",
+      "edge_type": "reference",
+      "evidence": "Uses centered assumption from centering reduction",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-s5b:eq-out-000",
+          "p4-s5a:eq-in-000",
+          1
+        ],
+        [
+          "p4-s5b:eq-out-001",
+          "p4-s5a:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-s5c",
+      "target": "p4-s3",
+      "edge_type": "reference",
+      "evidence": "MSS coefficient formula with a_1=b_1=0 simplifies",
+      "detection": "structural",
+      "port_matches": [],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-s5d",
+      "target": "p4-s5b",
+      "edge_type": "reference",
+      "evidence": "Uses 1/Phi_3 = -2a_2/9 - 3a_3^2/(2a_2^2)",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-s5d:eq-out-000",
+          "p4-s5b:eq-in-001",
+          2
+        ],
+        [
+          "p4-s5d:eq-out-000",
+          "p4-s5b:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-s5d",
+      "target": "p4-s5c",
+      "edge_type": "reference",
+      "evidence": "Uses c_2=a_2+b_2, c_3=a_3+b_3 from \u229e_3 simplification",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-s5d:eq-out-000",
+          "p4-s5c:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-s6",
+      "target": "p4-problem",
+      "edge_type": "assert",
+      "evidence": "Proved for n=2,3; numerically verified for n=4,5",
+      "detection": "classical",
+      "port_matches": [
+        [
+          "p4-s6:eq-out-000",
+          "p4-problem:eq-in-000",
+          1
+        ],
+        [
+          "p4-s6:eq-out-001",
+          "p4-problem:eq-in-000",
+          1
+        ],
+        [
+          "p4-s6:eq-out-002",
+          "p4-problem:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-s6",
+      "target": "p4-s5",
+      "edge_type": "reference",
+      "evidence": "n=2 equality case",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-s6:eq-out-000",
+          "p4-s5:eq-in-000",
+          1
+        ],
+        [
+          "p4-s6:eq-out-000",
+          "p4-s5:eq-in-001",
+          1
+        ],
+        [
+          "p4-s6:eq-out-001",
+          "p4-s5:eq-in-000",
+          1
+        ],
+        [
+          "p4-s6:eq-out-001",
+          "p4-s5:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-s6",
+      "target": "p4-s5d",
+      "edge_type": "reference",
+      "evidence": "n=3 strict inequality via Titu's lemma",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-s6:eq-out-000",
+          "p4-s5d:eq-in-000",
+          4
+        ],
+        [
+          "p4-s6:eq-out-001",
+          "p4-s5d:eq-in-000",
+          2
+        ],
+        [
+          "p4-s6:eq-out-002",
+          "p4-s5d:eq-in-000",
+          2
+        ],
+        [
+          "p4-s6:eq-out-002",
+          "p4-s5d:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-s6",
+      "target": "p4-num",
+      "edge_type": "reference",
+      "evidence": "n=4,5 numerical verification",
+      "detection": "classical",
+      "port_matches": [
+        [
+          "p4-s6:eq-out-000",
+          "p4-num:eq-in-000",
+          2
+        ],
+        [
+          "p4-s6:eq-out-001",
+          "p4-num:eq-in-000",
+          2
+        ],
+        [
+          "p4-s6:eq-out-002",
+          "p4-num:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-n4-reform",
+      "target": "p4-s6",
+      "edge_type": "reform",
+      "evidence": "Reformulates open n=4 case: S = N/D, D < 0 on domain, need -N >= 0",
+      "detection": "classical",
+      "port_matches": [
+        [
+          "p4-n4-reform:eq-out-000",
+          "p4-s6:eq-in-000",
+          2
+        ],
+        [
+          "p4-n4-reform:eq-out-000",
+          "p4-s6:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-reform:eq-out-001",
+          "p4-s6:eq-in-000",
+          2
+        ],
+        [
+          "p4-n4-reform:eq-out-000",
+          "p4-s6:eq-in-002",
+          1
+        ],
+        [
+          "p4-n4-reform:eq-out-001",
+          "p4-s6:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-reform:eq-out-002",
+          "p4-s6:eq-in-002",
+          1
+        ],
+        [
+          "p4-n4-reform:eq-out-003",
+          "p4-s6:eq-in-002",
+          1
+        ]
+      ],
+      "iatc": "reform"
+    },
+    {
+      "source": "p4-n4-reform",
+      "target": "p4-s1",
+      "edge_type": "reference",
+      "evidence": "Uses Phi_4*disc = -4*f1*f2 algebraic identity",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-reform:eq-out-001",
+          "p4-s1:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-reform:eq-out-000",
+          "p4-s1:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-reform:eq-out-000",
+          "p4-s1:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-reform:eq-out-001",
+          "p4-s1:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-n4-hessian",
+      "target": "p4-n4-reform",
+      "edge_type": "clarify",
+      "evidence": "Equality point x0: Hessian PD, eigenvalues 3/4, 21/8, 6, 8",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-hessian:eq-out-002",
+          "p4-n4-reform:eq-in-002",
+          3
+        ],
+        [
+          "p4-n4-hessian:eq-out-001",
+          "p4-n4-reform:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-hessian:eq-out-002",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-hessian:eq-out-000",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-hessian:eq-out-000",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-hessian:eq-out-001",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-hessian:eq-out-001",
+          "p4-n4-reform:eq-in-002",
+          1
+        ],
+        [
+          "p4-n4-hessian:eq-out-001",
+          "p4-n4-reform:eq-in-003",
+          1
+        ],
+        [
+          "p4-n4-hessian:eq-out-002",
+          "p4-n4-reform:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "clarify"
+    },
+    {
+      "source": "p4-n4-boundary",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "-N >= 0 on boundary: f1,f2 faces algebraic, disc=0 face numerical",
+      "detection": "classical",
+      "port_matches": [
+        [
+          "p4-n4-boundary:eq-out-000",
+          "p4-n4-reform:eq-in-001",
+          3
+        ],
+        [
+          "p4-n4-boundary:eq-out-002",
+          "p4-n4-reform:eq-in-003",
+          3
+        ],
+        [
+          "p4-n4-boundary:eq-out-001",
+          "p4-n4-reform:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-boundary:eq-out-001",
+          "p4-n4-reform:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-boundary:eq-out-001",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-boundary:eq-out-002",
+          "p4-n4-reform:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-boundary:eq-out-000",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-boundary:eq-out-000",
+          "p4-n4-reform:eq-in-002",
+          1
+        ],
+        [
+          "p4-n4-boundary:eq-out-000",
+          "p4-n4-reform:eq-in-003",
+          1
+        ],
+        [
+          "p4-n4-boundary:eq-out-001",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-boundary:eq-out-002",
+          "p4-n4-reform:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-n4-sos-fail",
+      "target": "p4-n4-reform",
+      "edge_type": "challenge",
+      "evidence": "SOS/Putinar infeasible at degrees 10,12,14 \u2014 interior zero blocks certificates",
+      "detection": "classical",
+      "port_matches": [],
+      "iatc": "challenge"
+    },
+    {
+      "source": "p4-n4-case1",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 1 (a3=b3=0): exact, 4 CPs, all -N >= 0",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-case1:eq-out-002",
+          "p4-n4-reform:eq-in-002",
+          3
+        ],
+        [
+          "p4-n4-case1:eq-out-001",
+          "p4-n4-reform:eq-in-000",
+          2
+        ],
+        [
+          "p4-n4-case1:eq-out-002",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-case1:eq-out-000",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-case1:eq-out-000",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-case1:eq-out-001",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-case1:eq-out-001",
+          "p4-n4-reform:eq-in-002",
+          1
+        ],
+        [
+          "p4-n4-case1:eq-out-002",
+          "p4-n4-reform:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-n4-case2",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 2 (b3=0, a3!=0): exact, 0 interior CPs (degree-127 resultant, 30s)",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-case2:eq-out-003",
+          "p4-n4-reform:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-case2:eq-out-003",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-case2:eq-out-004",
+          "p4-n4-reform:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-case2:eq-out-004",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-case2:eq-out-000",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-case2:eq-out-000",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-case2:eq-out-001",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-case2:eq-out-001",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-case2:eq-out-002",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-case2:eq-out-002",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-case2:eq-out-003",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-case2:eq-out-004",
+          "p4-n4-reform:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-n4-case2a",
+      "target": "p4-n4-case2",
+      "edge_type": "clarify",
+      "evidence": "Sign-counting replaces Sturm for degree-70 factor (0.2s vs hours)",
+      "detection": "structural",
+      "port_matches": [],
+      "iatc": "clarify"
+    },
+    {
+      "source": "p4-n4-case3a",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 3a (diagonal): exact, 1 CP with -N = 2296",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-case3a:eq-out-001",
+          "p4-n4-reform:eq-in-000",
+          2
+        ],
+        [
+          "p4-n4-case3a:eq-out-000",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-case3a:eq-out-000",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-case3a:eq-out-001",
+          "p4-n4-reform:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-n4-case3b",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 3b (anti-diagonal): exact, 2 CPs with -N >= 0.05",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-case3b:eq-out-003",
+          "p4-n4-reform:eq-in-002",
+          3
+        ],
+        [
+          "p4-n4-case3b:eq-out-001",
+          "p4-n4-reform:eq-in-000",
+          2
+        ],
+        [
+          "p4-n4-case3b:eq-out-001",
+          "p4-n4-reform:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-case3b:eq-out-002",
+          "p4-n4-reform:eq-in-000",
+          2
+        ],
+        [
+          "p4-n4-case3b:eq-out-003",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-case3b:eq-out-000",
+          "p4-n4-reform:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-case3b:eq-out-000",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-case3b:eq-out-001",
+          "p4-n4-reform:eq-in-002",
+          1
+        ],
+        [
+          "p4-n4-case3b:eq-out-001",
+          "p4-n4-reform:eq-in-003",
+          1
+        ],
+        [
+          "p4-n4-case3b:eq-out-002",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-case3b:eq-out-003",
+          "p4-n4-reform:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-n4-case3c",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Case 3c (generic): PENDING \u2014 4 numerical CPs with -N ~ 1679, needs PHCpack",
+      "detection": "classical",
+      "port_matches": [],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-n4-ia-fail",
+      "target": "p4-n4-case3c",
+      "edge_type": "challenge",
+      "evidence": "Interval arithmetic failed: wrapping error + domain-unaware + Hessian bound too large",
+      "detection": "classical",
+      "port_matches": [],
+      "iatc": "challenge"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-reform",
+      "edge_type": "assert",
+      "evidence": "Cases 1-3b algebraically exact, all CPs have -N >= 0; Case 3c pending",
+      "detection": "classical",
+      "port_matches": [
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-reform:eq-in-000",
+          3
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-reform:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-reform:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-reform:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-reform:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-005",
+          "p4-n4-reform:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-005",
+          "p4-n4-reform:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-reform:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-reform:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-boundary",
+      "edge_type": "reference",
+      "evidence": "Boundary analysis complete",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-boundary:eq-in-000",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-boundary:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-boundary:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-boundary:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-boundary:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-005",
+          "p4-n4-boundary:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-boundary:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-boundary:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-boundary:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-boundary:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-boundary:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-boundary:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case1",
+      "edge_type": "reference",
+      "evidence": "Case 1 algebraically exact",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case1:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case1:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-case1:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-case1:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-005",
+          "p4-n4-case1:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case1:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case1:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case1:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-004",
+          "p4-n4-case1:eq-in-002",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-006",
+          "p4-n4-case1:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-006",
+          "p4-n4-case1:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case2",
+      "edge_type": "reference",
+      "evidence": "Case 2 algebraically exact",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case2:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case2:eq-in-004",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-case2:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-case2:eq-in-004",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-case2:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-case2:eq-in-004",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-005",
+          "p4-n4-case2:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-005",
+          "p4-n4-case2:eq-in-004",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case2:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case2:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case2:eq-in-002",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case2:eq-in-000",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case3a",
+      "edge_type": "reference",
+      "evidence": "Case 3a algebraically exact",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case3a:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case3a:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case3a:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case3a:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-006",
+          "p4-n4-case3a:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-006",
+          "p4-n4-case3a:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case3b",
+      "edge_type": "reference",
+      "evidence": "Case 3b algebraically exact",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case3b:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case3b:eq-in-002",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case3b:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case3b:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-case3b:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-case3b:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-005",
+          "p4-n4-case3b:eq-in-003",
+          2
+        ],
+        [
+          "p4-n4-conclusion:eq-out-000",
+          "p4-n4-case3b:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case3b:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-001",
+          "p4-n4-case3b:eq-in-002",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-002",
+          "p4-n4-case3b:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-conclusion:eq-out-003",
+          "p4-n4-case3b:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-n4-conclusion",
+      "target": "p4-n4-case3c",
+      "edge_type": "reference",
+      "evidence": "Case 3c pending PHCpack (superseded by Path 2)",
+      "detection": "classical",
+      "port_matches": [],
+      "iatc": "reference"
+    },
+    {
+      "source": "p4-n4-path2-proof",
+      "target": "p4-problem",
+      "edge_type": "assert",
+      "evidence": "n=4 PROVED: P-convexity of K_red via even-odd decomposition",
+      "detection": "structural",
+      "port_matches": [
+        [
+          "p4-n4-path2-proof:eq-out-006",
+          "p4-problem:eq-in-001",
+          2
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-000",
+          "p4-problem:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-001",
+          "p4-problem:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-001",
+          "p4-problem:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-002",
+          "p4-problem:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-003",
+          "p4-problem:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-003",
+          "p4-problem:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-005",
+          "p4-problem:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-008",
+          "p4-problem:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-009",
+          "p4-problem:eq-in-001",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-010",
+          "p4-problem:eq-in-000",
+          1
+        ],
+        [
+          "p4-n4-path2-proof:eq-out-010",
+          "p4-problem:eq-in-001",
+          1
+        ]
+      ],
+      "iatc": "assert"
+    },
+    {
+      "source": "p4-n4-path2-proof",
+      "target": "p4-n4-case3c",
+      "edge_type": "supersede",
+      "evidence": "Path 2 makes case-by-case critical point analysis unnecessary",
+      "detection": "structural",
+      "port_matches": [],
+      "iatc": "supersede"
+    }
+  ],
+  "hyperedges": [
+    {
+      "hx/id": "first-proof-p4:edge-000",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s1",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Phi_n = electrostatic self-energy via log derivative",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-001",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Cauchy-Schwarz gives 1/Phi_n ~ root spread",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-002",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s3",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "MSS 2015: preserves real-rootedness, linearizes cumulants",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-003",
+      "hx/type": "thread/exemplify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s3a",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "p \u229e_n q = E[char(A + UBU*)]",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "exemplify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-004",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s3b",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "kappa_k(p \u229e_n q) = kappa_k(p) + kappa_k(q)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-005",
+      "hx/type": "thread/retract",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "[RETRACTED] 1/Phi_n concavity claim \u2014 numerically neither convex nor concave",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "retract",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-006",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-num",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Numerical verification: 0/8000 violations, inequality IS true",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-007",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-num",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "1/Phi_n neither convex nor concave; superadditivity specific to \u229e_n structure",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-008",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s4",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s3b",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Cumulant additivity is the mechanism for superadditivity",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-009",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s4a",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s4",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "[ERROR] concavity+f(0)=0 gives SUBadditivity, not superadditivity; need CONVEXITY",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-010",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "n=2 proved: 1/Phi_2 linear in disc, \u229e_2 preserves exactly",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-011",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5a",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s3a",
+          "node_type": "comment"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Translation via A+\u03b1I in random matrix model",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-012",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5b",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5a",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses centered assumption from centering reduction",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-013",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5c",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s3",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "MSS coefficient formula with a_1=b_1=0 simplifies",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-014",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5d",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5b",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses 1/Phi_3 = -2a_2/9 - 3a_3^2/(2a_2^2)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-015",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s5d",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5c",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses c_2=a_2+b_2, c_3=a_3+b_3 from \u229e_3 simplification",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-016",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Proved for n=2,3; numerically verified for n=4,5",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-017",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "n=2 equality case",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-018",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s5d",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "n=3 strict inequality via Titu's lemma",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-019",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-s6",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-num",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "n=4,5 numerical verification",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-020",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s6",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Reformulates open n=4 case: S = N/D, D < 0, need -N >= 0",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "reform",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-021",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-s1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Uses Phi_4*disc = -4*f1*f2 algebraic identity",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-022",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-hessian",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Equality point x0: Hessian PD, eigenvalues 3/4, 21/8, 6, 8",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-023",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-boundary",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "-N >= 0 on boundary: f1,f2 faces algebraic, disc=0 numerical",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-024",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-sos-fail",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "SOS/Putinar infeasible \u2014 interior zero blocks certificates",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-025",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-case1",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 1 (a3=b3=0): exact, 4 CPs, all -N >= 0",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-026",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-case2",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 2 (b3=0, a3!=0): exact, 0 interior CPs (30s)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-027",
+      "hx/type": "thread/clarify",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-case2a",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-case2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Sign-counting replaces Sturm for degree-70 (0.2s vs hours)",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "clarify",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-028",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-case3a",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 3a (diagonal): exact, 1 CP, -N = 2296",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-029",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-case3b",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 3b (anti-diagonal): exact, 2 CPs, -N >= 0.05",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-030",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-case3c",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 3c (generic): PENDING \u2014 4 numerical CPs, needs PHCpack",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-031",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-ia-fail",
+          "node_type": "comment"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-case3c",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Interval arithmetic failed: wrapping error + domain-unaware",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "challenge",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-032",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-conclusion",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-reform",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Cases 1-3b algebraically exact, Case 3c pending",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-033",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-conclusion",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-boundary",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Boundary analysis complete",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-034",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-conclusion",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-case1",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 1 algebraically exact",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-035",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-conclusion",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-case2",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 2 algebraically exact",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-036",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-conclusion",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-case3a",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 3a algebraically exact",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-037",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-conclusion",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-case3b",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 3b algebraically exact",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-038",
+      "hx/type": "thread/reference",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-conclusion",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-case3c",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Case 3c pending PHCpack (superseded by Path 2)",
+        "detection": "classical"
+      },
+      "hx/labels": [
+        "thread",
+        "reference",
+        "classical"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-039",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-path2-proof",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-problem",
+          "node_type": "question"
+        }
+      ],
+      "hx/content": {
+        "evidence": "n=4 PROVED: P-convexity of K_red via even-odd decomposition + bilinear B + discriminant analysis",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "assert",
+        "structural"
+      ]
+    },
+    {
+      "hx/id": "first-proof-p4:edge-040",
+      "hx/type": "thread/supersede",
+      "hx/ends": [
+        {
+          "role": "source",
+          "ident": "p4-n4-path2-proof",
+          "node_type": "answer"
+        },
+        {
+          "role": "target",
+          "ident": "p4-n4-case3c",
+          "node_type": "answer"
+        }
+      ],
+      "hx/content": {
+        "evidence": "Path 2 (P-convexity) makes case-by-case critical point analysis unnecessary",
+        "detection": "structural"
+      },
+      "hx/labels": [
+        "thread",
+        "supersede",
+        "structural"
+      ]
+    }
+  ],
+  "stats": {
+    "n_nodes": 28,
+    "n_edges": 41,
+    "node_types": {
+      "question": 1,
+      "answer": 22,
+      "comment": 5
+    },
+    "edge_types": {
+      "clarify": 6,
+      "assert": 13,
+      "exemplify": 1,
+      "reference": 14,
+      "challenge": 4,
+      "retract": 1,
+      "reform": 1,
+      "supersede": 1
+    },
+    "detection_types": {
+      "structural": 27,
+      "classical": 14
+    },
+    "nodes_with_discourse": 28,
+    "nodes_with_ports": 22,
+    "edges_with_port_matches": 27
+  }
+}
