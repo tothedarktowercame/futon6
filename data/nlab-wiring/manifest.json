@@ -1,0 +1,45 @@
+{
+  "generated": "2026-02-15T16:55:34Z",
+  "source": "nlab",
+  "pages_processed": 20441,
+  "limit": null,
+  "elapsed_seconds": 295,
+  "totals": {
+    "environments": 29988,
+    "typed_links": 707065,
+    "diagrams": 12023,
+    "discourse": 173282,
+    "categorical": 4193,
+    "ner_terms": 626651
+  },
+  "env_type_freq": {
+    "env/proposition": 6975,
+    "env/definition": 6901,
+    "env/proof": 5546,
+    "env/remark": 3866,
+    "env/example": 3204,
+    "env/theorem": 1923,
+    "env/lemma": 1107,
+    "env/corollary": 437,
+    "env/note": 29
+  },
+  "link_type_freq": {
+    "link/prose-ref": 554117,
+    "link/theorem-ref": 41458,
+    "link/definition-ref": 36416,
+    "link/proof-ref": 23989,
+    "link/example-ref": 20713,
+    "link/remark-ref": 17803,
+    "link/navigation": 12569
+  },
+  "cat_type_freq": {
+    "cat/adjunction": 927,
+    "cat/limit": 876,
+    "cat/natural-transformation": 797,
+    "cat/monad": 442,
+    "cat/universal-property": 395,
+    "cat/equivalence": 298,
+    "cat/fibration": 272,
+    "cat/kan-extension": 186
+  }
+}
