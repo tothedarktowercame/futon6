@@ -1,0 +1,1081 @@
+{
+  "wiring_id": "first-proof-p4",
+  "timestamp": "2026-02-15T19:49:08.871512+00:00",
+  "summary": {
+    "edges_checked": 41,
+    "categorical_consistent": 0,
+    "port_compatible": 0,
+    "iatc_aligned": 1,
+    "completeness_mean": 0.0,
+    "overall_score": 0.0061
+  },
+  "edge_reports": [
+    {
+      "edge": {
+        "source": "p4-s1",
+        "target": "p4-problem",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s2",
+        "target": "p4-s1",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s3",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s3a",
+        "target": "p4-s3",
+        "iatc": "exemplify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "exemplify needs example-like discourse"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s3b",
+        "target": "p4-s3",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s4",
+        "target": "p4-s1",
+        "iatc": "retract"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "retract needs correction-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-num",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-num",
+        "target": "p4-s4",
+        "iatc": "challenge"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "challenge needs interrogative/adversative source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s4",
+        "target": "p4-s3b",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s4a",
+        "target": "p4-s4",
+        "iatc": "challenge"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "challenge needs interrogative/adversative source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5a",
+        "target": "p4-s3a",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5b",
+        "target": "p4-s5a",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5c",
+        "target": "p4-s3",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5d",
+        "target": "p4-s5b",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s5d",
+        "target": "p4-s5c",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s6",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s6",
+        "target": "p4-s5",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s6",
+        "target": "p4-s5d",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-s6",
+        "target": "p4-num",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-reform",
+        "target": "p4-s6",
+        "iatc": "reform"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reform needs rephrasing/clarifying marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-reform",
+        "target": "p4-s1",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-hessian",
+        "target": "p4-n4-reform",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-boundary",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-sos-fail",
+        "target": "p4-n4-reform",
+        "iatc": "challenge"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "challenge needs interrogative/adversative source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case1",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case2",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case2a",
+        "target": "p4-n4-case2",
+        "iatc": "clarify"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "clarify needs clarifying discourse marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case3a",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case3b",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-case3c",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-ia-fail",
+        "target": "p4-n4-case3c",
+        "iatc": "challenge"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "challenge needs interrogative/adversative source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-reform",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-boundary",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case1",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case2",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case3a",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case3b",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-conclusion",
+        "target": "p4-n4-case3c",
+        "iatc": "reference"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "reference needs citation-like marker"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-path2-proof",
+        "target": "p4-problem",
+        "iatc": "assert"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": false,
+          "detail": "assert needs consequential/causal discourse in source"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    },
+    {
+      "edge": {
+        "source": "p4-n4-path2-proof",
+        "target": "p4-n4-case3c",
+        "iatc": "supersede"
+      },
+      "checks": {
+        "categorical": {
+          "pass": false,
+          "detail": "missing categorical annotation on one or both endpoints"
+        },
+        "ports": {
+          "pass": false,
+          "detail": "no port matches",
+          "matches": []
+        },
+        "iatc": {
+          "pass": true,
+          "detail": "no strict rule for iatc=supersede"
+        },
+        "completeness": {
+          "source": 0.0,
+          "target": 0.0
+        }
+      }
+    }
+  ],
+  "node_reports": []
+}
