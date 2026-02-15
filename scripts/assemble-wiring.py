@@ -534,6 +534,69 @@ def _find_node_id(parent_post_id, question_id, answers):
 
 
 # ============================================================
+# SEThread → Dict Converter (for superpod integration)
+# ============================================================
+
+def sethread_to_dict(thread, site="", topic=""):
+    """Convert an SEThread dataclass to the dict format for build_thread_graph().
+
+    SEThread (from futon6.stackexchange) has:
+      question: SEPost (.id, .title, .body_text, .score, .tags, .accepted_answer_id)
+      answers: list[SEPost] (.id, .body_text, .score, .parent_id)
+      comments: dict[int, list[SEComment]] (post_id -> [{.id, .post_id, .text, .score}])
+      tags: list[str]
+
+    Returns normalized dict matching build_thread_graph() input.
+    """
+    q = thread.question
+    accepted_id = q.accepted_answer_id
+
+    # Reorganize comments from dict[post_id, list] to {question: [...], answers: {aid: [...]}}
+    q_comments = []
+    a_comments = {}
+    answer_ids = {a.id for a in thread.answers}
+
+    for post_id, clist in thread.comments.items():
+        comment_dicts = [
+            {"id": c.id, "post_id": c.post_id, "text": c.text, "score": c.score}
+            for c in clist
+        ]
+        if post_id == q.id:
+            q_comments = comment_dicts
+        elif post_id in answer_ids:
+            a_comments[str(post_id)] = comment_dicts
+        else:
+            # Comment on unknown post — attach to question as fallback
+            q_comments.extend(comment_dicts)
+
+    total_comments = len(q_comments) + sum(len(v) for v in a_comments.values())
+
+    return {
+        "id": q.id,
+        "body": q.body_text,
+        "title": q.title,
+        "tags": thread.tags or q.tags or [],
+        "score": q.score,
+        "site": site,
+        "topic": topic,
+        "answers": [
+            {
+                "id": a.id,
+                "body": a.body_text,
+                "score": a.score,
+                "is_accepted": (str(a.id) == str(accepted_id)) if accepted_id else False,
+            }
+            for a in thread.answers
+        ],
+        "comments": {
+            "question": q_comments,
+            "answers": a_comments,
+            "total": total_comments,
+        },
+    }
+
+
+# ============================================================
 # Thread Loading (from JSONL with full comments)
 # ============================================================
 

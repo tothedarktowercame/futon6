@@ -60,6 +60,19 @@ import subprocess
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+sys.path.insert(0, str(Path(__file__).parent))
+
+# CT-backed wiring modules (from scripts/)
+_assemble_wiring = None
+_nlab_wiring = None
+
+def _load_ct_modules():
+    """Lazy-load CT wiring modules (only needed for Stage 7 CT path)."""
+    global _assemble_wiring, _nlab_wiring
+    if _assemble_wiring is None:
+        _assemble_wiring = importlib.import_module("assemble-wiring")
+        _nlab_wiring = importlib.import_module("nlab-wiring")
+    return _assemble_wiring, _nlab_wiring
 
 from futon6.stackexchange import (
     build_qa_pairs_streaming,
@@ -757,6 +770,125 @@ def classify_thread_performatives_llm_batch(diagrams, pipe, tokenizer,
     return llm_enhanced
 
 
+# --- Stage 7 (CT-backed): Thread wiring with categorical annotation ---
+
+def run_stage7_ct_wiring(threads, reference, singles, multi_index,
+                          site="", outdir=None):
+    """Stage 7: CT-backed thread wiring assembly.
+
+    Replaces process_threads_to_diagrams() when CT reference is available.
+    Streams results to disk (one thread at a time), never accumulating all
+    wirings in RAM.
+
+    Returns (stats_dict, output_path).
+    """
+    aw, _ = _load_ct_modules()
+
+    wiring_path = outdir / "thread-wiring-ct.json"
+    total = len(threads)
+    stats = Counter()
+    cat_types = Counter()
+    iatc_types = Counter()
+
+    with open(wiring_path, "w") as f:
+        f.write("[\n")
+        for i, thread in enumerate(threads):
+            thread_dict = aw.sethread_to_dict(thread, site=site)
+            wiring = aw.build_thread_graph(thread_dict, reference, singles, multi_index)
+
+            # Stream to disk
+            if i > 0:
+                f.write(",\n")
+            json.dump(wiring, f, ensure_ascii=False)
+
+            # Accumulate stats
+            s = wiring["stats"]
+            stats["threads_processed"] += 1
+            stats["total_nodes"] += s["n_nodes"]
+            stats["total_edges"] += s["n_edges"]
+            stats["n_categorical"] += s["n_categorical"]
+            stats["n_diagrams"] += s["n_diagrams"]
+            stats["n_port_matches"] += s["n_port_matches"]
+            for t, c in s.get("categorical_types", {}).items():
+                cat_types[t] += c
+            for t, c in s.get("iatc_types", {}).items():
+                iatc_types[t] += c
+
+            if (i + 1) % 1000 == 0 or (i + 1) == total:
+                print(f"       [{i+1}/{total}] nodes={stats['total_nodes']} "
+                      f"edges={stats['total_edges']} "
+                      f"cat={stats['n_categorical']} "
+                      f"ports={stats['n_port_matches']}")
+
+        f.write("\n]")
+
+    # Compute derived stats
+    n_threads = stats["threads_processed"]
+    n_edges = stats["total_edges"]
+    default_edges = iatc_types.get("assert", 0) + iatc_types.get("clarify", 0)
+    classical_edges = n_edges - default_edges
+
+    result_stats = dict(stats)
+    result_stats.update({
+        "categorical_types": dict(cat_types.most_common()),
+        "iatc_types": dict(iatc_types.most_common()),
+        "performative_freq": dict(iatc_types.most_common()),
+        "unique_performatives": len(iatc_types),
+        "classical_edges": classical_edges,
+        "structural_edges": default_edges,
+        "classical_edge_rate": classical_edges / n_edges if n_edges else 0,
+        "threads_with_classical": n_threads,  # all threads get IATC in new pipeline
+        "ct_backed": True,
+    })
+
+    return result_stats, wiring_path
+
+
+def build_ct_performative_prompt(wiring_dict):
+    """Build LLM performative classification prompt from CT-backed wiring dict.
+
+    Generates the same kind of prompt as build_thread_performative_prompt() but
+    from the richer wiring dict instead of the old ThreadWiringDiagram dataclass.
+    """
+    lines = []
+    lines.append("You are analysing a math StackExchange thread to classify "
+                 "the argumentative moves between posts.\n")
+    lines.append(f"Thread: \"{wiring_dict.get('title', '')}\"")
+    lines.append(f"Topic: {wiring_dict.get('topic', 'mathematics')}\n")
+
+    lines.append("Posts:")
+    for node in wiring_dict["nodes"]:
+        ntype = node["type"].upper()
+        nid = node["id"]
+        text = ""
+        # Get text from discourse or reconstruct
+        if node.get("title"):
+            text = node["title"][:200]
+        elif node.get("text_length", 0) > 0:
+            # Use port labels as proxy for content
+            ports = node.get("input_ports", []) + node.get("output_ports", [])
+            text = "; ".join(p.get("label", "")[:50] for p in ports[:3])
+        cat_info = ""
+        if node.get("categorical"):
+            cat_types_str = ", ".join(c["hx/type"] for c in node["categorical"][:3])
+            cat_info = f" [CT: {cat_types_str}]"
+        lines.append(f"  [{nid}] ({ntype}, score={node.get('score',0)}{cat_info}): "
+                     f"{text[:200]}")
+
+    lines.append("\nEdges (current classification):")
+    for edge in wiring_dict["edges"]:
+        lines.append(f"  {edge['from']} → {edge['to']}: {edge['iatc']} ({edge['type']})")
+
+    lines.append("\nFor each edge, classify the argumentative move as one of:")
+    lines.append("  assert, challenge, query, clarify, reform, exemplify, "
+                 "reference, agree, retract")
+    lines.append("\nReply as JSON array:")
+    lines.append('[{"source": "<id>", "target": "<id>", "performative": "<type>", '
+                 '"reasoning": "<brief>"}]')
+
+    return "\n".join(lines)
+
+
 # --- Stage 4: Clustering ---
 
 def cluster_embeddings(embeddings, min_cluster_size=50, max_clusters=500):
@@ -1061,10 +1193,13 @@ def print_dry_run(args):
         print(f"  {'6. Reverse morphogenesis S←Q←A (LLM)':<42s} {args.llm_model:<36s} {fmt(est_stage6_min)+' min':>10s}")
 
     # Stage 7: Thread wiring diagrams
+    ct_ref_exists = Path(args.ct_reference).exists()
     if not stage7_active:
         print(f"  {'7. Thread wiring diagrams':<42s} {'SKIPPED':>10s}")
+    elif ct_ref_exists:
+        print(f"  {'7. CT-backed wiring + IATC + cat (CPU)':<42s} {'CT ref + IATC + ports':<36s} {fmt(est_stage7_min)+' min':>10s}")
     else:
-        print(f"  {'7. Thread wiring + performatives (CPU)':<42s} {'IATC regex bank':<36s} {fmt(est_stage7_min)+' min':>10s}")
+        print(f"  {'7. Thread wiring + performatives (CPU)':<42s} {'IATC regex bank (legacy)':<36s} {fmt(est_stage7_min)+' min':>10s}")
 
     print(f"  {'-'*42} {'-'*36} {'-'*10}")
 
@@ -1224,6 +1359,8 @@ def main():
                         help="Skip thread wiring diagram construction")
     parser.add_argument("--thread-limit", type=int, default=None,
                         help="Max threads to process in Stage 7")
+    parser.add_argument("--ct-reference", default="data/nlab-ct-reference.json",
+                        help="CT reference dictionary for CT-backed wiring (Stage 7)")
 
     args = parser.parse_args()
 
@@ -1469,9 +1606,9 @@ def main():
     # ========== Stage 7: Thread wiring diagrams + performatives ==========
     stage7_stats = None
     thread_diagrams = None
+    ct_wiring_path = None
     if not args.skip_threads:
         t7 = time.time()
-        print(f"\n[Stage 7/{n_stages}] Thread wiring diagrams + IATC performatives...")
 
         # Build full threads (3-pass streaming)
         threads = build_threads_streaming(
@@ -1481,9 +1618,74 @@ def main():
             thread_limit=args.thread_limit,
         )
 
-        if threads:
+        if not threads:
+            print(f"\n[Stage 7/{n_stages}] No threads built (0 qualifying questions)")
+            stage7_stats = {"threads_processed": 0}
+
+        # --- CT-backed path (preferred when reference exists) ---
+        elif Path(args.ct_reference).exists():
+            print(f"\n[Stage 7/{n_stages}] CT-backed thread wiring + IATC + categorical...")
+            print(f"       CT reference: {args.ct_reference}")
+
+            with open(args.ct_reference) as f:
+                ct_reference = json.load(f)
+
+            _, nw = _load_ct_modules()
+            ner_path = Path(args.ner_kernel)
+            if ner_path.exists():
+                ct_singles, ct_multi, ct_ncount = nw.load_ner_kernel(ner_path)
+                print(f"       NER kernel: {len(ct_singles)} single + {ct_ncount} multi terms")
+            else:
+                ct_singles, ct_multi = None, None
+                print(f"       NER kernel not found at {ner_path}, skipping NER")
+
+            stage7_stats, ct_wiring_path = run_stage7_ct_wiring(
+                threads, ct_reference, ct_singles, ct_multi,
+                site=args.site, outdir=outdir)
+
+            print(f"       {stage7_stats['threads_processed']} threads, "
+                  f"{stage7_stats['total_nodes']} nodes, "
+                  f"{stage7_stats['total_edges']} edges")
+            print(f"       Categorical: {stage7_stats['n_categorical']} "
+                  f"({dict(list(stage7_stats.get('categorical_types', {}).items())[:5])})")
+            print(f"       Port matches: {stage7_stats['n_port_matches']}")
+            if stage7_stats.get('iatc_types'):
+                print(f"       IATC types: {dict(list(stage7_stats['iatc_types'].items())[:6])}")
+            print(f"       Written {ct_wiring_path} "
+                  f"({os.path.getsize(ct_wiring_path) / 1e6:.1f} MB)")
+
+            # Moist-run: generate LLM prompts from CT wiring dicts
+            if args.moist_run:
+                print(f"       Generating CT-backed performative prompts (moist-run)...")
+                aw, _ = _load_ct_modules()
+                prompt_dir = outdir / "moist-prompts"
+                prompt_dir.mkdir(parents=True, exist_ok=True)
+                prompt_path = prompt_dir / "stage7-thread-performatives.jsonl"
+                n_prompts = 0
+                with open(ct_wiring_path) as wf, open(prompt_path, "w") as pf:
+                    wirings = json.load(wf)
+                    for w in wirings:
+                        prompt = build_ct_performative_prompt(w)
+                        record = {
+                            "thread_id": w["thread_id"],
+                            "stage": "thread_performatives",
+                            "n_nodes": w["stats"]["n_nodes"],
+                            "n_edges": w["stats"]["n_edges"],
+                            "prompt": prompt,
+                        }
+                        pf.write(json.dumps(record, ensure_ascii=False) + "\n")
+                        n_prompts += 1
+                print(f"       Written {prompt_path} ({n_prompts} prompts)")
+
+            print(f"       Stage 7 done in {time.time()-t7:.0f}s")
+
+        # --- Fallback: old thread_performatives path ---
+        else:
+            print(f"\n[Stage 7/{n_stages}] Thread wiring diagrams + IATC performatives...")
+            print(f"       (CT reference not found at {args.ct_reference}, "
+                  f"using legacy pipeline)")
+
             # Classical performative detection + wiring diagram construction
-            # (don't write to disk yet — LLM enhancement may follow)
             thread_diagrams, stage7_stats = process_threads_to_diagrams(threads)
 
             print(f"       {stage7_stats['threads_processed']} threads, "
@@ -1526,9 +1728,6 @@ def main():
                     thread_diagrams=thread_diagrams)
 
             print(f"       Stage 7 done in {time.time()-t7:.0f}s")
-        else:
-            print(f"       No threads built (0 qualifying questions)")
-            stage7_stats = {"threads_processed": 0}
     else:
         print(f"\n[Stage 7/{n_stages}] Skipped (--skip-threads)")
 

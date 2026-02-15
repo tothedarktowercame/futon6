@@ -319,3 +319,119 @@ class TestCommentFlattening:
     def test_empty(self):
         assert assemble_wiring._flatten_comments({}) == []
         assert assemble_wiring._flatten_comments([]) == []
+
+
+# ============================================================
+# SEThread → Dict Converter Tests
+# ============================================================
+
+class _FakeSEPost:
+    """Minimal stand-in for futon6.stackexchange.SEPost."""
+    def __init__(self, id, post_type="question", title="", body_text="",
+                 score=0, tags=None, accepted_answer_id=None, parent_id=None):
+        self.id = id
+        self.post_type = post_type
+        self.title = title
+        self.body_text = body_text
+        self.score = score
+        self.tags = tags or []
+        self.accepted_answer_id = accepted_answer_id
+        self.parent_id = parent_id
+
+class _FakeSEComment:
+    """Minimal stand-in for futon6.stackexchange.SEComment."""
+    def __init__(self, id, post_id, text="", score=0):
+        self.id = id
+        self.post_id = post_id
+        self.text = text
+        self.score = score
+
+class _FakeSEThread:
+    """Minimal stand-in for futon6.stackexchange.SEThread."""
+    def __init__(self, question, answers=None, comments=None, tags=None):
+        self.question = question
+        self.answers = answers or []
+        self.comments = comments or {}
+        self.tags = tags or []
+
+
+class TestSEThreadConverter:
+
+    def _make_thread(self):
+        q = _FakeSEPost(id=100, title="Test Q", body_text="What is X?",
+                        score=5, tags=["algebra"], accepted_answer_id=201)
+        a1 = _FakeSEPost(id=201, post_type="answer", body_text="X is Y.",
+                         score=10, parent_id=100)
+        a2 = _FakeSEPost(id=202, post_type="answer", body_text="X is Z.",
+                         score=3, parent_id=100)
+        c_q = _FakeSEComment(id=301, post_id=100, text="Good question.", score=1)
+        c_a1 = _FakeSEComment(id=302, post_id=201, text="Nice answer.", score=2)
+        return _FakeSEThread(
+            question=q,
+            answers=[a1, a2],
+            comments={100: [c_q], 201: [c_a1]},
+            tags=["algebra"],
+        )
+
+    def test_basic_fields(self):
+        thread = self._make_thread()
+        d = assemble_wiring.sethread_to_dict(thread, site="math.se", topic="algebra")
+        assert d["id"] == 100
+        assert d["title"] == "Test Q"
+        assert d["body"] == "What is X?"
+        assert d["score"] == 5
+        assert d["site"] == "math.se"
+        assert d["topic"] == "algebra"
+        assert d["tags"] == ["algebra"]
+
+    def test_answers_converted(self):
+        thread = self._make_thread()
+        d = assemble_wiring.sethread_to_dict(thread)
+        assert len(d["answers"]) == 2
+        assert d["answers"][0]["id"] == 201
+        assert d["answers"][0]["body"] == "X is Y."
+        assert d["answers"][0]["score"] == 10
+        assert d["answers"][1]["id"] == 202
+
+    def test_accepted_answer_flag(self):
+        thread = self._make_thread()
+        d = assemble_wiring.sethread_to_dict(thread)
+        assert d["answers"][0]["is_accepted"] is True   # id=201 matches
+        assert d["answers"][1]["is_accepted"] is False   # id=202 doesn't
+
+    def test_comments_reorganized(self):
+        thread = self._make_thread()
+        d = assemble_wiring.sethread_to_dict(thread)
+        comments = d["comments"]
+        assert len(comments["question"]) == 1
+        assert comments["question"][0]["id"] == 301
+        assert comments["question"][0]["text"] == "Good question."
+        assert "201" in comments["answers"]
+        assert len(comments["answers"]["201"]) == 1
+        assert comments["answers"]["201"][0]["id"] == 302
+        assert comments["total"] == 2
+
+    def test_no_accepted_answer(self):
+        q = _FakeSEPost(id=100, title="Q", body_text="?", accepted_answer_id=None)
+        a = _FakeSEPost(id=201, post_type="answer", body_text="A.")
+        thread = _FakeSEThread(question=q, answers=[a])
+        d = assemble_wiring.sethread_to_dict(thread)
+        assert d["answers"][0]["is_accepted"] is False
+
+    def test_empty_comments(self):
+        q = _FakeSEPost(id=100, title="Q", body_text="?")
+        thread = _FakeSEThread(question=q)
+        d = assemble_wiring.sethread_to_dict(thread)
+        assert d["comments"]["question"] == []
+        assert d["comments"]["answers"] == {}
+        assert d["comments"]["total"] == 0
+
+    def test_roundtrip_through_build_thread_graph(self):
+        """Converted dict should work with build_thread_graph()."""
+        thread = self._make_thread()
+        d = assemble_wiring.sethread_to_dict(thread, site="test", topic="test")
+        wiring = assemble_wiring.build_thread_graph(d, MINI_REFERENCE)
+        assert wiring["thread_id"] == 100
+        assert wiring["stats"]["n_nodes"] == 5  # 1q + 2a + 2c
+        assert wiring["stats"]["n_edges"] == 4  # 2 answer→q + 2 comment→parent
+        assert wiring["site"] == "test"
