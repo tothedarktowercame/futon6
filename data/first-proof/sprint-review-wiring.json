@@ -20,7 +20,7 @@
       "id": "ret-D2",
       "node_type": "data",
       "section": "1.4",
-      "body_text": "Scorecard: 6 correct, 2 correct-direction (incomplete proof), 2 wrong. Both wrong answers are on problems where official answer is NO.",
+      "body_text": "Scorecard: 4 correct, 4 correct-direction (incomplete or mis-targeted proof), 2 wrong. Both wrong answers are on problems where official answer is NO.",
       "score": 1
     },
     {
@@ -48,7 +48,7 @@
       "id": "ret-TB",
       "node_type": "evidence",
       "section": "3.2",
-      "body_text": "Tier B (P3, P4, P5, P6): right direction, incomplete proof. P3: possible problem substitution. P4: missing hyperbolic Hessian bridge. P6: missing modified barrier. P5: sketch not full rigor.",
+      "body_text": "Tier B (P3, P4, P5, P6): right direction, incomplete proof. P3: problem substitution (related variant). P4: missing hyperbolic Hessian bridge. P6: missing modified barrier. P5: sketch not full rigor.",
       "score": 1
     },
     {

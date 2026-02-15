@@ -1,0 +1,111 @@
+digraph SprintReviewWiring {
+  graph [rankdir=TB, overlap=false, splines=true, outputorder=edgesfirst, nodesep=0.40, ranksep=1.28, pad=0.10];
+  node [shape=box, style="rounded,filled", color="#666666", penwidth=1.0, fontname="Helvetica", fontsize=18, margin="0.08,0.06"];
+  edge [arrowsize=0.75, color="#444444"];
+
+  "ret-D0" [fillcolor="#d7dcff", label="Sprint data\n341 commits, 55 h"];
+  "ret-D1" [fillcolor="#d7dcff", label="Official solutions\nGround truth"];
+  "ret-D2" [fillcolor="#d7dcff", label="Scorecard\n4 / 4 / 2"];
+  "ret-M0" [fillcolor="#efe4ff", label="Infrastructure\nWiring + review"];
+  "ret-M1" [fillcolor="#efe4ff", label="Methodology\nTypes + layer switch"];
+  "ret-TA" [fillcolor="#d5f0d8", label="Tier A\nP2, 8, 9, 10"];
+  "ret-TB" [fillcolor="#d5f0d8", label="Tier B\nP3, 4, 5, 6"];
+  "ret-TC" [fillcolor="#d5f0d8", label="Tier C\nP1, 7"];
+  "ret-S1" [fillcolor="#f4f0bf", label="Structural\ndecomposition"];
+  "ret-S2" [fillcolor="#f4f0bf", label="Computation\nguides proof"];
+  "ret-S3" [fillcolor="#f4f0bf", label="Cycle\nmethodology"];
+  "ret-S4" [fillcolor="#f4f0bf", label="Protocol\n> baselines"];
+  "ret-F1" [fillcolor="#f4f0bf", label="YES bias"];
+  "ret-F2" [fillcolor="#f4f0bf", label="False-premise\ntrap"];
+  "ret-F3" [fillcolor="#f4f0bf", label="Conditional\ngap"];
+  "ret-F4" [fillcolor="#f4f0bf", label="Domain-depth\ngap"];
+  "ret-N1" [fillcolor="#f4f0bf", label="P4 near miss\nendpoint fixation"];
+  "ret-N2" [fillcolor="#f4f0bf", label="P6 near miss\nobject inertia"];
+  "ret-P1" [fillcolor="#f4f0bf", label="Coaching >\ndispatching"];
+  "ret-P2" [fillcolor="#f4f0bf", label="Negative\npheromone"];
+  "ret-V1" [fillcolor="#f8dede", label="Non-blinded\nevaluation"];
+  "ret-V2" [fillcolor="#f8dede", label="Baseline\ncomparability"];
+  "ret-V3" [fillcolor="#f8dede", label="Attribution\nuncertainty"];
+  "ret-R1" [fillcolor="#f7dfc6", label="Mandatory\nfalsification"];
+  "ret-R2" [fillcolor="#f7dfc6", label="Domain-depth\naudit"];
+  "ret-R3" [fillcolor="#f7dfc6", label="State-variable\nhop"];
+  "ret-C0" [fillcolor="#c6f5ca", label="Epistemic weakness\nFalse premises invisible", fontname="Helvetica-Bold", penwidth=1.0];
+  "ret-C1" [fillcolor="#c6f5ca", label="thesis\nFrontier = falsification depth", fontname="Helvetica-Bold", penwidth=1.0];
+
+  // Rank constraints
+  subgraph rank_0 { rank=same; "ret-D0"; "ret-D1"; }
+  "ret-D0" -> "ret-D1" [style=invis, weight=40];
+  subgraph rank_1 { rank=same; "ret-M0"; "ret-D2"; }
+  "ret-M0" -> "ret-D2" [style=invis, weight=40];
+  subgraph rank_2 { rank=same; "ret-M1"; "ret-TA"; "ret-TB"; }
+  "ret-M1" -> "ret-TA" [style=invis, weight=40];
+  "ret-TA" -> "ret-TB" [style=invis, weight=40];
+  subgraph rank_3 { rank=same; "ret-TC"; "ret-S1"; "ret-S2"; }
+  "ret-TC" -> "ret-S1" [style=invis, weight=40];
+  "ret-S1" -> "ret-S2" [style=invis, weight=40];
+  subgraph rank_4 { rank=same; "ret-S3"; "ret-F1"; "ret-F2"; }
+  "ret-S3" -> "ret-F1" [style=invis, weight=40];
+  "ret-F1" -> "ret-F2" [style=invis, weight=40];
+  subgraph rank_5 { rank=same; "ret-F3"; "ret-V1"; "ret-S4"; }
+  "ret-F3" -> "ret-V1" [style=invis, weight=40];
+  "ret-V1" -> "ret-S4" [style=invis, weight=40];
+  subgraph rank_6 { rank=same; "ret-P1"; "ret-P2"; "ret-F4"; }
+  "ret-P1" -> "ret-P2" [style=invis, weight=40];
+  "ret-P2" -> "ret-F4" [style=invis, weight=40];
+  subgraph rank_7 { rank=same; "ret-N1"; "ret-N2"; "ret-V2"; }
+  "ret-N1" -> "ret-N2" [style=invis, weight=40];
+  "ret-N2" -> "ret-V2" [style=invis, weight=40];
+  subgraph rank_8 { rank=same; "ret-R1"; "ret-R2"; "ret-R3"; }
+  "ret-R1" -> "ret-R2" [style=invis, weight=40];
+  "ret-R2" -> "ret-R3" [style=invis, weight=40];
+  subgraph rank_9 { rank=same; "ret-V3"; "ret-C0"; }
+  "ret-V3" -> "ret-C0" [style=invis, weight=40];
+  subgraph rank_10 { rank=same; "ret-C1"; }
+
+  // Central top-down spine
+  "ret-D2" -> "ret-TB" [style=invis, weight=80];
+  "ret-TB" -> "ret-S4" [style=invis, weight=80];
+  "ret-S4" -> "ret-R2" [style=invis, weight=80];
+  "ret-R2" -> "ret-C0" [style=invis, weight=80];
+  "ret-C0" -> "ret-C1" [style=invis, weight=80];
+
+  // Typed edges from wiring JSON
+  "ret-D0" -> "ret-D2" [style=solid, color="#333333", penwidth=2.0];
+  "ret-D1" -> "ret-D2" [style=solid, color="#333333", penwidth=2.0];
+  "ret-M0" -> "ret-S4" [style=dotted, color="#8a8a8a", penwidth=1.5, constraint=false];
+  "ret-M1" -> "ret-S3" [style=dotted, color="#8a8a8a", penwidth=1.5, constraint=false];
+  "ret-D2" -> "ret-TA" [style=dashed, color="#333333", penwidth=1.7];
+  "ret-D2" -> "ret-TB" [style=dashed, color="#333333", penwidth=1.7];
+  "ret-D2" -> "ret-TC" [style=dashed, color="#333333", penwidth=1.7];
+  "ret-TA" -> "ret-S1" [style=solid, color="#333333", penwidth=2.0];
+  "ret-TB" -> "ret-S2" [style=solid, color="#333333", penwidth=2.0];
+  "ret-TB" -> "ret-S3" [style=solid, color="#333333", penwidth=2.0];
+  "ret-TA" -> "ret-S4" [style=solid, color="#333333", penwidth=2.0];
+  "ret-TB" -> "ret-S4" [style=solid, color="#333333", penwidth=2.0];
+  "ret-TC" -> "ret-F1" [style=solid, color="#333333", penwidth=2.0];
+  "ret-TC" -> "ret-F2" [style=dotted, color="#333333", penwidth=2.0];
+  "ret-TC" -> "ret-F3" [style=dotted, color="#333333", penwidth=2.0];
+  "ret-F1" -> "ret-F4" [style=solid, color="#333333", penwidth=2.0];
+  "ret-F2" -> "ret-F4" [style=solid, color="#333333", penwidth=2.0];
+  "ret-F3" -> "ret-F4" [style=solid, color="#333333", penwidth=2.0];
+  "ret-TB" -> "ret-N1" [style=dotted, color="#333333", penwidth=2.0];
+  "ret-TB" -> "ret-N2" [style=dotted, color="#333333", penwidth=2.0];
+  "ret-N1" -> "ret-N2" [style=dotted, color="#8a8a8a", penwidth=1.5, constraint=false];
+  "ret-N1" -> "ret-R3" [style=solid, color="#333333", penwidth=2.0];
+  "ret-N2" -> "ret-R3" [style=solid, color="#333333", penwidth=2.0];
+  "ret-P1" -> "ret-S4" [style=solid, color="#333333", penwidth=2.0];
+  "ret-S3" -> "ret-P2" [style=solid, color="#333333", penwidth=2.0];
+  "ret-V1" -> "ret-S4" [style=dashed, color="#e88a8a", penwidth=2.2, constraint=false];
+  "ret-V2" -> "ret-S4" [style=dashed, color="#e88a8a", penwidth=2.2, constraint=false];
+  "ret-V3" -> "ret-P1" [style=dashed, color="#e88a8a", penwidth=2.2, constraint=false];
+  "ret-F1" -> "ret-R1" [style=solid, color="#333333", penwidth=2.0];
+  "ret-F4" -> "ret-R2" [style=solid, color="#333333", penwidth=2.0];
+  "ret-F2" -> "ret-C0" [style=solid, color="#333333", penwidth=2.0];
+  "ret-F3" -> "ret-C0" [style=solid, color="#333333", penwidth=2.0];
+  "ret-F4" -> "ret-C0" [style=solid, color="#333333", penwidth=2.0];
+  "ret-S4" -> "ret-C1" [style=solid, color="#333333", penwidth=2.0];
+  "ret-C0" -> "ret-C1" [style=solid, color="#333333", penwidth=2.0];
+  "ret-R1" -> "ret-C1" [style=dotted, color="#8a8a8a", penwidth=1.5, constraint=false];
+  "ret-R2" -> "ret-C1" [style=dotted, color="#8a8a8a", penwidth=1.5, constraint=false];
+  "ret-R3" -> "ret-C1" [style=dotted, color="#8a8a8a", penwidth=1.5, constraint=false];
+}

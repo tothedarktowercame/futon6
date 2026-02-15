@@ -13,7 +13,6 @@
 \usepackage{longtable,booktabs,tabularx}
 \usepackage{enumitem}
 \usepackage{setspace}
-\usepackage{fancyhdr}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{xurl}
 \usepackage{hyperref}
@@ -64,12 +63,7 @@
   before skip=2pt, after skip=2pt
 }
 
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\small\nouppercase{\leftmark}}
-\fancyhead[R]{\thepage}
-\renewcommand{\headrulewidth}{0.2pt}
-\setlength{\headheight}{14.5pt}
+\pagestyle{plain}
 
 \title{\textbf{A First Proof Sprint Review}\\[4pt]
 \large What We Got Right, What We Got Wrong,\\
@@ -80,7 +74,12 @@ and What the Official Solutions Reveal}
 
 \begin{document}
 \maketitle
-\thispagestyle{fancy}
+\makeatletter
+\let\ps@headings\ps@plain
+\let\ps@myheadings\ps@plain
+\makeatother
+\pagestyle{plain}
+\thispagestyle{plain}
 
 \begin{abstract}
 On February 11--14, 2026, we conducted a 55-hour human-AI proof sprint
@@ -93,7 +92,7 @@ February~14.  This paper is a retrospective: we compare our answers
 with the official ones, identify patterns of success and failure, catalog
 missed opportunities, and assess potential novel contributions.
 
-\medskip\noindent\textbf{Summary.}  We achieved 6 correct answers out of~10,
+We achieved 4 correct answers out of~10,
 with 8/10 in the correct direction.  The two wrong answers (Problems~1
 and~7) share a common pattern: a YES bias toward constructive arguments,
 combined with insufficient depth in specialized domains (regularity
@@ -108,9 +107,6 @@ companion monograph~\cite{monograph}; this review does not reproduce them.
 This paper should be read as a structured self-audit against external
 ground truth, not as a blinded benchmark study.
 \end{abstract}
-
-\tableofcontents
-\clearpage
 
 %% ====================================================================
 \section{Introduction}
@@ -180,7 +176,7 @@ reproduce the proof details from the monograph; instead, it asks:
 \midrule
 1 & $\Phi^4_3$ measure shift equiv.\ & YES & \textbf{NO} & Wrong \\
 2 & Rankin--Selberg test vector & YES & YES & Correct \\
-3 & Interpolation ASEP chain & YES & YES & Correct${}^*$ \\
+3 & Interpolation ASEP chain & YES & YES & Direction${}^\dagger$ \\
 4 & Finite free Stam inequality & Conj.\ YES & YES (proved) & Direction${}^\dagger$ \\
 5 & $O$-slice connectivity & Partial YES & YES & Direction${}^\dagger$ \\
 6 & Epsilon-light subsets & Partial YES & YES ($c=1/42$) & Direction${}^\dagger$ \\
@@ -192,28 +188,63 @@ reproduce the proof details from the monograph; instead, it asks:
 \end{tabular}
 
 \smallskip
-{\footnotesize ${}^*$Possible problem-substitution risk (interpolation
-vs.\ standard ASEP).  ${}^\dagger$Correct answer, incomplete proof.}
+{\footnotesize ${}^\dagger$Correct answer direction, but incomplete or
+mis-targeted proof.}
 \end{table}
 
-\textbf{Bottom line:} 6 correct answers, 2 correct-direction with
-incomplete proofs, 2 wrong answers.  Of the 8 problems with answer YES,
-we got 6 fully correct.  Both problems with answer NO were answered
+\textbf{Bottom line:} 4 correct answers, 4 correct-direction with
+incomplete or mis-targeted proofs, 2 wrong answers.  Of the 8 problems
+with answer YES, we got 4 fully correct.  Both problems with answer NO were answered
 incorrectly.
 
 \subsection{Paper structure}
 
 \Cref{fig:wiring} shows the argument wiring diagram for this paper:
 the logical dependencies between empirical claims, pattern
-identifications, and the central thesis.  The diagram follows the
-AIF (Argument Interchange Format) conventions used for the monograph's
-proof-level wiring diagrams, applied here at the paper level.
+identifications, and the central thesis.  The diagram follows the same
+typed node/edge conventions used for the monograph's proof-level wiring
+diagrams, applied here at the paper level.
 Dashed red arrows denote challenges (threats to validity) directed at
 specific claims.
 
 \begin{figure}[p]
 \centering
-\input{plates/sprint-review-wiring-tikz.tex}
+\begin{tikzpicture}
+  \node[anchor=south west, inner sep=0] (wireimg) at (0,0)
+    {\includegraphics[width=\textwidth,height=0.83\textheight,keepaspectratio]{plates/sprint-review-wiring-graphviz.pdf}};
+  \begin{scope}[x={(wireimg.south east)}, y={(wireimg.north west)}]
+    \node[
+      draw, rounded corners=2pt, fill=white, fill opacity=0.92, text opacity=1,
+      anchor=north east, align=left, font=\fontsize{7}{8}\selectfont,
+      inner sep=3pt
+    ] at (0.985, 0.985) {%
+      \textbf{Node types}\\[-1pt]
+      \begin{tabular}{@{}ll@{}}
+        \fcolorbox{black!40}{blue!20}{\rule{0.7em}{0.65em}} & data \\
+        \fcolorbox{black!40}{violet!15}{\rule{0.7em}{0.65em}} & method \\
+        \fcolorbox{black!40}{green!18}{\rule{0.7em}{0.65em}} & evidence \\
+        \fcolorbox{black!40}{yellow!20}{\rule{0.7em}{0.65em}} & synthesis \\
+        \fcolorbox{black!40}{red!14}{\rule{0.7em}{0.65em}} & challenge \\
+        \fcolorbox{black!40}{orange!18}{\rule{0.7em}{0.65em}} & prescription \\
+        \fcolorbox{black!40}{green!30}{\rule{0.7em}{0.65em}} & outcome
+      \end{tabular}
+    };
+    \node[
+      draw, rounded corners=2pt, fill=white, fill opacity=0.92, text opacity=1,
+      anchor=south west, align=left, font=\fontsize{7}{8}\selectfont,
+      inner sep=3pt, text width=2.9cm
+    ] at (0.02, 0.02) {%
+      \textbf{Edge types}\\[-1pt]
+      \begin{tabular}{@{}ll@{}}
+        {\color{black}\rule[0.45ex]{0.75cm}{0.45pt}} & assert \\
+        {\color{black}\texttt{- - -}} & classify \\
+        {\color{black}\texttt{. . .}} & exemplify \\
+        {\color{gray!70}\texttt{. . .}} & reference \\
+        {\color{red!70}\texttt{- - -}} & challenge
+      \end{tabular}
+    };
+  \end{scope}
+\end{tikzpicture}
 \caption{Argument wiring diagram for this paper.  Nodes are typed by
   role (data, method, evidence, synthesis, challenge, prescription,
   outcome); edges by epistemic relation.  The flow runs top to bottom:
@@ -381,7 +412,7 @@ the tier assignments and key comparison features.
 9 & A & Correct & Rank-2 bilinear & Degree 3 vs.\ 5 (different construction) \\
 10 & A & Correct & PCG + $K_\tau^2$ & Matches official; praised by author \\
 \midrule
-3 & B & Direction & $t$-PushTASEP & Possible problem substitution \\
+3 & B & Direction & $t$-PushTASEP & Problem substitution (related variant) \\
 4 & B & Direction & $\Phi_3 \cdot \mathrm{disc}$ & Missing general technique \\
 5 & B & Direction & $F_O$-local & Sketch, not full rigor \\
 6 & B & Direction & Tur\'an + greedy & Missing modified barrier \\
@@ -414,6 +445,9 @@ The official commentary notes that AI systems typically either
 (b)~tried to make the integrand constant on its support (impossible due
 to central characters).  We avoided both pitfalls by anchoring on the new
 vector from the start.
+
+There is no problem-substitution concern for Problem~2 in this review: the
+comparison is against the same task, with different proof architecture.
 
 \textbf{Verdict:} Solid match.  Difference is primarily in proof
 architecture, not substance.
@@ -503,14 +537,11 @@ not the standard ASEP polynomials.  The official solution requires a
 novel construction using signed two-line queues with intricate weight
 systems, going beyond the published AMW paper.
 
-The official commentary flags ``problem substitution''---solving the
-known related problem rather than the actual one---as a common AI error.
-Our solution may be partially susceptible to this critique, depending on
-how the notation bridge between starred and unstarred polynomials is
-interpreted.
+The official commentary's ``problem substitution'' diagnosis applies here:
+we solved a known related ASEP stationary-law result, not the exact
+interpolation-ASEP target as stated.
 
-\textbf{Verdict:} Correct answer; proof may solve a slightly easier
-problem.
+\textbf{Verdict:} Right direction, wrong problem version.
 
 \subsubsection{Problem 4: Finite free Stam inequality}
 
@@ -735,7 +766,7 @@ The differentiating factor appears to be the \emph{iterative protocol},
 not ``human presence'' per se.  Vanilla AI (single-prompt, no iteration)
 produced one essentially correct solution (P9) and one good solution
 (P10) across the ten problems.  Our sprint used repeated verify/revise
-cycles, numerical stress testing, and structured handoffs, and produced six
+cycles, numerical stress testing, and structured handoffs, and produced four
 correct answers with three strong matches and several partial results
 exceeding the baseline.  In this run, human input was real but often
 lightweight (task routing, reframing prompts, editorial integration), and
@@ -756,7 +787,7 @@ detail.
 \midrule
 1 & Quoted unpublished sketch or false premise & False premise (same error) \\
 2 & Identified $W$ but failed nonvanishing & Correct (anchored on new vector) \\
-3 & Metropolis--Hastings (trivial) or problem substitution & Correct family, possible substitution \\
+3 & Metropolis--Hastings (trivial) or problem substitution & Right direction; solved related variant \\
 4 & ``Did not make sense'' (Srivastava) & $n \le 3$ proved; $n=4$ certified \\
 5 & ``Essentially correct'' outline & Essentially correct outline \\
 6 & ChatGPT: couldn't answer; Gemini: vague & $K_n$ proved exactly, $c=1/3$ \\
@@ -987,20 +1018,18 @@ inequality recurs but closure stalls, force a deliberate ``state-variable
 hop'' cycle (new potential/barrier definitions) before spending more effort
 on sharpening constants within the old variable.
 
-\subsection{P3: Problem substitution risk}
+\subsection{P3: Problem substitution}
 
-The official commentary raises the possibility that our P3 solution
-addresses the standard ASEP polynomials rather than the interpolation
-variant.  We explicitly addressed the notation correspondence
-($F^*_\mu = F_\mu$ in AMW), but the official solution suggests deeper
-combinatorial work with signed two-line queues is needed.
+The official comparison resolves this point: our P3 solution addressed a
+related standard ASEP stationary-law theorem rather than the exact
+interpolation-ASEP formulation requested in the problem statement.  We
+explicitly attempted a notation bridge ($F^*_\mu = F_\mu$ in AMW), but the
+official solution's signed two-line queue construction shows that the
+interpolation layer is substantive and cannot be collapsed away here.
 
-The risk was identifiable: the problem statement uses starred notation
-($F^*_\mu$) throughout, and the difference between interpolation and
-standard polynomials is a known subtlety in the algebraic combinatorics
-literature.  More careful attention to the notation would have prompted
-investigation of whether the standard-to-interpolation bridge is trivial
-or substantive.
+The miss was identifiable: the starred notation ($F^*_\mu$) in the problem
+statement should have triggered an explicit check that we were proving the
+interpolation object itself, not only a neighboring result.
 
 \subsection{P7: Should have tested the NO direction}
 
@@ -1041,7 +1070,7 @@ official document catalogs for GPT-5.2~Pro and Gemini~3.0 Deep Think:
 \textbf{Failure mode} & \textbf{Us?} & \textbf{Where} \\
 \midrule
 Foundational error (false premise) & Yes & P1: assumed $\Phi^4_3 \sim$ GFF \\
-Problem substitution & Possibly & P3: interpolation vs.\ standard ASEP \\
+Problem substitution & Yes & P3: interpolation vs.\ standard ASEP \\
 Citation without substance & No & --- \\
 Local vs.\ global gap & Caught & P8: fixed via disjoint supports \\
 False theorems & No & --- \\
@@ -1159,9 +1188,9 @@ are moved to \texttt{sprint-review-outtakes.tex} to keep the main narrative comp
 In a 55-hour sprint on ten research-level mathematics problems:
 
 \begin{itemize}
-\item \textbf{6/10 correct answers}, with 3 strong proof matches (P2, P8,
+\item \textbf{4/10 correct answers}, with 3 strong proof matches (P2, P8,
   P10) and one genuinely different construction (P9).
-\item \textbf{8/10 correct direction}, with P4 and P6 producing
+\item \textbf{8/10 correct direction}, with P3, P4, P5, and P6 producing
   substantial partial results beyond what single-shot AI baselines
   achieved.
 \item \textbf{2/10 wrong answers} (P1, P7), both sharing the YES bias
