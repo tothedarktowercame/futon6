@@ -1,0 +1,53 @@
+{
+  "generated_utc": "2026-02-15T17:08:35.782612+00:00",
+  "min_question_score": 0,
+  "sample_size": 50,
+  "seed": "futon6-se-sample-v1",
+  "sets": [
+    {
+      "answers": 62,
+      "comments": 229,
+      "eligible_questions_with_answers": 11238,
+      "eligible_tagged_questions": 11239,
+      "output_file": "data/stackexchange-samples/math.stackexchange.com__category-theory.jsonl",
+      "site": "math.stackexchange.com",
+      "threads": 50,
+      "topic": "category-theory",
+      "topic_tag": "category-theory"
+    },
+    {
+      "answers": 63,
+      "comments": 167,
+      "eligible_questions_with_answers": 2644,
+      "eligible_tagged_questions": 2646,
+      "output_file": "data/stackexchange-samples/math.stackexchange.com__mathematical-physics.jsonl",
+      "site": "math.stackexchange.com",
+      "threads": 50,
+      "topic": "mathematical-physics",
+      "topic_tag": "mathematical-physics"
+    },
+    {
+      "answers": 78,
+      "comments": 335,
+      "eligible_questions_with_answers": 4535,
+      "eligible_tagged_questions": 4537,
+      "output_file": "data/stackexchange-samples/mathoverflow.net__category-theory.jsonl",
+      "site": "mathoverflow.net",
+      "threads": 50,
+      "topic": "category-theory",
+      "topic_tag": "ct.category-theory"
+    },
+    {
+      "answers": 111,
+      "comments": 396,
+      "eligible_questions_with_answers": 1445,
+      "eligible_tagged_questions": 1445,
+      "output_file": "data/stackexchange-samples/mathoverflow.net__mathematical-physics.jsonl",
+      "site": "mathoverflow.net",
+      "threads": 50,
+      "topic": "mathematical-physics",
+      "topic_tag": "mp.mathematical-physics"
+    }
+  ],
+  "source_root": "/home/joe/code/futon6/se-data"
+}
