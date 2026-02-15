@@ -1464,47 +1464,80 @@ def cmd_reference(args):
 # Subcommand: evaluate
 # ============================================================
 
-def cmd_evaluate(args):
-    """Score math.SE answers against CT reference structures."""
-    ref_path = Path(args.reference)
-    answers_path = Path(args.answers)
+def load_threads(path):
+    """Load threads from JSONL (one thread per line) or JSON array.
 
-    if not ref_path.exists():
-        print(f"Reference file not found: {ref_path}")
-        sys.exit(1)
-    if not answers_path.exists():
-        print(f"Answers file not found: {answers_path}")
-        sys.exit(1)
+    Normalises to a list of dicts with keys:
+        id, body, tags, accepted_answer_id, site, topic, answers[]
+    where each answer has: id, body, score, is_accepted
+    """
+    threads = []
+    p = Path(path)
+    # Try JSONL first
+    with open(p) as f:
+        first_char = f.read(1)
+    if first_char == '{':
+        # JSONL
+        with open(p) as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                threads.append(json.loads(line))
+    else:
+        # JSON array
+        with open(p) as f:
+            threads = json.load(f)
 
-    print(f"Loading reference from {ref_path}...")
-    with open(ref_path) as f:
-        reference = json.load(f)
+    normalised = []
+    for t in threads:
+        # Handle Codex SE thread format: {question: {...}, answers: [...]}
+        if "question" in t:
+            q = t["question"]
+            accepted_id = q.get("accepted_answer_id")
+            answers = []
+            for a in t.get("answers", []):
+                a_id = a.get("id")
+                answers.append({
+                    "id": a_id,
+                    "body": a.get("body_text", a.get("body", "")),
+                    "score": a.get("score", 0),
+                    "is_accepted": str(a_id) == str(accepted_id) if accepted_id else False,
+                })
+            normalised.append({
+                "id": q.get("id", t.get("thread_id", "unknown")),
+                "body": q.get("body_text", q.get("body", "")),
+                "title": q.get("title", ""),
+                "tags": q.get("tags", []),
+                "site": t.get("site", ""),
+                "topic": t.get("topic", ""),
+                "answers": answers,
+            })
+        else:
+            # Direct format: {id, body, tags, answers[{id, body, score, is_accepted}]}
+            normalised.append(t)
+    return normalised
 
-    print(f"Loading answers from {answers_path}...")
-    with open(answers_path) as f:
-        answers_data = json.load(f)
 
-    # Load NER kernel for term spotting
-    ner_path = Path(args.ner_kernel)
-    singles, multi_index = None, None
-    if ner_path.exists():
-        singles, multi_index, _ = load_ner_kernel(ner_path)
+def evaluate_threads(threads, reference, singles, multi_index):
+    """Score a list of normalised threads against CT reference.
 
+    Returns (results_list, summary_dict).
+    """
     patterns = reference["patterns"]
-    link_weights = reference.get("link_weights", {})
-
     results = []
-    for question in answers_data:
+
+    for question in threads:
         q_id = question.get("id", "unknown")
-        q_text = question.get("body", question.get("text", ""))
-        q_tags = question.get("tags", [])
+        q_text = question.get("body", "")
+        q_title = question.get("title", "")
+        q_full = q_title + " " + q_text
         answers = question.get("answers", [])
 
-        # Determine which categorical patterns are relevant to this question
+        # Determine which categorical patterns are relevant
         relevant_patterns = []
-        q_lower = q_text.lower()
+        q_lower = q_full.lower()
         for cat_type, pat_data in patterns.items():
-            # Check if question text mentions required links
             score = 0
             for link in pat_data.get("required_links", []):
                 if link in q_lower:
@@ -1514,31 +1547,29 @@ def cmd_evaluate(args):
                     score += 1
             if score > 0:
                 relevant_patterns.append((cat_type, score, pat_data))
-
         relevant_patterns.sort(key=lambda x: -x[1])
 
         # Score each answer
         scored_answers = []
         for answer in answers:
             a_id = answer.get("id", "unknown")
-            a_text = answer.get("body", answer.get("text", ""))
+            a_text = answer.get("body", "")
             is_accepted = answer.get("is_accepted", False)
             a_score = answer.get("score", 0)
 
-            # 1. Term overlap score
+            # 1. Term overlap
             term_score = 0
             if singles:
                 terms = spot_terms(a_text, singles, multi_index or {})
                 term_score = len(terms)
 
-            # 2. Structural match: detect discourse wiring in answer
+            # 2. Structural match: discourse wiring in answer
             discourse_scopes = detect_scopes(f"ans-{a_id}", a_text)
             discourse_wires = detect_wires(f"ans-{a_id}", a_text)
             discourse_ports = detect_ports(f"ans-{a_id}", a_text)
-
             struct_score = len(discourse_scopes) + len(discourse_wires) * 0.5
 
-            # 3. Completeness: does answer cover required links?
+            # 3. Completeness vs best matching pattern
             completeness_score = 0
             a_lower = a_text.lower()
             best_pattern = relevant_patterns[0] if relevant_patterns else None
@@ -1549,9 +1580,11 @@ def cmd_evaluate(args):
                 completeness_score = covered / max(1, len(required))
 
             # 4. Diagram presence
-            diagram_score = 1.0 if re.search(r'\\begin\{tikzcd\}|\\array\{|\\xymatrix', a_text) else 0.0
+            diagram_score = 1.0 if re.search(
+                r'\\begin\{tikzcd\}|\\array\s*\{|\\xymatrix|\\begin\{CD\}|'
+                r'\\xrightarrow|\\xleftarrow|\\overset\{.*?\}\{\\to\}',
+                a_text) else 0.0
 
-            # Combined score
             combined = (
                 term_score * 0.3 +
                 struct_score * 0.3 +
@@ -1572,10 +1605,8 @@ def cmd_evaluate(args):
                 },
             })
 
-        # Sort by CT score
         scored_answers.sort(key=lambda x: -x["ct_score"])
 
-        # Check if our ranking matches accepted answer
         ct_rank_of_accepted = None
         for rank, sa in enumerate(scored_answers):
             if sa["is_accepted"]:
@@ -1584,6 +1615,7 @@ def cmd_evaluate(args):
 
         results.append({
             "question_id": q_id,
+            "title": question.get("title", ""),
             "relevant_patterns": [(p[0], p[1]) for p in relevant_patterns[:3]],
             "n_answers": len(scored_answers),
             "scored_answers": scored_answers,
@@ -1591,35 +1623,130 @@ def cmd_evaluate(args):
             "ct_top_is_accepted": scored_answers[0]["is_accepted"] if scored_answers else None,
         })
 
-    # Aggregate
     n_questions = len(results)
     n_with_accepted = sum(1 for r in results if r["ct_rank_of_accepted"] is not None)
+    n_multi_answer = sum(1 for r in results if r["n_answers"] > 1)
+    n_multi_with_accepted = sum(1 for r in results
+                                 if r["n_answers"] > 1 and r["ct_rank_of_accepted"] is not None)
     n_top_match = sum(1 for r in results if r.get("ct_top_is_accepted"))
+    n_top_match_multi = sum(1 for r in results
+                            if r.get("ct_top_is_accepted") and r["n_answers"] > 1)
 
+    # Mean CT score for accepted vs non-accepted
+    accepted_scores = []
+    rejected_scores = []
+    for r in results:
+        for sa in r["scored_answers"]:
+            if sa["is_accepted"]:
+                accepted_scores.append(sa["ct_score"])
+            else:
+                rejected_scores.append(sa["ct_score"])
+
+    summary = {
+        "n_questions": n_questions,
+        "n_with_accepted": n_with_accepted,
+        "n_multi_answer": n_multi_answer,
+        "n_multi_with_accepted": n_multi_with_accepted,
+        "n_ct_top_is_accepted": n_top_match,
+        "n_ct_top_is_accepted_multi": n_top_match_multi,
+        "accuracy_all": round(n_top_match / max(1, n_with_accepted), 3),
+        "accuracy_multi": round(n_top_match_multi / max(1, n_multi_with_accepted), 3),
+        "mean_ct_score_accepted": round(sum(accepted_scores) / max(1, len(accepted_scores)), 2),
+        "mean_ct_score_rejected": round(sum(rejected_scores) / max(1, len(rejected_scores)), 2),
+    }
+
+    return results, summary
+
+
+def cmd_evaluate(args):
+    """Score SE/MO answers against CT reference structures.
+
+    Accepts a single JSONL file or a directory of JSONL files for 2x2 comparison.
+    """
+    ref_path = Path(args.reference)
+    answers_path = Path(args.answers)
+
+    if not ref_path.exists():
+        print(f"Reference file not found: {ref_path}")
+        sys.exit(1)
+
+    print(f"Loading reference from {ref_path}...")
+    with open(ref_path) as f:
+        reference = json.load(f)
+
+    # Load NER kernel
+    ner_path = Path(args.ner_kernel)
+    singles, multi_index = None, None
+    if ner_path.exists():
+        singles, multi_index, _ = load_ner_kernel(ner_path)
+
+    # Collect input files
+    if answers_path.is_dir():
+        input_files = sorted(answers_path.glob("*.jsonl"))
+    else:
+        input_files = [answers_path]
+
+    if not input_files:
+        print(f"No JSONL files found at {answers_path}")
+        sys.exit(1)
+
+    all_evaluations = {}
+    for input_file in input_files:
+        label = input_file.stem  # e.g. "math.stackexchange.com__category-theory"
+        print(f"\nEvaluating {label}...")
+        threads = load_threads(input_file)
+        print(f"  {len(threads)} threads loaded")
+        results, summary = evaluate_threads(threads, reference, singles, multi_index)
+        all_evaluations[label] = {
+            "file": str(input_file),
+            "summary": summary,
+            "results": results,
+        }
+        print(f"  Threads: {summary['n_questions']}, "
+              f"with accepted: {summary['n_with_accepted']}, "
+              f"multi-answer: {summary['n_multi_answer']}")
+        print(f"  CT top = accepted (all): {summary['n_ct_top_is_accepted']}"
+              f"/{summary['n_with_accepted']}"
+              f" ({summary['accuracy_all']:.0%})")
+        print(f"  CT top = accepted (multi): {summary['n_ct_top_is_accepted_multi']}"
+              f"/{summary['n_multi_with_accepted']}"
+              f" ({summary['accuracy_multi']:.0%})")
+        print(f"  Mean CT score: accepted={summary['mean_ct_score_accepted']}"
+              f" rejected={summary['mean_ct_score_rejected']}")
+
+    # Write combined output
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    evaluation = {
+
+    output = {
         "meta": {
             "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "reference": str(ref_path),
-            "answers": str(answers_path),
+            "n_input_files": len(input_files),
         },
-        "summary": {
-            "n_questions": n_questions,
-            "n_with_accepted": n_with_accepted,
-            "n_ct_top_is_accepted": n_top_match,
-            "accuracy": round(n_top_match / max(1, n_with_accepted), 3),
-        },
-        "results": results,
+        "evaluations": all_evaluations,
     }
 
+    # Print 2x2 comparison table if we have 4 files
+    if len(all_evaluations) >= 2:
+        print(f"\n{'='*70}")
+        print(f"{'2x2 CT Reference Evaluation':^70}")
+        print(f"{'='*70}")
+        print(f"{'Dataset':<50} {'Acc(all)':>8} {'Acc(2+)':>8} {'CT_acc':>7} {'CT_rej':>7}")
+        print(f"{'-'*70}")
+        for label, ev in sorted(all_evaluations.items()):
+            s = ev["summary"]
+            print(f"{label:<50} "
+                  f"{s['accuracy_all']:>7.0%} "
+                  f"{s['accuracy_multi']:>7.0%} "
+                  f"{s['mean_ct_score_accepted']:>7.1f} "
+                  f"{s['mean_ct_score_rejected']:>7.1f}")
+        print(f"{'='*70}")
+
     with open(out_path, "w") as f:
-        json.dump(evaluation, f, indent=2, ensure_ascii=False)
+        json.dump(output, f, indent=2, ensure_ascii=False)
 
     print(f"\nEvaluation written to {out_path}")
-    print(f"  Questions: {n_questions}")
-    print(f"  With accepted answer: {n_with_accepted}")
-    print(f"  CT top = accepted: {n_top_match} ({n_top_match/max(1, n_with_accepted):.0%})")
 
 
 # ============================================================
@@ -1647,7 +1774,8 @@ def main():
     # evaluate
     eval_p = sub.add_parser("evaluate", help="Score answers against reference")
     eval_p.add_argument("--reference", default="data/nlab-ct-reference.json")
-    eval_p.add_argument("--answers", required=True, help="Path to math.SE answers JSON")
+    eval_p.add_argument("--answers", required=True,
+                        help="Path to JSONL file or directory of JSONL files")
     eval_p.add_argument("--ner-kernel", default=str(NER_KERNEL))
     eval_p.add_argument("--output", default="data/ct-evaluation.json")
 
