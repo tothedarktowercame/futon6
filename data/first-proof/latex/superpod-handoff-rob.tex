@@ -1,0 +1,250 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+  \setmainfont{Latin Modern Roman}
+\fi
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!60!black,
+  pdftitle={Superpod Run: Handoff Note},
+  pdfauthor={Joseph Corneli}
+}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{itemsep=0.2em,topsep=0.3em}
+\setlist[enumerate]{itemsep=0.2em,topsep=0.3em}
+\setstretch{1.1}
+
+\pagestyle{plain}
+
+\title{\textbf{Superpod Run: What It Is and What It Produces}\\[3pt]
+\large A Handoff Note}
+\author{Joe Corneli\\
+\small Hyperreal Enterprises Ltd}
+\date{February 15, 2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{plain}
+
+\section*{Context}
+
+Rob---this note explains the ``superpod run,'' a batch processing job
+that takes the full StackExchange mathematics data dumps and transforms
+them into structured knowledge artifacts.  The run is the next concrete
+step in the futon6 project, and its output feeds directly into
+preparations for First Proof Batch~2 (expected $\sim$1 month from now).
+
+The short version: we're taking 567K math.stackexchange threads and
+100K MathOverflow threads, running them through a 7-stage pipeline, and
+producing \emph{typed wiring diagrams} for every thread---machine-readable
+representations of how the arguments in each thread fit together, what
+mathematical structures they reference, and where the logical connections
+are.
+
+\section*{What goes in}
+
+StackExchange publishes complete data dumps of every Q\&A site.  For
+mathematics we use two:
+
+\begin{itemize}
+\item \textbf{math.stackexchange.com} --- 567K question threads.
+  Undergraduate through graduate level.  High volume, broad coverage.
+\item \textbf{mathoverflow.net} --- 100K question threads.
+  Research level.  Narrower but deeper.
+\end{itemize}
+
+Each thread has a question, zero or more answers, and comments.  The raw
+data is XML (the SE data dump format).  Total: roughly 20~GB of XML,
+compressing to about 5~GB.
+
+\section*{What the pipeline does}
+
+The superpod job has seven stages.  Not all require a GPU---the first,
+fifth, and seventh stages run on a laptop.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}clXc@{}}
+\toprule
+\textbf{Stage} & \textbf{Name} & \textbf{What it does} & \textbf{Hardware} \\
+\midrule
+1 & Parse & Stream XML into structured QA pairs (question + answers +
+comments + tags + metadata) & CPU \\
+2 & Embed & Dense vector embedding of every post (768-dim,
+BGE-large model) for similarity search and clustering & GPU \\
+3 & Tag & LLM pattern tagging: classify each post against 25
+informal-argument patterns (Llama-3-8B) & GPU \\
+4 & Cluster & Group threads by mathematical topic using HDBSCAN on
+the embeddings from Stage~2 & CPU \\
+5 & NER + Scopes & Classical named-entity recognition (19K math
+terms from PlanetMath) plus discourse scope/wire/port detection & CPU \\
+6 & Reverse morphogenesis & LLM inference that reconstructs
+the logical skeleton of each QA pair: what's assumed, what's claimed,
+what's justified & GPU \\
+7 & Thread wiring & Build the final wiring diagram for each thread:
+IATC edge types, categorical pattern detection, port extraction
+and matching & CPU \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The pipeline has three run modes:
+\begin{itemize}
+\item \textbf{Full} (GPU): all seven stages.  Requires a multi-GPU
+  machine for Stages 2, 3, and 6.
+\item \textbf{Moist} (CPU + prompt files): runs CPU stages, then
+  generates prompt files for Stages 3 and 6 that can be handed off
+  to a cloud LLM provider.
+\item \textbf{CPU-only}: runs Stages 1, 4, 5, and 7.  Produces
+  structured data without the LLM-dependent enrichments.
+\end{itemize}
+
+For the immediate run, we'll likely use CPU-only or moist mode,
+since the LLM stages can be backfilled later.  The critical output
+is Stage~7: the CT-backed wiring diagrams.
+
+\section*{What comes out}
+
+For every thread, Stage~7 produces a JSON wiring diagram with three
+levels of structure:
+
+\begin{enumerate}
+\item \textbf{Thread level (discourse):} Each post becomes a node.
+  Edges between posts are typed by \emph{illocutionary act} --- assert,
+  challenge, clarify, reference, retract, reform, etc.  These capture
+  the argumentative moves in the thread.
+
+\item \textbf{Categorical level:} Each node is checked against a
+  reference dictionary of 8 category-theory pattern types
+  (adjunction, equivalence, fibration, etc.), extracted from 20K
+  nLab wiki pages.  IDF weighting avoids false positives from
+  ubiquitous terms.
+
+\item \textbf{Port level:} Mathematical content within each post is
+  decomposed into \emph{input ports} (assumptions, let-bindings) and
+  \emph{output ports} (conclusions, constraints).  Edges carry
+  \emph{port matches} showing which outputs of one post connect to
+  which inputs of the next, with match scores boosted by
+  the CT reference weights.
+\end{enumerate}
+
+So where a raw SE thread looks like ``question $\to$ answer $\to$
+comment,'' the wiring diagram looks more like: ``question introduces
+terms $X, Y$ via let-bindings; answer asserts conclusion $Z$ via
+Cauchy--Schwarz referencing $X$; comment challenges the bound on $Y$
+with an adversative discourse marker.''
+
+\section*{Scale}
+
+Some rough numbers for what the run produces:
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{math.SE} & \textbf{MathOverflow} \\
+\midrule
+Threads & $\sim$567K & $\sim$100K \\
+Nodes (posts) & $\sim$3M & $\sim$500K \\
+Edges (typed) & $\sim$2.5M & $\sim$400K \\
+Output size (est.) & $\sim$15 GB & $\sim$3 GB \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The 200-thread pilot we ran this week produced 1,641 nodes, 1,441
+edges, and 319 categorical detections with sharp differentiation:
+category-theory threads averaged 3 categorical patterns per thread
+vs.\ 0.2 for mathematical-physics threads.  The signal is real.
+
+\section*{How this connects to First Proof 2}
+
+We did a proof sprint on the First Proof benchmark two weeks ago
+(10 research-level math problems, 55 hours, 4/10 correct).  A
+detailed retrospective identified five things we'd do differently next
+time.  The superpod run addresses three of them directly:
+
+\begin{enumerate}
+\item \textbf{Better literature mining.}  During Sprint~1, our
+  keyword-based literature searches missed critical techniques (e.g.,
+  hyperbolic Hessian contraction bounds for Problem~4).  The superpod
+  output provides a structured index of how 667K threads discuss
+  mathematical concepts---not just keywords, but typed connections
+  between assumptions and conclusions.  When we encounter a proof step
+  that needs a bridge, we can query the wiring corpus: ``what threads
+  have an output port matching this input?''
+
+\item \textbf{Automated proof verification.}  We built a CT-backed
+  verifier that checks each edge in a proof wiring diagram for
+  structural consistency (do the port types match? does the edge type
+  match the discourse markers?).  During Sprint~1, these checks were
+  manual.  Now they're automated, and the superpod run gives the
+  verifier a large reference corpus to calibrate against.
+
+\item \textbf{Domain-depth pre-loading.}  Sprint~1's two wrong answers
+  were both on problems requiring deep specialized knowledge.  The
+  superpod output lets us pre-identify which mathematical subfields
+  have rich thread coverage and which are sparse, so we can
+  front-load targeted literature mining for the harder problems.
+\end{enumerate}
+
+The other two Sprint~1 lessons (mandatory falsification protocol,
+better calibration tracking) are process improvements that don't
+depend on the corpus, but benefit from it---a verification score
+that plateaus is a concrete trigger for switching from constructive
+to falsification mode.
+
+\section*{Timeline}
+
+\begin{description}[leftmargin=2em]
+\item[This week:] Launch the CPU-only run on math.SE + MathOverflow
+  ($\sim$48 hours of compute).  This produces Stage~1 (parsed
+  threads), Stage~5 (NER + scopes), and Stage~7 (CT-backed wiring
+  diagrams).
+\item[Next 2 weeks:] Backfill GPU stages (embeddings, LLM tagging)
+  if cloud compute is available.  Build a ``proof assistant'' wrapper
+  that integrates the verifier with the sprint workflow.
+\item[Week 4:] First Proof Batch~2, if announced.  Otherwise, dry-run
+  the full protocol on a practice problem (e.g., re-attempt
+  Problem~4 with the new infrastructure, targeting the all-$n$ bridge
+  we missed the first time).
+\end{description}
+
+\section*{What I'd like from you}
+
+Mainly: a sanity check.  Does this pipeline make sense as a way to
+build structured mathematical knowledge at scale?  The bet is that
+typed wiring diagrams (not just embeddings, not just keyword search)
+are the right intermediate representation---rich enough to support
+automated verification, structured enough to enable port-level queries,
+but not so formal that we need full theorem-proving infrastructure.
+
+If you want to poke at any of the artifacts, the repo is
+\texttt{futon6} on GitHub (private, happy to add you).  The key files:
+
+\begin{itemize}
+\item \texttt{scripts/superpod-job.py} --- the pipeline (1,700 lines)
+\item \texttt{scripts/assemble-wiring.py} --- wiring assembly (750 lines)
+\item \texttt{scripts/ct-verifier.py} --- proof verifier (570 lines)
+\item \texttt{data/nlab-ct-reference.json} --- the CT reference (20K pages)
+\item \texttt{data/first-proof/First\_Proof\_1-to-First\_Proof\_2.md}
+  --- the full changelog from Sprint~1 to Sprint~2 prep
+\end{itemize}
+
+\end{document}
