@@ -82,6 +82,16 @@ h1{font-size:1.35rem;margin-bottom:4px;color:#333}
 .legend-swatch{width:36px;height:14px;border-radius:2px;flex-shrink:0}
 .section-gap{height:16px}
 a.ner{color:inherit}
+/* Expression surfaces */
+mjx-container.expr-surface{background:rgba(34,197,94,.09);border-radius:3px;padding:1px 3px;cursor:pointer;transition:background .15s}
+mjx-container.expr-surface:hover{background:rgba(34,197,94,.22)}
+mjx-container.expr-surface-display{background:rgba(34,197,94,.06);border-radius:4px;padding:6px 10px;display:inline-block;transition:background .15s}
+mjx-container.expr-surface-display:hover{background:rgba(34,197,94,.16)}
+#sexp-tip{position:absolute;z-index:999;display:none;font-family:'SF Mono',Menlo,Monaco,Consolas,monospace;font-size:.78rem;line-height:1.4;background:#1e293b;color:#e2e8f0;padding:8px 12px;border-radius:5px;box-shadow:0 4px 16px rgba(0,0,0,.25);max-width:480px;white-space:pre-wrap;pointer-events:none}
+#sexp-tip .sexp-kw{color:#7dd3fc}
+#sexp-tip .sexp-op{color:#fbbf24}
+#sexp-tip .sexp-sym{color:#a5f3fc}
+#sexp-tip::after{content:'s-expression parse';display:block;font-size:.6rem;color:#64748b;margin-top:4px;letter-spacing:.04em;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -114,7 +124,8 @@ a.ner{color:inherit}
 </div>
 <p style="margin-top:12px;font-size:.75rem;color:#888;line-height:1.5">
   <strong>Scope Map</strong> panels decompose variable bindings into symbol : description form.<br>
-  <strong>Discourse Markers</strong> panels show rhetorical structure: adversative ("but"), consequential ("Thus"), examples, and cross-references.
+  <strong>Discourse Markers</strong> panels show rhetorical structure: adversative ("but"), consequential ("Thus"), examples, and cross-references.<br>
+  <span style="display:inline-block;width:36px;height:14px;background:rgba(34,197,94,.15);border-radius:2px;vertical-align:middle"></span> <strong>Expression surfaces</strong> — hover for s-expression parse. Each expression is a typed surface for further wiring.
 </p>
 </div>
 
@@ -123,6 +134,74 @@ a.ner{color:inherit}
 const RAW = {"question":{"id":633512,"url":"https://math.stackexchange.com/questions/633512","title":"What is the definition of a commutative diagram?","score":18,"tags":["category-theory"],"accepted_answer_id":633527,"body_html":"<p>Reading in <a href=\"http://katmat.math.uni-bremen.de/acc/acc.pdf\">ACC (the joy of cats)<\/a> I was quite surprised to meet a real\ndefinition of <em>diagram<\/em>. This word had been used exactly $27$ times\nallready (just believe me) and the question \u2018what is it?\u2019 had not reached my thinking\nwhatsoever. Okay, good to have a definition (11.1(1) see under),\nbut it triggered me to expect a definition of <em>commutative diagram<\/em>\nas well. Alas, it was not there. In my intuition I think of a diagram\nhaving a poset as scheme, but I don\u2019t trust that intuition\nenough to take this for granted. So I am asking you here:<\/p>\n\n<blockquote>\n  <p>What is the definition of a commutative diagram?<\/p>\n<\/blockquote>\n\n<p>Thanks in advance<\/p>\n\n<p>11.1 (1) A diagram in a category $\\mathcal{A}$ is a functor $D:\\mathcal{I}\\rightarrow\\mathcal{A}$\nwith codomain $\\mathcal{A}$. The domain, $\\mathcal{I}$, is called\nthe scheme of the diagram.<\/p>\n"},"answers":[{"id":633527,"url":"https://math.stackexchange.com/a/633527","score":17,"is_accepted":true,"body_html":"<p>Let $\\Gamma=(V,E,s,t)$ be a directed graph ($V$ = vertices, $E$ = edges, $s$ = source, $t$ = target). Let $\\mathcal{C}$ be a category. A <strong>diagram of shape<\/strong> $\\Gamma$ <strong>in<\/strong> $\\mathcal{C}$ is a family of objects $X(v) \\in \\mathcal{C}$ for every vertex $v \\in V$ and morphisms $X(e)$ in $\\mathcal{C}$ for every edge $e \\in E$ such that $s(X(e))=X(s(e))$ and $t(X(e))=X(t(e))$ for all $e \\in E$. Thus, every edge $e : v \\to w$ is mapped to a morphism $X(e) : X(v) \\to X(w)$.<\/p>\n\n<p>For a path $\\gamma$ in $\\Gamma$ we define a morphism $X(\\gamma)$ in $\\mathcal{C}$ by induction: If $\\gamma$ is the empty path at a vertex $v$, let $X(\\gamma):=\\mathrm{id}_{X(v)}$. If $\\gamma = \\beta \\circ e$ for a shorter path $\\beta$ and an edge $e$, define $X(\\gamma) := X(\\beta) \\circ X(e)$.<\/p>\n\n<p>The diagram $X$ is called <strong>commutative<\/strong> if for all vertices $v,w \\in V$ and all two paths $\\gamma,\\gamma'$ in $\\Gamma$ from $v$ to $w$ we have $X(\\gamma)=X(\\gamma')$.<\/p>\n\n<p>Convince yourself that this coincides with the usual definition for simple examples such as<\/p>\n\n<p>$$\\Gamma = \\begin{array}{c} \\bullet &amp; \\rightarrow &amp; \\bullet \\\\ \\downarrow &amp;&amp; \\downarrow \\\\ \\bullet &amp; \\rightarrow &amp; \\bullet  \\end{array}$$<\/p>\n\n<p>There is a close connection between diagrams and functors. If $\\mathsf{Path}(\\Gamma)$ denotes the path category, then functors $\\mathsf{Path}(\\Gamma) \\to \\mathcal{C}$ correspond to diagrams of shape $\\Gamma$ in $\\mathcal{C}$. These in turn correspond to homomorphisms of directed graphs $\\Gamma \\to U(\\mathcal{C})$, where $U(-)$ is the forgetful functor from categories to directed graphs.<\/p>\n\n<p>If one even regards arbitrary functors (with small domain category) as diagrams, then we may use the same definition of commutativity as above: Every two chains of morphisms between two given objects are mapped to the same morphism.<\/p>\n\n<p>Sometimes one only demands the commutativity condition for certain paths. For example, when dealing with sheaves or simplicial sets, usually a diagram of the shape\n$$\\begin{array}{c} \\bullet &amp; \\rightrightarrows &amp; \\bullet \\\\ \\downarrow &amp;&amp; \\downarrow \\\\ \\bullet &amp; \\rightrightarrows &amp; \\bullet  \\end{array}$$\nis called commutative if the two squares which consist of the two upper resp. lower horizontal morphisms are commutative. <\/p>\n\n<p>PS: I have just found that these definitions can also be found in Grothendieck\u2019s Tohoku paper. <\/p>\n"}],"comments_q":[{"id":1335328,"score":0,"text":"Your intuition probably works, though one can get commutative diagrams with less restrictions, since you just need the images of all arrows to agree (when they share domain and codomain), rather than all arrows themselves agreeing."},{"id":1335337,"score":0,"text":"There are some exceptional conventions to learn. For instance one may wonder what it means to commute, when working with a diagram with a pair of arrows between a couple of vertices, see <a href=\"http://math.stackexchange.com/questions/459405/commutativity-of-diagram-involving-two-arrows\">here<\/a>."},{"id":1335340,"score":0,"text":"There are no exceptions. The general definition (see my answer) also covers this case."},{"id":1335347,"score":0,"text":"@MartinBrandenburg When one explicitly writes those pairs like in my link, one ignores the fact that they are non-equal as the answer points out. As I understand it, your answer does not cover this case."},{"id":1335352,"score":1,"text":"@KarlKronenfeld, while that situation does arise in the literature, it is an abuse of language to call such a thing a commutative diagram. Martin\u2019s definition is the standard definition, really."},{"id":1335361,"score":0,"text":"Mariano, I hope that some day \u201cMartin\u2019s definition is the standard definition, really.\u201d will be a standard. :-D"}],"comments_a":{"633527":[{"id":1335366,"score":0,"text":"I haven\u2019t absorbed this yet, but how about my mentioned intuition (poset as scheme). Can you say some explicit about that? Is it too restricted? I expect so, because - if not - then your answer would be redundant, wouldn\u2019t it?"},{"id":1335376,"score":0,"text":"Of course posets are way too restrictive."},{"id":1335379,"score":1,"text":"A directed graph $\\Gamma$ as in Martin\u2019s anwer generates freely a category, which Maritn writes $Patth(\\Gamma)$ and you can quotient it by the relation that identifies two arrows whenever they are parallel (that is, they have the same domain and codomain) to get a new category $\\bar\\Gamma$. A commutative diagram of shape $\\Gamma$ is a functor defined on a category of the form $\\bar\\Gamma$. For suitably restricted $\\Gamma$, $\\bar\\Gamma$ is a poset. (You need $\\Gamma$ to be acyclic and probably more) But you do want, in general, cycles. For example, if $G$ is an group, you can view it as a"},{"id":1335388,"score":1,"text":"(\u2026) category with one object, and a space with action of $G$ is the same as a \u00abdiagram of shape $G$\u00bb with values in topological spaces: in this situation, the domain category is all loops. You can codify more complicated things in this way: you can have a poset and a group at each vertex acting and so on and so forth. This things *do* arise in nature."},{"id":1335392,"score":2,"text":"@Mariano\u00a0Su\u00e1rez-Alvarez Thank you. Intuition is essential and cannot be missed. But trustworthy it is not. I have a lot to learn again. By the way what is the percentage of mathematicians that are speaking of commutative diagrams and do not know what it really is? At the moment I am still one of them, but I have hope now that that will change."},{"id":1336112,"score":2,"text":"@drhab In Wikipedia (http://en.wikipedia.org/wiki/Commutative_diagram) commutative diagrams are defined exactly as you say with posets categories as schemes/indices. This is basically the same definition given by Martin for commutative diagrams. I do not see it as more restrictive than the one given with paths by Martin. Indeed also nlab (http://nlab.mathforge.org/nlab/show/commutative+diagram) describes a commutative diagram as a quiver which factors via a poset"},{"id":4249182,"score":0,"text":"Does it mean that, given a category with two objects and a morphism between them, we could say they commute? I.e. because all paths between the objects \u2014 there\u2019s one \u2014 are the same."},{"id":4586588,"score":0,"text":"@Hi-Angel: Sure."}]}};
 
 const WIRING = {"nodes":[{"id":"q-633512","type":"question","ner_terms":[{"term":"ACC","canon":"AscendingChainCondition"},{"term":"category","canon":"Category"},{"term":"codomain","canon":"Function"},{"term":"commutative","canon":"Commutative"},{"term":"commutative diagram","canon":"CommutativeDiagram"},{"term":"diagram","canon":"CommutativeDiagram"},{"term":"domain","canon":"Domain"},{"term":"functor","canon":"Functor"},{"term":"poset","canon":"Poset"},{"term":"scheme","canon":"Scheme"}],"discourse":[{"hx/id":"q-633512:wire-000","hx/role":"wire","hx/type":"wire/adversative","hx/content":{"match":"but","position":337}},{"hx/id":"q-633512:wire-001","hx/role":"wire","hx/type":"wire/adversative","hx/content":{"match":"but","position":499}},{"hx/id":"q-633512:label-000","hx/role":"label","hx/type":"explain/think-of","hx/content":{"match":"think of","position":454}}],"categorical":[]},{"id":"a-633527","type":"answer","ner_terms":[{"term":"category","canon":"Category"},{"term":"commutative","canon":"Commutative"},{"term":"commutativity","canon":"Commutative"},{"term":"diagram","canon":"CommutativeDiagram"},{"term":"directed graph","canon":"DirectedGraph"},{"term":"domain","canon":"Domain"},{"term":"forgetful functor","canon":"ConcreteCategory"},{"term":"functor","canon":"Functor"},{"term":"induction","canon":"Induction"},{"term":"morphism","canon":"StructureHomomorphism"},{"term":"path","canon":"Path"},{"term":"sheaves","canon":"Sheaf1"},{"term":"simplicial set","canon":"SimplicialObject"},{"term":"source","canon":"SourcesAndSinksOfVectorField"},{"term":"vertex","canon":"Polyhedron"},{"term":"vertices","canon":"KnotTheory"}],"discourse":[{"hx/id":"a-633527:scope-000","hx/role":"component","hx/type":"bind/let","hx/content":{"match":"Let $\\Gamma=(V,E,s,t)$ be a directed graph (","position":0},"hx/ends":[{"role":"symbol","latex":"\\Gamma=(V,E,s,t)"},{"role":"description","text":"a directed graph"},{"role":"parameters","text":"V = vertices, E = edges, s = source, t = target"}]},{"hx/id":"a-633527:scope-001","hx/role":"component","hx/type":"bind/let","hx/content":{"match":"Let $\\mathcal{C}$ be a category","position":102},"hx/ends":[{"role":"symbol","latex":"\\mathcal{C}"},{"role":"description","text":"a category"}]},{"hx/id":"a-633527:scope-002","hx/role":"component","hx/type":"quant/universal","hx/content":{"match":"for all $e \\in E$","position":366},"hx/ends":[{"role":"variable","latex":"e"},{"role":"domain","latex":"E","text":"edges of the graph"}]},{"hx/id":"a-633527:scope-003","hx/role":"component","hx/type":"constrain/where","hx/content":{"match":"where $U(-)$ is the forgetful functor from categories to directed graphs","position":1469},"hx/ends":[{"role":"symbol","latex":"U(-)"},{"role":"description","text":"the forgetful functor from categories to directed graphs"}]},{"hx/id":"a-633527:wire-000","hx/role":"wire","hx/type":"wire/consequential","hx/content":{"match":"Thus","position":385}},{"hx/id":"a-633527:port-000","hx/role":"port","hx/type":"port/the-same","hx/content":{"match":"the same definition","position":1640}},{"hx/id":"a-633527:port-001","hx/role":"port","hx/type":"port/the-same","hx/content":{"match":"the same morphism","position":1757}},{"hx/id":"a-633527:label-000","hx/role":"label","hx/type":"construct/exists","hx/content":{"match":"There is","position":1153}},{"hx/id":"a-633527:label-001","hx/role":"label","hx/type":"strategy/example","hx/content":{"match":"For example","position":1850}}],"categorical":[{"hx/type":"cat/equivalence","hx/content":{"score":8.4}},{"hx/type":"cat/limit","hx/content":{"score":3.7}},{"hx/type":"cat/universal-property","hx/content":{"score":5.4}}]}],"edges":[{"from":"a-633527","to":"q-633512","iatc":"assert"},{"from":"c-1335328","to":"q-633512","iatc":"clarify"},{"from":"c-1335337","to":"q-633512","iatc":"exemplify"},{"from":"c-1335340","to":"q-633512","iatc":"reference"},{"from":"c-1335347","to":"q-633512","iatc":"clarify"},{"from":"c-1335352","to":"q-633512","iatc":"clarify"},{"from":"c-1335361","to":"q-633512","iatc":"clarify"},{"from":"c-1335366","to":"a-633527","iatc":"challenge"},{"from":"c-1335376","to":"a-633527","iatc":"clarify"},{"from":"c-1335379","to":"a-633527","iatc":"clarify"},{"from":"c-1335388","to":"a-633527","iatc":"clarify"},{"from":"c-1335392","to":"a-633527","iatc":"query"},{"from":"c-1336112","to":"a-633527","iatc":"agree"},{"from":"c-4249182","to":"a-633527","iatc":"clarify"},{"from":"c-4586588","to":"a-633527","iatc":"clarify"}]};
+
+// ---- S-expression parses for embedded math ----
+// Each LaTeX expression is a typed surface. The s-exp shows its parse tree.
+// Key: TeX source (without $ delimiters, as MathJax sees it). Value: s-exp.
+const PARSES = {
+  // -- Question --
+  "\\mathcal{A}": "𝒜",
+  "D:\\mathcal{I}\\rightarrow\\mathcal{A}":
+    "(: D (→ ℐ 𝒜))",
+  "\\mathcal{I}": "ℐ",
+
+  // -- Answer: Let-bindings (paragraph 1) --
+  "\\Gamma=(V,E,s,t)":
+    "(= Γ (tuple V E s t))",
+  "\\mathcal{C}": "𝒞",
+  "\\Gamma": "Γ",
+  "X(v) \\in \\mathcal{C}":
+    "(∈ (X v) 𝒞)",
+  "v \\in V": "(∈ v V)",
+  "X(e)": "(X e)",
+  "e \\in E": "(∈ e E)",
+  "s(X(e))=X(s(e))":
+    "(= (s (X e)) (X (s e)))",
+  "t(X(e))=X(t(e))":
+    "(= (t (X e)) (X (t e)))",
+  "e : v \\to w":
+    "(: e (hom v w))",
+  "X(e) : X(v) \\to X(w)":
+    "(: (X e) (hom (X v) (X w)))",
+
+  // -- Answer: Path induction (paragraph 2) --
+  "\\gamma": "γ",
+  "X(\\gamma)": "(X γ)",
+  "X(\\gamma):=\\mathrm{id}_{X(v)}":
+    "(:= (X γ) (id (X v)))",
+  "\\gamma = \\beta \\circ e":
+    "(= γ (∘ β e))",
+  "\\beta": "β",
+  "X(\\gamma) := X(\\beta) \\circ X(e)":
+    "(:= (X γ) (∘ (X β) (X e)))",
+
+  // -- Answer: Commutativity condition (paragraph 3) --
+  "v,w \\in V": "(∈ (v w) V)",
+  "\\gamma,\\gamma'": "(γ γ′)",
+  "X(\\gamma)=X(\\gamma')":
+    "(= (X γ) (X γ′))",
+
+  // -- Answer: Diagram as graph (display) --
+  "\\Gamma = \\begin{array}{c} \\bullet & \\rightarrow & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightarrow & \\bullet  \\end{array}":
+    "(= Γ\n  (graph\n    (→ • •)  ;; top\n    (↓ • •)  ;; left\n    (↓ • •)  ;; right\n    (→ • •)));; bottom",
+
+  // -- Answer: Path category --
+  "\\mathsf{Path}(\\Gamma)": "(Path Γ)",
+  "\\mathsf{Path}(\\Gamma) \\to \\mathcal{C}":
+    "(→ (Path Γ) 𝒞)",
+  "\\Gamma \\to U(\\mathcal{C})":
+    "(→ Γ (U 𝒞))",
+  "U(-)": "(U □)",
+
+  // -- Answer: Double-arrow diagram (display) --
+  "\\begin{array}{c} \\bullet & \\rightrightarrows & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightrightarrows & \\bullet  \\end{array}":
+    "(graph\n  (⇉ • •)  ;; top pair\n  (↓ • •)  ;; left\n  (↓ • •)  ;; right\n  (⇉ • •));; bottom pair",
+
+  // -- Comments (Mariano's) --
+  "Patth(\\Gamma)": "(Path Γ)  ;; [sic]",
+  "\\bar\\Gamma": "Γ̄",
+  "G": "G",
+};
 
 // ---- Helpers ----
 function nlabUrl(canon) {
@@ -137,6 +216,57 @@ function escH(s) {
   const d = document.createElement('div');
   d.textContent = s;
   return d.innerHTML;
+}
+
+// ---- S-exp tooltip ----
+const tip = document.createElement('div');
+tip.id = 'sexp-tip';
+document.body.appendChild(tip);
+
+function showSexp(evt) {
+  const sexp = evt.currentTarget.getAttribute('data-sexp');
+  if (!sexp) return;
+  tip.textContent = sexp;
+  tip.style.display = 'block';
+  const r = evt.currentTarget.getBoundingClientRect();
+  const tipW = tip.offsetWidth;
+  let left = r.left + (r.width / 2) - (tipW / 2);
+  left = Math.max(8, Math.min(left, window.innerWidth - tipW - 8));
+  tip.style.left = left + 'px';
+  tip.style.top = (r.bottom + 6 + window.scrollY) + 'px';
+  tip.style.position = 'absolute';
+}
+function hideSexp() { tip.style.display = 'none'; }
+
+// Normalize TeX for matching: collapse whitespace, trim
+function normTex(s) { return s.replace(/\s+/g, ' ').trim(); }
+
+// Build normalized lookup
+const parseLookup = {};
+Object.keys(PARSES).forEach(k => { parseLookup[normTex(k)] = PARSES[k]; });
+
+// After MathJax renders, annotate every expression as a green surface
+function annotateExpressions(root) {
+  // MathJax 3: iterate all math items within root
+  if (!MathJax.startup || !MathJax.startup.document) return;
+  const mathDoc = MathJax.startup.document;
+  for (const item of mathDoc.math) {
+    const container = item.typesetRoot;
+    if (!container || !root.contains(container)) continue;
+
+    const tex = normTex(item.math);
+    const isDisplay = item.display;
+    const sexp = parseLookup[tex];
+
+    // Green surface
+    container.classList.add(isDisplay ? 'expr-surface-display' : 'expr-surface');
+
+    if (sexp) {
+      container.setAttribute('data-sexp', sexp);
+      container.addEventListener('mouseenter', showSexp);
+      container.addEventListener('mouseleave', hideSexp);
+    }
+  }
 }
 
 // Build edge lookup: target -> [{from, iatc}]
@@ -394,7 +524,9 @@ function renderThread() {
 
   // Re-typeset MathJax
   if (window.MathJax && MathJax.typesetPromise) {
-    MathJax.typesetPromise([container]).catch(e => console.warn('MathJax:', e));
+    MathJax.typesetPromise([container]).then(() => {
+      annotateExpressions(container);
+    }).catch(e => console.warn('MathJax:', e));
   }
 }
 
