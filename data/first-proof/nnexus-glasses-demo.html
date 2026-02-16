@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NNexus Glasses — math.SE #633512</title>
-<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},startup:{pageReady(){MathJax.startup.defaultPageReady().then(()=>console.log('MathJax ready'))}}};</script>
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},startup:{typeset:false}};</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -245,28 +245,76 @@ function normTex(s) { return s.replace(/\s+/g, ' ').trim(); }
 const parseLookup = {};
 Object.keys(PARSES).forEach(k => { parseLookup[normTex(k)] = PARSES[k]; });
 
-// After MathJax renders, annotate every expression as a green surface
-function annotateExpressions(root) {
-  // MathJax 3: iterate all math items within root
-  if (!MathJax.startup || !MathJax.startup.document) return;
-  const mathDoc = MathJax.startup.document;
-  for (const item of mathDoc.math) {
-    const container = item.typesetRoot;
-    if (!container || !root.contains(container)) continue;
+// PHASE 1: Before MathJax runs, wrap $...$ in annotated spans.
+// This captures the original TeX so we can match after MathJax renders.
+function wrapMathExpressions(root) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  const textNodes = [];
+  let n;
+  while ((n = walker.nextNode())) textNodes.push(n);
 
-    const tex = normTex(item.math);
-    const isDisplay = item.display;
-    const sexp = parseLookup[tex];
+  for (const textNode of textNodes) {
+    const text = textNode.nodeValue;
+    if (!text.includes('$')) continue;
+    const par = textNode.parentElement;
+    if (!par) continue;
+    const tag = par.tagName;
+    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE') continue;
+    // Skip if already inside a math wrapper
+    if (par.closest('.math-expr')) continue;
 
-    // Green surface
-    container.classList.add(isDisplay ? 'expr-surface-display' : 'expr-surface');
+    // Match $$...$$ (display, possibly multiline) then $...$ (inline)
+    const re = /\$\$([\s\S]+?)\$\$|\$([^$\n]+?)\$/g;
+    let lastIndex = 0;
+    let m;
+    const frag = document.createDocumentFragment();
+    let found = false;
 
-    if (sexp) {
-      container.setAttribute('data-sexp', sexp);
-      container.addEventListener('mouseenter', showSexp);
-      container.addEventListener('mouseleave', hideSexp);
+    while ((m = re.exec(text)) !== null) {
+      found = true;
+      if (m.index > lastIndex) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
+      }
+      const span = document.createElement('span');
+      span.className = 'math-expr';
+      const isDisplay = m[0].startsWith('$$');
+      const tex = (m[1] || m[2]).trim();
+      span.setAttribute('data-tex', tex);
+      span.setAttribute('data-display', isDisplay ? '1' : '0');
+      span.textContent = m[0]; // preserve delimiters for MathJax
+      frag.appendChild(span);
+      lastIndex = m.index + m[0].length;
+    }
+
+    if (found) {
+      if (lastIndex < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+      textNode.parentNode.replaceChild(frag, textNode);
     }
   }
+}
+
+// PHASE 2: After MathJax renders, style the wrapper spans.
+function annotateExpressions(root) {
+  root.querySelectorAll('.math-expr').forEach(span => {
+    const tex = span.getAttribute('data-tex');
+    const isDisplay = span.getAttribute('data-display') === '1';
+    // MathJax replaces the text content with <mjx-container>
+    const mjx = span.querySelector('mjx-container');
+    if (!mjx) return;
+
+    // Green surface
+    mjx.classList.add(isDisplay ? 'expr-surface-display' : 'expr-surface');
+
+    // Look up s-exp parse
+    const sexp = parseLookup[normTex(tex)];
+    if (sexp) {
+      mjx.setAttribute('data-sexp', sexp);
+      mjx.addEventListener('mouseenter', showSexp);
+      mjx.addEventListener('mouseleave', hideSexp);
+    }
+  });
 }
 
 // Build edge lookup: target -> [{from, iatc}]
@@ -442,6 +490,9 @@ function renderThread() {
 
   container.innerHTML = html;
 
+  // ---- FIRST: wrap $...$ in .math-expr spans before any other processing ----
+  wrapMathExpressions(container);
+
   // ---- Apply NER highlights via TreeWalker ----
   document.querySelectorAll('.card-body[data-node]').forEach(el => {
     const nodeId = el.getAttribute('data-node');
@@ -522,11 +573,25 @@ function renderThread() {
     });
   });
 
-  // Re-typeset MathJax
+  // Typeset with MathJax then annotate expression surfaces
+  function doMathJax() {
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([container]).then(() => {
+        annotateExpressions(container);
+      }).catch(e => console.warn('MathJax:', e));
+    }
+  }
+  // MathJax loads async — wait for it if needed
   if (window.MathJax && MathJax.typesetPromise) {
-    MathJax.typesetPromise([container]).then(() => {
-      annotateExpressions(container);
-    }).catch(e => console.warn('MathJax:', e));
+    doMathJax();
+  } else {
+    // Poll until MathJax is ready (loaded via async script)
+    const poll = setInterval(() => {
+      if (window.MathJax && MathJax.typesetPromise) {
+        clearInterval(poll);
+        doMathJax();
+      }
+    }, 100);
   }
 }
 
@@ -546,7 +611,7 @@ function highlightTextNodes(root, re, maker, onlyFirst) {
     // Skip nodes inside already-highlighted spans or inside MathJax
     const par = textNode.parentElement;
     if (!par) continue;
-    if (par.closest('.ner, .disc-scope, .disc-wire, .disc-label, .disc-port, mjx-container, .MathJax')) continue;
+    if (par.closest('.ner, .disc-scope, .disc-wire, .disc-label, .disc-port, .math-expr, mjx-container, .MathJax')) continue;
     // Skip script/style
     const tag = par.tagName;
     if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE') continue;
