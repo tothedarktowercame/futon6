@@ -46,12 +46,14 @@ conversion path. See futon1/apps/graph-memory for schema.
 """
 
 import argparse
+import importlib
 import json
 import os
 import re
 import sys
 import time
 import uuid
+from collections import Counter
 from pathlib import Path
 
 import shutil
@@ -1318,7 +1320,7 @@ def main():
     parser.add_argument("--min-score", type=int, default=1,
                         help="Minimum post score")
     parser.add_argument("--limit", type=int, default=None,
-                        help="Max QA pairs to process")
+                        help="Max QA pairs to index in Stage 1 (pilot mode)")
     parser.add_argument("--dry-run", action="store_true",
                         help="Show execution plan without running anything")
     parser.add_argument("--moist-run", action="store_true",
@@ -1364,6 +1366,14 @@ def main():
 
     args = parser.parse_args()
 
+    if args.limit is not None and args.limit <= 0:
+        parser.error("--limit must be > 0")
+
+    auto_thread_limit = False
+    if args.limit is not None and args.thread_limit is None:
+        args.thread_limit = args.limit
+        auto_thread_limit = True
+
     # Dry-run for download-only mode: infer expected Posts.xml path with no side effects.
     if args.dry_run and args.download and not args.posts_xml:
         dump = SE_DUMPS[args.download]
@@ -1394,6 +1404,9 @@ def main():
 
     if not args.posts_xml:
         parser.error("posts_xml is required (or use --download to fetch data first)")
+
+    if auto_thread_limit:
+        print(f"  Pilot mode: --thread-limit defaulted to --limit ({args.limit})")
 
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
@@ -1430,7 +1443,11 @@ def main():
             print(f"  No Comments.xml found at {comments_candidate}")
     # ========== Stage 1: Parse ==========
     print(f"[Stage 1/{n_stages}] Parsing {args.posts_xml}...")
-    pairs = build_qa_pairs_streaming(args.posts_xml, min_score=args.min_score)
+    pairs = build_qa_pairs_streaming(
+        args.posts_xml,
+        min_score=args.min_score,
+        question_limit=args.limit,
+    )
     if args.limit and len(pairs) > args.limit:
         print(f"       Parsed {len(pairs)} pairs, limiting to {args.limit}")
         pairs = pairs[:args.limit]

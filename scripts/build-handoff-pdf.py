@@ -334,6 +334,7 @@ def build():
     pdf.mono("  scripts/assemble-wiring.py       # wiring assembly (750 lines)")
     pdf.mono("  scripts/ct-verifier.py           # proof verifier (570 lines)")
     pdf.mono("  data/nlab-ct-reference.json      # CT reference (20K pages)")
+    pdf.mono("  data/first-proof/superpod-handoff-rob.lit.md  # executable ledger")
 
     # Output
     out = "/home/joe/code/futon6/data/first-proof/superpod-handoff-rob.pdf"

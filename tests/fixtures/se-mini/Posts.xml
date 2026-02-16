@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<posts>
+  <row Id="1" PostTypeId="1" CreationDate="2020-01-01T00:00:00.000" Score="5" ViewCount="100" Body="&lt;p&gt;Let $F: C \to D$ be a functor. Does it have a left adjoint?&lt;/p&gt;" OwnerUserId="1" Title="Adjoint functor existence" Tags="|category-theory|functors|" AnswerCount="2" AcceptedAnswerId="2" />
+  <row Id="2" PostTypeId="2" ParentId="1" CreationDate="2020-01-01T01:00:00.000" Score="7" Body="&lt;p&gt;Assume $C$ is complete and well-powered. Then by the adjoint functor theorem, $F$ has a left adjoint.&lt;/p&gt;" OwnerUserId="2" />
+  <row Id="3" PostTypeId="2" ParentId="1" CreationDate="2020-01-01T02:00:00.000" Score="1" Body="&lt;p&gt;For example, right adjoints preserve limits.&lt;/p&gt;" OwnerUserId="3" />
+
+  <row Id="4" PostTypeId="1" CreationDate="2020-01-02T00:00:00.000" Score="3" ViewCount="80" Body="&lt;p&gt;Given a diagram, when does a limit exist?&lt;/p&gt;" OwnerUserId="4" Title="Limit existence" Tags="|category-theory|limits|" AnswerCount="1" AcceptedAnswerId="5" />
+  <row Id="5" PostTypeId="2" ParentId="4" CreationDate="2020-01-02T01:00:00.000" Score="4" Body="&lt;p&gt;Consider the cone category and use a universal property.&lt;/p&gt;" OwnerUserId="5" />
+
+  <row Id="6" PostTypeId="1" CreationDate="2020-01-03T00:00:00.000" Score="2" ViewCount="60" Body="&lt;p&gt;Suppose $x+y=1$. Is there an inequality bound?&lt;/p&gt;" OwnerUserId="6" Title="Simple inequality" Tags="|inequalities|real-analysis|" AnswerCount="2" AcceptedAnswerId="7" />
+  <row Id="7" PostTypeId="2" ParentId="6" CreationDate="2020-01-03T01:00:00.000" Score="5" Body="&lt;p&gt;By Cauchy-Schwarz, $(x+y)^2 \le 2(x^2+y^2)$.&lt;/p&gt;" OwnerUserId="7" />
+  <row Id="8" PostTypeId="2" ParentId="6" CreationDate="2020-01-03T02:00:00.000" Score="0" Body="&lt;p&gt;Try a simpler case first and check equality at $x=y$.&lt;/p&gt;" OwnerUserId="8" />
+
+  <row Id="9" PostTypeId="1" CreationDate="2020-01-04T00:00:00.000" Score="1" ViewCount="40" Body="&lt;p&gt;What is a monad in plain language?&lt;/p&gt;" OwnerUserId="9" Title="Monad intuition" Tags="|category-theory|monads|" AnswerCount="1" AcceptedAnswerId="10" />
+  <row Id="10" PostTypeId="2" ParentId="9" CreationDate="2020-01-04T01:00:00.000" Score="2" Body="&lt;p&gt;A monad is an endofunctor with unit and multiplication.&lt;/p&gt;" OwnerUserId="10" />
+</posts>

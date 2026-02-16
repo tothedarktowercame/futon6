@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<comments>
+  <row Id="101" PostId="1" Score="1" Text="Can you clarify assumptions?" CreationDate="2020-01-01T00:30:00.000" UserId="11" />
+  <row Id="102" PostId="2" Score="2" Text="This is proved in Mac Lane." CreationDate="2020-01-01T01:30:00.000" UserId="12" />
+  <row Id="103" PostId="4" Score="0" Text="Consider the terminal cone first." CreationDate="2020-01-02T00:30:00.000" UserId="13" />
+  <row Id="104" PostId="7" Score="1" Text="For example set x=y=1/2." CreationDate="2020-01-03T01:30:00.000" UserId="14" />
+  <row Id="105" PostId="10" Score="1" Text="Nice intuition." CreationDate="2020-01-04T01:30:00.000" UserId="15" />
+</comments>
