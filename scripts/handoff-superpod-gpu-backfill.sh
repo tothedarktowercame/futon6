@@ -1,6 +1,10 @@
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#scripts/handoff-superpod-gpu-backfill.sh>>[init]
 #!/usr/bin/env bash
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#bash-strict>>[init]
 set -euo pipefail
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#gpu-preamble>>[init]
 # GPU backfill for stages 2/3/4/6 after CPU baseline artifacts exist.
 # This is a required handoff stage on Superpod.
 # Usage:
@@ -17,14 +21,18 @@ case "$TARGET" in
     exit 1
     ;;
 esac
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#gpu-env>>[init]
 if ! command -v nvidia-smi >/dev/null 2>&1; then
   echo "[gpu] WARNING: nvidia-smi not found. GPU stack may be unavailable."
 fi
 
 LLM_MODEL="${LLM_MODEL:-meta-llama/Meta-Llama-3-8B-Instruct}"
 EMBED_MODEL="${EMBED_MODEL:-BAAI/bge-large-en-v1.5}"
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#gpu-run-site>>[init]
 run_site() {
   local site="$1"
   local posts="$2"
@@ -46,7 +54,9 @@ run_site() {
     --reference data/nlab-ct-reference.json \
     --output "$outdir/thread-wiring-ct-verification.json"
 }
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#gpu-dispatch>>[init]
 if [[ "$TARGET" == "math" || "$TARGET" == "both" ]]; then
   run_site \
     "math.stackexchange" \
@@ -64,3 +74,5 @@ if [[ "$TARGET" == "mathoverflow" || "$TARGET" == "both" ]]; then
 fi
 
 echo "[gpu] done."
+# ~/~ end
+# ~/~ end

@@ -1,6 +1,10 @@
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#scripts/handoff-superpod-all.sh>>[init]
 #!/usr/bin/env bash
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#bash-strict>>[init]
 set -euo pipefail
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-header-comment>>[init]
 # Single-command Superpod handoff runner.
 # Default behavior:
 #   1) bootstrap inputs
@@ -14,7 +18,9 @@ set -euo pipefail
 #   --smoke-only       stop after smoke run + verification
 #   --skip-bootstrap   do not run bootstrap script
 #   --skip-tests       do not run pytest sanity checks
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-root-and-args>>[init]
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
@@ -34,7 +40,9 @@ for arg in "$@"; do
       ;;
   esac
 done
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-utility-functions>>[init]
 STEP=0
 step() {
   STEP=$((STEP + 1))
@@ -51,7 +59,9 @@ assert_file() {
   local path="$1"
   [[ -f "$path" ]] || fail "missing file: $path"
 }
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-verify-run-dir>>[init]
 verify_run_dir() {
   local dir="$1"
   assert_file "$dir/manifest.json"
@@ -89,7 +99,9 @@ if edges <= 0:
 print(f"{d}: ok (threads={s7.get('threads_processed')}, edges_checked={edges})")
 PY
 }
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-run-smoke>>[init]
 run_smoke() {
   local out_smoke="/tmp/superpod-rob-smoke-$(date +%s)"
   echo "[all] smoke output dir: $out_smoke"
@@ -112,7 +124,9 @@ run_smoke() {
 
   verify_run_dir "$out_smoke"
 }
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-package-outputs>>[init]
 package_outputs() {
   tar czf superpod-math-processed.tar.gz \
     math-processed/entities.json \
@@ -139,7 +153,9 @@ package_outputs() {
   tar czf superpod-math-processed-gpu.tar.gz math-processed-gpu
   tar czf superpod-mo-processed-gpu.tar.gz mo-processed-gpu
 }
+# ~/~ end
 
+# ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-orchestration>>[init]
 echo "[all] repo: $ROOT_DIR"
 echo "[all] smoke_only=$SMOKE_ONLY skip_bootstrap=$SKIP_BOOTSTRAP skip_tests=$SKIP_TESTS"
 
@@ -215,3 +231,5 @@ echo "  superpod-math-processed.tar.gz"
 echo "  superpod-mo-processed.tar.gz"
 echo "  superpod-math-processed-gpu.tar.gz"
 echo "  superpod-mo-processed-gpu.tar.gz"
+# ~/~ end
+# ~/~ end

@@ -207,7 +207,8 @@ def build_qa_pairs(posts: dict[int, SEPost]) -> list[SEQAPair]:
     return pairs
 
 
-def build_qa_pairs_streaming(xml_path: str, min_score: int = 0) -> list[SEQAPair]:
+def build_qa_pairs_streaming(xml_path: str, min_score: int = 0,
+                             question_limit: int | None = None) -> list[SEQAPair]:
     """Build QA pairs with two streaming passes over the XML.
 
     Pass 1: collect only pairing metadata (IDs, scores, accepted answer).
@@ -254,6 +255,10 @@ def build_qa_pairs_streaming(xml_path: str, min_score: int = 0) -> list[SEQAPair
             pair_map[qid] = accepted
         else:
             pair_map[qid] = max(candidates, key=lambda x: x[1])[0]
+
+    # Apply question limit if requested
+    if question_limit is not None and len(pair_map) > question_limit:
+        pair_map = dict(list(pair_map.items())[:question_limit])
 
     # IDs we need to load in pass 2
     needed_ids = set(pair_map.keys()) | set(pair_map.values())
