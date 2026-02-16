@@ -551,6 +551,35 @@ seven stages are:
 CPU-only mode (`--skip-embeddings --skip-llm --skip-clustering`) runs
 stages 1, 5, and 7. The critical output is stage 7.
 
+### Planned stages 8-10: expression surfaces and structural embeddings
+
+The current pipeline produces rich per-thread annotations but they remain
+local — there is no global structure connecting threads by the *shape* of
+their mathematical arguments. Three additional stages address this:
+
+| # | Stage | What it does | HW |
+|---|-------|-------------|-----|
+| 8 | Expression surface parsing | Parse every `$...$` LaTeX expression into an s-expression tree. E.g. `$s(X(e))=X(s(e))$` → `(= (s (X e)) (X (s e)))`. Each expression becomes a typed surface for further wiring. | CPU |
+| 9a | Thread hypergraph assembly | Combine all annotation layers (NER terms, scope bindings, wiring edges, categorical detections, s-exp surfaces) into a single typed hypergraph per thread — the thread's *structural signature*. | CPU |
+| 9b | Hypergraph embedding | Embed each thread's typed hypergraph into a fixed-dimensional vector using a graph neural network (Graphormer, GPS, or HGNN+). Training signal is free: tag co-occurrence, SE "related questions" links, shared categorical detections. | GPU |
+| 10 | Structural similarity index | Build a FAISS index over the embedding vectors. Enables structural search: "find threads with the same argument shape as this one." | CPU |
+
+Stage 8 is deterministic and embarrassingly parallel across the 128 CPU
+cores. Stage 9b is the only new GPU stage — it trains a graph embedding
+model on the ~2M thread hypergraphs. The result is what we're calling
+a **LWGM** (Large Wiring Graph Model): an embedding space over *argument
+structure*, not token sequences.
+
+A demo of stages 5+7+8 on a single thread is at
+`data/first-proof/nnexus-glasses-demo.html` — open it in any browser to
+see NER terms, scope maps, wiring edges, categorical badges, and
+expression surfaces with s-exp tooltips all rendered on math.SE #633512.
+
+These stages are not yet implemented in `superpod-job.py` — they are
+defined as prototype P11 in the devmap. The current handoff run produces
+the inputs they need (stages 1-7 output). A follow-up run would add
+stages 8-10 once the code is ready.
+
 ## 8. What the output actually looks like
 
 We've already run the pipeline at small scale on 200 StackExchange threads
@@ -699,11 +728,19 @@ Mission Control (single command)
       |       +--> O4 mo-processed-gpu/
       |
       +--> M6 packaging
+      |       |
+      |       +--> O5 superpod-math-processed.tar.gz
+      |       +--> O6 superpod-mo-processed.tar.gz
+      |       +--> O7 superpod-math-processed-gpu.tar.gz
+      |       +--> O8 superpod-mo-processed-gpu.tar.gz
+      |
+      +--> M7 [planned] expression surfaces + structural embeddings
               |
-              +--> O5 superpod-math-processed.tar.gz
-              +--> O6 superpod-mo-processed.tar.gz
-              +--> O7 superpod-math-processed-gpu.tar.gz
-              +--> O8 superpod-mo-processed-gpu.tar.gz
+              +--> P7  Stage 8:  LaTeX → s-exp (CPU x128, deterministic)
+              +--> P8  Stage 9a: thread hypergraph assembly (CPU)
+              +--> P9  Stage 9b: hypergraph embedding (GPU, graph transformer)
+              +--> P10 Stage 10: FAISS structural similarity index (CPU)
+              +--> O9  structural-embeddings.tar.gz
 ```
 
 Invariants enforced by the orchestrator:
@@ -731,6 +768,15 @@ results.
 At project level, this turns a one-off run into infrastructure. The same
 pipeline can be rerun, audited, and diffed over time, so Rob can evaluate
 whether later changes improve signal, regress quality, or break invariants.
+
+The longer-term vision is stages 8-10: parse every LaTeX expression into a
+typed s-expression tree, assemble all annotation layers into a hypergraph
+per thread, and embed those hypergraphs via a graph neural network. The
+result is a structural similarity index where "related questions" means
+"structurally analogous mathematical reasoning" — not just shared keywords.
+We're calling this a LWGM (Large Wiring Graph Model). The current run
+produces the inputs it needs; stages 8-10 would run as a follow-up once
+the code is ready.
 
 ## Notes
 
