@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NNexus Glasses — math.SE #633512</title>
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},startup:{pageReady(){MathJax.startup.defaultPageReady().then(()=>console.log('MathJax ready'))}}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,"Times New Roman",serif;background:#fafaf7;color:#222;line-height:1.6;max-width:820px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:1.35rem;margin-bottom:4px;color:#333}
+.subtitle{font-size:.85rem;color:#777;margin-bottom:28px}
+/* Cards */
+.card{background:#fff;border:1px solid #ddd;border-radius:6px;padding:20px 24px;margin-bottom:0;position:relative}
+.card-q{border-left:4px solid #3b82f6}
+.card-a{border-left:4px solid #10b981}
+.card-c{background:#fafafa;border:1px solid #e5e5e5;border-radius:4px;padding:10px 14px;margin:0;font-size:.88rem;line-height:1.5}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.card-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:3px;color:#fff}
+.card-label-q{background:#3b82f6}
+.card-label-a{background:#10b981}
+.score{font-size:.78rem;color:#888;font-weight:600}
+.accepted{color:#10b981;font-weight:700;font-size:.78rem}
+.tag{display:inline-block;font-size:.7rem;background:#e0e7ff;color:#3730a3;padding:1px 7px;border-radius:3px;font-family:sans-serif}
+.card-body p{margin-bottom:.85em}
+.card-body blockquote{border-left:3px solid #c7d2fe;padding:6px 14px;margin:10px 0;background:#f5f3ff;font-style:italic}
+/* NER highlights */
+.ner{background:rgba(253,224,71,.25);border-bottom:1.5px solid #ca8a04;padding:0 1px;border-radius:1px;cursor:pointer;text-decoration:none;color:inherit;transition:background .15s}
+.ner:hover{background:rgba(253,224,71,.5)}
+/* Discourse markers */
+.disc-scope{background:rgba(147,197,253,.18);border-bottom:1.5px dashed #3b82f6;padding:0 1px;border-radius:1px}
+.disc-wire{border-bottom:1.5px dotted #a855f7;padding:0 1px}
+.disc-label{border-bottom:1.5px solid #f97316;padding:0 1px}
+.disc-port{border-bottom:1.5px double #14b8a6;padding:0 1px}
+/* Categorical badges */
+.cat-badge{display:inline-block;font-size:.65rem;font-weight:600;font-family:system-ui,sans-serif;padding:2px 8px;border-radius:10px;margin-right:6px;letter-spacing:.03em;text-transform:uppercase}
+.cat-equivalence{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
+.cat-limit{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.cat-universal-property{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+/* Edge annotations */
+.edge-row{display:flex;align-items:center;gap:8px;padding:6px 14px;font-size:.78rem;font-family:system-ui,sans-serif;color:#555}
+.edge-badge{display:inline-block;font-size:.65rem;font-weight:700;padding:1px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em;color:#fff}
+.iatc-assert{background:#3b82f6}
+.iatc-clarify{background:#8b5cf6}
+.iatc-exemplify{background:#f59e0b}
+.iatc-reference{background:#6366f1}
+.iatc-challenge{background:#ef4444}
+.iatc-query{background:#ec4899}
+.iatc-agree{background:#10b981}
+.edge-arrow{color:#999;font-family:monospace}
+.edge-group{margin:6px 0;padding:4px 0;border-left:2px dashed #ddd;margin-left:12px}
+/* Comments section */
+.comments-section{margin-top:2px}
+.comments-header{font-size:.78rem;color:#888;font-weight:600;padding:8px 14px;font-family:sans-serif;cursor:pointer;user-select:none}
+.comments-list{display:flex;flex-direction:column;gap:4px;padding:0 0 8px 0}
+.comment-score{font-size:.72rem;color:#aaa;margin-right:6px;font-weight:600}
+/* Legend */
+.legend{background:#fff;border:1px solid #ddd;border-radius:6px;padding:16px 20px;margin-top:32px;font-size:.8rem;font-family:system-ui,sans-serif}
+.legend h3{font-size:.85rem;margin-bottom:10px;color:#555}
+.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}
+.legend-item{display:flex;align-items:center;gap:8px}
+.legend-swatch{width:36px;height:14px;border-radius:2px;flex-shrink:0}
+.section-gap{height:16px}
+a.ner{color:inherit}
+</style>
+</head>
+<body>
+
+<h1>What is the definition of a commutative diagram?</h1>
+<p class="subtitle">math.SE #633512 &mdash; NNexus Glasses view &middot; wiring overlay</p>
+
+<div id="thread"></div>
+
+<div class="legend" id="legend">
+<h3>Legend</h3>
+<div class="legend-grid">
+ <div class="legend-item"><span class="legend-swatch" style="background:rgba(253,224,71,.35);border-bottom:2px solid #ca8a04"></span> NER term (nLab-linked)</div>
+ <div class="legend-item"><span class="legend-swatch" style="background:rgba(147,197,253,.22);border-bottom:2px dashed #3b82f6"></span> Scope (let / for-all / where)</div>
+ <div class="legend-item"><span class="legend-swatch" style="border-bottom:2px dotted #a855f7"></span> Discourse wire (thus, but, since)</div>
+ <div class="legend-item"><span class="legend-swatch" style="border-bottom:2px solid #f97316"></span> Discourse label (example, exists)</div>
+ <div class="legend-item"><span class="legend-swatch" style="border-bottom:2px double #14b8a6"></span> Port (the same, such)</div>
+ <div class="legend-item">
+  <span class="edge-badge iatc-assert" style="font-size:.6rem">assert</span>
+  <span class="edge-badge iatc-clarify" style="font-size:.6rem">clarify</span>
+  <span class="edge-badge iatc-challenge" style="font-size:.6rem">challenge</span>
+ </div>
+ <div class="legend-item">
+  <span class="cat-badge cat-equivalence">equivalence</span>
+  <span class="cat-badge cat-limit">limit</span>
+ </div>
+ <div class="legend-item">
+  <span class="cat-badge cat-universal-property">universal-property</span>
+ </div>
+</div>
+</div>
+
+<script>
+// ---- Embedded data ----
+const RAW = {"question":{"id":633512,"url":"https://math.stackexchange.com/questions/633512","title":"What is the definition of a commutative diagram?","score":18,"tags":["category-theory"],"accepted_answer_id":633527,"body_html":"<p>Reading in <a href=\"http://katmat.math.uni-bremen.de/acc/acc.pdf\">ACC (the joy of cats)<\/a> I was quite surprised to meet a real\ndefinition of <em>diagram<\/em>. This word had been used exactly $27$ times\nallready (just believe me) and the question \u2018what is it?\u2019 had not reached my thinking\nwhatsoever. Okay, good to have a definition (11.1(1) see under),\nbut it triggered me to expect a definition of <em>commutative diagram<\/em>\nas well. Alas, it was not there. In my intuition I think of a diagram\nhaving a poset as scheme, but I don\u2019t trust that intuition\nenough to take this for granted. So I am asking you here:<\/p>\n\n<blockquote>\n  <p>What is the definition of a commutative diagram?<\/p>\n<\/blockquote>\n\n<p>Thanks in advance<\/p>\n\n<p>11.1 (1) A diagram in a category $\\mathcal{A}$ is a functor $D:\\mathcal{I}\\rightarrow\\mathcal{A}$\nwith codomain $\\mathcal{A}$. The domain, $\\mathcal{I}$, is called\nthe scheme of the diagram.<\/p>\n"},"answers":[{"id":633527,"url":"https://math.stackexchange.com/a/633527","score":17,"is_accepted":true,"body_html":"<p>Let $\\Gamma=(V,E,s,t)$ be a directed graph ($V$ = vertices, $E$ = edges, $s$ = source, $t$ = target). Let $\\mathcal{C}$ be a category. A <strong>diagram of shape<\/strong> $\\Gamma$ <strong>in<\/strong> $\\mathcal{C}$ is a family of objects $X(v) \\in \\mathcal{C}$ for every vertex $v \\in V$ and morphisms $X(e)$ in $\\mathcal{C}$ for every edge $e \\in E$ such that $s(X(e))=X(s(e))$ and $t(X(e))=X(t(e))$ for all $e \\in E$. Thus, every edge $e : v \\to w$ is mapped to a morphism $X(e) : X(v) \\to X(w)$.<\/p>\n\n<p>For a path $\\gamma$ in $\\Gamma$ we define a morphism $X(\\gamma)$ in $\\mathcal{C}$ by induction: If $\\gamma$ is the empty path at a vertex $v$, let $X(\\gamma):=\\mathrm{id}_{X(v)}$. If $\\gamma = \\beta \\circ e$ for a shorter path $\\beta$ and an edge $e$, define $X(\\gamma) := X(\\beta) \\circ X(e)$.<\/p>\n\n<p>The diagram $X$ is called <strong>commutative<\/strong> if for all vertices $v,w \\in V$ and all two paths $\\gamma,\\gamma'$ in $\\Gamma$ from $v$ to $w$ we have $X(\\gamma)=X(\\gamma')$.<\/p>\n\n<p>Convince yourself that this coincides with the usual definition for simple examples such as<\/p>\n\n<p>$$\\Gamma = \\begin{array}{c} \\bullet &amp; \\rightarrow &amp; \\bullet \\\\ \\downarrow &amp;&amp; \\downarrow \\\\ \\bullet &amp; \\rightarrow &amp; \\bullet  \\end{array}$$<\/p>\n\n<p>There is a close connection between diagrams and functors. If $\\mathsf{Path}(\\Gamma)$ denotes the path category, then functors $\\mathsf{Path}(\\Gamma) \\to \\mathcal{C}$ correspond to diagrams of shape $\\Gamma$ in $\\mathcal{C}$. These in turn correspond to homomorphisms of directed graphs $\\Gamma \\to U(\\mathcal{C})$, where $U(-)$ is the forgetful functor from categories to directed graphs.<\/p>\n\n<p>If one even regards arbitrary functors (with small domain category) as diagrams, then we may use the same definition of commutativity as above: Every two chains of morphisms between two given objects are mapped to the same morphism.<\/p>\n\n<p>Sometimes one only demands the commutativity condition for certain paths. For example, when dealing with sheaves or simplicial sets, usually a diagram of the shape\n$$\\begin{array}{c} \\bullet &amp; \\rightrightarrows &amp; \\bullet \\\\ \\downarrow &amp;&amp; \\downarrow \\\\ \\bullet &amp; \\rightrightarrows &amp; \\bullet  \\end{array}$$\nis called commutative if the two squares which consist of the two upper resp. lower horizontal morphisms are commutative. <\/p>\n\n<p>PS: I have just found that these definitions can also be found in Grothendieck\u2019s Tohoku paper. <\/p>\n"}],"comments_q":[{"id":1335328,"score":0,"text":"Your intuition probably works, though one can get commutative diagrams with less restrictions, since you just need the images of all arrows to agree (when they share domain and codomain), rather than all arrows themselves agreeing."},{"id":1335337,"score":0,"text":"There are some exceptional conventions to learn. For instance one may wonder what it means to commute, when working with a diagram with a pair of arrows between a couple of vertices, see <a href=\"http://math.stackexchange.com/questions/459405/commutativity-of-diagram-involving-two-arrows\">here<\/a>."},{"id":1335340,"score":0,"text":"There are no exceptions. The general definition (see my answer) also covers this case."},{"id":1335347,"score":0,"text":"@MartinBrandenburg When one explicitly writes those pairs like in my link, one ignores the fact that they are non-equal as the answer points out. As I understand it, your answer does not cover this case."},{"id":1335352,"score":1,"text":"@KarlKronenfeld, while that situation does arise in the literature, it is an abuse of language to call such a thing a commutative diagram. Martin\u2019s definition is the standard definition, really."},{"id":1335361,"score":0,"text":"Mariano, I hope that some day \u201cMartin\u2019s definition is the standard definition, really.\u201d will be a standard. :-D"}],"comments_a":{"633527":[{"id":1335366,"score":0,"text":"I haven\u2019t absorbed this yet, but how about my mentioned intuition (poset as scheme). Can you say some explicit about that? Is it too restricted? I expect so, because - if not - then your answer would be redundant, wouldn\u2019t it?"},{"id":1335376,"score":0,"text":"Of course posets are way too restrictive."},{"id":1335379,"score":1,"text":"A directed graph $\\Gamma$ as in Martin\u2019s anwer generates freely a category, which Maritn writes $Patth(\\Gamma)$ and you can quotient it by the relation that identifies two arrows whenever they are parallel (that is, they have the same domain and codomain) to get a new category $\\bar\\Gamma$. A commutative diagram of shape $\\Gamma$ is a functor defined on a category of the form $\\bar\\Gamma$. For suitably restricted $\\Gamma$, $\\bar\\Gamma$ is a poset. (You need $\\Gamma$ to be acyclic and probably more) But you do want, in general, cycles. For example, if $G$ is an group, you can view it as a"},{"id":1335388,"score":1,"text":"(\u2026) category with one object, and a space with action of $G$ is the same as a \u00abdiagram of shape $G$\u00bb with values in topological spaces: in this situation, the domain category is all loops. You can codify more complicated things in this way: you can have a poset and a group at each vertex acting and so on and so forth. This things *do* arise in nature."},{"id":1335392,"score":2,"text":"@Mariano\u00a0Su\u00e1rez-Alvarez Thank you. Intuition is essential and cannot be missed. But trustworthy it is not. I have a lot to learn again. By the way what is the percentage of mathematicians that are speaking of commutative diagrams and do not know what it really is? At the moment I am still one of them, but I have hope now that that will change."},{"id":1336112,"score":2,"text":"@drhab In Wikipedia (http://en.wikipedia.org/wiki/Commutative_diagram) commutative diagrams are defined exactly as you say with posets categories as schemes/indices. This is basically the same definition given by Martin for commutative diagrams. I do not see it as more restrictive than the one given with paths by Martin. Indeed also nlab (http://nlab.mathforge.org/nlab/show/commutative+diagram) describes a commutative diagram as a quiver which factors via a poset"},{"id":4249182,"score":0,"text":"Does it mean that, given a category with two objects and a morphism between them, we could say they commute? I.e. because all paths between the objects \u2014 there\u2019s one \u2014 are the same."},{"id":4586588,"score":0,"text":"@Hi-Angel: Sure."}]}};
+
+const WIRING = {"nodes":[{"id":"q-633512","type":"question","ner_terms":[{"term":"ACC","canon":"AscendingChainCondition"},{"term":"category","canon":"Category"},{"term":"codomain","canon":"Function"},{"term":"commutative","canon":"Commutative"},{"term":"commutative diagram","canon":"CommutativeDiagram"},{"term":"diagram","canon":"CommutativeDiagram"},{"term":"domain","canon":"Domain"},{"term":"functor","canon":"Functor"},{"term":"poset","canon":"Poset"},{"term":"scheme","canon":"Scheme"}],"discourse":[{"hx/id":"q-633512:wire-000","hx/role":"wire","hx/type":"wire/adversative","hx/content":{"match":"but","position":337}},{"hx/id":"q-633512:wire-001","hx/role":"wire","hx/type":"wire/adversative","hx/content":{"match":"but","position":499}},{"hx/id":"q-633512:label-000","hx/role":"label","hx/type":"explain/think-of","hx/content":{"match":"think of","position":454}}],"categorical":[]},{"id":"a-633527","type":"answer","ner_terms":[{"term":"category","canon":"Category"},{"term":"commutative","canon":"Commutative"},{"term":"commutativity","canon":"Commutative"},{"term":"diagram","canon":"CommutativeDiagram"},{"term":"directed graph","canon":"DirectedGraph"},{"term":"domain","canon":"Domain"},{"term":"forgetful functor","canon":"ConcreteCategory"},{"term":"functor","canon":"Functor"},{"term":"induction","canon":"Induction"},{"term":"morphism","canon":"StructureHomomorphism"},{"term":"path","canon":"Path"},{"term":"sheaves","canon":"Sheaf1"},{"term":"simplicial set","canon":"SimplicialObject"},{"term":"source","canon":"SourcesAndSinksOfVectorField"},{"term":"vertex","canon":"Polyhedron"},{"term":"vertices","canon":"KnotTheory"}],"discourse":[{"hx/id":"a-633527:scope-000","hx/role":"component","hx/type":"bind/let","hx/content":{"match":"Let $\\Gamma=(V,E,s,t)$ be a directed graph (","position":0}},{"hx/id":"a-633527:scope-001","hx/role":"component","hx/type":"bind/let","hx/content":{"match":"Let $\\mathcal{C}$ be a category","position":102}},{"hx/id":"a-633527:scope-002","hx/role":"component","hx/type":"quant/universal","hx/content":{"match":"for all $e \\in E$","position":366}},{"hx/id":"a-633527:scope-003","hx/role":"component","hx/type":"constrain/where","hx/content":{"match":"where $U(-)$ is the forgetful functor from categories to directed graphs","position":1469}},{"hx/id":"a-633527:wire-000","hx/role":"wire","hx/type":"wire/consequential","hx/content":{"match":"Thus","position":385}},{"hx/id":"a-633527:port-000","hx/role":"port","hx/type":"port/the-same","hx/content":{"match":"the same definition","position":1640}},{"hx/id":"a-633527:port-001","hx/role":"port","hx/type":"port/the-same","hx/content":{"match":"the same morphism","position":1757}},{"hx/id":"a-633527:label-000","hx/role":"label","hx/type":"construct/exists","hx/content":{"match":"There is","position":1153}},{"hx/id":"a-633527:label-001","hx/role":"label","hx/type":"strategy/example","hx/content":{"match":"For example","position":1850}}],"categorical":[{"hx/type":"cat/equivalence","hx/content":{"score":8.4}},{"hx/type":"cat/limit","hx/content":{"score":3.7}},{"hx/type":"cat/universal-property","hx/content":{"score":5.4}}]}],"edges":[{"from":"a-633527","to":"q-633512","iatc":"assert"},{"from":"c-1335328","to":"q-633512","iatc":"clarify"},{"from":"c-1335337","to":"q-633512","iatc":"exemplify"},{"from":"c-1335340","to":"q-633512","iatc":"reference"},{"from":"c-1335347","to":"q-633512","iatc":"clarify"},{"from":"c-1335352","to":"q-633512","iatc":"clarify"},{"from":"c-1335361","to":"q-633512","iatc":"clarify"},{"from":"c-1335366","to":"a-633527","iatc":"challenge"},{"from":"c-1335376","to":"a-633527","iatc":"clarify"},{"from":"c-1335379","to":"a-633527","iatc":"clarify"},{"from":"c-1335388","to":"a-633527","iatc":"clarify"},{"from":"c-1335392","to":"a-633527","iatc":"query"},{"from":"c-1336112","to":"a-633527","iatc":"agree"},{"from":"c-4249182","to":"a-633527","iatc":"clarify"},{"from":"c-4586588","to":"a-633527","iatc":"clarify"}]};
+
+// ---- Helpers ----
+function nlabUrl(canon) {
+  // Skip canons that are numeric or generic
+  if (/^\d+$/.test(canon)) return null;
+  // nLab URLs use + as space: "CommutativeDiagram" -> "commutative+diagram"
+  const spaced = canon.replace(/([a-z])([A-Z])/g, '$1+$2').toLowerCase();
+  return 'https://ncatlab.org/nlab/show/' + spaced.replace(/ /g, '+');
+}
+
+function escH(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// Build edge lookup: target -> [{from, iatc}]
+const edgesByTarget = {};
+WIRING.edges.forEach(e => {
+  if (!edgesByTarget[e.to]) edgesByTarget[e.to] = [];
+  edgesByTarget[e.to].push(e);
+});
+
+// Build node lookup
+const nodeMap = {};
+WIRING.nodes.forEach(n => nodeMap[n.id] = n);
+
+// ---- Render ----
+function renderThread() {
+  const container = document.getElementById('thread');
+  let html = '';
+
+  // --- Question card ---
+  const q = RAW.question;
+  html += `<div class="card card-q" id="card-q-${q.id}">`;
+  html += `<div class="card-header">`;
+  html += `<span class="card-label card-label-q">Question</span>`;
+  html += `<span class="score">${q.score} votes</span>`;
+  q.tags.forEach(t => { html += `<span class="tag">${escH(t)}</span>`; });
+  html += `<span class="score" style="margin-left:auto">q-${q.id}</span>`;
+  html += `</div>`;
+  html += `<div class="card-body" data-node="q-${q.id}">${q.body_html}</div>`;
+  html += `</div>`;
+
+  // Edge annotations targeting question
+  const qEdges = edgesByTarget['q-' + q.id] || [];
+  if (qEdges.length) {
+    html += `<div class="edge-group">`;
+    qEdges.forEach(e => {
+      html += `<div class="edge-row"><span class="edge-arrow">${e.from}</span> <span class="edge-arrow">&rarr;</span> <span class="edge-arrow">q-${q.id}</span> <span class="edge-badge iatc-${e.iatc}">${e.iatc}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Question comments
+  if (RAW.comments_q && RAW.comments_q.length) {
+    html += `<div class="comments-section"><div class="comments-header">${RAW.comments_q.length} comments on question</div><div class="comments-list">`;
+    RAW.comments_q.forEach(c => {
+      const ce = WIRING.edges.find(e => e.from === 'c-' + c.id);
+      html += `<div class="card-c"><span class="comment-score">${c.score}</span>`;
+      if (ce) html += `<span class="edge-badge iatc-${ce.iatc}" style="font-size:.6rem;vertical-align:middle;margin-right:6px">${ce.iatc}</span>`;
+      html += `<span style="font-size:.7rem;color:#aaa;margin-right:4px">c-${c.id}</span> `;
+      html += `${c.text}</div>`;
+    });
+    html += `</div></div>`;
+  }
+
+  html += `<div class="section-gap"></div>`;
+
+  // --- Answer card(s) ---
+  RAW.answers.forEach(a => {
+    const aNode = nodeMap['a-' + a.id];
+
+    html += `<div class="card card-a" id="card-a-${a.id}">`;
+    html += `<div class="card-header">`;
+    html += `<span class="card-label card-label-a">Answer</span>`;
+    if (a.id === q.accepted_answer_id) html += `<span class="accepted">&#10003; Accepted</span>`;
+    html += `<span class="score">${a.score} votes</span>`;
+    // Categorical badges
+    if (aNode && aNode.categorical) {
+      aNode.categorical.forEach(cat => {
+        const t = cat['hx/type'].replace('cat/', '');
+        const sc = cat['hx/content'].score;
+        html += `<span class="cat-badge cat-${t}">${t} <span style="opacity:.6">${sc}</span></span>`;
+      });
+    }
+    html += `<span class="score" style="margin-left:auto">a-${a.id}</span>`;
+    html += `</div>`;
+    html += `<div class="card-body" data-node="a-${a.id}">${a.body_html}</div>`;
+    html += `</div>`;
+
+    // Edge annotations targeting answer
+    const aEdges = edgesByTarget['a-' + a.id] || [];
+    if (aEdges.length) {
+      html += `<div class="edge-group">`;
+      aEdges.forEach(e => {
+        html += `<div class="edge-row"><span class="edge-arrow">${e.from}</span> <span class="edge-arrow">&rarr;</span> <span class="edge-arrow">a-${a.id}</span> <span class="edge-badge iatc-${e.iatc}">${e.iatc}</span></div>`;
+      });
+      html += `</div>`;
+    }
+
+    // Answer comments
+    const aCmts = RAW.comments_a[String(a.id)] || [];
+    if (aCmts.length) {
+      html += `<div class="comments-section"><div class="comments-header">${aCmts.length} comments on answer</div><div class="comments-list">`;
+      aCmts.forEach(c => {
+        const ce = WIRING.edges.find(e => e.from === 'c-' + c.id);
+        html += `<div class="card-c"><span class="comment-score">${c.score}</span>`;
+        if (ce) html += `<span class="edge-badge iatc-${ce.iatc}" style="font-size:.6rem;vertical-align:middle;margin-right:6px">${ce.iatc}</span>`;
+        html += `<span style="font-size:.7rem;color:#aaa;margin-right:4px">c-${c.id}</span> `;
+        html += `${c.text}</div>`;
+      });
+      html += `</div></div>`;
+    }
+  });
+
+  container.innerHTML = html;
+
+  // ---- Apply NER highlights via TreeWalker ----
+  document.querySelectorAll('.card-body[data-node]').forEach(el => {
+    const nodeId = el.getAttribute('data-node');
+    const wNode = nodeMap[nodeId];
+    if (!wNode || !wNode.ner_terms) return;
+
+    // Sort terms longest-first to prefer multi-word matches
+    const terms = wNode.ner_terms.slice().sort((a, b) => b.term.length - a.term.length);
+
+    // Build a combined regex
+    const escaped = terms.map(t => t.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const re = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'gi');
+    const termMap = {};
+    terms.forEach(t => { termMap[t.term.toLowerCase()] = t; });
+
+    highlightTextNodes(el, re, (match) => {
+      const key = match.toLowerCase();
+      // Find the longest matching term
+      let best = null;
+      for (const t of terms) {
+        if (key === t.term.toLowerCase() || key.startsWith(t.term.toLowerCase())) {
+          best = t; break;
+        }
+      }
+      if (!best) best = termMap[key];
+      if (!best) return null;
+      const url = nlabUrl(best.canon);
+      if (url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.className = 'ner';
+        a.target = '_blank';
+        a.title = best.canon + ' (nLab)';
+        a.textContent = match;
+        return a;
+      } else {
+        const span = document.createElement('span');
+        span.className = 'ner';
+        span.title = best.canon;
+        span.textContent = match;
+        return span;
+      }
+    });
+  });
+
+  // ---- Apply discourse highlights ----
+  document.querySelectorAll('.card-body[data-node]').forEach(el => {
+    const nodeId = el.getAttribute('data-node');
+    const wNode = nodeMap[nodeId];
+    if (!wNode || !wNode.discourse) return;
+
+    wNode.discourse.forEach(d => {
+      const match = d['hx/content'].match;
+      const role = d['hx/role'];
+      let cls = 'disc-wire';
+      if (role === 'component') cls = 'disc-scope';
+      else if (role === 'label') cls = 'disc-label';
+      else if (role === 'port') cls = 'disc-port';
+
+      const typeShort = (d['hx/type'] || '').split('/').pop();
+      // Only highlight the keyword portion for scopes (first word or two)
+      let needle = match;
+      if (role === 'component' && match.length > 20) {
+        // For let-bindings, highlight "Let ... be"
+        // For "for all ...", highlight "for all"
+        // For "where ...", highlight "where"
+        const kw = match.match(/^(Let|for all|where)\b/i);
+        if (kw) needle = kw[1];
+      }
+
+      const re = new RegExp(needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+      highlightTextNodes(el, re, (m) => {
+        const span = document.createElement('span');
+        span.className = cls;
+        span.title = d['hx/type'];
+        span.textContent = m;
+        return span;
+      }, true); // only first match
+    });
+  });
+
+  // Re-typeset MathJax
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(e => console.warn('MathJax:', e));
+  }
+}
+
+// Highlight text nodes matching `re` inside `root`.
+// `maker(matchStr)` returns an Element to replace the match, or null to skip.
+// If `onlyFirst` is true, stop after the first replacement.
+function highlightTextNodes(root, re, maker, onlyFirst) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  const nodes = [];
+  let n;
+  while ((n = walker.nextNode())) nodes.push(n);
+
+  let done = false;
+  for (const textNode of nodes) {
+    if (done) break;
+    const text = textNode.nodeValue;
+    // Skip nodes inside already-highlighted spans or inside MathJax
+    const par = textNode.parentElement;
+    if (!par) continue;
+    if (par.closest('.ner, .disc-scope, .disc-wire, .disc-label, .disc-port, mjx-container, .MathJax')) continue;
+    // Skip script/style
+    const tag = par.tagName;
+    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE') continue;
+
+    let lastIndex = 0;
+    let m;
+    re.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let replaced = false;
+
+    while ((m = re.exec(text)) !== null) {
+      const el = maker(m[0]);
+      if (!el) continue;
+      replaced = true;
+      if (m.index > lastIndex) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
+      }
+      frag.appendChild(el);
+      lastIndex = m.index + m[0].length;
+      if (onlyFirst) { done = true; break; }
+    }
+
+    if (replaced) {
+      if (lastIndex < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+      textNode.parentNode.replaceChild(frag, textNode);
+    }
+  }
+}
+
+// Boot
+renderThread();
+</script>
+</body>
+</html>
