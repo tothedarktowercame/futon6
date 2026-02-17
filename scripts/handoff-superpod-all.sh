@@ -23,8 +23,14 @@ set -euo pipefail
 #   4) sharded GPU pipeline for both corpora
 #   5) package outputs
 #
-# Block 1 invocation (recommended for first superpod run):
-#   NUM_SHARDS=8 EXTRA_SHARD_ARGS="--skip-llm" bash scripts/handoff-superpod-all.sh
+# Block 2 (BLOCK=2, requires Block 1 output):
+#   1) verify Block 1 output exists + GPU/LLM prereqs
+#   2) sharded LLM on thread sample (both corpora)
+#   3) compose LLM files into Block 1 output
+#
+# Invocations:
+#   Block 1:  NUM_SHARDS=8 EXTRA_SHARD_ARGS="--skip-llm" bash scripts/handoff-superpod-all.sh
+#   Block 2:  BLOCK=2 NUM_SHARDS=8 bash scripts/handoff-superpod-all.sh
 #
 # Options:
 #   --smoke-only       stop after smoke run + verification
@@ -34,6 +40,8 @@ set -euo pipefail
 # Environment:
 #   NUM_SHARDS          number of parallel shards (default: 1 = unsharded)
 #   EXTRA_SHARD_ARGS    extra args passed to each shard job (e.g. "--skip-llm")
+#   BLOCK               1 (default) or 2; Block 2 adds LLM to Block 1 output
+#   LLM_THREAD_LIMIT    threads per shard for Block 2 LLM (default: 5000)
 # ~/~ end
 
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-root-and-args>>[init]
@@ -45,6 +53,8 @@ SKIP_BOOTSTRAP=0
 SKIP_TESTS=0
 NUM_SHARDS="${NUM_SHARDS:-1}"
 EXTRA_SHARD_ARGS="${EXTRA_SHARD_ARGS:-}"
+BLOCK="${BLOCK:-1}"
+LLM_THREAD_LIMIT="${LLM_THREAD_LIMIT:-5000}"
 
 for arg in "$@"; do
   case "$arg" in
@@ -181,8 +191,61 @@ package_outputs() {
 
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-orchestration>>[init]
 echo "[all] repo: $ROOT_DIR"
-echo "[all] smoke_only=$SMOKE_ONLY skip_bootstrap=$SKIP_BOOTSTRAP skip_tests=$SKIP_TESTS num_shards=$NUM_SHARDS"
+echo "[all] block=$BLOCK smoke_only=$SMOKE_ONLY skip_bootstrap=$SKIP_BOOTSTRAP skip_tests=$SKIP_TESTS num_shards=$NUM_SHARDS"
 
+# ---- Block 2: LLM enrichment (compose onto Block 1 output) ----
+if [[ "$BLOCK" == "2" ]]; then
+  for d in ./math-processed-gpu ./mo-processed-gpu; do
+    [[ -d "$d" ]] || fail "Block 1 output not found: $d (run Block 1 first)"
+  done
+
+  command -v nvidia-smi >/dev/null 2>&1 || fail "nvidia-smi not found"
+  python3 -c "import torch; assert torch.cuda.is_available()" 2>/dev/null \
+    || fail "PyTorch cannot see CUDA"
+  [[ -n "${HF_TOKEN:-}" ]] || fail "HF_TOKEN not set (required for LLM)"
+
+  LLM_MODEL="${LLM_MODEL:-meta-llama/Meta-Llama-3-8B-Instruct}"
+
+  step "Block 2: LLM on ${LLM_THREAD_LIMIT}/shard sample (math.stackexchange)"
+  python3 scripts/superpod-shard.py run \
+    --posts-xml ./se-data/math.stackexchange.com/Posts.xml \
+    --comments-xml ./se-data/math.stackexchange.com/Comments.xml \
+    --site math.stackexchange \
+    --num-shards "$NUM_SHARDS" \
+    --output-dir ./math-processed-gpu-llm \
+    --skip-post-merge \
+    -- --thread-limit "$LLM_THREAD_LIMIT" --skip-embeddings \
+    --llm-model "$LLM_MODEL" --embed-device cuda
+
+  step "Block 2: LLM on ${LLM_THREAD_LIMIT}/shard sample (mathoverflow)"
+  python3 scripts/superpod-shard.py run \
+    --posts-xml ./se-data/mathoverflow.net/Posts.xml \
+    --comments-xml ./se-data/mathoverflow.net/Comments.xml \
+    --site mathoverflow.net \
+    --num-shards "$NUM_SHARDS" \
+    --output-dir ./mo-processed-gpu-llm \
+    --skip-post-merge \
+    -- --thread-limit "$LLM_THREAD_LIMIT" --skip-embeddings \
+    --llm-model "$LLM_MODEL" --embed-device cuda
+
+  step "compose LLM files into Block 1 output"
+  for f in pattern-tags.json reverse-morphogenesis.json; do
+    if [[ -f ./math-processed-gpu-llm/"$f" ]]; then
+      cp ./math-processed-gpu-llm/"$f" ./math-processed-gpu/
+      echo "  math-processed-gpu/$f"
+    fi
+    if [[ -f ./mo-processed-gpu-llm/"$f" ]]; then
+      cp ./mo-processed-gpu-llm/"$f" ./mo-processed-gpu/
+      echo "  mo-processed-gpu/$f"
+    fi
+  done
+
+  echo
+  echo "[all] Block 2 complete. LLM files composed into Block 1 output."
+  exit 0
+fi
+
+# ---- Block 1 / default ----
 if (( ! SKIP_BOOTSTRAP )); then
   step "bootstrap inputs"
   bash scripts/handoff-superpod-bootstrap.sh
