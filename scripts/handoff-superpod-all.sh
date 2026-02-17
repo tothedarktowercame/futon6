@@ -6,12 +6,13 @@ set -euo pipefail
 
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-header-comment>>[init]
 # Single-command Superpod handoff runner.
+# Runs 11-stage pipeline (stages 1-7 + LWGM stages 8-10).
 # Default behavior:
 #   1) bootstrap inputs
 #   2) sanity tests
 #   3) smoke run + verification
-#   4) full CPU runs + verification
-#   5) required GPU backfill + verification
+#   4) full CPU runs + verification (stages 1/5/7/8/9a)
+#   5) required GPU backfill + verification (stages 1-10 incl. LWGM)
 #   6) package outputs
 #
 # Options:
@@ -137,6 +138,8 @@ package_outputs() {
     math-processed/scopes.json \
     math-processed/thread-wiring-ct.json \
     math-processed/thread-wiring-ct-verification.json \
+    math-processed/expression-surfaces.json \
+    math-processed/hypergraphs.json \
     math-processed/manifest.json
 
   tar czf superpod-mo-processed.tar.gz \
@@ -148,6 +151,8 @@ package_outputs() {
     mo-processed/scopes.json \
     mo-processed/thread-wiring-ct.json \
     mo-processed/thread-wiring-ct-verification.json \
+    mo-processed/expression-surfaces.json \
+    mo-processed/hypergraphs.json \
     mo-processed/manifest.json
 
   tar czf superpod-math-processed-gpu.tar.gz math-processed-gpu

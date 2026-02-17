@@ -77,12 +77,13 @@ set -euo pipefail
 
 ``` {.bash #all-header-comment}
 # Single-command Superpod handoff runner.
+# Runs 11-stage pipeline (stages 1-7 + LWGM stages 8-10).
 # Default behavior:
 #   1) bootstrap inputs
 #   2) sanity tests
 #   3) smoke run + verification
-#   4) full CPU runs + verification
-#   5) required GPU backfill + verification
+#   4) full CPU runs + verification (stages 1/5/7/8/9a)
+#   5) required GPU backfill + verification (stages 1-10 incl. LWGM)
 #   6) package outputs
 #
 # Options:
@@ -236,7 +237,8 @@ run_smoke() {
 
 Four tarballs: CPU and GPU outputs for each of the two corpora. The CPU
 tarballs list specific files (to avoid bundling intermediate artifacts);
-the GPU tarballs take the whole directory.
+the GPU tarballs take the whole directory (which now includes the LWGM
+embeddings and FAISS index).
 
 ``` {.bash #all-package-outputs}
 package_outputs() {
@@ -249,6 +251,8 @@ package_outputs() {
     math-processed/scopes.json \
     math-processed/thread-wiring-ct.json \
     math-processed/thread-wiring-ct-verification.json \
+    math-processed/expression-surfaces.json \
+    math-processed/hypergraphs.json \
     math-processed/manifest.json
 
   tar czf superpod-mo-processed.tar.gz \
@@ -260,6 +264,8 @@ package_outputs() {
     mo-processed/scopes.json \
     mo-processed/thread-wiring-ct.json \
     mo-processed/thread-wiring-ct-verification.json \
+    mo-processed/expression-surfaces.json \
+    mo-processed/hypergraphs.json \
     mo-processed/manifest.json
 
   tar czf superpod-math-processed-gpu.tar.gz math-processed-gpu
@@ -424,11 +430,13 @@ echo "[bootstrap] OK: all required inputs are present."
 
 ## 6. GPU Backfill
 
-The CPU baseline (stages 1, 5, 7) gives us parsed threads, term/scope
-spotting, and wiring diagrams. The GPU backfill re-runs the full 7-stage
-pipeline with embeddings, LLM pattern tagging, clustering, and reverse
-morphogenesis enabled. The two outputs are complementary: CPU is
-deterministic and fast; GPU adds richer semantic signals.
+The CPU baseline (stages 1, 5, 7, 8, 9a) gives us parsed threads,
+term/scope spotting, wiring diagrams, expression surfaces, and
+hypergraphs. The GPU backfill re-runs the full 11-stage pipeline with
+embeddings, LLM pattern tagging, clustering, reverse morphogenesis, graph
+embedding (9b), and FAISS indexing (10) enabled. The two outputs are
+complementary: CPU is deterministic and fast; GPU adds richer semantic
+signals plus the structural similarity index.
 
 ``` {.bash file=scripts/handoff-superpod-gpu-backfill.sh}
 <<bash-strict>>
@@ -448,7 +456,7 @@ The script takes a single argument: `math`, `mathoverflow`, or `both`
 (default). It validates the argument and locates the repo root.
 
 ``` {.bash #gpu-preamble}
-# GPU backfill for stages 2/3/4/6 after CPU baseline artifacts exist.
+# GPU backfill: full 11-stage pipeline including LWGM (stages 9b+10).
 # This is a required handoff stage on Superpod.
 # Usage:
 #   bash scripts/handoff-superpod-gpu-backfill.sh [math|mathoverflow|both]
@@ -493,7 +501,7 @@ run_site() {
   local comments="$3"
   local outdir="$4"
 
-  echo "[gpu] running full 7-stage pipeline for $site ..."
+  echo "[gpu] running full 11-stage pipeline for $site ..."
   python3 scripts/superpod-job.py \
     "$posts" \
     --comments-xml "$comments" \
@@ -534,9 +542,9 @@ echo "[gpu] done."
 
 ## 7. The Python Pipeline
 
-The heavy lifting happens in `scripts/superpod-job.py` (1,800 lines). It is
+The heavy lifting happens in `scripts/superpod-job.py` (~2,300 lines). It is
 not embedded here — it is a library, not part of the handoff narrative. The
-seven stages are:
+eleven stages are:
 
 | # | Stage | What it does | HW |
 |---|-------|-------------|-----|
@@ -547,38 +555,102 @@ seven stages are:
 | 5 | Term + scope spotting | Find known math terms (19K dictionary) and where authors introduce variables/assumptions ("Let X be...", "Assume...", "Define...") | CPU |
 | 6 | Situation reconstruction | LLM reconstructs the logical skeleton of each QA pair | GPU |
 | 7 | Thread wiring | Build a typed graph of each thread: who asserts/challenges/clarifies what, which math structures appear, how conclusions connect to assumptions | CPU |
+| 8 | Expression surfaces | Parse every `$...$` LaTeX expression to an s-expression tree | CPU |
+| 9a | Hypergraph assembly | Combine all annotation layers into a typed hypergraph per thread | CPU |
+| 9b | Graph embedding | Embed hypergraphs via R-GCN contrastive learning (LWGM) | GPU |
+| 10 | Similarity index | Build a FAISS index for structural nearest-neighbor search | CPU |
 
 CPU-only mode (`--skip-embeddings --skip-llm --skip-clustering`) runs
-stages 1, 5, and 7. The critical output is stage 7.
+stages 1, 5, 7, 8, and 9a. The critical output is stage 7; stages 8+9a
+extend it with expression-level structure. Stage 9b requires PyTorch and
+benefits from GPU; stage 10 requires stage 9b's output.
 
-### Planned stages 8-10: expression surfaces and structural embeddings
+### Stages 8-10: the LWGM (Large Wiring Graph Model)
 
-The current pipeline produces rich per-thread annotations but they remain
-local — there is no global structure connecting threads by the *shape* of
-their mathematical arguments. Three additional stages address this:
+Stages 1-7 produce rich per-thread annotations, but they remain local —
+there is no global structure connecting threads by the *shape* of their
+mathematical arguments. Stages 8-10 build that global structure:
 
-| # | Stage | What it does | HW |
-|---|-------|-------------|-----|
-| 8 | Expression surface parsing | Parse every `$...$` LaTeX expression into an s-expression tree. E.g. `$s(X(e))=X(s(e))$` → `(= (s (X e)) (X (s e)))`. Each expression becomes a typed surface for further wiring. | CPU |
-| 9a | Thread hypergraph assembly | Combine all annotation layers (NER terms, scope bindings, wiring edges, categorical detections, s-exp surfaces) into a single typed hypergraph per thread — the thread's *structural signature*. | CPU |
-| 9b | Hypergraph embedding | Embed each thread's typed hypergraph into a fixed-dimensional vector using a graph neural network (Graphormer, GPS, or HGNN+). Training signal is free: tag co-occurrence, SE "related questions" links, shared categorical detections. | GPU |
-| 10 | Structural similarity index | Build a FAISS index over the embedding vectors. Enables structural search: "find threads with the same argument shape as this one." | CPU |
+**Stage 8 — Expression surface parsing** (`src/futon6/latex_sexp.py`).
+A recursive-descent parser with precedence climbing converts every
+`$...$` and `$$...$$` LaTeX fragment into a typed s-expression. For
+example `$s(X(e))=X(s(e))$` becomes `(= (s (X e)) (X (s e)))`. Array
+environments produce graph structures: `(graph (→ A B) (→ B C))`. The
+parser handles 180+ LaTeX commands (fractions, subscripts, integrals,
+set builders, etc.) and falls back to a quoted string for the ~5% of
+expressions that use exotic packages. CPU-only, streaming, deterministic.
 
-Stage 8 is deterministic and embarrassingly parallel across the 128 CPU
-cores. Stage 9b is the only new GPU stage — it trains a graph embedding
-model on the ~2M thread hypergraphs. The result is what we're calling
-a **LWGM** (Large Wiring Graph Model): an embedding space over *argument
-structure*, not token sequences.
+**Stage 9a — Hypergraph assembly** (`src/futon6/hypergraph.py`). Combines
+all annotation layers into a single typed hypergraph per thread:
+- 4 node types: `post`, `term`, `expression`, `scope`
+- 6 edge types: `iatc` (discourse), `mention`, `discourse`, `scope`,
+  `surface`, `categorical`
+
+This is the thread's *structural signature*. The proof-of-concept thread
+(math.SE #633512, "What is a commutative diagram?") produces 82 nodes and
+99 edges. CPU-only.
+
+**Stage 9b — Graph embedding** (`src/futon6/graph_embed.py`). Trains an
+R-GCN (Relational Graph Convolutional Network) with self-supervised
+contrastive learning (InfoNCE/NT-Xent loss) on the hypergraph corpus.
+Each thread becomes a 128-dimensional L2-normalized vector. The training
+signal is free — augmented views of each graph (node dropout + edge
+dropout) provide positive pairs. No labels required. The architecture:
+
+- Node features: type + subtype embeddings (learned, 256 hash buckets)
+- R-GCN layers with per-relation weight matrices
+- Mean pooling → MLP projection head → L2 normalize
+- No torch_geometric dependency — pure PyTorch
+
+Default: 128d embeddings, 50 epochs, batch size 64. Configurable via
+`--graph-embed-dim` and `--graph-embed-epochs`. GPU-accelerated but will
+run on CPU (slowly) if no CUDA is available.
+
+**Stage 10 — FAISS structural similarity index** (`src/futon6/faiss_index.py`).
+Builds an inner-product index over the embedding vectors. Supports exact
+search (`flat`) for corpora under ~1M threads, and IVF approximate search
+for larger ones. Falls back to brute-force numpy (`NumpyIndex`) when FAISS
+is not installed — same API, slower for large corpora. The result: given
+any thread, retrieve the k threads with the most similar *argument
+structure*.
+
+This is what we're calling the **LWGM** — an embedding space over argument
+structure, not token sequences. "Related questions" means "structurally
+analogous mathematical reasoning," not just shared keywords.
 
 A demo of stages 5+7+8 on a single thread is at
 `data/first-proof/nnexus-glasses-demo.html` — open it in any browser to
 see NER terms, scope maps, wiring edges, categorical badges, and
 expression surfaces with s-exp tooltips all rendered on math.SE #633512.
 
-These stages are not yet implemented in `superpod-job.py` — they are
-defined as prototype P11 in the devmap. The current handoff run produces
-the inputs they need (stages 1-7 output). A follow-up run would add
-stages 8-10 once the code is ready.
+### What this means for the run
+
+Stages 8 and 9a run automatically in CPU-only mode — they add no new
+dependencies and no new flags to the orchestrator invocations. The CPU
+baseline runs (math.SE, MO) will produce `expression-surfaces.json` and
+`hypergraphs.json` alongside the existing artifacts.
+
+Stage 9b requires PyTorch (`pip install futon6[lwgm]`) and benefits from
+GPU. It runs during the GPU backfill pass. Stage 10 follows automatically
+if 9b produced embeddings.
+
+To skip stages 8-10 entirely (e.g., if you only care about stages 1-7):
+```bash
+python3 scripts/superpod-job.py ... \
+    --skip-expressions --skip-hypergraphs --skip-graph-embed --skip-faiss
+```
+
+### New output files from stages 8-10
+
+| File | Stage | Description |
+|------|-------|-------------|
+| `expression-surfaces.json` | 8 | Per-thread LaTeX→s-exp parse results |
+| `hypergraphs.json` | 9a | Per-thread typed hypergraphs (nodes + edges) |
+| `hypergraph-embeddings.npy` | 9b | (N, 128) float32 embedding matrix |
+| `graph-gnn-model.pt` | 9b | Trained R-GCN model weights |
+| `hypergraph-thread-ids.json` | 9b | Thread ID → row mapping |
+| `structural-similarity-index.npy` | 10 | FAISS/numpy index file |
+| `structural-similarity-index.ids.json` | 10 | Index ID mapping |
 
 ## 8. What the output actually looks like
 
@@ -684,6 +756,10 @@ Send back all 4 tarballs plus a short metric table from CPU and GPU
 - `stage7_stats.total_edges`
 - `stage7_stats.n_categorical`
 - `stage7_stats.n_port_matches`
+- `stage8_stats.total_expressions` / `stage8_stats.parse_rate`
+- `stage9a_stats.hypergraphs_produced` / `stage9a_stats.avg_nodes`
+- `stage9b_stats.n_embedded` / `stage9b_stats.embed_dim` (GPU only)
+- `stage10_stats.n_vectors` (GPU only)
 
 ## 10. Mission wiring diagram
 
@@ -709,38 +785,35 @@ Mission Control (single command)
       |       |
       |       +--> V1 verify required files + edges_checked > 0
       |
-      +--> M4 CPU baseline run (math.SE + MO; stages 1/5/7)
+      +--> M4 CPU baseline run (math.SE + MO; stages 1/5/7/8/9a)
       |       |
       |       +--> P1 parse XML posts/comments
       |       +--> P2 term + scope spotting
       |       +--> P3 thread wiring assembly (category-theory backed)
+      |       +--> P7 LaTeX → s-exp expression surfaces (CPU)
+      |       +--> P8 typed hypergraph assembly (CPU)
       |       +--> V2 manifest sanity + structural verifier
       |       +--> O1 math-processed/
       |       +--> O2 mo-processed/
       |
-      +--> M5 required GPU backfill (math.SE + MO; full stages 1..7)
+      +--> M5 GPU run (math.SE + MO; full stages 1..10 = LWGM)
       |       |
       |       +--> P4 embeddings (GPU)
       |       +--> P5 LLM pattern tagging (GPU)
       |       +--> P6 clustering + situation reconstruction
+      |       +--> P7-P8 expression surfaces + hypergraphs (CPU, same as M4)
+      |       +--> P9 R-GCN graph embedding (GPU, contrastive learning)
+      |       +--> P10 FAISS structural similarity index (CPU)
       |       +--> V3 structural verifier refresh
-      |       +--> O3 math-processed-gpu/
-      |       +--> O4 mo-processed-gpu/
+      |       +--> O3 math-processed-gpu/  (includes LWGM index)
+      |       +--> O4 mo-processed-gpu/    (includes LWGM index)
       |
       +--> M6 packaging
-      |       |
-      |       +--> O5 superpod-math-processed.tar.gz
-      |       +--> O6 superpod-mo-processed.tar.gz
-      |       +--> O7 superpod-math-processed-gpu.tar.gz
-      |       +--> O8 superpod-mo-processed-gpu.tar.gz
-      |
-      +--> M7 [planned] expression surfaces + structural embeddings
               |
-              +--> P7  Stage 8:  LaTeX → s-exp (CPU x128, deterministic)
-              +--> P8  Stage 9a: thread hypergraph assembly (CPU)
-              +--> P9  Stage 9b: hypergraph embedding (GPU, graph transformer)
-              +--> P10 Stage 10: FAISS structural similarity index (CPU)
-              +--> O9  structural-embeddings.tar.gz
+              +--> O5 superpod-math-processed.tar.gz
+              +--> O6 superpod-mo-processed.tar.gz
+              +--> O7 superpod-math-processed-gpu.tar.gz
+              +--> O8 superpod-mo-processed-gpu.tar.gz
 ```
 
 Invariants enforced by the orchestrator:
@@ -760,23 +833,21 @@ keywords. Second, verification quality improves: `ct-verifier` checks the
 resulting structure and blocks empty artifacts.
 
 The CPU and GPU outputs are complementary, not interchangeable. CPU gives a
-deterministic baseline and immediate wiring products. GPU backfill adds richer
-semantic signals (embeddings and LLM-derived structure) over the same corpus.
-Keeping both lets us compare quality and track where extra compute changes
-results.
+deterministic baseline and immediate wiring products (stages 1-9a). GPU
+backfill adds richer semantic signals (embeddings, LLM-derived structure) and
+the full LWGM — stages 9b and 10 train a graph neural network on the
+hypergraph corpus and build a structural similarity index.
+
+The LWGM is the new capability this run produces. Every thread's typed
+hypergraph (82 nodes, 99 edges for a typical thread like #633512) gets
+embedded into a 128-dimensional vector via R-GCN contrastive learning.
+"Related questions" then means "structurally analogous mathematical
+reasoning" — not just shared keywords. The FAISS index makes this
+queryable at sub-millisecond latency across the full 667K-thread corpus.
 
 At project level, this turns a one-off run into infrastructure. The same
 pipeline can be rerun, audited, and diffed over time, so Rob can evaluate
 whether later changes improve signal, regress quality, or break invariants.
-
-The longer-term vision is stages 8-10: parse every LaTeX expression into a
-typed s-expression tree, assemble all annotation layers into a hypergraph
-per thread, and embed those hypergraphs via a graph neural network. The
-result is a structural similarity index where "related questions" means
-"structurally analogous mathematical reasoning" — not just shared keywords.
-We're calling this a LWGM (Large Wiring Graph Model). The current run
-produces the inputs it needs; stages 8-10 would run as a follow-up once
-the code is ready.
 
 ## Notes
 

@@ -5,7 +5,7 @@ set -euo pipefail
 # ~/~ end
 
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#gpu-preamble>>[init]
-# GPU backfill for stages 2/3/4/6 after CPU baseline artifacts exist.
+# GPU backfill: full 11-stage pipeline including LWGM (stages 9b+10).
 # This is a required handoff stage on Superpod.
 # Usage:
 #   bash scripts/handoff-superpod-gpu-backfill.sh [math|mathoverflow|both]
@@ -39,7 +39,7 @@ run_site() {
   local comments="$3"
   local outdir="$4"
 
-  echo "[gpu] running full 7-stage pipeline for $site ..."
+  echo "[gpu] running full 11-stage pipeline for $site ..."
   python3 scripts/superpod-job.py \
     "$posts" \
     --comments-xml "$comments" \
