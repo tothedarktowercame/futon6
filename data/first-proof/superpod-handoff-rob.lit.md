@@ -518,6 +518,22 @@ The embedding and LLM models can be overridden via environment variables.
 Defaults are BGE-large for embeddings and Llama-3-8B-Instruct for pattern
 tagging and reverse morphogenesis.
 
+**Important: HuggingFace authentication required.** Llama-3 is a gated
+model — you must:
+
+1. Create a HuggingFace account at https://huggingface.co
+2. Accept the Llama 3 license at https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct
+3. Create an access token at https://huggingface.co/settings/tokens
+4. Before running: `export HF_TOKEN=hf_your_token_here`
+
+BGE-large (Stage 2 embeddings) is public and needs no authentication.
+The LWGM stages (8-10) need no HuggingFace access at all.
+
+If you want to skip the LLM stages entirely (stages 3 and 6) and run only
+embeddings + wiring + LWGM, use `--skip-llm`. This still produces the
+core deliverables: wiring diagrams, expression surfaces, hypergraphs,
+structural embeddings, and FAISS index.
+
 ``` {.bash #gpu-env}
 if ! command -v nvidia-smi >/dev/null 2>&1; then
   echo "[gpu] FATAL: nvidia-smi not found. Install NVIDIA drivers first."
@@ -535,6 +551,12 @@ if ! python3 -c "import torch; assert torch.cuda.is_available(), 'no CUDA'" 2>/d
 fi
 
 echo "[gpu] GPU OK: $(python3 -c "import torch; print(torch.cuda.get_device_name(0))")"
+
+if [[ -z "${HF_TOKEN:-}" ]]; then
+  echo "[gpu] WARNING: HF_TOKEN not set. Llama-3 (stages 3/6) will fail."
+  echo "[gpu]   export HF_TOKEN=hf_your_token_here"
+  echo "[gpu]   Or pass --skip-llm to skip stages 3/6."
+fi
 
 LLM_MODEL="${LLM_MODEL:-meta-llama/Meta-Llama-3-8B-Instruct}"
 EMBED_MODEL="${EMBED_MODEL:-BAAI/bge-large-en-v1.5}"

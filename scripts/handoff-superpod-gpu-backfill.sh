@@ -41,6 +41,12 @@ fi
 
 echo "[gpu] GPU OK: $(python3 -c "import torch; print(torch.cuda.get_device_name(0))")"
 
+if [[ -z "${HF_TOKEN:-}" ]]; then
+  echo "[gpu] WARNING: HF_TOKEN not set. Llama-3 (stages 3/6) will fail."
+  echo "[gpu]   export HF_TOKEN=hf_your_token_here"
+  echo "[gpu]   Or pass --skip-llm to skip stages 3/6."
+fi
+
 LLM_MODEL="${LLM_MODEL:-meta-llama/Meta-Llama-3-8B-Instruct}"
 EMBED_MODEL="${EMBED_MODEL:-BAAI/bge-large-en-v1.5}"
 # ~/~ end
