@@ -529,6 +529,19 @@ model — you must:
 BGE-large (Stage 2 embeddings) is public and needs no authentication.
 The LWGM stages (8-10) need no HuggingFace access at all.
 
+**Alternative: use Mistral-7B (no gating).** We validated the full
+pipeline end-to-end on a Linode RTX 4000 Ada using
+`mistralai/Mistral-7B-Instruct-v0.3` — same parameter count, ungated,
+produced reasonable pattern tags. To use Mistral instead of Llama:
+
+```bash
+export LLM_MODEL=mistralai/Mistral-7B-Instruct-v0.3
+```
+
+Rob's call: Llama-3-8B if you have HF access and prefer Meta's model,
+Mistral-7B if you want zero authentication hassle. Both are 7-8B
+parameter instruction-tuned models. The pipeline code is model-agnostic.
+
 If you want to skip the LLM stages entirely (stages 3 and 6) and run only
 embeddings + wiring + LWGM, use `--skip-llm`. This still produces the
 core deliverables: wiring diagrams, expression surfaces, hypergraphs,
