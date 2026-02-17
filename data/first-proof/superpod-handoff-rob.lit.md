@@ -304,8 +304,24 @@ run_smoke() {
 
 Four tarballs: CPU and GPU outputs for each of the two corpora. The CPU
 tarballs list specific files (to avoid bundling intermediate artifacts);
-the GPU tarballs take the whole directory (which now includes the LWGM
-embeddings and FAISS index).
+the GPU tarballs take the whole directory. This is important because the
+GPU output includes **reusable model artifacts** that enable downstream
+structural search on commodity hardware:
+
+- `graph-gnn-model.pt` — trained R-GCN weights + config (Stage 9b).
+  This is the model that maps wiring diagrams to embedding vectors.
+  Once trained on the superpod, inference (embedding a new wiring diagram)
+  is a single forward pass that runs on CPU in milliseconds.
+- `hypergraph-embeddings.npy` — pre-computed embeddings for all threads (Stage 9b).
+- `hypergraph-thread-ids.json` — thread ID ↔ embedding row mapping.
+- `structural-similarity-index.faiss` — FAISS nearest-neighbor index (Stage 10).
+  Sub-second k-NN search over the full corpus on a laptop.
+- `structural-similarity-index.ids.json` — thread ID mapping for FAISS queries.
+
+These artifacts are the key deliverable for the "stepper" use case: given a
+new wiring diagram (from a proof attempt, an ArXiv paper, etc.), embed it
+via the trained R-GCN and search the FAISS index for structurally similar
+threads — all on local hardware, no GPU required.
 
 ``` {.bash #all-package-outputs}
 package_outputs() {
@@ -1215,12 +1231,30 @@ priority.
 ## 10. Deliverables and return payload
 
 Expected outputs:
-- `superpod-math-processed.tar.gz`
-- `superpod-mo-processed.tar.gz`
+- `superpod-math-processed.tar.gz` (CPU baseline, unsharded only)
+- `superpod-mo-processed.tar.gz` (CPU baseline, unsharded only)
 - `superpod-math-processed-gpu.tar.gz`
 - `superpod-mo-processed-gpu.tar.gz`
 
-Send back all 4 tarballs plus a short metric table from CPU and GPU
+The GPU tarballs are the critical deliverable. They contain both the
+per-thread pipeline output (wiring diagrams, hypergraphs, etc.) **and**
+the trained model artifacts needed for downstream structural search:
+
+| File | Stage | Purpose |
+|------|-------|---------|
+| `graph-gnn-model.pt` | 9b | R-GCN weights — embed new wiring diagrams on CPU |
+| `hypergraph-embeddings.npy` | 9b | Pre-computed thread embeddings |
+| `hypergraph-thread-ids.json` | 9b | Thread ID ↔ embedding row mapping |
+| `structural-similarity-index.faiss` | 10 | FAISS k-NN index for structural search |
+| `structural-similarity-index.ids.json` | 10 | Thread ID mapping for FAISS queries |
+
+These model artifacts enable **hot re-embedding**: given a new wiring
+diagram (from a proof attempt, an ArXiv paper, or a new SE thread),
+load the R-GCN model, run a forward pass (CPU, milliseconds), and
+query the FAISS index for structurally similar threads. No GPU needed
+after the initial superpod training run.
+
+Send back all tarballs plus a short metric table from CPU and GPU
 `manifest.json` files:
 - `entity_count`
 - `stage5_stats.total_ner_hits`

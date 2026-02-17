@@ -184,6 +184,9 @@ package_outputs() {
       mo-processed/manifest.json
   fi
 
+  # GPU tarballs include the whole directory: per-thread output AND
+  # reusable model artifacts (graph-gnn-model.pt, structural-similarity-index.faiss,
+  # hypergraph-embeddings.npy, etc.) for downstream hot re-embedding on CPU.
   tar czf superpod-math-processed-gpu.tar.gz math-processed-gpu
   tar czf superpod-mo-processed-gpu.tar.gz mo-processed-gpu
 }
