@@ -208,7 +208,9 @@ def build_qa_pairs(posts: dict[int, SEPost]) -> list[SEQAPair]:
 
 
 def build_qa_pairs_streaming(xml_path: str, min_score: int = 0,
-                             question_limit: int | None = None) -> list[SEQAPair]:
+                             question_limit: int | None = None,
+                             shard_index: int | None = None,
+                             num_shards: int | None = None) -> list[SEQAPair]:
     """Build QA pairs with two streaming passes over the XML.
 
     Pass 1: collect only pairing metadata (IDs, scores, accepted answer).
@@ -216,6 +218,9 @@ def build_qa_pairs_streaming(xml_path: str, min_score: int = 0,
     Pass 2: stream again, loading only posts that are part of a pair.
 
     Memory: O(pairs) not O(all posts). Safe on 4GB machines for multi-GB dumps.
+
+    Shard mode: if shard_index and num_shards are set, only keep questions
+    where question_id % num_shards == shard_index.
     """
     import sys
 
@@ -234,6 +239,9 @@ def build_qa_pairs_streaming(xml_path: str, min_score: int = 0,
 
         if post_type_id == 1 and score >= min_score:
             qid = int(attrs["Id"])
+            if num_shards is not None and (qid % num_shards) != shard_index:
+                elem.clear()
+                continue
             acc = int(a) if (a := attrs.get("AcceptedAnswerId")) else None
             tags = parse_se_tags(attrs.get("Tags", ""))
             questions[qid] = (acc, tags)
@@ -352,6 +360,8 @@ def build_threads_streaming(
     comments_xml_path: str | None = None,
     min_score: int = 0,
     thread_limit: int | None = None,
+    shard_index: int | None = None,
+    num_shards: int | None = None,
 ) -> list[SEThread]:
     """Build full thread objects with a 3-pass streaming approach.
 
@@ -363,6 +373,9 @@ def build_threads_streaming(
     Assembles SEThread objects, one per question.
 
     Memory: O(threads) not O(all posts). Safe for large dumps.
+
+    Shard mode: if shard_index and num_shards are set, only keep questions
+    where question_id % num_shards == shard_index.
     """
     import sys
 
@@ -383,6 +396,9 @@ def build_threads_streaming(
 
         if post_type_id == 1 and score >= min_score:
             qid = int(attrs["Id"])
+            if num_shards is not None and (qid % num_shards) != shard_index:
+                elem.clear()
+                continue
             acc = int(a) if (a := attrs.get("AcceptedAnswerId")) else None
             tags = parse_se_tags(attrs.get("Tags", ""))
             questions[qid] = (acc, tags)

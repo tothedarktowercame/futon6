@@ -1724,10 +1724,31 @@ def main():
     parser.add_argument("--preflight", action="store_true",
                         help="Strict health gates: abort on warnings (use for pre-flight validation runs)")
 
+    # Sharding (for parallel execution on multi-GPU machines)
+    parser.add_argument("--shard-index", type=int, default=None,
+                        help="Shard index (0-based) for parallel runs")
+    parser.add_argument("--num-shards", type=int, default=None,
+                        help="Total number of shards")
+
     args = parser.parse_args()
 
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be > 0")
+
+    # Shard validation
+    if (args.shard_index is not None) != (args.num_shards is not None):
+        parser.error("--shard-index and --num-shards must be used together")
+    if args.num_shards is not None:
+        if args.num_shards < 1:
+            parser.error("--num-shards must be >= 1")
+        if args.shard_index < 0 or args.shard_index >= args.num_shards:
+            parser.error(f"--shard-index must be in [0, {args.num_shards - 1}]")
+        # In shard mode, skip stages that need the full corpus
+        args.skip_clustering = True
+        args.skip_graph_embed = True
+        args.skip_faiss = True
+        print(f"  Shard mode: shard {args.shard_index}/{args.num_shards}"
+              f" (auto-skipping clustering, graph-embed, faiss)")
 
     auto_thread_limit = False
     if args.limit is not None and args.thread_limit is None:
@@ -1819,6 +1840,8 @@ def main():
         args.posts_xml,
         min_score=args.min_score,
         question_limit=args.limit,
+        shard_index=args.shard_index,
+        num_shards=args.num_shards,
     )
     if args.limit and len(pairs) > args.limit:
         print(f"       Parsed {len(pairs)} pairs, limiting to {args.limit}")
@@ -2008,6 +2031,8 @@ def main():
             comments_xml_path=args.comments_xml,
             min_score=args.min_score,
             thread_limit=args.thread_limit,
+            shard_index=args.shard_index,
+            num_shards=args.num_shards,
         )
         print(f"       {len(threads)} threads built in {time.time()-t7:.0f}s")
 
@@ -2264,6 +2289,8 @@ def main():
         "source": args.site,
         "posts_xml": args.posts_xml,
         "min_score": args.min_score,
+        "shard_index": args.shard_index,
+        "num_shards": args.num_shards,
         "embed_model": args.embed_model if not args.skip_embeddings else None,
         "llm_model": args.llm_model if not args.skip_llm else None,
         "stats": stats,

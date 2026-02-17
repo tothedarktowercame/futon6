@@ -73,11 +73,46 @@ run_site() {
     --reference data/nlab-ct-reference.json \
     --output "$outdir/thread-wiring-ct-verification.json"
 }
+
+run_site_sharded() {
+  local site="$1"
+  local posts="$2"
+  local comments="$3"
+  local outdir="$4"
+
+  echo "[gpu] running sharded pipeline ($NUM_SHARDS shards) for $site ..."
+  python3 scripts/superpod-shard.py run \
+    --posts-xml "$posts" \
+    --comments-xml "$comments" \
+    --site "$site" \
+    --num-shards "$NUM_SHARDS" \
+    --output-dir "$outdir" \
+    -- \
+    --embed-device cuda \
+    --embed-model "$EMBED_MODEL" \
+    --llm-model "$LLM_MODEL" \
+    $EXTRA_SHARD_ARGS
+
+  python3 scripts/ct-verifier.py verify \
+    --wiring "$outdir/thread-wiring-ct.json" \
+    --reference data/nlab-ct-reference.json \
+    --output "$outdir/thread-wiring-ct-verification.json"
+}
 # ~/~ end
 
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#gpu-dispatch>>[init]
+NUM_SHARDS="${NUM_SHARDS:-1}"
+EXTRA_SHARD_ARGS="${EXTRA_SHARD_ARGS:-}"
+
+if [[ "$NUM_SHARDS" -gt 1 ]]; then
+  run_fn=run_site_sharded
+  echo "[gpu] sharded mode: $NUM_SHARDS shards"
+else
+  run_fn=run_site
+fi
+
 if [[ "$TARGET" == "math" || "$TARGET" == "both" ]]; then
-  run_site \
+  $run_fn \
     "math.stackexchange" \
     "./se-data/math.stackexchange.com/Posts.xml" \
     "./se-data/math.stackexchange.com/Comments.xml" \
@@ -85,7 +120,7 @@ if [[ "$TARGET" == "math" || "$TARGET" == "both" ]]; then
 fi
 
 if [[ "$TARGET" == "mathoverflow" || "$TARGET" == "both" ]]; then
-  run_site \
+  $run_fn \
     "mathoverflow.net" \
     "./se-data/mathoverflow.net/Posts.xml" \
     "./se-data/mathoverflow.net/Comments.xml" \

@@ -48,7 +48,11 @@ def test_superpod_job_ct_pipeline_smoke(tmp_path: Path):
     )
 
     manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
-    assert manifest["stages_completed"] == ["parse", "ner_scopes", "thread_wiring"]
+    # CPU-only mode runs parse, ner, wiring, expressions, hypergraphs (+ graph_embed/faiss if available)
+    completed = manifest["stages_completed"]
+    assert "parse" in completed
+    assert "ner_scopes" in completed
+    assert "thread_wiring" in completed
     assert manifest["stage7_stats"]["ct_backed"] is True
     assert manifest["stage7_stats"]["threads_processed"] == 4
 

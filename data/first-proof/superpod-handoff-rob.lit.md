@@ -602,13 +602,51 @@ run_site() {
     --reference data/nlab-ct-reference.json \
     --output "$outdir/thread-wiring-ct-verification.json"
 }
+
+run_site_sharded() {
+  local site="$1"
+  local posts="$2"
+  local comments="$3"
+  local outdir="$4"
+
+  echo "[gpu] running sharded pipeline ($NUM_SHARDS shards) for $site ..."
+  python3 scripts/superpod-shard.py run \
+    --posts-xml "$posts" \
+    --comments-xml "$comments" \
+    --site "$site" \
+    --num-shards "$NUM_SHARDS" \
+    --output-dir "$outdir" \
+    -- \
+    --embed-device cuda \
+    --embed-model "$EMBED_MODEL" \
+    --llm-model "$LLM_MODEL" \
+    $EXTRA_SHARD_ARGS
+
+  python3 scripts/ct-verifier.py verify \
+    --wiring "$outdir/thread-wiring-ct.json" \
+    --reference data/nlab-ct-reference.json \
+    --output "$outdir/thread-wiring-ct-verification.json"
+}
 ```
 
 ### 6.4 Site dispatch
 
+If `NUM_SHARDS` is set to a value greater than 1, we use the sharded path.
+Otherwise, we run the single-process pipeline.
+
 ``` {.bash #gpu-dispatch}
+NUM_SHARDS="${NUM_SHARDS:-1}"
+EXTRA_SHARD_ARGS="${EXTRA_SHARD_ARGS:-}"
+
+if [[ "$NUM_SHARDS" -gt 1 ]]; then
+  run_fn=run_site_sharded
+  echo "[gpu] sharded mode: $NUM_SHARDS shards"
+else
+  run_fn=run_site
+fi
+
 if [[ "$TARGET" == "math" || "$TARGET" == "both" ]]; then
-  run_site \
+  $run_fn \
     "math.stackexchange" \
     "./se-data/math.stackexchange.com/Posts.xml" \
     "./se-data/math.stackexchange.com/Comments.xml" \
@@ -616,7 +654,7 @@ if [[ "$TARGET" == "math" || "$TARGET" == "both" ]]; then
 fi
 
 if [[ "$TARGET" == "mathoverflow" || "$TARGET" == "both" ]]; then
-  run_site \
+  $run_fn \
     "mathoverflow.net" \
     "./se-data/mathoverflow.net/Posts.xml" \
     "./se-data/mathoverflow.net/Comments.xml" \
@@ -625,6 +663,56 @@ fi
 
 echo "[gpu] done."
 ```
+
+### 6.5 Sharded execution (for large corpora)
+
+The superpod runs in 4-hour blocks. With 567K math.SE threads, the LLM stages
+alone (10.3s per thread) would take ~25 hours even on 8 A100s. Sharding
+partitions the corpus so stages 1-9a run in parallel, one shard per GPU,
+then the global stages (9b contrastive learning + 10 FAISS index) run on the
+merged output.
+
+```
+Phase A: N parallel shard jobs (stages 1-9a each, ~45 min)
+         ↓
+Phase B: merge shard outputs into one directory (~15 min)
+         ↓
+Phase C: stages 9b + 10 on merged corpus (~35 min)
+```
+
+To run in sharded mode:
+
+```bash
+NUM_SHARDS=8 bash scripts/handoff-superpod-gpu-backfill.sh both
+```
+
+Or use the shard orchestrator directly:
+
+```bash
+python3 scripts/superpod-shard.py run \
+    --posts-xml ./se-data/math.stackexchange.com/Posts.xml \
+    --comments-xml ./se-data/math.stackexchange.com/Comments.xml \
+    --site math.stackexchange \
+    --num-shards 8 \
+    --output-dir ./math-processed-gpu \
+    -- --embed-device cuda --skip-llm
+```
+
+The shard filter is deterministic: `question_id % num_shards == shard_index`.
+Each shard processes a disjoint subset of threads. Answers and comments
+follow automatically (they're keyed by parent question ID).
+
+**The LLM bottleneck is real.** Sharding solves CPU stage parallelism and
+makes the pipeline composable, but it doesn't conjure extra GPU-hours. Three
+options within a 4-hour block:
+
+1. **`--skip-llm`** (recommended): core deliverables (wiring diagrams,
+   expression surfaces, hypergraphs, LWGM embeddings, FAISS index) don't need
+   LLM. Sharded CPU + embeddings + 9b + 10 completes in ~2 hours.
+2. **`--thread-limit N`** per shard: run LLM on a subset (e.g. 5K/shard =
+   40K total, ~7% coverage). Enough for quality assessment.
+3. **Multi-block**: run across multiple 4-hour blocks. Requires manual
+   coordination (future checkpointing support would automate this).
 
 ## 7. The Python Pipeline
 
@@ -828,7 +916,8 @@ All of this is already in the repo if you want to poke at it:
 ## 9. Resource estimates
 
 Based on preflight (100 threads, RTX 4000 Ada 20GB, 21.5 min) and
-physics.SE calibration (114K threads).
+physics.SE calibration (114K threads). Now refined for the actual
+superpod spec: **128 CPUs, 2 TB RAM, 8 GPUs**, 4-hour blocks.
 
 ### Downloads
 
@@ -852,41 +941,159 @@ physics.SE calibration (114K threads).
 | Everything else | ~5 GB | ~1 GB |
 | **Total per corpus** | **~45 GB** | **~8 GB** |
 
-Safe disk budget: **150 GB** (includes raw XML, models, intermediate files).
+During sharded execution, shard directories exist alongside the merged
+output until cleanup. Peak disk: ~2x single-corpus output.
 
-### Time
+Safe disk budget: **200 GB** (includes raw XML, models, shard intermediates,
+merged output, and headroom).
 
-**The bottleneck is LLM inference (stages 3 + 6).** In the preflight,
-LLM stages were 80% of wall time: 10.3 seconds per thread on a single
-RTX 4000 Ada running sequentially. At 567K threads that's ~1600 GPU-hours
-on that hardware — obviously not feasible on a single small GPU.
+### Per-stage time estimates (8 shards, 8 GPUs)
 
-Superpod time depends entirely on GPU count and type:
+Each shard processes ~71K threads (math.SE) or ~12.5K threads (MO).
+Each shard gets 16 CPUs and 1 GPU.
 
-| Hardware | LLM stages (math.SE) | LLM stages (MO) | Everything else | Total |
-|----------|---------------------|-----------------|-----------------|-------|
-| 1x A100 80GB | ~200h | ~35h | ~6h | ~240h |
-| 4x A100 80GB | ~50h | ~9h | ~6h | ~65h |
-| 8x A100 80GB | ~25h | ~5h | ~6h | ~36h |
+| Stage | What | HW | Per shard (math.SE) | Per shard (MO) | Notes |
+|-------|------|----|-------|-------|-------|
+| 1 | Parse XML | CPU | 10 min | 3 min | Streams full XML per shard (shard filter skips non-matching questions) |
+| 2 | Embeddings | GPU | 5 min | 1 min | BGE-large, batch_size=2048 on A100 80GB |
+| 3 | LLM tagging | GPU | **5–25h** | **1–4h** | The bottleneck. See below. |
+| 4 | Clustering | CPU | skipped | skipped | Auto-skipped in shard mode |
+| 5 | NER + scopes | CPU | 15 min | 3 min | Classical term spotter, linear in threads |
+| 6 | Reverse morphogenesis | GPU | **5–25h** | **1–4h** | Same LLM cost as Stage 3 |
+| 7 | Thread wiring | CPU | 30 min | 8 min | Re-parses XML, then CT wiring per thread |
+| 8 | Expression surfaces | CPU | 15 min | 3 min | LaTeX parser, linear in threads |
+| 9a | Hypergraph assembly | CPU | 10 min | 2 min | Combines wiring + expressions |
+| 9b | Graph embedding | GPU | **1–3h** | **15–30 min** | R-GCN contrastive. Needs full merged corpus. |
+| 10 | FAISS index | CPU | 1 min | 1 min | Trivial at this scale |
 
-Assumptions: A100 is ~3x faster per thread than RTX 4000 (larger batches,
-faster memory bandwidth); multi-GPU parallelism is linear for LLM stages.
+### The LLM bottleneck
 
-**CPU-only mode** (`--skip-embeddings --skip-llm --skip-clustering`)
-runs stages 1, 5, 7, 8, 9a in **~3-5 hours** for math.SE, **~1 hour**
-for MO. No GPU required. Produces wiring diagrams, expression surfaces,
-and hypergraphs — everything except text embeddings, pattern tags,
-situation reconstructions, LWGM embeddings, and FAISS index.
+In the preflight, Mistral-7B inference cost 10.3s per thread on RTX 4000
+Ada (20GB, batch_size=8). On A100 80GB, three improvements compound:
 
-**Rob: please report your GPU hardware** (count and type) so we can
-refine these estimates. Also run `--dry-run` on the actual data to get
-the pipeline's own estimates:
+- **4x VRAM** → batch_size=32-64 (more parallelism per call)
+- **Faster HBM** → ~2x memory throughput
+- **Tensor cores** → ~1.5x compute on fp16
+
+Realistic per-thread estimate on A100: **2–3s** (3–5x faster than RTX 4000).
+
+Per shard (71K threads, 1 A100):
+- Best case (2s/thread): 71K × 2s = 39h per LLM stage
+- Each thread needs 2 LLM stages (3 + 6): **78h total per shard**
+
+With 8 shards on 8 GPUs running in parallel, wall time = per-shard time
+= **78h for LLM stages alone**. This does not fit in any number of
+reasonable 4-hour blocks.
+
+**The LLM stages are not feasible in the 4-hour-block model** unless
+inference throughput improves ~20x (e.g., via vLLM or TensorRT-LLM, which
+could get per-thread cost down to 0.1–0.3s). That is an infrastructure
+change beyond the scope of this handoff.
+
+### Multi-block plan
+
+The pipeline decomposes into **three blocks** at natural stable points.
+Each block's outputs are ordinary files on disk — the checkpoint between
+blocks is simply "the output directory exists."
+
+#### Block 1: Core pipeline (1 × 4h block) — THE REQUIRED RUN
+
+Everything except LLM stages. Produces all core deliverables.
+
+```
+Time budget:
+  bootstrap + smoke + tests           15 min
+  CPU stages sharded (1/5/7/8/9a)     45 min  (8 shards × 16 CPUs)
+  Embeddings sharded (stage 2)         5 min  (8 shards × 1 GPU)
+  Merge shard outputs                 20 min  (I/O bound, ~90 GB total)
+  Stage 9b: R-GCN on merged corpus    90 min  (1 GPU, 567K graphs, 30 epochs)
+  Stage 10: FAISS index                1 min
+  Repeat for MO                       30 min  (5x smaller corpus)
+                                    --------
+  Total                             ~3.5 hours
+```
+
+**Stable point after Block 1:** output dirs `math-processed-gpu/` and
+`mo-processed-gpu/` contain everything except `pattern-tags.json` and
+`reverse-morphogenesis.json`. The `manifest.json` records which stages
+completed. Evaluation can already run (`--cpu-only` mode skips embedding
+comparison).
+
+**This is the minimum viable run.** If only one block is available, do this.
+
+How to run:
+
+```bash
+NUM_SHARDS=8 EXTRA_SHARD_ARGS="--skip-llm" \
+  bash scripts/handoff-superpod-gpu-backfill.sh both
+```
+
+Or equivalently with the orchestrator:
+
+```bash
+python3 scripts/superpod-shard.py run \
+    --posts-xml ./se-data/math.stackexchange.com/Posts.xml \
+    --comments-xml ./se-data/math.stackexchange.com/Comments.xml \
+    --site math.stackexchange \
+    --num-shards 8 \
+    --output-dir ./math-processed-gpu \
+    -- --embed-device cuda --skip-llm
+```
+
+#### Block 2 (optional): LLM on a sample (1 × 4h block)
+
+Run LLM stages on a **subset** of threads to get pattern tags and
+situation reconstructions for quality assessment. Use `--limit` to cap
+Stage 1 parsing, which automatically caps everything downstream.
+
+```
+Time budget (per corpus, 40K thread limit):
+  Parse 40K threads                    5 min
+  Embeddings                           1 min
+  Stage 3: LLM tagging (40K × 2.5s)  1.5h   (1 GPU)
+  Stage 6: LLM reverse morph (same)   1.5h   (1 GPU)
+  Stages 5/7/8/9a                     10 min
+                                    --------
+  Total per corpus                  ~3.2 hours
+```
+
+Run math.SE and MO in sequence (different GPU assignments):
 
 ```bash
 python3 scripts/superpod-job.py \
     ./se-data/math.stackexchange.com/Posts.xml \
-    --site math.stackexchange --dry-run
+    --comments-xml ./se-data/math.stackexchange.com/Comments.xml \
+    --site math.stackexchange \
+    --output-dir ./math-llm-sample \
+    --limit 40000 \
+    --embed-device cuda \
+    --llm-model "$LLM_MODEL"
 ```
+
+**Stable point after Block 2:** `math-llm-sample/` has full pipeline output
+for 40K threads (7% of math.SE). Enough to evaluate LLM quality and decide
+whether a full-corpus LLM run is justified.
+
+#### Block 3+ (optional): Full LLM coverage
+
+Only if Block 2 evaluation shows that LLM outputs add enough value to justify
+the cost. Would require either:
+
+- **vLLM inference server** (~10-20x faster, could fit in 2–3 blocks)
+- **Extended time allocation** (~20 blocks at current throughput)
+- **Checkpoint-and-resume** (not yet implemented — would write partial
+  `pattern-tags.json` and resume from where it left off)
+
+This is explicitly deferred. The core deliverables from Block 1 are the
+priority.
+
+### Summary table
+
+| Block | Duration | Contents | Stable output |
+|-------|----------|----------|---------------|
+| **Block 1** (required) | ~3.5h | CPU sharded + embeddings + merge + 9b + 10, both corpora | `math-processed-gpu/`, `mo-processed-gpu/` |
+| Block 2 (optional) | ~3.5h | LLM on 40K math.SE + 40K MO threads | `math-llm-sample/`, `mo-llm-sample/` |
+| Block 3+ (optional) | N × 4h | Full-corpus LLM (needs vLLM or checkpointing) | incremental |
 
 ## 10. Deliverables and return payload
 
