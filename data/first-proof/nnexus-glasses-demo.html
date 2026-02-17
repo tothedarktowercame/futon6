@@ -82,6 +82,20 @@ h1{font-size:1.35rem;margin-bottom:4px;color:#333}
 .legend-swatch{width:36px;height:14px;border-radius:2px;flex-shrink:0}
 .section-gap{height:16px}
 a.ner{color:inherit}
+/* Context panel */
+.context-panel{background:#f8f9fa;border:1px solid #e2e5e9;border-radius:8px;padding:20px 24px;margin-bottom:28px;font-family:system-ui,-apple-system,sans-serif;font-size:.85rem;line-height:1.65;color:#444}
+.context-panel summary{font-size:.9rem;font-weight:600;color:#333;cursor:pointer;padding:2px 0;user-select:none}
+.context-panel summary:hover{color:#111}
+.context-panel h4{font-size:.82rem;font-weight:700;color:#555;margin:16px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+.context-panel h4:first-of-type{margin-top:10px}
+.context-panel ul{margin:4px 0 10px 18px;padding:0}
+.context-panel li{margin-bottom:4px}
+.context-panel .layer-name{font-weight:600}
+.context-panel .app-num{display:inline-block;width:18px;height:18px;background:#e0e7ff;color:#3730a3;border-radius:50%;text-align:center;font-size:.7rem;font-weight:700;line-height:18px;margin-right:6px;flex-shrink:0}
+.context-panel p{margin:6px 0}
+/* Scale footer */
+.scale-footer{background:#f0f4f8;border:1px solid #d1d9e0;border-radius:6px;padding:16px 20px;margin-top:24px;font-size:.8rem;font-family:system-ui,sans-serif;color:#555;line-height:1.6}
+.scale-footer strong{color:#333}
 /* Expression surfaces */
 mjx-container.expr-surface{background:rgba(34,197,94,.09);border-radius:3px;padding:1px 3px;cursor:pointer;transition:background .15s}
 mjx-container.expr-surface:hover{background:rgba(34,197,94,.22)}
@@ -98,6 +112,26 @@ mjx-container.expr-surface-display:hover{background:rgba(34,197,94,.16)}
 
 <h1>What is the definition of a commutative diagram?</h1>
 <p class="subtitle">math.SE #633512 &mdash; NNexus Glasses view &middot; wiring overlay</p>
+
+<details class="context-panel" open>
+<summary>What you're looking at</summary>
+<p>This is a single math.SE thread processed through our 11-stage pipeline. Each annotation layer reveals structure that's invisible in the raw text:</p>
+<ul>
+ <li><span class="layer-name" style="color:#ca8a04">Gold highlights</span> &mdash; mathematical terms linked to nLab encyclopedia entries (19K-term dictionary)</li>
+ <li><span class="layer-name" style="color:#3b82f6">Blue scope maps</span> &mdash; variable bindings (Let, &forall;, where) decomposed into symbol : type form &mdash; the logical skeleton of the argument</li>
+ <li><span class="layer-name" style="color:#7c3aed">Purple discourse markers</span> &mdash; rhetorical moves (adversative "but", consequential "thus", examples) &mdash; the argument's flow</li>
+ <li><span class="layer-name" style="color:#555">Edge badges</span> &mdash; how posts relate to each other (assert, clarify, challenge, agree) &mdash; the conversation's pragmatic structure</li>
+ <li><span class="layer-name" style="color:#1e40af">Categorical badges</span> &mdash; category-theoretic concepts detected (equivalence, limit, universal property) with confidence scores</li>
+ <li><span class="layer-name" style="color:#16a34a">Green expression surfaces</span> &mdash; hover any formula for its s-expression parse tree &mdash; every LaTeX expression parsed into a typed symbolic representation</li>
+</ul>
+
+<h4>What the superpod produces at scale</h4>
+<p>The superpod run processes this pipeline on <strong>567K math.SE threads</strong> and <strong>100K MathOverflow threads</strong>. For each thread it produces a hypergraph combining all six layers, then builds a structural similarity index (R-GCN graph neural network + FAISS) across the entire corpus. The result: given any thread, find the threads with the most similar <em>argument structure</em> &mdash; not just shared keywords, but analogous mathematical reasoning.</p>
+
+<h4>What this enables</h4>
+<p><span class="app-num">1</span> <strong>First Proof style problems.</strong> When working on a competition problem, search for threads that use the same proof strategy (e.g., "argue by contradiction + exploit symmetry") on different mathematical objects. The structural index finds these even when there's zero keyword overlap. This is the fast path from "I have a problem" to "here are 20 threads where people solved structurally analogous problems."</p>
+<p><span class="app-num">2</span> <strong>ArXiv processing.</strong> The same pipeline can process ArXiv papers in a subsequent run, enabling structural search across published research &mdash; finding papers that reason analogously to your problem, across subfields.</p>
+</details>
 
 <div id="thread"></div>
 
@@ -127,6 +161,12 @@ mjx-container.expr-surface-display:hover{background:rgba(34,197,94,.16)}
   <strong>Discourse Markers</strong> panels show rhetorical structure: adversative ("but"), consequential ("Thus"), examples, and cross-references.<br>
   <span style="display:inline-block;width:36px;height:14px;background:rgba(34,197,94,.15);border-radius:2px;vertical-align:middle"></span> <strong>Expression surfaces</strong> — hover for s-expression parse. Each expression is a typed surface for further wiring.
 </p>
+</div>
+
+<div class="scale-footer">
+<strong>Scale:</strong> This demo shows 1 thread. The superpod run produces this for <strong>667K threads</strong> (567K math.SE + 100K MathOverflow), then computes structural embeddings and a FAISS similarity index across all of them.
+For deeper interactive exploration, see the Arxana hypergraph browser (Emacs + HTML dual view, <code>futon4/dev/arxana-browser-hypergraph.el</code>).
+Technical details: <code>data/first-proof/superpod-handoff-rob.lit.md</code>.
 </div>
 
 <script>
