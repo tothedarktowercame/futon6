@@ -520,8 +520,21 @@ tagging and reverse morphogenesis.
 
 ``` {.bash #gpu-env}
 if ! command -v nvidia-smi >/dev/null 2>&1; then
-  echo "[gpu] WARNING: nvidia-smi not found. GPU stack may be unavailable."
+  echo "[gpu] FATAL: nvidia-smi not found. Install NVIDIA drivers first."
+  echo "[gpu]   apt-get install -y ubuntu-drivers-common && ubuntu-drivers autoinstall && reboot"
+  exit 1
 fi
+
+nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
+echo
+
+if ! python3 -c "import torch; assert torch.cuda.is_available(), 'no CUDA'" 2>/dev/null; then
+  echo "[gpu] FATAL: PyTorch cannot see CUDA. Check driver/torch compatibility."
+  echo "[gpu]   python3 -c \"import torch; print(torch.cuda.is_available())\""
+  exit 1
+fi
+
+echo "[gpu] GPU OK: $(python3 -c "import torch; print(torch.cuda.get_device_name(0))")"
 
 LLM_MODEL="${LLM_MODEL:-meta-llama/Meta-Llama-3-8B-Instruct}"
 EMBED_MODEL="${EMBED_MODEL:-BAAI/bge-large-en-v1.5}"
