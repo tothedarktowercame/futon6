@@ -825,7 +825,70 @@ All of this is already in the repo if you want to poke at it:
 - `data/physics-se-classical/` — 114K physics.SE QA pairs (full stage 1+5 run)
 - `data/stackexchange-samples/` — the 200 raw threads used for the pilot
 
-## 9. Deliverables and return payload
+## 9. Resource estimates
+
+Based on preflight (100 threads, RTX 4000 Ada 20GB, 21.5 min) and
+physics.SE calibration (114K threads).
+
+### Downloads
+
+| Item | Size |
+|------|------|
+| math.SE dump (7z) | ~3.4 GB |
+| MathOverflow dump (7z) | ~0.5 GB |
+| LLM model (Mistral-7B or Llama-3-8B) | ~14 GB |
+| Embedding model (BGE-large) | ~1.3 GB |
+| **Total download** | **~19 GB** |
+
+### Disk space
+
+| Output file | math.SE (567K) | MO (100K) |
+|------------|----------------|-----------|
+| hypergraphs.json | ~22 GB | ~4 GB |
+| thread-wiring-ct.json | ~14 GB | ~2 GB |
+| expression-surfaces.json | ~3 GB | ~1 GB |
+| embeddings.npy (1024d) | ~2.3 GB | ~0.4 GB |
+| hypergraph-embeddings.npy (128d) | ~0.3 GB | ~0.05 GB |
+| Everything else | ~5 GB | ~1 GB |
+| **Total per corpus** | **~45 GB** | **~8 GB** |
+
+Safe disk budget: **150 GB** (includes raw XML, models, intermediate files).
+
+### Time
+
+**The bottleneck is LLM inference (stages 3 + 6).** In the preflight,
+LLM stages were 80% of wall time: 10.3 seconds per thread on a single
+RTX 4000 Ada running sequentially. At 567K threads that's ~1600 GPU-hours
+on that hardware — obviously not feasible on a single small GPU.
+
+Superpod time depends entirely on GPU count and type:
+
+| Hardware | LLM stages (math.SE) | LLM stages (MO) | Everything else | Total |
+|----------|---------------------|-----------------|-----------------|-------|
+| 1x A100 80GB | ~200h | ~35h | ~6h | ~240h |
+| 4x A100 80GB | ~50h | ~9h | ~6h | ~65h |
+| 8x A100 80GB | ~25h | ~5h | ~6h | ~36h |
+
+Assumptions: A100 is ~3x faster per thread than RTX 4000 (larger batches,
+faster memory bandwidth); multi-GPU parallelism is linear for LLM stages.
+
+**CPU-only mode** (`--skip-embeddings --skip-llm --skip-clustering`)
+runs stages 1, 5, 7, 8, 9a in **~3-5 hours** for math.SE, **~1 hour**
+for MO. No GPU required. Produces wiring diagrams, expression surfaces,
+and hypergraphs — everything except text embeddings, pattern tags,
+situation reconstructions, LWGM embeddings, and FAISS index.
+
+**Rob: please report your GPU hardware** (count and type) so we can
+refine these estimates. Also run `--dry-run` on the actual data to get
+the pipeline's own estimates:
+
+```bash
+python3 scripts/superpod-job.py \
+    ./se-data/math.stackexchange.com/Posts.xml \
+    --site math.stackexchange --dry-run
+```
+
+## 10. Deliverables and return payload
 
 Expected outputs:
 - `superpod-math-processed.tar.gz`
@@ -847,7 +910,7 @@ Send back all 4 tarballs plus a short metric table from CPU and GPU
 - `stage9b_stats.n_embedded` / `stage9b_stats.embed_dim` (GPU only)
 - `stage10_stats.n_vectors` (GPU only)
 
-## 10. Post-run evaluation
+## 11. Post-run evaluation
 
 After the tarballs come back, run the evaluation script locally before
 doing anything else. The script checks pipeline health, embedding quality,
@@ -869,7 +932,7 @@ python scripts/evaluate-superpod-run.py math-processed-gpu/ \
 
 The evaluation has five parts:
 
-### 10.1 Pipeline health
+### 11.1 Pipeline health
 
 Did all stages complete? Check the manifest. Key numbers:
 - `stage8_stats.parse_rate` should be >80% (LaTeX parser coverage)
@@ -880,7 +943,7 @@ If the parse rate is low, the LaTeX parser needs more construct coverage
 before a re-run is worthwhile. If hypergraph assembly rate is low, the
 schema is too rigid for real-world thread shapes.
 
-### 10.2 Hypergraph topology
+### 11.2 Hypergraph topology
 
 Sample 200 hypergraphs, check:
 - Size distribution (nodes, edges per thread)
@@ -892,7 +955,7 @@ The node type distribution tells you what the hypergraphs are actually
 made of. If 90% of nodes are `post` and barely any are `expression` or
 `scope`, the expression parser or scope detector is underperforming.
 
-### 10.3 Embedding quality (GPU only)
+### 11.3 Embedding quality (GPU only)
 
 For both text (BGE-large, stage 2) and structural (R-GCN, stage 9b)
 embeddings, check for degeneracy:
@@ -904,7 +967,7 @@ embeddings, check for degeneracy:
 - **Norm distribution**: L2-normalized embeddings should have norm ~1 with
   low variance.
 
-### 10.4 Structural vs text comparison (GPU only)
+### 11.4 Structural vs text comparison (GPU only)
 
 The key question: does the LWGM add signal over text embeddings?
 
@@ -919,7 +982,7 @@ But also look at the *failures* — where structural and text disagree:
   different argument structure. If structural correctly separates these,
   it's capturing something real.
 
-### 10.5 Cross-domain candidates for human review
+### 11.5 Cross-domain candidates for human review
 
 The evaluation script can export thread pairs where structural similarity
 is high (>0.7) but tag overlap is low (<0.1). These are "same argument
@@ -940,7 +1003,7 @@ we need to understand what before scaling up.
 | Embeddings degenerate | Training failed. Architecture or hyperparameter problem. | Debug locally on subset before re-running |
 | Parse rate <80% or assembly rate <95% | Upstream problem — LaTeX parser or hypergraph schema too narrow. | Fix parser/schema, re-run CPU stages |
 
-## 11. Mission wiring diagram
+## 12. Mission wiring diagram
 
 Intent: Convert raw public math Q/A corpora into verified typed wiring
 artifacts that can be queried by downstream proof work.
@@ -1000,7 +1063,7 @@ Invariants enforced by the orchestrator:
 - `stage7_stats.ct_backed=true`, `stage7_stats.threads_processed > 0`,
   and `edges_checked > 0`; otherwise the run fails hard
 
-## 12. Why this work is interesting and valuable
+## 13. Why this work is interesting and valuable
 
 This run is not just data collection. It produces a reusable evidence layer for
 math reasoning work: each thread becomes a typed wiring object with explicit
