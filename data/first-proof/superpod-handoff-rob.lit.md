@@ -761,7 +761,100 @@ Send back all 4 tarballs plus a short metric table from CPU and GPU
 - `stage9b_stats.n_embedded` / `stage9b_stats.embed_dim` (GPU only)
 - `stage10_stats.n_vectors` (GPU only)
 
-## 10. Mission wiring diagram
+## 10. Post-run evaluation
+
+After the tarballs come back, run the evaluation script locally before
+doing anything else. The script checks pipeline health, embedding quality,
+and — for the GPU run — whether structural embeddings add signal over text
+embeddings.
+
+```bash
+# GPU run (full evaluation including LWGM quality):
+python scripts/evaluate-superpod-run.py math-processed-gpu/ \
+    --json-report eval-math-gpu.json
+
+# CPU run (stages 1-9a only, no embedding comparison):
+python scripts/evaluate-superpod-run.py math-processed/ --cpu-only
+
+# Export 50 cross-domain candidates for human review:
+python scripts/evaluate-superpod-run.py math-processed-gpu/ \
+    --export-review cross-domain-candidates.json --n-review 50
+```
+
+The evaluation has five parts:
+
+### 10.1 Pipeline health
+
+Did all stages complete? Check the manifest. Key numbers:
+- `stage8_stats.parse_rate` should be >80% (LaTeX parser coverage)
+- `stage9a_stats.hypergraphs_produced / threads_processed` should be >95%
+- `stage7_stats.ct_backed` should be true
+
+If the parse rate is low, the LaTeX parser needs more construct coverage
+before a re-run is worthwhile. If hypergraph assembly rate is low, the
+schema is too rigid for real-world thread shapes.
+
+### 10.2 Hypergraph topology
+
+Sample 200 hypergraphs, check:
+- Size distribution (nodes, edges per thread)
+- Node type distribution (post / term / expression / scope)
+- Edge type distribution (iatc / mention / discourse / scope / surface / categorical)
+- Empty or singleton hypergraphs (<5% acceptable)
+
+The node type distribution tells you what the hypergraphs are actually
+made of. If 90% of nodes are `post` and barely any are `expression` or
+`scope`, the expression parser or scope detector is underperforming.
+
+### 10.3 Embedding quality (GPU only)
+
+For both text (BGE-large, stage 2) and structural (R-GCN, stage 9b)
+embeddings, check for degeneracy:
+- **Avg pairwise cosine similarity**: should be near 0 (isotropic), not
+  near 1 (collapsed). If >0.9, the model failed to learn.
+- **Effective dimensionality**: how many PCA components to explain 90% of
+  variance. If <5, the embeddings are degenerate. Should be >=20 for 128d
+  embeddings.
+- **Norm distribution**: L2-normalized embeddings should have norm ~1 with
+  low variance.
+
+### 10.4 Structural vs text comparison (GPU only)
+
+The key question: does the LWGM add signal over text embeddings?
+
+For 500 sample threads, find 10 nearest neighbours under both embeddings
+and compute tag overlap (Jaccard similarity). The P11 success criterion:
+structural neighbours share tags at >=2x the rate of text neighbours.
+
+But also look at the *failures* — where structural and text disagree:
+- **Structural finds, text misses**: threads with different vocabulary but
+  same argument shape. These are the cross-domain pattern candidates (P2).
+- **Text finds, structural misses**: threads with similar wording but
+  different argument structure. If structural correctly separates these,
+  it's capturing something real.
+
+### 10.5 Cross-domain candidates for human review
+
+The evaluation script can export thread pairs where structural similarity
+is high (>0.7) but tag overlap is low (<0.1). These are "same argument
+shape, different topic" candidates. Export 50 of these, review them by
+hand, and answer: are these structurally similar?
+
+The P11 criterion is >60% agreement. If it holds, the LWGM is discovering
+real cross-domain patterns and a 2nd run (adding ArXiv) is well-motivated.
+If it fails, the embeddings are learning something other than structure and
+we need to understand what before scaling up.
+
+### What the evaluation decides
+
+| Outcome | Interpretation | Next step |
+|---------|---------------|-----------|
+| Health OK, embeddings isotropic, cross-domain >60% agreement | LWGM works. Ready for downstream use + ArXiv scale-up. | Use index for P2/P6; plan ArXiv pipeline |
+| Health OK, embeddings isotropic, cross-domain <60% | Structure captured but noisy. Richer training signals (tag co-occurrence, related-questions) would help. | Targeted improvement before 2nd run |
+| Embeddings degenerate | Training failed. Architecture or hyperparameter problem. | Debug locally on subset before re-running |
+| Parse rate <80% or assembly rate <95% | Upstream problem — LaTeX parser or hypergraph schema too narrow. | Fix parser/schema, re-run CPU stages |
+
+## 11. Mission wiring diagram
 
 Intent: Convert raw public math Q/A corpora into verified typed wiring
 artifacts that can be queried by downstream proof work.
@@ -821,7 +914,7 @@ Invariants enforced by the orchestrator:
 - `stage7_stats.ct_backed=true`, `stage7_stats.threads_processed > 0`,
   and `edges_checked > 0`; otherwise the run fails hard
 
-## 11. Why this work is interesting and valuable
+## 12. Why this work is interesting and valuable
 
 This run is not just data collection. It produces a reusable evidence layer for
 math reasoning work: each thread becomes a typed wiring object with explicit
