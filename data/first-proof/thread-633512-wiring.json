@@ -1,0 +1,375 @@
+{
+  "nodes": [
+    {
+      "id": "q-633512",
+      "type": "question",
+      "ner_terms": [
+        {
+          "term": "ACC",
+          "canon": "AscendingChainCondition"
+        },
+        {
+          "term": "category",
+          "canon": "Category"
+        },
+        {
+          "term": "codomain",
+          "canon": "Function"
+        },
+        {
+          "term": "commutative",
+          "canon": "Commutative"
+        },
+        {
+          "term": "commutative diagram",
+          "canon": "CommutativeDiagram"
+        },
+        {
+          "term": "diagram",
+          "canon": "CommutativeDiagram"
+        },
+        {
+          "term": "domain",
+          "canon": "Domain"
+        },
+        {
+          "term": "functor",
+          "canon": "Functor"
+        },
+        {
+          "term": "poset",
+          "canon": "Poset"
+        },
+        {
+          "term": "scheme",
+          "canon": "Scheme"
+        }
+      ],
+      "discourse": [
+        {
+          "hx/id": "q-633512:wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/adversative",
+          "hx/content": {
+            "match": "but",
+            "position": 337
+          }
+        },
+        {
+          "hx/id": "q-633512:wire-001",
+          "hx/role": "wire",
+          "hx/type": "wire/adversative",
+          "hx/content": {
+            "match": "but",
+            "position": 499
+          }
+        },
+        {
+          "hx/id": "q-633512:label-000",
+          "hx/role": "label",
+          "hx/type": "explain/think-of",
+          "hx/content": {
+            "match": "think of",
+            "position": 454
+          }
+        }
+      ],
+      "categorical": []
+    },
+    {
+      "id": "a-633527",
+      "type": "answer",
+      "ner_terms": [
+        {
+          "term": "category",
+          "canon": "Category"
+        },
+        {
+          "term": "commutative",
+          "canon": "Commutative"
+        },
+        {
+          "term": "commutativity",
+          "canon": "Commutative"
+        },
+        {
+          "term": "diagram",
+          "canon": "CommutativeDiagram"
+        },
+        {
+          "term": "directed graph",
+          "canon": "DirectedGraph"
+        },
+        {
+          "term": "domain",
+          "canon": "Domain"
+        },
+        {
+          "term": "forgetful functor",
+          "canon": "ConcreteCategory"
+        },
+        {
+          "term": "functor",
+          "canon": "Functor"
+        },
+        {
+          "term": "induction",
+          "canon": "Induction"
+        },
+        {
+          "term": "morphism",
+          "canon": "StructureHomomorphism"
+        },
+        {
+          "term": "path",
+          "canon": "Path"
+        },
+        {
+          "term": "sheaves",
+          "canon": "Sheaf1"
+        },
+        {
+          "term": "simplicial set",
+          "canon": "SimplicialObject"
+        },
+        {
+          "term": "source",
+          "canon": "SourcesAndSinksOfVectorField"
+        },
+        {
+          "term": "vertex",
+          "canon": "Polyhedron"
+        },
+        {
+          "term": "vertices",
+          "canon": "KnotTheory"
+        }
+      ],
+      "discourse": [
+        {
+          "hx/id": "a-633527:scope-000",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "Let $\\Gamma=(V,E,s,t)$ be a directed graph (",
+            "position": 0
+          },
+          "hx/ends": [
+            {
+              "role": "symbol",
+              "latex": "\\Gamma=(V,E,s,t)"
+            },
+            {
+              "role": "description",
+              "text": "a directed graph"
+            },
+            {
+              "role": "parameters",
+              "text": "V = vertices, E = edges, s = source, t = target"
+            }
+          ]
+        },
+        {
+          "hx/id": "a-633527:scope-001",
+          "hx/role": "component",
+          "hx/type": "bind/let",
+          "hx/content": {
+            "match": "Let $\\mathcal{C}$ be a category",
+            "position": 102
+          },
+          "hx/ends": [
+            {
+              "role": "symbol",
+              "latex": "\\mathcal{C}"
+            },
+            {
+              "role": "description",
+              "text": "a category"
+            }
+          ]
+        },
+        {
+          "hx/id": "a-633527:scope-002",
+          "hx/role": "component",
+          "hx/type": "quant/universal",
+          "hx/content": {
+            "match": "for all $e \\in E$",
+            "position": 366
+          },
+          "hx/ends": [
+            {
+              "role": "variable",
+              "latex": "e"
+            },
+            {
+              "role": "domain",
+              "latex": "E",
+              "text": "edges of the graph"
+            }
+          ]
+        },
+        {
+          "hx/id": "a-633527:scope-003",
+          "hx/role": "component",
+          "hx/type": "constrain/where",
+          "hx/content": {
+            "match": "where $U(-)$ is the forgetful functor from categories to directed graphs",
+            "position": 1469
+          },
+          "hx/ends": [
+            {
+              "role": "symbol",
+              "latex": "U(-)"
+            },
+            {
+              "role": "description",
+              "text": "the forgetful functor from categories to directed graphs"
+            }
+          ]
+        },
+        {
+          "hx/id": "a-633527:wire-000",
+          "hx/role": "wire",
+          "hx/type": "wire/consequential",
+          "hx/content": {
+            "match": "Thus",
+            "position": 385
+          }
+        },
+        {
+          "hx/id": "a-633527:port-000",
+          "hx/role": "port",
+          "hx/type": "port/the-same",
+          "hx/content": {
+            "match": "the same definition",
+            "position": 1640
+          }
+        },
+        {
+          "hx/id": "a-633527:port-001",
+          "hx/role": "port",
+          "hx/type": "port/the-same",
+          "hx/content": {
+            "match": "the same morphism",
+            "position": 1757
+          }
+        },
+        {
+          "hx/id": "a-633527:label-000",
+          "hx/role": "label",
+          "hx/type": "construct/exists",
+          "hx/content": {
+            "match": "There is",
+            "position": 1153
+          }
+        },
+        {
+          "hx/id": "a-633527:label-001",
+          "hx/role": "label",
+          "hx/type": "strategy/example",
+          "hx/content": {
+            "match": "For example",
+            "position": 1850
+          }
+        }
+      ],
+      "categorical": [
+        {
+          "hx/type": "cat/equivalence",
+          "hx/content": {
+            "score": 8.4
+          }
+        },
+        {
+          "hx/type": "cat/limit",
+          "hx/content": {
+            "score": 3.7
+          }
+        },
+        {
+          "hx/type": "cat/universal-property",
+          "hx/content": {
+            "score": 5.4
+          }
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "a-633527",
+      "to": "q-633512",
+      "iatc": "assert"
+    },
+    {
+      "from": "c-1335328",
+      "to": "q-633512",
+      "iatc": "clarify"
+    },
+    {
+      "from": "c-1335337",
+      "to": "q-633512",
+      "iatc": "exemplify"
+    },
+    {
+      "from": "c-1335340",
+      "to": "q-633512",
+      "iatc": "reference"
+    },
+    {
+      "from": "c-1335347",
+      "to": "q-633512",
+      "iatc": "clarify"
+    },
+    {
+      "from": "c-1335352",
+      "to": "q-633512",
+      "iatc": "clarify"
+    },
+    {
+      "from": "c-1335361",
+      "to": "q-633512",
+      "iatc": "clarify"
+    },
+    {
+      "from": "c-1335366",
+      "to": "a-633527",
+      "iatc": "challenge"
+    },
+    {
+      "from": "c-1335376",
+      "to": "a-633527",
+      "iatc": "clarify"
+    },
+    {
+      "from": "c-1335379",
+      "to": "a-633527",
+      "iatc": "clarify"
+    },
+    {
+      "from": "c-1335388",
+      "to": "a-633527",
+      "iatc": "clarify"
+    },
+    {
+      "from": "c-1335392",
+      "to": "a-633527",
+      "iatc": "query"
+    },
+    {
+      "from": "c-1336112",
+      "to": "a-633527",
+      "iatc": "agree"
+    },
+    {
+      "from": "c-4249182",
+      "to": "a-633527",
+      "iatc": "clarify"
+    },
+    {
+      "from": "c-4586588",
+      "to": "a-633527",
+      "iatc": "clarify"
+    }
+  ]
+}

@@ -1,0 +1,1875 @@
+{
+  "thread_id": 633512,
+  "nodes": [
+    {
+      "id": "a-633527",
+      "type": "post",
+      "subtype": "answer",
+      "attrs": {
+        "score": 17,
+        "is_accepted": true
+      }
+    },
+    {
+      "id": "a-633527:scope-000",
+      "type": "scope",
+      "subtype": "bind/let",
+      "attrs": {
+        "match": "Let $\\Gamma=(V,E,s,t)$ be a directed graph (",
+        "ends": [
+          {
+            "role": "symbol",
+            "latex": "\\Gamma=(V,E,s,t)"
+          },
+          {
+            "role": "description",
+            "text": "a directed graph"
+          },
+          {
+            "role": "parameters",
+            "text": "V = vertices, E = edges, s = source, t = target"
+          }
+        ]
+      }
+    },
+    {
+      "id": "a-633527:scope-001",
+      "type": "scope",
+      "subtype": "bind/let",
+      "attrs": {
+        "match": "Let $\\mathcal{C}$ be a category",
+        "ends": [
+          {
+            "role": "symbol",
+            "latex": "\\mathcal{C}"
+          },
+          {
+            "role": "description",
+            "text": "a category"
+          }
+        ]
+      }
+    },
+    {
+      "id": "a-633527:scope-002",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "attrs": {
+        "match": "for all $e \\in E$",
+        "ends": [
+          {
+            "role": "variable",
+            "latex": "e"
+          },
+          {
+            "role": "domain",
+            "latex": "E",
+            "text": "edges of the graph"
+          }
+        ]
+      }
+    },
+    {
+      "id": "a-633527:scope-003",
+      "type": "scope",
+      "subtype": "constrain/where",
+      "attrs": {
+        "match": "where $U(-)$ is the forgetful functor from categories to directed graphs",
+        "ends": [
+          {
+            "role": "symbol",
+            "latex": "U(-)"
+          },
+          {
+            "role": "description",
+            "text": "the forgetful functor from categories to directed graphs"
+          }
+        ]
+      }
+    },
+    {
+      "id": "c-1335328",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 0,
+        "parent": "q-633512"
+      }
+    },
+    {
+      "id": "c-1335337",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 0,
+        "parent": "q-633512"
+      }
+    },
+    {
+      "id": "c-1335340",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 0,
+        "parent": "q-633512"
+      }
+    },
+    {
+      "id": "c-1335347",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 0,
+        "parent": "q-633512"
+      }
+    },
+    {
+      "id": "c-1335352",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 1,
+        "parent": "q-633512"
+      }
+    },
+    {
+      "id": "c-1335361",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 0,
+        "parent": "q-633512"
+      }
+    },
+    {
+      "id": "c-1335366",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 0,
+        "parent": "a-633527"
+      }
+    },
+    {
+      "id": "c-1335376",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 0,
+        "parent": "a-633527"
+      }
+    },
+    {
+      "id": "c-1335379",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 1,
+        "parent": "a-633527"
+      }
+    },
+    {
+      "id": "c-1335388",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 1,
+        "parent": "a-633527"
+      }
+    },
+    {
+      "id": "c-1335392",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 2,
+        "parent": "a-633527"
+      }
+    },
+    {
+      "id": "c-1336112",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 2,
+        "parent": "a-633527"
+      }
+    },
+    {
+      "id": "c-4249182",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 0,
+        "parent": "a-633527"
+      }
+    },
+    {
+      "id": "c-4586588",
+      "type": "post",
+      "subtype": "comment",
+      "attrs": {
+        "score": 0,
+        "parent": "a-633527"
+      }
+    },
+    {
+      "id": "expr:a-633527:1d0756d1",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\gamma = \\beta \\circ e",
+        "sexp": "(= γ (∘ β e))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:2ef3e2ad",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\Gamma = \\begin{array}{c} \\bullet & \\rightarrow & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightarrow & \\bullet  \\end{array}",
+        "sexp": "(= Γ (graph (→ • •) (→ • •)))",
+        "display": true
+      }
+    },
+    {
+      "id": "expr:a-633527:32d70a15",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "X(\\gamma) := X(\\beta) \\circ X(e)",
+        "sexp": "(:= (X γ) (∘ (X β) (X e)))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:375b7b53",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\mathsf{Path}(\\Gamma)",
+        "sexp": "(Path Γ)",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:49c7268f",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\Gamma \\to U(\\mathcal{C})",
+        "sexp": "(→ Γ (U 𝒞))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:4c596c27",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\Gamma",
+        "sexp": "Γ",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:4ddb7e1c",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\gamma,\\gamma'",
+        "sexp": "(tuple γ (prime γ))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:58e6b3a4",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "e",
+        "sexp": "e",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:5a6c5211",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "X(\\gamma)",
+        "sexp": "(X γ)",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:6499d503",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\beta",
+        "sexp": "β",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:67833ee2",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\gamma",
+        "sexp": "γ",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:6993d107",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "e \\in E",
+        "sexp": "(∈ e E)",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:6cd4c521",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "s(X(e))=X(s(e))",
+        "sexp": "(= (s (X e)) (X (s e)))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:7a38d8cb",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "v",
+        "sexp": "v",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:7b771a19",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "X(e) : X(v) \\to X(w)",
+        "sexp": "(: (X e) (→ (X v) (X w)))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:8b35ef03",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\mathcal{C}",
+        "sexp": "𝒞",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:8efd86fb",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "t",
+        "sexp": "t",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:a0f1490a",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "s",
+        "sexp": "s",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:a815cf7d",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "X(\\gamma)=X(\\gamma')",
+        "sexp": "(= (X γ) (X (prime γ)))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:a8b5975f",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\mathsf{Path}(\\Gamma) \\to \\mathcal{C}",
+        "sexp": "(→ (Path Γ) 𝒞)",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:acf3e18d",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "U(-)",
+        "sexp": "(U □)",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:aff024fe",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "w",
+        "sexp": "w",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:b5f30a61",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "X(v) \\in \\mathcal{C}",
+        "sexp": "(∈ (X v) 𝒞)",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:b96813d1",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "X(\\gamma):=\\mathrm{id}_{X(v)}",
+        "sexp": "(:= (X γ) (sub id (X v)))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:bba1fc2f",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "v \\in V",
+        "sexp": "(∈ v V)",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:c032adc1",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "X",
+        "sexp": "X",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:c9ee5681",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "V",
+        "sexp": "V",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:d457eb65",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "v,w \\in V",
+        "sexp": "(tuple v (∈ w V))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:e0184ade",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "E",
+        "sexp": "E",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:e24a9016",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "t(X(e))=X(t(e))",
+        "sexp": "(= (t (X e)) (X (t e)))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:e5e3c4e4",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\begin{array}{c} \\bullet & \\rightrightarrows & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightrightarrows & \\bullet  \\end{array}",
+        "sexp": "(graph (⇉ • •) (⇉ • •))",
+        "display": true
+      }
+    },
+    {
+      "id": "expr:a-633527:ea593a37",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "e : v \\to w",
+        "sexp": "(: e (→ v w))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:f05c8f68",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "X(e)",
+        "sexp": "(X e)",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:a-633527:f77a252f",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\Gamma=(V,E,s,t)",
+        "sexp": "(= Γ (tuple V E s t))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:c-1335379:4c596c27",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\Gamma",
+        "sexp": "Γ",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:c-1335379:803e25f7",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\bar\\Gamma",
+        "sexp": "(bar Γ)",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:c-1335379:a36a6718",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "G",
+        "sexp": "G",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:c-1335379:ea21f165",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "Patth(\\Gamma)",
+        "sexp": "P",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:c-1335388:a36a6718",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "G",
+        "sexp": "G",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:q-633512:5bbfa655",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\mathcal{A}",
+        "sexp": "𝒜",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:q-633512:8d78ee8a",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "\\mathcal{I}",
+        "sexp": "ℐ",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:q-633512:9895ab6f",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "D:\\mathcal{I}\\rightarrow\\mathcal{A}",
+        "sexp": "(: D (→ ℐ 𝒜))",
+        "display": false
+      }
+    },
+    {
+      "id": "expr:q-633512:bc33ea4e",
+      "type": "expression",
+      "subtype": "math",
+      "attrs": {
+        "latex": "27",
+        "sexp": "27",
+        "display": false
+      }
+    },
+    {
+      "id": "q-633512",
+      "type": "post",
+      "subtype": "question",
+      "attrs": {
+        "score": 18,
+        "title": "What is the definition of a commutative diagram?",
+        "tags": [
+          "category-theory"
+        ]
+      }
+    },
+    {
+      "id": "term:AscendingChainCondition",
+      "type": "term",
+      "subtype": "AscendingChainCondition",
+      "attrs": {
+        "surface_forms": [
+          "ACC"
+        ]
+      }
+    },
+    {
+      "id": "term:Category",
+      "type": "term",
+      "subtype": "Category",
+      "attrs": {
+        "surface_forms": [
+          "category"
+        ]
+      }
+    },
+    {
+      "id": "term:Commutative",
+      "type": "term",
+      "subtype": "Commutative",
+      "attrs": {
+        "surface_forms": [
+          "commutative",
+          "commutativity"
+        ]
+      }
+    },
+    {
+      "id": "term:CommutativeDiagram",
+      "type": "term",
+      "subtype": "CommutativeDiagram",
+      "attrs": {
+        "surface_forms": [
+          "commutative diagram",
+          "diagram"
+        ]
+      }
+    },
+    {
+      "id": "term:ConcreteCategory",
+      "type": "term",
+      "subtype": "ConcreteCategory",
+      "attrs": {
+        "surface_forms": [
+          "forgetful functor"
+        ]
+      }
+    },
+    {
+      "id": "term:DirectedGraph",
+      "type": "term",
+      "subtype": "DirectedGraph",
+      "attrs": {
+        "surface_forms": [
+          "directed graph"
+        ]
+      }
+    },
+    {
+      "id": "term:Domain",
+      "type": "term",
+      "subtype": "Domain",
+      "attrs": {
+        "surface_forms": [
+          "domain"
+        ]
+      }
+    },
+    {
+      "id": "term:Function",
+      "type": "term",
+      "subtype": "Function",
+      "attrs": {
+        "surface_forms": [
+          "codomain"
+        ]
+      }
+    },
+    {
+      "id": "term:Functor",
+      "type": "term",
+      "subtype": "Functor",
+      "attrs": {
+        "surface_forms": [
+          "functor"
+        ]
+      }
+    },
+    {
+      "id": "term:Induction",
+      "type": "term",
+      "subtype": "Induction",
+      "attrs": {
+        "surface_forms": [
+          "induction"
+        ]
+      }
+    },
+    {
+      "id": "term:KnotTheory",
+      "type": "term",
+      "subtype": "KnotTheory",
+      "attrs": {
+        "surface_forms": [
+          "vertices"
+        ]
+      }
+    },
+    {
+      "id": "term:Path",
+      "type": "term",
+      "subtype": "Path",
+      "attrs": {
+        "surface_forms": [
+          "path"
+        ]
+      }
+    },
+    {
+      "id": "term:Polyhedron",
+      "type": "term",
+      "subtype": "Polyhedron",
+      "attrs": {
+        "surface_forms": [
+          "vertex"
+        ]
+      }
+    },
+    {
+      "id": "term:Poset",
+      "type": "term",
+      "subtype": "Poset",
+      "attrs": {
+        "surface_forms": [
+          "poset"
+        ]
+      }
+    },
+    {
+      "id": "term:Scheme",
+      "type": "term",
+      "subtype": "Scheme",
+      "attrs": {
+        "surface_forms": [
+          "scheme"
+        ]
+      }
+    },
+    {
+      "id": "term:Sheaf1",
+      "type": "term",
+      "subtype": "Sheaf1",
+      "attrs": {
+        "surface_forms": [
+          "sheaves"
+        ]
+      }
+    },
+    {
+      "id": "term:SimplicialObject",
+      "type": "term",
+      "subtype": "SimplicialObject",
+      "attrs": {
+        "surface_forms": [
+          "simplicial set"
+        ]
+      }
+    },
+    {
+      "id": "term:SourcesAndSinksOfVectorField",
+      "type": "term",
+      "subtype": "SourcesAndSinksOfVectorField",
+      "attrs": {
+        "surface_forms": [
+          "source"
+        ]
+      }
+    },
+    {
+      "id": "term:StructureHomomorphism",
+      "type": "term",
+      "subtype": "StructureHomomorphism",
+      "attrs": {
+        "surface_forms": [
+          "morphism"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "type": "iatc",
+      "ends": [
+        "a-633527",
+        "q-633512"
+      ],
+      "attrs": {
+        "act": "assert"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335328",
+        "q-633512"
+      ],
+      "attrs": {
+        "act": "clarify"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335337",
+        "q-633512"
+      ],
+      "attrs": {
+        "act": "exemplify"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335340",
+        "q-633512"
+      ],
+      "attrs": {
+        "act": "reference"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335347",
+        "q-633512"
+      ],
+      "attrs": {
+        "act": "clarify"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335352",
+        "q-633512"
+      ],
+      "attrs": {
+        "act": "clarify"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335361",
+        "q-633512"
+      ],
+      "attrs": {
+        "act": "clarify"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335366",
+        "a-633527"
+      ],
+      "attrs": {
+        "act": "challenge"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335376",
+        "a-633527"
+      ],
+      "attrs": {
+        "act": "clarify"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335379",
+        "a-633527"
+      ],
+      "attrs": {
+        "act": "clarify"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335388",
+        "a-633527"
+      ],
+      "attrs": {
+        "act": "clarify"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1335392",
+        "a-633527"
+      ],
+      "attrs": {
+        "act": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-1336112",
+        "a-633527"
+      ],
+      "attrs": {
+        "act": "agree"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-4249182",
+        "a-633527"
+      ],
+      "attrs": {
+        "act": "clarify"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "c-4586588",
+        "a-633527"
+      ],
+      "attrs": {
+        "act": "clarify"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:AscendingChainCondition"
+      ],
+      "attrs": {
+        "surface": "ACC"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:Category"
+      ],
+      "attrs": {
+        "surface": "category"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:Function"
+      ],
+      "attrs": {
+        "surface": "codomain"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:Commutative"
+      ],
+      "attrs": {
+        "surface": "commutative"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:CommutativeDiagram"
+      ],
+      "attrs": {
+        "surface": "commutative diagram"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:CommutativeDiagram"
+      ],
+      "attrs": {
+        "surface": "diagram"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:Domain"
+      ],
+      "attrs": {
+        "surface": "domain"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:Functor"
+      ],
+      "attrs": {
+        "surface": "functor"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:Poset"
+      ],
+      "attrs": {
+        "surface": "poset"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q-633512",
+        "term:Scheme"
+      ],
+      "attrs": {
+        "surface": "scheme"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:Category"
+      ],
+      "attrs": {
+        "surface": "category"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:Commutative"
+      ],
+      "attrs": {
+        "surface": "commutative"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:Commutative"
+      ],
+      "attrs": {
+        "surface": "commutativity"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:CommutativeDiagram"
+      ],
+      "attrs": {
+        "surface": "diagram"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:DirectedGraph"
+      ],
+      "attrs": {
+        "surface": "directed graph"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:Domain"
+      ],
+      "attrs": {
+        "surface": "domain"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:ConcreteCategory"
+      ],
+      "attrs": {
+        "surface": "forgetful functor"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:Functor"
+      ],
+      "attrs": {
+        "surface": "functor"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:Induction"
+      ],
+      "attrs": {
+        "surface": "induction"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:StructureHomomorphism"
+      ],
+      "attrs": {
+        "surface": "morphism"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:Path"
+      ],
+      "attrs": {
+        "surface": "path"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:Sheaf1"
+      ],
+      "attrs": {
+        "surface": "sheaves"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:SimplicialObject"
+      ],
+      "attrs": {
+        "surface": "simplicial set"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:SourcesAndSinksOfVectorField"
+      ],
+      "attrs": {
+        "surface": "source"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:Polyhedron"
+      ],
+      "attrs": {
+        "surface": "vertex"
+      }
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a-633527",
+        "term:KnotTheory"
+      ],
+      "attrs": {
+        "surface": "vertices"
+      }
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q-633512"
+      ],
+      "attrs": {
+        "hx_id": "q-633512:wire-000",
+        "role": "wire",
+        "dtype": "wire/adversative",
+        "match": "but"
+      }
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q-633512"
+      ],
+      "attrs": {
+        "hx_id": "q-633512:wire-001",
+        "role": "wire",
+        "dtype": "wire/adversative",
+        "match": "but"
+      }
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q-633512"
+      ],
+      "attrs": {
+        "hx_id": "q-633512:label-000",
+        "role": "label",
+        "dtype": "explain/think-of",
+        "match": "think of"
+      }
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a-633527:scope-000",
+        "a-633527"
+      ],
+      "attrs": {
+        "binding_type": "bind/let"
+      }
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a-633527:scope-001",
+        "a-633527"
+      ],
+      "attrs": {
+        "binding_type": "bind/let"
+      }
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a-633527:scope-002",
+        "a-633527"
+      ],
+      "attrs": {
+        "binding_type": "quant/universal"
+      }
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a-633527:scope-003",
+        "a-633527"
+      ],
+      "attrs": {
+        "binding_type": "constrain/where"
+      }
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "a-633527"
+      ],
+      "attrs": {
+        "hx_id": "a-633527:wire-000",
+        "role": "wire",
+        "dtype": "wire/consequential",
+        "match": "Thus"
+      }
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "a-633527"
+      ],
+      "attrs": {
+        "hx_id": "a-633527:port-000",
+        "role": "port",
+        "dtype": "port/the-same",
+        "match": "the same definition"
+      }
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "a-633527"
+      ],
+      "attrs": {
+        "hx_id": "a-633527:port-001",
+        "role": "port",
+        "dtype": "port/the-same",
+        "match": "the same morphism"
+      }
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "a-633527"
+      ],
+      "attrs": {
+        "hx_id": "a-633527:label-000",
+        "role": "label",
+        "dtype": "construct/exists",
+        "match": "There is"
+      }
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "a-633527"
+      ],
+      "attrs": {
+        "hx_id": "a-633527:label-001",
+        "role": "label",
+        "dtype": "strategy/example",
+        "match": "For example"
+      }
+    },
+    {
+      "type": "categorical",
+      "ends": [
+        "a-633527"
+      ],
+      "attrs": {
+        "concept": "cat/equivalence",
+        "score": 8.4
+      }
+    },
+    {
+      "type": "categorical",
+      "ends": [
+        "a-633527"
+      ],
+      "attrs": {
+        "concept": "cat/limit",
+        "score": 3.7
+      }
+    },
+    {
+      "type": "categorical",
+      "ends": [
+        "a-633527"
+      ],
+      "attrs": {
+        "concept": "cat/universal-property",
+        "score": 5.4
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:q-633512:bc33ea4e",
+        "q-633512"
+      ],
+      "attrs": {
+        "position": 196
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:q-633512:5bbfa655",
+        "q-633512"
+      ],
+      "attrs": {
+        "position": 773
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:q-633512:9895ab6f",
+        "q-633512"
+      ],
+      "attrs": {
+        "position": 800
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:q-633512:8d78ee8a",
+        "q-633512"
+      ],
+      "attrs": {
+        "position": 879
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:f77a252f",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 7
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:c9ee5681",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 47
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:e0184ade",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 63
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:a0f1490a",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 76
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:8efd86fb",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 90
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:8b35ef03",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 109
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:4c596c27",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 174
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:b5f30a61",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 240
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:bba1fc2f",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 280
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:f05c8f68",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 304
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:6993d107",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 343
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:6cd4c521",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 363
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:e24a9016",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 385
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:ea593a37",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 439
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:7b771a19",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 477
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:67833ee2",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 520
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:5a6c5211",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 562
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:7a38d8cb",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 647
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:b96813d1",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 656
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:1d0756d1",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 692
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:6499d503",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 736
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:58e6b3a4",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 756
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:32d70a15",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 768
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:c032adc1",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 824
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:d457eb65",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 887
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:4ddb7e1c",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 917
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:aff024fe",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 958
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:a815cf7d",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 970
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:2ef3e2ad",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 1102
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:375b7b53",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 1334
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:a8b5975f",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 1399
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:49c7268f",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 1559
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:acf3e18d",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 1594
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:a-633527:e5e3c4e4",
+        "a-633527"
+      ],
+      "attrs": {
+        "position": 2075
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:c-1335379:4c596c27",
+        "c-1335379"
+      ],
+      "attrs": {
+        "position": 17
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:c-1335379:ea21f165",
+        "c-1335379"
+      ],
+      "attrs": {
+        "position": 96
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:c-1335379:803e25f7",
+        "c-1335379"
+      ],
+      "attrs": {
+        "position": 278
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:c-1335379:a36a6718",
+        "c-1335379"
+      ],
+      "attrs": {
+        "position": 557
+      }
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "expr:c-1335388:a36a6718",
+        "c-1335388"
+      ],
+      "attrs": {
+        "position": 57
+      }
+    }
+  ],
+  "meta": {
+    "n_nodes": 82,
+    "n_edges": 99,
+    "n_posts": 16,
+    "n_terms": 19,
+    "n_expressions": 43,
+    "n_scopes": 4,
+    "edge_types": {
+      "iatc": 15,
+      "mention": 26,
+      "discourse": 8,
+      "scope": 4,
+      "categorical": 3,
+      "surface": 43
+    }
+  }
+}
