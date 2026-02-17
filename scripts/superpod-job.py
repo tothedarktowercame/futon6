@@ -35,6 +35,8 @@ All stages:
     5. NER term spotting + scope detection (CPU, classical)
     6. Reverse morphogenesis S<-Q<-A (LLM / prompt generation)
     7. Thread wiring diagrams + IATC performatives (CPU, classical + LLM)
+    8. Expression surface parsing (CPU, LaTeX -> s-exp)
+    9a. Hypergraph assembly (CPU, typed hypergraph from wiring + expressions)
 
 Each stage writes its output independently -- if a stage fails, earlier
 outputs are still usable.
@@ -93,6 +95,8 @@ from futon6.thread_performatives import (
     merge_llm_edges,
     write_thread_wiring_json,
 )
+from futon6.latex_sexp import parse as sexp_parse, parse_all
+from futon6.hypergraph import assemble as assemble_hypergraph
 
 # --- Downloadable SE data dumps (Internet Archive) ---
 
@@ -846,6 +850,205 @@ def run_stage7_ct_wiring(threads, reference, singles, multi_index,
     return result_stats, wiring_path
 
 
+# ---------------------------------------------------------------------------
+# Stage 8: Expression surface parsing (CPU)
+# ---------------------------------------------------------------------------
+
+def run_stage8_expression_surfaces(threads, outdir):
+    """Stage 8: Parse all LaTeX expressions in thread bodies to s-expressions.
+
+    CPU-only, streaming one thread at a time. Extracts $...$ and $$...$$
+    from question/answer/comment HTML, parses each to a typed s-exp.
+
+    Returns (stats_dict, output_path).
+    """
+    out_path = outdir / "expression-surfaces.json"
+    total = len(threads)
+    n_exprs = 0
+    n_parsed = 0
+    n_fallback = 0
+
+    with open(out_path, "w") as f:
+        f.write("[\n")
+        for i, thread in enumerate(threads):
+            # Gather all HTML bodies from the thread
+            bodies = []
+            q = thread.question
+            bodies.append((f"q-{q.id}", q.body))
+            for ans in thread.answers:
+                bodies.append((f"a-{ans.id}", ans.body))
+            for post_id, comments in thread.comments.items():
+                for c in comments:
+                    bodies.append((f"c-{c.id}", c.text))
+
+            # Parse expressions from each body
+            thread_exprs = []
+            for post_id, html in bodies:
+                if not html:
+                    continue
+                parsed = parse_all(html)
+                for p in parsed:
+                    is_fallback = (p["sexp"].startswith('"')
+                                   and p["sexp"].endswith('"'))
+                    thread_exprs.append({
+                        "post_id": post_id,
+                        "latex": p["latex"],
+                        "sexp": p["sexp"],
+                        "display": p["display"],
+                        "fallback": is_fallback,
+                    })
+                    n_exprs += 1
+                    if is_fallback:
+                        n_fallback += 1
+                    else:
+                        n_parsed += 1
+
+            record = {
+                "thread_id": q.id,
+                "n_expressions": len(thread_exprs),
+                "expressions": thread_exprs,
+            }
+
+            if i > 0:
+                f.write(",\n")
+            json.dump(record, f, ensure_ascii=False)
+
+            if (i + 1) % 1000 == 0 or (i + 1) == total:
+                print(f"       [{i+1}/{total}] exprs={n_exprs} "
+                      f"parsed={n_parsed} fallback={n_fallback}")
+
+        f.write("\n]")
+
+    stats = {
+        "threads_processed": total,
+        "total_expressions": n_exprs,
+        "parsed": n_parsed,
+        "fallback": n_fallback,
+        "parse_rate": n_parsed / n_exprs if n_exprs else 0,
+    }
+    return stats, out_path
+
+
+# ---------------------------------------------------------------------------
+# Stage 9a: Hypergraph assembly (CPU)
+# ---------------------------------------------------------------------------
+
+def run_stage9a_hypergraphs(threads, wiring_path, surfaces_path, outdir):
+    """Stage 9a: Assemble typed hypergraphs from wiring + expression surfaces.
+
+    Reads Stage 7 wiring and Stage 8 expression surfaces, combines into
+    a per-thread hypergraph with nodes (post, term, expression, scope)
+    and edges (iatc, mention, discourse, scope, surface, categorical).
+
+    Returns (stats_dict, output_path).
+    """
+    # Load wiring dicts (streamed from Stage 7)
+    with open(wiring_path) as f:
+        wirings = json.load(f)
+
+    # Index wiring by thread_id
+    wiring_by_id = {}
+    for w in wirings:
+        tid = w.get("thread_id") or w.get("question_id")
+        if tid:
+            wiring_by_id[tid] = w
+
+    # Load expression surfaces (from Stage 8)
+    surfaces_by_id = {}
+    if surfaces_path and Path(surfaces_path).exists():
+        with open(surfaces_path) as f:
+            surfaces = json.load(f)
+        for s in surfaces:
+            surfaces_by_id[s["thread_id"]] = s
+
+    out_path = outdir / "hypergraphs.json"
+    total = len(threads)
+    n_nodes = 0
+    n_edges = 0
+    n_hg = 0
+
+    with open(out_path, "w") as f:
+        f.write("[\n")
+        for i, thread in enumerate(threads):
+            qid = thread.question.id
+            wiring = wiring_by_id.get(qid)
+            if not wiring:
+                continue
+
+            # Build the raw dict expected by assemble_hypergraph
+            raw = _sethread_to_raw(thread)
+            # Extract wiring nodes/edges
+            w_nodes = wiring.get("nodes", [])
+            w_edges = wiring.get("edges", [])
+            wiring_dict = {"nodes": w_nodes, "edges": w_edges}
+
+            hg = assemble_hypergraph(raw, wiring_dict)
+
+            if i > 0:
+                f.write(",\n")
+            json.dump(hg, f, ensure_ascii=False)
+
+            n_nodes += hg["meta"]["n_nodes"]
+            n_edges += hg["meta"]["n_edges"]
+            n_hg += 1
+
+            if (i + 1) % 1000 == 0 or (i + 1) == total:
+                print(f"       [{i+1}/{total}] hypergraphs={n_hg} "
+                      f"nodes={n_nodes} edges={n_edges}")
+
+        f.write("\n]")
+
+    stats = {
+        "threads_processed": total,
+        "hypergraphs_produced": n_hg,
+        "total_nodes": n_nodes,
+        "total_edges": n_edges,
+        "avg_nodes": n_nodes / n_hg if n_hg else 0,
+        "avg_edges": n_edges / n_hg if n_hg else 0,
+    }
+    return stats, out_path
+
+
+def _sethread_to_raw(thread) -> dict:
+    """Convert an SEThread dataclass to the raw dict format expected by hypergraph.assemble()."""
+    q = thread.question
+    raw = {
+        "question": {
+            "id": q.id,
+            "title": q.title,
+            "score": q.score,
+            "tags": q.tags,
+            "body_html": q.body,
+        },
+        "answers": [],
+        "comments_q": [],
+        "comments_a": {},
+    }
+    for ans in thread.answers:
+        raw["answers"].append({
+            "id": ans.id,
+            "score": ans.score,
+            "is_accepted": (q.accepted_answer_id == ans.id),
+            "body_html": ans.body,
+        })
+    # Comments on question
+    for c in thread.comments.get(q.id, []):
+        raw["comments_q"].append({
+            "id": c.id,
+            "score": c.score,
+            "text": c.text,
+        })
+    # Comments on answers
+    for ans in thread.answers:
+        ans_comments = thread.comments.get(ans.id, [])
+        if ans_comments:
+            raw["comments_a"][str(ans.id)] = [
+                {"id": c.id, "score": c.score, "text": c.text}
+                for c in ans_comments
+            ]
+    return raw
+
+
 def build_ct_performative_prompt(wiring_dict):
     """Build LLM performative classification prompt from CT-backed wiring dict.
 
@@ -1203,10 +1406,27 @@ def print_dry_run(args):
     else:
         print(f"  {'7. Thread wiring + performatives (CPU)':<42s} {'IATC regex bank (legacy)':<36s} {fmt(est_stage7_min)+' min':>10s}")
 
+    # Stage 8: Expression surfaces
+    stage8_active = not args.skip_expressions
+    if not stage8_active:
+        print(f"  {'8. Expression surface parsing':<42s} {'SKIPPED':>10s}")
+    else:
+        est_stage8_min = est_stage1_min * 0.5 if isinstance(est_stage1_min, (int, float)) else "?"
+        print(f"  {'8. Expression surfaces (CPU)':<42s} {'latex_sexp parser':<36s} {fmt(est_stage8_min)+' min':>10s}")
+
+    # Stage 9a: Hypergraph assembly
+    stage9a_active = not args.skip_hypergraphs
+    if not stage9a_active:
+        print(f"  {'9a. Hypergraph assembly':<42s} {'SKIPPED':>10s}")
+    else:
+        est_stage9a_min = est_stage1_min * 0.3 if isinstance(est_stage1_min, (int, float)) else "?"
+        print(f"  {'9a. Hypergraph assembly (CPU)':<42s} {'typed hypergraph builder':<36s} {fmt(est_stage9a_min)+' min':>10s}")
+
     print(f"  {'-'*42} {'-'*36} {'-'*10}")
 
     active = (1 + int(stage2_active) + int(stage3_active) + int(stage4_active)
-              + int(stage5_active) + int(stage6_active) + int(stage7_active))
+              + int(stage5_active) + int(stage6_active) + int(stage7_active)
+              + int(stage8_active) + int(stage9a_active))
     if isinstance(est_stage1_min, (int, float)):
         est_total_min = est_stage1_min
         if stage2_active:
@@ -1221,9 +1441,13 @@ def print_dry_run(args):
             est_total_min += est_stage6_min
         if stage7_active:
             est_total_min += est_stage7_min
+        if stage8_active:
+            est_total_min += est_stage8_min
+        if stage9a_active:
+            est_total_min += est_stage9a_min
     else:
         est_total_min = "?"
-    print(f"  {'TOTAL':<42s} {f'{active}/7 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
+    print(f"  {'TOTAL':<42s} {f'{active}/9 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
     print()
 
     print("  ESTIMATED OUTPUT:")
@@ -1240,6 +1464,10 @@ def print_dry_run(args):
             print(f"    scopes.json           ~{fmt(est_entities_mb * 0.2)} MB")
         if not args.skip_threads:
             print(f"    thread-wiring.json    ~{fmt(est_entities_mb * 0.5)} MB")
+        if not args.skip_expressions:
+            print(f"    expression-surfaces.json ~{fmt(est_entities_mb * 0.3)} MB")
+        if not args.skip_hypergraphs:
+            print(f"    hypergraphs.json      ~{fmt(est_entities_mb * 0.8)} MB")
         print(f"    {'':24s} --------")
         print(f"    {'TOTAL':24s} ~{fmt(est_total_gb)} GB")
     else:
@@ -1364,6 +1592,12 @@ def main():
     parser.add_argument("--ct-reference", default="data/nlab-ct-reference.json",
                         help="CT reference dictionary for CT-backed wiring (Stage 7)")
 
+    # Expression surfaces + hypergraphs (Stages 8-9a)
+    parser.add_argument("--skip-expressions", action="store_true",
+                        help="Skip expression surface parsing (Stage 8)")
+    parser.add_argument("--skip-hypergraphs", action="store_true",
+                        help="Skip hypergraph assembly (Stage 9a)")
+
     args = parser.parse_args()
 
     if args.limit is not None and args.limit <= 0:
@@ -1431,7 +1665,7 @@ def main():
 
     t0 = time.time()
 
-    n_stages = 7
+    n_stages = 9
 
     # Auto-detect Comments.xml if not provided
     if not args.comments_xml and args.posts_xml:
@@ -1748,6 +1982,55 @@ def main():
     else:
         print(f"\n[Stage 7/{n_stages}] Skipped (--skip-threads)")
 
+    # ========== Stage 8: Expression surface parsing ==========
+    stage8_stats = None
+    surfaces_path = None
+    if not args.skip_expressions and not args.skip_threads and threads:
+        t8 = time.time()
+        print(f"\n[Stage 8/{n_stages}] Expression surface parsing (LaTeX → s-exp)...")
+        stage8_stats, surfaces_path = run_stage8_expression_surfaces(
+            threads, outdir)
+        print(f"       {stage8_stats['total_expressions']} expressions from "
+              f"{stage8_stats['threads_processed']} threads")
+        print(f"       Parse rate: {stage8_stats['parse_rate']:.1%} "
+              f"({stage8_stats['parsed']} parsed, "
+              f"{stage8_stats['fallback']} fallback)")
+        print(f"       Written {surfaces_path} "
+              f"({os.path.getsize(surfaces_path) / 1e6:.1f} MB)")
+        print(f"       Stage 8 done in {time.time()-t8:.0f}s")
+    elif args.skip_expressions:
+        print(f"\n[Stage 8/{n_stages}] Skipped (--skip-expressions)")
+    else:
+        print(f"\n[Stage 8/{n_stages}] Skipped (no threads from Stage 7)")
+
+    # ========== Stage 9a: Hypergraph assembly ==========
+    stage9a_stats = None
+    if (not args.skip_hypergraphs and not args.skip_threads
+            and threads and (ct_wiring_path or thread_diagrams)):
+        t9 = time.time()
+        print(f"\n[Stage 9a/{n_stages}] Hypergraph assembly...")
+
+        # Determine wiring path (CT-backed or legacy)
+        wiring_src = ct_wiring_path
+        if not wiring_src:
+            # Legacy path: write thread diagrams to temp file
+            wiring_src = outdir / "thread-wiring.json"
+
+        stage9a_stats, hg_path = run_stage9a_hypergraphs(
+            threads, wiring_src, surfaces_path, outdir)
+        print(f"       {stage9a_stats['hypergraphs_produced']} hypergraphs, "
+              f"{stage9a_stats['total_nodes']} nodes, "
+              f"{stage9a_stats['total_edges']} edges")
+        print(f"       Avg: {stage9a_stats['avg_nodes']:.0f} nodes, "
+              f"{stage9a_stats['avg_edges']:.0f} edges per thread")
+        print(f"       Written {hg_path} "
+              f"({os.path.getsize(hg_path) / 1e6:.1f} MB)")
+        print(f"       Stage 9a done in {time.time()-t9:.0f}s")
+    elif args.skip_hypergraphs:
+        print(f"\n[Stage 9a/{n_stages}] Skipped (--skip-hypergraphs)")
+    else:
+        print(f"\n[Stage 9a/{n_stages}] Skipped (no wiring from Stage 7)")
+
     # ========== Manifest ==========
     elapsed = time.time() - t0
     manifest = {
@@ -1772,10 +2055,14 @@ def main():
             *([] if args.skip_ner or stage5_stats is None else ["ner_scopes"]),
             *([] if stage6_stats is None else ["reverse_morphogenesis"]),
             *([] if stage7_stats is None else ["thread_wiring"]),
+            *([] if stage8_stats is None else ["expression_surfaces"]),
+            *([] if stage9a_stats is None else ["hypergraphs"]),
         ],
         "stage5_stats": stage5_stats,
         "stage6_stats": stage6_stats,
         "stage7_stats": stage7_stats,
+        "stage8_stats": stage8_stats,
+        "stage9a_stats": stage9a_stats,
         "output_files": [f.name for f in outdir.iterdir() if f.is_file()],
         "patterns": PATTERN_NAMES,
     }
