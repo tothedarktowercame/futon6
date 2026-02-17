@@ -37,6 +37,44 @@ What it does (with step-by-step progress and hard fail gates):
 bash scripts/handoff-superpod-all.sh --smoke-only
 ```
 
+### Pre-flight validation (recommended before full run)
+
+Before committing to the full superpod run, do a pre-flight on a small GPU
+box (Linode GPU, ~$10). This runs all 11 stages on 1000 real threads with
+strict health gates — any warning becomes a hard failure.
+
+```bash
+# Download the math.SE data
+python3 scripts/superpod-job.py --download math --data-dir ./se-data
+
+# Pre-flight: 1000 threads, all stages, GPU, strict health gates
+python3 scripts/superpod-job.py \
+    ./se-data/math.stackexchange.com/Posts.xml \
+    --comments-xml ./se-data/math.stackexchange.com/Comments.xml \
+    --site math.stackexchange \
+    --output-dir ./preflight-1000 \
+    --thread-limit 1000 \
+    --embed-device cuda \
+    --graph-embed-epochs 10 \
+    --preflight
+
+# Evaluate the output
+python3 scripts/evaluate-superpod-run.py ./preflight-1000/ \
+    --json-report preflight-report.json
+
+# Inspect cross-domain candidates
+python3 scripts/evaluate-superpod-run.py ./preflight-1000/ \
+    --export-review preflight-review.json --n-review 20
+```
+
+The `--preflight` flag makes the inline health gates strict:
+- Stage 8: parse rate <80% → abort (parser needs work)
+- Stage 9a: assembly rate <90% → abort (schema too rigid)
+- Stage 9b: avg pairwise cosine >0.5 → abort (embeddings collapsing)
+
+If the pre-flight passes, the full run will too. If it fails, fix the
+issue cheaply ($10) instead of discovering it after the superpod run ($$$).
+
 ## 4. The Orchestrator
 
 The orchestrator is `scripts/handoff-superpod-all.sh`. It assembles all the

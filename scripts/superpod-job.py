@@ -1720,6 +1720,10 @@ def main():
     parser.add_argument("--graph-embed-epochs", type=int, default=50,
                         help="GNN training epochs (default: 50)")
 
+    # Health gates
+    parser.add_argument("--preflight", action="store_true",
+                        help="Strict health gates: abort on warnings (use for pre-flight validation runs)")
+
     args = parser.parse_args()
 
     if args.limit is not None and args.limit <= 0:
@@ -1786,6 +1790,18 @@ def main():
         print()
 
     t0 = time.time()
+
+    # Health gate: warn or abort depending on --preflight
+    def health_gate(stage: str, condition: bool, message: str):
+        """Print health warning; abort if --preflight is set."""
+        if not condition:
+            return
+        if args.preflight:
+            print(f"\n[HEALTH GATE FAIL] {stage}: {message}")
+            print(f"  Aborting (--preflight mode). Fix the issue and re-run.")
+            sys.exit(1)
+        else:
+            print(f"  [HEALTH WARNING] {stage}: {message}")
 
     n_stages = 11  # 1-7, 8, 9a, 9b, 10
 
@@ -2120,6 +2136,14 @@ def main():
         print(f"       Written {surfaces_path} "
               f"({os.path.getsize(surfaces_path) / 1e6:.1f} MB)")
         print(f"       Stage 8 done in {time.time()-t8:.0f}s")
+
+        # Health gates
+        health_gate("Stage 8", stage8_stats['parse_rate'] < 0.50,
+                     f"parse rate {stage8_stats['parse_rate']:.1%} < 50% — parser is broken")
+        health_gate("Stage 8", stage8_stats['parse_rate'] < 0.80,
+                     f"parse rate {stage8_stats['parse_rate']:.1%} < 80% — parser needs more construct coverage")
+        health_gate("Stage 8", stage8_stats['total_expressions'] == 0,
+                     "zero expressions found — is the input LaTeX-free?")
     elif args.skip_expressions:
         print(f"\n[Stage 8/{n_stages}] Skipped (--skip-expressions)")
     else:
@@ -2148,6 +2172,15 @@ def main():
         print(f"       Written {hg_path} "
               f"({os.path.getsize(hg_path) / 1e6:.1f} MB)")
         print(f"       Stage 9a done in {time.time()-t9:.0f}s")
+
+        # Health gates
+        assembly_rate = (stage9a_stats['hypergraphs_produced']
+                         / stage9a_stats['threads_processed']
+                         if stage9a_stats['threads_processed'] else 0)
+        health_gate("Stage 9a", assembly_rate < 0.90,
+                     f"assembly rate {assembly_rate:.1%} < 90% — hypergraph schema too rigid")
+        health_gate("Stage 9a", stage9a_stats['avg_nodes'] < 3,
+                     f"avg {stage9a_stats['avg_nodes']:.1f} nodes/thread — hypergraphs are trivial")
     elif args.skip_hypergraphs:
         print(f"\n[Stage 9a/{n_stages}] Skipped (--skip-hypergraphs)")
     else:
@@ -2174,6 +2207,25 @@ def main():
         print(f"       Written {hg_embeddings_path} "
               f"({os.path.getsize(hg_embeddings_path) / 1e6:.1f} MB)")
         print(f"       Model: {model_path}")
+
+        # Inline embedding quality check
+        _emb = np.load(str(hg_embeddings_path))
+        if len(_emb) >= 10:
+            _sample = _emb[:min(500, len(_emb))]
+            _norms = np.linalg.norm(_sample, axis=1)
+            _normed = _sample / (_norms[:, None] + 1e-8)
+            _cos = (_normed @ _normed.T)
+            _mask = ~np.eye(len(_sample), dtype=bool)
+            _avg_cos = float(_cos[_mask].mean())
+            print(f"       Embedding health: avg_pairwise_cosine={_avg_cos:.4f} "
+                  f"(want ~0, degenerate if >0.9)")
+            stage9b_stats["avg_pairwise_cosine"] = round(_avg_cos, 4)
+
+            health_gate("Stage 9b", _avg_cos > 0.9,
+                         f"DEGENERATE embeddings (avg cosine {_avg_cos:.3f}) — training failed")
+            health_gate("Stage 9b", _avg_cos > 0.5,
+                         f"high avg cosine ({_avg_cos:.3f}) — embeddings may be collapsing")
+
         print(f"       Stage 9b done in {time.time()-t9b:.0f}s")
     elif args.skip_graph_embed:
         print(f"\n[Stage 9b/{n_stages}] Skipped (--skip-graph-embed)")
