@@ -116,7 +116,8 @@ set -euo pipefail
 ``` {.bash #all-header-comment}
 # Single-command Superpod handoff runner.
 # Runs 11-stage pipeline (stages 1-7 + LWGM stages 8-10).
-# Default behavior:
+#
+# Default behavior (NUM_SHARDS=1 or unset):
 #   1) bootstrap inputs
 #   2) sanity tests
 #   3) smoke run + verification
@@ -124,10 +125,24 @@ set -euo pipefail
 #   5) required GPU backfill + verification (stages 1-10 incl. LWGM)
 #   6) package outputs
 #
+# Sharded / Block 1 (NUM_SHARDS>1):
+#   1) bootstrap inputs
+#   2) sanity tests
+#   3) smoke run + verification
+#   4) sharded GPU pipeline for both corpora
+#   5) package outputs
+#
+# Block 1 invocation (recommended for first superpod run):
+#   NUM_SHARDS=8 EXTRA_SHARD_ARGS="--skip-llm" bash scripts/handoff-superpod-all.sh
+#
 # Options:
 #   --smoke-only       stop after smoke run + verification
 #   --skip-bootstrap   do not run bootstrap script
 #   --skip-tests       do not run pytest sanity checks
+#
+# Environment:
+#   NUM_SHARDS          number of parallel shards (default: 1 = unsharded)
+#   EXTRA_SHARD_ARGS    extra args passed to each shard job (e.g. "--skip-llm")
 ```
 
 ### 4.3 Argument parsing
@@ -136,6 +151,8 @@ The script locates the repo root relative to its own path (so it works
 regardless of where you invoke it), then parses three optional flags.
 `--smoke-only` is the fast confidence check. `--skip-bootstrap` and
 `--skip-tests` exist for reruns where the data is already in place.
+`NUM_SHARDS` and `EXTRA_SHARD_ARGS` are read from the environment to
+control sharded execution.
 
 ``` {.bash #all-root-and-args}
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -144,6 +161,8 @@ cd "$ROOT_DIR"
 SMOKE_ONLY=0
 SKIP_BOOTSTRAP=0
 SKIP_TESTS=0
+NUM_SHARDS="${NUM_SHARDS:-1}"
+EXTRA_SHARD_ARGS="${EXTRA_SHARD_ARGS:-}"
 
 for arg in "$@"; do
   case "$arg" in
@@ -280,31 +299,33 @@ embeddings and FAISS index).
 
 ``` {.bash #all-package-outputs}
 package_outputs() {
-  tar czf superpod-math-processed.tar.gz \
-    math-processed/entities.json \
-    math-processed/relations.json \
-    math-processed/tags.json \
-    math-processed/stats.json \
-    math-processed/ner-terms.json \
-    math-processed/scopes.json \
-    math-processed/thread-wiring-ct.json \
-    math-processed/thread-wiring-ct-verification.json \
-    math-processed/expression-surfaces.json \
-    math-processed/hypergraphs.json \
-    math-processed/manifest.json
+  if [[ "$NUM_SHARDS" -le 1 ]]; then
+    tar czf superpod-math-processed.tar.gz \
+      math-processed/entities.json \
+      math-processed/relations.json \
+      math-processed/tags.json \
+      math-processed/stats.json \
+      math-processed/ner-terms.json \
+      math-processed/scopes.json \
+      math-processed/thread-wiring-ct.json \
+      math-processed/thread-wiring-ct-verification.json \
+      math-processed/expression-surfaces.json \
+      math-processed/hypergraphs.json \
+      math-processed/manifest.json
 
-  tar czf superpod-mo-processed.tar.gz \
-    mo-processed/entities.json \
-    mo-processed/relations.json \
-    mo-processed/tags.json \
-    mo-processed/stats.json \
-    mo-processed/ner-terms.json \
-    mo-processed/scopes.json \
-    mo-processed/thread-wiring-ct.json \
-    mo-processed/thread-wiring-ct-verification.json \
-    mo-processed/expression-surfaces.json \
-    mo-processed/hypergraphs.json \
-    mo-processed/manifest.json
+    tar czf superpod-mo-processed.tar.gz \
+      mo-processed/entities.json \
+      mo-processed/relations.json \
+      mo-processed/tags.json \
+      mo-processed/stats.json \
+      mo-processed/ner-terms.json \
+      mo-processed/scopes.json \
+      mo-processed/thread-wiring-ct.json \
+      mo-processed/thread-wiring-ct-verification.json \
+      mo-processed/expression-surfaces.json \
+      mo-processed/hypergraphs.json \
+      mo-processed/manifest.json
+  fi
 
   tar czf superpod-math-processed-gpu.tar.gz math-processed-gpu
   tar czf superpod-mo-processed-gpu.tar.gz mo-processed-gpu
@@ -314,14 +335,19 @@ package_outputs() {
 ### 4.8 Pipeline orchestration
 
 This is the main flow. It runs top-to-bottom with hard fail gates between
-stages. The sequence is: bootstrap, tests, smoke, CPU baseline (math.SE then
-MO), GPU backfill, packaging. If `--smoke-only` was passed, it exits after
-the smoke gate. Each CPU run is followed immediately by ct-verifier and
-`verify_run_dir`.
+stages. Bootstrap, tests, and smoke always run first.
+
+When `NUM_SHARDS > 1` (the **Block 1** path), the sharded GPU pipeline
+handles both corpora in one step — the separate CPU baseline is redundant
+because the sharded run already covers stages 1–9a per shard, merges, and
+runs 9b+10.
+
+When `NUM_SHARDS = 1` (default), the original sequence runs: CPU baseline
+for each corpus, then GPU backfill, then packaging.
 
 ``` {.bash #all-orchestration}
 echo "[all] repo: $ROOT_DIR"
-echo "[all] smoke_only=$SMOKE_ONLY skip_bootstrap=$SKIP_BOOTSTRAP skip_tests=$SKIP_TESTS"
+echo "[all] smoke_only=$SMOKE_ONLY skip_bootstrap=$SKIP_BOOTSTRAP skip_tests=$SKIP_TESTS num_shards=$NUM_SHARDS"
 
 if (( ! SKIP_BOOTSTRAP )); then
   step "bootstrap inputs"
@@ -346,55 +372,77 @@ if (( SMOKE_ONLY )); then
   exit 0
 fi
 
-step "CPU baseline run + verification (math.stackexchange)"
-python3 scripts/superpod-job.py \
-  ./se-data/math.stackexchange.com/Posts.xml \
-  --comments-xml ./se-data/math.stackexchange.com/Comments.xml \
-  --site math.stackexchange \
-  --output-dir ./math-processed \
-  --skip-embeddings \
-  --skip-llm \
-  --skip-clustering
-python3 scripts/ct-verifier.py verify \
-  --wiring ./math-processed/thread-wiring-ct.json \
-  --reference data/nlab-ct-reference.json \
-  --output ./math-processed/thread-wiring-ct-verification.json
-verify_run_dir "./math-processed"
+if [[ "$NUM_SHARDS" -gt 1 ]]; then
+  # Block 1: sharded pipeline supersedes separate CPU baseline + GPU backfill.
+  # NUM_SHARDS and EXTRA_SHARD_ARGS are exported so gpu-backfill.sh picks them up.
+  export NUM_SHARDS EXTRA_SHARD_ARGS
 
-step "CPU baseline run + verification (mathoverflow)"
-python3 scripts/superpod-job.py \
-  ./se-data/mathoverflow.net/Posts.xml \
-  --comments-xml ./se-data/mathoverflow.net/Comments.xml \
-  --site mathoverflow.net \
-  --output-dir ./mo-processed \
-  --skip-embeddings \
-  --skip-llm \
-  --skip-clustering
-python3 scripts/ct-verifier.py verify \
-  --wiring ./mo-processed/thread-wiring-ct.json \
-  --reference data/nlab-ct-reference.json \
-  --output ./mo-processed/thread-wiring-ct-verification.json
-verify_run_dir "./mo-processed"
+  step "sharded pipeline ($NUM_SHARDS shards) + verification"
+  bash scripts/handoff-superpod-gpu-backfill.sh both
+  verify_run_dir "./math-processed-gpu"
+  verify_run_dir "./mo-processed-gpu"
 
-step "required GPU backfill + verification"
-bash scripts/handoff-superpod-gpu-backfill.sh both
-verify_run_dir "./math-processed-gpu"
-verify_run_dir "./mo-processed-gpu"
+  step "package outputs"
+  package_outputs
 
-step "package outputs"
-package_outputs
+  assert_file "superpod-math-processed-gpu.tar.gz"
+  assert_file "superpod-mo-processed-gpu.tar.gz"
 
-assert_file "superpod-math-processed.tar.gz"
-assert_file "superpod-mo-processed.tar.gz"
-assert_file "superpod-math-processed-gpu.tar.gz"
-assert_file "superpod-mo-processed-gpu.tar.gz"
+  echo
+  echo "[all] complete (sharded / Block 1). Deliver:"
+  echo "  superpod-math-processed-gpu.tar.gz"
+  echo "  superpod-mo-processed-gpu.tar.gz"
+else
+  step "CPU baseline run + verification (math.stackexchange)"
+  python3 scripts/superpod-job.py \
+    ./se-data/math.stackexchange.com/Posts.xml \
+    --comments-xml ./se-data/math.stackexchange.com/Comments.xml \
+    --site math.stackexchange \
+    --output-dir ./math-processed \
+    --skip-embeddings \
+    --skip-llm \
+    --skip-clustering
+  python3 scripts/ct-verifier.py verify \
+    --wiring ./math-processed/thread-wiring-ct.json \
+    --reference data/nlab-ct-reference.json \
+    --output ./math-processed/thread-wiring-ct-verification.json
+  verify_run_dir "./math-processed"
 
-echo
-echo "[all] complete. Deliver:"
-echo "  superpod-math-processed.tar.gz"
-echo "  superpod-mo-processed.tar.gz"
-echo "  superpod-math-processed-gpu.tar.gz"
-echo "  superpod-mo-processed-gpu.tar.gz"
+  step "CPU baseline run + verification (mathoverflow)"
+  python3 scripts/superpod-job.py \
+    ./se-data/mathoverflow.net/Posts.xml \
+    --comments-xml ./se-data/mathoverflow.net/Comments.xml \
+    --site mathoverflow.net \
+    --output-dir ./mo-processed \
+    --skip-embeddings \
+    --skip-llm \
+    --skip-clustering
+  python3 scripts/ct-verifier.py verify \
+    --wiring ./mo-processed/thread-wiring-ct.json \
+    --reference data/nlab-ct-reference.json \
+    --output ./mo-processed/thread-wiring-ct-verification.json
+  verify_run_dir "./mo-processed"
+
+  step "required GPU backfill + verification"
+  bash scripts/handoff-superpod-gpu-backfill.sh both
+  verify_run_dir "./math-processed-gpu"
+  verify_run_dir "./mo-processed-gpu"
+
+  step "package outputs"
+  package_outputs
+
+  assert_file "superpod-math-processed.tar.gz"
+  assert_file "superpod-mo-processed.tar.gz"
+  assert_file "superpod-math-processed-gpu.tar.gz"
+  assert_file "superpod-mo-processed-gpu.tar.gz"
+
+  echo
+  echo "[all] complete. Deliver:"
+  echo "  superpod-math-processed.tar.gz"
+  echo "  superpod-mo-processed.tar.gz"
+  echo "  superpod-math-processed-gpu.tar.gz"
+  echo "  superpod-mo-processed-gpu.tar.gz"
+fi
 ```
 
 ## 5. Bootstrap: Getting the Data
