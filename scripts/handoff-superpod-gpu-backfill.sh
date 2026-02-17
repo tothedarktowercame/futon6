@@ -41,13 +41,13 @@ fi
 
 echo "[gpu] GPU OK: $(python3 -c "import torch; print(torch.cuda.get_device_name(0))")"
 
-if [[ -z "${HF_TOKEN:-}" ]]; then
-  echo "[gpu] WARNING: HF_TOKEN not set. Llama-3 (stages 3/6) will fail."
+if [[ -z "${HF_TOKEN:-}" ]] && [[ "${LLM_MODEL:-}" == *"meta-llama"* ]]; then
+  echo "[gpu] WARNING: HF_TOKEN not set but LLM_MODEL is Llama (gated)."
   echo "[gpu]   export HF_TOKEN=hf_your_token_here"
-  echo "[gpu]   Or pass --skip-llm to skip stages 3/6."
+  echo "[gpu]   Or use the default (Mistral-7B, ungated)."
 fi
 
-LLM_MODEL="${LLM_MODEL:-meta-llama/Meta-Llama-3-8B-Instruct}"
+LLM_MODEL="${LLM_MODEL:-mistralai/Mistral-7B-Instruct-v0.3}"
 EMBED_MODEL="${EMBED_MODEL:-BAAI/bge-large-en-v1.5}"
 # ~/~ end
 

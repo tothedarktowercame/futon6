@@ -202,9 +202,8 @@ if [[ "$BLOCK" == "2" ]]; then
   command -v nvidia-smi >/dev/null 2>&1 || fail "nvidia-smi not found"
   python3 -c "import torch; assert torch.cuda.is_available()" 2>/dev/null \
     || fail "PyTorch cannot see CUDA"
-  [[ -n "${HF_TOKEN:-}" ]] || fail "HF_TOKEN not set (required for LLM)"
 
-  LLM_MODEL="${LLM_MODEL:-meta-llama/Meta-Llama-3-8B-Instruct}"
+  LLM_MODEL="${LLM_MODEL:-mistralai/Mistral-7B-Instruct-v0.3}"
 
   step "Block 2: LLM on ${LLM_THREAD_LIMIT}/shard sample (math.stackexchange)"
   python3 scripts/superpod-shard.py run \
