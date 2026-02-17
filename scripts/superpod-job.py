@@ -2000,12 +2000,16 @@ def main():
         t7 = time.time()
 
         # Build full threads (3-pass streaming)
+        print(f"\n[Stage 7/{n_stages}] Building threads from {args.posts_xml}...")
+        print(f"       (streaming XML, thread_limit={args.thread_limit or 'none'}, "
+              f"this may take a few minutes on large dumps)")
         threads = build_threads_streaming(
             args.posts_xml,
             comments_xml_path=args.comments_xml,
             min_score=args.min_score,
             thread_limit=args.thread_limit,
         )
+        print(f"       {len(threads)} threads built in {time.time()-t7:.0f}s")
 
         if not threads:
             print(f"\n[Stage 7/{n_stages}] No threads built (0 qualifying questions)")
