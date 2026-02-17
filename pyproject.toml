@@ -17,6 +17,7 @@ dev = [
 ]
 gpu = [
     "torch>=2.0",
+    "accelerate>=0.25.0",
     "flash-attn>=2.0; platform_system == 'Linux'",
 ]
 lwgm = [

@@ -21,7 +21,8 @@ pip install --upgrade pip
 pip install -e ".[dev,lwgm]"
 
 # Sentence transformers for BGE-large (Stage 2)
-pip install sentence-transformers
+# accelerate for LLM device_map (Stages 3/6)
+pip install sentence-transformers accelerate
 
 echo "=== 4. Verify GPU ==="
 nvidia-smi
