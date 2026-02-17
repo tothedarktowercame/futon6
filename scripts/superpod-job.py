@@ -37,6 +37,8 @@ All stages:
     7. Thread wiring diagrams + IATC performatives (CPU, classical + LLM)
     8. Expression surface parsing (CPU, LaTeX -> s-exp)
     9a. Hypergraph assembly (CPU, typed hypergraph from wiring + expressions)
+    9b. Graph embedding (GPU, R-GCN contrastive learning on hypergraphs)
+    10. FAISS structural similarity index (CPU)
 
 Each stage writes its output independently -- if a stage fails, earlier
 outputs are still usable.
@@ -97,6 +99,8 @@ from futon6.thread_performatives import (
 )
 from futon6.latex_sexp import parse as sexp_parse, parse_all
 from futon6.hypergraph import assemble as assemble_hypergraph
+from futon6.graph_embed import train as train_gnn, embed_hypergraphs, save_model
+from futon6.faiss_index import build_index, save_index
 
 # --- Downloadable SE data dumps (Internet Archive) ---
 
@@ -1049,6 +1053,88 @@ def _sethread_to_raw(thread) -> dict:
     return raw
 
 
+# ---------------------------------------------------------------------------
+# Stage 9b: Hypergraph embedding via R-GCN (GPU)
+# ---------------------------------------------------------------------------
+
+def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
+                                 n_layers=2, epochs=50, batch_size=64,
+                                 device=None):
+    """Stage 9b: Train R-GCN on thread hypergraphs, produce embeddings.
+
+    GPU-accelerated contrastive learning on the typed hypergraph structure.
+
+    Returns (stats_dict, embeddings_path, model_path, thread_ids).
+    """
+    with open(hg_path) as f:
+        hypergraphs = json.load(f)
+
+    thread_ids = [hg.get("thread_id", i) for i, hg in enumerate(hypergraphs)]
+
+    model, embeddings = train_gnn(
+        hypergraphs, dim=embed_dim, hidden_dim=hidden_dim,
+        n_layers=n_layers, epochs=epochs, batch_size=batch_size,
+        device=device, verbose=True)
+
+    emb_path = outdir / "hypergraph-embeddings.npy"
+    model_path = outdir / "graph-gnn-model.pt"
+    ids_path = outdir / "hypergraph-thread-ids.json"
+
+    np.save(str(emb_path), embeddings)
+    save_model(model, str(model_path))
+    with open(ids_path, "w") as f:
+        json.dump(thread_ids, f)
+
+    stats = {
+        "n_threads": len(hypergraphs),
+        "n_embedded": embeddings.shape[0],
+        "embed_dim": embeddings.shape[1],
+        "epochs": epochs,
+        "device": str(device or "auto"),
+    }
+    return stats, emb_path, model_path, thread_ids
+
+
+# ---------------------------------------------------------------------------
+# Stage 10: FAISS structural similarity index (CPU)
+# ---------------------------------------------------------------------------
+
+def run_stage10_faiss_index(embeddings_path, thread_ids, outdir,
+                             index_type="flat"):
+    """Stage 10: Build FAISS index from hypergraph embeddings.
+
+    Returns (stats_dict, index_path).
+    """
+    embeddings = np.load(str(embeddings_path))
+
+    index, ids = build_index(embeddings, thread_ids, index_type=index_type)
+
+    index_path = outdir / "structural-similarity-index"
+    save_index(index, ids, str(index_path))
+
+    stats = {
+        "n_vectors": len(ids),
+        "dimension": embeddings.shape[1],
+        "index_type": index_type,
+        "has_faiss": True,
+    }
+
+    # Quick self-check: query a random thread
+    try:
+        from futon6.faiss_index import query as faiss_query
+        if len(ids) >= 2:
+            results = faiss_query(index, ids, embeddings[0], k=5, exclude_id=ids[0])
+            stats["sample_query"] = {
+                "query_thread": ids[0],
+                "top_5": [r["thread_id"] for r in results],
+                "top_5_sim": [round(r["similarity"], 3) for r in results],
+            }
+    except Exception:
+        pass
+
+    return stats, index_path
+
+
 def build_ct_performative_prompt(wiring_dict):
     """Build LLM performative classification prompt from CT-backed wiring dict.
 
@@ -1422,11 +1508,28 @@ def print_dry_run(args):
         est_stage9a_min = est_stage1_min * 0.3 if isinstance(est_stage1_min, (int, float)) else "?"
         print(f"  {'9a. Hypergraph assembly (CPU)':<42s} {'typed hypergraph builder':<36s} {fmt(est_stage9a_min)+' min':>10s}")
 
+    # Stage 9b: Graph embedding
+    stage9b_active = not args.skip_graph_embed
+    if not stage9b_active:
+        print(f"  {'9b. Graph embedding':<42s} {'SKIPPED':>10s}")
+    else:
+        est_stage9b_min = est_stage1_min * 2.0 if isinstance(est_stage1_min, (int, float)) else "?"
+        print(f"  {'9b. Graph embedding (GPU, R-GCN)':<42s} {f'{args.graph_embed_dim}d, {args.graph_embed_epochs}ep':<36s} {fmt(est_stage9b_min)+' min':>10s}")
+
+    # Stage 10: FAISS index
+    stage10_active = not args.skip_faiss
+    if not stage10_active:
+        print(f"  {'10. FAISS similarity index':<42s} {'SKIPPED':>10s}")
+    else:
+        est_stage10_min = est_stage1_min * 0.1 if isinstance(est_stage1_min, (int, float)) else "?"
+        print(f"  {'10. FAISS similarity index (CPU)':<42s} {'inner product search':<36s} {fmt(est_stage10_min)+' min':>10s}")
+
     print(f"  {'-'*42} {'-'*36} {'-'*10}")
 
     active = (1 + int(stage2_active) + int(stage3_active) + int(stage4_active)
               + int(stage5_active) + int(stage6_active) + int(stage7_active)
-              + int(stage8_active) + int(stage9a_active))
+              + int(stage8_active) + int(stage9a_active)
+              + int(stage9b_active) + int(stage10_active))
     if isinstance(est_stage1_min, (int, float)):
         est_total_min = est_stage1_min
         if stage2_active:
@@ -1445,9 +1548,13 @@ def print_dry_run(args):
             est_total_min += est_stage8_min
         if stage9a_active:
             est_total_min += est_stage9a_min
+        if stage9b_active:
+            est_total_min += est_stage9b_min
+        if stage10_active:
+            est_total_min += est_stage10_min
     else:
         est_total_min = "?"
-    print(f"  {'TOTAL':<42s} {f'{active}/9 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
+    print(f"  {'TOTAL':<42s} {f'{active}/11 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
     print()
 
     print("  ESTIMATED OUTPUT:")
@@ -1468,6 +1575,11 @@ def print_dry_run(args):
             print(f"    expression-surfaces.json ~{fmt(est_entities_mb * 0.3)} MB")
         if not args.skip_hypergraphs:
             print(f"    hypergraphs.json      ~{fmt(est_entities_mb * 0.8)} MB")
+        if not args.skip_graph_embed:
+            est_emb_mb = est_pairs * args.graph_embed_dim * 4 / 1e6 if isinstance(est_pairs, int) else "?"
+            print(f"    hypergraph-embeddings.npy ~{fmt(est_emb_mb)} MB")
+        if not args.skip_faiss:
+            print(f"    structural-similarity-index  ~{fmt(est_emb_mb) if not args.skip_graph_embed else '?'} MB")
         print(f"    {'':24s} --------")
         print(f"    {'TOTAL':24s} ~{fmt(est_total_gb)} GB")
     else:
@@ -1598,6 +1710,16 @@ def main():
     parser.add_argument("--skip-hypergraphs", action="store_true",
                         help="Skip hypergraph assembly (Stage 9a)")
 
+    # Graph embedding + FAISS index (Stages 9b-10)
+    parser.add_argument("--skip-graph-embed", action="store_true",
+                        help="Skip graph GNN embedding (Stage 9b, GPU)")
+    parser.add_argument("--skip-faiss", action="store_true",
+                        help="Skip FAISS index construction (Stage 10)")
+    parser.add_argument("--graph-embed-dim", type=int, default=128,
+                        help="Hypergraph embedding dimension (default: 128)")
+    parser.add_argument("--graph-embed-epochs", type=int, default=50,
+                        help="GNN training epochs (default: 50)")
+
     args = parser.parse_args()
 
     if args.limit is not None and args.limit <= 0:
@@ -1665,7 +1787,7 @@ def main():
 
     t0 = time.time()
 
-    n_stages = 9
+    n_stages = 11  # 1-7, 8, 9a, 9b, 10
 
     # Auto-detect Comments.xml if not provided
     if not args.comments_xml and args.posts_xml:
@@ -2031,6 +2153,54 @@ def main():
     else:
         print(f"\n[Stage 9a/{n_stages}] Skipped (no wiring from Stage 7)")
 
+    # ========== Stage 9b: Graph embedding (GPU) ==========
+    stage9b_stats = None
+    hg_embeddings_path = None
+    hg_thread_ids = None
+    hg_path = outdir / "hypergraphs.json"
+    if (not args.skip_graph_embed and stage9a_stats is not None
+            and hg_path.exists()):
+        t9b = time.time()
+        print(f"\n[Stage 9b/{n_stages}] Graph embedding "
+              f"(R-GCN, {args.graph_embed_dim}d, {args.graph_embed_epochs} epochs)...")
+        stage9b_stats, hg_embeddings_path, model_path, hg_thread_ids = \
+            run_stage9b_graph_embedding(
+                hg_path, outdir,
+                embed_dim=args.graph_embed_dim,
+                epochs=args.graph_embed_epochs,
+            )
+        print(f"       {stage9b_stats['n_embedded']} thread embeddings "
+              f"({stage9b_stats['embed_dim']}d) on {stage9b_stats['device']}")
+        print(f"       Written {hg_embeddings_path} "
+              f"({os.path.getsize(hg_embeddings_path) / 1e6:.1f} MB)")
+        print(f"       Model: {model_path}")
+        print(f"       Stage 9b done in {time.time()-t9b:.0f}s")
+    elif args.skip_graph_embed:
+        print(f"\n[Stage 9b/{n_stages}] Skipped (--skip-graph-embed)")
+    else:
+        print(f"\n[Stage 9b/{n_stages}] Skipped (no hypergraphs from Stage 9a)")
+
+    # ========== Stage 10: FAISS similarity index ==========
+    stage10_stats = None
+    if (not args.skip_faiss and hg_embeddings_path is not None
+            and hg_thread_ids is not None):
+        t10 = time.time()
+        print(f"\n[Stage 10/{n_stages}] Building structural similarity index...")
+        stage10_stats, index_path = run_stage10_faiss_index(
+            hg_embeddings_path, hg_thread_ids, outdir)
+        print(f"       {stage10_stats['n_vectors']} vectors "
+              f"({stage10_stats['dimension']}d)")
+        if stage10_stats.get("sample_query"):
+            sq = stage10_stats["sample_query"]
+            print(f"       Sample: thread {sq['query_thread']} → "
+                  f"neighbors {sq['top_5'][:3]}")
+        print(f"       Written {index_path}.*")
+        print(f"       Stage 10 done in {time.time()-t10:.0f}s")
+    elif args.skip_faiss:
+        print(f"\n[Stage 10/{n_stages}] Skipped (--skip-faiss)")
+    else:
+        print(f"\n[Stage 10/{n_stages}] Skipped (no embeddings from Stage 9b)")
+
     # ========== Manifest ==========
     elapsed = time.time() - t0
     manifest = {
@@ -2057,12 +2227,16 @@ def main():
             *([] if stage7_stats is None else ["thread_wiring"]),
             *([] if stage8_stats is None else ["expression_surfaces"]),
             *([] if stage9a_stats is None else ["hypergraphs"]),
+            *([] if stage9b_stats is None else ["graph_embedding"]),
+            *([] if stage10_stats is None else ["faiss_index"]),
         ],
         "stage5_stats": stage5_stats,
         "stage6_stats": stage6_stats,
         "stage7_stats": stage7_stats,
         "stage8_stats": stage8_stats,
         "stage9a_stats": stage9a_stats,
+        "stage9b_stats": stage9b_stats,
+        "stage10_stats": stage10_stats,
         "output_files": [f.name for f in outdir.iterdir() if f.is_file()],
         "patterns": PATTERN_NAMES,
     }
