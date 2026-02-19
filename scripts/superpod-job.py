@@ -83,6 +83,7 @@ def _load_ct_modules():
 from futon6.stackexchange import (
     build_qa_pairs_streaming,
     build_threads_streaming,
+    load_arxiv_pairs,
     qa_to_entity,
     qa_to_relations,
     tag_entities,
@@ -1645,7 +1646,7 @@ def main():
         epilog="Available downloads: " + ", ".join(
             f"{k} ({v['description']})" for k, v in SE_DUMPS.items()))
     parser.add_argument("posts_xml", nargs="?", default=None,
-                        help="Path to Posts.xml (not needed with --download)")
+                        help="Path to Posts.xml (not needed with --download or --arxiv-jsonl)")
 
     # Download options
     parser.add_argument("--download", choices=list(SE_DUMPS.keys()),
@@ -1653,10 +1654,20 @@ def main():
     parser.add_argument("--data-dir", default="./se-data",
                         help="Directory for downloaded dumps (default: ./se-data)")
 
+    # ArXiv input (alternative to SE Posts.xml)
+    parser.add_argument("--arxiv-jsonl", default=None,
+                        help="ArXiv metadata JSONL (from harvest-arxiv-ct.py). "
+                             "Alternative to Posts.xml for processing ArXiv papers.")
+
+    # Laptop mode
+    parser.add_argument("--laptop", action="store_true",
+                        help="Laptop-friendly defaults: MiniLM embeddings, CPU device, "
+                             "moist-run for LLM stages, small batch sizes")
+
     parser.add_argument("--output-dir", "-o", default=None,
                         help="Output directory for all artefacts (default: auto from --site)")
     parser.add_argument("--site", default="math.stackexchange",
-                        help="SE site name")
+                        help="SE site name (or ArXiv category e.g. 'arxiv.math-ct')")
     parser.add_argument("--min-score", type=int, default=1,
                         help="Minimum post score")
     parser.add_argument("--limit", type=int, default=None,
@@ -1736,6 +1747,24 @@ def main():
 
     args = parser.parse_args()
 
+    # --laptop: sensible CPU defaults
+    if args.laptop:
+        if args.embed_model == parser.get_default("embed_model"):
+            args.embed_model = "all-MiniLM-L6-v2"
+        if args.embed_device == parser.get_default("embed_device"):
+            args.embed_device = "cpu"
+        if args.embed_batch_size == parser.get_default("embed_batch_size"):
+            args.embed_batch_size = 256
+        if args.graph_embed_batch_size == parser.get_default("graph_embed_batch_size"):
+            args.graph_embed_batch_size = 64
+        if args.graph_embed_workers == parser.get_default("graph_embed_workers"):
+            args.graph_embed_workers = 0
+        if args.graph_embed_epochs == parser.get_default("graph_embed_epochs"):
+            args.graph_embed_epochs = 10
+        if not args.moist_run:
+            args.moist_run = True
+        print("  Laptop mode: MiniLM embeddings, CPU, moist-run for LLM stages")
+
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be > 0")
 
@@ -1787,8 +1816,8 @@ def main():
             return
         # If posts_xml was also given, continue to processing
 
-    if not args.posts_xml:
-        parser.error("posts_xml is required (or use --download to fetch data first)")
+    if not args.posts_xml and not args.arxiv_jsonl:
+        parser.error("posts_xml or --arxiv-jsonl is required (or use --download to fetch data first)")
 
     if auto_thread_limit:
         print(f"  Pilot mode: --thread-limit defaulted to --limit ({args.limit})")
@@ -1838,18 +1867,33 @@ def main():
             print(f"  Auto-detected Comments.xml: {args.comments_xml}")
         else:
             print(f"  No Comments.xml found at {comments_candidate}")
+
     # ========== Stage 1: Parse ==========
-    print(f"[Stage 1/{n_stages}] Parsing {args.posts_xml}...")
-    pairs = build_qa_pairs_streaming(
-        args.posts_xml,
-        min_score=args.min_score,
-        question_limit=args.limit,
-        shard_index=args.shard_index,
-        num_shards=args.num_shards,
-    )
-    if args.limit and len(pairs) > args.limit:
-        print(f"       Parsed {len(pairs)} pairs, limiting to {args.limit}")
-        pairs = pairs[:args.limit]
+    arxiv_id_map = {}  # question.id → arxiv string ID (only for ArXiv input)
+    if args.arxiv_jsonl:
+        # ArXiv JSONL input
+        print(f"[Stage 1/{n_stages}] Loading ArXiv papers from {args.arxiv_jsonl}...")
+        pairs, arxiv_id_map = load_arxiv_pairs(args.arxiv_jsonl, limit=args.limit)
+        # Default site name for ArXiv
+        if args.site == "math.stackexchange":
+            args.site = "arxiv.math-ct"
+        # Thread stages don't apply to single-document papers
+        if not args.skip_threads:
+            args.skip_threads = True
+            print(f"       Auto-skipping thread wiring (single-document papers)")
+    else:
+        print(f"[Stage 1/{n_stages}] Parsing {args.posts_xml}...")
+        pairs = build_qa_pairs_streaming(
+            args.posts_xml,
+            min_score=args.min_score,
+            question_limit=args.limit,
+            shard_index=args.shard_index,
+            num_shards=args.num_shards,
+        )
+        if args.limit and len(pairs) > args.limit:
+            print(f"       Parsed {len(pairs)} pairs, limiting to {args.limit}")
+            pairs = pairs[:args.limit]
+
     stats = corpus_stats(pairs)
     print(f"       {stats['qa_pairs']} QA pairs, "
           f"{stats['unique_tags']} tags, "
@@ -1859,7 +1903,11 @@ def main():
     entities = []
     all_relations = []
     for pair in pairs:
-        entity_id = f"se-{args.site.split('.')[0]}-{pair.question.id}"
+        if arxiv_id_map:
+            arxiv_str_id = arxiv_id_map.get(pair.question.id, str(pair.question.id))
+            entity_id = f"arxiv-{arxiv_str_id}"
+        else:
+            entity_id = f"se-{args.site.split('.')[0]}-{pair.question.id}"
         entity = qa_to_entity(pair, site=args.site, entity_id=entity_id)
         entities.append(entity)
         rels = qa_to_relations(pair, site=args.site, entity_id=entity_id)

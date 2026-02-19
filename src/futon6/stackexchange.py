@@ -657,3 +657,73 @@ def corpus_stats(pairs: list[SEQAPair]) -> dict:
             if p.question.body_latex or p.answer.body_latex
         ),
     }
+
+
+# --- ArXiv JSONL loader ---
+
+def load_arxiv_pairs(
+    jsonl_path: str, limit: int | None = None,
+) -> tuple[list[SEQAPair], dict[int, str]]:
+    """Load ArXiv metadata JSONL (from harvest-arxiv-ct.py) as SEQAPairs.
+
+    Maps each paper to a QA pair:
+        question = title + abstract (the "what")
+        answer   = abstract (reused — full body requires LaTeX source)
+        tags     = ArXiv categories
+
+    This lets ArXiv papers flow through the same pipeline as SE data.
+
+    Returns (pairs, id_map) where id_map maps question.id → arxiv string ID.
+    """
+    import json as _json
+    pairs = []
+    id_map: dict[int, str] = {}
+    with open(jsonl_path) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            paper = _json.loads(line)
+
+            arxiv_id = paper.get("id", "")
+            title = paper.get("title", "")
+            abstract = paper.get("abstract", "")
+            categories = paper.get("categories", [])
+            date = paper.get("date", "")
+
+            # Extract LaTeX from abstract (ArXiv abstracts often have $...$)
+            latex_frags = extract_latex(abstract)
+
+            qid = hash(arxiv_id) & 0x7FFFFFFF  # stable positive int
+            question = SEPost(
+                id=qid,
+                post_type="question",
+                title=title,
+                body=abstract,
+                body_text=abstract,
+                body_latex=latex_frags,
+                score=0,
+                tags=categories,
+                creation_date=date,
+            )
+            answer = SEPost(
+                id=qid + 1,
+                post_type="answer",
+                body=abstract,
+                body_text=abstract,
+                body_latex=latex_frags,
+                score=0,
+                parent_id=qid,
+                creation_date=date,
+            )
+            pairs.append(SEQAPair(
+                question=question,
+                answer=answer,
+                tags=categories,
+            ))
+            id_map[qid] = arxiv_id
+
+            if limit and len(pairs) >= limit:
+                break
+
+    return pairs, id_map
