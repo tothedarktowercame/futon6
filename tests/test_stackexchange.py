@@ -12,6 +12,7 @@ from futon6.stackexchange import (
     iter_comments,
     load_posts,
     build_qa_pairs,
+    build_qa_pairs_streaming,
     build_threads_streaming,
     qa_to_entity,
     qa_to_relations,
@@ -183,6 +184,15 @@ class TestQAPairs:
             pairs = build_qa_pairs(posts)
             q1_pair = next(p for p in pairs if p.question.id == 1)
             assert "quantum-mechanics" in q1_pair.tags
+        finally:
+            os.unlink(path)
+
+    def test_build_qa_pairs_streaming_question_limit(self):
+        path = _write_sample_xml()
+        try:
+            pairs = build_qa_pairs_streaming(path, min_score=0, question_limit=1)
+            assert len(pairs) == 1
+            assert pairs[0].question.id == 1
         finally:
             os.unlink(path)
 

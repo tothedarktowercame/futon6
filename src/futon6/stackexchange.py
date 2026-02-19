@@ -207,8 +207,11 @@ def build_qa_pairs(posts: dict[int, SEPost]) -> list[SEQAPair]:
     return pairs
 
 
-def build_qa_pairs_streaming(xml_path: str, min_score: int = 0,
-                             question_limit: int | None = None) -> list[SEQAPair]:
+def build_qa_pairs_streaming(
+    xml_path: str,
+    min_score: int = 0,
+    question_limit: int | None = None,
+) -> list[SEQAPair]:
     """Build QA pairs with two streaming passes over the XML.
 
     Pass 1: collect only pairing metadata (IDs, scores, accepted answer).
@@ -216,6 +219,12 @@ def build_qa_pairs_streaming(xml_path: str, min_score: int = 0,
     Pass 2: stream again, loading only posts that are part of a pair.
 
     Memory: O(pairs) not O(all posts). Safe on 4GB machines for multi-GB dumps.
+
+    Args:
+        xml_path: path to Posts.xml
+        min_score: question/answer score filter
+        question_limit: optional cap on how many questions to index in pass 1.
+            This is used for fast pilot runs.
     """
     import sys
 
@@ -233,13 +242,18 @@ def build_qa_pairs_streaming(xml_path: str, min_score: int = 0,
         score = int(attrs.get("Score", 0))
 
         if post_type_id == 1 and score >= min_score:
+            if question_limit is not None and len(questions) >= question_limit:
+                elem.clear()
+                continue
             qid = int(attrs["Id"])
             acc = int(a) if (a := attrs.get("AcceptedAnswerId")) else None
             tags = parse_se_tags(attrs.get("Tags", ""))
             questions[qid] = (acc, tags)
         elif post_type_id == 2 and score >= min_score:
             parent = int(p) if (p := attrs.get("ParentId")) else None
-            if parent:
+            # For limited runs, keep answers only for indexed questions.
+            # For full runs, preserve original behavior and keep all answers.
+            if parent and (question_limit is None or parent in questions):
                 answers_by_q.setdefault(parent, []).append(
                     (int(attrs["Id"]), score))
         elem.clear()
@@ -263,7 +277,8 @@ def build_qa_pairs_streaming(xml_path: str, min_score: int = 0,
     # IDs we need to load in pass 2
     needed_ids = set(pair_map.keys()) | set(pair_map.values())
 
-    print(f"       Pass 1: {len(questions)} questions, "
+    limit_note = f" (limit={question_limit})" if question_limit is not None else ""
+    print(f"       Pass 1: {len(questions)} questions{limit_note}, "
           f"{sum(len(v) for v in answers_by_q.values())} answers, "
           f"{len(pair_map)} pairs to load", file=sys.stderr)
 
