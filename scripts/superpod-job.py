@@ -796,21 +796,26 @@ def run_stage7_ct_wiring(threads, reference, singles, multi_index,
     aw, _ = _load_ct_modules()
 
     wiring_path = outdir / "thread-wiring-ct.json"
+    wiring_jsonl_path = outdir / "thread-wiring-ct.jsonl"
     total = len(threads)
     stats = Counter()
     cat_types = Counter()
     iatc_types = Counter()
 
-    with open(wiring_path, "w") as f:
+    with open(wiring_path, "w") as f, open(wiring_jsonl_path, "w") as fj:
         f.write("[\n")
         for i, thread in enumerate(threads):
             thread_dict = aw.sethread_to_dict(thread, site=site)
             wiring = aw.build_thread_graph(thread_dict, reference, singles, multi_index)
 
-            # Stream to disk
+            # Stream to JSON array
             if i > 0:
                 f.write(",\n")
             json.dump(wiring, f, ensure_ascii=False)
+
+            # Stream to JSONL (one record per line — fast multiprocessing)
+            fj.write(json.dumps(wiring, ensure_ascii=False))
+            fj.write("\n")
 
             # Accumulate stats
             s = wiring["stats"]
@@ -1064,18 +1069,29 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
     """Stage 9b: Train R-GCN on thread hypergraphs, produce embeddings.
 
     GPU-accelerated contrastive learning on the typed hypergraph structure.
+    Uses a .pt tensor cache to avoid re-parsing multi-GB JSON on rerun.
 
     Returns (stats_dict, embeddings_path, model_path, thread_ids).
     """
-    with open(hg_path) as f:
-        hypergraphs = json.load(f)
+    tensor_cache = outdir / "hypergraph-tensors.pt"
 
-    thread_ids = [hg.get("thread_id", i) for i, hg in enumerate(hypergraphs)]
+    # If tensor cache exists, skip JSON load entirely
+    if tensor_cache.exists():
+        print(f"       Tensor cache found: {tensor_cache}")
+        from futon6.graph_embed import load_tensor_cache
+        _, cached_thread_ids = load_tensor_cache(str(tensor_cache))
+        hypergraphs = []  # not needed — train() will load from cache
+        thread_ids = cached_thread_ids
+    else:
+        with open(hg_path) as f:
+            hypergraphs = json.load(f)
+        thread_ids = [hg.get("thread_id", i) for i, hg in enumerate(hypergraphs)]
 
     model, embeddings = train_gnn(
         hypergraphs, dim=embed_dim, hidden_dim=hidden_dim,
         n_layers=n_layers, epochs=epochs, batch_size=batch_size,
-        device=device, verbose=True, num_workers=num_workers)
+        device=device, verbose=True, num_workers=num_workers,
+        tensor_cache_path=str(tensor_cache))
 
     emb_path = outdir / "hypergraph-embeddings.npy"
     model_path = outdir / "graph-gnn-model.pt"
@@ -1664,6 +1680,9 @@ def main():
                         help="Laptop-friendly defaults: MiniLM embeddings, CPU device, "
                              "moist-run for LLM stages, small batch sizes")
 
+    parser.add_argument("--input-dir", "-i", default=None,
+                        help="Base directory for input data (Posts.xml, 7z files). "
+                             "Use when data lives on a different filesystem (e.g. /scratch/).")
     parser.add_argument("--output-dir", "-o", default=None,
                         help="Output directory for all artefacts (default: auto from --site)")
     parser.add_argument("--site", default="math.stackexchange",
@@ -1764,6 +1783,20 @@ def main():
         if not args.moist_run:
             args.moist_run = True
         print("  Laptop mode: MiniLM embeddings, CPU, moist-run for LLM stages")
+
+    # --input-dir: resolve relative input paths against a base directory
+    if args.input_dir:
+        input_base = Path(args.input_dir)
+        if args.posts_xml and not Path(args.posts_xml).is_absolute():
+            args.posts_xml = str(input_base / args.posts_xml)
+        if args.arxiv_jsonl and not Path(args.arxiv_jsonl).is_absolute():
+            args.arxiv_jsonl = str(input_base / args.arxiv_jsonl)
+        if args.comments_xml and not Path(args.comments_xml).is_absolute():
+            args.comments_xml = str(input_base / args.comments_xml)
+        # data-dir for downloads also goes to input location
+        if args.data_dir == parser.get_default("data_dir"):
+            args.data_dir = str(input_base / "se-data")
+        print(f"  Input dir: {args.input_dir}")
 
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be > 0")

@@ -13,6 +13,8 @@ from futon6.graph_embed import (
     ThreadGNN,
     info_nce_loss,
     train,
+    save_tensor_cache,
+    load_tensor_cache,
 )
 
 
@@ -95,3 +97,43 @@ def test_minimal_graph():
     x, ei = hypergraph_to_tensors(hg)
     assert x.shape == (2, 2)
     assert 0 in ei  # iatc edge type
+
+
+def test_tensor_cache_roundtrip(sample_hg, tmp_path):
+    """Test save/load of pre-tensorized hypergraphs."""
+    x, ei = hypergraph_to_tensors(sample_hg)
+    graph_tensors = [(x, ei)]
+    thread_ids = ["thread-633512"]
+
+    cache_path = str(tmp_path / "cache.pt")
+    save_tensor_cache(graph_tensors, thread_ids, cache_path)
+
+    loaded_tensors, loaded_ids = load_tensor_cache(cache_path)
+    assert len(loaded_tensors) == 1
+    assert loaded_ids == thread_ids
+
+    lx, lei = loaded_tensors[0]
+    assert torch.equal(lx, x)
+    for k in ei:
+        assert torch.equal(lei[k], ei[k])
+
+
+def test_train_with_tensor_cache(sample_hg, tmp_path):
+    """Test that train() can save and reload a tensor cache."""
+    import copy
+    corpus = [copy.deepcopy(sample_hg) for _ in range(4)]
+    cache_path = str(tmp_path / "tensors.pt")
+
+    # First run: creates cache
+    model1, emb1 = train(
+        corpus, dim=16, hidden_dim=32, n_layers=1,
+        epochs=2, batch_size=2, verbose=False,
+        tensor_cache_path=cache_path)
+    assert os.path.exists(cache_path)
+
+    # Second run: loads from cache (empty hypergraphs list)
+    model2, emb2 = train(
+        [], dim=16, hidden_dim=32, n_layers=1,
+        epochs=2, batch_size=2, verbose=False,
+        tensor_cache_path=cache_path)
+    assert emb2.shape == emb1.shape

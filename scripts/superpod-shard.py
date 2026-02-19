@@ -56,6 +56,11 @@ JSON_LIST_FILES = [
     "hypergraph-thread-ids.json",
 ]
 
+# JSONL files: concatenate lines (trivial merge, fast multiprocessing)
+JSONL_FILES = [
+    "thread-wiring-ct.jsonl",
+]
+
 # numpy array files: concatenate along axis 0
 NPY_FILES = [
     "embeddings.npy",
@@ -116,6 +121,24 @@ def merge_json_lists(shard_dirs, filename, output_path):
         with open(output_path, "w") as f:
             json.dump(merged, f)
     return len(merged)
+
+
+def merge_jsonl_files(shard_dirs, filename, output_path):
+    """Merge JSONL files by concatenating lines."""
+    n_lines = 0
+    with open(output_path, "w") as out:
+        for d in shard_dirs:
+            p = d / filename
+            if not p.exists():
+                continue
+            with open(p) as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        out.write(line)
+                        out.write("\n")
+                        n_lines += 1
+    return n_lines
 
 
 def merge_npy_files(shard_dirs, filename, output_path):
@@ -183,7 +206,16 @@ def cmd_merge(args):
         else:
             print(f"  {filename}: not present in any shard (skipped)")
 
-    # 2. JSON list files (parse and concatenate)
+    # 2. JSONL files (line concatenation — fast and multiprocess-friendly)
+    for filename in JSONL_FILES:
+        present = [d for d in shard_dirs if (d / filename).exists()]
+        if present:
+            t0 = time.time()
+            n = merge_jsonl_files(shard_dirs, filename, outdir / filename)
+            sz = os.path.getsize(outdir / filename) / 1e6
+            print(f"  {filename}: {n} lines, {sz:.1f} MB ({time.time()-t0:.1f}s)")
+
+    # 3. JSON list files (parse and concatenate)
     for filename in JSON_LIST_FILES:
         present = [d for d in shard_dirs if (d / filename).exists()]
         if present:
@@ -270,6 +302,8 @@ def cmd_run(args):
     ]
     if args.comments_xml:
         base_cmd += ["--comments-xml", args.comments_xml]
+    if getattr(args, "input_dir", None):
+        base_cmd += ["--input-dir", args.input_dir]
     # Pass through extra flags
     base_cmd += args.extra_args
 
@@ -464,6 +498,9 @@ def main():
                        help="GNN training batch size (default: 512)")
     p_run.add_argument("--graph-embed-workers", type=int, default=4,
                        help="DataLoader workers for GNN training (default: 4, 0=inline)")
+    p_run.add_argument("--input-dir", default=None,
+                       help="Base directory for input data (Posts.xml, 7z files). "
+                            "Use when data lives on /scratch/ or another filesystem.")
     p_run.add_argument("--skip-post-merge", action="store_true",
                        help="Skip post-merge stages 9b + 10")
     p_run.add_argument("extra_args", nargs="*",

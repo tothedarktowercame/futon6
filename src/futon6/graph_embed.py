@@ -465,6 +465,7 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
           lr: float = 1e-3, node_drop: float = 0.1, edge_drop: float = 0.2,
           device: str | None = None, verbose: bool = True,
           num_workers: int = 4,
+          tensor_cache_path: str | None = None,
           ) -> tuple[ThreadGNN, np.ndarray]:
     """Self-supervised contrastive training of the thread GNN.
 
@@ -475,6 +476,7 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
     epochs : training epochs
     device : 'cuda', 'cpu', or None (auto-detect)
     num_workers : DataLoader workers for CPU-side augmentation (0 = inline)
+    tensor_cache_path : if set, save/load tensorized graphs here (.pt)
 
     Returns
     -------
@@ -483,17 +485,32 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    # Convert all hypergraphs to tensor form
-    if verbose:
-        print(f"       Converting {len(hypergraphs)} hypergraphs to tensors...")
-    graph_tensors = []
-    for hg in hypergraphs:
-        try:
-            x, ei = hypergraph_to_tensors(hg)
-            if x.size(0) >= 2:  # need at least 2 nodes
-                graph_tensors.append((x, ei))
-        except Exception:
-            continue
+    # Try loading pre-tensorized cache
+    if tensor_cache_path and Path(tensor_cache_path).exists():
+        if verbose:
+            print(f"       Loading tensor cache from {tensor_cache_path}...")
+        graph_tensors, _cached_ids = load_tensor_cache(tensor_cache_path)
+        if verbose:
+            print(f"       {len(graph_tensors)} graphs loaded from cache")
+    else:
+        # Convert all hypergraphs to tensor form
+        if verbose:
+            print(f"       Converting {len(hypergraphs)} hypergraphs to tensors...")
+        graph_tensors = []
+        for hg in hypergraphs:
+            try:
+                x, ei = hypergraph_to_tensors(hg)
+                if x.size(0) >= 2:  # need at least 2 nodes
+                    graph_tensors.append((x, ei))
+            except Exception:
+                continue
+
+        # Save tensor cache for future runs
+        if tensor_cache_path and graph_tensors:
+            thread_ids = [hg.get("thread_id", i) for i, hg in enumerate(hypergraphs)]
+            if verbose:
+                print(f"       Saving tensor cache to {tensor_cache_path}...")
+            save_tensor_cache(graph_tensors, thread_ids, tensor_cache_path)
 
     if len(graph_tensors) < 2:
         raise ValueError(f"Need at least 2 valid graphs, got {len(graph_tensors)}")
@@ -654,6 +671,38 @@ def embed_hypergraphs(model: ThreadGNN, hypergraphs: list[dict],
 # ---------------------------------------------------------------------------
 # Save / load
 # ---------------------------------------------------------------------------
+
+def save_tensor_cache(graph_tensors: list[tuple[torch.Tensor, dict[int, torch.Tensor]]],
+                      thread_ids: list,
+                      path: str) -> None:
+    """Save pre-tensorized hypergraphs to disk for fast reload.
+
+    Avoids re-parsing multi-GB JSON and re-running hypergraph_to_tensors()
+    on every Stage 9b invocation.
+    """
+    # Pack into a serializable format: list of (x, {int: tensor}) pairs
+    packed = []
+    for x, ei in graph_tensors:
+        packed.append({
+            "x": x,
+            "ei": {str(k): v for k, v in ei.items()},
+        })
+    torch.save({"graphs": packed, "thread_ids": thread_ids}, path)
+
+
+def load_tensor_cache(path: str) -> tuple[list[tuple[torch.Tensor, dict[int, torch.Tensor]]], list]:
+    """Load pre-tensorized hypergraphs from a .pt cache.
+
+    Returns (graph_tensors, thread_ids).
+    """
+    data = torch.load(path, map_location="cpu", weights_only=False)
+    graph_tensors = []
+    for item in data["graphs"]:
+        x = item["x"]
+        ei = {int(k): v for k, v in item["ei"].items()}
+        graph_tensors.append((x, ei))
+    return graph_tensors, data["thread_ids"]
+
 
 def save_model(model: ThreadGNN, path: str) -> None:
     torch.save({
