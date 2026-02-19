@@ -24,6 +24,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import random
 from collections import Counter
 from pathlib import Path
@@ -32,6 +33,7 @@ from typing import Any
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.utils.data import Dataset, DataLoader
 import numpy as np
 
 
@@ -422,6 +424,39 @@ def info_nce_loss(z1: torch.Tensor, z2: torch.Tensor,
 
 
 # ---------------------------------------------------------------------------
+# DataLoader for contrastive training
+# ---------------------------------------------------------------------------
+
+class ContrastiveGraphDataset(Dataset):
+    """Wraps pre-converted graph tensors for contrastive DataLoader.
+
+    Each __getitem__ returns two augmented views of the same graph,
+    enabling CPU-side augmentation in worker processes while the GPU trains.
+    """
+
+    def __init__(self, graph_tensors, node_drop=0.1, edge_drop=0.2):
+        self.graph_tensors = graph_tensors
+        self.node_drop = node_drop
+        self.edge_drop = edge_drop
+
+    def __len__(self):
+        return len(self.graph_tensors)
+
+    def __getitem__(self, idx):
+        x, ei = self.graph_tensors[idx]
+        v1 = augment_graph(x, ei, self.node_drop, self.edge_drop)
+        v2 = augment_graph(x, ei, self.node_drop, self.edge_drop)
+        return v1, v2
+
+
+def contrastive_collate_fn(batch):
+    """Collate (view1, view2) pairs into two GraphBatches."""
+    view1 = [item[0] for item in batch]
+    view2 = [item[1] for item in batch]
+    return collate_graphs(view1), collate_graphs(view2)
+
+
+# ---------------------------------------------------------------------------
 # Training loop
 # ---------------------------------------------------------------------------
 
@@ -429,6 +464,7 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
           n_layers: int = 2, epochs: int = 50, batch_size: int = 64,
           lr: float = 1e-3, node_drop: float = 0.1, edge_drop: float = 0.2,
           device: str | None = None, verbose: bool = True,
+          num_workers: int = 4,
           ) -> tuple[ThreadGNN, np.ndarray]:
     """Self-supervised contrastive training of the thread GNN.
 
@@ -438,6 +474,7 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
     dim : embedding dimension
     epochs : training epochs
     device : 'cuda', 'cpu', or None (auto-detect)
+    num_workers : DataLoader workers for CPU-side augmentation (0 = inline)
 
     Returns
     -------
@@ -471,43 +508,77 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
-    # Training loop
+    # Training loop — use DataLoader when num_workers > 0
     n = len(graph_tensors)
+    use_dataloader = num_workers > 0 and n >= batch_size
+    use_cuda = device != "cpu" and torch.cuda.is_available()
+
+    if use_dataloader:
+        dataset = ContrastiveGraphDataset(graph_tensors, node_drop, edge_drop)
+        loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=True,
+            num_workers=num_workers,
+            collate_fn=contrastive_collate_fn,
+            pin_memory=use_cuda,
+            persistent_workers=True,
+            prefetch_factor=2,
+            drop_last=(n > batch_size),  # drop tiny trailing batch
+        )
+
     for epoch in range(epochs):
         model.train()
-        indices = list(range(n))
-        random.shuffle(indices)
         total_loss = 0.0
         n_batches = 0
 
-        for start in range(0, n, batch_size):
-            batch_idx = indices[start:start + batch_size]
-            if len(batch_idx) < 2:
-                continue
+        if use_dataloader:
+            for batch1, batch2 in loader:
+                batch1 = batch1.to(device)
+                batch2 = batch2.to(device)
 
-            # Create two augmented views
-            view1 = []
-            view2 = []
-            for idx in batch_idx:
-                x, ei = graph_tensors[idx]
-                x1, ei1 = augment_graph(x, ei, node_drop, edge_drop)
-                x2, ei2 = augment_graph(x, ei, node_drop, edge_drop)
-                view1.append((x1, ei1))
-                view2.append((x2, ei2))
+                z1 = model(batch1)
+                z2 = model(batch2)
 
-            batch1 = collate_graphs(view1).to(device)
-            batch2 = collate_graphs(view2).to(device)
+                loss = info_nce_loss(z1, z2)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
 
-            z1 = model(batch1)
-            z2 = model(batch2)
+                total_loss += loss.item()
+                n_batches += 1
+        else:
+            # Fallback: manual batching (for small datasets or debugging)
+            indices = list(range(n))
+            random.shuffle(indices)
 
-            loss = info_nce_loss(z1, z2)
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+            for start in range(0, n, batch_size):
+                batch_idx = indices[start:start + batch_size]
+                if len(batch_idx) < 2:
+                    continue
 
-            total_loss += loss.item()
-            n_batches += 1
+                view1 = []
+                view2 = []
+                for idx in batch_idx:
+                    x, ei = graph_tensors[idx]
+                    x1, ei1 = augment_graph(x, ei, node_drop, edge_drop)
+                    x2, ei2 = augment_graph(x, ei, node_drop, edge_drop)
+                    view1.append((x1, ei1))
+                    view2.append((x2, ei2))
+
+                b1 = collate_graphs(view1).to(device)
+                b2 = collate_graphs(view2).to(device)
+
+                z1 = model(b1)
+                z2 = model(b2)
+
+                loss = info_nce_loss(z1, z2)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+
+                total_loss += loss.item()
+                n_batches += 1
 
         if verbose and (epoch + 1) % max(1, epochs // 10) == 0:
             avg = total_loss / max(1, n_batches)

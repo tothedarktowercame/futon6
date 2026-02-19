@@ -1058,8 +1058,8 @@ def _sethread_to_raw(thread) -> dict:
 # ---------------------------------------------------------------------------
 
 def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
-                                 n_layers=2, epochs=50, batch_size=64,
-                                 device=None):
+                                 n_layers=2, epochs=50, batch_size=512,
+                                 device=None, num_workers=4):
     """Stage 9b: Train R-GCN on thread hypergraphs, produce embeddings.
 
     GPU-accelerated contrastive learning on the typed hypergraph structure.
@@ -1074,7 +1074,7 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
     model, embeddings = train_gnn(
         hypergraphs, dim=embed_dim, hidden_dim=hidden_dim,
         n_layers=n_layers, epochs=epochs, batch_size=batch_size,
-        device=device, verbose=True)
+        device=device, verbose=True, num_workers=num_workers)
 
     emb_path = outdir / "hypergraph-embeddings.npy"
     model_path = outdir / "graph-gnn-model.pt"
@@ -1514,7 +1514,7 @@ def print_dry_run(args):
         print(f"  {'9b. Graph embedding':<42s} {'SKIPPED':>10s}")
     else:
         est_stage9b_min = est_stage1_min * 2.0 if isinstance(est_stage1_min, (int, float)) else "?"
-        print(f"  {'9b. Graph embedding (GPU, R-GCN)':<42s} {f'{args.graph_embed_dim}d, {args.graph_embed_epochs}ep':<36s} {fmt(est_stage9b_min)+' min':>10s}")
+        print(f"  {'9b. Graph embedding (GPU, R-GCN)':<42s} {f'{args.graph_embed_dim}d, {args.graph_embed_epochs}ep, bs={args.graph_embed_batch_size}':<36s} {fmt(est_stage9b_min)+' min':>10s}")
 
     # Stage 10: FAISS index
     stage10_active = not args.skip_faiss
@@ -1669,8 +1669,8 @@ def main():
     # Embedding options
     parser.add_argument("--embed-model", default="BAAI/bge-large-en-v1.5",
                         help="Embedding model")
-    parser.add_argument("--embed-batch-size", type=int, default=2048,
-                        help="Embedding batch size")
+    parser.add_argument("--embed-batch-size", type=int, default=8192,
+                        help="Embedding batch size (default: 8192, tune for GPU VRAM)")
     parser.add_argument("--embed-device", default="cuda",
                         help="Device for embeddings")
     parser.add_argument("--skip-embeddings", action="store_true")
@@ -1679,8 +1679,8 @@ def main():
     parser.add_argument("--llm-model",
                         default="meta-llama/Meta-Llama-3-8B-Instruct",
                         help="LLM for pattern tagging")
-    parser.add_argument("--llm-batch-size", type=int, default=8,
-                        help="LLM inference batch size")
+    parser.add_argument("--llm-batch-size", type=int, default=16,
+                        help="LLM inference batch size (default: 16, safe for 80GB GPUs)")
     parser.add_argument("--skip-llm", action="store_true")
 
     # Clustering
@@ -1719,6 +1719,10 @@ def main():
                         help="Hypergraph embedding dimension (default: 128)")
     parser.add_argument("--graph-embed-epochs", type=int, default=50,
                         help="GNN training epochs (default: 50)")
+    parser.add_argument("--graph-embed-batch-size", type=int, default=512,
+                        help="GNN training batch size (default: 512, was 64)")
+    parser.add_argument("--graph-embed-workers", type=int, default=4,
+                        help="DataLoader workers for GNN training (default: 4, 0=inline)")
 
     # Health gates
     parser.add_argument("--preflight", action="store_true",
@@ -2224,12 +2228,15 @@ def main():
             and hg_path.exists()):
         t9b = time.time()
         print(f"\n[Stage 9b/{n_stages}] Graph embedding "
-              f"(R-GCN, {args.graph_embed_dim}d, {args.graph_embed_epochs} epochs)...")
+              f"(R-GCN, {args.graph_embed_dim}d, {args.graph_embed_epochs} epochs, "
+              f"bs={args.graph_embed_batch_size}, workers={args.graph_embed_workers})...")
         stage9b_stats, hg_embeddings_path, model_path, hg_thread_ids = \
             run_stage9b_graph_embedding(
                 hg_path, outdir,
                 embed_dim=args.graph_embed_dim,
                 epochs=args.graph_embed_epochs,
+                batch_size=args.graph_embed_batch_size,
+                num_workers=args.graph_embed_workers,
             )
         print(f"       {stage9b_stats['n_embedded']} thread embeddings "
               f"({stage9b_stats['embed_dim']}d) on {stage9b_stats['device']}")
