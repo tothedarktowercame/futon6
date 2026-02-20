@@ -1,0 +1,420 @@
+{
+  "generated_utc": "2026-02-20T10:37:09.620272+00:00",
+  "thread_candidates_total": 200,
+  "thread_showcases": [
+    {
+      "source_file": "mathoverflow.net__category-theory.jsonl",
+      "thread_id": "mathoverflow.net:178778",
+      "site": "mathoverflow.net",
+      "topic": "category-theory",
+      "url": "https://mathoverflow.net/questions/178778",
+      "title": "In the category of sets epimorphisms are surjective - Constructive Proof?",
+      "question_excerpt": "The statement that surjective maps are epimorphisms in the category of sets can be shown in a constructive way. What about the inverse? Is it possible to show that every epimorphism in the category of sets is surjective without reverting to a proof by contradiction / negation?",
+      "answer_excerpt": "Theorem: Every epi is surjective. Proof. Let $h : A \\to B$ be an epimorphism. We define maps $f, g : B \\to \\mathcal{P}(B)$ by \\begin{align*} f(b) &= \\{b\\} \\cap \\mathrm{im}(h)\\\\ g(b) &= \\{b\\} \\end{align*} where we recall that $\\mathrm{im}(h) = \\{b \\in B \\mid \\exists a \\in A \\,.\\, ",
+      "stats": {
+        "wiring_nodes": 24,
+        "wiring_edges": 23,
+        "categorical_edges": 5,
+        "hypergraph_nodes": 211,
+        "hypergraph_edges": 267,
+        "scope_nodes": 44,
+        "expression_nodes": 95
+      },
+      "scope_type_top": [
+        [
+          "constrain/such-that",
+          21
+        ],
+        [
+          "quant/universal",
+          10
+        ],
+        [
+          "quant/existential",
+          6
+        ],
+        [
+          "bind/let",
+          3
+        ],
+        [
+          "bind/big-union",
+          1
+        ],
+        [
+          "env/theorem",
+          1
+        ],
+        [
+          "assume/consider",
+          1
+        ],
+        [
+          "constrain/where",
+          1
+        ]
+      ],
+      "iatc_top": [
+        [
+          "clarify",
+          8
+        ],
+        [
+          "assert",
+          5
+        ],
+        [
+          "query",
+          4
+        ],
+        [
+          "agree",
+          2
+        ],
+        [
+          "reform",
+          1
+        ],
+        [
+          "challenge",
+          1
+        ]
+      ],
+      "shared_terms_q_to_a": [
+        "term:Category",
+        "term:CategoryOfSets",
+        "term:MultivaluedFunction",
+        "term:Polygon",
+        "term:RingHomomorphism"
+      ],
+      "shared_term_count": 5,
+      "reused_scope_symbols": [
+        [
+          "a",
+          5
+        ],
+        [
+          "a \\in A",
+          2
+        ],
+        [
+          "b \\in B",
+          2
+        ],
+        [
+          "h : A \\to B",
+          2
+        ],
+        [
+          "y",
+          2
+        ]
+      ]
+    },
+    {
+      "source_file": "math.stackexchange.com__category-theory.jsonl",
+      "thread_id": "math.stackexchange.com:3990837",
+      "site": "math.stackexchange.com",
+      "topic": "category-theory",
+      "url": "https://math.stackexchange.com/questions/3990837",
+      "title": "Are pointed CW complexes for which the Yoneda embedding restricted to finite CW complexes reflects isomorphisms forced to be connected?",
+      "question_excerpt": "I'm currently reading Edgar H. Brown's paper, Abstract Homotopy Theory , which proves a categorical version of the Brown Representability Theorem. I've come across a statement that I don't really how to verify (if it is in fact true). First the notation and definitions. Let $\\mat",
+      "answer_excerpt": "Let $f:A\\to B$ be a map of non-pointed CW complexes which looks like an isomorphism to the finite complexes in the homotopy category. (For example as in the paper you link we might take $A=B$ the classifying space of the group of permutations of a countable infinite set with all ",
+      "stats": {
+        "wiring_nodes": 3,
+        "wiring_edges": 2,
+        "categorical_edges": 5,
+        "hypergraph_nodes": 85,
+        "hypergraph_edges": 124,
+        "scope_nodes": 4,
+        "expression_nodes": 31
+      },
+      "scope_type_top": [
+        [
+          "bind/let",
+          3
+        ],
+        [
+          "quant/universal",
+          1
+        ]
+      ],
+      "iatc_top": [
+        [
+          "exemplify",
+          1
+        ],
+        [
+          "clarify",
+          1
+        ]
+      ],
+      "shared_terms_q_to_a": [
+        "term:283",
+        "term:Category",
+        "term:ConnectedPoset",
+        "term:ConnectedSpace",
+        "term:CoordinateVector",
+        "term:Countable",
+        "term:ExtendedRealNumbers",
+        "term:Frame",
+        "term:HomotopyCategory",
+        "term:HomotopyOfPaths",
+        "term:Mapping",
+        "term:PointedSet",
+        "term:RingHomomorphism",
+        "term:Subgraph"
+      ],
+      "shared_term_count": 14,
+      "reused_scope_symbols": []
+    },
+    {
+      "source_file": "mathoverflow.net__category-theory.jsonl",
+      "thread_id": "mathoverflow.net:10010",
+      "site": "mathoverflow.net",
+      "topic": "category-theory",
+      "url": "https://mathoverflow.net/questions/10010",
+      "title": "is localization of category of categories equivalent to |Cat|",
+      "question_excerpt": "It might be a stupid question. Suppose There is a category of categories,denoted by CAT,where objects are categories, morpshims are functors between categories Take multiplicative system S={category equivalences}. Then we take localization at S. Then we get localized category S^(",
+      "answer_excerpt": "There are set theoretic issues that will hinder any proof of this statement. In particular I don't believe you can construct the adjunction in part (2) without applying the axiom of choice to CAT, and it's not clear the localization S^(-1)CAT makes sense either. That said, let's ",
+      "stats": {
+        "wiring_nodes": 12,
+        "wiring_edges": 11,
+        "categorical_edges": 17,
+        "hypergraph_nodes": 143,
+        "hypergraph_edges": 284,
+        "scope_nodes": 6,
+        "expression_nodes": 36
+      },
+      "scope_type_top": [
+        [
+          "quant/universal",
+          2
+        ],
+        [
+          "constrain/such-that",
+          2
+        ],
+        [
+          "assume/consider",
+          1
+        ],
+        [
+          "bind/let",
+          1
+        ]
+      ],
+      "iatc_top": [
+        [
+          "clarify",
+          5
+        ],
+        [
+          "assert",
+          2
+        ],
+        [
+          "reference",
+          2
+        ],
+        [
+          "challenge",
+          2
+        ]
+      ],
+      "shared_terms_q_to_a": [
+        "term:Adjoint",
+        "term:Category",
+        "term:CategoryOfSmallCategories",
+        "term:Class",
+        "term:ConcreteCategory",
+        "term:EquivalenceRelation",
+        "term:Functor",
+        "term:GroupAction",
+        "term:Isomorphism",
+        "term:Localization",
+        "term:MultiplicativeFunction",
+        "term:RingHomomorphism",
+        "term:StructureHomomorphism",
+        "term:WilliamFrancisLawvere"
+      ],
+      "shared_term_count": 14,
+      "reused_scope_symbols": []
+    },
+    {
+      "source_file": "mathoverflow.net__mathematical-physics.jsonl",
+      "thread_id": "mathoverflow.net:3477",
+      "site": "mathoverflow.net",
+      "topic": "mathematical-physics",
+      "url": "https://mathoverflow.net/questions/3477",
+      "title": "What is the symbol of a differential operator?",
+      "question_excerpt": "I find Wikipedia's discussion of symbols of differential operators a bit impenetrable, and Google doesn't seem to turn up useful links, so I'm hoping someone can point me to a more pedantic discussion. Background I think I understand the basic idea on $\\mathbb{R}^n$ , so for read",
+      "answer_excerpt": "The principal symbol of a differential operator $\\sum_{|\\alpha| \\leq m} a_\\alpha(x) \\partial_x^\\alpha$ is by definition the function $\\sum_{|\\alpha| = m} a_\\alpha(x) (i\\xi)^\\alpha$ Here $\\alpha$ is a multi-index (so $\\partial_x^\\alpha$ denotes $\\alpha_1$ derivatives with respect ",
+      "stats": {
+        "wiring_nodes": 15,
+        "wiring_edges": 14,
+        "categorical_edges": 1,
+        "hypergraph_nodes": 263,
+        "hypergraph_edges": 434,
+        "scope_nodes": 7,
+        "expression_nodes": 75
+      },
+      "scope_type_top": [
+        [
+          "bind/summation",
+          5
+        ],
+        [
+          "constrain/where",
+          1
+        ],
+        [
+          "bind/let",
+          1
+        ]
+      ],
+      "iatc_top": [
+        [
+          "assert",
+          5
+        ],
+        [
+          "clarify",
+          5
+        ],
+        [
+          "challenge",
+          2
+        ],
+        [
+          "agree",
+          1
+        ],
+        [
+          "reference",
+          1
+        ]
+      ],
+      "shared_terms_q_to_a": [
+        "term:16021",
+        "term:2727",
+        "term:283",
+        "term:Algebra",
+        "term:Algebras",
+        "term:Canonical",
+        "term:ChainRule",
+        "term:ChangeOfBasis",
+        "term:Coalgebra",
+        "term:CoordinateVector",
+        "term:CotangentBundle",
+        "term:DifferentiableFunction",
+        "term:DifferentialOperator",
+        "term:DiscretizationOfContinuousSystems",
+        "term:FractionalIdealOfCommutativeRing",
+        "term:Frame"
+      ],
+      "shared_term_count": 37,
+      "reused_scope_symbols": [
+        [
+          "a",
+          2
+        ]
+      ]
+    },
+    {
+      "source_file": "mathoverflow.net__mathematical-physics.jsonl",
+      "thread_id": "mathoverflow.net:140120",
+      "site": "mathoverflow.net",
+      "topic": "mathematical-physics",
+      "url": "https://mathoverflow.net/questions/140120",
+      "title": "Limit of a double integral",
+      "question_excerpt": "What is the $\\varepsilon\\to 0$ limit of the following double integral $$\\int\\limits_{-1}^1d\\tau\\;\\sqrt{1-\\tau^2}\\;\\tau\\int\\limits_0^\\infty dq\\;q^2e^{iq(\\tau+i\\varepsilon)}\\;?$$ I was asked about this integral by my friend who got it in a physics research project. In fact this is ",
+      "answer_excerpt": "I believe these integrals can be evaluated directly in the $\\varepsilon=0$ limit by interpreting the result of the inner integral as a distribution. $$ \\int\\limits_0^\\infty dq \\, q^{n+1} \\, e^{iq(\\tau + i\\varepsilon)} \\to (-i)^{n+1}\\frac{\\partial^{n+1}}{\\partial\\tau^{n+1}} \\left(",
+      "stats": {
+        "wiring_nodes": 3,
+        "wiring_edges": 2,
+        "categorical_edges": 1,
+        "hypergraph_nodes": 138,
+        "hypergraph_edges": 171,
+        "scope_nodes": 29,
+        "expression_nodes": 63
+      },
+      "scope_type_top": [
+        [
+          "bind/integral",
+          23
+        ],
+        [
+          "bind/summation",
+          4
+        ],
+        [
+          "quant/universal",
+          2
+        ]
+      ],
+      "iatc_top": [
+        [
+          "assert",
+          2
+        ]
+      ],
+      "shared_terms_q_to_a": [
+        "term:313",
+        "term:EvenNumber",
+        "term:FirstOrderLanguage",
+        "term:FixedPointsOfNormalFunctions",
+        "term:HadamardMatrix",
+        "term:Integral",
+        "term:LimitOfRealNumberSequence",
+        "term:PolynomialRing",
+        "term:Substitution"
+      ],
+      "shared_term_count": 9,
+      "reused_scope_symbols": [
+        [
+          "q",
+          7
+        ],
+        [
+          "n",
+          3
+        ],
+        [
+          "t",
+          2
+        ]
+      ]
+    }
+  ],
+  "arxiv_tex_showcase": {
+    "source": "arxiv-math-ct-eprint",
+    "arxiv_id": "0705.0462",
+    "title": "Resource modalities in game semantics",
+    "url": "https://arxiv.org/abs/0705.0462",
+    "tar_file": "0705.0462.tar.gz",
+    "tex_member": "resource_modalities.tex",
+    "detected_env": "lemma",
+    "detected_binder": "forall",
+    "scope_type_top": [
+      [
+        "constrain/such-that",
+        4
+      ],
+      [
+        "constrain/where",
+        2
+      ],
+      [
+        "assume/explicit",
+        1
+      ],
+      [
+        "env/lemma",
+        1
+      ]
+    ],
+    "snippet": "\\ldots \\xrightarrow{m_{k-1}} x_{k-1} \\xrightarrow{m_k} x_k \\end{equation} % Two paths are parallel when they have the same initial and final positions. % A play~(\\ref{equation/play}) is \\emph{alternating} when: \\mathin \\forall i \\in \\{1 , \\ldots , k-1\\}, \\quad \\quad \\lambda_A(m_{i+1}) = - \\lambda_A(m_i). \\mathout % \\paragraph{{\\bf Strategy.}} % A strategy $\\sigma$ of a Conway game is defined as a set of alternating plays of even length such that: % \\begin{itemize} \\sitem $\\sigma$~contains the empty play, \\sitem every nonempty play starts with an Opponent move, \\sitem $\\sigma$ is closed by even-length prefix: for every play~$s$, and for all moves~$m,n$, $$ s \\cdot m \\cdot n \\in \\sigma \\Implie",
+    "checked_tar_files": 10
+  }
+}

@@ -100,8 +100,16 @@ from futon6.thread_performatives import (
 )
 from futon6.latex_sexp import parse as sexp_parse, parse_all
 from futon6.hypergraph import assemble as assemble_hypergraph
-from futon6.graph_embed import train as train_gnn, embed_hypergraphs, save_model
 from futon6.faiss_index import build_index, save_index
+
+_GRAPH_EMBED_IMPORT_ERROR = None
+try:
+    from futon6.graph_embed import train as train_gnn, embed_hypergraphs, save_model
+except Exception as exc:
+    train_gnn = None
+    embed_hypergraphs = None
+    save_model = None
+    _GRAPH_EMBED_IMPORT_ERROR = exc
 
 # --- Downloadable SE data dumps (Internet Archive) ---
 
@@ -294,6 +302,69 @@ SCOPE_REGEXES = [
     ("set-notation", r"\$([^$]*\\in\s+[^$]+)\$"),
 ]
 
+CLASSICAL_TO_METATHEORY = {
+    "let-binding": "bind/let",
+    "define": "bind/define",
+    "assume": "assume/explicit",
+    "consider": "assume/consider",
+    "for-any": "quant/universal",
+    "where-binding": "constrain/where",
+    "set-notation": "constrain/such-that",
+}
+
+BINDER_TYPE_BY_COMMAND = {
+    "sum": "bind/summation",
+    "prod": "bind/product",
+    "coprod": "bind/coprod",
+    "bigcup": "bind/big-union",
+    "bigcap": "bind/big-intersection",
+}
+
+SYMBOL_RE = re.compile(r"[A-Za-z](?:_[A-Za-z0-9]+)?")
+QUANTIFIER_CMD_RE = re.compile(
+    r"\\(forall|exists)\s*(?:\{)?\s*([A-Za-z](?:_[A-Za-z0-9]+)?)"
+)
+AGGREGATE_BINDER_RE = re.compile(
+    r"\\(sum|prod|coprod|bigcup|bigcap)\s*(?:_\{([^}]*)\}|_([A-Za-z](?:_[A-Za-z0-9]+)?))?"
+)
+INTEGRAL_BINDER_RE = re.compile(
+    r"\\int(?:\s*(?:_\{[^}]*\}|_[^\s^{}]+))?(?:\s*(?:\^\{[^}]*\}|\^[^\s{}]+))?"
+)
+PROSE_ENV_TYPE_MAP = {
+    "definition": "env/definition",
+    "defn": "env/definition",
+    "theorem": "env/theorem",
+    "lemma": "env/lemma",
+    "proposition": "env/proposition",
+    "prop": "env/proposition",
+    "corollary": "env/corollary",
+    "remark": "env/remark",
+    "example": "env/example",
+    "proof": "env/proof",
+    "notation": "env/definition",
+}
+LATEX_ENV_STYLE = {
+    "defn": "env/definition",
+    "definition": "env/definition",
+    "theorem": "env/theorem",
+    "thm": "env/theorem",
+    "prop": "env/proposition",
+    "proposition": "env/proposition",
+    "lemma": "env/lemma",
+    "cor": "env/corollary",
+    "corollary": "env/corollary",
+    "remark": "env/remark",
+    "rmk": "env/remark",
+    "example": "env/example",
+    "proof": "env/proof",
+    "note": "env/note",
+    "notation": "env/definition",
+}
+LATEX_ENV_OPEN_RE = re.compile(r"\\begin\{(\w+)\}")
+PROSE_ENV_HEADING_RE = re.compile(
+    r"(?m)^\s*(Definition|Defn|Theorem|Lemma|Proposition|Prop|Corollary|Remark|Example|Proof|Notation)\b[:.]?"
+)
+
 
 def load_ner_kernel(path):
     """Load NER kernel terms from TSV.
@@ -371,7 +442,7 @@ def detect_scopes_entity(entity_id, text):
     """Detect scope openers in text, returning futon4-compatible hyperedges.
 
     Each scope record is a hyperedge with:
-      hx/type  — scope type (let-binding, define, assume, etc.)
+      hx/type  — metatheory type (bind/*, quant/*, assume/*, constrain/*)
       hx/ends  — endpoints with roles (entity, symbol, type/condition)
       hx/content — match text and position
       hx/labels — tags for filtering
@@ -416,14 +487,197 @@ def detect_scopes_entity(entity_id, text):
             elif stype == "set-notation":
                 ends.append({"role": "membership", "latex": m.group(1).strip()})
 
+            meta_type = CLASSICAL_TO_METATHEORY.get(stype, f"scope/{stype}")
             scopes.append({
                 "hx/id": scope_id,
-                "hx/type": f"scope/{stype}",
+                "hx/type": meta_type,
                 "hx/ends": ends,
                 "hx/content": {"match": m.group()[:120],
                                "position": m.start()},
                 "hx/labels": ["scope", stype],
             })
+
+    env_scopes = _detect_environment_scopes(entity_id, text, start_idx=scope_idx)
+    scopes.extend(env_scopes)
+    scope_idx += len(env_scopes)
+
+    scopes.extend(_detect_symbolic_binders(entity_id, text, start_idx=scope_idx))
+    return scopes
+
+
+def _iter_math_fragments(text):
+    """Yield (fragment, absolute_position) for common LaTeX math delimiters."""
+    blocked = []
+
+    for m in re.finditer(r"\$\$(.+?)\$\$", text, re.DOTALL):
+        blocked.append((m.start(), m.end()))
+        yield m.group(1), m.start(1)
+
+    for m in re.finditer(r"\\\[(.+?)\\\]", text, re.DOTALL):
+        blocked.append((m.start(), m.end()))
+        yield m.group(1), m.start(1)
+
+    for m in re.finditer(r"\$([^$\n]+?)\$", text):
+        if any(a <= m.start() < b for a, b in blocked):
+            continue
+        yield m.group(1), m.start(1)
+
+    for m in re.finditer(r"\\\((.+?)\\\)", text, re.DOTALL):
+        yield m.group(1), m.start(1)
+
+
+def _extract_bound_symbol(subscript):
+    """Best-effort extraction of a bound variable from a subscript."""
+    if not subscript:
+        return None
+
+    m = re.search(r"([A-Za-z](?:_[A-Za-z0-9]+)?)\s*(?:=|\\in|∈)", subscript)
+    if m:
+        return m.group(1)
+
+    m = SYMBOL_RE.search(subscript)
+    return m.group(0) if m else None
+
+
+def _extract_integral_symbol(fragment_tail):
+    """Best-effort extraction of integration variable from trailing fragment."""
+    m = re.search(
+        r"(?:\\,|\\;|\\!|\s)*(?:d|\\mathrm\{d\})\s*([A-Za-z](?:_[A-Za-z0-9]+)?)",
+        fragment_tail,
+    )
+    if m:
+        return m.group(1)
+    return None
+
+
+def _detect_symbolic_binders(entity_id, text, start_idx=0):
+    """Detect binder-like symbolic operators in LaTeX math fragments."""
+    scopes = []
+    scope_idx = start_idx
+
+    for fragment, frag_pos in _iter_math_fragments(text):
+        for m in QUANTIFIER_CMD_RE.finditer(fragment):
+            quant_cmd = m.group(1)
+            symbol = m.group(2)
+            scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+            scope_idx += 1
+
+            scope_type = "quant/universal" if quant_cmd == "forall" else "quant/existential"
+            scopes.append({
+                "hx/id": scope_id,
+                "hx/type": scope_type,
+                "hx/ends": [
+                    {"role": "entity", "ident": entity_id},
+                    {"role": "binder", "latex": f"\\{quant_cmd}"},
+                    {"role": "symbol", "latex": symbol},
+                ],
+                "hx/content": {
+                    "match": fragment[m.start():m.end()][:120],
+                    "position": frag_pos + m.start(),
+                },
+                "hx/labels": ["scope", "symbolic-binder", quant_cmd],
+            })
+
+        for m in AGGREGATE_BINDER_RE.finditer(fragment):
+            cmd = m.group(1)
+            subscript = m.group(2) or m.group(3) or ""
+            bound_symbol = _extract_bound_symbol(subscript)
+            scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+            scope_idx += 1
+
+            ends = [
+                {"role": "entity", "ident": entity_id},
+                {"role": "binder", "latex": f"\\{cmd}"},
+            ]
+            if bound_symbol:
+                ends.append({"role": "symbol", "latex": bound_symbol})
+            if subscript:
+                ends.append({"role": "subscript", "latex": subscript[:80]})
+
+            scopes.append({
+                "hx/id": scope_id,
+                "hx/type": BINDER_TYPE_BY_COMMAND.get(cmd, "bind/operator"),
+                "hx/ends": ends,
+                "hx/content": {
+                    "match": fragment[m.start():m.end()][:120],
+                    "position": frag_pos + m.start(),
+                },
+                "hx/labels": ["scope", "symbolic-binder", cmd],
+            })
+
+        for m in INTEGRAL_BINDER_RE.finditer(fragment):
+            tail = fragment[m.end():m.end() + 64]
+            symbol = _extract_integral_symbol(tail)
+            scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+            scope_idx += 1
+
+            ends = [
+                {"role": "entity", "ident": entity_id},
+                {"role": "binder", "latex": "\\int"},
+            ]
+            if symbol:
+                ends.append({"role": "symbol", "latex": symbol})
+
+            scopes.append({
+                "hx/id": scope_id,
+                "hx/type": "bind/integral",
+                "hx/ends": ends,
+                "hx/content": {
+                    "match": fragment[m.start():min(len(fragment), m.end() + 32)][:120],
+                    "position": frag_pos + m.start(),
+                },
+                "hx/labels": ["scope", "symbolic-binder", "integral"],
+            })
+
+    return scopes
+
+
+def _detect_environment_scopes(entity_id, text, start_idx=0):
+    """Detect theorem-like environments as discourse scopes."""
+    scopes = []
+    scope_idx = start_idx
+
+    for m in LATEX_ENV_OPEN_RE.finditer(text):
+        env_name = m.group(1).lower()
+        env_type = LATEX_ENV_STYLE.get(env_name)
+        if not env_type:
+            continue
+        scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+        scope_idx += 1
+        scopes.append({
+            "hx/id": scope_id,
+            "hx/type": env_type,
+            "hx/ends": [
+                {"role": "entity", "ident": entity_id},
+                {"role": "environment", "name": env_name},
+            ],
+            "hx/content": {
+                "match": m.group()[:120],
+                "position": m.start(),
+            },
+            "hx/labels": ["scope", "environment", env_name],
+        })
+
+    for m in PROSE_ENV_HEADING_RE.finditer(text):
+        label = m.group(1).lower()
+        env_type = PROSE_ENV_TYPE_MAP.get(label)
+        if not env_type:
+            continue
+        scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+        scope_idx += 1
+        scopes.append({
+            "hx/id": scope_id,
+            "hx/type": env_type,
+            "hx/ends": [
+                {"role": "entity", "ident": entity_id},
+                {"role": "environment", "name": label},
+            ],
+            "hx/content": {
+                "match": m.group()[:120],
+                "position": m.start(),
+            },
+            "hx/labels": ["scope", "environment", label],
+        })
 
     return scopes
 
@@ -458,7 +712,6 @@ def run_stage5_ner_scopes(entities, pairs, ner_kernel_path, outdir):
         for i, (entity, pair) in enumerate(zip(entities, pairs)):
             eid = entity["entity/id"]
             full_text = (pair.question.body_text + " " + pair.answer.body_text)
-            answer_text = pair.answer.body_text
 
             # NER term spotting
             terms = spot_terms_entity(full_text, singles, multi_index)
@@ -467,7 +720,7 @@ def run_stage5_ner_scopes(entities, pairs, ner_kernel_path, outdir):
                 total_ner_hits += len(terms)
 
             # Scope detection
-            scopes = detect_scopes_entity(eid, answer_text)
+            scopes = detect_scopes_entity(eid, full_text)
             if scopes:
                 entities_with_scopes += 1
                 total_scopes += len(scopes)
@@ -1073,6 +1326,10 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
 
     Returns (stats_dict, embeddings_path, model_path, thread_ids).
     """
+    if train_gnn is None:
+        raise RuntimeError(
+            f"Graph embedding dependencies unavailable: {_GRAPH_EMBED_IMPORT_ERROR}"
+        )
     tensor_cache = outdir / "hypergraph-tensors.pt"
 
     # If tensor cache exists, skip JSON load entirely
@@ -1820,6 +2077,14 @@ def main():
     if args.limit is not None and args.thread_limit is None:
         args.thread_limit = args.limit
         auto_thread_limit = True
+
+    if train_gnn is None and not args.skip_graph_embed:
+        args.skip_graph_embed = True
+        if not args.skip_faiss:
+            args.skip_faiss = True
+        print("  Graph embedding disabled: optional dependencies missing")
+        print(f"    reason: {_GRAPH_EMBED_IMPORT_ERROR}")
+        print("    auto-skipping stages 9b (graph-embed) and 10 (faiss)")
 
     # Dry-run for download-only mode: infer expected Posts.xml path with no side effects.
     if args.dry_run and args.download and not args.posts_xml:

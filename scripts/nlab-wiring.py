@@ -106,6 +106,42 @@ CLASSICAL_TO_METATHEORY = {
     "set-notation": "constrain/such-that",
 }
 
+BINDER_TYPE_BY_COMMAND = {
+    "sum": "bind/summation",
+    "prod": "bind/product",
+    "coprod": "bind/coprod",
+    "bigcup": "bind/big-union",
+    "bigcap": "bind/big-intersection",
+}
+
+SYMBOL_RE = re.compile(r"[A-Za-z](?:_[A-Za-z0-9]+)?")
+QUANTIFIER_CMD_RE = re.compile(
+    r"\\(forall|exists)\s*(?:\{)?\s*([A-Za-z](?:_[A-Za-z0-9]+)?)"
+)
+AGGREGATE_BINDER_RE = re.compile(
+    r"\\(sum|prod|coprod|bigcup|bigcap)\s*(?:_\{([^}]*)\}|_([A-Za-z](?:_[A-Za-z0-9]+)?))?"
+)
+INTEGRAL_BINDER_RE = re.compile(
+    r"\\int(?:\s*(?:_\{[^}]*\}|_[^\s^{}]+))?(?:\s*(?:\^\{[^}]*\}|\^[^\s{}]+))?"
+)
+PROSE_ENV_TYPE_MAP = {
+    "definition": "env/definition",
+    "defn": "env/definition",
+    "theorem": "env/theorem",
+    "lemma": "env/lemma",
+    "proposition": "env/proposition",
+    "prop": "env/proposition",
+    "corollary": "env/corollary",
+    "remark": "env/remark",
+    "example": "env/example",
+    "proof": "env/proof",
+    "notation": "env/definition",
+}
+LATEX_ENV_OPEN_RE = re.compile(r"\\begin\{(\w+)\}")
+PROSE_ENV_HEADING_RE = re.compile(
+    r"(?m)^\s*(Definition|Defn|Theorem|Lemma|Proposition|Prop|Corollary|Remark|Example|Proof|Notation)\b[:.]?"
+)
+
 # Wire detection (from validate-ct.py)
 WIRE_REGEXES = [
     ("wire/adversative", r"\b(?:but|however|on the other hand|nevertheless|yet)\b", re.IGNORECASE),
@@ -777,6 +813,196 @@ def strip_nlab_markup(text):
     return plain
 
 
+def _iter_math_fragments(text):
+    """Yield (fragment, absolute_position) for common LaTeX math delimiters."""
+    blocked = []
+
+    for m in re.finditer(r"\$\$(.+?)\$\$", text, re.DOTALL):
+        blocked.append((m.start(), m.end()))
+        yield m.group(1), m.start(1)
+
+    for m in re.finditer(r"\\\[(.+?)\\\]", text, re.DOTALL):
+        blocked.append((m.start(), m.end()))
+        yield m.group(1), m.start(1)
+
+    for m in re.finditer(r"\$([^$\n]+?)\$", text):
+        if any(a <= m.start() < b for a, b in blocked):
+            continue
+        yield m.group(1), m.start(1)
+
+    for m in re.finditer(r"\\\((.+?)\\\)", text, re.DOTALL):
+        yield m.group(1), m.start(1)
+
+
+def _extract_bound_symbol(subscript):
+    """Best-effort extraction of a bound variable from a subscript."""
+    if not subscript:
+        return None
+
+    m = re.search(r"([A-Za-z](?:_[A-Za-z0-9]+)?)\s*(?:=|\\in|∈)", subscript)
+    if m:
+        return m.group(1)
+
+    m = SYMBOL_RE.search(subscript)
+    return m.group(0) if m else None
+
+
+def _extract_integral_symbol(fragment_tail):
+    """Best-effort extraction of integration variable from trailing fragment."""
+    m = re.search(
+        r"(?:\\,|\\;|\\!|\s)*(?:d|\\mathrm\{d\})\s*([A-Za-z](?:_[A-Za-z0-9]+)?)",
+        fragment_tail,
+    )
+    if m:
+        return m.group(1)
+    return None
+
+
+def _detect_symbolic_binders(entity_id, text, start_idx=0, parent_env_id=None):
+    """Detect binder-like symbolic operators in LaTeX math fragments."""
+    scopes = []
+    scope_idx = start_idx
+
+    for fragment, frag_pos in _iter_math_fragments(text):
+        # Quantifiers: \forall x, \exists y, ...
+        for m in QUANTIFIER_CMD_RE.finditer(fragment):
+            quant_cmd = m.group(1)
+            symbol = m.group(2)
+            scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+            scope_idx += 1
+
+            scope_type = "quant/universal" if quant_cmd == "forall" else "quant/existential"
+            scopes.append({
+                "hx/id": scope_id,
+                "hx/role": "component",
+                "hx/type": scope_type,
+                "hx/parent": parent_env_id,
+                "hx/ends": [
+                    {"role": "entity", "ident": entity_id},
+                    {"role": "binder", "latex": f"\\{quant_cmd}"},
+                    {"role": "symbol", "latex": symbol},
+                ],
+                "hx/content": {
+                    "match": fragment[m.start():m.end()][:120],
+                    "position": frag_pos + m.start(),
+                },
+                "hx/labels": ["scope", "symbolic-binder", quant_cmd],
+            })
+
+        # Aggregate binders: \sum, \prod, \coprod, ...
+        for m in AGGREGATE_BINDER_RE.finditer(fragment):
+            cmd = m.group(1)
+            subscript = m.group(2) or m.group(3) or ""
+            bound_symbol = _extract_bound_symbol(subscript)
+            scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+            scope_idx += 1
+
+            ends = [
+                {"role": "entity", "ident": entity_id},
+                {"role": "binder", "latex": f"\\{cmd}"},
+            ]
+            if bound_symbol:
+                ends.append({"role": "symbol", "latex": bound_symbol})
+            if subscript:
+                ends.append({"role": "subscript", "latex": subscript[:80]})
+
+            scopes.append({
+                "hx/id": scope_id,
+                "hx/role": "component",
+                "hx/type": BINDER_TYPE_BY_COMMAND.get(cmd, "bind/operator"),
+                "hx/parent": parent_env_id,
+                "hx/ends": ends,
+                "hx/content": {
+                    "match": fragment[m.start():m.end()][:120],
+                    "position": frag_pos + m.start(),
+                },
+                "hx/labels": ["scope", "symbolic-binder", cmd],
+            })
+
+        # Integrals: \int ... dx
+        for m in INTEGRAL_BINDER_RE.finditer(fragment):
+            tail = fragment[m.end():m.end() + 64]
+            symbol = _extract_integral_symbol(tail)
+            scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+            scope_idx += 1
+
+            ends = [
+                {"role": "entity", "ident": entity_id},
+                {"role": "binder", "latex": "\\int"},
+            ]
+            if symbol:
+                ends.append({"role": "symbol", "latex": symbol})
+
+            scopes.append({
+                "hx/id": scope_id,
+                "hx/role": "component",
+                "hx/type": "bind/integral",
+                "hx/parent": parent_env_id,
+                "hx/ends": ends,
+                "hx/content": {
+                    "match": fragment[m.start():min(len(fragment), m.end() + 32)][:120],
+                    "position": frag_pos + m.start(),
+                },
+                "hx/labels": ["scope", "symbolic-binder", "integral"],
+            })
+
+    return scopes
+
+
+def _detect_environment_scopes(entity_id, text, start_idx=0, parent_env_id=None):
+    """Detect theorem-like environments as discourse scopes."""
+    scopes = []
+    scope_idx = start_idx
+
+    for m in LATEX_ENV_OPEN_RE.finditer(text):
+        env_name = m.group(1).lower()
+        env_type = ENV_LATEX_STYLE.get(env_name)
+        if not env_type:
+            continue
+        scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+        scope_idx += 1
+        scopes.append({
+            "hx/id": scope_id,
+            "hx/role": "component",
+            "hx/type": env_type,
+            "hx/parent": parent_env_id,
+            "hx/ends": [
+                {"role": "entity", "ident": entity_id},
+                {"role": "environment", "name": env_name},
+            ],
+            "hx/content": {
+                "match": m.group()[:120],
+                "position": m.start(),
+            },
+            "hx/labels": ["scope", "environment", env_name],
+        })
+
+    for m in PROSE_ENV_HEADING_RE.finditer(text):
+        label = m.group(1).lower()
+        env_type = PROSE_ENV_TYPE_MAP.get(label)
+        if not env_type:
+            continue
+        scope_id = f"{entity_id}:scope-{scope_idx:03d}"
+        scope_idx += 1
+        scopes.append({
+            "hx/id": scope_id,
+            "hx/role": "component",
+            "hx/type": env_type,
+            "hx/parent": parent_env_id,
+            "hx/ends": [
+                {"role": "entity", "ident": entity_id},
+                {"role": "environment", "name": label},
+            ],
+            "hx/content": {
+                "match": m.group()[:120],
+                "position": m.start(),
+            },
+            "hx/labels": ["scope", "environment", label],
+        })
+
+    return scopes
+
+
 def detect_scopes(entity_id, text, parent_env_id=None):
     """Detect scope bindings in text. Returns hx/ records."""
     scopes = []
@@ -816,6 +1042,14 @@ def detect_scopes(entity_id, text, parent_env_id=None):
                 "hx/content": {"match": m.group()[:120], "position": m.start()},
                 "hx/labels": ["scope", stype],
             })
+    env_scopes = _detect_environment_scopes(
+        entity_id, text, start_idx=scope_idx, parent_env_id=parent_env_id)
+    scopes.extend(env_scopes)
+    scope_idx += len(env_scopes)
+
+    symbolic = _detect_symbolic_binders(
+        entity_id, text, start_idx=scope_idx, parent_env_id=parent_env_id)
+    scopes.extend(symbolic)
     return scopes
 
 

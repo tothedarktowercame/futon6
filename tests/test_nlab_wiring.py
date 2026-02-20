@@ -386,6 +386,36 @@ class TestDiscourseWiring:
         wire_types = {w["hx/type"] for w in wire_records}
         assert "wire/causal" in wire_types or "wire/consequential" in wire_types
 
+    def test_symbolic_binders_detected(self):
+        text = (
+            r"Given $\forall x \in X,\ \int_0^1 f(x)\,dx = \sum_{n=1}^{\infty} a_n$ "
+            r"and $\exists y$."
+        )
+        scopes = nlab_wiring.detect_scopes("t-1", text)
+        scope_types = {s["hx/type"] for s in scopes}
+        assert "quant/universal" in scope_types
+        assert "quant/existential" in scope_types
+        assert "bind/integral" in scope_types
+        assert "bind/summation" in scope_types
+
+    def test_degenerate_sum_as_binder(self):
+        text = r"We use the operation $\sum a_i$ as shorthand."
+        scopes = nlab_wiring.detect_scopes("t-2", text)
+        sums = [s for s in scopes if s["hx/type"] == "bind/summation"]
+        assert sums
+        assert any(end.get("role") == "binder" for end in sums[0]["hx/ends"])
+
+    def test_latex_theorem_environment_is_scope(self):
+        scopes = nlab_wiring.detect_scopes("t-3", LATEX_ENV_SNIPPET)
+        scope_types = {s["hx/type"] for s in scopes}
+        assert "env/theorem" in scope_types
+        assert "env/proof" in scope_types
+
+    def test_heading_theorem_environment_is_scope(self):
+        text = "Theorem. Every monad comes from an adjunction in this case."
+        scopes = nlab_wiring.detect_scopes("t-4", text)
+        assert any(s["hx/type"] == "env/theorem" for s in scopes)
+
 
 # ============================================================
 # Step 5: Categorical hyperedge tests

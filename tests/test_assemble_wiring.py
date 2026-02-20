@@ -165,6 +165,11 @@ class TestPortExtraction:
         label = assemble_wiring._scope_to_label(scope)
         assert "F" in label
 
+    def test_symbolic_binder_is_input_port(self):
+        text = r"Let $f$ be continuous. Consider $\int_0^1 f(x)\,dx$. Therefore we are done."
+        inputs, _ = assemble_wiring.extract_ports(text, "test")
+        assert any(p["type"] == "bind/integral" for p in inputs)
+
 
 # ============================================================
 # Port Matching Tests

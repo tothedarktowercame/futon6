@@ -157,9 +157,7 @@ def extract_ports(text, entity_id):
         # Scopes before consequential wires are inputs (assumptions)
         # Scopes after are outputs (conclusions)
         if pos < earliest_conclusion:
-            if scope_type in ("bind/let", "bind/define", "assume/explicit",
-                              "assume/consider", "quant/universal",
-                              "constrain/where", "constrain/such-that"):
+            if scope_type.startswith(("bind/", "assume/", "quant/", "constrain/")):
                 input_ports.append(port)
         else:
             output_ports.append(port)
