@@ -1463,19 +1463,20 @@ def build_pattern_prompt(question_title, question_text, answer_text):
 
     return f"""You are a mathematics education researcher analysing proof strategies.
 
-Given this Q&A from math.stackexchange, identify which informal reasoning patterns the ANSWER uses.
-
-Question: {question_title}
-{q}
-
-Answer:
-{a}
+Task: identify which informal reasoning patterns the ANSWER uses.
 
 Here are the 25 patterns to check:
 {pattern_list}
 
 Reply with ONLY a JSON list of pattern numbers (1-25) that the answer clearly uses. Example: [3, 10, 17]
-If none apply clearly, reply: []"""
+If none apply clearly, reply: []
+
+Now analyze this Q&A from math.stackexchange:
+Question: {question_title}
+{q}
+
+Answer:
+{a}"""
 
 
 def _create_llm_pipeline(model_name, batch_size=8):
@@ -2380,6 +2381,14 @@ def build_ct_performative_prompt(wiring_dict):
     lines = []
     lines.append("You are analysing a math StackExchange thread to classify "
                  "the argumentative moves between posts.\n")
+    lines.append("For each edge, classify the argumentative move as one of:")
+    lines.append("  assert, challenge, query, clarify, reform, exemplify, "
+                 "reference, agree, retract")
+    lines.append("Reply as JSON array:")
+    lines.append('[{"source": "<id>", "target": "<id>", "performative": "<type>", '
+                 '"reasoning": "<brief>"}]')
+    lines.append("")
+    lines.append("Now classify this thread payload.")
     lines.append(f"Thread: \"{wiring_dict.get('title', '')}\"")
     lines.append(f"Topic: {wiring_dict.get('topic', 'mathematics')}\n")
 
@@ -2405,13 +2414,6 @@ def build_ct_performative_prompt(wiring_dict):
     lines.append("\nEdges (current classification):")
     for edge in wiring_dict["edges"]:
         lines.append(f"  {edge['from']} → {edge['to']}: {edge['iatc']} ({edge['type']})")
-
-    lines.append("\nFor each edge, classify the argumentative move as one of:")
-    lines.append("  assert, challenge, query, clarify, reform, exemplify, "
-                 "reference, agree, retract")
-    lines.append("\nReply as JSON array:")
-    lines.append('[{"source": "<id>", "target": "<id>", "performative": "<type>", '
-                 '"reasoning": "<brief>"}]')
 
     return "\n".join(lines)
 
@@ -2475,13 +2477,7 @@ def build_reverse_morphogenesis_prompt(question_title, question_text, answer_tex
 
     return f"""You are a mathematics education researcher studying how questions arise from situations.
 
-Given this Q&A pair from math.stackexchange, perform reverse morphogenesis analysis.
-
-Question: {question_title}
-{q}
-
-Answer:
-{a}
+Perform reverse morphogenesis analysis for a Q&A pair.
 
 Tasks:
 
@@ -2510,7 +2506,14 @@ Reply as JSON:
   "quality": {{"form": "good|weak|broken", "salience": "good|weak|broken", "arrow": "good|weak|broken"}},
   "situation_S": "<the induced situation>",
   "roundtrip_check": "<does S -> Q hold? brief assessment>"
-}}"""
+}}
+
+Now analyze this Q&A pair from math.stackexchange:
+Question: {question_title}
+{q}
+
+Answer:
+{a}"""
 
 
 def generate_moist_prompts(pairs, entities, outdir, stages=None, thread_diagrams=None):

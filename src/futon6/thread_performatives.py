@@ -343,7 +343,7 @@ def build_thread_performative_prompt(diagram: ThreadWiringDiagram) -> str:
     lines = []
     lines.append("You are a discourse analyst studying mathematical argumentation online.")
     lines.append("")
-    lines.append("Given this thread from a math/science Q&A site, classify each ")
+    lines.append("Given a thread from a math/science Q&A site, classify each ")
     lines.append("post/comment relationship using IATC performative types.")
     lines.append("")
     lines.append("Performative types:")
@@ -356,6 +356,11 @@ def build_thread_performative_prompt(diagram: ThreadWiringDiagram) -> str:
     lines.append("  reference — cites external source or prior work")
     lines.append("  agree     — endorses or confirms")
     lines.append("  retract   — withdraws a prior claim")
+    lines.append("")
+    lines.append("For each relationship, classify the performative type.")
+    lines.append("Reply as JSON list:")
+    lines.append('[{"source": "<node_id>", "target": "<node_id>", '
+                 '"performative": "<type>", "reasoning": "<brief explanation>"}]')
     lines.append("")
     lines.append("Thread:")
 
@@ -373,12 +378,6 @@ def build_thread_performative_prompt(diagram: ThreadWiringDiagram) -> str:
     for node in diagram.nodes:
         if node.node_type == "comment":
             lines.append(f"  [C{node.post_id} on post {node.parent_post_id}]: {node.body_text[:200]}")
-
-    lines.append("")
-    lines.append("For each relationship, classify the performative type.")
-    lines.append("Reply as JSON list:")
-    lines.append('[{"source": "<node_id>", "target": "<node_id>", '
-                 '"performative": "<type>", "reasoning": "<brief explanation>"}]')
 
     return "\n".join(lines)
 
