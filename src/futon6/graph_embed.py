@@ -15,7 +15,7 @@ Training:       graph contrastive learning — augment each graph via random
                 of the same graph together and push different graphs apart.
 
     >>> from futon6.graph_embed import embed_hypergraphs, train
-    >>> model, embeddings = train(hypergraphs, dim=128, epochs=50)
+    >>> model, embeddings, stats = train(hypergraphs, dim=128, epochs=50)
     >>> embeddings.shape  # (n_threads, 128)
 """
 
@@ -456,6 +456,112 @@ def contrastive_collate_fn(batch):
     return collate_graphs(view1), collate_graphs(view2)
 
 
+def _split_train_val_indices(
+    n: int,
+    val_frac: float = 0.1,
+    min_val: int = 32,
+    max_val: int = 2048,
+    seed: int = 1337,
+) -> tuple[list[int], list[int]]:
+    """Create a deterministic train/val split for contrastive evaluation."""
+    if n < 4:
+        return list(range(n)), []
+
+    if n < 200:
+        val_n = max(2, int(n * val_frac))
+    else:
+        val_n = max(min_val, int(n * val_frac))
+    val_n = min(val_n, max_val, n - 2)
+    if val_n < 2:
+        return list(range(n)), []
+
+    idx = list(range(n))
+    rnd = random.Random(seed)
+    rnd.shuffle(idx)
+    val_idx = sorted(idx[:val_n])
+    train_idx = sorted(idx[val_n:])
+    if len(train_idx) < 2:
+        return list(range(n)), []
+    return train_idx, val_idx
+
+
+def _embed_graph_list(
+    model: nn.Module,
+    graphs: list[tuple[torch.Tensor, dict[int, torch.Tensor]]],
+    batch_size: int,
+    device: str,
+) -> torch.Tensor:
+    """Embed a list of tensorized graphs and return (N, D) torch tensor on device."""
+    all_out = []
+    with torch.no_grad():
+        for start in range(0, len(graphs), batch_size):
+            batch = collate_graphs(graphs[start:start + batch_size]).to(device)
+            emb = model.embed(batch)
+            all_out.append(emb)
+    return torch.cat(all_out, dim=0) if all_out else torch.zeros(0, 1, device=device)
+
+
+def _paired_retrieval_metrics(
+    model: nn.Module,
+    graph_tensors: list[tuple[torch.Tensor, dict[int, torch.Tensor]]],
+    indices: list[int],
+    batch_size: int,
+    device: str,
+    node_drop: float,
+    edge_drop: float,
+) -> dict[str, float]:
+    """Compute paired-view retrieval quality on held-out graphs.
+
+    For each graph i, build two augmentations A_i and B_i. Then for each A_i,
+    retrieve nearest B_j under cosine and check whether j=i.
+    """
+    if len(indices) < 2:
+        return {
+            "acc_at_1": 0.0,
+            "acc_at_5": 0.0,
+            "mrr": 0.0,
+            "n_eval": len(indices),
+        }
+
+    view1 = []
+    view2 = []
+    for idx in indices:
+        x, ei = graph_tensors[idx]
+        v1 = augment_graph(x, ei, node_drop=node_drop, edge_drop=edge_drop)
+        v2 = augment_graph(x, ei, node_drop=node_drop, edge_drop=edge_drop)
+        view1.append(v1)
+        view2.append(v2)
+
+    z1 = _embed_graph_list(model, view1, batch_size=batch_size, device=device)
+    z2 = _embed_graph_list(model, view2, batch_size=batch_size, device=device)
+    if z1.size(0) == 0 or z2.size(0) == 0:
+        return {"acc_at_1": 0.0, "acc_at_5": 0.0, "mrr": 0.0, "n_eval": 0}
+
+    sim = z1 @ z2.T  # normalized embeddings => cosine similarity
+    order = torch.argsort(sim, dim=1, descending=True)
+    target = torch.arange(order.size(0), device=order.device)
+
+    top1 = order[:, :1]
+    k5 = min(5, order.size(1))
+    top5 = order[:, :k5]
+
+    acc1 = (top1.squeeze(1) == target).float().mean().item()
+    acc5 = (top5 == target.unsqueeze(1)).any(dim=1).float().mean().item()
+
+    # Reciprocal rank of the true pair.
+    match = (order == target.unsqueeze(1)).nonzero(as_tuple=False)
+    rr = torch.zeros(order.size(0), device=order.device)
+    rr[match[:, 0]] = 1.0 / (match[:, 1].float() + 1.0)
+    mrr = rr.mean().item()
+
+    return {
+        "acc_at_1": float(acc1),
+        "acc_at_5": float(acc5),
+        "mrr": float(mrr),
+        "n_eval": int(order.size(0)),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Training loop
 # ---------------------------------------------------------------------------
@@ -466,7 +572,10 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
           device: str | None = None, verbose: bool = True,
           num_workers: int = 4,
           tensor_cache_path: str | None = None,
-          ) -> tuple[ThreadGNN, np.ndarray]:
+          val_frac: float = 0.1,
+          val_max_graphs: int = 2048,
+          eval_every: int = 1,
+          ) -> tuple[ThreadGNN, np.ndarray, dict[str, Any]]:
     """Self-supervised contrastive training of the thread GNN.
 
     Parameters
@@ -480,10 +589,14 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
 
     Returns
     -------
-    (model, embeddings) where embeddings is (n_threads, dim) numpy array
+    (model, embeddings, training_stats) where embeddings is (n_threads, dim)
+    numpy array and training_stats includes loss and paired-view retrieval
+    metrics (Acc@1/Acc@5) on a held-out validation split.
     """
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
+    if eval_every <= 0:
+        eval_every = 1
 
     # Try loading pre-tensorized cache
     if tensor_cache_path and Path(tensor_cache_path).exists():
@@ -515,8 +628,21 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
     if len(graph_tensors) < 2:
         raise ValueError(f"Need at least 2 valid graphs, got {len(graph_tensors)}")
 
+    all_graph_tensors = graph_tensors
+    train_idx, val_idx = _split_train_val_indices(
+        len(all_graph_tensors),
+        val_frac=val_frac,
+        max_val=val_max_graphs,
+    )
+    train_graphs = [all_graph_tensors[i] for i in train_idx]
+
     if verbose:
-        print(f"       {len(graph_tensors)} valid graphs, training on {device}...")
+        print(f"       {len(all_graph_tensors)} valid graphs, training on {device}...")
+        if val_idx:
+            print(f"       Validation split: {len(train_idx)} train / {len(val_idx)} val"
+                  f" (paired retrieval Acc@1/Acc@5)")
+        else:
+            print("       Validation split: disabled (too few graphs)")
 
     model = ThreadGNN(
         hidden_dim=hidden_dim, embed_dim=dim,
@@ -526,12 +652,12 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
     # Training loop — use DataLoader when num_workers > 0
-    n = len(graph_tensors)
-    use_dataloader = num_workers > 0 and n >= batch_size
+    n_train = len(train_graphs)
+    use_dataloader = num_workers > 0 and n_train >= batch_size
     use_cuda = device != "cpu" and torch.cuda.is_available()
 
     if use_dataloader:
-        dataset = ContrastiveGraphDataset(graph_tensors, node_drop, edge_drop)
+        dataset = ContrastiveGraphDataset(train_graphs, node_drop, edge_drop)
         loader = DataLoader(
             dataset,
             batch_size=batch_size,
@@ -541,8 +667,13 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
             pin_memory=use_cuda,
             persistent_workers=True,
             prefetch_factor=2,
-            drop_last=(n > batch_size),  # drop tiny trailing batch
+            drop_last=(n_train > batch_size),  # drop tiny trailing batch
         )
+
+    loss_curve = []
+    val_curve = []
+    best_val_acc1 = -1.0
+    best_val_epoch = None
 
     for epoch in range(epochs):
         model.train()
@@ -566,10 +697,10 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
                 n_batches += 1
         else:
             # Fallback: manual batching (for small datasets or debugging)
-            indices = list(range(n))
+            indices = list(range(n_train))
             random.shuffle(indices)
 
-            for start in range(0, n, batch_size):
+            for start in range(0, n_train, batch_size):
                 batch_idx = indices[start:start + batch_size]
                 if len(batch_idx) < 2:
                     continue
@@ -577,7 +708,7 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
                 view1 = []
                 view2 = []
                 for idx in batch_idx:
-                    x, ei = graph_tensors[idx]
+                    x, ei = train_graphs[idx]
                     x1, ei1 = augment_graph(x, ei, node_drop, edge_drop)
                     x2, ei2 = augment_graph(x, ei, node_drop, edge_drop)
                     view1.append((x1, ei1))
@@ -597,26 +728,80 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
                 total_loss += loss.item()
                 n_batches += 1
 
-        if verbose and (epoch + 1) % max(1, epochs // 10) == 0:
-            avg = total_loss / max(1, n_batches)
-            print(f"       Epoch {epoch+1}/{epochs}  loss={avg:.4f}")
+        avg_loss = total_loss / max(1, n_batches)
+        loss_curve.append(float(avg_loss))
+
+        val_metrics = None
+        eval_now = ((epoch + 1) % eval_every == 0) or ((epoch + 1) == epochs)
+        if eval_now and val_idx:
+            model.eval()
+            val_metrics = _paired_retrieval_metrics(
+                model=model,
+                graph_tensors=all_graph_tensors,
+                indices=val_idx,
+                batch_size=batch_size,
+                device=device,
+                node_drop=node_drop,
+                edge_drop=edge_drop,
+            )
+            val_metrics["epoch"] = int(epoch + 1)
+            val_curve.append(val_metrics)
+            if val_metrics["acc_at_1"] > best_val_acc1:
+                best_val_acc1 = val_metrics["acc_at_1"]
+                best_val_epoch = int(epoch + 1)
+
+        log_now = ((epoch + 1) % max(1, epochs // 10) == 0) or ((epoch + 1) == epochs)
+        if verbose and log_now:
+            msg = f"       Epoch {epoch+1}/{epochs}  loss={avg_loss:.4f}"
+            if val_metrics is not None:
+                msg += ("  val_acc@1={:.3f} val_acc@5={:.3f} val_mrr={:.3f} n={}".format(
+                    val_metrics["acc_at_1"],
+                    val_metrics["acc_at_5"],
+                    val_metrics["mrr"],
+                    val_metrics["n_eval"],
+                ))
+            print(msg)
 
     # Final embedding pass
     model.eval()
     all_embeddings = []
     with torch.no_grad():
-        for start in range(0, n, batch_size):
-            batch_graphs = graph_tensors[start:start + batch_size]
+        for start in range(0, len(all_graph_tensors), batch_size):
+            batch_graphs = all_graph_tensors[start:start + batch_size]
             batch = collate_graphs(batch_graphs).to(device)
             emb = model.embed(batch)
             all_embeddings.append(emb.cpu().numpy())
 
     embeddings = np.concatenate(all_embeddings, axis=0)
 
+    final_val = val_curve[-1] if val_curve else None
+    training_stats = {
+        "n_graphs_total": len(all_graph_tensors),
+        "n_graphs_train": len(train_idx),
+        "n_graphs_val": len(val_idx),
+        "val_fraction": float(val_frac),
+        "eval_every": int(eval_every),
+        "loss_final": float(loss_curve[-1]) if loss_curve else None,
+        "loss_best": float(min(loss_curve)) if loss_curve else None,
+        "loss_curve": loss_curve,
+        "best_val_acc1": float(best_val_acc1) if best_val_acc1 >= 0 else None,
+        "best_val_epoch": best_val_epoch,
+        "val_acc1_final": (float(final_val["acc_at_1"]) if final_val else None),
+        "val_acc5_final": (float(final_val["acc_at_5"]) if final_val else None),
+        "val_mrr_final": (float(final_val["mrr"]) if final_val else None),
+        "val_curve": val_curve,
+    }
+
     if verbose:
         print(f"       Embeddings: {embeddings.shape}")
+        if final_val is not None:
+            print("       Validation summary: "
+                  f"best_acc@1={training_stats['best_val_acc1']:.3f} "
+                  f"(epoch {training_stats['best_val_epoch']}), "
+                  f"final_acc@1={training_stats['val_acc1_final']:.3f}, "
+                  f"final_acc@5={training_stats['val_acc5_final']:.3f}")
 
-    return model, embeddings
+    return model, embeddings, training_stats
 
 
 # ---------------------------------------------------------------------------

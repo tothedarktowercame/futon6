@@ -50,11 +50,15 @@ conversion path. See futon1/apps/graph-memory for schema.
 """
 
 import argparse
+import hashlib
 import importlib
+import itertools
 import json
 import os
+import random
 import re
 import sys
+import tarfile
 import time
 import uuid
 from collections import Counter
@@ -71,6 +75,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 # CT-backed wiring modules (from scripts/)
 _assemble_wiring = None
 _nlab_wiring = None
+_scope_detector = None
+_scope_detector_name = None
 
 def _load_ct_modules():
     """Lazy-load CT wiring modules (only needed for Stage 7 CT path)."""
@@ -79,6 +85,26 @@ def _load_ct_modules():
         _assemble_wiring = importlib.import_module("assemble-wiring")
         _nlab_wiring = importlib.import_module("nlab-wiring")
     return _assemble_wiring, _nlab_wiring
+
+
+def _load_scope_detector(prefer_nlab=True):
+    """Return (detect_scopes_fn, detector_name), preferring nlab-wiring."""
+    global _scope_detector, _scope_detector_name
+    if _scope_detector is not None:
+        return _scope_detector, _scope_detector_name
+
+    if prefer_nlab:
+        try:
+            nw = importlib.import_module("nlab-wiring")
+            _scope_detector = nw.detect_scopes
+            _scope_detector_name = "nlab-wiring.detect_scopes"
+            return _scope_detector, _scope_detector_name
+        except Exception as exc:
+            print(f"       Scope detector fallback: nlab-wiring unavailable ({exc})")
+
+    _scope_detector = detect_scopes_entity
+    _scope_detector_name = "superpod.detect_scopes_entity"
+    return _scope_detector, _scope_detector_name
 
 from futon6.stackexchange import (
     build_qa_pairs_streaming,
@@ -364,6 +390,150 @@ LATEX_ENV_OPEN_RE = re.compile(r"\\begin\{(\w+)\}")
 PROSE_ENV_HEADING_RE = re.compile(
     r"(?m)^\s*(Definition|Defn|Theorem|Lemma|Proposition|Prop|Corollary|Remark|Example|Proof|Notation)\b[:.]?"
 )
+LATEX_EMPH_RE = re.compile(r"\\(?:emph|textit|textbf)\{([^{}]{3,120})\}")
+CALLED_AS_RE = re.compile(
+    r"\b(?:called|known as|termed)\s+(?:the\s+)?([A-Za-z][A-Za-z\- ]{2,80})",
+    re.IGNORECASE,
+)
+IS_CALLED_RE = re.compile(
+    r"\b([A-Za-z][A-Za-z\- ]{2,80})\s+is\s+(?:called|known as|termed)\b",
+    re.IGNORECASE,
+)
+DEFINED_AS_RE = re.compile(
+    r"\b([A-Za-z][A-Za-z\- ]{2,80})\s+is\s+(?:defined as|defined to be)\b",
+    re.IGNORECASE,
+)
+DEFINITION_OF_RE = re.compile(
+    r"\bdefinition\s+of\s+([A-Za-z][A-Za-z\- ]{2,80})",
+    re.IGNORECASE,
+)
+LATEX_DEFINITION_BLOCK_RE = re.compile(
+    r"\\begin\{definition\}(.{0,320}?)\\end\{definition\}",
+    re.IGNORECASE | re.DOTALL,
+)
+DEF_BLOCK_SUBJECT_RE = re.compile(
+    r"\b([A-Za-z][A-Za-z\- ]{2,80})\s+is\b",
+    re.IGNORECASE,
+)
+DISCOVERY_STOPWORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has", "in",
+    "is", "it", "its", "of", "on", "or", "our", "that", "the", "their", "then",
+    "there", "these", "this", "to", "we", "with", "if", "let", "any", "every",
+    "each", "all", "such",
+}
+DISCOVERY_GENERIC = {
+    "definition", "proof", "theorem", "lemma", "proposition", "corollary",
+    "remark", "example", "notation", "equation", "result",
+    "weak", "strong", "which", "morphisms", "cells", "condition", "define",
+    "acknowledgements",
+}
+
+
+def _compact_context(text, start, end, window=120):
+    lo = max(0, start - window)
+    hi = min(len(text), end + window)
+    snippet = text[lo:hi]
+    rel_start = max(0, start - lo)
+    rel_end = max(rel_start, min(len(snippet), end - lo))
+    s = f"{snippet[:rel_start]}<<{snippet[rel_start:rel_end]}>>{snippet[rel_end:]}"
+    s = " ".join(s.split())
+    if lo > 0:
+        s = "... " + s
+    if hi < len(text):
+        s = s + " ..."
+    return s
+
+
+def _normalize_discovered_term(raw):
+    if not raw:
+        return None
+    s = raw
+    s = re.sub(r"\\[A-Za-z]+\*?(?:\[[^\]]*\])?", " ", s)  # remove latex commands
+    s = s.replace("{", " ").replace("}", " ").replace("$", " ")
+    s = re.sub(r"[^A-Za-z\-\s']", " ", s)
+    s = " ".join(s.split()).lower().strip(" -'")
+    if not s:
+        return None
+
+    toks = [t for t in s.split() if t]
+    while toks and toks[0] in DISCOVERY_STOPWORDS:
+        toks = toks[1:]
+    while toks and toks[-1] in DISCOVERY_STOPWORDS:
+        toks = toks[:-1]
+    if not toks:
+        return None
+
+    if len(toks) > 4:
+        return None
+    if all(t in DISCOVERY_STOPWORDS for t in toks):
+        return None
+    if len(toks) == 1 and (toks[0] in DISCOVERY_STOPWORDS or toks[0] in DISCOVERY_GENERIC):
+        return None
+    if toks[0] in DISCOVERY_GENERIC and len(toks) == 1:
+        return None
+    if any(len(t) == 1 for t in toks):
+        return None
+    if not any(len(t) >= 4 for t in toks):
+        return None
+
+    term = " ".join(toks)
+    if len(term) < 3 or len(term) > 80:
+        return None
+    return term
+
+
+def extract_open_ner_candidates(text, max_per_entity=64):
+    """Extract open-world candidate terms from definitional/marked contexts."""
+    out = []
+    seen = set()
+
+    def _add(raw, source, start, end):
+        term = _normalize_discovered_term(raw)
+        if not term:
+            return
+        key = (term, source)
+        if key in seen:
+            return
+        seen.add(key)
+        out.append((term, source, _compact_context(text, start, end)))
+
+    for m in LATEX_EMPH_RE.finditer(text):
+        _add(m.group(1), "latex-emph", m.start(1), m.end(1))
+        if len(out) >= max_per_entity:
+            return out
+
+    for m in CALLED_AS_RE.finditer(text):
+        _add(m.group(1), "called-as", m.start(1), m.end(1))
+        if len(out) >= max_per_entity:
+            return out
+
+    for m in IS_CALLED_RE.finditer(text):
+        _add(m.group(1), "is-called", m.start(1), m.end(1))
+        if len(out) >= max_per_entity:
+            return out
+
+    for m in DEFINED_AS_RE.finditer(text):
+        _add(m.group(1), "defined-as", m.start(1), m.end(1))
+        if len(out) >= max_per_entity:
+            return out
+
+    for m in DEFINITION_OF_RE.finditer(text):
+        _add(m.group(1), "definition-of", m.start(1), m.end(1))
+        if len(out) >= max_per_entity:
+            return out
+
+    for m in LATEX_DEFINITION_BLOCK_RE.finditer(text):
+        block = m.group(1)
+        if not block:
+            continue
+        for sm in DEF_BLOCK_SUBJECT_RE.finditer(block):
+            abs_start = m.start(1) + sm.start(1)
+            abs_end = m.start(1) + sm.end(1)
+            _add(sm.group(1), "definition-block-subject", abs_start, abs_end)
+            if len(out) >= max_per_entity:
+                return out
+
+    return out
 
 
 def load_ner_kernel(path):
@@ -682,7 +852,21 @@ def _detect_environment_scopes(entity_id, text, start_idx=0):
     return scopes
 
 
-def run_stage5_ner_scopes(entities, pairs, ner_kernel_path, outdir):
+def run_stage5_ner_scopes(
+    entities,
+    pairs,
+    ner_kernel_path,
+    outdir,
+    scope_detector=None,
+    scope_detector_name="superpod.detect_scopes_entity",
+    discover_terms=False,
+    discover_terms_min_freq=3,
+    discover_terms_max=2000,
+    discover_terms_max_per_entity=64,
+    discover_terms_eprint_dir=None,
+    discover_terms_eprint_max_chars=240_000,
+    discover_terms_eprint_max_tex_members=4,
+):
     """Run Stage 5: NER term spotting + scope detection.
 
     Memory-safe: streams results directly to disk (one JSON object per line
@@ -692,8 +876,34 @@ def run_stage5_ner_scopes(entities, pairs, ner_kernel_path, outdir):
     """
     from collections import Counter
 
+    if scope_detector is None:
+        scope_detector = detect_scopes_entity
+        scope_detector_name = "superpod.detect_scopes_entity"
+
     singles, multi_index, multi_count = load_ner_kernel(ner_kernel_path)
     print(f"       NER kernel: {len(singles)} single + {multi_count} multi-word terms")
+    print(f"       Scope detector: {scope_detector_name}")
+
+    known_terms = None
+    discovery_total = 0
+    discovery_unknown = 0
+    discovery_occ = Counter()
+    discovery_entities = Counter()
+    discovery_sources = {}
+    discovery_example = {}
+    discovery_eprint_ok = 0
+    discovery_eprint_missing = 0
+    discovery_eprint_status = Counter()
+    if discover_terms:
+        known_terms = set(singles.keys())
+        for rows in multi_index.values():
+            for term_lower, _, _ in rows:
+                known_terms.add(term_lower)
+        print("       Open-world term discovery: enabled "
+              f"(min_freq={discover_terms_min_freq}, max={discover_terms_max})")
+        if discover_terms_eprint_dir is not None:
+            print("       Open-world term discovery text source: eprints "
+                  f"({discover_terms_eprint_dir})")
 
     ner_path = outdir / "ner-terms.json"
     scope_path = outdir / "scopes.json"
@@ -720,12 +930,58 @@ def run_stage5_ner_scopes(entities, pairs, ner_kernel_path, outdir):
                 total_ner_hits += len(terms)
 
             # Scope detection
-            scopes = detect_scopes_entity(eid, full_text)
+            scopes = scope_detector(eid, full_text)
             if scopes:
                 entities_with_scopes += 1
                 total_scopes += len(scopes)
                 for s in scopes:
                     stype_freq[s["hx/type"]] += 1
+
+            # Open-world term discovery
+            if discover_terms:
+                discovery_text = full_text
+                if discover_terms_eprint_dir is not None:
+                    eprint_text, e_meta = _load_eprint_text_for_entity(
+                        eprint_dir=discover_terms_eprint_dir,
+                        entity_id=eid,
+                        max_chars=discover_terms_eprint_max_chars,
+                        max_members=discover_terms_eprint_max_tex_members,
+                    )
+                    estatus = e_meta.get("status", "unknown")
+                    discovery_eprint_status[estatus] += 1
+                    if eprint_text:
+                        discovery_text = eprint_text
+                        discovery_eprint_ok += 1
+                    else:
+                        discovery_eprint_missing += 1
+                candidates = extract_open_ner_candidates(
+                    discovery_text,
+                    max_per_entity=discover_terms_max_per_entity,
+                )
+                seen_terms = set()
+                seen_pair = set()
+                for term, source, context in candidates:
+                    discovery_total += 1
+                    if term in known_terms:
+                        continue
+                    discovery_unknown += 1
+                    key = (term, source)
+                    if key in seen_pair:
+                        continue
+                    seen_pair.add(key)
+                    discovery_occ[term] += 1
+                    if term not in discovery_sources:
+                        discovery_sources[term] = Counter()
+                    discovery_sources[term][source] += 1
+                    if term not in discovery_example:
+                        discovery_example[term] = {
+                            "entity_id": eid,
+                            "source": source,
+                            "context": context,
+                        }
+                    seen_terms.add(term)
+                for term in seen_terms:
+                    discovery_entities[term] += 1
 
             # Write to disk immediately, then discard
             sep = ",\n" if i > 0 else ""
@@ -747,8 +1003,70 @@ def run_stage5_ner_scopes(entities, pairs, ner_kernel_path, outdir):
     print(f"       Written {ner_path} ({os.path.getsize(ner_path) / 1e6:.1f} MB)")
     print(f"       Written {scope_path} ({os.path.getsize(scope_path) / 1e6:.1f} MB)")
 
+    open_ner_stats = None
+    if discover_terms:
+        cands_path = outdir / "candidate-new-terms.jsonl"
+        summary_path = outdir / "candidate-new-terms-summary.json"
+        rows = []
+        for term, occ in discovery_occ.items():
+            entity_n = discovery_entities.get(term, 0)
+            if entity_n < discover_terms_min_freq:
+                continue
+            src_counter = discovery_sources.get(term, Counter())
+            definitional = sum(
+                src_counter.get(k, 0) for k in (
+                    "is-called",
+                    "called-as",
+                    "defined-as",
+                    "definition-of",
+                    "definition-block-subject",
+                    "latex-emph",
+                )
+            )
+            score = occ + 0.5 * entity_n + 0.2 * definitional
+            ex = discovery_example.get(term, {})
+            rows.append({
+                "term_lower": term,
+                "candidate_count": int(occ),
+                "entity_count": int(entity_n),
+                "score": round(score, 4),
+                "sources": dict(src_counter),
+                "example_entity_id": ex.get("entity_id"),
+                "example_source": ex.get("source"),
+                "example_context": ex.get("context"),
+            })
+        rows.sort(key=lambda r: (-r["score"], -r["entity_count"], -r["candidate_count"], r["term_lower"]))
+        rows = rows[:discover_terms_max]
+
+        with open(cands_path, "w", encoding="utf-8") as f:
+            for r in rows:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+        open_ner_stats = {
+            "enabled": True,
+            "min_freq": discover_terms_min_freq,
+            "max_candidates": discover_terms_max,
+            "max_per_entity": discover_terms_max_per_entity,
+            "eprint_mode": discover_terms_eprint_dir is not None,
+            "eprint_dir": str(discover_terms_eprint_dir) if discover_terms_eprint_dir is not None else None,
+            "eprint_text_used": discovery_eprint_ok,
+            "eprint_text_missing": discovery_eprint_missing,
+            "eprint_status_counts": dict(discovery_eprint_status),
+            "total_extracted": discovery_total,
+            "total_unknown_extracted": discovery_unknown,
+            "unique_unknown_terms": len(discovery_occ),
+            "candidates_written": len(rows),
+            "output_jsonl": str(cands_path),
+        }
+        with open(summary_path, "w", encoding="utf-8") as f:
+            json.dump(open_ner_stats, f, indent=2, ensure_ascii=False)
+
+        print(f"       Written {cands_path} ({os.path.getsize(cands_path) / 1e6:.1f} MB)")
+        print(f"       Written {summary_path} ({os.path.getsize(summary_path) / 1e6:.1f} MB)")
+
     return {
         "ner_kernel_terms": len(singles) + multi_count,
+        "scope_detector": scope_detector_name,
         "entities_processed": n,
         "total_ner_hits": total_ner_hits,
         "entities_with_ner": entities_with_ner,
@@ -757,6 +1075,377 @@ def run_stage5_ner_scopes(entities, pairs, ner_kernel_path, outdir):
         "entities_with_scopes": entities_with_scopes,
         "scope_coverage": entities_with_scopes / n if n else 0,
         "scope_type_freq": dict(stype_freq.most_common()),
+        "open_ner": open_ner_stats,
+    }
+
+
+def _load_distinctor_mit_module():
+    """Load the shared MIT heuristics from pilot-planetmath-distinctors.py."""
+    return importlib.import_module("pilot-planetmath-distinctors")
+
+
+def _safe_arxiv_id(arxiv_id):
+    s = arxiv_id.replace("/", "__")
+    return re.sub(r"[^A-Za-z0-9._-]", "_", s)
+
+
+def _read_tex_members_from_tar(path, max_chars=240_000, max_members=4):
+    """Extract and concatenate up to max_members .tex files from a tar archive."""
+    try:
+        with tarfile.open(path, "r:*") as tf:
+            members = [
+                m for m in tf.getmembers()
+                if m.isfile() and m.name.lower().endswith(".tex")
+            ]
+            members.sort(key=lambda m: m.size, reverse=True)
+            selected = members[:max_members]
+            if not selected:
+                return "", {"status": "no-tex-members", "path": str(path)}
+
+            chunks = []
+            member_names = []
+            total_chars = 0
+            for m in selected:
+                remaining = max_chars - total_chars
+                if remaining <= 0:
+                    break
+                fh = tf.extractfile(m)
+                if fh is None:
+                    continue
+                raw = fh.read(max(4096, remaining * 2))
+                text = raw.decode("utf-8", errors="ignore")
+                if len(text) > remaining:
+                    text = text[:remaining]
+                if not text.strip():
+                    continue
+                chunks.append(text)
+                member_names.append(m.name)
+                total_chars += len(text)
+            joined = "\n\n".join(chunks)
+            return joined[:max_chars], {
+                "status": "ok",
+                "path": str(path),
+                "members": member_names,
+            }
+    except (tarfile.TarError, OSError, EOFError) as exc:
+        return "", {"status": "tar-read-error", "path": str(path), "error": str(exc)}
+
+
+def _load_eprint_text_for_entity(eprint_dir, entity_id, max_chars=240_000, max_members=4):
+    """Load TeX text for arXiv entity id (arxiv-<id>) if available."""
+    if not entity_id.startswith("arxiv-"):
+        return None, {"status": "non-arxiv-entity"}
+    arxiv_id = entity_id[len("arxiv-"):]
+    sid = _safe_arxiv_id(arxiv_id)
+    cands = [p for p in eprint_dir.glob(f"{sid}*") if p.is_file()]
+    if not cands:
+        return None, {"status": "missing", "id": arxiv_id}
+
+    def _pri(path):
+        name = path.name.lower()
+        if name.endswith(".tex"):
+            return 0
+        if name.endswith(".tar.gz"):
+            return 1
+        if name.endswith(".tar"):
+            return 2
+        if name.endswith(".bin"):
+            return 3
+        return 9
+
+    for path in sorted(cands, key=_pri):
+        name = path.name.lower()
+        if name.endswith(".tex"):
+            try:
+                text = path.read_text(encoding="utf-8", errors="ignore")
+                return text[:max_chars], {"status": "ok", "path": str(path), "members": [path.name]}
+            except OSError:
+                continue
+        if name.endswith(".tar.gz") or name.endswith(".tar"):
+            text, meta = _read_tex_members_from_tar(path, max_chars=max_chars, max_members=max_members)
+            if text:
+                return text, meta
+            continue
+        if name.endswith(".bin"):
+            # Some payloads are mislabeled; try tar decode first, then plain text.
+            text, meta = _read_tex_members_from_tar(path, max_chars=max_chars, max_members=max_members)
+            if text:
+                return text, meta
+            try:
+                raw = path.read_bytes()[: max(8192, max_chars * 2)]
+                guess = raw.decode("utf-8", errors="ignore")
+                if "\\documentclass" in guess or "\\begin{" in guess or "$" in guess:
+                    return guess[:max_chars], {"status": "ok", "path": str(path), "members": [path.name]}
+            except OSError:
+                continue
+
+    return None, {"status": "unusable", "id": arxiv_id}
+
+
+def run_stage5b_distinctor_mit(
+    entities,
+    pairs,
+    outdir,
+    scope_detector,
+    scope_detector_name,
+    entity_limit=0,
+    max_hits=500,
+    seed=13,
+    eprint_dir=None,
+    eprint_max_chars=240_000,
+    eprint_max_tex_members=4,
+):
+    """Run distinctor/MIT pilot on entity text using binder-aware scopes."""
+    mod = _load_distinctor_mit_module()
+    n_total = len(entities)
+    indices = list(range(n_total))
+    sampled = False
+    if entity_limit and entity_limit > 0 and n_total > entity_limit:
+        sampled = True
+        rnd = random.Random(seed)
+        indices = sorted(rnd.sample(indices, entity_limit))
+
+    n_eval = len(indices)
+    pair_events = Counter()
+    unresolved_events = Counter()
+    explicit_eq_events = Counter()
+    explicit_neq_events = Counter()
+    scope_type_freq = Counter()
+    status_counts = Counter()
+    entries_with_binder_scopes = 0
+    total_binder_scopes = 0
+    eprint_text_used = 0
+    eprint_text_missing = 0
+    eprint_status = Counter()
+    hits = []
+
+    hits_path = outdir / "distinctor-mit-hits.jsonl"
+    summary_path = outdir / "distinctor-mit-summary.json"
+    findings_json_path = outdir / "distinctor-mit-findings.json"
+    findings_md_path = outdir / "distinctor-mit-findings.md"
+    use_eprints = bool(eprint_dir)
+
+    for i, idx in enumerate(indices, start=1):
+        entity = entities[idx]
+        pair = pairs[idx]
+        eid = entity["entity/id"]
+        full_text = (pair.question.body_text + " " + pair.answer.body_text)
+        if use_eprints:
+            eprint_text, e_meta = _load_eprint_text_for_entity(
+                eprint_dir=eprint_dir,
+                entity_id=eid,
+                max_chars=eprint_max_chars,
+                max_members=eprint_max_tex_members,
+            )
+            estatus = e_meta.get("status", "unknown")
+            eprint_status[estatus] += 1
+            if eprint_text:
+                full_text = eprint_text
+                eprint_text_used += 1
+            else:
+                eprint_text_missing += 1
+
+        scopes = scope_detector(eid, full_text)
+        binder_scopes = [s for s in scopes if mod.is_binderish(s)]
+        if binder_scopes:
+            entries_with_binder_scopes += 1
+        total_binder_scopes += len(binder_scopes)
+        for s in binder_scopes:
+            scope_type_freq[s.get("hx/type", "?")] += 1
+
+        exprs = mod.extract_math_expressions(full_text)
+
+        for scope in binder_scopes:
+            scope_symbols = mod.extract_scope_symbols(scope)
+            if len(scope_symbols) < 2:
+                continue
+
+            scope_exprs = mod._scope_expressions(scope, exprs)
+            eq_pairs = set()
+            neq_pairs = set()
+            for ex in scope_exprs:
+                ex_eq, ex_neq = mod.parse_relation_pairs(ex["latex"])
+                eq_pairs.update(ex_eq)
+                neq_pairs.update(ex_neq)
+
+            for a, b in itertools.combinations(sorted(scope_symbols), 2):
+                if not mod._pair_compatible(a, b):
+                    continue
+                sym_pair = tuple(sorted((a, b)))
+
+                has_nontrivial_context = any(
+                    mod._is_nontrivial_pair_context(sym_pair, ex["latex"])
+                    for ex in scope_exprs
+                )
+                if (
+                    not has_nontrivial_context
+                    and sym_pair not in eq_pairs
+                    and sym_pair not in neq_pairs
+                ):
+                    continue
+
+                status = "unresolved"
+                pair_events[sym_pair] += 1
+                if sym_pair in neq_pairs:
+                    status = "explicit-distinct"
+                    explicit_neq_events[sym_pair] += 1
+                elif sym_pair in eq_pairs:
+                    status = "explicit-equal"
+                    explicit_eq_events[sym_pair] += 1
+                else:
+                    unresolved_events[sym_pair] += 1
+                status_counts[status] += 1
+
+                if len(hits) < max_hits:
+                    support_ex = mod._best_supporting_expr(sym_pair, scope_exprs)
+                    c = scope.get("hx/content", {})
+                    support_start = support_ex.get("position") if support_ex else None
+                    support_end = support_ex.get("end") if support_ex else None
+                    scope_start = c.get("position")
+                    scope_end = c.get("end")
+                    hit = {
+                        "hit_id": f"{eid}:{scope.get('hx/id', '')}:{sym_pair[0]}:{sym_pair[1]}:{len(hits) + 1}",
+                        "status": status,
+                        "entity_id": eid,
+                        "title": pair.question.title,
+                        "pair": [sym_pair[0], sym_pair[1]],
+                        "scope_id": scope.get("hx/id", ""),
+                        "scope_type": scope.get("hx/type", ""),
+                        "scope_start": scope_start,
+                        "scope_end": scope_end,
+                        "scope_match": (c.get("match") or "")[:140],
+                        "scope_symbols": scope_symbols,
+                        "support_latex": (support_ex["latex"] if support_ex else "")[:300],
+                        "support_expr_start": support_start,
+                        "support_expr_end": support_end,
+                        "scope_context": mod._context_excerpt(full_text, scope_start, scope_end),
+                        "support_context": mod._context_excerpt(full_text, support_start, support_end),
+                        "has_nontrivial_context": bool(
+                            support_ex and mod._is_nontrivial_pair_context(sym_pair, support_ex["latex"])
+                        ),
+                    }
+                    hit.update(mod.assess_mit_for_hit(hit))
+                    hits.append(hit)
+
+        if i % 1000 == 0 or i == n_eval:
+            status_tail = ""
+            if use_eprints:
+                status_tail = (
+                    f" eprint_ok={eprint_text_used}"
+                    f" eprint_missing={eprint_text_missing}"
+                )
+            print(
+                f"       [MIT {i}/{n_eval}] binder_scopes={total_binder_scopes} "
+                f"candidate={sum(pair_events.values())} hits={len(hits)}{status_tail}"
+            )
+
+    with open(hits_path, "w", encoding="utf-8") as f:
+        for row in hits:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+    mit_counts = Counter(h.get("mit_label", "unclear") for h in hits)
+    mit_avg_conf = (
+        sum(float(h.get("mit_confidence", 0.0)) for h in hits) / len(hits)
+        if hits else 0.0
+    )
+
+    summary = {
+        "entity_count_total": n_total,
+        "entity_count_evaluated": n_eval,
+        "sampled_entities": sampled,
+        "entity_limit": entity_limit,
+        "seed": seed,
+        "scope_detector": scope_detector_name,
+        "eprint_mode": use_eprints,
+        "eprint_dir": str(eprint_dir) if eprint_dir else None,
+        "eprint_text_used": eprint_text_used,
+        "eprint_text_missing": eprint_text_missing,
+        "eprint_status_counts": dict(eprint_status),
+        "entries_with_binder_scopes": entries_with_binder_scopes,
+        "entry_binder_coverage": round(entries_with_binder_scopes / n_eval, 4) if n_eval else 0.0,
+        "total_binder_scopes": total_binder_scopes,
+        "candidate_pair_events": sum(pair_events.values()),
+        "unresolved_pair_events": sum(unresolved_events.values()),
+        "explicit_equal_pair_events": sum(explicit_eq_events.values()),
+        "explicit_distinct_pair_events": sum(explicit_neq_events.values()),
+        "top_candidate_pairs": [[a, b, n] for (a, b), n in pair_events.most_common(30)],
+        "top_unresolved_pairs": [[a, b, n] for (a, b), n in unresolved_events.most_common(30)],
+        "scope_type_freq": dict(scope_type_freq.most_common()),
+        "hit_status_counts": dict(status_counts),
+        "hits_written": len(hits),
+        "mit_counts": dict(mit_counts),
+        "mit_avg_confidence": round(mit_avg_conf, 4),
+        "output_hits": str(hits_path),
+    }
+
+    with open(summary_path, "w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2, ensure_ascii=False)
+
+    findings = {
+        "generated_from": str(hits_path),
+        "total_hits": len(hits),
+        "mit_counts": dict(mit_counts),
+        "mit_avg_confidence": round(mit_avg_conf, 4),
+        "top_likely_distinctor": [
+            h for h in hits if h.get("mit_label") == "likely-distinctor"
+        ][:120],
+        "top_unclear": [
+            h for h in hits if h.get("mit_label") == "unclear"
+        ][:120],
+    }
+    with open(findings_json_path, "w", encoding="utf-8") as f:
+        json.dump(findings, f, indent=2, ensure_ascii=False)
+
+    md_lines = [
+        "# Distinctor MIT Findings",
+        "",
+        f"- entities_evaluated: {n_eval}",
+        f"- sampled: {sampled}",
+        f"- candidate_pair_events: {summary['candidate_pair_events']}",
+        f"- unresolved_pair_events: {summary['unresolved_pair_events']}",
+        f"- explicit_equal_pair_events: {summary['explicit_equal_pair_events']}",
+        f"- explicit_distinct_pair_events: {summary['explicit_distinct_pair_events']}",
+        f"- benign-cooccurrence: {mit_counts.get('benign-cooccurrence', 0)}",
+        f"- likely-distinctor: {mit_counts.get('likely-distinctor', 0)}",
+        f"- unclear: {mit_counts.get('unclear', 0)}",
+        f"- avg_confidence: {round(mit_avg_conf, 4)}",
+        "",
+        "## Likely Distinctor Candidates",
+    ]
+    likely_rows = [h for h in hits if h.get("mit_label") == "likely-distinctor"]
+    if likely_rows:
+        for i, h in enumerate(likely_rows[:80], start=1):
+            md_lines.append(
+                f"{i}. {h.get('entity_id', '')} "
+                f"pair=({', '.join(h.get('pair', []))}) "
+                f"scope={h.get('scope_type', '')} "
+                f"conf={h.get('mit_confidence', 0.0)} "
+                f"rationale={','.join(h.get('mit_rationale', []))}"
+            )
+    else:
+        md_lines.append("- none")
+    md_lines.append("")
+    md_lines.append("## Unclear Candidates")
+    unclear_rows = [h for h in hits if h.get("mit_label") == "unclear"]
+    if unclear_rows:
+        for i, h in enumerate(unclear_rows[:80], start=1):
+            md_lines.append(
+                f"{i}. {h.get('entity_id', '')} "
+                f"pair=({', '.join(h.get('pair', []))}) "
+                f"scope={h.get('scope_type', '')} "
+                f"conf={h.get('mit_confidence', 0.0)} "
+                f"rationale={','.join(h.get('mit_rationale', []))}"
+            )
+    else:
+        md_lines.append("- none")
+    with open(findings_md_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(md_lines) + "\n")
+
+    return {
+        **summary,
+        "summary_path": str(summary_path),
+        "findings_json_path": str(findings_json_path),
+        "findings_md_path": str(findings_md_path),
     }
 
 
@@ -1192,6 +1881,278 @@ def run_stage8_expression_surfaces(threads, outdir):
     return stats, out_path
 
 
+def _load_stage5_entity_map(path, key):
+    """Load Stage 5 JSON array file into entity_id -> list payload map."""
+    if not path.exists():
+        return {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            rows = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    out = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        eid = row.get("entity_id")
+        if not eid:
+            continue
+        payload = row.get(key, [])
+        out[eid] = payload if isinstance(payload, list) else []
+    return out
+
+
+def _extract_math_snippets_for_hypergraph(text, max_exprs=160, max_latex_len=512):
+    """Extract unique LaTeX snippets from text for paper-level hypergraphs."""
+    out = []
+    seen = set()
+    blocked = []
+
+    def _add(raw, display, pos):
+        tex = " ".join((raw or "").strip().split())
+        if not tex or len(tex) > max_latex_len:
+            return False
+        if tex in seen:
+            return False
+        seen.add(tex)
+        out.append({
+            "latex": tex,
+            "display": bool(display),
+            "position": int(pos),
+        })
+        return len(out) >= max_exprs
+
+    for m in re.finditer(r"\$\$(.+?)\$\$", text, re.DOTALL):
+        blocked.append((m.start(), m.end()))
+        if _add(m.group(1), True, m.start(1)):
+            return out
+
+    for m in re.finditer(r"\\\[(.+?)\\\]", text, re.DOTALL):
+        blocked.append((m.start(), m.end()))
+        if _add(m.group(1), True, m.start(1)):
+            return out
+
+    for m in re.finditer(r"(?<!\$)\$([^$\n]+?)\$(?!\$)", text):
+        if any(a <= m.start() < b for a, b in blocked):
+            continue
+        if _add(m.group(1), False, m.start(1)):
+            return out
+
+    for m in re.finditer(r"\\\((.+?)\\\)", text, re.DOTALL):
+        if _add(m.group(1), False, m.start(1)):
+            return out
+
+    out.sort(key=lambda r: r["position"])
+    return out
+
+
+def _build_arxiv_paper_hypergraph(entity, pair, terms, scopes, text, max_exprs=160):
+    """Build a paper-level typed hypergraph using Stage 5 outputs + expressions."""
+    eid = entity["entity/id"]
+    post_id = f"paper:{eid}"
+    nodes = {}
+    edges = []
+
+    def _add_node(nid, ntype, subtype, attrs):
+        if nid not in nodes:
+            nodes[nid] = {
+                "id": nid,
+                "type": ntype,
+                "subtype": subtype,
+                "attrs": attrs,
+            }
+
+    _add_node(post_id, "post", "paper", {
+        "title": pair.question.title,
+        "tags": pair.tags or [],
+        "date": pair.question.creation_date,
+    })
+
+    # NER terms -> term nodes + mention edges
+    seen_term_edges = set()
+    for t in terms:
+        if not isinstance(t, dict):
+            continue
+        canon = (t.get("canon") or t.get("term_lower") or t.get("term") or "").strip().lower()
+        surface = (t.get("term") or canon).strip()
+        if not canon:
+            continue
+        term_id = f"term:{canon}"
+        _add_node(term_id, "term", canon, {"surface_forms": set()})
+        nodes[term_id]["attrs"]["surface_forms"].add(surface)
+        if term_id not in seen_term_edges:
+            edges.append({
+                "type": "mention",
+                "ends": [post_id, term_id],
+                "attrs": {"surface": surface},
+            })
+            seen_term_edges.add(term_id)
+
+    # Scope records -> scope nodes + scope edges
+    for idx, s in enumerate(scopes):
+        if not isinstance(s, dict):
+            continue
+        scope_id = s.get("hx/id") or f"{eid}:scope-{idx:04d}"
+        scope_type = s.get("hx/type", "scope/unknown")
+        content = s.get("hx/content") or {}
+        _add_node(scope_id, "scope", scope_type, {
+            "match": content.get("match", ""),
+            "position": content.get("position"),
+            "end": content.get("end"),
+            "labels": s.get("hx/labels", []),
+        })
+        edges.append({
+            "type": "scope",
+            "ends": [scope_id, post_id],
+            "attrs": {"binding_type": scope_type},
+        })
+
+    # Expressions -> expression nodes + surface edges
+    expr_rows = _extract_math_snippets_for_hypergraph(text, max_exprs=max_exprs)
+    for ex in expr_rows:
+        latex = ex["latex"]
+        sexp = sexp_parse(latex)
+        h = hashlib.sha1(latex.encode("utf-8")).hexdigest()[:12]
+        expr_id = f"expr:{eid}:{h}"
+        _add_node(expr_id, "expression", "math", {
+            "latex": latex,
+            "sexp": sexp,
+            "display": ex["display"],
+        })
+        edges.append({
+            "type": "surface",
+            "ends": [expr_id, post_id],
+            "attrs": {"position": ex["position"]},
+        })
+
+    # JSON-serializable attrs
+    for n in nodes.values():
+        for k, v in list(n.get("attrs", {}).items()):
+            if isinstance(v, set):
+                n["attrs"][k] = sorted(v)
+
+    node_list = sorted(nodes.values(), key=lambda n: n["id"])
+    edge_types = Counter(e["type"] for e in edges)
+    return {
+        "thread_id": eid,
+        "nodes": node_list,
+        "edges": edges,
+        "meta": {
+            "n_nodes": len(node_list),
+            "n_edges": len(edges),
+            "n_posts": sum(1 for n in node_list if n["type"] == "post"),
+            "n_terms": sum(1 for n in node_list if n["type"] == "term"),
+            "n_expressions": sum(1 for n in node_list if n["type"] == "expression"),
+            "n_scopes": sum(1 for n in node_list if n["type"] == "scope"),
+            "edge_types": dict(edge_types),
+        },
+    }
+
+
+def run_stage9a_arxiv_paper_hypergraphs(
+    entities,
+    pairs,
+    outdir,
+    paper_hg_eprint_dir=None,
+    paper_hg_text_max_chars=240_000,
+    paper_hg_max_tex_members=4,
+    paper_hg_max_expressions=160,
+):
+    """Stage 9a (arXiv): assemble paper-level hypergraphs from Stage 5 outputs."""
+    total = len(entities)
+    ner_map = _load_stage5_entity_map(outdir / "ner-terms.json", "terms")
+    scope_map = _load_stage5_entity_map(outdir / "scopes.json", "scopes")
+    if not ner_map:
+        print("       Warning: ner-terms.json missing or empty; term nodes may be sparse")
+    if not scope_map:
+        print("       Warning: scopes.json missing or empty; scope nodes may be sparse")
+
+    out_path = outdir / "hypergraphs.json"
+    n_hg = 0
+    n_nodes = 0
+    n_edges = 0
+    n_terms = 0
+    n_scopes = 0
+    n_exprs = 0
+    edge_type_freq = Counter()
+    eprint_ok = 0
+    eprint_missing = 0
+    eprint_status = Counter()
+
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write("[\n")
+        for i, (entity, pair) in enumerate(zip(entities, pairs)):
+            eid = entity["entity/id"]
+            full_text = pair.question.body_text + " " + pair.answer.body_text
+            if paper_hg_eprint_dir is not None:
+                eprint_text, e_meta = _load_eprint_text_for_entity(
+                    eprint_dir=paper_hg_eprint_dir,
+                    entity_id=eid,
+                    max_chars=paper_hg_text_max_chars,
+                    max_members=paper_hg_max_tex_members,
+                )
+                estatus = e_meta.get("status", "unknown")
+                eprint_status[estatus] += 1
+                if eprint_text:
+                    full_text = eprint_text
+                    eprint_ok += 1
+                else:
+                    eprint_missing += 1
+            elif paper_hg_text_max_chars and len(full_text) > paper_hg_text_max_chars:
+                full_text = full_text[:paper_hg_text_max_chars]
+
+            hg = _build_arxiv_paper_hypergraph(
+                entity=entity,
+                pair=pair,
+                terms=ner_map.get(eid, []),
+                scopes=scope_map.get(eid, []),
+                text=full_text,
+                max_exprs=paper_hg_max_expressions,
+            )
+
+            if i > 0:
+                f.write(",\n")
+            json.dump(hg, f, ensure_ascii=False)
+
+            n_hg += 1
+            n_nodes += hg["meta"]["n_nodes"]
+            n_edges += hg["meta"]["n_edges"]
+            n_terms += hg["meta"]["n_terms"]
+            n_scopes += hg["meta"]["n_scopes"]
+            n_exprs += hg["meta"]["n_expressions"]
+            edge_type_freq.update(hg["meta"].get("edge_types", {}))
+
+            if (i + 1) % 500 == 0 or (i + 1) == total:
+                extra = ""
+                if paper_hg_eprint_dir is not None:
+                    extra = f" eprint_ok={eprint_ok} missing={eprint_missing}"
+                print(f"       [{i+1}/{total}] hypergraphs={n_hg} "
+                      f"nodes={n_nodes} edges={n_edges}{extra}")
+
+        f.write("\n]")
+
+    stats = {
+        "threads_processed": total,  # compatibility with downstream health gates
+        "papers_processed": total,
+        "hypergraphs_produced": n_hg,
+        "total_nodes": n_nodes,
+        "total_edges": n_edges,
+        "avg_nodes": n_nodes / n_hg if n_hg else 0,
+        "avg_edges": n_edges / n_hg if n_hg else 0,
+        "total_terms": n_terms,
+        "total_scopes": n_scopes,
+        "total_expressions": n_exprs,
+        "edge_type_freq": dict(edge_type_freq.most_common()),
+        "paper_text_source": ("eprints" if paper_hg_eprint_dir is not None else "metadata"),
+        "paper_hg_max_expressions": paper_hg_max_expressions,
+        "paper_hg_text_max_chars": paper_hg_text_max_chars,
+        "eprint_text_used": eprint_ok,
+        "eprint_text_missing": eprint_missing,
+        "eprint_status_counts": dict(eprint_status),
+    }
+    return stats, out_path
+
+
 # ---------------------------------------------------------------------------
 # Stage 9a: Hypergraph assembly (CPU)
 # ---------------------------------------------------------------------------
@@ -1344,7 +2305,7 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
             hypergraphs = json.load(f)
         thread_ids = [hg.get("thread_id", i) for i, hg in enumerate(hypergraphs)]
 
-    model, embeddings = train_gnn(
+    model, embeddings, train_stats = train_gnn(
         hypergraphs, dim=embed_dim, hidden_dim=hidden_dim,
         n_layers=n_layers, epochs=epochs, batch_size=batch_size,
         device=device, verbose=True, num_workers=num_workers,
@@ -1360,11 +2321,12 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
         json.dump(thread_ids, f)
 
     stats = {
-        "n_threads": len(hypergraphs),
+        "n_threads": len(thread_ids),
         "n_embedded": embeddings.shape[0],
         "embed_dim": embeddings.shape[1],
         "epochs": epochs,
         "device": str(device or "auto"),
+        "train_metrics": train_stats,
     }
     return stats, emb_path, model_path, thread_ids
 
@@ -1690,11 +2652,12 @@ def print_dry_run(args):
         est_stage3_min = est_pairs / 114000 * 8  # LLM inference (slowest)
         est_stage4_min = est_pairs / 114000 * 1  # clustering
         est_stage5_min = est_pairs / 114000 * 2  # NER + scope
+        est_stage5b_min = est_pairs / 114000 * 1.5  # MIT binder-pair pass
         est_stage6_min = est_stage1_min  # rough placeholder for reverse morphogenesis
         est_stage7_min = est_stage1_min * 1.5
     else:
         est_stage1_min = est_stage2_min = est_stage3_min = "?"
-        est_stage4_min = est_stage5_min = est_stage6_min = est_stage7_min = "?"
+        est_stage4_min = est_stage5_min = est_stage5b_min = est_stage6_min = est_stage7_min = "?"
 
     skip_embeddings = args.skip_embeddings or args.moist_run
     skip_clustering = args.skip_clustering or args.moist_run
@@ -1704,6 +2667,7 @@ def print_dry_run(args):
     stage3_active = args.moist_run or (not args.skip_llm)
     stage4_active = not skip_clustering
     stage5_active = not args.skip_ner
+    stage5b_active = args.run_distinctor_mit
     stage6_active = args.moist_run or (not args.skip_llm)
     stage7_active = not args.skip_threads
 
@@ -1749,6 +2713,14 @@ def print_dry_run(args):
         print(f"  {'5. NER + scope detection':<42s} {'SKIPPED':>10s}")
     else:
         print(f"  {'5. NER + scope detection (CPU)':<42s} {args.ner_kernel:<36s} {fmt(est_stage5_min)+' min':>10s}")
+
+    if not stage5b_active:
+        print(f"  {'5b. Distinctor MIT pilot':<42s} {'SKIPPED':>10s}")
+    else:
+        lim = args.distinctor_entity_limit or "all"
+        src = "eprints" if args.distinctor_eprint_dir else "qa/metadata"
+        tool = f"binder-pair MIT {src} (limit={lim})"
+        print(f"  {'5b. Distinctor MIT pilot (CPU)':<42s} {tool:<36s} {fmt(est_stage5b_min)+' min':>10s}")
 
     if not stage6_active:
         print(f"  {'6. Reverse morphogenesis S←Q←A':<42s} {'SKIPPED':>10s}")
@@ -1801,7 +2773,8 @@ def print_dry_run(args):
     print(f"  {'-'*42} {'-'*36} {'-'*10}")
 
     active = (1 + int(stage2_active) + int(stage3_active) + int(stage4_active)
-              + int(stage5_active) + int(stage6_active) + int(stage7_active)
+              + int(stage5_active) + int(stage5b_active)
+              + int(stage6_active) + int(stage7_active)
               + int(stage8_active) + int(stage9a_active)
               + int(stage9b_active) + int(stage10_active))
     if isinstance(est_stage1_min, (int, float)):
@@ -1814,6 +2787,8 @@ def print_dry_run(args):
             est_total_min += est_stage4_min
         if stage5_active:
             est_total_min += est_stage5_min
+        if stage5b_active:
+            est_total_min += est_stage5b_min
         if stage6_active:
             est_total_min += est_stage6_min
         if stage7_active:
@@ -1828,7 +2803,8 @@ def print_dry_run(args):
             est_total_min += est_stage10_min
     else:
         est_total_min = "?"
-    print(f"  {'TOTAL':<42s} {f'{active}/11 stages active':<36s} {fmt(est_total_min)+' min':>10s}")
+    total_stages = 11 + int(stage5b_active)
+    print(f"  {'TOTAL':<42s} {f'{active}/{total_stages} stages active':<36s} {fmt(est_total_min)+' min':>10s}")
     print()
 
     print("  ESTIMATED OUTPUT:")
@@ -1843,6 +2819,11 @@ def print_dry_run(args):
         if not args.skip_ner:
             print(f"    ner-terms.json        ~{fmt(est_entities_mb * 0.4)} MB")
             print(f"    scopes.json           ~{fmt(est_entities_mb * 0.2)} MB")
+            if args.discover_terms:
+                print(f"    candidate-new-terms.jsonl ~{fmt(est_entities_mb * 0.05)} MB")
+        if stage5b_active:
+            print(f"    distinctor-mit-hits.jsonl   ~{fmt(est_entities_mb * 0.08)} MB")
+            print(f"    distinctor-mit-summary.json ~{fmt(est_entities_mb * 0.01)} MB")
         if not args.skip_threads:
             print(f"    thread-wiring.json    ~{fmt(est_entities_mb * 0.5)} MB")
         if not args.skip_expressions:
@@ -1889,10 +2870,48 @@ def print_dry_run(args):
         cmd_parts.append(f"  --skip-clustering")
     if args.skip_ner:
         cmd_parts.append(f"  --skip-ner")
+    if args.discover_terms:
+        cmd_parts.append(f"  --discover-terms")
+        if args.discover_terms_min_freq != 3:
+            cmd_parts.append(f"  --discover-terms-min-freq {args.discover_terms_min_freq}")
+        if args.discover_terms_max != 2000:
+            cmd_parts.append(f"  --discover-terms-max {args.discover_terms_max}")
+        if args.discover_terms_max_per_entity != 64:
+            cmd_parts.append(f"  --discover-terms-max-per-entity {args.discover_terms_max_per_entity}")
+        if args.discover_terms_eprint_dir:
+            cmd_parts.append(f"  --discover-terms-eprint-dir {args.discover_terms_eprint_dir}")
+        if args.discover_terms_eprint_max_chars != 240000:
+            cmd_parts.append(f"  --discover-terms-eprint-max-chars {args.discover_terms_eprint_max_chars}")
+        if args.discover_terms_eprint_max_tex_members != 4:
+            cmd_parts.append(f"  --discover-terms-eprint-max-tex-members {args.discover_terms_eprint_max_tex_members}")
+    if args.run_distinctor_mit:
+        cmd_parts.append(f"  --run-distinctor-mit")
+        if args.distinctor_entity_limit:
+            cmd_parts.append(f"  --distinctor-entity-limit {args.distinctor_entity_limit}")
+        if args.distinctor_max_hits != 500:
+            cmd_parts.append(f"  --distinctor-max-hits {args.distinctor_max_hits}")
+        if args.distinctor_seed != 13:
+            cmd_parts.append(f"  --distinctor-seed {args.distinctor_seed}")
+        if args.distinctor_eprint_dir:
+            cmd_parts.append(f"  --distinctor-eprint-dir {args.distinctor_eprint_dir}")
+        if args.distinctor_eprint_max_chars != 240000:
+            cmd_parts.append(f"  --distinctor-eprint-max-chars {args.distinctor_eprint_max_chars}")
+        if args.distinctor_eprint_max_tex_members != 4:
+            cmd_parts.append(f"  --distinctor-eprint-max-tex-members {args.distinctor_eprint_max_tex_members}")
     if args.skip_threads:
         cmd_parts.append(f"  --skip-threads")
     if args.thread_limit:
         cmd_parts.append(f"  --thread-limit {args.thread_limit}")
+    if args.skip_hypergraphs:
+        cmd_parts.append(f"  --skip-hypergraphs")
+    if args.paper_hg_eprint_dir:
+        cmd_parts.append(f"  --paper-hg-eprint-dir {args.paper_hg_eprint_dir}")
+    if args.paper_hg_max_expressions != 160:
+        cmd_parts.append(f"  --paper-hg-max-expressions {args.paper_hg_max_expressions}")
+    if args.paper_hg_text_max_chars != 240000:
+        cmd_parts.append(f"  --paper-hg-text-max-chars {args.paper_hg_text_max_chars}")
+    if args.paper_hg_max_tex_members != 4:
+        cmd_parts.append(f"  --paper-hg-max-tex-members {args.paper_hg_max_tex_members}")
     print(f"    {' \\\\\n    '.join(cmd_parts)}")
     print()
     print(f"  MOIST RUN (CPU stages + prompt files for Codex handoff):")
@@ -1902,6 +2921,44 @@ def print_dry_run(args):
     moist_parts.append(f"  --site {args.site}")
     if args.limit:
         moist_parts.append(f"  --limit {args.limit}")
+    if args.discover_terms:
+        moist_parts.append(f"  --discover-terms")
+        if args.discover_terms_min_freq != 3:
+            moist_parts.append(f"  --discover-terms-min-freq {args.discover_terms_min_freq}")
+        if args.discover_terms_max != 2000:
+            moist_parts.append(f"  --discover-terms-max {args.discover_terms_max}")
+        if args.discover_terms_max_per_entity != 64:
+            moist_parts.append(f"  --discover-terms-max-per-entity {args.discover_terms_max_per_entity}")
+        if args.discover_terms_eprint_dir:
+            moist_parts.append(f"  --discover-terms-eprint-dir {args.discover_terms_eprint_dir}")
+        if args.discover_terms_eprint_max_chars != 240000:
+            moist_parts.append(f"  --discover-terms-eprint-max-chars {args.discover_terms_eprint_max_chars}")
+        if args.discover_terms_eprint_max_tex_members != 4:
+            moist_parts.append(f"  --discover-terms-eprint-max-tex-members {args.discover_terms_eprint_max_tex_members}")
+    if args.run_distinctor_mit:
+        moist_parts.append(f"  --run-distinctor-mit")
+        if args.distinctor_entity_limit:
+            moist_parts.append(f"  --distinctor-entity-limit {args.distinctor_entity_limit}")
+        if args.distinctor_max_hits != 500:
+            moist_parts.append(f"  --distinctor-max-hits {args.distinctor_max_hits}")
+        if args.distinctor_seed != 13:
+            moist_parts.append(f"  --distinctor-seed {args.distinctor_seed}")
+        if args.distinctor_eprint_dir:
+            moist_parts.append(f"  --distinctor-eprint-dir {args.distinctor_eprint_dir}")
+        if args.distinctor_eprint_max_chars != 240000:
+            moist_parts.append(f"  --distinctor-eprint-max-chars {args.distinctor_eprint_max_chars}")
+        if args.distinctor_eprint_max_tex_members != 4:
+            moist_parts.append(f"  --distinctor-eprint-max-tex-members {args.distinctor_eprint_max_tex_members}")
+    if args.skip_hypergraphs:
+        moist_parts.append(f"  --skip-hypergraphs")
+    if args.paper_hg_eprint_dir:
+        moist_parts.append(f"  --paper-hg-eprint-dir {args.paper_hg_eprint_dir}")
+    if args.paper_hg_max_expressions != 160:
+        moist_parts.append(f"  --paper-hg-max-expressions {args.paper_hg_max_expressions}")
+    if args.paper_hg_text_max_chars != 240000:
+        moist_parts.append(f"  --paper-hg-text-max-chars {args.paper_hg_text_max_chars}")
+    if args.paper_hg_max_tex_members != 4:
+        moist_parts.append(f"  --paper-hg-max-tex-members {args.paper_hg_max_tex_members}")
     print(f"    {' \\\\\n    '.join(moist_parts)}")
     print()
     print(f"    Generates: moist-prompts/stage3-pattern-tagging.jsonl")
@@ -1980,6 +3037,34 @@ def main():
                         help="Path to NER kernel TSV")
     parser.add_argument("--skip-ner", action="store_true",
                         help="Skip NER term spotting and scope detection")
+    parser.add_argument("--discover-terms", action="store_true",
+                        help="Enable open-world technical term discovery in Stage 5")
+    parser.add_argument("--discover-terms-min-freq", type=int, default=3,
+                        help="Min entity frequency for discovered terms (default: 3)")
+    parser.add_argument("--discover-terms-max", type=int, default=2000,
+                        help="Max discovered terms to write (default: 2000)")
+    parser.add_argument("--discover-terms-max-per-entity", type=int, default=64,
+                        help="Max raw discovery candidates scanned per entity (default: 64)")
+    parser.add_argument("--discover-terms-eprint-dir", default=None,
+                        help="Optional arXiv eprint directory for full-text term discovery")
+    parser.add_argument("--discover-terms-eprint-max-chars", type=int, default=240000,
+                        help="Per-entity text cap for eprint-backed term discovery (default: 240000)")
+    parser.add_argument("--discover-terms-eprint-max-tex-members", type=int, default=4,
+                        help="Max .tex members per tar for eprint-backed term discovery (default: 4)")
+    parser.add_argument("--run-distinctor-mit", action="store_true",
+                        help="Run binder-pair MIT/distinctor pilot (Stage 5b)")
+    parser.add_argument("--distinctor-entity-limit", type=int, default=0,
+                        help="Optional cap for Stage 5b entities (0 = all)")
+    parser.add_argument("--distinctor-max-hits", type=int, default=500,
+                        help="Max inspectable MIT hit rows to write (default: 500)")
+    parser.add_argument("--distinctor-seed", type=int, default=13,
+                        help="Sampling seed for Stage 5b when --distinctor-entity-limit is used")
+    parser.add_argument("--distinctor-eprint-dir", default=None,
+                        help="Optional arXiv eprint directory (.tar/.tar.gz/.tex) for Stage 5b full-text MIT")
+    parser.add_argument("--distinctor-eprint-max-chars", type=int, default=240000,
+                        help="Per-entity text cap when reading eprints (default: 240000)")
+    parser.add_argument("--distinctor-eprint-max-tex-members", type=int, default=4,
+                        help="Max .tex members per tar archive in Stage 5b (default: 4)")
 
     # Thread wiring diagrams (Stage 7)
     parser.add_argument("--comments-xml", default=None,
@@ -1996,6 +3081,14 @@ def main():
                         help="Skip expression surface parsing (Stage 8)")
     parser.add_argument("--skip-hypergraphs", action="store_true",
                         help="Skip hypergraph assembly (Stage 9a)")
+    parser.add_argument("--paper-hg-eprint-dir", default=None,
+                        help="Optional arXiv eprint dir for paper-level hypergraphs (Stage 9a arXiv mode)")
+    parser.add_argument("--paper-hg-max-expressions", type=int, default=160,
+                        help="Max expressions parsed per arXiv paper hypergraph (default: 160)")
+    parser.add_argument("--paper-hg-text-max-chars", type=int, default=240000,
+                        help="Text cap per arXiv paper for hypergraph assembly (default: 240000)")
+    parser.add_argument("--paper-hg-max-tex-members", type=int, default=4,
+                        help="Max .tex members read per arXiv tar for paper hypergraphs (default: 4)")
 
     # Graph embedding + FAISS index (Stages 9b-10)
     parser.add_argument("--skip-graph-embed", action="store_true",
@@ -2050,6 +3143,12 @@ def main():
             args.arxiv_jsonl = str(input_base / args.arxiv_jsonl)
         if args.comments_xml and not Path(args.comments_xml).is_absolute():
             args.comments_xml = str(input_base / args.comments_xml)
+        if args.paper_hg_eprint_dir and not Path(args.paper_hg_eprint_dir).is_absolute():
+            args.paper_hg_eprint_dir = str(input_base / args.paper_hg_eprint_dir)
+        if args.discover_terms_eprint_dir and not Path(args.discover_terms_eprint_dir).is_absolute():
+            args.discover_terms_eprint_dir = str(input_base / args.discover_terms_eprint_dir)
+        if args.distinctor_eprint_dir and not Path(args.distinctor_eprint_dir).is_absolute():
+            args.distinctor_eprint_dir = str(input_base / args.distinctor_eprint_dir)
         # data-dir for downloads also goes to input location
         if args.data_dir == parser.get_default("data_dir"):
             args.data_dir = str(input_base / "se-data")
@@ -2057,6 +3156,30 @@ def main():
 
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be > 0")
+    if args.discover_terms_min_freq <= 0:
+        parser.error("--discover-terms-min-freq must be > 0")
+    if args.discover_terms_max <= 0:
+        parser.error("--discover-terms-max must be > 0")
+    if args.discover_terms_max_per_entity <= 0:
+        parser.error("--discover-terms-max-per-entity must be > 0")
+    if args.discover_terms_eprint_max_chars <= 0:
+        parser.error("--discover-terms-eprint-max-chars must be > 0")
+    if args.discover_terms_eprint_max_tex_members <= 0:
+        parser.error("--discover-terms-eprint-max-tex-members must be > 0")
+    if args.paper_hg_max_expressions <= 0:
+        parser.error("--paper-hg-max-expressions must be > 0")
+    if args.paper_hg_text_max_chars <= 0:
+        parser.error("--paper-hg-text-max-chars must be > 0")
+    if args.paper_hg_max_tex_members <= 0:
+        parser.error("--paper-hg-max-tex-members must be > 0")
+    if args.distinctor_entity_limit < 0:
+        parser.error("--distinctor-entity-limit must be >= 0")
+    if args.distinctor_max_hits <= 0:
+        parser.error("--distinctor-max-hits must be > 0")
+    if args.distinctor_eprint_max_chars <= 0:
+        parser.error("--distinctor-eprint-max-chars must be > 0")
+    if args.distinctor_eprint_max_tex_members <= 0:
+        parser.error("--distinctor-eprint-max-tex-members must be > 0")
 
     # Shard validation
     if (args.shard_index is not None) != (args.num_shards is not None):
@@ -2123,6 +3246,24 @@ def main():
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
 
+    if args.arxiv_jsonl and args.paper_hg_eprint_dir is None:
+        if args.distinctor_eprint_dir:
+            args.paper_hg_eprint_dir = args.distinctor_eprint_dir
+            print(f"  Paper hypergraphs: defaulting --paper-hg-eprint-dir to --distinctor-eprint-dir ({args.paper_hg_eprint_dir})")
+        elif args.discover_terms_eprint_dir:
+            args.paper_hg_eprint_dir = args.discover_terms_eprint_dir
+            print(f"  Paper hypergraphs: defaulting --paper-hg-eprint-dir to --discover-terms-eprint-dir ({args.paper_hg_eprint_dir})")
+
+    if args.distinctor_eprint_dir and not Path(args.distinctor_eprint_dir).exists():
+        print(f"  WARNING: --distinctor-eprint-dir not found: {args.distinctor_eprint_dir}")
+        print("           Stage 5b will fall back to metadata/QA text.")
+    if args.discover_terms_eprint_dir and not Path(args.discover_terms_eprint_dir).exists():
+        print(f"  WARNING: --discover-terms-eprint-dir not found: {args.discover_terms_eprint_dir}")
+        print("           Open-world term discovery will use metadata/QA text.")
+    if args.paper_hg_eprint_dir and not Path(args.paper_hg_eprint_dir).exists():
+        print(f"  WARNING: --paper-hg-eprint-dir not found: {args.paper_hg_eprint_dir}")
+        print("           Paper hypergraphs will use metadata/QA text.")
+
     # ========== Moist Run ==========
     # Moist run: execute CPU stages normally, generate prompt files for LLM
     # stages. This lets you run Stage 1 (parse) and Stage 5 (NER) on a laptop,
@@ -2155,7 +3296,7 @@ def main():
         else:
             print(f"  [HEALTH WARNING] {stage}: {message}")
 
-    n_stages = 11  # 1-7, 8, 9a, 9b, 10
+    n_stages = 11 + (1 if args.run_distinctor_mit else 0)  # + optional 5b
 
     # Auto-detect Comments.xml if not provided
     if not args.comments_xml and args.posts_xml:
@@ -2307,6 +3448,8 @@ def main():
 
     # ========== Stage 5: NER + Scope Detection ==========
     stage5_stats = None
+    stage5b_stats = None
+    scope_detector, scope_detector_name = _load_scope_detector(prefer_nlab=True)
     if not args.skip_ner:
         ner_path = Path(args.ner_kernel)
         if not ner_path.exists():
@@ -2316,7 +3459,17 @@ def main():
             print(f"\n[Stage 5/{n_stages}] NER term spotting + scope detection...")
             print(f"       Kernel: {ner_path}")
             stage5_stats = run_stage5_ner_scopes(
-                entities, pairs, str(ner_path), outdir)
+                entities, pairs, str(ner_path), outdir,
+                scope_detector=scope_detector,
+                scope_detector_name=scope_detector_name,
+                discover_terms=args.discover_terms,
+                discover_terms_min_freq=args.discover_terms_min_freq,
+                discover_terms_max=args.discover_terms_max,
+                discover_terms_max_per_entity=args.discover_terms_max_per_entity,
+                discover_terms_eprint_dir=(Path(args.discover_terms_eprint_dir)
+                                           if args.discover_terms_eprint_dir else None),
+                discover_terms_eprint_max_chars=args.discover_terms_eprint_max_chars,
+                discover_terms_eprint_max_tex_members=args.discover_terms_eprint_max_tex_members)
 
             print(f"       NER coverage: {stage5_stats['ner_coverage']:.0%} "
                   f"({stage5_stats['entities_with_ner']}/{stage5_stats['entities_processed']})")
@@ -2326,9 +3479,64 @@ def main():
                 print(f"       Scope types:")
                 for stype, count in stage5_stats['scope_type_freq'].items():
                     print(f"         {stype}: {count}")
+            open_ner = stage5_stats.get("open_ner")
+            if open_ner:
+                print("       Open-world NER: "
+                      f"{open_ner['candidates_written']} candidates "
+                      f"(unknown_extracted={open_ner['total_unknown_extracted']}, "
+                      f"unique={open_ner['unique_unknown_terms']})")
+                if open_ner.get("eprint_mode"):
+                    print("         eprint text coverage: "
+                          f"{open_ner.get('eprint_text_used', 0)}/"
+                          f"{stage5_stats['entities_processed']} "
+                          f"(missing={open_ner.get('eprint_text_missing', 0)})")
             print(f"       Stage 5 done in {time.time()-t5:.0f}s")
     else:
         print(f"\n[Stage 5/{n_stages}] Skipped (--skip-ner)")
+
+    # ========== Stage 5b: Distinctor MIT pilot ==========
+    if args.run_distinctor_mit:
+        t5b = time.time()
+        print(f"\n[Stage 5b/{n_stages}] Distinctor MIT pilot (CPU)...")
+        print(f"       Scope detector: {scope_detector_name}")
+        print(f"       Entity limit: {args.distinctor_entity_limit or 'all'}")
+        print(f"       Max hits: {args.distinctor_max_hits}")
+        eprint_dir = Path(args.distinctor_eprint_dir) if args.distinctor_eprint_dir else None
+        if eprint_dir:
+            print(f"       Eprint text: {eprint_dir} "
+                  f"(max_chars={args.distinctor_eprint_max_chars}, "
+                  f"max_tex_members={args.distinctor_eprint_max_tex_members})")
+        stage5b_stats = run_stage5b_distinctor_mit(
+            entities=entities,
+            pairs=pairs,
+            outdir=outdir,
+            scope_detector=scope_detector,
+            scope_detector_name=scope_detector_name,
+            entity_limit=args.distinctor_entity_limit,
+            max_hits=args.distinctor_max_hits,
+            seed=args.distinctor_seed,
+            eprint_dir=eprint_dir,
+            eprint_max_chars=args.distinctor_eprint_max_chars,
+            eprint_max_tex_members=args.distinctor_eprint_max_tex_members,
+        )
+        print(f"       Binder coverage: {stage5b_stats['entry_binder_coverage']:.0%} "
+              f"({stage5b_stats['entries_with_binder_scopes']}/{stage5b_stats['entity_count_evaluated']})")
+        if stage5b_stats.get("eprint_mode"):
+            print(f"       Eprint text coverage: {stage5b_stats['eprint_text_used']}/"
+                  f"{stage5b_stats['entity_count_evaluated']} "
+                  f"(missing={stage5b_stats['eprint_text_missing']})")
+        print(f"       Candidate pairs: {stage5b_stats['candidate_pair_events']} "
+              f"(unresolved={stage5b_stats['unresolved_pair_events']}, "
+              f"eq={stage5b_stats['explicit_equal_pair_events']}, "
+              f"neq={stage5b_stats['explicit_distinct_pair_events']})")
+        print(f"       MIT labels: {stage5b_stats['mit_counts']}")
+        print(f"       Outputs: {Path(stage5b_stats['summary_path']).name}, "
+              f"{Path(stage5b_stats['findings_json_path']).name}, "
+              f"{Path(stage5b_stats['findings_md_path']).name}, "
+              f"{Path(stage5b_stats['output_hits']).name}")
+        print(f"       Stage 5b done in {time.time()-t5b:.0f}s")
+    else:
+        print(f"\n[Stage 5b/{n_stages}] Skipped (--run-distinctor-mit not set)")
 
     # ========== Stage 6: Reverse morphogenesis S←Q←A ==========
     stage6_stats = None
@@ -2530,7 +3738,44 @@ def main():
 
     # ========== Stage 9a: Hypergraph assembly ==========
     stage9a_stats = None
-    if (not args.skip_hypergraphs and not args.skip_threads
+    if not args.skip_hypergraphs and args.arxiv_jsonl:
+        t9 = time.time()
+        print(f"\n[Stage 9a/{n_stages}] Paper-level hypergraph assembly (arXiv mode)...")
+        paper_hg_eprint_dir = Path(args.paper_hg_eprint_dir) if args.paper_hg_eprint_dir else None
+        if paper_hg_eprint_dir:
+            print(f"       Paper text source: {paper_hg_eprint_dir} "
+                  f"(max_chars={args.paper_hg_text_max_chars}, "
+                  f"max_tex_members={args.paper_hg_max_tex_members})")
+        stage9a_stats, hg_path = run_stage9a_arxiv_paper_hypergraphs(
+            entities=entities,
+            pairs=pairs,
+            outdir=outdir,
+            paper_hg_eprint_dir=paper_hg_eprint_dir,
+            paper_hg_text_max_chars=args.paper_hg_text_max_chars,
+            paper_hg_max_tex_members=args.paper_hg_max_tex_members,
+            paper_hg_max_expressions=args.paper_hg_max_expressions,
+        )
+        print(f"       {stage9a_stats['hypergraphs_produced']} paper hypergraphs, "
+              f"{stage9a_stats['total_nodes']} nodes, "
+              f"{stage9a_stats['total_edges']} edges")
+        print(f"       Avg: {stage9a_stats['avg_nodes']:.0f} nodes, "
+              f"{stage9a_stats['avg_edges']:.0f} edges per paper")
+        if stage9a_stats.get("paper_text_source") == "eprints":
+            print(f"       Eprint text coverage: {stage9a_stats.get('eprint_text_used', 0)}/"
+                  f"{stage9a_stats.get('papers_processed', 0)} "
+                  f"(missing={stage9a_stats.get('eprint_text_missing', 0)})")
+        print(f"       Written {hg_path} "
+              f"({os.path.getsize(hg_path) / 1e6:.1f} MB)")
+        print(f"       Stage 9a done in {time.time()-t9:.0f}s")
+
+        assembly_rate = (stage9a_stats['hypergraphs_produced']
+                         / stage9a_stats.get('papers_processed', 0)
+                         if stage9a_stats.get('papers_processed', 0) else 0)
+        health_gate("Stage 9a", assembly_rate < 0.90,
+                    f"assembly rate {assembly_rate:.1%} < 90% — hypergraph schema too rigid")
+        health_gate("Stage 9a", stage9a_stats['avg_nodes'] < 3,
+                    f"avg {stage9a_stats['avg_nodes']:.1f} nodes/paper — hypergraphs are trivial")
+    elif (not args.skip_hypergraphs and not args.skip_threads
             and threads and (ct_wiring_path or thread_diagrams)):
         t9 = time.time()
         print(f"\n[Stage 9a/{n_stages}] Hypergraph assembly...")
@@ -2586,6 +3831,14 @@ def main():
             )
         print(f"       {stage9b_stats['n_embedded']} thread embeddings "
               f"({stage9b_stats['embed_dim']}d) on {stage9b_stats['device']}")
+        tm = stage9b_stats.get("train_metrics") or {}
+        if tm.get("val_acc1_final") is not None:
+            print("       Validation retrieval: "
+                  f"Acc@1={tm['val_acc1_final']:.3f} "
+                  f"Acc@5={tm['val_acc5_final']:.3f} "
+                  f"MRR={tm['val_mrr_final']:.3f} "
+                  f"(best Acc@1={tm.get('best_val_acc1', 0.0):.3f} "
+                  f"@ epoch {tm.get('best_val_epoch')})")
         print(f"       Written {hg_embeddings_path} "
               f"({os.path.getsize(hg_embeddings_path) / 1e6:.1f} MB)")
         print(f"       Model: {model_path}")
@@ -2641,6 +3894,7 @@ def main():
         "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "source": args.site,
         "posts_xml": args.posts_xml,
+        "arxiv_jsonl": args.arxiv_jsonl,
         "min_score": args.min_score,
         "shard_index": args.shard_index,
         "num_shards": args.num_shards,
@@ -2652,6 +3906,11 @@ def main():
         "relation_count": len(all_relations),
         "elapsed_seconds": round(elapsed),
         "moist_run": args.moist_run,
+        "discover_terms": args.discover_terms,
+        "discover_terms_eprint_dir": args.discover_terms_eprint_dir,
+        "run_distinctor_mit": args.run_distinctor_mit,
+        "distinctor_eprint_dir": args.distinctor_eprint_dir,
+        "paper_hg_eprint_dir": args.paper_hg_eprint_dir,
         "stages_completed": [
             "parse",
             *([] if args.skip_embeddings else ["embeddings"]),
@@ -2659,6 +3918,7 @@ def main():
               ([] if args.skip_llm else ["llm_pattern_tags"])),
             *([] if args.skip_clustering or embeddings is None else ["clustering"]),
             *([] if args.skip_ner or stage5_stats is None else ["ner_scopes"]),
+            *([] if (not args.run_distinctor_mit) or stage5b_stats is None else ["distinctor_mit"]),
             *([] if stage6_stats is None else ["reverse_morphogenesis"]),
             *([] if stage7_stats is None else ["thread_wiring"]),
             *([] if stage8_stats is None else ["expression_surfaces"]),
@@ -2667,6 +3927,7 @@ def main():
             *([] if stage10_stats is None else ["faiss_index"]),
         ],
         "stage5_stats": stage5_stats,
+        "stage5b_stats": stage5b_stats,
         "stage6_stats": stage6_stats,
         "stage7_stats": stage7_stats,
         "stage8_stats": stage8_stats,
