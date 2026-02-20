@@ -222,10 +222,14 @@ def build_scope_ranges(scopes: list[dict]) -> list[tuple[int, int]]:
     for s in scopes:
         c = s.get("hx/content", {})
         pos = c.get("position")
-        match = c.get("match", "")
-        if not isinstance(pos, int) or not match:
+        if not isinstance(pos, int):
             continue
-        end = pos + len(match)
+        end = c.get("end")
+        if not isinstance(end, int):
+            match = c.get("match", "")
+            if not match:
+                continue
+            end = pos + len(match)
         if end > pos:
             ranges.append((pos, end))
     ranges.sort()

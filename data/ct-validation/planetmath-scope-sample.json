@@ -1,0 +1,2483 @@
+{
+  "planetmath_root": "/home/joe/code/planetmath",
+  "sample_per_domain": 120,
+  "seed": 7,
+  "missing_domains": [],
+  "aggregate": {
+    "domains": [
+      "18_Category_theory_homological_algebra",
+      "11_Number_theory",
+      "54_General_topology",
+      "68_Computer_science"
+    ],
+    "sampled_entries": 480,
+    "entries_with_scopes": 386,
+    "entry_scope_coverage": 0.8042,
+    "total_vars": 30968,
+    "scoped_vars": 21969,
+    "unscoped_vars": 8999,
+    "var_scope_coverage": 0.7094
+  },
+  "domains": [
+    {
+      "domain": "18_Category_theory_homological_algebra",
+      "edn_path": "/home/joe/code/planetmath/18_Category_theory_homological_algebra.edn",
+      "sampled_entries": 120,
+      "entries_with_scopes": 106,
+      "entry_scope_coverage": 0.8833,
+      "total_scopes": 872,
+      "scope_types_top": [
+        [
+          "quant/universal",
+          297
+        ],
+        [
+          "constrain/such-that",
+          256
+        ],
+        [
+          "bind/let",
+          85
+        ],
+        [
+          "assume/explicit",
+          79
+        ],
+        [
+          "env/proof",
+          33
+        ],
+        [
+          "env/definition",
+          31
+        ],
+        [
+          "constrain/where",
+          27
+        ],
+        [
+          "env/proposition",
+          13
+        ],
+        [
+          "env/theorem",
+          11
+        ],
+        [
+          "env/remark",
+          8
+        ],
+        [
+          "assume/consider",
+          6
+        ],
+        [
+          "quant/existential",
+          5
+        ]
+      ],
+      "expr_count": 4054,
+      "total_vars": 10667,
+      "scoped_vars": 7453,
+      "unscoped_vars": 3214,
+      "var_scope_coverage": 0.6987,
+      "unscoped_tokens_top": [
+        [
+          "C",
+          212
+        ],
+        [
+          "A",
+          187
+        ],
+        [
+          "f",
+          173
+        ],
+        [
+          "r",
+          153
+        ],
+        [
+          "B",
+          143
+        ],
+        [
+          "\\mathcal{C}",
+          116
+        ],
+        [
+          "g",
+          111
+        ],
+        [
+          "p",
+          94
+        ],
+        [
+          "F",
+          88
+        ],
+        [
+          "X",
+          81
+        ],
+        [
+          "x",
+          75
+        ],
+        [
+          "d",
+          75
+        ],
+        [
+          "E",
+          69
+        ],
+        [
+          "a",
+          69
+        ],
+        [
+          "n",
+          67
+        ],
+        [
+          "S",
+          64
+        ],
+        [
+          "b",
+          63
+        ],
+        [
+          "q",
+          63
+        ],
+        [
+          "D",
+          62
+        ],
+        [
+          "m",
+          57
+        ]
+      ],
+      "worst_entries": [
+        {
+          "id": "CategoricalPullback",
+          "title": "categorical pullback",
+          "unscoped_vars": 202,
+          "total_vars": 215,
+          "top_unscoped": [
+            [
+              "f",
+              26
+            ],
+            [
+              "B",
+              25
+            ],
+            [
+              "g",
+              23
+            ],
+            [
+              "X",
+              18
+            ],
+            [
+              "Y",
+              18
+            ],
+            [
+              "r",
+              17
+            ],
+            [
+              "d",
+              14
+            ],
+            [
+              "A",
+              9
+            ]
+          ]
+        },
+        {
+          "id": "ExamplesOfPullbacks",
+          "title": "examples of pullbacks",
+          "unscoped_vars": 199,
+          "total_vars": 247,
+          "top_unscoped": [
+            [
+              "A",
+              25
+            ],
+            [
+              "B",
+              23
+            ],
+            [
+              "f",
+              15
+            ],
+            [
+              "D",
+              13
+            ],
+            [
+              "e",
+              13
+            ],
+            [
+              "g",
+              11
+            ],
+            [
+              "C",
+              10
+            ],
+            [
+              "F",
+              8
+            ]
+          ]
+        },
+        {
+          "id": "CompositionsOfNaturalTransformations",
+          "title": "compositions of natural transformations",
+          "unscoped_vars": 178,
+          "total_vars": 181,
+          "top_unscoped": [
+            [
+              "S",
+              28
+            ],
+            [
+              "T",
+              27
+            ],
+            [
+              "\\eta",
+              23
+            ],
+            [
+              "\\tau",
+              22
+            ],
+            [
+              "A",
+              20
+            ],
+            [
+              "\\mathcal{C}",
+              10
+            ],
+            [
+              "C",
+              10
+            ],
+            [
+              "\\mathcal{D}",
+              9
+            ]
+          ]
+        },
+        {
+          "id": "DoubleCategory",
+          "title": "double category",
+          "unscoped_vars": 156,
+          "total_vars": 166,
+          "top_unscoped": [
+            [
+              "A",
+              18
+            ],
+            [
+              "B",
+              17
+            ],
+            [
+              "f",
+              16
+            ],
+            [
+              "j",
+              14
+            ],
+            [
+              "r",
+              12
+            ],
+            [
+              "d",
+              12
+            ],
+            [
+              "D",
+              7
+            ],
+            [
+              "v",
+              7
+            ]
+          ]
+        },
+        {
+          "id": "EqualizerIsAnInverseLimit",
+          "title": "equalizer is an inverse limit",
+          "unscoped_vars": 146,
+          "total_vars": 187,
+          "top_unscoped": [
+            [
+              "r",
+              20
+            ],
+            [
+              "F",
+              18
+            ],
+            [
+              "X",
+              14
+            ],
+            [
+              "A",
+              10
+            ],
+            [
+              "i",
+              9
+            ],
+            [
+              "f",
+              8
+            ],
+            [
+              "g",
+              8
+            ],
+            [
+              "a",
+              8
+            ]
+          ]
+        },
+        {
+          "id": "SnakeLemmaProofOf",
+          "title": "snake lemma, proof of",
+          "unscoped_vars": 135,
+          "total_vars": 160,
+          "top_unscoped": [
+            [
+              "x",
+              31
+            ],
+            [
+              "r",
+              19
+            ],
+            [
+              "\\beta",
+              17
+            ],
+            [
+              "\\alpha",
+              15
+            ],
+            [
+              "d",
+              14
+            ],
+            [
+              "\\gamma",
+              9
+            ],
+            [
+              "y",
+              7
+            ],
+            [
+              "\\varphi",
+              5
+            ]
+          ]
+        },
+        {
+          "id": "NsupercategoryTheory",
+          "title": "$n$-supercategory theory",
+          "unscoped_vars": 127,
+          "total_vars": 200,
+          "top_unscoped": [
+            [
+              "x",
+              19
+            ],
+            [
+              "\\Delta",
+              17
+            ],
+            [
+              "u",
+              11
+            ],
+            [
+              "\\Gamma",
+              10
+            ],
+            [
+              "y",
+              9
+            ],
+            [
+              "C",
+              8
+            ],
+            [
+              "n",
+              6
+            ],
+            [
+              "f",
+              6
+            ]
+          ]
+        },
+        {
+          "id": "GaugeFieldsAndGaugeGroup",
+          "title": "gauge fields and gauge group",
+          "unscoped_vars": 120,
+          "total_vars": 188,
+          "top_unscoped": [
+            [
+              "E",
+              11
+            ],
+            [
+              "\\delta",
+              10
+            ],
+            [
+              "F",
+              9
+            ],
+            [
+              "k",
+              9
+            ],
+            [
+              "H",
+              8
+            ],
+            [
+              "d",
+              8
+            ],
+            [
+              "n",
+              6
+            ],
+            [
+              "f",
+              6
+            ]
+          ]
+        },
+        {
+          "id": "EffectiveEquivalenceRelation",
+          "title": "effective equivalence relation",
+          "unscoped_vars": 111,
+          "total_vars": 153,
+          "top_unscoped": [
+            [
+              "p",
+              20
+            ],
+            [
+              "R",
+              13
+            ],
+            [
+              "q",
+              13
+            ],
+            [
+              "A",
+              12
+            ],
+            [
+              "a",
+              9
+            ],
+            [
+              "r",
+              9
+            ],
+            [
+              "b",
+              7
+            ],
+            [
+              "g",
+              6
+            ]
+          ]
+        },
+        {
+          "id": "Congruence",
+          "title": "congruence",
+          "unscoped_vars": 110,
+          "total_vars": 115,
+          "top_unscoped": [
+            [
+              "m",
+              38
+            ],
+            [
+              "b",
+              19
+            ],
+            [
+              "a",
+              18
+            ],
+            [
+              "c",
+              15
+            ],
+            [
+              "Z",
+              6
+            ],
+            [
+              "d",
+              6
+            ],
+            [
+              "p",
+              3
+            ],
+            [
+              "f",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "AlternativeDefinitionOfCategory1",
+          "title": "alternative definition of category",
+          "unscoped_vars": 107,
+          "total_vars": 387,
+          "top_unscoped": [
+            [
+              "M",
+              10
+            ],
+            [
+              "b",
+              10
+            ],
+            [
+              "P",
+              9
+            ],
+            [
+              "c",
+              8
+            ],
+            [
+              "L",
+              8
+            ],
+            [
+              "U",
+              8
+            ],
+            [
+              "V",
+              8
+            ],
+            [
+              "a",
+              7
+            ]
+          ]
+        },
+        {
+          "id": "PropertiesOfRegularAndExtremalMonomorphisms",
+          "title": "properties of regular and extremal monomorphisms",
+          "unscoped_vars": 103,
+          "total_vars": 124,
+          "top_unscoped": [
+            [
+              "f",
+              33
+            ],
+            [
+              "g",
+              23
+            ],
+            [
+              "e",
+              23
+            ],
+            [
+              "r",
+              7
+            ],
+            [
+              "s",
+              7
+            ],
+            [
+              "h",
+              4
+            ],
+            [
+              "A",
+              4
+            ],
+            [
+              "B",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "11_Number_theory",
+      "edn_path": "/home/joe/code/planetmath/11_Number_theory.edn",
+      "sampled_entries": 120,
+      "entries_with_scopes": 93,
+      "entry_scope_coverage": 0.775,
+      "total_scopes": 690,
+      "scope_types_top": [
+        [
+          "quant/universal",
+          228
+        ],
+        [
+          "constrain/such-that",
+          85
+        ],
+        [
+          "assume/explicit",
+          75
+        ],
+        [
+          "bind/let",
+          66
+        ],
+        [
+          "bind/summation",
+          51
+        ],
+        [
+          "constrain/where",
+          46
+        ],
+        [
+          "bind/product",
+          41
+        ],
+        [
+          "env/proof",
+          28
+        ],
+        [
+          "env/definition",
+          22
+        ],
+        [
+          "env/theorem",
+          20
+        ],
+        [
+          "bind/integral",
+          8
+        ],
+        [
+          "env/example",
+          7
+        ]
+      ],
+      "expr_count": 3813,
+      "total_vars": 6976,
+      "scoped_vars": 4663,
+      "unscoped_vars": 2313,
+      "var_scope_coverage": 0.6684,
+      "unscoped_tokens_top": [
+        [
+          "n",
+          331
+        ],
+        [
+          "x",
+          196
+        ],
+        [
+          "a",
+          173
+        ],
+        [
+          "b",
+          159
+        ],
+        [
+          "m",
+          124
+        ],
+        [
+          "K",
+          112
+        ],
+        [
+          "p",
+          103
+        ],
+        [
+          "v",
+          77
+        ],
+        [
+          "d",
+          68
+        ],
+        [
+          "\\alpha",
+          61
+        ],
+        [
+          "k",
+          55
+        ],
+        [
+          "f",
+          52
+        ],
+        [
+          "u",
+          50
+        ],
+        [
+          "c",
+          45
+        ],
+        [
+          "i",
+          36
+        ],
+        [
+          "y",
+          36
+        ],
+        [
+          "s",
+          31
+        ],
+        [
+          "t",
+          29
+        ],
+        [
+          "\\Delta",
+          29
+        ],
+        [
+          "F",
+          29
+        ]
+      ],
+      "worst_entries": [
+        {
+          "id": "RepresentationOfIntegersByEquivalentIntegralBinaryQuadraticForms",
+          "title": "representation of integers by equivalent integral binary quadratic forms",
+          "unscoped_vars": 175,
+          "total_vars": 375,
+          "top_unscoped": [
+            [
+              "F",
+              22
+            ],
+            [
+              "x",
+              19
+            ],
+            [
+              "y",
+              19
+            ],
+            [
+              "\\alpha",
+              17
+            ],
+            [
+              "\\gamma",
+              17
+            ],
+            [
+              "\\beta",
+              15
+            ],
+            [
+              "\\delta",
+              15
+            ],
+            [
+              "G",
+              12
+            ]
+          ]
+        },
+        {
+          "id": "Pollardsrho",
+          "title": "Pollard's $\\rho$",
+          "unscoped_vars": 155,
+          "total_vars": 169,
+          "top_unscoped": [
+            [
+              "x",
+              27
+            ],
+            [
+              "d",
+              26
+            ],
+            [
+              "k",
+              26
+            ],
+            [
+              "n",
+              24
+            ],
+            [
+              "a",
+              13
+            ],
+            [
+              "b",
+              11
+            ],
+            [
+              "f",
+              7
+            ],
+            [
+              "\\rho",
+              6
+            ]
+          ]
+        },
+        {
+          "id": "EquivalenceOfFormClassGroupAndClassGroup",
+          "title": "equivalence of form class group and class group",
+          "unscoped_vars": 127,
+          "total_vars": 143,
+          "top_unscoped": [
+            [
+              "K",
+              35
+            ],
+            [
+              "\\Delta",
+              21
+            ],
+            [
+              "\\mathcal{C}",
+              12
+            ],
+            [
+              "C",
+              12
+            ],
+            [
+              "d",
+              12
+            ],
+            [
+              "b",
+              8
+            ],
+            [
+              "m",
+              6
+            ],
+            [
+              "a",
+              5
+            ]
+          ]
+        },
+        {
+          "id": "FieldIsDiscreteAndCocompactInItsAdeles",
+          "title": "field is discrete and cocompact in its ad\\`{e",
+          "unscoped_vars": 120,
+          "total_vars": 262,
+          "top_unscoped": [
+            [
+              "K",
+              46
+            ],
+            [
+              "v",
+              33
+            ],
+            [
+              "U",
+              10
+            ],
+            [
+              "x",
+              6
+            ],
+            [
+              "f",
+              3
+            ],
+            [
+              "z",
+              3
+            ],
+            [
+              "I",
+              3
+            ],
+            [
+              "y",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "ProofOfPythagoreanTriplet",
+          "title": "proof of Pythagorean triplet",
+          "unscoped_vars": 92,
+          "total_vars": 255,
+          "top_unscoped": [
+            [
+              "n",
+              32
+            ],
+            [
+              "m",
+              31
+            ],
+            [
+              "a",
+              9
+            ],
+            [
+              "b",
+              9
+            ],
+            [
+              "c",
+              5
+            ],
+            [
+              "A",
+              3
+            ],
+            [
+              "B",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "BaseConversion",
+          "title": "base conversion",
+          "unscoped_vars": 84,
+          "total_vars": 95,
+          "top_unscoped": [
+            [
+              "b",
+              30
+            ],
+            [
+              "n",
+              22
+            ],
+            [
+              "s",
+              8
+            ],
+            [
+              "A",
+              8
+            ],
+            [
+              "t",
+              6
+            ],
+            [
+              "i",
+              6
+            ],
+            [
+              "m",
+              3
+            ],
+            [
+              "a",
+              1
+            ]
+          ]
+        },
+        {
+          "id": "PolynomialEquationWithAlgebraicCoefficients",
+          "title": "polynomial equation with algebraic coefficients",
+          "unscoped_vars": 82,
+          "total_vars": 86,
+          "top_unscoped": [
+            [
+              "\\alpha",
+              33
+            ],
+            [
+              "k",
+              11
+            ],
+            [
+              "G",
+              6
+            ],
+            [
+              "x",
+              5
+            ],
+            [
+              "m",
+              5
+            ],
+            [
+              "a",
+              5
+            ],
+            [
+              "j",
+              3
+            ],
+            [
+              "h",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "IntegerContraharmonicMeans",
+          "title": "integer contraharmonic means",
+          "unscoped_vars": 69,
+          "total_vars": 291,
+          "top_unscoped": [
+            [
+              "u",
+              30
+            ],
+            [
+              "v",
+              28
+            ],
+            [
+              "p",
+              6
+            ],
+            [
+              "c",
+              5
+            ]
+          ]
+        },
+        {
+          "id": "CubicReciprocityLaw",
+          "title": "cubic reciprocity law",
+          "unscoped_vars": 64,
+          "total_vars": 133,
+          "top_unscoped": [
+            [
+              "\\omega",
+              12
+            ],
+            [
+              "K",
+              11
+            ],
+            [
+              "a",
+              6
+            ],
+            [
+              "b",
+              6
+            ],
+            [
+              "x",
+              4
+            ],
+            [
+              "\\alpha",
+              4
+            ],
+            [
+              "\\beta",
+              4
+            ],
+            [
+              "N",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "DiscriminantOfAlgebraicNumber",
+          "title": "discriminant of algebraic number",
+          "unscoped_vars": 59,
+          "total_vars": 174,
+          "top_unscoped": [
+            [
+              "\\vartheta",
+              16
+            ],
+            [
+              "n",
+              11
+            ],
+            [
+              "x",
+              11
+            ],
+            [
+              "f",
+              9
+            ],
+            [
+              "d",
+              3
+            ],
+            [
+              "N",
+              2
+            ],
+            [
+              "a",
+              2
+            ],
+            [
+              "Q",
+              2
+            ]
+          ]
+        },
+        {
+          "id": "CalculatingTheJacobiSymbol",
+          "title": "calculating the Jacobi symbol",
+          "unscoped_vars": 56,
+          "total_vars": 56,
+          "top_unscoped": [
+            [
+              "m",
+              29
+            ],
+            [
+              "b",
+              9
+            ],
+            [
+              "c",
+              9
+            ],
+            [
+              "a",
+              8
+            ],
+            [
+              "s",
+              1
+            ]
+          ]
+        },
+        {
+          "id": "ProofOfPythagoreanTriples1",
+          "title": "proof of Pythagorean triples",
+          "unscoped_vars": 55,
+          "total_vars": 85,
+          "top_unscoped": [
+            [
+              "s",
+              11
+            ],
+            [
+              "a",
+              6
+            ],
+            [
+              "t",
+              6
+            ],
+            [
+              "m",
+              6
+            ],
+            [
+              "n",
+              6
+            ],
+            [
+              "i",
+              4
+            ],
+            [
+              "b",
+              3
+            ],
+            [
+              "r",
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "54_General_topology",
+      "edn_path": "/home/joe/code/planetmath/54_General_topology.edn",
+      "sampled_entries": 120,
+      "entries_with_scopes": 105,
+      "entry_scope_coverage": 0.875,
+      "total_scopes": 1256,
+      "scope_types_top": [
+        [
+          "quant/universal",
+          470
+        ],
+        [
+          "constrain/such-that",
+          399
+        ],
+        [
+          "bind/let",
+          112
+        ],
+        [
+          "assume/explicit",
+          105
+        ],
+        [
+          "env/proof",
+          34
+        ],
+        [
+          "bind/big-union",
+          29
+        ],
+        [
+          "constrain/where",
+          21
+        ],
+        [
+          "bind/product",
+          19
+        ],
+        [
+          "env/theorem",
+          17
+        ],
+        [
+          "bind/big-intersection",
+          12
+        ],
+        [
+          "env/proposition",
+          6
+        ],
+        [
+          "assume/consider",
+          6
+        ]
+      ],
+      "expr_count": 3525,
+      "total_vars": 7321,
+      "scoped_vars": 5888,
+      "unscoped_vars": 1433,
+      "var_scope_coverage": 0.8043,
+      "unscoped_tokens_top": [
+        [
+          "X",
+          154
+        ],
+        [
+          "n",
+          151
+        ],
+        [
+          "f",
+          104
+        ],
+        [
+          "x",
+          93
+        ],
+        [
+          "A",
+          72
+        ],
+        [
+          "a",
+          55
+        ],
+        [
+          "Y",
+          47
+        ],
+        [
+          "y",
+          43
+        ],
+        [
+          "d",
+          42
+        ],
+        [
+          "S",
+          42
+        ],
+        [
+          "B",
+          40
+        ],
+        [
+          "b",
+          36
+        ],
+        [
+          "R",
+          33
+        ],
+        [
+          "U",
+          29
+        ],
+        [
+          "T",
+          28
+        ],
+        [
+          "c",
+          27
+        ],
+        [
+          "H",
+          24
+        ],
+        [
+          "P",
+          22
+        ],
+        [
+          "i",
+          21
+        ],
+        [
+          "m",
+          21
+        ]
+      ],
+      "worst_entries": [
+        {
+          "id": "ProofOfBorsukUlamTheorem",
+          "title": "proof of Borsuk-Ulam theorem",
+          "unscoped_vars": 158,
+          "total_vars": 170,
+          "top_unscoped": [
+            [
+              "n",
+              51
+            ],
+            [
+              "A",
+              24
+            ],
+            [
+              "H",
+              24
+            ],
+            [
+              "S",
+              22
+            ],
+            [
+              "f",
+              19
+            ],
+            [
+              "R",
+              9
+            ],
+            [
+              "i",
+              4
+            ],
+            [
+              "P",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "NestedIntervalTheorem",
+          "title": "nested interval theorem",
+          "unscoped_vars": 97,
+          "total_vars": 135,
+          "top_unscoped": [
+            [
+              "a",
+              34
+            ],
+            [
+              "b",
+              25
+            ],
+            [
+              "n",
+              22
+            ],
+            [
+              "i",
+              8
+            ],
+            [
+              "m",
+              7
+            ],
+            [
+              "j",
+              1
+            ]
+          ]
+        },
+        {
+          "id": "TheGroupsOfRealNumbers",
+          "title": "the groups of real numbers",
+          "unscoped_vars": 78,
+          "total_vars": 81,
+          "top_unscoped": [
+            [
+              "f",
+              19
+            ],
+            [
+              "r",
+              15
+            ],
+            [
+              "s",
+              14
+            ],
+            [
+              "R",
+              8
+            ],
+            [
+              "x",
+              8
+            ],
+            [
+              "e",
+              8
+            ],
+            [
+              "y",
+              4
+            ],
+            [
+              "Z",
+              2
+            ]
+          ]
+        },
+        {
+          "id": "ConditionsForACollectionOfSubsetsToBeABasisForSomeTopology",
+          "title": "conditions for a collection of subsets to be a basis for some topology",
+          "unscoped_vars": 77,
+          "total_vars": 159,
+          "top_unscoped": [
+            [
+              "B",
+              19
+            ],
+            [
+              "T",
+              18
+            ],
+            [
+              "\\mathcal{T}",
+              12
+            ],
+            [
+              "\\mathcal{B}",
+              10
+            ],
+            [
+              "X",
+              9
+            ],
+            [
+              "\\mathcal{C}",
+              3
+            ],
+            [
+              "C",
+              3
+            ],
+            [
+              "x",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "MultifuncoidHasAtomicArguments",
+          "title": "Multifuncoid has atomic arguments",
+          "unscoped_vars": 72,
+          "total_vars": 86,
+          "top_unscoped": [
+            [
+              "c",
+              27
+            ],
+            [
+              "f",
+              13
+            ],
+            [
+              "a",
+              8
+            ],
+            [
+              "\\Phi",
+              6
+            ],
+            [
+              "X",
+              6
+            ],
+            [
+              "L",
+              6
+            ],
+            [
+              "b",
+              4
+            ],
+            [
+              "m",
+              1
+            ]
+          ]
+        },
+        {
+          "id": "ProofOfCharacterizationOfConnectedCompactMetricSpaces",
+          "title": "proof of characterization of connected compact metric spaces.",
+          "unscoped_vars": 65,
+          "total_vars": 149,
+          "top_unscoped": [
+            [
+              "A",
+              15
+            ],
+            [
+              "B",
+              9
+            ],
+            [
+              "\\varepsilon",
+              8
+            ],
+            [
+              "X",
+              7
+            ],
+            [
+              "p",
+              6
+            ],
+            [
+              "i",
+              4
+            ],
+            [
+              "k",
+              3
+            ],
+            [
+              "\\delta",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "SequenceAccumulatingEverywhereIn11",
+          "title": "sequence accumulating everywhere in $[-1,\\,1]$",
+          "unscoped_vars": 64,
+          "total_vars": 65,
+          "top_unscoped": [
+            [
+              "P",
+              19
+            ],
+            [
+              "\\nu",
+              11
+            ],
+            [
+              "\\mu",
+              9
+            ],
+            [
+              "\\pi",
+              6
+            ],
+            [
+              "n",
+              6
+            ],
+            [
+              "k",
+              5
+            ],
+            [
+              "\\varepsilon",
+              4
+            ],
+            [
+              "l",
+              2
+            ]
+          ]
+        },
+        {
+          "id": "MetricSpacesAreHausdorff",
+          "title": "metric spaces are Hausdorff",
+          "unscoped_vars": 63,
+          "total_vars": 66,
+          "top_unscoped": [
+            [
+              "x",
+              14
+            ],
+            [
+              "y",
+              14
+            ],
+            [
+              "d",
+              13
+            ],
+            [
+              "B",
+              10
+            ],
+            [
+              "z",
+              7
+            ],
+            [
+              "X",
+              5
+            ]
+          ]
+        },
+        {
+          "id": "HomotopyGroups",
+          "title": "homotopy groups",
+          "unscoped_vars": 53,
+          "total_vars": 92,
+          "top_unscoped": [
+            [
+              "n",
+              16
+            ],
+            [
+              "\\pi",
+              8
+            ],
+            [
+              "D",
+              8
+            ],
+            [
+              "X",
+              4
+            ],
+            [
+              "S",
+              4
+            ],
+            [
+              "x",
+              3
+            ],
+            [
+              "f",
+              2
+            ],
+            [
+              "g",
+              2
+            ]
+          ]
+        },
+        {
+          "id": "SomeStructuresOnmathbbRn",
+          "title": "some structures on $\\mathbb{R",
+          "unscoped_vars": 45,
+          "total_vars": 71,
+          "top_unscoped": [
+            [
+              "n",
+              20
+            ],
+            [
+              "u",
+              10
+            ],
+            [
+              "\\lambda",
+              4
+            ],
+            [
+              "v",
+              4
+            ],
+            [
+              "x",
+              3
+            ],
+            [
+              "y",
+              2
+            ],
+            [
+              "d",
+              1
+            ],
+            [
+              "r",
+              1
+            ]
+          ]
+        },
+        {
+          "id": "LocalHomeomorphism",
+          "title": "local homeomorphism",
+          "unscoped_vars": 44,
+          "total_vars": 58,
+          "top_unscoped": [
+            [
+              "f",
+              11
+            ],
+            [
+              "C",
+              5
+            ],
+            [
+              "z",
+              4
+            ],
+            [
+              "x",
+              4
+            ],
+            [
+              "X",
+              3
+            ],
+            [
+              "Y",
+              3
+            ],
+            [
+              "T",
+              3
+            ],
+            [
+              "U",
+              2
+            ]
+          ]
+        },
+        {
+          "id": "ProofOfPolishSpacesUpToBorelIsomorphism",
+          "title": "proof of Polish spaces up to Borel isomorphism",
+          "unscoped_vars": 43,
+          "total_vars": 48,
+          "top_unscoped": [
+            [
+              "N",
+              9
+            ],
+            [
+              "\\mathcal{N}",
+              7
+            ],
+            [
+              "S",
+              7
+            ],
+            [
+              "f",
+              6
+            ],
+            [
+              "X",
+              6
+            ],
+            [
+              "R",
+              3
+            ],
+            [
+              "g",
+              2
+            ],
+            [
+              "v",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "68_Computer_science",
+      "edn_path": "/home/joe/code/planetmath/68_Computer_science.edn",
+      "sampled_entries": 120,
+      "entries_with_scopes": 82,
+      "entry_scope_coverage": 0.6833,
+      "total_scopes": 612,
+      "scope_types_top": [
+        [
+          "quant/universal",
+          262
+        ],
+        [
+          "constrain/such-that",
+          169
+        ],
+        [
+          "assume/explicit",
+          54
+        ],
+        [
+          "bind/let",
+          52
+        ],
+        [
+          "constrain/where",
+          29
+        ],
+        [
+          "bind/summation",
+          13
+        ],
+        [
+          "env/theorem",
+          10
+        ],
+        [
+          "env/proposition",
+          5
+        ],
+        [
+          "bind/coprod",
+          5
+        ],
+        [
+          "bind/big-union",
+          3
+        ],
+        [
+          "assume/consider",
+          3
+        ],
+        [
+          "env/proof",
+          2
+        ]
+      ],
+      "expr_count": 3221,
+      "total_vars": 6004,
+      "scoped_vars": 3965,
+      "unscoped_vars": 2039,
+      "var_scope_coverage": 0.6604,
+      "unscoped_tokens_top": [
+        [
+          "n",
+          179
+        ],
+        [
+          "L",
+          118
+        ],
+        [
+          "X",
+          76
+        ],
+        [
+          "i",
+          76
+        ],
+        [
+          "\\Sigma",
+          74
+        ],
+        [
+          "x",
+          68
+        ],
+        [
+          "G",
+          65
+        ],
+        [
+          "a",
+          59
+        ],
+        [
+          "P",
+          54
+        ],
+        [
+          "T",
+          54
+        ],
+        [
+          "A",
+          50
+        ],
+        [
+          "Y",
+          48
+        ],
+        [
+          "p",
+          48
+        ],
+        [
+          "u",
+          45
+        ],
+        [
+          "\\lambda",
+          43
+        ],
+        [
+          "S",
+          41
+        ],
+        [
+          "k",
+          41
+        ],
+        [
+          "b",
+          40
+        ],
+        [
+          "\\tau",
+          39
+        ],
+        [
+          "\\sigma",
+          38
+        ]
+      ],
+      "worst_entries": [
+        {
+          "id": "GeometricRepresentationOfRelationComposition",
+          "title": "geometric representation of relation composition",
+          "unscoped_vars": 248,
+          "total_vars": 373,
+          "top_unscoped": [
+            [
+              "X",
+              48
+            ],
+            [
+              "L",
+              27
+            ],
+            [
+              "Y",
+              25
+            ],
+            [
+              "H",
+              21
+            ],
+            [
+              "Z",
+              21
+            ],
+            [
+              "G",
+              19
+            ],
+            [
+              "\\tau",
+              18
+            ],
+            [
+              "P",
+              12
+            ]
+          ]
+        },
+        {
+          "id": "FormalDefinitionOfATuringMachine",
+          "title": "formal definition of a Turing machine",
+          "unscoped_vars": 122,
+          "total_vars": 167,
+          "top_unscoped": [
+            [
+              "w",
+              20
+            ],
+            [
+              "\\tau",
+              17
+            ],
+            [
+              "T",
+              11
+            ],
+            [
+              "m",
+              11
+            ],
+            [
+              "t",
+              7
+            ],
+            [
+              "p",
+              7
+            ],
+            [
+              "i",
+              7
+            ],
+            [
+              "r",
+              6
+            ]
+          ]
+        },
+        {
+          "id": "NondeterministicFiniteAutomaton",
+          "title": "non-deterministic finite automaton",
+          "unscoped_vars": 84,
+          "total_vars": 96,
+          "top_unscoped": [
+            [
+              "M",
+              12
+            ],
+            [
+              "F",
+              10
+            ],
+            [
+              "S",
+              6
+            ],
+            [
+              "\\Sigma",
+              6
+            ],
+            [
+              "\\lambda",
+              5
+            ],
+            [
+              "a",
+              5
+            ],
+            [
+              "r",
+              5
+            ],
+            [
+              "\\delta",
+              4
+            ]
+          ]
+        },
+        {
+          "id": "Hashing",
+          "title": "hashing",
+          "unscoped_vars": 71,
+          "total_vars": 76,
+          "top_unscoped": [
+            [
+              "n",
+              16
+            ],
+            [
+              "k",
+              16
+            ],
+            [
+              "h",
+              11
+            ],
+            [
+              "T",
+              7
+            ],
+            [
+              "f",
+              5
+            ],
+            [
+              "K",
+              4
+            ],
+            [
+              "A",
+              4
+            ],
+            [
+              "c",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "DerivationTree",
+          "title": "derivation tree",
+          "unscoped_vars": 70,
+          "total_vars": 92,
+          "top_unscoped": [
+            [
+              "u",
+              10
+            ],
+            [
+              "\\sigma",
+              8
+            ],
+            [
+              "\\Sigma",
+              7
+            ],
+            [
+              "G",
+              6
+            ],
+            [
+              "N",
+              6
+            ],
+            [
+              "i",
+              6
+            ],
+            [
+              "P",
+              4
+            ],
+            [
+              "Y",
+              4
+            ]
+          ]
+        },
+        {
+          "id": "LinearBoundedAutomaton",
+          "title": "linear bounded automaton",
+          "unscoped_vars": 69,
+          "total_vars": 168,
+          "top_unscoped": [
+            [
+              "u",
+              7
+            ],
+            [
+              "a",
+              6
+            ],
+            [
+              "Q",
+              5
+            ],
+            [
+              "\\Gamma",
+              5
+            ],
+            [
+              "D",
+              5
+            ],
+            [
+              "M",
+              4
+            ],
+            [
+              "\\delta",
+              4
+            ],
+            [
+              "b",
+              4
+            ]
+          ]
+        },
+        {
+          "id": "HomomorphismOfLanguages",
+          "title": "homomorphism of languages",
+          "unscoped_vars": 58,
+          "total_vars": 119,
+          "top_unscoped": [
+            [
+              "\\Sigma",
+              15
+            ],
+            [
+              "h",
+              14
+            ],
+            [
+              "g",
+              6
+            ],
+            [
+              "\\lambda",
+              5
+            ],
+            [
+              "\\alpha",
+              4
+            ],
+            [
+              "\\beta",
+              4
+            ],
+            [
+              "a",
+              4
+            ],
+            [
+              "F",
+              2
+            ]
+          ]
+        },
+        {
+          "id": "GardenofEdenTheorem",
+          "title": "Garden-of-Eden theorem",
+          "unscoped_vars": 57,
+          "total_vars": 95,
+          "top_unscoped": [
+            [
+              "d",
+              14
+            ],
+            [
+              "n",
+              11
+            ],
+            [
+              "\\rho",
+              6
+            ],
+            [
+              "k",
+              5
+            ],
+            [
+              "a",
+              4
+            ],
+            [
+              "r",
+              4
+            ],
+            [
+              "p",
+              4
+            ],
+            [
+              "Q",
+              4
+            ]
+          ]
+        },
+        {
+          "id": "Quicksort",
+          "title": "quicksort",
+          "unscoped_vars": 55,
+          "total_vars": 79,
+          "top_unscoped": [
+            [
+              "S",
+              17
+            ],
+            [
+              "i",
+              7
+            ],
+            [
+              "j",
+              7
+            ],
+            [
+              "n",
+              6
+            ],
+            [
+              "L",
+              5
+            ],
+            [
+              "p",
+              4
+            ],
+            [
+              "A",
+              3
+            ],
+            [
+              "C",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "PolynomialHierarchyIsAHierarchy",
+          "title": "polynomial hierarchy is a hierarchy",
+          "unscoped_vars": 53,
+          "total_vars": 69,
+          "top_unscoped": [
+            [
+              "p",
+              13
+            ],
+            [
+              "i",
+              13
+            ],
+            [
+              "\\Sigma",
+              6
+            ],
+            [
+              "\\mathcal{P}",
+              6
+            ],
+            [
+              "P",
+              6
+            ],
+            [
+              "\\Pi",
+              4
+            ],
+            [
+              "\\Delta",
+              3
+            ],
+            [
+              "\\mathcal{C}",
+              1
+            ]
+          ]
+        },
+        {
+          "id": "LinearLanguage",
+          "title": "linear language",
+          "unscoped_vars": 50,
+          "total_vars": 84,
+          "top_unscoped": [
+            [
+              "G",
+              12
+            ],
+            [
+              "\\sigma",
+              8
+            ],
+            [
+              "u",
+              5
+            ],
+            [
+              "a",
+              5
+            ],
+            [
+              "\\lambda",
+              4
+            ],
+            [
+              "\\Sigma",
+              3
+            ],
+            [
+              "N",
+              3
+            ],
+            [
+              "n",
+              3
+            ]
+          ]
+        },
+        {
+          "id": "ChomskyHierarchy",
+          "title": "Chomsky hierarchy",
+          "unscoped_vars": 49,
+          "total_vars": 68,
+          "top_unscoped": [
+            [
+              "L",
+              9
+            ],
+            [
+              "A",
+              5
+            ],
+            [
+              "\\Sigma",
+              4
+            ],
+            [
+              "\\sigma",
+              4
+            ],
+            [
+              "W",
+              4
+            ],
+            [
+              "\\lambda",
+              4
+            ],
+            [
+              "i",
+              4
+            ],
+            [
+              "N",
+              3
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

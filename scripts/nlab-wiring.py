@@ -89,8 +89,13 @@ ENV_TO_LINK_TYPE = {
 SCOPE_REGEXES = [
     ("let-binding", r"\bLet\s+\$([^$]+)\$\s+(be|denote)\s+([^.,$]+)"),
     ("define", r"\bDefine\s+\$([^$]+)\$\s*(:=|=|\\equiv)\s*([^.,$]+)"),
+    ("diagram-family", r"\b[Aa]\s+diagram[^.]{0,260}?\$([A-Za-z])\([^)]+\)\$"),
+    ("diagram-named", r"\b(?:[Tt]he|[Aa])\s+diagram\s+\$([^$]+)\$\s+(?:is|are|be|called)"),
     ("assume", r"\b(Assume|Suppose)\s+(that\s+)?\$([^$]+)\$"),
+    ("if-condition", r"\bIf\s+\$([^$]+)\$"),
     ("consider", r"\bConsider\s+(a|an|the|some)?\s*\$?([^$.]{1,60})"),
+    ("for-in", r"\bFor\s+(?:a|an|the|each|every)\s+[^$.]{0,80}?\$([^$]+)\$\s+in\s+\$([^$]+)\$"),
+    ("for-any-entity", r"\b(?:for\s+)?(any|every|each|all)\s+[^$.]{0,80}?\$([^$]+)\$"),
     ("for-any", r"\b(?:for\s+)?(any|every|each|all)\s+\$([^$]+)\$"),
     ("where-binding", r"\bwhere\s+\$([^$]+)\$\s+(is|denotes|represents)\s+([^.,$]+)"),
     ("set-notation", r"\$([^$]*\\in\s+[^$]+)\$"),
@@ -99,8 +104,13 @@ SCOPE_REGEXES = [
 CLASSICAL_TO_METATHEORY = {
     "let-binding": "bind/let",
     "define": "bind/define",
+    "diagram-family": "bind/let",
+    "diagram-named": "bind/let",
     "assume": "assume/explicit",
+    "if-condition": "assume/explicit",
     "consider": "assume/consider",
+    "for-in": "quant/universal",
+    "for-any-entity": "quant/universal",
     "for-any": "quant/universal",
     "where-binding": "constrain/where",
     "set-notation": "constrain/such-that",
@@ -858,6 +868,36 @@ def _extract_integral_symbol(fragment_tail):
     return None
 
 
+def _find_scope_end(text, match_start, match_end, stype):
+    """Heuristic end-offset for scope extent in prose.
+
+    Scope starts are usually explicit ("Let", "For", "If"), but endings are not.
+    We approximate extent by scanning to a nearby clause/sentence boundary.
+    """
+    if match_end <= match_start:
+        return match_end
+
+    if stype in {"let-binding", "define", "diagram-family", "diagram-named"}:
+        return len(text)
+
+    # Membership snippets are already local by construction.
+    if stype == "set-notation":
+        return match_end
+
+    hard_stop = min(len(text), match_start + 420)
+    tail = text[match_end:hard_stop]
+
+    if stype == "consider":
+        boundary_re = re.compile(r"[,.;!?]")
+    else:
+        boundary_re = re.compile(r"[.;!?]")
+
+    m = boundary_re.search(tail)
+    if m:
+        return match_end + m.end()
+    return hard_stop
+
+
 def _detect_symbolic_binders(entity_id, text, start_idx=0, parent_env_id=None):
     """Detect binder-like symbolic operators in LaTeX math fragments."""
     scopes = []
@@ -885,6 +925,7 @@ def _detect_symbolic_binders(entity_id, text, start_idx=0, parent_env_id=None):
                 "hx/content": {
                     "match": fragment[m.start():m.end()][:120],
                     "position": frag_pos + m.start(),
+                    "end": frag_pos + len(fragment),
                 },
                 "hx/labels": ["scope", "symbolic-binder", quant_cmd],
             })
@@ -915,6 +956,7 @@ def _detect_symbolic_binders(entity_id, text, start_idx=0, parent_env_id=None):
                 "hx/content": {
                     "match": fragment[m.start():m.end()][:120],
                     "position": frag_pos + m.start(),
+                    "end": frag_pos + len(fragment),
                 },
                 "hx/labels": ["scope", "symbolic-binder", cmd],
             })
@@ -942,6 +984,7 @@ def _detect_symbolic_binders(entity_id, text, start_idx=0, parent_env_id=None):
                 "hx/content": {
                     "match": fragment[m.start():min(len(fragment), m.end() + 32)][:120],
                     "position": frag_pos + m.start(),
+                    "end": frag_pos + len(fragment),
                 },
                 "hx/labels": ["scope", "symbolic-binder", "integral"],
             })
@@ -973,6 +1016,7 @@ def _detect_environment_scopes(entity_id, text, start_idx=0, parent_env_id=None)
             "hx/content": {
                 "match": m.group()[:120],
                 "position": m.start(),
+                "end": m.end(),
             },
             "hx/labels": ["scope", "environment", env_name],
         })
@@ -996,6 +1040,7 @@ def _detect_environment_scopes(entity_id, text, start_idx=0, parent_env_id=None)
             "hx/content": {
                 "match": m.group()[:120],
                 "position": m.start(),
+                "end": m.end(),
             },
             "hx/labels": ["scope", "environment", label],
         })
@@ -1015,15 +1060,29 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             if stype == "let-binding":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "type", "text": m.group(3).strip()[:80]})
+            elif stype == "diagram-family":
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "type", "text": "diagram family variable"})
+            elif stype == "diagram-named":
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "type", "text": "diagram variable"})
             elif stype == "define":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "value", "text": m.group(3).strip()[:80]})
             elif stype == "assume":
                 ends.append({"role": "condition", "latex": m.group(3).strip()})
+            elif stype == "if-condition":
+                ends.append({"role": "condition", "latex": m.group(1).strip()})
             elif stype == "consider":
                 obj = (m.group(2) or "").strip()
                 if obj:
                     ends.append({"role": "object", "text": obj[:80]})
+            elif stype == "for-in":
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "domain", "latex": m.group(2).strip()})
+            elif stype == "for-any-entity":
+                ends.append({"role": "quantifier", "text": m.group(1)})
+                ends.append({"role": "symbol", "latex": m.group(2).strip()})
             elif stype == "for-any":
                 ends.append({"role": "quantifier", "text": m.group(1)})
                 ends.append({"role": "symbol", "latex": m.group(2).strip()})
@@ -1033,13 +1092,18 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             elif stype == "set-notation":
                 ends.append({"role": "membership", "latex": m.group(1).strip()})
             meta_type = CLASSICAL_TO_METATHEORY.get(stype, f"scope/{stype}")
+            scope_end = _find_scope_end(text, m.start(), m.end(), stype)
             scopes.append({
                 "hx/id": scope_id,
                 "hx/role": "component",
                 "hx/type": meta_type,
                 "hx/parent": parent_env_id,
                 "hx/ends": ends,
-                "hx/content": {"match": m.group()[:120], "position": m.start()},
+                "hx/content": {
+                    "match": m.group()[:120],
+                    "position": m.start(),
+                    "end": scope_end,
+                },
                 "hx/labels": ["scope", stype],
             })
     env_scopes = _detect_environment_scopes(

@@ -416,6 +416,56 @@ class TestDiscourseWiring:
         scopes = nlab_wiring.detect_scopes("t-4", text)
         assert any(s["hx/type"] == "env/theorem" for s in scopes)
 
+    def test_scope_records_include_end_offsets(self):
+        text = r"Let $X$ be a set. For every $x \in X$ we have $x=x$."
+        scopes = nlab_wiring.detect_scopes("t-5", text)
+        components = [s for s in scopes if s["hx/role"] == "component"]
+        assert components
+        for s in components:
+            c = s.get("hx/content", {})
+            assert "end" in c
+            assert isinstance(c["end"], int)
+            assert c["end"] > c["position"]
+
+    def test_for_in_scope_detected(self):
+        text = r"For a path $\gamma$ in $\Gamma$ we define $X(\gamma)$."
+        scopes = nlab_wiring.detect_scopes("t-6", text)
+        assert any(
+            s["hx/type"] == "quant/universal"
+            and any(e.get("role") == "domain" and e.get("latex") == r"\Gamma"
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_if_condition_scope_detected(self):
+        text = r"If $\gamma = \beta \circ e$, define $X(\gamma)$."
+        scopes = nlab_wiring.detect_scopes("t-7", text)
+        assert any(
+            s["hx/type"] == "assume/explicit"
+            and any(e.get("role") == "condition" and r"\gamma" in e.get("latex", "")
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_let_scope_extends_across_text(self):
+        text = r"Let $\Gamma$ be a graph. Later we use $\Gamma$ again."
+        scopes = [s for s in nlab_wiring.detect_scopes("t-8", text)
+                  if s["hx/type"] == "bind/let"]
+        assert scopes
+        c = scopes[0]["hx/content"]
+        assert c["position"] == 0
+        assert c["end"] == len(text)
+
+    def test_for_any_entity_detected(self):
+        text = r"For every edge $e \in E$ such that $f(e)=e$, we proceed."
+        scopes = nlab_wiring.detect_scopes("t-9", text)
+        assert any(
+            s["hx/type"] == "quant/universal"
+            and any(e.get("role") == "symbol" and e.get("latex") == r"e \in E"
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
 
 # ============================================================
 # Step 5: Categorical hyperedge tests
