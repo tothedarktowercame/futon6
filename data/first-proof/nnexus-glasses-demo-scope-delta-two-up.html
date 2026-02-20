@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NNexus Glasses Scope Delta + Two-Up Demo</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: #f7f7f4; color: #1f2937; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 24px 16px 56px; }
+h1 { margin: 0 0 4px; font-size: 1.45rem; }
+.sub { color: #6b7280; font-size: 0.9rem; margin-bottom: 18px; }
+.note { background: #e8eefc; border: 1px solid #bfdbfe; padding: 12px 14px; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 0.86rem; line-height: 1.45; margin-bottom: 16px; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+.stat { background: #fff; border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; }
+.stat .k { font: 700 0.72rem/1 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; color: #64748b; }
+.stat .v { font: 700 1.25rem/1.15 system-ui, sans-serif; color: #111827; margin-top: 4px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.card { background: #fff; border: 1px solid #d1d5db; border-radius: 10px; padding: 14px 14px 16px; }
+.card h2 { margin: 0 0 8px; font-size: 1rem; font-family: system-ui, sans-serif; }
+.pill { display: inline-block; font: 700 0.65rem/1 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .05em; border-radius: 999px; padding: 4px 8px; margin-right: 6px; }
+.pill.legacy { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+.pill.common { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.pill.added { background: #ffedd5; color: #9a3412; border: 1px solid #fdba74; }
+.pill.warn { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.textbox { border: 1px solid #e5e7eb; border-radius: 8px; background: #fcfcfb; padding: 12px; line-height: 1.5; max-height: 420px; overflow: auto; white-space: pre-wrap; }
+.scope-legacy { background: rgba(59,130,246,.13); border-bottom: 2px solid #3b82f6; border-radius: 3px; padding: 0 2px; }
+.scope-common { background: rgba(16,185,129,.14); border-bottom: 2px solid #10b981; border-radius: 3px; padding: 0 2px; }
+.scope-added { background: rgba(249,115,22,.14); border-bottom: 2px solid #f97316; border-radius: 3px; padding: 0 2px; }
+.table { width: 100%; border-collapse: collapse; font-family: system-ui, sans-serif; font-size: 0.82rem; }
+.table th, .table td { border-bottom: 1px solid #e5e7eb; padding: 7px 6px; text-align: left; vertical-align: top; }
+.table th { color: #475569; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: .04em; }
+.table code { background: #f1f5f9; padding: 1px 4px; border-radius: 4px; }
+.section { margin-top: 16px; }
+.mini { font-family: system-ui, sans-serif; font-size: 0.82rem; color: #475569; }
+pre { margin: 8px 0 0; background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 10px 12px; overflow: auto; font-size: 0.78rem; }
+.latex-box { margin-top: 6px; background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 10px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.78rem; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+.sexp-box { margin-top: 6px; background: #111827; color: #e5e7eb; border-radius: 8px; padding: 10px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.78rem; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+.var-scoped { background: rgba(34,197,94,.28); border-bottom: 2px solid #16a34a; border-radius: 3px; padding: 0 1px; color: #dcfce7; }
+.var-unscoped { background: rgba(239,68,68,.28); border-bottom: 2px solid #ef4444; border-radius: 3px; padding: 0 1px; color: #fee2e2; }
+.row-meta { margin-top: 4px; font-size: 0.74rem; color: #64748b; font-family: system-ui, sans-serif; }
+.twoup td { width: 50%; }
+@media (max-width: 980px) {
+  .grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .twoup td { width: auto; display: block; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>NNexus Glasses Scope Delta + Two-Up Demo</h1>
+  <p class="sub">New file: <code>data/first-proof/nnexus-glasses-demo-scope-delta-two-up.html</code>. Existing demos unchanged.</p>
+
+  <div class="note">
+    This page compares scope treatment on the same thread (<a href="https://math.stackexchange.com/questions/633512" target="_blank">math.SE #633512</a>) and adds a two-up expression view:
+    <strong>(A)</strong> marked-up LaTeX variable tokens by scope coverage, <strong>(B)</strong> parsed s-expression mapping.
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Legacy Scope Overlay <span class="pill legacy">Legacy</span></h2>
+      <div class="mini">Scopes in original wiring snapshot.</div>
+      <div class="textbox" id="legacy-text"></div>
+    </div>
+
+    <div class="card">
+      <h2>New Scope Overlay <span class="pill common">Common</span><span class="pill added">Added</span></h2>
+      <div class="mini">Updated detector includes metatheory mapping, symbolic binders, and theorem-like environments.</div>
+      <div class="textbox" id="new-text"></div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <h2>Two-Up Expressions: Marked-up LaTeX vs s-expression</h2>
+    <div class="mini" id="coverage-line"></div>
+    <table class="table twoup" id="expr-table">
+      <thead><tr><th>A. Marked-up LaTeX</th><th>B. s-expression mapping</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="section card">
+    <h2>Added Scopes In This Thread</h2>
+    <table class="table" id="added-table">
+      <thead><tr><th>Type</th><th>Match</th><th>Pos</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="section card">
+    <h2>Type Count Delta</h2>
+    <table class="table" id="type-table">
+      <thead><tr><th>Type</th><th>Legacy</th><th>New</th><th>Delta</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="section card">
+    <h2>Paper TeX Scope Case (math.CT)</h2>
+    <div class="mini" id="paper-meta"></div>
+    <pre id="paper-snippet"></pre>
+  </div>
+</div>
+
+<script>
+const DATA = {"thread": {"id": 633512, "url": "https://math.stackexchange.com/questions/633512", "title": "What is the definition of a commutative diagram?", "question_text": "Reading in ACC (the joy of cats) I was quite surprised to meet a real definition of diagram . This word had been used exactly $27$ times allready (just believe me) and the question ‘what is it?’ had not reached my thinking whatsoever. Okay, good to have a definition (11.1(1) see under), but it triggered me to expect a definition of commutative diagram as well. Alas, it was not there. In my intuition I think of a diagram having a poset as scheme, but I don’t trust that intuition enough to take this for granted. So I am asking you here: What is the definition of a commutative diagram? Thanks in advance 11.1 (1) A diagram in a category $\\mathcal{A}$ is a functor $D:\\mathcal{I}\\rightarrow\\mathcal{A}$ with codomain $\\mathcal{A}$. The domain, $\\mathcal{I}$, is called the scheme of the diagram.", "answer_id": "a-633527", "answer_text": "Let $\\Gamma=(V,E,s,t)$ be a directed graph ($V$ = vertices, $E$ = edges, $s$ = source, $t$ = target). Let $\\mathcal{C}$ be a category. A diagram of shape $\\Gamma$ in $\\mathcal{C}$ is a family of objects $X(v) \\in \\mathcal{C}$ for every vertex $v \\in V$ and morphisms $X(e)$ in $\\mathcal{C}$ for every edge $e \\in E$ such that $s(X(e))=X(s(e))$ and $t(X(e))=X(t(e))$ for all $e \\in E$. Thus, every edge $e : v \\to w$ is mapped to a morphism $X(e) : X(v) \\to X(w)$. For a path $\\gamma$ in $\\Gamma$ we define a morphism $X(\\gamma)$ in $\\mathcal{C}$ by induction: If $\\gamma$ is the empty path at a vertex $v$, let $X(\\gamma):=\\mathrm{id}_{X(v)}$. If $\\gamma = \\beta \\circ e$ for a shorter path $\\beta$ and an edge $e$, define $X(\\gamma) := X(\\beta) \\circ X(e)$. The diagram $X$ is called commutative if for all vertices $v,w \\in V$ and all two paths $\\gamma,\\gamma'$ in $\\Gamma$ from $v$ to $w$ we have $X(\\gamma)=X(\\gamma')$. Convince yourself that this coincides with the usual definition for simple examples such as $$\\Gamma = \\begin{array}{c} \\bullet & \\rightarrow & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightarrow & \\bullet \\end{array}$$ There is a close connection between diagrams and functors. If $\\mathsf{Path}(\\Gamma)$ denotes the path category, then functors $\\mathsf{Path}(\\Gamma) \\to \\mathcal{C}$ correspond to diagrams of shape $\\Gamma$ in $\\mathcal{C}$. These in turn correspond to homomorphisms of directed graphs $\\Gamma \\to U(\\mathcal{C})$, where $U(-)$ is the forgetful functor from categories to directed graphs. If one even regards arbitrary functors (with small domain category) as diagrams, then we may use the same definition of commutativity as above: Every two chains of morphisms between two given objects are mapped to the same morphism. Sometimes one only demands the commutativity condition for certain paths. For example, when dealing with sheaves or simplicial sets, usually a diagram of the shape $$\\begin{array}{c} \\bullet & \\rightrightarrows & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightrightarrows & \\bullet \\end{array}$$ is called commutative if the two squares which consist of the two upper resp. lower horizontal morphisms are commutative. PS: I have just found that these definitions can also be found in Grothendieck’s Tohoku paper."}, "legacy_scopes": [{"hx/id": "a-633527:scope-000", "hx/role": "component", "hx/type": "bind/let", "hx/content": {"match": "Let $\\Gamma=(V,E,s,t)$ be a directed graph (", "position": 0}, "hx/ends": [{"role": "symbol", "latex": "\\Gamma=(V,E,s,t)"}, {"role": "description", "text": "a directed graph"}, {"role": "parameters", "text": "V = vertices, E = edges, s = source, t = target"}]}, {"hx/id": "a-633527:scope-001", "hx/role": "component", "hx/type": "bind/let", "hx/content": {"match": "Let $\\mathcal{C}$ be a category", "position": 102}, "hx/ends": [{"role": "symbol", "latex": "\\mathcal{C}"}, {"role": "description", "text": "a category"}]}, {"hx/id": "a-633527:scope-002", "hx/role": "component", "hx/type": "quant/universal", "hx/content": {"match": "for all $e \\in E$", "position": 366}, "hx/ends": [{"role": "variable", "latex": "e"}, {"role": "domain", "latex": "E", "text": "edges of the graph"}]}, {"hx/id": "a-633527:scope-003", "hx/role": "component", "hx/type": "constrain/where", "hx/content": {"match": "where $U(-)$ is the forgetful functor from categories to directed graphs", "position": 1469}, "hx/ends": [{"role": "symbol", "latex": "U(-)"}, {"role": "description", "text": "the forgetful functor from categories to directed graphs"}]}], "new_scopes": [{"hx/id": "a-633527:scope-000", "hx/role": "component", "hx/type": "bind/let", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "symbol", "latex": "\\Gamma=(V,E,s,t)"}, {"role": "type", "text": "a directed graph ("}], "hx/content": {"match": "Let $\\Gamma=(V,E,s,t)$ be a directed graph (", "position": 0}, "hx/labels": ["scope", "let-binding"], "delta_status": "common"}, {"hx/id": "a-633527:scope-001", "hx/role": "component", "hx/type": "bind/let", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "symbol", "latex": "\\mathcal{C}"}, {"role": "type", "text": "a category"}], "hx/content": {"match": "Let $\\mathcal{C}$ be a category", "position": 102}, "hx/labels": ["scope", "let-binding"], "delta_status": "common"}, {"hx/id": "a-633527:scope-002", "hx/role": "component", "hx/type": "quant/universal", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "quantifier", "text": "all"}, {"role": "symbol", "latex": "e \\in E"}], "hx/content": {"match": "for all $e \\in E$", "position": 366}, "hx/labels": ["scope", "for-any"], "delta_status": "common"}, {"hx/id": "a-633527:scope-003", "hx/role": "component", "hx/type": "constrain/where", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "symbol", "latex": "U(-)"}, {"role": "description", "text": "the forgetful functor from categories to directed graphs"}], "hx/content": {"match": "where $U(-)$ is the forgetful functor from categories to directed graphs", "position": 1469}, "hx/labels": ["scope", "where-binding"], "delta_status": "common"}, {"hx/id": "a-633527:scope-004", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "X(v) \\in \\mathcal{C}"}], "hx/content": {"match": "$X(v) \\in \\mathcal{C}$", "position": 203}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}, {"hx/id": "a-633527:scope-005", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "v \\in V"}], "hx/content": {"match": "$v \\in V$", "position": 243}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}, {"hx/id": "a-633527:scope-006", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "e \\in E"}], "hx/content": {"match": "$e \\in E$", "position": 306}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}, {"hx/id": "a-633527:scope-007", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "e \\in E"}], "hx/content": {"match": "$e \\in E$", "position": 374}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}, {"hx/id": "a-633527:scope-008", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "v,w \\in V"}], "hx/content": {"match": "$v,w \\in V$", "position": 817}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}], "added_scopes": [{"hx/id": "a-633527:scope-004", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "X(v) \\in \\mathcal{C}"}], "hx/content": {"match": "$X(v) \\in \\mathcal{C}$", "position": 203}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}, {"hx/id": "a-633527:scope-005", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "v \\in V"}], "hx/content": {"match": "$v \\in V$", "position": 243}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}, {"hx/id": "a-633527:scope-006", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "e \\in E"}], "hx/content": {"match": "$e \\in E$", "position": 306}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}, {"hx/id": "a-633527:scope-007", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "e \\in E"}], "hx/content": {"match": "$e \\in E$", "position": 374}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}, {"hx/id": "a-633527:scope-008", "hx/role": "component", "hx/type": "constrain/such-that", "hx/parent": null, "hx/ends": [{"role": "entity", "ident": "a-633527"}, {"role": "membership", "latex": "v,w \\in V"}], "hx/content": {"match": "$v,w \\in V$", "position": 817}, "hx/labels": ["scope", "set-notation"], "delta_status": "added"}], "expr_rows": [{"index": 1, "position": 4, "display": false, "latex": "\\Gamma=(V,E,s,t)", "sexp": "(= Γ (tuple V E s t))", "parse_fallback": false, "vars": [{"token": "\\Gamma", "start": 0, "end": 6, "global_pos": 5, "scoped": true}, {"token": "V", "start": 8, "end": 9, "global_pos": 13, "scoped": true}, {"token": "E", "start": 10, "end": 11, "global_pos": 15, "scoped": true}, {"token": "s", "start": 12, "end": 13, "global_pos": 17, "scoped": true}, {"token": "t", "start": 14, "end": 15, "global_pos": 19, "scoped": true}], "var_count": 5, "scoped_count": 5, "unscoped_count": 0, "unscoped_tokens": []}, {"index": 2, "position": 44, "display": false, "latex": "V", "sexp": "V", "parse_fallback": false, "vars": [{"token": "V", "start": 0, "end": 1, "global_pos": 45, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["V"]}, {"index": 3, "position": 60, "display": false, "latex": "E", "sexp": "E", "parse_fallback": false, "vars": [{"token": "E", "start": 0, "end": 1, "global_pos": 61, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["E"]}, {"index": 4, "position": 73, "display": false, "latex": "s", "sexp": "s", "parse_fallback": false, "vars": [{"token": "s", "start": 0, "end": 1, "global_pos": 74, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["s"]}, {"index": 5, "position": 87, "display": false, "latex": "t", "sexp": "t", "parse_fallback": false, "vars": [{"token": "t", "start": 0, "end": 1, "global_pos": 88, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["t"]}, {"index": 6, "position": 106, "display": false, "latex": "\\mathcal{C}", "sexp": "𝒞", "parse_fallback": false, "vars": [{"token": "\\mathcal{C}", "start": 0, "end": 11, "global_pos": 107, "scoped": true}], "var_count": 1, "scoped_count": 1, "unscoped_count": 0, "unscoped_tokens": []}, {"index": 7, "position": 154, "display": false, "latex": "\\Gamma", "sexp": "Γ", "parse_fallback": false, "vars": [{"token": "\\Gamma", "start": 0, "end": 6, "global_pos": 155, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\Gamma"]}, {"index": 8, "position": 166, "display": false, "latex": "\\mathcal{C}", "sexp": "𝒞", "parse_fallback": false, "vars": [{"token": "\\mathcal{C}", "start": 0, "end": 11, "global_pos": 167, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\mathcal{C}"]}, {"index": 9, "position": 203, "display": false, "latex": "X(v) \\in \\mathcal{C}", "sexp": "(∈ (X v) 𝒞)", "parse_fallback": false, "vars": [{"token": "X", "start": 0, "end": 1, "global_pos": 204, "scoped": true}, {"token": "v", "start": 2, "end": 3, "global_pos": 206, "scoped": true}, {"token": "\\mathcal{C}", "start": 9, "end": 20, "global_pos": 213, "scoped": true}], "var_count": 3, "scoped_count": 3, "unscoped_count": 0, "unscoped_tokens": []}, {"index": 10, "position": 243, "display": false, "latex": "v \\in V", "sexp": "(∈ v V)", "parse_fallback": false, "vars": [{"token": "v", "start": 0, "end": 1, "global_pos": 244, "scoped": true}, {"token": "V", "start": 6, "end": 7, "global_pos": 250, "scoped": true}], "var_count": 2, "scoped_count": 2, "unscoped_count": 0, "unscoped_tokens": []}, {"index": 11, "position": 267, "display": false, "latex": "X(e)", "sexp": "(X e)", "parse_fallback": false, "vars": [{"token": "X", "start": 0, "end": 1, "global_pos": 268, "scoped": false}, {"token": "e", "start": 2, "end": 3, "global_pos": 270, "scoped": false}], "var_count": 2, "scoped_count": 0, "unscoped_count": 2, "unscoped_tokens": ["X", "e"]}, {"index": 12, "position": 277, "display": false, "latex": "\\mathcal{C}", "sexp": "𝒞", "parse_fallback": false, "vars": [{"token": "\\mathcal{C}", "start": 0, "end": 11, "global_pos": 278, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\mathcal{C}"]}, {"index": 13, "position": 306, "display": false, "latex": "e \\in E", "sexp": "(∈ e E)", "parse_fallback": false, "vars": [{"token": "e", "start": 0, "end": 1, "global_pos": 307, "scoped": true}, {"token": "E", "start": 6, "end": 7, "global_pos": 313, "scoped": true}], "var_count": 2, "scoped_count": 2, "unscoped_count": 0, "unscoped_tokens": []}, {"index": 14, "position": 326, "display": false, "latex": "s(X(e))=X(s(e))", "sexp": "(= (s (X e)) (X (s e)))", "parse_fallback": false, "vars": [{"token": "s", "start": 0, "end": 1, "global_pos": 327, "scoped": false}, {"token": "X", "start": 2, "end": 3, "global_pos": 329, "scoped": false}, {"token": "e", "start": 4, "end": 5, "global_pos": 331, "scoped": false}, {"token": "X", "start": 8, "end": 9, "global_pos": 335, "scoped": false}, {"token": "s", "start": 10, "end": 11, "global_pos": 337, "scoped": false}, {"token": "e", "start": 12, "end": 13, "global_pos": 339, "scoped": false}], "var_count": 6, "scoped_count": 0, "unscoped_count": 6, "unscoped_tokens": ["X", "e", "s"]}, {"index": 15, "position": 348, "display": false, "latex": "t(X(e))=X(t(e))", "sexp": "(= (t (X e)) (X (t e)))", "parse_fallback": false, "vars": [{"token": "t", "start": 0, "end": 1, "global_pos": 349, "scoped": false}, {"token": "X", "start": 2, "end": 3, "global_pos": 351, "scoped": false}, {"token": "e", "start": 4, "end": 5, "global_pos": 353, "scoped": false}, {"token": "X", "start": 8, "end": 9, "global_pos": 357, "scoped": false}, {"token": "t", "start": 10, "end": 11, "global_pos": 359, "scoped": false}, {"token": "e", "start": 12, "end": 13, "global_pos": 361, "scoped": false}], "var_count": 6, "scoped_count": 0, "unscoped_count": 6, "unscoped_tokens": ["X", "e", "t"]}, {"index": 16, "position": 374, "display": false, "latex": "e \\in E", "sexp": "(∈ e E)", "parse_fallback": false, "vars": [{"token": "e", "start": 0, "end": 1, "global_pos": 375, "scoped": true}, {"token": "E", "start": 6, "end": 7, "global_pos": 381, "scoped": true}], "var_count": 2, "scoped_count": 2, "unscoped_count": 0, "unscoped_tokens": []}, {"index": 17, "position": 402, "display": false, "latex": "e : v \\to w", "sexp": "(: e (→ v w))", "parse_fallback": false, "vars": [{"token": "e", "start": 0, "end": 1, "global_pos": 403, "scoped": false}, {"token": "v", "start": 4, "end": 5, "global_pos": 407, "scoped": false}, {"token": "w", "start": 10, "end": 11, "global_pos": 413, "scoped": false}], "var_count": 3, "scoped_count": 0, "unscoped_count": 3, "unscoped_tokens": ["e", "v", "w"]}, {"index": 18, "position": 440, "display": false, "latex": "X(e) : X(v) \\to X(w)", "sexp": "(: (X e) (→ (X v) (X w)))", "parse_fallback": false, "vars": [{"token": "X", "start": 0, "end": 1, "global_pos": 441, "scoped": false}, {"token": "e", "start": 2, "end": 3, "global_pos": 443, "scoped": false}, {"token": "X", "start": 7, "end": 8, "global_pos": 448, "scoped": false}, {"token": "v", "start": 9, "end": 10, "global_pos": 450, "scoped": false}, {"token": "X", "start": 16, "end": 17, "global_pos": 457, "scoped": false}, {"token": "w", "start": 18, "end": 19, "global_pos": 459, "scoped": false}], "var_count": 6, "scoped_count": 0, "unscoped_count": 6, "unscoped_tokens": ["X", "e", "v", "w"]}, {"index": 19, "position": 475, "display": false, "latex": "\\gamma", "sexp": "γ", "parse_fallback": false, "vars": [{"token": "\\gamma", "start": 0, "end": 6, "global_pos": 476, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\gamma"]}, {"index": 20, "position": 487, "display": false, "latex": "\\Gamma", "sexp": "Γ", "parse_fallback": false, "vars": [{"token": "\\Gamma", "start": 0, "end": 6, "global_pos": 488, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\Gamma"]}, {"index": 21, "position": 517, "display": false, "latex": "X(\\gamma)", "sexp": "(X γ)", "parse_fallback": false, "vars": [{"token": "X", "start": 0, "end": 1, "global_pos": 518, "scoped": false}, {"token": "\\gamma", "start": 2, "end": 8, "global_pos": 520, "scoped": false}], "var_count": 2, "scoped_count": 0, "unscoped_count": 2, "unscoped_tokens": ["X", "\\gamma"]}, {"index": 22, "position": 532, "display": false, "latex": "\\mathcal{C}", "sexp": "𝒞", "parse_fallback": false, "vars": [{"token": "\\mathcal{C}", "start": 0, "end": 11, "global_pos": 533, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\mathcal{C}"]}, {"index": 23, "position": 563, "display": false, "latex": "\\gamma", "sexp": "γ", "parse_fallback": false, "vars": [{"token": "\\gamma", "start": 0, "end": 6, "global_pos": 564, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\gamma"]}, {"index": 24, "position": 602, "display": false, "latex": "v", "sexp": "v", "parse_fallback": false, "vars": [{"token": "v", "start": 0, "end": 1, "global_pos": 603, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["v"]}, {"index": 25, "position": 611, "display": false, "latex": "X(\\gamma):=\\mathrm{id}_{X(v)}", "sexp": "(:= (X γ) (sub id (X v)))", "parse_fallback": false, "vars": [{"token": "X", "start": 0, "end": 1, "global_pos": 612, "scoped": false}, {"token": "\\gamma", "start": 2, "end": 8, "global_pos": 614, "scoped": false}, {"token": "X", "start": 24, "end": 25, "global_pos": 636, "scoped": false}, {"token": "v", "start": 26, "end": 27, "global_pos": 638, "scoped": false}], "var_count": 4, "scoped_count": 0, "unscoped_count": 4, "unscoped_tokens": ["X", "\\gamma", "v"]}, {"index": 26, "position": 647, "display": false, "latex": "\\gamma = \\beta \\circ e", "sexp": "(= γ (∘ β e))", "parse_fallback": false, "vars": [{"token": "\\gamma", "start": 0, "end": 6, "global_pos": 648, "scoped": false}, {"token": "\\beta", "start": 9, "end": 14, "global_pos": 657, "scoped": false}, {"token": "e", "start": 21, "end": 22, "global_pos": 669, "scoped": false}], "var_count": 3, "scoped_count": 0, "unscoped_count": 3, "unscoped_tokens": ["\\beta", "\\gamma", "e"]}, {"index": 27, "position": 691, "display": false, "latex": "\\beta", "sexp": "β", "parse_fallback": false, "vars": [{"token": "\\beta", "start": 0, "end": 5, "global_pos": 692, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\beta"]}, {"index": 28, "position": 711, "display": false, "latex": "e", "sexp": "e", "parse_fallback": false, "vars": [{"token": "e", "start": 0, "end": 1, "global_pos": 712, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["e"]}, {"index": 29, "position": 723, "display": false, "latex": "X(\\gamma) := X(\\beta) \\circ X(e)", "sexp": "(:= (X γ) (∘ (X β) (X e)))", "parse_fallback": false, "vars": [{"token": "X", "start": 0, "end": 1, "global_pos": 724, "scoped": false}, {"token": "\\gamma", "start": 2, "end": 8, "global_pos": 726, "scoped": false}, {"token": "X", "start": 13, "end": 14, "global_pos": 737, "scoped": false}, {"token": "\\beta", "start": 15, "end": 20, "global_pos": 739, "scoped": false}, {"token": "X", "start": 28, "end": 29, "global_pos": 752, "scoped": false}, {"token": "e", "start": 30, "end": 31, "global_pos": 754, "scoped": false}], "var_count": 6, "scoped_count": 0, "unscoped_count": 6, "unscoped_tokens": ["X", "\\beta", "\\gamma", "e"]}, {"index": 30, "position": 771, "display": false, "latex": "X", "sexp": "X", "parse_fallback": false, "vars": [{"token": "X", "start": 0, "end": 1, "global_pos": 772, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["X"]}, {"index": 31, "position": 817, "display": false, "latex": "v,w \\in V", "sexp": "(tuple v (∈ w V))", "parse_fallback": false, "vars": [{"token": "v", "start": 0, "end": 1, "global_pos": 818, "scoped": true}, {"token": "w", "start": 2, "end": 3, "global_pos": 820, "scoped": true}, {"token": "V", "start": 8, "end": 9, "global_pos": 826, "scoped": true}], "var_count": 3, "scoped_count": 3, "unscoped_count": 0, "unscoped_tokens": []}, {"index": 32, "position": 847, "display": false, "latex": "\\gamma,\\gamma'", "sexp": "(tuple γ (prime γ))", "parse_fallback": false, "vars": [{"token": "\\gamma", "start": 0, "end": 6, "global_pos": 848, "scoped": false}, {"token": "\\gamma", "start": 7, "end": 13, "global_pos": 855, "scoped": false}], "var_count": 2, "scoped_count": 0, "unscoped_count": 2, "unscoped_tokens": ["\\gamma"]}, {"index": 33, "position": 867, "display": false, "latex": "\\Gamma", "sexp": "Γ", "parse_fallback": false, "vars": [{"token": "\\Gamma", "start": 0, "end": 6, "global_pos": 868, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\Gamma"]}, {"index": 34, "position": 881, "display": false, "latex": "v", "sexp": "v", "parse_fallback": false, "vars": [{"token": "v", "start": 0, "end": 1, "global_pos": 882, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["v"]}, {"index": 35, "position": 888, "display": false, "latex": "w", "sexp": "w", "parse_fallback": false, "vars": [{"token": "w", "start": 0, "end": 1, "global_pos": 889, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["w"]}, {"index": 36, "position": 900, "display": false, "latex": "X(\\gamma)=X(\\gamma')", "sexp": "(= (X γ) (X (prime γ)))", "parse_fallback": false, "vars": [{"token": "X", "start": 0, "end": 1, "global_pos": 901, "scoped": false}, {"token": "\\gamma", "start": 2, "end": 8, "global_pos": 903, "scoped": false}, {"token": "X", "start": 10, "end": 11, "global_pos": 911, "scoped": false}, {"token": "\\gamma", "start": 12, "end": 18, "global_pos": 913, "scoped": false}], "var_count": 4, "scoped_count": 0, "unscoped_count": 4, "unscoped_tokens": ["X", "\\gamma"]}, {"index": 37, "position": 1016, "display": true, "latex": "\\Gamma = \\begin{array}{c} \\bullet & \\rightarrow & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightarrow & \\bullet \\end{array}", "sexp": "(= Γ (graph (→ • •) (→ • •)))", "parse_fallback": false, "vars": [{"token": "\\Gamma", "start": 0, "end": 6, "global_pos": 1018, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\Gamma"]}, {"index": 38, "position": 1215, "display": false, "latex": "\\mathsf{Path}(\\Gamma)", "sexp": "(Path Γ)", "parse_fallback": false, "vars": [{"token": "\\Gamma", "start": 14, "end": 20, "global_pos": 1230, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\Gamma"]}, {"index": 39, "position": 1280, "display": false, "latex": "\\mathsf{Path}(\\Gamma) \\to \\mathcal{C}", "sexp": "(→ (Path Γ) 𝒞)", "parse_fallback": false, "vars": [{"token": "\\Gamma", "start": 14, "end": 20, "global_pos": 1295, "scoped": false}, {"token": "\\mathcal{C}", "start": 26, "end": 37, "global_pos": 1307, "scoped": false}], "var_count": 2, "scoped_count": 0, "unscoped_count": 2, "unscoped_tokens": ["\\Gamma", "\\mathcal{C}"]}, {"index": 40, "position": 1352, "display": false, "latex": "\\Gamma", "sexp": "Γ", "parse_fallback": false, "vars": [{"token": "\\Gamma", "start": 0, "end": 6, "global_pos": 1353, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\Gamma"]}, {"index": 41, "position": 1364, "display": false, "latex": "\\mathcal{C}", "sexp": "𝒞", "parse_fallback": false, "vars": [{"token": "\\mathcal{C}", "start": 0, "end": 11, "global_pos": 1365, "scoped": false}], "var_count": 1, "scoped_count": 0, "unscoped_count": 1, "unscoped_tokens": ["\\mathcal{C}"]}, {"index": 42, "position": 1440, "display": false, "latex": "\\Gamma \\to U(\\mathcal{C})", "sexp": "(→ Γ (U 𝒞))", "parse_fallback": false, "vars": [{"token": "\\Gamma", "start": 0, "end": 6, "global_pos": 1441, "scoped": false}, {"token": "U", "start": 11, "end": 12, "global_pos": 1452, "scoped": false}, {"token": "\\mathcal{C}", "start": 13, "end": 24, "global_pos": 1454, "scoped": false}], "var_count": 3, "scoped_count": 0, "unscoped_count": 3, "unscoped_tokens": ["U", "\\Gamma", "\\mathcal{C}"]}, {"index": 43, "position": 1475, "display": false, "latex": "U(-)", "sexp": "(U □)", "parse_fallback": false, "vars": [{"token": "U", "start": 0, "end": 1, "global_pos": 1476, "scoped": true}], "var_count": 1, "scoped_count": 1, "unscoped_count": 0, "unscoped_tokens": []}, {"index": 44, "position": 1940, "display": true, "latex": "\\begin{array}{c} \\bullet & \\rightrightarrows & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightrightarrows & \\bullet \\end{array}", "sexp": "(graph (⇉ • •) (⇉ • •))", "parse_fallback": false, "vars": [], "var_count": 0, "scoped_count": 0, "unscoped_count": 0, "unscoped_tokens": []}], "scope_coverage": {"expr_count": 44, "expr_with_unscoped": 35, "total_vars": 90, "scoped_vars": 19, "unscoped_vars": 71, "pct_scoped": 21.1, "all_scoped": false}, "stats": {"legacy_count": 4, "new_count": 9, "added_count": 5, "legacy_type_counts": {"bind/let": 2, "quant/universal": 1, "constrain/where": 1}, "new_type_counts": {"bind/let": 2, "quant/universal": 1, "constrain/where": 1, "constrain/such-that": 5}}, "paper_scope_case": {"arxiv_id": "0705.0462", "title": "Resource modalities in game semantics", "url": "https://arxiv.org/abs/0705.0462", "snippet": "\\ldots \\xrightarrow{m_{k-1}} x_{k-1} \\xrightarrow{m_k} x_k \\end{equation} % Two paths are parallel when they have the same initial and final positions. % A play~(\\ref{equation/play}) is \\emph{alternating} when: \\mathin \\forall i \\in \\{1 , \\ldots , k-1\\}, \\quad \\quad \\lambda_A(m_{i+1}) = - \\lambda_A(m_i). \\mathout % \\paragraph{{\\bf Strategy.}} % A strategy $\\sigma$ of a Conway game is defined as a set of alternating plays of even length such that: % \\begin{itemize} \\sitem $\\sigma$~contains the empty play, \\sitem every nonempty play starts with an Opponent move, \\sitem $\\sigma$ is closed by even-length prefix: for every play~$s$, and for all moves~$m,n$, $$ s \\cdot m \\cdot n \\in \\sigma \\Implie", "detected_env": "lemma", "detected_binder": "forall", "scope_type_top": [["constrain/such-that", 4], ["constrain/where", 2], ["assume/explicit", 1], ["env/lemma", 1]]}};
+
+function esc(s) {
+  return String(s)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function renderHighlighted(text, scopes, clsFn) {
+  const arr = [...scopes].sort((a,b) => {
+    const pa = Number(a?.['hx/content']?.position ?? 1e12);
+    const pb = Number(b?.['hx/content']?.position ?? 1e12);
+    if (pa !== pb) return pa - pb;
+    const la = String(a?.['hx/content']?.match ?? '').length;
+    const lb = String(b?.['hx/content']?.match ?? '').length;
+    return lb - la;
+  });
+
+  let out = '';
+  let cur = 0;
+  for (const s of arr) {
+    const c = s['hx/content'] || {};
+    const pos = Number(c.position ?? -1);
+    const m = String(c.match ?? '');
+    if (pos < 0 || !m) continue;
+    if (pos < cur) continue;
+    const end = Math.min(text.length, pos + m.length);
+    if (pos > text.length || end <= pos) continue;
+    out += esc(text.slice(cur, pos));
+    const cls = clsFn(s);
+    const tip = `${s['hx/type'] || '?'} @${pos}`;
+    out += `<span class="${cls}" title="${esc(tip)}">${esc(text.slice(pos, end))}</span>`;
+    cur = end;
+  }
+  out += esc(text.slice(cur));
+  return out;
+}
+
+function annotateLatex(latex, vars) {
+  const arr = [...(vars || [])].sort((a,b) => Number(a.start) - Number(b.start));
+  let cur = 0;
+  let out = '';
+  for (const v of arr) {
+    const s = Number(v.start);
+    const e = Number(v.end);
+    if (s < cur || e <= s) continue;
+    out += esc(latex.slice(cur, s));
+    const cls = v.scoped ? 'var-scoped' : 'var-unscoped';
+    const tip = `${v.token} @${v.global_pos} ${v.scoped ? 'scoped' : 'unscoped'}`;
+    out += `<span class="${cls}" title="${esc(tip)}">${esc(latex.slice(s, e))}</span>`;
+    cur = e;
+  }
+  out += esc(latex.slice(cur));
+  return out;
+}
+
+function buildStats() {
+  const s = DATA.stats;
+  const c = DATA.scope_coverage || {};
+  const cards = [
+    ['Legacy scopes', s.legacy_count],
+    ['New scopes', s.new_count],
+    ['Added scopes', s.added_count],
+    ['Variable tokens', c.total_vars ?? 0],
+    ['Scoped tokens', c.scoped_vars ?? 0],
+    ['Unscoped tokens', c.unscoped_vars ?? 0],
+    ['Scoped %', `${c.pct_scoped ?? 0}%`],
+    ['Exprs w/ unscoped', c.expr_with_unscoped ?? 0],
+  ];
+  document.getElementById('stats').innerHTML = cards.map(([k,v]) =>
+    `<div class="stat"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`
+  ).join('');
+}
+
+function buildTexts() {
+  const text = DATA.thread.answer_text;
+  const legacy = DATA.legacy_scopes;
+  const news = DATA.new_scopes;
+  document.getElementById('legacy-text').innerHTML = renderHighlighted(text, legacy, () => 'scope-legacy');
+  document.getElementById('new-text').innerHTML = renderHighlighted(text, news, (s) =>
+    s.delta_status === 'added' ? 'scope-added' : 'scope-common'
+  );
+}
+
+function buildExprTable() {
+  const c = DATA.scope_coverage || {};
+  const rows = DATA.expr_rows || [];
+  const line = document.getElementById('coverage-line');
+  const goalState = c.all_scoped ? 'goal met' : 'goal not met';
+  line.innerHTML =
+    `Goal: every variable token is in >=1 scope. ` +
+    `<strong>${esc(goalState)}</strong>. ` +
+    `Current: <strong>${Number(c.scoped_vars || 0)}/${Number(c.total_vars || 0)} (${esc(c.pct_scoped || 0)}%)</strong> scoped, ` +
+    `<strong>${Number(c.unscoped_vars || 0)}</strong> unscoped.`;
+
+  const body = document.querySelector('#expr-table tbody');
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="2">No math expressions found.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = rows.map((r) => {
+    const status = Number(r.unscoped_count || 0) === 0
+      ? '<span class="pill common">fully scoped</span>'
+      : '<span class="pill warn">needs scope</span>';
+    const unscoped = (r.unscoped_tokens || []).length
+      ? `unscoped: <code>${esc((r.unscoped_tokens || []).join(', '))}</code>`
+      : 'unscoped: none';
+    const parseFlag = r.parse_fallback
+      ? ' <span class="pill added">fallback parse</span>'
+      : '';
+    return `
+      <tr>
+        <td>
+          <div>${status} <span class="mini">expr #${r.index} @${r.position}</span></div>
+          <div class="latex-box">${annotateLatex(String(r.latex || ''), r.vars || [])}</div>
+          <div class="row-meta">vars: ${r.var_count} | scoped: ${r.scoped_count} | ${unscoped}</div>
+        </td>
+        <td>
+          <div class="mini">s-expression${parseFlag}</div>
+          <div class="sexp-box">${esc(String(r.sexp || ''))}</div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+function buildAddedTable() {
+  const body = document.querySelector('#added-table tbody');
+  const rows = DATA.added_scopes || [];
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="3">No added scopes in this thread.</td></tr>';
+    return;
+  }
+  body.innerHTML = rows.map((s) => {
+    const c = s['hx/content'] || {};
+    return `<tr><td><code>${esc(s['hx/type'] || '?')}</code></td><td>${esc(c.match || '')}</td><td>${Number(c.position ?? -1)}</td></tr>`;
+  }).join('');
+}
+
+function buildTypeDelta() {
+  const legacy = DATA.stats.legacy_type_counts || {};
+  const now = DATA.stats.new_type_counts || {};
+  const keys = Array.from(new Set([...Object.keys(legacy), ...Object.keys(now)])).sort();
+  const body = document.querySelector('#type-table tbody');
+  body.innerHTML = keys.map((k) => {
+    const a = Number(legacy[k] || 0);
+    const b = Number(now[k] || 0);
+    const d = b - a;
+    const ds = d > 0 ? `+${d}` : `${d}`;
+    return `<tr><td><code>${esc(k)}</code></td><td>${a}</td><td>${b}</td><td>${ds}</td></tr>`;
+  }).join('');
+}
+
+function buildPaperCase() {
+  const p = DATA.paper_scope_case || {};
+  const meta = document.getElementById('paper-meta');
+  const pre = document.getElementById('paper-snippet');
+  if (p.error) {
+    meta.textContent = p.error;
+    pre.textContent = '';
+    return;
+  }
+  const scopeTop = (p.scope_type_top || []).map(([t,n]) => `${t}:${n}`).join(', ');
+  meta.innerHTML =
+    `arXiv <code>${esc(p.arxiv_id || '')}</code> - ` +
+    `<a href="${esc(p.url || '#')}" target="_blank">${esc(p.title || '')}</a> - ` +
+    `env=<code>${esc(p.detected_env || '')}</code>, binder=<code>${esc(p.detected_binder || '')}</code><br>` +
+    `Detected scope types: ${esc(scopeTop)}`;
+  pre.textContent = p.snippet || '';
+}
+
+buildStats();
+buildTexts();
+buildExprTable();
+buildAddedTable();
+buildTypeDelta();
+buildPaperCase();
+</script>
+</body>
+</html>
