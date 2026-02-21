@@ -20,3 +20,5 @@ data/nlab-preview/
 data/o0/
 data/physics-se-classical/
 data/nlab-wiring/pages.json
+.mypy_cache/
+se-data/

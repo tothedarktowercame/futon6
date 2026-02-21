@@ -2915,7 +2915,7 @@ def print_dry_run(args):
         cmd_parts.append(f"  --paper-hg-text-max-chars {args.paper_hg_text_max_chars}")
     if args.paper_hg_max_tex_members != 4:
         cmd_parts.append(f"  --paper-hg-max-tex-members {args.paper_hg_max_tex_members}")
-    print(f"    {' \\\\\n    '.join(cmd_parts)}")
+    print("    " + ' \\\\\n    '.join(cmd_parts))
     print()
     print(f"  MOIST RUN (CPU stages + prompt files for Codex handoff):")
     moist_parts = [f"python scripts/superpod-job.py {args.posts_xml}"]
@@ -2962,7 +2962,7 @@ def print_dry_run(args):
         moist_parts.append(f"  --paper-hg-text-max-chars {args.paper_hg_text_max_chars}")
     if args.paper_hg_max_tex_members != 4:
         moist_parts.append(f"  --paper-hg-max-tex-members {args.paper_hg_max_tex_members}")
-    print(f"    {' \\\\\n    '.join(moist_parts)}")
+    print("    " + ' \\\\\n    '.join(moist_parts))
     print()
     print(f"    Generates: moist-prompts/stage3-pattern-tagging.jsonl")
     print(f"               moist-prompts/stage6-reverse-morphogenesis.jsonl")
