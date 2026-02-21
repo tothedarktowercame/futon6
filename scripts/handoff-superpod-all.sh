@@ -131,7 +131,7 @@ PY
 
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-run-smoke>>[init]
 run_smoke() {
-  local out_smoke="/tmp/superpod-rob-smoke-$(date +%s)"
+  local out_smoke="tmp/superpod-rob-smoke-$(date +%s)"
   echo "[all] smoke output dir: $out_smoke"
 
   python3 scripts/superpod-job.py \

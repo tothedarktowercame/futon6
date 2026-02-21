@@ -37,7 +37,7 @@ fi
 
 if [[ "$MODE" != "full-only" ]]; then
   echo "[run] smoke run..."
-  OUT_SMOKE="/tmp/superpod-rob-smoke-$(date +%s)"
+  OUT_SMOKE="tmp/superpod-rob-smoke-$(date +%s)"
   python3 scripts/superpod-job.py \
     tests/fixtures/se-mini/Posts.xml \
     --comments-xml tests/fixtures/se-mini/Comments.xml \
