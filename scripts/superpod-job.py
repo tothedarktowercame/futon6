@@ -50,6 +50,7 @@ conversion path. See futon1/apps/graph-memory for schema.
 """
 
 import argparse
+import builtins as _builtins
 import hashlib
 import importlib
 import itertools
@@ -62,6 +63,7 @@ import tarfile
 import time
 import uuid
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 
 import shutil
@@ -71,6 +73,15 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent))
+
+
+def _timestamp_now() -> str:
+    return datetime.now().strftime("%H:%M:%S")
+
+
+def print(*args, **kwargs):  # type: ignore[override]
+    kwargs.setdefault("flush", True)
+    return _builtins.print(f"[{_timestamp_now()}]", *args, **kwargs)
 
 # CT-backed wiring modules (from scripts/)
 _assemble_wiring = None
@@ -1485,13 +1496,16 @@ def _create_llm_pipeline(model_name, batch_size=8):
     Returns (pipe, tokenizer) tuple. The pipeline is created without
     default max_new_tokens — callers pass it per-call.
     """
-    from transformers import pipeline, AutoTokenizer
+    from transformers import pipeline, AutoTokenizer, AutoConfig
     import torch
 
     print(f"       Loading model {model_name}...")
+    config = AutoConfig.from_pretrained(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+    if not getattr(config, "is_encoder_decoder", False):
+        tokenizer.padding_side = "left"
 
     pipe = pipeline(
         "text-generation",
@@ -1505,60 +1519,231 @@ def _create_llm_pipeline(model_name, batch_size=8):
     return pipe, tokenizer
 
 
-def tag_patterns_llm_batch(pairs, model_name=None, batch_size=8, device="cuda",
-                           pipe=None, tokenizer=None, entry_ids=None):
+def tag_patterns_llm_batch(
+    pairs,
+    model_name=None,
+    batch_size=8,
+    device="cuda",
+    pipe=None,
+    tokenizer=None,
+    entry_ids=None,
+    progress_done_base=0,
+    progress_total=None,
+    progress_start_time=None,
+):
     """Tag QA pairs with reasoning patterns using a local LLM.
 
-    Uses transformers pipeline for batched inference. If pipe/tokenizer
-    are provided, reuses them; otherwise creates a new pipeline.
+    Uses a Dataset-backed transformers pipeline pass (single call) so GPU
+    execution stays in high-throughput mode instead of many sequential calls.
+    If pipe/tokenizer are provided, reuses them; otherwise creates a new
+    pipeline.
     """
-    if pipe is None:
-        pipe, tokenizer = _create_llm_pipeline(model_name, batch_size)
+    from torch.utils.data import Dataset as TorchDataset
 
-    results = []
-    total = len(pairs)
-    if entry_ids is not None and len(entry_ids) != total:
-        raise ValueError(f"entry_ids length ({len(entry_ids)}) != pairs length ({total})")
+    class _PatternPromptDataset(TorchDataset):
+        """Lazily format Stage 3 prompts for pipeline dataset mode."""
 
-    for start in range(0, total, batch_size):
-        batch = pairs[start:start + batch_size]
-        prompts = []
-        for pair in batch:
+        def __init__(self, qa_pairs, tok):
+            self.qa_pairs = qa_pairs
+            self.tok = tok
+
+        def __len__(self):
+            return len(self.qa_pairs)
+
+        def __getitem__(self, idx):
+            pair = self.qa_pairs[idx]
             prompt = build_pattern_prompt(
                 pair.question.title,
                 pair.question.body_text,
                 pair.answer.body_text,
             )
             messages = [{"role": "user", "content": prompt}]
-            formatted = tokenizer.apply_chat_template(
+            return self.tok.apply_chat_template(
                 messages, tokenize=False, add_generation_prompt=True
             )
-            prompts.append(formatted)
 
-        outputs = pipe(prompts, return_full_text=False, max_new_tokens=64)
+    if pipe is None:
+        pipe, tokenizer = _create_llm_pipeline(model_name, batch_size)
 
-        for i, out in enumerate(outputs):
-            text = out[0]["generated_text"].strip()
-            pattern_ids = _parse_pattern_response(text)
-            entry_id = (entry_ids[start + i]
-                        if entry_ids is not None
-                        else f"se-math-{batch[i].question.id}")
-            results.append({
-                "entry_id": entry_id,
-                "patterns": [PATTERN_NAMES[pid - 1] for pid in pattern_ids
-                             if 1 <= pid <= 25],
-                "raw": text,
-            })
+    results = []
+    total_local = len(pairs)
+    if entry_ids is not None and len(entry_ids) != total_local:
+        raise ValueError(f"entry_ids length ({len(entry_ids)}) != pairs length ({total_local})")
+    total_progress = total_local if progress_total is None else int(progress_total)
+    done_base = int(progress_done_base)
 
-        done = min(start + batch_size, total)
-        if done % 1000 < batch_size or done == total:
-            elapsed = time.time() - _llm_start
-            rate = done / elapsed if elapsed > 0 else 0
-            eta = (total - done) / rate if rate > 0 else 0
-            print(f"       [{done}/{total}] {rate:.0f} pairs/s, "
+    prompt_dataset = _PatternPromptDataset(pairs, tokenizer)
+    outputs = pipe(
+        prompt_dataset,
+        return_full_text=False,
+        max_new_tokens=64,
+        batch_size=batch_size,
+    )
+
+    if progress_start_time is None:
+        t_start = _llm_start if _llm_start else time.time()
+    else:
+        t_start = float(progress_start_time)
+
+    for i, out in enumerate(outputs):
+        if isinstance(out, list):
+            item = out[0] if out else {}
+        elif isinstance(out, dict):
+            item = out
+        else:
+            item = {}
+
+        text = str(item.get("generated_text", "")).strip()
+        pattern_ids = _parse_pattern_response(text)
+        entry_id = (entry_ids[i]
+                    if entry_ids is not None
+                    else f"se-math-{pairs[i].question.id}")
+        results.append({
+            "entry_id": entry_id,
+            "patterns": [PATTERN_NAMES[pid - 1] for pid in pattern_ids
+                         if 1 <= pid <= 25],
+            "raw": text,
+        })
+
+        done_local = i + 1
+        done_progress = done_base + done_local
+        if done_progress % 1000 == 0 or done_local == total_local:
+            elapsed = time.time() - t_start
+            rate = done_progress / elapsed if elapsed > 0 else 0
+            eta = max(total_progress - done_progress, 0) / rate if rate > 0 else 0
+            print(f"       [{done_progress}/{total_progress}] {rate:.0f} pairs/s, "
                   f"ETA {eta/60:.0f} min")
 
     return results
+
+
+def _stage3_chunk_ranges(total_items, chunks_per_shard):
+    """Return balanced [start, end) ranges for Stage 3 chunking."""
+    if total_items <= 0:
+        return []
+    n_chunks = max(1, min(int(chunks_per_shard), int(total_items)))
+    base = total_items // n_chunks
+    rem = total_items % n_chunks
+    ranges = []
+    start = 0
+    for chunk_idx in range(n_chunks):
+        size = base + (1 if chunk_idx < rem else 0)
+        end = start + size
+        ranges.append((chunk_idx, start, end))
+        start = end
+    return ranges
+
+
+def run_stage3_pattern_tagging_chunked(
+    pairs,
+    entry_ids,
+    outdir,
+    pipe,
+    tokenizer,
+    batch_size,
+    chunks_per_shard=10,
+):
+    """Run Stage 3 in resumable chunks and merge to pattern-tags.json.
+
+    Chunk files are treated as completion markers: existing chunk files are
+    never recomputed. Remove a chunk file manually to force recompute.
+    """
+    total = len(pairs)
+    if len(entry_ids) != total:
+        raise ValueError(f"entry_ids length ({len(entry_ids)}) != pairs length ({total})")
+
+    chunk_ranges = _stage3_chunk_ranges(total, chunks_per_shard)
+    chunk_dir = outdir / "stage3-pattern-tags-chunks"
+    chunk_dir.mkdir(parents=True, exist_ok=True)
+
+    meta_path = chunk_dir / "meta.json"
+    expected_meta = {
+        "version": 1,
+        "total_pairs": total,
+        "chunks_per_shard": int(chunks_per_shard),
+        "effective_chunks": len(chunk_ranges),
+    }
+    if meta_path.exists():
+        with open(meta_path) as f:
+            existing_meta = json.load(f)
+        if existing_meta != expected_meta:
+            raise RuntimeError(
+                f"Stage 3 chunk metadata mismatch in {meta_path}. "
+                "Remove stage3-pattern-tags-chunks to restart Stage 3 chunking "
+                "with new parameters."
+            )
+    else:
+        with open(meta_path, "w") as f:
+            json.dump(expected_meta, f, ensure_ascii=False, indent=2)
+
+    if not chunk_ranges:
+        write_json(outdir / "pattern-tags.json", [])
+        return []
+
+    print(f"       Stage 3 chunking: {len(chunk_ranges)} chunks "
+          f"(requested={chunks_per_shard})")
+
+    pending_chunks = []
+    completed_pairs = 0
+    for chunk_idx, start, end in chunk_ranges:
+        chunk_size = end - start
+        chunk_path = chunk_dir / f"chunk-{chunk_idx:03d}.json"
+        if chunk_path.exists():
+            completed_pairs += chunk_size
+            print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)} exists "
+                  f"({chunk_size} pairs), skipping")
+            continue
+        pending_chunks.append((chunk_idx, start, end, chunk_path))
+
+    remaining_pairs = total - completed_pairs
+    if remaining_pairs > 0:
+        print(f"       Stage 3 remaining this run: {remaining_pairs}/{total} pairs")
+
+    run_start = time.time()
+    processed_this_run = 0
+    for chunk_idx, start, end, chunk_path in pending_chunks:
+        chunk_size = end - start
+        print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)}: "
+              f"pairs[{start}:{end}] ({chunk_size})")
+        chunk_tags = tag_patterns_llm_batch(
+            pairs[start:end],
+            batch_size=batch_size,
+            pipe=pipe,
+            tokenizer=tokenizer,
+            entry_ids=entry_ids[start:end],
+            progress_done_base=processed_this_run,
+            progress_total=remaining_pairs,
+            progress_start_time=run_start,
+        )
+        processed_this_run += chunk_size
+
+        tmp_path = chunk_dir / f"chunk-{chunk_idx:03d}.tmp"
+        with open(tmp_path, "w") as f:
+            json.dump(chunk_tags, f, ensure_ascii=False)
+        os.replace(tmp_path, chunk_path)
+        print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)} written: {chunk_path.name}")
+
+    merged_results = []
+    for chunk_idx, _start, _end in chunk_ranges:
+        chunk_path = chunk_dir / f"chunk-{chunk_idx:03d}.json"
+        if not chunk_path.exists():
+            raise RuntimeError(
+                f"Missing Stage 3 chunk file: {chunk_path}. "
+                "Re-run Stage 3 or remove chunks to restart."
+            )
+        with open(chunk_path) as f:
+            chunk_data = json.load(f)
+        if not isinstance(chunk_data, list):
+            raise RuntimeError(f"Invalid Stage 3 chunk payload (not a list): {chunk_path}")
+        merged_results.extend(chunk_data)
+
+    if len(merged_results) != total:
+        raise RuntimeError(
+            f"Stage 3 merge length mismatch: merged={len(merged_results)} expected={total}"
+        )
+
+    write_json(outdir / "pattern-tags.json", merged_results)
+    return merged_results
 
 
 def _parse_pattern_response(text):
@@ -1622,57 +1807,201 @@ def _parse_json_array_response(text):
 
 # --- Stage 6: Reverse morphogenesis LLM inference ---
 
-def run_reverse_morphogenesis_llm_batch(pairs, entities, pipe, tokenizer,
-                                        batch_size=4):
+def run_reverse_morphogenesis_llm_batch(
+    pairs,
+    entities,
+    pipe,
+    tokenizer,
+    batch_size=4,
+    progress_done_base=0,
+    progress_total=None,
+    progress_start_time=None,
+):
     """Run reverse morphogenesis analysis using a local LLM.
 
-    For each QA pair, generates the S←Q←A prompt, runs inference, and
-    parses the JSON response. Smaller batch_size than Stage 3 because
-    prompts and responses are both larger.
+    Uses a Dataset-backed transformers pipeline pass (single call) so GPU
+    execution stays in high-throughput mode instead of many sequential calls.
+    Prompts and responses are larger than Stage 3, so Stage 6 batch sizes
+    are typically smaller in practice.
 
     Returns list of result dicts.
     """
-    results = []
-    total = len(pairs)
-    t_start = time.time()
+    from torch.utils.data import Dataset as TorchDataset
 
-    for start in range(0, total, batch_size):
-        batch_pairs = pairs[start:start + batch_size]
-        batch_entities = entities[start:start + batch_size]
-        prompts = []
-        for pair in batch_pairs:
+    class _ReverseMorphPromptDataset(TorchDataset):
+        """Lazily format Stage 6 prompts for pipeline dataset mode."""
+
+        def __init__(self, qa_pairs, tok):
+            self.qa_pairs = qa_pairs
+            self.tok = tok
+
+        def __len__(self):
+            return len(self.qa_pairs)
+
+        def __getitem__(self, idx):
+            pair = self.qa_pairs[idx]
             prompt = build_reverse_morphogenesis_prompt(
                 pair.question.title,
                 pair.question.body_text,
                 pair.answer.body_text,
             )
             messages = [{"role": "user", "content": prompt}]
-            formatted = tokenizer.apply_chat_template(
+            return self.tok.apply_chat_template(
                 messages, tokenize=False, add_generation_prompt=True
             )
-            prompts.append(formatted)
 
-        outputs = pipe(prompts, return_full_text=False, max_new_tokens=512)
+    results = []
+    total = len(pairs)
+    if progress_total is None:
+        progress_total = total
+    t_start = progress_start_time if progress_start_time is not None else time.time()
+    prompt_dataset = _ReverseMorphPromptDataset(pairs, tokenizer)
+    outputs = pipe(
+        prompt_dataset,
+        return_full_text=False,
+        max_new_tokens=512,
+        batch_size=batch_size,
+    )
 
-        for i, out in enumerate(outputs):
-            text = out[0]["generated_text"].strip()
-            parsed = _parse_json_object_response(text)
-            results.append({
-                "entity_id": batch_entities[i]["entity/id"],
-                "question_id": batch_pairs[i].question.id,
-                "analysis": parsed,
-                "raw": text,
-            })
+    for i, out in enumerate(outputs):
+        if isinstance(out, list):
+            item = out[0] if out else {}
+        elif isinstance(out, dict):
+            item = out
+        else:
+            item = {}
 
-        done = min(start + batch_size, total)
-        if done % 500 < batch_size or done == total:
+        text = str(item.get("generated_text", "")).strip()
+        parsed = _parse_json_object_response(text)
+        results.append({
+            "entity_id": entities[i]["entity/id"],
+            "question_id": pairs[i].question.id,
+            "analysis": parsed,
+            "raw": text,
+        })
+
+        done_local = i + 1
+        done_progress = progress_done_base + done_local
+        if done_progress % 500 == 0 or done_local == total:
             elapsed = time.time() - t_start
-            rate = done / elapsed if elapsed > 0 else 0
-            eta = (total - done) / rate if rate > 0 else 0
-            print(f"       [{done}/{total}] {rate:.0f} pairs/s, "
+            rate = done_progress / elapsed if elapsed > 0 else 0
+            eta = max(progress_total - done_progress, 0) / rate if rate > 0 else 0
+            print(f"       [{done_progress}/{progress_total}] {rate:.0f} pairs/s, "
                   f"ETA {eta/60:.0f} min")
 
     return results
+
+
+def run_stage6_reverse_morphogenesis_chunked(
+    pairs,
+    entities,
+    outdir,
+    pipe,
+    tokenizer,
+    batch_size,
+    chunks_per_shard=10,
+):
+    """Run Stage 6 in resumable chunks and merge to reverse-morphogenesis.json.
+
+    Chunk files are treated as completion markers: existing chunk files are
+    never recomputed. Remove a chunk file manually to force recompute.
+    """
+    total = len(pairs)
+    if len(entities) != total:
+        raise ValueError(f"entities length ({len(entities)}) != pairs length ({total})")
+
+    chunk_ranges = _stage3_chunk_ranges(total, chunks_per_shard)
+    chunk_dir = outdir / "stage6-reverse-morphogenesis-chunks"
+    chunk_dir.mkdir(parents=True, exist_ok=True)
+
+    meta_path = chunk_dir / "meta.json"
+    expected_meta = {
+        "version": 1,
+        "total_pairs": total,
+        "chunks_per_shard": int(chunks_per_shard),
+        "effective_chunks": len(chunk_ranges),
+    }
+    if meta_path.exists():
+        with open(meta_path) as f:
+            existing_meta = json.load(f)
+        if existing_meta != expected_meta:
+            raise RuntimeError(
+                f"Stage 6 chunk metadata mismatch in {meta_path}. "
+                "Remove stage6-reverse-morphogenesis-chunks to restart Stage 6 chunking "
+                "with new parameters."
+            )
+    else:
+        with open(meta_path, "w") as f:
+            json.dump(expected_meta, f, ensure_ascii=False, indent=2)
+
+    if not chunk_ranges:
+        write_json(outdir / "reverse-morphogenesis.json", [])
+        return []
+
+    print(f"       Stage 6 chunking: {len(chunk_ranges)} chunks "
+          f"(requested={chunks_per_shard})")
+
+    pending_chunks = []
+    completed_pairs = 0
+    for chunk_idx, start, end in chunk_ranges:
+        chunk_size = end - start
+        chunk_path = chunk_dir / f"chunk-{chunk_idx:03d}.json"
+        if chunk_path.exists():
+            completed_pairs += chunk_size
+            print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)} exists "
+                  f"({chunk_size} pairs), skipping")
+            continue
+        pending_chunks.append((chunk_idx, start, end, chunk_path))
+
+    remaining_pairs = total - completed_pairs
+    if remaining_pairs > 0:
+        print(f"       Stage 6 remaining this run: {remaining_pairs}/{total} pairs")
+
+    run_start = time.time()
+    processed_this_run = 0
+    for chunk_idx, start, end, chunk_path in pending_chunks:
+        chunk_size = end - start
+        print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)}: "
+              f"pairs[{start}:{end}] ({chunk_size})")
+        chunk_results = run_reverse_morphogenesis_llm_batch(
+            pairs[start:end],
+            entities[start:end],
+            pipe,
+            tokenizer,
+            batch_size=batch_size,
+            progress_done_base=processed_this_run,
+            progress_total=remaining_pairs,
+            progress_start_time=run_start,
+        )
+        processed_this_run += chunk_size
+
+        tmp_path = chunk_dir / f"chunk-{chunk_idx:03d}.tmp"
+        with open(tmp_path, "w") as f:
+            json.dump(chunk_results, f, ensure_ascii=False)
+        os.replace(tmp_path, chunk_path)
+        print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)} written: {chunk_path.name}")
+
+    merged_results = []
+    for chunk_idx, _start, _end in chunk_ranges:
+        chunk_path = chunk_dir / f"chunk-{chunk_idx:03d}.json"
+        if not chunk_path.exists():
+            raise RuntimeError(
+                f"Missing Stage 6 chunk file: {chunk_path}. "
+                "Re-run Stage 6 or remove chunks to restart."
+            )
+        with open(chunk_path) as f:
+            chunk_data = json.load(f)
+        if not isinstance(chunk_data, list):
+            raise RuntimeError(f"Invalid Stage 6 chunk payload (not a list): {chunk_path}")
+        merged_results.extend(chunk_data)
+
+    if len(merged_results) != total:
+        raise RuntimeError(
+            f"Stage 6 merge length mismatch: merged={len(merged_results)} expected={total}"
+        )
+
+    write_json(outdir / "reverse-morphogenesis.json", merged_results)
+    return merged_results
 
 
 # --- Stage 7: Thread performative LLM classification ---
@@ -2705,7 +3034,10 @@ def print_dry_run(args):
     elif args.moist_run:
         print(f"  {'3. Pattern tagging prompts (CPU)':<42s} {'prompt generation':<36s} {fmt(est_stage1_min)+' min':>10s}")
     else:
-        print(f"  {'3. LLM pattern tagging (GPU)':<42s} {args.llm_model:<36s} {fmt(est_stage3_min)+' min':>10s}")
+        stage3_model = (f"{args.llm_model} "
+                        f"(batch={args.llm_stage3_batch_size}, "
+                        f"chunks={args.llm_stage3_chunks_per_shard})")
+        print(f"  {'3. LLM pattern tagging (GPU)':<42s} {stage3_model:<36s} {fmt(est_stage3_min)+' min':>10s}")
 
     if not stage4_active:
         print(f"  {'4. Clustering':<42s} {'SKIPPED':>10s}")
@@ -2730,7 +3062,10 @@ def print_dry_run(args):
     elif args.moist_run:
         print(f"  {'6. Reverse morphogenesis prompts':<42s} {'prompt generation':<36s} {fmt(est_stage6_min)+' min':>10s}")
     else:
-        print(f"  {'6. Reverse morphogenesis S←Q←A (LLM)':<42s} {args.llm_model:<36s} {fmt(est_stage6_min)+' min':>10s}")
+        stage6_model = (f"{args.llm_model} "
+                        f"(batch={args.llm_stage6_batch_size}, "
+                        f"chunks={args.llm_stage6_chunks_per_shard})")
+        print(f"  {'6. Reverse morphogenesis S←Q←A (LLM)':<42s} {stage6_model:<36s} {fmt(est_stage6_min)+' min':>10s}")
 
     # Stage 7: Thread wiring diagrams
     ct_ref_exists = Path(args.ct_reference).exists()
@@ -2869,6 +3204,16 @@ def print_dry_run(args):
         cmd_parts.append(f"  --skip-embeddings")
     if args.skip_llm:
         cmd_parts.append(f"  --skip-llm")
+    if args.llm_batch_size != 24:
+        cmd_parts.append(f"  --llm-batch-size {args.llm_batch_size}")
+    if args.llm_stage3_batch_size != 80:
+        cmd_parts.append(f"  --llm-stage3-batch-size {args.llm_stage3_batch_size}")
+    if args.llm_stage3_chunks_per_shard != 10:
+        cmd_parts.append(f"  --llm-stage3-chunks-per-shard {args.llm_stage3_chunks_per_shard}")
+    if args.llm_stage6_batch_size != 64:
+        cmd_parts.append(f"  --llm-stage6-batch-size {args.llm_stage6_batch_size}")
+    if args.llm_stage6_chunks_per_shard != 10:
+        cmd_parts.append(f"  --llm-stage6-chunks-per-shard {args.llm_stage6_chunks_per_shard}")
     if args.skip_clustering:
         cmd_parts.append(f"  --skip-clustering")
     if args.skip_ner:
@@ -3016,8 +3361,8 @@ def main():
     # Embedding options
     parser.add_argument("--embed-model", default="BAAI/bge-large-en-v1.5",
                         help="Embedding model")
-    parser.add_argument("--embed-batch-size", type=int, default=8192,
-                        help="Embedding batch size (default: 8192, tune for GPU VRAM)")
+    parser.add_argument("--embed-batch-size", type=int, default=1024,
+                        help="Embedding batch size (default: 1024, tune for GPU VRAM)")
     parser.add_argument("--embed-device", default="cuda",
                         help="Device for embeddings")
     parser.add_argument("--skip-embeddings", action="store_true")
@@ -3026,8 +3371,17 @@ def main():
     parser.add_argument("--llm-model",
                         default="meta-llama/Meta-Llama-3-8B-Instruct",
                         help="LLM for pattern tagging")
-    parser.add_argument("--llm-batch-size", type=int, default=16,
-                        help="LLM inference batch size (default: 16, safe for 80GB GPUs)")
+    parser.add_argument("--llm-batch-size", type=int, default=24,
+                        help="LLM batch size baseline (used by Stage 7 and Stage 6 fallback)")
+    parser.add_argument("--llm-stage3-batch-size", type=int, default=80,
+                        help="LLM batch size for Stage 3 pattern tagging")
+    parser.add_argument("--llm-stage3-chunks-per-shard", type=int, default=10,
+                        help="Stage 3 output chunks per shard for resumable runs (default: 10)")
+    parser.add_argument("--llm-stage6-batch-size", type=int, default=64,
+                        help="LLM batch size for Stage 6 reverse morphogenesis "
+                             "(default: 64)")
+    parser.add_argument("--llm-stage6-chunks-per-shard", type=int, default=10,
+                        help="Stage 6 output chunks per shard for resumable runs (default: 10)")
     parser.add_argument("--skip-llm", action="store_true")
 
     # Clustering
@@ -3102,10 +3456,10 @@ def main():
                         help="Hypergraph embedding dimension (default: 128)")
     parser.add_argument("--graph-embed-epochs", type=int, default=50,
                         help="GNN training epochs (default: 50)")
-    parser.add_argument("--graph-embed-batch-size", type=int, default=512,
-                        help="GNN training batch size (default: 512, was 64)")
-    parser.add_argument("--graph-embed-workers", type=int, default=4,
-                        help="DataLoader workers for GNN training (default: 4, 0=inline)")
+    parser.add_argument("--graph-embed-batch-size", type=int, default=1024,
+                        help="GNN training batch size (default: 1024)")
+    parser.add_argument("--graph-embed-workers", type=int, default=16,
+                        help="DataLoader workers for GNN training (default: 16, 0=inline)")
 
     # Health gates
     parser.add_argument("--preflight", action="store_true",
@@ -3159,6 +3513,20 @@ def main():
 
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be > 0")
+    if args.llm_batch_size <= 0:
+        parser.error("--llm-batch-size must be > 0")
+    if args.llm_stage3_batch_size <= 0:
+        parser.error("--llm-stage3-batch-size must be > 0")
+    if args.llm_stage3_chunks_per_shard <= 0:
+        parser.error("--llm-stage3-chunks-per-shard must be > 0")
+    if args.llm_stage6_batch_size <= 0:
+        parser.error("--llm-stage6-batch-size must be > 0")
+    if args.llm_stage6_chunks_per_shard <= 0:
+        parser.error("--llm-stage6-chunks-per-shard must be > 0")
+    if args.graph_embed_batch_size <= 0:
+        parser.error("--graph-embed-batch-size must be > 0")
+    if args.graph_embed_workers < 0:
+        parser.error("--graph-embed-workers must be >= 0")
     if args.discover_terms_min_freq <= 0:
         parser.error("--discover-terms-min-freq must be > 0")
     if args.discover_terms_max <= 0:
@@ -3390,8 +3758,13 @@ def main():
     def _ensure_llm_pipeline():
         nonlocal llm_pipe, llm_tokenizer
         if llm_pipe is None:
+            max_batch = max(
+                args.llm_batch_size,
+                args.llm_stage3_batch_size,
+                args.llm_stage6_batch_size,
+            )
             llm_pipe, llm_tokenizer = _create_llm_pipeline(
-                args.llm_model, args.llm_batch_size)
+                args.llm_model, max_batch)
         return llm_pipe, llm_tokenizer
 
     # ========== Stage 3: LLM pattern tagging ==========
@@ -3406,15 +3779,19 @@ def main():
         t3 = time.time()
         global _llm_start
         _llm_start = t3
-        print(f"\n[Stage 3/{n_stages}] LLM pattern tagging ({args.llm_model})...")
+        print(f"\n[Stage 3/{n_stages}] LLM pattern tagging ({args.llm_model}, "
+              f"batch={args.llm_stage3_batch_size}, "
+              f"chunks={args.llm_stage3_chunks_per_shard})...")
         pipe, tok = _ensure_llm_pipeline()
-        pattern_tags = tag_patterns_llm_batch(
+        pattern_tags = run_stage3_pattern_tagging_chunked(
             pairs,
-            batch_size=args.llm_batch_size,
-            pipe=pipe, tokenizer=tok,
             entry_ids=[e["entity/id"] for e in entities],
+            outdir=outdir,
+            pipe=pipe,
+            tokenizer=tok,
+            batch_size=args.llm_stage3_batch_size,
+            chunks_per_shard=args.llm_stage3_chunks_per_shard,
         )
-        write_json(outdir / "pattern-tags.json", pattern_tags)
         print(f"       Stage 3 done in {time.time()-t3:.0f}s")
 
         # Pattern frequency summary
@@ -3555,18 +3932,26 @@ def main():
         print(f"       Stage 6 (moist) done in {time.time()-t6:.0f}s")
     elif not args.skip_llm:
         t6 = time.time()
-        print(f"\n[Stage 6/{n_stages}] Reverse morphogenesis S←Q←A ({args.llm_model})...")
+        print(f"\n[Stage 6/{n_stages}] Reverse morphogenesis S←Q←A ({args.llm_model}, "
+              f"batch={args.llm_stage6_batch_size}, "
+              f"chunks={args.llm_stage6_chunks_per_shard})...")
         pipe, tok = _ensure_llm_pipeline()
-        rm_results = run_reverse_morphogenesis_llm_batch(
-            pairs, entities, pipe, tok,
-            batch_size=max(1, args.llm_batch_size // 2),
+        rm_results = run_stage6_reverse_morphogenesis_chunked(
+            pairs,
+            entities,
+            outdir,
+            pipe,
+            tok,
+            batch_size=args.llm_stage6_batch_size,
+            chunks_per_shard=args.llm_stage6_chunks_per_shard,
         )
-        write_json(outdir / "reverse-morphogenesis.json", rm_results)
 
         # Quality summary
         n_parsed = sum(1 for r in rm_results if "parse_error" not in r["analysis"])
         stage6_stats = {
             "mode": "llm-inference",
+            "batch_size": args.llm_stage6_batch_size,
+            "chunks_per_shard": args.llm_stage6_chunks_per_shard,
             "total": len(rm_results),
             "parsed_ok": n_parsed,
             "parse_rate": n_parsed / len(rm_results) if rm_results else 0,
