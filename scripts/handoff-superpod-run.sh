@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+echo() {
+  local ts
+  ts="$(date '+%H:%M:%S')"
+  if [[ "${1-}" == "-n" ]]; then
+    shift
+    builtin echo -n "[$ts] $*"
+  else
+    builtin echo "[$ts] $*"
+  fi
+}
+
 # End-to-end superpod handoff run.
 # Intended to run on the Superpod execution host after cloning futon6.
 #
@@ -37,7 +48,7 @@ fi
 
 if [[ "$MODE" != "full-only" ]]; then
   echo "[run] smoke run..."
-  OUT_SMOKE="tmp/superpod-rob-smoke-$(date +%s)"
+  OUT_SMOKE="$ROOT_DIR/tmp/superpod-rob-smoke-$(date +%s)"
   python3 scripts/superpod-job.py \
     tests/fixtures/se-mini/Posts.xml \
     --comments-xml tests/fixtures/se-mini/Comments.xml \

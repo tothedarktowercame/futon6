@@ -2,8 +2,18 @@
 """Build the superpod handoff PDF for Rob using fpdf2."""
 
 from fpdf import FPDF
+from pathlib import Path
 
 FONT_DIR = "/usr/share/fonts/truetype/dejavu"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _line_count(path: Path) -> int | None:
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            return sum(1 for _ in handle)
+    except OSError:
+        return None
 
 class HandoffPDF(FPDF):
     def __init__(self):
@@ -103,7 +113,7 @@ def build():
     pdf.ln(10)
     pdf.set_font("DejaVu", "", 10)
     pdf.set_text_color(80, 80, 80)
-    pdf.cell(0, 5, "Joe Corneli  |  Hyperreal Enterprises  |  February 15, 2026", align="C")
+    pdf.cell(0, 5, "Joe Corneli  |  Hyperreal Enterprises  |  February 16, 2026", align="C")
     pdf.ln(12)
 
     # Horizontal rule
@@ -122,10 +132,10 @@ def build():
     )
     pdf.body_text(
         "The short version: we're taking 567K math.stackexchange threads and "
-        "100K MathOverflow threads, running them through a 7-stage pipeline, and "
-        "producing typed wiring diagrams for every thread \u2014 machine-readable "
-        "representations of how the arguments in each thread fit together, what "
-        "mathematical structures they reference, and where the logical connections are."
+        "100K MathOverflow threads, running them through an 11-stage pipeline "
+        "(Stages 1\u20137 plus LWGM Stages 8\u201310), and producing typed artifacts for "
+        "every thread \u2014 wiring diagrams, expression surfaces, hypergraphs, and "
+        "a structural similarity index for nearest-neighbor retrieval by argument shape."
     )
 
     # What goes in
@@ -151,8 +161,10 @@ def build():
     # What the pipeline does
     pdf.section("What the Pipeline Does")
     pdf.body_text(
-        "The superpod job has seven stages. Not all require a GPU \u2014 the "
-        "first, fifth, and seventh run on a laptop."
+        "The superpod job has eleven stages. Four are GPU-bound (2, 3, 6, 9b); "
+        "the rest are streaming CPU passes. In the required superpod run we "
+        "typically skip the LLM stages (3 and 6) and still produce the core "
+        "deliverables."
     )
     pdf.ln(2)
 
@@ -168,12 +180,16 @@ def build():
 
     stages = [
         ("1", "Parse", "Stream XML into structured QA pairs", "CPU"),
-        ("2", "Embed", "Dense 768-dim vector embedding of every post (BGE-large)", "GPU"),
-        ("3", "Tag", "LLM pattern tagging: 25 argument patterns (Llama-3-8B)", "GPU"),
-        ("4", "Cluster", "Group threads by topic using HDBSCAN on embeddings", "CPU"),
-        ("5", "NER + Scopes", "Named-entity recognition (19K terms) + discourse detection", "CPU"),
-        ("6", "Rev. morph.", "LLM reconstruction of logical skeleton per QA pair", "GPU"),
-        ("7", "Thread wiring", "CT-backed wiring diagram: IATC edges, ports, categorical", "CPU"),
+        ("2", "Embed", "Dense vector embeddings of posts (similarity + clustering)", "GPU"),
+        ("3", "Tag", "LLM tagging: 25 argument patterns per answer", "GPU"),
+        ("4", "Cluster", "Topic clustering based on embeddings", "CPU"),
+        ("5", "Terms + scopes", "Term dictionary + scope openers (Let/Assume/Define)", "CPU"),
+        ("6", "Rev. morph.", "LLM situation reconstruction per QA pair", "GPU"),
+        ("7", "Thread wiring", "Typed wiring: IATC + CT refs + ports", "CPU"),
+        ("8", "Expr. surfaces", "Parse $...$ LaTeX into typed s-expressions", "CPU"),
+        ("9a", "Hypergraphs", "Assemble typed hypergraph per thread", "CPU"),
+        ("9b", "Graph embed", "R-GCN contrastive embedding (LWGM)", "GPU"),
+        ("10", "Similarity idx", "FAISS k-NN index over structural embeddings", "CPU"),
     ]
     pdf.set_font("DejaVu", "", 9)
     for num, name, desc, hw in stages:
@@ -190,9 +206,10 @@ def build():
     pdf.ln(4)
 
     pdf.body_text(
-        "Three run modes: Full (GPU, all stages), Moist (CPU stages + prompt files "
-        "for cloud LLM handoff), CPU-only (Stages 1, 4, 5, 7). For the immediate run "
-        "we'll use CPU-only or moist mode. The critical output is Stage 7."
+        "Run modes: core superpod run (skip LLM, run GPU where needed for embeddings "
+        "and LWGM), moist-run (generate prompt files for cloud LLM), and full GPU "
+        "LLM runs (Stages 3 and 6). The critical output is Stage 7; Stages 8\u201310 "
+        "extend it with expression-level structure and a global structural retrieval index."
     )
 
     # What comes out
@@ -241,7 +258,7 @@ def build():
         ("Threads", "~567K", "~100K"),
         ("Nodes (posts)", "~3M", "~500K"),
         ("Edges (typed)", "~2.5M", "~400K"),
-        ("Output size (est.)", "~15 GB", "~3 GB"),
+        ("Output size (est.)", "~45 GB", "~8 GB"),
     ]
     pdf.set_font("DejaVu", "", 9.5)
     for label, a, b in rows:
@@ -300,13 +317,15 @@ def build():
     # Timeline
     pdf.section("Timeline")
     pdf.bullet(
-        "Launch the CPU-only run on math.SE + MathOverflow (~48 hours). "
-        "This produces parsed threads, NER + scopes, and CT-backed wiring diagrams.",
+        "Run the required superpod block (sharded, skip LLM). "
+        "This produces CT-backed wiring, expression surfaces, hypergraphs, LWGM "
+        "embeddings, and a FAISS similarity index.",
         bold_prefix="This week:"
     )
     pdf.bullet(
-        "Backfill GPU stages if cloud compute is available. Build a \"proof "
-        "assistant\" wrapper integrating the verifier with the sprint workflow.",
+        "Optional: backfill LLM stages (pattern tags + reverse morphogenesis) "
+        "on a bounded thread sample for quality assessment. Integrate the verifier "
+        "+ structural search into the proof workflow.",
         bold_prefix="Next 2 weeks:"
     )
     pdf.bullet(
@@ -330,15 +349,28 @@ def build():
         "If you want to poke at any of the artifacts, the repo is futon6 on GitHub "
         "(private, happy to add you). Key files:"
     )
-    pdf.mono("  scripts/superpod-job.py          # the pipeline (1,700 lines)")
-    pdf.mono("  scripts/assemble-wiring.py       # wiring assembly (750 lines)")
-    pdf.mono("  scripts/ct-verifier.py           # proof verifier (570 lines)")
+    pipeline_lines = _line_count(REPO_ROOT / "scripts" / "superpod-job.py")
+    assemble_lines = _line_count(REPO_ROOT / "scripts" / "assemble-wiring.py")
+    verifier_lines = _line_count(REPO_ROOT / "scripts" / "ct-verifier.py")
+    pdf.mono(
+        "  scripts/superpod-job.py          # the pipeline"
+        + (f" ({pipeline_lines:,} lines)" if pipeline_lines is not None else "")
+    )
+    pdf.mono(
+        "  scripts/assemble-wiring.py       # wiring assembly"
+        + (f" ({assemble_lines:,} lines)" if assemble_lines is not None else "")
+    )
+    pdf.mono(
+        "  scripts/ct-verifier.py           # proof verifier"
+        + (f" ({verifier_lines:,} lines)" if verifier_lines is not None else "")
+    )
     pdf.mono("  data/nlab-ct-reference.json      # CT reference (20K pages)")
     pdf.mono("  data/first-proof/superpod-handoff-rob.lit.md  # executable ledger")
 
     # Output
-    out = "/home/joe/code/futon6/data/first-proof/superpod-handoff-rob.pdf"
-    pdf.output(out)
+    out = REPO_ROOT / "data" / "first-proof" / "superpod-handoff-rob.pdf"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    pdf.output(str(out))
     print(f"Written: {out}")
     print(f"Pages: {pdf.page_no()}")
 

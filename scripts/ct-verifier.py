@@ -11,11 +11,14 @@ Checks:
 from __future__ import annotations
 
 import argparse
+import builtins as _builtins
 import json
+import multiprocessing
 import re
 import sys
 import time
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -27,6 +30,16 @@ import importlib
 
 assemble_wiring = importlib.import_module("assemble-wiring")
 nlab_wiring = importlib.import_module("nlab-wiring")
+
+_WORKER_REFERENCE: dict[str, Any] | None = None
+
+
+def _timestamp_now() -> str:
+    return datetime.now().strftime("%H:%M:%S")
+
+
+def print(*args, **kwargs):  # type: ignore[override]
+    return _builtins.print(f"[{_timestamp_now()}]", *args, **kwargs)
 
 
 EXAMPLE_RE = re.compile(
@@ -487,16 +500,44 @@ def verify_wiring_dict(
     }
 
 
+def _init_verify_worker(reference: dict[str, Any]) -> None:
+    global _WORKER_REFERENCE
+    _WORKER_REFERENCE = reference
+
+
+def _verify_wiring_dict_worker(wiring: dict[str, Any]) -> dict[str, Any]:
+    if _WORKER_REFERENCE is None:
+        raise RuntimeError("worker reference not initialized")
+    return verify_wiring_dict(wiring, _WORKER_REFERENCE)
+
+
 def verify_wiring_file(
     wiring_path: Path,
     reference_path: Path,
     output_path: Path,
+    workers: int = 1,
 ) -> None:
+    if workers < 1:
+        raise ValueError(f"workers must be >= 1, got {workers}")
+
     wiring_obj = json.loads(wiring_path.read_text(encoding="utf-8"))
     reference = json.loads(reference_path.read_text(encoding="utf-8"))
 
     if isinstance(wiring_obj, list):
-        reports = [verify_wiring_dict(item, reference) for item in wiring_obj]
+        if workers == 1 or len(wiring_obj) < 2:
+            reports = [verify_wiring_dict(item, reference) for item in wiring_obj]
+        else:
+            executor_kwargs: dict[str, Any] = {
+                "max_workers": workers,
+                "initializer": _init_verify_worker,
+                "initargs": (reference,),
+            }
+            # Prefer fork on Linux HPC so large module state is inherited cheaply.
+            if "fork" in multiprocessing.get_all_start_methods():
+                executor_kwargs["mp_context"] = multiprocessing.get_context("fork")
+
+            with ProcessPoolExecutor(**executor_kwargs) as ex:
+                reports = list(ex.map(_verify_wiring_dict_worker, wiring_obj, chunksize=32))
         payload: Any = reports
     else:
         payload = verify_wiring_dict(wiring_obj, reference)
@@ -547,6 +588,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_verify.add_argument("--wiring", type=Path, required=True)
     p_verify.add_argument("--reference", type=Path, required=True)
     p_verify.add_argument("--output", type=Path, required=True)
+    p_verify.add_argument("--workers", type=int, default=1,
+                          help="Worker processes for list-style inputs (default: 1)")
 
     p_live = sub.add_parser("live", help="Watch directory and verify new wiring files")
     p_live.add_argument("--reference", type=Path, required=True)
@@ -560,7 +603,12 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
     if args.command == "verify":
-        verify_wiring_file(args.wiring, args.reference, args.output)
+        verify_wiring_file(
+            args.wiring,
+            args.reference,
+            args.output,
+            workers=args.workers,
+        )
     elif args.command == "live":
         run_live(args.reference, args.thread_wiring, args.output_dir, interval_s=args.interval)
 

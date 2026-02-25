@@ -4,6 +4,17 @@
 set -euo pipefail
 # ~/~ end
 
+echo() {
+  local ts
+  ts="$(date '+%H:%M:%S')"
+  if [[ "${1-}" == "-n" ]]; then
+    shift
+    builtin echo -n "[$ts] $*"
+  else
+    builtin echo "[$ts] $*"
+  fi
+}
+
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#bootstrap-setup>>[init]
 # Bootstrap required inputs for the superpod handoff run.
 # Intended to run on the target machine (e.g. Linode) after cloning futon6.
