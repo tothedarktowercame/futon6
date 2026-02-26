@@ -4,6 +4,7 @@
 Subcommands:
     merge   Combine N shard output directories into one merged directory
     run     Orchestrate: launch N parallel shard jobs → merge → post-merge stages
+    post-merge  Merge existing shard outputs (optional) → run post-merge stages
 
 Usage:
     # Merge 4 shard directories:
@@ -19,18 +20,54 @@ Usage:
         --num-shards 8 \
         --output-dir ./math-processed \
         -- --embed-device cuda --skip-llm
+
+    # Re-run merge + post-merge stages only (no shard jobs):
+    python scripts/superpod-shard.py post-merge \
+        --shard-dirs ./math-processed-shard-0 ./math-processed-shard-1 \
+        --output-dir ./math-processed \
+        --graph-embed-epochs 20 --graph-embed-batch-size 1024
 """
 
 import argparse
+import builtins as _builtins
 import json
 import os
+import queue
 import shutil
 import subprocess
 import sys
+import threading
 import time
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
+
+
+def _timestamp_now() -> str:
+    return datetime.now().strftime("%H:%M:%S")
+
+
+def print(*args, **kwargs):  # type: ignore[override]
+    kwargs.setdefault("flush", True)
+    return _builtins.print(f"[{_timestamp_now()}]", *args, **kwargs)
+
+
+def _stream_shard_output(
+    shard_idx: int,
+    pipe,
+    outq: "queue.Queue",
+) -> None:
+    """Read shard output lines and push to a central queue."""
+    try:
+        for line in iter(pipe.readline, ""):
+            outq.put((shard_idx, line.rstrip("\n")))
+    finally:
+        try:
+            pipe.close()
+        except Exception:
+            pass
+        outq.put((shard_idx, None))
 
 
 # ---------------------------------------------------------------------------
@@ -265,6 +302,64 @@ def cmd_merge(args):
 # run subcommand
 # ---------------------------------------------------------------------------
 
+def run_post_merge_stages(outdir: Path, graph_embed_dim: int,
+                          graph_embed_epochs: int, graph_embed_batch_size: int,
+                          graph_embed_workers: int = 0,
+                          skip_post_merge: bool = False,
+                          log_prefix: str = "[run]"):
+    """Run Phase C (stages 9b + 10) against an existing merged output dir."""
+    hg_path = outdir / "hypergraphs.json"
+    if hg_path.exists() and not skip_post_merge:
+        print(f"\n{log_prefix} Phase C: post-merge stages (9b + 10)...")
+        t2 = time.time()
+
+        script_dir = Path(__file__).parent
+        # Import and run stage 9b directly
+        sys.path.insert(0, str(script_dir))
+        sys.path.insert(0, str(script_dir.parent / "src"))
+
+        from importlib import import_module
+        spj = import_module("superpod-job")
+        run_9b = spj.run_stage9b_graph_embedding
+        run_10 = spj.run_stage10_faiss_index
+
+        print(f"  [9b] Graph embedding (R-GCN, {graph_embed_dim}d, "
+              f"{graph_embed_epochs} epochs, batch={graph_embed_batch_size}, "
+              f"workers={graph_embed_workers})...")
+        stats_9b, emb_path, model_path, thread_ids = run_9b(
+            hg_path, outdir,
+            embed_dim=graph_embed_dim,
+            epochs=graph_embed_epochs,
+            batch_size=graph_embed_batch_size,
+            num_workers=graph_embed_workers,
+        )
+        print(f"  [9b] {stats_9b['n_embedded']} embeddings ({stats_9b['embed_dim']}d)")
+
+        print(f"  [10] Building FAISS index...")
+        stats_10, index_path = run_10(emb_path, thread_ids, outdir)
+        print(f"  [10] {stats_10['n_vectors']} vectors indexed")
+
+        # Update manifest with post-merge stages
+        manifest_path = outdir / "manifest.json"
+        if manifest_path.exists():
+            with open(manifest_path) as f:
+                manifest = json.load(f)
+            manifest["stage9b_stats"] = stats_9b
+            manifest["stage10_stats"] = stats_10
+            stages_completed = list(manifest.get("stages_completed", []))
+            for stage_name in ("graph_embedding", "faiss_index"):
+                if stage_name not in stages_completed:
+                    stages_completed.append(stage_name)
+            manifest["stages_completed"] = stages_completed
+            with open(manifest_path, "w") as f:
+                json.dump(manifest, f, indent=2, ensure_ascii=False)
+
+        print(f"{log_prefix} Phase C complete in {time.time()-t2:.0f}s")
+    elif skip_post_merge:
+        print(f"\n{log_prefix} Phase C skipped (--skip-post-merge)")
+    else:
+        print(f"\n{log_prefix} Phase C skipped (no hypergraphs.json in merged output)")
+
 def detect_gpu_count():
     """Detect number of available GPUs."""
     try:
@@ -281,6 +376,12 @@ def detect_gpu_count():
 def cmd_run(args):
     """Orchestrate: parallel shard jobs → merge → post-merge stages."""
     num_shards = args.num_shards
+    if args.graph_embed_batch_size <= 0:
+        print("[run] ERROR: --graph-embed-batch-size must be > 0", file=sys.stderr)
+        sys.exit(2)
+    if args.graph_embed_workers < 0:
+        print("[run] ERROR: --graph-embed-workers must be >= 0", file=sys.stderr)
+        sys.exit(2)
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
 
@@ -295,7 +396,7 @@ def cmd_run(args):
     # Build base command (everything after --)
     script_dir = Path(__file__).parent
     base_cmd = [
-        sys.executable, str(script_dir / "superpod-job.py"),
+        sys.executable, "-u", str(script_dir / "superpod-job.py"),
         args.posts_xml,
         "--site", args.site,
         "--embed-batch-size", str(args.embed_batch_size),
@@ -311,6 +412,8 @@ def cmd_run(args):
     print(f"\n[run] Phase A: launching {num_shards} shard jobs...")
     t0 = time.time()
     processes = []
+    outq: queue.Queue = queue.Queue()
+    stream_threads: dict[int, threading.Thread] = {}
     for i in range(num_shards):
         shard_cmd = base_cmd + [
             "--output-dir", str(shard_dirs[i]),
@@ -318,28 +421,61 @@ def cmd_run(args):
             "--num-shards", str(num_shards),
         ]
         env = os.environ.copy()
+        env["PYTHONUNBUFFERED"] = "1"
         if num_gpus > 0:
             env["CUDA_VISIBLE_DEVICES"] = str(i % num_gpus)
         print(f"  shard {i}: CUDA_VISIBLE_DEVICES={i % num_gpus if num_gpus else 'none'} "
               f"→ {shard_dirs[i]}")
         proc = subprocess.Popen(
             shard_cmd, env=env,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            text=True, bufsize=1,
+        )
         processes.append((i, proc))
+        if proc.stdout is None:
+            raise RuntimeError(f"failed to capture stdout for shard {i}")
+        t = threading.Thread(
+            target=_stream_shard_output,
+            args=(i, proc.stdout, outq),
+            daemon=True,
+        )
+        t.start()
+        stream_threads[i] = t
 
     # Wait for all shards, streaming output
     failed = []
-    for i, proc in processes:
-        stdout, _ = proc.communicate()
-        if stdout:
-            # Print shard output with prefix
-            for line in stdout.decode(errors="replace").splitlines():
-                print(f"  [shard-{i}] {line}")
-        if proc.returncode != 0:
-            failed.append(i)
-            print(f"  [shard-{i}] FAILED (exit code {proc.returncode})")
-        else:
-            print(f"  [shard-{i}] completed OK")
+    completed: set[int] = set()
+    while len(completed) < len(processes):
+        try:
+            shard_idx, line = outq.get(timeout=0.2)
+            if line is not None:
+                print(f"  [shard-{shard_idx}] {line}")
+        except queue.Empty:
+            pass
+
+        for i, proc in processes:
+            if i in completed:
+                continue
+            rc = proc.poll()
+            if rc is None:
+                continue
+            completed.add(i)
+            if rc != 0:
+                failed.append(i)
+                print(f"  [shard-{i}] FAILED (exit code {rc})")
+            else:
+                print(f"  [shard-{i}] completed OK")
+
+    # Drain any trailing lines that raced with process shutdown.
+    for i, t in stream_threads.items():
+        t.join(timeout=1.0)
+    while True:
+        try:
+            shard_idx, line = outq.get_nowait()
+            if line is not None:
+                print(f"  [shard-{shard_idx}] {line}")
+        except queue.Empty:
+            break
 
     if failed:
         print(f"\n[run] FATAL: shards {failed} failed. Aborting.")
@@ -357,107 +493,59 @@ def cmd_run(args):
     cmd_merge(merge_args)
     print(f"[run] Phase B complete in {time.time()-t1:.0f}s")
 
-    # Phase C: post-merge stages (9b + 10)
-    hg_path = outdir / "hypergraphs.json"
-    if hg_path.exists() and not args.skip_post_merge:
-        print(f"\n[run] Phase C: post-merge stages (9b + 10)...")
-        t2 = time.time()
-
-        # Import and run stage 9b directly
-        sys.path.insert(0, str(script_dir))
-        sys.path.insert(0, str(script_dir.parent / "src"))
-
-        from importlib import import_module
-        spj = import_module("superpod-job")
-        run_9b = spj.run_stage9b_graph_embedding
-        run_10 = spj.run_stage10_faiss_index
-
-        print(f"  [9b] Graph embedding (R-GCN, bs={args.graph_embed_batch_size}, "
-              f"workers={args.graph_embed_workers})...")
-        stats_9b, emb_path, model_path, thread_ids = run_9b(
-            hg_path, outdir,
-            embed_dim=args.graph_embed_dim,
-            epochs=args.graph_embed_epochs,
-            batch_size=args.graph_embed_batch_size,
-            num_workers=args.graph_embed_workers,
-        )
-        print(f"  [9b] {stats_9b['n_embedded']} embeddings ({stats_9b['embed_dim']}d)")
-
-        print(f"  [10] Building FAISS index...")
-        stats_10, index_path = run_10(emb_path, thread_ids, outdir)
-        print(f"  [10] {stats_10['n_vectors']} vectors indexed")
-
-        # Update manifest with post-merge stages
-        manifest_path = outdir / "manifest.json"
-        with open(manifest_path) as f:
-            manifest = json.load(f)
-        manifest["stage9b_stats"] = stats_9b
-        manifest["stage10_stats"] = stats_10
-        manifest["stages_completed"] = manifest.get("stages_completed", []) + [
-            "graph_embedding", "faiss_index"]
-        with open(manifest_path, "w") as f:
-            json.dump(manifest, f, indent=2, ensure_ascii=False)
-
-        print(f"[run] Phase C complete in {time.time()-t2:.0f}s")
-    elif args.skip_post_merge:
-        print(f"\n[run] Phase C skipped (--skip-post-merge)")
-    else:
-        print(f"\n[run] Phase C skipped (no hypergraphs.json in merged output)")
+    run_post_merge_stages(
+        outdir=outdir,
+        graph_embed_dim=args.graph_embed_dim,
+        graph_embed_epochs=args.graph_embed_epochs,
+        graph_embed_batch_size=args.graph_embed_batch_size,
+        graph_embed_workers=args.graph_embed_workers,
+        skip_post_merge=args.skip_post_merge,
+        log_prefix="[run]",
+    )
 
     total = time.time() - t0
     print(f"\n[run] all phases complete in {total:.0f}s ({total/60:.1f} min)")
 
 
 def cmd_post_merge(args):
-    """Run only Phase C (stages 9b + 10) on an existing merged output directory."""
+    """Optionally merge existing shard outputs, then run stages 9b + 10."""
+    if args.graph_embed_batch_size <= 0:
+        print("[post] ERROR: --graph-embed-batch-size must be > 0", file=sys.stderr)
+        sys.exit(2)
+    if args.graph_embed_workers < 0:
+        print("[post] ERROR: --graph-embed-workers must be >= 0", file=sys.stderr)
+        sys.exit(2)
+
     outdir = Path(args.output_dir)
-    hg_path = outdir / "hypergraphs.json"
-
-    if not hg_path.exists():
-        print(f"[post-merge] FATAL: {hg_path} not found. "
-              f"Run 'merge' or full 'run' first.")
-        sys.exit(1)
-
-    print(f"[post-merge] Phase C on {outdir}")
     t0 = time.time()
 
-    script_dir = Path(__file__).resolve().parent
-    sys.path.insert(0, str(script_dir))
-    sys.path.insert(0, str(script_dir.parent / "src"))
+    if args.shard_dirs:
+        print(f"[post] Phase B: merging {len(args.shard_dirs)} shard dirs...")
+        t1 = time.time()
+        merge_args = argparse.Namespace(
+            shard_dirs=args.shard_dirs,
+            output_dir=args.output_dir,
+        )
+        cmd_merge(merge_args)
+        print(f"[post] Phase B complete in {time.time()-t1:.0f}s")
+    else:
+        if not outdir.exists():
+            print(f"[post] ERROR: output dir not found: {outdir}", file=sys.stderr)
+            sys.exit(1)
+        print(f"[post] Phase B skipped (no --shard-dirs provided). Using {outdir}")
 
-    from importlib import import_module
-    spj = import_module("superpod-job")
-    run_9b = spj.run_stage9b_graph_embedding
-    run_10 = spj.run_stage10_faiss_index
-
-    print(f"  [9b] Graph embedding (R-GCN, bs={args.graph_embed_batch_size}, "
-          f"workers={args.graph_embed_workers})...")
-    stats_9b, emb_path, model_path, thread_ids = run_9b(
-        hg_path, outdir,
-        embed_dim=args.graph_embed_dim,
-        epochs=args.graph_embed_epochs,
-        batch_size=args.graph_embed_batch_size,
-        num_workers=args.graph_embed_workers,
+    run_post_merge_stages(
+        outdir=outdir,
+        graph_embed_dim=args.graph_embed_dim,
+        graph_embed_epochs=args.graph_embed_epochs,
+        graph_embed_batch_size=args.graph_embed_batch_size,
+        graph_embed_workers=args.graph_embed_workers,
+        skip_post_merge=args.skip_post_merge,
+        log_prefix="[post]",
     )
-    print(f"  [9b] {stats_9b['n_embedded']} embeddings ({stats_9b['embed_dim']}d)")
 
-    print(f"  [10] Building FAISS index...")
-    stats_10, index_path = run_10(emb_path, thread_ids, outdir)
-    print(f"  [10] {stats_10['n_vectors']} vectors indexed")
-
-    # Update manifest
-    manifest_path = outdir / "manifest.json"
-    if manifest_path.exists():
-        with open(manifest_path) as f:
-            manifest = json.load(f)
-        manifest["stage9b_stats"] = stats_9b
-        manifest["stage10_stats"] = stats_10
-        manifest["stages_completed"] = manifest.get("stages_completed", []) + [
-            "graph_embedding", "faiss_index"]
-        with open(manifest_path, "w") as f:
-            json.dump(manifest, f, indent=2, ensure_ascii=False)
-
-    print(f"[post-merge] complete in {time.time()-t0:.0f}s")
+    total = time.time() - t0
+    print(f"\n[post] complete in {total:.0f}s ({total/60:.1f} min)")
 
 
 # ---------------------------------------------------------------------------
@@ -466,7 +554,7 @@ def cmd_post_merge(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Superpod shard orchestrator: merge and run sharded pipelines")
+        description="Superpod shard orchestrator: merge, run, and post-merge pipelines")
     sub = parser.add_subparsers(dest="command", required=True)
 
     # --- merge ---
@@ -488,16 +576,16 @@ def main():
                        help="Number of shards")
     p_run.add_argument("--output-dir", "-o", required=True,
                        help="Final merged output directory")
-    p_run.add_argument("--embed-batch-size", type=int, default=4096,
-                       help="Embedding batch size per shard (default: 4096)")
+    p_run.add_argument("--embed-batch-size", type=int, default=2048,
+                       help="Embedding batch size per shard (default: 2048)")
     p_run.add_argument("--graph-embed-dim", type=int, default=128,
                        help="Hypergraph embedding dimension (default: 128)")
     p_run.add_argument("--graph-embed-epochs", type=int, default=50,
                        help="GNN training epochs (default: 50)")
-    p_run.add_argument("--graph-embed-batch-size", type=int, default=512,
-                       help="GNN training batch size (default: 512)")
-    p_run.add_argument("--graph-embed-workers", type=int, default=4,
-                       help="DataLoader workers for GNN training (default: 4, 0=inline)")
+    p_run.add_argument("--graph-embed-batch-size", type=int, default=1024,
+                       help="Batch size for post-merge Stage 9b graph embedding (default: 1024)")
+    p_run.add_argument("--graph-embed-workers", type=int, default=16,
+                       help="CPU workers for Stage 9b batch prep (default: 16)")
     p_run.add_argument("--input-dir", default=None,
                        help="Base directory for input data (Posts.xml, 7z files). "
                             "Use when data lives on /scratch/ or another filesystem.")
@@ -507,19 +595,25 @@ def main():
                        help="Extra flags passed through to superpod-job.py "
                             "(put after --)")
 
-    # --- post-merge (Phase C only) ---
-    p_pm = sub.add_parser("post-merge",
-                          help="Run only Phase C (9b + 10) on existing merged output")
-    p_pm.add_argument("--output-dir", "-o", required=True,
-                      help="Merged output directory (must contain hypergraphs.json)")
-    p_pm.add_argument("--graph-embed-dim", type=int, default=128,
-                      help="Hypergraph embedding dimension (default: 128)")
-    p_pm.add_argument("--graph-embed-epochs", type=int, default=50,
-                      help="GNN training epochs (default: 50)")
-    p_pm.add_argument("--graph-embed-batch-size", type=int, default=512,
-                      help="GNN training batch size (default: 512)")
-    p_pm.add_argument("--graph-embed-workers", type=int, default=4,
-                      help="DataLoader workers for GNN training (default: 4, 0=inline)")
+    # --- post-merge ---
+    p_post = sub.add_parser(
+        "post-merge",
+        help="Merge existing shards (optional) and run post-merge stages 9b + 10",
+    )
+    p_post.add_argument("--output-dir", "-o", required=True,
+                        help="Merged output directory (existing or merge target)")
+    p_post.add_argument("--shard-dirs", nargs="*", default=None,
+                        help="Optional shard output directories to merge before post-merge stages")
+    p_post.add_argument("--graph-embed-dim", type=int, default=128,
+                        help="Hypergraph embedding dimension (default: 128)")
+    p_post.add_argument("--graph-embed-epochs", type=int, default=50,
+                        help="GNN training epochs (default: 50)")
+    p_post.add_argument("--graph-embed-batch-size", type=int, default=1024,
+                        help="Batch size for Stage 9b graph embedding (default: 1024)")
+    p_post.add_argument("--graph-embed-workers", type=int, default=16,
+                        help="CPU workers for Stage 9b batch prep (default: 16)")
+    p_post.add_argument("--skip-post-merge", action="store_true",
+                        help="Skip stages 9b + 10 (useful for merge-only refresh)")
 
     args = parser.parse_args()
 

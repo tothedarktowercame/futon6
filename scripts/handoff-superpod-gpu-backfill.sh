@@ -4,11 +4,34 @@
 set -euo pipefail
 # ~/~ end
 
+echo() {
+  local ts
+  ts="$(date '+%H:%M:%S')"
+  if [[ "${1-}" == "-n" ]]; then
+    shift
+    builtin echo -n "[$ts] $*"
+  else
+    builtin echo "[$ts] $*"
+  fi
+}
+
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#gpu-preamble>>[init]
 # GPU backfill: full 11-stage pipeline including LWGM (stages 9b+10).
 # This is a required handoff stage on Superpod.
 # Usage:
 #   bash scripts/handoff-superpod-gpu-backfill.sh [math|mathoverflow|both]
+#
+# Optional env knobs for Stage 3 + 9b:
+#   LLM_BATCH_SIZE         baseline LLM batch size (Stage 7, default: 24)
+#   LLM_STAGE3_BATCH_SIZE  Stage 3 LLM batch size (default: 80)
+#   LLM_STAGE3_CHUNKS_PER_SHARD  Stage 3 resumable chunks per shard (default: 10)
+#   LLM_STAGE6_BATCH_SIZE  Stage 6 LLM batch size (default: 48)
+#   LLM_STAGE6_CHUNKS_PER_SHARD  Stage 6 resumable chunks per shard (default: 10)
+#   GRAPH_EMBED_DIM         embedding dimension (default: 128)
+#   GRAPH_EMBED_EPOCHS      training epochs (default: 50)
+#   GRAPH_EMBED_BATCH_SIZE  training batch size (default: 1024)
+#   GRAPH_EMBED_WORKERS     CPU workers for batch prep
+#                           (default: SLURM_CPUS_PER_TASK if set, else 16)
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
@@ -48,7 +71,25 @@ if [[ -z "${HF_TOKEN:-}" ]] && [[ "${LLM_MODEL:-}" == *"meta-llama"* ]]; then
 fi
 
 LLM_MODEL="${LLM_MODEL:-mistralai/Mistral-7B-Instruct-v0.3}"
+LLM_BATCH_SIZE="${LLM_BATCH_SIZE:-24}"
+LLM_STAGE3_BATCH_SIZE="${LLM_STAGE3_BATCH_SIZE:-80}"
+LLM_STAGE3_CHUNKS_PER_SHARD="${LLM_STAGE3_CHUNKS_PER_SHARD:-10}"
+LLM_STAGE6_BATCH_SIZE="${LLM_STAGE6_BATCH_SIZE:-48}"
+LLM_STAGE6_CHUNKS_PER_SHARD="${LLM_STAGE6_CHUNKS_PER_SHARD:-10}"
 EMBED_MODEL="${EMBED_MODEL:-BAAI/bge-large-en-v1.5}"
+GRAPH_EMBED_DIM="${GRAPH_EMBED_DIM:-128}"
+GRAPH_EMBED_EPOCHS="${GRAPH_EMBED_EPOCHS:-50}"
+GRAPH_EMBED_BATCH_SIZE="${GRAPH_EMBED_BATCH_SIZE:-1024}"
+if [[ -z "${GRAPH_EMBED_WORKERS:-}" ]]; then
+  if [[ "${SLURM_CPUS_PER_TASK:-}" =~ ^[0-9]+$ ]] && (( SLURM_CPUS_PER_TASK > 0 )); then
+    GRAPH_EMBED_WORKERS="$SLURM_CPUS_PER_TASK"
+  else
+    GRAPH_EMBED_WORKERS=16
+  fi
+fi
+
+echo "[gpu] llm config: stage3_batch=${LLM_STAGE3_BATCH_SIZE} chunks=${LLM_STAGE3_CHUNKS_PER_SHARD} stage6_batch=${LLM_STAGE6_BATCH_SIZE} stage6_chunks=${LLM_STAGE6_CHUNKS_PER_SHARD} base_batch=${LLM_BATCH_SIZE}"
+echo "[gpu] graph-embed config: dim=${GRAPH_EMBED_DIM} epochs=${GRAPH_EMBED_EPOCHS} batch=${GRAPH_EMBED_BATCH_SIZE} workers=${GRAPH_EMBED_WORKERS}"
 # ~/~ end
 
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#gpu-run-site>>[init]
@@ -66,7 +107,16 @@ run_site() {
     --output-dir "$outdir" \
     --embed-device cuda \
     --embed-model "$EMBED_MODEL" \
-    --llm-model "$LLM_MODEL"
+    --llm-model "$LLM_MODEL" \
+    --llm-batch-size "$LLM_BATCH_SIZE" \
+    --llm-stage3-batch-size "$LLM_STAGE3_BATCH_SIZE" \
+    --llm-stage3-chunks-per-shard "$LLM_STAGE3_CHUNKS_PER_SHARD" \
+    --llm-stage6-batch-size "$LLM_STAGE6_BATCH_SIZE" \
+    --llm-stage6-chunks-per-shard "$LLM_STAGE6_CHUNKS_PER_SHARD" \
+    --graph-embed-dim "$GRAPH_EMBED_DIM" \
+    --graph-embed-epochs "$GRAPH_EMBED_EPOCHS" \
+    --graph-embed-batch-size "$GRAPH_EMBED_BATCH_SIZE" \
+    --graph-embed-workers "$GRAPH_EMBED_WORKERS"
 
   python3 scripts/ct-verifier.py verify \
     --wiring "$outdir/thread-wiring-ct.json" \
@@ -87,10 +137,19 @@ run_site_sharded() {
     --site "$site" \
     --num-shards "$NUM_SHARDS" \
     --output-dir "$outdir" \
+    --graph-embed-dim "$GRAPH_EMBED_DIM" \
+    --graph-embed-epochs "$GRAPH_EMBED_EPOCHS" \
+    --graph-embed-batch-size "$GRAPH_EMBED_BATCH_SIZE" \
+    --graph-embed-workers "$GRAPH_EMBED_WORKERS" \
     -- \
     --embed-device cuda \
     --embed-model "$EMBED_MODEL" \
     --llm-model "$LLM_MODEL" \
+    --llm-batch-size "$LLM_BATCH_SIZE" \
+    --llm-stage3-batch-size "$LLM_STAGE3_BATCH_SIZE" \
+    --llm-stage3-chunks-per-shard "$LLM_STAGE3_CHUNKS_PER_SHARD" \
+    --llm-stage6-batch-size "$LLM_STAGE6_BATCH_SIZE" \
+    --llm-stage6-chunks-per-shard "$LLM_STAGE6_CHUNKS_PER_SHARD" \
     $EXTRA_SHARD_ARGS
 
   python3 scripts/ct-verifier.py verify \
