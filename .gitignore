@@ -24,3 +24,10 @@ data/nlab-wiring/pages.json
 se-data/
 tmp/
 .entangled/
+.codex-home/
+*.aux
+*.log
+*.out
+*.fdb_latexmk
+*.fls
+*.toc
