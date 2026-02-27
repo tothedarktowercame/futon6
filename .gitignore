@@ -6,6 +6,7 @@ __pycache__/
 dist/
 build/
 .cpcache/
+data/
 data/se-physics.json
 data/physics-se/
 data/pm-term-dictionary.json
