@@ -1,0 +1,695 @@
+{
+  "stats": {
+    "total": 85,
+    "our_parsed": 85,
+    "latexml_parsed": 0,
+    "both_parsed": 0,
+    "exact_match": 0,
+    "structural_match": 0,
+    "our_only": 85,
+    "latexml_only": 0,
+    "neither": 0
+  },
+  "results": [
+    {
+      "latex": "x",
+      "description": "single variable",
+      "our_sexp": "x",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\alpha",
+      "description": "Greek letter",
+      "our_sexp": "α",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\Gamma",
+      "description": "uppercase Greek",
+      "our_sexp": "Γ",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "a + b",
+      "description": "addition",
+      "our_sexp": "(+ a b)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "a - b",
+      "description": "subtraction",
+      "our_sexp": "(- a b)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "a \\cdot b",
+      "description": "multiplication (cdot)",
+      "our_sexp": "(· a b)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "a \\times b",
+      "description": "multiplication (times)",
+      "our_sexp": "(× a b)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "a = b",
+      "description": "equality",
+      "our_sexp": "(= a b)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "a \\neq b",
+      "description": "inequality",
+      "our_sexp": "(≠ a b)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "a \\leq b",
+      "description": "less-or-equal",
+      "our_sexp": "a",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "x \\in S",
+      "description": "set membership",
+      "our_sexp": "(∈ x S)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "A \\subset B",
+      "description": "subset",
+      "our_sexp": "(⊂ A B)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "A \\subseteq B",
+      "description": "subset-or-equal",
+      "our_sexp": "(⊆ A B)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\frac{a}{b}",
+      "description": "fraction",
+      "our_sexp": "(/ a b)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\frac{1}{n+1}",
+      "description": "fraction with sum in denom",
+      "our_sexp": "(/ 1 (+ n 1))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\frac{x^2 + 1}{x - 1}",
+      "description": "fraction with polynomial",
+      "our_sexp": "(/ (+ (sup x 2) 1) (- x 1))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "x_i",
+      "description": "subscript",
+      "our_sexp": "(sub x i)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "x^2",
+      "description": "superscript",
+      "our_sexp": "(sup x 2)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "x_i^2",
+      "description": "both sub and super",
+      "our_sexp": "(sup (sub x i) 2)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "a_{ij}",
+      "description": "subscript group",
+      "our_sexp": "(sub a i)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "f(x)",
+      "description": "function application",
+      "our_sexp": "(f x)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "f(x, y)",
+      "description": "multi-arg function",
+      "our_sexp": "(f (tuple x y))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\sin(x)",
+      "description": "named function",
+      "our_sexp": "(sin x)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "f : A \\to B",
+      "description": "typed morphism",
+      "our_sexp": "(: f (→ A B))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "A \\rightarrow B",
+      "description": "arrow",
+      "our_sexp": "(→ A B)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "f \\circ g",
+      "description": "composition",
+      "our_sexp": "(∘ f g)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "A \\hookrightarrow B",
+      "description": "inclusion",
+      "our_sexp": "(↪ A B)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "f \\mapsto g",
+      "description": "mapsto",
+      "our_sexp": "(↦ f g)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\forall x",
+      "description": "universal quantifier",
+      "our_sexp": "(∀ x)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\exists x",
+      "description": "existential quantifier",
+      "our_sexp": "(∃ x)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "A \\land B",
+      "description": "conjunction",
+      "our_sexp": "(∧ A B)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "A \\lor B",
+      "description": "disjunction",
+      "our_sexp": "(∨ A B)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "A \\cup B",
+      "description": "union",
+      "our_sexp": "(∪ A B)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "A \\cap B",
+      "description": "intersection",
+      "our_sexp": "A",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\bar{x}",
+      "description": "bar accent",
+      "our_sexp": "(bar x)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\hat{x}",
+      "description": "hat accent",
+      "our_sexp": "(hat x)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\tilde{x}",
+      "description": "tilde accent",
+      "our_sexp": "(tilde x)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\vec{v}",
+      "description": "vector",
+      "our_sexp": "(vec v)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\overline{AB}",
+      "description": "overline",
+      "our_sexp": "(bar A)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathcal{C}",
+      "description": "mathcal",
+      "our_sexp": "𝒞",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathbb{R}",
+      "description": "mathbb",
+      "our_sexp": "ℝ",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathsf{Path}",
+      "description": "mathsf",
+      "our_sexp": "Path",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathrm{id}",
+      "description": "mathrm",
+      "our_sexp": "id",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\left( x + y \\right)",
+      "description": "sized parens",
+      "our_sexp": "(+ x y)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "(a, b, c)",
+      "description": "tuple",
+      "our_sexp": "(tuple a b c)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\Gamma=(V,E,s,t)",
+      "description": "graph definition",
+      "our_sexp": "(= Γ (tuple V E s t))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "s(X(e))=X(s(e))",
+      "description": "functoriality",
+      "our_sexp": "(= (s (X e)) (X (s e)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "e : v \\to w",
+      "description": "edge typing",
+      "our_sexp": "(: e (→ v w))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "X(\\gamma):=\\mathrm{id}_{X(v)}",
+      "description": "path definition",
+      "our_sexp": "(:= (X γ) (sub id (X v)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "X(\\gamma) := X(\\beta) \\circ X(e)",
+      "description": "path induction",
+      "our_sexp": "(:= (X γ) (∘ (X β) (X e)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathsf{Path}(\\Gamma) \\to \\mathcal{C}",
+      "description": "functor type",
+      "our_sexp": "(→ (Path Γ) 𝒞)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "D:\\mathcal{I}\\rightarrow\\mathcal{A}",
+      "description": "diagram functor",
+      "our_sexp": "(: D (→ ℐ 𝒜))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\gamma = \\beta \\circ e",
+      "description": "from expr:a-633527:1d0756d1",
+      "our_sexp": "(= γ (∘ β e))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\Gamma = \\begin{array}{c} \\bullet & \\rightarrow & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightarrow & \\bullet  \\end{array}",
+      "description": "from expr:a-633527:2ef3e2ad",
+      "our_sexp": "(= Γ (graph (→ • •) (→ • •)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "X(\\gamma) := X(\\beta) \\circ X(e)",
+      "description": "from expr:a-633527:32d70a15",
+      "our_sexp": "(:= (X γ) (∘ (X β) (X e)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathsf{Path}(\\Gamma)",
+      "description": "from expr:a-633527:375b7b53",
+      "our_sexp": "(Path Γ)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\Gamma \\to U(\\mathcal{C})",
+      "description": "from expr:a-633527:49c7268f",
+      "our_sexp": "(→ Γ (U 𝒞))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\Gamma",
+      "description": "from expr:a-633527:4c596c27",
+      "our_sexp": "Γ",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\gamma,\\gamma'",
+      "description": "from expr:a-633527:4ddb7e1c",
+      "our_sexp": "(tuple γ (prime γ))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "X(\\gamma)",
+      "description": "from expr:a-633527:5a6c5211",
+      "our_sexp": "(X γ)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\beta",
+      "description": "from expr:a-633527:6499d503",
+      "our_sexp": "β",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\gamma",
+      "description": "from expr:a-633527:67833ee2",
+      "our_sexp": "γ",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "e \\in E",
+      "description": "from expr:a-633527:6993d107",
+      "our_sexp": "(∈ e E)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "s(X(e))=X(s(e))",
+      "description": "from expr:a-633527:6cd4c521",
+      "our_sexp": "(= (s (X e)) (X (s e)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "X(e) : X(v) \\to X(w)",
+      "description": "from expr:a-633527:7b771a19",
+      "our_sexp": "(: (X e) (→ (X v) (X w)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathcal{C}",
+      "description": "from expr:a-633527:8b35ef03",
+      "our_sexp": "𝒞",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "X(\\gamma)=X(\\gamma')",
+      "description": "from expr:a-633527:a815cf7d",
+      "our_sexp": "(= (X γ) (X (prime γ)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathsf{Path}(\\Gamma) \\to \\mathcal{C}",
+      "description": "from expr:a-633527:a8b5975f",
+      "our_sexp": "(→ (Path Γ) 𝒞)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "U(-)",
+      "description": "from expr:a-633527:acf3e18d",
+      "our_sexp": "(U □)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "X(v) \\in \\mathcal{C}",
+      "description": "from expr:a-633527:b5f30a61",
+      "our_sexp": "(∈ (X v) 𝒞)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "X(\\gamma):=\\mathrm{id}_{X(v)}",
+      "description": "from expr:a-633527:b96813d1",
+      "our_sexp": "(:= (X γ) (sub id (X v)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "v \\in V",
+      "description": "from expr:a-633527:bba1fc2f",
+      "our_sexp": "(∈ v V)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "v,w \\in V",
+      "description": "from expr:a-633527:d457eb65",
+      "our_sexp": "(tuple v (∈ w V))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "t(X(e))=X(t(e))",
+      "description": "from expr:a-633527:e24a9016",
+      "our_sexp": "(= (t (X e)) (X (t e)))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\begin{array}{c} \\bullet & \\rightrightarrows & \\bullet \\\\ \\downarrow && \\downarrow \\\\ \\bullet & \\rightrightarrows & \\bullet  \\end{array}",
+      "description": "from expr:a-633527:e5e3c4e4",
+      "our_sexp": "(graph (⇉ • •) (⇉ • •))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "e : v \\to w",
+      "description": "from expr:a-633527:ea593a37",
+      "our_sexp": "(: e (→ v w))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "X(e)",
+      "description": "from expr:a-633527:f05c8f68",
+      "our_sexp": "(X e)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\Gamma=(V,E,s,t)",
+      "description": "from expr:a-633527:f77a252f",
+      "our_sexp": "(= Γ (tuple V E s t))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\Gamma",
+      "description": "from expr:c-1335379:4c596c27",
+      "our_sexp": "Γ",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\bar\\Gamma",
+      "description": "from expr:c-1335379:803e25f7",
+      "our_sexp": "(bar Γ)",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "Patth(\\Gamma)",
+      "description": "from expr:c-1335379:ea21f165",
+      "our_sexp": "P",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathcal{A}",
+      "description": "from expr:q-633512:5bbfa655",
+      "our_sexp": "𝒜",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "\\mathcal{I}",
+      "description": "from expr:q-633512:8d78ee8a",
+      "our_sexp": "ℐ",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "D:\\mathcal{I}\\rightarrow\\mathcal{A}",
+      "description": "from expr:q-633512:9895ab6f",
+      "our_sexp": "(: D (→ ℐ 𝒜))",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    },
+    {
+      "latex": "27",
+      "description": "from expr:q-633512:bc33ea4e",
+      "our_sexp": "27",
+      "latexml_cmml": null,
+      "latexml_sexp": null,
+      "comparison": null
+    }
+  ]
+}

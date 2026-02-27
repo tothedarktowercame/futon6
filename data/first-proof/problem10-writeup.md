@@ -38,19 +38,28 @@ K_tau(TZ) costs O(n^2 r). Total: O(qr + n^2 r).
 
 ### 3. Preconditioner
 
-Replace the sparse projector SS^T by its expectation (q/N)I for uniform
-sampling. Whitening by K_tau^{-1/2} gives the approximation
+#### Original preconditioner (gap identified)
 
-    A_hat ~ c(Z^T Z x K_tau) + lambda I,  c = q/N.
+Whitening by K_tau^{-1/2} and replacing SS^T by (q/N)I gives the
+Kronecker preconditioner P_old = H x K_tau with H = c Z^T Z + lambda I_r.
 
-The Kronecker preconditioner P = H x K_tau with H = c Z^T Z + lambda I_r
-is efficient to form and invert:
+**Problem:** The system matrix has K_tau^2 in the signal term but P_old
+has only K_tau. Even when D = cI exactly, the mismatch is
+A - P = c Z^T Z x K_tau(K_tau - I). Numerical experiments (P10-C001)
+confirm delta in [5.2, 22.7] — spectral equivalence fails.
 
-- Z^T Z = Hadamard_{i != k} (A_i^T A_i) by the Khatri-Rao identity.
-  Cost: O(sum_i n_i r^2).
-- Precompute Cholesky of K_tau (O(n^3)) and H (O(r^3)).
-- Each application P^{-1}z solves K_tau Y H^T = Z' via triangular
-  substitution in O(n^2 r + nr^2).
+#### Improved preconditioner (gap resolved)
+
+Use K_tau^2 in the signal term to match the system:
+
+    P_new = c (G x K_tau^2) + lambda (I_r x K_tau),
+
+where G = (1/q) Z^T Z. This exactly matches A when D = cI (delta = 0
+at machine precision). Efficiently invertible via eigendecomposition of
+K_tau: block-diagonalizes to n blocks of r x r at cost O(n^2 r + nr^2).
+
+Numerical evidence (P10-C002): delta < 1 for 18/22 configs under uniform
+sampling (mean delta = 0.89), a 12.4x improvement over the original.
 
 ### 4. Convergence
 
@@ -61,13 +70,18 @@ with kappa = cond(P^{-1/2} A P^{-1/2}). If
 
 then kappa <= (1+delta)/(1-delta) and t = O(sqrt(kappa) log(1/eps)).
 
-For uniform random sampling with q >= C n log n, matrix concentration
-(Tropp 2011, Theorem 1.6) gives delta = O(sqrt(n log n / q)), so kappa = O(1)
-and PCG converges in O(log(1/eps)) iterations.
+With P_new and uniform sampling (q >= C n log n), the exact-match property
+at D = cI plus matrix concentration (Tropp 2011) gives
+delta = O(sqrt(n log n / q)) < 1, so kappa = O(1) and PCG converges in
+O(log(1/eps)) iterations.
+
+Caveat: adversarial row-concentrated sampling gives delta in [1.4, 2.5]
+even with P_new. The O(log(1/eps)) claim requires sampling regularity.
 
 Necessity note:
-- Small explicit counterexamples showing why these assumptions are necessary
-  are recorded in `data/first-proof/problem10-necessity-counterexamples.md`.
+- Counterexamples in `data/first-proof/problem10-necessity-counterexamples.md`.
+- Gap analysis in `scripts/verify-p10-convergence-gap.py`.
+- Resolution in `scripts/verify-p10-improved-preconditioner.py`.
 
 ### 5. Total complexity
 

@@ -1,0 +1,839 @@
+{
+  "thread_id": "first-proof-the-argument",
+  "description": "The Argument (Part IV conclusion): raw trace data → explicit argument structure. Meta-level wiring diagram for the Strategy Patterns chapter, showing how git commit traces become an argumentative structure (AIF), and how the sidebar live case study validates the metacognitive interrupt claim.",
+  "nodes": [
+    {
+      "id": "arg-G0",
+      "node_type": "data",
+      "post_id": 2201,
+      "body_text": "Raw data: git hashes and commit traces from the ten-problem sprint.",
+      "score": 0,
+      "creation_date": "2026-02-11",
+      "parent_post_id": null
+    },
+    {
+      "id": "arg-G1",
+      "node_type": "data",
+      "post_id": 2202,
+      "body_text": "Evidence ledgers: pattern-tagged commit support. Each of five design patterns has an evidence ledger citing 3–5 pivotal commits with roles and primary artifacts.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 2201
+    },
+    {
+      "id": "arg-G2",
+      "node_type": "data",
+      "post_id": 2203,
+      "body_text": "Post-hoc reconstruction: pattern extraction from chronology. Five design patterns (Outcome Typing, Layer-Switching, Creative Reduction, Structural Decomposition, Layer Switch Under Coaching) extracted from the sprint's commit history.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2202
+    },
+    {
+      "id": "arg-C0",
+      "node_type": "synthesis",
+      "post_id": 2204,
+      "body_text": "Conclusion claim: textual argument recovers strategy-level causality. The evidence ledgers and patterns constitute an argument that the sprint's proof strategies are causally recoverable from the commit trace.",
+      "score": 2,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2203
+    },
+    {
+      "id": "arg-C1",
+      "node_type": "synthesis",
+      "post_id": 2205,
+      "body_text": "Canonical episode (Problem 6): persistence → obstruction → layer switch → progress. The full P6 arc from dispatch-driven GPL-H attack through coaching intervention to elementary proof via Turán + Foster + pigeonhole.",
+      "score": 2,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 2204
+    },
+    {
+      "id": "arg-X0",
+      "node_type": "outcome",
+      "post_id": 2206,
+      "body_text": "Cross-problem learning: strategy-level analogy. Transfer operates at the level of proof strategy, not mathematical content — P7's layer-switching strategy transfers to P6 even though the mathematics is entirely different.",
+      "score": 2,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2204
+    },
+    {
+      "id": "arg-A0",
+      "node_type": "formal",
+      "post_id": 2207,
+      "body_text": "AIF node types: claim / conflict / preference / inference. The Argument Interchange Framework provides typed nodes for representing argument structure. P6's five-node worked example: n1 (claim: BSS adapts), n2 (conflict: structural obstruction), n3 (preference: switch layer), n4 (claim: elementary proof), n5 (inference: n4 resolves what n2 blocked).",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2205
+    },
+    {
+      "id": "arg-A1",
+      "node_type": "formal",
+      "post_id": 2208,
+      "body_text": "Typed edges: attacks / supports / preference-over. AIF edges capture argumentative relations: n2 →[attacks] n1, n3 →[preference] n4 over n1, n5 →[supports] n4. Three edges suffice for the P6 layer-switch argument.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2207
+    },
+    {
+      "id": "arg-A2",
+      "node_type": "formal",
+      "post_id": 2209,
+      "body_text": "S-expression form: math content + argument structure together. (aif:graph (node n1 :type claim :content \"BSS adapts\") (edge n2 n1 :type attacks) ...) — no separate annotation layer needed.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2208
+    },
+    {
+      "id": "arg-I0",
+      "node_type": "infrastructure",
+      "post_id": 2210,
+      "body_text": "Arxana (futon5): typed-edge graph substrate. Provides persistent storage for the AIF graph with typed nodes and edges. The S-expression form maps directly to Arxana's native representation.",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2209
+    },
+    {
+      "id": "arg-I1",
+      "node_type": "infrastructure",
+      "post_id": 2211,
+      "body_text": "Peripheral model (futon3c): explore → reflect → edit → reflect → test. Constrained execution environments where reflect hops produce argumentative annotation because that is the only permitted action. The constraint makes reflection generative rather than reflexive.",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2209
+    },
+    {
+      "id": "arg-I2",
+      "node_type": "infrastructure",
+      "post_id": 2212,
+      "body_text": "(layer, status) monitor: detect stationarity. Track (layer, status) pairs across commits; flag stationarity after k cycles to trigger reframing prompt automatically. P6's failed phase exhibits the TryHarder signature: six dispatch-and-fail cycles over eight hours, all in the sparsification layer.",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2211
+    },
+    {
+      "id": "arg-X1",
+      "node_type": "outcome",
+      "post_id": 2213,
+      "body_text": "Learning from success: visible closures; coach not dispatch. Make success histories visible to stuck agents — rumination is not learning, analogy is. Coach with reframing questions ('What kind of problem is this?'), don't dispatch another attack vector.",
+      "score": 2,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2206
+    },
+    {
+      "id": "arg-S0",
+      "node_type": "sidebar",
+      "post_id": 2214,
+      "body_text": "Stuck phase: hours in one layer, no closure. After P6's elementary proof for K_n, agents spent several hours exploring amplification bounds (trajectory coupling, Neumann expansion, spectral spread) within the barrier-greedy layer. (layer, status) = (barrier-greedy amplification, open) was stationary.",
+      "score": 0,
+      "creation_date": "2026-02-12",
+      "parent_post_id": 2205
+    },
+    {
+      "id": "arg-S1",
+      "node_type": "sidebar",
+      "post_id": 2215,
+      "body_text": "Intervention: second-agent MathOverflow scan. During writing of Part IV — while editing the very paragraphs about metacognitive interrupts — a second agent scanned 152,893 MO questions across six independent strategy tracks (A–F), each with keyword bundles and contextual anchoring.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2214
+    },
+    {
+      "id": "arg-S2",
+      "node_type": "sidebar",
+      "post_id": 2216,
+      "body_text": "Result: split replaces single bound target. E-regime (graph-adaptive transfer, deg_{R,max} ≤ 2) + F-regime (gain-loss balance, deg_{R,max} ≥ 3) replaces the single universal amplification bound. Track E dominated with 60 anchored-strong hits vs 8 for next-best.",
+      "score": 2,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2215
+    },
+    {
+      "id": "arg-S3",
+      "node_type": "sidebar",
+      "post_id": 2217,
+      "body_text": "Demonstration: reflect hop changes policy faster. The MO scan was structurally a reflect hop — constrained task (read external literature, do not edit proof) that returned with annotation (alternative approaches, ranked by precedent). It produced a genuine layer switch in under 30 minutes after five hours of local play.",
+      "score": 2,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2216
+    },
+    {
+      "id": "arg-P0",
+      "node_type": "postscript",
+      "post_id": 2218,
+      "body_text": "Cycle 7: BMI falsified in general graphs. The barrier-monotonicity inequality d̄_t < 1 was disproved for general graphs via explicit construction. The Turán + Foster + pigeonhole construction still works; the target shifts from BMI to vertex-level feasibility (No-Skip / GPL-V).",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2215
+    },
+    {
+      "id": "arg-P1",
+      "node_type": "postscript",
+      "post_id": 2219,
+      "body_text": "Status code: OPEN / STUCK / FALSIFIED. The (layer, status) monitor should track three states. FALSIFIED is distinct from STUCK — it means the layer is proven impossible, not just difficult. The BMI falsification is the concrete instance.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2218
+    },
+    {
+      "id": "arg-P2",
+      "node_type": "postscript",
+      "post_id": 2220,
+      "body_text": "Control rule: FALSIFIED ⇒ abandon layer. A FALSIFIED status should trigger layer abandonment, not just reframing. This is the strongest form of the metacognitive interrupt — the layer itself is dead, not merely stuck.",
+      "score": 1,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 2219
+    },
+    {
+      "id": "arg-X2",
+      "node_type": "outcome",
+      "post_id": 2221,
+      "body_text": "Metacognitive interrupt: trigger policy switch on stationarity/falsification. Four independent paths converge: the sidebar demonstration, the postscript control rule, the learning-from-success principle, and the (layer, status) monitor. The git log provides the detection signal — repeated commits within the same layer with no status change is the TryHarder signature.",
+      "score": 3,
+      "creation_date": "2026-02-13",
+      "parent_post_id": null
+    },
+    {
+      "id": "arg-T0",
+      "node_type": "outcome",
+      "post_id": 2222,
+      "body_text": "THE ARGUMENT: raw trace data → explicit argument structure. The ten-problem sprint demonstrates that strategy-level causality is recoverable from commit traces, and that the argumentative structure can be formalized via AIF node/edge typing and S-expression representation.",
+      "score": 3,
+      "creation_date": "2026-02-14",
+      "parent_post_id": 2221
+    },
+    {
+      "id": "arg-T1",
+      "node_type": "outcome",
+      "post_id": 2223,
+      "body_text": "Target system: live AIF graph; patterns become graph queries. With Arxana (typed-edge storage) + peripheral model (real-time capture via reflect hops) + S-expression form (unified representation), the sprint's argumentative structure would be captured as it unfolds — the distance is a tooling gap, not a conceptual one.",
+      "score": 2,
+      "creation_date": "2026-02-14",
+      "parent_post_id": 2222
+    }
+  ],
+  "edges": [
+    {
+      "source": "arg-G0",
+      "target": "arg-G1",
+      "edge_type": "clarify",
+      "evidence": "Raw git hashes and commit traces organized into pattern-tagged evidence ledgers",
+      "detection": "structural"
+    },
+    {
+      "source": "arg-G1",
+      "target": "arg-G2",
+      "edge_type": "reform",
+      "evidence": "c557899 (Outcome Typing), 0fa4e82 (Layer-Switching), 03c1f8d (Creative Reduction), 09e23db (Structural Decomposition): one founding commit per pattern",
+      "detection": "commit-trace",
+      "commits": ["c557899", "0fa4e82", "03c1f8d", "09e23db"]
+    },
+    {
+      "source": "arg-G2",
+      "target": "arg-C0",
+      "edge_type": "assert",
+      "evidence": "Evidence-ledger synthesis: five pattern ledgers with 3–5 commits each constitute the evidentiary basis for the conclusion claim",
+      "detection": "structural"
+    },
+    {
+      "source": "arg-C0",
+      "target": "arg-C1",
+      "edge_type": "exemplify",
+      "evidence": "5289ca8 (GPL-H dispatch) → cc11834 (counterexample) → 73aa112 (elementary proof) → 7e03174 (E+F hybrid reduction): the P6 arc exemplifies the full persistence → obstruction → layer switch → progress pattern",
+      "detection": "commit-trace",
+      "commits": ["5289ca8", "cc11834", "73aa112", "7e03174"]
+    },
+    {
+      "source": "arg-C0",
+      "target": "arg-X0",
+      "edge_type": "reference",
+      "evidence": "P7 (layer-switching), P4 (creative reduction), P8 (structural decomposition) provide independent transfer evidence for the conclusion claim",
+      "detection": "structural"
+    },
+    {
+      "source": "arg-C1",
+      "target": "arg-A0",
+      "edge_type": "reform",
+      "evidence": "cc11834: the K_{t,r} counterexample IS an AIF conflict node — reformulating the P6 episode into AIF node types (claim/conflict/preference/inference)",
+      "detection": "commit-trace",
+      "commits": ["cc11834"]
+    },
+    {
+      "source": "arg-A0",
+      "target": "arg-A1",
+      "edge_type": "assert",
+      "evidence": "cc11834: the counterexample commit demonstrates all three AIF edge types — n2 attacks n1 (conflict attacks claim), n3 prefers n4 over n1 (preference-over), n5 supports n4 (inference supports claim)",
+      "detection": "commit-trace",
+      "commits": ["cc11834"]
+    },
+    {
+      "source": "arg-A1",
+      "target": "arg-A2",
+      "edge_type": "reform",
+      "evidence": "3454c9d: AIF coda contains the S-expression worked example — (aif:graph (node n1 :type claim ...) (edge n2 n1 :type attacks) ...)",
+      "detection": "commit-trace",
+      "commits": ["3454c9d"]
+    },
+    {
+      "source": "arg-A2",
+      "target": "arg-I0",
+      "edge_type": "reference",
+      "evidence": "de3e2ac (structural consistency in proof representation), 3454c9d (AIF coda): S-expression form maps naturally to Arxana's typed-edge graph substrate",
+      "detection": "commit-trace",
+      "commits": ["de3e2ac", "3454c9d"]
+    },
+    {
+      "source": "arg-A2",
+      "target": "arg-I1",
+      "edge_type": "reference",
+      "evidence": "73aa112 (coaching-induced layer switch), 7e03174 (MO scan reflect hop): these two commits ARE peripheral-model actions — constrained execution producing argumentative annotation",
+      "detection": "commit-trace",
+      "commits": ["73aa112", "7e03174"]
+    },
+    {
+      "source": "arg-I1",
+      "target": "arg-I2",
+      "edge_type": "assert",
+      "evidence": "5c7388a (resolve gaps G1/G3, narrow to single remaining gap): status monitoring in action — tracking what remains and triggering when gaps close",
+      "detection": "commit-trace",
+      "commits": ["5c7388a"]
+    },
+    {
+      "source": "arg-C1",
+      "target": "arg-S0",
+      "edge_type": "exemplify",
+      "evidence": "The P6 canonical episode exemplifies itself in the sidebar: the layer switch that happened while writing this chapter about layer switches",
+      "detection": "structural"
+    },
+    {
+      "source": "arg-S0",
+      "target": "arg-S1",
+      "edge_type": "assert",
+      "evidence": "5289ca8: GPL-H attack dispatch note — the dispatch-driven loop mechanism that characterizes the stuck phase, leading eventually to the MathOverflow intervention",
+      "detection": "commit-trace",
+      "commits": ["5289ca8"]
+    },
+    {
+      "source": "arg-S1",
+      "target": "arg-S2",
+      "edge_type": "assert",
+      "evidence": "7e03174: MathOverflow track evidence and E+F hybrid reduction — the intervention produces the regime-split result",
+      "detection": "commit-trace",
+      "commits": ["7e03174"]
+    },
+    {
+      "source": "arg-S1",
+      "target": "arg-P0",
+      "edge_type": "challenge",
+      "evidence": "a7b0e3e: P6 Cycle 7 — BMI falsified, gap promoted to No-Skip/GPL-V. The intervention revealed that the barrier-monotonicity inequality fails in general graphs",
+      "detection": "commit-trace",
+      "commits": ["a7b0e3e"]
+    },
+    {
+      "source": "arg-S2",
+      "target": "arg-S3",
+      "edge_type": "assert",
+      "evidence": "73aa112: elementary proof via coaching-induced layer switch — the result demonstrates that the reflect hop changed proof policy from persistence to layer-switching",
+      "detection": "commit-trace",
+      "commits": ["73aa112"]
+    },
+    {
+      "source": "arg-S3",
+      "target": "arg-X2",
+      "edge_type": "assert",
+      "evidence": "90b6dd6: unified Codex repair verification (15/15) — QC tracking infrastructure that the metacognitive interrupt builds on",
+      "detection": "commit-trace",
+      "commits": ["90b6dd6"]
+    },
+    {
+      "source": "arg-P0",
+      "target": "arg-P1",
+      "edge_type": "assert",
+      "evidence": "ea925aa: continuation cycles and BMI postscript — falsification of BMI motivates the three-state status code (OPEN/STUCK/FALSIFIED)",
+      "detection": "commit-trace",
+      "commits": ["ea925aa"]
+    },
+    {
+      "source": "arg-P1",
+      "target": "arg-P2",
+      "edge_type": "assert",
+      "evidence": "ea925aa: the status code taxonomy implies the control rule — FALSIFIED ⇒ abandon layer is the strongest metacognitive interrupt",
+      "detection": "commit-trace",
+      "commits": ["ea925aa"]
+    },
+    {
+      "source": "arg-P2",
+      "target": "arg-X2",
+      "edge_type": "assert",
+      "evidence": "ea925aa (continuation cycles), a7b0e3e (BMI falsification): the control rule feeds the metacognitive interrupt — FALSIFIED triggers layer abandonment",
+      "detection": "commit-trace",
+      "commits": ["ea925aa", "a7b0e3e"]
+    },
+    {
+      "source": "arg-X0",
+      "target": "arg-X1",
+      "edge_type": "assert",
+      "evidence": "0fa4e82 (P7 layer-switching), 620ed57 (P7 rotation lattice), 03c1f8d (P4 Φ₄·disc identity), a5a4fbe (P8 product smoothing): cross-problem evidence that success comes from reframing, not persistence",
+      "detection": "commit-trace",
+      "commits": ["0fa4e82", "620ed57", "03c1f8d", "a5a4fbe"]
+    },
+    {
+      "source": "arg-X1",
+      "target": "arg-X2",
+      "edge_type": "assert",
+      "evidence": "9aaf8fa: promote scoped result to Close after targeted gap closure — making success histories visible enables the metacognitive interrupt principle",
+      "detection": "commit-trace",
+      "commits": ["9aaf8fa"]
+    },
+    {
+      "source": "arg-I2",
+      "target": "arg-X2",
+      "edge_type": "assert",
+      "evidence": "287a41c: P7 rotation route pivot and triage — the monitor detects stationarity and triggers policy switch, exactly as the metacognitive interrupt prescribes",
+      "detection": "commit-trace",
+      "commits": ["287a41c"]
+    },
+    {
+      "source": "arg-X2",
+      "target": "arg-T0",
+      "edge_type": "assert",
+      "evidence": "c557899: align closure language with evidence — the metacognitive interrupt principle is THE ARGUMENT's core claim, making the argument structure explicit",
+      "detection": "commit-trace",
+      "commits": ["c557899"]
+    },
+    {
+      "source": "arg-T0",
+      "target": "arg-T1",
+      "edge_type": "reference",
+      "evidence": "3454c9d (AIF coda), 2c734cb (scope-aware closure typing): THE ARGUMENT points toward the target system — live AIF graph where patterns become graph queries",
+      "detection": "commit-trace",
+      "commits": ["3454c9d", "2c734cb"]
+    },
+    {
+      "source": "arg-I0",
+      "target": "arg-T1",
+      "edge_type": "reference",
+      "evidence": "3454c9d (AIF coda), 90b6dd6 (QC verification infrastructure): Arxana provides the typed-edge graph substrate for the target system",
+      "detection": "commit-trace",
+      "commits": ["3454c9d", "90b6dd6"]
+    },
+    {
+      "source": "arg-I1",
+      "target": "arg-T1",
+      "edge_type": "reference",
+      "evidence": "3454c9d (AIF coda), de3e2ac (structural consistency): the peripheral model provides real-time capture for the target system via interleaved reflect hops",
+      "detection": "commit-trace",
+      "commits": ["3454c9d", "de3e2ac"]
+    }
+  ],
+  "hyperedges": [
+    {
+      "hx/id": "first-proof-the-argument:edge-000",
+      "hx/type": "argument/clarify",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-G0", "node_type": "data" },
+        { "role": "target", "ident": "arg-G1", "node_type": "data" }
+      ],
+      "hx/content": {
+        "evidence": "Raw git hashes and commit traces organized into pattern-tagged evidence ledgers",
+        "detection": "structural"
+      },
+      "hx/labels": ["argument", "clarify", "structural"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-001",
+      "hx/type": "argument/reform",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-G1", "node_type": "data" },
+        { "role": "target", "ident": "arg-G2", "node_type": "data" }
+      ],
+      "hx/content": {
+        "evidence": "c557899 (Outcome Typing), 0fa4e82 (Layer-Switching), 03c1f8d (Creative Reduction), 09e23db (Structural Decomposition)",
+        "detection": "commit-trace",
+        "commits": ["c557899", "0fa4e82", "03c1f8d", "09e23db"]
+      },
+      "hx/labels": ["argument", "reform", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-002",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-G2", "node_type": "data" },
+        { "role": "target", "ident": "arg-C0", "node_type": "synthesis" }
+      ],
+      "hx/content": {
+        "evidence": "Evidence-ledger synthesis: five pattern ledgers constitute the evidentiary basis",
+        "detection": "structural"
+      },
+      "hx/labels": ["argument", "assert", "structural"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-003",
+      "hx/type": "argument/exemplify",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-C0", "node_type": "synthesis" },
+        { "role": "target", "ident": "arg-C1", "node_type": "synthesis" }
+      ],
+      "hx/content": {
+        "evidence": "5289ca8 → cc11834 → 73aa112 → 7e03174: P6 arc exemplifies persistence → obstruction → layer switch → progress",
+        "detection": "commit-trace",
+        "commits": ["5289ca8", "cc11834", "73aa112", "7e03174"]
+      },
+      "hx/labels": ["argument", "exemplify", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-004",
+      "hx/type": "argument/reference",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-C0", "node_type": "synthesis" },
+        { "role": "target", "ident": "arg-X0", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "P7/P4/P8 transfer evidence: independent problems validate the conclusion via strategy-level analogy",
+        "detection": "structural"
+      },
+      "hx/labels": ["argument", "reference", "structural"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-005",
+      "hx/type": "argument/reform",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-C1", "node_type": "synthesis" },
+        { "role": "target", "ident": "arg-A0", "node_type": "formal" }
+      ],
+      "hx/content": {
+        "evidence": "cc11834: K_{t,r} counterexample IS an AIF conflict node — reformulating P6 episode into AIF node types",
+        "detection": "commit-trace",
+        "commits": ["cc11834"]
+      },
+      "hx/labels": ["argument", "reform", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-006",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-A0", "node_type": "formal" },
+        { "role": "target", "ident": "arg-A1", "node_type": "formal" }
+      ],
+      "hx/content": {
+        "evidence": "cc11834: counterexample demonstrates all three AIF edge types (attacks, supports, preference-over)",
+        "detection": "commit-trace",
+        "commits": ["cc11834"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-007",
+      "hx/type": "argument/reform",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-A1", "node_type": "formal" },
+        { "role": "target", "ident": "arg-A2", "node_type": "formal" }
+      ],
+      "hx/content": {
+        "evidence": "3454c9d: AIF coda contains S-expression worked example",
+        "detection": "commit-trace",
+        "commits": ["3454c9d"]
+      },
+      "hx/labels": ["argument", "reform", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-008",
+      "hx/type": "argument/reference",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-A2", "node_type": "formal" },
+        { "role": "target", "ident": "arg-I0", "node_type": "infrastructure" }
+      ],
+      "hx/content": {
+        "evidence": "de3e2ac (structural consistency), 3454c9d (AIF coda): S-expression form maps to Arxana's typed-edge graph substrate",
+        "detection": "commit-trace",
+        "commits": ["de3e2ac", "3454c9d"]
+      },
+      "hx/labels": ["argument", "reference", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-009",
+      "hx/type": "argument/reference",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-A2", "node_type": "formal" },
+        { "role": "target", "ident": "arg-I1", "node_type": "infrastructure" }
+      ],
+      "hx/content": {
+        "evidence": "73aa112 (coaching-induced layer switch), 7e03174 (MO scan reflect hop): both ARE peripheral-model actions",
+        "detection": "commit-trace",
+        "commits": ["73aa112", "7e03174"]
+      },
+      "hx/labels": ["argument", "reference", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-010",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-I1", "node_type": "infrastructure" },
+        { "role": "target", "ident": "arg-I2", "node_type": "infrastructure" }
+      ],
+      "hx/content": {
+        "evidence": "5c7388a: narrow to single remaining gap — status monitoring in action",
+        "detection": "commit-trace",
+        "commits": ["5c7388a"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-011",
+      "hx/type": "argument/exemplify",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-C1", "node_type": "synthesis" },
+        { "role": "target", "ident": "arg-S0", "node_type": "sidebar" }
+      ],
+      "hx/content": {
+        "evidence": "P6 layer-switch ledger: the canonical episode exemplifies itself in the sidebar live case study",
+        "detection": "structural"
+      },
+      "hx/labels": ["argument", "exemplify", "structural"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-012",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-S0", "node_type": "sidebar" },
+        { "role": "target", "ident": "arg-S1", "node_type": "sidebar" }
+      ],
+      "hx/content": {
+        "evidence": "5289ca8: GPL-H attack dispatch note — the dispatch-driven loop mechanism that characterizes the stuck phase",
+        "detection": "commit-trace",
+        "commits": ["5289ca8"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-013",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-S1", "node_type": "sidebar" },
+        { "role": "target", "ident": "arg-S2", "node_type": "sidebar" }
+      ],
+      "hx/content": {
+        "evidence": "7e03174: MO track evidence and E+F hybrid reduction — intervention produces regime-split result",
+        "detection": "commit-trace",
+        "commits": ["7e03174"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-014",
+      "hx/type": "argument/challenge",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-S1", "node_type": "sidebar" },
+        { "role": "target", "ident": "arg-P0", "node_type": "postscript" }
+      ],
+      "hx/content": {
+        "evidence": "a7b0e3e: P6 Cycle 7 — BMI falsified, gap promoted to No-Skip/GPL-V",
+        "detection": "commit-trace",
+        "commits": ["a7b0e3e"]
+      },
+      "hx/labels": ["argument", "challenge", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-015",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-S2", "node_type": "sidebar" },
+        { "role": "target", "ident": "arg-S3", "node_type": "sidebar" }
+      ],
+      "hx/content": {
+        "evidence": "73aa112: elementary proof via coaching-induced layer switch — the result demonstrates that reflect hops change policy",
+        "detection": "commit-trace",
+        "commits": ["73aa112"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-016",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-S3", "node_type": "sidebar" },
+        { "role": "target", "ident": "arg-X2", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "90b6dd6: unified Codex repair verification — QC tracking infrastructure enabling the metacognitive interrupt",
+        "detection": "commit-trace",
+        "commits": ["90b6dd6"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-017",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-P0", "node_type": "postscript" },
+        { "role": "target", "ident": "arg-P1", "node_type": "postscript" }
+      ],
+      "hx/content": {
+        "evidence": "ea925aa: continuation cycles and BMI postscript — falsification motivates three-state status code",
+        "detection": "commit-trace",
+        "commits": ["ea925aa"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-018",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-P1", "node_type": "postscript" },
+        { "role": "target", "ident": "arg-P2", "node_type": "postscript" }
+      ],
+      "hx/content": {
+        "evidence": "ea925aa: status code taxonomy implies control rule — FALSIFIED ⇒ abandon layer",
+        "detection": "commit-trace",
+        "commits": ["ea925aa"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-019",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-P2", "node_type": "postscript" },
+        { "role": "target", "ident": "arg-X2", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "ea925aa (continuation cycles), a7b0e3e (BMI falsification): control rule feeds the metacognitive interrupt",
+        "detection": "commit-trace",
+        "commits": ["ea925aa", "a7b0e3e"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-020",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-X0", "node_type": "outcome" },
+        { "role": "target", "ident": "arg-X1", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "0fa4e82 (P7 layer-switching), 620ed57 (P7 rotation lattice), 03c1f8d (P4 Φ₄·disc identity), a5a4fbe (P8 product smoothing): cross-problem success evidence",
+        "detection": "commit-trace",
+        "commits": ["0fa4e82", "620ed57", "03c1f8d", "a5a4fbe"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-021",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-X1", "node_type": "outcome" },
+        { "role": "target", "ident": "arg-X2", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "9aaf8fa: promote scoped result to Close — making success histories visible enables the metacognitive interrupt",
+        "detection": "commit-trace",
+        "commits": ["9aaf8fa"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-022",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-I2", "node_type": "infrastructure" },
+        { "role": "target", "ident": "arg-X2", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "287a41c: P7 rotation route pivot — the monitor detects stationarity and triggers policy switch",
+        "detection": "commit-trace",
+        "commits": ["287a41c"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-023",
+      "hx/type": "argument/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-X2", "node_type": "outcome" },
+        { "role": "target", "ident": "arg-T0", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "c557899: align closure language with evidence — the metacognitive interrupt is THE ARGUMENT's core claim",
+        "detection": "commit-trace",
+        "commits": ["c557899"]
+      },
+      "hx/labels": ["argument", "assert", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-024",
+      "hx/type": "argument/reference",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-T0", "node_type": "outcome" },
+        { "role": "target", "ident": "arg-T1", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "3454c9d (AIF coda), 2c734cb (scope-aware closure typing): THE ARGUMENT points toward the target system",
+        "detection": "commit-trace",
+        "commits": ["3454c9d", "2c734cb"]
+      },
+      "hx/labels": ["argument", "reference", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-025",
+      "hx/type": "argument/reference",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-I0", "node_type": "infrastructure" },
+        { "role": "target", "ident": "arg-T1", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "3454c9d (AIF coda), 90b6dd6 (QC verification infrastructure): Arxana provides substrate for target system",
+        "detection": "commit-trace",
+        "commits": ["3454c9d", "90b6dd6"]
+      },
+      "hx/labels": ["argument", "reference", "commit-trace"]
+    },
+    {
+      "hx/id": "first-proof-the-argument:edge-026",
+      "hx/type": "argument/reference",
+      "hx/ends": [
+        { "role": "source", "ident": "arg-I1", "node_type": "infrastructure" },
+        { "role": "target", "ident": "arg-T1", "node_type": "outcome" }
+      ],
+      "hx/content": {
+        "evidence": "3454c9d (AIF coda), de3e2ac (structural consistency): peripheral model provides real-time capture for target system",
+        "detection": "commit-trace",
+        "commits": ["3454c9d", "de3e2ac"]
+      },
+      "hx/labels": ["argument", "reference", "commit-trace"]
+    }
+  ],
+  "stats": {
+    "n_nodes": 23,
+    "n_edges": 27,
+    "node_types": {
+      "data": 3,
+      "synthesis": 2,
+      "formal": 3,
+      "infrastructure": 3,
+      "sidebar": 4,
+      "postscript": 3,
+      "outcome": 5
+    },
+    "edge_types": {
+      "clarify": 1,
+      "reform": 3,
+      "assert": 14,
+      "reference": 6,
+      "challenge": 1,
+      "exemplify": 2
+    },
+    "detection_types": {
+      "structural": 4,
+      "commit-trace": 23
+    },
+    "distinct_commits_cited": 19,
+    "regions": {
+      "top_chain": ["arg-G0", "arg-G1", "arg-G2", "arg-C0"],
+      "canonical_episode": ["arg-C1"],
+      "formal_branch": ["arg-A0", "arg-A1", "arg-A2"],
+      "infrastructure": ["arg-I0", "arg-I1", "arg-I2"],
+      "sidebar": ["arg-S0", "arg-S1", "arg-S2", "arg-S3"],
+      "postscript": ["arg-P0", "arg-P1", "arg-P2"],
+      "cross_problem": ["arg-X0", "arg-X1"],
+      "convergence": ["arg-X2", "arg-T0", "arg-T1"]
+    }
+  }
+}

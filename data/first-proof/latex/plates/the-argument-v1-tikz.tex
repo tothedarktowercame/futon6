@@ -67,31 +67,31 @@
 \draw[->] (C0) -- (C1) node[midway,above,hashlbl] {\hash{5289ca8} $\to$ \hash{cc11834} $\to$ \hash{73aa112} $\to$ \hash{7e03174}};
 \draw[->] (C0) -- (X0) node[midway,above,hashlbl] {P7/P4/P8 transfer evidence};
 
-\draw[->] (C1) -- (A0) node[midway,above,hashlbl] {\hash{cb3bd91}};
-\draw[->] (A0) -- (A1) node[midway,left,hashlbl] {\hash{cb3bd91}};
-\draw[->] (A1) -- (A2) node[midway,left,hashlbl] {\hash{cb3bd91}};
-\draw[->] (A2.south west) -- (I0.north west) node[midway,above,hashlbl] {\hash{3454c9d}, \hash{cb3bd91}};
-\draw[->] (A2) -- (I1) node[midway,above,hashlbl] {\hash{3454c9d}, \hash{cb3bd91}};
-\draw[->] (I1) -- (I2) node[midway,right,hashlbl] {\hash{cb3bd91}};
+\draw[->] (C1) -- (A0) node[midway,above,hashlbl] {\hash{cc11834}};
+\draw[->] (A0) -- (A1) node[midway,left,hashlbl] {\hash{cc11834}};
+\draw[->] (A1) -- (A2) node[midway,left,hashlbl] {\hash{3454c9d}};
+\draw[->] (A2.south west) -- (I0.north west) node[midway,above,hashlbl] {\hash{de3e2ac}, \hash{3454c9d}};
+\draw[->] (A2) -- (I1) node[midway,above,hashlbl] {\hash{73aa112}, \hash{7e03174}};
+\draw[->] (I1) -- (I2) node[midway,right,hashlbl] {\hash{5c7388a}};
 
 \draw[->] (C1) -- (S0) node[midway,right,hashlbl] {P6 layer-switch ledger};
-\draw[->] (S0) -- (S1) node[midway,left,hashlbl] {\hash{cb3bd91}};
+\draw[->] (S0) -- (S1) node[midway,left,hashlbl] {\hash{5289ca8}};
 \draw[->] (S1) -- (S2) node[midway,left,hashlbl] {\hash{7e03174}};
 \draw[->] (S1.east) to[out=14,in=198] node[pos=0.40,left,yshift=6pt,hashlbl] {\hash{a7b0e3e}} (P0.west);
-\draw[->] (S2) -- (S3) node[midway,left,hashlbl] {\hash{cb3bd91}};
-\draw[->] (S3) -- (X2) node[midway,below,hashlbl] {\hash{cb3bd91}};
+\draw[->] (S2) -- (S3) node[midway,left,hashlbl] {\hash{73aa112}};
+\draw[->] (S3) -- (X2) node[midway,below,hashlbl] {\hash{90b6dd6}};
 
 \draw[->] (P0) -- (P1) node[midway,right,hashlbl] {\hash{ea925aa}};
 \draw[->] (P1) -- (P2) node[midway,right,hashlbl] {\hash{ea925aa}};
-\draw[->] (P2) -- (X2) node[midway,below,hashlbl] {\hash{ea925aa}, \hash{cb3bd91}};
+\draw[->] (P2) -- (X2) node[midway,below,hashlbl] {\hash{ea925aa}, \hash{a7b0e3e}};
 
 \draw[->] (X0) -- (X1) node[midway,above,hashlbl] {\hash{0fa4e82}, \hash{620ed57}, \hash{03c1f8d}, \hash{a5a4fbe}};
-\draw[->] (X1.south east) to[out=-70,in=10] node[pos=0.58,right,hashlbl] {\hash{cb3bd91}} (X2.east);
-\draw[->] (I2) -- (X2) node[midway,below,hashlbl] {\hash{cb3bd91}};
-\draw[->] (X2) -- (T0) node[midway,right,hashlbl] {\hash{cb3bd91}};
-\draw[->] (T0) -- (T1) node[midway,below,hashlbl] {\hash{3454c9d}, \hash{cb3bd91}};
-\draw[->] (I0) -- (T1) node[midway,left,hashlbl] {\hash{3454c9d}, \hash{cb3bd91}};
-\draw[->] (I1.south east) to[out=-80,in=25,looseness=0.90] node[pos=0.62,left,hashlbl] {\hash{3454c9d}, \hash{cb3bd91}} (T1.north);
+\draw[->] (X1.south east) to[out=-70,in=10] node[pos=0.58,right,hashlbl] {\hash{9aaf8fa}} (X2.east);
+\draw[->] (I2) -- (X2) node[midway,below,hashlbl] {\hash{287a41c}};
+\draw[->] (X2) -- (T0) node[midway,right,hashlbl] {\hash{c557899}};
+\draw[->] (T0) -- (T1) node[midway,below,hashlbl] {\hash{3454c9d}, \hash{2c734cb}};
+\draw[->] (I0) -- (T1) node[midway,left,hashlbl] {\hash{3454c9d}, \hash{90b6dd6}};
+\draw[->] (I1.south east) to[out=-80,in=25,looseness=0.90] node[pos=0.62,left,hashlbl] {\hash{3454c9d}, \hash{de3e2ac}} (T1.north);
 
 \end{tikzpicture}
 \endgroup

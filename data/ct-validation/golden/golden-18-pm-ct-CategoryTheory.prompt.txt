@@ -1,0 +1,382 @@
+You are a mathematical wiring diagram extractor. Your job is to decompose mathematical text into three kinds of structure:
+
+1. COMPONENTS — scope bindings (the boxes of the diagram)
+2. PORTS — cross-scope anaphoric references (connections between non-nested boxes)
+3. WIRES — connectives (the argument flow between boxes)
+
+You are a CLASSIFIER, not a creative writer. Every record you output must use one of the types listed below. Do not invent types.
+
+## 1. COMPONENT TYPES (30 types)
+
+### BINDING (introduces a new symbol)
+- bind/let — "Let X be a Y" / "Let X denote Y"
+- bind/define — "Define X := Y" / "We define X as Y" / "X is defined as Y"
+- bind/name — "denote by X" / "call this X" / "writing X for Y" / "introduce X"
+- bind/associate — "we associate X to/with Y"
+
+### QUANTIFIER (bound variable with domain)
+- quant/universal — "for all/every/each/any X in S"
+- quant/existential — "there exists X such that P"
+- quant/select — "take/choose/fix/pick (any) X"
+- quant/given — "given (a/an/any) X"
+
+### ASSUMPTION (restricts without binding a new symbol)
+- assume/explicit — "Assume/Suppose (that) P"
+- assume/conditional — "If X is/has/satisfies P"
+- assume/consider — "Consider (a/the) X"
+- assume/wlog — "Without loss of generality" / "WLOG"
+
+### CONSTRAINT (adds condition to existing binding)
+- constrain/where — "where X is/denotes/represents Y"
+- constrain/such-that — "such that P(X)"
+- constrain/with — "with X being/a/the Y"
+- constrain/here — "Here, X is Y"
+
+### FORMULA (binding inside math notation)
+- formula/integral — ∫...dx (integration variable)
+- formula/limit — lim_{x→a}
+- formula/sum-index — Σ_{x∈S}
+- formula/prod-index — Π_{x∈S}
+- formula/set-builder — {x : P(x)} or {x | P(x)}
+- formula/sup-inf — sup/inf/max/min_{x∈S}
+- formula/quantifier-symbol — ∀x / ∃x
+
+### PROOF STRUCTURE (implicit scope boundaries)
+- proof/claim — "Claim: P"
+- proof/case — "Case N: ..."
+- proof/induction — "Base case" / "Inductive step"
+- proof/method — "Proof by contradiction/induction/..."
+
+### CONCLUSION (scope closure)
+- conclude/therefore — therefore / thus / hence / so / it follows
+- conclude/explicit — "we conclude (that) P"
+- conclude/qed — QED / □ / ∎
+
+## 2. PORT TYPES (11 types)
+
+Ports connect components across the scope tree — they reference bindings
+that are NOT ancestors/descendants. Simple variable reuse within a nested
+scope is handled by the tree (parent pointers), NOT by ports.
+
+### DEMONSTRATIVE
+- port/that-noun — "that root" / "that function" / "that map"
+- port/this-noun — "this equation" / "this operator"
+- port/the-above — "the above expression" / "the preceding argument"
+- port/the-same — "the same space" / "the same argument"
+- port/such — "such a function" / "such elements"
+- port/latter-former — "the former" / "the latter"
+
+### STRUCTURAL
+- port/respectively — "X and Y are A and B, respectively"
+- port/similarly — "Similarly, ..." / "Analogously, ..."
+- port/likewise — "Likewise" / "Correspondingly"
+
+### PERSISTENCE
+- port/still — "is still X" / "still holds" / "still valid"
+- port/remains — "remains true" / "remains valid"
+
+## 3. WIRE TYPES (5 types)
+
+Wires are the argument flow between components. Each wire connects a
+SOURCE component (logically prior: premise, reason, context) to a
+TARGET component (logically posterior: conclusion, result, consequence).
+
+- wire/adversative — but, however, on the other hand, nevertheless, yet
+- wire/causal — because, since, the reason is, as, given that
+- wire/consequential — so, therefore, thus, hence, it follows, note that
+- wire/clarifying — that is, in other words, namely, more precisely, i.e.
+- wire/intuitive — intuitively, roughly speaking, heuristically
+
+### WIRE LABELS (optional — 32 types)
+
+Each wire may carry a reasoning label (or null). Labels say WHAT reasoning
+is transported through the wire.
+
+Strategy: strategy/example, strategy/analogy, strategy/contradiction,
+  strategy/inversion, strategy/generalize, strategy/simplify,
+  strategy/count, strategy/special-case, strategy/dimensions,
+  strategy/symmetry, strategy/extreme-case
+
+Explain: explain/think-of, explain/meaning, explain/register-shift,
+  explain/the-idea
+
+Correct: correct/actually, correct/wrong, correct/subtlety,
+  correct/misconception, correct/careful
+
+Approx: approx/neglect, approx/order-of-mag, approx/perturbative,
+  approx/regime
+
+Epistemic: epistemic/can-show, epistemic/turns-out, epistemic/not-obvious,
+  epistemic/known, epistemic/open
+
+Construct: construct/exists, construct/explicit, construct/build
+
+## OUTPUT FORMAT
+
+Return a JSON object with three arrays:
+
+```json
+{
+  "components": [...],
+  "ports": [...],
+  "wires": [...]
+}
+```
+
+### Component record
+
+```json
+{"id": "c-000", "type": "bind/let", "parent": null,
+ "match": "Let $f: [a,b] \\to \\mathbb{R}$ be continuous", "position": 0,
+ "roles": {"symbol": "f", "type": "continuous function from [a,b] to R"}}
+```
+
+Fields:
+- id: sequential c-NNN
+- type: one of the 30 component types (REQUIRED)
+- parent: id of enclosing component, or null for top-level
+- match: exact text matched (up to 120 chars)
+- position: character offset in the text
+- roles: type-specific key-value pairs (see role schemas below)
+
+### Port record
+
+```json
+{"id": "p-000", "type": "port/the-above", "source": "c-003", "target": "c-001",
+ "match": "the above maximum point"}
+```
+
+Fields:
+- id: sequential p-NNN
+- type: one of the 11 port types (REQUIRED)
+- source: id of component containing the referring expression
+- target: id of component being referenced
+- match: the referring expression
+
+### Wire record
+
+```json
+{"id": "w-000", "type": "wire/causal", "source": "c-000", "target": "c-001",
+ "match": "Since [a,b] is compact and f is continuous", "label": null}
+```
+
+Fields:
+- id: sequential w-NNN
+- type: one of the 5 wire types (REQUIRED)
+- source: id of logically prior component (premise/reason)
+- target: id of logically posterior component (conclusion/result)
+- match: the connective phrase
+- label: one of the 32 wire label types, or null
+
+## COMPONENT ROLE SCHEMAS
+
+bind/let:       {symbol, type}
+bind/define:    {symbol, definition}
+bind/name:      {symbol, referent?}
+bind/associate: {symbol, target}
+
+quant/universal:    {quantifier, variable, domain?}
+quant/existential:  {variable, domain?, condition?}
+quant/select:       {verb, variable, domain?}
+quant/given:        {variable, type?}
+
+assume/explicit:    {condition}
+assume/conditional: {subject, predicate}
+assume/consider:    {object}
+assume/wlog:        {simplification?}
+
+constrain/where:     {symbol, description}
+constrain/such-that: {condition}
+constrain/with:      {symbol, description}
+constrain/here:      {symbol, description}
+
+formula/integral:          {variable, domain?}
+formula/limit:             {variable, target}
+formula/sum-index:         {variable, domain?}
+formula/prod-index:        {variable, domain?}
+formula/set-builder:       {variable, condition}
+formula/sup-inf:           {operator, variable, domain?}
+formula/quantifier-symbol: {quantifier, variable}
+
+proof/claim:     {statement}
+proof/case:      {case-id, description?}
+proof/induction: {phase}
+proof/method:    {method}
+
+conclude/therefore: {conclusion?}
+conclude/explicit:  {conclusion}
+conclude/qed:       {}
+
+## COMPONENT NESTING RULES
+
+Assign `parent` pointers to form a scope TREE:
+1. bind/* opens a scope. Subsequent scopes referencing the bound symbol are children.
+2. constrain/* is child of the binding it constrains.
+3. formula/* is child of the enclosing prose scope.
+4. proof/case opens a new scope; everything inside is a child.
+5. conclude/* closes the innermost open scope (its parent is that scope).
+6. assume/conditional opens a scope until the next conclude/* or counter-assumption.
+7. Comma-separated bindings ("Let X be..., Y be..., Z be..."): later ones are children of the first.
+
+## PORT RULES
+
+1. Only create ports for NON-TRIVIAL cross-tree references (demonstratives, structural parallels, identity persistence).
+2. Simple variable reuse within a scope's subtree is handled by the tree, not ports.
+3. Source = component containing the referring expression. Target = component being referenced.
+
+## WIRE RULES
+
+1. Source = logically prior component (premise/reason/context).
+   Target = logically posterior component (conclusion/result/consequence).
+2. "Since A, B" → source: A-component, target: B-component, type: wire/causal.
+3. "A, therefore B" → source: A-component, target: B-component, type: wire/consequential.
+4. "A, but B" → source: A-component, target: B-component, type: wire/adversative.
+5. Not every connective word creates a wire. Only create wires that connect identifiable components.
+6. Assign a label when the wire carries a specific reasoning move. Most wires are unlabelled.
+
+## EXAMPLE
+
+Input text:
+"Let $f: [a,b] \to \mathbb{R}$ be continuous. Since $[a,b]$ is compact and $f$ is continuous, $f$ attains its maximum at some point $c \in [a,b]$. But note that $c$ need not be unique. If $f$ is also strictly concave, then the above maximum point is unique, hence $c$ is the only critical point."
+
+Output:
+```json
+{
+  "components": [
+    {"id": "c-000", "type": "bind/let", "parent": null,
+     "match": "Let $f: [a,b] \\to \\mathbb{R}$ be continuous", "position": 0,
+     "roles": {"symbol": "f", "type": "continuous function from [a,b] to R"}},
+    {"id": "c-001", "type": "quant/existential", "parent": "c-000",
+     "match": "$f$ attains its maximum at some point $c \\in [a,b]$", "position": 62,
+     "roles": {"variable": "c", "domain": "[a,b]", "condition": "f attains maximum at c"}},
+    {"id": "c-002", "type": "assume/conditional", "parent": "c-000",
+     "match": "If $f$ is also strictly concave", "position": 138,
+     "roles": {"subject": "f", "predicate": "strictly concave"}},
+    {"id": "c-003", "type": "conclude/therefore", "parent": "c-002",
+     "match": "the above maximum point is unique", "position": 171,
+     "roles": {"conclusion": "the maximum point is unique"}},
+    {"id": "c-004", "type": "conclude/therefore", "parent": "c-002",
+     "match": "hence $c$ is the only critical point", "position": 206,
+     "roles": {"conclusion": "c is the only critical point"}}
+  ],
+  "ports": [
+    {"id": "p-000", "type": "port/the-above", "source": "c-003", "target": "c-001",
+     "match": "the above maximum point"}
+  ],
+  "wires": [
+    {"id": "w-000", "type": "wire/causal", "source": "c-000", "target": "c-001",
+     "match": "Since [a,b] is compact and f is continuous", "label": null},
+    {"id": "w-001", "type": "wire/adversative", "source": "c-001", "target": "c-002",
+     "match": "But note that c need not be unique", "label": "correct/subtlety"},
+    {"id": "w-002", "type": "wire/consequential", "source": "c-002", "target": "c-003",
+     "match": "then", "label": null},
+    {"id": "w-003", "type": "wire/consequential", "source": "c-003", "target": "c-004",
+     "match": "hence", "label": null}
+  ]
+}
+```
+
+Reading the wiring diagram:
+- c-000 (Let f) is the root component. c-001 and c-002 are its children in the tree.
+- w-000 (causal wire): the binding of f on [a,b] provides the reason for the existence of c.
+- w-001 (adversative wire): the existence result has a gap (non-uniqueness) → motivates the concavity assumption. Labelled correct/subtlety.
+- p-000 (port): "the above maximum point" in c-003 references c-001's binding of c across the tree (c-003 is inside c-002, a sibling of c-001).
+- w-002, w-003 (consequential wires): the standard if→then→hence derivation chain.
+
+## YOUR TASK
+
+Analyze the following mathematical text. Extract ALL components (30 scope types), ports (11 anaphora types), and wires (5 connective types + optional labels). Classify each using the types above. Return the JSON object with three arrays.
+
+TEXT:
+\PMlinkescapeword{sort}
+\PMlinkescapeword{order}
+\PMlinkescapeword{onto}
+\PMlinkescapeword{level}
+\PMlinkescapeword{field}
+\PMlinkescapeword{language}
+\PMlinkescapeword{complete}
+\PMlinkescapeword{simple}
+\raggedbottom
+\section*{Introduction}
+
+Much of contemporary mathematics studies algebraic structures of one sort or another: rings, groups, vector spaces and many others.  More generally, the idea of a set with some structure is very general: topological spaces, differentiable manifolds, graphs and so on.  Each of these kinds of things has a notion of a function that respects the structure: group and ring homomorphisms, linear transformations, continuous functions, differentiable functions, graph homomorphisms, and so on.  In order to mathematically capture the notion of ``kind of thing'', as well as ``function which preserves the structure'', the notion of a category was introduced.
+
+A category has two parts: a collection of objects, and a notion of morphism between two objects.  These morphisms are required to have an associative composition law, and there are a few other conditions, but a category is a very general notion.  Each of the examples listed above forms a category.  Some very simple objects can form categories; the objects need not have meaningful elements, and the morphisms need not be functions.  
+
+As a tool, category theory allows mathematicians to focus on the morphisms between objects rather than their elements.  In many cases, these morphisms are precisely the objects of interest; in others, the objects are.  In either case, the usual tools of set theory force the mathematician to worry about individual elements.
+
+\section*{What can you do with categories?}
+
+A category serves to formalize the notion of ``function preserving structure'', and often it turns out that if one knows enough about the functions preserving the structure, one can forget the structure entirely.  
+
+Many concepts that turn up in similar forms in many different categories can in fact be defined naturally for any category.  For example, one can define an \emph{isomorphism} in any category: it is a morphism from $A$ to $B$ for which there exists a morphism from $B$ to $A$ such that the composition on both sides yields the identity.  With one stroke, we have defined isomorphism for every category; it corresponds exactly to the familiar notion and is defined in complete generality.  Similarly, one can define finite and infinite direct sums and direct products in complete generality.  Proving their existence is a task one must do for each category in turn, but their properties can be concisely defined in categorical language. 
+
+Isomorphism is in fact a central notion in category theory: most categorical constructions cannot distinguish between isomorphic objects.  Frequently, this is exactly what is desired, since equality of objects is in general a tricky concept: if we take a group and replace each element with a pair, that element and a ``tag'', do we have the same group?  Strictly speaking, no, but they are certainly isomorphic.  Of course, sometimes one wants to distinguish between isomorphic objects: the different Sylow $p$-subgroups of a finite group, for example.  In such a case, the category-theoretic solution is to work in a different category (called an arrow category) where the objects are now morphisms of the original category (in the example of subgroups of a given group, the objects would be injections of a subgroup into a larger group).  This allows one to describe exactly the difference between the isomorphic objects: they are embedded in a larger group in different ways.  Sure enough, in the arrow category they are no longer isomorphic.  This process also allows one to distinguish, for example, automorphisms of a scheme over the complex numbers that fix the complex numbers, and automorphisms that come from some (usually non-continuous and non-constructible) automorphism of the complex numbers. 
+
+\subsection{Examples of Categories:}
+\begin{enumerate}
+\item Group 
+\item Groupoid
+\item Monoid
+\item Abelian Categories
+\item Category of groups and group homomorphisms
+\item Category of groupoids and groupoid homomorphisms
+\item Category of groups and group homomorphisms
+\item Category of automata and automaton homomorphisms
+\end{enumerate}
+
+\section*{Functors}
+
+It sometimes happens that we construct a mechanism for converting objects from one category into objects of another category.  The simplest is perhaps the forgetful functor that simply ``forgets'' some of the structure on an object: one can convert a group into a set by simply forgetting the group law.  A more interesting example is the fundamental group: it takes topological spaces to groups. In both these cases, we also have a way to convert a morphism of one category into a morphism of another: a group homomorphism is a map of points with some extra properties, and a continuous function takes a path class to a path class in a way that preserves concatenation.   Such a rule we call a \emph{functor}.  There are two different kinds: covariant functors convert arrows $A\to B$ into arrows $F(A)\to F(B)$, while contravariant reverse arrows: $A\to B$ becomes $F(B)\to F(A)$.  The fundamental theorem of Galois theory describes a contravariant functor from extensions of a given field to subgroups of its Galois group.
+
+Category theory gives us tools for analyzing such functors: we can talk about natural transformations of functors, and in fact we can use these to assemble the category of functors from one category to another into a category, provided certain set-theoretic constraints are met (universes are a tool used to address these set-theoretic difficulties).
+
+Under certain circumstances, a functor will be one-to-one and onto on isomorphism classes and morphisms.  Such a functor is called an equivalence of categories and is very powerful: it allows one to completely convert a problem in one category into a problem in another category. The fundamental theorem of Galois theory is that the functor from a subgroup of the Galois group of a field to its fixed field is an equivalence of categories. Since it is a contravariant functor, it reverses arrows. 
+
+Analyzing functors is valuable since, like the fundamental group, many of the invariants of an object are actually functors.  Since categories are able to deal with isomorphisms and functors are compatible with the category structure, functors are generally a good way of attacking the problem ``are these two objects isomorphic?''.  One finds a functor from the category the objects are in to some simpler category; if the images are not isomorphic, then the objects were not isomorphic.  Many such functors come from homological algebra.
+
+\subsection{Limits and Colimits defined as Functors}
+
+\subsection{Adjoint Functor Pairs}
+For any pair of equivalent categories $A$ and $B$ there is a pair of \PMlinkname{adjoint functors}{AdjointFunctor} 
+$F: A \to B$ (left-adjoint) and $G: B \to A$ (right-adjoint) going in opposite directions between $A$ and $B$ which define the equivalence of the two categories (if it exists). Such adjoint functor pairs play fundamental roles in 
+the theory of categories.
+
+\subsection{Limits and Colimits defined as Functors}
+
+\PMlinkname{Equivalence of Categories}{EquivalenceOfCategories2}
+when it exists is defined by a functor, $E$ with special properties that are completely specified under
+\PMlinkname{`equivalence of categories'}{EquivalenceOfCategories2}.  
+
+\section{Natural Transformations (Functorial Morphisms) and Natural Equivalence}
+If functors provide the means to `map' or compare categories, natural transformations
+are the means for comparing two functors between the same two categories by mapping their actions both on objects and morphisms subject to naturality conditions for the diagrams that link the image objects and morphisms
+of the two functors that are being compared. 
+
+\section{Reversing arrows/Duality}
+
+If $C$ is a category, we can make another category $C^{\operatorname{op}}$, calld the opposite category, by simply formally reversing the direction of the arrows of $C$. This seems unnatural in many cases (for example, in the category of sets, it seems very odd for a function from $A$ to $B$ to be described by an arrow from $B$ to $A$) but does not violate any axioms of category theory. 
+
+The opposite category is useful because one often finds that two concepts (for example, direct product and direct sum) are defined in almost exactly the same way, with the arrows reversed. Noticing this allows one to apply the general category theory describing one to the other with no extra work. Of course, any properties that depend on the particular category in question will differ, but many properties of (for example) the sum and product are independent of the particular category chosen. 
+
+Moreover, especially when dealing with contravariant functors, one often finds oneself dealing with a familiar object with the arrows reversed.  In this situation, the prefix ``co'' is used: a categorical direct sum is also called a categorical direct coproduct.  A nontrivial example of this is the definition of a Hopf algebra: it is a cogroup object in the category of algebras over a field $k$. That is to say, its defining axioms are precisely those of a group object with the arrows reversed. Hopf algebras arise from affine group schemes by way of the contravariant functor taking a $k$-algebra to its prime spectrum.
+
+\section*{Homological algebra}
+
+The fundamental group is an extremely powerful tool for studying topological spaces: it allows relatively straightforward proofs of the hairy ball theorem and several other topological results.  So many mathematicians have looked for generalizations of various sorts.  Tools such as singular homology, de Rham cohomology, cellular homology, sheaf cohomology, \'etale cohomology, and others all address similar problems.  As their names suggest, they use similar techniques at some level.  Describing what that level is and extracting the similarities led to the field of homological algebra.
+
+Central to the field is the notion of an abelian category.  This is a category which satisfies a lengthy list of categorical axioms, which together ensure that it behaves like the category of abelian groups\footnote{In fact, there is a (nontrivial) theorem that asserts that any small abelian category is equivalent to a full subcategory of the category of abelian groups.}: morphisms have kernels and cokernels, finite direct sums exist, and so on.  Within this category, one has the notion of a complex, a sequence of objects with a ``differential'' map.  One can extract the homology of such objects.  This process is exactly what is going on in each of the cases above.
+
+Homological algebra is a very large and important field, which deserves an entry of its own, but the notion of category is essential to its study.
+
+\section*{Categories as objects}
+
+Since category theory is so widely applicable, a large number of tools have been developed for studying categories.  Partially as a result, a number of fields use categories as basic tools.  For example, in geometry, a site is a generalization of a topological space.  One can view a topological space as a category with an object for each open set and an arrow $U\to V$ whenever $U\subseteq V$.  Then presheaves become contravariant functors, and sheaves are presheaves for which a particular diagram commutes.  One can generalize this by allowing other categories than the category of open sets, such as the category of finite coverings of a particular topological space.  Thus every site is a category with some additional properties. 
+
+\section*{Blue sky}
+
+Categories are a useful tool in studying many kinds of objects.  In fact, for some kinds of object, their study becomes easiest when cast entirely in categorical language.  This has led various people to argue that category theory is a more valuable tool for looking at mathematics than set theory; some have continued on to argue that the foundations of mathematics should be shifted from set theory over to category theory.  This is not as large a revolution as it may seem at first, since the foundations of mathematics have already been recast onto an axiomatic foundation within the last two hundred years.
+
+\PMlinkname{Bibliography for Category Theory and Algebraic Topology}{CategoricalOntologyABibliographyOfCategoryTheory}
+%%%%%
+%%%%%

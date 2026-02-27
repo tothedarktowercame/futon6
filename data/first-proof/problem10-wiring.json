@@ -101,10 +101,28 @@
       "parent_post_id": 104
     },
     {
+      "id": "p10-s4-gap",
+      "node_type": "comment",
+      "post_id": 1043,
+      "body_text": "Gap in original preconditioner (P10-C001): P_old = H⊗K_tau has K_tau where A has K_tau². Even when D=cI: A-P = c·Z^TZ⊗K_tau(K_tau-I). Empirical δ in [5.2, 22.7] — spectral equivalence fails.",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 104
+    },
+    {
+      "id": "p10-s4-improved",
+      "node_type": "answer",
+      "post_id": 108,
+      "body_text": "Improved preconditioner (P10-C002): P_new = c(G⊗K_tau²) + λ(I_r⊗K_tau). Exactly matches A(D=cI). Invertible via eigendecomposition of K_tau: n blocks of r×r at O(n²r + nr²). δ < 1 under uniform sampling (mean 0.89, 18/22 configs).",
+      "score": 0,
+      "creation_date": "2026-02-13",
+      "parent_post_id": 10
+    },
+    {
       "id": "p10-s5",
       "node_type": "answer",
       "post_id": 105,
-      "body_text": "Convergence: PCG has t = O(√κ log(1/ε)) with κ = cond(P^{-1/2} A P^{-1/2}). Sufficient conditions: δ = O(√(n log n / q)) via Tropp 2011 Thm 1.6 matrix concentration on SS'-cI. Requires q >> n log n.",
+      "body_text": "Convergence: PCG has t = O(√κ log(1/ε)) with κ = cond(P^{-1/2} A P^{-1/2}). With P_old: δ >> 1 (fails). With P_new: δ < 1 under uniform sampling (mean 0.89). Concentration via Tropp 2011 Thm 1.6 on D-cI gives δ = O(√(n log n / q)) for sufficient q. Adversarial sampling caveat: δ ∈ [1.4, 2.5].",
       "score": 0,
       "creation_date": "2026-02-11",
       "parent_post_id": 10
@@ -214,11 +232,39 @@
       "detection": "structural"
     },
     {
+      "source": "p10-s4-gap",
+      "target": "p10-s4",
+      "edge_type": "challenge",
+      "evidence": "Original preconditioner has K_tau where A has K_tau²; δ in [5.2, 22.7]",
+      "detection": "numerical"
+    },
+    {
+      "source": "p10-s4-improved",
+      "target": "p10-s4-gap",
+      "edge_type": "reform",
+      "evidence": "Improved P_new uses K_tau² to match system; δ < 1 under uniform sampling",
+      "detection": "numerical"
+    },
+    {
+      "source": "p10-s4-improved",
+      "target": "p10-s4",
+      "edge_type": "reform",
+      "evidence": "Replaces P_old with P_new = c(G⊗K_tau²) + λ(I_r⊗K_tau); same cost, better δ",
+      "detection": "numerical"
+    },
+    {
+      "source": "p10-s5",
+      "target": "p10-s4-improved",
+      "edge_type": "assert",
+      "evidence": "Spectral equivalence with P_new: δ < 1 under uniform sampling, giving κ = O(1)",
+      "detection": "numerical"
+    },
+    {
       "source": "p10-s5",
       "target": "p10-s4",
-      "edge_type": "assert",
-      "evidence": "Spectral equivalence bounds κ(P⁻¹A), giving PCG rate O(√κ log(1/ε))",
-      "detection": "structural"
+      "edge_type": "challenge",
+      "evidence": "Original spectral equivalence claim fails: δ >> 1 with P_old (P10-C001)",
+      "detection": "numerical"
     },
     {
       "source": "p10-s6",
@@ -770,19 +816,84 @@
         "reference",
         "structural"
       ]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-020",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        { "role": "source", "ident": "p10-s4-gap", "node_type": "comment" },
+        { "role": "target", "ident": "p10-s4", "node_type": "answer" }
+      ],
+      "hx/content": {
+        "evidence": "Original preconditioner has K_tau where A has K_tau²; δ in [5.2, 22.7]",
+        "detection": "numerical"
+      },
+      "hx/labels": ["thread", "challenge", "numerical"]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-021",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        { "role": "source", "ident": "p10-s4-improved", "node_type": "answer" },
+        { "role": "target", "ident": "p10-s4-gap", "node_type": "comment" }
+      ],
+      "hx/content": {
+        "evidence": "Improved P_new uses K_tau² to match system; δ < 1 under uniform sampling",
+        "detection": "numerical"
+      },
+      "hx/labels": ["thread", "reform", "numerical"]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-022",
+      "hx/type": "thread/reform",
+      "hx/ends": [
+        { "role": "source", "ident": "p10-s4-improved", "node_type": "answer" },
+        { "role": "target", "ident": "p10-s4", "node_type": "answer" }
+      ],
+      "hx/content": {
+        "evidence": "Replaces P_old with P_new = c(G⊗K_tau²) + λ(I_r⊗K_tau); same cost, better δ",
+        "detection": "numerical"
+      },
+      "hx/labels": ["thread", "reform", "numerical"]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-023",
+      "hx/type": "thread/assert",
+      "hx/ends": [
+        { "role": "source", "ident": "p10-s5", "node_type": "answer" },
+        { "role": "target", "ident": "p10-s4-improved", "node_type": "answer" }
+      ],
+      "hx/content": {
+        "evidence": "Spectral equivalence with P_new: δ < 1 under uniform sampling, giving κ = O(1)",
+        "detection": "numerical"
+      },
+      "hx/labels": ["thread", "assert", "numerical"]
+    },
+    {
+      "hx/id": "first-proof-p10:edge-024",
+      "hx/type": "thread/challenge",
+      "hx/ends": [
+        { "role": "source", "ident": "p10-s5", "node_type": "answer" },
+        { "role": "target", "ident": "p10-s4", "node_type": "answer" }
+      ],
+      "hx/content": {
+        "evidence": "Original spectral equivalence claim fails: δ >> 1 with P_old (P10-C001)",
+        "detection": "numerical"
+      },
+      "hx/labels": ["thread", "challenge", "numerical"]
     }
   ],
   "stats": {
-    "n_nodes": 14,
-    "n_edges": 20,
+    "n_nodes": 16,
+    "n_edges": 24,
     "node_types": {
       "question": 1,
-      "answer": 7,
-      "comment": 6
+      "answer": 8,
+      "comment": 7
     },
     "edge_types": {
-      "challenge": 1,
-      "reform": 2,
+      "challenge": 3,
+      "reform": 4,
       "clarify": 5,
       "assert": 4,
       "agree": 1,
@@ -791,7 +902,8 @@
     },
     "detection_types": {
       "structural": 19,
-      "classical": 1
+      "classical": 1,
+      "numerical": 5
     }
   }
 }

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<title>First Proof</title>
+<!--Generated on Thu Feb  5 01:36:23 2026 by LaTeXML (version 0.8.8) http://dlmf.nist.gov/LaTeXML/.-->
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<link href="/static/browse/0.3.4/css/arxiv-html-papers-20250916.css" rel="stylesheet" type="text/css"/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
+<script src="/static/browse/0.3.4/js/addons_new.js"></script>
+<script src="/static/browse/0.3.4/js/feedbackOverlay.js"></script>
+<base href="/html/2602.05192v1/"/></head>
+<body>
+<nav class="ltx_page_navbar">
+<nav class="ltx_TOC">
+<ol class="ltx_toclist">
+<li class="ltx_tocentry ltx_tocentry_section"><a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S1" title="In First Proof"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">1 </span>Introduction</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section"><a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S2" title="In First Proof"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">2 </span>The questions</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section"><a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S3" title="In First Proof"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">3 </span>Related work</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section"><a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S4" title="In First Proof"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">4 </span>Implementation details</span></a></li>
+<li class="ltx_tocentry ltx_tocentry_section"><a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S5" title="In First Proof"><span class="ltx_text ltx_ref_title"><span class="ltx_tag ltx_tag_ref">5 </span>Discussion</span></a></li>
+</ol></nav>
+</nav>
+<div class="ltx_page_main">
+<div class="ltx_page_content">
+<article class="ltx_document ltx_authors_1line">
+<h1 class="ltx_title ltx_title_document">First Proof</h1>
+<div class="ltx_authors">
+<span class="ltx_creator ltx_role_author">
+<span class="ltx_personname"> Mohammed Abouzaid<span class="ltx_note ltx_role_footnote" id="footnote1"><sup class="ltx_note_mark">1</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">1</sup><span class="ltx_tag ltx_tag_note">1</span>🖂 Corresponding author, Email: abouzaid@stanford.edu</span></span></span>
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id1.1.id1">Stanford University</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Andrew J. Blumberg
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id2.1.id1">Columbia University</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Martin Hairer 
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id3.1.id1">EPFL and Imperial</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Joe Kileel
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id4.1.id1">University of Texas at Austin</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Tamara G. Kolda 
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id5.1.id1">MathSci.ai</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Paul D. Nelson
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id6.1.id1">Aarhus University</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Daniel Spielman 
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id7.1.id1">Yale University</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Nikhil Srivastava<span class="ltx_note ltx_role_footnote" id="footnote2"><sup class="ltx_note_mark">2</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">2</sup><span class="ltx_tag ltx_tag_note">2</span>🖂 Corresponding author, Email: nikhil@math.berkeley.edu</span></span></span>
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id8.1.id1">University of California, Berkeley</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Rachel Ward<span class="ltx_note ltx_role_footnote" id="footnote3"><sup class="ltx_note_mark">3</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">3</sup><span class="ltx_tag ltx_tag_note">3</span>🖂 Corresponding author, Email: rward@math.utexas.edu</span></span></span>
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id9.1.id1">University of Texas at Austin</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Shmuel Weinberger
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id10.1.id1">University of Chicago</span>
+</span></span>
+<span class="ltx_author_before">  </span><span class="ltx_creator ltx_role_author">
+<span class="ltx_personname">Lauren Williams<span class="ltx_note ltx_role_footnote" id="footnote4"><sup class="ltx_note_mark">4</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">4</sup><span class="ltx_tag ltx_tag_note">4</span>🖂 Corresponding author, Email: williams@math.harvard.edu</span></span></span>
+<br class="ltx_break"/><span class="ltx_text ltx_font_italic" id="id11.1.id1">Harvard University</span>
+</span></span>
+</div>
+<div class="ltx_abstract">
+<h6 class="ltx_title ltx_title_abstract">Abstract</h6>
+<p class="ltx_p" id="id12.id1">To assess the ability of current AI systems to correctly answer research-level mathematics questions, we share a set of ten math questions which have arisen naturally in the research process of the authors. The questions had not been shared publicly until now; the answers are known to the authors of the questions but will remain encrypted for a short time.</p>
+</div>
+<div class="ltx_pagination ltx_role_newpage"></div>
+<section class="ltx_section" id="S1">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">1 </span>Introduction</h2>
+<div class="ltx_para" id="S1.p1">
+<p class="ltx_p" id="S1.p1.1">In baking, the <span class="ltx_text ltx_font_italic" id="S1.p1.1.1">first proof</span>, or bulk fermentation process, is a crucial step in which one lets the entire batch of dough ferment as one mass, before dividing and shaping it into loaves.</p>
+</div>
+<div class="ltx_para" id="S1.p2">
+<p class="ltx_p" id="S1.p2.1">This manuscript represents our preliminary efforts to come up with an objective and realistic methodology for assessing the capabilities of AI systems to autonomously solve research-level math questions. After letting these ideas ferment in the community, we hope to be able to produce a more structured benchmark in a few months.</p>
+</div>
+<div class="ltx_para" id="S1.p3">
+<p class="ltx_p" id="S1.p3.1">One of our primary goals is to develop a sophisticated understanding of the role that AI tools could play in the workflow of professional mathematicians. While commercial AI systems are undoubtedly already at a level where they are useful tools for mathematicians<span class="ltx_note ltx_role_footnote" id="footnote5"><sup class="ltx_note_mark">5</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">5</sup><span class="ltx_tag ltx_tag_note">5</span>For instance, mathematicians are using AI tools to do literature searches, check manuscripts for errors, write computer code, and bounce ideas.</span></span></span>, <span class="ltx_text ltx_font_bold" id="S1.p3.1.1">it is not yet clear where AI systems stand at solving research-level math questions on their own, without an expert in the loop</span>. At the moment, most math benchmarks assess the performance of AI systems on math contest questions, an artificial domain that does not reflect the practice of creative mathematics by researchers.</p>
+</div>
+<div class="ltx_para" id="S1.p4">
+<p class="ltx_p" id="S1.p4.1">Evaluation of research capabilities is a challenging task. As frontier AI systems are now highly capable of searching the literature and translating mathematical questions from one format to another, it is challenging to disentangle problem-solving capabilities from search capabilities when conducting such an assessment. Our core observation is that an ideal test should involve <span class="ltx_text ltx_font_bold" id="S1.p4.1.1">research math questions which arose naturally in the process of a mathematician’s own research, were subsequently solved by the mathematician, but have not yet been posted to the internet.</span></p>
+</div>
+<div class="ltx_para" id="S1.p5">
+<p class="ltx_p" id="S1.p5.1">Towards this end, we present a diverse set of 10 research-level math questions, drawn from the mathematical fields of algebraic combinatorics, spectral graph theory, algebraic topology, stochastic analysis, symplectic geometry, representation theory, lattices in Lie groups, tensor analysis, and numerical linear algebra, each of which came about naturally in the research process for one of the authors (sometimes together with collaborators). Each question has been solved by the author(s) of the question with a proof that is roughly five pages or less, but the answers are not yet posted to the internet. The page restriction is due to the technical limitations of current publicly available AI systems, and this means that many of the questions on our list are not of sufficient importance to qualify as publishable research on their own, but are smaller components in future publications.</p>
+</div>
+<div class="ltx_para" id="S1.p6">
+<p class="ltx_p" id="S1.p6.1">Most of the questions that we have collected are extracted from lemmas arising in larger works whose main results go beyond what current systems are capable of tackling. Significant effort is required to identify such lemmas as crucial steps in these works.</p>
+</div>
+<div class="ltx_para" id="S1.p7">
+<p class="ltx_p" id="S1.p7.1">Before explaining the nature of our evaluation, we will try to be clear about <span class="ltx_text ltx_font_bold" id="S1.p7.1.1">what math research is</span>. Contrary to the popular conception that research is only about finding solutions to well-specified, age-old problems (e.g., Fermat’s Last Theorem), most of the important parts of modern research involve
+figuring out what the question actually is
+and
+developing frameworks within which it can be answered.
+Perelman’s proof of the Poincaré conjecture was a stunning achievement. But in order for it to be possible, Thurston had to develop a new way of thinking about geometric objects and Hamilton had to invent a new kind of dynamics explaining how such objects change.</p>
+</div>
+<div class="ltx_para" id="S1.p8">
+<p class="ltx_p" id="S1.p8.1">Our ‘first proof’ experiment is focused on the final and most well-specified
+stage of math research, in which the question and frameworks are already
+understood. We do not address the selection of questions to study, the formulation of new definitions, and the development of novel theories.
+We wish to be clear that our choice of emphasis on proving well-formed statements is
+driven by the judgment that this is a first step; evaluation of the performance
+of frontier systems on the higher-level research tasks above is also essential.</p>
+</div>
+<div class="ltx_para" id="S1.p9">
+<p class="ltx_p" id="S1.p9.1">The answers to our set of ten research level math questions have been encrypted and posted to
+<a class="ltx_ref ltx_url ltx_font_typewriter" href="https://1stproof.org" title="">https://1stproof.org</a>.
+The authors will release the answers on February 13, 2026.
+<span class="ltx_text ltx_font_bold" id="S1.p9.1.1">We invite the community to experiment with our ten questions before the answers are released, and to share their results and observations online.</span> Ideally, participants should share a complete transcript of their interaction with an AI system. In this process, we hope to gain insight into questions such as: What is an appropriate prompting strategy? What format should an answer take and how should it be graded? Are there data contamination issues we have missed?
+We hope to use this understanding to design a more formal benchmark. A few months later, we plan to finalize a second set of questions;
+we are open to devising agreements to test
+AI models
+on these questions prior to making them public.</p>
+</div>
+<div class="ltx_para" id="S1.p10">
+<p class="ltx_p" id="S1.p10.1">Unlike other proposed math research benchmarks (see Section <a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S3" title="3 Related work ‣ First Proof"><span class="ltx_text ltx_ref_tag">3</span></a>), our question list should not be considered a benchmark in its current form. For one, our questions are not numerous enough to be considered a benchmark. By construction, producing research-level math questions with answers which have not yet been published, and whose answers are a certain length, requires substantial human effort. A typical mathematician might create and address
+a few such questions a year. Additionally,
+we have not specified a formal grading scheme for answers. While we have found correct answers to each of the questions, correct answers are not always unique — there may be multiple proofs or, alternatively, multiple counterexamples.
+This makes assessment more challenging, as it must at present be done by a human expert.</p>
+</div>
+<div class="ltx_para" id="S1.p11">
+<p class="ltx_p" id="S1.p11.1">Compared to previous assessments of AI systems in completing tasks related to mathematical research (discussed in Section <a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S3" title="3 Related work ‣ First Proof"><span class="ltx_text ltx_ref_tag">3</span></a> below), to the best of our knowledge, ours is the first to simultaneously have all of the following features:</p>
+<ul class="ltx_itemize" id="S1.I1">
+<li class="ltx_item" id="S1.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i1.p1">
+<p class="ltx_p" id="S1.I1.i1.p1.1">The questions are sampled from the true distribution of questions that mathematicians are currently working on. Their answers are proofs, which at present must be graded by humans.</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i2.p1">
+<p class="ltx_p" id="S1.I1.i2.p1.1">The answers have never appeared on the internet, in talks, or in any public forum. This eliminates a substantial data contamination problem.</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i3.p1">
+<p class="ltx_p" id="S1.I1.i3.p1.1">The questions are being made public in this document. This means they cannot be reused in the future, but they can be examined by everyone.</p>
+</div>
+</li>
+<li class="ltx_item" id="S1.I1.i4" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S1.I1.i4.p1">
+<p class="ltx_p" id="S1.I1.i4.p1.1">We allow models unfettered access to outside resources such as Internet searches, bringing them closer to representing real-world assessments.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="ltx_para" id="S1.p12">
+<p class="ltx_p" id="S1.p12.1">We ran
+preliminary tests on many of our ten questions using GPT 5.2 Pro and Gemini 3.0 Deepthink; we briefly discuss our mitigation strategy for data contamination
+in Section <a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S4" title="4 Implementation details ‣ First Proof"><span class="ltx_text ltx_ref_tag">4</span></a>. Our tests indicate that — when the system is given one shot to produce the answer — the best publicly available AI systems struggle to answer many of our questions.
+In the interest of following a clear protocol,
+we chose not to iteratively interact with the systems, or even re-run the queries.
+However, we expect that through such interactions we would
+be able
+to coax the systems to produce better answers. 
+<br class="ltx_break"/></p>
+</div>
+<div class="ltx_para ltx_noindent" id="S1.p13">
+<p class="ltx_p" id="S1.p13.1"><span class="ltx_text ltx_font_bold" id="S1.p13.1.1">Conflicts of interest.</span>
+No funding was received for the design or implementation of this
+project. None of the authors of this report was employed by or consulted with
+AI companies during the project, nor will they do so while contributing to it.
+<br class="ltx_break"/></p>
+</div>
+<div class="ltx_para ltx_noindent" id="S1.p14">
+<p class="ltx_p" id="S1.p14.1"><span class="ltx_text ltx_font_bold" id="S1.p14.1.1">Acknowledgment.</span> We thank the Simons Institute for the Theory of Computing for hosting the organizational meeting of this project in early December 2025, with support from the Director’s Opportunity Fund. PN is supported by a research grant (VIL54509) from VILLUM FONDEN. This statement reflects author support and does not imply sponsor involvement in the benchmark.</p>
+</div>
+</section>
+<section class="ltx_section" id="S2">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">2 </span>The questions</h2>
+<div class="ltx_para" id="S2.p1">
+<ol class="ltx_enumerate" id="S2.I1">
+<li class="ltx_item" id="S2.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">1.</span>
+<div class="ltx_para" id="S2.I1.i1.p1">
+<p class="ltx_p" id="S2.I1.i1.p1.11">Let <math alttext="\mathbb{T}^{3}" class="ltx_Math" display="inline" id="S2.I1.i1.p1.1.m1" intent=":literal"><semantics><msup><mi>𝕋</mi><mn>3</mn></msup><annotation encoding="application/x-tex">\mathbb{T}^{3}</annotation></semantics></math> be the three dimensional unit size torus and let <math alttext="\mu" class="ltx_Math" display="inline" id="S2.I1.i1.p1.2.m2" intent=":literal"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math> be the <math alttext="\Phi^{4}_{3}" class="ltx_Math" display="inline" id="S2.I1.i1.p1.3.m3" intent=":literal"><semantics><msubsup><mi mathvariant="normal">Φ</mi><mn>3</mn><mn>4</mn></msubsup><annotation encoding="application/x-tex">\Phi^{4}_{3}</annotation></semantics></math> measure on the space of distributions <math alttext="\mathcal{D}^{\prime}(\mathbb{T}^{3})" class="ltx_Math" display="inline" id="S2.I1.i1.p1.4.m4" intent=":literal"><semantics><mrow><msup><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo>′</mo></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msup><mi>𝕋</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{D}^{\prime}(\mathbb{T}^{3})</annotation></semantics></math>. Let <math alttext="\psi:\mathbb{T}^{3}\to\mathbb{R}" class="ltx_Math" display="inline" id="S2.I1.i1.p1.5.m5" intent=":literal"><semantics><mrow><mi>ψ</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><msup><mi>𝕋</mi><mn>3</mn></msup><mo stretchy="false">→</mo><mi>ℝ</mi></mrow></mrow><annotation encoding="application/x-tex">\psi:\mathbb{T}^{3}\to\mathbb{R}</annotation></semantics></math> be a smooth function that is not identically zero and let <math alttext="T_{\psi}:\mathcal{D}^{\prime}(\mathbb{T}^{3})\to\mathcal{D}^{\prime}(\mathbb{T}^{3})" class="ltx_Math" display="inline" id="S2.I1.i1.p1.6.m6" intent=":literal"><semantics><mrow><msub><mi>T</mi><mi>ψ</mi></msub><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mrow><msup><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo>′</mo></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msup><mi>𝕋</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">→</mo><mrow><msup><mi class="ltx_font_mathcaligraphic">𝒟</mi><mo>′</mo></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msup><mi>𝕋</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">T_{\psi}:\mathcal{D}^{\prime}(\mathbb{T}^{3})\to\mathcal{D}^{\prime}(\mathbb{T}^{3})</annotation></semantics></math> be the shift map given by <math alttext="T_{\psi}(u)=u+\psi" class="ltx_Math" display="inline" id="S2.I1.i1.p1.7.m7" intent=":literal"><semantics><mrow><mrow><msub><mi>T</mi><mi>ψ</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo></mrow></mrow><mo>=</mo><mrow><mi>u</mi><mo>+</mo><mi>ψ</mi></mrow></mrow><annotation encoding="application/x-tex">T_{\psi}(u)=u+\psi</annotation></semantics></math> (with the usual identification of smooth functions as distributions). Are the measures <math alttext="\mu" class="ltx_Math" display="inline" id="S2.I1.i1.p1.8.m8" intent=":literal"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math> and <math alttext="T_{\psi}^{*}\mu" class="ltx_Math" display="inline" id="S2.I1.i1.p1.9.m9" intent=":literal"><semantics><mrow><msubsup><mi>T</mi><mi>ψ</mi><mo>∗</mo></msubsup><mo lspace="0em" rspace="0em">​</mo><mi>μ</mi></mrow><annotation encoding="application/x-tex">T_{\psi}^{*}\mu</annotation></semantics></math> equivalent? Here, equivalence of measures is in the sense of having the same null sets and <math alttext="T_{\psi}^{*}" class="ltx_Math" display="inline" id="S2.I1.i1.p1.10.m10" intent=":literal"><semantics><msubsup><mi>T</mi><mi>ψ</mi><mo>∗</mo></msubsup><annotation encoding="application/x-tex">T_{\psi}^{*}</annotation></semantics></math> denotes the pushforward under <math alttext="T_{\psi}" class="ltx_Math" display="inline" id="S2.I1.i1.p1.11.m11" intent=":literal"><semantics><msub><mi>T</mi><mi>ψ</mi></msub><annotation encoding="application/x-tex">T_{\psi}</annotation></semantics></math>.</p>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">2.</span>
+<div class="ltx_para" id="S2.I1.i2.p1">
+<p class="ltx_p" id="S2.I1.i2.p1.12">Let <math alttext="F" class="ltx_Math" display="inline" id="S2.I1.i2.p1.1.m1" intent=":literal"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math> be a non-archimedean local field with ring of integers <math alttext="\mathfrak{o}" class="ltx_Math" display="inline" id="S2.I1.i2.p1.2.m2" intent=":literal"><semantics><mi>𝔬</mi><annotation encoding="application/x-tex">\mathfrak{o}</annotation></semantics></math>. Let <math alttext="N_{r}" class="ltx_Math" display="inline" id="S2.I1.i2.p1.3.m3" intent=":literal"><semantics><msub><mi>N</mi><mi>r</mi></msub><annotation encoding="application/x-tex">N_{r}</annotation></semantics></math> denote the subgroup of <math alttext="\mathrm{GL}_{r}(F)" class="ltx_Math" display="inline" id="S2.I1.i2.p1.4.m4" intent=":literal"><semantics><mrow><msub><mi>GL</mi><mi>r</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>F</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathrm{GL}_{r}(F)</annotation></semantics></math> consisting of upper-triangular unipotent elements. Let <math alttext="\psi:F\to\mathbb{C}^{\times}" class="ltx_Math" display="inline" id="S2.I1.i2.p1.5.m5" intent=":literal"><semantics><mrow><mi>ψ</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mi>F</mi><mo stretchy="false">→</mo><msup><mi>ℂ</mi><mo>×</mo></msup></mrow></mrow><annotation encoding="application/x-tex">\psi:F\to\mathbb{C}^{\times}</annotation></semantics></math> be a nontrivial additive character of conductor <math alttext="\mathfrak{o}" class="ltx_Math" display="inline" id="S2.I1.i2.p1.6.m6" intent=":literal"><semantics><mi>𝔬</mi><annotation encoding="application/x-tex">\mathfrak{o}</annotation></semantics></math>, identified in the standard way with a generic character of <math alttext="N_{r}" class="ltx_Math" display="inline" id="S2.I1.i2.p1.7.m7" intent=":literal"><semantics><msub><mi>N</mi><mi>r</mi></msub><annotation encoding="application/x-tex">N_{r}</annotation></semantics></math>.
+Let <math alttext="\Pi" class="ltx_Math" display="inline" id="S2.I1.i2.p1.8.m8" intent=":literal"><semantics><mi mathvariant="normal">Π</mi><annotation encoding="application/x-tex">\Pi</annotation></semantics></math> be a generic irreducible admissible representation of <math alttext="\mathrm{GL}_{n+1}(F)" class="ltx_Math" display="inline" id="S2.I1.i2.p1.9.m9" intent=":literal"><semantics><mrow><msub><mi>GL</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>F</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathrm{GL}_{n+1}(F)</annotation></semantics></math>, realized in its <math alttext="\psi^{-1}" class="ltx_Math" display="inline" id="S2.I1.i2.p1.10.m10" intent=":literal"><semantics><msup><mi>ψ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><annotation encoding="application/x-tex">\psi^{-1}</annotation></semantics></math>-Whittaker model <math alttext="\mathcal{W}(\Pi,\psi^{-1})" class="ltx_Math" display="inline" id="S2.I1.i2.p1.11.m11" intent=":literal"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒲</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">Π</mi><mo>,</mo><msup><mi>ψ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{W}(\Pi,\psi^{-1})</annotation></semantics></math>. Must there exist <math alttext="W\in\mathcal{W}(\Pi,\psi^{-1})" class="ltx_Math" display="inline" id="S2.I1.i2.p1.12.m12" intent=":literal"><semantics><mrow><mi>W</mi><mo>∈</mo><mrow><mi class="ltx_font_mathcaligraphic">𝒲</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">Π</mi><mo>,</mo><msup><mi>ψ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">W\in\mathcal{W}(\Pi,\psi^{-1})</annotation></semantics></math> with the following property?</p>
+</div>
+<div class="ltx_para" id="S2.I1.i2.p2">
+<p class="ltx_p" id="S2.I1.i2.p2.8">Let <math alttext="\pi" class="ltx_Math" display="inline" id="S2.I1.i2.p2.1.m1" intent=":literal"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math> be a generic irreducible admissible representation of <math alttext="\mathrm{GL}_{n}(F)" class="ltx_Math" display="inline" id="S2.I1.i2.p2.2.m2" intent=":literal"><semantics><mrow><msub><mi>GL</mi><mi>n</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>F</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathrm{GL}_{n}(F)</annotation></semantics></math>, realized in its <math alttext="\psi" class="ltx_Math" display="inline" id="S2.I1.i2.p2.3.m3" intent=":literal"><semantics><mi>ψ</mi><annotation encoding="application/x-tex">\psi</annotation></semantics></math>-Whittaker model <math alttext="\mathcal{W}(\pi,\psi)" class="ltx_Math" display="inline" id="S2.I1.i2.p2.4.m4" intent=":literal"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒲</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>π</mi><mo>,</mo><mi>ψ</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{W}(\pi,\psi)</annotation></semantics></math>. Let <math alttext="\mathfrak{q}" class="ltx_Math" display="inline" id="S2.I1.i2.p2.5.m5" intent=":literal"><semantics><mi>𝔮</mi><annotation encoding="application/x-tex">\mathfrak{q}</annotation></semantics></math> denote the conductor ideal of <math alttext="\pi" class="ltx_Math" display="inline" id="S2.I1.i2.p2.6.m6" intent=":literal"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math>, let <math alttext="Q\in F^{\times}" class="ltx_Math" display="inline" id="S2.I1.i2.p2.7.m7" intent=":literal"><semantics><mrow><mi>Q</mi><mo>∈</mo><msup><mi>F</mi><mo>×</mo></msup></mrow><annotation encoding="application/x-tex">Q\in F^{\times}</annotation></semantics></math> be a generator of <math alttext="\mathfrak{q}^{-1}" class="ltx_Math" display="inline" id="S2.I1.i2.p2.8.m8" intent=":literal"><semantics><msup><mi>𝔮</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><annotation encoding="application/x-tex">\mathfrak{q}^{-1}</annotation></semantics></math>, and set</p>
+<table class="ltx_equation ltx_eqn_table" id="S2.Ex1">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="u_{Q}:=I_{n+1}+Q\,E_{n,n+1}\in\mathrm{GL}_{n+1}(F)," class="ltx_Math" display="block" id="S2.Ex1.m1" intent=":literal"><semantics><mrow><mrow><msub><mi>u</mi><mi>Q</mi></msub><mo>:=</mo><mrow><msub><mi>I</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mi>Q</mi><mo lspace="0.170em" rspace="0em">​</mo><msub><mi>E</mi><mrow><mi>n</mi><mo>,</mo><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></mrow></msub></mrow></mrow><mo>∈</mo><mrow><msub><mi>GL</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>F</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">u_{Q}:=I_{n+1}+Q\,E_{n,n+1}\in\mathrm{GL}_{n+1}(F),</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+<p class="ltx_p" id="S2.I1.i2.p2.13">where <math alttext="E_{i,j}" class="ltx_Math" display="inline" id="S2.I1.i2.p2.9.m1" intent=":literal"><semantics><msub><mi>E</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">E_{i,j}</annotation></semantics></math> is the matrix with a <math alttext="1" class="ltx_Math" display="inline" id="S2.I1.i2.p2.10.m2" intent=":literal"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math> in the <math alttext="(i,j)" class="ltx_Math" display="inline" id="S2.I1.i2.p2.11.m3" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(i,j)</annotation></semantics></math>-entry and <math alttext="0" class="ltx_Math" display="inline" id="S2.I1.i2.p2.12.m4" intent=":literal"><mn>0</mn></math> elsewhere. For some <math alttext="V\in\mathcal{W}(\pi,\psi)" class="ltx_Math" display="inline" id="S2.I1.i2.p2.13.m5" intent=":literal"><semantics><mrow><mi>V</mi><mo>∈</mo><mrow><mi class="ltx_font_mathcaligraphic">𝒲</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>π</mi><mo>,</mo><mi>ψ</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">V\in\mathcal{W}(\pi,\psi)</annotation></semantics></math>, the local Rankin–Selberg integral</p>
+<table class="ltx_equation ltx_eqn_table" id="S2.Ex2">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\int_{N_{n}\backslash\mathrm{GL}_{n}(F)}W(\operatorname{diag}(g,1)u_{Q})\,V(g)\,|\det g|^{s-\frac{1}{2}}\,dg" class="ltx_Math" display="block" id="S2.Ex2.m1" intent=":literal"><semantics><mrow><msub><mo>∫</mo><mrow><mrow><msub><mi>N</mi><mi>n</mi></msub><mo lspace="0.222em" rspace="0.222em">\</mo><msub><mi>GL</mi><mi>n</mi></msub></mrow><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>F</mi><mo stretchy="false">)</mo></mrow></mrow></msub><mrow><mi>W</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mrow><mrow><mi>diag</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>g</mi><mo>,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mrow><mo lspace="0em" rspace="0em">​</mo><msub><mi>u</mi><mi>Q</mi></msub></mrow><mo stretchy="false">)</mo></mrow><mo lspace="0.170em" rspace="0em">​</mo><mi>V</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>g</mi><mo stretchy="false">)</mo></mrow><mo lspace="0.170em" rspace="0em">​</mo><msup><mrow><mo stretchy="false">|</mo><mrow><mo lspace="0em" movablelimits="false" rspace="0.167em">det</mo><mi>g</mi></mrow><mo stretchy="false">|</mo></mrow><mrow><mi>s</mi><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo rspace="0em">𝑑</mo><mi>g</mi></mrow></mrow></mrow><annotation encoding="application/x-tex">\int_{N_{n}\backslash\mathrm{GL}_{n}(F)}W(\operatorname{diag}(g,1)u_{Q})\,V(g)\,|\det g|^{s-\frac{1}{2}}\,dg</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+<p class="ltx_p" id="S2.I1.i2.p2.14">is finite and nonzero for all <math alttext="s\in\mathbb{C}" class="ltx_Math" display="inline" id="S2.I1.i2.p2.14.m1" intent=":literal"><semantics><mrow><mi>s</mi><mo>∈</mo><mi>ℂ</mi></mrow><annotation encoding="application/x-tex">s\in\mathbb{C}</annotation></semantics></math>.</p>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">3.</span>
+<div class="ltx_para" id="S2.I1.i3.p1">
+<p class="ltx_p" id="S2.I1.i3.p1.5">Let <math alttext="\lambda=(\lambda_{1}&gt;\dots&gt;\lambda_{n}\geq 0)" class="ltx_Math" display="inline" id="S2.I1.i3.p1.1.m1" intent=":literal"><semantics><mrow><mi>λ</mi><mo>=</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>λ</mi><mn>1</mn></msub><mo>&gt;</mo><mi mathvariant="normal">⋯</mi><mo>&gt;</mo><msub><mi>λ</mi><mi>n</mi></msub><mo>≥</mo><mn>0</mn></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">\lambda=(\lambda_{1}&gt;\dots&gt;\lambda_{n}\geq 0)</annotation></semantics></math> be a partition with distinct parts. Assume moreover that
+<math alttext="\lambda" class="ltx_Math" display="inline" id="S2.I1.i3.p1.2.m2" intent=":literal"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math> is <span class="ltx_text ltx_font_italic" id="S2.I1.i3.p1.5.1">restricted</span>, in the sense that it has a unique part of size <math alttext="0" class="ltx_Math" display="inline" id="S2.I1.i3.p1.3.m3" intent=":literal"><mn>0</mn></math> and no part of size <math alttext="1" class="ltx_Math" display="inline" id="S2.I1.i3.p1.4.m4" intent=":literal"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>.
+Does there exist a nontrivial Markov chain on <math alttext="S_{n}(\lambda)" class="ltx_Math" display="inline" id="S2.I1.i3.p1.5.m5" intent=":literal"><semantics><mrow><msub><mi>S</mi><mi>n</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>λ</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">S_{n}(\lambda)</annotation></semantics></math> whose stationary distribution is given by</p>
+<table class="ltx_equation ltx_eqn_table" id="S2.Ex3">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\frac{F^{*}_{\mu}(x_{1},\dots,x_{n};q=1,t)}{P^{*}_{\lambda}(x_{1},\dots,x_{n};q=1,t)}\text{ for }\mu\in S_{n}(\lambda)" class="ltx_math_unparsed" display="block" id="S2.Ex3.m1" intent=":literal"><semantics><mrow><mrow><mfrac><mrow><msubsup><mi>F</mi><mi>μ</mi><mo>∗</mo></msubsup><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>x</mi><mi>n</mi></msub><mo>;</mo><mi>q</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mrow><mrow><msubsup><mi>P</mi><mi>λ</mi><mo>∗</mo></msubsup><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>x</mi><mi>n</mi></msub><mo>;</mo><mi>q</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mrow></mfrac><mo lspace="0em" rspace="0em">​</mo><mtext> for </mtext><mo lspace="0em" rspace="0em">​</mo><mi>μ</mi></mrow><mo>∈</mo><mrow><msub><mi>S</mi><mi>n</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>λ</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\frac{F^{*}_{\mu}(x_{1},\dots,x_{n};q=1,t)}{P^{*}_{\lambda}(x_{1},\dots,x_{n};q=1,t)}\text{ for }\mu\in S_{n}(\lambda)</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+<p class="ltx_p" id="S2.I1.i3.p1.8">where <math alttext="F^{*}_{\mu}(x_{1},\dots,x_{n};q,t)" class="ltx_Math" display="inline" id="S2.I1.i3.p1.6.m1" intent=":literal"><semantics><mrow><msubsup><mi>F</mi><mi>μ</mi><mo>∗</mo></msubsup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>x</mi><mi>n</mi></msub><mo>;</mo><mi>q</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">F^{*}_{\mu}(x_{1},\dots,x_{n};q,t)</annotation></semantics></math> and
+<math alttext="P^{*}_{\lambda}(x_{1},\dots,x_{n};q,t)" class="ltx_Math" display="inline" id="S2.I1.i3.p1.7.m2" intent=":literal"><semantics><mrow><msubsup><mi>P</mi><mi>λ</mi><mo>∗</mo></msubsup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>x</mi><mi>n</mi></msub><mo>;</mo><mi>q</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">P^{*}_{\lambda}(x_{1},\dots,x_{n};q,t)</annotation></semantics></math> are the
+interpolation ASEP polynomial and interpolation Macdonald polynomial,
+respectively? If so, prove that the Markov chain you construct has the
+desired stationary distribution. By “nontrivial” we mean that the
+transition probabilities of the Markov chain should not be described
+using the polynomials <math alttext="F_{\mu}^{*}(x_{1},\dots,x_{n};q,t)" class="ltx_Math" display="inline" id="S2.I1.i3.p1.8.m3" intent=":literal"><semantics><mrow><msubsup><mi>F</mi><mi>μ</mi><mo>∗</mo></msubsup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>x</mi><mi>n</mi></msub><mo>;</mo><mi>q</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">F_{\mu}^{*}(x_{1},\dots,x_{n};q,t)</annotation></semantics></math>.</p>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i4" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">4.</span>
+<div class="ltx_para" id="S2.I1.i4.p1">
+<p class="ltx_p" id="S2.I1.i4.p1.3">Let <math alttext="p(x)" class="ltx_Math" display="inline" id="S2.I1.i4.p1.1.m1" intent=":literal"><semantics><mrow><mi>p</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(x)</annotation></semantics></math> and <math alttext="q(x)" class="ltx_Math" display="inline" id="S2.I1.i4.p1.2.m2" intent=":literal"><semantics><mrow><mi>q</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">q(x)</annotation></semantics></math> be two monic polynomials of degree <math alttext="n" class="ltx_Math" display="inline" id="S2.I1.i4.p1.3.m3" intent=":literal"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>:</p>
+<table class="ltx_equation ltx_eqn_table" id="S2.Ex4">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="p(x)=\sum_{k=0}^{n}a_{k}x^{n-k}\quad\text{and}\quad q(x)=\sum_{k=0}^{n}b_{k}x^{n-k}" class="ltx_Math" display="block" id="S2.Ex4.m1" intent=":literal"><semantics><mrow><mrow><mrow><mi>p</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mi>n</mi></munderover><mrow><msub><mi>a</mi><mi>k</mi></msub><mo lspace="0em" rspace="0em">​</mo><msup><mi>x</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></msup></mrow></mrow><mspace style="width:1em;" width="1em"></mspace><mtext>and</mtext></mrow></mrow><mspace style="width:1em;" width="1em"></mspace><mrow><mrow><mi>q</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mi>n</mi></munderover><mrow><msub><mi>b</mi><mi>k</mi></msub><mo lspace="0em" rspace="0em">​</mo><msup><mi>x</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></msup></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">p(x)=\sum_{k=0}^{n}a_{k}x^{n-k}\quad\text{and}\quad q(x)=\sum_{k=0}^{n}b_{k}x^{n-k}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+<p class="ltx_p" id="S2.I1.i4.p1.5">where <math alttext="a_{0}=b_{0}=1" class="ltx_Math" display="inline" id="S2.I1.i4.p1.4.m1" intent=":literal"><semantics><mrow><msub><mi>a</mi><mn>0</mn></msub><mo>=</mo><msub><mi>b</mi><mn>0</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a_{0}=b_{0}=1</annotation></semantics></math>. Define <math alttext="p\boxplus_{n}q(x)" class="ltx_Math" display="inline" id="S2.I1.i4.p1.5.m2" intent=":literal"><semantics><mrow><mi>p</mi><msub><mo>⊞</mo><mi>n</mi></msub><mrow><mi>q</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">p\boxplus_{n}q(x)</annotation></semantics></math> to be the polynomial</p>
+<table class="ltx_equation ltx_eqn_table" id="S2.Ex5">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="(p\boxplus_{n}q)(x)=\sum_{k=0}^{n}c_{k}x^{n-k}" class="ltx_Math" display="block" id="S2.Ex5.m1" intent=":literal"><semantics><mrow><mrow><mrow><mo stretchy="false">(</mo><mrow><mi>p</mi><msub><mo>⊞</mo><mi>n</mi></msub><mi>q</mi></mrow><mo stretchy="false">)</mo></mrow><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mi>n</mi></munderover><mrow><msub><mi>c</mi><mi>k</mi></msub><mo lspace="0em" rspace="0em">​</mo><msup><mi>x</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></msup></mrow></mrow></mrow><annotation encoding="application/x-tex">(p\boxplus_{n}q)(x)=\sum_{k=0}^{n}c_{k}x^{n-k}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+<p class="ltx_p" id="S2.I1.i4.p1.6">where the coefficients <math alttext="c_{k}" class="ltx_Math" display="inline" id="S2.I1.i4.p1.6.m1" intent=":literal"><semantics><msub><mi>c</mi><mi>k</mi></msub><annotation encoding="application/x-tex">c_{k}</annotation></semantics></math> are given by the formula:</p>
+<table class="ltx_equation ltx_eqn_table" id="S2.Ex6">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="c_{k}=\sum_{i+j=k}\frac{(n-i)!(n-j)!}{n!(n-k)!}a_{i}b_{j}" class="ltx_Math" display="block" id="S2.Ex6.m1" intent=":literal"><semantics><mrow><msub><mi>c</mi><mi>k</mi></msub><mo rspace="0.111em">=</mo><mrow><munder><mo movablelimits="false">∑</mo><mrow><mrow><mi>i</mi><mo>+</mo><mi>j</mi></mrow><mo>=</mo><mi>k</mi></mrow></munder><mrow><mfrac><mrow><mrow><mrow><mo stretchy="false">(</mo><mrow><mi>n</mi><mo>−</mo><mi>i</mi></mrow><mo stretchy="false">)</mo></mrow><mo>!</mo></mrow><mo lspace="0em" rspace="0em">​</mo><mrow><mrow><mo stretchy="false">(</mo><mrow><mi>n</mi><mo>−</mo><mi>j</mi></mrow><mo stretchy="false">)</mo></mrow><mo>!</mo></mrow></mrow><mrow><mrow><mi>n</mi><mo>!</mo></mrow><mo lspace="0em" rspace="0em">​</mo><mrow><mrow><mo stretchy="false">(</mo><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow><mo stretchy="false">)</mo></mrow><mo>!</mo></mrow></mrow></mfrac><mo lspace="0em" rspace="0em">​</mo><msub><mi>a</mi><mi>i</mi></msub><mo lspace="0em" rspace="0em">​</mo><msub><mi>b</mi><mi>j</mi></msub></mrow></mrow></mrow><annotation encoding="application/x-tex">c_{k}=\sum_{i+j=k}\frac{(n-i)!(n-j)!}{n!(n-k)!}a_{i}b_{j}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+<p class="ltx_p" id="S2.I1.i4.p1.8">for <math alttext="k=0,1,\dots,n" class="ltx_Math" display="inline" id="S2.I1.i4.p1.7.m1" intent=":literal"><semantics><mrow><mi>k</mi><mo>=</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><mi>n</mi></mrow></mrow><annotation encoding="application/x-tex">k=0,1,\dots,n</annotation></semantics></math>.
+For a monic polynomial <math alttext="p(x)=\prod_{i\leq n}(x-\lambda_{i})" class="ltx_Math" display="inline" id="S2.I1.i4.p1.8.m2" intent=":literal"><semantics><mrow><mrow><mi>p</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">=</mo><mrow><msub><mo rspace="0em">∏</mo><mrow><mi>i</mi><mo>≤</mo><mi>n</mi></mrow></msub><mrow><mo stretchy="false">(</mo><mrow><mi>x</mi><mo>−</mo><msub><mi>λ</mi><mi>i</mi></msub></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">p(x)=\prod_{i\leq n}(x-\lambda_{i})</annotation></semantics></math>, define</p>
+<table class="ltx_equation ltx_eqn_table" id="S2.Ex7">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\Phi_{n}(p):=\sum_{i\leq n}(\sum_{j\neq i}\frac{1}{\lambda_{i}-\lambda_{j}})^{2}" class="ltx_Math" display="block" id="S2.Ex7.m1" intent=":literal"><semantics><mrow><mrow><msub><mi mathvariant="normal">Φ</mi><mi>n</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo></mrow></mrow><mo rspace="0.111em">:=</mo><mrow><munder><mo movablelimits="false" rspace="0em">∑</mo><mrow><mi>i</mi><mo>≤</mo><mi>n</mi></mrow></munder><msup><mrow><mo stretchy="false">(</mo><mrow><munder><mo lspace="0em" movablelimits="false">∑</mo><mrow><mi>j</mi><mo>≠</mo><mi>i</mi></mrow></munder><mfrac><mn>1</mn><mrow><msub><mi>λ</mi><mi>i</mi></msub><mo>−</mo><msub><mi>λ</mi><mi>j</mi></msub></mrow></mfrac></mrow><mo stretchy="false">)</mo></mrow><mn>2</mn></msup></mrow></mrow><annotation encoding="application/x-tex">\Phi_{n}(p):=\sum_{i\leq n}(\sum_{j\neq i}\frac{1}{\lambda_{i}-\lambda_{j}})^{2}</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+<p class="ltx_p" id="S2.I1.i4.p1.13">and <math alttext="\Phi_{n}(p):=\infty" class="ltx_Math" display="inline" id="S2.I1.i4.p1.9.m1" intent=":literal"><semantics><mrow><mrow><msub><mi mathvariant="normal">Φ</mi><mi>n</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo></mrow></mrow><mo>:=</mo><mi mathvariant="normal">∞</mi></mrow><annotation encoding="application/x-tex">\Phi_{n}(p):=\infty</annotation></semantics></math> if <math alttext="p" class="ltx_Math" display="inline" id="S2.I1.i4.p1.10.m2" intent=":literal"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math> has a multiple root.
+Is it true that if <math alttext="p(x)" class="ltx_Math" display="inline" id="S2.I1.i4.p1.11.m3" intent=":literal"><semantics><mrow><mi>p</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(x)</annotation></semantics></math> and <math alttext="q(x)" class="ltx_Math" display="inline" id="S2.I1.i4.p1.12.m4" intent=":literal"><semantics><mrow><mi>q</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">q(x)</annotation></semantics></math> are monic real-rooted polynomials of
+degree <math alttext="n" class="ltx_Math" display="inline" id="S2.I1.i4.p1.13.m5" intent=":literal"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>, then</p>
+<table class="ltx_equation ltx_eqn_table" id="S2.Ex8">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\frac{1}{\Phi_{n}(p\boxplus_{n}q)}\geq\frac{1}{\Phi_{n}(p)}+\frac{1}{\Phi_{n}(q)}?" class="ltx_Math" display="block" id="S2.Ex8.m1" intent=":literal"><semantics><mrow><mfrac><mn>1</mn><mrow><msub><mi mathvariant="normal">Φ</mi><mi>n</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mrow><mi>p</mi><msub><mo>⊞</mo><mi>n</mi></msub><mi>q</mi></mrow><mo stretchy="false">)</mo></mrow></mrow></mfrac><mo>≥</mo><mrow><mfrac><mn>1</mn><mrow><msub><mi mathvariant="normal">Φ</mi><mi>n</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo></mrow></mrow></mfrac><mo>+</mo><mrow><mfrac><mn>1</mn><mrow><msub><mi mathvariant="normal">Φ</mi><mi>n</mi></msub><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow></mrow></mfrac><mo lspace="0em" rspace="0em">​</mo><mi mathvariant="normal">?</mi></mrow></mrow></mrow><annotation encoding="application/x-tex">\frac{1}{\Phi_{n}(p\boxplus_{n}q)}\geq\frac{1}{\Phi_{n}(p)}+\frac{1}{\Phi_{n}(q)}?</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i5" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">5.</span>
+<div class="ltx_para" id="S2.I1.i5.p1">
+<p class="ltx_p" id="S2.I1.i5.p1.7">Fix a finite group <math alttext="G" class="ltx_Math" display="inline" id="S2.I1.i5.p1.1.m1" intent=":literal"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>. Let <math alttext="{\catsymbfont{O}}" class="ltx_Math" display="inline" id="S2.I1.i5.p1.2.m2" intent=":literal"><semantics><mi mathvariant="normal">O</mi><annotation encoding="application/x-tex">{\catsymbfont{O}}</annotation></semantics></math> denote an incomplete transfer
+system associated to an <math alttext="N_{\infty}" class="ltx_Math" display="inline" id="S2.I1.i5.p1.3.m3" intent=":literal"><semantics><msub><mi>N</mi><mi mathvariant="normal">∞</mi></msub><annotation encoding="application/x-tex">N_{\infty}</annotation></semantics></math> operad. Define the slice
+filtration on the <math alttext="G" class="ltx_Math" display="inline" id="S2.I1.i5.p1.4.m4" intent=":literal"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>-equivariant stable category adapted to <math alttext="{\catsymbfont{O}}" class="ltx_Math" display="inline" id="S2.I1.i5.p1.5.m5" intent=":literal"><semantics><mi mathvariant="normal">O</mi><annotation encoding="application/x-tex">{\catsymbfont{O}}</annotation></semantics></math> and
+state and prove a characterization of the <math alttext="{\catsymbfont{O}}" class="ltx_Math" display="inline" id="S2.I1.i5.p1.6.m6" intent=":literal"><semantics><mi mathvariant="normal">O</mi><annotation encoding="application/x-tex">{\catsymbfont{O}}</annotation></semantics></math>-slice connectivity of
+a connective <math alttext="G" class="ltx_Math" display="inline" id="S2.I1.i5.p1.7.m7" intent=":literal"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>-spectrum in terms of the geometric fixed points.</p>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i6" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">6.</span>
+<div class="ltx_para" id="S2.I1.i6.p1">
+<p class="ltx_p" id="S2.I1.i6.p1.19">For a graph <math alttext="G=(V,E)" class="ltx_Math" display="inline" id="S2.I1.i6.p1.1.m1" intent=":literal"><semantics><mrow><mi>G</mi><mo>=</mo><mrow><mo stretchy="false">(</mo><mi>V</mi><mo>,</mo><mi>E</mi><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">G=(V,E)</annotation></semantics></math>, let <math alttext="G_{S}=(V,E(S,S))" class="ltx_Math" display="inline" id="S2.I1.i6.p1.2.m2" intent=":literal"><semantics><mrow><msub><mi>G</mi><mi>S</mi></msub><mo>=</mo><mrow><mo stretchy="false">(</mo><mi>V</mi><mo>,</mo><mrow><mi>E</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>S</mi><mo>,</mo><mi>S</mi><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">G_{S}=(V,E(S,S))</annotation></semantics></math> denote the graph with the same vertex set,
+but only the edges between vertices in <math alttext="S" class="ltx_Math" display="inline" id="S2.I1.i6.p1.3.m3" intent=":literal"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>. Let <math alttext="L" class="ltx_Math" display="inline" id="S2.I1.i6.p1.4.m4" intent=":literal"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math> be the Laplacian matrix of <math alttext="G" class="ltx_Math" display="inline" id="S2.I1.i6.p1.5.m5" intent=":literal"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math> and let <math alttext="L_{S}" class="ltx_Math" display="inline" id="S2.I1.i6.p1.6.m6" intent=":literal"><semantics><msub><mi>L</mi><mi>S</mi></msub><annotation encoding="application/x-tex">L_{S}</annotation></semantics></math> be the Laplacian of <math alttext="G_{S}" class="ltx_Math" display="inline" id="S2.I1.i6.p1.7.m7" intent=":literal"><semantics><msub><mi>G</mi><mi>S</mi></msub><annotation encoding="application/x-tex">G_{S}</annotation></semantics></math>.
+I say that a set of vertices <math alttext="S" class="ltx_Math" display="inline" id="S2.I1.i6.p1.8.m8" intent=":literal"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math> is <math alttext="\epsilon" class="ltx_Math" display="inline" id="S2.I1.i6.p1.9.m9" intent=":literal"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>-light if the matrix <math alttext="\epsilon L-L_{S}" class="ltx_Math" display="inline" id="S2.I1.i6.p1.10.m10" intent=":literal"><semantics><mrow><mrow><mi>ϵ</mi><mo lspace="0em" rspace="0em">​</mo><mi>L</mi></mrow><mo>−</mo><msub><mi>L</mi><mi>S</mi></msub></mrow><annotation encoding="application/x-tex">\epsilon L-L_{S}</annotation></semantics></math> is positive semidefinite.
+Does there exist a constant <math alttext="c&gt;0" class="ltx_Math" display="inline" id="S2.I1.i6.p1.11.m11" intent=":literal"><semantics><mrow><mi>c</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">c&gt;0</annotation></semantics></math> so that for every graph <math alttext="G" class="ltx_Math" display="inline" id="S2.I1.i6.p1.12.m12" intent=":literal"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math> and every <math alttext="\epsilon" class="ltx_Math" display="inline" id="S2.I1.i6.p1.13.m13" intent=":literal"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math> between <math alttext="0" class="ltx_Math" display="inline" id="S2.I1.i6.p1.14.m14" intent=":literal"><mn>0</mn></math> and <math alttext="1" class="ltx_Math" display="inline" id="S2.I1.i6.p1.15.m15" intent=":literal"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>, <math alttext="V" class="ltx_Math" display="inline" id="S2.I1.i6.p1.16.m16" intent=":literal"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math> contains an <math alttext="\epsilon" class="ltx_Math" display="inline" id="S2.I1.i6.p1.17.m17" intent=":literal"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>-light subset <math alttext="S" class="ltx_Math" display="inline" id="S2.I1.i6.p1.18.m18" intent=":literal"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math> of size at least <math alttext="c\epsilon|V|" class="ltx_Math" display="inline" id="S2.I1.i6.p1.19.m19" intent=":literal"><semantics><mrow><mi>c</mi><mo lspace="0em" rspace="0em">​</mo><mi>ϵ</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">|</mo><mi>V</mi><mo stretchy="false">|</mo></mrow></mrow><annotation encoding="application/x-tex">c\epsilon|V|</annotation></semantics></math>?</p>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i7" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">7.</span>
+<div class="ltx_para" id="S2.I1.i7.p1">
+<p class="ltx_p" id="S2.I1.i7.p1.4">Suppose that <math alttext="\Gamma" class="ltx_Math" display="inline" id="S2.I1.i7.p1.1.m1" intent=":literal"><semantics><mi mathvariant="normal">Γ</mi><annotation encoding="application/x-tex">\Gamma</annotation></semantics></math> is a uniform lattice in a real semi-simple group, and that <math alttext="\Gamma" class="ltx_Math" display="inline" id="S2.I1.i7.p1.2.m2" intent=":literal"><semantics><mi mathvariant="normal">Γ</mi><annotation encoding="application/x-tex">\Gamma</annotation></semantics></math> contains some 2-torsion. Is it possible for <math alttext="\Gamma" class="ltx_Math" display="inline" id="S2.I1.i7.p1.3.m3" intent=":literal"><semantics><mi mathvariant="normal">Γ</mi><annotation encoding="application/x-tex">\Gamma</annotation></semantics></math> to be the fundamental group of a compact manifold without boundary whose universal cover is acyclic over the rational numbers <math alttext="\mathbb{Q}" class="ltx_Math" display="inline" id="S2.I1.i7.p1.4.m4" intent=":literal"><semantics><mi>ℚ</mi><annotation encoding="application/x-tex">\mathbb{Q}</annotation></semantics></math>?</p>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i8" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">8.</span>
+<div class="ltx_para" id="S2.I1.i8.p1">
+<p class="ltx_p" id="S2.I1.i8.p1.8">A polyhedral Lagrangian surface <math alttext="K" class="ltx_Math" display="inline" id="S2.I1.i8.p1.1.m1" intent=":literal"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> in <math alttext="\mathbb{R}^{4}" class="ltx_Math" display="inline" id="S2.I1.i8.p1.2.m2" intent=":literal"><semantics><msup><mi>ℝ</mi><mn>4</mn></msup><annotation encoding="application/x-tex">\mathbb{R}^{4}</annotation></semantics></math> is a finite polyhedral complex all of whose faces are Lagrangians, and which is a topological submanifold of <math alttext="\mathbb{R}^{4}" class="ltx_Math" display="inline" id="S2.I1.i8.p1.3.m3" intent=":literal"><semantics><msup><mi>ℝ</mi><mn>4</mn></msup><annotation encoding="application/x-tex">\mathbb{R}^{4}</annotation></semantics></math>. A Lagrangian smoothing of <math alttext="K" class="ltx_Math" display="inline" id="S2.I1.i8.p1.4.m4" intent=":literal"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> is a Hamiltonian isotopy <math alttext="K_{t}" class="ltx_Math" display="inline" id="S2.I1.i8.p1.5.m5" intent=":literal"><semantics><msub><mi>K</mi><mi>t</mi></msub><annotation encoding="application/x-tex">K_{t}</annotation></semantics></math> of smooth Lagrangian submanifolds, parameterised by <math alttext="(0,1]" class="ltx_Math" display="inline" id="S2.I1.i8.p1.6.m6" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">(0,1]</annotation></semantics></math>, extending to a topological isotopy, parametrised by <math alttext="[0,1]" class="ltx_Math" display="inline" id="S2.I1.i8.p1.7.m7" intent=":literal"><semantics><mrow><mo stretchy="false">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0,1]</annotation></semantics></math>, with endpoint <math alttext="K_{0}=K" class="ltx_Math" display="inline" id="S2.I1.i8.p1.8.m8" intent=":literal"><semantics><mrow><msub><mi>K</mi><mn>0</mn></msub><mo>=</mo><mi>K</mi></mrow><annotation encoding="application/x-tex">K_{0}=K</annotation></semantics></math>.</p>
+</div>
+<div class="ltx_para" id="S2.I1.i8.p2">
+<p class="ltx_p" id="S2.I1.i8.p2.3">Let <math alttext="K" class="ltx_Math" display="inline" id="S2.I1.i8.p2.1.m1" intent=":literal"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> be a polyhedral Lagrangian surface with the property that exactly <math alttext="4" class="ltx_Math" display="inline" id="S2.I1.i8.p2.2.m2" intent=":literal"><semantics><mn>4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math> faces meet at every vertex. Does <math alttext="K" class="ltx_Math" display="inline" id="S2.I1.i8.p2.3.m3" intent=":literal"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> necessarily have a Lagrangian smoothing?</p>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i9" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">9.</span>
+<div class="ltx_para" id="S2.I1.i9.p1">
+<p class="ltx_p" id="S2.I1.i9.p1.11">Let <math alttext="n\geq 5" class="ltx_Math" display="inline" id="S2.I1.i9.p1.1.m1" intent=":literal"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">n\geq 5</annotation></semantics></math>.
+Let <math alttext="A^{(1)},\ldots,A^{(n)}\in\mathbb{R}^{3\times 4}" class="ltx_Math" display="inline" id="S2.I1.i9.p1.2.m2" intent=":literal"><semantics><mrow><mrow><msup><mi>A</mi><mrow><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msup><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msup><mi>A</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msup></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mn>3</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">A^{(1)},\ldots,A^{(n)}\in\mathbb{R}^{3\times 4}</annotation></semantics></math> be Zariski-generic.
+For <math alttext="\alpha,\beta,\gamma,\delta\in[n]" class="ltx_Math" display="inline" id="S2.I1.i9.p1.3.m3" intent=":literal"><semantics><mrow><mrow><mi>α</mi><mo>,</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mi>δ</mi></mrow><mo>∈</mo><mrow><mo stretchy="false">[</mo><mi>n</mi><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha,\beta,\gamma,\delta\in[n]</annotation></semantics></math>, construct <math alttext="Q^{(\alpha\beta\gamma\delta)}\in\mathbb{R}^{3\times 3\times 3\times 3}" class="ltx_Math" display="inline" id="S2.I1.i9.p1.4.m4" intent=":literal"><semantics><mrow><msup><mi>Q</mi><mrow><mo stretchy="false">(</mo><mrow><mi>α</mi><mo lspace="0em" rspace="0em">​</mo><mi>β</mi><mo lspace="0em" rspace="0em">​</mo><mi>γ</mi><mo lspace="0em" rspace="0em">​</mo><mi>δ</mi></mrow><mo stretchy="false">)</mo></mrow></msup><mo>∈</mo><msup><mi>ℝ</mi><mrow><mn>3</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>3</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>3</mn><mo lspace="0.222em" rspace="0.222em">×</mo><mn>3</mn></mrow></msup></mrow><annotation encoding="application/x-tex">Q^{(\alpha\beta\gamma\delta)}\in\mathbb{R}^{3\times 3\times 3\times 3}</annotation></semantics></math> so that its <math alttext="(i,j,k,\ell)" class="ltx_Math" display="inline" id="S2.I1.i9.p1.5.m5" intent=":literal"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo>,</mo><mi>k</mi><mo>,</mo><mi mathvariant="normal">ℓ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(i,j,k,\ell)</annotation></semantics></math> entry for <math alttext="1\leq i,j,k,\ell\leq 3" class="ltx_Math" display="inline" id="S2.I1.i9.p1.6.m6" intent=":literal"><semantics><mrow><mrow><mn>1</mn><mo>≤</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi><mo>,</mo><mi>k</mi></mrow></mrow><mo>,</mo><mrow><mi mathvariant="normal">ℓ</mi><mo>≤</mo><mn>3</mn></mrow></mrow><annotation encoding="application/x-tex">1\leq i,j,k,\ell\leq 3</annotation></semantics></math> is given by <math alttext="Q^{(\alpha\beta\gamma\delta)}_{ijk\ell}=\det[A^{(\alpha)}(i,:);A^{(\beta)}(j,:);A^{(\gamma)}(k,:);A^{(\delta)}(\ell,:)]" class="ltx_Math" display="inline" id="S2.I1.i9.p1.7.m7" intent=":literal"><semantics><mrow><msubsup><mi>Q</mi><mrow><mi>i</mi><mo lspace="0em" rspace="0em">​</mo><mi>j</mi><mo lspace="0em" rspace="0em">​</mo><mi>k</mi><mo lspace="0em" rspace="0em">​</mo><mi mathvariant="normal">ℓ</mi></mrow><mrow><mo stretchy="false">(</mo><mrow><mi>α</mi><mo lspace="0em" rspace="0em">​</mo><mi>β</mi><mo lspace="0em" rspace="0em">​</mo><mi>γ</mi><mo lspace="0em" rspace="0em">​</mo><mi>δ</mi></mrow><mo stretchy="false">)</mo></mrow></msubsup><mo rspace="0.1389em">=</mo><mrow><mo lspace="0.1389em" rspace="0em">det</mo><mrow><mo stretchy="false">[</mo><mrow><msup><mi>A</mi><mrow><mo stretchy="false">(</mo><mi>α</mi><mo stretchy="false">)</mo></mrow></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>,</mo><mo rspace="0em">:</mo><mo stretchy="false">)</mo></mrow></mrow><mo>;</mo><mrow><msup><mi>A</mi><mrow><mo stretchy="false">(</mo><mi>β</mi><mo stretchy="false">)</mo></mrow></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>j</mi><mo>,</mo><mo rspace="0em">:</mo><mo stretchy="false">)</mo></mrow></mrow><mo>;</mo><mrow><msup><mi>A</mi><mrow><mo stretchy="false">(</mo><mi>γ</mi><mo stretchy="false">)</mo></mrow></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>k</mi><mo>,</mo><mo rspace="0em">:</mo><mo stretchy="false">)</mo></mrow></mrow><mo>;</mo><mrow><msup><mi>A</mi><mrow><mo stretchy="false">(</mo><mi>δ</mi><mo stretchy="false">)</mo></mrow></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">ℓ</mi><mo>,</mo><mo rspace="0em">:</mo><mo stretchy="false">)</mo></mrow></mrow><mo stretchy="false">]</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">Q^{(\alpha\beta\gamma\delta)}_{ijk\ell}=\det[A^{(\alpha)}(i,:);A^{(\beta)}(j,:);A^{(\gamma)}(k,:);A^{(\delta)}(\ell,:)]</annotation></semantics></math>.
+Here <math alttext="A(i,:)" class="ltx_Math" display="inline" id="S2.I1.i9.p1.8.m8" intent=":literal"><semantics><mrow><mi>A</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>,</mo><mo rspace="0em">:</mo><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">A(i,:)</annotation></semantics></math> denotes the <math alttext="i" class="ltx_Math" display="inline" id="S2.I1.i9.p1.9.m9" intent=":literal"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>th row of a matrix <math alttext="A" class="ltx_Math" display="inline" id="S2.I1.i9.p1.10.m10" intent=":literal"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>, and semicolon denotes vertical concatenation.
+We are interested in algebraic relations on the set of tensors <math alttext="\{Q^{(\alpha\beta\gamma\delta)}:\alpha,\beta,\gamma,\delta\in[n]\}" class="ltx_Math" display="inline" id="S2.I1.i9.p1.11.m11" intent=":literal"><semantics><mrow><mo stretchy="false">{</mo><msup><mi>Q</mi><mrow><mo stretchy="false">(</mo><mrow><mi>α</mi><mo lspace="0em" rspace="0em">​</mo><mi>β</mi><mo lspace="0em" rspace="0em">​</mo><mi>γ</mi><mo lspace="0em" rspace="0em">​</mo><mi>δ</mi></mrow><mo stretchy="false">)</mo></mrow></msup><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><mrow><mi>α</mi><mo>,</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mi>δ</mi></mrow><mo>∈</mo><mrow><mo stretchy="false">[</mo><mi>n</mi><mo stretchy="false">]</mo></mrow></mrow><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{Q^{(\alpha\beta\gamma\delta)}:\alpha,\beta,\gamma,\delta\in[n]\}</annotation></semantics></math>.</p>
+</div>
+<div class="ltx_para" id="S2.I1.i9.p2">
+<p class="ltx_p" id="S2.I1.i9.p2.1">More precisely, does there exist a polynomial map <math alttext="\mathbf{F}:\mathbb{R}^{81n^{4}}\rightarrow\mathbb{R}^{N}" class="ltx_Math" display="inline" id="S2.I1.i9.p2.1.m1" intent=":literal"><semantics><mrow><mi>𝐅</mi><mo lspace="0.278em" rspace="0.278em">:</mo><mrow><msup><mi>ℝ</mi><mrow><mn>81</mn><mo lspace="0em" rspace="0em">​</mo><msup><mi>n</mi><mn>4</mn></msup></mrow></msup><mo stretchy="false">→</mo><msup><mi>ℝ</mi><mi>N</mi></msup></mrow></mrow><annotation encoding="application/x-tex">\mathbf{F}:\mathbb{R}^{81n^{4}}\rightarrow\mathbb{R}^{N}</annotation></semantics></math> that satisfies the following three properties?</p>
+</div>
+<div class="ltx_para" id="S2.I1.i9.p3">
+<ul class="ltx_itemize" id="S2.I1.i9.I1">
+<li class="ltx_item" id="S2.I1.i9.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S2.I1.i9.I1.i1.p1">
+<p class="ltx_p" id="S2.I1.i9.I1.i1.p1.2">The map <math alttext="\mathbf{F}" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i1.p1.1.m1" intent=":literal"><semantics><mi>𝐅</mi><annotation encoding="application/x-tex">\mathbf{F}</annotation></semantics></math> does not depend on <math alttext="A^{(1)},\ldots A^{(n)}" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i1.p1.2.m2" intent=":literal"><semantics><mrow><msup><mi>A</mi><mrow><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msup><mo>,</mo><mrow><mi mathvariant="normal">…</mi><mo lspace="0em" rspace="0em">​</mo><msup><mi>A</mi><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msup></mrow></mrow><annotation encoding="application/x-tex">A^{(1)},\ldots A^{(n)}</annotation></semantics></math>.</p>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i9.I1.i2" style="list-style-type:none;padding-top:5.0pt;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S2.I1.i9.I1.i2.p1">
+<p class="ltx_p" id="S2.I1.i9.I1.i2.p1.2">The degrees of the coordinate functions of <math alttext="\mathbf{F}" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i2.p1.1.m1" intent=":literal"><semantics><mi>𝐅</mi><annotation encoding="application/x-tex">\mathbf{F}</annotation></semantics></math> do not depend on <math alttext="n" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i2.p1.2.m2" intent=":literal"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>.</p>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i9.I1.i3" style="list-style-type:none;padding-top:5.0pt;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S2.I1.i9.I1.i3.p1">
+<p class="ltx_p" id="S2.I1.i9.I1.i3.p1.7">Let <math alttext="\lambda\in\mathbb{R}^{n\times n\times n\times n}" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i3.p1.1.m1" intent=":literal"><semantics><mrow><mi>λ</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>n</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>n</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\lambda\in\mathbb{R}^{n\times n\times n\times n}</annotation></semantics></math> satisfy
+<math alttext="\lambda_{\alpha\beta\gamma\delta}\neq 0" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i3.p1.2.m2" intent=":literal"><semantics><mrow><msub><mi>λ</mi><mrow><mi>α</mi><mo lspace="0em" rspace="0em">​</mo><mi>β</mi><mo lspace="0em" rspace="0em">​</mo><mi>γ</mi><mo lspace="0em" rspace="0em">​</mo><mi>δ</mi></mrow></msub><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda_{\alpha\beta\gamma\delta}\neq 0</annotation></semantics></math> for precisely <math alttext="\alpha,\beta,\gamma,\delta\in[n]" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i3.p1.3.m3" intent=":literal"><semantics><mrow><mrow><mi>α</mi><mo>,</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mi>δ</mi></mrow><mo>∈</mo><mrow><mo stretchy="false">[</mo><mi>n</mi><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha,\beta,\gamma,\delta\in[n]</annotation></semantics></math> that are not identical. Then <math alttext="\mathbf{F}(\lambda_{\alpha\beta\gamma\delta}Q^{(\alpha\beta\gamma\delta)}:\alpha,\beta,\gamma,\delta\in[n])=0" class="ltx_math_unparsed" display="inline" id="S2.I1.i9.I1.i3.p1.4.m4" intent=":literal"><semantics><mrow><mi>𝐅</mi><mrow><mo stretchy="false">(</mo><msub><mi>λ</mi><mrow><mi>α</mi><mo lspace="0em" rspace="0em">​</mo><mi>β</mi><mo lspace="0em" rspace="0em">​</mo><mi>γ</mi><mo lspace="0em" rspace="0em">​</mo><mi>δ</mi></mrow></msub><msup><mi>Q</mi><mrow><mo stretchy="false">(</mo><mrow><mi>α</mi><mo lspace="0em" rspace="0em">​</mo><mi>β</mi><mo lspace="0em" rspace="0em">​</mo><mi>γ</mi><mo lspace="0em" rspace="0em">​</mo><mi>δ</mi></mrow><mo stretchy="false">)</mo></mrow></msup><mo lspace="0.278em" rspace="0.278em">:</mo><mi>α</mi><mo>,</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mi>δ</mi><mo>∈</mo><mrow><mo stretchy="false">[</mo><mi>n</mi><mo stretchy="false">]</mo></mrow><mo stretchy="false">)</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbf{F}(\lambda_{\alpha\beta\gamma\delta}Q^{(\alpha\beta\gamma\delta)}:\alpha,\beta,\gamma,\delta\in[n])=0</annotation></semantics></math> holds if and only if there exist <math alttext="u,v,w,x\in(\mathbb{R}^{*})^{n}" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i3.p1.5.m5" intent=":literal"><semantics><mrow><mrow><mi>u</mi><mo>,</mo><mi>v</mi><mo>,</mo><mi>w</mi><mo>,</mo><mi>x</mi></mrow><mo>∈</mo><msup><mrow><mo stretchy="false">(</mo><msup><mi>ℝ</mi><mo>∗</mo></msup><mo stretchy="false">)</mo></mrow><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">u,v,w,x\in(\mathbb{R}^{*})^{n}</annotation></semantics></math> such that <math alttext="\lambda_{\alpha\beta\gamma\delta}=u_{\alpha}v_{\beta}w_{\gamma}x_{\delta}" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i3.p1.6.m6" intent=":literal"><semantics><mrow><msub><mi>λ</mi><mrow><mi>α</mi><mo lspace="0em" rspace="0em">​</mo><mi>β</mi><mo lspace="0em" rspace="0em">​</mo><mi>γ</mi><mo lspace="0em" rspace="0em">​</mo><mi>δ</mi></mrow></msub><mo>=</mo><mrow><msub><mi>u</mi><mi>α</mi></msub><mo lspace="0em" rspace="0em">​</mo><msub><mi>v</mi><mi>β</mi></msub><mo lspace="0em" rspace="0em">​</mo><msub><mi>w</mi><mi>γ</mi></msub><mo lspace="0em" rspace="0em">​</mo><msub><mi>x</mi><mi>δ</mi></msub></mrow></mrow><annotation encoding="application/x-tex">\lambda_{\alpha\beta\gamma\delta}=u_{\alpha}v_{\beta}w_{\gamma}x_{\delta}</annotation></semantics></math> for all <math alttext="\alpha,\beta,\gamma,\delta\in[n]" class="ltx_Math" display="inline" id="S2.I1.i9.I1.i3.p1.7.m7" intent=":literal"><semantics><mrow><mrow><mi>α</mi><mo>,</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mi>δ</mi></mrow><mo>∈</mo><mrow><mo stretchy="false">[</mo><mi>n</mi><mo stretchy="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha,\beta,\gamma,\delta\in[n]</annotation></semantics></math> that are not identical.</p>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li class="ltx_item" id="S2.I1.i10" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">10.</span>
+<div class="ltx_para" id="S2.I1.i10.p1">
+<p class="ltx_p" id="S2.I1.i10.p1.7">Given a <math alttext="d" class="ltx_Math" display="inline" id="S2.I1.i10.p1.1.m1" intent=":literal"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>-way tensor <math alttext="\mathcal{T}\in\mathbb{R}^{n_{1}\times n_{2}\times\cdots\times n_{d}}" class="ltx_Math" display="inline" id="S2.I1.i10.p1.2.m2" intent=":literal"><semantics><mrow><mi class="ltx_font_mathcaligraphic">𝒯</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><msub><mi>n</mi><mn>1</mn></msub><mo lspace="0.222em" rspace="0.222em">×</mo><msub><mi>n</mi><mn>2</mn></msub><mo lspace="0.222em" rspace="0.222em">×</mo><mi mathvariant="normal">⋯</mi><mo lspace="0.222em" rspace="0.222em">×</mo><msub><mi>n</mi><mi>d</mi></msub></mrow></msup></mrow><annotation encoding="application/x-tex">\mathcal{T}\in\mathbb{R}^{n_{1}\times n_{2}\times\cdots\times n_{d}}</annotation></semantics></math>
+such that the data is unaligned (meaning the tensor <math alttext="\mathcal{T}" class="ltx_Math" display="inline" id="S2.I1.i10.p1.3.m3" intent=":literal"><semantics><mi class="ltx_font_mathcaligraphic">𝒯</mi><annotation encoding="application/x-tex">\mathcal{T}</annotation></semantics></math> has missing entries),
+we consider the problem of computing a CP decomposition of rank <math alttext="r" class="ltx_Math" display="inline" id="S2.I1.i10.p1.4.m4" intent=":literal"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math> where some modes are infinite-dimensional and constrained to be in a Reproducing Kernel Hilbert Space (RKHS).
+We want to solve this using an alternating optimization approach, and our question is focused on the mode-<math alttext="k" class="ltx_Math" display="inline" id="S2.I1.i10.p1.5.m5" intent=":literal"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> subproblem for an infinite-dimensional mode.
+For the subproblem, then CP factor matrices
+<math alttext="A_{1},\dots,A_{k-1},A_{k+1},\dots,A_{d}" class="ltx_Math" display="inline" id="S2.I1.i10.p1.6.m6" intent=":literal"><semantics><mrow><msub><mi>A</mi><mn>1</mn></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>A</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>A</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mi mathvariant="normal">…</mi><mo>,</mo><msub><mi>A</mi><mi>d</mi></msub></mrow><annotation encoding="application/x-tex">A_{1},\dots,A_{k-1},A_{k+1},\dots,A_{d}</annotation></semantics></math> are fixed, and we are solving for <math alttext="A_{k}" class="ltx_Math" display="inline" id="S2.I1.i10.p1.7.m7" intent=":literal"><semantics><msub><mi>A</mi><mi>k</mi></msub><annotation encoding="application/x-tex">A_{k}</annotation></semantics></math>.</p>
+</div>
+<div class="ltx_para" id="S2.I1.i10.p2">
+<p class="ltx_p" id="S2.I1.i10.p2.23">Our notation is as follows.
+Let <math alttext="N=\prod_{i}n_{i}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.1.m1" intent=":literal"><semantics><mrow><mi>N</mi><mo rspace="0.111em">=</mo><mrow><msub><mo>∏</mo><mi>i</mi></msub><msub><mi>n</mi><mi>i</mi></msub></mrow></mrow><annotation encoding="application/x-tex">N=\prod_{i}n_{i}</annotation></semantics></math> denote the product of all sizes.
+Let <math alttext="n\equiv n_{k}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.2.m2" intent=":literal"><semantics><mrow><mi>n</mi><mo>≡</mo><msub><mi>n</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">n\equiv n_{k}</annotation></semantics></math> be the size of mode <math alttext="k" class="ltx_Math" display="inline" id="S2.I1.i10.p2.3.m3" intent=":literal"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>, let
+<math alttext="M=\prod_{i\neq k}n_{i}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.4.m4" intent=":literal"><semantics><mrow><mi>M</mi><mo rspace="0.111em">=</mo><mrow><msub><mo>∏</mo><mrow><mi>i</mi><mo>≠</mo><mi>k</mi></mrow></msub><msub><mi>n</mi><mi>i</mi></msub></mrow></mrow><annotation encoding="application/x-tex">M=\prod_{i\neq k}n_{i}</annotation></semantics></math> be the product of all dimensions except <math alttext="k" class="ltx_Math" display="inline" id="S2.I1.i10.p2.5.m5" intent=":literal"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>, and assume <math alttext="n\ll M" class="ltx_Math" display="inline" id="S2.I1.i10.p2.6.m6" intent=":literal"><semantics><mrow><mi>n</mi><mo>≪</mo><mi>M</mi></mrow><annotation encoding="application/x-tex">n\ll M</annotation></semantics></math>.
+Since the data are unaligned, this means only a subset of <math alttext="\mathcal{T}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.7.m7" intent=":literal"><semantics><mi class="ltx_font_mathcaligraphic">𝒯</mi><annotation encoding="application/x-tex">\mathcal{T}</annotation></semantics></math>’s entries are observed, and we let <math alttext="q\ll N" class="ltx_Math" display="inline" id="S2.I1.i10.p2.8.m8" intent=":literal"><semantics><mrow><mi>q</mi><mo>≪</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">q\ll N</annotation></semantics></math> denote the number of observed entries.
+We let <math alttext="T\in\mathbb{R}^{n\times M}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.9.m9" intent=":literal"><semantics><mrow><mi>T</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>M</mi></mrow></msup></mrow><annotation encoding="application/x-tex">T\in\mathbb{R}^{n\times M}</annotation></semantics></math> denote the mode-<math alttext="k" class="ltx_Math" display="inline" id="S2.I1.i10.p2.10.m10" intent=":literal"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> unfolding of the tensor <math alttext="\mathcal{T}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.11.m11" intent=":literal"><semantics><mi class="ltx_font_mathcaligraphic">𝒯</mi><annotation encoding="application/x-tex">\mathcal{T}</annotation></semantics></math> with all missing entries set to zero.
+The <math alttext="\operatorname{vec}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.12.m12" intent=":literal"><semantics><mi>vec</mi><annotation encoding="application/x-tex">\operatorname{vec}</annotation></semantics></math> operations creates a vector from a matrix by stacking its columns,
+and we let <math alttext="S\in\mathbb{R}^{N\times q}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.13.m13" intent=":literal"><semantics><mrow><mi>S</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>N</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>q</mi></mrow></msup></mrow><annotation encoding="application/x-tex">S\in\mathbb{R}^{N\times q}</annotation></semantics></math> denote the selection matrix (a subset of the <math alttext="N\times N" class="ltx_Math" display="inline" id="S2.I1.i10.p2.14.m14" intent=":literal"><semantics><mrow><mi>N</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">N\times N</annotation></semantics></math> identity matrix) such that <math alttext="S^{T}\operatorname{vec}(T)" class="ltx_Math" display="inline" id="S2.I1.i10.p2.15.m15" intent=":literal"><semantics><mrow><msup><mi>S</mi><mi>T</mi></msup><mo lspace="0.167em" rspace="0em">​</mo><mrow><mi>vec</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>T</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">S^{T}\operatorname{vec}(T)</annotation></semantics></math> selects the <math alttext="q" class="ltx_Math" display="inline" id="S2.I1.i10.p2.16.m16" intent=":literal"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math> known entries of the tensor <math alttext="\mathcal{T}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.17.m17" intent=":literal"><semantics><mi class="ltx_font_mathcaligraphic">𝒯</mi><annotation encoding="application/x-tex">\mathcal{T}</annotation></semantics></math> from the vectorization of its mode-<math alttext="k" class="ltx_Math" display="inline" id="S2.I1.i10.p2.18.m18" intent=":literal"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> unfolding.
+We let <math alttext="Z=A_{d}\odot\cdots\odot A_{k+1}\odot A_{k-1}\odot\cdots\odot A_{1}\in\mathbb{R}^{M\times r}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.19.m19" intent=":literal"><semantics><mrow><mi>Z</mi><mo>=</mo><mrow><msub><mi>A</mi><mi>d</mi></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi mathvariant="normal">⋯</mi><mo lspace="0.222em" rspace="0.222em">⊙</mo><msub><mi>A</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><msub><mi>A</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo lspace="0.222em" rspace="0.222em">⊙</mo><mi mathvariant="normal">⋯</mi><mo lspace="0.222em" rspace="0.222em">⊙</mo><msub><mi>A</mi><mn>1</mn></msub></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>M</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>r</mi></mrow></msup></mrow><annotation encoding="application/x-tex">Z=A_{d}\odot\cdots\odot A_{k+1}\odot A_{k-1}\odot\cdots\odot A_{1}\in\mathbb{R}^{M\times r}</annotation></semantics></math> be the Khatri-Rao product of the factor matrices corresponding to all modes except mode <math alttext="k" class="ltx_Math" display="inline" id="S2.I1.i10.p2.20.m20" intent=":literal"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>.
+We let <math alttext="B=TZ" class="ltx_Math" display="inline" id="S2.I1.i10.p2.21.m21" intent=":literal"><semantics><mrow><mi>B</mi><mo>=</mo><mrow><mi>T</mi><mo lspace="0em" rspace="0em">​</mo><mi>Z</mi></mrow></mrow><annotation encoding="application/x-tex">B=TZ</annotation></semantics></math> denote the MTTKRP of the tensor <math alttext="\mathcal{T}" class="ltx_Math" display="inline" id="S2.I1.i10.p2.22.m22" intent=":literal"><semantics><mi class="ltx_font_mathcaligraphic">𝒯</mi><annotation encoding="application/x-tex">\mathcal{T}</annotation></semantics></math> and Khatri-Rao product <math alttext="Z" class="ltx_Math" display="inline" id="S2.I1.i10.p2.23.m23" intent=":literal"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>.</p>
+</div>
+<div class="ltx_para" id="S2.I1.i10.p3">
+<p class="ltx_p" id="S2.I1.i10.p3.5">We assume <math alttext="A_{k}=KW" class="ltx_Math" display="inline" id="S2.I1.i10.p3.1.m1" intent=":literal"><semantics><mrow><msub><mi>A</mi><mi>k</mi></msub><mo>=</mo><mrow><mi>K</mi><mo lspace="0em" rspace="0em">​</mo><mi>W</mi></mrow></mrow><annotation encoding="application/x-tex">A_{k}=KW</annotation></semantics></math> where
+<math alttext="K\in\mathbb{R}^{n\times n}" class="ltx_Math" display="inline" id="S2.I1.i10.p3.2.m2" intent=":literal"><semantics><mrow><mi>K</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">K\in\mathbb{R}^{n\times n}</annotation></semantics></math> denotes the psd RKHS kernel matrix for mode <math alttext="k" class="ltx_Math" display="inline" id="S2.I1.i10.p3.3.m3" intent=":literal"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>.
+The matrix <math alttext="W" class="ltx_Math" display="inline" id="S2.I1.i10.p3.4.m4" intent=":literal"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math> of size <math alttext="n\times r" class="ltx_Math" display="inline" id="S2.I1.i10.p3.5.m5" intent=":literal"><semantics><mrow><mi>n</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">n\times r</annotation></semantics></math> is the unknown for which we must solve.
+The system to be solved is</p>
+<table class="ltx_equation ltx_eqn_table" id="S2.Ex9">
+<tbody><tr class="ltx_equation ltx_eqn_row ltx_align_baseline">
+<td class="ltx_eqn_cell ltx_eqn_center_padleft"></td>
+<td class="ltx_eqn_cell ltx_align_center"><math alttext="\left[(Z\otimes K)^{T}SS^{T}(Z\otimes K)+\lambda(I_{r}\otimes K)\right]\operatorname{vec}(W)=(I_{r}\otimes K)\operatorname{vec}(B)." class="ltx_Math" display="block" id="S2.Ex9.m1" intent=":literal"><semantics><mrow><mrow><mrow><mrow><mo>[</mo><mrow><mrow><msup><mrow><mo stretchy="false">(</mo><mrow><mi>Z</mi><mo lspace="0.222em" rspace="0.222em">⊗</mo><mi>K</mi></mrow><mo stretchy="false">)</mo></mrow><mi>T</mi></msup><mo lspace="0em" rspace="0em">​</mo><mi>S</mi><mo lspace="0em" rspace="0em">​</mo><msup><mi>S</mi><mi>T</mi></msup><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mrow><mi>Z</mi><mo lspace="0.222em" rspace="0.222em">⊗</mo><mi>K</mi></mrow><mo stretchy="false">)</mo></mrow></mrow><mo>+</mo><mrow><mi>λ</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mrow><msub><mi>I</mi><mi>r</mi></msub><mo lspace="0.222em" rspace="0.222em">⊗</mo><mi>K</mi></mrow><mo stretchy="false">)</mo></mrow></mrow></mrow><mo>]</mo></mrow><mo lspace="0.167em" rspace="0em">​</mo><mrow><mi>vec</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">)</mo></mrow></mrow></mrow><mo>=</mo><mrow><mrow><mo stretchy="false">(</mo><mrow><msub><mi>I</mi><mi>r</mi></msub><mo lspace="0.222em" rspace="0.222em">⊗</mo><mi>K</mi></mrow><mo stretchy="false">)</mo></mrow><mo lspace="0.167em" rspace="0em">​</mo><mrow><mi>vec</mi><mo>⁡</mo><mrow><mo stretchy="false">(</mo><mi>B</mi><mo stretchy="false">)</mo></mrow></mrow></mrow></mrow><mo lspace="0em">.</mo></mrow><annotation encoding="application/x-tex">\left[(Z\otimes K)^{T}SS^{T}(Z\otimes K)+\lambda(I_{r}\otimes K)\right]\operatorname{vec}(W)=(I_{r}\otimes K)\operatorname{vec}(B).</annotation></semantics></math></td>
+<td class="ltx_eqn_cell ltx_eqn_center_padright"></td>
+</tr></tbody>
+</table>
+<p class="ltx_p" id="S2.I1.i10.p3.9">Here, <math alttext="I_{r}" class="ltx_Math" display="inline" id="S2.I1.i10.p3.6.m1" intent=":literal"><semantics><msub><mi>I</mi><mi>r</mi></msub><annotation encoding="application/x-tex">I_{r}</annotation></semantics></math> denotes the <math alttext="r\times r" class="ltx_Math" display="inline" id="S2.I1.i10.p3.7.m2" intent=":literal"><semantics><mrow><mi>r</mi><mo lspace="0.222em" rspace="0.222em">×</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">r\times r</annotation></semantics></math> identity matrix.
+This is a system of size <math alttext="nr\times nr" class="ltx_Math" display="inline" id="S2.I1.i10.p3.8.m3" intent=":literal"><semantics><mrow><mrow><mrow><mi>n</mi><mo lspace="0em" rspace="0em">​</mo><mi>r</mi></mrow><mo lspace="0.222em" rspace="0.222em">×</mo><mi>n</mi></mrow><mo lspace="0em" rspace="0em">​</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">nr\times nr</annotation></semantics></math>
+Using a standard linear solver costs <math alttext="O(n^{3}r^{3})" class="ltx_Math" display="inline" id="S2.I1.i10.p3.9.m4" intent=":literal"><semantics><mrow><mi>O</mi><mo lspace="0em" rspace="0em">​</mo><mrow><mo stretchy="false">(</mo><mrow><msup><mi>n</mi><mn>3</mn></msup><mo lspace="0em" rspace="0em">​</mo><msup><mi>r</mi><mn>3</mn></msup></mrow><mo stretchy="false">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(n^{3}r^{3})</annotation></semantics></math>,
+and explicitly forming the matrix is an additional expense.</p>
+</div>
+<div class="ltx_para" id="S2.I1.i10.p4">
+<p class="ltx_p" id="S2.I1.i10.p4.2">Explain how an iterative preconditioned conjugate gradient linear solver can be used to solve this problem more efficiently. Explain the method and choice of preconditioner. Explain in detail how the matrix-vector products are computed and why this works. Provide complexity analysis.
+We assume <math alttext="n,r&lt;q\ll N" class="ltx_Math" display="inline" id="S2.I1.i10.p4.1.m1" intent=":literal"><semantics><mrow><mrow><mi>n</mi><mo>,</mo><mi>r</mi></mrow><mo>&lt;</mo><mi>q</mi><mo>≪</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">n,r&lt;q\ll N</annotation></semantics></math>. Avoid any computation of order <math alttext="N" class="ltx_Math" display="inline" id="S2.I1.i10.p4.2.m2" intent=":literal"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>.</p>
+</div>
+</li>
+</ol>
+</div>
+</section>
+<section class="ltx_section" id="S3">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">3 </span>Related work</h2>
+<div class="ltx_para" id="S3.p1">
+<p class="ltx_p" id="S3.p1.1">As mentioned earlier, there have been several proposed math research benchmarks. We discuss a few of them here.</p>
+</div>
+<div class="ltx_para" id="S3.p2">
+<p class="ltx_p" id="S3.p2.1">FrontierMath <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#bib.bib1" title="">1</a>]</cite> is a benchmark of “several hundred unpublished, expert-level mathematics problems that take specialists hours to days to solve.”
+It was funded by OpenAI. Presently, the FrontierMath problems are private
+(apart from 12 examples that are publicly available). OpenAI has access to a subset of FrontierMath problems and solutions, and EpochAI has access to the full set of solutions. The FrontierMath problems are structured so that each final answer is an integer or symbolic expression, which makes them automatically gradable, as well as amenable to post-training via reinforcement learning.</p>
+</div>
+<div class="ltx_para" id="S3.p3">
+<p class="ltx_p" id="S3.p3.1">IMProofBench <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#bib.bib2" title="IMProofBench: benchmarking AI on research-level mathematical proof generation">2</a>]</cite> is a broader mathematical proof benchmark, designed to evaluate the ability of AI systems to create research-level mathematical proofs. The problems are designed to allow for automatic grading of subquestions, but still require human experts to fully verify correctness.
+The IMProofBench questions are private.</p>
+</div>
+<div class="ltx_para" id="S3.p4">
+<p class="ltx_p" id="S3.p4.1">The RealMath benchmark for research-level math questions <cite class="ltx_cite ltx_citemacro_cite">[<a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#bib.bib3" title="RealMath: a continuous benchmark for evaluating language models on research-level mathematics">3</a>]</cite> scrapes (i.e. collects papers automatically from)
+math and computer science categories in <a class="ltx_ref ltx_href" href="https://arxiv.org" title="">arXiv.org</a>, skewing toward fields with “constructive” theorems like probability and statistics. It only scrapes questions posted after the “training data cutoff” of the AI models being tested, where training data cutoff refers to the final date from which web data was collected and used for training data. Like FrontierMath, the RealMath questions are designed to facilitate automatic grading, with a final short symbolic or numeric answer. Unlike FrontierMath and IMProofBench, the RealMath questions are public and intended to be refreshed every so often to avoid data contamination.</p>
+</div>
+</section>
+<section class="ltx_section" id="S4">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">4 </span>Implementation details</h2>
+<div class="ltx_para" id="S4.p1">
+<p class="ltx_p" id="S4.p1.1">Over the span of a few weeks, we tested roughly 20 research-level math questions using Gemini 3 Pro, GPT-5.1 Pro, and then GPT-5.2 Pro when GPT 5.2 Pro became available. The final selection of questions used the following criteria:</p>
+<ol class="ltx_enumerate" id="S4.I1">
+<li class="ltx_item" id="S4.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">1.</span>
+<div class="ltx_para" id="S4.I1.i1.p1">
+<p class="ltx_p" id="S4.I1.i1.p1.1">Use of the AI system did not reveal the existence of a previous answer to the question that was unknown to the authors.</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">2.</span>
+<div class="ltx_para" id="S4.I1.i2.p1">
+<p class="ltx_p" id="S4.I1.i2.p1.1">A one page statement was sufficient for the systems to “understand” the formulation of the question, i.e. it was able to reformulate the question in its own language before starting to answer it.</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">3.</span>
+<div class="ltx_para" id="S4.I1.i3.p1">
+<p class="ltx_p" id="S4.I1.i3.p1.1">Agreement was reached with the authors of the question to release a human generated proof within the required parameters (length and timeframe).</p>
+</div>
+</li>
+<li class="ltx_item" id="S4.I1.i4" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">4.</span>
+<div class="ltx_para" id="S4.I1.i4.p1">
+<p class="ltx_p" id="S4.I1.i4.p1.1">No member of the team contributed more than one problem.</p>
+</div>
+</li>
+</ol>
+<p class="ltx_p" id="S4.p1.2">The reason for testing more than 10 questions was to probe the “boundary” between the types of questions the models can solve and the types of questions beyond their reach. To minimize data contamination, we turned off the option to share data for training and improving models, but we are aware that data is still retained for 3 days by Google, and 30 days by OpenAI<span class="ltx_note ltx_role_footnote" id="footnote6"><sup class="ltx_note_mark">6</sup><span class="ltx_note_outer"><span class="ltx_note_content"><sup class="ltx_note_mark">6</sup><span class="ltx_tag ltx_tag_note">6</span>According to our reading of the OpenAI <a class="ltx_ref ltx_href" href="https://help.openai.com/en/articles/8983778-chat-and-file-retention-policies-in-chatgpt" title="">Terms of Service</a>, a chat can be retained longer than 30 days if the chat has been de-identified and disassociated from the author. According to our reading of the Gemini <a class="ltx_ref ltx_href" href="https://support.google.com/gemini/answer/13594961" title="">Terms of Service</a>, chats reviewed by human reviewers may be retained for up to 3 years.</span></span></span>. Throughout the process, we have endeavored to keep the answers to our questions private. We have uploaded encrypted answers to the private repository,
+<a class="ltx_ref ltx_url ltx_font_typewriter" href="https://1stproof.org" title="">https://1stproof.org</a>.
+We will make the answers publicly available about a week
+after we release the questions.</p>
+</div>
+</section>
+<section class="ltx_section" id="S5">
+<h2 class="ltx_title ltx_title_section">
+<span class="ltx_tag ltx_tag_section">5 </span>Discussion</h2>
+<div class="ltx_para" id="S5.p1">
+<p class="ltx_p" id="S5.p1.1">We have presented a set of ten research-level mathematics questions.
+As mentioned earlier, mathematical research consists of multiple components, including:</p>
+<ul class="ltx_itemize" id="S5.I1">
+<li class="ltx_item" id="S5.I1.i1" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S5.I1.i1.p1">
+<p class="ltx_p" id="S5.I1.i1.p1.1">creating and selecting the questions to study, which will guide and shape the field;</p>
+</div>
+</li>
+<li class="ltx_item" id="S5.I1.i2" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S5.I1.i2.p1">
+<p class="ltx_p" id="S5.I1.i2.p1.1">developing novel theories for approaching these questions, including formalizing new definitions and frameworks;</p>
+</div>
+</li>
+<li class="ltx_item" id="S5.I1.i3" style="list-style-type:none;">
+<span class="ltx_tag ltx_tag_item">•</span>
+<div class="ltx_para" id="S5.I1.i3.p1">
+<p class="ltx_p" id="S5.I1.i3.p1.1">finding answers to the selected questions, and rigorously proving that these answers are correct.</p>
+</div>
+</li>
+</ul>
+<p class="ltx_p" id="S5.p1.2">Our ‘first proof’ experiment is focused on the final, most well-specified, and most measurable stage of mathematical research, that is, finding answers to the selected questions. We do not address the question of evaluating whether AI systems can reasonably create questions to study, or develop novel theories.</p>
+</div>
+<div class="ltx_para" id="S5.p2">
+<p class="ltx_p" id="S5.p2.1">We plan to create a second set of questions of the same nature as the ones in Section <a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S2" title="2 The questions ‣ First Proof"><span class="ltx_text ltx_ref_tag">2</span></a> in the coming months, and we are open to devising agreements to test frontier AI systems on the second set of questions before we release them. We hope that this second set of questions can serve as a form of benchmark for testing the capabilities of AI.</p>
+</div>
+<div class="ltx_para" id="S5.p3">
+<p class="ltx_p" id="S5.p3.1">Beyond the next release, depending on technological developments, we plan to release additional sets of questions by removing some of the artificial constraints we imposed on our chosen questions, such as length, as well as to explore ways of measuring performance along other aspects of the work of research mathematics.</p>
+</div>
+</section>
+<section class="ltx_bibliography" id="bib">
+<h2 class="ltx_title ltx_title_bibliography">References</h2>
+<ul class="ltx_biblist" id="bib.L1">
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib1">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[1]</span>
+<span class="ltx_bibblock">Note: <span class="ltx_text ltx_bib_note"><a class="ltx_ref ltx_url ltx_font_typewriter" href="https://epoch.ai/frontiermath" title="">https://epoch.ai/frontiermath</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S3.p2.1" title="3 Related work ‣ First Proof"><span class="ltx_text ltx_ref_tag">§3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib2">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[2]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">J. Schmitt, G. Bérczi, J. Dekoninck, J. Feusi, T. Gehrunger, R. Appenzeller, J. Bryan, N. Canova, T. de Wolff, F. Gaia, <span class="ltx_text ltx_bib_etal">et al.</span></span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">IMProofBench: benchmarking AI on research-level mathematical proof generation</span>.
+</span>
+<span class="ltx_bibblock">Note: <span class="ltx_text ltx_bib_note"><a class="ltx_ref ltx_url ltx_font_typewriter" href="https://arxiv.org/abs/2509.26076" title="">https://arxiv.org/abs/2509.26076</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S3.p3.1" title="3 Related work ‣ First Proof"><span class="ltx_text ltx_ref_tag">§3</span></a>.
+</span>
+</li>
+<li class="ltx_bibitem ltx_bib_misc" id="bib.bib3">
+<span class="ltx_tag ltx_bib_key ltx_role_refnum ltx_tag_bibitem">[3]</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_author">J. Zhang, C. Petrui, K. Nikolić, and F. Tramèr</span>
+</span>
+<span class="ltx_bibblock"><span class="ltx_text ltx_bib_title">RealMath: a continuous benchmark for evaluating language models on research-level mathematics</span>.
+</span>
+<span class="ltx_bibblock">Note: <span class="ltx_text ltx_bib_note"><a class="ltx_ref ltx_url ltx_font_typewriter" href="https://arxiv.org/abs/2505.12575" title="">https://arxiv.org/abs/2505.12575</a></span>
+</span>
+<span class="ltx_bibblock ltx_bib_cited">Cited by: <a class="ltx_ref" href="https://arxiv.org/html/2602.05192v1#S3.p4.1" title="3 Related work ‣ First Proof"><span class="ltx_text ltx_ref_tag">§3</span></a>.
+</span>
+</li>
+</ul>
+</section>
+</article>
+</div>
+<footer class="ltx_page_footer">
+<div class="ltx_page_logo">Generated  on Thu Feb  5 01:36:23 2026 by <a class="ltx_LaTeXML_logo" href="http://dlmf.nist.gov/LaTeXML/"><span style="letter-spacing:-0.2em; margin-right:0.1em;">L<span class="ltx_font_smallcaps" style="position:relative; bottom:2.2pt;">a</span>T<span class="ltx_font_smallcaps" style="font-size:120%;position:relative; bottom:-0.2ex;">e</span></span><span style="font-size:90%; position:relative; bottom:-0.2ex;">XML</span><img alt="Mascot Sammy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAOCAYAAAD5YeaVAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wKExQZLWTEaOUAAAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAdpJREFUKM9tkL+L2nAARz9fPZNCKFapUn8kyI0e4iRHSR1Kb8ng0lJw6FYHFwv2LwhOpcWxTjeUunYqOmqd6hEoRDhtDWdA8ApRYsSUCDHNt5ul13vz4w0vWCgUnnEc975arX6ORqN3VqtVZbfbTQC4uEHANM3jSqXymFI6yWazP2KxWAXAL9zCUa1Wy2tXVxheKA9YNoR8Pt+aTqe4FVVVvz05O6MBhqUIBGk8Hn8HAOVy+T+XLJfLS4ZhTiRJgqIoVBRFIoric47jPnmeB1mW/9rr9ZpSSn3Lsmir1fJZlqWlUonKsvwWwD8ymc/nXwVBeLjf7xEKhdBut9Hr9WgmkyGEkJwsy5eHG5vN5g0AKIoCAEgkEkin0wQAfN9/cXPdheu6P33fBwB4ngcAcByHJpPJl+fn54mD3Gg0NrquXxeLRQAAwzAYj8cwTZPwPH9/sVg8PXweDAauqqr2cDjEer1GJBLBZDJBs9mE4zjwfZ85lAGg2+06hmGgXq+j3+/DsixYlgVN03a9Xu8jgCNCyIegIAgx13Vfd7vdu+FweG8YRkjXdWy329+dTgeSJD3ieZ7RNO0VAXAPwDEAO5VKndi2fWrb9jWl9Esul6PZbDY9Go1OZ7PZ9z/lyuD3OozU2wAAAABJRU5ErkJggg=="/></a>
+</div></footer>
+</div>
+</body>
+</html>
