@@ -603,6 +603,11 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
         if verbose:
             print(f"       Loading tensor cache from {tensor_cache_path}...")
         graph_tensors, _cached_ids = load_tensor_cache(tensor_cache_path)
+        if len(_cached_ids) != len(graph_tensors):
+            raise ValueError(
+                "stale tensor cache: thread_ids count does not match graph tensors "
+                f"({len(_cached_ids)} ids vs {len(graph_tensors)} graphs)"
+            )
         if verbose:
             print(f"       {len(graph_tensors)} graphs loaded from cache")
     else:
@@ -610,20 +615,21 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
         if verbose:
             print(f"       Converting {len(hypergraphs)} hypergraphs to tensors...")
         graph_tensors = []
-        for hg in hypergraphs:
+        valid_thread_ids = []
+        for i, hg in enumerate(hypergraphs):
             try:
                 x, ei = hypergraph_to_tensors(hg)
                 if x.size(0) >= 2:  # need at least 2 nodes
                     graph_tensors.append((x, ei))
+                    valid_thread_ids.append(hg.get("thread_id", i))
             except Exception:
                 continue
 
         # Save tensor cache for future runs
         if tensor_cache_path and graph_tensors:
-            thread_ids = [hg.get("thread_id", i) for i, hg in enumerate(hypergraphs)]
             if verbose:
                 print(f"       Saving tensor cache to {tensor_cache_path}...")
-            save_tensor_cache(graph_tensors, thread_ids, tensor_cache_path)
+            save_tensor_cache(graph_tensors, valid_thread_ids, tensor_cache_path)
 
     if len(graph_tensors) < 2:
         raise ValueError(f"Need at least 2 valid graphs, got {len(graph_tensors)}")

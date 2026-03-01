@@ -146,7 +146,18 @@ def check_embedding_quality(emb_path: Path, name: str) -> dict:
 # 3. Structural vs text embedding comparison
 # ---------------------------------------------------------------------------
 
-def compare_embeddings(outdir: Path, n_sample: int = 500, k: int = 10) -> dict:
+def _entity_thread_id(entity: dict) -> int | None:
+    """Extract numeric thread ID from entity/id values like se-math-123."""
+    eid = entity.get("entity/id")
+    if not isinstance(eid, str):
+        return None
+    tail = eid.rsplit("-", 1)[-1]
+    if tail.isdigit():
+        return int(tail)
+    return None
+
+
+def compare_embeddings(outdir: Path, n_sample: int = 500, k: int = 10) -> tuple[dict, list[dict]]:
     """Compare LWGM structural neighbours vs text-embedding neighbours.
 
     For each sample thread, find k nearest neighbours under both embeddings
@@ -158,75 +169,113 @@ def compare_embeddings(outdir: Path, n_sample: int = 500, k: int = 10) -> dict:
 
     for p in [text_emb_path, struct_emb_path, entities_path]:
         if not p.exists():
-            return {"ok": False, "error": f"{p} not found"}
+            return {"ok": False, "error": f"{p} not found"}, []
 
     text_emb = np.load(str(text_emb_path))
     struct_emb = np.load(str(struct_emb_path))
     entities = json.loads(entities_path.read_text())
 
-    # Both should have same number of rows (one per thread)
     n_text = text_emb.shape[0]
     n_struct = struct_emb.shape[0]
 
-    # They might not be equal if some threads failed hypergraph assembly.
-    # Use structural thread IDs to align.
+    # Structural IDs are required for robust alignment with entities/tags.
     ids_path = outdir / "hypergraph-thread-ids.json"
     if ids_path.exists():
         struct_ids = json.loads(ids_path.read_text())
     else:
-        struct_ids = list(range(n_struct))
+        return {"ok": False, "error": "hypergraph-thread-ids.json not found"}, []
 
-    # Build tag lookup from entities
-    tags_by_idx = {}
+    # Alignment guard for legacy outputs where IDs and embeddings drifted.
+    warnings = []
+    if len(struct_ids) != n_struct:
+        n_aligned = min(len(struct_ids), n_struct)
+        warnings.append(
+            f"structural id/embedding mismatch: {len(struct_ids)} ids vs {n_struct} rows; "
+            f"truncating to {n_aligned}"
+        )
+        struct_ids = struct_ids[:n_aligned]
+        struct_emb = struct_emb[:n_aligned]
+        n_struct = n_aligned
+
+    # Build tag lookup and thread-id lookup from entities
+    tags_by_entity_idx = {}
+    entity_idx_by_thread_id = {}
     for i, ent in enumerate(entities):
-        tags_by_idx[i] = set(ent.get("tags", []))
+        tags_by_entity_idx[i] = set(ent.get("tags", []))
+        tid = _entity_thread_id(ent)
+        if tid is not None and tid not in entity_idx_by_thread_id:
+            entity_idx_by_thread_id[tid] = i
+
+    # Row-level mapping: structural row -> entity row (when resolvable).
+    struct_entity_idx = {}
+    for row, tid in enumerate(struct_ids):
+        eidx = entity_idx_by_thread_id.get(int(tid))
+        if eidx is not None and eidx < n_text:
+            struct_entity_idx[row] = eidx
+
+    valid_struct_rows = list(struct_entity_idx.keys())
+    if not valid_struct_rows:
+        return {"ok": False, "error": "no structural rows align to entities/text embeddings"}, []
 
     # Normalize both embedding matrices
     text_normed = text_emb / (np.linalg.norm(text_emb, axis=1, keepdims=True) + 1e-8)
     struct_normed = struct_emb / (np.linalg.norm(struct_emb, axis=1, keepdims=True) + 1e-8)
 
-    # Sample threads that have both embeddings
+    # Sample only structural rows that align to entity/text IDs.
     rng = np.random.default_rng(42)
-    sample_size = min(n_sample, n_struct)
-    sample_idx = rng.choice(n_struct, sample_size, replace=False)
+    sample_size = min(n_sample, len(valid_struct_rows))
+    sample_idx = rng.choice(valid_struct_rows, sample_size, replace=False)
 
     text_jaccards = []
     struct_jaccards = []
     cross_domain_candidates = []
 
     for si in sample_idx:
-        query_tags = tags_by_idx.get(si, set())
+        query_entity_idx = struct_entity_idx[int(si)]
+        query_thread_id = int(struct_ids[int(si)])
+        query_tags = tags_by_entity_idx.get(query_entity_idx, set())
         if not query_tags:
             continue
 
         # Text embedding neighbours
-        text_sims = text_normed[si] @ text_normed.T
+        text_sims = text_normed[query_entity_idx] @ text_normed.T
         text_top = np.argsort(-text_sims)[1:k+1]
         text_tag_overlap = [
-            _jaccard(query_tags, tags_by_idx.get(j, set()))
+            _jaccard(query_tags, tags_by_entity_idx.get(int(j), set()))
             for j in text_top
         ]
         text_jaccards.extend(text_tag_overlap)
 
         # Structural embedding neighbours
-        struct_sims = struct_normed[si] @ struct_normed.T
+        struct_sims = struct_normed[int(si)] @ struct_normed.T
         struct_top = np.argsort(-struct_sims)[1:k+1]
-        struct_tag_overlap = [
-            _jaccard(query_tags, tags_by_idx.get(j, set()))
-            for j in struct_top
-        ]
+        struct_tag_overlap = []
+        for j in struct_top:
+            j = int(j)
+            j_entity_idx = struct_entity_idx.get(j)
+            if j_entity_idx is None:
+                continue
+            struct_tag_overlap.append(
+                _jaccard(query_tags, tags_by_entity_idx.get(j_entity_idx, set()))
+            )
         struct_jaccards.extend(struct_tag_overlap)
 
         # Cross-domain candidates: high structural similarity, low tag overlap
         for rank, j in enumerate(struct_top[:5]):
-            j_tags = tags_by_idx.get(j, set())
+            j = int(j)
+            j_entity_idx = struct_entity_idx.get(j)
+            if j_entity_idx is None:
+                continue
+            j_tags = tags_by_entity_idx.get(j_entity_idx, set())
             sim = float(struct_sims[j])
             jac = _jaccard(query_tags, j_tags)
             if sim > 0.7 and jac < 0.1 and query_tags and j_tags:
                 cross_domain_candidates.append({
-                    "query_idx": int(si),
+                    "query_idx": int(query_entity_idx),
+                    "query_thread_id": query_thread_id,
                     "query_tags": sorted(query_tags),
-                    "neighbour_idx": int(j),
+                    "neighbour_idx": int(j_entity_idx),
+                    "neighbour_thread_id": int(struct_ids[j]),
                     "neighbour_tags": sorted(j_tags),
                     "structural_similarity": round(sim, 4),
                     "tag_jaccard": round(jac, 4),
@@ -241,12 +290,17 @@ def compare_embeddings(outdir: Path, n_sample: int = 500, k: int = 10) -> dict:
         "ok": True,
         "n_sampled": sample_size,
         "k": k,
+        "n_text_rows": n_text,
+        "n_struct_rows": n_struct,
+        "n_struct_aligned_rows": len(valid_struct_rows),
         "text_embedding_tag_jaccard_mean": round(text_mean, 4),
         "structural_embedding_tag_jaccard_mean": round(struct_mean, 4),
         "structural_to_text_ratio": round(ratio, 3),
         "n_cross_domain_candidates": len(cross_domain_candidates),
         "p11_criterion_2x": ratio >= 2.0,
     }
+    if warnings:
+        report["warnings"] = warnings
 
     # Sort cross-domain candidates by structural similarity
     cross_domain_candidates.sort(key=lambda x: -x["structural_similarity"])

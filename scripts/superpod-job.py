@@ -137,7 +137,7 @@ from futon6.thread_performatives import (
 )
 from futon6.latex_sexp import parse as sexp_parse, parse_all
 from futon6.hypergraph import assemble as assemble_hypergraph
-from futon6.faiss_index import build_index, save_index
+from futon6.faiss_index import HAS_FAISS, build_index, save_index
 
 _GRAPH_EMBED_IMPORT_ERROR = None
 try:
@@ -2622,24 +2622,48 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
             f"Graph embedding dependencies unavailable: {_GRAPH_EMBED_IMPORT_ERROR}"
         )
     tensor_cache = outdir / "hypergraph-tensors.pt"
+    from futon6.graph_embed import load_tensor_cache
 
-    # If tensor cache exists, skip JSON load entirely
+    hypergraphs = []
+    thread_ids = None
+
+    # If tensor cache exists, validate it before using.
     if tensor_cache.exists():
         print(f"       Tensor cache found: {tensor_cache}")
-        from futon6.graph_embed import load_tensor_cache
-        _, cached_thread_ids = load_tensor_cache(str(tensor_cache))
-        hypergraphs = []  # not needed — train() will load from cache
-        thread_ids = cached_thread_ids
+        cached_graphs, cached_thread_ids = load_tensor_cache(str(tensor_cache))
+        if len(cached_graphs) != len(cached_thread_ids):
+            stale_path = tensor_cache.with_name(
+                f"{tensor_cache.stem}.stale-{int(time.time())}.pt"
+            )
+            print(
+                "       Stale tensor cache detected "
+                f"({len(cached_graphs)} graphs vs {len(cached_thread_ids)} ids); "
+                f"moving aside to {stale_path.name}"
+            )
+            tensor_cache.replace(stale_path)
+            with open(hg_path) as f:
+                hypergraphs = json.load(f)
+        else:
+            # train() will load from cache; IDs align with cached tensors.
+            thread_ids = cached_thread_ids
     else:
         with open(hg_path) as f:
             hypergraphs = json.load(f)
-        thread_ids = [hg.get("thread_id", i) for i, hg in enumerate(hypergraphs)]
 
     model, embeddings, train_stats = train_gnn(
         hypergraphs, dim=embed_dim, hidden_dim=hidden_dim,
         n_layers=n_layers, epochs=epochs, batch_size=batch_size,
         device=device, verbose=True, num_workers=num_workers,
         tensor_cache_path=str(tensor_cache))
+
+    if thread_ids is None:
+        _, thread_ids = load_tensor_cache(str(tensor_cache))
+
+    if len(thread_ids) != embeddings.shape[0]:
+        raise RuntimeError(
+            "Stage 9b invariant failed: thread ID count does not match embedding rows "
+            f"({len(thread_ids)} ids vs {embeddings.shape[0]} embeddings)"
+        )
 
     emb_path = outdir / "hypergraph-embeddings.npy"
     model_path = outdir / "graph-gnn-model.pt"
@@ -2672,6 +2696,11 @@ def run_stage10_faiss_index(embeddings_path, thread_ids, outdir,
     Returns (stats_dict, index_path).
     """
     embeddings = np.load(str(embeddings_path))
+    if len(thread_ids) != embeddings.shape[0]:
+        raise ValueError(
+            "Stage 10 invariant failed: thread ID count does not match embedding rows "
+            f"({len(thread_ids)} ids vs {embeddings.shape[0]} embeddings)"
+        )
 
     index, ids = build_index(embeddings, thread_ids, index_type=index_type)
 
@@ -2682,7 +2711,7 @@ def run_stage10_faiss_index(embeddings_path, thread_ids, outdir,
         "n_vectors": len(ids),
         "dimension": embeddings.shape[1],
         "index_type": index_type,
-        "has_faiss": True,
+        "has_faiss": bool(HAS_FAISS),
     }
 
     # Quick self-check: query a random thread
