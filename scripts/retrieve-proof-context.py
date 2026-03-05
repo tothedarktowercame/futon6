@@ -34,7 +34,7 @@ import numpy as np
 REPO_ROOT = Path(__file__).resolve().parent.parent
 STORAGE_MATH = Path(os.path.expanduser("~/code/storage/math-processed-gpu"))
 STORAGE_MO = Path(os.path.expanduser("~/code/storage/mo-processed-gpu"))
-STORAGE_ASE = Path(os.path.expanduser("~/code/storage/ase"))
+STORAGE_ARSE = Path(os.path.expanduser("~/code/storage/arse"))
 
 # Topic keywords per proof node — extracted from NODE_VERIFICATION_FOCUS
 # and the node body text in problem7-wiring.json
@@ -334,7 +334,7 @@ def main():
     parser.add_argument("--candidate-limit", type=int, default=500,
                         help="Max candidates after keyword filter (default: 500)")
     parser.add_argument("--sources", nargs="+", default=["math", "mo"],
-                        choices=["math", "mo", "ase"])
+                        choices=["math", "mo", "arse"])
     parser.add_argument("--output", type=Path, default=None,
                         help="Output JSONL path (default: data/first-proof/problem{N}-corpus-context.jsonl)")
     parser.add_argument("--no-embeddings", action="store_true",
@@ -362,9 +362,9 @@ def main():
         storage_dirs.append(("math", STORAGE_MATH))
     if "mo" in args.sources:
         storage_dirs.append(("mo", STORAGE_MO))
-    if "ase" in args.sources or STORAGE_ASE.exists():
-        if (STORAGE_ASE / "entities.json").exists():
-            storage_dirs.append(("ase", STORAGE_ASE))
+    if "arse" in args.sources or STORAGE_ARSE.exists():
+        if (STORAGE_ARSE / "entities.json").exists():
+            storage_dirs.append(("arse", STORAGE_ARSE))
 
     all_entities: list[dict] = []
     source_offsets: list[tuple[str, int, int]] = []

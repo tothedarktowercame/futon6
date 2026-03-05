@@ -1,4 +1,4 @@
-# Codex Handoff: ASE Pipeline (Artificial Stack Exchange)
+# Codex Handoff: ArSE Pipeline (Artificial Stack Exchange)
 
 Date: 2026-03-05
 Agent: Claude → Codex
@@ -32,7 +32,7 @@ executed yet.
 │  Real Corpus     │    │  retrieve-proof-       │
 │  math-processed  │───▶│  context.py            │
 │  mo-processed    │    │  (BGE + FAISS 4-stage) │
-│  ase store       │    └───────────┬────────────┘
+│  arse store      │    └───────────┬────────────┘
 └──────────────────┘                │
                                     ▼
                         ┌───────────────────────┐
@@ -53,16 +53,16 @@ executed yet.
                      └─────────────┼──────────────┘
                                    ▼
                         ┌───────────────────────┐
-                        │  ase-store.py          │
+                        │  arse-store.py         │
                         │  ingest → reindex      │
                         │  (BGE + GNN + FAISS)   │
                         └───────────┬────────────┘
                                     │
                                     ▼
                            ┌────────────────┐
-                           │  ASE corpus     │
+                           │  ArSE corpus    │
                            │  ~/code/storage │
-                           │  /ase/          │
+                           │  /arse/         │
                            └────────────────┘
 ```
 
@@ -72,19 +72,19 @@ executed yet.
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `scripts/retrieve-proof-context.py` | 4-stage retrieval: tag filter → keyword → BGE rerank → FAISS structural expansion. Queries math, MO, and ASE corpora. | Working |
+| `scripts/retrieve-proof-context.py` | 4-stage retrieval: tag filter → keyword → BGE rerank → FAISS structural expansion. Queries math, MO, and ArSE corpora. | Working |
 | `scripts/generate-synthetic-qa.py` | Gap analysis per proof node. Extracts question components from retrieved threads. Builds generation prompts. | Working (dry-run tested for P2, P3, P7, P8) |
-| `scripts/prepare-ase-tickle-queue.py` | Converts generation prompts to Tickle work queue format (`data/ase-queue/`). | Working |
-| `scripts/ase-store.py` | File-based ASE store: ingest, reindex (BGE + GNN + FAISS), stats, query. | Working (no data ingested yet) |
-| `scripts/test-ase-generate.py` | End-to-end test without Tickle. Calls `claude -p` or `codex -q` via CLI. Includes P7 curriculum questions. `--backend claude\|codex` flag. | Working (5/5 passed) |
-| `scripts/run-ase-hotspot-loop.py` | Chains: hotspot manifest → retrieval → generation → enriched stepper. | Written, untested |
+| `scripts/prepare-arse-tickle-queue.py` | Converts generation prompts to Tickle work queue format (`data/arse-queue/`). | Working |
+| `scripts/arse-store.py` | File-based ArSE store: ingest, reindex (BGE + GNN + FAISS), stats, query. | Working (no data ingested yet) |
+| `scripts/test-arse-generate.py` | End-to-end test without Tickle. Calls `claude -p` or `codex -q` via CLI. Includes P7 curriculum questions. `--backend claude\|codex` flag. | Working (5/5 passed) |
+| `scripts/run-arse-hotspot-loop.py` | Chains: hotspot manifest → retrieval → generation → enriched stepper. | Written, untested |
 
 ### Clojure (futon3c)
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `src/futon3c/agents/ase_work_queue.clj` | ASE entity loader, prompt builder, evidence emission. Follows `tickle_work_queue.clj` pattern. | Written, not compiled |
-| `dev/futon3c/dev.clj` (lines ~1823-2000) | REPL helpers: `ase-progress!`, `run-ase-entry!`, `run-ase-batch!`. Added to `status` output. | Written, not compiled |
+| `src/futon3c/agents/arse_work_queue.clj` | ArSE entity loader, prompt builder, evidence emission. Follows `tickle_work_queue.clj` pattern. | Written, not compiled |
+| `dev/futon3c/dev.clj` (lines ~1823-2000) | REPL helpers: `arse-progress!`, `run-arse-entry!`, `run-arse-batch!`. Added to `status` output. | Written, not compiled |
 
 ### Data
 
@@ -92,11 +92,11 @@ executed yet.
 |------|----------|
 | `data/first-proof/problem7-corpus-context.jsonl` | Pre-retrieved context: 8 nodes × 8 threads each (64 total) |
 | `data/synthetic-qa/problem{N}-prompts.jsonl` | Generation prompts (P2: 8, P3: 8, P7: 16, P8: 8 = 40 total) |
-| `data/ase-queue/entities.json` | 40 Tickle work items with prompts |
-| `data/ase-queue/review-prompts.json` | Claude review prompts (5 criteria each) |
-| `data/ase-queue/queue-manifest.json` | Metadata: problems, counts, estimated time |
-| `data/ase-test/q{1-5}-result.json` | Test results from P7 curriculum run |
-| `~/code/storage/ase/` | ASE store directory (empty, awaiting first ingest) |
+| `data/arse-queue/entities.json` | 40 Tickle work items with prompts |
+| `data/arse-queue/review-prompts.json` | Claude review prompts (5 criteria each) |
+| `data/arse-queue/queue-manifest.json` | Metadata: problems, counts, estimated time |
+| `data/arse-test/q{1-5}-result.json` | Test results from P7 curriculum run |
+| `~/code/storage/arse/` | ArSE store directory (empty, awaiting first ingest) |
 
 ## The Retrieval Pipeline (4 stages)
 
@@ -186,7 +186,7 @@ their implications. Use `--backend claude` (default) or `--backend codex`.
 **Observations**:
 - Hypergraph structure is consistently well-typed (post/term/expression/scope nodes; mention/surface/scope/discourse/iatc edges)
 - LaTeX escape issue in JSON required `fix_latex_escapes()` workaround
-- Results at `data/ase-test/q{1-5}-result.json`
+- Results at `data/arse-test/q{1-5}-result.json`
 
 ## Hypergraph Output Schema
 
@@ -194,7 +194,7 @@ Each generated thread produces:
 
 ```json
 {
-  "thread_id": "ase-p7-curriculum-q1",
+  "thread_id": "arse-p7-curriculum-q1",
   "title": "...",
   "question": "... (LaTeX inline) ...",
   "answer": "... (rigorous, with LaTeX) ...",
@@ -238,17 +238,17 @@ python3 scripts/generate-synthetic-qa.py --problem 3 --dry-run
 python3 scripts/generate-synthetic-qa.py --problem 8 --dry-run
 
 # Step 3: Run generation via test script (or direct API)
-.venv/bin/python3 scripts/test-ase-generate.py --problem 7 --question all
+.venv/bin/python3 scripts/test-arse-generate.py --problem 7 --question all
 ```
 
 For problems without pre-built curriculum questions, modify
-`test-ase-generate.py` to read from `data/synthetic-qa/problem{N}-prompts.jsonl`
+`test-arse-generate.py` to read from `data/synthetic-qa/problem{N}-prompts.jsonl`
 and feed each prompt to the API.
 
 **Success criteria**: ≥80% valid JSON parse rate. All outputs have
 ≥4 term nodes, ≥1 expression node, ≥1 scope node.
 
-### Task 2: Ingest results into ASE store (MEDIUM)
+### Task 2: Ingest results into ArSE store (MEDIUM)
 
 After generation, convert results to JSONL and ingest:
 
@@ -256,21 +256,21 @@ After generation, convert results to JSONL and ingest:
 # Convert test results to JSONL
 python3 -c "
 import json, glob
-with open('data/ase-test/all-results.jsonl', 'w') as out:
-    for f in sorted(glob.glob('data/ase-test/q*-result.json')):
+with open('data/arse-test/all-results.jsonl', 'w') as out:
+    for f in sorted(glob.glob('data/arse-test/q*-result.json')):
         obj = json.load(open(f))
         if 'thread_id' in obj:
             out.write(json.dumps(obj) + '\n')
 "
 
 # Ingest
-python3 scripts/ase-store.py ingest data/ase-test/all-results.jsonl
+python3 scripts/arse-store.py ingest data/arse-test/all-results.jsonl
 
 # Reindex (requires sentence-transformers + torch in .venv)
-python3 scripts/ase-store.py reindex
+python3 scripts/arse-store.py reindex
 
 # Verify
-python3 scripts/ase-store.py stats
+python3 scripts/arse-store.py stats
 ```
 
 **Success criteria**: Store reports correct entity count. Embeddings
@@ -293,12 +293,12 @@ Source: `REVIEWER.md` gap descriptions + `data/first-proof/problem{N}-wiring.jso
 
 ### Task 4: Add prompt-file execution mode to test script (HIGH)
 
-`test-ase-generate.py` currently only has hardcoded P7 curriculum questions.
+`test-arse-generate.py` currently only has hardcoded P7 curriculum questions.
 Add a `--prompts-file` flag that reads from a JSONL file (as produced by
 `generate-synthetic-qa.py`) and runs each prompt through the API:
 
 ```bash
-.venv/bin/python3 scripts/test-ase-generate.py \
+.venv/bin/python3 scripts/test-arse-generate.py \
     --prompts-file data/synthetic-qa/problem3-prompts.jsonl \
     --timeout 120
 ```
@@ -308,7 +308,7 @@ requiring Tickle.
 
 ### Task 5: Validate hotspot stepper integration (LOW)
 
-`run-ase-hotspot-loop.py` chains hotspot stepper → retrieval → generation.
+`run-arse-hotspot-loop.py` chains hotspot stepper → retrieval → generation.
 Verify it works with existing P7 hotspot data at
 `data/first-proof/stepper/problem7-hotspot-stepper-*.json`.
 
@@ -319,7 +319,7 @@ Verify it works with existing P7 hotspot data at
    handles this by using text seeds to bridge.
 
 2. **LaTeX in JSON**: LLMs produce `\Gamma` not `\\Gamma` in JSON strings.
-   `fix_latex_escapes()` in `test-ase-generate.py` handles this. Any new
+   `fix_latex_escapes()` in `test-arse-generate.py` handles this. Any new
    API integration must apply the same fix.
 
 3. **Nested Claude sessions**: `claude -p` cannot run inside another Claude

@@ -9,5 +9,5 @@
   "n_work_items": 40,
   "response_schema": "synthetic-hypergraph",
   "estimated_time_minutes": 120,
-  "queue_type": "ase"
+  "queue_type": "arse"
 }

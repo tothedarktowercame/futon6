@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare ASE work queue for Tickle overnight runs.
+"""Prepare ArSE work queue for Tickle overnight runs (ArSE Tickling).
 
 Converts the synthetic QA prompts (from generate-synthetic-qa.py) into
 a format consumable by Tickle's work queue machinery:
@@ -8,7 +8,7 @@ a format consumable by Tickle's work queue machinery:
   - review-prompts.json: corresponding review prompts for Claude
   - queue-manifest.json: metadata for progress tracking
 
-The output goes to futon6/data/ase-queue/ where tickle_work_queue.clj
+The output goes to futon6/data/arse-queue/ where tickle_work_queue.clj
 can pick it up alongside the CT entities.
 
 Can also generate prompts for Frontier Math problems when wiring
@@ -16,13 +16,13 @@ diagrams exist.
 
 Usage:
     # Prepare queue for P7 hotspots
-    python3 scripts/prepare-ase-tickle-queue.py --problem 7
+    python3 scripts/prepare-arse-tickle-queue.py --problem 7
 
     # Prepare for multiple problems
-    python3 scripts/prepare-ase-tickle-queue.py --problem 3 7
+    python3 scripts/prepare-arse-tickle-queue.py --problem 3 7
 
     # Include all problems that have wiring diagrams
-    python3 scripts/prepare-ase-tickle-queue.py --all
+    python3 scripts/prepare-arse-tickle-queue.py --all
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ import time
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-ASE_QUEUE_DIR = REPO_ROOT / "data" / "ase-queue"
+ARSE_QUEUE_DIR = REPO_ROOT / "data" / "arse-queue"
 
 
 def load_prompts(problem: int) -> list[dict]:
@@ -54,7 +54,7 @@ def build_review_prompt(work_item: dict) -> str:
     """Build a review prompt for Claude to evaluate a generated QA pair."""
     return (
         "Runtime surface contract:\n"
-        "- Agent: claude-1 (Tickle ASE work queue — review mode)\n"
+        "- Agent: claude-1 (ArSE Tickling — review mode)\n"
         f"- Task: Review synthetic QA pair for proof node: {work_item['node-id']}\n"
         "- Your verdict will be recorded as evidence.\n\n"
         "## Review Criteria\n\n"
@@ -100,7 +100,7 @@ def main():
     parser.add_argument("--problem", type=int, nargs="+", default=[])
     parser.add_argument("--all", action="store_true",
                         help="Include all problems with wiring diagrams")
-    parser.add_argument("--output-dir", type=Path, default=ASE_QUEUE_DIR)
+    parser.add_argument("--output-dir", type=Path, default=ARSE_QUEUE_DIR)
     args = parser.parse_args()
 
     if args.all:
@@ -110,7 +110,7 @@ def main():
     else:
         problems = [7]  # default
 
-    print(f"Preparing ASE queue for problems: {problems}")
+    print(f"Preparing ArSE queue for problems: {problems}")
 
     all_work_items = []
     all_review_prompts = {}
@@ -125,9 +125,9 @@ def main():
             work_id = rec["thread_id"]
             work_item = {
                 "entity-id": work_id,
-                "title": f"[ASE P{problem}] {rec['node_id']} — synthetic QA #{rec['instance']}",
+                "title": f"[ArSE P{problem}] {rec['node_id']} — synthetic QA #{rec['instance']}",
                 "type": "synthetic-qa",
-                "corpus": "ase",
+                "corpus": "arse",
                 "problem": problem,
                 "node-id": rec["node_id"],
                 "instance": rec["instance"],
@@ -161,7 +161,7 @@ def main():
         "n_work_items": len(all_work_items),
         "response_schema": "synthetic-hypergraph",
         "estimated_time_minutes": len(all_work_items) * 3,  # ~3 min per item
-        "queue_type": "ase",
+        "queue_type": "arse",
     }
     manifest_path = args.output_dir / "queue-manifest.json"
     with manifest_path.open("w") as f:
@@ -176,7 +176,7 @@ def main():
     print(f"  {manifest_path}")
     print(f"\nTo run overnight via Tickle:")
     print(f"  ;; In futon3c REPL:")
-    print(f"  (dev/run-ase-batch! :n {len(all_work_items)})")
+    print(f"  (dev/run-arse-batch! :n {len(all_work_items)})")
 
     return 0
 

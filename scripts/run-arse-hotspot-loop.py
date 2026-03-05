@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Artificial Stack Exchange hotspot loop.
+"""ArSE (Artificial Stack Exchange) hotspot loop.
 
 Weaves together the hotspot stepper, corpus retrieval, and synthetic QA
 generation into a single workflow:
@@ -10,20 +10,20 @@ generation into a single workflow:
   4. Produce synthetic QA in hypergraph-native format
   5. Output enriched corpus context for the stepper
 
-This is the ASE self-play loop applied to proof improvement: the proof
+This is the ArSE self-play loop applied to proof improvement: the proof
 nodes are the Asker (they generate questions via gap analysis), the LLM
 is the Answerer, the hypergraph schema is the structure, and the hotspot
 stepper is the evaluator.
 
 Usage:
     # Full pipeline: retrieve + generate + prepare stepper
-    python3 scripts/run-ase-hotspot-loop.py --problem 7
+    python3 scripts/run-arse-hotspot-loop.py --problem 7
 
     # Just retrieve + analyze (no generation)
-    python3 scripts/run-ase-hotspot-loop.py --problem 7 --retrieve-only
+    python3 scripts/run-arse-hotspot-loop.py --problem 7 --retrieve-only
 
     # Generate synthetic QA from existing retrieval
-    python3 scripts/run-ase-hotspot-loop.py --problem 7 --generate-only
+    python3 scripts/run-arse-hotspot-loop.py --problem 7 --generate-only
 """
 
 from __future__ import annotations
@@ -145,10 +145,10 @@ def build_enriched_stepper_manifest(
     """Build a new stepper manifest that uses --corpus-context."""
     output_ts = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     output_jsonl = (
-        f"data/first-proof/problem{problem}-codex-results-ase-{output_ts}.jsonl"
+        f"data/first-proof/problem{problem}-codex-results-arse-{output_ts}.jsonl"
     )
     prompts_jsonl = (
-        f"data/first-proof/problem{problem}-codex-prompts-ase-{output_ts}.jsonl"
+        f"data/first-proof/problem{problem}-codex-prompts-arse-{output_ts}.jsonl"
     )
 
     # Take the original intervention command and replace/add --corpus-context
@@ -183,18 +183,18 @@ def build_enriched_stepper_manifest(
     new_cmd.extend(["--corpus-context", str(corpus_context_path)])
 
     manifest = {
-        "experiment_id": f"p{problem}-ase-hotspots-{output_ts}",
+        "experiment_id": f"p{problem}-arse-hotspots-{output_ts}",
         "wiring": original_manifest.get("wiring"),
         "compare_script": original_manifest.get("compare_script"),
         "run": {"execute": False, "stop_on_error": True},
         "baseline": original_manifest.get("baseline"),
         "interventions": [
             {
-                "label": "ase-enriched-hotspot",
+                "label": "arse-enriched-hotspot",
                 "command": new_cmd,
                 "output_jsonl": output_jsonl,
                 "notes": (
-                    "Hotspot-only run with pre-retrieved corpus context from ASE loop. "
+                    "Hotspot-only run with pre-retrieved corpus context from ArSE loop. "
                     "Uses FAISS structural expansion + text embedding reranking "
                     "instead of filesystem browsing."
                 ),
@@ -207,7 +207,7 @@ def build_enriched_stepper_manifest(
         "learning_log": {
             "decision_rule": (
                 "Compare node-level claim_verified distributions between "
-                "legacy baseline and ASE-enriched run. Adopt if gap rate decreases."
+                "legacy baseline and ArSE-enriched run. Adopt if gap rate decreases."
             ),
             "questions": [
                 "Did pre-retrieved context eliminate filesystem browsing timeouts?",
@@ -220,7 +220,7 @@ def build_enriched_stepper_manifest(
 
     out_path = (
         REPO_ROOT / "data" / "first-proof" / "stepper"
-        / f"problem{problem}-ase-stepper-{output_ts}.json"
+        / f"problem{problem}-arse-stepper-{output_ts}.json"
     )
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with out_path.open("w") as f:
@@ -294,13 +294,13 @@ def main():
             args.problem, manifest, context_path,
         )
         print(f"\n[3/3] Enriched stepper manifest: {stepper_path}")
-        print(f"\nTo run the ASE-enriched stepper:")
+        print(f"\nTo run the ArSE-enriched stepper:")
         print(f"  python3 scripts/run-proof-stepper.py --manifest {stepper_path}")
     else:
         print(f"\nNo stepper manifest found — skipping manifest generation")
 
     print(f"\n{'='*60}")
-    print(f"ASE hotspot loop complete for problem {args.problem}")
+    print(f"ArSE hotspot loop complete for problem {args.problem}")
     print(f"  Corpus context:     {context_path}")
     print(f"  Synthetic prompts:  {prompts_path}")
     if manifest_path:

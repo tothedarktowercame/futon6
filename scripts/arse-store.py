@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Artificial Stack Exchange store.
+"""ArSE (Artificial Stack Exchange) store.
 
 A minimal, file-based store for synthetic QA threads in hypergraph-native
 format. Mirrors the structure of storage/math-processed-gpu/ so the
@@ -11,20 +11,20 @@ Operations:
     stats    — Show store statistics
     query    — Search the store (keyword + FAISS)
 
-The store lives at storage/ase/ by default.
+The store lives at storage/arse/ by default.
 
 Usage:
     # Ingest synthetic QA from API output
-    python3 scripts/ase-store.py ingest data/synthetic-qa/problem7.jsonl
+    python3 scripts/arse-store.py ingest data/synthetic-qa/problem7.jsonl
 
     # Rebuild indexes after ingestion
-    python3 scripts/ase-store.py reindex
+    python3 scripts/arse-store.py reindex
 
     # Show stats
-    python3 scripts/ase-store.py stats
+    python3 scripts/arse-store.py stats
 
     # Query
-    python3 scripts/ase-store.py query "surgery obstruction torsion lattice"
+    python3 scripts/arse-store.py query "surgery obstruction torsion lattice"
 """
 
 from __future__ import annotations
@@ -39,7 +39,7 @@ from pathlib import Path
 import numpy as np
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_STORE = Path(os.path.expanduser("~/code/storage/ase"))
+DEFAULT_STORE = Path(os.path.expanduser("~/code/storage/arse"))
 
 
 def ensure_store(store_dir: Path) -> None:
@@ -297,7 +297,7 @@ def stats(store_dir: Path) -> int:
     entities = load_entities(store_dir)
     hypergraphs = load_hypergraphs(store_dir)
 
-    print(f"ASE Store: {store_dir}")
+    print(f"ArSE Store: {store_dir}")
     print(f"  Entities:    {len(entities)}")
     print(f"  Hypergraphs: {len(hypergraphs)}")
     print(f"  Created:     {manifest.get('created', '?')}")
