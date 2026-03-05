@@ -30,6 +30,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -230,15 +231,28 @@ def call_llm(prompt: str, timeout: int = 120, backend: str = "claude") -> str | 
 
     Backends:
         claude — claude -p (Opus 4.6)
-        codex  — codex -q (Codex 5.3)
+        codex  — codex exec (Codex CLI non-interactive mode)
     """
     # Strip CLAUDECODE env var so claude -p doesn't refuse to nest
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
+    output_path = None
 
     if backend == "claude":
         cmd = ["claude", "-p", prompt, "--output-format", "text"]
     elif backend == "codex":
-        cmd = ["codex", "-q", prompt]
+        # codex CLI no longer supports `-q`; use non-interactive exec mode.
+        with tempfile.NamedTemporaryFile(prefix="ase-codex-", suffix=".txt", delete=False) as tf:
+            output_path = tf.name
+        cmd = [
+            "codex",
+            "exec",
+            "-C",
+            str(REPO_ROOT),
+            "--skip-git-repo-check",
+            "-o",
+            output_path,
+            prompt,
+        ]
     else:
         print(f"  Unknown backend: {backend}", file=sys.stderr)
         return None
@@ -251,13 +265,25 @@ def call_llm(prompt: str, timeout: int = 120, backend: str = "claude") -> str | 
         if result.returncode != 0:
             print(f"  {backend} error: {result.stderr[:300]}", file=sys.stderr)
             return None
-        return result.stdout.strip()
+        text = result.stdout.strip()
+        if backend == "codex" and not text and output_path:
+            try:
+                text = Path(output_path).read_text(encoding="utf-8").strip()
+            except Exception:
+                pass
+        return text or None
     except subprocess.TimeoutExpired:
         print(f"  {backend} timed out after {timeout}s", file=sys.stderr)
         return None
     except FileNotFoundError:
         print(f"  {backend} CLI not found", file=sys.stderr)
         return None
+    finally:
+        if output_path:
+            try:
+                Path(output_path).unlink(missing_ok=True)
+            except Exception:
+                pass
 
 
 def fix_latex_escapes(text: str) -> str:
