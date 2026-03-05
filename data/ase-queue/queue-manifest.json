@@ -1,0 +1,13 @@
+{
+  "generated": "2026-03-05T01:11:51Z",
+  "problems": [
+    2,
+    3,
+    7,
+    8
+  ],
+  "n_work_items": 40,
+  "response_schema": "synthetic-hypergraph",
+  "estimated_time_minutes": 120,
+  "queue_type": "ase"
+}
