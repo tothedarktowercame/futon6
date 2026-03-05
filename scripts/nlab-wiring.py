@@ -89,21 +89,26 @@ ENV_TO_LINK_TYPE = {
 SCOPE_REGEXES = [
     ("let-binding", r"\bLet\s+\$([^$]+)\$\s+(be|denote)\s+([^.,$]+)"),
     ("define", r"\bDefine\s+\$([^$]+)\$\s*(:=|=|\\equiv)\s*([^.,$]+)"),
+    ("typed-arrow", r"\$([^$]{1,120}?)\s*:\s*([^$]{1,220}?\\(?:to|rightarrow|longrightarrow|hookrightarrow|twoheadrightarrow|mapsto)[^$]{0,160})\$"),
+    ("arrow-expression", r"\$([^$]{1,240}?\\(?:to|rightarrow|longrightarrow|hookrightarrow|twoheadrightarrow|mapsto)[^$]{1,240})\$"),
     ("diagram-family", r"\b[Aa]\s+diagram[^.]{0,260}?\$([A-Za-z])\([^)]+\)\$"),
     ("diagram-named", r"\b(?:[Tt]he|[Aa])\s+diagram\s+\$([^$]+)\$\s+(?:is|are|be|called)"),
     ("assume", r"\b(Assume|Suppose)\s+(that\s+)?\$([^$]+)\$"),
     ("if-condition", r"\bIf\s+\$([^$]+)\$"),
     ("consider", r"\bConsider\s+(a|an|the|some)?\s*\$?([^$.]{1,60})"),
     ("for-in", r"\bFor\s+(?:a|an|the|each|every)\s+[^$.]{0,80}?\$([^$]+)\$\s+in\s+\$([^$]+)\$"),
-    ("for-any-entity", r"\b(?:for\s+)?(any|every|each|all)\s+[^$.]{0,80}?\$([^$]+)\$"),
+    ("for-any-entity", r"\b(?:for\s+)?(any|every|each|all)\s+[^$.]{1,80}?\$([^$]+)\$"),
     ("for-any", r"\b(?:for\s+)?(any|every|each|all)\s+\$([^$]+)\$"),
     ("where-binding", r"\bwhere\s+\$([^$]+)\$\s+(is|denotes|represents)\s+([^.,$]+)"),
+    ("relation-expression", r"\$([^$]{1,260}?(?:=|\\(?:in|subseteq|subset|leq|geq|neq|equiv|approx|sim|cong)|[<>])[^$]{0,260})\$"),
     ("set-notation", r"\$([^$]*\\in\s+[^$]+)\$"),
 ]
 
 CLASSICAL_TO_METATHEORY = {
     "let-binding": "bind/let",
     "define": "bind/define",
+    "typed-arrow": "bind/typed",
+    "arrow-expression": "bind/typed",
     "diagram-family": "bind/let",
     "diagram-named": "bind/let",
     "assume": "assume/explicit",
@@ -113,6 +118,7 @@ CLASSICAL_TO_METATHEORY = {
     "for-any-entity": "quant/universal",
     "for-any": "quant/universal",
     "where-binding": "constrain/where",
+    "relation-expression": "constrain/relation",
     "set-notation": "constrain/such-that",
 }
 
@@ -151,6 +157,7 @@ LATEX_ENV_OPEN_RE = re.compile(r"\\begin\{(\w+)\}")
 PROSE_ENV_HEADING_RE = re.compile(
     r"(?m)^\s*(Definition|Defn|Theorem|Lemma|Proposition|Prop|Corollary|Remark|Example|Proof|Notation)\b[:.]?"
 )
+LATEX_ENV_TOKEN_RE = re.compile(r"\\(begin|end)\{(\w+)\}")
 
 # Wire detection (from validate-ct.py)
 WIRE_REGEXES = [
@@ -868,6 +875,20 @@ def _extract_integral_symbol(fragment_tail):
     return None
 
 
+_SCOPE_STARTER_RE = re.compile(
+    r"\b(?:Let|Define|Assume|Suppose|If|Consider|For|where|"
+    r"Definition|Defn|Theorem|Lemma|Proposition|Prop|Corollary|Remark|Example|Proof|Notation)\b",
+)
+
+
+def _find_next_scope_starter(text, start, stop):
+    """Find next likely scope-starter token in [start, stop)."""
+    if start >= stop:
+        return None
+    m = _SCOPE_STARTER_RE.search(text, start, stop)
+    return m.start() if m else None
+
+
 def _find_scope_end(text, match_start, match_end, stype):
     """Heuristic end-offset for scope extent in prose.
 
@@ -877,14 +898,24 @@ def _find_scope_end(text, match_start, match_end, stype):
     if match_end <= match_start:
         return match_end
 
-    if stype in {"let-binding", "define", "diagram-family", "diagram-named"}:
-        return len(text)
-
-    # Membership snippets are already local by construction.
-    if stype == "set-notation":
+    if stype in {"set-notation", "typed-arrow", "arrow-expression", "relation-expression"}:
         return match_end
 
-    hard_stop = min(len(text), match_start + 420)
+    long_scope = stype in {"let-binding", "define", "diagram-family", "diagram-named"}
+    hard_span = 900 if long_scope else 420
+    hard_stop = min(len(text), match_start + hard_span)
+
+    cands = []
+
+    para_break = text.find("\n\n", match_end, hard_stop)
+    if para_break != -1:
+        cands.append(para_break)
+
+    if long_scope:
+        next_scope = _find_next_scope_starter(text, match_end + 1, hard_stop)
+        if next_scope is not None:
+            cands.append(next_scope)
+
     tail = text[match_end:hard_stop]
 
     if stype == "consider":
@@ -894,7 +925,18 @@ def _find_scope_end(text, match_start, match_end, stype):
 
     m = boundary_re.search(tail)
     if m:
-        return match_end + m.end()
+        boundary_end = match_end + m.end()
+        if long_scope:
+            tail2 = text[boundary_end:hard_stop]
+            m2 = boundary_re.search(tail2)
+            if m2:
+                boundary_end = boundary_end + m2.end()
+        cands.append(boundary_end)
+
+    if cands:
+        valid = [c for c in cands if c > match_end]
+        if valid:
+            return min(valid)
     return hard_stop
 
 
@@ -992,18 +1034,61 @@ def _detect_symbolic_binders(entity_id, text, start_idx=0, parent_env_id=None):
     return scopes
 
 
+def _pair_latex_environment_ranges(text):
+    """Return paired LaTeX environment spans from \\begin/\\end tokens.
+
+    Prefers same-name closure; if none exists, falls back to the nearest open
+    env on the stack so we still get well-formed interval boundaries.
+    """
+    pairs = []
+    stack = []  # list of (env_name, begin_match)
+
+    for m in LATEX_ENV_TOKEN_RE.finditer(text):
+        kind = m.group(1)
+        env_name = m.group(2).lower()
+
+        if kind == "begin":
+            stack.append((env_name, m))
+            continue
+
+        # kind == "end"
+        idx = None
+        for i in range(len(stack) - 1, -1, -1):
+            if stack[i][0] == env_name:
+                idx = i
+                break
+        if idx is None and stack:
+            idx = len(stack) - 1
+        if idx is None:
+            continue
+
+        begin_name, begin_m = stack.pop(idx)
+        pairs.append({
+            "open_name": begin_name,
+            "close_name": env_name,
+            "open_match": begin_m.group(),
+            "open_start": begin_m.start(),
+            "open_end": begin_m.end(),
+            "close_end": m.end(),
+        })
+
+    return pairs
+
+
 def _detect_environment_scopes(entity_id, text, start_idx=0, parent_env_id=None):
     """Detect theorem-like environments as discourse scopes."""
     scopes = []
     scope_idx = start_idx
 
-    for m in LATEX_ENV_OPEN_RE.finditer(text):
-        env_name = m.group(1).lower()
+    for p in _pair_latex_environment_ranges(text):
+        env_name = p["open_name"]
         env_type = ENV_LATEX_STYLE.get(env_name)
         if not env_type:
             continue
         scope_id = f"{entity_id}:scope-{scope_idx:03d}"
         scope_idx += 1
+        close_name = p["close_name"]
+        close_style = "matched-close" if close_name == env_name else "cross-close"
         scopes.append({
             "hx/id": scope_id,
             "hx/role": "component",
@@ -1012,20 +1097,23 @@ def _detect_environment_scopes(entity_id, text, start_idx=0, parent_env_id=None)
             "hx/ends": [
                 {"role": "entity", "ident": entity_id},
                 {"role": "environment", "name": env_name},
+                {"role": "close-environment", "name": close_name},
             ],
             "hx/content": {
-                "match": m.group()[:120],
-                "position": m.start(),
-                "end": m.end(),
+                "match": p["open_match"][:120],
+                "position": p["open_start"],
+                "end": p["close_end"],
             },
-            "hx/labels": ["scope", "environment", env_name],
+            "hx/labels": ["scope", "environment", env_name, close_style],
         })
 
-    for m in PROSE_ENV_HEADING_RE.finditer(text):
+    prose_heads = list(PROSE_ENV_HEADING_RE.finditer(text))
+    for i, m in enumerate(prose_heads):
         label = m.group(1).lower()
         env_type = PROSE_ENV_TYPE_MAP.get(label)
         if not env_type:
             continue
+        next_pos = prose_heads[i + 1].start() if i + 1 < len(prose_heads) else len(text)
         scope_id = f"{entity_id}:scope-{scope_idx:03d}"
         scope_idx += 1
         scopes.append({
@@ -1040,7 +1128,7 @@ def _detect_environment_scopes(entity_id, text, start_idx=0, parent_env_id=None)
             "hx/content": {
                 "match": m.group()[:120],
                 "position": m.start(),
-                "end": m.end(),
+                "end": max(m.end(), next_pos),
             },
             "hx/labels": ["scope", "environment", label],
         })
@@ -1086,6 +1174,13 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             elif stype == "for-any":
                 ends.append({"role": "quantifier", "text": m.group(1)})
                 ends.append({"role": "symbol", "latex": m.group(2).strip()})
+            elif stype == "typed-arrow":
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "type", "latex": m.group(2).strip()[:120]})
+            elif stype == "arrow-expression":
+                ends.append({"role": "type", "latex": m.group(1).strip()[:160]})
+            elif stype == "relation-expression":
+                ends.append({"role": "relation", "latex": m.group(1).strip()[:160]})
             elif stype == "where-binding":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "description", "text": m.group(3).strip()[:80]})

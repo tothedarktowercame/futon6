@@ -76,7 +76,7 @@ def test_info_nce_loss():
 def test_train_smoke(sample_hg):
     import copy
     corpus = [copy.deepcopy(sample_hg) for _ in range(4)]
-    model, embeddings = train(
+    model, embeddings, stats = train(
         corpus, dim=16, hidden_dim=32, n_layers=1,
         epochs=2, batch_size=2, verbose=False)
     assert embeddings.shape == (4, 16)
@@ -125,14 +125,14 @@ def test_train_with_tensor_cache(sample_hg, tmp_path):
     cache_path = str(tmp_path / "tensors.pt")
 
     # First run: creates cache
-    model1, emb1 = train(
+    model1, emb1, _ = train(
         corpus, dim=16, hidden_dim=32, n_layers=1,
         epochs=2, batch_size=2, verbose=False,
         tensor_cache_path=cache_path)
     assert os.path.exists(cache_path)
 
     # Second run: loads from cache (empty hypergraphs list)
-    model2, emb2 = train(
+    model2, emb2, _ = train(
         [], dim=16, hidden_dim=32, n_layers=1,
         epochs=2, batch_size=2, verbose=False,
         tensor_cache_path=cache_path)

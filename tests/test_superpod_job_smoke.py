@@ -55,6 +55,13 @@ def test_superpod_job_ct_pipeline_smoke(tmp_path: Path):
     assert "thread_wiring" in completed
     assert manifest["stage7_stats"]["ct_backed"] is True
     assert manifest["stage7_stats"]["threads_processed"] == 4
+    assert "stage_status" in manifest
+    assert manifest["stage_status"]["parse"]["status"] == "completed"
+    assert manifest["stage_status"]["embeddings"]["status"] == "skipped"
+    assert "skip_reason" in manifest["stage_status"]["embeddings"]
+    assert manifest["stage_status"]["reverse_morphogenesis"]["status"] == "skipped"
+    assert manifest["readiness"]["status"] in {"pass", "warn"}
+    assert isinstance(manifest.get("health_gate_thresholds"), dict)
 
     wiring = json.loads((outdir / "thread-wiring-ct.json").read_text(encoding="utf-8"))
     assert isinstance(wiring, list)
@@ -76,3 +83,4 @@ def test_superpod_job_limit_defaults_thread_limit(tmp_path: Path):
     manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["entity_count"] == 2
     assert manifest["stage7_stats"]["threads_processed"] == 2
+    assert manifest["stage_status"]["thread_wiring"]["status"] == "completed"

@@ -17,6 +17,7 @@ import importlib
 import json
 import re
 import tarfile
+import textwrap
 from datetime import datetime, timezone
 from collections import Counter
 from pathlib import Path
@@ -240,6 +241,205 @@ def is_pos_in_any_scope(pos: int, ranges: list[tuple[int, int]]) -> bool:
     return any(start <= pos < end for start, end in ranges)
 
 
+def _context_excerpt(text: str, start: int, end: int, window: int = 56) -> tuple[str, str]:
+    left0 = max(0, start - window)
+    right0 = min(len(text), end + window)
+    left = " ".join(text[left0:start].split())
+    right = " ".join(text[end:right0].split())
+    left = left.rstrip()
+    right = right.lstrip()
+    if left.endswith("$"):
+        left = left[:-1].rstrip()
+    if right.startswith("$"):
+        right = right[1:].lstrip()
+    if left0 > 0 and left:
+        left = "... " + left
+    if right0 < len(text) and right:
+        right = right + " ..."
+    return left, right
+
+
+def _build_intersplice_examples(answer_text: str, expr_rows: list[dict], max_examples: int = 12) -> list[dict]:
+    all_candidates = [r for r in expr_rows if r.get("var_count", 0) > 0]
+    if not all_candidates:
+        return []
+    candidates = [
+        r for r in all_candidates
+        if r.get("var_count", 0) >= 2 or len(r.get("latex", "")) >= 8
+    ]
+    if len(candidates) < max_examples:
+        for r in all_candidates:
+            if r in candidates:
+                continue
+            candidates.append(r)
+            if len(candidates) >= max_examples * 2:
+                break
+
+    # Prefer expressions with more variables or unresolved scope, then diversify by position.
+    ranked = sorted(
+        candidates,
+        key=lambda r: (
+            int(r.get("unscoped_count", 0) > 0),
+            r.get("var_count", 0),
+            len(r.get("latex", "")),
+        ),
+        reverse=True,
+    )
+
+    chosen = []
+    seen = set()
+    for row in ranked:
+        if len(chosen) >= max_examples // 2:
+            break
+        idx = row["index"]
+        if idx in seen:
+            continue
+        seen.add(idx)
+        chosen.append(row)
+
+    for row in sorted(candidates, key=lambda r: r["index"]):
+        if len(chosen) >= max_examples:
+            break
+        idx = row["index"]
+        if idx in seen:
+            continue
+        seen.add(idx)
+        chosen.append(row)
+
+    out = []
+    for row in sorted(chosen, key=lambda r: r["index"]):
+        start = row.get("latex_start", row["position"])
+        end = row.get("latex_end", start + len(row.get("latex", "")))
+        left, right = _context_excerpt(answer_text, start, end)
+        out.append({
+            "index": row["index"],
+            "position": row["position"],
+            "display": row.get("display", False),
+            "latex": row.get("latex", ""),
+            "sexp": row.get("sexp", ""),
+            "parse_fallback": row.get("parse_fallback", False),
+            "var_count": row.get("var_count", 0),
+            "scoped_count": row.get("scoped_count", 0),
+            "unscoped_count": row.get("unscoped_count", 0),
+            "unscoped_tokens": row.get("unscoped_tokens", []),
+            "context_left": left,
+            "context_right": right,
+        })
+    return out
+
+
+def _wrap_comment_lines(prefix: str, text: str, width: int = 108) -> list[str]:
+    text = text.replace("\n", " ").strip()
+    if not text:
+        return [f";; {prefix}"]
+    wrapped = textwrap.wrap(text, width=width, break_long_words=False, break_on_hyphens=False)
+    if not wrapped:
+        return [f";; {prefix}"]
+    lines = [f";; {prefix}{wrapped[0]}"]
+    for w in wrapped[1:]:
+        lines.append(f";; {' ' * len(prefix)}{w}")
+    return lines
+
+
+def _build_full_interspliced_lisp(answer_text: str, expr_rows: list[dict]) -> str:
+    """Build full no-ellipsis prose/LaTeX/s-exp dump."""
+    rows = sorted(expr_rows, key=lambda r: (r.get("latex_start", r["position"]), r["index"]))
+    lines = []
+    cur = 0
+    for row in rows:
+        start = int(row.get("latex_start", row["position"]))
+        end = int(row.get("latex_end", start + len(row.get("latex", ""))))
+        start = max(cur, start)
+        end = max(start, min(len(answer_text), end))
+        prose = answer_text[cur:start]
+        if prose.strip():
+            lines.extend(_wrap_comment_lines("Prose: ", prose))
+        latex = row.get("latex", "")
+        sexp = row.get("sexp", "")
+        lines.extend(_wrap_comment_lines("LaTeX: ", latex))
+        lines.append(str(sexp))
+        lines.append("")
+        cur = end
+
+    tail = answer_text[cur:]
+    if tail.strip():
+        lines.extend(_wrap_comment_lines("Prose: ", tail))
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _lisp_quote(s: str) -> str:
+    return '"' + s.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def _build_scope_tree_lisp(answer_text: str, scopes: list[dict]) -> str:
+    """Nested scope dump with full source comments (no ellipses)."""
+    nodes = []
+    for i, s in enumerate(scopes):
+        c = s.get("hx/content", {})
+        start = c.get("position")
+        if not isinstance(start, int):
+            continue
+        end = c.get("end")
+        if not isinstance(end, int):
+            m = c.get("match", "")
+            end = start + len(m) if m else start
+        end = max(start, min(len(answer_text), end))
+        nodes.append({
+            "sid": f"S{i:03d}",
+            "type": s.get("hx/type", "scope/unknown"),
+            "start": start,
+            "end": end,
+            "source": answer_text[start:end],
+            "ends": s.get("hx/ends", []),
+            "parent": None,
+            "children": [],
+        })
+
+    nodes.sort(key=lambda n: (n["start"], -(n["end"] - n["start"])))
+    stack = []
+    for n in nodes:
+        while stack and n["start"] >= stack[-1]["end"]:
+            stack.pop()
+        while stack and n["end"] > stack[-1]["end"]:
+            stack.pop()
+        if stack:
+            n["parent"] = stack[-1]["sid"]
+            stack[-1]["children"].append(n)
+        stack.append(n)
+
+    index = {n["sid"]: n for n in nodes}
+    roots = [n for n in nodes if n["parent"] is None]
+
+    def render(node: dict, depth: int, out: list[str]) -> None:
+        ind = "  " * depth
+        out.append(
+            f"{ind}(scope {node['sid']} :type {node['type']} :start {node['start']} :end {node['end']}"
+        )
+        for cl in _wrap_comment_lines("Source: ", node["source"]):
+            out.append(ind + "  " + cl)
+
+        for e in node["ends"]:
+            role = e.get("role", "part")
+            if "latex" in e:
+                out.append(ind + f"  (end :role {role} :latex {_lisp_quote(str(e['latex']))})")
+            elif "text" in e:
+                out.append(ind + f"  (end :role {role} :text {_lisp_quote(str(e['text']))})")
+            elif "name" in e:
+                out.append(ind + f"  (end :role {role} :name {_lisp_quote(str(e['name']))})")
+            elif "ident" in e:
+                out.append(ind + f"  (end :role {role} :ident {_lisp_quote(str(e['ident']))})")
+
+        for c in node["children"]:
+            render(index[c["sid"]], depth + 1, out)
+        out.append(ind + ")")
+
+    out = []
+    for r in roots:
+        render(r, 0, out)
+        out.append("")
+    return "\n".join(out).rstrip() + "\n"
+
+
 def build() -> None:
     if not RAW_PATH.exists() or not WIRING_PATH.exists():
         raise FileNotFoundError("required thread fixture files are missing")
@@ -324,6 +524,8 @@ def build() -> None:
             "position": expr["position"],
             "display": expr["display"],
             "latex": latex,
+            "latex_start": expr["position"] + expr["open_len"],
+            "latex_end": expr["position"] + expr["open_len"] + len(latex),
             "sexp": sexp,
             "parse_fallback": bool(sexp.startswith('"') and sexp.endswith('"')),
             "vars": enriched,
@@ -334,6 +536,9 @@ def build() -> None:
         })
 
     paper = find_paper_snippet(nw.detect_scopes)
+    intersplice_examples = _build_intersplice_examples(a_text, expr_rows, max_examples=12)
+    full_lisp_dump = _build_full_interspliced_lisp(a_text, expr_rows)
+    scope_lisp_dump = _build_scope_tree_lisp(a_text, new_rows)
     coverage = {
         "expr_count": len(expr_rows),
         "expr_with_unscoped": expr_with_unscoped,
@@ -357,6 +562,9 @@ def build() -> None:
         "new_scopes": new_rows,
         "added_scopes": added_sorted,
         "expr_rows": expr_rows,
+        "intersplice_examples": intersplice_examples,
+        "full_lisp_dump": full_lisp_dump,
+        "scope_lisp_dump": scope_lisp_dump,
         "scope_coverage": coverage,
         "stats": {
             "legacy_count": len(legacy_scopes),
@@ -424,6 +632,14 @@ pre {{ margin: 8px 0 0; background: #0f172a; color: #e2e8f0; border-radius: 8px;
 .var-unscoped {{ background: rgba(239,68,68,.28); border-bottom: 2px solid #ef4444; border-radius: 3px; padding: 0 1px; color: #fee2e2; }}
 .row-meta {{ margin-top: 4px; font-size: 0.74rem; color: #64748b; font-family: system-ui, sans-serif; }}
 .twoup td {{ width: 50%; }}
+.inter-list {{ display: grid; gap: 10px; }}
+.inter-item {{ border: 1px solid #e5e7eb; border-radius: 8px; background: #fcfcfb; padding: 10px 12px; }}
+.inter-line {{ line-height: 1.45; }}
+.inline-tex, .inline-sexp-chip {{ display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 2px 8px; margin: 0 4px; }}
+.inline-tex {{ background: #e0f2fe; border: 1px solid #7dd3fc; color: #0c4a6e; }}
+.inline-sexp-chip {{ background: #ede9fe; border: 1px solid #c4b5fd; color: #4c1d95; }}
+.chip-k {{ font: 700 0.62rem/1 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .04em; opacity: .9; }}
+.chip-v {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.75rem; }}
 @media (max-width: 980px) {{
   .grid {{ grid-template-columns: 1fr; }}
   .stats {{ grid-template-columns: 1fr 1fr; }}
@@ -464,6 +680,24 @@ pre {{ margin: 8px 0 0; background: #0f172a; color: #e2e8f0; border-radius: 8px;
       <thead><tr><th>A. Marked-up LaTeX</th><th>B. s-expression mapping</th></tr></thead>
       <tbody></tbody>
     </table>
+  </div>
+
+  <div class=\"section card\">
+    <h2>Interspliced LaTeX ↔ s-exp Walkthrough</h2>
+    <div class=\"mini\">Selected examples with local prose context; each formula is paired inline with its s-expression.</div>
+    <div class=\"inter-list\" id=\"intersplice-list\"></div>
+  </div>
+
+  <div class=\"section card\">
+    <h2>Full Interspliced Dump (No Ellipses)</h2>
+    <div class=\"mini\">Complete answer text reconstructed as <code>;; Prose</code> and <code>;; LaTeX</code> comments with s-expression lines.</div>
+    <pre id=\"full-lisp\"></pre>
+  </div>
+
+  <div class=\"section card\">
+    <h2>Scope Tree Dump (No Ellipses)</h2>
+    <div class=\"mini\">Nested scope forms with full source-span comments and scope end roles.</div>
+    <pre id=\"scope-lisp\"></pre>
   </div>
 
   <div class=\"section card\">
@@ -619,6 +853,46 @@ function buildExprTable() {{
   }}).join('');
 }}
 
+function buildIntersplice() {{
+  const rows = DATA.intersplice_examples || [];
+  const host = document.getElementById('intersplice-list');
+  if (!rows.length) {{
+    host.innerHTML = '<div class="mini">No interspliced examples available.</div>';
+    return;
+  }}
+
+  host.innerHTML = rows.map((r) => {{
+    const status = Number(r.unscoped_count || 0) === 0
+      ? '<span class="pill common">fully scoped</span>'
+      : '<span class="pill warn">needs scope</span>';
+    const parseFlag = r.parse_fallback
+      ? ' <span class="pill added">fallback parse</span>'
+      : '';
+    const tok = (r.unscoped_tokens || []).length
+      ? `unscoped: <code>${{esc((r.unscoped_tokens || []).join(', '))}}</code>`
+      : 'unscoped: none';
+
+    return `
+      <div class="inter-item">
+        <div class="mini">expr #${{r.index}} @${{r.position}} ${{status}}${{parseFlag}}</div>
+        <div class="inter-line">
+          ${{esc(r.context_left || '')}}
+          <span class="inline-tex"><span class="chip-k">TeX</span><span class="chip-v">${{esc(String(r.latex || ''))}}</span></span>
+          <span class="inline-sexp-chip"><span class="chip-k">s-exp</span><span class="chip-v">${{esc(String(r.sexp || ''))}}</span></span>
+          ${{esc(r.context_right || '')}}
+        </div>
+        <div class="row-meta">vars: ${{r.var_count}} | scoped: ${{r.scoped_count}} | ${{tok}}</div>
+      </div>`;
+  }}).join('');
+}}
+
+function buildLispDumps() {{
+  const full = document.getElementById('full-lisp');
+  const scope = document.getElementById('scope-lisp');
+  if (full) full.textContent = String(DATA.full_lisp_dump || '');
+  if (scope) scope.textContent = String(DATA.scope_lisp_dump || '');
+}}
+
 function buildAddedTable() {{
   const body = document.querySelector('#added-table tbody');
   const rows = DATA.added_scopes || [];
@@ -667,6 +941,8 @@ function buildPaperCase() {{
 buildStats();
 buildTexts();
 buildExprTable();
+buildIntersplice();
+buildLispDumps();
 buildAddedTable();
 buildTypeDelta();
 buildPaperCase();

@@ -283,7 +283,7 @@ def build_node_prompt(
             "",
             "## Local Corpus Hint",
             "",
-            f"Use local processed data if available under: {math_se_dir}",
+            f"Use local corpus data if available under: {math_se_dir}",
         ])
 
     return "\n".join(lines)
@@ -350,7 +350,7 @@ def build_synthesis_prompt(
             "",
             "## Local Corpus Hint",
             "",
-            f"Use local processed data if available under: {math_se_dir}",
+            f"Use local corpus data if available under: {math_se_dir}",
         ])
     return "\n".join(lines)
 

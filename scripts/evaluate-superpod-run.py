@@ -48,6 +48,10 @@ def check_pipeline_health(outdir: Path) -> dict:
         "elapsed_seconds": manifest.get("elapsed_seconds"),
         "entity_count": manifest.get("entity_count"),
         "source": manifest.get("source"),
+        "readiness": manifest.get("readiness"),
+        "health_gate_thresholds": manifest.get("health_gate_thresholds"),
+        "health_issues": manifest.get("health_issues", []),
+        "stage_status": manifest.get("stage_status", {}),
     }
 
     # Stage-level stats
@@ -57,8 +61,10 @@ def check_pipeline_health(outdir: Path) -> dict:
             report[key] = manifest[key]
 
     # Check critical invariants
+    stage_status = report.get("stage_status") or {}
+    thread_stage = stage_status.get("thread_wiring") or {}
     s7 = manifest.get("stage7_stats") or {}
-    if not s7.get("ct_backed"):
+    if thread_stage.get("status") == "completed" and not s7.get("ct_backed"):
         report["warnings"] = report.get("warnings", [])
         report["warnings"].append("stage7 not CT-backed")
 
@@ -77,6 +83,30 @@ def check_pipeline_health(outdir: Path) -> dict:
             report["warnings"] = report.get("warnings", [])
             report["warnings"].append(
                 f"hypergraph assembly rate {rate:.1%} < 95%")
+
+    # Surface stage-status contract issues so automation can catch drift.
+    if stage_status:
+        expected = {
+            "parse", "embeddings", "llm_pattern_tags", "clustering", "ner_scopes",
+            "distinctor_mit", "reverse_morphogenesis", "thread_wiring",
+            "expression_surfaces", "hypergraphs", "graph_embedding", "faiss_index",
+        }
+        missing = sorted(expected - set(stage_status.keys()))
+        if missing:
+            report["warnings"] = report.get("warnings", [])
+            report["warnings"].append(f"manifest stage_status missing keys: {missing}")
+        for key, rec in stage_status.items():
+            if rec.get("status") == "skipped" and not rec.get("skip_reason"):
+                report["warnings"] = report.get("warnings", [])
+                report["warnings"].append(f"stage_status[{key}] skipped without skip_reason")
+
+    # Bubble up producer-side health warnings.
+    if report["health_issues"]:
+        report["warnings"] = report.get("warnings", [])
+        for issue in report["health_issues"]:
+            report["warnings"].append(
+                f"{issue.get('stage', 'unknown')}: {issue.get('message', '')}"
+            )
 
     return report
 
@@ -458,6 +488,11 @@ def main():
     print(f"   Stages completed: {health.get('stages_completed', [])}")
     print(f"   Entities: {health.get('entity_count', '?')}")
     print(f"   Elapsed: {health.get('elapsed_seconds', '?')}s")
+    if health.get("readiness"):
+        rd = health["readiness"] or {}
+        print(f"   Readiness: {rd.get('status', '?')} (issues={rd.get('issues', '?')}, preflight={rd.get('preflight', False)})")
+    if health.get("stage_status"):
+        print(f"   Stage status records: {len(health['stage_status'])}")
     if health.get("stage8_stats"):
         s8 = health["stage8_stats"]
         print(f"   Expression parse rate: {s8.get('parse_rate', 0):.1%}")

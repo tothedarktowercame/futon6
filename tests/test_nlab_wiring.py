@@ -454,7 +454,8 @@ class TestDiscourseWiring:
         assert scopes
         c = scopes[0]["hx/content"]
         assert c["position"] == 0
-        assert c["end"] == len(text)
+        assert c["end"] >= text.find(".") + 1
+        assert c["end"] <= len(text)
 
     def test_for_any_entity_detected(self):
         text = r"For every edge $e \in E$ such that $f(e)=e$, we proceed."
@@ -465,6 +466,54 @@ class TestDiscourseWiring:
                     for e in s.get("hx/ends", []))
             for s in scopes
         )
+
+    def test_typed_arrow_scope_detected(self):
+        text = r"We have $f : A \to B$ and $g : B \to C$."
+        scopes = nlab_wiring.detect_scopes("t-10", text)
+        typed = [s for s in scopes if s["hx/type"] == "bind/typed"]
+        assert len(typed) >= 2
+        assert any(
+            any(e.get("role") == "type" and r"\to" in e.get("latex", "")
+                for e in s.get("hx/ends", []))
+            for s in typed
+        )
+
+    def test_arrow_expression_scope_detected(self):
+        text = r"Homomorphisms of directed graphs $\Gamma \to U(\mathcal{C})$ are useful."
+        scopes = nlab_wiring.detect_scopes("t-10b", text)
+        assert any(
+            s["hx/type"] == "bind/typed"
+            and any(e.get("role") == "type" and r"\Gamma \to U(\mathcal{C})" in e.get("latex", "")
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_relation_expression_scope_detected(self):
+        text = r"We use $x^2 + y^2 = z^2$ in this argument."
+        scopes = nlab_wiring.detect_scopes("t-10c", text)
+        assert any(
+            s["hx/type"] == "constrain/relation"
+            and any(e.get("role") == "relation" and "=" in e.get("latex", "")
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_latex_environment_scope_uses_closing_token(self):
+        text = r"\begin{theorem}Statement.\end{theorem}"
+        scopes = nlab_wiring.detect_scopes("t-11", text)
+        envs = [s for s in scopes if s["hx/type"] == "env/theorem"]
+        assert envs
+        c = envs[0]["hx/content"]
+        assert c["position"] == 0
+        assert c["end"] == len(text)
+
+    def test_cross_close_environment_scope_supported(self):
+        text = r"\begin{theorem}Statement.\end{proof}"
+        scopes = nlab_wiring.detect_scopes("t-12", text)
+        envs = [s for s in scopes if s["hx/type"] == "env/theorem"]
+        assert envs
+        labels = set(envs[0].get("hx/labels", []))
+        assert "cross-close" in labels
 
 
 # ============================================================

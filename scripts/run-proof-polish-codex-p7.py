@@ -20,10 +20,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import tempfile
+import time
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 
@@ -176,11 +179,24 @@ def build_node_prompt(
     node: dict,
     edges: list[dict],
     solution_text: str,
-    math_se_dir: Path | None = None,
+    corpus_dirs: list[Path] | None = None,
+    prompt_mode: str = "wired",
+    corpus_context: str | None = None,
 ) -> str:
-    """Build a verification prompt for a single proof node."""
+    """Build a verification prompt for a single proof node.
+
+    If corpus_context is provided (pre-retrieved thread excerpts),
+    it replaces the generic "Local Corpus Hints" section.
+    """
     node_id = node["id"]
-    focus = NODE_VERIFICATION_FOCUS.get(node_id, "Verify the mathematical claim.")
+    use_wiring = prompt_mode == "wired"
+    if use_wiring:
+        focus = NODE_VERIFICATION_FOCUS.get(node_id, "Verify the mathematical claim.")
+    else:
+        focus = (
+            "Verify this claim independently (claim-only mode). "
+            "State whether it is verified/plausible/gap and list missing assumptions."
+        )
 
     # Find edges involving this node
     incoming = [e for e in edges if e["target"] == node_id]
@@ -215,13 +231,13 @@ def build_node_prompt(
         "",
     ]
 
-    if incoming:
+    if use_wiring and incoming:
         lines.append("## Incoming Edges (this step depends on)")
         for e in incoming:
             lines.append(f"  - {e['source']} -> {node_id} [{e['edge_type']}]: {e['evidence']}")
         lines.append("")
 
-    if outgoing:
+    if use_wiring and outgoing:
         lines.append("## Outgoing Edges (this step supports)")
         for e in outgoing:
             lines.append(f"  - {node_id} -> {e['target']} [{e['edge_type']}]: {e['evidence']}")
@@ -240,6 +256,15 @@ def build_node_prompt(
         "result via Fowler's FH(Q) theorem, then isolates the remaining manifold-upgrade "
         "surgery obstruction step for the torsion lattice case.",
         "",
+    ])
+    if not use_wiring:
+        lines.extend([
+            "Claim-only mode is active: do not use incoming/outgoing wiring edges "
+            "as evidence. Judge this claim on its own mathematical merits.",
+            "",
+        ])
+
+    lines.extend([
         "Key references: Fowler (arXiv:1204.4667), Avramidi (arXiv:1506.06293), "
         "Wall 'Surgery on Compact Manifolds' (1999 2nd ed), Brown and Luck on "
         "group/orbifold cohomology.",
@@ -256,13 +281,12 @@ def build_node_prompt(
         "(e.g., `mathoverflow.net` or `math.stackexchange.com`).",
         "6. Reply as a single JSON object matching the required schema.",
     ])
-    if math_se_dir:
-        lines.extend([
-            "",
-            "## Local Corpus Hint",
-            "",
-            f"Use local processed data if available under: {math_se_dir}",
-        ])
+    if corpus_context:
+        lines.extend(["", corpus_context])
+    elif corpus_dirs:
+        lines.extend(["", "## Local Corpus Hints", ""])
+        for cdir in corpus_dirs:
+            lines.append(f"- Use local corpus data if available under: {cdir}")
 
     return "\n".join(lines)
 
@@ -270,9 +294,12 @@ def build_node_prompt(
 def build_synthesis_prompt(
     solution_text: str,
     wiring: dict,
-    math_se_dir: Path | None = None,
+    corpus_dirs: list[Path] | None = None,
+    prompt_mode: str = "wired",
+    corpus_context: str | None = None,
 ) -> str:
     """Build a synthesis prompt that reviews the entire proof."""
+    use_wiring = prompt_mode == "wired"
     stats = wiring.get("stats", {})
     lines = [
         "You are a mathematical proof verifier reviewing a complete proof.",
@@ -287,11 +314,6 @@ def build_synthesis_prompt(
         "## Proof",
         "",
         solution_text,
-        "",
-        "## Wiring Diagram Summary",
-        "",
-        f"Nodes: {stats.get('n_nodes', '?')}, Edges: {stats.get('n_edges', '?')}",
-        f"Edge types: {json.dumps(stats.get('edge_types', {}))}",
         "",
         "## Instructions",
         "",
@@ -320,23 +342,43 @@ def build_synthesis_prompt(
         "10. Reply as a single JSON object matching the required schema. "
         "Use node_id='p7-synthesis' for the synthesis.",
     ]
-    if math_se_dir:
-        lines.extend([
+    if use_wiring:
+        lines[13:13] = [
+            "## Wiring Diagram Summary",
             "",
-            "## Local Corpus Hint",
+            f"Nodes: {stats.get('n_nodes', '?')}, Edges: {stats.get('n_edges', '?')}",
+            f"Edge types: {json.dumps(stats.get('edge_types', {}))}",
             "",
-            f"Use local processed data if available under: {math_se_dir}",
-        ])
+        ]
+    else:
+        lines.insert(13, "Claim-only mode is active: do not rely on wiring graph structure.")
+        lines.insert(14, "")
+    if corpus_context:
+        lines.extend(["", corpus_context])
+    elif corpus_dirs:
+        lines.extend(["", "## Local Corpus Hints", ""])
+        for cdir in corpus_dirs:
+            lines.append(f"- Use local corpus data if available under: {cdir}")
     return "\n".join(lines)
+
+
+def _clean_env() -> dict:
+    """Return env dict without CLAUDECODE (avoids nested-session block)."""
+    env = os.environ.copy()
+    env.pop("CLAUDECODE", None)
+    return env
 
 
 def run_codex_once(
     codex_bin: str,
     model: str,
+    reasoning_effort: str,
+    web_search: str,
     cwd: Path,
     schema_path: Path,
     prompt_text: str,
-) -> tuple[int, str, str]:
+    timeout_seconds: int,
+) -> tuple[int, str, str, bool]:
     """Run a single prompt through codex exec."""
     with tempfile.NamedTemporaryFile("w+", suffix=".txt", delete=False) as out_f:
         out_path = Path(out_f.name)
@@ -352,17 +394,68 @@ def run_codex_once(
         "--cd", str(cwd),
         "--sandbox", "workspace-write",
         "--model", model,
+        "-c", f'model_reasoning_effort="{reasoning_effort}"',
+        "-c", f'web_search="{web_search}"',
         "--output-schema", str(schema_path),
         "--output-last-message", str(out_path),
         "-",
     ]
-    proc = subprocess.run(cmd, input=instruction, text=True, capture_output=True)
+    timed_out = False
+    try:
+        proc = subprocess.run(
+            cmd,
+            input=instruction,
+            text=True,
+            capture_output=True,
+            timeout=timeout_seconds,
+            env=_clean_env(),
+        )
+        return_code = proc.returncode
+        stderr_text = proc.stderr.strip()
+    except subprocess.TimeoutExpired as e:
+        timed_out = True
+        return_code = 124
+        stderr_text = (e.stderr or "").strip()
+        timeout_msg = f"[timeout] codex exec exceeded {timeout_seconds}s"
+        stderr_text = f"{timeout_msg}\n{stderr_text}".strip()
     try:
         response_text = out_path.read_text(encoding="utf-8").strip()
     except FileNotFoundError:
         response_text = ""
     out_path.unlink(missing_ok=True)
-    return proc.returncode, response_text, proc.stderr.strip()
+    return return_code, response_text, stderr_text, timed_out
+
+
+def load_completed_node_ids(
+    path: Path,
+    *,
+    rerun_failures: bool = False,
+    rerun_timed_out: bool = False,
+) -> set[str]:
+    done: set[str] = set()
+    valid_claims = {"verified", "plausible", "gap", "error"}
+    if not path.exists():
+        return done
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except Exception:
+                continue
+            node_id = rec.get("node_id")
+            if isinstance(node_id, str) and node_id:
+                if rerun_failures:
+                    claim_verified = rec.get("claim_verified")
+                    parse_error = bool(rec.get("parse_error", False))
+                    if parse_error or claim_verified not in valid_claims:
+                        continue
+                if rerun_timed_out and bool(rec.get("timed_out", False)):
+                    continue
+                done.add(node_id)
+    return done
 
 
 def main() -> int:
@@ -374,12 +467,73 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=None,
                     help="Max prompts to process (default: all generated prompts)")
     ap.add_argument("--model", default="gpt-5.3-codex")
+    ap.add_argument("--reasoning-effort", default="medium",
+                    choices=["minimal", "low", "medium", "high"],
+                    help="Codex reasoning effort (default: medium)")
+    ap.add_argument("--web-search", default="live",
+                    choices=["disabled", "cached", "live"],
+                    help="Codex web search mode (default: live)")
     ap.add_argument("--codex-bin", default="codex")
     ap.add_argument("--dry-run", action="store_true",
                     help="Generate prompts only, don't call Codex")
     ap.add_argument("--math-se-dir", type=Path, default=DEFAULT_MATH_SE_DIR,
                     help="Local processed StackExchange data directory (hinted to Codex prompts)")
+    ap.add_argument("--extra-corpus-dir", type=Path, action="append", default=[],
+                    help="Additional local corpus directories to hint in prompts (repeatable)")
+    ap.add_argument("--resume", action="store_true",
+                    help="Append to output and skip node_ids already present in output JSONL")
+    ap.add_argument(
+        "--resume-rerun-failures",
+        action="store_true",
+        help=(
+            "When used with --resume, re-run rows that are parse failures or missing "
+            "valid claim_verified values."
+        ),
+    )
+    ap.add_argument(
+        "--resume-rerun-timed-out",
+        action="store_true",
+        help=(
+            "When used with --resume, re-run rows previously marked timed_out=true."
+        ),
+    )
+    ap.add_argument("--timeout-seconds", type=int, default=900,
+                    help="Per-node codex exec timeout in seconds (default: 900)")
+    ap.add_argument("--max-retries", type=int, default=2,
+                    help="Max attempts per node before recording parse_error (default: 2)")
     ap.add_argument("--repo-root", type=Path, default=REPO_ROOT)
+    ap.add_argument("--parallel", type=int, default=1,
+                    help="Run this many nodes concurrently (default: 1 = sequential)")
+    ap.add_argument("--max-raw-bytes", type=int, default=8000,
+                    help="Truncate raw failure output to this many bytes (default: 8000)")
+    ap.add_argument(
+        "--prompt-mode",
+        default="wired",
+        choices=["wired", "claim-only"],
+        help=(
+            "Prompt context mode: 'wired' includes edge structure/focus; "
+            "'claim-only' suppresses wiring-edge context for ablation."
+        ),
+    )
+    ap.add_argument(
+        "--node-id",
+        action="append",
+        default=[],
+        help=(
+            "Restrict execution to specific node IDs (repeatable), "
+            "e.g. --node-id p7-s2 --node-id p7-s4."
+        ),
+    )
+    ap.add_argument(
+        "--corpus-context",
+        type=Path,
+        default=None,
+        help=(
+            "Path to pre-retrieved corpus context JSONL (from retrieve-proof-context.py). "
+            "When provided, each node prompt includes the retrieved thread excerpts "
+            "instead of generic corpus directory hints."
+        ),
+    )
     args = ap.parse_args()
 
     # Load wiring diagram
@@ -397,28 +551,73 @@ def main() -> int:
     nodes = wiring["nodes"]
     edges = wiring["edges"]
 
+    corpus_dirs = [args.math_se_dir] + list(args.extra_corpus_dir)
+
+    # Load pre-retrieved corpus context if provided
+    node_context: dict[str, str] = {}
+    if args.corpus_context and args.corpus_context.exists():
+        with args.corpus_context.open() as f:
+            for line in f:
+                rec = json.loads(line)
+                nid = rec.get("node_id", "")
+                ctx = rec.get("prompt_context", "")
+                if nid and ctx:
+                    node_context[nid] = ctx
+        print(f"Loaded pre-retrieved context for {len(node_context)} nodes")
+
     # Build prompts for each node
     prompts = []
     for node in nodes:
+        nid = node["id"]
         prompt_text = build_node_prompt(
             node,
             edges,
             solution_text,
-            math_se_dir=args.math_se_dir,
+            corpus_dirs=corpus_dirs if not node_context else None,
+            prompt_mode=args.prompt_mode,
+            corpus_context=node_context.get(nid),
         )
         prompts.append({
-            "node_id": node["id"],
+            "node_id": nid,
             "node_type": node["node_type"],
+            "prompt_mode": args.prompt_mode,
             "prompt": prompt_text,
         })
+
+    # For synthesis, combine all node contexts
+    synthesis_context = None
+    if node_context:
+        all_ctx = [node_context[nid] for nid in sorted(node_context) if nid != "p7-synthesis"]
+        if all_ctx:
+            synthesis_context = "\n\n".join(all_ctx)
 
     # Add synthesis prompt
     prompts.append({
         "node_id": "p7-synthesis",
         "node_type": "synthesis",
-        "prompt": build_synthesis_prompt(solution_text, wiring, math_se_dir=args.math_se_dir),
+        "prompt_mode": args.prompt_mode,
+        "prompt": build_synthesis_prompt(
+            solution_text,
+            wiring,
+            corpus_dirs=corpus_dirs if not node_context else None,
+            prompt_mode=args.prompt_mode,
+            corpus_context=synthesis_context,
+        ),
     })
     run_limit = len(prompts) if args.limit is None else min(args.limit, len(prompts))
+    selected = prompts[:run_limit]
+    if args.node_id:
+        requested = set(args.node_id)
+        available = {p["node_id"] for p in selected}
+        missing = sorted(requested - available)
+        if missing:
+            print(
+                "Warning: requested node_id(s) not in selected prompt set: "
+                + ", ".join(missing),
+                file=sys.stderr,
+            )
+        selected = [p for p in selected if p["node_id"] in requested]
+        print(f"Node filter active: {len(selected)} node(s) selected")
 
     # Write prompts
     args.prompts_out.parent.mkdir(parents=True, exist_ok=True)
@@ -430,10 +629,32 @@ def main() -> int:
     if args.dry_run:
         print("Dry run -- not calling Codex.")
         print(f"\nPrompt summary ({len(prompts)} prompts, run_limit={run_limit}):")
-        for p in prompts:
+        for p in selected:
             lines = p["prompt"].count("\n") + 1
             print(f"  {p['node_id']:20s} [{p['node_type']:10s}] ~{lines} lines")
         return 0
+
+    if args.max_retries < 1:
+        print("--max-retries must be >= 1", file=sys.stderr)
+        return 2
+    if args.timeout_seconds < 1:
+        print("--timeout-seconds must be >= 1", file=sys.stderr)
+        return 2
+
+    done_node_ids: set[str] = set()
+    if args.resume:
+        done_node_ids = load_completed_node_ids(
+            args.output,
+            rerun_failures=args.resume_rerun_failures,
+            rerun_timed_out=args.resume_rerun_timed_out,
+        )
+        if done_node_ids:
+            print(f"Resume mode: found {len(done_node_ids)} completed node_ids in {args.output}")
+        selected = [p for p in selected if p["node_id"] not in done_node_ids]
+        print(f"Resume mode: {len(selected)} node(s) remaining")
+        if not selected:
+            print("Nothing to do.")
+            return 0
 
     # Run through Codex
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -444,44 +665,118 @@ def main() -> int:
         json.dump(RESPONSE_SCHEMA, sf, ensure_ascii=True, indent=2)
         schema_path = Path(sf.name)
 
-    try:
-        with open(args.output, "w") as fout:
-            for rec in prompts[:run_limit]:
-                rc, raw_response, stderr_text = run_codex_once(
-                    codex_bin=args.codex_bin,
-                    model=args.model,
-                    cwd=args.repo_root,
-                    schema_path=schema_path,
-                    prompt_text=rec["prompt"],
+    def _process_one_node(rec: dict) -> dict:
+        """Process a single node through Codex (thread-safe)."""
+        attempts = 0
+        timed_out_any = False
+        total_elapsed = 0.0
+        rc = -1
+        raw_response = ""
+        stderr_text = ""
+        parsed: dict | None = None
+
+        while attempts < args.max_retries:
+            attempts += 1
+            start = time.monotonic()
+            rc, raw_response, stderr_text, timed_out = run_codex_once(
+                codex_bin=args.codex_bin,
+                model=args.model,
+                reasoning_effort=args.reasoning_effort,
+                web_search=args.web_search,
+                cwd=args.repo_root,
+                schema_path=schema_path,
+                prompt_text=rec["prompt"],
+                timeout_seconds=args.timeout_seconds,
+            )
+            elapsed = time.monotonic() - start
+            total_elapsed += elapsed
+            timed_out_any = timed_out_any or timed_out
+
+            try:
+                candidate = json.loads(raw_response)
+            except Exception:
+                candidate = None
+            if isinstance(candidate, dict):
+                parsed = candidate
+                break
+
+        out = {"node_id": rec["node_id"]}
+        if parsed is not None:
+            out.update(parsed)
+        else:
+            out["parse_error"] = True
+            parts = []
+            if raw_response:
+                parts.append(raw_response)
+            if rc != 0:
+                parts.append(f"[codex_exit_code={rc}]")
+            if stderr_text:
+                parts.append(f"[stderr]\n{stderr_text}")
+            raw_text = "\n".join(parts).strip()
+            # Truncate massive Codex agent transcripts
+            if len(raw_text) > args.max_raw_bytes:
+                raw_text = (
+                    raw_text[:args.max_raw_bytes // 2]
+                    + f"\n\n... [truncated {len(raw_text) - args.max_raw_bytes} bytes] ...\n\n"
+                    + raw_text[-(args.max_raw_bytes // 2):]
                 )
+            out["raw"] = raw_text
+        out["attempts"] = attempts
+        out["elapsed_seconds"] = round(total_elapsed, 3)
+        out["timed_out"] = bool(timed_out_any)
+        return out
 
-                out = {"node_id": rec["node_id"]}
-                try:
-                    parsed = json.loads(raw_response)
-                    if isinstance(parsed, dict):
-                        out.update(parsed)
-                        v = parsed.get("claim_verified", "")
-                        if v in ("verified", "plausible", "gap", "error"):
-                            verified[v] += 1
-                    else:
-                        out["parse_error"] = True
-                        out["raw"] = raw_response
-                except Exception:
-                    out["parse_error"] = True
-                    parts = []
-                    if raw_response:
-                        parts.append(raw_response)
-                    if rc != 0:
-                        parts.append(f"[codex_exit_code={rc}]")
-                    if stderr_text:
-                        parts.append(f"[stderr]\n{stderr_text}")
-                    out["raw"] = "\n".join(parts).strip()
+    try:
+        output_mode = "a" if args.resume else "w"
+        results: list[dict] = []
 
-                fout.write(json.dumps(out, ensure_ascii=False) + "\n")
+        if args.parallel > 1:
+            print(f"Running {len(selected)} nodes with {args.parallel} workers...")
+            with ThreadPoolExecutor(max_workers=args.parallel) as pool:
+                futures = {pool.submit(_process_one_node, rec): rec
+                           for rec in selected}
+                for future in as_completed(futures):
+                    out = future.result()
+                    results.append(out)
+                    v = out.get("claim_verified", "")
+                    if v in ("verified", "plausible", "gap", "error"):
+                        verified[v] += 1
+                    processed += 1
+                    status = out.get("claim_verified",
+                                     "parse_error" if out.get("parse_error") else "?")
+                    print(
+                        f"[{processed:02d}/{len(selected)}] "
+                        f"{out['node_id']:20s} -> {status} "
+                        f"(attempts={out['attempts']}, "
+                        f"elapsed={out['elapsed_seconds']:.1f}s, "
+                        f"timeout={out['timed_out']})"
+                    )
+                    sys.stdout.flush()
+        else:
+            for rec in selected:
+                out = _process_one_node(rec)
+                results.append(out)
+                v = out.get("claim_verified", "")
+                if v in ("verified", "plausible", "gap", "error"):
+                    verified[v] += 1
                 processed += 1
-                status = out.get("claim_verified", "parse_error" if out.get("parse_error") else "?")
-                print(f"[{processed:02d}/{run_limit}] {rec['node_id']:20s} -> {status}")
+                status = out.get("claim_verified",
+                                 "parse_error" if out.get("parse_error") else "?")
+                print(
+                    f"[{processed:02d}/{len(selected)}] "
+                    f"{out['node_id']:20s} -> {status} "
+                    f"(attempts={out['attempts']}, "
+                    f"elapsed={out['elapsed_seconds']:.1f}s, "
+                    f"timeout={out['timed_out']})"
+                )
                 sys.stdout.flush()
+
+        # Write results in node order (stable output regardless of completion order)
+        node_order = {rec["node_id"]: i for i, rec in enumerate(selected)}
+        results.sort(key=lambda r: node_order.get(r["node_id"], 999))
+        with open(args.output, output_mode, encoding="utf-8") as fout:
+            for out in results:
+                fout.write(json.dumps(out, ensure_ascii=False) + "\n")
     finally:
         schema_path.unlink(missing_ok=True)
 

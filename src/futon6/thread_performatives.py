@@ -300,12 +300,29 @@ def diagram_to_hyperedges(diagram: ThreadWiringDiagram) -> list[dict]:
     return hyperedges
 
 
+def _edge_confidence_tier(edge: ThreadEdge) -> int:
+    """Assign confidence tier to an edge.
+
+    Tier 1: IATC performatives and structural edges (66-72% alignment rate).
+    Tier 2: Categorical/port-match edges (3-5% consistency rate, experimental).
+    """
+    if edge.edge_type in VALID_PERFORMATIVES or edge.edge_type in (
+            "assert", "comment-on", "responds-to"):
+        return 1
+    return 2
+
+
 def diagram_to_dict(diagram: ThreadWiringDiagram) -> dict:
     """Serialize a wiring diagram to a JSON-safe dict."""
+    edges = []
+    for e in diagram.edges:
+        d = asdict(e)
+        d["confidence_tier"] = _edge_confidence_tier(e)
+        edges.append(d)
     return {
         "thread_id": diagram.thread_id,
         "nodes": [asdict(n) for n in diagram.nodes],
-        "edges": [asdict(e) for e in diagram.edges],
+        "edges": edges,
         "hyperedges": diagram_to_hyperedges(diagram),
         "stats": diagram_stats(diagram),
     }

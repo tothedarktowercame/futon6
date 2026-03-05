@@ -95,6 +95,7 @@ class Token:
 
 _TOKEN_RE = re.compile(r"""
     (?P<newline>\\\\)               |  # \\ (LaTeX newline / array row sep)
+    (?P<spacing_cmd>\\[,;:! ])      |  # \, \; \: \! \  (spacing commands)
     (?P<command>\\[a-zA-Z]+)       |  # \command
     (?P<number>[0-9]+(?:\.[0-9]+)?) |  # numbers
     (?P<defeq>:=)                   |  # := (before : alone)
@@ -109,6 +110,8 @@ _TOKEN_RE = re.compile(r"""
     (?P<sub>_)                       |
     (?P<sup>\^)                      |
     (?P<prime>')                     |
+    (?P<star>[*])                     |  # postfix star (dual/adjoint)
+    (?P<hash>[#])                     |  # postfix hash (sharp)
     (?P<ident>[a-zA-Z])              |  # single letter identifiers
     (?P<ws>\s+)                      |  # whitespace (skip)
     (?P<amp>&)                       |  # array separator (skip)
@@ -121,10 +124,16 @@ def tokenize(latex: str) -> list[Token]:
     for m in _TOKEN_RE.finditer(latex):
         kind = m.lastgroup
         val = m.group()
-        if kind in ('ws', 'amp'):
+        if kind in ('ws', 'amp', 'spacing_cmd'):
             continue
         if kind == 'newline':
             tokens.append(Token('newline', '\\\\'))
+            continue
+        if kind == 'star':
+            tokens.append(Token('star', '*'))
+            continue
+        if kind == 'hash':
+            tokens.append(Token('hash', '#'))
             continue
         if kind == 'command':
             cmd = val[1:]  # strip backslash
@@ -133,14 +142,16 @@ def tokenize(latex: str) -> list[Token]:
             elif cmd in OPERATORS:
                 tokens.append(Token('op', OPERATORS[cmd]))
             elif cmd in ('mathcal', 'mathsf', 'mathrm', 'mathbb',
-                         'mathbf', 'mathit', 'text', 'textbf', 'textit'):
+                         'mathbf', 'mathit', 'text', 'textbf', 'textit',
+                         'rm', 'bf', 'it', 'sf', 'operatorname'):
                 tokens.append(Token('command', cmd))
             elif cmd == 'frac':
                 tokens.append(Token('command', 'frac'))
             elif cmd in ('left', 'right', 'big', 'Big', 'bigg', 'Bigg'):
                 continue  # sizing — skip
-            elif cmd in ('quad', 'qquad', 'hspace', 'hfill', ',', ';'):
-                continue  # spacing — skip
+            elif cmd in ('quad', 'qquad', 'hspace', 'hfill',
+                         ',', ';', '!', ':', ' '):
+                continue  # spacing — skip (includes \, \; \! \: \ )
             elif cmd == 'bar':
                 tokens.append(Token('command', 'bar'))
             elif cmd in ('hat', 'tilde', 'vec', 'dot', 'ddot', 'overline', 'underline'):
@@ -266,6 +277,12 @@ class Parser:
             elif t.kind == 'prime':
                 self.advance()
                 base = App('prime', [base])
+            elif t.kind == 'star':
+                self.advance()
+                base = App('star', [base])
+            elif t.kind == 'hash':
+                self.advance()
+                base = App('sharp', [base])
             elif t.kind == 'lparen':
                 # Function application: f(x) or f(x,y,...)
                 args = self.parse_paren_args()
@@ -294,6 +311,14 @@ class Parser:
             self.advance()
             return Atom(t.value)
 
+        if t.kind == 'star':
+            self.advance()
+            return Atom('*')
+
+        if t.kind == 'hash':
+            self.advance()
+            return Atom('#')
+
         if t.kind == 'command':
             return self.parse_command()
 
@@ -318,8 +343,19 @@ class Parser:
         t = self.advance()
         cmd = t.value
 
+        if cmd in ('rm', 'bf', 'it', 'sf'):
+            # Old-style font switches: \rm X or \rm{X} — consume next atom
+            if self.at('lbrace'):
+                content = self.parse_brace_content()
+            else:
+                parts = []
+                while self.peek().kind in ('ident', 'number'):
+                    parts.append(self.advance().value)
+                content = ''.join(parts) if parts else cmd
+            return Atom(content)
+
         if cmd in ('mathcal', 'mathsf', 'mathrm', 'mathbb', 'mathbf',
-                    'mathit', 'text', 'textbf', 'textit'):
+                    'mathit', 'text', 'textbf', 'textit', 'operatorname'):
             # \mathcal{C} → the decorated name
             content = self.parse_brace_content()
             # For single letters in mathcal/mathbb, use unicode if possible
@@ -339,6 +375,13 @@ class Parser:
                 return Atom(content)
 
         if cmd == 'frac':
+            # \frac{a}{b} is standard. Shorthand \frac12 means \frac{1}{2}:
+            # when next token is a multi-digit number without braces, split
+            # first digit as numerator and rest as denominator.
+            if (not self.at('lbrace') and self.peek().kind == 'number'
+                    and len(self.peek().value) == 2):
+                digits = self.advance().value
+                return App('/', [Atom(digits[0]), Atom(digits[1])])
             num = self.parse_brace_group()
             den = self.parse_brace_group()
             return App('/', [num, den])
