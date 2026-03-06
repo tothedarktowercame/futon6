@@ -1,0 +1,230 @@
+{
+  "thread_id": "synth-p7-s2-000",
+  "title": "How does Bredon cohomology give rational Poincaré duality for torsion lattices?",
+  "question": "Let X=G/K be the symmetric space of a connected semisimple Lie group with finite center and let \\Gamma< G be a uniform lattice that may have torsion. Ordinary group cohomology with compact supports gives Poincaré duality for torsion-free lattices, but what should replace it when \\Gamma has finite stabilizers? More concretely, how do the Bredon/orbifold cohomology groups \\widehat H^*_c(X/\\Gamma;\\mathbb Q) furnish a rational Poincaré duality pairing of formal dimension d=\\dim X for \\Gamma?",
+  "answer": "Because the \\Gamma-action on X is proper and cocompact, each isotropy group \\Gamma_x is finite. One therefore forms the Bredon cohomology of \\Gamma with coefficients in the rational Mackey functor given by the trivial representation:\\n\\n\\qquad H^*_{\\mathcal F}(\\Gamma;\\mathbb Q)=H^*(\\operatorname{Hom}_{\\mathcal O\\Gamma}(C_*^{\\mathcal F}(X),\\underline{\\mathbb Q})).\\n\\nThe equivariant Eckmann–Shapiro spectral sequence collapses to give\\n\\n\\qquad H^*_{\\mathcal F}(\\Gamma;\\mathbb Q)\\cong H^*_c(X;\\mathbb Q),\\n\\nbecause every fixed-point set X^{H} of a finite subgroup H\\subset\\Gamma is contractible and carries the same compactly supported cohomology as X. Poincaré duality holds for the orientable manifold X of dimension d, so cap product with the fundamental class \\[X]\\in H_d^c(X;\\mathbb Q) furnishes isomorphisms\\n\\n\\qquad H^i_{\\mathcal F}(\\Gamma;\\mathbb Q)\\cong H_{d-i}^{\\mathcal F}(\\Gamma;\\mathbb Q).\\n\\nThis is the rational orbifold Poincaré duality satisfied by the orbifold X/\\Gamma. When \\Gamma is torsion-free the Bredon groups reduce to ordinary cohomology, recovering classical duality. Thus the Bredon/orbifold description supplies the desired rational PD structure of formal dimension d even in the presence of torsion.",
+  "tags": [
+    "group-cohomology",
+    "homological-algebra",
+    "algebraic-topology"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "group-theory",
+      "label": "uniform lattice"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "Bredon cohomology"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "orbifold cohomology"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "compactly supported cohomology"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "Poincaré duality"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "group-theory",
+      "label": "finite isotropy"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "H^*_{\\mathcal F}(\\Gamma;\\mathbb Q)=\\operatorname{Hom}_{\\mathcal O\\Gamma}(C_*^{\\mathcal F}(X),\\underline{\\mathbb Q})"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "H^*_{\\mathcal F}(\\Gamma;\\mathbb Q)\\cong H^*_c(X;\\mathbb Q)"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "H^i_{\\mathcal F}(\\Gamma;\\mathbb Q)\\cong H_{d-i}^{\\mathcal F}(\\Gamma;\\mathbb Q)"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for any proper cocompact action of \\Gamma on X"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if \\Gamma is torsion-free then Bredon groups reduce to ordinary cohomology"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
