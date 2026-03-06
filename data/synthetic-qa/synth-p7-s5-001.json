@@ -1,0 +1,237 @@
+{
+  "thread_id": "synth-p7-s5-001",
+  "title": "Rational Smith theory for free involutions on acyclic complexes",
+  "question": "Let Y be a finite CW complex with a cellular involution \\tau and assume H_*(Y;\\mathbb Q)=0. In the proof we let Z/2 act freely on such a space coming from the universal cover of a fake projective space. Textbooks on Smith theory usually state that the fixed-point set of a p-group action on a mod-p acyclic complex is again mod-p acyclic, which sounds like an obstruction to free actions. Could someone spell out why this reasoning does not apply with rational coefficients? In particular, if \\tau acts freely, what becomes of the Smith complex over \\mathbb Q, and how does one see that Y/\\tau is still rationally acyclic while Y^{\\langle\\tau\\rangle}=\\varnothing?",
+  "answer": "The Smith complex is built from C_*(Y;\\mathbb F_p) with the maps 1\\pm\\tau, and its exactness uses the equality (1-\\tau)(1+\\tau)=0 inside \\mathbb F_p[\\mathbb Z/2]. When the characteristic is p, the operator 1+\\tau is nilpotent on chains, so the short exact sequence 0\\to C_*(Y^{\\langle\\tau\\rangle};\\mathbb F_p)\\to C_*(Y;\\mathbb F_p)\\xrightarrow{1+\\tau} C_*(Y;\\mathbb F_p)\\to0 produces the usual Smith long exact sequence and forces nonzero homology in the fixed points whenever Y is mod-p acyclic. Over \\mathbb Q the algebra changes: the group ring decomposes as \\mathbb Q[\\mathbb Z/2]\\cong\\mathbb Q\\oplus\\mathbb Q, so the averaging idempotent e_+=\\tfrac{1}{2}(1+\\tau) is invertible on the +1 eigenspace. The chain map 1+\\tau now splits C_*(Y;\\mathbb Q) into \\pm-eigenspaces, and the putative Smith exact sequence collapses because e_+ is an automorphism.\\n\\nWhen \\tau acts freely, the covering projection \\pi:Y\\to Y/\\tau admits a rational transfer tr defined by averaging lifts. It satisfies the identities\\n\\ntr\\circ\\pi_*=2\\,id_{H_*(Y;\\mathbb Q)},\\qquad \\pi_*\\circ tr=2\\,id_{H_*(Y/\\tau;\\mathbb Q)}.\\n\\nSince 2 is invertible, \\pi_* and tr are isomorphisms onto the \\pm-eigenspaces, and H_*(Y/\\tau;\\mathbb Q)\\cong H_*(Y;\\mathbb Q)^\\tau=0 when Y is rationally acyclic. Nothing forces a fixed set because the entire argument relied on characteristic p. Thus a free Z/2-action on a rationally acyclic complex is compatible with Smith theory: the mod-2 version still predicts fixed points (indeed, Y^{\\langle\\tau\\rangle}=\\varnothing implies H_*(Y;\\mathbb F_2)\\neq0), but in characteristic zero the averaging idempotent kills the obstruction and the quotient remains rationally acyclic.",
+  "tags": [
+    "algebraic-topology",
+    "group-theory",
+    "homology-cohomology"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "Smith complex"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "homology",
+      "label": "rational homology"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "group-theory",
+      "label": "free involution"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "homology",
+      "label": "transfer map"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "homology",
+      "label": "fixed-point set"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "algebra",
+      "label": "averaging idempotent"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "0\\\\to C_*(Y^{\\\\langle\\\\tau\\\\rangle};\\\\mathbb F_p)\\\\to C_*(Y;\\\\mathbb F_p)\\\\xrightarrow{1+\\\\tau} C_*(Y;\\\\mathbb F_p)\\\\to0"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "e_+=\\\\tfrac{1}{2}(1+\\\\tau)\\\\in\\\\mathbb Q[\\\\mathbb Z/2]"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\\\operatorname{tr}\\\\circ\\\\pi_*=2\\\\,id_{H_*(Y;\\\\mathbb Q)},\\\\quad \\\\pi_*\\\\circ\\\\operatorname{tr}=2\\\\,id_{H_*(Y/\\\\tau;\\\\mathbb Q)}"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for any finite CW-complex with a Z/2-action"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if \tau acts freely and coefficients have char 0"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
