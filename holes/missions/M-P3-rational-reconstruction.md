@@ -354,6 +354,99 @@ compose them: "use construct-an-explicit-witness (strategy) to build a
 chain whose properties are governed by Macdonald polynomial theory
 (content)."
 
+## 4. ARGUE
+
+### Patterns governing this mission
+
+This mission is itself governed by patterns — not the `math-strategy/`
+patterns it creates, but higher-level patterns that shaped the decision
+to do this work and the method used. Making these explicit is the ARGUE
+phase's job: showing that the design is coherent with the stack's
+theoretical commitments, not just workable.
+
+**`enrichment/rational-reconstruction` [日/引]** — the direct ancestor.
+M-futon-enrichment used rational reconstruction to build the codebase's
+self-representation through layered replay rather than bulk import. This
+mission applies the same method to mathematical proof rather than code:
+replay P3's development as if pattern discipline had been in place,
+recording findings as evidence layers. The three advantages transfer:
+replayability (vPSR/vPUR records can be queried), incremental correction
+(early virtual records may be revised as we learn what scope granularity
+works), and methodology transfer (if it works for P3, it works for P7,
+P8, and beyond).
+
+**`futon-theory/baldwin-cycle` [🔃/三]** — the theoretical frame. The
+three new `math-strategy/` patterns are Baldwin Phase 1 artifacts:
+learned behaviors that emerged from examining P3. If the virtual replay
+confirms they catch real gaps, they enter Phase 2 (assimilation into the
+library as reusable patterns). If future missions confirm they work
+across problems, Phase 3 (canalization — they become standard proof
+hygiene, expected of every proof, not optional heuristics). This mission
+is explicitly Phase 1: exploration. We do not yet know if these patterns
+are good.
+
+**`futon-theory/retroactive-canonicalization` [🔄/溯]** — the deeper
+logic. The P3 proof was developed ad hoc. The virtual reconstruction
+retroactively identifies which decisions *were* pattern applications
+(even though no pattern was named at the time) and which were pattern
+*gaps* (decisions where no pattern existed and the proof suffered for
+it). The reviewer's 3 findings are evidence that certain patterns were
+structurally necessary — the proof broke precisely where discipline was
+absent. Retroactive canonicalization says: the structure was always
+there; the naming capacity to see it was not. The vPSRs provide that
+naming capacity after the fact.
+
+**`f6/pattern-as-strategy` [🎯/策]** — the bridge to agents. The
+`math-informal/` patterns are already positioned as agent-operational
+strategies (per Corneli 2014 §10.6). The `math-strategy/` patterns
+extend this from content strategies ("try induction") to architectural
+strategies ("check that your construction isn't circular"). If agents
+can use `convention-bridge` as a prompt to verify notation equivalences
+before asserting them, that's the pattern-as-strategy vision operating
+at a higher level of proof structure.
+
+### Why this design, not alternatives
+
+The obvious alternative is: just fix the P3 gaps directly. Write the
+missing bridge lemma, add the irreducibility proof, cite positivity.
+This would be useful but would teach us nothing about methodology.
+The rational reconstruction approach costs more upfront but produces
+transferable artifacts (patterns, vPSR/vPUR format, scope granularity
+model) that apply to all 10 first-proof problems and to future
+mathematical work in the stack.
+
+A second alternative: apply pattern discipline only to *new* proofs
+going forward, skip the reconstruction. This avoids the hindsight bias
+of virtual records but loses the opportunity to validate the method
+against known ground truth (the reviewer's findings). P3 is a
+controlled experiment: we know where the gaps are, so we can test
+whether the method would have found them.
+
+### Trade-off summary
+
+| Given up | Gained |
+|----------|--------|
+| Speed (reconstruction is slower than direct repair) | Validated methodology that transfers to Pn |
+| Certainty (virtual records are retrospective, not real-time) | Controlled test against known reviewer findings |
+| Simplicity (could just fix P3) | Three reusable patterns + scope granularity model + vPSR/vPUR format |
+
+### Generalization notes
+
+The method generalizes along two axes:
+
+1. **To other first-proof problems.** P7 and P8 have critical gaps; P2
+   has a critical gap. Each could receive the same treatment. The
+   patterns discovered here (convention-bridge, non-circularity-check,
+   compose-independent-lemmas) may apply directly or need extension.
+
+2. **To non-mathematical domains.** The vPSR/vPUR format with domain-
+   specific scope levels works for any domain where decisions are made
+   and outcomes evaluated. The provenance standard's code scope
+   (repo/namespace/var) and mathematical scope (problem/step/sub-step/
+   expression) are two instances of the same structure. A third instance
+   (e.g., for design decisions, business strategy) would confirm the
+   pattern is general.
+
 **D2: Virtual vs actual PSR/PUR**
 
 IF: We want to reconstruct pattern discipline on an already-completed proof.
