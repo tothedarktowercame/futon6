@@ -1,0 +1,224 @@
+{
+  "thread_id": "synth-p7-problem-000",
+  "title": "Can a torsion lattice be \\pi_1 of a manifold with rationally acyclic cover?",
+  "question": "Let G be a connected semisimple Lie group with finite center and let \\Gamma< G be a cocompact lattice containing a nontrivial element g of order 2. Could such a \\Gamma be realized as \\pi_1(M) for a closed manifold M whose universal cover \\widetilde M is rationally acyclic (i.e. H_i(\\widetilde M;\\mathbb Q)=0 for i>0)? I know that torsion-free compact lattices give closed aspherical manifolds G/K/\\Gamma, but I am unsure whether the presence of 2-torsion merely produces orbifold singularities or whether it outright obstructs any manifold model with rationally acyclic cover.",
+  "answer": "No. If M is a closed manifold and \\widetilde M is its universal cover, then the deck transformation group is isomorphic to \\pi_1(M) and acts freely and properly discontinuously on \\widetilde M. Freeness forces every nontrivial element of \\Gamma to move every point of \\widetilde M, so \\Gamma must be torsion-free; an element g of order 2 would fix some point of \\widetilde M by the Lefschetz fixed-point theorem (because the Lefschetz number of an orientation-preserving involution on a rationally acyclic compact manifold is 1), contradicting freeness.\\n\\nTherefore a uniform lattice with 2-torsion cannot arise as the fundamental group of any closed manifold whose universal cover is rationally acyclic. The best one can obtain from such a lattice is a compact orbifold \\Gamma\\backslash X, where X=G/K is the symmetric space. To produce a genuine manifold, one must pass to a torsion-free finite-index subgroup of \\Gamma; Selberg's lemma guarantees the existence of such a subgroup, and its quotient yields the desired manifold while the original lattice only gives the orbifold.",
+  "tags": [
+    "lie-groups",
+    "lattice",
+    "algebraic-topology",
+    "manifolds"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "lie-groups",
+      "label": "uniform lattice"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "lie-groups",
+      "label": "semisimple Lie group"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "rationally acyclic universal cover"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "deck transformation group"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "geometry",
+      "label": "orbifold quotient"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "Selberg lemma"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "H_i(\\widetilde M;\\mathbb Q)=0 \text{ for } i>0"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "L(g)=\\sum_i (-1)^i \\operatorname{tr}(g_*:H_i(\\widetilde M;\\mathbb Q)\\to H_i(\\widetilde M;\\mathbb Q)) =1"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "X/\\Gamma \text{ is an orbifold when } \\Gamma \text{ has torsion}"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for every closed manifold M with universal cover \\widetilde M"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if \\Gamma contains torsion then its action cannot be free"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
