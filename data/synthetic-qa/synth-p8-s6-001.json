@@ -1,0 +1,230 @@
+{
+  "thread_id": "synth-p8-s6-001",
+  "title": "Obstructions and remedies for global Hamiltonian patching",
+  "question": "In smoothing a polyhedral Lagrangian K\\subset(\\mathbb R^4,\\omega_0), each vertex and edge is handled by a local Hamiltonian isotopy with compact support. What are the potential obstructions to patching these local moves into a global isotopy, and how can one use partitions of unity or flux considerations to ensure the final map is Hamiltonian and agrees with K outside the chosen neighborhoods?",
+  "answer": "The only possible obstructions come from overlapping supports or from nontrivial flux. If two local isotopies overlap, their Hamiltonians may fail to commute and the resulting flow may not equal the intended composition; if the local primitives do not glue to a global primitive, the concatenated isotopy may only be symplectic rather than Hamiltonian. Both issues are avoided by the standard setup:\\n\\n1. Choose disjoint Darboux neighborhoods around vertices and disjoint tubular neighborhoods of edge segments. Use a partition of unity subordinate to these sets when writing the global Hamiltonian \\tilde H_t=\\sum \\rho_i H_i(t,x); the cutoffs ensure that \\tilde H_t agrees with H_i inside the i-th neighborhood and vanishes elsewhere.\\n\\n2. Arrange that each local isotopy is exact: the faces are exact Lagrangians, so \\lambda_{\\omega_0}|_{L}\\) has primitives agreeing on the overlaps; the flux of each isotopy therefore vanishes. The sum \\tilde H_t then has zero flux as well, so the global flow remains Hamiltonian.\\n\\nIf these conditions hold, the resulting flow \\Phi_t solves \\dot\\Phi_t = X_{\\tilde H_t}\\circ\\Phi_t, equals the identity outside the union of the chosen neighborhoods, and smooths every vertex and edge simultaneously. Any obstruction—such as overlapping supports or a mismatch of primitives—would manifest as a nonzero flux class in H^1(K;\\mathbb R) and prevent the isotopy from being Hamiltonian. By keeping the supports disjoint and using exactness to kill the flux, we ensure the patched isotopy exists and carries K to a smooth Lagrangian that is C^0-close to the original polyhedral surface.",
+  "tags": [
+    "symplectic-geometry",
+    "differential-topology",
+    "manifolds"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "Hamiltonian isotopy"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "partition of unity"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "flux"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "exact Lagrangian"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "support"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "global smoothing"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\tilde H_t = \\sum_i \\rho_i(x) H_i(t,x)"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\operatorname{Flux}(\\Phi_t) = 0"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\dot\\Phi_t = X_{\\tilde H_t} \\circ \\Phi_t"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for any polyhedral Lagrangian with finitely many vertices"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if the local isotopies have disjoint supports and are exact"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
