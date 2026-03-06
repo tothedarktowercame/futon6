@@ -1,0 +1,237 @@
+{
+  "thread_id": "synth-p7-s5-000",
+  "title": "Why Smith theory imposes no rational obstruction for free Z/2-actions",
+  "question": "Let X be a finite CW-complex that is rationally acyclic (H_i(X;\\mathbb Q)=0 for i>0) and let \\tau act cellularly with \\tau^2=1. Classical Smith theory says that the fixed set X^{\\langle\\tau\\rangle} controls H_*(X;\\mathbb Z/2), and many texts conclude that Z/2-actions on mod-2 acyclic complexes have fixed points. Why does this argument fail over \\mathbb Q? More concretely, how do transfer and averaging show that a free \\mathbb Z/2-action on a rationally acyclic space produces no obstruction, even though the mod-2 Smith inequalities still hold?",
+  "answer": "Smith theory is inherently p-local: the Smith chains are the subcomplexes of the cellular chain complex C_*(X;\\mathbb F_p) obtained by restricting and averaging with respect to \\tau. When the coefficient field has characteristic p, the operator 1+\\tau is nilpotent, so one obtains a long exact sequence relating H_*(X;\\mathbb F_p) to H_*(X^{\\langle\\tau\\rangle};\\mathbb F_p), forcing nontrivial fixed-point homology whenever X is mod-p acyclic. In characteristic zero, 1+\\tau is invertible, and the same chain-level argument collapses. Instead we have a transfer map tr:H_*(X/\\tau;\\mathbb Q)\\to H_*(X;\\mathbb Q) defined by averaging preimages, and it satisfies tr\\circ\\pi_*=2\\,id_{H_*(X;\\mathbb Q)}. Because 2 is invertible in \\mathbb Q, \\pi_* is injective and every class in H_*(X;\\mathbb Q) is 2 times the transfer of a class downstairs. Thus H_*(X;\\mathbb Q) carries no information about X^{\\langle\\tau\\rangle}.\\n\\nIf the action is free, \\pi:X\\to X/\\tau is a covering of degree 2 and the transfer shows H_*(X/\\tau;\\mathbb Q)\\cong H_*(X;\\mathbb Q)^\\tau. For a rationally acyclic X this invariant subspace vanishes, so X/\\tau is also rationally acyclic and there is no contradiction with Smith theory. The only nontrivial constraints live in mod-2 homology, where 2 is no longer invertible: there the Smith complex detects fixed-point data through the short exact sequence 0\\to C_*(X^{\\langle\\tau\\rangle};\\mathbb F_2)\\to C_*(X;\\mathbb F_2)\\xrightarrow{1+\\tau} C_*(X;\\mathbb F_2)\\to 0. Consequently, mod-2 Smith theory continues to impose fixed-point obstructions, but rational coefficients bypass them entirely because averaging by 1/2 kills the obstruction.",
+  "tags": [
+    "algebraic-topology",
+    "group-theory",
+    "homology-cohomology"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "Smith theory"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "rationally acyclic space"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "group-theory",
+      "label": "free Z/2-action"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "homology",
+      "label": "transfer map"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "homology",
+      "label": "fixed-point set"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "homology",
+      "label": "mod-p homology"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\\\operatorname{tr}\\\\circ\\\\pi_* = 2\\\\,id_{H_*(X;\\\\mathbb Q)}"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "H_*(X/\\\\tau;\\\\mathbb Q) \\\\cong H_*(X;\\\\mathbb Q)^{\\\\langle\\\\tau\\\\rangle}"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "0\\\\to C_*(X^{\\\\langle\\\\tau\\\\rangle};\\\\mathbb F_2)\\\\to C_*(X;\\\\mathbb F_2)\\\\xrightarrow{1+\\\\tau} C_*(X;\\\\mathbb F_2)\\\\to 0"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for any finite CW-complex with a Z/2-action"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if the coefficient field has characteristic different from 2"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
