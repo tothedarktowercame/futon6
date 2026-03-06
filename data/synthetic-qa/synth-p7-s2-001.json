@@ -1,0 +1,223 @@
+{
+  "thread_id": "synth-p7-s2-001",
+  "title": "Orbifold Poincaré duality for torsion lattices",
+  "question": "Uniform lattices with torsion act properly cocompactly on X=G/K, so the quotient is an orbifold rather than a manifold. Most Poincaré-duality references assume torsion-free groups. What is the right version of duality for \\Gamma when the stabilizers are finite, and how does one see the dimension d=\\dim X appear in the Bredon cohomology groups H^*_{\\mathcal F}(\\Gamma;\\mathbb Q)?",
+  "answer": "The correct object is the Bredon (or equivalently, orbifold) cohomology of the \\Gamma-action with coefficients in the constant rational Mackey functor. Because every finite subgroup H\\subset\\Gamma fixes a totally geodesic copy of X and acts trivially on the fundamental class, the Bredon chain complex C_*^{\\mathcal F}(X) is a d-dimensional duality complex in the sense of Lück. Thus cap product with the \\Gamma-invariant class \\[X]\\in H_d^{\\mathcal F}(\\Gamma;\\mathbb Q) yields isomorphisms\\n\\n\\qquad H^i_{\\mathcal F}(\\Gamma;\\mathbb Q)\\xrightarrow{\\ \\cap [X]\\ } H_{d-i}^{\\mathcal F}(\\Gamma;\\mathbb Q).\\n\\nThese Bredon groups agree with the singular cohomology of the orbifold X/\\Gamma, so this is precisely the rational Poincaré duality satisfied by X/\\Gamma. When \\Gamma is torsion-free the collection of finite subgroups consists only of the trivial group, and the statement collapses to the familiar duality for manifolds. Hence \\Gamma enjoys a rational PD of formal dimension d even though the quotient is an orbifold.",
+  "tags": [
+    "group-cohomology",
+    "homological-algebra",
+    "algebraic-topology"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "group-theory",
+      "label": "uniform lattice"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "Bredon cohomology"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "geometry",
+      "label": "orbifold quotient"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "duality complex"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "Poincaré duality"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "group-theory",
+      "label": "finite stabilizer"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "H^i_{\\mathcal F}(\\Gamma;\\mathbb Q)\\cong H_{d-i}^{\\mathcal F}(\\Gamma;\\mathbb Q)"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "C_*^{\\mathcal F}(X) \text{ is a duality complex of dimension } d"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "H^*_{\\mathcal F}(\\Gamma;\\mathbb Q)\\cong H^*(X/\\Gamma;\\mathbb Q)"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for any proper cocompact action with finite stabilizers"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if the action is free the orbifold duality reduces to manifold duality"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
