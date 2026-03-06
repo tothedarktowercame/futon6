@@ -1,0 +1,265 @@
+{
+  "thread_id": "synth-p3-s4-000",
+  "title": "Why is the q=1 AMW ring chain irreducible with positive normalization?",
+  "question": "The AMW q=1 theorem asserts that on the ring sector S_n(\\lambda) with x_i>0 and 0\\le t<1 the inhomogeneous multispecies exclusion chain has stationary law \\pi(\\eta)=F_{\\eta}(x;1,t)/P_{\\lambda}(x;1,t), where P_{\\lambda}(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}(x;1,t). However, the proof sketch in node p3-s4 assumes the process is irreducible on that sector and that the normalization sum is strictly positive without giving details. How can we check irreducibility of the q=1 ring chain and verify that the sector sum P_{\\lambda}(x;1,t) is finite and positive, thereby justifying the use of the AMW stationary distribution?",
+  "answer": "The state space S_n(\\lambda) consists of permutations of the multiset with content \\lambda. Every generator of the ring process swaps two adjacent species whenever the active clock rings and the weaker particle lies ahead, so any elementary transposition that respects the content occurs at positive rate. Because adjacent transpositions generate the symmetric group, every configuration can be reached from any other through a sequence of such swaps, proving irreducibility on the fixed-content sector.\\n\\nFor positivity, recall that the modified Macdonald polynomials are symmetric power series with nonnegative coefficients when x_i>0 and 0\\le t<1; in particular F_{\\eta}(x;1,t)>0 for every configuration \\eta. The sector sum\\n\\n\\qquad P_{\\lambda}(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}(x;1,t)\\n\\nis finite because the sector contains only |S_n(\\lambda)| states, and it is strictly positive because each summand is positive. Consequently the stationary weights \\pi(\\eta)=F_{\\eta}(x;1,t)/P_{\\lambda}(x;1,t) form a bona fide probability measure, and the irreducibility argument implies that this measure is the unique stationary distribution described by the AMW theorem.",
+  "tags": [
+    "probability",
+    "markov-chains",
+    "combinatorics"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "probability",
+      "label": "AMW theorem"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "probability",
+      "label": "fixed-content sector"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "probability",
+      "label": "multispecies exclusion chain"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "probability",
+      "label": "irreducibility"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "probability",
+      "label": "stationary distribution"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "modified Macdonald polynomial"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\pi(\\eta)=\\frac{F_{\\eta}(x;1,t)}{P_{\\lambda}(x;1,t)}"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "P_{\\lambda}(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}(x;1,t)"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "F_{\\eta}(x;1,t)>0 \text{ for } x_i>0, 0\\le t<1"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for x_i>0 and 0\\le t<1"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for every configuration in S_n(\\lambda)"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t6"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
