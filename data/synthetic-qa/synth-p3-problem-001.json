@@ -1,0 +1,251 @@
+{
+  "thread_id": "synth-p3-problem-001",
+  "title": "How do Macdonald star factors interact with the CTMC normalization?",
+  "question": "Take a partition \\lambda with \\lambda_n=0 and let S_n(\\lambda) be the content-fixed sector used for the modified Macdonald CTMC. The claimed stationary law is \\pi(\\mu)=F_{\\mu}^*(x;1,t)/P_{\\lambda}^*(x;1,t), yet the jump rates are written in terms of the unstarred polynomials and truncated geometric normalizations [m]_t=\\frac{1-t^m}{1-t}. Why is it legitimate to replace every F_{\\mu}^* with F_{\\mu} divided by the product b_{\\mu}(1,t)=\\prod_{s\\in\\mu}(1-t^{1+\\mathrm{leg}(s)}) and to normalize globally by P_{\\lambda}^*(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}^*(x;1,t)? In other words, how do we prove that the star/non-star conversion is purely multiplicative and therefore compatible with the local clock probabilities in the CTMC construction?",
+  "answer": "Macdonald's plethystic definition gives F_{\\mu}^*(X;q,t)=b_{\\mu}(q,t)F_{\\mu}[X/(1-t);q,t], so at q=1 the only difference between the starred and unstarred specialisations is the scalar\\n\\n\\qquad b_{\\mu}(1,t)=\\prod_{s\\in\\mu}(1-t^{1+\\mathrm{leg}(s)})=\\prod_{i\\ge 1}(t;t)_{m_i(\\mu)},\\n\\nwhere the final equality uses that the legs count repeated parts. Because this factor depends solely on the multiplicities m_i(\\mu), every local transition that changes the content by moving one particle multiplies b_{\\mu}(1,t) by exactly the same truncated geometric factor that appears in the update rule. Thus the detailed-balance ratio\\n\\n\\qquad \\frac{\\pi(\\mu)}{\\pi(\\nu)}=\\frac{F_{\\mu}(x;1,t)}{F_{\\nu}(x;1,t)}\\cdot\\frac{b_{\\nu}(1,t)}{b_{\\mu}(1,t)}\\n\\nmatches the ratio imposed by the local clocks, showing that the CTMC is consistent with the starred stationary law. Summing over the sector gives\\n\\n\\qquad P_{\\lambda}^*(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}(x;1,t)\\,b_{\\nu}(1,t)^{-1},\\n\\nso the normalization remains a strict positive constant because the sum of Macdonald polynomials over the finite sector is finite. Hence the star/non-star bridge is purely multiplicative: F_{\\mu}^*=F_{\\mu}/b_{\\mu}(1,t), P_{\\lambda}^*=\\sum F_{\\nu}/b_{\\nu}(1,t), and the CTMC local probabilities automatically glue to the global stationary distribution.",
+  "tags": [
+    "combinatorics",
+    "probability",
+    "symmetric-functions"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "modified Macdonald polynomial"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "star normalization"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "probability",
+      "label": "finite-state CTMC"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "probability",
+      "label": "stationary law"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "sector sum P_\\lambda^*"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "Macdonald hook factor b_\\mu(1,t)"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\pi(\\mu)=\\frac{F_{\\mu}^*(x;1,t)}{P_{\\lambda}^*(x;1,t)}"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "b_{\\mu}(1,t)=\\prod_{s\\in\\mu}(1-t^{1+\\operatorname{leg}(s)})"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "P_{\\lambda}^*(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}^*(x;1,t)"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for all x_i>0 and 0\\le t<1"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if a transition changes m_i(\\mu) then the factor b_{\\mu}(1,t) updates by the same truncated geometric weight"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t6"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
