@@ -1,0 +1,251 @@
+{
+  "thread_id": "synth-p3-s1-000",
+  "title": "Why is the t-PushTASEP update truncated geometric?",
+  "question": "Consider the inhomogeneous multispecies t-PushTASEP on an n-site ring with rates 1/x_j as described in the proof of node p3-s1. When site j rings and the active species r sits above m weaker species clockwise, the construction selects the k-th weaker species with probability t^{k-1}/[m]_t, where [m]_t=1+t+\\cdots+t^{m-1}, and then runs the push-cascade until species 0 is displaced. How does this truncated geometric law follow from the Macdonald Pieri rule for adding a box to F_{\\mu}(x;1,t), and why does it guarantee that the local update is compatible with the CTMC generator built from the modified Macdonald stationary weights?",
+  "answer": "Fix a configuration \\eta with active species r at site j and order the weaker species clockwise as (s_1,\\dots,s_m). Applying the one-row Macdonald Pieri rule with q=1 gives\\n\\n\\qquad F_{\\eta^{(k)}}(x;1,t)=t^{k-1}\\frac{1-t^{m-k+1}}{1-t^{m}}F_{\\eta}(x;1,t),\\n\\nwhere \\eta^{(k)} is obtained by swapping r with s_k and leaving the rest unchanged. The factor t^{k-1} accounts for the q=1 Macdonald charge gained by crossing k-1 weaker species, while the denominator 1-t^{m} is the hook-length normalisation coming from the m choices available. Consequently\\n\\n\\qquad \\frac{F_{\\eta^{(k)}}(x;1,t)}{F_{\\eta}(x;1,t)}=t^{k-1}\\frac{1-t}{1-t^{m}},\\n\\nso multiplying by (1-t^{m})/(1-t) yields exactly the probability mass t^{k-1}/[m]_t assigned to the event that r jumps past s_k. The sum \\sum_{k=1}^m t^{k-1} equals [m]_t, hence the truncated geometric law is normalized. Because the CTMC generator uses ratios of stationary weights, the product\\n\\n\\qquad \\frac{\\pi(\\eta^{(k)})}{\\pi(\\eta)}=\\frac{F_{\\eta^{(k)}}^*(x;1,t)}{F_{\\eta}^*(x;1,t)}=t^{k-1}\\frac{1-t}{1-t^{m}}\\n\\nmatches the prescribed local probability, so the push-cascade update obeys detailed balance with the modified Macdonald stationary distribution. This derivation shows that the truncated geometric choice is not ad hoc: it is forced by the Pieri coefficients, and therefore the local rule and global stationary measure are perfectly compatible.",
+  "tags": [
+    "combinatorics",
+    "probability",
+    "markov-chains"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "probability",
+      "label": "multispecies t-PushTASEP"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "probability",
+      "label": "truncated geometric distribution"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "Macdonald Pieri rule"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "probability",
+      "label": "push-cascade update"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "probability",
+      "label": "CTMC generator"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "modified Macdonald stationary law"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\mathbf{P}(k)=\\frac{t^{k-1}}{[m]_t},\\quad [m]_t=1+t+\\cdots+t^{m-1}"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "F_{\\eta^{(k)}}(x;1,t)=t^{k-1}\\frac{1-t^{m-k+1}}{1-t^{m}}F_{\\eta}(x;1,t)"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\frac{\\pi(\\eta^{(k)})}{\\pi(\\eta)}=t^{k-1}\\frac{1-t}{1-t^{m}}"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for any ring configuration with m weaker species"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if 0\\le t<1 then [m]_t>0 and the probabilities normalize"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t6"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
