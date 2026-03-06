@@ -1,0 +1,244 @@
+{
+  "thread_id": "synth-p8-problem-001",
+  "title": "Maslov-angle test for smoothing Lagrangian vertices",
+  "question": "Let K\\subset(\\mathbb R^4,\\omega_0) be a polyhedral Lagrangian whose vertices have valence four. Fix a vertex p and choose unit edge directions w_1,\\dots,w_4 arranged cyclically. Each oriented line w_i spans a Lagrangian plane with its successor, and we can attach to it a Maslov angle \\theta_i\\in S^1 by writing w_i+iJw_i\\in\\mathbb C^2. How can one tell from the \\theta_i (or equivalently from the symplectic Gram matrix G_{ij}=\\omega_0(w_i,Jw_j)) whether the star admits a decomposition T_p\\mathbb R^4=\\Lambda_1\\oplus\\Lambda_2 into complementary Lagrangian planes? Why is this Maslov ordering exactly what is needed to perform a local Lagrangian smoothing of the vertex?",
+  "answer": "For four Lagrangian rays the Maslov angles record their position in the Lagrangian Grassmannian \\Lambda(2)\\cong S^1. A pair of rays \\{w_i,w_j\\} spans a Lagrangian plane iff their angles differ by \\pi (mod 2\\pi). Therefore a necessary and sufficient condition for a direct sum decomposition is:\\n\\n- After reordering, the angles satisfy \\theta_1+\\theta_3\\equiv\\theta_2+\\theta_4\\equiv\\pi (mod 2\\pi), and the two sums are distinct (so the planes are transverse).\\n\\nIn linear algebra terms this says the symplectic Gram matrix\\n\\nG_{ij}=\\omega_0(w_i,Jw_j)\\n\\nhas block form \\begin{pmatrix}0 & D\\\\ -D & 0\\end{pmatrix} under a permutation of the basis, with D diagonal and \\det D\\neq0. Equivalently, the bivectors w_1\\wedge w_3 and w_2\\wedge w_4 span the kernel of \\omega_0 on \\bigwedge^2 T_p\\mathbb R^4. When this happens the vertex star splits into two Lagrangian half-planes that intersect only along the two shared edges; the tangent cone is symplectomorphic to \\{y_1=0\\}\\cup\\{x_1=0\\}.\\n\\nThe Maslov ordering controls smoothing because the Lagrangian angle extends continuously across exact Lagrangians. If the four angles alternate (\\theta_1<\\theta_2<\\theta_3<\\theta_4\\) with \\theta_{i+2}=\\theta_i+\\pi), one can choose a small disk D\\subset\\Lambda_1 and solve for a generating function F:D\\to\\mathbb R whose differential interpolates between the two cones while preserving the boundary data on each edge. The resulting graph remains Lagrangian because \\partial D is mapped to the alternating angles, ensuring the Maslov class of the patch is zero. The block condition on G_{ij} guarantees that the linearized boundary value problem is elliptic (no degeneracy in the normal directions), so the smoothing is unique up to Hamiltonian isotopy. If the angles fail to alternate, then all four rays lie in a semicircle of \\Lambda(2) and the Gram matrix drops rank; any attempted rounding forces \\Lambda_1 and \\Lambda_2 to coincide, so \\omega_0 restricts nontrivially somewhere and the vertex cannot be smoothed within the Lagrangian category. Thus the Maslov-angle pattern is exactly the test for the “nontrivial symplectic direct sum” needed in the smoothing argument.",
+  "tags": [
+    "symplectic-geometry",
+    "differential-topology",
+    "manifolds"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "Maslov angle"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "symplectic Gram matrix"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "Lagrangian Grassmannian"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "vertex star"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "Hamiltonian smoothing"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "symplectic-geometry",
+      "label": "Lagrangian angle"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\theta_{i+2}\\equiv \\theta_i + \\pi \\pmod{2\\pi}"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "G_{ij}=\\omega_0(w_i,Jw_j)"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\det \\begin{pmatrix}0 & D\\\\ -D & 0\\end{pmatrix} = (\\det D)^2"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for any four-face Lagrangian vertex"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if the Maslov angles alternate and the Gram matrix has full rank"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
