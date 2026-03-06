@@ -1,0 +1,237 @@
+{
+  "thread_id": "synth-p7-s1-001",
+  "title": "Fixed-point strata of torsion lattices on symmetric spaces",
+  "question": "Suppose \\Gamma< G is a uniform lattice in a semisimple Lie group whose action on X=G/K contains an involution g. How can we describe the fixed-point set X^g and the resulting singular stratum of the orbifold X/\\Gamma, and why does passing to a torsion-free finite-index subgroup remove these singularities?",
+  "answer": "Cartan's fixed-point theorem shows that an isometry of finite order on the nonpositively curved symmetric space X fixes a totally geodesic submanifold X^g. Because the stabilizer \\Gamma_x of any x\\in X^g is finite, the local model of X^g near x is just the fixed-point subspace of the isotropy representation of \\Gamma_x on T_xX. The normal directions transform by a nontrivial representation of \\Gamma_x, so the quotient looks like (T_xX^{g} \\oplus N_x)/\\Gamma_x, i.e. an orbifold chart with a mirror (if g acts as a reflection) or higher-order cone.\\n\\nSelberg's lemma provides a torsion-free subgroup \\Gamma'\\subset \\Gamma of finite index. Because torsion elements are exactly those creating nontrivial stabilizers, the action of \\Gamma' on X is free, so X/\\Gamma' is a genuine manifold and the covering map X/\\Gamma' \\to X/\\Gamma ramifies precisely over the singular strata determined by the various X^g. Thus the singularities in X/\\Gamma disappear after removing torsion, confirming that orbifold issues are solely caused by the finite stabilizers coming from torsion elements.",
+  "tags": [
+    "lie-groups",
+    "orbifolds",
+    "differential-topology"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "lie-groups",
+      "label": "symmetric space"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "lie-groups",
+      "label": "uniform lattice"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "geometry",
+      "label": "fixed-point set"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "geometry",
+      "label": "orbifold stratum"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "geometry",
+      "label": "Cartan fixed-point theorem"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "lie-groups",
+      "label": "Selberg lemma"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "X^{g}=\\{x\\in X: gx=x\\}"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\Gamma_x=\\operatorname{Stab}_\\Gamma(x) \text{ is finite}"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "(T_xX^{g} \\oplus N_x)/\\Gamma_x \text{ is an orbifold chart}"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for every torsion element g\\in\\Gamma"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if \\Gamma'\\subset\\Gamma is torsion-free then X/\\Gamma' is a manifold"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
