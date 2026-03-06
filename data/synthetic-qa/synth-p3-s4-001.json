@@ -1,0 +1,265 @@
+{
+  "thread_id": "synth-p3-s4-001",
+  "title": "Checking AMW irreducibility and normalization on the q=1 ring",
+  "question": "Working again in the q=1 ring sector S_n(\\lambda) with rates 1/x_j and 0\\le t<1, the AMW result declares that the stationary measure of the multispecies exclusion chain is \\pi(\\eta)=F_{\\eta}(x;1,t)/P_{\\lambda}(x;1,t). To invoke this result we must know that (i) the CTMC is irreducible on S_n(\\lambda) and (ii) the normalization constant P_{\\lambda}(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}(x;1,t) is finite and strictly positive. Can someone provide a concrete argument for each point using only the t-PushTASEP update rules and basic properties of modified Macdonald polynomials?",
+  "answer": "(i) Irreducibility follows from the push-cascade mechanics. Given any two configurations \\eta and \\xi, order the particles in \\eta lexicographically by species label. Each clock event either swaps an adjacent pair or performs a push that is equivalent to a sequence of adjacent swaps. Because the allowed transitions include every adjacent swap of unequal species with positive rate, we can bubble sort \\eta into the canonical sorted word and then reverse the sequence to reach \\xi. Hence the graph of states connected by positive-rate updates is the Cayley graph of the multiset permutations, so the chain is irreducible.\\n\\n(ii) Positivity of the sector sum is immediate from Macdonald theory. At q=1 the modified Macdonald polynomial F_{\\nu}(x;1,t) has a nonnegative monomial expansion when x_i>0 and 0\\le t<1 (Macdonald, Chap. VI). Therefore each term in\\n\\n\\qquad P_{\\lambda}(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}(x;1,t)\\n\\nis strictly positive, and there are only |S_n(\\lambda)| terms, so the sum is finite and positive. These two facts justify the hypotheses of the AMW theorem and ensure that \\pi(\\eta)=F_{\\eta}(x;1,t)/P_{\\lambda}(x;1,t) is a well-defined stationary distribution for the ring chain.",
+  "tags": [
+    "probability",
+    "markov-chains",
+    "combinatorics"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "probability",
+      "label": "AMW stationary law"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "probability",
+      "label": "fixed-content sector"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "probability",
+      "label": "t-PushTASEP update"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "probability",
+      "label": "irreducibility"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "modified Macdonald positivity"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "probability",
+      "label": "sector normalization"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\pi(\\eta)=\\frac{F_{\\eta}(x;1,t)}{P_{\\lambda}(x;1,t)}"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "P_{\\lambda}(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}(x;1,t)"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "F_{\\nu}(x;1,t)>0 \text{ whenever } x_i>0, 0\\le t<1"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for x_i>0 and 0\\le t<1"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for all states in S_n(\\lambda)"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t6"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
