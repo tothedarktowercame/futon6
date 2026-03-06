@@ -1,0 +1,216 @@
+{
+  "thread_id": "synth-p7-s3-000",
+  "title": "Applying Fowler's FH(Q) criterion to torsion lattices",
+  "question": "Fowler's FH(\\mathbb Q) condition asks for a proper cocompact \\Gamma-complex whose isotropy lies in a family \\mathcal F and whose fixed-point Euler characteristics vanish. Let \\Gamma be a torsion lattice acting on X=G/K with finite stabilizers. Assuming that every finite subgroup H\\subset\\Gamma has \\chi(X^H)=0 for H\\ne\\{1\\}, why does Fowler's theorem place \\Gamma in FH(\\mathbb Q)?",
+  "answer": "The FH(\\mathbb Q) property means that \\Gamma admits a finite \\Gamma-CW complex Y such that every cell stabilizer is finite and whose Bredon homology with coefficients in \\mathbb Q is finitely generated in each degree. Fowler constructs Y from X by attaching finitely many equivariant cells to kill the compactly supported homology of each fixed-point set X^H. The hypotheses that X is contractible, the action is proper cocompact, and \\chi(X^H)=0 for nontrivial H imply that all obstruction groups vanish, so the cellular chain complex C_*^{\\mathcal F}(Y;\\mathbb Q) becomes finite.\\n\\nConcretely, the spectral sequence with E^1_{p,q}=\\bigoplus_{[\\sigma]} H_q(\\Gamma_{\\sigma};\\mathbb Q) collapses because \\Gamma_{\\sigma} is finite and the Euler vanishing forces acyclicity above degree 0. The resulting Bredon chain complex for Y provides a finite projective resolution of the constant functor \\underline{\\mathbb Q}, so \\Gamma\\in FH(\\mathbb Q). This is the equivariant finiteness conclusion used to show that torsion lattices admit finite rational orbicomplex models even though they need not be fundamental groups of manifolds.",
+  "tags": [
+    "algebraic-topology",
+    "homotopy-theory",
+    "group-theory"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "group-theory",
+      "label": "FH(\\mathbb Q)"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "group-theory",
+      "label": "torsion lattice"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "Bredon homology"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "equivariant CW complex"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "Euler characteristic"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "algebraic-topology",
+      "label": "spectral sequence"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "E^1_{p,q}=\\bigoplus_{[\\sigma]} H_q(\\Gamma_{\\sigma};\\mathbb Q)"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\chi(X^H)=0 \text{ for all }1\\ne H\\subset\\Gamma"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "C_*^{\\mathcal F}(Y;\\mathbb Q) \text{ is finite projective}"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if the action is proper cocompact with finite stabilizers"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "assuming fixed-point Euler characteristics vanish"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s2"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
