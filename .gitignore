@@ -32,3 +32,6 @@ tmp/
 *.fdb_latexmk
 *.fls
 *.toc
+*.tar.gz
+mo-processed/
+test*.pdf
