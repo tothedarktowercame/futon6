@@ -1,0 +1,251 @@
+{
+  "thread_id": "synth-p3-problem-000",
+  "title": "When do starred modified Macdonald polynomials equal the unstarred ones?",
+  "question": "Let \\lambda be a partition with \\lambda_n=0 and let S_n(\\lambda) be the content-fixed sector appearing in the multispecies CTMC construction for modified Macdonald polynomials. For x_i>0 and 0\\le t<1 the proposed stationary law is \\pi(\\mu)=F_{\\mu}^*(x;1,t)/P_{\\lambda}^*(x;1,t), where P_{\\lambda}^*(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)}F_{\\nu}^*(x;1,t). Most references assert without proof that the starred specialization differs from the unstarred modified Macdonald F_{\\mu}(x;1,t) only by an explicit product in the parts of \\mu. Could someone explain precisely when F_{\\mu}^*=F_{\\mu} \\cdot c_{\\mu}(t) and how that ratio guarantees that the CTMC stationary weights patch from the local (single site) normalization to the global sector sum?",
+  "answer": "The starred normalization is the plethystic evaluation F_{\\mu}^*(x;q,t)=F_{\\mu}[X/(1-t);q,t] multiplied by the standard Macdonald scalar b_{\\mu}(q,t). In the q=1 specialisation used for the CTMC we have\\n\\n\\qquad F_{\\mu}^*(x;1,t)=\\frac{F_{\\mu}(x;1,t)}{\\prod_{i\\ge 1}(t;t)_{m_i(\\mu)}},\\qquad (t;t)_m=\\prod_{j=1}^m(1-t^j).\\n\\nThe factor depends only on the multiplicities m_i(\\mu) of each part size, so whenever x_i>0 and 0\\le t<1 the ratio is finite and positive. Consequently the stationary law\\n\\n\\qquad \\pi(\\mu)=\\frac{F_{\\mu}^*(x;1,t)}{P_{\\lambda}^*(x;1,t)}=\\frac{F_{\\mu}(x;1,t)}{\\displaystyle \\sum_{\\nu\\in S_n(\\lambda)} F_{\\nu}(x;1,t) \\prod_{i\\ge 1}(t;t)_{m_i(\\nu)}^{-1}}\\prod_{i\\ge 1}(t;t)_{m_i(\\mu)}^{-1}\\n\\nis just the unstarred weight multiplied by the local product coming from plethystic substitution. The local-to-global compatibility follows because the CTMC transition rates are expressed in terms of ratios F_{\\mu}^*/F_{\\nu}^*, and the common factors (t;t)_{m_i} cancel except for the multiplicities that actually change, matching the combinatorial updates of the clock process. Thus the star vs non-star bridge is completely explicit: the starred law agrees with the unstarred one after dividing by the hook-content-type product, so the global sector sum remains a true probability normalization.",
+  "tags": [
+    "combinatorics",
+    "probability",
+    "symmetric-functions"
+  ],
+  "nodes": [
+    {
+      "id": "q1",
+      "type": "post",
+      "subtype": "question"
+    },
+    {
+      "id": "a1",
+      "type": "post",
+      "subtype": "answer"
+    },
+    {
+      "id": "t1",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "modified Macdonald polynomial"
+    },
+    {
+      "id": "t2",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "star normalization"
+    },
+    {
+      "id": "t3",
+      "type": "term",
+      "subtype": "probability",
+      "label": "finite-state CTMC"
+    },
+    {
+      "id": "t4",
+      "type": "term",
+      "subtype": "probability",
+      "label": "stationary distribution"
+    },
+    {
+      "id": "t5",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "sector sum P_\\lambda^*"
+    },
+    {
+      "id": "t6",
+      "type": "term",
+      "subtype": "symmetric-functions",
+      "label": "plethystic evaluation"
+    },
+    {
+      "id": "e1",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "\\pi(\\mu)=\\frac{F_{\\mu}^*(x;1,t)}{P_{\\lambda}^*(x;1,t)}"
+    },
+    {
+      "id": "e2",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "F_{\\mu}^*(x;1,t)=\\frac{F_{\\mu}(x;1,t)}{\\prod_{i\\ge 1}(t;t)_{m_i(\\mu)}}"
+    },
+    {
+      "id": "e3",
+      "type": "expression",
+      "subtype": "latex",
+      "latex": "P_{\\lambda}^*(x;1,t)=\\sum_{\\nu\\in S_n(\\lambda)} F_{\\nu}^*(x;1,t)"
+    },
+    {
+      "id": "s1",
+      "type": "scope",
+      "subtype": "quant/universal",
+      "text": "for all \\mu\\in S_n(\\lambda) with x_i>0, 0\\le t<1"
+    },
+    {
+      "id": "s2",
+      "type": "scope",
+      "subtype": "conditional",
+      "text": "if multiplicities m_i(\\mu) are finite then starred/unstarred differ by \\prod (t;t)_{m_i}^{-1}"
+    }
+  ],
+  "edges": [
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "q1",
+        "t6"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t1"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t2"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t3"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t4"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t5"
+      ]
+    },
+    {
+      "type": "mention",
+      "ends": [
+        "a1",
+        "t6"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "q1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e1"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e2"
+      ]
+    },
+    {
+      "type": "surface",
+      "ends": [
+        "a1",
+        "e3"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "q1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s1"
+      ]
+    },
+    {
+      "type": "scope",
+      "ends": [
+        "a1",
+        "s2"
+      ]
+    },
+    {
+      "type": "discourse",
+      "ends": [
+        "q1",
+        "a1"
+      ]
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "q1",
+        "a1"
+      ],
+      "attrs": {
+        "performative": "query"
+      }
+    },
+    {
+      "type": "iatc",
+      "ends": [
+        "a1",
+        "q1"
+      ],
+      "attrs": {
+        "performative": "assert"
+      }
+    }
+  ]
+}
