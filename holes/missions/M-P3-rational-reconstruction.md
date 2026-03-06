@@ -447,6 +447,359 @@ The method generalizes along two axes:
    (e.g., for design decisions, business strategy) would confirm the
    pattern is general.
 
+## 5. VERIFY
+
+### Virtual replay of P3 proof development
+
+---
+
+#### vPSR-1: p3-s1 — Construct the chain
+
+- **Step**: p3-s1 (§2 Lemma — explicit chain construction)
+- **Pattern chosen**: `math-informal/construct-an-explicit-witness`
+- **Candidates considered**: `construct-an-explicit-witness`,
+  `use-probabilistic-method`, `reduce-to-known-result`
+- **Rationale**: The problem asks "does there exist a nontrivial CTMC."
+  The strongest answer is to exhibit one. `use-probabilistic-method`
+  would show existence non-constructively (weaker). `reduce-to-known-result`
+  alone would give the stationary distribution but not the chain itself.
+  Construction gives both the chain and computability.
+- **Scope**: p3-s1 (proof-step)
+- **Confidence**: high
+
+#### vPUR-1: p3-s1
+
+- **Step**: p3-s1
+- **Pattern**: `math-informal/construct-an-explicit-witness`
+- **Scope**: p3-s1 (§2 Lemma — explicit chain construction)
+- **Actions taken**: Defined inhomogeneous multispecies t-PushTASEP on
+  n-site ring. Site j rings at rate 1/x_j. Active species r selects k-th
+  weaker species with probability t^(k-1)/[m]_t. Push-cascade until
+  species 0 displaced.
+- **Outcome**: success — concrete chain defined
+- **Prediction error**: low
+- **Gap detected**: The pattern's THEN says "verify each required
+  property." The truncated geometric probability is *stated* but its
+  derivation from Pieri coefficients is deferred. This is a partial
+  verification — the construction is explicit but one key property
+  (why *this* probability law?) is left unjustified at this step.
+  The synthetic QA (synth-p3-s1) targets exactly this gap.
+- **Reviewer alignment**: No direct finding, but this incomplete
+  verification propagates forward.
+
+---
+
+#### vPSR-2: p3-s2 — Formalize the generator
+
+- **Step**: p3-s2 (§2 cont. — explicit generator)
+- **Pattern chosen**: `math-informal/construct-an-explicit-witness` (cont.)
+- **Candidates considered**: same as vPSR-1 (this is a sub-step of the
+  same construction)
+- **Rationale**: The construction needs formalization: write q(η,η')
+  explicitly, verify rates are nonnegative and finite, confirm cascade
+  termination via λ_n=0 vacancy.
+- **Scope**: p3-s2 (proof-step)
+- **Confidence**: high (purely mechanical formalization)
+
+#### vPUR-2: p3-s2
+
+- **Step**: p3-s2
+- **Pattern**: `math-informal/construct-an-explicit-witness` (cont.)
+- **Scope**: p3-s2
+- **Actions taken**: Wrote generator matrix, verified nonneg rates,
+  confirmed finite exit rate, cascade termination from single vacancy.
+- **Outcome**: success — generator well-defined
+- **Prediction error**: none
+- **Gap detected**: none — this step is self-contained
+- **Reviewer alignment**: none
+
+---
+
+#### vPSR-3: p3-s3 — Non-circularity check
+
+- **Step**: p3-s3 (§3 — nontriviality lemma)
+- **Pattern chosen**: `math-strategy/non-circularity-check`
+- **Candidates considered**: `non-circularity-check` (only candidate —
+  no existing `math-informal/` pattern addresses meta-level concerns
+  about construction independence)
+- **Rationale**: The problem asks for a *nontrivial* chain — one not
+  defined using F*_μ values. We need to verify the construction's
+  ingredients don't reference the target. This is a meta-mathematical
+  move, not a mathematical one.
+- **Scope**: p3-s3 (proof-step)
+- **Confidence**: high (the ingredients are clearly enumerable)
+
+#### vPUR-3: p3-s3
+
+- **Step**: p3-s3
+- **Pattern**: `math-strategy/non-circularity-check`
+- **Scope**: p3-s3
+- **Actions taken**: Listed ingredients: site rates 1/x_j (parameters),
+  species comparison (ring configuration), t-geometric weights (function
+  of t and count m). Verified: none reference F*_μ or P*_λ.
+- **Outcome**: success — construction is independent of target
+- **Prediction error**: none
+- **Gap detected**: The pattern's THEN(d) says "state the non-circularity
+  explicitly." The original proof does this in 3 sentences (§3). Adequate
+  but could be more systematic — a table of ingredients vs. dependencies
+  would be clearer.
+- **Reviewer alignment**: none — reviewer did not flag nontriviality
+
+---
+
+#### vPSR-4: p3-s4 — Invoke AMW theorem
+
+- **Step**: p3-s4 (§4 — main theorem)
+- **Pattern chosen**: `math-informal/reduce-to-known-result`
+- **Candidates considered**: `reduce-to-known-result`,
+  `construct-an-explicit-witness` (could we derive the stationary
+  distribution directly without citing AMW?)
+- **Rationale**: AMW Theorem 1.1 directly gives π(η) = F_η/P_λ for
+  exactly the chain we constructed. The reduction is natural — our chain
+  IS the AMW chain at q=1. Deriving the stationary distribution from
+  scratch would be redundant.
+- **Scope**: p3-s4 (proof-step)
+- **Confidence**: high
+
+#### vPUR-4: p3-s4
+
+- **Step**: p3-s4
+- **Pattern**: `math-informal/reduce-to-known-result`
+- **Scope**: p3-s4
+- **Actions taken**: Cited AMW Theorem 1.1 (arXiv:2403.10485). Stated:
+  for x_i>0, 0≤t<1, stationary distribution is π(η) = F_η(x;1,t) /
+  P_λ(x;1,t).
+- **Outcome**: success — theorem applies directly
+- **Prediction error**: medium — **the pattern's THEN says "verify
+  missing hypotheses."** Two hypotheses need checking:
+  (a) Positivity: F_η > 0 in our parameter range. The original proof
+  mentions this but does not give a precise citation within AMW.
+  (b) Irreducibility: AMW's theorem may assume irreducibility. The
+  original proof punts on this ("optional," §7).
+  The pattern *prescribes* checking these. The original *didn't*.
+- **Gap detected**: Two gaps, both flagged by the pattern:
+  - Positivity (reviewer finding 3, medium)
+  - Irreducibility (reviewer finding 2, major)
+- **Reviewer alignment**: **STRONG.** The `reduce-to-known-result`
+  pattern's HOWEVER clause ("forcing a reduction to the wrong theorem
+  produces fragile proofs") and THEN clause ("bridge the gap: verify
+  missing hypotheses") directly prescribe the actions the reviewer
+  recommended. A PSR at this step would have said: "I'm invoking AMW
+  — what are its hypotheses? Are they all satisfied?" That question
+  surfaces both findings 2 and 3.
+
+---
+
+#### vPSR-5: p3-s5 — Notation bridge
+
+- **Step**: p3-s5 (§5 — notation bridge F* = F)
+- **Pattern chosen**: `math-strategy/convention-bridge`
+- **Candidates considered**: `convention-bridge`,
+  `math-informal/transport-across-isomorphism` (rejected: notation
+  conventions are not isomorphisms in any precise sense)
+- **Rationale**: The problem uses starred notation F*_μ; AMW uses
+  unstarred F_η. The proof needs to connect them. This is a convention
+  alignment, not a mathematical transformation.
+- **Scope**: p3-s5 (proof-step)
+- **Confidence**: medium (the bridge *should* be straightforward but
+  that's exactly what the reviewer doubted)
+
+#### vPUR-5: p3-s5
+
+- **Step**: p3-s5
+- **Pattern**: `math-strategy/convention-bridge`
+- **Scope**: p3-s5
+- **Actions taken**: Stated writeup convention F*_η := F_η. Argued
+  that if F*_η = α·F_η for state-independent α, then ratio cancels.
+  Verified for n=2.
+- **Outcome**: **partial** — the bridge is asserted, not proved
+- **Prediction error**: **high.** The `convention-bridge` pattern's
+  HOWEVER clause warns: "what looks like 'the same thing with different
+  notation' may hide a genuine mathematical difference." Its THEN
+  clause demands: "(a) state both conventions precisely, with citations;
+  (b) write the explicit relationship; (c) prove it holds in your
+  parameter regime; (d) if well-known, cite the specific proposition."
+  The original proof does (a) and (b) partially but does NOT do (c)
+  or (d). It asserts the bridge without proof or citation.
+- **Gap detected**: **Major gap — exactly reviewer finding 1.**
+  The convention-bridge pattern would have caught this: step (c)
+  requires a proof or citation, not an assertion. The pattern's
+  BECAUSE clause ("the five minutes spent making the bridge explicit
+  saves weeks of back-and-forth") describes the reviewer interaction
+  that actually occurred.
+- **Reviewer alignment**: **DIRECT HIT.** Finding 1 says "the argument
+  needs a precise citation that the starred interpolation normalization
+  differs by a global factor independent of state η." The pattern's
+  THEN(c)+(d) prescribe exactly this.
+
+---
+
+#### vPSR-6: p3-s6 — Sanity check n=2
+
+- **Step**: p3-s6 (§6 — n=2 reduction)
+- **Pattern chosen**: `math-informal/try-a-simpler-case`
+- **Candidates considered**: `try-a-simpler-case`,
+  `math-informal/numerical-scout` (rejected: n=2 is exact, not
+  numerical)
+- **Rationale**: n=2 is the smallest non-trivial case (one particle,
+  one vacancy). Computing the stationary distribution explicitly confirms
+  the chain construction and the AMW theorem agree on a concrete example.
+- **Scope**: p3-s6 (proof-step)
+- **Confidence**: high (standard technique)
+
+#### vPUR-6: p3-s6
+
+- **Step**: p3-s6
+- **Pattern**: `math-informal/try-a-simpler-case`
+- **Scope**: p3-s6
+- **Actions taken**: λ=(a,0), two states, rates 1/x_1 and 1/x_2.
+  Stationary ratio x_1:x_2. Confirmed consistent with AMW Prop. 2.4.
+- **Outcome**: success
+- **Prediction error**: none
+- **Gap detected**: The pattern's THEN says "articulate what generalises
+  and what does not." The original proof notes n=2 is "consistent" but
+  does not explicitly state which features of n=2 extend to general n
+  and which do not. Minor omission.
+- **Reviewer alignment**: Finding 3 (positivity) is partially addressed
+  here — n=2 shows positivity concretely — but the general case is
+  not addressed. The `try-a-simpler-case` pattern would have prompted:
+  "OK, n=2 works. Does the positivity argument generalise?"
+
+---
+
+#### vPSR-7: p3-s7 — Compose the conclusion
+
+- **Step**: p3-s7 (§7 — conclusion)
+- **Pattern chosen**: `math-strategy/compose-independent-lemmas`
+- **Candidates considered**: `compose-independent-lemmas` (only
+  candidate — no existing pattern addresses proof assembly)
+- **Rationale**: The conclusion claims to follow from s1+s3+s4+s5.
+  These are (mostly) independent pieces: construction (s1-s2),
+  nontriviality (s3), stationary distribution (s4), notation (s5).
+  The composition should be short and add nothing new.
+- **Scope**: p3-s7 (proof-step)
+- **Confidence**: medium (depends on all pieces being solid)
+
+#### vPUR-7: p3-s7
+
+- **Step**: p3-s7
+- **Pattern**: `math-strategy/compose-independent-lemmas`
+- **Scope**: p3-s7
+- **Actions taken**: Stated existence (s4), nontriviality (s3), target
+  ratio (s5). Noted uniqueness/irreducibility is "optional."
+- **Outcome**: **partial** — composition surfaces gaps in the pieces
+- **Prediction error**: **medium.** The pattern's THEN(d) says "trace
+  every assertion in the composition to its source piece." Doing this
+  reveals:
+  - "Stationary distribution is F_η/P_λ" → traces to s4 (AMW). ✓
+  - "This equals F*_μ/P*_λ" → traces to s5 (notation bridge). ✗ s5
+    is asserted, not proved.
+  - "Chain is nontrivial" → traces to s3. ✓
+  - "Irreducibility is optional" → traces to... nothing. This is a
+    new claim made in the composition step, not traced to any piece.
+    The pattern says the composition "should be short — if it is long,
+    one of the pieces is incomplete." The irreducibility disclaimer is
+    a signal that a piece is missing.
+- **Gap detected**: Two issues surfaced by trace-back:
+  (1) The notation bridge (s5) is not solid — composition inherits
+  this weakness. (Reviewer finding 1.)
+  (2) The irreducibility claim is made *in the composition* rather
+  than in a dedicated piece — violating the pattern's principle that
+  composition adds nothing new. (Reviewer finding 2.)
+- **Reviewer alignment**: **STRONG.** The compose-independent-lemmas
+  pattern catches both findings 1 and 2 through its trace-back
+  discipline. Finding 1: the notation bridge doesn't trace. Finding 2:
+  the irreducibility claim has no source piece.
+
+---
+
+### Counterfactual assessment
+
+For each reviewer finding, the four-question test:
+
+#### Finding 1 (major): Star/non-star bridge asserted
+
+1. **Which vPSR?** vPSR-5 (p3-s5, convention-bridge)
+2. **Does HOWEVER warn?** Yes: "may hide a genuine mathematical
+   difference"
+3. **Does THEN prescribe the repair?** Yes: "(c) prove it holds in your
+   parameter regime; (d) if well-known, cite the specific proposition"
+4. **Would vPUR flag it?** Yes: vPUR-5 outcome is "partial," prediction
+   error "high," gap detected matches reviewer finding verbatim.
+
+**Verdict: pattern discipline would have caught this.** ✓
+
+#### Finding 2 (major): Irreducibility too compressed
+
+1. **Which vPSR?** vPSR-4 (p3-s4, reduce-to-known-result) and vPSR-7
+   (p3-s7, compose-independent-lemmas)
+2. **Does HOWEVER warn?** reduce-to-known-result: "verify missing
+   hypotheses." compose-independent-lemmas: "independence must be
+   genuine, not assumed" and "if the composition is long, a piece is
+   incomplete."
+3. **Does THEN prescribe the repair?** reduce-to-known-result THEN:
+   "bridge the gap: verify missing hypotheses." compose-independent-lemmas
+   THEN(d): "trace every assertion to a piece."
+4. **Would vPUR flag it?** Yes: vPUR-4 notes "AMW may assume
+   irreducibility" as a gap. vPUR-7 notes "irreducibility claim has no
+   source piece."
+
+**Verdict: pattern discipline would have caught this.** ✓
+Two patterns independently flag it from different angles (hypothesis
+checking and composition trace-back).
+
+#### Finding 3 (medium): Positivity needs citation
+
+1. **Which vPSR?** vPSR-4 (p3-s4, reduce-to-known-result)
+2. **Does HOWEVER warn?** Yes: "verify missing hypotheses"
+3. **Does THEN prescribe the repair?** Yes: "compare hypotheses: what is
+   missing or different?" — positivity is a hypothesis of the stationary
+   distribution being a probability measure.
+4. **Would vPUR flag it?** Yes: vPUR-4 lists positivity as a gap alongside
+   irreducibility.
+
+**Verdict: pattern discipline would have caught this.** ✓
+Same mechanism as finding 2: the reduce-to-known-result pattern forces
+hypothesis enumeration.
+
+### Comparison: original vs pattern-guided
+
+| Aspect | Original (ad hoc) | Pattern-guided (replay) |
+|--------|-------------------|------------------------|
+| Decomposition | 7 sections, linear | Same 7 nodes — patterns didn't change the decomposition |
+| Notation bridge (s5) | Asserted in 1 paragraph | `convention-bridge` demands proof/citation — gap caught |
+| Nontriviality (s3) | 3 sentences | `non-circularity-check` demands ingredient trace — adequate but could be more systematic |
+| Main theorem (s4) | Cited without checking hypotheses | `reduce-to-known-result` demands hypothesis verification — gaps caught (positivity, irreducibility) |
+| Sanity check (s6) | Computed correctly | `try-a-simpler-case` asks "what generalises?" — minor improvement |
+| Conclusion (s7) | Narrative assembly | `compose-independent-lemmas` demands trace-back — two gaps caught |
+| Total reviewer findings caught | 0/3 (found by external reviewer) | **3/3 (found by pattern discipline)** |
+
+### Key finding
+
+The pattern-guided replay did NOT change the proof's structure — the
+same 7 steps in the same order. What it changed was the *quality of
+attention at each step*. Each pattern carries a HOWEVER clause (what can
+go wrong) and a THEN clause (what to do about it). The original proof
+executed the THEN without checking the HOWEVER. Pattern discipline forces
+you to check both.
+
+The three gaps were all of the same type: **unverified hypotheses at
+interfaces between steps.** The notation bridge (s5) interfaces with the
+theorem (s4). The irreducibility question interfaces with the conclusion
+(s7). Positivity interfaces with the probability interpretation. These
+are exactly the places where `convention-bridge`, `reduce-to-known-result`,
+and `compose-independent-lemmas` focus attention.
+
+### Completion criteria check
+
+1. ✓ Every decision point has a virtual PSR (7 vPSRs, one per node)
+2. ✓ Every proof step has a virtual PUR with mathematical scope (7 vPURs,
+   all proof-step scoped)
+3. ✓ At least 3 new `math-strategy/` patterns written (convention-bridge,
+   non-circularity-check, compose-independent-lemmas)
+4. ✓ Comparison table produced (see above)
+5. ✓ Assessment: pattern discipline catches 3/3 reviewer findings
+
 **D2: Virtual vs actual PSR/PUR**
 
 IF: We want to reconstruct pattern discipline on an already-completed proof.
@@ -470,3 +823,91 @@ BECAUSE: The provenance standard should be domain-agnostic in its
 *mechanism* (PUR carries scope) but domain-specific in its *vocabulary*
 (what counts as a scope level). Mathematics and code have isomorphic
 structures at different granularities.
+
+## 6. INSTANTIATE
+
+### Provenance artifact
+
+The virtual replay is recorded as a JSON provenance layer:
+
+**`data/first-proof/problem3-provenance.json`**
+
+This file extends `problem3-wiring.json` (referenced via `"extends"`)
+with:
+
+- **6 pattern nodes** — 3 existing (`math-informal/`), 3 new
+  (`math-strategy/`), each linking to its flexiarg source
+- **7 vPSR records** — one per proof step, with pattern chosen,
+  candidates, rationale, scope, and confidence
+- **7 vPUR records** — one per proof step, with outcome, prediction
+  error, gap detected, and reviewer finding alignment
+- **3 reviewer finding records** — each linking to the vPSR/vPUR that
+  would have caught it, with the specific pattern mechanism
+- **26 typed edges** — pattern-selection (7), applied-to (7),
+  outcome-of (7), detects (5)
+
+The JSON format is compatible with the existing wiring/synthetic-QA
+schema (typed nodes and edges) and could be ingested into futon1a as
+`provenance/*` hyperedges if desired. For now it stands alone as a
+queryable artifact.
+
+### End-to-end demonstration
+
+The full loop:
+
+1. **Proof exists** → `problem3-solution.md` (7 sections)
+2. **Wiring captured** → `problem3-wiring.json` (8 nodes, 10 edges)
+3. **Gaps identified** → `REVIEWER.md` (3 findings)
+4. **Synthetic QA generated** → `synth-p3-*.json` (8 files, 4 steps)
+5. **Patterns selected** → 3 existing + 3 new `math-strategy/` patterns
+6. **Virtual replay** → 7 vPSR + 7 vPUR with mathematical scope
+7. **Provenance recorded** → `problem3-provenance.json` (typed graph)
+8. **Assessment** → 3/3 findings caught by pattern discipline
+
+A future agent or human can:
+- Read the proof (`problem3-solution.md`)
+- See its structure (`problem3-wiring.json`)
+- See which patterns governed each step (`problem3-provenance.json`,
+  follow `pattern-selection` edges)
+- See where gaps were detected (`detects` edges → reviewer findings)
+- Trace from a gap back to the pattern that should have prevented it
+  (finding → vPUR → vPSR → pattern → HOWEVER clause)
+
+This is the provenance standard in action: graph is system of record,
+PUR carries scope, patterns are named and traceable.
+
+### Deferred items
+
+- **Actual P3 repair**: fixing the 3 gaps is a separate mission. This
+  mission validates the method, not the content.
+- **futon1a ingestion**: the provenance JSON could be ingested as
+  hyperedges (`provenance/pattern-applied`, `provenance/pattern-outcome`,
+  `provenance/gap-detected`). Deferred until the enrichment pipeline
+  has a math-provenance ingestion path.
+- **Other problems**: P7 (critical), P8 (critical), P2 (critical) are
+  candidates for the same treatment. Each would produce its own
+  provenance JSON and potentially new patterns.
+- **Tooling**: the vPSR/vPUR format could be generated semi-automatically
+  from a proof wiring diagram + pattern catalog. The mission peripheral
+  could offer pattern suggestions at each node.
+
+### Checkpoint — 2026-03-06
+
+**What was done:**
+- IDENTIFY → MAP → DERIVE → ARGUE → VERIFY → INSTANTIATE (full cycle)
+- 3 new `math-strategy/` patterns created (convention-bridge,
+  non-circularity-check, compose-independent-lemmas)
+- 7 vPSR + 7 vPUR virtual records with mathematical scope
+- Counterfactual assessment: 3/3 reviewer findings caught
+- Provenance JSON artifact produced
+- Draft provenance standard validated on mathematical domain
+
+**Artifacts:**
+- `futon6/holes/missions/M-P3-rational-reconstruction.md` (this file)
+- `futon6/data/first-proof/problem3-provenance.json`
+- `futon3/library/math-strategy/convention-bridge.flexiarg`
+- `futon3/library/math-strategy/non-circularity-check.flexiarg`
+- `futon3/library/math-strategy/compose-independent-lemmas.flexiarg`
+- `futon3/docs/draft-provenance-standard.md`
+
+**Status: COMPLETE.**

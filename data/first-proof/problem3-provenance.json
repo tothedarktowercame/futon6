@@ -1,0 +1,264 @@
+{
+  "thread_id": "first-proof-p3-provenance",
+  "extends": "first-proof-p3",
+  "provenance_method": "virtual-reconstruction",
+  "mission": "M-P3-rational-reconstruction",
+  "date": "2026-03-06",
+  "notes": "Virtual PSR/PUR records reconstructing pattern discipline on the P3 proof. Extends problem3-wiring.json with provenance nodes and edges.",
+
+  "patterns": [
+    {
+      "id": "pat:construct-an-explicit-witness",
+      "namespace": "math-informal",
+      "source": "futon3/library/math-informal/construct-an-explicit-witness.flexiarg"
+    },
+    {
+      "id": "pat:reduce-to-known-result",
+      "namespace": "math-informal",
+      "source": "futon3/library/math-informal/reduce-to-known-result.flexiarg"
+    },
+    {
+      "id": "pat:try-a-simpler-case",
+      "namespace": "math-informal",
+      "source": "futon3/library/math-informal/try-a-simpler-case.flexiarg"
+    },
+    {
+      "id": "pat:convention-bridge",
+      "namespace": "math-strategy",
+      "source": "futon3/library/math-strategy/convention-bridge.flexiarg",
+      "created_by": "M-P3-rational-reconstruction"
+    },
+    {
+      "id": "pat:non-circularity-check",
+      "namespace": "math-strategy",
+      "source": "futon3/library/math-strategy/non-circularity-check.flexiarg",
+      "created_by": "M-P3-rational-reconstruction"
+    },
+    {
+      "id": "pat:compose-independent-lemmas",
+      "namespace": "math-strategy",
+      "source": "futon3/library/math-strategy/compose-independent-lemmas.flexiarg",
+      "created_by": "M-P3-rational-reconstruction"
+    }
+  ],
+
+  "vpsr": [
+    {
+      "id": "vpsr-1",
+      "step": "p3-s1",
+      "pattern": "pat:construct-an-explicit-witness",
+      "candidates": ["pat:construct-an-explicit-witness", "pat:reduce-to-known-result"],
+      "rationale": "Problem asks 'does there exist'; construction gives the strongest answer and a computable object.",
+      "scope": "p3-s1",
+      "scope_granularity": "proof-step",
+      "confidence": "high"
+    },
+    {
+      "id": "vpsr-2",
+      "step": "p3-s2",
+      "pattern": "pat:construct-an-explicit-witness",
+      "candidates": ["pat:construct-an-explicit-witness"],
+      "rationale": "Sub-step: formalize the generator q(eta,eta') from the construction.",
+      "scope": "p3-s2",
+      "scope_granularity": "proof-step",
+      "confidence": "high"
+    },
+    {
+      "id": "vpsr-3",
+      "step": "p3-s3",
+      "pattern": "pat:non-circularity-check",
+      "candidates": ["pat:non-circularity-check"],
+      "rationale": "Problem requires nontriviality. Must verify construction ingredients don't reference F*_mu.",
+      "scope": "p3-s3",
+      "scope_granularity": "proof-step",
+      "confidence": "high"
+    },
+    {
+      "id": "vpsr-4",
+      "step": "p3-s4",
+      "pattern": "pat:reduce-to-known-result",
+      "candidates": ["pat:reduce-to-known-result", "pat:construct-an-explicit-witness"],
+      "rationale": "AMW Theorem 1.1 directly gives the stationary distribution for our chain. Natural reduction.",
+      "scope": "p3-s4",
+      "scope_granularity": "proof-step",
+      "confidence": "high"
+    },
+    {
+      "id": "vpsr-5",
+      "step": "p3-s5",
+      "pattern": "pat:convention-bridge",
+      "candidates": ["pat:convention-bridge"],
+      "rationale": "Problem uses F*; AMW uses F. Must connect the two conventions explicitly.",
+      "scope": "p3-s5",
+      "scope_granularity": "proof-step",
+      "confidence": "medium"
+    },
+    {
+      "id": "vpsr-6",
+      "step": "p3-s6",
+      "pattern": "pat:try-a-simpler-case",
+      "candidates": ["pat:try-a-simpler-case"],
+      "rationale": "n=2 is the smallest non-trivial ring. Confirms construction + theorem agree on concrete example.",
+      "scope": "p3-s6",
+      "scope_granularity": "proof-step",
+      "confidence": "high"
+    },
+    {
+      "id": "vpsr-7",
+      "step": "p3-s7",
+      "pattern": "pat:compose-independent-lemmas",
+      "candidates": ["pat:compose-independent-lemmas"],
+      "rationale": "Conclusion assembles s1+s3+s4+s5. These are independent pieces; composition should add nothing new.",
+      "scope": "p3-s7",
+      "scope_granularity": "proof-step",
+      "confidence": "medium"
+    }
+  ],
+
+  "vpur": [
+    {
+      "id": "vpur-1",
+      "step": "p3-s1",
+      "pattern": "pat:construct-an-explicit-witness",
+      "scope": "p3-s1",
+      "outcome": "success",
+      "prediction_error": "low",
+      "gap_detected": "Truncated geometric probability stated but derivation from Pieri coefficients deferred. Pattern says 'verify each required property' — verification incomplete.",
+      "reviewer_finding": null
+    },
+    {
+      "id": "vpur-2",
+      "step": "p3-s2",
+      "pattern": "pat:construct-an-explicit-witness",
+      "scope": "p3-s2",
+      "outcome": "success",
+      "prediction_error": "none",
+      "gap_detected": null,
+      "reviewer_finding": null
+    },
+    {
+      "id": "vpur-3",
+      "step": "p3-s3",
+      "pattern": "pat:non-circularity-check",
+      "scope": "p3-s3",
+      "outcome": "success",
+      "prediction_error": "none",
+      "gap_detected": "Adequate but could be more systematic — pattern suggests ingredient-vs-dependency table.",
+      "reviewer_finding": null
+    },
+    {
+      "id": "vpur-4",
+      "step": "p3-s4",
+      "pattern": "pat:reduce-to-known-result",
+      "scope": "p3-s4",
+      "outcome": "success",
+      "prediction_error": "medium",
+      "gap_detected": "Pattern demands 'verify missing hypotheses.' Two unverified: (a) positivity of F_eta in parameter range, (b) irreducibility of chain. Both needed for AMW to apply.",
+      "reviewer_finding": ["finding-2-irreducibility", "finding-3-positivity"]
+    },
+    {
+      "id": "vpur-5",
+      "step": "p3-s5",
+      "pattern": "pat:convention-bridge",
+      "scope": "p3-s5",
+      "outcome": "partial",
+      "prediction_error": "high",
+      "gap_detected": "Pattern demands '(c) prove it holds in your parameter regime; (d) cite the specific proposition.' Original asserts the bridge without proof or citation.",
+      "reviewer_finding": ["finding-1-notation-bridge"]
+    },
+    {
+      "id": "vpur-6",
+      "step": "p3-s6",
+      "pattern": "pat:try-a-simpler-case",
+      "scope": "p3-s6",
+      "outcome": "success",
+      "prediction_error": "none",
+      "gap_detected": "Pattern says 'articulate what generalises.' Original confirms n=2 but does not state which features extend to general n.",
+      "reviewer_finding": null
+    },
+    {
+      "id": "vpur-7",
+      "step": "p3-s7",
+      "pattern": "pat:compose-independent-lemmas",
+      "scope": "p3-s7",
+      "outcome": "partial",
+      "prediction_error": "medium",
+      "gap_detected": "Trace-back reveals: (1) notation bridge (s5) not solid — composition inherits weakness; (2) irreducibility claim made in composition without source piece.",
+      "reviewer_finding": ["finding-1-notation-bridge", "finding-2-irreducibility"]
+    }
+  ],
+
+  "reviewer_findings": [
+    {
+      "id": "finding-1-notation-bridge",
+      "severity": "major",
+      "summary": "Star/non-star normalization bridge is asserted, not proved.",
+      "source": "REVIEWER.md §Problem 3, Finding 1",
+      "caught_by_vpsr": ["vpsr-5"],
+      "caught_by_vpur": ["vpur-5", "vpur-7"],
+      "pattern_mechanism": "convention-bridge HOWEVER warns about hidden differences; THEN demands proof/citation. compose-independent-lemmas trace-back exposes the weak link."
+    },
+    {
+      "id": "finding-2-irreducibility",
+      "severity": "major",
+      "summary": "Irreducibility claim is too compressed / not established.",
+      "source": "REVIEWER.md §Problem 3, Finding 2",
+      "caught_by_vpsr": ["vpsr-4", "vpsr-7"],
+      "caught_by_vpur": ["vpur-4", "vpur-7"],
+      "pattern_mechanism": "reduce-to-known-result THEN demands hypothesis verification. compose-independent-lemmas trace-back finds irreducibility claim has no source piece."
+    },
+    {
+      "id": "finding-3-positivity",
+      "severity": "medium",
+      "summary": "Positivity of F_mu(x;1,t) needs direct citation in stated parameter range.",
+      "source": "REVIEWER.md §Problem 3, Finding 3",
+      "caught_by_vpsr": ["vpsr-4"],
+      "caught_by_vpur": ["vpur-4"],
+      "pattern_mechanism": "reduce-to-known-result THEN says 'compare hypotheses: what is missing or different?' Positivity is a hypothesis of the stationary distribution being a probability measure."
+    }
+  ],
+
+  "edges": [
+    {"type": "pattern-selection", "ends": ["vpsr-1", "pat:construct-an-explicit-witness"]},
+    {"type": "pattern-selection", "ends": ["vpsr-2", "pat:construct-an-explicit-witness"]},
+    {"type": "pattern-selection", "ends": ["vpsr-3", "pat:non-circularity-check"]},
+    {"type": "pattern-selection", "ends": ["vpsr-4", "pat:reduce-to-known-result"]},
+    {"type": "pattern-selection", "ends": ["vpsr-5", "pat:convention-bridge"]},
+    {"type": "pattern-selection", "ends": ["vpsr-6", "pat:try-a-simpler-case"]},
+    {"type": "pattern-selection", "ends": ["vpsr-7", "pat:compose-independent-lemmas"]},
+
+    {"type": "applied-to", "ends": ["vpsr-1", "p3-s1"]},
+    {"type": "applied-to", "ends": ["vpsr-2", "p3-s2"]},
+    {"type": "applied-to", "ends": ["vpsr-3", "p3-s3"]},
+    {"type": "applied-to", "ends": ["vpsr-4", "p3-s4"]},
+    {"type": "applied-to", "ends": ["vpsr-5", "p3-s5"]},
+    {"type": "applied-to", "ends": ["vpsr-6", "p3-s6"]},
+    {"type": "applied-to", "ends": ["vpsr-7", "p3-s7"]},
+
+    {"type": "outcome-of", "ends": ["vpur-1", "vpsr-1"]},
+    {"type": "outcome-of", "ends": ["vpur-2", "vpsr-2"]},
+    {"type": "outcome-of", "ends": ["vpur-3", "vpsr-3"]},
+    {"type": "outcome-of", "ends": ["vpur-4", "vpsr-4"]},
+    {"type": "outcome-of", "ends": ["vpur-5", "vpsr-5"]},
+    {"type": "outcome-of", "ends": ["vpur-6", "vpsr-6"]},
+    {"type": "outcome-of", "ends": ["vpur-7", "vpsr-7"]},
+
+    {"type": "detects", "ends": ["vpur-4", "finding-2-irreducibility"]},
+    {"type": "detects", "ends": ["vpur-4", "finding-3-positivity"]},
+    {"type": "detects", "ends": ["vpur-5", "finding-1-notation-bridge"]},
+    {"type": "detects", "ends": ["vpur-7", "finding-1-notation-bridge"]},
+    {"type": "detects", "ends": ["vpur-7", "finding-2-irreducibility"]}
+  ],
+
+  "stats": {
+    "patterns_used": 6,
+    "patterns_existing": 3,
+    "patterns_new": 3,
+    "vpsr_count": 7,
+    "vpur_count": 7,
+    "outcomes": {"success": 5, "partial": 2},
+    "reviewer_findings_total": 3,
+    "reviewer_findings_caught": 3,
+    "catch_rate": "3/3 = 100%"
+  }
+}
