@@ -10,12 +10,19 @@
 
 ## Spec-Lock
 
-- `formal_statement`: pending
-- `quantifiers`: pending
-- `parameter_regime`: pending
-- `output_format`: pending
-- `forbidden_substitutions`: "Do not replace with generic design-theory existence question."
-- `spec_lock_status`: `fail`
+- `formal_statement`: |
+    An (n,q,r)-Steiner system S is a collection of q-subsets of [n] = {1,...,n}
+    such that every r-subset of [n] is contained in exactly 1 element of S.
+
+    **Problem**: Construct an (n,q,r)-Steiner system with n > q > r > 5, r < 10,
+    and n < 200.
+
+    No known examples exist with r > 5 despite theoretical existence proofs (Keevash 2014).
+- `quantifiers`: "Existential — find any single (n,q,r) triple satisfying the constraints and construct the system."
+- `parameter_regime`: "n < 200, r in {6,7,8,9}, q in (r, n)."
+- `output_format`: "Multiline string. Line 1: '#n,q,r'. Subsequent lines: elements of each q-subset separated by whitespace."
+- `forbidden_substitutions`: "Do not replace with generic design-theory existence question. Do not weaken r > 5 to r >= 5. Do not claim existence without explicit construction."
+- `spec_lock_status`: `pass`
 
 ## Current Hypothesis
 
@@ -24,7 +31,7 @@
 
 ## Risk Flags
 
-- `spec_risk`: high
+- `spec_risk`: low (spec-locked)
 - `no_bias_risk`: medium
 - `domain_depth_risk`: high
 - `verification_risk`: high
@@ -61,5 +68,5 @@
 
 - `status`: `NARROWS`
 - `final_note`: "Initialized; awaiting Spec-Lock."
-- `next_action`: "Extract and normalize exact problem statement + regime."
+- `next_action`: "Begin FALSIFY phase — attempt the opposite answer."
 

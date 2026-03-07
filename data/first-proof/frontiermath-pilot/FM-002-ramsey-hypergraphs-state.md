@@ -10,12 +10,27 @@
 
 ## Spec-Lock
 
-- `formal_statement`: pending
-- `quantifiers`: pending
-- `parameter_regime`: pending
-- `output_format`: pending
-- `forbidden_substitutions`: "Do not replace with easier graph-only Ramsey variant."
-- `spec_lock_status`: `fail`
+- `formal_statement`: |
+    A hypergraph (V, H) contains a **partition of size n** if there exist D ⊆ V
+    and P ⊆ H such that |D| = n and every member of D is contained in exactly
+    one member of P.
+
+    H(n) = greatest k such that there exists a hypergraph (V, H) with |V| = k,
+    no isolated vertices, and no partitions of size > n.
+
+    **Warm-up**: Construct a hypergraph with |V| >= 64, |H| <= 20, no partitions
+    of size > 20, no isolated vertices.
+
+    **Single**: Same but |V| >= 66.
+
+    **Full Problem**: Improve the known lower bound H(n) >= k_n where k_1 = 1
+    and k_n = floor(n/2) + k_{floor(n/2)} + k_{floor((n+1)/2)}.
+    Demonstrate H(n) >= c * k_n for some c > 1, effective by n=15.
+- `quantifiers`: "For all n (full problem). Fixed n=20 (warm-up/single)."
+- `parameter_regime`: "n <= 100, must complete within 10 minutes on standard hardware."
+- `output_format`: "Python function `solution(n: int) -> str` producing hypergraphs as edge strings, e.g. '{1,2,3},{2,4},{3,4,5}'."
+- `forbidden_substitutions`: "Do not replace with easier graph-only Ramsey variant. Do not weaken the partition definition."
+- `spec_lock_status`: `pass`
 
 ## Current Hypothesis
 
@@ -24,7 +39,7 @@
 
 ## Risk Flags
 
-- `spec_risk`: high
+- `spec_risk`: low (spec-locked)
 - `no_bias_risk`: medium
 - `domain_depth_risk`: high
 - `verification_risk`: medium
@@ -61,5 +76,5 @@
 
 - `status`: `NARROWS`
 - `final_note`: "Initialized; awaiting Spec-Lock."
-- `next_action`: "Extract and normalize exact problem statement + regime."
+- `next_action`: "Begin FALSIFY phase — attempt the opposite answer."
 
