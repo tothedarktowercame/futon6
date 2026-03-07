@@ -198,11 +198,12 @@ function getNodeLabel(d, nodeId) {
 
 function formatMath(text) {
   if (!text) return '';
-  var out = escapeHtml(text);
-  // Split on \n\n for paragraphs, \n for line breaks
-  var paragraphs = out.split('\\n\\n');
+  // After JSON.parse, \\n becomes real newline; handle both just in case
+  var normalized = text.replace(/\\n/g, '\n');
+  var out = escapeHtml(normalized);
+  var paragraphs = out.split('\n\n');
   return paragraphs.map(function(p) {
-    return '<p>' + p.replace(/\\n/g, '<br>') + '</p>';
+    return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
   }).join('');
 }
 
