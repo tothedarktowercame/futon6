@@ -419,7 +419,9 @@ def build_generation_prompt(
         "  - `{type: 'iatc', ends: [src_id, tgt_id], attrs: {performative: 'assert'|'clarify'|'query'}}` — speech act",
         "  - `{type: 'categorical', ends: [src_id, tgt_id], attrs: {relation: '<cat-theory-relation>'}}` — if applicable",
         "",
-        "Aim for 4-8 term nodes, 2-4 expression nodes, and 1-3 scope nodes.",
+        "The number of nodes should reflect the actual complexity of the content.",
+        "A simple question might have 3 terms and 1 expression; a rich one might have 10+ terms, 5 expressions, and 3 scopes.",
+        "Do NOT default to a fixed template — let the mathematics dictate the structure.",
         "Every node should be connected by at least one edge.",
         "Reply with ONLY the JSON object.",
     ])

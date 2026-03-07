@@ -218,7 +218,9 @@ def build_prompt(q: dict, corpus_ctx: str | None, wiring_node: dict | None) -> s
         "  - `{type: 'discourse', ends: [question_id, answer_id]}`",
         "  - `{type: 'iatc', ends: [src, tgt], attrs: {performative: 'assert'|'clarify'|'query'}}`",
         "",
-        "Aim for 4-8 term nodes, 2-4 expression nodes, 1-3 scope nodes.",
+        "The number of nodes should reflect the actual complexity of the content.",
+        "A simple question might have 3 terms and 1 expression; a rich one might have 10+ terms, 5 expressions, and 3 scopes.",
+        "Do NOT default to a fixed template — let the mathematics dictate the structure.",
         "Every node should be connected by at least one edge.",
         "Reply with ONLY the JSON object.",
     ])

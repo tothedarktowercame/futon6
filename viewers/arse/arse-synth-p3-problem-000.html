@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When do starred modified Macdonald polynomials equal the unstarred ones? — ArSE</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  startup: { typeset: true }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --bg: #1a1a2e; --bg2: #16213e; --bg3: #0f3460;
+  --fg: #e0e0e0; --fg2: #a0a0b0;
+  --accent: #e94560; --gold: #d4a856; --green: #4ecca3;
+  --blue: #7ec8e3; --purple: #b088f9; --orange: #f0a500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { background: var(--bg2); border-bottom: 2px solid var(--accent); padding: 20px 0; margin-bottom: 30px; }
+header .container { display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.6em; letter-spacing: 0.05em; }
+header h1 span { color: var(--accent); }
+header .stats { font-size: 0.9em; color: var(--fg2); margin-left: auto; }
+.tag { background: var(--bg3); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.72em; display: inline-block; }
+mjx-container { color: #f0d060 !important; }
+
+.back-btn { background: var(--bg3); color: var(--fg); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; margin-bottom: 20px; display: inline-block; text-decoration: none; }
+.back-btn:hover { background: var(--accent); text-decoration: none; }
+.detail-header { margin-bottom: 24px; }
+.detail-header h2 { font-size: 1.3em; margin-bottom: 8px; }
+.detail-header .detail-meta { color: var(--fg2); font-size: 0.85em; }
+.qa-section { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+.qa-section.answer { border-left-color: var(--green); }
+.qa-section h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.qa-section .content { font-size: 0.95em; line-height: 1.7; }
+.qa-section .content p { margin-bottom: 12px; }
+.graph-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.graph-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.node-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.node-chip { padding: 4px 10px; border-radius: 6px; font-size: 0.82em; display: flex; align-items: center; gap: 4px; }
+.node-chip .ntype { font-size: 0.7em; opacity: 0.7; }
+.chip-term { background: rgba(212,168,86,0.15); color: var(--gold); border: 1px solid rgba(212,168,86,0.3); }
+.chip-expression { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+.chip-scope { background: rgba(176,136,249,0.15); color: var(--purple); border: 1px solid rgba(176,136,249,0.3); }
+.chip-post { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid rgba(233,69,96,0.3); }
+.edge-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+.edge-table th { text-align: left; padding: 6px 10px; color: var(--fg2); border-bottom: 1px solid var(--bg3); }
+.edge-table td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.edge-type { padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
+.et-mention { background: rgba(212,168,86,0.2); color: var(--gold); }
+.et-surface { background: rgba(78,204,163,0.2); color: var(--green); }
+.et-scope { background: rgba(176,136,249,0.2); color: var(--purple); }
+.et-discourse { background: rgba(233,69,96,0.2); color: var(--accent); }
+.et-iatc { background: rgba(240,165,0,0.2); color: var(--orange); }
+.expr-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.expr-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.expr-item { background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 2px solid var(--green); font-size: 1.1em; overflow-x: auto; }
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img src="arse-logo2.png" alt="ArSE" style="width:80px;height:80px;border-radius:12px;">
+    <h1><span>ArSE</span> Viewer</h1>
+    <div class="stats"></div>
+  </div>
+</header>
+<div class="container">
+<a class="back-btn" href="arse-viewer.html">&larr; Back to index</a>
+<div class="detail-header">
+  <h2>When do starred modified Macdonald polynomials equal the unstarred ones?</h2>
+  <div class="detail-meta">synth-p3-problem-000 &nbsp;|&nbsp; <span class="tag">combinatorics</span> <span class="tag">probability</span> <span class="tag">symmetric-functions</span>
+    &nbsp;|&nbsp; 13 nodes, 22 edges</div>
+</div>
+<div class="qa-section">
+  <h3>Question</h3>
+  <div class="content"><p>Let $\lambda$ be a partition with $\lambda_n=0$ and let $S_n(\lambda)$ be the content-fixed sector appearing in the multispecies CTMC construction for modified Macdonald polynomials. For $x_i&gt;0$ and $0\le t&lt;1$ the proposed stationary law is $\pi(\mu)=F_{\mu}^*(x;1,t)/P_{\lambda}^*(x;1,t)$, where $P_{\lambda}^*(x;1,t)=\sum_{
+u\in S_n(\lambda)}F_{
+u}^*(x;1,t)$. Most references assert without proof that the starred specialization differs from the unstarred modified Macdonald $F_{\mu}(x;1,t)$ only by an explicit product in the parts of $\mu$. Could someone explain precisely when $F_{\mu}^*=F_{\mu} \cdot c_{\mu}(t)$ and how that ratio guarantees that the CTMC stationary weights patch from the local (single site) normalization to the global sector sum?</p></div>
+</div>
+<div class="qa-section answer">
+  <h3>Answer</h3>
+  <div class="content"><p>The starred normalization is the plethystic evaluation $F_{\mu}^*(x;q,t)=F_{\mu}[X/(1-t);q,t]$ multiplied by the standard Macdonald scalar $b_{\mu}(q,t)$. In the $q=1$ specialisation used for the CTMC we have</p><p>$$F_{\mu}^*(x;1,t)=\frac{F_{\mu}(x;1,t)}{\prod_{i\ge 1}(t;t)_{m_i(\mu)}},\qquad (t;t)_m=\prod_{j=1}^m(1-t^j).$$</p><p>The factor depends only on the multiplicities $m_i(\mu)$ of each part size, so whenever $x_i&gt;0$ and $0\le t&lt;1$ the ratio is finite and positive. Consequently the stationary law</p><p>$$\pi(\mu)=\frac{F_{\mu}^*(x;1,t)}{P_{\lambda}^*(x;1,t)}=\frac{F_{\mu}(x;1,t)}{\displaystyle \sum_{
+u\in S_n(\lambda)} F_{
+u}(x;1,t) \prod_{i\ge 1}(t;t)_{m_i(
+u)}^{-1}}\prod_{i\ge 1}(t;t)_{m_i(\mu)}^{-1}$$</p><p>is just the unstarred weight multiplied by the local product coming from plethystic substitution. The local-to-global compatibility follows because the CTMC transition rates are expressed in terms of ratios $F_{\mu}^*/F_{
+u}^*$, and the common factors $(t;t)_{m_i}$ cancel except for the multiplicities that actually change, matching the combinatorial updates of the clock process. Thus the star vs non-star bridge is completely explicit: the starred law agrees with the unstarred one after dividing by the hook-content-type product, so the global sector sum remains a true probability normalization.</p></div>
+</div>
+<div class="expr-panel"><h3>Expressions (3)</h3>
+<div class="expr-item">\(\pi(\mu)=\frac{F_{\mu}^*(x;1,t)}{P_{\lambda}^*(x;1,t)}\)</div>
+<div class="expr-item">\(F_{\mu}^*(x;1,t)=\frac{F_{\mu}(x;1,t)}{\prod_{i\ge 1}(t;t)_{m_i(\mu)}}\)</div>
+<div class="expr-item">\(P_{\lambda}^*(x;1,t)=\sum_{\nu\in S_n(\lambda)} F_{\nu}^*(x;1,t)\)</div>
+</div>
+<div class="graph-panel"><h3>Hypergraph Nodes (13)</h3>
+<div class="node-list">
+<span class="node-chip chip-post"><span class="ntype">post</span> question</span>
+<span class="node-chip chip-post"><span class="ntype">post</span> answer</span>
+<span class="node-chip chip-term"><span class="ntype">symmetric-functions</span> modified Macdonald polynomial</span>
+<span class="node-chip chip-term"><span class="ntype">symmetric-functions</span> star normalization</span>
+<span class="node-chip chip-term"><span class="ntype">probability</span> finite-state CTMC</span>
+<span class="node-chip chip-term"><span class="ntype">probability</span> stationary distribution</span>
+<span class="node-chip chip-term"><span class="ntype">symmetric-functions</span> sector sum P_\lambda^*</span>
+<span class="node-chip chip-term"><span class="ntype">symmetric-functions</span> plethystic evaluation</span>
+<span class="node-chip chip-scope"><span class="ntype">quant/universal</span> for all \mu\in S_n(\lambda) with x_i&gt;0, 0\le t&lt;1</span>
+<span class="node-chip chip-scope"><span class="ntype">conditional</span> if multiplicities m_i(\mu) are finite then starred/unstarred differ by \prod (t;t)_{m_i}^{-1}</span>
+</div>
+<h3 style="margin-top:16px;">Edges (22)</h3>
+<table class="edge-table"><thead><tr><th>Type</th><th>From</th><th>To</th><th>Attrs</th></tr></thead><tbody>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t1: modified Macdonald polynomial</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t2: star normalization</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t3: finite-state CTMC</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t4: stationary distribution</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t5: sector sum P_\lambda^*</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t6: plethystic evaluation</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t1: modified Macdonald polynomial</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t2: star normalization</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t3: finite-state CTMC</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t4: stationary distribution</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t5: sector sum P_\lambda^*</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t6: plethystic evaluation</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>q1 (question)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e3 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s1: for all \mu\in S_n(\lambda) with x_i&gt;0, </td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s1: for all \mu\in S_n(\lambda) with x_i&gt;0, </td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s2: if multiplicities m_i(\mu) are finite th</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-discourse">discourse</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;query&quot;}</td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>a1 (answer)</td>
+  <td>q1 (question)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;assert&quot;}</td>
+</tr>
+</tbody></table></div>
+</div></body></html>

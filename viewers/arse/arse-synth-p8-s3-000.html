@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When does the vertex spanning lemma yield a symplectic direct sum? — ArSE</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  startup: { typeset: true }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --bg: #1a1a2e; --bg2: #16213e; --bg3: #0f3460;
+  --fg: #e0e0e0; --fg2: #a0a0b0;
+  --accent: #e94560; --gold: #d4a856; --green: #4ecca3;
+  --blue: #7ec8e3; --purple: #b088f9; --orange: #f0a500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { background: var(--bg2); border-bottom: 2px solid var(--accent); padding: 20px 0; margin-bottom: 30px; }
+header .container { display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.6em; letter-spacing: 0.05em; }
+header h1 span { color: var(--accent); }
+header .stats { font-size: 0.9em; color: var(--fg2); margin-left: auto; }
+.tag { background: var(--bg3); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.72em; display: inline-block; }
+mjx-container { color: #f0d060 !important; }
+
+.back-btn { background: var(--bg3); color: var(--fg); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; margin-bottom: 20px; display: inline-block; text-decoration: none; }
+.back-btn:hover { background: var(--accent); text-decoration: none; }
+.detail-header { margin-bottom: 24px; }
+.detail-header h2 { font-size: 1.3em; margin-bottom: 8px; }
+.detail-header .detail-meta { color: var(--fg2); font-size: 0.85em; }
+.qa-section { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+.qa-section.answer { border-left-color: var(--green); }
+.qa-section h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.qa-section .content { font-size: 0.95em; line-height: 1.7; }
+.qa-section .content p { margin-bottom: 12px; }
+.graph-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.graph-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.node-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.node-chip { padding: 4px 10px; border-radius: 6px; font-size: 0.82em; display: flex; align-items: center; gap: 4px; }
+.node-chip .ntype { font-size: 0.7em; opacity: 0.7; }
+.chip-term { background: rgba(212,168,86,0.15); color: var(--gold); border: 1px solid rgba(212,168,86,0.3); }
+.chip-expression { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+.chip-scope { background: rgba(176,136,249,0.15); color: var(--purple); border: 1px solid rgba(176,136,249,0.3); }
+.chip-post { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid rgba(233,69,96,0.3); }
+.edge-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+.edge-table th { text-align: left; padding: 6px 10px; color: var(--fg2); border-bottom: 1px solid var(--bg3); }
+.edge-table td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.edge-type { padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
+.et-mention { background: rgba(212,168,86,0.2); color: var(--gold); }
+.et-surface { background: rgba(78,204,163,0.2); color: var(--green); }
+.et-scope { background: rgba(176,136,249,0.2); color: var(--purple); }
+.et-discourse { background: rgba(233,69,96,0.2); color: var(--accent); }
+.et-iatc { background: rgba(240,165,0,0.2); color: var(--orange); }
+.expr-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.expr-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.expr-item { background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 2px solid var(--green); font-size: 1.1em; overflow-x: auto; }
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img src="arse-logo2.png" alt="ArSE" style="width:80px;height:80px;border-radius:12px;">
+    <h1><span>ArSE</span> Viewer</h1>
+    <div class="stats"></div>
+  </div>
+</header>
+<div class="container">
+<a class="back-btn" href="arse-viewer.html">&larr; Back to index</a>
+<div class="detail-header">
+  <h2>When does the vertex spanning lemma yield a symplectic direct sum?</h2>
+  <div class="detail-meta">synth-p8-s3-000 &nbsp;|&nbsp; <span class="tag">symplectic-geometry</span> <span class="tag">linear-algebra</span> <span class="tag">differential-geometry</span>
+    &nbsp;|&nbsp; 13 nodes, 20 edges</div>
+</div>
+<div class="qa-section">
+  <h3>Question</h3>
+  <div class="content"><p>Let $K\subset(\mathbb R^4,\omega_0)$ be a polyhedral Lagrangian whose vertex star at $p$ lies in an affine hyperplane $H$. The algebraic proof of the vertex spanning lemma says that if the four incident edges span $H$ and no two Lagrangian faces coincide, then after reordering a symplectic basis $(e_1,e_3,e_2,e_4)$ we obtain a block-diagonal matrix for $\omega_0$, so $T_p\mathbb R^4=V_1\oplus V_2$ with each $V_i$ Lagrangian. What hypotheses on $H$ and on the edges are actually needed to justify this block decomposition? How does $\ker(\omega_0|_H)$ control the topology of the vertex star and guarantee that the algebraic normal form exists?</p></div>
+</div>
+<div class="qa-section answer">
+  <h3>Answer</h3>
+  <div class="content"><p>Because $K$ is Lagrangian all faces lie in 2-planes on which $\omega_0$ vanishes. If the four edges span the hyperplane $H$, then $\omega_0|_H$ is a rank-two skew form whose kernel is one-dimensional. Topologically, this kernel line is the common intersection of all Lagrangian faces: each face contains the line because its tangent plane lies inside $H$ and is isotropic for $\omega_0$. If two distinct edges were contained in the kernel, then every edge would be proportional, contradicting the assumption that the star has four distinct faces. Thus there are exactly two opposite edges spanning $\ker(\omega_0|_H)$, and the remaining two edges project to a symplectic basis of $H/\ker$.</p><p>Choose a Darboux chart with basis $(e_1,e_2,e_3,e_4)$ such that $e_1$ lies along $\ker(\omega_0|_H)$ and $e_2$ projects to an edge inside $H$. Extend by $J e_1=e_3$ and $J e_2=e_4$. In this basis the matrix of $\omega_0$ takes the form</p><p>$$\Omega=\begin{pmatrix}0 &amp; 0 &amp; a &amp; 0\\0 &amp; 0 &amp; 0 &amp; b\\-a &amp; 0 &amp; 0 &amp; 0\\0 &amp; -b &amp; 0 &amp; 0\end{pmatrix},$$</p><p>where $a=\omega_0(e_1,e_3)$ and $b=\omega_0(e_2,e_4)$ are nonzero. The subspaces $V_1=\operatorname{span}\{e_1,e_3\}$ and $V_2=\operatorname{span}\{e_2,e_4\}$ are Lagrangian and complementary, so the vertex star decomposes as a direct sum of two Lagrangian fans. The algebraic block-diagonalization therefore rests on two geometric prerequisites: (1) the edges span a hyperplane $H$ transverse to $JH$ so that $\omega_0|_H$ has one-dimensional kernel, and (2) the kernel line is contained in every face but coincides with exactly one pair of opposite edges. When these hold the linear algebra argument applies and yields the symplectic direct sum used in the vertex spanning lemma.</p></div>
+</div>
+<div class="expr-panel"><h3>Expressions (3)</h3>
+<div class="expr-item">\(\ker(\omega_0|_H) = \bigcap_{F\ni p} T_pF\)</div>
+<div class="expr-item">\(\Omega = \begin{pmatrix}0 &amp; 0 &amp; a &amp; 0\\0 &amp; 0 &amp; 0 &amp; b\\-a &amp; 0 &amp; 0 &amp; 0\\0 &amp; -b &amp; 0 &amp; 0\end{pmatrix}\)</div>
+<div class="expr-item">\(T_p\mathbb R^4 = V_1 \oplus V_2\)</div>
+</div>
+<div class="graph-panel"><h3>Hypergraph Nodes (13)</h3>
+<div class="node-list">
+<span class="node-chip chip-post"><span class="ntype">post</span> question</span>
+<span class="node-chip chip-post"><span class="ntype">post</span> answer</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> vertex spanning lemma</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Lagrangian fan</span>
+<span class="node-chip chip-term"><span class="ntype">linear-algebra</span> kernel of restricted form</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Darboux basis</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> symplectic direct sum</span>
+<span class="node-chip chip-term"><span class="ntype">linear-algebra</span> block-diagonal form</span>
+<span class="node-chip chip-scope"><span class="ntype">quant/universal</span> for any four-face Lagrangian vertex</span>
+<span class="node-chip chip-scope"><span class="ntype">conditional</span> if the edges span a hyperplane whose \omega-restriction has one-dimensional kernel</span>
+</div>
+<h3 style="margin-top:16px;">Edges (20)</h3>
+<table class="edge-table"><thead><tr><th>Type</th><th>From</th><th>To</th><th>Attrs</th></tr></thead><tbody>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t1: vertex spanning lemma</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t2: Lagrangian fan</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t3: kernel of restricted form</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t5: symplectic direct sum</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t1: vertex spanning lemma</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t2: Lagrangian fan</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t3: kernel of restricted form</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t4: Darboux basis</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t5: symplectic direct sum</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t6: block-diagonal form</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e3 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s1: for any four-face Lagrangian vertex</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s1: for any four-face Lagrangian vertex</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s2: if the edges span a hyperplane whose \om</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s2: if the edges span a hyperplane whose \om</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-discourse">discourse</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;query&quot;}</td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>a1 (answer)</td>
+  <td>q1 (question)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;assert&quot;}</td>
+</tr>
+</tbody></table></div>
+</div></body></html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hamiltonian interpolation along an edge arc — ArSE</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  startup: { typeset: true }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --bg: #1a1a2e; --bg2: #16213e; --bg3: #0f3460;
+  --fg: #e0e0e0; --fg2: #a0a0b0;
+  --accent: #e94560; --gold: #d4a856; --green: #4ecca3;
+  --blue: #7ec8e3; --purple: #b088f9; --orange: #f0a500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { background: var(--bg2); border-bottom: 2px solid var(--accent); padding: 20px 0; margin-bottom: 30px; }
+header .container { display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.6em; letter-spacing: 0.05em; }
+header h1 span { color: var(--accent); }
+header .stats { font-size: 0.9em; color: var(--fg2); margin-left: auto; }
+.tag { background: var(--bg3); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.72em; display: inline-block; }
+mjx-container { color: #f0d060 !important; }
+
+.back-btn { background: var(--bg3); color: var(--fg); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; margin-bottom: 20px; display: inline-block; text-decoration: none; }
+.back-btn:hover { background: var(--accent); text-decoration: none; }
+.detail-header { margin-bottom: 24px; }
+.detail-header h2 { font-size: 1.3em; margin-bottom: 8px; }
+.detail-header .detail-meta { color: var(--fg2); font-size: 0.85em; }
+.qa-section { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+.qa-section.answer { border-left-color: var(--green); }
+.qa-section h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.qa-section .content { font-size: 0.95em; line-height: 1.7; }
+.qa-section .content p { margin-bottom: 12px; }
+.graph-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.graph-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.node-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.node-chip { padding: 4px 10px; border-radius: 6px; font-size: 0.82em; display: flex; align-items: center; gap: 4px; }
+.node-chip .ntype { font-size: 0.7em; opacity: 0.7; }
+.chip-term { background: rgba(212,168,86,0.15); color: var(--gold); border: 1px solid rgba(212,168,86,0.3); }
+.chip-expression { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+.chip-scope { background: rgba(176,136,249,0.15); color: var(--purple); border: 1px solid rgba(176,136,249,0.3); }
+.chip-post { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid rgba(233,69,96,0.3); }
+.edge-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+.edge-table th { text-align: left; padding: 6px 10px; color: var(--fg2); border-bottom: 1px solid var(--bg3); }
+.edge-table td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.edge-type { padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
+.et-mention { background: rgba(212,168,86,0.2); color: var(--gold); }
+.et-surface { background: rgba(78,204,163,0.2); color: var(--green); }
+.et-scope { background: rgba(176,136,249,0.2); color: var(--purple); }
+.et-discourse { background: rgba(233,69,96,0.2); color: var(--accent); }
+.et-iatc { background: rgba(240,165,0,0.2); color: var(--orange); }
+.expr-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.expr-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.expr-item { background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 2px solid var(--green); font-size: 1.1em; overflow-x: auto; }
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img src="arse-logo2.png" alt="ArSE" style="width:80px;height:80px;border-radius:12px;">
+    <h1><span>ArSE</span> Viewer</h1>
+    <div class="stats"></div>
+  </div>
+</header>
+<div class="container">
+<a class="back-btn" href="arse-viewer.html">&larr; Back to index</a>
+<div class="detail-header">
+  <h2>Hamiltonian interpolation along an edge arc</h2>
+  <div class="detail-meta">synth-p8-s5-001 &nbsp;|&nbsp; <span class="tag">symplectic-geometry</span> <span class="tag">differential-topology</span> <span class="tag">surgery-theory</span>
+    &nbsp;|&nbsp; 13 nodes, 18 edges</div>
+</div>
+<div class="qa-section">
+  <h3>Question</h3>
+  <div class="content"><p>Two product neighborhoods around consecutive vertices of a polyhedral Lagrangian $K\subset(\mathbb R^4,\omega_0)$ overlap along an edge arc $\gamma$. Inside each neighborhood the Lagrangian is the graph of an exact 1-form $dS_i$ over a common 2-disk. Lees/Weinstein give local coordinates in the smooth case, but here $\gamma$ sits in the piecewise-linear locus. What conditions on $\gamma$ and on the primitives $S_1,S_2$ guarantee that the interpolated function $S_\varepsilon(x)=\chi(x_1/\varepsilon)S_1+(1-\chi)S_2$ still produces a Hamiltonian smoothing that matches the vertex models at the ends of $\gamma$?</p></div>
+</div>
+<div class="qa-section answer">
+  <h3>Answer</h3>
+  <div class="content"><p>Assume first that the two vertex neighborhoods have already been smoothed so that near the endpoints of $\gamma$ the Lagrangian is smooth and coincides with the graphs of $dS_1$ and $dS_2$. The edge arc is then contained in the intersection of two Darboux charts in which $\gamma$ is straight and the sheets are exact graphs. The only obstruction to applying the standard Hamiltonian interpolation is the piecewise-linear transition along $\gamma$; to rule it out we require:</p><p>1. **Exactness along the edge:** the forms $\lambda_{\omega_0}|_{L_i}$ admit primitives $S_i$ that extend continuously across $\gamma$. This is automatic for polyhedral Lagrangians built from exact faces.
+2. **$C^1$ matching on the edge:** $S_1$ and $S_2$ agree together with their first derivatives along $x_2=0$ (the line representing $\gamma$) so that their graphs share the same tangent plane. This condition ensures the piecewise-linear crease is only second order.
+3. **Compact support of the difference:** $S_1-S_2$ vanishes near the endpoints of $\gamma$ so that the interpolation leaves the vertex neighborhoods untouched.</p><p>Under these hypotheses the cutoff construction</p><p>$$S_\varepsilon(x)=\chi\Big(\frac{x_1}{\varepsilon}\Big) S_1(x)+\left(1-\chi\Big(\frac{x_1}{\varepsilon}\Big)\right) S_2(x)$$</p><p>defines a $C^\infty$ function equal to $S_1$ for $x_1\gg0$ and to $S_2$ for $x_1\ll0$. Its graph is exact Lagrangian because $\chi$ depends only on $x_1$, so $dS_\varepsilon$ is a convex combination of $dS_1$ and $dS_2$ plus a correction supported where $\chi&#x27;
+eq0$. The family $S_t$ ($t\in[0,1]$) connecting $S_1$ to $S_\varepsilon$ yields a compactly supported Hamiltonian isotopy supported in the overlap of the vertex neighborhoods. The resulting smoothing matches the vertex data at both ends of $\gamma$ and replaces the polyhedral crease by a smooth strip. Thus the Lees/Weinstein surgery extends to the PL setting whenever the edge arc admits exact primitives that agree to first order along $\gamma$.</p></div>
+</div>
+<div class="expr-panel"><h3>Expressions (3)</h3>
+<div class="expr-item">\(S_\varepsilon(x)=\chi\Big(\frac{x_1}{\varepsilon}\Big) S_1(x)+(1-\chi\Big(\frac{x_1}{\varepsilon}\Big)) S_2(x)\)</div>
+<div class="expr-item">\(H_t(x) = -\partial_t S_t(x)\)</div>
+<div class="expr-item">\(L_t = \operatorname{graph}(dS_t)\)</div>
+</div>
+<div class="graph-panel"><h3>Hypergraph Nodes (13)</h3>
+<div class="node-list">
+<span class="node-chip chip-post"><span class="ntype">post</span> question</span>
+<span class="node-chip chip-post"><span class="ntype">post</span> answer</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> polyhedral Lagrangian</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> exact primitive</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Hamiltonian interpolation</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> vertex neighborhood</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> edge arc</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Darboux chart</span>
+<span class="node-chip chip-scope"><span class="ntype">quant/universal</span> for any edge arc between smoothed vertex neighborhoods</span>
+<span class="node-chip chip-scope"><span class="ntype">conditional</span> if S_1,S_2 match to first order along the edge and are exact</span>
+</div>
+<h3 style="margin-top:16px;">Edges (18)</h3>
+<table class="edge-table"><thead><tr><th>Type</th><th>From</th><th>To</th><th>Attrs</th></tr></thead><tbody>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t1: polyhedral Lagrangian</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t4: vertex neighborhood</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t5: edge arc</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t1: polyhedral Lagrangian</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t2: exact primitive</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t3: Hamiltonian interpolation</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t4: vertex neighborhood</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t6: Darboux chart</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e3 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s1: for any edge arc between smoothed vertex</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s1: for any edge arc between smoothed vertex</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s2: if S_1,S_2 match to first order along th</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s2: if S_1,S_2 match to first order along th</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-discourse">discourse</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;query&quot;}</td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>a1 (answer)</td>
+  <td>q1 (question)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;assert&quot;}</td>
+</tr>
+</tbody></table></div>
+</div></body></html>

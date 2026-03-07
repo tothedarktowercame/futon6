@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Does torsion in a uniform lattice obstruct rationally acyclic manifolds? — ArSE</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  startup: { typeset: true }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --bg: #1a1a2e; --bg2: #16213e; --bg3: #0f3460;
+  --fg: #e0e0e0; --fg2: #a0a0b0;
+  --accent: #e94560; --gold: #d4a856; --green: #4ecca3;
+  --blue: #7ec8e3; --purple: #b088f9; --orange: #f0a500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { background: var(--bg2); border-bottom: 2px solid var(--accent); padding: 20px 0; margin-bottom: 30px; }
+header .container { display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.6em; letter-spacing: 0.05em; }
+header h1 span { color: var(--accent); }
+header .stats { font-size: 0.9em; color: var(--fg2); margin-left: auto; }
+.tag { background: var(--bg3); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.72em; display: inline-block; }
+mjx-container { color: #f0d060 !important; }
+
+.back-btn { background: var(--bg3); color: var(--fg); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; margin-bottom: 20px; display: inline-block; text-decoration: none; }
+.back-btn:hover { background: var(--accent); text-decoration: none; }
+.detail-header { margin-bottom: 24px; }
+.detail-header h2 { font-size: 1.3em; margin-bottom: 8px; }
+.detail-header .detail-meta { color: var(--fg2); font-size: 0.85em; }
+.qa-section { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+.qa-section.answer { border-left-color: var(--green); }
+.qa-section h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.qa-section .content { font-size: 0.95em; line-height: 1.7; }
+.qa-section .content p { margin-bottom: 12px; }
+.graph-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.graph-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.node-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.node-chip { padding: 4px 10px; border-radius: 6px; font-size: 0.82em; display: flex; align-items: center; gap: 4px; }
+.node-chip .ntype { font-size: 0.7em; opacity: 0.7; }
+.chip-term { background: rgba(212,168,86,0.15); color: var(--gold); border: 1px solid rgba(212,168,86,0.3); }
+.chip-expression { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+.chip-scope { background: rgba(176,136,249,0.15); color: var(--purple); border: 1px solid rgba(176,136,249,0.3); }
+.chip-post { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid rgba(233,69,96,0.3); }
+.edge-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+.edge-table th { text-align: left; padding: 6px 10px; color: var(--fg2); border-bottom: 1px solid var(--bg3); }
+.edge-table td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.edge-type { padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
+.et-mention { background: rgba(212,168,86,0.2); color: var(--gold); }
+.et-surface { background: rgba(78,204,163,0.2); color: var(--green); }
+.et-scope { background: rgba(176,136,249,0.2); color: var(--purple); }
+.et-discourse { background: rgba(233,69,96,0.2); color: var(--accent); }
+.et-iatc { background: rgba(240,165,0,0.2); color: var(--orange); }
+.expr-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.expr-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.expr-item { background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 2px solid var(--green); font-size: 1.1em; overflow-x: auto; }
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img src="arse-logo2.png" alt="ArSE" style="width:80px;height:80px;border-radius:12px;">
+    <h1><span>ArSE</span> Viewer</h1>
+    <div class="stats"></div>
+  </div>
+</header>
+<div class="container">
+<a class="back-btn" href="arse-viewer.html">&larr; Back to index</a>
+<div class="detail-header">
+  <h2>Does torsion in a uniform lattice obstruct rationally acyclic manifolds?</h2>
+  <div class="detail-meta">synth-p7-problem-001 &nbsp;|&nbsp; <span class="tag">lie-groups</span> <span class="tag">lattice</span> <span class="tag">algebraic-topology</span> <span class="tag">manifolds</span>
+    &nbsp;|&nbsp; 12 nodes, 16 edges</div>
+</div>
+<div class="qa-section">
+  <h3>Question</h3>
+  <div class="content"><p>Let $G$ be a connected semisimple Lie group with finite center and let $\Gamma&lt;G$ be a cocompact lattice that contains a nontrivial element of order 2. If one wants a closed manifold $M$ with rationally acyclic universal cover whose fundamental group is $\Gamma$, is the presence of this torsion an actual obstruction, or can one keep the torsion and still obtain $M$ by performing equivariant surgeries on the orbifold $X/\Gamma$ where $X=G/K$ is the symmetric space?</p></div>
+</div>
+<div class="qa-section answer">
+  <h3>Answer</h3>
+  <div class="content"><p>Torsion is a hard obstruction. If $M$ is a closed manifold whose universal cover is rationally acyclic, then $\Gamma=\pi_1(M)$ acts freely on the universal cover $\widetilde M$. Every deck transformation is homotopic to the identity, so for any torsion element $g\in\Gamma$ the Lefschetz number satisfies $L(g)=1$. Lefschetz fixed-point theory therefore implies that $g$ has a fixed point in $\widetilde M$, contradicting freeness. Hence $\Gamma$ must be torsion-free.</p><p>Equivariant surgery on the orbifold $X/\Gamma$ cannot remove the fixed points without first passing to a torsion-free subgroup. Selberg&#x27;s lemma provides a finite-index torsion-free subgroup $\Gamma&#x27;\subset\Gamma$, and the quotient $X/\Gamma&#x27;$ is the desired aspherical manifold with rationally acyclic cover $X$. The original lattice merely produces the orbifold $X/\Gamma$; any attempt to descend back to $\Gamma$ reintroduces isotropy and destroys the manifold structure.</p></div>
+</div>
+<div class="expr-panel"><h3>Expressions (2)</h3>
+<div class="expr-item">\(L(g)=\sum_i (-1)^i \operatorname{tr}(g_*:H_i(\widetilde M;\mathbb Q)\to H_i(\widetilde M;\mathbb Q))=1\)</div>
+<div class="expr-item">\(X=G/K,\quad M=X/\Gamma&#x27; 	ext{ when } \Gamma&#x27; 	ext{ is torsion-free}\)</div>
+</div>
+<div class="graph-panel"><h3>Hypergraph Nodes (12)</h3>
+<div class="node-list">
+<span class="node-chip chip-post"><span class="ntype">post</span> question</span>
+<span class="node-chip chip-post"><span class="ntype">post</span> answer</span>
+<span class="node-chip chip-term"><span class="ntype">lie-groups</span> uniform lattice</span>
+<span class="node-chip chip-term"><span class="ntype">lie-groups</span> semisimple Lie group</span>
+<span class="node-chip chip-term"><span class="ntype">algebraic-topology</span> rationally acyclic universal cover</span>
+<span class="node-chip chip-term"><span class="ntype">algebraic-topology</span> Lefschetz fixed-point theorem</span>
+<span class="node-chip chip-term"><span class="ntype">geometry</span> orbifold quotient</span>
+<span class="node-chip chip-term"><span class="ntype">lie-groups</span> Selberg lemma</span>
+<span class="node-chip chip-scope"><span class="ntype">quant/universal</span> for any closed manifold with rationally acyclic universal cover</span>
+<span class="node-chip chip-scope"><span class="ntype">conditional</span> if \Gamma has torsion then its action on \widetilde M cannot be free</span>
+</div>
+<h3 style="margin-top:16px;">Edges (16)</h3>
+<table class="edge-table"><thead><tr><th>Type</th><th>From</th><th>To</th><th>Attrs</th></tr></thead><tbody>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t1: uniform lattice</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t2: semisimple Lie group</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t3: rationally acyclic universal cover</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t1: uniform lattice</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t4: Lefschetz fixed-point theorem</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t5: orbifold quotient</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t6: Selberg lemma</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s1: for any closed manifold with rationally </td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s1: for any closed manifold with rationally </td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s2: if \Gamma has torsion then its action on</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s2: if \Gamma has torsion then its action on</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-discourse">discourse</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;query&quot;}</td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>a1 (answer)</td>
+  <td>q1 (question)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;assert&quot;}</td>
+</tr>
+</tbody></table></div>
+</div></body></html>

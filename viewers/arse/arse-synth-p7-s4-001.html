@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to kill the Wall obstruction when upgrading an FH(ℚ) complex? — ArSE</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  startup: { typeset: true }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --bg: #1a1a2e; --bg2: #16213e; --bg3: #0f3460;
+  --fg: #e0e0e0; --fg2: #a0a0b0;
+  --accent: #e94560; --gold: #d4a856; --green: #4ecca3;
+  --blue: #7ec8e3; --purple: #b088f9; --orange: #f0a500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { background: var(--bg2); border-bottom: 2px solid var(--accent); padding: 20px 0; margin-bottom: 30px; }
+header .container { display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.6em; letter-spacing: 0.05em; }
+header h1 span { color: var(--accent); }
+header .stats { font-size: 0.9em; color: var(--fg2); margin-left: auto; }
+.tag { background: var(--bg3); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.72em; display: inline-block; }
+mjx-container { color: #f0d060 !important; }
+
+.back-btn { background: var(--bg3); color: var(--fg); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; margin-bottom: 20px; display: inline-block; text-decoration: none; }
+.back-btn:hover { background: var(--accent); text-decoration: none; }
+.detail-header { margin-bottom: 24px; }
+.detail-header h2 { font-size: 1.3em; margin-bottom: 8px; }
+.detail-header .detail-meta { color: var(--fg2); font-size: 0.85em; }
+.qa-section { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+.qa-section.answer { border-left-color: var(--green); }
+.qa-section h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.qa-section .content { font-size: 0.95em; line-height: 1.7; }
+.qa-section .content p { margin-bottom: 12px; }
+.graph-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.graph-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.node-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.node-chip { padding: 4px 10px; border-radius: 6px; font-size: 0.82em; display: flex; align-items: center; gap: 4px; }
+.node-chip .ntype { font-size: 0.7em; opacity: 0.7; }
+.chip-term { background: rgba(212,168,86,0.15); color: var(--gold); border: 1px solid rgba(212,168,86,0.3); }
+.chip-expression { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+.chip-scope { background: rgba(176,136,249,0.15); color: var(--purple); border: 1px solid rgba(176,136,249,0.3); }
+.chip-post { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid rgba(233,69,96,0.3); }
+.edge-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+.edge-table th { text-align: left; padding: 6px 10px; color: var(--fg2); border-bottom: 1px solid var(--bg3); }
+.edge-table td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.edge-type { padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
+.et-mention { background: rgba(212,168,86,0.2); color: var(--gold); }
+.et-surface { background: rgba(78,204,163,0.2); color: var(--green); }
+.et-scope { background: rgba(176,136,249,0.2); color: var(--purple); }
+.et-discourse { background: rgba(233,69,96,0.2); color: var(--accent); }
+.et-iatc { background: rgba(240,165,0,0.2); color: var(--orange); }
+.expr-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.expr-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.expr-item { background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 2px solid var(--green); font-size: 1.1em; overflow-x: auto; }
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img src="arse-logo2.png" alt="ArSE" style="width:80px;height:80px;border-radius:12px;">
+    <h1><span>ArSE</span> Viewer</h1>
+    <div class="stats"></div>
+  </div>
+</header>
+<div class="container">
+<a class="back-btn" href="arse-viewer.html">&larr; Back to index</a>
+<div class="detail-header">
+  <h2>How to kill the Wall obstruction when upgrading an FH(ℚ) complex?</h2>
+  <div class="detail-meta">synth-p7-s4-001 &nbsp;|&nbsp; <span class="tag">algebraic-topology</span> <span class="tag">manifolds</span> <span class="tag">differential-topology</span>
+    &nbsp;|&nbsp; 14 nodes, 22 edges</div>
+</div>
+<div class="qa-section">
+  <h3>Question</h3>
+  <div class="content"><p>Let $X$ be a finite CW complex whose rational homology agrees with that of a closed $n$-manifold (an $FH(\mathbb Q)$ complex in our notation), and assume $\pi_1(X)=\Gamma$ carries the 2-torsion lattice used in the proof. Suppose a degree-one normal map $f:M^n\to X$ with stable normal bundle classified by $
+u$ has already been built. Wall&#x27;s surgery exact sequence says that the obstruction to replacing $X$ by a closed manifold $M&#x27;$ homotopy equivalent to $X$ is the element</p><p>$$\theta(\eta(f)) \in L_n^{\langle1\rangle}(\mathbb Z[\Gamma]),$$</p><p>where $\eta(f)\in[X,G/TOP]$ is the normal invariant of $f$. Which conditions on $\eta(f)$ and on the $L$-group ensure this obstruction vanishes, and how does one see that the torsion in $\Gamma$ does not reintroduce an obstruction while keeping $\pi_1(M&#x27;)\cong\Gamma$?</p></div>
+</div>
+<div class="qa-section answer">
+  <h3>Answer</h3>
+  <div class="content"><p>Because $X$ is a rational Poincar\&#x27;e complex, the usual Postnikov tower plus Sullivan&#x27;s rational surgery produces a degree-one normal map $f$ whose normal invariant lives in $[X,G/TOP]\cong H^0(X;\mathbb Z/2)\oplus H^2(X;\mathbb Z/2)\oplus H^4(X;\mathbb Z)\oplus\cdots$. Changing $f$ within its bordism class changes $\eta(f)$ by an arbitrary element of this cohomology group, so we may hunt for $\eta$ with trivial Wall obstruction. The relevant part of the exact sequence</p><p>$$0\to S^{TOP}(X)\to[X,G/TOP]\xrightarrow{\theta} L_n^{\langle1\rangle}(\mathbb Z[\Gamma])\to0$$</p><p>pairs each normal invariant with its surgery obstruction. For the chosen 2-torsion lattice, the assembly map identifies $L_n^{\langle1\rangle}(\mathbb Z[\Gamma])\otimes\mathbb Q$ with $H_n(B\Gamma;\mathbb Q)\oplus H_{n-4}(B\Gamma;\mathbb Q)\oplus\cdots$, but $B\Gamma=B K$ has only even-dimensional rational homology inherited from the $FH(\mathbb Q)$ model. The summands in degree $n$, $n-4$, ... all vanish because torsion in $\Gamma$ forces these groups to be finite, hence zero after tensoring with $\mathbb Q$. Thus $L_n^{\langle1\rangle}(\mathbb Z[\Gamma])$ is torsion, generated by 2-primary classes detected by the reduced $w_2$ and $w_4$ of the normal invariant. By choosing $\eta(f)$ so that these characteristic classes match those of the $FH(\mathbb Q)$ tangent microbundle, we force $\theta(\eta(f))=0$.</p><p>With the obstruction gone, the exact sequence shows that $\eta(f)$ lifts to an element of the structure set $S^{TOP}(X)$, i.e. to a closed manifold $M&#x27;$ together with a simple homotopy equivalence $M&#x27;\to X$ inducing an isomorphism on $\pi_1$. Normal invariants that differ by elements of $[X,G/TOP]$ correspond to performing tangential surgeries on embedded spheres; these do not change $\pi_1$ because all handles of index $1$ and $n-1$ are attached along null-homotopic loops (the attaching spheres represent zero in $H_1$ thanks to $FH(\mathbb Q)$). Consequently $M&#x27;$ is a closed manifold, shares $\pi_1$ with $X$, and realizes the $FH(\mathbb Q)$ data once the $L$-group obstruction is neutralized.</p></div>
+</div>
+<div class="expr-panel"><h3>Expressions (3)</h3>
+<div class="expr-item">\(\theta(\eta(f)) \in L_n^{\langle1\rangle}(\mathbb Z[\Gamma])\)</div>
+<div class="expr-item">\(0\to S^{TOP}(X)\to[X,G/TOP]\xrightarrow{\theta} L_n^{\langle1\rangle}(\mathbb Z[\Gamma])\to0\)</div>
+<div class="expr-item">\(L_n^{\langle1\rangle}(\mathbb Z[\Gamma])\otimes\mathbb Q \cong H_n(B\Gamma;\mathbb Q)\oplus H_{n-4}(B\Gamma;\mathbb Q)\oplus\cdots\)</div>
+</div>
+<div class="graph-panel"><h3>Hypergraph Nodes (14)</h3>
+<div class="node-list">
+<span class="node-chip chip-post"><span class="ntype">post</span> question</span>
+<span class="node-chip chip-post"><span class="ntype">post</span> answer</span>
+<span class="node-chip chip-term"><span class="ntype">algebraic-topology</span> FH(\mathbb Q) complex</span>
+<span class="node-chip chip-term"><span class="ntype">topology</span> degree-one normal map</span>
+<span class="node-chip chip-term"><span class="ntype">topology</span> normal invariant</span>
+<span class="node-chip chip-term"><span class="ntype">algebraic-topology</span> Wall L-group</span>
+<span class="node-chip chip-term"><span class="ntype">algebraic-topology</span> Wall surgery exact sequence</span>
+<span class="node-chip chip-term"><span class="ntype">group-theory</span> 2-torsion lattice \Gamma</span>
+<span class="node-chip chip-term"><span class="ntype">topology</span> structure set</span>
+<span class="node-chip chip-scope"><span class="ntype">quant/universal</span> for every FH(\mathbb Q) complex with \pi_1=\Gamma</span>
+<span class="node-chip chip-scope"><span class="ntype">conditional</span> if the rationalized L-group vanishes</span>
+</div>
+<h3 style="margin-top:16px;">Edges (22)</h3>
+<table class="edge-table"><thead><tr><th>Type</th><th>From</th><th>To</th><th>Attrs</th></tr></thead><tbody>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t1: FH(\mathbb Q) complex</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t2: degree-one normal map</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t3: normal invariant</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t4: Wall L-group</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t6: 2-torsion lattice \Gamma</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t2: degree-one normal map</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t3: normal invariant</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t4: Wall L-group</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t5: Wall surgery exact sequence</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t6: 2-torsion lattice \Gamma</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t7: structure set</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>q1 (question)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e3 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s1: for every FH(\mathbb Q) complex with \pi</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s1: for every FH(\mathbb Q) complex with \pi</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s2: if the rationalized L-group vanishes</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s2: if the rationalized L-group vanishes</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-discourse">discourse</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;query&quot;}</td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>a1 (answer)</td>
+  <td>q1 (question)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;assert&quot;}</td>
+</tr>
+</tbody></table></div>
+</div></body></html>

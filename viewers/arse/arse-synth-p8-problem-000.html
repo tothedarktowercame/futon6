@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When does a 4-face vertex admit a symplectic splitting? — ArSE</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  startup: { typeset: true }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --bg: #1a1a2e; --bg2: #16213e; --bg3: #0f3460;
+  --fg: #e0e0e0; --fg2: #a0a0b0;
+  --accent: #e94560; --gold: #d4a856; --green: #4ecca3;
+  --blue: #7ec8e3; --purple: #b088f9; --orange: #f0a500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { background: var(--bg2); border-bottom: 2px solid var(--accent); padding: 20px 0; margin-bottom: 30px; }
+header .container { display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.6em; letter-spacing: 0.05em; }
+header h1 span { color: var(--accent); }
+header .stats { font-size: 0.9em; color: var(--fg2); margin-left: auto; }
+.tag { background: var(--bg3); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.72em; display: inline-block; }
+mjx-container { color: #f0d060 !important; }
+
+.back-btn { background: var(--bg3); color: var(--fg); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; margin-bottom: 20px; display: inline-block; text-decoration: none; }
+.back-btn:hover { background: var(--accent); text-decoration: none; }
+.detail-header { margin-bottom: 24px; }
+.detail-header h2 { font-size: 1.3em; margin-bottom: 8px; }
+.detail-header .detail-meta { color: var(--fg2); font-size: 0.85em; }
+.qa-section { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+.qa-section.answer { border-left-color: var(--green); }
+.qa-section h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.qa-section .content { font-size: 0.95em; line-height: 1.7; }
+.qa-section .content p { margin-bottom: 12px; }
+.graph-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.graph-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.node-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.node-chip { padding: 4px 10px; border-radius: 6px; font-size: 0.82em; display: flex; align-items: center; gap: 4px; }
+.node-chip .ntype { font-size: 0.7em; opacity: 0.7; }
+.chip-term { background: rgba(212,168,86,0.15); color: var(--gold); border: 1px solid rgba(212,168,86,0.3); }
+.chip-expression { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+.chip-scope { background: rgba(176,136,249,0.15); color: var(--purple); border: 1px solid rgba(176,136,249,0.3); }
+.chip-post { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid rgba(233,69,96,0.3); }
+.edge-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+.edge-table th { text-align: left; padding: 6px 10px; color: var(--fg2); border-bottom: 1px solid var(--bg3); }
+.edge-table td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.edge-type { padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
+.et-mention { background: rgba(212,168,86,0.2); color: var(--gold); }
+.et-surface { background: rgba(78,204,163,0.2); color: var(--green); }
+.et-scope { background: rgba(176,136,249,0.2); color: var(--purple); }
+.et-discourse { background: rgba(233,69,96,0.2); color: var(--accent); }
+.et-iatc { background: rgba(240,165,0,0.2); color: var(--orange); }
+.expr-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.expr-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.expr-item { background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 2px solid var(--green); font-size: 1.1em; overflow-x: auto; }
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img src="arse-logo2.png" alt="ArSE" style="width:80px;height:80px;border-radius:12px;">
+    <h1><span>ArSE</span> Viewer</h1>
+    <div class="stats"></div>
+  </div>
+</header>
+<div class="container">
+<a class="back-btn" href="arse-viewer.html">&larr; Back to index</a>
+<div class="detail-header">
+  <h2>When does a 4-face vertex admit a symplectic splitting?</h2>
+  <div class="detail-meta">synth-p8-problem-000 &nbsp;|&nbsp; <span class="tag">symplectic-geometry</span> <span class="tag">differential-topology</span> <span class="tag">manifolds</span>
+    &nbsp;|&nbsp; 13 nodes, 20 edges</div>
+</div>
+<div class="qa-section">
+  <h3>Question</h3>
+  <div class="content"><p>In $(\mathbb R^4,\omega_0=dx_1\wedge dy_1+dx_2\wedge dy_2)$ let $K$ be a polyhedral surface whose faces are embedded Lagrangian triangles. Each vertex $p$ is incident to four faces, so the tangent cone $C_pK$ is generated by four oriented rays $v_1,\dots,v_4$ lying in Lagrangian 2-planes. Many smoothing arguments implicitly assume that $C_pK$ splits as a direct sum of two transverse Lagrangian cones, i.e. that the rays can be paired into Lagrangian bases of complementary planes. What concrete conditions on the $v_i$ ensure such a symplectic splitting exists, and why does this nondegeneracy provide a local Hamiltonian smoothing of the vertex star?</p></div>
+</div>
+<div class="qa-section answer">
+  <h3>Answer</h3>
+  <div class="content"><p>After a symplectic change of coordinates we may assume $p=0$ and $\omega_0$ has the standard matrix $J$. A 2-plane $\Lambda\subset\mathbb R^4$ is Lagrangian iff $\omega_0$ restricts to zero on it, equivalently if a spanning pair $(a,b)$ satisfies $\omega_0(a,b)=0$. For a vertex star with four edges meeting cyclically, we obtain primitive tangent vectors $v_1,\dots,v_4$ along the edges of the incident faces. The tangent cone splits as $\Lambda_+\cup\Lambda_-$ with $\Lambda_+=\operatorname{span}\{v_i,v_{i+2}\}$ and $\Lambda_- = \operatorname{span}\{v_{i+1},v_{i+3}\}$ (indices mod 4) exactly when two conditions hold:</p><p>1. **Lagrangian pairing:** $\omega_0(v_i,v_{i+2})=0=\omega_0(v_{i+1},v_{i+3})$ so that each opposite pair spans a Lagrangian plane.
+2. **Nondegeneracy:** The bivectors $v_i\wedge Jv_i$ satisfy $v_1\wedge Jv_1+v_3\wedge Jv_3 = 0$ and $v_2\wedge Jv_2+v_4\wedge Jv_4 = 0$, ensuring that $\Lambda_+\oplus\Lambda_- = T_0\mathbb R^4$ as a direct sum. Geometrically this says that the projections of the four rays to the Lagrangian Grassmannian $\Lambda(2)$ land at two transverse points, so the vertex star is modeled on the union of two transverse Lagrangian half-planes.</p><p>When these conditions hold one can express the star as the union of two exact Lagrangian cones that meet cleanly along the two edges forming $\Lambda_+\cap\Lambda_-$. In Darboux coordinates the neighborhood is Hamiltonian isotopic to the union $\{y_1=0,y_2=0\}\cup\{x_1=0,x_2=0\}$. One then chooses a bump function $\rho(r)$ and solves the Cauchy–Riemann equation for a generating function $F(x_1,x_2)$ whose graph interpolates between the two cones, keeping $\partial F$ on the boundary rays to preserve the combinatorics. Because $\Lambda_+\oplus\Lambda_-=T_0\mathbb R^4$ and the rays form a symplectic basis, the resulting graph $L_F$ is the image of the vertex star under a compactly supported Hamiltonian isotopy, giving a smooth Lagrangian patch. If the balancing condition fails (e.g. $\omega_0(v_i,v_{i+2})
+eq 0$) the two cones cannot be made complementary, so any attempted smoothing forces $\omega_0$ to acquire nonzero restriction, obstructing a Lagrangian smoothing. Thus the symplectic splitting criterion is precisely what guarantees the existence of a Lagrangian smoothing at a 4-face vertex.</p></div>
+</div>
+<div class="expr-panel"><h3>Expressions (3)</h3>
+<div class="expr-item">\(\omega_0 = dx_1\\wedge dy_1 + dx_2\\wedge dy_2\)</div>
+<div class="expr-item">\(\omega_0(v_i,v_{i+2}) = 0\)</div>
+<div class="expr-item">\(v_1\\wedge Jv_1 + v_3\\wedge Jv_3 = 0 = v_2\\wedge Jv_2 + v_4\\wedge Jv_4\)</div>
+</div>
+<div class="graph-panel"><h3>Hypergraph Nodes (13)</h3>
+<div class="node-list">
+<span class="node-chip chip-post"><span class="ntype">post</span> question</span>
+<span class="node-chip chip-post"><span class="ntype">post</span> answer</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> polyhedral Lagrangian</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> vertex star</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Lagrangian cone</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> symplectic basis</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Hamiltonian smoothing</span>
+<span class="node-chip chip-term"><span class="ntype">geometry</span> generating function</span>
+<span class="node-chip chip-scope"><span class="ntype">quant/universal</span> for any vertex where four Lagrangian faces meet</span>
+<span class="node-chip chip-scope"><span class="ntype">conditional</span> if the tangent rays satisfy the Lagrangian pairing and balancing equalities</span>
+</div>
+<h3 style="margin-top:16px;">Edges (20)</h3>
+<table class="edge-table"><thead><tr><th>Type</th><th>From</th><th>To</th><th>Attrs</th></tr></thead><tbody>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t1: polyhedral Lagrangian</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t2: vertex star</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t3: Lagrangian cone</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t4: symplectic basis</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t1: polyhedral Lagrangian</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t2: vertex star</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t3: Lagrangian cone</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t4: symplectic basis</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t5: Hamiltonian smoothing</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t6: generating function</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>q1 (question)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e3 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s1: for any vertex where four Lagrangian fac</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s1: for any vertex where four Lagrangian fac</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s2: if the tangent rays satisfy the Lagrangi</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s2: if the tangent rays satisfy the Lagrangi</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-discourse">discourse</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;query&quot;}</td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>a1 (answer)</td>
+  <td>q1 (question)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;assert&quot;}</td>
+</tr>
+</tbody></table></div>
+</div></body></html>

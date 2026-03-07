@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maslov-angle test for smoothing Lagrangian vertices — ArSE</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  startup: { typeset: true }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --bg: #1a1a2e; --bg2: #16213e; --bg3: #0f3460;
+  --fg: #e0e0e0; --fg2: #a0a0b0;
+  --accent: #e94560; --gold: #d4a856; --green: #4ecca3;
+  --blue: #7ec8e3; --purple: #b088f9; --orange: #f0a500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { background: var(--bg2); border-bottom: 2px solid var(--accent); padding: 20px 0; margin-bottom: 30px; }
+header .container { display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.6em; letter-spacing: 0.05em; }
+header h1 span { color: var(--accent); }
+header .stats { font-size: 0.9em; color: var(--fg2); margin-left: auto; }
+.tag { background: var(--bg3); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.72em; display: inline-block; }
+mjx-container { color: #f0d060 !important; }
+
+.back-btn { background: var(--bg3); color: var(--fg); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; margin-bottom: 20px; display: inline-block; text-decoration: none; }
+.back-btn:hover { background: var(--accent); text-decoration: none; }
+.detail-header { margin-bottom: 24px; }
+.detail-header h2 { font-size: 1.3em; margin-bottom: 8px; }
+.detail-header .detail-meta { color: var(--fg2); font-size: 0.85em; }
+.qa-section { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+.qa-section.answer { border-left-color: var(--green); }
+.qa-section h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.qa-section .content { font-size: 0.95em; line-height: 1.7; }
+.qa-section .content p { margin-bottom: 12px; }
+.graph-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.graph-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.node-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.node-chip { padding: 4px 10px; border-radius: 6px; font-size: 0.82em; display: flex; align-items: center; gap: 4px; }
+.node-chip .ntype { font-size: 0.7em; opacity: 0.7; }
+.chip-term { background: rgba(212,168,86,0.15); color: var(--gold); border: 1px solid rgba(212,168,86,0.3); }
+.chip-expression { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+.chip-scope { background: rgba(176,136,249,0.15); color: var(--purple); border: 1px solid rgba(176,136,249,0.3); }
+.chip-post { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid rgba(233,69,96,0.3); }
+.edge-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+.edge-table th { text-align: left; padding: 6px 10px; color: var(--fg2); border-bottom: 1px solid var(--bg3); }
+.edge-table td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.edge-type { padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
+.et-mention { background: rgba(212,168,86,0.2); color: var(--gold); }
+.et-surface { background: rgba(78,204,163,0.2); color: var(--green); }
+.et-scope { background: rgba(176,136,249,0.2); color: var(--purple); }
+.et-discourse { background: rgba(233,69,96,0.2); color: var(--accent); }
+.et-iatc { background: rgba(240,165,0,0.2); color: var(--orange); }
+.expr-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.expr-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.expr-item { background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 2px solid var(--green); font-size: 1.1em; overflow-x: auto; }
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img src="arse-logo2.png" alt="ArSE" style="width:80px;height:80px;border-radius:12px;">
+    <h1><span>ArSE</span> Viewer</h1>
+    <div class="stats"></div>
+  </div>
+</header>
+<div class="container">
+<a class="back-btn" href="arse-viewer.html">&larr; Back to index</a>
+<div class="detail-header">
+  <h2>Maslov-angle test for smoothing Lagrangian vertices</h2>
+  <div class="detail-meta">synth-p8-problem-001 &nbsp;|&nbsp; <span class="tag">symplectic-geometry</span> <span class="tag">differential-topology</span> <span class="tag">manifolds</span>
+    &nbsp;|&nbsp; 13 nodes, 21 edges</div>
+</div>
+<div class="qa-section">
+  <h3>Question</h3>
+  <div class="content"><p>Let $K\subset(\mathbb R^4,\omega_0)$ be a polyhedral Lagrangian whose vertices have valence four. Fix a vertex $p$ and choose unit edge directions $w_1,\dots,w_4$ arranged cyclically. Each oriented line $w_i$ spans a Lagrangian plane with its successor, and we can attach to it a Maslov angle $\theta_i\in S^1$ by writing $w_i+iJw_i\in\mathbb C^2$. How can one tell from the $\theta_i$ (or equivalently from the symplectic Gram matrix $G_{ij}=\omega_0(w_i,Jw_j)$) whether the star admits a decomposition $T_p\mathbb R^4=\Lambda_1\oplus\Lambda_2$ into complementary Lagrangian planes? Why is this Maslov ordering exactly what is needed to perform a local Lagrangian smoothing of the vertex?</p></div>
+</div>
+<div class="qa-section answer">
+  <h3>Answer</h3>
+  <div class="content"><p>For four Lagrangian rays the Maslov angles record their position in the Lagrangian Grassmannian $\Lambda(2)\cong S^1$. A pair of rays $\{w_i,w_j\}$ spans a Lagrangian plane iff their angles differ by $\pi$ (mod $2\pi$). Therefore a necessary and sufficient condition for a direct sum decomposition is:</p><p>- After reordering, the angles satisfy $\theta_1+\theta_3\equiv\theta_2+\theta_4\equiv\pi$ (mod $2\pi$), and the two sums are distinct (so the planes are transverse).</p><p>In linear algebra terms this says the symplectic Gram matrix</p><p>$$G_{ij}=\omega_0(w_i,Jw_j)$$</p><p>has block form $\begin{pmatrix}0 &amp; D\\ -D &amp; 0\end{pmatrix}$ under a permutation of the basis, with $D$ diagonal and $\det D
+eq0$. Equivalently, the bivectors $w_1\wedge w_3$ and $w_2\wedge w_4$ span the kernel of $\omega_0$ on $\bigwedge^2 T_p\mathbb R^4$. When this happens the vertex star splits into two Lagrangian half-planes that intersect only along the two shared edges; the tangent cone is symplectomorphic to $\{y_1=0\}\cup\{x_1=0\}$.</p><p>The Maslov ordering controls smoothing because the Lagrangian angle extends continuously across exact Lagrangians. If the four angles alternate ($\theta_1&lt;\theta_2&lt;\theta_3&lt;\theta_4$) with $\theta_{i+2}=\theta_i+\pi$, one can choose a small disk $D\subset\Lambda_1$ and solve for a generating function $F:D\to\mathbb R$ whose differential interpolates between the two cones while preserving the boundary data on each edge. The resulting graph remains Lagrangian because $\partial D$ is mapped to the alternating angles, ensuring the Maslov class of the patch is zero. The block condition on $G_{ij}$ guarantees that the linearized boundary value problem is elliptic (no degeneracy in the normal directions), so the smoothing is unique up to Hamiltonian isotopy. If the angles fail to alternate, then all four rays lie in a semicircle of $\Lambda(2)$ and the Gram matrix drops rank; any attempted rounding forces $\Lambda_1$ and $\Lambda_2$ to coincide, so $\omega_0$ restricts nontrivially somewhere and the vertex cannot be smoothed within the Lagrangian category. Thus the Maslov-angle pattern is exactly the test for the &quot;nontrivial symplectic direct sum&quot; needed in the smoothing argument.</p></div>
+</div>
+<div class="expr-panel"><h3>Expressions (3)</h3>
+<div class="expr-item">\(\theta_{i+2}\equiv \theta_i + \pi \pmod{2\pi}\)</div>
+<div class="expr-item">\(G_{ij}=\omega_0(w_i,Jw_j)\)</div>
+<div class="expr-item">\(\det \begin{pmatrix}0 &amp; D\\ -D &amp; 0\end{pmatrix} = (\det D)^2\)</div>
+</div>
+<div class="graph-panel"><h3>Hypergraph Nodes (13)</h3>
+<div class="node-list">
+<span class="node-chip chip-post"><span class="ntype">post</span> question</span>
+<span class="node-chip chip-post"><span class="ntype">post</span> answer</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Maslov angle</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> symplectic Gram matrix</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Lagrangian Grassmannian</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> vertex star</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Hamiltonian smoothing</span>
+<span class="node-chip chip-term"><span class="ntype">symplectic-geometry</span> Lagrangian angle</span>
+<span class="node-chip chip-scope"><span class="ntype">quant/universal</span> for any four-face Lagrangian vertex</span>
+<span class="node-chip chip-scope"><span class="ntype">conditional</span> if the Maslov angles alternate and the Gram matrix has full rank</span>
+</div>
+<h3 style="margin-top:16px;">Edges (21)</h3>
+<table class="edge-table"><thead><tr><th>Type</th><th>From</th><th>To</th><th>Attrs</th></tr></thead><tbody>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t1: Maslov angle</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t2: symplectic Gram matrix</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t3: Lagrangian Grassmannian</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t4: vertex star</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t1: Maslov angle</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t2: symplectic Gram matrix</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t3: Lagrangian Grassmannian</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t4: vertex star</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t5: Hamiltonian smoothing</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t6: Lagrangian angle</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>q1 (question)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e3 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s1: for any four-face Lagrangian vertex</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s1: for any four-face Lagrangian vertex</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s2: if the Maslov angles alternate and the G</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s2: if the Maslov angles alternate and the G</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-discourse">discourse</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;query&quot;}</td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>a1 (answer)</td>
+  <td>q1 (question)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;assert&quot;}</td>
+</tr>
+</tbody></table></div>
+</div></body></html>

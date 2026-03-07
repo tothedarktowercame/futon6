@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How do epsilon factors force conductor matching for Rankin--Selberg integrals? — ArSE</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  startup: { typeset: true }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --bg: #1a1a2e; --bg2: #16213e; --bg3: #0f3460;
+  --fg: #e0e0e0; --fg2: #a0a0b0;
+  --accent: #e94560; --gold: #d4a856; --green: #4ecca3;
+  --blue: #7ec8e3; --purple: #b088f9; --orange: #f0a500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { background: var(--bg2); border-bottom: 2px solid var(--accent); padding: 20px 0; margin-bottom: 30px; }
+header .container { display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.6em; letter-spacing: 0.05em; }
+header h1 span { color: var(--accent); }
+header .stats { font-size: 0.9em; color: var(--fg2); margin-left: auto; }
+.tag { background: var(--bg3); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.72em; display: inline-block; }
+mjx-container { color: #f0d060 !important; }
+
+.back-btn { background: var(--bg3); color: var(--fg); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; margin-bottom: 20px; display: inline-block; text-decoration: none; }
+.back-btn:hover { background: var(--accent); text-decoration: none; }
+.detail-header { margin-bottom: 24px; }
+.detail-header h2 { font-size: 1.3em; margin-bottom: 8px; }
+.detail-header .detail-meta { color: var(--fg2); font-size: 0.85em; }
+.qa-section { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+.qa-section.answer { border-left-color: var(--green); }
+.qa-section h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.qa-section .content { font-size: 0.95em; line-height: 1.7; }
+.qa-section .content p { margin-bottom: 12px; }
+.graph-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.graph-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.node-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.node-chip { padding: 4px 10px; border-radius: 6px; font-size: 0.82em; display: flex; align-items: center; gap: 4px; }
+.node-chip .ntype { font-size: 0.7em; opacity: 0.7; }
+.chip-term { background: rgba(212,168,86,0.15); color: var(--gold); border: 1px solid rgba(212,168,86,0.3); }
+.chip-expression { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+.chip-scope { background: rgba(176,136,249,0.15); color: var(--purple); border: 1px solid rgba(176,136,249,0.3); }
+.chip-post { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid rgba(233,69,96,0.3); }
+.edge-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+.edge-table th { text-align: left; padding: 6px 10px; color: var(--fg2); border-bottom: 1px solid var(--bg3); }
+.edge-table td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.edge-type { padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
+.et-mention { background: rgba(212,168,86,0.2); color: var(--gold); }
+.et-surface { background: rgba(78,204,163,0.2); color: var(--green); }
+.et-scope { background: rgba(176,136,249,0.2); color: var(--purple); }
+.et-discourse { background: rgba(233,69,96,0.2); color: var(--accent); }
+.et-iatc { background: rgba(240,165,0,0.2); color: var(--orange); }
+.expr-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.expr-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.expr-item { background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 2px solid var(--green); font-size: 1.1em; overflow-x: auto; }
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img src="arse-logo2.png" alt="ArSE" style="width:80px;height:80px;border-radius:12px;">
+    <h1><span>ArSE</span> Viewer</h1>
+    <div class="stats"></div>
+  </div>
+</header>
+<div class="container">
+<a class="back-btn" href="arse-viewer.html">&larr; Back to index</a>
+<div class="detail-header">
+  <h2>How do epsilon factors force conductor matching for Rankin--Selberg integrals?</h2>
+  <div class="detail-meta">synth-p2-s5-001 &nbsp;|&nbsp; <span class="tag">number-theory</span> <span class="tag">automorphic-forms</span> <span class="tag">l-functions</span>
+    &nbsp;|&nbsp; 13 nodes, 24 edges</div>
+</div>
+<div class="qa-section">
+  <h3>Question</h3>
+  <div class="content"><p>Fix a non-archimedean local field $F$ with additive character $\psi$ of conductor $O_F$. Let $\Pi$ (resp. $\pi$) be a generic representation of $GL_n(F)$ (resp. $GL_m(F)$), each realized in its Whittaker model. The Godement--Jacquet integral defines the conductor exponent $c_{\mathrm{GJ}}(\Pi \times \pi)=c(\Pi)+c(\pi)$, whereas the Rankin--Selberg Whittaker integral produces its own exponent through the epsilon factor $\varepsilon(s,\Pi \times \pi,\psi)=\omega(\Pi \times \pi,\psi)\,q^{-c_{\mathrm{RS}}(\Pi \times \pi)(s-\tfrac12)}$. Suppose $W_0$ and $W_{\pi}$ are the Casselman new vectors, normalized by $W_0(gk)=W_0(g)$ for $k \in K_1(\mathfrak{p}^{c(\Pi)})$, and let $u_Q$ range through the prescribed unipotent translates used in the Rankin--Selberg section.</p><p>Why must $Z_{RS}(W_0 \otimes W_{\pi},s)$ retain the same conductor as the Godement--Jacquet integral for every choice of $u_Q$, and how does the epsilon factor show that any failure of conductor matching would contradict the uniqueness of the local functional equation?</p></div>
+</div>
+<div class="qa-section answer">
+  <h3>Answer</h3>
+  <div class="content"><p>Because the Godement--Jacquet integral evaluates the matrix coefficients of the new vectors $v_0$ and $w_0$ against the characteristic function of $K_1(\mathfrak{p}^{c(\Pi)+c(\pi)})$, its conductor is by construction $c_{\mathrm{GJ}}(\Pi \times \pi)=c(\Pi)+c(\pi)$. Casselman--Shalika identifies the Whittaker new vector $W_0$ with a function supported on $N(F)T^{+}K_1(\mathfrak{p}^{c(\Pi)})$; right translation by any $u_Q$ merely translates the $N$-component and keeps the torus valuations intact, so $R(u_Q)W_0$ remains nonzero on every dominant coset that survives in the Godement--Jacquet computation. Pairing $R(u_Q)W_0$ with the new vector $W_{\pi}$ therefore produces a Rankin--Selberg integral whose Mellin transform is again supported on valuation ranges $[0,c(\Pi)+c(\pi)]$, forcing $c_{\mathrm{RS}}(\Pi \times \pi)=c(\Pi)+c(\pi)$.</p><p>The local functional equation normalizes the Rankin--Selberg side by the epsilon factor $\varepsilon(s,\Pi \times \pi,\psi)=\omega(\Pi \times \pi,\psi)\,q^{-c_{\mathrm{RS}}(\Pi \times \pi)(s-1/2)}$. If $c_{\mathrm{RS}}$ differed from $c_{\mathrm{GJ}}$, the two gamma factors could not coincide: the Godement--Jacquet functional equation has already fixed the valuation $q^{-c_{\mathrm{GJ}}(\Pi \times \pi)(s-1/2)}$. Hence any hypothetical zero of $R(u_Q)W_0$ on the relevant torus cells would force the Rankin--Selberg epsilon factor to drop in conductor and contradict the uniqueness of that functional equation. This comparison shows that the unipotent translates leave the new vector nonvanishing and that the conductors computed from the two integrals must agree.</p></div>
+</div>
+<div class="expr-panel"><h3>Expressions (3)</h3>
+<div class="expr-item">\(c_{\mathrm{GJ}}(\Pi \times \pi)=c(\Pi)+c(\pi)\)</div>
+<div class="expr-item">\(\varepsilon(s,\Pi \times \pi,\psi)=\omega(\Pi \times \pi,\psi)\,q^{-c_{\mathrm{RS}}(\Pi \times \pi)(s-\tfrac12)}\)</div>
+<div class="expr-item">\(Z_{RS}(W_0\otimes W_{\pi},s)=\int_{N(F)\backslash G(F)} W_0(gu_Q)W_{\pi}(g)|\det g|^{s-\frac{n+m-1}{2}}dg\)</div>
+</div>
+<div class="graph-panel"><h3>Hypergraph Nodes (13)</h3>
+<div class="node-list">
+<span class="node-chip chip-post"><span class="ntype">post</span> question</span>
+<span class="node-chip chip-post"><span class="ntype">post</span> answer</span>
+<span class="node-chip chip-term"><span class="ntype">number-theory</span> conductor exponent</span>
+<span class="node-chip chip-term"><span class="ntype">number-theory</span> Godement--Jacquet integral</span>
+<span class="node-chip chip-term"><span class="ntype">number-theory</span> Rankin--Selberg integral</span>
+<span class="node-chip chip-term"><span class="ntype">number-theory</span> epsilon factor</span>
+<span class="node-chip chip-term"><span class="ntype">representation-theory</span> Casselman--Shalika formula</span>
+<span class="node-chip chip-term"><span class="ntype">representation-theory</span> unipotent translate</span>
+<span class="node-chip chip-scope"><span class="ntype">quant/universal</span> for every generic pair (\Pi,\pi)</span>
+<span class="node-chip chip-scope"><span class="ntype">conditional</span> if W_0 is Casselman new and u_Q is allowed</span>
+</div>
+<h3 style="margin-top:16px;">Edges (24)</h3>
+<table class="edge-table"><thead><tr><th>Type</th><th>From</th><th>To</th><th>Attrs</th></tr></thead><tbody>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t1: conductor exponent</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t2: Godement--Jacquet integral</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t3: Rankin--Selberg integral</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t4: epsilon factor</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t5: Casselman--Shalika formula</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>q1 (question)</td>
+  <td>t6: unipotent translate</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t1: conductor exponent</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t2: Godement--Jacquet integral</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t3: Rankin--Selberg integral</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t4: epsilon factor</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t5: Casselman--Shalika formula</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-mention">mention</span></td>
+  <td>a1 (answer)</td>
+  <td>t6: unipotent translate</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>q1 (question)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>q1 (question)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e1 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e2 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-surface">surface</span></td>
+  <td>a1 (answer)</td>
+  <td>e3 (latex)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s1: for every generic pair (\Pi,\pi)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>q1 (question)</td>
+  <td>s2: if W_0 is Casselman new and u_Q is allow</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s1: for every generic pair (\Pi,\pi)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-scope">scope</span></td>
+  <td>a1 (answer)</td>
+  <td>s2: if W_0 is Casselman new and u_Q is allow</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-discourse">discourse</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em"></td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>q1 (question)</td>
+  <td>a1 (answer)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;query&quot;}</td>
+</tr>
+<tr>
+  <td><span class="edge-type et-iatc">iatc</span></td>
+  <td>a1 (answer)</td>
+  <td>q1 (question)</td>
+  <td style="color:var(--fg2);font-size:0.85em">{&quot;performative&quot;: &quot;assert&quot;}</td>
+</tr>
+</tbody></table></div>
+</div></body></html>
