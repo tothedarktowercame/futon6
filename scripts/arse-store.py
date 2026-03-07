@@ -34,17 +34,85 @@ import json
 import os
 import sys
 import time
+import urllib.request
 from pathlib import Path
 
 import numpy as np
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_STORE = Path(os.path.expanduser("~/code/storage/arse"))
+FUTON1A_URL = os.environ.get("FUTON1A_URL", "http://localhost:7071")
 
 
 def ensure_store(store_dir: Path) -> None:
     """Create store directory structure if needed."""
     store_dir.mkdir(parents=True, exist_ok=True)
+
+
+def post_evidence(evidence: dict) -> dict | None:
+    """Post an evidence entry to futon1a. Returns response or None on failure."""
+    url = f"{FUTON1A_URL}/api/alpha/evidence"
+    data = json.dumps(evidence).encode("utf-8")
+    req = urllib.request.Request(
+        url, data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            return json.loads(resp.read())
+    except Exception as e:
+        print(f"  [dual-write] futon1a POST failed: {e}")
+        return None
+
+
+def dual_write_qa(thread_id: str, title: str, question: str, answer: str,
+                  tags: list[str], source_node: str = "", author: str = "arse-store") -> None:
+    """Dual-write a Q&A pair to the evidence landscape via futon1a.
+
+    Creates two linked evidence entries:
+    - Question entry (claim-type: question)
+    - Answer entry (claim-type: conclusion, in-reply-to question)
+    """
+    now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    q_id = f"arse-q-{thread_id}"
+    a_id = f"arse-a-{thread_id}"
+
+    # Post question
+    q_entry = {
+        "evidence-id": q_id,
+        "subject": {"ref/type": "arse-thread", "ref/id": thread_id},
+        "type": "arse-qa",
+        "claim-type": "question",
+        "author": author,
+        "at": now,
+        "body": {"title": title, "text": question, "source-node": source_node},
+        "tags": tags,
+        "penholder": "api",
+    }
+    q_result = post_evidence(q_entry)
+    if q_result:
+        print(f"  [dual-write] question {q_id} → futon1a OK")
+    else:
+        return  # Don't post answer if question failed
+
+    # Post answer (only if non-empty)
+    if answer and answer.strip():
+        a_entry = {
+            "evidence-id": a_id,
+            "subject": {"ref/type": "arse-thread", "ref/id": thread_id},
+            "type": "arse-qa",
+            "claim-type": "conclusion",
+            "author": author,
+            "at": now,
+            "body": {"text": answer, "source-node": source_node},
+            "tags": tags,
+            "in-reply-to": q_id,
+            "penholder": "api",
+        }
+        a_result = post_evidence(a_entry)
+        if a_result:
+            print(f"  [dual-write] answer {a_id} → futon1a OK")
 
 
 def load_entities(store_dir: Path) -> list[dict]:
@@ -150,6 +218,16 @@ def ingest(store_dir: Path, input_path: Path) -> int:
                 hypergraphs.append(hg)
 
             new_count += 1
+
+            # Dual-write to futon1a evidence landscape
+            dual_write_qa(
+                thread_id=thread_id,
+                title=rec.get("title", ""),
+                question=rec.get("question", ""),
+                answer=rec.get("answer", ""),
+                tags=rec.get("tags", []),
+                source_node=rec.get("source_node", ""),
+            )
 
     save_entities(store_dir, entities)
     save_hypergraphs(store_dir, hypergraphs)
@@ -365,6 +443,103 @@ def query(store_dir: Path, query_text: str, top_k: int = 5) -> int:
     return 0
 
 
+def ask(store_dir: Path, title: str, question: str, tags: list[str],
+        author: str = "agent") -> int:
+    """Post a standalone question (no answer yet)."""
+    ensure_store(store_dir)
+    entities = load_entities(store_dir)
+    manifest = load_manifest(store_dir)
+
+    thread_id = f"ask-{int(time.time())}-{len(entities)}"
+
+    entity = {
+        "entity/id": thread_id,
+        "entity/type": "QAPair",
+        "entity/source": "artificial-stack-exchange",
+        "title": title,
+        "question-body": question,
+        "answer-body": "",
+        "tags": tags,
+        "score": 0,
+        "answer-score": 0,
+        "synthetic": True,
+        "source_node": "",
+        "source_problem": "",
+        "unanswered": True,
+        "author": author,
+    }
+    entities.append(entity)
+    save_entities(store_dir, entities)
+
+    manifest["entity_count"] = len(entities)
+    manifest["last_updated"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    save_manifest(store_dir, manifest)
+
+    # Dual-write question only (no answer)
+    dual_write_qa(
+        thread_id=thread_id,
+        title=title,
+        question=question,
+        answer="",
+        tags=tags,
+        author=author,
+    )
+
+    print(f"Question posted: {thread_id}")
+    print(f"  Title: {title}")
+    print(f"  Tags: {tags}")
+    return 0
+
+
+def answer(store_dir: Path, thread_id: str, answer_text: str,
+           author: str = "agent") -> int:
+    """Post an answer to an existing question."""
+    ensure_store(store_dir)
+    entities = load_entities(store_dir)
+
+    # Find the question
+    target = None
+    for e in entities:
+        eid = e.get("entity/id", e.get("thread_id", ""))
+        if eid == thread_id:
+            target = e
+            break
+
+    if target is None:
+        print(f"Question not found: {thread_id}")
+        return 1
+
+    if target.get("answer-body"):
+        print(f"Warning: {thread_id} already has an answer. Overwriting.")
+
+    target["answer-body"] = answer_text
+    target.pop("unanswered", None)
+    save_entities(store_dir, entities)
+
+    # Dual-write answer to futon1a
+    now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    a_id = f"arse-a-{thread_id}"
+    q_id = f"arse-q-{thread_id}"
+    a_entry = {
+        "evidence-id": a_id,
+        "subject": {"ref/type": "arse-thread", "ref/id": thread_id},
+        "type": "arse-qa",
+        "claim-type": "conclusion",
+        "author": author,
+        "at": now,
+        "body": {"text": answer_text},
+        "tags": target.get("tags", []),
+        "in-reply-to": q_id,
+        "penholder": "api",
+    }
+    result = post_evidence(a_entry)
+    if result:
+        print(f"  [dual-write] answer {a_id} → futon1a OK")
+
+    print(f"Answer posted to: {thread_id}")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -384,6 +559,17 @@ def main():
     p_query.add_argument("text", help="Query text")
     p_query.add_argument("--top-k", type=int, default=5)
 
+    p_ask = sub.add_parser("ask", help="Post a question (no answer)")
+    p_ask.add_argument("title", help="Question title")
+    p_ask.add_argument("question", help="Question body")
+    p_ask.add_argument("--tags", nargs="*", default=[], help="Tags")
+    p_ask.add_argument("--author", default="agent", help="Author name")
+
+    p_answer = sub.add_parser("answer", help="Answer an existing question")
+    p_answer.add_argument("thread_id", help="Thread ID to answer")
+    p_answer.add_argument("text", help="Answer text")
+    p_answer.add_argument("--author", default="agent", help="Author name")
+
     args = parser.parse_args()
     if not args.command:
         parser.print_help()
@@ -397,6 +583,10 @@ def main():
         return stats(args.store)
     elif args.command == "query":
         return query(args.store, args.text, args.top_k)
+    elif args.command == "ask":
+        return ask(args.store, args.title, args.question, args.tags, args.author)
+    elif args.command == "answer":
+        return answer(args.store, args.thread_id, args.text, args.author)
     return 0
 
 
