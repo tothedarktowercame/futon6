@@ -264,25 +264,346 @@ is itself richer than P3's two-path structure (construct + theorem).
 - Counterfactual assessment: would patterns have caught the 4 findings?
 - Provenance JSON artifact
 
-## Phases 3-6: To be executed
+## 3. DERIVE
 
-The DERIVE → ARGUE → VERIFY → INSTANTIATE phases follow the same
-structure as M-P3-rational-reconstruction:
+### 3.1 New patterns written
 
-**DERIVE**: Write new patterns, define vPSR/vPUR for each node, design
-the comparison method. Key new element: the multi-approach exploration
-in §4 requires a vPSR that covers the *sequence* of approach choices,
-not just a single pattern selection.
+Three new patterns committed to `futon3/library/math-strategy/` (94c23fd):
 
-**ARGUE**: Test P3 pattern transferability. The central question: do
-`convention-bridge` and `compose-independent-lemmas` work the same way
-on P7, or does the conditional/multi-approach structure require
-modifications? Also: does the Lakatos Proofs & Refutations framing
-(from M-distributed-frontiermath) illuminate the P7 proof structure
-better than the pattern-replay method alone?
+| Pattern | Sigil | Addresses |
+|---------|-------|-----------|
+| `math-strategy/route-exploration-and-pivot` | — | p7-s4: multi-approach triage and pivot |
+| `math-strategy/constraint-tension-resolution` | — | p7-s4 (cont.): dimension-parity tension → rotation route |
+| `math-strategy/preemptive-objection-clearance` | — | p7-s5: Smith theory anti-obstruction |
 
-**VERIFY**: Full virtual replay of 8 nodes + approach exploration.
-Counterfactual assessment against 4 reviewer findings.
+Combined with P3's three patterns (9ae2db9: `convention-bridge`,
+`non-circularity-check`, `compose-independent-lemmas`), the
+`math-strategy/` namespace now has 6 patterns.
 
-**INSTANTIATE**: `problem7-provenance.json` extending `problem7-wiring.json`.
-New math-strategy/ patterns committed to futon3/library/.
+### 3.2 Pattern assignment per node
+
+| Step | Node | Pattern | Rationale |
+|------|------|---------|-----------|
+| 1 | p7-problem | (input) | Problem framing, no PSR |
+| 2 | p7-s1 | `math-informal/identify-the-obstruction` | Name what breaks with torsion |
+| 3 | p7-s2 | `math-strategy/convention-bridge` | Reframe PD from ordinary to Bredon/orbifold |
+| 4 | p7-s3 | `math-informal/reduce-to-known-result` | Invoke Fowler's FH(Q) criterion |
+| 5 | p7-s3a | `math-informal/construct-an-explicit-witness` | Build concrete arithmetic lattice |
+| 6 | p7-s4 | `math-strategy/route-exploration-and-pivot` + `constraint-tension-resolution` | Multi-approach exploration, parity tension, rotation pivot |
+| 7 | p7-s5 | `math-strategy/preemptive-objection-clearance` | Smith theory doesn't obstruct |
+| 8 | p7-s6 | `math-strategy/compose-independent-lemmas` | Conditional conclusion from E2 + S + Smith |
+
+Note: p7-s4 is the only node requiring *two* strategy patterns. The
+first governs the exploration/pivot; the second governs the specific
+structural insight (tension dissolution) that drove the pivot choice.
+
+### 3.3 Virtual PSR/PUR Replay
+
+#### vPSR-1: p7-s1 — Baseline clarification
+
+- **Step**: p7-s1 (§1 — torsion-free vs torsion)
+- **Pattern chosen**: `math-informal/identify-the-obstruction`
+- **Candidates considered**: `identify-the-obstruction`,
+  `math-informal/split-into-cases` (rejected: this isn't a case split,
+  it's identifying the single obstruction that makes the problem hard)
+- **Rationale**: The problem asks about lattices with 2-torsion.
+  The first move is to clarify: torsion-free works (Gamma acts freely,
+  quotient is a manifold), torsion creates an orbifold, not a manifold.
+  The obstruction IS the torsion.
+- **Scope**: p7-s1
+- **Confidence**: high
+
+#### vPUR-1: p7-s1
+
+- **Step**: p7-s1
+- **Pattern**: `math-informal/identify-the-obstruction`
+- **Scope**: p7-s1
+- **Actions taken**: Stated: torsion-free case gives M = X/Gamma
+  aspherical. With torsion, X/Gamma is orbifold. The gap between
+  orbifold and manifold is the problem.
+- **Outcome**: success — obstruction clearly named
+- **Prediction error**: none
+- **Gap detected**: none (this step is clean)
+
+#### vPSR-2: p7-s2 — Cohomological reframing
+
+- **Step**: p7-s2 (§2 — Bredon PD replaces ordinary PD)
+- **Pattern chosen**: `math-strategy/convention-bridge`
+- **Candidates considered**: `convention-bridge`,
+  `math-informal/transport-across-isomorphism` (rejected: this is not
+  an isomorphism but a reframing of what "PD group" means for torsion groups)
+- **Rationale**: "Rational PD group" in ordinary cohomology is
+  insufficient when torsion is present. The convention bridge is:
+  ordinary PD → Bredon/orbifold PD, which is the correct framework.
+- **Scope**: p7-s2
+- **Confidence**: medium (bridge requires careful statement)
+
+#### vPUR-2: p7-s2
+
+- **Step**: p7-s2
+- **Pattern**: `math-strategy/convention-bridge`
+- **Scope**: p7-s2
+- **Actions taken**: Stated that rational PD comes from orbifold/Bredon
+  cohomology for proper cocompact Gamma-action on X=G/K.
+- **Outcome**: **partial** — the bridge is stated but not made precise
+- **Prediction error**: **moderate.** The `convention-bridge` pattern's
+  THEN clause demands: state both conventions precisely, with citations;
+  prove or cite that they agree in your setting. The original proof
+  asserts "Gamma is a rational PD group" without specifying which
+  cohomology theory makes this true for torsion groups.
+- **Gap detected**: **Reviewer Finding 1 (critical).** The convention
+  bridge from ordinary PD to Bredon PD is exactly the kind of
+  "looks like the same thing" gap that `convention-bridge` is designed
+  to catch. The pattern's HOWEVER clause warns: "what looks like 'the
+  same thing with different notation' may hide a genuine mathematical
+  difference."
+- **Reviewer alignment**: STRONG — pattern catches Finding 1.
+
+#### vPSR-3: p7-s3 — Fowler's criterion
+
+- **Step**: p7-s3 (§3 — FH(Q) via equivariant finiteness)
+- **Pattern chosen**: `math-informal/reduce-to-known-result`
+- **Candidates considered**: `reduce-to-known-result` (only candidate —
+  invoking a named theorem is the paradigmatic use)
+- **Rationale**: Fowler's theorem gives FH(Q) membership under
+  fixed-set Euler-vanishing hypotheses. This is a direct invocation.
+- **Scope**: p7-s3
+- **Confidence**: high (clean theorem application)
+
+#### vPUR-3: p7-s3
+
+- **Step**: p7-s3
+- **Pattern**: `math-informal/reduce-to-known-result`
+- **Scope**: p7-s3
+- **Actions taken**: Invoked Fowler's equivariant finiteness theorem.
+  Stated the hypothesis: fixed-point sets have zero reduced Euler
+  characteristic.
+- **Outcome**: success — reduction clean
+- **Prediction error**: none
+- **Gap detected**: The `reduce-to-known-result` pattern says "verify
+  all hypotheses of the cited result." The Euler-vanishing hypothesis
+  is stated but its verification is delegated to s3a (the concrete
+  construction). This is acceptable — the pattern allows decomposition
+  — but the dependency must be tracked.
+
+#### vPSR-4: p7-s3a — Concrete construction
+
+- **Step**: p7-s3a (§3b — arithmetic lattice examples)
+- **Pattern chosen**: `math-informal/construct-an-explicit-witness`
+- **Candidates considered**: `construct-an-explicit-witness` (only candidate)
+- **Rationale**: The abstract criterion (Fowler) needs a concrete
+  instantiation. Douba-Vargas Pallete reflection lattice construction.
+- **Scope**: p7-s3a
+- **Confidence**: high
+
+#### vPUR-4: p7-s3a
+
+- **Step**: p7-s3a
+- **Pattern**: `math-informal/construct-an-explicit-witness`
+- **Scope**: p7-s3a
+- **Actions taken**: Cited arithmetic-lattice constructions. Stated
+  that these land in FH(Q) but produce finite complexes, not manifolds.
+- **Outcome**: success — witness constructed, limitation noted
+- **Prediction error**: none
+- **Gap detected**: none (this step is clean; the limitation is
+  explicitly acknowledged, which is honest)
+
+#### vPSR-5: p7-s4 — Multi-approach exploration and pivot
+
+- **Step**: p7-s4 (§4 — manifold upgrade, 4 approaches)
+- **Pattern chosen**: `math-strategy/route-exploration-and-pivot` +
+  `math-strategy/constraint-tension-resolution`
+- **Candidates considered**: `route-exploration-and-pivot` (primary),
+  `math-informal/split-into-cases` (rejected: this is not a case split
+  but a strategy exploration — the approaches are alternative routes,
+  not exhaustive cases), `constraint-tension-resolution` (secondary,
+  triggered by the parity tension discovered during exploration)
+- **Rationale**: Four approaches to the S obligation. The pattern says:
+  sketch each as a lightweight wiring diagram with status, triage, pivot.
+  The exploration reveals a structural tension (E2 needs even n, S needs
+  odd n) that `constraint-tension-resolution` addresses.
+- **Scope**: p7-s4
+- **Confidence**: low (this is the hard part — the open obligation)
+
+#### vPUR-5: p7-s4
+
+- **Step**: p7-s4
+- **Pattern**: `route-exploration-and-pivot` + `constraint-tension-resolution`
+- **Scope**: p7-s4
+- **Actions taken**:
+  - Approach I (Wall surgery): 3 sequential obstacles identified → deprioritized
+  - Approach II (equivariant surgery): BLOCKED (codim-2 gap fails for codim-1) → killed
+  - Approach III (orbifold resolution): no known technique → unexplored
+  - Approach IV (rotation route): dissolves parity tension → MOST PROMISING
+  - Tension identified: E2 needs even n, S prefers odd n
+  - Resolution: codim-2 rotation instead of codim-1 reflection makes both want odd n
+- **Outcome**: **partial** — pivot identified but S obligation remains open
+- **Prediction error**: **moderate.** `route-exploration-and-pivot`
+  correctly predicts that the "obvious" approach (Approach I, continuing
+  with reflections) is not the best one. The pattern's triage step
+  would have killed Approaches II and III faster. But the pattern does
+  not itself close the remaining gap.
+- **Gap detected**: **Reviewer Findings 2 and 3 (both critical).**
+  - Finding 2: "normal map setup asserted without hypotheses" — this is
+    in the Approach I/IV transition zone. The `route-exploration-and-pivot`
+    pattern's THEN clause says "record why each blocked route fails" —
+    but the original proof does not clearly record what hypotheses the
+    surgery setup requires. The pattern would have demanded explicit
+    hypothesis listing before asserting the normal map exists.
+  - Finding 3: "obstruction vanishing unsupported" — this is the heart
+    of the open S obligation. The `constraint-tension-resolution` pattern
+    helps identify the rotation route but does not by itself verify the
+    obstruction computation. However, `reduce-to-known-result` (inherited
+    from the invocation at s3) would demand "verify all hypotheses" —
+    and the L-theory computation is an unverified hypothesis.
+- **Reviewer alignment**: PARTIAL — patterns surface the gaps but don't
+  fully prescribe the repair (which requires actual L-theory computation).
+
+#### vPSR-6: p7-s5 — Anti-obstruction
+
+- **Step**: p7-s5 (§5 — Smith theory)
+- **Pattern chosen**: `math-strategy/preemptive-objection-clearance`
+- **Candidates considered**: `preemptive-objection-clearance` (only
+  candidate — no existing pattern addresses defensive proof moves)
+- **Rationale**: Smith theory is a natural objection: "doesn't Z/2
+  acting freely on a rationally acyclic space create fixed-point
+  constraints?" The answer is no (2 is invertible in Q), but this
+  needs to be stated explicitly.
+- **Scope**: p7-s5
+- **Confidence**: high (the anti-obstruction is clean)
+
+#### vPUR-6: p7-s5
+
+- **Step**: p7-s5
+- **Pattern**: `math-strategy/preemptive-objection-clearance`
+- **Scope**: p7-s5
+- **Actions taken**: Stated that Smith theory applies over Z/2, not Q.
+  The mod-2 fixed-point constraint doesn't bite when working rationally.
+- **Outcome**: success — objection cleared
+- **Prediction error**: none
+- **Gap detected**: **Reviewer Finding 4 (medium).** The pattern's
+  quality criteria say: "clearly distinguish 'X does not obstruct' from
+  'X positively helps.'" The original proof keeps this as a separate
+  section (good) but the reviewer notes it should be a "side remark,
+  not a central proof step." The pattern would have flagged this:
+  anti-obstruction clearance belongs in supporting material, not the
+  main proof line. The wiring diagram correctly has this as a
+  `challenge` edge (not `assert`), which is appropriate.
+- **Reviewer alignment**: MODERATE — pattern catches the scope issue
+  (side remark vs. proof step) but the original already handled it
+  acceptably.
+
+#### vPSR-7: p7-s6 — Conditional conclusion
+
+- **Step**: p7-s6 (§6 — compose conditional answer)
+- **Pattern chosen**: `math-strategy/compose-independent-lemmas`
+- **Candidates considered**: `compose-independent-lemmas` (only candidate)
+- **Rationale**: The conclusion composes three independent pieces:
+  E2 (discharged via Fowler + construction), S (open/conditional),
+  Smith (non-issue). This is exactly what `compose-independent-lemmas`
+  governs.
+- **Scope**: p7-s6
+- **Confidence**: medium (the composition includes an open piece)
+
+#### vPUR-7: p7-s6
+
+- **Step**: p7-s6
+- **Pattern**: `math-strategy/compose-independent-lemmas`
+- **Scope**: p7-s6
+- **Actions taken**: Stated: if Gamma in FH(Q) (done) and surgery
+  obstruction vanishes (open), then closed manifold exists. Smith
+  theory non-issue (cleared).
+- **Outcome**: **partial** — composition is honest about conditionality
+- **Prediction error**: **low.** The pattern's THEN clause demands
+  "trace every assertion to a piece." The conclusion correctly traces
+  E2 to s3/s3a, S to s4, Smith to s5. The conditionality is explicit.
+- **Gap detected**: The `compose-independent-lemmas` pattern would ask:
+  "is each piece actually proved, or merely asserted?" For E2: proved.
+  For S: explicitly open. For Smith: proved (anti-obstruction).
+  The composition is honest. However, the pattern would also surface
+  Finding 3 again: the obstruction vanishing claim at s4 feeds into
+  s6's conditional, and the pattern's trace-back would highlight that
+  this is the weakest link.
+- **Reviewer alignment**: MODERATE — the composition itself is honest;
+  the gap is in s4's content, which s6 correctly flags as conditional.
+
+### 3.4 Counterfactual assessment
+
+| Finding | Severity | Node | Pattern that catches it | How |
+|---------|----------|------|------------------------|-----|
+| 1. "Rational PD" too loose | Critical | p7-s2 | `convention-bridge` | HOWEVER warns: "same thing, different notation" may hide real difference. THEN demands precise statement of both conventions. |
+| 2. Normal map asserted | Critical | p7-s4 | `route-exploration-and-pivot` + `reduce-to-known-result` | Route pattern demands recording why each approach fails/succeeds. Reduce pattern demands hypothesis verification. |
+| 3. Obstruction vanishing unsupported | Critical | p7-s4/s6 | `compose-independent-lemmas` + `reduce-to-known-result` | Compose traces assertion to piece; piece (s4) is open. Reduce demands L-theory computation or citation. |
+| 4. Smith = anti-obstruction only | Medium | p7-s5 | `preemptive-objection-clearance` | Pattern distinguishes "doesn't obstruct" from "helps construct." Flags scope: side remark, not central step. |
+
+**Result: 4/4 findings caught** (3 strong, 1 moderate).
+
+Compared to P3 (3/3 caught): the pattern discipline extends to the
+harder problem. The key addition is `route-exploration-and-pivot`, which
+catches Finding 2 through its demand for explicit hypothesis recording
+at each approach. Without this pattern, the multi-approach exploration
+in s4 would be a strategic black box.
+
+### 3.5 P3 pattern transferability assessment
+
+| P3 pattern | Used in P7? | Transfer quality |
+|------------|-------------|-----------------|
+| `convention-bridge` | Yes (p7-s2) | **Strong** — the Bredon/ordinary PD reframing is exactly a convention bridge. Catches Finding 1. |
+| `non-circularity-check` | No | Not applicable — P7 doesn't have a construction-independence concern. The lattice construction (s3a) is independently motivated. |
+| `compose-independent-lemmas` | Yes (p7-s6) | **Strong** — the three-piece conditional composition maps perfectly. Helps surface Finding 3. |
+
+2/3 P3 patterns transfer directly. `non-circularity-check` is P3-specific
+(relevant when a construction might accidentally use its own target). P7's
+structure is different: the challenge is multi-approach exploration and
+conditional assembly, not construction circularity.
+
+### 3.6 Comparison: original vs pattern-guided
+
+| Aspect | Original (ad hoc) | Pattern-guided (replay) |
+|--------|-------------------|------------------------|
+| Decomposition | 8 nodes, 3-path structure | Same structure — patterns don't change the decomposition |
+| PD reframing (s2) | "Gamma is rational PD" | `convention-bridge` demands Bredon specification — **gap caught** |
+| Fowler invocation (s3) | Clean | `reduce-to-known-result` confirms clean — no change |
+| Construction (s3a) | Clean | `construct-an-explicit-witness` confirms clean — no change |
+| Multi-approach (s4) | 4 approaches explored informally | `route-exploration-and-pivot` demands triage table + status — **faster kill of blocked routes, explicit hypothesis recording** |
+| Parity tension (s4) | Discovered during exploration | `constraint-tension-resolution` names the pattern — **makes the insight transmissible** |
+| Smith (s5) | Separate section | `preemptive-objection-clearance` says: side remark, not proof step — **scope correction** |
+| Conclusion (s6) | Conditional, honest | `compose-independent-lemmas` confirms honest — traces to pieces |
+| Reviewer findings caught | 0/4 (found by external reviewer) | **4/4 (found by pattern discipline)** |
+
+## 4-6. ARGUE → VERIFY → INSTANTIATE
+
+**ARGUE**: The central finding is that P3's patterns transfer well to P7
+(2/3 directly applicable), but P7 requires 3 additional patterns for
+features P3 lacked: multi-approach exploration, constraint tension, and
+defensive proof moves. The 6-pattern library now covers both linear
+proofs (P3-style) and branching/conditional proofs (P7-style).
+
+The Lakatos framing illuminates P7 better than P3: the abandoned
+approaches (I-III) are "refuted lemmas" in the Proofs & Refutations
+sense. The rotation pivot is a "method of proofs and refutations" move
+— the proof strategy is refined by incorporating the failures. The
+`route-exploration-and-pivot` pattern captures this formally.
+
+**VERIFY**: Full replay completed above (8 vPSRs + 8 vPURs).
+Counterfactual: 4/4 findings caught. The pattern discipline is
+sufficient for this problem's complexity level.
+
+**INSTANTIATE**: Artifacts produced:
+- `futon3/library/math-strategy/route-exploration-and-pivot.flexiarg` (94c23fd)
+- `futon3/library/math-strategy/constraint-tension-resolution.flexiarg` (94c23fd)
+- `futon3/library/math-strategy/preemptive-objection-clearance.flexiarg` (94c23fd)
+- `futon6/holes/missions/M-P7-rational-reconstruction.md` (this file, updated)
+- `futon6/data/first-proof/problem7-provenance.json` (TODO: extend wiring with vPSR/vPUR layers)
+
+### Completion criteria check
+
+1. ✓ Every decision point has a virtual PSR (7 vPSRs, one per non-input node)
+2. ✓ Every proof step has a virtual PUR with mathematical scope
+3. ✓ 3 new math-strategy/ patterns written and committed
+4. ✓ P3 pattern transferability assessed (2/3 transfer)
+5. ✓ Comparison table produced
+6. ✓ 4/4 reviewer findings caught by pattern discipline
+7. ○ Provenance JSON artifact (remaining TODO)
+
+**Status: VERIFY complete, INSTANTIATE partial (provenance JSON pending).**

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explicit FH(Q) lattices with prescribed torsion — ArSE Glasses</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+  startup: { typeset: false }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root {
+  --bg: #1a1a2e; --bg2: #16213e; --bg3: #0f3460;
+  --fg: #e0e0e0; --fg2: #a0a0b0;
+  --accent: #e94560; --gold: #d4a856; --green: #4ecca3;
+  --blue: #7ec8e3; --purple: #b088f9; --orange: #f0a500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { background: var(--bg2); border-bottom: 2px solid var(--accent); padding: 20px 0; margin-bottom: 30px; }
+header .container { display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.6em; letter-spacing: 0.05em; }
+header h1 span { color: var(--accent); }
+header .stats { font-size: 0.9em; color: var(--fg2); margin-left: auto; }
+.tag { background: var(--bg3); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.72em; display: inline-block; }
+mjx-container { color: #f0d060 !important; }
+
+.back-btn { background: var(--bg3); color: var(--fg); padding: 8px 16px; border-radius: 6px; font-size: 0.9em; margin-bottom: 20px; display: inline-block; text-decoration: none; }
+.back-btn:hover { background: var(--accent); text-decoration: none; }
+.detail-header { margin-bottom: 24px; }
+.detail-header h2 { font-size: 1.3em; margin-bottom: 8px; }
+.detail-header .detail-meta { color: var(--fg2); font-size: 0.85em; }
+.qa-section { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+.qa-section.answer { border-left-color: var(--green); }
+.qa-section h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.qa-section .content { font-size: 0.95em; line-height: 1.7; }
+.qa-section .content p { margin-bottom: 12px; }
+
+/* --- NER highlights (gold, dark-theme adapted) --- */
+.ner { background: rgba(212,168,86,0.18); border-bottom: 1.5px solid var(--gold); padding: 0 2px; border-radius: 2px; cursor: pointer; color: inherit; text-decoration: none; transition: background 0.15s; }
+.ner:hover { background: rgba(212,168,86,0.38); }
+a.ner { color: inherit; }
+
+/* --- Discourse markers (inline) --- */
+.disc-scope { background: rgba(126,200,227,0.12); border-bottom: 2px solid var(--blue); padding: 1px 2px; border-radius: 2px; }
+.disc-wire { background: rgba(176,136,249,0.1); border-bottom: 2px dotted var(--purple); padding: 1px 2px; border-radius: 2px; }
+.disc-label { background: rgba(240,165,0,0.1); border-bottom: 2px solid var(--orange); padding: 1px 2px; border-radius: 2px; }
+.disc-port { background: rgba(78,204,163,0.1); border-bottom: 2px double var(--green); padding: 1px 2px; border-radius: 2px; }
+.disc-type-pill { font-size: 0.55rem; font-weight: 700; font-family: system-ui, sans-serif; vertical-align: super; padding: 0 4px; border-radius: 2px; margin-left: 2px; letter-spacing: 0.03em; text-transform: uppercase; opacity: 0.85; }
+.disc-type-pill.scope-pill { background: rgba(126,200,227,0.25); color: var(--blue); }
+.disc-type-pill.wire-pill { background: rgba(176,136,249,0.25); color: var(--purple); }
+.disc-type-pill.label-pill { background: rgba(240,165,0,0.25); color: var(--orange); }
+.disc-type-pill.port-pill { background: rgba(78,204,163,0.25); color: var(--green); }
+
+/* --- Scope Map panel (dark-theme) --- */
+.scope-map { background: rgba(126,200,227,0.06); border: 1px solid rgba(126,200,227,0.2); border-radius: 6px; padding: 14px 18px; margin: 10px 0 4px; font-family: system-ui, sans-serif; font-size: 0.82rem; }
+.scope-map h4 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--blue); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.scope-map h4::before { content: ""; display: inline-block; width: 3px; height: 14px; background: var(--blue); border-radius: 2px; }
+.scope-map.discourse-map { background: rgba(176,136,249,0.06); border-color: rgba(176,136,249,0.2); }
+.scope-map.discourse-map h4 { color: var(--purple); }
+.scope-map.discourse-map h4::before { background: var(--purple); }
+.scope-row { display: flex; gap: 10px; align-items: baseline; padding: 5px 0; border-bottom: 1px solid rgba(126,200,227,0.08); }
+.scope-row:last-child { border-bottom: none; }
+.scope-type { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #fff; background: var(--blue); padding: 1px 7px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; }
+.scope-type.st-let { background: #3b82f6; }
+.scope-type.st-forall { background: #7c3aed; }
+.scope-type.st-where { background: #0891b2; }
+.scope-type.st-if { background: #d97706; }
+.scope-type.st-conditional { background: #d97706; }
+.scope-symbol { font-family: Georgia, serif; font-style: italic; color: var(--blue); min-width: 40px; }
+.scope-arrow { color: var(--fg2); font-family: monospace; font-size: 0.75rem; }
+.scope-desc { color: var(--fg); flex: 1; }
+
+/* --- IATC edge badges --- */
+.iatc-badge-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; margin-bottom: 8px; font-size: 0.82rem; font-family: system-ui, sans-serif; color: var(--fg2); background: var(--bg2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); }
+.edge-badge { display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.04em; color: #fff; }
+.iatc-query { background: #ec4899; }
+.iatc-assert { background: #3b82f6; }
+.iatc-clarify { background: #8b5cf6; }
+.iatc-exemplify { background: #f59e0b; }
+.iatc-challenge { background: #ef4444; }
+.iatc-agree { background: #10b981; }
+.edge-arrow-text { color: var(--fg2); font-family: monospace; font-size: 0.8rem; }
+
+/* --- Expression surfaces (green tint, dark-theme) --- */
+mjx-container.expr-surface { background: rgba(78,204,163,0.12); border-radius: 3px; padding: 1px 3px; cursor: pointer; transition: background 0.15s; }
+mjx-container.expr-surface:hover { background: rgba(78,204,163,0.28); }
+mjx-container.expr-surface-display { background: rgba(78,204,163,0.08); border-radius: 4px; padding: 6px 10px; display: inline-block; transition: background 0.15s; }
+mjx-container.expr-surface-display:hover { background: rgba(78,204,163,0.2); }
+#sexp-tip { position: absolute; z-index: 999; display: none; font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace; font-size: 0.78rem; line-height: 1.4; background: #0f172a; color: #e2e8f0; padding: 8px 12px; border-radius: 5px; box-shadow: 0 4px 16px rgba(0,0,0,0.5); max-width: 480px; white-space: pre-wrap; pointer-events: none; border: 1px solid rgba(126,200,227,0.3); }
+#sexp-tip::after { content: 's-expression parse'; display: block; font-size: 0.6rem; color: #64748b; margin-top: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+/* --- Expressions panel --- */
+.expr-panel { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.expr-panel h3 { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.expr-item { background: var(--bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 2px solid var(--green); font-size: 1.1em; overflow-x: auto; }
+
+/* --- Legend (dark-theme) --- */
+.legend { background: var(--bg2); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 18px 22px; margin-top: 24px; margin-bottom: 16px; font-size: 0.8rem; font-family: system-ui, sans-serif; color: var(--fg2); }
+.legend h3 { font-size: 0.85rem; margin-bottom: 12px; color: var(--fg); }
+.legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-swatch { width: 36px; height: 14px; border-radius: 2px; flex-shrink: 0; }
+
+/* --- Collapsible raw hypergraph --- */
+.raw-hypergraph { background: var(--bg2); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.raw-hypergraph summary { font-size: 0.9em; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; user-select: none; padding: 4px 0; }
+.raw-hypergraph summary:hover { color: var(--fg); }
+.node-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.node-chip { padding: 4px 10px; border-radius: 6px; font-size: 0.82em; display: flex; align-items: center; gap: 4px; }
+.node-chip .ntype { font-size: 0.7em; opacity: 0.7; }
+.chip-term { background: rgba(212,168,86,0.15); color: var(--gold); border: 1px solid rgba(212,168,86,0.3); }
+.chip-expression { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
+.chip-scope { background: rgba(176,136,249,0.15); color: var(--purple); border: 1px solid rgba(176,136,249,0.3); }
+.chip-post { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid rgba(233,69,96,0.3); }
+.edge-table { width: 100%; border-collapse: collapse; font-size: 0.82em; margin-top: 12px; }
+.edge-table th { text-align: left; padding: 6px 10px; color: var(--fg2); border-bottom: 1px solid var(--bg3); }
+.edge-table td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.edge-type { padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
+.et-mention { background: rgba(212,168,86,0.2); color: var(--gold); }
+.et-surface { background: rgba(78,204,163,0.2); color: var(--green); }
+.et-scope { background: rgba(176,136,249,0.2); color: var(--purple); }
+.et-discourse { background: rgba(233,69,96,0.2); color: var(--accent); }
+.et-iatc { background: rgba(240,165,0,0.2); color: var(--orange); }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img src="arse-logo2.png" alt="ArSE" style="width:80px;height:80px;border-radius:12px;">
+    <h1><span>ArSE</span> Viewer <span style="font-size:0.5em;color:var(--purple);vertical-align:middle;margin-left:8px;">NNexus Glasses</span></h1>
+    <div class="stats"></div>
+  </div>
+</header>
+<div class="container">
+<a class="back-btn" href="arse-viewer.html">&larr; Back to index</a>
+<div class="detail-header">
+  <h2>Explicit FH(&#x211A;) lattices with prescribed torsion</h2>
+  <div class="detail-meta">synth-p7-s3a-001 &nbsp;|&nbsp; <span class="tag">algebraic-groups</span> <span class="tag">number-theory</span> <span class="tag">group-theory</span>
+    &nbsp;|&nbsp; 13 nodes, 18 edges &nbsp;|&nbsp; <span style="color:var(--purple)">Glasses view</span></div>
+</div>
+
+<!-- IATC edge badges between Q and A -->
+<div id="iatc-badges"></div>
+
+<!-- Question -->
+<div class="qa-section" id="qa-question">
+  <h3>Question</h3>
+  <div class="content" id="q-content"></div>
+  <div id="q-scope-map"></div>
+</div>
+
+<!-- Answer -->
+<div class="qa-section answer" id="qa-answer">
+  <h3>Answer</h3>
+  <div class="content" id="a-content"></div>
+  <div id="a-scope-map"></div>
+</div>
+
+<!-- Expressions panel -->
+<div class="expr-panel" id="expr-panel"><h3>Expressions (3)</h3>
+<div class="expr-item">\(\Gamma=\mathcal O^{1} \subset B^{\times}\)</div>
+<div class="expr-item">\(\operatorname{tors}(\Gamma)=\mu_n(F)\)</div>
+<div class="expr-item">\(F=\mathbb Q(\zeta_n) \Rightarrow n\text{-torsion in }\Gamma\)</div>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+<h3>NNexus Glasses Legend</h3>
+<div class="legend-grid">
+ <div class="legend-item"><span class="legend-swatch" style="background:rgba(212,168,86,0.25);border-bottom:2px solid var(--gold)"></span> NER term (gold highlight)</div>
+ <div class="legend-item"><span class="legend-swatch" style="background:rgba(126,200,227,0.15);border-bottom:2px solid var(--blue)"></span> Scope binding <span class="disc-type-pill scope-pill">let</span></div>
+ <div class="legend-item"><span class="legend-swatch" style="background:rgba(176,136,249,0.15);border-bottom:2px dotted var(--purple)"></span> Discourse wire <span class="disc-type-pill wire-pill">hence</span></div>
+ <div class="legend-item"><span class="legend-swatch" style="background:rgba(240,165,0,0.15);border-bottom:2px solid var(--orange)"></span> Discourse label <span class="disc-type-pill label-pill">example</span></div>
+ <div class="legend-item"><span class="legend-swatch" style="background:rgba(78,204,163,0.15);border-bottom:2px double var(--green)"></span> Expression surface (green tint)</div>
+ <div class="legend-item">
+  <span class="edge-badge iatc-query" style="font-size:0.6rem">query</span>
+  <span class="edge-badge iatc-assert" style="font-size:0.6rem">assert</span>
+  <span style="font-size:0.72rem;color:var(--fg2)">IATC badges</span>
+ </div>
+</div>
+<p style="margin-top:12px;font-size:0.75rem;color:var(--fg2);line-height:1.5">
+  <strong style="color:var(--fg)">Scope Map</strong> panels decompose variable bindings and conditionals into symbol : description form.<br>
+  <strong style="color:var(--fg)">Discourse Markers</strong> show rhetorical connectives: consequential ("Hence"), conditional ("because"), exemplary ("For example").<br>
+  <span style="display:inline-block;width:36px;height:14px;background:rgba(78,204,163,0.2);border-radius:2px;vertical-align:middle"></span> <strong style="color:var(--fg)">Expression surfaces</strong> get green tint. Hover for s-expression parse.
+</p>
+</div>
+
+<!-- Raw Hypergraph (collapsible) -->
+<details class="raw-hypergraph">
+<summary>Raw Hypergraph (13 nodes, 18 edges)</summary>
+<div id="raw-nodes"></div>
+<div id="raw-edges"></div>
+</details>
+
+</div><!-- /container -->
+
+<script>
+// ---- Embedded hypergraph data from synth-p7-s3a-001.json ----
+const DATA = {
+  "thread_id": "synth-p7-s3a-001",
+  "title": "Explicit FH(\u211a) lattices with prescribed torsion",
+  "question": "Fowler\u0027s arithmetic $FH(\\mathbb Q)$ lattices are built from anisotropic quaternion algebras over number fields. If I want an explicit cocompact lattice whose torsion is exactly the cyclic group of order 5 (or order $n$ in general), how should I choose the field and order, and why does this construction still land in $FH(\\mathbb Q)$ even though the resulting quotient is only an orbicomplex?",
+  "answer": "Pick a number field $F$ containing the desired cyclic group of roots of unity $\\mu_n(F)$. For example, take $F=\\mathbb Q(\\zeta_5)$ and let $B$ be the unique quaternion algebra over $F$ that ramifies at every real place (there are none here) and at a pair of finite places so that $B$ is a division algebra. Let $\\mathcal O\\subset B$ be a maximal order and set $\\Gamma=\\mathcal O^{1}$ (norm-one elements). The embedding $B\\otimes_{F,\\sigma}\\mathbb R\\cong \\mathbf H$ gives a homomorphism $\\Gamma\\hookrightarrow G=\\operatorname{SU}(2)^r$, whose projection to one factor yields a uniform lattice.\n\nThe torsion of $\\Gamma$ consists of the units of $\\mathcal O$, and these units map onto $\\mu_n(F)$. By choosing $F$ with prescribed roots of unity one realizes exactly those torsion orders. The action on the associated symmetric space satisfies Fowler\u0027s Euler-vanishing hypothesis because every fixed-point set is contractible and has zero reduced Euler characteristic. Hence $\\Gamma\\in FH(\\mathbb Q)$, producing a finite rational orbicomplex even though the torsion prevents a manifold quotient.",
+  "nodes": [
+    {"id":"q1","type":"post","subtype":"question"},
+    {"id":"a1","type":"post","subtype":"answer"},
+    {"id":"t1","type":"term","subtype":"number-theory","label":"cyclotomic field"},
+    {"id":"t2","type":"term","subtype":"number-theory","label":"quaternion algebra"},
+    {"id":"t3","type":"term","subtype":"group-theory","label":"maximal order"},
+    {"id":"t4","type":"term","subtype":"group-theory","label":"torsion unit"},
+    {"id":"t5","type":"term","subtype":"group-theory","label":"FH(\\mathbb Q)"},
+    {"id":"t6","type":"term","subtype":"geometry","label":"orbicomplex"},
+    {"id":"e1","type":"expression","subtype":"latex","latex":"\\Gamma=\\mathcal O^{1} \\subset B^{\\times}"},
+    {"id":"e2","type":"expression","subtype":"latex","latex":"\\operatorname{tors}(\\Gamma)=\\mu_n(F)"},
+    {"id":"e3","type":"expression","subtype":"latex","latex":"F=\\mathbb Q(\\zeta_n) \\Rightarrow n\\text{-torsion in }\\Gamma"},
+    {"id":"s1","type":"scope","subtype":"conditional","text":"if the number field contains \\mu_n"},
+    {"id":"s2","type":"scope","subtype":"conditional","text":"torsion obstructs manifold quotients but not FH(\\mathbb Q)"}
+  ],
+  "edges": [
+    {"type":"mention","ends":["q1","t1"]},
+    {"type":"mention","ends":["q1","t2"]},
+    {"type":"mention","ends":["a1","t1"]},
+    {"type":"mention","ends":["a1","t2"]},
+    {"type":"mention","ends":["a1","t3"]},
+    {"type":"mention","ends":["a1","t4"]},
+    {"type":"mention","ends":["a1","t5"]},
+    {"type":"mention","ends":["a1","t6"]},
+    {"type":"surface","ends":["a1","e1"]},
+    {"type":"surface","ends":["a1","e2"]},
+    {"type":"surface","ends":["a1","e3"]},
+    {"type":"scope","ends":["q1","s1"]},
+    {"type":"scope","ends":["a1","s1"]},
+    {"type":"scope","ends":["q1","s2"]},
+    {"type":"scope","ends":["a1","s2"]},
+    {"type":"discourse","ends":["q1","a1"]},
+    {"type":"iatc","ends":["q1","a1"],"attrs":{"performative":"query"}},
+    {"type":"iatc","ends":["a1","q1"],"attrs":{"performative":"assert"}}
+  ]
+};
+
+// S-expression parses for hoverable expressions
+const PARSES = {
+  "\\Gamma=\\mathcal O^{1} \\subset B^{\\times}":
+    "(subset (= \u0393 (superscript O 1)) (units B))",
+  "\\operatorname{tors}(\\Gamma)=\\mu_n(F)":
+    "(= (tors \u0393) (\u03bc n F))",
+  "F=\\mathbb Q(\\zeta_n) \\Rightarrow n\\text{-torsion in }\\Gamma":
+    "(\u21d2 (= F (Q \u03b6_n)) (has-torsion \u0393 n))",
+  "FH(\\mathbb Q)": "(FH \u211a)",
+  "\\mu_n(F)": "(\u03bc n F)",
+  "F=\\mathbb Q(\\zeta_5)": "(= F (Q \u03b6\u2085))",
+  "\\mathcal O\\subset B": "(\u2282 O B)",
+  "\\Gamma=\\mathcal O^{1}": "(= \u0393 (superscript O 1))",
+  "B\\otimes_{F,\\sigma}\\mathbb R\\cong \\mathbf H":
+    "(\u2245 (\u2297 B F\u03c3 \u211d) \u210d)",
+  "\\Gamma\\hookrightarrow G=\\operatorname{SU}(2)^r":
+    "(\u21aa \u0393 (= G (SU 2 r)))",
+  "\\Gamma\\in FH(\\mathbb Q)": "(\u2208 \u0393 (FH \u211a))"
+};
+
+// ---- NER terms with surface forms to match in text ----
+const NER_TERMS = {
+  "question": [
+    {term: "quaternion algebras", canon: "QuaternionAlgebra"},
+    {term: "cocompact lattice", canon: "CocompactLattice"},
+    {term: "cyclic group", canon: "CyclicGroup"},
+    {term: "number fields", canon: "NumberField"},
+    {term: "orbicomplex", canon: "Orbicomplex"},
+    {term: "torsion", canon: "TorsionSubgroup"},
+    {term: "lattices", canon: "Lattice"}
+  ],
+  "answer": [
+    {term: "number field", canon: "NumberField"},
+    {term: "roots of unity", canon: "RootOfUnity"},
+    {term: "quaternion algebra", canon: "QuaternionAlgebra"},
+    {term: "division algebra", canon: "DivisionAlgebra"},
+    {term: "maximal order", canon: "MaximalOrder"},
+    {term: "uniform lattice", canon: "UniformLattice"},
+    {term: "torsion", canon: "TorsionSubgroup"},
+    {term: "Euler characteristic", canon: "EulerCharacteristic"},
+    {term: "symmetric space", canon: "SymmetricSpace"},
+    {term: "homomorphism", canon: "GroupHomomorphism"},
+    {term: "orbicomplex", canon: "Orbicomplex"},
+    {term: "manifold", canon: "Manifold"}
+  ]
+};
+
+// ---- Discourse markers to highlight ----
+const DISCOURSE = {
+  "question": [
+    {match: "If I want", type: "conditional", role: "scope", cls: "disc-scope", pill: "scope-pill"},
+    {match: "even though", type: "concessive", role: "wire", cls: "disc-wire", pill: "wire-pill"}
+  ],
+  "answer": [
+    {match: "For example", type: "example", role: "label", cls: "disc-label", pill: "label-pill"},
+    {match: "let", type: "let", role: "scope", cls: "disc-scope", pill: "scope-pill", wordBoundary: true},
+    {match: "Let", type: "let", role: "scope", cls: "disc-scope", pill: "scope-pill"},
+    {match: "because", type: "causal", role: "wire", cls: "disc-wire", pill: "wire-pill"},
+    {match: "Hence", type: "consequential", role: "wire", cls: "disc-wire", pill: "wire-pill"},
+    {match: "even though", type: "concessive", role: "wire", cls: "disc-wire", pill: "wire-pill"}
+  ]
+};
+
+// ---- Scope map data ----
+const SCOPE_MAPS = {
+  "question": [
+    {type: "if", label: "if", symbol: "F", desc: "number field containing \\(\\mu_n\\)"},
+    {type: "conditional", label: "conditional", symbol: "\\(\\Gamma\\)", desc: "resulting quotient is only an orbicomplex"}
+  ],
+  "answer": [
+    {type: "let", label: "let", symbol: "\\(F\\)", desc: "number field containing desired roots of unity"},
+    {type: "let", label: "let", symbol: "\\(B\\)", desc: "unique quaternion algebra over \\(F\\), a division algebra"},
+    {type: "let", label: "let", symbol: "\\(\\mathcal O\\)", desc: "maximal order in \\(B\\)"},
+    {type: "let", label: "let", symbol: "\\(\\Gamma = \\mathcal O^1\\)", desc: "norm-one elements of \\(\\mathcal O\\)"},
+    {type: "conditional", label: "if", symbol: "\\(F\\)", desc: "contains prescribed roots of unity \\(\\mu_n\\)"},
+    {type: "conditional", label: "because", symbol: "", desc: "every fixed-point set is contractible with zero reduced Euler characteristic"}
+  ]
+};
+
+// ---- Helper functions ----
+function escH(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function nlabUrl(canon) {
+  if (!canon || /^\d+$/.test(canon)) return null;
+  const spaced = canon.replace(/([a-z])([A-Z])/g, '$1+$2').toLowerCase();
+  return 'https://ncatlab.org/nlab/show/' + spaced.replace(/ /g, '+');
+}
+
+function normTex(s) { return s.replace(/\s+/g, ' ').trim(); }
+
+// Build normalized parse lookup
+const parseLookup = {};
+Object.keys(PARSES).forEach(k => { parseLookup[normTex(k)] = PARSES[k]; });
+
+// ---- S-exp tooltip ----
+const tip = document.createElement('div');
+tip.id = 'sexp-tip';
+document.body.appendChild(tip);
+
+function showSexp(evt) {
+  const sexp = evt.currentTarget.getAttribute('data-sexp');
+  if (!sexp) return;
+  tip.textContent = sexp;
+  tip.style.display = 'block';
+  const r = evt.currentTarget.getBoundingClientRect();
+  const tipW = tip.offsetWidth;
+  let left = r.left + (r.width / 2) - (tipW / 2);
+  left = Math.max(8, Math.min(left, window.innerWidth - tipW - 8));
+  tip.style.left = left + 'px';
+  tip.style.top = (r.bottom + 6 + window.scrollY) + 'px';
+  tip.style.position = 'absolute';
+}
+function hideSexp() { tip.style.display = 'none'; }
+
+// ---- Wrap $...$ in annotated spans before MathJax runs ----
+function wrapMathExpressions(root) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  const textNodes = [];
+  let n;
+  while ((n = walker.nextNode())) textNodes.push(n);
+
+  for (const textNode of textNodes) {
+    const text = textNode.nodeValue;
+    if (!text.includes('$')) continue;
+    const par = textNode.parentElement;
+    if (!par) continue;
+    const tag = par.tagName;
+    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE') continue;
+    if (par.closest('.math-expr')) continue;
+
+    const re = /\$\$([\s\S]+?)\$\$|\$([^$\n]+?)\$/g;
+    let lastIndex = 0;
+    let m;
+    const frag = document.createDocumentFragment();
+    let found = false;
+
+    while ((m = re.exec(text)) !== null) {
+      found = true;
+      if (m.index > lastIndex) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
+      }
+      const span = document.createElement('span');
+      span.className = 'math-expr';
+      const isDisplay = m[0].startsWith('$$');
+      const tex = (m[1] || m[2]).trim();
+      span.setAttribute('data-tex', tex);
+      span.setAttribute('data-display', isDisplay ? '1' : '0');
+      span.textContent = m[0];
+      frag.appendChild(span);
+      lastIndex = m.index + m[0].length;
+    }
+
+    if (found) {
+      if (lastIndex < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+      textNode.parentNode.replaceChild(frag, textNode);
+    }
+  }
+}
+
+// ---- After MathJax renders, add green expression surfaces ----
+function annotateExpressions(root) {
+  root.querySelectorAll('.math-expr').forEach(span => {
+    const tex = span.getAttribute('data-tex');
+    const isDisplay = span.getAttribute('data-display') === '1';
+    const mjx = span.querySelector('mjx-container');
+    if (!mjx) return;
+
+    mjx.classList.add(isDisplay ? 'expr-surface-display' : 'expr-surface');
+
+    const sexp = parseLookup[normTex(tex)];
+    if (sexp) {
+      mjx.setAttribute('data-sexp', sexp);
+      mjx.addEventListener('mouseenter', showSexp);
+      mjx.addEventListener('mouseleave', hideSexp);
+    }
+  });
+}
+
+// ---- Highlight text nodes matching regex ----
+function highlightTextNodes(root, re, maker, onlyFirst) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  const nodes = [];
+  let nd;
+  while ((nd = walker.nextNode())) nodes.push(nd);
+
+  let done = false;
+  for (const textNode of nodes) {
+    if (done) break;
+    const text = textNode.nodeValue;
+    const par = textNode.parentElement;
+    if (!par) continue;
+    if (par.closest('.ner, .disc-scope, .disc-wire, .disc-label, .disc-port, .math-expr, mjx-container, .MathJax')) continue;
+    const tag = par.tagName;
+    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE') continue;
+
+    let lastIndex = 0;
+    let m;
+    re.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let replaced = false;
+
+    while ((m = re.exec(text)) !== null) {
+      const el = maker(m[0]);
+      if (!el) continue;
+      replaced = true;
+      if (m.index > lastIndex) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
+      }
+      frag.appendChild(el);
+      lastIndex = m.index + m[0].length;
+      if (onlyFirst) { done = true; break; }
+    }
+
+    if (replaced) {
+      if (lastIndex < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+      textNode.parentNode.replaceChild(frag, textNode);
+    }
+  }
+}
+
+// ---- Render scope map panel ----
+function renderScopeMap(containerId, entries) {
+  if (!entries || !entries.length) return;
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  let html = '<div class="scope-map"><h4>Scope Map</h4>';
+  entries.forEach(s => {
+    const tc = 'st-' + s.type;
+    html += '<div class="scope-row">';
+    html += '<span class="scope-type ' + tc + '">' + escH(s.label) + '</span>';
+    if (s.symbol) {
+      html += '<span class="scope-symbol">' + s.symbol + '</span>';
+    }
+    if (s.desc) {
+      html += '<span class="scope-arrow">:</span>';
+      html += '<span class="scope-desc">' + s.desc + '</span>';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ---- Render IATC badges ----
+function renderIATCBadges() {
+  const container = document.getElementById('iatc-badges');
+  const iatcEdges = DATA.edges.filter(e => e.type === 'iatc');
+  if (!iatcEdges.length) return;
+
+  let html = '';
+  iatcEdges.forEach(e => {
+    const perf = e.attrs.performative;
+    const fromLabel = e.ends[0] === 'q1' ? 'Question' : 'Answer';
+    const toLabel = e.ends[1] === 'q1' ? 'Question' : 'Answer';
+    html += '<div class="iatc-badge-row">';
+    html += '<span class="edge-arrow-text">' + fromLabel + '</span>';
+    html += ' <span class="edge-arrow-text">&rarr;</span> ';
+    html += '<span class="edge-arrow-text">' + toLabel + '</span> ';
+    html += '<span class="edge-badge iatc-' + perf + '">' + perf + '</span>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+// ---- Render raw hypergraph (collapsible) ----
+function renderRawHypergraph() {
+  // Nodes
+  const nodesContainer = document.getElementById('raw-nodes');
+  let nhtml = '<h4 style="font-size:0.85em;color:var(--fg2);margin:12px 0 8px;">Nodes (' + DATA.nodes.length + ')</h4><div class="node-list">';
+  DATA.nodes.forEach(n => {
+    let chipCls = 'chip-term';
+    if (n.type === 'post') chipCls = 'chip-post';
+    else if (n.type === 'expression') chipCls = 'chip-expression';
+    else if (n.type === 'scope') chipCls = 'chip-scope';
+    const label = n.label || n.subtype || n.id;
+    nhtml += '<span class="node-chip ' + chipCls + '"><span class="ntype">' + escH(n.type) + '</span> ' + escH(label) + '</span>';
+  });
+  nhtml += '</div>';
+  nodesContainer.innerHTML = nhtml;
+
+  // Edges
+  const edgesContainer = document.getElementById('raw-edges');
+  let ehtml = '<h4 style="font-size:0.85em;color:var(--fg2);margin:12px 0 8px;">Edges (' + DATA.edges.length + ')</h4>';
+  ehtml += '<table class="edge-table"><thead><tr><th>Type</th><th>From</th><th>To</th><th>Attrs</th></tr></thead><tbody>';
+  DATA.edges.forEach(e => {
+    const etCls = 'et-' + e.type;
+    const fromNode = DATA.nodes.find(n => n.id === e.ends[0]);
+    const toNode = DATA.nodes.find(n => n.id === e.ends[1]);
+    const fromLabel = fromNode ? (fromNode.label || fromNode.subtype || fromNode.id) : e.ends[0];
+    const toLabel = toNode ? (toNode.label || toNode.subtype || toNode.id) : e.ends[1];
+    const attrs = e.attrs ? JSON.stringify(e.attrs) : '';
+    ehtml += '<tr>';
+    ehtml += '<td><span class="edge-type ' + etCls + '">' + escH(e.type) + '</span></td>';
+    ehtml += '<td>' + escH(e.ends[0] + ': ' + fromLabel) + '</td>';
+    ehtml += '<td>' + escH(e.ends[1] + ': ' + toLabel) + '</td>';
+    ehtml += '<td style="color:var(--fg2);font-size:0.85em">' + escH(attrs) + '</td>';
+    ehtml += '</tr>';
+  });
+  ehtml += '</tbody></table>';
+  edgesContainer.innerHTML = ehtml;
+}
+
+// ---- Apply NER highlights ----
+function applyNER(el, section) {
+  const terms = NER_TERMS[section];
+  if (!terms || !terms.length) return;
+
+  // Sort longest-first
+  const sorted = terms.slice().sort((a, b) => b.term.length - a.term.length);
+  const escaped = sorted.map(t => t.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const re = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'gi');
+  const termMap = {};
+  sorted.forEach(t => { termMap[t.term.toLowerCase()] = t; });
+
+  highlightTextNodes(el, re, (match) => {
+    const key = match.toLowerCase();
+    let best = null;
+    for (const t of sorted) {
+      if (key === t.term.toLowerCase()) { best = t; break; }
+    }
+    if (!best) best = termMap[key];
+    if (!best) return null;
+
+    const url = nlabUrl(best.canon);
+    if (url) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.className = 'ner';
+      a.target = '_blank';
+      a.title = best.canon + ' (nLab)';
+      a.textContent = match;
+      return a;
+    } else {
+      const span = document.createElement('span');
+      span.className = 'ner';
+      span.title = best.canon;
+      span.textContent = match;
+      return span;
+    }
+  });
+}
+
+// ---- Apply discourse marker highlights ----
+function applyDiscourse(el, section) {
+  const markers = DISCOURSE[section];
+  if (!markers || !markers.length) return;
+
+  markers.forEach(d => {
+    const needle = d.match;
+    let pattern;
+    if (d.wordBoundary) {
+      pattern = new RegExp('\\b' + needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+    } else {
+      pattern = new RegExp(needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    }
+
+    highlightTextNodes(el, pattern, (m) => {
+      const span = document.createElement('span');
+      span.className = d.cls;
+      span.title = d.type;
+      span.innerHTML = escH(m) + '<span class="disc-type-pill ' + d.pill + '">' + escH(d.type) + '</span>';
+      return span;
+    }, true);
+  });
+}
+
+// ---- Main boot ----
+function boot() {
+  // Set Q and A content as paragraphs
+  const qEl = document.getElementById('q-content');
+  const aEl = document.getElementById('a-content');
+
+  // Question text (single paragraph)
+  qEl.innerHTML = '<p>' + DATA.question + '</p>';
+
+  // Answer text (split on double newline)
+  const aParagraphs = DATA.answer.split('\n\n');
+  aEl.innerHTML = aParagraphs.map(p => '<p>' + p + '</p>').join('');
+
+  // Wrap math expressions before MathJax
+  wrapMathExpressions(qEl);
+  wrapMathExpressions(aEl);
+
+  // Apply NER highlights
+  applyNER(qEl, 'question');
+  applyNER(aEl, 'answer');
+
+  // Apply discourse marker highlights
+  applyDiscourse(qEl, 'question');
+  applyDiscourse(aEl, 'answer');
+
+  // Render scope map panels
+  renderScopeMap('q-scope-map', SCOPE_MAPS.question);
+  renderScopeMap('a-scope-map', SCOPE_MAPS.answer);
+
+  // Render IATC badges
+  renderIATCBadges();
+
+  // Render raw hypergraph
+  renderRawHypergraph();
+
+  // Typeset with MathJax then annotate expression surfaces
+  function doMathJax() {
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise().then(() => {
+        annotateExpressions(document.getElementById('q-content'));
+        annotateExpressions(document.getElementById('a-content'));
+        annotateExpressions(document.getElementById('expr-panel'));
+        annotateExpressions(document.getElementById('q-scope-map'));
+        annotateExpressions(document.getElementById('a-scope-map'));
+      }).catch(e => console.warn('MathJax:', e));
+    }
+  }
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    doMathJax();
+  } else {
+    const poll = setInterval(() => {
+      if (window.MathJax && MathJax.typesetPromise) {
+        clearInterval(poll);
+        doMathJax();
+      }
+    }, 100);
+  }
+}
+
+boot();
+</script>
+</body>
+</html>
