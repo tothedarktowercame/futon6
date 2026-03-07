@@ -22,10 +22,10 @@ We want to discover:
 
 | Role | Agent(s) | Location | Channel | Purpose |
 |------|----------|----------|---------|---------|
-| **Prover** | codex-1 + zcodex | Linode + Houston | #futon / #zabuton | Dual-core proof engine: construct, compute, write formal arguments |
-| **Critic** | claude-1 | Linode | #futon | Falsify claims, find counterexamples, verify proof steps |
-| **Mentor** | claude-2 (new session) | Linode | #futon | Meta-level: name patterns, detect loops, redirect strategy |
-| **Tickle** | tickle-1 | Linode | #futon | Timekeeper, phase nudges, relay between channels |
+| **Prover** | codex-1 + zcodex | Linode + Houston | #math | Dual-core proof engine: construct, compute, write formal arguments |
+| **Critic** | claude-1 | Linode | #math | Falsify claims, find counterexamples, verify proof steps |
+| **Mentor** | claude-2 (REPL-driven) | Linode workspace2 | #math | Meta-level: name patterns, detect loops, redirect strategy |
+| **Tickle** | tickle-1 | Linode | #math | Bell-driven orchestrator, phase transitions |
 
 ### Prover: Dual-Core Pattern
 
@@ -75,22 +75,30 @@ become pattern library candidates (recorded as PURs).
 ### Communication Flow
 
 ```
-#zabuton (Rob)              #futon (Joe)
-┌──────────────┐            ┌──────────────────────────┐
-│ zcodex       │◄──git───►  │ codex-1                  │
-│  (Prover B)  │  pushes    │  (Prover A)              │
-│              │            │ claude-1 (Critic)         │
-│              │◄──tickle──►│ claude-2 (Mentor)         │
-│              │  relays    │ tickle-1 (Timekeeper)     │
-└──────────────┘            └──────────────────────────┘
-                    │
-            futon6 repo (shared artifact)
+#math (shared mission channel)
+┌─────────────────────────────────────────┐
+│ codex-1  (Prover A) — Linode            │
+│ zcodex   (Prover B) — Houston           │
+│ claude-1 (Critic)   — Linode            │
+│ claude-2 (Mentor)   — Linode workspace2 │
+│ tickle   (Orchestrator)                 │
+│ joe, rob (Observers)                    │
+└─────────────────────────────────────────┘
+         │
+   futon6 repo (shared artifact)
 ```
+
+All agents share a single `#math` channel via the multi-channel ngircd bridge.
+The bridge (systemd `ngircd-bridge@futon`) joins both `#futon` and `#math` —
+agents can be reached on either channel with the same nick.
 
 - **IRC for handoffs**: "@zcodex pushed proof sketch to fm001-prob branch,
   please check the n≥7 case" — short, actionable.
 - **Git for work products**: State files, proof sketches, reviews, lemmas.
-- **Tickle relays** between channels when cross-team coordination is needed.
+- **claude-2 (Mentor)** is REPL-driven — Joe attaches via workspace2 and
+  decides when it speaks. Not auto-invoked on @mentions.
+- **Tickle** is bell-driven — agents signal `@tickle BELL <event>` on
+  completion; Tickle reads state files and assigns the next phase.
 
 ## Protocol
 
@@ -129,7 +137,7 @@ Goal: Build proof attempts for the surviving hypothesis.
 2. **claude-1**: Reviews each proof sketch adversarially. Files review docs.
 3. **Mentor**: Monitors for loops. After 3 failed attempts on the same route,
    requires a TryHarder license or a route switch.
-4. **Tickle**: Phase nudges every 60 minutes.
+4. **Tickle**: Bell-driven phase transitions (agents signal completion).
 
 TryHarder licenses required for persistence. Mentor approves or denies.
 
@@ -180,28 +188,52 @@ Same as the pre-season mission. Failure is acceptable when it yields:
 3. A falsified route with reusable negative result.
 4. A new pattern recognized and recorded.
 
+## Question-Asking Pattern Language
+
+The mission deploys the 8 question-asking patterns from Phase 3 analysis
+(see `data/question-patterns/question-asking-pattern-language.md`):
+
+| Role | Primary patterns |
+|------|-----------------|
+| **Prover** | QP-1 (landscape scout), QP-2 (technique landscape), QP-7 (kernel ID) |
+| **Critic** | QP-3 (structural probe), QP-4 (failure characterization), QP-8 (confidence inversion) |
+| **Mentor** | QP-6 (tension dissolution), QP-8 (confidence inversion), pattern naming |
+
 ## Setup Checklist
 
-- [ ] futon6 repo accessible to both codex-1 and zcodex (shared remote)
-- [ ] FM-001 state file at `data/first-proof/frontiermath-pilot/FM-001-ramsey-book-graphs-state.md`
-- [ ] #futon bridge running (claude-1, codex-1, tickle-1)
-- [ ] #zabuton bridge running (zcodex)
-- [ ] Mentor session (claude-2) registered and monitoring
-- [ ] Rob has IRC access to #zabuton and can observe #futon
-- [ ] Joe has IRC access to both channels
+- [x] futon6 repo accessible to both codex-1 and zcodex (shared remote)
+- [x] FM-001 state file spec-locked (`spec_lock_status: pass`)
+- [x] FM-002, FM-003 also spec-locked (available for future missions)
+- [x] Multi-channel bridge: `#futon` + `#math` via single systemd unit
+- [x] claude, codex, claude-2, tickle all joined `#math` with clean nicks
+- [ ] claude-2 Mentor session started on workspace2 (REPL-driven, not auto-invoke)
+- [ ] zcodex reachable from `#math` (currently configured same as codex; may need Rob's bridge)
+- [ ] Rob has IRC access to `#math`
+- [ ] Tickle bell-driven orchestration wired for FM-001 phase transitions
 
 ## Starting the Mission
 
-On #futon:
+On #math:
 ```
-@claude spec-lock FM-001. Extract the exact problem statement from
-the Frontier Math source and fill in the state file. Do not hypothesize.
-```
-
-On #zabuton:
-```
-@zcodex independently verify the FM-001 spec that codex-1 is writing.
-Pull futon6, read the state file, check it against the source.
+@codex spec-lock FM-001. The state file is already filled — verify it
+matches the FrontierMath source. Signal @tickle BELL SPEC_VERIFIED when done.
 ```
 
-The Mentor watches and waits.
+```
+@zcodex independently verify the FM-001 spec. Pull futon6, read
+data/first-proof/frontiermath-pilot/FM-001-ramsey-book-graphs-state.md,
+check it against the source. Signal @tickle BELL SPEC_VERIFIED when done.
+```
+
+Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
+
+## Infrastructure Notes
+
+- **Bridge env**: `~/.config/futon3c/bridge-futon.env`
+  - `BRIDGE_BOTS=claude,codex,claude-2,tickle`
+  - `IRC_CHANNELS=#math`
+  - `NICK_AGENT_MAP=claude:claude-1,codex:codex-1,claude-2:claude-2,tickle:tickle-1`
+- **Bridge restart**: `systemctl --user restart ngircd-bridge@futon`
+- **Post to #math**: `curl -s -X POST http://127.0.0.1:6769/say -H 'Content-Type: application/json' -d '{"from":"claude","channel":"#math","text":"..."}'`
+- **Tickle implementation**: `src/futon3c/agents/tickle.clj` (watchdog), `tickle_orchestrate.clj` (conductor), `dev.clj` tickle-lite (bell-driven)
+- **State files**: `data/first-proof/frontiermath-pilot/FM-00{1,2,3}-*-state.md`
