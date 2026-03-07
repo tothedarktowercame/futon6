@@ -1,7 +1,7 @@
 # Mission: P8 Rational Reconstruction
 
 **Date:** 2026-03-07
-**Status:** VERIFY
+**Status:** COMPLETE (VERIFY done, pattern commit + provenance JSON pending, 2026-03-07)
 **Owner:** futon6, with pattern discipline from futon3
 **Depends on:** First-proof P8 material (complete), M-P7-rational-reconstruction
   (complete — method validated on branching proofs), math-strategy/ patterns
