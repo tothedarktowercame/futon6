@@ -58,6 +58,13 @@ F1 also becomes the verification backbone for C3/C4.
 - **Exit criterion**: Produce a table: for each tier n, does the block-circulant
   construction apply? What alternative constructions exist for non-prime-power cases?
 
+### 2026-03-08 Harness status
+
+- Ran `scripts/fm001/ramsey_book_sat.py` (futon3c) at `n=3` and `n=4`; both SAT instances solved instantly (witnesses at `/tmp/fm001-n3.json` and `/tmp/fm001-n4.json`).
+- Generated the unsolved CNF for `n=5` (`/tmp/FM001-n5.cnf`, 18 360 vars / 48 960 clauses) for offline Sat/DRAT work without re-running Glucose locally.
+- Scoped the composite-modulus target: building the `n=23` instance (no solve yet) yields 90 vertices, 12 159 180 vars, and 26 080 560 clauses — solving requires heavier resources.
+- Archived the reproducible artifacts under `futon6/data/frontiermath-pilot/harness/` (`n3-witness.json`, `n4-witness.json`, `FM001-n5.cnf.gz`) so collaborators can inspect the witnesses/CNF without touching `/tmp`.
+
 ## Phase 2: CONSTRUCT
 
 ### C1-structure — Characterize B_k-freeness
