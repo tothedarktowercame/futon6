@@ -219,6 +219,12 @@ On #math:
 matches the FrontierMath source. Signal @tickle BELL SPEC_VERIFIED when done.
 ```
 
+## 2026-03-08 Update — SAT harness progress
+
+- Added `scripts/fm001/ramsey_book_sat.py` (futon3c repo) to build the unconstrained $K_{4n-2}$ book-Ramsey CNF and invoke Glucose via python-sat. Verified the harness on $n=3$ (witness at `/tmp/fm001-n3.json`); the $n=5$ instance already stresses Glucose, so symmetry reduction is next before pushing to the composite-modulus targets such as $n=23$.
+- Updated `data/proof-state/FM-001-falsify-plan.md` with the Wesley (2025) and Wigderson–Fox–Conlon references plus a composite-modulus experiment queue.
+- Created a local `.venv/` for the solver toolchain; leave it untracked and reuse it whenever running the harness.
+
 ```
 @zcodex independently verify the FM-001 spec. Pull futon6, read
 data/first-proof/frontiermath-pilot/FM-001-ramsey-book-graphs-state.md,
