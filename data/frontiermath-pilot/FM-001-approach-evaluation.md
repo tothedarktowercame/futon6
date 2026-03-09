@@ -8,67 +8,34 @@ so complement edge (0,∞) has 48 common neighbors — violating B_25-freeness.
 
 This document evaluates the remaining approaches.
 
-## Approach 3: Optimized Extension (Paley(97) + ∞ with non-QR adjacency)
+## Approach 3: Paley(97) + ∞ Extension — PROVED IMPOSSIBLE
 
-### Why small perturbations fail
+### The twin obstruction was a symptom; the disease is deeper
 
-The twin obstruction is structural, not accidental. The core problem:
+The S=QR twin obstruction (commit `e88f30e`) showed ONE bad adjacency
+set. But the following argument proves NO adjacency set S works:
 
-- Vertex 0 in Paley(97) has neighbors = QR (the 48 quadratic residues)
-- If ∞ is adjacent to S where S ≈ QR, then 0 and ∞ are near-twins
-- In complement, (0,∞) common neighbors = {v : v ∉ N(0), v ∉ S} = NR \ S
-- With S = QR: complement CN = 48 (all NR). Swapping one QR↔NR: CN = 47
+**Constraint 1 (G B_24-free on original edges):**
+For any Paley edge (u,v) with v-u ∈ QR: CN_G(u,v) = 23 + (1 if u,v ∈ S).
+For B_24-free: need CN < 24, so NOT both u,v ∈ S.
+⟹ **S must be independent in Paley(97)**.
+Independence number α(Paley(97)) ≤ √97 ≈ 9 (Hoffman bound).
+Actual search: α ≤ 6.
 
-**Quantitative analysis**: To get complement CN(0,∞) < 25, we need
-|NR \ S| < 25, i.e., S must contain at least 24 of the 48 NR elements.
-But then |S| ≥ 24 (from NR) + remaining QR elements. For the G-edge
-constraint on ∞'s edges, each s ∈ S needs |S ∩ N(s)| < 24.
+**Constraint 2 (complement B_25-free on ∞-edges):**
+For v ∉ S: CN_complement(∞,v) = |(v+NR) \ S| = 48 - |S ∩ (v+NR)|.
+For B_25-free: need 48 - |S ∩ (v+NR)| < 25, i.e., |S ∩ (v+NR)| ≥ 24.
+But |S| ≤ 6, so |S ∩ (v+NR)| ≤ 6 < 24. **IMPOSSIBLE.**
 
-More precisely: if ∞ is adjacent to 0 (making it a G-edge), then
-CN_G(∞, 0) = |S ∩ QR| (since N_Paley(0) = QR). If S contains k QRs,
-then CN_G(∞, 0) = k. We need k < 24.
+**Conclusion:** Constraints 1 and 2 are jointly unsatisfiable.
+No extension of Paley(97) by one vertex can be both B_24-free and
+complement B_25-free, for ANY choice of adjacency set S.
 
-But if S contains < 24 QRs, then S must contain ≥ |S| - 23 NRs to
-maintain degree. For |S| ≈ 48: at least 25 NRs in S. Then for
-complement edge (0, ∞): CN_complement(0, ∞) = |NR \ S| = 48 - (NR ∩ S).
-If NR ∩ S ≥ 25, then |NR \ S| ≤ 23 < 25 ✓
+This generalizes: for Paley(4n-3) with n ≥ 3, α ≤ √(4n-3) ≈ 2√n,
+but complement constraint requires |S| ≥ 2n-1. Since 2√n ≪ 2n-1,
+the Paley extension approach fails for ALL n.
 
-**So there IS a window**: |S ∩ QR| ≤ 23 AND |S ∩ NR| ≥ 24.
-This means S is NR-heavy: majority non-residues, minority residues.
-
-### The catch: every vertex is "vertex 0"
-
-The twin problem isn't unique to vertex 0. For EVERY vertex v in Paley(97):
-- N_Paley(v) = {w : w-v ∈ QR} (48 vertices)
-- If ∞ adjacent to S, then complement edge (v, ∞) has CN = |(V\S) ∩ (V\N(v))|
-- Equivalently: |{w ∉ S : w-v ∈ NR}| = |NR_v \ S| where NR_v = {v+r : r ∈ NR}
-
-Since v ranges over all of Z_97, the "NR cosets" NR_v = v + NR cover all of
-Z_97 in a structured way. For ∞ not adjacent to v (v ∉ S), we need
-|NR_v \ S| < 25 for ALL such v.
-
-For v ∈ S (∞ adjacent to v), we need |S ∩ N(v)| < 24, i.e.,
-|S ∩ (v + QR)| < 24.
-
-**This is a set-packing/covering problem over Z_97** — find S such that:
-1. ∀v ∈ S: |S ∩ (v + QR)| < 24
-2. ∀v ∉ S: |(v + NR) \ S| < 25
-
-### Feasibility of approach 3
-
-This is computationally tractable for q=97:
-- Search space: choose |S| from ~44 to ~50 (7 sizes)
-- For each size: try structured sets (cosets, arithmetic progressions,
-  union of small cosets) and random sampling
-- Verification is O(97²) per candidate — fast
-
-**Risk**: The constraints may be unsatisfiable. The strongly regular
-structure of Paley creates uniform pressure across all vertices, and the
-two constraints pull in opposite directions (S needs to be QR-light near
-each member, but NR-heavy near each non-member).
-
-**Verdict**: MEDIUM feasibility. Worth a bounded computational search
-(< 1 hour), but have a fallback ready.
+**Verdict**: IMPOSSIBLE. Not "hard to find" — mathematically impossible.
 
 ## Approach 2: Cayley Graph on Z_98
 
@@ -225,38 +192,71 @@ def try_qr_inspired(n=25):
 | Extension artifacts | Yes (∞ is asymmetric) | No (all vertices equivalent) |
 | Self-complementary? | No (∞ breaks it) | Possible if C is chosen well |
 
-## Recommendation
+## Approach 2: Cayley on Z_98 — Computational Results
 
-**Primary path: Approach 2 (Cayley on Z_98)**.
+### QR(97) direct embedding: FAILED
 
-Reasons:
-1. No extension vertex — all vertices are equivalent by Z_98 symmetry
-2. Smaller effective search space due to symmetry constraint (C = -C)
-3. Rich algebraic structure (Z_98 = Z_2 × Z_49) provides structured seeds
-4. The QR(97) embedding into Z_98 is a natural first candidate — it
-   preserves the Paley structure while adding the 98th vertex organically
-5. If random search fails, hill-climbing on the max-CN score is well-defined
+QR(97) (48 elements in {1,...,96}) embedded into Z_98:
+- **Not symmetric** mod 98 (QR(97) is symmetric mod 97, not 98)
+- max G-CN = 27, max complement-CN = 28
+- Fails badly on both constraints
 
-**Secondary path: Approach 3 (optimized S for extension)**.
+### Symmetric search: FAILED
 
-Worth a bounded search (< 1 hour) in parallel. The quantitative analysis
-shows a feasibility window exists, but the uniform pressure from Paley's
-regularity may make it unsatisfiable.
+Simulated annealing with 20 restarts × 50K steps on symmetric connection
+sets (|C|=48, C = -C mod 98):
+- Best: max G-CN = 26, max complement-CN = 26 (score 5)
+- Target: G-CN ≤ 23, complement-CN ≤ 24 (score 0)
+- Gap of 3 on G-edges, 2 on complement — not close
 
-**Codex dispatch priority**:
-1. First: `try_qr_inspired(25)` — check if QR(97) embedded in Z_98 works
-2. Second: `search_cayley_98(25, 100000)` — random search with scoring
-3. Third: Hill-climbing on best candidate from step 2
-4. Parallel: bounded approach-3 search (try_extension with optimized S)
+Tried |C| ∈ {44,...,52}: no size achieves score < 5.
 
-## For n=50 (T2) and general n (T3)
+### General graph search: FAILED
 
-Same methodology scales:
-- n=50: Cayley on Z_198 = Z_2 × Z_9 × Z_11, connection set from QR(197)
-- General: Cayley on Z_{4n-2}, seed from QR(4n-3) if prime, else nearest prime
+SA on unrestricted 98-vertex graphs (no Cayley symmetry):
+- After 10K steps: max G-CN = 33, max complement-CN = 34 (score 20)
+- Converging slowly, still far from target
+
+### SRG feasibility: NO SOLUTIONS
+
+For srg(98, k, λ, μ) with λ ≤ 23 and complement-λ ≤ 24:
+From k(k-1) = kλ + (97-k)μ and 97 prime: requires 97|k or 97|μ.
+No integer solutions exist with the required bounds. **No strongly
+regular graph on 98 vertices has the right parameters.**
+
+## Strategic Reassessment
+
+All explicit construction approaches have failed:
+
+| Approach | Status | Reason |
+|----------|--------|--------|
+| Extended Paley (S=QR) | REFUTED | Twin obstruction |
+| Extended Paley (any S) | IMPOSSIBLE | α ≤ 6 vs complement needs |S| ≥ 24 |
+| Cayley Z_98 (QR embed) | FAILED | Not symmetric mod 98, CN=27 |
+| Cayley Z_98 (search) | FAILED | Best CN=26, target ≤23 |
+| General 98-vertex SA | FAILED | Converging too slowly |
+| SRG(98,k,≤23,μ) | IMPOSSIBLE | 97 prime, no integer solutions |
+
+**This suggests the proof of R(B_{n-1}, B_n) ≥ 4n-1 may not use
+explicit construction on 4n-2 vertices.** Alternative proof strategies:
+
+1. **Non-constructive**: Probabilistic method (Lovász Local Lemma),
+   algebraic dimension arguments, or entropy methods
+2. **Inductive/recursive**: Build from smaller cases
+3. **Ramsey goodness**: If B_{n-1} is "Ramsey good" wrt B_n, exact
+   formulas may apply (Nikiforov-Rousseau 2005)
+4. **Different graph family**: Perhaps non-vertex-transitive, non-regular,
+   or using a completely different combinatorial structure
+
+**Recommendation**: Pivot from CONSTRUCT to re-examine FALSIFY evidence
+and F2-literature. The problem may require a proof-theoretic approach
+(Ramsey goodness, Szemerédi regularity, or similar) rather than
+explicit witness construction.
 
 ## Status
 
-- H-C1-extended-paley: **REFUTED** (twin obstruction)
-- H-C1-cayley-alternative: **UNTESTED** — primary path, ready for Codex
-- New conjecture needed: H-C2-cayley-qr-embed (QR(97) in Z_98 as witness)
+- H-C1-extended-paley: **REFUTED** (twin obstruction + impossibility proof)
+- H-C1-cayley-alternative: **TESTED, FAILED** (Cayley Z_98 search unsuccessful)
+- H-C2-cayley-qr-embed: **REFUTED** (not symmetric mod 98, CN=27)
+- Approach 3 (any Paley extension): **PROVED IMPOSSIBLE**
+- **STRATEGIC PIVOT NEEDED**: construction approach may be wrong entirely
