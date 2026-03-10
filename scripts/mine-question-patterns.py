@@ -199,7 +199,6 @@ def main() -> None:
                 "entity_id": entry["entity_id"],
                 "question_id": entry["question_id"],
                 "cluster_id": int(labels[idx]),
-                "situation": entry["situation"],
             }
         )
 
