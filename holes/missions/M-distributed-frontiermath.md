@@ -221,8 +221,8 @@ matches the FrontierMath source. Signal @tickle BELL SPEC_VERIFIED when done.
 
 ## 2026-03-08 Update — SAT harness progress
 
-- Added `scripts/fm001/ramsey_book_sat.py` (futon3c repo) to build the unconstrained $K_{4n-2}$ book-Ramsey CNF and invoke Glucose via python-sat. Verified the harness on $n=3$ (witness at `/tmp/fm001-n3.json`); the $n=5$ instance already stresses Glucose, so symmetry reduction is next before pushing to the composite-modulus targets such as $n=23$.
-- Updated `data/proof-state/FM-001-falsify-plan.md` with the Wesley (2025) and Wigderson–Fox–Conlon references plus a composite-modulus experiment queue.
+- Added `scripts/fm001/ramsey_book_sat.py` to build the unconstrained $K_{4n-2}$ book-Ramsey CNF and invoke Glucose via python-sat. Verified the harness on $n=3$ (witness at `/tmp/fm001-n3.json`); the $n=5$ instance already stresses Glucose, so symmetry reduction is next before pushing to the composite-modulus targets such as $n=23$.
+- Updated `data/frontiermath-pilot/FM-001-falsify-plan.md` with the Wesley (2025) and Wigderson–Fox–Conlon references plus a composite-modulus experiment queue.
 - Created a local `.venv/` for the solver toolchain; leave it untracked and reuse it whenever running the harness.
 
 ```
@@ -232,6 +232,14 @@ check it against the source. Signal @tickle BELL SPEC_VERIFIED when done.
 ```
 
 Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
+
+## 2026-03-09 Update — F1-opposite sprint
+
+- Rebuilt the $n=5$ CNF (`[data/frontiermath-pilot/harness/FM001-n5.cnf.gz]`) from `scripts/fm001/ramsey_book_sat.py`. A Glucose4 run via PySAT stalled (>60 s without decision progress), so we are switching to a standalone `kissat-sc2023` build with a 2-hour wall-clock cap to either extract `n5-witness.json` or emit an UNSAT DRAT for ledger logging.
+- Generated the next instance $n=6$ (`[data/frontiermath-pilot/harness/FM001-n6.cnf.gz]`, 41 580 vars / 106 260 clauses) with `--no-solve` so we can immediately queue it once the $n=5$ outcome lands.
+- Action items: compile/install `kissat` in the shared toolchain, capture SHA512 hashes for both CNFs in `data/frontiermath-pilot/harness/README.md`, and record every solver outcome in the FM-001 strategy/falsification notes under `data/frontiermath-pilot/`.
+- Added a cheap vertex-order symmetry breaker (monotone incident edges on vertex 0) to the SAT encoding and regenerated the CNFs / SHA512 fingerprints so `kissat` and future solvers work on the reduced orbit space. After this change, `FM001-n5.cnf.gz` is 48 976 clauses (up from 48 960).
+- `kissat 4.0.4 --time=1800 FM001-n5.cnf` finished SAT in 11 s; the log (`[data/frontiermath-pilot/harness/FM001-n5.kissat.log]`) and decoded witness (`[data/frontiermath-pilot/harness/n5-witness.json]`) now live in the harness directory so H-F1(n=5) is marked refuted.
 
 ## Infrastructure Notes
 

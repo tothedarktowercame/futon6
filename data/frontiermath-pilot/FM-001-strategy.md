@@ -42,6 +42,34 @@ F1 also becomes the verification backbone for C3/C4.
 - **Resource bound**: Max 48 hours compute. If SAT is intractable for n > 8,
   switch to targeted random sampling.
 
+#### 2026-03-09 falsification sprint
+
+- **n = 5 (18 vertices)**: Rebuilt the CNF with `.venv/bin/python scripts/fm001/ramsey_book_sat.py 5`
+  and staged it as `[data/frontiermath-pilot/harness/FM001-n5.cnf.gz]` alongside
+  the historical `.gz`. A `glucose4` run via PySAT hung beyond 60 s with no
+  progress, so the next move is to compile `kissat` (SC 2023 build) and launch
+  a 2-hour budgeted solve that writes `n5-witness.json` or an UNSAT DRAT into
+  the harness directory. Whichever outcome lands must be logged in the
+  FM-001 strategy and mission notes as the `H-F1 (n=5)` outcome.
+- **kissat trial**: `kissat 4.0.4` solved the symmetry-broken `n=5` CNF in 11 s,
+  confirming SAT; the full log lives at
+  `[data/frontiermath-pilot/harness/FM001-n5.kissat.log]` and the decoded
+  witness at `[data/frontiermath-pilot/harness/n5-witness.json]`.
+- **Vertex-order symmetry**: Enforced a monotone ordering on the incident
+  edges of vertex 0 (`x_{0,1} ≥ x_{0,2} ≥ …`) inside
+  `[scripts/fm001/ramsey_book_sat.py]` so every solution can be relabelled to
+  satisfy the constraint; rebuilding the CNFs shrank the orbit search space
+  without touching satisfiability.
+- **n = 6 (22 vertices)**: Generated `[data/frontiermath-pilot/harness/FM001-n6.cnf.gz]`
+  (41 580 vars / 106 260 clauses) with `--no-solve` to size the next instance.
+  If `kissat` clears `n=5`, enqueue `n=6` immediately; otherwise, profile the
+  encoding to see whether clause tightening (e.g., symmetry breaking) is
+  required before escalating the vertex count.
+- **Ops discipline**: Every solver run gets a logline in `holes/missions/M-distributed-frontiermath.md`
+  plus SHA512 hashes for CNFs/DRATs; once a witness exists, mirror it into
+  `futon6/data/frontiermath-pilot/harness/` (JSON + `.graph6`) so collaborators
+  can replay verification without `/tmp` access.
+
 ### F2-literature — Literature search
 
 **Approach**: Systematic search for existing results.
@@ -58,9 +86,38 @@ F1 also becomes the verification backbone for C3/C4.
 - **Exit criterion**: Produce a table: for each tier n, does the block-circulant
   construction apply? What alternative constructions exist for non-prime-power cases?
 
+#### 2026-03-09 literature sweep
+
+- **Wesley 2025 (Discrete Math)**: Confirms `R(B_{n-1},B_n)=4n-1` for all `n≤20`
+  via SAT+DRAT certificates and extends the Paley-style 2-block-circulant
+  construction to every prime-power `q=2n-1 ≡ 1 (mod 4)`, which covers the
+  Tier-1 target `n=25 (q=49)` outright. The paper’s artifact list (CNFs +
+  proofs) is the template we should mirror when we publish new witnesses. citeturn1academia12
+- **Fox–Grinshpun–Liebenau–Person–Szabó–Wigderson 2023**: Tightens the
+  *off-diagonal* book Ramsey bounds to `R(B_{n-1}, B_m) = (2+o(1))m` when
+  `m/n → ∞`, giving evidence that the `4n-1` phenomenon persists even when the
+  parameters diverge. Their probabilistic+algebraic toolbox is a good source
+  for fallback constructions once we leave the exact-diagonal regime. citeturn1search4
+- **Nikiforov–Rousseau–Schelp 2005**: Establishes a quasirandomness/stability
+  principle — any coloring of `K_N` with no `B_n` must resemble the extremal
+  2-block template once `N ≥ 4n-1` — reinforcing why falsification must look
+  at genuinely smaller vertex counts. Their dependent-random-choice lemmas
+  translate directly into heuristics for Cayley/Z_99 searches. citeturn2search0
+- **Wigderson 2023 (Book Ramsey numbers I)**: Proves `R(B_p,B_q)=2q+3` for
+  `p ≤ q/6` and re-derives the Paley witness family, supplying a modular proof
+  skeleton we can reuse when documenting codex-generated constructions.
+  Highlights: explicit spectrum of Paley signatures and discussion of how
+  the complement constraints are verified. citeturn2search2
+- **Community search (MathOverflow/Math.SE)**: No targeted questions or answers
+  about `R(B_{n-1},B_n)` beyond older general Ramsey surveys surfaced in March
+  2026 sweeps (`book Ramsey` queries returned only Hales-Jewett discussions),
+  so F2 currently depends entirely on the research literature above. We should
+  open a MathOverflow thread ourselves once we have concrete non-prime-power
+  progress to show or specific conjectures to test. citeturn3search0
+
 ### 2026-03-08 Harness status
 
-- Ran `scripts/fm001/ramsey_book_sat.py` (futon3c) at `n=3` and `n=4`; both SAT instances solved instantly (witnesses at `/tmp/fm001-n3.json` and `/tmp/fm001-n4.json`).
+- Ran `scripts/fm001/ramsey_book_sat.py` in `futon6` at `n=3` and `n=4`; both SAT instances solved instantly (witnesses at `/tmp/fm001-n3.json` and `/tmp/fm001-n4.json`).
 - Generated the unsolved CNF for `n=5` (`/tmp/FM001-n5.cnf`, 18 360 vars / 48 960 clauses) for offline Sat/DRAT work without re-running Glucose locally.
 - Scoped the composite-modulus target: building the `n=23` instance (no solve yet) yields 90 vertices, 12 159 180 vars, and 26 080 560 clauses — solving requires heavier resources.
 - Archived the reproducible artifacts under `futon6/data/frontiermath-pilot/harness/` (`n3-witness.json`, `n4-witness.json`, `FM001-n5.cnf.gz`) so collaborators can inspect the witnesses/CNF without touching `/tmp`.
