@@ -38,6 +38,8 @@ tmp/
 .codex-home/
 *.aux
 *.log
+!data/frontiermath-pilot/harness/FM-001b-sat/n8-z3.log
+!data/frontiermath-pilot/harness/FM-001b-sat/test.log
 *.out
 *.fdb_latexmk
 *.fls
