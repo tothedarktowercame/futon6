@@ -12,3 +12,9 @@ launching SAT or checker runs.
 | `FM001-n7.cnf.gz` | 26-vertex ($n=7$) instance, unsolved (built with `--no-solve`) | `6460b7f8c03ac06da7d274596eb1bfbc4d3391e64b1b7f321e04687a2303c9aeca59a2508aa96f4ce9b4e086efead107003cd71d73b6658be89ea865ae8711e4` |
 | `n3-witness.json` | Witness coloring for $n=3$ confirming $R(B_{2},B_3)=11$ | `a2538e6871739844c400f3e2508fd46a49d2c0e17c7dcd5b7d1f2e00b02a7437fe49ceff26f2f8501aa3a74632833a4b716a03a15c28e8792fcf965caf015b36` |
 | `n4-witness.json` | Witness coloring for $n=4$ confirming $R(B_{3},B_4)=15$ | `d143e8217afd821c966e3e23ad24033b39a44da2c043ee6ebeb7228d34e36e5f5033eaf21b69603e2ed17a265bd8bee3caf8793b7b78f665e9003902540ff2ef` |
+
+## Scratch directories
+
+- `FM-001b-sat/` preserves intermediate FM-001b SAT scratch artifacts that were
+  temporarily produced outside `futon6`. They are kept here as a reminder that
+  experiment outputs need a canonical home in this harness.
