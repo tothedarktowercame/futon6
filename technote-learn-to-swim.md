@@ -226,6 +226,85 @@ structured inquiry) are the fulcrum; LLMs are the lever.
 
 ---
 
+## Horizon: provably minimal understanding paths
+
+The deepest version of this work isn't "produce a proof" or even
+"produce a better proof." It's: **given a reader's prior knowledge,
+produce the provably shortest path to understanding this proof.**
+
+A proof is a logical structure. Understanding a proof is a *path*
+through that structure. Different people need different paths depending
+on what they already know. The minimal path for someone who knows
+homological algebra but not field theory is different from the minimal
+path for someone who knows both but not the specific construction
+technique.
+
+### Why this is tractable
+
+Three things in the stack compose into the machinery for this:
+
+**1. The obligation DAG is the proof's dependency graph.**
+The proof peripheral already represents proofs as DAGs — nodes are
+concepts/lemmas, edges are dependencies. Minimality on a DAG is
+well-defined: shortest path from what you know to the theorem,
+weighted by learning cost per edge.
+
+**2. The question-asking patterns are the edges.**
+QP-5 (theorem applicability) is the edge "do I already know enough to
+apply this theorem?" QP-7 (kernel identification) is "what's the
+single node I'm missing?" Personalisation comes from which edges have
+zero cost for *this* reader — because they already know that step.
+
+**3. The AIF observation model gives the cost function.**
+Each reader's prior knowledge is an observation vector. Edges with
+high precision (reader already knows this) have low cost. Edges with
+low precision (new concept) have high cost. The minimal understanding
+path is the policy that minimises total free energy from the reader's
+current beliefs to the state where the proof is understood. This is
+literally what AIF computes — it's not metaphor.
+
+### The architecture
+
+```
+Reader's prior knowledge (observation vector)
+    │
+    ▼
+Proof obligation DAG (nodes = concepts/lemmas, edges = dependencies)
+    │
+    ▼
+Personalised shortest path (weighted by reader's knowledge gaps)
+    │
+    ▼
+Ordered sequence of explanations (each one is a QP-guided
+reconstruction of one edge in the minimal path)
+```
+
+### Why this is novel
+
+Nobody is working on provably minimal understanding paths. Proof
+assistants (Lean, Coq) verify correctness. Textbooks give one
+fixed path. Tutoring systems adapt pacing but not structure. The
+conjunction of proof DAGs, question-asking patterns, personalised
+observation vectors, and AIF-based path minimisation doesn't exist
+anywhere else.
+
+### Why this is a product
+
+"Give me the shortest path to understanding this paper, given what I
+already know" is something every graduate student and every researcher
+would use. The value proposition isn't "solve math problems" — it's
+"make mathematical knowledge accessible on a personalised basis, with
+provable minimality guarantees."
+
+This connects to the broader "why": opportunities to learn from
+practice are wasted because the paths to understanding are not made
+explicit. The minimal understanding path is the antidote — it tells
+you exactly what you need to learn, in what order, skipping everything
+you already know, with each step explained by the question-asking
+pattern that makes it intelligible.
+
+---
+
 ## Files referenced
 
 | File | What it provides |
