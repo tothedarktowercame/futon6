@@ -51,6 +51,15 @@ Proof-frame receipts:
     `futon3c`
   - can print the execute-phase payload, print the `/eval` form, or submit
     `pb/cycle-advance!` to a running local `futon3c`
+- `scripts/frontiermath/advance-proof-cycle-from-local-run.py`
+  - projects one existing `mfuton/data/frontiermath-local/<problem>/runs/<run-id>/`
+    bundle into the proof-frame seam
+  - requires explicit `--cycle-id` and optional `--blocker-id` until the
+    current run bundles carry those graph anchors natively
+  - emits a proof-frame receipt first, then hands that receipt to the existing
+    cycle-advance adapter
+- `scripts/frontiermath/advance-proof-cycle-from-local-run-windows.bat`
+  - Windows wrapper for the same owner-side local-run seam
 
 Open design issue:
 - proof-state-root and repo-layout assumptions are still unresolved
@@ -60,6 +69,9 @@ Open design issue:
 - the current Windows wrapper default to
   `mfuton/data/frontiermath-local/FM-001/active` is an owner-side local lane
   binding, not a claim that the broader cross-repo abstraction is solved
+- the current local-run bridge still needs explicit cycle/blocker anchors at
+  invocation time; that is an honest temporary requirement until the run
+  bundles themselves carry proof-graph ids
 - a future solution should make proof-frame execution container-friendly rather
   than binding it to one repo's local filesystem layout
 - when the bridge adapter is added later, it should map these receipts into

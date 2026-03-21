@@ -271,6 +271,10 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   - `scripts/frontiermath/emit-proof-frame-receipt.py`
   - `scripts/run-proof-stepper.py --proof-problem-id ...`
   - `scripts/frontiermath/advance-proof-cycle-from-frame-receipt.py`
+  - `scripts/frontiermath/advance-proof-cycle-from-local-run.py`
+    - projects one existing local `mfuton` run bundle into the proof-frame seam
+    - requires explicit cycle/blocker anchors until the current run bundle
+      shape carries them natively
 
 ## Infrastructure Notes
 
