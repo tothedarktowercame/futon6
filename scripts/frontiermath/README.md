@@ -12,6 +12,9 @@ Current wrapper:
     `futon3c`'s supported `--math-irc` switch
   - isolates Codex continuity to `futon6/.state/codex-frontiermath-local/`
   - defaults to a codex-only lane and disables Claude relay/register lanes
+  - defaults `FUTON3C_PROOF_STATE_ROOT` to
+    `mfuton/data/frontiermath-local/FM-001/active` via `MFUTON_ROOT`
+    without changing `futon3c`'s generic proof-tool surface
 - `scripts/frontiermath/local-futon3c-linux.sh`
   - starts local `futon3c` runtime plus `ngircd_bridge.py` under one shell
     wrapper
@@ -54,6 +57,9 @@ Open design issue:
   cross-repo abstractions
 - do not reintroduce FrontierMath-specific path assumptions into `futon3c`
   as a shortcut
+- the current Windows wrapper default to
+  `mfuton/data/frontiermath-local/FM-001/active` is an owner-side local lane
+  binding, not a claim that the broader cross-repo abstraction is solved
 - a future solution should make proof-frame execution container-friendly rather
   than binding it to one repo's local filesystem layout
 - when the bridge adapter is added later, it should map these receipts into

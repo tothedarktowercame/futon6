@@ -282,11 +282,13 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
 - **Post to #math**: `curl -s -X POST http://127.0.0.1:6769/say -H 'Content-Type: application/json' -d '{"from":"claude","channel":"#math","text":"..."}'`
 - **Tickle implementation**: `src/futon3c/agents/tickle.clj` (watchdog), `tickle_orchestrate.clj` (conductor), `dev.clj` tickle-lite (bell-driven)
 - **State files**: `data/first-proof/frontiermath-pilot/FM-00{1,2,3}-*-state.md`
-- **Local Windows bring-up**: `scripts/frontiermath/local-futon3c-windows.bat`
-  - set `FUTON3C_ROOT` first when the sibling `../futon3c` checkout is not the
-    intended runtime
-  - this wrapper intentionally does not set `FUTON3C_PROOF_STATE_ROOT`; that
-    abstraction still needs a general solution
+  - **Local Windows bring-up**: `scripts/frontiermath/local-futon3c-windows.bat`
+    - set `FUTON3C_ROOT` first when the sibling `../futon3c` checkout is not the
+      intended runtime
+    - this wrapper now defaults `FUTON3C_PROOF_STATE_ROOT` to
+      `mfuton/data/frontiermath-local/FM-001/active` through `MFUTON_ROOT`
+      for the current local Windows lane, without changing `futon3c`'s
+      generic proof-tooling surface
 - **Local Ubuntu/Linux bring-up**: `scripts/frontiermath/local-futon3c-linux.sh`
   - supervises both `make dev` and `scripts/ngircd_bridge.py`
   - defaults `CODEX_CWD` to the `futon6` root to reduce scattered work
