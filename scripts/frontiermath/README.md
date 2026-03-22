@@ -13,7 +13,9 @@ Current wrapper:
   - keeps `#futon` as the primary room and adds `#math` through
     `futon3c`'s supported `--math-irc` switch
   - isolates Codex continuity to `futon6/.state/codex-frontiermath-local/`
-  - defaults to a codex-only lane and disables Claude relay/register lanes
+  - defaults to a local FM lane with `codex` as the invoke bot and `tickle`
+    available as a bridge-visible system sender for room assignment pages
+  - disables Claude relay/register lanes by default
   - defaults to an isolated local rehearsal port quartet:
     - `FUTON1A_PORT=7271`
     - `FUTON3C_PORT=7270`

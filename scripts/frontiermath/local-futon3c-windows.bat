@@ -41,7 +41,7 @@ shift
 goto parse_args
 :args_parsed
 
-if not defined BRIDGE_BOTS set "BRIDGE_BOTS=codex"
+if not defined BRIDGE_BOTS set "BRIDGE_BOTS=codex,tickle"
 if not defined FUTON3C_CODEX_AGENT_ID set "FUTON3C_CODEX_AGENT_ID=codex-1"
 if not defined FUTON3C_REGISTER_CLAUDE set "FUTON3C_REGISTER_CLAUDE=false"
 if not defined FUTON3C_RELAY_CLAUDE set "FUTON3C_RELAY_CLAUDE=false"

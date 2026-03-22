@@ -245,7 +245,8 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
 
 - FrontierMath-specific local bring-up now belongs to `futon6`, not `futon3c`.
 - Use `scripts/frontiermath/local-futon3c-windows.bat` from this repo to start
-  the local codex-only FrontierMath lane on Windows.
+  the local FrontierMath lane on Windows, with `codex` as the invoke bot and
+  `tickle` available as the bridge-visible room-page sender.
   - the current Windows owner-side default prefers a sibling
     `futon3c-mfuton-overlay` checkout when present, then falls back to the
     sibling `futon3c` checkout
