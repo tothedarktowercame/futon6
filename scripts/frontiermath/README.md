@@ -8,10 +8,22 @@ Purpose:
 Current wrapper:
 - `scripts/frontiermath/local-futon3c-windows.bat`
   - starts a local `futon3c` dev lane for FrontierMath work
+  - prefers a sibling `futon3c-mfuton-overlay` checkout when present, then
+    falls back to the sibling `futon3c` checkout
   - keeps `#futon` as the primary room and adds `#math` through
     `futon3c`'s supported `--math-irc` switch
   - isolates Codex continuity to `futon6/.state/codex-frontiermath-local/`
   - defaults to a codex-only lane and disables Claude relay/register lanes
+  - defaults to an isolated local rehearsal port quartet:
+    - `FUTON1A_PORT=7271`
+    - `FUTON3C_PORT=7270`
+    - `FUTON3C_IRC_PORT=7667`
+    - `FUTON3C_DRAWBRIDGE_PORT=7768`
+  - isolates bridge-local runtime files and `/say` HTTP under the
+    FrontierMath lane defaults:
+    - `XDG_RUNTIME_DIR=mfuton/data/tmp/frontiermath-local/runtime`
+    - `BRIDGE_HTTP_PORT=7769`
+    - `INVOKE_BASE=http://127.0.0.1:7270`
   - defaults `FUTON3C_PROOF_STATE_ROOT` to
     `mfuton/data/frontiermath-local/FM-001/active` via `MFUTON_ROOT`
     without changing `futon3c`'s generic proof-tool surface

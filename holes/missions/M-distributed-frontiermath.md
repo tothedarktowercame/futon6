@@ -246,6 +246,14 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
 - FrontierMath-specific local bring-up now belongs to `futon6`, not `futon3c`.
 - Use `scripts/frontiermath/local-futon3c-windows.bat` from this repo to start
   the local codex-only FrontierMath lane on Windows.
+  - the current Windows owner-side default prefers a sibling
+    `futon3c-mfuton-overlay` checkout when present, then falls back to the
+    sibling `futon3c` checkout
+  - it also defaults the local rehearsal lane to ports
+    `7271/7270/7667/7768` unless the operator overrides them
+  - it isolates bridge pid/health files and bridge `/say` HTTP under the
+    FrontierMath lane via `XDG_RUNTIME_DIR`, `BRIDGE_HTTP_PORT`, and
+    `INVOKE_BASE`
 - Use `scripts/frontiermath/local-futon3c-linux.sh` from this repo to start
   the analogous local lane on Ubuntu GNU/Linux.
 - This wrapper owns:
@@ -287,8 +295,12 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
 - **Tickle implementation**: `src/futon3c/agents/tickle.clj` (watchdog), `tickle_orchestrate.clj` (conductor), `dev.clj` tickle-lite (bell-driven)
 - **State files**: `data/first-proof/frontiermath-pilot/FM-00{1,2,3}-*-state.md`
   - **Local Windows bring-up**: `scripts/frontiermath/local-futon3c-windows.bat`
-    - set `FUTON3C_ROOT` first when the sibling `../futon3c` checkout is not the
-      intended runtime
+    - prefers the sibling `../futon3c-mfuton-overlay` checkout when present,
+      then falls back to `../futon3c`
+    - defaults the local rehearsal lane to ports `7271/7270/7667/7768`
+    - defaults bridge runtime isolation to
+      `mfuton/data/tmp/frontiermath-local/runtime`, `BRIDGE_HTTP_PORT=7769`,
+      and `INVOKE_BASE=http://127.0.0.1:7270`
     - this wrapper now defaults `FUTON3C_PROOF_STATE_ROOT` to
       `mfuton/data/frontiermath-local/FM-001/active` through `MFUTON_ROOT`
       for the current local Windows lane, without changing `futon3c`'s
