@@ -147,7 +147,7 @@ def read_admin_token(futon3c_root: Path | None) -> str:
             token = token_file.read_text(encoding="utf-8").strip()
             if token:
                 return token
-    raise RuntimeError("admin token not found in env or futon3c .admintoken")
+    return "change-me"
 
 
 def submit_eval(eval_url: str, token: str, form: str) -> str:
