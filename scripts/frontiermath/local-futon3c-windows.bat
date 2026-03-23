@@ -47,6 +47,9 @@ if not defined FUTON3C_REGISTER_CLAUDE set "FUTON3C_REGISTER_CLAUDE=false"
 if not defined FUTON3C_RELAY_CLAUDE set "FUTON3C_RELAY_CLAUDE=false"
 if not defined IRC_CHANNEL set "IRC_CHANNEL=#futon"
 if not defined IRC_COMMAND_OWNER_AGENT_MAP set "IRC_COMMAND_OWNER_AGENT_MAP=#futon:codex-1,#math:codex-1"
+if not defined CODEX_PROFILE set "CODEX_PROFILE=frontiermath_worker"
+if not defined CODEX_SANDBOX set "CODEX_SANDBOX=workspace-write"
+if not defined CODEX_APPROVAL_POLICY set "CODEX_APPROVAL_POLICY=untrusted"
 if not defined CODEX_SESSION_FILE set "CODEX_SESSION_FILE=%REPO_ROOT%\.state\codex-frontiermath-local\session-id"
 if not defined CODEX_CWD set "CODEX_CWD=%REPO_ROOT%"
 if not defined CODEX_BRIDGE_SUMMARY_MODE set "CODEX_BRIDGE_SUMMARY_MODE=raw"
@@ -80,6 +83,8 @@ echo [frontiermath-local] futon3c=%FUTON3C_ROOT%
 echo [frontiermath-local] mfuton=%MFUTON_ROOT%
 echo [frontiermath-local] session=%CODEX_SESSION_FILE%
 echo [frontiermath-local] codex cwd=%CODEX_CWD%
+echo [frontiermath-local] codex profile=%CODEX_PROFILE%
+echo [frontiermath-local] codex permission=sandbox:%CODEX_SANDBOX% approval:%CODEX_APPROVAL_POLICY%
 echo [frontiermath-local] proof-state-root=%FUTON3C_PROOF_STATE_ROOT%
 echo [frontiermath-local] ports=http:%FUTON3C_PORT% health:%FUTON1A_PORT% irc:%FUTON3C_IRC_PORT% drawbridge:%FUTON3C_DRAWBRIDGE_PORT%
 echo [frontiermath-local] bridge-http=%BRIDGE_HTTP_PORT%
@@ -104,6 +109,9 @@ echo   FUTON3C_ROOT                 path to futon3c checkout ^(default: sibling 
 echo   MFUTON_ROOT                  path to mfuton checkout used for the local FM-001 active root
 echo   CODEX_SESSION_FILE           continuity file for the codex lane
 echo   CODEX_CWD                    working directory for codex execution ^(default: futon6 root^)
+echo   CODEX_PROFILE                Codex config profile for the worker lane ^(default: frontiermath_worker^)
+echo   CODEX_SANDBOX                Codex sandbox override ^(default: workspace-write^)
+echo   CODEX_APPROVAL_POLICY        Codex approval override ^(default: untrusted^)
 echo   FUTON3C_PROOF_STATE_ROOT     explicit proof-state root override ^(default: %%MFUTON_ROOT%%\data\frontiermath-local\FM-001\active^)
 echo   FUTON1A_PORT                 local health/evidence port ^(default 7271^)
 echo   FUTON3C_PORT                 local futon3c HTTP port ^(default 7270^)
