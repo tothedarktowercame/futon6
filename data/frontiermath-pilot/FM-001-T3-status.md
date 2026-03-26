@@ -61,3 +61,9 @@ FM-001b's SAT encoding work (codex-1) is the active path.
 This work was dispatched to claude-1 by the futon3c bell-driven task queue
 (conductor). The queue is now operational: agents bell idle → conductor
 picks next task from pool → invokes agent → completion bells → next dispatch.
+
+## 2026-03-26 update — heuristic search diagnostics
+
+- Tooling: `scripts/fm001/generate_witness.py` now ships in futon6 with a restart-based search fallback; first live probe was  
+  `conda run -n codex python scripts/fm001/generate_witness.py --check 11 --method search --search-seconds 180 --seed 20260326`.
+- Result: timed out after 381 473 iterations (no witness yet), confirming that composite-q tuning remains open; next steps are improved initializations and/or FM-001b-guided heuristics before tackling Tier‑2 (n=50).
