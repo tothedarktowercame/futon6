@@ -322,3 +322,4 @@ pattern that makes it intelligible.
 | `futon3/library/f6/*.flexiarg` | 10 math-specific patterns |
 | `holes/handoffs/question-asking-as-reverse-morphogenesis.md` | ← theory |
 | `holes/handoffs/question-asking-pattern-mining-from-mo-rm-2026-03-06.md` | Mining handoff |
+| `resources/Mathsistant814.pdf` | Prior grant proposal (Corneli, Sheridan, Sheridan et al.) — T2A/T2B/T2C anticipate the obligation DAG, explainable recommendations, and user modelling that the horizon section grounds in AIF |

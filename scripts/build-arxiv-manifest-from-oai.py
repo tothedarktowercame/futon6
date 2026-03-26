@@ -11,6 +11,7 @@ import argparse
 import json
 import sqlite3
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -49,10 +50,37 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def req_xml(url: str, user_agent: str, timeout: int) -> bytes:
+def req_xml(
+    url: str,
+    user_agent: str,
+    timeout: int,
+    retries: int,
+    retry_sleep_seconds: float,
+) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": user_agent})
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read()
+    attempts = retries + 1
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read()
+        except (
+            TimeoutError,
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+        ) as exc:
+            last_error = exc
+            if isinstance(exc, urllib.error.HTTPError) and 400 <= exc.code < 500:
+                raise
+            if attempt >= attempts:
+                raise
+            wait_seconds = retry_sleep_seconds * attempt
+            print(
+                f"[retry] attempt={attempt}/{attempts} wait={wait_seconds:.1f}s "
+                f"url={url} error={exc}"
+            )
+            time.sleep(wait_seconds)
+    raise RuntimeError(f"unreachable req_xml failure: {last_error}")
 
 
 def normalize_text(s: str) -> str:
@@ -293,7 +321,13 @@ def run_harvest(args: argparse.Namespace) -> int:
             if page > 1 and args.sleep_seconds > 0:
                 time.sleep(args.sleep_seconds)
 
-            xml_bytes = req_xml(url, args.user_agent, args.timeout)
+            xml_bytes = req_xml(
+                url,
+                args.user_agent,
+                args.timeout,
+                args.retries,
+                args.retry_sleep_seconds,
+            )
             root = ET.fromstring(xml_bytes)
 
             records = root.findall("oai:ListRecords/oai:record", NS)
@@ -405,6 +439,13 @@ def main() -> int:
     ap.add_argument("--include-crosslists", action="store_true", default=False)
     ap.add_argument("--sleep-seconds", type=float, default=3.1)
     ap.add_argument("--timeout", type=int, default=60)
+    ap.add_argument("--retries", type=int, default=6, help="Retry transient request failures")
+    ap.add_argument(
+        "--retry-sleep-seconds",
+        type=float,
+        default=10.0,
+        help="Base sleep between request retries; multiplied by attempt number",
+    )
     ap.add_argument("--resume", action="store_true", default=True)
     ap.add_argument("--no-resume", action="store_true", help="Do not resume from saved token")
     ap.add_argument("--notes", default="")
