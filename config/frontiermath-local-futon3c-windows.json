@@ -3,9 +3,11 @@
     "futon3c_base_env_name": "unix_dev_linode_env",
     "base_env_overlay": {
       "BRIDGE_BOTS": "math-curator,math-mentor,codex,tickle",
+      "CODEX_APPROVAL_POLICY": "on-request",
       "CODEX_BRIDGE_SUMMARY_MODE": "raw",
-      "CODEX_CWD": ".",
+      "CODEX_CWD": "../../gh",
       "CODEX_PROFILE": "frontiermath_worker",
+      "CODEX_SANDBOX": "workspace-write",
       "CODEX_SESSION_FILE": ".state/codex-frontiermath-local/session-id",
       "FUTON3C_CODEX_AGENT_ID": "codex-1",
       "FUTON3C_DIRECT_INVOKE_TIMEOUT_SECONDS": 30,
