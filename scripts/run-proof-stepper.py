@@ -15,6 +15,7 @@ import json
 import re
 import shlex
 import subprocess
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -245,7 +246,7 @@ def compare_arms(
     json_out = run_dir / f"compare-{ctag}.json"
 
     cmd = [
-        "python3",
+        sys.executable,
         str(compare_script),
         "--baseline",
         str(baseline.output_jsonl),
@@ -373,7 +374,7 @@ def emit_boundary_receipt(
     record_path = run_dir / "record.json"
 
     cmd = [
-        "python3",
+        sys.executable,
         str(emitter),
         "--problem-id",
         str(args.proof_problem_id),

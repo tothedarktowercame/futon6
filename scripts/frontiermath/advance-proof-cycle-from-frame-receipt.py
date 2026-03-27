@@ -147,7 +147,10 @@ def read_admin_token(futon3c_root: Path | None) -> str:
             token = token_file.read_text(encoding="utf-8").strip()
             if token:
                 return token
-    return "change-me"
+    raise SystemExit(
+        "No admin token found. Set FUTON3C_ADMIN_TOKEN or ADMIN_TOKEN, "
+        "or create .admintoken in the futon3c root."
+    )
 
 
 def submit_eval(eval_url: str, token: str, form: str) -> str:
