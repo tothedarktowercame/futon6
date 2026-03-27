@@ -2,7 +2,7 @@
   "launcher": {
     "futon3c_base_env_name": "unix_dev_linode_env",
     "base_env_overlay": {
-      "BRIDGE_BOTS": "claude,claude-2,codex,tickle",
+      "BRIDGE_BOTS": "math-curator,math-mentor,codex,tickle",
       "CODEX_BRIDGE_SUMMARY_MODE": "raw",
       "CODEX_CWD": ".",
       "CODEX_PROFILE": "frontiermath_worker",
@@ -25,7 +25,7 @@
       "IRC_COMMAND_OWNER_AGENT_MAP": "#futon:codex-1,#math:codex-1",
       "IRC_HOST": "127.0.0.1",
       "MATH_IRC": true,
-      "NICK_AGENT_MAP": "claude:claude-1,claude-2:claude-2,codex:codex-1,tickle:tickle-1",
+      "NICK_AGENT_MAP": "math-curator:claude-1,math-mentor:claude-2,codex:codex-1,tickle:tickle-1",
       "USE_LOCAL_IRC": "1",
       "XDG_RUNTIME_DIR": "data/tmp/frontiermath-local/runtime"
     },
