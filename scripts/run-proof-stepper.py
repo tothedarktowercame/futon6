@@ -15,6 +15,7 @@ import json
 import re
 import shlex
 import subprocess
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -245,7 +246,7 @@ def compare_arms(
     json_out = run_dir / f"compare-{ctag}.json"
 
     cmd = [
-        "python3",
+        sys.executable,
         str(compare_script),
         "--baseline",
         str(baseline.output_jsonl),
@@ -360,6 +361,56 @@ def render_summary_md(
     return "\n".join(lines) + "\n"
 
 
+def emit_boundary_receipt(
+    repo_root: Path,
+    experiment_id: str,
+    run_dir: Path,
+    manifest_copy: Path,
+    args: argparse.Namespace,
+) -> str:
+    emitter = repo_root / "scripts" / "frontiermath" / "emit-proof-frame-receipt.py"
+    frame_id = args.proof_frame_id or f"{sanitize_label(experiment_id)}-{run_dir.name}"
+    summary_path = run_dir / "summary.md"
+    record_path = run_dir / "record.json"
+
+    cmd = [
+        sys.executable,
+        str(emitter),
+        "--problem-id",
+        str(args.proof_problem_id),
+        "--frame-id",
+        frame_id,
+        "--frame-label",
+        experiment_id,
+        "--boundary-kind",
+        args.boundary_kind,
+        "--entrypoint",
+        "python3 scripts/run-proof-stepper.py",
+        "--artifact",
+        str(manifest_copy),
+        "--artifact",
+        str(summary_path),
+        "--artifact",
+        str(record_path),
+        "--input",
+        str(manifest_copy),
+        "--writable",
+        str(run_dir),
+        "--case-anchor",
+        str(manifest_copy),
+    ]
+    if args.proof_cycle_id:
+        cmd.extend(["--cycle-id", str(args.proof_cycle_id)])
+    if args.proof_blocker_id:
+        cmd.extend(["--blocker-id", str(args.proof_blocker_id)])
+
+    proc = subprocess.run(cmd, cwd=str(repo_root), text=True, capture_output=True)
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout or "boundary receipt emission failed").strip()
+        raise RuntimeError(detail)
+    return (proc.stdout or "").strip()
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--manifest", type=Path, required=True)
@@ -367,6 +418,14 @@ def main() -> int:
                     help="Do not execute commands; only summarize/compare existing outputs")
     ap.add_argument("--run-dir", type=Path, default=None,
                     help="Optional explicit run directory")
+    ap.add_argument("--proof-problem-id",
+                    help="Emit a futon6 proof frame receipt anchored to this proof problem")
+    ap.add_argument("--proof-cycle-id")
+    ap.add_argument("--proof-blocker-id")
+    ap.add_argument("--proof-frame-id",
+                    help="Optional explicit receipt frame id; defaults to experiment + run stamp")
+    ap.add_argument("--boundary-kind", choices=["container", "workspace", "frame"],
+                    default="workspace")
     args = ap.parse_args()
 
     repo_root = Path(__file__).resolve().parent.parent
@@ -453,10 +512,25 @@ def main() -> int:
         "interventions": intervention_results,
         "comparisons": comparisons,
     }
-    (run_dir / "record.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    record_path = run_dir / "record.json"
+    record_path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    boundary_receipt = None
+    if args.proof_problem_id:
+        boundary_receipt = emit_boundary_receipt(
+            repo_root=repo_root,
+            experiment_id=experiment_id,
+            run_dir=run_dir,
+            manifest_copy=manifest_copy,
+            args=args,
+        )
+        record["boundary_receipt"] = boundary_receipt
+        record_path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"stepper run completed: {run_dir}")
     print(f"summary: {run_dir / 'summary.md'}")
+    if boundary_receipt:
+        print(f"boundary receipt: {boundary_receipt}")
     return 0
 
 

@@ -241,6 +241,50 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
 - Added a cheap vertex-order symmetry breaker (monotone incident edges on vertex 0) to the SAT encoding and regenerated the CNFs / SHA512 fingerprints so `kissat` and future solvers work on the reduced orbit space. After this change, `FM001-n5.cnf.gz` is 48 976 clauses (up from 48 960).
 - `kissat 4.0.4 --time=1800 FM001-n5.cnf` finished SAT in 11 s; the log (`[data/frontiermath-pilot/harness/FM001-n5.kissat.log]`) and decoded witness (`[data/frontiermath-pilot/harness/n5-witness.json]`) now live in the harness directory so H-F1(n=5) is marked refuted.
 
+## 2026-03-20 Update — Ownership Boundary
+
+- FrontierMath-specific local bring-up now belongs to `futon6`, not `futon3c`.
+- Use `scripts/frontiermath/local-futon3c-windows.bat` from this repo to start
+  the local FrontierMath lane on Windows, with `codex` as the invoke bot and
+  `tickle` available as the bridge-visible room-page sender.
+  - the current Windows owner-side default prefers a sibling
+    `futon3c-mfuton-overlay` checkout when present, then falls back to the
+    sibling `futon3c` checkout
+  - it also defaults the local rehearsal lane to ports
+    `7271/7270/7667/7768` unless the operator overrides them
+  - it isolates bridge pid/health files and bridge `/say` HTTP under the
+    FrontierMath lane via `XDG_RUNTIME_DIR`, `BRIDGE_HTTP_PORT`, and
+    `INVOKE_BASE`
+- Use `scripts/frontiermath/local-futon3c-linux.sh` from this repo to start
+  the analogous local lane on Ubuntu GNU/Linux.
+- This wrapper owns:
+  - FrontierMath session continuity (`.state/codex-frontiermath-local/`)
+  - local room policy (`#futon` primary, `#math` joined via the supported
+    `futon3c` `--math-irc` surface)
+  - FrontierMath-specific bare `!` ownership defaults when the current
+    `futon3c` bridge supports room-owner maps
+  - `CODEX_CWD=<futon6-root>` by default so local proof work lands in
+    `futon6` rather than scattering into whichever repo booted the runtime
+- `futon3c` remains the generic runtime, IRC bridge, and proof-tool substrate.
+- Proof-state-root and repo-layout assumptions are still open cross-repo
+  design problems. Do not solve them by hard-coding FrontierMath-specific
+  filesystem assumptions into `futon3c`; the eventual fix should support
+  container-friendly proof-frame execution.
+- The proof DAG question is settled as follows:
+  - `futon3c`'s obligation DAG remains the mathematical dependency graph
+  - `futon6` may add a separate execution-trace graph of proof frame
+    receipts, but that graph must only attach to obligation nodes/cycles and
+    must not redefine proof dependencies
+- Seed implementation:
+  - `scripts/frontiermath/proof-frame-receipt.md`
+  - `scripts/frontiermath/emit-proof-frame-receipt.py`
+  - `scripts/run-proof-stepper.py --proof-problem-id ...`
+  - `scripts/frontiermath/advance-proof-cycle-from-frame-receipt.py`
+  - `scripts/frontiermath/advance-proof-cycle-from-local-run.py`
+    - projects one existing local `mfuton` run bundle into the proof-frame seam
+    - requires explicit cycle/blocker anchors until the current run bundle
+      shape carries them natively
+
 ## Infrastructure Notes
 
 - **Bridge env**: `~/.config/futon3c/bridge-futon.env`
@@ -251,3 +295,18 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
 - **Post to #math**: `curl -s -X POST http://127.0.0.1:6769/say -H 'Content-Type: application/json' -d '{"from":"claude","channel":"#math","text":"..."}'`
 - **Tickle implementation**: `src/futon3c/agents/tickle.clj` (watchdog), `tickle_orchestrate.clj` (conductor), `dev.clj` tickle-lite (bell-driven)
 - **State files**: `data/first-proof/frontiermath-pilot/FM-00{1,2,3}-*-state.md`
+  - **Local Windows bring-up**: `scripts/frontiermath/local-futon3c-windows.bat`
+    - prefers the sibling `../futon3c-mfuton-overlay` checkout when present,
+      then falls back to `../futon3c`
+    - defaults the local rehearsal lane to ports `7271/7270/7667/7768`
+    - defaults bridge runtime isolation to
+      `mfuton/data/tmp/frontiermath-local/runtime`, `BRIDGE_HTTP_PORT=7769`,
+      and `INVOKE_BASE=http://127.0.0.1:7270`
+    - this wrapper now defaults `FUTON3C_PROOF_STATE_ROOT` to
+      `mfuton/data/frontiermath-local/FM-001/active` through `MFUTON_ROOT`
+      for the current local Windows lane, without changing `futon3c`'s
+      generic proof-tooling surface
+- **Local Ubuntu/Linux bring-up**: `scripts/frontiermath/local-futon3c-linux.sh`
+  - supervises both `make dev` and `scripts/ngircd_bridge.py`
+  - defaults `CODEX_CWD` to the `futon6` root to reduce scattered work
+  - also intentionally leaves `FUTON3C_PROOF_STATE_ROOT` unset

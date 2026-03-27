@@ -1,0 +1,69 @@
+{
+  "launcher": {
+    "futon3c_base_env_name": "unix_dev_linode_env",
+    "base_env_overlay": {
+      "BRIDGE_BOTS": "math-curator,math-mentor,codex,tickle",
+      "CODEX_APPROVAL_POLICY": "on-request",
+      "CODEX_BRIDGE_SUMMARY_MODE": "raw",
+      "CODEX_CWD": "../../gh",
+      "CODEX_PROFILE": "frontiermath_worker",
+      "CODEX_SANDBOX": "workspace-write",
+      "CODEX_SESSION_FILE": ".state/codex-frontiermath-local/session-id",
+      "FUTON3C_CODEX_AGENT_ID": "codex-1",
+      "FUTON3C_DIRECT_INVOKE_TIMEOUT_SECONDS": 30,
+      "FUTON3C_FM_CONDUCTOR_AUTOSTART": true,
+      "FUTON3C_FM_CONDUCTOR_ROTATION": "codex-1",
+      "FUTON3C_FRONTIERMATH_ROOT": "data/frontiermath-local/source/futon6-frontiermath-local-ops",
+      "FUTON3C_IRC_LANE": "local",
+      "FUTON3C_IRC_LANE_NORMALIZED": "local",
+      "FUTON3C_MFUTON_MODE": "mfuton",
+      "FUTON3C_PROOF_STATE_ROOT": "data/frontiermath-local/FM-001/active",
+      "FUTON3C_REGISTER_CLAUDE2": true,
+      "FUTON3C_REGISTER_CODEX": true,
+      "INVOKE_INTERRUPT_READY_POLL_SECONDS": 1,
+      "INVOKE_INTERRUPT_READY_TIMEOUT_SECONDS": 30,
+      "INVOKE_INTERRUPT_WHEN_BUSY": true,
+      "IRC_CHANNEL": "#futon",
+      "IRC_COMMAND_OWNER_AGENT_MAP": "#futon:codex-1,#math:codex-1",
+      "IRC_HOST": "127.0.0.1",
+      "MATH_IRC": true,
+      "NICK_AGENT_MAP": "math-curator:claude-1,math-mentor:claude-2,codex:codex-1,tickle:tickle-1",
+      "USE_LOCAL_IRC": "1",
+      "XDG_RUNTIME_DIR": "data/tmp/frontiermath-local/runtime"
+    },
+    "prod_env_overlay": {
+      "BRIDGE_HTTP_PORT": 6769,
+      "FUTON1A_PORT": 7071,
+      "FUTON3C_DRAWBRIDGE_PORT": 6768,
+      "FUTON3C_IRC_PORT": 6667,
+      "FUTON3C_PORT": 7070,
+      "FUTON3C_SELF_URL": "http://127.0.0.1:7070",
+      "FUTON5_PORT": 7072,
+      "FUTON4_BASE_URL": "http://localhost:7071/api/alpha",
+      "INVOKE_BASE": "http://127.0.0.1:7070",
+      "IRC_PORT": 6667,
+      "PORT_PROFILE": "prod"
+    },
+    "dev_env_overlay": {
+      "BRIDGE_HTTP_PORT": 7769,
+      "FUTON1A_PORT": 7271,
+      "FUTON3C_DRAWBRIDGE_PORT": 7768,
+      "FUTON3C_IRC_PORT": 7667,
+      "FUTON3C_PORT": 7270,
+      "FUTON3C_SELF_URL": "http://127.0.0.1:7270",
+      "FUTON5_PORT": 7272,
+      "FUTON4_BASE_URL": "http://localhost:7271/api/alpha",
+      "INVOKE_BASE": "http://127.0.0.1:7270",
+      "IRC_PORT": 7667,
+      "PORT_PROFILE": "dev"
+    },
+    "remote_irc_overlay_env": {
+      "FUTON3C_IRC_LANE": "linode",
+      "FUTON3C_IRC_LANE_NORMALIZED": "linode",
+      "FUTON3C_IRC_PORT": 0,
+      "IRC_HOST": "172.236.28.208",
+      "IRC_PORT": 6667,
+      "USE_LOCAL_IRC": "0"
+    }
+  }
+}
