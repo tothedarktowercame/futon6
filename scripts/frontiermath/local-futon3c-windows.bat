@@ -14,7 +14,11 @@ if not defined MFUTON_HOME (
 for %%I in ("%MFUTON_HOME%") do set "MFUTON_HOME=%%~fI"
 set "MFUTON_CODEX_PY=%MFUTON_HOME%\agent_skills\development\codex-python.bat"
 set "MFUTON_LAUNCHER=%MFUTON_HOME%\src\mfuton\development\frontiermath_local_futon3c_windows.py"
-set "FRONTIERMATH_LOCAL_CONFIG=%REPO_ROOT%\config\frontiermath-local-futon3c-windows.json"
+if defined FUTON6_FRONTIERMATH_LOCAL_CONFIG (
+  set "FRONTIERMATH_LOCAL_CONFIG=%FUTON6_FRONTIERMATH_LOCAL_CONFIG%"
+) else (
+  set "FRONTIERMATH_LOCAL_CONFIG=%REPO_ROOT%\config\frontiermath-local-futon3c-windows.json"
+)
 
 if not exist "%MFUTON_CODEX_PY%" (
   1>&2 echo [frontiermath-local] ERROR: missing %MFUTON_CODEX_PY%.
@@ -31,5 +35,6 @@ if not exist "%FRONTIERMATH_LOCAL_CONFIG%" (
   exit /b 1
 )
 
+echo [frontiermath-local] config=%FRONTIERMATH_LOCAL_CONFIG%
 call "%MFUTON_CODEX_PY%" "%MFUTON_LAUNCHER%" --futon6-root "%REPO_ROOT%" --config "%FRONTIERMATH_LOCAL_CONFIG%" %*
 exit /b %ERRORLEVEL%
