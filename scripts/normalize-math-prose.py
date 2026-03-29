@@ -142,7 +142,9 @@ DMU_TOKEN_RE = re.compile(
     r"(?<![A-Za-z0-9_])dmu(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+)?(?=[^A-Za-z0-9_]|$)"
 )
 INTEGRAL_TOKEN_RE = re.compile(
-    r"(?<![A-Za-z0-9_])integral(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+)?(?=[^A-Za-z0-9_]|$)"
+    r"(?<![A-Za-z0-9_])integral(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+)(?=[^A-Za-z0-9_]|$)"
+    # Note: requires subscript (integral_{...} or integral_X). Bare "integral"
+    # as a noun (Pettis integral, integral domain) is NOT matched.
 )
 SIMPLE_COMPARISON_RE = re.compile(
     r"(?<![$\\])\b([A-Za-z][A-Za-z0-9_]*|\d+)\s*([<>])\s*([A-Za-z][A-Za-z0-9_]*|\d+)\b"
