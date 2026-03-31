@@ -51,6 +51,12 @@ def default_output(problem_id: str, frame_id: str) -> Path:
     return REPO_ROOT / ".state" / "proof-frames" / problem_id / f"{frame_id}.json"
 
 
+def load_workspace_metadata(path: str | None) -> dict | None:
+    if not path:
+        return None
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
 def build_graph_refs(args: argparse.Namespace) -> list[dict[str, str]]:
     refs: list[dict[str, str]] = [
         {"ref/type": "proof-problem", "ref/id": args.problem_id},
@@ -100,6 +106,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--writable", action="append", default=[])
     ap.add_argument("--upstream-boundary", action="append", default=[])
     ap.add_argument("--case-anchor")
+    ap.add_argument("--workspace-metadata")
     ap.add_argument("--output")
     return ap.parse_args()
 
@@ -115,7 +122,34 @@ def main() -> int:
     workdir = args.workdir or str(Path.cwd().resolve())
     boundary_id = args.boundary_id or args.frame_id
     trace_id = args.trace_id or boundary_id
+    workspace_metadata = load_workspace_metadata(args.workspace_metadata)
     artifacts = norm_paths(args.artifact)
+    workspace_map = None
+    if workspace_metadata:
+        workspace_map = {
+            "workspace/root": workspace_metadata.get("frame/workspace-root"),
+            "workspace/module-root": workspace_metadata.get("frame/module-root"),
+            "workspace/lean-root": workspace_metadata.get("frame/lean-root"),
+            "workspace/shared-extension-root": workspace_metadata.get("frame/shared-extension-root"),
+            "workspace/proof-plan": workspace_metadata.get("artifacts", {}).get("proof-plan"),
+            "workspace/changelog": workspace_metadata.get("artifacts", {}).get("changelog"),
+            "workspace/execute-notes": workspace_metadata.get("artifacts", {}).get("execute-notes"),
+            "workspace/lean-main": workspace_metadata.get("artifacts", {}).get("lean-main"),
+            "workspace/lean-scratch": workspace_metadata.get("artifacts", {}).get("lean-scratch"),
+            "workspace/metadata": workspace_metadata.get("artifacts", {}).get("workspace-metadata"),
+        }
+        for key in (
+            "proof-plan",
+            "changelog",
+            "execute-notes",
+            "lean-main",
+            "lean-scratch",
+            "workspace-metadata",
+        ):
+            raw = workspace_metadata.get("artifacts", {}).get(key)
+            if isinstance(raw, str) and raw.strip():
+                artifacts.append(str(Path(raw).resolve()))
+    artifacts = list(dict.fromkeys(artifacts))
     graph_refs = build_graph_refs(args)
     algorithm_ref = {"ref/type": "algorithm", "ref/id": args.algorithm_ref}
 
@@ -149,6 +183,8 @@ def main() -> int:
         "frame/artifacts": artifacts,
         "case-anchor": args.case_anchor,
     }
+    if workspace_map:
+        receipt["frame/workspace"] = workspace_map
 
     output_path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     print(output_path)
