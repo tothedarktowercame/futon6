@@ -56,6 +56,7 @@ def build_metadata(problem_id: str, frame_id: str, *, apm_lean_root: Path) -> di
         "frame/shared-extension-root": str(local_root),
         "artifacts": {
             "proof-plan": str(workspace / "proof-plan.edn"),
+            "formal-alignment": str(workspace / "formal-alignment.edn"),
             "changelog": str(workspace / "changelog.edn"),
             "execute-notes": str(workspace / "execute.md"),
             "workspace-readme": str(workspace / "README.md"),
@@ -94,6 +95,17 @@ def changelog_template(problem_id: str, frame_id: str) -> str:
     )
 
 
+def formal_alignment_template(problem_id: str) -> str:
+    return (
+        "{:problem-id "
+        + repr(problem_id)
+        + "\n :main-claim {:informal-claim \"\"\n"
+        + "             :formal-name \"\"\n"
+        + "             :formal-target \"\"}\n"
+        + " :alignments []}\n"
+    )
+
+
 def execute_template(metadata: dict) -> str:
     return f"""**Stage 1 — THE CLEAN PROOF**
 
@@ -107,6 +119,9 @@ def execute_template(metadata: dict) -> str:
 
 The machine-readable plan lives at:
 {metadata["artifacts"]["proof-plan"]}
+
+The formal/informal alignment artifact lives at:
+{metadata["artifacts"]["formal-alignment"]}
 
 **Stage 3 — LEAN FORMALIZATION**
 
@@ -214,6 +229,7 @@ def main() -> int:
         Path(metadata["artifacts"]["proof-plan"]): plan_template(
             args.problem_id, args.frame_id, metadata["frame/module-root"]
         ),
+        Path(metadata["artifacts"]["formal-alignment"]): formal_alignment_template(args.problem_id),
         Path(metadata["artifacts"]["changelog"]): changelog_template(args.problem_id, args.frame_id),
         Path(metadata["artifacts"]["execute-notes"]): execute_template(metadata),
         Path(metadata["artifacts"]["workspace-readme"]): readme_template(metadata),

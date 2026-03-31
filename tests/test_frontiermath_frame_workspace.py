@@ -41,6 +41,7 @@ class FrameWorkspaceInitTest(unittest.TestCase):
             self.assertEqual(metadata["proof/problem-id"], "a02J04")
             self.assertIn("ApmCanaries.Frames.A02J04", metadata["frame/module-root"])
             self.assertTrue(metadata["artifacts"]["lean-main"].endswith("Main.lean"))
+            self.assertTrue(metadata["artifacts"]["formal-alignment"].endswith("formal-alignment.edn"))
 
     def test_receipt_can_embed_workspace_map(self) -> None:
         with TemporaryDirectory() as tmp_dir:
@@ -54,6 +55,7 @@ class FrameWorkspaceInitTest(unittest.TestCase):
                         "frame/shared-extension-root": "/tmp/apm-lean/ApmCanaries/Local",
                         "artifacts": {
                             "proof-plan": "/tmp/ws/proof-plan.edn",
+                            "formal-alignment": "/tmp/ws/formal-alignment.edn",
                             "changelog": "/tmp/ws/changelog.edn",
                             "execute-notes": "/tmp/ws/execute.md",
                             "lean-main": "/tmp/apm-lean/ApmCanaries/Frames/A02J04/FRunner/Main.lean",

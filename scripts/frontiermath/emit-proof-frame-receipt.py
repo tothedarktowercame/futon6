@@ -132,6 +132,7 @@ def main() -> int:
             "workspace/lean-root": workspace_metadata.get("frame/lean-root"),
             "workspace/shared-extension-root": workspace_metadata.get("frame/shared-extension-root"),
             "workspace/proof-plan": workspace_metadata.get("artifacts", {}).get("proof-plan"),
+            "workspace/formal-alignment": workspace_metadata.get("artifacts", {}).get("formal-alignment"),
             "workspace/changelog": workspace_metadata.get("artifacts", {}).get("changelog"),
             "workspace/execute-notes": workspace_metadata.get("artifacts", {}).get("execute-notes"),
             "workspace/lean-main": workspace_metadata.get("artifacts", {}).get("lean-main"),
@@ -140,6 +141,7 @@ def main() -> int:
         }
         for key in (
             "proof-plan",
+            "formal-alignment",
             "changelog",
             "execute-notes",
             "lean-main",
