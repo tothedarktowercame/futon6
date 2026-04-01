@@ -101,7 +101,11 @@ def formal_alignment_template(problem_id: str) -> str:
         + repr(problem_id)
         + "\n :main-claim {:informal-claim \"\"\n"
         + "             :formal-name \"\"\n"
-        + "             :formal-target \"\"}\n"
+        + "             :formal-target \"\"\n"
+        + "             :sanity-check {:mentions-problem-objects? false\n"
+        + "                            :avoids-assuming-conclusion? false\n"
+        + "                            :meaningful-without-prose? false\n"
+        + "                            :notes \"\"}}\n"
         + " :alignments []}\n"
     )
 

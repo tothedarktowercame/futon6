@@ -42,6 +42,9 @@ class FrameWorkspaceInitTest(unittest.TestCase):
             self.assertIn("ApmCanaries.Frames.A02J04", metadata["frame/module-root"])
             self.assertTrue(metadata["artifacts"]["lean-main"].endswith("Main.lean"))
             self.assertTrue(metadata["artifacts"]["formal-alignment"].endswith("formal-alignment.edn"))
+            template = self.init_mod.formal_alignment_template("a02J04")
+            self.assertIn(":sanity-check", template)
+            self.assertIn(":avoids-assuming-conclusion? false", template)
 
     def test_receipt_can_embed_workspace_map(self) -> None:
         with TemporaryDirectory() as tmp_dir:
