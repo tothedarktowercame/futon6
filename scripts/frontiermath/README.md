@@ -113,6 +113,20 @@ Proof-frame receipts:
 - `scripts/frontiermath/advance-proof-cycle-from-local-run-windows.bat`
   - Windows wrapper for the same owner-side local-run seam
 
+Proof-frame workspaces:
+- `scripts/frontiermath/proof-frame-workspace.md`
+  - defines the owner-side workspace convention that receipts alone do not provide
+  - keeps per-frame scratch separate from reusable local extension work
+- `scripts/frontiermath/init-proof-frame-workspace.py`
+  - creates one frame-local workspace rooted in `futon6/.state/proof-frames/`
+  - also creates per-frame Lean files under `apm-lean/ApmCanaries/Frames/...`
+  - seeds `proof-plan.edn`, `changelog.edn`, and `execute.md`
+- `scripts/frontiermath/promote-proof-frame-lean.py`
+  - copies stabilized Lean material from one frame workspace into
+    `apm-lean/ApmCanaries/Local/...`
+  - keeps promotion explicit instead of using the shared local extension area as
+    scratch space
+
 Open design issue:
 - proof-state-root and repo-layout assumptions are still unresolved
   cross-repo abstractions
@@ -130,3 +144,6 @@ Open design issue:
   `futon3c` execute-phase payloads without creating a second proof DAG
   - seed adapter now exists in
     `scripts/frontiermath/advance-proof-cycle-from-frame-receipt.py`
+- frame-local workspaces are now the intended owner-side answer to parallel
+  scratch isolation; receipts continue to record provenance rather than
+  replacing workspace boundaries

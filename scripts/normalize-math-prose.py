@@ -142,7 +142,9 @@ DMU_TOKEN_RE = re.compile(
     r"(?<![A-Za-z0-9_])dmu(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+)?(?=[^A-Za-z0-9_]|$)"
 )
 INTEGRAL_TOKEN_RE = re.compile(
-    r"(?<![A-Za-z0-9_])integral(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+)?(?=[^A-Za-z0-9_]|$)"
+    r"(?<![A-Za-z0-9_])integral(?:_\{[^}]+\}|_[A-Za-z0-9+\-]+)(?=[^A-Za-z0-9_]|$)"
+    # Note: requires subscript (integral_{...} or integral_X). Bare "integral"
+    # as a noun (Pettis integral, integral domain) is NOT matched.
 )
 SIMPLE_COMPARISON_RE = re.compile(
     r"(?<![$\\])\b([A-Za-z][A-Za-z0-9_]*|\d+)\s*([<>])\s*([A-Za-z][A-Za-z0-9_]*|\d+)\b"
@@ -1114,6 +1116,91 @@ def process_plain_text_segment(s: str) -> str:
     s = _sub_outside_inline_dollar(s, BARE_GREEK_WRAP_RE, _bare_greek_wrap_repl)
     s = MIN_NORM_TOKEN_RE.sub(_min_norm_token_repl, s)
     s = UNICODE_MATH_CHAR_RE.sub(_unicode_math_char_repl, s)
+
+    # --- APM domain patterns (topology / algebra / analysis / functional) ---
+
+    # Inner product brackets: <Ax,y> → $\langle Ax, y \rangle$
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"<([^<>$]{1,40}),\s*([^<>$]{1,40})>"),
+        lambda m: rf"$\langle {m.group(1)}, {m.group(2)} \rangle$",
+    )
+    # Projective spaces: RP^2, RP^n
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"\bRP\^(\w+)"),
+        lambda m: rf"$\mathbb{{R}}\mathrm{{P}}^{{{m.group(1)}}}$",
+    )
+    # Spheres: S^1, S^2
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"(?<!\w)S\^(\d)"),
+        lambda m: rf"$S^{{{m.group(1)}}}$",
+    )
+    # Lp spaces: L^2, L^p, L^1
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"(?<!\w)L\^(\w+)"),
+        lambda m: rf"$L^{{{m.group(1)}}}$",
+    )
+    # C_c (compactly supported functions)
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"\bC_c\b"),
+        lambda m: r"$C_c$",
+    )
+    # Polynomial rings: K[x,y], K[x], R[x]
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"\bK\[x,y\]"),
+        lambda m: r"$K[x,y]$",
+    )
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"\bK\[x\]"),
+        lambda m: r"$K[x]$",
+    )
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"\bR\[x\]"),
+        lambda m: r"$R[x]$",
+    )
+    # Hom functor: Hom(Z/2,Z) etc. — expand Z inside
+    def _hom_repl(m):
+        body = m.group(1)
+        body = re.sub(r"\bZ/2\b", r"\\mathbb{Z}/2", body)
+        body = re.sub(r"\bZ\b", r"\\mathbb{Z}", body)
+        return rf"$\mathrm{{Hom}}({body})$"
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"\bHom\(([^)]+)\)"),
+        _hom_repl,
+    )
+    # Z/2 as group (standalone, outside Hom)
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"(?<!\w)Z/2(?!\w)"),
+        lambda m: r"$\mathbb{Z}/2$",
+    )
+    # pi_1, pi_2 (fundamental group)
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"\bpi_(\d)"),
+        lambda m: rf"$\pi_{{{m.group(1)}}}$",
+    )
+    # f_* (induced map)
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"\bf_\*"),
+        lambda m: r"$f_*$",
+    )
+    # General subscripted variables: y_n, f_n, By_n, g_eps etc.
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"\b([A-Za-z]{1,3})_([a-z0-9]{1,4})\b"),
+        lambda m: rf"${m.group(1)}_{{{m.group(2)}}}$",
+    )
+
     return s
 
 
