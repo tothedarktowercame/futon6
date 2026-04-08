@@ -1,12 +1,15 @@
 # Mission: Superpod Mark 2 — Structural Retrieval that Discriminates
 
-**Date:** 2026-03-29
-**Status:** IDENTIFY (mission proposal)
+**Date:** 2026-03-29 (IDENTIFY), 2026-04-05 (IDENTIFY revised)
+**Status:** IDENTIFY
 **Origin:** Learn-to-swim canary findings (M-apm-solutions, 2026-03-29).
 Embedding collapse in Mark 1 diagnosed during retrieval-augmented
 theorem proving.
-**Owner:** futon6
-**Cross-ref:** M-apm-solutions (futon3c), technote-learn-to-swim (futon6)
+**Owner:** Rob (superpod infrastructure + training), Joe (evaluation + integration)
+**Repos:** futon6 (pipeline scripts, NER), futon3c (downstream consumers),
+apm-lean (evaluation data from APM proof campaigns)
+**Cross-ref:** M-apm-solutions (futon3c), technote-learn-to-swim (futon6),
+M-diagramprover (futon3c, separate mission — shares superpod but different workflow)
 
 ## Motivation
 
@@ -112,6 +115,44 @@ lacks.
 | technote-learn-to-swim (futon6) | Defines the validation protocol |
 | M-artificial-stack-exchange (futon6) | Future consumer of structural retrieval |
 | M-distributed-frontiermath (futon3c) | Future consumer for FM proof campaigns |
+| M-diagramprover (futon3c) | **Separate mission**, shares superpod. DiagramProver does proof search; Mark 2 does retrieval. Connection: Mark 2 structural embeddings could be the retrieval backend for DiagramProver's pattern matching. |
+
+## Theoretical anchoring
+
+- **Contrastive learning with hard negatives** (Chen et al., SimCLR; Robinson
+  et al., 2021 "hard negative mixing"): the standard finding is that random
+  negatives produce trivially solvable tasks. Hard negatives — examples that
+  are textually similar but structurally different — force the model to learn
+  the structural signal.
+- **Graph neural networks for typed structures** (Schlichtkrull et al., R-GCN):
+  the existing pipeline uses R-GCN but the training signal was too weak. The
+  architecture is not the problem; the training data (negatives) is.
+- **Hybrid retrieval** (Karpukhin et al., DPR; Izacard & Grave, Atlas): dense
+  retrieval works best when combined with sparse/structural signals. The
+  pipeline should produce both text embeddings (BGE, working) and structural
+  embeddings (R-GCN, to fix) and combine them.
+- **futon3/library cross-refs:**
+  - `enrichment/rational-reconstruction` — build the evaluation set
+    incrementally, not as a one-shot dump
+  - `enrichment/layered-ingestion` — the pipeline already runs in stages;
+    Mark 2 changes stages 5, 9b, 10 without reprocessing 1-8
+  - `math-informal/find-the-right-abstraction` — the technique NER problem:
+    what level of abstraction captures proof architecture?
+
+## Source material
+
+| Artifact | Location | Notes |
+|----------|----------|-------|
+| Superpod pipeline | `futon6/scripts/superpod-job.py` | 10-stage Python pipeline |
+| Stage 9b training | `futon6/scripts/superpod-job.py` (stage 9b section) | R-GCN contrastive training |
+| NER kernel | `futon6/data/ner-kernel/terms.tsv` | 19,236 terms from PlanetMath |
+| BGE embeddings | `futon6/data/embeddings/` (on superpod) | Stage 2 output, 1024-dim, working |
+| R-GCN embeddings | `futon6/data/embeddings/` (on superpod) | Stage 9b output, collapsed |
+| Math.CT hypergraphs | superpod storage | 9,916 papers, all 10 stages complete |
+| Learn-to-swim canaries | `futon6/scripts/frontiermath/` | 3 CT canary problems (C5-C7) |
+| APM Mathlib cross-refs | `futon3c/data/leandojo-pilot-20/` | 20 problems with Mathlib API names — potential evaluation data for structural retrieval |
+| Term spotter | `futon6/scripts/spot-terms.bb` | Babashka classical NER |
+| PlanetMath corpus | `~/code/planetmath/` | 9,477 entries, 59 EDN files |
 
 ## Open questions
 
