@@ -1,0 +1,589 @@
+#!/usr/bin/env python3
+"""mark2 — arXiv batch coordinator for superpod Mark 2.
+
+Runs on the Chicago staging server. Manages the three-party relay:
+  Joe's machine → [mark2 builds batches] → Rob's superpod → [results] → Joe
+
+Storage-aware: won't build if disk budget is exceeded. Tracks batch
+lifecycle so everyone knows what's where.
+
+Usage (Rob via SSH):
+    ssh chicago mark2 status          # what's available
+    ssh chicago mark2 next            # show next ready batch
+    scp chicago:~/mark2/inbox/batch-003.tar.gz .
+    ssh chicago mark2 pulled 3        # I took batch 3
+    scp results-003.tar.gz chicago:~/mark2/outbox/
+    ssh chicago mark2 returned 3      # results for batch 3 are up
+
+Usage (Joe via SSH):
+    ssh chicago mark2 status
+    ssh chicago mark2 build           # build next batch
+    scp chicago:~/mark2/outbox/results-003.tar.gz .
+    ssh chicago mark2 collected 3     # I grabbed results 3
+
+Usage (unattended):
+    ssh chicago mark2 build --if-room # only build if under disk budget
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import re
+import shutil
+import sqlite3
+import sys
+import tarfile
+import time
+import urllib.error
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+
+# -- Defaults (overridable via env or config) ---------------------------------
+
+MARK2_HOME = Path(os.environ.get("MARK2_HOME", Path.home() / "mark2"))
+MANIFEST_DB = Path(os.environ.get(
+    "MARK2_MANIFEST_DB",
+    MARK2_HOME / "arxiv_manifest.sqlite",
+))
+PAGE_SIZE = int(os.environ.get("MARK2_PAGE_SIZE", "5000"))
+RATE_LIMIT = float(os.environ.get("MARK2_RATE_LIMIT", "3.0"))
+MAX_INBOX_MB = int(os.environ.get("MARK2_MAX_INBOX_MB", "2000"))
+TIMEOUT = 120
+RETRIES = 4
+USER_AGENT = "futon6-mark2/1.0 (+https://github.com/tothedarktowercame/futon6)"
+
+
+def now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+# -- Directories --------------------------------------------------------------
+
+def inbox() -> Path:
+    p = MARK2_HOME / "inbox"
+    p.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def outbox() -> Path:
+    p = MARK2_HOME / "outbox"
+    p.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def work() -> Path:
+    p = MARK2_HOME / "work"
+    p.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def state_path() -> Path:
+    return MARK2_HOME / "state.json"
+
+
+# -- State persistence --------------------------------------------------------
+
+def load_state() -> dict:
+    sp = state_path()
+    if sp.exists():
+        return json.loads(sp.read_text())
+    return {"batches": {}, "next_batch": 1}
+
+
+def save_state(state: dict) -> None:
+    MARK2_HOME.mkdir(parents=True, exist_ok=True)
+    tmp = state_path().with_suffix(".tmp")
+    tmp.write_text(json.dumps(state, indent=2))
+    tmp.replace(state_path())
+
+
+def batch_state(state: dict, num: int) -> dict | None:
+    return state.get("batches", {}).get(str(num))
+
+
+def set_batch_state(state: dict, num: int, **kwargs) -> None:
+    key = str(num)
+    if key not in state["batches"]:
+        state["batches"][key] = {}
+    state["batches"][key].update(kwargs)
+    save_state(state)
+
+
+# -- Disk budget --------------------------------------------------------------
+
+def dir_size_mb(path: Path) -> float:
+    total = 0
+    if path.exists():
+        for f in path.rglob("*"):
+            if f.is_file():
+                total += f.stat().st_size
+    return total / (1024 * 1024)
+
+
+def inbox_has_room() -> bool:
+    return dir_size_mb(inbox()) < MAX_INBOX_MB
+
+
+# -- Fetch logic (from arxiv-pager.py) ----------------------------------------
+
+def safe_id(arxiv_id: str) -> str:
+    s = arxiv_id.replace("/", "__")
+    return re.sub(r"[^A-Za-z0-9._-]", "_", s)
+
+
+def infer_extension(content_type: str, payload: bytes) -> str:
+    ct = (content_type or "").lower()
+    if "gzip" in ct or "x-gzip" in ct:
+        return ".tar.gz"
+    if "x-eprint-tar" in ct or "x-tar" in ct or "application/tar" in ct:
+        return ".tar"
+    if "x-tex" in ct or "text/plain" in ct:
+        return ".tex"
+    if len(payload) >= 2 and payload[:2] == b"\x1f\x8b":
+        return ".tar.gz"
+    if len(payload) > 265 and payload[257:262] == b"ustar":
+        return ".tar"
+    head = payload[:1024].lstrip()
+    if head.startswith(b"\\documentclass") or head.startswith(b"\\input"):
+        return ".tex"
+    return ".bin"
+
+
+def fetch_one(url: str) -> tuple[bytes, str]:
+    last_err: Exception | None = None
+    for attempt in range(1, RETRIES + 1):
+        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+                body = resp.read()
+                ctype = resp.headers.get("Content-Type", "")
+            if ctype.lower().startswith("text/html"):
+                head = body[:512].decode("utf-8", errors="ignore").lower()
+                if "error" in head or "unavailable" in head or "captcha" in head:
+                    raise RuntimeError("html error payload")
+            return body, ctype
+        except (urllib.error.HTTPError, urllib.error.URLError,
+                TimeoutError, RuntimeError) as exc:
+            last_err = exc
+            if attempt >= RETRIES:
+                break
+            time.sleep(min(30.0, 2.0 * attempt))
+    assert last_err is not None
+    raise last_err
+
+
+# -- Build command ------------------------------------------------------------
+
+def cmd_build(args) -> int:
+    if not MANIFEST_DB.exists():
+        print(f"error: manifest DB not found: {MANIFEST_DB}", file=sys.stderr)
+        print(f"copy it here: scp local:storage/arxiv-manifest/arxiv_manifest.sqlite {MANIFEST_DB}")
+        return 1
+
+    if args.if_room and not inbox_has_room():
+        print(f"inbox at {dir_size_mb(inbox()):.0f} MB "
+              f"(budget {MAX_INBOX_MB} MB) — skipping")
+        return 0
+
+    state = load_state()
+    batch_num = state.get("next_batch", 1)
+    batch_name = f"batch-{batch_num:03d}"
+    tar_path = inbox() / f"{batch_name}.tar.gz"
+
+    if tar_path.exists():
+        print(f"{batch_name} already in inbox")
+        return 0
+
+    page_size = args.page_size or PAGE_SIZE
+    db = sqlite3.connect(MANIFEST_DB)
+    db.execute("PRAGMA journal_mode=WAL")
+
+    pending = db.execute(
+        "SELECT COUNT(*) FROM papers "
+        "WHERE latest=1 AND include=1 AND status='pending'"
+    ).fetchone()[0]
+
+    if pending == 0:
+        print("no pending papers in manifest")
+        db.close()
+        return 0
+
+    print(f"building {batch_name} ({page_size} papers, {pending} pending)")
+
+    # Claim papers
+    status_tag = f"batch-{batch_num:03d}"
+    rows = db.execute(
+        "SELECT arxiv_id, version, id_with_version, title, abstract, "
+        "  authors_json, categories_json, primary_category, "
+        "  created, updated, abs_url, eprint_url "
+        "FROM papers "
+        "WHERE latest=1 AND include=1 AND status='pending' "
+        "ORDER BY created ASC, arxiv_id ASC "
+        "LIMIT ?",
+        (page_size,),
+    ).fetchall()
+
+    ids = [(r[0], r[1]) for r in rows]
+    db.executemany(
+        "UPDATE papers SET status=?, last_attempt_at=? "
+        "WHERE arxiv_id=? AND version=?",
+        [(status_tag, now_iso(), aid, ver) for aid, ver in ids],
+    )
+    db.commit()
+
+    # Build metadata
+    papers = []
+    for (arxiv_id, version, idv, title, abstract, authors_json,
+         categories_json, primary_category, created, updated,
+         abs_url, eprint_url) in rows:
+        papers.append({
+            "id": idv,
+            "base_id": arxiv_id,
+            "version": version,
+            "title": title or "",
+            "abstract": abstract or "",
+            "authors": json.loads(authors_json or "[]"),
+            "categories": json.loads(categories_json or "[]"),
+            "primary_category": primary_category or "",
+            "date": created or "",
+            "updated": updated or "",
+            "url": abs_url,
+            "eprint_url": eprint_url,
+        })
+
+    # Write to work dir
+    batch_dir = work() / batch_name
+    batch_dir.mkdir(parents=True, exist_ok=True)
+    eprint_dir = batch_dir / "eprints"
+    eprint_dir.mkdir(exist_ok=True)
+
+    jsonl_path = batch_dir / f"{batch_name}.jsonl"
+    with jsonl_path.open("w") as f:
+        for p in papers:
+            f.write(json.dumps(p, ensure_ascii=False) + "\n")
+    print(f"  metadata: {len(papers)} rows")
+
+    # Fetch eprints
+    ok = 0
+    failed = 0
+    last_req = 0.0
+    t0 = time.time()
+
+    for i, paper in enumerate(papers, start=1):
+        wait = RATE_LIMIT - (time.time() - last_req)
+        if wait > 0:
+            time.sleep(wait)
+
+        sid = safe_id(paper["id"])
+        try:
+            payload, ctype = fetch_one(paper["eprint_url"])
+            last_req = time.time()
+            ext = infer_extension(ctype, payload)
+            out = eprint_dir / f"{sid}{ext}"
+            tmp = eprint_dir / f".{sid}.tmp"
+            tmp.write_bytes(payload)
+            tmp.replace(out)
+
+            digest = hashlib.sha256(payload).hexdigest()
+            db.execute(
+                "UPDATE papers SET fetched_at=?, sha256=?, raw_bytes=? "
+                "WHERE arxiv_id=? AND version=?",
+                (now_iso(), digest, len(payload),
+                 paper["base_id"], paper["version"]),
+            )
+            ok += 1
+        except Exception as exc:
+            last_req = time.time()
+            db.execute(
+                "UPDATE papers SET attempts=attempts+1, "
+                "last_attempt_at=?, error_message=? "
+                "WHERE arxiv_id=? AND version=?",
+                (now_iso(), str(exc), paper["base_id"], paper["version"]),
+            )
+            failed += 1
+
+        if i % 50 == 0:
+            elapsed = time.time() - t0
+            print(f"  [{i}/{len(papers)}] ok={ok} failed={failed} "
+                  f"({elapsed:.0f}s)")
+
+    db.commit()
+    elapsed = time.time() - t0
+    print(f"  fetch: ok={ok} failed={failed} ({elapsed:.0f}s)")
+
+    # Write summary
+    summary = {
+        "batch": batch_name,
+        "created_at": now_iso(),
+        "total": len(papers),
+        "fetched_ok": ok,
+        "fetched_failed": failed,
+        "page_size": page_size,
+    }
+    (batch_dir / "batch-summary.json").write_text(json.dumps(summary, indent=2))
+
+    # Tarball → inbox
+    with tarfile.open(tar_path, "w:gz") as tf:
+        tf.add(batch_dir, arcname=batch_name)
+    size_mb = tar_path.stat().st_size / (1024 * 1024)
+    print(f"  tarball: {tar_path.name} ({size_mb:.1f} MB)")
+
+    # Clean work dir
+    shutil.rmtree(batch_dir)
+
+    # Mark staged in manifest
+    staged_tag = f"staged-{batch_num:03d}"
+    db.execute(
+        "UPDATE papers SET status=? WHERE status=?",
+        (staged_tag, status_tag),
+    )
+    db.commit()
+    db.close()
+
+    # Update coordinator state
+    set_batch_state(state, batch_num,
+                    status="inbox",
+                    created_at=now_iso(),
+                    papers=len(papers),
+                    ok=ok,
+                    failed=failed,
+                    size_mb=round(size_mb, 1))
+    state["next_batch"] = batch_num + 1
+    save_state(state)
+
+    print(f"  {batch_name} ready in inbox")
+    return 0
+
+
+# -- Lifecycle commands -------------------------------------------------------
+
+def cmd_pulled(args) -> int:
+    """Rob pulled a batch from inbox. Triggers build of next batch."""
+    num = args.batch_num
+    state = load_state()
+    bs = batch_state(state, num)
+    if not bs:
+        print(f"batch {num} not found in state")
+        return 1
+    tar = inbox() / f"batch-{num:03d}.tar.gz"
+    if tar.exists():
+        tar.unlink()
+        print(f"  cleaned inbox/{tar.name}")
+    set_batch_state(state, num, status="pulled", pulled_at=now_iso())
+    print(f"  batch {num} marked pulled")
+
+    # Auto-build next batch if there's room
+    if inbox_has_room():
+        print()
+        # Reuse build with --if-room safety check
+        build_args = argparse.Namespace(page_size=None, if_room=True)
+        cmd_build(build_args)
+    else:
+        print(f"  inbox full ({dir_size_mb(inbox()):.0f} MB) — "
+              f"skipping auto-build")
+
+    return 0
+
+
+def cmd_returned(args) -> int:
+    """Rob uploaded results."""
+    num = args.batch_num
+    state = load_state()
+    bs = batch_state(state, num)
+    if not bs:
+        print(f"batch {num} not found in state")
+        return 1
+    expected = outbox() / f"results-{num:03d}.tar.gz"
+    if not expected.exists():
+        # Check for any results file with this batch number
+        candidates = list(outbox().glob(f"*{num:03d}*"))
+        if not candidates:
+            print(f"  warning: no results file found in outbox for batch {num}")
+    set_batch_state(state, num, status="results-ready",
+                    returned_at=now_iso())
+    print(f"  batch {num} results registered")
+    return 0
+
+
+def cmd_collected(args) -> int:
+    """Joe grabbed results."""
+    num = args.batch_num
+    state = load_state()
+    bs = batch_state(state, num)
+    if not bs:
+        print(f"batch {num} not found in state")
+        return 1
+    # Clean up results from outbox
+    for f in outbox().glob(f"*{num:03d}*"):
+        f.unlink()
+        print(f"  cleaned outbox/{f.name}")
+    set_batch_state(state, num, status="done", collected_at=now_iso())
+    print(f"  batch {num} complete")
+    return 0
+
+
+# -- Status -------------------------------------------------------------------
+
+def cmd_status(args) -> int:
+    state = load_state()
+    batches = state.get("batches", {})
+
+    # Manifest stats
+    if MANIFEST_DB.exists():
+        db = sqlite3.connect(MANIFEST_DB)
+        pending = db.execute(
+            "SELECT COUNT(*) FROM papers "
+            "WHERE latest=1 AND include=1 AND status='pending'"
+        ).fetchone()[0]
+        total = db.execute(
+            "SELECT COUNT(*) FROM papers WHERE latest=1 AND include=1"
+        ).fetchone()[0]
+        db.close()
+        print(f"manifest:  {pending:,}/{total:,} pending")
+    else:
+        print(f"manifest:  not found ({MANIFEST_DB})")
+
+    print(f"inbox:     {dir_size_mb(inbox()):.0f} MB "
+          f"(budget {MAX_INBOX_MB} MB)")
+    print(f"outbox:    {dir_size_mb(outbox()):.0f} MB")
+    print(f"next:      batch-{state.get('next_batch', 1):03d}")
+
+    if not batches:
+        print("\nno batches yet")
+        return 0
+
+    print(f"\n{'batch':<12s} {'status':<16s} {'papers':>7s} "
+          f"{'size':>8s} {'when'}")
+    print("-" * 65)
+    for num_str in sorted(batches.keys(), key=int):
+        b = batches[num_str]
+        status = b.get("status", "?")
+        papers = b.get("papers", "?")
+        size = f"{b['size_mb']} MB" if "size_mb" in b else "?"
+        # Show most recent timestamp
+        when = (b.get("collected_at") or b.get("returned_at")
+                or b.get("pulled_at") or b.get("created_at") or "?")
+        if when != "?" and len(when) > 16:
+            when = when[:16]
+        print(f"batch-{num_str:>03s}   {status:<16s} {str(papers):>7s} "
+              f"{size:>8s} {when}")
+
+    # Summary
+    in_inbox = [b for b in batches.values() if b.get("status") == "inbox"]
+    in_flight = [b for b in batches.values()
+                 if b.get("status") in ("pulled", "results-ready")]
+    if in_inbox:
+        print(f"\n  → {len(in_inbox)} batch(es) ready for Rob to pull")
+    if in_flight:
+        print(f"  → {len(in_flight)} batch(es) in flight")
+
+    return 0
+
+
+def cmd_next(args) -> int:
+    """Show the next batch available for Rob to pull."""
+    state = load_state()
+    for num_str in sorted(state.get("batches", {}).keys(), key=int):
+        b = state["batches"][num_str]
+        if b.get("status") == "inbox":
+            name = f"batch-{int(num_str):03d}"
+            tar = inbox() / f"{name}.tar.gz"
+            print(f"{name} ({b.get('papers', '?')} papers, "
+                  f"{b.get('size_mb', '?')} MB)")
+            if tar.exists():
+                print(f"  scp chicago:~/mark2/inbox/{tar.name} .")
+            return 0
+    print("no batches in inbox — ask Joe to run: mark2 build")
+    return 0
+
+
+# -- Reset (for testing) ------------------------------------------------------
+
+def cmd_reset(args) -> int:
+    """Reset state and manifest for re-testing."""
+    state = load_state()
+    if not args.force:
+        print("this will reset all batch state and un-stage papers in the manifest.")
+        print("use --force to confirm.")
+        return 1
+
+    if MANIFEST_DB.exists():
+        db = sqlite3.connect(MANIFEST_DB)
+        # Reset all non-pending papers back to pending
+        db.execute(
+            "UPDATE papers SET status='pending' "
+            "WHERE latest=1 AND include=1 AND status != 'pending'"
+        )
+        db.commit()
+        pending = db.execute(
+            "SELECT COUNT(*) FROM papers "
+            "WHERE latest=1 AND include=1 AND status='pending'"
+        ).fetchone()[0]
+        db.close()
+        print(f"manifest: reset all to pending ({pending:,} papers)")
+
+    # Clear directories
+    for d in [inbox(), outbox(), work()]:
+        if d.exists():
+            shutil.rmtree(d)
+            d.mkdir()
+            print(f"cleared {d}")
+
+    save_state({"batches": {}, "next_batch": 1})
+    print("state reset")
+    return 0
+
+
+# -- Main ---------------------------------------------------------------------
+
+def main() -> int:
+    ap = argparse.ArgumentParser(
+        prog="mark2",
+        description="arXiv batch coordinator for superpod Mark 2")
+    sub = ap.add_subparsers(dest="command")
+
+    p_status = sub.add_parser("status", help="Show current state")
+    p_status.set_defaults(func=cmd_status)
+
+    p_next = sub.add_parser("next", help="Show next batch for Rob")
+    p_next.set_defaults(func=cmd_next)
+
+    p_build = sub.add_parser("build", help="Build next batch")
+    p_build.add_argument("--page-size", type=int, default=None)
+    p_build.add_argument("--if-room", action="store_true",
+                         help="Only build if inbox is under disk budget")
+    p_build.set_defaults(func=cmd_build)
+
+    p_pulled = sub.add_parser("pulled", help="Mark batch as pulled by Rob")
+    p_pulled.add_argument("batch_num", type=int)
+    p_pulled.set_defaults(func=cmd_pulled)
+
+    p_returned = sub.add_parser("returned",
+                                help="Mark batch results uploaded by Rob")
+    p_returned.add_argument("batch_num", type=int)
+    p_returned.set_defaults(func=cmd_returned)
+
+    p_collected = sub.add_parser("collected",
+                                 help="Mark results collected by Joe")
+    p_collected.add_argument("batch_num", type=int)
+    p_collected.set_defaults(func=cmd_collected)
+
+    p_reset = sub.add_parser("reset", help="Reset all state (testing)")
+    p_reset.add_argument("--force", action="store_true")
+    p_reset.set_defaults(func=cmd_reset)
+
+    args = ap.parse_args()
+    if not args.command:
+        ap.print_help()
+        return 0
+
+    MARK2_HOME.mkdir(parents=True, exist_ok=True)
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,170 +1,180 @@
-# Mission: Superpod Mark 2 — Structural Retrieval that Discriminates
+# Mission: Superpod Mark 2 — All of arXiv
 
-**Date:** 2026-03-29 (IDENTIFY), 2026-04-05 (IDENTIFY revised)
-**Status:** IDENTIFY
-**Origin:** Learn-to-swim canary findings (M-apm-solutions, 2026-03-29).
-Embedding collapse in Mark 1 diagnosed during retrieval-augmented
-theorem proving.
-**Owner:** Rob (superpod infrastructure + training), Joe (evaluation + integration)
-**Repos:** futon6 (pipeline scripts, NER), futon3c (downstream consumers),
-apm-lean (evaluation data from APM proof campaigns)
-**Cross-ref:** M-apm-solutions (futon3c), technote-learn-to-swim (futon6),
-M-diagramprover (futon3c, separate mission — shares superpod but different workflow)
+**Date:** 2026-03-29 (started), 2026-04-12 (rewritten)
+**Status:** MAP
+**Owner:** Rob (superpod runs), Joe (pipeline code + evaluation)
+**Repos:** futon6 (pipeline), futon3c (downstream retrieval), apm-lean (evaluation)
 
-## Motivation
+## What Mark 1 showed
 
-The superpod pipeline processes mathematical corpora (arXiv, Stack
-Exchange) into typed hypergraphs and produces embeddings for
-structural similarity retrieval. The Mark 1 run on 9,916 math.CT
-papers demonstrated the pipeline is operationally complete — all ten
-stages run, all outputs are produced.
+The pipeline (`scripts/superpod-job.py`, 4800 lines, 10 stages) ran on
+9,916 arXiv math.CT papers in 614 seconds on GPU. Everything works
+end-to-end: parse → embed → NER → hypergraphs → FAISS index.
 
-However, the pipeline's distinctive contribution — structural
-embeddings from typed hypergraphs — does not yet work. The R-GCN
-graph embeddings (stage 9b) collapsed during training: all pairwise
-cosine similarities ~1.0, zero discriminative power. The contrastive
-objective trained with random negatives solved a task too easy to
-learn anything useful. We fell back to BGE text embeddings (stage 2),
-which work well for text similarity but cannot see proof structure.
+We used the output for retrieval-augmented theorem proving (the
+learn-to-swim canaries, documented in `apm-lean/report/apm-canaries.tex`).
+Result: BGE text retrieval found a paper using the identical construction
+for canary C7 (Pettis integral as monad algebra map, similarity 0.82).
+For standard techniques (C5, C6), retrieval added nothing. **Retrieval
+helps when the technique is non-obvious and domain-specific.**
 
-The gap: the superpod builds rich structural representations (typed
-hypergraphs with scope bindings, term co-occurrence, discourse
-edges) but then fails to embed them usefully. The Mark 1 hypergraphs
-are good; the Mark 1 training of embeddings from those hypergraphs
-is not. This mission fixes that.
+The R-GCN graph embeddings (stage 9b) collapsed — all cosine similarities
+~1.0. Switching to BGE text embeddings (stage 2) was a one-line fix,
+zero additional compute. BGE is the working retrieval backend now.
 
-**Why this matters beyond the pipeline itself:** retrieval-augmented
-theorem proving (the learn-to-swim protocol) showed that retrieval
-helps when the proof technique is non-obvious. Text similarity finds
-papers that use the same words. Structural similarity would find
-papers that have the same *proof architecture* — the same pattern of
-scope bindings, the same dependency structure between claims. That is
-the retrieval signal the learn-to-swim protocol needs and currently
-lacks.
+## What Mark 2 is
 
-## The gap (specific)
+**Process all of arXiv** (not just the 9,916-paper math.CT slice),
+with pipeline improvements based on what Mark 1 taught us.
 
-1. **Stage 9b training signal.** The contrastive objective needs hard
-   negatives: papers that are textually similar but structurally
-   different. The current random sampling produces a trivially
-   solvable task.
+This is a scale-up with targeted fixes, not a research project. The
+pipeline works. The fixes are:
 
-2. **Evaluation.** The Mark 1 run reported 99.8% Acc@1 as a quality
-   metric. This is misleading (easy negatives). The pipeline needs an
-   evaluation protocol that measures whether structural embeddings
-   capture proof-architecture similarity, not just topic similarity.
-   The learn-to-swim canaries provide a concrete evaluation: does
-   structural retrieval find technique-relevant papers that text
-   retrieval misses?
+1. **Better training signal for stage 9b.** Hard negatives instead of
+   random negatives. Use BGE similarity bands (0.7–0.8) to find papers
+   that are textually confusable but structurally different. The R-GCN
+   architecture is fine; the training data was too easy.
 
-3. **Technique-level NER.** The NER kernel (19,214 terms) is
-   concept-level ("functor", "equivalence", "adjunction"). The
-   learn-to-swim finding was that retrieval helps when it surfaces
-   technique-level terms ("Borel completion adjunction", "Pettis
-   integral as algebra map"). The pipeline needs scope-aware
-   multi-word term extraction to capture these.
+2. **Technique-level NER (stage 5).** The current NER kernel has
+   19,236 concept-level terms ("functor", "adjunction"). The
+   learn-to-swim finding: retrieval helps for technique-level terms
+   ("Borel completion adjunction", "Pettis integral as algebra map").
+   Scope-aware multi-word extraction would capture these.
 
-4. **Hybrid embedding architecture.** Text and structure capture
-   different signals. The pipeline should produce a hybrid embedding
-   that uses both, rather than forcing a choice between BGE (text-only,
-   works) and R-GCN (structure-only, broken).
+3. **Hybrid embeddings (stage 10).** BGE captures text similarity.
+   R-GCN (once fixed) captures structural similarity. Combine them
+   in the FAISS index rather than forcing a choice. Conservative
+   approach: concatenate frozen embeddings.
 
-## Scope
+## What exists already
 
-### In scope
+| What | Where | State |
+|------|-------|-------|
+| 10-stage pipeline | `futon6/scripts/superpod-job.py` | Working, tested on math.CT |
+| ArXiv input adapter | `--arxiv-jsonl` flag | Working (added Feb 2026) |
+| Laptop mode | `--laptop` flag | Working (CPU-friendly dev iteration) |
+| arXiv manifest | `storage/arxiv-manifest/arxiv_manifest.sqlite` | 570,209 math papers, all pending |
+| R-GCN module | `futon6/src/futon6/graph_embed.py` | Working code, bad training signal |
+| Embedding audit | `futon6/scripts/audit-graph-embeddings.py` | Validates collapse/quality |
+| Review pair generator | `futon6/scripts/generate-review-pairs.py` | Tier-stratified sampling |
+| NER kernel | `futon6/data/ner-kernel/terms.tsv` | 19,236 terms from PlanetMath |
+| BGE retrieval bridge | `futon3c/scripts/corpus_ws_bridge.py` | Live, serves downstream consumers |
+| Canaries evaluation | `apm-lean/report/apm-canaries.tex` | 7 problems, 3 with retrieval assessment |
+| LeanDojo pilot-20 | `futon3c/data/leandojo-pilot-20/` | 20 APM problems with Mathlib cross-refs |
+| Mark 1 outputs | on superpod storage | 9,916 papers, all stages, hypergraphs + embeddings |
 
-- Improve stage 9b training: hard negative mining, better contrastive
-  objective, validation against a human-judged evaluation set
-- Add technique-level NER to stage 5 (scope-aware multi-word extraction)
-- Design hybrid embedding architecture (text + structure)
-- Evaluation protocol using learn-to-swim canaries as ground truth
-- Changes to `scripts/superpod-job.py` and related training scripts
+## Data staging
 
-### Out of scope
+The arXiv manifest (`storage/arxiv-manifest/arxiv_manifest.sqlite`)
+contains 570,209 math papers across all categories (math.AP: 56K,
+math.CO: 52K, math.PR: 43K, ... down to smaller categories).
 
-- Reprocessing stages 1–8 (they work; improvements are to 5, 9b, 10)
-- Scaling to new corpora beyond math.CT (future mission, after Mark 2
-  is validated on the existing data)
-- Integration with downstream consumers (M-apm-solutions,
-  M-artificial-stack-exchange handle their own wiring)
+The `mark2` coordinator (`scripts/mark2`) runs on Joe's Chicago
+Linode server and manages the three-party relay:
 
-## Completion criteria
+```
+manifest (570K papers)
+  → mark2 builds batch N (5,000 papers + eprint sources, tarball)
+  → Rob scps batch from Chicago, runs pipeline on superpod
+  → Rob scps results back to Chicago
+  → Joe scps results from Chicago to local storage
+  → repeat
+```
 
-1. Stage 9b embeddings on the existing math.CT hypergraphs produce
-   pairwise cosine similarity with std > 0.10 (vs current ~0.45 with
-   bimodal collapse). Validation accuracy < 90% (indicating a
-   non-trivial task).
+The coordinator is storage-aware (configurable inbox budget, default
+2GB) and self-advancing: when Rob marks a batch as pulled, the next
+batch builds automatically. Joe seeds the first batch; after that
+the machine runs itself.
 
-2. On a 20-paper human-judged evaluation set, structural retrieval
-   (R-GCN or hybrid) finds at least 3 technique-relevant papers that
-   BGE-only retrieval ranks below position 10.
+### Batch lifecycle
 
-3. Technique-level NER extracts at least 200 multi-word technique
-   terms from the math.CT corpus, validated by spot-checking 50
-   against the source text.
+```
+build → inbox → pulled (auto-builds next) → returned → collected → done
+```
 
-4. The improved pipeline is documented and reproducible: a fresh
-   superpod run on math.CT with the Mark 2 training produces
-   discriminating embeddings without manual intervention.
+### Rob's workflow
 
-## Relationship to other missions
+```bash
+# See what's ready
+ssh chicago mark2 next
+
+# Pull batch
+scp chicago:~/mark2/inbox/batch-003.tar.gz .
+ssh chicago mark2 pulled 3        # triggers batch-004 build
+
+# Unpack and run pipeline
+tar xf batch-003.tar.gz
+cd batch-003
+python ~/futon6/scripts/superpod-job.py \
+  --arxiv-jsonl batch-003.jsonl \
+  --site arxiv.math \
+  --output-dir ./output/
+
+# Upload results
+tar czf results-003.tar.gz output/
+scp results-003.tar.gz chicago:~/mark2/outbox/
+ssh chicago mark2 returned 3
+```
+
+The pipeline handles checkpointing — if interrupted, re-run with
+the same `--output-dir` to resume from the last completed stage.
+
+### Joe's workflow
+
+```bash
+ssh chicago mark2 status          # overview
+scp chicago:~/mark2/outbox/results-003.tar.gz .
+ssh chicago mark2 collected 3     # cleans up outbox
+```
+
+### Iterating on stage 9b
+
+Once a batch has been processed, re-run just stage 9b with different
+training parameters (stages 1–8 outputs are reused):
+
+```bash
+python scripts/superpod-job.py \
+  --arxiv-jsonl batch-003.jsonl \
+  --site arxiv.math \
+  --output-dir ./output/ \
+  --skip-stages 1,2,3,4,5,6,7,8,9a,10
+```
+
+### LeanDojo (separate workload)
+
+M-diagramprover, not Mark 2. The pilot-20 problems are at
+`futon3c/data/leandojo-pilot-20/`. Shares the superpod but runs
+independently of the mining pipeline.
+
+## Open items
+
+| Item | Owner | Status |
+|------|-------|--------|
+| Deploy mark2 + manifest to Chicago server | Joe | Next |
+| Add `--skip-stages` flag if not present | Joe | Check |
+| Pipeline improvements: hard negatives (9b), technique NER (5), hybrid (10) | Joe | In progress (math.CT pilot was the round-trip) |
+| First batch test run on superpod | Rob | After mark2 deployed |
+
+## How we'll know it worked
+
+1. Run the improved pipeline on a corpus significantly larger than
+   math.CT (target: all arXiv math, ~200K+ papers).
+
+2. Stage 9b embeddings no longer collapse: pairwise cosine similarity
+   std > 0.10, validation accuracy < 90% (non-trivial task).
+
+3. On the learn-to-swim canaries (or LeanDojo pilot-20), structural
+   or hybrid retrieval surfaces technique-relevant papers that BGE-only
+   retrieval misses.
+
+4. The FAISS index serves downstream consumers (`corpus_ws_bridge.py`)
+   with measurably better retrieval precision than BGE-only Mark 1.
+
+## Related missions
 
 | Mission | Relationship |
 |---------|-------------|
-| M-apm-solutions (futon3c) | Consumer: learn-to-swim uses retrieval |
-| technote-learn-to-swim (futon6) | Defines the validation protocol |
-| M-artificial-stack-exchange (futon6) | Future consumer of structural retrieval |
-| M-distributed-frontiermath (futon3c) | Future consumer for FM proof campaigns |
-| M-diagramprover (futon3c) | **Separate mission**, shares superpod. DiagramProver does proof search; Mark 2 does retrieval. Connection: Mark 2 structural embeddings could be the retrieval backend for DiagramProver's pattern matching. |
-
-## Theoretical anchoring
-
-- **Contrastive learning with hard negatives** (Chen et al., SimCLR; Robinson
-  et al., 2021 "hard negative mixing"): the standard finding is that random
-  negatives produce trivially solvable tasks. Hard negatives — examples that
-  are textually similar but structurally different — force the model to learn
-  the structural signal.
-- **Graph neural networks for typed structures** (Schlichtkrull et al., R-GCN):
-  the existing pipeline uses R-GCN but the training signal was too weak. The
-  architecture is not the problem; the training data (negatives) is.
-- **Hybrid retrieval** (Karpukhin et al., DPR; Izacard & Grave, Atlas): dense
-  retrieval works best when combined with sparse/structural signals. The
-  pipeline should produce both text embeddings (BGE, working) and structural
-  embeddings (R-GCN, to fix) and combine them.
-- **futon3/library cross-refs:**
-  - `enrichment/rational-reconstruction` — build the evaluation set
-    incrementally, not as a one-shot dump
-  - `enrichment/layered-ingestion` — the pipeline already runs in stages;
-    Mark 2 changes stages 5, 9b, 10 without reprocessing 1-8
-  - `math-informal/find-the-right-abstraction` — the technique NER problem:
-    what level of abstraction captures proof architecture?
-
-## Source material
-
-| Artifact | Location | Notes |
-|----------|----------|-------|
-| Superpod pipeline | `futon6/scripts/superpod-job.py` | 10-stage Python pipeline |
-| Stage 9b training | `futon6/scripts/superpod-job.py` (stage 9b section) | R-GCN contrastive training |
-| NER kernel | `futon6/data/ner-kernel/terms.tsv` | 19,236 terms from PlanetMath |
-| BGE embeddings | `futon6/data/embeddings/` (on superpod) | Stage 2 output, 1024-dim, working |
-| R-GCN embeddings | `futon6/data/embeddings/` (on superpod) | Stage 9b output, collapsed |
-| Math.CT hypergraphs | superpod storage | 9,916 papers, all 10 stages complete |
-| Learn-to-swim canaries | `futon6/scripts/frontiermath/` | 3 CT canary problems (C5-C7) |
-| APM Mathlib cross-refs | `futon3c/data/leandojo-pilot-20/` | 20 problems with Mathlib API names — potential evaluation data for structural retrieval |
-| Term spotter | `futon6/scripts/spot-terms.bb` | Babashka classical NER |
-| PlanetMath corpus | `~/code/planetmath/` | 9,477 entries, 59 EDN files |
-
-## Open questions
-
-1. **Hard negative mining strategy.** Use BGE similarity (confusable
-   pairs at 0.7–0.8) or mine from hypergraph structure (same terms,
-   different scope topology)? Or both?
-
-2. **Hybrid architecture.** Concatenate frozen embeddings (simple,
-   preserves BGE quality) or train jointly (richer, riskier)? The
-   frozen approach is the conservative first step.
-
-3. **Technique NER boundary.** "Adjunction" is a concept;
-   "Borel completion adjunction" is a technique. Where's the line?
-   Scope-aware extraction (terms that appear inside let-bindings or
-   theorem statements) might be a principled criterion.
+| M-apm-solutions | Consumer: uses retrieval for theorem proving |
+| M-diagramprover | Shares superpod, separate workflow (proof search not mining) |
+| M-artificial-stack-exchange | Future consumer of improved retrieval |
+| M-distributed-frontiermath | Future consumer for FrontierMath campaigns |
