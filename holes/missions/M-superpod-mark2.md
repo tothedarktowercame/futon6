@@ -178,3 +178,267 @@ independently of the mining pipeline.
 | M-diagramprover | Shares superpod, separate workflow (proof search not mining) |
 | M-artificial-stack-exchange | Future consumer of improved retrieval |
 | M-distributed-frontiermath | Future consumer for FrontierMath campaigns |
+
+## Burnin Checkpoint — batch-001 (2026-04-15)
+
+Rob ran batch-001 on the superpod (8× A100 80GB, one node, 16 CPU procs).
+Observed problems and the changes made before batch-002:
+
+**Observed on batch-001:**
+
+1. Stage 2 (BGE embeddings) pinned to a single GPU — `SentenceTransformer.encode()` with `device="cuda"` is single-device despite the docstring claim of auto-distribution. 11 min wall time where 8 GPUs were sitting idle.
+2. Stage 2 re-ran from scratch on job restart even though `embeddings.npy` already existed. `stage_status` is an in-memory dict, re-initialized every invocation; there was no on-disk resume check.
+3. Stage 7 (thread-performative LLM classification) emitted `"You seem to be using the pipelines sequentially on GPU"` — offender was `classify_thread_performatives_llm_batch` passing a `list` of prompts per outer batch rather than a `Dataset`. Interleaved with stage 6 output because both share `_ensure_llm_pipeline`.
+4. Python 3.12 `SyntaxWarning: invalid escape sequence '\i' / '\s' / '\m'` at `<unknown>:N` — transformers' jinja2 chat-template compilation under 3.12, cosmetic.
+
+**Changes landed (futon6 @ 2026-04-15):**
+
+- `src/futon6/stackexchange.py` — `compute_qa_embeddings` gained `num_workers: int = 1`. When >1 and device is cuda, uses `SentenceTransformer.start_multi_process_pool(target_devices=["cuda:0",...,"cuda:{N-1}"])` + `encode_multi_process`. Single-device path untouched for laptop mode.
+- `scripts/superpod-job.py` — new `--embed-workers N` flag (default 1). For batch-002 Rob should pass `--embed-workers 8`. Expected: stage 2 drops from ~11 min to ~90s on 8× A100.
+- `scripts/superpod-job.py` — stage 2 now checks `outdir/embeddings.npy` before running; if present and row-count matches `len(pairs)`, it's loaded and the stage manifest records `resumed: true`. Row-count mismatch (batch changed) triggers recompute with an explanatory log line. Force-rerun = `rm embeddings.npy`.
+- `scripts/superpod-job.py` — `classify_thread_performatives_llm_batch` refactored to a `TorchDataset` pass, matching stages 3 and 6. HF warning gone; throughput improves because the pipeline streams instead of restarting per outer batch.
+- `scripts/superpod-job.py` — `warnings.filterwarnings("ignore", category=SyntaxWarning, message=r"invalid escape sequence.*")` at import. Targeted: doesn't mask real syntax issues in pipeline code.
+
+**Batch-002 invocation:**
+
+```bash
+python ~/futon6/scripts/superpod-job.py \
+  --arxiv-jsonl batch-002.jsonl --site arxiv.math \
+  --output-dir ./output/ --embed-workers 8
+```
+
+**Still open (deferred from this checkpoint):**
+
+- Stage 6 (reverse morphogenesis LLM inference) is still on one GPU. `_create_llm_pipeline` uses `device_map="auto"` which places a small model entirely on cuda:0. Real 8-GPU data-parallel generation needs a process-level replica refactor (N worker procs, each with its own pipe, chunk-sharded inputs) — larger change, intentionally punted. Revisit before batch-003 if stage 6 is still the wall-clock dominator.
+- Stage 9b R-GCN training is still single-GPU. Mark 2's stated goal (hard negatives, non-collapsed embeddings) doesn't require DDP yet at batch sizes we've tested; defer until training signal is proven on batch-002/003 outputs.
+
+## Checkpoint — Learn As We Go (2026-04-15)
+
+Before lifting a finger on stage 6 multi-GPU, we reframed what stage 6 *is* in the arXiv setting. The conclusion: stage 6 isn't a retrieval enrichment — it's the **synthetic training corpus generator for a forward problem-solving model**. Backward reconstruction at arXiv scale (570K papers) produces grounded (problem, techniques, terminology, patterns, result) tuples; a forward model trained on that corpus is the actual research payoff. Retrieval quality is a side effect of doing reconstruction well.
+
+### Why the old stage 6 doesn't fit papers
+
+The arXiv adapter (`load_arxiv_pairs` in `src/futon6/stackexchange.py:683`) is a kludge: each paper becomes a fake Q/A where `question = title + abstract` and `answer = abstract` duplicated. Stage 6 then feeds the LLM the abstract twice and asks for the S←Q←A/xiang/salience/arrow reconstruction — a pedagogical move that doesn't apply. Papers have no questioner, no epistemic asymmetry between question and answer. The frame is incoherent.
+
+### The reframed stage 6 principle
+
+We don't trust authors. The paper is **evidence**, not testimony. Even a well-written paper that says "this solves problem X" is one input among several; the *real* problem a paper solves is reconstructed from what the paper actually does — its techniques, its terminology, its argumentative skeleton — and compared against what the author claimed.
+
+**Why terminology is load-bearing**: technique vocabulary constrains the problem-class. Ruler-and-compass is the clean base case (Wantzel ⇒ quadratic closure of ℚ — the terminology *is* the solvability envelope). For fuzzier techniques the envelope is softer but the move is the same: let the techniques tell you what's in the solvability class, compare against the author's stated framing, and treat the gap as diagnostic.
+
+### Four-layer output schema (per paper)
+
+1. **Stated problem** — what the author says, with evidence loci. Often thin or absent.
+2. **Techniques deployed** — technique-level terms (from stage 5c) with loci in the paper.
+3. **Reconstructed problem-class** — from the technique vocabulary and argumentative skeleton back to the problems those techniques address, with a derivation showing why.
+4. **Stated-vs-reconstructed gap** — diagnostic signal. Papers where these diverge are often the ones where the real contribution differs from the marketed one, and retrieval on technique beats retrieval on stated framing.
+
+All four layers carry evidence pointers (section/paragraph/hypergraph-node refs). Not just for auditability — as grounding for the forward model's training signal.
+
+### Pipeline shape for batch-002
+
+| Stage | What it does | Status |
+|---|---|---|
+| 5 (existing) | Concept-level NER — unchanged | Keep |
+| **5c (new)** | Technique-level NER — scope-aware multi-word term extraction | Draft |
+| **5d (new)** | Paper hypergraph — argumentative skeleton + terminology lift. **Two arms kept distinct**: classical extractor, LLM-augmented extractor. | Draft |
+| **6 (rewritten)** | Paper reverse morphogenesis. Consumes abstract + intro + conclusions prose + 5d hypergraph + 5c technique list. Multi-pass capable. | Draft |
+| **3 (extended)** | Paper-level pattern tagging with a **growing library**: seed from futon3's flexiarg, mine paper-structure patterns as we go. | Draft |
+| **11 (new)** | Sketch-and-score. Generates a structural-and-findings sketch from (reconstructed problem + techniques + patterns) and scores against the paper. | Draft |
+
+Stage 7 (thread wiring) stays skipped for arXiv. Stage 9a hypergraph was thread-based; 5d is its paper-appropriate replacement.
+
+### Evaluation — each paper is its own gold standard
+
+No external labels. The primary quality criterion is **sense of inevitability**: given the reconstructed (problem + techniques + patterns), does the generated sketch match the paper's actual structure and findings? If yes, the reconstruction captured something real. If no, it missed the heart.
+
+This operationalizes a criterion that mathematical understanding has always had — "of course, given these ingredients, you'd get this" — as a measurable per-paper metric (sketch-vs-paper: term coverage, structural match, finding coherence). Per-batch score distribution is what we track.
+
+### The mining approach *is* ML
+
+The pipeline is a self-improving system with four update channels, each mapped to a component:
+
+- **Pattern library** grows when a paper has strong technique/problem coherence but weak pattern fit — that gap is a "mine a new pattern" signal.
+- **Technique vocabulary** sharpens when the C-extraction misses terms the reconstruction later had to invent.
+- **Hypergraph structural features** grow when argumentative hyperedges are missing — a paper whose sketch fails because the hypergraph didn't capture "theorem T depends on lemma L" tells us to add a new hyperedge type or sharpen the classical extractor.
+- **Prompts tune** against the gap distribution — reconstructions systematically weak on one of the four output layers are a prompt-shape signal, not a model signal.
+
+Two temporal scales:
+
+- **Per-paper** (tight loop): stage 6 → stage 11 → optional refinement pass keyed on the specific weak field. Effectively a short self-play cycle.
+- **Per-batch** (learning step): aggregate gaps across ~5K papers, update library/vocabulary/hypergraph-extractor/prompts. Next batch runs with a sharper pipeline.
+
+**Corollary — training corpus curation**: the forward-model training corpus gets *score-weighted*, not just accumulated. High-inevitability reconstructions are clean training signal. Low-inevitability papers get a `reconstruction_quality` tag, used either for harder training tasks or held for later passes when the pipeline is stronger. Corpus quality tracks pipeline quality; co-improvement, not static accumulation.
+
+### Experimental arms for batch-002
+
+At 1% of arXiv per batch, experimental parallelism is cheap. Three dimensions running as natural experiments, kept distinct so we can read the tape afterward:
+
+| Dimension | Arms |
+|---|---|
+| Stage 5d extractor | classical, LLM, both |
+| Stage 6 reconstruction passes | 1, 2, 3 (fixed N = 3 for batch-002; adaptive in batch-003 once plateau shape is known) |
+| Stage 3 pattern library seeds | flexiarg-only, flexiarg + mined |
+
+Multi-pass is cheaper than it looks: the **first pass of the multi-pass arm IS the single-pass arm's output**. Paired comparisons per paper come free (minus the extra LLM cost at passes 2–3). Single-pass arm = "stop after pass-1 score."
+
+Per-paper provenance metadata (which arm produced which output, which library version was live, which pass produced which score) is recorded in a batch-level `experiment_meta.json` so downstream analysis can disentangle the effects.
+
+### Forward model — why this is the real payoff
+
+- **Training signal**: (reconstructed problem-class, technique vocabulary, pattern tags) → sketched argumentative structure
+- **Ground truth**: the actual paper
+- **At inference**: novel problem → proposed techniques + patterns → sketched construction
+
+570K self-validating training examples, with the evaluation metric built into the pipeline itself. Consumer mission: **M-apm-solutions** (theorem proving). The forward model turns reconstructed mining output into a candidate technique-and-structure proposer for novel problems.
+
+### Next action
+
+**Spec drafted:** `futon6/holes/missions/M-paper-reverse-morphogenesis.md`
+(2026-04-15) covers all six components — 5c technique-NER, 5d paper
+hypergraph (classical + LLM arms), stage-6 four-layer rewrite with
+multi-pass, stage-3 paper-level patterns with mining protocol, stage-11
+sketch-and-score, and the batch-level experiment-meta ledger.
+
+Implementation order documented in that spec; pipeline improvements land
+between batches with tight per-batch evaluation loops driving the updates.
+
+## Post-run health and quality checks
+
+Run through this checklist the moment a batch returns from the superpod,
+*before* declaring the batch good and *before* applying per-batch
+learning-loop updates. Most items read directly from the run's stdout/
+stderr log and the `stage_status` manifest; a few want a 10-paper
+eyeball pass.
+
+### 1. Did the GPU utilization fix actually work?
+
+- **Stage 2 wall time**: should be < 2 min for 5K papers on 8× A100.
+  - ≈ 90 s = eight GPUs (success). ≈ 11 min = one GPU (the batch-001
+    failure mode — Rob forgot `--embed-workers 8` or the flag isn't
+    being honored).
+  - > 3 min: check that `--embed-workers 8` was passed; check stage 2
+    log line for the active worker count.
+- **Stage 2 resume on restart**: if Rob ctrl-C'd mid-batch and re-ran,
+  the log should say `Reusing existing embeddings.npy (shape (N, D))`
+  and `stage_status.embeddings.resumed: true`. If it recomputed, the
+  checkpoint logic regressed — file a bug.
+- **HF "sequentially on GPU" warning absent from stderr.** If it appears
+  during stage 6 or 7, Fix 2 from the batch-001 checkpoint regressed.
+- **SyntaxWarnings absent.** If `<unknown>:N: SyntaxWarning: invalid
+  escape sequence` floods stderr, Fix 4 regressed.
+
+### 2. Did eprints actually load (or are we still on abstracts)?
+
+- **Stage 5c / 5d log line**: `Text source: eprint=N, abstract-fallback=M`.
+  - Healthy: `M < 100` on a 5K-paper batch (< 2%).
+  - `M > 500`: check `--paper-eprint-dir` path, check `eprints/`
+    integrity, check for corrupt tarballs. Loader's per-file status
+    codes (`missing`, `tar-read-error`, `unusable`) are visible if
+    you rerun with a smaller sample.
+- **Stage 5d `with_claim_blocks`**: % of papers whose hypergraph
+  contains at least one numbered theorem/lemma/proposition.
+  - With eprints loaded for pure-math batches: expect 70–95%.
+  - With eprints loaded but `with_claim_blocks` low: papers may use
+    non-standard environments (`\newtheorem`, custom names). Look at
+    a weak sample to find out.
+  - Near-zero: eprints didn't load. Cross-check against §1.
+- **`stage_status.paper_hypergraph.text_source_counts`** records this
+  machine-readably — prefer that over grepping stdout for automation.
+
+### 3. Is the natural experiment actually live?
+
+- **Stage 5c arm balance** (`classical=A, llm=B, both=C`):
+  - Healthy: `C / (A+B+C) > 0.2`. Means both arms are finding overlapping
+    terms — validates that they're extracting from the same signal.
+  - `B = 0`: LLM arm silently failing. Check for pipeline errors at
+    stage 5c; check `_ensure_llm_pipeline` actually loaded a model.
+  - `A / B > 5`: classical is dominant — expected early, but if it
+    persists across batches, LLM prompt needs work.
+  - `A = 0` with nonzero `B`: classical is too strict on this corpus
+    (expected for non-eponymous technique-heavy sub-disciplines).
+    That's iteration fuel — log it for the per-batch update.
+- **Stage 5d edge provenance** (`classical=X, llm=Y, both=Z`):
+  - `Z > 0`: LLM confirms classical structural edges. Good.
+  - `Y > 0`: LLM is adding implicit edges the classical parser missed
+    (motivation-link, implicit derivation). This is the main reason
+    the LLM arm exists — if `Y = 0` across the batch, the prompt
+    isn't eliciting net-new edges.
+  - `Y / X` ratio is the cleanest "how much is the LLM contributing
+    uniquely?" summary. Track across batches.
+
+### 4. Sanity spot-check (10 papers, ~15 minutes)
+
+Pick 10 random papers from the batch. For each:
+
+- **`techniques.json`**: read the extracted techniques. Are they real,
+  specific mathematical moves, or generic/noisy phrases?
+  - False positives worth logging: sentence fragments, prepositional
+    phrases, things that aren't techniques.
+  - False negatives worth logging: techniques the paper clearly uses
+    that didn't get extracted. These drive classical-pattern and LLM
+    few-shot improvements.
+- **`paper-hypergraphs.json`**: pick 3 papers with claim blocks. For each,
+  read the hypergraph and check:
+  - Does every numbered theorem have a matching derivation edge to a
+    proof? (Miss rate = parsing failure.)
+  - Do `definition-use` edges point from definitions to later mentions?
+  - Do citation-grounding edges connect proofs to their cited
+    references via the technique nodes actually used?
+- Record observations in a small batch-N-spotcheck.md — these become
+  inputs to the per-batch learning loop.
+
+### 5. Regression-style distribution checks
+
+- **Techniques per paper**: distribution across the batch.
+  - Pure-math papers (10–30 pages): typically 5–50 techniques.
+  - < 3 per paper on average: extraction too strict.
+  - > 200 per paper: extraction too noisy.
+- **Nodes / edges per paper** in `paper-hypergraphs.json`: should roughly
+  track paper length. Zero-edge papers are likely eprint-fallback or
+  non-standard environments.
+- **Per-section term density**: techniques should cluster in
+  definitions, theorem statements, and proofs — not in references or
+  acknowledgements. A high-density references section suggests the
+  LaTeX `thebibliography` environment leaked into the body.
+
+### 6. Failure forensics
+
+Look for these in `stage_status` and logs when something's off:
+
+- Any stage marked `skipped` that shouldn't be. Expected skips:
+  thread stages (`--skip-threads` auto-set for arXiv), optional 5b.
+  Unexpected skips (NER kernel not found, embeddings skipped under
+  `--moist-run` without intent) are batch-invalidating.
+- `stage_status.<stage>.resumed: true` when you didn't expect a
+  restart — means a previous run left partial outputs; verify they're
+  current-batch outputs, not leftovers from another run.
+- `n_llm_new_edges = 0` uniformly across all papers: LLM arm
+  structurally not firing (pipeline error swallowed, prompt producing
+  empty arrays, node-ID hallucination filter rejecting everything).
+
+### 7. Before advancing the learning loop
+
+After the batch passes §§1–6, and before you apply per-channel updates:
+
+1. Per-paper scores available? (Once stage 11 lands; for batch-002's
+   first run manual spot-check substitutes.)
+2. Score distribution agrees with spot-check intuition — papers you
+   flagged as weak in §4 have low scores, not high ones.
+3. Any systematic failure modes — e.g., all papers in a sub-discipline
+   cluster at the low end of the score distribution. If yes, that's a
+   per-channel signal (pattern library gap, technique vocabulary gap,
+   hypergraph-feature gap, or prompt gap per §"Learn As We Go").
+4. Per-channel update proposals written down *before* applying, so
+   there's a rollback target if the next batch regresses.
+5. Proposals applied to code, tagged with the batch number in commit
+   messages / library-version records, so we can attribute later
+   effects.
+
+### Automation
+
+Most of §§1–3 and §5 are mechanical enough to automate. A
+`scripts/post-run-health-check.py` that reads `stage_status` + the
+stdout log + a sample of output JSONs and emits a pass/warn/fail
+report would pay for itself in a few batches. Stub it as a next
+action after stage 11.

@@ -63,6 +63,13 @@ import sys
 import tarfile
 import time
 import uuid
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    category=SyntaxWarning,
+    message=r"invalid escape sequence.*",
+)
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
@@ -139,6 +146,17 @@ from futon6.thread_performatives import (
 from futon6.latex_sexp import parse as sexp_parse, parse_all
 from futon6.hypergraph import assemble as assemble_hypergraph
 from futon6.faiss_index import HAS_FAISS, build_index, save_index
+from futon6.technique_ner import (
+    extract_techniques_classical,
+    extract_techniques_llm,
+    merge_technique_arms,
+    techniques_to_records,
+)
+from futon6.paper_hypergraph import (
+    extract_paper_hypergraph_classical,
+    extract_paper_hypergraph_llm,
+    merge_paper_hypergraphs,
+)
 
 _GRAPH_EMBED_IMPORT_ERROR = None
 try:
@@ -2135,36 +2153,58 @@ def classify_thread_performatives_llm_batch(diagrams, pipe, tokenizer,
     runs the LLM, parses the JSON response, and merges LLM-classified
     edge types back into the diagram (overriding classical/structural).
 
-    Smaller batch_size because thread prompts can be very long.
+    Uses a Dataset-backed pipeline pass (single call) so GPU execution
+    stays in high-throughput mode. Smaller batch_size because thread
+    prompts can be very long.
 
     Returns count of diagrams where LLM provided new classifications.
     """
+    from torch.utils.data import Dataset as TorchDataset
+
+    class _ThreadPerfPromptDataset(TorchDataset):
+        """Lazily format stage 7 thread-performative prompts."""
+
+        def __init__(self, diagrams, tok):
+            self.diagrams = diagrams
+            self.tok = tok
+
+        def __len__(self):
+            return len(self.diagrams)
+
+        def __getitem__(self, idx):
+            prompt = build_thread_performative_prompt(self.diagrams[idx])
+            messages = [{"role": "user", "content": prompt}]
+            return self.tok.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+
     total = len(diagrams)
     llm_enhanced = 0
     t_start = time.time()
 
-    for start in range(0, total, batch_size):
-        batch = diagrams[start:start + batch_size]
-        prompts = []
-        for diagram in batch:
-            prompt = build_thread_performative_prompt(diagram)
-            messages = [{"role": "user", "content": prompt}]
-            formatted = tokenizer.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
-            prompts.append(formatted)
+    prompt_dataset = _ThreadPerfPromptDataset(diagrams, tokenizer)
+    outputs = pipe(
+        prompt_dataset,
+        return_full_text=False,
+        max_new_tokens=512,
+        batch_size=batch_size,
+    )
 
-        outputs = pipe(prompts, return_full_text=False, max_new_tokens=512)
+    for i, out in enumerate(outputs):
+        if isinstance(out, list):
+            item = out[0] if out else {}
+        elif isinstance(out, dict):
+            item = out
+        else:
+            item = {}
+        text = str(item.get("generated_text", "")).strip()
+        llm_edges = _parse_json_array_response(text)
+        if llm_edges:
+            merge_llm_edges(diagrams[i], llm_edges)
+            llm_enhanced += 1
 
-        for i, out in enumerate(outputs):
-            text = out[0]["generated_text"].strip()
-            llm_edges = _parse_json_array_response(text)
-            if llm_edges:
-                merge_llm_edges(batch[i], llm_edges)
-                llm_enhanced += 1
-
-        done = min(start + batch_size, total)
-        if done % 100 < batch_size or done == total:
+        done = i + 1
+        if done % 100 == 0 or done == total:
             elapsed = time.time() - t_start
             rate = done / elapsed if elapsed > 0 else 0
             eta = (total - done) / rate if rate > 0 else 0
@@ -3588,6 +3628,11 @@ def main():
                         help="Embedding batch size (default: 1024, tune for GPU VRAM)")
     parser.add_argument("--embed-device", default="cuda",
                         help="Device for embeddings")
+    parser.add_argument("--embed-workers", type=int, default=1,
+                        help="Data-parallel embedding workers. On an 8-GPU "
+                             "node, pass --embed-workers 8 to shard encode "
+                             "across cuda:0..cuda:7 (SentenceTransformer "
+                             "multi-process pool). Default 1 = single device.")
     parser.add_argument("--skip-embeddings", action="store_true")
 
     # LLM options
@@ -3645,6 +3690,47 @@ def main():
                         help="Per-entity text cap when reading eprints (default: 240000)")
     parser.add_argument("--distinctor-eprint-max-tex-members", type=int, default=4,
                         help="Max .tex members per tar archive in Stage 5b (default: 4)")
+
+    # Technique-level NER (Stage 5c) — M-paper-reverse-morphogenesis
+    parser.add_argument("--skip-technique-ner", action="store_true",
+                        help="Skip Stage 5c (technique-level NER)")
+    parser.add_argument("--technique-ner-arm", default="both",
+                        choices=["classical", "llm", "both"],
+                        help="Which extraction arm to run for Stage 5c. "
+                             "'both' runs classical + LLM and records "
+                             "per-term provenance (classical/llm/both). "
+                             "Default: both, per the batch-002 experiment plan.")
+    parser.add_argument("--technique-ner-max-terms", type=int, default=256,
+                        help="Per-paper cap on extracted technique terms (default: 256)")
+    parser.add_argument("--technique-ner-llm-max-chars", type=int, default=6000,
+                        help="Per-paper prose truncation for the LLM arm (default: 6000)")
+
+    # Paper hypergraph (Stage 5d) — M-paper-reverse-morphogenesis
+    parser.add_argument("--skip-paper-hypergraph", action="store_true",
+                        help="Skip Stage 5d (paper-level argumentative hypergraph)")
+    parser.add_argument("--paper-hypergraph-arm", default="both",
+                        choices=["classical", "llm", "both"],
+                        help="Which extraction arm to run for Stage 5d. "
+                             "'both' runs classical LaTeX parsing + LLM "
+                             "implicit-edge pass and records per-edge "
+                             "provenance (classical/llm/both). Default: both.")
+    parser.add_argument("--paper-hypergraph-prose-cap", type=int, default=4000,
+                        help="Per-paper prose char cap for Stage 5d LLM arm (default: 4000)")
+    parser.add_argument("--paper-hypergraph-node-cap", type=int, default=80,
+                        help="Max classical nodes summarised in Stage 5d LLM prompt (default: 80)")
+
+    # Shared eprint source for paper stages (5c, 5d, and future 6)
+    parser.add_argument("--paper-eprint-dir", default=None,
+                        help="Directory of arXiv eprint sources (LaTeX .tex, "
+                             ".tar, .tar.gz, or raw payload named by arxiv id). "
+                             "When set, paper stages (5c/5d) load the full "
+                             "LaTeX body instead of falling back to the "
+                             "abstract. Mark2 batches ship eprints at "
+                             "<batch>/eprints/ — pass that path.")
+    parser.add_argument("--paper-eprint-max-chars", type=int, default=500_000,
+                        help="Per-paper eprint text cap for paper stages (default: 500000)")
+    parser.add_argument("--paper-eprint-max-tex-members", type=int, default=8,
+                        help="Max .tex members per tar archive for paper stages (default: 8)")
 
     # Thread wiring diagrams (Stage 7)
     parser.add_argument("--comments-xml", default=None,
@@ -4009,19 +4095,35 @@ def main():
     # ========== Stage 2: Embeddings ==========
     if not args.skip_embeddings:
         t2 = time.time()
-        print(f"\n[Stage 2/{n_stages}] Embeddings ({args.embed_model})...")
-        embeddings = compute_qa_embeddings(
-            pairs,
-            model_name=args.embed_model,
-            batch_size=args.embed_batch_size,
-            device=args.embed_device,
-        )
         emb_path = outdir / "embeddings.npy"
-        np.save(emb_path, embeddings)
-        print(f"       Shape: {embeddings.shape}, "
-              f"saved {os.path.getsize(emb_path)/1e9:.2f} GB")
-        print(f"       Stage 2 done in {time.time()-t2:.0f}s")
-        mark_stage("embeddings", "completed", n_vectors=int(embeddings.shape[0]))
+        if emb_path.exists():
+            embeddings = np.load(emb_path)
+            if embeddings.shape[0] == len(pairs):
+                print(f"\n[Stage 2/{n_stages}] Reusing existing {emb_path.name} "
+                      f"(shape {embeddings.shape})")
+                mark_stage("embeddings", "completed",
+                           n_vectors=int(embeddings.shape[0]), resumed=True)
+            else:
+                print(f"\n[Stage 2/{n_stages}] Existing {emb_path.name} has "
+                      f"{embeddings.shape[0]} rows but pairs={len(pairs)}; recomputing.")
+                embeddings = None
+        else:
+            embeddings = None
+
+        if embeddings is None:
+            print(f"\n[Stage 2/{n_stages}] Embeddings ({args.embed_model})...")
+            embeddings = compute_qa_embeddings(
+                pairs,
+                model_name=args.embed_model,
+                batch_size=args.embed_batch_size,
+                device=args.embed_device,
+                num_workers=args.embed_workers,
+            )
+            np.save(emb_path, embeddings)
+            print(f"       Shape: {embeddings.shape}, "
+                  f"saved {os.path.getsize(emb_path)/1e9:.2f} GB")
+            print(f"       Stage 2 done in {time.time()-t2:.0f}s")
+            mark_stage("embeddings", "completed", n_vectors=int(embeddings.shape[0]))
     else:
         print(f"\n[Stage 2/{n_stages}] Skipped (--skip-embeddings)")
         embeddings = None
@@ -4215,6 +4317,281 @@ def main():
     else:
         print(f"\n[Stage 5b/{n_stages}] Skipped (--run-distinctor-mit not set)")
         mark_stage("distinctor_mit", "skipped", skip_reason="--run-distinctor-mit not set")
+
+    # Paper text loader used by stages 5c and 5d: prefer eprint LaTeX body
+    # when --paper-eprint-dir is set; fall back to abstract-only text.
+    paper_eprint_path = (
+        Path(args.paper_eprint_dir) if args.paper_eprint_dir else None
+    )
+    if paper_eprint_path is not None and not paper_eprint_path.exists():
+        print(f"       Warning: --paper-eprint-dir {paper_eprint_path} does "
+              f"not exist; paper stages will fall back to abstracts.")
+        paper_eprint_path = None
+
+    def _paper_text_for(entity, pair):
+        """Return (text, source) for a paper stage.
+
+        Source is 'eprint' if the LaTeX body loaded, 'abstract' otherwise.
+        """
+        abstract_text = (pair.question.title + "\n\n"
+                         + pair.question.body_text + "\n\n"
+                         + pair.answer.body_text)
+        if paper_eprint_path is None:
+            return abstract_text, "abstract"
+        eprint_text, _meta = _load_eprint_text_for_entity(
+            paper_eprint_path,
+            entity["entity/id"],
+            max_chars=args.paper_eprint_max_chars,
+            max_members=args.paper_eprint_max_tex_members,
+        )
+        if eprint_text:
+            return pair.question.title + "\n\n" + eprint_text, "eprint"
+        return abstract_text, "abstract"
+
+    # ========== Stage 5c: Technique-level NER ==========
+    # Paper-focused technique extraction. Classical and LLM arms are kept
+    # distinct so downstream analysis can attribute signal to each.
+    # Spec: futon6/holes/missions/M-paper-reverse-morphogenesis.md §5c.
+    if not args.skip_technique_ner:
+        t5c = time.time()
+        print(f"\n[Stage 5c/{n_stages}] Technique-level NER "
+              f"(arm={args.technique_ner_arm})...")
+        techniques_path = outdir / "techniques.json"
+        if techniques_path.exists():
+            print(f"       Reusing existing {techniques_path.name}")
+            mark_stage("technique_ner", "completed", resumed=True)
+        else:
+            arm = args.technique_ner_arm
+            concept_vocab: set[str] = set()
+            ner_terms_path = outdir / "ner-terms.json"
+            if ner_terms_path.exists():
+                try:
+                    with open(ner_terms_path) as f:
+                        for record in json.load(f):
+                            for t in record.get("terms", []) or []:
+                                if isinstance(t, dict):
+                                    term = t.get("term") or t.get("canon") or ""
+                                elif isinstance(t, str):
+                                    term = t
+                                else:
+                                    term = ""
+                                if term:
+                                    concept_vocab.add(term.lower())
+                except (json.JSONDecodeError, OSError) as e:
+                    print(f"       Warning: could not read {ner_terms_path.name} "
+                          f"for concept seeding ({e}); proceeding without.")
+            if concept_vocab:
+                print(f"       Concept vocabulary: {len(concept_vocab)} terms "
+                      f"(from Stage 5 ner-terms.json)")
+
+            pipe_5c = tok_5c = None
+            if arm in ("llm", "both"):
+                pipe_5c, tok_5c = _ensure_llm_pipeline()
+
+            records = []
+            n_papers = len(pairs)
+            arm_counts = {"classical": 0, "llm": 0, "both": 0}
+            text_source_counts = {"eprint": 0, "abstract": 0}
+            t_batch = time.time()
+            for i, (entity, pair) in enumerate(zip(entities, pairs)):
+                paper_text, text_source = _paper_text_for(entity, pair)
+                text_source_counts[text_source] = (
+                    text_source_counts.get(text_source, 0) + 1
+                )
+                classical_hits = (
+                    extract_techniques_classical(
+                        paper_text,
+                        concepts=concept_vocab or None,
+                        max_terms=args.technique_ner_max_terms,
+                    )
+                    if arm in ("classical", "both") else []
+                )
+                llm_hits = (
+                    extract_techniques_llm(
+                        paper_text,
+                        pipe=pipe_5c,
+                        tokenizer=tok_5c,
+                        max_input_chars=args.technique_ner_llm_max_chars,
+                    )
+                    if arm in ("llm", "both") else []
+                )
+                if arm == "both":
+                    merged = merge_technique_arms(classical_hits, llm_hits)
+                elif arm == "classical":
+                    merged = classical_hits
+                else:
+                    merged = llm_hits
+                for h in merged:
+                    arm_counts[h.extraction_source] = (
+                        arm_counts.get(h.extraction_source, 0) + 1
+                    )
+                records.append(techniques_to_records(entity["entity/id"], merged))
+                if (i + 1) % 100 == 0 or (i + 1) == n_papers:
+                    elapsed = time.time() - t_batch
+                    rate = (i + 1) / elapsed if elapsed > 0 else 0
+                    eta = (n_papers - i - 1) / rate if rate > 0 else 0
+                    print(f"       [{i+1}/{n_papers}] {rate:.1f} papers/s, "
+                          f"ETA {eta/60:.0f} min")
+
+            with open(techniques_path, "w") as f:
+                json.dump(records, f, ensure_ascii=False, indent=2)
+            print(f"       Saved {techniques_path.name} "
+                  f"({sum(len(r['techniques']) for r in records)} terms across "
+                  f"{n_papers} papers)")
+            print(f"       Provenance: classical={arm_counts['classical']}, "
+                  f"llm={arm_counts['llm']}, both={arm_counts['both']}")
+            print(f"       Text source: eprint={text_source_counts['eprint']}, "
+                  f"abstract-fallback={text_source_counts['abstract']}")
+            print(f"       Stage 5c done in {time.time()-t5c:.0f}s")
+            mark_stage("technique_ner", "completed",
+                       n_papers=n_papers, arm=arm, arm_counts=arm_counts,
+                       text_source_counts=text_source_counts)
+    else:
+        print(f"\n[Stage 5c/{n_stages}] Skipped (--skip-technique-ner)")
+        mark_stage("technique_ner", "skipped", skip_reason="--skip-technique-ner")
+
+    # ========== Stage 5d: Paper hypergraph ==========
+    # Structure-and-terminology lift: argumentative skeleton from LaTeX
+    # blocks (theorem/lemma/proof/definition/equation/citation) plus the
+    # concept + technique nodes from stages 5 and 5c.
+    # Spec: futon6/holes/missions/M-paper-reverse-morphogenesis.md §5d.
+    if not args.skip_paper_hypergraph:
+        t5d = time.time()
+        print(f"\n[Stage 5d/{n_stages}] Paper hypergraph "
+              f"(arm={args.paper_hypergraph_arm})...")
+        hg_path = outdir / "paper-hypergraphs.json"
+        if hg_path.exists():
+            print(f"       Reusing existing {hg_path.name}")
+            mark_stage("paper_hypergraph", "completed", resumed=True)
+        else:
+            arm = args.paper_hypergraph_arm
+
+            # Concept vocabulary from Stage 5
+            concept_by_entity: dict[str, list[str]] = {}
+            ner_terms_path = outdir / "ner-terms.json"
+            if ner_terms_path.exists():
+                try:
+                    with open(ner_terms_path) as f:
+                        for record in json.load(f):
+                            eid = record.get("entity_id") or record.get("id")
+                            terms = []
+                            for t in record.get("terms", []) or []:
+                                if isinstance(t, dict):
+                                    tt = t.get("term") or t.get("canon") or ""
+                                elif isinstance(t, str):
+                                    tt = t
+                                else:
+                                    tt = ""
+                                if tt:
+                                    terms.append(tt)
+                            if eid:
+                                concept_by_entity[eid] = terms
+                except (json.JSONDecodeError, OSError) as e:
+                    print(f"       Warning: could not read ner-terms.json "
+                          f"({e}); proceeding without concept vocabulary.")
+
+            # Technique vocabulary from Stage 5c
+            technique_by_entity: dict[str, list[str]] = {}
+            techniques_path = outdir / "techniques.json"
+            if techniques_path.exists():
+                try:
+                    with open(techniques_path) as f:
+                        for record in json.load(f):
+                            eid = record.get("paper_id")
+                            terms = [t.get("term") for t in record.get("techniques", [])
+                                     if isinstance(t, dict) and t.get("term")]
+                            if eid:
+                                technique_by_entity[eid] = terms
+                except (json.JSONDecodeError, OSError) as e:
+                    print(f"       Warning: could not read techniques.json "
+                          f"({e}); proceeding without technique vocabulary.")
+
+            if concept_by_entity or technique_by_entity:
+                print(f"       Loaded vocabularies: "
+                      f"{len(concept_by_entity)} papers with concepts, "
+                      f"{len(technique_by_entity)} with techniques")
+
+            pipe_5d = tok_5d = None
+            if arm in ("llm", "both"):
+                pipe_5d, tok_5d = _ensure_llm_pipeline()
+
+            hypergraphs = []
+            n_papers = len(pairs)
+            edge_provenance = {"classical": 0, "llm": 0, "both": 0}
+            n_blocks_total = 0
+            n_with_claim_blocks = 0
+            text_source_counts = {"eprint": 0, "abstract": 0}
+            t_batch = time.time()
+            for i, (entity, pair) in enumerate(zip(entities, pairs)):
+                eid = entity["entity/id"]
+                paper_text, text_source = _paper_text_for(entity, pair)
+                text_source_counts[text_source] = (
+                    text_source_counts.get(text_source, 0) + 1
+                )
+                concepts_p = concept_by_entity.get(eid, [])
+                techniques_p = technique_by_entity.get(eid, [])
+
+                classical_hg = (
+                    extract_paper_hypergraph_classical(
+                        paper_text, eid,
+                        concepts=concepts_p,
+                        techniques=techniques_p,
+                    )
+                    if arm in ("classical", "both")
+                    else {"paper_id": eid, "nodes": [], "edges": [],
+                          "sectional": [], "meta": {}}
+                )
+
+                if arm in ("llm", "both"):
+                    llm_edges = extract_paper_hypergraph_llm(
+                        paper_text, classical_hg,
+                        pipe=pipe_5d, tokenizer=tok_5d,
+                        prose_cap_chars=args.paper_hypergraph_prose_cap,
+                        hg_cap_nodes=args.paper_hypergraph_node_cap,
+                    )
+                    final_hg = merge_paper_hypergraphs(classical_hg, llm_edges)
+                else:
+                    final_hg = classical_hg
+
+                for e in final_hg["edges"]:
+                    prov = e.get("attrs", {}).get("provenance", "classical")
+                    edge_provenance[prov] = edge_provenance.get(prov, 0) + 1
+
+                n_blocks_total += final_hg.get("meta", {}).get("n_blocks", 0)
+                if final_hg.get("meta", {}).get("has_theorem_blocks"):
+                    n_with_claim_blocks += 1
+                hypergraphs.append(final_hg)
+
+                if (i + 1) % 100 == 0 or (i + 1) == n_papers:
+                    elapsed = time.time() - t_batch
+                    rate = (i + 1) / elapsed if elapsed > 0 else 0
+                    eta = (n_papers - i - 1) / rate if rate > 0 else 0
+                    print(f"       [{i+1}/{n_papers}] {rate:.1f} papers/s, "
+                          f"ETA {eta/60:.0f} min")
+
+            with open(hg_path, "w") as f:
+                json.dump(hypergraphs, f, ensure_ascii=False)
+            total_edges = sum(len(h["edges"]) for h in hypergraphs)
+            total_nodes = sum(len(h["nodes"]) for h in hypergraphs)
+            print(f"       Saved {hg_path.name}: {total_nodes} nodes, "
+                  f"{total_edges} edges across {n_papers} papers")
+            print(f"       Papers with theorem/lemma/proposition blocks: "
+                  f"{n_with_claim_blocks}/{n_papers} "
+                  f"({100 * n_with_claim_blocks / max(n_papers, 1):.0f}%)")
+            print(f"       Edge provenance: classical={edge_provenance['classical']}, "
+                  f"llm={edge_provenance['llm']}, both={edge_provenance['both']}")
+            print(f"       Text source: eprint={text_source_counts['eprint']}, "
+                  f"abstract-fallback={text_source_counts['abstract']}")
+            print(f"       Stage 5d done in {time.time()-t5d:.0f}s")
+            mark_stage("paper_hypergraph", "completed",
+                       n_papers=n_papers, arm=arm,
+                       total_nodes=total_nodes, total_edges=total_edges,
+                       with_claim_blocks=n_with_claim_blocks,
+                       edge_provenance=edge_provenance,
+                       text_source_counts=text_source_counts)
+    else:
+        print(f"\n[Stage 5d/{n_stages}] Skipped (--skip-paper-hypergraph)")
+        mark_stage("paper_hypergraph", "skipped", skip_reason="--skip-paper-hypergraph")
 
     # ========== Stage 6: Reverse morphogenesis S←Q←A ==========
     stage6_stats = None
