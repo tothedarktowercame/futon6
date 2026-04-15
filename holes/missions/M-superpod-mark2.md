@@ -155,6 +155,18 @@ independently of the mining pipeline.
 | Pipeline improvements: hard negatives (9b), technique NER (5), hybrid (10) | Joe | In progress (math.CT pilot was the round-trip) |
 | First batch test run on superpod | Rob | After mark2 deployed |
 
+### Open items — future mark2
+
+Design questions the current round-robin arXiv slicing doesn't answer, to
+be addressed once the extraction/reconstruction pipeline is validated at
+scale.
+
+| Item | Why it matters | Triggering condition |
+|---|---|---|
+| **Topic-targeted batch cutting** | mark2 currently slices arXiv in round-robin order. Batch-N's content is uncorrelated with any specific downstream evaluation target (APM prelim topics, Mathlib/LeanDojo coverage, FrontierMath problem areas). Eventually, evaluating the forward-model claim (PREREG Claim 4) requires a batch whose content is topic-aligned to the evaluation target — otherwise the forward model has no training signal in the relevant direction. Open design questions: where do the topic filters come from (human-curated vs learned from broad-batch reconstructions)? how do we avoid overfitting the forward model to the filter's biases? does the topic filter itself need a preregistration protocol? | After ≥ 3 broad batches land cleanly and stage 11 scores are in the usable range, cut a first topic-targeted batch. |
+| **Cross-batch vocabulary consolidation** | Each batch's 5c output grows the technique vocabulary, but without a canonicalization pass the same technique appears under multiple surface forms across batches ("Borel completion adjunction" vs "Borel completion" vs "completion adjunction"). Long-term corpus quality depends on canonicalization. | When the cumulative technique vocabulary across all batches exceeds ~10K terms. |
+| **Batch-aware reproducibility** | Each batch's pipeline state (library version, prompts, code SHA) is recorded per-run, but a clean `batch-N-pipeline-snapshot.tar.gz` that freezes the state of all four learning-loop channels would make post-hoc replay possible. | Whenever a batch's results are surprising enough that we want to re-run it with the exact original pipeline. |
+
 ## How we'll know it worked
 
 1. Run the improved pipeline on a corpus significantly larger than

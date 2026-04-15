@@ -122,12 +122,24 @@ implemented and running at scale, is used to train a model that takes
 (problem, techniques, patterns) → sketched argumentative structure,
 
 **THEN** that model should propose usable technique-and-structure
-candidates for novel problems (specifically, the learn-to-swim canaries
-and LeanDojo pilot-20 problems in M-apm-solutions).
+candidates for novel problems.
 
-**Status:** Not tested in batch-002. Preregistered here so that the
-thread is documented end-to-end; evaluation of Claim 4 is the
-responsibility of M-apm-solutions.
+**Status:** Not tested in batch-002, and not testable against any
+specific external problem set from this batch's output. Batch-002 is
+a ~5,000-paper round-robin slice of the arXiv math manifest; its
+content is uncorrelated with any particular downstream evaluation
+target (e.g., APM prelim topics, Mathlib's LeanDojo coverage,
+FrontierMath problem areas). The batch's role here is to produce
+*input* for forward-model training — not to test whether the trained
+model is useful against a specific target. Evaluation of Claim 4 is
+the responsibility of the downstream consumer mission
+(M-apm-solutions), and requires a corpus whose content has been
+accumulated or filtered to cover the evaluation target's topics. See
+M-superpod-mark2 § "Open items — future mark2" for the topic-targeted
+batch question that Claim 4's eventual evaluation depends on.
+
+Preregistered here so that the thread is documented end-to-end, not
+so that batch-002 is taken to bear on it.
 
 ## Operational definitions
 
