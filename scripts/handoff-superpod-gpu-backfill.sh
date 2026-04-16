@@ -27,7 +27,7 @@ echo() {
 #   LLM_STAGE3_CHUNKS_PER_SHARD  Stage 3 resumable chunks per shard (default: 10)
 #   LLM_STAGE6_BATCH_SIZE  Stage 6 LLM batch size (default: 48)
 #   LLM_STAGE6_CHUNKS_PER_SHARD  Stage 6 resumable chunks per shard (default: 10)
-#   LLM_GPU_WORKERS       Process-level Stage 5c LLM GPU workers
+#   LLM_GPU_WORKERS       Process-level local LLM GPU workers
 #                          (default: 0 = auto all visible GPUs)
 #   LLM_LOADER_WORKERS     Python workers feeding Dataset-backed LLM pipelines.
 #                          For unsharded runs, superpod-job defaults to

@@ -231,7 +231,6 @@ embarrassingly parallel.
 
 **Still open (deferred from this checkpoint):**
 
-- Stage 6 (reverse morphogenesis LLM inference) is still on one GPU. `_create_llm_pipeline` uses `device_map="auto"` which places a small model entirely on cuda:0. Real 8-GPU data-parallel generation needs a process-level replica refactor (N worker procs, each with its own pipe, chunk-sharded inputs) — larger change, intentionally punted. Revisit before batch-003 if stage 6 is still the wall-clock dominator.
 - Stage 9b R-GCN training is still single-GPU. Mark 2's stated goal (hard negatives, non-collapsed embeddings) doesn't require DDP yet at batch sizes we've tested; defer until training signal is proven on batch-002/003 outputs.
 
 ## Follow-up Checkpoint — Rob's throughput feedback (2026-04-16)
@@ -253,8 +252,9 @@ Rob's second burn-in pass caught two concrete throughput issues:
   visible GPUs for CUDA embeddings, one worker otherwise. Explicit
   `--embed-workers 8` remains fine and documents intent.
 - `scripts/superpod-job.py` — new `--llm-gpu-workers N`; default is auto
-  all visible GPUs for Stage 5c. This is process-level data parallelism:
-  one Python model worker per GPU, each with its own `CUDA_VISIBLE_DEVICES`.
+  all visible GPUs for local LLM stages (3, 5c, 5d, 6, and legacy 7).
+  This is process-level data parallelism: one Python model worker per GPU,
+  each with its own `CUDA_VISIBLE_DEVICES`.
 - `scripts/superpod-job.py` — new `--llm-loader-workers N`; default is
   `min(16, Slurm/cpuset CPU affinity)`, with `LLM_LOADER_WORKERS` as an env
   override and `0` for inline loading.
