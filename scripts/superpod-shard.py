@@ -53,6 +53,30 @@ def print(*args, **kwargs):  # type: ignore[override]
     return _builtins.print(f"[{_timestamp_now()}]", *args, **kwargs)
 
 
+def _available_cpu_count() -> int:
+    """CPU count available to this job, honoring Slurm/cpuset affinity."""
+    counts = []
+    slurm_cpus = os.environ.get("SLURM_CPUS_PER_TASK")
+    if slurm_cpus and slurm_cpus.isdigit():
+        counts.append(int(slurm_cpus))
+    try:
+        counts.append(len(os.sched_getaffinity(0)))
+    except (AttributeError, OSError):
+        pass
+    if not counts:
+        counts.append(os.cpu_count() or 1)
+    return max(1, min(c for c in counts if c > 0))
+
+
+def _default_loader_workers_per_shard(num_shards: int) -> int:
+    """Split the Slurm/cpuset CPU allotment across concurrent shard procs."""
+    return max(1, min(16, _available_cpu_count()) // max(1, num_shards))
+
+
+def _has_option(args, option: str) -> bool:
+    return any(a == option or a.startswith(option + "=") for a in args)
+
+
 def _stream_shard_output(
     shard_idx: int,
     pipe,
@@ -382,12 +406,26 @@ def cmd_run(args):
     if args.graph_embed_workers < 0:
         print("[run] ERROR: --graph-embed-workers must be >= 0", file=sys.stderr)
         sys.exit(2)
+    if args.llm_loader_workers is None:
+        env_loader_workers = os.environ.get("LLM_LOADER_WORKERS")
+        if env_loader_workers:
+            if not env_loader_workers.isdigit():
+                print("[run] ERROR: LLM_LOADER_WORKERS must be >= 0", file=sys.stderr)
+                sys.exit(2)
+            args.llm_loader_workers = int(env_loader_workers)
+        else:
+            args.llm_loader_workers = _default_loader_workers_per_shard(num_shards)
+    if args.llm_loader_workers < 0:
+        print("[run] ERROR: --llm-loader-workers must be >= 0", file=sys.stderr)
+        sys.exit(2)
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
 
     # Detect GPUs for assignment
     num_gpus = detect_gpu_count()
     print(f"[run] {num_shards} shards, {num_gpus} GPUs detected")
+    print(f"[run] CPU affinity: {_available_cpu_count()} cores; "
+          f"LLM loader workers per shard: {args.llm_loader_workers}")
     print(f"[run] output: {outdir}")
 
     # Build shard output dirs
@@ -405,6 +443,8 @@ def cmd_run(args):
         base_cmd += ["--comments-xml", args.comments_xml]
     if getattr(args, "input_dir", None):
         base_cmd += ["--input-dir", args.input_dir]
+    if not _has_option(args.extra_args, "--llm-loader-workers"):
+        base_cmd += ["--llm-loader-workers", str(args.llm_loader_workers)]
     # Pass through extra flags
     base_cmd += args.extra_args
 
@@ -586,6 +626,10 @@ def main():
                        help="Batch size for post-merge Stage 9b graph embedding (default: 1024)")
     p_run.add_argument("--graph-embed-workers", type=int, default=16,
                        help="CPU workers for Stage 9b batch prep (default: 16)")
+    p_run.add_argument("--llm-loader-workers", type=int, default=None,
+                       help="Python workers feeding each shard's Dataset-backed "
+                            "transformers pipelines. Default: split "
+                            "min(16, Slurm/cpuset CPU affinity) across shards.")
     p_run.add_argument("--input-dir", default=None,
                        help="Base directory for input data (Posts.xml, 7z files). "
                             "Use when data lives on /scratch/ or another filesystem.")

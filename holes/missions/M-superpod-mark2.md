@@ -216,13 +216,51 @@ Observed problems and the changes made before batch-002:
 ```bash
 python ~/futon6/scripts/superpod-job.py \
   --arxiv-jsonl batch-002.jsonl --site arxiv.math \
-  --output-dir ./output/ --embed-workers 8
+  --output-dir ./output/ --embed-workers 8 --llm-loader-workers 16
 ```
+
+Rob's Slurm `short` queue allocation exposes 16 CPU cores to the job via
+cpuset affinity. Do not size feeders from the physical node; use the job
+affinity (`SLURM_CPUS_PER_TASK` / `os.sched_getaffinity(0)`). GPU data
+parallelism does not remove the need to feed batches with enough Python
+workers, and pure-CPU stages should use multiprocessing where their work is
+embarrassingly parallel.
 
 **Still open (deferred from this checkpoint):**
 
 - Stage 6 (reverse morphogenesis LLM inference) is still on one GPU. `_create_llm_pipeline` uses `device_map="auto"` which places a small model entirely on cuda:0. Real 8-GPU data-parallel generation needs a process-level replica refactor (N worker procs, each with its own pipe, chunk-sharded inputs) — larger change, intentionally punted. Revisit before batch-003 if stage 6 is still the wall-clock dominator.
 - Stage 9b R-GCN training is still single-GPU. Mark 2's stated goal (hard negatives, non-collapsed embeddings) doesn't require DDP yet at batch sizes we've tested; defer until training signal is proven on batch-002/003 outputs.
+
+## Follow-up Checkpoint — Rob's throughput feedback (2026-04-16)
+
+Rob's second burn-in pass caught two concrete throughput issues:
+
+1. Eight GPUs were visible, but the runner did not also raise the CPU-side
+   feeder worker count. On the Slurm `short` queue the usable CPU budget is
+   16 cores, even though the node has more physical CPUs; code must honor
+   affinity rather than `os.cpu_count()` alone.
+2. Stage 5c/5d still invoked transformers pipelines once per paper, producing
+   the HF warning: "You seem to be using the pipelines sequentially on GPU."
+   The correct shape is Dataset-backed pipeline calls, as already used by
+   stages 3, 6, and 7.
+
+**Changes landed (futon6 @ 2026-04-16):**
+
+- `scripts/superpod-job.py` — `--embed-workers` now defaults to auto: all
+  visible GPUs for CUDA embeddings, one worker otherwise. Explicit
+  `--embed-workers 8` remains fine and documents intent.
+- `scripts/superpod-job.py` — new `--llm-loader-workers N`; default is
+  `min(16, Slurm/cpuset CPU affinity)`, with `LLM_LOADER_WORKERS` as an env
+  override and `0` for inline loading.
+- `src/futon6/technique_ner.py` and `src/futon6/paper_hypergraph.py` —
+  added Dataset-backed batch helpers for Stage 5c and 5d LLM arms.
+- `scripts/superpod-job.py` — Stage 5c and 5d now call the LLM in batched
+  Dataset chunks instead of one pipeline invocation per paper.
+- `scripts/superpod-job.py` — stages 3, 6, and 7 now pass the same explicit
+  loader worker count into their Dataset-backed pipeline calls.
+- `scripts/superpod-shard.py` — sharded mode splits the 16-core/job affinity
+  budget across shard processes by default, so 8 shards use 2 feeder workers
+  each unless overridden.
 
 ## Checkpoint — Learn As We Go (2026-04-15)
 

@@ -612,7 +612,12 @@ def compute_qa_embeddings(
     """
     from sentence_transformers import SentenceTransformer
 
-    model = SentenceTransformer(model_name, device=device)
+    model_device = device
+    if num_workers > 1 and device and device.startswith("cuda"):
+        # The worker pool below places replicas on target_devices. Keeping the
+        # parent model on CPU avoids an unnecessary extra allocation on cuda:0.
+        model_device = "cpu"
+    model = SentenceTransformer(model_name, device=model_device)
 
     texts = []
     for pair in pairs:

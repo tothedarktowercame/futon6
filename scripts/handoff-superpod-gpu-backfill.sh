@@ -27,6 +27,11 @@ echo() {
 #   LLM_STAGE3_CHUNKS_PER_SHARD  Stage 3 resumable chunks per shard (default: 10)
 #   LLM_STAGE6_BATCH_SIZE  Stage 6 LLM batch size (default: 48)
 #   LLM_STAGE6_CHUNKS_PER_SHARD  Stage 6 resumable chunks per shard (default: 10)
+#   LLM_LOADER_WORKERS     Python workers feeding Dataset-backed LLM pipelines.
+#                          For unsharded runs, superpod-job defaults to
+#                          min(16, Slurm/cpuset CPU affinity). For sharded
+#                          runs, superpod-shard splits that CPU budget across
+#                          concurrent shard processes unless explicitly set.
 #   GRAPH_EMBED_DIM         embedding dimension (default: 128)
 #   GRAPH_EMBED_EPOCHS      training epochs (default: 50)
 #   GRAPH_EMBED_BATCH_SIZE  training batch size (default: 1024)
@@ -88,7 +93,7 @@ if [[ -z "${GRAPH_EMBED_WORKERS:-}" ]]; then
   fi
 fi
 
-echo "[gpu] llm config: stage3_batch=${LLM_STAGE3_BATCH_SIZE} chunks=${LLM_STAGE3_CHUNKS_PER_SHARD} stage6_batch=${LLM_STAGE6_BATCH_SIZE} stage6_chunks=${LLM_STAGE6_CHUNKS_PER_SHARD} base_batch=${LLM_BATCH_SIZE}"
+echo "[gpu] llm config: stage3_batch=${LLM_STAGE3_BATCH_SIZE} chunks=${LLM_STAGE3_CHUNKS_PER_SHARD} stage6_batch=${LLM_STAGE6_BATCH_SIZE} stage6_chunks=${LLM_STAGE6_CHUNKS_PER_SHARD} base_batch=${LLM_BATCH_SIZE} loader_workers=${LLM_LOADER_WORKERS:-auto}"
 echo "[gpu] graph-embed config: dim=${GRAPH_EMBED_DIM} epochs=${GRAPH_EMBED_EPOCHS} batch=${GRAPH_EMBED_BATCH_SIZE} workers=${GRAPH_EMBED_WORKERS}"
 # ~/~ end
 

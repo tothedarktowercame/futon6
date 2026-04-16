@@ -553,6 +553,85 @@ def _parse_llm_edges(response: str) -> list[dict]:
     return out
 
 
+def _filter_llm_edges(classical_hg: dict, edges: list[dict]) -> list[dict]:
+    """Keep only LLM edges whose endpoint node ids exist classically."""
+    valid_ids = {n["id"] for n in classical_hg["nodes"]}
+    filtered = []
+    for e in edges:
+        if all(end in valid_ids for end in e["ends"]):
+            filtered.append(e)
+    return filtered
+
+
+def extract_paper_hypergraph_llm_batch(
+    texts: list[str],
+    classical_hgs: list[dict],
+    pipe,
+    tokenizer,
+    max_new_tokens: int = 700,
+    prose_cap_chars: int = 4000,
+    hg_cap_nodes: int = 80,
+    batch_size: int = 8,
+    loader_workers: int = 0,
+) -> list[list[dict]]:
+    """Batched LLM implicit-edge extraction for paper hypergraphs.
+
+    Uses a Dataset-backed transformers pipeline call so GPU inference is
+    streamed in batches instead of invoked once per paper.
+    """
+    from torch.utils.data import Dataset as TorchDataset
+
+    if len(texts) != len(classical_hgs):
+        raise ValueError(
+            f"text/classical_hg length mismatch: {len(texts)} != {len(classical_hgs)}"
+        )
+
+    class _PaperHypergraphPromptDataset(TorchDataset):
+        def __init__(self, paper_texts, hgs, tok):
+            self.paper_texts = paper_texts
+            self.hgs = hgs
+            self.tok = tok
+
+        def __len__(self):
+            return len(self.paper_texts)
+
+        def __getitem__(self, idx):
+            prompt = _build_llm_prompt(
+                self.paper_texts[idx],
+                self.hgs[idx],
+                prose_cap_chars=prose_cap_chars,
+                hg_cap_nodes=hg_cap_nodes,
+            )
+            messages = [{"role": "user", "content": prompt}]
+            return self.tok.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+
+    if not texts:
+        return []
+
+    prompt_dataset = _PaperHypergraphPromptDataset(texts, classical_hgs, tokenizer)
+    outputs = pipe(
+        prompt_dataset,
+        return_full_text=False,
+        max_new_tokens=max_new_tokens,
+        batch_size=batch_size,
+        num_workers=loader_workers,
+    )
+
+    results: list[list[dict]] = []
+    for classical_hg, out in zip(classical_hgs, outputs):
+        if isinstance(out, list):
+            item = out[0] if out else {}
+        elif isinstance(out, dict):
+            item = out
+        else:
+            item = {}
+        raw = str(item.get("generated_text", ""))
+        results.append(_filter_llm_edges(classical_hg, _parse_llm_edges(raw)))
+    return results
+
+
 def extract_paper_hypergraph_llm(
     text: str,
     classical_hg: dict,
@@ -567,30 +646,17 @@ def extract_paper_hypergraph_llm(
     Caller is expected to merge these into the classical hypergraph via
     merge_paper_hypergraphs().
     """
-    prompt = _build_llm_prompt(text, classical_hg,
-                               prose_cap_chars=prose_cap_chars,
-                               hg_cap_nodes=hg_cap_nodes)
-    messages = [{"role": "user", "content": prompt}]
-    formatted = tokenizer.apply_chat_template(
-        messages, tokenize=False, add_generation_prompt=True
-    )
-    outputs = pipe(
-        [formatted],
-        return_full_text=False,
+    return extract_paper_hypergraph_llm_batch(
+        [text],
+        [classical_hg],
+        pipe=pipe,
+        tokenizer=tokenizer,
         max_new_tokens=max_new_tokens,
-    )
-    raw = outputs[0][0]["generated_text"] if outputs else ""
-    edges = _parse_llm_edges(raw)
-
-    # Keep only edges whose ends all reference nodes that exist in the
-    # classical hypergraph. This prevents hallucinated node IDs from leaking
-    # into downstream consumers.
-    valid_ids = {n["id"] for n in classical_hg["nodes"]}
-    filtered = []
-    for e in edges:
-        if all(end in valid_ids for end in e["ends"]):
-            filtered.append(e)
-    return filtered
+        prose_cap_chars=prose_cap_chars,
+        hg_cap_nodes=hg_cap_nodes,
+        batch_size=1,
+        loader_workers=0,
+    )[0]
 
 
 def merge_paper_hypergraphs(classical_hg: dict, llm_edges: list[dict]) -> dict:

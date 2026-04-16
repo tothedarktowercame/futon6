@@ -58,6 +58,11 @@ echo() {
 #   LLM_STAGE3_CHUNKS_PER_SHARD  Stage 3 resumable chunks per shard (default: 10)
 #   LLM_STAGE6_BATCH_SIZE  Stage 6 LLM batch size (default: 48)
 #   LLM_STAGE6_CHUNKS_PER_SHARD  Stage 6 resumable chunks per shard (default: 10)
+#   LLM_LOADER_WORKERS     Python workers feeding Dataset-backed LLM pipelines.
+#                          Unsharded superpod-job defaults to min(16,
+#                          Slurm/cpuset CPU affinity). Sharded superpod-shard
+#                          splits that CPU budget across shard processes unless
+#                          explicitly set.
 #   GRAPH_EMBED_DIM         Stage 9b embedding dimension (default: 128)
 #   GRAPH_EMBED_EPOCHS      Stage 9b epochs (default: 50)
 #   GRAPH_EMBED_BATCH_SIZE  Stage 9b batch size (default: 1024)
@@ -268,7 +273,7 @@ package_outputs() {
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-orchestration>>[init]
 echo "[all] repo: $ROOT_DIR"
 echo "[all] block=$BLOCK smoke_only=$SMOKE_ONLY skip_bootstrap=$SKIP_BOOTSTRAP skip_tests=$SKIP_TESTS num_shards=$NUM_SHARDS"
-echo "[all] llm: stage3_batch=$LLM_STAGE3_BATCH_SIZE chunks=$LLM_STAGE3_CHUNKS_PER_SHARD stage6_batch=$LLM_STAGE6_BATCH_SIZE stage6_chunks=$LLM_STAGE6_CHUNKS_PER_SHARD base_batch=$LLM_BATCH_SIZE"
+echo "[all] llm: stage3_batch=$LLM_STAGE3_BATCH_SIZE chunks=$LLM_STAGE3_CHUNKS_PER_SHARD stage6_batch=$LLM_STAGE6_BATCH_SIZE stage6_chunks=$LLM_STAGE6_CHUNKS_PER_SHARD base_batch=$LLM_BATCH_SIZE loader_workers=${LLM_LOADER_WORKERS:-auto}"
 echo "[all] graph-embed: dim=$GRAPH_EMBED_DIM epochs=$GRAPH_EMBED_EPOCHS batch=$GRAPH_EMBED_BATCH_SIZE workers=$GRAPH_EMBED_WORKERS"
 echo "[all] resume_math_stage9=$RESUME_MATH_STAGE9"
 

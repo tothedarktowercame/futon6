@@ -323,31 +323,8 @@ def _parse_llm_response(text: str) -> list[dict]:
     return [x for x in parsed if isinstance(x, dict) and x.get("term")]
 
 
-def extract_techniques_llm(
-    text: str,
-    pipe,
-    tokenizer,
-    max_new_tokens: int = 512,
-    max_input_chars: int = 6000,
-) -> list[TechniqueHit]:
-    """LLM-backed technique-NER using a transformers text-generation pipeline.
-
-    pipe / tokenizer are the shared LLM pipeline (created by
-    `_create_llm_pipeline` in superpod-job.py, typically reused across
-    stages 3/6/5c)."""
-    prompt = _build_llm_prompt(text, max_chars=max_input_chars)
-    messages = [{"role": "user", "content": prompt}]
-    formatted = tokenizer.apply_chat_template(
-        messages, tokenize=False, add_generation_prompt=True
-    )
-    outputs = pipe(
-        [formatted],
-        return_full_text=False,
-        max_new_tokens=max_new_tokens,
-    )
-    raw = outputs[0][0]["generated_text"] if outputs else ""
-    entries = _parse_llm_response(raw)
-
+def _llm_entries_to_hits(text: str, entries: list[dict]) -> list[TechniqueHit]:
+    """Convert parsed LLM JSON entries into localized technique hits."""
     section_spans = _parse_section_spans(text)
     hits: dict[str, TechniqueHit] = {}
     lower_text = text.lower()
@@ -390,6 +367,88 @@ def extract_techniques_llm(
         )
 
     return list(hits.values())
+
+
+def extract_techniques_llm_batch(
+    texts: Sequence[str],
+    pipe,
+    tokenizer,
+    max_new_tokens: int = 512,
+    max_input_chars: int = 6000,
+    batch_size: int = 8,
+    loader_workers: int = 0,
+) -> list[list[TechniqueHit]]:
+    """Batched LLM-backed technique-NER.
+
+    Uses a Dataset-backed transformers pipeline call so the GPU stays fed
+    instead of receiving one pipeline invocation per paper.
+    """
+    from torch.utils.data import Dataset as TorchDataset
+
+    class _TechniquePromptDataset(TorchDataset):
+        def __init__(self, paper_texts, tok):
+            self.paper_texts = paper_texts
+            self.tok = tok
+
+        def __len__(self):
+            return len(self.paper_texts)
+
+        def __getitem__(self, idx):
+            prompt = _build_llm_prompt(
+                self.paper_texts[idx], max_chars=max_input_chars
+            )
+            messages = [{"role": "user", "content": prompt}]
+            return self.tok.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+
+    if not texts:
+        return []
+
+    prompt_dataset = _TechniquePromptDataset(texts, tokenizer)
+    outputs = pipe(
+        prompt_dataset,
+        return_full_text=False,
+        max_new_tokens=max_new_tokens,
+        batch_size=batch_size,
+        num_workers=loader_workers,
+    )
+
+    results: list[list[TechniqueHit]] = []
+    for text, out in zip(texts, outputs):
+        if isinstance(out, list):
+            item = out[0] if out else {}
+        elif isinstance(out, dict):
+            item = out
+        else:
+            item = {}
+        raw = str(item.get("generated_text", ""))
+        entries = _parse_llm_response(raw)
+        results.append(_llm_entries_to_hits(text, entries))
+    return results
+
+
+def extract_techniques_llm(
+    text: str,
+    pipe,
+    tokenizer,
+    max_new_tokens: int = 512,
+    max_input_chars: int = 6000,
+) -> list[TechniqueHit]:
+    """LLM-backed technique-NER using a transformers text-generation pipeline.
+
+    pipe / tokenizer are the shared LLM pipeline (created by
+    `_create_llm_pipeline` in superpod-job.py, typically reused across
+    stages 3/6/5c)."""
+    return extract_techniques_llm_batch(
+        [text],
+        pipe=pipe,
+        tokenizer=tokenizer,
+        max_new_tokens=max_new_tokens,
+        max_input_chars=max_input_chars,
+        batch_size=1,
+        loader_workers=0,
+    )[0]
 
 
 # --- Merge --------------------------------------------------------------

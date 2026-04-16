@@ -87,6 +87,42 @@ def _timestamp_now() -> str:
     return datetime.now().strftime("%H:%M:%S")
 
 
+def _available_cpu_count() -> int:
+    """CPU count available to this job, honoring Slurm/cpuset affinity."""
+    counts = []
+    slurm_cpus = os.environ.get("SLURM_CPUS_PER_TASK")
+    if slurm_cpus and slurm_cpus.isdigit():
+        counts.append(int(slurm_cpus))
+    try:
+        counts.append(len(os.sched_getaffinity(0)))
+    except (AttributeError, OSError):
+        pass
+    if not counts:
+        counts.append(os.cpu_count() or 1)
+    return max(1, min(c for c in counts if c > 0))
+
+
+def _default_loader_workers() -> int:
+    """Default feeder workers for Dataset-backed LLM pipeline calls."""
+    return min(16, _available_cpu_count())
+
+
+def _visible_cuda_count() -> int:
+    """Count GPUs visible to this process."""
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return int(torch.cuda.device_count())
+    except Exception:
+        pass
+
+    visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if visible:
+        devices = [d for d in visible.split(",") if d.strip() and d.strip() != "-1"]
+        return len(devices)
+    return 0
+
+
 def print(*args, **kwargs):  # type: ignore[override]
     kwargs.setdefault("flush", True)
     return _builtins.print(f"[{_timestamp_now()}]", *args, **kwargs)
@@ -148,13 +184,13 @@ from futon6.hypergraph import assemble as assemble_hypergraph
 from futon6.faiss_index import HAS_FAISS, build_index, save_index
 from futon6.technique_ner import (
     extract_techniques_classical,
-    extract_techniques_llm,
+    extract_techniques_llm_batch,
     merge_technique_arms,
     techniques_to_records,
 )
 from futon6.paper_hypergraph import (
     extract_paper_hypergraph_classical,
-    extract_paper_hypergraph_llm,
+    extract_paper_hypergraph_llm_batch,
     merge_paper_hypergraphs,
 )
 
@@ -1542,6 +1578,7 @@ def tag_patterns_llm_batch(
     pairs,
     model_name=None,
     batch_size=8,
+    loader_workers=0,
     device="cuda",
     pipe=None,
     tokenizer=None,
@@ -1597,6 +1634,7 @@ def tag_patterns_llm_batch(
         return_full_text=False,
         max_new_tokens=64,
         batch_size=batch_size,
+        num_workers=loader_workers,
     )
 
     if progress_start_time is None:
@@ -1661,6 +1699,7 @@ def run_stage3_pattern_tagging_chunked(
     tokenizer,
     batch_size,
     chunks_per_shard=10,
+    loader_workers=0,
 ):
     """Run Stage 3 in resumable chunks and merge to pattern-tags.json.
 
@@ -1727,6 +1766,7 @@ def run_stage3_pattern_tagging_chunked(
         chunk_tags = tag_patterns_llm_batch(
             pairs[start:end],
             batch_size=batch_size,
+            loader_workers=loader_workers,
             pipe=pipe,
             tokenizer=tokenizer,
             entry_ids=entry_ids[start:end],
@@ -1952,6 +1992,7 @@ def run_reverse_morphogenesis_llm_batch(
     pipe,
     tokenizer,
     batch_size=4,
+    loader_workers=0,
     progress_done_base=0,
     progress_total=None,
     progress_start_time=None,
@@ -2000,6 +2041,7 @@ def run_reverse_morphogenesis_llm_batch(
         return_full_text=False,
         max_new_tokens=640,
         batch_size=batch_size,
+        num_workers=loader_workers,
     )
 
     for i, out in enumerate(outputs):
@@ -2039,6 +2081,7 @@ def run_stage6_reverse_morphogenesis_chunked(
     tokenizer,
     batch_size,
     chunks_per_shard=10,
+    loader_workers=0,
 ):
     """Run Stage 6 in resumable chunks and merge to reverse-morphogenesis.json.
 
@@ -2108,6 +2151,7 @@ def run_stage6_reverse_morphogenesis_chunked(
             pipe,
             tokenizer,
             batch_size=batch_size,
+            loader_workers=loader_workers,
             progress_done_base=processed_this_run,
             progress_total=remaining_pairs,
             progress_start_time=run_start,
@@ -2146,7 +2190,8 @@ def run_stage6_reverse_morphogenesis_chunked(
 # --- Stage 7: Thread performative LLM classification ---
 
 def classify_thread_performatives_llm_batch(diagrams, pipe, tokenizer,
-                                            batch_size=2):
+                                            batch_size=2,
+                                            loader_workers=0):
     """Run LLM-based performative classification on thread wiring diagrams.
 
     Enhances classical detection: for each diagram, generates a prompt,
@@ -2188,6 +2233,7 @@ def classify_thread_performatives_llm_batch(diagrams, pipe, tokenizer,
         return_full_text=False,
         max_new_tokens=512,
         batch_size=batch_size,
+        num_workers=loader_workers,
     )
 
     for i, out in enumerate(outputs):
@@ -3628,11 +3674,12 @@ def main():
                         help="Embedding batch size (default: 1024, tune for GPU VRAM)")
     parser.add_argument("--embed-device", default="cuda",
                         help="Device for embeddings")
-    parser.add_argument("--embed-workers", type=int, default=1,
-                        help="Data-parallel embedding workers. On an 8-GPU "
-                             "node, pass --embed-workers 8 to shard encode "
-                             "across cuda:0..cuda:7 (SentenceTransformer "
-                             "multi-process pool). Default 1 = single device.")
+    parser.add_argument("--embed-workers", type=int, default=0,
+                        help="Data-parallel embedding workers. Default 0 = auto: "
+                             "use all visible GPUs for cuda embeddings, else 1. "
+                             "On an 8-GPU node this shards encode across "
+                             "cuda:0..cuda:7 via a SentenceTransformer "
+                             "multi-process pool. Pass 1 for single-device.")
     parser.add_argument("--skip-embeddings", action="store_true")
 
     # LLM options
@@ -3650,6 +3697,10 @@ def main():
                              "(default: 64)")
     parser.add_argument("--llm-stage6-chunks-per-shard", type=int, default=10,
                         help="Stage 6 output chunks per shard for resumable runs (default: 10)")
+    parser.add_argument("--llm-loader-workers", type=int, default=None,
+                        help="Python workers feeding Dataset-backed transformers "
+                             "pipelines. Default: min(16, Slurm/cpuset CPU "
+                             "affinity). Use 0 for inline loading.")
     parser.add_argument("--skip-llm", action="store_true")
 
     # Clustering
@@ -3836,8 +3887,24 @@ def main():
             args.data_dir = str(input_base / "se-data")
         print(f"  Input dir: {args.input_dir}")
 
+    if args.embed_workers == 0:
+        if str(args.embed_device).startswith("cuda"):
+            args.embed_workers = max(1, _visible_cuda_count())
+        else:
+            args.embed_workers = 1
+    if args.llm_loader_workers is None:
+        env_loader_workers = os.environ.get("LLM_LOADER_WORKERS")
+        if env_loader_workers:
+            if not env_loader_workers.isdigit():
+                parser.error("LLM_LOADER_WORKERS must be >= 0")
+            args.llm_loader_workers = int(env_loader_workers)
+        else:
+            args.llm_loader_workers = _default_loader_workers()
+
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be > 0")
+    if args.embed_workers < 0:
+        parser.error("--embed-workers must be >= 0")
     if not (0.0 <= args.gate_stage6_parse_rate_min <= 1.0):
         parser.error("--gate-stage6-parse-rate-min must be in [0,1]")
     if not (0.0 <= args.gate_stage7_categorical_rate_min <= 1.0):
@@ -3856,6 +3923,8 @@ def main():
         parser.error("--llm-stage6-batch-size must be > 0")
     if args.llm_stage6_chunks_per_shard <= 0:
         parser.error("--llm-stage6-chunks-per-shard must be > 0")
+    if args.llm_loader_workers < 0:
+        parser.error("--llm-loader-workers must be >= 0")
     if args.graph_embed_batch_size <= 0:
         parser.error("--graph-embed-batch-size must be > 0")
     if args.graph_embed_workers < 0:
@@ -3949,6 +4018,14 @@ def main():
 
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
+
+    if args.skip_llm:
+        if args.technique_ner_arm in ("llm", "both"):
+            args.technique_ner_arm = "classical"
+            print("  --skip-llm: Stage 5c using classical arm only")
+        if args.paper_hypergraph_arm in ("llm", "both"):
+            args.paper_hypergraph_arm = "classical"
+            print("  --skip-llm: Stage 5d using classical arm only")
 
     if args.arxiv_jsonl and args.paper_hg_eprint_dir is None:
         if args.distinctor_eprint_dir:
@@ -4168,7 +4245,8 @@ def main():
         _llm_start = t3
         print(f"\n[Stage 3/{n_stages}] LLM pattern tagging ({args.llm_model}, "
               f"batch={args.llm_stage3_batch_size}, "
-              f"chunks={args.llm_stage3_chunks_per_shard})...")
+              f"chunks={args.llm_stage3_chunks_per_shard}, "
+              f"loader_workers={args.llm_loader_workers})...")
         pipe, tok = _ensure_llm_pipeline()
         pattern_tags = run_stage3_pattern_tagging_chunked(
             pairs,
@@ -4178,6 +4256,7 @@ def main():
             tokenizer=tok,
             batch_size=args.llm_stage3_batch_size,
             chunks_per_shard=args.llm_stage3_chunks_per_shard,
+            loader_workers=args.llm_loader_workers,
         )
         print(f"       Stage 3 done in {time.time()-t3:.0f}s")
 
@@ -4355,7 +4434,8 @@ def main():
     if not args.skip_technique_ner:
         t5c = time.time()
         print(f"\n[Stage 5c/{n_stages}] Technique-level NER "
-              f"(arm={args.technique_ner_arm})...")
+              f"(arm={args.technique_ner_arm}, "
+              f"loader_workers={args.llm_loader_workers})...")
         techniques_path = outdir / "techniques.json"
         if techniques_path.exists():
             print(f"       Reusing existing {techniques_path.name}")
@@ -4388,12 +4468,54 @@ def main():
             if arm in ("llm", "both"):
                 pipe_5c, tok_5c = _ensure_llm_pipeline()
 
-            records = []
+            records = [None] * len(pairs)
             n_papers = len(pairs)
             arm_counts = {"classical": 0, "llm": 0, "both": 0}
             text_source_counts = {"eprint": 0, "abstract": 0}
             t_batch = time.time()
+            llm_chunk_size = max(1, args.llm_batch_size * 8)
+            pending_texts = []
+            pending_items = []
+
+            def _record_techniques(idx, entity_id, merged):
+                for h in merged:
+                    arm_counts[h.extraction_source] = (
+                        arm_counts.get(h.extraction_source, 0) + 1
+                    )
+                records[idx] = techniques_to_records(entity_id, merged)
+
+            def _flush_technique_llm(final_flush=False):
+                if not pending_items:
+                    return
+                llm_batches = extract_techniques_llm_batch(
+                    pending_texts,
+                    pipe=pipe_5c,
+                    tokenizer=tok_5c,
+                    max_input_chars=args.technique_ner_llm_max_chars,
+                    batch_size=args.llm_batch_size,
+                    loader_workers=args.llm_loader_workers,
+                )
+                for (idx, entity_id, classical_hits), llm_hits in zip(
+                        pending_items, llm_batches):
+                    if arm == "both":
+                        merged = merge_technique_arms(classical_hits, llm_hits)
+                    elif arm == "classical":
+                        merged = classical_hits
+                    else:
+                        merged = llm_hits
+                    _record_techniques(idx, entity_id, merged)
+                pending_items.clear()
+                pending_texts.clear()
+                done = sum(1 for r in records if r is not None)
+                elapsed = time.time() - t_batch
+                rate = done / elapsed if elapsed > 0 else 0
+                eta = (n_papers - done) / rate if rate > 0 else 0
+                if done % 100 == 0 or done == n_papers or final_flush:
+                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
+                          f"ETA {eta/60:.0f} min")
+
             for i, (entity, pair) in enumerate(zip(entities, pairs)):
+                eid = entity["entity/id"]
                 paper_text, text_source = _paper_text_for(entity, pair)
                 text_source_counts[text_source] = (
                     text_source_counts.get(text_source, 0) + 1
@@ -4406,32 +4528,30 @@ def main():
                     )
                     if arm in ("classical", "both") else []
                 )
-                llm_hits = (
-                    extract_techniques_llm(
-                        paper_text,
-                        pipe=pipe_5c,
-                        tokenizer=tok_5c,
-                        max_input_chars=args.technique_ner_llm_max_chars,
-                    )
-                    if arm in ("llm", "both") else []
-                )
-                if arm == "both":
-                    merged = merge_technique_arms(classical_hits, llm_hits)
-                elif arm == "classical":
+                if arm in ("llm", "both"):
+                    pending_texts.append(paper_text)
+                    pending_items.append((i, eid, classical_hits))
+                    if len(pending_items) >= llm_chunk_size:
+                        _flush_technique_llm()
+                    continue
+
+                if arm == "classical":
                     merged = classical_hits
                 else:
-                    merged = llm_hits
-                for h in merged:
-                    arm_counts[h.extraction_source] = (
-                        arm_counts.get(h.extraction_source, 0) + 1
-                    )
-                records.append(techniques_to_records(entity["entity/id"], merged))
+                    merged = []
+                _record_techniques(i, eid, merged)
                 if (i + 1) % 100 == 0 or (i + 1) == n_papers:
                     elapsed = time.time() - t_batch
-                    rate = (i + 1) / elapsed if elapsed > 0 else 0
-                    eta = (n_papers - i - 1) / rate if rate > 0 else 0
-                    print(f"       [{i+1}/{n_papers}] {rate:.1f} papers/s, "
+                    done = i + 1
+                    rate = done / elapsed if elapsed > 0 else 0
+                    eta = (n_papers - done) / rate if rate > 0 else 0
+                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
                           f"ETA {eta/60:.0f} min")
+
+            _flush_technique_llm(final_flush=True)
+            if any(r is None for r in records):
+                missing = sum(1 for r in records if r is None)
+                raise RuntimeError(f"Stage 5c did not produce {missing} records")
 
             with open(techniques_path, "w") as f:
                 json.dump(records, f, ensure_ascii=False, indent=2)
@@ -4458,7 +4578,8 @@ def main():
     if not args.skip_paper_hypergraph:
         t5d = time.time()
         print(f"\n[Stage 5d/{n_stages}] Paper hypergraph "
-              f"(arm={args.paper_hypergraph_arm})...")
+              f"(arm={args.paper_hypergraph_arm}, "
+              f"loader_workers={args.llm_loader_workers})...")
         hg_path = outdir / "paper-hypergraphs.json"
         if hg_path.exists():
             print(f"       Reusing existing {hg_path.name}")
@@ -4515,13 +4636,56 @@ def main():
             if arm in ("llm", "both"):
                 pipe_5d, tok_5d = _ensure_llm_pipeline()
 
-            hypergraphs = []
+            hypergraphs = [None] * len(pairs)
             n_papers = len(pairs)
             edge_provenance = {"classical": 0, "llm": 0, "both": 0}
-            n_blocks_total = 0
-            n_with_claim_blocks = 0
+            paper_hg_metrics = {"n_blocks_total": 0, "n_with_claim_blocks": 0}
             text_source_counts = {"eprint": 0, "abstract": 0}
             t_batch = time.time()
+            llm_chunk_size = max(1, args.llm_batch_size * 8)
+            pending_texts = []
+            pending_hgs = []
+            pending_items = []
+
+            def _record_paper_hg(idx, final_hg):
+                for e in final_hg["edges"]:
+                    prov = e.get("attrs", {}).get("provenance", "classical")
+                    edge_provenance[prov] = edge_provenance.get(prov, 0) + 1
+
+                paper_hg_metrics["n_blocks_total"] += (
+                    final_hg.get("meta", {}).get("n_blocks", 0)
+                )
+                if final_hg.get("meta", {}).get("has_theorem_blocks"):
+                    paper_hg_metrics["n_with_claim_blocks"] += 1
+                hypergraphs[idx] = final_hg
+
+            def _flush_paper_hg_llm(final_flush=False):
+                if not pending_items:
+                    return
+                llm_batches = extract_paper_hypergraph_llm_batch(
+                    pending_texts,
+                    pending_hgs,
+                    pipe=pipe_5d,
+                    tokenizer=tok_5d,
+                    prose_cap_chars=args.paper_hypergraph_prose_cap,
+                    hg_cap_nodes=args.paper_hypergraph_node_cap,
+                    batch_size=args.llm_batch_size,
+                    loader_workers=args.llm_loader_workers,
+                )
+                for (idx, classical_hg), llm_edges in zip(pending_items, llm_batches):
+                    final_hg = merge_paper_hypergraphs(classical_hg, llm_edges)
+                    _record_paper_hg(idx, final_hg)
+                pending_items.clear()
+                pending_texts.clear()
+                pending_hgs.clear()
+                done = sum(1 for h in hypergraphs if h is not None)
+                elapsed = time.time() - t_batch
+                rate = done / elapsed if elapsed > 0 else 0
+                eta = (n_papers - done) / rate if rate > 0 else 0
+                if done % 100 == 0 or done == n_papers or final_flush:
+                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
+                          f"ETA {eta/60:.0f} min")
+
             for i, (entity, pair) in enumerate(zip(entities, pairs)):
                 eid = entity["entity/id"]
                 paper_text, text_source = _paper_text_for(entity, pair)
@@ -4543,36 +4707,36 @@ def main():
                 )
 
                 if arm in ("llm", "both"):
-                    llm_edges = extract_paper_hypergraph_llm(
-                        paper_text, classical_hg,
-                        pipe=pipe_5d, tokenizer=tok_5d,
-                        prose_cap_chars=args.paper_hypergraph_prose_cap,
-                        hg_cap_nodes=args.paper_hypergraph_node_cap,
-                    )
-                    final_hg = merge_paper_hypergraphs(classical_hg, llm_edges)
+                    pending_texts.append(paper_text)
+                    pending_hgs.append(classical_hg)
+                    pending_items.append((i, classical_hg))
+                    if len(pending_items) >= llm_chunk_size:
+                        _flush_paper_hg_llm()
+                    continue
                 else:
                     final_hg = classical_hg
 
-                for e in final_hg["edges"]:
-                    prov = e.get("attrs", {}).get("provenance", "classical")
-                    edge_provenance[prov] = edge_provenance.get(prov, 0) + 1
-
-                n_blocks_total += final_hg.get("meta", {}).get("n_blocks", 0)
-                if final_hg.get("meta", {}).get("has_theorem_blocks"):
-                    n_with_claim_blocks += 1
-                hypergraphs.append(final_hg)
+                _record_paper_hg(i, final_hg)
 
                 if (i + 1) % 100 == 0 or (i + 1) == n_papers:
                     elapsed = time.time() - t_batch
-                    rate = (i + 1) / elapsed if elapsed > 0 else 0
-                    eta = (n_papers - i - 1) / rate if rate > 0 else 0
-                    print(f"       [{i+1}/{n_papers}] {rate:.1f} papers/s, "
+                    done = i + 1
+                    rate = done / elapsed if elapsed > 0 else 0
+                    eta = (n_papers - done) / rate if rate > 0 else 0
+                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
                           f"ETA {eta/60:.0f} min")
+
+            _flush_paper_hg_llm(final_flush=True)
+            if any(h is None for h in hypergraphs):
+                missing = sum(1 for h in hypergraphs if h is None)
+                raise RuntimeError(f"Stage 5d did not produce {missing} hypergraphs")
 
             with open(hg_path, "w") as f:
                 json.dump(hypergraphs, f, ensure_ascii=False)
             total_edges = sum(len(h["edges"]) for h in hypergraphs)
             total_nodes = sum(len(h["nodes"]) for h in hypergraphs)
+            n_blocks_total = paper_hg_metrics["n_blocks_total"]
+            n_with_claim_blocks = paper_hg_metrics["n_with_claim_blocks"]
             print(f"       Saved {hg_path.name}: {total_nodes} nodes, "
                   f"{total_edges} edges across {n_papers} papers")
             print(f"       Papers with theorem/lemma/proposition blocks: "
@@ -4615,7 +4779,8 @@ def main():
         t6 = time.time()
         print(f"\n[Stage 6/{n_stages}] Reverse morphogenesis S←Q←A ({args.llm_model}, "
               f"batch={args.llm_stage6_batch_size}, "
-              f"chunks={args.llm_stage6_chunks_per_shard})...")
+              f"chunks={args.llm_stage6_chunks_per_shard}, "
+              f"loader_workers={args.llm_loader_workers})...")
         pipe, tok = _ensure_llm_pipeline()
         rm_results = run_stage6_reverse_morphogenesis_chunked(
             pairs,
@@ -4625,6 +4790,7 @@ def main():
             tok,
             batch_size=args.llm_stage6_batch_size,
             chunks_per_shard=args.llm_stage6_chunks_per_shard,
+            loader_workers=args.llm_loader_workers,
         )
 
         # Quality summary
@@ -4795,6 +4961,7 @@ def main():
                 llm_enhanced = classify_thread_performatives_llm_batch(
                     thread_diagrams, pipe, tok,
                     batch_size=max(1, args.llm_batch_size // 4),
+                    loader_workers=args.llm_loader_workers,
                 )
                 stage7_stats["llm_enhanced_threads"] = llm_enhanced
                 stage7_stats["llm_enhance_rate"] = (
