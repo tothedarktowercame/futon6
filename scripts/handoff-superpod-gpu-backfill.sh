@@ -27,7 +27,7 @@ echo() {
 #   LLM_STAGE3_CHUNKS_PER_SHARD  Stage 3 resumable chunks per shard (default: 10)
 #   LLM_STAGE6_BATCH_SIZE  Stage 6 LLM batch size (default: 48)
 #   LLM_STAGE6_CHUNKS_PER_SHARD  Stage 6 resumable chunks per shard (default: 10)
-#   LLM_GPU_WORKERS       Process-level local LLM GPU workers
+#   LLM_GPU_WORKERS       Replica-fanout local LLM GPU workers, not DDP/DeepSpeed
 #                          (default: 0 = auto all visible GPUs)
 #   LLM_LOADER_WORKERS     Python workers feeding Dataset-backed LLM pipelines.
 #                          For unsharded runs, superpod-job defaults to
@@ -96,7 +96,7 @@ if [[ -z "${GRAPH_EMBED_WORKERS:-}" ]]; then
   fi
 fi
 
-echo "[gpu] llm config: stage3_batch=${LLM_STAGE3_BATCH_SIZE} chunks=${LLM_STAGE3_CHUNKS_PER_SHARD} stage6_batch=${LLM_STAGE6_BATCH_SIZE} stage6_chunks=${LLM_STAGE6_CHUNKS_PER_SHARD} base_batch=${LLM_BATCH_SIZE} gpu_workers=${LLM_GPU_WORKERS} loader_workers=${LLM_LOADER_WORKERS:-auto}"
+echo "[gpu] llm config: stage3_batch=${LLM_STAGE3_BATCH_SIZE} chunks=${LLM_STAGE3_CHUNKS_PER_SHARD} stage6_batch=${LLM_STAGE6_BATCH_SIZE} stage6_chunks=${LLM_STAGE6_CHUNKS_PER_SHARD} base_batch=${LLM_BATCH_SIZE} replica_gpu_workers=${LLM_GPU_WORKERS} loader_workers=${LLM_LOADER_WORKERS:-auto}"
 echo "[gpu] graph-embed config: dim=${GRAPH_EMBED_DIM} epochs=${GRAPH_EMBED_EPOCHS} batch=${GRAPH_EMBED_BATCH_SIZE} workers=${GRAPH_EMBED_WORKERS}"
 # ~/~ end
 

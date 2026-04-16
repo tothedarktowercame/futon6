@@ -253,8 +253,9 @@ Rob's second burn-in pass caught two concrete throughput issues:
   `--embed-workers 8` remains fine and documents intent.
 - `scripts/superpod-job.py` — new `--llm-gpu-workers N`; default is auto
   all visible GPUs for local LLM stages (3, 5c, 5d, 6, and legacy 7).
-  This is process-level data parallelism: one Python model worker per GPU,
-  each with its own `CUDA_VISIBLE_DEVICES`.
+  Correction: this is replica fanout, not DeepSpeed or PyTorch DDP. It can
+  make `nvidia-smi` show one Python model worker per GPU, but it must not be
+  represented as satisfying Rob's DDP/DeepSpeed requirement.
 - `scripts/superpod-job.py` — new `--llm-loader-workers N`; default is
   `min(16, Slurm/cpuset CPU affinity)`, with `LLM_LOADER_WORKERS` as an env
   override and `0` for inline loading.
@@ -267,6 +268,14 @@ Rob's second burn-in pass caught two concrete throughput issues:
 - `scripts/superpod-shard.py` — sharded mode splits the 16-core/job affinity
   budget across shard processes by default, so 8 shards use 2 feeder workers
   each unless overridden.
+
+**Correction after Rob's DDP objection (2026-04-16):**
+
+The `--llm-gpu-workers` path above is not the DDP/DeepSpeed fix Rob asked for.
+It is only independent per-GPU model replication with parent-side task fanout.
+That may improve throughput for independent inference items, but it is not a
+substitute for a real `torchrun`/DeepSpeed distributed LLM path. Treat true
+DDP/DeepSpeed LLM execution as still open.
 
 ## Checkpoint — Learn As We Go (2026-04-15)
 

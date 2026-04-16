@@ -1789,12 +1789,12 @@ def _llm_worker_main(argv):
 
 
 class _LlmGpuPool:
-    """Persistent process-level data parallelism for local LLM stages.
+    """Persistent process-level replica fanout for local LLM stages.
 
     Each child is launched with a single CUDA device visible, loads its own
     pipeline once, and receives JSONL tasks for stages 3, 5c, 5d, 6, and 7.
-    This is process-level model replication, not transformers DataLoader
-    feeding, so nvidia-smi should show one Python model worker per GPU.
+    This is not DeepSpeed or PyTorch DDP. It is retained as an explicit
+    replica fallback and must not be described as satisfying a DDP requirement.
     """
 
     def __init__(
@@ -4160,11 +4160,11 @@ def main():
                              "pipelines. Default: min(16, Slurm/cpuset CPU "
                              "affinity). Use 0 for inline loading.")
     parser.add_argument("--llm-gpu-workers", type=int, default=0,
-                        help="Process-level GPU workers for local LLM stages "
-                             "(3, 5c, 5d, 6, and legacy 7). Default 0 = "
-                             "auto-use all visible CUDA devices; 1 = single "
-                             "shared pipeline. On an 8-GPU node pass 8 to "
-                             "make the intended model-replica count explicit.")
+                        help="Replica-fanout GPU workers for local LLM stages "
+                             "(3, 5c, 5d, 6, and legacy 7). This is not "
+                             "DeepSpeed/PyTorch DDP. Default 0 = auto-use all "
+                             "visible CUDA devices; 1 = single shared "
+                             "pipeline.")
     parser.add_argument("--skip-llm", action="store_true")
 
     # Clustering
@@ -4725,8 +4725,9 @@ def main():
                 args.llm_stage3_batch_size,
                 args.llm_stage6_batch_size,
             )
-            print(f"       LLM data parallelism: {len(devices)} GPU worker "
-                  f"processes (total_loader_workers={args.llm_loader_workers})")
+            print(f"       LLM replica fanout: {len(devices)} GPU worker "
+                  f"processes (not DeepSpeed/DDP; "
+                  f"total_loader_workers={args.llm_loader_workers})")
             llm_gpu_pool = _LlmGpuPool(
                 model_name=args.llm_model,
                 gpu_devices=devices,
