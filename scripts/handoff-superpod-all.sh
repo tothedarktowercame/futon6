@@ -58,6 +58,8 @@ echo() {
 #   LLM_STAGE3_CHUNKS_PER_SHARD  Stage 3 resumable chunks per shard (default: 10)
 #   LLM_STAGE6_BATCH_SIZE  Stage 6 LLM batch size (default: 48)
 #   LLM_STAGE6_CHUNKS_PER_SHARD  Stage 6 resumable chunks per shard (default: 10)
+#   LLM_GPU_WORKERS       Process-level Stage 5c LLM GPU workers
+#                          (default: 0 = auto all visible GPUs)
 #   LLM_LOADER_WORKERS     Python workers feeding Dataset-backed LLM pipelines.
 #                          Unsharded superpod-job defaults to min(16,
 #                          Slurm/cpuset CPU affinity). Sharded superpod-shard
@@ -89,6 +91,7 @@ LLM_STAGE3_BATCH_SIZE="${LLM_STAGE3_BATCH_SIZE:-80}"
 LLM_STAGE3_CHUNKS_PER_SHARD="${LLM_STAGE3_CHUNKS_PER_SHARD:-10}"
 LLM_STAGE6_BATCH_SIZE="${LLM_STAGE6_BATCH_SIZE:-48}"
 LLM_STAGE6_CHUNKS_PER_SHARD="${LLM_STAGE6_CHUNKS_PER_SHARD:-10}"
+LLM_GPU_WORKERS="${LLM_GPU_WORKERS:-0}"
 GRAPH_EMBED_DIM="${GRAPH_EMBED_DIM:-128}"
 GRAPH_EMBED_EPOCHS="${GRAPH_EMBED_EPOCHS:-50}"
 GRAPH_EMBED_BATCH_SIZE="${GRAPH_EMBED_BATCH_SIZE:-1024}"
@@ -273,7 +276,7 @@ package_outputs() {
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-orchestration>>[init]
 echo "[all] repo: $ROOT_DIR"
 echo "[all] block=$BLOCK smoke_only=$SMOKE_ONLY skip_bootstrap=$SKIP_BOOTSTRAP skip_tests=$SKIP_TESTS num_shards=$NUM_SHARDS"
-echo "[all] llm: stage3_batch=$LLM_STAGE3_BATCH_SIZE chunks=$LLM_STAGE3_CHUNKS_PER_SHARD stage6_batch=$LLM_STAGE6_BATCH_SIZE stage6_chunks=$LLM_STAGE6_CHUNKS_PER_SHARD base_batch=$LLM_BATCH_SIZE loader_workers=${LLM_LOADER_WORKERS:-auto}"
+echo "[all] llm: stage3_batch=$LLM_STAGE3_BATCH_SIZE chunks=$LLM_STAGE3_CHUNKS_PER_SHARD stage6_batch=$LLM_STAGE6_BATCH_SIZE stage6_chunks=$LLM_STAGE6_CHUNKS_PER_SHARD base_batch=$LLM_BATCH_SIZE gpu_workers=$LLM_GPU_WORKERS loader_workers=${LLM_LOADER_WORKERS:-auto}"
 echo "[all] graph-embed: dim=$GRAPH_EMBED_DIM epochs=$GRAPH_EMBED_EPOCHS batch=$GRAPH_EMBED_BATCH_SIZE workers=$GRAPH_EMBED_WORKERS"
 echo "[all] resume_math_stage9=$RESUME_MATH_STAGE9"
 
@@ -303,7 +306,8 @@ if [[ "$BLOCK" == "2" ]]; then
     --llm-stage3-batch-size "$LLM_STAGE3_BATCH_SIZE" \
     --llm-stage3-chunks-per-shard "$LLM_STAGE3_CHUNKS_PER_SHARD" \
     --llm-stage6-batch-size "$LLM_STAGE6_BATCH_SIZE" \
-    --llm-stage6-chunks-per-shard "$LLM_STAGE6_CHUNKS_PER_SHARD"
+    --llm-stage6-chunks-per-shard "$LLM_STAGE6_CHUNKS_PER_SHARD" \
+    --llm-gpu-workers "$LLM_GPU_WORKERS"
 
   step "Block 2: LLM on ${LLM_THREAD_LIMIT}/shard sample (mathoverflow)"
   python3 scripts/superpod-shard.py run \
@@ -319,7 +323,8 @@ if [[ "$BLOCK" == "2" ]]; then
     --llm-stage3-batch-size "$LLM_STAGE3_BATCH_SIZE" \
     --llm-stage3-chunks-per-shard "$LLM_STAGE3_CHUNKS_PER_SHARD" \
     --llm-stage6-batch-size "$LLM_STAGE6_BATCH_SIZE" \
-    --llm-stage6-chunks-per-shard "$LLM_STAGE6_CHUNKS_PER_SHARD"
+    --llm-stage6-chunks-per-shard "$LLM_STAGE6_CHUNKS_PER_SHARD" \
+    --llm-gpu-workers "$LLM_GPU_WORKERS"
 
   step "compose LLM files into Block 1 output"
   for f in pattern-tags.json reverse-morphogenesis.json; do
@@ -367,7 +372,7 @@ if [[ "$NUM_SHARDS" -gt 1 ]]; then
   # NUM_SHARDS and EXTRA_SHARD_ARGS are exported so gpu-backfill.sh picks them up.
   export NUM_SHARDS EXTRA_SHARD_ARGS
   export LLM_BATCH_SIZE LLM_STAGE3_BATCH_SIZE LLM_STAGE3_CHUNKS_PER_SHARD
-  export LLM_STAGE6_BATCH_SIZE LLM_STAGE6_CHUNKS_PER_SHARD
+  export LLM_STAGE6_BATCH_SIZE LLM_STAGE6_CHUNKS_PER_SHARD LLM_GPU_WORKERS
   export GRAPH_EMBED_DIM GRAPH_EMBED_EPOCHS GRAPH_EMBED_BATCH_SIZE GRAPH_EMBED_WORKERS
 
   do_resume_math_stage9=0

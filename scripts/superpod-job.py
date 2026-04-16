@@ -123,6 +123,17 @@ def _visible_cuda_count() -> int:
     return 0
 
 
+def _visible_cuda_device_ids() -> list[str]:
+    """CUDA device ids that can be assigned to child worker processes."""
+    visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if visible:
+        devices = [d.strip() for d in visible.split(",")
+                   if d.strip() and d.strip() != "-1"]
+        if devices:
+            return devices
+    return [str(i) for i in range(_visible_cuda_count())]
+
+
 def print(*args, **kwargs):  # type: ignore[override]
     kwargs.setdefault("flush", True)
     return _builtins.print(f"[{_timestamp_now()}]", *args, **kwargs)
@@ -183,6 +194,7 @@ from futon6.latex_sexp import parse as sexp_parse, parse_all
 from futon6.hypergraph import assemble as assemble_hypergraph
 from futon6.faiss_index import HAS_FAISS, build_index, save_index
 from futon6.technique_ner import (
+    TechniqueHit,
     extract_techniques_classical,
     extract_techniques_llm_batch,
     merge_technique_arms,
@@ -1572,6 +1584,217 @@ def _create_llm_pipeline(model_name, batch_size=8):
         batch_size=batch_size,
     )
     return pipe, tokenizer
+
+
+def _stage5c_worker_main(argv):
+    """Hidden JSONL worker: one long-lived Stage 5c LLM process per GPU."""
+    import contextlib
+    import traceback
+
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--model", required=True)
+    parser.add_argument("--batch-size", type=int, required=True)
+    parser.add_argument("--loader-workers", type=int, default=0)
+    parser.add_argument("--max-input-chars", type=int, required=True)
+    args = parser.parse_args(argv)
+
+    with contextlib.redirect_stdout(sys.stderr):
+        pipe, tokenizer = _create_llm_pipeline(args.model, args.batch_size)
+
+    for line in sys.stdin:
+        line = line.strip()
+        if not line:
+            continue
+        msg = json.loads(line)
+        if msg.get("type") == "stop":
+            break
+
+        task_id = msg["task_id"]
+        texts = msg["texts"]
+        try:
+            with contextlib.redirect_stdout(sys.stderr):
+                hits_batches = extract_techniques_llm_batch(
+                    texts,
+                    pipe=pipe,
+                    tokenizer=tokenizer,
+                    max_input_chars=args.max_input_chars,
+                    batch_size=args.batch_size,
+                    loader_workers=args.loader_workers,
+                )
+            payload = [
+                [
+                    {
+                        "canonical": h.canonical,
+                        "term": h.term,
+                        "loci": h.loci,
+                        "first_defined_at": h.first_defined_at,
+                        "extraction_source": h.extraction_source,
+                    }
+                    for h in hits
+                ]
+                for hits in hits_batches
+            ]
+            _builtins.print(
+                json.dumps({"task_id": task_id, "ok": True, "hits": payload}),
+                flush=True,
+            )
+        except Exception as exc:
+            _builtins.print(
+                json.dumps({
+                    "task_id": task_id,
+                    "ok": False,
+                    "error": repr(exc),
+                    "traceback": traceback.format_exc(),
+                }),
+                flush=True,
+            )
+
+
+class _Stage5CLlmGpuPool:
+    """Persistent process-level Stage 5c data parallelism.
+
+    Each child is launched with a single CUDA device visible, loads its own
+    pipeline once, and then receives JSONL tasks. This is intentionally
+    process-level rather than a transformers DataLoader setting: it is what
+    makes nvidia-smi show one Python model worker per GPU.
+    """
+
+    def __init__(
+        self,
+        model_name: str,
+        gpu_devices: list[str],
+        batch_size: int,
+        total_loader_workers: int,
+        max_input_chars: int,
+    ):
+        if not gpu_devices:
+            raise ValueError("gpu_devices must be non-empty")
+        self.model_name = model_name
+        self.gpu_devices = list(gpu_devices)
+        self.batch_size = int(batch_size)
+        self.loader_workers = max(0, int(total_loader_workers) // len(gpu_devices))
+        self.max_input_chars = int(max_input_chars)
+        self.procs = []
+        self.next_task_id = 0
+
+        script_path = Path(__file__).resolve()
+        for worker_idx, device in enumerate(self.gpu_devices):
+            env = os.environ.copy()
+            env["CUDA_VISIBLE_DEVICES"] = device
+            env["PYTHONUNBUFFERED"] = "1"
+            cmd = [
+                sys.executable,
+                "-u",
+                str(script_path),
+                "__stage5c_worker",
+                "--model",
+                self.model_name,
+                "--batch-size",
+                str(self.batch_size),
+                "--loader-workers",
+                str(self.loader_workers),
+                "--max-input-chars",
+                str(self.max_input_chars),
+            ]
+            proc = subprocess.Popen(
+                cmd,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=None,
+                text=True,
+                bufsize=1,
+                env=env,
+            )
+            self.procs.append(proc)
+            print(f"       Stage 5c LLM worker {worker_idx}: "
+                  f"CUDA_VISIBLE_DEVICES={device}, "
+                  f"loader_workers={self.loader_workers}")
+
+    def close(self):
+        for proc in self.procs:
+            if proc.poll() is not None:
+                continue
+            try:
+                if proc.stdin:
+                    proc.stdin.write(json.dumps({"type": "stop"}) + "\n")
+                    proc.stdin.flush()
+                    proc.stdin.close()
+            except BrokenPipeError:
+                pass
+        for proc in self.procs:
+            try:
+                proc.wait(timeout=20)
+            except subprocess.TimeoutExpired:
+                proc.terminate()
+                try:
+                    proc.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    proc.kill()
+
+    def run(self, texts: list[str]) -> list[list[TechniqueHit]]:
+        if not texts:
+            return []
+
+        n_workers = min(len(self.procs), len(texts))
+        ranges = _stage3_chunk_ranges(len(texts), n_workers)
+        task_meta = {}
+        for worker_idx, (chunk_idx, start, end) in enumerate(ranges):
+            proc = self.procs[worker_idx]
+            if proc.poll() is not None:
+                raise RuntimeError(
+                    f"Stage 5c LLM worker {worker_idx} exited with {proc.returncode}"
+                )
+            task_id = self.next_task_id
+            self.next_task_id += 1
+            task_meta[task_id] = (worker_idx, start, end)
+            msg = {
+                "type": "task",
+                "task_id": task_id,
+                "texts": texts[start:end],
+            }
+            if proc.stdin is None:
+                raise RuntimeError(f"Stage 5c LLM worker {worker_idx} has no stdin")
+            proc.stdin.write(json.dumps(msg, ensure_ascii=False) + "\n")
+            proc.stdin.flush()
+
+        out: list[list[TechniqueHit] | None] = [None] * len(texts)
+        for task_id, (worker_idx, start, _end) in task_meta.items():
+            proc = self.procs[worker_idx]
+            if proc.stdout is None:
+                raise RuntimeError(f"Stage 5c LLM worker {worker_idx} has no stdout")
+            line = proc.stdout.readline()
+            if not line:
+                raise RuntimeError(
+                    f"Stage 5c LLM worker {worker_idx} produced no result "
+                    f"(exit={proc.poll()})"
+                )
+            result = json.loads(line)
+            if result.get("task_id") != task_id:
+                raise RuntimeError(
+                    f"Stage 5c LLM worker {worker_idx} task mismatch: "
+                    f"expected {task_id}, got {result.get('task_id')}"
+                )
+            if not result.get("ok"):
+                raise RuntimeError(
+                    "Stage 5c LLM worker failed:\n"
+                    f"{result.get('error')}\n{result.get('traceback')}"
+                )
+            for offset, hits_payload in enumerate(result["hits"]):
+                out[start + offset] = [
+                    TechniqueHit(
+                        canonical=h["canonical"],
+                        term=h["term"],
+                        loci=h.get("loci") or [],
+                        first_defined_at=h.get("first_defined_at"),
+                        extraction_source=h.get("extraction_source", "llm"),
+                    )
+                    for h in hits_payload
+                ]
+
+        if any(item is None for item in out):
+            missing = sum(1 for item in out if item is None)
+            raise RuntimeError(f"Stage 5c LLM pool missing {missing} results")
+        return out  # type: ignore[return-value]
 
 
 def tag_patterns_llm_batch(
@@ -3628,6 +3851,10 @@ def print_dry_run(args):
 
 
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == "__stage5c_worker":
+        _stage5c_worker_main(sys.argv[2:])
+        return
+
     parser = argparse.ArgumentParser(
         description="Superpod batch job: SE dump -> F6 artefacts",
         epilog="Available downloads: " + ", ".join(
@@ -3701,6 +3928,12 @@ def main():
                         help="Python workers feeding Dataset-backed transformers "
                              "pipelines. Default: min(16, Slurm/cpuset CPU "
                              "affinity). Use 0 for inline loading.")
+    parser.add_argument("--llm-gpu-workers", type=int, default=0,
+                        help="Process-level GPU workers for Stage 5c LLM "
+                             "extraction. Default 0 = auto-use all visible "
+                             "CUDA devices; 1 = single shared pipeline. "
+                             "On an 8-GPU node pass 8 to make the intended "
+                             "model-replica count explicit.")
     parser.add_argument("--skip-llm", action="store_true")
 
     # Clustering
@@ -3925,6 +4158,8 @@ def main():
         parser.error("--llm-stage6-chunks-per-shard must be > 0")
     if args.llm_loader_workers < 0:
         parser.error("--llm-loader-workers must be >= 0")
+    if args.llm_gpu_workers < 0:
+        parser.error("--llm-gpu-workers must be >= 0")
     if args.graph_embed_batch_size <= 0:
         parser.error("--graph-embed-batch-size must be > 0")
     if args.graph_embed_workers < 0:
@@ -4225,6 +4460,21 @@ def main():
                 args.llm_model, max_batch)
         return llm_pipe, llm_tokenizer
 
+    def _release_llm_pipeline():
+        nonlocal llm_pipe, llm_tokenizer
+        if llm_pipe is None and llm_tokenizer is None:
+            return
+        llm_pipe = None
+        llm_tokenizer = None
+        try:
+            import gc
+            import torch
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except Exception:
+            pass
+
     # ========== Stage 3: LLM pattern tagging ==========
     if args.moist_run:
         # Moist mode: generate prompts, don't run LLM
@@ -4465,8 +4715,30 @@ def main():
                       f"(from Stage 5 ner-terms.json)")
 
             pipe_5c = tok_5c = None
+            stage5c_llm_pool = None
             if arm in ("llm", "both"):
-                pipe_5c, tok_5c = _ensure_llm_pipeline()
+                if args.llm_gpu_workers == 0:
+                    stage5c_gpu_devices = _visible_cuda_device_ids()
+                else:
+                    visible_devices = _visible_cuda_device_ids()
+                    if visible_devices:
+                        stage5c_gpu_devices = visible_devices[:args.llm_gpu_workers]
+                    else:
+                        stage5c_gpu_devices = []
+                if len(stage5c_gpu_devices) > 1:
+                    _release_llm_pipeline()
+                    print(f"       Stage 5c LLM data parallelism: "
+                          f"{len(stage5c_gpu_devices)} GPU worker processes "
+                          f"(total_loader_workers={args.llm_loader_workers})")
+                    stage5c_llm_pool = _Stage5CLlmGpuPool(
+                        model_name=args.llm_model,
+                        gpu_devices=stage5c_gpu_devices,
+                        batch_size=args.llm_batch_size,
+                        total_loader_workers=args.llm_loader_workers,
+                        max_input_chars=args.technique_ner_llm_max_chars,
+                    )
+                else:
+                    pipe_5c, tok_5c = _ensure_llm_pipeline()
 
             records = [None] * len(pairs)
             n_papers = len(pairs)
@@ -4487,14 +4759,17 @@ def main():
             def _flush_technique_llm(final_flush=False):
                 if not pending_items:
                     return
-                llm_batches = extract_techniques_llm_batch(
-                    pending_texts,
-                    pipe=pipe_5c,
-                    tokenizer=tok_5c,
-                    max_input_chars=args.technique_ner_llm_max_chars,
-                    batch_size=args.llm_batch_size,
-                    loader_workers=args.llm_loader_workers,
-                )
+                if stage5c_llm_pool is not None:
+                    llm_batches = stage5c_llm_pool.run(pending_texts)
+                else:
+                    llm_batches = extract_techniques_llm_batch(
+                        pending_texts,
+                        pipe=pipe_5c,
+                        tokenizer=tok_5c,
+                        max_input_chars=args.technique_ner_llm_max_chars,
+                        batch_size=args.llm_batch_size,
+                        loader_workers=args.llm_loader_workers,
+                    )
                 for (idx, entity_id, classical_hits), llm_hits in zip(
                         pending_items, llm_batches):
                     if arm == "both":
@@ -4514,41 +4789,46 @@ def main():
                     print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
                           f"ETA {eta/60:.0f} min")
 
-            for i, (entity, pair) in enumerate(zip(entities, pairs)):
-                eid = entity["entity/id"]
-                paper_text, text_source = _paper_text_for(entity, pair)
-                text_source_counts[text_source] = (
-                    text_source_counts.get(text_source, 0) + 1
-                )
-                classical_hits = (
-                    extract_techniques_classical(
-                        paper_text,
-                        concepts=concept_vocab or None,
-                        max_terms=args.technique_ner_max_terms,
+            try:
+                for i, (entity, pair) in enumerate(zip(entities, pairs)):
+                    eid = entity["entity/id"]
+                    paper_text, text_source = _paper_text_for(entity, pair)
+                    text_source_counts[text_source] = (
+                        text_source_counts.get(text_source, 0) + 1
                     )
-                    if arm in ("classical", "both") else []
-                )
-                if arm in ("llm", "both"):
-                    pending_texts.append(paper_text)
-                    pending_items.append((i, eid, classical_hits))
-                    if len(pending_items) >= llm_chunk_size:
-                        _flush_technique_llm()
-                    continue
+                    classical_hits = (
+                        extract_techniques_classical(
+                            paper_text,
+                            concepts=concept_vocab or None,
+                            max_terms=args.technique_ner_max_terms,
+                        )
+                        if arm in ("classical", "both") else []
+                    )
+                    if arm in ("llm", "both"):
+                        pending_texts.append(paper_text)
+                        pending_items.append((i, eid, classical_hits))
+                        if len(pending_items) >= llm_chunk_size:
+                            _flush_technique_llm()
+                        continue
 
-                if arm == "classical":
-                    merged = classical_hits
-                else:
-                    merged = []
-                _record_techniques(i, eid, merged)
-                if (i + 1) % 100 == 0 or (i + 1) == n_papers:
-                    elapsed = time.time() - t_batch
-                    done = i + 1
-                    rate = done / elapsed if elapsed > 0 else 0
-                    eta = (n_papers - done) / rate if rate > 0 else 0
-                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
-                          f"ETA {eta/60:.0f} min")
+                    if arm == "classical":
+                        merged = classical_hits
+                    else:
+                        merged = []
+                    _record_techniques(i, eid, merged)
+                    if (i + 1) % 100 == 0 or (i + 1) == n_papers:
+                        elapsed = time.time() - t_batch
+                        done = i + 1
+                        rate = done / elapsed if elapsed > 0 else 0
+                        eta = (n_papers - done) / rate if rate > 0 else 0
+                        print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
+                              f"ETA {eta/60:.0f} min")
 
-            _flush_technique_llm(final_flush=True)
+                _flush_technique_llm(final_flush=True)
+            finally:
+                if stage5c_llm_pool is not None:
+                    stage5c_llm_pool.close()
+
             if any(r is None for r in records):
                 missing = sum(1 for r in records if r is None)
                 raise RuntimeError(f"Stage 5c did not produce {missing} records")

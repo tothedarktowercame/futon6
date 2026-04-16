@@ -216,7 +216,10 @@ Observed problems and the changes made before batch-002:
 ```bash
 python ~/futon6/scripts/superpod-job.py \
   --arxiv-jsonl batch-002.jsonl --site arxiv.math \
-  --output-dir ./output/ --embed-workers 8 --llm-loader-workers 16
+  --output-dir ./output/ \
+  --embed-workers 8 \
+  --llm-gpu-workers 8 \
+  --llm-loader-workers 16
 ```
 
 Rob's Slurm `short` queue allocation exposes 16 CPU cores to the job via
@@ -249,6 +252,9 @@ Rob's second burn-in pass caught two concrete throughput issues:
 - `scripts/superpod-job.py` — `--embed-workers` now defaults to auto: all
   visible GPUs for CUDA embeddings, one worker otherwise. Explicit
   `--embed-workers 8` remains fine and documents intent.
+- `scripts/superpod-job.py` — new `--llm-gpu-workers N`; default is auto
+  all visible GPUs for Stage 5c. This is process-level data parallelism:
+  one Python model worker per GPU, each with its own `CUDA_VISIBLE_DEVICES`.
 - `scripts/superpod-job.py` — new `--llm-loader-workers N`; default is
   `min(16, Slurm/cpuset CPU affinity)`, with `LLM_LOADER_WORKERS` as an env
   override and `0` for inline loading.

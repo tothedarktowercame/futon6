@@ -27,6 +27,8 @@ echo() {
 #   LLM_STAGE3_CHUNKS_PER_SHARD  Stage 3 resumable chunks per shard (default: 10)
 #   LLM_STAGE6_BATCH_SIZE  Stage 6 LLM batch size (default: 48)
 #   LLM_STAGE6_CHUNKS_PER_SHARD  Stage 6 resumable chunks per shard (default: 10)
+#   LLM_GPU_WORKERS       Process-level Stage 5c LLM GPU workers
+#                          (default: 0 = auto all visible GPUs)
 #   LLM_LOADER_WORKERS     Python workers feeding Dataset-backed LLM pipelines.
 #                          For unsharded runs, superpod-job defaults to
 #                          min(16, Slurm/cpuset CPU affinity). For sharded
@@ -81,6 +83,7 @@ LLM_STAGE3_BATCH_SIZE="${LLM_STAGE3_BATCH_SIZE:-80}"
 LLM_STAGE3_CHUNKS_PER_SHARD="${LLM_STAGE3_CHUNKS_PER_SHARD:-10}"
 LLM_STAGE6_BATCH_SIZE="${LLM_STAGE6_BATCH_SIZE:-48}"
 LLM_STAGE6_CHUNKS_PER_SHARD="${LLM_STAGE6_CHUNKS_PER_SHARD:-10}"
+LLM_GPU_WORKERS="${LLM_GPU_WORKERS:-0}"
 EMBED_MODEL="${EMBED_MODEL:-BAAI/bge-large-en-v1.5}"
 GRAPH_EMBED_DIM="${GRAPH_EMBED_DIM:-128}"
 GRAPH_EMBED_EPOCHS="${GRAPH_EMBED_EPOCHS:-50}"
@@ -93,7 +96,7 @@ if [[ -z "${GRAPH_EMBED_WORKERS:-}" ]]; then
   fi
 fi
 
-echo "[gpu] llm config: stage3_batch=${LLM_STAGE3_BATCH_SIZE} chunks=${LLM_STAGE3_CHUNKS_PER_SHARD} stage6_batch=${LLM_STAGE6_BATCH_SIZE} stage6_chunks=${LLM_STAGE6_CHUNKS_PER_SHARD} base_batch=${LLM_BATCH_SIZE} loader_workers=${LLM_LOADER_WORKERS:-auto}"
+echo "[gpu] llm config: stage3_batch=${LLM_STAGE3_BATCH_SIZE} chunks=${LLM_STAGE3_CHUNKS_PER_SHARD} stage6_batch=${LLM_STAGE6_BATCH_SIZE} stage6_chunks=${LLM_STAGE6_CHUNKS_PER_SHARD} base_batch=${LLM_BATCH_SIZE} gpu_workers=${LLM_GPU_WORKERS} loader_workers=${LLM_LOADER_WORKERS:-auto}"
 echo "[gpu] graph-embed config: dim=${GRAPH_EMBED_DIM} epochs=${GRAPH_EMBED_EPOCHS} batch=${GRAPH_EMBED_BATCH_SIZE} workers=${GRAPH_EMBED_WORKERS}"
 # ~/~ end
 
@@ -118,6 +121,7 @@ run_site() {
     --llm-stage3-chunks-per-shard "$LLM_STAGE3_CHUNKS_PER_SHARD" \
     --llm-stage6-batch-size "$LLM_STAGE6_BATCH_SIZE" \
     --llm-stage6-chunks-per-shard "$LLM_STAGE6_CHUNKS_PER_SHARD" \
+    --llm-gpu-workers "$LLM_GPU_WORKERS" \
     --graph-embed-dim "$GRAPH_EMBED_DIM" \
     --graph-embed-epochs "$GRAPH_EMBED_EPOCHS" \
     --graph-embed-batch-size "$GRAPH_EMBED_BATCH_SIZE" \
@@ -155,6 +159,7 @@ run_site_sharded() {
     --llm-stage3-chunks-per-shard "$LLM_STAGE3_CHUNKS_PER_SHARD" \
     --llm-stage6-batch-size "$LLM_STAGE6_BATCH_SIZE" \
     --llm-stage6-chunks-per-shard "$LLM_STAGE6_CHUNKS_PER_SHARD" \
+    --llm-gpu-workers "$LLM_GPU_WORKERS" \
     $EXTRA_SHARD_ARGS
 
   python3 scripts/ct-verifier.py verify \
