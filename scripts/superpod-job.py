@@ -1558,13 +1558,89 @@ Answer:
 {a}"""
 
 
-def _create_llm_pipeline(model_name, batch_size=8):
-    """Create a reusable LLM pipeline for text generation.
+class _DatasetTextGenerationRunner:
+    """Dataset/DataLoader-backed text generation without HF Pipeline.__call__.
 
-    Returns (pipe, tokenizer) tuple. The pipeline is created without
-    default max_new_tokens — callers pass it per-call.
+    The transformers Pipeline warning Rob saw is emitted solely from repeated
+    Pipeline.__call__ invocations on CUDA. This runner keeps the useful shape
+    (Dataset input, DataLoader feeder workers, batched generation) but calls
+    model.generate directly, so chunked resumability does not trip the
+    sequential-pipeline path.
     """
-    from transformers import pipeline, AutoTokenizer, AutoConfig
+
+    def __init__(self, model, tokenizer):
+        self.model = model
+        self.tokenizer = tokenizer
+        self.config = getattr(model, "config", None)
+
+    def _input_device(self):
+        try:
+            return next(self.model.parameters()).device
+        except StopIteration:
+            return getattr(self.model, "device", "cpu")
+
+    def __call__(
+        self,
+        dataset,
+        return_full_text=False,
+        max_new_tokens=128,
+        batch_size=8,
+        num_workers=0,
+        **_kwargs,
+    ):
+        from torch.utils.data import DataLoader
+
+        def _collate(rows):
+            return list(rows)
+
+        loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            num_workers=num_workers,
+            collate_fn=_collate,
+        )
+
+        outputs = []
+        device = self._input_device()
+        is_encoder_decoder = bool(
+            getattr(self.config, "is_encoder_decoder", False)
+        )
+        for prompt_batch in loader:
+            encoded = self.tokenizer(
+                prompt_batch,
+                return_tensors="pt",
+                padding=True,
+            )
+            encoded = {k: v.to(device) for k, v in encoded.items()}
+            generated = self.model.generate(
+                **encoded,
+                max_new_tokens=max_new_tokens,
+                do_sample=False,
+                pad_token_id=self.tokenizer.pad_token_id,
+            )
+            if return_full_text or is_encoder_decoder:
+                decoded_tokens = generated
+            else:
+                decoded_tokens = generated[:, encoded["input_ids"].shape[1]:]
+            decoded = self.tokenizer.batch_decode(
+                decoded_tokens,
+                skip_special_tokens=True,
+            )
+            outputs.extend(
+                [{"generated_text": text.strip()}] for text in decoded
+            )
+        return outputs
+
+
+def _create_llm_pipeline(model_name, batch_size=8):
+    """Create a reusable Dataset-backed local LLM runner.
+
+    Returns (runner, tokenizer). The runner intentionally does not use the
+    transformers Pipeline API, because Pipeline warns after repeated CUDA calls
+    even when each call receives a Dataset.
+    """
+    from transformers import AutoTokenizer, AutoConfig
+    from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM
     import torch
 
     print(f"       Loading model {model_name}...")
@@ -1575,16 +1651,18 @@ def _create_llm_pipeline(model_name, batch_size=8):
     if not getattr(config, "is_encoder_decoder", False):
         tokenizer.padding_side = "left"
 
-    pipe = pipeline(
-        "text-generation",
-        model=model_name,
-        tokenizer=tokenizer,
+    model_cls = (
+        AutoModelForSeq2SeqLM
+        if getattr(config, "is_encoder_decoder", False)
+        else AutoModelForCausalLM
+    )
+    model = model_cls.from_pretrained(
+        model_name,
         torch_dtype=torch.float16,
         device_map="auto",
-        do_sample=False,
-        batch_size=batch_size,
     )
-    return pipe, tokenizer
+    model.eval()
+    return _DatasetTextGenerationRunner(model, tokenizer), tokenizer
 
 
 def _run_prompt_dataset_llm_batch(

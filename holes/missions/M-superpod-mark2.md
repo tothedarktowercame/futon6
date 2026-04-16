@@ -277,6 +277,16 @@ That may improve throughput for independent inference items, but it is not a
 substitute for a real `torchrun`/DeepSpeed distributed LLM path. Treat true
 DDP/DeepSpeed LLM execution as still open.
 
+**Correction after Rob's Dataset warning persisted (2026-04-16):**
+
+Rob was also right that the HF warning still mattered. The previous change gave
+each pipeline call a Dataset, but transformers emits the CUDA warning after
+repeated `Pipeline.__call__` invocations regardless. `scripts/superpod-job.py`
+now bypasses the transformers Pipeline API for local LLM inference: it loads
+`AutoModelForCausalLM`/`AutoModelForSeq2SeqLM` directly and runs a Dataset /
+DataLoader feeder into `model.generate`. Chunked resumability remains, but the
+sequential Pipeline call path is gone.
+
 ## Checkpoint — Learn As We Go (2026-04-15)
 
 Before lifting a finger on stage 6 multi-GPU, we reframed what stage 6 *is* in the arXiv setting. The conclusion: stage 6 isn't a retrieval enrichment — it's the **synthetic training corpus generator for a forward problem-solving model**. Backward reconstruction at arXiv scale (570K papers) produces grounded (problem, techniques, terminology, patterns, result) tuples; a forward model trained on that corpus is the actual research payoff. Retrieval quality is a side effect of doing reconstruction well.
