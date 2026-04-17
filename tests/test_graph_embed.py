@@ -80,6 +80,11 @@ def test_train_smoke(sample_hg):
         corpus, dim=16, hidden_dim=32, n_layers=1,
         epochs=2, batch_size=2, verbose=False)
     assert embeddings.shape == (4, 16)
+    assert stats["loss_initial"] is not None
+    assert stats["loss_final"] is not None
+    assert stats["loss_best"] is not None
+    assert stats["loss_tail_epochs"] == 2
+    assert stats["loss_tail_delta"] is not None
 
 
 def test_minimal_graph():

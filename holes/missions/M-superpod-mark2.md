@@ -82,9 +82,21 @@ manifest (570K papers)
 ```
 
 The coordinator is storage-aware (configurable inbox budget, default
-2GB) and self-advancing: when Rob marks a batch as pulled, the next
-batch builds automatically. Joe seeds the first batch; after that
-the machine runs itself.
+2GB) and self-advancing. As of 2026-04-16 it builds 10,000-paper batches
+by default (`MARK2_PAGE_SIZE=10000`) while preserving the conservative
+one-request-per-three-seconds eprint fetch interval. A full batch therefore
+takes about 8h20m to assemble before compression overhead. The manifest keeps
+canonical arXiv URLs, but fetches are routed through `export.arxiv.org` by
+default (`MARK2_EPRINT_HOST=export.arxiv.org`) in line with arXiv's
+programmatic harvesting guidance.
+
+When Rob marks a batch as pulled, the coordinator now starts a background
+`fill --if-room` job rather than blocking Rob's SSH command for the whole
+fetch window. The fill target is two ready inbox batches by default
+(`MARK2_READY_TARGET=2`), guarded by a build lock so manual fills, cron
+fills, and Rob-triggered fills cannot overlap. Joe seeds or repairs state
+when needed; under normal operation the machine keeps itself slightly ahead
+of Rob's superpod processing pace.
 
 ### Batch lifecycle
 
@@ -123,6 +135,7 @@ the same `--output-dir` to resume from the last completed stage.
 
 ```bash
 ssh chicago mark2 status          # overview
+ssh chicago mark2 fill --if-room  # ensure the configured ready-batch target
 scp chicago:~/mark2/outbox/results-003.tar.gz .
 ssh chicago mark2 collected 3     # cleans up outbox
 ```
@@ -137,6 +150,8 @@ python scripts/superpod-job.py \
   --arxiv-jsonl batch-003.jsonl \
   --site arxiv.math \
   --output-dir ./output/ \
+  --graph-embed-epochs 200 \
+  --graph-embed-eval-every 5 \
   --skip-stages 1,2,3,4,5,6,7,8,9a,10
 ```
 
@@ -286,6 +301,16 @@ now bypasses the transformers Pipeline API for local LLM inference: it loads
 `AutoModelForCausalLM`/`AutoModelForSeq2SeqLM` directly and runs a Dataset /
 DataLoader feeder into `model.generate`. Chunked resumability remains, but the
 sequential Pipeline call path is gone.
+
+**Correction after Rob's Stage 9b loss feedback (2026-04-17):**
+
+Rob observed that the R-GCN training completed quickly at 50 epochs and the
+loss did not look minimized. Stage 9b now defaults to 200 epochs in production,
+while laptop mode still drops to 10 epochs for local iteration. Validation
+retrieval is evaluated every 5 epochs by default via
+`--graph-embed-eval-every N` (2 in laptop mode), and the runner prints
+initial/final/best loss plus the last-10-epoch loss delta so a run log shows
+whether training is still materially improving at the end.
 
 ## Checkpoint — Learn As We Go (2026-04-15)
 

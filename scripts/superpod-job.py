@@ -3347,8 +3347,9 @@ def _sethread_to_raw(thread) -> dict:
 # ---------------------------------------------------------------------------
 
 def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
-                                 n_layers=2, epochs=50, batch_size=512,
-                                 device=None, num_workers=4):
+                                 n_layers=2, epochs=200, batch_size=512,
+                                 device=None, num_workers=4,
+                                 eval_every=5):
     """Stage 9b: Train R-GCN on thread hypergraphs, produce embeddings.
 
     GPU-accelerated contrastive learning on the typed hypergraph structure.
@@ -3393,7 +3394,8 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
         hypergraphs, dim=embed_dim, hidden_dim=hidden_dim,
         n_layers=n_layers, epochs=epochs, batch_size=batch_size,
         device=device, verbose=True, num_workers=num_workers,
-        tensor_cache_path=str(tensor_cache))
+        tensor_cache_path=str(tensor_cache),
+        eval_every=eval_every)
 
     if thread_ids is None:
         _, thread_ids = load_tensor_cache(str(tensor_cache))
@@ -3418,6 +3420,7 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
         "n_embedded": embeddings.shape[0],
         "embed_dim": embeddings.shape[1],
         "epochs": epochs,
+        "eval_every": eval_every,
         "device": str(device or "auto"),
         "train_metrics": train_stats,
     }
@@ -3939,7 +3942,7 @@ def print_dry_run(args):
         print(f"  {'9b. Graph embedding':<42s} {'SKIPPED':>10s}")
     else:
         est_stage9b_min = est_stage1_min * 2.0 if isinstance(est_stage1_min, (int, float)) else "?"
-        print(f"  {'9b. Graph embedding (GPU, R-GCN)':<42s} {f'{args.graph_embed_dim}d, {args.graph_embed_epochs}ep, bs={args.graph_embed_batch_size}':<36s} {fmt(est_stage9b_min)+' min':>10s}")
+        print(f"  {'9b. Graph embedding (GPU, R-GCN)':<42s} {f'{args.graph_embed_dim}d, {args.graph_embed_epochs}ep, eval={args.graph_embed_eval_every}, bs={args.graph_embed_batch_size}':<36s} {fmt(est_stage9b_min)+' min':>10s}")
 
     # Stage 10: FAISS index
     stage10_active = not args.skip_faiss
@@ -4359,8 +4362,10 @@ def main():
                              "(default: 0 = skip). Set to 100 for production runs.")
     parser.add_argument("--graph-embed-dim", type=int, default=128,
                         help="Hypergraph embedding dimension (default: 128)")
-    parser.add_argument("--graph-embed-epochs", type=int, default=50,
-                        help="GNN training epochs (default: 50)")
+    parser.add_argument("--graph-embed-epochs", type=int, default=200,
+                        help="GNN training epochs (default: 200)")
+    parser.add_argument("--graph-embed-eval-every", type=int, default=5,
+                        help="Evaluate Stage 9b validation retrieval every N epochs (default: 5)")
     parser.add_argument("--graph-embed-batch-size", type=int, default=1024,
                         help="GNN training batch size (default: 1024)")
     parser.add_argument("--graph-embed-workers", type=int, default=16,
@@ -4405,6 +4410,8 @@ def main():
             args.graph_embed_workers = 0
         if args.graph_embed_epochs == parser.get_default("graph_embed_epochs"):
             args.graph_embed_epochs = 10
+        if args.graph_embed_eval_every == parser.get_default("graph_embed_eval_every"):
+            args.graph_embed_eval_every = 2
         if not args.moist_run:
             args.moist_run = True
         print("  Laptop mode: MiniLM embeddings, CPU, moist-run for LLM stages")
@@ -4471,6 +4478,10 @@ def main():
         parser.error("--llm-gpu-workers must be >= 0")
     if args.graph_embed_batch_size <= 0:
         parser.error("--graph-embed-batch-size must be > 0")
+    if args.graph_embed_epochs <= 0:
+        parser.error("--graph-embed-epochs must be > 0")
+    if args.graph_embed_eval_every <= 0:
+        parser.error("--graph-embed-eval-every must be > 0")
     if args.graph_embed_workers < 0:
         parser.error("--graph-embed-workers must be >= 0")
     if args.discover_terms_min_freq <= 0:
@@ -5770,6 +5781,7 @@ def main():
         t9b = time.time()
         print(f"\n[Stage 9b/{n_stages}] Graph embedding "
               f"(R-GCN, {args.graph_embed_dim}d, {args.graph_embed_epochs} epochs, "
+              f"eval_every={args.graph_embed_eval_every}, "
               f"bs={args.graph_embed_batch_size}, workers={args.graph_embed_workers})...")
         stage9b_stats, hg_embeddings_path, model_path, hg_thread_ids = \
             run_stage9b_graph_embedding(
@@ -5778,10 +5790,24 @@ def main():
                 epochs=args.graph_embed_epochs,
                 batch_size=args.graph_embed_batch_size,
                 num_workers=args.graph_embed_workers,
+                eval_every=args.graph_embed_eval_every,
             )
         print(f"       {stage9b_stats['n_embedded']} thread embeddings "
               f"({stage9b_stats['embed_dim']}d) on {stage9b_stats['device']}")
         tm = stage9b_stats.get("train_metrics") or {}
+        if tm.get("loss_final") is not None:
+            msg = (
+                f"       Training loss: initial={tm.get('loss_initial', 0.0):.4f} "
+                f"final={tm['loss_final']:.4f} "
+                f"best={tm.get('loss_best', 0.0):.4f}"
+            )
+            if tm.get("loss_tail_delta") is not None:
+                msg += (
+                    f" tail{tm.get('loss_tail_epochs')}_drop="
+                    f"{tm['loss_tail_delta']:.4f}"
+                    f" ({tm.get('loss_tail_relative_delta', 0.0):.1%})"
+                )
+            print(msg)
         if tm.get("val_acc1_final") is not None:
             print("       Validation retrieval: "
                   f"Acc@1={tm['val_acc1_final']:.3f} "
