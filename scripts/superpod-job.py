@@ -1261,6 +1261,39 @@ def _load_eprint_text_for_entity(eprint_dir, entity_id, max_chars=240_000, max_m
     return None, {"status": "unusable", "id": arxiv_id}
 
 
+def _strip_eprint_filename_suffix(name):
+    for suffix in (".tar.gz", ".tex", ".tar", ".bin", ".gz"):
+        if name.endswith(suffix):
+            return name[:-len(suffix)]
+    return name
+
+
+def _paper_eprint_file_preflight(eprint_dir, entities):
+    """Cheap eprint directory coverage check by filename, before LLM work."""
+    arxiv_safe_ids = []
+    for entity in entities:
+        entity_id = entity.get("entity/id", "")
+        if entity_id.startswith("arxiv-"):
+            arxiv_safe_ids.append(_safe_arxiv_id(entity_id[len("arxiv-"):]))
+
+    available_safe_ids = set()
+    total_files = 0
+    for path in eprint_dir.iterdir():
+        if not path.is_file():
+            continue
+        total_files += 1
+        available_safe_ids.add(_strip_eprint_filename_suffix(path.name))
+
+    matched = sum(1 for sid in arxiv_safe_ids if sid in available_safe_ids)
+    return {
+        "eprint_dir": str(eprint_dir),
+        "arxiv_entities": len(arxiv_safe_ids),
+        "eprint_files": total_files,
+        "candidate_matches": matched,
+        "candidate_missing": max(0, len(arxiv_safe_ids) - matched),
+    }
+
+
 def run_stage5b_distinctor_mit(
     entities,
     pairs,
@@ -3219,6 +3252,16 @@ def run_stage9a_arxiv_paper_hypergraphs(
         "eprint_text_missing": eprint_missing,
         "eprint_status_counts": dict(eprint_status),
     }
+    if paper_hg_eprint_dir is not None and total and eprint_ok == 0:
+        try:
+            out_path.unlink()
+        except OSError:
+            pass
+        raise RuntimeError(
+            f"Stage 9a was requested with --paper-eprint-dir="
+            f"{paper_hg_eprint_dir}, but loaded zero eprints; refusing to "
+            "write abstract-only hypergraphs"
+        )
     return stats, out_path
 
 
@@ -3805,11 +3848,19 @@ def generate_moist_prompts(pairs, entities, outdir, stages=None, thread_diagrams
 
 def print_dry_run(args):
     """Print execution plan without running anything."""
-    posts = Path(args.posts_xml)
-    posts_size = posts.stat().st_size / 1e9 if posts.exists() else 0
-
-    # Estimate QA pair count from file size (~6KB per QA pair for physics.SE)
-    est_pairs = int(posts_size * 1e9 / 6000) if posts_size else "?"
+    if args.arxiv_jsonl:
+        source_path = Path(args.arxiv_jsonl)
+        source_size = source_path.stat().st_size / 1e9 if source_path.exists() else 0
+        if source_path.exists():
+            with open(source_path, encoding="utf-8") as f:
+                est_pairs = sum(1 for line in f if line.strip())
+        else:
+            est_pairs = "?"
+    else:
+        source_path = Path(args.posts_xml)
+        source_size = source_path.stat().st_size / 1e9 if source_path.exists() else 0
+        # Estimate QA pair count from file size (~6KB per QA pair for physics.SE)
+        est_pairs = int(source_size * 1e9 / 6000) if source_size else "?"
     if args.limit:
         est_pairs = min(est_pairs, args.limit) if isinstance(est_pairs, int) else args.limit
 
@@ -3851,8 +3902,8 @@ def print_dry_run(args):
     print("SUPERPOD JOB — DRY RUN (nothing will be executed)")
     print("=" * 64)
     print()
-    print(f"  Input:        {args.posts_xml}")
-    print(f"  Input size:   {posts_size:.2f} GB" if posts_size else f"  Input:        {args.posts_xml} (NOT FOUND)")
+    print(f"  Input:        {source_path}")
+    print(f"  Input size:   {source_size:.2f} GB" if source_size else f"  Input:        {source_path} (NOT FOUND)")
     print(f"  Site:         {args.site}")
     print(f"  Min score:    {args.min_score}")
     print(f"  Limit:        {args.limit or 'none'}")
@@ -4039,7 +4090,11 @@ def print_dry_run(args):
     print()
 
     print("  TO RUN FOR REAL:")
-    cmd_parts = [f"python scripts/superpod-job.py {args.posts_xml}"]
+    input_arg = (
+        f"--arxiv-jsonl {args.arxiv_jsonl}"
+        if args.arxiv_jsonl else args.posts_xml
+    )
+    cmd_parts = [f"python scripts/superpod-job.py {input_arg}"]
     cmd_parts.append(f"  --output-dir {args.output_dir}")
     cmd_parts.append(f"  --site {args.site}")
     if args.limit:
@@ -4090,13 +4145,19 @@ def print_dry_run(args):
             cmd_parts.append(f"  --distinctor-eprint-max-chars {args.distinctor_eprint_max_chars}")
         if args.distinctor_eprint_max_tex_members != 4:
             cmd_parts.append(f"  --distinctor-eprint-max-tex-members {args.distinctor_eprint_max_tex_members}")
+    if args.paper_eprint_dir:
+        cmd_parts.append(f"  --paper-eprint-dir {args.paper_eprint_dir}")
+    if args.paper_eprint_max_chars != 500_000:
+        cmd_parts.append(f"  --paper-eprint-max-chars {args.paper_eprint_max_chars}")
+    if args.paper_eprint_max_tex_members != 8:
+        cmd_parts.append(f"  --paper-eprint-max-tex-members {args.paper_eprint_max_tex_members}")
     if args.skip_threads:
         cmd_parts.append(f"  --skip-threads")
     if args.thread_limit:
         cmd_parts.append(f"  --thread-limit {args.thread_limit}")
     if args.skip_hypergraphs:
         cmd_parts.append(f"  --skip-hypergraphs")
-    if args.paper_hg_eprint_dir:
+    if args.paper_hg_eprint_dir and args.paper_hg_eprint_dir != args.paper_eprint_dir:
         cmd_parts.append(f"  --paper-hg-eprint-dir {args.paper_hg_eprint_dir}")
     if args.paper_hg_max_expressions != 160:
         cmd_parts.append(f"  --paper-hg-max-expressions {args.paper_hg_max_expressions}")
@@ -4107,7 +4168,7 @@ def print_dry_run(args):
     print("    " + ' \\\\\n    '.join(cmd_parts))
     print()
     print(f"  MOIST RUN (CPU stages + prompt files for Codex handoff):")
-    moist_parts = [f"python scripts/superpod-job.py {args.posts_xml}"]
+    moist_parts = [f"python scripts/superpod-job.py {input_arg}"]
     moist_parts.append(f"  --moist-run")
     moist_parts.append(f"  --output-dir {args.output_dir}")
     moist_parts.append(f"  --site {args.site}")
@@ -4141,9 +4202,15 @@ def print_dry_run(args):
             moist_parts.append(f"  --distinctor-eprint-max-chars {args.distinctor_eprint_max_chars}")
         if args.distinctor_eprint_max_tex_members != 4:
             moist_parts.append(f"  --distinctor-eprint-max-tex-members {args.distinctor_eprint_max_tex_members}")
+    if args.paper_eprint_dir:
+        moist_parts.append(f"  --paper-eprint-dir {args.paper_eprint_dir}")
+    if args.paper_eprint_max_chars != 500_000:
+        moist_parts.append(f"  --paper-eprint-max-chars {args.paper_eprint_max_chars}")
+    if args.paper_eprint_max_tex_members != 8:
+        moist_parts.append(f"  --paper-eprint-max-tex-members {args.paper_eprint_max_tex_members}")
     if args.skip_hypergraphs:
         moist_parts.append(f"  --skip-hypergraphs")
-    if args.paper_hg_eprint_dir:
+    if args.paper_hg_eprint_dir and args.paper_hg_eprint_dir != args.paper_eprint_dir:
         moist_parts.append(f"  --paper-hg-eprint-dir {args.paper_hg_eprint_dir}")
     if args.paper_hg_max_expressions != 160:
         moist_parts.append(f"  --paper-hg-max-expressions {args.paper_hg_max_expressions}")
@@ -4394,7 +4461,10 @@ def main():
     parser.add_argument("--num-shards", type=int, default=None,
                         help="Total number of shards")
 
+    run_argv = sys.argv[:]
     args = parser.parse_args()
+    raw_paper_eprint_dir_arg = args.paper_eprint_dir
+    raw_paper_hg_eprint_dir_arg = args.paper_hg_eprint_dir
 
     # --laptop: sensible CPU defaults
     if args.laptop:
@@ -4425,6 +4495,8 @@ def main():
             args.arxiv_jsonl = str(input_base / args.arxiv_jsonl)
         if args.comments_xml and not Path(args.comments_xml).is_absolute():
             args.comments_xml = str(input_base / args.comments_xml)
+        if args.paper_eprint_dir and not Path(args.paper_eprint_dir).is_absolute():
+            args.paper_eprint_dir = str(input_base / args.paper_eprint_dir)
         if args.paper_hg_eprint_dir and not Path(args.paper_hg_eprint_dir).is_absolute():
             args.paper_hg_eprint_dir = str(input_base / args.paper_hg_eprint_dir)
         if args.discover_terms_eprint_dir and not Path(args.discover_terms_eprint_dir).is_absolute():
@@ -4500,6 +4572,10 @@ def main():
         parser.error("--paper-hg-text-max-chars must be > 0")
     if args.paper_hg_max_tex_members <= 0:
         parser.error("--paper-hg-max-tex-members must be > 0")
+    if args.paper_eprint_max_chars <= 0:
+        parser.error("--paper-eprint-max-chars must be > 0")
+    if args.paper_eprint_max_tex_members <= 0:
+        parser.error("--paper-eprint-max-tex-members must be > 0")
     if args.distinctor_entity_limit < 0:
         parser.error("--distinctor-entity-limit must be >= 0")
     if args.distinctor_max_hits <= 0:
@@ -4549,11 +4625,46 @@ def main():
     if not args.output_dir:
         args.output_dir = derive_default_output_dir(args.site)
 
+    def _path_key(value):
+        return Path(value).expanduser().resolve(strict=False)
+
+    paper_eprint_source = None
+    if args.paper_eprint_dir and args.paper_hg_eprint_dir:
+        if _path_key(args.paper_eprint_dir) != _path_key(args.paper_hg_eprint_dir):
+            parser.error(
+                "--paper-eprint-dir and --paper-hg-eprint-dir refer to "
+                "different directories; use one canonical eprint directory"
+            )
+        args.paper_eprint_dir = str(_path_key(args.paper_eprint_dir))
+        args.paper_hg_eprint_dir = args.paper_eprint_dir
+        paper_eprint_source = "paper-eprint-dir+paper-hg-eprint-dir"
+    elif args.paper_eprint_dir:
+        args.paper_eprint_dir = str(_path_key(args.paper_eprint_dir))
+        args.paper_hg_eprint_dir = args.paper_eprint_dir
+        paper_eprint_source = "paper-eprint-dir"
+    elif args.paper_hg_eprint_dir:
+        args.paper_hg_eprint_dir = str(_path_key(args.paper_hg_eprint_dir))
+        args.paper_eprint_dir = args.paper_hg_eprint_dir
+        paper_eprint_source = "paper-hg-eprint-dir-legacy"
+    elif args.arxiv_jsonl and args.distinctor_eprint_dir:
+        args.paper_eprint_dir = str(_path_key(args.distinctor_eprint_dir))
+        args.paper_hg_eprint_dir = args.paper_eprint_dir
+        paper_eprint_source = "distinctor-eprint-dir-default"
+        print(f"  Paper stages: defaulting --paper-eprint-dir to --distinctor-eprint-dir ({args.paper_eprint_dir})")
+    elif args.arxiv_jsonl and args.discover_terms_eprint_dir:
+        args.paper_eprint_dir = str(_path_key(args.discover_terms_eprint_dir))
+        args.paper_hg_eprint_dir = args.paper_eprint_dir
+        paper_eprint_source = "discover-terms-eprint-dir-default"
+        print(f"  Paper stages: defaulting --paper-eprint-dir to --discover-terms-eprint-dir ({args.paper_eprint_dir})")
+
+    if args.paper_eprint_dir and not Path(args.paper_eprint_dir).is_dir():
+        parser.error(f"--paper-eprint-dir not found or not a directory: {args.paper_eprint_dir}")
+
     # ========== Dry Run ==========
     # Run before download logic to guarantee no network/filesystem side effects.
     if args.dry_run:
-        if not args.posts_xml:
-            parser.error("posts_xml is required for --dry-run unless used with --download")
+        if not args.posts_xml and not args.arxiv_jsonl:
+            parser.error("posts_xml or --arxiv-jsonl is required for --dry-run unless used with --download")
         print_dry_run(args)
         return
 
@@ -4582,24 +4693,12 @@ def main():
             args.paper_hypergraph_arm = "classical"
             print("  --skip-llm: Stage 5d using classical arm only")
 
-    if args.arxiv_jsonl and args.paper_hg_eprint_dir is None:
-        if args.distinctor_eprint_dir:
-            args.paper_hg_eprint_dir = args.distinctor_eprint_dir
-            print(f"  Paper hypergraphs: defaulting --paper-hg-eprint-dir to --distinctor-eprint-dir ({args.paper_hg_eprint_dir})")
-        elif args.discover_terms_eprint_dir:
-            args.paper_hg_eprint_dir = args.discover_terms_eprint_dir
-            print(f"  Paper hypergraphs: defaulting --paper-hg-eprint-dir to --discover-terms-eprint-dir ({args.paper_hg_eprint_dir})")
-
     if args.distinctor_eprint_dir and not Path(args.distinctor_eprint_dir).exists():
         print(f"  WARNING: --distinctor-eprint-dir not found: {args.distinctor_eprint_dir}")
         print("           Stage 5b will fall back to metadata/QA text.")
     if args.discover_terms_eprint_dir and not Path(args.discover_terms_eprint_dir).exists():
         print(f"  WARNING: --discover-terms-eprint-dir not found: {args.discover_terms_eprint_dir}")
         print("           Open-world term discovery will use metadata/QA text.")
-    if args.paper_hg_eprint_dir and not Path(args.paper_hg_eprint_dir).exists():
-        print(f"  WARNING: --paper-hg-eprint-dir not found: {args.paper_hg_eprint_dir}")
-        print("           Paper hypergraphs will use metadata/QA text.")
-
     # ========== Moist Run ==========
     # Moist run: execute CPU stages normally, generate prompt files for LLM
     # stages. This lets you run Stage 1 (parse) and Stage 5 (NER) on a laptop,
@@ -4723,6 +4822,29 @@ def main():
 
     print(f"       Stage 1 done in {time.time()-t0:.0f}s")
     mark_stage("parse", "completed", qa_pairs=len(pairs))
+
+    paper_eprint_preflight = None
+    if args.paper_eprint_dir:
+        paper_eprint_preflight = _paper_eprint_file_preflight(
+            Path(args.paper_eprint_dir), entities
+        )
+        print("       Paper eprint preflight: "
+              f"{paper_eprint_preflight['candidate_matches']}/"
+              f"{paper_eprint_preflight['arxiv_entities']} arXiv entities "
+              f"have source-file candidates "
+              f"({paper_eprint_preflight['eprint_files']} files in dir)")
+        if paper_eprint_preflight["arxiv_entities"] == 0 and entities:
+            raise RuntimeError(
+                "--paper-eprint-dir was supplied, but Stage 1 produced no "
+                "arXiv entity IDs; refusing to silently fall back to abstracts"
+            )
+        if (paper_eprint_preflight["arxiv_entities"] > 0
+                and paper_eprint_preflight["candidate_matches"] == 0):
+            raise RuntimeError(
+                "--paper-eprint-dir was supplied, but no eprint filenames "
+                "matched the arXiv entities; refusing to silently fall back "
+                "to abstracts"
+            )
 
     # ========== Stage 2: Embeddings ==========
     if not args.skip_embeddings:
@@ -5015,13 +5137,32 @@ def main():
     paper_eprint_path = (
         Path(args.paper_eprint_dir) if args.paper_eprint_dir else None
     )
-    if paper_eprint_path is not None and not paper_eprint_path.exists():
-        print(f"       Warning: --paper-eprint-dir {paper_eprint_path} does "
-              f"not exist; paper stages will fall back to abstracts.")
-        paper_eprint_path = None
+    previous_manifest = None
+
+    def _previous_stage_status(stage_key):
+        nonlocal previous_manifest
+        if previous_manifest is None:
+            manifest_path = outdir / "manifest.json"
+            try:
+                with open(manifest_path, encoding="utf-8") as f:
+                    previous_manifest = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                previous_manifest = {}
+        return (previous_manifest.get("stage_status", {}) or {}).get(stage_key, {}) or {}
+
+    def _require_paper_eprint_usage(stage_name, counts, produced):
+        if paper_eprint_path is None or not produced:
+            return
+        if int((counts or {}).get("eprint", 0)) > 0:
+            return
+        raise RuntimeError(
+            f"{stage_name} was requested with --paper-eprint-dir="
+            f"{paper_eprint_path}, but loaded zero eprints; refusing to "
+            "write abstract-only paper-stage output"
+        )
 
     def _paper_text_for(entity, pair):
-        """Return (text, source) for a paper stage.
+        """Return (text, source, eprint_meta) for a paper stage.
 
         Source is 'eprint' if the LaTeX body loaded, 'abstract' otherwise.
         """
@@ -5029,16 +5170,16 @@ def main():
                          + pair.question.body_text + "\n\n"
                          + pair.answer.body_text)
         if paper_eprint_path is None:
-            return abstract_text, "abstract"
-        eprint_text, _meta = _load_eprint_text_for_entity(
+            return abstract_text, "abstract", {"status": "no-eprint-dir"}
+        eprint_text, meta = _load_eprint_text_for_entity(
             paper_eprint_path,
             entity["entity/id"],
             max_chars=args.paper_eprint_max_chars,
             max_members=args.paper_eprint_max_tex_members,
         )
         if eprint_text:
-            return pair.question.title + "\n\n" + eprint_text, "eprint"
-        return abstract_text, "abstract"
+            return pair.question.title + "\n\n" + eprint_text, "eprint", meta
+        return abstract_text, "abstract", meta
 
     # ========== Stage 5c: Technique-level NER ==========
     # Paper-focused technique extraction. Classical and LLM arms are kept
@@ -5052,7 +5193,14 @@ def main():
         techniques_path = outdir / "techniques.json"
         if techniques_path.exists():
             print(f"       Reusing existing {techniques_path.name}")
-            mark_stage("technique_ner", "completed", resumed=True)
+            prev_counts = _previous_stage_status("technique_ner").get(
+                "text_source_counts", {}
+            )
+            _require_paper_eprint_usage(
+                "Stage 5c", prev_counts, produced=True
+            )
+            mark_stage("technique_ner", "completed", resumed=True,
+                       text_source_counts=prev_counts)
         else:
             arm = args.technique_ner_arm
             concept_vocab: set[str] = set()
@@ -5090,6 +5238,7 @@ def main():
             n_papers = len(pairs)
             arm_counts = {"classical": 0, "llm": 0, "both": 0}
             text_source_counts = {"eprint": 0, "abstract": 0}
+            eprint_status_counts = {}
             t_batch = time.time()
             llm_chunk_size = max(1, args.llm_batch_size * 8)
             pending_texts = []
@@ -5140,9 +5289,13 @@ def main():
 
             for i, (entity, pair) in enumerate(zip(entities, pairs)):
                 eid = entity["entity/id"]
-                paper_text, text_source = _paper_text_for(entity, pair)
+                paper_text, text_source, eprint_meta = _paper_text_for(entity, pair)
                 text_source_counts[text_source] = (
                     text_source_counts.get(text_source, 0) + 1
+                )
+                eprint_status = eprint_meta.get("status", "unknown")
+                eprint_status_counts[eprint_status] = (
+                    eprint_status_counts.get(eprint_status, 0) + 1
                 )
                 classical_hits = (
                     extract_techniques_classical(
@@ -5177,6 +5330,9 @@ def main():
             if any(r is None for r in records):
                 missing = sum(1 for r in records if r is None)
                 raise RuntimeError(f"Stage 5c did not produce {missing} records")
+            _require_paper_eprint_usage(
+                "Stage 5c", text_source_counts, produced=bool(records)
+            )
 
             with open(techniques_path, "w") as f:
                 json.dump(records, f, ensure_ascii=False, indent=2)
@@ -5187,10 +5343,13 @@ def main():
                   f"llm={arm_counts['llm']}, both={arm_counts['both']}")
             print(f"       Text source: eprint={text_source_counts['eprint']}, "
                   f"abstract-fallback={text_source_counts['abstract']}")
+            if paper_eprint_path is not None:
+                print(f"       Eprint load status: {eprint_status_counts}")
             print(f"       Stage 5c done in {time.time()-t5c:.0f}s")
             mark_stage("technique_ner", "completed",
                        n_papers=n_papers, arm=arm, arm_counts=arm_counts,
-                       text_source_counts=text_source_counts)
+                       text_source_counts=text_source_counts,
+                       eprint_status_counts=eprint_status_counts)
     else:
         print(f"\n[Stage 5c/{n_stages}] Skipped (--skip-technique-ner)")
         mark_stage("technique_ner", "skipped", skip_reason="--skip-technique-ner")
@@ -5208,7 +5367,14 @@ def main():
         hg_path = outdir / "paper-hypergraphs.json"
         if hg_path.exists():
             print(f"       Reusing existing {hg_path.name}")
-            mark_stage("paper_hypergraph", "completed", resumed=True)
+            prev_counts = _previous_stage_status("paper_hypergraph").get(
+                "text_source_counts", {}
+            )
+            _require_paper_eprint_usage(
+                "Stage 5d", prev_counts, produced=True
+            )
+            mark_stage("paper_hypergraph", "completed", resumed=True,
+                       text_source_counts=prev_counts)
         else:
             arm = args.paper_hypergraph_arm
 
@@ -5271,6 +5437,7 @@ def main():
             edge_provenance = {"classical": 0, "llm": 0, "both": 0}
             paper_hg_metrics = {"n_blocks_total": 0, "n_with_claim_blocks": 0}
             text_source_counts = {"eprint": 0, "abstract": 0}
+            eprint_status_counts = {}
             t_batch = time.time()
             llm_chunk_size = max(1, args.llm_batch_size * 8)
             pending_texts = []
@@ -5327,9 +5494,13 @@ def main():
 
             for i, (entity, pair) in enumerate(zip(entities, pairs)):
                 eid = entity["entity/id"]
-                paper_text, text_source = _paper_text_for(entity, pair)
+                paper_text, text_source, eprint_meta = _paper_text_for(entity, pair)
                 text_source_counts[text_source] = (
                     text_source_counts.get(text_source, 0) + 1
+                )
+                eprint_status = eprint_meta.get("status", "unknown")
+                eprint_status_counts[eprint_status] = (
+                    eprint_status_counts.get(eprint_status, 0) + 1
                 )
                 concepts_p = concept_by_entity.get(eid, [])
                 techniques_p = technique_by_entity.get(eid, [])
@@ -5369,6 +5540,9 @@ def main():
             if any(h is None for h in hypergraphs):
                 missing = sum(1 for h in hypergraphs if h is None)
                 raise RuntimeError(f"Stage 5d did not produce {missing} hypergraphs")
+            _require_paper_eprint_usage(
+                "Stage 5d", text_source_counts, produced=bool(hypergraphs)
+            )
 
             with open(hg_path, "w") as f:
                 json.dump(hypergraphs, f, ensure_ascii=False)
@@ -5385,13 +5559,16 @@ def main():
                   f"llm={edge_provenance['llm']}, both={edge_provenance['both']}")
             print(f"       Text source: eprint={text_source_counts['eprint']}, "
                   f"abstract-fallback={text_source_counts['abstract']}")
+            if paper_eprint_path is not None:
+                print(f"       Eprint load status: {eprint_status_counts}")
             print(f"       Stage 5d done in {time.time()-t5d:.0f}s")
             mark_stage("paper_hypergraph", "completed",
                        n_papers=n_papers, arm=arm,
                        total_nodes=total_nodes, total_edges=total_edges,
                        with_claim_blocks=n_with_claim_blocks,
                        edge_provenance=edge_provenance,
-                       text_source_counts=text_source_counts)
+                       text_source_counts=text_source_counts,
+                       eprint_status_counts=eprint_status_counts)
     else:
         print(f"\n[Stage 5d/{n_stages}] Skipped (--skip-paper-hypergraph)")
         mark_stage("paper_hypergraph", "skipped", skip_reason="--skip-paper-hypergraph")
@@ -5688,7 +5865,7 @@ def main():
     if not args.skip_hypergraphs and args.arxiv_jsonl:
         t9 = time.time()
         print(f"\n[Stage 9a/{n_stages}] Paper-level hypergraph assembly (arXiv mode)...")
-        paper_hg_eprint_dir = Path(args.paper_hg_eprint_dir) if args.paper_hg_eprint_dir else None
+        paper_hg_eprint_dir = Path(args.paper_eprint_dir) if args.paper_eprint_dir else None
         if paper_hg_eprint_dir:
             print(f"       Paper text source: {paper_hg_eprint_dir} "
                   f"(max_chars={args.paper_hg_text_max_chars}, "
@@ -5907,6 +6084,11 @@ def main():
     readiness_status = "pass" if not health_issues else "warn"
     manifest = {
         "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "run": {
+            "argv": run_argv,
+            "cwd": os.getcwd(),
+            "python": sys.executable,
+        },
         "source": args.site,
         "posts_xml": args.posts_xml,
         "arxiv_jsonl": args.arxiv_jsonl,
@@ -5925,7 +6107,18 @@ def main():
         "discover_terms_eprint_dir": args.discover_terms_eprint_dir,
         "run_distinctor_mit": args.run_distinctor_mit,
         "distinctor_eprint_dir": args.distinctor_eprint_dir,
+        "paper_eprint_dir": args.paper_eprint_dir,
         "paper_hg_eprint_dir": args.paper_hg_eprint_dir,
+        "paper_eprint": {
+            "effective_dir": args.paper_eprint_dir,
+            "legacy_hg_dir": args.paper_hg_eprint_dir,
+            "source": paper_eprint_source,
+            "raw_paper_eprint_dir_arg": raw_paper_eprint_dir_arg,
+            "raw_paper_hg_eprint_dir_arg": raw_paper_hg_eprint_dir_arg,
+            "max_chars": args.paper_eprint_max_chars,
+            "max_tex_members": args.paper_eprint_max_tex_members,
+            "preflight": paper_eprint_preflight,
+        },
         "stage6_backend": args.stage6_backend,
         "health_gate_thresholds": {
             "stage6_parse_rate_min": args.gate_stage6_parse_rate_min,
