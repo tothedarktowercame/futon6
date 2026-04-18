@@ -15,7 +15,7 @@ Training:       graph contrastive learning — augment each graph via random
                 of the same graph together and push different graphs apart.
 
     >>> from futon6.graph_embed import embed_hypergraphs, train
-    >>> model, embeddings, stats = train(hypergraphs, dim=128, epochs=50)
+    >>> model, embeddings, stats = train(hypergraphs, dim=128, epochs=200)
     >>> embeddings.shape  # (n_threads, 128)
 """
 
@@ -567,7 +567,7 @@ def _paired_retrieval_metrics(
 # ---------------------------------------------------------------------------
 
 def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
-          n_layers: int = 2, epochs: int = 50, batch_size: int = 64,
+          n_layers: int = 2, epochs: int = 200, batch_size: int = 64,
           lr: float = 1e-3, node_drop: float = 0.1, edge_drop: float = 0.2,
           device: str | None = None, verbose: bool = True,
           num_workers: int = 4,
@@ -781,14 +781,34 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
     embeddings = np.concatenate(all_embeddings, axis=0)
 
     final_val = val_curve[-1] if val_curve else None
+    loss_initial = float(loss_curve[0]) if loss_curve else None
+    loss_final = float(loss_curve[-1]) if loss_curve else None
+    loss_best = float(min(loss_curve)) if loss_curve else None
+    if len(loss_curve) >= 2:
+        tail_n = min(10, len(loss_curve))
+        tail_start = float(loss_curve[-tail_n])
+        tail_end = float(loss_curve[-1])
+        loss_tail_delta = tail_start - tail_end
+        loss_tail_relative_delta = (
+            loss_tail_delta / max(abs(tail_start), 1e-12)
+        )
+    else:
+        tail_n = len(loss_curve)
+        loss_tail_delta = None
+        loss_tail_relative_delta = None
+
     training_stats = {
         "n_graphs_total": len(all_graph_tensors),
         "n_graphs_train": len(train_idx),
         "n_graphs_val": len(val_idx),
         "val_fraction": float(val_frac),
         "eval_every": int(eval_every),
-        "loss_final": float(loss_curve[-1]) if loss_curve else None,
-        "loss_best": float(min(loss_curve)) if loss_curve else None,
+        "loss_initial": loss_initial,
+        "loss_final": loss_final,
+        "loss_best": loss_best,
+        "loss_tail_epochs": int(tail_n),
+        "loss_tail_delta": loss_tail_delta,
+        "loss_tail_relative_delta": loss_tail_relative_delta,
         "loss_curve": loss_curve,
         "best_val_acc1": float(best_val_acc1) if best_val_acc1 >= 0 else None,
         "best_val_epoch": best_val_epoch,

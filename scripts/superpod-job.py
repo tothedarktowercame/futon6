@@ -51,6 +51,7 @@ conversion path. See futon1/apps/graph-memory for schema.
 
 import argparse
 import ast
+import atexit
 import builtins as _builtins
 import hashlib
 import importlib
@@ -63,6 +64,13 @@ import sys
 import tarfile
 import time
 import uuid
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    category=SyntaxWarning,
+    message=r"invalid escape sequence.*",
+)
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
@@ -78,6 +86,53 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 def _timestamp_now() -> str:
     return datetime.now().strftime("%H:%M:%S")
+
+
+def _available_cpu_count() -> int:
+    """CPU count available to this job, honoring Slurm/cpuset affinity."""
+    counts = []
+    slurm_cpus = os.environ.get("SLURM_CPUS_PER_TASK")
+    if slurm_cpus and slurm_cpus.isdigit():
+        counts.append(int(slurm_cpus))
+    try:
+        counts.append(len(os.sched_getaffinity(0)))
+    except (AttributeError, OSError):
+        pass
+    if not counts:
+        counts.append(os.cpu_count() or 1)
+    return max(1, min(c for c in counts if c > 0))
+
+
+def _default_loader_workers() -> int:
+    """Default feeder workers for Dataset-backed LLM pipeline calls."""
+    return min(16, _available_cpu_count())
+
+
+def _visible_cuda_count() -> int:
+    """Count GPUs visible to this process."""
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return int(torch.cuda.device_count())
+    except Exception:
+        pass
+
+    visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if visible:
+        devices = [d for d in visible.split(",") if d.strip() and d.strip() != "-1"]
+        return len(devices)
+    return 0
+
+
+def _visible_cuda_device_ids() -> list[str]:
+    """CUDA device ids that can be assigned to child worker processes."""
+    visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if visible:
+        devices = [d.strip() for d in visible.split(",")
+                   if d.strip() and d.strip() != "-1"]
+        if devices:
+            return devices
+    return [str(i) for i in range(_visible_cuda_count())]
 
 
 def print(*args, **kwargs):  # type: ignore[override]
@@ -139,6 +194,18 @@ from futon6.thread_performatives import (
 from futon6.latex_sexp import parse as sexp_parse, parse_all
 from futon6.hypergraph import assemble as assemble_hypergraph
 from futon6.faiss_index import HAS_FAISS, build_index, save_index
+from futon6.technique_ner import (
+    TechniqueHit,
+    extract_techniques_classical,
+    extract_techniques_llm_batch,
+    merge_technique_arms,
+    techniques_to_records,
+)
+from futon6.paper_hypergraph import (
+    extract_paper_hypergraph_classical,
+    extract_paper_hypergraph_llm_batch,
+    merge_paper_hypergraphs,
+)
 
 _GRAPH_EMBED_IMPORT_ERROR = None
 try:
@@ -1194,6 +1261,39 @@ def _load_eprint_text_for_entity(eprint_dir, entity_id, max_chars=240_000, max_m
     return None, {"status": "unusable", "id": arxiv_id}
 
 
+def _strip_eprint_filename_suffix(name):
+    for suffix in (".tar.gz", ".tex", ".tar", ".bin", ".gz"):
+        if name.endswith(suffix):
+            return name[:-len(suffix)]
+    return name
+
+
+def _paper_eprint_file_preflight(eprint_dir, entities):
+    """Cheap eprint directory coverage check by filename, before LLM work."""
+    arxiv_safe_ids = []
+    for entity in entities:
+        entity_id = entity.get("entity/id", "")
+        if entity_id.startswith("arxiv-"):
+            arxiv_safe_ids.append(_safe_arxiv_id(entity_id[len("arxiv-"):]))
+
+    available_safe_ids = set()
+    total_files = 0
+    for path in eprint_dir.iterdir():
+        if not path.is_file():
+            continue
+        total_files += 1
+        available_safe_ids.add(_strip_eprint_filename_suffix(path.name))
+
+    matched = sum(1 for sid in arxiv_safe_ids if sid in available_safe_ids)
+    return {
+        "eprint_dir": str(eprint_dir),
+        "arxiv_entities": len(arxiv_safe_ids),
+        "eprint_files": total_files,
+        "candidate_matches": matched,
+        "candidate_missing": max(0, len(arxiv_safe_ids) - matched),
+    }
+
+
 def run_stage5b_distinctor_mit(
     entities,
     pairs,
@@ -1491,13 +1591,89 @@ Answer:
 {a}"""
 
 
-def _create_llm_pipeline(model_name, batch_size=8):
-    """Create a reusable LLM pipeline for text generation.
+class _DatasetTextGenerationRunner:
+    """Dataset/DataLoader-backed text generation without HF Pipeline.__call__.
 
-    Returns (pipe, tokenizer) tuple. The pipeline is created without
-    default max_new_tokens — callers pass it per-call.
+    The transformers Pipeline warning Rob saw is emitted solely from repeated
+    Pipeline.__call__ invocations on CUDA. This runner keeps the useful shape
+    (Dataset input, DataLoader feeder workers, batched generation) but calls
+    model.generate directly, so chunked resumability does not trip the
+    sequential-pipeline path.
     """
-    from transformers import pipeline, AutoTokenizer, AutoConfig
+
+    def __init__(self, model, tokenizer):
+        self.model = model
+        self.tokenizer = tokenizer
+        self.config = getattr(model, "config", None)
+
+    def _input_device(self):
+        try:
+            return next(self.model.parameters()).device
+        except StopIteration:
+            return getattr(self.model, "device", "cpu")
+
+    def __call__(
+        self,
+        dataset,
+        return_full_text=False,
+        max_new_tokens=128,
+        batch_size=8,
+        num_workers=0,
+        **_kwargs,
+    ):
+        from torch.utils.data import DataLoader
+
+        def _collate(rows):
+            return list(rows)
+
+        loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            num_workers=num_workers,
+            collate_fn=_collate,
+        )
+
+        outputs = []
+        device = self._input_device()
+        is_encoder_decoder = bool(
+            getattr(self.config, "is_encoder_decoder", False)
+        )
+        for prompt_batch in loader:
+            encoded = self.tokenizer(
+                prompt_batch,
+                return_tensors="pt",
+                padding=True,
+            )
+            encoded = {k: v.to(device) for k, v in encoded.items()}
+            generated = self.model.generate(
+                **encoded,
+                max_new_tokens=max_new_tokens,
+                do_sample=False,
+                pad_token_id=self.tokenizer.pad_token_id,
+            )
+            if return_full_text or is_encoder_decoder:
+                decoded_tokens = generated
+            else:
+                decoded_tokens = generated[:, encoded["input_ids"].shape[1]:]
+            decoded = self.tokenizer.batch_decode(
+                decoded_tokens,
+                skip_special_tokens=True,
+            )
+            outputs.extend(
+                [{"generated_text": text.strip()}] for text in decoded
+            )
+        return outputs
+
+
+def _create_llm_pipeline(model_name, batch_size=8):
+    """Create a reusable Dataset-backed local LLM runner.
+
+    Returns (runner, tokenizer). The runner intentionally does not use the
+    transformers Pipeline API, because Pipeline warns after repeated CUDA calls
+    even when each call receives a Dataset.
+    """
+    from transformers import AutoTokenizer, AutoConfig
+    from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM
     import torch
 
     print(f"       Loading model {model_name}...")
@@ -1508,22 +1684,416 @@ def _create_llm_pipeline(model_name, batch_size=8):
     if not getattr(config, "is_encoder_decoder", False):
         tokenizer.padding_side = "left"
 
-    pipe = pipeline(
-        "text-generation",
-        model=model_name,
-        tokenizer=tokenizer,
+    model_cls = (
+        AutoModelForSeq2SeqLM
+        if getattr(config, "is_encoder_decoder", False)
+        else AutoModelForCausalLM
+    )
+    model = model_cls.from_pretrained(
+        model_name,
         torch_dtype=torch.float16,
         device_map="auto",
-        do_sample=False,
-        batch_size=batch_size,
     )
-    return pipe, tokenizer
+    model.eval()
+    return _DatasetTextGenerationRunner(model, tokenizer), tokenizer
+
+
+def _run_prompt_dataset_llm_batch(
+    prompts,
+    pipe,
+    tokenizer,
+    max_new_tokens,
+    batch_size,
+    loader_workers=0,
+):
+    """Run preformatted prompts through a Dataset-backed text-generation call."""
+    from torch.utils.data import Dataset as TorchDataset
+
+    class _PromptDataset(TorchDataset):
+        def __init__(self, prompt_texts):
+            self.prompt_texts = prompt_texts
+
+        def __len__(self):
+            return len(self.prompt_texts)
+
+        def __getitem__(self, idx):
+            messages = [{"role": "user", "content": self.prompt_texts[idx]}]
+            return tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+
+    if not prompts:
+        return []
+
+    outputs = pipe(
+        _PromptDataset(prompts),
+        return_full_text=False,
+        max_new_tokens=max_new_tokens,
+        batch_size=batch_size,
+        num_workers=loader_workers,
+    )
+
+    texts = []
+    for out in outputs:
+        if isinstance(out, list):
+            item = out[0] if out else {}
+        elif isinstance(out, dict):
+            item = out
+        else:
+            item = {}
+        texts.append(str(item.get("generated_text", "")).strip())
+    return texts
+
+
+def _llm_worker_main(argv):
+    """Hidden JSONL worker: one long-lived local LLM process per GPU."""
+    import contextlib
+    import traceback
+
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--model", required=True)
+    parser.add_argument("--batch-size", type=int, required=True)
+    parser.add_argument("--loader-workers", type=int, default=0)
+    parser.add_argument("--max-input-chars", type=int, required=True)
+    args = parser.parse_args(argv)
+
+    with contextlib.redirect_stdout(sys.stderr):
+        pipe, tokenizer = _create_llm_pipeline(args.model, args.batch_size)
+
+    for line in sys.stdin:
+        line = line.strip()
+        if not line:
+            continue
+        msg = json.loads(line)
+        if msg.get("type") == "stop":
+            break
+
+        task_id = msg["task_id"]
+        task_type = msg["task_type"]
+        items = msg["items"]
+        task_batch_size = int(msg.get("batch_size", args.batch_size))
+        try:
+            if task_type == "stage3":
+                prompts = [
+                    build_pattern_prompt(
+                        item["question_title"],
+                        item["question_text"],
+                        item["answer_text"],
+                    )
+                    for item in items
+                ]
+                with contextlib.redirect_stdout(sys.stderr):
+                    raw_texts = _run_prompt_dataset_llm_batch(
+                        prompts,
+                        pipe=pipe,
+                        tokenizer=tokenizer,
+                        max_new_tokens=64,
+                        batch_size=task_batch_size,
+                        loader_workers=args.loader_workers,
+                    )
+                payload = []
+                for item, raw in zip(items, raw_texts):
+                    pattern_ids = _parse_pattern_response(raw)
+                    payload.append({
+                        "entry_id": item["entry_id"],
+                        "patterns": [
+                            PATTERN_NAMES[pid - 1]
+                            for pid in pattern_ids
+                            if 1 <= pid <= 25
+                        ],
+                        "raw": raw,
+                    })
+            elif task_type == "stage5c":
+                texts = items
+                with contextlib.redirect_stdout(sys.stderr):
+                    hits_batches = extract_techniques_llm_batch(
+                        texts,
+                        pipe=pipe,
+                        tokenizer=tokenizer,
+                        max_input_chars=args.max_input_chars,
+                        batch_size=task_batch_size,
+                        loader_workers=args.loader_workers,
+                    )
+                payload = [
+                    [
+                        {
+                            "canonical": h.canonical,
+                            "term": h.term,
+                            "loci": h.loci,
+                            "first_defined_at": h.first_defined_at,
+                            "extraction_source": h.extraction_source,
+                        }
+                        for h in hits
+                    ]
+                    for hits in hits_batches
+                ]
+            elif task_type == "stage5d":
+                texts = [item["text"] for item in items]
+                classical_hgs = [item["classical_hg"] for item in items]
+                with contextlib.redirect_stdout(sys.stderr):
+                    payload = extract_paper_hypergraph_llm_batch(
+                        texts,
+                        classical_hgs,
+                        pipe=pipe,
+                        tokenizer=tokenizer,
+                        prose_cap_chars=msg["prose_cap_chars"],
+                        hg_cap_nodes=msg["hg_cap_nodes"],
+                        batch_size=task_batch_size,
+                        loader_workers=args.loader_workers,
+                    )
+            elif task_type == "stage6":
+                prompts = [
+                    build_reverse_morphogenesis_prompt(
+                        item["question_title"],
+                        item["question_text"],
+                        item["answer_text"],
+                    )
+                    for item in items
+                ]
+                with contextlib.redirect_stdout(sys.stderr):
+                    raw_texts = _run_prompt_dataset_llm_batch(
+                        prompts,
+                        pipe=pipe,
+                        tokenizer=tokenizer,
+                        max_new_tokens=640,
+                        batch_size=task_batch_size,
+                        loader_workers=args.loader_workers,
+                    )
+                payload = [
+                    {
+                        "entity_id": item["entity_id"],
+                        "question_id": item["question_id"],
+                        "analysis": _parse_json_object_response(raw),
+                        "raw": raw,
+                    }
+                    for item, raw in zip(items, raw_texts)
+                ]
+            elif task_type == "stage7":
+                prompts = items
+                with contextlib.redirect_stdout(sys.stderr):
+                    raw_texts = _run_prompt_dataset_llm_batch(
+                        prompts,
+                        pipe=pipe,
+                        tokenizer=tokenizer,
+                        max_new_tokens=512,
+                        batch_size=task_batch_size,
+                        loader_workers=args.loader_workers,
+                    )
+                payload = [_parse_json_array_response(raw) for raw in raw_texts]
+            else:
+                raise ValueError(f"unknown LLM worker task_type: {task_type}")
+
+            _builtins.print(
+                json.dumps({"task_id": task_id, "ok": True, "payload": payload}),
+                flush=True,
+            )
+        except Exception as exc:
+            _builtins.print(
+                json.dumps({
+                    "task_id": task_id,
+                    "ok": False,
+                    "error": repr(exc),
+                    "traceback": traceback.format_exc(),
+                }),
+                flush=True,
+            )
+
+
+class _LlmGpuPool:
+    """Persistent process-level replica fanout for local LLM stages.
+
+    Each child is launched with a single CUDA device visible, loads its own
+    pipeline once, and receives JSONL tasks for stages 3, 5c, 5d, 6, and 7.
+    This is not DeepSpeed or PyTorch DDP. It is retained as an explicit
+    replica fallback and must not be described as satisfying a DDP requirement.
+    """
+
+    def __init__(
+        self,
+        model_name: str,
+        gpu_devices: list[str],
+        batch_size: int,
+        total_loader_workers: int,
+        max_input_chars: int,
+    ):
+        if not gpu_devices:
+            raise ValueError("gpu_devices must be non-empty")
+        self.model_name = model_name
+        self.gpu_devices = list(gpu_devices)
+        self.batch_size = int(batch_size)
+        self.loader_workers = max(0, int(total_loader_workers) // len(gpu_devices))
+        self.max_input_chars = int(max_input_chars)
+        self.procs = []
+        self.next_task_id = 0
+
+        script_path = Path(__file__).resolve()
+        for worker_idx, device in enumerate(self.gpu_devices):
+            env = os.environ.copy()
+            env["CUDA_VISIBLE_DEVICES"] = device
+            env["PYTHONUNBUFFERED"] = "1"
+            cmd = [
+                sys.executable,
+                "-u",
+                str(script_path),
+                "__llm_worker",
+                "--model",
+                self.model_name,
+                "--batch-size",
+                str(self.batch_size),
+                "--loader-workers",
+                str(self.loader_workers),
+                "--max-input-chars",
+                str(self.max_input_chars),
+            ]
+            proc = subprocess.Popen(
+                cmd,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=None,
+                text=True,
+                bufsize=1,
+                env=env,
+            )
+            self.procs.append(proc)
+            print(f"       LLM worker {worker_idx}: "
+                  f"CUDA_VISIBLE_DEVICES={device}, "
+                  f"loader_workers={self.loader_workers}")
+
+    def close(self):
+        for proc in self.procs:
+            if proc.poll() is not None:
+                continue
+            try:
+                if proc.stdin:
+                    proc.stdin.write(json.dumps({"type": "stop"}) + "\n")
+                    proc.stdin.flush()
+                    proc.stdin.close()
+            except BrokenPipeError:
+                pass
+        for proc in self.procs:
+            try:
+                proc.wait(timeout=20)
+            except subprocess.TimeoutExpired:
+                proc.terminate()
+                try:
+                    proc.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    proc.kill()
+
+    def run(self, task_type: str, items: list, **extra) -> list:
+        if not items:
+            return []
+
+        n_workers = min(len(self.procs), len(items))
+        ranges = _stage3_chunk_ranges(len(items), n_workers)
+        task_meta = {}
+        for worker_idx, (_chunk_idx, start, end) in enumerate(ranges):
+            proc = self.procs[worker_idx]
+            if proc.poll() is not None:
+                raise RuntimeError(
+                    f"LLM worker {worker_idx} exited with {proc.returncode}"
+                )
+            task_id = self.next_task_id
+            self.next_task_id += 1
+            task_meta[task_id] = (worker_idx, start, end)
+            msg = {
+                "type": "task",
+                "task_id": task_id,
+                "task_type": task_type,
+                "items": items[start:end],
+                **extra,
+            }
+            if proc.stdin is None:
+                raise RuntimeError(f"LLM worker {worker_idx} has no stdin")
+            proc.stdin.write(json.dumps(msg, ensure_ascii=False) + "\n")
+            proc.stdin.flush()
+
+        out: list = [None] * len(items)
+        for task_id, (worker_idx, start, _end) in task_meta.items():
+            proc = self.procs[worker_idx]
+            if proc.stdout is None:
+                raise RuntimeError(f"LLM worker {worker_idx} has no stdout")
+            line = proc.stdout.readline()
+            if not line:
+                raise RuntimeError(
+                    f"LLM worker {worker_idx} produced no result "
+                    f"(exit={proc.poll()})"
+                )
+            result = json.loads(line)
+            if result.get("task_id") != task_id:
+                raise RuntimeError(
+                    f"LLM worker {worker_idx} task mismatch: "
+                    f"expected {task_id}, got {result.get('task_id')}"
+                )
+            if not result.get("ok"):
+                raise RuntimeError(
+                    "LLM worker failed:\n"
+                    f"{result.get('error')}\n{result.get('traceback')}"
+                )
+            for offset, item in enumerate(result["payload"]):
+                out[start + offset] = item
+
+        if any(item is None for item in out):
+            missing = sum(1 for item in out if item is None)
+            raise RuntimeError(f"LLM pool missing {missing} results")
+        return out
+
+    def run_stage3(self, items: list[dict], batch_size: int) -> list[dict]:
+        return self.run("stage3", items, batch_size=batch_size)
+
+    def run_stage5c(self, texts: list[str], batch_size: int) -> list[list[TechniqueHit]]:
+        payload = self.run("stage5c", texts, batch_size=batch_size)
+        return [
+            [
+                TechniqueHit(
+                    canonical=h["canonical"],
+                    term=h["term"],
+                    loci=h.get("loci") or [],
+                    first_defined_at=h.get("first_defined_at"),
+                    extraction_source=h.get("extraction_source", "llm"),
+                )
+                for h in hits_payload
+            ]
+            for hits_payload in payload
+        ]
+
+    def run_stage5d(
+        self,
+        texts: list[str],
+        classical_hgs: list[dict],
+        prose_cap_chars: int,
+        hg_cap_nodes: int,
+        batch_size: int,
+    ) -> list[list[dict]]:
+        items = [
+            {"text": text, "classical_hg": classical_hg}
+            for text, classical_hg in zip(texts, classical_hgs)
+        ]
+        return self.run(
+            "stage5d",
+            items,
+            prose_cap_chars=prose_cap_chars,
+            hg_cap_nodes=hg_cap_nodes,
+            batch_size=batch_size,
+        )
+
+    def run_stage6(self, items: list[dict], batch_size: int) -> list[dict]:
+        return self.run("stage6", items, batch_size=batch_size)
+
+    def run_stage7(self, prompts: list[str], batch_size: int) -> list[list[dict]]:
+        return self.run("stage7", prompts, batch_size=batch_size)
+
+
+def _stage5c_worker_main(argv):
+    """Backward-compatible hidden worker entry point."""
+    _llm_worker_main(argv)
 
 
 def tag_patterns_llm_batch(
     pairs,
     model_name=None,
     batch_size=8,
+    loader_workers=0,
     device="cuda",
     pipe=None,
     tokenizer=None,
@@ -1579,6 +2149,7 @@ def tag_patterns_llm_batch(
         return_full_text=False,
         max_new_tokens=64,
         batch_size=batch_size,
+        num_workers=loader_workers,
     )
 
     if progress_start_time is None:
@@ -1643,6 +2214,8 @@ def run_stage3_pattern_tagging_chunked(
     tokenizer,
     batch_size,
     chunks_per_shard=10,
+    loader_workers=0,
+    llm_pool=None,
 ):
     """Run Stage 3 in resumable chunks and merge to pattern-tags.json.
 
@@ -1706,16 +2279,35 @@ def run_stage3_pattern_tagging_chunked(
         chunk_size = end - start
         print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)}: "
               f"pairs[{start}:{end}] ({chunk_size})")
-        chunk_tags = tag_patterns_llm_batch(
-            pairs[start:end],
-            batch_size=batch_size,
-            pipe=pipe,
-            tokenizer=tokenizer,
-            entry_ids=entry_ids[start:end],
-            progress_done_base=processed_this_run,
-            progress_total=remaining_pairs,
-            progress_start_time=run_start,
-        )
+        if llm_pool is not None:
+            items = [
+                {
+                    "entry_id": entry_ids[j],
+                    "question_title": pairs[j].question.title,
+                    "question_text": pairs[j].question.body_text,
+                    "answer_text": pairs[j].answer.body_text,
+                }
+                for j in range(start, end)
+            ]
+            chunk_tags = llm_pool.run_stage3(items, batch_size=batch_size)
+            done_progress = processed_this_run + chunk_size
+            elapsed = time.time() - run_start
+            rate = done_progress / elapsed if elapsed > 0 else 0
+            eta = max(remaining_pairs - done_progress, 0) / rate if rate > 0 else 0
+            print(f"       [{done_progress}/{remaining_pairs}] {rate:.0f} pairs/s, "
+                  f"ETA {eta/60:.0f} min")
+        else:
+            chunk_tags = tag_patterns_llm_batch(
+                pairs[start:end],
+                batch_size=batch_size,
+                loader_workers=loader_workers,
+                pipe=pipe,
+                tokenizer=tokenizer,
+                entry_ids=entry_ids[start:end],
+                progress_done_base=processed_this_run,
+                progress_total=remaining_pairs,
+                progress_start_time=run_start,
+            )
         processed_this_run += chunk_size
 
         tmp_path = chunk_dir / f"chunk-{chunk_idx:03d}.tmp"
@@ -1934,6 +2526,7 @@ def run_reverse_morphogenesis_llm_batch(
     pipe,
     tokenizer,
     batch_size=4,
+    loader_workers=0,
     progress_done_base=0,
     progress_total=None,
     progress_start_time=None,
@@ -1982,6 +2575,7 @@ def run_reverse_morphogenesis_llm_batch(
         return_full_text=False,
         max_new_tokens=640,
         batch_size=batch_size,
+        num_workers=loader_workers,
     )
 
     for i, out in enumerate(outputs):
@@ -2021,6 +2615,8 @@ def run_stage6_reverse_morphogenesis_chunked(
     tokenizer,
     batch_size,
     chunks_per_shard=10,
+    loader_workers=0,
+    llm_pool=None,
 ):
     """Run Stage 6 in resumable chunks and merge to reverse-morphogenesis.json.
 
@@ -2084,16 +2680,36 @@ def run_stage6_reverse_morphogenesis_chunked(
         chunk_size = end - start
         print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)}: "
               f"pairs[{start}:{end}] ({chunk_size})")
-        chunk_results = run_reverse_morphogenesis_llm_batch(
-            pairs[start:end],
-            entities[start:end],
-            pipe,
-            tokenizer,
-            batch_size=batch_size,
-            progress_done_base=processed_this_run,
-            progress_total=remaining_pairs,
-            progress_start_time=run_start,
-        )
+        if llm_pool is not None:
+            items = [
+                {
+                    "entity_id": entities[j]["entity/id"],
+                    "question_id": pairs[j].question.id,
+                    "question_title": pairs[j].question.title,
+                    "question_text": pairs[j].question.body_text,
+                    "answer_text": pairs[j].answer.body_text,
+                }
+                for j in range(start, end)
+            ]
+            chunk_results = llm_pool.run_stage6(items, batch_size=batch_size)
+            done_progress = processed_this_run + chunk_size
+            elapsed = time.time() - run_start
+            rate = done_progress / elapsed if elapsed > 0 else 0
+            eta = max(remaining_pairs - done_progress, 0) / rate if rate > 0 else 0
+            print(f"       [{done_progress}/{remaining_pairs}] {rate:.0f} pairs/s, "
+                  f"ETA {eta/60:.0f} min")
+        else:
+            chunk_results = run_reverse_morphogenesis_llm_batch(
+                pairs[start:end],
+                entities[start:end],
+                pipe,
+                tokenizer,
+                batch_size=batch_size,
+                loader_workers=loader_workers,
+                progress_done_base=processed_this_run,
+                progress_total=remaining_pairs,
+                progress_start_time=run_start,
+            )
         processed_this_run += chunk_size
 
         tmp_path = chunk_dir / f"chunk-{chunk_idx:03d}.tmp"
@@ -2128,43 +2744,78 @@ def run_stage6_reverse_morphogenesis_chunked(
 # --- Stage 7: Thread performative LLM classification ---
 
 def classify_thread_performatives_llm_batch(diagrams, pipe, tokenizer,
-                                            batch_size=2):
+                                            batch_size=2,
+                                            loader_workers=0,
+                                            llm_pool=None):
     """Run LLM-based performative classification on thread wiring diagrams.
 
     Enhances classical detection: for each diagram, generates a prompt,
     runs the LLM, parses the JSON response, and merges LLM-classified
     edge types back into the diagram (overriding classical/structural).
 
-    Smaller batch_size because thread prompts can be very long.
+    Uses a Dataset-backed pipeline pass (single call) so GPU execution
+    stays in high-throughput mode. Smaller batch_size because thread
+    prompts can be very long.
 
     Returns count of diagrams where LLM provided new classifications.
     """
+    from torch.utils.data import Dataset as TorchDataset
+
+    class _ThreadPerfPromptDataset(TorchDataset):
+        """Lazily format stage 7 thread-performative prompts."""
+
+        def __init__(self, diagrams, tok):
+            self.diagrams = diagrams
+            self.tok = tok
+
+        def __len__(self):
+            return len(self.diagrams)
+
+        def __getitem__(self, idx):
+            prompt = build_thread_performative_prompt(self.diagrams[idx])
+            messages = [{"role": "user", "content": prompt}]
+            return self.tok.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+
     total = len(diagrams)
     llm_enhanced = 0
     t_start = time.time()
 
-    for start in range(0, total, batch_size):
-        batch = diagrams[start:start + batch_size]
-        prompts = []
-        for diagram in batch:
-            prompt = build_thread_performative_prompt(diagram)
-            messages = [{"role": "user", "content": prompt}]
-            formatted = tokenizer.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
-            prompts.append(formatted)
+    if llm_pool is not None:
+        outputs = llm_pool.run_stage7([
+            build_thread_performative_prompt(diagram)
+            for diagram in diagrams
+        ], batch_size=batch_size)
+    else:
+        prompt_dataset = _ThreadPerfPromptDataset(diagrams, tokenizer)
+        outputs = pipe(
+            prompt_dataset,
+            return_full_text=False,
+            max_new_tokens=512,
+            batch_size=batch_size,
+            num_workers=loader_workers,
+        )
 
-        outputs = pipe(prompts, return_full_text=False, max_new_tokens=512)
-
-        for i, out in enumerate(outputs):
-            text = out[0]["generated_text"].strip()
+    for i, out in enumerate(outputs):
+        if llm_pool is not None:
+            llm_edges = out if isinstance(out, list) else []
+        elif isinstance(out, list):
+            item = out[0] if out else {}
+            text = str(item.get("generated_text", "")).strip()
             llm_edges = _parse_json_array_response(text)
-            if llm_edges:
-                merge_llm_edges(batch[i], llm_edges)
-                llm_enhanced += 1
+        elif isinstance(out, dict):
+            item = out
+            text = str(item.get("generated_text", "")).strip()
+            llm_edges = _parse_json_array_response(text)
+        else:
+            llm_edges = []
+        if llm_edges:
+            merge_llm_edges(diagrams[i], llm_edges)
+            llm_enhanced += 1
 
-        done = min(start + batch_size, total)
-        if done % 100 < batch_size or done == total:
+        done = i + 1
+        if done % 100 == 0 or done == total:
             elapsed = time.time() - t_start
             rate = done / elapsed if elapsed > 0 else 0
             eta = (total - done) / rate if rate > 0 else 0
@@ -2601,6 +3252,16 @@ def run_stage9a_arxiv_paper_hypergraphs(
         "eprint_text_missing": eprint_missing,
         "eprint_status_counts": dict(eprint_status),
     }
+    if paper_hg_eprint_dir is not None and total and eprint_ok == 0:
+        try:
+            out_path.unlink()
+        except OSError:
+            pass
+        raise RuntimeError(
+            f"Stage 9a was requested with --paper-eprint-dir="
+            f"{paper_hg_eprint_dir}, but loaded zero eprints; refusing to "
+            "write abstract-only hypergraphs"
+        )
     return stats, out_path
 
 
@@ -2729,8 +3390,9 @@ def _sethread_to_raw(thread) -> dict:
 # ---------------------------------------------------------------------------
 
 def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
-                                 n_layers=2, epochs=50, batch_size=512,
-                                 device=None, num_workers=4):
+                                 n_layers=2, epochs=200, batch_size=512,
+                                 device=None, num_workers=4,
+                                 eval_every=5):
     """Stage 9b: Train R-GCN on thread hypergraphs, produce embeddings.
 
     GPU-accelerated contrastive learning on the typed hypergraph structure.
@@ -2775,7 +3437,8 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
         hypergraphs, dim=embed_dim, hidden_dim=hidden_dim,
         n_layers=n_layers, epochs=epochs, batch_size=batch_size,
         device=device, verbose=True, num_workers=num_workers,
-        tensor_cache_path=str(tensor_cache))
+        tensor_cache_path=str(tensor_cache),
+        eval_every=eval_every)
 
     if thread_ids is None:
         _, thread_ids = load_tensor_cache(str(tensor_cache))
@@ -2800,6 +3463,7 @@ def run_stage9b_graph_embedding(hg_path, outdir, embed_dim=128, hidden_dim=128,
         "n_embedded": embeddings.shape[0],
         "embed_dim": embeddings.shape[1],
         "epochs": epochs,
+        "eval_every": eval_every,
         "device": str(device or "auto"),
         "train_metrics": train_stats,
     }
@@ -3184,11 +3848,19 @@ def generate_moist_prompts(pairs, entities, outdir, stages=None, thread_diagrams
 
 def print_dry_run(args):
     """Print execution plan without running anything."""
-    posts = Path(args.posts_xml)
-    posts_size = posts.stat().st_size / 1e9 if posts.exists() else 0
-
-    # Estimate QA pair count from file size (~6KB per QA pair for physics.SE)
-    est_pairs = int(posts_size * 1e9 / 6000) if posts_size else "?"
+    if args.arxiv_jsonl:
+        source_path = Path(args.arxiv_jsonl)
+        source_size = source_path.stat().st_size / 1e9 if source_path.exists() else 0
+        if source_path.exists():
+            with open(source_path, encoding="utf-8") as f:
+                est_pairs = sum(1 for line in f if line.strip())
+        else:
+            est_pairs = "?"
+    else:
+        source_path = Path(args.posts_xml)
+        source_size = source_path.stat().st_size / 1e9 if source_path.exists() else 0
+        # Estimate QA pair count from file size (~6KB per QA pair for physics.SE)
+        est_pairs = int(source_size * 1e9 / 6000) if source_size else "?"
     if args.limit:
         est_pairs = min(est_pairs, args.limit) if isinstance(est_pairs, int) else args.limit
 
@@ -3230,8 +3902,8 @@ def print_dry_run(args):
     print("SUPERPOD JOB — DRY RUN (nothing will be executed)")
     print("=" * 64)
     print()
-    print(f"  Input:        {args.posts_xml}")
-    print(f"  Input size:   {posts_size:.2f} GB" if posts_size else f"  Input:        {args.posts_xml} (NOT FOUND)")
+    print(f"  Input:        {source_path}")
+    print(f"  Input size:   {source_size:.2f} GB" if source_size else f"  Input:        {source_path} (NOT FOUND)")
     print(f"  Site:         {args.site}")
     print(f"  Min score:    {args.min_score}")
     print(f"  Limit:        {args.limit or 'none'}")
@@ -3321,7 +3993,7 @@ def print_dry_run(args):
         print(f"  {'9b. Graph embedding':<42s} {'SKIPPED':>10s}")
     else:
         est_stage9b_min = est_stage1_min * 2.0 if isinstance(est_stage1_min, (int, float)) else "?"
-        print(f"  {'9b. Graph embedding (GPU, R-GCN)':<42s} {f'{args.graph_embed_dim}d, {args.graph_embed_epochs}ep, bs={args.graph_embed_batch_size}':<36s} {fmt(est_stage9b_min)+' min':>10s}")
+        print(f"  {'9b. Graph embedding (GPU, R-GCN)':<42s} {f'{args.graph_embed_dim}d, {args.graph_embed_epochs}ep, eval={args.graph_embed_eval_every}, bs={args.graph_embed_batch_size}':<36s} {fmt(est_stage9b_min)+' min':>10s}")
 
     # Stage 10: FAISS index
     stage10_active = not args.skip_faiss
@@ -3418,7 +4090,11 @@ def print_dry_run(args):
     print()
 
     print("  TO RUN FOR REAL:")
-    cmd_parts = [f"python scripts/superpod-job.py {args.posts_xml}"]
+    input_arg = (
+        f"--arxiv-jsonl {args.arxiv_jsonl}"
+        if args.arxiv_jsonl else args.posts_xml
+    )
+    cmd_parts = [f"python scripts/superpod-job.py {input_arg}"]
     cmd_parts.append(f"  --output-dir {args.output_dir}")
     cmd_parts.append(f"  --site {args.site}")
     if args.limit:
@@ -3469,13 +4145,19 @@ def print_dry_run(args):
             cmd_parts.append(f"  --distinctor-eprint-max-chars {args.distinctor_eprint_max_chars}")
         if args.distinctor_eprint_max_tex_members != 4:
             cmd_parts.append(f"  --distinctor-eprint-max-tex-members {args.distinctor_eprint_max_tex_members}")
+    if args.paper_eprint_dir:
+        cmd_parts.append(f"  --paper-eprint-dir {args.paper_eprint_dir}")
+    if args.paper_eprint_max_chars != 500_000:
+        cmd_parts.append(f"  --paper-eprint-max-chars {args.paper_eprint_max_chars}")
+    if args.paper_eprint_max_tex_members != 8:
+        cmd_parts.append(f"  --paper-eprint-max-tex-members {args.paper_eprint_max_tex_members}")
     if args.skip_threads:
         cmd_parts.append(f"  --skip-threads")
     if args.thread_limit:
         cmd_parts.append(f"  --thread-limit {args.thread_limit}")
     if args.skip_hypergraphs:
         cmd_parts.append(f"  --skip-hypergraphs")
-    if args.paper_hg_eprint_dir:
+    if args.paper_hg_eprint_dir and args.paper_hg_eprint_dir != args.paper_eprint_dir:
         cmd_parts.append(f"  --paper-hg-eprint-dir {args.paper_hg_eprint_dir}")
     if args.paper_hg_max_expressions != 160:
         cmd_parts.append(f"  --paper-hg-max-expressions {args.paper_hg_max_expressions}")
@@ -3486,7 +4168,7 @@ def print_dry_run(args):
     print("    " + ' \\\\\n    '.join(cmd_parts))
     print()
     print(f"  MOIST RUN (CPU stages + prompt files for Codex handoff):")
-    moist_parts = [f"python scripts/superpod-job.py {args.posts_xml}"]
+    moist_parts = [f"python scripts/superpod-job.py {input_arg}"]
     moist_parts.append(f"  --moist-run")
     moist_parts.append(f"  --output-dir {args.output_dir}")
     moist_parts.append(f"  --site {args.site}")
@@ -3520,9 +4202,15 @@ def print_dry_run(args):
             moist_parts.append(f"  --distinctor-eprint-max-chars {args.distinctor_eprint_max_chars}")
         if args.distinctor_eprint_max_tex_members != 4:
             moist_parts.append(f"  --distinctor-eprint-max-tex-members {args.distinctor_eprint_max_tex_members}")
+    if args.paper_eprint_dir:
+        moist_parts.append(f"  --paper-eprint-dir {args.paper_eprint_dir}")
+    if args.paper_eprint_max_chars != 500_000:
+        moist_parts.append(f"  --paper-eprint-max-chars {args.paper_eprint_max_chars}")
+    if args.paper_eprint_max_tex_members != 8:
+        moist_parts.append(f"  --paper-eprint-max-tex-members {args.paper_eprint_max_tex_members}")
     if args.skip_hypergraphs:
         moist_parts.append(f"  --skip-hypergraphs")
-    if args.paper_hg_eprint_dir:
+    if args.paper_hg_eprint_dir and args.paper_hg_eprint_dir != args.paper_eprint_dir:
         moist_parts.append(f"  --paper-hg-eprint-dir {args.paper_hg_eprint_dir}")
     if args.paper_hg_max_expressions != 160:
         moist_parts.append(f"  --paper-hg-max-expressions {args.paper_hg_max_expressions}")
@@ -3542,6 +4230,10 @@ def print_dry_run(args):
 
 
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] in {"__llm_worker", "__stage5c_worker"}:
+        _llm_worker_main(sys.argv[2:])
+        return
+
     parser = argparse.ArgumentParser(
         description="Superpod batch job: SE dump -> F6 artefacts",
         epilog="Available downloads: " + ", ".join(
@@ -3588,6 +4280,12 @@ def main():
                         help="Embedding batch size (default: 1024, tune for GPU VRAM)")
     parser.add_argument("--embed-device", default="cuda",
                         help="Device for embeddings")
+    parser.add_argument("--embed-workers", type=int, default=0,
+                        help="Data-parallel embedding workers. Default 0 = auto: "
+                             "use all visible GPUs for cuda embeddings, else 1. "
+                             "On an 8-GPU node this shards encode across "
+                             "cuda:0..cuda:7 via a SentenceTransformer "
+                             "multi-process pool. Pass 1 for single-device.")
     parser.add_argument("--skip-embeddings", action="store_true")
 
     # LLM options
@@ -3605,6 +4303,16 @@ def main():
                              "(default: 64)")
     parser.add_argument("--llm-stage6-chunks-per-shard", type=int, default=10,
                         help="Stage 6 output chunks per shard for resumable runs (default: 10)")
+    parser.add_argument("--llm-loader-workers", type=int, default=None,
+                        help="Python workers feeding Dataset-backed transformers "
+                             "pipelines. Default: min(16, Slurm/cpuset CPU "
+                             "affinity). Use 0 for inline loading.")
+    parser.add_argument("--llm-gpu-workers", type=int, default=0,
+                        help="Replica-fanout GPU workers for local LLM stages "
+                             "(3, 5c, 5d, 6, and legacy 7). This is not "
+                             "DeepSpeed/PyTorch DDP. Default 0 = auto-use all "
+                             "visible CUDA devices; 1 = single shared "
+                             "pipeline.")
     parser.add_argument("--skip-llm", action="store_true")
 
     # Clustering
@@ -3646,6 +4354,47 @@ def main():
     parser.add_argument("--distinctor-eprint-max-tex-members", type=int, default=4,
                         help="Max .tex members per tar archive in Stage 5b (default: 4)")
 
+    # Technique-level NER (Stage 5c) — M-paper-reverse-morphogenesis
+    parser.add_argument("--skip-technique-ner", action="store_true",
+                        help="Skip Stage 5c (technique-level NER)")
+    parser.add_argument("--technique-ner-arm", default="both",
+                        choices=["classical", "llm", "both"],
+                        help="Which extraction arm to run for Stage 5c. "
+                             "'both' runs classical + LLM and records "
+                             "per-term provenance (classical/llm/both). "
+                             "Default: both, per the batch-002 experiment plan.")
+    parser.add_argument("--technique-ner-max-terms", type=int, default=256,
+                        help="Per-paper cap on extracted technique terms (default: 256)")
+    parser.add_argument("--technique-ner-llm-max-chars", type=int, default=6000,
+                        help="Per-paper prose truncation for the LLM arm (default: 6000)")
+
+    # Paper hypergraph (Stage 5d) — M-paper-reverse-morphogenesis
+    parser.add_argument("--skip-paper-hypergraph", action="store_true",
+                        help="Skip Stage 5d (paper-level argumentative hypergraph)")
+    parser.add_argument("--paper-hypergraph-arm", default="both",
+                        choices=["classical", "llm", "both"],
+                        help="Which extraction arm to run for Stage 5d. "
+                             "'both' runs classical LaTeX parsing + LLM "
+                             "implicit-edge pass and records per-edge "
+                             "provenance (classical/llm/both). Default: both.")
+    parser.add_argument("--paper-hypergraph-prose-cap", type=int, default=4000,
+                        help="Per-paper prose char cap for Stage 5d LLM arm (default: 4000)")
+    parser.add_argument("--paper-hypergraph-node-cap", type=int, default=80,
+                        help="Max classical nodes summarised in Stage 5d LLM prompt (default: 80)")
+
+    # Shared eprint source for paper stages (5c, 5d, and future 6)
+    parser.add_argument("--paper-eprint-dir", default=None,
+                        help="Directory of arXiv eprint sources (LaTeX .tex, "
+                             ".tar, .tar.gz, or raw payload named by arxiv id). "
+                             "When set, paper stages (5c/5d) load the full "
+                             "LaTeX body instead of falling back to the "
+                             "abstract. Mark2 batches ship eprints at "
+                             "<batch>/eprints/ — pass that path.")
+    parser.add_argument("--paper-eprint-max-chars", type=int, default=500_000,
+                        help="Per-paper eprint text cap for paper stages (default: 500000)")
+    parser.add_argument("--paper-eprint-max-tex-members", type=int, default=8,
+                        help="Max .tex members per tar archive for paper stages (default: 8)")
+
     # Thread wiring diagrams (Stage 7)
     parser.add_argument("--comments-xml", default=None,
                         help="Path to Comments.xml (auto-detected from Posts.xml dir)")
@@ -3680,8 +4429,10 @@ def main():
                              "(default: 0 = skip). Set to 100 for production runs.")
     parser.add_argument("--graph-embed-dim", type=int, default=128,
                         help="Hypergraph embedding dimension (default: 128)")
-    parser.add_argument("--graph-embed-epochs", type=int, default=50,
-                        help="GNN training epochs (default: 50)")
+    parser.add_argument("--graph-embed-epochs", type=int, default=200,
+                        help="GNN training epochs (default: 200)")
+    parser.add_argument("--graph-embed-eval-every", type=int, default=5,
+                        help="Evaluate Stage 9b validation retrieval every N epochs (default: 5)")
     parser.add_argument("--graph-embed-batch-size", type=int, default=1024,
                         help="GNN training batch size (default: 1024)")
     parser.add_argument("--graph-embed-workers", type=int, default=16,
@@ -3710,7 +4461,10 @@ def main():
     parser.add_argument("--num-shards", type=int, default=None,
                         help="Total number of shards")
 
+    run_argv = sys.argv[:]
     args = parser.parse_args()
+    raw_paper_eprint_dir_arg = args.paper_eprint_dir
+    raw_paper_hg_eprint_dir_arg = args.paper_hg_eprint_dir
 
     # --laptop: sensible CPU defaults
     if args.laptop:
@@ -3726,6 +4480,8 @@ def main():
             args.graph_embed_workers = 0
         if args.graph_embed_epochs == parser.get_default("graph_embed_epochs"):
             args.graph_embed_epochs = 10
+        if args.graph_embed_eval_every == parser.get_default("graph_embed_eval_every"):
+            args.graph_embed_eval_every = 2
         if not args.moist_run:
             args.moist_run = True
         print("  Laptop mode: MiniLM embeddings, CPU, moist-run for LLM stages")
@@ -3739,6 +4495,8 @@ def main():
             args.arxiv_jsonl = str(input_base / args.arxiv_jsonl)
         if args.comments_xml and not Path(args.comments_xml).is_absolute():
             args.comments_xml = str(input_base / args.comments_xml)
+        if args.paper_eprint_dir and not Path(args.paper_eprint_dir).is_absolute():
+            args.paper_eprint_dir = str(input_base / args.paper_eprint_dir)
         if args.paper_hg_eprint_dir and not Path(args.paper_hg_eprint_dir).is_absolute():
             args.paper_hg_eprint_dir = str(input_base / args.paper_hg_eprint_dir)
         if args.discover_terms_eprint_dir and not Path(args.discover_terms_eprint_dir).is_absolute():
@@ -3750,8 +4508,24 @@ def main():
             args.data_dir = str(input_base / "se-data")
         print(f"  Input dir: {args.input_dir}")
 
+    if args.embed_workers == 0:
+        if str(args.embed_device).startswith("cuda"):
+            args.embed_workers = max(1, _visible_cuda_count())
+        else:
+            args.embed_workers = 1
+    if args.llm_loader_workers is None:
+        env_loader_workers = os.environ.get("LLM_LOADER_WORKERS")
+        if env_loader_workers:
+            if not env_loader_workers.isdigit():
+                parser.error("LLM_LOADER_WORKERS must be >= 0")
+            args.llm_loader_workers = int(env_loader_workers)
+        else:
+            args.llm_loader_workers = _default_loader_workers()
+
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be > 0")
+    if args.embed_workers < 0:
+        parser.error("--embed-workers must be >= 0")
     if not (0.0 <= args.gate_stage6_parse_rate_min <= 1.0):
         parser.error("--gate-stage6-parse-rate-min must be in [0,1]")
     if not (0.0 <= args.gate_stage7_categorical_rate_min <= 1.0):
@@ -3770,8 +4544,16 @@ def main():
         parser.error("--llm-stage6-batch-size must be > 0")
     if args.llm_stage6_chunks_per_shard <= 0:
         parser.error("--llm-stage6-chunks-per-shard must be > 0")
+    if args.llm_loader_workers < 0:
+        parser.error("--llm-loader-workers must be >= 0")
+    if args.llm_gpu_workers < 0:
+        parser.error("--llm-gpu-workers must be >= 0")
     if args.graph_embed_batch_size <= 0:
         parser.error("--graph-embed-batch-size must be > 0")
+    if args.graph_embed_epochs <= 0:
+        parser.error("--graph-embed-epochs must be > 0")
+    if args.graph_embed_eval_every <= 0:
+        parser.error("--graph-embed-eval-every must be > 0")
     if args.graph_embed_workers < 0:
         parser.error("--graph-embed-workers must be >= 0")
     if args.discover_terms_min_freq <= 0:
@@ -3790,6 +4572,10 @@ def main():
         parser.error("--paper-hg-text-max-chars must be > 0")
     if args.paper_hg_max_tex_members <= 0:
         parser.error("--paper-hg-max-tex-members must be > 0")
+    if args.paper_eprint_max_chars <= 0:
+        parser.error("--paper-eprint-max-chars must be > 0")
+    if args.paper_eprint_max_tex_members <= 0:
+        parser.error("--paper-eprint-max-tex-members must be > 0")
     if args.distinctor_entity_limit < 0:
         parser.error("--distinctor-entity-limit must be >= 0")
     if args.distinctor_max_hits <= 0:
@@ -3839,11 +4625,46 @@ def main():
     if not args.output_dir:
         args.output_dir = derive_default_output_dir(args.site)
 
+    def _path_key(value):
+        return Path(value).expanduser().resolve(strict=False)
+
+    paper_eprint_source = None
+    if args.paper_eprint_dir and args.paper_hg_eprint_dir:
+        if _path_key(args.paper_eprint_dir) != _path_key(args.paper_hg_eprint_dir):
+            parser.error(
+                "--paper-eprint-dir and --paper-hg-eprint-dir refer to "
+                "different directories; use one canonical eprint directory"
+            )
+        args.paper_eprint_dir = str(_path_key(args.paper_eprint_dir))
+        args.paper_hg_eprint_dir = args.paper_eprint_dir
+        paper_eprint_source = "paper-eprint-dir+paper-hg-eprint-dir"
+    elif args.paper_eprint_dir:
+        args.paper_eprint_dir = str(_path_key(args.paper_eprint_dir))
+        args.paper_hg_eprint_dir = args.paper_eprint_dir
+        paper_eprint_source = "paper-eprint-dir"
+    elif args.paper_hg_eprint_dir:
+        args.paper_hg_eprint_dir = str(_path_key(args.paper_hg_eprint_dir))
+        args.paper_eprint_dir = args.paper_hg_eprint_dir
+        paper_eprint_source = "paper-hg-eprint-dir-legacy"
+    elif args.arxiv_jsonl and args.distinctor_eprint_dir:
+        args.paper_eprint_dir = str(_path_key(args.distinctor_eprint_dir))
+        args.paper_hg_eprint_dir = args.paper_eprint_dir
+        paper_eprint_source = "distinctor-eprint-dir-default"
+        print(f"  Paper stages: defaulting --paper-eprint-dir to --distinctor-eprint-dir ({args.paper_eprint_dir})")
+    elif args.arxiv_jsonl and args.discover_terms_eprint_dir:
+        args.paper_eprint_dir = str(_path_key(args.discover_terms_eprint_dir))
+        args.paper_hg_eprint_dir = args.paper_eprint_dir
+        paper_eprint_source = "discover-terms-eprint-dir-default"
+        print(f"  Paper stages: defaulting --paper-eprint-dir to --discover-terms-eprint-dir ({args.paper_eprint_dir})")
+
+    if args.paper_eprint_dir and not Path(args.paper_eprint_dir).is_dir():
+        parser.error(f"--paper-eprint-dir not found or not a directory: {args.paper_eprint_dir}")
+
     # ========== Dry Run ==========
     # Run before download logic to guarantee no network/filesystem side effects.
     if args.dry_run:
-        if not args.posts_xml:
-            parser.error("posts_xml is required for --dry-run unless used with --download")
+        if not args.posts_xml and not args.arxiv_jsonl:
+            parser.error("posts_xml or --arxiv-jsonl is required for --dry-run unless used with --download")
         print_dry_run(args)
         return
 
@@ -3864,13 +4685,13 @@ def main():
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
 
-    if args.arxiv_jsonl and args.paper_hg_eprint_dir is None:
-        if args.distinctor_eprint_dir:
-            args.paper_hg_eprint_dir = args.distinctor_eprint_dir
-            print(f"  Paper hypergraphs: defaulting --paper-hg-eprint-dir to --distinctor-eprint-dir ({args.paper_hg_eprint_dir})")
-        elif args.discover_terms_eprint_dir:
-            args.paper_hg_eprint_dir = args.discover_terms_eprint_dir
-            print(f"  Paper hypergraphs: defaulting --paper-hg-eprint-dir to --discover-terms-eprint-dir ({args.paper_hg_eprint_dir})")
+    if args.skip_llm:
+        if args.technique_ner_arm in ("llm", "both"):
+            args.technique_ner_arm = "classical"
+            print("  --skip-llm: Stage 5c using classical arm only")
+        if args.paper_hypergraph_arm in ("llm", "both"):
+            args.paper_hypergraph_arm = "classical"
+            print("  --skip-llm: Stage 5d using classical arm only")
 
     if args.distinctor_eprint_dir and not Path(args.distinctor_eprint_dir).exists():
         print(f"  WARNING: --distinctor-eprint-dir not found: {args.distinctor_eprint_dir}")
@@ -3878,10 +4699,6 @@ def main():
     if args.discover_terms_eprint_dir and not Path(args.discover_terms_eprint_dir).exists():
         print(f"  WARNING: --discover-terms-eprint-dir not found: {args.discover_terms_eprint_dir}")
         print("           Open-world term discovery will use metadata/QA text.")
-    if args.paper_hg_eprint_dir and not Path(args.paper_hg_eprint_dir).exists():
-        print(f"  WARNING: --paper-hg-eprint-dir not found: {args.paper_hg_eprint_dir}")
-        print("           Paper hypergraphs will use metadata/QA text.")
-
     # ========== Moist Run ==========
     # Moist run: execute CPU stages normally, generate prompt files for LLM
     # stages. This lets you run Stage 1 (parse) and Stage 5 (NER) on a laptop,
@@ -4006,22 +4823,61 @@ def main():
     print(f"       Stage 1 done in {time.time()-t0:.0f}s")
     mark_stage("parse", "completed", qa_pairs=len(pairs))
 
+    paper_eprint_preflight = None
+    if args.paper_eprint_dir:
+        paper_eprint_preflight = _paper_eprint_file_preflight(
+            Path(args.paper_eprint_dir), entities
+        )
+        print("       Paper eprint preflight: "
+              f"{paper_eprint_preflight['candidate_matches']}/"
+              f"{paper_eprint_preflight['arxiv_entities']} arXiv entities "
+              f"have source-file candidates "
+              f"({paper_eprint_preflight['eprint_files']} files in dir)")
+        if paper_eprint_preflight["arxiv_entities"] == 0 and entities:
+            raise RuntimeError(
+                "--paper-eprint-dir was supplied, but Stage 1 produced no "
+                "arXiv entity IDs; refusing to silently fall back to abstracts"
+            )
+        if (paper_eprint_preflight["arxiv_entities"] > 0
+                and paper_eprint_preflight["candidate_matches"] == 0):
+            raise RuntimeError(
+                "--paper-eprint-dir was supplied, but no eprint filenames "
+                "matched the arXiv entities; refusing to silently fall back "
+                "to abstracts"
+            )
+
     # ========== Stage 2: Embeddings ==========
     if not args.skip_embeddings:
         t2 = time.time()
-        print(f"\n[Stage 2/{n_stages}] Embeddings ({args.embed_model})...")
-        embeddings = compute_qa_embeddings(
-            pairs,
-            model_name=args.embed_model,
-            batch_size=args.embed_batch_size,
-            device=args.embed_device,
-        )
         emb_path = outdir / "embeddings.npy"
-        np.save(emb_path, embeddings)
-        print(f"       Shape: {embeddings.shape}, "
-              f"saved {os.path.getsize(emb_path)/1e9:.2f} GB")
-        print(f"       Stage 2 done in {time.time()-t2:.0f}s")
-        mark_stage("embeddings", "completed", n_vectors=int(embeddings.shape[0]))
+        if emb_path.exists():
+            embeddings = np.load(emb_path)
+            if embeddings.shape[0] == len(pairs):
+                print(f"\n[Stage 2/{n_stages}] Reusing existing {emb_path.name} "
+                      f"(shape {embeddings.shape})")
+                mark_stage("embeddings", "completed",
+                           n_vectors=int(embeddings.shape[0]), resumed=True)
+            else:
+                print(f"\n[Stage 2/{n_stages}] Existing {emb_path.name} has "
+                      f"{embeddings.shape[0]} rows but pairs={len(pairs)}; recomputing.")
+                embeddings = None
+        else:
+            embeddings = None
+
+        if embeddings is None:
+            print(f"\n[Stage 2/{n_stages}] Embeddings ({args.embed_model})...")
+            embeddings = compute_qa_embeddings(
+                pairs,
+                model_name=args.embed_model,
+                batch_size=args.embed_batch_size,
+                device=args.embed_device,
+                num_workers=args.embed_workers,
+            )
+            np.save(emb_path, embeddings)
+            print(f"       Shape: {embeddings.shape}, "
+                  f"saved {os.path.getsize(emb_path)/1e9:.2f} GB")
+            print(f"       Stage 2 done in {time.time()-t2:.0f}s")
+            mark_stage("embeddings", "completed", n_vectors=int(embeddings.shape[0]))
     else:
         print(f"\n[Stage 2/{n_stages}] Skipped (--skip-embeddings)")
         embeddings = None
@@ -4033,6 +4889,7 @@ def main():
     # ========== Shared LLM pipeline (lazy, created once) ==========
     llm_pipe = None
     llm_tokenizer = None
+    llm_gpu_pool = None
 
     def _ensure_llm_pipeline():
         nonlocal llm_pipe, llm_tokenizer
@@ -4045,6 +4902,58 @@ def main():
             llm_pipe, llm_tokenizer = _create_llm_pipeline(
                 args.llm_model, max_batch)
         return llm_pipe, llm_tokenizer
+
+    def _release_llm_pipeline():
+        nonlocal llm_pipe, llm_tokenizer
+        if llm_pipe is None and llm_tokenizer is None:
+            return
+        llm_pipe = None
+        llm_tokenizer = None
+        try:
+            import gc
+            import torch
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except Exception:
+            pass
+
+    def _llm_gpu_devices():
+        if args.llm_gpu_workers == 0:
+            return _visible_cuda_device_ids()
+        visible_devices = _visible_cuda_device_ids()
+        return visible_devices[:args.llm_gpu_workers] if visible_devices else []
+
+    def _ensure_llm_gpu_pool():
+        nonlocal llm_gpu_pool
+        devices = _llm_gpu_devices()
+        if len(devices) <= 1:
+            return None
+        if llm_gpu_pool is None:
+            _release_llm_pipeline()
+            max_batch = max(
+                args.llm_batch_size,
+                args.llm_stage3_batch_size,
+                args.llm_stage6_batch_size,
+            )
+            print(f"       LLM replica fanout: {len(devices)} GPU worker "
+                  f"processes (not DeepSpeed/DDP; "
+                  f"total_loader_workers={args.llm_loader_workers})")
+            llm_gpu_pool = _LlmGpuPool(
+                model_name=args.llm_model,
+                gpu_devices=devices,
+                batch_size=max_batch,
+                total_loader_workers=args.llm_loader_workers,
+                max_input_chars=args.technique_ner_llm_max_chars,
+            )
+            atexit.register(_close_llm_gpu_pool)
+        return llm_gpu_pool
+
+    def _close_llm_gpu_pool():
+        nonlocal llm_gpu_pool
+        if llm_gpu_pool is not None:
+            llm_gpu_pool.close()
+            llm_gpu_pool = None
 
     # ========== Stage 3: LLM pattern tagging ==========
     if args.moist_run:
@@ -4066,8 +4975,13 @@ def main():
         _llm_start = t3
         print(f"\n[Stage 3/{n_stages}] LLM pattern tagging ({args.llm_model}, "
               f"batch={args.llm_stage3_batch_size}, "
-              f"chunks={args.llm_stage3_chunks_per_shard})...")
-        pipe, tok = _ensure_llm_pipeline()
+              f"chunks={args.llm_stage3_chunks_per_shard}, "
+              f"loader_workers={args.llm_loader_workers})...")
+        llm_pool = _ensure_llm_gpu_pool()
+        if llm_pool is None:
+            pipe, tok = _ensure_llm_pipeline()
+        else:
+            pipe = tok = None
         pattern_tags = run_stage3_pattern_tagging_chunked(
             pairs,
             entry_ids=[e["entity/id"] for e in entities],
@@ -4076,6 +4990,8 @@ def main():
             tokenizer=tok,
             batch_size=args.llm_stage3_batch_size,
             chunks_per_shard=args.llm_stage3_chunks_per_shard,
+            loader_workers=args.llm_loader_workers,
+            llm_pool=llm_pool,
         )
         print(f"       Stage 3 done in {time.time()-t3:.0f}s")
 
@@ -4216,6 +5132,447 @@ def main():
         print(f"\n[Stage 5b/{n_stages}] Skipped (--run-distinctor-mit not set)")
         mark_stage("distinctor_mit", "skipped", skip_reason="--run-distinctor-mit not set")
 
+    # Paper text loader used by stages 5c and 5d: prefer eprint LaTeX body
+    # when --paper-eprint-dir is set; fall back to abstract-only text.
+    paper_eprint_path = (
+        Path(args.paper_eprint_dir) if args.paper_eprint_dir else None
+    )
+    previous_manifest = None
+
+    def _previous_stage_status(stage_key):
+        nonlocal previous_manifest
+        if previous_manifest is None:
+            manifest_path = outdir / "manifest.json"
+            try:
+                with open(manifest_path, encoding="utf-8") as f:
+                    previous_manifest = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                previous_manifest = {}
+        return (previous_manifest.get("stage_status", {}) or {}).get(stage_key, {}) or {}
+
+    def _require_paper_eprint_usage(stage_name, counts, produced):
+        if paper_eprint_path is None or not produced:
+            return
+        if int((counts or {}).get("eprint", 0)) > 0:
+            return
+        raise RuntimeError(
+            f"{stage_name} was requested with --paper-eprint-dir="
+            f"{paper_eprint_path}, but loaded zero eprints; refusing to "
+            "write abstract-only paper-stage output"
+        )
+
+    def _paper_text_for(entity, pair):
+        """Return (text, source, eprint_meta) for a paper stage.
+
+        Source is 'eprint' if the LaTeX body loaded, 'abstract' otherwise.
+        """
+        abstract_text = (pair.question.title + "\n\n"
+                         + pair.question.body_text + "\n\n"
+                         + pair.answer.body_text)
+        if paper_eprint_path is None:
+            return abstract_text, "abstract", {"status": "no-eprint-dir"}
+        eprint_text, meta = _load_eprint_text_for_entity(
+            paper_eprint_path,
+            entity["entity/id"],
+            max_chars=args.paper_eprint_max_chars,
+            max_members=args.paper_eprint_max_tex_members,
+        )
+        if eprint_text:
+            return pair.question.title + "\n\n" + eprint_text, "eprint", meta
+        return abstract_text, "abstract", meta
+
+    # ========== Stage 5c: Technique-level NER ==========
+    # Paper-focused technique extraction. Classical and LLM arms are kept
+    # distinct so downstream analysis can attribute signal to each.
+    # Spec: futon6/holes/missions/M-paper-reverse-morphogenesis.md §5c.
+    if not args.skip_technique_ner:
+        t5c = time.time()
+        print(f"\n[Stage 5c/{n_stages}] Technique-level NER "
+              f"(arm={args.technique_ner_arm}, "
+              f"loader_workers={args.llm_loader_workers})...")
+        techniques_path = outdir / "techniques.json"
+        if techniques_path.exists():
+            print(f"       Reusing existing {techniques_path.name}")
+            prev_counts = _previous_stage_status("technique_ner").get(
+                "text_source_counts", {}
+            )
+            _require_paper_eprint_usage(
+                "Stage 5c", prev_counts, produced=True
+            )
+            mark_stage("technique_ner", "completed", resumed=True,
+                       text_source_counts=prev_counts)
+        else:
+            arm = args.technique_ner_arm
+            concept_vocab: set[str] = set()
+            ner_terms_path = outdir / "ner-terms.json"
+            if ner_terms_path.exists():
+                try:
+                    with open(ner_terms_path) as f:
+                        for record in json.load(f):
+                            for t in record.get("terms", []) or []:
+                                if isinstance(t, dict):
+                                    term = t.get("term") or t.get("canon") or ""
+                                elif isinstance(t, str):
+                                    term = t
+                                else:
+                                    term = ""
+                                if term:
+                                    concept_vocab.add(term.lower())
+                except (json.JSONDecodeError, OSError) as e:
+                    print(f"       Warning: could not read {ner_terms_path.name} "
+                          f"for concept seeding ({e}); proceeding without.")
+            if concept_vocab:
+                print(f"       Concept vocabulary: {len(concept_vocab)} terms "
+                      f"(from Stage 5 ner-terms.json)")
+
+            pipe_5c = tok_5c = None
+            stage5c_llm_pool = None
+            if arm in ("llm", "both"):
+                stage5c_llm_pool = _ensure_llm_gpu_pool()
+                if stage5c_llm_pool is None:
+                    pipe_5c, tok_5c = _ensure_llm_pipeline()
+                else:
+                    print("       Stage 5c using shared LLM GPU worker pool")
+
+            records = [None] * len(pairs)
+            n_papers = len(pairs)
+            arm_counts = {"classical": 0, "llm": 0, "both": 0}
+            text_source_counts = {"eprint": 0, "abstract": 0}
+            eprint_status_counts = {}
+            t_batch = time.time()
+            llm_chunk_size = max(1, args.llm_batch_size * 8)
+            pending_texts = []
+            pending_items = []
+
+            def _record_techniques(idx, entity_id, merged):
+                for h in merged:
+                    arm_counts[h.extraction_source] = (
+                        arm_counts.get(h.extraction_source, 0) + 1
+                    )
+                records[idx] = techniques_to_records(entity_id, merged)
+
+            def _flush_technique_llm(final_flush=False):
+                if not pending_items:
+                    return
+                if stage5c_llm_pool is not None:
+                    llm_batches = stage5c_llm_pool.run_stage5c(
+                        pending_texts,
+                        batch_size=args.llm_batch_size,
+                    )
+                else:
+                    llm_batches = extract_techniques_llm_batch(
+                        pending_texts,
+                        pipe=pipe_5c,
+                        tokenizer=tok_5c,
+                        max_input_chars=args.technique_ner_llm_max_chars,
+                        batch_size=args.llm_batch_size,
+                        loader_workers=args.llm_loader_workers,
+                    )
+                for (idx, entity_id, classical_hits), llm_hits in zip(
+                        pending_items, llm_batches):
+                    if arm == "both":
+                        merged = merge_technique_arms(classical_hits, llm_hits)
+                    elif arm == "classical":
+                        merged = classical_hits
+                    else:
+                        merged = llm_hits
+                    _record_techniques(idx, entity_id, merged)
+                pending_items.clear()
+                pending_texts.clear()
+                done = sum(1 for r in records if r is not None)
+                elapsed = time.time() - t_batch
+                rate = done / elapsed if elapsed > 0 else 0
+                eta = (n_papers - done) / rate if rate > 0 else 0
+                if done % 100 == 0 or done == n_papers or final_flush:
+                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
+                          f"ETA {eta/60:.0f} min")
+
+            for i, (entity, pair) in enumerate(zip(entities, pairs)):
+                eid = entity["entity/id"]
+                paper_text, text_source, eprint_meta = _paper_text_for(entity, pair)
+                text_source_counts[text_source] = (
+                    text_source_counts.get(text_source, 0) + 1
+                )
+                eprint_status = eprint_meta.get("status", "unknown")
+                eprint_status_counts[eprint_status] = (
+                    eprint_status_counts.get(eprint_status, 0) + 1
+                )
+                classical_hits = (
+                    extract_techniques_classical(
+                        paper_text,
+                        concepts=concept_vocab or None,
+                        max_terms=args.technique_ner_max_terms,
+                    )
+                    if arm in ("classical", "both") else []
+                )
+                if arm in ("llm", "both"):
+                    pending_texts.append(paper_text)
+                    pending_items.append((i, eid, classical_hits))
+                    if len(pending_items) >= llm_chunk_size:
+                        _flush_technique_llm()
+                    continue
+
+                if arm == "classical":
+                    merged = classical_hits
+                else:
+                    merged = []
+                _record_techniques(i, eid, merged)
+                if (i + 1) % 100 == 0 or (i + 1) == n_papers:
+                    elapsed = time.time() - t_batch
+                    done = i + 1
+                    rate = done / elapsed if elapsed > 0 else 0
+                    eta = (n_papers - done) / rate if rate > 0 else 0
+                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
+                          f"ETA {eta/60:.0f} min")
+
+            _flush_technique_llm(final_flush=True)
+
+            if any(r is None for r in records):
+                missing = sum(1 for r in records if r is None)
+                raise RuntimeError(f"Stage 5c did not produce {missing} records")
+            _require_paper_eprint_usage(
+                "Stage 5c", text_source_counts, produced=bool(records)
+            )
+
+            with open(techniques_path, "w") as f:
+                json.dump(records, f, ensure_ascii=False, indent=2)
+            print(f"       Saved {techniques_path.name} "
+                  f"({sum(len(r['techniques']) for r in records)} terms across "
+                  f"{n_papers} papers)")
+            print(f"       Provenance: classical={arm_counts['classical']}, "
+                  f"llm={arm_counts['llm']}, both={arm_counts['both']}")
+            print(f"       Text source: eprint={text_source_counts['eprint']}, "
+                  f"abstract-fallback={text_source_counts['abstract']}")
+            if paper_eprint_path is not None:
+                print(f"       Eprint load status: {eprint_status_counts}")
+            print(f"       Stage 5c done in {time.time()-t5c:.0f}s")
+            mark_stage("technique_ner", "completed",
+                       n_papers=n_papers, arm=arm, arm_counts=arm_counts,
+                       text_source_counts=text_source_counts,
+                       eprint_status_counts=eprint_status_counts)
+    else:
+        print(f"\n[Stage 5c/{n_stages}] Skipped (--skip-technique-ner)")
+        mark_stage("technique_ner", "skipped", skip_reason="--skip-technique-ner")
+
+    # ========== Stage 5d: Paper hypergraph ==========
+    # Structure-and-terminology lift: argumentative skeleton from LaTeX
+    # blocks (theorem/lemma/proof/definition/equation/citation) plus the
+    # concept + technique nodes from stages 5 and 5c.
+    # Spec: futon6/holes/missions/M-paper-reverse-morphogenesis.md §5d.
+    if not args.skip_paper_hypergraph:
+        t5d = time.time()
+        print(f"\n[Stage 5d/{n_stages}] Paper hypergraph "
+              f"(arm={args.paper_hypergraph_arm}, "
+              f"loader_workers={args.llm_loader_workers})...")
+        hg_path = outdir / "paper-hypergraphs.json"
+        if hg_path.exists():
+            print(f"       Reusing existing {hg_path.name}")
+            prev_counts = _previous_stage_status("paper_hypergraph").get(
+                "text_source_counts", {}
+            )
+            _require_paper_eprint_usage(
+                "Stage 5d", prev_counts, produced=True
+            )
+            mark_stage("paper_hypergraph", "completed", resumed=True,
+                       text_source_counts=prev_counts)
+        else:
+            arm = args.paper_hypergraph_arm
+
+            # Concept vocabulary from Stage 5
+            concept_by_entity: dict[str, list[str]] = {}
+            ner_terms_path = outdir / "ner-terms.json"
+            if ner_terms_path.exists():
+                try:
+                    with open(ner_terms_path) as f:
+                        for record in json.load(f):
+                            eid = record.get("entity_id") or record.get("id")
+                            terms = []
+                            for t in record.get("terms", []) or []:
+                                if isinstance(t, dict):
+                                    tt = t.get("term") or t.get("canon") or ""
+                                elif isinstance(t, str):
+                                    tt = t
+                                else:
+                                    tt = ""
+                                if tt:
+                                    terms.append(tt)
+                            if eid:
+                                concept_by_entity[eid] = terms
+                except (json.JSONDecodeError, OSError) as e:
+                    print(f"       Warning: could not read ner-terms.json "
+                          f"({e}); proceeding without concept vocabulary.")
+
+            # Technique vocabulary from Stage 5c
+            technique_by_entity: dict[str, list[str]] = {}
+            techniques_path = outdir / "techniques.json"
+            if techniques_path.exists():
+                try:
+                    with open(techniques_path) as f:
+                        for record in json.load(f):
+                            eid = record.get("paper_id")
+                            terms = [t.get("term") for t in record.get("techniques", [])
+                                     if isinstance(t, dict) and t.get("term")]
+                            if eid:
+                                technique_by_entity[eid] = terms
+                except (json.JSONDecodeError, OSError) as e:
+                    print(f"       Warning: could not read techniques.json "
+                          f"({e}); proceeding without technique vocabulary.")
+
+            if concept_by_entity or technique_by_entity:
+                print(f"       Loaded vocabularies: "
+                      f"{len(concept_by_entity)} papers with concepts, "
+                      f"{len(technique_by_entity)} with techniques")
+
+            pipe_5d = tok_5d = None
+            stage5d_llm_pool = None
+            if arm in ("llm", "both"):
+                stage5d_llm_pool = _ensure_llm_gpu_pool()
+                if stage5d_llm_pool is None:
+                    pipe_5d, tok_5d = _ensure_llm_pipeline()
+                else:
+                    print("       Stage 5d using shared LLM GPU worker pool")
+
+            hypergraphs = [None] * len(pairs)
+            n_papers = len(pairs)
+            edge_provenance = {"classical": 0, "llm": 0, "both": 0}
+            paper_hg_metrics = {"n_blocks_total": 0, "n_with_claim_blocks": 0}
+            text_source_counts = {"eprint": 0, "abstract": 0}
+            eprint_status_counts = {}
+            t_batch = time.time()
+            llm_chunk_size = max(1, args.llm_batch_size * 8)
+            pending_texts = []
+            pending_hgs = []
+            pending_items = []
+
+            def _record_paper_hg(idx, final_hg):
+                for e in final_hg["edges"]:
+                    prov = e.get("attrs", {}).get("provenance", "classical")
+                    edge_provenance[prov] = edge_provenance.get(prov, 0) + 1
+
+                paper_hg_metrics["n_blocks_total"] += (
+                    final_hg.get("meta", {}).get("n_blocks", 0)
+                )
+                if final_hg.get("meta", {}).get("has_theorem_blocks"):
+                    paper_hg_metrics["n_with_claim_blocks"] += 1
+                hypergraphs[idx] = final_hg
+
+            def _flush_paper_hg_llm(final_flush=False):
+                if not pending_items:
+                    return
+                if stage5d_llm_pool is not None:
+                    llm_batches = stage5d_llm_pool.run_stage5d(
+                        pending_texts,
+                        pending_hgs,
+                        prose_cap_chars=args.paper_hypergraph_prose_cap,
+                        hg_cap_nodes=args.paper_hypergraph_node_cap,
+                        batch_size=args.llm_batch_size,
+                    )
+                else:
+                    llm_batches = extract_paper_hypergraph_llm_batch(
+                        pending_texts,
+                        pending_hgs,
+                        pipe=pipe_5d,
+                        tokenizer=tok_5d,
+                        prose_cap_chars=args.paper_hypergraph_prose_cap,
+                        hg_cap_nodes=args.paper_hypergraph_node_cap,
+                        batch_size=args.llm_batch_size,
+                        loader_workers=args.llm_loader_workers,
+                    )
+                for (idx, classical_hg), llm_edges in zip(pending_items, llm_batches):
+                    final_hg = merge_paper_hypergraphs(classical_hg, llm_edges)
+                    _record_paper_hg(idx, final_hg)
+                pending_items.clear()
+                pending_texts.clear()
+                pending_hgs.clear()
+                done = sum(1 for h in hypergraphs if h is not None)
+                elapsed = time.time() - t_batch
+                rate = done / elapsed if elapsed > 0 else 0
+                eta = (n_papers - done) / rate if rate > 0 else 0
+                if done % 100 == 0 or done == n_papers or final_flush:
+                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
+                          f"ETA {eta/60:.0f} min")
+
+            for i, (entity, pair) in enumerate(zip(entities, pairs)):
+                eid = entity["entity/id"]
+                paper_text, text_source, eprint_meta = _paper_text_for(entity, pair)
+                text_source_counts[text_source] = (
+                    text_source_counts.get(text_source, 0) + 1
+                )
+                eprint_status = eprint_meta.get("status", "unknown")
+                eprint_status_counts[eprint_status] = (
+                    eprint_status_counts.get(eprint_status, 0) + 1
+                )
+                concepts_p = concept_by_entity.get(eid, [])
+                techniques_p = technique_by_entity.get(eid, [])
+
+                classical_hg = (
+                    extract_paper_hypergraph_classical(
+                        paper_text, eid,
+                        concepts=concepts_p,
+                        techniques=techniques_p,
+                    )
+                    if arm in ("classical", "both")
+                    else {"paper_id": eid, "nodes": [], "edges": [],
+                          "sectional": [], "meta": {}}
+                )
+
+                if arm in ("llm", "both"):
+                    pending_texts.append(paper_text)
+                    pending_hgs.append(classical_hg)
+                    pending_items.append((i, classical_hg))
+                    if len(pending_items) >= llm_chunk_size:
+                        _flush_paper_hg_llm()
+                    continue
+                else:
+                    final_hg = classical_hg
+
+                _record_paper_hg(i, final_hg)
+
+                if (i + 1) % 100 == 0 or (i + 1) == n_papers:
+                    elapsed = time.time() - t_batch
+                    done = i + 1
+                    rate = done / elapsed if elapsed > 0 else 0
+                    eta = (n_papers - done) / rate if rate > 0 else 0
+                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
+                          f"ETA {eta/60:.0f} min")
+
+            _flush_paper_hg_llm(final_flush=True)
+            if any(h is None for h in hypergraphs):
+                missing = sum(1 for h in hypergraphs if h is None)
+                raise RuntimeError(f"Stage 5d did not produce {missing} hypergraphs")
+            _require_paper_eprint_usage(
+                "Stage 5d", text_source_counts, produced=bool(hypergraphs)
+            )
+
+            with open(hg_path, "w") as f:
+                json.dump(hypergraphs, f, ensure_ascii=False)
+            total_edges = sum(len(h["edges"]) for h in hypergraphs)
+            total_nodes = sum(len(h["nodes"]) for h in hypergraphs)
+            n_blocks_total = paper_hg_metrics["n_blocks_total"]
+            n_with_claim_blocks = paper_hg_metrics["n_with_claim_blocks"]
+            print(f"       Saved {hg_path.name}: {total_nodes} nodes, "
+                  f"{total_edges} edges across {n_papers} papers")
+            print(f"       Papers with theorem/lemma/proposition blocks: "
+                  f"{n_with_claim_blocks}/{n_papers} "
+                  f"({100 * n_with_claim_blocks / max(n_papers, 1):.0f}%)")
+            print(f"       Edge provenance: classical={edge_provenance['classical']}, "
+                  f"llm={edge_provenance['llm']}, both={edge_provenance['both']}")
+            print(f"       Text source: eprint={text_source_counts['eprint']}, "
+                  f"abstract-fallback={text_source_counts['abstract']}")
+            if paper_eprint_path is not None:
+                print(f"       Eprint load status: {eprint_status_counts}")
+            print(f"       Stage 5d done in {time.time()-t5d:.0f}s")
+            mark_stage("paper_hypergraph", "completed",
+                       n_papers=n_papers, arm=arm,
+                       total_nodes=total_nodes, total_edges=total_edges,
+                       with_claim_blocks=n_with_claim_blocks,
+                       edge_provenance=edge_provenance,
+                       text_source_counts=text_source_counts,
+                       eprint_status_counts=eprint_status_counts)
+    else:
+        print(f"\n[Stage 5d/{n_stages}] Skipped (--skip-paper-hypergraph)")
+        mark_stage("paper_hypergraph", "skipped", skip_reason="--skip-paper-hypergraph")
+
     # ========== Stage 6: Reverse morphogenesis S←Q←A ==========
     stage6_stats = None
     if args.moist_run:
@@ -4238,8 +5595,14 @@ def main():
         t6 = time.time()
         print(f"\n[Stage 6/{n_stages}] Reverse morphogenesis S←Q←A ({args.llm_model}, "
               f"batch={args.llm_stage6_batch_size}, "
-              f"chunks={args.llm_stage6_chunks_per_shard})...")
-        pipe, tok = _ensure_llm_pipeline()
+              f"chunks={args.llm_stage6_chunks_per_shard}, "
+              f"loader_workers={args.llm_loader_workers})...")
+        llm_pool = _ensure_llm_gpu_pool()
+        if llm_pool is None:
+            pipe, tok = _ensure_llm_pipeline()
+        else:
+            print("       Stage 6 using shared LLM GPU worker pool")
+            pipe = tok = None
         rm_results = run_stage6_reverse_morphogenesis_chunked(
             pairs,
             entities,
@@ -4248,6 +5611,8 @@ def main():
             tok,
             batch_size=args.llm_stage6_batch_size,
             chunks_per_shard=args.llm_stage6_chunks_per_shard,
+            loader_workers=args.llm_loader_workers,
+            llm_pool=llm_pool,
         )
 
         # Quality summary
@@ -4414,10 +5779,17 @@ def main():
             # LLM enhancement (if available, runs after classical)
             if not args.skip_llm and not args.moist_run:
                 print(f"       Running LLM performative classification...")
-                pipe, tok = _ensure_llm_pipeline()
+                llm_pool = _ensure_llm_gpu_pool()
+                if llm_pool is None:
+                    pipe, tok = _ensure_llm_pipeline()
+                else:
+                    print("       Stage 7 using shared LLM GPU worker pool")
+                    pipe = tok = None
                 llm_enhanced = classify_thread_performatives_llm_batch(
                     thread_diagrams, pipe, tok,
                     batch_size=max(1, args.llm_batch_size // 4),
+                    loader_workers=args.llm_loader_workers,
+                    llm_pool=llm_pool,
                 )
                 stage7_stats["llm_enhanced_threads"] = llm_enhanced
                 stage7_stats["llm_enhance_rate"] = (
@@ -4448,6 +5820,8 @@ def main():
     else:
         print(f"\n[Stage 7/{n_stages}] Skipped (--skip-threads)")
         mark_stage("thread_wiring", "skipped", skip_reason="--skip-threads")
+
+    _close_llm_gpu_pool()
 
     # ========== Stage 8: Expression surface parsing ==========
     stage8_stats = None
@@ -4491,7 +5865,7 @@ def main():
     if not args.skip_hypergraphs and args.arxiv_jsonl:
         t9 = time.time()
         print(f"\n[Stage 9a/{n_stages}] Paper-level hypergraph assembly (arXiv mode)...")
-        paper_hg_eprint_dir = Path(args.paper_hg_eprint_dir) if args.paper_hg_eprint_dir else None
+        paper_hg_eprint_dir = Path(args.paper_eprint_dir) if args.paper_eprint_dir else None
         if paper_hg_eprint_dir:
             print(f"       Paper text source: {paper_hg_eprint_dir} "
                   f"(max_chars={args.paper_hg_text_max_chars}, "
@@ -4584,6 +5958,7 @@ def main():
         t9b = time.time()
         print(f"\n[Stage 9b/{n_stages}] Graph embedding "
               f"(R-GCN, {args.graph_embed_dim}d, {args.graph_embed_epochs} epochs, "
+              f"eval_every={args.graph_embed_eval_every}, "
               f"bs={args.graph_embed_batch_size}, workers={args.graph_embed_workers})...")
         stage9b_stats, hg_embeddings_path, model_path, hg_thread_ids = \
             run_stage9b_graph_embedding(
@@ -4592,10 +5967,24 @@ def main():
                 epochs=args.graph_embed_epochs,
                 batch_size=args.graph_embed_batch_size,
                 num_workers=args.graph_embed_workers,
+                eval_every=args.graph_embed_eval_every,
             )
         print(f"       {stage9b_stats['n_embedded']} thread embeddings "
               f"({stage9b_stats['embed_dim']}d) on {stage9b_stats['device']}")
         tm = stage9b_stats.get("train_metrics") or {}
+        if tm.get("loss_final") is not None:
+            msg = (
+                f"       Training loss: initial={tm.get('loss_initial', 0.0):.4f} "
+                f"final={tm['loss_final']:.4f} "
+                f"best={tm.get('loss_best', 0.0):.4f}"
+            )
+            if tm.get("loss_tail_delta") is not None:
+                msg += (
+                    f" tail{tm.get('loss_tail_epochs')}_drop="
+                    f"{tm['loss_tail_delta']:.4f}"
+                    f" ({tm.get('loss_tail_relative_delta', 0.0):.1%})"
+                )
+            print(msg)
         if tm.get("val_acc1_final") is not None:
             print("       Validation retrieval: "
                   f"Acc@1={tm['val_acc1_final']:.3f} "
@@ -4695,6 +6084,11 @@ def main():
     readiness_status = "pass" if not health_issues else "warn"
     manifest = {
         "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "run": {
+            "argv": run_argv,
+            "cwd": os.getcwd(),
+            "python": sys.executable,
+        },
         "source": args.site,
         "posts_xml": args.posts_xml,
         "arxiv_jsonl": args.arxiv_jsonl,
@@ -4713,7 +6107,18 @@ def main():
         "discover_terms_eprint_dir": args.discover_terms_eprint_dir,
         "run_distinctor_mit": args.run_distinctor_mit,
         "distinctor_eprint_dir": args.distinctor_eprint_dir,
+        "paper_eprint_dir": args.paper_eprint_dir,
         "paper_hg_eprint_dir": args.paper_hg_eprint_dir,
+        "paper_eprint": {
+            "effective_dir": args.paper_eprint_dir,
+            "legacy_hg_dir": args.paper_hg_eprint_dir,
+            "source": paper_eprint_source,
+            "raw_paper_eprint_dir_arg": raw_paper_eprint_dir_arg,
+            "raw_paper_hg_eprint_dir_arg": raw_paper_hg_eprint_dir_arg,
+            "max_chars": args.paper_eprint_max_chars,
+            "max_tex_members": args.paper_eprint_max_tex_members,
+            "preflight": paper_eprint_preflight,
+        },
         "stage6_backend": args.stage6_backend,
         "health_gate_thresholds": {
             "stage6_parse_rate_min": args.gate_stage6_parse_rate_min,

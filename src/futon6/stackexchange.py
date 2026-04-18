@@ -589,11 +589,9 @@ def compute_qa_embeddings(
     model_name: str = "all-MiniLM-L6-v2",
     batch_size: int = 256,
     device: str | None = None,
+    num_workers: int = 1,
 ):
     """Compute embeddings for QA pairs.
-
-    On GPU machines, set device="cuda" and increase batch_size.
-    For multi-GPU, the model auto-distributes with device="cuda".
 
     Args:
         pairs: list of QA pairs
@@ -601,27 +599,53 @@ def compute_qa_embeddings(
             - "all-MiniLM-L6-v2" (fast, 384d, good baseline)
             - "all-mpnet-base-v2" (better quality, 768d)
             - "BAAI/bge-large-en-v1.5" (strong, 1024d, needs GPU)
-        batch_size: encoding batch size (256 for GPU, 32 for CPU)
-        device: "cuda", "cpu", or None (auto-detect)
+        batch_size: per-worker encoding batch size
+        device: "cuda", "cpu", or None (auto-detect). Ignored when
+            num_workers > 1 and device is cuda — workers are assigned
+            to cuda:0..cuda:{num_workers-1}.
+        num_workers: data-parallel workers. 1 = single-device encode
+            (original path). >1 = SentenceTransformer multi-process
+            pool, sharding the text list across workers.
 
     Returns:
         numpy array of shape (len(pairs), embedding_dim)
     """
     from sentence_transformers import SentenceTransformer
 
-    model = SentenceTransformer(model_name, device=device)
+    model_device = device
+    if num_workers > 1 and device and device.startswith("cuda"):
+        # The worker pool below places replicas on target_devices. Keeping the
+        # parent model on CPU avoids an unnecessary extra allocation on cuda:0.
+        model_device = "cpu"
+    model = SentenceTransformer(model_name, device=model_device)
 
     texts = []
     for pair in pairs:
         q = pair.question
         a = pair.answer
-        # Combine question title + body + answer for embedding
         parts = [q.title]
         if q.body_text:
-            parts.append(q.body_text[:500])  # truncate long bodies
+            parts.append(q.body_text[:500])
         if a.body_text:
             parts.append(a.body_text[:500])
         texts.append(". ".join(parts))
+
+    if num_workers > 1:
+        if device and device.startswith("cuda"):
+            target_devices = [f"cuda:{i}" for i in range(num_workers)]
+        else:
+            target_devices = [device or "cpu"] * num_workers
+        pool = model.start_multi_process_pool(target_devices=target_devices)
+        try:
+            embeddings = model.encode_multi_process(
+                texts,
+                pool,
+                batch_size=batch_size,
+                normalize_embeddings=True,
+            )
+        finally:
+            model.stop_multi_process_pool(pool)
+        return embeddings
 
     embeddings = model.encode(
         texts,

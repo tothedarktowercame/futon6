@@ -28,30 +28,61 @@ Usage (unattended):
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
+import fcntl
 import hashlib
 import json
 import os
 import re
 import shutil
 import sqlite3
+import subprocess
 import sys
 import tarfile
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+try:
+    sys.stdout.reconfigure(line_buffering=True)
+except AttributeError:
+    pass
+
 # -- Defaults (overridable via env or config) ---------------------------------
 
-MARK2_HOME = Path(os.environ.get("MARK2_HOME", Path.home() / "mark2"))
+def default_mark2_home(script_file: str | os.PathLike[str] | None = None) -> Path:
+    """Return the coordinator state root.
+
+    The deployed coordinator lives at /home/joe/mark2/mark2 but Rob invokes it
+    as user rob over SSH.  In that case Path.home() points at /home/rob, while
+    the shared inbox/state live next to the deployed script.  The repo copy is
+    futon6/scripts/mark2, so it keeps the historical ~/mark2 default.
+    """
+    if "MARK2_HOME" in os.environ:
+        return Path(os.environ["MARK2_HOME"])
+
+    if script_file is not None:
+        script_path = Path(script_file).resolve()
+        if script_path.name == "mark2" and script_path.parent.name == "mark2":
+            return script_path.parent
+
+    return Path.home() / "mark2"
+
+
+MARK2_HOME = default_mark2_home(__file__)
 MANIFEST_DB = Path(os.environ.get(
     "MARK2_MANIFEST_DB",
     MARK2_HOME / "arxiv_manifest.sqlite",
 ))
-PAGE_SIZE = int(os.environ.get("MARK2_PAGE_SIZE", "5000"))
+PAGE_SIZE = int(os.environ.get("MARK2_PAGE_SIZE", "10000"))
 RATE_LIMIT = float(os.environ.get("MARK2_RATE_LIMIT", "3.0"))
 MAX_INBOX_MB = int(os.environ.get("MARK2_MAX_INBOX_MB", "2000"))
+READY_TARGET = int(os.environ.get("MARK2_READY_TARGET", "2"))
+AUTO_FILL = os.environ.get("MARK2_AUTO_FILL", "1").lower() not in {"0", "false", "no"}
+EPRINT_HOST = os.environ.get("MARK2_EPRINT_HOST", "export.arxiv.org")
 TIMEOUT = 120
 RETRIES = 4
 USER_AGENT = "futon6-mark2/1.0 (+https://github.com/tothedarktowercame/futon6)"
@@ -85,6 +116,16 @@ def state_path() -> Path:
     return MARK2_HOME / "state.json"
 
 
+def log_dir() -> Path:
+    p = MARK2_HOME / "logs"
+    p.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def build_lock_path() -> Path:
+    return MARK2_HOME / "build.lock"
+
+
 # -- State persistence --------------------------------------------------------
 
 def load_state() -> dict:
@@ -111,6 +152,31 @@ def set_batch_state(state: dict, num: int, **kwargs) -> None:
         state["batches"][key] = {}
     state["batches"][key].update(kwargs)
     save_state(state)
+
+
+class BuildAlreadyRunning(RuntimeError):
+    pass
+
+
+@contextmanager
+def exclusive_build_lock():
+    MARK2_HOME.mkdir(parents=True, exist_ok=True)
+    with build_lock_path().open("w") as lock_file:
+        try:
+            fcntl.flock(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            raise BuildAlreadyRunning(f"build already running ({build_lock_path()})") from exc
+        lock_file.write(f"pid={os.getpid()} started_at={now_iso()}\n")
+        lock_file.flush()
+        try:
+            yield
+        finally:
+            fcntl.flock(lock_file, fcntl.LOCK_UN)
+
+
+def ready_batch_count(state: dict) -> int:
+    return sum(1 for b in state.get("batches", {}).values()
+               if b.get("status") == "inbox")
 
 
 # -- Disk budget --------------------------------------------------------------
@@ -176,9 +242,25 @@ def fetch_one(url: str) -> tuple[bytes, str]:
     raise last_err
 
 
-# -- Build command ------------------------------------------------------------
+def eprint_fetch_url(url: str) -> str:
+    """Route arXiv eprint harvests through the programmatic-access host."""
+    if not EPRINT_HOST:
+        return url
+    parsed = urllib.parse.urlsplit(url)
+    if parsed.netloc in {"arxiv.org", "www.arxiv.org", "export.arxiv.org"}:
+        return urllib.parse.urlunsplit((
+            parsed.scheme or "https",
+            EPRINT_HOST,
+            parsed.path,
+            parsed.query,
+            parsed.fragment,
+        ))
+    return url
 
-def cmd_build(args) -> int:
+
+# -- Build commands -----------------------------------------------------------
+
+def build_one(args) -> int:
     if not MANIFEST_DB.exists():
         print(f"error: manifest DB not found: {MANIFEST_DB}", file=sys.stderr)
         print(f"copy it here: scp local:storage/arxiv-manifest/arxiv_manifest.sqlite {MANIFEST_DB}")
@@ -280,7 +362,7 @@ def cmd_build(args) -> int:
 
         sid = safe_id(paper["id"])
         try:
-            payload, ctype = fetch_one(paper["eprint_url"])
+            payload, ctype = fetch_one(eprint_fetch_url(paper["eprint_url"]))
             last_req = time.time()
             ext = infer_extension(ctype, payload)
             out = eprint_dir / f"{sid}{ext}"
@@ -359,6 +441,78 @@ def cmd_build(args) -> int:
     return 0
 
 
+def cmd_build(args) -> int:
+    try:
+        with exclusive_build_lock():
+            return build_one(args)
+    except BuildAlreadyRunning as exc:
+        print(str(exc))
+        return 0
+
+
+def cmd_fill(args) -> int:
+    """Build until the inbox has the requested number of ready batches."""
+    target_ready = args.target_ready if args.target_ready is not None else READY_TARGET
+    target_ready = max(0, target_ready)
+
+    try:
+        with exclusive_build_lock():
+            while True:
+                state = load_state()
+                ready = ready_batch_count(state)
+                if ready >= target_ready:
+                    print(f"ready target met: {ready}/{target_ready} batch(es) in inbox")
+                    return 0
+
+                if args.if_room and not inbox_has_room():
+                    print(f"inbox at {dir_size_mb(inbox()):.0f} MB "
+                          f"(budget {MAX_INBOX_MB} MB) — stopping fill")
+                    return 0
+
+                before_next = state.get("next_batch", 1)
+                before_ready = ready
+                rc = build_one(argparse.Namespace(page_size=args.page_size,
+                                                  if_room=args.if_room))
+                if rc != 0:
+                    return rc
+
+                after = load_state()
+                if (after.get("next_batch", 1) == before_next
+                        and ready_batch_count(after) == before_ready):
+                    print("fill made no progress — stopping")
+                    return 0
+    except BuildAlreadyRunning as exc:
+        print(str(exc))
+        return 0
+
+
+def start_background_fill(reason: str) -> None:
+    if not AUTO_FILL:
+        print("  auto-fill disabled (MARK2_AUTO_FILL=0)")
+        return
+
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    log_path = log_dir() / f"fill-{stamp}.log"
+    cmd = [
+        sys.executable,
+        str(Path(__file__).resolve()),
+        "fill",
+        "--if-room",
+        "--target-ready",
+        str(READY_TARGET),
+    ]
+    with log_path.open("ab") as log:
+        subprocess.Popen(
+            cmd,
+            stdout=log,
+            stderr=subprocess.STDOUT,
+            stdin=subprocess.DEVNULL,
+            start_new_session=True,
+            close_fds=True,
+        )
+    print(f"  auto-fill started ({reason}); log: {log_path}")
+
+
 # -- Lifecycle commands -------------------------------------------------------
 
 def cmd_pulled(args) -> int:
@@ -367,7 +521,7 @@ def cmd_pulled(args) -> int:
     state = load_state()
     bs = batch_state(state, num)
     if not bs:
-        print(f"batch {num} not found in state")
+        print(f"batch {num} not found in state ({state_path()})")
         return 1
     tar = inbox() / f"batch-{num:03d}.tar.gz"
     if tar.exists():
@@ -376,15 +530,13 @@ def cmd_pulled(args) -> int:
     set_batch_state(state, num, status="pulled", pulled_at=now_iso())
     print(f"  batch {num} marked pulled")
 
-    # Auto-build next batch if there's room
-    if inbox_has_room():
-        print()
-        # Reuse build with --if-room safety check
-        build_args = argparse.Namespace(page_size=None, if_room=True)
-        cmd_build(build_args)
-    else:
+    # Auto-fill in the background so Rob's SSH command does not block for the
+    # whole arXiv fetch window.
+    if not inbox_has_room():
         print(f"  inbox full ({dir_size_mb(inbox()):.0f} MB) — "
               f"skipping auto-build")
+    else:
+        start_background_fill(f"batch {num} pulled")
 
     return 0
 
@@ -395,7 +547,7 @@ def cmd_returned(args) -> int:
     state = load_state()
     bs = batch_state(state, num)
     if not bs:
-        print(f"batch {num} not found in state")
+        print(f"batch {num} not found in state ({state_path()})")
         return 1
     expected = outbox() / f"results-{num:03d}.tar.gz"
     if not expected.exists():
@@ -415,7 +567,7 @@ def cmd_collected(args) -> int:
     state = load_state()
     bs = batch_state(state, num)
     if not bs:
-        print(f"batch {num} not found in state")
+        print(f"batch {num} not found in state ({state_path()})")
         return 1
     # Clean up results from outbox
     for f in outbox().glob(f"*{num:03d}*"):
@@ -431,6 +583,11 @@ def cmd_collected(args) -> int:
 def cmd_status(args) -> int:
     state = load_state()
     batches = state.get("batches", {})
+
+    print(f"home:      {MARK2_HOME}")
+    print(f"config:    page_size={PAGE_SIZE:,} rate_limit={RATE_LIMIT:.1f}s "
+          f"ready_target={READY_TARGET} auto_fill={'on' if AUTO_FILL else 'off'} "
+          f"eprint_host={EPRINT_HOST or 'manifest'}")
 
     # Manifest stats
     if MANIFEST_DB.exists():
@@ -557,6 +714,17 @@ def main() -> int:
     p_build.add_argument("--if-room", action="store_true",
                          help="Only build if inbox is under disk budget")
     p_build.set_defaults(func=cmd_build)
+
+    p_fill = sub.add_parser(
+        "fill",
+        help="Build until the inbox has the configured number of ready batches")
+    p_fill.add_argument("--page-size", type=int, default=None)
+    p_fill.add_argument("--target-ready", type=int, default=None,
+                        help="Ready inbox batches to maintain "
+                             f"(default: {READY_TARGET})")
+    p_fill.add_argument("--if-room", action="store_true",
+                        help="Stop when inbox is over disk budget")
+    p_fill.set_defaults(func=cmd_fill)
 
     p_pulled = sub.add_parser("pulled", help="Mark batch as pulled by Rob")
     p_pulled.add_argument("batch_num", type=int)
