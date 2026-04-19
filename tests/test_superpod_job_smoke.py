@@ -168,6 +168,7 @@ def test_arxiv_paper_eprint_dir_feeds_all_paper_stages(tmp_path: Path):
     assert manifest["paper_hg_eprint_dir"] == str(eprints.resolve())
     assert manifest["paper_eprint"]["source"] == "paper-eprint-dir"
     assert manifest["paper_eprint"]["preflight"]["candidate_matches"] == 1
+    assert manifest["llm_batch_sizes"]["stage5d"] == 4
     assert manifest["stage_status"]["technique_ner"]["text_source_counts"]["eprint"] == 1
     assert manifest["stage_status"]["paper_hypergraph"]["text_source_counts"]["eprint"] == 1
     assert manifest["stage9a_stats"]["paper_text_source"] == "eprints"
@@ -184,7 +185,13 @@ def test_arxiv_paper_hg_eprint_dir_is_legacy_alias(tmp_path: Path):
         root,
         outdir,
         input_dir,
-        ["--paper-hg-eprint-dir", "eprints", "--dry-run"],
+        [
+            "--paper-hg-eprint-dir",
+            "eprints",
+            "--llm-stage5d-batch-size",
+            "2",
+            "--dry-run",
+        ],
     )
     assert run.returncode == 0, (
         "superpod-job arxiv dry-run failed\n"
@@ -192,6 +199,7 @@ def test_arxiv_paper_hg_eprint_dir_is_legacy_alias(tmp_path: Path):
         f"stderr:\n{run.stderr}"
     )
     assert f"--paper-eprint-dir {eprints.resolve()}" in run.stdout
+    assert "--llm-stage5d-batch-size 2" in run.stdout
     assert "--paper-hg-eprint-dir" not in run.stdout
 
 
