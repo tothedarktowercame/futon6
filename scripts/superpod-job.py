@@ -80,6 +80,8 @@ import subprocess
 
 import numpy as np
 
+os.environ.setdefault("PYTORCH_ALLOC_CONF", "expandable_segments:True")
+
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -1639,6 +1641,44 @@ class _DatasetTextGenerationRunner:
             getattr(self.config, "is_encoder_decoder", False)
         )
         for prompt_batch in loader:
+            decoded = self._generate_prompt_batch(
+                prompt_batch,
+                max_new_tokens=max_new_tokens,
+                return_full_text=return_full_text,
+                is_encoder_decoder=is_encoder_decoder,
+            )
+            outputs.extend(
+                [{"generated_text": text.strip()}] for text in decoded
+            )
+        return outputs
+
+    def _empty_cuda_cache(self):
+        try:
+            import torch
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except Exception:
+            pass
+
+    def _is_cuda_oom(self, exc: BaseException) -> bool:
+        try:
+            import torch
+            if isinstance(exc, torch.cuda.OutOfMemoryError):
+                return True
+        except Exception:
+            pass
+        msg = str(exc).lower()
+        return "cuda out of memory" in msg or "torch.outofmemoryerror" in msg
+
+    def _generate_prompt_batch(
+        self,
+        prompt_batch,
+        max_new_tokens,
+        return_full_text,
+        is_encoder_decoder,
+    ):
+        device = self._input_device()
+        try:
             encoded = self.tokenizer(
                 prompt_batch,
                 return_tensors="pt",
@@ -1659,10 +1699,34 @@ class _DatasetTextGenerationRunner:
                 decoded_tokens,
                 skip_special_tokens=True,
             )
-            outputs.extend(
-                [{"generated_text": text.strip()}] for text in decoded
-            )
-        return outputs
+            return decoded
+        except Exception as exc:
+            if self._is_cuda_oom(exc) and len(prompt_batch) > 1:
+                self._empty_cuda_cache()
+                mid = max(1, len(prompt_batch) // 2)
+                print(
+                    "       CUDA OOM during LLM generation; retrying "
+                    f"batch of {len(prompt_batch)} as {mid}+"
+                    f"{len(prompt_batch) - mid}",
+                    file=sys.stderr,
+                    flush=True,
+                )
+                return (
+                    self._generate_prompt_batch(
+                        prompt_batch[:mid],
+                        max_new_tokens=max_new_tokens,
+                        return_full_text=return_full_text,
+                        is_encoder_decoder=is_encoder_decoder,
+                    )
+                    + self._generate_prompt_batch(
+                        prompt_batch[mid:],
+                        max_new_tokens=max_new_tokens,
+                        return_full_text=return_full_text,
+                        is_encoder_decoder=is_encoder_decoder,
+                    )
+                )
+            self._empty_cuda_cache()
+            raise
 
 
 def _create_llm_pipeline(model_name, batch_size=8):
@@ -4109,6 +4173,8 @@ def print_dry_run(args):
         cmd_parts.append(f"  --llm-stage3-batch-size {args.llm_stage3_batch_size}")
     if args.llm_stage3_chunks_per_shard != 10:
         cmd_parts.append(f"  --llm-stage3-chunks-per-shard {args.llm_stage3_chunks_per_shard}")
+    if args.llm_stage5d_batch_size != 4:
+        cmd_parts.append(f"  --llm-stage5d-batch-size {args.llm_stage5d_batch_size}")
     if args.llm_stage6_batch_size != 64:
         cmd_parts.append(f"  --llm-stage6-batch-size {args.llm_stage6_batch_size}")
     if args.llm_stage6_chunks_per_shard != 10:
@@ -4298,6 +4364,9 @@ def main():
                         help="LLM batch size for Stage 3 pattern tagging")
     parser.add_argument("--llm-stage3-chunks-per-shard", type=int, default=10,
                         help="Stage 3 output chunks per shard for resumable runs (default: 10)")
+    parser.add_argument("--llm-stage5d-batch-size", type=int, default=4,
+                        help="LLM batch size for Stage 5d paper hypergraph "
+                             "implicit-edge extraction (default: 4)")
     parser.add_argument("--llm-stage6-batch-size", type=int, default=64,
                         help="LLM batch size for Stage 6 reverse morphogenesis "
                              "(default: 64)")
@@ -4540,6 +4609,8 @@ def main():
         parser.error("--llm-stage3-batch-size must be > 0")
     if args.llm_stage3_chunks_per_shard <= 0:
         parser.error("--llm-stage3-chunks-per-shard must be > 0")
+    if args.llm_stage5d_batch_size <= 0:
+        parser.error("--llm-stage5d-batch-size must be > 0")
     if args.llm_stage6_batch_size <= 0:
         parser.error("--llm-stage6-batch-size must be > 0")
     if args.llm_stage6_chunks_per_shard <= 0:
@@ -4897,6 +4968,7 @@ def main():
             max_batch = max(
                 args.llm_batch_size,
                 args.llm_stage3_batch_size,
+                args.llm_stage5d_batch_size,
                 args.llm_stage6_batch_size,
             )
             llm_pipe, llm_tokenizer = _create_llm_pipeline(
@@ -4934,6 +5006,7 @@ def main():
             max_batch = max(
                 args.llm_batch_size,
                 args.llm_stage3_batch_size,
+                args.llm_stage5d_batch_size,
                 args.llm_stage6_batch_size,
             )
             print(f"       LLM replica fanout: {len(devices)} GPU worker "
@@ -5363,6 +5436,7 @@ def main():
         t5d = time.time()
         print(f"\n[Stage 5d/{n_stages}] Paper hypergraph "
               f"(arm={args.paper_hypergraph_arm}, "
+              f"llm_batch={args.llm_stage5d_batch_size}, "
               f"loader_workers={args.llm_loader_workers})...")
         hg_path = outdir / "paper-hypergraphs.json"
         if hg_path.exists():
@@ -5439,7 +5513,7 @@ def main():
             text_source_counts = {"eprint": 0, "abstract": 0}
             eprint_status_counts = {}
             t_batch = time.time()
-            llm_chunk_size = max(1, args.llm_batch_size * 8)
+            llm_chunk_size = max(1, args.llm_stage5d_batch_size * 8)
             pending_texts = []
             pending_hgs = []
             pending_items = []
@@ -5465,7 +5539,7 @@ def main():
                         pending_hgs,
                         prose_cap_chars=args.paper_hypergraph_prose_cap,
                         hg_cap_nodes=args.paper_hypergraph_node_cap,
-                        batch_size=args.llm_batch_size,
+                        batch_size=args.llm_stage5d_batch_size,
                     )
                 else:
                     llm_batches = extract_paper_hypergraph_llm_batch(
@@ -5475,7 +5549,7 @@ def main():
                         tokenizer=tok_5d,
                         prose_cap_chars=args.paper_hypergraph_prose_cap,
                         hg_cap_nodes=args.paper_hypergraph_node_cap,
-                        batch_size=args.llm_batch_size,
+                        batch_size=args.llm_stage5d_batch_size,
                         loader_workers=args.llm_loader_workers,
                     )
                 for (idx, classical_hg), llm_edges in zip(pending_items, llm_batches):
@@ -5564,6 +5638,7 @@ def main():
             print(f"       Stage 5d done in {time.time()-t5d:.0f}s")
             mark_stage("paper_hypergraph", "completed",
                        n_papers=n_papers, arm=arm,
+                       llm_batch_size=args.llm_stage5d_batch_size,
                        total_nodes=total_nodes, total_edges=total_edges,
                        with_claim_blocks=n_with_claim_blocks,
                        edge_provenance=edge_provenance,
@@ -6097,6 +6172,12 @@ def main():
         "num_shards": args.num_shards,
         "embed_model": args.embed_model if not args.skip_embeddings else None,
         "llm_model": args.llm_model if not args.skip_llm else None,
+        "llm_batch_sizes": {
+            "baseline": args.llm_batch_size,
+            "stage3": args.llm_stage3_batch_size,
+            "stage5d": args.llm_stage5d_batch_size,
+            "stage6": args.llm_stage6_batch_size,
+        },
         "stats": stats,
         "entity_count": len(entities),
         "tag_count": len(tags),
