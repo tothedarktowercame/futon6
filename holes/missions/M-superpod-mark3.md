@@ -395,3 +395,91 @@ contract (preserve / adapt / drop) named.
 **Test state:** N/A (mission doc only).
 
 **Next:** MAP phase. Answer Q1–Q6, then DERIVE.
+
+### Checkpoint R-2 deliverable — 2026-04-27
+
+**What was done:** R-2 (hierarchical arxiv-proof pattern set) authored
+in `futon3/library/`, completing the Joe-side authoring track without
+runner integration. Eleven files:
+
+- 5 family parents in `futon3/library/math-strategy/`:
+  `existence-result.flexiarg`,
+  `characterization-result.flexiarg`,
+  `structural-relation-result.flexiarg`,
+  `property-of-object-result.flexiarg`,
+  `clarification-meta.flexiarg` (meta-tag, not a pattern).
+- 5 new leaves in `futon3/library/math-informal/`:
+  `failure-mode-characterization.flexiarg`,
+  `structural-characterization.flexiarg`,
+  `structural-inclusion.flexiarg`,
+  `complexity-classification.flexiarg`,
+  `structural-equivalence.flexiarg`.
+- 1 operator-readable index:
+  `futon3/library/math-strategy/PAPER-SHAPES-INDEX.md` ties the
+  hierarchy together with cross-references to existing
+  math-informal leaves and exemplar arxiv paper-ids per family.
+
+The taxonomy cross-references existing math-informal patterns
+(e.g. `transport-across-isomorphism`, `find-the-right-abstraction`,
+`split-into-cases`, `exhaustion-as-theorem`) rather than
+duplicating them. The new leaves only fill genuine gaps the
+existing library didn't cover.
+
+**Per-flexiarg `@family` field**: each new leaf declares its
+parent family (e.g. `@family math-strategy/characterization-result`)
+so future tooling can derive the hierarchy by grep.
+
+**Test state:** Schema only; no runner-side validation.
+
+**Next:** R-1 (arxiv-aware Stage 3 prompt) consumes this
+taxonomy as its choice space (see PAPER-SHAPES-INDEX.md
+§"Use as a prompt choice space"). Authoring R-1 is the next
+local-only deliverable; runner integration is downstream of
+Rob's deploy.
+
+### Checkpoint R-1 deliverable — 2026-04-27
+
+**What was done:** R-1 (arxiv-aware Stage 3 prompt builder) authored
+as a local module in `src/futon6/arxiv_pattern_prompt.py` with a
+test suite in `tests/test_arxiv_pattern_prompt.py`. Three exports:
+
+- `load_paper_shape_taxonomy(library_root)` — parses the 5 family
+  parents + member leaves from `futon3/library/math-strategy/` and
+  `math-informal/`. Reads `@flexiarg`, `@title`, `@family`,
+  `member[…]`, and `! conclusion:` body for each pattern.
+- `build_arxiv_pattern_prompt(paper_id, title, abstract,
+  theorem_excerpts=None, proof_excerpts=None, ...)` — emits the
+  prompt with the hierarchical choice space. Includes coverage and
+  slot-distinctness rules in the prompt itself so the LLM knows
+  when to emit `clarification-meta` rather than defaulting to
+  `uncertain`.
+- `parse_arxiv_pattern_response(raw)` — validates the LLM's JSON
+  response against the loaded taxonomy. Rejects invalid families
+  / leaves; enforces that `clarification-meta` carries a
+  `:collapsed {:reason :explanation}` block. Returns
+  `{:ok :family :leaf :family_confidence :leaf_confidence
+  :rationale :collapsed :error}`.
+
+**Test state:** 15 tests, 15 passed, 0 failures.
+Covers: taxonomy load (5 families, leaves linked to families),
+prompt builder (all families and excerpts present, abstract
+clipping), response parser (well-formed / uncertain-leaf /
+clarification-meta with-and-without-collapsed / invalid-family
+/ invalid-leaf / no-json).
+
+**Demo verified:** module renders a coherent prompt for
+`arxiv-2604.20815v1` (Zarankiewicz dichotomy) with all 5 families
+and 18 leaves in the expected hierarchical layout.
+
+**Integration path:** Rob's mark3 deploy imports both functions.
+The runner calls `build_arxiv_pattern_prompt(...)` at Stage 3
+when input source is arxiv (see #46 for source-detection logic).
+Output of `parse_arxiv_pattern_response(...)` lands in
+`pattern-tags.json` with the new schema; coverage discipline
+record fires when `parse_*` returns `:ok false`.
+
+**Next:** Track B (geometry-on-existing-data demo for Rob).
+Compute T_total + Laplacian summaries on the 40k papers already
+in `~/code/storage/mark2/outbox/`. Materialises `E-Ttotal.md`
+from stub to real findings; produces a compact reusable script
+that mark3 can adopt verbatim for the geometry-artifact stage.
