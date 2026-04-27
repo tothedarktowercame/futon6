@@ -15,6 +15,42 @@ extends rather than replaces.
 mission (math-corpus-as-hypergraph; pattern application
 diagnostic with witnesses).
 
+### Why this mission exists in this shape (pattern-work context)
+
+mark3 is more than a runner cleanup. It is the math-corpus
+prong of a broader pattern-application diagnostic: each agent
+turn (or paper, in the arxiv prototype) should be coded as an
+application of a **typed, well-specified, repeatable pattern of
+demonstrable value**. Joe's parent theory mission frames
+patterns as `context → tension → move` — a BHK-arrow shape
+whose witness (proof, code change, theorem) makes the
+application checkable. The math corpus is *prototype 2* of
+that frame: the hand-tagged 25-paper pilot
+([`futon3/holes/excursions/E-math-prototype-pilot.md`](../../../futon3/holes/excursions/E-math-prototype-pilot.md))
+showed the substrate already produces the slot triple
+(`situation_S`, `xiang_salience`, `arrow_constraint`) — what's
+missing is the named-pattern overlay that R-1 + R-2 add.
+
+The **R-1 / R-2 / R-3 / geometry-artifact** stack in this
+mission isn't mark3-internal cleanup. Each piece corresponds
+to one of the parent IFR's five properties:
+
+- **R-1 (arxiv prompt) + R-2 (hierarchical pattern set):**
+  *well-specified.*
+- **Coverage discipline (no nulls):** *coverage.*
+- **Slot-distinctness:** *repeatable.*
+- **Geometry artifact (T_total, F₂):** *demonstrable value.*
+- **Hierarchical taxonomy + family-level fallback:** *replicable
+  under automation.*
+
+Rob does not need to engage with the parent mission to do this
+work — the deliverables here stand alone. But the framing
+explains *why* the substrate edges in this particular
+direction rather than alternative refactors. Cross-references:
+[`E-math-prototype-pilot.md`](../../../futon3/holes/excursions/E-math-prototype-pilot.md)
+(empirical seed), [`E-substrate-metrics.md`](../../../futon3/holes/excursions/E-substrate-metrics.md)
+(F₂ score and successor metrics).
+
 ## 1. IDENTIFY — naming the gap
 
 ### Motivation
@@ -211,28 +247,101 @@ with concrete findings, not speculation, before MAP exit.)
 | mark3 manifest / coordinator fork | — | **Missing** |
 | Pattern-tag round-trip test | — | **Missing** |
 
-### MAP questions
+### MAP questions — answered (2026-04-27)
 
-- **Q1.** Where in `superpod-job.py` is `PATTERNS` declared, and
-  is it loaded from a file or hard-coded? Can the source be
-  swapped via a flag without code change to swap pattern set?
-- **Q2.** What does the current `mark2.bak` history at
-  `linode-chicago:~/mark2/` tell us about how often the runner
-  has been hot-patched? Does mark3's "alongside mark2" framing
-  match Rob's existing operational discipline?
-- **Q3.** Is `eprint_mode` already advertised on a flag, and is
-  the input-jsonl shape compatible with passing eprint-dir
-  (i.e. does the regular batch jsonl carry the eprint path,
-  or only the abstract)?
-- **Q4.** What's the LLM prompt-budget envelope per paper for
-  Stage 3? If the arxiv prompt with theorem/proof excerpts
-  exceeds it, paragraph-level chunking is needed.
-- **Q5.** Where does the `hypergraph-thread-ids.json` artifact
-  come from, and does it already imply a per-paper
-  geometric-quantity hook we can extend?
-- **Q6.** What's the existing test harness for `superpod-job.py`?
-  `tests/test_superpod_job_smoke.py` exists (74cc161); what
-  does it cover, and where do mark3's new VERIFY tests slot in?
+**Q1. PATTERNS hard-coded; no swap flag.**
+`PATTERNS` is a literal list at `scripts/superpod-job.py:340`,
+25 `(name, description)` tuples (≈ 2,300 chars). `PATTERN_NAMES`
+derives from it at module load. **No flag swaps the source.**
+Adding `--stage3-pattern-set <path>` to read an alternative list
+is a small change (≈ 30 lines: argparse entry + load + branch in
+`build_pattern_prompt`). The mark3 R-1 module
+(`src/futon6/arxiv_pattern_prompt.py`) already loads from the
+futon3 flexiarg directory via `load_paper_shape_taxonomy()`, so
+the swap is implemented for the arxiv path; the only remaining
+work is wiring `--source arxiv` to dispatch to it.
+
+**Q2. mark2 has been hot-patched 6× over 7 days.**
+`linode-chicago:~/mark2/` contains six `mark2.bak.YYYYMMDDTHHMMSSZ`
+files: five on 2026-04-16 (rapid iteration day) and one on
+2026-04-23. Each `mark2.bak` differs from the live `mark2`
+binary, so they are real patches not no-ops. **Hot-patching
+during burnin is Rob's operational discipline.** The
+mark3-alongside-mark2 framing matches: a separate `mark3`
+binary with its own `mark3.bak` cadence keeps the mark2 backup
+chain undisturbed.
+
+**Q3. eprint flag exists; jsonl shape carries metadata only.**
+- Flag: `--discover-terms-eprint-dir <path>` (parser at
+  `superpod-job.py:4405`), with sibling `--distinctor-eprint-dir`
+  and a `--paper-eprint-dir` default-fallback chain at
+  lines 4720-4729. The flag exists, is off by default, and has
+  been used by mfuton invocations.
+- Input-jsonl shape (per `src/futon6/stackexchange.py:688`,
+  `load_arxiv_pairs()`): `{id, title, abstract, categories, date}`.
+  **No `eprint_path` field.** Eprints come from a separate
+  filesystem directory; `_load_eprint_text_for_entity()` at
+  `superpod-job.py:1215` matches files by `glob(f"{paper_id_short}*")`.
+  Therefore R-3 (eprint default for arxiv batches; #46) needs
+  a filesystem convention for where eprints live (e.g.
+  `~/mark2/eprints/` or wherever Rob stores them) plus a
+  default-on-when-source-is-arxiv branch.
+
+**Q4. Arxiv prompt is ≈ 7,600 chars; mark2 SE prompt is ≈ 4,500 chars.**
+- mark3 arxiv prompt (built via R-1 module) with all 5 family
+  parents, 18 leaves, abstract clipped at 1,200 chars, plus up
+  to 3 theorem and 3 proof excerpts at 600 chars each: **7,571
+  chars** measured directly. ≈ 1,900 tokens.
+- mark2 SE prompt (`build_pattern_prompt`): 25-pattern list
+  (2,310 chars) + Q[:700] + A[:900] + template ≈ **4,500 chars**.
+- 67 % size increase. Comfortable within typical LLM windows
+  (Mistral-7B-instruct: 8,192 tokens ≈ 32,000 chars; modern
+  models: 128 K+ tokens). **No paragraph-level chunking needed
+  for v0.** If a future extension wants to feed full proof
+  bodies rather than excerpts, chunking will become necessary;
+  parked.
+
+**Q5. `hypergraph-thread-ids.json` is GNN-side; not the right hook.**
+Emitted at `superpod-job.py:3522` after the GNN training pass,
+as the index for `hypergraph-embeddings.npy`. It carries thread
+ids, not per-paper geometric quantities. The right hook for
+the mark3 geometry artifact is **a new per-paper sweep** over
+`paper-hypergraphs.json` after Stage 5d completes — exactly
+what `compute-paper-T.py` already does. Cost: ≈ 1 ms per paper;
+runs in ≈ 4 s on a 5 K-paper batch. Output sibling artifact
+`output/geometry.json` (or `paper-T.tsv`). See Track-B
+checkpoint below.
+
+**Q6. Test harness has 5 smoke tests; mark3 VERIFY tests slot
+in cleanly.**
+`tests/test_superpod_job_smoke.py` (221 lines, 5 tests):
+- `test_superpod_job_ct_pipeline_smoke` — canonical end-to-end.
+- `test_superpod_job_limit_defaults_thread_limit` — argument plumbing.
+- `test_arxiv_paper_eprint_dir_feeds_all_paper_stages` — eprint flag flow.
+- `test_arxiv_paper_hg_eprint_dir_is_legacy_alias` — flag aliasing.
+- `test_arxiv_paper_eprint_dir_fails_when_no_sources_match` — failure path.
+
+mark3 V-5..V-9 land as siblings:
+- V-6 (round-trip on hierarchical pattern-tag schema) → new test
+  using R-1's `parse_arxiv_pattern_response()` against a fixture.
+- V-7 (coverage smoke) → new test that runs Stage 3 with
+  pre-known LLM-failure prompts and asserts every paper gets a
+  record (success or `:status :failed`).
+- V-8 (geometry artifact correctness) → new test invoking
+  `compute_paper_T.compute_one_paper()` on hand-checked
+  fixtures.
+- V-9 (mark2/mark3 coordinator non-interference) → integration
+  test that spawns a mark3 batch alongside a mark2 batch on
+  separate inbox/outbox dirs.
+
+Existing harness pattern (smoke-test-with-tmp-path-fixtures)
+fits all four naturally; **no test-infrastructure changes
+needed**. R-1 already shipped its own test file
+(`tests/test_arxiv_pattern_prompt.py`, 15 tests, all passing)
+which V-6 builds on.
+
+**MAP exit:** all six questions have concrete answers. Ready
+for DERIVE.
 
 ### Notes — what's already in mfuton-equivalent code
 
@@ -547,3 +656,45 @@ mathematically sensible outputs without any tuning.
 (code reads of `superpod-job.py`, `mark2`, the test harness).
 Or, if Rob is ready: bundle R-1 + R-2 + the geometry script
 into a draft mark3 branch for review.
+
+### Checkpoint MAP-exit — 2026-04-27
+
+**What was done:** answered all six MAP questions with concrete
+code-read findings (line numbers, file paths, measured
+prompt-budget numbers, test-harness inventory). Highlights:
+
+- PATTERNS is a hard-coded literal at `superpod-job.py:340`; a
+  `--stage3-pattern-set` flag is ≈ 30 lines to add. R-1's
+  `load_paper_shape_taxonomy()` already implements the loader.
+- mark2 has been hot-patched 6× in 7 days (`mark2.bak.*`
+  files); mark3-alongside framing matches existing discipline.
+- eprint flag exists (`--discover-terms-eprint-dir`); arxiv
+  jsonl has no `eprint_path` field, so R-3 (#46) needs a
+  filesystem convention plus a default-on branch.
+- Arxiv prompt size measured: 7,571 chars (≈ 1,900 tokens) —
+  comfortably within typical LLM windows; no chunking needed.
+- `hypergraph-thread-ids.json` is GNN-side and not the right
+  geometry hook; the right hook is a new sweep over
+  `paper-hypergraphs.json` (already implemented in
+  `compute-paper-T.py`).
+- Test harness has 5 smoke tests at `test_superpod_job_smoke.py`;
+  V-5..V-9 slot in as siblings without test-infrastructure
+  changes.
+
+Light cross-reference section ("Why this mission exists in this
+shape") added at the top of the mission to point Rob at the
+parent theory context (`M-pattern-application-diagnostic`,
+`E-math-prototype-pilot`, `E-substrate-metrics`) without
+requiring he engage with it for the substrate work. Mark3
+deliverables stand alone; the framing just explains why the
+shape is what it is.
+
+**Test state:** N/A (mission doc only).
+
+**Next:** DERIVE. The MAP findings constrain DERIVE concretely:
+typed pattern-tag schema (R-1 done), coverage-record schema
+with two distinguishable failure modes (per E-Ttotal §"Two
+silent-fail modes"), geometry artifact spec (matches
+`compute-paper-T.py` output shape), and the source-detection
+branch (Q3 conclusion). DERIVE writeup is ≈ 1-2 hours of
+focused work.
