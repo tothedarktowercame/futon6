@@ -483,3 +483,67 @@ Compute T_total + Laplacian summaries on the 40k papers already
 in `~/code/storage/mark2/outbox/`. Materialises `E-Ttotal.md`
 from stub to real findings; produces a compact reusable script
 that mark3 can adopt verbatim for the geometry-artifact stage.
+
+### Checkpoint Track-B deliverable — 2026-04-27
+
+**What was done:** Track B (geometry-on-existing-data demo) materialised
+as `scripts/compute-paper-T.py` running on three batches already in
+`~/code/storage/mark2/outbox/`. ~4 seconds per 5,000 papers; pure-Python.
+Reads `output/paper-hypergraphs.json`, emits TSV with per-paper
+`n_claims, n_unpaired, T_total, top_support_id, top_support_count` plus
+a Δ-Laplacian proxy (`top_support_id` is the non-claim vertex co-
+occurring most often with unpaired claims — load-bearing-concept
+candidate).
+
+**Findings landed in
+`futon3/holes/excursions/E-Ttotal.md` v0:**
+
+- F-1: T_total is a stable corpus property. mfuton-001 and mfuton-002
+  (independent 5k-paper samples) produce near-identical distributions
+  (mean 0.364 / 0.368, median 0.333 / 0.333). The geometry is real, not
+  a sampling artifact.
+- F-2: The eprint-off cost is now empirically measurable. Older
+  `results-005` lineage has 83 % empty-claim papers (vs 28-32 % for
+  mfuton); on the rest the T-mean shifts 0.36 → 0.53. **R-3 (eprint
+  default) is backed by hard numbers, not architectural argument.**
+- F-3: Distribution shape has meaningful resolution (p10=0.0, p90=0.78
+  on mfuton). Plenty of dynamic range for downstream consumers.
+- Cross-tab against the 25 hand-tagged papers shows directional
+  family signal (characterization median T=0.19, structural-relation
+  T=0.33), n=24 too small for stat-sig but rank ordering matches
+  the qualitative reading.
+- **Two silent-fail modes are now distinguishable:** triple-level
+  (null analysis, 4 %) vs hypergraph-level (n_claims=0, 32 %).
+  The mark3 coverage record needs both reasons named in DERIVE.
+- Δ-Laplacian proxy spot-check on Zarankiewicz paper picks
+  `technique:axis-parallel-box` as the load-bearing concept —
+  matches the abstract's actual punchline. **Geometric framing
+  operationally correct on real data with a one-line T definition.**
+
+**Test state:** pure-Python compute step; 3 batches × 5k papers
+processed without error. No automated tests for the analysis
+script itself in v0.
+
+**Integration path:** the script lifts verbatim into mark3's
+pipeline as a per-batch geometry stage. The mission's §3 DERIVE
+sketch for `output/geometry.json` should incorporate the
+distinguishable silent-fail-reason discipline:
+
+```clojure
+{:status :failed
+ :reason :triple-extraction      ; or :no-theorem-blocks, etc.
+ :stage :stage6                  ; or :stage5d
+ :substrate-mode :abstract-only} ; or :eprint, :degraded
+```
+
+**Demo for Rob:** the cross-batch comparison (mfuton vs
+results-005) makes R-3 (eprint default) empirically motivated;
+the cross-tab shows the substrate is doing useful work *now*
+without further runner patches; the Zarankiewicz-load-bearing-
+concept spot-check shows the geometric framing produces
+mathematically sensible outputs without any tuning.
+
+**Next:** mark3 MAP phase. Q1–Q6 in §2 still need answering
+(code reads of `superpod-job.py`, `mark2`, the test harness).
+Or, if Rob is ready: bundle R-1 + R-2 + the geometry script
+into a draft mark3 branch for review.
