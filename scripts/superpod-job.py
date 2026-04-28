@@ -65,6 +65,7 @@ import tarfile
 import time
 import uuid
 import warnings
+from difflib import SequenceMatcher
 
 warnings.filterwarnings(
     "ignore",
@@ -84,6 +85,11 @@ os.environ.setdefault("PYTORCH_ALLOC_CONF", "expandable_segments:True")
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent))
+
+from futon6.arxiv_pattern_prompt import (
+    build_arxiv_pattern_prompt,
+    parse_arxiv_pattern_response,
+)
 
 
 def _timestamp_now() -> str:
@@ -208,6 +214,7 @@ from futon6.paper_hypergraph import (
     extract_paper_hypergraph_llm_batch,
     merge_paper_hypergraphs,
 )
+from futon6.legacy_tex_normalize import normalize as normalize_legacy_tex
 
 _GRAPH_EMBED_IMPORT_ERROR = None
 try:
@@ -1593,6 +1600,62 @@ Answer:
 {a}"""
 
 
+def _is_arxiv_entry_id(entry_id) -> bool:
+    return str(entry_id or "").startswith("arxiv-")
+
+
+def _stage3_prompt_for_entry(entry_id, question_title, question_text, answer_text):
+    if _is_arxiv_entry_id(entry_id):
+        return build_arxiv_pattern_prompt(
+            paper_id=str(entry_id)[len("arxiv-"):],
+            title=question_title,
+            abstract=question_text or answer_text or "",
+        )
+    return build_pattern_prompt(question_title, question_text, answer_text)
+
+
+def _stage3_result_from_raw(entry_id, raw):
+    text = str(raw or "").strip()
+    if _is_arxiv_entry_id(entry_id):
+        parsed = parse_arxiv_pattern_response(text)
+        if not parsed.get("ok"):
+            return {
+                "entry_id": entry_id,
+                "schema_version": "arxiv-paper-shapes-v1",
+                "status": "failed",
+                "reason": "stage3-parse-error",
+                "error": parsed.get("error", "unknown"),
+                "patterns": [],
+                "raw": text,
+            }
+        leaf = parsed.get("leaf")
+        family = parsed.get("family")
+        chosen = leaf if leaf and leaf != "uncertain" else family
+        return {
+            "entry_id": entry_id,
+            "schema_version": "arxiv-paper-shapes-v1",
+            "status": "ok",
+            "family": family,
+            "leaf": leaf,
+            "family_confidence": parsed.get("family_confidence", 0.0),
+            "leaf_confidence": parsed.get("leaf_confidence", 0.0),
+            "rationale": parsed.get("rationale", ""),
+            "collapsed": parsed.get("collapsed"),
+            "patterns": ([chosen] if chosen else []),
+            "raw": text,
+        }
+    pattern_ids = _parse_pattern_response(text)
+    return {
+        "entry_id": entry_id,
+        "patterns": [
+            PATTERN_NAMES[pid - 1]
+            for pid in pattern_ids
+            if 1 <= pid <= 25
+        ],
+        "raw": text,
+    }
+
+
 class _DatasetTextGenerationRunner:
     """Dataset/DataLoader-backed text generation without HF Pipeline.__call__.
 
@@ -1839,7 +1902,8 @@ def _llm_worker_main(argv):
         try:
             if task_type == "stage3":
                 prompts = [
-                    build_pattern_prompt(
+                    _stage3_prompt_for_entry(
+                        item["entry_id"],
                         item["question_title"],
                         item["question_text"],
                         item["answer_text"],
@@ -1857,16 +1921,7 @@ def _llm_worker_main(argv):
                     )
                 payload = []
                 for item, raw in zip(items, raw_texts):
-                    pattern_ids = _parse_pattern_response(raw)
-                    payload.append({
-                        "entry_id": item["entry_id"],
-                        "patterns": [
-                            PATTERN_NAMES[pid - 1]
-                            for pid in pattern_ids
-                            if 1 <= pid <= 25
-                        ],
-                        "raw": raw,
-                    })
+                    payload.append(_stage3_result_from_raw(item["entry_id"], raw))
             elif task_type == "stage5c":
                 texts = items
                 with contextlib.redirect_stdout(sys.stderr):
@@ -1924,12 +1979,11 @@ def _llm_worker_main(argv):
                         loader_workers=args.loader_workers,
                     )
                 payload = [
-                    {
-                        "entity_id": item["entity_id"],
-                        "question_id": item["question_id"],
-                        "analysis": _parse_json_object_response(raw),
-                        "raw": raw,
-                    }
+                    _build_stage6_result(
+                        item["entity_id"],
+                        item["question_id"],
+                        raw,
+                    )
                     for item, raw in zip(items, raw_texts)
                 ]
             elif task_type == "stage7":
@@ -2178,8 +2232,9 @@ def tag_patterns_llm_batch(
     class _PatternPromptDataset(TorchDataset):
         """Lazily format Stage 3 prompts for pipeline dataset mode."""
 
-        def __init__(self, qa_pairs, tok):
+        def __init__(self, qa_pairs, entry_ids, tok):
             self.qa_pairs = qa_pairs
+            self.entry_ids = entry_ids
             self.tok = tok
 
         def __len__(self):
@@ -2187,7 +2242,8 @@ def tag_patterns_llm_batch(
 
         def __getitem__(self, idx):
             pair = self.qa_pairs[idx]
-            prompt = build_pattern_prompt(
+            prompt = _stage3_prompt_for_entry(
+                self.entry_ids[idx],
                 pair.question.title,
                 pair.question.body_text,
                 pair.answer.body_text,
@@ -2207,7 +2263,12 @@ def tag_patterns_llm_batch(
     total_progress = total_local if progress_total is None else int(progress_total)
     done_base = int(progress_done_base)
 
-    prompt_dataset = _PatternPromptDataset(pairs, tokenizer)
+    normalized_entry_ids = (
+        list(entry_ids)
+        if entry_ids is not None
+        else [f"se-math-{pairs[i].question.id}" for i in range(total_local)]
+    )
+    prompt_dataset = _PatternPromptDataset(pairs, normalized_entry_ids, tokenizer)
     outputs = pipe(
         prompt_dataset,
         return_full_text=False,
@@ -2230,16 +2291,8 @@ def tag_patterns_llm_batch(
             item = {}
 
         text = str(item.get("generated_text", "")).strip()
-        pattern_ids = _parse_pattern_response(text)
-        entry_id = (entry_ids[i]
-                    if entry_ids is not None
-                    else f"se-math-{pairs[i].question.id}")
-        results.append({
-            "entry_id": entry_id,
-            "patterns": [PATTERN_NAMES[pid - 1] for pid in pattern_ids
-                         if 1 <= pid <= 25],
-            "raw": text,
-        })
+        entry_id = normalized_entry_ids[i]
+        results.append(_stage3_result_from_raw(entry_id, text))
 
         done_local = i + 1
         done_progress = done_base + done_local
@@ -2560,6 +2613,178 @@ def _parse_json_object_response(text):
     return {"raw": tail, "parse_error": "invalid JSON"}
 
 
+_STAGE6_REQUIRED_KEYS = {
+    "xiang_form",
+    "xiang_salience",
+    "arrow_constraint",
+    "quality",
+    "situation_S",
+    "roundtrip_check",
+}
+_STAGE6_QUALITY_KEYS = {"form", "salience", "arrow"}
+_STAGE6_SLOT_KEYS = ("xiang_salience", "arrow_constraint", "situation_S")
+_STAGE6_STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "by",
+    "for",
+    "from",
+    "how",
+    "if",
+    "in",
+    "into",
+    "is",
+    "it",
+    "of",
+    "on",
+    "or",
+    "that",
+    "the",
+    "their",
+    "this",
+    "to",
+    "under",
+    "what",
+    "why",
+    "with",
+}
+
+
+def _stage6_normalize_slot_text(text):
+    s = str(text or "").lower()
+    s = re.sub(r"[^a-z0-9\s]", " ", s)
+    s = re.sub(r"\s+", " ", s)
+    return s.strip()
+
+
+def _stage6_slot_tokens(text):
+    return {
+        tok
+        for tok in _stage6_normalize_slot_text(text).split()
+        if len(tok) >= 3 and tok not in _STAGE6_STOPWORDS
+    }
+
+
+def _stage6_pairwise_slot_check(left_key, left_text, right_key, right_text):
+    left_norm = _stage6_normalize_slot_text(left_text)
+    right_norm = _stage6_normalize_slot_text(right_text)
+    left_tokens = _stage6_slot_tokens(left_text)
+    right_tokens = _stage6_slot_tokens(right_text)
+    shared = left_tokens & right_tokens
+    union = left_tokens | right_tokens
+    jaccard = (len(shared) / len(union)) if union else 0.0
+    containment = 0.0
+    if left_tokens and right_tokens:
+        containment = max(
+            len(shared) / len(left_tokens),
+            len(shared) / len(right_tokens),
+        )
+    seq_ratio = SequenceMatcher(None, left_norm, right_norm).ratio()
+    exact_match = bool(left_norm) and left_norm == right_norm
+    collapsed = exact_match or (
+        min(len(left_tokens), len(right_tokens)) >= 4
+        and (jaccard >= 0.8 or containment >= 0.9 or seq_ratio >= 0.92)
+    )
+    return {
+        "left": left_key,
+        "right": right_key,
+        "collapsed": collapsed,
+        "exact_match": exact_match,
+        "jaccard": round(float(jaccard), 3),
+        "containment": round(float(containment), 3),
+        "sequence_ratio": round(float(seq_ratio), 3),
+        "shared_tokens": sorted(shared),
+    }
+
+
+def _stage6_slot_distinctness(analysis):
+    pairwise = []
+    collapsed_pairs = []
+    for left_key, right_key in itertools.combinations(_STAGE6_SLOT_KEYS, 2):
+        pair = _stage6_pairwise_slot_check(
+            left_key,
+            analysis.get(left_key, ""),
+            right_key,
+            analysis.get(right_key, ""),
+        )
+        pairwise.append(pair)
+        if pair["collapsed"]:
+            collapsed_pairs.append(f"{left_key}~{right_key}")
+    return {
+        "status": "collapsed" if collapsed_pairs else "distinct",
+        "collapsed": bool(collapsed_pairs),
+        "collapsed_pairs": collapsed_pairs,
+        "pairwise": pairwise,
+    }
+
+
+def _build_stage6_result(entity_id, question_id, raw_text):
+    parsed = _parse_json_object_response(raw_text)
+    record = {
+        "entity_id": entity_id,
+        "question_id": question_id,
+        "schema_version": "reverse-morphogenesis-v2",
+        "status": "failed",
+        "reason": None,
+        "collapsed": False,
+        "analysis": parsed if isinstance(parsed, dict) else {"raw": str(raw_text or "")},
+        "raw": str(raw_text or ""),
+    }
+
+    if not isinstance(parsed, dict):
+        record["reason"] = "stage6-invalid-response"
+        record["error"] = "parser returned a non-dict payload"
+        return record
+
+    if "parse_error" in parsed:
+        record["reason"] = "stage6-parse-error"
+        record["error"] = parsed["parse_error"]
+        return record
+
+    missing_keys = sorted(_STAGE6_REQUIRED_KEYS - set(parsed))
+    if missing_keys:
+        record["reason"] = "stage6-missing-required-keys"
+        record["error"] = f"missing keys: {', '.join(missing_keys)}"
+        record["missing_keys"] = missing_keys
+        return record
+
+    quality = parsed.get("quality")
+    if not isinstance(quality, dict):
+        record["reason"] = "stage6-invalid-quality"
+        record["error"] = "quality must be a JSON object"
+        return record
+
+    missing_quality_keys = sorted(_STAGE6_QUALITY_KEYS - set(quality))
+    if missing_quality_keys:
+        record["reason"] = "stage6-invalid-quality"
+        record["error"] = (
+            "quality missing keys: " + ", ".join(missing_quality_keys)
+        )
+        record["missing_quality_keys"] = missing_quality_keys
+        return record
+
+    for key in ("xiang_form", "xiang_salience", "arrow_constraint", "situation_S", "roundtrip_check"):
+        if not isinstance(parsed.get(key), str):
+            record["reason"] = "stage6-invalid-value-types"
+            record["error"] = f"{key} must be a string"
+            return record
+
+    distinctness = _stage6_slot_distinctness(parsed)
+    record["slot_distinctness"] = distinctness
+    record["collapsed"] = bool(distinctness["collapsed"])
+    if distinctness["collapsed"]:
+        record["status"] = "clarification"
+        record["reason"] = "slot-collapse"
+    else:
+        record["status"] = "ok"
+    return record
+
+
 def _parse_json_array_response(text):
     """Extract a JSON array from LLM response text."""
     start = text.find('[')
@@ -2651,13 +2876,13 @@ def run_reverse_morphogenesis_llm_batch(
             item = {}
 
         text = str(item.get("generated_text", "")).strip()
-        parsed = _parse_json_object_response(text)
-        results.append({
-            "entity_id": entities[i]["entity/id"],
-            "question_id": pairs[i].question.id,
-            "analysis": parsed,
-            "raw": text,
-        })
+        results.append(
+            _build_stage6_result(
+                entities[i]["entity/id"],
+                pairs[i].question.id,
+                text,
+            )
+        )
 
         done_local = i + 1
         done_progress = progress_done_base + done_local
@@ -2697,7 +2922,7 @@ def run_stage6_reverse_morphogenesis_chunked(
 
     meta_path = chunk_dir / "meta.json"
     expected_meta = {
-        "version": 1,
+        "version": 2,
         "total_pairs": total,
         "chunks_per_shard": int(chunks_per_shard),
         "effective_chunks": len(chunk_ranges),
@@ -3329,6 +3554,82 @@ def run_stage9a_arxiv_paper_hypergraphs(
     return stats, out_path
 
 
+def _compute_paper_geometry_row(paper):
+    nodes = paper.get("nodes", [])
+    edges = paper.get("edges", [])
+
+    claim_ids = {
+        n.get("id", "")
+        for n in nodes
+        if n.get("type") == "claim"
+    }
+    n_claims = len(claim_ids)
+
+    grounded_claims = set()
+    for e in edges:
+        if e.get("type") != "derivation":
+            continue
+        roles = e.get("roles") or {}
+        for vid, role in roles.items():
+            if role == "target" and vid in claim_ids:
+                grounded_claims.add(vid)
+
+    unpaired = claim_ids - grounded_claims
+    n_unpaired = len(unpaired)
+    t_total = (n_unpaired / n_claims) if n_claims else -1.0
+
+    incidence = Counter()
+    for e in edges:
+        ends = e.get("ends") or list((e.get("roles") or {}).keys())
+        if not ends:
+            continue
+        unpaired_in_edge = [v for v in ends if v in unpaired]
+        if not unpaired_in_edge:
+            continue
+        non_claim_in_edge = [v for v in ends if v not in claim_ids]
+        for v in non_claim_in_edge:
+            incidence[v] += len(unpaired_in_edge)
+
+    top_support_id = ""
+    top_support_count = 0
+    if incidence:
+        top_support_id, top_support_count = incidence.most_common(1)[0]
+
+    paper_id = paper.get("paper_id") or paper.get("thread_id") or ""
+    return {
+        "paper_id": paper_id,
+        "n_claims": n_claims,
+        "unpaired_claims": n_unpaired,
+        "T_total": t_total,
+        "laplacian_summary": {
+            "top_support_id": top_support_id,
+            "top_support_count": top_support_count,
+        },
+    }
+
+
+def write_geometry_artifact(hg_path, outdir):
+    with open(hg_path, "r", encoding="utf-8") as f:
+        papers = json.load(f)
+
+    rows = [_compute_paper_geometry_row(paper) for paper in papers]
+    out_path = outdir / "geometry.json"
+    write_json(out_path, rows)
+
+    valid = [r["T_total"] for r in rows if r["T_total"] >= 0]
+    std_t = float(np.std(valid)) if valid else 0.0
+    mean_t = (sum(valid) / len(valid)) if valid else 0.0
+    stats = {
+        "papers": len(rows),
+        "with_claims": len(valid),
+        "empty_claim_papers": len(rows) - len(valid),
+        "mean_T_total": round(float(mean_t), 4),
+        "std_T_total": round(std_t, 4),
+        "max_T_total": round(max(valid), 4) if valid else None,
+    }
+    return stats, out_path
+
+
 # ---------------------------------------------------------------------------
 # Stage 9a: Hypergraph assembly (CPU)
 # ---------------------------------------------------------------------------
@@ -3783,6 +4084,12 @@ Return ONLY a valid JSON object with these exact keys (no other text):
 - "situation_S": a concrete situation from which this question naturally arises (string, ≤60 words)
 - "roundtrip_check": does the situation produce this question? (string, ≤30 words)
 
+Slot-distinctness rule:
+- "xiang_salience", "arrow_constraint", and "situation_S" must be substantively
+  different from each other, not paraphrases of the same sentence.
+- If the source material is too thin to separate them cleanly, reflect that by
+  downgrading the relevant entries in "quality" and say so in "roundtrip_check".
+
 Quality ratings:
 - 象 form: Is the mathematical object well-specified?
 - 香 salience: Does the questioner know WHY they want to know?
@@ -3818,7 +4125,8 @@ def generate_moist_prompts(pairs, entities, outdir, stages=None, thread_diagrams
         count = 0
         with open(path, "w") as f:
             for pair, entity in zip(pairs, entities):
-                prompt = build_pattern_prompt(
+                prompt = _stage3_prompt_for_entry(
+                    entity["entity/id"],
                     pair.question.title,
                     pair.question.body_text,
                     pair.answer.body_text,
@@ -4576,6 +4884,20 @@ def main():
         if args.data_dir == parser.get_default("data_dir"):
             args.data_dir = str(input_base / "se-data")
         print(f"  Input dir: {args.input_dir}")
+
+    auto_arxiv_eprints_dir = None
+    if args.arxiv_jsonl:
+        arxiv_batch_dir = Path(args.arxiv_jsonl).expanduser().resolve(strict=False).parent
+        candidate_eprints = arxiv_batch_dir / "eprints"
+        if (not args.discover_terms_eprint_dir
+                and not args.distinctor_eprint_dir
+                and not args.paper_eprint_dir
+                and not args.paper_hg_eprint_dir
+                and candidate_eprints.is_dir()):
+            auto_arxiv_eprints_dir = str(candidate_eprints)
+            args.discover_terms_eprint_dir = auto_arxiv_eprints_dir
+            print("  ArXiv mode: defaulting --discover-terms-eprint-dir to "
+                  f"batch-local eprints ({auto_arxiv_eprints_dir})")
 
     if args.embed_workers == 0:
         if str(args.embed_device).startswith("cuda"):
@@ -5509,7 +5831,12 @@ def main():
             hypergraphs = [None] * len(pairs)
             n_papers = len(pairs)
             edge_provenance = {"classical": 0, "llm": 0, "both": 0}
-            paper_hg_metrics = {"n_blocks_total": 0, "n_with_claim_blocks": 0}
+            paper_hg_metrics = {
+                "n_blocks_total": 0,
+                "n_with_claim_blocks": 0,
+                "normalized_papers": 0,
+                "normalization_rewrites": 0,
+            }
             text_source_counts = {"eprint": 0, "abstract": 0}
             eprint_status_counts = {}
             t_batch = time.time()
@@ -5578,20 +5905,36 @@ def main():
                 )
                 concepts_p = concept_by_entity.get(eid, [])
                 techniques_p = technique_by_entity.get(eid, [])
+                normalization = None
+                paper_text_stage5d = paper_text
+                block_annotations = None
+                if text_source == "eprint":
+                    normalization = normalize_legacy_tex(paper_text, paper_id=eid)
+                    paper_text_stage5d = normalization.rewritten_text
+                    block_annotations = normalization.block_annotations
+                    if normalization.rewrites:
+                        paper_hg_metrics["normalized_papers"] += 1
+                        paper_hg_metrics["normalization_rewrites"] += len(normalization.rewrites)
 
                 classical_hg = (
                     extract_paper_hypergraph_classical(
-                        paper_text, eid,
+                        paper_text_stage5d, eid,
                         concepts=concepts_p,
                         techniques=techniques_p,
+                        block_annotations=block_annotations,
                     )
                     if arm in ("classical", "both")
                     else {"paper_id": eid, "nodes": [], "edges": [],
                           "sectional": [], "meta": {}}
                 )
+                if normalization is not None and normalization.rewrites:
+                    classical_hg.setdefault("meta", {})["normalization"] = {
+                        "rewrites": len(normalization.rewrites),
+                        "aliases": dict(normalization.alias_map),
+                    }
 
                 if arm in ("llm", "both"):
-                    pending_texts.append(paper_text)
+                    pending_texts.append(paper_text_stage5d)
                     pending_hgs.append(classical_hg)
                     pending_items.append((i, classical_hg))
                     if len(pending_items) >= llm_chunk_size:
@@ -5633,6 +5976,12 @@ def main():
                   f"llm={edge_provenance['llm']}, both={edge_provenance['both']}")
             print(f"       Text source: eprint={text_source_counts['eprint']}, "
                   f"abstract-fallback={text_source_counts['abstract']}")
+            if paper_hg_metrics["normalized_papers"]:
+                print(
+                    "       Legacy normalization: "
+                    f"{paper_hg_metrics['normalized_papers']} papers, "
+                    f"{paper_hg_metrics['normalization_rewrites']} rewrites"
+                )
             if paper_eprint_path is not None:
                 print(f"       Eprint load status: {eprint_status_counts}")
             print(f"       Stage 5d done in {time.time()-t5d:.0f}s")
@@ -5641,6 +5990,8 @@ def main():
                        llm_batch_size=args.llm_stage5d_batch_size,
                        total_nodes=total_nodes, total_edges=total_edges,
                        with_claim_blocks=n_with_claim_blocks,
+                       normalized_papers=paper_hg_metrics["normalized_papers"],
+                       normalization_rewrites=paper_hg_metrics["normalization_rewrites"],
                        edge_provenance=edge_provenance,
                        text_source_counts=text_source_counts,
                        eprint_status_counts=eprint_status_counts)
@@ -5690,8 +6041,10 @@ def main():
             llm_pool=llm_pool,
         )
 
-        # Quality summary
-        n_parsed = sum(1 for r in rm_results if "parse_error" not in r["analysis"])
+        # Coverage summary: parsed JSON plus collapsed/clarification records
+        # both count as Stage 6 coverage; only explicit failures do not.
+        stage6_status_counts = Counter(r.get("status", "failed") for r in rm_results)
+        n_parsed = stage6_status_counts.get("ok", 0) + stage6_status_counts.get("clarification", 0)
         stage6_stats = {
             "mode": "llm-inference",
             "batch_size": args.llm_stage6_batch_size,
@@ -5699,8 +6052,18 @@ def main():
             "total": len(rm_results),
             "parsed_ok": n_parsed,
             "parse_rate": n_parsed / len(rm_results) if rm_results else 0,
+            "status_counts": dict(stage6_status_counts),
+            "clarification_count": stage6_status_counts.get("clarification", 0),
+            "failed_count": stage6_status_counts.get("failed", 0),
+            "slot_collapse_count": sum(1 for r in rm_results if r.get("collapsed")),
         }
         print(f"       {n_parsed}/{len(rm_results)} responses parsed as JSON")
+        if stage6_stats["clarification_count"]:
+            print(
+                "       "
+                f"{stage6_stats['clarification_count']}/{len(rm_results)} "
+                "records flagged for slot collapse / clarification"
+            )
         print(f"       Stage 6 done in {time.time()-t6:.0f}s")
         health_gate(
             "Stage 6",
@@ -5718,6 +6081,8 @@ def main():
             "completed",
             parsed_ok=int(stage6_stats["parsed_ok"]),
             parse_rate=round(float(stage6_stats["parse_rate"]), 4),
+            clarification_count=int(stage6_stats["clarification_count"]),
+            failed_count=int(stage6_stats["failed_count"]),
         )
     else:
         print(f"\n[Stage 6/{n_stages}] Skipped (--skip-llm)")
@@ -5963,6 +6328,12 @@ def main():
             print(f"       Eprint text coverage: {stage9a_stats.get('eprint_text_used', 0)}/"
                   f"{stage9a_stats.get('papers_processed', 0)} "
                   f"(missing={stage9a_stats.get('eprint_text_missing', 0)})")
+        geometry_stats, geometry_path = write_geometry_artifact(hg_path, outdir)
+        stage9a_stats["geometry_stats"] = geometry_stats
+        stage9a_stats["geometry_path"] = str(geometry_path)
+        print(f"       Geometry artifact: {geometry_path.name} "
+              f"(with_claims={geometry_stats['with_claims']}/"
+              f"{geometry_stats['papers']}, std={geometry_stats['std_T_total']:.3f})")
         print(f"       Written {hg_path} "
               f"({os.path.getsize(hg_path) / 1e6:.1f} MB)")
         print(f"       Stage 9a done in {time.time()-t9:.0f}s")
@@ -6238,7 +6609,8 @@ def main():
         "stage_status": stage_status,
         "health_issues": health_issues,
         "output_files": [f.name for f in outdir.iterdir() if f.is_file()],
-        "patterns": PATTERN_NAMES,
+        "patterns": (None if args.arxiv_jsonl else PATTERN_NAMES),
+        "pattern_schema": ("arxiv-paper-shapes-v1" if args.arxiv_jsonl else "se-patterns-v1"),
     }
     write_json(outdir / "manifest.json", manifest)
 

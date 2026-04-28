@@ -60,6 +60,13 @@ def test_parse_latex_blocks_captures_labels():
     assert "def:borel-completion" in labels
 
 
+def test_parse_latex_blocks_defaults_block_origin_to_native():
+    blocks, _ = parse_latex_blocks(SAMPLE_LATEX)
+    assert blocks
+    assert all(b.block_origin == "native" for b in blocks)
+    assert all(b.source_cue is None for b in blocks)
+
+
 def test_classical_emits_typed_nodes():
     hg = extract_paper_hypergraph_classical(
         SAMPLE_LATEX, "test-001",
@@ -75,6 +82,52 @@ def test_classical_emits_typed_nodes():
     assert "technique" in node_types
     assert "concept" in node_types
     assert "citation" in node_types
+
+
+def test_classical_block_annotations_roundtrip_to_node_attrs():
+    blocks, _ = parse_latex_blocks(SAMPLE_LATEX)
+    theorem_block = next(b for b in blocks if b.env == "theorem")
+    proof_block = next(b for b in blocks if b.env == "proof")
+    annotations = {
+        theorem_block.span: {
+            "block_origin": "alias_expanded",
+            "source_cue": r"\newtheorem{thm}{Theorem}",
+        },
+        proof_block.span: {
+            "block_origin": "prose_synthesized",
+            "source_cue": "proof head detected near theorem statement",
+        },
+    }
+    hg = extract_paper_hypergraph_classical(
+        SAMPLE_LATEX,
+        "test-001",
+        block_annotations=annotations,
+    )
+    theorem_node = next(n for n in hg["nodes"] if n["id"].startswith("claim:theorem"))
+    proof_node = next(n for n in hg["nodes"] if n["id"].startswith("proof:"))
+    assert theorem_node["attrs"]["block_origin"] == "alias_expanded"
+    assert theorem_node["attrs"]["source_cue"] == r"\newtheorem{thm}{Theorem}"
+    assert proof_node["attrs"]["block_origin"] == "prose_synthesized"
+    assert proof_node["attrs"]["source_cue"] == "proof head detected near theorem statement"
+    assert hg["meta"]["block_origin_counts"]["alias_expanded"] == 1
+    assert hg["meta"]["block_origin_counts"]["prose_synthesized"] == 1
+
+
+def test_classical_block_annotations_accept_start_offset_keys():
+    blocks, _ = parse_latex_blocks(SAMPLE_LATEX)
+    theorem_block = next(b for b in blocks if b.env == "theorem")
+    hg = extract_paper_hypergraph_classical(
+        SAMPLE_LATEX,
+        "test-001",
+        block_annotations={
+            theorem_block.span[0]: {
+                "block_origin": "alias_expanded",
+                "source_cue": r"\newtheorem{thm}{Theorem}",
+            }
+        },
+    )
+    theorem_node = next(n for n in hg["nodes"] if n["id"].startswith("claim:theorem"))
+    assert theorem_node["attrs"]["block_origin"] == "alias_expanded"
 
 
 def test_classical_derivation_edge_links_theorem_to_proof():

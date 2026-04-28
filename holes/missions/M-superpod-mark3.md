@@ -147,6 +147,9 @@ replicable under automation):
   (`scripts/mark2`). It works.
 - Persistent homology / Forman-Ricci curvature on the corpus
   (phase-2 geometric work, lives downstream).
+- Closing the older-arXiv vintage gap via legacy TeX normalization.
+  That follow-on is tracked separately in
+  `futon6/holes/excursions/E-mfuton-silver.md`.
 - Cross-paper pattern-similarity propagation via
   `structural-similarity-index`.
 - Reconciling Mark 1 / 2 / 3 outputs into a single canonical
@@ -186,6 +189,7 @@ replicable under automation):
 | `M-apm-solutions` (futon3c) | Downstream consumer of FAISS retrieval |
 | `M-trip-journal` (futon5a) | Future consumer of typed pattern records |
 | `E-math-prototype-pilot` (futon3) | The hand-tagging pilot that produced this mission's pattern-set seed |
+| `E-mfuton-silver` (futon6) | Substrate-side implementation plan for lifting older arXiv source into the same theorem/proof block vocabulary mfuton already satisfies |
 
 ### Source material
 
@@ -199,6 +203,9 @@ replicable under automation):
 - `~/code/storage/mark2/outbox/results-mfuton-001..002/output/` —
   reference for the rich-hypergraph + reverse-morphogenesis
   output shape.
+- `futon6/holes/excursions/E-mfuton-silver.md` — follow-on plan for
+  using mfuton outputs as silver targets when improving legacy-source
+  normalization on older arXiv batches.
 - `futon3/holes/excursions/E-math-prototype-pilot.md` — the
   25-paper hand-tagging that produced the candidate pattern
   set.

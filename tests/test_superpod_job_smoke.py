@@ -95,6 +95,32 @@ def _write_arxiv_fixture(input_dir: Path) -> Path:
     return eprints
 
 
+def _write_legacy_alias_arxiv_fixture(input_dir: Path) -> Path:
+    input_dir.mkdir()
+    eprints = input_dir / "eprints"
+    eprints.mkdir()
+    (input_dir / "batch-001.jsonl").write_text(
+        json.dumps({
+            "id": "math/0102067v1",
+            "title": "A toy theorem",
+            "abstract": "We prove that $x=x$ by a short argument.",
+            "categories": ["math.CT"],
+            "date": "2001-02-07",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    (eprints / "math__0102067v1.tex").write_text(
+        "\\documentclass{article}\n"
+        "\\newtheorem{thm}{Theorem}\n"
+        "\\begin{document}\n"
+        "\\begin{thm}For every object $X$, $X=X$.\\end{thm}\n"
+        "\\begin{proof}Use the identity morphism $1_X:X\\to X$.\\end{proof}\n"
+        "\\end{document}\n",
+        encoding="utf-8",
+    )
+    return eprints
+
+
 def test_superpod_job_ct_pipeline_smoke(tmp_path: Path):
     root = Path(__file__).parent.parent
     outdir = tmp_path / "superpod-out"
@@ -173,6 +199,57 @@ def test_arxiv_paper_eprint_dir_feeds_all_paper_stages(tmp_path: Path):
     assert manifest["stage_status"]["paper_hypergraph"]["text_source_counts"]["eprint"] == 1
     assert manifest["stage9a_stats"]["paper_text_source"] == "eprints"
     assert manifest["stage9a_stats"]["eprint_text_used"] == 1
+    geometry = json.loads((outdir / "geometry.json").read_text(encoding="utf-8"))
+    assert isinstance(geometry, list)
+    assert geometry[0]["paper_id"].startswith("arxiv-")
+    assert "laplacian_summary" in geometry[0]
+    assert manifest["stage9a_stats"]["geometry_stats"]["papers"] == 1
+
+
+def test_arxiv_batch_local_eprints_auto_default(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    eprints = _write_arxiv_fixture(input_dir)
+    outdir = tmp_path / "arxiv-out"
+
+    run = _run_arxiv_superpod(root, outdir, input_dir, [])
+    assert run.returncode == 0, (
+        "superpod-job arxiv auto-default eprint run failed\n"
+        f"stdout:\n{run.stdout}\n"
+        f"stderr:\n{run.stderr}"
+    )
+    assert "defaulting --discover-terms-eprint-dir to batch-local eprints" in run.stdout
+
+    manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["discover_terms_eprint_dir"] == str(eprints.resolve())
+    assert manifest["paper_eprint_dir"] == str(eprints.resolve())
+    assert manifest["paper_eprint"]["source"] == "discover-terms-eprint-dir-default"
+    assert manifest["stage9a_stats"]["eprint_text_used"] == 1
+    assert (outdir / "geometry.json").exists()
+
+
+def test_arxiv_legacy_theorem_aliases_are_normalized(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_legacy_alias_arxiv_fixture(input_dir)
+    outdir = tmp_path / "arxiv-out"
+
+    run = _run_arxiv_superpod(root, outdir, input_dir, [])
+    assert run.returncode == 0, (
+        "superpod-job arxiv legacy alias run failed\n"
+        f"stdout:\n{run.stdout}\n"
+        f"stderr:\n{run.stderr}"
+    )
+
+    manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["stage_status"]["paper_hypergraph"]["normalized_papers"] == 1
+    assert manifest["stage_status"]["paper_hypergraph"]["normalization_rewrites"] >= 2
+
+    hypergraphs = json.loads((outdir / "paper-hypergraphs.json").read_text(encoding="utf-8"))
+    claim_nodes = [n for n in hypergraphs[0]["nodes"] if n["type"] == "claim"]
+    assert len(claim_nodes) == 1
+    assert claim_nodes[0]["attrs"]["block_origin"] == "alias_expanded"
+    assert "newtheorem alias thm->theorem" in claim_nodes[0]["attrs"]["source_cue"]
 
 
 def test_arxiv_paper_hg_eprint_dir_is_legacy_alias(tmp_path: Path):
@@ -219,3 +296,24 @@ def test_arxiv_paper_eprint_dir_fails_when_no_sources_match(tmp_path: Path):
     )
     assert run.returncode != 0
     assert "no eprint filenames matched the arXiv entities" in run.stderr
+
+
+def test_arxiv_moist_run_uses_paper_shape_prompt(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_arxiv_fixture(input_dir)
+    outdir = tmp_path / "arxiv-out"
+
+    run = _run_arxiv_superpod(root, outdir, input_dir, ["--moist-run"])
+    assert run.returncode == 0, (
+        "superpod-job arxiv moist-run failed\n"
+        f"stdout:\n{run.stdout}\n"
+        f"stderr:\n{run.stderr}"
+    )
+
+    prompt_path = outdir / "moist-prompts" / "stage3-pattern-tagging.jsonl"
+    first = json.loads(prompt_path.read_text(encoding="utf-8").splitlines()[0])
+    prompt = first["prompt"]
+    assert "mathematics paper-shape classifier" in prompt
+    assert "math-strategy/" in prompt
+    assert "math.stackexchange" not in prompt
