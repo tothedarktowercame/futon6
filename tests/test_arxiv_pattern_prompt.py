@@ -4,7 +4,7 @@ Validates:
 - Taxonomy loads from futon3/library/ flexiargs.
 - Prompt builder emits a coherent string with all 5 families and leaves.
 - Response parser accepts well-formed responses, rejects malformed ones,
-  and enforces clarification-meta's `:reason` requirement.
+  and repairs common local-LLM JSON/taxonomy drift without dropping records.
 """
 from __future__ import annotations
 
@@ -21,7 +21,21 @@ from futon6.arxiv_pattern_prompt import (
 )
 
 
-_LIBRARY_ROOT = Path.home() / "code" / "futon3" / "library"
+_LIBRARY_CANDIDATES = []
+if env_library := os.environ.get("FUTON3_LIBRARY"):
+    _LIBRARY_CANDIDATES.append(Path(env_library))
+if env_root := os.environ.get("FUTON3_ROOT"):
+    _LIBRARY_CANDIDATES.append(Path(env_root) / "library")
+_LIBRARY_CANDIDATES.extend(
+    [
+        Path.home() / "code" / "futon3" / "library",
+        Path(__file__).resolve().parents[2] / "futon3" / "library",
+    ]
+)
+_LIBRARY_ROOT = next(
+    (candidate for candidate in _LIBRARY_CANDIDATES if candidate.exists()),
+    _LIBRARY_CANDIDATES[0],
+)
 _HAS_LIBRARY = _LIBRARY_ROOT.exists()
 
 
@@ -136,7 +150,7 @@ class TestResponseParser(unittest.TestCase):
         self.assertTrue(result["ok"])
         self.assertEqual(result["leaf"], "uncertain")
 
-    def test_clarification_meta_requires_collapsed(self):
+    def test_clarification_meta_without_collapsed_is_repaired(self):
         raw = json.dumps({
             "family": "math-strategy/clarification-meta",
             "leaf": "",
@@ -145,8 +159,9 @@ class TestResponseParser(unittest.TestCase):
             "rationale": "Triple is single-axis.",
         })
         result = parse_arxiv_pattern_response(raw)
-        self.assertFalse(result["ok"])
-        self.assertIn("clarification-meta", result["error"])
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["collapsed"]["reason"], "other")
+        self.assertIn("clarification-meta-collapsed-synthesized", result["warnings"])
 
     def test_clarification_meta_with_collapsed_ok(self):
         raw = json.dumps({
@@ -172,14 +187,32 @@ class TestResponseParser(unittest.TestCase):
         self.assertFalse(result["ok"])
         self.assertIn("invalid-family", result["error"])
 
-    def test_invalid_leaf_rejected_for_strategic_family(self):
+    def test_invalid_leaf_is_normalized_to_uncertain_for_strategic_family(self):
         raw = json.dumps({
             "family": "math-strategy/existence-result",
             "leaf": "math-informal/imaginary-leaf",
+            "leaf_confidence": 0.9,
         })
         result = parse_arxiv_pattern_response(raw)
-        self.assertFalse(result["ok"])
-        self.assertIn("invalid-leaf", result["error"])
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["leaf"], "uncertain")
+        self.assertLessEqual(result["leaf_confidence"], 0.5)
+        self.assertIn("invalid-leaf-normalized", result["warnings"][0])
+
+    def test_tex_backslashes_in_rationale_are_repaired(self):
+        raw = (
+            '{'
+            '"family": "math-strategy/characterization-result",'
+            '"leaf": "math-informal/structural-characterization",'
+            '"family_confidence": 0.9,'
+            '"leaf_confidence": 0.8,'
+            '"rationale": "Classifies $(\\mathbb{T},\\mathsf{V})$-categories.",'
+            '"collapsed": null'
+            '}'
+        )
+        result = parse_arxiv_pattern_response(raw)
+        self.assertTrue(result["ok"])
+        self.assertIn("\\mathbb", result["rationale"])
 
     def test_no_json_in_response(self):
         result = parse_arxiv_pattern_response("Sorry, I cannot answer.")

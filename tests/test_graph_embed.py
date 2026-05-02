@@ -12,6 +12,7 @@ from futon6.graph_embed import (
     augment_graph,
     ThreadGNN,
     info_nce_loss,
+    _shutdown_dataloader_workers,
     train,
     save_tensor_cache,
     load_tensor_cache,
@@ -142,3 +143,24 @@ def test_train_with_tensor_cache(sample_hg, tmp_path):
         epochs=2, batch_size=2, verbose=False,
         tensor_cache_path=cache_path)
     assert emb2.shape == emb1.shape
+
+
+def test_shutdown_dataloader_workers_clears_loader_iterator():
+    class FakeIterator:
+        def __init__(self):
+            self.shutdown_calls = 0
+
+        def _shutdown_workers(self):
+            self.shutdown_calls += 1
+
+    class FakeLoader:
+        def __init__(self, iterator):
+            self._iterator = iterator
+
+    iterator = FakeIterator()
+    loader = FakeLoader(iterator)
+
+    _shutdown_dataloader_workers(loader)
+
+    assert iterator.shutdown_calls == 1
+    assert loader._iterator is None

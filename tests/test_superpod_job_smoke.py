@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import subprocess
 import sys
+from types import SimpleNamespace
 from pathlib import Path
 
 
@@ -70,28 +72,48 @@ def _run_arxiv_superpod(
     )
 
 
-def _write_arxiv_fixture(input_dir: Path) -> Path:
+def _load_superpod_job_module(root: Path):
+    spec = importlib.util.spec_from_file_location(
+        "superpod_job_for_test",
+        root / "scripts" / "superpod-job.py",
+    )
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _write_arxiv_fixture(input_dir: Path, *, count: int = 1) -> Path:
     input_dir.mkdir()
     eprints = input_dir / "eprints"
     eprints.mkdir()
-    (input_dir / "batch-001.jsonl").write_text(
-        json.dumps({
-            "id": "math/0102067v1",
-            "title": "A toy theorem",
-            "abstract": "We prove that $x=x$ by a short argument.",
-            "categories": ["math.CT"],
-            "date": "2001-02-07",
-        }) + "\n",
-        encoding="utf-8",
-    )
-    (eprints / "math__0102067v1.tex").write_text(
-        "\\documentclass{article}\n"
-        "\\begin{document}\n"
-        "\\begin{theorem}For every object $X$, $X=X$.\\end{theorem}\n"
-        "\\begin{proof}Use the identity morphism $1_X:X\\to X$.\\end{proof}\n"
-        "\\end{document}\n",
-        encoding="utf-8",
-    )
+    rows = []
+    for idx in range(count):
+        numeric = 102067 + idx
+        arxiv_id = f"math/{numeric:07d}v1"
+        rows.append(
+            json.dumps(
+                {
+                    "id": arxiv_id,
+                    "title": f"A toy theorem {idx + 1}",
+                    "abstract": f"We prove that $x_{idx + 1}=x_{idx + 1}$ by a short argument.",
+                    "categories": ["math.CT"],
+                    "date": "2001-02-07",
+                }
+            )
+        )
+        (eprints / f"math__{numeric:07d}v1.tex").write_text(
+            "\\documentclass{article}\n"
+            "\\begin{document}\n"
+            f"\\begin{{theorem}}For every object $X_{{{idx + 1}}}$, "
+            f"$X_{{{idx + 1}}}=X_{{{idx + 1}}}$.\\end{{theorem}}\n"
+            f"\\begin{{proof}}Use the identity morphism $1_{{X_{{{idx + 1}}}}}:"
+            f"X_{{{idx + 1}}}\\to X_{{{idx + 1}}}$.\\end{{proof}}\n"
+            "\\end{document}\n",
+            encoding="utf-8",
+        )
+    (input_dir / "batch-001.jsonl").write_text("\n".join(rows) + "\n", encoding="utf-8")
     return eprints
 
 
@@ -202,8 +224,13 @@ def test_arxiv_paper_eprint_dir_feeds_all_paper_stages(tmp_path: Path):
     geometry = json.loads((outdir / "geometry.json").read_text(encoding="utf-8"))
     assert isinstance(geometry, list)
     assert geometry[0]["paper_id"].startswith("arxiv-")
+    assert geometry[0]["n_claims"] == 1
+    assert geometry[0]["T_total"] >= 0
     assert "laplacian_summary" in geometry[0]
     assert manifest["stage9a_stats"]["geometry_stats"]["papers"] == 1
+    assert manifest["stage9a_stats"]["geometry_stats"]["with_claims"] == 1
+    assert manifest["stage9a_stats"]["geometry_source"] == "paper-hypergraphs"
+    assert manifest["stage_status"]["hypergraphs"]["geometry_with_claims"] == 1
 
 
 def test_arxiv_batch_local_eprints_auto_default(tmp_path: Path):
@@ -225,6 +252,8 @@ def test_arxiv_batch_local_eprints_auto_default(tmp_path: Path):
     assert manifest["paper_eprint_dir"] == str(eprints.resolve())
     assert manifest["paper_eprint"]["source"] == "discover-terms-eprint-dir-default"
     assert manifest["stage9a_stats"]["eprint_text_used"] == 1
+    assert manifest["stage9a_stats"]["geometry_source"] == "paper-hypergraphs"
+    assert manifest["stage9a_stats"]["geometry_stats"]["with_claims"] == 1
     assert (outdir / "geometry.json").exists()
 
 
@@ -250,6 +279,9 @@ def test_arxiv_legacy_theorem_aliases_are_normalized(tmp_path: Path):
     assert len(claim_nodes) == 1
     assert claim_nodes[0]["attrs"]["block_origin"] == "alias_expanded"
     assert "newtheorem alias thm->theorem" in claim_nodes[0]["attrs"]["source_cue"]
+    geometry = json.loads((outdir / "geometry.json").read_text(encoding="utf-8"))
+    assert geometry[0]["n_claims"] == 1
+    assert manifest["stage9a_stats"]["geometry_source"] == "paper-hypergraphs"
 
 
 def test_arxiv_paper_hg_eprint_dir_is_legacy_alias(tmp_path: Path):
@@ -317,3 +349,295 @@ def test_arxiv_moist_run_uses_paper_shape_prompt(tmp_path: Path):
     assert "mathematics paper-shape classifier" in prompt
     assert "math-strategy/" in prompt
     assert "math.stackexchange" not in prompt
+
+
+def test_stage3_existing_arxiv_chunks_reparse_when_parser_version_changes(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    module = _load_superpod_job_module(root)
+    outdir = tmp_path / "arxiv-out"
+    chunk_dir = outdir / "stage3-pattern-tags-chunks"
+    chunk_dir.mkdir(parents=True)
+    old_meta = {
+        "version": 1,
+        "total_pairs": 1,
+        "chunks_per_shard": 1,
+        "effective_chunks": 1,
+        "max_new_tokens": 192,
+    }
+    (chunk_dir / "meta.json").write_text(
+        json.dumps(old_meta, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    raw = (
+        '{'
+        '"family": "math-strategy/characterization-result",'
+        '"leaf": "math-informal/structural-characterization",'
+        '"family_confidence": 0.9,'
+        '"leaf_confidence": 0.8,'
+        '"rationale": "Classifies $(\\mathbb{T},\\mathsf{V})$-categories.",'
+        '"collapsed": null'
+        '}'
+    )
+    (chunk_dir / "chunk-000.json").write_text(
+        json.dumps(
+            [
+                {
+                    "entry_id": "arxiv-math/0102067v1",
+                    "status": "failed",
+                    "reason": "stage3-parse-error",
+                    "error": "json-decode: Invalid \\\\escape",
+                    "patterns": [],
+                    "raw": raw,
+                }
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    class FailIfCalledPool:
+        def run_stage3(self, items, batch_size):
+            raise AssertionError("Stage 3 LLM should not rerun existing chunks")
+
+    pairs = [
+        SimpleNamespace(
+            question=SimpleNamespace(title="A toy paper", body_text="abstract"),
+            answer=SimpleNamespace(body_text="abstract"),
+        )
+    ]
+    results = module.run_stage3_pattern_tagging_chunked(
+        pairs,
+        ["arxiv-math/0102067v1"],
+        outdir,
+        pipe=None,
+        tokenizer=None,
+        batch_size=1,
+        chunks_per_shard=1,
+        llm_pool=FailIfCalledPool(),
+        max_new_tokens=192,
+    )
+
+    assert results[0]["status"] == "ok"
+    assert "\\mathbb" in results[0]["rationale"]
+    meta = json.loads((chunk_dir / "meta.json").read_text(encoding="utf-8"))
+    assert meta["parse_version"] == "arxiv-paper-shapes-v2"
+    merged = json.loads((outdir / "pattern-tags.json").read_text(encoding="utf-8"))
+    assert merged[0]["status"] == "ok"
+
+
+def test_arxiv_paper_stage_resume_survives_missing_manifest_via_stage_sidecars(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_arxiv_fixture(input_dir)
+    outdir = tmp_path / "arxiv-out"
+
+    first = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--llm-stage5d-checkpoint-chunk-size",
+            "32",
+        ],
+    )
+    assert first.returncode == 0, (
+        "initial superpod-job arxiv eprint run failed\n"
+        f"stdout:\n{first.stdout}\n"
+        f"stderr:\n{first.stderr}"
+    )
+
+    manifest_path = outdir / "manifest.json"
+    manifest_path.unlink()
+    assert not manifest_path.exists()
+    assert (outdir / "stage-status" / "technique_ner.json").exists()
+    assert (outdir / "stage-status" / "paper_hypergraph.json").exists()
+
+    second = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--llm-stage5d-checkpoint-chunk-size",
+            "32",
+        ],
+    )
+    assert second.returncode == 0, (
+        "resumed superpod-job arxiv eprint run failed\n"
+        f"stdout:\n{second.stdout}\n"
+        f"stderr:\n{second.stderr}"
+    )
+    assert "Reusing existing techniques.json" in second.stdout
+    assert "Reusing existing paper-hypergraphs.json" in second.stdout
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["stage_status"]["technique_ner"]["resumed"] is True
+    assert manifest["stage_status"]["paper_hypergraph"]["resumed"] is True
+    assert manifest["stage_status"]["technique_ner"]["text_source_counts"]["eprint"] == 1
+    assert manifest["stage_status"]["paper_hypergraph"]["text_source_counts"]["eprint"] == 1
+
+    manifest_path.unlink()
+
+    third = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        ["--paper-eprint-dir", "eprints"],
+    )
+    assert third.returncode == 0, (
+        "repeat resumed superpod-job arxiv eprint run failed\n"
+        f"stdout:\n{third.stdout}\n"
+        f"stderr:\n{third.stderr}"
+    )
+    assert "Reusing existing techniques.json" in third.stdout
+    assert "Reusing existing paper-hypergraphs.json" in third.stdout
+
+
+def test_arxiv_paper_stage_resume_requires_stage_sidecar_provenance(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_arxiv_fixture(input_dir)
+    outdir = tmp_path / "arxiv-out"
+
+    first = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--llm-stage5d-checkpoint-chunk-size",
+            "32",
+        ],
+    )
+    assert first.returncode == 0, (
+        "initial superpod-job arxiv eprint run failed\n"
+        f"stdout:\n{first.stdout}\n"
+        f"stderr:\n{first.stderr}"
+    )
+
+    (outdir / "manifest.json").unlink()
+    (outdir / "stage-status" / "technique_ner.json").unlink()
+
+    second = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--llm-stage5d-checkpoint-chunk-size",
+            "32",
+        ],
+    )
+    assert second.returncode != 0
+    assert "Stage 5c cannot safely resume existing techniques.json" in second.stderr
+    assert "Move" in second.stderr
+    assert "fresh provenance" in second.stderr
+
+
+def test_arxiv_paper_stage5d_chunk_resume_reuses_completed_chunks(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_arxiv_fixture(input_dir, count=33)
+    outdir = tmp_path / "arxiv-out"
+
+    first = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--llm-stage5d-checkpoint-chunk-size",
+            "32",
+        ],
+    )
+    assert first.returncode == 0, (
+        "initial superpod-job arxiv stage5d run failed\n"
+        f"stdout:\n{first.stdout}\n"
+        f"stderr:\n{first.stderr}"
+    )
+
+    chunk_dir = outdir / "stage5d-paper-hypergraph-chunks"
+    assert (chunk_dir / "chunk-000.json").exists()
+    assert (chunk_dir / "chunk-001.json").exists()
+
+    (outdir / "manifest.json").unlink()
+    (outdir / "stage-status" / "paper_hypergraph.json").unlink()
+    (outdir / "paper-hypergraphs.json").unlink()
+    (chunk_dir / "chunk-001.json").unlink()
+
+    second = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--llm-stage5d-checkpoint-chunk-size",
+            "32",
+        ],
+    )
+    assert second.returncode == 0, (
+        "resumed superpod-job arxiv stage5d run failed\n"
+        f"stdout:\n{second.stdout}\n"
+        f"stderr:\n{second.stderr}"
+    )
+    assert "Stage 5d chunking: 2 chunks" in second.stdout
+    assert "chunk 1/2 exists (32 papers), skipping" in second.stdout
+    assert "chunk 2/2:" in second.stdout
+    assert "chunk 2/2 written: chunk-001.json" in second.stdout
+
+    manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["stage_status"]["paper_hypergraph"]["resumed_from_chunks"] is True
+    assert manifest["stage_status"]["paper_hypergraph"]["resumed_chunks"] == 1
+    assert manifest["stage_status"]["paper_hypergraph"]["resumed_papers"] == 32
+
+
+def test_arxiv_paper_stage5d_resume_keeps_existing_chunk_geometry_when_default_changes(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_arxiv_fixture(input_dir, count=33)
+    outdir = tmp_path / "arxiv-out"
+
+    first = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--llm-stage5d-checkpoint-chunk-size",
+            "32",
+        ],
+    )
+    assert first.returncode == 0, (
+        "initial superpod-job arxiv stage5d geometry run failed\n"
+        f"stdout:\n{first.stdout}\n"
+        f"stderr:\n{first.stderr}"
+    )
+
+    chunk_dir = outdir / "stage5d-paper-hypergraph-chunks"
+    (outdir / "manifest.json").unlink()
+    (outdir / "stage-status" / "paper_hypergraph.json").unlink()
+    (outdir / "paper-hypergraphs.json").unlink()
+    (chunk_dir / "chunk-001.json").unlink()
+
+    second = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        ["--paper-eprint-dir", "eprints"],
+    )
+    assert second.returncode == 0, (
+        "resumed superpod-job arxiv stage5d geometry-preserving run failed\n"
+        f"stdout:\n{second.stdout}\n"
+        f"stderr:\n{second.stderr}"
+    )
+    assert "Reusing existing Stage 5d checkpoint geometry (32 papers/chunk)" in second.stdout
+    assert "Stage 5d chunking: 2 chunks" in second.stdout
+    assert "chunk 1/2 exists (32 papers), skipping" in second.stdout

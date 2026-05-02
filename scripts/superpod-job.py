@@ -395,11 +395,42 @@ def derive_default_output_dir(site):
     return f"./{slug}-processed"
 
 
-def write_json(path, data):
-    """Write JSON with reasonable formatting."""
-    with open(path, "w") as f:
+def write_json(path, data, *, verbose=True):
+    """Write JSON atomically with reasonable formatting."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    with open(tmp, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False)
-    print(f"       Written {path} ({os.path.getsize(path) / 1e6:.1f} MB)")
+    tmp.replace(path)
+    if verbose:
+        print(f"       Written {path} ({os.path.getsize(path) / 1e6:.1f} MB)")
+
+
+def read_json_if_exists(path):
+    """Return parsed JSON or None when the file is absent/unreadable."""
+    path = Path(path)
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def stage_status_dir(outdir):
+    return Path(outdir) / "stage-status"
+
+
+def stage_status_path(outdir, stage_key):
+    return stage_status_dir(outdir) / f"{stage_key}.json"
+
+
+def write_stage_status(outdir, stage_key, record):
+    write_json(stage_status_path(outdir, stage_key), record, verbose=False)
+
+
+def read_stage_status(outdir, stage_key):
+    return read_json_if_exists(stage_status_path(outdir, stage_key))
 
 
 # --- Stage 5: NER term spotting + scope detection (CPU, classical) ---
@@ -1604,6 +1635,16 @@ def _is_arxiv_entry_id(entry_id) -> bool:
     return str(entry_id or "").startswith("arxiv-")
 
 
+_STAGE3_ARXIV_PARSE_VERSION = "arxiv-paper-shapes-v2"
+_STAGE3_SE_PARSE_VERSION = "se-patterns-v1"
+
+
+def _stage3_parse_version(entry_ids) -> str:
+    if any(_is_arxiv_entry_id(entry_id) for entry_id in entry_ids):
+        return _STAGE3_ARXIV_PARSE_VERSION
+    return _STAGE3_SE_PARSE_VERSION
+
+
 def _stage3_prompt_for_entry(entry_id, question_title, question_text, answer_text):
     if _is_arxiv_entry_id(entry_id):
         return build_arxiv_pattern_prompt(
@@ -1656,6 +1697,94 @@ def _stage3_result_from_raw(entry_id, raw):
     }
 
 
+def _can_reparse_stage3_chunks(existing_meta, expected_meta):
+    """True when only the parser version changed, not the LLM chunk geometry."""
+    if not isinstance(existing_meta, dict):
+        return False
+    old = dict(existing_meta)
+    new = dict(expected_meta)
+    old_parse_version = old.pop("parse_version", None)
+    new_parse_version = new.pop("parse_version", None)
+    return old == new and old_parse_version != new_parse_version
+
+
+def _reparse_stage3_chunks_from_raw(chunk_ranges, chunk_dir, entry_ids, expected_meta):
+    reparsed_total = 0
+    failed_total = 0
+    for chunk_idx, start, end in chunk_ranges:
+        chunk_path = chunk_dir / f"chunk-{chunk_idx:03d}.json"
+        if not chunk_path.exists():
+            raise RuntimeError(
+                f"Cannot reparse Stage 3 chunk with current parser: {chunk_path} "
+                "is missing. Remove stage3-pattern-tags-chunks to restart Stage 3."
+            )
+        with open(chunk_path) as f:
+            chunk_data = json.load(f)
+        if not isinstance(chunk_data, list):
+            raise RuntimeError(
+                f"Cannot reparse Stage 3 chunk with current parser: "
+                f"{chunk_path} is not a JSON list."
+            )
+        expected_len = end - start
+        if len(chunk_data) != expected_len:
+            raise RuntimeError(
+                f"Cannot reparse Stage 3 chunk with current parser: {chunk_path} "
+                f"has {len(chunk_data)} rows, expected {expected_len}."
+            )
+
+        reparsed_rows = []
+        for offset, old_row in enumerate(chunk_data):
+            if not isinstance(old_row, dict) or "raw" not in old_row:
+                raise RuntimeError(
+                    f"Cannot reparse Stage 3 chunk with current parser: "
+                    f"{chunk_path} row {offset} has no raw LLM response."
+                )
+            new_row = _stage3_result_from_raw(
+                entry_ids[start + offset],
+                old_row.get("raw"),
+            )
+            reparsed_rows.append(new_row)
+            reparsed_total += 1
+            if new_row.get("status") != "ok":
+                failed_total += 1
+
+        tmp_path = chunk_dir / f"chunk-{chunk_idx:03d}.reparse.tmp"
+        with open(tmp_path, "w") as f:
+            json.dump(reparsed_rows, f, ensure_ascii=False)
+        os.replace(tmp_path, chunk_path)
+
+    with open(chunk_dir / "meta.json", "w") as f:
+        json.dump(expected_meta, f, ensure_ascii=False, indent=2)
+    print(
+        "       Reparsed existing Stage 3 chunks with current parser: "
+        f"{reparsed_total - failed_total}/{reparsed_total} ok"
+    )
+
+
+def _shutdown_dataloader_workers(loader, iterator=None):
+    """Best-effort shutdown for multiprocessing DataLoader workers.
+
+    Long-lived local LLM worker processes create several DataLoader-backed
+    inference passes per job. Relying on interpreter shutdown to reap those
+    worker processes leaks multiprocessing semaphores and produces noisy
+    `resource_tracker` warnings at process exit.
+    """
+    target = iterator
+    if target is None and loader is not None:
+        target = getattr(loader, "_iterator", None)
+    shutdown = getattr(target, "_shutdown_workers", None)
+    if callable(shutdown):
+        try:
+            shutdown()
+        except Exception:
+            pass
+    if loader is not None and hasattr(loader, "_iterator"):
+        try:
+            loader._iterator = None
+        except Exception:
+            pass
+
+
 class _DatasetTextGenerationRunner:
     """Dataset/DataLoader-backed text generation without HF Pipeline.__call__.
 
@@ -1697,23 +1826,27 @@ class _DatasetTextGenerationRunner:
             num_workers=num_workers,
             collate_fn=_collate,
         )
-
-        outputs = []
-        device = self._input_device()
-        is_encoder_decoder = bool(
-            getattr(self.config, "is_encoder_decoder", False)
-        )
-        for prompt_batch in loader:
-            decoded = self._generate_prompt_batch(
-                prompt_batch,
-                max_new_tokens=max_new_tokens,
-                return_full_text=return_full_text,
-                is_encoder_decoder=is_encoder_decoder,
+        loader_iter = None
+        try:
+            outputs = []
+            device = self._input_device()
+            is_encoder_decoder = bool(
+                getattr(self.config, "is_encoder_decoder", False)
             )
-            outputs.extend(
-                [{"generated_text": text.strip()}] for text in decoded
-            )
-        return outputs
+            loader_iter = iter(loader)
+            for prompt_batch in loader_iter:
+                decoded = self._generate_prompt_batch(
+                    prompt_batch,
+                    max_new_tokens=max_new_tokens,
+                    return_full_text=return_full_text,
+                    is_encoder_decoder=is_encoder_decoder,
+                )
+                outputs.extend(
+                    [{"generated_text": text.strip()}] for text in decoded
+                )
+            return outputs
+        finally:
+            _shutdown_dataloader_workers(loader, loader_iter)
 
     def _empty_cuda_cache(self):
         try:
@@ -1882,6 +2015,7 @@ def _llm_worker_main(argv):
     parser.add_argument("--batch-size", type=int, required=True)
     parser.add_argument("--loader-workers", type=int, default=0)
     parser.add_argument("--max-input-chars", type=int, required=True)
+    parser.add_argument("--stage3-max-new-tokens", type=int, default=64)
     args = parser.parse_args(argv)
 
     with contextlib.redirect_stdout(sys.stderr):
@@ -1901,6 +2035,9 @@ def _llm_worker_main(argv):
         task_batch_size = int(msg.get("batch_size", args.batch_size))
         try:
             if task_type == "stage3":
+                task_max_new_tokens = int(
+                    msg.get("max_new_tokens", args.stage3_max_new_tokens)
+                )
                 prompts = [
                     _stage3_prompt_for_entry(
                         item["entry_id"],
@@ -1915,7 +2052,7 @@ def _llm_worker_main(argv):
                         prompts,
                         pipe=pipe,
                         tokenizer=tokenizer,
-                        max_new_tokens=64,
+                        max_new_tokens=task_max_new_tokens,
                         batch_size=task_batch_size,
                         loader_workers=args.loader_workers,
                     )
@@ -2033,6 +2170,7 @@ class _LlmGpuPool:
         batch_size: int,
         total_loader_workers: int,
         max_input_chars: int,
+        stage3_max_new_tokens: int = 64,
     ):
         if not gpu_devices:
             raise ValueError("gpu_devices must be non-empty")
@@ -2041,6 +2179,7 @@ class _LlmGpuPool:
         self.batch_size = int(batch_size)
         self.loader_workers = max(0, int(total_loader_workers) // len(gpu_devices))
         self.max_input_chars = int(max_input_chars)
+        self.stage3_max_new_tokens = int(stage3_max_new_tokens)
         self.procs = []
         self.next_task_id = 0
 
@@ -2062,6 +2201,8 @@ class _LlmGpuPool:
                 str(self.loader_workers),
                 "--max-input-chars",
                 str(self.max_input_chars),
+                "--stage3-max-new-tokens",
+                str(self.stage3_max_new_tokens),
             ]
             proc = subprocess.Popen(
                 cmd,
@@ -2157,7 +2298,12 @@ class _LlmGpuPool:
         return out
 
     def run_stage3(self, items: list[dict], batch_size: int) -> list[dict]:
-        return self.run("stage3", items, batch_size=batch_size)
+        return self.run(
+            "stage3",
+            items,
+            batch_size=batch_size,
+            max_new_tokens=self.stage3_max_new_tokens,
+        )
 
     def run_stage5c(self, texts: list[str], batch_size: int) -> list[list[TechniqueHit]]:
         payload = self.run("stage5c", texts, batch_size=batch_size)
@@ -2219,6 +2365,7 @@ def tag_patterns_llm_batch(
     progress_done_base=0,
     progress_total=None,
     progress_start_time=None,
+    max_new_tokens=64,
 ):
     """Tag QA pairs with reasoning patterns using a local LLM.
 
@@ -2272,7 +2419,7 @@ def tag_patterns_llm_batch(
     outputs = pipe(
         prompt_dataset,
         return_full_text=False,
-        max_new_tokens=64,
+        max_new_tokens=max_new_tokens,
         batch_size=batch_size,
         num_workers=loader_workers,
     )
@@ -2323,6 +2470,73 @@ def _stage3_chunk_ranges(total_items, chunks_per_shard):
     return ranges
 
 
+def _fixed_chunk_ranges(total_items, chunk_size):
+    """Return fixed-size [start, end) ranges for resumable chunking."""
+    if total_items <= 0:
+        return []
+    size = max(1, int(chunk_size))
+    ranges = []
+    start = 0
+    chunk_idx = 0
+    while start < total_items:
+        end = min(total_items, start + size)
+        ranges.append((chunk_idx, start, end))
+        start = end
+        chunk_idx += 1
+    return ranges
+
+
+def _all_chunk_files_present(chunk_ranges, chunk_dir):
+    return all(
+        (chunk_dir / f"chunk-{chunk_idx:03d}.json").exists()
+        for chunk_idx, _start, _end in chunk_ranges
+    )
+
+
+def _stage3_expected_meta(total, entry_ids, chunks_per_shard, max_new_tokens):
+    return {
+        "version": 1,
+        "total_pairs": total,
+        "chunks_per_shard": int(chunks_per_shard),
+        "effective_chunks": len(_stage3_chunk_ranges(total, chunks_per_shard)),
+        "max_new_tokens": int(max_new_tokens),
+        "parse_version": _stage3_parse_version(entry_ids),
+    }
+
+
+def _stage3_chunks_available_for_resume(
+    outdir,
+    entry_ids,
+    chunks_per_shard,
+    max_new_tokens,
+):
+    total = len(entry_ids)
+    chunk_ranges = _stage3_chunk_ranges(total, chunks_per_shard)
+    if not chunk_ranges:
+        return True
+    chunk_dir = outdir / "stage3-pattern-tags-chunks"
+    meta_path = chunk_dir / "meta.json"
+    if not meta_path.exists():
+        return False
+    try:
+        with open(meta_path) as f:
+            existing_meta = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return False
+    expected_meta = _stage3_expected_meta(
+        total,
+        entry_ids,
+        chunks_per_shard,
+        max_new_tokens,
+    )
+    if (
+        existing_meta != expected_meta
+        and not _can_reparse_stage3_chunks(existing_meta, expected_meta)
+    ):
+        return False
+    return _all_chunk_files_present(chunk_ranges, chunk_dir)
+
+
 def run_stage3_pattern_tagging_chunked(
     pairs,
     entry_ids,
@@ -2333,6 +2547,7 @@ def run_stage3_pattern_tagging_chunked(
     chunks_per_shard=10,
     loader_workers=0,
     llm_pool=None,
+    max_new_tokens=64,
 ):
     """Run Stage 3 in resumable chunks and merge to pattern-tags.json.
 
@@ -2348,21 +2563,29 @@ def run_stage3_pattern_tagging_chunked(
     chunk_dir.mkdir(parents=True, exist_ok=True)
 
     meta_path = chunk_dir / "meta.json"
-    expected_meta = {
-        "version": 1,
-        "total_pairs": total,
-        "chunks_per_shard": int(chunks_per_shard),
-        "effective_chunks": len(chunk_ranges),
-    }
+    expected_meta = _stage3_expected_meta(
+        total,
+        entry_ids,
+        chunks_per_shard,
+        max_new_tokens,
+    )
     if meta_path.exists():
         with open(meta_path) as f:
             existing_meta = json.load(f)
         if existing_meta != expected_meta:
-            raise RuntimeError(
-                f"Stage 3 chunk metadata mismatch in {meta_path}. "
-                "Remove stage3-pattern-tags-chunks to restart Stage 3 chunking "
-                "with new parameters."
-            )
+            if _can_reparse_stage3_chunks(existing_meta, expected_meta):
+                _reparse_stage3_chunks_from_raw(
+                    chunk_ranges,
+                    chunk_dir,
+                    entry_ids,
+                    expected_meta,
+                )
+            else:
+                raise RuntimeError(
+                    f"Stage 3 chunk metadata mismatch in {meta_path}. "
+                    "Remove stage3-pattern-tags-chunks to restart Stage 3 "
+                    "chunking with new parameters."
+                )
     else:
         with open(meta_path, "w") as f:
             json.dump(expected_meta, f, ensure_ascii=False, indent=2)
@@ -2372,7 +2595,7 @@ def run_stage3_pattern_tagging_chunked(
         return []
 
     print(f"       Stage 3 chunking: {len(chunk_ranges)} chunks "
-          f"(requested={chunks_per_shard})")
+          f"(requested={chunks_per_shard}, max_new_tokens={max_new_tokens})")
 
     pending_chunks = []
     completed_pairs = 0
@@ -2424,6 +2647,7 @@ def run_stage3_pattern_tagging_chunked(
                 progress_done_base=processed_this_run,
                 progress_total=remaining_pairs,
                 progress_start_time=run_start,
+                max_new_tokens=max_new_tokens,
             )
         processed_this_run += chunk_size
 
@@ -2785,6 +3009,33 @@ def _build_stage6_result(entity_id, question_id, raw_text):
     return record
 
 
+def _stage6_expected_meta(total, chunks_per_shard):
+    return {
+        "version": 2,
+        "total_pairs": total,
+        "chunks_per_shard": int(chunks_per_shard),
+        "effective_chunks": len(_stage3_chunk_ranges(total, chunks_per_shard)),
+    }
+
+
+def _stage6_chunks_available_for_resume(outdir, total, chunks_per_shard):
+    chunk_ranges = _stage3_chunk_ranges(total, chunks_per_shard)
+    if not chunk_ranges:
+        return True
+    chunk_dir = outdir / "stage6-reverse-morphogenesis-chunks"
+    meta_path = chunk_dir / "meta.json"
+    if not meta_path.exists():
+        return False
+    try:
+        with open(meta_path) as f:
+            existing_meta = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return False
+    if existing_meta != _stage6_expected_meta(total, chunks_per_shard):
+        return False
+    return _all_chunk_files_present(chunk_ranges, chunk_dir)
+
+
 def _parse_json_array_response(text):
     """Extract a JSON array from LLM response text."""
     start = text.find('[')
@@ -2921,12 +3172,7 @@ def run_stage6_reverse_morphogenesis_chunked(
     chunk_dir.mkdir(parents=True, exist_ok=True)
 
     meta_path = chunk_dir / "meta.json"
-    expected_meta = {
-        "version": 2,
-        "total_pairs": total,
-        "chunks_per_shard": int(chunks_per_shard),
-        "effective_chunks": len(chunk_ranges),
-    }
+    expected_meta = _stage6_expected_meta(total, chunks_per_shard)
     if meta_path.exists():
         with open(meta_path) as f:
             existing_meta = json.load(f)
@@ -3608,7 +3854,7 @@ def _compute_paper_geometry_row(paper):
     }
 
 
-def write_geometry_artifact(hg_path, outdir):
+def write_geometry_artifact(hg_path, outdir, source_label="hypergraphs"):
     with open(hg_path, "r", encoding="utf-8") as f:
         papers = json.load(f)
 
@@ -3621,6 +3867,8 @@ def write_geometry_artifact(hg_path, outdir):
     mean_t = (sum(valid) / len(valid)) if valid else 0.0
     stats = {
         "papers": len(rows),
+        "source": source_label,
+        "source_path": str(hg_path),
         "with_claims": len(valid),
         "empty_claim_papers": len(rows) - len(valid),
         "mean_T_total": round(float(mean_t), 4),
@@ -3628,6 +3876,20 @@ def write_geometry_artifact(hg_path, outdir):
         "max_T_total": round(max(valid), 4) if valid else None,
     }
     return stats, out_path
+
+
+def _arxiv_geometry_source_path(outdir, fallback_hg_path):
+    """Prefer Stage 5d paper hypergraphs for arXiv claim geometry.
+
+    Stage 9a's arXiv `hypergraphs.json` is an expression/term/scope graph and
+    intentionally does not contain claim nodes. Stage 5d's
+    `paper-hypergraphs.json` is the claim-bearing graph, so geometry must use it
+    when present.
+    """
+    paper_hg_path = Path(outdir) / "paper-hypergraphs.json"
+    if paper_hg_path.is_file():
+        return paper_hg_path, "paper-hypergraphs"
+    return Path(fallback_hg_path), "hypergraphs"
 
 
 # ---------------------------------------------------------------------------
@@ -4481,8 +4743,15 @@ def print_dry_run(args):
         cmd_parts.append(f"  --llm-stage3-batch-size {args.llm_stage3_batch_size}")
     if args.llm_stage3_chunks_per_shard != 10:
         cmd_parts.append(f"  --llm-stage3-chunks-per-shard {args.llm_stage3_chunks_per_shard}")
+    if args.llm_stage3_max_new_tokens != 64:
+        cmd_parts.append(f"  --llm-stage3-max-new-tokens {args.llm_stage3_max_new_tokens}")
     if args.llm_stage5d_batch_size != 4:
         cmd_parts.append(f"  --llm-stage5d-batch-size {args.llm_stage5d_batch_size}")
+    if args.llm_stage5d_checkpoint_chunk_size != 1000:
+        cmd_parts.append(
+            "  --llm-stage5d-checkpoint-chunk-size "
+            f"{args.llm_stage5d_checkpoint_chunk_size}"
+        )
     if args.llm_stage6_batch_size != 64:
         cmd_parts.append(f"  --llm-stage6-batch-size {args.llm_stage6_batch_size}")
     if args.llm_stage6_chunks_per_shard != 10:
@@ -4672,9 +4941,14 @@ def main():
                         help="LLM batch size for Stage 3 pattern tagging")
     parser.add_argument("--llm-stage3-chunks-per-shard", type=int, default=10,
                         help="Stage 3 output chunks per shard for resumable runs (default: 10)")
+    parser.add_argument("--llm-stage3-max-new-tokens", type=int, default=64,
+                        help="Maximum generated tokens for each Stage 3 pattern-tagging JSON response (default: 64)")
     parser.add_argument("--llm-stage5d-batch-size", type=int, default=4,
                         help="LLM batch size for Stage 5d paper hypergraph "
                              "implicit-edge extraction (default: 4)")
+    parser.add_argument("--llm-stage5d-checkpoint-chunk-size", type=int, default=1000,
+                        help="Checkpoint chunk size for resumable Stage 5d paper "
+                             "hypergraph output (default: 1000 papers)")
     parser.add_argument("--llm-stage6-batch-size", type=int, default=64,
                         help="LLM batch size for Stage 6 reverse morphogenesis "
                              "(default: 64)")
@@ -4818,6 +5092,10 @@ def main():
     # Health gates
     parser.add_argument("--preflight", action="store_true",
                         help="Strict health gates: abort on warnings (use for pre-flight validation runs)")
+    parser.add_argument("--gate-stage3-parse-rate-min", type=float, default=0.98,
+                        help="Minimum acceptable Stage 3 arXiv pattern-tag parse rate before warning/fail in preflight (default: 0.98)")
+    parser.add_argument("--gate-stage9a-geometry-claim-rate-min", type=float, default=0.01,
+                        help="Minimum acceptable arXiv Stage 9a geometry claim-paper rate before warning/fail in preflight (default: 0.01)")
     parser.add_argument("--gate-stage6-parse-rate-min", type=float, default=0.80,
                         help="Minimum acceptable Stage 6 parse_rate before warning/fail in preflight (default: 0.80)")
     parser.add_argument("--stage6-backend", type=str, default="local-llm",
@@ -4931,14 +5209,22 @@ def main():
         parser.error("--llm-stage3-batch-size must be > 0")
     if args.llm_stage3_chunks_per_shard <= 0:
         parser.error("--llm-stage3-chunks-per-shard must be > 0")
+    if args.llm_stage3_max_new_tokens <= 0:
+        parser.error("--llm-stage3-max-new-tokens must be > 0")
     if args.llm_stage5d_batch_size <= 0:
         parser.error("--llm-stage5d-batch-size must be > 0")
+    if args.llm_stage5d_checkpoint_chunk_size <= 0:
+        parser.error("--llm-stage5d-checkpoint-chunk-size must be > 0")
     if args.llm_stage6_batch_size <= 0:
         parser.error("--llm-stage6-batch-size must be > 0")
     if args.llm_stage6_chunks_per_shard <= 0:
         parser.error("--llm-stage6-chunks-per-shard must be > 0")
     if args.llm_loader_workers < 0:
         parser.error("--llm-loader-workers must be >= 0")
+    if not (0.0 <= args.gate_stage3_parse_rate_min <= 1.0):
+        parser.error("--gate-stage3-parse-rate-min must be in [0,1]")
+    if not (0.0 <= args.gate_stage9a_geometry_claim_rate_min <= 1.0):
+        parser.error("--gate-stage9a-geometry-claim-rate-min must be in [0,1]")
     if args.llm_gpu_workers < 0:
         parser.error("--llm-gpu-workers must be >= 0")
     if args.graph_embed_batch_size <= 0:
@@ -5136,6 +5422,7 @@ def main():
         if extra:
             record.update(extra)
         stage_status[stage_key] = record
+        write_stage_status(outdir, stage_key, record)
 
     # Health gate: warn or abort depending on --preflight
     def health_gate(stage: str, condition: bool, message: str):
@@ -5340,6 +5627,7 @@ def main():
                 batch_size=max_batch,
                 total_loader_workers=args.llm_loader_workers,
                 max_input_chars=args.technique_ner_llm_max_chars,
+                stage3_max_new_tokens=args.llm_stage3_max_new_tokens,
             )
             atexit.register(_close_llm_gpu_pool)
         return llm_gpu_pool
@@ -5371,15 +5659,27 @@ def main():
         print(f"\n[Stage 3/{n_stages}] LLM pattern tagging ({args.llm_model}, "
               f"batch={args.llm_stage3_batch_size}, "
               f"chunks={args.llm_stage3_chunks_per_shard}, "
+              f"max_new_tokens={args.llm_stage3_max_new_tokens}, "
               f"loader_workers={args.llm_loader_workers})...")
-        llm_pool = _ensure_llm_gpu_pool()
-        if llm_pool is None:
-            pipe, tok = _ensure_llm_pipeline()
-        else:
+        entry_ids = [e["entity/id"] for e in entities]
+        if _stage3_chunks_available_for_resume(
+            outdir,
+            entry_ids,
+            args.llm_stage3_chunks_per_shard,
+            args.llm_stage3_max_new_tokens,
+        ):
+            print("       Stage 3 chunks complete; reusing without loading LLM")
+            llm_pool = None
             pipe = tok = None
+        else:
+            llm_pool = _ensure_llm_gpu_pool()
+            if llm_pool is None:
+                pipe, tok = _ensure_llm_pipeline()
+            else:
+                pipe = tok = None
         pattern_tags = run_stage3_pattern_tagging_chunked(
             pairs,
-            entry_ids=[e["entity/id"] for e in entities],
+            entry_ids=entry_ids,
             outdir=outdir,
             pipe=pipe,
             tokenizer=tok,
@@ -5387,18 +5687,37 @@ def main():
             chunks_per_shard=args.llm_stage3_chunks_per_shard,
             loader_workers=args.llm_loader_workers,
             llm_pool=llm_pool,
+            max_new_tokens=args.llm_stage3_max_new_tokens,
         )
         print(f"       Stage 3 done in {time.time()-t3:.0f}s")
 
         # Pattern frequency summary
         from collections import Counter
         freq = Counter()
+        stage3_status_counts = Counter(r.get("status", "failed") for r in pattern_tags)
+        stage3_ok = stage3_status_counts.get("ok", 0)
+        stage3_parse_rate = stage3_ok / len(pattern_tags) if pattern_tags else 0.0
         for pt in pattern_tags:
             freq.update(pt["patterns"])
+        print(f"       Pattern tags parsed: {stage3_ok}/{len(pattern_tags)} "
+              f"({stage3_parse_rate:.1%})")
         print(f"       Pattern frequency (top 10):")
         for name, count in freq.most_common(10):
             print(f"         {name}: {count}")
-        mark_stage("llm_pattern_tags", "completed", tagged=len(pattern_tags))
+        health_gate(
+            "Stage 3",
+            args.arxiv_jsonl and stage3_parse_rate < args.gate_stage3_parse_rate_min,
+            f"pattern-tag parse rate {stage3_parse_rate:.1%} < "
+            f"{args.gate_stage3_parse_rate_min:.0%} threshold",
+        )
+        mark_stage(
+            "llm_pattern_tags",
+            "completed",
+            tagged=len(pattern_tags),
+            parsed_ok=int(stage3_ok),
+            parse_rate=round(float(stage3_parse_rate), 4),
+            status_counts=dict(stage3_status_counts),
+        )
     else:
         print(f"\n[Stage 3/{n_stages}] Skipped (--skip-llm)")
         mark_stage("llm_pattern_tags", "skipped", skip_reason="--skip-llm")
@@ -5536,14 +5855,80 @@ def main():
 
     def _previous_stage_status(stage_key):
         nonlocal previous_manifest
+        sidecar = read_stage_status(outdir, stage_key)
+        if isinstance(sidecar, dict):
+            return sidecar
         if previous_manifest is None:
-            manifest_path = outdir / "manifest.json"
-            try:
-                with open(manifest_path, encoding="utf-8") as f:
-                    previous_manifest = json.load(f)
-            except (OSError, json.JSONDecodeError):
-                previous_manifest = {}
+            previous_manifest = read_json_if_exists(outdir / "manifest.json") or {}
         return (previous_manifest.get("stage_status", {}) or {}).get(stage_key, {}) or {}
+
+    def _resume_recompute_error(stage_name, artifact_path, reason):
+        raise RuntimeError(
+            f"{stage_name} cannot safely resume existing {artifact_path.name}: "
+            f"{reason}. Move {artifact_path} aside and rerun so the stage "
+            "recomputes with fresh provenance."
+        )
+
+    def _validate_resumable_json_array(
+        stage_name,
+        stage_key,
+        artifact_path,
+        expected_ids,
+        *,
+        id_field,
+    ):
+        payload = read_json_if_exists(artifact_path)
+        if payload is None:
+            _resume_recompute_error(
+                stage_name,
+                artifact_path,
+                "artifact is unreadable or not valid JSON",
+            )
+        if not isinstance(payload, list):
+            _resume_recompute_error(
+                stage_name,
+                artifact_path,
+                f"expected JSON array but found {type(payload).__name__}",
+            )
+        if len(payload) != len(expected_ids):
+            _resume_recompute_error(
+                stage_name,
+                artifact_path,
+                f"row count {len(payload)} does not match entity count {len(expected_ids)}",
+            )
+        actual_ids = []
+        for idx, row in enumerate(payload):
+            if not isinstance(row, dict):
+                _resume_recompute_error(
+                    stage_name,
+                    artifact_path,
+                    f"row {idx} is {type(row).__name__}, expected object",
+                )
+            actual_id = row.get(id_field)
+            if not actual_id:
+                _resume_recompute_error(
+                    stage_name,
+                    artifact_path,
+                    f"row {idx} is missing required id field {id_field!r}",
+                )
+            actual_ids.append(actual_id)
+        if actual_ids != expected_ids:
+            _resume_recompute_error(
+                stage_name,
+                artifact_path,
+                f"{id_field} values do not align with current entities",
+            )
+
+        prior_status = _previous_stage_status(stage_key)
+        if paper_eprint_path is not None:
+            counts = prior_status.get("text_source_counts")
+            if not isinstance(counts, dict) or "eprint" not in counts:
+                _resume_recompute_error(
+                    stage_name,
+                    artifact_path,
+                    "stage-status provenance is missing text_source_counts for --paper-eprint-dir",
+                )
+        return prior_status
 
     def _require_paper_eprint_usage(stage_name, counts, produced):
         if paper_eprint_path is None or not produced:
@@ -5555,6 +5940,13 @@ def main():
             f"{paper_eprint_path}, but loaded zero eprints; refusing to "
             "write abstract-only paper-stage output"
         )
+
+    def _resumed_stage_extras(prior_status):
+        return {
+            key: value
+            for key, value in prior_status.items()
+            if key not in {"status", "resumed"}
+        }
 
     def _paper_text_for(entity, pair):
         """Return (text, source, eprint_meta) for a paper stage.
@@ -5588,14 +5980,23 @@ def main():
         techniques_path = outdir / "techniques.json"
         if techniques_path.exists():
             print(f"       Reusing existing {techniques_path.name}")
-            prev_counts = _previous_stage_status("technique_ner").get(
-                "text_source_counts", {}
+            prev_status = _validate_resumable_json_array(
+                "Stage 5c",
+                "technique_ner",
+                techniques_path,
+                [entity["entity/id"] for entity in entities],
+                id_field="paper_id",
             )
+            prev_counts = prev_status.get("text_source_counts", {})
             _require_paper_eprint_usage(
                 "Stage 5c", prev_counts, produced=True
             )
-            mark_stage("technique_ner", "completed", resumed=True,
-                       text_source_counts=prev_counts)
+            mark_stage(
+                "technique_ner",
+                "completed",
+                resumed=True,
+                **_resumed_stage_extras(prev_status),
+            )
         else:
             arm = args.technique_ner_arm
             concept_vocab: set[str] = set()
@@ -5729,6 +6130,18 @@ def main():
                 "Stage 5c", text_source_counts, produced=bool(records)
             )
 
+            stage5c_record = {
+                "n_papers": n_papers,
+                "arm": arm,
+                "arm_counts": arm_counts,
+                "text_source_counts": text_source_counts,
+                "eprint_status_counts": eprint_status_counts,
+            }
+            write_stage_status(
+                outdir,
+                "technique_ner",
+                {"status": "completed", **stage5c_record},
+            )
             with open(techniques_path, "w") as f:
                 json.dump(records, f, ensure_ascii=False, indent=2)
             print(f"       Saved {techniques_path.name} "
@@ -5741,10 +6154,7 @@ def main():
             if paper_eprint_path is not None:
                 print(f"       Eprint load status: {eprint_status_counts}")
             print(f"       Stage 5c done in {time.time()-t5c:.0f}s")
-            mark_stage("technique_ner", "completed",
-                       n_papers=n_papers, arm=arm, arm_counts=arm_counts,
-                       text_source_counts=text_source_counts,
-                       eprint_status_counts=eprint_status_counts)
+            mark_stage("technique_ner", "completed", **stage5c_record)
     else:
         print(f"\n[Stage 5c/{n_stages}] Skipped (--skip-technique-ner)")
         mark_stage("technique_ner", "skipped", skip_reason="--skip-technique-ner")
@@ -5759,20 +6169,99 @@ def main():
         print(f"\n[Stage 5d/{n_stages}] Paper hypergraph "
               f"(arm={args.paper_hypergraph_arm}, "
               f"llm_batch={args.llm_stage5d_batch_size}, "
+              f"checkpoint_chunk={args.llm_stage5d_checkpoint_chunk_size}, "
               f"loader_workers={args.llm_loader_workers})...")
         hg_path = outdir / "paper-hypergraphs.json"
         if hg_path.exists():
             print(f"       Reusing existing {hg_path.name}")
-            prev_counts = _previous_stage_status("paper_hypergraph").get(
-                "text_source_counts", {}
+            prev_status = _validate_resumable_json_array(
+                "Stage 5d",
+                "paper_hypergraph",
+                hg_path,
+                [entity["entity/id"] for entity in entities],
+                id_field="paper_id",
             )
+            prev_counts = prev_status.get("text_source_counts", {})
             _require_paper_eprint_usage(
                 "Stage 5d", prev_counts, produced=True
             )
-            mark_stage("paper_hypergraph", "completed", resumed=True,
-                       text_source_counts=prev_counts)
+            mark_stage(
+                "paper_hypergraph",
+                "completed",
+                resumed=True,
+                **_resumed_stage_extras(prev_status),
+            )
         else:
             arm = args.paper_hypergraph_arm
+            n_papers = len(pairs)
+            checkpoint_chunk_size = max(1, args.llm_stage5d_checkpoint_chunk_size)
+            chunk_ranges = _fixed_chunk_ranges(n_papers, checkpoint_chunk_size)
+            chunk_dir = outdir / "stage5d-paper-hypergraph-chunks"
+            chunk_dir.mkdir(parents=True, exist_ok=True)
+
+            meta_path = chunk_dir / "meta.json"
+            expected_meta = {
+                "version": 1,
+                "total_papers": n_papers,
+                "checkpoint_chunk_size": int(checkpoint_chunk_size),
+                "effective_chunks": len(chunk_ranges),
+                "arm": arm,
+                "llm_batch_size": int(args.llm_stage5d_batch_size),
+                "prose_cap_chars": int(args.paper_hypergraph_prose_cap),
+                "hg_cap_nodes": int(args.paper_hypergraph_node_cap),
+                "legacy_tex_normalization": True,
+            }
+            if meta_path.exists():
+                with open(meta_path) as f:
+                    existing_meta = json.load(f)
+                compatibility_keys = {
+                    "version",
+                    "total_papers",
+                    "arm",
+                    "llm_batch_size",
+                    "prose_cap_chars",
+                    "hg_cap_nodes",
+                    "legacy_tex_normalization",
+                }
+                if any(existing_meta.get(key) != expected_meta.get(key) for key in compatibility_keys):
+                    raise RuntimeError(
+                        f"Stage 5d chunk metadata mismatch in {meta_path}. "
+                        "Remove stage5d-paper-hypergraph-chunks to restart Stage 5d "
+                        "chunking with new parameters."
+                    )
+                existing_chunk_size = int(existing_meta.get("checkpoint_chunk_size", 0))
+                if existing_chunk_size <= 0:
+                    raise RuntimeError(
+                        f"Stage 5d chunk metadata in {meta_path} is missing a valid "
+                        "checkpoint_chunk_size."
+                    )
+                if existing_chunk_size != checkpoint_chunk_size:
+                    print(
+                        "       Reusing existing Stage 5d checkpoint geometry "
+                        f"({existing_chunk_size} papers/chunk) from {meta_path.name}"
+                    )
+                    checkpoint_chunk_size = existing_chunk_size
+                    chunk_ranges = _fixed_chunk_ranges(n_papers, checkpoint_chunk_size)
+                expected_meta = {
+                    "version": 1,
+                    "total_papers": n_papers,
+                    "checkpoint_chunk_size": int(checkpoint_chunk_size),
+                    "effective_chunks": len(chunk_ranges),
+                    "arm": arm,
+                    "llm_batch_size": int(args.llm_stage5d_batch_size),
+                    "prose_cap_chars": int(args.paper_hypergraph_prose_cap),
+                    "hg_cap_nodes": int(args.paper_hypergraph_node_cap),
+                    "legacy_tex_normalization": True,
+                }
+                if existing_meta != expected_meta:
+                    raise RuntimeError(
+                        f"Stage 5d chunk metadata mismatch in {meta_path}. "
+                        "Remove stage5d-paper-hypergraph-chunks to restart Stage 5d "
+                        "chunking with new parameters."
+                    )
+            else:
+                with open(meta_path, "w") as f:
+                    json.dump(expected_meta, f, ensure_ascii=False, indent=2)
 
             # Concept vocabulary from Stage 5
             concept_by_entity: dict[str, list[str]] = {}
@@ -5828,8 +6317,149 @@ def main():
                 else:
                     print("       Stage 5d using shared LLM GPU worker pool")
 
-            hypergraphs = [None] * len(pairs)
-            n_papers = len(pairs)
+            completed_chunks = 0
+            completed_papers = 0
+            hypergraphs = []
+            if chunk_ranges:
+                print(f"       Stage 5d chunking: {len(chunk_ranges)} chunks "
+                      f"(checkpoint_chunk_size={checkpoint_chunk_size})")
+
+                pending_chunks = []
+                for chunk_idx, start, end in chunk_ranges:
+                    chunk_size = end - start
+                    chunk_path = chunk_dir / f"chunk-{chunk_idx:03d}.json"
+                    if chunk_path.exists():
+                        completed_chunks += 1
+                        completed_papers += chunk_size
+                        print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)} exists "
+                              f"({chunk_size} papers), skipping")
+                        continue
+                    pending_chunks.append((chunk_idx, start, end, chunk_path))
+
+                remaining_papers = n_papers - completed_papers
+                if remaining_papers > 0:
+                    print(f"       Stage 5d remaining this run: "
+                          f"{remaining_papers}/{n_papers} papers")
+
+                t_batch = time.time()
+                processed_this_run = 0
+                for chunk_idx, start, end, chunk_path in pending_chunks:
+                    chunk_size = end - start
+                    print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)}: "
+                          f"papers[{start}:{end}] ({chunk_size})")
+                    chunk_texts = []
+                    chunk_classical_hgs = []
+                    chunk_results = []
+                    for i in range(start, end):
+                        entity = entities[i]
+                        pair = pairs[i]
+                        eid = entity["entity/id"]
+                        paper_text, text_source, _eprint_meta = _paper_text_for(entity, pair)
+                        concepts_p = concept_by_entity.get(eid, [])
+                        techniques_p = technique_by_entity.get(eid, [])
+                        normalization = None
+                        paper_text_stage5d = paper_text
+                        block_annotations = None
+                        if text_source == "eprint":
+                            normalization = normalize_legacy_tex(paper_text, paper_id=eid)
+                            paper_text_stage5d = normalization.rewritten_text
+                            block_annotations = normalization.block_annotations
+                        classical_hg = (
+                            extract_paper_hypergraph_classical(
+                                paper_text_stage5d, eid,
+                                concepts=concepts_p,
+                                techniques=techniques_p,
+                                block_annotations=block_annotations,
+                            )
+                            if arm in ("classical", "both")
+                            else {"paper_id": eid, "nodes": [], "edges": [],
+                                  "sectional": [], "meta": {}}
+                        )
+                        if normalization is not None and normalization.rewrites:
+                            classical_hg.setdefault("meta", {})["normalization"] = {
+                                "rewrites": len(normalization.rewrites),
+                                "aliases": dict(normalization.alias_map),
+                            }
+                        if arm in ("llm", "both"):
+                            chunk_texts.append(paper_text_stage5d)
+                            chunk_classical_hgs.append(classical_hg)
+                        else:
+                            chunk_results.append(classical_hg)
+
+                    if arm in ("llm", "both"):
+                        if stage5d_llm_pool is not None:
+                            llm_batches = stage5d_llm_pool.run_stage5d(
+                                chunk_texts,
+                                chunk_classical_hgs,
+                                prose_cap_chars=args.paper_hypergraph_prose_cap,
+                                hg_cap_nodes=args.paper_hypergraph_node_cap,
+                                batch_size=args.llm_stage5d_batch_size,
+                            )
+                        else:
+                            llm_batches = extract_paper_hypergraph_llm_batch(
+                                chunk_texts,
+                                chunk_classical_hgs,
+                                pipe=pipe_5d,
+                                tokenizer=tok_5d,
+                                prose_cap_chars=args.paper_hypergraph_prose_cap,
+                                hg_cap_nodes=args.paper_hypergraph_node_cap,
+                                batch_size=args.llm_stage5d_batch_size,
+                                loader_workers=args.llm_loader_workers,
+                            )
+                        for classical_hg, llm_edges in zip(chunk_classical_hgs, llm_batches):
+                            chunk_results.append(
+                                merge_paper_hypergraphs(classical_hg, llm_edges)
+                            )
+
+                    write_json(chunk_path, chunk_results, verbose=False)
+                    processed_this_run += chunk_size
+                    elapsed = time.time() - t_batch
+                    rate = processed_this_run / elapsed if elapsed > 0 else 0
+                    eta = max(remaining_papers - processed_this_run, 0) / rate if rate > 0 else 0
+                    print(f"       [{processed_this_run}/{remaining_papers}] {rate:.1f} papers/s, "
+                          f"ETA {eta/60:.0f} min")
+                    print(f"       chunk {chunk_idx+1}/{len(chunk_ranges)} written: "
+                          f"{chunk_path.name}")
+
+                hypergraphs = []
+                for chunk_idx, start, end in chunk_ranges:
+                    chunk_path = chunk_dir / f"chunk-{chunk_idx:03d}.json"
+                    if not chunk_path.exists():
+                        raise RuntimeError(
+                            f"Missing Stage 5d chunk file: {chunk_path}. "
+                            "Re-run Stage 5d or remove chunks to restart."
+                        )
+                    with open(chunk_path) as f:
+                        chunk_data = json.load(f)
+                    if not isinstance(chunk_data, list):
+                        raise RuntimeError(
+                            f"Invalid Stage 5d chunk payload (not a list): {chunk_path}"
+                        )
+                    expected_chunk_size = end - start
+                    if len(chunk_data) != expected_chunk_size:
+                        raise RuntimeError(
+                            f"Stage 5d chunk length mismatch in {chunk_path}: "
+                            f"chunk={len(chunk_data)} expected={expected_chunk_size}"
+                        )
+                    for offset, final_hg in enumerate(chunk_data):
+                        if not isinstance(final_hg, dict):
+                            raise RuntimeError(
+                                f"Invalid Stage 5d chunk row (not a dict): {chunk_path}"
+                            )
+                        expected_paper_id = entities[start + offset]["entity/id"]
+                        if final_hg.get("paper_id") != expected_paper_id:
+                            raise RuntimeError(
+                                f"Stage 5d chunk paper_id mismatch in {chunk_path}: "
+                                f"expected={expected_paper_id} got={final_hg.get('paper_id')}"
+                            )
+                    hypergraphs.extend(chunk_data)
+
+                if len(hypergraphs) != n_papers:
+                    raise RuntimeError(
+                        f"Stage 5d merge length mismatch: merged={len(hypergraphs)} "
+                        f"expected={n_papers}"
+                    )
+
             edge_provenance = {"classical": 0, "llm": 0, "both": 0}
             paper_hg_metrics = {
                 "n_blocks_total": 0,
@@ -5837,65 +6467,25 @@ def main():
                 "normalized_papers": 0,
                 "normalization_rewrites": 0,
             }
-            text_source_counts = {"eprint": 0, "abstract": 0}
-            eprint_status_counts = {}
-            t_batch = time.time()
-            llm_chunk_size = max(1, args.llm_stage5d_batch_size * 8)
-            pending_texts = []
-            pending_hgs = []
-            pending_items = []
-
-            def _record_paper_hg(idx, final_hg):
+            for final_hg in hypergraphs:
                 for e in final_hg["edges"]:
                     prov = e.get("attrs", {}).get("provenance", "classical")
                     edge_provenance[prov] = edge_provenance.get(prov, 0) + 1
-
-                paper_hg_metrics["n_blocks_total"] += (
-                    final_hg.get("meta", {}).get("n_blocks", 0)
-                )
-                if final_hg.get("meta", {}).get("has_theorem_blocks"):
+                meta = final_hg.get("meta", {})
+                paper_hg_metrics["n_blocks_total"] += meta.get("n_blocks", 0)
+                if meta.get("has_theorem_blocks"):
                     paper_hg_metrics["n_with_claim_blocks"] += 1
-                hypergraphs[idx] = final_hg
-
-            def _flush_paper_hg_llm(final_flush=False):
-                if not pending_items:
-                    return
-                if stage5d_llm_pool is not None:
-                    llm_batches = stage5d_llm_pool.run_stage5d(
-                        pending_texts,
-                        pending_hgs,
-                        prose_cap_chars=args.paper_hypergraph_prose_cap,
-                        hg_cap_nodes=args.paper_hypergraph_node_cap,
-                        batch_size=args.llm_stage5d_batch_size,
+                normalization_meta = meta.get("normalization")
+                if isinstance(normalization_meta, dict):
+                    paper_hg_metrics["normalized_papers"] += 1
+                    paper_hg_metrics["normalization_rewrites"] += int(
+                        normalization_meta.get("rewrites", 0) or 0
                     )
-                else:
-                    llm_batches = extract_paper_hypergraph_llm_batch(
-                        pending_texts,
-                        pending_hgs,
-                        pipe=pipe_5d,
-                        tokenizer=tok_5d,
-                        prose_cap_chars=args.paper_hypergraph_prose_cap,
-                        hg_cap_nodes=args.paper_hypergraph_node_cap,
-                        batch_size=args.llm_stage5d_batch_size,
-                        loader_workers=args.llm_loader_workers,
-                    )
-                for (idx, classical_hg), llm_edges in zip(pending_items, llm_batches):
-                    final_hg = merge_paper_hypergraphs(classical_hg, llm_edges)
-                    _record_paper_hg(idx, final_hg)
-                pending_items.clear()
-                pending_texts.clear()
-                pending_hgs.clear()
-                done = sum(1 for h in hypergraphs if h is not None)
-                elapsed = time.time() - t_batch
-                rate = done / elapsed if elapsed > 0 else 0
-                eta = (n_papers - done) / rate if rate > 0 else 0
-                if done % 100 == 0 or done == n_papers or final_flush:
-                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
-                          f"ETA {eta/60:.0f} min")
 
-            for i, (entity, pair) in enumerate(zip(entities, pairs)):
-                eid = entity["entity/id"]
-                paper_text, text_source, eprint_meta = _paper_text_for(entity, pair)
+            text_source_counts = {"eprint": 0, "abstract": 0}
+            eprint_status_counts = {}
+            for entity, pair in zip(entities, pairs):
+                _paper_text, text_source, eprint_meta = _paper_text_for(entity, pair)
                 text_source_counts[text_source] = (
                     text_source_counts.get(text_source, 0) + 1
                 )
@@ -5903,70 +6493,38 @@ def main():
                 eprint_status_counts[eprint_status] = (
                     eprint_status_counts.get(eprint_status, 0) + 1
                 )
-                concepts_p = concept_by_entity.get(eid, [])
-                techniques_p = technique_by_entity.get(eid, [])
-                normalization = None
-                paper_text_stage5d = paper_text
-                block_annotations = None
-                if text_source == "eprint":
-                    normalization = normalize_legacy_tex(paper_text, paper_id=eid)
-                    paper_text_stage5d = normalization.rewritten_text
-                    block_annotations = normalization.block_annotations
-                    if normalization.rewrites:
-                        paper_hg_metrics["normalized_papers"] += 1
-                        paper_hg_metrics["normalization_rewrites"] += len(normalization.rewrites)
-
-                classical_hg = (
-                    extract_paper_hypergraph_classical(
-                        paper_text_stage5d, eid,
-                        concepts=concepts_p,
-                        techniques=techniques_p,
-                        block_annotations=block_annotations,
-                    )
-                    if arm in ("classical", "both")
-                    else {"paper_id": eid, "nodes": [], "edges": [],
-                          "sectional": [], "meta": {}}
-                )
-                if normalization is not None and normalization.rewrites:
-                    classical_hg.setdefault("meta", {})["normalization"] = {
-                        "rewrites": len(normalization.rewrites),
-                        "aliases": dict(normalization.alias_map),
-                    }
-
-                if arm in ("llm", "both"):
-                    pending_texts.append(paper_text_stage5d)
-                    pending_hgs.append(classical_hg)
-                    pending_items.append((i, classical_hg))
-                    if len(pending_items) >= llm_chunk_size:
-                        _flush_paper_hg_llm()
-                    continue
-                else:
-                    final_hg = classical_hg
-
-                _record_paper_hg(i, final_hg)
-
-                if (i + 1) % 100 == 0 or (i + 1) == n_papers:
-                    elapsed = time.time() - t_batch
-                    done = i + 1
-                    rate = done / elapsed if elapsed > 0 else 0
-                    eta = (n_papers - done) / rate if rate > 0 else 0
-                    print(f"       [{done}/{n_papers}] {rate:.1f} papers/s, "
-                          f"ETA {eta/60:.0f} min")
-
-            _flush_paper_hg_llm(final_flush=True)
-            if any(h is None for h in hypergraphs):
-                missing = sum(1 for h in hypergraphs if h is None)
-                raise RuntimeError(f"Stage 5d did not produce {missing} hypergraphs")
             _require_paper_eprint_usage(
                 "Stage 5d", text_source_counts, produced=bool(hypergraphs)
             )
 
+            stage5d_record = {
+                "n_papers": n_papers,
+                "arm": arm,
+                "llm_batch_size": args.llm_stage5d_batch_size,
+                "total_nodes": sum(len(h["nodes"]) for h in hypergraphs),
+                "total_edges": sum(len(h["edges"]) for h in hypergraphs),
+                "with_claim_blocks": paper_hg_metrics["n_with_claim_blocks"],
+                "edge_provenance": edge_provenance,
+                "text_source_counts": text_source_counts,
+                "eprint_status_counts": eprint_status_counts,
+                "normalized_papers": paper_hg_metrics["normalized_papers"],
+                "normalization_rewrites": paper_hg_metrics["normalization_rewrites"],
+                "chunk_count": len(chunk_ranges),
+                "resumed_chunks": completed_chunks,
+                "resumed_papers": completed_papers,
+                "resumed_from_chunks": completed_chunks > 0,
+            }
+            write_stage_status(
+                outdir,
+                "paper_hypergraph",
+                {"status": "completed", **stage5d_record},
+            )
             with open(hg_path, "w") as f:
                 json.dump(hypergraphs, f, ensure_ascii=False)
-            total_edges = sum(len(h["edges"]) for h in hypergraphs)
-            total_nodes = sum(len(h["nodes"]) for h in hypergraphs)
+            total_edges = stage5d_record["total_edges"]
+            total_nodes = stage5d_record["total_nodes"]
             n_blocks_total = paper_hg_metrics["n_blocks_total"]
-            n_with_claim_blocks = paper_hg_metrics["n_with_claim_blocks"]
+            n_with_claim_blocks = stage5d_record["with_claim_blocks"]
             print(f"       Saved {hg_path.name}: {total_nodes} nodes, "
                   f"{total_edges} edges across {n_papers} papers")
             print(f"       Papers with theorem/lemma/proposition blocks: "
@@ -5985,16 +6543,7 @@ def main():
             if paper_eprint_path is not None:
                 print(f"       Eprint load status: {eprint_status_counts}")
             print(f"       Stage 5d done in {time.time()-t5d:.0f}s")
-            mark_stage("paper_hypergraph", "completed",
-                       n_papers=n_papers, arm=arm,
-                       llm_batch_size=args.llm_stage5d_batch_size,
-                       total_nodes=total_nodes, total_edges=total_edges,
-                       with_claim_blocks=n_with_claim_blocks,
-                       normalized_papers=paper_hg_metrics["normalized_papers"],
-                       normalization_rewrites=paper_hg_metrics["normalization_rewrites"],
-                       edge_provenance=edge_provenance,
-                       text_source_counts=text_source_counts,
-                       eprint_status_counts=eprint_status_counts)
+            mark_stage("paper_hypergraph", "completed", **stage5d_record)
     else:
         print(f"\n[Stage 5d/{n_stages}] Skipped (--skip-paper-hypergraph)")
         mark_stage("paper_hypergraph", "skipped", skip_reason="--skip-paper-hypergraph")
@@ -6023,12 +6572,21 @@ def main():
               f"batch={args.llm_stage6_batch_size}, "
               f"chunks={args.llm_stage6_chunks_per_shard}, "
               f"loader_workers={args.llm_loader_workers})...")
-        llm_pool = _ensure_llm_gpu_pool()
-        if llm_pool is None:
-            pipe, tok = _ensure_llm_pipeline()
-        else:
-            print("       Stage 6 using shared LLM GPU worker pool")
+        if _stage6_chunks_available_for_resume(
+            outdir,
+            len(pairs),
+            args.llm_stage6_chunks_per_shard,
+        ):
+            print("       Stage 6 chunks complete; reusing without loading LLM")
+            llm_pool = None
             pipe = tok = None
+        else:
+            llm_pool = _ensure_llm_gpu_pool()
+            if llm_pool is None:
+                pipe, tok = _ensure_llm_pipeline()
+            else:
+                print("       Stage 6 using shared LLM GPU worker pool")
+                pipe = tok = None
         rm_results = run_stage6_reverse_morphogenesis_chunked(
             pairs,
             entities,
@@ -6328,12 +6886,20 @@ def main():
             print(f"       Eprint text coverage: {stage9a_stats.get('eprint_text_used', 0)}/"
                   f"{stage9a_stats.get('papers_processed', 0)} "
                   f"(missing={stage9a_stats.get('eprint_text_missing', 0)})")
-        geometry_stats, geometry_path = write_geometry_artifact(hg_path, outdir)
+        geometry_source_path, geometry_source = _arxiv_geometry_source_path(outdir, hg_path)
+        geometry_stats, geometry_path = write_geometry_artifact(
+            geometry_source_path,
+            outdir,
+            source_label=geometry_source,
+        )
         stage9a_stats["geometry_stats"] = geometry_stats
         stage9a_stats["geometry_path"] = str(geometry_path)
+        stage9a_stats["geometry_source"] = geometry_source
+        stage9a_stats["geometry_source_path"] = str(geometry_source_path)
         print(f"       Geometry artifact: {geometry_path.name} "
               f"(with_claims={geometry_stats['with_claims']}/"
-              f"{geometry_stats['papers']}, std={geometry_stats['std_T_total']:.3f})")
+              f"{geometry_stats['papers']}, source={geometry_source}, "
+              f"std={geometry_stats['std_T_total']:.3f})")
         print(f"       Written {hg_path} "
               f"({os.path.getsize(hg_path) / 1e6:.1f} MB)")
         print(f"       Stage 9a done in {time.time()-t9:.0f}s")
@@ -6341,15 +6907,34 @@ def main():
         assembly_rate = (stage9a_stats['hypergraphs_produced']
                          / stage9a_stats.get('papers_processed', 0)
                          if stage9a_stats.get('papers_processed', 0) else 0)
+        geometry_claim_rate = (
+            geometry_stats["with_claims"] / geometry_stats["papers"]
+            if geometry_stats["papers"] else 0.0
+        )
         health_gate("Stage 9a", assembly_rate < 0.90,
                     f"assembly rate {assembly_rate:.1%} < 90% — hypergraph schema too rigid")
         health_gate("Stage 9a", stage9a_stats['avg_nodes'] < 3,
                     f"avg {stage9a_stats['avg_nodes']:.1f} nodes/paper — hypergraphs are trivial")
+        health_gate(
+            "Stage 9a",
+            geometry_source == "hypergraphs",
+            "arXiv geometry fell back to claim-free Stage 9a hypergraphs; "
+            "paper-hypergraphs.json is missing",
+        )
+        health_gate(
+            "Stage 9a",
+            geometry_claim_rate < args.gate_stage9a_geometry_claim_rate_min,
+            f"geometry claim-paper rate {geometry_claim_rate:.1%} < "
+            f"{args.gate_stage9a_geometry_claim_rate_min:.0%} threshold",
+        )
         mark_stage(
             "hypergraphs",
             "completed",
             produced=int(stage9a_stats["hypergraphs_produced"]),
             processed=int(stage9a_stats.get("papers_processed", 0)),
+            geometry_with_claims=int(geometry_stats["with_claims"]),
+            geometry_claim_rate=round(float(geometry_claim_rate), 4),
+            geometry_source=geometry_source,
         )
     elif (not args.skip_hypergraphs and not args.skip_threads
             and threads and (ct_wiring_path or thread_diagrams)):
@@ -6528,6 +7113,11 @@ def main():
     # ========== Manifest ==========
     elapsed = time.time() - t0
     readiness_status = "pass" if not health_issues else "warn"
+    persisted_stage_status = {}
+    for status_file in sorted(stage_status_dir(outdir).glob("*.json")):
+        payload = read_json_if_exists(status_file)
+        if isinstance(payload, dict):
+            persisted_stage_status[status_file.stem] = payload
     manifest = {
         "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "run": {
@@ -6548,6 +7138,9 @@ def main():
             "stage3": args.llm_stage3_batch_size,
             "stage5d": args.llm_stage5d_batch_size,
             "stage6": args.llm_stage6_batch_size,
+        },
+        "llm_generation_max_new_tokens": {
+            "stage3": args.llm_stage3_max_new_tokens,
         },
         "stats": stats,
         "entity_count": len(entities),
@@ -6573,9 +7166,11 @@ def main():
         },
         "stage6_backend": args.stage6_backend,
         "health_gate_thresholds": {
+            "stage3_parse_rate_min": args.gate_stage3_parse_rate_min,
             "stage6_parse_rate_min": args.gate_stage6_parse_rate_min,
             "stage7_categorical_rate_min": args.gate_stage7_categorical_rate_min,
             "stage7_port_rate_min": args.gate_stage7_port_rate_min,
+            "stage9a_geometry_claim_rate_min": args.gate_stage9a_geometry_claim_rate_min,
             "stage9b_val_acc1_min": args.gate_stage9b_val_acc1_min,
         },
         "readiness": {
@@ -6606,7 +7201,7 @@ def main():
         "stage9a_stats": stage9a_stats,
         "stage9b_stats": stage9b_stats,
         "stage10_stats": stage10_stats,
-        "stage_status": stage_status,
+        "stage_status": {**persisted_stage_status, **stage_status},
         "health_issues": health_issues,
         "output_files": [f.name for f in outdir.iterdir() if f.is_file()],
         "patterns": (None if args.arxiv_jsonl else PATTERN_NAMES),
