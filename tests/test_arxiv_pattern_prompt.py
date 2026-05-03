@@ -10,11 +10,15 @@ from __future__ import annotations
 
 import json
 import os
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
+import futon6.arxiv_pattern_prompt as arxiv_pattern_prompt
 from futon6.arxiv_pattern_prompt import (
     FAMILY_PARENTS,
+    _default_futon3_library,
     build_arxiv_pattern_prompt,
     load_paper_shape_taxonomy,
     parse_arxiv_pattern_response,
@@ -79,6 +83,28 @@ class TestTaxonomyLoad(unittest.TestCase):
         for leaf_id, expected_family in expected.items():
             self.assertIn(leaf_id, tax.leaves, f"missing new leaf {leaf_id}")
             self.assertEqual(tax.leaves[leaf_id].family, expected_family)
+
+    def test_default_library_finds_sibling_checkout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp) / "futon6"
+            fake_module = repo_root / "src" / "futon6" / "arxiv_pattern_prompt.py"
+            fake_module.parent.mkdir(parents=True, exist_ok=True)
+            fake_module.write_text("# fake module path for resolver test\n", encoding="utf-8")
+
+            sibling_library = repo_root / "futon3" / "library"
+            sibling_library.mkdir(parents=True, exist_ok=True)
+            for parent_id in FAMILY_PARENTS:
+                (sibling_library / f"{parent_id}.flexiarg").parent.mkdir(parents=True, exist_ok=True)
+                (sibling_library / f"{parent_id}.flexiarg").write_text("title: ok\n", encoding="utf-8")
+
+            with mock.patch.dict(os.environ, {}, clear=True):
+                with mock.patch.object(
+                    arxiv_pattern_prompt,
+                    "DEFAULT_FUTON3_LIBRARY",
+                    repo_root / "missing-home-library",
+                ):
+                    with mock.patch.object(arxiv_pattern_prompt, "__file__", str(fake_module)):
+                        self.assertEqual(_default_futon3_library(), sibling_library)
 
 
 @unittest.skipUnless(_HAS_LIBRARY, "futon3 library not present")

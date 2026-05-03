@@ -60,7 +60,7 @@ def _default_futon3_library() -> Path:
     candidates.append(DEFAULT_FUTON3_LIBRARY)
 
     # The superpod installation keeps futons as sibling checkouts under darktower.
-    darktower_library = Path(__file__).resolve().parents[3] / "futon3" / "library"
+    darktower_library = Path(__file__).resolve().parents[2] / "futon3" / "library"
     candidates.append(darktower_library)
 
     for candidate in candidates:
