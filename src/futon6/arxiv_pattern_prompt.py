@@ -20,6 +20,7 @@ deploys the Stage 3 fork.
 from __future__ import annotations
 
 import json
+import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -44,6 +45,28 @@ FAMILY_PARENTS = [
     "math-strategy/property-of-object-result",
     "math-strategy/clarification-meta",
 ]
+
+
+def _has_paper_shape_families(library_root: Path) -> bool:
+    return all((library_root / f"{parent_id}.flexiarg").is_file() for parent_id in FAMILY_PARENTS)
+
+
+def _default_futon3_library() -> Path:
+    candidates: list[Path] = []
+    if env_library := os.environ.get("FUTON3_LIBRARY"):
+        candidates.append(Path(env_library).expanduser())
+    if env_root := os.environ.get("FUTON3_ROOT"):
+        candidates.append(Path(env_root).expanduser() / "library")
+    candidates.append(DEFAULT_FUTON3_LIBRARY)
+
+    # The superpod installation keeps futons as sibling checkouts under darktower.
+    darktower_library = Path(__file__).resolve().parents[2] / "futon3" / "library"
+    candidates.append(darktower_library)
+
+    for candidate in candidates:
+        if _has_paper_shape_families(candidate):
+            return candidate
+    return candidates[0]
 
 
 @dataclass
@@ -118,7 +141,7 @@ def _parse_one_flexiarg(path: Path) -> Optional[Pattern]:
     )
 
 
-def load_paper_shape_taxonomy(library_root: Path = DEFAULT_FUTON3_LIBRARY) -> PaperShapeTaxonomy:
+def load_paper_shape_taxonomy(library_root: Optional[Path] = None) -> PaperShapeTaxonomy:
     """Load the 5-family + leaves paper-shape taxonomy from futon3 flexiargs.
 
     Family parents declare member-pattern lists; leaves declare @family.
@@ -126,6 +149,8 @@ def load_paper_shape_taxonomy(library_root: Path = DEFAULT_FUTON3_LIBRARY) -> Pa
     leaf's @family is missing (e.g. existing patterns that pre-date the
     taxonomy and haven't been retrofitted with @family).
     """
+    if library_root is None:
+        library_root = _default_futon3_library()
     families: dict[str, Pattern] = {}
     for parent_id in FAMILY_PARENTS:
         rel = parent_id + ".flexiarg"
@@ -251,6 +276,37 @@ JSON output:"""
 
 
 _VALID_FAMILY_IDS = set(FAMILY_PARENTS)
+_INVALID_JSON_ESCAPE_RE = re.compile(r"\\(?![\"\\/bfnrtu])")
+
+
+def _json_loads_tolerating_tex_escapes(blob: str) -> tuple[dict | None, str | None]:
+    """Parse LLM JSON, retrying after escaping raw TeX backslashes.
+
+    Llama often writes rationale strings containing TeX such as ``\\mathbb``.
+    That is semantically valid text but invalid JSON because ``\\m`` is not an
+    allowed JSON escape. Doubling only invalid backslashes preserves ordinary
+    JSON escapes while recovering these otherwise-useful Stage 3 records.
+    """
+    try:
+        obj = json.loads(blob)
+        return (obj if isinstance(obj, dict) else None), None
+    except json.JSONDecodeError as first_exc:
+        repaired = _INVALID_JSON_ESCAPE_RE.sub(r"\\\\", blob)
+        if repaired == blob:
+            return None, f"json-decode: {first_exc}"
+        try:
+            obj = json.loads(repaired)
+            return (obj if isinstance(obj, dict) else None), None
+        except json.JSONDecodeError as second_exc:
+            return None, f"json-decode: {second_exc}"
+
+
+def _coerce_confidence(value, *, default: float = 0.0) -> float:
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return default
+    return max(0.0, min(1.0, parsed))
 
 
 def parse_arxiv_pattern_response(
@@ -275,36 +331,52 @@ def parse_arxiv_pattern_response(
     if brace_start < 0 or brace_end < brace_start:
         return {"ok": False, "error": "no-json-object", "raw_excerpt": text[:200]}
     blob = text[brace_start:brace_end + 1]
-    try:
-        obj = json.loads(blob)
-    except json.JSONDecodeError as exc:
-        return {"ok": False, "error": f"json-decode: {exc}", "raw_excerpt": blob[:200]}
+    obj, json_error = _json_loads_tolerating_tex_escapes(blob)
+    if obj is None:
+        return {
+            "ok": False,
+            "error": json_error or "json-not-object",
+            "raw_excerpt": blob[:200],
+        }
 
     family = obj.get("family", "")
     leaf = obj.get("leaf", "")
     if family not in _VALID_FAMILY_IDS:
-        return {"ok": False, "error": f"invalid-family: {family!r}", "raw_excerpt": blob[:200]}
+        return {
+            "ok": False,
+            "error": f"invalid-family: {family!r}",
+            "raw_excerpt": blob[:200],
+        }
+    warnings: list[str] = []
     if leaf != "uncertain" and leaf not in taxonomy.leaves and leaf:
-        # Accept absence of leaf only when family is clarification-meta or
-        # leaf is missing entirely.
-        if family != "math-strategy/clarification-meta":
-            return {"ok": False,
-                    "error": f"invalid-leaf: {leaf!r} not in taxonomy",
-                    "raw_excerpt": blob[:200]}
+        if family == "math-strategy/clarification-meta":
+            leaf = ""
+        else:
+            warnings.append(f"invalid-leaf-normalized: {leaf!r}")
+            leaf = "uncertain"
+            obj["leaf_confidence"] = min(
+                _coerce_confidence(obj.get("leaf_confidence")),
+                0.5,
+            )
 
     if family == "math-strategy/clarification-meta":
         collapsed = obj.get("collapsed")
         if not isinstance(collapsed, dict) or "reason" not in collapsed:
-            return {"ok": False,
-                    "error": "clarification-meta requires `collapsed: {reason, explanation}`",
-                    "raw_excerpt": blob[:200]}
+            warnings.append("clarification-meta-collapsed-synthesized")
+            obj["collapsed"] = {
+                "reason": "other",
+                "explanation": str(
+                    obj.get("rationale", "") or "LLM omitted collapsed metadata."
+                ),
+            }
 
     return {
         "ok": True,
         "family": family,
         "leaf": leaf or None,
-        "family_confidence": float(obj.get("family_confidence", 0.0)),
-        "leaf_confidence": float(obj.get("leaf_confidence", 0.0)),
+        "family_confidence": _coerce_confidence(obj.get("family_confidence")),
+        "leaf_confidence": _coerce_confidence(obj.get("leaf_confidence")),
         "rationale": obj.get("rationale", ""),
         "collapsed": obj.get("collapsed"),
+        "warnings": warnings,
     }

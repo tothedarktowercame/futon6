@@ -456,6 +456,26 @@ def contrastive_collate_fn(batch):
     return collate_graphs(view1), collate_graphs(view2)
 
 
+def _shutdown_dataloader_workers(loader: DataLoader | None, iterator=None) -> None:
+    """Best-effort shutdown for multiprocessing DataLoader workers."""
+    if loader is None:
+        return
+    target = iterator
+    if target is None:
+        target = getattr(loader, "_iterator", None)
+    shutdown = getattr(target, "_shutdown_workers", None)
+    if callable(shutdown):
+        try:
+            shutdown()
+        except Exception:
+            pass
+    if hasattr(loader, "_iterator"):
+        try:
+            loader._iterator = None
+        except Exception:
+            pass
+
+
 def _split_train_val_indices(
     n: int,
     val_frac: float = 0.1,
@@ -662,6 +682,7 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
     use_dataloader = num_workers > 0 and n_train >= batch_size
     use_cuda = device != "cpu" and torch.cuda.is_available()
 
+    loader = None
     if use_dataloader:
         dataset = ContrastiveGraphDataset(train_graphs, node_drop, edge_drop)
         loader = DataLoader(
@@ -680,105 +701,109 @@ def train(hypergraphs: list[dict], dim: int = 128, hidden_dim: int = 128,
     val_curve = []
     best_val_acc1 = -1.0
     best_val_epoch = None
+    loader_iter = None
+    try:
+        for epoch in range(epochs):
+            model.train()
+            total_loss = 0.0
+            n_batches = 0
 
-    for epoch in range(epochs):
-        model.train()
-        total_loss = 0.0
-        n_batches = 0
+            if use_dataloader:
+                loader_iter = iter(loader)
+                for batch1, batch2 in loader_iter:
+                    batch1 = batch1.to(device)
+                    batch2 = batch2.to(device)
 
-        if use_dataloader:
-            for batch1, batch2 in loader:
-                batch1 = batch1.to(device)
-                batch2 = batch2.to(device)
+                    z1 = model(batch1)
+                    z2 = model(batch2)
 
-                z1 = model(batch1)
-                z2 = model(batch2)
+                    loss = info_nce_loss(z1, z2)
+                    optimizer.zero_grad()
+                    loss.backward()
+                    optimizer.step()
 
-                loss = info_nce_loss(z1, z2)
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
+                    total_loss += loss.item()
+                    n_batches += 1
+            else:
+                # Fallback: manual batching (for small datasets or debugging)
+                indices = list(range(n_train))
+                random.shuffle(indices)
 
-                total_loss += loss.item()
-                n_batches += 1
-        else:
-            # Fallback: manual batching (for small datasets or debugging)
-            indices = list(range(n_train))
-            random.shuffle(indices)
+                for start in range(0, n_train, batch_size):
+                    batch_idx = indices[start:start + batch_size]
+                    if len(batch_idx) < 2:
+                        continue
 
-            for start in range(0, n_train, batch_size):
-                batch_idx = indices[start:start + batch_size]
-                if len(batch_idx) < 2:
-                    continue
+                    view1 = []
+                    view2 = []
+                    for idx in batch_idx:
+                        x, ei = train_graphs[idx]
+                        x1, ei1 = augment_graph(x, ei, node_drop, edge_drop)
+                        x2, ei2 = augment_graph(x, ei, node_drop, edge_drop)
+                        view1.append((x1, ei1))
+                        view2.append((x2, ei2))
 
-                view1 = []
-                view2 = []
-                for idx in batch_idx:
-                    x, ei = train_graphs[idx]
-                    x1, ei1 = augment_graph(x, ei, node_drop, edge_drop)
-                    x2, ei2 = augment_graph(x, ei, node_drop, edge_drop)
-                    view1.append((x1, ei1))
-                    view2.append((x2, ei2))
+                    b1 = collate_graphs(view1).to(device)
+                    b2 = collate_graphs(view2).to(device)
 
-                b1 = collate_graphs(view1).to(device)
-                b2 = collate_graphs(view2).to(device)
+                    z1 = model(b1)
+                    z2 = model(b2)
 
-                z1 = model(b1)
-                z2 = model(b2)
+                    loss = info_nce_loss(z1, z2)
+                    optimizer.zero_grad()
+                    loss.backward()
+                    optimizer.step()
 
-                loss = info_nce_loss(z1, z2)
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
+                    total_loss += loss.item()
+                    n_batches += 1
 
-                total_loss += loss.item()
-                n_batches += 1
+            avg_loss = total_loss / max(1, n_batches)
+            loss_curve.append(float(avg_loss))
 
-        avg_loss = total_loss / max(1, n_batches)
-        loss_curve.append(float(avg_loss))
+            val_metrics = None
+            eval_now = ((epoch + 1) % eval_every == 0) or ((epoch + 1) == epochs)
+            if eval_now and val_idx:
+                model.eval()
+                val_metrics = _paired_retrieval_metrics(
+                    model=model,
+                    graph_tensors=all_graph_tensors,
+                    indices=val_idx,
+                    batch_size=batch_size,
+                    device=device,
+                    node_drop=node_drop,
+                    edge_drop=edge_drop,
+                )
+                val_metrics["epoch"] = int(epoch + 1)
+                val_curve.append(val_metrics)
+                if val_metrics["acc_at_1"] > best_val_acc1:
+                    best_val_acc1 = val_metrics["acc_at_1"]
+                    best_val_epoch = int(epoch + 1)
 
-        val_metrics = None
-        eval_now = ((epoch + 1) % eval_every == 0) or ((epoch + 1) == epochs)
-        if eval_now and val_idx:
-            model.eval()
-            val_metrics = _paired_retrieval_metrics(
-                model=model,
-                graph_tensors=all_graph_tensors,
-                indices=val_idx,
-                batch_size=batch_size,
-                device=device,
-                node_drop=node_drop,
-                edge_drop=edge_drop,
-            )
-            val_metrics["epoch"] = int(epoch + 1)
-            val_curve.append(val_metrics)
-            if val_metrics["acc_at_1"] > best_val_acc1:
-                best_val_acc1 = val_metrics["acc_at_1"]
-                best_val_epoch = int(epoch + 1)
+            log_now = ((epoch + 1) % max(1, epochs // 10) == 0) or ((epoch + 1) == epochs)
+            if verbose and log_now:
+                msg = f"       Epoch {epoch+1}/{epochs}  loss={avg_loss:.4f}"
+                if val_metrics is not None:
+                    msg += ("  val_acc@1={:.3f} val_acc@5={:.3f} val_mrr={:.3f} n={}".format(
+                        val_metrics["acc_at_1"],
+                        val_metrics["acc_at_5"],
+                        val_metrics["mrr"],
+                        val_metrics["n_eval"],
+                    ))
+                print(msg)
 
-        log_now = ((epoch + 1) % max(1, epochs // 10) == 0) or ((epoch + 1) == epochs)
-        if verbose and log_now:
-            msg = f"       Epoch {epoch+1}/{epochs}  loss={avg_loss:.4f}"
-            if val_metrics is not None:
-                msg += ("  val_acc@1={:.3f} val_acc@5={:.3f} val_mrr={:.3f} n={}".format(
-                    val_metrics["acc_at_1"],
-                    val_metrics["acc_at_5"],
-                    val_metrics["mrr"],
-                    val_metrics["n_eval"],
-                ))
-            print(msg)
+        # Final embedding pass
+        model.eval()
+        all_embeddings = []
+        with torch.no_grad():
+            for start in range(0, len(all_graph_tensors), batch_size):
+                batch_graphs = all_graph_tensors[start:start + batch_size]
+                batch = collate_graphs(batch_graphs).to(device)
+                emb = model.embed(batch)
+                all_embeddings.append(emb.cpu().numpy())
 
-    # Final embedding pass
-    model.eval()
-    all_embeddings = []
-    with torch.no_grad():
-        for start in range(0, len(all_graph_tensors), batch_size):
-            batch_graphs = all_graph_tensors[start:start + batch_size]
-            batch = collate_graphs(batch_graphs).to(device)
-            emb = model.embed(batch)
-            all_embeddings.append(emb.cpu().numpy())
-
-    embeddings = np.concatenate(all_embeddings, axis=0)
+        embeddings = np.concatenate(all_embeddings, axis=0)
+    finally:
+        _shutdown_dataloader_workers(loader, loader_iter)
 
     final_val = val_curve[-1] if val_curve else None
     loss_initial = float(loss_curve[0]) if loss_curve else None

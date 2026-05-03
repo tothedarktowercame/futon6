@@ -4,24 +4,42 @@ Validates:
 - Taxonomy loads from futon3/library/ flexiargs.
 - Prompt builder emits a coherent string with all 5 families and leaves.
 - Response parser accepts well-formed responses, rejects malformed ones,
-  and enforces clarification-meta's `:reason` requirement.
+  and repairs common local-LLM JSON/taxonomy drift without dropping records.
 """
 from __future__ import annotations
 
 import json
 import os
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
+import futon6.arxiv_pattern_prompt as arxiv_pattern_prompt
 from futon6.arxiv_pattern_prompt import (
     FAMILY_PARENTS,
+    _default_futon3_library,
     build_arxiv_pattern_prompt,
     load_paper_shape_taxonomy,
     parse_arxiv_pattern_response,
 )
 
 
-_LIBRARY_ROOT = Path.home() / "code" / "futon3" / "library"
+_LIBRARY_CANDIDATES = []
+if env_library := os.environ.get("FUTON3_LIBRARY"):
+    _LIBRARY_CANDIDATES.append(Path(env_library))
+if env_root := os.environ.get("FUTON3_ROOT"):
+    _LIBRARY_CANDIDATES.append(Path(env_root) / "library")
+_LIBRARY_CANDIDATES.extend(
+    [
+        Path.home() / "code" / "futon3" / "library",
+        Path(__file__).resolve().parents[2] / "futon3" / "library",
+    ]
+)
+_LIBRARY_ROOT = next(
+    (candidate for candidate in _LIBRARY_CANDIDATES if candidate.exists()),
+    _LIBRARY_CANDIDATES[0],
+)
 _HAS_LIBRARY = _LIBRARY_ROOT.exists()
 
 
@@ -65,6 +83,28 @@ class TestTaxonomyLoad(unittest.TestCase):
         for leaf_id, expected_family in expected.items():
             self.assertIn(leaf_id, tax.leaves, f"missing new leaf {leaf_id}")
             self.assertEqual(tax.leaves[leaf_id].family, expected_family)
+
+    def test_default_library_finds_sibling_checkout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp) / "futon6"
+            fake_module = repo_root / "src" / "futon6" / "arxiv_pattern_prompt.py"
+            fake_module.parent.mkdir(parents=True, exist_ok=True)
+            fake_module.write_text("# fake module path for resolver test\n", encoding="utf-8")
+
+            sibling_library = repo_root / "futon3" / "library"
+            sibling_library.mkdir(parents=True, exist_ok=True)
+            for parent_id in FAMILY_PARENTS:
+                (sibling_library / f"{parent_id}.flexiarg").parent.mkdir(parents=True, exist_ok=True)
+                (sibling_library / f"{parent_id}.flexiarg").write_text("title: ok\n", encoding="utf-8")
+
+            with mock.patch.dict(os.environ, {}, clear=True):
+                with mock.patch.object(
+                    arxiv_pattern_prompt,
+                    "DEFAULT_FUTON3_LIBRARY",
+                    repo_root / "missing-home-library",
+                ):
+                    with mock.patch.object(arxiv_pattern_prompt, "__file__", str(fake_module)):
+                        self.assertEqual(_default_futon3_library(), sibling_library)
 
 
 @unittest.skipUnless(_HAS_LIBRARY, "futon3 library not present")
@@ -136,7 +176,7 @@ class TestResponseParser(unittest.TestCase):
         self.assertTrue(result["ok"])
         self.assertEqual(result["leaf"], "uncertain")
 
-    def test_clarification_meta_requires_collapsed(self):
+    def test_clarification_meta_without_collapsed_is_repaired(self):
         raw = json.dumps({
             "family": "math-strategy/clarification-meta",
             "leaf": "",
@@ -145,8 +185,9 @@ class TestResponseParser(unittest.TestCase):
             "rationale": "Triple is single-axis.",
         })
         result = parse_arxiv_pattern_response(raw)
-        self.assertFalse(result["ok"])
-        self.assertIn("clarification-meta", result["error"])
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["collapsed"]["reason"], "other")
+        self.assertIn("clarification-meta-collapsed-synthesized", result["warnings"])
 
     def test_clarification_meta_with_collapsed_ok(self):
         raw = json.dumps({
@@ -172,14 +213,32 @@ class TestResponseParser(unittest.TestCase):
         self.assertFalse(result["ok"])
         self.assertIn("invalid-family", result["error"])
 
-    def test_invalid_leaf_rejected_for_strategic_family(self):
+    def test_invalid_leaf_is_normalized_to_uncertain_for_strategic_family(self):
         raw = json.dumps({
             "family": "math-strategy/existence-result",
             "leaf": "math-informal/imaginary-leaf",
+            "leaf_confidence": 0.9,
         })
         result = parse_arxiv_pattern_response(raw)
-        self.assertFalse(result["ok"])
-        self.assertIn("invalid-leaf", result["error"])
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["leaf"], "uncertain")
+        self.assertLessEqual(result["leaf_confidence"], 0.5)
+        self.assertIn("invalid-leaf-normalized", result["warnings"][0])
+
+    def test_tex_backslashes_in_rationale_are_repaired(self):
+        raw = (
+            '{'
+            '"family": "math-strategy/characterization-result",'
+            '"leaf": "math-informal/structural-characterization",'
+            '"family_confidence": 0.9,'
+            '"leaf_confidence": 0.8,'
+            '"rationale": "Classifies $(\\mathbb{T},\\mathsf{V})$-categories.",'
+            '"collapsed": null'
+            '}'
+        )
+        result = parse_arxiv_pattern_response(raw)
+        self.assertTrue(result["ok"])
+        self.assertIn("\\mathbb", result["rationale"])
 
     def test_no_json_in_response(self):
         result = parse_arxiv_pattern_response("Sorry, I cannot answer.")
