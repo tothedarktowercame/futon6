@@ -70,6 +70,8 @@ class Block:
     span: (start, end) char offsets in the full paper text
     section: section id this block sits in
     number: positional number within its env type (1-indexed)
+    block_origin: native|alias_expanded|prose_synthesized
+    source_cue: cue that justified non-native synthesis / rewriting
     """
     env: str
     body: str
@@ -78,6 +80,8 @@ class Block:
     label: str | None = None
     section: str = "0"
     number: int = 0
+    block_origin: str = "native"
+    source_cue: str | None = None
 
 
 def _parse_section_spans(text: str) -> list[tuple[int, int, str, str]]:
@@ -128,7 +132,10 @@ def _section_for_offset(section_spans: Sequence[tuple[int, int, str, str]],
     return "0"
 
 
-def parse_latex_blocks(text: str) -> tuple[list[Block], list[tuple[int, int, str, str]]]:
+def parse_latex_blocks(
+    text: str,
+    block_annotations: dict[int | tuple[int, int], dict] | None = None,
+) -> tuple[list[Block], list[tuple[int, int, str, str]]]:
     """Parse all recognised LaTeX environments. Returns (blocks, section_spans).
 
     Blocks are returned in document order. Section spans are (start, end, id,
@@ -137,6 +144,7 @@ def parse_latex_blocks(text: str) -> tuple[list[Block], list[tuple[int, int, str
     section_spans = _parse_section_spans(text)
     blocks: list[Block] = []
     env_counts: dict[str, int] = defaultdict(int)
+    block_annotations = block_annotations or {}
 
     for m in _ENV_PATTERN.finditer(text):
         env = m.group("env")
@@ -146,6 +154,10 @@ def parse_latex_blocks(text: str) -> tuple[list[Block], list[tuple[int, int, str
         label = label_m.group("label") if label_m else None
         section = _section_for_offset(section_spans, m.start())
         env_counts[env] += 1
+        annotation = (
+            block_annotations.get(m.start())
+            or block_annotations.get((m.start(), m.end()), {})
+        )
         blocks.append(Block(
             env=env,
             body=body,
@@ -154,6 +166,8 @@ def parse_latex_blocks(text: str) -> tuple[list[Block], list[tuple[int, int, str
             label=label,
             section=section,
             number=env_counts[env],
+            block_origin=annotation.get("block_origin", "native"),
+            source_cue=annotation.get("source_cue"),
         ))
     return blocks, section_spans
 
@@ -192,6 +206,7 @@ def extract_paper_hypergraph_classical(
     paper_id: str,
     concepts: Iterable[str] | None = None,
     techniques: Iterable[str] | None = None,
+    block_annotations: dict[int | tuple[int, int], dict] | None = None,
 ) -> dict:
     """Build paper-level hypergraph from LaTeX block structure + term indexes.
 
@@ -207,7 +222,10 @@ def extract_paper_hypergraph_classical(
     concepts = list(concepts or [])
     techniques = list(techniques or [])
 
-    blocks, section_spans = parse_latex_blocks(text)
+    blocks, section_spans = parse_latex_blocks(
+        text,
+        block_annotations=block_annotations,
+    )
 
     nodes: dict[str, dict] = {}
     edges: list[dict] = []
@@ -236,6 +254,8 @@ def extract_paper_hypergraph_classical(
         edge["attrs"].setdefault("provenance", "classical")
         edges.append(edge)
 
+    block_origin_counts: dict[str, int] = defaultdict(int)
+
     # Section nodes
     for start, end, sid, title in section_spans:
         if sid == "0" and not title:
@@ -256,6 +276,7 @@ def extract_paper_hypergraph_classical(
     # Block nodes (definition / claim / proof / equation)
     claim_nodes_by_label: dict[str, str] = {}   # label -> node id
     for b in blocks:
+        block_origin_counts[b.block_origin] += 1
         if b.env in CLAIM_ENVS:
             bid = _node_id("claim", f"{b.env}-{b.number}")
             _add_node(bid, "claim", subtype=b.env, attrs={
@@ -266,6 +287,8 @@ def extract_paper_hypergraph_classical(
                 "section": b.section,
                 "char_span": list(b.span),
                 "statement": b.body.strip()[:800],
+                "block_origin": b.block_origin,
+                "source_cue": b.source_cue,
             })
             if b.label:
                 claim_nodes_by_label[b.label] = bid
@@ -278,6 +301,8 @@ def extract_paper_hypergraph_classical(
                 "section": b.section,
                 "char_span": list(b.span),
                 "text": b.body.strip()[:800],
+                "block_origin": b.block_origin,
+                "source_cue": b.source_cue,
             })
             if b.label:
                 claim_nodes_by_label[b.label] = bid
@@ -288,6 +313,8 @@ def extract_paper_hypergraph_classical(
                 "section": b.section,
                 "char_span": list(b.span),
                 "text": b.body.strip()[:800],
+                "block_origin": b.block_origin,
+                "source_cue": b.source_cue,
             })
         elif b.env in EQ_ENVS:
             bid = _node_id("equation", f"eq-{b.number}")
@@ -298,6 +325,8 @@ def extract_paper_hypergraph_classical(
                 "section": b.section,
                 "char_span": list(b.span),
                 "tex": b.body.strip()[:400],
+                "block_origin": b.block_origin,
+                "source_cue": b.source_cue,
             })
             if b.label:
                 claim_nodes_by_label[b.label] = bid
@@ -442,6 +471,7 @@ def extract_paper_hypergraph_classical(
         "n_nodes": len(nodes),
         "n_edges": len(edges),
         "n_blocks": len(blocks),
+        "block_origin_counts": dict(block_origin_counts),
         "n_sections": len(section_spans),
         "has_theorem_blocks": any(b.env in CLAIM_ENVS for b in blocks),
         "has_proof_blocks": any(b.env in PROOF_ENVS for b in blocks),
