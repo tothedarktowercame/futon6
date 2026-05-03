@@ -82,10 +82,10 @@ manifest (570K papers)
 ```
 
 The coordinator is storage-aware (configurable inbox budget, default
-2GB) and self-advancing. As of 2026-04-16 it builds 10,000-paper batches
-by default (`MARK2_PAGE_SIZE=10000`) while preserving the conservative
+2GB) and self-advancing. As of 2026-04-23 it builds 5,000-paper batches
+by default (`MARK2_PAGE_SIZE=5000`) while preserving the conservative
 one-request-per-three-seconds eprint fetch interval. A full batch therefore
-takes about 8h20m to assemble before compression overhead. The manifest keeps
+takes about 4h10m to assemble before compression overhead. The manifest keeps
 canonical arXiv URLs, but fetches are routed through `export.arxiv.org` by
 default (`MARK2_EPRINT_HOST=export.arxiv.org`) in line with arXiv's
 programmatic harvesting guidance.

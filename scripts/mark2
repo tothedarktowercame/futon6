@@ -77,7 +77,7 @@ MANIFEST_DB = Path(os.environ.get(
     "MARK2_MANIFEST_DB",
     MARK2_HOME / "arxiv_manifest.sqlite",
 ))
-PAGE_SIZE = int(os.environ.get("MARK2_PAGE_SIZE", "10000"))
+PAGE_SIZE = int(os.environ.get("MARK2_PAGE_SIZE", "5000"))
 RATE_LIMIT = float(os.environ.get("MARK2_RATE_LIMIT", "3.0"))
 MAX_INBOX_MB = int(os.environ.get("MARK2_MAX_INBOX_MB", "2000"))
 READY_TARGET = int(os.environ.get("MARK2_READY_TARGET", "2"))
@@ -551,8 +551,9 @@ def cmd_returned(args) -> int:
         return 1
     expected = outbox() / f"results-{num:03d}.tar.gz"
     if not expected.exists():
-        # Check for any results file with this batch number
-        candidates = list(outbox().glob(f"*{num:03d}*"))
+        # Stay within the numbered results namespace; do not match unrelated
+        # artifacts such as mfuton input bundles that happen to contain "001".
+        candidates = list(outbox().glob(f"results-{num:03d}*"))
         if not candidates:
             print(f"  warning: no results file found in outbox for batch {num}")
     set_batch_state(state, num, status="results-ready",
@@ -569,8 +570,10 @@ def cmd_collected(args) -> int:
     if not bs:
         print(f"batch {num} not found in state ({state_path()})")
         return 1
-    # Clean up results from outbox
-    for f in outbox().glob(f"*{num:03d}*"):
+    # Clean only the numbered results bundle(s) for this batch. A broad
+    # "*001*" glob can accidentally catch unrelated artifacts such as
+    # "batch-mfuton-001.tar.gz".
+    for f in outbox().glob(f"results-{num:03d}*"):
         f.unlink()
         print(f"  cleaned outbox/{f.name}")
     set_batch_state(state, num, status="done", collected_at=now_iso())
