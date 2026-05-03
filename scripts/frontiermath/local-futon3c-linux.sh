@@ -27,7 +27,8 @@ Environment overrides:
   CODEX_SESSION_FILE           continuity file for the codex lane
   CODEX_CWD                    working directory for codex execution
   IRC_CHANNEL                  primary IRC room (default #futon)
-  IRC_CHANNELS                 extra IRC rooms (default #math)
+  FUTON3C_FRONTIERMATH_ROOM    FrontierMath room (default #math)
+  IRC_CHANNELS                 extra IRC rooms (default FUTON3C_FRONTIERMATH_ROOM)
   IRC_COMMAND_OWNER_AGENT_MAP  optional room-owner map for bare ! commands
 
 Notes:
@@ -51,13 +52,14 @@ export FUTON3C_FM_CONDUCTOR_ROTATION="${FUTON3C_FM_CONDUCTOR_ROTATION:-codex-1}"
 export FUTON3C_FM_CONDUCTOR_AUTOSTART="${FUTON3C_FM_CONDUCTOR_AUTOSTART:-true}"
 export FUTON3C_DIRECT_INVOKE_TIMEOUT_SECONDS="${FUTON3C_DIRECT_INVOKE_TIMEOUT_SECONDS:-10}"
 export MATH_IRC="${MATH_IRC:-true}"
+export FUTON3C_FRONTIERMATH_ROOM="${FUTON3C_FRONTIERMATH_ROOM:-#math}"
 export FUTON3C_IRC_PORT="${FUTON3C_IRC_PORT:-6667}"
 export BRIDGE_BOTS="${BRIDGE_BOTS:-codex}"
 export IRC_HOST="${IRC_HOST:-127.0.0.1}"
 export IRC_PORT="${IRC_PORT:-${FUTON3C_IRC_PORT}}"
 export IRC_CHANNEL="${IRC_CHANNEL:-#futon}"
-export IRC_CHANNELS="${IRC_CHANNELS:-#math}"
-export IRC_COMMAND_OWNER_AGENT_MAP="${IRC_COMMAND_OWNER_AGENT_MAP:-#futon:codex-1,#math:codex-1}"
+export IRC_CHANNELS="${IRC_CHANNELS:-${FUTON3C_FRONTIERMATH_ROOM}}"
+export IRC_COMMAND_OWNER_AGENT_MAP="${IRC_COMMAND_OWNER_AGENT_MAP:-#futon:codex-1,${FUTON3C_FRONTIERMATH_ROOM}:codex-1}"
 export CODEX_SESSION_FILE="${CODEX_SESSION_FILE:-${repo_root}/.state/codex-frontiermath-local/session-id}"
 export CODEX_CWD="${CODEX_CWD:-${repo_root}}"
 export CODEX_BRIDGE_SUMMARY_MODE="${CODEX_BRIDGE_SUMMARY_MODE:-raw}"
@@ -71,6 +73,7 @@ printf '[frontiermath-local] futon3c=%s\n' "${futon3c_root}"
 printf '[frontiermath-local] session=%s\n' "${CODEX_SESSION_FILE}"
 printf '[frontiermath-local] codex cwd=%s\n' "${CODEX_CWD}"
 printf '[frontiermath-local] primary channel=%s\n' "${IRC_CHANNEL}"
+printf '[frontiermath-local] frontiermath room=%s\n' "${FUTON3C_FRONTIERMATH_ROOM}"
 printf '[frontiermath-local] extra channels=%s\n' "${IRC_CHANNELS}"
 printf '[frontiermath-local] owner map=%s\n' "${IRC_COMMAND_OWNER_AGENT_MAP}"
 printf '[frontiermath-local] mfuton mode=%s\n' "${FUTON3C_MFUTON_MODE}"
