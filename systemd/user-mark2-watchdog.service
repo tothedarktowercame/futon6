@@ -1,0 +1,11 @@
+[Unit]
+Description=Check MARK2 lane health and send alert email on stall
+ConditionPathExists=%h/mark2/mark2
+ConditionPathExists=%h/mark2/state.json
+
+[Service]
+Type=oneshot
+SuccessExitStatus=1
+Environment=MARK2_HOME=%h/mark2
+EnvironmentFile=-%h/.config/mark2-watchdog.env
+ExecStart=/usr/bin/python3 %h/mark2/mark2 watchdog

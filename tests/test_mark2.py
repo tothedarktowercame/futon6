@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.machinery
 import importlib.util
+import json
 import os
 import subprocess
 import sys
@@ -148,3 +149,98 @@ def test_pulled_can_skip_auto_fill(tmp_path: Path):
     assert run.returncode == 0
     assert "batch 2 marked pulled" in run.stdout
     assert "auto-fill disabled" in run.stdout
+
+
+def test_returned_cleans_stale_inbox_and_starts_auto_fill(tmp_path: Path, monkeypatch):
+    mark2 = _load_mark2()
+    home = tmp_path / "shared-mark2"
+    home.mkdir()
+    monkeypatch.setattr(mark2, "MARK2_HOME", home)
+
+    (home / "state.json").write_text(
+        '{"batches":{"2":{"status":"inbox"}},"next_batch":3}',
+        encoding="utf-8",
+    )
+    (home / "inbox").mkdir()
+    (home / "outbox").mkdir()
+    (home / "inbox" / "batch-002.tar.gz").write_text("input", encoding="utf-8")
+    (home / "outbox" / "results-002.tar.gz").write_text("output", encoding="utf-8")
+
+    calls: list[str] = []
+    monkeypatch.setattr(mark2, "start_background_fill", lambda reason: calls.append(reason))
+
+    rc = mark2.cmd_returned(type("Args", (), {"batch_num": 2})())
+
+    assert rc == 0
+    assert not (home / "inbox" / "batch-002.tar.gz").exists()
+    assert calls == ["batch 2 returned"]
+    state = json.loads((home / "state.json").read_text(encoding="utf-8"))
+    assert state["batches"]["2"]["status"] == "results-ready"
+    assert "returned_at" in state["batches"]["2"]
+
+
+def test_collected_starts_auto_fill_when_ready_target_is_low(tmp_path: Path, monkeypatch):
+    mark2 = _load_mark2()
+    home = tmp_path / "shared-mark2"
+    home.mkdir()
+    monkeypatch.setattr(mark2, "MARK2_HOME", home)
+
+    (home / "state.json").write_text(
+        '{"batches":{"2":{"status":"results-ready"}},"next_batch":3}',
+        encoding="utf-8",
+    )
+    (home / "outbox").mkdir()
+    (home / "outbox" / "results-002.tar.gz").write_text("output", encoding="utf-8")
+
+    calls: list[str] = []
+    monkeypatch.setattr(mark2, "start_background_fill", lambda reason: calls.append(reason))
+
+    rc = mark2.cmd_collected(type("Args", (), {"batch_num": 2})())
+
+    assert rc == 0
+    assert not (home / "outbox" / "results-002.tar.gz").exists()
+    assert calls == ["batch 2 collected"]
+    state = json.loads((home / "state.json").read_text(encoding="utf-8"))
+    assert state["batches"]["2"]["status"] == "done"
+    assert "collected_at" in state["batches"]["2"]
+
+
+def test_watchdog_alerts_when_lane_needs_fill_and_no_builder(tmp_path: Path, monkeypatch):
+    mark2 = _load_mark2()
+    home = tmp_path / "shared-mark2"
+    home.mkdir()
+    monkeypatch.setattr(mark2, "MARK2_HOME", home)
+
+    (home / "state.json").write_text('{"batches":{},"next_batch":9}', encoding="utf-8")
+    monkeypatch.setattr(mark2, "manifest_counts", lambda: (10, 20))
+    monkeypatch.setattr(mark2, "active_mark2_builder", lambda: (None, None))
+    monkeypatch.setattr(mark2, "read_build_lock", lambda: None)
+
+    rc = mark2.cmd_watchdog(type("Args", (), {"email_to": None, "repeat_hours": 12.0})())
+
+    assert rc == 1
+    state = json.loads((home / "watchdog-state.json").read_text(encoding="utf-8"))
+    assert state["last_status"] == "alert"
+    assert "lane stalled" in state["last_alert_key"]
+
+
+def test_watchdog_accepts_active_builder(tmp_path: Path, monkeypatch):
+    mark2 = _load_mark2()
+    home = tmp_path / "shared-mark2"
+    home.mkdir()
+    monkeypatch.setattr(mark2, "MARK2_HOME", home)
+
+    (home / "state.json").write_text('{"batches":{},"next_batch":9}', encoding="utf-8")
+    monkeypatch.setattr(mark2, "manifest_counts", lambda: (10, 20))
+    monkeypatch.setattr(
+        mark2,
+        "active_mark2_builder",
+        lambda: (1234, "python3 /home/joe/mark2/mark2 fill --if-room"),
+    )
+    monkeypatch.setattr(mark2, "read_build_lock", lambda: {"pid": "1234"})
+
+    rc = mark2.cmd_watchdog(type("Args", (), {"email_to": None, "repeat_hours": 12.0})())
+
+    assert rc == 0
+    state = json.loads((home / "watchdog-state.json").read_text(encoding="utf-8"))
+    assert state["last_status"] == "healthy"

@@ -1,0 +1,11 @@
+[Unit]
+Description=Schedule MARK2 lane watchdog checks
+
+[Timer]
+OnCalendar=*:0/15
+AccuracySec=2m
+Persistent=true
+Unit=mark2-watchdog.service
+
+[Install]
+WantedBy=timers.target

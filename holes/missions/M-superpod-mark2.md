@@ -90,18 +90,21 @@ canonical arXiv URLs, but fetches are routed through `export.arxiv.org` by
 default (`MARK2_EPRINT_HOST=export.arxiv.org`) in line with arXiv's
 programmatic harvesting guidance.
 
-When Rob marks a batch as pulled, the coordinator now starts a background
+When Rob marks a batch as pulled, the coordinator starts a background
 `fill --if-room` job rather than blocking Rob's SSH command for the whole
-fetch window. The fill target is two ready inbox batches by default
+fetch window. The same ready-target repair is also triggered when results are
+registered or collected, so the lane recovers even if an operator forgets the
+`pulled` step and the inbox tarball only becomes obviously stale once results
+come back. The fill target is two ready inbox batches by default
 (`MARK2_READY_TARGET=2`), guarded by a build lock so manual fills, cron
-fills, and Rob-triggered fills cannot overlap. Joe seeds or repairs state
-when needed; under normal operation the machine keeps itself slightly ahead
-of Rob's superpod processing pace.
+fills, and lifecycle-triggered fills cannot overlap. Joe seeds or repairs
+state when needed; under normal operation the machine keeps itself slightly
+ahead of Rob's superpod processing pace.
 
 ### Batch lifecycle
 
 ```
-build → inbox → pulled (auto-builds next) → returned → collected → done
+build → inbox → pulled/returned/collected (restore ready target) → done
 ```
 
 ### Rob's workflow

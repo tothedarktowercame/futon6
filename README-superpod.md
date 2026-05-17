@@ -53,6 +53,14 @@ Current archival convention:
 See also:
 
 - [storage/mark2/README-OPERATOR.txt](/home/joe/code/storage/mark2/README-OPERATOR.txt)
+- [scripts/futon6-status.py](/home/joe/code/futon6/scripts/futon6-status.py)
+
+For a concrete operator snapshot that joins the live Linode state to the local
+archive mirrors, run:
+
+```bash
+~/code/futon6/scripts/futon6-status.py
+```
 
 ## 3. What is already landed in code
 

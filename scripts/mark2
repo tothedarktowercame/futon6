@@ -35,6 +35,7 @@ import json
 import os
 import re
 import shutil
+import socket
 import sqlite3
 import subprocess
 import sys
@@ -116,6 +117,10 @@ def state_path() -> Path:
     return MARK2_HOME / "state.json"
 
 
+def watchdog_state_path() -> Path:
+    return MARK2_HOME / "watchdog-state.json"
+
+
 def log_dir() -> Path:
     p = MARK2_HOME / "logs"
     p.mkdir(parents=True, exist_ok=True)
@@ -179,6 +184,23 @@ def ready_batch_count(state: dict) -> int:
                if b.get("status") == "inbox")
 
 
+def manifest_counts() -> tuple[int | None, int | None]:
+    if not MANIFEST_DB.exists():
+        return None, None
+    db = sqlite3.connect(MANIFEST_DB)
+    try:
+        pending = db.execute(
+            "SELECT COUNT(*) FROM papers "
+            "WHERE latest=1 AND include=1 AND status='pending'"
+        ).fetchone()[0]
+        total = db.execute(
+            "SELECT COUNT(*) FROM papers WHERE latest=1 AND include=1"
+        ).fetchone()[0]
+        return pending, total
+    finally:
+        db.close()
+
+
 # -- Disk budget --------------------------------------------------------------
 
 def dir_size_mb(path: Path) -> float:
@@ -192,6 +214,107 @@ def dir_size_mb(path: Path) -> float:
 
 def inbox_has_room() -> bool:
     return dir_size_mb(inbox()) < MAX_INBOX_MB
+
+
+def read_build_lock() -> dict[str, str] | None:
+    path = build_lock_path()
+    if not path.exists():
+        return None
+    text = path.read_text().strip()
+    if not text:
+        return {}
+    info: dict[str, str] = {}
+    for field in text.split():
+        if "=" in field:
+            key, value = field.split("=", 1)
+            info[key] = value
+    if not info:
+        info["raw"] = text
+    return info
+
+
+def pid_cmdline(pid: int) -> str | None:
+    try:
+        raw = Path(f"/proc/{pid}/cmdline").read_bytes()
+    except FileNotFoundError:
+        return None
+    except OSError:
+        return None
+    cmdline = raw.replace(b"\x00", b" ").decode("utf-8", errors="replace").strip()
+    return cmdline or None
+
+
+def is_mark2_builder_cmd(cmdline: str) -> bool:
+    padded = f" {cmdline} "
+    return "mark2" in cmdline and (" fill " in padded or " build " in padded)
+
+
+def active_mark2_builder() -> tuple[int | None, str | None]:
+    lock_info = read_build_lock() or {}
+    pid_text = lock_info.get("pid")
+    if pid_text and pid_text.isdigit():
+        pid = int(pid_text)
+        cmdline = pid_cmdline(pid)
+        if cmdline and is_mark2_builder_cmd(cmdline):
+            return pid, cmdline
+
+    proc = subprocess.run(
+        ["ps", "-eo", "pid=,args="],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    for line in proc.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        pid_text, _, args = line.partition(" ")
+        if pid_text.isdigit() and is_mark2_builder_cmd(args):
+            return int(pid_text), args
+    return None, None
+
+
+def load_watchdog_state() -> dict:
+    path = watchdog_state_path()
+    if path.exists():
+        return json.loads(path.read_text())
+    return {}
+
+
+def save_watchdog_state(state: dict) -> None:
+    MARK2_HOME.mkdir(parents=True, exist_ok=True)
+    tmp = watchdog_state_path().with_suffix(".tmp")
+    tmp.write_text(json.dumps(state, indent=2))
+    tmp.replace(watchdog_state_path())
+
+
+def send_watchdog_email(recipient: str, subject: str, body: str) -> tuple[bool, str]:
+    mail_bin = shutil.which("mail")
+    if mail_bin:
+        proc = subprocess.run(
+            [mail_bin, "-s", subject, recipient],
+            input=body,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if proc.returncode == 0:
+            return True, f"{mail_bin} -s {subject!r} {recipient}"
+
+    sendmail_bin = shutil.which("sendmail")
+    if sendmail_bin:
+        payload = f"To: {recipient}\nSubject: {subject}\n\n{body}\n"
+        proc = subprocess.run(
+            [sendmail_bin, "-t"],
+            input=payload,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if proc.returncode == 0:
+            return True, f"{sendmail_bin} -t"
+
+    return False, "no working mail transport found"
 
 
 # -- Fetch logic (from arxiv-pager.py) ----------------------------------------
@@ -513,6 +636,19 @@ def start_background_fill(reason: str) -> None:
     print(f"  auto-fill started ({reason}); log: {log_path}")
 
 
+def maybe_start_background_fill(reason: str) -> None:
+    """Try to restore the ready target after a lifecycle transition."""
+    state = load_state()
+    ready = ready_batch_count(state)
+    if ready >= READY_TARGET:
+        print(f"  ready target already met: {ready}/{READY_TARGET}")
+        return
+    if not inbox_has_room():
+        print(f"  inbox full ({dir_size_mb(inbox()):.0f} MB) — skipping auto-build")
+        return
+    start_background_fill(reason)
+
+
 # -- Lifecycle commands -------------------------------------------------------
 
 def cmd_pulled(args) -> int:
@@ -529,14 +665,7 @@ def cmd_pulled(args) -> int:
         print(f"  cleaned inbox/{tar.name}")
     set_batch_state(state, num, status="pulled", pulled_at=now_iso())
     print(f"  batch {num} marked pulled")
-
-    # Auto-fill in the background so Rob's SSH command does not block for the
-    # whole arXiv fetch window.
-    if not inbox_has_room():
-        print(f"  inbox full ({dir_size_mb(inbox()):.0f} MB) — "
-              f"skipping auto-build")
-    else:
-        start_background_fill(f"batch {num} pulled")
+    maybe_start_background_fill(f"batch {num} pulled")
 
     return 0
 
@@ -549,6 +678,10 @@ def cmd_returned(args) -> int:
     if not bs:
         print(f"batch {num} not found in state ({state_path()})")
         return 1
+    stale_inbox = inbox() / f"batch-{num:03d}.tar.gz"
+    if stale_inbox.exists():
+        stale_inbox.unlink()
+        print(f"  cleaned stale inbox/{stale_inbox.name}")
     expected = outbox() / f"results-{num:03d}.tar.gz"
     if not expected.exists():
         # Stay within the numbered results namespace; do not match unrelated
@@ -559,6 +692,7 @@ def cmd_returned(args) -> int:
     set_batch_state(state, num, status="results-ready",
                     returned_at=now_iso())
     print(f"  batch {num} results registered")
+    maybe_start_background_fill(f"batch {num} returned")
     return 0
 
 
@@ -578,7 +712,117 @@ def cmd_collected(args) -> int:
         print(f"  cleaned outbox/{f.name}")
     set_batch_state(state, num, status="done", collected_at=now_iso())
     print(f"  batch {num} complete")
+    maybe_start_background_fill(f"batch {num} collected")
     return 0
+
+
+def cmd_watchdog(args) -> int:
+    """Check lane health and optionally send an email alert."""
+    state = load_state()
+    ready = ready_batch_count(state)
+    pending, total = manifest_counts()
+    active_pid, active_cmd = active_mark2_builder()
+    lock_info = read_build_lock()
+
+    reasons: list[str] = []
+    healthy = True
+
+    if pending is None:
+        reasons.append(f"manifest missing at {MANIFEST_DB}")
+        healthy = False
+    elif pending == 0:
+        reasons.append(f"manifest drained: 0/{total} pending")
+    elif ready >= READY_TARGET:
+        reasons.append(f"ready target met: {ready}/{READY_TARGET}")
+    elif active_pid is not None:
+        reasons.append(f"builder active: pid={active_pid}")
+    else:
+        reasons.append(
+            f"lane stalled: ready={ready}/{READY_TARGET}, pending={pending}/{total}, "
+            "no active builder"
+        )
+        healthy = False
+
+    if lock_info and active_pid is None:
+        pid_text = lock_info.get("pid")
+        if pid_text:
+            reasons.append(f"stale build.lock pid={pid_text}")
+        else:
+            reasons.append("stale build.lock present")
+
+    hostname = socket.gethostname()
+    print(f"watchdog: {'healthy' if healthy else 'ALERT'} on {hostname}")
+    for reason in reasons:
+        print(f"  {reason}")
+    if active_cmd:
+        print(f"  cmd: {active_cmd}")
+
+    if healthy:
+        save_watchdog_state({
+            "last_status": "healthy",
+            "checked_at": now_iso(),
+        })
+        return 0
+
+    recipient = args.email_to or os.environ.get("MARK2_ALERT_TO")
+    repeat_seconds = max(0, int(args.repeat_hours * 3600))
+    alert_key = "|".join(reasons)
+    sent = False
+    sent_note = "no recipient configured"
+
+    wd_state = load_watchdog_state()
+    last_key = wd_state.get("last_alert_key")
+    last_sent_at = wd_state.get("last_sent_at")
+    should_send = bool(recipient)
+
+    if should_send and last_key == alert_key and last_sent_at:
+        try:
+            age = time.time() - datetime.fromisoformat(last_sent_at).timestamp()
+        except ValueError:
+            age = repeat_seconds + 1
+        if age < repeat_seconds:
+            should_send = False
+            sent_note = (f"alert suppressed; last sent {int(age // 60)}m ago "
+                         f"for same condition")
+
+    body_lines = [
+        f"MARK2 watchdog alert on {hostname}",
+        f"checked_at: {now_iso()}",
+        f"mark2_home: {MARK2_HOME}",
+        f"manifest_db: {MANIFEST_DB}",
+        "",
+        "Findings:",
+    ]
+    body_lines.extend(f"- {reason}" for reason in reasons)
+    if active_cmd:
+        body_lines.append(f"- cmd: {active_cmd}")
+    body_lines.extend([
+        "",
+        "Suggested checks:",
+        "- ~/mark2/mark2 status",
+        "- tail -n 200 ~/mark2/logs/fill-*.log",
+        "- ps -eo pid,etimes,args | grep mark2",
+    ])
+    body = "\n".join(body_lines)
+
+    if should_send and recipient:
+        subject = f"[mark2] ALERT on {hostname}: ready={ready}/{READY_TARGET}"
+        sent, sent_note = send_watchdog_email(recipient, subject, body)
+
+    new_state = {
+        "last_status": "alert",
+        "checked_at": now_iso(),
+        "last_alert_key": alert_key,
+    }
+    if sent and recipient:
+        new_state["last_sent_at"] = now_iso()
+        new_state["last_recipient"] = recipient
+    else:
+        new_state["last_unsent_note"] = sent_note
+    save_watchdog_state(new_state)
+
+    print(f"  email: {'sent' if sent else 'not sent'} ({sent_note})")
+    return 1
 
 
 # -- Status -------------------------------------------------------------------
@@ -593,16 +837,8 @@ def cmd_status(args) -> int:
           f"eprint_host={EPRINT_HOST or 'manifest'}")
 
     # Manifest stats
-    if MANIFEST_DB.exists():
-        db = sqlite3.connect(MANIFEST_DB)
-        pending = db.execute(
-            "SELECT COUNT(*) FROM papers "
-            "WHERE latest=1 AND include=1 AND status='pending'"
-        ).fetchone()[0]
-        total = db.execute(
-            "SELECT COUNT(*) FROM papers WHERE latest=1 AND include=1"
-        ).fetchone()[0]
-        db.close()
+    pending, total = manifest_counts()
+    if pending is not None and total is not None:
         print(f"manifest:  {pending:,}/{total:,} pending")
     else:
         print(f"manifest:  not found ({MANIFEST_DB})")
@@ -742,6 +978,20 @@ def main() -> int:
                                  help="Mark results collected by Joe")
     p_collected.add_argument("batch_num", type=int)
     p_collected.set_defaults(func=cmd_collected)
+
+    p_watchdog = sub.add_parser(
+        "watchdog",
+        help="Check lane health and optionally send an email alert")
+    p_watchdog.add_argument(
+        "--email-to",
+        default=None,
+        help="Alert recipient (default: MARK2_ALERT_TO env var)")
+    p_watchdog.add_argument(
+        "--repeat-hours",
+        type=float,
+        default=float(os.environ.get("MARK2_ALERT_REPEAT_HOURS", "12")),
+        help="Minimum hours between repeated alerts for the same condition")
+    p_watchdog.set_defaults(func=cmd_watchdog)
 
     p_reset = sub.add_parser("reset", help="Reset all state (testing)")
     p_reset.add_argument("--force", action="store_true")
