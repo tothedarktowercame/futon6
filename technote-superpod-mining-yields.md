@@ -93,10 +93,23 @@ Sample concordance hits (full corpus, 60K papers):
 
 **The concordance is direct corpus value not yet surfaced.** For F6 P6 (Landscape Mode) and F6 P1 (Seed Domain), per-entity backreferences ("which papers mention Brownian motion?") are core lookups.
 
-**Two open questions to flag to Rob:**
+**KB confirmed: PlanetMath (primary) + StackExchange tags + SE body extraction**, per `~/code/futon6/scripts/build-ner-kernel.bb`. Rob's design is explicitly two-tier:
 
-1. **What KB anchors the canon field?** PlanetMath, nLab, Wikipedia categories, ad-hoc? The numeric IDs suggest an internal-ID-passthrough is happening for matches without canonical labels.
-2. **Pipeline is per-surface deterministic.** Each surface maps to exactly one canon (0 lexical ambiguity). Worth confirming whether this is by-design or a stage limitation.
+- *Tier 1 (closed dictionary, CPU NER):* named entities from PlanetMath+SE — the canon field
+- *Tier 2/3 (open LLM extraction):* family + leaf pattern tagging (Q1-Q6 substrate)
+
+> *"The negative space [not covered by Tier 1 terms] is where informal reasoning patterns live"* — quoted from the kernel-build script
+
+**`discover_terms: False` for every cached batch.** The pipeline has an open-vocabulary NER discovery stage as a configurable flag (`--discover-terms-eprint-dir`) but it wasn't activated. The corpus is being projected onto PlanetMath's ontology rather than building its own. **Novel arxiv-introduced concepts won't appear in the concordance unless they're also in PlanetMath.**
+
+This explains the numeric-canon noise (PlanetMath internal IDs that fell through without canonical labels), the `MoscowMathematicalPapyrus → geometry` weirdness (PM includes historical/cultural entries), and the `PrimeNumber → 0` hole (PM's canonical name is probably different).
+
+**Two structural concerns:**
+
+1. **"Pipeline learning new terms as it goes" is configurable but off by default.** Turning on `discover_terms` for the next batch is a one-flag change.
+2. **No stack-side feedback loop.** Even with discovery on, newly-found terms don't flow back into the kernel for the next run. Genuine iterative corpus-building would want a kernel-update loop.
+
+**One open question remaining:** the per-surface determinism (0 lexical ambiguity) — is this by-design or a stage limitation?
 
 ## §7 — Frontier-paper identification (F6 P11 validation)
 
