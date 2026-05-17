@@ -60,24 +60,43 @@ Comparing three F6 P1 candidates on cached corpus:
 
 **Recommendation: categorical arrows for the MVP.** Smallest scope (1.4K papers, 17 patterns) but most coherent. P1's existing success-criteria (entries exist, linked coherently, examples and proofs included) favour coherence over breadth. The CT-specific 3-family-only signature (zero property-of-object papers) is itself a substantive observation about CT-as-mathematical-practice: it operates one level of abstraction above where bounding-estimates make sense. Compactness becomes the natural v2 expansion.
 
-## §6 — Named-entity concordance (built today; index direct)
+## §6 — Named-entity concordance (full-corpus index built; canon-quality measured)
 
-The pipeline produces per-paper `ner-terms.json` with `:term` + `:term_lower` + `:canon` (canonical entity from external knowledge base). For batch 007 alone: 5,000 papers × ~13 terms-per-paper = 64,079 term instances; 2,560 distinct canonical entities; 3,894 distinct surface terms. Inverting the per-paper structure gives a concordance index in ~30 lines of Python.
+The pipeline produces per-paper `ner-terms.json` with `:term` + `:term_lower` + `:canon` (canonical entity from external knowledge base). **Full-corpus stats (all 60K papers):** 812,473 total term instances; **4,295 distinct canonical entities**; 7,693 distinct surface forms. Inverting the per-paper structure into a term-centric concordance index = ~30 lines of Python over cached data.
 
-Sample concordance hits:
+Sample concordance hits (full corpus, 60K papers):
 
 | Canonical entity | Document frequency |
 |---|---|
-| Group | 683 (13.7%) |
-| TopologicalSpace | 511 (10.2%) |
-| Manifold | 317 (6.3%) |
-| Polytope | 335 (6.7%) |
-| BrownianMotion | 63 (1.3%) |
-| GaussianProcess | 16 (0.3%) |
+| Group | 8,903 (14.8%) |
+| TopologicalSpace | 6,283 (10.5%) |
+| Polytope | 4,323 (7.2%) |
+| Manifold | 3,867 (6.4%) |
+| LieAlgebra | 1,580 (2.6%) |
+| BrownianMotion | 576 (1.0%) |
+| GaussianProcess | 134 (0.2%) |
 
-**The concordance is direct corpus value not yet surfaced.** For F6 P6 (Landscape Mode) and F6 P1 (Seed Domain), per-entity backreferences ("which papers mention Brownian motion?") are core lookups. The data exists.
+**Interesting hole: `PrimeNumber` returns 0 papers.** Either the canon vocabulary doesn't include it or papers about primes use a different surface form. Worth confirming.
 
-**Canon-quality caveat:** ~10-20% of canonicalisations look noisy — numeric IDs (`'10'`, `'1064'`, `'111'`) and obvious misalignments (`floquet theory` → `'11'`, `geometry` → `'MoscowMathematicalPapyrus'`). Worth confirming with Rob: which KB the canon field anchors against, and how alignment quality is currently measured.
+**Canon-quality measurement (Q9b):**
+
+| Property | Value |
+|---|---|
+| Distinct canons | 4,295 |
+| **Probably-clean** | **3,940 (91.7%)** |
+| Numeric-ID canons (probably-bad) | 337 (7.8%; touch **53.5% of papers**) |
+| Non-math-marker canons | 18 (e.g. `MoscowMathematicalPapyrus` df=2,611, `Algorithm` df=2,026) |
+| Surface→canon ambiguous | **0** (pipeline is deterministic per surface — design choice that loses ambiguity-handling) |
+| Over-collapsed canons (>3 surfaces) | 394 (most legitimate; some genuinely over-aggressive) |
+
+**Reading: 92% clean; bad canons are systematically detectable.** A sanitisation pass (drop numeric, review non-math markers, investigate over-collapsed) would improve quality meaningfully without breaking the corpus.
+
+**The concordance is direct corpus value not yet surfaced.** For F6 P6 (Landscape Mode) and F6 P1 (Seed Domain), per-entity backreferences ("which papers mention Brownian motion?") are core lookups.
+
+**Two open questions to flag to Rob:**
+
+1. **What KB anchors the canon field?** PlanetMath, nLab, Wikipedia categories, ad-hoc? The numeric IDs suggest an internal-ID-passthrough is happening for matches without canonical labels.
+2. **Pipeline is per-surface deterministic.** Each surface maps to exactly one canon (0 lexical ambiguity). Worth confirming whether this is by-design or a stage limitation.
 
 ## §7 — Frontier-paper identification (F6 P11 validation)
 
