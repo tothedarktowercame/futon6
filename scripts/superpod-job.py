@@ -79,6 +79,7 @@ from pathlib import Path
 import shutil
 import subprocess
 
+import edn_format
 import numpy as np
 
 os.environ.setdefault("PYTORCH_ALLOC_CONF", "expandable_segments:True")
@@ -90,6 +91,14 @@ from futon6.arxiv_pattern_prompt import (
     build_arxiv_pattern_prompt,
     parse_arxiv_pattern_response,
 )
+from futon6.theorem_extraction import extract_from_tarball
+
+
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_DISCOVERY_PM_SEED = ROOT / "data" / "dictionary" / "entries-pm-seed.edn"
+DEFAULT_DISCOVERY_NLAB_SEED = ROOT / "data" / "dictionary" / "entries-nlab-seed.edn"
+DEFAULT_DISCOVERY_NNEXUS_STOPWORDS = Path.home() / "code" / "nnexus" / "lib" / "NNexus" / "StopWordList.pm"
+DEFAULT_DISCOVERY_NNEXUS_SNAPSHOT = Path.home() / "code" / "nnexus" / "lib" / "NNexus" / "resources" / "database" / "snapshot-6-2014.sqlite"
 
 
 def _timestamp_now() -> str:
@@ -546,6 +555,26 @@ DISCOVERY_GENERIC = {
     "weak", "strong", "which", "morphisms", "cells", "condition", "define",
     "acknowledgements",
 }
+DISCOVERY_QUALITY_SINGLE_WORDS = {
+    "free", "internal", "external", "standard", "connected", "coherent",
+    "reduced", "cartesian", "monoidal", "simplicial", "cubical", "abelian",
+    "braided", "symmetric", "weak", "strict", "finite", "small", "large",
+    "complete", "cocomplete", "exact", "closed", "pointed", "presentable",
+    "thin", "left", "right", "upper", "lower", "objects", "object", "spaces",
+    "space", "maps", "map", "morphism", "morphisms", "cells", "cell",
+    "arrows", "arrow", "sheaves", "sheaf", "functors", "functor", "what",
+}
+DISCOVERY_QUALITY_BAN_TOKENS = {
+    "this", "these", "that", "those", "smallest", "largest", "least",
+    "greatest",
+}
+DISCOVERY_ADJECTIVAL_SUFFIXES = (
+    "al", "ial", "ical", "ic", "ary", "ory", "ive", "less",
+)
+DISCOVERY_LOCAL_DEFINITIONAL_RE = re.compile(
+    r"\b(?:is\s+defined\s+as|defined\s+to\s+be|we\s+call|is\s+called|definition\s+of)\b",
+    re.IGNORECASE,
+)
 
 
 def _compact_context(text, start, end, window=120):
@@ -653,6 +682,225 @@ def extract_open_ner_candidates(text, max_per_entity=64):
                 return out
 
     return out
+
+
+def _load_discovery_seed_lowers(path):
+    if not path:
+        return set()
+    path = Path(path)
+    if not path.exists():
+        return set()
+    raw = edn_format.loads(path.read_text(encoding="utf-8"))
+    entries = raw.get(edn_format.Keyword("dictionary/entries"), [])
+    out = set()
+    for entry in entries:
+        lower = entry.get(edn_format.Keyword("term/lower"))
+        if lower:
+            out.add(str(lower))
+    return out
+
+
+def _load_discovery_nnexus_stopwords(path):
+    if not path:
+        return set()
+    path = Path(path)
+    if not path.exists():
+        return set()
+    text = path.read_text(encoding="utf-8", errors="replace")
+    match = re.search(r"return \[qw/(.*?)/\];", text, re.DOTALL)
+    if not match:
+        return set()
+    return {token.strip().lower() for token in match.group(1).split() if token.strip()}
+
+
+def _load_discovery_nnexus_snapshot_lowers(path):
+    if not path:
+        return set()
+    path = Path(path)
+    if not path.exists():
+        return set()
+    out = set()
+    pat = re.compile(r'^INSERT INTO "concepts" VALUES\(\d+,\'([^\']*)\',\'([^\']*)\',')
+    with path.open("r", encoding="utf-8", errors="replace") as handle:
+        for line in handle:
+            match = pat.match(line)
+            if not match:
+                continue
+            firstword, tailwords = match.groups()
+            concept = " ".join(part for part in (firstword, tailwords) if part).strip()
+            if concept:
+                out.add(concept.lower())
+    return out
+
+
+def _normalize_discovery_support_text(text):
+    s = re.sub(r"\\[A-Za-z]+\*?(?:\[[^\]]*\])?", " ", text or "")
+    s = s.replace("{", " ").replace("}", " ").replace("$", " ")
+    s = re.sub(r"\s+", " ", s)
+    return s.strip().lower()
+
+
+def _trim_discovery_support_text(text, max_chars=500):
+    return " ".join((text or "").split())[:max_chars]
+
+
+def _discovery_context_looks_definitional(text):
+    return bool(DISCOVERY_LOCAL_DEFINITIONAL_RE.search(_normalize_discovery_support_text(text)))
+
+
+def _discovery_contains_term(term_lower, text):
+    return term_lower in _normalize_discovery_support_text(text)
+
+
+def _discovery_rhs_contexts_for_eprint(paper_id, eprint_meta):
+    path = (eprint_meta or {}).get("path")
+    if not path:
+        return []
+    path = Path(path)
+    if not path.exists():
+        return []
+    try:
+        result = extract_from_tarball(str(path), paper_id)
+    except Exception:
+        return []
+    contexts = []
+    for definition in result.definitions:
+        text = _trim_discovery_support_text(definition.get("content", ""))
+        if text:
+            contexts.append({
+                "kind": "definition-env",
+                "label": definition.get("label") or None,
+                "section": definition.get("section") or None,
+                "text": text,
+            })
+    for theorem in result.theorems:
+        text = _trim_discovery_support_text(theorem.statement)
+        if text:
+            contexts.append({
+                "kind": "theorem-statement",
+                "label": theorem.label or None,
+                "section": theorem.section or None,
+                "text": text,
+            })
+    return contexts
+
+
+def _discovery_seed_membership(term_lower, pm_lowers, nlab_lowers, nnexus_lowers):
+    in_pm = term_lower in pm_lowers
+    in_nlab = term_lower in nlab_lowers
+    in_nnexus = term_lower in nnexus_lowers
+    return {
+        "known_in_pm_seed": in_pm,
+        "known_in_nlab_seed": in_nlab,
+        "known_in_nnexus_snapshot": in_nnexus,
+        "novel_vs_seed": "novel" if not (in_pm or in_nlab or in_nnexus) else "known",
+    }
+
+
+def _discovery_keep_single_word_term(
+    term_lower,
+    *,
+    known_in_pm_seed,
+    known_in_nlab_seed,
+    known_in_nnexus_snapshot,
+    entity_count,
+    rhs_support_counts,
+    nnexus_stopwords,
+):
+    if known_in_pm_seed or known_in_nlab_seed or known_in_nnexus_snapshot:
+        return True
+    if " " in term_lower:
+        return True
+    if term_lower in nnexus_stopwords or term_lower in DISCOVERY_QUALITY_SINGLE_WORDS:
+        return False
+    if any(term_lower.endswith(suffix) for suffix in DISCOVERY_ADJECTIVAL_SUFFIXES):
+        return False
+    if entity_count < 2:
+        return False
+    if not (rhs_support_counts.get("definition-env", 0) or rhs_support_counts.get("local-definitional-context", 0)):
+        return False
+    return True
+
+
+def _discovery_keep_multiword_term(
+    term_lower,
+    *,
+    known_in_pm_seed,
+    known_in_nlab_seed,
+    known_in_nnexus_snapshot,
+    nnexus_stopwords,
+):
+    if known_in_pm_seed or known_in_nlab_seed or known_in_nnexus_snapshot:
+        return True
+    tokens = term_lower.split()
+    if any(token in DISCOVERY_QUALITY_BAN_TOKENS for token in tokens):
+        return False
+    stopword_count = sum(1 for token in tokens if token in nnexus_stopwords)
+    if stopword_count > 1:
+        return False
+    return True
+
+
+def _add_discovery_context_limited(bucket, row, limit):
+    if len(bucket) >= limit:
+        return
+    key = (row.get("paper_id"), row.get("kind"), row.get("text"))
+    existing = {
+        (item.get("paper_id"), item.get("kind"), item.get("text"))
+        for item in bucket
+    }
+    if key not in existing:
+        bucket.append(row)
+
+
+def _build_learned_dictionary_entry(row):
+    definitions = []
+    seen_defs = set()
+    for ctx in row.get("supporting_contexts", []):
+        key = (ctx.get("kind"), ctx.get("text"))
+        if key in seen_defs:
+            continue
+        seen_defs.add(key)
+        definitions.append({
+            "text": ctx.get("text"),
+            "source_paper": ctx.get("paper_id"),
+            "method": ctx.get("kind"),
+            "label": ctx.get("label"),
+            "section": ctx.get("section"),
+            "status": "provisional" if row.get("novel_vs_seed") == "novel" else "seed-known",
+        })
+
+    usage_examples = []
+    seen_usage = set()
+    for ctx in row.get("lhs_contexts", []):
+        key = (ctx.get("paper_id"), ctx.get("text"))
+        if key in seen_usage:
+            continue
+        seen_usage.add(key)
+        usage_examples.append({
+            "source_paper": ctx.get("paper_id"),
+            "source": ctx.get("source"),
+            "context": ctx.get("text"),
+        })
+
+    return {
+        "term_id": row.get("term_lower", "").replace(" ", "-"),
+        "term_headword": row.get("term_lower"),
+        "term_lower": row.get("term_lower"),
+        "term_status": "provisional" if row.get("novel_vs_seed") == "novel" else "seed-known",
+        "term_canon_source": "arxiv-discovery",
+        "term_occurrence_count": row.get("candidate_count", 0),
+        "term_entity_count": row.get("entity_count", 0),
+        "paper_ids": row.get("paper_ids", []),
+        "known_in_pm_seed": row.get("known_in_pm_seed", False),
+        "known_in_nlab_seed": row.get("known_in_nlab_seed", False),
+        "known_in_nnexus_snapshot": row.get("known_in_nnexus_snapshot", False),
+        "novel_vs_seed": row.get("novel_vs_seed"),
+        "sources": row.get("sources", {}),
+        "rhs_support_counts": row.get("rhs_support_counts", {}),
+        "definitions": definitions,
+        "usage_examples": usage_examples,
+    }
 
 
 def load_ner_kernel(path):
@@ -982,6 +1230,12 @@ def run_stage5_ner_scopes(
     discover_terms_min_freq=3,
     discover_terms_max=2000,
     discover_terms_max_per_entity=64,
+    discover_terms_pm_seed=None,
+    discover_terms_nlab_seed=None,
+    discover_terms_nnexus_stopwords=None,
+    discover_terms_nnexus_snapshot=None,
+    discover_terms_max_lhs_contexts=3,
+    discover_terms_max_rhs_contexts=5,
     eprint_dir=None,
     eprint_max_chars=240_000,
     eprint_max_tex_members=4,
@@ -1016,16 +1270,29 @@ def run_stage5_ner_scopes(
     discovery_eprint_ok = 0
     discovery_eprint_missing = 0
     discovery_eprint_status = Counter()
+    discovery_aggregates = {}
+    rhs_context_cache = {}
+    pm_seed_lowers = set()
+    nlab_seed_lowers = set()
+    nnexus_stopwords = set()
+    nnexus_snapshot_lowers = set()
     if discover_terms:
         known_terms = set(singles.keys())
         for rows in multi_index.values():
             for term_lower, _, _ in rows:
                 known_terms.add(term_lower)
+        pm_seed_lowers = _load_discovery_seed_lowers(discover_terms_pm_seed)
+        nlab_seed_lowers = _load_discovery_seed_lowers(discover_terms_nlab_seed)
+        nnexus_stopwords = _load_discovery_nnexus_stopwords(discover_terms_nnexus_stopwords)
+        nnexus_snapshot_lowers = _load_discovery_nnexus_snapshot_lowers(discover_terms_nnexus_snapshot)
         print("       Open-world term discovery: enabled "
               f"(min_freq={discover_terms_min_freq}, max={discover_terms_max})")
         if discover_terms_eprint_dir is not None:
             print("       Open-world term discovery text source: eprints "
                   f"({discover_terms_eprint_dir})")
+        print("       Open-world term seed context: "
+              f"pm={len(pm_seed_lowers)} nlab={len(nlab_seed_lowers)} "
+              f"nnexus={len(nnexus_snapshot_lowers)} stopwords={len(nnexus_stopwords)}")
 
     ner_path = outdir / "ner-terms.json"
     scope_path = outdir / "scopes.json"
@@ -1083,6 +1350,7 @@ def run_stage5_ner_scopes(
             # Open-world term discovery
             if discover_terms:
                 discovery_text = full_text
+                discovery_meta = eprint_meta
                 if discover_terms_eprint_dir is not None:
                     eprint_text, e_meta = _load_eprint_text_for_entity(
                         eprint_dir=discover_terms_eprint_dir,
@@ -1094,9 +1362,14 @@ def run_stage5_ner_scopes(
                     discovery_eprint_status[estatus] += 1
                     if eprint_text:
                         discovery_text = eprint_text
+                        discovery_meta = e_meta
                         discovery_eprint_ok += 1
                     else:
                         discovery_eprint_missing += 1
+                rhs_contexts = rhs_context_cache.get(eid)
+                if rhs_contexts is None:
+                    rhs_contexts = _discovery_rhs_contexts_for_eprint(eid, discovery_meta)
+                    rhs_context_cache[eid] = rhs_contexts
                 candidates = extract_open_ner_candidates(
                     discovery_text,
                     max_per_entity=discover_terms_max_per_entity,
@@ -1122,6 +1395,71 @@ def run_stage5_ner_scopes(
                             "source": source,
                             "context": context,
                         }
+                    record = discovery_aggregates.setdefault(
+                        term,
+                        {
+                            "term_lower": term,
+                            "candidate_count": 0,
+                            "entity_ids": set(),
+                            "sources": Counter(),
+                            "lhs_contexts": [],
+                            "rhs_support_counts": Counter(),
+                            "supporting_contexts": [],
+                            **_discovery_seed_membership(
+                                term,
+                                pm_seed_lowers,
+                                nlab_seed_lowers,
+                                nnexus_snapshot_lowers,
+                            ),
+                        },
+                    )
+                    record["candidate_count"] += 1
+                    record["entity_ids"].add(eid)
+                    record["sources"][source] += 1
+                    _add_discovery_context_limited(
+                        record["lhs_contexts"],
+                        {
+                            "paper_id": eid,
+                            "source": source,
+                            "kind": "lhs-candidate-context",
+                            "text": context[:500],
+                        },
+                        discover_terms_max_lhs_contexts,
+                    )
+                    if source in {
+                        "is-called",
+                        "called-as",
+                        "defined-as",
+                        "definition-of",
+                        "definition-block-subject",
+                    } or _discovery_context_looks_definitional(context):
+                        record["rhs_support_counts"]["local-definitional-context"] += 1
+                        _add_discovery_context_limited(
+                            record["supporting_contexts"],
+                            {
+                                "paper_id": eid,
+                                "source": source,
+                                "kind": "local-definitional-context",
+                                "text": context[:500],
+                            },
+                            discover_terms_max_rhs_contexts,
+                        )
+                    for rhs_context in rhs_contexts:
+                        if not _discovery_contains_term(term, rhs_context["text"]):
+                            continue
+                        record["rhs_support_counts"][rhs_context["kind"]] += 1
+                        _add_discovery_context_limited(
+                            record["supporting_contexts"],
+                            {
+                                "paper_id": eid,
+                                "source": source,
+                                "kind": rhs_context["kind"],
+                                "label": rhs_context.get("label"),
+                                "section": rhs_context.get("section"),
+                                "text": rhs_context["text"],
+                            },
+                            discover_terms_max_rhs_contexts,
+                        )
                     seen_terms.add(term)
                 for term in seen_terms:
                     discovery_entities[term] += 1
@@ -1168,12 +1506,17 @@ def run_stage5_ner_scopes(
     if discover_terms:
         cands_path = outdir / "candidate-new-terms.jsonl"
         summary_path = outdir / "candidate-new-terms-summary.json"
+        learned_dict_path = outdir / "learned-term-dictionary.jsonl"
         rows = []
-        for term, occ in discovery_occ.items():
-            entity_n = discovery_entities.get(term, 0)
+        filtered_out_terms = 0
+        prefilter_unique_terms = len(discovery_aggregates)
+        for term, record in discovery_aggregates.items():
+            occ = record["candidate_count"]
+            entity_ids = sorted(record.pop("entity_ids"))
+            entity_n = len(entity_ids)
             if entity_n < discover_terms_min_freq:
                 continue
-            src_counter = discovery_sources.get(term, Counter())
+            src_counter = Counter(record["sources"])
             definitional = sum(
                 src_counter.get(k, 0) for k in (
                     "is-called",
@@ -1186,7 +1529,29 @@ def run_stage5_ner_scopes(
             )
             score = occ + 0.5 * entity_n + 0.2 * definitional
             ex = discovery_example.get(term, {})
-            rows.append({
+            rhs_support_counts = dict(sorted(record["rhs_support_counts"].items()))
+            if " " in term:
+                keep = _discovery_keep_multiword_term(
+                    term,
+                    known_in_pm_seed=record["known_in_pm_seed"],
+                    known_in_nlab_seed=record["known_in_nlab_seed"],
+                    known_in_nnexus_snapshot=record["known_in_nnexus_snapshot"],
+                    nnexus_stopwords=nnexus_stopwords,
+                )
+            else:
+                keep = _discovery_keep_single_word_term(
+                    term,
+                    known_in_pm_seed=record["known_in_pm_seed"],
+                    known_in_nlab_seed=record["known_in_nlab_seed"],
+                    known_in_nnexus_snapshot=record["known_in_nnexus_snapshot"],
+                    entity_count=entity_n,
+                    rhs_support_counts=rhs_support_counts,
+                    nnexus_stopwords=nnexus_stopwords,
+                )
+            if not keep:
+                filtered_out_terms += 1
+                continue
+            row = {
                 "term_lower": term,
                 "candidate_count": int(occ),
                 "entity_count": int(entity_n),
@@ -1195,12 +1560,34 @@ def run_stage5_ner_scopes(
                 "example_entity_id": ex.get("entity_id"),
                 "example_source": ex.get("source"),
                 "example_context": ex.get("context"),
-            })
+                "paper_ids": entity_ids[:25],
+                "lhs_contexts": record["lhs_contexts"],
+                "rhs_support_counts": rhs_support_counts,
+                "supporting_contexts": record["supporting_contexts"],
+                "known_in_pm_seed": record["known_in_pm_seed"],
+                "known_in_nlab_seed": record["known_in_nlab_seed"],
+                "known_in_nnexus_snapshot": record["known_in_nnexus_snapshot"],
+                "novel_vs_seed": record["novel_vs_seed"],
+                "learned_status": (
+                    "new-term"
+                    if record["novel_vs_seed"] == "novel"
+                    else "seed-known-missing-from-kernel"
+                ),
+            }
+            rows.append(row)
         rows.sort(key=lambda r: (-r["score"], -r["entity_count"], -r["candidate_count"], r["term_lower"]))
         rows = rows[:discover_terms_max]
+        new_terms_learned = sum(1 for row in rows if row["novel_vs_seed"] == "novel")
+        seed_known_terms = sum(1 for row in rows if row["novel_vs_seed"] != "novel")
+        rhs_supported_terms = sum(1 for row in rows if row["rhs_support_counts"])
+        learned_rows = [_build_learned_dictionary_entry(row) for row in rows]
+        learned_rows = learned_rows[:discover_terms_max]
 
         with open(cands_path, "w", encoding="utf-8") as f:
             for r in rows:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        with open(learned_dict_path, "w", encoding="utf-8") as f:
+            for r in learned_rows:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
         open_ner_stats = {
@@ -1216,13 +1603,25 @@ def run_stage5_ner_scopes(
             "total_extracted": discovery_total,
             "total_unknown_extracted": discovery_unknown,
             "unique_unknown_terms": len(discovery_occ),
+            "prefilter_unique_candidate_terms": prefilter_unique_terms,
+            "filtered_out_terms": filtered_out_terms,
+            "new_terms_learned": new_terms_learned,
+            "seed_known_terms_missing_from_kernel": seed_known_terms,
+            "rhs_supported_terms": rhs_supported_terms,
+            "pm_seed_terms": len(pm_seed_lowers),
+            "nlab_seed_terms": len(nlab_seed_lowers),
+            "nnexus_snapshot_terms": len(nnexus_snapshot_lowers),
+            "nnexus_stopword_count": len(nnexus_stopwords),
             "candidates_written": len(rows),
+            "learned_dictionary_written": len(learned_rows),
             "output_jsonl": str(cands_path),
+            "output_dictionary_jsonl": str(learned_dict_path),
         }
         with open(summary_path, "w", encoding="utf-8") as f:
             json.dump(open_ner_stats, f, indent=2, ensure_ascii=False)
 
         print(f"       Written {cands_path} ({os.path.getsize(cands_path) / 1e6:.1f} MB)")
+        print(f"       Written {learned_dict_path} ({os.path.getsize(learned_dict_path) / 1e6:.1f} MB)")
         print(f"       Written {summary_path} ({os.path.getsize(summary_path) / 1e6:.1f} MB)")
 
     return {
@@ -4855,6 +5254,18 @@ def print_dry_run(args):
             cmd_parts.append(f"  --discover-terms-eprint-max-chars {args.discover_terms_eprint_max_chars}")
         if args.discover_terms_eprint_max_tex_members != 4:
             cmd_parts.append(f"  --discover-terms-eprint-max-tex-members {args.discover_terms_eprint_max_tex_members}")
+        if args.discover_terms_pm_seed != str(DEFAULT_DISCOVERY_PM_SEED):
+            cmd_parts.append(f"  --discover-terms-pm-seed {args.discover_terms_pm_seed}")
+        if args.discover_terms_nlab_seed != str(DEFAULT_DISCOVERY_NLAB_SEED):
+            cmd_parts.append(f"  --discover-terms-nlab-seed {args.discover_terms_nlab_seed}")
+        if args.discover_terms_nnexus_stopwords != str(DEFAULT_DISCOVERY_NNEXUS_STOPWORDS):
+            cmd_parts.append(f"  --discover-terms-nnexus-stopwords {args.discover_terms_nnexus_stopwords}")
+        if args.discover_terms_nnexus_snapshot != str(DEFAULT_DISCOVERY_NNEXUS_SNAPSHOT):
+            cmd_parts.append(f"  --discover-terms-nnexus-snapshot {args.discover_terms_nnexus_snapshot}")
+        if args.discover_terms_max_lhs_contexts != 3:
+            cmd_parts.append(f"  --discover-terms-max-lhs-contexts {args.discover_terms_max_lhs_contexts}")
+        if args.discover_terms_max_rhs_contexts != 5:
+            cmd_parts.append(f"  --discover-terms-max-rhs-contexts {args.discover_terms_max_rhs_contexts}")
     if args.run_distinctor_mit:
         cmd_parts.append(f"  --run-distinctor-mit")
         if args.distinctor_entity_limit:
@@ -4912,6 +5323,18 @@ def print_dry_run(args):
             moist_parts.append(f"  --discover-terms-eprint-max-chars {args.discover_terms_eprint_max_chars}")
         if args.discover_terms_eprint_max_tex_members != 4:
             moist_parts.append(f"  --discover-terms-eprint-max-tex-members {args.discover_terms_eprint_max_tex_members}")
+        if args.discover_terms_pm_seed != str(DEFAULT_DISCOVERY_PM_SEED):
+            moist_parts.append(f"  --discover-terms-pm-seed {args.discover_terms_pm_seed}")
+        if args.discover_terms_nlab_seed != str(DEFAULT_DISCOVERY_NLAB_SEED):
+            moist_parts.append(f"  --discover-terms-nlab-seed {args.discover_terms_nlab_seed}")
+        if args.discover_terms_nnexus_stopwords != str(DEFAULT_DISCOVERY_NNEXUS_STOPWORDS):
+            moist_parts.append(f"  --discover-terms-nnexus-stopwords {args.discover_terms_nnexus_stopwords}")
+        if args.discover_terms_nnexus_snapshot != str(DEFAULT_DISCOVERY_NNEXUS_SNAPSHOT):
+            moist_parts.append(f"  --discover-terms-nnexus-snapshot {args.discover_terms_nnexus_snapshot}")
+        if args.discover_terms_max_lhs_contexts != 3:
+            moist_parts.append(f"  --discover-terms-max-lhs-contexts {args.discover_terms_max_lhs_contexts}")
+        if args.discover_terms_max_rhs_contexts != 5:
+            moist_parts.append(f"  --discover-terms-max-rhs-contexts {args.discover_terms_max_rhs_contexts}")
     if args.run_distinctor_mit:
         moist_parts.append(f"  --run-distinctor-mit")
         if args.distinctor_entity_limit:
@@ -5071,6 +5494,18 @@ def main():
                         help="Per-entity text cap for eprint-backed term discovery (default: 240000)")
     parser.add_argument("--discover-terms-eprint-max-tex-members", type=int, default=4,
                         help="Max .tex members per tar for eprint-backed term discovery (default: 4)")
+    parser.add_argument("--discover-terms-pm-seed", default=str(DEFAULT_DISCOVERY_PM_SEED),
+                        help="PlanetMath seed EDN for seed-aware Stage 5 discovery (default: repo data/dictionary/entries-pm-seed.edn)")
+    parser.add_argument("--discover-terms-nlab-seed", default=str(DEFAULT_DISCOVERY_NLAB_SEED),
+                        help="nLab seed EDN for seed-aware Stage 5 discovery (default: repo data/dictionary/entries-nlab-seed.edn)")
+    parser.add_argument("--discover-terms-nnexus-stopwords", default=str(DEFAULT_DISCOVERY_NNEXUS_STOPWORDS),
+                        help="NNexus stopword source for discovery filtering (default: ~/code/nnexus/.../StopWordList.pm)")
+    parser.add_argument("--discover-terms-nnexus-snapshot", default=str(DEFAULT_DISCOVERY_NNEXUS_SNAPSHOT),
+                        help="NNexus concept snapshot SQL dump for seed membership (default: ~/code/nnexus/.../snapshot-6-2014.sqlite)")
+    parser.add_argument("--discover-terms-max-lhs-contexts", type=int, default=3,
+                        help="Max lhs usage contexts retained per learned term (default: 3)")
+    parser.add_argument("--discover-terms-max-rhs-contexts", type=int, default=5,
+                        help="Max rhs definitional/theorem contexts retained per learned term (default: 5)")
     parser.add_argument("--run-distinctor-mit", action="store_true",
                         help="Run binder-pair MIT/distinctor pilot (Stage 5b)")
     parser.add_argument("--distinctor-entity-limit", type=int, default=0,
@@ -5237,6 +5672,14 @@ def main():
             args.paper_hg_eprint_dir = str(input_base / args.paper_hg_eprint_dir)
         if args.discover_terms_eprint_dir and not Path(args.discover_terms_eprint_dir).is_absolute():
             args.discover_terms_eprint_dir = str(input_base / args.discover_terms_eprint_dir)
+        if args.discover_terms_pm_seed and not Path(args.discover_terms_pm_seed).is_absolute():
+            args.discover_terms_pm_seed = str(input_base / args.discover_terms_pm_seed)
+        if args.discover_terms_nlab_seed and not Path(args.discover_terms_nlab_seed).is_absolute():
+            args.discover_terms_nlab_seed = str(input_base / args.discover_terms_nlab_seed)
+        if args.discover_terms_nnexus_stopwords and not Path(args.discover_terms_nnexus_stopwords).is_absolute():
+            args.discover_terms_nnexus_stopwords = str(input_base / args.discover_terms_nnexus_stopwords)
+        if args.discover_terms_nnexus_snapshot and not Path(args.discover_terms_nnexus_snapshot).is_absolute():
+            args.discover_terms_nnexus_snapshot = str(input_base / args.discover_terms_nnexus_snapshot)
         if args.distinctor_eprint_dir and not Path(args.distinctor_eprint_dir).is_absolute():
             args.distinctor_eprint_dir = str(input_base / args.distinctor_eprint_dir)
         # data-dir for downloads also goes to input location
@@ -5326,6 +5769,10 @@ def main():
         parser.error("--discover-terms-eprint-max-chars must be > 0")
     if args.discover_terms_eprint_max_tex_members <= 0:
         parser.error("--discover-terms-eprint-max-tex-members must be > 0")
+    if args.discover_terms_max_lhs_contexts <= 0:
+        parser.error("--discover-terms-max-lhs-contexts must be > 0")
+    if args.discover_terms_max_rhs_contexts <= 0:
+        parser.error("--discover-terms-max-rhs-contexts must be > 0")
     if args.paper_hg_max_expressions <= 0:
         parser.error("--paper-hg-max-expressions must be > 0")
     if args.paper_hg_text_max_chars <= 0:
@@ -5459,6 +5906,18 @@ def main():
     if args.discover_terms_eprint_dir and not Path(args.discover_terms_eprint_dir).exists():
         print(f"  WARNING: --discover-terms-eprint-dir not found: {args.discover_terms_eprint_dir}")
         print("           Open-world term discovery will use metadata/QA text.")
+    if args.discover_terms and args.discover_terms_pm_seed and not Path(args.discover_terms_pm_seed).exists():
+        print(f"  WARNING: --discover-terms-pm-seed not found: {args.discover_terms_pm_seed}")
+        print("           Stage 5 learning will continue without PlanetMath seed membership.")
+    if args.discover_terms and args.discover_terms_nlab_seed and not Path(args.discover_terms_nlab_seed).exists():
+        print(f"  WARNING: --discover-terms-nlab-seed not found: {args.discover_terms_nlab_seed}")
+        print("           Stage 5 learning will continue without nLab seed membership.")
+    if args.discover_terms and args.discover_terms_nnexus_stopwords and not Path(args.discover_terms_nnexus_stopwords).exists():
+        print(f"  WARNING: --discover-terms-nnexus-stopwords not found: {args.discover_terms_nnexus_stopwords}")
+        print("           Stage 5 learning will continue without NNexus stopword filtering.")
+    if args.discover_terms and args.discover_terms_nnexus_snapshot and not Path(args.discover_terms_nnexus_snapshot).exists():
+        print(f"  WARNING: --discover-terms-nnexus-snapshot not found: {args.discover_terms_nnexus_snapshot}")
+        print("           Stage 5 learning will continue without NNexus concept membership.")
     # ========== Moist Run ==========
     # Moist run: execute CPU stages normally, generate prompt files for LLM
     # stages. This lets you run Stage 1 (parse) and Stage 5 (NER) on a laptop,
@@ -5851,6 +6310,16 @@ def main():
                 discover_terms_min_freq=args.discover_terms_min_freq,
                 discover_terms_max=args.discover_terms_max,
                 discover_terms_max_per_entity=args.discover_terms_max_per_entity,
+                discover_terms_pm_seed=(Path(args.discover_terms_pm_seed)
+                                        if args.discover_terms_pm_seed else None),
+                discover_terms_nlab_seed=(Path(args.discover_terms_nlab_seed)
+                                          if args.discover_terms_nlab_seed else None),
+                discover_terms_nnexus_stopwords=(Path(args.discover_terms_nnexus_stopwords)
+                                                 if args.discover_terms_nnexus_stopwords else None),
+                discover_terms_nnexus_snapshot=(Path(args.discover_terms_nnexus_snapshot)
+                                                if args.discover_terms_nnexus_snapshot else None),
+                discover_terms_max_lhs_contexts=args.discover_terms_max_lhs_contexts,
+                discover_terms_max_rhs_contexts=args.discover_terms_max_rhs_contexts,
                 eprint_dir=(Path(args.paper_eprint_dir)
                             if args.paper_eprint_dir else None),
                 eprint_max_chars=args.paper_eprint_max_chars,
@@ -5871,9 +6340,17 @@ def main():
             open_ner = stage5_stats.get("open_ner")
             if open_ner:
                 print("       Open-world NER: "
-                      f"{open_ner['candidates_written']} candidates "
-                      f"(unknown_extracted={open_ner['total_unknown_extracted']}, "
+                      f"{open_ner['candidates_written']} learned candidates "
+                      f"(prefilter={open_ner['prefilter_unique_candidate_terms']}, "
+                      f"filtered_out={open_ner['filtered_out_terms']}, "
+                      f"unknown_extracted={open_ner['total_unknown_extracted']}, "
                       f"unique={open_ner['unique_unknown_terms']})")
+                print("         learned dictionary: "
+                      f"{open_ner['learned_dictionary_written']} entries, "
+                      f"new={open_ner['new_terms_learned']}, "
+                      f"seed-known-missing-from-kernel="
+                      f"{open_ner['seed_known_terms_missing_from_kernel']}, "
+                      f"rhs_supported={open_ner['rhs_supported_terms']}")
                 if open_ner.get("eprint_mode"):
                     print("         eprint text coverage: "
                           f"{open_ner.get('eprint_text_used', 0)}/"
@@ -5894,6 +6371,7 @@ def main():
                 eprint_status_counts=stage5_stats.get("eprint_status_counts", {}),
                 eprint_text_used=stage5_stats.get("eprint_text_used", 0),
                 eprint_text_missing=stage5_stats.get("eprint_text_missing", 0),
+                open_ner=stage5_stats.get("open_ner"),
             )
     else:
         print(f"\n[Stage 5/{n_stages}] Skipped (--skip-ner)")
@@ -7239,6 +7717,12 @@ def main():
         "moist_run": args.moist_run,
         "discover_terms": args.discover_terms,
         "discover_terms_eprint_dir": args.discover_terms_eprint_dir,
+        "discover_terms_pm_seed": args.discover_terms_pm_seed,
+        "discover_terms_nlab_seed": args.discover_terms_nlab_seed,
+        "discover_terms_nnexus_stopwords": args.discover_terms_nnexus_stopwords,
+        "discover_terms_nnexus_snapshot": args.discover_terms_nnexus_snapshot,
+        "discover_terms_max_lhs_contexts": args.discover_terms_max_lhs_contexts,
+        "discover_terms_max_rhs_contexts": args.discover_terms_max_rhs_contexts,
         "run_distinctor_mit": args.run_distinctor_mit,
         "distinctor_eprint_dir": args.distinctor_eprint_dir,
         "paper_eprint_dir": args.paper_eprint_dir,

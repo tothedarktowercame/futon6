@@ -165,6 +165,10 @@ python3 scripts/superpod-job.py \
   --ner-kernel /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \
   --discover-terms \
   --discover-terms-eprint-dir eprints \
+  --discover-terms-pm-seed /home/joe/code/futon6/data/dictionary/entries-pm-seed.edn \
+  --discover-terms-nlab-seed /home/joe/code/futon6/data/dictionary/entries-nlab-seed.edn \
+  --discover-terms-nnexus-stopwords /home/joe/code/nnexus/lib/NNexus/StopWordList.pm \
+  --discover-terms-nnexus-snapshot /home/joe/code/nnexus/lib/NNexus/resources/database/snapshot-6-2014.sqlite \
   --skip-embeddings \
   --skip-llm \
   --skip-clustering \
@@ -178,9 +182,14 @@ Why these flags are the current default-safe lane:
   tree rather than the abstract surrogate
 - `--discover-terms-eprint-dir eprints` makes open-world term discovery read
   the same source family
+- the seed flags make Stage 5 classify extracted terms against the current
+  PM seed, nLab seed, and NNexus concept snapshot while still retaining
+  provisional genuinely new terms
 - `--skip-embeddings --skip-llm --skip-clustering --skip-graph-embed --skip-faiss`
   keeps the run CPU-safe while still giving:
   - Stage 5 NER/scope output
+  - `candidate-new-terms.jsonl` with seed-aware novelty labels
+  - `learned-term-dictionary.jsonl` with provisional OED-style entries
   - Stage 5c classical technique extraction
   - Stage 5d classical paper hypergraphs
   - Stage 9a geometry
@@ -188,6 +197,10 @@ Why these flags are the current default-safe lane:
 Expected post-run checks:
 
 - Stage 5 should report `text source: eprint=N, abstract-fallback=0`
+- Stage 5 should also report a learned-dictionary summary such as:
+  - `new=...`
+  - `seed-known-missing-from-kernel=...`
+  - `rhs_supported=...`
 - Stage 5c and Stage 5d should also report eprint-only text use
 - Stage 9a should report nonzero eprint text coverage
 

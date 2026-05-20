@@ -155,6 +155,39 @@ def _write_minimal_ner_kernel(tmp_path: Path) -> Path:
     return path
 
 
+def _write_minimal_seed_edn(path: Path, terms: list[str]) -> Path:
+    entries = "\n".join(
+        f'    {{:term/lower "{term}"}}' for term in terms
+    )
+    path.write_text(
+        "{:dictionary/entries [\n"
+        f"{entries}\n"
+        "]}\n",
+        encoding="utf-8",
+    )
+    return path
+
+
+def _write_minimal_nnexus_stopwords(path: Path) -> Path:
+    path.write_text(
+        "package NNexus::StopWordList;\n"
+        "sub getStopWords {\n"
+        "  return [qw/free internal smallest/];\n"
+        "}\n"
+        "1;\n",
+        encoding="utf-8",
+    )
+    return path
+
+
+def _write_minimal_nnexus_snapshot(path: Path) -> Path:
+    path.write_text(
+        "INSERT INTO \"concepts\" VALUES(1,'etale','morphism',0,0);\n",
+        encoding="utf-8",
+    )
+    return path
+
+
 def _write_scope_free_abstract_arxiv_fixture(input_dir: Path) -> Path:
     input_dir.mkdir()
     eprints = input_dir / "eprints"
@@ -177,6 +210,38 @@ def _write_scope_free_abstract_arxiv_fixture(input_dir: Path) -> Path:
         "\\begin{document}\n"
         "\\begin{theorem}For every object $X$, $X=X$.\\end{theorem}\n"
         "\\begin{proof}Use the identity morphism $1_X:X\\to X$.\\end{proof}\n"
+        "\\end{document}\n",
+        encoding="utf-8",
+    )
+    return eprints
+
+
+def _write_discovery_learning_arxiv_fixture(input_dir: Path) -> Path:
+    input_dir.mkdir()
+    eprints = input_dir / "eprints"
+    eprints.mkdir()
+    (input_dir / "batch-001.jsonl").write_text(
+        json.dumps({
+            "id": "math/0102067v1",
+            "title": "Learning terms from eprints",
+            "abstract": "We introduce a new categorical construction.",
+            "categories": ["math.CT"],
+            "date": "2001-02-07",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    (eprints / "math__0102067v1.tex").write_text(
+        "\\documentclass{article}\n"
+        "\\begin{document}\n"
+        "\\begin{definition}\n"
+        "A \\emph{known concept} is defined as a previously named construction.\n"
+        "\\end{definition}\n"
+        "\\begin{definition}\n"
+        "A \\emph{toy localization} is defined as a localization with a witness.\n"
+        "\\end{definition}\n"
+        "\\begin{theorem}\n"
+        "Every toy localization preserves the known concept.\n"
+        "\\end{theorem}\n"
         "\\end{document}\n",
         encoding="utf-8",
     )
@@ -332,6 +397,85 @@ def test_arxiv_stage5_uses_eprints_not_scope_free_abstracts(tmp_path: Path):
     scopes = json.loads((outdir / "scopes.json").read_text(encoding="utf-8"))
     assert len(scopes) == 1
     assert scopes[0]["count"] > 0
+
+
+def test_arxiv_discover_terms_learns_seed_aware_dictionary_entries(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_discovery_learning_arxiv_fixture(input_dir)
+    ner_kernel = _write_minimal_ner_kernel(tmp_path)
+    pm_seed = _write_minimal_seed_edn(tmp_path / "pm-seed.edn", ["known concept"])
+    nlab_seed = _write_minimal_seed_edn(tmp_path / "nlab-seed.edn", [])
+    nnexus_stopwords = _write_minimal_nnexus_stopwords(tmp_path / "StopWordList.pm")
+    nnexus_snapshot = _write_minimal_nnexus_snapshot(tmp_path / "snapshot.sql")
+    outdir = tmp_path / "arxiv-out"
+
+    run = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--discover-terms",
+            "--discover-terms-min-freq",
+            "1",
+            "--discover-terms-eprint-dir",
+            "eprints",
+            "--discover-terms-pm-seed",
+            str(pm_seed),
+            "--discover-terms-nlab-seed",
+            str(nlab_seed),
+            "--discover-terms-nnexus-stopwords",
+            str(nnexus_stopwords),
+            "--discover-terms-nnexus-snapshot",
+            str(nnexus_snapshot),
+            "--ner-kernel",
+            str(ner_kernel),
+        ],
+    )
+    assert run.returncode == 0, (
+        "superpod-job arxiv discovery-learning run failed\n"
+        f"stdout:\n{run.stdout}\n"
+        f"stderr:\n{run.stderr}"
+    )
+    assert "learned dictionary:" in run.stdout
+
+    manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
+    open_ner = manifest["stage5_stats"]["open_ner"]
+    assert open_ner["enabled"] is True
+    assert open_ner["new_terms_learned"] == 1
+    assert open_ner["seed_known_terms_missing_from_kernel"] == 1
+    assert open_ner["rhs_supported_terms"] == 2
+    assert open_ner["pm_seed_terms"] == 1
+    assert open_ner["nnexus_snapshot_terms"] == 1
+    assert open_ner["learned_dictionary_written"] == 2
+    assert Path(open_ner["output_dictionary_jsonl"]).name == "learned-term-dictionary.jsonl"
+
+    candidate_rows = [
+        json.loads(line)
+        for line in (outdir / "candidate-new-terms.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    learned_rows = [
+        json.loads(line)
+        for line in (outdir / "learned-term-dictionary.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    by_term = {row["term_lower"]: row for row in candidate_rows}
+    dict_by_term = {row["term_lower"]: row for row in learned_rows}
+
+    assert by_term["known concept"]["novel_vs_seed"] == "known"
+    assert by_term["known concept"]["learned_status"] == "seed-known-missing-from-kernel"
+    assert by_term["toy localization"]["novel_vs_seed"] == "novel"
+    assert by_term["toy localization"]["learned_status"] == "new-term"
+    assert by_term["toy localization"]["rhs_support_counts"]["definition-env"] >= 1
+    assert by_term["toy localization"]["rhs_support_counts"]["theorem-statement"] >= 1
+
+    assert dict_by_term["known concept"]["term_status"] == "seed-known"
+    assert dict_by_term["toy localization"]["term_status"] == "provisional"
+    assert dict_by_term["toy localization"]["definitions"]
+    assert dict_by_term["toy localization"]["usage_examples"]
 
 
 def test_arxiv_legacy_theorem_aliases_are_normalized(tmp_path: Path):
