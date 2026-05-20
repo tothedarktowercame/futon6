@@ -1,0 +1,118 @@
+;; ~/code/futon6/data/dictionary/SAMPLE-entries.edn
+;; Two worked sample entries demonstrating the OED-shape schema proposed in
+;; ~/code/futon6/holes/excursions/E-discover-terms-as-dictionary-construction.md
+;; Created 2026-05-19 by claude-13. Not the canonical dictionary — illustrative only.
+;;
+;; Entries are mocked from §2.A.2.43 demo output (where extract_open_ner_candidates
+;; surfaced "meta-set" from a PM .tex source). Treat as schema reference, not data.
+
+{:dictionary/version "0.0-sample"
+ :dictionary/created #inst "2026-05-19"
+ :dictionary/created-by :claude-13
+ :dictionary/note "Two sample entries: one canonical PM-seeded, one provisional arxiv-discovered."
+
+ :dictionary/entries
+ [
+  ;; =====================================================================
+  ;; Entry 1: PlanetMath-seeded canonical entry
+  ;; =====================================================================
+  {:term/id           "ringed-space"
+   :term/headword     "Ringed space"
+   :term/lower        "ringed space"
+   :term/part         :noun
+   :term/aliases      []
+   :term/etymology
+   {:first-source     "planetmath:RingedSpace"
+    :first-source-date nil                       ; PM entries don't carry historical dates
+    :first-extractor  :pm-seed-loader/v1
+    :note             "PlanetMath canonical entry; first-introduction-paper not tracked at seed time"}
+   :term/definitions
+   [{:def/id          "ringed-space-d1"
+     :def/text
+     "A ringed space is a pair (X, O_X) where X is a topological space and O_X is a sheaf of rings on X, called the structure sheaf. Morphisms of ringed spaces are continuous maps together with compatible sheaf-of-rings homomorphisms."
+     :def/extracted-from "planetmath:RingedSpace"
+     :def/source-context "PM article body — full text"
+     :def/extraction-method :pm-seed
+     :def/extracted-at #inst "2026-05-19"
+     :def/confidence  1.0
+     :def/status      :canonical}]
+   :term/usage-examples
+   [{:example/paper   "planetmath:RingedSpace"
+     :example/role    :canonical-source
+     :example/context "(see PM article body)"
+     :example/seen-at nil}]
+   :term/status       :canonical
+   :term/canon-source :planetmath-seed
+   :term/first-seen   nil
+   :term/last-seen    nil
+   :term/occurrence-count 1
+   :term/cross-refs
+   [{:rel :uses           :target "sheaf-of-rings"}
+    {:rel :uses           :target "topological-space"}
+    {:rel :generalises    :target "scheme"}
+    {:rel :parent-concept :target "locally-ringed-space"}]
+   :term/review-notes
+   ["Seeded from PM 2026-05-19. Definition lifted verbatim from PM body first paragraph."]
+   :term/graduated-at #inst "2026-05-19"}
+
+  ;; =====================================================================
+  ;; Entry 2: Arxiv-discovered provisional entry (mocked from §2.A.2.43 demo)
+  ;; =====================================================================
+  {:term/id           "meta-set"
+   :term/headword     "Meta-set"
+   :term/lower        "meta-set"
+   :term/part         :noun
+   :term/aliases      ["super-set" "meta-class"]
+   :term/etymology
+   {:first-source     "tmp-cat18:18-00-ACATEGORYTHEORYANDHIGHERDIMENSIONALALGEBRAAPPROACHTO..."
+    :first-source-date nil                       ; PM .tex; arxiv would carry a date
+    :first-extractor  :extract-open-ner-candidates/v1
+    :note             "Surfaced via latex-emph from a PM category-theory .tex source. In a real arxiv corpus this row would have a paper-id + date."}
+   :term/definitions
+   [{:def/id          "meta-set-d1"
+     :def/text        "A collection of sets that is not itself a set — e.g. the collection of all sets. May also be called a 'super-set' or a meta-class."
+     :def/extracted-from "tmp-cat18:18-00-ACATEGORYTHEORYANDHIGHERDIMENSIONALALGEBRAAPPROACHTO..."
+     :def/source-context "...a collection of sets may be a \\emph{class}, instead of a set [59],[176]-[177]; it may also be called a 'super-set', or a \\emph{meta-set}; a 'theorem' about such sets is a higher-level statement..."
+     :def/extraction-method :paragraph-definitional-regex   ; T1+T2 in excursion §5
+     :def/extracted-at #inst "2026-05-19"
+     :def/confidence  0.78                       ; T1+T2 heuristic without LLM verification
+     :def/status      :provisional}]
+   :term/usage-examples
+   [{:example/paper   "tmp-cat18:18-00-ACATEGORYTHEORYANDHIGHERDIMENSIONALALGEBRA..."
+     :example/role    :first-introduction
+     :example/context "a collection of sets may be a \\emph{class}, instead of a set [59],[176]-[177]; it may also be called a 'super-set', or a \\emph{meta-set}"
+     :example/seen-at nil}]
+   :term/status       :provisional
+   :term/canon-source :arxiv-discovery           ; in this mock; would be :pm-tex-source for the actual extraction
+   :term/first-seen   nil
+   :term/last-seen    nil
+   :term/occurrence-count 3                      ; from the demo output: one direct emph + 2 cross-references in same .tex
+   :term/cross-refs
+   [{:rel :related-to     :target "meta-theorem"}
+    {:rel :related-to     :target "meta-process"}
+    {:rel :related-to     :target "meta-level"}
+    {:rel :alternative-of :target "proper-class"}
+    {:rel :parent-concept :target "class-set-theory"}]
+   :term/review-notes
+   ["Provisional 2026-05-19. T1+T2 extraction; confidence 0.78. Operator review: definitional context is clear but the term is itself non-standard (Baianu's framing); whether to canonise vs reduce-to-alias-of 'proper-class' is a math-philosophy call."]
+   :term/graduated-at nil}]
+
+ ;; =====================================================================
+ ;; Sample stopword entries (for the noise-filter side)
+ ;; =====================================================================
+ :dictionary/stopwords
+ [{:stopword/id      "acta-universitatis-apulensis"
+   :stopword/lower   "acta universitatis apulensis"
+   :stopword/reason  :bibliography-journal-name
+   :stopword/first-flagged-at #inst "2026-05-19"
+   :stopword/example-context "\\bibitem{...} acta universitatis apulensis, vol 18, no 4, ..."
+   :stopword/source-paper "tmp-cat18:18-00-ACATEGORYTHEORYANDHIGHERDIMENSIONALALGEBRA..."
+   :stopword/flag-method :latex-emph-without-definitional-context-AND-bibitem-adjacent}
+
+  {:stopword/id      "unique"
+   :stopword/lower   "unique"
+   :stopword/reason  :generic-emphasis
+   :stopword/first-flagged-at #inst "2026-05-19"
+   :stopword/example-context "a fully functional mind to observe and understand the human mind"
+   :stopword/source-paper "tmp-cat18:18-00-ACATEGORYTHEORYANDHIGHERDIMENSIONALALGEBRA..."
+   :stopword/flag-method :latex-emph-without-definitional-context-AND-word-in-common-vocabulary}]}
