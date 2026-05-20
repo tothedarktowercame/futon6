@@ -53,6 +53,22 @@ def _load_metadata(path: Path) -> Dict[str, dict]:
     return {row["id"]: row for row in _iter_jsonl(path)}
 
 
+def _resolve_local_path(local_file: str, data_dir: Path) -> Path:
+    path = Path(local_file)
+    if path.is_absolute():
+        return path
+
+    candidates = [data_dir / path]
+    if data_dir.name == "data":
+        candidates.append(data_dir.parent / path)
+    candidates.append(ROOT / path)
+
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
+
+
 def _pick_tar_member(members: List[tarfile.TarInfo]) -> Optional[tarfile.TarInfo]:
     if not members:
         return None
@@ -135,13 +151,7 @@ def iter_arxiv_entries(data_dir: str | Path, *, limit: Optional[int] = None) -> 
         local_file = row.get("local_file") or row.get("path")
         if not local_file:
             continue
-        local_path = Path(local_file)
-        if not local_path.is_absolute():
-            candidate = data_dir / local_path
-            if candidate.exists():
-                local_path = candidate
-            else:
-                local_path = ROOT / local_path
+        local_path = _resolve_local_path(local_file, data_dir)
         body_text = _read_payload(local_path)
         body_length = len(body_text)
         meta = metadata.get(arxiv_id, {})

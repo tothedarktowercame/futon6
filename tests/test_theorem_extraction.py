@@ -1,5 +1,6 @@
 """Tests for theorem extraction from LaTeX source."""
 
+import gzip
 import json
 import tempfile
 from pathlib import Path
@@ -211,6 +212,18 @@ def test_extract_from_file():
     assert len(result.theorems) == 5
     assert result.source_path == f.name
     Path(f.name).unlink()
+
+
+def test_extract_from_gzip_single_tex():
+    with tempfile.NamedTemporaryFile(suffix=".tar.gz", delete=False) as f:
+        gz_path = Path(f.name)
+    with gzip.open(gz_path, "wt", encoding="utf-8") as handle:
+        handle.write(SAMPLE_LATEX)
+    result = extract_from_tarball(str(gz_path), "test/gzip")
+    assert len(result.theorems) == 5
+    assert len(result.definitions) == 1
+    assert result.source_path == str(gz_path)
+    gz_path.unlink()
 
 
 def test_to_stepper_missions():

@@ -14,6 +14,7 @@ Design constraints:
 import re
 import hashlib
 import json
+import gzip
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
@@ -277,19 +278,33 @@ def extract_from_tarball(tar_path: str, paper_id: str) -> ExtractionResult:
     import tarfile
 
     tex_contents = {}
-    with tarfile.open(tar_path, "r:*") as tar:
-        for member in tar.getmembers():
-            if member.name.endswith(".tex") and member.isfile():
-                f = tar.extractfile(member)
-                if f:
-                    tex_contents[member.name] = f.read().decode(
-                        "utf-8", errors="replace"
-                    )
+    try:
+        with tarfile.open(tar_path, "r:*") as tar:
+            for member in tar.getmembers():
+                if member.name.endswith(".tex") and member.isfile():
+                    f = tar.extractfile(member)
+                    if f:
+                        tex_contents[member.name] = f.read().decode(
+                            "utf-8", errors="replace"
+                        )
+    except tarfile.ReadError:
+        tex_contents = {}
 
     if not tex_contents:
-        # Might be a single .tex file, not a tarball
+        # Might be a single .tex file, possibly gzip-compressed rather than tarred.
         try:
-            source = Path(tar_path).read_text(errors="replace")
+            with gzip.open(tar_path, "rt", encoding="utf-8", errors="replace") as f:
+                source = f.read()
+        except OSError:
+            try:
+                source = Path(tar_path).read_text(errors="replace")
+            except Exception:
+                return ExtractionResult(
+                    paper_id=paper_id, source_path=tar_path,
+                    stats={"error": "no .tex files found"},
+                )
+
+        try:
             result = extract_theorems(source, paper_id)
             result.source_path = tar_path
             return result

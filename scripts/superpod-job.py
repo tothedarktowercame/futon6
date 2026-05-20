@@ -982,6 +982,9 @@ def run_stage5_ner_scopes(
     discover_terms_min_freq=3,
     discover_terms_max=2000,
     discover_terms_max_per_entity=64,
+    eprint_dir=None,
+    eprint_max_chars=240_000,
+    eprint_max_tex_members=4,
     discover_terms_eprint_dir=None,
     discover_terms_eprint_max_chars=240_000,
     discover_terms_eprint_max_tex_members=4,
@@ -1032,6 +1035,11 @@ def run_stage5_ner_scopes(
     entities_with_ner = 0
     entities_with_scopes = 0
     stype_freq = Counter()
+    text_source_counts = Counter()
+    eprint_text_used = 0
+    eprint_text_missing = 0
+    eprint_status_counts = Counter()
+    arxiv_entities_processed = 0
     n = len(entities)
 
     with open(ner_path, "w") as ner_f, open(scope_path, "w") as scope_f:
@@ -1040,7 +1048,23 @@ def run_stage5_ner_scopes(
 
         for i, (entity, pair) in enumerate(zip(entities, pairs)):
             eid = entity["entity/id"]
-            full_text = (pair.question.body_text + " " + pair.answer.body_text)
+            full_text, text_source, eprint_meta = _entity_text_with_eprint_fallback(
+                entity,
+                pair,
+                eprint_dir=eprint_dir,
+                eprint_max_chars=eprint_max_chars,
+                eprint_max_tex_members=eprint_max_tex_members,
+                include_title=False,
+            )
+            text_source_counts[text_source] += 1
+            eprint_status = eprint_meta.get("status", "unknown")
+            eprint_status_counts[eprint_status] += 1
+            if eid.startswith("arxiv-"):
+                arxiv_entities_processed += 1
+            if text_source == "eprint":
+                eprint_text_used += 1
+            elif eprint_dir is not None:
+                eprint_text_missing += 1
 
             # NER term spotting
             terms = spot_terms_entity(full_text, singles, multi_index)
@@ -1112,15 +1136,33 @@ def run_stage5_ner_scopes(
                 ensure_ascii=False))
 
             if (i + 1) % 10000 == 0 or (i + 1) == n:
+                extra = ""
+                if eprint_dir is not None:
+                    extra = (f" eprint_ok={eprint_text_used}"
+                             f" eprint_missing={eprint_text_missing}")
                 print(f"       [{i+1}/{n}] "
                       f"NER: {total_ner_hits} hits, "
-                      f"scopes: {total_scopes} records")
+                      f"scopes: {total_scopes} records{extra}")
 
         ner_f.write("\n]")
         scope_f.write("\n]")
 
     print(f"       Written {ner_path} ({os.path.getsize(ner_path) / 1e6:.1f} MB)")
     print(f"       Written {scope_path} ({os.path.getsize(scope_path) / 1e6:.1f} MB)")
+
+    if eprint_dir is not None and arxiv_entities_processed and eprint_text_used == 0:
+        try:
+            ner_path.unlink()
+        except OSError:
+            pass
+        try:
+            scope_path.unlink()
+        except OSError:
+            pass
+        raise RuntimeError(
+            f"Stage 5 was requested with eprint_dir={eprint_dir}, but loaded "
+            "zero arXiv eprints; refusing to write abstract-only NER/scope output"
+        )
 
     open_ner_stats = None
     if discover_terms:
@@ -1194,6 +1236,12 @@ def run_stage5_ner_scopes(
         "entities_with_scopes": entities_with_scopes,
         "scope_coverage": entities_with_scopes / n if n else 0,
         "scope_type_freq": dict(stype_freq.most_common()),
+        "text_source_counts": dict(text_source_counts),
+        "eprint_dir": str(eprint_dir) if eprint_dir is not None else None,
+        "eprint_text_used": eprint_text_used,
+        "eprint_text_missing": eprint_text_missing,
+        "eprint_status_counts": dict(eprint_status_counts),
+        "arxiv_entities_processed": arxiv_entities_processed,
         "open_ner": open_ner_stats,
     }
 
@@ -1301,6 +1349,40 @@ def _load_eprint_text_for_entity(eprint_dir, entity_id, max_chars=240_000, max_m
     return None, {"status": "unusable", "id": arxiv_id}
 
 
+def _entity_text_with_eprint_fallback(
+    entity,
+    pair,
+    *,
+    eprint_dir=None,
+    eprint_max_chars=240_000,
+    eprint_max_tex_members=4,
+    include_title=False,
+):
+    """Return (text, source, eprint_meta) for an entity text stage.
+
+    Source is `eprint` when LaTeX body text loaded, `abstract` otherwise.
+    """
+    parts = []
+    if include_title:
+        parts.append(pair.question.title)
+    parts.append(pair.question.body_text)
+    parts.append(pair.answer.body_text)
+    abstract_text = "\n\n".join(part for part in parts if part)
+    if eprint_dir is None:
+        return abstract_text, "abstract", {"status": "no-eprint-dir"}
+    eprint_text, meta = _load_eprint_text_for_entity(
+        eprint_dir,
+        entity["entity/id"],
+        max_chars=eprint_max_chars,
+        max_members=eprint_max_tex_members,
+    )
+    if eprint_text:
+        if include_title:
+            return pair.question.title + "\n\n" + eprint_text, "eprint", meta
+        return eprint_text, "eprint", meta
+    return abstract_text, "abstract", meta
+
+
 def _strip_eprint_filename_suffix(name):
     for suffix in (".tar.gz", ".tex", ".tar", ".bin", ".gz"):
         if name.endswith(suffix):
@@ -1381,21 +1463,20 @@ def run_stage5b_distinctor_mit(
         entity = entities[idx]
         pair = pairs[idx]
         eid = entity["entity/id"]
-        full_text = (pair.question.body_text + " " + pair.answer.body_text)
-        if use_eprints:
-            eprint_text, e_meta = _load_eprint_text_for_entity(
-                eprint_dir=eprint_dir,
-                entity_id=eid,
-                max_chars=eprint_max_chars,
-                max_members=eprint_max_tex_members,
-            )
-            estatus = e_meta.get("status", "unknown")
-            eprint_status[estatus] += 1
-            if eprint_text:
-                full_text = eprint_text
-                eprint_text_used += 1
-            else:
-                eprint_text_missing += 1
+        full_text, text_source, e_meta = _entity_text_with_eprint_fallback(
+            entity,
+            pair,
+            eprint_dir=eprint_dir if use_eprints else None,
+            eprint_max_chars=eprint_max_chars,
+            eprint_max_tex_members=eprint_max_tex_members,
+            include_title=False,
+        )
+        estatus = e_meta.get("status", "unknown")
+        eprint_status[estatus] += 1
+        if text_source == "eprint":
+            eprint_text_used += 1
+        elif use_eprints:
+            eprint_text_missing += 1
 
         scopes = scope_detector(eid, full_text)
         binder_scopes = [s for s in scopes if mod.is_binderish(s)]
@@ -5770,6 +5851,10 @@ def main():
                 discover_terms_min_freq=args.discover_terms_min_freq,
                 discover_terms_max=args.discover_terms_max,
                 discover_terms_max_per_entity=args.discover_terms_max_per_entity,
+                eprint_dir=(Path(args.paper_eprint_dir)
+                            if args.paper_eprint_dir else None),
+                eprint_max_chars=args.paper_eprint_max_chars,
+                eprint_max_tex_members=args.paper_eprint_max_tex_members,
                 discover_terms_eprint_dir=(Path(args.discover_terms_eprint_dir)
                                            if args.discover_terms_eprint_dir else None),
                 discover_terms_eprint_max_chars=args.discover_terms_eprint_max_chars,
@@ -5794,8 +5879,22 @@ def main():
                           f"{open_ner.get('eprint_text_used', 0)}/"
                           f"{stage5_stats['entities_processed']} "
                           f"(missing={open_ner.get('eprint_text_missing', 0)})")
+            if args.paper_eprint_dir:
+                print("       Stage 5 text source: "
+                      f"eprint={stage5_stats['text_source_counts'].get('eprint', 0)}, "
+                      f"abstract-fallback={stage5_stats['text_source_counts'].get('abstract', 0)}")
+                print(f"       Stage 5 eprint load status: "
+                      f"{stage5_stats.get('eprint_status_counts', {})}")
             print(f"       Stage 5 done in {time.time()-t5:.0f}s")
-            mark_stage("ner_scopes", "completed", entities_processed=stage5_stats["entities_processed"])
+            mark_stage(
+                "ner_scopes",
+                "completed",
+                entities_processed=stage5_stats["entities_processed"],
+                text_source_counts=stage5_stats.get("text_source_counts", {}),
+                eprint_status_counts=stage5_stats.get("eprint_status_counts", {}),
+                eprint_text_used=stage5_stats.get("eprint_text_used", 0),
+                eprint_text_missing=stage5_stats.get("eprint_text_missing", 0),
+            )
     else:
         print(f"\n[Stage 5/{n_stages}] Skipped (--skip-ner)")
         mark_stage("ner_scopes", "skipped", skip_reason="--skip-ner")
@@ -5949,24 +6048,14 @@ def main():
         }
 
     def _paper_text_for(entity, pair):
-        """Return (text, source, eprint_meta) for a paper stage.
-
-        Source is 'eprint' if the LaTeX body loaded, 'abstract' otherwise.
-        """
-        abstract_text = (pair.question.title + "\n\n"
-                         + pair.question.body_text + "\n\n"
-                         + pair.answer.body_text)
-        if paper_eprint_path is None:
-            return abstract_text, "abstract", {"status": "no-eprint-dir"}
-        eprint_text, meta = _load_eprint_text_for_entity(
-            paper_eprint_path,
-            entity["entity/id"],
-            max_chars=args.paper_eprint_max_chars,
-            max_members=args.paper_eprint_max_tex_members,
+        return _entity_text_with_eprint_fallback(
+            entity,
+            pair,
+            eprint_dir=paper_eprint_path,
+            eprint_max_chars=args.paper_eprint_max_chars,
+            eprint_max_tex_members=args.paper_eprint_max_tex_members,
+            include_title=True,
         )
-        if eprint_text:
-            return pair.question.title + "\n\n" + eprint_text, "eprint", meta
-        return abstract_text, "abstract", meta
 
     # ========== Stage 5c: Technique-level NER ==========
     # Paper-focused technique extraction. Classical and LLM arms are kept

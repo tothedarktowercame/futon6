@@ -143,10 +143,51 @@ def _write_legacy_alias_arxiv_fixture(input_dir: Path) -> Path:
     return eprints
 
 
+def _write_minimal_ner_kernel(tmp_path: Path) -> Path:
+    path = tmp_path / "terms.tsv"
+    path.write_text(
+        "term_lower\tterm_orig\tunused\tcanon\n"
+        "object\tObject\t_\tObject\n"
+        "identity morphism\tidentity morphism\t_\tIdentityMorphism\n"
+        "localization\tlocalization\t_\tLocalization\n",
+        encoding="utf-8",
+    )
+    return path
+
+
+def _write_scope_free_abstract_arxiv_fixture(input_dir: Path) -> Path:
+    input_dir.mkdir()
+    eprints = input_dir / "eprints"
+    eprints.mkdir()
+    (input_dir / "batch-001.jsonl").write_text(
+        json.dumps({
+            "id": "math/0102067v1",
+            "title": "A theorem with a scope-free abstract",
+            "abstract": (
+                "We study localization phenomena in model categories and prove "
+                "several new existence results."
+            ),
+            "categories": ["math.CT"],
+            "date": "2001-02-07",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    (eprints / "math__0102067v1.tex").write_text(
+        "\\documentclass{article}\n"
+        "\\begin{document}\n"
+        "\\begin{theorem}For every object $X$, $X=X$.\\end{theorem}\n"
+        "\\begin{proof}Use the identity morphism $1_X:X\\to X$.\\end{proof}\n"
+        "\\end{document}\n",
+        encoding="utf-8",
+    )
+    return eprints
+
+
 def test_superpod_job_ct_pipeline_smoke(tmp_path: Path):
     root = Path(__file__).parent.parent
     outdir = tmp_path / "superpod-out"
-    run = _run_superpod(root, outdir, ["--thread-limit", "4"])
+    ner_kernel = _write_minimal_ner_kernel(tmp_path)
+    run = _run_superpod(root, outdir, ["--thread-limit", "4", "--ner-kernel", str(ner_kernel)])
     assert run.returncode == 0, (
         "superpod-job failed\n"
         f"stdout:\n{run.stdout}\n"
@@ -159,7 +200,7 @@ def test_superpod_job_ct_pipeline_smoke(tmp_path: Path):
     assert "parse" in completed
     assert "ner_scopes" in completed
     assert "thread_wiring" in completed
-    assert manifest["stage7_stats"]["ct_backed"] is True
+    assert "classical_edge_rate" in manifest["stage7_stats"]
     assert manifest["stage7_stats"]["threads_processed"] == 4
     assert "stage_status" in manifest
     assert manifest["stage_status"]["parse"]["status"] == "completed"
@@ -169,7 +210,7 @@ def test_superpod_job_ct_pipeline_smoke(tmp_path: Path):
     assert manifest["readiness"]["status"] in {"pass", "warn"}
     assert isinstance(manifest.get("health_gate_thresholds"), dict)
 
-    wiring = json.loads((outdir / "thread-wiring-ct.json").read_text(encoding="utf-8"))
+    wiring = json.loads((outdir / "thread-wiring.json").read_text(encoding="utf-8"))
     assert isinstance(wiring, list)
     assert len(wiring) == 4
 
@@ -196,13 +237,14 @@ def test_arxiv_paper_eprint_dir_feeds_all_paper_stages(tmp_path: Path):
     root = Path(__file__).parent.parent
     input_dir = tmp_path / "arxiv-input"
     eprints = _write_arxiv_fixture(input_dir)
+    ner_kernel = _write_minimal_ner_kernel(tmp_path)
     outdir = tmp_path / "arxiv-out"
 
     run = _run_arxiv_superpod(
         root,
         outdir,
         input_dir,
-        ["--paper-eprint-dir", "eprints"],
+        ["--paper-eprint-dir", "eprints", "--ner-kernel", str(ner_kernel)],
     )
     assert run.returncode == 0, (
         "superpod-job arxiv eprint run failed\n"
@@ -216,6 +258,8 @@ def test_arxiv_paper_eprint_dir_feeds_all_paper_stages(tmp_path: Path):
     assert manifest["paper_hg_eprint_dir"] == str(eprints.resolve())
     assert manifest["paper_eprint"]["source"] == "paper-eprint-dir"
     assert manifest["paper_eprint"]["preflight"]["candidate_matches"] == 1
+    assert manifest["stage5_stats"]["eprint_text_used"] == 1
+    assert manifest["stage_status"]["ner_scopes"]["text_source_counts"]["eprint"] == 1
     assert manifest["llm_batch_sizes"]["stage5d"] == 4
     assert manifest["stage_status"]["technique_ner"]["text_source_counts"]["eprint"] == 1
     assert manifest["stage_status"]["paper_hypergraph"]["text_source_counts"]["eprint"] == 1
@@ -237,9 +281,10 @@ def test_arxiv_batch_local_eprints_auto_default(tmp_path: Path):
     root = Path(__file__).parent.parent
     input_dir = tmp_path / "arxiv-input"
     eprints = _write_arxiv_fixture(input_dir)
+    ner_kernel = _write_minimal_ner_kernel(tmp_path)
     outdir = tmp_path / "arxiv-out"
 
-    run = _run_arxiv_superpod(root, outdir, input_dir, [])
+    run = _run_arxiv_superpod(root, outdir, input_dir, ["--ner-kernel", str(ner_kernel)])
     assert run.returncode == 0, (
         "superpod-job arxiv auto-default eprint run failed\n"
         f"stdout:\n{run.stdout}\n"
@@ -251,10 +296,42 @@ def test_arxiv_batch_local_eprints_auto_default(tmp_path: Path):
     assert manifest["discover_terms_eprint_dir"] == str(eprints.resolve())
     assert manifest["paper_eprint_dir"] == str(eprints.resolve())
     assert manifest["paper_eprint"]["source"] == "discover-terms-eprint-dir-default"
+    assert manifest["stage5_stats"]["eprint_text_used"] == 1
+    assert manifest["stage_status"]["ner_scopes"]["text_source_counts"]["eprint"] == 1
     assert manifest["stage9a_stats"]["eprint_text_used"] == 1
     assert manifest["stage9a_stats"]["geometry_source"] == "paper-hypergraphs"
     assert manifest["stage9a_stats"]["geometry_stats"]["with_claims"] == 1
     assert (outdir / "geometry.json").exists()
+
+
+def test_arxiv_stage5_uses_eprints_not_scope_free_abstracts(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_scope_free_abstract_arxiv_fixture(input_dir)
+    ner_kernel = _write_minimal_ner_kernel(tmp_path)
+    outdir = tmp_path / "arxiv-out"
+
+    run = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        ["--paper-eprint-dir", "eprints", "--ner-kernel", str(ner_kernel)],
+    )
+    assert run.returncode == 0, (
+        "superpod-job arxiv scope-source run failed\n"
+        f"stdout:\n{run.stdout}\n"
+        f"stderr:\n{run.stderr}"
+    )
+
+    manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["stage5_stats"]["eprint_text_used"] == 1
+    assert manifest["stage5_stats"]["text_source_counts"]["eprint"] == 1
+    assert manifest["stage5_stats"]["scope_coverage"] == 1.0
+    assert manifest["stage_status"]["ner_scopes"]["text_source_counts"]["eprint"] == 1
+
+    scopes = json.loads((outdir / "scopes.json").read_text(encoding="utf-8"))
+    assert len(scopes) == 1
+    assert scopes[0]["count"] > 0
 
 
 def test_arxiv_legacy_theorem_aliases_are_normalized(tmp_path: Path):
