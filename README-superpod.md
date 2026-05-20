@@ -190,6 +190,8 @@ Why these flags are the current default-safe lane:
   - Stage 5 NER/scope output
   - `candidate-new-terms.jsonl` with seed-aware novelty labels
   - `learned-term-dictionary.jsonl` with provisional OED-style entries
+  - `qc-preregister.json` with historical baseline checks against archived
+    `mark2` runs
   - Stage 5c classical technique extraction
   - Stage 5d classical paper hypergraphs
   - Stage 9a geometry

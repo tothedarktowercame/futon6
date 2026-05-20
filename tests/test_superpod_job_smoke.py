@@ -188,6 +188,39 @@ def _write_minimal_nnexus_snapshot(path: Path) -> Path:
     return path
 
 
+def _write_preregister_baseline_manifest(path: Path, *, entity_count: int = 1,
+                                         scope_cov: float = 1.0, avg_nodes: float = 15.0,
+                                         with_claims: int = 1, papers: int = 1) -> Path:
+    payload = {
+        "entity_count": entity_count,
+        "paper_eprint_dir": "/tmp/eprints",
+        "readiness": {"status": "pass", "issues": 0, "preflight": False},
+        "health_issues": [],
+        "stage5_stats": {
+            "scope_coverage": scope_cov,
+            "text_source_counts": {"eprint": entity_count, "abstract": 0},
+        },
+        "stage9a_stats": {
+            "paper_text_source": "eprints",
+            "avg_nodes": avg_nodes,
+            "avg_edges": max(0.0, avg_nodes - 1.0),
+            "geometry_stats": {
+                "papers": papers,
+                "with_claims": with_claims,
+            },
+        },
+        "stage_status": {
+            "ner_scopes": {
+                "status": "completed",
+                "entities_processed": entity_count,
+                "text_source_counts": {"eprint": entity_count, "abstract": 0},
+            }
+        },
+    }
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    return path
+
+
 def _write_scope_free_abstract_arxiv_fixture(input_dir: Path) -> Path:
     input_dir.mkdir()
     eprints = input_dir / "eprints"
@@ -397,6 +430,50 @@ def test_arxiv_stage5_uses_eprints_not_scope_free_abstracts(tmp_path: Path):
     scopes = json.loads((outdir / "scopes.json").read_text(encoding="utf-8"))
     assert len(scopes) == 1
     assert scopes[0]["count"] > 0
+
+
+def test_arxiv_run_emits_preregister_qc_sidecar(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_scope_free_abstract_arxiv_fixture(input_dir)
+    ner_kernel = _write_minimal_ner_kernel(tmp_path)
+    baseline_dir = tmp_path / "preregister-baselines"
+    baseline_dir.mkdir()
+    _write_preregister_baseline_manifest(baseline_dir / "001.json", avg_nodes=10.0)
+    _write_preregister_baseline_manifest(baseline_dir / "002.json", avg_nodes=20.0)
+    outdir = tmp_path / "arxiv-out"
+
+    run = _run_arxiv_superpod(
+        root,
+        outdir,
+        input_dir,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--ner-kernel",
+            str(ner_kernel),
+            "--preregister-qc-baseline-dir",
+            str(baseline_dir),
+        ],
+    )
+    assert run.returncode == 0, (
+        "superpod-job arxiv preregister QC run failed\n"
+        f"stdout:\n{run.stdout}\n"
+        f"stderr:\n{run.stderr}"
+    )
+    assert "Preregistered QC:" in run.stdout
+
+    manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
+    prereg = manifest["preregister_qc"]
+    assert prereg["enabled"] is True
+    assert prereg["profile"] == "broad-arxiv"
+    assert prereg["status"] in {"pass", "warn", "fail"}
+    assert Path(prereg["output_path"]).name == "qc-preregister.json"
+
+    report = json.loads((outdir / "qc-preregister.json").read_text(encoding="utf-8"))
+    gate_names = {gate["name"]: gate for gate in report["evaluation"]["gates"]}
+    assert gate_names["paper_text_provenance"]["status"] == "pass"
+    assert report["profile"] == "broad-arxiv"
 
 
 def test_arxiv_discover_terms_learns_seed_aware_dictionary_entries(tmp_path: Path):

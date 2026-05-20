@@ -91,6 +91,11 @@ from futon6.arxiv_pattern_prompt import (
     build_arxiv_pattern_prompt,
     parse_arxiv_pattern_response,
 )
+from futon6.preregister_superpod_qc import (
+    DEFAULT_BASELINE_DIR as DEFAULT_PREREG_BASELINE_DIR,
+    build_report_from_manifest,
+    infer_profile as infer_preregister_qc_profile,
+)
 from futon6.theorem_extraction import extract_from_tarball
 
 
@@ -5286,6 +5291,12 @@ def print_dry_run(args):
         cmd_parts.append(f"  --paper-eprint-max-chars {args.paper_eprint_max_chars}")
     if args.paper_eprint_max_tex_members != 8:
         cmd_parts.append(f"  --paper-eprint-max-tex-members {args.paper_eprint_max_tex_members}")
+    if args.skip_preregister_qc:
+        cmd_parts.append("  --skip-preregister-qc")
+    if args.preregister_qc_baseline_dir != str(DEFAULT_PREREG_BASELINE_DIR):
+        cmd_parts.append(f"  --preregister-qc-baseline-dir {args.preregister_qc_baseline_dir}")
+    if args.preregister_qc_profile != "auto":
+        cmd_parts.append(f"  --preregister-qc-profile {args.preregister_qc_profile}")
     if args.skip_threads:
         cmd_parts.append(f"  --skip-threads")
     if args.thread_limit:
@@ -5355,6 +5366,12 @@ def print_dry_run(args):
         moist_parts.append(f"  --paper-eprint-max-chars {args.paper_eprint_max_chars}")
     if args.paper_eprint_max_tex_members != 8:
         moist_parts.append(f"  --paper-eprint-max-tex-members {args.paper_eprint_max_tex_members}")
+    if args.skip_preregister_qc:
+        moist_parts.append("  --skip-preregister-qc")
+    if args.preregister_qc_baseline_dir != str(DEFAULT_PREREG_BASELINE_DIR):
+        moist_parts.append(f"  --preregister-qc-baseline-dir {args.preregister_qc_baseline_dir}")
+    if args.preregister_qc_profile != "auto":
+        moist_parts.append(f"  --preregister-qc-profile {args.preregister_qc_profile}")
     if args.skip_hypergraphs:
         moist_parts.append(f"  --skip-hypergraphs")
     if args.paper_hg_eprint_dir and args.paper_hg_eprint_dir != args.paper_eprint_dir:
@@ -5561,6 +5578,15 @@ def main():
                         help="Per-paper eprint text cap for paper stages (default: 500000)")
     parser.add_argument("--paper-eprint-max-tex-members", type=int, default=8,
                         help="Max .tex members per tar archive for paper stages (default: 8)")
+    parser.add_argument("--skip-preregister-qc", action="store_true",
+                        help="Skip post-run preregistered QC sidecar generation")
+    parser.add_argument("--preregister-qc-baseline-dir", default=str(DEFAULT_PREREG_BASELINE_DIR),
+                        help="Historical manifest directory for preregistered QC baselines "
+                             "(default: ~/code/storage/mark2/manifests)")
+    parser.add_argument("--preregister-qc-profile", choices=["auto", "broad-arxiv", "mfuton"],
+                        default="auto",
+                        help="Historical QC profile to compare against "
+                             "(default: auto)")
 
     # Thread wiring diagrams (Stage 7)
     parser.add_argument("--comments-xml", default=None,
@@ -5670,6 +5696,8 @@ def main():
             args.paper_eprint_dir = str(input_base / args.paper_eprint_dir)
         if args.paper_hg_eprint_dir and not Path(args.paper_hg_eprint_dir).is_absolute():
             args.paper_hg_eprint_dir = str(input_base / args.paper_hg_eprint_dir)
+        if args.preregister_qc_baseline_dir and not Path(args.preregister_qc_baseline_dir).is_absolute():
+            args.preregister_qc_baseline_dir = str(input_base / args.preregister_qc_baseline_dir)
         if args.discover_terms_eprint_dir and not Path(args.discover_terms_eprint_dir).is_absolute():
             args.discover_terms_eprint_dir = str(input_base / args.discover_terms_eprint_dir)
         if args.discover_terms_pm_seed and not Path(args.discover_terms_pm_seed).is_absolute():
@@ -7737,6 +7765,15 @@ def main():
             "max_tex_members": args.paper_eprint_max_tex_members,
             "preflight": paper_eprint_preflight,
         },
+        "preregister_qc": {
+            "enabled": bool(args.arxiv_jsonl and not args.skip_preregister_qc),
+            "baseline_dir": args.preregister_qc_baseline_dir,
+            "profile": (
+                args.preregister_qc_profile
+                if args.preregister_qc_profile != "auto"
+                else infer_preregister_qc_profile(site=args.site, arxiv_jsonl=args.arxiv_jsonl)
+            ),
+        },
         "stage6_backend": args.stage6_backend,
         "health_gate_thresholds": {
             "stage3_parse_rate_min": args.gate_stage3_parse_rate_min,
@@ -7780,6 +7817,39 @@ def main():
         "patterns": (None if args.arxiv_jsonl else PATTERN_NAMES),
         "pattern_schema": ("arxiv-paper-shapes-v1" if args.arxiv_jsonl else "se-patterns-v1"),
     }
+
+    prereg_report = None
+    if manifest["preregister_qc"]["enabled"]:
+        baseline_dir = Path(args.preregister_qc_baseline_dir)
+        profile = manifest["preregister_qc"]["profile"]
+        prereg_report = build_report_from_manifest(
+            manifest,
+            baseline_dir=baseline_dir,
+            profile=profile,
+        )
+        prereg_path = outdir / "qc-preregister.json"
+        write_json(prereg_path, prereg_report)
+        manifest["preregister_qc"] = {
+            **manifest["preregister_qc"],
+            "status": prereg_report["evaluation"]["overall"],
+            "output_path": str(prereg_path),
+            "evaluation": prereg_report["evaluation"],
+            "baseline_summary": prereg_report["baseline_summary"],
+        }
+        manifest["output_files"] = [f.name for f in outdir.iterdir() if f.is_file()]
+        print("  Preregistered QC: "
+              f"{prereg_report['evaluation']['overall']} "
+              f"({len(prereg_report['evaluation']['gates'])} gates) -> {prereg_path.name}")
+    else:
+        manifest["preregister_qc"] = {
+            **manifest["preregister_qc"],
+            "status": "skipped",
+            "reason": (
+                "--skip-preregister-qc"
+                if args.skip_preregister_qc
+                else "non-arxiv run"
+            ),
+        }
     write_json(outdir / "manifest.json", manifest)
 
     print(f"\n{'='*60}")
