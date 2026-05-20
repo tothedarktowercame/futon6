@@ -1211,6 +1211,49 @@ def _extract_uncovered_structure_rows(text, records, singles, multi_index, *, mi
     return rows[:max_uncovered]
 
 
+_DISCOURSE_VERB_KIND = {
+    "let": "scope",
+    "define": "scope",
+    "denote": "scope",
+    "write": "scope",
+    "fix": "scope",
+    "assume": "scope",
+    "suppose": "scope",
+    "prove": "label",
+    "show": "label",
+    "obtain": "label",
+    "derive": "label",
+    "study": "label",
+    "consider": "label",
+    "introduce": "label",
+    "recall": "label",
+    "apply": "label",
+    "then": "wire",
+    "therefore": "wire",
+    "notice": "wire",
+    "observe": "wire",
+}
+_DISCOURSE_VERBS = frozenset(_DISCOURSE_VERB_KIND.keys())
+
+
+def _signature_has_discourse_verb(signature):
+    return any(token in _DISCOURSE_VERBS for token in (signature or "").split())
+
+
+def _predict_kind_from_signature(signature):
+    kinds = [
+        _DISCOURSE_VERB_KIND[token]
+        for token in (signature or "").split()
+        if token in _DISCOURSE_VERB_KIND
+    ]
+    if not kinds:
+        return None
+    for preferred in ("scope", "label", "wire"):
+        if preferred in kinds:
+            return preferred
+    return None
+
+
 def _summarize_structure_seed_candidates(rows, *, min_signature_freq=1, max_candidates=1000):
     buckets = {}
     for row in rows:
@@ -1218,6 +1261,8 @@ def _summarize_structure_seed_candidates(rows, *, min_signature_freq=1, max_cand
             continue
         signature = row.get("structure_seed_signature") or ""
         if not signature:
+            continue
+        if not _signature_has_discourse_verb(signature):
             continue
         bucket = buckets.setdefault(signature, {
             "signature": signature,
@@ -1251,6 +1296,7 @@ def _summarize_structure_seed_candidates(rows, *, min_signature_freq=1, max_cand
             "paper_ids": sorted(bucket["paper_ids"]),
             "paper_count": len(bucket["paper_ids"]),
             "max_known_term_hit_count": bucket["max_known_term_hit_count"],
+            "predicted_kind": _predict_kind_from_signature(bucket["signature"]),
             "example_sentences": bucket["example_sentences"],
         })
     out.sort(
@@ -1303,6 +1349,13 @@ def _match_structure_seed_signature(new_signature, prior_signatures, min_tokens=
 
 
 def _load_structure_seed_signatures(path):
+    """Load prior structure-seed signatures for the replay matcher.
+
+    Prefers the per-candidate `full_signatures` list (newer schema) so the
+    matcher operates on per-residual full signatures, not on the coarse
+    cluster key. Falls back to the candidate's top-level `signature` when
+    `full_signatures` is absent (older schema).
+    """
     if path is None or not Path(path).exists():
         return []
     try:
@@ -1320,14 +1373,20 @@ def _load_structure_seed_signatures(path):
     for row in rows:
         if not isinstance(row, dict):
             continue
-        signature = (row.get("signature") or row.get("structure_seed_signature") or "").strip()
-        if not signature or signature in seen:
-            continue
-        seen.add(signature)
-        tokens = _signature_tokens(signature)
-        if not tokens:
-            continue
-        out.append((signature, tokens))
+        candidate_sigs = list(row.get("full_signatures") or [])
+        if not candidate_sigs:
+            fallback = (row.get("signature") or row.get("structure_seed_signature") or "").strip()
+            if fallback:
+                candidate_sigs = [fallback]
+        for sig in candidate_sigs:
+            signature = (sig or "").strip()
+            if not signature or signature in seen:
+                continue
+            seen.add(signature)
+            tokens = _signature_tokens(signature)
+            if not tokens:
+                continue
+            out.append((signature, tokens))
     out.sort(key=lambda item: len(item[1]), reverse=True)
     return out
 

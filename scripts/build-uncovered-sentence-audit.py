@@ -109,6 +109,34 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
             "are counted."
         ),
     )
+    parser.add_argument(
+        "--learned-patterns-json",
+        type=Path,
+        default=None,
+        help=(
+            "Path to a learned-discourse-patterns.json from a prior audit. When set, "
+            "patterns are loaded and applied via nlab-wiring.detect_learned during "
+            "per-paper coverage computation. This is the promotion path: replay "
+            "signatures become live detector hits that count toward sentence coverage."
+        ),
+    )
+    parser.add_argument(
+        "--learned-patterns-out",
+        type=Path,
+        default=None,
+        help=(
+            "Destination for the gated learned-discourse-patterns.json produced from "
+            "this run's structure_seed_candidates. Defaults to <out-dir>/"
+            "learned-discourse-patterns.json. Only signatures with paper_count >= "
+            "--learned-patterns-min-paper-count and a predicted_kind survive."
+        ),
+    )
+    parser.add_argument(
+        "--learned-patterns-min-paper-count",
+        type=int,
+        default=2,
+        help="Minimum paper_count for a signature to enter the gated pattern set.",
+    )
     return parser.parse_args(argv)
 
 
@@ -303,24 +331,175 @@ def summarize_term_dense_uncovered(uncovered_rows: list[dict]) -> list[dict]:
     return out
 
 
+# Discourse-verb taxonomy. The same verb namespace drives the candidate prefilter
+# (signature must contain at least one of these) AND the predicted_kind heuristic
+# (cue verb -> kind class). The classes match Stage 5's existing detector roles.
+DISCOURSE_VERB_KIND = {
+    # scope: binding or assumption
+    "let": "scope",
+    "define": "scope",
+    "denote": "scope",
+    "write": "scope",
+    "fix": "scope",
+    "assume": "scope",
+    "suppose": "scope",
+    # label: rhetorical / strategic move
+    "prove": "label",
+    "show": "label",
+    "obtain": "label",
+    "derive": "label",
+    "study": "label",
+    "consider": "label",
+    "introduce": "label",
+    "recall": "label",
+    "apply": "label",
+    # wire: discourse connective
+    "then": "wire",
+    "therefore": "wire",
+    "notice": "wire",
+    "observe": "wire",
+}
+DISCOURSE_VERBS = frozenset(DISCOURSE_VERB_KIND.keys())
+
+# For coarse clustering across papers: collapse full signatures to their
+# discourse-verb + structural-connective backbone. Two residuals with the
+# same coarse signature share the same discourse role, even if their full
+# token sequences differ in noun-phrase positioning.
+COARSE_STRUCTURAL_CUES = DISCOURSE_VERBS | {
+    "and", "or", "not", "that", "be", "exists", "there", "if", "then",
+    "where", "when", "we", "for", "any", "every",
+}
+
+
+def _signature_has_discourse_verb(signature: str) -> bool:
+    return any(token in DISCOURSE_VERBS for token in signature.split())
+
+
+def coarse_discourse_signature(full_signature: str) -> str:
+    """Extract the discourse-verb + structural-connective backbone.
+
+    Drops placeholders and content-bearing tokens; keeps only structural cues
+    in order. Used as the clustering key for cross-paper aggregation and as
+    the source for gated-pattern regex emission.
+    """
+    tokens = full_signature.split()
+    kept = [t for t in tokens if t in COARSE_STRUCTURAL_CUES]
+    return " ".join(kept)
+
+
+def _predict_kind_from_signature(signature: str) -> str | None:
+    """Classify a signature by its leading/strongest discourse verb.
+
+    Scope verbs (binding) outrank label verbs (rhetorical) outrank wire
+    verbs (connective), reflecting that a binding cue, when present,
+    usually dominates the sentence's role.
+    """
+    tokens = signature.split()
+    kinds_seen = []
+    for token in tokens:
+        kind = DISCOURSE_VERB_KIND.get(token)
+        if kind:
+            kinds_seen.append(kind)
+    if not kinds_seen:
+        return None
+    for preferred in ("scope", "label", "wire"):
+        if preferred in kinds_seen:
+            return preferred
+    return None
+
+
+def _signature_to_regex(signature: str) -> str:
+    """Translate a structure-seed signature into a loose-match regex over raw text.
+
+    Placeholders (<term>, <math>, <cite>, etc.) are skipped — the regex anchors
+    on the cue-word backbone with a lazy 1-to-120-char gap between cues. Cue
+    words allow morphological inflection via a trailing `\\w*`.
+    """
+    cue_tokens = [
+        token for token in signature.split()
+        if not (token.startswith("<") and token.endswith(">"))
+    ]
+    if not cue_tokens:
+        return ""
+    parts = [rf"\b{re.escape(cue_tokens[0])}\w*"]
+    for token in cue_tokens[1:]:
+        parts.append(r".{1,120}?")
+        parts.append(rf"\b{re.escape(token)}\w*")
+    return "".join(parts)
+
+
+def load_learned_patterns(path: Path | None) -> list[dict]:
+    if path is None or not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if isinstance(payload, dict):
+        return list(payload.get("patterns") or [])
+    if isinstance(payload, list):
+        return list(payload)
+    return []
+
+
+def build_learned_discourse_patterns(
+    candidates: list[dict],
+    *,
+    min_paper_count: int = 2,
+) -> list[dict]:
+    """Filter and translate structure-seed candidates into a deployable pattern set.
+
+    Gate: paper_count >= min_paper_count AND predicted_kind is set. The intent is
+    to keep only signatures that recurred across papers AND carry a recognizable
+    discourse verb. Each surviving candidate is paired with a loose-match regex.
+    """
+    out = []
+    for cand in candidates:
+        if cand.get("paper_count", 0) < min_paper_count:
+            continue
+        kind = cand.get("predicted_kind")
+        if kind not in {"scope", "label", "wire"}:
+            continue
+        regex = _signature_to_regex(cand["signature"])
+        if not regex:
+            continue
+        out.append({
+            "signature": cand["signature"],
+            "regex": regex,
+            "predicted_kind": kind,
+            "paper_count": cand["paper_count"],
+            "count": cand["count"],
+            "max_known_term_hit_count": cand.get("max_known_term_hit_count", 0),
+        })
+    return out
+
+
 def summarize_structure_seed_candidates(paper_reports: list[dict]) -> list[dict]:
     buckets = {}
     for paper in paper_reports:
         for row in paper.get("uncovered_sentences", []):
             if row.get("known_term_hit_count", 0) <= 0:
                 continue
-            template = row.get("structure_seed_signature") or ""
-            if not template:
+            full_signature = row.get("structure_seed_signature") or ""
+            if not full_signature:
                 continue
-            bucket = buckets.setdefault(template, {
-                "signature": template,
+            if not _signature_has_discourse_verb(full_signature):
+                continue
+            # Cluster by coarse signature so cross-paper analogues bucket together.
+            coarse = coarse_discourse_signature(full_signature)
+            if not coarse:
+                continue
+            bucket = buckets.setdefault(coarse, {
+                "signature": coarse,
                 "count": 0,
                 "paper_ids": set(),
+                "full_signatures": set(),
                 "example_sentences": [],
                 "max_known_term_hit_count": 0,
             })
             bucket["count"] += 1
             bucket["paper_ids"].add(paper.get("paper_id"))
+            bucket["full_signatures"].add(full_signature)
             bucket["max_known_term_hit_count"] = max(
                 bucket["max_known_term_hit_count"],
                 row.get("known_term_hit_count", 0),
@@ -330,6 +509,7 @@ def summarize_structure_seed_candidates(paper_reports: list[dict]) -> list[dict]
                     "paper_id": paper.get("paper_id"),
                     "index": row.get("index"),
                     "text": row.get("text"),
+                    "full_signature": full_signature,
                     "known_terms": [
                         item["term_lower"] for item in row.get("known_term_hits", [])[:8]
                     ],
@@ -341,7 +521,9 @@ def summarize_structure_seed_candidates(paper_reports: list[dict]) -> list[dict]
             "count": bucket["count"],
             "paper_ids": sorted(bucket["paper_ids"]),
             "paper_count": len(bucket["paper_ids"]),
+            "full_signatures": sorted(bucket["full_signatures"]),
             "max_known_term_hit_count": bucket["max_known_term_hit_count"],
+            "predicted_kind": _predict_kind_from_signature(bucket["signature"]),
             "example_sentences": bucket["example_sentences"],
         })
     rows.sort(
@@ -412,13 +594,15 @@ def build_paper_audit(
     singles: dict,
     multi_index: dict,
     seed_signatures: list | None = None,
+    learned_patterns: list | None = None,
 ) -> dict:
     text = load_eprint_text(batch_tar, raw_id)
     scopes = NLAB_WIRING.detect_scopes(raw_id, text) or []
     wires = NLAB_WIRING.detect_wires(raw_id, text) or []
     ports = NLAB_WIRING.detect_ports(raw_id, text) or []
     labels = NLAB_WIRING.detect_labels(raw_id, text) or []
-    discourse = sorted([*scopes, *wires, *ports, *labels], key=record_position_key)
+    learned = NLAB_WIRING.detect_learned(raw_id, text, learned_patterns or []) or []
+    discourse = sorted([*scopes, *wires, *ports, *labels, *learned], key=record_position_key)
     scope_coverage = VIEWER.scope_coverage_stats(text, scopes)
     discourse_coverage = VIEWER.scope_coverage_stats(text, discourse)
     uncovered_rows = extract_uncovered_sentences(
@@ -452,6 +636,7 @@ def build_paper_audit(
         "wire_count": len(wires),
         "port_count": len(ports),
         "label_count": len(labels),
+        "learned_count": len(learned),
         "scope_coverage": scope_coverage,
         "discourse_coverage": discourse_coverage,
         "coverage_lift": {
@@ -566,14 +751,20 @@ def main(argv: list[str]) -> int:
         seed=args.seed,
     )
     seed_signatures = SUPERPOD_JOB._load_structure_seed_signatures(args.seed_signatures_json)
+    input_learned_patterns = load_learned_patterns(args.learned_patterns_json)
     paper_reports = [
         build_paper_audit(
             args.batch_tar, batch_meta, raw_id, args, singles, multi_index,
             seed_signatures=seed_signatures,
+            learned_patterns=input_learned_patterns,
         )
         for raw_id in selected_papers
     ]
     seed_matches_applied = sum(p.get("residuals_with_seed_match", 0) for p in paper_reports)
+    candidates = summarize_structure_seed_candidates(paper_reports)
+    output_learned_patterns = build_learned_discourse_patterns(
+        candidates, min_paper_count=args.learned_patterns_min_paper_count
+    )
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "run_index": len(ledger.get("runs", [])),
@@ -582,12 +773,24 @@ def main(argv: list[str]) -> int:
         "seed_signatures_json": str(args.seed_signatures_json) if args.seed_signatures_json else None,
         "seed_signatures_loaded": len(seed_signatures),
         "seed_matches_applied": seed_matches_applied,
+        "learned_patterns_json": str(args.learned_patterns_json) if args.learned_patterns_json else None,
+        "learned_patterns_loaded": len(input_learned_patterns),
+        "learned_records_total": sum(p.get("learned_count", 0) for p in paper_reports),
         "papers": paper_reports,
-        "structure_seed_candidates": summarize_structure_seed_candidates(paper_reports),
+        "structure_seed_candidates": candidates,
+        "learned_discourse_patterns_count": len(output_learned_patterns),
     }
     write_json(args.out_json, report)
     args.out_html.parent.mkdir(parents=True, exist_ok=True)
     args.out_html.write_text(render_html(report), encoding="utf-8")
+
+    patterns_out = args.learned_patterns_out or (args.out_dir / "learned-discourse-patterns.json")
+    write_json(patterns_out, {
+        "generated_at": report["generated_at"],
+        "source_audit": str(args.out_json),
+        "min_paper_count": args.learned_patterns_min_paper_count,
+        "patterns": output_learned_patterns,
+    })
 
     if args.advance_ledger:
         ledger.setdefault("runs", []).append({
@@ -601,6 +804,12 @@ def main(argv: list[str]) -> int:
     print(f"Selected papers: {', '.join(selected_papers)}")
     print(f"Wrote {args.out_json}")
     print(f"Wrote {args.out_html}")
+    print(f"Wrote {patterns_out} ({len(output_learned_patterns)} gated patterns)")
+    if input_learned_patterns:
+        print(
+            f"Learned-pattern replay: {len(input_learned_patterns)} patterns loaded, "
+            f"{report['learned_records_total']} records fired across papers"
+        )
     if seed_signatures:
         print(
             f"Seed replay: {len(seed_signatures)} prior signatures loaded, "

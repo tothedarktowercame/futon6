@@ -1335,6 +1335,45 @@ def detect_labels(entity_id, text, parent_env_id=None):
     return labels
 
 
+def detect_learned(entity_id, text, learned_patterns, parent_env_id=None):
+    """Apply gated learned-discourse-patterns to raw text.
+
+    learned_patterns is a list of dicts with keys: regex, predicted_kind,
+    signature. Records emit with hx/type = "learned/<predicted_kind>" so they
+    integrate with the existing detector role taxonomy (scope/wire/label).
+    """
+    if not learned_patterns:
+        return []
+    records = []
+    rec_idx = 0
+    for pat in learned_patterns:
+        regex = pat.get("regex") or ""
+        kind = pat.get("predicted_kind") or ""
+        if not regex or kind not in {"scope", "label", "wire"}:
+            continue
+        try:
+            compiled = re.compile(regex, re.IGNORECASE)
+        except re.error:
+            continue
+        for m in compiled.finditer(text):
+            records.append({
+                "hx/id": f"{entity_id}:learned-{rec_idx:03d}",
+                "hx/role": kind,
+                "hx/type": f"learned/{kind}",
+                "hx/parent": parent_env_id,
+                "hx/content": {
+                    "match": m.group()[:160],
+                    "position": m.start(),
+                    "end": m.end(),
+                    "signature": pat.get("signature"),
+                    "source": "learned-discourse-pattern",
+                },
+                "hx/labels": [kind, "learned", "learned-" + kind],
+            })
+            rec_idx += 1
+    return records
+
+
 def extract_discourse_wiring(page_id, content, envs):
     """Run scope/wire/port/label detection within each environment and on prose.
 

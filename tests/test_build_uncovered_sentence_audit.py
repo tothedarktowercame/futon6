@@ -135,9 +135,66 @@ def test_summarize_structure_seed_candidates_aggregates_cross_paper_templates():
     ]
     rows = AUDIT.summarize_structure_seed_candidates(papers)
     assert len(rows) == 1
-    assert rows[0]["signature"] == "we study <term> on <term>"
+    # Aggregation now buckets by the COARSE signature so analogous residuals
+    # across papers cluster together. The full per-residual signature lives in
+    # full_signatures.
+    assert rows[0]["signature"] == "we study"
+    assert rows[0]["full_signatures"] == ["we study <term> on <term>"]
     assert rows[0]["paper_count"] == 2
     assert rows[0]["count"] == 2
+    assert rows[0]["predicted_kind"] == "label"
+
+
+def test_signature_has_discourse_verb_filters_correctly():
+    assert AUDIT._signature_has_discourse_verb("we study <term> and <term>")
+    assert AUDIT._signature_has_discourse_verb("let <term> be <term>")
+    # Pure backbone with no discourse verb gets rejected.
+    assert not AUDIT._signature_has_discourse_verb("<term> and <term>")
+    assert not AUDIT._signature_has_discourse_verb("<math> <term> <math>")
+    assert not AUDIT._signature_has_discourse_verb("")
+
+
+def test_predict_kind_scope_beats_label_when_both_present():
+    # If a sentence has both a binding cue and a rhetorical cue, scope wins.
+    kind = AUDIT._predict_kind_from_signature("let <term> be <term> and we prove <term>")
+    assert kind == "scope"
+
+
+def test_predict_kind_label_when_only_rhetorical_cue():
+    assert AUDIT._predict_kind_from_signature("we prove <term> and <term>") == "label"
+    assert AUDIT._predict_kind_from_signature("we study <term> and <term>") == "label"
+
+
+def test_predict_kind_none_when_no_discourse_verb():
+    assert AUDIT._predict_kind_from_signature("<term> and <term>") is None
+
+
+def test_signature_to_regex_anchors_cue_backbone():
+    rx = AUDIT._signature_to_regex("we study <term> and <term>")
+    import re as _re
+    # Should match a real sentence with intervening noun phrases.
+    assert _re.search(rx, "We study group actions and natural transformations", _re.IGNORECASE)
+    # Should NOT match a sentence missing the cue backbone.
+    assert not _re.search(rx, "He doesn't really care about any of this", _re.IGNORECASE)
+
+
+def test_build_learned_discourse_patterns_gates_by_paper_count():
+    candidates = [
+        # Below gate: only one paper.
+        {"signature": "we study <term>", "paper_count": 1, "count": 5,
+         "predicted_kind": "label", "max_known_term_hit_count": 3},
+        # At gate: two papers + classified.
+        {"signature": "let <term> be <term>", "paper_count": 2, "count": 2,
+         "predicted_kind": "scope", "max_known_term_hit_count": 4},
+        # Gate met but no predicted_kind → reject.
+        {"signature": "<term> and <term>", "paper_count": 3, "count": 5,
+         "predicted_kind": None, "max_known_term_hit_count": 4},
+    ]
+    out = AUDIT.build_learned_discourse_patterns(candidates, min_paper_count=2)
+    sigs = [p["signature"] for p in out]
+    assert sigs == ["let <term> be <term>"]
+    assert out[0]["predicted_kind"] == "scope"
+    assert "regex" in out[0] and out[0]["regex"]
 
 
 def test_seed_signatures_flag_loads_and_matches_via_audit_module(tmp_path):

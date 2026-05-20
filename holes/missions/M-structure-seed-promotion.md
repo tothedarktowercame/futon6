@@ -1,7 +1,7 @@
 # Mission: Structure-Seed Promotion — From Replay Labels to a Live Pattern Inducer
 
 **Date:** 2026-05-20
-**Status:** IDENTIFY
+**Status:** INSTANTIATE (sections 3.1–3.3 landed same session; 3.4 + measurement open)
 **Owner:** Joe (POC complete on `nlab-wiring.py` / `build-uncovered-sentence-audit.py` / `superpod-job.py`); next-phase delegate TBD
 **Predecessor work in same session:**
 - structure-seed signature aggregation and Stage 5 hook (Codex,
@@ -168,3 +168,86 @@ If 6 yields measurable lift, the loop has closed: learned
 structure feeds back into detection. If not, the bottleneck is
 upstream (residual extractor surfaces non-discourse prose) and the
 next move is in that extractor, not in the learner.
+
+## 6. Same-session implementation result (2026-05-20)
+
+Steps 1–5 landed. Step 6 measurement run on real batch-008 papers
+shows a partial result that calls for tuning, not a re-architecture.
+
+### What shipped (same session)
+
+- **Discourse-verb prefilter** in
+  `summarize_structure_seed_candidates` (both
+  `scripts/build-uncovered-sentence-audit.py` and
+  `scripts/superpod-job.py`). Signatures without a discourse-verb
+  cue are dropped before bucketing.
+- **Coarse-signature clustering** (`coarse_discourse_signature`):
+  signatures bucket on the discourse-verb + structural-connective
+  backbone, so two papers' `<term> be introduce <cite>` and
+  `<math> be introduce <term> <num>` aggregate to coarse signature
+  `be introduce`. Each candidate carries `full_signatures` for the
+  replay matcher.
+- **`predicted_kind` heuristic**: scope > label > wire preference
+  over discourse verbs in the signature.
+- **Gate + regex emitter** (`build_learned_discourse_patterns`):
+  `paper_count ≥ N` AND `predicted_kind ∈ {scope, label, wire}`;
+  tokens translate to a loose-match regex with `.{1,120}?` gaps
+  between cue anchors.
+- **`detect_learned`** in `scripts/nlab-wiring.py`: consumes the
+  gated pattern set; emits `learned/<predicted_kind>` records that
+  count toward coverage just like any other detector hit.
+- **Audit wiring**: `--learned-patterns-json` (input) and
+  `--learned-patterns-out` (output) CLI flags. `learned-discourse-
+  patterns.json` is emitted by every audit run.
+
+### What the measurement showed
+
+On a 9-paper batch-008 sample (audit-A):
+- 8 structure-seed candidates after discourse-verb prefilter
+- 1 candidate cleared the `paper_count ≥ 2` gate: coarse
+  signature `be introduce`, predicted kind `label`, observed in
+  `0801.4067v1` and `0711.1887v1`
+- Gated patterns file: 1 entry
+
+Applying that one pattern to a fresh 6-paper batch (audit-B):
+- 1 learned record fired on `0711.0898v1`
+- Sentence coverage on B-with-patterns vs B-baseline: **+0.0000
+  across all 6 papers**
+
+### Why coverage didn't lift on this sample
+
+The `be introduce` regex matched a region of the test paper that
+was already covered by existing scope/wire/port/label detection.
+A learned-pattern record stacked on top of an existing scope
+contributes no marginal coverage. The fire is real; the lift on
+this small batch is zero because the existing detector is already
+strong where the pattern fires.
+
+### Open work (sections 3.4 + measurement)
+
+- **Run on Rob-sized batches.** At 9 papers, only one signature
+  clears `paper_count ≥ 2`. At 50–100 papers (the queue Rob is
+  prepping), many more should survive and the marginal-coverage
+  signal should be measurable.
+- **Loss-of-loss stopping rule** (section 3.4) is unimplemented.
+  Track `structure_loss` from `learning_loss` across promotion
+  cycles; promote signatures whose addition reduces residuals.
+- **Anti-clobber gating.** Optionally suppress `detect_learned`
+  records that fall inside already-covered spans, to focus
+  promoted patterns on widening coverage rather than annotating
+  already-covered prose. This is a cheap filter at the audit
+  layer.
+
+### Tests added in this slice
+
+- `test_signature_has_discourse_verb_filters_correctly`
+- `test_predict_kind_scope_beats_label_when_both_present`
+- `test_predict_kind_label_when_only_rhetorical_cue`
+- `test_predict_kind_none_when_no_discourse_verb`
+- `test_signature_to_regex_anchors_cue_backbone`
+- `test_build_learned_discourse_patterns_gates_by_paper_count`
+- `test_detect_learned_fires_on_text_via_loaded_pattern`
+- `test_detect_learned_no_op_when_no_patterns`
+- `test_detect_learned_skips_bad_regex_silently`
+
+Test count after this slice: 122 passed.

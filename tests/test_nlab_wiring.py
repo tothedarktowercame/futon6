@@ -382,6 +382,38 @@ class TestDiscourseWiring:
         )
         assert any(l["hx/type"] == "strategy/question" for l in labels)
 
+    def test_detect_learned_fires_on_text_via_loaded_pattern(self):
+        patterns = [{
+            "signature": "we study <term> and <term>",
+            "regex": r"\bwe\w*.{1,120}?\bstudy\w*.{1,120}?\band\w*",
+            "predicted_kind": "label",
+        }]
+        records = nlab_wiring.detect_learned(
+            "test-learn",
+            "We study group actions and natural transformations.",
+            patterns,
+        )
+        assert len(records) == 1
+        rec = records[0]
+        assert rec["hx/type"] == "learned/label"
+        assert rec["hx/role"] == "label"
+        assert rec["hx/content"]["signature"] == "we study <term> and <term>"
+        assert "learned-label" in rec["hx/labels"]
+
+    def test_detect_learned_no_op_when_no_patterns(self):
+        # Defaults to empty list — must not change any existing behavior.
+        assert nlab_wiring.detect_learned("e", "Any text whatsoever.", []) == []
+        assert nlab_wiring.detect_learned("e", "Any text whatsoever.", None) == []
+
+    def test_detect_learned_skips_bad_regex_silently(self):
+        patterns = [{
+            "signature": "weird",
+            "regex": r"(unclosed",  # malformed
+            "predicted_kind": "wire",
+        }]
+        # Bad regex must not crash the detector or produce a partial record.
+        assert nlab_wiring.detect_learned("e", "text", patterns) == []
+
     def test_notice_that_wire(self):
         wires = nlab_wiring.detect_wires(
             "t-notice",
