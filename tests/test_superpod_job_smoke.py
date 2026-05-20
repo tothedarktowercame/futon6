@@ -155,6 +155,21 @@ def _write_minimal_ner_kernel(tmp_path: Path) -> Path:
     return path
 
 
+def _write_structure_learning_ner_kernel(tmp_path: Path) -> Path:
+    path = tmp_path / "structure-terms.tsv"
+    path.write_text(
+        "term_lower\tterm_orig\tunused\tcanon\n"
+        "toy localization\ttoy localization\t_\tToyLocalization\n"
+        "known concept\tknown concept\t_\tKnownConcept\n"
+        "setting\tsetting\t_\tSetting\n"
+        "bilinear form\tbilinear form\t_\tBilinearForm\n"
+        "inner product\tinner product\t_\tInnerProduct\n"
+        "norm\tnorm\t_\tNorm\n",
+        encoding="utf-8",
+    )
+    return path
+
+
 def _write_minimal_seed_edn(path: Path, terms: list[str]) -> Path:
     entries = "\n".join(
         f'    {{:term/lower "{term}"}}' for term in terms
@@ -279,6 +294,142 @@ def _write_discovery_learning_arxiv_fixture(input_dir: Path) -> Path:
         encoding="utf-8",
     )
     return eprints
+
+
+def _write_discourse_rich_arxiv_fixture(input_dir: Path) -> Path:
+    input_dir.mkdir()
+    eprints = input_dir / "eprints"
+    eprints.mkdir()
+    (input_dir / "batch-001.jsonl").write_text(
+        json.dumps({
+            "id": "math/0102067v1",
+            "title": "Discourse rich eprint",
+            "abstract": "We study a functorial construction.",
+            "categories": ["math.CT"],
+            "date": "2001-02-07",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    (eprints / "math__0102067v1.tex").write_text(
+        "\\documentclass{article}\n"
+        "\\begin{document}\n"
+        "\\begin{definition}\n"
+        "Fix $X$ to be a cofibrant object. We write $F$ for the identity functor on $X$.\n"
+        "\\end{definition}\n"
+        "\\begin{proof}\n"
+        "Since $F : X \\to X$, therefore this functor is explicit. "
+        "In other words, there exists $f$ such that $f : X \\to X$.\n"
+        "\\end{proof}\n"
+        "\\end{document}\n",
+        encoding="utf-8",
+    )
+    return eprints
+
+
+def _write_structure_learning_arxiv_fixture(input_dir: Path) -> Path:
+    input_dir.mkdir()
+    eprints = input_dir / "eprints"
+    eprints.mkdir()
+    (input_dir / "batch-001.jsonl").write_text(
+        json.dumps({
+            "id": "math/0102067v1",
+            "title": "Structure learning starter",
+            "abstract": "We study toy localization and known concept.",
+            "categories": ["math.CT"],
+            "date": "2001-02-07",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    (eprints / "math__0102067v1.tex").write_text(
+        "\\documentclass{article}\n"
+        "\\begin{document}\n"
+        "We study toy localization and known concept in a simple setting.\n"
+        "We study toy localization and known concept in another setting.\n"
+        "\\end{document}\n",
+        encoding="utf-8",
+    )
+    return eprints
+
+
+def _write_structure_learning_arxiv_fixture_generalization(input_dir: Path) -> Path:
+    """Different concrete terms, different cue padding, same backbone as fixture-1.
+
+    Run-1 fixture-1 learns `we study <term> and <term>`. This fixture-2 residual
+    skeletonizes to `we study <term> and <term> when there exists <term>`, a strict
+    superset. A correct subsequence matcher fires the prior on this residual.
+    """
+    input_dir.mkdir()
+    eprints = input_dir / "eprints"
+    eprints.mkdir()
+    (input_dir / "batch-001.jsonl").write_text(
+        json.dumps({
+            "id": "math/0102099v1",
+            "title": "Generalization probe",
+            "abstract": "We study bilinear forms and inner products.",
+            "categories": ["math.CT"],
+            "date": "2001-02-07",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    (eprints / "math__0102099v1.tex").write_text(
+        "\\documentclass{article}\n"
+        "\\begin{document}\n"
+        "We study bilinear forms and inner products when there exists a unique norm.\n"
+        "We study bilinear forms and inner products when there exists another norm.\n"
+        "\\end{document}\n",
+        encoding="utf-8",
+    )
+    return eprints
+
+
+def test_structure_seed_signature_tokens_round_trip():
+    root = Path(__file__).parent.parent
+    mod = _load_superpod_job_module(root)
+    assert mod._signature_tokens("we prove that <term> be <term>") == (
+        "we", "prove", "that", "<term>", "be", "<term>",
+    )
+    assert mod._signature_tokens("") == ()
+
+
+def test_structure_seed_subsequence_match_basic():
+    root = Path(__file__).parent.parent
+    mod = _load_superpod_job_module(root)
+    prior = "we prove that <term> be <term>"
+    new = "we prove that the <term> be <term> for every prime"
+    priors = [(prior, mod._signature_tokens(prior))]
+    matched = mod._match_structure_seed_signature(new, priors)
+    assert matched == prior
+
+
+def test_structure_seed_match_rejects_too_short_prior():
+    root = Path(__file__).parent.parent
+    mod = _load_superpod_job_module(root)
+    short_prior = "we <term>"
+    new = "we study <term> and <term>"
+    priors = [(short_prior, mod._signature_tokens(short_prior))]
+    assert mod._match_structure_seed_signature(new, priors) is None
+
+
+def test_structure_seed_match_returns_longest_prior():
+    root = Path(__file__).parent.parent
+    mod = _load_superpod_job_module(root)
+    shorter = "we prove <term>"
+    longer = "we prove that <term> be <term>"
+    new = "we prove that the <term> be <term>"
+    priors = [
+        (shorter, mod._signature_tokens(shorter)),
+        (longer, mod._signature_tokens(longer)),
+    ]
+    assert mod._match_structure_seed_signature(new, priors) == longer
+
+
+def test_structure_seed_match_rejects_when_prior_not_subsequence():
+    root = Path(__file__).parent.parent
+    mod = _load_superpod_job_module(root)
+    prior = "we prove that <term> be <term>"  # has "that"
+    new = "we prove <term> be <term>"  # missing "that"
+    priors = [(prior, mod._signature_tokens(prior))]
+    assert mod._match_structure_seed_signature(new, priors) is None
 
 
 def test_superpod_job_ct_pipeline_smoke(tmp_path: Path):
@@ -553,6 +704,137 @@ def test_arxiv_discover_terms_learns_seed_aware_dictionary_entries(tmp_path: Pat
     assert dict_by_term["toy localization"]["term_status"] == "provisional"
     assert dict_by_term["toy localization"]["definitions"]
     assert dict_by_term["toy localization"]["usage_examples"]
+
+    paper_hypergraphs = json.loads((outdir / "paper-hypergraphs.json").read_text(encoding="utf-8"))
+    concept_terms = {
+        node["attrs"].get("term")
+        for node in paper_hypergraphs[0]["nodes"]
+        if node.get("type") == "concept"
+    }
+    assert "toy localization" in concept_terms
+
+
+def test_arxiv_stage5_emits_discourse_wiring_and_hypergraph_nodes(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir = tmp_path / "arxiv-input"
+    _write_discourse_rich_arxiv_fixture(input_dir)
+    ner_kernel = _write_minimal_ner_kernel(tmp_path)
+    outdir = tmp_path / "arxiv-out"
+
+    run = _run_arxiv_superpod(root, outdir, input_dir, ["--ner-kernel", str(ner_kernel)])
+    assert run.returncode == 0, (
+        "superpod-job arxiv discourse run failed\n"
+        f"stdout:\n{run.stdout}\n"
+        f"stderr:\n{run.stderr}"
+    )
+
+    manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["stage5_stats"]["total_wires"] >= 1
+    assert manifest["stage5_stats"]["total_ports"] >= 1
+    assert manifest["stage5_stats"]["total_labels"] >= 1
+    assert Path(manifest["stage5_stats"]["output_discourse_json"]).name == "discourse-wiring.json"
+
+    discourse_rows = json.loads((outdir / "discourse-wiring.json").read_text(encoding="utf-8"))
+    assert discourse_rows[0]["counts"]["wires"] >= 1
+    assert discourse_rows[0]["counts"]["ports"] >= 1
+    assert discourse_rows[0]["counts"]["labels"] >= 1
+
+    hypergraphs = json.loads((outdir / "hypergraphs.json").read_text(encoding="utf-8"))
+    node_types = {node["type"] for node in hypergraphs[0]["nodes"]}
+    assert "wire" in node_types
+    assert "port" in node_types
+    assert "label" in node_types
+
+
+def test_arxiv_stage5_learns_and_reseeds_structure_signatures(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    input_dir1 = tmp_path / "arxiv-input-1"
+    _write_structure_learning_arxiv_fixture(input_dir1)
+    ner_kernel = _write_structure_learning_ner_kernel(tmp_path)
+
+    outdir1 = tmp_path / "arxiv-out-1"
+    run1 = _run_arxiv_superpod(
+        root,
+        outdir1,
+        input_dir1,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--ner-kernel",
+            str(ner_kernel),
+            "--discover-structures",
+            "--discover-structures-min-signature-freq",
+            "1",
+        ],
+    )
+    assert run1.returncode == 0, (
+        "superpod-job arxiv structure-learning run failed\n"
+        f"stdout:\n{run1.stdout}\n"
+        f"stderr:\n{run1.stderr}"
+    )
+
+    manifest1 = json.loads((outdir1 / "manifest.json").read_text(encoding="utf-8"))
+    structure1 = manifest1["stage5_stats"]["structure_learning"]
+    assert structure1["enabled"] is True
+    assert structure1["candidates_written"] >= 1
+    assert structure1["loss"]["uncovered_sentences_with_known_terms"] >= 1
+    candidates = json.loads((outdir1 / "learned-structure-candidates.json").read_text(encoding="utf-8"))
+    assert any(row["signature"] == "we study <term> and <term>" for row in candidates), (
+        f"expected 'we study <term> and <term>' in signatures, got: "
+        f"{[row['signature'] for row in candidates]}"
+    )
+
+    # Run 2: DIFFERENT paper, DIFFERENT concrete terms, longer cue chain.
+    # Residual signature is `we study <term> and <term> when there exists <term>`,
+    # which strictly contains the run-1 signature as a subsequence.
+    input_dir2 = tmp_path / "arxiv-input-2"
+    _write_structure_learning_arxiv_fixture_generalization(input_dir2)
+    outdir2 = tmp_path / "arxiv-out-2"
+    run2 = _run_arxiv_superpod(
+        root,
+        outdir2,
+        input_dir2,
+        [
+            "--paper-eprint-dir",
+            "eprints",
+            "--ner-kernel",
+            str(ner_kernel),
+            "--discover-structures",
+            "--discover-structures-min-signature-freq",
+            "1",
+            "--discover-structures-seed-json",
+            str(outdir1 / "learned-structure-summary.json"),
+        ],
+    )
+    assert run2.returncode == 0, (
+        "superpod-job arxiv structure-reseed run failed\n"
+        f"stdout:\n{run2.stdout}\n"
+        f"stderr:\n{run2.stderr}"
+    )
+
+    manifest2 = json.loads((outdir2 / "manifest.json").read_text(encoding="utf-8"))
+    structure2 = manifest2["stage5_stats"]["structure_learning"]
+    assert structure2["seed_signatures_loaded"] >= 1
+    assert structure2["seed_matches_applied"] >= 1, (
+        "run-2 used a different paper and different terms than run-1; the subsequence "
+        "matcher should still fire the prior signature here. seed_matches_applied=0 means "
+        "the replay loop is still doing exact-match, not generalization."
+    )
+    assert manifest2["stage5_stats"]["learned_structure_matches"] >= 1
+    discourse_rows = json.loads((outdir2 / "discourse-wiring.json").read_text(encoding="utf-8"))
+    assert discourse_rows[0]["counts"]["learned_structure"] >= 1
+    # The fired records should carry both the run-2 signature and the matched run-1 prior.
+    wiring = json.loads((outdir2 / "discourse-wiring.json").read_text(encoding="utf-8"))
+    seed_records = []
+    for row in wiring:
+        for rec in row.get("records", []):
+            if rec.get("hx/type") == "learned/structure-seed":
+                seed_records.append(rec)
+    assert seed_records, "no learned/structure-seed records emitted in run 2"
+    matched = seed_records[0]["hx/content"]["matched_prior_signature"]
+    assert matched == "we study <term> and <term>", (
+        f"expected matched_prior_signature to be the run-1 backbone, got {matched!r}"
+    )
 
 
 def test_arxiv_legacy_theorem_aliases_are_normalized(tmp_path: Path):

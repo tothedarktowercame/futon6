@@ -371,6 +371,108 @@ class TestDiscourseWiring:
         wire_records = [d for d in discourse if d["hx/role"] == "wire"]
         assert len(wire_records) > 0
 
+    def test_sequence_wire_detected(self):
+        wires = nlab_wiring.detect_wires("test-seq", "Next, we prove the auxiliary lemma.")
+        assert any(w["hx/type"] == "wire/sequencing" for w in wires)
+
+    def test_question_label_detected(self):
+        labels = nlab_wiring.detect_labels(
+            "test-q",
+            "In light of Lemma 2, one might ask the following question."
+        )
+        assert any(l["hx/type"] == "strategy/question" for l in labels)
+
+    def test_notice_that_wire(self):
+        wires = nlab_wiring.detect_wires(
+            "t-notice",
+            "Notice that in most cases the genus two curve fulfills these assumptions."
+        )
+        assert any(w["hx/type"] == "wire/consequential" for w in wires)
+
+    def test_observe_that_wire(self):
+        wires = nlab_wiring.detect_wires(
+            "t-obs",
+            "Observe that the diagram commutes by naturality."
+        )
+        assert any(w["hx/type"] == "wire/consequential" for w in wires)
+
+    def test_thanks_to_causal_wire(self):
+        wires = nlab_wiring.detect_wires(
+            "t-thx",
+            "In [6], thanks to this axiom, we may construct the bimodule structure."
+        )
+        assert any(w["hx/type"] == "wire/causal" for w in wires)
+
+    def test_we_now_sequencing_wire(self):
+        wires = nlab_wiring.detect_wires(
+            "t-wenow",
+            "We now consider the axiomatics of Ann-categories in another view."
+        )
+        assert any(w["hx/type"] == "wire/sequencing" for w in wires)
+
+    def test_in_order_to_purposive_wire(self):
+        wires = nlab_wiring.detect_wires(
+            "t-iot",
+            "In order to do so, we must alter the diagonalization step."
+        )
+        assert any(w["hx/type"] == "wire/purposive" for w in wires)
+
+    def test_these_anaphoric_port(self):
+        ports = nlab_wiring.detect_ports(
+            "t-these",
+            "These are the categories with distributivity constraints similar to rings."
+        )
+        assert any(p["hx/type"] == "port/these-anaphoric" for p in ports)
+
+    def test_paper_frame_label(self):
+        labels = nlab_wiring.detect_labels(
+            "t-frame-paper",
+            "In this paper, we have made some comments on these two definitions."
+        )
+        assert any(l["hx/type"] == "strategy/paper-frame" for l in labels)
+
+    def test_section_frame_label(self):
+        labels = nlab_wiring.detect_labels(
+            "t-frame-section",
+            "In this section, we will prove the independence of the last requirement."
+        )
+        assert any(l["hx/type"] == "strategy/paper-frame" for l in labels)
+
+    def test_numbered_section_frame_label(self):
+        labels = nlab_wiring.detect_labels(
+            "t-frame-numbered-section",
+            "In section 5 we explain how this method extends to the homogeneous subspace."
+        )
+        assert any(l["hx/type"] == "strategy/paper-frame" for l in labels)
+
+    def test_ordinal_section_frame_label(self):
+        labels = nlab_wiring.detect_labels(
+            "t-frame-ordinal-section",
+            "In the fourth section we prove by a new method that the basis elements are independent."
+        )
+        assert any(l["hx/type"] == "strategy/paper-frame" for l in labels)
+
+    def test_main_result_label(self):
+        labels = nlab_wiring.detect_labels(
+            "t-main",
+            "The main result of this paper is the relationship of Ann-categories and rings."
+        )
+        assert any(l["hx/type"] == "strategy/main-result" for l in labels)
+
+    def test_recent_work_label(self):
+        labels = nlab_wiring.detect_labels(
+            "t-recent",
+            "Recently, we have proved that this cohomology coincides with Maclane's."
+        )
+        assert any(l["hx/type"] == "strategy/recent-work" for l in labels)
+
+    def test_easy_to_see_label(self):
+        labels = nlab_wiring.detect_labels(
+            "t-easy",
+            "It is easy to see that every BG group has PIG."
+        )
+        assert any(l["hx/type"] == "epistemic/easy-to-see" for l in labels)
+
     def test_discourse_parent_env(self):
         """Discourse records inside environments should have hx/parent set."""
         envs = nlab_wiring.parse_environments(ADJUNCTION_SNIPPET)
@@ -514,6 +616,111 @@ class TestDiscourseWiring:
         assert envs
         labels = set(envs[0].get("hx/labels", []))
         assert "cross-close" in labels
+
+    def test_fix_binding_scope_detected(self):
+        text = r"Fix $X$ to be a cofibrant object."
+        scopes = nlab_wiring.detect_scopes("t-13", text)
+        assert any(
+            s["hx/type"] == "bind/let"
+            and any(e.get("role") == "symbol" and e.get("latex") == "X"
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_write_for_scope_detected(self):
+        text = r"We write $F$ for the identity functor on $\mathcal{C}$."
+        scopes = nlab_wiring.detect_scopes("t-14", text)
+        assert any(
+            s["hx/type"] == "bind/define"
+            and any(e.get("role") == "symbol" and e.get("latex") == "F"
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_exists_binding_scope_detected(self):
+        text = r"There exists $f$ such that $f : X \to Y$."
+        scopes = nlab_wiring.detect_scopes("t-15", text)
+        assert any(
+            s["hx/type"] == "quant/existential"
+            and any(e.get("role") == "symbol" and e.get("latex") == "f"
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_choose_work_in_scope_detected(self):
+        text = r"We choose to work in the Cauchy completion $\Q\V$ of $\V$."
+        scopes = nlab_wiring.detect_scopes("t-15b", text)
+        assert any(
+            s["hx/type"] == "assume/consider"
+            and any(e.get("role") == "object" and "Cauchy completion" in e.get("text", "")
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_is_denoted_by_scope_detected(self):
+        text = r"The set of such $G$ is denoted by $\operatorname{Aux}(F)$."
+        scopes = nlab_wiring.detect_scopes("t-16", text)
+        assert any(
+            s["hx/type"] == "bind/define"
+            and any(e.get("role") == "symbol" and r"\operatorname{Aux}(F)" in e.get("latex", "")
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_we_denote_by_scope_detected(self):
+        text = r"We denote as usual by $h_k$ the $k$-th complete homogeneous symmetric function."
+        scopes = nlab_wiring.detect_scopes("t-16b", text)
+        assert any(
+            s["hx/type"] == "bind/define"
+            and any(e.get("role") == "symbol" and e.get("latex") == "h_k"
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_let_command_binding_scope_detected(self):
+        text = r"Let \Digraph\ be the category of directed graphs and graph maps."
+        scopes = nlab_wiring.detect_scopes("t-17", text)
+        assert any(
+            s["hx/type"] == "bind/let"
+            and any(e.get("role") == "symbol" and e.get("latex") == r"\Digraph"
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_here_denotes_scope_detected(self):
+        text = r"Here $\exp(Q)$ denotes the exponent of a group $Q$."
+        scopes = nlab_wiring.detect_scopes("t-18", text)
+        assert any(
+            s["hx/type"] == "bind/define"
+            and any(e.get("role") == "symbol" and e.get("latex") == r"\exp(Q)"
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_typed_arrow_short_macro_detected(self):
+        text = r"We have $s:A \ra C^\o$ and $t:A \ra C$."
+        scopes = nlab_wiring.detect_scopes("t-19", text)
+        assert any(
+            s["hx/type"] == "bind/typed"
+            and any(e.get("role") == "type" and r"\ra" in e.get("latex", "")
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
+
+    def test_assume_that_prose_scope_detected(self):
+        text = r"Assume that with positive $\Pi$ probability, $X_{\xi}$ is not a Dirac measure."
+        scopes = nlab_wiring.detect_scopes("t-20", text)
+        assert any(s["hx/type"] == "assume/explicit" for s in scopes)
+
+    def test_let_also_denote_scope_detected(self):
+        text = r"Let also $X$ denote a subset of $(x_1,x_2,\ldots,x_n)$."
+        scopes = nlab_wiring.detect_scopes("t-21", text)
+        assert any(
+            s["hx/type"] == "bind/let"
+            and any(e.get("role") == "symbol" and e.get("latex") == "X"
+                    for e in s.get("hx/ends", []))
+            for s in scopes
+        )
 
 
 # ============================================================

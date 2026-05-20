@@ -76,6 +76,11 @@ In [superpod-job.py](/home/joe/code/futon6/scripts/superpod-job.py):
   paper path is reached without manual flag discipline
 - Stage 5 NER/scope detection is now eprint-first for arXiv paper runs
   instead of mining duplicated abstract text
+- Stage 5 now emits a combined `discourse-wiring.json` artifact
+  alongside `scopes.json`, carrying scopes plus wires, ports, and labels
+- Stage 5 learned-term output now feeds forward into Stage 5c and Stage 5d,
+  so paper technique extraction and paper hypergraphs can use terms learned
+  earlier in the same run
 - Stage 6 emits explicit coverage/status records rather than ambiguous
   silent holes
 - slot-distinctness is enforced more explicitly for
@@ -140,6 +145,8 @@ The practical interpretation is:
 - the first things to inspect on any arXiv paper run are:
   - `manifest.json -> stage5_stats.text_source_counts`
   - `manifest.json -> stage5_stats.eprint_status_counts`
+  - `manifest.json -> stage5_stats.total_discourse_records`
+  - `manifest.json -> stage5_stats.total_wires / total_ports / total_labels`
   - `manifest.json -> stage_status.technique_ner.text_source_counts`
   - `manifest.json -> stage_status.paper_hypergraph.text_source_counts`
   - `manifest.json -> stage9a_stats.eprint_text_used`
@@ -164,6 +171,7 @@ python3 scripts/superpod-job.py \
   --paper-eprint-dir eprints \
   --ner-kernel /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \
   --discover-terms \
+  --discover-structures \
   --discover-terms-eprint-dir eprints \
   --discover-terms-pm-seed /home/joe/code/futon6/data/dictionary/entries-pm-seed.edn \
   --discover-terms-nlab-seed /home/joe/code/futon6/data/dictionary/entries-nlab-seed.edn \
@@ -185,11 +193,20 @@ Why these flags are the current default-safe lane:
 - the seed flags make Stage 5 classify extracted terms against the current
   PM seed, nLab seed, and NNexus concept snapshot while still retaining
   provisional genuinely new terms
+- `--discover-structures` makes Stage 5 mine term-dense uncovered residual
+  sentences into learned structure signatures and write a simple
+  structure/term loss summary
+- the same learned-term stream is then reused in Stage 5c and Stage 5d, so
+  the runner can accumulate terminology in-run instead of requiring a
+  separate downstream novelty pass
 - `--skip-embeddings --skip-llm --skip-clustering --skip-graph-embed --skip-faiss`
   keeps the run CPU-safe while still giving:
   - Stage 5 NER/scope output
+  - `discourse-wiring.json` with scope + wire + port + label records
   - `candidate-new-terms.jsonl` with seed-aware novelty labels
   - `learned-term-dictionary.jsonl` with provisional OED-style entries
+  - `learned-structure-candidates.json` with reusable residual signatures
+  - `learned-structure-summary.json` with structure loss and seed-match stats
   - `qc-preregister.json` with historical baseline checks against archived
     `mark2` runs
   - Stage 5c classical technique extraction
@@ -203,11 +220,41 @@ Expected post-run checks:
   - `new=...`
   - `seed-known-missing-from-kernel=...`
   - `rhs_supported=...`
+- Stage 5 should now also report:
+  - `Discourse coverage: ...`
+  - `wires=...`
+  - `ports=...`
+  - `labels=...`
 - Stage 5c and Stage 5d should also report eprint-only text use
 - Stage 9a should report nonzero eprint text coverage
 
 If any of those fall back to abstracts for a supposedly paper-backed batch,
 stop and treat the run as a provenance failure.
+
+## 5a. Distributed Proofreaders loop
+
+For structure-learning work, the current recommended audit loop is:
+
+```bash
+python3 scripts/build-uncovered-sentence-audit.py
+```
+
+That script:
+
+- chooses fresh papers not already used in the daisychain ledger
+- measures current Stage 5 discourse coverage
+- emits only the residual uncovered sentences for manual review
+- advances a ledger so the next run shifts to new papers instead of
+  repeatedly tuning on the same examples
+
+The main outputs are:
+
+- `data/showcases/distributed-proofreaders/latest-audit.json`
+- `data/showcases/distributed-proofreaders/latest-audit.html`
+- `data/showcases/distributed-proofreaders/daisychain-ledger.json`
+
+The intent is to grow a reusable seed kit of structure patterns, not to
+paper-special-case the detector around one or two hand-picked texts.
 
 ## 6. What the evidence says so far
 

@@ -72,7 +72,7 @@ warnings.filterwarnings(
     category=SyntaxWarning,
     message=r"invalid escape sequence.*",
 )
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
 
@@ -166,6 +166,7 @@ _assemble_wiring = None
 _nlab_wiring = None
 _scope_detector = None
 _scope_detector_name = None
+_discourse_detectors = None
 
 def _load_ct_modules():
     """Lazy-load CT wiring modules (only needed for Stage 7 CT path)."""
@@ -194,6 +195,40 @@ def _load_scope_detector(prefer_nlab=True):
     _scope_detector = detect_scopes_entity
     _scope_detector_name = "superpod.detect_scopes_entity"
     return _scope_detector, _scope_detector_name
+
+
+def _noop_discourse_detector(entity_id, text, parent_env_id=None):
+    return []
+
+
+def _load_discourse_detectors(prefer_nlab=True):
+    """Return Stage 5 discourse detectors, preferring nlab-wiring."""
+    global _discourse_detectors
+    if _discourse_detectors is not None:
+        return _discourse_detectors
+
+    if prefer_nlab:
+        try:
+            nw = importlib.import_module("nlab-wiring")
+            _discourse_detectors = {
+                "scope": nw.detect_scopes,
+                "wire": nw.detect_wires,
+                "port": nw.detect_ports,
+                "label": nw.detect_labels,
+                "source": "nlab-wiring",
+            }
+            return _discourse_detectors
+        except Exception as exc:
+            print(f"       Discourse detector fallback: nlab-wiring unavailable ({exc})")
+
+    _discourse_detectors = {
+        "scope": detect_scopes_entity,
+        "wire": _noop_discourse_detector,
+        "port": _noop_discourse_detector,
+        "label": _noop_discourse_detector,
+        "source": "superpod",
+    }
+    return _discourse_detectors
 
 from futon6.stackexchange import (
     build_qa_pairs_streaming,
@@ -908,6 +943,32 @@ def _build_learned_dictionary_entry(row):
     }
 
 
+def _record_position_key(record):
+    if not isinstance(record, dict):
+        return (10**12, "")
+    content = record.get("hx/content") or {}
+    pos = content.get("position")
+    if not isinstance(pos, int):
+        pos = 10**12
+    return (pos, record.get("hx/id") or "")
+
+
+def _load_jsonl_records(path):
+    rows = []
+    if not path.exists():
+        return rows
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                rows.append(json.loads(line))
+    except (OSError, json.JSONDecodeError):
+        return []
+    return rows
+
+
 def load_ner_kernel(path):
     """Load NER kernel terms from TSV.
 
@@ -978,6 +1039,322 @@ def spot_terms_entity(text, singles, multi_index):
 
     return [{"term": orig, "term_lower": tl, "canon": canon}
             for tl, (orig, canon) in sorted(hits.items())]
+
+
+_STRUCTURE_CUE_WORDS = {
+    "we", "let", "define", "denote", "write", "show", "prove", "obtain", "apply",
+    "study", "consider", "introduce", "recall", "if", "then", "assume", "suppose",
+    "where", "when", "for", "any", "every", "there", "exists", "be",
+    "that", "and", "or", "not", "only", "particular", "consist", "depend",
+    "turn", "focus", "choose", "work",
+}
+
+_STRUCTURE_CUE_LEMMAS = {
+    "shows": "show",
+    "proved": "prove",
+    "proves": "prove",
+    "obtains": "obtain",
+    "obtained": "obtain",
+    "applies": "apply",
+    "applied": "apply",
+    "studies": "study",
+    "considered": "consider",
+    "considers": "consider",
+    "introduced": "introduce",
+    "introduces": "introduce",
+    "recalled": "recall",
+    "recalls": "recall",
+    "depends": "depend",
+    "consists": "consist",
+    "chooses": "choose",
+    "chose": "choose",
+    "worked": "work",
+    "is": "be",
+    "are": "be",
+    "was": "be",
+    "were": "be",
+    "being": "be",
+    "been": "be",
+}
+
+
+def _sentence_spans(text):
+    out = []
+    for match in re.finditer(r"[^.!?\n][^.!?\n]*(?:[.!?](?=\s|$)|$)", text):
+        start, end = match.span()
+        snippet = text[start:end].strip()
+        if end > start and snippet:
+            out.append((start, end, snippet))
+    return out
+
+
+def _record_span(record):
+    if not isinstance(record, dict):
+        return None
+    content = record.get("hx/content") or {}
+    start = content.get("position")
+    end = content.get("end")
+    if isinstance(start, int) and isinstance(end, int) and end > start:
+        return (start, end)
+    return None
+
+
+def _merge_spans(spans):
+    merged = []
+    for start, end in sorted(spans):
+        if not merged or start > merged[-1][1]:
+            merged.append([start, end])
+        else:
+            merged[-1][1] = max(merged[-1][1], end)
+    return [(start, end) for start, end in merged]
+
+
+def _extract_sentence_term_features(sentence, singles, multi_index):
+    hits = spot_terms_entity(sentence, singles, multi_index)
+    unique_terms = []
+    seen = set()
+    for row in hits:
+        term = (row.get("term") or row.get("term_lower") or "").strip()
+        if not term:
+            continue
+        term_lower = (row.get("term_lower") or term.lower()).strip().lower()
+        if term_lower in seen:
+            continue
+        seen.add(term_lower)
+        unique_terms.append({
+            "term": term,
+            "term_lower": term_lower,
+            "canon": row.get("canon"),
+        })
+    return {
+        "known_term_hit_count": len(unique_terms),
+        "known_term_hits": unique_terms,
+    }
+
+
+def _normalize_structure_seed_text(sentence, known_term_hits):
+    normalized = sentence
+    for item in sorted(
+        known_term_hits,
+        key=lambda row: len(row.get("term_lower", "")),
+        reverse=True,
+    ):
+        term = (item.get("term") or item.get("term_lower") or "").strip()
+        if not term:
+            continue
+        variants = [term]
+        if not term.endswith("s"):
+            variants.append(f"{term}s")
+        for variant in variants:
+            pattern = re.compile(rf"\b{re.escape(variant)}\b", re.IGNORECASE)
+            normalized = pattern.sub("<TERM>", normalized)
+    normalized = re.sub(r"\$[^$]+\$", "<MATH>", normalized)
+    normalized = re.sub(r"\\cite\{[^}]+\}", "<CITE>", normalized)
+    normalized = re.sub(r"\[[^\]]+\]", "<CITE>", normalized)
+    normalized = re.sub(r"\\[A-Za-z]+", "<CMD>", normalized)
+    normalized = re.sub(r"\b\d+(?:\.\d+)?\b", "<NUM>", normalized)
+    normalized = normalized.lower()
+    normalized = re.sub(r"\s+", " ", normalized)
+    return normalized.strip()
+
+
+def _structure_seed_skeleton(normalized_template):
+    tokens = re.findall(r"<[a-z]+>|[a-z]+", normalized_template)
+    kept = []
+    for token in tokens:
+        if token.startswith("<") and token.endswith(">"):
+            kept.append(token)
+            continue
+        lemma = _STRUCTURE_CUE_LEMMAS.get(token, token)
+        if lemma in _STRUCTURE_CUE_WORDS:
+            kept.append(lemma)
+    collapsed = []
+    for token in kept:
+        if collapsed and collapsed[-1] == token and token.startswith("<"):
+            continue
+        collapsed.append(token)
+    return " ".join(collapsed)
+
+
+def _extract_uncovered_structure_rows(text, records, singles, multi_index, *, min_sentence_chars=40, max_uncovered=30):
+    merged = _merge_spans([
+        span for record in records if (span := _record_span(record))
+    ])
+    rows = []
+    for idx, (start, end, sentence) in enumerate(_sentence_spans(text)):
+        if len(sentence) < min_sentence_chars:
+            continue
+        if any(not (m_end <= start or m_start >= end) for m_start, m_end in merged):
+            continue
+        term_features = _extract_sentence_term_features(sentence, singles, multi_index)
+        template = _normalize_structure_seed_text(sentence, term_features["known_term_hits"])
+        signature = _structure_seed_skeleton(template)
+        rows.append({
+            "index": idx,
+            "start": start,
+            "end": end,
+            "text": sentence,
+            "has_math": ("$" in sentence or "\\" in sentence),
+            "has_citation": ("\\cite" in sentence or ("[" in sentence and "]" in sentence)),
+            **term_features,
+            "structure_seed_template": template,
+            "structure_seed_signature": signature,
+        })
+    rows.sort(
+        key=lambda row: (
+            row["known_term_hit_count"],
+            row["has_math"],
+            len(row["text"]),
+        ),
+        reverse=True,
+    )
+    return rows[:max_uncovered]
+
+
+def _summarize_structure_seed_candidates(rows, *, min_signature_freq=1, max_candidates=1000):
+    buckets = {}
+    for row in rows:
+        if row.get("known_term_hit_count", 0) <= 0:
+            continue
+        signature = row.get("structure_seed_signature") or ""
+        if not signature:
+            continue
+        bucket = buckets.setdefault(signature, {
+            "signature": signature,
+            "count": 0,
+            "paper_ids": set(),
+            "example_sentences": [],
+            "max_known_term_hit_count": 0,
+        })
+        bucket["count"] += 1
+        bucket["paper_ids"].add(row.get("paper_id"))
+        bucket["max_known_term_hit_count"] = max(
+            bucket["max_known_term_hit_count"],
+            row.get("known_term_hit_count", 0),
+        )
+        if len(bucket["example_sentences"]) < 3:
+            bucket["example_sentences"].append({
+                "paper_id": row.get("paper_id"),
+                "index": row.get("index"),
+                "text": row.get("text"),
+                "known_terms": [
+                    item["term_lower"] for item in row.get("known_term_hits", [])[:8]
+                ],
+            })
+    out = []
+    for bucket in buckets.values():
+        if bucket["count"] < min_signature_freq:
+            continue
+        out.append({
+            "signature": bucket["signature"],
+            "count": bucket["count"],
+            "paper_ids": sorted(bucket["paper_ids"]),
+            "paper_count": len(bucket["paper_ids"]),
+            "max_known_term_hit_count": bucket["max_known_term_hit_count"],
+            "example_sentences": bucket["example_sentences"],
+        })
+    out.sort(
+        key=lambda row: (
+            row["paper_count"],
+            row["count"],
+            row["max_known_term_hit_count"],
+            len(row["signature"]),
+        ),
+        reverse=True,
+    )
+    return out[:max_candidates]
+
+
+_STRUCTURE_SEED_MIN_TOKENS = 3
+
+
+def _signature_tokens(signature):
+    return tuple(re.findall(r"<[a-z]+>|[a-z]+", signature or ""))
+
+
+def _is_subsequence(needle, haystack):
+    if not needle:
+        return False
+    i = 0
+    for token in haystack:
+        if token == needle[i]:
+            i += 1
+            if i == len(needle):
+                return True
+    return False
+
+
+def _match_structure_seed_signature(new_signature, prior_signatures, min_tokens=_STRUCTURE_SEED_MIN_TOKENS):
+    new_tokens = _signature_tokens(new_signature)
+    if not new_tokens:
+        return None
+    best = None
+    best_len = 0
+    for prior_sig, prior_tokens in prior_signatures:
+        if len(prior_tokens) < min_tokens:
+            continue
+        if len(prior_tokens) > len(new_tokens):
+            continue
+        if _is_subsequence(prior_tokens, new_tokens):
+            if len(prior_tokens) > best_len:
+                best = prior_sig
+                best_len = len(prior_tokens)
+    return best
+
+
+def _load_structure_seed_signatures(path):
+    if path is None or not Path(path).exists():
+        return []
+    try:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if isinstance(payload, dict):
+        rows = payload.get("structure_seed_candidates") or payload.get("candidates") or []
+    elif isinstance(payload, list):
+        rows = payload
+    else:
+        return []
+    out = []
+    seen = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        signature = (row.get("signature") or row.get("structure_seed_signature") or "").strip()
+        if not signature or signature in seen:
+            continue
+        seen.add(signature)
+        tokens = _signature_tokens(signature)
+        if not tokens:
+            continue
+        out.append((signature, tokens))
+    out.sort(key=lambda item: len(item[1]), reverse=True)
+    return out
+
+
+def _make_structure_seed_record(entity_id, match_idx, row):
+    signature = row.get("structure_seed_signature") or ""
+    matched_prior = row.get("matched_prior_signature") or signature
+    return {
+        "hx/id": f"{entity_id}:learned-structure-{match_idx:03d}",
+        "hx/role": "label",
+        "hx/type": "learned/structure-seed",
+        "hx/parent": None,
+        "hx/ends": [
+            {"role": "entity", "ident": entity_id},
+            {"role": "signature", "text": signature},
+            {"role": "matched_prior", "text": matched_prior},
+        ],
+        "hx/content": {
+            "match": row.get("text", "")[:160],
+            "position": row.get("start"),
+            "end": row.get("end"),
+            "signature": signature,
+            "matched_prior_signature": matched_prior,
+            "source": "structure-seed-signature",
+        },
+        "hx/labels": ["label", "learned-structure", "structure-seed"],
+    }
 
 
 def detect_scopes_entity(entity_id, text):
@@ -1231,6 +1608,7 @@ def run_stage5_ner_scopes(
     outdir,
     scope_detector=None,
     scope_detector_name="superpod.detect_scopes_entity",
+    discourse_detectors=None,
     discover_terms=False,
     discover_terms_min_freq=3,
     discover_terms_max=2000,
@@ -1247,6 +1625,11 @@ def run_stage5_ner_scopes(
     discover_terms_eprint_dir=None,
     discover_terms_eprint_max_chars=240_000,
     discover_terms_eprint_max_tex_members=4,
+    discover_structures=False,
+    discover_structures_seed_json=None,
+    discover_structures_min_signature_freq=2,
+    discover_structures_max=1000,
+    discover_structures_max_uncovered_per_entity=30,
 ):
     """Run Stage 5: NER term spotting + scope detection.
 
@@ -1260,10 +1643,17 @@ def run_stage5_ner_scopes(
     if scope_detector is None:
         scope_detector = detect_scopes_entity
         scope_detector_name = "superpod.detect_scopes_entity"
+    if discourse_detectors is None:
+        discourse_detectors = _load_discourse_detectors(prefer_nlab=True)
+    wire_detector = discourse_detectors.get("wire", _noop_discourse_detector)
+    port_detector = discourse_detectors.get("port", _noop_discourse_detector)
+    label_detector = discourse_detectors.get("label", _noop_discourse_detector)
 
     singles, multi_index, multi_count = load_ner_kernel(ner_kernel_path)
     print(f"       NER kernel: {len(singles)} single + {multi_count} multi-word terms")
     print(f"       Scope detector: {scope_detector_name}")
+    if discourse_detectors.get("source"):
+        print(f"       Discourse detector source: {discourse_detectors['source']}")
 
     known_terms = None
     discovery_total = 0
@@ -1298,25 +1688,53 @@ def run_stage5_ner_scopes(
         print("       Open-world term seed context: "
               f"pm={len(pm_seed_lowers)} nlab={len(nlab_seed_lowers)} "
               f"nnexus={len(nnexus_snapshot_lowers)} stopwords={len(nnexus_stopwords)}")
+    structure_seed_signatures = _load_structure_seed_signatures(discover_structures_seed_json)
+    if discover_structures:
+        print("       Live structure discovery: enabled "
+              f"(min_signature_freq={discover_structures_min_signature_freq}, "
+              f"max={discover_structures_max}, "
+              f"max_uncovered_per_entity={discover_structures_max_uncovered_per_entity})")
+        if structure_seed_signatures:
+            print("       Live structure reseeding: "
+                  f"{len(structure_seed_signatures)} prior signatures")
 
     ner_path = outdir / "ner-terms.json"
     scope_path = outdir / "scopes.json"
+    discourse_path = outdir / "discourse-wiring.json"
 
     total_ner_hits = 0
     total_scopes = 0
+    total_wires = 0
+    total_ports = 0
+    total_labels = 0
+    total_discourse_records = 0
     entities_with_ner = 0
     entities_with_scopes = 0
+    entities_with_wires = 0
+    entities_with_ports = 0
+    entities_with_labels = 0
+    entities_with_discourse = 0
     stype_freq = Counter()
+    discourse_role_freq = Counter()
+    discourse_type_freq = Counter()
     text_source_counts = Counter()
     eprint_text_used = 0
     eprint_text_missing = 0
     eprint_status_counts = Counter()
     arxiv_entities_processed = 0
+    total_learned_structure_matches = 0
+    entities_with_learned_structure_matches = 0
+    total_uncovered_sentences = 0
+    total_uncovered_with_known_terms = 0
+    total_known_term_hits_in_uncovered = 0
+    entities_with_term_dense_residuals = 0
+    structure_seed_rows = []
     n = len(entities)
 
-    with open(ner_path, "w") as ner_f, open(scope_path, "w") as scope_f:
+    with open(ner_path, "w") as ner_f, open(scope_path, "w") as scope_f, open(discourse_path, "w") as discourse_f:
         ner_f.write("[\n")
         scope_f.write("[\n")
+        discourse_f.write("[\n")
 
         for i, (entity, pair) in enumerate(zip(entities, pairs)):
             eid = entity["entity/id"]
@@ -1351,6 +1769,80 @@ def run_stage5_ner_scopes(
                 total_scopes += len(scopes)
                 for s in scopes:
                     stype_freq[s["hx/type"]] += 1
+
+            wires = wire_detector(eid, full_text) or []
+            ports = port_detector(eid, full_text) or []
+            labels = label_detector(eid, full_text) or []
+            if wires:
+                entities_with_wires += 1
+                total_wires += len(wires)
+            if ports:
+                entities_with_ports += 1
+                total_ports += len(ports)
+            if labels:
+                entities_with_labels += 1
+                total_labels += len(labels)
+            base_discourse_records = sorted(
+                [*scopes, *wires, *ports, *labels],
+                key=_record_position_key,
+            )
+            learned_structure_records = []
+            if discover_structures or structure_seed_signatures:
+                uncovered_rows = _extract_uncovered_structure_rows(
+                    full_text,
+                    base_discourse_records,
+                    singles,
+                    multi_index,
+                    max_uncovered=discover_structures_max_uncovered_per_entity,
+                )
+                if uncovered_rows:
+                    total_uncovered_sentences += len(uncovered_rows)
+                    uncovered_with_known_terms = sum(
+                        1 for row in uncovered_rows if row.get("known_term_hit_count", 0) > 0
+                    )
+                    total_uncovered_with_known_terms += uncovered_with_known_terms
+                    total_known_term_hits_in_uncovered += sum(
+                        row.get("known_term_hit_count", 0) for row in uncovered_rows
+                    )
+                    if uncovered_with_known_terms:
+                        entities_with_term_dense_residuals += 1
+                if discover_structures:
+                    for row in uncovered_rows:
+                        structure_seed_rows.append({
+                            "paper_id": eid,
+                            **row,
+                        })
+                if structure_seed_signatures:
+                    match_idx = 0
+                    for row in uncovered_rows:
+                        signature = row.get("structure_seed_signature") or ""
+                        if not signature or row.get("known_term_hit_count", 0) <= 0:
+                            continue
+                        matched_prior = _match_structure_seed_signature(
+                            signature, structure_seed_signatures
+                        )
+                        if matched_prior:
+                            enriched_row = dict(row)
+                            enriched_row["matched_prior_signature"] = matched_prior
+                            learned_structure_records.append(
+                                _make_structure_seed_record(eid, match_idx, enriched_row)
+                            )
+                            match_idx += 1
+                    if learned_structure_records:
+                        entities_with_learned_structure_matches += 1
+                        total_learned_structure_matches += len(learned_structure_records)
+            discourse_records = sorted(
+                [*base_discourse_records, *learned_structure_records],
+                key=_record_position_key,
+            )
+            if discourse_records:
+                entities_with_discourse += 1
+                total_discourse_records += len(discourse_records)
+                for record in discourse_records:
+                    role = record.get("hx/role") or "unknown"
+                    rtype = record.get("hx/type") or "unknown"
+                    discourse_role_freq[role] += 1
+                    discourse_type_freq[rtype] += 1
 
             # Open-world term discovery
             if discover_terms:
@@ -1477,6 +1969,24 @@ def run_stage5_ner_scopes(
             scope_f.write(sep + json.dumps(
                 {"entity_id": eid, "scopes": scopes, "count": len(scopes)},
                 ensure_ascii=False))
+            discourse_f.write(sep + json.dumps(
+                {
+                    "entity_id": eid,
+                    "records": discourse_records,
+                    "scopes": scopes,
+                    "wires": wires,
+                    "ports": ports,
+                    "labels": labels,
+                    "counts": {
+                        "records": len(discourse_records),
+                        "scopes": len(scopes),
+                        "wires": len(wires),
+                        "ports": len(ports),
+                        "labels": len(labels),
+                        "learned_structure": len(learned_structure_records),
+                    },
+                },
+                ensure_ascii=False))
 
             if (i + 1) % 10000 == 0 or (i + 1) == n:
                 extra = ""
@@ -1485,13 +1995,16 @@ def run_stage5_ner_scopes(
                              f" eprint_missing={eprint_text_missing}")
                 print(f"       [{i+1}/{n}] "
                       f"NER: {total_ner_hits} hits, "
-                      f"scopes: {total_scopes} records{extra}")
+                      f"scopes: {total_scopes} records, "
+                      f"discourse: {total_discourse_records} records{extra}")
 
         ner_f.write("\n]")
         scope_f.write("\n]")
+        discourse_f.write("\n]")
 
     print(f"       Written {ner_path} ({os.path.getsize(ner_path) / 1e6:.1f} MB)")
     print(f"       Written {scope_path} ({os.path.getsize(scope_path) / 1e6:.1f} MB)")
+    print(f"       Written {discourse_path} ({os.path.getsize(discourse_path) / 1e6:.1f} MB)")
 
     if eprint_dir is not None and arxiv_entities_processed and eprint_text_used == 0:
         try:
@@ -1500,6 +2013,10 @@ def run_stage5_ner_scopes(
             pass
         try:
             scope_path.unlink()
+        except OSError:
+            pass
+        try:
+            discourse_path.unlink()
         except OSError:
             pass
         raise RuntimeError(
@@ -1629,6 +2146,43 @@ def run_stage5_ner_scopes(
         print(f"       Written {learned_dict_path} ({os.path.getsize(learned_dict_path) / 1e6:.1f} MB)")
         print(f"       Written {summary_path} ({os.path.getsize(summary_path) / 1e6:.1f} MB)")
 
+    structure_learning_stats = None
+    if discover_structures:
+        structure_path = outdir / "learned-structure-candidates.json"
+        structure_summary_path = outdir / "learned-structure-summary.json"
+        structure_rows = _summarize_structure_seed_candidates(
+            structure_seed_rows,
+            min_signature_freq=discover_structures_min_signature_freq,
+            max_candidates=discover_structures_max,
+        )
+        structure_learning_stats = {
+            "enabled": True,
+            "seed_signatures_loaded": len(structure_seed_signatures),
+            "seed_matches_applied": total_learned_structure_matches,
+            "entities_with_seed_matches": entities_with_learned_structure_matches,
+            "prefilter_candidate_rows": len(structure_seed_rows),
+            "candidates_written": len(structure_rows),
+            "output_candidates_json": str(structure_path),
+            "output_summary_json": str(structure_summary_path),
+            "structure_seed_candidates": structure_rows,
+            "loss": {
+                "uncovered_sentences_total": total_uncovered_sentences,
+                "uncovered_sentences_with_known_terms": total_uncovered_with_known_terms,
+                "known_term_hits_in_uncovered_sentences": total_known_term_hits_in_uncovered,
+                "entities_with_term_dense_residuals": entities_with_term_dense_residuals,
+                "free_floating_term_ratio": round(
+                    (total_uncovered_with_known_terms / total_uncovered_sentences),
+                    4,
+                ) if total_uncovered_sentences else 0.0,
+            },
+        }
+        with open(structure_path, "w", encoding="utf-8") as f:
+            json.dump(structure_rows, f, indent=2, ensure_ascii=False)
+        with open(structure_summary_path, "w", encoding="utf-8") as f:
+            json.dump(structure_learning_stats, f, indent=2, ensure_ascii=False)
+        print(f"       Written {structure_path} ({os.path.getsize(structure_path) / 1e6:.1f} MB)")
+        print(f"       Written {structure_summary_path} ({os.path.getsize(structure_summary_path) / 1e6:.1f} MB)")
+
     return {
         "ner_kernel_terms": len(singles) + multi_count,
         "scope_detector": scope_detector_name,
@@ -1640,6 +2194,18 @@ def run_stage5_ner_scopes(
         "entities_with_scopes": entities_with_scopes,
         "scope_coverage": entities_with_scopes / n if n else 0,
         "scope_type_freq": dict(stype_freq.most_common()),
+        "total_wires": total_wires,
+        "entities_with_wires": entities_with_wires,
+        "total_ports": total_ports,
+        "entities_with_ports": entities_with_ports,
+        "total_labels": total_labels,
+        "entities_with_labels": entities_with_labels,
+        "total_discourse_records": total_discourse_records,
+        "entities_with_discourse": entities_with_discourse,
+        "discourse_coverage": entities_with_discourse / n if n else 0,
+        "discourse_role_freq": dict(discourse_role_freq.most_common()),
+        "discourse_type_freq": dict(discourse_type_freq.most_common()),
+        "output_discourse_json": str(discourse_path),
         "text_source_counts": dict(text_source_counts),
         "eprint_dir": str(eprint_dir) if eprint_dir is not None else None,
         "eprint_text_used": eprint_text_used,
@@ -1647,6 +2213,25 @@ def run_stage5_ner_scopes(
         "eprint_status_counts": dict(eprint_status_counts),
         "arxiv_entities_processed": arxiv_entities_processed,
         "open_ner": open_ner_stats,
+        "learned_structure_matches": total_learned_structure_matches,
+        "entities_with_learned_structure_matches": entities_with_learned_structure_matches,
+        "structure_learning": structure_learning_stats,
+        "learning_loss": {
+            "term_loss": {
+                "entities_with_ner": entities_with_ner,
+                "entities_without_discourse_but_with_ner": max(0, entities_with_ner - entities_with_discourse),
+                "total_ner_hits": total_ner_hits,
+            },
+            "structure_loss": (
+                structure_learning_stats.get("loss", {})
+                if structure_learning_stats else {}
+            ),
+            "interaction_loss": {
+                "known_term_hits_in_uncovered_sentences": total_known_term_hits_in_uncovered,
+                "uncovered_sentences_with_known_terms": total_uncovered_with_known_terms,
+                "seed_matches_applied": total_learned_structure_matches,
+            },
+        },
     }
 
 
@@ -4024,6 +4609,80 @@ def _load_stage5_entity_map(path, key):
     return out
 
 
+def _load_stage5_concept_vocab(outdir):
+    """Load Stage 5 concept vocab from direct NER hits plus learned terms."""
+    concept_vocab = set()
+    concept_by_entity = defaultdict(set)
+    stats = {
+        "ner_terms": 0,
+        "ner_entities": 0,
+        "learned_terms": 0,
+        "learned_entity_links": 0,
+    }
+
+    ner_terms_path = outdir / "ner-terms.json"
+    if ner_terms_path.exists():
+        try:
+            with open(ner_terms_path, "r", encoding="utf-8") as f:
+                for record in json.load(f):
+                    eid = record.get("entity_id") or record.get("id")
+                    entity_terms = set()
+                    for t in record.get("terms", []) or []:
+                        if isinstance(t, dict):
+                            term = t.get("term_lower") or t.get("term") or t.get("canon") or ""
+                        elif isinstance(t, str):
+                            term = t
+                        else:
+                            term = ""
+                        term = term.strip().lower()
+                        if not term:
+                            continue
+                        concept_vocab.add(term)
+                        entity_terms.add(term)
+                    if eid and entity_terms:
+                        concept_by_entity[eid].update(entity_terms)
+                        stats["ner_entities"] += 1
+        except (json.JSONDecodeError, OSError):
+            pass
+    stats["ner_terms"] = len(concept_vocab)
+
+    learned_terms_path = outdir / "learned-term-dictionary.jsonl"
+    if learned_terms_path.exists():
+        for row in _load_jsonl_records(learned_terms_path):
+            term = (
+                row.get("term_lower")
+                or row.get("term_headword")
+                or row.get("headword")
+                or ""
+            ).strip().lower()
+            if not term:
+                continue
+            concept_vocab.add(term)
+            stats["learned_terms"] += 1
+            paper_ids = []
+            for pid in row.get("paper_ids", []) or []:
+                if isinstance(pid, str) and pid:
+                    paper_ids.append(pid)
+            if not paper_ids:
+                for bucket_key in ("definitions", "usage_examples"):
+                    for item in row.get(bucket_key, []) or []:
+                        pid = item.get("source_paper")
+                        if isinstance(pid, str) and pid:
+                            paper_ids.append(pid)
+            for pid in sorted(set(paper_ids)):
+                concept_by_entity[pid].add(term)
+                stats["learned_entity_links"] += 1
+
+    concept_by_entity = {
+        eid: sorted(terms)
+        for eid, terms in concept_by_entity.items()
+        if terms
+    }
+    stats["total_terms"] = len(concept_vocab)
+    stats["entity_vocabularies"] = len(concept_by_entity)
+    return sorted(concept_vocab), concept_by_entity, stats
+
+
 def _extract_math_snippets_for_hypergraph(text, max_exprs=160, max_latex_len=512):
     """Extract unique LaTeX snippets from text for paper-level hypergraphs."""
     out = []
@@ -4068,7 +4727,7 @@ def _extract_math_snippets_for_hypergraph(text, max_exprs=160, max_latex_len=512
     return out
 
 
-def _build_arxiv_paper_hypergraph(entity, pair, terms, scopes, text, max_exprs=160):
+def _build_arxiv_paper_hypergraph(entity, pair, terms, scopes, text, max_exprs=160, discourse_records=None):
     """Build a paper-level typed hypergraph using Stage 5 outputs + expressions."""
     eid = entity["entity/id"]
     post_id = f"paper:{eid}"
@@ -4093,10 +4752,14 @@ def _build_arxiv_paper_hypergraph(entity, pair, terms, scopes, text, max_exprs=1
     # NER terms -> term nodes + mention edges
     seen_term_edges = set()
     for t in terms:
-        if not isinstance(t, dict):
+        if isinstance(t, dict):
+            canon = (t.get("canon") or t.get("term_lower") or t.get("term") or "").strip().lower()
+            surface = (t.get("term") or canon).strip()
+        elif isinstance(t, str):
+            canon = t.strip().lower()
+            surface = canon
+        else:
             continue
-        canon = (t.get("canon") or t.get("term_lower") or t.get("term") or "").strip().lower()
-        surface = (t.get("term") or canon).strip()
         if not canon:
             continue
         term_id = f"term:{canon}"
@@ -4127,6 +4790,26 @@ def _build_arxiv_paper_hypergraph(entity, pair, terms, scopes, text, max_exprs=1
             "type": "scope",
             "ends": [scope_id, post_id],
             "attrs": {"binding_type": scope_type},
+        })
+
+    for idx, record in enumerate(discourse_records or []):
+        if not isinstance(record, dict):
+            continue
+        role = record.get("hx/role")
+        if role not in {"wire", "port", "label"}:
+            continue
+        record_id = record.get("hx/id") or f"{eid}:{role}-{idx:04d}"
+        record_type = record.get("hx/type", f"{role}/unknown")
+        content = record.get("hx/content") or {}
+        _add_node(record_id, role, record_type, {
+            "match": content.get("match", ""),
+            "position": content.get("position"),
+            "labels": record.get("hx/labels", []),
+        })
+        edges.append({
+            "type": role,
+            "ends": [record_id, post_id],
+            "attrs": {"discourse_type": record_type},
         })
 
     # Expressions -> expression nodes + surface edges
@@ -4166,6 +4849,9 @@ def _build_arxiv_paper_hypergraph(entity, pair, terms, scopes, text, max_exprs=1
             "n_terms": sum(1 for n in node_list if n["type"] == "term"),
             "n_expressions": sum(1 for n in node_list if n["type"] == "expression"),
             "n_scopes": sum(1 for n in node_list if n["type"] == "scope"),
+            "n_wires": sum(1 for n in node_list if n["type"] == "wire"),
+            "n_ports": sum(1 for n in node_list if n["type"] == "port"),
+            "n_labels": sum(1 for n in node_list if n["type"] == "label"),
             "edge_types": dict(edge_types),
         },
     }
@@ -4184,6 +4870,8 @@ def run_stage9a_arxiv_paper_hypergraphs(
     total = len(entities)
     ner_map = _load_stage5_entity_map(outdir / "ner-terms.json", "terms")
     scope_map = _load_stage5_entity_map(outdir / "scopes.json", "scopes")
+    discourse_map = _load_stage5_entity_map(outdir / "discourse-wiring.json", "records")
+    _, learned_concept_by_entity, _ = _load_stage5_concept_vocab(outdir)
     if not ner_map:
         print("       Warning: ner-terms.json missing or empty; term nodes may be sparse")
     if not scope_map:
@@ -4226,8 +4914,19 @@ def run_stage9a_arxiv_paper_hypergraphs(
             hg = _build_arxiv_paper_hypergraph(
                 entity=entity,
                 pair=pair,
-                terms=ner_map.get(eid, []),
+                terms=[
+                    *(ner_map.get(eid, []) or []),
+                    *[
+                        term for term in learned_concept_by_entity.get(eid, [])
+                        if term not in {
+                            ((t.get("canon") or t.get("term_lower") or t.get("term") or "").strip().lower())
+                            for t in (ner_map.get(eid, []) or [])
+                            if isinstance(t, dict)
+                        }
+                    ],
+                ],
                 scopes=scope_map.get(eid, []),
+                discourse_records=discourse_map.get(eid, []),
                 text=full_text,
                 max_exprs=paper_hg_max_expressions,
             )
@@ -5059,9 +5758,9 @@ def print_dry_run(args):
         print(f"  {'4. Clustering (CPU)':<42s} {'HDBSCAN/KMeans':<36s} {fmt(est_stage4_min)+' min':>10s}")
 
     if not stage5_active:
-        print(f"  {'5. NER + scope detection':<42s} {'SKIPPED':>10s}")
+        print(f"  {'5. NER + discourse detection':<42s} {'SKIPPED':>10s}")
     else:
-        print(f"  {'5. NER + scope detection (CPU)':<42s} {args.ner_kernel:<36s} {fmt(est_stage5_min)+' min':>10s}")
+        print(f"  {'5. NER + discourse detection (CPU)':<42s} {args.ner_kernel:<36s} {fmt(est_stage5_min)+' min':>10s}")
 
     if not stage5b_active:
         print(f"  {'5b. Distinctor MIT pilot':<42s} {'SKIPPED':>10s}")
@@ -5171,8 +5870,13 @@ def print_dry_run(args):
         if not args.skip_ner:
             print(f"    ner-terms.json        ~{fmt(est_entities_mb * 0.4)} MB")
             print(f"    scopes.json           ~{fmt(est_entities_mb * 0.2)} MB")
+            print(f"    discourse-wiring.json ~{fmt(est_entities_mb * 0.3)} MB")
             if args.discover_terms:
                 print(f"    candidate-new-terms.jsonl ~{fmt(est_entities_mb * 0.05)} MB")
+                print(f"    learned-term-dictionary.jsonl ~{fmt(est_entities_mb * 0.05)} MB")
+            if args.discover_structures:
+                print(f"    learned-structure-candidates.json ~{fmt(est_entities_mb * 0.03)} MB")
+                print(f"    learned-structure-summary.json    ~{fmt(est_entities_mb * 0.01)} MB")
         if stage5b_active:
             print(f"    distinctor-mit-hits.jsonl   ~{fmt(est_entities_mb * 0.08)} MB")
             print(f"    distinctor-mit-summary.json ~{fmt(est_entities_mb * 0.01)} MB")
@@ -5271,6 +5975,16 @@ def print_dry_run(args):
             cmd_parts.append(f"  --discover-terms-max-lhs-contexts {args.discover_terms_max_lhs_contexts}")
         if args.discover_terms_max_rhs_contexts != 5:
             cmd_parts.append(f"  --discover-terms-max-rhs-contexts {args.discover_terms_max_rhs_contexts}")
+    if args.discover_structures:
+        cmd_parts.append("  --discover-structures")
+        if args.discover_structures_seed_json:
+            cmd_parts.append(f"  --discover-structures-seed-json {args.discover_structures_seed_json}")
+        if args.discover_structures_min_signature_freq != 2:
+            cmd_parts.append(f"  --discover-structures-min-signature-freq {args.discover_structures_min_signature_freq}")
+        if args.discover_structures_max != 1000:
+            cmd_parts.append(f"  --discover-structures-max {args.discover_structures_max}")
+        if args.discover_structures_max_uncovered_per_entity != 30:
+            cmd_parts.append(f"  --discover-structures-max-uncovered-per-entity {args.discover_structures_max_uncovered_per_entity}")
     if args.run_distinctor_mit:
         cmd_parts.append(f"  --run-distinctor-mit")
         if args.distinctor_entity_limit:
@@ -5346,6 +6060,16 @@ def print_dry_run(args):
             moist_parts.append(f"  --discover-terms-max-lhs-contexts {args.discover_terms_max_lhs_contexts}")
         if args.discover_terms_max_rhs_contexts != 5:
             moist_parts.append(f"  --discover-terms-max-rhs-contexts {args.discover_terms_max_rhs_contexts}")
+    if args.discover_structures:
+        moist_parts.append("  --discover-structures")
+        if args.discover_structures_seed_json:
+            moist_parts.append(f"  --discover-structures-seed-json {args.discover_structures_seed_json}")
+        if args.discover_structures_min_signature_freq != 2:
+            moist_parts.append(f"  --discover-structures-min-signature-freq {args.discover_structures_min_signature_freq}")
+        if args.discover_structures_max != 1000:
+            moist_parts.append(f"  --discover-structures-max {args.discover_structures_max}")
+        if args.discover_structures_max_uncovered_per_entity != 30:
+            moist_parts.append(f"  --discover-structures-max-uncovered-per-entity {args.discover_structures_max_uncovered_per_entity}")
     if args.run_distinctor_mit:
         moist_parts.append(f"  --run-distinctor-mit")
         if args.distinctor_entity_limit:
@@ -5523,6 +6247,16 @@ def main():
                         help="Max lhs usage contexts retained per learned term (default: 3)")
     parser.add_argument("--discover-terms-max-rhs-contexts", type=int, default=5,
                         help="Max rhs definitional/theorem contexts retained per learned term (default: 5)")
+    parser.add_argument("--discover-structures", action="store_true",
+                        help="Enable live structure-seed learning from term-dense uncovered Stage 5 residuals")
+    parser.add_argument("--discover-structures-seed-json", default=None,
+                        help="Optional prior learned-structure JSON for Stage 5 reseeding")
+    parser.add_argument("--discover-structures-min-signature-freq", type=int, default=2,
+                        help="Min frequency for learned structure signatures (default: 2)")
+    parser.add_argument("--discover-structures-max", type=int, default=1000,
+                        help="Max learned structure signatures to write (default: 1000)")
+    parser.add_argument("--discover-structures-max-uncovered-per-entity", type=int, default=30,
+                        help="Max uncovered sentences scanned per entity for structure learning (default: 30)")
     parser.add_argument("--run-distinctor-mit", action="store_true",
                         help="Run binder-pair MIT/distinctor pilot (Stage 5b)")
     parser.add_argument("--distinctor-entity-limit", type=int, default=0,
@@ -5708,6 +6442,8 @@ def main():
             args.discover_terms_nnexus_stopwords = str(input_base / args.discover_terms_nnexus_stopwords)
         if args.discover_terms_nnexus_snapshot and not Path(args.discover_terms_nnexus_snapshot).is_absolute():
             args.discover_terms_nnexus_snapshot = str(input_base / args.discover_terms_nnexus_snapshot)
+        if args.discover_structures_seed_json and not Path(args.discover_structures_seed_json).is_absolute():
+            args.discover_structures_seed_json = str(input_base / args.discover_structures_seed_json)
         if args.distinctor_eprint_dir and not Path(args.distinctor_eprint_dir).is_absolute():
             args.distinctor_eprint_dir = str(input_base / args.distinctor_eprint_dir)
         # data-dir for downloads also goes to input location
@@ -5801,6 +6537,12 @@ def main():
         parser.error("--discover-terms-max-lhs-contexts must be > 0")
     if args.discover_terms_max_rhs_contexts <= 0:
         parser.error("--discover-terms-max-rhs-contexts must be > 0")
+    if args.discover_structures_min_signature_freq <= 0:
+        parser.error("--discover-structures-min-signature-freq must be > 0")
+    if args.discover_structures_max <= 0:
+        parser.error("--discover-structures-max must be > 0")
+    if args.discover_structures_max_uncovered_per_entity <= 0:
+        parser.error("--discover-structures-max-uncovered-per-entity must be > 0")
     if args.paper_hg_max_expressions <= 0:
         parser.error("--paper-hg-max-expressions must be > 0")
     if args.paper_hg_text_max_chars <= 0:
@@ -5945,6 +6687,8 @@ def main():
         print("           Stage 5 learning will continue without NNexus stopword filtering.")
     if args.discover_terms and args.discover_terms_nnexus_snapshot and not Path(args.discover_terms_nnexus_snapshot).exists():
         print(f"  WARNING: --discover-terms-nnexus-snapshot not found: {args.discover_terms_nnexus_snapshot}")
+    if args.discover_structures and args.discover_structures_seed_json and not Path(args.discover_structures_seed_json).exists():
+        print(f"  WARNING: --discover-structures-seed-json not found: {args.discover_structures_seed_json}")
         print("           Stage 5 learning will continue without NNexus concept membership.")
     # ========== Moist Run ==========
     # Moist run: execute CPU stages normally, generate prompt files for LLM
@@ -6321,6 +7065,7 @@ def main():
     stage5_stats = None
     stage5b_stats = None
     scope_detector, scope_detector_name = _load_scope_detector(prefer_nlab=True)
+    discourse_detectors = _load_discourse_detectors(prefer_nlab=True)
     if not args.skip_ner:
         ner_path = Path(args.ner_kernel)
         if not ner_path.exists():
@@ -6328,12 +7073,13 @@ def main():
             mark_stage("ner_scopes", "skipped", skip_reason=f"NER kernel not found: {ner_path}")
         else:
             t5 = time.time()
-            print(f"\n[Stage 5/{n_stages}] NER term spotting + scope detection...")
+            print(f"\n[Stage 5/{n_stages}] NER term spotting + discourse detection...")
             print(f"       Kernel: {ner_path}")
             stage5_stats = run_stage5_ner_scopes(
                 entities, pairs, str(ner_path), outdir,
                 scope_detector=scope_detector,
                 scope_detector_name=scope_detector_name,
+                discourse_detectors=discourse_detectors,
                 discover_terms=args.discover_terms,
                 discover_terms_min_freq=args.discover_terms_min_freq,
                 discover_terms_max=args.discover_terms_max,
@@ -6355,16 +7101,29 @@ def main():
                 discover_terms_eprint_dir=(Path(args.discover_terms_eprint_dir)
                                            if args.discover_terms_eprint_dir else None),
                 discover_terms_eprint_max_chars=args.discover_terms_eprint_max_chars,
-                discover_terms_eprint_max_tex_members=args.discover_terms_eprint_max_tex_members)
+                discover_terms_eprint_max_tex_members=args.discover_terms_eprint_max_tex_members,
+                discover_structures=args.discover_structures,
+                discover_structures_seed_json=(Path(args.discover_structures_seed_json)
+                                               if args.discover_structures_seed_json else None),
+                discover_structures_min_signature_freq=args.discover_structures_min_signature_freq,
+                discover_structures_max=args.discover_structures_max,
+                discover_structures_max_uncovered_per_entity=args.discover_structures_max_uncovered_per_entity)
 
             print(f"       NER coverage: {stage5_stats['ner_coverage']:.0%} "
                   f"({stage5_stats['entities_with_ner']}/{stage5_stats['entities_processed']})")
             print(f"       Scope coverage: {stage5_stats['scope_coverage']:.0%} "
                   f"({stage5_stats['entities_with_scopes']}/{stage5_stats['entities_processed']})")
+            print(f"       Discourse coverage: {stage5_stats['discourse_coverage']:.0%} "
+                  f"({stage5_stats['entities_with_discourse']}/{stage5_stats['entities_processed']})")
             if stage5_stats['scope_type_freq']:
                 print(f"       Scope types:")
                 for stype, count in stage5_stats['scope_type_freq'].items():
                     print(f"         {stype}: {count}")
+            print("       Discourse records: "
+                  f"wires={stage5_stats['total_wires']}, "
+                  f"ports={stage5_stats['total_ports']}, "
+                  f"labels={stage5_stats['total_labels']}, "
+                  f"combined={stage5_stats['total_discourse_records']}")
             open_ner = stage5_stats.get("open_ner")
             if open_ner:
                 print("       Open-world NER: "
@@ -6384,6 +7143,19 @@ def main():
                           f"{open_ner.get('eprint_text_used', 0)}/"
                           f"{stage5_stats['entities_processed']} "
                           f"(missing={open_ner.get('eprint_text_missing', 0)})")
+            structure_learning = stage5_stats.get("structure_learning")
+            if structure_learning:
+                print("       Live structure learning: "
+                      f"{structure_learning['candidates_written']} candidate signatures, "
+                      f"seed_matches={structure_learning['seed_matches_applied']}, "
+                      f"term-dense residual entities="
+                      f"{structure_learning['loss']['entities_with_term_dense_residuals']}")
+                print("         structure loss: "
+                      f"uncovered={structure_learning['loss']['uncovered_sentences_total']}, "
+                      f"known-term-uncovered="
+                      f"{structure_learning['loss']['uncovered_sentences_with_known_terms']}, "
+                      f"free-floating-ratio="
+                      f"{structure_learning['loss']['free_floating_term_ratio']:.0%}")
             if args.paper_eprint_dir:
                 print("       Stage 5 text source: "
                       f"eprint={stage5_stats['text_source_counts'].get('eprint', 0)}, "
@@ -6399,7 +7171,11 @@ def main():
                 eprint_status_counts=stage5_stats.get("eprint_status_counts", {}),
                 eprint_text_used=stage5_stats.get("eprint_text_used", 0),
                 eprint_text_missing=stage5_stats.get("eprint_text_missing", 0),
+                total_discourse_records=stage5_stats.get("total_discourse_records", 0),
+                discourse_role_freq=stage5_stats.get("discourse_role_freq", {}),
                 open_ner=stage5_stats.get("open_ner"),
+                structure_learning=stage5_stats.get("structure_learning"),
+                learning_loss=stage5_stats.get("learning_loss"),
             )
     else:
         print(f"\n[Stage 5/{n_stages}] Skipped (--skip-ner)")
@@ -6594,27 +7370,14 @@ def main():
             )
         else:
             arm = args.technique_ner_arm
-            concept_vocab: set[str] = set()
-            ner_terms_path = outdir / "ner-terms.json"
-            if ner_terms_path.exists():
-                try:
-                    with open(ner_terms_path) as f:
-                        for record in json.load(f):
-                            for t in record.get("terms", []) or []:
-                                if isinstance(t, dict):
-                                    term = t.get("term") or t.get("canon") or ""
-                                elif isinstance(t, str):
-                                    term = t
-                                else:
-                                    term = ""
-                                if term:
-                                    concept_vocab.add(term.lower())
-                except (json.JSONDecodeError, OSError) as e:
-                    print(f"       Warning: could not read {ner_terms_path.name} "
-                          f"for concept seeding ({e}); proceeding without.")
+            concept_vocab, _, concept_stats = _load_stage5_concept_vocab(outdir)
             if concept_vocab:
-                print(f"       Concept vocabulary: {len(concept_vocab)} terms "
-                      f"(from Stage 5 ner-terms.json)")
+                print(
+                    "       Concept vocabulary: "
+                    f"{len(concept_vocab)} terms "
+                    f"(ner={concept_stats['ner_terms']}, "
+                    f"learned={concept_stats['learned_terms']})"
+                )
 
             pipe_5c = tok_5c = None
             stage5c_llm_pool = None
@@ -6859,28 +7622,7 @@ def main():
                     json.dump(expected_meta, f, ensure_ascii=False, indent=2)
 
             # Concept vocabulary from Stage 5
-            concept_by_entity: dict[str, list[str]] = {}
-            ner_terms_path = outdir / "ner-terms.json"
-            if ner_terms_path.exists():
-                try:
-                    with open(ner_terms_path) as f:
-                        for record in json.load(f):
-                            eid = record.get("entity_id") or record.get("id")
-                            terms = []
-                            for t in record.get("terms", []) or []:
-                                if isinstance(t, dict):
-                                    tt = t.get("term") or t.get("canon") or ""
-                                elif isinstance(t, str):
-                                    tt = t
-                                else:
-                                    tt = ""
-                                if tt:
-                                    terms.append(tt)
-                            if eid:
-                                concept_by_entity[eid] = terms
-                except (json.JSONDecodeError, OSError) as e:
-                    print(f"       Warning: could not read ner-terms.json "
-                          f"({e}); proceeding without concept vocabulary.")
+            _, concept_by_entity, concept_stats = _load_stage5_concept_vocab(outdir)
 
             # Technique vocabulary from Stage 5c
             technique_by_entity: dict[str, list[str]] = {}
@@ -6900,7 +7642,8 @@ def main():
 
             if concept_by_entity or technique_by_entity:
                 print(f"       Loaded vocabularies: "
-                      f"{len(concept_by_entity)} papers with concepts, "
+                      f"{len(concept_by_entity)} papers with concepts "
+                      f"(learned_links={concept_stats['learned_entity_links']}), "
                       f"{len(technique_by_entity)} with techniques")
 
             pipe_5d = tok_5d = None
@@ -7751,6 +8494,11 @@ def main():
         "discover_terms_nnexus_snapshot": args.discover_terms_nnexus_snapshot,
         "discover_terms_max_lhs_contexts": args.discover_terms_max_lhs_contexts,
         "discover_terms_max_rhs_contexts": args.discover_terms_max_rhs_contexts,
+        "discover_structures": args.discover_structures,
+        "discover_structures_seed_json": args.discover_structures_seed_json,
+        "discover_structures_min_signature_freq": args.discover_structures_min_signature_freq,
+        "discover_structures_max": args.discover_structures_max,
+        "discover_structures_max_uncovered_per_entity": args.discover_structures_max_uncovered_per_entity,
         "run_distinctor_mit": args.run_distinctor_mit,
         "distinctor_eprint_dir": args.distinctor_eprint_dir,
         "paper_eprint_dir": args.paper_eprint_dir,

@@ -87,13 +87,26 @@ ENV_TO_LINK_TYPE = {
 
 # Scope detection (from nlab-prevalidate.py / validate-ct.py)
 SCOPE_REGEXES = [
-    ("let-binding", r"\bLet\s+\$([^$]+)\$\s+(be|denote)\s+([^.,$]+)"),
+    ("let-binding", r"\bLet(?:\s+also)?\s+\$([^$]+)\$\s+(be|denote)\s+([^.,$]+)"),
+    ("let-command-binding", r"\bLet\s+(\\[A-Za-z]+\\?)\s+(be|denote)\s+([^.,\n]+)"),
+    ("fix-binding", r"\bFix\s+\$([^$]+)\$(?:\s+(?:be|to be|as)\s+([^.,$]+))?"),
+    ("fix-command-binding", r"\bFix\s+(\\[A-Za-z]+\\?)(?:\s+(?:be|to be|as)\s+([^.,\n]+))?"),
     ("define", r"\bDefine\s+\$([^$]+)\$\s*(:=|=|\\equiv)\s*([^.,$]+)"),
-    ("typed-arrow", r"\$([^$]{1,120}?)\s*:\s*([^$]{1,220}?\\(?:to|rightarrow|longrightarrow|hookrightarrow|twoheadrightarrow|mapsto)[^$]{0,160})\$"),
-    ("arrow-expression", r"\$([^$]{1,240}?\\(?:to|rightarrow|longrightarrow|hookrightarrow|twoheadrightarrow|mapsto)[^$]{1,240})\$"),
+    ("denote-by", r"\bDenote\s+by\s+\$([^$]+)\$\s+([^.,$]+)"),
+    ("we-denote-by", r"\b(?:We\s+)?denote(?:\s+as\s+usual)?\s+by\s+\$([^$]+)\$\s+([^.,$]+)"),
+    ("write-for", r"\b(?:We\s+)?[Ww]rite\s+\$([^$]+)\$\s+for\s+([^.,$]+)"),
+    ("is-denoted-by", r"\b([^.\n]{1,160}?)\s+is denoted by\s+\$([^$]+)\$"),
+    ("choose-binding", r"\bChoose\s+\$([^$]+)\$"),
+    ("choose-work-in", r"\b(?:We\s+)?choose\s+to\s+work\s+in\s+([^.,\n]+)"),
+    ("exists-binding", r"\bThere\s+(?:is|exists)\s+\$([^$]+)\$"),
+    ("here-denotes", r"\b(?:Here\s+)?\$([^$]+)\$\s+denotes\s+([^.,$]+)"),
+    ("is-called", r"\$([^$]+)\$\s+is\s+(?:called|defined as)\s+([^.,$]+)"),
+    ("typed-arrow", r"\$([^$]{1,120}?)\s*:\s*([^$]{1,220}?\\(?:to|ra|la|lra|rightarrow|leftarrow|leftrightarrow|longrightarrow|hookleftarrow|hookrightarrow|twoheadleftarrow|twoheadrightarrow|mapsto)[^$]{0,160})\$"),
+    ("arrow-expression", r"\$([^$]{1,240}?\\(?:to|ra|la|lra|rightarrow|leftarrow|leftrightarrow|longrightarrow|hookleftarrow|hookrightarrow|twoheadleftarrow|twoheadrightarrow|mapsto)[^$]{1,240})\$"),
     ("diagram-family", r"\b[Aa]\s+diagram[^.]{0,260}?\$([A-Za-z])\([^)]+\)\$"),
     ("diagram-named", r"\b(?:[Tt]he|[Aa])\s+diagram\s+\$([^$]+)\$\s+(?:is|are|be|called)"),
     ("assume", r"\b(Assume|Suppose)\s+(that\s+)?\$([^$]+)\$"),
+    ("assume-that-prose", r"\b(Assume|Suppose)\s+that\s+([^.\n]{1,220})"),
     ("if-condition", r"\bIf\s+\$([^$]+)\$"),
     ("consider", r"\bConsider\s+(a|an|the|some)?\s*\$?([^$.]{1,60})"),
     ("for-in", r"\bFor\s+(?:a|an|the|each|every)\s+[^$.]{0,80}?\$([^$]+)\$\s+in\s+\$([^$]+)\$"),
@@ -106,12 +119,25 @@ SCOPE_REGEXES = [
 
 CLASSICAL_TO_METATHEORY = {
     "let-binding": "bind/let",
+    "let-command-binding": "bind/let",
+    "fix-binding": "bind/let",
+    "fix-command-binding": "bind/let",
     "define": "bind/define",
+    "denote-by": "bind/define",
+    "we-denote-by": "bind/define",
+    "write-for": "bind/define",
+    "is-denoted-by": "bind/define",
+    "here-denotes": "bind/define",
+    "is-called": "bind/define",
+    "choose-binding": "assume/consider",
+    "choose-work-in": "assume/consider",
+    "exists-binding": "quant/existential",
     "typed-arrow": "bind/typed",
     "arrow-expression": "bind/typed",
     "diagram-family": "bind/let",
     "diagram-named": "bind/let",
     "assume": "assume/explicit",
+    "assume-that-prose": "assume/explicit",
     "if-condition": "assume/explicit",
     "consider": "assume/consider",
     "for-in": "quant/universal",
@@ -162,10 +188,13 @@ LATEX_ENV_TOKEN_RE = re.compile(r"\\(begin|end)\{(\w+)\}")
 # Wire detection (from validate-ct.py)
 WIRE_REGEXES = [
     ("wire/adversative", r"\b(?:but|however|on the other hand|nevertheless|yet)\b", re.IGNORECASE),
-    ("wire/causal", r"\b(?:because|since|the reason is|given that)\b", re.IGNORECASE),
-    ("wire/consequential", r"\b(?:therefore|thus|hence|it follows|so that|note that|in fact)\b", re.IGNORECASE),
+    ("wire/causal", r"\b(?:because|since|the reason is|given that|thanks to|owing to)\b", re.IGNORECASE),
+    ("wire/consequential", r"\b(?:therefore|thus|hence|it follows|so that|note that|notice that|observe that|in fact)\b", re.IGNORECASE),
     ("wire/clarifying", r"\b(?:that is|in other words|namely|more precisely|i\.e\.)\b", re.IGNORECASE),
     ("wire/intuitive", r"\b(?:intuitively|roughly speaking|heuristically)\b", re.IGNORECASE),
+    ("wire/sequencing", r"\b(?:first|next|finally|then|we now|now we)\b", re.IGNORECASE),
+    ("wire/evidential", r"\b(?:in light of|by the above|as noted above)\b", re.IGNORECASE),
+    ("wire/purposive", r"\b(?:in order to|so as to|to this end|with this in mind)\b", re.IGNORECASE),
 ]
 
 # Port detection (from validate-ct.py)
@@ -177,6 +206,7 @@ PORT_REGEXES = [
     ("port/such", r"\bsuch (?:a|an)\s+\w+", re.IGNORECASE),
     ("port/similarly", r"\b(?:similarly|analogously)\b", re.IGNORECASE),
     ("port/likewise", r"\b(?:likewise|correspondingly)\b", re.IGNORECASE),
+    ("port/these-anaphoric", r"\bthese\s+(?:are|denote|form|define|represent|give|provide|yield|come|arise|extend|generalize|generalise|satisfy)\b", re.IGNORECASE),
 ]
 
 # Wire labels (from validate-ct.py)
@@ -187,11 +217,16 @@ LABEL_REGEXES = [
     ("correct/actually", r"\bactually\b", re.IGNORECASE),
     ("correct/subtlety", r"\b(?:subtlety|subtle)\b", re.IGNORECASE),
     ("epistemic/can-show", r"\bone can (?:show|verify|check)\b", re.IGNORECASE),
+    ("epistemic/easy-to-see", r"\bit is easy to see that\b", re.IGNORECASE),
     ("epistemic/known", r"\b(?:well known|well-known|it is known)\b", re.IGNORECASE),
     ("construct/exists", r"\bthere (?:is|exists|exist)\b", re.IGNORECASE),
     ("construct/explicit", r"\bexplicitly\b", re.IGNORECASE),
     ("strategy/generalize", r"\b(?:generalize|generalise|more generally)\b", re.IGNORECASE),
     ("strategy/example", r"\b(?:for example|for instance|e\.g\.)\b", re.IGNORECASE),
+    ("strategy/question", r"\b(?:one might ask|ask the following question)\b", re.IGNORECASE),
+    ("strategy/paper-frame", r"\bIn (?:this|the\s+\w+|section\s+\d+)\s+(?:paper|section|article|note|chapter|subsection)?\s*,?\s*we\b", re.IGNORECASE),
+    ("strategy/main-result", r"\bthe main (?:result|theorem|contribution|claim|point|construction)\b", re.IGNORECASE),
+    ("strategy/recent-work", r"\b(?:recently|previously)\s*,?\s+we\b", re.IGNORECASE),
 ]
 
 
@@ -1148,6 +1183,25 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             if stype == "let-binding":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "type", "text": m.group(3).strip()[:80]})
+            elif stype == "let-command-binding":
+                symbol = m.group(1).strip()
+                if symbol.endswith("\\") and len(symbol) > 1:
+                    symbol = symbol[:-1]
+                ends.append({"role": "symbol", "latex": symbol})
+                ends.append({"role": "type", "text": m.group(3).strip()[:80]})
+            elif stype == "fix-binding":
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                desc = (m.group(2) or "").strip()
+                if desc:
+                    ends.append({"role": "type", "text": desc[:80]})
+            elif stype == "fix-command-binding":
+                symbol = m.group(1).strip()
+                if symbol.endswith("\\") and len(symbol) > 1:
+                    symbol = symbol[:-1]
+                ends.append({"role": "symbol", "latex": symbol})
+                desc = (m.group(2) or "").strip()
+                if desc:
+                    ends.append({"role": "type", "text": desc[:80]})
             elif stype == "diagram-family":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "type", "text": "diagram family variable"})
@@ -1157,8 +1211,23 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             elif stype == "define":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "value", "text": m.group(3).strip()[:80]})
+            elif stype in {"denote-by", "we-denote-by", "write-for", "is-called", "here-denotes"}:
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "description", "text": m.group(2).strip()[:80]})
+            elif stype == "is-denoted-by":
+                ends.append({"role": "description", "text": m.group(1).strip()[:80]})
+                ends.append({"role": "symbol", "latex": m.group(2).strip()})
+            elif stype == "choose-binding":
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+            elif stype == "choose-work-in":
+                ends.append({"role": "object", "text": m.group(1).strip()[:120]})
+            elif stype == "exists-binding":
+                ends.append({"role": "quantifier", "text": "there exists"})
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
             elif stype == "assume":
                 ends.append({"role": "condition", "latex": m.group(3).strip()})
+            elif stype == "assume-that-prose":
+                ends.append({"role": "condition", "text": m.group(2).strip()[:160]})
             elif stype == "if-condition":
                 ends.append({"role": "condition", "latex": m.group(1).strip()})
             elif stype == "consider":
