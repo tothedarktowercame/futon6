@@ -303,12 +303,16 @@ def test_render_tree_node_emits_canon_label_and_tooltip_for_grounded_symbol():
     tree = ss.build_scope_tree(spans, [])
     node = tree["children"][0]
     out = mod.render_tree_node("X", node, is_root=False)
-    # Tooltip surfaces canon + strategy + type phrase
-    assert 'title="AbelianGroup (via let-binding: abelian group)"' in out
+    # Tooltip surfaces canon + strategy + role + type phrase
+    assert "AbelianGroup" in out
+    assert "let-binding" in out
+    assert "abelian group" in out
+    assert "role=" in out
     # Badge text shows the canon name, not the verbose type
     assert ">AbelianGroup<" in out
-    # CSS class still includes math-grounded-symbol so styling applies
+    # CSS class still includes math-grounded-symbol + role-* so styling applies
     assert "math-grounded-symbol" in out
+    assert "role-" in out
 
 
 def test_render_tree_node_default_label_for_non_grounded_scope():
@@ -328,3 +332,59 @@ def test_render_tree_node_default_label_for_non_grounded_scope():
     assert ">env/proof<" in out
     # No title attribute on non-grounded scopes
     assert "title=" not in out
+
+
+def test_detect_grounded_symbols_emits_newcommand_with_body_fallback_canon():
+    """\\newcommand{\\RR}{\\mathbb R} -> ground \\RR in math envelopes.
+
+    The canon may be a body-derived fallback (no kernel hit on "real
+    numbers" in the toy kernel), but the binding still emits and the
+    label-on-mark is non-empty.
+    """
+    mod = load_module()
+    singles, multi_index = _toy_kernel()
+    text = r"\newcommand{\RR}{{\mathbb R}}" + "\nLet $\\RR$ denote the reals."
+    records, _, summary = mod.detect_grounded_symbols("e", text, singles, multi_index)
+    nc_records = [r for r in records if r["hx/content"]["strategy"] == "newcommand"]
+    assert nc_records, "expected at least one newcommand-grounded atom"
+    rec = nc_records[0]
+    assert rec["hx/content"]["match"] == r"\RR"
+    # Canon is body-fallback "R" (toy kernel has no "real numbers" entry)
+    # or whatever the kernel returns; either way it's truthy.
+    assert rec["hx/content"]["canon"]
+    # Role is enriched on the record
+    assert "syntax_role" in rec["hx/content"]
+
+
+def test_detect_grounded_symbols_role_enrichment_present():
+    mod = load_module()
+    singles, multi_index = _toy_kernel()
+    text = "Let $X$ be an abelian group. The value $X$ is fixed."
+    records, _, _ = mod.detect_grounded_symbols("e", text, singles, multi_index)
+    assert records
+    for r in records:
+        assert "syntax_role" in r["hx/content"]
+        assert r["hx/content"]["syntax_role"] in {
+            "greek", "binop", "bridge", "relation", "comparison",
+            "large-op", "arrow", "function", "delimiter", "named-op",
+            "number", "variable",
+        }
+
+
+def test_detect_grounded_symbols_skips_uncanon_prose_strategy_bindings():
+    """LetBindingStrategy w/ no kernel canon shouldn't pollute the records.
+
+    Reason: the prose regex captures noisy phrasal residue when the
+    kernel doesn't recognise the phrase; rendering those would emit
+    spurious marks. NewcommandStrategy is the exception (its body
+    fallback IS informative).
+    """
+    mod = load_module()
+    singles, multi_index = _toy_kernel()
+    # "frobnicator" is not in the toy kernel; let-binding fires but
+    # canon stays None.
+    text = "Let $W$ be a frobnicator. So $W$ is well-defined."
+    records, _, _ = mod.detect_grounded_symbols("e", text, singles, multi_index)
+    # Filter: only newcommand bindings should pass when canon is missing.
+    let_w = [r for r in records if r["hx/content"]["match"] == "W"]
+    assert not let_w, "let-binding without kernel canon shouldn't emit"

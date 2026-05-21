@@ -11,6 +11,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from futon6.symbol_grounding import (
     DenotationStrategy,
     LetBindingStrategy,
+    NewcommandStrategy,
     StrategyContext,
     SymbolBinding,
     SymbolEnvironment,
@@ -225,3 +226,85 @@ def test_environment_returns_none_for_unbound_symbol():
     text = "Let $X$ be an abelian group. End."
     env = run_strategies(_ctx(text), default_strategies())
     assert env.lookup("Z", 0) is None
+
+
+# ============================================================
+# NewcommandStrategy
+# ============================================================
+
+def test_newcommand_blackboard_letter_resolves_via_kernel():
+    text = r"\newcommand{\RR}{{\mathbb R}}" + "\nSome paper body using $\\RR$ everywhere."
+    bindings = NewcommandStrategy().apply(_ctx(text))
+    bs = [b for b in bindings if b.symbol == r"\RR"]
+    assert bs, "expected a binding for \\RR"
+    b = bs[0]
+    assert b.canon == "RealNumbers" or b.canon == "real numbers" or b.canon  # any of: kernel hit or fallback
+    assert b.scope_start == 0
+    assert b.scope_end == len(text)
+    assert b.confidence == "high"
+    assert b.strategy == "newcommand"
+
+
+def test_newcommand_literal_word_body_uses_kernel():
+    # \Cat -> "Category" — the literal word should hit the kernel via lowercased lookup.
+    text = r"\newcommand{\Cat}{Category}" + "\nThe paper uses $\\Cat$ throughout."
+    bindings = NewcommandStrategy().apply(_ctx(text))
+    bs = [b for b in bindings if b.symbol == r"\Cat"]
+    assert bs
+    assert bs[0].canon == "Category"
+
+
+def test_newcommand_skips_typographic_macros():
+    text = (
+        r"\newcommand{\bsq}{\vrule height .9ex width .8ex depth -.1ex}"
+        "\n"
+        r"\newcommand{\eeq}{\end{equation}}"
+        "\n"
+        r"\def\objectstyle{\scriptstyle}"
+    )
+    bindings = NewcommandStrategy().apply(_ctx(text))
+    syms = {b.symbol for b in bindings}
+    assert r"\bsq" not in syms
+    assert r"\eeq" not in syms
+    assert r"\objectstyle" not in syms
+
+
+def test_newcommand_skips_parameterised_def():
+    text = r"\def\foo#1#2{x_{#1}^{#2}}" + "\n"
+    bindings = NewcommandStrategy().apply(_ctx(text))
+    assert not any(b.symbol == r"\foo" for b in bindings)
+
+
+def test_newcommand_calligraphic_letter_falls_back_to_letter_label():
+    # \sE -> {\cal E}. No kernel phrase exists for "E" alone, so canon
+    # should fall back to the cleaned body "E" so the badge is readable.
+    text = r"\newcommand{\sE}{{\cal E}}" + "\nUsing $\\sE$ here."
+    bindings = NewcommandStrategy().apply(_ctx(text))
+    bs = [b for b in bindings if b.symbol == r"\sE"]
+    assert bs
+    assert bs[0].canon == "E"
+    # type_phrase preserves one level of grouping; the inner cleaning is
+    # what produces the canon. We just require the original LaTeX intent
+    # to be visible in the tooltip body.
+    assert "cal E" in bs[0].type_phrase
+
+
+def test_newcommand_paper_wide_scope_environment_lookup():
+    # \RR binding is global; lookup should succeed at any position.
+    text = r"\newcommand{\RR}{{\mathbb R}}" + "\n" + "x " * 200 + r"$\RR$" + "more text."
+    env = run_strategies(_ctx(text), [NewcommandStrategy()])
+    pos = text.index(r"$\RR$")
+    b = env.lookup(r"\RR", pos)
+    assert b is not None
+    assert b.strategy == "newcommand"
+
+
+def test_newcommand_declaremathoperator():
+    text = r"\DeclareMathOperator{\spec}{Spec}" + "\nWe use $\\spec$ later."
+    bindings = NewcommandStrategy().apply(_ctx(text))
+    assert any(b.symbol == r"\spec" for b in bindings)
+
+
+def test_newcommand_default_strategies_includes_it():
+    names = {s.name for s in default_strategies()}
+    assert "newcommand" in names

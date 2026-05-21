@@ -301,3 +301,125 @@ def walk_math_ast(nodes: list[MathNode], depth: int = 0) -> Iterator[tuple[MathN
         yield node, depth
         for arg in node.args:
             yield from walk_math_ast(arg["nodes"], depth + 1)
+
+
+# ============================================================
+# Syntactic-role classification (First Proof port)
+# ============================================================
+# math-proofread-style.sty from First Proof partitions every math atom
+# into a syntactic role and assigns each a colour. We port the lookup
+# tables here so the QC viewer can paint atoms by role (independent of
+# semantic grounding). Roles match First Proof's `\mGreek`, `\mOperator`,
+# `\mRelation`, … families.
+#
+# This is intentionally a *role* classifier, not a tokenizer — given a
+# macro name or a single-character atom, return which role bucket it
+# falls in. Callers that walk the math AST plug this in atom-by-atom.
+
+_GREEK = frozenset({
+    "alpha", "beta", "gamma", "delta", "epsilon", "varepsilon",
+    "zeta", "eta", "theta", "vartheta", "iota", "kappa", "lambda",
+    "mu", "nu", "xi", "rho", "varrho", "sigma", "varsigma", "tau",
+    "upsilon", "phi", "varphi", "chi", "psi", "omega", "pi", "varpi",
+    "Gamma", "Delta", "Theta", "Lambda", "Xi", "Pi", "Sigma",
+    "Upsilon", "Phi", "Psi", "Omega",
+})
+_BINOP = frozenset({
+    "times", "cdot", "cup", "cap", "otimes", "oplus", "ominus", "ast",
+    "circ", "bullet", "diamond", "star", "wedge", "vee", "uplus", "sqcup",
+})
+_BRIDGE = frozenset({"pm", "mp", "amalg"})
+_RELATION = frozenset({
+    "in", "notin", "ni", "subset", "subseteq", "subsetneq", "supset",
+    "supseteq", "supsetneq", "vdash", "models", "perp", "parallel",
+    "equiv", "sim", "simeq", "cong", "propto", "asymp",
+})
+_COMPARISON = frozenset({
+    "le", "leq", "leqslant", "ge", "geq", "geqslant", "neq", "approx",
+    "doteq", "succ", "succeq", "prec", "preceq",
+})
+_LARGE_OP = frozenset({
+    "sum", "prod", "coprod", "int", "iint", "iiint", "oint", "lim",
+    "limsup", "liminf", "sup", "inf", "max", "min", "bigcup", "bigcap",
+    "bigoplus", "bigotimes", "bigvee", "bigwedge", "bigsqcup",
+})
+_ARROW = frozenset({
+    "to", "rightarrow", "leftarrow", "leftrightarrow", "Rightarrow",
+    "Leftarrow", "Leftrightarrow", "mapsto", "longrightarrow",
+    "longleftarrow", "longmapsto", "hookrightarrow", "hookleftarrow",
+    "twoheadrightarrow", "rightharpoonup", "leftharpoonup", "iff", "implies",
+    "uparrow", "downarrow", "updownarrow", "nearrow", "searrow",
+    "swarrow", "nwarrow",
+})
+_FUNCTION = frozenset({
+    "sin", "cos", "tan", "cot", "sec", "csc", "arcsin", "arccos",
+    "arctan", "sinh", "cosh", "tanh", "log", "ln", "lg", "exp",
+    "det", "deg", "arg", "gcd", "lcm",
+})
+_DELIMITER = frozenset({
+    "langle", "rangle", "lvert", "rvert", "vert", "lvert", "rvert",
+    "lbrack", "rbrack", "lbrace", "rbrace", "lfloor", "rfloor",
+    "lceil", "rceil", "ulcorner", "urcorner", "llcorner", "lrcorner",
+    "Vert", "lVert", "rVert", "{", "}",
+})
+_NAMED_OP_HINT = frozenset({
+    # mathrm-wrapped operator names commonly seen in arXiv preambles
+    "Hom", "Aut", "End", "Spec", "Proj", "Frac", "Gal", "Ker",
+    "Im", "Coker", "Mor", "Ob", "Ext", "Tor", "rank", "span",
+    "tr", "id", "Id", "Aut", "Sym", "Alt", "GL", "SL", "PGL",
+    "PSL", "Pic", "Br", "Cl", "div", "Div", "Char", "char",
+})
+
+_DELIM_CHARS = frozenset("()[]|")
+_NUMBER_RE = re.compile(r"^[0-9]+(\.[0-9]+)?$")
+
+
+def classify_atom_role(token: str) -> str:
+    r"""Return the First-Proof syntactic role for a math atom.
+
+    Token is either a literal character (e.g. `x`, `+`, `(`, `7`) or a
+    macro literal (e.g. `\alpha`, `\to`, `\sum`). Returns one of:
+      'greek', 'binop', 'bridge', 'relation', 'comparison',
+      'large-op', 'arrow', 'function', 'delimiter', 'named-op',
+      'number', 'variable'  (the default for letter-like atoms)
+
+    Unknown tokens default to 'variable' since most unclassified atoms
+    in real math are author-defined letters and macros.
+    """
+    if not token:
+        return "variable"
+    if token.startswith("\\"):
+        name = token[1:].lstrip()
+        if name in _GREEK:
+            return "greek"
+        if name in _BINOP:
+            return "binop"
+        if name in _BRIDGE:
+            return "bridge"
+        if name in _RELATION:
+            return "relation"
+        if name in _COMPARISON:
+            return "comparison"
+        if name in _LARGE_OP:
+            return "large-op"
+        if name in _ARROW:
+            return "arrow"
+        if name in _FUNCTION:
+            return "function"
+        if name in _DELIMITER:
+            return "delimiter"
+        if name in _NAMED_OP_HINT:
+            return "named-op"
+        return "variable"
+    # Single literal char or short token
+    if token in {"+", "-"}:
+        return "bridge"
+    if token in {"*", "/"}:
+        return "binop"
+    if token in {"=", "<", ">"}:
+        return "comparison"
+    if token in _DELIM_CHARS:
+        return "delimiter"
+    if _NUMBER_RE.match(token):
+        return "number"
+    return "variable"

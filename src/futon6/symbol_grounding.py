@@ -168,6 +168,186 @@ class DenotationStrategy(Strategy):
         return out
 
 
+class NewcommandStrategy(Strategy):
+    r"""`\newcommand{\name}{body}` and siblings — paper-wide, high confidence.
+
+    Author-defined macros are the single richest source of paper-local
+    vocabulary. Every arXiv preamble has them; some papers ship 80+. We
+    harvest:
+      \newcommand{\name}{body}              ; \renewcommand variants
+      \newcommand{\name}[N]{body}           ; arity is parsed and discarded
+      \DeclareMathOperator{\name}{body}     ; and the *-form
+      \def\name{body}                       ; bare \def with no params
+
+    Definitions with `#N` parameters are templates (e.g.
+    `\def\foo#1#2{...}`) not symbols, so we skip them. Bodies that match
+    `_SKIP_PATTERN` are typographic / structural macros (`\begin`,
+    `\hspace`, `\stackrel`, …) — not symbol-grounding candidates.
+
+    Symbol = the macro token itself (`\\RR`, `\\Cat`); the atom-walker
+    yields full macro tokens so lookup is exact. Scope is paper-wide
+    (`\newcommand` is global by LaTeX convention even when defined
+    mid-document). Confidence = high.
+
+    Canon resolution proceeds in three stages so the badge always carries
+    a meaningful label:
+      1. Blackboard/calligraphic letter (`\mathbb R`, `\cal E`) — look up
+         the conventional phrase ("real numbers", "expectation") in the
+         kernel.
+      2. Failing that, lookup the cleaned body itself as a kernel phrase
+         (e.g. `\\Cat` → body "Category" → canon "Category").
+      3. Failing that, fall back to the cleaned body as the canon
+         (e.g. `\\sE` → "E" — purely typographic, but at least the badge
+         shows what the reader sees on the page).
+    """
+    name = "newcommand"
+    default_confidence = "high"
+
+    # These patterns match the *header* (`\newcommand{\name}` + optional
+    # arity/default args) and leave the body to be extracted by a balanced-
+    # brace walker, since real preambles routinely wrap bodies in
+    # `\ensuremath{\mathbf{Cat}}` (3 levels of nesting), which a fixed-depth
+    # regex can't handle without false truncation.
+    _DEFS_HEADER = re.compile(
+        r"\\(?:re)?newcommand\s*\*?\s*\{\s*(\\[A-Za-z@]+)\s*\}"
+        r"(?:\s*\[\d+\])?"
+        r"(?:\s*\[[^\]]*\])?"
+        r"\s*"
+    )
+    _DEF_HEADER = re.compile(
+        r"\\def\s*(\\[A-Za-z@]+)\s*(?:#\d)*\s*"
+    )
+    _DMO_HEADER = re.compile(
+        r"\\DeclareMathOperator\s*\*?\s*\{\s*(\\[A-Za-z@]+)\s*\}\s*"
+    )
+
+    _SKIP_PATTERN = re.compile(
+        r"\\(?:begin|end|hspace|vspace|hrule|vrule|stackrel|rule|"
+        r"label|ref|footnote|noindent|parindent|raisebox|scriptstyle|"
+        r"scriptscriptstyle|displaystyle|textstyle|arraystretch|setlength|"
+        r"newcolumntype|renewenvironment|newenvironment|protect|"
+        r"makeatletter|makeatother|expandafter|let)"
+    )
+
+    _FONT_ARG = re.compile(
+        r"\\(?:ensuremath|mathbb|mathrm|mathcal|mathfrak|mathbf|mathsf|mathtt|"
+        r"mathscr|operatorname|text|textrm|textsf|texttt)\s*\{([^{}]*)\}"
+    )
+    _FONT_GROUP = re.compile(
+        r"\{\s*\\(?:cal|bf|rm|sf|tt|sl|it|em|mathbb|mathrm|mathcal|"
+        r"mathfrak|mathbf|mathsf|mathtt|mathscr)\s+([^{}]+)\}"
+    )
+    _OUTER_BRACES = re.compile(r"^\s*\{(.*)\}\s*$", re.DOTALL)
+
+    # Convention: \mathbb {letter} or \cal {letter} → phrase the kernel
+    # might know. We keep this list tight so we don't falsely ground
+    # symbols whose convention the author may not be following.
+    _LETTER_TO_PHRASE = {
+        "R": "real numbers",
+        "C": "complex numbers",
+        "N": "natural numbers",
+        "Q": "rational numbers",
+        "Z": "integers",
+        "H": "quaternions",
+    }
+
+    @staticmethod
+    def _extract_balanced(text: str, start: int) -> tuple[str, int] | None:
+        """Given text[start] == '{', return (body_with_braces, end_pos)."""
+        if start >= len(text) or text[start] != "{":
+            return None
+        depth = 0
+        for i in range(start, len(text)):
+            ch = text[i]
+            if ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    return text[start : i + 1], i + 1
+        return None
+
+    def apply(self, ctx: StrategyContext) -> list[SymbolBinding]:
+        out = []
+        text = ctx.paper_text
+        kernel_lookup = ctx.kernel_lookup or (lambda _: None)
+        for header_pat in (self._DEFS_HEADER, self._DEF_HEADER, self._DMO_HEADER):
+            for m in header_pat.finditer(text):
+                symbol = m.group(1)
+                body_extr = self._extract_balanced(text, m.end())
+                if body_extr is None:
+                    continue
+                body, body_end = body_extr
+                body_inner = body
+                inner_m = self._OUTER_BRACES.match(body_inner)
+                if inner_m:
+                    body_inner = inner_m.group(1)
+                body_inner = body_inner.strip()
+                if not body_inner:
+                    continue
+                if "#" in body_inner:
+                    continue
+                if self._SKIP_PATTERN.search(body_inner):
+                    continue
+
+                cleaned = self._clean_body(body_inner)
+                if not cleaned or not self._is_symbol_like(cleaned):
+                    # Reject bodies that, after font/brace stripping, still
+                    # look like typography (`\langle`, `\,\cong\,`), pure
+                    # numbers (`1.5`, `1`), or decorator fragments (`^op`).
+                    # These exist in real preambles but aren't math symbols.
+                    continue
+
+                canon = None
+                if len(cleaned) == 1 and cleaned in self._LETTER_TO_PHRASE:
+                    canon = kernel_lookup(self._LETTER_TO_PHRASE[cleaned])
+                if canon is None and cleaned:
+                    canon = kernel_lookup(cleaned.lower())
+                if canon is None:
+                    # Synthesise a label from the cleaned body so the viewer
+                    # renders something readable. Cap length so a verbose
+                    # body doesn't blow out the badge.
+                    canon = cleaned[:24]
+
+                out.append(SymbolBinding(
+                    binding_id=ctx.next_id(),
+                    symbol=symbol,
+                    canon=canon,
+                    type_phrase=body_inner,
+                    scope_start=0,
+                    scope_end=len(text),
+                    confidence=self.default_confidence,
+                    strategy=self.name,
+                    evidence_span=(m.start(), body_end),
+                ))
+        return out
+
+    _SYMBOL_LIKE = re.compile(r"^[A-Za-z][A-Za-z0-9]{0,30}$")
+
+    @classmethod
+    def _is_symbol_like(cls, cleaned: str) -> bool:
+        """A cleaned body is a math-symbol candidate iff it's an alphabetic
+        token of reasonable length. This excludes typography like `\\quad`
+        (still carries a backslash), decorator fragments (`^op`), and
+        bare numerics (`1.5`, `1`)."""
+        return bool(cls._SYMBOL_LIKE.match(cleaned))
+
+    @classmethod
+    def _clean_body(cls, body: str) -> str:
+        """Strip font wrappers + braces. `{\\mathbb R}` -> `R`; `{Category}` -> `Category`."""
+        s = body
+        prev = None
+        while prev != s:
+            prev = s
+            s = cls._FONT_ARG.sub(r"\1", s)
+            s = cls._FONT_GROUP.sub(r"\1", s)
+            m = cls._OUTER_BRACES.match(s)
+            if m:
+                s = m.group(1)
+            s = s.strip()
+        return s
+
+
 class TheYXStrategy(Strategy):
     """`the Y $X$` (e.g., "the category $\\mathcal{C}$") — medium confidence.
 
@@ -340,7 +520,72 @@ def run_strategies(
 def default_strategies() -> list[Strategy]:
     """The starter strategy set. Add to this list as new strategies land."""
     return [
+        NewcommandStrategy(),
         LetBindingStrategy(),
         DenotationStrategy(),
         TheYXStrategy(),
     ]
+
+
+# ============================================================
+# Cross-paper newcommand vocabulary aggregation
+# ============================================================
+
+def aggregate_newcommand_vocab(
+    envs_by_paper: dict[str, "SymbolEnvironment"],
+) -> dict:
+    """Aggregate newcommand bindings across papers into a learned vocabulary.
+
+    The output shape is intentionally simple:
+        {
+          "by_symbol": {
+            "\\RR": [
+              {"paper_id": "0712.4211v1", "body": "{\\mathbb R}", "canon": "R"},
+              ...
+            ],
+            ...
+          },
+          "common": [   # symbols that appear in N>=2 papers with same body
+            {"symbol": "\\RR", "body": "{\\mathbb R}", "canon": "R",
+             "papers": ["0712.4211v1", "..."], "support": 2},
+            ...
+          ],
+        }
+
+    This is the seed of cross-paper syntax learning: when a fresh paper
+    uses `\\RR` without defining it, a future strategy can consult
+    `common` to retrieve the canonical interpretation. With four demo
+    papers the `common` list is sparse, but the mechanism scales: run
+    the same aggregation across a 1000-paper superpod batch and the
+    convention table fills out fast.
+    """
+    by_symbol: dict[str, list[dict]] = {}
+    for paper_id, env in envs_by_paper.items():
+        for b in env.all_bindings:
+            if b.strategy != "newcommand":
+                continue
+            by_symbol.setdefault(b.symbol, []).append({
+                "paper_id": paper_id,
+                "body": b.type_phrase,
+                "canon": b.canon,
+            })
+
+    common = []
+    for symbol, entries in by_symbol.items():
+        # Group by body to see which (symbol,body) pairs recur
+        by_body: dict[str, dict] = {}
+        for e in entries:
+            slot = by_body.setdefault(e["body"], {
+                "symbol": symbol,
+                "body": e["body"],
+                "canon": e["canon"],
+                "papers": [],
+            })
+            slot["papers"].append(e["paper_id"])
+        for slot in by_body.values():
+            if len(slot["papers"]) >= 2:
+                slot["support"] = len(slot["papers"])
+                common.append(slot)
+    common.sort(key=lambda d: -d["support"])
+
+    return {"by_symbol": by_symbol, "common": common}

@@ -146,9 +146,21 @@ def detect_grounded_symbols(
     grounded_atom_count = 0
     for atom_text, start, end in _math_atoms_for_grounding(text):
         binding = env.lookup(atom_text, start)
-        if binding is None or binding.canon is None:
+        if binding is None:
+            continue
+        # Gate by strategy. NewcommandStrategy always emits — its canon
+        # is a body-derived fallback when no kernel hit, which is still
+        # informative (e.g. `\RR` -> "R"). Prose strategies only emit
+        # when a kernel canon was found; without it the regex's
+        # phrasal capture is noisy ("first assertion is", "components
+        # in the ", …) and would pollute the viewer.
+        if binding.strategy != "newcommand" and not binding.canon:
+            continue
+        if not binding.canon and not binding.type_phrase:
             continue
         grounded_atom_count += 1
+        canon_or_fallback = binding.canon or binding.type_phrase[:24]
+        role = _ma.classify_atom_role(atom_text)
         records.append({
             "hx/id": f"{entity_id}:grounded-{rec_idx:05d}",
             "hx/role": "scope",
@@ -161,11 +173,12 @@ def detect_grounded_symbols(
                 "canon": binding.canon,
                 "type_phrase": binding.type_phrase,
                 "strategy": binding.strategy,
+                "syntax_role": role,
             },
             "hx/labels": [
                 "scope", "math", "grounded",
                 f"strategy-{binding.strategy}",
-                f"canon-{binding.canon}",
+                f"canon-{canon_or_fallback}",
             ],
         })
         rec_idx += 1
@@ -621,21 +634,27 @@ def render_tree_node(text: str, node: dict, *, is_root: bool) -> str:
     # so a reader can hover any purple symbol and see "AbelianGroup (let-binding)".
     title_attr = ""
     content = node.get("content") or {}
+    role_class = ""
     if node["label"] == "math/grounded-symbol":
-        canon = content.get("canon") or "?"
+        canon = content.get("canon")
         strategy = content.get("strategy") or "?"
         type_phrase = content.get("type_phrase") or ""
-        title_text = f"{canon} (via {strategy}"
-        if type_phrase:
+        syntax_role = content.get("syntax_role") or "variable"
+        # If the strategy didn't get a kernel canon, fall back to a
+        # truncated type_phrase so the badge stays informative. The full
+        # type_phrase lives in the tooltip below.
+        display = canon or (type_phrase[:18] if type_phrase else "?")
+        title_text = f"{display} (via {strategy}; role={syntax_role}"
+        if type_phrase and type_phrase != display:
             title_text += f": {type_phrase}"
         title_text += ")"
         title_attr = f' title="{html.escape(title_text)}"'
-        # Override the badge text: show the canon name, not the verbose type
-        label_text = canon
+        label_text = display
+        role_class = f" role-{syntax_role}"
     else:
         label_text = node["label"]
     label_html = f'<span class="scope-label">{html.escape(label_text)}</span>'
-    return f'<mark class="scope {type_class} {depth_class}"{title_attr}>{label_html}{"".join(out)}</mark>'
+    return f'<mark class="scope {type_class} {depth_class}{role_class}"{title_attr}>{label_html}{"".join(out)}</mark>'
 
 
 def render_overlay_markup(
@@ -1038,6 +1057,23 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
        term overlay. The label badge shows the strategy that bound it. */
     .scope.math-grounded-symbol {{ background: rgba(124, 58, 237, 0.34); outline: 1px solid rgba(124, 58, 237, 0.8); outline-offset: -1px; }}
     .scope.math-grounded-symbol .scope-label {{ background: rgba(124, 58, 237, 0.55); color: white; }}
+    /* First Proof syntactic-role palette (math-proofread-style.sty v0.9).
+       Applied to the grounded-symbol mark's label so the reader sees the
+       role at a glance: Greek = Mulberry, named-op = BurntOrange, etc.
+       The mark BACKGROUND stays purple (grounding signal); the LABEL
+       chip carries the role color so the two signals can coexist. */
+    .scope.math-grounded-symbol.role-greek .scope-label {{ background: #c92a82; }}
+    .scope.math-grounded-symbol.role-binop .scope-label {{ background: #8b008b; }}
+    .scope.math-grounded-symbol.role-bridge .scope-label {{ background: #2e8b57; }}
+    .scope.math-grounded-symbol.role-relation .scope-label {{ background: #7851a9; }}
+    .scope.math-grounded-symbol.role-comparison .scope-label {{ background: #004225; }}
+    .scope.math-grounded-symbol.role-large-op .scope-label {{ background: #8a2be2; }}
+    .scope.math-grounded-symbol.role-arrow .scope-label {{ background: #008080; }}
+    .scope.math-grounded-symbol.role-function .scope-label {{ background: #da70d6; }}
+    .scope.math-grounded-symbol.role-delimiter .scope-label {{ background: #ff00ff; }}
+    .scope.math-grounded-symbol.role-named-op .scope-label {{ background: #cc5500; }}
+    .scope.math-grounded-symbol.role-number .scope-label {{ background: #b22222; }}
+    .scope.math-grounded-symbol.role-variable .scope-label {{ background: rgba(124, 58, 237, 0.55); }}
     .scope-label {{ display: inline-block; margin-right: 6px; padding: 0 4px; background: rgba(29, 26, 22, 0.1); border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
     .term-kernel {{ background: rgba(15, 118, 110, 0.12); border-bottom: 1px solid rgba(15, 118, 110, 0.45); padding: 0 1px; border-radius: 2px; cursor: help; }}
     .term-kernel:hover {{ background: rgba(15, 118, 110, 0.22); }}
