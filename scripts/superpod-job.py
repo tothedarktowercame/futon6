@@ -217,6 +217,7 @@ def _load_discourse_detectors(prefer_nlab=True):
                 "port": nw.detect_ports,
                 "label": nw.detect_labels,
                 "comment": nw.detect_comments,
+                "math": nw.detect_math_scopes,
                 "source": "nlab-wiring",
             }
             return _discourse_detectors
@@ -229,6 +230,7 @@ def _load_discourse_detectors(prefer_nlab=True):
         "port": _noop_discourse_detector,
         "label": _noop_discourse_detector,
         "comment": _noop_discourse_detector,
+        "math": _noop_discourse_detector,
         "source": "superpod",
     }
     return _discourse_detectors
@@ -1497,6 +1499,7 @@ def run_stage5_ner_scopes(
     port_detector = discourse_detectors.get("port", _noop_discourse_detector)
     label_detector = discourse_detectors.get("label", _noop_discourse_detector)
     comment_detector = discourse_detectors.get("comment", _noop_discourse_detector)
+    math_detector = discourse_detectors.get("math", _noop_discourse_detector)
 
     singles, multi_index, multi_count = load_ner_kernel(ner_kernel_path)
     print(f"       NER kernel: {len(singles)} single + {multi_count} multi-word terms")
@@ -1557,6 +1560,7 @@ def run_stage5_ner_scopes(
     total_ports = 0
     total_labels = 0
     total_comments = 0
+    total_math_scopes = 0
     total_discourse_records = 0
     entities_with_ner = 0
     entities_with_scopes = 0
@@ -1564,6 +1568,7 @@ def run_stage5_ner_scopes(
     entities_with_ports = 0
     entities_with_labels = 0
     entities_with_comments = 0
+    entities_with_math_scopes = 0
     entities_with_discourse = 0
     stype_freq = Counter()
     discourse_role_freq = Counter()
@@ -1633,6 +1638,7 @@ def run_stage5_ner_scopes(
             ports = port_detector(eid, full_text) or []
             labels = label_detector(eid, full_text) or []
             comments = comment_detector(eid, full_text) or []
+            math_scopes = math_detector(eid, full_text) or []
             if wires:
                 entities_with_wires += 1
                 total_wires += len(wires)
@@ -1645,10 +1651,15 @@ def run_stage5_ner_scopes(
             if comments:
                 entities_with_comments += 1
                 total_comments += len(comments)
-            # Comments are scope-shaped: they cover prose that is unreachable in
-            # the rendered PDF. Merging them in here means kernel terms inside
-            # commented-out source don't get treated as residual frontier later.
-            scopes = [*scopes, *comments]
+            if math_scopes:
+                entities_with_math_scopes += 1
+                total_math_scopes += len(math_scopes)
+            # Comments are scope-shaped: they cover prose that is unreachable
+            # in the rendered PDF. Math-scope sub-structures nest inside any
+            # outer math scope via the shared scope-tree builder, giving the
+            # frontier metric a way to land *inside* $...$ blocks (Layer 1 of
+            # M-symbol-grounding.md).
+            scopes = [*scopes, *comments, *math_scopes]
             base_discourse_records = sorted(
                 [*scopes, *wires, *ports, *labels],
                 key=_record_position_key,
@@ -2147,6 +2158,8 @@ def run_stage5_ner_scopes(
         "entities_with_labels": entities_with_labels,
         "total_comments": total_comments,
         "entities_with_comments": entities_with_comments,
+        "total_math_scopes": total_math_scopes,
+        "entities_with_math_scopes": entities_with_math_scopes,
         "audit_summary": audit_summary,
         "total_discourse_records": total_discourse_records,
         "entities_with_discourse": entities_with_discourse,

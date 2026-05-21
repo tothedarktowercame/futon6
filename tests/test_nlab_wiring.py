@@ -405,6 +405,84 @@ class TestDiscourseWiring:
         assert nlab_wiring.detect_learned("e", "Any text whatsoever.", []) == []
         assert nlab_wiring.detect_learned("e", "Any text whatsoever.", None) == []
 
+    # --- Math-scope detection (Layer 1 of symbol grounding) ---
+
+    def test_math_typed_arrow_fires_inside_dollars(self):
+        records = nlab_wiring.detect_math_scopes(
+            "test-m1",
+            "Let $f : X \\to Y$ be a morphism.",
+        )
+        types = [r["hx/type"] for r in records]
+        assert "math/typed-arrow" in types
+        assert "math/typed-binding" in types
+
+    def test_math_named_functor_recognized(self):
+        records = nlab_wiring.detect_math_scopes(
+            "test-m2",
+            "The set $\\Hom(A, B)$ has identity $\\End(A)$.",
+        )
+        functor_records = [r for r in records if r["hx/type"] == "math/named-functor"]
+        labels = {r["hx/content"]["match"] for r in functor_records}
+        assert "\\Hom" in labels
+        assert "\\End" in labels
+
+    def test_math_composition_and_adjunction(self):
+        records = nlab_wiring.detect_math_scopes(
+            "test-m3",
+            "Consider $g \\circ f$ and the adjunction $T \\dashv U$.",
+        )
+        types = [r["hx/type"] for r in records]
+        assert "math/composition" in types
+        assert "math/adjunction" in types
+
+    def test_math_category_symbol_with_braces(self):
+        records = nlab_wiring.detect_math_scopes(
+            "test-m4",
+            "Let $\\mathcal{C}$ and $\\mathbf{Set}$ be categories.",
+        )
+        cat_records = [r for r in records if r["hx/type"] == "math/category-symbol"]
+        labels = {r["hx/content"]["match"] for r in cat_records}
+        assert "\\mathcal{C}" in labels
+        assert "\\mathbf{Set}" in labels
+
+    def test_math_quantifier_and_membership(self):
+        records = nlab_wiring.detect_math_scopes(
+            "test-m5",
+            "For $\\forall x \\in X$, there exists $\\exists y$.",
+        )
+        types = [r["hx/type"] for r in records]
+        assert types.count("math/quantifier") >= 2
+        assert "math/membership" in types
+
+    def test_math_scope_positions_are_absolute(self):
+        text = "before $X \\to Y$ after"  # arrow starts at offset 10 in raw text
+        records = nlab_wiring.detect_math_scopes("t-m6", text)
+        arrows = [r for r in records if r["hx/type"] == "math/typed-arrow"]
+        assert arrows
+        pos = arrows[0]["hx/content"]["position"]
+        # The arrow's position should land in the math interior, not at offset 0.
+        assert pos > len("before ")
+        assert text[pos:pos+3] == "\\to"
+
+    def test_math_no_records_outside_dollars(self):
+        # `\to` appears in plain prose; should NOT be detected without dollars.
+        records = nlab_wiring.detect_math_scopes(
+            "t-m7",
+            r"The phrase \to is not in math mode here.",
+        )
+        assert records == []
+
+    def test_math_equality_skips_double_eq_and_coloneq(self):
+        # Equality should fire on bare `=`, not on `==` or `:=` or `\equiv`.
+        records = nlab_wiring.detect_math_scopes(
+            "t-m8",
+            "$X = Y$ but not $a == b$ and not $f := g$",
+        )
+        eq_records = [r for r in records if r["hx/type"] == "math/equality"]
+        assert len(eq_records) == 1  # only the bare `=` fires
+        match_text = eq_records[0]["hx/content"]["match"]
+        assert match_text == "="
+
     def test_detect_comments_finds_latex_comments(self):
         text = (
             "Definition of monoid.\n"

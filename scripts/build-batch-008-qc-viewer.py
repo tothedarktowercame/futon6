@@ -681,8 +681,16 @@ def build_paper_view(
     local_scopes = NLAB_WIRING.detect_scopes(entity_id, eprint_text)
     # Merge LaTeX-comment scopes so commented-out source counts toward
     # coverage (and so the kernel terms inside don't get reported as
-    # scope-development frontier).
-    local_scopes = [*local_scopes, *NLAB_WIRING.detect_comments(entity_id, eprint_text)]
+    # scope-development frontier). Math sub-scopes (math/typed-arrow,
+    # math/named-functor, etc.) fire inside $...$ blocks and nest under
+    # any outer math scope (relation-expression, bind/typed) via the
+    # shared scope-tree builder — that's the visible payoff for the
+    # symbol-grounding mission (M-symbol-grounding.md).
+    local_scopes = [
+        *local_scopes,
+        *NLAB_WIRING.detect_comments(entity_id, eprint_text),
+        *NLAB_WIRING.detect_math_scopes(entity_id, eprint_text),
+    ]
     local_coverage = scope_coverage_stats(eprint_text, local_scopes)
     local_bins = scope_density_bins(eprint_text, local_scopes)
     local_windows = pick_scope_windows(

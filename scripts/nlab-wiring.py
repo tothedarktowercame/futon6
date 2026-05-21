@@ -1335,6 +1335,97 @@ def detect_labels(entity_id, text, parent_env_id=None):
     return labels
 
 
+# ============================================================
+# Math-content scope detection (Layer 1 of symbol grounding)
+# ============================================================
+# Fires INSIDE $...$ blocks, producing sub-scopes (math/typed-arrow,
+# math/named-functor, etc.) that nest under any outer math scope already
+# emitted by detect_scopes (relation-expression, arrow-expression, etc.).
+# The shared scope-tree builder handles nesting depth automatically.
+#
+# Layer 1 is regex-only; Layer 2 (M-symbol-grounding.md) will swap in an
+# AST-based parser for richer cases.
+
+MATH_BLOCK_RE = re.compile(r"\$([^$\n]+?)\$")
+
+MATH_SCOPE_PATTERNS = [
+    ("math/typed-arrow", re.compile(
+        r"\\(?:to|rightarrow|longrightarrow|mapsto|"
+        r"leftarrow|longleftarrow|leftrightarrow|longleftrightarrow|"
+        r"hookrightarrow|hookleftarrow|"
+        r"twoheadrightarrow|twoheadleftarrow|"
+        r"rightharpoonup|leftharpoonup|"
+        r"Rightarrow|Leftarrow|Leftrightarrow|"
+        r"ra|la|lra)\b"
+    )),
+    ("math/composition", re.compile(r"\\circ\b")),
+    ("math/adjunction", re.compile(r"\\(?:dashv|vdash|perp)\b")),
+    ("math/membership", re.compile(r"\\(?:in|notin|ni)\b")),
+    ("math/inclusion", re.compile(
+        r"\\(?:subseteq|supseteq|subset|supset|subsetneq|supsetneq|sqsubset|sqsubseteq)\b"
+    )),
+    ("math/isomorphism", re.compile(r"\\(?:cong|simeq|equiv|approx|sim)\b")),
+    ("math/tensor", re.compile(
+        r"\\(?:otimes|odot|oplus|ominus|wedge|vee|sqcup|sqcap)\b"
+    )),
+    ("math/cartesian", re.compile(r"\\times\b")),
+    ("math/quantifier", re.compile(r"\\(?:forall|exists|nexists)\b")),
+    ("math/named-functor", re.compile(
+        r"\\(?:Hom|End|Aut|Spec|Pic|Ker|Im|Coker|Mor|Ob|Tr|Det|Sym|"
+        r"Stab|Inv|Span|Sub|Quot|Rep|Frac|Image|Coimage|coker|ker|im|"
+        r"id|Id|Ext|Tor)\b"
+    )),
+    ("math/category-symbol", re.compile(
+        r"\\(?:mathcal|mathbf|mathfrak|mathbb|cat)\{[A-Z][^}]*\}"
+    )),
+    ("math/identity", re.compile(
+        r"\\(?:mathrm|operatorname)\{id\}(?:_(?:\{[^}]+\}|[A-Za-z0-9]+))?"
+        r"|\b1_(?:\{[^}]+\}|[A-Za-z0-9]+)"
+    )),
+    # f : Y -- a typed-binding cue. Conservative: require a letter then `:` then
+    # a letter/backslash to avoid matching arbitrary colon usage.
+    ("math/typed-binding", re.compile(r"\b[A-Za-z][A-Za-z0-9_]*\s*:\s*(?=[A-Za-z\\])")),
+    # Bare = (math equality), but NOT inside == / >= / <= / != / :=
+    ("math/equality", re.compile(r"(?<![=<>!:])=(?!=)")),
+]
+
+
+def detect_math_scopes(entity_id, text, parent_env_id=None):
+    """Layer-1 math-content scope detection.
+
+    Iterates `$...$` math blocks; inside each, applies MATH_SCOPE_PATTERNS
+    to surface specific constructions (typed arrows, named functors,
+    quantifiers, etc.) as scope records. Positions are absolute (offset
+    by the math block's position in the outer text) so the shared
+    scope-tree builder nests them correctly under any enclosing outer
+    scope (e.g., a bind/typed scope wrapping the whole math block).
+    """
+    records = []
+    idx = 0
+    for block_m in MATH_BLOCK_RE.finditer(text):
+        interior_start = block_m.start(1)
+        interior_end = block_m.end(1)
+        interior = text[interior_start:interior_end]
+        for mtype, pattern in MATH_SCOPE_PATTERNS:
+            for inner_m in pattern.finditer(interior):
+                abs_start = interior_start + inner_m.start()
+                abs_end = interior_start + inner_m.end()
+                records.append({
+                    "hx/id": f"{entity_id}:math-{idx:04d}",
+                    "hx/role": "scope",
+                    "hx/type": mtype,
+                    "hx/parent": parent_env_id,
+                    "hx/content": {
+                        "match": inner_m.group()[:80],
+                        "position": abs_start,
+                        "end": abs_end,
+                    },
+                    "hx/labels": ["scope", "math", mtype.split("/")[1]],
+                })
+                idx += 1
+    return records
+
+
 COMMENT_RE = re.compile(r"(?<!\\)%[^\n]*")
 
 
