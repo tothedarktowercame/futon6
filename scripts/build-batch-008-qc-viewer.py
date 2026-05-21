@@ -649,8 +649,11 @@ def render_tree_node(text: str, node: dict, *, is_root: bool) -> str:
 
     if is_root:
         return "".join(out)
+    # Depth-aware visual class so nested scopes are distinguishable. Cap at
+    # depth-5+ so the palette stays bounded for arbitrarily deep nesting.
+    depth_class = f'depth-{min(node["depth"], 5)}'
     label_html = f'<span class="scope-label">{html.escape(node["label"])}</span>'
-    return f'<mark class="scope">{label_html}{"".join(out)}</mark>'
+    return f'<mark class="scope {depth_class}">{label_html}{"".join(out)}</mark>'
 
 
 def render_overlay_markup(
@@ -1016,7 +1019,15 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
     .density {{ display: grid; grid-template-columns: repeat(40, 1fr); gap: 2px; margin-top: 10px; }}
     .density-bin {{ display: block; height: 16px; background: #0f766e; border-radius: 3px; }}
     pre {{ white-space: pre-wrap; background: #fff; border: 1px solid #ece3d6; padding: 10px; border-radius: 10px; line-height: 1.45; font-size: 14px; overflow-wrap: anywhere; }}
-    .scope {{ background: linear-gradient(90deg, var(--scope), var(--scope2)); padding: 0 1px; border-radius: 3px; }}
+    .scope {{ padding: 0 1px; border-radius: 3px; }}
+    /* Depth-aware scope coloring. Outer (d1) = amber; nested levels shift hue
+       through rose, violet, indigo, slate. d5+ caps the palette so arbitrarily
+       deep nesting doesn't run out of distinguishable colors. */
+    .scope.depth-1 {{ background: linear-gradient(90deg, #fbd38d, #fee2e2); }}
+    .scope.depth-2 {{ background: linear-gradient(90deg, #fbcfe8, #fce7f3); }}
+    .scope.depth-3 {{ background: linear-gradient(90deg, #ddd6fe, #ede9fe); }}
+    .scope.depth-4 {{ background: linear-gradient(90deg, #c7d2fe, #e0e7ff); }}
+    .scope.depth-5 {{ background: linear-gradient(90deg, #a5b4fc, #cbd5e1); outline: 1px dashed rgba(71, 85, 105, 0.4); outline-offset: -2px; }}
     .scope-label {{ display: inline-block; margin-right: 6px; padding: 0 4px; background: rgba(29, 26, 22, 0.1); border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
     .term-kernel {{ background: rgba(15, 118, 110, 0.12); border-bottom: 1px solid rgba(15, 118, 110, 0.45); padding: 0 1px; border-radius: 2px; cursor: help; }}
     .term-kernel:hover {{ background: rgba(15, 118, 110, 0.22); }}
@@ -1024,7 +1035,11 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
     .term-kernel.inhabited:hover {{ background: rgba(124, 58, 237, 0.30); }}
     .markup-legend {{ font: 12px/1.4 system-ui, sans-serif; color: var(--muted); margin: 8px 0 6px 0; }}
     .markup-legend .swatch {{ display: inline-block; padding: 0 6px; border-radius: 3px; margin-right: 4px; }}
-    .markup-legend .swatch.scope {{ background: linear-gradient(90deg, var(--scope), var(--scope2)); }}
+    .markup-legend .swatch.scope.depth-1 {{ background: linear-gradient(90deg, #fbd38d, #fee2e2); }}
+    .markup-legend .swatch.scope.depth-2 {{ background: linear-gradient(90deg, #fbcfe8, #fce7f3); }}
+    .markup-legend .swatch.scope.depth-3 {{ background: linear-gradient(90deg, #ddd6fe, #ede9fe); }}
+    .markup-legend .swatch.scope.depth-4 {{ background: linear-gradient(90deg, #c7d2fe, #e0e7ff); }}
+    .markup-legend .swatch.scope.depth-5 {{ background: linear-gradient(90deg, #a5b4fc, #cbd5e1); outline: 1px dashed rgba(71, 85, 105, 0.4); outline-offset: -2px; }}
     .markup-legend .swatch.term {{ background: rgba(15, 118, 110, 0.18); border-bottom: 1px solid rgba(15, 118, 110, 0.55); }}
     .markup-legend .swatch.term-inhabited {{ background: rgba(124, 58, 237, 0.20); border-bottom: 1px solid rgba(124, 58, 237, 0.6); }}
     .badge {{ display: inline-block; padding: 1px 6px; border-radius: 999px; font-size: 12px; margin-left: 6px; border: 1px solid currentColor; }}
@@ -1073,7 +1088,12 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
         <h2>Old local viewer snippet</h2>
         <p class="sub">Retained here only to show why the previous mockup was misleading: it used a near-full-paper snippet and highlighted too few scopes. The viewer now also overlays NER-kernel term hits inline.</p>
         <p class="markup-legend">
-          <span class="swatch scope">scope</span> structural construction
+          <span class="swatch scope depth-1">d1</span>
+          <span class="swatch scope depth-2">d2</span>
+          <span class="swatch scope depth-3">d3</span>
+          <span class="swatch scope depth-4">d4</span>
+          <span class="swatch scope depth-5">d5+</span>
+          scope nesting depth (outer → inner)
           &nbsp;·&nbsp;
           <span class="swatch term">term</span> kernel term in residual prose (= <strong>scope-development candidate</strong>)
           &nbsp;·&nbsp;
