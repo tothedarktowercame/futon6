@@ -458,20 +458,24 @@ def find_kernel_term_positions(text: str, singles: dict, multi_index: dict) -> l
 
 
 def classify_kernel_terms(text: str, scopes: list[dict], singles: dict, multi_index: dict) -> dict:
-    """Count kernel-term occurrences by relation to scope detection.
+    """Count kernel-term occurrences by relation to scope coverage.
 
-    Returns {inhabited, outer, straddled}:
-    - inhabited: term fully inside some scope (already structurally annotated)
-    - outer: term in residual prose (a scope-development candidate; what the
-      structure-learning loop should be targeting)
-    - straddled: term straddles a scope boundary (ambiguous; counted but
-      rendered as dropped)
-
-    The outer count is the meaningful frontier metric: it should decrease as
-    learned scope patterns land and the prose around known terms gets wrapped.
+    Returns {inhabited, outer, straddled, total, depth_distribution}:
+    - inhabited: term fully inside some scope (any scope; the frontier
+      semantics doesn't care whether other scopes straddle)
+    - outer: term completely disjoint from all scopes (scope-development
+      candidate — what the structure-learning loop should target)
+    - straddled: term overlaps some scope boundary AND isn't contained in
+      any scope (ambiguous edges)
+    - depth_distribution: map of {depth -> count} for inhabited terms,
+      where depth=1 is "inside a top-level scope," depth=2 is "inside a
+      scope inside a scope," etc. Computed via the tree renderer's view of
+      the same data; terms placed inside scopes the tree had to drop due
+      to mutual straddling don't contribute to this map but are still
+      counted as inhabited above.
     """
     term_positions = find_kernel_term_positions(text, singles, multi_index)
-    all_scope_spans: list[tuple[int, int]] = []
+    span_records: list[dict] = []
     for scope in scopes:
         content = scope.get("hx/content", {}) or {}
         start = content.get("position")
@@ -480,31 +484,49 @@ def classify_kernel_terms(text: str, scopes: list[dict], singles: dict, multi_in
             continue
         if not isinstance(end, int):
             end = start + len(content.get("match", ""))
-        all_scope_spans.append((start, end))
-    all_scope_spans.sort()
+        span_records.append({
+            "start": start,
+            "end": end,
+            "label": scope.get("hx/type", "?"),
+        })
 
     inhabited = outer = straddled = 0
-    for (ts, te, _tl, _canon) in term_positions:
-        is_inside = False
-        is_straddle = False
-        for (ss, se) in all_scope_spans:
+    inhabited_terms: list[tuple[int, int, str, str | None]] = []
+    for term in term_positions:
+        ts, te = term[0], term[1]
+        contained = False
+        overlaps_any = False
+        for sp in span_records:
+            ss, se = sp["start"], sp["end"]
             if ss <= ts and te <= se:
-                is_inside = True
-                break
-            if not (se <= ts or ss >= te):
-                is_straddle = True
-                break
-        if is_inside:
+                contained = True
+            elif not (se <= ts or ss >= te):
+                overlaps_any = True
+        if contained:
             inhabited += 1
-        elif is_straddle:
+            inhabited_terms.append(term)
+        elif overlaps_any:
             straddled += 1
         else:
             outer += 1
+
+    tree = build_scope_tree(span_records, inhabited_terms)
+    depth_dist: dict[int, int] = {}
+
+    def walk(node: dict) -> None:
+        for child in node["children"]:
+            term_count = len(child["terms"])
+            if term_count:
+                depth_dist[child["depth"]] = depth_dist.get(child["depth"], 0) + term_count
+            walk(child)
+
+    walk(tree)
     return {
         "inhabited": inhabited,
         "outer": outer,
         "straddled": straddled,
-        "total": inhabited + outer + straddled,
+        "total": len(term_positions),
+        "depth_distribution": dict(sorted(depth_dist.items())),
     }
 
 
@@ -514,24 +536,121 @@ def _term_span_html(text: str, start: int, end: int, canon: str | None, *, inhab
     return f'<span class="{klass}"{title}>{html.escape(text[start:end])}</span>'
 
 
-def _render_scope_inner(text: str, scope_start: int, scope_end: int,
-                        inner_terms: list[tuple[int, int, str, str | None]]) -> str:
-    """Render the contents of a scope span, threading inhabited term marks inside.
+def build_scope_tree(
+    scope_spans: list[dict],
+    term_positions: list[tuple[int, int, str, str | None]],
+) -> dict:
+    """Arrange flat scope spans into a containment tree, with terms at deepest scope.
 
-    inner_terms must be fully contained in [scope_start, scope_end) and
-    non-overlapping with each other (caller's responsibility).
+    Each scope is either fully contained in another (becomes a child) or sits as
+    a sibling at the top level. Scopes that straddle another scope's boundary
+    (partial overlap, neither containing nor contained) are dropped — they
+    can't be tree-arranged and would produce broken nesting. Each term is
+    placed in the deepest scope that fully contains it; terms not contained
+    by any scope sit at the root; terms straddling a scope boundary are
+    dropped.
+
+    The root node uses sentinel start=-1 and end=10**18 so any real span fits
+    inside it. Its `label` is "$root" and is never rendered; only its children
+    and terms.
     """
-    inner_terms = sorted(inner_terms, key=lambda t: (t[0], t[1]))
+    root: dict = {
+        "start": -1,
+        "end": 10**18,
+        "label": "$root",
+        "children": [],
+        "terms": [],
+        "depth": 0,
+    }
+    # Outer-first ordering: earlier start wins; on tie, larger span wins.
+    sorted_scopes = sorted(scope_spans, key=lambda s: (s["start"], -(s["end"] - s["start"])))
+    stack: list[dict] = [root]
+    for sp in sorted_scopes:
+        # Pop scopes that ended before this one starts.
+        while stack[-1] is not root and stack[-1]["end"] <= sp["start"]:
+            stack.pop()
+        top = stack[-1]
+        # If the new scope fully fits inside the current top, nest it.
+        if top["start"] <= sp["start"] and sp["end"] <= top["end"]:
+            node = {
+                "start": sp["start"],
+                "end": sp["end"],
+                "label": sp["label"],
+                "children": [],
+                "terms": [],
+                "depth": top["depth"] + 1,
+            }
+            top["children"].append(node)
+            stack.append(node)
+        # else: scope straddles the top span — drop it.
+
+    def find_deepest(node: dict, ts: int, te: int) -> dict | None:
+        if not (node["start"] <= ts and te <= node["end"]):
+            return None
+        for child in node["children"]:
+            deeper = find_deepest(child, ts, te)
+            if deeper is not None:
+                return deeper
+        return node
+
+    def straddles_any_input_scope(ts: int, te: int) -> bool:
+        # A term that overlaps a scope without being fully contained in it is
+        # ambiguous — drop it. Check against the original input scope set so a
+        # term doesn't sneak into the root just because the straddled scope was
+        # dropped from the tree.
+        for sp in scope_spans:
+            ss, se = sp["start"], sp["end"]
+            if se <= ts or ss >= te:
+                continue  # disjoint
+            if ss <= ts and te <= se:
+                continue  # fully contained
+            return True
+        return False
+
+    for (ts, te, tl, canon) in term_positions:
+        if straddles_any_input_scope(ts, te):
+            continue  # straddled — drop
+        deepest = find_deepest(root, ts, te)
+        if deepest is not None:
+            deepest["terms"].append((ts, te, tl, canon))
+    return root
+
+
+def render_tree_node(text: str, node: dict, *, is_root: bool) -> str:
+    """Recursively emit nested mark elements with deepest-scope term placement.
+
+    Terms at the root render with the .term-kernel class (outer); terms at any
+    non-root scope render with .term-kernel.inhabited (purple). Nested scopes
+    produce nested <mark> elements.
+    """
+    events: list[tuple[int, int, str, object]] = []
+    for child in node["children"]:
+        events.append((child["start"], child["end"], "scope", child))
+    for (ts, te, tl, canon) in node["terms"]:
+        events.append((ts, te, "term", (tl, canon)))
+    events.sort(key=lambda e: (e[0], e[1]))
+
+    cursor = 0 if is_root else node["start"]
+    end_pos = len(text) if is_root else node["end"]
     out: list[str] = []
-    cursor = scope_start
-    for (ts, te, _tl, canon) in inner_terms:
-        if ts < cursor:
+    for start, end, kind, payload in events:
+        if start < cursor:
             continue
-        out.append(html.escape(text[cursor:ts]))
-        out.append(_term_span_html(text, ts, te, canon, inhabited=True))
-        cursor = te
-    out.append(html.escape(text[cursor:scope_end]))
-    return "".join(out)
+        clipped_start = max(cursor, min(len(text), start))
+        clipped_end = max(clipped_start, min(len(text), end))
+        out.append(html.escape(text[cursor:clipped_start]))
+        if kind == "scope":
+            out.append(render_tree_node(text, payload, is_root=False))
+        else:
+            _tl, canon = payload
+            out.append(_term_span_html(text, clipped_start, clipped_end, canon, inhabited=not is_root))
+        cursor = clipped_end
+    out.append(html.escape(text[cursor:min(len(text), end_pos)]))
+
+    if is_root:
+        return "".join(out)
+    label_html = f'<span class="scope-label">{html.escape(node["label"])}</span>'
+    return f'<mark class="scope">{label_html}{"".join(out)}</mark>'
 
 
 def render_overlay_markup(
@@ -540,18 +659,19 @@ def render_overlay_markup(
     singles: dict,
     multi_index: dict,
     offset: int = 0,
-    scope_limit: int | None = 8,
+    scope_limit: int | None = None,
 ) -> str:
-    """Render text with scope + kernel-term overlay.
+    """Tree-aware scope + kernel-term overlay.
 
-    Semantics ("inhabited scopes"): a kernel term that falls *inside* a
-    scope is not suppressed; it renders inside the scope's mark with the
-    `.inhabited` class, so the visual hierarchy preserves both layers.
-    Terms that *partially* overlap a scope boundary are still dropped — those
-    represent ambiguous edges, not nesting. Terms outside any scope render
-    standalone.
+    Scopes nest as a containment tree: an inner scope renders inside its
+    parent scope's mark element. Each kernel term gets placed in its deepest
+    containing scope (or at the root if no scope contains it). Terms in any
+    non-root scope render as inhabited (purple); terms at the root render as
+    outer (teal). Straddling scopes and straddling terms are dropped.
+
+    scope_limit truncates the input span list before tree-building; default
+    None renders all scopes (the snippet itself bounds total volume).
     """
-    # All scope spans, used both for rendering and for classifying terms.
     all_scope_spans: list[dict] = []
     for scope in scopes:
         content = scope.get("hx/content", {}) or {}
@@ -566,74 +686,13 @@ def render_overlay_markup(
             "end": max(0, end - offset),
             "label": scope.get("hx/type", "?"),
         })
-    all_scope_spans.sort(key=lambda s: (s["start"], s["end"]))
-
-    # Pick which scopes get rendered (the limit is purely visual; the full set
-    # is still used for term containment).
-    rendered_scope_spans = (
-        all_scope_spans if scope_limit is None else all_scope_spans[:scope_limit]
-    )
-    rendered_keys = {(s["start"], s["end"]) for s in rendered_scope_spans}
+    all_scope_spans.sort(key=lambda s: (s["start"], -(s["end"] - s["start"])))
+    if scope_limit is not None:
+        all_scope_spans = all_scope_spans[:scope_limit]
 
     term_positions = find_kernel_term_positions(text, singles, multi_index)
-
-    # Classify each term: inhabits-a-rendered-scope, inhabits-non-rendered (treated
-    # as outer to preserve the kernel hit visually), straddles-a-scope (dropped),
-    # or fully-outer.
-    inhabited: dict[tuple[int, int], list[tuple[int, int, str, str | None]]] = {}
-    outer_terms: list[tuple[int, int, str, str | None]] = []
-    for (ts, te, tl, canon) in term_positions:
-        container = None
-        straddles = False
-        for sp in all_scope_spans:
-            ss, se = sp["start"], sp["end"]
-            if ss <= ts and te <= se:
-                container = (ss, se)
-                break
-            if not (se <= ts or ss >= te):
-                straddles = True
-                break
-        if container is not None:
-            if container in rendered_keys:
-                inhabited.setdefault(container, []).append((ts, te, tl, canon))
-            else:
-                # Scope exists but isn't drawn this turn — keep the term hit.
-                outer_terms.append((ts, te, tl, canon))
-        elif not straddles:
-            outer_terms.append((ts, te, tl, canon))
-
-    # Assemble a flat event list and walk linearly. Scopes carry their inner
-    # term list so they render as a single composite block.
-    events: list[dict] = []
-    for sp in rendered_scope_spans:
-        events.append({
-            "kind": "scope",
-            "start": sp["start"],
-            "end": sp["end"],
-            "label": sp["label"],
-            "inner_terms": inhabited.get((sp["start"], sp["end"]), []),
-        })
-    for (ts, te, tl, canon) in outer_terms:
-        events.append({"kind": "term", "start": ts, "end": te, "label": tl, "canon": canon})
-    events.sort(key=lambda e: (e["start"], e["end"]))
-
-    out: list[str] = []
-    cursor = 0
-    for ev in events:
-        start = max(0, min(len(text), ev["start"]))
-        end = max(start, min(len(text), ev["end"]))
-        if start < cursor:
-            continue
-        out.append(html.escape(text[cursor:start]))
-        if ev["kind"] == "scope":
-            label_html = f'<span class="scope-label">{html.escape(ev["label"])}</span>'
-            inner_html = _render_scope_inner(text, start, end, ev["inner_terms"])
-            out.append(f'<mark class="scope">{label_html}{inner_html}</mark>')
-        else:
-            out.append(_term_span_html(text, start, end, ev.get("canon"), inhabited=False))
-        cursor = end
-    out.append(html.escape(text[cursor:]))
-    return "".join(out)
+    tree = build_scope_tree(all_scope_spans, term_positions)
+    return render_tree_node(text, tree, is_root=True)
 
 
 def render_scope_markup(text: str, scopes: list[dict], offset: int = 0, limit: int | None = 8) -> str:
@@ -861,6 +920,7 @@ def build_paper_view(
         "local_term_inhabited_count": term_stats["inhabited"],
         "local_term_outer_count": term_stats["outer"],
         "local_term_straddled_count": term_stats["straddled"],
+        "local_term_depth_distribution": term_stats["depth_distribution"],
     }
 
 
@@ -1026,6 +1086,11 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
           / <code>{paper.get('local_term_straddled_count', 0)}</code> straddled
           = <code>{paper.get('local_term_overlay_count', 0)}</code> total kernel hits.
           Outer count should fall as learned scope patterns land.
+        </p>
+        <p class="markup-legend">
+          Inhabited-term depth distribution (tree-aware):
+          {' '.join(f'depth&nbsp;{d}:&nbsp;<code>{c}</code>' for d, c in (paper.get('local_term_depth_distribution') or {}).items()) or '<em>no nested terms</em>'}.
+          Higher depths mean richer structural nesting around the term.
         </p>
         <pre>{paper['local_scope_markup']}</pre>
         <p class="tiny">Top local scope types: {html.escape(json.dumps(paper['local_scope_types'], ensure_ascii=False))}</p>

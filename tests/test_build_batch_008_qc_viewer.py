@@ -64,3 +64,126 @@ def test_render_scope_markup_inserts_scope_label():
     assert "scope-label" in markup
     assert "bind/let" in markup
     assert "Let f : X -&gt;" in markup
+
+
+# ============================================================
+# Tree-aware scope renderer tests
+# ============================================================
+
+def _scope(start, end, label):
+    return {"start": start, "end": end, "label": label}
+
+
+def test_build_scope_tree_nests_inner_under_outer():
+    mod = load_module()
+    spans = [
+        _scope(0, 100, "env/proof"),
+        _scope(20, 60, "bind/typed"),
+    ]
+    tree = mod.build_scope_tree(spans, [])
+    assert tree["label"] == "$root"
+    assert len(tree["children"]) == 1
+    outer = tree["children"][0]
+    assert outer["label"] == "env/proof"
+    assert outer["depth"] == 1
+    assert len(outer["children"]) == 1
+    inner = outer["children"][0]
+    assert inner["label"] == "bind/typed"
+    assert inner["depth"] == 2
+
+
+def test_build_scope_tree_keeps_disjoint_scopes_as_siblings():
+    mod = load_module()
+    spans = [
+        _scope(0, 40, "bind/let"),
+        _scope(50, 90, "constrain/relation"),
+    ]
+    tree = mod.build_scope_tree(spans, [])
+    assert len(tree["children"]) == 2
+    assert {c["label"] for c in tree["children"]} == {"bind/let", "constrain/relation"}
+
+
+def test_build_scope_tree_drops_straddling_scope():
+    mod = load_module()
+    # Second scope straddles the first's right edge — can't be tree-arranged.
+    spans = [
+        _scope(0, 50, "env/proof"),
+        _scope(40, 90, "constrain/relation"),
+    ]
+    tree = mod.build_scope_tree(spans, [])
+    assert len(tree["children"]) == 1
+    assert tree["children"][0]["label"] == "env/proof"
+
+
+def test_term_placed_at_deepest_containing_scope():
+    mod = load_module()
+    spans = [
+        _scope(0, 100, "env/proof"),
+        _scope(20, 60, "bind/typed"),
+    ]
+    # Term at [30, 35] is inside both; should land in inner (bind/typed).
+    terms = [(30, 35, "monad", "Monad")]
+    tree = mod.build_scope_tree(spans, terms)
+    outer = tree["children"][0]
+    inner = outer["children"][0]
+    assert inner["terms"] == [(30, 35, "monad", "Monad")]
+    assert outer["terms"] == []
+
+
+def test_term_at_root_when_no_scope_contains_it():
+    mod = load_module()
+    spans = [_scope(0, 50, "env/proof")]
+    terms = [(80, 85, "functor", "Functor")]
+    tree = mod.build_scope_tree(spans, terms)
+    assert tree["terms"] == [(80, 85, "functor", "Functor")]
+
+
+def test_term_straddling_scope_is_dropped():
+    mod = load_module()
+    spans = [_scope(0, 50, "env/proof")]
+    terms = [(45, 60, "monad", "Monad")]  # crosses right edge
+    tree = mod.build_scope_tree(spans, terms)
+    # Term doesn't fit anywhere — not at root (it overlaps a scope), not in scope.
+    assert tree["terms"] == []
+    assert tree["children"][0]["terms"] == []
+
+
+def test_render_tree_node_produces_nested_marks():
+    mod = load_module()
+    text = "AAAA proof body BBBB"
+    spans = [
+        _scope(0, len(text), "env/proof"),
+        _scope(5, 15, "bind/typed"),
+    ]
+    tree = mod.build_scope_tree(spans, [])
+    html_out = mod.render_tree_node(text, tree, is_root=True)
+    # Outer mark should contain inner mark (nested).
+    outer_pos = html_out.find("env/proof")
+    inner_pos = html_out.find("bind/typed")
+    end_inner = html_out.find("</mark>", inner_pos)
+    end_outer = html_out.find("</mark>", end_inner + 1)
+    assert outer_pos < inner_pos < end_inner < end_outer
+
+
+def test_classify_kernel_terms_reports_depth_distribution():
+    mod = load_module()
+    # Text with whitespace tokenization so spot_terms_entity can find "monad".
+    # Place "monad" inside the inner (nested) scope at depth 2.
+    prefix = "a " * 30  # 60 chars
+    middle = "monad "  # 6 chars; "monad" sits at offset 60-65
+    suffix = "b " * 100  # 200 chars
+    text = prefix + middle + suffix
+    proof_end = len(text)
+    scopes = [
+        {"hx/type": "env/proof", "hx/content": {"position": 0, "end": proof_end, "match": text}},
+        {"hx/type": "bind/typed", "hx/content": {"position": 50, "end": 100, "match": text[50:100]}},
+    ]
+    singles = {"monad": ("monad", "Monad")}
+    multi_index: dict = {}
+    stats = mod.classify_kernel_terms(text, scopes, singles, multi_index)
+    assert stats["total"] == 1
+    assert stats["inhabited"] == 1
+    assert stats["outer"] == 0
+    assert stats["straddled"] == 0
+    # depth=2 since the term lands inside the inner (nested) scope.
+    assert stats["depth_distribution"] == {2: 1}
