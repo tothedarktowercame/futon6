@@ -112,42 +112,119 @@ If `pylatexenc` is too heavy or not available, fall back to a small
 custom recursive-descent parser focused on the math constructs we care
 about.
 
-### Layer 3 — Symbol-term grounding (the actual point)
+### Layer 3 — Symbol-term grounding via a defeasible strategy library
 
-Once Layers 1–2 give us *what's there structurally* inside math, Layer 3
-asks *what does it refer to*.
+**Reframing (2026-05-21):** the right model is *not* a grounding
+pipeline that builds a paper-level dictionary. It is a **library of
+named, defeasible strategies** that each emit tentative `(symbol,
+canon, scope-range)` bindings with provenance. Bindings can be
+*defeated* by later evidence in the same paper (e.g., `Let X be a
+finite abelian group` later in the paper narrows the scope of the
+earlier `Let X be an abelian group`). Bindings are paper-local — no
+symbol persists across papers. What *can* persist across papers is
+**strategy effectiveness**: which strategies fire, how often, with
+what corroboration.
 
-Mechanism:
+Joe's verbatim guidance: *"Symbol grounding has to be per-paper, but
+even so, maybe we can learn an approach that will improve symbol
+grounding over all."* That "approach" is the strategy library, and
+the cross-paper learning happens at the meta-level (hit rates,
+corroboration rates, strategy composition).
 
-1. **Prose-side symbol declarations**: scan prose around each math block
-   for declaration patterns we already detect — `Let \$X\$ be a Y`,
-   `\$X\$ denotes Y`, `Fix \$X\$ as Y`, `where \$X\$ is a Y`. The
-   right-hand-side is typically a kernel-term hit.
-2. **Per-paper symbol environment**: a dict
-   `{symbol_text: {canon, declared_kind, declaration_position}}` built
-   by scanning the whole paper. `X` declared as `category` near the
-   top binds for subsequent math.
-3. **Math-scope grounding**: when `detect_math_scopes` emits a
-   `math/symbol` record for `X`, look up `X` in the per-paper env. If
-   found, attach `canon=Category` to the scope content. The renderer
-   then treats the symbol as an *inhabited term* inside math — just
-   like the kernel-term overlay in prose.
-4. **Frontier extends to math**: every ungrounded symbol becomes a
-   `math/scope-development-frontier` candidate. The audit summary
-   reports `math_inhabited` / `math_outer` / `math_total` alongside the
-   prose-level frontier counts.
+#### Core data model
 
-### Supervised validation via First Proof Batch One
+```python
+@dataclass
+class SymbolBinding:
+    symbol: str                   # e.g., "X" or "\\mathcal{C}"
+    canon: str | None             # e.g., "AbelianGroup"; None = unbound
+    type_phrase: str              # the raw RHS, e.g., "abelian group"
+    scope_start: int              # paper position where binding applies from
+    scope_end: int                # exclusive end (later binding narrows this)
+    confidence: str               # "high" / "medium" / "low"
+    strategy: str                 # name of the strategy that produced this
+    evidence_span: tuple[int, int]
+    defeated_by: str | None       # binding id that narrowed/superseded this
+```
 
-The Batch One markup gives us truth labels for what symbol grounding
-*should* produce on agent-authored content. Layer 3 includes:
+`SymbolEnvironment` is a **piecewise** lookup: given a paper position
+`p` and a symbol `X`, return the binding whose scope range contains
+`p`. New bindings narrow the scope of earlier bindings rather than
+deleting them — the original binding stays in the log with
+`defeated_by` set so the meta-learning loop can see when and why each
+strategy got overridden.
 
-- A converter from Batch One's port labels + discourse records into the
-  same `(symbol, canon)` pairs the prose-side grounder produces.
-- A precision/recall comparison on a held-out subset of Batch One.
-- An honest report: if our prose-side grounder hits 60% precision on
-  Batch One data, that's the upper-bound expectation on arXiv content
-  where authors aren't writing with grounding in mind.
+#### Strategy library (starter set)
+
+| # | Strategy | Looks for | Confidence |
+|---|---|---|---|
+| 1 | `let-binding` | `Let $X$ be a Y` | high |
+| 2 | `denotation` | `$X$ denotes Y`, `we denote by $X$ Y` | high |
+| 3 | `fix-pattern` | `Fix $X$ as Y` | high |
+| 4 | `the-Y-X` | `the Y $X$` (e.g. "the category $\\mathcal{C}$") | medium |
+| 5 | `inline-is-a` | `$X$ is a Y` | medium |
+| 6 | `color-channel` | preamble `\\newcommand{\\X}[1]{\\textcolor{...}{#1}}`. **This is the First Proof signal** — color-coded macros are a type channel (delimiters in pink, etc.). Color does not give us canonical names but it does cluster symbols into typed channels. | high (for the channel; type-name extraction still needed) |
+| 7 | `notation-env` | `\\begin{notation}...\\end{notation}` blocks | high |
+| 8 | `section-context` | section heading near first occurrence of symbol | low |
+| 9 | `kernel-ambient` | NER kernel lookup with no in-paper declaration | low |
+
+#### Defeasibility
+
+Every strategy emits *defeasible* bindings:
+
+- A `let-binding` at position 1024 binds `X → AbelianGroup` from 1024
+  onward.
+- A later `let-binding` at position 4500 binds `X → FiniteAbelianGroup`.
+  The first binding's `scope_end` gets capped at 4500. The first
+  binding is not deleted — it now applies only on `[1024, 4500)` and
+  carries `defeated_by` pointing at the later one.
+- Two strategies disagreeing at the same position is also a defeat:
+  whichever has higher confidence wins; the loser remains in the log.
+- Implicit defeat by *no later evidence* is fine — bindings naturally
+  apply until end of paper if no narrowing occurs.
+
+This makes the grounder honest about reading mathematics: locally
+bound symbols stay locally bound, and the system records *where* and
+*why* every claim was made, not just the conclusion.
+
+#### Cross-paper meta-learning
+
+For each strategy across a batch:
+- `hit_rate` = total emitted bindings / total math-symbol occurrences
+- `corroboration_rate` = bindings that agree (same canon) with another
+  strategy / total bindings emitted
+- `defeat_rate` = bindings that got narrowed by later evidence / total
+
+Strategies with high `corroboration_rate` are trustworthy. Strategies
+that fire alone and never get corroborated are either solo-correct on
+their slice (good) or noise (bad). The QC headline reports these
+per-strategy numbers each batch; over time we keep the high-trust
+strategies and prune or constrain the low-trust ones.
+
+#### Frontier extends to math
+
+Every ungrounded symbol inside `$...$` becomes a math-frontier
+candidate. The audit summary gains:
+- `math_inhabited_terms` (symbols with at least one binding)
+- `math_outer_terms` (symbols mentioned but not bound by any strategy)
+- `math_inhabitation_rate`
+
+These mirror the prose-level frontier counts but for symbol-grounding.
+
+#### First Proof's actual role
+
+First Proof Batch One uses **color-based markup** (delimiters in
+pink, etc.) for visual symbol types in agent-authored proof content.
+It is *not* a pre-labeled `(symbol, canon)` dataset. Its role here:
+
+- **Calibration corpus** — known-rich math content where we can
+  hand-judge whether the strategy library produces sensible bindings.
+- **Color-channel reference** — the visual conventions inform
+  strategy 6 above (preamble color macros as type channels).
+
+The grounder needs no supervised labels to start: prose-pattern
+strategies + kernel lookups are sufficient for a v1. First Proof
+calibrates judgments, not weights.
 
 ## 4. Out of scope
 
