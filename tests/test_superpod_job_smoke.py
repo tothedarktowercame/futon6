@@ -423,6 +423,69 @@ def test_structure_seed_match_returns_longest_prior():
     assert mod._match_structure_seed_signature(new, priors) == longer
 
 
+def test_audit_classify_terms_reports_depth_distribution():
+    root = Path(__file__).parent.parent
+    mod = _load_superpod_job_module(root)
+    # Text with whitespace tokenization so spot_terms_entity can find "monad".
+    # Outer scope at [0, len(text)] (env/proof), inner at [50, 100] (bind/typed).
+    # "monad" placed at offset ~60 sits inside both → depth=2.
+    prefix = "a " * 30  # 60 chars
+    middle = "monad "
+    suffix = "b " * 100
+    text = prefix + middle + suffix
+    base_records = [
+        {"hx/type": "env/proof", "hx/content": {"position": 0, "end": len(text), "match": text}},
+        {"hx/type": "bind/typed", "hx/content": {"position": 50, "end": 100, "match": text[50:100]}},
+    ]
+    singles = {"monad": ("monad", "Monad")}
+    multi_index: dict = {}
+    stats = mod._audit_classify_terms(text, base_records, singles, multi_index)
+    assert stats["total"] == 1
+    assert stats["inhabited"] == 1
+    assert stats["outer"] == 0
+    assert stats["straddled"] == 0
+    assert stats["depth_distribution"] == {2: 1}
+
+
+def test_audit_classify_terms_root_for_term_outside_all_scopes():
+    root = Path(__file__).parent.parent
+    mod = _load_superpod_job_module(root)
+    # Scope at [0, 50]; term "functor" placed at ~70 sits outside it.
+    text = "a " * 30 + "functor " + "b " * 50  # 60 chars before "functor"
+    base_records = [
+        {"hx/type": "env/proof", "hx/content": {"position": 0, "end": 50, "match": text[:50]}},
+    ]
+    singles = {"functor": ("functor", "Functor")}
+    multi_index: dict = {}
+    stats = mod._audit_classify_terms(text, base_records, singles, multi_index)
+    assert stats["total"] == 1
+    assert stats["outer"] == 1
+    assert stats["inhabited"] == 0
+    assert stats["depth_distribution"] == {}
+
+
+def test_build_scope_tree_inline_matches_viewer_semantics():
+    root = Path(__file__).parent.parent
+    mod = _load_superpod_job_module(root)
+    spans = [
+        {"start": 0, "end": 100, "label": "env/proof"},
+        {"start": 20, "end": 60, "label": "bind/typed"},
+        {"start": 80, "end": 90, "label": "constrain/relation"},
+    ]
+    tree = mod._build_scope_tree(spans, [(30, 35), (85, 88)])
+    # Both children of env/proof; inner term in bind/typed, second in constrain/relation.
+    assert len(tree["children"]) == 1
+    outer = tree["children"][0]
+    assert outer["label"] == "env/proof"
+    assert outer["depth"] == 1
+    assert {c["label"] for c in outer["children"]} == {"bind/typed", "constrain/relation"}
+    # Term (30,35) placed in bind/typed at depth 2.
+    bind_typed = next(c for c in outer["children"] if c["label"] == "bind/typed")
+    constrain = next(c for c in outer["children"] if c["label"] == "constrain/relation")
+    assert (30, 35) in bind_typed["terms"]
+    assert (85, 88) in constrain["terms"]
+
+
 def test_structure_seed_match_rejects_when_prior_not_subsequence():
     root = Path(__file__).parent.parent
     mod = _load_superpod_job_module(root)

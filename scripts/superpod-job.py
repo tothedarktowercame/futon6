@@ -1256,15 +1256,83 @@ def _predict_kind_from_signature(signature):
     return None
 
 
+def _build_scope_tree(scope_spans, term_positions):
+    """Inline copy of build-batch-008-qc-viewer.build_scope_tree.
+
+    Arranges scope spans into a containment tree (children fully inside their
+    parent; siblings disjoint). Scopes that straddle a tree ancestor's
+    boundary are dropped — they can't be tree-arranged. Terms that straddle
+    any input scope are dropped; otherwise each is placed in its deepest
+    containing scope, or at the root if no scope contains it.
+
+    Root sentinel uses start=-1 / end=10**18 so any real span fits inside.
+    """
+    root: dict = {
+        "start": -1,
+        "end": 10**18,
+        "label": "$root",
+        "children": [],
+        "terms": [],
+        "depth": 0,
+    }
+    sorted_scopes = sorted(scope_spans, key=lambda s: (s["start"], -(s["end"] - s["start"])))
+    stack: list[dict] = [root]
+    for sp in sorted_scopes:
+        while stack[-1] is not root and stack[-1]["end"] <= sp["start"]:
+            stack.pop()
+        top = stack[-1]
+        if top["start"] <= sp["start"] and sp["end"] <= top["end"]:
+            node = {
+                "start": sp["start"],
+                "end": sp["end"],
+                "label": sp["label"],
+                "children": [],
+                "terms": [],
+                "depth": top["depth"] + 1,
+            }
+            top["children"].append(node)
+            stack.append(node)
+
+    def find_deepest(node, ts, te):
+        if not (node["start"] <= ts and te <= node["end"]):
+            return None
+        for child in node["children"]:
+            deeper = find_deepest(child, ts, te)
+            if deeper is not None:
+                return deeper
+        return node
+
+    def straddles_any_input_scope(ts, te):
+        for sp in scope_spans:
+            ss, se = sp["start"], sp["end"]
+            if se <= ts or ss >= te:
+                continue
+            if ss <= ts and te <= se:
+                continue
+            return True
+        return False
+
+    for term in term_positions:
+        ts, te = term[0], term[1]
+        if straddles_any_input_scope(ts, te):
+            continue
+        deepest = find_deepest(root, ts, te)
+        if deepest is not None:
+            deepest["terms"].append(term)
+    return root
+
+
 def _audit_classify_terms(text, base_records, singles, multi_index):
     """Inline counterpart of build-batch-008-qc-viewer.classify_kernel_terms.
 
-    Counts kernel-term occurrences in `text` relative to the merged span of
-    `base_records`. Returns flat counts: inhabited (contained by any scope),
-    outer (disjoint from all scopes; scope-development frontier), straddled
-    (partial overlap with some scope), and total. The numbers mirror what
-    the audit pipeline produces, so Rob can read superpod and audit reports
-    against the same yardstick.
+    Reports flat counts (inhabited / outer / straddled / total) using the
+    frontier semantics — a term is inhabited iff any scope contains it,
+    regardless of straddling other scopes. Additionally reports
+    depth_distribution via the same tree builder the QC viewer uses, so
+    Rob gets the full structural picture the viewer would show on the
+    sampled entities. Depth distribution is best-effort: terms inside
+    scopes that the tree had to drop due to mutual straddling count as
+    inhabited but don't appear in the depth map.
     """
     hits = spot_terms_entity(text, singles, multi_index)
     positions = []
@@ -1286,7 +1354,7 @@ def _audit_classify_terms(text, base_records, singles, multi_index):
             deduped.append((ts, te))
             last_end = te
 
-    scope_spans: list[tuple[int, int]] = []
+    span_records: list[dict] = []
     for rec in base_records:
         content = rec.get("hx/content", {}) or {}
         start = content.get("position")
@@ -1295,28 +1363,48 @@ def _audit_classify_terms(text, base_records, singles, multi_index):
             continue
         if not isinstance(end, int):
             end = start + len(content.get("match", ""))
-        scope_spans.append((start, end))
+        span_records.append({
+            "start": start,
+            "end": end,
+            "label": rec.get("hx/type", "?"),
+        })
 
     inhabited = outer = straddled = 0
+    inhabited_terms: list[tuple[int, int]] = []
     for ts, te in deduped:
         contained = False
         overlaps_any = False
-        for ss, se in scope_spans:
+        for sp in span_records:
+            ss, se = sp["start"], sp["end"]
             if ss <= ts and te <= se:
                 contained = True
             elif not (se <= ts or ss >= te):
                 overlaps_any = True
         if contained:
             inhabited += 1
+            inhabited_terms.append((ts, te))
         elif overlaps_any:
             straddled += 1
         else:
             outer += 1
+
+    tree = _build_scope_tree(span_records, inhabited_terms)
+    depth_dist: dict[int, int] = {}
+
+    def walk(node):
+        for child in node["children"]:
+            term_count = len(child["terms"])
+            if term_count:
+                depth_dist[child["depth"]] = depth_dist.get(child["depth"], 0) + term_count
+            walk(child)
+
+    walk(tree)
     return {
         "inhabited": inhabited,
         "outer": outer,
         "straddled": straddled,
         "total": inhabited + outer + straddled,
+        "depth_distribution": dict(sorted(depth_dist.items())),
     }
 
 
@@ -2188,6 +2276,7 @@ def run_stage5_ner_scopes(
     if audit_records:
         per_paper = []
         aggregate = {"inhabited": 0, "outer": 0, "straddled": 0, "total": 0}
+        depth_aggregate: dict[int, int] = {}
         for rec in audit_records:
             stats = _audit_classify_terms(
                 rec["text"], rec["base_records"], singles, multi_index
@@ -2198,11 +2287,16 @@ def run_stage5_ner_scopes(
             })
             for key in ("inhabited", "outer", "straddled", "total"):
                 aggregate[key] += stats[key]
+            for depth, count in (stats.get("depth_distribution") or {}).items():
+                depth_aggregate[depth] = depth_aggregate.get(depth, 0) + count
         aggregate_total = aggregate["total"] or 0
         aggregate["frontier_ratio"] = round(
             (aggregate["outer"] / aggregate_total) if aggregate_total else 0.0,
             4,
         )
+        aggregate["depth_distribution"] = dict(sorted(depth_aggregate.items()))
+        max_depth = max(depth_aggregate) if depth_aggregate else 0
+        aggregate["max_depth"] = max_depth
         audit_summary = {
             "sample_size": len(audit_records),
             "papers": per_paper,
@@ -2211,6 +2305,10 @@ def run_stage5_ner_scopes(
         audit_path = outdir / "audit-summary.json"
         with open(audit_path, "w", encoding="utf-8") as f:
             json.dump(audit_summary, f, indent=2, ensure_ascii=False)
+        depth_str = (
+            ", ".join(f"d{d}:{c}" for d, c in aggregate["depth_distribution"].items())
+            if aggregate["depth_distribution"] else "none"
+        )
         print(
             f"       Audit sample ({len(audit_records)} entities): "
             f"inhabited={aggregate['inhabited']}, "
@@ -2218,6 +2316,7 @@ def run_stage5_ner_scopes(
             f"straddled={aggregate['straddled']} "
             f"-> {audit_path.name}"
         )
+        print(f"       Audit depth distribution: {depth_str} (max_depth={max_depth})")
 
     if eprint_dir is not None and arxiv_entities_processed and eprint_text_used == 0:
         try:
@@ -8857,6 +8956,13 @@ def main():
                 f"outer={head['audit_outer_terms']} (frontier {frontier_ratio:.1%}), "
                 f"straddled={head['audit_straddled_terms']}"
             )
+            depth_dist = head.get("audit_depth_distribution") or {}
+            if depth_dist:
+                depth_str = ", ".join(f"d{d}:{c}" for d, c in depth_dist.items())
+                print(
+                    f"    scope-tree depth distribution: {depth_str} "
+                    f"(max_depth={head.get('audit_max_depth', 0)})"
+                )
     else:
         manifest["preregister_qc"] = {
             **manifest["preregister_qc"],

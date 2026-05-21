@@ -160,6 +160,8 @@ def summarize_structure_learning(manifest):
         "audit_outer_terms": int(audit_agg.get("outer") or 0),
         "audit_straddled_terms": int(audit_agg.get("straddled") or 0),
         "audit_frontier_ratio": audit_agg.get("frontier_ratio"),
+        "audit_depth_distribution": dict(audit_agg.get("depth_distribution") or {}),
+        "audit_max_depth": int(audit_agg.get("max_depth") or 0),
     }
 
 
