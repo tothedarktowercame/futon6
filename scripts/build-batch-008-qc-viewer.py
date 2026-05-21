@@ -457,6 +457,57 @@ def find_kernel_term_positions(text: str, singles: dict, multi_index: dict) -> l
     return deduped
 
 
+def classify_kernel_terms(text: str, scopes: list[dict], singles: dict, multi_index: dict) -> dict:
+    """Count kernel-term occurrences by relation to scope detection.
+
+    Returns {inhabited, outer, straddled}:
+    - inhabited: term fully inside some scope (already structurally annotated)
+    - outer: term in residual prose (a scope-development candidate; what the
+      structure-learning loop should be targeting)
+    - straddled: term straddles a scope boundary (ambiguous; counted but
+      rendered as dropped)
+
+    The outer count is the meaningful frontier metric: it should decrease as
+    learned scope patterns land and the prose around known terms gets wrapped.
+    """
+    term_positions = find_kernel_term_positions(text, singles, multi_index)
+    all_scope_spans: list[tuple[int, int]] = []
+    for scope in scopes:
+        content = scope.get("hx/content", {}) or {}
+        start = content.get("position")
+        end = content.get("end")
+        if not isinstance(start, int):
+            continue
+        if not isinstance(end, int):
+            end = start + len(content.get("match", ""))
+        all_scope_spans.append((start, end))
+    all_scope_spans.sort()
+
+    inhabited = outer = straddled = 0
+    for (ts, te, _tl, _canon) in term_positions:
+        is_inside = False
+        is_straddle = False
+        for (ss, se) in all_scope_spans:
+            if ss <= ts and te <= se:
+                is_inside = True
+                break
+            if not (se <= ts or ss >= te):
+                is_straddle = True
+                break
+        if is_inside:
+            inhabited += 1
+        elif is_straddle:
+            straddled += 1
+        else:
+            outer += 1
+    return {
+        "inhabited": inhabited,
+        "outer": outer,
+        "straddled": straddled,
+        "total": inhabited + outer + straddled,
+    }
+
+
 def _term_span_html(text: str, start: int, end: int, canon: str | None, *, inhabited: bool) -> str:
     title = f' title="canon={html.escape(canon)}"' if canon else ""
     klass = "term-kernel inhabited" if inhabited else "term-kernel"
@@ -762,8 +813,13 @@ def build_paper_view(
             ),
         })
 
-    # Whole-paper term count for the summary line on the page.
-    local_term_overlay_count = len(find_kernel_term_positions(eprint_text, singles, multi_index))
+    # Whole-paper term classification. The `outer` count is the
+    # scope-development frontier: each term in residual prose is a hit
+    # the kernel already knows but the structure detector has not yet
+    # wrapped in a scope. That count should fall as structure-learning
+    # patterns land.
+    term_stats = classify_kernel_terms(eprint_text, local_scopes, singles, multi_index)
+    local_term_overlay_count = term_stats["total"]
 
     return {
         "raw_id": raw_id,
@@ -802,6 +858,9 @@ def build_paper_view(
         "local_theorem_stats": theorem_result.stats,
         "local_terms": local_terms,
         "local_term_overlay_count": local_term_overlay_count,
+        "local_term_inhabited_count": term_stats["inhabited"],
+        "local_term_outer_count": term_stats["outer"],
+        "local_term_straddled_count": term_stats["straddled"],
     }
 
 
@@ -956,11 +1015,17 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
         <p class="markup-legend">
           <span class="swatch scope">scope</span> structural construction
           &nbsp;·&nbsp;
-          <span class="swatch term">term</span> kernel term outside any scope
+          <span class="swatch term">term</span> kernel term in residual prose (= <strong>scope-development candidate</strong>)
           &nbsp;·&nbsp;
           <span class="swatch term-inhabited">term</span> kernel term <em>inhabiting</em> a scope
-          &nbsp;·&nbsp;
-          <code>{paper.get('local_term_overlay_count', 0)}</code> kernel term occurrences total in the full eprint
+        </p>
+        <p class="markup-legend">
+          Full-eprint term counts:
+          <code>{paper.get('local_term_inhabited_count', 0)}</code> inhabited
+          / <code>{paper.get('local_term_outer_count', 0)}</code> outer (scope-development frontier)
+          / <code>{paper.get('local_term_straddled_count', 0)}</code> straddled
+          = <code>{paper.get('local_term_overlay_count', 0)}</code> total kernel hits.
+          Outer count should fall as learned scope patterns land.
         </p>
         <pre>{paper['local_scope_markup']}</pre>
         <p class="tiny">Top local scope types: {html.escape(json.dumps(paper['local_scope_types'], ensure_ascii=False))}</p>
@@ -1023,6 +1088,12 @@ def render_index_html(papers: list[dict], manifest: dict, out_json: Path, page_d
               </div>
               <div class="density">{render_density_bar(paper['local_scope_bins'])}</div>
               <p class="tiny">Top local scope types: {html.escape(json.dumps(paper['local_scope_types'], ensure_ascii=False))}</p>
+              <p class="tiny">Kernel terms:
+                <code>{paper.get('local_term_inhabited_count', 0)}</code> inhabited
+                / <code>{paper.get('local_term_outer_count', 0)}</code> outer
+                <em>(scope-development frontier)</em>
+                / <code>{paper.get('local_term_overlay_count', 0)}</code> total.
+              </p>
               <p class="tiny"><a href="{html.escape(page_href)}">Open full paper demo</a></p>
             </section>
             """

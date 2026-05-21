@@ -269,6 +269,56 @@ proportionally.
   Not blocking for Rob's first batch — this is the meta-loop
   diagnostic, not correctness.
 
+## 7. Outer-term count as the scope-development frontier
+
+A simpler progress metric than `structure_loss` emerged from the
+QC viewer work in this session. Every kernel-known term occurrence
+falls into exactly one of three classes against the current
+detector:
+
+- **inhabited** — term lies fully inside a scope. Already
+  structurally annotated.
+- **outer** — term lies in residual prose (no scope contains it).
+  *Each one is a scope-development candidate.* The structure
+  detector has missed an opportunity to wrap the prose around a
+  known mathematical anchor.
+- **straddled** — term crosses a scope boundary. Ambiguous; small
+  in practice; counted separately.
+
+The **outer count** is the meaningful frontier metric:
+
+- It is directly observable per paper.
+- It is interpretable: "how many known mathematical terms still
+  sit in unannotated prose."
+- It should fall monotonically as learned scope patterns land
+  (each new scope pattern that wraps prose around a known term
+  migrates that term from outer to inhabited).
+- It does not require running the structure-learning loop — any
+  audit produces it.
+
+`classify_kernel_terms()` in
+`scripts/build-batch-008-qc-viewer.py` computes the three counts
+per paper. The QC viewer surfaces them in both the index card
+and the per-paper legend.
+
+This becomes the empirical answer to "is the loop helping?":
+
+- Run the audit pipeline before applying learned patterns.
+- Record the outer count per paper.
+- Apply learned patterns via `--learned-patterns-json` (with
+  anti-clobber on).
+- Re-record the outer count per paper.
+- Inhabitation rate = (outer-before − outer-after) / outer-before.
+
+A positive inhabitation rate is the clean signal that the loop
+moved real structure. Sentence coverage was the proxy used in
+section 6; outer-term migration is the more direct metric and
+should replace it as the primary number for the next measurement
+cycle.
+
+The loss-of-loss stopping rule (still open) becomes: stop when
+inhabitation rate per cycle drops below some threshold ε.
+
 ### Tests added in this slice
 
 - `test_signature_has_discourse_verb_filters_correctly`
