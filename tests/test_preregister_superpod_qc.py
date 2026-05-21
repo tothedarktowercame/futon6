@@ -229,6 +229,65 @@ def test_qc_warns_when_zero_candidates_despite_enabled(tmp_path):
     assert gate_names["structure_learning_capture"]["status"] == "warn"
 
 
+def test_headline_summary_includes_audit_aggregate_when_present(tmp_path):
+    root = Path(__file__).parent.parent
+    module = _load_module(root)
+    baseline_dir = tmp_path / "baselines"
+    baseline_dir.mkdir()
+    _write_manifest(baseline_dir / "001.json", entity_count=5000, scope_cov=0.21, avg_nodes=64.0, with_claims=1350, papers=5000)
+
+    # Manifest with an audit_summary block alongside structure_learning.
+    current = tmp_path / "manifest.json"
+    payload = {
+        "entity_count": 5000,
+        "paper_eprint_dir": "/tmp/eprints",
+        "discover_terms": False,
+        "readiness": {"status": "pass", "issues": 0, "preflight": False},
+        "health_issues": [],
+        "stage5_stats": {
+            "scope_coverage": 0.22,
+            "text_source_counts": {"eprint": 5000, "abstract": 0},
+            "open_ner": {},
+            "total_comments": 0,
+            "entities_with_comments": 0,
+            "structure_learning": {
+                "enabled": True,
+                "candidates_written": 1,
+                "structure_seed_candidates": [
+                    {"signature": "be obtain", "paper_count": 2, "predicted_kind": "label"},
+                ],
+                "loss": {"free_floating_term_ratio": 0.27, "uncovered_sentences_with_known_terms": 12},
+            },
+            "audit_summary": {
+                "sample_size": 30,
+                "aggregate": {
+                    "inhabited": 7500,
+                    "outer": 2500,
+                    "straddled": 50,
+                    "total": 10050,
+                    "frontier_ratio": 0.2488,
+                },
+            },
+        },
+        "stage9a_stats": {
+            "avg_nodes": 64.0,
+            "avg_edges": 63.0,
+            "geometry_stats": {"papers": 5000, "with_claims": 1380},
+        },
+        "stage_status": {"ner_scopes": {"status": "completed",
+                                         "text_source_counts": {"eprint": 5000, "abstract": 0}}},
+    }
+    current.write_text(json.dumps(payload), encoding="utf-8")
+
+    report = module.build_report(current, baseline_dir, "broad-arxiv")
+    head = report["headline_summary"]
+    assert head["audit_sample_size"] == 30
+    assert head["audit_inhabited_terms"] == 7500
+    assert head["audit_outer_terms"] == 2500
+    assert head["audit_straddled_terms"] == 50
+    assert abs(head["audit_frontier_ratio"] - 0.2488) < 1e-6
+
+
 def test_headline_summary_handles_missing_structure_learning_block(tmp_path):
     root = Path(__file__).parent.parent
     module = _load_module(root)

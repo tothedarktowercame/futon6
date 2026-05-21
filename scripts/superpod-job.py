@@ -1256,6 +1256,70 @@ def _predict_kind_from_signature(signature):
     return None
 
 
+def _audit_classify_terms(text, base_records, singles, multi_index):
+    """Inline counterpart of build-batch-008-qc-viewer.classify_kernel_terms.
+
+    Counts kernel-term occurrences in `text` relative to the merged span of
+    `base_records`. Returns flat counts: inhabited (contained by any scope),
+    outer (disjoint from all scopes; scope-development frontier), straddled
+    (partial overlap with some scope), and total. The numbers mirror what
+    the audit pipeline produces, so Rob can read superpod and audit reports
+    against the same yardstick.
+    """
+    hits = spot_terms_entity(text, singles, multi_index)
+    positions = []
+    for hit in hits:
+        tl = hit.get("term_lower") or hit.get("term") or ""
+        if not tl:
+            continue
+        try:
+            pattern = re.compile(rf"\b{re.escape(tl)}\b", re.IGNORECASE)
+        except re.error:
+            continue
+        for m in pattern.finditer(text):
+            positions.append((m.start(), m.end()))
+    positions.sort(key=lambda r: (r[0], -(r[1] - r[0])))
+    deduped: list[tuple[int, int]] = []
+    last_end = -1
+    for ts, te in positions:
+        if ts >= last_end:
+            deduped.append((ts, te))
+            last_end = te
+
+    scope_spans: list[tuple[int, int]] = []
+    for rec in base_records:
+        content = rec.get("hx/content", {}) or {}
+        start = content.get("position")
+        end = content.get("end")
+        if not isinstance(start, int):
+            continue
+        if not isinstance(end, int):
+            end = start + len(content.get("match", ""))
+        scope_spans.append((start, end))
+
+    inhabited = outer = straddled = 0
+    for ts, te in deduped:
+        contained = False
+        overlaps_any = False
+        for ss, se in scope_spans:
+            if ss <= ts and te <= se:
+                contained = True
+            elif not (se <= ts or ss >= te):
+                overlaps_any = True
+        if contained:
+            inhabited += 1
+        elif overlaps_any:
+            straddled += 1
+        else:
+            outer += 1
+    return {
+        "inhabited": inhabited,
+        "outer": outer,
+        "straddled": straddled,
+        "total": inhabited + outer + straddled,
+    }
+
+
 def _summarize_structure_seed_candidates(rows, *, min_signature_freq=1, max_candidates=1000):
     buckets = {}
     for row in rows:
@@ -1691,6 +1755,8 @@ def run_stage5_ner_scopes(
     discover_structures_min_signature_freq=2,
     discover_structures_max=1000,
     discover_structures_max_uncovered_per_entity=30,
+    stage5_loss_log_interval=500,
+    audit_sample_size=30,
 ):
     """Run Stage 5: NER term spotting + scope detection.
 
@@ -1794,6 +1860,14 @@ def run_stage5_ner_scopes(
     entities_with_term_dense_residuals = 0
     structure_seed_rows = []
     n = len(entities)
+    # Pick the audit sample up front (seeded for reproducibility). Cap at n.
+    # 0 disables; negative treated as 0. Positive picks min(K, n) entity indices.
+    audit_sample_indices: set[int] = set()
+    if audit_sample_size and audit_sample_size > 0:
+        k = min(audit_sample_size, n)
+        rng = random.Random(20260521)
+        audit_sample_indices = set(rng.sample(range(n), k))
+    audit_records: list[dict] = []  # cached (eid, text, base_records) for the sample
 
     with open(ner_path, "w") as ner_f, open(scope_path, "w") as scope_f, open(discourse_path, "w") as discourse_f:
         ner_f.write("[\n")
@@ -1858,6 +1932,12 @@ def run_stage5_ner_scopes(
                 [*scopes, *wires, *ports, *labels],
                 key=_record_position_key,
             )
+            if i in audit_sample_indices:
+                audit_records.append({
+                    "entity_id": eid,
+                    "text": full_text,
+                    "base_records": list(base_discourse_records),
+                })
             learned_structure_records = []
             if discover_structures or structure_seed_signatures:
                 uncovered_rows = _extract_uncovered_structure_rows(
@@ -2069,6 +2149,29 @@ def run_stage5_ner_scopes(
                       f"NER: {total_ner_hits} hits, "
                       f"scopes: {total_scopes} records, "
                       f"discourse: {total_discourse_records} records{extra}")
+            # Running learning-loss snapshot — keeps Rob in the loop on long
+            # batches where the final summary is hours away.
+            if stage5_loss_log_interval and (
+                (i + 1) % stage5_loss_log_interval == 0 or (i + 1) == n
+            ):
+                free_floating = (
+                    total_uncovered_with_known_terms / total_uncovered_sentences
+                    if total_uncovered_sentences else 0.0
+                )
+                seed_info = ""
+                if discover_structures or structure_seed_signatures:
+                    seed_info = (
+                        f", seed_matches={total_learned_structure_matches}"
+                        f" across {entities_with_learned_structure_matches} entities"
+                    )
+                print(
+                    f"       [{i+1}/{n}] loss snapshot: "
+                    f"term entities_with_ner={entities_with_ner}, "
+                    f"structure uncovered={total_uncovered_sentences} "
+                    f"(with_terms={total_uncovered_with_known_terms}), "
+                    f"interaction free_floating={free_floating:.1%}"
+                    f"{seed_info}"
+                )
 
         ner_f.write("\n]")
         scope_f.write("\n]")
@@ -2077,6 +2180,44 @@ def run_stage5_ner_scopes(
     print(f"       Written {ner_path} ({os.path.getsize(ner_path) / 1e6:.1f} MB)")
     print(f"       Written {scope_path} ({os.path.getsize(scope_path) / 1e6:.1f} MB)")
     print(f"       Written {discourse_path} ({os.path.getsize(discourse_path) / 1e6:.1f} MB)")
+
+    # End-of-job inline audit summary. Mirrors the per-paper inhabited/outer
+    # split that the audit pipeline produces locally, so Rob can read the
+    # superpod run against the same yardstick.
+    audit_summary = None
+    if audit_records:
+        per_paper = []
+        aggregate = {"inhabited": 0, "outer": 0, "straddled": 0, "total": 0}
+        for rec in audit_records:
+            stats = _audit_classify_terms(
+                rec["text"], rec["base_records"], singles, multi_index
+            )
+            per_paper.append({
+                "entity_id": rec["entity_id"],
+                **stats,
+            })
+            for key in ("inhabited", "outer", "straddled", "total"):
+                aggregate[key] += stats[key]
+        aggregate_total = aggregate["total"] or 0
+        aggregate["frontier_ratio"] = round(
+            (aggregate["outer"] / aggregate_total) if aggregate_total else 0.0,
+            4,
+        )
+        audit_summary = {
+            "sample_size": len(audit_records),
+            "papers": per_paper,
+            "aggregate": aggregate,
+        }
+        audit_path = outdir / "audit-summary.json"
+        with open(audit_path, "w", encoding="utf-8") as f:
+            json.dump(audit_summary, f, indent=2, ensure_ascii=False)
+        print(
+            f"       Audit sample ({len(audit_records)} entities): "
+            f"inhabited={aggregate['inhabited']}, "
+            f"outer={aggregate['outer']} (frontier {aggregate['frontier_ratio']:.1%}), "
+            f"straddled={aggregate['straddled']} "
+            f"-> {audit_path.name}"
+        )
 
     if eprint_dir is not None and arxiv_entities_processed and eprint_text_used == 0:
         try:
@@ -2274,6 +2415,7 @@ def run_stage5_ner_scopes(
         "entities_with_labels": entities_with_labels,
         "total_comments": total_comments,
         "entities_with_comments": entities_with_comments,
+        "audit_summary": audit_summary,
         "total_discourse_records": total_discourse_records,
         "entities_with_discourse": entities_with_discourse,
         "discourse_coverage": entities_with_discourse / n if n else 0,
@@ -6331,6 +6473,21 @@ def main():
                         help="Max learned structure signatures to write (default: 1000)")
     parser.add_argument("--discover-structures-max-uncovered-per-entity", type=int, default=30,
                         help="Max uncovered sentences scanned per entity for structure learning (default: 30)")
+    parser.add_argument("--stage5-loss-log-interval", type=int, default=500,
+                        help=(
+                            "Print running learning-loss counters every N entities during Stage 5 "
+                            "(default: 500). Use 0 to disable. The line shows term/structure/"
+                            "interaction loss snapshots — useful on long batches where Rob wants "
+                            "visibility into structure learning while the job is still running."
+                        ))
+    parser.add_argument("--audit-sample-size", type=int, default=30,
+                        help=(
+                            "Number of entities to include in the end-of-job inline audit "
+                            "summary (default: 30). The audit classifies kernel-term hits "
+                            "into inhabited / outer / straddled per entity and aggregates "
+                            "across the sample. Set to 0 to disable; set negative to audit "
+                            "every entity (expensive on large batches)."
+                        ))
     parser.add_argument("--run-distinctor-mit", action="store_true",
                         help="Run binder-pair MIT/distinctor pilot (Stage 5b)")
     parser.add_argument("--distinctor-entity-limit", type=int, default=0,
@@ -7181,7 +7338,10 @@ def main():
                                                if args.discover_structures_seed_json else None),
                 discover_structures_min_signature_freq=args.discover_structures_min_signature_freq,
                 discover_structures_max=args.discover_structures_max,
-                discover_structures_max_uncovered_per_entity=args.discover_structures_max_uncovered_per_entity)
+                discover_structures_max_uncovered_per_entity=args.discover_structures_max_uncovered_per_entity,
+                stage5_loss_log_interval=args.stage5_loss_log_interval,
+                audit_sample_size=args.audit_sample_size,
+            )
 
             print(f"       NER coverage: {stage5_stats['ner_coverage']:.0%} "
                   f"({stage5_stats['entities_with_ner']}/{stage5_stats['entities_processed']})")
@@ -8688,6 +8848,14 @@ def main():
             print(
                 f"  Comment scopes: {head['comment_scopes_total']} comment/unreachable "
                 f"records across {head['entities_with_comments']} entities"
+            )
+        if head.get("audit_sample_size"):
+            frontier_ratio = head.get("audit_frontier_ratio") or 0.0
+            print(
+                f"  Audit summary ({head['audit_sample_size']} sampled entities): "
+                f"inhabited={head['audit_inhabited_terms']}, "
+                f"outer={head['audit_outer_terms']} (frontier {frontier_ratio:.1%}), "
+                f"straddled={head['audit_straddled_terms']}"
             )
     else:
         manifest["preregister_qc"] = {

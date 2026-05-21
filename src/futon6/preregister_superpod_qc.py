@@ -140,6 +140,8 @@ def summarize_structure_learning(manifest):
                 gated += 1
 
     loss = sl.get("loss") or {}
+    audit = s5.get("audit_summary") or {}
+    audit_agg = (audit or {}).get("aggregate") or {}
     return {
         "structure_learning_enabled": bool(sl.get("enabled")),
         "candidates_discovered": int(sl.get("candidates_written") or 0),
@@ -153,6 +155,11 @@ def summarize_structure_learning(manifest):
         "uncovered_sentences_with_known_terms": int(loss.get("uncovered_sentences_with_known_terms") or 0),
         "comment_scopes_total": int(s5.get("total_comments") or 0),
         "entities_with_comments": int(s5.get("entities_with_comments") or 0),
+        "audit_sample_size": int((audit or {}).get("sample_size") or 0),
+        "audit_inhabited_terms": int(audit_agg.get("inhabited") or 0),
+        "audit_outer_terms": int(audit_agg.get("outer") or 0),
+        "audit_straddled_terms": int(audit_agg.get("straddled") or 0),
+        "audit_frontier_ratio": audit_agg.get("frontier_ratio"),
     }
 
 
