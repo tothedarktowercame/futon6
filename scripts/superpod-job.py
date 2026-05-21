@@ -97,6 +97,7 @@ from futon6.preregister_superpod_qc import (
     infer_profile as infer_preregister_qc_profile,
 )
 from futon6.theorem_extraction import extract_from_tarball
+from futon6 import structure_seed as _ss
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -1043,41 +1044,10 @@ def spot_terms_entity(text, singles, multi_index):
             for tl, (orig, canon) in sorted(hits.items())]
 
 
-_STRUCTURE_CUE_WORDS = {
-    "we", "let", "define", "denote", "write", "show", "prove", "obtain", "apply",
-    "study", "consider", "introduce", "recall", "if", "then", "assume", "suppose",
-    "where", "when", "for", "any", "every", "there", "exists", "be",
-    "that", "and", "or", "not", "only", "particular", "consist", "depend",
-    "turn", "focus", "choose", "work",
-}
-
-_STRUCTURE_CUE_LEMMAS = {
-    "shows": "show",
-    "proved": "prove",
-    "proves": "prove",
-    "obtains": "obtain",
-    "obtained": "obtain",
-    "applies": "apply",
-    "applied": "apply",
-    "studies": "study",
-    "considered": "consider",
-    "considers": "consider",
-    "introduced": "introduce",
-    "introduces": "introduce",
-    "recalled": "recall",
-    "recalls": "recall",
-    "depends": "depend",
-    "consists": "consist",
-    "chooses": "choose",
-    "chose": "choose",
-    "worked": "work",
-    "is": "be",
-    "are": "be",
-    "was": "be",
-    "were": "be",
-    "being": "be",
-    "been": "be",
-}
+# Structure-seed cue tables (and the discourse-verb taxonomy, signature
+# normalization, scope-tree, and replay matcher) live in
+# src/futon6/structure_seed.py — the single source of truth shared with the
+# audit and viewer runners. The module is imported as _ss above.
 
 
 def _sentence_spans(text):
@@ -1134,51 +1104,46 @@ def _extract_sentence_term_features(sentence, singles, multi_index):
     }
 
 
-def _normalize_structure_seed_text(sentence, known_term_hits):
-    normalized = sentence
-    for item in sorted(
-        known_term_hits,
-        key=lambda row: len(row.get("term_lower", "")),
-        reverse=True,
-    ):
-        term = (item.get("term") or item.get("term_lower") or "").strip()
-        if not term:
-            continue
-        variants = [term]
-        if not term.endswith("s"):
-            variants.append(f"{term}s")
-        for variant in variants:
-            pattern = re.compile(rf"\b{re.escape(variant)}\b", re.IGNORECASE)
-            normalized = pattern.sub("<TERM>", normalized)
-    normalized = re.sub(r"\$[^$]+\$", "<MATH>", normalized)
-    normalized = re.sub(r"\\cite\{[^}]+\}", "<CITE>", normalized)
-    normalized = re.sub(r"\[[^\]]+\]", "<CITE>", normalized)
-    normalized = re.sub(r"\\[A-Za-z]+", "<CMD>", normalized)
-    normalized = re.sub(r"\b\d+(?:\.\d+)?\b", "<NUM>", normalized)
-    normalized = normalized.lower()
-    normalized = re.sub(r"\s+", " ", normalized)
-    return normalized.strip()
+# ---- structure-seed primitives (imported from futon6.structure_seed) ----
+# Underscore-prefixed aliases preserve call sites; the implementations live
+# in src/futon6/structure_seed.py as the single source of truth shared with
+# build-uncovered-sentence-audit.py and build-batch-008-qc-viewer.py.
+_normalize_structure_seed_text = _ss.normalize_structure_seed_text
+_structure_seed_skeleton = _ss.structure_seed_skeleton
+_DISCOURSE_VERB_KIND = _ss.DISCOURSE_VERB_KIND
+_DISCOURSE_VERBS = _ss.DISCOURSE_VERBS
+_signature_has_discourse_verb = _ss.signature_has_discourse_verb
+_predict_kind_from_signature = _ss.predict_kind_from_signature
+_build_scope_tree = _ss.build_scope_tree
+_summarize_structure_seed_candidates = _ss.summarize_structure_seed_candidates
+_STRUCTURE_SEED_MIN_TOKENS = _ss.STRUCTURE_SEED_MIN_TOKENS
+_signature_tokens = _ss.signature_tokens
+_is_subsequence = _ss.is_subsequence
+_match_structure_seed_signature = _ss.match_structure_seed_signature
+_load_structure_seed_signatures = _ss.load_structure_seed_signatures
 
 
-def _structure_seed_skeleton(normalized_template):
-    tokens = re.findall(r"<[a-z]+>|[a-z]+", normalized_template)
-    kept = []
-    for token in tokens:
-        if token.startswith("<") and token.endswith(">"):
-            kept.append(token)
-            continue
-        lemma = _STRUCTURE_CUE_LEMMAS.get(token, token)
-        if lemma in _STRUCTURE_CUE_WORDS:
-            kept.append(lemma)
-    collapsed = []
-    for token in kept:
-        if collapsed and collapsed[-1] == token and token.startswith("<"):
-            continue
-        collapsed.append(token)
-    return " ".join(collapsed)
+def _audit_classify_terms(text, base_records, singles, multi_index):
+    """Spot-and-classify wrapper around futon6.structure_seed.
+
+    Uses this runner's spot_terms_entity for the spotting step, then delegates
+    classification (flat counts + tree-aware depth distribution) to the
+    shared module. Output shape matches the QC viewer's classify_kernel_terms.
+    """
+    positions = _ss.find_kernel_term_positions(text, spot_terms_entity, singles, multi_index)
+    scope_spans = _ss.scope_records_to_spans(base_records)
+    return _ss.classify_kernel_terms_from_positions(positions, scope_spans)
 
 
 def _extract_uncovered_structure_rows(text, records, singles, multi_index, *, min_sentence_chars=40, max_uncovered=30):
+    """Per-entity residual extractor used by Stage 5's structure-learning loop.
+
+    Walks each sentence, skips those that overlap any detector span, then
+    enriches the surviving residuals with kernel-term features and the full
+    structure-seed signature for downstream aggregation/replay. Uses the
+    runner-local helpers _merge_spans / _record_span / _sentence_spans /
+    _extract_sentence_term_features alongside the shared normalize/skeleton.
+    """
     merged = _merge_spans([
         span for record in records if (span := _record_span(record))
     ])
@@ -1211,338 +1176,6 @@ def _extract_uncovered_structure_rows(text, records, singles, multi_index, *, mi
         reverse=True,
     )
     return rows[:max_uncovered]
-
-
-_DISCOURSE_VERB_KIND = {
-    "let": "scope",
-    "define": "scope",
-    "denote": "scope",
-    "write": "scope",
-    "fix": "scope",
-    "assume": "scope",
-    "suppose": "scope",
-    "prove": "label",
-    "show": "label",
-    "obtain": "label",
-    "derive": "label",
-    "study": "label",
-    "consider": "label",
-    "introduce": "label",
-    "recall": "label",
-    "apply": "label",
-    "then": "wire",
-    "therefore": "wire",
-    "notice": "wire",
-    "observe": "wire",
-}
-_DISCOURSE_VERBS = frozenset(_DISCOURSE_VERB_KIND.keys())
-
-
-def _signature_has_discourse_verb(signature):
-    return any(token in _DISCOURSE_VERBS for token in (signature or "").split())
-
-
-def _predict_kind_from_signature(signature):
-    kinds = [
-        _DISCOURSE_VERB_KIND[token]
-        for token in (signature or "").split()
-        if token in _DISCOURSE_VERB_KIND
-    ]
-    if not kinds:
-        return None
-    for preferred in ("scope", "label", "wire"):
-        if preferred in kinds:
-            return preferred
-    return None
-
-
-def _build_scope_tree(scope_spans, term_positions):
-    """Inline copy of build-batch-008-qc-viewer.build_scope_tree.
-
-    Arranges scope spans into a containment tree (children fully inside their
-    parent; siblings disjoint). Scopes that straddle a tree ancestor's
-    boundary are dropped — they can't be tree-arranged. Terms that straddle
-    any input scope are dropped; otherwise each is placed in its deepest
-    containing scope, or at the root if no scope contains it.
-
-    Root sentinel uses start=-1 / end=10**18 so any real span fits inside.
-    """
-    root: dict = {
-        "start": -1,
-        "end": 10**18,
-        "label": "$root",
-        "children": [],
-        "terms": [],
-        "depth": 0,
-    }
-    sorted_scopes = sorted(scope_spans, key=lambda s: (s["start"], -(s["end"] - s["start"])))
-    stack: list[dict] = [root]
-    for sp in sorted_scopes:
-        while stack[-1] is not root and stack[-1]["end"] <= sp["start"]:
-            stack.pop()
-        top = stack[-1]
-        if top["start"] <= sp["start"] and sp["end"] <= top["end"]:
-            node = {
-                "start": sp["start"],
-                "end": sp["end"],
-                "label": sp["label"],
-                "children": [],
-                "terms": [],
-                "depth": top["depth"] + 1,
-            }
-            top["children"].append(node)
-            stack.append(node)
-
-    def find_deepest(node, ts, te):
-        if not (node["start"] <= ts and te <= node["end"]):
-            return None
-        for child in node["children"]:
-            deeper = find_deepest(child, ts, te)
-            if deeper is not None:
-                return deeper
-        return node
-
-    def straddles_any_input_scope(ts, te):
-        for sp in scope_spans:
-            ss, se = sp["start"], sp["end"]
-            if se <= ts or ss >= te:
-                continue
-            if ss <= ts and te <= se:
-                continue
-            return True
-        return False
-
-    for term in term_positions:
-        ts, te = term[0], term[1]
-        if straddles_any_input_scope(ts, te):
-            continue
-        deepest = find_deepest(root, ts, te)
-        if deepest is not None:
-            deepest["terms"].append(term)
-    return root
-
-
-def _audit_classify_terms(text, base_records, singles, multi_index):
-    """Inline counterpart of build-batch-008-qc-viewer.classify_kernel_terms.
-
-    Reports flat counts (inhabited / outer / straddled / total) using the
-    frontier semantics — a term is inhabited iff any scope contains it,
-    regardless of straddling other scopes. Additionally reports
-    depth_distribution via the same tree builder the QC viewer uses, so
-    Rob gets the full structural picture the viewer would show on the
-    sampled entities. Depth distribution is best-effort: terms inside
-    scopes that the tree had to drop due to mutual straddling count as
-    inhabited but don't appear in the depth map.
-    """
-    hits = spot_terms_entity(text, singles, multi_index)
-    positions = []
-    for hit in hits:
-        tl = hit.get("term_lower") or hit.get("term") or ""
-        if not tl:
-            continue
-        try:
-            pattern = re.compile(rf"\b{re.escape(tl)}\b", re.IGNORECASE)
-        except re.error:
-            continue
-        for m in pattern.finditer(text):
-            positions.append((m.start(), m.end()))
-    positions.sort(key=lambda r: (r[0], -(r[1] - r[0])))
-    deduped: list[tuple[int, int]] = []
-    last_end = -1
-    for ts, te in positions:
-        if ts >= last_end:
-            deduped.append((ts, te))
-            last_end = te
-
-    span_records: list[dict] = []
-    for rec in base_records:
-        content = rec.get("hx/content", {}) or {}
-        start = content.get("position")
-        end = content.get("end")
-        if not isinstance(start, int):
-            continue
-        if not isinstance(end, int):
-            end = start + len(content.get("match", ""))
-        span_records.append({
-            "start": start,
-            "end": end,
-            "label": rec.get("hx/type", "?"),
-        })
-
-    inhabited = outer = straddled = 0
-    inhabited_terms: list[tuple[int, int]] = []
-    for ts, te in deduped:
-        contained = False
-        overlaps_any = False
-        for sp in span_records:
-            ss, se = sp["start"], sp["end"]
-            if ss <= ts and te <= se:
-                contained = True
-            elif not (se <= ts or ss >= te):
-                overlaps_any = True
-        if contained:
-            inhabited += 1
-            inhabited_terms.append((ts, te))
-        elif overlaps_any:
-            straddled += 1
-        else:
-            outer += 1
-
-    tree = _build_scope_tree(span_records, inhabited_terms)
-    depth_dist: dict[int, int] = {}
-
-    def walk(node):
-        for child in node["children"]:
-            term_count = len(child["terms"])
-            if term_count:
-                depth_dist[child["depth"]] = depth_dist.get(child["depth"], 0) + term_count
-            walk(child)
-
-    walk(tree)
-    return {
-        "inhabited": inhabited,
-        "outer": outer,
-        "straddled": straddled,
-        "total": inhabited + outer + straddled,
-        "depth_distribution": dict(sorted(depth_dist.items())),
-    }
-
-
-def _summarize_structure_seed_candidates(rows, *, min_signature_freq=1, max_candidates=1000):
-    buckets = {}
-    for row in rows:
-        if row.get("known_term_hit_count", 0) <= 0:
-            continue
-        signature = row.get("structure_seed_signature") or ""
-        if not signature:
-            continue
-        if not _signature_has_discourse_verb(signature):
-            continue
-        bucket = buckets.setdefault(signature, {
-            "signature": signature,
-            "count": 0,
-            "paper_ids": set(),
-            "example_sentences": [],
-            "max_known_term_hit_count": 0,
-        })
-        bucket["count"] += 1
-        bucket["paper_ids"].add(row.get("paper_id"))
-        bucket["max_known_term_hit_count"] = max(
-            bucket["max_known_term_hit_count"],
-            row.get("known_term_hit_count", 0),
-        )
-        if len(bucket["example_sentences"]) < 3:
-            bucket["example_sentences"].append({
-                "paper_id": row.get("paper_id"),
-                "index": row.get("index"),
-                "text": row.get("text"),
-                "known_terms": [
-                    item["term_lower"] for item in row.get("known_term_hits", [])[:8]
-                ],
-            })
-    out = []
-    for bucket in buckets.values():
-        if bucket["count"] < min_signature_freq:
-            continue
-        out.append({
-            "signature": bucket["signature"],
-            "count": bucket["count"],
-            "paper_ids": sorted(bucket["paper_ids"]),
-            "paper_count": len(bucket["paper_ids"]),
-            "max_known_term_hit_count": bucket["max_known_term_hit_count"],
-            "predicted_kind": _predict_kind_from_signature(bucket["signature"]),
-            "example_sentences": bucket["example_sentences"],
-        })
-    out.sort(
-        key=lambda row: (
-            row["paper_count"],
-            row["count"],
-            row["max_known_term_hit_count"],
-            len(row["signature"]),
-        ),
-        reverse=True,
-    )
-    return out[:max_candidates]
-
-
-_STRUCTURE_SEED_MIN_TOKENS = 3
-
-
-def _signature_tokens(signature):
-    return tuple(re.findall(r"<[a-z]+>|[a-z]+", signature or ""))
-
-
-def _is_subsequence(needle, haystack):
-    if not needle:
-        return False
-    i = 0
-    for token in haystack:
-        if token == needle[i]:
-            i += 1
-            if i == len(needle):
-                return True
-    return False
-
-
-def _match_structure_seed_signature(new_signature, prior_signatures, min_tokens=_STRUCTURE_SEED_MIN_TOKENS):
-    new_tokens = _signature_tokens(new_signature)
-    if not new_tokens:
-        return None
-    best = None
-    best_len = 0
-    for prior_sig, prior_tokens in prior_signatures:
-        if len(prior_tokens) < min_tokens:
-            continue
-        if len(prior_tokens) > len(new_tokens):
-            continue
-        if _is_subsequence(prior_tokens, new_tokens):
-            if len(prior_tokens) > best_len:
-                best = prior_sig
-                best_len = len(prior_tokens)
-    return best
-
-
-def _load_structure_seed_signatures(path):
-    """Load prior structure-seed signatures for the replay matcher.
-
-    Prefers the per-candidate `full_signatures` list (newer schema) so the
-    matcher operates on per-residual full signatures, not on the coarse
-    cluster key. Falls back to the candidate's top-level `signature` when
-    `full_signatures` is absent (older schema).
-    """
-    if path is None or not Path(path).exists():
-        return []
-    try:
-        payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return []
-    if isinstance(payload, dict):
-        rows = payload.get("structure_seed_candidates") or payload.get("candidates") or []
-    elif isinstance(payload, list):
-        rows = payload
-    else:
-        return []
-    out = []
-    seen = set()
-    for row in rows:
-        if not isinstance(row, dict):
-            continue
-        candidate_sigs = list(row.get("full_signatures") or [])
-        if not candidate_sigs:
-            fallback = (row.get("signature") or row.get("structure_seed_signature") or "").strip()
-            if fallback:
-                candidate_sigs = [fallback]
-        for sig in candidate_sigs:
-            signature = (sig or "").strip()
-            if not signature or signature in seen:
-                continue
-            seen.add(signature)
-            tokens = _signature_tokens(signature)
-            if not tokens:
-                continue
-            out.append((signature, tokens))
-    out.sort(key=lambda item: len(item[1]), reverse=True)
-    return out
 
 
 def _make_structure_seed_record(entity_id, match_idx, row):

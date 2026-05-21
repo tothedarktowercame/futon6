@@ -842,9 +842,21 @@ def test_arxiv_stage5_learns_and_reseeds_structure_signatures(tmp_path: Path):
     assert structure1["candidates_written"] >= 1
     assert structure1["loss"]["uncovered_sentences_with_known_terms"] >= 1
     candidates = json.loads((outdir1 / "learned-structure-candidates.json").read_text(encoding="utf-8"))
-    assert any(row["signature"] == "we study <term> and <term>" for row in candidates), (
-        f"expected 'we study <term> and <term>' in signatures, got: "
-        f"{[row['signature'] for row in candidates]}"
+    # Aggregation buckets by the COARSE signature so cross-paper analogues
+    # cluster together. The full per-residual signature lives in
+    # full_signatures so the replay matcher still has precise priors.
+    target_full = "we study <term> and <term>"
+    matching = [
+        row for row in candidates
+        if target_full in (row.get("full_signatures") or [])
+    ]
+    assert matching, (
+        f"expected full signature {target_full!r} in any candidate's "
+        f"full_signatures, got: {[(row['signature'], row.get('full_signatures')) for row in candidates]}"
+    )
+    # The coarse signature drops placeholders and keeps the cue backbone.
+    assert matching[0]["signature"] == "we study and", (
+        f"expected coarse signature 'we study and', got {matching[0]['signature']!r}"
     )
 
     # Run 2: DIFFERENT paper, DIFFERENT concrete terms, longer cue chain.

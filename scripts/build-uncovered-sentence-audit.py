@@ -30,40 +30,14 @@ DEFAULT_LEDGER = DEFAULT_OUT_DIR / "daisychain-ledger.json"
 DEFAULT_RUN_JSON = DEFAULT_OUT_DIR / "latest-audit.json"
 DEFAULT_RUN_HTML = DEFAULT_OUT_DIR / "latest-audit.html"
 DEFAULT_NER_KERNEL = Path.home() / "code" / "storage" / "futon6" / "data" / "ner-kernel" / "terms.tsv"
-STRUCTURE_CUE_WORDS = {
-    "we", "let", "define", "denote", "write", "show", "prove", "obtain", "apply",
-    "study", "consider", "introduce", "recall", "if", "then", "assume", "suppose",
-    "where", "when", "for", "any", "every", "there", "exists", "be",
-    "that", "and", "or", "not", "only", "particular", "consist", "depend",
-    "turn", "focus", "choose", "work",
-}
-STRUCTURE_CUE_LEMMAS = {
-    "shows": "show",
-    "proved": "prove",
-    "proves": "prove",
-    "obtains": "obtain",
-    "obtained": "obtain",
-    "applies": "apply",
-    "applied": "apply",
-    "studies": "study",
-    "considered": "consider",
-    "considers": "consider",
-    "introduced": "introduce",
-    "introduces": "introduce",
-    "recalled": "recall",
-    "recalls": "recall",
-    "depends": "depend",
-    "consists": "consist",
-    "chooses": "choose",
-    "chose": "choose",
-    "worked": "work",
-    "is": "be",
-    "are": "be",
-    "was": "be",
-    "were": "be",
-    "being": "be",
-    "been": "be",
-}
+# Structure-seed cue tables + primitives are imported from the shared module
+# so this script, superpod-job.py, and build-batch-008-qc-viewer.py all use
+# identical semantics.
+sys.path.insert(0, str(ROOT / "src"))
+from futon6 import structure_seed as _ss
+
+STRUCTURE_CUE_WORDS = _ss.STRUCTURE_CUE_WORDS
+STRUCTURE_CUE_LEMMAS = _ss.STRUCTURE_CUE_LEMMAS
 
 
 def load_module(module_name: str, path: Path):
@@ -219,51 +193,9 @@ def extract_sentence_term_features(
     }
 
 
-def normalize_structure_seed_text(
-    sentence: str,
-    known_term_hits: list[dict],
-) -> str:
-    normalized = sentence
-    for item in sorted(
-        known_term_hits,
-        key=lambda row: len(row.get("term_lower", "")),
-        reverse=True,
-    ):
-        term = (item.get("term") or item.get("term_lower") or "").strip()
-        if not term:
-            continue
-        variants = [term]
-        if not term.endswith("s"):
-            variants.append(f"{term}s")
-        for variant in variants:
-            pattern = re.compile(rf"\b{re.escape(variant)}\b", re.IGNORECASE)
-            normalized = pattern.sub("<TERM>", normalized)
-    normalized = re.sub(r"\$[^$]+\$", "<MATH>", normalized)
-    normalized = re.sub(r"\\cite\{[^}]+\}", "<CITE>", normalized)
-    normalized = re.sub(r"\[[^\]]+\]", "<CITE>", normalized)
-    normalized = re.sub(r"\\[A-Za-z]+", "<CMD>", normalized)
-    normalized = re.sub(r"\b\d+(?:\.\d+)?\b", "<NUM>", normalized)
-    normalized = normalized.lower()
-    normalized = re.sub(r"\s+", " ", normalized)
-    return normalized.strip()
-
-
-def structure_seed_skeleton(normalized_template: str) -> str:
-    tokens = re.findall(r"<[a-z]+>|[a-z]+", normalized_template)
-    kept = []
-    for token in tokens:
-        if token.startswith("<") and token.endswith(">"):
-            kept.append(token)
-            continue
-        lemma = STRUCTURE_CUE_LEMMAS.get(token, token)
-        if lemma in STRUCTURE_CUE_WORDS:
-            kept.append(lemma)
-    collapsed = []
-    for token in kept:
-        if collapsed and collapsed[-1] == token and token.startswith("<"):
-            continue
-        collapsed.append(token)
-    return " ".join(collapsed)
+# Re-exported from the shared module so test imports keep working.
+normalize_structure_seed_text = _ss.normalize_structure_seed_text
+structure_seed_skeleton = _ss.structure_seed_skeleton
 
 
 def extract_uncovered_sentences(
@@ -349,81 +281,13 @@ def summarize_term_dense_uncovered(uncovered_rows: list[dict]) -> list[dict]:
     return out
 
 
-# Discourse-verb taxonomy. The same verb namespace drives the candidate prefilter
-# (signature must contain at least one of these) AND the predicted_kind heuristic
-# (cue verb -> kind class). The classes match Stage 5's existing detector roles.
-DISCOURSE_VERB_KIND = {
-    # scope: binding or assumption
-    "let": "scope",
-    "define": "scope",
-    "denote": "scope",
-    "write": "scope",
-    "fix": "scope",
-    "assume": "scope",
-    "suppose": "scope",
-    # label: rhetorical / strategic move
-    "prove": "label",
-    "show": "label",
-    "obtain": "label",
-    "derive": "label",
-    "study": "label",
-    "consider": "label",
-    "introduce": "label",
-    "recall": "label",
-    "apply": "label",
-    # wire: discourse connective
-    "then": "wire",
-    "therefore": "wire",
-    "notice": "wire",
-    "observe": "wire",
-}
-DISCOURSE_VERBS = frozenset(DISCOURSE_VERB_KIND.keys())
-
-# For coarse clustering across papers: collapse full signatures to their
-# discourse-verb + structural-connective backbone. Two residuals with the
-# same coarse signature share the same discourse role, even if their full
-# token sequences differ in noun-phrase positioning.
-COARSE_STRUCTURAL_CUES = DISCOURSE_VERBS | {
-    "and", "or", "not", "that", "be", "exists", "there", "if", "then",
-    "where", "when", "we", "for", "any", "every",
-}
-
-
-def _signature_has_discourse_verb(signature: str) -> bool:
-    return any(token in DISCOURSE_VERBS for token in signature.split())
-
-
-def coarse_discourse_signature(full_signature: str) -> str:
-    """Extract the discourse-verb + structural-connective backbone.
-
-    Drops placeholders and content-bearing tokens; keeps only structural cues
-    in order. Used as the clustering key for cross-paper aggregation and as
-    the source for gated-pattern regex emission.
-    """
-    tokens = full_signature.split()
-    kept = [t for t in tokens if t in COARSE_STRUCTURAL_CUES]
-    return " ".join(kept)
-
-
-def _predict_kind_from_signature(signature: str) -> str | None:
-    """Classify a signature by its leading/strongest discourse verb.
-
-    Scope verbs (binding) outrank label verbs (rhetorical) outrank wire
-    verbs (connective), reflecting that a binding cue, when present,
-    usually dominates the sentence's role.
-    """
-    tokens = signature.split()
-    kinds_seen = []
-    for token in tokens:
-        kind = DISCOURSE_VERB_KIND.get(token)
-        if kind:
-            kinds_seen.append(kind)
-    if not kinds_seen:
-        return None
-    for preferred in ("scope", "label", "wire"):
-        if preferred in kinds_seen:
-            return preferred
-    return None
+# Discourse-verb taxonomy + helpers — re-exported from futon6.structure_seed.
+DISCOURSE_VERB_KIND = _ss.DISCOURSE_VERB_KIND
+DISCOURSE_VERBS = _ss.DISCOURSE_VERBS
+COARSE_STRUCTURAL_CUES = _ss.COARSE_STRUCTURAL_CUES
+_signature_has_discourse_verb = _ss.signature_has_discourse_verb
+coarse_discourse_signature = _ss.coarse_discourse_signature
+_predict_kind_from_signature = _ss.predict_kind_from_signature
 
 
 def _signature_to_regex(signature: str) -> str:
@@ -493,67 +357,15 @@ def build_learned_discourse_patterns(
 
 
 def summarize_structure_seed_candidates(paper_reports: list[dict]) -> list[dict]:
-    buckets = {}
-    for paper in paper_reports:
-        for row in paper.get("uncovered_sentences", []):
-            if row.get("known_term_hit_count", 0) <= 0:
-                continue
-            full_signature = row.get("structure_seed_signature") or ""
-            if not full_signature:
-                continue
-            if not _signature_has_discourse_verb(full_signature):
-                continue
-            # Cluster by coarse signature so cross-paper analogues bucket together.
-            coarse = coarse_discourse_signature(full_signature)
-            if not coarse:
-                continue
-            bucket = buckets.setdefault(coarse, {
-                "signature": coarse,
-                "count": 0,
-                "paper_ids": set(),
-                "full_signatures": set(),
-                "example_sentences": [],
-                "max_known_term_hit_count": 0,
-            })
-            bucket["count"] += 1
-            bucket["paper_ids"].add(paper.get("paper_id"))
-            bucket["full_signatures"].add(full_signature)
-            bucket["max_known_term_hit_count"] = max(
-                bucket["max_known_term_hit_count"],
-                row.get("known_term_hit_count", 0),
-            )
-            if len(bucket["example_sentences"]) < 3:
-                bucket["example_sentences"].append({
-                    "paper_id": paper.get("paper_id"),
-                    "index": row.get("index"),
-                    "text": row.get("text"),
-                    "full_signature": full_signature,
-                    "known_terms": [
-                        item["term_lower"] for item in row.get("known_term_hits", [])[:8]
-                    ],
-                })
+    """Audit-side adapter: flatten paper_reports into rows with paper_id,
+    then delegate to the shared aggregator in futon6.structure_seed.
+    """
     rows = []
-    for bucket in buckets.values():
-        rows.append({
-            "signature": bucket["signature"],
-            "count": bucket["count"],
-            "paper_ids": sorted(bucket["paper_ids"]),
-            "paper_count": len(bucket["paper_ids"]),
-            "full_signatures": sorted(bucket["full_signatures"]),
-            "max_known_term_hit_count": bucket["max_known_term_hit_count"],
-            "predicted_kind": _predict_kind_from_signature(bucket["signature"]),
-            "example_sentences": bucket["example_sentences"],
-        })
-    rows.sort(
-        key=lambda row: (
-            row["paper_count"],
-            row["count"],
-            row["max_known_term_hit_count"],
-            len(row["signature"]),
-        ),
-        reverse=True,
-    )
-    return rows[:24]
+    for paper in paper_reports:
+        pid = paper.get("paper_id")
+        for row in paper.get("uncovered_sentences", []):
+            rows.append({**row, "paper_id": pid})
+    return _ss.summarize_structure_seed_candidates(rows, max_candidates=24)
 
 
 def select_daisychain_papers(

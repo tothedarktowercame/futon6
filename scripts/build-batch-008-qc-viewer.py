@@ -63,6 +63,7 @@ NLAB_WIRING = load_module("nlab_wiring_batch008_qc", ROOT / "scripts" / "nlab-wi
 TERM_EVIDENCE = load_module("build_arxiv_ct_term_evidence_qc", ROOT / "scripts" / "build-arxiv-ct-term-evidence.py")
 SUPERPOD_JOB = TERM_EVIDENCE.SUPERPOD_JOB
 from futon6.theorem_extraction import extract_from_tarball
+from futon6 import structure_seed as _ss
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
@@ -426,108 +427,21 @@ def pick_scope_windows(text: str, scopes: list[dict], *, max_windows: int, windo
 
 
 def find_kernel_term_positions(text: str, singles: dict, multi_index: dict) -> list[tuple[int, int, str, str | None]]:
-    """For every term the NER kernel spots in `text`, locate all occurrences.
-
-    Returns (start, end, term_lower, canon) tuples relative to `text`. Overlapping
-    occurrences are resolved by preferring the longest match starting earliest,
-    which lets multi-word terms like "monoidal category" win over their
-    constituent words.
-    """
-    hits = SUPERPOD_JOB.spot_terms_entity(text, singles, multi_index)
-    positions: list[tuple[int, int, str, str | None]] = []
-    for hit in hits:
-        term_lower = hit.get("term_lower") or ""
-        canon = hit.get("canon")
-        if not term_lower:
-            continue
-        try:
-            pattern = re.compile(rf"\b{re.escape(term_lower)}\b", re.IGNORECASE)
-        except re.error:
-            continue
-        for m in pattern.finditer(text):
-            positions.append((m.start(), m.end(), term_lower, canon))
-    # Longest-first at each start, then non-overlapping greedy.
-    positions.sort(key=lambda row: (row[0], -(row[1] - row[0])))
-    deduped: list[tuple[int, int, str, str | None]] = []
-    last_end = -1
-    for start, end, tl, canon in positions:
-        if start >= last_end:
-            deduped.append((start, end, tl, canon))
-            last_end = end
-    return deduped
+    """Wrapper around futon6.structure_seed.find_kernel_term_positions that
+    feeds in this script's spot_terms_entity (sourced from superpod-job)."""
+    return _ss.find_kernel_term_positions(text, SUPERPOD_JOB.spot_terms_entity, singles, multi_index)
 
 
 def classify_kernel_terms(text: str, scopes: list[dict], singles: dict, multi_index: dict) -> dict:
-    """Count kernel-term occurrences by relation to scope coverage.
+    """Wrapper around futon6.structure_seed.classify_kernel_terms_from_positions
+    that handles this script's spot-terms step + scope-record conversion.
 
-    Returns {inhabited, outer, straddled, total, depth_distribution}:
-    - inhabited: term fully inside some scope (any scope; the frontier
-      semantics doesn't care whether other scopes straddle)
-    - outer: term completely disjoint from all scopes (scope-development
-      candidate — what the structure-learning loop should target)
-    - straddled: term overlaps some scope boundary AND isn't contained in
-      any scope (ambiguous edges)
-    - depth_distribution: map of {depth -> count} for inhabited terms,
-      where depth=1 is "inside a top-level scope," depth=2 is "inside a
-      scope inside a scope," etc. Computed via the tree renderer's view of
-      the same data; terms placed inside scopes the tree had to drop due
-      to mutual straddling don't contribute to this map but are still
-      counted as inhabited above.
+    Returns flat inhabited/outer/straddled/total plus tree-aware
+    depth_distribution. See the shared module for semantics.
     """
-    term_positions = find_kernel_term_positions(text, singles, multi_index)
-    span_records: list[dict] = []
-    for scope in scopes:
-        content = scope.get("hx/content", {}) or {}
-        start = content.get("position")
-        end = content.get("end")
-        if not isinstance(start, int):
-            continue
-        if not isinstance(end, int):
-            end = start + len(content.get("match", ""))
-        span_records.append({
-            "start": start,
-            "end": end,
-            "label": scope.get("hx/type", "?"),
-        })
-
-    inhabited = outer = straddled = 0
-    inhabited_terms: list[tuple[int, int, str, str | None]] = []
-    for term in term_positions:
-        ts, te = term[0], term[1]
-        contained = False
-        overlaps_any = False
-        for sp in span_records:
-            ss, se = sp["start"], sp["end"]
-            if ss <= ts and te <= se:
-                contained = True
-            elif not (se <= ts or ss >= te):
-                overlaps_any = True
-        if contained:
-            inhabited += 1
-            inhabited_terms.append(term)
-        elif overlaps_any:
-            straddled += 1
-        else:
-            outer += 1
-
-    tree = build_scope_tree(span_records, inhabited_terms)
-    depth_dist: dict[int, int] = {}
-
-    def walk(node: dict) -> None:
-        for child in node["children"]:
-            term_count = len(child["terms"])
-            if term_count:
-                depth_dist[child["depth"]] = depth_dist.get(child["depth"], 0) + term_count
-            walk(child)
-
-    walk(tree)
-    return {
-        "inhabited": inhabited,
-        "outer": outer,
-        "straddled": straddled,
-        "total": len(term_positions),
-        "depth_distribution": dict(sorted(depth_dist.items())),
-    }
+    positions = find_kernel_term_positions(text, singles, multi_index)
+    span_records = _ss.scope_records_to_spans(scopes)
+    return _ss.classify_kernel_terms_from_positions(positions, span_records)
 
 
 def _term_span_html(text: str, start: int, end: int, canon: str | None, *, inhabited: bool) -> str:
@@ -536,84 +450,8 @@ def _term_span_html(text: str, start: int, end: int, canon: str | None, *, inhab
     return f'<span class="{klass}"{title}>{html.escape(text[start:end])}</span>'
 
 
-def build_scope_tree(
-    scope_spans: list[dict],
-    term_positions: list[tuple[int, int, str, str | None]],
-) -> dict:
-    """Arrange flat scope spans into a containment tree, with terms at deepest scope.
-
-    Each scope is either fully contained in another (becomes a child) or sits as
-    a sibling at the top level. Scopes that straddle another scope's boundary
-    (partial overlap, neither containing nor contained) are dropped — they
-    can't be tree-arranged and would produce broken nesting. Each term is
-    placed in the deepest scope that fully contains it; terms not contained
-    by any scope sit at the root; terms straddling a scope boundary are
-    dropped.
-
-    The root node uses sentinel start=-1 and end=10**18 so any real span fits
-    inside it. Its `label` is "$root" and is never rendered; only its children
-    and terms.
-    """
-    root: dict = {
-        "start": -1,
-        "end": 10**18,
-        "label": "$root",
-        "children": [],
-        "terms": [],
-        "depth": 0,
-    }
-    # Outer-first ordering: earlier start wins; on tie, larger span wins.
-    sorted_scopes = sorted(scope_spans, key=lambda s: (s["start"], -(s["end"] - s["start"])))
-    stack: list[dict] = [root]
-    for sp in sorted_scopes:
-        # Pop scopes that ended before this one starts.
-        while stack[-1] is not root and stack[-1]["end"] <= sp["start"]:
-            stack.pop()
-        top = stack[-1]
-        # If the new scope fully fits inside the current top, nest it.
-        if top["start"] <= sp["start"] and sp["end"] <= top["end"]:
-            node = {
-                "start": sp["start"],
-                "end": sp["end"],
-                "label": sp["label"],
-                "children": [],
-                "terms": [],
-                "depth": top["depth"] + 1,
-            }
-            top["children"].append(node)
-            stack.append(node)
-        # else: scope straddles the top span — drop it.
-
-    def find_deepest(node: dict, ts: int, te: int) -> dict | None:
-        if not (node["start"] <= ts and te <= node["end"]):
-            return None
-        for child in node["children"]:
-            deeper = find_deepest(child, ts, te)
-            if deeper is not None:
-                return deeper
-        return node
-
-    def straddles_any_input_scope(ts: int, te: int) -> bool:
-        # A term that overlaps a scope without being fully contained in it is
-        # ambiguous — drop it. Check against the original input scope set so a
-        # term doesn't sneak into the root just because the straddled scope was
-        # dropped from the tree.
-        for sp in scope_spans:
-            ss, se = sp["start"], sp["end"]
-            if se <= ts or ss >= te:
-                continue  # disjoint
-            if ss <= ts and te <= se:
-                continue  # fully contained
-            return True
-        return False
-
-    for (ts, te, tl, canon) in term_positions:
-        if straddles_any_input_scope(ts, te):
-            continue  # straddled — drop
-        deepest = find_deepest(root, ts, te)
-        if deepest is not None:
-            deepest["terms"].append((ts, te, tl, canon))
-    return root
+# build_scope_tree is re-exported from futon6.structure_seed.
+build_scope_tree = _ss.build_scope_tree
 
 
 def render_tree_node(text: str, node: dict, *, is_root: bool) -> str:
