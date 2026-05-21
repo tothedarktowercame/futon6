@@ -457,6 +457,32 @@ def find_kernel_term_positions(text: str, singles: dict, multi_index: dict) -> l
     return deduped
 
 
+def _term_span_html(text: str, start: int, end: int, canon: str | None, *, inhabited: bool) -> str:
+    title = f' title="canon={html.escape(canon)}"' if canon else ""
+    klass = "term-kernel inhabited" if inhabited else "term-kernel"
+    return f'<span class="{klass}"{title}>{html.escape(text[start:end])}</span>'
+
+
+def _render_scope_inner(text: str, scope_start: int, scope_end: int,
+                        inner_terms: list[tuple[int, int, str, str | None]]) -> str:
+    """Render the contents of a scope span, threading inhabited term marks inside.
+
+    inner_terms must be fully contained in [scope_start, scope_end) and
+    non-overlapping with each other (caller's responsibility).
+    """
+    inner_terms = sorted(inner_terms, key=lambda t: (t[0], t[1]))
+    out: list[str] = []
+    cursor = scope_start
+    for (ts, te, _tl, canon) in inner_terms:
+        if ts < cursor:
+            continue
+        out.append(html.escape(text[cursor:ts]))
+        out.append(_term_span_html(text, ts, te, canon, inhabited=True))
+        cursor = te
+    out.append(html.escape(text[cursor:scope_end]))
+    return "".join(out)
+
+
 def render_overlay_markup(
     text: str,
     scopes: list[dict],
@@ -465,14 +491,17 @@ def render_overlay_markup(
     offset: int = 0,
     scope_limit: int | None = 8,
 ) -> str:
-    """Render text with combined scope + kernel-term markup.
+    """Render text with scope + kernel-term overlay.
 
-    Scope spans take precedence; kernel-term spans that overlap any scope span
-    (including unshown ones, to keep rendering honest) are suppressed. Within
-    the surviving term spans, longest-match wins.
+    Semantics ("inhabited scopes"): a kernel term that falls *inside* a
+    scope is not suppressed; it renders inside the scope's mark with the
+    `.inhabited` class, so the visual hierarchy preserves both layers.
+    Terms that *partially* overlap a scope boundary are still dropped — those
+    represent ambiguous edges, not nesting. Terms outside any scope render
+    standalone.
     """
-    # Build complete scope-span set for clobber-check (all scopes, not just shown).
-    full_scope_spans: list[tuple[int, int]] = []
+    # All scope spans, used both for rendering and for classifying terms.
+    all_scope_spans: list[dict] = []
     for scope in scopes:
         content = scope.get("hx/content", {}) or {}
         start = content.get("position")
@@ -481,70 +510,76 @@ def render_overlay_markup(
             continue
         if not isinstance(end, int):
             end = start + len(content.get("match", ""))
-        full_scope_spans.append((max(0, start - offset), max(0, end - offset)))
-    full_scope_spans.sort()
-
-    # Renderable scope spans (subject to limit) carry labels.
-    render_scope_records: list[dict] = []
-    sorted_scopes = sorted(
-        scopes,
-        key=lambda s: (
-            (s.get("hx/content", {}) or {}).get("position", 10**18),
-            (s.get("hx/content", {}) or {}).get("end", 10**18),
-        ),
-    )
-    if scope_limit is not None:
-        sorted_scopes = sorted_scopes[:scope_limit]
-    for scope in sorted_scopes:
-        content = scope.get("hx/content", {}) or {}
-        start = content.get("position")
-        end = content.get("end")
-        if not isinstance(start, int):
-            continue
-        if not isinstance(end, int):
-            end = start + len(content.get("match", ""))
-        render_scope_records.append({
+        all_scope_spans.append({
             "start": max(0, start - offset),
             "end": max(0, end - offset),
             "label": scope.get("hx/type", "?"),
-            "kind": "scope",
         })
+    all_scope_spans.sort(key=lambda s: (s["start"], s["end"]))
 
-    # Kernel term positions (relative to passed-in text already).
+    # Pick which scopes get rendered (the limit is purely visual; the full set
+    # is still used for term containment).
+    rendered_scope_spans = (
+        all_scope_spans if scope_limit is None else all_scope_spans[:scope_limit]
+    )
+    rendered_keys = {(s["start"], s["end"]) for s in rendered_scope_spans}
+
     term_positions = find_kernel_term_positions(text, singles, multi_index)
 
-    def overlaps_full_scope(s: int, e: int) -> bool:
-        for ms, me in full_scope_spans:
-            if not (me <= s or ms >= e):
-                return True
-        return False
+    # Classify each term: inhabits-a-rendered-scope, inhabits-non-rendered (treated
+    # as outer to preserve the kernel hit visually), straddles-a-scope (dropped),
+    # or fully-outer.
+    inhabited: dict[tuple[int, int], list[tuple[int, int, str, str | None]]] = {}
+    outer_terms: list[tuple[int, int, str, str | None]] = []
+    for (ts, te, tl, canon) in term_positions:
+        container = None
+        straddles = False
+        for sp in all_scope_spans:
+            ss, se = sp["start"], sp["end"]
+            if ss <= ts and te <= se:
+                container = (ss, se)
+                break
+            if not (se <= ts or ss >= te):
+                straddles = True
+                break
+        if container is not None:
+            if container in rendered_keys:
+                inhabited.setdefault(container, []).append((ts, te, tl, canon))
+            else:
+                # Scope exists but isn't drawn this turn — keep the term hit.
+                outer_terms.append((ts, te, tl, canon))
+        elif not straddles:
+            outer_terms.append((ts, te, tl, canon))
 
-    term_records = [
-        {"start": s, "end": e, "label": tl, "canon": canon, "kind": "term"}
-        for (s, e, tl, canon) in term_positions
-        if not overlaps_full_scope(s, e)
-    ]
-
-    all_spans = render_scope_records + term_records
-    all_spans.sort(key=lambda row: (row["start"], row["end"]))
+    # Assemble a flat event list and walk linearly. Scopes carry their inner
+    # term list so they render as a single composite block.
+    events: list[dict] = []
+    for sp in rendered_scope_spans:
+        events.append({
+            "kind": "scope",
+            "start": sp["start"],
+            "end": sp["end"],
+            "label": sp["label"],
+            "inner_terms": inhabited.get((sp["start"], sp["end"]), []),
+        })
+    for (ts, te, tl, canon) in outer_terms:
+        events.append({"kind": "term", "start": ts, "end": te, "label": tl, "canon": canon})
+    events.sort(key=lambda e: (e["start"], e["end"]))
 
     out: list[str] = []
     cursor = 0
-    for span in all_spans:
-        start = max(0, min(len(text), span["start"]))
-        end = max(start, min(len(text), span["end"]))
+    for ev in events:
+        start = max(0, min(len(text), ev["start"]))
+        end = max(start, min(len(text), ev["end"]))
         if start < cursor:
             continue
         out.append(html.escape(text[cursor:start]))
-        frag = html.escape(text[start:end])
-        if span["kind"] == "scope":
-            out.append(
-                f'<mark class="scope"><span class="scope-label">{html.escape(span["label"])}</span>{frag}</mark>'
-            )
+        if ev["kind"] == "scope":
+            label_html = f'<span class="scope-label">{html.escape(ev["label"])}</span>'
+            inner_html = _render_scope_inner(text, start, end, ev["inner_terms"])
+            out.append(f'<mark class="scope">{label_html}{inner_html}</mark>')
         else:
-            canon = span.get("canon") or ""
-            title = f' title="canon={html.escape(canon)}"' if canon else ""
-            out.append(f'<span class="term-kernel"{title}>{frag}</span>')
+            out.append(_term_span_html(text, start, end, ev.get("canon"), inhabited=False))
         cursor = end
     out.append(html.escape(text[cursor:]))
     return "".join(out)
@@ -866,10 +901,13 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
     .scope-label {{ display: inline-block; margin-right: 6px; padding: 0 4px; background: rgba(29, 26, 22, 0.1); border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
     .term-kernel {{ background: rgba(15, 118, 110, 0.12); border-bottom: 1px solid rgba(15, 118, 110, 0.45); padding: 0 1px; border-radius: 2px; cursor: help; }}
     .term-kernel:hover {{ background: rgba(15, 118, 110, 0.22); }}
+    .term-kernel.inhabited {{ background: rgba(124, 58, 237, 0.18); border-bottom: 1px solid rgba(124, 58, 237, 0.6); }}
+    .term-kernel.inhabited:hover {{ background: rgba(124, 58, 237, 0.30); }}
     .markup-legend {{ font: 12px/1.4 system-ui, sans-serif; color: var(--muted); margin: 8px 0 6px 0; }}
     .markup-legend .swatch {{ display: inline-block; padding: 0 6px; border-radius: 3px; margin-right: 4px; }}
     .markup-legend .swatch.scope {{ background: linear-gradient(90deg, var(--scope), var(--scope2)); }}
     .markup-legend .swatch.term {{ background: rgba(15, 118, 110, 0.18); border-bottom: 1px solid rgba(15, 118, 110, 0.55); }}
+    .markup-legend .swatch.term-inhabited {{ background: rgba(124, 58, 237, 0.20); border-bottom: 1px solid rgba(124, 58, 237, 0.6); }}
     .badge {{ display: inline-block; padding: 1px 6px; border-radius: 999px; font-size: 12px; margin-left: 6px; border: 1px solid currentColor; }}
     .badge.novel {{ color: var(--novel); }}
     .badge.known {{ color: var(--known); }}
@@ -918,9 +956,11 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
         <p class="markup-legend">
           <span class="swatch scope">scope</span> structural construction
           &nbsp;·&nbsp;
-          <span class="swatch term">term</span> NER kernel hit (hover for canon)
+          <span class="swatch term">term</span> kernel term outside any scope
           &nbsp;·&nbsp;
-          <code>{paper.get('local_term_overlay_count', 0)}</code> kernel term occurrences in the full eprint
+          <span class="swatch term-inhabited">term</span> kernel term <em>inhabiting</em> a scope
+          &nbsp;·&nbsp;
+          <code>{paper.get('local_term_overlay_count', 0)}</code> kernel term occurrences total in the full eprint
         </p>
         <pre>{paper['local_scope_markup']}</pre>
         <p class="tiny">Top local scope types: {html.escape(json.dumps(paper['local_scope_types'], ensure_ascii=False))}</p>
