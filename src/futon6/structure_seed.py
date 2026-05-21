@@ -418,6 +418,7 @@ def build_scope_tree(scope_spans, term_positions):
                 "start": sp["start"],
                 "end": sp["end"],
                 "label": sp["label"],
+                "content": sp.get("content"),  # preserved enrichment fields
                 "children": [],
                 "terms": [],
                 "depth": top["depth"] + 1,
@@ -457,7 +458,11 @@ def build_scope_tree(scope_spans, term_positions):
 def scope_records_to_spans(records):
     """Convert detector records (hx/content with position+end) to scope_spans dicts.
 
-    Skips records without a usable position.
+    Skips records without a usable position. The full `hx/content` dict is
+    preserved on the span as `content` so downstream renderers can surface
+    enrichment fields (canon, strategy, matched_prior_signature, ...) as
+    tooltips or sub-labels without having to re-look-up the original
+    record.
     """
     out = []
     for rec in records:
@@ -472,6 +477,7 @@ def scope_records_to_spans(records):
             "start": start,
             "end": end,
             "label": rec.get("hx/type", "?"),
+            "content": content,
         })
     return out
 

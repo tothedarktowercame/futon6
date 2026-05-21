@@ -187,3 +187,144 @@ def test_classify_kernel_terms_reports_depth_distribution():
     assert stats["straddled"] == 0
     # depth=2 since the term lands inside the inner (nested) scope.
     assert stats["depth_distribution"] == {2: 1}
+
+
+# ============================================================
+# Symbol grounding wiring (Task 48)
+# ============================================================
+
+def _toy_kernel():
+    """Mimic (singles, multi_index) shape returned by load_ner_kernel."""
+    singles = {
+        "abelian group": ("abelian group", "AbelianGroup"),  # ner_kernel does store multi-word in singles for direct lookup in the viewer's path
+        "category": ("category", "Category"),
+    }
+    multi_index = {
+        "abelian": [("abelian group", "abelian group", "AbelianGroup")],
+    }
+    return singles, multi_index
+
+
+def test_kernel_phrase_lookup_handles_singles_and_multi_word():
+    mod = load_module()
+    singles, multi_index = _toy_kernel()
+    lookup = mod._make_kernel_phrase_lookup(singles, multi_index)
+    # exact match in singles
+    assert lookup("category") == "Category"
+    # multi-word resolved via multi_index
+    assert lookup("abelian group") == "AbelianGroup"
+    # unknown phrase
+    assert lookup("frobnicator") is None
+    # case + whitespace tolerance
+    assert lookup("  ABELIAN GROUP  ") == "AbelianGroup"
+
+
+def test_walk_atoms_yields_single_letters_inside_chars():
+    mod = load_module()
+    from futon6 import math_ast as ma
+    nodes = ma.parse_math("XYZ", base_offset=0)
+    atoms = list(mod._walk_atoms(nodes))
+    # Each letter is its own atom
+    texts = [a[0] for a in atoms]
+    assert texts == ["X", "Y", "Z"]
+
+
+def test_walk_atoms_yields_full_macro_text():
+    mod = load_module()
+    from futon6 import math_ast as ma
+    nodes = ma.parse_math(r"\mathcal{C}", base_offset=0)
+    atoms = list(mod._walk_atoms(nodes))
+    # Macro itself emits one atom (full text); then recurses into args ('C')
+    macro_atoms = [a for a in atoms if a[0].startswith("\\")]
+    assert any(a[0] == r"\mathcal{C}" for a in macro_atoms)
+    # And the interior 'C' is also yielded by recursion
+    inner = [a for a in atoms if a[0] == "C"]
+    assert inner
+
+
+def test_detect_grounded_symbols_grounds_x_from_let_binding():
+    mod = load_module()
+    singles, multi_index = _toy_kernel()
+    text = "Let $X$ be an abelian group. The group $X$ has identity element."
+    records, env, summary = mod.detect_grounded_symbols(
+        "test-entity", text, singles, multi_index,
+    )
+    # Every "X" inside $...$ after the declaration should ground to AbelianGroup.
+    grounded_texts = [r["hx/content"]["match"] for r in records]
+    assert "X" in grounded_texts
+    # Canon attached
+    canons = {r["hx/content"]["canon"] for r in records}
+    assert "AbelianGroup" in canons
+    # Strategy attribution present
+    strats = {r["hx/content"]["strategy"] for r in records}
+    assert "let-binding" in strats
+    # Summary block populated
+    assert summary["total_bindings_emitted"] >= 1
+    assert summary["grounded_atom_count"] >= 1
+
+
+def test_detect_grounded_symbols_records_have_math_grounded_symbol_type():
+    mod = load_module()
+    singles, multi_index = _toy_kernel()
+    text = "Let $X$ be an abelian group. So $X$."
+    records, _, _ = mod.detect_grounded_symbols("e", text, singles, multi_index)
+    assert all(r["hx/type"] == "math/grounded-symbol" for r in records)
+    assert all(r["hx/role"] == "scope" for r in records)
+
+
+def test_detect_grounded_symbols_returns_empty_for_no_bindings():
+    mod = load_module()
+    singles, multi_index = _toy_kernel()
+    text = "No declarations here. Just $Z$ floating around."
+    records, env, summary = mod.detect_grounded_symbols("e", text, singles, multi_index)
+    assert records == []
+    assert summary["grounded_atom_count"] == 0
+
+
+# ============================================================
+# Tooltip + canon-label rendering on grounded-symbol marks
+# ============================================================
+
+def test_render_tree_node_emits_canon_label_and_tooltip_for_grounded_symbol():
+    mod = load_module()
+    from futon6 import structure_seed as ss
+    record = {
+        "hx/id": "t:g-0", "hx/role": "scope", "hx/type": "math/grounded-symbol",
+        "hx/parent": None,
+        "hx/content": {
+            "match": "X", "position": 0, "end": 1,
+            "canon": "AbelianGroup",
+            "type_phrase": "abelian group",
+            "strategy": "let-binding",
+        },
+        "hx/labels": ["scope", "math", "grounded"],
+    }
+    spans = ss.scope_records_to_spans([record])
+    tree = ss.build_scope_tree(spans, [])
+    node = tree["children"][0]
+    out = mod.render_tree_node("X", node, is_root=False)
+    # Tooltip surfaces canon + strategy + type phrase
+    assert 'title="AbelianGroup (via let-binding: abelian group)"' in out
+    # Badge text shows the canon name, not the verbose type
+    assert ">AbelianGroup<" in out
+    # CSS class still includes math-grounded-symbol so styling applies
+    assert "math-grounded-symbol" in out
+
+
+def test_render_tree_node_default_label_for_non_grounded_scope():
+    mod = load_module()
+    from futon6 import structure_seed as ss
+    record = {
+        "hx/id": "t:s-0", "hx/role": "scope", "hx/type": "env/proof",
+        "hx/parent": None,
+        "hx/content": {"position": 0, "end": 5, "match": "proof"},
+        "hx/labels": ["scope"],
+    }
+    spans = ss.scope_records_to_spans([record])
+    tree = ss.build_scope_tree(spans, [])
+    node = tree["children"][0]
+    out = mod.render_tree_node("proof", node, is_root=False)
+    # Non-grounded scopes keep their original label
+    assert ">env/proof<" in out
+    # No title attribute on non-grounded scopes
+    assert "title=" not in out

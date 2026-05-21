@@ -64,6 +64,128 @@ TERM_EVIDENCE = load_module("build_arxiv_ct_term_evidence_qc", ROOT / "scripts" 
 SUPERPOD_JOB = TERM_EVIDENCE.SUPERPOD_JOB
 from futon6.theorem_extraction import extract_from_tarball
 from futon6 import structure_seed as _ss
+from futon6 import math_ast as _ma
+from futon6 import symbol_grounding as _sg
+
+
+def _make_kernel_phrase_lookup(singles: dict, multi_index: dict):
+    """Build a phrase→canon lookup for the symbol-grounding strategies.
+
+    `singles` maps single-word term_lower → (term_orig, canon).
+    `multi_index` maps first_word → list of (term_lower, term_orig, canon).
+    Returns a function that, given a phrase like "abelian group", returns
+    the kernel's canon name, or None if the phrase isn't known.
+    """
+    def lookup(phrase: str) -> str | None:
+        phrase = (phrase or "").lower().strip()
+        if not phrase:
+            return None
+        if phrase in singles:
+            return singles[phrase][1]
+        first_word = phrase.split()[0] if phrase else ""
+        if first_word in multi_index:
+            for term_lower, _orig, canon in multi_index[first_word]:
+                if term_lower == phrase:
+                    return canon
+        return None
+    return lookup
+
+
+def _math_atoms_for_grounding(text: str):
+    """Yield (atom_text, abs_start, abs_end) for each atom we'd like to
+    look up in the SymbolEnvironment.
+
+    Atoms are: (a) each single letter inside chars nodes within math
+    envelopes, and (b) full macro-token texts like `\\mathcal{C}`. Letter
+    atoms are emitted one at a time so juxtapositions like `XY` become
+    candidates `X` and `Y` separately. Macros are emitted as a whole so
+    `\\mathcal{C}` matches a Let-binding that captured the same literal
+    string.
+    """
+    for env_start, env_end, int_start, int_end, _kind in _ma.find_math_envelopes(text):
+        interior = text[int_start:int_end]
+        nodes = _ma.parse_math(interior, base_offset=int_start)
+        yield from _walk_atoms(nodes)
+
+
+def _walk_atoms(nodes):
+    for node in nodes:
+        if node.kind == "chars":
+            for i, ch in enumerate(node.text):
+                if ch.isalpha():
+                    yield (ch, node.start + i, node.start + i + 1)
+        elif node.kind == "macro":
+            yield (node.text, node.start, node.end)
+        for arg in node.args:
+            yield from _walk_atoms(arg["nodes"])
+
+
+def detect_grounded_symbols(
+    entity_id: str,
+    text: str,
+    singles: dict,
+    multi_index: dict,
+):
+    """Run grounding strategies; return (scope records, env, strategy summary).
+
+    Each emitted scope is a `math/grounded-symbol` record positioned at an
+    atom that matched a binding in the per-paper SymbolEnvironment. The
+    record carries the canon name + originating strategy in hx/content so
+    downstream rendering can surface it.
+    """
+    kernel_lookup = _make_kernel_phrase_lookup(singles, multi_index)
+    ctx = _sg.StrategyContext(
+        paper_id=entity_id,
+        paper_text=text,
+        kernel_lookup=kernel_lookup,
+    )
+    env = _sg.run_strategies(ctx, _sg.default_strategies())
+
+    records = []
+    rec_idx = 0
+    grounded_atom_count = 0
+    for atom_text, start, end in _math_atoms_for_grounding(text):
+        binding = env.lookup(atom_text, start)
+        if binding is None or binding.canon is None:
+            continue
+        grounded_atom_count += 1
+        records.append({
+            "hx/id": f"{entity_id}:grounded-{rec_idx:05d}",
+            "hx/role": "scope",
+            "hx/type": "math/grounded-symbol",
+            "hx/parent": None,
+            "hx/content": {
+                "match": atom_text,
+                "position": start,
+                "end": end,
+                "canon": binding.canon,
+                "type_phrase": binding.type_phrase,
+                "strategy": binding.strategy,
+            },
+            "hx/labels": [
+                "scope", "math", "grounded",
+                f"strategy-{binding.strategy}",
+                f"canon-{binding.canon}",
+            ],
+        })
+        rec_idx += 1
+
+    # Per-strategy emission counts for the QC summary
+    strategy_emit_counts: dict[str, int] = {}
+    for b in env.all_bindings:
+        strategy_emit_counts[b.strategy] = strategy_emit_counts.get(b.strategy, 0) + 1
+    strategy_active_counts: dict[str, int] = {}
+    for b in env.all_active():
+        strategy_active_counts[b.strategy] = strategy_active_counts.get(b.strategy, 0) + 1
+
+    summary = {
+        "total_bindings_emitted": len(env.all_bindings),
+        "active_bindings": len(env.all_active()),
+        "grounded_atom_count": grounded_atom_count,
+        "strategy_emit_counts": dict(sorted(strategy_emit_counts.items())),
+        "strategy_active_counts": dict(sorted(strategy_active_counts.items())),
+    }
+    return records, env, summary
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
@@ -494,8 +616,26 @@ def render_tree_node(text: str, node: dict, *, is_root: bool) -> str:
     # comment/unreachable becomes .comment-unreachable). Forward slashes and
     # whitespace get normalized to dashes for class-name validity.
     type_class = node["label"].replace("/", "-").replace(" ", "-")
-    label_html = f'<span class="scope-label">{html.escape(node["label"])}</span>'
-    return f'<mark class="scope {type_class} {depth_class}">{label_html}{"".join(out)}</mark>'
+    # Hover tooltip: surface enrichment from hx/content where present.
+    # math/grounded-symbol scopes carry the canon name + originating strategy,
+    # so a reader can hover any purple symbol and see "AbelianGroup (let-binding)".
+    title_attr = ""
+    content = node.get("content") or {}
+    if node["label"] == "math/grounded-symbol":
+        canon = content.get("canon") or "?"
+        strategy = content.get("strategy") or "?"
+        type_phrase = content.get("type_phrase") or ""
+        title_text = f"{canon} (via {strategy}"
+        if type_phrase:
+            title_text += f": {type_phrase}"
+        title_text += ")"
+        title_attr = f' title="{html.escape(title_text)}"'
+        # Override the badge text: show the canon name, not the verbose type
+        label_text = canon
+    else:
+        label_text = node["label"]
+    label_html = f'<span class="scope-label">{html.escape(label_text)}</span>'
+    return f'<mark class="scope {type_class} {depth_class}"{title_attr}>{label_html}{"".join(out)}</mark>'
 
 
 def render_overlay_markup(
@@ -530,6 +670,7 @@ def render_overlay_markup(
             "start": max(0, start - offset),
             "end": max(0, end - offset),
             "label": scope.get("hx/type", "?"),
+            "content": content,  # propagated so render_tree_node can surface enrichment (canon, strategy, ...)
         })
     all_scope_spans.sort(key=lambda s: (s["start"], -(s["end"] - s["start"])))
     if scope_limit is not None:
@@ -686,11 +827,15 @@ def build_paper_view(
     # any outer math scope (relation-expression, bind/typed) via the
     # shared scope-tree builder — that's the visible payoff for the
     # symbol-grounding mission (M-symbol-grounding.md).
+    grounded_scopes, symbol_env, grounding_summary = detect_grounded_symbols(
+        entity_id, eprint_text, singles, multi_index,
+    )
     local_scopes = [
         *local_scopes,
         *NLAB_WIRING.detect_comments(entity_id, eprint_text),
         *NLAB_WIRING.detect_math_scopes(entity_id, eprint_text),
         *NLAB_WIRING.detect_math_scopes_ast(entity_id, eprint_text),
+        *grounded_scopes,
     ]
     local_coverage = scope_coverage_stats(eprint_text, local_scopes)
     local_bins = scope_density_bins(eprint_text, local_scopes)
@@ -779,6 +924,7 @@ def build_paper_view(
         "local_term_outer_count": term_stats["outer"],
         "local_term_straddled_count": term_stats["straddled"],
         "local_term_depth_distribution": term_stats["depth_distribution"],
+        "local_symbol_grounding": grounding_summary,
     }
 
 
@@ -887,6 +1033,11 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
        strikethrough makes "this content is unreachable in the PDF" obvious. */
     .scope.comment-unreachable {{ background: rgba(120, 113, 108, 0.16); color: rgba(60, 60, 60, 0.55); text-decoration: line-through; text-decoration-color: rgba(120, 113, 108, 0.5); outline: 1px dotted rgba(120, 113, 108, 0.45); outline-offset: -1px; }}
     .scope.comment-unreachable .scope-label {{ background: rgba(120, 113, 108, 0.25); text-decoration: none; }}
+    /* Grounded math symbol — per-paper SymbolEnvironment match. Saturated
+       purple to read against the depth palette and pair with the inhabited
+       term overlay. The label badge shows the strategy that bound it. */
+    .scope.math-grounded-symbol {{ background: rgba(124, 58, 237, 0.34); outline: 1px solid rgba(124, 58, 237, 0.8); outline-offset: -1px; }}
+    .scope.math-grounded-symbol .scope-label {{ background: rgba(124, 58, 237, 0.55); color: white; }}
     .scope-label {{ display: inline-block; margin-right: 6px; padding: 0 4px; background: rgba(29, 26, 22, 0.1); border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
     .term-kernel {{ background: rgba(15, 118, 110, 0.12); border-bottom: 1px solid rgba(15, 118, 110, 0.45); padding: 0 1px; border-radius: 2px; cursor: help; }}
     .term-kernel:hover {{ background: rgba(15, 118, 110, 0.22); }}
@@ -957,6 +1108,8 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
           <span class="swatch term">term</span> kernel term in residual prose (= <strong>scope-development candidate</strong>)
           &nbsp;·&nbsp;
           <span class="swatch term-inhabited">term</span> kernel term <em>inhabiting</em> a scope
+          &nbsp;·&nbsp;
+          <span class="swatch scope math-grounded-symbol" style="padding: 0 6px;">X</span> math symbol <em>grounded</em> per-paper by the symbol-grounding strategies
         </p>
         <p class="markup-legend">
           Full-eprint term counts:
@@ -970,6 +1123,14 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
           Inhabited-term depth distribution (tree-aware):
           {' '.join(f'depth&nbsp;{d}:&nbsp;<code>{c}</code>' for d, c in (paper.get('local_term_depth_distribution') or {}).items()) or '<em>no nested terms</em>'}.
           Higher depths mean richer structural nesting around the term.
+        </p>
+        <p class="markup-legend">
+          Symbol-grounding strategies fired (per-paper, defeasible):
+          <code>{(paper.get('local_symbol_grounding') or {}).get('total_bindings_emitted', 0)}</code> bindings emitted,
+          <code>{(paper.get('local_symbol_grounding') or {}).get('active_bindings', 0)}</code> still active at end of paper,
+          <code>{(paper.get('local_symbol_grounding') or {}).get('grounded_atom_count', 0)}</code> math-atom occurrences grounded.
+          By strategy:
+          {' '.join(f'{html.escape(s)}:&nbsp;<code>{n}</code>' for s, n in ((paper.get('local_symbol_grounding') or {}).get('strategy_emit_counts') or {}).items()) or '<em>none</em>'}.
         </p>
         <pre>{paper['local_scope_markup']}</pre>
         <p class="tiny">Top local scope types: {html.escape(json.dumps(paper['local_scope_types'], ensure_ascii=False))}</p>
@@ -1173,6 +1334,7 @@ def main(argv: list[str] | None = None) -> dict:
                 "reverse_morphogenesis": paper["reverse_morphogenesis"],
                 "local_theorem_stats": paper["local_theorem_stats"],
                 "local_terms": paper["local_terms"],
+                "local_symbol_grounding": paper.get("local_symbol_grounding"),
             }
             for paper in papers
         ],
