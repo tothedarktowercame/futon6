@@ -652,8 +652,12 @@ def render_tree_node(text: str, node: dict, *, is_root: bool) -> str:
     # Depth-aware visual class so nested scopes are distinguishable. Cap at
     # depth-5+ so the palette stays bounded for arbitrarily deep nesting.
     depth_class = f'depth-{min(node["depth"], 5)}'
+    # Type-slug class lets CSS override the palette per scope type (e.g.,
+    # comment/unreachable becomes .comment-unreachable). Forward slashes and
+    # whitespace get normalized to dashes for class-name validity.
+    type_class = node["label"].replace("/", "-").replace(" ", "-")
     label_html = f'<span class="scope-label">{html.escape(node["label"])}</span>'
-    return f'<mark class="scope {depth_class}">{label_html}{"".join(out)}</mark>'
+    return f'<mark class="scope {type_class} {depth_class}">{label_html}{"".join(out)}</mark>'
 
 
 def render_overlay_markup(
@@ -837,6 +841,10 @@ def build_paper_view(
         raise FileNotFoundError(f"missing batch-008 eprint payload for {raw_id}")
     eprint_text, theorem_result = load_eprint_text_and_theorems(raw_id, payload, suffix)
     local_scopes = NLAB_WIRING.detect_scopes(entity_id, eprint_text)
+    # Merge LaTeX-comment scopes so commented-out source counts toward
+    # coverage (and so the kernel terms inside don't get reported as
+    # scope-development frontier).
+    local_scopes = [*local_scopes, *NLAB_WIRING.detect_comments(entity_id, eprint_text)]
     local_coverage = scope_coverage_stats(eprint_text, local_scopes)
     local_bins = scope_density_bins(eprint_text, local_scopes)
     local_windows = pick_scope_windows(
@@ -1028,6 +1036,10 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
     .scope.depth-3 {{ background: linear-gradient(90deg, #ddd6fe, #ede9fe); }}
     .scope.depth-4 {{ background: linear-gradient(90deg, #c7d2fe, #e0e7ff); }}
     .scope.depth-5 {{ background: linear-gradient(90deg, #a5b4fc, #cbd5e1); outline: 1px dashed rgba(71, 85, 105, 0.4); outline-offset: -2px; }}
+    /* LaTeX comment scope overrides the depth palette: dim background plus
+       strikethrough makes "this content is unreachable in the PDF" obvious. */
+    .scope.comment-unreachable {{ background: rgba(120, 113, 108, 0.16); color: rgba(60, 60, 60, 0.55); text-decoration: line-through; text-decoration-color: rgba(120, 113, 108, 0.5); outline: 1px dotted rgba(120, 113, 108, 0.45); outline-offset: -1px; }}
+    .scope.comment-unreachable .scope-label {{ background: rgba(120, 113, 108, 0.25); text-decoration: none; }}
     .scope-label {{ display: inline-block; margin-right: 6px; padding: 0 4px; background: rgba(29, 26, 22, 0.1); border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
     .term-kernel {{ background: rgba(15, 118, 110, 0.12); border-bottom: 1px solid rgba(15, 118, 110, 0.45); padding: 0 1px; border-radius: 2px; cursor: help; }}
     .term-kernel:hover {{ background: rgba(15, 118, 110, 0.22); }}

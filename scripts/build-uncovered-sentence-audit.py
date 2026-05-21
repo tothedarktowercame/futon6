@@ -647,6 +647,10 @@ def build_paper_audit(
     wires = NLAB_WIRING.detect_wires(raw_id, text) or []
     ports = NLAB_WIRING.detect_ports(raw_id, text) or []
     labels = NLAB_WIRING.detect_labels(raw_id, text) or []
+    comments = NLAB_WIRING.detect_comments(raw_id, text) or []
+    # Treat commented-out source as a scope so the kernel terms inside don't
+    # count as scope-development frontier.
+    scopes = [*scopes, *comments]
     learned_all = NLAB_WIRING.detect_learned(raw_id, text, learned_patterns or []) or []
     # Anti-clobber: a learned record only counts toward coverage if its match
     # span lies entirely outside the union of scope/wire/port/label spans. This

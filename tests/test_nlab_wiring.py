@@ -405,6 +405,36 @@ class TestDiscourseWiring:
         assert nlab_wiring.detect_learned("e", "Any text whatsoever.", []) == []
         assert nlab_wiring.detect_learned("e", "Any text whatsoever.", None) == []
 
+    def test_detect_comments_finds_latex_comments(self):
+        text = (
+            "Definition of monoid.\n"
+            "% TODO: rewrite this paragraph using monad terminology\n"
+            "A monoid is a set with operation.\n"
+        )
+        records = nlab_wiring.detect_comments("test-comment", text)
+        assert len(records) == 1
+        rec = records[0]
+        assert rec["hx/type"] == "comment/unreachable"
+        assert rec["hx/role"] == "scope"
+        assert "TODO" in rec["hx/content"]["match"]
+
+    def test_detect_comments_skips_escaped_percent(self):
+        text = "The fraction is 95\\% of the total."
+        records = nlab_wiring.detect_comments("test-esc", text)
+        # `\%` is a literal percent sign, not a comment.
+        assert records == []
+
+    def test_detect_comments_handles_multiple_comments(self):
+        text = (
+            "% first comment\n"
+            "real content here\n"
+            "% second comment\n"
+            "more content\n"
+            "trailing % inline comment until newline\n"
+        )
+        records = nlab_wiring.detect_comments("test-multi", text)
+        assert len(records) == 3
+
     def test_detect_learned_skips_bad_regex_silently(self):
         patterns = [{
             "signature": "weird",

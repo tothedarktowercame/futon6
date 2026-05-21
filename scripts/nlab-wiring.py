@@ -1335,6 +1335,35 @@ def detect_labels(entity_id, text, parent_env_id=None):
     return labels
 
 
+COMMENT_RE = re.compile(r"(?<!\\)%[^\n]*")
+
+
+def detect_comments(entity_id, text, parent_env_id=None):
+    """Detect LaTeX comments and emit them as scope/comment/unreachable records.
+
+    A comment runs from an unescaped `%` to end of line. Content inside is
+    structurally unreachable in the rendered PDF and should not count as
+    scope-development frontier. The simple negative-lookbehind misses the
+    edge case `\\\\%` (escaped backslash followed by a real comment), which
+    is rare enough in arXiv source to accept as a known limitation.
+    """
+    records = []
+    for i, m in enumerate(COMMENT_RE.finditer(text)):
+        records.append({
+            "hx/id": f"{entity_id}:comment-{i:03d}",
+            "hx/role": "scope",
+            "hx/type": "comment/unreachable",
+            "hx/parent": parent_env_id,
+            "hx/content": {
+                "match": m.group()[:160],
+                "position": m.start(),
+                "end": m.end(),
+            },
+            "hx/labels": ["scope", "comment", "unreachable"],
+        })
+    return records
+
+
 def detect_learned(entity_id, text, learned_patterns, parent_env_id=None):
     """Apply gated learned-discourse-patterns to raw text.
 
