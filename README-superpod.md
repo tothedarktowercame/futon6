@@ -242,19 +242,95 @@ python3 scripts/build-uncovered-sentence-audit.py
 That script:
 
 - chooses fresh papers not already used in the daisychain ledger
-- measures current Stage 5 discourse coverage
-- emits only the residual uncovered sentences for manual review
+- runs Stage 5 discourse detection over each
+- enriches each uncovered residual with known-term hits from the
+  NER kernel and a normalized structure-seed signature
+- buckets cross-paper signatures by their discourse-verb backbone
+- gates the resulting candidates into `learned-discourse-patterns.json`
+  (default: `paper_count >= 2` and a recognizable `predicted_kind` of
+  `scope` / `label` / `wire`)
 - advances a ledger so the next run shifts to new papers instead of
   repeatedly tuning on the same examples
 
-The main outputs are:
+The default outputs are:
 
-- `data/showcases/distributed-proofreaders/latest-audit.json`
-- `data/showcases/distributed-proofreaders/latest-audit.html`
-- `data/showcases/distributed-proofreaders/daisychain-ledger.json`
+- `data/showcases/distributed-proofreaders/latest-audit.json` — full
+  audit, including per-paper coverage, residuals, term hits, and
+  aggregated `structure_seed_candidates`
+- `data/showcases/distributed-proofreaders/latest-audit.html` — same as
+  HTML for browsing
+- `data/showcases/distributed-proofreaders/learned-discourse-patterns.json` —
+  gated patterns from this run, deployable into a follow-on audit
+- `data/showcases/distributed-proofreaders/daisychain-ledger.json` —
+  records advance across runs
+
+### Replay matcher (cross-batch firing detection)
+
+Pass a prior audit JSON to surface cross-batch signature firings:
+
+```bash
+python3 scripts/build-uncovered-sentence-audit.py \
+  --seed-signatures-json data/showcases/distributed-proofreaders/latest-audit.json \
+  --no-advance-ledger
+```
+
+The audit then runs an in-order subsequence matcher: every residual in
+the current run is checked against the prior signatures. The matched
+prior is recorded on each residual as `matched_prior_signature`, and
+the run-level report carries `seed_signatures_loaded` and
+`seed_matches_applied`. This is how you measure whether learning from
+batch A transfers to batch B.
+
+### Promotion loop (learned patterns feed back into detection)
+
+To apply previously-learned patterns as live detectors:
+
+```bash
+python3 scripts/build-uncovered-sentence-audit.py \
+  --learned-patterns-json data/showcases/distributed-proofreaders/learned-discourse-patterns.json \
+  --no-advance-ledger
+```
+
+The audit then:
+
+- loads each pattern's regex + `predicted_kind`
+- calls `nlab_wiring.detect_learned` over every paper's text
+- runs an **anti-clobber filter** (ON by default): only learned records
+  whose match span lies outside the union of existing
+  scope/wire/port/label spans count toward coverage. Records that pile
+  onto already-covered prose are kept for diagnostics but excluded
+  from the discourse list so the coverage delta is a clean signal.
+- emits `learned_records_emitted_total`, `learned_records_total`
+  (kept), `learned_records_clobbered_total` in the report
+
+To inspect all firings including the clobbered ones, use
+`--no-learned-anticlobber`.
+
+### Recommended cross-batch iteration
+
+```bash
+# 1. Audit batch A → patterns from A
+python3 scripts/build-uncovered-sentence-audit.py \
+  --paper-id ID1 --paper-id ID2 ... \
+  --out-json /tmp/A.json \
+  --learned-patterns-out /tmp/A-patterns.json \
+  --no-advance-ledger
+
+# 2. Audit batch B with A's patterns → measure lift
+python3 scripts/build-uncovered-sentence-audit.py \
+  --paper-id ID_N+1 ... \
+  --out-json /tmp/B-with.json \
+  --learned-patterns-json /tmp/A-patterns.json \
+  --no-advance-ledger
+
+# 3. Compare B-with against a B-baseline run (no --learned-patterns-json)
+#    on the same paper IDs to read the coverage delta.
+```
 
 The intent is to grow a reusable seed kit of structure patterns, not to
 paper-special-case the detector around one or two hand-picked texts.
+Promotion details and the open loss-of-loss work are tracked in
+[`holes/missions/M-structure-seed-promotion.md`](holes/missions/M-structure-seed-promotion.md).
 
 ## 6. What the evidence says so far
 
