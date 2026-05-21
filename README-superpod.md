@@ -1,6 +1,6 @@
 # README: Superpod Status
 
-Last updated: 2026-05-20
+Last updated: 2026-05-21
 
 This file is the operator-facing summary of where the superpod pipeline
 stands now across the live `mark2` lane, the in-code `mark3` upgrades, and
@@ -154,13 +154,19 @@ The practical interpretation is:
 If those do not show eprint usage, treat the run as QC-failed for paper
 mining, not as a weak-but-valid result.
 
-## 5. Laptop-safe running instructions
+## 5. Running instructions
 
-This laptop has no GPU. That does **not** block the paper-mining lane. It
-only blocks embeddings, LLM inference, graph embeddings, and FAISS.
+The single canonical command for both Rob's superpod runs and the local
+laptop-CPU replays is below. The `--skip-*` flags are the only difference:
 
-For a CPU-safe arXiv replay that still exercises the corrected eprint-backed
-paper stages, use:
+- **For Rob's superpod (full GPU): omit** all five `--skip-*` flags so
+  embeddings, LLM, clustering, graph-embed, and FAISS all run.
+- **For laptop CPU replay**: keep the `--skip-*` flags as shown so the
+  paper-mining lane still exercises Stage 5 / 5c / 5d / 9a + the new
+  structure-learning loop without GPU.
+
+In both modes the rest of the command is identical, the QC outputs print
+in the same shape, and the structure-learning loop runs.
 
 ```bash
 python3 scripts/superpod-job.py \
@@ -194,42 +200,61 @@ Why these flags are the current default-safe lane:
   PM seed, nLab seed, and NNexus concept snapshot while still retaining
   provisional genuinely new terms
 - `--discover-structures` makes Stage 5 mine term-dense uncovered residual
-  sentences into learned structure signatures and write a simple
-  structure/term loss summary
+  sentences into learned structure signatures, classify them by discourse
+  verb (scope / label / wire), and emit gated candidates that can be
+  replayed on a future run via `--discover-structures-seed-json`
 - the same learned-term stream is then reused in Stage 5c and Stage 5d, so
   the runner can accumulate terminology in-run instead of requiring a
   separate downstream novelty pass
 - `--skip-embeddings --skip-llm --skip-clustering --skip-graph-embed --skip-faiss`
   keeps the run CPU-safe while still giving:
   - Stage 5 NER/scope output
-  - `discourse-wiring.json` with scope + wire + port + label records
+  - `discourse-wiring.json` with scope + wire + port + label + comment records
   - `candidate-new-terms.jsonl` with seed-aware novelty labels
   - `learned-term-dictionary.jsonl` with provisional OED-style entries
   - `learned-structure-candidates.json` with reusable residual signatures
+    (coarse cluster signature + `full_signatures` per cluster + `predicted_kind`)
   - `learned-structure-summary.json` with structure loss and seed-match stats
+  - `audit-summary.json` with per-paper inhabited/outer/straddled term
+    counts and tree-aware depth distribution on a random sample of entities
   - `qc-preregister.json` with historical baseline checks against archived
-    `mark2` runs
+    `mark2` runs plus the new structure-learning gates and headline
   - Stage 5c classical technique extraction
   - Stage 5d classical paper hypergraphs
   - Stage 9a geometry
 
-Expected post-run checks:
+Two new flags with safe defaults — only override if Rob wants:
 
-- Stage 5 should report `text source: eprint=N, abstract-fallback=0`
-- Stage 5 should also report a learned-dictionary summary such as:
-  - `new=...`
-  - `seed-known-missing-from-kernel=...`
-  - `rhs_supported=...`
-- Stage 5 should now also report:
-  - `Discourse coverage: ...`
-  - `wires=...`
-  - `ports=...`
-  - `labels=...`
-- Stage 5c and Stage 5d should also report eprint-only text use
-- Stage 9a should report nonzero eprint text coverage
+- `--stage5-loss-log-interval N` (default 500): print a running loss
+  snapshot every N entities during the Stage 5 loop. Set to 0 to silence.
+- `--audit-sample-size K` (default 30): how many entities the inline
+  end-of-job audit classifies. 30 is cheap; 0 disables the audit entirely.
 
-If any of those fall back to abstracts for a supposedly paper-backed batch,
-stop and treat the run as a provenance failure.
+Expected post-run checks (failure of any indicates the run isn't valid):
+
+- **Provenance**: Stage 5 reports `text source: eprint=N, abstract-fallback=0`;
+  Stage 5c and Stage 5d report eprint-only text use; Stage 9a reports
+  nonzero eprint coverage. Fallback to abstracts on a paper-backed batch
+  is a provenance failure — stop and investigate.
+- **Stage 5 baseline output**: `Discourse coverage`, `wires=`, `ports=`,
+  `labels=` numbers print.
+- **Periodic loss snapshots**: every 500 entities, lines like
+  `[N/T] loss snapshot: term entities_with_ner=…, structure uncovered=…
+  (with_terms=…), interaction free_floating=NN.N%, seed_matches=…`.
+- **Audit summary**: at end of Stage 5, lines like
+  `Audit sample (30 entities): inhabited=…, outer=… (frontier NN.N%),
+  straddled=… -> audit-summary.json` followed by a depth distribution
+  line `Audit depth distribution: d1:N, d2:N, d3:N, … (max_depth=N)`.
+- **Structure-learning headline** (when `--discover-structures` is on):
+  `Structure-learning headline: discovered=N, classified=M (label=…,
+  scope=…, wire=…), gated=K`. The `gated` count is what the next run
+  could replay via `--discover-structures-seed-json` to test transfer.
+- **QC**: `Preregistered QC: pass|warn|fail (N gates) -> qc-preregister.json`
+  with new gates `structure_learning_capture`, `gated_pattern_yield`,
+  `structure_seed_replay` (if seed JSON was loaded).
+- **Comment scopes**: `Comment scopes: N comment/unreachable records
+  across M entities` (24% of source by chars is typical; >50% may indicate
+  a corpus with heavy meta-content).
 
 ## 5a. Distributed Proofreaders loop
 
@@ -331,6 +356,142 @@ The intent is to grow a reusable seed kit of structure patterns, not to
 paper-special-case the detector around one or two hand-picked texts.
 Promotion details and the open loss-of-loss work are tracked in
 [`holes/missions/M-structure-seed-promotion.md`](holes/missions/M-structure-seed-promotion.md).
+
+## 5b. Demos to inspect
+
+The QC viewer renders per-paper pages with structural overlays. Both the
+v1 baseline (scope-only) and the v2 (tree-aware + inhabited terms +
+depth coloring + comment scopes) live under
+`data/showcases/`. The files are gitignored regeneratable artifacts;
+Rob can rebuild them locally after a run with:
+
+```bash
+python3 scripts/build-batch-008-qc-viewer.py \
+  --paper-id 0710.3853v1 --paper-id 0802.0600v1 \
+  --paper-id 0711.1739v1 --paper-id 0712.4211v1 \
+  --out-html data/showcases/batch-008-math-ct-qc-v2.html \
+  --out-json data/showcases/batch-008-math-ct-qc-v2.json \
+  --out-page-dir data/showcases/batch-008-math-ct-qc-v2-pages
+```
+
+Then open:
+
+- [`batch-008-math-ct-qc-v2.html`](data/showcases/batch-008-math-ct-qc-v2.html) —
+  index with per-paper frontier counts and kernel-term breakdowns
+- per-paper pages under `batch-008-math-ct-qc-v2-pages/` — full overlay
+  with nested scope marks, inhabited (purple) vs outer (teal) kernel
+  terms, comment/unreachable scopes (grey strikethrough), and a depth
+  distribution line
+
+For the structure-learning loop's residual proofreading view:
+
+- [`distributed-proofreaders/latest-audit.html`](data/showcases/distributed-proofreaders/latest-audit.html) —
+  uncovered sentences ranked by kernel-term density, grouped by paper
+- [`distributed-proofreaders/learned-discourse-patterns.json`](data/showcases/distributed-proofreaders/learned-discourse-patterns.json) —
+  gated patterns ready to feed into a next-iteration audit via
+  `--learned-patterns-json`
+
+What to look at in v2:
+
+- The legend bar shows the **depth palette** (d1 amber, d2 rose, d3
+  violet, d4 indigo, d5+ slate w/ dashed outline) plus the term swatches
+  (teal = outer, purple = inhabited, grey strikethrough = comment).
+- **Per-paper frontier counts**: `inhabited / outer (scope-development
+  frontier) / total`. Outer = candidates for future scope work.
+- **Depth distribution** under each paper: `d1:N d2:N d3:N …`. The
+  Galois actions paper (`0711.1739v1`) currently shows terms nested
+  six levels deep; the flat renderer would have hidden ~80% of those.
+- The `0802.0600v1` (Balanced category theory) page is the clearest
+  example of high frontier ratio — most of its kernel terms sit in
+  unannotated prose, which is exactly the structure-learning target.
+
+## 5c. Preregistration: what we expect to learn from the renewed mining
+
+This section commits in writing — before Rob's first batch lands — to
+what we predict and how we'll measure it. Anything not on this list
+that surfaces will count as an unexpected finding rather than a
+confirmation.
+
+### Metrics we will track per batch
+
+1. **Aggregate frontier ratio** (`audit_outer_terms / audit_total`)
+   over the audit sample. Reported in the QC headline.
+2. **Inhabitation rate** between consecutive batches: `(outer_before
+   - outer_after) / outer_before` on the same paper set when
+   `--discover-structures-seed-json` carries forward. A positive value
+   means learned patterns are migrating residual terms into scope.
+3. **Gated pattern yield** (`headline_summary.gated_for_promotion`):
+   candidates that cleared `paper_count >= 2 AND predicted_kind set`.
+4. **Depth distribution**: `audit_depth_distribution` and
+   `audit_max_depth`. We expect mass at d1–d3 and a long thin tail
+   into d4–d6.
+5. **Comment-scope share**: total `comment/unreachable` chars / total
+   source chars. A sanity check on corpus quality.
+6. **Free-floating term ratio** during the run: prints every 500
+   entities. We expect it to stabilize (not climb) as the batch progresses.
+
+### Predictions for batch sized 1000+ papers
+
+- **Gated pattern yield ≥ 5**. At 30-paper sample we got 1; scaling
+  argument: more papers → more cross-paper recurrence clears the
+  `paper_count >= 2` gate. If yield is < 2, the prefilter is too
+  strict or the discourse-verb taxonomy is missing common cues.
+- **Max depth ≥ 5** on at least 10% of sampled papers. Real arXiv
+  math.* papers routinely nest `env/proof > bind/let > bind/typed >
+  constrain/relation`. Lower max-depth suggests detector regressions.
+- **Frontier ratio between 15% and 40%** on the audit sample
+  aggregate. Below 15% means scopes are already covering everything
+  (good but suspicious); above 40% means the detector is mostly
+  watching from the sidelines (which is what we want to reduce).
+- **Comment-scope share between 5% and 30%** of source chars.
+  Outside that range suggests the comment detector is mis-firing or
+  the corpus has unusual meta-content.
+- **At least three distinct `predicted_kind` values** in the gated
+  candidates (scope, label, wire all represented). If only one kind
+  shows up, the discourse-verb taxonomy is funneling everything
+  through one category and the classifier needs widening.
+
+### Patterns we specifically expect to clear the gate
+
+From the 30-paper batch-008 evidence and the audit's 9-paper run, we
+got `be obtain` (label) and `be introduce` (label) at small N. At
+1000+ papers we expect to additionally see:
+
+- `we prove that be` (label) — recurrent theorem-statement frame
+- `let be` (scope) — basic binding cue when the math content uses
+  `\let` macros or short let-be constructions
+- `we study and` (label) — paper-level framing seen in introductions
+- `assume that` / `suppose that` (scope) — proof-internal binding
+- `notice that` / `observe that` (wire) — discourse connectives
+
+If none of those clear `paper_count >= 2` at 1000 papers, something
+is wrong with the aggregation prefilter, not with the corpus.
+
+### Closing the loop across batches
+
+Rob's first batch produces `learned-structure-candidates.json`. The
+second batch loads that as `--discover-structures-seed-json` and we
+read two new numbers from the QC headline:
+
+- `seed_matches_applied` — how many residuals in batch B were
+  recognized via signatures learned from batch A. Non-zero confirms
+  cross-batch transfer.
+- `entities_with_seed_matches` — diversity of where matches fired.
+
+The first batch with non-zero replay is the "the loop closed on real
+data" milestone.
+
+### Stopping rule
+
+Iteration stops when **inhabitation rate per cycle drops below 1%**
+across a representative random sample, OR when the gated-pattern
+yield stops growing across two consecutive batches. At that point
+the next bottleneck is the detector itself (more cue verbs, more
+scope shapes), not the learning loop.
+
+The full discipline is documented in
+[`holes/missions/M-structure-seed-promotion.md`](holes/missions/M-structure-seed-promotion.md)
+section 7.
 
 ## 6. What the evidence says so far
 
@@ -447,11 +608,19 @@ state summary for the current arXiv mark2/mark3 work.
 If you need the one-paragraph summary:
 
 The live superpod workflow is still `mark2` through the Chicago
-transfer/archive lane, but the runner has now been materially upgraded in
-code for the next arXiv phase. The important current point is that paper
-mining must be eprint-backed: Stage 5 NER/scope detection, Stage 5c
-technique extraction, Stage 5d paper hypergraphs, and Stage 9a geometry are
-only trustworthy when the manifest confirms real eprint usage. The laptop
-safe invocation is now the CPU-only paper path with embeddings/LLM/FAISS
-disabled, and the latest two-paper replay confirms that this path is reading
-papers rather than abstract surrogates.
+transfer/archive lane, with the runner materially upgraded for arXiv work.
+Paper mining must be eprint-backed: Stage 5 NER/scope detection, Stage 5c
+technique extraction, Stage 5d paper hypergraphs, and Stage 9a geometry
+are only trustworthy when the manifest confirms eprint usage. The single
+canonical command lives in section 5 (drop the `--skip-*` flags on
+superpod, keep them on the laptop). On top of that baseline, Stage 5 now
+runs a structure-learning loop that mines term-dense uncovered residuals
+into discourse-verb-classified candidate signatures (`learned-structure-
+candidates.json`), can replay a prior batch's signatures via subsequence
+match (`--discover-structures-seed-json`), reports periodic loss snapshots
+during the run and an audit summary at the end (`audit-summary.json`),
+and gives the QC report a headline block showing what was learned. The
+preregistration in section 5c commits to which numbers we'll track and
+what we expect them to look like before the first big batch lands; the
+demo pointers in section 5b show what the per-paper visualization looks
+like under the new tooling.
