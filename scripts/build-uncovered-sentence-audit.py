@@ -137,6 +137,24 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=2,
         help="Minimum paper_count for a signature to enter the gated pattern set.",
     )
+    parser.add_argument(
+        "--learned-anticlobber",
+        action="store_true",
+        default=True,
+        help=(
+            "When applying learned patterns to coverage, only count records whose "
+            "match span lies entirely outside existing scope/wire/port/label coverage. "
+            "This filters out learned records that pile onto already-covered prose so "
+            "the coverage delta is a clean signal of newly-opened territory. ON by "
+            "default."
+        ),
+    )
+    parser.add_argument(
+        "--no-learned-anticlobber",
+        dest="learned_anticlobber",
+        action="store_false",
+        help="Disable the anti-clobber filter; useful for inspecting all firings.",
+    )
     return parser.parse_args(argv)
 
 
@@ -586,6 +604,34 @@ def load_eprint_text(batch_tar: Path, raw_id: str) -> str:
         tmp_path.unlink(missing_ok=True)
 
 
+def apply_anticlobber(base_records: list[dict], learned_records: list[dict]) -> tuple[list[dict], list[dict]]:
+    """Split learned records by whether they overlap the base-detector span union.
+
+    Returns (kept, clobbered). A learned record is clobbered when its match span
+    intersects the merged span of base scope/wire/port/label records — its
+    annotation duplicates existing coverage and would inflate the learned-count
+    without widening sentence coverage. Records without a usable span (no
+    position) are kept rather than dropped.
+    """
+    base_spans = VIEWER.merge_spans(
+        [span for r in base_records if (span := VIEWER.scope_span(r))]
+    )
+    kept = []
+    clobbered = []
+    for record in learned_records:
+        span = VIEWER.scope_span(record)
+        if span is None:
+            kept.append(record)
+            continue
+        s, e = span
+        overlaps = any(not (m_end <= s or m_start >= e) for m_start, m_end in base_spans)
+        if overlaps:
+            clobbered.append(record)
+        else:
+            kept.append(record)
+    return kept, clobbered
+
+
 def build_paper_audit(
     batch_tar: Path,
     batch_meta: dict[str, dict],
@@ -601,8 +647,21 @@ def build_paper_audit(
     wires = NLAB_WIRING.detect_wires(raw_id, text) or []
     ports = NLAB_WIRING.detect_ports(raw_id, text) or []
     labels = NLAB_WIRING.detect_labels(raw_id, text) or []
-    learned = NLAB_WIRING.detect_learned(raw_id, text, learned_patterns or []) or []
-    discourse = sorted([*scopes, *wires, *ports, *labels, *learned], key=record_position_key)
+    learned_all = NLAB_WIRING.detect_learned(raw_id, text, learned_patterns or []) or []
+    # Anti-clobber: a learned record only counts toward coverage if its match
+    # span lies entirely outside the union of scope/wire/port/label spans. This
+    # keeps the coverage delta a clean signal of newly-opened territory; records
+    # that pile onto already-covered prose are recorded as clobbered.
+    base_records = [*scopes, *wires, *ports, *labels]
+    if getattr(args, "learned_anticlobber", True):
+        learned_kept, learned_clobbered = apply_anticlobber(base_records, learned_all)
+    else:
+        learned_kept = list(learned_all)
+        learned_clobbered = []
+    discourse = sorted(
+        [*base_records, *learned_kept],
+        key=record_position_key,
+    )
     scope_coverage = VIEWER.scope_coverage_stats(text, scopes)
     discourse_coverage = VIEWER.scope_coverage_stats(text, discourse)
     uncovered_rows = extract_uncovered_sentences(
@@ -636,7 +695,9 @@ def build_paper_audit(
         "wire_count": len(wires),
         "port_count": len(ports),
         "label_count": len(labels),
-        "learned_count": len(learned),
+        "learned_count": len(learned_kept),
+        "learned_records_emitted": len(learned_all),
+        "learned_records_clobbered": len(learned_clobbered),
         "scope_coverage": scope_coverage,
         "discourse_coverage": discourse_coverage,
         "coverage_lift": {
@@ -775,7 +836,10 @@ def main(argv: list[str]) -> int:
         "seed_matches_applied": seed_matches_applied,
         "learned_patterns_json": str(args.learned_patterns_json) if args.learned_patterns_json else None,
         "learned_patterns_loaded": len(input_learned_patterns),
+        "learned_anticlobber": getattr(args, "learned_anticlobber", True),
         "learned_records_total": sum(p.get("learned_count", 0) for p in paper_reports),
+        "learned_records_emitted_total": sum(p.get("learned_records_emitted", 0) for p in paper_reports),
+        "learned_records_clobbered_total": sum(p.get("learned_records_clobbered", 0) for p in paper_reports),
         "papers": paper_reports,
         "structure_seed_candidates": candidates,
         "learned_discourse_patterns_count": len(output_learned_patterns),
@@ -806,9 +870,13 @@ def main(argv: list[str]) -> int:
     print(f"Wrote {args.out_html}")
     print(f"Wrote {patterns_out} ({len(output_learned_patterns)} gated patterns)")
     if input_learned_patterns:
+        kept = report["learned_records_total"]
+        emitted = report["learned_records_emitted_total"]
+        clobbered = report["learned_records_clobbered_total"]
         print(
-            f"Learned-pattern replay: {len(input_learned_patterns)} patterns loaded, "
-            f"{report['learned_records_total']} records fired across papers"
+            f"Learned-pattern replay: {len(input_learned_patterns)} patterns loaded; "
+            f"{emitted} records emitted, {kept} kept (anti-clobber), "
+            f"{clobbered} clobbered"
         )
     if seed_signatures:
         print(

@@ -197,6 +197,87 @@ def test_build_learned_discourse_patterns_gates_by_paper_count():
     assert "regex" in out[0] and out[0]["regex"]
 
 
+def test_anticlobber_drops_learned_records_overlapping_base_scope():
+    # A base scope covering chars 100-200; a learned record at 150-160 (inside)
+    # is clobbered. A learned record at 300-310 (outside) is kept.
+    base = [{
+        "hx/id": "base-0",
+        "hx/role": "scope",
+        "hx/type": "env/theorem",
+        "hx/content": {"position": 100, "end": 200, "match": "..."},
+    }]
+    learned = [
+        {
+            "hx/id": "L-clobber",
+            "hx/role": "label",
+            "hx/type": "learned/label",
+            "hx/content": {"position": 150, "end": 160, "match": "..."},
+        },
+        {
+            "hx/id": "L-kept",
+            "hx/role": "label",
+            "hx/type": "learned/label",
+            "hx/content": {"position": 300, "end": 310, "match": "..."},
+        },
+    ]
+    kept, clobbered = AUDIT.apply_anticlobber(base, learned)
+    assert [r["hx/id"] for r in kept] == ["L-kept"]
+    assert [r["hx/id"] for r in clobbered] == ["L-clobber"]
+
+
+def test_anticlobber_keeps_records_with_no_span():
+    # A learned record without a usable position survives — defensive default.
+    base = [{
+        "hx/id": "base-0",
+        "hx/role": "scope",
+        "hx/type": "env/theorem",
+        "hx/content": {"position": 100, "end": 200, "match": "..."},
+    }]
+    learned_no_span = {
+        "hx/id": "L-nospan",
+        "hx/role": "label",
+        "hx/type": "learned/label",
+        "hx/content": {"match": "..."},  # no position
+    }
+    kept, clobbered = AUDIT.apply_anticlobber(base, [learned_no_span])
+    assert kept == [learned_no_span]
+    assert clobbered == []
+
+
+def test_anticlobber_with_no_base_keeps_everything():
+    # If base detectors fired nothing, learned records can't be clobbered.
+    learned = [
+        {
+            "hx/id": "L-1",
+            "hx/role": "label",
+            "hx/type": "learned/label",
+            "hx/content": {"position": 0, "end": 10, "match": "..."},
+        },
+    ]
+    kept, clobbered = AUDIT.apply_anticlobber([], learned)
+    assert kept == learned
+    assert clobbered == []
+
+
+def test_anticlobber_partial_overlap_counts_as_clobber():
+    # Boundary case: a learned record straddles the edge of a base span.
+    base = [{
+        "hx/id": "base-0",
+        "hx/role": "scope",
+        "hx/type": "env/theorem",
+        "hx/content": {"position": 100, "end": 200, "match": "..."},
+    }]
+    straddle = {
+        "hx/id": "L-straddle",
+        "hx/role": "label",
+        "hx/type": "learned/label",
+        "hx/content": {"position": 190, "end": 250, "match": "..."},
+    }
+    kept, clobbered = AUDIT.apply_anticlobber(base, [straddle])
+    assert kept == []
+    assert clobbered == [straddle]
+
+
 def test_seed_signatures_flag_loads_and_matches_via_audit_module(tmp_path):
     # Write a synthetic prior-run audit JSON with one signature long enough
     # to clear the matcher's min_tokens=3 floor.

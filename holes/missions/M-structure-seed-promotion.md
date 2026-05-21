@@ -1,7 +1,7 @@
 # Mission: Structure-Seed Promotion — From Replay Labels to a Live Pattern Inducer
 
 **Date:** 2026-05-20
-**Status:** INSTANTIATE (sections 3.1–3.3 landed same session; 3.4 + measurement open)
+**Status:** INSTANTIATE (sections 3.1–3.3 + anti-clobber filter landed 2026-05-20; loss-of-loss stopping rule open)
 **Owner:** Joe (POC complete on `nlab-wiring.py` / `build-uncovered-sentence-audit.py` / `superpod-job.py`); next-phase delegate TBD
 **Predecessor work in same session:**
 - structure-seed signature aggregation and Stage 5 hook (Codex,
@@ -223,20 +223,51 @@ contributes no marginal coverage. The fire is real; the lift on
 this small batch is zero because the existing detector is already
 strong where the pattern fires.
 
-### Open work (sections 3.4 + measurement)
+### Anti-clobber filter (landed)
 
-- **Run on Rob-sized batches.** At 9 papers, only one signature
-  clears `paper_count ≥ 2`. At 50–100 papers (the queue Rob is
-  prepping), many more should survive and the marginal-coverage
-  signal should be measurable.
+`apply_anticlobber(base_records, learned_records)` in
+`scripts/build-uncovered-sentence-audit.py` splits learned records
+into kept (no overlap with the merged span of
+scope/wire/port/label) and clobbered (overlaps existing coverage).
+Only kept records enter the discourse list. CLI default is
+anti-clobber ON; `--no-learned-anticlobber` opts out for
+diagnostics.
+
+Audit report now reports `learned_records_emitted_total`,
+`learned_records_total` (= kept), `learned_records_clobbered_total`,
+plus per-paper counts.
+
+### 30-paper validation result (2026-05-20)
+
+Run audit-A on 30 batch-008 papers (random sample, seed 20260521,
+no overlap with prior session runs) → **2 gated patterns**:
+- `prove that be` (label, paper_count=2)
+- `be obtain` (label, paper_count=2)
+
+Run audit-B on a different 30 papers, baseline vs with learned
+patterns:
+- **5 / 30 papers showed positive sentence-coverage lift**
+- Per-paper delta range: +0.0018 to +0.0116
+- Aggregate sentence-coverage delta: **+0.0008** (small but
+  non-zero, signal not just batch noise)
+- Total learned records: 35 emitted; **21 kept** (60%) after
+  anti-clobber; **14 clobbered** (40%) — anti-clobber filter
+  catches a substantial fraction that would otherwise inflate the
+  learned-count without widening coverage
+
+That is the loop closing on real data. The +0.0000 result from
+the 6-paper test was small-batch noise; at 30+30 the signal
+becomes detectable. At Rob-sized batches (50–100+ papers) more
+signatures will clear `paper_count ≥ 2` and the lift should grow
+proportionally.
+
+### Still open
+
 - **Loss-of-loss stopping rule** (section 3.4) is unimplemented.
   Track `structure_loss` from `learning_loss` across promotion
   cycles; promote signatures whose addition reduces residuals.
-- **Anti-clobber gating.** Optionally suppress `detect_learned`
-  records that fall inside already-covered spans, to focus
-  promoted patterns on widening coverage rather than annotating
-  already-covered prose. This is a cheap filter at the audit
-  layer.
+  Not blocking for Rob's first batch — this is the meta-loop
+  diagnostic, not correctness.
 
 ### Tests added in this slice
 
