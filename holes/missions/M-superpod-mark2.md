@@ -95,8 +95,8 @@ When Rob marks a batch as pulled, the coordinator starts a background
 fetch window. The same ready-target repair is also triggered when results are
 registered or collected, so the lane recovers even if an operator forgets the
 `pulled` step and the inbox tarball only becomes obviously stale once results
-come back. The fill target is two ready inbox batches by default
-(`MARK2_READY_TARGET=2`), guarded by a build lock so manual fills, cron
+come back. The fill target is six ready inbox batches by default
+(`MARK2_READY_TARGET=6`), guarded by a build lock so manual fills, cron
 fills, and lifecycle-triggered fills cannot overlap. Joe seeds or repairs
 state when needed; under normal operation the machine keeps itself slightly
 ahead of Rob's superpod processing pace.

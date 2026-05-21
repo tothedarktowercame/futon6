@@ -1,0 +1,44 @@
+{:dictionary/version "0.1-pm-seed"
+ :dictionary/created #inst "2026-05-20T00:00:00Z"
+ :dictionary/created-by :pm-seed-loader/v1
+ :dictionary/source-root "/tmp/pm"
+ :dictionary/entry-count 2
+ :dictionary/entries
+ [{:term/id "ringed-space"
+   :term/headword "Ringed space"
+   :term/lower "ringed space"
+   :term/part :noun
+   :term/aliases []
+   :term/etymology {:first-source "planetmath:RingedSpace"
+                    :first-source-date nil
+                    :first-extractor :pm-seed-loader/v1
+                    :note "fixture"}
+   :term/definitions []
+   :term/usage-examples []
+   :term/status :canonical
+   :term/canon-source :planetmath-seed
+   :term/first-seen nil
+   :term/last-seen nil
+   :term/occurrence-count 1
+   :term/cross-refs []
+   :term/review-notes []
+   :term/graduated-at #inst "2026-05-20T00:00:00Z"}
+  {:term/id "sheaf"
+   :term/headword "Sheaf"
+   :term/lower "sheaf"
+   :term/part :noun
+   :term/aliases []
+   :term/etymology {:first-source "planetmath:Sheaf"
+                    :first-source-date nil
+                    :first-extractor :pm-seed-loader/v1
+                    :note "fixture"}
+   :term/definitions []
+   :term/usage-examples []
+   :term/status :canonical
+   :term/canon-source :planetmath-seed
+   :term/first-seen nil
+   :term/last-seen nil
+   :term/occurrence-count 1
+   :term/cross-refs []
+   :term/review-notes []
+   :term/graduated-at #inst "2026-05-20T00:00:00Z"}]}

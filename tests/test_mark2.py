@@ -92,7 +92,7 @@ def test_status_reports_batch_fill_config(tmp_path: Path):
 
     assert run.returncode == 0
     assert (
-        "config:    page_size=5,000 rate_limit=3.0s ready_target=2 "
+        "config:    page_size=5,000 rate_limit=3.0s ready_target=6 "
         "auto_fill=on eprint_host=export.arxiv.org"
     ) in run.stdout
 

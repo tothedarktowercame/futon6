@@ -1,0 +1,39 @@
+{:dictionary-schema/version "0.1"
+ :dictionary-schema/owner :pm-seed-loader-v1
+ :dictionary-schema/note "Reference schema for PlanetMath-seeded dictionary entries and stopwords."
+ :dictionary-schema/entry
+ {:required [:term/id
+             :term/headword
+             :term/lower
+             :term/part
+             :term/aliases
+             :term/definitions
+             :term/status
+             :term/canon-source
+             :term/review-notes]
+  :statuses [:canonical :canonical-no-definition :provisional :reviewed :stopword :alias-of]
+  :definition-fields [:def/id
+                      :def/text
+                      :def/extracted-from
+                      :def/source-context
+                      :def/extraction-method
+                      :def/extracted-at
+                      :def/confidence
+                      :def/status]
+  :usage-example-fields [:example/paper
+                         :example/role
+                         :example/context
+                         :example/seen-at]}
+ :dictionary-schema/stopword
+ {:required [:stopword/id
+             :stopword/lower
+             :stopword/reason
+             :stopword/first-flagged-at
+             :stopword/example-context
+             :stopword/source-paper
+             :stopword/flag-method]
+  :reasons [:generic-emphasis
+            :bibliography-journal-name
+            :reference-marker
+            :proper-noun-not-concept
+            :section-marker-fragment]}}
