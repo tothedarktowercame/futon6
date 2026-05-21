@@ -215,6 +215,7 @@ def _load_discourse_detectors(prefer_nlab=True):
                 "wire": nw.detect_wires,
                 "port": nw.detect_ports,
                 "label": nw.detect_labels,
+                "comment": nw.detect_comments,
                 "source": "nlab-wiring",
             }
             return _discourse_detectors
@@ -226,6 +227,7 @@ def _load_discourse_detectors(prefer_nlab=True):
         "wire": _noop_discourse_detector,
         "port": _noop_discourse_detector,
         "label": _noop_discourse_detector,
+        "comment": _noop_discourse_detector,
         "source": "superpod",
     }
     return _discourse_detectors
@@ -1707,6 +1709,7 @@ def run_stage5_ner_scopes(
     wire_detector = discourse_detectors.get("wire", _noop_discourse_detector)
     port_detector = discourse_detectors.get("port", _noop_discourse_detector)
     label_detector = discourse_detectors.get("label", _noop_discourse_detector)
+    comment_detector = discourse_detectors.get("comment", _noop_discourse_detector)
 
     singles, multi_index, multi_count = load_ner_kernel(ner_kernel_path)
     print(f"       NER kernel: {len(singles)} single + {multi_count} multi-word terms")
@@ -1766,12 +1769,14 @@ def run_stage5_ner_scopes(
     total_wires = 0
     total_ports = 0
     total_labels = 0
+    total_comments = 0
     total_discourse_records = 0
     entities_with_ner = 0
     entities_with_scopes = 0
     entities_with_wires = 0
     entities_with_ports = 0
     entities_with_labels = 0
+    entities_with_comments = 0
     entities_with_discourse = 0
     stype_freq = Counter()
     discourse_role_freq = Counter()
@@ -1832,6 +1837,7 @@ def run_stage5_ner_scopes(
             wires = wire_detector(eid, full_text) or []
             ports = port_detector(eid, full_text) or []
             labels = label_detector(eid, full_text) or []
+            comments = comment_detector(eid, full_text) or []
             if wires:
                 entities_with_wires += 1
                 total_wires += len(wires)
@@ -1841,6 +1847,13 @@ def run_stage5_ner_scopes(
             if labels:
                 entities_with_labels += 1
                 total_labels += len(labels)
+            if comments:
+                entities_with_comments += 1
+                total_comments += len(comments)
+            # Comments are scope-shaped: they cover prose that is unreachable in
+            # the rendered PDF. Merging them in here means kernel terms inside
+            # commented-out source don't get treated as residual frontier later.
+            scopes = [*scopes, *comments]
             base_discourse_records = sorted(
                 [*scopes, *wires, *ports, *labels],
                 key=_record_position_key,
@@ -2259,6 +2272,8 @@ def run_stage5_ner_scopes(
         "entities_with_ports": entities_with_ports,
         "total_labels": total_labels,
         "entities_with_labels": entities_with_labels,
+        "total_comments": total_comments,
+        "entities_with_comments": entities_with_comments,
         "total_discourse_records": total_discourse_records,
         "entities_with_discourse": entities_with_discourse,
         "discourse_coverage": entities_with_discourse / n if n else 0,
@@ -8647,6 +8662,33 @@ def main():
         print("  Preregistered QC: "
               f"{prereg_report['evaluation']['overall']} "
               f"({len(prereg_report['evaluation']['gates'])} gates) -> {prereg_path.name}")
+        head = prereg_report.get("headline_summary") or {}
+        if head.get("structure_learning_enabled"):
+            kind_bd = head.get("candidates_kind_breakdown") or {}
+            kind_str = ", ".join(f"{k}={v}" for k, v in kind_bd.items()) or "none"
+            print(
+                f"  Structure-learning headline: "
+                f"discovered={head['candidates_discovered']}, "
+                f"classified={head['candidates_classified']} ({kind_str}), "
+                f"gated={head['gated_for_promotion']}"
+            )
+            if head.get("seed_signatures_loaded"):
+                print(
+                    f"    seed replay: loaded={head['seed_signatures_loaded']}, "
+                    f"matches={head['seed_matches_applied']}, "
+                    f"entities={head['entities_with_seed_matches']}"
+                )
+            ratio = head.get("free_floating_term_ratio")
+            if ratio is not None:
+                print(
+                    f"    free-floating term ratio: {ratio:.1%} "
+                    f"(residual sentences with kernel terms, structure-learning targets)"
+                )
+        if head.get("comment_scopes_total"):
+            print(
+                f"  Comment scopes: {head['comment_scopes_total']} comment/unreachable "
+                f"records across {head['entities_with_comments']} entities"
+            )
     else:
         manifest["preregister_qc"] = {
             **manifest["preregister_qc"],

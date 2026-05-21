@@ -115,6 +115,47 @@ def _gate(name, status, message, **extra):
     return payload
 
 
+def summarize_structure_learning(manifest):
+    """Build the structure-learning headline block surfaced at the top of QC.
+
+    The numbers come from stage5_stats.structure_learning and Stage 5 comment
+    counters. They are the answer to "what did this run actually learn?" —
+    candidates discovered, how many cleared the promotion gate, how many
+    fired against a prior seed JSON, and how much commented-out source the
+    detector now ignores instead of treating as residual.
+    """
+    s5 = manifest.get("stage5_stats") or {}
+    sl = s5.get("structure_learning") or {}
+    candidates = sl.get("structure_seed_candidates") or []
+
+    gated = 0
+    classified = 0
+    kind_breakdown: dict[str, int] = {}
+    for c in candidates:
+        pk = c.get("predicted_kind")
+        if pk:
+            classified += 1
+            kind_breakdown[pk] = kind_breakdown.get(pk, 0) + 1
+            if int(c.get("paper_count") or 0) >= 2:
+                gated += 1
+
+    loss = sl.get("loss") or {}
+    return {
+        "structure_learning_enabled": bool(sl.get("enabled")),
+        "candidates_discovered": int(sl.get("candidates_written") or 0),
+        "candidates_classified": classified,
+        "candidates_kind_breakdown": dict(sorted(kind_breakdown.items())),
+        "gated_for_promotion": gated,
+        "seed_signatures_loaded": int(sl.get("seed_signatures_loaded") or 0),
+        "seed_matches_applied": int(sl.get("seed_matches_applied") or 0),
+        "entities_with_seed_matches": int(sl.get("entities_with_seed_matches") or 0),
+        "free_floating_term_ratio": loss.get("free_floating_term_ratio"),
+        "uncovered_sentences_with_known_terms": int(loss.get("uncovered_sentences_with_known_terms") or 0),
+        "comment_scopes_total": int(s5.get("total_comments") or 0),
+        "entities_with_comments": int(s5.get("entities_with_comments") or 0),
+    }
+
+
 def evaluate_manifest(manifest, baseline_summary, profile: str):
     gates = []
     s5 = manifest.get("stage5_stats") or {}
@@ -123,6 +164,7 @@ def evaluate_manifest(manifest, baseline_summary, profile: str):
     gs = s9.get("geometry_stats") or {}
     stage_status = manifest.get("stage_status") or {}
     entity_count = manifest.get("entity_count")
+    structure_learning = s5.get("structure_learning") or {}
 
     expected_entity_counts = baseline_summary.get("entity_count_values") or []
     if expected_entity_counts and entity_count in expected_entity_counts:
@@ -230,6 +272,63 @@ def evaluate_manifest(manifest, baseline_summary, profile: str):
             )
         gates.append(_gate("term_learning_prediction", status, msg))
 
+    # Structure-learning gates only fire when the run actually exercised the
+    # structure-learning loop. The headline summary below reports the same
+    # numbers in one place regardless of which gates ran.
+    if structure_learning.get("enabled"):
+        candidates_written = int(structure_learning.get("candidates_written") or 0)
+        if candidates_written >= 1:
+            gates.append(_gate(
+                "structure_learning_capture",
+                "pass",
+                f"Stage 5 emitted {candidates_written} structure-seed candidate(s)",
+            ))
+        else:
+            gates.append(_gate(
+                "structure_learning_capture",
+                "warn",
+                "discover-structures was enabled but Stage 5 emitted 0 candidates",
+            ))
+
+        candidates = structure_learning.get("structure_seed_candidates") or []
+        gated_count = sum(
+            1 for c in candidates
+            if c.get("predicted_kind") and int(c.get("paper_count") or 0) >= 2
+        )
+        if gated_count >= 1:
+            gates.append(_gate(
+                "gated_pattern_yield",
+                "pass",
+                f"{gated_count} candidate(s) cleared the promotion gate "
+                f"(paper_count>=2 AND predicted_kind set)",
+            ))
+        else:
+            gates.append(_gate(
+                "gated_pattern_yield",
+                "warn",
+                f"no candidates cleared the promotion gate; {len(candidates)} candidates total. "
+                f"Expected on small batches; check on larger ones.",
+            ))
+
+    seed_signatures_loaded = int(structure_learning.get("seed_signatures_loaded") or 0)
+    if seed_signatures_loaded > 0:
+        seed_matches = int(structure_learning.get("seed_matches_applied") or 0)
+        entities_matched = int(structure_learning.get("entities_with_seed_matches") or 0)
+        if seed_matches >= 1:
+            gates.append(_gate(
+                "structure_seed_replay",
+                "pass",
+                f"replay matcher fired on {seed_matches} record(s) across {entities_matched} entit(y/ies); "
+                f"{seed_signatures_loaded} prior signature(s) loaded",
+            ))
+        else:
+            gates.append(_gate(
+                "structure_seed_replay",
+                "warn",
+                f"{seed_signatures_loaded} prior signature(s) loaded but no matches fired. "
+                f"Either the corpus shifted or the matcher floor is too strict.",
+            ))
+
     health_issues = manifest.get("health_issues") or []
     unusual = [
         issue for issue in health_issues
@@ -274,6 +373,7 @@ def build_report_from_manifest(manifest, baseline_dir: Path, profile: str):
         "profile": profile,
         "baseline_summary": baseline_summary,
         "evaluation": evaluation,
+        "headline_summary": summarize_structure_learning(manifest),
     }
 
 
