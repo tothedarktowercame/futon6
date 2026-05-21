@@ -1426,6 +1426,137 @@ def detect_math_scopes(entity_id, text, parent_env_id=None):
     return records
 
 
+# ============================================================
+# Math-content scope detection — Layer 2 (AST-driven)
+# ============================================================
+# Layer 1 (regex) catches token-level constructs but can't bound macro
+# arguments (a `\Hom{A}{B}` becomes three separate scopes, not a single
+# scope containing argument scopes), can't see subscripts/superscripts on
+# complex atoms, and only finds inline `$...$`. Layer 2 uses a small
+# AST parser to fill those gaps. Both layers run; the shared scope-tree
+# builder nests them appropriately (Layer 2's full-extent macro scopes
+# become parents of Layer 1's token scopes for `\to`, `=`, etc.).
+
+# Lazy import so that nlab-wiring stays usable as a standalone script even
+# if src/futon6/ is not on sys.path. Callers from the audit/viewer/superpod
+# always have it.
+def _import_math_ast():
+    try:
+        from futon6 import math_ast as ma
+        return ma
+    except ImportError:
+        import sys as _sys
+        from pathlib import Path as _Path
+        _here = _Path(__file__).resolve().parent.parent
+        _src = _here / "src"
+        if str(_src) not in _sys.path:
+            _sys.path.insert(0, str(_src))
+        from futon6 import math_ast as ma
+        return ma
+
+
+# Macros we wrap with a math/named-functor-call scope spanning the whole
+# `\Name{arg1}{arg2}...` extent. Matches the Layer 1 functor list so the
+# vocabulary stays consistent.
+_FUNCTOR_MACROS = frozenset({
+    "Hom", "End", "Aut", "Spec", "Pic", "Ker", "Im", "Coker", "Mor", "Ob",
+    "Tr", "Det", "Sym", "Stab", "Inv", "Span", "Sub", "Quot", "Rep",
+    "Frac", "Image", "Coimage", "coker", "ker", "im", "id", "Id",
+    "Ext", "Tor",
+})
+
+_CATEGORY_MACROS = frozenset({"mathcal", "mathbf", "mathfrak", "mathbb", "cat"})
+
+
+def detect_math_scopes_ast(entity_id, text, parent_env_id=None):
+    """Layer-2 math-scope detection via AST parsing.
+
+    Finds all math envelopes (inline, display, paren, bracket, environment)
+    and parses each into a node tree. Emits scope records for:
+
+    - math/envelope        — the whole math region, with envelope_kind label
+    - math/macro-call      — generic `\\name{...}{...}` extent
+    - math/named-functor-call — like macro-call but for functor-named macros
+                              (\\Hom, \\End, etc.) so they're visually distinct
+    - math/category-symbol-call — \\mathcal{C}, \\mathbf{Set}, etc. (full extent)
+    - math/subscript / math/superscript — with the script atom as content
+    - math/group           — bare `{...}` matched brace groups
+    - math/macro-arg       — each argument of a macro, as a sub-scope
+
+    Records are scope-shaped (hx/role='scope', hx/type='math/...') and carry
+    absolute positions back-mapped to the outer text. The scope-tree builder
+    will nest them correctly.
+    """
+    ma = _import_math_ast()
+    records = []
+    idx = 0
+
+    def emit(start, end, mtype, match_text, extra_labels=None):
+        nonlocal idx
+        labels = ["scope", "math", mtype.split("/", 1)[1]]
+        if extra_labels:
+            labels.extend(extra_labels)
+        records.append({
+            "hx/id": f"{entity_id}:math-ast-{idx:04d}",
+            "hx/role": "scope",
+            "hx/type": mtype,
+            "hx/parent": parent_env_id,
+            "hx/content": {
+                "match": match_text[:120],
+                "position": start,
+                "end": end,
+            },
+            "hx/labels": labels,
+        })
+        idx += 1
+
+    def walk(nodes):
+        for node in nodes:
+            if node.kind == "macro":
+                if node.name in _FUNCTOR_MACROS and node.args:
+                    mtype = "math/named-functor-call"
+                elif node.name in _CATEGORY_MACROS and node.args:
+                    mtype = "math/category-symbol-call"
+                elif node.args:
+                    mtype = "math/macro-call"
+                else:
+                    mtype = None  # token-only macros are handled by Layer 1
+                if mtype:
+                    emit(node.start, node.end, mtype, node.text,
+                         extra_labels=[f"name-{node.name}"])
+                    for ai, arg in enumerate(node.args):
+                        emit(arg["start"], arg["end"], "math/macro-arg",
+                             text[arg["start"]:arg["end"]],
+                             extra_labels=[f"slot-{ai}"])
+                        walk(arg["nodes"])
+            elif node.kind == "group":
+                emit(node.start, node.end, "math/group", node.text)
+                for arg in node.args:
+                    walk(arg["nodes"])
+            elif node.kind == "sub":
+                emit(node.start, node.end, "math/subscript", node.text)
+                for arg in node.args:
+                    walk(arg["nodes"])
+            elif node.kind == "sup":
+                emit(node.start, node.end, "math/superscript", node.text)
+                for arg in node.args:
+                    walk(arg["nodes"])
+            # chars: nothing to emit; Layer 1 handles bare operators
+
+    for env_start, env_end, int_start, int_end, env_kind in ma.find_math_envelopes(text):
+        # Emit an envelope scope only for display/paren/bracket/environment;
+        # Layer 1's MATH_BLOCK_RE already covers the inline `$...$` shape via
+        # detect_scopes' relation-expression / arrow-expression rules.
+        if env_kind != "inline":
+            emit(env_start, env_end, "math/envelope", text[env_start:env_end],
+                 extra_labels=[f"envelope-{env_kind}"])
+        interior = text[int_start:int_end]
+        nodes = ma.parse_math(interior, base_offset=int_start)
+        walk(nodes)
+
+    return records
+
+
 COMMENT_RE = re.compile(r"(?<!\\)%[^\n]*")
 
 

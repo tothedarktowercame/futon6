@@ -472,6 +472,89 @@ class TestDiscourseWiring:
         )
         assert records == []
 
+    # --- Layer 2: AST-driven math-scope detection ---
+
+    def test_math_ast_emits_named_functor_call_full_extent(self):
+        text = r"$\Hom(A, B)$ and $\Hom{X}{Y}$ together."
+        records = nlab_wiring.detect_math_scopes_ast("t-ast-1", text)
+        call_records = [r for r in records if r["hx/type"] == "math/named-functor-call"]
+        # Only the brace-arg version produces a named-functor-call (the
+        # paren-arg version is point-token; Layer 1 catches it).
+        assert len(call_records) == 1
+        # Full extent includes both arguments
+        rec = call_records[0]
+        assert text[rec["hx/content"]["position"]:rec["hx/content"]["end"]] == r"\Hom{X}{Y}"
+
+    def test_math_ast_emits_macro_args_as_sub_scopes(self):
+        text = r"the map $\Hom{A}{B}$ here"
+        records = nlab_wiring.detect_math_scopes_ast("t-ast-2", text)
+        arg_records = [r for r in records if r["hx/type"] == "math/macro-arg"]
+        assert len(arg_records) == 2
+        spans = [text[r["hx/content"]["position"]:r["hx/content"]["end"]] for r in arg_records]
+        assert "{A}" in spans
+        assert "{B}" in spans
+
+    def test_math_ast_emits_category_symbol_call(self):
+        text = r"Let $\mathcal{C}$ and $\mathbf{Set}$ be categories."
+        records = nlab_wiring.detect_math_scopes_ast("t-ast-3", text)
+        cat_records = [r for r in records if r["hx/type"] == "math/category-symbol-call"]
+        assert len(cat_records) == 2
+        matches = {r["hx/content"]["match"] for r in cat_records}
+        assert r"\mathcal{C}" in matches
+        assert r"\mathbf{Set}" in matches
+
+    def test_math_ast_detects_subscript_and_superscript(self):
+        text = r"$X_i^n$"
+        records = nlab_wiring.detect_math_scopes_ast("t-ast-4", text)
+        types = [r["hx/type"] for r in records]
+        assert "math/subscript" in types
+        assert "math/superscript" in types
+
+    def test_math_ast_envelope_scope_for_display_math(self):
+        text = r"text before $$F(x) = x^2$$ text after"
+        records = nlab_wiring.detect_math_scopes_ast("t-ast-5", text)
+        env_records = [r for r in records if r["hx/type"] == "math/envelope"]
+        assert len(env_records) == 1
+        env = env_records[0]
+        # Envelope spans the whole $$...$$
+        assert text[env["hx/content"]["position"]:env["hx/content"]["end"]] == "$$F(x) = x^2$$"
+        assert "envelope-display" in env["hx/labels"]
+
+    def test_math_ast_envelope_scope_for_equation_environment(self):
+        text = (
+            "Statement. "
+            r"\begin{equation}"
+            r"F(x) = x^2"
+            r"\end{equation}"
+            " conclusion."
+        )
+        records = nlab_wiring.detect_math_scopes_ast("t-ast-6", text)
+        env_records = [r for r in records if r["hx/type"] == "math/envelope"]
+        assert len(env_records) == 1
+        assert "envelope-environment" in env_records[0]["hx/labels"]
+
+    def test_math_ast_no_envelope_record_for_inline_dollars(self):
+        # Inline `$...$` doesn't emit math/envelope (Layer 1's MATH_BLOCK_RE
+        # already wraps inline math; envelope records would double up).
+        text = r"$X = Y$"
+        records = nlab_wiring.detect_math_scopes_ast("t-ast-7", text)
+        env_records = [r for r in records if r["hx/type"] == "math/envelope"]
+        assert env_records == []
+
+    def test_math_ast_nested_functor_calls(self):
+        text = r"$\Hom{\Hom{A}{B}}{C}$"
+        records = nlab_wiring.detect_math_scopes_ast("t-ast-8", text)
+        call_records = [r for r in records if r["hx/type"] == "math/named-functor-call"]
+        # Outer Hom and inner Hom both get scopes
+        assert len(call_records) == 2
+        spans = sorted(
+            (r["hx/content"]["position"], r["hx/content"]["end"]) for r in call_records
+        )
+        outer_span, inner_span = spans[0], spans[1]
+        # Outer fully contains inner
+        assert outer_span[0] < inner_span[0]
+        assert outer_span[1] > inner_span[1]
+
     def test_math_equality_skips_double_eq_and_coloneq(self):
         # Equality should fire on bare `=`, not on `==` or `:=` or `\equiv`.
         records = nlab_wiring.detect_math_scopes(

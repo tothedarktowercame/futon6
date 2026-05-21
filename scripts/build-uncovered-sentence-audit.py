@@ -461,11 +461,12 @@ def build_paper_audit(
     labels = NLAB_WIRING.detect_labels(raw_id, text) or []
     comments = NLAB_WIRING.detect_comments(raw_id, text) or []
     math_scopes = NLAB_WIRING.detect_math_scopes(raw_id, text) or []
+    math_ast_scopes = NLAB_WIRING.detect_math_scopes_ast(raw_id, text) or []
     # Treat commented-out source as a scope so the kernel terms inside don't
-    # count as scope-development frontier. Math sub-scopes are scope-shaped
-    # and nest under existing outer math scopes (bind/typed, etc.) via the
-    # shared scope-tree builder.
-    scopes = [*scopes, *comments, *math_scopes]
+    # count as scope-development frontier. Math sub-scopes (Layer 1 regex +
+    # Layer 2 AST) are scope-shaped and nest under existing outer math scopes
+    # via the shared scope-tree builder.
+    scopes = [*scopes, *comments, *math_scopes, *math_ast_scopes]
     learned_all = NLAB_WIRING.detect_learned(raw_id, text, learned_patterns or []) or []
     # Anti-clobber: a learned record only counts toward coverage if its match
     # span lies entirely outside the union of scope/wire/port/label spans. This

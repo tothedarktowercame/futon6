@@ -218,6 +218,7 @@ def _load_discourse_detectors(prefer_nlab=True):
                 "label": nw.detect_labels,
                 "comment": nw.detect_comments,
                 "math": nw.detect_math_scopes,
+                "math_ast": nw.detect_math_scopes_ast,
                 "source": "nlab-wiring",
             }
             return _discourse_detectors
@@ -231,6 +232,7 @@ def _load_discourse_detectors(prefer_nlab=True):
         "label": _noop_discourse_detector,
         "comment": _noop_discourse_detector,
         "math": _noop_discourse_detector,
+        "math_ast": _noop_discourse_detector,
         "source": "superpod",
     }
     return _discourse_detectors
@@ -1500,6 +1502,7 @@ def run_stage5_ner_scopes(
     label_detector = discourse_detectors.get("label", _noop_discourse_detector)
     comment_detector = discourse_detectors.get("comment", _noop_discourse_detector)
     math_detector = discourse_detectors.get("math", _noop_discourse_detector)
+    math_ast_detector = discourse_detectors.get("math_ast", _noop_discourse_detector)
 
     singles, multi_index, multi_count = load_ner_kernel(ner_kernel_path)
     print(f"       NER kernel: {len(singles)} single + {multi_count} multi-word terms")
@@ -1639,6 +1642,7 @@ def run_stage5_ner_scopes(
             labels = label_detector(eid, full_text) or []
             comments = comment_detector(eid, full_text) or []
             math_scopes = math_detector(eid, full_text) or []
+            math_ast_scopes = math_ast_detector(eid, full_text) or []
             if wires:
                 entities_with_wires += 1
                 total_wires += len(wires)
@@ -1654,12 +1658,14 @@ def run_stage5_ner_scopes(
             if math_scopes:
                 entities_with_math_scopes += 1
                 total_math_scopes += len(math_scopes)
+            if math_ast_scopes:
+                total_math_scopes += len(math_ast_scopes)
             # Comments are scope-shaped: they cover prose that is unreachable
-            # in the rendered PDF. Math-scope sub-structures nest inside any
-            # outer math scope via the shared scope-tree builder, giving the
-            # frontier metric a way to land *inside* $...$ blocks (Layer 1 of
-            # M-symbol-grounding.md).
-            scopes = [*scopes, *comments, *math_scopes]
+            # in the rendered PDF. Math sub-structures (Layer 1 regex tokens +
+            # Layer 2 AST extents) nest inside any outer math scope via the
+            # shared scope-tree builder, giving the frontier metric a way to
+            # land *inside* $...$ blocks (M-symbol-grounding.md).
+            scopes = [*scopes, *comments, *math_scopes, *math_ast_scopes]
             base_discourse_records = sorted(
                 [*scopes, *wires, *ports, *labels],
                 key=_record_position_key,

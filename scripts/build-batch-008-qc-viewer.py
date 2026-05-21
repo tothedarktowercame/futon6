@@ -690,6 +690,7 @@ def build_paper_view(
         *local_scopes,
         *NLAB_WIRING.detect_comments(entity_id, eprint_text),
         *NLAB_WIRING.detect_math_scopes(entity_id, eprint_text),
+        *NLAB_WIRING.detect_math_scopes_ast(entity_id, eprint_text),
     ]
     local_coverage = scope_coverage_stats(eprint_text, local_scopes)
     local_bins = scope_density_bins(eprint_text, local_scopes)
