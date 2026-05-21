@@ -47,6 +47,7 @@ DEFAULT_PM_SEED = ROOT / "data" / "dictionary" / "entries-pm-seed.edn"
 DEFAULT_NLAB_SEED = ROOT / "data" / "dictionary" / "entries-nlab-seed.edn"
 DEFAULT_NNEXUS_STOPWORDS = Path.home() / "code" / "nnexus" / "lib" / "NNexus" / "StopWordList.pm"
 DEFAULT_NNEXUS_SNAPSHOT = Path.home() / "code" / "nnexus" / "lib" / "NNexus" / "resources" / "database" / "snapshot-6-2014.sqlite"
+DEFAULT_NER_KERNEL = Path.home() / "code" / "storage" / "futon6" / "data" / "ner-kernel" / "terms.tsv"
 
 
 def load_module(module_name: str, path: Path):
@@ -83,6 +84,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--nlab-seed", type=Path, default=DEFAULT_NLAB_SEED)
     parser.add_argument("--nnexus-stopwords", type=Path, default=DEFAULT_NNEXUS_STOPWORDS)
     parser.add_argument("--nnexus-snapshot", type=Path, default=DEFAULT_NNEXUS_SNAPSHOT)
+    parser.add_argument("--ner-kernel", type=Path, default=DEFAULT_NER_KERNEL,
+                        help="Live NER kernel TSV used for inline term overlay markup.")
     parser.add_argument("--max-local-terms", type=int, default=12)
     parser.add_argument("--max-local-windows", type=int, default=6,
                         help="Max clustered local-scope windows per paper")
@@ -422,6 +425,131 @@ def pick_scope_windows(text: str, scopes: list[dict], *, max_windows: int, windo
     return chosen
 
 
+def find_kernel_term_positions(text: str, singles: dict, multi_index: dict) -> list[tuple[int, int, str, str | None]]:
+    """For every term the NER kernel spots in `text`, locate all occurrences.
+
+    Returns (start, end, term_lower, canon) tuples relative to `text`. Overlapping
+    occurrences are resolved by preferring the longest match starting earliest,
+    which lets multi-word terms like "monoidal category" win over their
+    constituent words.
+    """
+    hits = SUPERPOD_JOB.spot_terms_entity(text, singles, multi_index)
+    positions: list[tuple[int, int, str, str | None]] = []
+    for hit in hits:
+        term_lower = hit.get("term_lower") or ""
+        canon = hit.get("canon")
+        if not term_lower:
+            continue
+        try:
+            pattern = re.compile(rf"\b{re.escape(term_lower)}\b", re.IGNORECASE)
+        except re.error:
+            continue
+        for m in pattern.finditer(text):
+            positions.append((m.start(), m.end(), term_lower, canon))
+    # Longest-first at each start, then non-overlapping greedy.
+    positions.sort(key=lambda row: (row[0], -(row[1] - row[0])))
+    deduped: list[tuple[int, int, str, str | None]] = []
+    last_end = -1
+    for start, end, tl, canon in positions:
+        if start >= last_end:
+            deduped.append((start, end, tl, canon))
+            last_end = end
+    return deduped
+
+
+def render_overlay_markup(
+    text: str,
+    scopes: list[dict],
+    singles: dict,
+    multi_index: dict,
+    offset: int = 0,
+    scope_limit: int | None = 8,
+) -> str:
+    """Render text with combined scope + kernel-term markup.
+
+    Scope spans take precedence; kernel-term spans that overlap any scope span
+    (including unshown ones, to keep rendering honest) are suppressed. Within
+    the surviving term spans, longest-match wins.
+    """
+    # Build complete scope-span set for clobber-check (all scopes, not just shown).
+    full_scope_spans: list[tuple[int, int]] = []
+    for scope in scopes:
+        content = scope.get("hx/content", {}) or {}
+        start = content.get("position")
+        end = content.get("end")
+        if not isinstance(start, int):
+            continue
+        if not isinstance(end, int):
+            end = start + len(content.get("match", ""))
+        full_scope_spans.append((max(0, start - offset), max(0, end - offset)))
+    full_scope_spans.sort()
+
+    # Renderable scope spans (subject to limit) carry labels.
+    render_scope_records: list[dict] = []
+    sorted_scopes = sorted(
+        scopes,
+        key=lambda s: (
+            (s.get("hx/content", {}) or {}).get("position", 10**18),
+            (s.get("hx/content", {}) or {}).get("end", 10**18),
+        ),
+    )
+    if scope_limit is not None:
+        sorted_scopes = sorted_scopes[:scope_limit]
+    for scope in sorted_scopes:
+        content = scope.get("hx/content", {}) or {}
+        start = content.get("position")
+        end = content.get("end")
+        if not isinstance(start, int):
+            continue
+        if not isinstance(end, int):
+            end = start + len(content.get("match", ""))
+        render_scope_records.append({
+            "start": max(0, start - offset),
+            "end": max(0, end - offset),
+            "label": scope.get("hx/type", "?"),
+            "kind": "scope",
+        })
+
+    # Kernel term positions (relative to passed-in text already).
+    term_positions = find_kernel_term_positions(text, singles, multi_index)
+
+    def overlaps_full_scope(s: int, e: int) -> bool:
+        for ms, me in full_scope_spans:
+            if not (me <= s or ms >= e):
+                return True
+        return False
+
+    term_records = [
+        {"start": s, "end": e, "label": tl, "canon": canon, "kind": "term"}
+        for (s, e, tl, canon) in term_positions
+        if not overlaps_full_scope(s, e)
+    ]
+
+    all_spans = render_scope_records + term_records
+    all_spans.sort(key=lambda row: (row["start"], row["end"]))
+
+    out: list[str] = []
+    cursor = 0
+    for span in all_spans:
+        start = max(0, min(len(text), span["start"]))
+        end = max(start, min(len(text), span["end"]))
+        if start < cursor:
+            continue
+        out.append(html.escape(text[cursor:start]))
+        frag = html.escape(text[start:end])
+        if span["kind"] == "scope":
+            out.append(
+                f'<mark class="scope"><span class="scope-label">{html.escape(span["label"])}</span>{frag}</mark>'
+            )
+        else:
+            canon = span.get("canon") or ""
+            title = f' title="canon={html.escape(canon)}"' if canon else ""
+            out.append(f'<span class="term-kernel"{title}>{frag}</span>')
+        cursor = end
+    out.append(html.escape(text[cursor:]))
+    return "".join(out)
+
+
 def render_scope_markup(text: str, scopes: list[dict], offset: int = 0, limit: int | None = 8) -> str:
     spans = []
     sorted_scopes = sorted(
@@ -545,6 +673,8 @@ def build_paper_view(
     nlab_lowers: set[str],
     nnexus_lowers: set[str],
     nnexus_stopwords: set[str],
+    singles: dict,
+    multi_index: dict,
 ) -> dict:
     entity_id = raw_to_entity_id(raw_id)
     meta = batch_meta[raw_id]
@@ -591,8 +721,14 @@ def build_paper_view(
             "scope_count": window["scope_count"],
             "coverage": window["coverage"],
             "scope_types": Counter(scope.get("hx/type", "?") for scope in window["scopes"]).most_common(6),
-            "markup": render_scope_markup(window["text"], window["scopes"], offset=window["start"], limit=None),
+            "markup": render_overlay_markup(
+                window["text"], window["scopes"], singles, multi_index,
+                offset=window["start"], scope_limit=None,
+            ),
         })
+
+    # Whole-paper term count for the summary line on the page.
+    local_term_overlay_count = len(find_kernel_term_positions(eprint_text, singles, multi_index))
 
     return {
         "raw_id": raw_id,
@@ -624,10 +760,13 @@ def build_paper_view(
         "local_scope_coverage": local_coverage,
         "local_scope_types": Counter(scope.get("hx/type", "?") for scope in local_scopes).most_common(8),
         "local_scope_bins": local_bins,
-        "local_scope_markup": render_scope_markup(local_snippet, local_scopes, offset=local_offset),
+        "local_scope_markup": render_overlay_markup(
+            local_snippet, local_scopes, singles, multi_index, offset=local_offset,
+        ),
         "local_scope_windows": rendered_windows,
         "local_theorem_stats": theorem_result.stats,
         "local_terms": local_terms,
+        "local_term_overlay_count": local_term_overlay_count,
     }
 
 
@@ -725,6 +864,12 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
     pre {{ white-space: pre-wrap; background: #fff; border: 1px solid #ece3d6; padding: 10px; border-radius: 10px; line-height: 1.45; font-size: 14px; overflow-wrap: anywhere; }}
     .scope {{ background: linear-gradient(90deg, var(--scope), var(--scope2)); padding: 0 1px; border-radius: 3px; }}
     .scope-label {{ display: inline-block; margin-right: 6px; padding: 0 4px; background: rgba(29, 26, 22, 0.1); border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
+    .term-kernel {{ background: rgba(15, 118, 110, 0.12); border-bottom: 1px solid rgba(15, 118, 110, 0.45); padding: 0 1px; border-radius: 2px; cursor: help; }}
+    .term-kernel:hover {{ background: rgba(15, 118, 110, 0.22); }}
+    .markup-legend {{ font: 12px/1.4 system-ui, sans-serif; color: var(--muted); margin: 8px 0 6px 0; }}
+    .markup-legend .swatch {{ display: inline-block; padding: 0 6px; border-radius: 3px; margin-right: 4px; }}
+    .markup-legend .swatch.scope {{ background: linear-gradient(90deg, var(--scope), var(--scope2)); }}
+    .markup-legend .swatch.term {{ background: rgba(15, 118, 110, 0.18); border-bottom: 1px solid rgba(15, 118, 110, 0.55); }}
     .badge {{ display: inline-block; padding: 1px 6px; border-radius: 999px; font-size: 12px; margin-left: 6px; border: 1px solid currentColor; }}
     .badge.novel {{ color: var(--novel); }}
     .badge.known {{ color: var(--known); }}
@@ -769,14 +914,21 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
       </section>
       <section class="panel">
         <h2>Old local viewer snippet</h2>
-        <p class="sub">Retained here only to show why the previous mockup was misleading: it used a near-full-paper snippet and highlighted too few scopes.</p>
+        <p class="sub">Retained here only to show why the previous mockup was misleading: it used a near-full-paper snippet and highlighted too few scopes. The viewer now also overlays NER-kernel term hits inline.</p>
+        <p class="markup-legend">
+          <span class="swatch scope">scope</span> structural construction
+          &nbsp;·&nbsp;
+          <span class="swatch term">term</span> NER kernel hit (hover for canon)
+          &nbsp;·&nbsp;
+          <code>{paper.get('local_term_overlay_count', 0)}</code> kernel term occurrences in the full eprint
+        </p>
         <pre>{paper['local_scope_markup']}</pre>
         <p class="tiny">Top local scope types: {html.escape(json.dumps(paper['local_scope_types'], ensure_ascii=False))}</p>
       </section>
     </div>
     <section class="panel">
       <h2>Representative local scope windows</h2>
-      <p class="sub">These windows are chosen from dense local clusters in the raw eprint, so the markup now reflects what the detector actually found instead of showing a mostly blank giant excerpt.</p>
+      <p class="sub">These windows are chosen from dense local clusters in the raw eprint, so the markup now reflects what the detector actually found instead of showing a mostly blank giant excerpt. Scopes and NER-kernel term hits are layered together; scopes take precedence on overlap.</p>
       {windows}
     </section>
     <div class="grid">
@@ -910,6 +1062,7 @@ def main(argv: list[str] | None = None) -> dict:
     nlab_lowers = TERM_EVIDENCE.load_known_term_lowers(args.nlab_seed)
     nnexus_lowers = TERM_EVIDENCE.load_nnexus_concept_lowers(args.nnexus_snapshot)
     nnexus_stopwords = TERM_EVIDENCE.load_nnexus_stopwords(args.nnexus_stopwords)
+    singles, multi_index, _ = SUPERPOD_JOB.load_ner_kernel(args.ner_kernel)
 
     selected_raw_ids = args.paper_ids or pick_representative_papers(
         batch_meta,
@@ -928,6 +1081,8 @@ def main(argv: list[str] | None = None) -> dict:
             nlab_lowers,
             nnexus_lowers,
             nnexus_stopwords,
+            singles,
+            multi_index,
         )
         for raw_id in selected_raw_ids
     ]
