@@ -10,8 +10,12 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from futon6.symbol_grounding import (
     DenotationStrategy,
+    FixPatternStrategy,
+    InlineIsAStrategy,
+    KernelAmbientStrategy,
     LetBindingStrategy,
     NewcommandStrategy,
+    NotationEnvStrategy,
     StrategyContext,
     SymbolBinding,
     SymbolEnvironment,
@@ -372,3 +376,180 @@ def test_aggregate_strategy_metrics_zero_emitted_yields_zero_rates():
     """A strategy with no emissions shouldn't NaN out the rate calc."""
     agg = aggregate_strategy_metrics({})
     assert agg == {}
+
+
+# ============================================================
+# FixPatternStrategy
+# ============================================================
+
+def test_fix_pattern_simple():
+    text = "Fix $X$ as a category for the rest of the section."
+    bindings = FixPatternStrategy().apply(_ctx(text))
+    assert any(b.symbol == "X" and b.canon == "Category" for b in bindings)
+
+
+def test_fix_to_be_form():
+    text = "Fix $T$ to be a monad on $\\mathcal{C}$."
+    bindings = FixPatternStrategy().apply(_ctx(text))
+    assert any(b.symbol == "T" and b.canon == "Monad" for b in bindings)
+
+
+def test_fix_pattern_no_false_positive_on_fix_a_typo():
+    """`Fix a typo` shouldn't fire — no $X$ between Fix and "as a typo"."""
+    text = "We fix a typo in equation 3.4."
+    bindings = FixPatternStrategy().apply(_ctx(text))
+    assert bindings == []
+
+
+# ============================================================
+# InlineIsAStrategy
+# ============================================================
+
+def test_inline_is_a_simple():
+    text = "Here $T$ is a monad on the category $\\mathcal{C}$."
+    bindings = InlineIsAStrategy().apply(_ctx(text))
+    assert any(b.symbol == "T" and b.canon == "Monad" for b in bindings)
+
+
+def test_inline_is_a_medium_confidence():
+    text = "$X$ is a ring."
+    bindings = InlineIsAStrategy().apply(_ctx(text))
+    assert bindings[0].confidence == "medium"
+
+
+def test_inline_is_a_rejects_set_of_phrases():
+    text = "$S$ is a set of points."
+    bindings = InlineIsAStrategy().apply(_ctx(text))
+    # `set of` is in the reject list because "S is a set of points" is
+    # less a type assertion than a description of S's elements.
+    assert all(b.type_phrase != "set of" for b in bindings)
+
+
+# ============================================================
+# NotationEnvStrategy
+# ============================================================
+
+def test_notation_env_extracts_declarations():
+    text = (
+        "Some prose. "
+        r"\begin{notation}"
+        " In this paper $X$ denotes an abelian group "
+        "and $T$ denotes a monad."
+        r"\end{notation}"
+        " More prose."
+    )
+    bindings = NotationEnvStrategy().apply(_ctx(text))
+    syms = {(b.symbol, b.canon) for b in bindings}
+    assert ("X", "AbelianGroup") in syms
+    assert ("T", "Monad") in syms
+
+
+def test_notation_env_supports_stands_for():
+    text = (
+        r"\begin{notation}"
+        " $X$ stands for the category of vector spaces. "
+        r"\end{notation}"
+    )
+    bindings = NotationEnvStrategy().apply(_ctx(text))
+    # type_phrase = "category" via the regex's lazy capture; not asserting
+    # canon since "category of vector spaces" isn't in the toy kernel.
+    assert any(b.symbol == "X" for b in bindings)
+
+
+def test_notation_env_supports_convention_alias():
+    text = (
+        r"\begin{convention}"
+        " $\\mathcal{C}$ denotes a category. "
+        r"\end{convention}"
+    )
+    bindings = NotationEnvStrategy().apply(_ctx(text))
+    assert any(b.symbol == r"\mathcal{C}" and b.canon == "Category" for b in bindings)
+
+
+def test_notation_env_scope_is_paper_wide():
+    text = (
+        r"\begin{notation} $X$ denotes a ring. \end{notation}"
+        " " * 200
+        + " Later in the paper, $X$ shows up."
+    )
+    bindings = NotationEnvStrategy().apply(_ctx(text))
+    b = next(b for b in bindings if b.symbol == "X")
+    assert b.scope_start == 0
+    assert b.scope_end == len(text)
+
+
+# ============================================================
+# KernelAmbientStrategy
+# ============================================================
+
+def _toy_scan(text: str) -> list[tuple[int, int, str, str]]:
+    """Find any kernel phrase from the toy kernel inside `text`."""
+    table = {
+        "abelian group": "AbelianGroup",
+        "monad": "Monad",
+        "category": "Category",
+        "set": "Set",
+        "ring": "Ring",
+    }
+    out = []
+    low = text.lower()
+    for phrase, canon in table.items():
+        idx = 0
+        while True:
+            i = low.find(phrase, idx)
+            if i == -1:
+                break
+            out.append((i, i + len(phrase), phrase, canon))
+            idx = i + 1
+    return out
+
+
+def _scan_ctx(text: str) -> StrategyContext:
+    return StrategyContext(
+        paper_id="test",
+        paper_text=text,
+        kernel_lookup=_toy_kernel,
+        kernel_scan=_toy_scan,
+    )
+
+
+def test_kernel_ambient_grounds_atom_in_sentence_with_kernel_phrase():
+    text = "We compute the abelian group $G/[G,G]$ at each step."
+    bindings = KernelAmbientStrategy().apply(_scan_ctx(text))
+    syms = {(b.symbol, b.canon) for b in bindings}
+    assert ("G", "AbelianGroup") in syms
+
+
+def test_kernel_ambient_skips_when_multiple_phrases_in_sentence():
+    """Ambiguous: sentence has both 'monad' and 'category' — skip."""
+    text = "Consider the monad $T$ on a category."
+    bindings = KernelAmbientStrategy().apply(_scan_ctx(text))
+    assert bindings == []
+
+
+def test_kernel_ambient_low_confidence():
+    text = "Consider an abelian group $G$ today."
+    bindings = KernelAmbientStrategy().apply(_scan_ctx(text))
+    assert bindings
+    assert bindings[0].confidence == "low"
+
+
+def test_kernel_ambient_no_scan_no_bindings():
+    text = "Consider the abelian group $G$."
+    ctx = StrategyContext(
+        paper_id="t", paper_text=text, kernel_lookup=_toy_kernel,
+    )  # no kernel_scan
+    assert KernelAmbientStrategy().apply(ctx) == []
+
+
+# ============================================================
+# default_strategies grew
+# ============================================================
+
+def test_default_strategies_includes_new_strategies():
+    names = {s.name for s in default_strategies()}
+    for required in (
+        "newcommand", "notation-env", "let-binding", "fix-pattern",
+        "denotation", "inline-is-a", "the-Y-X", "kernel-ambient",
+    ):
+        assert required in names, required

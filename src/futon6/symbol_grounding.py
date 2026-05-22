@@ -54,12 +54,16 @@ class StrategyContext:
     stays small. A strategy that needs the math AST gets it via
     `math_envelopes` (list of (start, end, kind) tuples). The kernel
     lookup function maps a phrase like "abelian group" → canonical name
-    if the phrase is in the kernel.
+    if the phrase is in the kernel. The kernel scanner walks a text
+    region and yields all kernel-recognised phrases as
+    (start, end, phrase, canon) tuples — used by strategies that need
+    to find phrases of unknown shape (e.g. kernel-ambient).
     """
     paper_id: str
     paper_text: str
     math_envelopes: list[tuple[int, int, str]] = field(default_factory=list)
     kernel_lookup: Callable[[str], str | None] | None = None
+    kernel_scan: Callable[[str], list[tuple[int, int, str, str]]] | None = None
     next_binding_id: list[int] = field(default_factory=lambda: [0])
 
     def next_id(self) -> str:
@@ -166,6 +170,89 @@ class DenotationStrategy(Strategy):
                     evidence_span=(m.start(), m.end()),
                 ))
         return out
+
+
+class KernelAmbientStrategy(Strategy):
+    """Symbol in math envelope + kernel phrase in surrounding sentence — low confidence.
+
+    For each math envelope, scan the surrounding sentence for any
+    kernel-known phrase. If exactly one phrase is found, emit a low-
+    confidence binding mapping every alphabetic atom inside the
+    envelope to the kernel phrase's canon. This is the highest-recall
+    strategy in the library — most math sentences contain a kernel
+    term — and the noisiest, hence confidence='low'. The meta-learning
+    loop will surface its defeat rate so it can be constrained later.
+
+    Scope is the envelope itself, not paper-wide: ambient context
+    binds to the immediate symbol use, not to every future use of
+    the same letter.
+    """
+    name = "kernel-ambient"
+    default_confidence = "low"
+
+    _ATOM_IN_MATH = re.compile(r"\\[A-Za-z@]+|[A-Za-z]")
+
+    def apply(self, ctx: StrategyContext) -> list[SymbolBinding]:
+        if ctx.kernel_scan is None:
+            return []
+        out = []
+        envelopes = ctx.math_envelopes or _collect_envelopes_lazily(ctx.paper_text)
+        for entry in envelopes:
+            env_start, env_end = entry[0], entry[1]
+            int_start, int_end = (
+                (entry[2], entry[3]) if len(entry) >= 4 else (env_start, env_end)
+            )
+            # Sentence boundary: previous '.' or '\n' to next '.' or '\n'
+            sent_start = max(
+                ctx.paper_text.rfind(".", 0, env_start) + 1,
+                ctx.paper_text.rfind("\n", 0, env_start) + 1,
+                0,
+            )
+            after = env_end
+            sent_end_period = ctx.paper_text.find(".", after)
+            sent_end_nl = ctx.paper_text.find("\n", after)
+            candidates = [
+                p for p in (sent_end_period, sent_end_nl) if p != -1
+            ]
+            sent_end = min(candidates) if candidates else len(ctx.paper_text)
+            sentence = ctx.paper_text[sent_start:sent_end]
+            # Drop math envelopes from the sentence so a kernel hit inside
+            # math doesn't tag every atom with itself.
+            prose = (
+                sentence[: env_start - sent_start]
+                + " " * (env_end - env_start)
+                + sentence[env_end - sent_start :]
+            )
+            hits = ctx.kernel_scan(prose)
+            if not hits or len(hits) > 1:
+                # Ambiguous if more than one phrase — skip to keep precision
+                # tolerable; future strategies could break ties by proximity.
+                continue
+            hit_start, hit_end, phrase, canon = hits[0]
+            interior = ctx.paper_text[int_start:int_end]
+            atoms = {m.group(0) for m in self._ATOM_IN_MATH.finditer(interior)}
+            for atom in atoms:
+                out.append(SymbolBinding(
+                    binding_id=ctx.next_id(),
+                    symbol=atom,
+                    canon=canon,
+                    type_phrase=phrase,
+                    scope_start=env_start,
+                    scope_end=env_end,
+                    confidence=self.default_confidence,
+                    strategy=self.name,
+                    evidence_span=(sent_start + hit_start, sent_start + hit_end),
+                ))
+        return out
+
+
+def _collect_envelopes_lazily(text: str) -> list[tuple[int, int, int, int, str]]:
+    """Find math envelopes if the caller didn't precompute them.
+
+    Imports math_ast lazily to avoid a circular import.
+    """
+    from . import math_ast as ma
+    return list(ma.find_math_envelopes(text))
 
 
 class NewcommandStrategy(Strategy):
@@ -348,6 +435,141 @@ class NewcommandStrategy(Strategy):
         return s
 
 
+class FixPatternStrategy(Strategy):
+    """`Fix $X$ as Y` / `Fix $X$ to be Y` — high confidence.
+
+    Mirror of `LetBindingStrategy`. The "fix" verb is common in algebra
+    and analysis; the binding is just as authoritative as "let".
+    """
+    name = "fix-pattern"
+    default_confidence = "high"
+
+    _PATTERN = re.compile(
+        r"\bFix\s+\$([^$\n]{1,40})\$\s+(?:as|to\s+be)\s+(?:(?:an|a|the)\s+)?"
+        r"([a-z][\w\s\-]{2,60}?)"
+        r"(?=[.,;:\n]|\s+(?:and|or|with|such|over|in|on|of|for|that|which)\b)",
+        re.IGNORECASE,
+    )
+
+    def apply(self, ctx: StrategyContext) -> list[SymbolBinding]:
+        out = []
+        for m in self._PATTERN.finditer(ctx.paper_text):
+            symbol = m.group(1).strip()
+            type_phrase = m.group(2).strip().lower()
+            canon = (ctx.kernel_lookup or (lambda _: None))(type_phrase)
+            out.append(SymbolBinding(
+                binding_id=ctx.next_id(),
+                symbol=symbol,
+                canon=canon,
+                type_phrase=type_phrase,
+                scope_start=_scope_start_after_punct(ctx.paper_text, m.end()),
+                scope_end=len(ctx.paper_text),
+                confidence=self.default_confidence,
+                strategy=self.name,
+                evidence_span=(m.start(), m.end()),
+            ))
+        return out
+
+
+class InlineIsAStrategy(Strategy):
+    """`$X$ is a Y` — medium confidence.
+
+    Like `the-Y-X`, weaker than declarations because "$X$ is a category"
+    can either declare X as a category or claim it (citing prior
+    declaration). The meta-learning loop will surface defeat rate.
+    """
+    name = "inline-is-a"
+    default_confidence = "medium"
+
+    _PATTERN = re.compile(
+        r"\$([^$\n]{1,40})\$\s+is\s+(?:(?:an|a|the)\s+)?"
+        r"([a-z][\w\s\-]{2,60}?)"
+        r"(?=[.,;:\n]|\s+(?:and|or|with|such|over|in|on|of|where)\b)",
+        re.IGNORECASE,
+    )
+
+    def apply(self, ctx: StrategyContext) -> list[SymbolBinding]:
+        out = []
+        kernel_lookup = ctx.kernel_lookup or (lambda _: None)
+        for m in self._PATTERN.finditer(ctx.paper_text):
+            symbol = m.group(1).strip()
+            type_phrase = m.group(2).strip().lower()
+            if len(type_phrase) < 3 or type_phrase in {
+                "set of", "list of", "case of", "kind of", "way of",
+            }:
+                continue
+            canon = kernel_lookup(type_phrase)
+            out.append(SymbolBinding(
+                binding_id=ctx.next_id(),
+                symbol=symbol,
+                canon=canon,
+                type_phrase=type_phrase,
+                scope_start=m.end(),
+                scope_end=len(ctx.paper_text),
+                confidence=self.default_confidence,
+                strategy=self.name,
+                evidence_span=(m.start(), m.end()),
+            ))
+        return out
+
+
+class NotationEnvStrategy(Strategy):
+    r"""`\begin{notation}…\end{notation}` blocks — high confidence inside.
+
+    Many algebra/CT papers ship a `notation` environment where authors
+    declare paper-local symbols *en masse*. The block has the highest
+    declarative density per character in the entire paper. Inside, we
+    re-run the let-binding / denotation regexes; bindings inside this
+    block carry the parent strategy name `notation-env` so the meta-
+    learning loop sees them as a separate channel.
+
+    The environment names cover the common variants:
+    `notation`, `notations`, `convention`, `conventions`.
+    """
+    name = "notation-env"
+    default_confidence = "high"
+
+    _ENV_PATTERN = re.compile(
+        r"\\begin\{(?:notation|notations|convention|conventions)\*?\}"
+        r"([\s\S]*?)"
+        r"\\end\{(?:notation|notations|convention|conventions)\*?\}",
+        re.IGNORECASE,
+    )
+    _DECL_PATTERN = re.compile(
+        r"\$([^$\n]{1,40})\$\s+"
+        r"(?:denotes?|stands?\s+for|is)\s+"
+        r"(?:(?:an|a|the)\s+)?"
+        r"([a-z][\w\s\-]{2,60}?)"
+        r"(?=[.,;:\n]|\s+(?:and|or|with|such|over|in|on|of|for)\b)",
+        re.IGNORECASE,
+    )
+
+    def apply(self, ctx: StrategyContext) -> list[SymbolBinding]:
+        out = []
+        kernel_lookup = ctx.kernel_lookup or (lambda _: None)
+        for env_m in self._ENV_PATTERN.finditer(ctx.paper_text):
+            body = env_m.group(1)
+            body_offset = env_m.start(1)
+            for m in self._DECL_PATTERN.finditer(body):
+                symbol = m.group(1).strip()
+                type_phrase = m.group(2).strip().lower()
+                canon = kernel_lookup(type_phrase)
+                # Notation declarations apply paper-wide (the conventional
+                # block at the front of the paper is meant as a glossary).
+                out.append(SymbolBinding(
+                    binding_id=ctx.next_id(),
+                    symbol=symbol,
+                    canon=canon,
+                    type_phrase=type_phrase,
+                    scope_start=0,
+                    scope_end=len(ctx.paper_text),
+                    confidence=self.default_confidence,
+                    strategy=self.name,
+                    evidence_span=(body_offset + m.start(), body_offset + m.end()),
+                ))
+        return out
+
+
 class TheYXStrategy(Strategy):
     """`the Y $X$` (e.g., "the category $\\mathcal{C}$") — medium confidence.
 
@@ -521,9 +743,13 @@ def default_strategies() -> list[Strategy]:
     """The starter strategy set. Add to this list as new strategies land."""
     return [
         NewcommandStrategy(),
+        NotationEnvStrategy(),
         LetBindingStrategy(),
+        FixPatternStrategy(),
         DenotationStrategy(),
+        InlineIsAStrategy(),
         TheYXStrategy(),
+        KernelAmbientStrategy(),
     ]
 
 

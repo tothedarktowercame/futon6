@@ -98,6 +98,8 @@ from futon6.preregister_superpod_qc import (
 )
 from futon6.theorem_extraction import extract_from_tarball
 from futon6 import structure_seed as _ss
+from futon6 import grounding as _grounding_module
+from futon6 import symbol_grounding as _sg_module
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -1588,6 +1590,14 @@ def run_stage5_ner_scopes(
     total_known_term_hits_in_uncovered = 0
     entities_with_term_dense_residuals = 0
     structure_seed_rows = []
+    # Symbol-grounding accumulators. Per-paper strategy_metrics dicts
+    # feed `aggregate_strategy_metrics` after the loop so the manifest
+    # carries cross-paper defeat / corroboration rates. SymbolEnvironments
+    # feed `aggregate_newcommand_vocab` for the learned-vocab artifact.
+    total_grounded_marks = 0
+    entities_with_grounded_marks = 0
+    strategy_metrics_by_entity: dict[str, dict] = {}
+    symbol_envs_by_entity: dict[str, object] = {}
     n = len(entities)
     # Pick the audit sample up front (seeded for reproducibility). Cap at n.
     # 0 disables; negative treated as 0. Positive picks min(K, n) entity indices.
@@ -1660,12 +1670,31 @@ def run_stage5_ner_scopes(
                 total_math_scopes += len(math_scopes)
             if math_ast_scopes:
                 total_math_scopes += len(math_ast_scopes)
+            # Layer 3 — symbol grounding. Eight strategies fire per paper;
+            # per-strategy emit / defeat / corroboration metrics flow to
+            # the manifest's strategy_meta_learning slot after the loop.
+            grounded_records, symbol_env, grounding_summary = (
+                _grounding_module.detect_grounded_symbols(
+                    eid, full_text, singles, multi_index, spot_terms_entity,
+                )
+            )
+            if grounded_records:
+                entities_with_grounded_marks += 1
+                total_grounded_marks += len(grounded_records)
+            strategy_metrics_by_entity[eid] = (
+                grounding_summary.get("strategy_metrics") or {}
+            )
+            symbol_envs_by_entity[eid] = symbol_env
             # Comments are scope-shaped: they cover prose that is unreachable
             # in the rendered PDF. Math sub-structures (Layer 1 regex tokens +
             # Layer 2 AST extents) nest inside any outer math scope via the
             # shared scope-tree builder, giving the frontier metric a way to
-            # land *inside* $...$ blocks (M-symbol-grounding.md).
-            scopes = [*scopes, *comments, *math_scopes, *math_ast_scopes]
+            # land *inside* $...$ blocks (M-symbol-grounding.md). Grounded
+            # scope records nest under those.
+            scopes = [
+                *scopes, *comments, *math_scopes, *math_ast_scopes,
+                *grounded_records,
+            ]
             base_discourse_records = sorted(
                 [*scopes, *wires, *ports, *labels],
                 key=_record_position_key,
@@ -1902,6 +1931,26 @@ def run_stage5_ner_scopes(
                         f", seed_matches={total_learned_structure_matches}"
                         f" across {entities_with_learned_structure_matches} entities"
                     )
+                grounding_running = _sg_module.aggregate_strategy_metrics(
+                    strategy_metrics_by_entity
+                )
+                grounding_info = ""
+                if grounding_running:
+                    by_emit = sorted(
+                        grounding_running.items(),
+                        key=lambda kv: -kv[1].get("emitted", 0),
+                    )[:3]
+                    parts = []
+                    for strat, agg in by_emit:
+                        parts.append(
+                            f"{strat}:{agg.get('emitted', 0)}"
+                            f"/d={agg.get('defeat_rate', 0)*100:.0f}%"
+                            f"/c={agg.get('corroboration_rate', 0)*100:.0f}%"
+                        )
+                    grounding_info = (
+                        f", grounding {total_grounded_marks} marks across "
+                        f"{entities_with_grounded_marks} entities ({', '.join(parts)})"
+                    )
                 print(
                     f"       [{i+1}/{n}] loss snapshot: "
                     f"term entities_with_ner={entities_with_ner}, "
@@ -1909,6 +1958,7 @@ def run_stage5_ner_scopes(
                     f"(with_terms={total_uncovered_with_known_terms}), "
                     f"interaction free_floating={free_floating:.1%}"
                     f"{seed_info}"
+                    f"{grounding_info}"
                 )
 
         ner_f.write("\n]")
@@ -1918,6 +1968,21 @@ def run_stage5_ner_scopes(
     print(f"       Written {ner_path} ({os.path.getsize(ner_path) / 1e6:.1f} MB)")
     print(f"       Written {scope_path} ({os.path.getsize(scope_path) / 1e6:.1f} MB)")
     print(f"       Written {discourse_path} ({os.path.getsize(discourse_path) / 1e6:.1f} MB)")
+
+    # Learned-newcommand vocab: per-symbol body distribution + the
+    # `common` table of (symbol, body) pairs that recur in ≥2 papers.
+    # Future runs can consume this as a `LearnedVocabStrategy` to ground
+    # fresh papers that use \RR without defining it.
+    vocab_path = outdir / "learned-newcommand-vocab.json"
+    learned_vocab = _sg_module.aggregate_newcommand_vocab(symbol_envs_by_entity)
+    with open(vocab_path, "w", encoding="utf-8") as vf:
+        json.dump(learned_vocab, vf, indent=2, ensure_ascii=False)
+    print(
+        f"       Written {vocab_path} "
+        f"({os.path.getsize(vocab_path) / 1e6:.2f} MB) — "
+        f"{len(learned_vocab.get('by_symbol', {}))} distinct \\macro symbols, "
+        f"{len(learned_vocab.get('common', []))} recurring (symbol, body) pairs"
+    )
 
     # End-of-job inline audit summary. Mirrors the per-paper inhabited/outer
     # split that the audit pipeline produces locally, so Rob can read the
@@ -2166,6 +2231,14 @@ def run_stage5_ner_scopes(
         "entities_with_comments": entities_with_comments,
         "total_math_scopes": total_math_scopes,
         "entities_with_math_scopes": entities_with_math_scopes,
+        "total_grounded_marks": total_grounded_marks,
+        "entities_with_grounded_marks": entities_with_grounded_marks,
+        "strategy_meta_learning": _sg_module.aggregate_strategy_metrics(
+            strategy_metrics_by_entity
+        ),
+        "learned_newcommand_vocab": _sg_module.aggregate_newcommand_vocab(
+            symbol_envs_by_entity
+        ),
         "audit_summary": audit_summary,
         "total_discourse_records": total_discourse_records,
         "entities_with_discourse": entities_with_discourse,

@@ -206,38 +206,28 @@ def _toy_kernel():
 
 
 def test_kernel_phrase_lookup_handles_singles_and_multi_word():
-    mod = load_module()
+    from futon6 import grounding as grd
     singles, multi_index = _toy_kernel()
-    lookup = mod._make_kernel_phrase_lookup(singles, multi_index)
-    # exact match in singles
+    lookup = grd.make_kernel_phrase_lookup(singles, multi_index)
     assert lookup("category") == "Category"
-    # multi-word resolved via multi_index
     assert lookup("abelian group") == "AbelianGroup"
-    # unknown phrase
     assert lookup("frobnicator") is None
-    # case + whitespace tolerance
     assert lookup("  ABELIAN GROUP  ") == "AbelianGroup"
 
 
 def test_walk_atoms_yields_single_letters_inside_chars():
-    mod = load_module()
-    from futon6 import math_ast as ma
-    nodes = ma.parse_math("XYZ", base_offset=0)
-    atoms = list(mod._walk_atoms(nodes))
-    # Each letter is its own atom
+    from futon6 import grounding as grd
+    # walk_math_atoms walks $...$ envelopes, so wrap in delimiters.
+    atoms = list(grd.walk_math_atoms("$XYZ$"))
     texts = [a[0] for a in atoms]
     assert texts == ["X", "Y", "Z"]
 
 
 def test_walk_atoms_yields_full_macro_text():
-    mod = load_module()
-    from futon6 import math_ast as ma
-    nodes = ma.parse_math(r"\mathcal{C}", base_offset=0)
-    atoms = list(mod._walk_atoms(nodes))
-    # Macro itself emits one atom (full text); then recurses into args ('C')
+    from futon6 import grounding as grd
+    atoms = list(grd.walk_math_atoms(r"$\mathcal{C}$"))
     macro_atoms = [a for a in atoms if a[0].startswith("\\")]
     assert any(a[0] == r"\mathcal{C}" for a in macro_atoms)
-    # And the interior 'C' is also yielded by recursion
     inner = [a for a in atoms if a[0] == "C"]
     assert inner
 

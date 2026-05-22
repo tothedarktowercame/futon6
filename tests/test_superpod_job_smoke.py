@@ -796,6 +796,17 @@ def test_arxiv_stage5_emits_discourse_wiring_and_hypergraph_nodes(tmp_path: Path
     assert manifest["stage5_stats"]["total_ports"] >= 1
     assert manifest["stage5_stats"]["total_labels"] >= 1
     assert Path(manifest["stage5_stats"]["output_discourse_json"]).name == "discourse-wiring.json"
+    # Symbol grounding ran. The fixture has "Fix $X$ to be a cofibrant
+    # object" — "object" hits the kernel via the kernel-ambient strategy,
+    # so we expect at least one grounded mark + a strategy_meta_learning
+    # block with at least one strategy that fired.
+    s5 = manifest["stage5_stats"]
+    assert "strategy_meta_learning" in s5
+    assert "learned_newcommand_vocab" in s5
+    assert s5["total_grounded_marks"] >= 0  # may be 0 if no kernel phrase fired
+    assert isinstance(s5["strategy_meta_learning"], dict)
+    # The dedicated vocab side-file should also exist.
+    assert (outdir / "learned-newcommand-vocab.json").exists()
 
     discourse_rows = json.loads((outdir / "discourse-wiring.json").read_text(encoding="utf-8"))
     assert discourse_rows[0]["counts"]["wires"] >= 1

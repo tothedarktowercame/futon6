@@ -66,58 +66,7 @@ from futon6.theorem_extraction import extract_from_tarball
 from futon6 import structure_seed as _ss
 from futon6 import math_ast as _ma
 from futon6 import symbol_grounding as _sg
-
-
-def _make_kernel_phrase_lookup(singles: dict, multi_index: dict):
-    """Build a phrase→canon lookup for the symbol-grounding strategies.
-
-    `singles` maps single-word term_lower → (term_orig, canon).
-    `multi_index` maps first_word → list of (term_lower, term_orig, canon).
-    Returns a function that, given a phrase like "abelian group", returns
-    the kernel's canon name, or None if the phrase isn't known.
-    """
-    def lookup(phrase: str) -> str | None:
-        phrase = (phrase or "").lower().strip()
-        if not phrase:
-            return None
-        if phrase in singles:
-            return singles[phrase][1]
-        first_word = phrase.split()[0] if phrase else ""
-        if first_word in multi_index:
-            for term_lower, _orig, canon in multi_index[first_word]:
-                if term_lower == phrase:
-                    return canon
-        return None
-    return lookup
-
-
-def _math_atoms_for_grounding(text: str):
-    """Yield (atom_text, abs_start, abs_end) for each atom we'd like to
-    look up in the SymbolEnvironment.
-
-    Atoms are: (a) each single letter inside chars nodes within math
-    envelopes, and (b) full macro-token texts like `\\mathcal{C}`. Letter
-    atoms are emitted one at a time so juxtapositions like `XY` become
-    candidates `X` and `Y` separately. Macros are emitted as a whole so
-    `\\mathcal{C}` matches a Let-binding that captured the same literal
-    string.
-    """
-    for env_start, env_end, int_start, int_end, _kind in _ma.find_math_envelopes(text):
-        interior = text[int_start:int_end]
-        nodes = _ma.parse_math(interior, base_offset=int_start)
-        yield from _walk_atoms(nodes)
-
-
-def _walk_atoms(nodes):
-    for node in nodes:
-        if node.kind == "chars":
-            for i, ch in enumerate(node.text):
-                if ch.isalpha():
-                    yield (ch, node.start + i, node.start + i + 1)
-        elif node.kind == "macro":
-            yield (node.text, node.start, node.end)
-        for arg in node.args:
-            yield from _walk_atoms(arg["nodes"])
+from futon6 import grounding as _grd
 
 
 def detect_grounded_symbols(
@@ -126,85 +75,14 @@ def detect_grounded_symbols(
     singles: dict,
     multi_index: dict,
 ):
-    """Run grounding strategies; return (scope records, env, strategy summary).
+    """Thin wrapper around `futon6.grounding.detect_grounded_symbols`.
 
-    Each emitted scope is a `math/grounded-symbol` record positioned at an
-    atom that matched a binding in the per-paper SymbolEnvironment. The
-    record carries the canon name + originating strategy in hx/content so
-    downstream rendering can surface it.
+    Kept here so existing call sites and tests (`test_build_batch_008_qc_viewer.py`)
+    don't have to change while the shared module is the source of truth.
     """
-    kernel_lookup = _make_kernel_phrase_lookup(singles, multi_index)
-    ctx = _sg.StrategyContext(
-        paper_id=entity_id,
-        paper_text=text,
-        kernel_lookup=kernel_lookup,
+    return _grd.detect_grounded_symbols(
+        entity_id, text, singles, multi_index, SUPERPOD_JOB.spot_terms_entity,
     )
-    env = _sg.run_strategies(ctx, _sg.default_strategies())
-
-    records = []
-    rec_idx = 0
-    grounded_atom_count = 0
-    for atom_text, start, end in _math_atoms_for_grounding(text):
-        binding = env.lookup(atom_text, start)
-        if binding is None:
-            continue
-        # Gate by strategy. NewcommandStrategy always emits — its canon
-        # is a body-derived fallback when no kernel hit, which is still
-        # informative (e.g. `\RR` -> "R"). Prose strategies only emit
-        # when a kernel canon was found; without it the regex's
-        # phrasal capture is noisy ("first assertion is", "components
-        # in the ", …) and would pollute the viewer.
-        if binding.strategy != "newcommand" and not binding.canon:
-            continue
-        if not binding.canon and not binding.type_phrase:
-            continue
-        grounded_atom_count += 1
-        canon_or_fallback = binding.canon or binding.type_phrase[:24]
-        role = _ma.classify_atom_role(atom_text)
-        records.append({
-            "hx/id": f"{entity_id}:grounded-{rec_idx:05d}",
-            "hx/role": "scope",
-            "hx/type": "math/grounded-symbol",
-            "hx/parent": None,
-            "hx/content": {
-                "match": atom_text,
-                "position": start,
-                "end": end,
-                "canon": binding.canon,
-                "type_phrase": binding.type_phrase,
-                "strategy": binding.strategy,
-                "syntax_role": role,
-            },
-            "hx/labels": [
-                "scope", "math", "grounded",
-                f"strategy-{binding.strategy}",
-                f"canon-{canon_or_fallback}",
-            ],
-        })
-        rec_idx += 1
-
-    # Per-strategy emission counts for the QC summary
-    strategy_emit_counts: dict[str, int] = {}
-    for b in env.all_bindings:
-        strategy_emit_counts[b.strategy] = strategy_emit_counts.get(b.strategy, 0) + 1
-    strategy_active_counts: dict[str, int] = {}
-    for b in env.all_active():
-        strategy_active_counts[b.strategy] = strategy_active_counts.get(b.strategy, 0) + 1
-
-    # Per-strategy meta-learning slot: emit/defeat/corroborate. Fed to
-    # the cross-paper aggregator in the index step so the QC headline
-    # can show defeat_rate and corroboration_rate per strategy.
-    strategy_metrics = _sg.compute_strategy_metrics(env)
-
-    summary = {
-        "total_bindings_emitted": len(env.all_bindings),
-        "active_bindings": len(env.all_active()),
-        "grounded_atom_count": grounded_atom_count,
-        "strategy_emit_counts": dict(sorted(strategy_emit_counts.items())),
-        "strategy_active_counts": dict(sorted(strategy_active_counts.items())),
-        "strategy_metrics": strategy_metrics,
-    }
-    return records, env, summary
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
