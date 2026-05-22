@@ -184,6 +184,11 @@ def detect_grounded_symbols(
         binding = env.lookup(atom_text, start)
         if binding is None:
             continue
+        # Constructor declarations are quoted (multi-symbol LHSes like
+        # `\gamma_1 < \cdots < \gamma_n`). They can't match a single
+        # atom; the constructor-declaration scope below carries them.
+        if binding.constructor != "single":
+            continue
         if binding.strategy != "newcommand" and not binding.canon:
             continue
         if not binding.canon and not binding.type_phrase:
@@ -212,6 +217,41 @@ def detect_grounded_symbols(
             ],
         })
         rec_idx += 1
+
+    # Emit math/constructor-declaration scope records for every
+    # non-single binding in the env. These cover the LHS extent (the
+    # `$...$` block, via lhs_span) so the reader can see "this is a
+    # sequence/relation/equation declaration of <type_phrase>" without
+    # the engine faking a per-atom match. Defeated bindings still emit
+    # — the visible mark is still useful diagnostic information about
+    # the declaration site.
+    cons_idx = 0
+    for b in env.all_bindings:
+        if b.constructor == "single":
+            continue
+        if not b.lhs_span:
+            continue
+        records.append({
+            "hx/id": f"{entity_id}:cons-{cons_idx:05d}",
+            "hx/role": "scope",
+            "hx/type": "math/constructor-declaration",
+            "hx/parent": None,
+            "hx/content": {
+                "match": b.symbol,
+                "position": b.lhs_span[0],
+                "end": b.lhs_span[1],
+                "canon": b.canon,
+                "type_phrase": b.type_phrase,
+                "strategy": b.strategy,
+                "constructor": b.constructor,
+            },
+            "hx/labels": [
+                "scope", "math", "constructor-declaration",
+                f"strategy-{b.strategy}",
+                f"constructor-{b.constructor}",
+            ],
+        })
+        cons_idx += 1
 
     strategy_emit_counts: dict[str, int] = {}
     for b in env.all_bindings:

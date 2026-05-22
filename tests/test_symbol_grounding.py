@@ -22,6 +22,7 @@ from futon6.symbol_grounding import (
     SymbolEnvironment,
     TheYXStrategy,
     aggregate_strategy_metrics,
+    classify_lhs,
     compute_strategy_metrics,
     default_strategies,
     merge_bindings,
@@ -640,6 +641,84 @@ def test_default_strategies_with_learned_vocab_appends_it():
     vocab = [{"symbol": r"\RR", "body": "{\\mathbb R}", "canon": "R", "support": 2}]
     names_with = {s.name for s in default_strategies(learned_vocab=vocab)}
     assert "learned-vocab" in names_with
+
+
+# ============================================================
+# classify_lhs + constructor tagging on LetBindingStrategy
+# ============================================================
+
+def test_classify_lhs_single_letter():
+    assert classify_lhs("X") == "single"
+    assert classify_lhs("f") == "single"
+
+
+def test_classify_lhs_single_macro():
+    assert classify_lhs(r"\alpha") == "single"
+    assert classify_lhs(r"\mathcal{C}") == "single"
+    assert classify_lhs(r"\mathbb{R}") == "single"
+
+
+def test_classify_lhs_comma_list():
+    assert classify_lhs("X, Y, Z") == "comma-list"
+    assert classify_lhs(r"\alpha, \beta") == "comma-list"
+
+
+def test_classify_lhs_relation_chain():
+    assert classify_lhs(r"\gamma_1(t) < \cdots < \gamma_n(t)") == "relation-chain"
+    assert classify_lhs(r"X \leq Y") == "relation-chain"
+    assert classify_lhs(r"a \in S") == "relation-chain"
+
+
+def test_classify_lhs_equation():
+    assert classify_lhs("X = (Y, Z)") == "equation"
+    assert classify_lhs(r"\phi = \psi^{-1}") == "equation"
+
+
+def test_classify_lhs_complex_fallback():
+    assert classify_lhs(r"f : X \to Y") == "complex"
+    assert classify_lhs(r"\{(x, y) : x^2 + y^2 = 1\}") == "complex"
+
+
+def test_classify_lhs_commas_inside_braces_dont_split():
+    # comma inside \mathcal{...} shouldn't trigger comma-list
+    assert classify_lhs(r"\mathbb{Z}_{p,q}") == "complex"  # subscript braces
+
+
+def test_let_binding_with_relation_chain_lhs_emits_constructor_binding():
+    text = (
+        r"Let $\gamma_1(t) < \cdots < \gamma_n(t)$ be the roots of $p$. "
+        "Then they are distinct."
+    )
+    bindings = LetBindingStrategy().apply(_ctx(text))
+    assert len(bindings) == 1
+    b = bindings[0]
+    # Verbatim LHS retained as "quote"
+    assert b.symbol == r"\gamma_1(t) < \cdots < \gamma_n(t)"
+    assert b.constructor == "relation-chain"
+    # type_phrase still extracted
+    assert "root" in b.type_phrase
+
+
+def test_let_binding_with_comma_list_lhs_tags_constructor():
+    text = "Let $X, Y, Z$ be a sequence of vectors. End."
+    bindings = LetBindingStrategy().apply(_ctx(text))
+    assert bindings[0].constructor == "comma-list"
+    assert bindings[0].symbol == "X, Y, Z"
+
+
+def test_let_binding_with_single_lhs_keeps_constructor_single():
+    text = "Let $X$ be an abelian group."
+    bindings = LetBindingStrategy().apply(_ctx(text))
+    assert bindings[0].constructor == "single"
+
+
+def test_let_binding_records_lhs_span():
+    text = "Let $X$ be a category."
+    bindings = LetBindingStrategy().apply(_ctx(text))
+    b = bindings[0]
+    assert b.lhs_span is not None
+    # The LHS span covers the X between the $...$ delimiters.
+    assert text[b.lhs_span[0]:b.lhs_span[1]] == "X"
 
 
 def test_learned_vocab_strategy_picks_highest_support_when_duplicates():

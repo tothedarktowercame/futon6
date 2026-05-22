@@ -111,7 +111,9 @@ def main(argv: list[str] | None = None) -> dict:
         })
         total_grounded_marks += len(records)
         # Collect spot-check samples — every binding is a candidate; we
-        # reservoir later.
+        # reservoir later. `constructor` reports the LHS shape so the
+        # operator can see at a glance whether a sample is a single
+        # symbol or a quoted multi-symbol declaration.
         for b in env.all_bindings:
             ctx_start = max(0, b.evidence_span[0] - args.context_chars)
             ctx_end = min(len(text), b.evidence_span[1] + args.context_chars)
@@ -121,6 +123,7 @@ def main(argv: list[str] | None = None) -> dict:
                 "canon": b.canon,
                 "type_phrase": b.type_phrase,
                 "confidence": b.confidence,
+                "constructor": getattr(b, "constructor", "single"),
                 "defeated": b.defeated_by is not None,
                 "evidence_span": list(b.evidence_span),
                 "context": text[ctx_start:ctx_end].replace("\n", " "),
@@ -144,6 +147,16 @@ def main(argv: list[str] | None = None) -> dict:
         else:
             sampled[strat] = rng.sample(pool, args.sample_per_strategy)
 
+    # Cross-strategy constructor distribution: how many bindings are
+    # quoted (non-single)? A high ratio signals that the prose patterns
+    # are firing on declarations the engine can't yet decompose — useful
+    # signal for future work on constructor unpacking.
+    constructor_counts: dict[str, int] = {}
+    for items in samples_by_strategy.values():
+        for s in items:
+            c = s.get("constructor", "single")
+            constructor_counts[c] = constructor_counts.get(c, 0) + 1
+
     report = {
         "input_dir": str(args.input_dir),
         "ner_kernel": str(args.ner_kernel),
@@ -151,6 +164,7 @@ def main(argv: list[str] | None = None) -> dict:
         "paper_count": len(paper_paths),
         "total_grounded_marks": total_grounded_marks,
         "strategy_meta_learning": aggregate,
+        "constructor_distribution": constructor_counts,
         "spot_check_samples": sampled,
         "per_paper_summary": per_paper_summary,
     }
@@ -172,6 +186,13 @@ def main(argv: list[str] | None = None) -> dict:
             f"  {strat:14s} emitted={emit:5d}  papers={papers:3d}  "
             f"defeated={defeat_pct:5.1f}%  corroborated={corr_pct:5.1f}%"
         )
+
+    if constructor_counts:
+        total = sum(constructor_counts.values())
+        print()
+        print(f"[eval-grounding] Constructor distribution ({total} bindings):")
+        for c, n in sorted(constructor_counts.items(), key=lambda kv: -kv[1]):
+            print(f"  {c:18s} {n:5d}  ({n/total*100:.1f}%)")
     return report
 
 

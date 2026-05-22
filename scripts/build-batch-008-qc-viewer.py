@@ -551,6 +551,17 @@ def render_tree_node(text: str, node: dict, *, is_root: bool) -> str:
         title_attr = f' title="{html.escape(title_text)}"'
         label_text = display
         role_class = f" role-{syntax_role}"
+    elif node["label"] == "math/constructor-declaration":
+        # Quoted multi-symbol declaration (Joe's LetSeqConstructor
+        # framing): the verbatim LHS gets a colored mark; the label
+        # shows the constructor kind so the reader sees "this is a
+        # comma-list / relation-chain / equation declaration of <type>".
+        constructor = content.get("constructor") or "complex"
+        type_phrase = content.get("type_phrase") or "?"
+        strategy = content.get("strategy") or "?"
+        title_text = f"{constructor} → {type_phrase} (via {strategy})"
+        title_attr = f' title="{html.escape(title_text)}"'
+        label_text = f"{constructor}: {type_phrase[:22]}"
     else:
         label_text = node["label"]
     label_html = f'<span class="scope-label">{html.escape(label_text)}</span>'
@@ -975,6 +986,11 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
     .scope.math-grounded-symbol.role-named-op .scope-label {{ background: #cc5500; }}
     .scope.math-grounded-symbol.role-number .scope-label {{ background: #b22222; }}
     .scope.math-grounded-symbol.role-variable .scope-label {{ background: rgba(124, 58, 237, 0.55); }}
+    /* Constructor declaration — quoted multi-symbol LHS (Joe's
+       LetSeqConstructor framing). Distinct teal background so it doesn't
+       confuse with the purple grounded-symbol palette. */
+    .scope.math-constructor-declaration {{ background: rgba(13, 148, 136, 0.22); outline: 1px dashed rgba(13, 148, 136, 0.8); outline-offset: -1px; }}
+    .scope.math-constructor-declaration .scope-label {{ background: rgba(13, 148, 136, 0.7); color: white; }}
     .scope-label {{ display: inline-block; margin-right: 6px; padding: 0 4px; background: rgba(29, 26, 22, 0.1); border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
     .term-kernel {{ background: rgba(15, 118, 110, 0.12); border-bottom: 1px solid rgba(15, 118, 110, 0.45); padding: 0 1px; border-radius: 2px; cursor: help; }}
     .term-kernel:hover {{ background: rgba(15, 118, 110, 0.22); }}

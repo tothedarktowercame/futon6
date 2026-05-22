@@ -26,6 +26,24 @@ class SymbolBinding:
     binding's scope by capping its scope_end — the original is retained
     in the strategy log with `defeated_by` set so meta-learning can see
     which strategies override which.
+
+    `constructor` classifies the LHS shape:
+      - `single`: a single ground-able atom (letter, `\\macro`,
+        `\\macro{X}`). The atom walker can match it.
+      - `comma-list`: top-level commas signal multiple symbols sharing
+        a type. Decomposition is a future concern; for now the binding
+        is "quoted" — keeps the verbatim LHS as `symbol` and never
+        tries to match a single atom.
+      - `relation-chain`: contains `<`/`\\leq`/`\\dots`/etc — declares
+        a relation between symbols, not a single symbol.
+      - `equation`: contains `=` — equation, not declaration.
+      - `complex`: didn't fit any of the above; reader/future code
+        decides how to handle.
+
+    Only `single` bindings produce per-atom `math/grounded-symbol`
+    scope records. The others get `math/constructor-declaration` scope
+    records covering the LHS extent, so the viewer surfaces them
+    without faking a per-atom match.
     """
     binding_id: str
     symbol: str
@@ -37,6 +55,8 @@ class SymbolBinding:
     strategy: str
     evidence_span: tuple[int, int]
     defeated_by: str | None = None
+    constructor: str = "single"
+    lhs_span: tuple[int, int] | None = None
 
 
 _CONFIDENCE_RANK = {"low": 0, "medium": 1, "high": 2}
@@ -99,6 +119,72 @@ def _scope_start_after_punct(text: str, end_pos: int) -> int:
     return p
 
 
+# `\macro{X}` arg shape allows letters, digits, or a one-deep brace group
+# so we accept `\mathbb{N_+}` style shapes. Two-level nesting is overkill
+# for what counts as a single math atom.
+_SINGLE_LHS_RE = re.compile(
+    r"^(?:[A-Za-z]"
+    r"|\\[A-Za-z]+"
+    r"|\\[A-Za-z]+\{[A-Za-z0-9]+\}"
+    r")$"
+)
+
+_RELATION_OPS_RE = re.compile(
+    r"\\(?:le|leq|ge|geq|neq|approx|equiv|sim|simeq|cong|prec|preceq|succ|succeq|"
+    r"in|notin|subset|subseteq|subsetneq|supset|supseteq|supsetneq|dots|cdots|ldots)\b"
+    r"|[<>≤≥≠]"
+)
+
+
+def _has_top_level_char(s: str, ch: str) -> bool:
+    """Return True if `ch` appears at depth 0 (outside braces AND parens).
+
+    Parens are tracked alongside braces so `X = (Y, Z)` is not mis-classified
+    as a comma-list — the comma there is a tuple separator inside `(...)`,
+    not a top-level multi-symbol declaration.
+    """
+    brace_depth = 0
+    paren_depth = 0
+    for c in s:
+        if c == "{":
+            brace_depth += 1
+        elif c == "}":
+            brace_depth = max(0, brace_depth - 1)
+        elif c == "(":
+            paren_depth += 1
+        elif c == ")":
+            paren_depth = max(0, paren_depth - 1)
+        elif c == ch and brace_depth == 0 and paren_depth == 0:
+            return True
+    return False
+
+
+def classify_lhs(lhs: str) -> str:
+    """Bucket a captured LHS by its declarative shape.
+
+    The buckets are mutually exclusive in this order:
+      `single`: matches `_SINGLE_LHS_RE` (one atom).
+      `comma-list`: top-level comma (declaration of multiple symbols
+        sharing a type).
+      `relation-chain`: contains a relation operator (`<`, `\\leq`,
+        `\\dots`, etc.) — the LHS introduces a relation, not a symbol.
+      `equation`: contains `=` — equation, not declaration.
+      `complex`: nothing else fit; future code decides.
+    """
+    s = (lhs or "").strip()
+    if not s:
+        return "complex"
+    if _SINGLE_LHS_RE.match(s):
+        return "single"
+    if _has_top_level_char(s, ","):
+        return "comma-list"
+    if _RELATION_OPS_RE.search(s):
+        return "relation-chain"
+    if _has_top_level_char(s, "="):
+        return "equation"
+    return "complex"
+
+
 class LetBindingStrategy(Strategy):
     """`Let $X$ be (a|an|the) Y` — high confidence.
 
@@ -120,7 +206,13 @@ class LetBindingStrategy(Strategy):
         for m in self._PATTERN.finditer(ctx.paper_text):
             symbol = m.group(1).strip()
             type_phrase = m.group(2).strip().lower()
+            constructor = classify_lhs(symbol)
             canon = (ctx.kernel_lookup or (lambda _: None))(type_phrase)
+            # Non-single LHSes carry the verbatim text as the symbol —
+            # the binding is "quoted" for future processing. They
+            # produce a math/constructor-declaration scope record
+            # (not math/grounded-symbol) so the viewer still surfaces
+            # them. See `constructor` field docs on SymbolBinding.
             out.append(SymbolBinding(
                 binding_id=ctx.next_id(),
                 symbol=symbol,
@@ -131,6 +223,8 @@ class LetBindingStrategy(Strategy):
                 confidence=self.default_confidence,
                 strategy=self.name,
                 evidence_span=(m.start(), m.end()),
+                constructor=constructor,
+                lhs_span=(m.start(1), m.end(1)),
             ))
         return out
 
@@ -168,6 +262,8 @@ class DenotationStrategy(Strategy):
                     confidence=self.default_confidence,
                     strategy=self.name,
                     evidence_span=(m.start(), m.end()),
+                    constructor=classify_lhs(symbol),
+                    lhs_span=(m.start(1), m.end(1)),
                 ))
         return out
 
@@ -544,6 +640,8 @@ class FixPatternStrategy(Strategy):
                 confidence=self.default_confidence,
                 strategy=self.name,
                 evidence_span=(m.start(), m.end()),
+                constructor=classify_lhs(symbol),
+                lhs_span=(m.start(1), m.end(1)),
             ))
         return out
 
@@ -586,6 +684,8 @@ class InlineIsAStrategy(Strategy):
                 confidence=self.default_confidence,
                 strategy=self.name,
                 evidence_span=(m.start(), m.end()),
+                constructor=classify_lhs(symbol),
+                lhs_span=(m.start(1), m.end(1)),
             ))
         return out
 
@@ -643,6 +743,8 @@ class NotationEnvStrategy(Strategy):
                     confidence=self.default_confidence,
                     strategy=self.name,
                     evidence_span=(body_offset + m.start(), body_offset + m.end()),
+                    constructor=classify_lhs(symbol),
+                    lhs_span=(body_offset + m.start(1), body_offset + m.end(1)),
                 ))
         return out
 
@@ -682,6 +784,8 @@ class TheYXStrategy(Strategy):
                 confidence=self.default_confidence,
                 strategy=self.name,
                 evidence_span=(m.start(), m.end()),
+                constructor=classify_lhs(symbol),
+                lhs_span=(m.start(2), m.end(2)),
             ))
         return out
 

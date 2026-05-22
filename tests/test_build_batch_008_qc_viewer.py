@@ -361,6 +361,51 @@ def test_detect_grounded_symbols_role_enrichment_present():
         }
 
 
+def test_render_tree_node_renders_constructor_declaration():
+    """math/constructor-declaration scopes get a teal mark + a
+    `constructor: type_phrase` label so the reader knows the LHS is a
+    multi-symbol declaration the engine couldn't ground per-atom."""
+    mod = load_module()
+    from futon6 import structure_seed as ss
+    record = {
+        "hx/id": "t:c-0", "hx/role": "scope",
+        "hx/type": "math/constructor-declaration",
+        "hx/parent": None,
+        "hx/content": {
+            "match": r"\gamma_1 < \cdots < \gamma_n",
+            "position": 0,
+            "end": 26,
+            "canon": None,
+            "type_phrase": "roots",
+            "strategy": "let-binding",
+            "constructor": "relation-chain",
+        },
+        "hx/labels": ["scope", "math", "constructor-declaration"],
+    }
+    spans = ss.scope_records_to_spans([record])
+    tree = ss.build_scope_tree(spans, [])
+    node = tree["children"][0]
+    out = mod.render_tree_node(r"\gamma_1 < \cdots < \gamma_n", node, is_root=False)
+    assert "math-constructor-declaration" in out
+    assert "relation-chain" in out
+    assert "roots" in out
+
+
+def test_detect_grounded_symbols_emits_constructor_declaration_record():
+    """A let-binding with relation-chain LHS produces a
+    math/constructor-declaration scope record (not math/grounded-symbol).
+    Atom-level lookup yields no per-atom mark for these."""
+    mod = load_module()
+    singles, multi_index = _toy_kernel()
+    text = (
+        r"Let $\gamma_1 < \gamma_2 < \gamma_3$ be roots of $p$. End."
+    )
+    records, _, _ = mod.detect_grounded_symbols("e", text, singles, multi_index)
+    cons = [r for r in records if r["hx/type"] == "math/constructor-declaration"]
+    assert cons, "expected a constructor-declaration record"
+    assert cons[0]["hx/content"]["constructor"] == "relation-chain"
+
+
 def test_render_strategy_meta_block_emits_rows_and_pct():
     mod = load_module()
     agg = {
