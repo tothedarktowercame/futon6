@@ -191,12 +191,18 @@ def detect_grounded_symbols(
     for b in env.all_active():
         strategy_active_counts[b.strategy] = strategy_active_counts.get(b.strategy, 0) + 1
 
+    # Per-strategy meta-learning slot: emit/defeat/corroborate. Fed to
+    # the cross-paper aggregator in the index step so the QC headline
+    # can show defeat_rate and corroboration_rate per strategy.
+    strategy_metrics = _sg.compute_strategy_metrics(env)
+
     summary = {
         "total_bindings_emitted": len(env.all_bindings),
         "active_bindings": len(env.all_active()),
         "grounded_atom_count": grounded_atom_count,
         "strategy_emit_counts": dict(sorted(strategy_emit_counts.items())),
         "strategy_active_counts": dict(sorted(strategy_active_counts.items())),
+        "strategy_metrics": strategy_metrics,
     }
     return records, env, summary
 
@@ -1208,7 +1214,14 @@ def render_paper_page(paper: dict, *, report_path: Path, back_href: str) -> str:
 </html>"""
 
 
-def render_index_html(papers: list[dict], manifest: dict, out_json: Path, page_dir: Path, index_path: Path) -> str:
+def render_index_html(
+    papers: list[dict],
+    manifest: dict,
+    out_json: Path,
+    page_dir: Path,
+    index_path: Path,
+    aggregate_metrics: dict | None = None,
+) -> str:
     generated = datetime.now(timezone.utc).isoformat(timespec="seconds")
     cards = []
     for paper in papers:
@@ -1272,6 +1285,11 @@ def render_index_html(papers: list[dict], manifest: dict, out_json: Path, page_d
     .coverage-badge.sparse {{ color: var(--sparse); }}
     code {{ font-family: "SFMono-Regular", Consolas, monospace; }}
     a {{ color: var(--accent); text-decoration: none; }}
+    .meta-learning {{ background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin: 22px 0; }}
+    .meta-table {{ width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }}
+    .meta-table th, .meta-table td {{ text-align: left; padding: 6px 10px; border-bottom: 1px solid #eadccf; }}
+    .meta-table th {{ color: var(--muted); text-transform: uppercase; font: 700 0.72rem/1 system-ui, sans-serif; letter-spacing: .04em; }}
+    .meta-table .pct {{ color: var(--muted); font-size: 12px; }}
     @media (max-width: 980px) {{ .stats-grid {{ grid-template-columns: 1fr 1fr; }} }}
   </style>
 </head>
@@ -1293,10 +1311,65 @@ def render_index_html(papers: list[dict], manifest: dict, out_json: Path, page_d
       hypergraphs={manifest.get('stage9a_stats', {}).get('hypergraphs_produced')} |
       report={html.escape(str(out_json))}
     </p>
+    {render_strategy_meta_block(aggregate_metrics)}
     {''.join(cards)}
   </div>
 </body>
 </html>"""
+
+
+def render_strategy_meta_block(aggregate_metrics: dict | None) -> str:
+    """Cross-paper symbol-grounding meta-learning headline.
+
+    Shows per-strategy emit / defeat-rate / corroboration-rate
+    aggregated across all selected papers. A strategy with high
+    corroboration_rate is being independently confirmed by other
+    strategies — that's the trust signal. A strategy with high
+    defeat_rate produces bindings that later evidence narrows away —
+    interpret as "this strategy is firing on transient declarations,
+    not stable ones." Sorted by emitted count descending.
+    """
+    if not aggregate_metrics:
+        return ""
+    rows = []
+    for strat, agg in sorted(
+        aggregate_metrics.items(),
+        key=lambda kv: -kv[1].get("emitted", 0),
+    ):
+        emit = agg.get("emitted", 0)
+        defeated = agg.get("defeated", 0)
+        corr = agg.get("corroborated", 0)
+        solo = agg.get("solo", 0)
+        papers = agg.get("papers_active", 0)
+        defeat_pct = agg.get("defeat_rate", 0.0) * 100
+        corr_pct = agg.get("corroboration_rate", 0.0) * 100
+        rows.append(
+            f"<tr><td><code>{html.escape(strat)}</code></td>"
+            f"<td>{emit}</td><td>{papers}</td>"
+            f"<td>{defeated}&nbsp;<span class='pct'>({defeat_pct:.1f}%)</span></td>"
+            f"<td>{corr}&nbsp;<span class='pct'>({corr_pct:.1f}%)</span></td>"
+            f"<td>{solo}</td></tr>"
+        )
+    return f"""
+    <section class="meta-learning">
+      <h2>Strategy meta-learning (cross-paper)</h2>
+      <p class="tiny">
+        Per-strategy aggregation across the selected papers. <em>Emitted</em> = total
+        bindings produced. <em>Defeated</em> = bindings whose scope got narrowed by
+        later evidence in the same paper. <em>Corroborated</em> = bindings whose
+        (symbol, canon) pair was independently produced by another strategy.
+        High corroboration + low defeat = trustworthy. The opposite pattern flags
+        a strategy worth constraining or pruning.
+      </p>
+      <table class="meta-table">
+        <thead><tr>
+          <th>Strategy</th><th>Emitted</th><th>Papers active</th>
+          <th>Defeated</th><th>Corroborated</th><th>Solo</th>
+        </tr></thead>
+        <tbody>{''.join(rows)}</tbody>
+      </table>
+    </section>
+    """
 
 
 def main(argv: list[str] | None = None) -> dict:
@@ -1349,6 +1422,15 @@ def main(argv: list[str] | None = None) -> dict:
         page_path.write_text(page_html, encoding="utf-8")
         paper["page_path"] = str(page_path)
 
+    # Cross-paper meta-learning: aggregate per-paper strategy metrics into
+    # totals + defeat/corroboration rates so the index headline can show
+    # which strategies are reliable across the batch.
+    metrics_by_paper = {
+        paper["raw_id"]: (paper.get("local_symbol_grounding") or {}).get("strategy_metrics") or {}
+        for paper in papers
+    }
+    aggregate_metrics = _sg.aggregate_strategy_metrics(metrics_by_paper)
+
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "batch_tar": str(args.batch_tar),
@@ -1379,10 +1461,14 @@ def main(argv: list[str] | None = None) -> dict:
             "stage5_stats": results["manifest"].get("stage5_stats"),
             "stage9a_stats": results["manifest"].get("stage9a_stats"),
         },
+        "strategy_meta_learning": aggregate_metrics,
     }
     args.out_json.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     args.out_html.write_text(
-        render_index_html(papers, results["manifest"], args.out_json, args.out_page_dir, args.out_html),
+        render_index_html(
+            papers, results["manifest"], args.out_json, args.out_page_dir,
+            args.out_html, aggregate_metrics=aggregate_metrics,
+        ),
         encoding="utf-8",
     )
     print(f"Wrote {args.out_html}")

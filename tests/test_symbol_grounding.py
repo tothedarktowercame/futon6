@@ -16,6 +16,8 @@ from futon6.symbol_grounding import (
     SymbolBinding,
     SymbolEnvironment,
     TheYXStrategy,
+    aggregate_strategy_metrics,
+    compute_strategy_metrics,
     default_strategies,
     merge_bindings,
     run_strategies,
@@ -308,3 +310,65 @@ def test_newcommand_declaremathoperator():
 def test_newcommand_default_strategies_includes_it():
     names = {s.name for s in default_strategies()}
     assert "newcommand" in names
+
+
+# ============================================================
+# Strategy meta-learning metrics
+# ============================================================
+
+def test_compute_strategy_metrics_counts_emit_and_defeat():
+    text = (
+        "Let $X$ be an abelian group. "
+        "After much development, "
+        "let $X$ be a finite abelian group. "
+        "Done."
+    )
+    env = run_strategies(_ctx(text), [LetBindingStrategy()])
+    metrics = compute_strategy_metrics(env)
+    assert "let-binding" in metrics
+    assert metrics["let-binding"]["emitted"] == 2
+    # The first binding got defeated by the second.
+    assert metrics["let-binding"]["defeated"] == 1
+
+
+def test_compute_strategy_metrics_corroboration_when_two_strategies_agree():
+    # Both `let-binding` and `the-Y-X` fire on $X$ with canon=Category.
+    text = (
+        "Let $X$ be a category. "
+        "Consider the category $X$ for context."
+    )
+    env = run_strategies(_ctx(text), [LetBindingStrategy(), TheYXStrategy()])
+    metrics = compute_strategy_metrics(env)
+    # Each strategy should see at least one binding marked corroborated.
+    assert metrics["let-binding"]["corroborated"] >= 1
+    assert metrics["the-Y-X"]["corroborated"] >= 1
+
+
+def test_compute_strategy_metrics_solo_when_no_corroboration():
+    text = "Let $X$ be a category."
+    env = run_strategies(_ctx(text), [LetBindingStrategy()])
+    metrics = compute_strategy_metrics(env)
+    assert metrics["let-binding"]["solo"] == 1
+    assert metrics["let-binding"]["corroborated"] == 0
+
+
+def test_aggregate_strategy_metrics_sums_across_papers():
+    paper_a = {"let-binding": {"emitted": 4, "defeated": 1, "corroborated": 2, "solo": 1}}
+    paper_b = {"let-binding": {"emitted": 6, "defeated": 0, "corroborated": 3, "solo": 3},
+               "newcommand": {"emitted": 10, "defeated": 0, "corroborated": 0, "solo": 10}}
+    agg = aggregate_strategy_metrics({"p_a": paper_a, "p_b": paper_b})
+    assert agg["let-binding"]["emitted"] == 10
+    assert agg["let-binding"]["defeated"] == 1
+    assert agg["let-binding"]["corroborated"] == 5
+    assert agg["let-binding"]["papers_active"] == 2
+    assert agg["let-binding"]["defeat_rate"] == 0.1
+    assert agg["let-binding"]["corroboration_rate"] == 0.5
+    # newcommand only fired in paper_b
+    assert agg["newcommand"]["papers_active"] == 1
+    assert agg["newcommand"]["emitted"] == 10
+
+
+def test_aggregate_strategy_metrics_zero_emitted_yields_zero_rates():
+    """A strategy with no emissions shouldn't NaN out the rate calc."""
+    agg = aggregate_strategy_metrics({})
+    assert agg == {}

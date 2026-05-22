@@ -371,6 +371,48 @@ def test_detect_grounded_symbols_role_enrichment_present():
         }
 
 
+def test_render_strategy_meta_block_emits_rows_and_pct():
+    mod = load_module()
+    agg = {
+        "let-binding": {
+            "emitted": 10, "defeated": 2, "corroborated": 5, "solo": 3,
+            "papers_active": 2, "defeat_rate": 0.2, "corroboration_rate": 0.5,
+        },
+        "newcommand": {
+            "emitted": 100, "defeated": 0, "corroborated": 0, "solo": 100,
+            "papers_active": 4, "defeat_rate": 0.0, "corroboration_rate": 0.0,
+        },
+    }
+    out = mod.render_strategy_meta_block(agg)
+    # Both strategies appear
+    assert "let-binding" in out
+    assert "newcommand" in out
+    # newcommand emits more so it sorts first
+    assert out.index("newcommand") < out.index("let-binding")
+    # Defeat / corroboration percentages render
+    assert "20.0%" in out
+    assert "50.0%" in out
+
+
+def test_render_strategy_meta_block_empty_returns_empty_string():
+    mod = load_module()
+    assert mod.render_strategy_meta_block(None) == ""
+    assert mod.render_strategy_meta_block({}) == ""
+
+
+def test_detect_grounded_symbols_summary_carries_strategy_metrics():
+    mod = load_module()
+    singles, multi_index = _toy_kernel()
+    text = "Let $X$ be a category. Let $X$ be a monoidal category. End."
+    _, _, summary = mod.detect_grounded_symbols("e", text, singles, multi_index)
+    assert "strategy_metrics" in summary
+    assert "let-binding" in summary["strategy_metrics"]
+    # Two bindings on X, the first got narrowed.
+    slot = summary["strategy_metrics"]["let-binding"]
+    assert slot["emitted"] == 2
+    assert slot["defeated"] == 1
+
+
 def test_detect_grounded_symbols_skips_uncanon_prose_strategy_bindings():
     """LetBindingStrategy w/ no kernel canon shouldn't pollute the records.
 

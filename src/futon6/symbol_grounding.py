@@ -528,6 +528,108 @@ def default_strategies() -> list[Strategy]:
 
 
 # ============================================================
+# Per-paper strategy metrics (input to cross-paper meta-learning)
+# ============================================================
+
+def compute_strategy_metrics(env: "SymbolEnvironment") -> dict[str, dict]:
+    """Per-strategy emission / defeat / corroboration on one paper.
+
+    For each strategy name, return:
+      - emitted: total bindings the strategy produced
+      - defeated: bindings whose scope got narrowed by later evidence
+        (a binding's `defeated_by` is set whenever another binding for
+        the same symbol started inside its scope range — typical when a
+        local "Let X be a finite abelian group" supersedes an earlier
+        global "Let X be an abelian group")
+      - corroborated: bindings that share both symbol AND canon with a
+        binding produced by a DIFFERENT strategy (an independent vote
+        for the same interpretation)
+      - solo: emitted - defeated - corroborated; bindings that are
+        neither contradicted nor independently confirmed
+
+    The mission framing (M-symbol-grounding.md §3) calls these
+    hit/defeat/corroboration rates; "rate" is computed at the
+    aggregation step where we have an emitted-bindings denominator.
+    """
+    by_strategy: dict[str, dict] = {}
+    # Group bindings by symbol to find cross-strategy corroboration
+    by_symbol: dict[str, list[SymbolBinding]] = {}
+    for b in env.all_bindings:
+        by_symbol.setdefault(b.symbol, []).append(b)
+
+    def init(name: str) -> dict:
+        return by_strategy.setdefault(name, {
+            "emitted": 0, "defeated": 0, "corroborated": 0, "solo": 0,
+        })
+
+    for b in env.all_bindings:
+        slot = init(b.strategy)
+        slot["emitted"] += 1
+        is_defeated = b.defeated_by is not None
+        if is_defeated:
+            slot["defeated"] += 1
+        # Corroborated iff another binding for the same symbol from a
+        # different strategy shares the same canon.
+        others = by_symbol.get(b.symbol, [])
+        is_corroborated = any(
+            o is not b
+            and o.strategy != b.strategy
+            and o.canon == b.canon
+            and b.canon is not None
+            for o in others
+        )
+        if is_corroborated:
+            slot["corroborated"] += 1
+        # Solo = neither defeated nor corroborated. The trio
+        # (defeated, corroborated, solo) is mutually exclusive so the
+        # three sum to `emitted` even when individual bindings are
+        # both defeated AND corroborated (we count them once, in the
+        # defeated bucket — defeat outranks corroboration as a signal
+        # since it represents a direct contradiction).
+        if not is_defeated and not is_corroborated:
+            slot["solo"] += 1
+
+    return by_strategy
+
+
+# ============================================================
+# Cross-paper aggregation of strategy metrics
+# ============================================================
+
+def aggregate_strategy_metrics(
+    metrics_by_paper: dict[str, dict[str, dict]],
+) -> dict[str, dict]:
+    """Sum per-paper strategy metrics into cross-paper totals + rates.
+
+    Returns dict[strategy_name -> {emitted, defeated, corroborated,
+    solo, papers_active, defeat_rate, corroboration_rate}].
+
+    `defeat_rate` and `corroboration_rate` are floats in [0, 1],
+    computed as fraction of `emitted`. `papers_active` is the count of
+    papers where the strategy emitted at least one binding — useful for
+    spotting strategies that fire rarely but reliably.
+    """
+    out: dict[str, dict] = {}
+    for paper_id, per_strategy in metrics_by_paper.items():
+        for strat, slot in per_strategy.items():
+            agg = out.setdefault(strat, {
+                "emitted": 0, "defeated": 0, "corroborated": 0,
+                "solo": 0, "papers_active": 0,
+            })
+            if slot["emitted"] > 0:
+                agg["papers_active"] += 1
+            for k in ("emitted", "defeated", "corroborated", "solo"):
+                agg[k] += slot.get(k, 0)
+    for strat, agg in out.items():
+        emit = agg["emitted"]
+        agg["defeat_rate"] = (agg["defeated"] / emit) if emit else 0.0
+        agg["corroboration_rate"] = (
+            agg["corroborated"] / emit if emit else 0.0
+        )
+    return out
+
+
+# ============================================================
 # Cross-paper newcommand vocabulary aggregation
 # ============================================================
 

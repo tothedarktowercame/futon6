@@ -260,6 +260,41 @@ calibrates judgments, not weights.
   supervisory anchor; losing it would force us to invert from prose
   context alone.
 
+## 6.5 Evidence (so far)
+
+- **Layer 1** (regex math scopes): `nlab-wiring.detect_math_scopes` —
+  shipped in the v2 viewer; commit `1b4f0a4` and follow-ons.
+- **Layer 2** (math AST): `src/futon6/math_ast.py` — custom recursive-
+  descent parser (pylatexenc not used); commit `c38e62b`. Tests in
+  `tests/test_math_ast.py`.
+- **Layer 3 core** (defeasible strategies): `src/futon6/symbol_grounding.py`
+  with `SymbolBinding`, `SymbolEnvironment`, `merge_bindings`, three
+  starter strategies (`let-binding`, `denotation`, `the-Y-X`); commit
+  `dce28fa`. Tests in `tests/test_symbol_grounding.py`.
+- **Layer 3 viewer wiring**: each grounded atom shows a purple badge
+  with canon name + strategy-attribution tooltip; commit `432fa91`.
+- **Strategy 6 (color-channel)** and **Strategy 7 (notation-env)** are
+  open. Cross-paper meta-learning is now in place (see below).
+- **Task 49 — NewcommandStrategy + role palette + cross-paper vocab**:
+  commit `269017c`.
+    - `\newcommand`/`\def`/`\DeclareMathOperator` harvested with
+      balanced-brace body extraction.
+    - First-Proof `math-proofread-style.sty` v0.9 palette ported as
+      `math_ast.classify_atom_role()`. Each grounded mark's label chip
+      gets a `role-X` CSS class so Greek letters render Mulberry,
+      named operators BurntOrange, etc.
+    - Hopf demo mark count: 1566 → 2293 (+\Cat, \M, \V, \K, \B, \C, \X).
+    - Galois: 5691 → 6745; Martingale: 2504 → 2679.
+    - `aggregate_newcommand_vocab(envs)` scaffolds cross-paper vocab
+      learning (per-symbol body distribution + recurring `common` list).
+- **Task 50 — strategy meta-learning**:
+    - `compute_strategy_metrics(env)` produces per-paper emit / defeat
+      / corroboration / solo counts.
+    - `aggregate_strategy_metrics(metrics_by_paper)` sums across
+      papers and reports defeat / corroboration rates.
+    - Index page now has a "Strategy meta-learning (cross-paper)"
+      section listing each strategy's trust signal.
+
 ## 7. Stopping rule
 
 The structure-learning loop has a stopping rule (M-structure-seed-
