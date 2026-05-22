@@ -535,6 +535,18 @@ def test_kernel_ambient_low_confidence():
     assert bindings[0].confidence == "low"
 
 
+def test_kernel_ambient_skips_font_wrapper_macros_as_atoms():
+    """\\mathrm in a math envelope is typography, not a symbol. The
+    kernel-ambient strategy must not bind it to the surrounding kernel
+    phrase. Same for \\text, \\operatorname, \\left, \\right, ..."""
+    text = "Consider the abelian group $K_{\\mathrm{red}}$ acting freely."
+    bindings = KernelAmbientStrategy().apply(_scan_ctx(text))
+    syms = {b.symbol for b in bindings}
+    assert r"\mathrm" not in syms
+    # K still binds.
+    assert "K" in syms
+
+
 def test_kernel_ambient_no_scan_no_bindings():
     text = "Consider the abelian group $G$."
     ctx = StrategyContext(

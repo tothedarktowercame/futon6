@@ -56,3 +56,61 @@ def test_walk_math_atoms_yields_macro_tokens():
     atoms = list(grounding.walk_math_atoms(r"$\Hom(A, B)$"))
     macros = [a[0] for a in atoms if a[0].startswith("\\")]
     assert r"\Hom" in macros
+
+
+def test_walk_math_atoms_suppresses_mathrm_wrapper():
+    """\\mathrm{red} is typography, not a math symbol — must not appear
+    in the atom stream, and the inner letters of the text-mode argument
+    must not appear as singleton atoms either (otherwise `r`, `e`, `d`
+    would leak)."""
+    atoms = list(grounding.walk_math_atoms(r"$K_{\mathrm{red}}$"))
+    texts = [a[0] for a in atoms]
+    assert r"\mathrm{red}" not in texts
+    assert "r" not in texts
+    assert "e" not in texts
+    assert "d" not in texts
+    # The outer K still yields.
+    assert "K" in texts
+
+
+def test_walk_math_atoms_suppresses_operatorname_wrapper():
+    atoms = list(grounding.walk_math_atoms(r"$\operatorname{Spec}(R)$"))
+    texts = [a[0] for a in atoms]
+    assert r"\operatorname{Spec}" not in texts
+    assert "S" not in texts and "p" not in texts
+    # Adjacent R survives.
+    assert "R" in texts
+
+
+def test_walk_math_atoms_suppresses_text_wrapper():
+    atoms = list(grounding.walk_math_atoms(r"$X^{\text{op}}$"))
+    texts = [a[0] for a in atoms]
+    assert r"\text{op}" not in texts
+    assert "o" not in texts
+    assert "X" in texts
+
+
+def test_walk_math_atoms_preserves_mathcal_wrapper():
+    """`\\mathcal{C}` IS a canonical category symbol — must still yield
+    as a full atom AND recurse into the C."""
+    atoms = list(grounding.walk_math_atoms(r"$\mathcal{C}$"))
+    texts = [a[0] for a in atoms]
+    assert r"\mathcal{C}" in texts
+    assert "C" in texts
+
+
+def test_walk_math_atoms_preserves_mathbb_wrapper():
+    atoms = list(grounding.walk_math_atoms(r"$\mathbb{R}$"))
+    texts = [a[0] for a in atoms]
+    assert r"\mathbb{R}" in texts
+    assert "R" in texts
+
+
+def test_walk_math_atoms_skips_left_right_typography_but_recurses():
+    """`\\left(` and `\\right)` are typography — no atom yield, but the
+    `f` inside still appears in the atom stream."""
+    atoms = list(grounding.walk_math_atoms(r"$\left( f \right)$"))
+    texts = [a[0] for a in atoms]
+    assert r"\left" not in texts
+    assert r"\right" not in texts
+    assert "f" in texts

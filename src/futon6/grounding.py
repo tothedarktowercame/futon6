@@ -59,6 +59,26 @@ def make_kernel_scan(
     return scan
 
 
+# Font/text-mode wrappers whose ARGUMENT carries the operator name —
+# the macro itself isn't a math symbol. Treating `\mathrm{red}` as an
+# atom mis-grounds it (e.g. as ConvexSet via kernel-ambient on the word
+# "convex" nearby). For these, we suppress both the full-text yield AND
+# the recursive walk into the argument: the argument is a text-mode
+# operator label (`Spec`, `Hom`, `red`), not a sequence of math letters.
+_TEXT_MODE_FONT_MACROS = frozenset({
+    "mathrm", "operatorname", "mathup", "text", "textrm", "textsf",
+    "texttt", "ensuremath",
+})
+
+# Pure typography or sizing — yield nothing, but RECURSE so any math
+# inside still gets walked. `\left(`, `\big[`, etc.
+_TYPOGRAPHY_MACROS = frozenset({
+    "left", "right", "big", "Big", "bigg", "Bigg", "bigl", "bigr",
+    "Bigl", "Bigr", "biggl", "biggr", "Biggl", "Biggr", "displaystyle",
+    "textstyle", "scriptstyle", "scriptscriptstyle", "nolimits", "limits",
+})
+
+
 def walk_math_atoms(text: str) -> Iterator[tuple[str, int, int]]:
     """Yield `(atom_text, abs_start, abs_end)` for each ground-able atom.
 
@@ -67,6 +87,14 @@ def walk_math_atoms(text: str) -> Iterator[tuple[str, int, int]]:
           envelopes (so juxtapositions like `XY` become two candidates),
       (b) full macro-token texts like `\\mathcal{C}` (so a Let-binding
           that captured the same literal matches via exact string).
+
+    Filtered out:
+      - Text-mode font macros (`\\mathrm`, `\\operatorname`, `\\text`):
+        their argument is an operator name like "Spec", not a sequence
+        of math symbols. The whole `\\mathrm{red}` group used to leak
+        as an atom and bind to whatever kernel phrase was nearby; now
+        it's silently skipped.
+      - Pure typography (`\\left`, `\\big`, etc.): no yield but recurse.
     """
     for env_start, env_end, int_start, int_end, _kind in _ma.find_math_envelopes(text):
         interior = text[int_start:int_end]
@@ -81,7 +109,20 @@ def _walk_atoms(nodes):
                 if ch.isalpha():
                     yield (ch, node.start + i, node.start + i + 1)
         elif node.kind == "macro":
+            name = (node.name or "").lstrip("\\")
+            if name in _TEXT_MODE_FONT_MACROS:
+                # Suppress: no yield of `\mathrm{Spec}`, no recurse into
+                # "Spec" (which would otherwise yield S, p, e, c as atoms).
+                continue
+            if name in _TYPOGRAPHY_MACROS:
+                # Skip yield but recurse so any nested math gets walked.
+                for arg in node.args:
+                    yield from _walk_atoms(arg["nodes"])
+                continue
             yield (node.text, node.start, node.end)
+            for arg in node.args:
+                yield from _walk_atoms(arg["nodes"])
+            continue
         for arg in node.args:
             yield from _walk_atoms(arg["nodes"])
 

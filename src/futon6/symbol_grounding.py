@@ -191,6 +191,18 @@ class KernelAmbientStrategy(Strategy):
     default_confidence = "low"
 
     _ATOM_IN_MATH = re.compile(r"\\[A-Za-z@]+|[A-Za-z]")
+    # Font/text-mode wrappers that aren't math symbols. We skip them as
+    # atom candidates so a `\mathrm{red}` in an envelope doesn't get
+    # bound to whatever kernel phrase the sentence mentions. Kept in
+    # sync with `grounding._TEXT_MODE_FONT_MACROS` (the symmetric filter
+    # for the main atom walker).
+    _SKIP_MACROS_AS_ATOMS = frozenset({
+        r"\mathrm", r"\operatorname", r"\mathup", r"\text", r"\textrm",
+        r"\textsf", r"\texttt", r"\ensuremath",
+        r"\left", r"\right", r"\big", r"\Big", r"\bigg", r"\Bigg",
+        r"\displaystyle", r"\textstyle", r"\scriptstyle",
+        r"\scriptscriptstyle", r"\nolimits", r"\limits",
+    })
 
     def apply(self, ctx: StrategyContext) -> list[SymbolBinding]:
         if ctx.kernel_scan is None:
@@ -230,7 +242,10 @@ class KernelAmbientStrategy(Strategy):
                 continue
             hit_start, hit_end, phrase, canon = hits[0]
             interior = ctx.paper_text[int_start:int_end]
-            atoms = {m.group(0) for m in self._ATOM_IN_MATH.finditer(interior)}
+            atoms = {
+                m.group(0) for m in self._ATOM_IN_MATH.finditer(interior)
+                if m.group(0) not in self._SKIP_MACROS_AS_ATOMS
+            }
             for atom in atoms:
                 out.append(SymbolBinding(
                     binding_id=ctx.next_id(),
