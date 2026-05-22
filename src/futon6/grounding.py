@@ -86,12 +86,33 @@ def _walk_atoms(nodes):
             yield from _walk_atoms(arg["nodes"])
 
 
+def load_learned_vocab(path) -> list[dict]:
+    """Load a `learned-newcommand-vocab.json` (the file Stage 5 emits).
+
+    Returns the `common` slot — a list of {symbol, body, canon,
+    papers, support} dicts. If the file is missing or malformed,
+    returns an empty list so callers can pass the result unconditionally.
+    """
+    import json
+    from pathlib import Path
+    p = Path(path)
+    if not p.exists():
+        return []
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    return list(data.get("common", []))
+
+
 def detect_grounded_symbols(
     entity_id: str,
     text: str,
     singles: dict,
     multi_index: dict,
     spot_terms_fn,
+    *,
+    learned_vocab: list[dict] | None = None,
 ) -> tuple[list[dict], _sg.SymbolEnvironment, dict]:
     """Run all default strategies on `text`; return (records, env, summary).
 
@@ -113,7 +134,7 @@ def detect_grounded_symbols(
         kernel_lookup=kernel_lookup,
         kernel_scan=kernel_scan,
     )
-    env = _sg.run_strategies(ctx, _sg.default_strategies())
+    env = _sg.run_strategies(ctx, _sg.default_strategies(learned_vocab=learned_vocab))
 
     records = []
     rec_idx = 0

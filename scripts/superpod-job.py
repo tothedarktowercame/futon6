@@ -1484,6 +1484,7 @@ def run_stage5_ner_scopes(
     discover_structures_max_uncovered_per_entity=30,
     stage5_loss_log_interval=500,
     audit_sample_size=30,
+    learned_vocab_path=None,
 ):
     """Run Stage 5: NER term spotting + scope detection.
 
@@ -1509,6 +1510,18 @@ def run_stage5_ner_scopes(
     singles, multi_index, multi_count = load_ner_kernel(ner_kernel_path)
     print(f"       NER kernel: {len(singles)} single + {multi_count} multi-word terms")
     print(f"       Scope detector: {scope_detector_name}")
+
+    # Optional learned newcommand vocab from a prior superpod run. If
+    # supplied, its `common` slot seeds LearnedVocabStrategy so the
+    # current batch can ground macros that are USED here but never
+    # \newcommanded.
+    learned_vocab_common: list[dict] = []
+    if learned_vocab_path is not None:
+        learned_vocab_common = _grounding_module.load_learned_vocab(learned_vocab_path)
+        print(
+            f"       Learned vocab: {len(learned_vocab_common)} recurring "
+            f"(symbol, body) pairs from {learned_vocab_path}"
+        )
     if discourse_detectors.get("source"):
         print(f"       Discourse detector source: {discourse_detectors['source']}")
 
@@ -1676,6 +1689,7 @@ def run_stage5_ner_scopes(
             grounded_records, symbol_env, grounding_summary = (
                 _grounding_module.detect_grounded_symbols(
                     eid, full_text, singles, multi_index, spot_terms_entity,
+                    learned_vocab=learned_vocab_common,
                 )
             )
             if grounded_records:
@@ -6312,6 +6326,14 @@ def main():
                             "across the sample. Set to 0 to disable; set negative to audit "
                             "every entity (expensive on large batches)."
                         ))
+    parser.add_argument("--learned-vocab", default=None,
+                        help=(
+                            "Path to a learned-newcommand-vocab.json produced by "
+                            "a prior Stage 5 run. If supplied, its `common` table "
+                            "seeds the LearnedVocabStrategy so the current batch "
+                            "can ground macros that authors USE but never "
+                            "\\newcommand."
+                        ))
     parser.add_argument("--run-distinctor-mit", action="store_true",
                         help="Run binder-pair MIT/distinctor pilot (Stage 5b)")
     parser.add_argument("--distinctor-entity-limit", type=int, default=0,
@@ -7165,6 +7187,9 @@ def main():
                 discover_structures_max_uncovered_per_entity=args.discover_structures_max_uncovered_per_entity,
                 stage5_loss_log_interval=args.stage5_loss_log_interval,
                 audit_sample_size=args.audit_sample_size,
+                learned_vocab_path=(
+                    Path(args.learned_vocab) if args.learned_vocab else None
+                ),
             )
 
             print(f"       NER coverage: {stage5_stats['ner_coverage']:.0%} "

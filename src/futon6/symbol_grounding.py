@@ -255,6 +255,68 @@ def _collect_envelopes_lazily(text: str) -> list[tuple[int, int, int, int, str]]
     return list(ma.find_math_envelopes(text))
 
 
+class LearnedVocabStrategy(Strategy):
+    r"""Cross-paper newcommand defaults — low confidence, paper-wide.
+
+    Consumes the `common` list from `aggregate_newcommand_vocab` (a
+    cross-paper aggregator over previous superpod batches). For each
+    (symbol, body, canon) entry that recurs in ≥2 papers, this strategy
+    looks for the symbol in the current paper's text. If the symbol
+    appears AND the current paper hasn't defined it (no NewcommandStrategy
+    binding starts at scope_start=0 with higher confidence), the learned
+    default fires.
+
+    Confidence is `low` because the learned default is, by construction,
+    a convention guess: paper authors may use the same macro for
+    different meanings ("\\T" is the monad in one paper, the torus in
+    another). The `merge_bindings` step will favour any explicit
+    in-paper declaration over this default.
+
+    Construction takes `common_vocab` — a list of dicts with at least
+    `symbol`, `canon`, `body` keys (the shape `aggregate_newcommand_vocab`
+    emits in its `common` slot). When multiple entries share a symbol,
+    the one with highest `support` wins.
+    """
+    name = "learned-vocab"
+    default_confidence = "low"
+
+    def __init__(self, common_vocab: list[dict] | None = None):
+        self._lookup: dict[str, dict] = {}
+        for entry in common_vocab or []:
+            sym = entry.get("symbol")
+            if not sym:
+                continue
+            cur = self._lookup.get(sym)
+            if cur is None or entry.get("support", 0) > cur.get("support", 0):
+                self._lookup[sym] = entry
+
+    def apply(self, ctx: StrategyContext) -> list[SymbolBinding]:
+        if not self._lookup:
+            return []
+        out = []
+        text = ctx.paper_text
+        for sym, entry in self._lookup.items():
+            # Match the macro token boundary so `\RR` doesn't match `\RRR`.
+            pattern = re.compile(re.escape(sym) + r"(?![A-Za-z])")
+            m = pattern.search(text)
+            if m is None:
+                continue
+            canon = entry.get("canon")
+            body = entry.get("body", "")
+            out.append(SymbolBinding(
+                binding_id=ctx.next_id(),
+                symbol=sym,
+                canon=canon,
+                type_phrase=body,
+                scope_start=0,
+                scope_end=len(text),
+                confidence=self.default_confidence,
+                strategy=self.name,
+                evidence_span=(m.start(), m.end()),
+            ))
+        return out
+
+
 class NewcommandStrategy(Strategy):
     r"""`\newcommand{\name}{body}` and siblings — paper-wide, high confidence.
 
@@ -739,9 +801,17 @@ def run_strategies(
     return SymbolEnvironment(merged)
 
 
-def default_strategies() -> list[Strategy]:
-    """The starter strategy set. Add to this list as new strategies land."""
-    return [
+def default_strategies(
+    learned_vocab: list[dict] | None = None,
+) -> list[Strategy]:
+    """The starter strategy set. Add to this list as new strategies land.
+
+    Pass `learned_vocab` (the `common` slot from
+    `aggregate_newcommand_vocab`) to include the cross-paper
+    `LearnedVocabStrategy`. With no vocab, the strategy is omitted —
+    fresh runs have nothing to learn from yet.
+    """
+    strategies: list[Strategy] = [
         NewcommandStrategy(),
         NotationEnvStrategy(),
         LetBindingStrategy(),
@@ -751,6 +821,9 @@ def default_strategies() -> list[Strategy]:
         TheYXStrategy(),
         KernelAmbientStrategy(),
     ]
+    if learned_vocab:
+        strategies.append(LearnedVocabStrategy(learned_vocab))
+    return strategies
 
 
 # ============================================================

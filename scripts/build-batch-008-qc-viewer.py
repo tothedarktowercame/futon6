@@ -74,14 +74,20 @@ def detect_grounded_symbols(
     text: str,
     singles: dict,
     multi_index: dict,
+    learned_vocab=None,
 ):
     """Thin wrapper around `futon6.grounding.detect_grounded_symbols`.
 
     Kept here so existing call sites and tests (`test_build_batch_008_qc_viewer.py`)
     don't have to change while the shared module is the source of truth.
+    `learned_vocab` (the `common` slot from a prior superpod batch's
+    `learned-newcommand-vocab.json`) wires the cross-paper
+    LearnedVocabStrategy into the run.
     """
     return _grd.detect_grounded_symbols(
-        entity_id, text, singles, multi_index, SUPERPOD_JOB.spot_terms_entity,
+        entity_id, text, singles, multi_index,
+        SUPERPOD_JOB.spot_terms_entity,
+        learned_vocab=learned_vocab,
     )
 
 
@@ -106,12 +112,22 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--nnexus-snapshot", type=Path, default=DEFAULT_NNEXUS_SNAPSHOT)
     parser.add_argument("--ner-kernel", type=Path, default=DEFAULT_NER_KERNEL,
                         help="Live NER kernel TSV used for inline term overlay markup.")
+    parser.add_argument("--learned-vocab", type=Path, default=None,
+                        help="Path to a learned-newcommand-vocab.json produced "
+                             "by a prior Stage 5 run. If supplied, its `common` "
+                             "table seeds the LearnedVocabStrategy.")
     parser.add_argument("--max-local-terms", type=int, default=12)
     parser.add_argument("--max-local-windows", type=int, default=6,
                         help="Max clustered local-scope windows per paper")
     parser.add_argument("--window-chars", type=int, default=1800,
                         help="Approximate local window size in characters")
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+    # Load the learned-vocab `common` table once at startup so every
+    # paper's grounding call reuses the same in-memory list.
+    args.learned_vocab_common = (
+        _grd.load_learned_vocab(args.learned_vocab) if args.learned_vocab else []
+    )
+    return args
 
 
 def raw_to_entity_id(raw_id: str) -> str:
@@ -732,6 +748,7 @@ def build_paper_view(
     # symbol-grounding mission (M-symbol-grounding.md).
     grounded_scopes, symbol_env, grounding_summary = detect_grounded_symbols(
         entity_id, eprint_text, singles, multi_index,
+        learned_vocab=args.learned_vocab_common,
     )
     local_scopes = [
         *local_scopes,

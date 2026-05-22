@@ -13,6 +13,7 @@ from futon6.symbol_grounding import (
     FixPatternStrategy,
     InlineIsAStrategy,
     KernelAmbientStrategy,
+    LearnedVocabStrategy,
     LetBindingStrategy,
     NewcommandStrategy,
     NotationEnvStrategy,
@@ -553,3 +554,88 @@ def test_default_strategies_includes_new_strategies():
         "denotation", "inline-is-a", "the-Y-X", "kernel-ambient",
     ):
         assert required in names, required
+
+
+# ============================================================
+# LearnedVocabStrategy
+# ============================================================
+
+def test_learned_vocab_strategy_fires_when_symbol_appears():
+    vocab = [
+        {"symbol": r"\RR", "body": "{\\mathbb R}", "canon": "RealNumbers",
+         "papers": ["p1", "p2"], "support": 2},
+        {"symbol": r"\ZZ", "body": "{\\mathbb Z}", "canon": "Integers",
+         "papers": ["p1", "p3"], "support": 2},
+    ]
+    text = "We work over $\\RR$ throughout. $\\ZZ$ also appears here."
+    bindings = LearnedVocabStrategy(vocab).apply(_ctx(text))
+    syms = {(b.symbol, b.canon) for b in bindings}
+    assert (r"\RR", "RealNumbers") in syms
+    assert (r"\ZZ", "Integers") in syms
+
+
+def test_learned_vocab_strategy_skips_symbols_not_in_text():
+    vocab = [
+        {"symbol": r"\RR", "body": "{\\mathbb R}", "canon": "RealNumbers",
+         "support": 2},
+        {"symbol": r"\PP", "body": "{\\mathbb P}", "canon": "Primes",
+         "support": 2},
+    ]
+    text = "We work over $\\RR$ today; nothing else."
+    bindings = LearnedVocabStrategy(vocab).apply(_ctx(text))
+    syms = {b.symbol for b in bindings}
+    assert r"\RR" in syms
+    assert r"\PP" not in syms
+
+
+def test_learned_vocab_strategy_is_low_confidence():
+    vocab = [{"symbol": r"\RR", "body": "{\\mathbb R}", "canon": "R", "support": 2}]
+    text = "$\\RR$ is the reals."
+    bindings = LearnedVocabStrategy(vocab).apply(_ctx(text))
+    assert bindings[0].confidence == "low"
+
+
+def test_learned_vocab_strategy_loses_to_in_paper_newcommand():
+    """Defeasibility: in-paper \\newcommand outranks learned default.
+
+    The cross-paper vocab claims \\T → Torus. The current paper defines
+    \\T → Monad. Both bindings start at scope 0; newcommand is high
+    confidence, learned-vocab is low; merge_bindings picks newcommand.
+    """
+    vocab = [{"symbol": r"\T", "body": "{\\mathbb T}", "canon": "Torus",
+              "support": 5}]
+    text = r"\newcommand{\T}{Monad}" + "\nUsing $\\T$ here."
+
+    def kernel(p):
+        return {"monad": "Monad", "torus": "Torus"}.get(p.lower().strip())
+
+    ctx = StrategyContext(
+        paper_id="t", paper_text=text, kernel_lookup=kernel,
+    )
+    env = run_strategies(ctx, default_strategies(learned_vocab=vocab))
+    # Active binding at position of \T usage should be the newcommand one.
+    pos = text.index(r"$\T$")
+    b = env.lookup(r"\T", pos)
+    assert b is not None
+    assert b.strategy == "newcommand"
+    assert b.canon == "Monad"
+
+
+def test_default_strategies_with_learned_vocab_appends_it():
+    names_without = {s.name for s in default_strategies()}
+    assert "learned-vocab" not in names_without
+
+    vocab = [{"symbol": r"\RR", "body": "{\\mathbb R}", "canon": "R", "support": 2}]
+    names_with = {s.name for s in default_strategies(learned_vocab=vocab)}
+    assert "learned-vocab" in names_with
+
+
+def test_learned_vocab_strategy_picks_highest_support_when_duplicates():
+    vocab = [
+        {"symbol": r"\T", "body": "{\\mathbb T}", "canon": "Torus", "support": 3},
+        {"symbol": r"\T", "body": "Monad", "canon": "Monad", "support": 8},
+    ]
+    text = "$\\T$"
+    bindings = LearnedVocabStrategy(vocab).apply(_ctx(text))
+    assert bindings[0].canon == "Monad"
+    assert bindings[0].type_phrase == "Monad"
