@@ -71,30 +71,60 @@ def canon_match(engine_canon: str | None, gold_canon: str, mode: str) -> bool:
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--gold", type=Path, required=True)
+    parser.add_argument(
+        "--gold", type=Path, required=True, action="append",
+        help="Gold JSON path. Repeatable: --gold pm.json --gold wiki.json. "
+             "The eval keeps per-source counters so PM vs Wikipedia "
+             "precision delta can be inspected.",
+    )
     parser.add_argument("--ner-kernel", type=Path, required=True)
     parser.add_argument("--out", type=Path, default=Path("grounding-gold-eval.json"))
-    parser.add_argument("--max-entries", type=int, default=0)
+    parser.add_argument(
+        "--max-entries-per-source", type=int, default=0,
+        help="Cap entries per source (0 = no cap). Useful for keeping "
+             "Wikipedia's volume balanced against smaller PM-style sources.",
+    )
     parser.add_argument("--match-mode", choices=["loose", "strict"], default="loose")
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> dict:
     args = parse_args(argv)
-    gold = json.loads(args.gold.read_text(encoding="utf-8"))
-    entries = gold["entries"]
-    if args.max_entries:
-        entries = entries[: args.max_entries]
-    print(f"[gold-eval] {len(entries)} entries from {args.gold}")
+    # Load every supplied gold file; tag entries with their source so the
+    # per-source breakdown can detect corpus-overfitting (gate P2).
+    sources: list[dict] = []  # list of {source, entries}
+    flat_entries: list[tuple[str, dict]] = []  # (source, entry)
+    for gold_path in args.gold:
+        data = json.loads(gold_path.read_text(encoding="utf-8"))
+        src = data.get("source") or gold_path.stem
+        es = data["entries"]
+        if args.max_entries_per_source:
+            es = es[: args.max_entries_per_source]
+        sources.append({
+            "source": src,
+            "path": str(gold_path),
+            "entries": len(es),
+            "pairs": sum(len(e["gold"]) for e in es),
+        })
+        for e in es:
+            flat_entries.append((src, e))
+        print(f"[gold-eval] {len(es)} entries / "
+              f"{sum(len(e['gold']) for e in es)} pairs from {gold_path}")
+    print(f"[gold-eval] Combined: {len(flat_entries)} entries across "
+          f"{len(sources)} source(s)")
     singles, multi_index, _ = SUPERPOD_JOB.load_ner_kernel(args.ner_kernel)
 
     # Per-strategy counters across the corpus.
     tp_by_strategy: dict[str, int] = defaultdict(int)
     fp_by_strategy: dict[str, int] = defaultdict(int)
-    fn_by_strategy: dict[str, int] = defaultdict(int)  # never assigned per-strategy; aggregate only
     # Symbol-level gold recall (per entry): which gold symbols did ANY strategy hit?
     total_gold = 0
     total_gold_hit = 0
+
+    # Per-source counters for Gate P2's per-source-delta check.
+    per_source: dict[str, dict] = defaultdict(lambda: {
+        "tp": 0, "fp": 0, "gold_total": 0, "gold_hit": 0, "entries": 0,
+    })
 
     # Per-entry view for debugging
     per_entry = []
@@ -106,7 +136,7 @@ def main(argv: list[str] | None = None) -> dict:
     miss_samples = []
     hit_samples = []
 
-    for entry in entries:
+    for source, entry in flat_entries:
         raw = entry["raw_text"]
         gold_pairs = entry["gold"]
         gold_by_sym: dict[str, list[str]] = defaultdict(list)
@@ -122,9 +152,11 @@ def main(argv: list[str] | None = None) -> dict:
         for b in env.all_bindings:
             engine_on_sym[b.symbol].append((b.strategy, b.canon))
 
+        per_source[source]["entries"] += 1
         entry_hit = 0
         for sym, canons in gold_by_sym.items():
             total_gold += 1
+            per_source[source]["gold_total"] += 1
             engine_calls = engine_on_sym.get(sym, [])
             # Count engine bindings on this gold symbol per strategy
             for strat, _c in engine_calls:
@@ -134,14 +166,18 @@ def main(argv: list[str] | None = None) -> dict:
             for strat, ec in engine_calls:
                 if any(canon_match(ec, gc, args.match_mode) for gc in canons):
                     tp_by_strategy[strat] += 1
+                    per_source[source]["tp"] += 1
                     matched = True
                 else:
                     fp_by_strategy[strat] += 1
+                    per_source[source]["fp"] += 1
             if matched:
                 total_gold_hit += 1
+                per_source[source]["gold_hit"] += 1
                 entry_hit += 1
                 if len(hit_samples) < 6:
                     hit_samples.append({
+                        "source": source,
                         "entry": entry["id"],
                         "symbol": sym,
                         "gold_canons": canons,
@@ -150,6 +186,7 @@ def main(argv: list[str] | None = None) -> dict:
             else:
                 if len(miss_samples) < 6:
                     miss_samples.append({
+                        "source": source,
                         "entry": entry["id"],
                         "symbol": sym,
                         "gold_canons": canons,
@@ -157,6 +194,7 @@ def main(argv: list[str] | None = None) -> dict:
                     })
 
         per_entry.append({
+            "source": source,
             "entry_id": entry["id"],
             "gold_count": len(gold_pairs),
             "gold_hit": entry_hit,
@@ -187,16 +225,47 @@ def main(argv: list[str] | None = None) -> dict:
         if (overall_precision + overall_recall) else 0.0
     )
 
+    # Per-source aggregates for Gate P2's per-source-delta check.
+    per_source_summary = {}
+    for src, c in per_source.items():
+        emit = c["tp"] + c["fp"]
+        precision = c["tp"] / emit if emit else 0.0
+        recall = c["gold_hit"] / c["gold_total"] if c["gold_total"] else 0.0
+        f1 = (
+            2 * precision * recall / (precision + recall)
+            if (precision + recall) else 0.0
+        )
+        per_source_summary[src] = {
+            "entries": c["entries"],
+            "gold_total": c["gold_total"],
+            "gold_hit": c["gold_hit"],
+            "tp": c["tp"],
+            "fp": c["fp"],
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+        }
+    # Max delta across all source pairs (informative for the P2 gate)
+    max_precision_delta = 0.0
+    src_names = list(per_source_summary.keys())
+    for i, a in enumerate(src_names):
+        for b in src_names[i + 1:]:
+            delta = abs(per_source_summary[a]["precision"] - per_source_summary[b]["precision"])
+            max_precision_delta = max(max_precision_delta, delta)
+
     report = {
-        "gold": str(args.gold),
+        "gold_paths": [str(p) for p in args.gold],
+        "sources": sources,
         "ner_kernel": str(args.ner_kernel),
         "match_mode": args.match_mode,
-        "entries_evaluated": len(entries),
+        "entries_evaluated": len(flat_entries),
         "total_gold_pairs": total_gold,
         "total_gold_hit": total_gold_hit,
         "overall_recall": overall_recall,
         "overall_precision": overall_precision,
         "overall_f1": overall_f1,
+        "per_source": per_source_summary,
+        "max_precision_delta": max_precision_delta,
         "strategy_table": strategy_table,
         "hit_samples": hit_samples,
         "miss_samples": miss_samples,
@@ -205,10 +274,19 @@ def main(argv: list[str] | None = None) -> dict:
     args.out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[gold-eval] wrote {args.out}")
     print()
-    print(f"[gold-eval] Overall: gold={total_gold}, "
+    print(f"[gold-eval] OVERALL: gold={total_gold}, "
           f"hit={total_gold_hit}, recall={overall_recall*100:.1f}%, "
           f"precision={overall_precision*100:.1f}%, "
           f"F1={overall_f1*100:.1f}%")
+    print()
+    print("[gold-eval] Per-source breakdown:")
+    for src, v in per_source_summary.items():
+        print(
+            f"  {src:20s} entries={v['entries']:5d}  gold={v['gold_total']:5d}  "
+            f"P={v['precision']*100:5.1f}%  R={v['recall']*100:5.1f}%  "
+            f"F1={v['f1']*100:5.1f}%"
+        )
+    print(f"  Max per-source precision delta: {max_precision_delta*100:.1f}pp")
     print()
     print("[gold-eval] Per-strategy precision (TP / engine bindings on gold symbols):")
     rows = sorted(
