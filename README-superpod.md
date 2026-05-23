@@ -590,7 +590,136 @@ Implication:
 That matters for interpretation of batch composition, not for the mark3
 runner logic itself.
 
-## 9. Older superpod docs
+## 9. Symbol-grounding readiness for 5K Arxiv slice (Gate P6)
+
+Status: **all preparation gates passed; awaiting Joe's go/no-go.**
+
+The symbol-grounding pipeline (the Stage-5 CPU portion that runs
+end-to-end per paper, before the GPU components) has cleared its
+five preparation gates from
+`holes/missions/M-symbol-grounding-scaling-plan.md`.
+
+### Gate-by-gate evidence
+
+**Gate P1 — Wikipedia gold extractor.** Built
+`scripts/build-grounding-gold-wikipedia.py`. 7027 entries, 13376 gold
+pairs. Combined with PM (469 pairs) and ProofWiki (14939 pairs);
+nLab held-out as test corpus (no train signal).
+
+**Gate P2 — Combined gold ≥ 1500 pairs across ≥ 800 entries.**
+17475 cross-source gold pairs after F4 (literature-lifted strategy
+merge proposer returned "no merges" → strategies are independent,
+not redundant).
+
+**Gate P3 — Strategy gating + canon-ancestry comparison.** Three
+gating rounds shipped via `--disable-strategy`; ancestry-match mode
+via `--match-mode ancestry --ancestry-index data/canon-ancestry-pm.json`.
+
+**Gate P4 — Precision ≥ 30% with recall stable.** PM gold, 200
+held-out entries, ancestry-match mode, no topic priors:
+
+| | precision | recall | F1 |
+|---|---:|---:|---:|
+| best single strategy (let-binding) | 29.0% | – | – |
+| weighted-avg per strategy | 13.6% | – | – |
+| **arbitrated (Bayesian)** | **32.4%** | **22.1%** | **26.3%** |
+
+Above-target precision; arbitrated recall stable.
+
+Topic-aware priors (MSC + SE corpus) are wired through
+`bayesian_grounding.combine_strategy_votes` via `context_factors` but
+are *configurable per use case*:
+
+| eval surface | priors? | result |
+|---|---|---|
+| arxiv coherence vs nLab vocab | ON | +13.2pp (47.9% → 61.1%) |
+| PM gold precision/recall | OFF | priors hurt recall ~5pp |
+
+PM gold has cross-MSC references (a logic-tagged entry citing a
+topology canon) that the MSC prior wrongly suppresses; arxiv papers
+are genuinely topic-coherent, so the prior helps. Default for the
+production run: priors ON.
+
+**Gate P5 — 100-paper production shakedown.** Two contrasting pools
+processed end-to-end via `scripts/p5-production-shakedown.py`:
+
+| | broad-non-CT (mfuton-001) | CT-pure |
+|---|---:|---:|
+| papers processed | 99 | 88 |
+| wall time | 23.6s | 29.3s |
+| throughput | 4.19 papers/s | 3.0 papers/s |
+| total emissions | 12530 | 12391 |
+| mean canons / paper | 126.6 | 140.8 |
+| unique canons | 1112 | 1122 |
+| in-nLab (all emissions) | 49.1% | 66.4% |
+| in-nLab (high-confidence, p≥0.5) | 42.6% | 55.5% |
+| RSS end | 648 MB | 653 MB |
+| malformed bindings | 0 | 0 |
+| MSC prior canons added (online) | 351 | 493 |
+
+All P5 checks pass: no OOM, no crashes, no malformed bindings,
+progress logging fires, every strategy represented, online MSC-prior
+updates land cleanly. The 17.3pp in-nLab gap is correct-direction
+(nLab is CT-skewed; broad papers still hit 49% because general math
+vocabulary is shared) — the pipeline isn't CT-overfit.
+
+### Scale economics for the 5000-paper slice
+
+At 3–4 papers/sec single-threaded CPU, the symbol-grounding portion
+alone is ~25 min for 5000 papers wall-time-equivalent (independent
+of GPU stages). The superpod parallelises across many workers, so
+real wall-clock will be dominated by Stage 3 LLM / Stage 6 anyway.
+
+What 5000 papers buys us (per scaling-plan §3):
+- ~half a million per-binding fingerprints into the canon store
+- ~5000 MSC-prior updates (high-confidence emissions) — meaningful
+  shift in P(canon | MSC) distribution for canons that surface often
+- enough strategy-emission volume for the per-strategy reliability
+  posteriors to tighten well below 5% credible-interval width
+
+### Recommended invocation
+
+The Stage-5 portion of `superpod-job.py` already calls
+`grounding.detect_grounded_symbols`. To enable topic priors for the
+production run, pass:
+
+```
+--ner-kernel data/ner-kernel-clean.tsv
+--msc-prior data/topic-prior-msc.json
+--se-corpus-prior data/topic-prior-se-corpus.json
+--update-msc-prior data/topic-prior-msc-updated.json
+```
+
+The cleaned NER kernel (`data/ner-kernel-clean.tsv`, 18937 entries)
+filters out the "stable → StableMarriageProblem" garbage shape that
+Joe spotted in batch-008. `--update-msc-prior` writes the
+online-EM-updated MSC prior at end of run for the next batch to
+pick up.
+
+### Open questions for Gate P6
+
+1. **Which 5000 papers?** The math.CT pool has 9742 eprints; mfuton-001
+   has another 5000 broader math.*. Two natural slices:
+   - First 5000 of math.CT by arxiv id (oldest first) — keeps
+     experiment comparable to the existing batch-008 work.
+   - 5000 mixed-domain from mfuton-001/002 — exercises priors on
+     the broader vocabulary the pipeline will see in arxiv-at-large.
+2. **Priors on or off?** Default recommendation: ON for arxiv. Joe's
+   call. Trivial to flip via the CLI flags.
+3. **Pre-flight canon-store seeding.** We have an aggregate from PM
+   + ProofWiki + Wikipedia + nLab (`data/canon-store-pm-pw-wiki/`).
+   Use it as starting prior for arbitration, or start cold?
+
+### What we'll learn from the run
+
+- whether the 61.1%-in-nLab coherence number (30-paper sample) holds
+  on a 5000-paper run, or decays as topical diversity broadens
+- whether the MSC online-EM updates converge or wander
+- per-strategy reliability tightening — the credible-interval widths
+  will tell us which strategies need more evidence vs which are
+  already well-characterised
+
+## 10. Older superpod docs
 
 Some older repo-root superpod notes refer to the earlier StackExchange /
 MathOverflow production run rather than the current arXiv batch lane.
@@ -603,7 +732,7 @@ In particular:
 Those remain useful historical records, but they are not the authoritative
 state summary for the current arXiv mark2/mark3 work.
 
-## 10. Short version
+## 11. Short version
 
 If you need the one-paragraph summary:
 
@@ -623,4 +752,9 @@ and gives the QC report a headline block showing what was learned. The
 preregistration in section 5c commits to which numbers we'll track and
 what we expect them to look like before the first big batch lands; the
 demo pointers in section 5b show what the per-paper visualization looks
-like under the new tooling.
+like under the new tooling. Section 9 is the symbol-grounding readiness
+report (Gate P6 hand-off): all five preparation gates (P1–P5) have
+passed — arbitrated precision 32.4% with 22.1% recall on PM gold,
+nLab coherence 61.1% on arxiv math.CT, production shakedown clean on
+both broad-non-CT and CT-pure 100-paper pools — awaiting Joe's go/no-go
+on a 5000-paper Arxiv slice and choice of slice/prior configuration.
