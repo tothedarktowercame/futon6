@@ -204,7 +204,11 @@ def main(argv=None):
             on_sym.setdefault(b.symbol, []).append((b.strategy, b.canon))
         # Resolve paper's arxiv categories -> MSC primary codes for the
         # MSC topic prior. Falls back to no down-weight if unknown.
+        # `.stem` on "0704.0502.tar.gz" returns "0704.0502.tar"; strip
+        # the trailing ".tar" so the id matches metadata keys.
         pid = tar_path.stem
+        if pid.endswith(".tar"):
+            pid = pid[:-4]
         cats = paper_categories.get(pid) or paper_categories.get(
             pid.rsplit("v", 1)[0] if "v" in pid else pid, []
         )

@@ -273,3 +273,44 @@ on before more code lands.
 
 That's 2–3 days. Everything else in §4 is on top of that, and
 sequenced based on what the side-by-side reveals.
+
+## 9. Topic-aware priors (2026-05-23 follow-on)
+
+Joe's framing: garbage like "stable → StableMarriageProblem"
+survives even after the kernel cleanup because some PM entries are
+articles whose primary MSC sits outside the paper's topic. Two
+independent prior signals slot into `combine_strategy_votes` as
+`context_factors`:
+
+  - **MSC topic prior** — `P(canon | MSC primary)` from PM's
+    `:msc-codes` per entry. arxiv categories resolve to MSC
+    primaries via `ARXIV_TO_MSC_PRIMARY` (math.CT→18, math.QA→
+    16/17/18/81, etc.). Down-weights canons whose mass sits in
+    unrelated MSC.
+  - **SE corpus-frequency prior** — marginal `P(canon)` over
+    math.SE + MathOverflow Q/A bodies. Cuts off canons that
+    essentially never appear in real math discourse.
+
+Both factors are NOT renormalised over candidates inside arbitration
+— single-candidate symbols (where domain-mismatched garbage fires
+alone) need to be able to lose to the null hypothesis when context
+support is uniformly low. The composed prior leaves them holding
+absolute mass that the constant null_prior can beat.
+
+`MSCTopicPrior.update_from_run(emissions, msc_primaries,
+min_confidence)` is the online-EM hook for arxiv-scale runs: each
+paper's accepted bindings above `--confidence-threshold` fold back
+into the prior, gated to avoid degenerate collapse.
+
+First evidence (30 arxiv math.CT papers, nLab held-out vocab):
+  - baseline + clean kernel: 47.9% emissions in nLab vocab
+  - + MSC topic prior: 52.7% (+4.8pp)
+  - + SE corpus prior: TBD (build in progress)
+
+Pattern (C) noise (`morphism → StructureHomomorphism`,
+`pushout → CategoricalPullback`) still survives — same shape Joe
+flagged in the audit. These canons exist in PM under MSC primaries
+that overlap math.CT (16/17/18 ring-algebra-category border) so the
+MSC prior alone can't disambiguate. Deferred until canon
+fingerprint store + cross-domain signal is rich enough for semantic
+mismatch detection.
