@@ -80,6 +80,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
              "arbitration consults cross-batch knowledge as the prior.",
     )
     parser.add_argument(
+        "--reliability-init-gold", type=Path, action="append", default=[],
+        help="Optional gold file(s) to use for per-strategy reliability "
+             "initialization (instead of TRAIN slice of --gold). Use this "
+             "when the TEST corpus should be fully held-out (no leakage "
+             "into reliabilities). Repeatable. When supplied, --train-n is "
+             "ignored and the full --gold is available for TEST.",
+    )
+    parser.add_argument(
         "--canon-prior-smoothing", type=float, default=0.1,
         help="Laplace smoothing factor for the canon prior.",
     )
@@ -101,9 +109,19 @@ def main(argv: list[str] | None = None) -> dict:
     gold = json.loads(args.gold.read_text(encoding="utf-8"))
     entries = list(gold["entries"])
     rng.shuffle(entries)
-    train = entries[: args.train_n]
-    test = entries[args.train_n : args.train_n + args.test_n]
-    print(f"[arbitration] split: train={len(train)}, test={len(test)}")
+    # External reliability-init: full --gold is available for testing,
+    # reliabilities come from --reliability-init-gold files instead.
+    if args.reliability_init_gold:
+        train = []
+        for p in args.reliability_init_gold:
+            init_gold = json.loads(p.read_text(encoding="utf-8"))
+            train.extend(init_gold["entries"])
+        test = entries[: args.test_n] if args.test_n else entries
+    else:
+        train = entries[: args.train_n]
+        test = entries[args.train_n : args.train_n + args.test_n]
+    print(f"[arbitration] split: train={len(train)}, test={len(test)} "
+          f"({'EXTERNAL' if args.reliability_init_gold else 'IN-CORPUS'} reliability init)")
 
     singles, multi_index, _ = SUPERPOD_JOB.load_ner_kernel(args.ner_kernel)
     ancestry: dict[str, set[str]] | None = None
