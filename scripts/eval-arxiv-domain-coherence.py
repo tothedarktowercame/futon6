@@ -47,6 +47,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from futon6 import bayesian_grounding as _bg
 from futon6 import canon_store as _cs
 from futon6 import grounding as _grd
+from futon6 import topic_prior as _tp
 
 
 def _load_module(name: str, rel_path: str):
@@ -99,6 +100,13 @@ def parse_args(argv=None):
     parser.add_argument("--ancestry-index", type=Path, default=None)
     parser.add_argument("--disable-strategy", action="append", default=[],
                         dest="disable_strategies")
+    parser.add_argument("--msc-prior", type=Path, default=None,
+                        help="topic-prior-msc.json — MSC topic prior")
+    parser.add_argument("--se-corpus-prior", type=Path, default=None,
+                        help="topic-prior-se-corpus.json — SE corpus-frequency prior")
+    parser.add_argument("--arxiv-metadata", type=Path, default=None,
+                        help="arxiv-math-ct-metadata.jsonl — gives per-paper "
+                             "`categories` for topic prior lookup")
     parser.add_argument("--seed", type=int, default=20260523)
     parser.add_argument("--confidence-threshold", type=float, default=0.5,
                         help="Posterior probability threshold for "
@@ -125,6 +133,36 @@ def main(argv=None):
     if args.canon_store:
         store = _cs.load_aggregate(args.canon_store)
         print(f"[coherence] canon-store: {len(store)} entries")
+    msc_prior = None
+    if args.msc_prior:
+        msc_prior = _tp.MSCTopicPrior.load(args.msc_prior)
+        print(f"[coherence] MSC topic prior: {len(msc_prior.counts)} canons")
+    se_prior = None
+    if args.se_corpus_prior:
+        se_prior = _tp.SECorpusPrior.load(args.se_corpus_prior)
+        print(f"[coherence] SE corpus prior: {len(se_prior.counts)} canons, "
+              f"{se_prior.n_documents} docs scanned at build time")
+    paper_categories: dict[str, list[str]] = {}
+    if args.arxiv_metadata and args.arxiv_metadata.exists():
+        for line in args.arxiv_metadata.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            pid = rec.get("id", "")
+            cats = rec.get("categories", []) or []
+            if pid and cats:
+                # Index by both "0711.1739" and "0711.1739v1" forms — the
+                # tar filenames use the v-suffixed form, the metadata may
+                # use either depending on the dump version.
+                paper_categories[pid] = cats
+                # If id has no v-suffix, also key any vN extensions implicitly
+                # by prefix matching in lookup.
+        print(f"[coherence] loaded categories for {len(paper_categories)} papers "
+              f"from {args.arxiv_metadata}")
 
     disabled = set(args.disable_strategies) if args.disable_strategies else None
     # Uniform reliability priors — we're not doing precision-against-gold
@@ -158,12 +196,29 @@ def main(argv=None):
         on_sym: dict[str, list[tuple[str, str | None]]] = {}
         for b in env.all_bindings:
             on_sym.setdefault(b.symbol, []).append((b.strategy, b.canon))
+        # Resolve paper's arxiv categories -> MSC primary codes for the
+        # MSC topic prior. Falls back to no down-weight if unknown.
+        pid = tar_path.stem
+        cats = paper_categories.get(pid) or paper_categories.get(
+            pid.rsplit("v", 1)[0] if "v" in pid else pid, []
+        )
+        msc_primaries = _tp.arxiv_categories_to_msc(cats) if cats else []
+        context_factors = []
+        if msc_prior is not None:
+            context_factors.append(
+                lambda c, _mp=msc_prior, _p=msc_primaries: _mp.prior(c, _p)
+            )
+        if se_prior is not None:
+            context_factors.append(lambda c, _sp=se_prior: _sp.prior(c))
         paper_canons = []
         for sym, votes in on_sym.items():
             prior = (
                 _cs.canon_prior(store, sym) if store else None
             ) or None
-            post = _bg.combine_strategy_votes(sym, votes, rels, prior=prior)
+            post = _bg.combine_strategy_votes(
+                sym, votes, rels, prior=prior,
+                context_factors=context_factors or None,
+            )
             top, prob = post.top1()
             if top is None:
                 continue

@@ -217,6 +217,7 @@ def combine_strategy_votes(
     reliabilities: dict[str, "StrategyReliability"],
     prior: dict[str, float] | None = None,
     null_prior: float = 0.05,
+    context_factors: list | None = None,
 ) -> CanonPosterior:
     r"""Combine per-strategy (strategy, canon) votes for one symbol into a
     posterior over candidate canons.
@@ -233,6 +234,14 @@ def combine_strategy_votes(
     probability that the symbol has no canonical binding (so a
     strategy that emitted None gets weight on the null hypothesis).
 
+    `context_factors` is an optional list of Callable[[canon], float]
+    factors composed multiplicatively with the base prior — used by
+    topic/corpus priors (MSC topic prior, SE corpus-frequency prior)
+    that supply per-canon weights independent of the symbol. The
+    composed prior is renormalised over the candidate set before the
+    likelihood is folded in, so context factors only re-shape the
+    prior, never the likelihood.
+
     Returns a normalised CanonPosterior.
     """
     # Build candidate set: every non-None canon ANY strategy voted for
@@ -247,6 +256,26 @@ def combine_strategy_votes(
     # Default prior: uniform over candidates, with explicit null mass
     if prior is None:
         prior = {c: (1.0 - null_prior) / len(candidates) for c in candidates}
+    if context_factors:
+        # Apply factors directly to the prior WITHOUT renormalising
+        # across candidates. This is intentional: if all candidates
+        # have low context-prior support (e.g. an OR-domain canon
+        # showing up in a CT paper), the absolute mass on canons
+        # shrinks relative to the constant null_prior, so the null
+        # hypothesis wins. Renormalising would erase that signal
+        # for single-candidate symbols, which is exactly the case
+        # where domain-mismatched garbage tends to fire alone.
+        composed = {}
+        for c in candidates:
+            base = prior.get(c, (1.0 - null_prior) / len(candidates))
+            factor = 1.0
+            for fn in context_factors:
+                try:
+                    factor *= max(fn(c), 1e-9)
+                except Exception:
+                    factor *= 1.0
+            composed[c] = base * factor
+        prior = composed
     # Include the null hypothesis as a candidate value for the
     # log-likelihood sum (it's the "no canon" alternative).
     if "__null__" not in prior:
