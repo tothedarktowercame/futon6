@@ -134,3 +134,37 @@ def test_update_from_agreement_ignores_none_canon():
     # No update — strategy a doesn't have a canon, so no agreement signal.
     assert rels["a"].alpha == a_alpha
     assert rels["b"].alpha == b_alpha
+
+
+def test_update_from_agreement_stable_over_many_repeated_agreements():
+    """Sanity: when two strategies consistently agree on the same
+    binding, both posteriors should stay near their initial mean
+    (they get α boost only, but proportionally so the ratio holds)."""
+    rels = {
+        "a": StrategyReliability("a", alpha=20, beta=20, n_observations=38),
+        "b": StrategyReliability("b", alpha=20, beta=20, n_observations=38),
+    }
+    initial_mean_a = rels["a"].mean
+    bindings = [[("a", "X", "Group"), ("b", "X", "Group")]] * 50
+    update_from_agreement(rels, bindings)
+    # Mean shifts upward (only α grows, not β) — that's expected.
+    # But the system shouldn't blow up or go to a weird fixed point.
+    assert 0.5 <= rels["a"].mean <= 1.0
+    assert rels["a"].mean > initial_mean_a
+
+
+def test_update_from_agreement_keeps_disagreement_weight_correct():
+    """When trusted disagrees with noisy, noisy loses β-weight
+    proportional to trusted's mean. After many iterations the
+    noisy strategy's mean should drop, trusted should stay."""
+    rels = {
+        "trusted": StrategyReliability("trusted", alpha=90, beta=10, n_observations=98),
+        "noisy": StrategyReliability("noisy", alpha=50, beta=50, n_observations=98),
+    }
+    trusted_mean_initial = rels["trusted"].mean
+    noisy_mean_initial = rels["noisy"].mean
+    bindings = [[("trusted", "X", "Group"), ("noisy", "X", "Ring")]] * 100
+    update_from_agreement(rels, bindings)
+    # Noisy's mean falls; trusted's mean unchanged (no update on it).
+    assert rels["noisy"].mean < noisy_mean_initial
+    assert rels["trusted"].mean == trusted_mean_initial
