@@ -75,6 +75,7 @@ def detect_grounded_symbols(
     singles: dict,
     multi_index: dict,
     learned_vocab=None,
+    disabled_strategies=None,
 ):
     """Thin wrapper around `futon6.grounding.detect_grounded_symbols`.
 
@@ -83,11 +84,15 @@ def detect_grounded_symbols(
     `learned_vocab` (the `common` slot from a prior superpod batch's
     `learned-newcommand-vocab.json`) wires the cross-paper
     LearnedVocabStrategy into the run.
+    `disabled_strategies` (set of strategy names) suppresses noisy
+    strategies for cleaner viewer output — same gating as the eval
+    uses for precision measurements.
     """
     return _grd.detect_grounded_symbols(
         entity_id, text, singles, multi_index,
         SUPERPOD_JOB.spot_terms_entity,
         learned_vocab=learned_vocab,
+        disabled_strategies=disabled_strategies,
     )
 
 
@@ -116,6 +121,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
                         help="Path to a learned-newcommand-vocab.json produced "
                              "by a prior Stage 5 run. If supplied, its `common` "
                              "table seeds the LearnedVocabStrategy.")
+    parser.add_argument("--disable-strategy", action="append", default=[],
+                        dest="disable_strategies",
+                        help="Strategy name to omit (repeatable). Match the eval "
+                             "gating to clean up viewer noise. Suggested: "
+                             "--disable-strategy the-Y-X "
+                             "--disable-strategy section-context "
+                             "--disable-strategy kernel-ambient")
     parser.add_argument("--max-local-terms", type=int, default=12)
     parser.add_argument("--max-local-windows", type=int, default=6,
                         help="Max clustered local-scope windows per paper")
@@ -760,6 +772,7 @@ def build_paper_view(
     grounded_scopes, symbol_env, grounding_summary = detect_grounded_symbols(
         entity_id, eprint_text, singles, multi_index,
         learned_vocab=args.learned_vocab_common,
+        disabled_strategies=(set(args.disable_strategies) if args.disable_strategies else None),
     )
     local_scopes = [
         *local_scopes,
