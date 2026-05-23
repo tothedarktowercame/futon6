@@ -43,6 +43,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from futon6 import bayesian_grounding as _bg
+from futon6 import canon_store as _cs
 from futon6 import grounding as _grd
 
 
@@ -71,6 +72,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=20260523)
     parser.add_argument("--disable-strategy", action="append", default=[],
                         dest="disable_strategies")
+    parser.add_argument(
+        "--canon-store", type=Path, default=None,
+        help="Path to a canon-store aggregate.json built by "
+             "build-canon-store.py. When supplied, canon_prior(store, "
+             "symbol) is passed into combine_strategy_votes so the "
+             "arbitration consults cross-batch knowledge as the prior.",
+    )
+    parser.add_argument(
+        "--canon-prior-smoothing", type=float, default=0.1,
+        help="Laplace smoothing factor for the canon prior.",
+    )
     return parser.parse_args(argv)
 
 
@@ -99,6 +111,16 @@ def main(argv: list[str] | None = None) -> dict:
         ai = json.loads(args.ancestry_index.read_text(encoding="utf-8"))
         ancestry = {k: set(v) for k, v in ai.get("by_canon", {}).items()}
     disabled = set(args.disable_strategies) if args.disable_strategies else None
+
+    # Optional canon-store: cross-batch prior consumed by arbitration
+    # (F5 of M-canon-fingerprint-store.md). When loaded, the prior for
+    # each symbol's arbitration becomes canon_prior(store, symbol)
+    # instead of a uniform-over-candidates default.
+    canon_store_aggregate: dict | None = None
+    if args.canon_store:
+        canon_store_aggregate = _cs.load_aggregate(args.canon_store)
+        print(f"[arbitration] canon-store: {len(canon_store_aggregate)} "
+              f"(symbol, canon) entries from {args.canon_store}")
 
     # --- TRAIN: initialise strategy reliability posteriors from gold ---
     train_tp: dict[str, int] = defaultdict(int)
@@ -163,8 +185,21 @@ def main(argv: list[str] | None = None) -> dict:
             if not votes:
                 arb_no_vote += 1
                 continue
+            # If a canon store was supplied, query the per-symbol prior
+            # (additive-smoothed distribution from cross-batch evidence)
+            # and pass it into the arbitration. Symbols unseen in the
+            # store yield an empty prior → arbitration falls back to
+            # its uniform-over-candidates default.
+            store_prior = None
+            if canon_store_aggregate is not None:
+                store_prior = _cs.canon_prior(
+                    canon_store_aggregate, sym,
+                    smoothing=args.canon_prior_smoothing,
+                )
+                if not store_prior:
+                    store_prior = None
             posterior = _bg.combine_strategy_votes(
-                sym, votes, reliabilities,
+                sym, votes, reliabilities, prior=store_prior,
             )
             top_canon, top_prob = posterior.top1()
             if top_canon is None:
