@@ -1093,6 +1093,7 @@ def run_strategies(
 
 def default_strategies(
     learned_vocab: list[dict] | None = None,
+    disabled: set[str] | None = None,
 ) -> list[Strategy]:
     """The starter strategy set. Add to this list as new strategies land.
 
@@ -1100,6 +1101,12 @@ def default_strategies(
     `aggregate_newcommand_vocab`) to include the cross-paper
     `LearnedVocabStrategy`. With no vocab, the strategy is omitted —
     fresh runs have nothing to learn from yet.
+
+    Pass `disabled` (set of strategy `name`s) to omit specific
+    strategies from the run. Used by the eval harness to validate
+    that gating off low-precision strategies lifts aggregate
+    precision (Gate P3 of M-symbol-grounding-scaling-plan.md).
+    Unknown names in `disabled` are silently ignored.
     """
     strategies: list[Strategy] = [
         NewcommandStrategy(),
@@ -1115,6 +1122,8 @@ def default_strategies(
     ]
     if learned_vocab:
         strategies.append(LearnedVocabStrategy(learned_vocab))
+    if disabled:
+        strategies = [s for s in strategies if s.name not in disabled]
     return strategies
 
 

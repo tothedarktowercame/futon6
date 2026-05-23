@@ -56,7 +56,12 @@ def _load_module(name: str, rel_path: str):
 SUPERPOD_JOB = _load_module("superpod_job_eval_gold", "scripts/superpod-job.py")
 
 
-def canon_match(engine_canon: str | None, gold_canon: str, mode: str) -> bool:
+def canon_match(
+    engine_canon: str | None,
+    gold_canon: str,
+    mode: str,
+    ancestry: dict[str, set[str]] | None = None,
+) -> bool:
     if engine_canon is None or gold_canon is None:
         return False
     a = engine_canon.strip().lower()
@@ -65,8 +70,33 @@ def canon_match(engine_canon: str | None, gold_canon: str, mode: str) -> bool:
         return False
     if mode == "strict":
         return a == b
-    # loose: case-insensitive + bidirectional substring containment
-    return a == b or a in b or b in a
+    if a == b or a in b or b in a:
+        return True
+    # ancestry mode: check related-canon graph (loose + ancestry, since
+    # ancestry alone would miss substring-but-not-related cases like
+    # "Group" vs "TopologicalGroup" — and those are usually right).
+    if mode == "ancestry" and ancestry:
+        # ancestry is keyed by ORIGINAL case (PM uses CamelCase canons).
+        # Look up both directions; if either is in the other's related set
+        # under any casing, count as match.
+        a_orig = engine_canon.strip()
+        b_orig = gold_canon.strip()
+        if a_orig in ancestry and b_orig in ancestry[a_orig]:
+            return True
+        if b_orig in ancestry and a_orig in ancestry[b_orig]:
+            return True
+        # Try case-insensitive variant in case the keys disagree on case
+        a_keys = {k for k in ancestry if k.lower() == a}
+        b_keys = {k for k in ancestry if k.lower() == b}
+        for ak in a_keys:
+            related_lower = {x.lower() for x in ancestry[ak]}
+            if b in related_lower:
+                return True
+        for bk in b_keys:
+            related_lower = {x.lower() for x in ancestry[bk]}
+            if a in related_lower:
+                return True
+    return False
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -84,7 +114,25 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Cap entries per source (0 = no cap). Useful for keeping "
              "Wikipedia's volume balanced against smaller PM-style sources.",
     )
-    parser.add_argument("--match-mode", choices=["loose", "strict"], default="loose")
+    parser.add_argument(
+        "--match-mode", choices=["loose", "strict", "ancestry"], default="loose",
+        help="loose = case-insensitive + substring; strict = exact; "
+             "ancestry = loose + related-canon graph (requires "
+             "--ancestry-index)",
+    )
+    parser.add_argument(
+        "--ancestry-index", type=Path, default=None,
+        help="Path to canon-ancestry JSON (build-canon-ancestry-pm.py). "
+             "Only used when --match-mode=ancestry.",
+    )
+    parser.add_argument(
+        "--disable-strategy", action="append", default=[], dest="disable_strategies",
+        help="Strategy name to omit from the run (repeatable). "
+             "Used for Gate P3 to validate that gating noisy strategies "
+             "lifts precision. Common choices from P2 baselines: "
+             "the-Y-X (3.9%%), section-context (2.8%%), "
+             "kernel-ambient (9.7%%).",
+    )
     return parser.parse_args(argv)
 
 
@@ -113,6 +161,14 @@ def main(argv: list[str] | None = None) -> dict:
     print(f"[gold-eval] Combined: {len(flat_entries)} entries across "
           f"{len(sources)} source(s)")
     singles, multi_index, _ = SUPERPOD_JOB.load_ner_kernel(args.ner_kernel)
+
+    # Optional canon-ancestry index — wired into canon_match below.
+    ancestry: dict[str, set[str]] | None = None
+    if args.ancestry_index:
+        ai = json.loads(args.ancestry_index.read_text(encoding="utf-8"))
+        ancestry = {k: set(v) for k, v in ai.get("by_canon", {}).items()}
+        print(f"[gold-eval] Ancestry index: {len(ancestry)} canons, "
+              f"{sum(len(v) for v in ancestry.values())} edges")
 
     # Per-strategy counters across the corpus.
     tp_by_strategy: dict[str, int] = defaultdict(int)
@@ -146,6 +202,7 @@ def main(argv: list[str] | None = None) -> dict:
         records, env, _ = _grd.detect_grounded_symbols(
             entry["id"], raw, singles, multi_index,
             SUPERPOD_JOB.spot_terms_entity,
+            disabled_strategies=(set(args.disable_strategies) if args.disable_strategies else None),
         )
         # Engine bindings on each gold symbol
         engine_on_sym: dict[str, list[tuple[str, str | None]]] = defaultdict(list)
@@ -164,7 +221,7 @@ def main(argv: list[str] | None = None) -> dict:
             # Look for a matching canon
             matched = False
             for strat, ec in engine_calls:
-                if any(canon_match(ec, gc, args.match_mode) for gc in canons):
+                if any(canon_match(ec, gc, args.match_mode, ancestry) for gc in canons):
                     tp_by_strategy[strat] += 1
                     per_source[source]["tp"] += 1
                     matched = True

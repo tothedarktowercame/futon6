@@ -837,6 +837,20 @@ def test_default_strategies_includes_section_and_color():
     assert "color-channel" in names
 
 
+def test_default_strategies_disabled_drops_named():
+    names_full = {s.name for s in default_strategies()}
+    names_gated = {s.name for s in default_strategies(disabled={"the-Y-X", "section-context"})}
+    assert names_full - names_gated == {"the-Y-X", "section-context"}
+
+
+def test_default_strategies_disabled_ignores_unknown_names():
+    names_full = {s.name for s in default_strategies()}
+    names_gated = {s.name for s in default_strategies(disabled={"the-Y-X", "nonexistent"})}
+    # the-Y-X dropped; nonexistent silently ignored (no exception)
+    assert "the-Y-X" not in names_gated
+    assert names_full - names_gated == {"the-Y-X"}
+
+
 def test_learned_vocab_strategy_picks_highest_support_when_duplicates():
     vocab = [
         {"symbol": r"\T", "body": "{\\mathbb T}", "canon": "Torus", "support": 3},

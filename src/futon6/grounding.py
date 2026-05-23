@@ -154,6 +154,7 @@ def detect_grounded_symbols(
     spot_terms_fn,
     *,
     learned_vocab: list[dict] | None = None,
+    disabled_strategies: set[str] | None = None,
 ) -> tuple[list[dict], _sg.SymbolEnvironment, dict]:
     """Run all default strategies on `text`; return (records, env, summary).
 
@@ -175,7 +176,13 @@ def detect_grounded_symbols(
         kernel_lookup=kernel_lookup,
         kernel_scan=kernel_scan,
     )
-    env = _sg.run_strategies(ctx, _sg.default_strategies(learned_vocab=learned_vocab))
+    env = _sg.run_strategies(
+        ctx,
+        _sg.default_strategies(
+            learned_vocab=learned_vocab,
+            disabled=disabled_strategies,
+        ),
+    )
 
     records = []
     rec_idx = 0
