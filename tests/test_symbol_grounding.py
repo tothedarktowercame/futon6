@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from futon6.symbol_grounding import (
+    ColorChannelStrategy,
     DenotationStrategy,
     FixPatternStrategy,
     InlineIsAStrategy,
@@ -17,6 +18,7 @@ from futon6.symbol_grounding import (
     LetBindingStrategy,
     NewcommandStrategy,
     NotationEnvStrategy,
+    SectionContextStrategy,
     StrategyContext,
     SymbolBinding,
     SymbolEnvironment,
@@ -719,6 +721,120 @@ def test_let_binding_records_lhs_span():
     assert b.lhs_span is not None
     # The LHS span covers the X between the $...$ delimiters.
     assert text[b.lhs_span[0]:b.lhs_span[1]] == "X"
+
+
+# ============================================================
+# SectionContextStrategy
+# ============================================================
+
+def test_section_context_binds_atoms_to_kernel_resolved_heading():
+    text = (
+        r"\section{The monad construction}"
+        " Some intro. "
+        "Let us write $T$ for the comparison functor. "
+        "Then $T$ extends to $\\mathcal{C}$. "
+        r"\section{Other topic}"
+        " More text $Z$ here."
+    )
+    bindings = SectionContextStrategy().apply(_ctx(text))
+    monad_bindings = [b for b in bindings if b.canon == "Monad"]
+    assert monad_bindings, "expected at least one Monad binding"
+    assert any(b.symbol == "T" for b in monad_bindings)
+
+
+def test_section_context_silent_when_heading_has_no_kernel_hit():
+    text = (
+        r"\section{Frobnicating widgets}"
+        " Let $X$ be active here."
+    )
+    bindings = SectionContextStrategy().apply(_ctx(text))
+    # Toy kernel has no entries for "frobnicating", "widgets", etc.
+    assert bindings == []
+
+
+def test_section_context_scopes_to_section_body_only():
+    text = (
+        r"\section{The category construction}"
+        " $X$ first. "
+        r"\section{The ring construction}"
+        " $X$ second."
+    )
+    bindings = SectionContextStrategy().apply(_ctx(text))
+    x_bindings = [b for b in bindings if b.symbol == "X"]
+    canons = {b.canon for b in x_bindings}
+    assert canons == {"Category", "Ring"}
+
+
+def test_section_context_skips_font_wrapper_macros_in_atoms():
+    text = r"\section{The category construction}" + " The set $K_{\\mathrm{red}}$ is interesting."
+    bindings = SectionContextStrategy().apply(_ctx(text))
+    syms = {b.symbol for b in bindings}
+    assert r"\mathrm" not in syms
+    assert "K" in syms
+
+
+def test_section_context_low_confidence():
+    text = r"\section{The category construction}" + " Take $X$."
+    bindings = SectionContextStrategy().apply(_ctx(text))
+    assert bindings[0].confidence == "low"
+
+
+# ============================================================
+# ColorChannelStrategy
+# ============================================================
+
+def test_color_channel_textcolor_pattern():
+    text = (
+        r"\newcommand{\mGreek}[1]{\textcolor{Mulberry}{#1}}"
+        "\n"
+        "Some body using $\\mGreek{\\alpha}$."
+    )
+    bindings = ColorChannelStrategy().apply(_ctx(text))
+    assert any(b.symbol == r"\mGreek" for b in bindings)
+    b = next(b for b in bindings if b.symbol == r"\mGreek")
+    assert b.type_phrase == "Mulberry-channel"
+    assert b.canon == "color/mulberry"
+    assert b.confidence == "high"
+
+
+def test_color_channel_color_group_pattern():
+    text = r"\newcommand{\mOperator}[1]{{\color{Purple}#1}}" + "\nText."
+    bindings = ColorChannelStrategy().apply(_ctx(text))
+    assert any(b.symbol == r"\mOperator" and b.canon == "color/purple" for b in bindings)
+
+
+def test_color_channel_paper_wide_scope():
+    text = (
+        r"\newcommand{\mGreek}[1]{\textcolor{Mulberry}{#1}}"
+        "\n" + ("padding " * 100) + "Use $\\mGreek{\\alpha}$ here."
+    )
+    bindings = ColorChannelStrategy().apply(_ctx(text))
+    b = bindings[0]
+    assert b.scope_start == 0
+    assert b.scope_end == len(text)
+
+
+def test_color_channel_skips_non_color_newcommand():
+    text = r"\newcommand{\foo}[1]{\mathbf{#1}}" + "\n"
+    bindings = ColorChannelStrategy().apply(_ctx(text))
+    assert bindings == []
+
+
+def test_color_channel_dedupes_repeat_definitions():
+    text = (
+        r"\newcommand{\mGreek}[1]{\textcolor{Mulberry}{#1}}"
+        "\n"
+        r"\renewcommand{\mGreek}[1]{\textcolor{Mulberry}{#1}}"
+    )
+    bindings = ColorChannelStrategy().apply(_ctx(text))
+    syms = [b.symbol for b in bindings]
+    assert syms.count(r"\mGreek") == 1
+
+
+def test_default_strategies_includes_section_and_color():
+    names = {s.name for s in default_strategies()}
+    assert "section-context" in names
+    assert "color-channel" in names
 
 
 def test_learned_vocab_strategy_picks_highest_support_when_duplicates():

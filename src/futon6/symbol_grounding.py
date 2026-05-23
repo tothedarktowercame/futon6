@@ -366,6 +366,177 @@ def _collect_envelopes_lazily(text: str) -> list[tuple[int, int, int, int, str]]
     return list(ma.find_math_envelopes(text))
 
 
+class SectionContextStrategy(Strategy):
+    r"""Bind math atoms via the nearest preceding section heading — low confidence.
+
+    Walks `\section{...}` / `\subsection{...}` / `\subsubsection{...}` /
+    `\paragraph{...}` headings in document order. Each heading defines a
+    section body running until the next heading (or end of document).
+    For every distinct math atom appearing in math envelopes within that
+    body, emit a low-confidence binding from atom → heading_text.
+
+    Skip when the heading text doesn't resolve via kernel lookup —
+    without a canon the binding adds noise (section titles aren't a
+    type vocabulary; they're topical labels). This makes the strategy
+    high-recall on math-rich kernel-aligned papers and silent otherwise.
+
+    Confidence is `low` because section titles are organizing labels,
+    not authoritative type declarations. The meta-learning loop will
+    surface defeat rate so we can tune.
+    """
+    name = "section-context"
+    default_confidence = "low"
+
+    _HEADING_PATTERN = re.compile(
+        r"\\(?:section|subsection|subsubsection|paragraph|subparagraph)\*?"
+        r"\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}"
+    )
+    _ATOM_IN_MATH = re.compile(r"\\[A-Za-z@]+|[A-Za-z]")
+    _SKIP_MACROS_AS_ATOMS = frozenset({
+        r"\mathrm", r"\operatorname", r"\mathup", r"\text", r"\textrm",
+        r"\textsf", r"\texttt", r"\ensuremath",
+        r"\left", r"\right", r"\big", r"\Big", r"\bigg", r"\Bigg",
+        r"\displaystyle", r"\textstyle", r"\scriptstyle",
+        r"\scriptscriptstyle", r"\nolimits", r"\limits",
+    })
+
+    @classmethod
+    def _clean_heading(cls, raw: str) -> str:
+        s = re.sub(r"\\[A-Za-z]+(\s*\{[^{}]*\})?", "", raw)
+        s = re.sub(r"[{}]+", "", s)
+        return re.sub(r"\s+", " ", s).strip().lower()
+
+    def apply(self, ctx: StrategyContext) -> list[SymbolBinding]:
+        kernel_lookup = ctx.kernel_lookup or (lambda _: None)
+        text = ctx.paper_text
+        headings = []
+        for m in self._HEADING_PATTERN.finditer(text):
+            title = self._clean_heading(m.group(1))
+            if title:
+                headings.append((m.start(), m.end(), title))
+        if not headings:
+            return []
+
+        envelopes = ctx.math_envelopes or _collect_envelopes_lazily(text)
+        out = []
+        for i, (h_start, h_end, title) in enumerate(headings):
+            body_start = h_end
+            body_end = headings[i + 1][0] if i + 1 < len(headings) else len(text)
+            # Try the full title first, then progressively shorter
+            # right-anchored phrases (e.g. "affine schemes" within
+            # "the geometry of affine schemes").
+            words = title.split()
+            canon = None
+            type_phrase = title
+            for length in range(min(len(words), 4), 0, -1):
+                for start_i in range(len(words) - length + 1):
+                    candidate = " ".join(words[start_i:start_i + length])
+                    c = kernel_lookup(candidate)
+                    if c is not None:
+                        canon = c
+                        type_phrase = candidate
+                        break
+                if canon is not None:
+                    break
+            if canon is None:
+                continue
+
+            atoms: set[str] = set()
+            for entry in envelopes:
+                env_start, env_end = entry[0], entry[1]
+                int_start, int_end = (
+                    (entry[2], entry[3]) if len(entry) >= 4 else (env_start, env_end)
+                )
+                if not (body_start <= env_start and env_end <= body_end):
+                    continue
+                interior = text[int_start:int_end]
+                for m in self._ATOM_IN_MATH.finditer(interior):
+                    atom = m.group(0)
+                    if atom not in self._SKIP_MACROS_AS_ATOMS:
+                        atoms.add(atom)
+            if not atoms:
+                continue
+            for atom in atoms:
+                out.append(SymbolBinding(
+                    binding_id=ctx.next_id(),
+                    symbol=atom,
+                    canon=canon,
+                    type_phrase=type_phrase,
+                    scope_start=body_start,
+                    scope_end=body_end,
+                    confidence=self.default_confidence,
+                    strategy=self.name,
+                    evidence_span=(h_start, h_end),
+                ))
+        return out
+
+
+class ColorChannelStrategy(Strategy):
+    r"""Author-defined color macros are syntactic-role channels — high confidence.
+
+    Detects `\newcommand{\name}[1]{\textcolor{COLOR}{#1}}` and the
+    `{\color{COLOR}#1}` group form. The macro becomes a role tag for
+    its arg — semantically First Proof's `\mGreek`, `\mOperator`,
+    `\mDelimiter`, etc.
+
+    The binding's symbol is the macro itself; type_phrase is
+    f"{color}-channel"; canon is set to a derived role name (e.g.
+    "color/mulberry") so the binding survives the no-canon prose-strategy
+    gate. Downstream code (or a future walker change) can use these
+    bindings to assign syntactic roles to wrapped atoms.
+
+    Primarily fires on First Proof / math-proofread-style papers.
+    arXiv papers usually have no color macros.
+    """
+    name = "color-channel"
+    default_confidence = "high"
+
+    _PATTERNS = [
+        # \newcommand{\name}[N]{\textcolor{COLOR}{...#1...}}
+        re.compile(
+            r"\\(?:re)?newcommand\s*\*?\s*\{\s*(\\[A-Za-z@]+)\s*\}"
+            r"\s*\[\d+\]"
+            r"(?:\s*\[[^\]]*\])?"
+            r"\s*\{\s*\\textcolor\s*\{\s*([A-Za-z][\w]*)\s*\}\s*\{"
+        ),
+        # \newcommand{\name}[N]{{\color{COLOR}...#1...}}
+        re.compile(
+            r"\\(?:re)?newcommand\s*\*?\s*\{\s*(\\[A-Za-z@]+)\s*\}"
+            r"\s*\[\d+\]"
+            r"(?:\s*\[[^\]]*\])?"
+            r"\s*\{\s*\{\s*\\color\s*\{\s*([A-Za-z][\w]*)\s*\}"
+        ),
+    ]
+
+    def apply(self, ctx: StrategyContext) -> list[SymbolBinding]:
+        out = []
+        seen: set[str] = set()
+        text = ctx.paper_text
+        for pat in self._PATTERNS:
+            for m in pat.finditer(text):
+                macro = m.group(1)
+                color = m.group(2)
+                if macro in seen:
+                    continue
+                seen.add(macro)
+                # Canon = role name derived from color (lowercase). Reader
+                # sees e.g. "color/mulberry" — generic but consistent;
+                # better mapping (Mulberry→greek) can land as a follow-on.
+                role_name = f"color/{color.lower()}"
+                out.append(SymbolBinding(
+                    binding_id=ctx.next_id(),
+                    symbol=macro,
+                    canon=role_name,
+                    type_phrase=f"{color}-channel",
+                    scope_start=0,
+                    scope_end=len(text),
+                    confidence=self.default_confidence,
+                    strategy=self.name,
+                    evidence_span=(m.start(), m.end()),
+                ))
+        return out
+
+
 class LearnedVocabStrategy(Strategy):
     r"""Cross-paper newcommand defaults — low confidence, paper-wide.
 
@@ -932,12 +1103,14 @@ def default_strategies(
     """
     strategies: list[Strategy] = [
         NewcommandStrategy(),
+        ColorChannelStrategy(),
         NotationEnvStrategy(),
         LetBindingStrategy(),
         FixPatternStrategy(),
         DenotationStrategy(),
         InlineIsAStrategy(),
         TheYXStrategy(),
+        SectionContextStrategy(),
         KernelAmbientStrategy(),
     ]
     if learned_vocab:
