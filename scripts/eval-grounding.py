@@ -131,6 +131,32 @@ def main(argv: list[str] | None = None) -> dict:
 
     aggregate = _sg.aggregate_strategy_metrics(metrics_by_paper)
 
+    # Precision proxy (lacking labeled gold against First Proof's hand-
+    # annotated symbol-canon pairs): an emitted binding counts as
+    # "supported" when it is BOTH undefeated AND corroborated by at
+    # least one other strategy on the same (symbol, canon). This is
+    # weaker than precision-against-gold but stronger than raw emit
+    # counts — it filters out noise that the defeasibility cascade
+    # already discounted and rewards cross-strategy agreement.
+    precision_proxy: dict[str, dict] = {}
+    for strat, agg in aggregate.items():
+        emit = agg.get("emitted", 0)
+        if emit == 0:
+            continue
+        survived = emit - agg.get("defeated", 0)
+        corr = agg.get("corroborated", 0)
+        # Lower-bound proxy: corroborated bindings that ALSO survived
+        # defeasibility. With strategies fully independent, this is
+        # a TP estimate.
+        supported = max(0, min(survived, corr))
+        precision_proxy[strat] = {
+            "emitted": emit,
+            "survived": survived,
+            "corroborated": corr,
+            "supported": supported,
+            "precision_proxy": supported / emit if emit else 0.0,
+        }
+
     # Reservoir-sample per strategy. Bias toward UN-defeated bindings
     # (more interesting for spot-check; defeated ones got overridden by
     # the engine already).
@@ -164,6 +190,7 @@ def main(argv: list[str] | None = None) -> dict:
         "paper_count": len(paper_paths),
         "total_grounded_marks": total_grounded_marks,
         "strategy_meta_learning": aggregate,
+        "precision_proxy": precision_proxy,
         "constructor_distribution": constructor_counts,
         "spot_check_samples": sampled,
         "per_paper_summary": per_paper_summary,
@@ -193,6 +220,30 @@ def main(argv: list[str] | None = None) -> dict:
         print(f"[eval-grounding] Constructor distribution ({total} bindings):")
         for c, n in sorted(constructor_counts.items(), key=lambda kv: -kv[1]):
             print(f"  {c:18s} {n:5d}  ({n/total*100:.1f}%)")
+
+    if precision_proxy:
+        print()
+        print("[eval-grounding] Precision proxy (corroborated AND undefeated):")
+        print("  This is NOT precision against labeled gold — it's a lower")
+        print("  bound. A binding only counts as 'supported' when another")
+        print("  strategy independently agrees on (symbol, canon) AND it")
+        print("  survived the defeasibility cascade. See report['precision_proxy'].")
+        rows = sorted(
+            precision_proxy.items(), key=lambda kv: -kv[1]["emitted"]
+        )
+        total_emit = sum(v["emitted"] for v in precision_proxy.values())
+        total_supp = sum(v["supported"] for v in precision_proxy.values())
+        overall_pct = total_supp / total_emit * 100 if total_emit else 0
+        for strat, v in rows:
+            pct = v["precision_proxy"] * 100
+            print(
+                f"  {strat:18s} {v['supported']:4d}/{v['emitted']:5d} = "
+                f"{pct:5.1f}%  (survived={v['survived']}, corr={v['corroborated']})"
+            )
+        print(
+            f"  {'OVERALL':18s} {total_supp:4d}/{total_emit:5d} = "
+            f"{overall_pct:5.1f}%"
+        )
     return report
 
 
