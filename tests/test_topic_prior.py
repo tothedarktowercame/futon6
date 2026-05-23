@@ -89,14 +89,16 @@ def test_se_prior_basic_shape():
     p = SECorpusPrior()
     p.add("Functor", 100)
     p.add("StableMarriageProblem", 1)
-    # Functor is heavily mentioned: prior near 1
-    assert p.prior("Functor") > 0.95
-    # StableMarriageProblem rare: prior small but non-zero
-    sp = p.prior("StableMarriageProblem")
-    assert 0 < sp < 0.05
-    # Unseen canon: small but non-zero
-    unseen = p.prior("NeverHeardOfIt")
-    assert 0 < unseen < 0.05
+    # Log-scaled: heavily-mentioned canon near 1, rare canon non-zero
+    # but smaller, unseen canon smallest. Spread is compressed vs
+    # linear scaling (intentional — we don't want to wipe out
+    # rare-but-legitimate canons).
+    f = p.prior("Functor")
+    s = p.prior("StableMarriageProblem")
+    u = p.prior("NeverHeardOfIt")
+    assert f > 0.95
+    assert 0 < s < f
+    assert 0 < u < s
 
 
 def test_se_prior_empty_returns_neutral():

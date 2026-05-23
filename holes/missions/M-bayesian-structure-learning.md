@@ -305,7 +305,20 @@ into the prior, gated to avoid degenerate collapse.
 First evidence (30 arxiv math.CT papers, nLab held-out vocab):
   - baseline + clean kernel: 47.9% emissions in nLab vocab
   - + MSC topic prior: 52.7% (+4.8pp)
-  - + SE corpus prior: TBD (build in progress)
+  - + MSC + SE corpus prior: **61.1%** (+13.2pp over baseline)
+  - high-confidence (p≥0.5) at the +13.2pp point: 54.9% (was 42.6%)
+
+Total emissions also dropped 4978 → 3510 (down 30%) — the priors push
+spurious annotations into the null mass rather than silently passing
+them through. Lower volume + higher quality is the correct direction
+for this kind of corrective signal.
+
+SE prior uses log-scaled `(log(n+1)+1)/(log(max+1)+1)` rather than
+linear `n/max` because the raw counts span 5 orders of magnitude
+(top single-letter "canons" hit 94k vs longtail at 1). Linear scaling
+flattened all real concepts to near-zero. Also filtered single-token
+phrases shorter than 3 chars at index-build time, so "A", "C", "Pi"
+etc. don't enter the count race.
 
 Pattern (C) noise (`morphism → StructureHomomorphism`,
 `pushout → CategoricalPullback`) still survives — same shape Joe

@@ -229,20 +229,20 @@ class SECorpusPrior:
     def prior(self, canon: str, smoothing: float = 1.0) -> float:
         """Multiplicative factor in (0, 1].
 
-        Canons with at least `smoothing` occurrences land at
-        2*smoothing / (max + smoothing). Canons absent from the
-        corpus map to `smoothing / (max + smoothing)` — small but
-        non-zero. Canons frequently mentioned saturate near 1.
-
-        The shape is `(n + smoothing) / (max_seen + smoothing)`
-        rather than `n / max_seen` so we don't double-count smoothing
-        in the denominator across many calls.
+        Log-scaled so single-letter or otherwise pathologically-common
+        canons in the index (e.g. "A" appearing 94000 times in MO
+        body text) don't flatten everything else to near-zero. Shape:
+            (log(n+1) + smoothing) / (log(max_seen+1) + smoothing)
+        Canons absent from corpus get `smoothing / (log(max_seen+1) +
+        smoothing)` — small but non-zero. A 100-mention canon lands
+        around 0.55 when max is 5000; a 5000-mention canon lands ~0.95.
         """
         if not self.counts:
             return 1.0
+        from math import log
         max_seen = max(self.counts.values())
         n = self.counts.get(canon, 0)
-        return (n + smoothing) / (max_seen + smoothing)
+        return (log(n + 1) + smoothing) / (log(max_seen + 1) + smoothing)
 
     def save(self, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)

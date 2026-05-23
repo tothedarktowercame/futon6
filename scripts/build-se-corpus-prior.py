@@ -69,6 +69,14 @@ def build_phrase_index(canons):
         if not toks:
             skipped += 1
             continue
+        # Skip single-token phrases shorter than 3 chars — these are
+        # pathological "canons" like "A", "C", "Pi" that match every
+        # variable name in math discourse and flood the index. Real
+        # short canons (Z2, O2) inherit the same problem; the cost
+        # of dropping them is they get the neutral 1.0 prior.
+        if len(toks) == 1 and len(toks[0]) < 3:
+            skipped += 1
+            continue
         phrase_to_canon.setdefault(toks, canon)
         by_length[len(toks)].add(toks)
     return phrase_to_canon, by_length, skipped
