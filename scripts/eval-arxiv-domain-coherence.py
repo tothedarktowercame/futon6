@@ -107,6 +107,12 @@ def parse_args(argv=None):
     parser.add_argument("--arxiv-metadata", type=Path, default=None,
                         help="arxiv-math-ct-metadata.jsonl — gives per-paper "
                              "`categories` for topic prior lookup")
+    parser.add_argument("--update-msc-prior", type=Path, default=None,
+                        help="If set, after each paper update the MSC prior "
+                             "with that paper's high-confidence emissions and "
+                             "save the updated prior to this path. Online-EM-"
+                             "style: only high-confidence (p>=threshold) "
+                             "bindings fold in, to avoid degenerate collapse.")
     parser.add_argument("--seed", type=int, default=20260523)
     parser.add_argument("--confidence-threshold", type=float, default=0.5,
                         help="Posterior probability threshold for "
@@ -226,6 +232,17 @@ def main(argv=None):
             if prob >= args.confidence_threshold:
                 hi_conf_counter[top] += 1
             paper_canons.append((sym, top, prob))
+        # Online MSC prior update: only fold in high-confidence emissions
+        # from this paper's accepted canons. Same threshold the
+        # `high_confidence_*` counters use, kept consistent so the
+        # reported numbers and the prior update agree on what counts
+        # as a "trustworthy" emission.
+        if args.update_msc_prior and msc_prior is not None and msc_primaries:
+            msc_prior.update_from_run(
+                ((canon, prob) for _sym, canon, prob in paper_canons),
+                msc_primaries,
+                min_confidence=args.confidence_threshold,
+            )
         per_paper.append({
             "paper": tar_path.name,
             "n_canons": len(paper_canons),
@@ -268,6 +285,10 @@ def main(argv=None):
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(out, ensure_ascii=False, indent=2),
                         encoding="utf-8")
+    if args.update_msc_prior and msc_prior is not None:
+        msc_prior.save(args.update_msc_prior)
+        print(f"[coherence] wrote updated MSC prior to {args.update_msc_prior} "
+              f"({len(msc_prior.counts)} canons, grand_total={msc_prior.grand_total})")
     print()
     print(f"[coherence] DONE: {n_processed} papers, "
           f"{total_emissions} total canon emissions, "

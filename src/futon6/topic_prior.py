@@ -147,6 +147,36 @@ class MSCTopicPrior:
         n_primaries = len(primaries)
         return (matched + smoothing) / (total + n_primaries * smoothing)
 
+    def update_from_run(
+        self,
+        emissions: Iterable[tuple[str, float]],
+        msc_primaries: Iterable[str],
+        min_confidence: float = 0.5,
+    ) -> int:
+        """Online update from a single paper's arbitration output.
+
+        `emissions` is an iterable of (canon, posterior_probability)
+        pairs — the engine's accepted bindings for the paper.
+        `msc_primaries` are the MSC primary codes that paper sits in
+        (resolved from its arxiv categories).
+
+        Only emissions with `posterior >= min_confidence` are folded
+        in — otherwise we'd be folding our own noise back into the
+        prior, an online-EM degenerate-collapse failure mode.
+
+        Returns the number of (canon, msc) pairs updated."""
+        primaries = list(msc_primaries)
+        if not primaries:
+            return 0
+        n_updates = 0
+        for canon, prob in emissions:
+            if prob < min_confidence:
+                continue
+            for p in primaries:
+                self.add(canon, p, n=1)
+                n_updates += 1
+        return n_updates
+
     def save(self, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(
