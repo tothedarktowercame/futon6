@@ -265,13 +265,19 @@ def combine_strategy_votes(
         # hypothesis wins. Renormalising would erase that signal
         # for single-candidate symbols, which is exactly the case
         # where domain-mismatched garbage tends to fire alone.
+        # Dampen each factor with sqrt so very small priors (0.05-0.20)
+        # don't crush legitimate-but-rare canons (gold-eval found that
+        # raw multiplicative composition pushed real matches into null
+        # mass, hurting recall ~8pp on PM gold). sqrt softens the
+        # penalty: 0.10 → 0.32, 0.25 → 0.5, 1.0 stays 1.0.
+        from math import sqrt
         composed = {}
         for c in candidates:
             base = prior.get(c, (1.0 - null_prior) / len(candidates))
             factor = 1.0
             for fn in context_factors:
                 try:
-                    factor *= max(fn(c), 1e-9)
+                    factor *= max(sqrt(fn(c)), 1e-9)
                 except Exception:
                     factor *= 1.0
             composed[c] = base * factor

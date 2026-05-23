@@ -45,6 +45,19 @@ sys.path.insert(0, str(ROOT / "src"))
 from futon6 import bayesian_grounding as _bg
 from futon6 import canon_store as _cs
 from futon6 import grounding as _grd
+from futon6 import topic_prior as _tp
+
+
+import re as _re
+_PM_ID_RE = _re.compile(r"^(\d{2})[A-Za-z0-9-]*-")
+
+
+def msc_primary_for_entry(entry_id: str) -> list[str]:
+    """For PM ids like '18-00-Functor' or '03A05-PropositionalLogic',
+    extract the MSC primary (first 2 digits). Returns [] for non-PM
+    ids — WP and PW gold don't carry MSC."""
+    m = _PM_ID_RE.match(entry_id or "")
+    return [m.group(1)] if m else []
 
 
 def _load_module(name: str, rel_path: str):
@@ -91,6 +104,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--canon-prior-smoothing", type=float, default=0.1,
         help="Laplace smoothing factor for the canon prior.",
     )
+    parser.add_argument("--msc-prior", type=Path, default=None,
+                        help="topic-prior-msc.json — MSC topic prior. For "
+                             "PM entries the MSC primary code is parsed "
+                             "from the entry id (e.g. '18-' → MSC 18). "
+                             "Non-PM entries (WP, PW) skip this factor.")
+    parser.add_argument("--se-corpus-prior", type=Path, default=None,
+                        help="topic-prior-se-corpus.json — SE corpus-"
+                             "frequency prior. Applied to every entry.")
     return parser.parse_args(argv)
 
 
@@ -139,6 +160,14 @@ def main(argv: list[str] | None = None) -> dict:
         canon_store_aggregate = _cs.load_aggregate(args.canon_store)
         print(f"[arbitration] canon-store: {len(canon_store_aggregate)} "
               f"(symbol, canon) entries from {args.canon_store}")
+    msc_prior = None
+    if args.msc_prior:
+        msc_prior = _tp.MSCTopicPrior.load(args.msc_prior)
+        print(f"[arbitration] MSC topic prior: {len(msc_prior.counts)} canons")
+    se_prior = None
+    if args.se_corpus_prior:
+        se_prior = _tp.SECorpusPrior.load(args.se_corpus_prior)
+        print(f"[arbitration] SE corpus prior: {len(se_prior.counts)} canons")
 
     # --- TRAIN: initialise strategy reliability posteriors from gold ---
     train_tp: dict[str, int] = defaultdict(int)
@@ -216,8 +245,20 @@ def main(argv: list[str] | None = None) -> dict:
                 )
                 if not store_prior:
                     store_prior = None
+            # Compose topic priors as context factors. PM entries get
+            # MSC-conditioned down-weighting; non-PM (WP, PW) skip MSC
+            # but still get the SE corpus-frequency factor.
+            context_factors = []
+            entry_msc = msc_primary_for_entry(entry.get("id", ""))
+            if msc_prior is not None and entry_msc:
+                context_factors.append(
+                    lambda c, _mp=msc_prior, _p=entry_msc: _mp.prior(c, _p)
+                )
+            if se_prior is not None:
+                context_factors.append(lambda c, _sp=se_prior: _sp.prior(c))
             posterior = _bg.combine_strategy_votes(
                 sym, votes, reliabilities, prior=store_prior,
+                context_factors=context_factors or None,
             )
             top_canon, top_prob = posterior.top1()
             if top_canon is None:
@@ -230,6 +271,14 @@ def main(argv: list[str] | None = None) -> dict:
                 arb_fp += 1
 
     arb_precision = arb_tp / (arb_tp + arb_fp) if (arb_tp + arb_fp) else 0.0
+    # Recall = TP / (TP + FN). The denominator includes both wrong-canon
+    # emissions (arb_fp counts as FN at the gold pair-level too — we missed
+    # the right canon) and no-vote cases. Conservative: total gold pairs
+    # the engine had a chance to recover.
+    arb_total_gold = arb_tp + arb_fp + arb_no_vote
+    arb_recall = arb_tp / arb_total_gold if arb_total_gold else 0.0
+    arb_f1 = (2 * arb_precision * arb_recall /
+              (arb_precision + arb_recall)) if (arb_precision + arb_recall) else 0.0
     per_strat_precision = {}
     for strat in set(per_strat_tp) | set(per_strat_fp):
         denom = per_strat_tp[strat] + per_strat_fp[strat]
@@ -239,6 +288,10 @@ def main(argv: list[str] | None = None) -> dict:
         "gold": str(args.gold),
         "match_mode": args.match_mode,
         "split": {"train": len(train), "test": len(test)},
+        "topic_priors": {
+            "msc_prior": str(args.msc_prior) if args.msc_prior else None,
+            "se_corpus_prior": str(args.se_corpus_prior) if args.se_corpus_prior else None,
+        },
         "strategy_reliabilities": {
             s: {"mean": r.mean, "alpha": r.alpha, "beta": r.beta, "n": r.n_observations}
             for s, r in reliabilities.items()
@@ -249,6 +302,8 @@ def main(argv: list[str] | None = None) -> dict:
             "fp": arb_fp,
             "no_vote": arb_no_vote,
             "precision": arb_precision,
+            "recall": arb_recall,
+            "f1": arb_f1,
         },
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -262,6 +317,9 @@ def main(argv: list[str] | None = None) -> dict:
     print(f"  weighted avg per strategy: "
           f"{(sum(per_strat_precision[s] * (per_strat_tp[s] + per_strat_fp[s]) for s in per_strat_precision) / max(1, sum(per_strat_tp[s] + per_strat_fp[s] for s in per_strat_precision)))*100:5.1f}%")
     print(f"  ARBITRATED (Bayesian):     {arb_precision*100:5.1f}%")
+    print(f"[arbitration] ARBITRATED recall: {arb_recall*100:5.1f}% "
+          f"({arb_tp}/{arb_total_gold} gold pairs caught)")
+    print(f"[arbitration] ARBITRATED F1:     {arb_f1*100:5.1f}%")
     print(f"  no_vote (no strategy fired on gold symbol): {arb_no_vote}")
     print(f"[arbitration] wrote {args.out}")
     return out
