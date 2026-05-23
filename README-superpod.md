@@ -156,17 +156,37 @@ mining, not as a weak-but-valid result.
 
 ## 5. Running instructions
 
-The single canonical command for both Rob's superpod runs and the local
-laptop-CPU replays is below. The `--skip-*` flags are the only difference:
+Two variants share most of the command, but **Rob's superpod run is
+NOT just "drop the `--skip-*` flags"**: removing `--skip-llm` enables
+Stage 6 with backend `local-llm`, which the help text on
+`scripts/superpod-job.py:6454` notes achieves only ~10% parse rate
+without schema constraints. Schema-constrained backends (`codex`,
+`gemini`) reach ~100% — passing the 80% gate at
+`scripts/superpod-job.py:8047`. The canonical superpod invocation
+therefore must add `--stage6-backend codex` (or `gemini`).
 
-- **For Rob's superpod (full GPU): omit** all five `--skip-*` flags so
-  embeddings, LLM, clustering, graph-embed, and FAISS all run.
-- **For laptop CPU replay**: keep the `--skip-*` flags as shown so the
-  paper-mining lane still exercises Stage 5 / 5c / 5d / 9a + the new
-  structure-learning loop without GPU.
+Paths in the commands below are **repo/scratch-relative**, matching
+the discipline of `scripts/run-arxiv-handoff.sh:52`. Absolute paths
+to Joe-local dirs were a portability footgun: missing `--ner-kernel`
+*silently skips Stage 5 entirely* (`scripts/superpod-job.py:7148`),
+while missing seed/snapshot files only warn and degrade discovery
+quality (`scripts/superpod-job.py:6753`).
 
-In both modes the rest of the command is identical, the QC outputs print
-in the same shape, and the structure-learning loop runs.
+- **For Rob's superpod (full GPU)**: drop the five `--skip-*` flags
+  AND add `--stage6-backend codex` (or `gemini`).
+- **For laptop CPU replay**: keep the `--skip-*` flags as shown so
+  the paper-mining lane still exercises Stage 5 / 5c / 5d / 9a + the
+  new structure-learning loop without GPU. Stage 6 is skipped
+  transitively by `--skip-llm`, so the backend choice doesn't matter
+  here.
+
+In both modes the QC outputs print in the same shape and the
+structure-learning loop runs.
+
+### Laptop CPU replay (default-safe)
+
+Run from the futon6 repo root; eprint dirs and seed paths are
+relative to that root.
 
 ```bash
 python3 scripts/superpod-job.py \
@@ -175,20 +195,50 @@ python3 scripts/superpod-job.py \
   --site arxiv.math \
   --output-dir /ABS/PATH/TO/output \
   --paper-eprint-dir eprints \
-  --ner-kernel /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \
+  --ner-kernel data/ner-kernel-clean.tsv \
   --discover-terms \
   --discover-structures \
   --discover-terms-eprint-dir eprints \
-  --discover-terms-pm-seed /home/joe/code/futon6/data/dictionary/entries-pm-seed.edn \
-  --discover-terms-nlab-seed /home/joe/code/futon6/data/dictionary/entries-nlab-seed.edn \
-  --discover-terms-nnexus-stopwords /home/joe/code/nnexus/lib/NNexus/StopWordList.pm \
-  --discover-terms-nnexus-snapshot /home/joe/code/nnexus/lib/NNexus/resources/database/snapshot-6-2014.sqlite \
+  --discover-terms-pm-seed data/dictionary/entries-pm-seed.edn \
+  --discover-terms-nlab-seed data/dictionary/entries-nlab-seed.edn \
+  --discover-terms-nnexus-stopwords ../nnexus/lib/NNexus/StopWordList.pm \
+  --discover-terms-nnexus-snapshot ../nnexus/lib/NNexus/resources/database/snapshot-6-2014.sqlite \
   --skip-embeddings \
   --skip-llm \
   --skip-clustering \
   --skip-graph-embed \
   --skip-faiss
 ```
+
+### Rob's superpod (full GPU)
+
+Same command as above, but: drop all five `--skip-*` flags AND add
+`--stage6-backend codex` (or `gemini`) so Stage 6 actually clears
+its 80% parse-rate gate. Add the topic priors so the symbol-grounding
+arbitration consults MSC + SE-corpus priors (see §9).
+
+```bash
+python3 scripts/superpod-job.py \
+  --input-dir /ABS/PATH/TO/batch-input \
+  --arxiv-jsonl BATCH.jsonl \
+  --site arxiv.math \
+  --output-dir /ABS/PATH/TO/output \
+  --paper-eprint-dir eprints \
+  --ner-kernel data/ner-kernel-clean.tsv \
+  --discover-terms \
+  --discover-structures \
+  --discover-terms-eprint-dir eprints \
+  --discover-terms-pm-seed data/dictionary/entries-pm-seed.edn \
+  --discover-terms-nlab-seed data/dictionary/entries-nlab-seed.edn \
+  --discover-terms-nnexus-stopwords ../nnexus/lib/NNexus/StopWordList.pm \
+  --discover-terms-nnexus-snapshot ../nnexus/lib/NNexus/resources/database/snapshot-6-2014.sqlite \
+  --stage6-backend codex
+```
+
+If the superpod environment doesn't have `nnexus` checked out
+alongside futon6, omit the two `--discover-terms-nnexus-*` flags
+rather than passing absolute Joe-local paths — discovery degrades
+gracefully rather than failing the run.
 
 Why these flags are the current default-safe lane:
 
@@ -679,22 +729,24 @@ What 5000 papers buys us (per scaling-plan §3):
 
 ### Recommended invocation
 
-The Stage-5 portion of `superpod-job.py` already calls
-`grounding.detect_grounded_symbols`. To enable topic priors for the
-production run, pass:
+Use the **superpod (full GPU)** command in §5 as the base, then add
+the topic-prior flags below. The cleaned NER kernel
+(`data/ner-kernel-clean.tsv`, 18937 entries) filters out the
+"stable → StableMarriageProblem" garbage shape that Joe spotted in
+batch-008. `--update-msc-prior` writes the online-EM-updated MSC
+prior at end of run for the next batch to pick up.
 
 ```
---ner-kernel data/ner-kernel-clean.tsv
+--ner-kernel data/ner-kernel-clean.tsv     # already in §5 command
 --msc-prior data/topic-prior-msc.json
 --se-corpus-prior data/topic-prior-se-corpus.json
 --update-msc-prior data/topic-prior-msc-updated.json
+--stage6-backend codex                      # already in §5 command
 ```
 
-The cleaned NER kernel (`data/ner-kernel-clean.tsv`, 18937 entries)
-filters out the "stable → StableMarriageProblem" garbage shape that
-Joe spotted in batch-008. `--update-msc-prior` writes the
-online-EM-updated MSC prior at end of run for the next batch to
-pick up.
+(`--stage6-backend codex` and the relative `--ner-kernel` path are
+inherited from the §5 superpod-variant; listed here only as a
+reminder of why those are non-default vs the laptop-CPU command.)
 
 ### Open questions for Gate P6
 

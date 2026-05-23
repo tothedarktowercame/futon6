@@ -5761,6 +5761,12 @@ def print_dry_run(args):
     skip_embeddings = args.skip_embeddings or args.moist_run
     skip_clustering = args.skip_clustering or args.moist_run
     llm_inference_active = (not args.skip_llm) and (not args.moist_run)
+    # Mirror the runtime auto-skip at scripts/superpod-job.py:6850 — the
+    # arxiv lane force-skips thread stages because arxiv papers are
+    # single-document. Without this the dry-run planner overstates what
+    # will actually run (Codex review flagged this 2026-05-23).
+    arxiv_mode = bool(args.arxiv_jsonl)
+    thread_stages_auto_skipped = arxiv_mode and not args.skip_threads
 
     stage2_active = not skip_embeddings
     stage3_active = args.moist_run or (not args.skip_llm)
@@ -5768,7 +5774,7 @@ def print_dry_run(args):
     stage5_active = not args.skip_ner
     stage5b_active = args.run_distinctor_mit
     stage6_active = args.moist_run or (not args.skip_llm)
-    stage7_active = not args.skip_threads
+    stage7_active = (not args.skip_threads) and not thread_stages_auto_skipped
 
     print("=" * 64)
     print("SUPERPOD JOB — DRY RUN (nothing will be executed)")
@@ -5837,7 +5843,9 @@ def print_dry_run(args):
     # Stage 7: Thread wiring diagrams
     ct_ref_exists = Path(args.ct_reference).exists()
     if not stage7_active:
-        print(f"  {'7. Thread wiring diagrams':<42s} {'SKIPPED':>10s}")
+        skipped_label = ("SKIPPED (arxiv auto)"
+                         if thread_stages_auto_skipped else "SKIPPED")
+        print(f"  {'7. Thread wiring diagrams':<42s} {skipped_label:>20s}")
     elif ct_ref_exists:
         print(f"  {'7. CT-backed wiring + IATC + cat (CPU)':<42s} {'CT ref + IATC + ports':<36s} {fmt(est_stage7_min)+' min':>10s}")
     else:
@@ -5910,6 +5918,8 @@ def print_dry_run(args):
         est_total_min = "?"
     total_stages = 11 + int(stage5b_active)
     print(f"  {'TOTAL':<42s} {f'{active}/{total_stages} stages active':<36s} {fmt(est_total_min)+' min':>10s}")
+    if thread_stages_auto_skipped:
+        print(f"  {'NOTE':<42s} {'arxiv lane: thread stages auto-skipped at runtime'}")
     print()
 
     print("  ESTIMATED OUTPUT:")
