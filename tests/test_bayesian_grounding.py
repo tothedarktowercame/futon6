@@ -9,7 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from futon6.bayesian_grounding import (
+    CanonPosterior,
     StrategyReliability,
+    combine_strategy_votes,
     expected_batch_info_gain,
     fit_reliabilities_from_eval_report,
     update_from_agreement,
@@ -168,3 +170,72 @@ def test_update_from_agreement_keeps_disagreement_weight_correct():
     # Noisy's mean falls; trusted's mean unchanged (no update on it).
     assert rels["noisy"].mean < noisy_mean_initial
     assert rels["trusted"].mean == trusted_mean_initial
+
+
+# ============================================================
+# CanonPosterior + combine_strategy_votes
+# ============================================================
+
+def test_combine_votes_unanimous_high_reliability_picks_that_canon():
+    rels = {
+        "a": StrategyReliability("a", alpha=90, beta=10, n_observations=98),
+        "b": StrategyReliability("b", alpha=90, beta=10, n_observations=98),
+    }
+    votes = [("a", "Group"), ("b", "Group")]
+    post = combine_strategy_votes("X", votes, rels)
+    top_canon, top_prob = post.top1()
+    assert top_canon == "Group"
+    assert top_prob > 0.9
+
+
+def test_combine_votes_high_trust_beats_low_trust_when_disagreeing():
+    rels = {
+        "trusted": StrategyReliability("trusted", alpha=95, beta=5, n_observations=98),
+        "noisy": StrategyReliability("noisy", alpha=20, beta=80, n_observations=98),
+    }
+    votes = [("trusted", "Group"), ("noisy", "Ring")]
+    post = combine_strategy_votes("X", votes, rels)
+    top_canon, _ = post.top1()
+    assert top_canon == "Group"
+
+
+def test_combine_votes_no_votes_returns_null_posterior():
+    rels = {}
+    post = combine_strategy_votes("X", [], rels)
+    top_canon, top_prob = post.top1()
+    assert top_canon is None
+    assert top_prob == 1.0
+
+
+def test_combine_votes_two_for_one_against_majority_wins():
+    rels = {
+        "a": StrategyReliability("a", alpha=80, beta=20, n_observations=98),
+        "b": StrategyReliability("b", alpha=80, beta=20, n_observations=98),
+        "c": StrategyReliability("c", alpha=80, beta=20, n_observations=98),
+    }
+    votes = [("a", "Group"), ("b", "Group"), ("c", "Ring")]
+    post = combine_strategy_votes("X", votes, rels)
+    assert post.candidates.get("Group", 0) > post.candidates.get("Ring", 0)
+
+
+def test_combine_votes_with_explicit_prior_uses_it():
+    rels = {
+        "a": StrategyReliability("a", alpha=80, beta=20, n_observations=98),
+        "b": StrategyReliability("b", alpha=80, beta=20, n_observations=98),
+    }
+    votes = [("a", "Group"), ("b", "Ring")]
+    prior = {"Group": 0.85, "Ring": 0.10}
+    post = combine_strategy_votes("X", votes, rels, prior=prior)
+    top_canon, _ = post.top1()
+    assert top_canon == "Group"
+
+
+def test_combine_votes_canon_posterior_normalizes_to_one():
+    rels = {
+        "a": StrategyReliability("a", alpha=70, beta=30, n_observations=98),
+        "b": StrategyReliability("b", alpha=70, beta=30, n_observations=98),
+    }
+    votes = [("a", "Group"), ("b", "Ring")]
+    post = combine_strategy_votes("X", votes, rels)
+    total = sum(post.candidates.values()) + post.null_mass
+    assert abs(total - 1.0) < 1e-9

@@ -183,6 +183,118 @@ def update_from_agreement(
                         # disagreement carries no signal.
 
 
+# ============================================================
+# Per-binding canon posterior — §3.2 of M-bayesian-structure-learning
+# ============================================================
+
+@dataclass
+class CanonPosterior:
+    """Distribution over candidate canons for one (symbol, paper) site.
+
+    Built by `combine_strategy_votes` from each strategy's emitted
+    canon weighted by that strategy's current reliability posterior.
+    `null_mass` is the probability that the symbol has no canonical
+    binding — used when no strategy fires confidently.
+    """
+    symbol: str
+    candidates: dict[str, float] = field(default_factory=dict)
+    null_mass: float = 0.0
+
+    def top1(self) -> tuple[str | None, float]:
+        """Return (best_canon, probability) or (None, null_mass) if
+        the null hypothesis is best."""
+        if not self.candidates:
+            return (None, self.null_mass)
+        best = max(self.candidates.items(), key=lambda kv: kv[1])
+        if best[1] < self.null_mass:
+            return (None, self.null_mass)
+        return best
+
+
+def combine_strategy_votes(
+    symbol: str,
+    votes: list[tuple[str, str | None]],
+    reliabilities: dict[str, "StrategyReliability"],
+    prior: dict[str, float] | None = None,
+    null_prior: float = 0.05,
+) -> CanonPosterior:
+    r"""Combine per-strategy (strategy, canon) votes for one symbol into a
+    posterior over candidate canons.
+
+    Treats each strategy's vote as an independent Bernoulli trial:
+    if strategy s emits canon c with reliability r_s, then
+        P(observe vote | c is true) = r_s
+        P(observe vote | c' ≠ c is true) = 1 - r_s
+    (the standard "if reliable then likely correct, else likely wrong"
+    likelihood structure).
+
+    `prior` is an optional dict[canon → prior_prob]; when None we use
+    a uniform prior over the candidate set. The `null_prior` is the
+    probability that the symbol has no canonical binding (so a
+    strategy that emitted None gets weight on the null hypothesis).
+
+    Returns a normalised CanonPosterior.
+    """
+    # Build candidate set: every non-None canon ANY strategy voted for
+    candidates: set[str] = set()
+    for _strat, canon in votes:
+        if canon is not None:
+            candidates.add(canon)
+
+    if not candidates:
+        return CanonPosterior(symbol=symbol, candidates={}, null_mass=1.0)
+
+    # Default prior: uniform over candidates, with explicit null mass
+    if prior is None:
+        prior = {c: (1.0 - null_prior) / len(candidates) for c in candidates}
+    # Include the null hypothesis as a candidate value for the
+    # log-likelihood sum (it's the "no canon" alternative).
+    if "__null__" not in prior:
+        # We treat the null mass separately rather than embedding "__null__"
+        # in the prior dict to keep the candidates set semantics clean.
+        pass
+
+    # Compute unnormalised posterior for each candidate canon
+    log_post: dict[str, float] = {}
+    from math import log
+    for c in candidates:
+        lp = log(max(prior.get(c, 1e-9), 1e-12))
+        for strat, voted_canon in votes:
+            rel = reliabilities.get(strat)
+            r = rel.mean if rel else 0.5
+            # Clamp to avoid log(0)
+            r = min(max(r, 1e-3), 1 - 1e-3)
+            if voted_canon == c:
+                lp += log(r)
+            elif voted_canon is None:
+                # Abstention: weakly negative for any positive canon
+                lp += log(1 - r) * 0.25  # discounted abstention penalty
+            else:
+                lp += log(1 - r)
+        log_post[c] = lp
+
+    # Null hypothesis: strategy "should have abstained" if c is null.
+    lp_null = log(max(null_prior, 1e-12))
+    for strat, voted_canon in votes:
+        rel = reliabilities.get(strat)
+        r = rel.mean if rel else 0.5
+        r = min(max(r, 1e-3), 1 - 1e-3)
+        if voted_canon is None:
+            lp_null += log(r)  # strategy correctly abstained
+        else:
+            lp_null += log(1 - r)  # strategy spuriously voted
+    log_post["__null__"] = lp_null
+
+    # Normalise via log-sum-exp
+    from math import exp
+    max_lp = max(log_post.values())
+    weights = {k: exp(v - max_lp) for k, v in log_post.items()}
+    z = sum(weights.values())
+    posterior = {k: v / z for k, v in weights.items()}
+    null_mass = posterior.pop("__null__", 0.0)
+    return CanonPosterior(symbol=symbol, candidates=posterior, null_mass=null_mass)
+
+
 def expected_batch_info_gain(
     reliabilities: dict[str, StrategyReliability],
     expected_observations_per_strategy: dict[str, int],
