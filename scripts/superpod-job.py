@@ -871,6 +871,69 @@ def _discovery_keep_single_word_term(
     return True
 
 
+def _load_collocation_prior(path):
+    """Load a CT-style term-frequency prior built by scripts/build_ct_prior.py.
+
+    Shape: {"n_docs": int, "unigram_df": {term: df}, "bigram_df": {"a b": df}}.
+    df = document frequency (papers containing term). Returns None if no path /
+    unreadable, so the collocation gate is a no-op unless a prior is supplied.
+    """
+    if not path:
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            prior = json.load(f)
+    except (OSError, ValueError):
+        return None
+    if not isinstance(prior, dict) or not prior.get("n_docs"):
+        return None
+    return prior
+
+
+def _collocation_incoherent(
+    term_lower,
+    prior,
+    *,
+    p_head_min=0.05,
+    p_tail_max=0.01,
+    bigram_min_df=3,
+):
+    """True if a multiword term carries the 'stable marriage' incoherence signature:
+    a common, well-understood head word immediately followed by an alien tail word
+    that the corpus never licenses as its collocate.
+
+    For each adjacent token pair (A, B) in the span:
+      - if bigram_df[A B] >= bigram_min_df: licensed collocation, fine.
+      - elif P(A) >= p_head_min and P(B) <= p_tail_max: common head + alien
+        unlicensed tail -> incoherent.
+    Conservative by construction (these are the anti-false-positive guarantees):
+      - a LOW-prior head (P(A) < p_head_min) never triggers a reject, so genuinely
+        novel terms like "lextensive completion" survive (head prior too low for the
+        corpus to know its completions).
+      - only fires when there is enough corpus evidence about the head to trust
+        that the tail is genuinely unlicensed.
+    Returns False (keep) when prior is None/empty or the term is single-token.
+    """
+    if not prior:
+        return False
+    n = prior.get("n_docs") or 0
+    if n <= 0:
+        return False
+    uni = prior.get("unigram_df", {})
+    bi = prior.get("bigram_df", {})
+    toks = term_lower.split()
+    if len(toks) < 2:
+        return False
+    for a, b in zip(toks, toks[1:]):
+        if bi.get(a + " " + b, 0) >= bigram_min_df:
+            continue
+        pa = uni.get(a, 0) / n
+        pb = uni.get(b, 0) / n
+        if pa >= p_head_min and pb <= p_tail_max:
+            return True
+    return False
+
+
 def _discovery_keep_multiword_term(
     term_lower,
     *,
@@ -878,6 +941,7 @@ def _discovery_keep_multiword_term(
     known_in_nlab_seed,
     known_in_nnexus_snapshot,
     nnexus_stopwords,
+    collocation_prior=None,
 ):
     if known_in_pm_seed or known_in_nlab_seed or known_in_nnexus_snapshot:
         return True
@@ -886,6 +950,13 @@ def _discovery_keep_multiword_term(
         return False
     stopword_count = sum(1 for token in tokens if token in nnexus_stopwords)
     if stopword_count > 1:
+        return False
+    # Collocation-coherence gate (no-op unless a prior is supplied). Only reached
+    # for terms NOT in any seed (seed-known returned True above), so this never
+    # judges established vocabulary. Rejects "stable marriage"-style imports:
+    # common head + alien unlicensed tail. Low-prior heads are never rejected, so
+    # novel CT terms survive.
+    if collocation_prior is not None and _collocation_incoherent(term_lower, collocation_prior):
         return False
     return True
 
@@ -1485,6 +1556,7 @@ def run_stage5_ner_scopes(
     stage5_loss_log_interval=500,
     audit_sample_size=30,
     learned_vocab_path=None,
+    discover_terms_collocation_prior=None,
 ):
     """Run Stage 5: NER term spotting + scope detection.
 
@@ -2070,8 +2142,15 @@ def run_stage5_ner_scopes(
         cands_path = outdir / "candidate-new-terms.jsonl"
         summary_path = outdir / "candidate-new-terms-summary.json"
         learned_dict_path = outdir / "learned-term-dictionary.jsonl"
+        collocation_prior = _load_collocation_prior(discover_terms_collocation_prior)
+        if discover_terms_collocation_prior and collocation_prior is None:
+            print(f"       WARNING: collocation prior {discover_terms_collocation_prior} "
+                  "unreadable/empty; collocation gate disabled")
+        elif collocation_prior is not None:
+            print(f"       Collocation gate ON (prior n_docs={collocation_prior.get('n_docs')})")
         rows = []
         filtered_out_terms = 0
+        collocation_rejected = 0
         prefilter_unique_terms = len(discovery_aggregates)
         for term, record in discovery_aggregates.items():
             occ = record["candidate_count"]
@@ -2100,7 +2179,16 @@ def run_stage5_ner_scopes(
                     known_in_nlab_seed=record["known_in_nlab_seed"],
                     known_in_nnexus_snapshot=record["known_in_nnexus_snapshot"],
                     nnexus_stopwords=nnexus_stopwords,
+                    collocation_prior=collocation_prior,
                 )
+                # Attribute collocation-specific rejections for run visibility.
+                # Only counts terms NOT seed-known (those bypass the gate above).
+                if (not keep and collocation_prior is not None
+                        and not (record["known_in_pm_seed"]
+                                 or record["known_in_nlab_seed"]
+                                 or record["known_in_nnexus_snapshot"])
+                        and _collocation_incoherent(term, collocation_prior)):
+                    collocation_rejected += 1
             else:
                 keep = _discovery_keep_single_word_term(
                     term,
@@ -2168,6 +2256,8 @@ def run_stage5_ner_scopes(
             "unique_unknown_terms": len(discovery_occ),
             "prefilter_unique_candidate_terms": prefilter_unique_terms,
             "filtered_out_terms": filtered_out_terms,
+            "collocation_gate_enabled": collocation_prior is not None,
+            "collocation_rejected_terms": collocation_rejected,
             "new_terms_learned": new_terms_learned,
             "seed_known_terms_missing_from_kernel": seed_known_terms,
             "rhs_supported_terms": rhs_supported_terms,
@@ -6289,6 +6379,11 @@ def main():
                         help="Enable open-world technical term discovery in Stage 5")
     parser.add_argument("--discover-terms-min-freq", type=int, default=3,
                         help="Min entity frequency for discovered terms (default: 3)")
+    parser.add_argument("--discover-terms-collocation-prior", default=None,
+                        help="Path to a CT-style term-frequency prior (build_ct_prior.py "
+                             "output) enabling the inline collocation-coherence gate that "
+                             "rejects incoherent multiword terms like 'stable marriage'. "
+                             "Default: None (gate off, no behaviour change).")
     parser.add_argument("--discover-terms-max", type=int, default=2000,
                         help="Max discovered terms to write (default: 2000)")
     parser.add_argument("--discover-terms-max-per-entity", type=int, default=64,
@@ -7200,6 +7295,7 @@ def main():
                 learned_vocab_path=(
                     Path(args.learned_vocab) if args.learned_vocab else None
                 ),
+                discover_terms_collocation_prior=args.discover_terms_collocation_prior,
             )
 
             print(f"       NER coverage: {stage5_stats['ner_coverage']:.0%} "

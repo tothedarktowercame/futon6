@@ -248,6 +248,84 @@ marriage" has ~0 prior → caught by over-detection; genuine rare CT terms
 classes — the separation codex-2 worried latex-emph could not provide, the base
 rate provides.
 
+## Inline collocation-coherence gate (designed 2026-05-31, claude-2 + codex-2)
+
+A SECOND use of the prior, distinct from step 2: run it **inline during the CT
+superpod NER pass** as a guardrail against runaway junk like "stable marriage
+problem" — no hand blocklist, and (critically) without rejecting genuinely novel
+CT terms. This sidesteps the staleness problem (the gate runs during the fresh
+run; it needs no posterior).
+
+**Why collocation, not frequency (measured against `ct-term-prior.json`):**
+"stable" alone is common and legitimate in CT (P=0.414); the junk is the *phrase*
+"stable marriage" (bigram df=0). "marriage" is alien (P=0.0023) and is NOT among
+"stable"'s 593 licensed completions, whereas `category` (df 728) and `homotopy`
+(df 833) are. So the discriminator is the **bigram**, not the unigram.
+
+**Retracted along the way (discipline):** (a) a scalar "hunger" metric
+`sum(right-bigram-df)/unigram-df` — broken: `functor` scored highest (10.72) yet
+is the most standalone term; it tracks frequency+grammar, not modifier-hunger.
+(b) claude-2's claim that a literal membership gate spares novel terms —
+**codex-2 falsified it**: `lextensive completion` has bigram df=0 AND `completion`
+is not in `lextensive`'s 6 licensed completions, so a raw "absent ⇒ reject" gate
+would kill the novel term. The gate MUST be conditional on head-prior.
+
+**The gate (three-way; verified on real numbers 2026-05-31):** for candidate
+bigram `A B`:
+- **PASS** if `bigram_df[A B] ≥ 3` (corpus-licensed collocation).
+- **ABSTAIN** (allow, defer to definition/source/posterior evidence) if
+  `P(A) < 0.05` — low-prior head ⇒ corpus can't reliably know its completions ⇒
+  **do not reject; this is the anti-novelty-kill switch.**
+- **REJECT/QUARANTINE** only if ALL: `bigram_df[A B] < 3` AND `P(A) ≥ 0.05`
+  (common head, completions well-known) AND `P(B) ≤ 0.01` (alien tail) AND no
+  strong local definitional context (`defined-as`/`called-as`/`definition-of`
+  should downgrade hard-reject to quarantine).
+
+Verified verdicts (computed against `ct-term-prior.json`, n_docs=9742):
+
+| candidate | verdict | evidence |
+|---|---|---|
+| `stable marriage` | REJECT/quarantine | head 0.414, tail 0.0023, bigram df 0 — the target |
+| `cartesian marriage` | REJECT/quarantine | head 0.395, tail 0.0023, df 0 |
+| `stable category` | PASS | bigram df 728 |
+| `stable homotopy` | PASS | bigram df 833 |
+| `abelian group` | PASS | bigram df 2105 |
+| `lextensive completion` | ABSTAIN | low-prior head 0.0114 → novelty survives |
+
+Threshold rationale (real numbers): `P(A)≥0.05` separates high-evidence CT heads
+(stable .414, cartesian .395, abelian .496, functor .874) from emerging heads
+(lextensive .0114, pretopos .0154); `P(B)≤0.01` catches alien tails (marriage
+.0023, shapley .0006, blocking .0021) without touching common CT tails (category
+.945, homotopy .527, completion .279).
+
+**Distributional "hungry modifier" signal — DIAGNOSTIC ONLY, not a gate
+(codex-2):** content-mass of the completion set distinguishes modifier-like
+stable/cartesian/abelian (top-12 ~10-11/12 content nouns) from standalone
+functor/morphism (~5/12; completions are `between`/`preserves`/`given`). But it
+is NOT clean enough to decide validity — `left` scores high content-mass (0.93)
+yet is a generic junk risk. Use it to flag candidates for extra scrutiny, never
+to accept/reject alone.
+
+**Status:** IMPLEMENTED, default-OFF (2026-05-31). `scripts/superpod-job.py`:
+`_load_collocation_prior` + `_collocation_incoherent` + `_discovery_keep_multiword_term`
+extended with optional `collocation_prior`, threaded through `run_stage5_ner_scopes`
+to CLI `--discover-terms-collocation-prior PATH`. Gate runs AFTER the seed-known
+bypass (never judges known vocab) and is a no-op unless the flag is passed —
+verified: argparse default None → prior None → inert, so Rob's runs are unchanged
+unless he opts in. Summary now reports `collocation_gate_enabled` +
+`collocation_rejected_terms`. Tests: `tests/test_collocation_gate.py` 8/8 incl.
+against the real 50MB prior.
+
+**To enable:** add `--discover-terms-collocation-prior data/ct-term-prior.json`
+to the Stage 5 invocation.
+
+**One unverified assumption (validate on a live run, do NOT trust blind):** the
+tests prove the GATE LOGIC, not that the upstream extractor hands it spans
+containing the `stable→marriage` adjacency. The candidate span is the normalized
+`\emph{}`-derived term (≤4 tokens, `term = " ".join(toks)` at superpod-job.py:676);
+whether real "stable marriage problem" extractions arrive as that adjacency must
+be confirmed against a run's `candidate-new-terms.jsonl` before the gate is trusted.
+
 ## Step 2 status: BLOCKED on a fresh NER run (Joe, 2026-05-31)
 
 Step 2 (load the mark2 `ner-terms/*.json` posterior, compute posterior-vs-prior
