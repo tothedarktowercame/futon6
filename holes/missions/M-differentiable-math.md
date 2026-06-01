@@ -130,6 +130,30 @@ as a cheap proxy; the full contract wants d from the continuous embedding — th
 natural next step is to recompute κ with BGE-distance as the ground metric and
 check the bottleneck ranking survives.
 
+## INCIDENT 2026-05-31 — BGE-grounded recompute OOM'd the box; BACKED OFF
+
+The next probe (BGE-distance as the ground metric, tag centroids from
+`embeddings.npy`) was attempted and **OOM'd the machine, pressuring the serving
+futon3c JVM into swap.** Root cause: the script `f.read()` the full 2.3G
+`entities.json` into RAM (regex over the whole file) + held an 805k qid→row dict
++ mmap'd the 3.1G array + q2tags, on a box already running a ~13Gi JVM. The
+runaway was killed; the JVM survived and recovered (HTTP 200 on :7070 after); the
+offending script was deleted unrun-from-git (never committed).
+
+**This violated the mission's OWN caveat #3 (slice, never load whole) and
+[[feedback_no_synchronous_heavy_drawbridge_calls]] (don't run heavy compute that
+can starve the shared serving JVM).** Decision (Joe): **back off** the BGE-grounded
+recompute on this machine.
+
+**If/when resumed, hard constraints:** (a) NEVER read entities.json whole — stream
+the qid→row map and discard as you go, or precompute it once to a small sidecar;
+(b) build tag centroids incrementally over mmap row-slices, never materialise the
+full 3.1G array; (c) run on a machine that is NOT hosting the futon3c JVM, or with
+a hard memory cap (ulimit/cgroup); (d) ideally hand this to the superpod, not the
+laptop. The hop-distance curvature result (committed, `192c120`) already
+demonstrates the bottleneck signal — the BGE-grounded version is a refinement, not
+a prerequisite, so there is no urgency that justifies risking the box.
+
 ## Relations
 
 - `futon5 M-differentiable-code` — the present-timeline sibling; we scout its future.
