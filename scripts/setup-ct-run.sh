@@ -3,8 +3,8 @@
 # setup-ct-run.sh — one-command setup + invocation for the math.CT NER/structure run.
 #
 # Fetches the consolidated handoff dir from linode-chicago in ONE rsync
-# (~/ct-handoff/ -> data/ + eprint bundle), verifies + extracts it, and runs the
-# GPU Stage-5/6 pipeline on the math.CT slice.
+# (/home/joe/ct-handoff/ -> data/ + eprint bundle), verifies + extracts it, and
+# runs the GPU Stage-5/6 pipeline on the math.CT slice.
 #
 # Verified against futon6 @ b9e149a (2026-05-31): every flag below exists in
 # scripts/superpod-job.py argparse; the three stale flags from the earlier
@@ -23,6 +23,9 @@ set -euo pipefail
 REPO="${REPO:-$HOME/code/futon6}"
 STORE="${STORE:-$HOME/code/storage/futon6/data}"
 REMOTE="${REMOTE:-linode-chicago}"
+# Absolute path on the linode (joe's home), world-readable; does NOT depend on
+# the ssh login user's home resolving anywhere in particular.
+REMOTE_HANDOFF_DIR="${REMOTE_HANDOFF_DIR:-/home/joe/ct-handoff}"
 HANDOFF="arxiv-math-ct-handoff-2026-02-20.7z"
 
 MODE="${1:-all}"
@@ -34,7 +37,7 @@ do_setup() {
   # Everything Rob needs lives in ONE dir on the linode: ~/ct-handoff/, laid out
   # as data/... (repo-mirrored) + bundle/ (the eprint+metadata 7z) + MANIFEST.txt.
   # One transfer, resumable (--partial), only copies what changed.
-  rsync -avh --partial "$REMOTE:ct-handoff/" "$STORE/handoff/"
+  rsync -avh --partial "$REMOTE:$REMOTE_HANDOFF_DIR/" "$STORE/handoff/"
 
   echo "== [2/4] place supplementary files into repo =="
   mkdir -p data/dictionary
