@@ -119,10 +119,15 @@ def add_seed(seed: dict[str, set[str]], term: str, source: str) -> None:
     seed[term].add(source)
 
 
-def extract_star_map_seeds(seed: dict[str, set[str]]) -> set[str]:
-    text = STAR_MAP.read_text(encoding="utf-8", errors="ignore")
+def extract_star_map_seeds(seed: dict[str, set[str]], text: str | None = None) -> set[str]:
+    if text is None:
+        text = STAR_MAP.read_text(encoding="utf-8", errors="ignore")
     cap_block = text.split(":capabilities", 1)[1].split(":missions", 1)[0]
-    capabilities = set(re.findall(r"(?m)^\s*:([a-z][a-z0-9-]+)\s*\{", cap_block))
+    # The FIRST capability key sits on the map's opening-brace line (" {:agency"),
+    # so anchoring on line-start (^\s*) drops :agency -> the false "7/7". Inner
+    # value-keys (:title, :status, ...) are followed by values, never "{", so
+    # matching ":key {" anywhere in the capabilities block has no false positives.
+    capabilities = set(re.findall(r":([a-z][a-z0-9-]+)\s*\{", cap_block))
     for cap in capabilities:
         add_seed(seed, cap, "star-map-capability")
     for edge_term in re.findall(r":type\s+:([a-z][a-z0-9-]+)", text):
@@ -180,10 +185,24 @@ def is_hard_drop(term: str) -> bool:
 
 
 def sip_score(df: int, n_docs: int, seed_vouched: bool, dict_word: bool = False) -> float:
+    """Distinctiveness-first SIP rank for the self-representing lexicon.
+
+    'Interesting' = a real NE that is CONCENTRATED, not ubiquitous. Distinctiveness
+    (1 - base-rate) is the multiplicative DRIVER, so ubiquitous scaffold (derive,
+    requires, invariant -- in ~half of all missions) sinks while distinctive concepts
+    (exotype, hypergraph, arxana) rise. log-salience keeps df=1 noise down without
+    letting df dominate; the seed vouch is a gentle tilt, NOT a flat bonus that would
+    re-invert the ranking (the prior +40 reclaim-bonus put scaffold on top). Kernel
+    MEMBERSHIP (reclamation) is separate: a reclaimed-but-ubiquitous NE like 'futon'
+    stays in the kernel yet ranks low here, which is correct.
+    """
+    if not df or not n_docs:
+        return 0.0
     p = df / n_docs
-    boilerplate_discount = 0.35 if p >= BOILERPLATE_P and seed_vouched and not dict_word else 1.0
-    reclaim_bonus = 40 if seed_vouched and dict_word else 0
-    return df * max(0.0, 1.0 - p) * boilerplate_discount + reclaim_bonus
+    distinctiveness = max(0.0, 1.0 - p)
+    salience = math.log1p(df)
+    vouch = 1.15 if seed_vouched else 1.0
+    return salience * distinctiveness * vouch
 
 
 def build_kernel(prior: dict, common: set[str], seed: dict[str, set[str]]) -> dict:
@@ -306,7 +325,7 @@ def main() -> None:
             "metadata": {
                 "kind": "self-representing",
                 "source": os.fspath(KERNEL_OUT),
-                "ranking": "SIP-style df * (1 - df/n_docs), with a small seeded-dictionary reclaim bonus and seeded boilerplate discounted not erased.",
+                "ranking": "distinctiveness-first SIP: log1p(df) * (1 - df/n_docs) * seed-vouch tilt. Ubiquitous scaffold sinks, distinctive concepts rise; reclamation (kernel membership) is separate from rank.",
             },
             "terms": self_rep,
         },

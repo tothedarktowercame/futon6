@@ -51,3 +51,30 @@ def test_kernel_reclaims_seeded_dictionary_terms_and_drops_generic_tech() -> Non
     assert "edn" not in terms
     assert "doesn" not in terms
     assert "ordinary" not in terms
+
+
+def test_star_map_parser_catches_first_key_on_brace_line() -> None:
+    # Regression: in the real graph.edn the FIRST capability key sits on the map's
+    # opening-brace line (" {:agency"); a ^\s* line-start anchor dropped it and
+    # mis-reported "7/7". The parser must catch keys regardless of line position.
+    text = (
+        ":capabilities\n"
+        " {:agency\n"
+        '  {:title "x", :status :satisfied, :scope []}\n'
+        "  :war-machine\n"
+        '  {:title "y", :status :held}}\n'
+        ":missions\n"
+    )
+    seed = defaultdict(set)
+    caps = mission_kernel.extract_star_map_seeds(seed, text=text)
+    assert "agency" in caps and "war-machine" in caps
+    assert "agency" in seed  # and it was seeded
+
+
+def test_sip_score_ranks_distinctive_above_ubiquitous() -> None:
+    # 'Interesting' = concentrated, not ubiquitous. A distinctive concept must
+    # outrank ubiquitous scaffold even when BOTH are seed-vouched.
+    nd = 267
+    distinctive = mission_kernel.sip_score(df=55, n_docs=nd, seed_vouched=True)   # ~hypergraph (p=.21)
+    scaffold = mission_kernel.sip_score(df=176, n_docs=nd, seed_vouched=True)     # ~map/complete (p=.66)
+    assert distinctive > scaffold
