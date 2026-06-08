@@ -1,0 +1,1831 @@
+{
+  "metadata": {
+    "kind": "self-representing",
+    "ranking": "SIP-style df * (1 - df/n_docs), with a small seeded-dictionary reclaim bonus and seeded boilerplate discounted not erased.",
+    "source": "/home/joe/code/futon6/data/mission-ner-kernel.json"
+  },
+  "terms": [
+    {
+      "df": 135,
+      "dict_word": true,
+      "p": 0.5056179775280899,
+      "score": 106.74157303370787,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "invariant"
+    },
+    {
+      "df": 130,
+      "dict_word": true,
+      "p": 0.4868913857677903,
+      "score": 106.70411985018725,
+      "seed_sources": [
+        "pudding-doc-8.2"
+      ],
+      "source_kind": "seed",
+      "term": "active"
+    },
+    {
+      "df": 130,
+      "dict_word": true,
+      "p": 0.4868913857677903,
+      "score": 106.70411985018725,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "prior"
+    },
+    {
+      "df": 128,
+      "dict_word": true,
+      "p": 0.4794007490636704,
+      "score": 106.63670411985018,
+      "seed_sources": [
+        "eightfold-phase"
+      ],
+      "source_kind": "seed",
+      "term": "derive"
+    },
+    {
+      "df": 142,
+      "dict_word": true,
+      "p": 0.5318352059925093,
+      "score": 106.47940074906367,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "agents"
+    },
+    {
+      "df": 124,
+      "dict_word": true,
+      "p": 0.46441947565543074,
+      "score": 106.41198501872658,
+      "seed_sources": [
+        "star-map-edge-type"
+      ],
+      "source_kind": "seed",
+      "term": "requires"
+    },
+    {
+      "df": 148,
+      "dict_word": true,
+      "p": 0.5543071161048689,
+      "score": 105.9625468164794,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "proof"
+    },
+    {
+      "df": 149,
+      "dict_word": true,
+      "p": 0.5580524344569289,
+      "score": 105.8501872659176,
+      "seed_sources": [
+        "star-map-edge-type"
+      ],
+      "source_kind": "seed",
+      "term": "produces"
+    },
+    {
+      "df": 151,
+      "dict_word": true,
+      "p": 0.5655430711610487,
+      "score": 105.60299625468164,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "phase"
+    },
+    {
+      "df": 114,
+      "dict_word": true,
+      "p": 0.42696629213483145,
+      "score": 105.32584269662922,
+      "seed_sources": [
+        "pudding-doc-8.2"
+      ],
+      "source_kind": "seed",
+      "term": "agency"
+    },
+    {
+      "df": 157,
+      "dict_word": true,
+      "p": 0.5880149812734082,
+      "score": 104.68164794007491,
+      "seed_sources": [
+        "eightfold-phase"
+      ],
+      "source_kind": "seed",
+      "term": "identify"
+    },
+    {
+      "df": 108,
+      "dict_word": true,
+      "p": 0.4044943820224719,
+      "score": 104.31460674157303,
+      "seed_sources": [
+        "eightfold-phase"
+      ],
+      "source_kind": "seed",
+      "term": "argue"
+    },
+    {
+      "df": 163,
+      "dict_word": true,
+      "p": 0.6104868913857678,
+      "score": 103.49063670411985,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "missions"
+    },
+    {
+      "df": 104,
+      "dict_word": true,
+      "p": 0.3895131086142322,
+      "score": 103.49063670411985,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "argument"
+    },
+    {
+      "df": 164,
+      "dict_word": true,
+      "p": 0.6142322097378277,
+      "score": 103.26591760299627,
+      "seed_sources": [
+        "eightfold-phase"
+      ],
+      "source_kind": "seed",
+      "term": "verify"
+    },
+    {
+      "df": 97,
+      "dict_word": true,
+      "p": 0.36329588014981273,
+      "score": 101.76029962546816,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "value"
+    },
+    {
+      "df": 95,
+      "dict_word": true,
+      "p": 0.35580524344569286,
+      "score": 101.19850187265918,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "support"
+    },
+    {
+      "df": 176,
+      "dict_word": true,
+      "p": 0.6591760299625468,
+      "score": 99.98501872659176,
+      "seed_sources": [
+        "pudding-doc-8.2"
+      ],
+      "source_kind": "seed",
+      "term": "complete"
+    },
+    {
+      "df": 176,
+      "dict_word": true,
+      "p": 0.6591760299625468,
+      "score": 99.98501872659176,
+      "seed_sources": [
+        "eightfold-phase"
+      ],
+      "source_kind": "seed",
+      "term": "map"
+    },
+    {
+      "df": 89,
+      "dict_word": true,
+      "p": 0.3333333333333333,
+      "score": 99.33333333333334,
+      "seed_sources": [
+        "mission-lifecycle",
+        "pudding-doc-8.2"
+      ],
+      "source_kind": "seed",
+      "term": "capability"
+    },
+    {
+      "df": 185,
+      "dict_word": true,
+      "p": 0.6928838951310862,
+      "score": 96.81647940074906,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "patterns"
+    },
+    {
+      "df": 80,
+      "dict_word": true,
+      "p": 0.299625468164794,
+      "score": 96.02996254681648,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "rationale"
+    },
+    {
+      "df": 79,
+      "dict_word": true,
+      "p": 0.2958801498127341,
+      "score": 95.625468164794,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "persistence"
+    },
+    {
+      "df": 77,
+      "dict_word": true,
+      "p": 0.2883895131086142,
+      "score": 94.7940074906367,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "truth"
+    },
+    {
+      "df": 191,
+      "dict_word": true,
+      "p": 0.7153558052434457,
+      "score": 94.36704119850188,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "state"
+    },
+    {
+      "df": 72,
+      "dict_word": true,
+      "p": 0.2696629213483146,
+      "score": 92.58426966292134,
+      "seed_sources": [
+        "eightfold-phase"
+      ],
+      "source_kind": "seed",
+      "term": "observe"
+    },
+    {
+      "df": 202,
+      "dict_word": true,
+      "p": 0.7565543071161048,
+      "score": 89.17602996254683,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "agent"
+    },
+    {
+      "df": 65,
+      "dict_word": true,
+      "p": 0.24344569288389514,
+      "score": 89.1760299625468,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "phases"
+    },
+    {
+      "df": 60,
+      "dict_word": true,
+      "p": 0.2247191011235955,
+      "score": 86.51685393258427,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "sorry"
+    },
+    {
+      "df": 58,
+      "dict_word": true,
+      "p": 0.21722846441947566,
+      "score": 85.40074906367042,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "par"
+    },
+    {
+      "df": 51,
+      "dict_word": true,
+      "p": 0.19101123595505617,
+      "score": 81.25842696629213,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "template"
+    },
+    {
+      "df": 49,
+      "dict_word": true,
+      "p": 0.18352059925093633,
+      "score": 80.00749063670412,
+      "seed_sources": [
+        "pudding-doc-8.2",
+        "pudding-status"
+      ],
+      "source_kind": "seed",
+      "term": "held"
+    },
+    {
+      "df": 219,
+      "dict_word": true,
+      "p": 0.8202247191011236,
+      "score": 79.37078651685394,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "evidence"
+    },
+    {
+      "df": 47,
+      "dict_word": true,
+      "p": 0.1760299625468165,
+      "score": 78.72659176029963,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "capabilities"
+    },
+    {
+      "df": 224,
+      "dict_word": true,
+      "p": 0.8389513108614233,
+      "score": 76.0749063670412,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "scope"
+    },
+    {
+      "df": 42,
+      "dict_word": true,
+      "p": 0.15730337078651685,
+      "score": 75.3932584269663,
+      "seed_sources": [
+        "pudding-doc-8.2",
+        "pudding-status"
+      ],
+      "source_kind": "seed",
+      "term": "satisfied"
+    },
+    {
+      "df": 42,
+      "dict_word": true,
+      "p": 0.15730337078651685,
+      "score": 75.3932584269663,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "wrapper"
+    },
+    {
+      "df": 228,
+      "dict_word": true,
+      "p": 0.8539325842696629,
+      "score": 73.30337078651687,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "futon"
+    },
+    {
+      "df": 228,
+      "dict_word": true,
+      "p": 0.8539325842696629,
+      "score": 73.30337078651687,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "pattern"
+    },
+    {
+      "df": 32,
+      "dict_word": true,
+      "p": 0.1198501872659176,
+      "score": 68.16479400749064,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "diagnostics"
+    },
+    {
+      "df": 31,
+      "dict_word": true,
+      "p": 0.11610486891385768,
+      "score": 67.40074906367042,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "training"
+    },
+    {
+      "df": 137,
+      "dict_word": false,
+      "p": 0.5131086142322098,
+      "score": 66.70411985018727,
+      "seed_sources": [
+        "flexiarg-basename",
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "invariants"
+    },
+    {
+      "df": 123,
+      "dict_word": false,
+      "p": 0.4606741573033708,
+      "score": 66.33707865168539,
+      "seed_sources": [
+        "eightfold-phase"
+      ],
+      "source_kind": "seed",
+      "term": "instantiate"
+    },
+    {
+      "df": 120,
+      "dict_word": false,
+      "p": 0.449438202247191,
+      "score": 66.06741573033707,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "lifecycle"
+    },
+    {
+      "df": 105,
+      "dict_word": false,
+      "p": 0.39325842696629215,
+      "score": 63.70786516853932,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "pre"
+    },
+    {
+      "df": 26,
+      "dict_word": true,
+      "p": 0.09737827715355805,
+      "score": 63.46816479400749,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "kernel"
+    },
+    {
+      "df": 24,
+      "dict_word": true,
+      "p": 0.0898876404494382,
+      "score": 61.842696629213485,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "heartbeat"
+    },
+    {
+      "df": 96,
+      "dict_word": false,
+      "p": 0.3595505617977528,
+      "score": 61.48314606741573,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "aif"
+    },
+    {
+      "df": 23,
+      "dict_word": true,
+      "p": 0.08614232209737828,
+      "score": 61.0187265917603,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "legacy"
+    },
+    {
+      "df": 23,
+      "dict_word": true,
+      "p": 0.08614232209737828,
+      "score": 61.0187265917603,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "roles"
+    },
+    {
+      "df": 21,
+      "dict_word": true,
+      "p": 0.07865168539325842,
+      "score": 59.348314606741575,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "isolation"
+    },
+    {
+      "df": 89,
+      "dict_word": false,
+      "p": 0.3333333333333333,
+      "score": 59.33333333333334,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "endpoint"
+    },
+    {
+      "df": 87,
+      "dict_word": false,
+      "p": 0.3258426966292135,
+      "score": 58.651685393258425,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "queryable"
+    },
+    {
+      "df": 86,
+      "dict_word": false,
+      "p": 0.32209737827715357,
+      "score": 58.29962546816479,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "psr"
+    },
+    {
+      "df": 85,
+      "dict_word": false,
+      "p": 0.31835205992509363,
+      "score": 57.940074906367045,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "handoff"
+    },
+    {
+      "df": 85,
+      "dict_word": false,
+      "p": 0.31835205992509363,
+      "score": 57.940074906367045,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "pur"
+    },
+    {
+      "df": 81,
+      "dict_word": false,
+      "p": 0.30337078651685395,
+      "score": 56.42696629213483,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "arxana"
+    },
+    {
+      "df": 78,
+      "dict_word": false,
+      "p": 0.29213483146067415,
+      "score": 55.21348314606741,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "runtime"
+    },
+    {
+      "df": 76,
+      "dict_word": false,
+      "p": 0.2846441947565543,
+      "score": 54.36704119850187,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "backend"
+    },
+    {
+      "df": 73,
+      "dict_word": false,
+      "p": 0.27340823970037453,
+      "score": 53.04119850187266,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "metadata"
+    },
+    {
+      "df": 73,
+      "dict_word": false,
+      "p": 0.27340823970037453,
+      "score": 53.04119850187266,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "namespace"
+    },
+    {
+      "df": 73,
+      "dict_word": false,
+      "p": 0.27340823970037453,
+      "score": 53.04119850187266,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "refactor"
+    },
+    {
+      "df": 73,
+      "dict_word": false,
+      "p": 0.27340823970037453,
+      "score": 53.04119850187266,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "xtdb"
+    },
+    {
+      "df": 13,
+      "dict_word": true,
+      "p": 0.04868913857677903,
+      "score": 52.36704119850187,
+      "seed_sources": [
+        "star-map-edge-type"
+      ],
+      "source_kind": "seed",
+      "term": "couples"
+    },
+    {
+      "df": 70,
+      "dict_word": false,
+      "p": 0.26217228464419473,
+      "score": 51.647940074906366,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "flexiarg"
+    },
+    {
+      "df": 12,
+      "dict_word": true,
+      "p": 0.0449438202247191,
+      "score": 51.46067415730337,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "phenotype"
+    },
+    {
+      "df": 11,
+      "dict_word": true,
+      "p": 0.04119850187265917,
+      "score": 50.546816479400746,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "agenda"
+    },
+    {
+      "df": 11,
+      "dict_word": true,
+      "p": 0.04119850187265917,
+      "score": 50.546816479400746,
+      "seed_sources": [
+        "pudding-kind"
+      ],
+      "source_kind": "seed",
+      "term": "kit"
+    },
+    {
+      "df": 67,
+      "dict_word": false,
+      "p": 0.250936329588015,
+      "score": 50.187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "endpoints"
+    },
+    {
+      "df": 257,
+      "dict_word": true,
+      "p": 0.9625468164794008,
+      "score": 49.625468164794,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "mission"
+    },
+    {
+      "df": 9,
+      "dict_word": true,
+      "p": 0.033707865168539325,
+      "score": 48.69662921348315,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "admissibility"
+    },
+    {
+      "df": 8,
+      "dict_word": true,
+      "p": 0.0299625468164794,
+      "score": 47.760299625468164,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "umbrella"
+    },
+    {
+      "df": 259,
+      "dict_word": true,
+      "p": 0.9700374531835206,
+      "score": 47.76029962546816,
+      "seed_sources": [
+        "pudding-doc-8.2"
+      ],
+      "source_kind": "seed",
+      "term": "status"
+    },
+    {
+      "df": 60,
+      "dict_word": false,
+      "p": 0.2247191011235955,
+      "score": 46.51685393258427,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "exotype"
+    },
+    {
+      "df": 58,
+      "dict_word": false,
+      "p": 0.21722846441947566,
+      "score": 45.40074906367041,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "codebase"
+    },
+    {
+      "df": 5,
+      "dict_word": true,
+      "p": 0.018726591760299626,
+      "score": 44.9063670411985,
+      "seed_sources": [
+        "pudding-doc-8.2"
+      ],
+      "source_kind": "seed",
+      "term": "mint"
+    },
+    {
+      "df": 4,
+      "dict_word": true,
+      "p": 0.0149812734082397,
+      "score": 43.940074906367045,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "moderation"
+    },
+    {
+      "df": 55,
+      "dict_word": false,
+      "p": 0.20599250936329588,
+      "score": 43.670411985018724,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "deliverable"
+    },
+    {
+      "df": 55,
+      "dict_word": false,
+      "p": 0.20599250936329588,
+      "score": 43.670411985018724,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "hypergraph"
+    },
+    {
+      "df": 54,
+      "dict_word": false,
+      "p": 0.20224719101123595,
+      "score": 43.078651685393254,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "standalone"
+    },
+    {
+      "df": 3,
+      "dict_word": true,
+      "p": 0.011235955056179775,
+      "score": 42.96629213483146,
+      "seed_sources": [
+        "eightfold-phase"
+      ],
+      "source_kind": "seed",
+      "term": "dissolve"
+    },
+    {
+      "df": 3,
+      "dict_word": true,
+      "p": 0.011235955056179775,
+      "score": 42.96629213483146,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "supplement"
+    },
+    {
+      "df": 2,
+      "dict_word": true,
+      "p": 0.00749063670411985,
+      "score": 41.98501872659176,
+      "seed_sources": [
+        "pudding-doc-8.2"
+      ],
+      "source_kind": "seed",
+      "term": "globe"
+    },
+    {
+      "df": 2,
+      "dict_word": true,
+      "p": 0.00749063670411985,
+      "score": 41.98501872659176,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "newcomer"
+    },
+    {
+      "df": 51,
+      "dict_word": false,
+      "p": 0.19101123595505617,
+      "score": 41.258426966292134,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "fallback"
+    },
+    {
+      "df": 1,
+      "dict_word": true,
+      "p": 0.003745318352059925,
+      "score": 40.99625468164794,
+      "seed_sources": [
+        "pudding-doc-8.2"
+      ],
+      "source_kind": "seed",
+      "term": "certify"
+    },
+    {
+      "df": 1,
+      "dict_word": true,
+      "p": 0.003745318352059925,
+      "score": 40.99625468164794,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "discernment"
+    },
+    {
+      "df": 1,
+      "dict_word": true,
+      "p": 0.003745318352059925,
+      "score": 40.99625468164794,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "generosity"
+    },
+    {
+      "df": 1,
+      "dict_word": true,
+      "p": 0.003745318352059925,
+      "score": 40.99625468164794,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "lexicon"
+    },
+    {
+      "df": 48,
+      "dict_word": false,
+      "p": 0.1797752808988764,
+      "score": 39.37078651685393,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "hyperedges"
+    },
+    {
+      "df": 47,
+      "dict_word": false,
+      "p": 0.1760299625468165,
+      "score": 38.72659176029963,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "futonic"
+    },
+    {
+      "df": 47,
+      "dict_word": false,
+      "p": 0.1760299625468165,
+      "score": 38.72659176029963,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "llm"
+    },
+    {
+      "df": 46,
+      "dict_word": false,
+      "p": 0.17228464419475656,
+      "score": 38.0749063670412,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "dag"
+    },
+    {
+      "df": 43,
+      "dict_word": false,
+      "p": 0.16104868913857678,
+      "score": 36.0749063670412,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "tbd"
+    },
+    {
+      "df": 42,
+      "dict_word": false,
+      "p": 0.15730337078651685,
+      "score": 35.3932584269663,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "blocker"
+    },
+    {
+      "df": 42,
+      "dict_word": false,
+      "p": 0.15730337078651685,
+      "score": 35.3932584269663,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "checkable"
+    },
+    {
+      "df": 41,
+      "dict_word": false,
+      "p": 0.15355805243445692,
+      "score": 34.70411985018727,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "behaviour"
+    },
+    {
+      "df": 40,
+      "dict_word": false,
+      "p": 0.149812734082397,
+      "score": 34.00749063670412,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "compositional"
+    },
+    {
+      "df": 40,
+      "dict_word": false,
+      "p": 0.149812734082397,
+      "score": 34.00749063670412,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "hyperedge"
+    },
+    {
+      "df": 40,
+      "dict_word": false,
+      "p": 0.149812734082397,
+      "score": 34.00749063670412,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "musn"
+    },
+    {
+      "df": 39,
+      "dict_word": false,
+      "p": 0.14606741573033707,
+      "score": 33.30337078651685,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "auditable"
+    },
+    {
+      "df": 39,
+      "dict_word": false,
+      "p": 0.14606741573033707,
+      "score": 33.30337078651685,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "deliverables"
+    },
+    {
+      "df": 39,
+      "dict_word": false,
+      "p": 0.14606741573033707,
+      "score": 33.30337078651685,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "deps"
+    },
+    {
+      "df": 38,
+      "dict_word": false,
+      "p": 0.14232209737827714,
+      "score": 32.59176029962547,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "arxiv"
+    },
+    {
+      "df": 38,
+      "dict_word": false,
+      "p": 0.14232209737827714,
+      "score": 32.59176029962547,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "embeddings"
+    },
+    {
+      "df": 38,
+      "dict_word": false,
+      "p": 0.14232209737827714,
+      "score": 32.59176029962547,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "eval"
+    },
+    {
+      "df": 38,
+      "dict_word": false,
+      "p": 0.14232209737827714,
+      "score": 32.59176029962547,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "inspectable"
+    },
+    {
+      "df": 38,
+      "dict_word": false,
+      "p": 0.14232209737827714,
+      "score": 32.59176029962547,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "mana"
+    },
+    {
+      "df": 37,
+      "dict_word": false,
+      "p": 0.13857677902621723,
+      "score": 31.872659176029963,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "inhabitation"
+    },
+    {
+      "df": 37,
+      "dict_word": false,
+      "p": 0.13857677902621723,
+      "score": 31.872659176029963,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "malli"
+    },
+    {
+      "df": 37,
+      "dict_word": false,
+      "p": 0.13857677902621723,
+      "score": 31.872659176029963,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "src"
+    },
+    {
+      "df": 36,
+      "dict_word": false,
+      "p": 0.1348314606741573,
+      "score": 31.146067415730336,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "devmap"
+    },
+    {
+      "df": 36,
+      "dict_word": false,
+      "p": 0.1348314606741573,
+      "score": 31.146067415730336,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "liveness"
+    },
+    {
+      "df": 36,
+      "dict_word": false,
+      "p": 0.1348314606741573,
+      "score": 31.146067415730336,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "traceability"
+    },
+    {
+      "df": 35,
+      "dict_word": false,
+      "p": 0.13108614232209737,
+      "score": 30.411985018726593,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "hardcoded"
+    },
+    {
+      "df": 35,
+      "dict_word": false,
+      "p": 0.13108614232209737,
+      "score": 30.411985018726593,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "websocket"
+    },
+    {
+      "df": 34,
+      "dict_word": false,
+      "p": 0.12734082397003746,
+      "score": 29.670411985018728,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "filesystem"
+    },
+    {
+      "df": 34,
+      "dict_word": false,
+      "p": 0.12734082397003746,
+      "score": 29.670411985018728,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "superpod"
+    },
+    {
+      "df": 34,
+      "dict_word": false,
+      "p": 0.12734082397003746,
+      "score": 29.670411985018728,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "xenotype"
+    },
+    {
+      "df": 33,
+      "dict_word": false,
+      "p": 0.12359550561797752,
+      "score": 28.921348314606742,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "purs"
+    },
+    {
+      "df": 33,
+      "dict_word": false,
+      "p": 0.12359550561797752,
+      "score": 28.921348314606742,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "regex"
+    },
+    {
+      "df": 32,
+      "dict_word": false,
+      "p": 0.1198501872659176,
+      "score": 28.164794007490638,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "efe"
+    },
+    {
+      "df": 32,
+      "dict_word": false,
+      "p": 0.1198501872659176,
+      "score": 28.164794007490638,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "vsatarcs"
+    },
+    {
+      "df": 31,
+      "dict_word": false,
+      "p": 0.11610486891385768,
+      "score": 27.40074906367041,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "namespaces"
+    },
+    {
+      "df": 31,
+      "dict_word": false,
+      "p": 0.11610486891385768,
+      "score": 27.40074906367041,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "reframe"
+    },
+    {
+      "df": 29,
+      "dict_word": false,
+      "p": 0.10861423220973783,
+      "score": 25.8501872659176,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "readme"
+    },
+    {
+      "df": 29,
+      "dict_word": false,
+      "p": 0.10861423220973783,
+      "score": 25.8501872659176,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "renderer"
+    },
+    {
+      "df": 29,
+      "dict_word": false,
+      "p": 0.10861423220973783,
+      "score": 25.8501872659176,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "timeout"
+    },
+    {
+      "df": 29,
+      "dict_word": false,
+      "p": 0.10861423220973783,
+      "score": 25.8501872659176,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "ukrn"
+    },
+    {
+      "df": 28,
+      "dict_word": false,
+      "p": 0.10486891385767791,
+      "score": 25.06367041198502,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "foundational"
+    },
+    {
+      "df": 28,
+      "dict_word": false,
+      "p": 0.10486891385767791,
+      "score": 25.06367041198502,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "psrs"
+    },
+    {
+      "df": 27,
+      "dict_word": false,
+      "p": 0.10112359550561797,
+      "score": 24.269662921348313,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "auth"
+    },
+    {
+      "df": 27,
+      "dict_word": false,
+      "p": 0.10112359550561797,
+      "score": 24.269662921348313,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "computable"
+    },
+    {
+      "df": 27,
+      "dict_word": false,
+      "p": 0.10112359550561797,
+      "score": 24.269662921348313,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "generalisation"
+    },
+    {
+      "df": 27,
+      "dict_word": false,
+      "p": 0.10112359550561797,
+      "score": 24.269662921348313,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "lossy"
+    },
+    {
+      "df": 27,
+      "dict_word": false,
+      "p": 0.10112359550561797,
+      "score": 24.269662921348313,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "realtime"
+    },
+    {
+      "df": 26,
+      "dict_word": false,
+      "p": 0.09737827715355805,
+      "score": 23.46816479400749,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "devmaps"
+    },
+    {
+      "df": 26,
+      "dict_word": false,
+      "p": 0.09737827715355805,
+      "score": 23.46816479400749,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "fulab"
+    },
+    {
+      "df": 26,
+      "dict_word": false,
+      "p": 0.09737827715355805,
+      "score": 23.46816479400749,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "generalises"
+    },
+    {
+      "df": 26,
+      "dict_word": false,
+      "p": 0.09737827715355805,
+      "score": 23.46816479400749,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "instantiation"
+    },
+    {
+      "df": 26,
+      "dict_word": false,
+      "p": 0.09737827715355805,
+      "score": 23.46816479400749,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "sorries"
+    },
+    {
+      "df": 25,
+      "dict_word": false,
+      "p": 0.09363295880149813,
+      "score": 22.659176029962545,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "corneli"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "backends"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "blockers"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "enum"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "exogeneity"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "fuclaude"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "hyperreal"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "runnable"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "sigil"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "vsat"
+    },
+    {
+      "df": 24,
+      "dict_word": false,
+      "p": 0.0898876404494382,
+      "score": 21.842696629213485,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "webarxana"
+    },
+    {
+      "df": 23,
+      "dict_word": false,
+      "p": 0.08614232209737828,
+      "score": 21.0187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "alfworld"
+    },
+    {
+      "df": 23,
+      "dict_word": false,
+      "p": 0.08614232209737828,
+      "score": 21.0187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "async"
+    },
+    {
+      "df": 23,
+      "dict_word": false,
+      "p": 0.08614232209737828,
+      "score": 21.0187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "cron"
+    },
+    {
+      "df": 23,
+      "dict_word": false,
+      "p": 0.08614232209737828,
+      "score": 21.0187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "fucodex"
+    },
+    {
+      "df": 23,
+      "dict_word": false,
+      "p": 0.08614232209737828,
+      "score": 21.0187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "planetmath"
+    },
+    {
+      "df": 23,
+      "dict_word": false,
+      "p": 0.08614232209737828,
+      "score": 21.0187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "traversal"
+    },
+    {
+      "df": 22,
+      "dict_word": false,
+      "p": 0.08239700374531835,
+      "score": 20.187265917602996,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "eoi"
+    },
+    {
+      "df": 22,
+      "dict_word": false,
+      "p": 0.08239700374531835,
+      "score": 20.187265917602996,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "epistemic"
+    },
+    {
+      "df": 22,
+      "dict_word": false,
+      "p": 0.08239700374531835,
+      "score": 20.187265917602996,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "evidenceentry"
+    },
+    {
+      "df": 22,
+      "dict_word": false,
+      "p": 0.08239700374531835,
+      "score": 20.187265917602996,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "friston"
+    },
+    {
+      "df": 22,
+      "dict_word": false,
+      "p": 0.08239700374531835,
+      "score": 20.187265917602996,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "greenfield"
+    },
+    {
+      "df": 22,
+      "dict_word": false,
+      "p": 0.08239700374531835,
+      "score": 20.187265917602996,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "socialerror"
+    },
+    {
+      "df": 22,
+      "dict_word": false,
+      "p": 0.08239700374531835,
+      "score": 20.187265917602996,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "sorrys"
+    },
+    {
+      "df": 21,
+      "dict_word": false,
+      "p": 0.07865168539325842,
+      "score": 19.348314606741575,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "bge"
+    },
+    {
+      "df": 21,
+      "dict_word": false,
+      "p": 0.07865168539325842,
+      "score": 19.348314606741575,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "docbook"
+    },
+    {
+      "df": 21,
+      "dict_word": false,
+      "p": 0.07865168539325842,
+      "score": 19.348314606741575,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "handoffs"
+    },
+    {
+      "df": 21,
+      "dict_word": false,
+      "p": 0.07865168539325842,
+      "score": 19.348314606741575,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "init"
+    },
+    {
+      "df": 21,
+      "dict_word": false,
+      "p": 0.07865168539325842,
+      "score": 19.348314606741575,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "morphogenesis"
+    },
+    {
+      "df": 21,
+      "dict_word": false,
+      "p": 0.07865168539325842,
+      "score": 19.348314606741575,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "schemas"
+    },
+    {
+      "df": 20,
+      "dict_word": false,
+      "p": 0.0749063670411985,
+      "score": 18.50187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "babashka"
+    },
+    {
+      "df": 20,
+      "dict_word": false,
+      "p": 0.0749063670411985,
+      "score": 18.50187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "env"
+    },
+    {
+      "df": 20,
+      "dict_word": false,
+      "p": 0.0749063670411985,
+      "score": 18.50187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "phenomenology"
+    },
+    {
+      "df": 20,
+      "dict_word": false,
+      "p": 0.0749063670411985,
+      "score": 18.50187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "refactored"
+    },
+    {
+      "df": 20,
+      "dict_word": false,
+      "p": 0.0749063670411985,
+      "score": 18.50187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "talkie"
+    },
+    {
+      "df": 20,
+      "dict_word": false,
+      "p": 0.0749063670411985,
+      "score": 18.50187265917603,
+      "seed_sources": [],
+      "source_kind": "prior-high-df",
+      "term": "walkie"
+    },
+    {
+      "df": 17,
+      "dict_word": false,
+      "p": 0.06367041198501873,
+      "score": 15.917602996254681,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "roadmap"
+    },
+    {
+      "df": 14,
+      "dict_word": false,
+      "p": 0.052434456928838954,
+      "score": 13.265917602996254,
+      "seed_sources": [
+        "mission-lifecycle"
+      ],
+      "source_kind": "seed",
+      "term": "genotype"
+    },
+    {
+      "df": 10,
+      "dict_word": false,
+      "p": 0.03745318352059925,
+      "score": 9.625468164794007,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "strawman"
+    },
+    {
+      "df": 3,
+      "dict_word": false,
+      "p": 0.011235955056179775,
+      "score": 2.966292134831461,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "stasis"
+    },
+    {
+      "df": 2,
+      "dict_word": false,
+      "p": 0.00749063670411985,
+      "score": 1.9850187265917603,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "advanceability"
+    },
+    {
+      "df": 2,
+      "dict_word": false,
+      "p": 0.00749063670411985,
+      "score": 1.9850187265917603,
+      "seed_sources": [
+        "star-map-edge-type"
+      ],
+      "source_kind": "seed",
+      "term": "specialises"
+    },
+    {
+      "df": 2,
+      "dict_word": false,
+      "p": 0.00749063670411985,
+      "score": 1.9850187265917603,
+      "seed_sources": [
+        "flexiarg-basename"
+      ],
+      "source_kind": "seed",
+      "term": "wyrd"
+    }
+  ]
+}
