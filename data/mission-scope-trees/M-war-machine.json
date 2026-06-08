@@ -1,0 +1,3528 @@
+{
+  "mission": "M-war-machine",
+  "path": "/home/joe/code/futon3c/holes/missions/M-war-machine.md",
+  "scope-count-by-binder-type": {
+    "capability-scope": 13,
+    "eightfold-phase": 3,
+    "loose-section": 3,
+    "map-item": 6,
+    "mission-scope-in": 1,
+    "mission-scope-out": 1,
+    "relates-to": 4,
+    "source-material": 1
+  },
+  "scope-hyperedges": [
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Mission: War Machine",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 1,
+          "role": "heading",
+          "title": "Mission: War Machine"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "umbrella"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/content": {
+        "end": 465,
+        "match": "Mission: War Machine",
+        "position": 0
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Mission: War Machine",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 1,
+          "role": "heading",
+          "title": "Mission: War Machine"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "umbrella"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-000",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": null,
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": null,
+      "scope-id": "M-war-machine:scope-000"
+    },
+    {
+      "binder-type": "eightfold-phase",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "IDENTIFY",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "IDENTIFY"
+        }
+      ],
+      "hx/content": {
+        "end": 481,
+        "match": "IDENTIFY",
+        "position": 465
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "IDENTIFY",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "IDENTIFY"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-001",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "eightfold-phase",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/eightfold-phase",
+      "parent": "M-war-machine:scope-000",
+      "scope-id": "M-war-machine:scope-001"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Motivation",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "self-representing-stack",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "capability",
+          "role": "capability",
+          "source": "kernel"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "liveness"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "active"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        }
+      ],
+      "hx/content": {
+        "end": 3303,
+        "match": "Motivation",
+        "position": 481
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Motivation",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "self-representing-stack",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "capability",
+          "role": "capability",
+          "source": "kernel"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "liveness"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "active"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-002",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-002"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "What the War Machine produces",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "active"
+        }
+      ],
+      "hx/content": {
+        "end": 4286,
+        "match": "What the War Machine produces",
+        "position": 3303
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "What the War Machine produces",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "active"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-003",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-003"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Theoretical anchoring",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "observe"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        }
+      ],
+      "hx/content": {
+        "end": 4945,
+        "match": "Theoretical anchoring",
+        "position": 4286
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Theoretical anchoring",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "observe"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-004",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-004"
+    },
+    {
+      "binder-type": "mission-scope-in",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Scope in",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Read evidence store for loop health signals"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Read mission inventory for triage signals"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Read sorry topology for closure trajectory signals"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Read joe-hud signals (commit ratios, evidence topics, firing ticks)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Synthesize into war room status (markdown or HUD panel)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Accessible via `M-x war-machine` or `arxana://view/war-room`"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/content": {
+        "end": 5294,
+        "match": "Scope in",
+        "position": 4945
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Scope in",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Read evidence store for loop health signals"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Read mission inventory for triage signals"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Read sorry topology for closure trajectory signals"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Read joe-hud signals (commit ratios, evidence topics, firing ticks)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Synthesize into war room status (markdown or HUD panel)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Accessible via `M-x war-machine` or `arxana://view/war-room`"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-005",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "mission-scope-in",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/mission-scope-in",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-005"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Scope in",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/content": {
+        "end": 5294,
+        "match": "Scope in",
+        "position": 4945
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Scope in",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-006",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-006"
+    },
+    {
+      "binder-type": "mission-scope-out",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Scope out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Autonomous WR decision-making (the machine reports, Joe decides)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Writing war bulletins (those remain manual \u2014 the machine provides the data)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Modifying missions or sorrys (read-only observer, like the joe-hud)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "New evidence collection (uses existing repeat signals per \"No new life-logging\")"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/content": {
+        "end": 5608,
+        "match": "Scope out",
+        "position": 5294
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Scope out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Autonomous WR decision-making (the machine reports, Joe decides)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Writing war bulletins (those remain manual \u2014 the machine provides the data)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Modifying missions or sorrys (read-only observer, like the joe-hud)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "New evidence collection (uses existing repeat signals per \"No new life-logging\")"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-007",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "mission-scope-out",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/mission-scope-out",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-007"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Completion criteria",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/content": {
+        "end": 5915,
+        "match": "Completion criteria",
+        "position": 5608
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Completion criteria",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-008",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-008"
+    },
+    {
+      "binder-type": "relates-to",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relationship to other missions",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-stack-inhabitation",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-a-sorry-enterprise",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-self-representing-stack",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-portfolio-inference",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        }
+      ],
+      "hx/content": {
+        "end": 6481,
+        "match": "Relationship to other missions",
+        "position": 5915
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relationship to other missions",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-stack-inhabitation",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-a-sorry-enterprise",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-self-representing-stack",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-portfolio-inference",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-009",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "relates-to",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/relates-to",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-009"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relationship to other missions",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "self-representing-stack",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        }
+      ],
+      "hx/content": {
+        "end": 6481,
+        "match": "Relationship to other missions",
+        "position": 5915
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relationship to other missions",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "self-representing-stack",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-010",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-010"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Source material",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "GET /api/alpha/evidence",
+          "role": "source"
+        },
+        {
+          "kind": "api",
+          "ref": "GET /api/alpha/missions",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3/holes/war-room.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3/holes/holistic-argument-sketch.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3/holes/war-bulletin-{1..6}.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon5a/data/alignment.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon5a/data/stack-logic-model.edn",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        }
+      ],
+      "hx/content": {
+        "end": 7043,
+        "match": "Source material",
+        "position": 6481
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Source material",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "GET /api/alpha/evidence",
+          "role": "source"
+        },
+        {
+          "kind": "api",
+          "ref": "GET /api/alpha/missions",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3/holes/war-room.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3/holes/holistic-argument-sketch.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3/holes/war-bulletin-{1..6}.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon5a/data/alignment.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon5a/data/stack-logic-model.edn",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-011",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-011"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Theoretical grounding: Deleuze & Guattari's War Machine",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
+          "term": "hyperreal"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/content": {
+        "end": 9991,
+        "match": "Theoretical grounding: Deleuze & Guattari's War Machine",
+        "position": 7043
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Theoretical grounding: Deleuze & Guattari's War Machine",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
+          "term": "hyperreal"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-012",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-012"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "The name",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        }
+      ],
+      "hx/content": {
+        "end": 10368,
+        "match": "The name",
+        "position": 9991
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "The name",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-013",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-013"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Exit criterion for the mission as a whole",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "foundational"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "observe"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        }
+      ],
+      "hx/content": {
+        "end": 13732,
+        "match": "Exit criterion for the mission as a whole",
+        "position": 10701
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Exit criterion for the mission as a whole",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "foundational"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "observe"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-014",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-014"
+    },
+    {
+      "binder-type": "eightfold-phase",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "MAP",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "MAP"
+        }
+      ],
+      "hx/content": {
+        "end": 13743,
+        "match": "MAP",
+        "position": 13732
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "MAP",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "MAP"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-015",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "eightfold-phase",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/eightfold-phase",
+      "parent": "M-war-machine:scope-000",
+      "scope-id": "M-war-machine:scope-015"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q1: Performance budget \u2014 all sources under 300ms",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        }
+      ],
+      "hx/content": {
+        "end": 14304,
+        "match": "Q1: Performance budget \u2014 all sources under 300ms",
+        "position": 13743
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q1: Performance budget \u2014 all sources under 300ms",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-016",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-016"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q1: Performance budget \u2014 all sources under 300ms",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q1: Performance budget \u2014 all sources under 300ms"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        }
+      ],
+      "hx/content": {
+        "end": 14304,
+        "match": "Q1: Performance budget \u2014 all sources under 300ms",
+        "position": 13743
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q1: Performance budget \u2014 all sources under 300ms",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q1: Performance budget \u2014 all sources under 300ms"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-017",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-017"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q2: Loop health \u2014 the holistic argument's arrows",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q2: Loop health \u2014 the holistic argument's arrows"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        }
+      ],
+      "hx/content": {
+        "end": 15418,
+        "match": "Q2: Loop health \u2014 the holistic argument's arrows",
+        "position": 14304
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q2: Loop health \u2014 the holistic argument's arrows",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q2: Loop health \u2014 the holistic argument's arrows"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-018",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-018"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q3: Reuse \u2014 joe-hud scan functions + 3 new scans",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q3: Reuse \u2014 joe-hud scan functions + 3 new scans"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        }
+      ],
+      "hx/content": {
+        "end": 16079,
+        "match": "Q3: Reuse \u2014 joe-hud scan functions + 3 new scans",
+        "position": 15418
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q3: Reuse \u2014 joe-hud scan functions + 3 new scans",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q3: Reuse \u2014 joe-hud scan functions + 3 new scans"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-019",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-019"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q4: Output surface \u2014 all three, sharing one scan",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        }
+      ],
+      "hx/content": {
+        "end": 16696,
+        "match": "Q4: Output surface \u2014 all three, sharing one scan",
+        "position": 16079
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q4: Output surface \u2014 all three, sharing one scan",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-020",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-020"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q4: Output surface \u2014 all three, sharing one scan",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q4: Output surface \u2014 all three, sharing one scan"
+        },
+        {
+          "ident": "M-x",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        }
+      ],
+      "hx/content": {
+        "end": 16696,
+        "match": "Q4: Output surface \u2014 all three, sharing one scan",
+        "position": 16079
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q4: Output surface \u2014 all three, sharing one scan",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q4: Output surface \u2014 all three, sharing one scan"
+        },
+        {
+          "ident": "M-x",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-021",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-021"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q5: Coordination without command \u2014 Hobbes operationalisation",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        },
+        {
+          "role": "concept",
+          "term": "renderer"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/content": {
+        "end": 18472,
+        "match": "Q5: Coordination without command \u2014 Hobbes operationalisation",
+        "position": 16696
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q5: Coordination without command \u2014 Hobbes operationalisation",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        },
+        {
+          "role": "concept",
+          "term": "renderer"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-022",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-022"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q5: Coordination without command \u2014 Hobbes operationalisation",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q5: Coordination without command \u2014 Hobbes operationalisation"
+        },
+        {
+          "kind": "file",
+          "ref": "arxana-browser-war-machine.el",
+          "role": "source"
+        },
+        {
+          "ident": "M-x",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        },
+        {
+          "role": "concept",
+          "term": "renderer"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/content": {
+        "end": 18472,
+        "match": "Q5: Coordination without command \u2014 Hobbes operationalisation",
+        "position": 16696
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Q5: Coordination without command \u2014 Hobbes operationalisation",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Q5: Coordination without command \u2014 Hobbes operationalisation"
+        },
+        {
+          "kind": "file",
+          "ref": "arxana-browser-war-machine.el",
+          "role": "source"
+        },
+        {
+          "ident": "M-x",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        },
+        {
+          "role": "concept",
+          "term": "renderer"
+        },
+        {
+          "role": "concept",
+          "term": "arxana"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-023",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-023"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Update 2026-04-26 \u2014 recurring AIF substrate is now live",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "self-representing-stack",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "efe"
+        },
+        {
+          "role": "concept",
+          "term": "diagnostics"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        }
+      ],
+      "hx/content": {
+        "end": 19789,
+        "match": "Update 2026-04-26 \u2014 recurring AIF substrate is now live",
+        "position": 18472
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Update 2026-04-26 \u2014 recurring AIF substrate is now live",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "self-representing-stack",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "efe"
+        },
+        {
+          "role": "concept",
+          "term": "diagnostics"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-024",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-024"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Update 2026-04-26 \u2014 recurring AIF substrate is now live",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Update 2026-04-26 \u2014 recurring AIF substrate is now live"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/src/futon3c/portfolio_inference/scheduler.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon5a/holes/missions/M-stack-stereolithography.md",
+          "role": "source"
+        },
+        {
+          "ident": "M-stack-stereolithography",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "efe"
+        },
+        {
+          "role": "concept",
+          "term": "diagnostics"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        }
+      ],
+      "hx/content": {
+        "end": 19789,
+        "match": "Update 2026-04-26 \u2014 recurring AIF substrate is now live",
+        "position": 18472
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Update 2026-04-26 \u2014 recurring AIF substrate is now live",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Update 2026-04-26 \u2014 recurring AIF substrate is now live"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/src/futon3c/portfolio_inference/scheduler.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon5a/holes/missions/M-stack-stereolithography.md",
+          "role": "source"
+        },
+        {
+          "ident": "M-stack-stereolithography",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "efe"
+        },
+        {
+          "role": "concept",
+          "term": "diagnostics"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-025",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-015",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-war-machine:scope-015",
+      "scope-id": "M-war-machine:scope-025"
+    },
+    {
+      "binder-type": "eightfold-phase",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "DERIVE \u2014 pending",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "DERIVE \u2014 pending"
+        }
+      ],
+      "hx/content": {
+        "end": 19815,
+        "match": "DERIVE \u2014 pending",
+        "position": 19789
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "DERIVE \u2014 pending",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "DERIVE \u2014 pending"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-026",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "eightfold-phase",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/eightfold-phase",
+      "parent": "M-war-machine:scope-000",
+      "scope-id": "M-war-machine:scope-026"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Pending DERIVE",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Pending DERIVE"
+        }
+      ],
+      "hx/content": {
+        "end": 19841,
+        "match": "Pending DERIVE",
+        "position": 19815
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Pending DERIVE",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Pending DERIVE"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-027",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-war-machine:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-war-machine:scope-000",
+      "scope-id": "M-war-machine:scope-027"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Integration with sibling missions",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Integration with sibling missions"
+        }
+      ],
+      "hx/content": {
+        "end": 19879,
+        "match": "Integration with sibling missions",
+        "position": 19841
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Integration with sibling missions",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Integration with sibling missions"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-028",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-war-machine:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-war-machine:scope-000",
+      "scope-id": "M-war-machine:scope-028"
+    },
+    {
+      "binder-type": "relates-to",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relation to M-aif-head",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-aif-head",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-war-machine",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "dag"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        }
+      ],
+      "hx/content": {
+        "end": 20622,
+        "match": "Relation to M-aif-head",
+        "position": 19879
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relation to M-aif-head",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-aif-head",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-war-machine",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "dag"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-029",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "relates-to",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-028",
+      "hx/role": "component",
+      "hx/type": "mission-scope/relates-to",
+      "parent": "M-war-machine:scope-028",
+      "scope-id": "M-war-machine:scope-029"
+    },
+    {
+      "binder-type": "relates-to",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relation to M-bounded-in-flight-state",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-bounded-in-flight-state",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "active"
+        },
+        {
+          "role": "concept",
+          "term": "mana"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "instantiate"
+        }
+      ],
+      "hx/content": {
+        "end": 22217,
+        "match": "Relation to M-bounded-in-flight-state",
+        "position": 20622
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relation to M-bounded-in-flight-state",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-bounded-in-flight-state",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "active"
+        },
+        {
+          "role": "concept",
+          "term": "mana"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "instantiate"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-030",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "relates-to",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-028",
+      "hx/role": "component",
+      "hx/type": "mission-scope/relates-to",
+      "parent": "M-war-machine:scope-028",
+      "scope-id": "M-war-machine:scope-030"
+    },
+    {
+      "binder-type": "relates-to",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relation to Mission Peripheral",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-war-machine",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "derive"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/content": {
+        "end": 22574,
+        "match": "Relation to Mission Peripheral",
+        "position": 22217
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "Relation to Mission Peripheral",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-war-machine",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "derive"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-031",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "relates-to",
+        "map"
+      ],
+      "hx/parent": "M-war-machine:scope-028",
+      "hx/role": "component",
+      "hx/type": "mission-scope/relates-to",
+      "parent": "M-war-machine:scope-028",
+      "scope-id": "M-war-machine:scope-031"
+    }
+  ]
+}
