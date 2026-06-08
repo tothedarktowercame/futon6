@@ -1,7 +1,7 @@
 # Mission: Bayesian structure learning — formalising what we mean by it
 
 **Date:** 2026-05-23
-**Status:** IDENTIFY → DERIVE — proposal stage; Joe to push back on framing
+**Status:** SUPERSEDED-AS-MISSION → recast toward Campaign-bayesian-structure-learning (Joe 2026-06-08; see §7b). Idea-of-record; NOT WM-pickable (a Campaign across math / differentiable-code / War-Machine domains, the last = E-efe-education).
 **Owner:** Joe (frames it) / claude-7 (drafted)
 **Predecessor:** [M-symbol-grounding.md](M-symbol-grounding.md),
 [M-symbol-grounding-scaling-plan.md](M-symbol-grounding-scaling-plan.md)
@@ -261,6 +261,46 @@ I recommend (a) "yes, this is the right reformulation," (b)
 "redirect P4-P6 to this mission," (c) "pair with someone who has
 read more of the active-inference literature than I have." This
 isn't a shipping decision; it's a redirection decision.
+
+## 7b. Decisions — RESOLVED (Joe, 2026-06-08)
+
+**(a) YES — reformulation is right, with the scope-binding sharpening** (cf. M-canon-fingerprint-store §2.1).
+Symbol grounding is not just typing: "a is a Number" is not the whole story; "a is the *base of a right
+triangle*" is. The Bayesian-native case is the **partly-filled scope** — "a is the base of a right triangle,
+but `?b, ?c` are unknown" — i.e. **uninstantiated scope variables**. That is exactly what §2's layer should
+learn:
+- a typed-but-unscoped symbol is **"hungry for a scope"** — the engine learns to *suspect* that "a is a Number"
+  wants a scope it hasn't yet seen;
+- and learns, **empirically and per-domain**, which scopes are available to fill it.
+This is the recognition loop made Bayesian: *"is this a Pythagorean triple? it sure looks like one…"* —
+abduction over scopes.
+
+**Sequencing — the MSE/MO skyhook (start in-the-middle).** Rather than end-to-end grounding in arXiv papers,
+**start mid-stream** with structure-learning over the **already-mined Math StackExchange / MathOverflow**
+content. The **A→B (question→answer) turn structure** gives a ready prior/posterior content base and lets us
+work through the *process of question-answering* in detail. MSE/MO exercises prepare us for arXiv, where the
+same A→B structure is present but **implicit**. (P7's 114K SE pairs + the math.SE pipeline are the skyhook substrate.)
+
+**(b) YES — build the Bayesian layer FIRST** (redirect P4-P6). Notwithstanding the already-greenlit math.CT
+superpod run on current tooling. And the data is **also local for other domains**: `M-differentiable-code.md`
+references this same Bayesian-structure-learning — a domain where **on-laptop** analysis suffices (no superpod).
+
+**(c) NOT a War-Machine-executable mission — a CAMPAIGN.** Hands-on, 3-6 weeks, paired — *not* WM-pickable work
+(its advanceability NAG is correctly telling us this is not single-cycle-leaf execution). The right shape is a
+**Campaign** translating the *Bayesian-structure-learning idea* into **several analogous domains run in
+parallel**:
+- **math** — symbol grounding (MSE/MO skyhook → arXiv);
+- **differentiable-code** — `M-differentiable-code`, local data;
+- **the War Machine itself** — *the coup de grâce* — where AIF / Friston / Bayesian inference are **first-class**.
+  Structure-learning over the WM's own generative model **IS** `[[E-efe-education]]` (precision-learning the EFE).
+  **Readiness test (Joe):** *"if we can't do structure learning with the WM, we might not be ready to do it on
+  the superpod yet."* The WM domain is the **local proving-ground** for the superpod (math) work.
+
+**Disposition.** Recast from a single (WM-pickable) mission toward **Campaign-bayesian-structure-learning** (to
+be chartered) federating the three domain-instances; the WM instance = `E-efe-education` (already chartered),
+math = this mission's content + `M-canon-fingerprint-store`, code = `M-differentiable-code`. This doc remains
+the **idea-of-record**; the Campaign owns cross-domain delivery. → **Not WM-pickable** (leaves the advanceable
+pool); the advanceability NAG is resolved by the *recast*, not by articulating WM holes.
 
 ## 8. What I'd do tomorrow if you green-light this
 
