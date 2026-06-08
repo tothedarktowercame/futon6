@@ -1,7 +1,7 @@
 # Mission: Canon fingerprint store — Billey-Tenner instantiation for symbol grounding
 
 **Date:** 2026-05-23
-**Status:** IDENTIFY → DERIVE — design proposal
+**Status:** DERIVE → INSTANTIATE — decisions resolved + holes articulated (Joe 2026-06-08): scope bindings (§2.1) + frequency-ordered MAP-REDUCE (§3.1) + SQLite; F1 schema delta in §8, holes in §9
 **Owner:** Joe (frames it) / claude-7 (drafted)
 **Predecessor:** [M-bayesian-structure-learning.md](M-bayesian-structure-learning.md)
 **Source pointer:** Billey, S. C. & Tenner, B. E. (2013).
@@ -89,6 +89,36 @@ def canon_distribution(symbol: str) -> dict[str, CanonAggregate]:
 This is the OEIS-shaped query: "what does `\sigma(T)` mean across
 the literature we've seen so far?"
 
+### 2.1 Scope bindings — from symbol fingerprints to *theorem* fingerprints (Joe, 2026-06-08)
+
+The §2 schema fingerprints **symbol** bindings — `(symbol, canon, …)`. Necessary, but not
+sufficient for a *theorem* fingerprint. A theorem is not a set of bound symbols; it is a
+**scoped relation** — bindings under *binders* that assign each symbol a **role**.
+
+Pythagoras is the test. Knowing `a, b, c : Number` (symbol bindings) does *not* fingerprint the
+theorem. What fingerprints it is the **scope**:
+- **inputs (binders):** `a, b` are the *legs* and `c` the *hypotenuse* of a *right triangle* —
+  numbers *mapped to* side-lengths under that geometric scope;
+- **output (relation):** `a² + b² = c²`.
+
+So §2 is taken one step further: each record carries not just `(symbol → canon)` but the **scope
+binding** — the binder/role the symbol plays (input-with-role) and the output relation the theorem
+asserts. A theorem fingerprint is `{scoped-inputs → output-relation}` — language-independent and
+canonical in the Billey-Tenner sense, because the *roles + the relation* are the invariant, not the
+surface symbols.
+
+**Anchor, not position (Joe).** The locator is a **strategy in the futon4 / Arxana sense**, NOT a
+character offset. "The third lemma in the paper" is semantically meaningful and stable; a position
+offset is neither. Re-extraction anchors to the strategy (the structural locator), not the byte
+position. → **resolves §8(a): drop `position`; the locator is an Arxana-style strategy.**
+
+**Statements now; proofs later (a different deliverable).** This mission fingerprints theorem
+*statements*. A **proof** fingerprint is separate: since a proof is a *composition of known
+theorems*, a proof fingerprint is itself **OEIS-shaped** — an ordered list of proof steps, each
+step citing a *statement* fingerprint. We will likely want both, but they are different kinds of
+object, and the statement fingerprint is the prerequisite (a proof step references statement
+fingerprints). Scoped here to statements; **proof-as-OEIS-of-steps** noted as the follow-on.
+
 ## 3. MAP-REDUCE shape
 
 The store is **append-only** in the MAP phase. Each Stage 5 run
@@ -111,6 +141,17 @@ aggregate). This keeps the operation cheap as the store grows.
 
 The store is *queryable* by symbol (the primary key for inference)
 and by canon (secondary — for the literature-lifted reduction in §5).
+
+### 3.1 Build order — most-cited-first (the "mathematical genome"; Joe + Rob, 2026-06-08)
+
+The MAP-REDUCE is **frequency-ordered**, not subject-agnostic-temporal. Build the reduced store
+**most-cited-first**: a bibliographic pass orders papers (and the mathematical objects they use)
+by citation count, and the REDUCE assimilates the **most-cited papers + most-common mathematical
+objects first**, so later batches *reuse* already-reduced structure instead of rediscovering it.
+MSC / arXiv codes are processed in most-cited-first order. The fingerprint database then grows like
+a **mathematical genome** — the high-frequency core (the canon everyone cites) is laid down first
+and reused; the long tail accretes against it. This is the explicit reuse-as-we-go MAP-REDUCE
+(per Rob): we MAP-REDUCE *while* building, seeding the store with the genome's conserved regions.
 
 ## 4. How (1) per-binding posterior consumes the store
 
@@ -219,19 +260,42 @@ self-improvement gap.
   performs identically to today's engine. Lift comes from batch
   N+1 onward as the prior accumulates.
 
-## 8. Decision asked of Joe
+## 8. Decisions — RESOLVED (Joe, 2026-06-08; supersedes claude-7's v1 recommendation)
 
-(a) Is the schema in §2 the right granularity, or should
-    fingerprints be coarser (per-paper-per-symbol with canon list)
-    or finer (with position offsets for re-extraction)?
-(b) Should F1-F2 run BEFORE or ALONGSIDE the §3.2 per-binding
-    posterior (Slice F3)? F3 doesn't strictly need F1-F2 to work;
-    it just doesn't *learn* without them.
-(c) Persistence format: SQLite (queryable), JSONL+aggregate
-    (cheap), or DuckDB (columnar, fast for canon-distribution
-    queries)? JSONL+aggregate matches existing infrastructure
-    (`learned-newcommand-vocab.json` is JSON); SQLite would let
-    Stage 5 query during the run.
+**(a) Granularity → SCOPE bindings (per-theorem), not just symbol bindings; strategy-anchor, not
+position.** Expand the schema to carry **scope bindings** — the binder/role of each input + the
+output relation — so a *theorem* can be fingerprinted, not merely a set of bound symbols (see
+§2.1, the Pythagoras test). **Drop `position`**; the locator is an Arxana-style **strategy** ("the
+third lemma in the paper"). Theorem *statements* now; **proof fingerprints (OEIS-of-steps)** are a
+separate later deliverable.
 
-My recommendation: schema as written (a), F1-F2 then F3 (b),
-JSONL+aggregate for v1 (c). Iterate if scale demands.
+**(b) ALONGSIDE.** F3 (the §3.2 per-binding posterior) runs *alongside* F1-F2; build **F1+F2 first**
+only to dissolve the chicken-and-egg (F3 doesn't *learn* without the store). AND the MAP-REDUCE is
+**frequency-ordered / most-cited-first** (§3.1, the "mathematical genome") so structure is reused
+as we go (per Rob): a bibliographic most-cited-first ordering of papers + MSC/arXiv codes + objects.
+
+**(c) SQLite** (or any in-run-queryable store) — Stage 5 queries the store *during* the run, not
+just offline. Drops JSONL+aggregate-v1; **in-run queryability is the requirement.**
+
+### Consequent schema delta (for F1)
+- `CanonFingerprint`: replace `position: str` with `strategy_anchor: str` (Arxana-style locator);
+  add scope fields — `role: str` (the binder role, e.g. "hypotenuse-of-right-triangle"),
+  `scope: str | None` (the binding scope), and lift the per-theorem grouping so a theorem's
+  `{scoped-inputs → output-relation}` is recoverable.
+- Persistence: **SQLite** (`canon_store.db`), schema mirroring the dataclasses, indexed by `symbol`
+  (primary inference key) and `canon` (secondary); Stage 5 opens it read/write per run.
+- REDUCE: seed most-cited-first (§3.1) before the long tail.
+
+## 9. Next holes — INSTANTIATE (articulated 2026-06-08, per the §8 decisions)
+
+- [ ] **F1** — SQLite `canon_store.db`: schema with **scope bindings** (`role`, `scope`,
+      `strategy_anchor` replacing `position`) per the §8 delta; `write_batch_fingerprints`; wire into
+      Stage 5 + the QC viewer's `detect_grounded_symbols`. Tests: round-trip, append-only.
+- [ ] **F2** — reducer + **in-run** query over SQLite; incremental state-merge; **most-cited-first
+      seed** (§3.1, the mathematical genome). Tests: idempotent reduce, correct aggregation, ordering.
+- [ ] **F3** (alongside, per §8b) — per-binding canon posterior consuming the store as prior (§3.2 of
+      M-bayesian-structure-learning); held-out precision lift.
+- [ ] **F4** — literature-lifted strategy-merge proposer (§5); validate on held-out gold, no-regression.
+- [ ] **F5** — Stage 5 closes the loop: read store on startup → prior → MAP-append → incremental REDUCE.
+- [ ] **(follow-on, separate deliverable)** proof fingerprints = OEIS-of-steps (§2.1) — defer until
+      statement fingerprints land.
