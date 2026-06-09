@@ -168,8 +168,11 @@ this route's loss — closing the AlphaZero loop (`reward = peradam` enters here
   candidate moves; the rollout CONSUMES the top-k (shape in §3.1). Where the first-order rank
   disagrees with the path-integral rank = the **cross-check diagnostic** *and* the
   **policy-improvement training signal** (the full AlphaZero loop — search improves the prior,
-  prior guides search). Ownership: claude-3 = gradient/prior, claude-4 = rollout/search,
-  claude-1 = coordination.
+  prior guides search). **Framing (Joe, 2026-06-09):** the two routes are the **AlphaZero
+  featureset — BOTH required, not redundant**; the prior makes the search tractable and the
+  search sharpens the prior. The rank-disagreement cross-check is a *minor side-benefit*, NOT
+  the reason for two routes. Ownership: claude-3 = gradient/prior, claude-4 = rollout/search,
+  claude-1 = coordination. Both build in **parallel** (Joe opened the codex pool 2026-06-09).
 - **G2 — node granularity at substrate scale.** H2 validated scope-grain on 342 code nodes;
   substrate-2 has **5,517 scopes**. Does the grain + the `N×N` adjacency scale, or does the
   loss need to be sparse / neighbourhood-local? (Same size-limit discipline `M-differentiable-
