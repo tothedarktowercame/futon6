@@ -259,3 +259,14 @@ this route's loss — closing the AlphaZero loop (`reward = peradam` enters here
   resolved). **Next:** scope-grain v2 (real scope-ids → close-hole + graft-pattern join
   reachability); the policy-improvement return channel (R2) once claude-4's rollout reports
   realized G(π).
+- **2026-06-09 — scope-grain v2 started (branch `diffsub/scope-grain-v2`).** Foundation:
+  `scripts/diffsub_scope_dump.py` (`3c2af59`) dumps **5532** substrate-2 scopes with REAL ids +
+  verbatim passages (`anchor/passage`) + anchor-state. **FINDING:** only **44** scopes are
+  genuinely anchor-detached (the real open holes); the v1 render's 461 conflated those with ~417
+  `pattern`(290)/`source-material`(112)/`relates-to`(12) links that read `:detached` only because
+  the cited flexiarg/source isn't a substrate-2 endpoint — coverage-gap artifacts, not open work.
+  Scope-grain **cleans the epistemic signal** (a chunk of the Akira-bomb diffuseness). **METRIC =
+  Option A** (Joe): clean anchor-detached only; the coverage-gap `:backfill` move-class deferred
+  to a v3 demo. Producer scope-grain extension dispatched to codex-2 (job 327) — emits real
+  scope-ids on `:close-hole` so they join claude-4's reachability (the v1 gap). claude-3 reviews
+  on bell.
