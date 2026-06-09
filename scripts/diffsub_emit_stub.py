@@ -81,10 +81,14 @@ for i, (d, e) in enumerate(zip(moves, exps)):
 
 def edn_move(d):
     adv = f'"{d["adv"]}"' if d["adv"] else "nil"
+    # :move/terminal? — true ⇒ the rollout carries its g-cost but does NOT expand through it.
+    # Only :centre-mess in v1: its transition T is a compound cluster graph-rewrite whose
+    # mechanism (pattern→wiring→structure) isn't built yet (M-memes). Don't fabricate its T.
+    term = "true" if d["cls"] == "centre-mess" else "false"
     return (f'  {{:move/id "{d["have"]}->{d["want"]}" :move/class :{d["cls"]}'
             f' :have "{d["have"]}" :want "{d["want"]}" :advances-cap {adv}'
             f' :score {d["score"]} :prior {d["prior"]} :delta-g {d["delta_g"]}'
-            f' :confidence :{d["conf"]} :rank {d["rank"]}'
+            f' :confidence :{d["conf"]} :rank {d["rank"]} :move/terminal? {term}'
             f' :note "{d["note"].replace(chr(34), chr(39))}"}}')
 
 

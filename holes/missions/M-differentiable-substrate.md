@@ -186,6 +186,18 @@ this route's loss — closing the AlphaZero loop (`reward = peradam` enters here
   `.venv-tpg`). The two-stage `--embed` / `--jax` split carries over; the substrate-2 fetch
   adds a third concern (the 7071 read). Keep the I-0 discipline (no second *serving* JVM;
   dev tooling venvs are fine).
+- **G6 — `:centre-mess` has no transition T (deferred to M-memes).** Of the four move-classes,
+  three are atomic arrows with a clean forward-model step (claude-4's shared kernel):
+  `:close-hole` → promote `:open→:constructed`; `:advance-capability` → promote + cap-flip on
+  `:capability/frontier?`; `:graft-pattern` → mint a new `(have,want)` arrow (which opens new
+  reachable `:have`s — the superset-prior reason). `:centre-mess` is **not** atomic — it's a
+  compound graph-rewrite over a cluster (raise coherence H, lower Salingaros C), whose mechanism
+  (pattern→wiring→structure) isn't built yet (M-memes territory). **v1 resolution (ratified with
+  claude-4 2026-06-09):** keep it as a *visible candidate* carrying its g-cost but mark it
+  **`:move/terminal? true`** — the rollout does not expand through it. Defining a toy T would
+  fabricate dynamics the simulator can't run (the regulator lesson). Promote to a real T when
+  M-memes delivers the pattern→structure mechanism; that's when `:centre-mess` becomes
+  expandable. (All other moves carry `:move/terminal? false`.)
 
 ---
 
