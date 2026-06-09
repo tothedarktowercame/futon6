@@ -5,9 +5,9 @@ Two stages, mirroring code_diff_jax_pilot.py:
   futon6/.venv/bin/python scripts/diffsub_emit.py --embed
   futon5/.venv-tpg/bin/python scripts/diffsub_emit.py --jax
 
-G2 v1 grain: mission + capability nodes. /tmp/scopes.json has no stable
-per-scope ids, so scope-grain is deferred rather than fabricating endpoints.
-The JAX adjacency is sparse N x k over BGE nearest-neighbour candidates.
+Default v2 grain: real substrate-2 scopes + capabilities. Scope ids are
+consumed verbatim from data/diffsub-scopes.json. The JAX adjacency is sparse
+N x k over BGE nearest-neighbour candidates.
 """
 from __future__ import annotations
 
@@ -25,17 +25,15 @@ import numpy as np
 ROOT = Path("/home/joe/code")
 HERE = ROOT / "futon6"
 OUTDIR = HERE / "resources/differentiable-substrate"
-EMB = OUTDIR / "emb.npy"
-NODES = OUTDIR / "nodes.json"
-SUMMARY = OUTDIR / "diffsub-jax-summary.json"
 MOVES = HERE / "data/diffsub-moves.edn"
 SCOPES_PATH = Path("/tmp/scopes.json")
+DIFFSUB_SCOPES_PATH = HERE / "data/diffsub-scopes.json"
 CAPS_PATH = HERE / "data/capability-graph.json"
 WHOLE_PATH = HERE / "data/mission-wholeness.edn"
 PHYLO_PATH = HERE / "data/mission-phylogeny.edn"
 
 KNN = int(os.environ.get("DIFFSUB_KNN", "20"))
-TOP_K = int(os.environ.get("DIFFSUB_TOP_K", "24"))
+TOP_K = int(os.environ.get("DIFFSUB_TOP_K", "64"))
 BAND_CENTER = float(os.environ.get("DIFFSUB_BAND_CENTER", "0.55"))
 BAND_WIDTH = float(os.environ.get("DIFFSUB_BAND_WIDTH", "0.18"))
 
@@ -87,6 +85,13 @@ def scope_aggregates(scopes: list[dict]) -> dict[str, dict]:
     return by_m
 
 
+def artifact_paths(grain: str) -> tuple[Path, Path, Path]:
+    suffix = "scope" if grain == "scope" else "mission"
+    return (OUTDIR / f"emb-{suffix}.npy",
+            OUTDIR / f"nodes-{suffix}.json",
+            OUTDIR / f"diffsub-jax-summary-{suffix}.json")
+
+
 def mission_metric(stem: str, agg: dict, cls: str) -> float:
     n = max(1.0, float(agg.get("n", 1)))
     det = float(agg.get("det", 0))
@@ -106,7 +111,15 @@ def capability_metric(cap: str, info: dict, caps: dict) -> float:
     return 2.20 if info.get("frontier") else 1.40
 
 
-def build_nodes() -> list[dict]:
+def scope_metric(scope: dict, cls: str) -> float:
+    class_weight = CLASSW.get(cls, 0.45)
+    local = (0.18
+             + (1.0 if scope.get("det") else 0.0)
+             + (0.30 if scope.get("binder") in FRONTIER_BINDERS else 0.0))
+    return local * class_weight
+
+
+def build_mission_nodes() -> list[dict]:
     scopes = read_json(SCOPES_PATH)
     caps = read_json(CAPS_PATH)
     cls = mission_classes()
@@ -143,18 +156,70 @@ def build_nodes() -> list[dict]:
     return nodes
 
 
-def do_embed() -> None:
+def build_scope_nodes() -> list[dict]:
+    scopes = read_json(DIFFSUB_SCOPES_PATH)
+    caps = read_json(CAPS_PATH)
+    cls = mission_classes()
+    nodes = []
+    for sc in scopes:
+        stem = sc.get("mission", "")
+        concepts = sc.get("concepts") or []
+        passage = sc.get("passage") or ""
+        c = cls.get(stem, "neutral")
+        nodes.append({
+            "id": sc["scope_id"],
+            "kind": "scope",
+            "scope_id": sc["scope_id"],
+            "mission": stem,
+            "mission_node": sc.get("mission_node"),
+            "binder": sc.get("binder"),
+            "det": bool(sc.get("det")),
+            "state": sc.get("state"),
+            "capability": sc.get("capability"),
+            "concepts": concepts,
+            "metric": scope_metric(sc, c),
+            "degree": 1 + len(concepts) + (1 if sc.get("capability") else 0),
+            "class": c,
+            "text": f"mission {stem} [{sc.get('binder')}] {passage} :: {' '.join(concepts)}",
+        })
+    for cap, info in sorted(caps.items()):
+        parents = info.get("scope", [])
+        nodes.append({
+            "id": f"scope/capability/{cap}",
+            "kind": "capability",
+            "cap": cap,
+            "metric": capability_metric(cap, info, caps),
+            "degree": len(parents) + len(info.get("minted_by", [])),
+            "claimed": bool(info.get("claimed")),
+            "frontier": bool(info.get("frontier")),
+            "status": info.get("status"),
+            "parents": parents,
+            "text": f"capability {cap} status {info.get('status')} frontier {info.get('frontier')} claimed {info.get('claimed')} parents {' '.join(parents)} title {info.get('title', '')}",
+        })
+    return nodes
+
+
+def build_nodes(grain: str) -> list[dict]:
+    if grain == "scope":
+        return build_scope_nodes()
+    if grain == "mission":
+        return build_mission_nodes()
+    raise ValueError(f"unknown grain: {grain}")
+
+
+def do_embed(grain: str) -> None:
     os.environ.setdefault("HF_HUB_OFFLINE", "1")
     os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
     from sentence_transformers import SentenceTransformer
 
-    nodes = build_nodes()
+    emb_path, nodes_path, _summary_path = artifact_paths(grain)
+    nodes = build_nodes(grain)
     model = SentenceTransformer("BAAI/bge-large-en-v1.5")
     vecs = model.encode([n["text"] for n in nodes], normalize_embeddings=True, show_progress_bar=True)
     OUTDIR.mkdir(parents=True, exist_ok=True)
-    np.save(EMB, np.asarray(vecs, dtype=np.float32))
-    NODES.write_text(json.dumps(nodes, indent=2))
-    print(f"embedded {len(nodes)} mission/capability nodes -> {EMB} shape={np.asarray(vecs).shape}")
+    np.save(emb_path, np.asarray(vecs, dtype=np.float32))
+    nodes_path.write_text(json.dumps(nodes, indent=2))
+    print(f"embedded {len(nodes)} {grain} nodes -> {emb_path} shape={np.asarray(vecs).shape}")
 
 
 def softmax(xs: list[float]) -> list[float]:
@@ -190,14 +255,15 @@ def emit_edn(moves: list[dict]) -> None:
     MOVES.write_text(edn)
 
 
-def do_jax() -> None:
+def do_jax(grain: str) -> None:
     import jax
     import jax.numpy as jnp
     from jax import grad
 
-    emb = np.load(EMB)
-    nodes = json.loads(NODES.read_text())
-    fresh_nodes = {n["id"]: n for n in build_nodes()}
+    emb_path, nodes_path, summary_path = artifact_paths(grain)
+    emb = np.load(emb_path)
+    nodes = json.loads(nodes_path.read_text())
+    fresh_nodes = {n["id"]: n for n in build_nodes(grain)}
     nodes = [{**n, **{k: v for k, v in fresh_nodes.get(n["id"], {}).items() if k != "text"}}
              for n in nodes]
     caps = read_json(CAPS_PATH)
@@ -275,30 +341,52 @@ def do_jax() -> None:
                       "delta_g": -score * 0.08,
                       "note": f"gradient toward capability anchor: {info.get('title', '')[:80]}"})
 
-    by_m = {nd["mission"]: nd for nd in nodes if nd["kind"] == "mission"}
-    for nd in sorted(by_m.values(), key=lambda x: -x.get("det", 0))[:8]:
-        if nd.get("det", 0) <= 0:
-            continue
-        i = node_by_id[nd["id"]]
-        stem = nd["mission"]
-        score = max(1e-6, float(gnorm[i]) * 900.0)
-        moves.append({"cls": "close-hole", "have": f"scope/{stem}/detached#open",
-                      "want": f"scope/{stem}/detached#closed", "adv": None,
-                      "score": score, "conf": "claimed-substrate", "terminal": False,
-                      "delta_g": -score * 0.08,
-                      "note": f"{nd.get('det', 0)} detached holes in {stem} ({nd.get('class')})"})
+    if grain == "scope":
+        det_scopes = [nd for nd in nodes if nd.get("kind") == "scope" and nd.get("det")]
+        for nd in det_scopes:
+            i = node_by_id[nd["id"]]
+            score = max(1e-6, float(gnorm[i]) * 900.0)
+            have = nd.get("mission_node") or f"scope/mission/{nd.get('mission')}"
+            moves.append({"cls": "close-hole", "have": have, "want": nd["scope_id"],
+                          "adv": None, "score": score, "conf": "claimed-substrate",
+                          "terminal": False, "delta_g": -score * 0.08,
+                          "note": f"real detached scope {nd['scope_id']} in {nd.get('mission')} [{nd.get('binder')}]"})
 
-    mess = [nd for nd in nodes if nd.get("kind") == "mission" and nd.get("class") == "mess" and nd.get("det", 0) > 0]
-    if mess:
-        nd = max(mess, key=lambda x: x.get("det", 0))
-        i = node_by_id[nd["id"]]
-        score = max(1e-6, float(gnorm[i]) * 650.0)
-        stem = nd["mission"]
-        moves.append({"cls": "centre-mess", "have": f"scope/{stem}/cluster",
-                      "want": f"scope/{stem}/centred", "adv": None, "score": score,
-                      "conf": "claimed-substrate", "terminal": True,
-                      "delta_g": -score * 0.08,
-                      "note": f"terminal v1 centre-mess for {stem}"})
+        mess = [nd for nd in det_scopes if nd.get("class") == "mess"]
+        if mess:
+            nd = max(mess, key=lambda x: float(gnorm[node_by_id[x["id"]]]))
+            i = node_by_id[nd["id"]]
+            score = max(1e-6, float(gnorm[i]) * 650.0)
+            moves.append({"cls": "centre-mess", "have": nd.get("mission_node") or nd["scope_id"],
+                          "want": f"{nd.get('mission')}/centred", "adv": None,
+                          "score": score, "conf": "claimed-substrate", "terminal": True,
+                          "delta_g": -score * 0.08,
+                          "note": f"terminal v1 centre-mess for {nd.get('mission')}"})
+    else:
+        by_m = {nd["mission"]: nd for nd in nodes if nd["kind"] == "mission"}
+        for nd in sorted(by_m.values(), key=lambda x: -x.get("det", 0))[:8]:
+            if nd.get("det", 0) <= 0:
+                continue
+            i = node_by_id[nd["id"]]
+            stem = nd["mission"]
+            score = max(1e-6, float(gnorm[i]) * 900.0)
+            moves.append({"cls": "close-hole", "have": f"scope/{stem}/detached#open",
+                          "want": f"scope/{stem}/detached#closed", "adv": None,
+                          "score": score, "conf": "claimed-substrate", "terminal": False,
+                          "delta_g": -score * 0.08,
+                          "note": f"{nd.get('det', 0)} detached holes in {stem} ({nd.get('class')})"})
+
+        mess = [nd for nd in nodes if nd.get("kind") == "mission" and nd.get("class") == "mess" and nd.get("det", 0) > 0]
+        if mess:
+            nd = max(mess, key=lambda x: x.get("det", 0))
+            i = node_by_id[nd["id"]]
+            score = max(1e-6, float(gnorm[i]) * 650.0)
+            stem = nd["mission"]
+            moves.append({"cls": "centre-mess", "have": f"scope/{stem}/cluster",
+                          "want": f"scope/{stem}/centred", "adv": None, "score": score,
+                          "conf": "claimed-substrate", "terminal": True,
+                          "delta_g": -score * 0.08,
+                          "note": f"terminal v1 centre-mess for {stem}"})
 
     moves.sort(key=lambda d: -d["score"])
     moves = moves[:TOP_K]
@@ -314,7 +402,7 @@ def do_jax() -> None:
     island_scores = [m["score"] for m in cap_moves if m["conf"] == "conjectural"]
     summit_scores = [m["score"] for m in cap_moves if m["conf"] == "claimed-substrate"]
     summary = {
-        "grain": "mission+capability",
+        "grain": "scope+capability" if grain == "scope" else "mission+capability",
         "adjacency": f"sparse-knn N={n} k={k}",
         "n": n,
         "k": k,
@@ -328,14 +416,17 @@ def do_jax() -> None:
         "summit_score_med": float(np.median(summit_scores)) if summit_scores else 0.0,
         "island_score_med": float(np.median(island_scores)) if island_scores else 0.0,
         "moves": len(moves),
+        "det_scopes_total": sum(1 for nd in nodes if nd.get("kind") == "scope" and nd.get("det")),
+        "det_scopes_surfaced": sum(1 for m in moves if m.get("cls") == "close-hole"),
     }
-    SUMMARY.write_text(json.dumps(summary, indent=2))
+    summary_path.write_text(json.dumps(summary, indent=2))
     print(f"[G2] grain={summary['grain']} adjacency={summary['adjacency']}")
     print(f"[conditioning] grad-norm min={summary['gradnorm_min']:.3e} med={summary['gradnorm_med']:.3e} "
           f"max={summary['gradnorm_max']:.3e} max/med={summary['gradnorm_max_med_ratio']:.2f} "
           f"corr(degree)={corr:+.3f}")
     print(f"[loop] mean satisfaction {sat_before:.4f} -> {sat_after:.4f}")
     print(f"[anchors] summit-score-med={summary['summit_score_med']:.6f} island-score-med={summary['island_score_med']:.6f}")
+    print(f"[det] surfaced {summary['det_scopes_surfaced']}/{summary['det_scopes_total']} detached scopes as close-hole moves")
     print(f"wrote {MOVES} — {len(moves)} moves")
 
 
@@ -343,11 +434,12 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--embed", action="store_true")
     ap.add_argument("--jax", action="store_true")
+    ap.add_argument("--grain", choices=["scope", "mission"], default="scope")
     args = ap.parse_args()
     if args.embed:
-        do_embed()
+        do_embed(args.grain)
     elif args.jax:
-        do_jax()
+        do_jax(args.grain)
     else:
         ap.error("use --embed then --jax")
 
