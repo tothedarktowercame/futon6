@@ -58,6 +58,7 @@ URL_RE = re.compile(r"https?://[^\s)>\"]+")
 API_RE = re.compile(r"\b(?:GET|POST|PUT|PATCH|DELETE)\s+(/[A-Za-z0-9_./:<>{}-]+)")
 SHA_RE = re.compile(r"\b[0-9a-f]{7,40}\b")
 WORD_RE = re.compile(r"[a-z][a-z0-9-]*")
+PATTERN_CANDIDATE_RE = re.compile(r"(?<![a-z0-9-])([a-z][a-z0-9]*-[a-z0-9-]+(?:-[a-z0-9-]+)+)(?![a-z0-9-])")
 
 
 @dataclass(frozen=True)
@@ -134,6 +135,25 @@ def load_capabilities(path: Path = STAR_MAP) -> set[str]:
     text = path.read_text(encoding="utf-8", errors="ignore")
     cap_block = text.split(":capabilities", 1)[1].split(":missions", 1)[0]
     return set(re.findall(r"(?m)^\s*:([a-z][a-z0-9-]+)\s*\{", cap_block))
+
+
+def load_pattern_index(root: Path = ROOT) -> list[dict]:
+    """Distinctive flexiarg basenames available as literal pattern citations."""
+    patterns = []
+    seen: set[str] = set()
+    for path in sorted(root.glob("futon*/library/**/*.flexiarg")):
+        name = path.stem
+        if name in seen:
+            continue
+        if name.count("-") >= 2 and len(name) >= 12:
+            patterns.append(
+                {
+                    "name": name,
+                    "ref": path.relative_to(root).as_posix(),
+                }
+            )
+            seen.add(name)
+    return patterns
 
 
 def find_concepts(text: str, terms: Iterable[str], max_terms: int = 40) -> list[dict]:
@@ -218,6 +238,25 @@ def capability_slots(text: str, capabilities: set[str], concept_terms: Iterable[
     return slots
 
 
+def pattern_slots(text: str, pattern_index: dict[str, str]) -> list[dict]:
+    slots = []
+    seen = set()
+    for m in PATTERN_CANDIDATE_RE.finditer(text):
+        name = m.group(1)
+        if name in seen:
+            continue
+        if name in pattern_index:
+            slots.append(
+                {
+                    "role": "pattern",
+                    "ident": name,
+                    "ref": pattern_index[name],
+                }
+            )
+            seen.add(name)
+    return slots
+
+
 def make_scope(
     entity_id: str,
     idx: int,
@@ -273,15 +312,19 @@ def detect_mission_scopes(
     path: Path,
     kernel_terms: list[str] | None = None,
     capabilities: set[str] | None = None,
+    patterns: list[dict] | None = None,
 ) -> dict:
     text = path.read_text(encoding="utf-8", errors="ignore")
     entity_id = path.stem
     kernel_terms = kernel_terms if kernel_terms is not None else load_kernel_terms()
     capabilities = capabilities if capabilities is not None else load_capabilities()
+    patterns = patterns if patterns is not None else load_pattern_index()
     sections = split_sections(text)
+    pattern_index = {pattern["name"]: pattern["ref"] for pattern in patterns}
 
     scopes: list[dict] = []
     phase_stack: list[tuple[int, str, str, str]] = []
+    seen_patterns: set[str] = set()
     idx = 0
 
     def current_parent(level: int) -> tuple[str | None, str]:
@@ -332,6 +375,11 @@ def detect_mission_scopes(
         if cap_slots and ("capab" in title_low or parent_phase in {"identify", "map", "derive"}):
             sub_binders.append(("capability-scope", cap_slots, parent_phase))
 
+        pat_slots = [slot for slot in pattern_slots(sec.text, pattern_index) if slot["ident"] not in seen_patterns]
+        if pat_slots:
+            seen_patterns.update(slot["ident"] for slot in pat_slots)
+            sub_binders.append(("pattern", pat_slots, parent_phase))
+
         if is_map_item(parent_phase, sec):
             map_ends = [{"role": "map-item", "title": sec.title}]
             map_ends.extend(source_slots(sec.text)[:12])
@@ -371,11 +419,12 @@ def main(argv=None) -> None:
     missions = args.missions or ENSEMBLE
     kernel_terms = load_kernel_terms()
     capabilities = load_capabilities()
+    patterns = load_pattern_index()
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
     for path in missions:
         p = path if path.is_absolute() else ROOT / path
-        tree = detect_mission_scopes(p, kernel_terms, capabilities)
+        tree = detect_mission_scopes(p, kernel_terms, capabilities, patterns)
         out = args.out_dir / f"{p.stem}.json"
         out.write_text(json.dumps(tree, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         counts = tree["scope-count-by-binder-type"]
