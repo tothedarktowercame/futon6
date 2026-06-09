@@ -443,3 +443,38 @@ the reserved `:move/id` join key mean the hooks already exist. R2 next; v3 a cle
   v1 stays forward-only. Also: the **A/B is now live** (claude-4 consumes `:prior`, so the variant
   files + `DIFFSUB_PRIOR_TEMP` move its selection) — queued behind Joe's greenlight; it reports
   which prior gives lowest-`G(π)`/fastest rollouts.
+
+### 8.7 R2 contract co-designed with claude-4 (2026-06-09) — two channels, policy + value
+
+claude-4's search internals refined §8 in two ways:
+- **A1 — distill to the G-WEIGHTED VISIT-MASS, not raw N.** claude-4's search is exhaustive top-k
+  tree enumeration (not MCTS-with-UCB), so raw visit-counts are ~uniform (every first move spawns a
+  full subtree) — a WEAK target. The policy-improvement signal is `π*(a) ∝ Σ_{paths∋a}
+  softmax_τ(−G_path)` — mass concentrates on moves on low-G paths. THAT is the distillation target
+  (corrects §8.1's `:visits = N`). claude-4 emits per move `:visit-mass` (target), `:q-best`,
+  `:q-mean`; my refit distills to `:visit-mass`.
+- **A2 — `:q` is a SELF-estimate; the real value is the PERADAM (my side).** `G(π) = Σ γ^t δg` is
+  built from MY `:delta-g`. The search never discharges a real sorry (MUST-B copy-state); only the
+  SELECTED first move applies live via `promote!`. So the realized peradam exists only for executed
+  moves, emitted by the DISCHARGE (`promote!` → `:constructed` → three-witness certificate / mana) —
+  the pudding-prover / M-pudding-peradams side.
+
+**Two-channel return (ratified):**
+- **CH1 (policy, DENSE, buildable NOW):** per batch, every move, from claude-4's search alone —
+  `{:return/from-gen :return/depth :return/top-k :return/gamma :return/tau
+    :policy [{:move/id :visit-mass :q-best :q-mean :selected} ...]}`.
+- **CH2 (value, SPARSE):** only moves that landed live — `{:realized [{:move/id :peradam
+  :discharged? :at} ...]}`. Needs the peradam-at-discharge wiring.
+- **Train:** distill the 5 metric-weights to CH1 `:visit-mass` (immediate) + ground value on CH2
+  `:peradam` (as real holes close). Policy side gets the Bayesian-blend/α-grows; value side is
+  honestly grounded only via CH2.
+
+**Peradam-source finding (the gating answer):** the peradam machinery exists (M-pudding-peradams
+three-witness certificate, futon7 `peradams-corpus.edn`) but is **NOT yet wired to emit a realized
+peradam per `:move/id` at live discharge** — corpus-calibration stage, keyed to the
+labor→arrow→fruit orb-triple, not the substrate-2 `(have,want)`. So: **ship CH1 now**; **CH2
+upgrades when the peradam-at-discharge per-`:move/id` emission is wired** — a concrete cross-mission
+seam **R2-CH2 ↔ M-pudding-peradams** (bind the three-witness certificate to the `promote!`
+discharge, keyed by `:move/id`); this gives M-pudding-peradams a concrete consumer (the
+value-grounding for the learning loop). CH1-only is still real policy improvement (the prior learns
+to *anticipate the lookahead* under self-value); CH2 adds the correction toward reality.
