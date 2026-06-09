@@ -478,3 +478,56 @@ seam **R2-CH2 ↔ M-pudding-peradams** (bind the three-witness certificate to th
 discharge, keyed by `:move/id`); this gives M-pudding-peradams a concrete consumer (the
 value-grounding for the learning loop). CH1-only is still real policy improvement (the prior learns
 to *anticipate the lookahead* under self-value); CH2 adds the correction toward reality.
+
+---
+
+## Review incorporated — Fable (Opus2x), 2026-06-09
+
+A producer's-eye review. Findings accepted; corrections to the record:
+
+1. **The scope-grain finding is the headline — ontological, not algorithmic.** Only 44 of the
+   apparent 461 detached scopes are genuine open work; ~417 were coverage-gap artifacts. So the
+   "Akira bomb" diffuseness was **substantially measurement error** — the epistemic field was wrong
+   by ~an order of magnitude *before* any gradient machinery, and the fix was *what counts as a
+   hole*, not an algorithm. Option-A's `:backfill` deferral correctly refuses to treat
+   citation-gaps as labor (typed-sorry discipline doing diagnostic work).
+
+2. **The peaked prior is PRESENTATIONAL, not informational.** z-norm + temperature converted a
+   genuinely tiny score spread (0.0127) into entropy-norm 0.85 *without the gradient knowing
+   anything more*. The prior's confidence is a tuned hyperparameter; it must NOT carry weight in
+   any external account until R2 grounds it. (Corrects Checkpoint 1's "useful prior": it's
+   *consumable*, not *informed*.)
+
+3. **CH1-only is self-CONSISTENCY improvement — sharper risk than §8.7 stated.** `G(π)` is built
+   from MY `:delta-g`; the search discharges no real sorry; so CH1 trains the prior to anticipate a
+   lookahead whose value function is the prior's own metric — AlphaZero with the terminal reward
+   amputated. Such loops can **confidently converge to artifacts of the metric**, amplifying the 5
+   features' biases. So **CH2 (real peradams) is load-bearing, not a downstream nice-to-have** —
+   it's the edge that makes the learning claim trustworthy at all. PROMOTED in priority.
+
+4. **The prior's real causal role is the top-k CUT, not exploration-guidance.** The search is
+   exhaustive over the branching set (not MCTS), so the prior *gates which moves enter the top-k* +
+   breaks ties (that's where tractability lives at 5565 nodes) — then distillation teaches it to
+   predict a search it *pre-determined via the cut*. Tighter self-reference; on record.
+
+5. **The depth-5 chain is partly BY CONSTRUCTION.** Precursor-chaining imposes the eightfold-phase
+   ordering, so the rollout "discovering" derive→argue→… partly rediscovers the workflow I encoded.
+   The non-trivial test v2 must report: **cross-mission unlocking** — a capability flip on one
+   mission opening reachable `:have`s on another (emergent, not encoded). The superset-prior + 9
+   chain-links *can* express it; whether the terrain *exhibits* it is the empirical question.
+
+6. **THE SYNTHESIS (the understated risk, foregrounded): both ends of the loop are currently *me*.**
+   G3 (the spec the gradient descends toward is **authored** — the capability anchors) and the CH1
+   self-reference (the value is **self-estimated** — my `:delta-g`) are the SAME hole from two
+   sides. Right now the loop is closed and self-referential: my spec → my gradient → my prior → a
+   search ranked by my value → distilled back into my prior — nothing external grounds it. **CH2
+   grounds the value end; resolving G3 (a learned/external spec) grounds the spec end.** Until both,
+   the "learning loop" learns only to be more self-consistent. This is the honest standing of the
+   learning claim — the apparatus is real and verified, but currently a beautifully-closed loop.
+
+7. **Methodology: structural witnesses don't cover semantic contracts.** The zero-drift handshake
+   checked structure (21/3/7/0, exact) and passed green *while* the central semantic contract (is
+   `:prior` actually consumed?) was violated by R1's re-flatten. The ratified fix needs **its own
+   witness** (a regression guard that the policy head is consumed, not recomputed) or it can
+   silently regress the same way. → action (claude-4 side, folds into the CH1 build): a
+   prior-consumption assertion.
