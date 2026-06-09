@@ -282,3 +282,14 @@ this route's loss — closing the AlphaZero loop (`reward = peradam` enters here
   gradient landscape is FLAT at scope-grain (sat 0.585→0.599, 44 detached in 5565) — structure
   strong, `:score`/`:prior` soft; metric-sharpening (class/frontier weighting) is the follow-up
   if the rollout leans on prior magnitudes.
+- **2026-06-09 — hot-swappable metric + the side-by-side payoff (Joe: "don't fix blind").** Added a
+  metric registry (`option-a`/`sharp`/`liveness`, `--metric`, tagged in `:emit/metric :C-variant`)
+  + a `--experiment` harness (same structure, different scores; variant files
+  `diffsub-moves-<name>.edn`). The experiment **immediately redirected the fix**: all three metric
+  variants gave a **uniform** prior (entropy-norm 1.000, prior-max = 1/55) despite real score
+  signal (score-cv 0.36, summit≫island 6×) — so the metric was NOT the bottleneck. The real lever
+  was the **prior softmax over small-magnitude gradient scores** flattening the ranking. Fix:
+  z-normalize scores + temperature (`DIFFSUB_PRIOR_TEMP`, default 2.0) → prior **uniform →
+  peaked** (entropy-norm 0.85, top move 10% mass vs 1.8% uniform; meaningful top-5). Handshake
+  unchanged (21/3/7). The metric stays a pluggable axis for future experiments; temperature is the
+  immediate tunable claude-4's PUCT can dial. Lesson: the experiment caught a wrong-knob fix.
