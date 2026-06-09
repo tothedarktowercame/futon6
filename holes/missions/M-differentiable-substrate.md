@@ -46,7 +46,13 @@ AlphaZero split is fully realised on the gradient side: prior (this) + search (c
 
 **Cross-agent state.** claude-4's consumer is built + tested (depth-5 chain PASS, 3-way root
 classifier, zero-drift handshake) and waiting on the producer bytes, which are committed on
-branch `diffsub/scope-grain-v2`. End-to-end run pends claude-4's bell pickup.
+branch `diffsub/scope-grain-v2`. **End-to-end is GREEN — SEAM CLOSED** (claude-4 witness futon2
+`holes/labs/e-rollout-v2-e2e.clj`, `3d41d26`): zero-drift handshake (21/3/7/0 exact), transitive
+reachability 44/44 close-holes lit from the 21 seeds + 3/3 summits + 7/7 islands dark, and the
+hypergraph-operator depth-5 chain unrolls live. The AlphaZero split now runs producer -> consumer
+-> rollout. (claude-4's clarification: soft scores don't touch reachability/depth — structural,
+all green — only *selection* among equally-reachable chains; metric-sharpening improves which
+chain the search prefers, R2 is the principled fix.)
 
 **Open (next moves).** (1) claude-4 runs the move-set end-to-end (expect 44 chained close-holes +
 3 summits + 7 dark islands). (2) The rollout-side metric/temperature experiment — which prior
@@ -328,3 +334,14 @@ this route's loss — closing the AlphaZero loop (`reward = peradam` enters here
   peaked** (entropy-norm 0.85, top move 10% mass vs 1.8% uniform; meaningful top-5). Handshake
   unchanged (21/3/7). The metric stays a pluggable axis for future experiments; temperature is the
   immediate tunable claude-4's PUCT can dial. Lesson: the experiment caught a wrong-knob fix.
+- **2026-06-09 — END-TO-END GREEN, seam CLOSED.** claude-4 ran the full rollout against the
+  landed producer (`diffsub-moves.edn`, 55 moves); witness futon2 `holes/labs/e-rollout-v2-e2e.clj`
+  (`3d41d26`). Zero-drift handshake exact (21 mission / 3 capability / 7 conjectural / 0 drift);
+  transitive reachability 44/44 close-holes lit from the 21 seeds, 3/3 cap summits reachable, 7/7
+  islands dark; live best-rollout depth-5 (hypergraph-operator mission→derive→argue→verify→
+  document→instantiate). v1's 3-reachable → 44 chained + 3 + 7. **The AlphaZero split runs
+  producer→consumer→rollout — the mission's central thesis is demonstrated end-to-end.**
+  claude-4 clarified the soft-score impact: it does NOT affect reachability/depth (structural,
+  all green), only *selection among equally-reachable chains* — so metric-sharpening (the `sharp`
+  variant / temperature) improves *which* chain the search prefers, and R2 (realized G(π) per
+  move-id → gradient training) is the principled fix; v1 forward-only as agreed.
