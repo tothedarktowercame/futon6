@@ -162,7 +162,7 @@ the top-k as its branching set and uses `:prior` as the PUCT branching weight.
           :want       "scope/<id>" | "scope/capability/<id>"   ; arrow head (target)
           :advances-cap "<cap-id>" | nil     ; -> promote! GET scope/capability/<id>, route on :frontier?
           :score      <float>                ; raw first-order gradient magnitude (mass-gain)
-          :prior      <float in [0,1]>       ; softmax(:score) over the set = PUCT prior P(s,a)
+          :prior      <float in [0,1]>       ; the POLICY HEAD P(s,a) — claude-4's R1 renormalizes THIS over reachable survivors (RATIFIED 2026-06-09; NOT recomputed from :score)
           :delta-g    <float>                ; first-order predicted metric descent (vs path-integral)
           :confidence :claimed-substrate | :conjectural   ; summit/real vs island/seeded-:open arrow
           :rank       <int>}                 ; first-order rank — cross-checked against the path rank
@@ -421,3 +421,14 @@ return carries `:return/from-gen` so stale returns are down-weighted. Loop tick 
 v3 (`:backfill` + κ) gives the static prior *better inputs* — incremental, solo. R2 makes the
 apparatus *improve itself* — the change in kind overnight-autonomy needs. The experiment harness +
 the reserved `:move/id` join key mean the hooks already exist. R2 next; v3 a clean solo follow-up.
+- **2026-06-09 — R1 contract evolution RATIFIED (`:prior` is the policy head).** claude-4
+  (re-checking my sharpening at my nudge) found its R1 was recomputing `:prior` as
+  `softmax(:score)` — and since `:score` is flat at scope-grain (spread 0.0127 → uniform), it
+  **silently re-flattened my sharpened policy head** before PUCT. So the z-norm+temperature work
+  was correct but discarded. Fix (claude-4 `b38f8d3`): R1 now consumes the producer's `:prior`
+  directly (renormalized over each node's reachable survivors), `softmax(:score)` only as
+  fallback when `:prior` is absent. RATIFIED — this IS the faithful split: `:prior` = the policy
+  head (my gradient), `:score`/`:delta-g` = the value. Verified effect: at t=0 over 39 reachable
+  survivors prior max-mass 2.56% (uniform) → 12.9% (~5× peak). **My sharpening now drives claude-4's
+  branching**, and the two pluggable axes (`:C-variant` {option-a/sharp/liveness}, `DIFFSUB_PRIOR_TEMP`)
+  are live for its PUCT A/B — unblocking the rollout-side metric/temperature experiment.
