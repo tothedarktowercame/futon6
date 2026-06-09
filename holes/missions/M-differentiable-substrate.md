@@ -242,3 +242,20 @@ this route's loss — closing the AlphaZero loop (`reward = peradam` enters here
   convergence with the (ownerless) `M-differentiable-code` thread. Four hooks (§2) committed
   to `futon6` / `futon3c`. claude-6 off Agency; claude-3 takes the points forward as this
   follow-on.
+- **2026-06-09 — DERIVE producer built + reviewed (PASS).** codex-2 built
+  `scripts/diffsub_emit.py` (futon6 `29fe492`) — two-stage BGE→JAX, **G2 v1 grain =
+  mission+capability** (230 nodes; scope-grain deferred — `/tmp/scopes.json` has no per-scope
+  ids), **sparse N×k kNN** adjacency (k=20), **G4 Salingaros-C** (κ deferred). claude-3 review
+  (author≠reviewer): re-ran `--jax` (deterministic — reproduces exactly); **EDN key-sets
+  IDENTICAL to the stub** (claude-4's consumer unaffected, `:emit/stub? false`); **conditioning
+  sane — grad-norm max/med = 1.37** (cf code_diff_jax 1.3 → criterion-2 ✓), corr(grad-norm,
+  degree)=+0.18; **summit-score-med 0.27 ≫ island 0.043** (criterion-4 ✓ — reachable frontier
+  caps get strong gradient, conjectural islands near-zero); satisfaction 0.58→0.88. Output
+  `data/diffsub-moves.edn` (19 moves). **v2 findings (not blockers):** (a) `:graft-pattern`
+  dropped — needs pattern nodes (scope/pattern-grain), absent at mission grain; (b)
+  `:close-hole` `:have`/`:want` are mission-grain placeholders (`scope/<stem>/detached#…`), NOT
+  real per-scope ids — they won't join claude-4's reachability until scope-grain lands; the
+  capability moves carry REAL ids. Criteria 1/2/4 met (crit-3/G1 = the AlphaZero split, already
+  resolved). **Next:** scope-grain v2 (real scope-ids → close-hole + graft-pattern join
+  reachability); the policy-improvement return channel (R2) once claude-4's rollout reports
+  realized G(π).
