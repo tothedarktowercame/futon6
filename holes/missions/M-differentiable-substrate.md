@@ -345,3 +345,79 @@ this route's loss — closing the AlphaZero loop (`reward = peradam` enters here
   all green), only *selection among equally-reachable chains* — so metric-sharpening (the `sharp`
   variant / temperature) improves *which* chain the search prefers, and R2 (realized G(π) per
   move-id → gradient training) is the principled fix; v1 forward-only as agreed.
+
+---
+
+## 8. R2 — the policy-improvement loop (v2 design, drafted 2026-06-09)
+
+**Thesis.** Close the AlphaZero loop. v1 is forward-only (prior → search). R2 makes it
+bidirectional: claude-4's search reports what it *concluded* per move, and this route trains its
+prior to predict that — so the prior improves from experience, the soft-score problem dissolves
+into *learning* (not hand-tuning), and `reward = peradam` finally does work. The change in kind:
+a fixed heuristic becomes a learning system.
+
+### 8.1 The return contract (claude-4 → claude-3) — the gating co-design
+
+Per rollout-batch, claude-4 emits the search's per-move statistics (NOT just the path outcome —
+credit assignment must be honest):
+
+```clojure
+{:return/at        <ts>
+ :return/from-gen  <prior-generation searched with>   ; staleness guard
+ :return/rollouts  <int>                                ; batch size
+ :moves [{:move/id  "<have>-><want>"
+          :visits   <int>     ; N(s,a) = the SEARCH'S IMPROVED POLICY π  (the training target)
+          :q        <float>   ; Q(s,a) = mean realised value of paths through it (value signal)
+          :selected <int>}    ; times on the best-rollout path
+         ...]}
+```
+The **visit-count `:visits`** is load-bearing — it IS the search's improved policy (AlphaZero's
+target). `:q`/`:selected` are value signals (for a later value head).
+
+### 8.2 The training mechanism (this route)
+
+A **Bayesian blend of a cold-start inductive prior + a learned refinement**:
+- **Cold-start** = the current gradient-over-metric (H3). Zero-data inductive bias.
+  `g(s) = w·features(s)`, features = [det, frontier, class-weight, log(gen), log(degree)]; w is the
+  hand-set variant coefficients today.
+- **Learned** = fit those same 5 coefficients w so the resulting prior matches claude-4's
+  visit-count policy π — **policy-distillation** (cross-entropy of my prior vs the search's π over
+  the shared move-set). **The metric experiment harness becomes the training harness**: the
+  side-by-side *enumerated* w-variants; R2 *optimises* w by gradient on the distillation loss.
+  Same parameterisation, learned not guessed.
+- **Blend (the posterior)** = `prior = (1−α)·cold + α·learned`, α grows with accumulated rollout
+  evidence. Gradient-prior = prior-over-weights; search outcomes = likelihood; blend = posterior
+  (the Bayesian-structure-learning reliability update, instantiated).
+
+Start linear-in-features (interpretable, few-shot-robust — rollouts are expensive, signal sparse).
+A richer learned head is a later capacity upgrade once data accumulates.
+
+### 8.3 The clock + versioning
+
+Batched: after B rollouts, claude-4 emits the aggregated return → refit w → re-emit
+`diffsub-moves.edn` tagged `:emit/gen <n>` → claude-4 searches the new prior for batch n+1. Each
+return carries `:return/from-gen` so stale returns are down-weighted. Loop tick = a batch.
+
+### 8.4 Exploration preservation (don't collapse the search)
+
+- Keep α < 1 (cold-start gradient-prior always contributes) — preserves inductive-bias exploration.
+- Temperature floor on the learned prior (don't over-peak).
+- claude-4's PUCT keeps its own exploration term + value head — the search explores regardless.
+
+### 8.5 Open design questions
+
+- **R2-Q1 (the gate):** does claude-4's rollout expose per-move `N(s,a)`/`Q`, or only best-path
+  `G(π)`? Co-design FIRST — visit-counts are the honest credit-assignment target.
+- **R2-Q2:** the α schedule (how fast to trust learned weights vs the inductive prior).
+- **R2-Q3:** cross-mission generalisation — features are generic (det/frontier/class/gen), so
+  learned w *should* transfer; verify (else the loop is per-mission, narrower).
+- **R2-Q4:** sparse-signal robustness — favour the 5-weight model + strong prior until data earns
+  more capacity.
+- **R2-Q5 (`reward = peradam`):** is `:q` the realised peradam (the typed-witness fruit a *closed*
+  hole emits)? Ties R2 to the pudding-prover peradam + sorry-arrow contracts.
+
+### 8.6 Why R2 over v3
+
+v3 (`:backfill` + κ) gives the static prior *better inputs* — incremental, solo. R2 makes the
+apparatus *improve itself* — the change in kind overnight-autonomy needs. The experiment harness +
+the reserved `:move/id` join key mean the hooks already exist. R2 next; v3 a clean solo follow-up.
