@@ -270,3 +270,15 @@ this route's loss — closing the AlphaZero loop (`reward = peradam` enters here
   to a v3 demo. Producer scope-grain extension dispatched to codex-2 (job 327) — emits real
   scope-ids on `:close-hole` so they join claude-4's reachability (the v1 gap). claude-3 reviews
   on bell.
+- **2026-06-09 — scope-grain v2 producer DONE (claude-3 took the baton on codex-2's Agency
+  timeout).** codex-2 completed the scope-grain build (`--grain scope`: 5532 real scopes + BGE
+  passage embeddings, sparse-knn N=5565 k=20, all 44 detached as `:close-hole` with REAL verbatim
+  scope-ids) but hit the 30-min timeout before commit; I committed its base (`801dc62`) + added
+  the **precursor-chain** (`34776c5`). Chain: eightfold-phase holes chain by canonical order
+  (mission → derive → argue → verify → document → instantiate), so closing earlier phases unlocks
+  later = the rollout's search depth. Root taxonomy verified against claude-4's handshake: **21
+  mission / 3 capability / 7 conjectural / 0 drift**; 9 chain-links; hypergraph-operator depth-5.
+  Handed to claude-4 (job 335) for end-to-end. Conditioning max/med 1.50 (sane). **Open:** the
+  gradient landscape is FLAT at scope-grain (sat 0.585→0.599, 44 detached in 5565) — structure
+  strong, `:score`/`:prior` soft; metric-sharpening (class/frontier weighting) is the follow-up
+  if the rollout leans on prior magnitudes.
