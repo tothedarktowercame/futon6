@@ -105,15 +105,71 @@ unclaimed islands (no terrain) correctly produce **no gradient** until a foothol
 constructed (this matches claude-1's reachability axis — an island is infinite-distance, flat
 field).
 
+### 3.1 The emit interface (ratified 2026-06-09 — the contract claude-4's rollout consumes)
+
+This route's output is a **ranked candidate move-set** in EDN. A *move* is a candidate BHK-arrow
+(keyed by `(have, want)` endpoints, aligning with claude-4's arrow store). The rollout consumes
+the top-k as its branching set and uses `:prior` as the PUCT branching weight.
+
+```clojure
+{:emit/at      <unix-ts>
+ :emit/metric  {:compose :additive :epistemic :C-holes :pragmatic :cap-ascent :C-variant :salingaros}
+ :emit/k       <int>
+ :moves [{:move/id    "<have>->. <want>"     ; stable key — dedupe, cross-check, return-channel
+          :move/class :close-hole | :graft-pattern | :advance-capability | :centre-mess
+          :have       "scope/<id>"           ; arrow tail (current state node)
+          :want       "scope/<id>" | "scope/capability/<id>"   ; arrow head (target)
+          :advances-cap "<cap-id>" | nil     ; -> promote! GET scope/capability/<id>, route on :frontier?
+          :score      <float>                ; raw first-order gradient magnitude (mass-gain)
+          :prior      <float in [0,1]>       ; softmax(:score) over the set = PUCT prior P(s,a)
+          :delta-g    <float>                ; first-order predicted metric descent (vs path-integral)
+          :confidence :claimed-substrate | :conjectural   ; summit/real vs island/seeded-:open arrow
+          :rank       <int>}                 ; first-order rank — cross-checked against the path rank
+         ...]}
+```
+
+Field rationale: `:have/:want` = arrow endpoints (claude-4's keying + sorry-arrow
+unify-on-promotion); `:advances-cap` = the capability-overlay read-contract hook (do not drift
+`:capability/frontier?`/`:status`); `:prior` = a **distribution**, not just a top-k cut (the
+AlphaZero policy head); `:delta-g` = the first-order number the rollout's `G(π)` is cross-checked
+against; `:confidence` = the island/summit trust split (a conjectural move is *proposed* terrain
+— the rollout discounts it); `:move/class` = which transition `T` applies (close a `:detached`
+hole / graft an arrow / flip capability-status via promote!). **Return channel (reserved):** the
+stable `:move/id` lets the rollout report realized `G(π)` per move back as the training target for
+this route's loss — closing the AlphaZero loop (`reward = peradam` enters here).
+
+**Two claude-4 constraints (ratified 2026-06-09), both already compatible:**
+- **Sim-on-copy / no `:7071` writes during search.** This route's emit is a **static data
+  artifact** — a snapshot of scored moves + `:emit/metric` version, consumed *once*. The rollout
+  sims entirely on its copy of the cap-overlay with zero live dependency on this route or on
+  7071 during search. The return channel (R2) is strictly *post*-search (training), never
+  mid-search.
+- **Reachability is the ROLLOUT's gate, not mine.** claude-4 consumes a *reachable* move-set
+  (open arrows whose `:have` is reached by some `:constructed` arrow). So this route emits
+  `:prior` over a **broad candidate set** (every move it can score off the metric, including
+  not-yet-reachable ones — flagged `:confidence :conjectural`, the islands); the **rollout
+  intersects with its currently-reachable set per sim-node and renormalizes `:prior` over the
+  survivors.** Emitting the superset is deliberate: constructing an arrow mid-rollout opens new
+  reachable `:have`s, and the prior must already cover them — so the prior is a *function over
+  the candidate space*, the rollout supplies the moving reachable mask.
+
 ---
 
 ## 4. Named gaps / open questions (carry, don't pre-answer)
 
-- **G1 — relation to claude-1's rollout.** Two routes to `G(π)`: gradient (this) vs discrete
-  rollout (`M-wm-policies`). Are they (a) competitors to cross-check
-  (combining-methods-as-diagnostic — their disagreement is signal), (b) the gradient *seeds*
-  the rollout's move-set, or (c) the gradient is the continuous relaxation the rollout
-  discretises? **Reconcile before building, not after.**
+- **G1 — relation to claude-1's rollout. ✅ RESOLVED 2026-06-09 (the AlphaZero split;
+  M-wm-policies §3, futon2 `b473b33`; coordinated by claude-1).** The two routes **COMPOSE,
+  not compete** (G1 options b+c *both*): this gradient route is the **policy prior** —
+  fast / global / first-order, it ranks candidate MOVES (which single edits descend the
+  metric toward the goal-anchors); claude-4's discrete rollout is the **search** — it consumes
+  this route's top-k proposed moves as its **branching set** and evaluates actual PATHS
+  (path-integral `G(π)` over sequences, the combinatorial structure a first-order gradient
+  can't see). `value = G(π)`, `reward = peradam`. **Interface:** this route EMITS ranked
+  candidate moves; the rollout CONSUMES the top-k (shape in §3.1). Where the first-order rank
+  disagrees with the path-integral rank = the **cross-check diagnostic** *and* the
+  **policy-improvement training signal** (the full AlphaZero loop — search improves the prior,
+  prior guides search). Ownership: claude-3 = gradient/prior, claude-4 = rollout/search,
+  claude-1 = coordination.
 - **G2 — node granularity at substrate scale.** H2 validated scope-grain on 342 code nodes;
   substrate-2 has **5,517 scopes**. Does the grain + the `N×N` adjacency scale, or does the
   loss need to be sparse / neighbourhood-local? (Same size-limit discipline `M-differentiable-
@@ -157,8 +213,9 @@ field).
 2. **Conditioning stays sane at substrate scale** (grad-norm max/med bounded; gradient tracks
    structure, not size — the H3 health numbers hold on 5,517 nodes, or the loss is made
    sparse).
-3. **G1 resolved**: a written reconciliation with claude-1's rollout (cross-check / seed /
-   relaxation) — so the two routes to `G(π)` compose rather than duplicate.
+3. **G1 resolved ✅ (2026-06-09)**: the AlphaZero split — this route is the policy prior, the
+   rollout is the search, composing via the §3.1 emit interface. The remaining build-bar is that
+   a real grad-loop *emits* the §3.1 shape and claude-4's rollout consumes it.
 4. The proposals **route toward the capability goal-anchors** (D2 stars), and islands with no
    terrain correctly produce no gradient (the honest "needs a foothold" signal).
 

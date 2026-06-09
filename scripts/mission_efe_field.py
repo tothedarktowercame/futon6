@@ -6,7 +6,7 @@
 #   g(s) = per-step cost / local metric (epistemic pole). NOT the EFE. EFE = G(π) = the
 #   geodesic over this; drawn later as policy streamlines. 🌟 claimed cap at its minting
 #   mission; ⭐ unclaimed = registered goal w/ no minting mission (endpoint, no terrain).
-import json, re, math
+import json, re, math, subprocess, time
 from pathlib import Path
 from collections import defaultdict
 
@@ -101,6 +101,86 @@ for li in range(1, NB):
                 contour.append(f'<line x1="{ax:.1f}" y1="{ay:.1f}" x2="{bx:.1f}" y2="{by:.1f}" '
                                f'stroke="#e6edff" stroke-width="1.1" opacity="{op:.2f}" stroke-linecap="round"/>')
 
+# --- MOMENTUM overlay: "Joe's territory" — missions worked recently (git, last ~3 weeks) ---
+# A warm LASSO (one bold dashed contour of a recency-weighted activity field), distinct from
+# the white metric level-sets: it shows WHERE THE WORK HAS BEEN, the momentum/exploit baseline
+# the EFE recommendation either confirms (inside) or breaks (outside).
+def march(grid, lv):  # marching-squares segment list at level lv (reused for the lasso)
+    segs = []
+    for gy in range(gh - 1):
+        for gx in range(gw - 1):
+            f00, f10 = grid[gy][gx], grid[gy][gx + 1]
+            f01, f11 = grid[gy + 1][gx], grid[gy + 1][gx + 1]
+            x0, y0, x1, y1 = gx * STEP, gy * STEP, (gx + 1) * STEP, (gy + 1) * STEP
+            cr = []
+            if (f00 > lv) != (f10 > lv): cr.append(interp((x0, y0), (x1, y0), f00, f10, lv))
+            if (f10 > lv) != (f11 > lv): cr.append(interp((x1, y0), (x1, y1), f10, f11, lv))
+            if (f11 > lv) != (f01 > lv): cr.append(interp((x1, y1), (x0, y1), f11, f01, lv))
+            if (f01 > lv) != (f00 > lv): cr.append(interp((x0, y1), (x0, y0), f01, f00, lv))
+            for k in range(0, len(cr) - 1, 2):
+                segs.append((cr[k], cr[k + 1]))
+    return segs
+
+NOW = time.time()
+MOM = defaultdict(float)
+for repo in sorted({p.parents[2] for p in ROOT.glob("futon*/holes/missions/M-*.md")}):
+    try:
+        out = subprocess.run(["git", "-C", str(repo), "log", "--since=21 days ago",
+                              "--pretty=format:%x01%ct", "--name-only"],
+                             capture_output=True, text=True, timeout=25).stdout
+    except Exception:
+        continue
+    t = None
+    for ln in out.splitlines():
+        if ln.startswith("\x01"):
+            t = int(ln[1:]) if ln[1:].strip().isdigit() else None
+        elif t and ln.endswith(".md"):
+            base = ln.rsplit("/", 1)[-1]
+            if base.startswith("M-"):
+                MOM["M-" + base[2:-3]] += math.exp(-((NOW - t) / 86400) / 10.0)  # ~10-day decay
+mgrid = [[0.0] * gw for _ in range(gh)]
+MSIG = 125.0
+mrc = int(3 * MSIG / STEP)
+for k, w in MOM.items():
+    if k not in POS:
+        continue
+    x, y = POS[k]
+    cgx, cgy = int(round(x / STEP)), int(round(y / STEP))
+    for vy in range(max(0, cgy - mrc), min(gh, cgy + mrc + 1)):
+        for vx in range(max(0, cgx - mrc), min(gw, cgx + mrc + 1)):
+            d2 = (vx * STEP - x) ** 2 + (vy * STEP - y) ** 2
+            mgrid[vy][vx] += w * math.exp(-d2 / (2 * MSIG * MSIG))
+mmax = max(max(r) for r in mgrid) or 1.0
+LV = 0.30 * mmax
+lasso_fill = [f'<rect x="{gx*STEP}" y="{gy*STEP}" width="{STEP}" height="{STEP}" fill="#ffae3b" opacity="0.045"/>'
+              for gy in range(gh - 1) for gx in range(gw - 1) if mgrid[gy][gx] > LV]
+lasso = "".join(f'<line x1="{a[0]:.1f}" y1="{a[1]:.1f}" x2="{b[0]:.1f}" y2="{b[1]:.1f}" stroke="#ffb43c" '
+                f'stroke-width="3.4" opacity="0.82" stroke-dasharray="11,8" stroke-linecap="round"/>'
+                for a, b in march(mgrid, LV))
+def in_territory(px, py):
+    gx, gy = int(round(px / STEP)), int(round(py / STEP))
+    return (0 <= gy < gh and 0 <= gx < gw and mgrid[gy][gx] > LV)
+
+# DARK MATTER: momentum missions with NO scope-district — recently worked, not (yet) in
+# substrate-2. They make empty lasso loops (gravity, no light); a ghost marker names them.
+darkm = sorted((k for k in MOM if k in POS and k[2:] not in by_m and MOM[k] > 1.0),
+               key=lambda k: -MOM[k])
+ghosts = []
+for k in darkm:
+    gx0, gy0 = POS[k]; stem = k[2:]
+    tt = (f"{stem} — DARK MATTER: recent git momentum ({MOM[k]:.1f}) but NO substrate-2 "
+          f"scope-district — a recently-worked mission D1 hasn't ingested yet. Present on "
+          f"momentum (the empty lasso loop), invisible to the metric.")
+    ghosts.append(
+        f'<g><title>{tt}</title>'
+        f'<circle cx="{gx0:.0f}" cy="{gy0:.0f}" r="24" fill="#ffb43c" opacity="0.05" pointer-events="all"/>'
+        f'<circle cx="{gx0:.0f}" cy="{gy0:.0f}" r="24" fill="none" stroke="#d8b066" stroke-width="1.3" '
+        f'stroke-dasharray="4,4" opacity="0.85"/>'
+        f'<text x="{gx0:.0f}" y="{gy0+5:.0f}" text-anchor="middle" font-size="16" fill="#d8b066" '
+        f'pointer-events="all">⬡</text>'
+        f'<text x="{gx0+28:.0f}" y="{gy0+4:.0f}" fill="#d8b066" font-size="12">{stem} · no substrate-2 district (dark matter)</text>'
+        f'</g>')
+
 # faint pattern-road backdrop (attestation-weighted)
 roads = []
 for a, b, w in ROADS:
@@ -164,6 +244,38 @@ for i, c in enumerate(islands):
     t = f"{c} — UNCLAIMED ISLAND ({info['status']}): NO ascent-anchor, no terrain — needs a constructed foothold. {info.get('title','')[:100]}"
     sky.append(starpoly(180 + i * 470, 80, 13, "none", "#ff8a6a", c, t.replace('"', "'")))  # red-ish = truly off-map
 
+# --- specially MARKED missions (e.g. the WM's current recommendation) — 🚀 + explainer ---
+MARKED = {
+    "emacs-cursor-peripheral": (
+        "War Machine recommendation",
+        "Read-only Emacs peripheral — a visible agent cursor 'body' inside the existing Emacs "
+        "session via the futon3c peripheral registry + WS transport (futon3 mission, in progress)."),
+}
+marks = []
+for stem, (why, desc) in MARKED.items():
+    key = "M-" + stem
+    if key not in POS:
+        continue
+    mx, my = POS[key]
+    mscs = by_m.get(stem, [])
+    mdet = sum(1 for s in mscs if s["det"])
+    mfront = sum(1 for s in mscs if s["binder"] in FRONTIER)
+    title = (f"🚀 M-{stem} — {why}.  {desc}  "
+             f"METRIC HERE: class={CLS.get(stem,'?')} · generativity {GEN.get(stem,0)} · "
+             f"{len(mscs)} scopes, {mdet} open/:detached, {mfront} frontier.  "
+             f"DIAGNOSTIC: low open-signal ({mdet}/{len(mscs)}) and no frontier scopes ⇒ a low "
+             f"epistemic peak — so a WM pick here is likely pragmatic/where-driven, not terrain-driven. "
+             f"Look at WHERE it sits: which class-neighbourhood, near which roads/stars.")
+    t = title.replace('"', "'")
+    marks.append(
+        f'<g><title>{t}</title>'
+        f'<circle cx="{mx:.0f}" cy="{my:.0f}" r="46" fill="none" stroke="#7fe0ff" stroke-width="1.0" opacity="0.40"/>'
+        f'<circle cx="{mx:.0f}" cy="{my:.0f}" r="34" fill="#7fe0ff" opacity="0.07" pointer-events="all"/>'
+        f'<circle cx="{mx:.0f}" cy="{my:.0f}" r="34" fill="none" stroke="#7fe0ff" stroke-width="2.4" opacity="0.95"/>'
+        f'<text x="{mx:.0f}" y="{my+11:.0f}" text-anchor="middle" font-size="32" pointer-events="all">🚀</text>'
+        f'<text x="{mx+42:.0f}" y="{my+5:.0f}" fill="#bdeaff" font-size="15" font-weight="bold">M-{stem} ◄ WM</text>'
+        f'</g>')
+
 doc = f"""<!doctype html><meta charset=utf-8><title>Futon City — per-scope metric field</title>
 <style>body{{margin:0;background:#05060a;color:#cdd3df;font:13px sans-serif}}header{{padding:11px 20px}}
 h1{{font-size:16px;margin:0 0 4px}}p{{margin:0;color:#8b95a7;font-size:12px;max-width:1180px}}
@@ -175,13 +287,24 @@ streamlines). Each mission is a DISTRICT — scopes spiral around the HEAD hub, 
 <span style="color:#3a7ad0">blue=pipeline</span> · grey=stub) and <b>sized by generativity</b> (backlinks).
 Orange points = open <b>:detached</b> holes (high ground); smooth level sets = topography; faint purple = pattern
 roads. <b>★ filled = claimed</b> capability (at its minting mission) · <b>☆ empty = unclaimed</b> (sky: a registered
-goal with no minting mission). <b>Hover any star or hub for its story.</b></p></header>
+goal with no minting mission). <b>🚀 = a specially-marked mission (the WM's current recommendation)</b> —
+cyan ring, hover for its story + metric diagnostic. <b><span style="color:#ffb43c">amber dashed lasso = YOUR
+territory</span></b> (missions worked in git's last ~3 weeks — the momentum/exploit baseline; inside = the WM
+confirms, outside = it breaks trend). <b><span style="color:#d8b066">⬡ = dark matter</span></b> (a lasso loop with
+momentum but no substrate-2 district — a mission worked but not yet ingested). <b>Hover any star or hub for its story.</b></p></header>
 <svg width="{W}" height="{H}" viewBox="0 0 {W} {H}">
 <rect x="0" y="0" width="{W}" height="150" fill="#0c0f18"/>
-<g>{''.join(fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
+<g>{''.join(fill)}</g><g>{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
 <g>{hubline_svg}</g><g>{scope_svg}</g><g>{hub_svg}</g>
-<g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g></svg>"""
+<g>{lasso}</g><g>{''.join(ghosts)}</g>
+<g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
+<g>{''.join(marks)}</g></svg>"""
 OUT.write_text(doc)
 print(f"wrote {OUT}")
 print(f"{len(scope_pts)} scopes / {len(hubs)} districts · {sum(1 for p in scope_pts if p[3])} holes · "
       f"{len(contour)} contour segs · {len(roads)} roads · 🌟{len(claimed)} ⭐{len(unclaimed)}")
+_top = sorted(MOM.items(), key=lambda kv: -kv[1])[:10]
+print("momentum (recent-git, top): " + ", ".join(f"{k[2:]}={v:.2f}" for k, v in _top))
+_p = POS.get("M-emacs-cursor-peripheral")
+print(f"lasso level={LV:.3f}/mmax={mmax:.3f} · 🚀 emacs-cursor-peripheral inside YOUR territory? "
+      f"{in_territory(*_p) if _p else 'n/a'}")
