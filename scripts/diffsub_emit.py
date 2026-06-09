@@ -343,14 +343,39 @@ def do_jax(grain: str) -> None:
 
     if grain == "scope":
         det_scopes = [nd for nd in nodes if nd.get("kind") == "scope" and nd.get("det")]
+        # PRECURSOR CHAIN (claude-3): eightfold-phase holes chain by canonical phase order so
+        # closing an earlier phase UNLOCKS the next (the depth claude-4's rollout searches over).
+        # First detached phase roots at the mission entity (the t=0 axiom claude-4 seeds); each
+        # later phase's :have = the prior detached phase's scope-id (itself a :want, so not a root).
+        # Non-phase holes (loose/map/cap) root at the mission (depth-1). Root taxonomy unchanged:
+        # the only roots are the 21 mission entities (+ cap summits + conjectural islands elsewhere).
+        PHASE_ORDER = {p: i for i, p in enumerate(
+            ["identify", "map", "derive", "argue", "verify", "document", "instantiate"])}
+        by_mission: dict[str, list] = defaultdict(list)
         for nd in det_scopes:
-            i = node_by_id[nd["id"]]
-            score = max(1e-6, float(gnorm[i]) * 900.0)
-            have = nd.get("mission_node") or f"scope/mission/{nd.get('mission')}"
-            moves.append({"cls": "close-hole", "have": have, "want": nd["scope_id"],
-                          "adv": None, "score": score, "conf": "claimed-substrate",
-                          "terminal": False, "delta_g": -score * 0.08,
-                          "note": f"real detached scope {nd['scope_id']} in {nd.get('mission')} [{nd.get('binder')}]"})
+            by_mission[nd.get("mission")].append(nd)
+        for stem, nds in by_mission.items():
+            mission_node = next((x.get("mission_node") for x in nds if x.get("mission_node")),
+                                f"scope/mission/{stem}")
+            phase_nds = sorted((x for x in nds if x.get("binder") == "eightfold-phase"),
+                               key=lambda x: PHASE_ORDER.get(x["scope_id"].rsplit("/", 1)[-1], 99))
+            prev_scope = None
+            for nd in phase_nds:
+                i = node_by_id[nd["id"]]
+                score = max(1e-6, float(gnorm[i]) * 900.0)
+                have = prev_scope if prev_scope else mission_node
+                moves.append({"cls": "close-hole", "have": have, "want": nd["scope_id"],
+                              "adv": None, "score": score, "conf": "claimed-substrate",
+                              "terminal": False, "delta_g": -score * 0.08,
+                              "note": f"detached phase {nd['scope_id']} in {stem} (chain)"})
+                prev_scope = nd["scope_id"]
+            for nd in (x for x in nds if x.get("binder") != "eightfold-phase"):
+                i = node_by_id[nd["id"]]
+                score = max(1e-6, float(gnorm[i]) * 900.0)
+                moves.append({"cls": "close-hole", "have": mission_node, "want": nd["scope_id"],
+                              "adv": None, "score": score, "conf": "claimed-substrate",
+                              "terminal": False, "delta_g": -score * 0.08,
+                              "note": f"detached {nd['scope_id']} in {stem} [{nd.get('binder')}] (root)"})
 
         mess = [nd for nd in det_scopes if nd.get("class") == "mess"]
         if mess:
