@@ -257,6 +257,55 @@ def pattern_slots(text: str, pattern_index: dict[str, str]) -> list[dict]:
     return slots
 
 
+def _record_field(window: str, label_re: str) -> str | None:
+    """Extract the value of a `Label:` field up to the next field/blank."""
+    m = re.search(
+        r"\*{0,2}(?:" + label_re + r")\*{0,2}:?\s*(.+?)"
+        r"(?:\n\s*[-*]?\s*\*{0,2}[A-Z][A-Za-z ]{2,20}\*{0,2}:|\n\s*\n|$)",
+        window,
+        re.S,
+    )
+    return re.sub(r"\s+", " ", m.group(1)).strip().strip("*").strip()[:400] if m else None
+
+
+def psr_pur_records(text: str) -> list[dict]:
+    """Detect genuine PSR/PUR records via the template discriminator (use, not
+    mention): a `Pattern:` line with adjacent Outcome+Prediction-error => PUR;
+    a `Pattern chosen:` line with adjacent Rationale/Candidates => PSR. Carries
+    the named pattern + the structured facets (the prediction-error/outcome being
+    the grounding signal for the downstream priming layer)."""
+    lines = text.split("\n")
+    out = []
+    for i, ln in enumerate(lines):
+        window = "\n".join(lines[i : i + 12])
+        mp = re.match(r"\s*[-*]?\s*\*{0,2}Pattern:?\*{0,2}\s*([a-z0-9][a-z0-9-]{6,})", ln)
+        if mp and "chosen" not in ln.lower() and re.search(r"Prediction error", window) and re.search(r"Outcome", window):
+            out.append({
+                "kind": "pur",
+                "pattern": mp.group(1).rstrip("-"),
+                "anchor": ln.strip()[:160],
+                "facets": {
+                    "actions": _record_field(window, "Actions taken|Actions"),
+                    "outcome": _record_field(window, "Outcome"),
+                    "prediction-error": _record_field(window, "Prediction error"),
+                    "notes": _record_field(window, "Notes"),
+                },
+            })
+            continue
+        cp = re.search(r"Pattern chosen:?\s*\*{0,2}\s*([a-z0-9][a-z0-9-]{6,})", ln)
+        if cp and re.search(r"Rationale|Candidates", window):
+            out.append({
+                "kind": "psr",
+                "pattern": cp.group(1).rstrip("-"),
+                "anchor": ln.strip()[:160],
+                "facets": {
+                    "candidates": _record_field(window, "Candidates considered|Candidates"),
+                    "rationale": _record_field(window, "Rationale"),
+                },
+            })
+    return out
+
+
 def make_scope(
     entity_id: str,
     idx: int,
@@ -391,6 +440,17 @@ def detect_mission_scopes(
                 continue
             ends = ends + find_concepts(sec.text, kernel_terms)
             scope = make_scope(entity_id, idx, binder_type, parent, sec.title, phase_name, sec.start, sec.end, ends)
+            scopes.append(scope)
+            idx += 1
+
+        # psr/pur: attested pattern-application records (use, not mention).
+        for rec in psr_pur_records(sec.text):
+            p_ends = [{"role": "pattern", "ident": rec["pattern"], "ref": pattern_index.get(rec["pattern"])}]
+            scope = make_scope(entity_id, idx, rec["kind"], parent, sec.title, parent_phase or "loose", sec.start, sec.end, p_ends)
+            scope["record"] = rec["kind"]
+            scope["pattern-ident"] = rec["pattern"]
+            scope["facets"] = rec["facets"]
+            scope["anchor-line"] = rec["anchor"]
             scopes.append(scope)
             idx += 1
 
