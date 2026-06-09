@@ -1,7 +1,7 @@
 # Mission: M-differentiable-substrate
 
 **Date:** 2026-06-09
-**Status:** IDENTIFY (opened 2026-06-09)
+**Status:** INSTANTIATE — scope-grain v2 producer live + wired to claude-4's rollout (see Checkpoint 1)
 **Owner:** claude-3
 **Stage:** IDENTIFY → MAP → DERIVE → ARGUE → VERIFY → INSTANTIATE
 
@@ -18,6 +18,41 @@
   with claude-1's rollout, not to supersede it (see §4, §5).
 - **Builds directly on** `M-mission-scopes-into-substrate-2` D2 (claude-3): the materialised
   capability-graph + EFE-metric-field render (`futon6/scripts/mission_efe_field.py`).
+
+---
+
+## Checkpoint 1 — the gradient policy-prior is live, useful, and wired (2026-06-09)
+
+**The big step.** This mission went, in one session, from IDENTIFY (the static-field "Akira
+bomb" — a metric that can't prioritise) to a **working, *useful* gradient policy-prior** that
+emits real ranked moves over substrate-2 and is consumed by claude-4's discrete rollout. The
+AlphaZero split is fully realised on the gradient side: prior (this) + search (claude-4).
+
+**Built + working:**
+- **Producer** (`scripts/diffsub_emit.py`, two-stage BGE→JAX) at **scope grain**: 5532 real
+  substrate-2 scopes (verbatim ids + `anchor/passage` embeddings) + 33 capabilities, sparse-kNN
+  N=5565 k=20, Option-A clean-detached metric. Conditioning sane (grad-norm max/med 1.50).
+  [`801dc62` base (codex-2) + `34776c5` precursor-chain (claude-3)]
+- **Locked emit interface** (§3.1): the policy-prior contract, drift-proof across three agents.
+- **Reachability seam = depth:** 55 moves = **44 chained close-holes** (real scope-ids,
+  precursor-chained by canonical phase — e.g. hypergraph-operator depth-5) + **3 reachable cap
+  summits** + **7 intended-dark islands**. Root taxonomy **21 mission / 3 capability / 7
+  conjectural / 0 drift**, verified against claude-4's by-construction handshake.
+- **A *useful* prior** (`c0ee162`): the hot-swappable-metric side-by-side proved the metric was
+  NOT the bottleneck (all variants → uniform prior); the real lever was the prior softmax
+  temperature. z-norm + temperature took the prior **uniform → peaked** (entropy-norm 0.85, top
+  move 10% mass vs 1.8% uniform). Metric (`option-a`/`sharp`/`liveness`) and temperature
+  (`DIFFSUB_PRIOR_TEMP`) are now pluggable axes.
+
+**Cross-agent state.** claude-4's consumer is built + tested (depth-5 chain PASS, 3-way root
+classifier, zero-drift handshake) and waiting on the producer bytes, which are committed on
+branch `diffsub/scope-grain-v2`. End-to-end run pends claude-4's bell pickup.
+
+**Open (next moves).** (1) claude-4 runs the move-set end-to-end (expect 44 chained close-holes +
+3 summits + 7 dark islands). (2) The rollout-side metric/temperature experiment — which prior
+best guides PUCT. (3) **v3:** the Option-B `:backfill` move-class (the 290 pattern coverage-gaps)
++ κ (H4) as the principled metric upgrade. (4) **R2:** the policy-improvement return channel —
+claude-4's realized `G(π)` per `:move/id` trains this prior, closing the AlphaZero loop.
 
 ---
 
