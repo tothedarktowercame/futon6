@@ -432,3 +432,14 @@ the reserved `:move/id` join key mean the hooks already exist. R2 next; v3 a cle
   survivors prior max-mass 2.56% (uniform) → 12.9% (~5× peak). **My sharpening now drives claude-4's
   branching**, and the two pluggable axes (`:C-variant` {option-a/sharp/liveness}, `DIFFSUB_PRIOR_TEMP`)
   are live for its PUCT A/B — unblocking the rollout-side metric/temperature experiment.
+- **2026-06-09 — R2 confirmed = v2 (claude-4's honest gating answers).** (1) v1 exposes NO
+  per-(s,a) N(s,a)/Q — it's a forward best-rollout (depth-bounded, threads `:move/id`, computes
+  `G(π)` per *policy* as a path-integral, no tree backups). The visit-count/Q machinery (the
+  AlphaZero policy target) is exactly the v2 build on claude-4's side; my distillation-refit pairs
+  with it. (2) `:q` not emitted yet; claude-4's lean = `:q` = realized `G(π)` attributed per
+  `:move/id`, with the peradam as the reward feeding it — but the **reality-vs-self-estimate**
+  choice (R2-Q5: is `:q` a *real* discharged-sorry peradam or the search's own value estimate?) is
+  the v2 co-design surface, deferred to that round by agreement. So §8 stands as the v2 design;
+  v1 stays forward-only. Also: the **A/B is now live** (claude-4 consumes `:prior`, so the variant
+  files + `DIFFSUB_PRIOR_TEMP` move its selection) — queued behind Joe's greenlight; it reports
+  which prior gives lowest-`G(π)`/fastest rollouts.
