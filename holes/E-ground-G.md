@@ -150,3 +150,53 @@ step. Two ways to get the data:
 (a, retrospective, available now) or generate-forward via the discharge-emission (b)? The original
 candidate list assumed the closure data existed; it doesn't — so the excursion's true v0 is
 *acquiring the realized-closure signal*, not consuming it.
+
+## Per-closure evidence shape (Joe, 2026-06-10): the M-memes-arrows three-state maturation
+
+Each closure carries **steppable evidence** in the canonical one-arrow-three-states shape
+(`futon3a/holes/labs/M-memes-arrows/reference-case-one-arrow-three-stages.edn`): a closure is an
+arrow-type keyed by its `(have, want)` endpoints, stepping
+`:correlated` (a hunch — co-occurrence, no method) → `:open` (a typed gap = the **sorry**, method
+absent) → `:constructed` (the runnable **method = BHK arrow = wiring diagram**). The closure IS the
+`:open → :constructed` step; the evidence is that record, with `:token-identity-proof` (same
+endpoints — matured, not re-minted) and `:provenance` (commit / cg-chain). The recorder's `:evidence`
+field carries this map verbatim (no recorder change needed).
+
+```clojure
+;; the :evidence each append-closure! entry carries
+{:arrow {:have "<precursor / what we had>" :want "<what the closure constructs>"
+         :endpoint-key [:<have-key> :<want-key>]}
+ :states
+ [{:state :correlated :plain "a hunch"            :evidence "<co-occurrence / rationale>" :construction nil}
+  {:state :open        :plain "a gap with a known shape"
+   :goal "<the committed goal>" :type-fixed-by "<the contract that fixes the type>"
+   :method-absent "<what's missing>" :construction nil}
+  {:state :constructed :plain "the machine / the proof" :addressed-at "<date>"
+   :construction {:method "<the runnable artifact>" :prerequisite "<deps>"
+                  :commit "<sha>" :artifact "<path>"} :same-token? true}]
+ :token-identity-proof "same (have,want) endpoints; the arrow matured, it was not re-minted"
+ :provenance "<where the construction lives + the commit/cg-chain>"}
+```
+
+### Worked example — `kit-outbox` (currently at `:open`; closing fills `:constructed`)
+```clojure
+{:arrow {:have "daily-scan + interest-network + eoi-new (three working pieces, no pipeline)"
+         :want "a staged outbox: scan -> interest-network match -> eoi-new draft -> staged (ready to send)"
+         :endpoint-key [:scan+interest+eoi-pieces :staged-outbox]}
+ :states
+ [{:state :correlated :plain "a hunch"
+   :evidence "the three pieces exist + co-occur in cold-outreach work; the registry note 'mostly WIRING existing pieces'"
+   :construction nil}
+  {:state :open :plain "a gap with a known shape"   ;; <-- kit-outbox sits HERE now (:held island)
+   :goal "wire the four steps into one staged-outbox pipeline; clears T2.2"
+   :type-fixed-by "T2.2 :pudding-requires — an engine-authored draft in the outbox for a :cold-scan-lead"
+   :method-absent "the wiring (the pieces are unconnected; it is an unclaimed island, off-map)"
+   :construction nil}
+  {:state :constructed :plain "the machine" :addressed-at "PENDING"
+   :construction {:method "PENDING — the staged-outbox pipeline" :prerequisite "scan / interest-network / eoi-new"
+                  :commit "PENDING" :artifact "PENDING"} :same-token? false}]
+ :token-identity-proof "same endpoints across states; will mature in place, not be re-minted"
+ :provenance "futon7 registry :kit-outbox; closure lands when the pipeline is wired + committed"}
+```
+The steppability is the point: anyone can read the record top-to-bottom and see exactly where the
+hole *is* (here, `:open`) and what `:constructed` will require — closure is filling the last node.
