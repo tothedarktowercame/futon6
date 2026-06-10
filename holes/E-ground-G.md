@@ -200,3 +200,14 @@ field carries this map verbatim (no recorder change needed).
 ```
 The steppability is the point: anyone can read the record top-to-bottom and see exactly where the
 hole *is* (here, `:open`) and what `:constructed` will require — closure is filling the last node.
+
+## Per-closure Lab Notes (Joe, 2026-06-10): make the evidence *visible*
+
+For the **early** closures, each also gets a **Lab Note** (Markdown + embedded **Mermaid**) in
+`holes/closure-lab-notes/NN-<scope>.md`, so the evidence is legible + **critique-able** by Joe and
+Fable — not just machine-parseable EDN. Each Lab Note renders:
+- the **three-state maturation** (`:correlated → :open → :constructed`) as a Mermaid state diagram;
+- the **wiring diagram** (the `:constructed` state) as a Mermaid flowchart — *see* the construction;
+- the **cascade** (`:correlated`) where one exists (thin cascades are themselves a data point);
+- provenance, the finding, and an explicit **critique surface** (what Joe/Fable might challenge).
+First: `closure-lab-notes/01-recommendation-bindings-q5.md`.
