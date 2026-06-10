@@ -98,7 +98,7 @@ def learned_from(closures, computed):
         p: {
             "alpha": alpha[p],
             "beta": beta.get(p, 0),
-            "mean": round(alpha[p] / (alpha[p] + beta.get(p, 0)), 6),
+            "mean": round((1 + alpha[p]) / (2 + alpha[p] + beta.get(p, 0)), 6),  # Beta(1,1) prior -> proper + count-differentiated
         }
         for p in sorted(alpha)
     }

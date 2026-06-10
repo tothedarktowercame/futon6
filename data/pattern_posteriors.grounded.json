@@ -2,31 +2,31 @@
   "evidence-situated-log": {
     "alpha": 1,
     "beta": 0,
-    "mean": 1.0
+    "mean": 0.666667
   },
   "mission-anchored-scan": {
     "alpha": 1,
     "beta": 0,
-    "mean": 1.0
+    "mean": 0.666667
   },
   "mission-unlocks-eoi": {
     "alpha": 1,
     "beta": 0,
-    "mean": 1.0
+    "mean": 0.666667
   },
   "model-recompute-schedule": {
     "alpha": 1,
     "beta": 0,
-    "mean": 1.0
+    "mean": 0.666667
   },
   "prototype-maturity-lifecycle": {
     "alpha": 1,
     "beta": 0,
-    "mean": 1.0
+    "mean": 0.666667
   },
   "typed-kolmogorov-arrows": {
     "alpha": 1,
     "beta": 0,
-    "mean": 1.0
+    "mean": 0.666667
   }
 }
