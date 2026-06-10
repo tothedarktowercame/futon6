@@ -5,32 +5,42 @@ Proof Sprint" (futon6). Format: running example, not monograph — the primary
 source is `futon6/holes/missions/E-mission-head.md` and its sibling artifacts;
 this paper reads them rather than repeating them.*
 
-**Status:** skeleton (2026-06-10, Joe + Fable). The §5 synthesis is the novel
-content; everything else narrates artifacts that already exist.
+**Status:** draft v2 (2026-06-10, Joe + Fable) — level-0 prose now holds to the
+plain-language standard (the ARGUE §4.1 discipline applied to the whole paper:
+boxes may speak the system's native language; the prose around them may not).
 
 ---
 
 ## 1. Two ascents of one mountain
 
-On 2026-06-10 a mission was developed from a single greenfield HEAD to a
-verified design in one working session — with two instruments watching it the
-whole way. The first instrument read its **structure**: a live panel showing
-the mission's typed scopes — phases, sections, patterns, selection records —
-materializing as each section was written, absent phases rendered as ghosts.
-The second read its **life**: the same HEAD compiled to an 8+32-bit sigil,
-birth vitals, falsifiability conditions, a survived adversarial bout, and a
-deadline clause with teeth.
+In the software system we work in, the unit of work is called a *mission*: a
+single document that begins with a short statement of intent (its *HEAD*) and
+grows, phase by phase, into a finished piece of work. On 10 June 2026 one
+mission went from a bare statement of intent to a verified design in a single
+working session — and two different instruments watched it happen.
 
-The Daumal-affine observation: these are two ascents of the same mountain by
-different faces, and each can report the other's summit. Neither reading
-reduces to the other; the paper's contribution (§5) is their synthesis.
+The first instrument read the mission's **structure**. As each section was
+written, a live outline showed the document's parts — its phases, sections,
+and cited methods — appearing as nested, colored blocks, with the phases that
+had *not* been written yet shown as pale "ghost" lines. The second instrument
+read the mission's **life**. The same statement of intent was compiled into a
+small numerical fingerprint, from which the system computed a health report
+for the newborn work: how confident, what was missing, what would count as
+failure — together with stated conditions under which the work would declare
+itself dead.
+
+In René Daumal's *Mount Analogue*, a mountain is climbed by parties on
+different faces, and what makes the summit real is that the ascents agree.
+The two readings here are two such ascents: neither reduces to the other, and
+their agreement — made precise in §5 — is the point.
 
 ## 2. The running example
 
-`E-mission-head.md` — a mission whose subject is missions: "make the mission
-HEAD a typed object." Its development is unusually well-instrumented because
-it instrumented *itself*: every phase it grew was captured by the tooling it
-was building. Primary artifacts (the paper's data):
+The running example is a mission whose subject is missions themselves: *make
+the opening statement of intent a typed, checkable object*. Its development
+is unusually well documented because it documented itself — every phase it
+grew through was captured by the very tooling it was building. The primary
+sources (everything below is on disk and quoted from, never paraphrased):
 
 | artifact | reading |
 |---|---|
@@ -45,31 +55,42 @@ was building. Primary artifacts (the paper's data):
 
 ## 3. The scope reading (anatomy)
 
-The mission as a nested system of typed regions anchored in text: the
-eightfold spine, loose-sections, pattern/PSR/PUR records, the plain-argument
-sub-scope; detected (`mission_scope_detect.py`), ingested to substrate-2,
-rendered as the Scratch-Map. Third-person, structural, *what the mission is
-made of*. Key device: the **ghost line** — a canon phase with no scope yet. The primary
-source's opening theme, as the scope typography renders it:
+Read structurally, a mission is a nested system of typed regions of text —
+*scopes*. The standard life-cycle phases form its spine; sections nest inside
+phases; records of which methods were chosen, and how they fared, nest inside
+sections. A detector finds these regions automatically and a panel draws them
+as colored blocks inside blocks (the same typography used in this PDF). This
+reading is third-person and anatomical: it says what the mission is *made
+of*. Its most useful device is the **ghost line**: a life-cycle phase that
+the standard form expects but the document does not yet contain, drawn in
+pale outline. Here is the running example's opening statement, exactly as the
+structural typography renders it:
 
 <!-- excerpt: holes/missions/E-mission-head.md :: ## HEAD -->
 
 ## 4. The AIF reading (physiology)
 
-The mission as a lifeform seeded from its HEAD: the recast to pattern form
-(Golemization), the compiled sigil, health-at-birth, falsifiers authored
-before constructions, the Calculemus self-argument, the wire-or-die clause.
-First-person (the mission's own model of itself), dynamical, *what the
-mission wants and whether it is well*. Key device: the **open arrow** — a
-typed gap with its RHS specified and its construction owed. The moment the
-lifeform first spoke — the sigil compilation, from the source:
+Read the other way, the mission is a small organism. Its statement of intent
+is rewritten in a four-part design-pattern form (*if / however / then /
+because*) and compiled into a numerical fingerprint — the system borrows the
+word *sigil*, after an earlier experiment in which simulated ants were
+animated by installing exactly such fingerprints. From the sigil the system
+computes birth vitals; the design states in advance what observations would
+prove it wrong; the work even argues for its own existence against the
+strongest objections we could write down, and carries a clause that declares
+it dead, publicly, if its parts are not put to use by a deadline. This
+reading is first-person and physiological: it says what the mission *wants*
+and whether it is *well*. Its most useful device is the **open arrow**: a
+named gap whose target is specified but whose construction is still owed.
+The moment the organism first spoke — the fingerprint compilation, from the
+source:
 
 <!-- excerpt: holes/missions/E-mission-head.md :: ### 3.3.1 v0.1 RESULT — the Golemization run (2026-06-10) -->
 
 ## 5. The synthesis (the new thing)
 
-The two readings are not analogues; they are **coupled as observation and
-model**:
+The two readings are not merely parallel descriptions; they are **coupled,
+the way observation and model are coupled in a living thing**:
 
 > **The scope reading is the lifeform's observation space; the AIF reading is
 > its generative model. A mission is well-formed exactly when the two cohere,
@@ -79,36 +100,39 @@ The mapping is exact, not poetic:
 
 | scope object | AIF object | the coupling |
 |---|---|---|
-| HEAD section | generative seed (priors) | the compiler (bridge) |
-| eightfold spine | policy stages | the canon is a *prior over trajectories* |
-| **ghost line** | **prediction error** | canon prior expects a phase; observation (the doc) lacks it — ∅ is literally the residual |
-| in-passing closure | a satisfied prediction by another path | posterior update without the expected observation |
-| open arrow | expected free energy not yet discharged | A2 prices its persistence |
-| PSR / PUR | policy selection / outcome observation | the pur binder makes the loop legible |
-| falsifier (F-node) | precision channel | what would *count* as error |
-| vitals (health.json) | interoception | computed FROM the scope-readable doc |
-| the panel | exteroception | the body as seen |
+| statement of intent (HEAD) | the model's starting beliefs | the fingerprint compiler |
+| the standard phases | stages of a plan | the standard form is an *expectation about how work unfolds* |
+| **ghost line** | **prediction error** | the standard form expects a phase; the document lacks it — the pale line *is* the mismatch |
+| a phase satisfied in passing | a prediction met by an unexpected route | belief updated without the expected observation |
+| open arrow | an unmet commitment the model still expects | the deadline clause prices its persistence |
+| method chosen / how it fared | action selected / outcome observed | the records make the learning loop legible |
+| stated failure condition | what would *count* as error | written before the construction, never after |
+| the vitals card | interoception (the body sensing itself) | computed *from* the structurally-readable document |
+| the outline panel | exteroception (the body as seen) | the same document, drawn |
 
 Three consequences worth the paper:
 
-1. **The body-schema claim.** The H1–H3 wiring (health computed from the doc
-   → displayed in the panel → seeded into the head) is not plumbing; it is
-   the *binding* of interoception to exteroception — the point at which the
-   mission acquires a body schema. Before it, two instruments; after it, one
-   organism with two senses.
-2. **Coherence is checkable, so DOCUMENT can be earned.** Disagreements
-   between the readings are findings, mechanically surfaced: a scope the
-   model doesn't want (decorative structure), a want with no scope
-   (unobservable desire — exactly the unminted-pattern catch), a ghost the
-   model says is satisfied (the in-passing DOCUMENT closure). The session
-   produced instances of all three.
-3. **The synthesis discharges the cascade's own largest gap.** The mission's
-   ARGUE cascade carries the unminted candidate
-   `two-projections-of-one-quantity`. The synthesis *is* that pattern's
-   construction: scope-reading and AIF-reading as two projections of one
-   underlying typed-arrow object (substrate-2 hyperedges + meme.db arrows +
-   the package are three stores of *one* structure). Publishing the paper
-   mints the pattern; the preprint is its flexiarg's BECAUSE.
+1. **The body-schema claim.** Late in the session, three pieces of wiring
+   were added: the health report is computed from the document, displayed in
+   the outline panel, and fed into the mission's model of itself. That is not
+   plumbing; it is the binding of inner sense to outer sense — the point at
+   which the mission acquires a body schema. Before it, two instruments;
+   after it, one organism with two senses.
+2. **Coherence is checkable.** Disagreements between the readings are not
+   embarrassments but findings, surfaced mechanically: structure the model
+   has no use for (decoration); a want with no corresponding structure (a
+   desire nothing can observe — the session caught a cited method that had
+   never actually been written down this way); a ghost the model says is
+   already satisfied (one phase was closed in passing, inside another
+   section, and the detector learned to see it). The session produced live
+   instances of all three.
+3. **The synthesis pays one of its own debts.** When the mission argued for
+   its existence, its argument leaned on a design principle that turned out
+   never to have been written into the method library: *two projections of
+   one quantity*. The synthesis above is precisely that principle's missing
+   construction — the structural reading and the organism reading are two
+   projections of one underlying object, stored three ways. Publishing the
+   argument writes the missing principle down.
 
 And the Daumal closure, which the stack supplies on its own: the points where
 two independent ascents *agree* are the only points one may call real — and
@@ -124,17 +148,20 @@ plain-language statement, boxed as it appears in the source:
 
 ## 6. Method appendix (planned)
 
-The session as the Cyborg learning loop run at operator scale: fold records
-(incl. the first `:success false`), the closure standard, the bell-handoff
-INSTANTIATE, the review gates. Cross-refs: E-scope-audit (the instrument's
-own audit trail), C-falsifiable-missions §7 (the closure schema), E-ground-G
-(what the satisfaction conditions discharge against).
+How the session was actually run: a human operator and several AI agents
+sharing one learning loop — every method-use recorded with its outcome
+(including the record-keeping's first honestly-logged *failure*), build work
+handed to worker agents with acceptance criteria and reviewed on return, and
+each claim checked against the system's stores before being written here.
+Technical cross-references for in-house readers are kept in the source
+repositories rather than in this text.
 
 ## 7. Relation to "A First Proof Sprint"
 
-The Proof Sprint documents a *proof* finding its way through the stack; this
-paper documents a *mission* doing the same — one level up: the unit of work
-examining the unit-of-work concept. Same house, different floor.
+"A First Proof Sprint" follows a single mathematical proof finding its way
+through this same system. The present account sits one level up: it follows
+the *unit of work itself* — the mission — through the same passage, the
+container examining the concept of containment. Same house, different floor.
 
 ---
 
