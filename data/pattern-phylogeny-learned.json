@@ -1,0 +1,18 @@
+{
+  "co_app": [
+    [
+      "mission-anchored-scan",
+      "mission-unlocks-eoi",
+      2,
+      "upvote:kit-outbox"
+    ],
+    [
+      "model-recompute-schedule",
+      "prototype-maturity-lifecycle",
+      1,
+      "seed:kit-cadence"
+    ]
+  ],
+  "descent": [],
+  "source": "/home/joe/code/futon6/holes/closure-folds.edn"
+}
