@@ -48,4 +48,11 @@
   :note "second independent instance of the same cosine artifact; same size-1 edge_count=0 saturation"}
  {:scope "E-mission-head/verify-v0" :success true
   :used ["mission-coherence/logic-model-before-code"]
-  :note "VERIFY V0: 5-invariant core.logic+pldb model (mission_head_invariants.clj), witness clean + 5/5 adversarials caught; the pattern was prescribed by the mission's own ARGUE cascade — cascade walking its talk"}]
+  :note "VERIFY V0: 5-invariant core.logic+pldb model (mission_head_invariants.clj), witness clean + 5/5 adversarials caught; the pattern was prescribed by the mission's own ARGUE cascade — cascade walking its talk"}
+ {:scope "E-mission-head/health-readout" :success true :used []
+  :note "H1 fold (codex-1, futon5@17e9b53): --emit-health producer; apparatus-grade (the bridge), no library-pattern THEN-rewrites; fable-1 review PASS"}
+ {:scope "E-mission-head/seeded-beliefs" :success true
+  :used ["peripherals/read-existing-seam-before-implementing"]
+  :note "H2 fold (codex-2, futon3c@9c4033b): the M-aif-head REVIVE — seam read + wired, not rebuilt; A1 as runtime check-law; review fix: degraded?-checks-xenotype"}
+ {:scope "E-mission-head/lifeform-lane" :success true :used []
+  :note "H3 fold (codex-3, futon3c@5b87192): vitals block; rendered live from health.json; fable-1 review PASS"}]

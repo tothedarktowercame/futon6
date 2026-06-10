@@ -565,3 +565,80 @@ optional, parallel, on claude-3's timetable; V0 verifies the design now.
   check resisted pure relational form and needed ground projection (min over
   falsifier steps); the house exemplar had no temporal-order invariant, so
   this is a small extension of the idiom worth carrying back to the pattern.
+
+## 6. INSTANTIATE (opened 2026-06-10) — three arrows, three bells
+
+The INSTANTIATE work *is* A2's three `:open` arrows, dispatched as parallel
+bell handoffs from **fable-1** (newly Agency-registered) to the three idle
+codex agents — contract-first so the consumers build against the schema while
+the producer implements it. The shared contract: **`<mission>.health.json`**
+(sibling of the mission doc; sigil + health + degraded mode for prose-only
+HEADs; schema fixed in the bells).
+
+| handoff | arrow | agent | job |
+|---|---|---|---|
+| **H1** — health emitter (`head_exotype_probe.py --emit-health`) | score → health-readout | codex-1 | `…227827-461` |
+| **H2** — the revive: wire MissionAifHead into the birth (`:on-cycle-complete`, 4-arity `validate-phase-advance`, `seed-from-health`) + A1-as-test | readout → seeded-beliefs | codex-2 | `…264432-462` |
+| **H3** — vitals block in the overview panel (♥ conf · xeno% · section marks · reading) | readout → lifeform-lane | codex-3 | `…264707-463` |
+
+Each bell carries: goal, `:in`/`:out`, acceptance bar, gates (clj-kondo +
+check-parens + named tests where applicable), the **hard constraints** (no
+touching the running JVM/Emacs; health never flows into gate/optimize — the
+V0 `measure-never-target` invariant restated as a handoff term), and
+**"bell fable-1 back with summary + commit shas."**
+
+**Review protocol (fable-1, on each bell-back):** read the diff, re-run the
+gates, check H2 against `mission_head_invariants.clj`'s invariants, state what
+was checked; fix small findings directly (carve-out b). **On acceptance:
+`promote!` the arrow in `diagram/E-mission-head` with the commit sha as the
+construction ref** — the A2 clock is satisfied by exactly these three
+promotions, and each promotion is a closure event for the fold ledger.
+
+## 7. DOCUMENT (opened 2026-06-10) — "Anatomy of a Futonic Mission (from the HEAD down)"
+
+Joe's frame: what this session produced is special — the same mission reached
+from **two perspectives** (the scope reading in `*mission-overview*`; the AIF
+reading in the lifeform package), a result Daumal would find satisfying in its
+own right. DOCUMENT = a **preprint**, companion to "A First Proof Sprint":
+running-example format, this mission doc as primary source, no verbatim
+repetition. **The missing piece that makes it worth writing: a synthesis of
+the two readings.**
+
+Skeleton drafted: `futon6/holes/anatomy-of-a-futonic-mission.md`. The §5
+synthesis thesis: *the scope reading is the lifeform's observation space; the
+AIF reading is its generative model; a mission is well-formed exactly when
+the two cohere — and the coherence is computable* (ghost lines are literally
+prediction errors against the canon prior; the H1–H3 wiring is the
+interoception↔exteroception binding — the body schema). Bonus discharge: the
+synthesis IS the construction for the cascade's unminted
+`two-projections-of-one-quantity` — publishing mints the pattern. Peradams
+form at reading-agreements.
+
+DOCUMENT remains open until the preprint is real and Joe calls the close
+(mission-close is the operator's call); INSTANTIATE bell-backs land first.
+
+### 6.1 INSTANTIATE closed (2026-06-10) — three bells, three folds, A2 satisfied
+
+All three handoffs landed and passed fable-1 review (the bells rang back but
+the return path was mis-aimed — fable-1's resume ran in the wrong project
+store; root-caused via the job receipts, re-grafted with explicit cwd; the
+*work* was flawless):
+
+- **H1 PASS** (`futon5@17e9b53`): `--emit-health` producer; both artifacts
+  verified incl. degraded mode. The vitals it computed match §3.3.1 exactly.
+- **H2 PASS + one review fix** (`futon3c@9c4033b`): the M-aif-head **revive**
+  — `seed-from-health`, `:on-cycle-complete` wired, 4-arity refusal surface,
+  and **A1 implemented as a runtime check-law** (beyond the bar). Fix:
+  `degraded?` now checks the xenotype, not the sigil container (+ contract-
+  shaped fixtures); 5 tests / 21 assertions green.
+- **H3 PASS** (`futon3c@5b87192`): `♥ vitals conf 0.33 · xeno 89% · ⊗IF
+  ⊗HOWEVER ✓THEN ✓BECAUSE` — rendered live in `*mission-overview*` from the
+  H1 artifact. The lifeform-viewer has its lifeform.
+
+**All three arrows `promote!`d `:open → :constructed`** with commit shas as
+construction refs — `diagram/E-mission-head` now reads **7 constructed / 0
+open. A2's wire-or-die clause is satisfied with the clock barely started;
+the lifeform keeps `:alive` honestly.** Three fold records added (the H2 one
+credits `read-existing-seam-before-implementing` — the revive was the fold).
+Residue for claude-4's seam: `promote!`'s CH2 substrate-2 emission wants a
+`:payload` on the arrow — promotions succeeded, secondary emission skipped.
