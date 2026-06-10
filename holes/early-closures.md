@@ -573,8 +573,19 @@ machine. Genuine non-fold + coverage gap.
 > for the competitive-β car: (A) keep penalising (conflates retrieval+utility) vs (B) gate the
 > utility-β on `coverage_gap=false` so only appropriately-retrieved-but-failed updates utility, leaving
 > mis-retrieval to the coverage-gap. Under (B) **this first β reclassifies as a coverage-gap, and the
-> first true *utility*-β is the competitive one** — i.e. F1 and the competitive-β car converge. Pending
-> Joe's fork call + fable-1 adversarial cross-check (co-authored gate).
+> first true *utility*-β is the competitive one** — i.e. F1 and the competitive-β car converge.
+>
+> **RESOLVED → B′ (both reviewers; fable-1 2026-06-10).** Gate **per-PATTERN, not per-cascade**:
+> a used pattern `u`'s failure touches *utility* iff `u` is phylogeny-**connected** within the chosen
+> set (≥1 semi-lattice edge — already in `construct_cascade`'s return value); an *isolated* `u`'s
+> failure rides the coverage-gap. (Cascade-level B is wrong: fable's V1 run is a counterexample —
+> `coverage_gap=true` *and* 13 edges *and* correctly-retrieved patterns in one cascade, where
+> cascade-level B would suppress a legitimate β.) So this first β reclassifies as a coverage-gap, the
+> pattern returns to Beta(1,1) (signal *relocated* to the two `aif-architecture/capability-operator-*`
+> candidates, not lost), and the **first true utility-β = a connected-pattern failure = the
+> competitive-β car**. Non-blocking: mis-retrievals should *also* accrue to a retriever-calibration
+> ledger (fable's 3rd currency) when proposal-scoring lands. Pending Joe's ratification + impl in the
+> β-feeder (claude-1's surface).
 
 **Honest limit — what this β does NOT yet do.** It moves a *posterior*, not a *selection*: the penalised
 pattern is the sole phylogeny match on its holes, so down-weighting it changes no cascade. A
