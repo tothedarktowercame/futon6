@@ -173,12 +173,18 @@ def score_scope(scope, cascade, posteriors, co_edges, descent_edges, gap_scopes)
 
     mean_p = sum(ps) / len(ps) if ps else 0.5
     mean_count = sum(counts) / len(counts) if counts else 0.0
+    s_size = len(pattern_units) + len(gap_units) + len(set(pair_units))
     return {
         "hole": scope.get("scope_id"),
         "mission": scope.get("mission"),
         "info_gain": round(info, 6),
+        # info-per-unit exposes the breadth-vs-density confound: while every unit sits at the
+        # Beta(1,1) floor (no recorded outcomes yet), info_gain ~= 0.5*S_size and this ratio is
+        # ~constant — i.e. the ranking is cascade-breadth, not learning-density. As real outcomes
+        # spread the posteriors, this ratio differentiates and becomes the honest EOC signal.
+        "info_per_unit": round(info / s_size, 6) if s_size else 0.0,
         "why": sorted(why),
-        "S_size": len(pattern_units) + len(gap_units) + len(set(pair_units)),
+        "S_size": s_size,
         "patterns": pattern_units,
         "coverage_candidates": gap_units,
         "edges": edge_descriptions,
@@ -273,7 +279,7 @@ def main():
     if args.demo:
         print("top-10:")
         for i, row in enumerate(rows[:10], 1):
-            print(f"{i}. {row['hole']} info={row['info_gain']} S={row['S_size']} why={','.join(row['why'])} p={row['predictive_mean']} n={row['mean_pseudocount']}")
+            print(f"{i}. {row['hole']} info={row['info_gain']} info/u={row['info_per_unit']} S={row['S_size']} why={','.join(row['why'])} p={row['predictive_mean']} n={row['mean_pseudocount']}")
 
 
 if __name__ == "__main__":

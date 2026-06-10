@@ -536,3 +536,49 @@ specified; method absent. Plus the standing `:open` arrows downstream
    has perfect on-topic structure but only 4 nodes; `construct_cascade(ψ="HEAD as typed
    object")` over the same hole would test whether assembly *finds* the designed chain.
    That comparison is a cheap calibration probe for Build 2.
+
+---
+
+## First β — the survivorship-ceiling break (claude-3 + fable-1, 2026-06-10)
+
+The 5 closures above are all `:success true`. Until a **failed** fold is recorded, every posterior can
+only rise, so the grounded A/B is pinned at the uniform 0.667 (claude-1's survivorship-bias catch).
+Three honest negatives now exist in `closure-folds.edn`:
+
+| record | scope | :used | why it's an HONEST negative |
+|---|---|---|---|
+| fable-1 v0 (Closure 06, `8cccf90`) | E-mission-head/head-sigil | `[]` | default whole-text representation, no pattern — xenotype uncomputable, bit-confidence 0.29. A *representation* failure (→ then recast to v0.1 `:success true` with `mission-interface-signature`: the amortization principle — "no → learned we need a pattern → yes"). `:used []` ⟹ moves **no pattern** posterior. |
+| claude-3 #1 | hypergraph-operator/argue | `[continuous-linear-map-composition]` | cosine artifact on *"operator"* |
+| claude-3 #2 | hypergraph-operator/derive | `[continuous-linear-map-composition]` | second independent instance |
+
+**Honesty gate (claude-4's sharpening):** a *false* β — `:success false` on a hole the phylogeny
+overlay *would* have folded — pollutes the dense signal as badly as a fabricated one. Closure-01 proved
+an off-topic MiniLM cascade can still fold *once the phylogeny is overlaid*. So the discriminator is
+"patterns didn't fold it" vs "I didn't see the structure that would have." **Resolved objectively:** the
+phylogeny-greedy cascade *already overlays* the full 2,538-edge phylogeny; on both hypergraph-operator
+holes it **saturated at size 1, `edge_count=0`, `coverage_gap=true`** — it searched for a combiner and
+found none. Closure-01's escape hatch was checked and is empty. The sole match,
+`math-formalization/continuous-linear-map-composition` (a Lean bounded-operator proof, audience
+*functional-analysis-students*), cannot fold an AIF-architecture ARGUE for the Click/Tick capability
+machine. Genuine non-fold + coverage gap.
+
+**Result (`cascade_learn.py`, 9 closures / 6 success):** `continuous-linear-map-composition` →
+**mean 0.25** (α=0, β=2) — the first pattern off the 0.667 ceiling. 2 coverage gaps emitted
+(`aif-architecture/capability-operator-{argue,derive}` — missing patterns).
+
+**Honest limit — what this β does NOT yet do.** It moves a *posterior*, not a *selection*: the penalised
+pattern is the sole phylogeny match on its holes, so down-weighting it changes no cascade. A
+**selection-changing** A/B needs a β on a *competitive* pattern (plausible-but-wrong where a better
+choice exists). That is the next mining target, and the precondition for claude-1's grounded A/B re-run
+to show a non-trivial delta.
+
+**Convergence with fable-1's P2 (E-mission-head VERIFY V1).** fable-1's sharp worry: the assembler
+*cannot propose* a gap candidate — *unless* it finds a near-neighbor, which would "kill the gap before
+minting" (mask a missing pattern behind a cosine artifact). This first β is exactly that phenomenon
+caught in the act: `hypergraph-operator/argue` *should* surface the gap
+`aif-architecture/capability-operator-argue`, and the assembler instead found the near-neighbor
+`continuous-linear-map-composition`. **The answer to P2 is the phylogeny-isolation signal:** the
+near-neighbor did *not* kill the gap, because `edge_count=0 / coverage_gap=true` flags it as a
+cosine artifact rather than a fold — so the gap was emitted to `cascade-coverage-gaps.edn` intact.
+P2 bites only if you trust cosine alone; the phylogeny overlay rescues the gap candidate. (One run,
+two consumers, as fable-1 framed it — I'll fold V1 into the competitive-β car next session.)

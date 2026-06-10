@@ -457,3 +457,43 @@ E-ground-G's v0 first looked); the E-mission-head diagram = **4 `:constructed` +
 unified store) so Cyborg closures feed it too — needs a grain bridge (meme.db arrows are entity-keyed
 mission-diagram arrows; the pattern-learning loop is pattern-stem-keyed). Recognise the shared
 standard + store now; build the bridge when the curriculum arm (Build 3) lands.
+
+## BUILD 3 REVIEW (claude-3, 2026-06-10) — codex-2 `a8ba57f`, reviewer-fix follow-up
+
+**Build:** `futon6/scripts/curriculum_propose.py` (read-only EXPLORE proposer) +
+`data/curriculum-proposals.edn` (44 ranked proposals). Reviewed as a real gate (author≠reviewer).
+
+**What I checked:**
+1. **Read the diff** (`git show a8ba57f`, 326 insertions, 2 new files). Confirmed *non-invasive*:
+   new script + artifact only; the star-map scheduler is untouched.
+2. **Verified the math.** `beta_bernoulli_info(α,β)` is the correct closed form for the mutual
+   information of a single Bernoulli draw under Beta(1+α,1+β): `H(X) − E_θ[H(X|θ)]`, with the
+   digamma identity `E[θ ln θ] = (a/total)(ψ(a+1) − ψ(total+1))` for the expected binary entropy.
+   This *is* Fable A3's "expected posterior contraction." Correct.
+3. **Reproduced the numbers** (`--demo`, run from `futon6/` against `futon3a/.venv`): 44 proposals,
+   top-10 matches codex-2's report byte-for-byte, EOC self-test `pass:true` reproduced.
+4. **S(h) provenance (Fable guard 1):** S is derived from the cascade's *actual* trajectory +
+   surfaced coverage-candidates, not from novel minted units. Holds in spirit.
+
+**Substantive finding (NOT a codex-2 defect — the data floor):** `info_gain ≈ 0.5·S_size`, the
+`info/unit` ratio is near-constant (0.43–0.59) across the top-10, and `mean_pseudocount ≈ 2.0`
+everywhere. Every unit sits at the Beta(1,1) prior because the grounded posteriors come from only 5
+success-closures → per-unit information is ~uniform → the sum just *counts units* → the ranking is
+**cascade-breadth, not learning-density.** This is the *same binding constraint* as the β feeder:
+it can't discriminate at edge-of-competence until real outcomes (claude-4's first-β work) spread the
+posteriors. The EOC self-test passes only on the thin technicality that the small edge-bonus
+deviations keep `|p−0.5| > 0.01`.
+
+**Reviewer-fix (mine, additive, ranking unchanged):** added `:info-per-unit` to each proposal row +
+the demo print, so the breadth-vs-density confound is legible in the artifact rather than implicit.
+Re-ran: py_compile clean, EOC still `pass:true`, ranking identical.
+
+**Deferred design question for Joe/Fable (does not bite until data spreads):** should the curriculum
+rank by total `info_gain` (breadth — "attempt the hole that teaches the most absolutely") or by
+`info_per_unit` (density — "most informative per unit of work")? Right now both orderings are nearly
+identical (everything's thin); the choice only matters once posteriors differentiate. Flagged, not
+forced.
+
+**Verdict:** APPROVED. Correct construction, non-invasive, reproducible; starved of data exactly
+where the rest of the loop is. Re-run it after the first real failures land — that is when its
+ranking stops being breadth and starts being information.

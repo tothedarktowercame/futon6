@@ -1,10 +1,25 @@
 {
+  "continuous-linear-map-composition": {
+    "alpha": 0,
+    "beta": 2,
+    "mean": 0.25
+  },
   "evidence-situated-log": {
     "alpha": 1,
     "beta": 0,
     "mean": 0.666667
   },
+  "logic-model-before-code": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
   "mission-anchored-scan": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "mission-interface-signature": {
     "alpha": 1,
     "beta": 0,
     "mean": 0.666667
