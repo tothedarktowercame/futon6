@@ -300,3 +300,33 @@ Peradams never enter; they remain the sparse audit that periodically checks this
 **Campaign implication:** this releases the **M-pattern-posteriors grounded-path escrow** —
 its "peradam-attributed outcome moves a posterior" requirement is satisfied by the *closure-attributed*
 outcome instead (a denser, car-independent grounding of the same shape). To record at STANDARD-VERIFY.
+
+## BUILD 1 — reviewed PASS (claude-3, real gate) + the kit-outbox finding
+
+Commits: futon6 `f14436a` (phylogeny edges export), futon3a `999f3e4` (phylogeny-grounded cascade).
+**What I checked (auditable):** read the diff (the marginal is now
+`rel·(alpha + connectivity(p,chosen))`, alpha=0.3; phylogeny loaded from the new JSON; non-phylogeny
+hits surfaced separately; low-connectivity flagged); **re-ran the demos myself** (kit-outbox: 27→4
+patterns, a connected semi-lattice, 14 non-phylogeny surfaced; inv-tripwire: now 9 patterns / 15
+edges, on-topic *tension* patterns + LOW-CONNECTIVITY flag); verified return keys preserved
+(`cascade/C/H/T` + new `semi-lattice/non-phylogeny/coverage-candidates`); `py_compile` clean. **No
+bugs found; the implementation matches the spec.**
+
+**THE FINDING (a live proof that Build 2 is necessary):** the new kit-outbox cascade **drops the two
+patterns that actually folded it in Closure 02** (`mission-anchored-scan`, `mission-unlocks-eoi`).
+*Why:* they have **zero phylogeny edges to the seed's cluster** — the static phylogeny (co-occurrence
+in existing mission docs) doesn't yet know the outbox pattern-language combines. The greedy faithfully
+followed the seed's connected component and missed theirs. **This is exactly the gap Build 2 closes:**
+Closure 02's fold *used those two together*, so the learning hook would **seed a co-application edge**
+between them (and to the outbox cluster), and the *next* phylogeny-grounded cascade would grow into
+them. The fix, by grounding honestly, reveals what the phylogeny doesn't know — and the closures are
+what teach it. The system discovers its own blind spot by trying to use its knowledge.
+
+**Closure 03 finding, updated:** inv-tripwire is NOT a hard "cascade-miss" under the fix — the
+phylogeny-grounded cascade finds an on-topic *tension* cluster (`structural-tension-as-observation`,
+`social/tension-before-code`) with real structure (15 edges). The embedding-only "miss" was partly the
+embedding's fault; phylogeny-grounding does better. (The low-connectivity flag still fires honestly.)
+
+**Property to track (not a bug):** the phylogeny-greedy is single-cluster-from-seed — it can miss
+relevant patterns in other components until the learning loop (Build 2) seeds the cross-cluster edges.
+This is the honest state of an incomplete phylogeny; Build 2 resolves it organically.
