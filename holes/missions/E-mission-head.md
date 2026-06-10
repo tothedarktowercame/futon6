@@ -642,3 +642,21 @@ the lifeform keeps `:alive` honestly.** Three fold records added (the H2 one
 credits `read-existing-seam-before-implementing` — the revive was the fold).
 Residue for claude-4's seam: `promote!`'s CH2 substrate-2 emission wants a
 `:payload` on the arrow — promotions succeeded, secondary emission skipped.
+
+### V1 — RUN (2026-06-10, via claude-3's construct_cascade review): VALIDATED, with one discovery
+
+Ran the assembler over two ψ phrasings of this mission's hole (fable-1 review of
+Build 1, claude-3 handoff). **P1:** 3/4 designed patterns recovered —
+`mission-interface-signature` ranked **#1 in both runs**; the argument is
+recoverable from the prior. **P2:** all three gap candidates **survive** the
+near-neighbor search, *enriched*: `war-machine/ideal-actual-gap` = a relative
+(not substitute) for `two-projections-of-one-quantity`;
+`ants/baseline-cyber-ant` = the exemplar for
+`stable-theme-enables-free-improvisation`; nothing near
+`measure-never-target`. **The divergence finding:**
+`realtime/liveness-heartbeats` is unrecoverable from either ψ — even phrased
+as "liveness or visible death" — so the designed cascade's seam→liveness edge
+is a **missing cross-cluster phylogeny edge** (realtime↔mission-coherence):
+the first concrete structure-discovery target of the A3 kind. V1 paid rent in
+both directions: it verified this mission AND handed the assembler a real
+calibration case (the F1 fork call: B′, per-pattern connectivity gating).
