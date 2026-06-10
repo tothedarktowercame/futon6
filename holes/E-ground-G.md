@@ -372,3 +372,36 @@ information-gain (model-internal); peradams remain the sparse audit. No imported
   **exploration** arm; enlarges the model's breadth.
 - The three together = E-ground-G's real shape: a grounded, peradam-free **active-inference capability
   loop** — exploit (close) + explore (enlarge), navigated by the star-map, predicated on the CV.
+
+## BUILD 3 — the curriculum arm = COUPLE the closure-loop to the star-map's EFE scheduler (designed)
+
+**Key realisation:** the exploration/curriculum arm is *already built* — it is **M-capability-star-map**
+(`futon0/holes/missions/M-capability-star-map.graph.edn` + `.../web/.../capability-star-map.graph.json`).
+It is a navigable capability graph with an **EFE-over-graph scheduler**
+(`aif/expected-free-energy-scorecard`: `G = risk + ambiguity + INFO + cost`) that picks the next
+*small, ready* action, and it carries the **I4-exogeneity safety** verbatim ("rolls downhill toward
+goals you wrote down in advance; can notice it lacks an ability but can't decide to chase one"). So
+Build 3 is **not** new machinery — it is the **coupling** of E-ground-G's grounded closure-loop
+(Build 2) to that existing scheduler. The two halves were built separately; Build 3 unifies them into
+one active-inference loop.
+
+**The coupling (three wires):**
+1. **Grounded model → the EFE `info` term.** Feed Build 2's grounded posteriors + learned phylogeny
+   into the scheduler's epistemic term: a hole foldable with **known high-posterior patterns +
+   existing edges** = *low* info-gain (exploit, we already know it); a hole needing a **coverage-gap
+   pattern** or a **cross-cluster edge the phylogeny lacks** = *high* info-gain (explore, it would
+   teach). The grounded model is exactly what tells the scheduler *known vs novel*.
+2. **EFE picks the next hole.** `EFE-min = pragmatic (can we close it?) + epistemic (would it teach?)`
+   over the bounded candidate set (star-map frontier ∩ open substrate-2 holes).
+3. **Closure feeds back.** The fold of the EFE-picked hole → `cascade_learn.py` (Build 2) → updates
+   posteriors + learned edges + gap-log → the scheduler re-scores. **The loop closes.**
+
+**Safety (inherited, not added):** the scheduler's downhill-only / pre-registered-goal property holds;
+enlarging the CV (adding a new `:held` thesis / capability) is **operator-gated** (consent / dokusan).
+The loop proposes curriculum; Joe ratifies what enters it. [[feedback_operator_not_sovereign]].
+
+**Build 3 deliverable (after Build 2 lands + is reviewed):** a thin coupling — feed
+`pattern_posteriors.grounded.json` + `pattern-phylogeny-learned.json` + `cascade-coverage-gaps.edn`
+into the star-map EFE scorecard's info term; emit a ranked **curriculum proposal** (top-K holes by
+EFE = pragmatic+epistemic) to the operator pane for ratification. The closure of a ratified pick
+re-enters Build 2. = E-ground-G's grounded learning ⨝ M-capability-star-map's scheduler, one loop.
