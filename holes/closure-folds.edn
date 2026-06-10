@@ -20,4 +20,9 @@
   :used ["dsc/evidence-situated-log"]
   :note "+ registry §8.1 two-part guard (apparatus, not a library pattern)"}
  {:scope "kit-cadence" :success true
-  :used ["ukrns/model-recompute-schedule" "devmap-coherence/prototype-maturity-lifecycle"]}]
+  :used ["ukrns/model-recompute-schedule" "devmap-coherence/prototype-maturity-lifecycle"]}
+ {:scope "E-mission-head/head-sigil" :success false :used []
+  :note "v0 FAILED fold (the file's first recorded negative, per claude-1's β discipline): default whole-text representation, no pattern guidance — xenotype uncomputable, bit-confidence 0.29 (4/8 bits coin-flips). Evidence: futon6/holes/missions/E-mission-head.md §3.1; futon5/scripts/head_exotype_probe.py"}
+ {:scope "E-mission-head/head-sigil" :success true
+  :used ["futon-theory/mission-interface-signature"]
+  :note "v0.1 fold: HEAD recast as IF/HOWEVER/THEN/BECAUSE (Golemization) → xenotype-32 computable, conf 0.33, THEN/BECAUSE anchor cos≈0.46. + 2 candidate patterns did real work but are NOT in the library (apparatus-grade, kit-intake precedent): candidate-pattern/two-projections-of-one-quantity, candidate-pattern/stable-theme-enables-free-improvisation — minted :open in meme.db cascade/E-mission-head-argue"}]

@@ -52,6 +52,14 @@ LOOSE_PHASE_MAP = [
 ]
 
 HEADER_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.M)
+
+# In-passing phase closure: a phase satisfied inline rather than by a section,
+# e.g. `**DOCUMENT phase:** satisfied by README...`. High-precision bold form.
+INLINE_PHASE_CLOSURE_RE = re.compile(
+    r"\*\*(HEAD|IDENTIFY|MAP|DERIVE|ARGUE|VERIFY|INSTANTIATE|DOCUMENT)"
+    r"\s+phase:?\*\*\s*(?:is\s+)?(satisfied|closed|complete|done)",
+    re.I,
+)
 MISSION_REF_RE = re.compile(r"\bM-[A-Za-z0-9][A-Za-z0-9-]*\b")
 PATH_RE = re.compile(r"\b[\w./{}-]+\.(?:clj|cljs|cljc|py|edn|bb|el|json|md|html|css|ts|js)\b")
 URL_RE = re.compile(r"https?://[^\s)>\"]+")
@@ -278,7 +286,9 @@ def psr_pur_records(text: str) -> list[dict]:
     out = []
     for i, ln in enumerate(lines):
         window = "\n".join(lines[i : i + 12])
-        mp = re.match(r"\s*[-*]?\s*\*{0,2}Pattern:?\*{0,2}\s*([a-z0-9][a-z0-9-]{6,})", ln)
+        # Pattern idents may be backtick-quoted and namespaced
+        # (`structure/two-projections-of-one-quantity`) — the house style.
+        mp = re.match(r"\s*[-*]?\s*\*{0,2}Pattern:?\*{0,2}\s*`?([a-z0-9][a-z0-9/-]{6,})", ln)
         if mp and "chosen" not in ln.lower() and re.search(r"Prediction error", window) and re.search(r"Outcome", window):
             out.append({
                 "kind": "pur",
@@ -292,7 +302,7 @@ def psr_pur_records(text: str) -> list[dict]:
                 },
             })
             continue
-        cp = re.search(r"Pattern chosen:?\s*\*{0,2}\s*([a-z0-9][a-z0-9-]{6,})", ln)
+        cp = re.search(r"Pattern chosen:?\s*\*{0,2}\s*`?([a-z0-9][a-z0-9/-]{6,})", ln)
         if cp and re.search(r"Rationale|Candidates", window):
             out.append({
                 "kind": "psr",
@@ -388,7 +398,17 @@ def detect_mission_scopes(
         mapped_phase = phase
         if phase is not None and sec.level <= 2:
             binder = "eightfold-phase"
-        elif sec.level <= 2:
+        elif re.search(r"plain[- ](language|text|english)[- ]?(argument|statement|version)?",
+                       sec.title, re.I):
+            # Defined sub-scope of ARGUE (Joe, 2026-06-10): the plain-language
+            # statement of the argument is a lifecycle requirement, not just
+            # another loose section.
+            binder = "plain-argument"
+            mapped_phase = "argue"
+        elif sec.level <= 3:
+            # Level-3 subsections are real scope structure (INSTANTIATE
+            # handoffs, VERIFY hooks, ARGUE rounds, PSR/PUR sections) — bind
+            # them as nested loose-sections; phase_stack supplies the parent.
             binder = "loose-section"
             mapped_phase = loose_phase_for_title(sec.title)
 
@@ -440,6 +460,20 @@ def detect_mission_scopes(
                 continue
             ends = ends + find_concepts(sec.text, kernel_terms)
             scope = make_scope(entity_id, idx, binder_type, parent, sec.title, phase_name, sec.start, sec.end, ends)
+            scopes.append(scope)
+            idx += 1
+
+        # In-passing phase closures: `**DOCUMENT phase:** satisfied by ...`
+        # anchor an eightfold-phase scope at the closure line itself.
+        for m in INLINE_PHASE_CLOSURE_RE.finditer(sec.text):
+            phase_name = m.group(1).lower()
+            pos = sec.content_start + m.start()
+            ends = [{"role": "phase-closure", "phase": phase_name,
+                     "verdict": m.group(2).lower()}]
+            scope = make_scope(entity_id, idx, "eightfold-phase", parent,
+                               f"{phase_name.upper()} (closed in passing)",
+                               phase_name, pos, pos + (m.end() - m.start()), ends)
+            scope["closure-in-passing"] = True
             scopes.append(scope)
             idx += 1
 

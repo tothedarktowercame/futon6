@@ -469,3 +469,70 @@ recurring-capability.
 4. **The commercial cluster folds into one coherent pipeline**: `kit-outbox` (T2.2 authored draft) →
    `kit-intake` (T2.3 sent + witness) → `kit-cadence` (recurring) — an on-map mission's worth of
    construction, each a clean 2-rule fold.
+
+---
+
+# Closure 06 — `E-mission-head/head-sigil` (representation fold; first recorded FAILURE + the fix)
+
+**Hole:** a mission HEAD has no computable xenotype — the bridge's 36-bit situational
+binding requires IF/HOWEVER/THEN/BECAUSE sections; HEADs are prose. (The seed-hole of
+the HEAD→AIF-lifeform chain; `diagram/E-mission-head` in meme.db.)
+**Character:** representation-fold · **includes the ledger's first `:success false` record**
+(the β / amortization discipline, claude-1 2026-06-10) · cascade is *designed*, not
+`construct_cascade`-assembled — the contrast case to Closures 01–05.
+**Provenance:** `futon6/holes/missions/E-mission-head.md` §3.1–3.3.1 (Fable + Joe, 2026-06-10);
+probe `futon5/scripts/head_exotype_probe.py`.
+
+## Stage 1 — the cascade (`:correlated` → here: designed, 4 real + 3 candidate)
+
+Unlike 01–05 (MiniLM-assembled), this cascade was **authored as the ARGUE** and minted to
+`meme.db` (`cascade/E-mission-head-argue`, 3 `:constructed` + 3 `:open`):
+
+```mermaid
+flowchart TD
+    MIS["futon-theory/mission-interface-signature<br/>declare a checkable interface"]:::p
+    SEAM["peripherals/read-existing-seam-before-implementing<br/>revive M-aif-head channels + bridge"]:::p
+    LIVE["realtime/liveness-heartbeats<br/>wire-or-die (amendment A2)"]:::p
+    LMBC["mission-coherence/logic-model-before-code<br/>F1–F4 authored before build"]:::p
+    MIS --> SEAM --> LIVE --> LMBC
+    G1["candidate-pattern/<br/>two-projections-of-one-quantity<br/>(cited in M-memes PSR — NEVER MINTED)"]:::gap
+    G2["candidate-pattern/<br/>measure-never-target (A1)"]:::gap
+    G3["candidate-pattern/<br/>stable-theme-enables-free-improvisation"]:::gap
+    MIS -.-> G1
+    G2 -.-> MIS
+    G3 -.-> MIS
+    classDef p fill:#eef,stroke:#88a;
+    classDef gap fill:#fde0e0,stroke:#cc4444,stroke-dasharray:4 3;
+```
+
+## Stage 2 — the sorry (`:open`)
+
+`{:have "mission-head-text" :want "computable-xenotype (the sigil)"}` — RHS fully
+specified; method absent. Plus the standing `:open` arrows downstream
+(health-readout, seeded-beliefs, lifeform-lane) which this fold does NOT close.
+
+## Stage 3 — the construction (`:constructed`) — with the failure first
+
+- **v0 attempt, `:success false`:** whole-text default → bit-confidence **0.29**,
+  4/8 bits coin-flips, **xenotype uncomputable**. Recorded as the fold file's first
+  negative — "if no, we still learned something" made data.
+- **v0.1 fold, `:success true`:** HEAD recast as IF/HOWEVER/THEN/BECAUSE
+  (E-mission-head.md §3.3, the Golemization step) → **xenotype-32 computable**
+  (`00011100·00011001·10101100·11001000`), mean-conf 0.33, and the real signal:
+  **THEN/BECAUSE anchor proximity cos ≈ 0.454/0.461** vs whole-text best 0.349.
+  Artifact: §3.3.1 + `E-mission-head.aif.edn` (the lifeform package, contest-staged).
+
+**Three findings:**
+1. **Foldability was a representation property, not a model property** — same projector,
+   same anchors; only the text's *shape* changed. The asymmetry (THEN/BECAUSE strong,
+   IF/HOWEVER weak) localizes the remaining gap: pattern-grain anchors cover actions
+   and warrants, not intents — HEAD-grain anchors are the named follow-up (F4).
+2. **Building the cascade caught a laundering instance:** M-memes' PSR cited
+   `structure/two-projections-of-one-quantity` — which does not exist in the library.
+   A Pattern Selection Record selecting an unminted pattern, found only by trying to
+   *reuse* the citation. Candidate-pattern arrow minted; the PSR should be annotated.
+3. **Designed cascades and assembled cascades need each other:** 01's lesson (embedding
+   over-selects; phylogeny recovers structure) meets its dual here — the designed chain
+   has perfect on-topic structure but only 4 nodes; `construct_cascade(ψ="HEAD as typed
+   object")` over the same hole would test whether assembly *finds* the designed chain.
+   That comparison is a cheap calibration probe for Build 2.
