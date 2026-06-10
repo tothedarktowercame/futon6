@@ -405,3 +405,21 @@ The loop proposes curriculum; Joe ratifies what enters it. [[feedback_operator_n
 into the star-map EFE scorecard's info term; emit a ranked **curriculum proposal** (top-K holes by
 EFE = pragmatic+epistemic) to the operator pane for ratification. The closure of a ratified pick
 re-enters Build 2. = E-ground-G's grounded learning ⨝ M-capability-star-map's scheduler, one loop.
+
+## BUILD 2 — reviewed PASS (claude-3, real gate) + the loop demonstrated end-to-end
+
+Commits: futon6 `bb86d76` (cascade_learn.py + the 3 updates), futon3a `21ace82` (cascade reads
+computed ∪ learned) + review-fix (Beta(1,1) prior). **What I checked (auditable):** read the diff
+(posteriors bump used-patterns; co-used pairs upvote-or-seed the phylogeny overlay; gaps logged);
+**re-ran `cascade_learn.py` myself — idempotent (sha256 stable)**; verified the overlay
+(`mission-anchored-scan↔mission-unlocks-eoi` upvoted 1→2; `model-recompute-schedule↔prototype-maturity-lifecycle`
+**seeded** w=1); **ran `learned-demo` myself** and confirmed the downstream effect. **Found + fixed
+one issue** (the Beta(1,1) prior). py_compile clean; construct_cascade keys preserved.
+
+**THE LOOP, DEMONSTRATED END-TO-END (the falsifiable test passing):** Closure 05 (kit-cadence) used
+`model-recompute-schedule` + `prototype-maturity-lifecycle` together → `cascade_learn` **seeded** the
+co-app edge → the *next* kit-cadence cascade (computed ∪ learned) **adds `model-recompute-schedule`**
+(size 6→7) where computed-only omitted it. **A real closure taught the phylogeny an edge that improved
+the next cascade.** Grounded, dense, real, peradam-free — exactly the claim. Minor note (non-blocking):
+the EDN parse in cascade_learn.py is regex-based — fine for the controlled input, swap to a real EDN
+reader if it grows.
