@@ -330,3 +330,45 @@ embedding's fault; phylogeny-grounding does better. (The low-connectivity flag s
 **Property to track (not a bug):** the phylogeny-greedy is single-cluster-from-seed — it can miss
 relevant patterns in other components until the learning loop (Build 2) seeds the cross-cluster edges.
 This is the honest state of an incomplete phylogeny; Build 2 resolves it organically.
+
+## THE CURRICULUM ARM (Joe, 2026-06-10): the loop looks for NEW things to learn — the epistemic arm of AIF
+
+The closure-learning loop (Build 2) is only the **exploitation / pragmatic** arm — it learns what's
+learnable and builds the capability model's **depth**. Joe's addition: the loop should also **look for
+new things to learn** — the **exploration / epistemic** arm. Together they are the two terms of the
+Expected Free Energy: **EFE = pragmatic value (close what you can) + epistemic value (seek what would
+teach you the most)**. The grounded learning loop is, fully, an **active-inference capability loop**.
+
+What plays each role (already-existing pieces, now named):
+- **The Pudding Prover registry = a forward-model of the CV.** Its `:held` theses are capabilities
+  *predicated on learning them* — "if you knew it now it wouldn't be listed." The held set IS the
+  curriculum / goal-structure; `:satisfied` = achieved CV. [[M-pudding-peradams]] / the registry.
+- **M-capability-star-map / M-futonzero-capability = the navigable capability model** (Khan-prior /
+  stereolithograph-posterior, missions-as-λ). Its **frontier** (reachable-but-not-yet-had) *is* the
+  curriculum's next steps.
+- **Two movements:** **build** the model (depth — exploitation, Build 2) and **enlarge** it (breadth —
+  propose new capabilities into the CV, the curriculum arm).
+
+**The curriculum signal = expected information gain.** Prefer holes/closures that would *teach* a new
+pattern, a new phylogeny edge, or a new capability (expand the model) over those that merely exploit
+known patterns. Build 2's **pattern-missing** update is the *seed* of this; the structured version
+reads the star-map frontier + the gap-log and proposes *what to learn next*.
+
+**Safety (inherited, load-bearing):** enlargement inherits the star-map's **I4 exogeneity** — "water
+doesn't flow uphill." The loop can *notice* it lacks a capability but **cannot unilaterally chase
+one** (especially a dangerous one): there is no downhill path to a goal the operator didn't
+pre-register. Enlargement of the CV therefore goes **through the operator** (the consent-gate /
+dokusan) — the loop *proposes* curriculum, the operator *ratifies* what enters it. [[feedback_operator_not_sovereign]].
+
+**Still peradam-free.** The curriculum is the registry/star-map structure; the drive is
+information-gain (model-internal); peradams remain the sparse audit. No imported reward anywhere.
+
+### Build sequence (the whole grounded AIF loop)
+- **Build 1** ✓ — phylogeny-grounded `construct_cascade` (reviewed PASS).
+- **Build 2** — the closure-learning hooks (posteriors + phylogeny-learns + gap-log) = the
+  **exploitation** arm; builds the model's depth.
+- **Build 3** — the **curriculum arm**: read the capability-star-map frontier + the gap-log → propose
+  new things to learn (highest expected information gain), gated through the operator. = the
+  **exploration** arm; enlarges the model's breadth.
+- The three together = E-ground-G's real shape: a grounded, peradam-free **active-inference capability
+  loop** — exploit (close) + explore (enlarge), navigated by the star-map, predicated on the CV.
