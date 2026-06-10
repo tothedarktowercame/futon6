@@ -562,9 +562,19 @@ found none. Closure-01's escape hatch was checked and is empty. The sole match,
 *functional-analysis-students*), cannot fold an AIF-architecture ARGUE for the Click/Tick capability
 machine. Genuine non-fold + coverage gap.
 
-**Result (`cascade_learn.py`, 9 closures / 6 success):** `continuous-linear-map-composition` →
-**mean 0.25** (α=0, β=2) — the first pattern off the 0.667 ceiling. 2 coverage gaps emitted
+**Result (`cascade_learn.py`, 10 closures / 7 success / 3 fail):** `continuous-linear-map-composition`
+→ **mean 0.25** (α=0, β=2) — the first pattern off the 0.667 ceiling. 2 coverage gaps emitted
 (`aif-architecture/capability-operator-{argue,derive}` — missing patterns).
+
+> **Open review finding (claude-1, F1 — retrieval vs. utility).** This β penalises the pattern's
+> *global utility* posterior for what is really a *retrieval* error (a cosine artifact surfaced it for
+> an AIF hole), so a cosine-magnet pattern loses trust even on its correct (functional-analysis) holes.
+> The honest signal here is the **coverage-gap** (correctly emitted); the utility-β is a *design fork*
+> for the competitive-β car: (A) keep penalising (conflates retrieval+utility) vs (B) gate the
+> utility-β on `coverage_gap=false` so only appropriately-retrieved-but-failed updates utility, leaving
+> mis-retrieval to the coverage-gap. Under (B) **this first β reclassifies as a coverage-gap, and the
+> first true *utility*-β is the competitive one** — i.e. F1 and the competitive-β car converge. Pending
+> Joe's fork call + fable-1 adversarial cross-check (co-authored gate).
 
 **Honest limit — what this β does NOT yet do.** It moves a *posterior*, not a *selection*: the penalised
 pattern is the sole phylogeny match on its holes, so down-weighting it changes no cascade. A
