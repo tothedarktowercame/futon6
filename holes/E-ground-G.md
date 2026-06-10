@@ -203,11 +203,12 @@ hole *is* (here, `:open`) and what `:constructed` will require — closure is fi
 
 ## Per-closure Lab Notes (Joe, 2026-06-10): make the evidence *visible*
 
-For the **early** closures, each also gets a **Lab Note** (Markdown + embedded **Mermaid**) in
-`holes/closure-lab-notes/NN-<scope>.md`, so the evidence is legible + **critique-able** by Joe and
+For the **early** closures, ONE consolidated Lab Note `holes/early-closures.md` holds each closure
+inline (Markdown + embedded **Mermaid**), so the evidence is legible + **critique-able** by Joe and
 Fable — not just machine-parseable EDN. Each Lab Note renders:
 - the **three-state maturation** (`:correlated → :open → :constructed`) as a Mermaid state diagram;
 - the **wiring diagram** (the `:constructed` state) as a Mermaid flowchart — *see* the construction;
 - the **cascade** (`:correlated`) where one exists (thin cascades are themselves a data point);
 - provenance, the finding, and an explicit **critique surface** (what Joe/Fable might challenge).
-First: `closure-lab-notes/01-recommendation-bindings-q5.md`.
+Cascade = real `construct_cascade` Library patterns (NOT a prose hunch); sorry = a real substrate-2
+subset (NOT a noted gap) — anchored in patterns + substrate-2 (Joe). First closure: §Closure 01 (q5).
