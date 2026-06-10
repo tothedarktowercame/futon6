@@ -1,0 +1,15 @@
+;; closure-folds.edn — structured fold records (input to cascade_learn.py / Build 2).
+;; Each record: which LIBRARY patterns actually folded the hole (the graph-rewrite rules
+;; applied), extracted from futon6/holes/early-closures.md. `used` = the subset of the
+;; cascade whose THEN-clauses did the fold; `success` = did it fold. This is the dense,
+;; real, peradam-free learning signal (pattern-utility + co-usage for edge-seeding).
+[{:scope "recommendation-bindings/q5" :used [] :success true :note "investigation closure, no fold"}
+ {:scope "kit-outbox" :success true
+  :used ["scan-coherence/mission-anchored-scan" "correspondence-coherence/mission-unlocks-eoi"]}
+ {:scope "aif2/inv-tripwire-mapping" :success true
+  :used ["sidecar/typed-kolmogorov-arrows"]}
+ {:scope "kit-intake" :success true
+  :used ["dsc/evidence-situated-log"]
+  :note "+ registry §8.1 two-part guard (apparatus, not a library pattern)"}
+ {:scope "kit-cadence" :success true
+  :used ["ukrns/model-recompute-schedule" "devmap-coherence/prototype-maturity-lifecycle"]}]
