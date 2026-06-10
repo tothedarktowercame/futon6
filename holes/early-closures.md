@@ -584,8 +584,28 @@ machine. Genuine non-fold + coverage gap.
 > pattern returns to Beta(1,1) (signal *relocated* to the two `aif-architecture/capability-operator-*`
 > candidates, not lost), and the **first true utility-β = a connected-pattern failure = the
 > competitive-β car**. Non-blocking: mis-retrievals should *also* accrue to a retriever-calibration
-> ledger (fable's 3rd currency) when proposal-scoring lands. Pending Joe's ratification + impl in the
-> β-feeder (claude-1's surface).
+> ledger (fable's 3rd currency) when proposal-scoring lands.
+>
+> **IMPLEMENTED + REVIEWED (claude-1 `f0dae07`; claude-3 review APPROVE).** `cascade_learn.connected_within`
+> gates failure-attribution per-pattern on the *computed* phylogeny base (idempotent). Verified:
+> `continuous-linear-map-composition` → neutral (was 0.25), coverage-gaps intact, idempotent. The
+> honest competitive-β detector (scanning *real* closures, not prospective scopes) reports **0 competitive
+> βs yet** — the first true utility-β awaits the next *real* connected-pattern failure (recording-discipline,
+> same as the first β). Switch proven load-bearing (14/25 uniform-boost selection-change).
+>
+> **OPEN WATCH-ITEM — the clique residual (claude-1).** `connectivity≈appropriateness` holds for the
+> *single* mis-retrieval (the first-β case: cross-domain ⟹ edge-isolated ⟹ coverage-gap). It does **not**
+> hold for a **wrong-cluster-internally-coherent clique**: B′ charges β if a used pattern connects to *any*
+> used pattern, not a *correctly-retrieved* one, so ≥2 mutually-connected co-domain-wrong patterns slip
+> through as a **false** competitive β — and it's not rare, since coherence-greedy (`rel·(α+connectivity)`)
+> *actively prefers* adding a pattern that connects to the first, i.e. the constructor can assemble a
+> coherent-but-wrong clique from two cosine artifacts. Discriminator to apply when real connected failures
+> land: **right-cluster-wrong-member (TRUE β) vs wrong-cluster-internally-coherent (FALSE β)**. Candidate
+> guard (next iteration, *not* implemented — no real case to test yet): gate connectivity on connection to
+> a pattern carrying positive evidence (α>0), since a wrong-domain clique has no in-domain α. Caveat
+> (claude-3): α is *global*, not per-domain — so that guard filters fresh-artifact cliques but not a clique
+> whose member earned α elsewhere; the airtight form needs domain-relevance, not just global α. Monitor;
+> implement against the first real connected failure.
 
 **Honest limit — what this β does NOT yet do.** It moves a *posterior*, not a *selection*: the penalised
 pattern is the sole phylogeny match on its holes, so down-weighting it changes no cascade. A
