@@ -497,3 +497,40 @@ forced.
 **Verdict:** APPROVED. Correct construction, non-invasive, reproducible; starved of data exactly
 where the rest of the loop is. Re-run it after the first real failures land — that is when its
 ranking stops being breadth and starts being information.
+
+## GROUNDED-T1 LANDING (claude-3, 2026-06-10) — measurement is DATA-BLOCKED, not impl-blocked
+
+Joe asked to run the grounded-T1 measurement (re-ground `move-cost` in realized closure, re-run
+`t1_rent`). I scouted the join before dispatching — and it cannot be run meaningfully:
+
+**The grounding signal does not cover the move set.** The rollout searches 55 moves / 86 endpoints
+(`diffsub-moves.edn`, scope-ids like `hypergraph-operator/instantiate`). Realized closures:
+- closure-folds `:success` scopes ∩ move endpoints = **1 / 86** (`aif2/inv-tripwire-mapping`).
+- meme.db (16 arrows, 22 entities) ∩ move endpoints = **0** (its arrows are scoped to E-mission-head;
+  its entities are pattern/concept names).
+- Even relaxed to **mission grain**: **2 / 30** move-missions have any realized closure
+  (`aif2`, `recommendation-bindings`).
+
+A grounded `g(s_t)` would be the fallback (≈0) for 85/86 endpoints with a single non-zero point —
+multi-step search cannot find divergence from that, so any rent number would be an artifact, not a
+test of grounding. **Running it would produce a misleading 0, not an honest measurement.**
+
+**Why (structural — the same disjointness the competitive-β co-mine hit):** the moves are
+**prospective** (30 missions of future phase-chains); the realized closures are **retrospective** (6
+completed work-streams). They are nearly disjoint *by construction* — and this is not merely "collect
+more data": the *frontier* moves a rollout searches are always the un-realized ones, which by
+definition have no realized outcome to look up. **Grounding-by-lookup is intrinsically empty for
+prospective search.**
+
+**The real grounding path (re-scope):** not a realized-closure *lookup* but a learned **predictive**
+value — move features → predicted closure, generalising the accumulating closures to unseen moves.
+That is exactly the grounded **pattern-posteriors** we just built and reviewed (a pattern is a dense,
+predictive closure-signal that *does* cover every move). So the honest rollout-grounding bridge is
+`move-cost ← grounded posteriors`, not `move-cost ← realized-closure lookup`. BUT the posteriors are
+currently near-uniform (data-starved), so that bridge would also show ≈0 rent today. **The go-live
+unlock is closure-data maturity, not more building.**
+
+**Decision (pending Joe):** (a) defer rollout-grounding; run a SUPERVISED observer go-live (existing
+apparatus + the reviewed grounded loop as a sidecar driving cascade/curriculum + coverage-gaps), OR
+(b) build the small `move-cost ← posteriors` bridge now and re-measure as closures accumulate, OR
+(c) log the degenerate 0-rent baseline for the record. Recommendation: (a) now, (b) as the real path.
