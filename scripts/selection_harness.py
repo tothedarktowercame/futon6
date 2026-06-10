@@ -40,19 +40,31 @@ def chosen_ids(cascade):
     return [pid for _, pid, _ in cascade["trajectory"]]
 
 
-def connected_evidence_members(cascade, posteriors, cc):
-    """Chosen patterns that BOTH carry posterior evidence AND are connected in the semi-lattice."""
-    sl = cascade["semi-lattice"]
-    connected = set()
-    for a, b in sl["descent"]:
-        connected.add(a); connected.add(b)
-    for edge in sl["co_app"]:
-        connected.add(edge[0]); connected.add(edge[1])
-    out = []
-    for pid in chosen_ids(cascade):
-        if pid in connected and cc.pattern_stem(pid) in posteriors:
-            out.append(pid)
-    return out
+def load_learn_module():
+    spec = importlib.util.spec_from_file_location("cascade_learn", FUTON6 / "scripts/cascade_learn.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def scan_real_closures_for_competitive_beta(closures_path, computed):
+    """The HONEST competitive-β detector (claude-3's surfacer correction): scan REAL recorded folds,
+    not prospective/detached scopes. A competitive β = a FAILED fold whose used pattern is COMPUTED-
+    connected within its actual :used set (B''s own gate). Cross-domain mis-retrievals are edge-isolated
+    by construction (the phylogeny encodes co-application history), so they route to the coverage-gap;
+    only a 'right-cluster-wrong-member' real failure yields a connected β. Reports none until one is
+    recorded organically — same recording-discipline as the first β. Fabricates nothing."""
+    cl = load_learn_module()
+    records = cl.parse_closure_folds(str(closures_path))
+    connected_failures, isolated_failures = [], []
+    for rec in records:
+        if bool(rec.get("success")):
+            continue
+        used = [cl.stem(p) for p in rec.get("used", [])]
+        for p in used:
+            (connected_failures if cl.connected_within(p, used, computed) else isolated_failures).append(
+                (rec.get("scope"), p))
+    return connected_failures, isolated_failures
 
 
 def main():
@@ -70,24 +82,30 @@ def main():
     if args.limit:
         scopes = scopes[: args.limit]
 
-    changed, candidates = [], []
+    changed = []
     for s in scopes:
         q = scope_query(s)
         off = cc.construct_cascade(q, posterior_weight=0.0)
         on = cc.construct_cascade(q, posterior_weight=args.weight, posterior_table=table)
         if chosen_ids(off) != chosen_ids(on):
             changed.append(s.get("scope_id"))
-        members = connected_evidence_members(on, posteriors, cc)
-        if members:
-            candidates.append((s.get("scope_id"), members))
 
     print(f"scopes={len(scopes)} weight={args.weight} posterior-table={table.get('label')} n-evidence={len(posteriors)}")
     print(f"SELECTION-DELTA: {len(changed)}/{len(scopes)} scopes change chosen set when grounded posterior is switched ON")
     for sid in changed[:15]:
         print(f"  changed: {sid}")
-    print(f"COMPETITIVE-β CANDIDATES (connected evidence-bearing members -> a FAILED fold here = competitive β): {len(candidates)}")
-    for sid, members in candidates[:15]:
-        print(f"  {sid}: {[cc.pattern_stem(m) for m in members]}")
+
+    # HONEST competitive-β detector: scan REAL closures (not prospective scopes) for connected failures.
+    cl = load_learn_module()
+    computed = cl.load_computed(str(FUTON6 / "data/pattern-phylogeny-edges.json"))
+    connected_failures, isolated_failures = scan_real_closures_for_competitive_beta(
+        FUTON6 / "holes/closure-folds.edn", computed)
+    print(f"COMPETITIVE-β IN THE REAL LEDGER (connected failed-fold members): {len(connected_failures)}")
+    for scope, p in connected_failures[:15]:
+        print(f"  competitive-β: {p} @ {scope}")
+    print(f"  (isolated failures routed to coverage-gap, NOT utility-β: {len(isolated_failures)} -> {[p for _,p in isolated_failures]})")
+    if not connected_failures:
+        print("  -> none yet. A competitive β awaits the next REAL connected-pattern failure (recording-discipline), not a fabricated one.")
 
 
 if __name__ == "__main__":
