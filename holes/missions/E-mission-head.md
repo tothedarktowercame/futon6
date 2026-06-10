@@ -479,3 +479,89 @@ so the cascade's gaps are not weaknesses of the argument but its most
 valuable output: three candidate patterns, each born with a use-site and a
 rationale. This is the cascade→sorry→wiring discipline applied to an
 *argument* rather than code — more work checked into the store, as intended.
+
+## 5. VERIFY (opened 2026-06-10) — two derivations of one argument
+
+**ARGUE exit (Joe, 2026-06-10):** ratified — the four-voice ARGUE (bout +
+amendments + plain-language + pattern cascade) passes out of ARGUE into VERIFY.
+
+### V1 — the convergence probe (the centerpiece; per combining-methods-as-diagnostic)
+
+Our §4.2 cascade was **designed** top-down from the bout. claude-3's **Build 1**
+(`futon3a/holes/labs/M-memes-arrows/cascade_construct.py`, phylogeny-grounded,
+reviewed PASS — C-falsifiable-missions) **assembles** cascades bottom-up from
+the prior distribution over the pattern library. Run Build 1 over this
+mission's hole (ψ ≈ "make the mission HEAD a typed, checkable object") and
+**diff the two derivations**. The disagreement is the diagnostic:
+
+- **P1 (recoverability):** the assembled cascade ranks the four designed
+  patterns (`mission-interface-signature`, `read-existing-seam…`,
+  `liveness-heartbeats`, `logic-model-before-code`) high. If yes → the
+  designed argument is *recoverable from the prior* — not idiosyncratic; the
+  pattern language supports it. If no → either the assembler is blind here or
+  the argument leans on unattested structure. Both are findings.
+- **P2 (the gap test — sharpest):** the assembler **cannot propose** the three
+  `:open` candidate patterns (they are not in the library, hence not in the
+  prior). Prediction: the diff shows holes exactly at the three gap joints.
+  *Unless* it surfaces near-neighbors that could serve — in which case the
+  candidates shrink or die before minting. This is how candidate patterns
+  earn their flexiargs: survive the near-neighbor search.
+- **P3 (the duals):** Closure 01 showed assembly over-selects (26 patterns,
+  6 phylogeny-orphans); Closure 06 notes design under-covers (4 nodes). The
+  diff measures both vices on one hole — calibration data for Build 2's
+  proposal-scoring (C-falsifiable-missions §7 A2: the cascade is a proposal
+  distribution; score its ranking of the used set).
+
+**Form:** follow-up excursion (candidate name `E-cascade-convergence`),
+cross-referenced to claude-3's Build 1 — it verifies this mission AND
+calibrates their assembler; one run, two consumers. Build 1 may still be in
+motion; the excursion waits on its owner's nod, not on this mission.
+
+### V2 — the standing obligations (already armed)
+
+- **A2's wire-or-die clock**: the three `:open` arrows in
+  `diagram/E-mission-head` (health-readout, seeded-beliefs, lifeform-lane) —
+  promote within two working sessions or the lifeform self-declares
+  `:moribund`. This is VERIFY's liveness check, running by construction.
+- **F2–F4** (in `E-mission-head.aif.edn`): decorative-readout,
+  uninformative-sigil, intent-not-typeable — spec-only falsifiers awaiting
+  their runs; F4's run is the HEAD-grain-anchors experiment (§3.4 car 3).
+
+### V0 — the logic model: VERIFIED (2026-06-10)
+
+Joe's steer: don't wait on Build 1 — the established VERIFY is the core.logic
+model, and the pattern specifying it (`mission-coherence/logic-model-before-code`)
+is **already the fourth pattern in this mission's own ARGUE cascade**. The
+argument prescribed its own verification; running it:
+
+`futon3c/src/futon3c/logic/mission_head_invariants.clj` — five structural
+invariants over an abstract lifeform trace:
+
+| invariant | encodes | adversarial caught |
+|---|---|---|
+| `measure-never-target` | A1: no gate/optimize decision consumes the health readout | ✓ |
+| `wire-or-die` | A2: at the horizon, no `:open` arrow while claiming `:alive` | ✓ |
+| `mode-crossing` | promotion requires a construction; attestation never crosses | ✓ |
+| `sigil-provenance` | sigils derive from HEAD sections; hand-set bits forbidden | ✓ |
+| `falsifier-first` | every construction's claim has an *earlier* falsifier | ✓ |
+
+**`run-verify` ⇒ `:verified? true`** — conforming witness 0 violations;
+all 5 adversarial fixtures caught by their own category (including the
+subtle one: a falsifier authored *after* its construction is caught by
+ground-step comparison, not just absence).
+
+V1 (the Build-1 convergence probe) stays open as the *empirical* complement —
+optional, parallel, on claude-3's timetable; V0 verifies the design now.
+
+### PUR — Pattern Use Record
+
+- Pattern: `mission-coherence/logic-model-before-code`
+- Actions taken: encoded the mission's 5 design invariants (A1, A2,
+  mode-crossing, sigil-provenance, falsifier-first) as core.logic+pldb over an
+  abstract lifeform-event trace; authored conforming witness + one adversarial
+  fixture per invariant; ran offline.
+- Outcome: success — witness clean, 5/5 adversarials caught.
+- Prediction error: minimal — one encoding note: the falsifier-*ordering*
+  check resisted pure relational form and needed ground projection (min over
+  falsifier steps); the house exemplar had no temporal-order invariant, so
+  this is a small extension of the idiom worth carrying back to the pattern.
