@@ -3,7 +3,7 @@
 *Ground the closed loop — make FutonZero learn from reality, not self-confirm.*
 
 **Date:** 2026-06-09
-**Status:** IDENTIFY (opened 2026-06-09)
+**Status:** FOLDED into Campaign `C-falsifiable-missions` (2026-06-10, futon3c/holes/campaigns/) — this umbrella's diagnosis (closed loop) + grounding edges E1–E5 are the campaign's charter material; the three chartered constituents (M-peradam-grounding / M-pattern-posteriors / M-arguing-worlds) operationalize them. **Retired as a standalone mission** per `:O-capstone-form` → campaign. Kept as the diagnosis record.
 **Owner:** claude-3 (authored as the sequel to `M-differentiable-substrate`; this mission is
 cross-cutting and coordinates with `M-wm-policies` (claude-1/claude-4), `M-pudding-peradams`
 (Joe/futon7), `E-possible-world-regulator`. Working title — see §0; Joe may rename.)
