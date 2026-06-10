@@ -44,15 +44,46 @@ flowchart TD
     class p1,p2,p3,p4,p5,p6,p7,p8,tail p;
 ```
 
-**Observation (a real finding, not a footnote):** this cascade is **high-C but generic** —
-`*/ARGUMENT`, `*/argument`, `devmap-coherence/*`, `workflow-coherence/wip-cap`. It is the *coherence
-of an audit*, not of a specific construction. Compare `kit-outbox` (a meaningful hole), whose cascade
-scores **lower C (7.34)** but assembles *on-topic* patterns (`structure/interest-event-vocabulary`,
-`scan-coherence/mission-anchored-scan`, `correspondence-coherence/mission-unlocks-eoi`). So **`C`
-(wholeness) does not track meaningfulness** — the trivial hole scored *higher*. This is the
-"Claude-fixes-easy-things" signature made measurable, and it echoes the known MiniLM-cosine-artifact
-problem. *The cascade machinery is more useful as a topicality/triviality discriminator than as a
-quality score.*
+**↑ This chain is an embedding artifact, NOT real structure.** `construct_cascade` ranks by MiniLM
+cosine only (`cascade_construct.py` lines 65/94/104) and **never reads the 2,538-edge pattern
+phylogeny** (`futon6/scripts/pattern_phylogeny.py`: *descent* = cross-reference toward primitives,
+*co-application* = HGT roads from co-occurrence in missions). Overlaying the phylogeny on the **same**
+patterns recovers the structure it discarded — **14 descent + 10 co-application edges = a semi-lattice**:
+
+```mermaid
+flowchart TD
+    INV["invariants<br/>TRUNK primitive"]:::trunk
+    SC["ifr-state-convergence"]:::p
+    F0["ifr-f0-sati"]:::p --> SC
+    F1["ifr-f1-dhammavicaya"]:::p --> F0
+    F1 --> SC
+    F1 --> INV
+    F2["ifr-f2-viriya"]:::p --> F1
+    F7["ifr-f7-upa-upekkha"]:::p --> F2
+    BH["futon-bridge-health"]:::p --> F2
+    ARG["ARGUMENT"]:::p --> INV
+    EX["exotype-003"]:::p --> INV
+    FSC["futon1-storage-coherence"]:::p --> INV
+    RC["retroactive-canonicalization"]:::p --> INV
+    ARG -. "co-app 16" .- INV
+    INV -. "co-app 6" .- RC
+    ARG -. "co-app 6" .- RC
+    FLOAT["6 of 26 patterns are NOT in the phylogeny at all<br/>(argument, f0-f4-boundary, peripheral-to-core,<br/>reflective-container, readiness-windows, platform-choreography)<br/>— embedding-selected, no combination grounding"]:::float
+    classDef trunk fill:#fff3cd,stroke:#d39e00;
+    classDef p fill:#eef,stroke:#88a;
+    classDef float fill:#fde0e0,stroke:#cc4444,stroke-dasharray:4 3;
+```
+*Solid = descent (toward the `invariants` trunk; the `ifr-*` chain sati ← dhammavicaya ← viriya ←
+upa-upekkha); dotted = co-application roads. This is "A City is Not a Tree" — tree + cross-links.*
+
+**Three findings:**
+1. **The embedding over-selects** — 6/26 patterns have no phylogeny node, so they cannot be part of a
+   real pattern-language; they are cosine-neighbours, not combiners.
+2. **The cascade machinery is defective** — `construct_cascade` ignores its own combination prior (the
+   phylogeny). This *is* the semilattice-vs-linear tension (E4) the campaign already named, found in the
+   wild. A phylogeny-grounded cascade would be structured by construction.
+3. **C ≠ meaningfulness** — the trivial hole scored *higher* C (9.79) than the meaningful `kit-outbox`
+   (7.34), with blander patterns. The "Claude-fixes-easy-things" signature, measurable.
 
 ## Stage 2 — the sorry (a real subset of substrate-2)
 
