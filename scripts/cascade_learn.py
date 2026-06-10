@@ -69,16 +69,24 @@ def learned_from(closures, computed):
     gaps = []
 
     for rec in closures:
-        if not rec.get("success"):
-            continue
         scope = rec.get("scope")
         used = [stem(p) for p in rec.get("used", [])]
+        closed = bool(rec.get("success"))
 
+        # node surface (claude-1): per-pattern Bernoulli — used-and-closed -> alpha, used-and-didn't -> beta.
+        # This is the discrimination unlock: failed folds give beta, so a pattern's mean drops below the
+        # all-success 0.667 the moment one of its uses fails to close.
         for p in used:
-            alpha[p] = alpha.get(p, 0) + 1
+            alpha.setdefault(p, 0)
             beta.setdefault(p, 0)
+            if closed:
+                alpha[p] += 1
+            else:
+                beta[p] += 1
 
-        for a, b in combinations(sorted(set(used)), 2):
+        # edge surface (claude-3): ONLY a successful fold's co-used pairs upvote/seed — a failed fold's
+        # pair did not combine, so it must not seed a phylogeny edge.
+        for a, b in (combinations(sorted(set(used)), 2) if closed else ()):
             pair = ordered_pair(a, b)
             if pair in computed["co_app"]:
                 co_overlay[pair] = {
