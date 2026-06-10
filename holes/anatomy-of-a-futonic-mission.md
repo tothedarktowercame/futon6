@@ -41,13 +41,18 @@ was building. Primary artifacts (the paper's data):
 | `mission_head_invariants.clj` (VERIFY V0, 5/5) | AIF (verified) / scope (a scope) |
 | `closure-folds.edn` entries incl. the first `:success false` | the loop's grain |
 
+<!-- vitals: holes/missions/E-mission-head.md -->
+
 ## 3. The scope reading (anatomy)
 
 The mission as a nested system of typed regions anchored in text: the
 eightfold spine, loose-sections, pattern/PSR/PUR records, the plain-argument
 sub-scope; detected (`mission_scope_detect.py`), ingested to substrate-2,
 rendered as the Scratch-Map. Third-person, structural, *what the mission is
-made of*. Key device: the **ghost line** — a canon phase with no scope yet.
+made of*. Key device: the **ghost line** — a canon phase with no scope yet. The primary
+source's opening theme, as the scope typography renders it:
+
+<!-- excerpt: holes/missions/E-mission-head.md :: ## HEAD -->
 
 ## 4. The AIF reading (physiology)
 
@@ -56,7 +61,10 @@ The mission as a lifeform seeded from its HEAD: the recast to pattern form
 before constructions, the Calculemus self-argument, the wire-or-die clause.
 First-person (the mission's own model of itself), dynamical, *what the
 mission wants and whether it is well*. Key device: the **open arrow** — a
-typed gap with its RHS specified and its construction owed.
+typed gap with its RHS specified and its construction owed. The moment the
+lifeform first spoke — the sigil compilation, from the source:
+
+<!-- excerpt: holes/missions/E-mission-head.md :: ### 3.3.1 v0.1 RESULT — the Golemization run (2026-06-10) -->
 
 ## 5. The synthesis (the new thing)
 
@@ -108,6 +116,11 @@ the stack already has a name and a discipline for externally-checkable value
 found on the mountain: **the peradam**. The synthesis predicts where peradams
 form: at reading-agreements. "One descends, one sees no longer, but one has
 seen."
+
+And the argument in the register anyone can read — the mission's own
+plain-language statement, boxed as it appears in the source:
+
+<!-- excerpt: holes/missions/E-mission-head.md :: ### 4.1 Plain-language argument (the version anyone can read) -->
 
 ## 6. Method appendix (planned)
 

@@ -165,8 +165,10 @@ def vitals_card(md_path: Path):
     return "\\begin{vitalsbox}\n" + body + "\n\\end{vitalsbox}\n"
 
 
-def render(md_path: Path) -> str:
-    lines = md_path.read_text(encoding="utf-8").split("\n")
+def render_body(lines, md_path=None, with_title=True):
+    """Render markdown LINES to boxed LaTeX body (the scope typography).
+    Reusable by the literate weaver (anatomy zip): with_title=False renders
+    excerpts without title page/vitals hooks."""
     out = []
     stack = []  # open box envs: ("phasebox"|"sectionbox"|"subbox")
     title = md_path.stem
@@ -221,9 +223,10 @@ def render(md_path: Path) -> str:
             if level == 1:
                 title = htext
                 close_to(1)
-                out.append(r"\begin{center}{\LARGE\bfseries " + inline(htext)
-                           + r"}\end{center}")
-                out.append("VITALSCARD")
+                if with_title:
+                    out.append(r"\begin{center}{\LARGE\bfseries " + inline(htext)
+                               + r"}\end{center}")
+                    out.append("VITALSCARD")
             elif level == 2:
                 close_to(1)
                 word = re.sub(r"^[0-9.]+\s*", "", htext).split()[0].strip(".:—-").lower()
@@ -284,7 +287,13 @@ def render(md_path: Path) -> str:
     if in_quote:
         out.append(r"\end{quote}")
     close_to(1)
-    body = "\n".join(out).replace("VITALSCARD", vitals_card(md_path))
+    return "\n".join(out)
+
+
+def render(md_path: Path) -> str:
+    lines = md_path.read_text(encoding="utf-8").split("\n")
+    body = render_body(lines, md_path=md_path, with_title=True)
+    body = body.replace("VITALSCARD", vitals_card(md_path))
     head = PREAMBLE.replace("MISSIONTITLEHEAD", esc(md_path.stem))
     return head + body + "\n\\end{document}\n"
 
