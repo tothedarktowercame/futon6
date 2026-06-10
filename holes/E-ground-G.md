@@ -212,3 +212,48 @@ Fable — not just machine-parseable EDN. Each Lab Note renders:
 - provenance, the finding, and an explicit **critique surface** (what Joe/Fable might challenge).
 Cascade = real `construct_cascade` Library patterns (NOT a prose hunch); sorry = a real substrate-2
 subset (NOT a noted gap) — anchored in patterns + substrate-2 (Joe). First closure: §Closure 01 (q5).
+
+## THE LANDING (Joe, 2026-06-10): the grounding signal is the cascade-fold closure loop — peradam-free
+
+The five early closures resolved E-ground-G's central question. The grounded signal external to the
+prior's metric is **the closure-fold loop itself**, and it carries (at least) **three learnable
+signals, none of which implicate a peradam**:
+1. **pattern-utility** — did a selected pattern's rule actually fold the hole? → update its posterior
+   (this is M-pattern-posteriors' signal, now grounded in *fold-usage*, not self-grading).
+2. **pattern-missing** — did the fold need a pattern absent from the cascade? → a recorded library
+   gap (author it); lowers cascade-coverage confidence for that ψ-shape.
+3. **edge-correctness** — were the phylogeny edges the *right* interconnections for this problem? →
+   **upvote** the edges that connected the used patterns; **seed** a new co-application edge when two
+   patterns are used together but had no phylogeny edge. The phylogeny **learns from closures**.
+
+This is dense (per-pattern, per-edge, per-closure), real (fold-success is a fact, not an estimate),
+external to the prior's metric, and **needs no car / no peradams** (peradams remain the sparse audit
+— Goodhart-safe, outside the loop). *We were hunting a grounding signal; it was the cascade-fold loop.*
+
+## THE FIX — phylogeny-grounded `construct_cascade` (spec for the build)
+
+**Defect (proven across Closures 01 + 03):** `construct_cascade` ranks by MiniLM cosine only and
+ignores the 2,538-edge phylogeny — it over-selects non-combiners (01) and misses foldable holes (03);
+its `C` tracks neither meaningfulness nor foldability.
+
+**Build 1 — the core fix (this is the dispatch):**
+- (a) **Emit the phylogeny as data.** Refactor `futon6/scripts/pattern_phylogeny.py` to ALSO write
+  `futon6/data/pattern-phylogeny-edges.json` = `{patterns:[...], descent:[[x,y]...], co_app:[[a,b,w]...]}`
+  (the `cites`/`co` it already computes), keyed by pattern stem. (Today it only writes HTML.)
+- (b) **Phylogeny-ground the selection.** In `cascade_construct.py`, change the coherence-greedy step
+  to grow along the phylogeny: marginal score `m'(p) = rel(p|ψ) · (α + connectivity(p, chosen))`
+  where `connectivity` rewards a descent or co-application edge from `p` to the already-chosen set
+  (the cascade grows as a connected semi-lattice, not scattered cosine-neighbours). Patterns with
+  **no phylogeny node** are down-weighted and surfaced separately as `:coverage-candidates` (not
+  silently mixed in — they are the "is a pattern missing?" signal).
+- (c) **Output the structure.** `construct_cascade` returns, in addition to the ranked list, the
+  `:semi-lattice {:descent [...] :co-app [...]}` among the chosen patterns + the dropped
+  `:non-phylogeny` set. So every cascade is a graph, not a chain.
+- **Acceptance:** re-run the kit-outbox + inv-tripwire queries; kit-outbox's on-topic patterns should
+  come out *connected* (semi-lattice), and inv-tripwire's near-zero-structure should be *visible in
+  the output* (flagged low-connectivity), not hidden behind a cosine ranking.
+
+**Build 2 — the learning hooks (follow-on, designed not dispatched):** after a recorded closure, take
+the fold's used-pattern set + the edges among them → (1) bump pattern posteriors (used=useful);
+(2) seed/upvote co-app edges among co-used patterns; (3) log missing-pattern gaps. Persist; the next
+cascade is better. This is the peradam-free ML loop above, made to run.
