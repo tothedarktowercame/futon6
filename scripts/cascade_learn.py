@@ -61,6 +61,25 @@ def load_computed(path):
     return {"co_app": co, "descent": descent, "descent_undirected": descent_undirected}
 
 
+def connected_within(p, used, computed):
+    """B': True iff pattern p shares >=1 phylogeny edge (co_app or descent) with ANOTHER pattern
+    in the used set. Connectivity gates failure attribution per-pattern (NOT cascade-level): a failed
+    fold charges utility (beta) to a used pattern ONLY if it was phylogeny-connected within the set --
+    i.e. it was a genuine compositional participant, not an isolated cosine-artifact / sole-match.
+
+    Uses the COMPUTED phylogeny base (loaded from disk, stable) only -- NOT the within-pass learned
+    overlay -- so recompute-from-scratch stays idempotent and the gate never depends on its own output.
+    cascade-level coverage_gap is the WRONG granularity (fable's V1: a coverage_gap cascade can still
+    contain correctly-retrieved connected patterns); connectivity is per-pattern."""
+    for q in used:
+        if q == p:
+            continue
+        pair = ordered_pair(p, q)
+        if pair in computed["co_app"] or pair in computed["descent_undirected"]:
+            return True
+    return False
+
+
 def learned_from(closures, computed):
     alpha = {}
     beta = {}
@@ -73,16 +92,17 @@ def learned_from(closures, computed):
         used = [stem(p) for p in rec.get("used", [])]
         closed = bool(rec.get("success"))
 
-        # node surface (claude-1): per-pattern Bernoulli — used-and-closed -> alpha, used-and-didn't -> beta.
-        # This is the discrimination unlock: failed folds give beta, so a pattern's mean drops below the
-        # all-success 0.667 the moment one of its uses fails to close.
+        # node surface (claude-1): per-pattern Bernoulli, B' connectivity-gated failure attribution.
+        # used-and-closed -> alpha (unconditional). used-and-didn't-close -> beta ONLY IF the pattern was
+        # phylogeny-CONNECTED within the used set; an ISOLATED failure is a retrieval/coverage error (it
+        # rides the :missing coverage-gap), not a utility failure, so it does NOT touch the node posterior.
+        # This relocates the first-beta signal (sole-match cosine artifacts) instead of mis-charging utility.
         for p in used:
-            alpha.setdefault(p, 0)
-            beta.setdefault(p, 0)
             if closed:
-                alpha[p] += 1
-            else:
-                beta[p] += 1
+                alpha[p] = alpha.get(p, 0) + 1
+            elif connected_within(p, used, computed):
+                beta[p] = beta.get(p, 0) + 1
+            # else: isolated failed pattern -> no utility charge (signal relocated to the coverage-gap)
 
         # edge surface (claude-3): ONLY a successful fold's co-used pairs upvote/seed — a failed fold's
         # pair did not combine, so it must not seed a phylogeny edge.
@@ -102,13 +122,16 @@ def learned_from(closures, computed):
         if missing:
             gaps.append({"scope": scope, "missing": missing, "at": rec.get("at") or "closure-folds.edn"})
 
+    # Only patterns with >=1 CHARGED outcome appear. A pattern whose only appearances were isolated
+    # failures earns no charge -> absent -> posterior_mean defaults to Beta(1,1) neutral (mult 1.0),
+    # exactly the "return to neutral" B' intends (signal relocated to the gap, not lost).
     posteriors = {
         p: {
-            "alpha": alpha[p],
+            "alpha": alpha.get(p, 0),
             "beta": beta.get(p, 0),
-            "mean": round((1 + alpha[p]) / (2 + alpha[p] + beta.get(p, 0)), 6),  # Beta(1,1) prior -> proper + count-differentiated
+            "mean": round((1 + alpha.get(p, 0)) / (2 + alpha.get(p, 0) + beta.get(p, 0)), 6),  # Beta(1,1) prior -> proper + count-differentiated
         }
-        for p in sorted(alpha)
+        for p in sorted(set(alpha) | set(beta))
     }
     learned = {
         "co_app": [[a, b, row["weight"], row["origin"]] for (a, b), row in sorted(co_overlay.items())],

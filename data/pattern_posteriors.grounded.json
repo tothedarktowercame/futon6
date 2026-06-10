@@ -1,9 +1,4 @@
 {
-  "continuous-linear-map-composition": {
-    "alpha": 0,
-    "beta": 2,
-    "mean": 0.25
-  },
   "evidence-situated-log": {
     "alpha": 1,
     "beta": 0,
@@ -35,6 +30,11 @@
     "mean": 0.666667
   },
   "prototype-maturity-lifecycle": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "read-existing-seam-before-implementing": {
     "alpha": 1,
     "beta": 0,
     "mean": 0.666667
