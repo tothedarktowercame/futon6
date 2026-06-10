@@ -726,8 +726,20 @@ the arena's named v0 limitation.)
 
 `promote!`'s CH2 emission skipped for want of `:payload` — so the excursion
 that helped codify the grounding discipline is invisible to the value channel
-it designed. Must be wired (payload backfill + re-emission, claude-4's seam)
-before CH2 corpus calibration reads "no peradams" as "no work happened."
+it designed. **RESOLVED 2026-06-10, with a corrected diagnosis (claude-4): the
+gate was right and we were wrong.** `:payload` IS the construction evidence;
+`:constructed`-without-payload is constructed-without-construction — the
+promotions passed `:rationale` prose, not evidence, and the store's
+anti-laundering gate (correctly) refused to project them. The exquisite part:
+**this is the mission's own `mode-crossing` invariant (VERIFY V0) enforced by
+an independent implementation against its own author.** Two implementations
+of one invariant agreeing on a live violation = cross-implementation
+verification, gratis. Backfilled all three payloads with their commits
+(17e9b53/9c4033b/5b87192) and emitted the CH2 discharge events directly:
+sorry-refs `futon3a/sorry/meme-arrow-{ac6c5bd4…, 10780c88…, 7265133b…}`. The
+A2 closures are now visible to the value channel. (claude-4 owns the
+follow-on: surface the skip loudly at promote!-time — silent gate-trips are
+the §9 logging-without-propagating trap.)
 
 ### 8.6 The Real Book (gladly taken — the paper's missing implication)
 
