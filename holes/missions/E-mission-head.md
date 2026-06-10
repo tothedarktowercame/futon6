@@ -660,3 +660,89 @@ is a **missing cross-cluster phylogeny edge** (realtime↔mission-coherence):
 the first concrete structure-discovery target of the A3 kind. V1 paid rent in
 both directions: it verified this mission AND handed the assembler a real
 calibration case (the F1 fork call: B′, per-pattern connectivity gating).
+
+## 8. External review (2026-06-10) — Mama Fable, via Joe; dispositions by fable-1
+
+Five critiques + one housekeeping item, received after DOCUMENT opened. Not
+post-hoc fixes — things the mission must carry. Dispositions:
+
+### 8.1 A1 lacks a scope condition (ACCEPTED — a real design error in the amendment as drafted)
+
+"Health never enters any optimization target" collides with the learning
+loop, whose entire point is that *some* measures become targets (visit-mass,
+peradams). The principled rule, latent in the architecture and now adopted:
+**signals grounded in external discharge (three-witness peradams, CH2) are
+targetable; self-estimated signals (bit-confidence, health vitals, CH1
+q-values) are observation-only.** This is itself the missing pattern that
+*relates* `measure-never-target` to reward-must-be-grounded and gives each
+its HOWEVER. Consequence: the candidate-pattern arrow in
+`cascade/E-mission-head-argue` gains this scope condition in its rationale
+before any flexiarg is minted; A1 in the package is re-scoped accordingly.
+Without this, the amendment was either too strong or destined for quiet
+per-case exceptions — which is how disciplines erode.
+
+### 8.2 The shem is mostly noise; the vitals display can launder it (ACCEPTED)
+
+Mean bit-confidence 0.33 with four near-coin-flip bits, on a bridge at 57.9%
+held-out accuracy, is barely above chance; the genuine signal of the run is
+the THEN/BECAUSE anchor asymmetry. But the H3 vitals line renders "conf 0.33
+· xeno 89%" — an impressive coverage number beside a damning quality number,
+and UI gestalt favors the impressive one. **The subtler failure class: a
+readout worse than decorative — confidently displaying a 36-bit word whose
+middle is noise.** Actions: (a) **F5 added to the package** — sharper than
+F2/F4: *birth vitals have no predictive validity over mission outcomes versus
+base rate*. Health-at-birth is a prior against which no likelihood has ever
+been computed; naming the null now prevents unearned authority while the
+births-with-outcomes corpus (car 3) accumulates. (b) Display follow-up
+(named, not yet built): weight the vitals line by anchor proximity — render
+the strong half solid, visually suppress the noise half until HEAD-grain
+anchors exist.
+
+### 8.3 A2 was satisfied in easy mode (ACCEPTED — re-armed)
+
+The three arrows were promoted within hours, by the session that armed the
+clock, with everyone watching. M-aif-head's failure mode was not slow
+building but *not staying wired* across months and handoffs — it died
+invisibly precisely because nothing measured its non-wiring (the round-2
+thesis-strike's own words). **A2′: the moribund clause re-arms as a standing
+heartbeat** — every newly seeded mission either gets its `health.json` at
+birth or increments a visible failure counter. The real test of the revive:
+**does the birth ceremony fire for the next mission seeded by someone who
+isn't thinking about today?** (Converges with E-scope-audit W12: the birth
+ceremony belongs in the watcher, not in anyone's attention.)
+
+### 8.4 The arena scores structure, not semantics (ACCEPTED — named as v0 limit)
+
+Round 1's catch (zero thesis-attacks) was a genuine structural diagnosis;
+round 2's "Symmetry: mutual, 6 vs 5" is edge-counting, and authored attack
+edges are an arms race. The grounding move is the stack's usual one: **attack
+edges should carry discharge obligations** — testable against the opponent's
+falsifiability nodes, not merely asserted — or Calculemus drifts toward a
+rhetoric simulator with a scoreboard. Worth fixing while the `indeterminate`
+verdicts are still honest. (For the contest runner's owner; recorded here as
+the arena's named v0 limitation.)
+
+### 8.5 Housekeeping with consequences: the A2 closures produced no peradams
+
+`promote!`'s CH2 emission skipped for want of `:payload` — so the excursion
+that helped codify the grounding discipline is invisible to the value channel
+it designed. Must be wired (payload backfill + re-emission, claude-4's seam)
+before CH2 corpus calibration reads "no peradams" as "no work happened."
+
+### 8.6 The Real Book (gladly taken — the paper's missing implication)
+
+A lead sheet is a typed object *because a community of practice has
+internalized the idiom* — every player carries the training set. The 320
+pattern-grain anchors are that idiom for patterns; the IF/HOWEVER weakness
+measures exactly where the idiom does not yet cover mission-intent prose.
+**HEAD-grain anchors are not a representation upgrade; they are building the
+Real Book for missions** — and the corpus only accumulates by playing more
+tunes through to their outcomes, which is what the August pipeline requires
+anyway. (→ the paper, §4/§5; and the reframe of DERIVE car 3.)
+
+### 8.7 Meta (held)
+
+The reviewer notes the review protocol now contains an instance of Fable
+checking work against invariants another instance of Fable helped codify —
+precisely where author≠reviewer should make us *more* careful, not less.
+Held as a standing caution on every future fable-1 review in this lineage.

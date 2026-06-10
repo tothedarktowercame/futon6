@@ -73,7 +73,9 @@ their witness functions is another way to write the animating word.
   {:id :nF3 :type :falsifiability :status :spec-only
    :content "IF seeded beliefs predict mission outcomes no better than a uniform prior over the mission corpus, the sigil carries no information"}
   {:id :nF4 :type :falsifiability :status :spec-only
-   :content "IF HEAD-grain anchors fail to lift IF/HOWEVER proximity above cos 0.4, the intent half of HEADs is not pattern-typeable"}]
+   :content "IF HEAD-grain anchors fail to lift IF/HOWEVER proximity above cos 0.4, the intent half of HEADs is not pattern-typeable"}
+  {:id :nF5 :type :falsifiability :status :spec-only
+   :content "IF birth vitals have no predictive validity over mission outcomes versus base rate (the corpus of births-with-outcomes, once it exists), the readout has accrued unearned authority — sharper than F2/F4: health-at-birth is a prior against which no likelihood has yet been computed (Mama Fable review 8.2)"}]
 
  :edges
  {:internal
@@ -107,6 +109,10 @@ their witness functions is another way to write the animating word.
  ;; --- ARGUE amendments (what the contra earned, round 1) --------------
  :amendments
  [{:id :A1 :from "E-mission-head-contra/nC2" :date "2026-06-10"
-   :text "The health readout NEVER gates birth and NEVER enters an optimization target (G, EFE ranking, fitness). Observation channel + sparse audit only — the Xbox-achievement discipline, codified. Violating this kills the lifeform by its own F2."}
+   :rescoped "2026-06-10 (Mama Fable review 8.1)"
+   :text "SCOPED: signals grounded in EXTERNAL DISCHARGE (three-witness peradams, CH2 closures) are targetable; SELF-ESTIMATED signals (bit-confidence, health vitals, CH1 q-values) are observation-only and NEVER enter an optimization target (G, EFE ranking, fitness) or gate birth. The health readout is in the second class. This scope condition is the missing pattern relating measure-never-target to reward-must-be-grounded; unscoped, the rule is either too strong or erodes by exception."}
   {:id :A2 :from "E-mission-head-contra/nC1" :date "2026-06-10"
-   :text "Wire-or-die: if the three :open arrows in diagram/E-mission-head are not promoted with real constructions within the next two working sessions on this thread, this lifeform self-declares :moribund in this package. The graveyard claim is load-bearing, not dismissed."}]}
+   :discharged "2026-06-10 (3 promotions, commits 17e9b53/9c4033b/5b87192) — IN EASY MODE: same session, full attention; tested construction, not inhabitation (Mama Fable review 8.3)"
+   :text "Wire-or-die: if the three :open arrows in diagram/E-mission-head are not promoted with real constructions within the next two working sessions on this thread, this lifeform self-declares :moribund in this package. The graveyard claim is load-bearing, not dismissed."}
+  {:id :A2-prime :from "Mama Fable review 8.3" :date "2026-06-10"
+   :text "The moribund clause re-arms as a STANDING HEARTBEAT (liveness-heartbeats applied temporally): every newly seeded mission either gets its health.json at birth or increments a visible failure counter. The real test of the revive: the birth ceremony fires for the next mission seeded by someone who is not thinking about today. (Implementation: the watcher, per E-scope-audit W12 — not anyone's attention.)"}]}
