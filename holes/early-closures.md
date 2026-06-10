@@ -297,3 +297,82 @@ node filled. That is the closure, mechanically.
 - The fold here is hand-applied. To be a real process it wants an *engine* (apply rule-set to a
   topology → fixed point). futon5 `tpg/runner` + `aif2-exotype` wiring may already be that engine —
   worth wiring the fold to it rather than drawing it.
+
+---
+
+# Closure 03 — `aif2/inv-tripwire-mapping` (a mapping fold; cascade-miss data point)
+
+**Hole:** map each aif2 `INV-*` invariant to its checkable **tripwire** (detector). **Character:**
+forward · mapping (bipartite) · *the cascade misses it — a contrast to kit-outbox*.
+
+## Stage 1 — cascade (small, low-C, NO phylogeny structure)
+
+`construct_cascade` → **8 patterns, C=1.841** (vs 27 / 7.34 for kit-outbox). The top pattern is
+on-topic (`futon-theory/structural-tension-as-observation` — an INV *is* a structural tension; and
+`sidecar/typed-kolmogorov-arrows` — the mapping arrow), but **the phylogeny shows 0 descent edges
+and 1 co-application edge among them** — they do **not** combine into a pattern-language.
+
+> **Finding (new kind):** here the *hole folds cleanly but the cascade fails to surface its
+> pattern-language*. So "the hole is foldable" and "the cascade found the right patterns" are
+> **independent** — the embedding-only cascade can miss a well-formed hole. (kit-outbox: cascade hit;
+> inv-tripwire: cascade miss; same fold-discipline applies to both.) Another nail in
+> "ground the cascade in the phylogeny, not just the embedding."
+
+## Stage 2 — the sorry topology (a bipartite mapping with 2 missing edges)
+
+Five `INV-*` invariants; three already have a tripwire (M-aif2.md:294); **two are unmapped — the gap:**
+
+```mermaid
+flowchart LR
+    subgraph INV["INV-* invariants"]
+        ip["INV-provenance"]:::hole
+        nb["INV-no-bypass"]:::done
+        un["INV-uniformity"]:::done
+        rd["INV-reduction"]:::done
+        ic["INV-consent"]:::hole
+    end
+    subgraph TW["tripwire checks"]
+        t_nb["both I-manifold edges present"]:::done
+        t_un["C-credit/C-admissibility act on S1≡S2"]:::done
+        t_rd["validator passes, registries frozen"]:::done
+        t_ip(["? orphan-candidate check — MISSING"]):::gap
+        t_ic(["? consent-record check — MISSING"]):::gap
+    end
+    nb --> t_nb
+    un --> t_un
+    rd --> t_rd
+    ip -.no tripwire.-> t_ip
+    ic -.no tripwire.-> t_ic
+    classDef hole fill:#ffe0e0,stroke:#cc4444;
+    classDef done fill:#eafbe8,stroke:#4caf50;
+    classDef gap fill:#ffe0e0,stroke:#cc4444,stroke-dasharray:5 3;
+```
+
+## Stage 3 — the rule (typed-arrow), and the fold
+
+**R (`sidecar/typed-kolmogorov-arrows`):** for an invariant `I` stated as a proposition, **add a
+typed arrow** `I → check(I)` where `check(I)` is the structural test that *fails iff `I` is violated*.
+Applied to the two unmapped invariants (read off their statements):
+
+| INV | statement | derived tripwire `check(I)` |
+|---|---|---|
+| `INV-provenance` | every candidate carries `{proposer-id, action-class, target}` | **assert no candidate has a nil proposer-id/action-class/target** (no orphans) |
+| `INV-consent` | activating a `:candidate` is consent-gated | **assert no `:candidate` reaches `:active` without a consent record** in its provenance |
+
+```mermaid
+flowchart LR
+    ip["INV-provenance"]:::done -->|R adds| t_ip["assert no orphan candidate<br/>(proposer/class/target non-nil)"]:::filled
+    ic["INV-consent"]:::done -->|R adds| t_ic["assert no :candidate→:active<br/>without a consent record"]:::filled
+    classDef done fill:#eafbe8,stroke:#4caf50;
+    classDef filled fill:#d4edda,stroke:#2e7d32,stroke-width:2px;
+```
+
+**The fold yields the wiring diagram** = the complete bipartite `INV-* ↔ tripwire` mapping (5/5). The
+two derived checks are the construction; landing them as tests in M-aif2.md is the realization
+(flagged for the aif2 owner to ratify — I do not silently edit another mission's doc).
+
+## Critique surface
+- Are the two derived tripwires *faithful* to the invariant statements, or under-specified? (They are
+  the minimal structural tests; the aif2 owner should confirm completeness.)
+- The cascade-miss is the headline: should `construct_cascade` be phylogeny-grounded **before** we use
+  cascades as any kind of signal? (Same conclusion as Closure 01, now from the opposite direction.)
