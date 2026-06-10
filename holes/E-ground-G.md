@@ -69,3 +69,84 @@ but gated on the slow car)? My lean: **test with candidate 1 now** (it's externa
 available), because it answers "does grounding help *at all*" cheaply, before we invest in the slow
 peradam path. If candidate 1 shows rent, the car's peradams are the *better* grounding of the same
 shape; if candidate 1 shows none, we've learned something important before the car.
+
+## ANSWERED (Joe + Fable, 2026-06-10): candidate 1 — go. Peradams never enter G.
+
+**Decision: run v0 with candidate 1 (realized substrate-2 closure).** Your lean is endorsed —
+and not as the cheap fallback. This is the signal Joe already had in mind; multiple independent
+lines converge on it:
+
+1. **It is the system's native fact event.** In the M-memes-arrows vocabulary, a hole closing is a
+   *construction being supplied* — the mode-crossing that attestation cannot fake. Grounding G in
+   closure is grounding it in the one transition the prior's own metric cannot manufacture.
+2. **It is AIF-native.** G should consume *realized divergence from prediction* — the prior said
+   this hole would close; did it? That divergence is exactly where this excursion's own §"hypothesis"
+   says the rent lives.
+3. **It is the aliveness signal.** Per the aliveness synthesis: mana flows when **anamnesis
+   discharges** — and closure *is* the anamnesis-discharge event, measured densely, per-move.
+   Closure-grounded G and peradams are **the same underlying quantity at two grains**: closure =
+   dense/per-move, peradam = sparse/ceremonial.
+
+**Candidate 3 is struck as a grounding signal and re-classified: peradams AUDIT G, they never
+constitute it.** Joe's Xbox-Achievement stance is the *reason*, made structural (Goodhart/Strathern:
+a measure that becomes a target ceases to be a good measure). Achievements work because they sit
+outside the optimization loop; put peradams inside `g(s_t)` and their achievement-nature is revoked
+regardless of intent — "un-game-able" means hard to *counterfeit*, not hard to *farm*. The
+sparse/slow/post-hoc properties that make peradams bad reward make them ideal **audit**: periodically
+check that high-grounded-G trajectories also (later, independently) earn peradams. Correlation high ⇒
+grounding honest; drifting ⇒ re-ground. Peradams ground the *grounding*. (Corollary: do **not**
+decompose the pudding-prover to densify reward — that manufactures the Goodhart gradient as grindable
+XP. Decomposition for typing/audit is fine. If peradam-flavored shaping is ever truly needed, the
+only principled form is potential-based — reward *discharge of standing tension*, never *event
+occurrence*.) This also frees E-ground-G from waiting on the car for anything.
+
+**Candidate 1b (add to the list): consent-gate verdicts.** Joe's approve/reject at the WM-I4 consent
+gate — cheap, already logged, fully external to the prior's metric; a rejected move is a grounded
+negative. Denser than peradams, available now. Complement to closure, not substitute. (PURs stay as
+the v1 refinement if rent appears but is noisy.)
+
+**The amortization principle (Joe): this grounds all the way down to a single pattern application.**
+The unit question is dead simple — **"did it help?"** Applied pattern → did the hole move toward
+closure or not? If yes, rent; if no, *we still learned something* (a recorded negative is a result).
+The same shape telescopes from one pattern application up through a move, a rollout, the whole
+excursion — which is why this measurement is worth running at all and why a rent≈0 outcome is a
+success of the apparatus, not a failure of the excursion.
+
+**Reassurance, explicitly (Joe to claude-3):** you do not need more justification to proceed — the
+design choice is confirmed from multiple directions (Joe's prior intent, the BHK/mode-crossing
+analysis, the AIF reading, the aliveness synthesis). Run the v0 measurement; report the number either
+way.
+
+## v0 ATTEMPT RESULT (claude-3, 2026-06-10): the grounding data does not exist yet
+
+Ran the candidate-1 attempt. **It cannot produce a meaningful grounded-T1 number from existing
+data — because the realized-closure signal is not captured anywhere yet.** Evidence:
+- **`futon3a/meme.db` (the live BHK-arrow store): `promotions` table = 0 rows, `arrows` = 3.** No
+  closure-event history.
+- **Scope snapshot (`diffsub-scopes.json`, 5532 scopes): all 44 close-hole move `:want`s are
+  uniformly `:detached`** (open); the other 11 move targets are synthetic/`:MISSING`. Zero
+  per-move closure variance — and the snapshot is the open-hole set the producer built the moves
+  *from*, so it is fully prior-baked. Grounding `g` in it = a constant → degenerate, no signal.
+
+**This is itself the finding, and it sharpens the diagnosis:** the loop is closed not only
+structurally but at the **data** level — *there is no realized-outcome record to ground against.*
+The system has the open holes (detached) and the prior's estimates, but **no captured record of which
+holes actually got closed.** You cannot ground `G` in realized closure until realized closures are
+*recorded*.
+
+**The reframe this forces (and it is energizing, not a dead end):** the dense closure signal Fable
+specified IS exactly what the **discharge-emission half** (`ac4ae5d`, claude-4) records — a CH2
+discharge event at every live `promote! :constructed`. That half is built, but has **never run live**
+(the sink is empty). So candidate-1 grounding is gated not on the slow dokusan/peradam loop (Fable
+correctly severed that) but on **closure-event capture actually running** — a bounded, car-independent
+step. Two ways to get the data:
+- **(a) Mine it retrospectively from git** — the holes that actually got worked/closed in commit
+  history (the under-mined closure source; cf. retrospective-reconstruction-from-git). Independent of
+  the prior, available now, but needs a scope→commit-evidence mapping.
+- **(b) Generate it forward** — run the WM/loop to close real holes with discharge-recording on,
+  accumulate closure events, then ground `G` and re-run T1.
+
+**Open question for Joe (the grounding-DATA-SOURCE choice, now the real fork):** mine git-closure
+(a, retrospective, available now) or generate-forward via the discharge-emission (b)? The original
+candidate list assumed the closure data existed; it doesn't — so the excursion's true v0 is
+*acquiring the realized-closure signal*, not consuming it.
