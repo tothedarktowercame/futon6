@@ -257,3 +257,46 @@ its `C` tracks neither meaningfulness nor foldability.
 the fold's used-pattern set + the edges among them → (1) bump pattern posteriors (used=useful);
 (2) seed/upvote co-app edges among co-used patterns; (3) log missing-pattern gaps. Persist; the next
 cascade is better. This is the peradam-free ML loop above, made to run.
+
+## BUILD 2 — the learning hooks (the peradam-free ML loop, designed in full)
+
+**Input:** a recorded closure (closure-ledger entry + its Lab-Note fold) =
+`{hole, cascade (proposed patterns), used (the subset whose rules folded it), fold-success?}`.
+**A script `futon6/scripts/cascade_learn.py` reads new closures and emits three updates; the next
+`construct_cascade` reads the updated artifacts. No peradams anywhere.**
+
+### Update 1 — pattern-utility → posteriors  (grounds M-pattern-posteriors)
+For each pattern `p` in the cascade of a *successful* fold:
+- `p` **used** in the fold → Beta success bump (`α += 1`): used = useful, observed not self-graded.
+- `p` **proposed but unused** → weak negative (`β += κ`, small κ): offered, not load-bearing here.
+Persist to `pattern_posteriors.json` (the file already exists; now it is **grounded in fold-usage**,
+not self-grading — this is precisely the grounded update path M-pattern-posteriors had escrowed).
+
+### Update 2 — edge-correctness → the phylogeny LEARNS  (Joe's "upvote and seed")
+For each pair `(a,b)` **both used** in a successful fold:
+- they **have** a phylogeny edge (descent or co-app) → **upvote** it (`w += 1`) — the interconnection
+  was the right one for this problem.
+- they have **no** edge → **seed** a new co-application edge `(a,b, w=1, :origin closure)` — they
+  combined in a real closure; that *is* a new co-application observation.
+Persist to `futon6/data/pattern-phylogeny-learned.json` (an overlay ON TOP of the computed
+`pattern-phylogeny-edges.json` from Build 1). `construct_cascade` reads computed ∪ learned, so each
+closure makes the next cascade's semi-lattice better-fitted to the kind of problem being solved.
+
+### Update 3 — pattern-missing → coverage gaps  (library growth signal)
+If a fold needed a pattern **not in the cascade** (named at fold time), append to
+`futon6/data/cascade-coverage-gaps.edn` `{:hole :psi :missing "<description>" :at}`. This is the
+"author a new pattern" backlog and lowers cascade-coverage confidence for that ψ-shape.
+
+### The loop (grounded, peradam-free)
+```
+closure (real fold) ──► cascade_learn.py ──► {posteriors, learned-edges, gap-log}
+        ▲                                                   │
+        └───────────  better construct_cascade  ◄───────────┘
+```
+Every closure improves the next cascade. The signal is "did the pattern/edge help fold a real hole" —
+dense, real, external to the prior, **un-gameable without doing real work** (you cannot fake a fold).
+Peradams never enter; they remain the sparse audit that periodically checks this loop hasn't drifted.
+
+**Campaign implication:** this releases the **M-pattern-posteriors grounded-path escrow** —
+its "peradam-attributed outcome moves a posterior" requirement is satisfied by the *closure-attributed*
+outcome instead (a denser, car-independent grounding of the same shape). To record at STANDARD-VERIFY.
