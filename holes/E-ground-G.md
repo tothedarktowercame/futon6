@@ -423,3 +423,37 @@ co-app edge → the *next* kit-cadence cascade (computed ∪ learned) **adds `mo
 the next cascade.** Grounded, dense, real, peradam-free — exactly the claim. Minor note (non-blocking):
 the EDN parse in cascade_learn.py is regex-based — fine for the controlled input, swap to a real EDN
 reader if it grows.
+
+## THE CYBORG ⨝ THE SHARED STORE (Joe → E-mission-head, 2026-06-10)
+
+`E-mission-head.md` §2.5 writes its own cascade→sorry→wiring diagram **into the same
+`futon3a/meme.db`** (scope-tag `diagram/E-mission-head`), under **the same E-ground-G standard**
+(realized closure, no laundering). Verified live: `meme.db` went **3 → 10 arrows** (was empty when
+E-ground-G's v0 first looked); the E-mission-head diagram = **4 `:constructed` + 3 `:open`**. *"We
+(Joe) are the Cyborg version of that same learning loop."* This unifies several threads:
+
+1. **The store is the shared substrate, written by BOTH agents and the Cyborg.** Agent
+   pattern-fold closures (`closure-folds.edn` / the closure-ledger) and Cyborg mission-diagram
+   closures (`meme.db` arrows) are the *same kind of thing* — `:correlated → :open → :constructed`
+   maturations — in the same store. The grounded learning loop is a **human-agent shared loop**,
+   not an agent-only one. (Cyborg / coupled-thinking, made literal: Joe writes to the store the
+   agents learn from, and learns from the store the agents write to.)
+2. **The original candidate-1 grounding signal is now being populated — by the Cyborg.** E-ground-G's
+   v0 found `meme.db` empty (no realized-closure data); E-mission-head's `promote!`-ing of its 3
+   `:open` sorries → `:constructed` are exactly the realized substrate-2 closure events candidate-1
+   wanted. The Cyborg is the populator the loop was waiting for.
+3. **E-mission-head is the GOAL half; E-ground-G is the LEARNING half — they meet at the store.**
+   The mission HEAD-as-AIF-object (priors/preferences/observations/policies; the 10 `observe.clj`
+   channels) is the **satisfaction-conditions** grounded-G discharges against — i.e. the CV /
+   curriculum structure the curriculum arm (Build 3) explores toward. E-mission-head §HEAD says it
+   explicitly: "a HEAD mapped to AIF terminal vocabulary is what grounded-G ultimately discharges
+   against."
+4. **The curriculum surface (the Build-3 question I held for Joe) is answered:** the mission-mode
+   **lifeform-viewer** (E-mission-head's open sorry `readout → mission-mode-lifeform-lane`) — the
+   panel that shows a mission's *health/strength*. Curriculum proposals ("what to learn next", by
+   EFE) surface there, in Joe's Cyborg interface, where his ratification already lives.
+
+**Integration (a real step, not done):** point E-ground-G's closure-learning at `meme.db` (the
+unified store) so Cyborg closures feed it too — needs a grain bridge (meme.db arrows are entity-keyed
+mission-diagram arrows; the pattern-learning loop is pattern-stem-keyed). Recognise the shared
+standard + store now; build the bridge when the curriculum arm (Build 3) lands.
