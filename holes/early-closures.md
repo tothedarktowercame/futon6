@@ -376,3 +376,96 @@ two derived checks are the construction; landing them as tests in M-aif2.md is t
   the minimal structural tests; the aif2 owner should confirm completeness.)
 - The cascade-miss is the headline: should `construct_cascade` be phylogeny-grounded **before** we use
   cascades as any kind of signal? (Same conclusion as Closure 01, now from the opposite direction.)
+
+---
+
+# Closure 04 — `kit-intake` (pipeline fold; the T2.3 / Ashby path)
+
+**Hole:** wire `:outreach-sent` evidence intake + the two-part guard (registry §8.1). **Character:**
+forward · commercial · *feeds T2.3 (a cold EOI actually sent) — the Ashby out-of-blanket case.*
+
+**Cascade:** 31 patterns, C=10.66, **on-topic** (`ukrns/exercise-response-capture`,
+`dsc/evidence-situated-log`, `agent/evidence-over-assertion`, `vsatelier/decision-provenance`).
+
+**Sorry topology** — three disconnected pieces, the certify target unfilled:
+```mermaid
+flowchart LR
+    snt["outreach-sent event"]:::piece
+    log["evidence log"]:::piece
+    grd["two-part guard (§8.1)"]:::piece
+    cert(["certify T2.3 — UNFILLED"]):::gap
+    classDef piece fill:#e8f4ff,stroke:#4a90d9;
+    classDef gap fill:#ffe0e0,stroke:#cc4444,stroke-dasharray:5 3;
+```
+
+**Rules (selected 2):** R1 `evidence-situated-log` = *add edge* `outreach-sent → evidence-log`
+(log the send as situated evidence). R2 the §8.1 two-part guard = *add edge*
+`evidence-log → guard → certify`, gated on a `:send-witness` being present.
+
+**Fold → wiring diagram:**
+```mermaid
+flowchart LR
+    snt["outreach-sent"]:::done -->|R1| log["evidence-log<br/>(:send-witness)"]:::done -->|R2| grd["two-part guard"]:::done -->|gate| cert(["certify T2.3 ✓"]):::filled
+    classDef done fill:#eafbe8,stroke:#4caf50;
+    classDef filled fill:#d4edda,stroke:#2e7d32,stroke-width:2px;
+```
+The guard is what makes this the **Ashby** path — the peradam mints only on a real out-of-blanket
+send with a logged witness, never on a claim.
+
+---
+
+# Closure 05 — `kit-cadence` (pipeline fold; a classifier)
+
+**Hole:** cadence hookup — a forward-model Beta posterior decides `:base-case` vs `:capability`
+(registry §9.2). **Character:** forward · commercial · *the recurring-vs-one-shot classifier.*
+
+**Cascade:** 28 patterns, C=9.296, **on-topic** (`ukrns/model-recompute-schedule`,
+`devmap-coherence/prototype-maturity-lifecycle`, `campaign-coherence/cross-mission-escrow`).
+
+**Sorry topology + fold** (pieces → folded):
+```mermaid
+flowchart LR
+    subgraph S0["sorry (disconnected)"]
+        clk0["cadence clock"]:::piece
+        bp0["Beta posterior"]:::piece
+        th0["maturity threshold"]:::piece
+        d0(["base-case | capability — gap"]):::gap
+    end
+    subgraph S1["fold → wiring diagram"]
+        clk1["cadence clock"]:::done -->|R1 model-recompute-schedule| bp1["recompute Beta posterior"]:::done -->|R2 maturity-lifecycle| th1["threshold"]:::done --> d1(["base-case | capability ✓"]):::filled
+    end
+    S0 ==> S1
+    classDef piece fill:#e8f4ff,stroke:#4a90d9;
+    classDef done fill:#eafbe8,stroke:#4caf50;
+    classDef gap fill:#ffe0e0,stroke:#cc4444,stroke-dasharray:5 3;
+    classDef filled fill:#d4edda,stroke:#2e7d32,stroke-width:2px;
+```
+**R1** `model-recompute-schedule` = recompute the posterior on the cadence clock; **R2**
+`prototype-maturity-lifecycle` = a maturity threshold over the posterior classifies base-case vs
+recurring-capability.
+
+---
+
+# Synthesis across the five (the qualitative read)
+
+| # | hole | character | cascade | fold | the finding |
+|---|---|---|---|---|---|
+| 01 | recommendation-bindings/q5 | investigation (already-done) | 26, C=9.79, **generic** | n/a | **snapshot is stale** → ground G from doc/commit, not the snapshot |
+| 02 | kit-outbox | pipeline | 27, C=7.34, on-topic | 2/27 rules, clean | the fold is a **derived fixed point**, not asserted |
+| 03 | aif2/inv-tripwire | mapping | 8, C=1.84, **no structure** | clean (typed-arrow) | **cascade-MISS** — foldable hole, cascade fails to find its pattern-language |
+| 04 | kit-intake | pipeline | 31, C=10.66, on-topic | 2 rules | the **T2.3/Ashby** path (send-witness-gated) |
+| 05 | kit-cadence | pipeline | 28, C=9.30, on-topic | 2 rules | recurring-vs-one-shot classifier |
+
+**Cross-closure findings:**
+1. **`construct_cascade` is embedding-only and should be phylogeny-grounded.** Two independent
+   demonstrations: 01 (over-selects 6/26 non-combiners; high C, generic) and 03 (misses a foldable
+   hole entirely). The cascade's `C` does **not** track meaningfulness or foldability.
+2. **The fold is real and general.** Pattern `THEN`-clauses *are* graph-rewrite rules; 2 rules suffice
+   to fold each pipeline/mapping hole; the wiring diagram is the fixed point. The learning signal is
+   *"which rules fold which sorry-topologies"* — pattern-and-substrate-anchored, not "Claude fixed it."
+3. **The grounding signal must be doc/commit-anchored, not the snapshot** (01), and **not every
+   scope is closure-ready** (some are under-resolved in substrate-2 — the 04/05-original source
+   friction). Both shape how E-ground-G's closure record should be built.
+4. **The commercial cluster folds into one coherent pipeline**: `kit-outbox` (T2.2 authored draft) →
+   `kit-intake` (T2.3 sent + witness) → `kit-cadence` (recurring) — an on-map mission's worth of
+   construction, each a clean 2-rule fold.
