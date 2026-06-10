@@ -4,10 +4,10 @@
 # in flat sublibraries. Descent = cross-reference (X cites primitive Y => X descends from Y);
 # generativity = in-cite-degree (primitives = the trunk); co-application = HGT roads; COLOUR = sublibrary
 # (so cross-cutting cascades show as colour-mixed clusters). Radial tree, trunk = the deep primitives.
-import re, glob, math, hashlib
+import re, glob, math, hashlib, json
 from pathlib import Path
 from collections import Counter, defaultdict
-ROOT=Path("/home/joe/code"); OUT=ROOT/"futon6/data/pattern-phylogeny.html"
+ROOT=Path("/home/joe/code"); OUT=ROOT/"futon6/data/pattern-phylogeny.html"; EDGES=ROOT/"futon6/data/pattern-phylogeny-edges.json"
 fx={}
 for f in glob.glob(str(ROOT/'futon*/library/**/*.flexiarg'),recursive=True):
     pr=Path(f).parts
@@ -61,7 +61,14 @@ doc=f"""<!doctype html><meta charset=utf-8><title>Pattern phylogeny</title>
 sublibrary; faint gold = co-application roads. <b>Colour-MIXED clusters = pattern-languages the flat sublibraries split apart.</b>
 Trunk primitives: argue-empirically-not-persuasively, stop-the-line, evidence-over-assertion. Zoom in.</p></header>
 <svg width="2600" height="2600" viewBox="0 0 2600 2600"><g>{''.join(hgt)}</g><g>{''.join(desc)}</g><g>{''.join(nodes)}</g><g>{''.join(labels)}</g></svg>"""
+edge_doc={
+    "patterns": sorted(P),
+    "descent": [[x,y] for x in sorted(cites) for y in sorted(cites[x])],
+    "co_app": [[a,b,w] for (a,b),w in sorted(co.items())],
+}
 OUT.write_text(doc)
+EDGES.write_text(json.dumps(edge_doc, indent=2, sort_keys=True) + "\n")
 print(f"wrote {OUT}")
+print(f"wrote {EDGES}")
 print(f"{len(P)} patterns, {sum(len(v) for v in cites.values())} cascade edges, {len(roots)} roots, max depth {max(depth.values())}")
 print("trunk (most-cited primitives):", [(y,indeg[y]) for y,_ in indeg.most_common(6)])
