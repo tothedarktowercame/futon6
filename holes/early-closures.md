@@ -193,3 +193,107 @@ stateDiagram-v2
 > **Next:** Closure 02 will be a **forward, meaningful** hole (`kit-outbox` or
 > `structure-seed-promotion/what-the-poc-does-not-ship`) — a real cascade → sorry → wiring with an
 > on-topic pattern-language, to compare against this already-done easy one.
+
+---
+
+# How the inference works (cascade → sorry → wiring as a *process*)
+
+The three stages are not a slideshow; they are a **graph-transformation** ("poor man's protein
+folding", Joe). The cascade proposes candidate design-patterns; we **select the subset** actually
+needed (often 1–2); each selected pattern is a **graph-rewrite rule** (its `THEN` clause = LHS→RHS)
+that acts on the **topology of the sorry**; applying the rules **folds** the sorry-graph into the
+wiring diagram. *Learning is "which patterns fold which sorry-topologies into which constructions."*
+
+---
+
+# Closure 02 — `kit-outbox` (forward, meaningful) — a worked fold
+
+**Hole:** `kit-outbox` (`:held` island) — wire daily-scan → interest-network → eoi-new into a staged
+outbox; clears T2.2. **Character:** forward · commercial · the construction is the fold's output.
+
+## Stage 1 — cascade, then select the subset
+
+`construct_cascade("staged outbox … cold EOI …")` → 27 patterns, C=7.34, **on-topic** (unlike Q5).
+We do **not** use all 27 — we select the two whose rules actually wire the topology:
+
+```mermaid
+flowchart TB
+    C["cascade (27 on-topic patterns):<br/>interest-event-vocabulary · transport-pivot · channel-upgrade ·<br/>aif-live-scores · … (23 more)"]:::pool
+    C ==SELECT==> R1["scan-coherence/mission-anchored-scan ✓"]:::pick
+    C ==SELECT==> R2["correspondence-coherence/mission-unlocks-eoi ✓"]:::pick
+    C -.unused.-> U["the other 25"]:::drop
+    classDef pool fill:#eef,stroke:#88a;
+    classDef pick fill:#eafbe8,stroke:#4caf50;
+    classDef drop fill:#f4f4f4,stroke:#bbb,stroke-dasharray:3 3;
+```
+
+## Stage 2 — the sorry topology (the unfolded substrate)
+
+Three real pieces exist but are **disconnected**; the target node is **unfilled** — that disconnection
+*is* the sorry:
+
+```mermaid
+flowchart LR
+    scan["daily-scan<br/>(piece — exists)"]:::piece
+    inet["interest-network<br/>(piece — exists)"]:::piece
+    eoi["eoi-new draft<br/>(piece — exists)"]:::piece
+    OUT(["staged-outbox<br/>UNFILLED — the gap"]):::gap
+    classDef piece fill:#e8f4ff,stroke:#4a90d9;
+    classDef gap fill:#ffe0e0,stroke:#cc4444,stroke-dasharray:5 3;
+```
+
+## Stage 3 — the rules (patterns as graph-rewrites; `THEN` = LHS→RHS)
+
+| rule | pattern | LHS (matches) | RHS (rewrites) |
+|---|---|---|---|
+| **R1** | `mission-anchored-scan` | a free scan + a mission with a question | **add edge** `scan → mission-question` (the scan now *answers* a mission) |
+| **R2** | `mission-unlocks-eoi` | a mission producing a showable artefact + a cold EoI | **add first-class edge** `mission-match → eoi-draft`, gated on the artefact |
+
+## Stage 4 — the fold (apply the rules → the wiring diagram)
+
+```mermaid
+flowchart LR
+    subgraph s0["① sorry (disconnected)"]
+        a0["scan"]:::piece
+        b0["interest-network"]:::piece
+        c0["eoi"]:::piece
+        d0(["staged-outbox · gap"]):::gap
+    end
+    subgraph s1["② after R1 (mission-anchored-scan)"]
+        a1["scan"]:::piece -->|R1 adds| b1["interest-network<br/>(mission-match)"]:::done
+        c1["eoi"]:::piece
+        d1(["staged-outbox · gap"]):::gap
+    end
+    subgraph s2["③ after R2 (mission-unlocks-eoi) = WIRING DIAGRAM"]
+        a2["scan"]:::done -->|R1| b2["mission-match"]:::done -->|R2 adds| c2["eoi-draft"]:::done -->|stage| d2(["staged-outbox ✓"]):::filled
+    end
+    s0 ==> s1 ==> s2
+    classDef piece fill:#e8f4ff,stroke:#4a90d9;
+    classDef done fill:#eafbe8,stroke:#4caf50;
+    classDef gap fill:#ffe0e0,stroke:#cc4444,stroke-dasharray:5 3;
+    classDef filled fill:#d4edda,stroke:#2e7d32,stroke-width:2px;
+```
+
+**The fold yields the wiring diagram** `scan → mission-match → eoi-draft → staged-outbox` — and it is
+*forced* by the two rules acting on the topology, not hand-drawn. The construction (the buildable
+pipeline) **is** this output graph. Two patterns out of 27; each one an edge-adding rewrite; the gap
+node filled. That is the closure, mechanically.
+
+## What this buys us (vs "Claude wired some pieces")
+
+- The **subset selection** is visible and small (2/27) — and *why* those two (their `THEN` clauses are
+  the only ones that add the needed edges).
+- The **wiring diagram is derived**, not asserted — it is the fixed point of applying the selected
+  rules to the sorry topology.
+- The **learning signal** is now meaningful and pattern-anchored: *rule R1+R2 close a
+  disconnected-pipeline topology*. That generalises to any sorry with the same shape — which is what
+  makes it worth grounding `G` in.
+
+## Critique surface (Joe / Fable)
+
+- Are R1/R2 *faithful* rewrites of those patterns' `THEN` clauses, or am I reading wiring into prose?
+- Is "disconnected pieces + unfilled target" the right formal shape for a sorry topology, or should it
+  use the existing `strategic-sorry-topology.aif.edn` / `alignment.edn` representation verbatim?
+- The fold here is hand-applied. To be a real process it wants an *engine* (apply rule-set to a
+  topology → fixed point). futon5 `tpg/runner` + `aif2-exotype` wiring may already be that engine —
+  worth wiring the fold to it rather than drawing it.
