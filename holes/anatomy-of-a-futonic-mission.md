@@ -68,9 +68,13 @@ structural typography renders it:
 
 <!-- excerpt: holes/missions/E-mission-head.md :: ## HEAD -->
 
-## 4. The AIF reading (physiology)
+## 4. The organism reading (physiology)
 
-Read the other way, the mission is a small organism. Its statement of intent
+Read the other way, the mission is a small organism. (In-house this is
+called the *AIF reading*, after **active inference** — a framework from
+computational neuroscience in which an organism maintains a model of itself
+and acts to keep that model's predictions true. Nothing below requires more
+of the theory than that sentence.) Its statement of intent
 is rewritten in a four-part design-pattern form (*if / however / then /
 because*) and compiled into a numerical fingerprint — the system borrows the
 word *sigil*, after an earlier experiment in which simulated ants were
@@ -92,13 +96,13 @@ source:
 The two readings are not merely parallel descriptions; they are **coupled,
 the way observation and model are coupled in a living thing**:
 
-> **The scope reading is the lifeform's observation space; the AIF reading is
-> its generative model. A mission is well-formed exactly when the two cohere,
+> **The structural reading is the organism's observation space; the organism
+> reading is its model of itself. A mission is well-formed exactly when the two cohere,
 > and the coherence is computable.**
 
 The mapping is exact, not poetic:
 
-| scope object | AIF object | the coupling |
+| structural object | organism object | the coupling |
 |---|---|---|
 | statement of intent (HEAD) | the model's starting beliefs | the fingerprint compiler |
 | the standard phases | stages of a plan | the standard form is an *expectation about how work unfolds* |
