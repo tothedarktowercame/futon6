@@ -418,6 +418,13 @@ def detect_mission_scopes(
             # another loose section.
             binder = "plain-argument"
             mapped_phase = "argue"
+        elif re.search(r"\bgate\b|\blogic[- ]model\b|\bverification model\b",
+                       sec.title, re.I):
+            # Defined sub-scope of VERIFY (Joe, spoken, 2026-06-11): the
+            # section that binds the ACTUAL verification — the executable
+            # gate and its certificate — is not a loose section. 13th binder.
+            binder = "verify-gate"
+            mapped_phase = "verify"
         elif sec.level <= 3:
             # Level-3 subsections are real scope structure (INSTANTIATE
             # handoffs, VERIFY hooks, ARGUE rounds, PSR/PUR sections) — bind

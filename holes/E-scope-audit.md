@@ -206,3 +206,9 @@ vocabulary-gap*) and becomes a labeled example for improving
   itself wrote the file. Found when the instrument audited the mission that
   was being built around it, minutes after a spoken detector fix (the
   source-material extension, 69d4ab4) made the artifacts visible at all.
+- **13th binder minted: `verify-gate`** (Joe, spoken, 2026-06-11) — the
+  section binding the actual verification (executable gate + certificate)
+  is a defined VERIFY sub-scope, not a loose section. Wired end-to-end live
+  (detector regex, ingest both dispatch sites, view fetch list, Drawbridge
+  reload, rendered on M-smart-emacs-cursor §5.1 within minutes of the
+  spoken assertion). Same minting path as plain-argument, one phase over.
