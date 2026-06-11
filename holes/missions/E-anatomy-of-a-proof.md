@@ -224,3 +224,35 @@ discipline, third instance).
 3. Problem 4 join by hand: steps ↔ certificates ↔ wiring versions — the
    worked example that mints the format.
 4. Compare: do the proofs beat the nLab on binding discipline?
+
+## 8. First shape-probe results (content-free, 2026-06-11)
+
+`proof_shape_probe.py`: each full proof reduced to its scope-type sequence
+— no content — then (1) leave-one-proof-out masked prediction per type,
+(2) shape profiles against the official-solutions scorecard (P1, P7 wrong;
+P4, P5, P6 incomplete; rest correct).
+
+**Joe's visual claim, quantified.** `section/body` is the most predictable
+type in the corpus (69.0% masked accuracy from context alone) — grammatical
+filler, exactly the "not hugely informative" intuition. The mathematical
+scopes are near-unpredictable: `constrain/relation` 0.0%, `quant/universal`
+0.0%, `bind/let` 0.0% — they are where the information lives. License
+granted (by data) for the salience move: section-grade scopes to marginal
+annotations, mathematical scopes foregrounded. (Honest nuance:
+`bind/summation` 63.6% — P4's algebra is repetitive enough to make even
+binders predictable there.)
+
+**Shape vs outcome (n=10 — anecdote, recorded as the F5 corpus's first
+entry, not as a result).** Both wrong proofs share a signature: frac-bind
+ZERO with the corpus-high quantifier fractions — quantification without
+binding, assertion over construction. P1's known failure was assuming the
+measure equivalence it needed to construct; P7's was assuming the wrong
+covering object: the shape saw the vice. (One correct proof, P8, also has
+zero binds — the signature is suggestive, not separating.) Wrong proofs
+are also the most stereotyped (transition entropy .464 vs .799 correct);
+incomplete proofs are the sprawlers (mean length 88 vs ~19).
+
+**Next:** proper MLM over shape sequences needs more proofs than ten — the
+math.CT corpus is the training set when it lands (the prepwork loop
+closes); the proof↔scope iteration (better scopes from proofs, better
+proofs from scopes) is the line of work this opens.
