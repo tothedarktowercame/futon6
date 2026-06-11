@@ -256,3 +256,19 @@ incomplete proofs are the sprawlers (mean length 88 vs ~19).
 math.CT corpus is the training set when it lands (the prepwork loop
 closes); the proof↔scope iteration (better scopes from proofs, better
 proofs from scopes) is the line of work this opens.
+
+## 9. The APM register (Joe, spoken: ~/code/apm-lean — some backed by formal proofs)
+
+93 prelim problems, 76 informal solutions, 17 with Lean dirs, **4 sorry-free
+(ground-truth correct — labels stronger than the official-comparison
+judgments)**; the 13 sorry-carrying proofs label WHERE formalization stuck.
+Probe: the register is invisible to all current instruments (0 scopes;
+bold-environment idiom **Definition./Claim./Lemma.**; Unicode math —
+‖ ∫ → α — breaks every binder regex). Fifth register, best labels.
+
+### H3 — handoff: APM register extension + protocol battery (to codex-1)
+- Spec: Unicode-math tokenization + bold-environment scopes + apm Skolem
+  audit + shape sequences with Lean-status labels (sorry-free / sorry-at /
+  no-lean) joined into the shape probe.
+- Job: invoke-1781182013723-736-e948f456 (dispatched 2026-06-11, fable-2 bell)
+- Bell-back: pending
