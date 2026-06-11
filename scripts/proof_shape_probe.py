@@ -28,6 +28,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import proof_tex_audit as pta  # noqa: E402
+import apm_proof_audit as apa  # noqa: E402
 
 LABELS = {
     1: "wrong", 7: "wrong",
@@ -111,15 +112,37 @@ def shape_profile(seq: list[str]) -> dict:
     }
 
 
+def shape_vs_label(profiles: dict[str, dict], labels: dict[str, str]) -> dict[str, dict]:
+    keys = ["len", "distinct-types", "mean-transition-entropy",
+            "frac-bind", "frac-constrain", "frac-wire", "frac-quant", "frac-assume"]
+    by_label: dict[str, list[dict]] = defaultdict(list)
+    for pid, prof in profiles.items():
+        by_label[labels[pid]].append(prof)
+    out = {}
+    for label, rows in sorted(by_label.items()):
+        out[label] = {k: round(sum(r[k] for r in rows) / len(rows), 3) for k in keys}
+        out[label]["n"] = len(rows)
+    return out
+
+
 def main() -> None:
-    sequences: dict[int, list[str]] = {}
-    profiles: dict[int, dict] = {}
+    sequences: dict[str, list[str]] = {}
+    profiles: dict[str, dict] = {}
+    labels: dict[str, str] = {}
     for path in pta.tex_files(pta.FULL_TEX_DIR):
         n = int("".join(ch for ch in path.stem.split("-")[0] if ch.isdigit()))
         result = pta.audit_tex(path)
         seq = shape_sequence(result)
-        sequences[n] = seq
-        profiles[n] = shape_profile(seq)
+        pid = f"first-proof-{n}"
+        sequences[pid] = seq
+        profiles[pid] = shape_profile(seq)
+        labels[pid] = LABELS[n]
+    for result in apa.run_audit():
+        pid = f"apm-{result['problem']}"
+        seq = shape_sequence(result)
+        sequences[pid] = seq
+        profiles[pid] = shape_profile(seq)
+        labels[pid] = result["lean"]["status"]
 
     pred = masked_accuracy(sequences)
     print(f"masked prediction, overall: {pred['overall']}%  (leave-one-proof-out)")
@@ -127,25 +150,22 @@ def main() -> None:
     for row in pred["per-type"]:
         print(f"{row['type']},{row['n']},{row['masked-accuracy']}")
 
-    print("\nshape vs outcome (n=10 — anecdote, not statistics):")
+    print("\nshape vs label (first-proof outcomes + APM Lean status):")
     keys = ["len", "distinct-types", "mean-transition-entropy",
             "frac-bind", "frac-constrain", "frac-wire", "frac-quant", "frac-assume"]
     print("class," + ",".join(keys))
-    by_class: dict[str, list[dict]] = defaultdict(list)
-    for n, prof in profiles.items():
-        by_class[LABELS[n]].append(prof)
-    for cls in ("correct", "incomplete", "wrong"):
-        rows = by_class[cls]
-        means = [round(sum(r[k] for r in rows) / len(rows), 3) for k in keys]
-        print(f"{cls}," + ",".join(str(m) for m in means))
+    combined = shape_vs_label(profiles, labels)
+    for cls, prof in combined.items():
+        print(f"{cls}," + ",".join(str(prof[k]) for k in keys))
     print("\nper-proof:")
-    for n in sorted(profiles):
-        print(f"P{n} ({LABELS[n]}): {profiles[n]}")
+    for pid in sorted(profiles):
+        print(f"{pid} ({labels[pid]}): {profiles[pid]}")
 
     OUT.write_text(json.dumps({
         "masked-prediction": pred,
-        "profiles": {str(k): v for k, v in profiles.items()},
-        "labels": {str(k): v for k, v in LABELS.items()},
+        "profiles": profiles,
+        "labels": labels,
+        "shape-vs-label": combined,
     }, indent=1), encoding="utf-8")
     print(f"\nwritten: {OUT}")
 

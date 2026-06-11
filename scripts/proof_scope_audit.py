@@ -192,9 +192,15 @@ def concept_terms(text: str, free_symbols: set[str]) -> list[str]:
             out.add(term)
     for m in CAP_COMPOUND_RE.finditer(text):
         head, tail = m.group(1), m.group(2)
-        if head.split()[0] in LEADING_SENTENCE_WORDS:
-            continue
+        head_parts = head.split()
+        if head_parts[0] in LEADING_SENTENCE_WORDS:
+            if len(head_parts) == 1:
+                continue
+            head = " ".join(head_parts[1:])
         out.add(f"{head} {tail}")
+        tail_parts = tail.split()
+        if len(tail_parts) > 1:
+            out.add(f"{head} {tail_parts[0]}")
     for sym in free_symbols:
         if len(sym) >= 4 and sym not in STOP_SYMBOLS:
             out.add(sym)

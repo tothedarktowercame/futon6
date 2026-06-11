@@ -83,3 +83,9 @@ def test_mini_mission_head_register_and_discharge():
     assert r["head-links"] == 3
     assert r["head-discharged"] == 2
     assert r["head-undischarged"] == ["operad"]
+
+def test_unicode_math_classification_extensions():
+    assert classify_expr("f → g") == "arrow"
+    assert classify_expr("∫ f ≤ 1") == "large-operator"
+    assert classify_expr("α") == "greek"
+    assert classify_expr("x ∈ E") == "relation"
