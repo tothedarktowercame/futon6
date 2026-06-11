@@ -31,9 +31,13 @@ import json
 import re
 from collections import defaultdict
 from pathlib import Path
+from typing import Iterable
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
 ROOT = Path("/home/joe/code")
 TREES = ROOT / "futon6" / "data" / "mission-scope-trees"
+SUBSTRATE_URL = "http://localhost:7071"
 
 BINDER_PHASES = {"head", "identify", "map"}
 BODY_PHASES = {"derive", "argue", "verify", "instantiate", "document"}
@@ -94,6 +98,72 @@ def text_needle(kind: str, ident: str) -> re.Pattern:
     return re.compile(r"(?<![\w/-])" + re.escape(ident) + r"(?![\w-])")
 
 
+def endpoint_values(edge: dict) -> list[str]:
+    return [str(e) for e in edge.get("hx/endpoints", [])]
+
+
+def edge_type(edge: dict) -> str | None:
+    return edge.get("hx/type") or edge.get("type")
+
+
+def file_equivalent(bound_ident: str, edited_ident: str) -> bool:
+    """Match exact paths, suffix paths, or stable basenames."""
+    bound = Path(bound_ident)
+    edited = Path(edited_ident)
+    bound_s = str(bound)
+    edited_s = str(edited)
+    return (
+        bound_s == edited_s
+        or bound_s.endswith("/" + edited_s)
+        or edited_s.endswith("/" + bound_s)
+        or bound.name == edited.name
+    )
+
+
+def attributed_code_files(mission: str, code_edges: Iterable[dict] | None) -> set[str]:
+    """Files edited by commits attributed to MISSION via substrate-2 code edges.
+
+    Expected edge shapes mirror substrate-2 hyperedges:
+    - code/v05/commit→mission endpoints [commit-sha, mission-id, ...]
+    - code/v05/edits endpoints [commit-sha, file-or-var-id, ...]
+    Direction sentinels in endpoint slot 3 are ignored.
+    """
+    if not code_edges:
+        return set()
+
+    commits = set()
+    edits_by_commit: dict[str, set[str]] = defaultdict(set)
+    for edge in code_edges:
+        endpoints = endpoint_values(edge)
+        if len(endpoints) < 2:
+            continue
+        etype = edge_type(edge)
+        if etype == "code/v05/commit→mission" and endpoints[1] == mission:
+            commits.add(endpoints[0])
+        elif etype == "code/v05/edits":
+            edits_by_commit[endpoints[0]].add(endpoints[1])
+
+    files = set()
+    for commit in commits:
+        files.update(edits_by_commit.get(commit, set()))
+    return files
+
+
+def fetch_code_edges(base_url: str = SUBSTRATE_URL) -> list[dict]:
+    """Fetch the two substrate-2 edge lanes needed by the code channel."""
+    edges = []
+    for hx_type in ("code/v05/commit→mission", "code/v05/edits"):
+        query = urlencode({"type": hx_type, "limit": 5000})
+        req = Request(
+            f"{base_url.rstrip('/')}/api/alpha/hyperedges?{query}",
+            headers={"Accept": "application/json"},
+        )
+        with urlopen(req, timeout=5) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+        edges.extend(payload.get("hyperedges", []))
+    return edges
+
+
 def phase_region_text(scopes: list[dict], text: str, phases: set[str]) -> str:
     """Union of raw-text intervals belonging to scopes in PHASES."""
     intervals = []
@@ -113,8 +183,9 @@ def phase_region_text(scopes: list[dict], text: str, phases: set[str]) -> str:
     return "\n".join(text[s:e] for s, e in merged)
 
 
-def analyze_tree(tree: dict, text: str) -> dict:
+def analyze_tree(tree: dict, text: str, code_edges: Iterable[dict] | None = None) -> dict:
     scopes = tree["scope-hyperedges"]
+    code_files = attributed_code_files(tree["mission"], code_edges)
 
     vacuous = []
     concept_only = 0
@@ -163,12 +234,24 @@ def analyze_tree(tree: dict, text: str) -> dict:
         if key in body_items:
             continue
         _, in_body_text = text_hits(key)
+        code_discharged = (
+            key[0] == "file"
+            and any(file_equivalent(key[1], edited) for edited in code_files)
+        )
+        verdict = (
+            "doc-used"
+            if in_body_text
+            else "code-discharged"
+            if code_discharged
+            else "confirmed-unused"
+        )
         unused.append(
             {
                 "kind": key[0],
                 "ident": key[1],
                 "bound-in": sorted(binder_items[key]),
-                "confirmed": not in_body_text,  # both channels agree: never used
+                "verdict": verdict,
+                "confirmed": verdict == "confirmed-unused",
             }
         )
 
@@ -198,6 +281,7 @@ def analyze_tree(tree: dict, text: str) -> dict:
         "concept-only": concept_only,
         "bound-items": len(binder_items),
         "used-items": len({k for k in binder_items if k in body_items}),
+        "code-files": sorted(code_files),
         "unused-bindings": unused,
         "free-variables": free,
     }
@@ -219,7 +303,7 @@ def fmt_report(r: dict, verbose: bool = False) -> str:
         for v in r["vacuous"]:
             lines.append(f"  vacuous  [{v['binder-type']}/{v['phase']}] {v['title']}")
         for u in r["unused-bindings"]:
-            tag = "CONFIRMED" if u["confirmed"] else "ends-only (detector blind?)"
+            tag = u.get("verdict") or ("CONFIRMED" if u["confirmed"] else "ends-only (detector blind?)")
             lines.append(f"  unused   {u['kind']}:{u['ident']} — {tag}")
         for f in r["free-variables"]:
             tag = "CONFIRMED" if f["confirmed"] else "ends-only (detector blind?)"
@@ -232,6 +316,18 @@ def parse_args(argv=None):
     ap.add_argument("missions", nargs="*", help="Mission names (tree stems). Default: all trees.")
     ap.add_argument("--trees-dir", type=Path, default=TREES)
     ap.add_argument("--json", action="store_true", help="Emit full JSON instead of the table.")
+    ap.add_argument(
+        "--code-edges",
+        type=Path,
+        default=None,
+        help="Optional JSON file containing substrate-2 code/v05/commit→mission and code/v05/edits hyperedges.",
+    )
+    ap.add_argument(
+        "--code-channel",
+        action="store_true",
+        help="Fetch substrate-2 code edges and use them as the third audit channel.",
+    )
+    ap.add_argument("--substrate-url", default=SUBSTRATE_URL)
     ap.add_argument("-v", "--verbose", action="store_true", help="Per-finding detail lines.")
     return ap.parse_args(argv)
 
@@ -239,6 +335,11 @@ def parse_args(argv=None):
 def main(argv=None) -> None:
     args = parse_args(argv)
     stems = args.missions or sorted(p.stem for p in args.trees_dir.glob("*.json"))
+    code_edges = []
+    if args.code_edges:
+        code_edges = json.loads(args.code_edges.read_text(encoding="utf-8"))
+    elif args.code_channel:
+        code_edges = fetch_code_edges(args.substrate_url)
     reports = []
     for stem in stems:
         tree = json.loads((args.trees_dir / f"{stem}.json").read_text(encoding="utf-8"))
@@ -249,7 +350,7 @@ def main(argv=None) -> None:
             print(f"{tree['mission']}: SKIPPED (missing doc: {path})")
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
-        reports.append(analyze_tree(tree, text))
+        reports.append(analyze_tree(tree, text, code_edges=code_edges))
 
     if args.json:
         print(json.dumps(reports, indent=2))

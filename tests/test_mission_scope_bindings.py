@@ -1,12 +1,14 @@
 """Skolem audit: each failure class fires on a synthetic tree, and the
 two-channel discrimination (real violation vs detector blindness) holds."""
 
+import json
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from mission_scope_bindings import analyze_tree, content_grade
+import mission_scope_bindings
+from mission_scope_bindings import analyze_tree, attributed_code_files, content_grade
 
 
 def scope(scope_id, binder, phase, title, ends, position=0, end=0):
@@ -92,6 +94,8 @@ def test_skolem_classes():
     # in body TEXT — detector blindness, not a confirmed violation.
     unused = {u["ident"]: u["confirmed"] for u in r["unused-bindings"]}
     assert unused == {"src/beta.clj": True, "M-elsewhere": False}
+    verdicts = {u["ident"]: u["verdict"] for u in r["unused-bindings"]}
+    assert verdicts == {"src/beta.clj": "confirmed-unused", "M-elsewhere": "doc-used"}
 
     # The pattern is used in DERIVE but never introduced anywhere — a
     # confirmed free variable.
@@ -100,3 +104,94 @@ def test_skolem_classes():
 
     assert r["bound-items"] == 3
     assert r["used-items"] == 1
+
+
+def test_attributed_code_files_joins_commit_mission_to_edits():
+    edges = [
+        {
+            "hx/type": "code/v05/commit→mission",
+            "hx/endpoints": ["sha1", "M-test", "dir:sha1→M-test"],
+        },
+        {
+            "hx/type": "code/v05/edits",
+            "hx/endpoints": ["sha1", "futon6/src/beta.clj", "dir:sha1→futon6/src/beta.clj"],
+        },
+        {
+            "hx/type": "code/v05/commit→mission",
+            "hx/endpoints": ["sha2", "M-other", "dir:sha2→M-other"],
+        },
+        {
+            "hx/type": "code/v05/edits",
+            "hx/endpoints": ["sha2", "src/foreign.clj", "dir:sha2→src/foreign.clj"],
+        },
+    ]
+    assert attributed_code_files("M-test", edges) == {"futon6/src/beta.clj"}
+
+
+def test_bound_file_can_be_code_discharged_by_attributed_commit():
+    edges = [
+        {
+            "hx/type": "code/v05/commit→mission",
+            "hx/endpoints": ["sha1", "M-test", "dir:sha1→M-test"],
+            "hx/props": {"relation/provenance": "trailer"},
+        },
+        {
+            "hx/type": "code/v05/edits",
+            "hx/endpoints": ["sha1", "futon6/src/beta.clj", "dir:sha1→futon6/src/beta.clj"],
+        },
+    ]
+    r = analyze_tree(TREE, TEXT, code_edges=edges)
+    verdicts = {u["ident"]: u["verdict"] for u in r["unused-bindings"]}
+    confirmed = {u["ident"]: u["confirmed"] for u in r["unused-bindings"]}
+
+    assert verdicts["src/beta.clj"] == "code-discharged"
+    assert confirmed["src/beta.clj"] is False
+    assert verdicts["M-elsewhere"] == "doc-used"
+
+
+def test_unattributed_or_other_mission_edits_do_not_discharge_binding():
+    edges = [
+        {
+            "hx/type": "code/v05/commit→mission",
+            "hx/endpoints": ["sha1", "M-other", "dir:sha1→M-other"],
+        },
+        {
+            "hx/type": "code/v05/edits",
+            "hx/endpoints": ["sha1", "src/beta.clj", "dir:sha1→src/beta.clj"],
+        },
+        {
+            "hx/type": "code/v05/edits",
+            "hx/endpoints": ["sha-unattributed", "src/beta.clj", "dir:sha-unattributed→src/beta.clj"],
+        },
+    ]
+    r = analyze_tree(TREE, TEXT, code_edges=edges)
+    verdicts = {u["ident"]: u["verdict"] for u in r["unused-bindings"]}
+    assert verdicts["src/beta.clj"] == "confirmed-unused"
+
+
+def test_fetch_code_edges_uses_store_boundary_with_mocked_urlopen(monkeypatch):
+    seen_urls = []
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def read(self):
+            return json.dumps({"hyperedges": [{"hx/type": "code/v05/edits"}]}).encode()
+
+    def fake_urlopen(req, timeout):
+        seen_urls.append(req.full_url)
+        assert timeout == 5
+        return Response()
+
+    monkeypatch.setattr(mission_scope_bindings, "urlopen", fake_urlopen)
+
+    edges = mission_scope_bindings.fetch_code_edges("http://store.test")
+
+    assert edges == [{"hx/type": "code/v05/edits"}, {"hx/type": "code/v05/edits"}]
+    assert len(seen_urls) == 2
+    assert "code%2Fv05%2Fcommit%E2%86%92mission" in seen_urls[0]
+    assert "code%2Fv05%2Fedits" in seen_urls[1]
