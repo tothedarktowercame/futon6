@@ -341,8 +341,15 @@ def index_html(summary_results: list[dict], full_results: list[dict], all_expr_t
             )
         else:
             full_cells = "<td></td><td></td><td></td><td></td>"
+        # The full proof gets a NAMED link beside the writeup — hiding it
+        # as a bare count made the index read "writeups only" (Joe).
+        title_cell = (
+            f"<a href=\"{slug}.html\">{esc(r['writeup'])}</a>"
+            + (f" &middot; <a href=\"{slug_for_writeup(full['writeup'])}.html\">"
+               f"<b>full proof</b></a>" if full else "")
+        )
         rows.append(
-            f"<tr><td><a href=\"{slug}.html\">{esc(r['writeup'])}</a></td>"
+            f"<tr><td>{title_cell}</td>"
             f"<td>{r['expr-count']}</td><td>{r['scope-count']}</td>"
             f"<td>{r['floating-expr-pct']:.1f}%</td><td>{len(r['free-symbols'])}</td>"
             f"<td>{r['vacuous-count']}</td>{full_cells}</tr>"
