@@ -153,6 +153,34 @@ discharge), `scripts/mission_scope_bindings.py` (binding flow),
 2. Re-rendering the monograph.
 3. Formalization (Lean etc.) — the anatomy types informal proofs.
 
+## 4. First results (tasks 1+2 landed 2026-06-11; codex-1 build `fd5d377`, fable-2 review)
+
+Review fixes applied (`proof_scope_audit.py`): display-block tokenization
+double-counted every block expression at drifted offsets (761→585 records
+after dedup at true offsets); weak-grading was span-grain while the printed
+nLab baseline is paragraph-grain — now matched, so the comparison is honest.
+
+**Baseline, ten writeups: 585 expressions, 77.8% floating vs nLab 18.3%.**
+Per-writeup spread: problem3 25.0% (the disciplined one) → problem9 98.4%
+(one detected binder in the whole writeup). Free symbols 24–65 per writeup;
+7 vacuous scopes.
+
+**The 77.8% is an upper bound, not a verdict** (the two-channel lesson):
+problem9's text is full of binders the register vocabulary misses. Labeled
+miss-classes for the next detector round, E-scope-audit style:
+- `Let A^(1), ..., A^(n) in R^{3x4} be ...` — superscripted symbol LISTS;
+- `For alpha, beta, gamma, delta in [n]` — greek-WORD lists (for-list-binding
+  only takes single letters);
+- `Fix camera-row pairs (gamma, k)` — Fix with prose object, no `$`;
+- `Take lambda_{abgd} = 1` — Take/Suppose forms absent entirely;
+- `Define P(A^(1),...,A^(n)) = det[...]` — Define with argument lists.
+
+What survives after those land is the real indiscipline measure — and the
+residue is expected to stay well above nLab: these writeups are *answer
+summaries* in the expository register, not scope-disciplined proof texts.
+Which is the mini-mission reading again: a writeup is mostly HEAD, and its
+discharge lives in the certificates, not in its own prose (condition 5).
+
 ## First cut tasks
 
 1. Tokenizer for the writeup register (ASCII math + indented display blocks)

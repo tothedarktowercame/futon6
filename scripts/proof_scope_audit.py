@@ -16,7 +16,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from nlab_skolem_audit import classify_expr
+from nlab_skolem_audit import classify_expr, paragraph_spans
 
 ROOT = Path(__file__).resolve().parent.parent
 WRITEUP_DIR = Path("/home/joe/code/storage/futon6/data/first-proof")
@@ -64,24 +64,35 @@ def detect_scopes(entity_id: str, text: str) -> list[dict[str, Any]]:
     return _NLAB_WIRING.detect_scopes(entity_id, text)
 
 
-def iter_indented_blocks(text: str):
-    start = None
-    lines = []
+def indented_line_spans(text: str) -> tuple[list[tuple[int, str]], list[tuple[int, int]]]:
+    """Display-math lines at their TRUE text offsets, plus block intervals.
+
+    Review fix (fable-2): the first cut tokenized a stripped/re-joined copy of
+    each block, so within-block positions drifted from the original text —
+    every display expression was then ALSO found by the inline pass at its
+    true offset and double-counted, with the drifted copy mis-graded against
+    scope spans. Positions here index the original text; the block intervals
+    let the inline pass skip block interiors entirely.
+    """
+    lines: list[tuple[int, str]] = []
+    blocks: list[tuple[int, int]] = []
     offset = 0
+    cur_start = None
     for raw in text.splitlines(keepends=True):
         line = raw.rstrip("\n")
         if re.match(r"^(?: {4,}|\t)\S", line):
-            if start is None:
-                start = offset
-            lines.append(line.strip())
+            if cur_start is None:
+                cur_start = offset
+            indent = len(line) - len(line.lstrip())
+            lines.append((offset + indent, line.strip()))
         else:
-            if lines:
-                yield start, "\n".join(lines)
-            start = None
-            lines = []
+            if cur_start is not None:
+                blocks.append((cur_start, offset))
+                cur_start = None
         offset += len(raw)
-    if lines:
-        yield start, "\n".join(lines)
+    if cur_start is not None:
+        blocks.append((cur_start, offset))
+    return lines, blocks
 
 
 def _mathy(token: str) -> bool:
@@ -102,14 +113,18 @@ def expression_records(text: str) -> list[dict[str, Any]]:
         seen.add(key)
         records.append({"expr": expr, "position": pos, "type": classify_expr(expr), "source": source})
 
-    for pos, block in iter_indented_blocks(text):
-        for rel, line in enumerate(block.splitlines()):
-            add(line, pos + block.find(line, rel), "indented-block")
-            for m in ASCII_EXPR_RE.finditer(line):
-                add(m.group(), pos + block.find(line) + m.start(), "indented-block-token")
+    display_lines, blocks = indented_line_spans(text)
+    for pos, line in display_lines:
+        add(line, pos, "display-line")
 
+    def in_block(p: int) -> bool:
+        return any(s <= p < e for s, e in blocks)
+
+    # One expression record per display line; the inline token pass covers
+    # prose math only — block interiors are skipped so nothing counts twice.
     for m in ASCII_EXPR_RE.finditer(text):
-        add(m.group(), m.start(), "ascii-inline")
+        if not in_block(m.start()):
+            add(m.group(), m.start(), "ascii-inline")
     return sorted(records, key=lambda r: (r["position"], r["expr"]))
 
 
@@ -148,12 +163,29 @@ def audit_writeup(path: Path) -> dict[str, Any]:
 
     scope_spans = [(s, *_span(s)) for s in scopes]
 
+    # Weak grade is PARAGRAPH-grain, matching nlab_skolem_audit's semantics —
+    # the printed nLab baseline is only comparable if both sides scope a
+    # binder over its whole paragraph, not just its matched phrase (review
+    # fix, fable-2).
+    paras = paragraph_spans(text)
+
+    def para_of(pos: int) -> int:
+        lo, hi = 0, len(paras) - 1
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if paras[mid][1] < pos:
+                lo = mid + 1
+            else:
+                hi = mid
+        return lo
+
+    binder_paras = {para_of(start) for _, start, _ in scope_spans}
+
     def grade(pos: int) -> str:
         env_hits = [s for s, start, end in scope_spans if start <= pos < end and str(s.get("hx/type", "")).startswith("env/")]
         if env_hits:
             return "strict"
-        weak_hits = [s for s, start, end in scope_spans if start <= pos < end]
-        if weak_hits:
+        if any(start <= pos < end for _, start, end in scope_spans) or para_of(pos) in binder_paras:
             return "weak"
         return "floating"
 
