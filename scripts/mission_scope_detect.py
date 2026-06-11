@@ -452,6 +452,13 @@ def detect_mission_scopes(
 
         parent, parent_phase = current_parent(sec.level + 1)
         phase_ctx = parent_phase if parent_phase != "loose" else current_phase_context(sec.level + 1)
+        # Section-typed sub-binders (map-item, source-material, ...) are the
+        # TYPED FACE of this section — they nest under the section's
+        # CONTAINER, not under the loose-section the heading itself just
+        # minted (which current_parent at level+1 returns since W3 made ###
+        # headings self-bind). Records INSIDE the section (psr/pur,
+        # certificates, closures) keep the self parent.
+        outer_parent, _outer_phase = current_parent(sec.level)
         title_low = sec.title.lower()
 
         sub_binders: list[tuple[str, list[dict], str]] = []
@@ -494,7 +501,7 @@ def detect_mission_scopes(
             if not ends and binder_type not in {"map-item"}:
                 continue
             ends = ends + find_concepts(sec.text, kernel_terms)
-            scope = make_scope(entity_id, idx, binder_type, parent, sec.title, phase_name, sec.start, sec.end, ends)
+            scope = make_scope(entity_id, idx, binder_type, outer_parent, sec.title, phase_name, sec.start, sec.end, ends)
             scopes.append(scope)
             idx += 1
 
