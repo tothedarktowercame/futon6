@@ -126,6 +126,55 @@ vocabulary-gap*) and becomes a labeled example for improving
   ("globe", "argue", "phase") — same generic-grab failure mode as
   M-prior-mathematics flagged for NER. Low priority; noisy not harmful.
 
+### Session 3 — the Skolem audit (2026-06-11, Joe's "empty scope is suspect")
+
+13. **W13 NEW INSTRUMENT — `mission_scope_bindings.py` (Skolem audit).** Joe's
+    observation: an empty scope is `∀x:` with no body; and if the body never
+    uses what MAP binds, the map was decoration ("vibe coding"). Three checkable
+    classes over any scope tree: *vacuous-binder* (scope with no content ends),
+    *unused-binding* (item bound in HEAD/IDENTIFY/MAP, untouched by any body
+    phase), *free-variable* (item used in a body phase, never introduced). Two
+    channels — detector ends vs literal text in phase regions — and the
+    disagreement IS the diagnostic: both-channels = real binding failure in the
+    mission; ends-only = detector blindness (a W-class finding). Tests in
+    `tests/test_mission_scope_bindings.py`.
+14. **Fleet baseline (204 trees, pre-W3-fix detector):** 611 vacuous scopes,
+    1,446 confirmed unused bindings, 78 confirmed free variables, 83 missions
+    with no binder/body spine. The typical mission binds dozens of items in MAP
+    and re-uses ~0–3 in the document's own body. Caveat: "use" often happens in
+    code/commits rather than re-citation, so an unused binding at doc grain is
+    an *undischarged citation*, not automatically a vice — but the near-zero
+    used-counts say MAP currently functions as inventory, not as a binder.
+    Spot-verified by hand (M-war-machine-pilot: `arxana-vsatarcs-belief.el`
+    bound at MAP L584, absent from the entire body).
+15. **W3 side-regression FIXED** (the addendum-9 chase item, quantified by the
+    audit as E-mission-head MAP binding *nothing*): `###` sections binding as
+    loose-sections masked the eightfold phase above them, so
+    map-item/capability/psr-pur sub-binders saw phase "loose" and never fired.
+    New `current_phase_context` (nearest non-loose phase on the stack) restores
+    them: E-mission-head map-item 0→3, capability 0→1, MAP bound 0→12 items.
+    Only E-mission-head re-detected; **fleet re-detect + re-ingest pending**
+    (W1/W6 store-generation discipline — don't refresh trees the store still
+    anchors to without retraction).
+16. **E-mission-head Skolem findings (fresh tree):** (a) the three M-aif-head
+    autopsy artifacts (`mission_head.clj`, `observe.clj`, `invariant.clj`) are
+    confirmed-unused — MAP exhumed them and DERIVE built the sigil path without
+    wiring them: the revive-vs-replace risk IDENTIFY itself flagged, now caught
+    mechanically; (b) 6 confirmed free patterns, including
+    `two-projections-of-one-quantity` — the audit independently rediscovers the
+    Anatomy paper's §5.3 admission (leaned on in ARGUE, never introduced).
+
+### Open findings (session 3 additions)
+- **W14 — the transducer channel (mission output-tape attribution).** A mission
+  is a Mealy-style transducer (Joe, 2026-06-11): doc = input tape + receipts,
+  code graph = output tape. The output tape (`code/v05/edits`) is live but
+  UNATTRIBUTED — no commit→mission edge exists; `file→mission` is
+  `mission/mentions-file` (doc-grain, circular as discharge evidence). Design +
+  Codex handoff spec: `futon6/holes/missions/E-mealy-style-transducer.md`
+  (new `code/v05/commit→mission` edge, trailer + session-heuristic provenances,
+  audit channel 3 → verdicts doc-used / code-discharged / confirmed-unused).
+  Dispatch pending Joe's go.
+
 ### Audit protocol notes
 - Classify every miss; only *vocabulary-gap* and *binder-miss* are detector
   work — drift/mis-anchor are lifecycle (re-ingest cadence + W5).
