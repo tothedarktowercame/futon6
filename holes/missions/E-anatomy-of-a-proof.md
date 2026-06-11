@@ -181,6 +181,40 @@ summaries* in the expository register, not scope-disciplined proof texts.
 Which is the mini-mission reading again: a writeup is mostly HEAD, and its
 discharge lives in the certificates, not in its own prose (condition 5).
 
+## 5. External scope — the background corpus as exotype (Joe, 2026-06-11)
+
+A proof legitimately uses concepts no local binder introduces — `Kirillov
+model K(Π)|_{GL_n}` (problem 2's track) is bound nowhere in the writeup, and
+that is not a defect: the proof exists *inside* a broader context in which
+Kirillov models exist and make sense. Local scopes were only half the
+anatomy. **A proof has a background corpus as its exotype** — the same shape
+as substrate-2's code models having the mission as exotype.
+
+Consequence for the audit: the free class splits three ways —
+- **locally-bound** — introduced by a binder in the text (the existing grade);
+- **externally-bound** — resolvable in the background corpus, with the
+  resolution target named (an nLab definition site, a `ct-term-prior.json`
+  term, a curated paper KB entry). Not suspect; these edges ARE the proof's
+  exotype, and enumerating them is the proof's import list.
+- **orphan** — bound nowhere, locally or externally. The remaining suspect
+  class, now much sharper.
+
+The background-corpus index is already on disk: 20,653 nLab page names with
+typed `env/definition` sites (`data/nlab-wiring/`), the CT term prior, and
+the problem-7-era curated paper KBs. Resolution is lookup, not search.
+
+## 6. The full-proof register (Joe, 2026-06-11)
+
+The §4 baseline covers only the short writeups. The FULL proofs
+(`latex/full/problemN-solution-full.tex`) are a different register again:
+`\(...\)`/`\[...\]` math (not `$...$`), a `\section`-based spine with ZERO
+LaTeX theorem environments, and — the gift — the workup's `\mNumber`/
+`\mBridgeOperator`/`\m*` type macros INLINE: the full proofs carry explicit
+expression-type annotations. That is a gold channel: harvest the `\m*`
+annotations and diff them against `classify_expr` — disagreement is either a
+typer bug or annotation drift, and either is worth knowing (two-channel
+discipline, third instance).
+
 ## First cut tasks
 
 1. Tokenizer for the writeup register (ASCII math + indented display blocks)
