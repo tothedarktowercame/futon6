@@ -160,7 +160,41 @@ each claim checked against the system's stores before being written here.
 Technical cross-references for in-house readers are kept in the source
 repositories rather than in this text.
 
-## 7. Relation to "A First Proof Sprint"
+## 7. A second ascent: a mission read mid-life
+
+The running example above was born instrumented — it documented itself from
+its first sentence. The harder test of the two readings is a mission that
+lived first and was analyzed later. On 11 June 2026 the structural
+instruments were pointed at `M-futonzero-generative` — a mission chartered
+two days earlier, advanced through twenty live War-Machine flights, its
+work products built by three agents — and the detector recovered
+**33 typed scopes** from a document nobody wrote for the instruments.
+
+What the structural reading found, mid-life: the mission's *behavioral
+constraints* came back as typed objects — each "scope out" bullet ("No
+reward-trained policy update", "No hidden scheduler") is an anchored scope
+with outward polarity, machine-visible at its exact line; its two hard
+gates and its checkpoint came back as sections; and its life-cycle came
+back honestly thin — HEAD and IDENTIFY present, every later phase a ghost
+line, which is *true*: this mission advances by external flights, not by
+writing its own phases. The organism reading agrees from the other face:
+the twenty flights were this mission's metabolism, and the document only
+records what the metabolism deposited.
+
+And the instrument reported its own boundary, which is the finding worth
+the section: the mission's **Remaining-Work checklist — the seven counted
+holes that the flights actually closed and the War Machine actually
+counted — is invisible to the scope reading.** The checkboxes detect as
+nothing at all; meanwhile a separate counter (the mission registry's)
+reads the same lines by regex, and the flights' acts changed them without
+either instrument seeing one object. Three systems touch the same holes;
+none share them. The mid-life analysis thus ends the way the first ascent
+did — with the synthesis paying a debt by *naming* it: the counted hole
+wants to become a first-class scope, so that a hole's count, a flight's
+act, and a panel's display are one thing read three ways. That is the
+next construction, and this paragraph is its preregistration.
+
+## 8. Relation to "A First Proof Sprint"
 
 "A First Proof Sprint" follows a single mathematical proof finding its way
 through this same system. The present account sits one level up: it follows
