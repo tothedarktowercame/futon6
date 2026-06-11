@@ -88,11 +88,11 @@ def section_spans(text: str) -> list[tuple[int, int, str]]:
 # where these commands most often appear (\sum_{i}, \lim_{n}, ...).
 EXPR_TYPE_RULES = [
     ("quantifier", re.compile(r"\\(forall|exists)(?![a-zA-Z])")),
-    ("arrow", re.compile(r"\\(to|rightarrow|longrightarrow|mapsto|hookrightarrow|twoheadrightarrow|leftarrow|Rightarrow|xrightarrow|underoverset|overset|underset)(?![a-zA-Z])|\\stackrel")),
-    ("large-operator", re.compile(r"\\(sum|prod|int|bigcup|bigcap|coprod|lim|colim|varinjlim|varprojlim|holim|hocolim|otimes|oplus)(?![a-zA-Z])")),
-    ("relation", re.compile(r"=|\\(le|leq|ge|geq|neq|cong|simeq|equiv|subset|subseteq|supset|in|ni|sim|approx|vdash|models|prec|succ)(?![a-zA-Z])|<|>")),
+    ("arrow", re.compile(r"\\(to|rightarrow|longrightarrow|mapsto|hookrightarrow|twoheadrightarrow|leftarrow|Rightarrow|xrightarrow|underoverset|overset|underset)(?![a-zA-Z])|\\stackrel|->|\|->|=>")),
+    ("large-operator", re.compile(r"\\(sum|prod|int|bigcup|bigcap|coprod|lim|colim|varinjlim|varprojlim|holim|hocolim|otimes|oplus)(?![a-zA-Z])|\b(sum|prod|int|lim)_[A-Za-z0-9]+")),
+    ("relation", re.compile(r"=|>=|<=|!=|\\(le|leq|ge|geq|neq|cong|simeq|equiv|subset|subseteq|supset|in|ni|sim|approx|vdash|models|prec|succ)(?![a-zA-Z])|<|>")),
     ("named-operator", re.compile(r"\\(mathrm|operatorname|mathop|Hom|End|Aut|Map|Spec|Ext|Tor)(?![a-zA-Z])|\\(sin|cos|log|exp|ker|coker|im|dim|rank)(?![a-zA-Z])")),
-    ("greek", re.compile(r"\\(alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|varphi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Phi|Psi|Omega)(?![a-zA-Z])")),
+    ("greek", re.compile(r"\\(alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|varphi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Phi|Psi|Omega)(?![a-zA-Z])|\b(alpha|beta|gamma|delta|epsilon|eta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|phi|psi|omega|Phi|Gamma|Delta|Theta|Lambda|Sigma|Omega)(?:_[A-Za-z0-9]+)?\b")),
     ("number", re.compile(r"^\s*-?\d+(\.\d+)?\s*$")),
     ("text", re.compile(r"\\(text|mathrm)\{[^}]*\s[^}]*\}")),
 ]

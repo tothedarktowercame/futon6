@@ -88,10 +88,13 @@ ENV_TO_LINK_TYPE = {
 # Scope detection (from nlab-prevalidate.py / validate-ct.py)
 SCOPE_REGEXES = [
     ("let-binding", r"\bLet(?:\s+also)?\s+\$([^$]+)\$\s+(be|denote)\s+([^.,$]+)"),
+    ("let-prose-binding", r"\bLet\s+([A-Za-z][A-Za-z0-9_]*(?:\([^)\n]{0,80}\))?)\s+(?:be|denote)\s+([^.,\n]+)"),
+    ("let-relation-binding", r"\bLet\s+([A-Za-z][A-Za-z0-9_]*)\s*(=|>=|<=|>|<|in)\s*([^.,\n]+)"),
     ("let-command-binding", r"\bLet\s+(\\[A-Za-z]+\\?)\s+(be|denote)\s+([^.,\n]+)"),
     ("fix-binding", r"\bFix\s+\$([^$]+)\$(?:\s+(?:be|to be|as)\s+([^.,$]+))?"),
     ("fix-command-binding", r"\bFix\s+(\\[A-Za-z]+\\?)(?:\s+(?:be|to be|as)\s+([^.,\n]+))?"),
     ("define", r"\bDefine\s+\$([^$]+)\$\s*(:=|=|\\equiv)\s*([^.,$]+)"),
+    ("define-prose-binding", r"\bDefine\s+(?:a|an|the)?\s*([^.\n]{0,80}?)\s+([A-Za-z][A-Za-z0-9_]*)\s+(?:by|as|to be)\s+([^.\n]+)"),
     ("denote-by", r"\bDenote\s+by\s+\$([^$]+)\$\s+([^.,$]+)"),
     ("we-denote-by", r"\b(?:We\s+)?denote(?:\s+as\s+usual)?\s+by\s+\$([^$]+)\$\s+([^.,$]+)"),
     ("write-for", r"\b(?:We\s+)?[Ww]rite\s+\$([^$]+)\$\s+for\s+([^.,$]+)"),
@@ -110,19 +113,27 @@ SCOPE_REGEXES = [
     ("if-condition", r"\bIf\s+\$([^$]+)\$"),
     ("consider", r"\bConsider\s+(a|an|the|some)?\s*\$?([^$.]{1,60})"),
     ("for-in", r"\bFor\s+(?:a|an|the|each|every)\s+[^$.]{0,80}?\$([^$]+)\$\s+in\s+\$([^$]+)\$"),
+    ("for-prose-binding", r"\bFor\s+(?:a|an|the|each|every)\s+([^.,:\n]{0,100}?)\s+([A-Za-z][A-Za-z0-9_]*)(?=\s*(?:[:;,.)]|in\b|of\b|with\b))"),
+    ("for-list-binding", r"\bFor\s+([A-Za-z](?:\s*,\s*[A-Za-z])+(?:\s*,?\s*(?:and\s+)?[A-Za-z])?)\s+in\s+([^.,\n]+)"),
     ("for-any-entity", r"\b(?:for\s+)?(any|every|each|all)\s+[^$.]{1,80}?\$([^$]+)\$"),
     ("for-any", r"\b(?:for\s+)?(any|every|each|all)\s+\$([^$]+)\$"),
     ("where-binding", r"\bwhere\s+\$([^$]+)\$\s+(is|denotes|represents)\s+([^.,$]+)"),
+    ("where-ascii-binding", r"\bwhere\s+([A-Za-z][A-Za-z0-9_]*(?:\([^)\n]{0,80}\))?)\s*(?:=|is|denotes|represents)\s*([^.,\n]+)"),
+    ("set-ascii-binding", r"\b[Ss]et\s+([A-Za-z][A-Za-z0-9_]*)\s*(?:=|:=)\s*([^.,\n]+)"),
+    ("wlog-binding", r"\bWLOG\b[^.\n]*"),
     ("relation-expression", r"\$([^$]{1,260}?(?:=|\\(?:in|subseteq|subset|leq|geq|neq|equiv|approx|sim|cong)|[<>])[^$]{0,260})\$"),
     ("set-notation", r"\$([^$]*\\in\s+[^$]+)\$"),
 ]
 
 CLASSICAL_TO_METATHEORY = {
     "let-binding": "bind/let",
+    "let-prose-binding": "bind/let",
+    "let-relation-binding": "bind/let",
     "let-command-binding": "bind/let",
     "fix-binding": "bind/let",
     "fix-command-binding": "bind/let",
     "define": "bind/define",
+    "define-prose-binding": "bind/define",
     "denote-by": "bind/define",
     "we-denote-by": "bind/define",
     "write-for": "bind/define",
@@ -141,9 +152,14 @@ CLASSICAL_TO_METATHEORY = {
     "if-condition": "assume/explicit",
     "consider": "assume/consider",
     "for-in": "quant/universal",
+    "for-prose-binding": "quant/universal",
+    "for-list-binding": "quant/universal",
     "for-any-entity": "quant/universal",
     "for-any": "quant/universal",
     "where-binding": "constrain/where",
+    "where-ascii-binding": "constrain/where",
+    "set-ascii-binding": "bind/define",
+    "wlog-binding": "assume/wlog",
     "relation-expression": "constrain/relation",
     "set-notation": "constrain/such-that",
 }
@@ -1183,6 +1199,13 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             if stype == "let-binding":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "type", "text": m.group(3).strip()[:80]})
+            elif stype == "let-prose-binding":
+                ends.append({"role": "symbol", "text": m.group(1).strip()})
+                ends.append({"role": "type", "text": m.group(2).strip()[:80]})
+            elif stype == "let-relation-binding":
+                ends.append({"role": "symbol", "text": m.group(1).strip()})
+                ends.append({"role": "relation", "text": m.group(2).strip()})
+                ends.append({"role": "value", "text": m.group(3).strip()[:80]})
             elif stype == "let-command-binding":
                 symbol = m.group(1).strip()
                 if symbol.endswith("\\") and len(symbol) > 1:
@@ -1211,6 +1234,13 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             elif stype == "define":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "value", "text": m.group(3).strip()[:80]})
+            elif stype == "define-prose-binding":
+                desc = (m.group(1) or "").strip()
+                symbol = m.group(2).strip()
+                ends.append({"role": "symbol", "text": symbol})
+                if desc:
+                    ends.append({"role": "type", "text": desc[:80]})
+                ends.append({"role": "value", "text": m.group(3).strip()[:80]})
             elif stype in {"denote-by", "we-denote-by", "write-for", "is-called", "here-denotes"}:
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "description", "text": m.group(2).strip()[:80]})
@@ -1237,6 +1267,15 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             elif stype == "for-in":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "domain", "latex": m.group(2).strip()})
+            elif stype == "for-prose-binding":
+                ends.append({"role": "quantifier", "text": "for"})
+                ends.append({"role": "type", "text": m.group(1).strip()[:80]})
+                ends.append({"role": "symbol", "text": m.group(2).strip()})
+            elif stype == "for-list-binding":
+                ends.append({"role": "quantifier", "text": "for"})
+                for sym in re.findall(r"[A-Za-z]", m.group(1)):
+                    ends.append({"role": "symbol", "text": sym})
+                ends.append({"role": "domain", "text": m.group(2).strip()[:80]})
             elif stype == "for-any-entity":
                 ends.append({"role": "quantifier", "text": m.group(1)})
                 ends.append({"role": "symbol", "latex": m.group(2).strip()})
@@ -1253,6 +1292,14 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             elif stype == "where-binding":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "description", "text": m.group(3).strip()[:80]})
+            elif stype == "where-ascii-binding":
+                ends.append({"role": "symbol", "text": m.group(1).strip()})
+                ends.append({"role": "description", "text": m.group(2).strip()[:80]})
+            elif stype == "set-ascii-binding":
+                ends.append({"role": "symbol", "text": m.group(1).strip()})
+                ends.append({"role": "value", "text": m.group(2).strip()[:80]})
+            elif stype == "wlog-binding":
+                ends.append({"role": "assumption", "text": m.group().strip()[:160]})
             elif stype == "set-notation":
                 ends.append({"role": "membership", "latex": m.group(1).strip()})
             meta_type = CLASSICAL_TO_METATHEORY.get(stype, f"scope/{stype}")
