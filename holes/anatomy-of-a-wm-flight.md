@@ -109,20 +109,53 @@ its AIF counterpart actually filled — and the three specimens show the
 three ways that coherence is earned: by measurement (A), by honest
 invalidation (B), by refusal (C).
 
-## 5. The preregistration check (vs early-closures.md)
+## 5. The preregistration check (vs early-closures.md) — REVISED
 
-The closure grammar maps into the flight almost organ-for-organ:
-**hole** → the target (a sorry / counted mission hole); **cascade
-(:correlated)** → the warrant organ (and literally: the scan's
-cascade-policies lane assembles a pattern-set per top mission);
-**construction (:constructed)** → the act + witness; **fold record** →
-the PUR + the pair + the discipline event (with `:success false`
-preserved — Specimen B is exactly the β-record the folds file's
-recording discipline demanded). What the flight ADDS to the closure
-grammar is the **price tag**: predicted-vs-realised under two models, with
-admissibility tags. A flight is a closure that also pays for — or honestly
-refuses to fake — its own measurement. The preregistration held, plus one
-new organ.
+*(First draft of this section claimed the mapping by prose analogy — the
+M-pilot-appearance repertoire without the M-memes-arrows content-hygiene
+(Joe's catch, 2026-06-11). A grammar-mapping claim is earned by
+CONSTRUCTING the objects in the stores, not by tabling the analogy. Done
+now for the specimens; the split below marks what is demonstrated vs what
+remains asserted.)*
+
+**Demonstrated, store-grade:**
+- **Specimen A's cascade, actually run**: `construct_cascade(ψ = the
+  day-counter hole)` → size 1, **C=0.369**, sole pattern
+  `scan-coherence/mission-anchored-scan` (rel 0.369). The library had
+  almost nothing for this hole — and honestly, the fold used none of it:
+  plain code closed it. Fold record written to `closure-folds.edn`
+  (`wm-flight/turn-9-daily-scan-item-368`, `:used []`) — the same shape as
+  closure-01's "investigation closure, no fold". Note the hygiene point
+  inside the record: the flight's disciplines (settled-read,
+  target-verification, witness) are LOOP organs, not fold patterns;
+  putting them in `:used` would launder loop-hygiene into
+  pattern-utility.
+- **Specimen B's fold record** (`wm-flight/turn-4-two-projections-mint`):
+  `:used ["structure/two-projections-of-one-quantity"]` with the real
+  discharge refs — arrow `arr-4d50ce67-10b` promoted WITH payload, CH2
+  sorry-ref `futon3a/sorry/meme-arrow-969d5eb3d8b6b363`. Fold-success and
+  measurement-validity recorded as separate facts at the fold grain.
+- **The closure grammar's three states exist for B in the actual stores**:
+  cascade (`cascade/E-mission-head-argue` scope-tags on the provenance
+  arrow), sorry (registry entry + arrow→sorry-doc in substrate-2),
+  construction (`futon3@c1c0325` in the arrow payload).
+
+**Still asserted, not yet constructed:**
+- Specimen A's hole as a substrate-2 subset: item 368 lived as a counted
+  doc-hole, never as a store sorry — the hole→store half of the grammar is
+  REAL only for holes that pass through the registry/meme-store (B), and
+  merely analogical for counted mission holes (A). Closing that gap is the
+  hole-granularity work (counted sub-holes as store objects).
+- Specimen C has no fold record: a refusal folds nothing — whether
+  refusals deserve their own typed place in the folds file (as β-grade
+  evidence about the FIELD rather than about patterns) is an open
+  recording-discipline question.
+
+**What survives of the original claim:** the flight still ADDS the
+price-tag organ (dual-model predicted-vs-realised with admissibility
+tags), now backed by A's actual frame; and the fold-record half of the
+preregistration is now demonstrated rather than asserted. The hole-state
+half is demonstrated for store-borne holes only.
 
 ## 6. What the schematic (M-pilot-appearance) doesn't show
 

@@ -61,4 +61,11 @@
  {:scope "E-mission-head/lifeform-lane" :success true :used []
   :discharge/move-id "mission-health-at-birth-readout->mission-mode-lifeform-lane"
   :discharge/sorry-ref "futon3a/sorry/meme-arrow-7265133b2ee6ca48"
-  :note "H3 fold (codex-3, futon3c@5b87192): vitals block; rendered live from health.json; fable-1 review PASS"}]
+  :note "H3 fold (codex-3, futon3c@5b87192): vitals block; rendered live from health.json; fable-1 review PASS"}
+ {:scope "wm-flight/turn-9-daily-scan-item-368" :success true :used []
+  :note "Specimen-A fold (anatomy-of-a-wm-flight workup, store-grade per M-memes content-hygiene): bounded display-bug fix (futon7@701522d), real day-number helper. REAL cascade run: construct_cascade(psi=day-counter hole) -> size 1, C=0.369, only scan-coherence/mission-anchored-scan (rel 0.369) -- the library offered almost nothing and the fold used none of it: plain code closed it. The flight's DISCIPLINES (settled-read, target-verification, witness) are loop-organs, not fold-patterns; recording them in :used would launder loop-hygiene into pattern-utility. First measured-pair flight: predicted -4.1629 / realised -4.1235 settled / error 0.039."}
+ {:scope "wm-flight/turn-4-two-projections-mint" :success true
+  :used ["structure/two-projections-of-one-quantity"]
+  :discharge/move-id "arr-4d50ce67-10b"
+  :discharge/sorry-ref "futon3a/sorry/meme-arrow-969d5eb3d8b6b363"
+  :note "Specimen-B fold: the mint itself (futon3@c1c0325) folded the cited-but-unwritten hole; registry discharge futon2@b3acaaa; arrow promoted WITH payload + CH2 event. The fold succeeded; the flight's MEASUREMENT was censored (target vanished -> fabricated 0.0, excluded) -- fold-success and measurement-validity are separate organs, which is the anatomy's Specimen-B lesson recorded here at the fold grain."}]
