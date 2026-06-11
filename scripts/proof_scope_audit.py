@@ -146,8 +146,7 @@ def _bound_symbols(scopes: list[dict[str, Any]]) -> set[str]:
             if e.get("role") == "symbol":
                 value = e.get("latex") or e.get("text") or ""
                 for sym in SYMBOL_RE.findall(value):
-                    if sym not in STOP_SYMBOLS:
-                        out.add(sym)
+                    out.add(sym)
     return out
 
 

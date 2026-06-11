@@ -39,3 +39,23 @@ def test_writeup_register_prose_binders(tmp_path):
     assert "p" in r["bound-symbols"]
     assert "a" in r["bound-symbols"]
     assert any(s["hx/type"] == "assume/wlog" for s in r["scopes"])
+
+
+def test_problem9_miss_classes_are_scoped(tmp_path):
+    p = tmp_path / "problem9-writeup.md"
+    p.write_text(
+        "Let A^(1), ..., A^(n) in R^{3x4} be Zariski-generic matrices.\n"
+        "For alpha, beta, gamma, delta in [n], construct Q^(abgd).\n"
+        "Fix camera-row pairs (gamma, k) and (delta, l).\n"
+        "Take lambda_{abgd} = 1 for all non-identical tuples.\n"
+        "Suppose X has rank 1.\n"
+        "Define P(A^(1),...,A^(n)) = det[T^(a_m,b_n,g,d)]_{3x3}.\n\n"
+        "    Q^(abgd)_{ijkl} = det[A^(a)(i,:); A^(b)(j,:)]\n",
+        encoding="utf-8",
+    )
+    r = audit_writeup(p)
+    labels = {label for s in r["scopes"] for label in s["hx/labels"]}
+    assert r["scope-count"] >= 6
+    assert {"let-decorated-list-binding", "for-list-binding", "fix-prose-binding",
+            "take-relation-binding", "suppose-prose", "define-arglist-binding"} <= labels
+    assert {"A", "alpha", "beta", "gamma", "delta", "lambda", "P"} <= set(r["bound-symbols"])
