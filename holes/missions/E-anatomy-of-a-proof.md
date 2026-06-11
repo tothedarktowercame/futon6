@@ -271,4 +271,11 @@ bold-environment idiom **Definition./Claim./Lemma.**; Unicode math —
   audit + shape sequences with Lean-status labels (sorry-free / sorry-at /
   no-lean) joined into the shape probe.
 - Job: invoke-1781182013723-736-e948f456 (dispatched 2026-06-11, fable-2 bell)
-- Bell-back: pending
+- Bell-back: DONE 2026-06-11 — commit b0e0cd7, trailer verified. Review
+  (fable-2): 15/15 tests green incl. Unicode classify extensions; 76
+  solutions audited (768 exprs, 1.3% floating — the best-bound register
+  yet); labels sorry-free 4 / sorry-carrying 11 / no-lean 61. CAVEAT
+  recorded: apm shape sequences are short (mean ~3 scopes on Lean-backed
+  problems) so the combined shape-vs-label table is not yet
+  register-comparable — normalize before reading anything into the
+  sorry-class rows. APPROVED.
