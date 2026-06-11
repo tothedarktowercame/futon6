@@ -16,12 +16,14 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+import background_corpus_index as bg
 from nlab_skolem_audit import classify_expr, paragraph_spans
 
 ROOT = Path(__file__).resolve().parent.parent
 WRITEUP_DIR = Path("/home/joe/code/storage/futon6/data/first-proof")
 OUT_JSON = ROOT / "data" / "first-proof-scope-audit.json"
 OUT_SUMMARY = ROOT / "data" / "first-proof-scope-summary.json"
+BACKGROUND_INDEX = ROOT / "data" / "background-corpus-index.json"
 
 NLAB_FLOATING_EXPR_BASELINE = 18.3
 NLAB_VACUOUS_BASELINE = {"vacuous": 797, "envs": 30154}
@@ -36,12 +38,20 @@ ASCII_EXPR_RE = re.compile(
     re.X,
 )
 SYMBOL_RE = re.compile(r"\b[A-Za-z][A-Za-z0-9_]*\b")
+BOLD_RE = re.compile(r"\*\*([^*\n]{2,120})\*\*")
+CAP_PHRASE_RE = re.compile(
+    r"\b(?:[A-Z][A-Za-z0-9_'-]+(?:\s+|[-])){1,5}[A-Z][A-Za-z0-9_'-]+\b"
+)
 STOP_SYMBOLS = {
     "A", "An", "By", "For", "If", "In", "Let", "QED", "Since", "Step", "The",
     "Then", "This", "We", "WLOG", "Yes", "No", "Proof", "Problem", "Answer",
     "Conclusion", "References", "where", "with", "and", "or", "the", "of", "in",
     "is", "are", "be", "to", "from", "for", "all", "any", "some", "there",
     "exists", "defined", "finite", "nonzero", "smooth", "real", "complex",
+}
+STOP_CONCEPTS = {
+    "Problem Statement", "Problem", "Answer", "Proof", "References",
+    "Conclusion", "Step", "Status", "Question",
 }
 
 
@@ -154,7 +164,57 @@ def _symbols_in_expr(expr: str) -> set[str]:
     return {s for s in SYMBOL_RE.findall(expr) if s not in STOP_SYMBOLS and not s[0].isdigit()}
 
 
-def audit_writeup(path: Path) -> dict[str, Any]:
+def concept_terms(text: str, free_symbols: set[str]) -> list[str]:
+    out: set[str] = set()
+    for m in BOLD_RE.finditer(text):
+        term = " ".join(m.group(1).split())
+        if term and term not in STOP_CONCEPTS:
+            out.add(term)
+    for m in CAP_PHRASE_RE.finditer(text):
+        term = " ".join(m.group().split())
+        if term and term not in STOP_CONCEPTS and not term.startswith("Problem "):
+            out.add(term)
+    for sym in free_symbols:
+        if len(sym) > 1 and sym not in STOP_SYMBOLS:
+            out.add(sym)
+    return sorted(out, key=lambda s: (s.lower(), s))
+
+
+def load_background_index(candidates: list[str] | None, index_path: Path = BACKGROUND_INDEX) -> dict[str, Any]:
+    if index_path.exists():
+        index = bg.load_index(index_path)
+        if candidates:
+            covered = set(index.get("candidate-terms", []))
+            requested = {bg.normalize_term(c) for c in candidates if bg.normalize_term(c)}
+            # The nLab name set is stable, but ct-prior materialization is
+            # candidate-filtered. Rebuild only if this run has candidates the
+            # persisted index was not built against; unresolved candidates are
+            # legitimate orphans, not a reason to rebuild forever.
+            if requested.issubset(covered):
+                return index
+        else:
+            return index
+    return bg.build_index(candidates, output=index_path)
+
+
+def resolve_concepts(candidates: list[str], index: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str]]:
+    resolved = []
+    orphans = []
+    for term in candidates:
+        hit = bg.resolve(index, term)
+        if hit:
+            resolved.append({
+                "term": term,
+                "resolution-kind": hit["resolution-kind"],
+                "target": hit["target"],
+                "matched-term": hit["term"],
+            })
+        else:
+            orphans.append(term)
+    return resolved, orphans
+
+
+def audit_writeup(path: Path, background_index: dict[str, Any] | None = None) -> dict[str, Any]:
     text = path.read_text(encoding="utf-8", errors="ignore")
     entity_id = path.stem.replace("-writeup", "")
     scopes = detect_scopes(entity_id, text)
@@ -199,6 +259,11 @@ def audit_writeup(path: Path) -> dict[str, Any]:
         used_symbols.update(_symbols_in_expr(e["expr"]))
 
     bound_symbols = _bound_symbols(scopes)
+    free_symbols = used_symbols - bound_symbols
+    concepts = concept_terms(text, free_symbols)
+    if background_index is None:
+        background_index = load_background_index(concepts)
+    external_concepts, orphan_concepts = resolve_concepts(concepts, background_index)
     vacuous = []
     for s, start, end in scope_spans:
         if not any(start <= e["position"] < end for e in exprs):
@@ -218,7 +283,12 @@ def audit_writeup(path: Path) -> dict[str, Any]:
         "floating-expr-count": len(floating_exprs),
         "floating-expr-pct": (100.0 * len(floating_exprs) / len(exprs)) if exprs else 0.0,
         "bound-symbols": sorted(bound_symbols),
-        "free-symbols": sorted(used_symbols - bound_symbols),
+        "free-symbols": sorted(free_symbols),
+        "candidate-concepts": concepts,
+        "external-concepts": external_concepts,
+        "orphan-concepts": orphan_concepts,
+        "externally-bound-count": len(external_concepts),
+        "orphan-count": len(orphan_concepts),
         "vacuous-scopes": vacuous,
         "vacuous-count": len(vacuous),
         "scopes": scopes,
@@ -231,7 +301,19 @@ def writeups(root: Path = WRITEUP_DIR) -> list[Path]:
 
 
 def run_audit(root: Path = WRITEUP_DIR) -> list[dict[str, Any]]:
-    return [audit_writeup(p) for p in writeups(root) if p.exists()]
+    paths = [p for p in writeups(root) if p.exists()]
+    seed_candidates: list[str] = []
+    for p in paths:
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        scopes = detect_scopes(p.stem.replace("-writeup", ""), text)
+        exprs = expression_records(text)
+        bound = _bound_symbols(scopes)
+        used = set()
+        for e in exprs:
+            used.update(_symbols_in_expr(e["expr"]))
+        seed_candidates.extend(concept_terms(text, used - bound))
+    index = load_background_index(seed_candidates)
+    return [audit_writeup(p, index) for p in paths]
 
 
 def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
@@ -239,6 +321,8 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
     scope_total = sum(r["scope-count"] for r in results)
     floating = sum(r["floating-expr-count"] for r in results)
     vacuous = sum(r["vacuous-count"] for r in results)
+    external = sum(r["externally-bound-count"] for r in results)
+    orphan = sum(r["orphan-count"] for r in results)
     return {
         "writeups": len(results),
         "expr-total": expr_total,
@@ -246,6 +330,8 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
         "floating-expr-count": floating,
         "floating-expr-pct": (100.0 * floating / expr_total) if expr_total else 0.0,
         "vacuous-scope-count": vacuous,
+        "externally-bound-count": external,
+        "orphan-count": orphan,
         "nlab-baseline": {
             "floating-expr-pct": NLAB_FLOATING_EXPR_BASELINE,
             "vacuous-envs": NLAB_VACUOUS_BASELINE,
@@ -257,6 +343,8 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
                 "scope-count": r["scope-count"],
                 "floating-expr-pct": round(r["floating-expr-pct"], 1),
                 "free-symbols": len(r["free-symbols"]),
+                "externally-bound": r["externally-bound-count"],
+                "orphan": r["orphan-count"],
                 "vacuous-count": r["vacuous-count"],
             }
             for r in results
@@ -265,12 +353,14 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def print_table(summary: dict[str, Any]) -> None:
-    print("writeup,exprs,scopes,floating%,free-symbols,vacuous")
+    print("writeup,exprs,scopes,floating%,free-symbols,externally-bound,orphan,vacuous")
     for row in summary["per-writeup"]:
-        print(f"{row['writeup']},{row['expr-count']},{row['scope-count']},{row['floating-expr-pct']},{row['free-symbols']},{row['vacuous-count']}")
+        print(f"{row['writeup']},{row['expr-count']},{row['scope-count']},{row['floating-expr-pct']},{row['free-symbols']},{row['externally-bound']},{row['orphan']},{row['vacuous-count']}")
     print(
         f"TOTAL,{summary['expr-total']},{summary['scope-total']},"
-        f"{summary['floating-expr-pct']:.1f},, {summary['vacuous-scope-count']}"
+        f"{summary['floating-expr-pct']:.1f},,"
+        f"{summary['externally-bound-count']},{summary['orphan-count']},"
+        f"{summary['vacuous-scope-count']}"
     )
     print(
         "nLab baseline: "
