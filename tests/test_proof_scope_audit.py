@@ -11,6 +11,7 @@ def synthetic_index():
     return {
         "terms": {
             "kirillov model": [{"term": "Kirillov model", "resolution-kind": "definition-site", "target": "nlab-99"}],
+            "whittaker model": [{"term": "Whittaker model", "resolution-kind": "nnexus", "target": "nnexus:whittaker model", "domains": ["Wikipedia", "Encyclopediaofmath"], "domain-count": 2}],
             "root separation energy": [{"term": "root separation energy", "resolution-kind": "ct-prior", "target": "ct-term-prior:root separation energy"}],
         },
         "candidate-terms": [],
@@ -75,6 +76,7 @@ def test_external_concept_resolution_splits_orphans(tmp_path):
     p = tmp_path / "problem2-writeup.md"
     p.write_text(
         "For a representation pi, the **Kirillov model** is used. "
+        "A **Whittaker model** is externally attested. "
         "The **Invented Orphan Gadget** remains unexplained.\n\n"
         "    I(s, W, V) = 1\n",
         encoding="utf-8",
@@ -82,4 +84,5 @@ def test_external_concept_resolution_splits_orphans(tmp_path):
     r = audit_writeup(p, synthetic_index())
     ext = {x["term"]: x for x in r["external-concepts"]}
     assert ext["Kirillov model"]["target"] == "nlab-99"
+    assert ext["Whittaker model"]["domains"] == ["Wikipedia", "Encyclopediaofmath"]
     assert "Invented Orphan Gadget" in r["orphan-concepts"]

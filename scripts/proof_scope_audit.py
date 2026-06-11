@@ -183,6 +183,8 @@ def concept_terms(text: str, free_symbols: set[str]) -> list[str]:
 def load_background_index(candidates: list[str] | None, index_path: Path = BACKGROUND_INDEX) -> dict[str, Any]:
     if index_path.exists():
         index = bg.load_index(index_path)
+        if index.get("schema-version") != 2 or "nnexus-domain-counts" not in index:
+            return bg.build_index(candidates, output=index_path)
         if candidates:
             covered = set(index.get("candidate-terms", []))
             requested = {bg.normalize_term(c) for c in candidates if bg.normalize_term(c)}
@@ -203,12 +205,16 @@ def resolve_concepts(candidates: list[str], index: dict[str, Any]) -> tuple[list
     for term in candidates:
         hit = bg.resolve(index, term)
         if hit:
-            resolved.append({
+            item = {
                 "term": term,
                 "resolution-kind": hit["resolution-kind"],
                 "target": hit["target"],
                 "matched-term": hit["term"],
-            })
+            }
+            for key in ("domains", "domain-count", "msc", "urls"):
+                if key in hit:
+                    item[key] = hit[key]
+            resolved.append(item)
         else:
             orphans.append(term)
     return resolved, orphans
@@ -323,6 +329,11 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
     vacuous = sum(r["vacuous-count"] for r in results)
     external = sum(r["externally-bound-count"] for r in results)
     orphan = sum(r["orphan-count"] for r in results)
+    external_domains = Counter()
+    for r in results:
+        for concept in r.get("external-concepts", []):
+            for domain in concept.get("domains", []):
+                external_domains[domain] += 1
     return {
         "writeups": len(results),
         "expr-total": expr_total,
@@ -332,6 +343,7 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
         "vacuous-scope-count": vacuous,
         "externally-bound-count": external,
         "orphan-count": orphan,
+        "external-resolution-domains": dict(sorted(external_domains.items())),
         "nlab-baseline": {
             "floating-expr-pct": NLAB_FLOATING_EXPR_BASELINE,
             "vacuous-envs": NLAB_VACUOUS_BASELINE,
