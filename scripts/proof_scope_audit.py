@@ -164,18 +164,39 @@ def _symbols_in_expr(expr: str) -> set[str]:
     return {s for s in SYMBOL_RE.findall(expr) if s not in STOP_SYMBOLS and not s[0].isdigit()}
 
 
+LEADING_SENTENCE_WORDS = {
+    "The", "A", "An", "In", "On", "By", "So", "If", "For", "Let", "Then",
+    "Define", "Step", "This", "We", "Since", "Thus", "Hence", "Note",
+}
+
+# ProperName(s) + one or two lowercase nouns — how mathematics names its
+# concepts (Kirillov model, Whittaker function, Jacquet module). The plain
+# consecutive-capitals regex cannot see these (review fix, fable-2: p2
+# yielded "The Kirillov" and never "Kirillov model").
+CAP_COMPOUND_RE = re.compile(
+    r"\b([A-Z][a-zA-Z-]{2,}(?:\s+[A-Z][a-zA-Z-]{2,})?)\s+([a-z][a-z-]{3,}(?:\s+[a-z][a-z-]{3,})?)\b"
+)
+
+
 def concept_terms(text: str, free_symbols: set[str]) -> list[str]:
     out: set[str] = set()
     for m in BOLD_RE.finditer(text):
         term = " ".join(m.group(1).split())
-        if term and term not in STOP_CONCEPTS:
+        # a bold SENTENCE is emphasis, not a concept
+        if term and term not in STOP_CONCEPTS and len(term.split()) <= 6 \
+           and ". " not in term:
             out.add(term)
     for m in CAP_PHRASE_RE.finditer(text):
         term = " ".join(m.group().split())
         if term and term not in STOP_CONCEPTS and not term.startswith("Problem "):
             out.add(term)
+    for m in CAP_COMPOUND_RE.finditer(text):
+        head, tail = m.group(1), m.group(2)
+        if head.split()[0] in LEADING_SENTENCE_WORDS:
+            continue
+        out.add(f"{head} {tail}")
     for sym in free_symbols:
-        if len(sym) > 1 and sym not in STOP_SYMBOLS:
+        if len(sym) >= 4 and sym not in STOP_SYMBOLS:
             out.add(sym)
     return sorted(out, key=lambda s: (s.lower(), s))
 
@@ -203,6 +224,14 @@ def resolve_concepts(candidates: list[str], index: dict[str, Any]) -> tuple[list
     resolved = []
     orphans = []
     for term in candidates:
+        # Resolution gate (review fix, fable-2): two-letter symbols and
+        # bare common words resolving against encyclopedia entries (I →
+        # imaginary unit, pi → Pi, gives → give) is the W7 keyword-grab
+        # failure mode at the resolution layer. Short single tokens never
+        # resolve; multiword phrases carry their own specificity.
+        if len(term.replace("_", "")) < 4 and " " not in term:
+            orphans.append(term)
+            continue
         hit = bg.resolve(index, term)
         if hit:
             item = {
