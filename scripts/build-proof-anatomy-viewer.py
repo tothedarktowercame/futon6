@@ -26,6 +26,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 import proof_scope_audit
+import proof_tex_audit
 
 WRITEUP_DIR = Path("/home/joe/code/storage/futon6/data/first-proof")
 OUT_DIR = ROOT / "data" / "showcases" / "proof-anatomy"
@@ -74,7 +75,15 @@ def slug_for_writeup(writeup: str) -> str:
     match = re.search(r"problem(\d+)-writeup\.md$", writeup)
     if match:
         return f"problem{match.group(1)}"
+    match = re.search(r"problem(\d+)-solution-full\.tex$", writeup)
+    if match:
+        return f"problem{match.group(1)}-full"
     return Path(writeup).stem.replace("-writeup", "")
+
+
+def problem_no(writeup: str) -> int | None:
+    match = re.search(r"problem(\d+)", writeup)
+    return int(match.group(1)) if match else None
 
 
 def span_from_scope(scope: dict, text_len: int) -> tuple[int, int] | None:
@@ -274,6 +283,16 @@ def page_html(result: dict, text: str, all_expr_types: set[str], all_grades: set
     vacuous = result["vacuous-scopes"][:12]
     expr_counts = Counter(e["type"] for e in result["expressions"])
     grade_counts = Counter(e["grade"] for e in result["expressions"])
+    gold_panel = ""
+    if result.get("register") == "full-tex":
+        examples = result.get("gold-disagreements", [])[:12]
+        gold_panel = f"""
+<section class="panel"><h2>Gold Diff</h2>
+<p><span class="pill">{result.get('gold-agreement-rate', 0.0):.1f}% agreement</span>
+ over {result.get('gold-annotated-count', 0)} macro-annotated expressions.</p>
+<table><thead><tr><th>Expression</th><th>Gold</th><th>Classifier</th></tr></thead><tbody>
+{''.join(f'<tr><td><code>{esc(e.get("expr", ""))}</code></td><td>{esc(", ".join(e.get("gold-types", [])))}</td><td>{esc(e.get("classified-type", ""))}</td></tr>' for e in examples)}
+</tbody></table></section>"""
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(result['writeup'])} — Proof Anatomy</title><style>{stylesheet(all_expr_types)}</style></head>
@@ -299,20 +318,34 @@ def page_html(result: dict, text: str, all_expr_types: set[str], all_grades: set
 <section class="panel"><h2>Free Symbols</h2><p>{esc(free or 'none')}</p></section>
 <section class="panel"><h2>Vacuous Scopes</h2><ul class="compact">{''.join(f'<li><code>{esc(v.get("type"))}</code> {esc(v.get("match", ""))}</li>' for v in vacuous) or '<li>none</li>'}</ul></section>
 </div>
+{gold_panel}
 <section class="writeup-box" id="{esc(slug)}">{overlay}</section>
 </div></body></html>"""
 
 
-def index_html(results: list[dict], all_expr_types: set[str], all_grades: set[str], all_binders: set[str], generated: str) -> str:
-    summary = proof_scope_audit.summarize(results)
+def index_html(summary_results: list[dict], full_results: list[dict], all_expr_types: set[str], all_grades: set[str], all_binders: set[str], generated: str) -> str:
+    summary = proof_scope_audit.summarize(summary_results)
+    full_summary = proof_tex_audit.summarize(full_results)
+    full_by_problem = {problem_no(r["writeup"]): r for r in full_results}
     rows = []
-    for r in results:
+    for r in summary_results:
         slug = slug_for_writeup(r["writeup"])
+        full = full_by_problem.get(problem_no(r["writeup"]))
+        if full:
+            full_slug = slug_for_writeup(full["writeup"])
+            full_cells = (
+                f"<td><a href=\"{full_slug}.html\">{full['expr-count']}</a></td>"
+                f"<td>{full['scope-count']}</td>"
+                f"<td>{full['floating-expr-pct']:.1f}%</td>"
+                f"<td>{full.get('gold-agreement-rate', 0.0):.1f}%</td>"
+            )
+        else:
+            full_cells = "<td></td><td></td><td></td><td></td>"
         rows.append(
             f"<tr><td><a href=\"{slug}.html\">{esc(r['writeup'])}</a></td>"
             f"<td>{r['expr-count']}</td><td>{r['scope-count']}</td>"
             f"<td>{r['floating-expr-pct']:.1f}%</td><td>{len(r['free-symbols'])}</td>"
-            f"<td>{r['vacuous-count']}</td></tr>"
+            f"<td>{r['vacuous-count']}</td>{full_cells}</tr>"
         )
     baseline = summary["nlab-baseline"]
     return f"""<!doctype html>
@@ -329,22 +362,30 @@ def index_html(results: list[dict], all_expr_types: set[str], all_grades: set[st
 <div class="stat"><div class="k">Vacuous</div><div class="v">{summary['vacuous-scope-count']}</div></div>
 </div></section>
 <section class="panel"><h2>Markup Legend</h2>{legend_html(all_expr_types, all_grades, all_binders)}</section>
-<section class="panel"><h2>Corpus Table</h2><table><thead><tr><th>Writeup</th><th>Expr</th><th>Scopes</th><th>Floating</th><th>Free Symbols</th><th>Vacuous</th></tr></thead><tbody>
+<section class="panel"><h2>Corpus Table</h2><table><thead><tr><th>Writeup</th><th>Summary Expr</th><th>Summary Scopes</th><th>Summary Floating</th><th>Free Symbols</th><th>Vacuous</th><th>Full Expr</th><th>Full Scopes</th><th>Full Floating</th><th>Gold Agree</th></tr></thead><tbody>
 {''.join(rows)}
-<tr><td><strong>Total</strong></td><td>{summary['expr-total']}</td><td>{summary['scope-total']}</td><td>{summary['floating-expr-pct']:.1f}%</td><td></td><td>{summary['vacuous-scope-count']}</td></tr>
-<tr><td><strong>nLab baseline</strong></td><td colspan="3">{baseline['floating-expr-pct']}% floating expressions</td><td colspan="2">{baseline['vacuous-envs']['vacuous']}/{baseline['vacuous-envs']['envs']} vacuous envs</td></tr>
+<tr><td><strong>Total</strong></td><td>{summary['expr-total']}</td><td>{summary['scope-total']}</td><td>{summary['floating-expr-pct']:.1f}%</td><td></td><td>{summary['vacuous-scope-count']}</td><td>{full_summary['expr-total']}</td><td>{full_summary['scope-total']}</td><td>{full_summary['floating-expr-pct']:.1f}%</td><td>{full_summary['gold-agreement-rate']:.1f}%</td></tr>
+<tr><td><strong>nLab baseline</strong></td><td colspan="3">{baseline['floating-expr-pct']}% floating expressions</td><td colspan="6">{baseline['vacuous-envs']['vacuous']}/{baseline['vacuous-envs']['envs']} vacuous envs</td></tr>
 </tbody></table></section>
 </div></body></html>"""
 
 
 def build(out_dir: Path = OUT_DIR, writeup_dir: Path = WRITEUP_DIR) -> dict:
     results = proof_scope_audit.run_audit(writeup_dir)
+    full_results = proof_tex_audit.run_audit()
     generated = datetime.now(timezone.utc).isoformat(timespec="seconds")
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    all_expr_types = {e["type"] for r in results for e in r["expressions"]}
-    all_grades = {e["grade"] for r in results for e in r["expressions"]}
-    all_binders = {str(s.get("hx/type", "unknown")) for r in results for s in r["scopes"]}
+    all_results = results + full_results
+    all_expr_types = {e["type"] for r in all_results for e in r["expressions"]}
+    all_expr_types.update(
+        t
+        for r in full_results
+        for e in r["expressions"]
+        for t in e.get("gold-types", [])
+    )
+    all_grades = {e["grade"] for r in all_results for e in r["expressions"]}
+    all_binders = {str(s.get("hx/type", "unknown")) for r in all_results for s in r["scopes"]}
 
     for result in results:
         path = writeup_dir / result["writeup"]
@@ -354,11 +395,19 @@ def build(out_dir: Path = OUT_DIR, writeup_dir: Path = WRITEUP_DIR) -> dict:
             page_html(result, text, all_expr_types, all_grades, all_binders, generated),
             encoding="utf-8",
         )
+    for result in full_results:
+        path = proof_tex_audit.FULL_TEX_DIR / result["writeup"]
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        slug = slug_for_writeup(result["writeup"])
+        (out_dir / f"{slug}.html").write_text(
+            page_html(result, text, all_expr_types, all_grades, all_binders, generated),
+            encoding="utf-8",
+        )
     (out_dir / "index.html").write_text(
-        index_html(results, all_expr_types, all_grades, all_binders, generated),
+        index_html(results, full_results, all_expr_types, all_grades, all_binders, generated),
         encoding="utf-8",
     )
-    return {"out-dir": str(out_dir), "pages": len(results) + 1, "results": results}
+    return {"out-dir": str(out_dir), "pages": len(results) + len(full_results) + 1, "results": results, "full-results": full_results}
 
 
 def parse_args(argv=None):
