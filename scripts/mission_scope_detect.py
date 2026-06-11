@@ -392,6 +392,19 @@ def detect_mission_scopes(
                 return scope_id, phase
         return None, "head"
 
+    def current_phase_context(level: int) -> str:
+        """Nearest enclosing NON-loose phase. A ### subsection binds as a
+        loose-section whose own phase is often 'loose', which used to mask the
+        eightfold phase above it — so map-items/capabilities under `## MAP`
+        stopped firing (the E-scope-audit W3 side-regression; quantified by
+        mission_scope_bindings.py as MAP binding nothing). Sub-binder decisions
+        should see the phase of the enclosing eightfold scope, not the loose
+        wrapper."""
+        for stack_level, _scope_id, phase, _title in reversed(phase_stack):
+            if stack_level < level and phase not in (None, "loose"):
+                return phase
+        return "loose"
+
     for sec in sections:
         phase = phase_for_title(sec.title)
         binder = None
@@ -424,6 +437,7 @@ def detect_mission_scopes(
             parent, parent_phase = scope["scope-id"], mapped_phase or "loose"
 
         parent, parent_phase = current_parent(sec.level + 1)
+        phase_ctx = parent_phase if parent_phase != "loose" else current_phase_context(sec.level + 1)
         title_low = sec.title.lower()
 
         sub_binders: list[tuple[str, list[dict], str]] = []
@@ -441,15 +455,15 @@ def detect_mission_scopes(
             sub_binders.append(("relates-to", mission_ref_slots(sec.text), "map"))
 
         cap_slots = capability_slots(sec.text, capabilities, kernel_terms)
-        if cap_slots and ("capab" in title_low or parent_phase in {"identify", "map", "derive"}):
-            sub_binders.append(("capability-scope", cap_slots, parent_phase))
+        if cap_slots and ("capab" in title_low or phase_ctx in {"identify", "map", "derive"}):
+            sub_binders.append(("capability-scope", cap_slots, phase_ctx))
 
         pat_slots = [slot for slot in pattern_slots(sec.text, pattern_index) if slot["ident"] not in seen_patterns]
         if pat_slots:
             seen_patterns.update(slot["ident"] for slot in pat_slots)
-            sub_binders.append(("pattern", pat_slots, parent_phase))
+            sub_binders.append(("pattern", pat_slots, phase_ctx))
 
-        if is_map_item(parent_phase, sec):
+        if is_map_item(phase_ctx, sec):
             map_ends = [{"role": "map-item", "title": sec.title}]
             map_ends.extend(source_slots(sec.text)[:12])
             map_ends.extend(mission_ref_slots(sec.text)[:12])
@@ -480,7 +494,7 @@ def detect_mission_scopes(
         # psr/pur: attested pattern-application records (use, not mention).
         for rec in psr_pur_records(sec.text):
             p_ends = [{"role": "pattern", "ident": rec["pattern"], "ref": pattern_index.get(rec["pattern"])}]
-            scope = make_scope(entity_id, idx, rec["kind"], parent, sec.title, parent_phase or "loose", sec.start, sec.end, p_ends)
+            scope = make_scope(entity_id, idx, rec["kind"], parent, sec.title, phase_ctx, sec.start, sec.end, p_ends)
             scope["record"] = rec["kind"]
             scope["pattern-ident"] = rec["pattern"]
             scope["facets"] = rec["facets"]
