@@ -271,18 +271,27 @@ def audit_tex(path: Path) -> dict[str, Any]:
         expr_types[expr["type"]] += 1
         expr_grades[expr["grade"]] += 1
         used_symbols.update(_symbols_in_expr(expr["expr"]))
-        if expr["gold-types"]:
+        # Gold diff at TOKEN grain (review fix, fable-2): the \m* macros
+        # annotate individual lexemes, while expr["type"] is the whole
+        # expression's dominant class — comparing across that grain gave
+        # 0% by construction. Classify each annotated token itself, within
+        # the vocabulary the two channels share.
+        comparable = {"number", "greek", "relation", "arrow",
+                      "large-operator", "named-operator", "text"}
+        for ann in expr.get("gold-annotations", []):
+            if ann["type"] not in comparable:
+                continue
             gold_total += 1
-            agree = expr["type"] in expr["gold-types"]
-            if agree:
+            token_type = proof_scope_audit.classify_expr(ann["text"])
+            if token_type == ann["type"]:
                 gold_agree += 1
             else:
                 disagreements.append({
-                    "expr": expr["expr"],
+                    "token": ann["text"],
+                    "in-expr": expr["expr"][:60],
                     "position": expr["position"],
-                    "gold-types": expr["gold-types"],
-                    "classified-type": expr["type"],
-                    "source": expr["source"],
+                    "gold-type": ann["type"],
+                    "classified-type": token_type,
                 })
 
     bound_symbols = _bound_symbols(scopes)

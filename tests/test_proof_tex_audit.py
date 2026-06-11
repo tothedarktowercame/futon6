@@ -33,7 +33,8 @@ def test_gold_diff_reports_agreement_and_disagreement(tmp_path, monkeypatch):
         r"""\section{Problem Statement}
 Let \(x\) be a number.
 \subsection{Solution}
-We have \(x \mRelation{=} y\) and also \(\mNumber{4} + x\).
+We have \(x \mRelation{=} y\) and also \(\mNumber{4} + x\)
+and \(z \mArrow{=} w\).
 """,
         encoding="utf-8",
     )
@@ -41,16 +42,15 @@ We have \(x \mRelation{=} y\) and also \(\mNumber{4} + x\).
 
     result = proof_tex_audit.audit_tex(tex)
 
-    assert result["expr-count"] == 3
-    assert result["gold-annotated-count"] == 2
-    assert result["gold-agree-count"] == 1
-    assert round(result["gold-agreement-rate"], 1) == 50.0
-    assert result["gold-disagreements"] == [
-        {
-            "expr": "4 + x",
-            "position": result["gold-disagreements"][0]["position"],
-            "gold-types": ["number"],
-            "classified-type": "variable",
-            "source": "inline",
-        }
-    ]
+    # Token-grain gold diff (review fix): each \m* annotation is compared
+    # against classify_expr of the annotated TOKEN, not the expression's
+    # dominant type. "=" as mRelation agrees; "4" as mNumber agrees; "=" as
+    # mArrow (deliberately mis-annotated) disagrees.
+    assert result["gold-annotated-count"] == 3
+    assert result["gold-agree-count"] == 2
+    assert round(result["gold-agreement-rate"], 1) == 66.7
+    (d,) = result["gold-disagreements"]
+    assert d["token"] == "="
+    assert d["gold-type"] == "arrow"
+    assert d["classified-type"] == "relation"
+
