@@ -191,3 +191,18 @@ vocabulary-gap*) and becomes a labeled example for improving
 - Reload discipline reminder: the Drawbridge-loaded ingest/view namespaces have
   `when-not find-ns` guards in the fast scripts — after editing either, force
   `load-file` via proof-eval or the JVM keeps serving the old code.
+
+### Session 3 addendum — W15 (found live on M-smart-emacs-cursor, 2026-06-11)
+
+- **W15 — produced-witness vs consumed-context.** The binding-flow audit
+  flags any body-phase item with no binder-phase introduction as a free
+  variable — but artifacts BORN in a body phase (the Reazon gate file and
+  its certificate, cited by the VERIFY that produced them) are not unbound
+  context; they are the existential's witnesses, the transducer's OUTPUTS.
+  The free class must split: consumed-without-introduction (the vice) vs
+  produced-in-phase (the construction). Discriminator candidates: the item
+  first appears in the same section that claims to create it; or the
+  commit→mission output tape (E-mealy-style-transducer) shows the mission
+  itself wrote the file. Found when the instrument audited the mission that
+  was being built around it, minutes after a spoken detector fix (the
+  source-material extension, 69d4ab4) made the artifacts visible at all.
