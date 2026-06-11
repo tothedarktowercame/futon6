@@ -2,6 +2,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=scripts/mfuton-superpod-gpu-policy.sh
+source "$ROOT_DIR/scripts/mfuton-superpod-gpu-policy.sh"
 
 # Override via env if desired.
 SCRATCH_ROOT="${SCRATCH_ROOT:-$HOME/gh/scratch/darktower/futon6}"
@@ -39,6 +41,7 @@ unpack_bundle() {
 
 run_arxiv_pipeline() {
   step "Run arXiv math.CT pipeline"
+  mfuton_superpod_apply_gpu_policy
   if [[ "$NUM_SHARDS" -gt 1 ]]; then
     echo "[note] arXiv pipeline runs unsharded; NUM_SHARDS=$NUM_SHARDS is ignored."
   fi
@@ -55,6 +58,8 @@ run_arxiv_pipeline() {
       --output-dir "$OUT_DIR" \
       --input-dir "$SCRATCH_ROOT" \
       --limit 10000 \
+      --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
+      --llm-gpu-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
       --skip-llm --skip-clustering --skip-threads --skip-expressions \
       --paper-hg-eprint-dir data/arxiv-math-ct-eprints \
       --discover-terms \
@@ -73,6 +78,7 @@ run_se_pipeline() {
   fi
 
   step "Run StackExchange pipeline (new-term spotting)"
+  mfuton_superpod_apply_gpu_policy
   if [[ "$NUM_SHARDS" -gt 1 ]]; then
     (
       cd "$ROOT_DIR"
@@ -82,6 +88,8 @@ run_se_pipeline() {
         --num-shards "$NUM_SHARDS" \
         --output-dir "$se_outdir" \
         -- \
+        --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
+        --llm-gpu-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
         --discover-terms
     )
   else
@@ -89,6 +97,8 @@ run_se_pipeline() {
       cd "$ROOT_DIR"
       python3 "$ROOT_DIR/scripts/superpod-job.py" "$posts_xml" \
         --output-dir "$se_outdir" \
+        --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
+        --llm-gpu-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
         --discover-terms
     )
   fi
@@ -104,6 +114,7 @@ run_mo_pipeline() {
   fi
 
   step "Run MathOverflow pipeline (new-term spotting)"
+  mfuton_superpod_apply_gpu_policy
   if [[ "$NUM_SHARDS" -gt 1 ]]; then
     (
       cd "$ROOT_DIR"
@@ -113,6 +124,8 @@ run_mo_pipeline() {
         --num-shards "$NUM_SHARDS" \
         --output-dir "$mo_outdir" \
         -- \
+        --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
+        --llm-gpu-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
         --discover-terms
     )
   else
@@ -121,6 +134,8 @@ run_mo_pipeline() {
       python3 "$ROOT_DIR/scripts/superpod-job.py" "$mo_posts_xml" \
         --site mathoverflow.net \
         --output-dir "$mo_outdir" \
+        --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
+        --llm-gpu-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
         --discover-terms
     )
   fi

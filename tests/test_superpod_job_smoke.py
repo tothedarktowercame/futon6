@@ -495,6 +495,27 @@ def test_structure_seed_match_rejects_when_prior_not_subsequence():
     assert mod._match_structure_seed_signature(new, priors) is None
 
 
+def test_eprint_loader_reports_unusable_candidate_attempts(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    mod = _load_superpod_job_module(root)
+    eprints = tmp_path / "eprints"
+    eprints.mkdir()
+    (eprints / "math__0102067v1.bin").write_bytes(b"not a tar archive and not TeX")
+
+    text, meta = mod._load_eprint_text_for_entity(
+        eprints,
+        "arxiv-math/0102067v1",
+    )
+
+    assert text is None
+    assert meta["status"] == "unusable"
+    assert meta["candidates"]
+    assert {attempt["status"] for attempt in meta["attempts"]} >= {
+        "tar-read-error",
+        "plain-text-probe-no-tex",
+    }
+
+
 def test_superpod_job_ct_pipeline_smoke(tmp_path: Path):
     root = Path(__file__).parent.parent
     outdir = tmp_path / "superpod-out"
@@ -1028,7 +1049,8 @@ def test_stage3_existing_arxiv_chunks_reparse_when_parser_version_changes(tmp_pa
         "total_pairs": 1,
         "chunks_per_shard": 1,
         "effective_chunks": 1,
-        "max_new_tokens": 192,
+        "max_new_tokens": 64,
+        "parse_version": "arxiv-paper-shapes-v2",
     }
     (chunk_dir / "meta.json").write_text(
         json.dumps(old_meta, indent=2) + "\n",
@@ -1086,8 +1108,80 @@ def test_stage3_existing_arxiv_chunks_reparse_when_parser_version_changes(tmp_pa
     assert results[0]["status"] == "ok"
     assert "\\mathbb" in results[0]["rationale"]
     meta = json.loads((chunk_dir / "meta.json").read_text(encoding="utf-8"))
-    assert meta["parse_version"] == "arxiv-paper-shapes-v2"
+    assert meta["parse_version"] == "arxiv-paper-shapes-v3"
     merged = json.loads((outdir / "pattern-tags.json").read_text(encoding="utf-8"))
+    assert merged[0]["status"] == "ok"
+
+
+def test_stage6_existing_chunks_reparse_when_parser_version_changes(tmp_path: Path):
+    root = Path(__file__).parent.parent
+    module = _load_superpod_job_module(root)
+    outdir = tmp_path / "arxiv-out"
+    chunk_dir = outdir / "stage6-reverse-morphogenesis-chunks"
+    chunk_dir.mkdir(parents=True)
+    old_meta = {
+        "version": 2,
+        "total_pairs": 1,
+        "chunks_per_shard": 1,
+        "effective_chunks": 1,
+    }
+    (chunk_dir / "meta.json").write_text(
+        json.dumps(old_meta, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    raw = (
+        "{"
+        "\"xiang_form\":\"integral operator $\\mathsf{C}$\","
+        "\"xiang_salience\":\"understand boundedness in Schatten classes\","
+        "\"arrow_constraint\":\"find the exponent relation needed for boundedness\","
+        "\"quality\":{\"form\":\"good\",\"salience\":\"good\",\"arrow\":\"good\"},"
+        "\"situation_S\":\"A researcher studies an integral operator on a Hilbert space.\","
+        "\"roundtrip_check\":\"Yes, the situation naturally asks for the boundedness criterion.\""
+    )
+    (chunk_dir / "chunk-000.json").write_text(
+        json.dumps(
+            [
+                {
+                    "entity_id": "arxiv-math/0212293",
+                    "question_id": 947844714,
+                    "status": "failed",
+                    "reason": "stage6-missing-required-keys",
+                    "analysis": {"form": "good", "salience": "good", "arrow": "good"},
+                    "raw": raw,
+                }
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    class FailIfCalledPool:
+        def run_stage6(self, items, batch_size):
+            raise AssertionError("Stage 6 LLM should not rerun existing chunks")
+
+    pairs = [
+        SimpleNamespace(
+            question=SimpleNamespace(id=947844714, title="A toy paper", body_text="abstract"),
+            answer=SimpleNamespace(body_text="abstract"),
+        )
+    ]
+    entities = [{"entity/id": "arxiv-math/0212293"}]
+    results = module.run_stage6_reverse_morphogenesis_chunked(
+        pairs,
+        entities,
+        outdir,
+        pipe=None,
+        tokenizer=None,
+        batch_size=1,
+        chunks_per_shard=1,
+        llm_pool=FailIfCalledPool(),
+    )
+
+    assert results[0]["status"] == "ok"
+    assert results[0]["salvage"]["reason"] == "stage6-truncated-or-json-escape-repair"
+    meta = json.loads((chunk_dir / "meta.json").read_text(encoding="utf-8"))
+    assert meta["parse_version"] == "reverse-morphogenesis-v3"
+    merged = json.loads((outdir / "reverse-morphogenesis.json").read_text(encoding="utf-8"))
     assert merged[0]["status"] == "ok"
 
 

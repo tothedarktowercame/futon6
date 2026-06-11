@@ -50,6 +50,25 @@ def test_stage6_parser_repairs_trailing_comma_and_unclosed_object():
     assert "parse_error" not in parsed
 
 
+def test_stage6_parser_salvages_truncated_jsonish_top_level_object():
+    mod = _load_superpod_job()
+    raw = (
+        "Here is the analysis:\n\n"
+        "{\n"
+        "\"xiang_form\": \"integral operators $\\bS_p$ and $\\mathsf{C}$\",\n"
+        "\"xiang_salience\": \"understand boundedness of a specific operator\",\n"
+        "\"arrow_constraint\": \"identify the relation among a, b, and p\",\n"
+        "\"quality\": {\"form\": \"good\", \"salience\": \"good\", \"arrow\": \"good\"},\n"
+        "\"situation_S\": \"A researcher needs a boundedness criterion.\",\n"
+        "\"roundtrip_check\": \"Yes, the situation naturally produces the question.\""
+    )
+    parsed = mod._parse_json_object_response(raw)
+    assert parsed["xiang_form"] == "integral operators $\\bS_p$ and $\\mathsf{C}$"
+    assert parsed["quality"]["arrow"] == "good"
+    assert parsed["_jsonish_salvage"]["reason"] == "stage6-truncated-or-json-escape-repair"
+    assert "parse_error" not in parsed
+
+
 def test_stage6_parser_accepts_python_literal_dict():
     mod = _load_superpod_job()
     raw = (
@@ -94,6 +113,23 @@ def test_stage6_result_marks_distinct_slots_ok():
     assert result["reason"] is None
     assert result["collapsed"] is False
     assert result["slot_distinctness"]["status"] == "distinct"
+
+
+def test_stage6_result_marks_salvaged_truncated_output_ok():
+    mod = _load_superpod_job()
+    raw = (
+        "{"
+        "\"xiang_form\":\"integral operator $\\mathsf{C}$\","
+        "\"xiang_salience\":\"understand boundedness in Schatten classes\","
+        "\"arrow_constraint\":\"find the exponent relation needed for boundedness\","
+        "\"quality\":{\"form\":\"good\",\"salience\":\"good\",\"arrow\":\"good\"},"
+        "\"situation_S\":\"A researcher studies an integral operator on a Hilbert space.\","
+        "\"roundtrip_check\":\"Yes, the situation naturally asks for the boundedness criterion.\""
+    )
+    result = mod._build_stage6_result("arxiv-2b", 88, raw)
+    assert result["status"] == "ok"
+    assert result["salvage"]["reason"] == "stage6-truncated-or-json-escape-repair"
+    assert "\\mathsf{C}" in result["analysis"]["xiang_form"]
 
 
 def test_stage6_result_flags_slot_collapse_for_clarification():

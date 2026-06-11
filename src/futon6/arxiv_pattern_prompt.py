@@ -277,6 +277,8 @@ JSON output:"""
 
 _VALID_FAMILY_IDS = set(FAMILY_PARENTS)
 _INVALID_JSON_ESCAPE_RE = re.compile(r"\\(?![\"\\/bfnrtu])")
+_JSON_STRING_FIELD_TEMPLATE = r'"{field}"\s*:\s*"((?:\\.|[^"\\])*)"'
+_JSON_NUMERIC_FIELD_TEMPLATE = r'"{field}"\s*:\s*([0-9]+(?:\.[0-9]+)?)'
 
 
 def _json_loads_tolerating_tex_escapes(blob: str) -> tuple[dict | None, str | None]:
@@ -309,6 +311,50 @@ def _coerce_confidence(value, *, default: float = 0.0) -> float:
     return max(0.0, min(1.0, parsed))
 
 
+def _extract_json_string_field(text: str, field: str) -> str | None:
+    pattern = re.compile(_JSON_STRING_FIELD_TEMPLATE.format(field=re.escape(field)))
+    match = pattern.search(text)
+    if not match:
+        return None
+    try:
+        return json.loads(f'"{match.group(1)}"')
+    except json.JSONDecodeError:
+        return _INVALID_JSON_ESCAPE_RE.sub(r"\\\\", match.group(1))
+
+
+def _extract_json_numeric_field(text: str, field: str) -> float | None:
+    pattern = re.compile(_JSON_NUMERIC_FIELD_TEMPLATE.format(field=re.escape(field)))
+    match = pattern.search(text)
+    if not match:
+        return None
+    return _coerce_confidence(match.group(1))
+
+
+def _salvage_truncated_json_object(text: str) -> tuple[dict | None, str | None]:
+    """Recover useful Stage 3 fields from token-truncated JSON-like output.
+
+    The 8B local model can emit the requested object but stop mid-rationale
+    when the Stage 3 token budget is too small.  In that case the family and
+    leaf fields are often complete and more useful than dropping the row.
+    """
+    if "{" not in text:
+        return None, "no-json-object"
+    family = _extract_json_string_field(text, "family")
+    if family not in _VALID_FAMILY_IDS:
+        return None, f"invalid-family: {family!r}"
+    leaf = _extract_json_string_field(text, "leaf") or "uncertain"
+    rationale = _extract_json_string_field(text, "rationale") or ""
+    return {
+        "family": family,
+        "leaf": leaf,
+        "family_confidence": _extract_json_numeric_field(text, "family_confidence"),
+        "leaf_confidence": _extract_json_numeric_field(text, "leaf_confidence"),
+        "rationale": rationale,
+        "collapsed": None,
+        "_salvaged_from_truncated_json": True,
+    }, None
+
+
 def parse_arxiv_pattern_response(
     raw: str,
     taxonomy: Optional[PaperShapeTaxonomy] = None,
@@ -329,15 +375,21 @@ def parse_arxiv_pattern_response(
     brace_start = text.find("{")
     brace_end = text.rfind("}")
     if brace_start < 0 or brace_end < brace_start:
-        return {"ok": False, "error": "no-json-object", "raw_excerpt": text[:200]}
-    blob = text[brace_start:brace_end + 1]
-    obj, json_error = _json_loads_tolerating_tex_escapes(blob)
-    if obj is None:
-        return {
-            "ok": False,
-            "error": json_error or "json-not-object",
-            "raw_excerpt": blob[:200],
-        }
+        obj, salvage_error = _salvage_truncated_json_object(text)
+        if obj is None:
+            return {"ok": False, "error": salvage_error or "no-json-object", "raw_excerpt": text[:200]}
+        blob = text[brace_start:] if brace_start >= 0 else text
+    else:
+        blob = text[brace_start:brace_end + 1]
+        obj, json_error = _json_loads_tolerating_tex_escapes(blob)
+        if obj is None:
+            obj, salvage_error = _salvage_truncated_json_object(blob)
+            if obj is None:
+                return {
+                    "ok": False,
+                    "error": json_error or salvage_error or "json-not-object",
+                    "raw_excerpt": blob[:200],
+                }
 
     family = obj.get("family", "")
     leaf = obj.get("leaf", "")
@@ -369,6 +421,9 @@ def parse_arxiv_pattern_response(
                     obj.get("rationale", "") or "LLM omitted collapsed metadata."
                 ),
             }
+
+    if obj.get("_salvaged_from_truncated_json"):
+        warnings.append("truncated-json-salvaged")
 
     return {
         "ok": True,

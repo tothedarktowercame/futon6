@@ -240,6 +240,21 @@ class TestResponseParser(unittest.TestCase):
         self.assertTrue(result["ok"])
         self.assertIn("\\mathbb", result["rationale"])
 
+    def test_truncated_json_response_is_salvaged_when_family_and_leaf_are_complete(self):
+        raw = (
+            '{'
+            '"family": "math-strategy/characterization-result",'
+            '"leaf": "math-informal/structural-characterization",'
+            '"family_confidence": 0.9,'
+            '"leaf_confidence": 0.8,'
+            '"rationale": "The paper provides a characterization of n-categories'
+        )
+        result = parse_arxiv_pattern_response(raw)
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["family"], "math-strategy/characterization-result")
+        self.assertEqual(result["leaf"], "math-informal/structural-characterization")
+        self.assertIn("truncated-json-salvaged", result["warnings"])
+
     def test_no_json_in_response(self):
         result = parse_arxiv_pattern_response("Sorry, I cannot answer.")
         self.assertFalse(result["ok"])
