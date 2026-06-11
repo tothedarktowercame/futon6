@@ -60,6 +60,13 @@ INLINE_PHASE_CLOSURE_RE = re.compile(
     r"\s+phase:?\*\*\s*(?:is\s+)?(satisfied|closed|complete|done)",
     re.I,
 )
+# Certificate verdicts (14th binder, Joe spoken 2026-06-11): a stated
+# gate verdict anchors a `certificate` scope, pass/fail read mechanically.
+CERT_VERDICT_RE = re.compile(
+    r"\bverdict(?:\s+on\s+record)?:?\s*(GATE OPEN|GATE SHUT|PASS(?:ED)?|FAIL(?:ED)?)\b",
+    re.I,
+)
+
 MISSION_REF_RE = re.compile(r"\bM-[A-Za-z0-9][A-Za-z0-9-]*\b")
 PATH_RE = re.compile(r"\b[\w./{}-]+\.(?:clj|cljs|cljc|py|edn|bb|el|json|md|html|css|ts|js|cert)\b")
 URL_RE = re.compile(r"https?://[^\s)>\"]+")
@@ -502,6 +509,25 @@ def detect_mission_scopes(
                                f"{phase_name.upper()} (closed in passing)",
                                phase_name, pos, pos + (m.end() - m.start()), ends)
             scope["closure-in-passing"] = True
+            scopes.append(scope)
+            idx += 1
+
+        # certificate verdicts: anchor a certificate scope at the verdict
+        # line; the verdict travels in the TITLE so every layer gets it free.
+        for m in CERT_VERDICT_RE.finditer(sec.text):
+            raw = m.group(1).upper()
+            state = "pass" if raw in {"GATE OPEN", "PASS", "PASSED"} else "fail"
+            pos = sec.content_start + m.start()
+            ends = [{"role": "verdict", "state": state}]
+            ends.extend(source_slots(sec.text)[:4])
+            scope = make_scope(entity_id, idx, "certificate", parent,
+                               f"certificate: {state}", parent_phase or "verify",
+                               pos, pos + (m.end() - m.start()), ends)
+            scope["anchor-line"] = sec.text[
+                sec.text.rfind("\n", 0, m.start()) + 1:
+                (sec.text.find("\n", m.end()) if sec.text.find("\n", m.end()) != -1 else len(sec.text))
+            ].strip()[:160]
+            scope["verdict"] = state
             scopes.append(scope)
             idx += 1
 
