@@ -61,7 +61,7 @@ INLINE_PHASE_CLOSURE_RE = re.compile(
     re.I,
 )
 MISSION_REF_RE = re.compile(r"\bM-[A-Za-z0-9][A-Za-z0-9-]*\b")
-PATH_RE = re.compile(r"\b[\w./{}-]+\.(?:clj|cljs|cljc|py|edn|bb|el|json|md|html|css|ts|js)\b")
+PATH_RE = re.compile(r"\b[\w./{}-]+\.(?:clj|cljs|cljc|py|edn|bb|el|json|md|html|css|ts|js|cert)\b")
 URL_RE = re.compile(r"https?://[^\s)>\"]+")
 API_RE = re.compile(r"\b(?:GET|POST|PUT|PATCH|DELETE)\s+(/[A-Za-z0-9_./:<>{}-]+)")
 SHA_RE = re.compile(r"\b[0-9a-f]{7,40}\b")
@@ -451,6 +451,13 @@ def detect_mission_scopes(
 
         if is_source_material(sec.title):
             sub_binders.append(("source-material", source_slots(sec.text), "map"))
+        elif phase_ctx in {"verify", "instantiate"}:
+            # A VERIFY/INSTANTIATE section that cites artifact files binds
+            # them (Joe, spoken 2026-06-11: the pointer to the verify model
+            # "should get a highlight" — a gate's artifacts are its ends).
+            slots = source_slots(sec.text)
+            if slots:
+                sub_binders.append(("source-material", slots, phase_ctx))
         if is_relation_section(sec.title):
             sub_binders.append(("relates-to", mission_ref_slots(sec.text), "map"))
 
