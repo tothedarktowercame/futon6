@@ -110,68 +110,112 @@ def concept_holes(text, defs):
     return {t: n for t, n in holes.items() if n >= 2}
 
 
-def collect_marks(text, defs, holes, scopes):
-    marks = []
-    for term, dpos in defs.items():
-        for m in re.finditer(re.escape(term), text, re.I):
-            marks.append((m.start(), m.end(), "defined",
-                          f"defined in this paper @ {dpos}"))
-    for term in holes:
-        for m in re.finditer(r"\b" + re.escape(term) + r"\b", text, re.I):
-            marks.append((m.start(), m.end(), "hole",
-                          f"no in-paper definition — needs canon link ({holes[term]} occurrences)"))
-    for s in scopes:
-        if str(s.get("hx/type")) != "bind/typed":
-            continue
-        ends = s.get("hx/ends") or []
-        sym = next((e.get("latex") for e in ends if e.get("role") == "symbol"), None)
-        typ = next((e.get("text") or e.get("latex") for e in ends if e.get("role") == "type"), "")
-        c = s.get("hx/content") or {}
-        if sym and c.get("position") is not None:
-            marks.append((c["position"], min(c.get("end", c["position"] + 40),
-                                             c["position"] + 160), "bind",
-                          f"bind: ${sym}$ : {(typ or '')[:60]}"))
-    marks.sort(key=lambda x: (x[0], -(x[1] - x[0])))
-    return marks
+CLS = {"defined": "background:#d3f3df;border-bottom:2px solid #0f766e",
+       "hole": "background:#fdf3d7;border-bottom:2px dashed #9a7b1a",
+       "bind": "background:#dde7fb;border-bottom:2px solid #2a4d9a",
+       "envtex": "background:#e4ecf4;border-bottom:2px solid #1d3a4d"}
 
-
+FAMILY_STYLE = {
+    "bind": "background:#dde7fb;border-bottom:2px solid #2a4d9a",
+    "constrain": "background:#efe3f7;border-bottom:2px solid #7a3ba8",
+    "quant": "background:#e3eef7;border-bottom:2px solid #1a6a9a",
+    "assume": "background:#e3f7ef;border-bottom:2px solid #1a9a6a",
+    "env": "background:#f4f0e4;outline:1px solid #c9bd9c",
+    "comment": "color:#888;background:#f0f0f0",
+}
 SUBTERM_COLORS = {"math/typed-arrow": "#008080", "math/membership": "#7851a9",
                   "math/subscript": "#8b008b", "math/superscript": "#8b008b",
                   "math/constructor-declaration": "#cc5500",
-                  "math/grounded-symbol": "#b22222", "math/group": "#704214",
-                  "math/macro-call": "#666"}
+                  "math/category-symbol": "#2e8b57", "math/category-symbol-call": "#2e8b57",
+                  "math/tensor": "#8a2be2", "math/isomorphism": "#b8860b",
+                  "math/equality": "#004225", "math/typed-binding": "#0f766e",
+                  "math/named-functor": "#cc5500", "math/group": "#704214",
+                  "math/macro-call": "#999", "math/macro-arg": "#bbb"}
 
 
-def math_expression_layer(eid, text):
-    """Golden rule 1 (Joe, 2026-06-12): anything between dollar signs is a
-    math-expression scope, and it should have subterms. Envelopes from the
-    $...$ blocks; typed subterms nested inside at absolute positions."""
-    exprs = []
-    for m in re.finditer(r"\$([^$]{1,300})\$", text):
-        exprs.append({"start": m.start(), "end": m.end(), "subterms": []})
-    sub_all = []
-    for det in ("detect_math_scopes", "detect_math_scopes_ast"):
-        fn = getattr(nw, det, None)
-        if fn:
-            sub_all.extend(fn(eid, text) or [])
-    by_start = sorted(exprs, key=lambda e: e["start"])
-    import bisect
-    starts = [e["start"] for e in by_start]
-    for s_ in sub_all:
-        c = s_.get("hx/content") or {}
+def load_base_scopes(pid):
+    """The existing system's voice: the fresh extraction (stage-5 parity)."""
+    f = Path("/home/joe/code/storage/mark2/ct-fresh-scopes") / (pid.replace("/", "_") + ".json")
+    if not f.exists():
+        return []
+    return json.loads(f.read_text()).get("scopes", [])
+
+
+def base_marks_and_envelopes(base):
+    envelopes, marks = [], []
+    for sc in base:
+        t = str(sc.get("hx/type", ""))
+        c = sc.get("hx/content") or {}
         pos, end = c.get("position"), c.get("end")
-        t = str(s_.get("hx/type", ""))
-        if pos is None or end is None or t == "math/envelope":
+        if pos is None or end is None or end <= pos:
             continue
-        i = bisect.bisect_right(starts, pos) - 1
-        if i >= 0 and end <= by_start[i]["end"]:
-            by_start[i]["subterms"].append((pos, min(end, pos + 80), t))
-    return by_start
+        fam = t.split("/")[0]
+        if t == "math/envelope":
+            envelopes.append({"start": pos, "end": end, "subterms": []})
+        elif fam == "math":
+            marks.append((pos, min(end, pos + 80), "SUB:" + t, t))
+        elif fam in FAMILY_STYLE:
+            ends = sc.get("hx/ends") or []
+            sym = next((e.get("latex") or e.get("text") for e in ends
+                        if e.get("role") == "symbol"), None)
+            typ = next((e.get("text") or e.get("latex") for e in ends
+                        if e.get("role") == "type"), None)
+            tip = t + (f": ${sym}$" if sym else "") + (f" : {typ[:50]}" if typ else "")
+            marks.append((pos, min(end, pos + 200), "FAM:" + fam, tip))
+    envelopes.sort(key=lambda e: e["start"])
+    import bisect
+    starts = [e["start"] for e in envelopes]
+    flat = []
+    for pos, end, kind, tip in marks:
+        if kind.startswith("SUB:"):
+            i = bisect.bisect_right(starts, pos) - 1
+            if i >= 0 and end <= envelopes[i]["end"]:
+                envelopes[i]["subterms"].append((pos, end, kind[4:]))
+                continue
+        flat.append((pos, end, kind, tip))
+    return envelopes, flat
 
 
-CLS = {"defined": "background:#d3f3df;border-bottom:2px solid #0f766e",
-       "hole": "background:#fdf3d7;border-bottom:2px dashed #9a7b1a",
-       "bind": "background:#dde7fb;border-bottom:2px solid #2a4d9a"}
+def render_page(text, envelopes, flat_marks, golden_marks):
+    """Base layer (the system's voice) + golden ADDITIONS (dashed top border)."""
+    events = {}
+    for pos, end, kind, tip in flat_marks:
+        events.setdefault(pos, []).append((end, "base", kind, tip))
+    for pos, end, kind, tip in golden_marks:
+        events.setdefault(pos, []).append((end, "golden", kind, tip))
+    for e in envelopes:
+        events.setdefault(e["start"], []).append((e["end"], "expr", "mexpr", e))
+    out, pos, last = [], 0, 0
+    n = Counter()
+    for start in sorted(events):
+        if start < last:
+            continue
+        out.append(esc(text[pos:start]))
+        end, layer, kind, payload = max(events[start], key=lambda x: x[0])
+        if layer == "expr":
+            e = payload
+            seg, p2, s_last = [], e["start"], e["start"]
+            for sp, se, st in sorted(set(e["subterms"])):
+                if sp < s_last:
+                    continue
+                seg.append(esc(text[p2:sp]))
+                seg.append(f'<span style="color:{SUBTERM_COLORS.get(st, chr(35)+"555")};font-weight:600" title="{esc(st)}">{esc(text[sp:se])}</span>')
+                p2 = se; s_last = se
+            seg.append(esc(text[p2:e["end"]]))
+            out.append(f'<span style="background:#eef0f7;border-radius:3px" title="math expression ({len(e[chr(34)+chr(34) if False else "subterms"])} subterms)">{"".join(seg)}</span>')
+            n["mexpr"] += 1
+        elif layer == "base":
+            fam = kind[4:] if kind.startswith("FAM:") else kind
+            style = FAMILY_STYLE.get(fam, "background:#eee")
+            out.append(f'<span style="{style}" title="{esc(payload)}">{esc(text[start:end])}</span>')
+            n["base:" + fam] += 1
+        else:
+            style = CLS[kind] + ";border-top:2px dashed #444"
+            out.append(f'<span style="{style}" title="GOLDEN ADDITION — {esc(payload)}">{esc(text[start:end])}</span>')
+            n["golden:" + kind] += 1
+        pos = end; last = end
+    out.append(esc(text[pos:]))
+    return "".join(out), n
 
 
 def render(pid):
@@ -180,71 +224,54 @@ def render(pid):
     if not text:
         print(f"{pid}: no text ({meta.get('status')})"); return
     text, rep_log = repairs(text)
+    base = load_base_scopes(pid)
+    envelopes, flat = base_marks_and_envelopes(base)
     envs = texenv.detect_tex_env_scopes(eid, text)
-    scopes = nw.detect_scopes(eid, text) or []
     defs = mine_definienda(text, envs)
     holes = concept_holes(text, defs)
-    marks = collect_marks(text, defs, holes, scopes)
-    exprs = math_expression_layer(eid, text)
-    expr_events = {e["start"]: e for e in exprs}
-    out, pos, last = [], 0, 0
-    n_used = Counter()
-
-    def emit_expr(e):
-        seg, p = [], e["start"]
-        subs = sorted(set(e["subterms"]))
-        s_last = e["start"]
-        for sp, se, st in subs:
-            if sp < s_last:
-                continue
-            seg.append(esc(text[p:sp]))
-            color = SUBTERM_COLORS.get(st, "#555")
-            seg.append(f'<span style="color:{color};font-weight:600" '
-                       f'title="{esc(st)}">{esc(text[sp:se])}</span>')
-            p = se; s_last = se
-        seg.append(esc(text[p:e["end"]]))
-        n_used["mexpr"] += 1
-        return (f'<span style="background:#eef0f7;border-radius:3px" '
-                f'title="math expression ({len(subs)} subterms)">{"".join(seg)}</span>')
-
-    events = sorted(set([m[0] for m in marks] + list(expr_events)))
-    midx = {m[0]: m for m in marks}
-    for start in events:
-        if start < last:
-            continue
-        out.append(esc(text[pos:start]))
-        if start in midx and (start not in expr_events or midx[start][1] >= expr_events[start]["end"]):
-            s_, e_, kind, tip = midx[start]
-            out.append(f'<span style="{CLS[kind]}" title="{esc(tip)}">{esc(text[s_:e_])}</span>')
-            pos = e_; last = e_; n_used[kind] += 1
-        elif start in expr_events:
-            e = expr_events[start]
-            out.append(emit_expr(e))
-            pos = e["end"]; last = e["end"]
-    out.append(esc(text[pos:]))
-    census = Counter(e["hx/type"].removeprefix("env-tex/") for e in envs
-                     if e["hx/type"].removeprefix("env-tex/") in
-                     ("theorem", "proposition", "lemma", "corollary", "definition"))
+    golden = []
+    for term, dpos in defs.items():
+        for m in re.finditer(re.escape(term), text, re.I):
+            golden.append((m.start(), m.end(), "defined",
+                           f"defined in this paper @ {dpos}"))
+    for term in holes:
+        for m in re.finditer(r"\b" + re.escape(term) + r"\b", text, re.I):
+            golden.append((m.start(), m.end(), "hole",
+                           f"no in-paper definition — needs canon link ({holes[term]} occ)"))
+    for env in envs:
+        c = env["hx/content"]
+        kind = env["hx/type"].removeprefix("env-tex/")
+        golden.append((c["position"], min(c["position"] + 60, c["end"]), "envtex",
+                       f"REAL TeX environment: {kind}"))
+    body, n = render_page(text, envelopes, flat, golden)
+    census = Counter(e["hx/type"].removeprefix("env-tex/") for e in envs)
+    base_counts = Counter(str(sc.get("hx/type", "?")).split("/")[0] for sc in base)
     sig = ", ".join(sorted(defs)[:8]) or "—"
     top_holes = ", ".join(t for t, _ in Counter(holes).most_common(6)) or "—"
-    rep_html = "<br>".join(esc(r) for r in rep_log) or "no repairs needed (log explicit per T1)"
+    rep_html = "<br>".join(esc(r) for r in rep_log) or "no repairs needed (explicit empty log)"
     page = OUT_DIR / f"fable-{pid}.html"
+    base_str = " · ".join(f"{k}:{v}" for k, v in base_counts.most_common(8))
+    n_str = " · ".join(f"{k}:{v}" for k, v in n.most_common(12))
     page.write_text(f"""<!doctype html><meta charset=utf-8><title>FABLE GOLDEN — {esc(pid)}</title>
-<style>body{{font:16px/1.7 Georgia,serif;max-width:980px;margin:30px auto;color:#1d1a16;background:#fffdf8;padding:0 18px}}
+<style>body{{font:16px/1.7 Georgia,serif;max-width:1000px;margin:30px auto;color:#1d1a16;background:#fffdf8;padding:0 18px}}
 pre{{white-space:pre-wrap;font:inherit}}.card{{border:2px solid #0f766e;border-radius:10px;padding:14px 18px;background:#f6fffd;font-family:system-ui;font-size:14px}}</style>
-<div class="card"><h2 style="margin:0 0 6px">TITLE CARD — fable-{esc(pid)}</h2>
+<div class="card"><h2 style="margin:0 0 6px">FABLE GOLDEN — {esc(pid)} (base = the system's existing voice; dashes on top = golden ADDITIONS)</h2>
+<b>Base layer (fresh extraction):</b> {esc(base_str)}<br>
 <b>Defined in-paper ({len(defs)}):</b> {esc(sig)}<br>
-<b>Census:</b> {esc(", ".join(f"{k}×{v}" for k, v in census.most_common()))}<br>
-<b>Top external concepts (holes, deduped, ≥2 occurrences):</b> {esc(top_holes)}<br>
+<b>Census (REAL TeX envs):</b> {esc(", ".join(f"{k}×{v}" for k, v in census.most_common(8)))}<br>
+<b>Top holes:</b> {esc(top_holes)}<br>
 <b>Repair log:</b> {rep_html}<br>
-<b>Marks:</b> {n_used['defined']} defined · {n_used['hole']} holes ({len(holes)} distinct) · {n_used['bind']} binds · {n_used['mexpr']} math expressions</div>
-<p><span style="{CLS['defined']}">defined in-paper</span> ·
-<span style="{CLS['hole']}">needs canon link</span> ·
-<span style="{CLS['bind']}">typed bind</span> ·
+<b>Rendered marks:</b> {esc(n_str)}</div>
+<p><span style="background:#dde7fb;border-bottom:2px solid #2a4d9a">bind</span> ·
+<span style="background:#efe3f7;border-bottom:2px solid #7a3ba8">constrain</span> ·
+<span style="background:#e3eef7;border-bottom:2px solid #1a6a9a">quant</span> ·
+<span style="background:#eef0f7">math expression w/ subterms</span> ·
+<span style="background:#d3f3df;border-bottom:2px solid #0f766e;border-top:2px dashed #444">+defined</span> ·
+<span style="background:#fdf3d7;border-bottom:2px dashed #9a7b1a;border-top:2px dashed #444">+hole</span> ·
+<span style="background:#e4ecf4;border-bottom:2px solid #1d3a4d;border-top:2px dashed #444">+real-env</span> ·
 <a href="https://arxiv.org/abs/{esc(pid.replace('_','/'))}">arXiv</a></p>
-<pre>{''.join(out)}</pre>""")
-    print(f"{pid}: defs={len(defs)} holes={len(holes)} distinct "
-          f"(marks: {n_used['defined']}g/{n_used['hole']}a/{n_used['bind']}b) -> {page.name}")
+<pre>{body}</pre>""")
+    print(f"{pid}: base={len(base)} scopes ({base_str}); golden +{len(golden)} -> {page.name}")
 
 
 if __name__ == "__main__":
