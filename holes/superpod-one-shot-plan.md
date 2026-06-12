@@ -79,3 +79,30 @@ threatened a re-run. Now extraction is local-forever; the superpod
 consumes stable substrate. The expected number of future superpod
 iterations for this lane: **one** (plus at most a re-embed if the
 registry schema changes fundamentally — guarded by converging it first).
+
+## Amendment (Joe, voice, same day): Phase S doesn't need the superpod either
+
+"Is that a need for a superpod, or is that something we could do on a
+Linode with one GPU? Do we need eight GPUs and hundreds of CPUs and
+20-hour runtimes? No."
+
+Sizing confirms it. The model lane as specified is single-GPU work:
+- Decorated-concept embeddings (BGE-class, short strings): math.CT ~10^5-10^6
+  items → minutes-to-hours on one GPU; even math.*-wide occurrence-level
+  (~10^8 snippets) is an overnight single-GPU job.
+- Concept-identity resolution: ANN/FAISS over those vectors — one box,
+  possibly CPU-only.
+- Learned classifiers: small-model fine-tunes on golden + engine output.
+
+**Phase S is renamed Phase G: one GPU Linode.** The superpod is
+reserved for a future that may never arrive (arXiv-wide deep full-text
+embeddings, large-model training) and is NOT on this lane's critical
+path. Nobody needs to be bothered.
+
+Why the original run needed scale and this doesn't: it did everything
+at once (extraction + discourse wiring + GNN + full-corpus embeddings).
+The concept-driven architecture is lighter — deterministic substrate
+local, model lane reduced to short-string embeddings + small models.
+The one-shot discipline still applies to Phase G verbatim (dry-run on
+math.CT, intermediates shipped, lanes separated) — good discipline is
+free even when the hardware is cheap.
