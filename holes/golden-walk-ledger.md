@@ -757,3 +757,32 @@ holes/golden-graphs/0809.2517-MA-comod.edn (the SVG is its rendering).
 Detector acceptance = machine round-trip from a marks file to this
 edge set (W2). The golden-30 deliverable is reframed: graphs for
 calibration regions, spans only as scaffolding.
+
+## Closing indictment (Joe, voice, ~15:29) — the viability bar
+
+On two proof paragraphs at ~point 58714 (0809.2517), 88 marks dense:
+"These two paragraphs are NOT VIABLE as printed. Paragraphs full of
+mathematical symbols, no attempt whatsoever to recover any structure
+from them. There's been a little bit of 'here I can maybe recognize
+one construction or another that happens to sit inside dollar signs.'
+But until you can get all of this stuff, it's not mathematics, it's
+not typesetting — who knows what the markup in this section has
+achieved?"
+
+The viability bar, stated as a standard: a section's markup is viable
+iff the structure is RECOVERED (W2 round-trip to a graph a reader
+could use); opportunistic recognition of constructions-that-happen-to-
+sit-in-dollar-signs does not count toward viability. Markup that is
+neither faithful mathematics (no semantics) nor faithful typesetting
+(it shreds the TeX into arity confetti, R15) has achieved a third
+thing that nobody asked for.
+
+Noted in the same paragraphs, the finest-grain authored signal of the
+walk: \stackrel{coc.}{=} — the author LABELS THE EQUALS SIGN with its
+justification. Equational chains carry per-step reasons in the source
+(\stackrel{reason}{=}); the proof DAG exists down to individual
+calculation steps, exact and harvestable (R12/R13 series), currently
+buried under macro confetti.
+
+WALK CLOSED. Net: R1-R15, W1-W2, the golden-graph ruling, the
+viability bar. One paper, one operator, ~30 minutes of voice.
