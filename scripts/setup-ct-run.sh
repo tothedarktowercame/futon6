@@ -20,6 +20,10 @@
 # configured (HostName 172.236.108.82, port 2222, user rob) ; nnexus at ~/code/nnexus.
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/mfuton-superpod-gpu-policy.sh
+source "$SCRIPT_DIR/mfuton-superpod-gpu-policy.sh"
+
 REPO="${REPO:-$HOME/code/futon6}"
 STORE="${STORE:-$HOME/code/storage/futon6/data}"
 REMOTE="${REMOTE:-linode-chicago}"
@@ -64,6 +68,7 @@ do_setup() {
 
 do_run() {
   cd "$REPO"
+  mfuton_superpod_apply_gpu_policy
   echo "== running math.CT GPU pipeline =="
   python3 scripts/superpod-job.py \
     --arxiv-jsonl "$STORE/arxiv-math-ct-metadata.jsonl" \
@@ -80,6 +85,8 @@ do_run() {
     --discover-terms-nnexus-stopwords ../nnexus/lib/NNexus/StopWordList.pm \
     --discover-terms-nnexus-snapshot ../nnexus/lib/NNexus/resources/database/snapshot-6-2014.sqlite \
     --discover-terms-collocation-prior data/ct-term-prior.json \
+    --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
+    --llm-gpu-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
     --stage6-backend codex
   echo "== done. results in ~/code/storage/arxiv-paper-hg-gpu-ct-5k =="
   echo "   collocation gate: see candidate-new-terms-summary.json ->"

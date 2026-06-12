@@ -28,7 +28,7 @@ echo() {
 #   LLM_STAGE6_BATCH_SIZE  Stage 6 LLM batch size (default: 48)
 #   LLM_STAGE6_CHUNKS_PER_SHARD  Stage 6 resumable chunks per shard (default: 10)
 #   LLM_GPU_WORKERS       Replica-fanout local LLM GPU workers, not DDP/DeepSpeed
-#                          (default: 0 = auto all visible GPUs)
+#                          (default: current Slurm current-host GPU count)
 #   LLM_LOADER_WORKERS     Python workers feeding Dataset-backed LLM pipelines.
 #                          For unsharded runs, superpod-job defaults to
 #                          min(16, Slurm/cpuset CPU affinity). For sharded
@@ -42,6 +42,9 @@ echo() {
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
+# shellcheck source=scripts/mfuton-superpod-gpu-policy.sh
+source "$ROOT_DIR/scripts/mfuton-superpod-gpu-policy.sh"
+mfuton_superpod_apply_gpu_policy
 
 TARGET="${1:-both}"
 case "$TARGET" in
@@ -60,7 +63,7 @@ if ! command -v nvidia-smi >/dev/null 2>&1; then
   exit 1
 fi
 
-nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader
+nvidia-smi -i "$CUDA_VISIBLE_DEVICES" --query-gpu=name,memory.total,driver_version --format=csv,noheader
 echo
 
 if ! python3 -c "import torch; assert torch.cuda.is_available(), 'no CUDA'" 2>/dev/null; then
@@ -83,7 +86,7 @@ LLM_STAGE3_BATCH_SIZE="${LLM_STAGE3_BATCH_SIZE:-80}"
 LLM_STAGE3_CHUNKS_PER_SHARD="${LLM_STAGE3_CHUNKS_PER_SHARD:-10}"
 LLM_STAGE6_BATCH_SIZE="${LLM_STAGE6_BATCH_SIZE:-48}"
 LLM_STAGE6_CHUNKS_PER_SHARD="${LLM_STAGE6_CHUNKS_PER_SHARD:-10}"
-LLM_GPU_WORKERS="${LLM_GPU_WORKERS:-0}"
+LLM_GPU_WORKERS="${LLM_GPU_WORKERS:-$MFUTON_SUPERPOD_GPU_COUNT}"
 EMBED_MODEL="${EMBED_MODEL:-BAAI/bge-large-en-v1.5}"
 GRAPH_EMBED_DIM="${GRAPH_EMBED_DIM:-128}"
 GRAPH_EMBED_EPOCHS="${GRAPH_EMBED_EPOCHS:-50}"
@@ -115,6 +118,7 @@ run_site() {
     --output-dir "$outdir" \
     --embed-device cuda \
     --embed-model "$EMBED_MODEL" \
+    --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
     --llm-model "$LLM_MODEL" \
     --llm-batch-size "$LLM_BATCH_SIZE" \
     --llm-stage3-batch-size "$LLM_STAGE3_BATCH_SIZE" \
@@ -153,6 +157,7 @@ run_site_sharded() {
     -- \
     --embed-device cuda \
     --embed-model "$EMBED_MODEL" \
+    --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
     --llm-model "$LLM_MODEL" \
     --llm-batch-size "$LLM_BATCH_SIZE" \
     --llm-stage3-batch-size "$LLM_STAGE3_BATCH_SIZE" \

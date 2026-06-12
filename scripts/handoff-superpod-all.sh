@@ -59,7 +59,7 @@ echo() {
 #   LLM_STAGE6_BATCH_SIZE  Stage 6 LLM batch size (default: 48)
 #   LLM_STAGE6_CHUNKS_PER_SHARD  Stage 6 resumable chunks per shard (default: 10)
 #   LLM_GPU_WORKERS       Replica-fanout local LLM GPU workers, not DDP/DeepSpeed
-#                          (default: 0 = auto all visible GPUs)
+#                          (default: current Slurm current-host GPU count)
 #   LLM_LOADER_WORKERS     Python workers feeding Dataset-backed LLM pipelines.
 #                          Unsharded superpod-job defaults to min(16,
 #                          Slurm/cpuset CPU affinity). Sharded superpod-shard
@@ -78,6 +78,8 @@ echo() {
 # ~/~ begin <<data/first-proof/superpod-handoff-rob.lit.md#all-root-and-args>>[init]
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
+# shellcheck source=scripts/mfuton-superpod-gpu-policy.sh
+source "$ROOT_DIR/scripts/mfuton-superpod-gpu-policy.sh"
 
 SMOKE_ONLY=0
 SKIP_BOOTSTRAP=0
@@ -91,7 +93,8 @@ LLM_STAGE3_BATCH_SIZE="${LLM_STAGE3_BATCH_SIZE:-80}"
 LLM_STAGE3_CHUNKS_PER_SHARD="${LLM_STAGE3_CHUNKS_PER_SHARD:-10}"
 LLM_STAGE6_BATCH_SIZE="${LLM_STAGE6_BATCH_SIZE:-48}"
 LLM_STAGE6_CHUNKS_PER_SHARD="${LLM_STAGE6_CHUNKS_PER_SHARD:-10}"
-LLM_GPU_WORKERS="${LLM_GPU_WORKERS:-0}"
+mfuton_superpod_apply_gpu_policy
+LLM_GPU_WORKERS="${LLM_GPU_WORKERS:-$MFUTON_SUPERPOD_GPU_COUNT}"
 GRAPH_EMBED_DIM="${GRAPH_EMBED_DIM:-128}"
 GRAPH_EMBED_EPOCHS="${GRAPH_EMBED_EPOCHS:-50}"
 GRAPH_EMBED_BATCH_SIZE="${GRAPH_EMBED_BATCH_SIZE:-1024}"
@@ -302,6 +305,7 @@ if [[ "$BLOCK" == "2" ]]; then
     --skip-post-merge \
     -- --thread-limit "$LLM_THREAD_LIMIT" --skip-embeddings \
     --llm-model "$LLM_MODEL" --embed-device cuda \
+    --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
     --llm-batch-size "$LLM_BATCH_SIZE" \
     --llm-stage3-batch-size "$LLM_STAGE3_BATCH_SIZE" \
     --llm-stage3-chunks-per-shard "$LLM_STAGE3_CHUNKS_PER_SHARD" \
@@ -319,6 +323,7 @@ if [[ "$BLOCK" == "2" ]]; then
     --skip-post-merge \
     -- --thread-limit "$LLM_THREAD_LIMIT" --skip-embeddings \
     --llm-model "$LLM_MODEL" --embed-device cuda \
+    --embed-workers "$MFUTON_SUPERPOD_GPU_COUNT" \
     --llm-batch-size "$LLM_BATCH_SIZE" \
     --llm-stage3-batch-size "$LLM_STAGE3_BATCH_SIZE" \
     --llm-stage3-chunks-per-shard "$LLM_STAGE3_CHUNKS_PER_SHARD" \

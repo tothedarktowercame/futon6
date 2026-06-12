@@ -1607,6 +1607,7 @@ def run_stage5_ner_scopes(
     discovery_eprint_ok = 0
     discovery_eprint_missing = 0
     discovery_eprint_status = Counter()
+    discovery_eprint_examples = {}
     discovery_aggregates = {}
     rhs_context_cache = {}
     pm_seed_lowers = set()
@@ -1667,6 +1668,7 @@ def run_stage5_ner_scopes(
     eprint_text_used = 0
     eprint_text_missing = 0
     eprint_status_counts = Counter()
+    eprint_status_examples = {}
     arxiv_entities_processed = 0
     total_learned_structure_matches = 0
     entities_with_learned_structure_matches = 0
@@ -1711,6 +1713,7 @@ def run_stage5_ner_scopes(
             text_source_counts[text_source] += 1
             eprint_status = eprint_meta.get("status", "unknown")
             eprint_status_counts[eprint_status] += 1
+            _record_eprint_diagnostic(eprint_status_examples, eid, eprint_meta)
             if eid.startswith("arxiv-"):
                 arxiv_entities_processed += 1
             if text_source == "eprint":
@@ -1862,6 +1865,7 @@ def run_stage5_ner_scopes(
                     )
                     estatus = e_meta.get("status", "unknown")
                     discovery_eprint_status[estatus] += 1
+                    _record_eprint_diagnostic(discovery_eprint_examples, eid, e_meta)
                     if eprint_text:
                         discovery_text = eprint_text
                         discovery_meta = e_meta
@@ -2251,6 +2255,7 @@ def run_stage5_ner_scopes(
             "eprint_text_used": discovery_eprint_ok,
             "eprint_text_missing": discovery_eprint_missing,
             "eprint_status_counts": dict(discovery_eprint_status),
+            "eprint_status_examples": discovery_eprint_examples,
             "total_extracted": discovery_total,
             "total_unknown_extracted": discovery_unknown,
             "unique_unknown_terms": len(discovery_occ),
@@ -2355,6 +2360,7 @@ def run_stage5_ner_scopes(
         "eprint_text_used": eprint_text_used,
         "eprint_text_missing": eprint_text_missing,
         "eprint_status_counts": dict(eprint_status_counts),
+        "eprint_status_examples": eprint_status_examples,
         "arxiv_entities_processed": arxiv_entities_processed,
         "open_ner": open_ner_stats,
         "learned_structure_matches": total_learned_structure_matches,
@@ -2422,6 +2428,12 @@ def _read_tex_members_from_tar(path, max_chars=240_000, max_members=4):
                 member_names.append(m.name)
                 total_chars += len(text)
             joined = "\n\n".join(chunks)
+            if not joined.strip():
+                return "", {
+                    "status": "empty-tex-members",
+                    "path": str(path),
+                    "members": member_names,
+                }
             return joined[:max_chars], {
                 "status": "ok",
                 "path": str(path),
@@ -2429,6 +2441,30 @@ def _read_tex_members_from_tar(path, max_chars=240_000, max_members=4):
             }
     except (tarfile.TarError, OSError, EOFError) as exc:
         return "", {"status": "tar-read-error", "path": str(path), "error": str(exc)}
+
+
+_EPRINT_DIAGNOSTIC_LIMIT = 20
+
+
+def _compact_eprint_meta(meta):
+    compact = {}
+    for key in ("status", "id", "path", "error", "members", "candidates", "attempts"):
+        if key in meta:
+            compact[key] = meta[key]
+    return compact
+
+
+def _record_eprint_diagnostic(examples, entity_id, meta, limit=_EPRINT_DIAGNOSTIC_LIMIT):
+    status = str(meta.get("status", "unknown"))
+    if status in {"ok", "no-eprint-dir", "non-arxiv-entity"}:
+        return
+    rows = examples.setdefault(status, [])
+    if len(rows) >= limit:
+        return
+    rows.append({
+        "entity_id": entity_id,
+        **_compact_eprint_meta(meta),
+    })
 
 
 def _load_eprint_text_for_entity(eprint_dir, entity_id, max_chars=240_000, max_members=4):
@@ -2439,7 +2475,7 @@ def _load_eprint_text_for_entity(eprint_dir, entity_id, max_chars=240_000, max_m
     sid = _safe_arxiv_id(arxiv_id)
     cands = [p for p in eprint_dir.glob(f"{sid}*") if p.is_file()]
     if not cands:
-        return None, {"status": "missing", "id": arxiv_id}
+        return None, {"status": "missing", "id": arxiv_id, "safe_id": sid}
 
     def _pri(path):
         name = path.name.lower()
@@ -2453,33 +2489,55 @@ def _load_eprint_text_for_entity(eprint_dir, entity_id, max_chars=240_000, max_m
             return 3
         return 9
 
+    attempts = []
     for path in sorted(cands, key=_pri):
         name = path.name.lower()
         if name.endswith(".tex"):
             try:
                 text = path.read_text(encoding="utf-8", errors="ignore")
                 return text[:max_chars], {"status": "ok", "path": str(path), "members": [path.name]}
-            except OSError:
+            except OSError as exc:
+                attempts.append({
+                    "status": "read-error",
+                    "path": str(path),
+                    "error": str(exc),
+                })
                 continue
         if name.endswith(".tar.gz") or name.endswith(".tar"):
             text, meta = _read_tex_members_from_tar(path, max_chars=max_chars, max_members=max_members)
             if text:
                 return text, meta
+            attempts.append(_compact_eprint_meta(meta))
             continue
         if name.endswith(".bin"):
             # Some payloads are mislabeled; try tar decode first, then plain text.
             text, meta = _read_tex_members_from_tar(path, max_chars=max_chars, max_members=max_members)
             if text:
                 return text, meta
+            attempts.append(_compact_eprint_meta(meta))
             try:
                 raw = path.read_bytes()[: max(8192, max_chars * 2)]
                 guess = raw.decode("utf-8", errors="ignore")
                 if "\\documentclass" in guess or "\\begin{" in guess or "$" in guess:
                     return guess[:max_chars], {"status": "ok", "path": str(path), "members": [path.name]}
-            except OSError:
+                attempts.append({
+                    "status": "plain-text-probe-no-tex",
+                    "path": str(path),
+                })
+            except OSError as exc:
+                attempts.append({
+                    "status": "plain-text-read-error",
+                    "path": str(path),
+                    "error": str(exc),
+                })
                 continue
 
-    return None, {"status": "unusable", "id": arxiv_id}
+    return None, {
+        "status": "unusable",
+        "id": arxiv_id,
+        "candidates": [str(p) for p in sorted(cands, key=_pri)[:10]],
+        "attempts": attempts[:10],
+    }
 
 
 def _entity_text_with_eprint_fallback(
@@ -2849,7 +2907,7 @@ def _is_arxiv_entry_id(entry_id) -> bool:
     return str(entry_id or "").startswith("arxiv-")
 
 
-_STAGE3_ARXIV_PARSE_VERSION = "arxiv-paper-shapes-v2"
+_STAGE3_ARXIV_PARSE_VERSION = "arxiv-paper-shapes-v3"
 _STAGE3_SE_PARSE_VERSION = "se-patterns-v1"
 
 
@@ -2912,14 +2970,19 @@ def _stage3_result_from_raw(entry_id, raw):
 
 
 def _can_reparse_stage3_chunks(existing_meta, expected_meta):
-    """True when only the parser version changed, not the LLM chunk geometry."""
+    """True when only parser/generation caps changed, not chunk geometry."""
     if not isinstance(existing_meta, dict):
         return False
     old = dict(existing_meta)
     new = dict(expected_meta)
     old_parse_version = old.pop("parse_version", None)
     new_parse_version = new.pop("parse_version", None)
-    return old == new and old_parse_version != new_parse_version
+    old_max_new_tokens = old.pop("max_new_tokens", None)
+    new_max_new_tokens = new.pop("max_new_tokens", None)
+    return old == new and (
+        old_parse_version != new_parse_version
+        or old_max_new_tokens != new_max_new_tokens
+    )
 
 
 def _reparse_stage3_chunks_from_raw(chunk_ranges, chunk_dir, entry_ids, expected_meta):
@@ -3933,6 +3996,78 @@ def _parse_json_object_response(text):
             return 0
         return sum(1 for k in expected_keys if k in obj)
 
+    def _extract_jsonish_string_field(s, field):
+        pattern = re.compile(rf'"{re.escape(field)}"\s*:\s*"')
+        match = pattern.search(s)
+        if not match:
+            return None, False
+        i = match.end()
+        chars = []
+        escaped = False
+        while i < len(s):
+            ch = s[i]
+            if escaped:
+                if ch == '"':
+                    chars.append('"')
+                elif ch == "\\":
+                    chars.append("\\")
+                elif ch == "u" and i + 4 < len(s):
+                    hex_digits = s[i + 1:i + 5]
+                    if re.fullmatch(r"[0-9a-fA-F]{4}", hex_digits):
+                        chars.append(chr(int(hex_digits, 16)))
+                        i += 4
+                    else:
+                        chars.append("\\" + ch)
+                else:
+                    # LLM outputs often contain LaTeX such as \mathsf or \bS_p,
+                    # which are invalid JSON escapes but should be preserved.
+                    chars.append("\\" + ch)
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                return "".join(chars), True
+            else:
+                chars.append(ch)
+            i += 1
+        if escaped:
+            chars.append("\\")
+        return "".join(chars).strip(), False
+
+    def _salvage_stage6_jsonish_object(s):
+        """Recover Stage 6 top-level fields from truncated JSON-ish output."""
+        if not all(f'"{key}"' in s for key in expected_keys):
+            return None
+
+        parsed = {}
+        complete = True
+        for key in (
+            "xiang_form",
+            "xiang_salience",
+            "arrow_constraint",
+            "situation_S",
+            "roundtrip_check",
+        ):
+            value, closed = _extract_jsonish_string_field(s, key)
+            if value is None:
+                return None
+            parsed[key] = value
+            complete = complete and closed
+
+        quality = {}
+        for key in ("form", "salience", "arrow"):
+            value, closed = _extract_jsonish_string_field(s, key)
+            if value is None:
+                return None
+            quality[key] = value
+            complete = complete and closed
+        parsed["quality"] = quality
+        parsed["_jsonish_salvage"] = {
+            "reason": "stage6-truncated-or-json-escape-repair",
+            "all_string_fields_closed": complete,
+        }
+        return parsed
+
     def _normalize_quotes(s):
         return (s.replace("“", '"')
                  .replace("”", '"')
@@ -4000,13 +4135,16 @@ def _parse_json_object_response(text):
             except json.JSONDecodeError:
                 pass
 
-        # Some model outputs look like Python dicts with single quotes.
-        try:
-            obj = ast.literal_eval(cleaned)
-            if isinstance(obj, dict):
-                return obj
-        except Exception:
-            pass
+        # Some model outputs look like Python dicts with single quotes. Skip
+        # this path for LaTeX-heavy strings so invalid escapes like \mathsf
+        # are handled by the Stage 6 JSON-ish salvage path without warnings.
+        if "\\" not in cleaned:
+            try:
+                obj = ast.literal_eval(cleaned)
+                if isinstance(obj, dict):
+                    return obj
+            except Exception:
+                pass
         return None
 
     text = str(text or "")
@@ -4041,6 +4179,9 @@ def _parse_json_object_response(text):
         tail_score = _score_obj(parsed)
         if tail_score > best_score or (tail_score == best_score and len(tail) > best_len):
             return parsed
+    salvaged = _salvage_stage6_jsonish_object(tail)
+    if salvaged is not None:
+        return salvaged
     if best_obj is not None:
         return best_obj
 
@@ -4059,6 +4200,7 @@ _STAGE6_REQUIRED_KEYS = {
     "situation_S",
     "roundtrip_check",
 }
+_STAGE6_PARSE_VERSION = "reverse-morphogenesis-v3"
 _STAGE6_QUALITY_KEYS = {"form", "salience", "arrow"}
 _STAGE6_SLOT_KEYS = ("xiang_salience", "arrow_constraint", "situation_S")
 _STAGE6_STOPWORDS = {
@@ -4163,6 +4305,9 @@ def _stage6_slot_distinctness(analysis):
 
 def _build_stage6_result(entity_id, question_id, raw_text):
     parsed = _parse_json_object_response(raw_text)
+    salvage = None
+    if isinstance(parsed, dict):
+        salvage = parsed.pop("_jsonish_salvage", None)
     record = {
         "entity_id": entity_id,
         "question_id": question_id,
@@ -4173,6 +4318,8 @@ def _build_stage6_result(entity_id, question_id, raw_text):
         "analysis": parsed if isinstance(parsed, dict) else {"raw": str(raw_text or "")},
         "raw": str(raw_text or ""),
     }
+    if salvage is not None:
+        record["salvage"] = salvage
 
     if not isinstance(parsed, dict):
         record["reason"] = "stage6-invalid-response"
@@ -4229,7 +4376,68 @@ def _stage6_expected_meta(total, chunks_per_shard):
         "total_pairs": total,
         "chunks_per_shard": int(chunks_per_shard),
         "effective_chunks": len(_stage3_chunk_ranges(total, chunks_per_shard)),
+        "parse_version": _STAGE6_PARSE_VERSION,
     }
+
+
+def _can_reparse_stage6_chunks(existing_meta, expected_meta):
+    """True when only the Stage 6 parser version changed."""
+    return _can_reparse_stage3_chunks(existing_meta, expected_meta)
+
+
+def _reparse_stage6_chunks_from_raw(chunk_ranges, chunk_dir, pairs, entities, expected_meta):
+    reparsed_total = 0
+    failed_total = 0
+    for chunk_idx, start, end in chunk_ranges:
+        chunk_path = chunk_dir / f"chunk-{chunk_idx:03d}.json"
+        if not chunk_path.exists():
+            raise RuntimeError(
+                f"Cannot reparse Stage 6 chunk with current parser: {chunk_path} "
+                "is missing. Remove stage6-reverse-morphogenesis-chunks to restart Stage 6."
+            )
+        with open(chunk_path) as f:
+            chunk_data = json.load(f)
+        if not isinstance(chunk_data, list):
+            raise RuntimeError(
+                f"Cannot reparse Stage 6 chunk with current parser: "
+                f"{chunk_path} is not a JSON list."
+            )
+        expected_len = end - start
+        if len(chunk_data) != expected_len:
+            raise RuntimeError(
+                f"Cannot reparse Stage 6 chunk with current parser: {chunk_path} "
+                f"has {len(chunk_data)} rows, expected {expected_len}."
+            )
+
+        reparsed_rows = []
+        for offset, old_row in enumerate(chunk_data):
+            if not isinstance(old_row, dict) or "raw" not in old_row:
+                raise RuntimeError(
+                    f"Cannot reparse Stage 6 chunk with current parser: "
+                    f"{chunk_path} row {offset} has no raw LLM response."
+                )
+            j = start + offset
+            new_row = _build_stage6_result(
+                entities[j]["entity/id"],
+                pairs[j].question.id,
+                old_row.get("raw"),
+            )
+            reparsed_rows.append(new_row)
+            reparsed_total += 1
+            if new_row.get("status") == "failed":
+                failed_total += 1
+
+        tmp_path = chunk_dir / f"chunk-{chunk_idx:03d}.reparse.tmp"
+        with open(tmp_path, "w") as f:
+            json.dump(reparsed_rows, f, ensure_ascii=False)
+        os.replace(tmp_path, chunk_path)
+
+    with open(chunk_dir / "meta.json", "w") as f:
+        json.dump(expected_meta, f, ensure_ascii=False, indent=2)
+    print(
+        "       Reparsed existing Stage 6 chunks with current parser: "
+        f"{reparsed_total - failed_total}/{reparsed_total} parsed"
+    )
 
 
 def _stage6_chunks_available_for_resume(outdir, total, chunks_per_shard):
@@ -4245,7 +4453,11 @@ def _stage6_chunks_available_for_resume(outdir, total, chunks_per_shard):
             existing_meta = json.load(f)
     except (OSError, json.JSONDecodeError):
         return False
-    if existing_meta != _stage6_expected_meta(total, chunks_per_shard):
+    expected_meta = _stage6_expected_meta(total, chunks_per_shard)
+    if (
+        existing_meta != expected_meta
+        and not _can_reparse_stage6_chunks(existing_meta, expected_meta)
+    ):
         return False
     return _all_chunk_files_present(chunk_ranges, chunk_dir)
 
@@ -4391,11 +4603,20 @@ def run_stage6_reverse_morphogenesis_chunked(
         with open(meta_path) as f:
             existing_meta = json.load(f)
         if existing_meta != expected_meta:
-            raise RuntimeError(
-                f"Stage 6 chunk metadata mismatch in {meta_path}. "
-                "Remove stage6-reverse-morphogenesis-chunks to restart Stage 6 chunking "
-                "with new parameters."
-            )
+            if _can_reparse_stage6_chunks(existing_meta, expected_meta):
+                _reparse_stage6_chunks_from_raw(
+                    chunk_ranges,
+                    chunk_dir,
+                    pairs,
+                    entities,
+                    expected_meta,
+                )
+            else:
+                raise RuntimeError(
+                    f"Stage 6 chunk metadata mismatch in {meta_path}. "
+                    "Remove stage6-reverse-morphogenesis-chunks to restart Stage 6 chunking "
+                    "with new parameters."
+                )
     else:
         with open(meta_path, "w") as f:
             json.dump(expected_meta, f, ensure_ascii=False, indent=2)
@@ -5032,6 +5253,7 @@ def run_stage9a_arxiv_paper_hypergraphs(
     eprint_ok = 0
     eprint_missing = 0
     eprint_status = Counter()
+    eprint_status_examples = {}
 
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("[\n")
@@ -5047,6 +5269,7 @@ def run_stage9a_arxiv_paper_hypergraphs(
                 )
                 estatus = e_meta.get("status", "unknown")
                 eprint_status[estatus] += 1
+                _record_eprint_diagnostic(eprint_status_examples, eid, e_meta)
                 if eprint_text:
                     full_text = eprint_text
                     eprint_ok += 1
@@ -5114,6 +5337,7 @@ def run_stage9a_arxiv_paper_hypergraphs(
         "eprint_text_used": eprint_ok,
         "eprint_text_missing": eprint_missing,
         "eprint_status_counts": dict(eprint_status),
+        "eprint_status_examples": eprint_status_examples,
     }
     if paper_hg_eprint_dir is not None and total and eprint_ok == 0:
         try:
@@ -7234,7 +7458,20 @@ def main():
         }
         write_json(outdir / "clusters.json", cluster_data)
         print(f"       Stage 4 done in {time.time()-t4:.0f}s")
-        mark_stage("clustering", "completed", n_clusters=int(n_clusters), n_noise=int(n_noise))
+        noise_rate = (n_noise / len(labels)) if labels else 0.0
+        health_gate(
+            "Stage 4",
+            bool(labels) and n_clusters == 0,
+            f"clustering produced zero clusters ({n_noise}/{len(labels)} noise, "
+            f"noise_rate={noise_rate:.1%})",
+        )
+        mark_stage(
+            "clustering",
+            "completed",
+            n_clusters=int(n_clusters),
+            n_noise=int(n_noise),
+            noise_rate=round(float(noise_rate), 4),
+        )
     else:
         print(f"\n[Stage 4/{n_stages}] Skipped")
         if args.skip_clustering:
@@ -7351,6 +7588,9 @@ def main():
                       f"abstract-fallback={stage5_stats['text_source_counts'].get('abstract', 0)}")
                 print(f"       Stage 5 eprint load status: "
                       f"{stage5_stats.get('eprint_status_counts', {})}")
+                examples = stage5_stats.get("eprint_status_examples") or {}
+                if examples:
+                    print(f"       Stage 5 eprint diagnostic samples: {list(examples)}")
             print(f"       Stage 5 done in {time.time()-t5:.0f}s")
             mark_stage(
                 "ner_scopes",
@@ -7358,6 +7598,7 @@ def main():
                 entities_processed=stage5_stats["entities_processed"],
                 text_source_counts=stage5_stats.get("text_source_counts", {}),
                 eprint_status_counts=stage5_stats.get("eprint_status_counts", {}),
+                eprint_status_examples=stage5_stats.get("eprint_status_examples", {}),
                 eprint_text_used=stage5_stats.get("eprint_text_used", 0),
                 eprint_text_missing=stage5_stats.get("eprint_text_missing", 0),
                 total_discourse_records=stage5_stats.get("total_discourse_records", 0),
@@ -7582,6 +7823,7 @@ def main():
             arm_counts = {"classical": 0, "llm": 0, "both": 0}
             text_source_counts = {"eprint": 0, "abstract": 0}
             eprint_status_counts = {}
+            eprint_status_examples = {}
             t_batch = time.time()
             llm_chunk_size = max(1, args.llm_batch_size * 8)
             pending_texts = []
@@ -7640,6 +7882,7 @@ def main():
                 eprint_status_counts[eprint_status] = (
                     eprint_status_counts.get(eprint_status, 0) + 1
                 )
+                _record_eprint_diagnostic(eprint_status_examples, eid, eprint_meta)
                 classical_hits = (
                     extract_techniques_classical(
                         paper_text,
@@ -7683,6 +7926,7 @@ def main():
                 "arm_counts": arm_counts,
                 "text_source_counts": text_source_counts,
                 "eprint_status_counts": eprint_status_counts,
+                "eprint_status_examples": eprint_status_examples,
             }
             write_stage_status(
                 outdir,
@@ -7700,6 +7944,8 @@ def main():
                   f"abstract-fallback={text_source_counts['abstract']}")
             if paper_eprint_path is not None:
                 print(f"       Eprint load status: {eprint_status_counts}")
+                if eprint_status_examples:
+                    print(f"       Eprint diagnostic samples: {list(eprint_status_examples)}")
             print(f"       Stage 5c done in {time.time()-t5c:.0f}s")
             mark_stage("technique_ner", "completed", **stage5c_record)
     else:
@@ -8011,7 +8257,9 @@ def main():
 
             text_source_counts = {"eprint": 0, "abstract": 0}
             eprint_status_counts = {}
+            eprint_status_examples = {}
             for entity, pair in zip(entities, pairs):
+                eid = entity["entity/id"]
                 _paper_text, text_source, eprint_meta = _paper_text_for(entity, pair)
                 text_source_counts[text_source] = (
                     text_source_counts.get(text_source, 0) + 1
@@ -8020,6 +8268,7 @@ def main():
                 eprint_status_counts[eprint_status] = (
                     eprint_status_counts.get(eprint_status, 0) + 1
                 )
+                _record_eprint_diagnostic(eprint_status_examples, eid, eprint_meta)
             _require_paper_eprint_usage(
                 "Stage 5d", text_source_counts, produced=bool(hypergraphs)
             )
@@ -8034,6 +8283,7 @@ def main():
                 "edge_provenance": edge_provenance,
                 "text_source_counts": text_source_counts,
                 "eprint_status_counts": eprint_status_counts,
+                "eprint_status_examples": eprint_status_examples,
                 "normalized_papers": paper_hg_metrics["normalized_papers"],
                 "normalization_rewrites": paper_hg_metrics["normalization_rewrites"],
                 "chunk_count": len(chunk_ranges),
@@ -8069,6 +8319,8 @@ def main():
                 )
             if paper_eprint_path is not None:
                 print(f"       Eprint load status: {eprint_status_counts}")
+                if eprint_status_examples:
+                    print(f"       Eprint diagnostic samples: {list(eprint_status_examples)}")
             print(f"       Stage 5d done in {time.time()-t5d:.0f}s")
             mark_stage("paper_hypergraph", "completed", **stage5d_record)
     else:
@@ -8104,7 +8356,7 @@ def main():
             len(pairs),
             args.llm_stage6_chunks_per_shard,
         ):
-            print("       Stage 6 chunks complete; reusing without loading LLM")
+            print("       Stage 6 chunks complete; reusing/reparsing without loading LLM")
             llm_pool = None
             pipe = tok = None
         else:
@@ -8413,6 +8665,9 @@ def main():
             print(f"       Eprint text coverage: {stage9a_stats.get('eprint_text_used', 0)}/"
                   f"{stage9a_stats.get('papers_processed', 0)} "
                   f"(missing={stage9a_stats.get('eprint_text_missing', 0)})")
+            examples = stage9a_stats.get("eprint_status_examples") or {}
+            if examples:
+                print(f"       Eprint diagnostic samples: {list(examples)}")
         geometry_source_path, geometry_source = _arxiv_geometry_source_path(outdir, hg_path)
         geometry_stats, geometry_path = write_geometry_artifact(
             geometry_source_path,

@@ -384,17 +384,21 @@ def run_post_merge_stages(outdir: Path, graph_embed_dim: int,
     else:
         print(f"\n{log_prefix} Phase C skipped (no hypergraphs.json in merged output)")
 
-def detect_gpu_count():
-    """Detect number of available GPUs."""
+def visible_gpu_devices():
+    """Return GPU tokens this process is allowed to hand to shard workers."""
+    visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if visible is not None:
+        return [token.strip() for token in visible.split(",") if token.strip()]
+
     try:
         result = subprocess.run(
-            ["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"],
+            ["nvidia-smi", "--query-gpu=index", "--format=csv,noheader,nounits"],
             capture_output=True, text=True, timeout=10)
         if result.returncode == 0:
-            return len(result.stdout.strip().splitlines())
+            return [line.strip() for line in result.stdout.splitlines() if line.strip()]
     except (FileNotFoundError, subprocess.TimeoutExpired):
         pass
-    return 0
+    return []
 
 
 def cmd_run(args):
@@ -421,9 +425,11 @@ def cmd_run(args):
     outdir = Path(args.output_dir)
     outdir.mkdir(parents=True, exist_ok=True)
 
-    # Detect GPUs for assignment
-    num_gpus = detect_gpu_count()
-    print(f"[run] {num_shards} shards, {num_gpus} GPUs detected")
+    # Detect GPUs for assignment. Respect CUDA_VISIBLE_DEVICES if a launcher has
+    # already narrowed the process to the Slurm-authorized allocation.
+    gpu_devices = visible_gpu_devices()
+    num_gpus = len(gpu_devices)
+    print(f"[run] {num_shards} shards, {num_gpus} GPUs visible")
     print(f"[run] CPU affinity: {_available_cpu_count()} cores; "
           f"LLM loader workers per shard: {args.llm_loader_workers}")
     print(f"[run] output: {outdir}")
@@ -462,10 +468,11 @@ def cmd_run(args):
         ]
         env = os.environ.copy()
         env["PYTHONUNBUFFERED"] = "1"
-        if num_gpus > 0:
-            env["CUDA_VISIBLE_DEVICES"] = str(i % num_gpus)
-        print(f"  shard {i}: CUDA_VISIBLE_DEVICES={i % num_gpus if num_gpus else 'none'} "
-              f"→ {shard_dirs[i]}")
+        shard_gpu = gpu_devices[i % num_gpus] if num_gpus else None
+        if shard_gpu is not None:
+            env["CUDA_VISIBLE_DEVICES"] = shard_gpu
+        print(f"  shard {i}: CUDA_VISIBLE_DEVICES={shard_gpu if shard_gpu is not None else 'none'} "
+              f"-> {shard_dirs[i]}")
         proc = subprocess.Popen(
             shard_cmd, env=env,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
