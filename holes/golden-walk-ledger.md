@@ -943,3 +943,12 @@ reserved for the few sites where construction IS the content
   target depth.
 - The 21 parse-hungry nodes in the golden set should be re-read: most
   are full-enough under this ruling.
+
+**Depth ruling addendum (Joe):** if deep expression structure is ever
+genuinely wanted (e.g. at := definition displays), don't build a
+parser — shell out to LaTeXML on PORTIONS: prepend the paper's own
+macro table to the fragment and run latexmlmath/latexml on just that
+snippet. Fragment-scale dodges the whole-document fragility we
+measured (100+ errors on the full master); the macro table we already
+sweep is exactly the preamble the fragment needs. Deep parse becomes
+an on-demand, per-site service — never a corpus stage.
