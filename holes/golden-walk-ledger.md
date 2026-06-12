@@ -274,3 +274,20 @@ shape (HEAD as satisfaction conditions).
   promissory-bind entries typed by the surrounding prose; check
   discharge within section extent.
 - Minted: 2026-06-12, live walk, voice.
+
+**R8 refinement (Joe, voice):** the heading introduction "is a scope
+opening — a scope called: I'm introducing a new symbol which hasn't
+been defined yet, but keep reading until you get the definition. A
+symbol-binding scope that's going to be paid off later in the text."
+
+So promissory-bind is not an annotation on the heading — it is a
+SCOPE WITH EXTENT: it opens at the introduction site and closes at
+the payoff (the discharging definition), not necessarily at the
+section boundary. The interval between is the *debt region*: uses of
+the symbol inside it are uses-under-promise — valid, but
+forward-dependent, and the anatomy should render them as such (the
+reader is carrying an obligation the author has taken out). Extent
+semantics, in scope terms: binder at the open, body = debt region,
+discharge = the close. An EOF before the close = the
+promised-never-delivered defect, now detectable as an unclosed scope
+rather than a missing row.
