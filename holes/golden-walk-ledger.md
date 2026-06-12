@@ -521,3 +521,23 @@ R12 correctly. Currently: marks nil across the whole line.
 
 - Site: 0809.2517 ~point 2640-2700.
 - Minted: 2026-06-12, live walk, voice.
+
+**W1 addendum — prose designation operators + the respectively-zip
+(Joe, voice):** "are given respectively by <display>" is the
+definition operator of this sentence and it is unmarked. Two pieces:
+
+1. **"is given by" is a designation operator** — the prose sibling of
+   R6's `:=`. The definition-verb family ("given by", "defined by",
+   "we set", "denote(d) by", "determined by") binds its subject to the
+   display/expression that follows, exactly as := does inside
+   displays. R6's binder detection must run on prose verbs, not just
+   display-internal symbols.
+2. **"respectively" is a ZIP operator** — order-sensitive pairing
+   between the distributed conjuncts ("left and right ... structures")
+   and the sequence of payoff expressions (here ν^A_{A\# H} and its
+   partner). The hyperedge emission: zip(conjuncts, displays) → one
+   designation edge EACH, preserving order. Without the zip, the two
+   structures share one blurry edge to one blob of math; with it, each
+   gets its own binder. ("Respectively" is pure syntax with exact
+   semantics — another authored signal in R12's class, free to
+   harvest.)
