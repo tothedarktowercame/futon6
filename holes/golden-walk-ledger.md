@@ -145,3 +145,39 @@ genuine orphan, the inverse failure of R3's pointer.
   in non-main files (here beseq2.tex feeding Galois2.tex) must still
   be swept.
 - Minted: 2026-06-12, live walk, voice.
+
+## R6 — large displays are scopes; `:=` in display = definition; diagram DSLs have subterms
+
+Joe marked a whole display region live (0809.2517, chars 645–1239):
+a `$$...$$` block of GrCalc graphical-calculus diagrams defining the
+smash-product multiplication, `m_{A\# H} := <string diagram>`, plus
+the unit. Marks at point: nil — nothing on the entire display.
+
+Three findings stack:
+
+1. **R1b witnessed live, $$-variant:** display math (`$$...$$` as well
+   as `\[...\]`/eqnarray) gets no envelope. Every display block is a
+   mexpr scope — the LARGE ones doubly so, since they carry the
+   paper's actual constructions.
+2. **`:=` inside display = definition site.** This display BINDS the
+   multiplication and unit of $A\# H$. Definitions don't only live in
+   prose ("X is a Y", R2) or \newcommand (R5) — they live in displayed
+   equations, and `:=` (also `\equiv`, "defined by", \stackrel{def}{=})
+   is the marker. The R4 symbol table must accept display-math binder
+   sites.
+3. **Diagram DSLs are structured subterm territory.** The GrCalc
+   macros (\gbeg/\got/\gmu/\gcmu/\gbr/\glm/\gob...) are a typesetting
+   DSL for string diagrams — cells, wires, multiplications, braidings.
+   Subterm typing here = parsing the diagram grammar, not generic
+   macro-call spans. (Affinity note: these ARE wiring diagrams — the
+   paper's own idiom is the futon5 idiom; a GrCalc parser would land
+   diagram structure we already know how to consume.)
+
+- Site: 0809.2517 region 645–1239 ($$ display after "becomes an
+  algebra in \C with multiplication and unit").
+- Tags: `m` (missed display envelope, missed := bind), type-level.
+- Detector hook: MATH_BLOCK_RE extended to $$...$$/\[...\]/eqnarray
+  (R1b fix); := and friends inside display → bind scope on the LHS;
+  GrCalc grammar as a subterm parser (stretch).
+- Minted: 2026-06-12, live walk, voice ("now I'm going to mark a
+  large display").
