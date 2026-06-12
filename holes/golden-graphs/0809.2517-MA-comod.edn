@@ -52,18 +52,18 @@
    :form "Hopf algebra",
    :role :concept,
    :canon :pointer,
-   :satiety :full}
+   :satiety {:hungry-for :canon}}
   {:id :flat, :form "flat", :role :decorator, :satiety :full}
   {:id :algebra,
    :form "algebra",
    :role :concept,
    :canon :pointer,
-   :satiety :full}
+   :satiety {:hungry-for :canon}}
   {:id :left-module,
    :form "left module",
    :role :concept,
    :canon :pointer,
-   :satiety :full}
+   :satiety {:hungry-for :canon}}
   {:id :linear, :form "$X$-linear", :role :decorator, :satiety :full}
   {:id :display-1,
    :form "$$\\gbeg{4}{4}...$$",
