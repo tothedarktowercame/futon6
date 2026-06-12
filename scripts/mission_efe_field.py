@@ -18,6 +18,20 @@ ROADS = json.load(open(ROOT / "futon6/data/mission-carpet-roads.json"))
 OUT = ROOT / "futon6/data/mission-efe-field.html"
 bare = lambda k: k[2:] if k.startswith("M-") else k
 
+# Off-map minters: builder/* and external/* are NOT missions, so a claimed cap
+# minted only by them has no carpet position and would silently not render
+# (kit-observables and 10 others). Anchor a builder-minted claimed cap at the
+# mission that OWNS the builder — the faithful extension of the field semantic
+# "claimed cap at its minting mission". Only FINDABLE owners are mapped here;
+# ambiguous (builder/wm-*: four builders, no single owner) and external/* caps
+# (no host mission by nature — off-map terrain) are left unplaced and FLAGGED
+# for an operator semantics decision rather than guessed.
+BUILDER_HOST_MISSION = {
+    "builder/pudding-prover":    "M-pudding-peradams",
+    "builder/futon7-daily-scan": "M-daily-scan",
+    "builder/ct-prototype":      "M-symbol-grounding",
+}
+
 # Salingaros class (red=mess / green=alive / blue=pipeline / grey=stub) + phylogeny generativity
 CLS = dict(re.findall(r':mission "M-([^"]+)" :class :(\w+)', (ROOT / "futon6/data/mission-wholeness.edn").read_text()))
 _gblock = re.search(r':generativity-index \{([^}]*)\}', (ROOT / "futon6/data/mission-phylogeny.edn").read_text())
@@ -229,13 +243,40 @@ def starpoly(cx, cy, r, fill, stroke, label, title):
             f'<text x="{cx+r+4:.0f}" y="{cy+5:.0f}" fill="#ffe08a" font-size="13">{label}</text></g>')
 
 claimed = []
+offmap_unplaced = []                                             # claimed caps with no anchor — flagged, not silently dropped
+_placements = []                                                 # (cap, cx, cy, title) before de-overlap
 for cap, info in CAPS.items():
     if info["claimed"]:
         mp = [POS[mm] for mm in info["minted_by"] if mm in POS]
+        anchored_via = None
+        if not mp:                                              # off-map minter (builder/* or external/*)
+            hosts = [BUILDER_HOST_MISSION.get(mm) for mm in info["minted_by"]]
+            hosts = [h for h in hosts if h and h in POS]
+            mp = [POS[h] for h in hosts]
+            if mp:
+                anchored_via = "owning mission: " + ", ".join(hosts)
         if mp:
             cx = sum(p[0] for p in mp) / len(mp); cy = sum(p[1] for p in mp) / len(mp)
-            t = f"{cap} — CLAIMED ({info['status']}). {info.get('title','')[:120]} · minted by: {', '.join(info['minted_by'])}"
-            claimed.append(starpoly(cx, cy, 10, "#ffe08a", "#a8801f", cap, t.replace('"', "'")))  # FILLED = claimed
+            via = f" · anchored at {anchored_via}" if anchored_via else ""
+            t = f"{cap} — CLAIMED ({info['status']}). {info.get('title','')[:120]} · minted by: {', '.join(info['minted_by'])}{via}"
+            _placements.append((cap, cx, cy, t.replace('"', "'")))
+        else:
+            offmap_unplaced.append(cap)
+# De-overlap: caps sharing one anchor (the kit-* family all anchor at
+# M-pudding-peradams — the first co-location the field has, since a builder mints
+# several caps per mission) fan onto a small ring so each star LANDS distinctly
+# instead of stacking invisibly. Single-occupant points are unchanged.
+_by_pt = defaultdict(list)
+for pl in _placements:
+    _by_pt[(round(pl[1]), round(pl[2]))].append(pl)
+for grp in _by_pt.values():
+    if len(grp) == 1:
+        cap, cx, cy, t = grp[0]
+        claimed.append(starpoly(cx, cy, 10, "#ffe08a", "#a8801f", cap, t))      # FILLED = claimed
+    else:
+        for i, (cap, cx, cy, t) in enumerate(sorted(grp, key=lambda g: g[0])):  # ring fan-out, deterministic by name
+            a = 2 * math.pi * i / len(grp)
+            claimed.append(starpoly(cx + 18*math.cos(a), cy - 18*math.sin(a), 10, "#ffe08a", "#a8801f", cap, t))
 def cap_anchor(cap):  # centroid of the claimed ascent-parents' minting missions (a graph foothold)
     mp = []
     for p in CAPS[cap]["scope"]:
@@ -326,6 +367,9 @@ OUT.write_text(doc)
 print(f"wrote {OUT}")
 print(f"{len(scope_pts)} scopes / {len(hubs)} districts · {sum(1 for p in scope_pts if p[3])} holes · "
       f"{len(contour)} contour segs · {len(roads)} roads · 🌟{len(claimed)} ⭐{len(unclaimed)}")
+if offmap_unplaced:
+    print(f"⚠ {len(offmap_unplaced)} claimed cap(s) still off-map (no owning-mission anchor; "
+          f"operator semantics decision pending): {', '.join(sorted(offmap_unplaced))}")
 _top = sorted(MOM.items(), key=lambda kv: -kv[1])[:10]
 print("momentum (recent-git, top): " + ", ".join(f"{k[2:]}={v:.2f}" for k, v in _top))
 _p = POS.get("M-emacs-cursor-peripheral")
