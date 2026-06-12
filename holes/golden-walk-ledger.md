@@ -786,3 +786,25 @@ buried under macro confetti.
 
 WALK CLOSED. Net: R1-R15, W1-W2, the golden-graph ruling, the
 viability bar. One paper, one operator, ~30 minutes of voice.
+
+## R5/R15 amendment — the classification needs a TeX-primitive inventory (Joe, post-walk)
+
+"Anything that isn't mathematical might be a TeX primitive." A control
+sequence that is neither author-defined nor LaTeX/AMS may be plain
+TeX (\atop, \above, \kern, \hskip, \accent...). The classifier's
+decision order is therefore:
+
+1. in the eprint's own \newcommand/\def table → author-defined (R5;
+   semantic class layout|structural per R15);
+2. in the TeX-primitive/plain inventory → TeX layer (almost always
+   layout/engine — excluded from anatomy like R15 layout macros, but
+   a handful are MATH-structural: \atop, \over, \above, \choose,
+   \mathchoice — these decode to operations);
+3. in the LaTeX/AMS standard vocabulary → standard markup (env heads,
+   \frac, \mathcal...; math-structural subset joins the lexicon);
+4. none of the above → UNKNOWN, flag it (likely a missed macro file
+   or a package we did not sweep — an honesty bit, not a guess).
+
+Reference inventory captured: holes/golden-graphs/tex-plain-cseq.txt
+(322 letters-only control sequences, from
+https://www.tug.org/utilities/plain/cseq.html, fetched 2026-06-12).
