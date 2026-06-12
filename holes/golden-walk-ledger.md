@@ -496,3 +496,28 @@ what was authored.
   files); prose-word-before typing on refs; bibliography resolution +
   locus capture on cites; emit as hyperedges with anchored ends.
 - Minted: 2026-06-12, live walk, voice.
+
+## W1 — composition witness: "the left and right $A$-module structures of $A\# H$"
+
+Not a new rule — a nine-word phrase that composes five existing ones,
+making it the natural acceptance test for the next detector
+generation:
+
+- "left and right" = side-decorators (R10) DISTRIBUTING over a
+  conjunction → two concepts from one phrase;
+- "$A$-module structure" = parametrized concept (R9), parameter edge
+  to A's binder;
+- "of $A\# H$" = component-of construction (R11 family);
+- $A\# H$ = author-constructed object whose binder is the :=
+  string-diagram display (R6);
+- the payoff equation \nu_{A\# H}^A under \label{left-right mod
+  Asm.H} = the authored anchor (R12) for future refs.
+
+Acceptance bar: a detector run that produces the full hyperedge set
+for this ONE sentence — two decorator-distributed concept nodes, the
+parameter edges, the component-of edge into the smash product's
+display binder, and the label anchor — has implemented R6+R9+R10+R11+
+R12 correctly. Currently: marks nil across the whole line.
+
+- Site: 0809.2517 ~point 2640-2700.
+- Minted: 2026-06-12, live walk, voice.
