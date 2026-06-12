@@ -919,3 +919,27 @@ Consequences:
   feeding = active inference on the corpus.
 - Walk rules recast: R3 pointer = hungry-for-canon; R8 debt region =
   hungry-until-payoff; sorry typing = hunger typing. One vocabulary.
+
+## Depth ruling (Joe, voice, 16:04) — expressions are implementation details
+
+"Do we really need a better expression parser? Yes — if we were trying
+to build full wiring diagrams for every single expression. But we're
+not. We're trying to build MODELS OF WHAT'S IN THE PAPER. The
+expressions are implementation details. We can't leave out the key
+concepts, but we don't need every level of detail" (like the
+full-GrCalc-cell SVG).
+
+Revision to R14's operational target: the required depth is
+CONCEPT-LEVEL — every symbol in an expression identified and linked to
+its binder/concept; internal expression structure stays coarse
+(classified tokens, not parse trees). Full structural parsing is
+reserved for the few sites where construction IS the content
+(:= definition displays, R6). Consequently:
+- parse-hunger is re-weighted: an expression is full-enough when its
+  symbols are bound; {:hungry-for :parse} applies only to definition
+  sites left unparsed.
+- "Better expression parser" drops OFF the Phase L critical path; the
+  anatomy-v0 token census (classify every cseq, no tree) is already at
+  target depth.
+- The 21 parse-hungry nodes in the golden set should be re-read: most
+  are full-enough under this ruling.
