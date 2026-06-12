@@ -238,3 +238,39 @@ three questions (all verified in the eprint):
   symbol table (R4) + convention paragraphs (new); emit
   parse-incomplete on the envelope when any token fails to resolve.
 - Minted: 2026-06-12, live walk, voice.
+
+## R8 — symbols in section headings = forward declarations (promissory-bind)
+
+Specimen: "\subsection{The map $\Upsilon$ assigning an $H$-Galois
+object to an $H$-Azumaya algebra}" (0809.2517, ~point 309). Marks:
+nil. Joe, voice: "a symbol that may not be defined yet... maybe
+they're planning to define it."
+
+The heading introduces $\Upsilon$ BEFORE any definition — but it is
+not an orphan use: it is a *forward declaration*, and the heading
+even carries the TYPE: "the map ... assigning an H-Galois object to
+an H-Azumaya algebra" is literally a type signature,
+Υ : H-Azumaya → H-Galois, stated in prose before the term is
+constructed. That is exactly the sorry-arrow shape — type without
+term, with the section body as the scope that promises to discharge
+it.
+
+Fourth binder kind for the symbol table:
+- macro-def (R5) / semantic-bind (R2) / convention-bind (R7) /
+  **promissory-bind** (R8): bound by sectioning structure; carries a
+  prose type signature; DISCHARGED when a real definition site for
+  the symbol appears within the section extent; an undischarged
+  promissory-bind at section end is a genuine defect (promised, never
+  delivered).
+
+Bonus: this gives paper anatomy its proof-hole semantics for free —
+a section = a sorry being discharged in real time; heading = the
+:want, body = the construction. Papers and missions get the same
+shape (HEAD as satisfaction conditions).
+
+- Site: 0809.2517 ~point 309 (subsection heading).
+- Tags: `m` (heading scope + promissory-bind unmarked), type-level.
+- Detector hook: \section/\subsection titles parsed for $-spans →
+  promissory-bind entries typed by the surrounding prose; check
+  discharge within section extent.
+- Minted: 2026-06-12, live walk, voice.
