@@ -886,3 +886,36 @@ index and papers are occurrence sites. Consequences:
 
 Status: strategic coda of the walk; should shape the detector work
 order (registry-of-recognizers, not per-paper parser).
+
+**Unification (Joe): recognizers = scopes, with a satiety dimension.**
+"These 'recognisers' are what we have been calling 'scopes'. Sometimes
+they are HUNGRY (e.g. for definitions outside the paper), sometimes
+they are FULL, like 'let x be an element of X'."
+
+So the registry is not a new mechanism bolted onto scopes — it IS the
+scope system, corpus-lifted. A scope = a recognizer instance = a
+structure with typed slots; its state is its satiety:
+
+- **full** — every slot bound within the local extent ("let x be an
+  element of X": binder, ambient, done). Full scopes are supply: they
+  discharge obligations, they feed others.
+- **hungry** — one or more slots reach outside the local extent: R3
+  pointers awaiting canon links, R8 promissory debts awaiting payoff,
+  R7 parse-incomplete envelopes, UNKNOWN control sequences, R9
+  parameter edges whose binder lives elsewhere. Hunger is TYPED by
+  which slot is empty and where its food can come from (in-paper
+  later / another paper / canon / nowhere-yet).
+
+Consequences:
+- The priority queue is hunger-driven: a concept's importance ≈ how
+  many scopes corpus-wide are hungry FOR it. Mining = feeding. A
+  recognition event either instantiates a scope, feeds a hungry one,
+  or (golden walk) mints a new species.
+- This is the aliveness vocabulary landing in futon6: hungry scopes
+  are undischarged tension (anamnesis); feeding discharges it (mana
+  flow); the corpus-wide hunger field is the EFE landscape for
+  papers, computed not from counts-per-type but from actual unbound
+  slots. The AIF reading is exact: hunger = expected free energy;
+  feeding = active inference on the corpus.
+- Walk rules recast: R3 pointer = hungry-for-canon; R8 debt region =
+  hungry-until-payoff; sorry typing = hunger typing. One vocabulary.
