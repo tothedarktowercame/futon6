@@ -27,7 +27,11 @@ OUT_DIR = ROOT / "data" / "mission-triples"
 SCOPE_DETECT = ROOT / "scripts" / "mission_scope_detect.py"
 
 HEADER_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.M)
-CHECKPOINT_RE = re.compile(r"(?ims)^Checkpoint\s+(\d+)\s*(?:\(([^)]*)\))?:\s*(.*?)(?=^Checkpoint\s+\d+\s*(?:\([^)]*\))?:|\Z)")
+CHECKPOINT_RE = re.compile(
+    r"(?ims)^\s*(?:#{1,6}\s*)?(?:[-*]\s*)?Checkpoint\s+(\d+)\b"
+    r"\s*(?:\(([^)]*)\))?\s*:?\s*(.*?)"
+    r"(?=^\s*(?:#{1,6}\s*)?(?:[-*]\s*)?Checkpoint\s+\d+\b|\Z)"
+)
 STATUS_RE = re.compile(r"(?im)^\s*(?:\*\*)?Status(?:\*\*)?\s*:?\s*(.+)$")
 PATH_RE = re.compile(r"(?<![A-Za-z0-9_./-])(?:~?/)?(?:[A-Za-z0-9_.{}-]+/)+[A-Za-z0-9_.{}-]+\.(?:clj|cljs|cljc|py|edn|bb|el|json|md|html|css|ts|js|cert|svg|tex|sty)(?![A-Za-z0-9_.-])")
 SHA_RE = re.compile(r"\b[0-9a-f]{7,40}\b")
@@ -189,14 +193,31 @@ def clean_endpoint(s: str) -> str:
     return s[:160] or "unmined"
 
 
+def first_substantial_paragraph(text: str) -> str | None:
+    for para in re.split(r"\n\s*\n", text):
+        para = re.sub(r"\s+", " ", para).strip()
+        if len(para) >= 80 and not para.startswith("|"):
+            return para[:700]
+    return None
+
+
+def last_substantial_paragraph(text: str) -> str | None:
+    paras = []
+    for para in re.split(r"\n\s*\n", text):
+        para = re.sub(r"\s+", " ", para).strip()
+        if len(para) >= 80 and not para.startswith("|"):
+            paras.append(para[:700])
+    return paras[-1] if paras else None
+
+
 def mine_hole(text: str, sections: list[Section]) -> dict[str, Any]:
     derive_text, derive_title = phase_region(text, sections, "derive")
-    fallback_chunks = []
+    fallback_regions = []
     for p in ("head", "identify", "map"):
         region, _title = phase_region(text, sections, p)
         if region:
-            fallback_chunks.append(region)
-    source = derive_text or "\n".join(fallback_chunks)
+            fallback_regions.append((p, region))
+    source = derive_text or "\n".join(region for _phase, region in fallback_regions)
     explicit = re.search(
         r"(?:typed hole minted:\s*)?`?(?P<id>arr-[A-Za-z0-9-]+)`?.{0,260}?"
         r"have\s*[=`:]?\s*`?(?P<have>[A-Za-z0-9_.:/-]+)`?\s*(?:→|->|to)\s*want\s*[=`:]?\s*`?(?P<want>[A-Za-z0-9_.:/-]+)`?",
@@ -228,6 +249,20 @@ def mine_hole(text: str, sections: list[Section]) -> dict[str, Any]:
             "source-section": derive_title or "HEAD/IDENTIFY/MAP fallback",
             "via": re.sub(r"\s+", " ", (hw.group(0) + " " + wl.group(0))[:700]).strip(),
             "rule": "sortie-11/fallback-have-want",
+        }
+
+    fallback_by_phase = {phase: region for phase, region in fallback_regions}
+    have_quote = first_substantial_paragraph(fallback_by_phase.get("head", "")) or first_substantial_paragraph(fallback_by_phase.get("identify", ""))
+    want_quote = last_substantial_paragraph(fallback_by_phase.get("map", "")) or last_substantial_paragraph(fallback_by_phase.get("identify", ""))
+    if have_quote and want_quote:
+        return {
+            "confidence": kw("reconstructed-thin"),
+            "id": None,
+            "have": clean_endpoint(have_quote[:180]),
+            "want": clean_endpoint(want_quote[:180]),
+            "source-section": "HEAD/IDENTIFY/MAP fallback",
+            "via": f"HAVE quote: {have_quote} WANT quote: {want_quote}",
+            "rule": "sortie-11/fallback-chain-quoted",
         }
 
     head = sections[0].text if sections else text[:500]
@@ -387,7 +422,21 @@ def artifact_exists(artifact: dict[str, Any], roots: list[Path]) -> bool:
             candidates.append(CODE_ROOT / value)
             for root in roots:
                 candidates.append(root / value)
-        return any(p.exists() for p in candidates)
+        if any(p.exists() for p in candidates):
+            return True
+        if not value.startswith(("/", "~/")):
+            suffix = Path(value).as_posix()
+            for root in roots:
+                for dirname in ("src", "scripts", "resources"):
+                    base = root / dirname
+                    if not base.exists():
+                        continue
+                    try:
+                        if any(base.glob(f"**/{suffix}")):
+                            return True
+                    except OSError:
+                        continue
+            return False
     if artifact["kind"] == kw("commit"):
         for root in roots:
             try:
