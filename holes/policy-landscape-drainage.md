@@ -52,3 +52,48 @@ best-of-alternatives vs history. This is claude-1's circumstances-v1
 Owner: unassigned (candidate next-pass item once adapter + v1.1 miner
 land). The picture's name, for the file when it exists:
 pattern-drainage-field.html.
+
+## Three traps, folded in (critique round, 2026-06-12 evening — descending importance)
+
+**1. Fact-versus-model: only one direction of disagreement is
+informative.** The realized route has an OUTCOME; counterfactuals have
+only metric scores. Metric-prefers-alternative does NOT mean history
+was suboptimal — it marks a point where either the metric or the route
+is wrong, and retrodiction cannot say which. So the drainage field
+generates CALIBRATION FLAGS, not training labels. Guard explicitly
+against feeding metric-preferred counterfactuals into the prior as if
+they were better outcomes — that is CH1 self-reference re-entering
+through the retrodictive door (the prior would learn the metric's
+counterfactual tastes, not reality's). The honest training signal runs
+the OTHER way: where the metric scores the realized route poorly and
+it drained anyway, THE METRIC owes an update.
+Schema consequence: comparison output carries :flag
+{:metric-prefers-alt | :metric-disconfirmed-by-drainage}, never a
+:better-route label.
+
+**2. The training set is censored — drained basins only.** Learning
+from (basin, route, drained) is learning from won games: it can make
+successful drainage more efficient; it cannot teach which basins stay
+dry or which routes fail. Mine the NEGATIVE class: abandoned cascades,
+never-closed holes, moribund missions. The dry-basin corpus is already
+sitting in the miner's skip list (133 skipped-not-completed) plus the
+first :success false closure-fold record (its seed). Thinner data,
+honest class.
+
+**3. Non-stationarity: cascades reshape the terrain they drain.**
+Closing holes flips capabilities, mints patterns, changes precursor
+structure — the unlocking thesis itself. Realized routes drained PAST
+terrain; scoring alternatives against CURRENT topography compares
+incommensurables (some alternatives were unreachable then; some
+realized moves are unrepeatable now). Required: PALEO-TOPOGRAPHY —
+terrain state commit-pinned per basin at drainage time, reconstructed
+from git history (the retrospective-reconstruction lane already
+established commits as the temporal signal). The metaphor supports the
+fix: rivers carve canyons; real hydrologists reconstruct the old
+surface before judging the old channel.
+
+Build-order consequence: trap 3 makes terrain-pinning a PREREQUISITE
+of the comparison, not a refinement — without paleo-topography the
+flags of trap 1 are unreadable. Order: pin terrain per basin → run
+comparisons → emit flags (1) → grow the negative corpus (2) in
+parallel.
