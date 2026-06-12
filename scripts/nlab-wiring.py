@@ -107,8 +107,9 @@ SCOPE_REGEXES = [
     ("exists-binding", r"\bThere\s+(?:is|exists)\s+\$([^$]+)\$"),
     ("here-denotes", r"\b(?:Here\s+)?\$([^$]+)\$\s+denotes\s+([^.,$]+)"),
     ("is-called", r"\$([^$]+)\$\s+is\s+(?:called|defined as)\s+([^.,$]+)"),
-    ("typed-arrow", r"\$([^$]{1,120}?)\s*:\s*([^$]{1,220}?\\(?:to|ra|la|lra|rightarrow|leftarrow|leftrightarrow|longrightarrow|hookleftarrow|hookrightarrow|twoheadleftarrow|twoheadrightarrow|mapsto)[^$]{0,160})\$"),
-    ("arrow-expression", r"\$([^$]{1,240}?\\(?:to|ra|la|lra|rightarrow|leftarrow|leftrightarrow|longrightarrow|hookleftarrow|hookrightarrow|twoheadleftarrow|twoheadrightarrow|mapsto)[^$]{1,240})\$"),
+    ("display-typed-arrow", r"\\\[\s*([A-Za-z\\][^:\n]{0,80}?)\s*:\s*([^\]]{1,220}?\\(?:to|ra|la|lra|rightarrow|leftarrow|leftrightarrow|longrightarrow|hookleftarrow|hookrightarrow|twoheadleftarrow|twoheadrightarrow|mapsto)[^\]]{0,160}?)\s*\\\]"),
+    ("typed-arrow", r"\$((?:(?!\\\[|\n\s*\n)[^$]){1,120}?)\s*:\s*((?:(?!\\\[|\n\s*\n)[^$]){1,220}?\\(?:to|ra|la|lra|rightarrow|leftarrow|leftrightarrow|longrightarrow|hookleftarrow|hookrightarrow|twoheadleftarrow|twoheadrightarrow|mapsto)[^$]{0,160})\$"),
+    ("arrow-expression", r"\$((?:(?!\\\[|\n\s*\n)[^$]){1,240}?\\(?:to|ra|la|lra|rightarrow|leftarrow|leftrightarrow|longrightarrow|hookleftarrow|hookrightarrow|twoheadleftarrow|twoheadrightarrow|mapsto)[^$]{1,240})\$"),
     ("diagram-family", r"\b[Aa]\s+diagram[^.]{0,260}?\$([A-Za-z])\([^)]+\)\$"),
     ("diagram-named", r"\b(?:[Tt]he|[Aa])\s+diagram\s+\$([^$]+)\$\s+(?:is|are|be|called)"),
     ("assume", r"\b(Assume|Suppose)\s+(that\s+)?\$([^$]+)\$"),
@@ -152,6 +153,7 @@ CLASSICAL_TO_METATHEORY = {
     "choose-work-in": "assume/consider",
     "exists-binding": "quant/existential",
     "typed-arrow": "bind/typed",
+    "display-typed-arrow": "bind/typed",
     "arrow-expression": "bind/typed",
     "diagram-family": "bind/let",
     "diagram-named": "bind/let",
@@ -1325,6 +1327,9 @@ def detect_scopes(entity_id, text, parent_env_id=None):
             elif stype == "for-any":
                 ends.append({"role": "quantifier", "text": m.group(1)})
                 ends.append({"role": "symbol", "latex": m.group(2).strip()})
+            elif stype == "display-typed-arrow":
+                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "type", "text": m.group(2).strip()[:80]})
             elif stype == "typed-arrow":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "type", "latex": m.group(2).strip()[:120]})
