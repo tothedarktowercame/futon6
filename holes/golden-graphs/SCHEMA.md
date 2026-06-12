@@ -76,3 +76,24 @@ canon-hungry; `:bundling :unresolved` → bundling-hungry;
 The corpus-level hunger field (sum of hungry slots by concept) is the
 priority queue of the concept-driven mining plan (THE KILLER IDEA,
 golden-walk-ledger.md).
+
+## Mined mission-triple kinds (miner v1 — PINNED from measurement, fable-2 2026-06-12)
+
+What `scripts/mission_triple_miner.py` (`26564e7`) actually emits across all 80
+`data/mission-triples/*.edn` (measured, not specified — the input contract for the
+substrate-metric cascade adapter):
+
+- **Cascade nodes** `{:id :role :satiety :form :via :rule}` — roles: `:scope` (the per-mission
+  problem node, 80×) · `:concept` (patterns, 400×). Satiety values: `:full` (400×) ·
+  `{:hungry-for :parse}` (79×) · `{:hungry-for :payoff}` (1×) — all within the taxonomy above.
+- **Cascade hyperedges** `{:kind :ends :via :rule}` — kinds: **`:differentiates`** (400×) ·
+  **`:states`** (42×). End roles: `:context` · `:pattern` · `:problem`.
+  `:states` is in the controlled table; `:differentiates` is cascade-specific (a pattern
+  differentiates a problem context) and not absorbed by any of the 22 — left as its own kind.
+- **Wiring nodes** — role `:application` (checkpoints as witnessed applications), satiety `:full`.
+  **Wiring hyperedges** — kind **`:composes`** with `:from`/`:to` ends in authored checkpoint
+  order (also cascade/wiring-specific, not absorbed).
+- **NOT emitted by miner v1: `:jointly-with`.** It is spec vocabulary only; no v1 file contains
+  it. Adapters must not assume it. When it lands it is n-ary: clique-expand (symmetry-preserving),
+  never chain (chaining imposes an order the semilattice forbids) — claude-3's ruling, the
+  projection choice is the adapter owner's.
