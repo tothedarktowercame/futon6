@@ -691,3 +691,27 @@ merge.
 - Tags: `x` (invented marks on layout tokens), `i` (duplicate assume),
   type-level.
 - Minted: 2026-06-12, live walk, voice.
+
+## W2 — graph-vs-marks differential: the lemma picture audit
+
+For Lemma \label{M^A-comod} (0809.2517) Fable hand-drew the full
+anatomy graph (lemma-MA-comod-anatomy.svg, in golden/) by applying
+R2/R5/R9/R10/R11/R12/W1 to the region. Joe: "very beautiful... however
+I'm not confident that could be drawn directly from the marked-up
+terms." Audit confirms — it cannot:
+
+- Derivable from current marks: the two assume boundaries (duplicated)
+  and the display extent. ~2 of 12 nodes, 0 of 16 typed edges.
+- NOT derivable: the whole Let-binder block (zero marks on "Let $H \in
+  \C$ be a flat Hopf algebra..."!), all membership edges, the C^H
+  parametrization, the with-clause equipment edge, the A⊗Ā compound,
+  the ρ_M re-entry, the "that is" designation, the \label anchor.
+
+Verdict: the graph is a TARGET, not an output — golden data of a new
+kind (region-level, edge-complete, drawn by operator+agent judgment).
+The per-edge differential above is the work order; W1's sentence plus
+this lemma graph together are the acceptance suite. New finding folded
+in: "Let X be ..." binder sentences are completely dark — the single
+most standard binding construction in mathematics has no detector.
+
+- Minted: 2026-06-12, live walk, voice.
