@@ -331,3 +331,28 @@ symbol-lane reads it as untyped algebra.
   emit one compound scope spanning the whole construction.
 - Minted: 2026-06-12, live walk, voice (utterance truncated
   mid-clause; the connection-failure point was complete).
+
+**R9 naming + NER/concept split (Joe, voice):** the `$X$-` prefix is
+a **mathematical decorator**. "A mathematical decorator is actually
+an important part of the concept. It doesn't necessarily have to be
+part of the named entity — but it needs to be part of the concept,
+the mathematical concept."
+
+So the two layers come apart cleanly:
+- **named entity** (NER lane): the lexical head — "Galois object",
+  "Azumaya algebra". The term-spotter / NER kernel keeps matching on
+  these; decorators stay OUT of the entity dictionary (else the
+  dictionary fragments into every parametrization an author invents).
+- **concept** (graph lane): decorator INCLUDED — the node is
+  H-Azumaya-algebra-with-H-bound-to-this-paper's-H, i.e. the compound
+  of R9 with its parameter edge. Concepts are
+  decorator-qualified entities, and the papers↔concepts bipartite
+  graph must be built over THESE, not over bare entities — otherwise
+  two papers "share a concept" when one decorates over a Hopf algebra
+  and the other over a group, which is exactly the false-merge the
+  embedding continuum already suffers.
+
+Decorators also stack and iterate ($A\x A$-bimodule; right
+$H$-comodule algebra — side-decorators like "right"/"left" are
+decorators too, prose rather than $-form). Decorator grammar =
+(side|$X$|$X,Y$)-entity, recursive.
