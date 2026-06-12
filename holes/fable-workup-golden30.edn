@@ -1,0 +1,23 @@
+{:workup "fable-2 per-type, sampling depth"
+ :date "2026-06-12"
+ :papers ["0809.2517" "2310.17349"]
+ :verdicts
+ [{:type :T1 :verdict :unverified
+   :note "no repair log rendered on either paper — cannot distinguish 'no damage' from 'log omitted'; builder should render an explicit empty log"}
+  {:type :T2 :verdict :good-with-span-bleed
+   :examples ["GOOD: 'Azumaya algebra', 'Brauer group', 'termwise coprojection', 'elementary pushout square', '$\\cor$-motive of $x$'"
+              "BLEED: 'an {\\em azumaya algebra} if $f$ and $g$ are isomorphisms' — conditional clause inside the definiendum"
+              "BLEED: 'action by $h$ on an $h$-azumaya algebra $a$' — whole phrase as term"]}
+  {:type :T4 :verdict :SYSTEMATIC-FAIL
+   :note "339 + 239 amber marks, ALL distinct (each once) — matching arbitrary noun phrases, not concepts; real holes (closed braided monoidal category, Grothendieck categories, enriched functors) drowned ~10:1"
+   :examples ["'it also admits a structure'" "'such that\\nthe equalizer morphism'"
+              "'those\\ncomplexes'" "'paper is to recover the triangulated category'"]
+   :fix-direction "concept-shaped filter: noun phrase headed by a math kind-word (category/functor/algebra/group/sheaf/motive/...) or TitleCase term; reject fragments with verbs/sentence leakage; dedupe by normalized term"}
+  {:type :T5 :verdict :strong
+   :examples ["$A$ : Azumaya algebra" "$\\Gamma : \\Smk \\rightarrow \\Cor$ : functor"
+              "$D(\\Shv_{tr})$ : derived category"]}
+  {:type :T7 :verdict :inconsistent
+   :note "title card present on 1312.2127 but census/signature absent on both workup papers — integration partial or data-dependent; must render on every page"}
+  {:type :T11 :verdict :new-type
+   :note "0506470 is a file-compendium artifact; classify, don't anatomize"}]
+ :stress-test-instruction "Codex proofreaders' findings are CALIBRATED against these verdicts: a proofreader who reports T4 noise paper-by-paper without naming the systematic pattern scores lower than one who generalizes; T5 strength means bind findings should be RARE — many bind findings signals proofreader over-flagging."}

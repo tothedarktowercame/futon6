@@ -149,7 +149,20 @@ def main() -> None:
         rec = json.loads(slice_path.read_text())
         scopes = rec.get("scopes", [])
         if p["total"] is None:
-            p = dict(p, total=len(scopes), inhabited="·", outer="·", straddled="·")
+            iv = sorted(((sc.get("hx/content") or {}).get("position"),
+                         (sc.get("hx/content") or {}).get("end"))
+                        for sc in scopes
+                        if (sc.get("hx/content") or {}).get("end") is not None)
+            dd = {}
+            stack = []
+            for pos, end in iv:
+                while stack and not (stack[-1][0] <= pos and end <= stack[-1][1]):
+                    stack.pop()
+                depth = len(stack) + 1
+                dd[str(depth)] = dd.get(str(depth), 0) + 1
+                stack.append((pos, end))
+            p = dict(p, total=len(scopes), inhabited="·", outer="·", straddled="·",
+                     depth_distribution=dd)
         mix = Counter(s.get("hx/type", "?") for s in scopes)
         skel = [s for s in scopes if str(s.get("hx/type", "")).startswith(SKELETON_PREFIXES)]
         roots = build_tree(skel)
@@ -182,8 +195,8 @@ def main() -> None:
 Stage-3 repair parse rate <b>{repair['stage3']['parse_rate']:.2%}</b> ({repair['stage3']['parsed_ok']}/{repair['stage3']['reparsed']},
 clipped-JSON salvage per futon6 PR #49). This sample: the run's own <b>{audit['sample_size']}-paper scope audit</b>,
 each rendered as a binder skeleton (bind/*, constrain/*, comment/*) over its positional scope nesting.
-Sibling atlas: <a href="../proof-anatomy/index.html">First Proof anatomy</a> — same visual grammar,
-prelim proofs beside CT papers. Generated {generated}.</p></header>
+Sibling atlas: <a href="../proof-anatomy/index.html">First Proof anatomy</a> — same visual grammar
+(the 489-problem PRELIM atlas, which the audits say has the best coverage, is a to-build). Generated {generated}.</p></header>
 <main><table><thead><tr><th>paper</th><th>scopes</th><th>inhabited</th><th>outer</th><th>straddled</th>
 <th>depth</th><th>binder skeleton (top)</th></tr></thead><tbody>{''.join(rows)}</tbody></table></main>""")
     print(f"wrote {OUT_DIR}/index.html + {len(rows)} paper pages")
