@@ -110,3 +110,38 @@ is then the real orphan.
 - Detector hook: tokenize ALL $...$ spans regardless of length; build
   per-paper symbol table from R2 bind sites; emit use→binder edges.
 - Minted: 2026-06-12, live walk, voice ("a serious bugbear").
+
+## R5 — author-defined macros are a special definition type (macro-def)
+
+`\C` is not primitive notation: the eprint defines it —
+`\newcommand{\C}{{\mathcal C}}` (0809.2517, beseq2.tex:65). "This type
+of author-defined macro should become a special type of definition
+because we want to know what's going on with author-defined symbols"
+(Joe, voice).
+
+So a symbol like \C carries a TWO-TIER definition chain, and the
+anatomy should show both tiers:
+
+1. **macro-def** (lexical binder) — the preamble \newcommand /\def /
+   \DeclareMathOperator: pure notation, maps surface form to TeX
+   right-hand side. Lives outside the running prose, often in a .sty
+   or a preamble-only .tex file.
+2. **semantic bind** (R2) — the prose site that gives the symbol its
+   mathematical content ("$\C$ is a closed braided monoidal
+   category ...").
+
+The R4 symbol table gains a notation column: symbol → macro-def site
++ RHS → semantic binder → uses. Author-defined symbols are exactly the
+ones that can NEVER resolve via canon (no nLab page for \C) — their
+entire meaning is intra-paper, which is why the chain must be complete:
+an author-defined macro with a macro-def but no semantic bind is a
+genuine orphan, the inverse failure of R3's pointer.
+
+- Site: 0809.2517 (\C used at ~point 173; defined beseq2.tex:65).
+- Detector hook: parse \newcommand/\renewcommand/\def/
+  \DeclareMathOperator across ALL files in the eprint (including .sty)
+  into macro-def scopes; join to the symbol table by surface form.
+- Note: the fresh extractor flattens multi-file eprints — macro-defs
+  in non-main files (here beseq2.tex feeding Galois2.tex) must still
+  be swept.
+- Minted: 2026-06-12, live walk, voice.
