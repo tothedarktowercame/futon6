@@ -80,3 +80,33 @@ state, not a detection kind.
 - Verdict: golden mark CORRECT (true positive for the concept-shaped
   filter — the ≥2-occurrence dedupe and kind-word head both behaved).
 - Minted: 2026-06-12, live walk, voice.
+
+## R4 — bound-symbol occurrences: mexpr mark + use→binder edge (BUGBEAR)
+
+Specimen: the `$\C$` in "the braiding of $\C$ is $H$-linear" carries
+NO mark at all — overlays-at returns nil. Two stacked violations:
+
+1. **R1 violation at detection level:** short single-symbol spans
+   (`$\C$`, `$H$`) get no mexpr envelope. Every $-span is a
+   math-expression scope — no length exemption.
+2. **Missing use→binder edge:** `\C` is *defined in this very
+   paragraph* ("$\C$ is a closed braided monoidal category ...", the
+   R2 bind site ~30 chars earlier). A symbol occurrence whose binder
+   exists in-paper should link to it. "According to the structure of
+   the paper... it says right what it is in this paragraph" (Joe,
+   voice). This is the golden-30 expectation stated at mint time —
+   "I'd expect *all symbols* to have definitions" — now witnessed
+   failing on the simplest possible case.
+
+The symbol table is the missing artifact: per paper, every bound
+symbol ($\C$, $H$, $\Upsilon$, ...) with its binder site, and every
+occurrence carrying an edge back. Same shape as R3's pointer/canon
+split, but *intra-paper*: occurrence = pointer, binder = the in-paper
+canon. A symbol occurrence with NO in-paper binder and NO canon link
+is then the real orphan.
+
+- Site: 0809.2517 point ~173.
+- Tags: `m` (missed mexpr on $\C$ and $H$), type-level.
+- Detector hook: tokenize ALL $...$ spans regardless of length; build
+  per-paper symbol table from R2 bind sites; emit use→binder edges.
+- Minted: 2026-06-12, live walk, voice ("a serious bugbear").
