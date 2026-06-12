@@ -417,3 +417,44 @@ Two layers:
 - Detector consequence: with-clause conjuncts get concept marks
   ALWAYS (pointer at minimum); the with-edge carries a bundling slot
   {bundled | property | supplied | unresolved}.
+
+## R11 — "this is why we really need hypergraphs": qualification re-enters built structure
+
+Specimen: "the braiding of $\C$ is $H$-linear" (0809.2517, §2
+assumption, final conjunct). Joe, voice: "We could have represented
+this whole sentence with the S-expression parse tree, but this kind
+of statement — the braiding of C is H-linear — is going BACK INTO
+that structure and qualifying it. You could write that down as an
+S-expression, but it's really a bit heavy."
+
+Two findings, one representational and one binder-taxonomic:
+
+1. **Fifth binder kind — decorator-bind:** "the braiding of $\C$" is
+   a use whose binder is a DECORATOR. No symbol was ever assigned to
+   the braiding; it exists in scope only because the "braided" in
+   "closed braided monoidal category" supplies an implicit component
+   (canonically c). Decorators don't just qualify concepts — they
+   introduce nameable structure into scope. Binder taxonomy now:
+   macro-def / semantic-bind / convention-bind / promissory-bind /
+   **decorator-bind** (component supplied by a decorator, referenced
+   by "the <component> of <object>").
+2. **The anatomy's native representation is a hypergraph, not a parse
+   tree.** The sentence parses as a tree, but this conjunct reaches
+   back into structure built earlier in the same sentence (into the
+   decorator tower's interior!) and qualifies it. As a 3-ary
+   hyperedge: ends = {braiding-component (via decorator-bind into
+   \C's tower), H (via semantic-bind), linearity (concept/canon)} —
+   flat, local, cheap. As an S-expression: paths into a re-entrant
+   tree — "a bit heavy" = the encoding cost of forcing cross-links
+   through tree locality. This is the formal license for what the
+   scopes.json ends/roles structure already gestures at, and it is
+   exactly Arxana's native store (relations over anchored ends;
+   substrate-2 = relations). Paper anatomy lands in the hypergraph,
+   not in a treebank.
+
+- Tags: type-level (representation + binder kind).
+- Detector hook: "the <noun> of $X$" resolved against X's decorator
+  tower (component lexicon per decorator: braided→braiding,
+  monoidal→tensor/unit, closed→internal hom); constraint conjuncts
+  emitted as n-ary hyperedges with role-typed ends.
+- Minted: 2026-06-12, live walk, voice.
