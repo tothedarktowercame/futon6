@@ -356,3 +356,32 @@ Decorators also stack and iterate ($A\x A$-bimodule; right
 $H$-comodule algebra — side-decorators like "right"/"left" are
 decorators too, prose rather than $-form). Decorator grammar =
 (side|$X$|$X,Y$)-entity, recursive.
+
+## R10 — with-clauses are capability decorators; assumptions want a dependency map
+
+Specimen: "$\C$ is a closed braided monoidal category with equalizers
+and coequalizers" (0809.2517, the §2 assumption).
+
+1. **Adjective stacks are decorator towers** — closed ∘ braided ∘
+   monoidal (category): prefix prose decorators, each independently
+   canon-resolvable, extending R9's grammar
+   (adj* (side|$X$)-entity (with-clause)?).
+2. **"with X and Y" is a CAPABILITY decorator** — not what the object
+   is but structure it is required to HAVE, i.e. resources the
+   section's proofs will consume (equalizers/coequalizers get used in
+   specific constructions, not everywhere).
+3. **The author announces a dependency map and leaves it implicit:**
+   "Nevertheless, for some of the results not all of the assumptions
+   will be necessary." Each assumption (closedness, braiding,
+   (co)equalizers, flatness, H-linearity of braiding) is a separate
+   obligation with its own set of consuming results. The anatomy
+   should carry assumption → consuming-result edges; the author's own
+   sentence is the license to build them. This is the with-clause's
+   payoff: capability decorators are exactly the assumption units the
+   dependency map is over.
+
+- Tags: type-level (decorator grammar extension + new edge family).
+- Detector hook: with-clause parser on bind sites; assumption units
+  individuated per conjunct; (stretch) result-side consumption mining
+  ("since \C has equalizers...", "by closedness...").
+- Minted: 2026-06-12, live walk, voice.
