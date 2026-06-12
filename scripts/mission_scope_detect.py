@@ -266,6 +266,7 @@ def pattern_slots(text: str, pattern_index: dict[str, str]) -> list[dict]:
                     "role": "pattern",
                     "ident": name,
                     "ref": pattern_index[name],
+                    "offset": m.start(),
                 }
             )
             seen.add(name)
@@ -486,10 +487,22 @@ def detect_mission_scopes(
         if cap_slots and ("capab" in title_low or phase_ctx in {"identify", "map", "derive"}):
             sub_binders.append(("capability-scope", cap_slots, phase_ctx))
 
+        # Pattern cites: one scope PER cite, anchored at the cite-site (the
+        # inline-closure idiom). Per-bullet anchors are what mission-mode
+        # renders and what cascade reassembly orders by; a single positionless
+        # rollup loses both (WM piloted flight 2026-06-12, sortie 5).
         pat_slots = [slot for slot in pattern_slots(sec.text, pattern_index) if slot["ident"] not in seen_patterns]
-        if pat_slots:
-            seen_patterns.update(slot["ident"] for slot in pat_slots)
-            sub_binders.append(("pattern", pat_slots, phase_ctx))
+        for slot in pat_slots:
+            seen_patterns.add(slot["ident"])
+            offset = slot.pop("offset", 0)
+            pos = sec.content_start + offset
+            window = sec.text[max(0, offset - 200):offset + 200]
+            ends = [slot] + find_concepts(window, kernel_terms)
+            scope = make_scope(entity_id, idx, "pattern", outer_parent,
+                               f"pattern: {slot['ident']}", phase_ctx,
+                               pos, pos + len(slot["ident"]), ends)
+            scopes.append(scope)
+            idx += 1
 
         if is_map_item(phase_ctx, sec):
             map_ends = [{"role": "map-item", "title": sec.title}]
