@@ -13,8 +13,7 @@
    :form "\\begin{prop}...\\end{prop}"
    :role :environment
    :decode "\\newtheorem{prop}[equation]{Proposition} (1312.2127.tex:29)"
-   :cseq-classes [{:cseq "\\begin" :decision-step 3 :class :latex-standard}
-                  {:environment "prop" :decision-step 1 :class :author-defined :source "1312.2127.tex:29"}]
+   :cseq-classes [{:environment "prop" :decision-step 1 :class :author-defined :source "1312.2127.tex:29"}]
    :via "\\begin{prop}"
    :rule :R5}
   {:id :cite-MK
@@ -38,7 +37,8 @@
    :role :mexpr
    :parse-incomplete false
    :tokens ["\\mathcal" "{" "D" "}"]
-   :cseq-classes [{:cseq "\\mathcal" :decision-step 3 :class :latex-standard :role :alphabetic-style}]
+   :cseq-classes [{:cseq "\\mathcal" :decision-step 4 :class :UNKNOWN
+                   :reason "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}]
    :via "$\\mathcal{D}$"
    :rule :R14}
   {:id :pretriangulated-dg-category
@@ -52,7 +52,8 @@
    :form "$\\epsilon$"
    :role :symbol
    :binder :semantic-bind
-   :cseq-class {:cseq "\\epsilon" :decision-step 3 :class :latex-ams-standard :role :math-symbol}
+   :cseq-class {:cseq "\\epsilon" :decision-step 4 :class :UNKNOWN
+                :reason "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}
    :via "then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
    :rule :R2}
   {:id :dg-functor
@@ -65,7 +66,8 @@
    :form "\\to"
    :role :operator
    :canon :arrow
-   :cseq-class {:cseq "\\to" :decision-step 3 :class :latex-ams-standard :role :arrow}
+   :cseq-class {:cseq "\\to" :decision-step 2 :class :latexml-standard-math :role :ARROW
+                :source "latexml-math-roles.tsv:876"}
    :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
    :rule :R14}
   {:id :typed-colon
@@ -97,9 +99,12 @@
    :role :mexpr
    :parse-incomplete false
    :tokens ["\\epsilon" ":" "\\mathcal" "{" "D" "}" "\\to" "PreTr" "(" "\\mathcal" "{" "D" "}" ")"]
-   :cseq-classes [{:cseq "\\epsilon" :decision-step 3 :class :latex-ams-standard :role :math-symbol}
-                  {:cseq "\\mathcal" :decision-step 3 :class :latex-standard :role :alphabetic-style}
-                  {:cseq "\\to" :decision-step 3 :class :latex-ams-standard :role :arrow}]
+   :cseq-classes [{:cseq "\\epsilon" :decision-step 4 :class :UNKNOWN
+                   :reason "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}
+                  {:cseq "\\mathcal" :decision-step 4 :class :UNKNOWN
+                   :reason "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}
+                  {:cseq "\\to" :decision-step 2 :class :latexml-standard-math :role :ARROW
+                   :source "latexml-math-roles.tsv:876"}]
    :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
    :rule :R14}
   {:id :quasi-equivalence
