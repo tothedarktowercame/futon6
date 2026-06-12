@@ -584,3 +584,43 @@ discharge scopes 1,2,3 → promise closed.
   obligation nodes + "prove i)" anaphora resolution to item anchors;
   emit goal/decomposes-into/discharges hyperedges.
 - Minted: 2026-06-12, live walk, voice.
+
+## R14 — math lexemes: $-span contents are compositional expressions, not opaque tokens
+
+Specimen: `$(A\# H)^A$` in obligation 3)'s context (and `$can_{(A\#
+H)^A}$`). Joe, voice: "we have a failure if we have symbols marked up
+inside dollar signs and we cannot detect those symbols or understand
+how they relate to each other with our NLP... it's just sitting there
+not marked up and I find that really offensive to my senses — we're
+meant to be doing NLP FOR MATHEMATICS and yet we're not actually
+marking up the mathematical lexemes."
+
+The requirement, stated plainly: every $-span parses as a
+compositional expression over the symbol table. `$(A\# H)^A$` is not
+a glyph — it is (superscript-A applied to (smash-product A H)):
+
+- `A`, `H` → their semantic binds (R2);
+- `\#` (smash) → the operation DEFINED by the := display (R6) — so
+  the compound A\# H resolves to its construction site;
+- `(-)^A` → an OPERATOR with its own binder: notation in the
+  invariants/coinvariants family the paper develops ("the object of
+  $H$-coinvariants of $M$ is the equalizer:" — Galois2.tex:46, a
+  semantic bind for the coinvariants functor; the superscript form is
+  its notational shadow, convention-bound).
+
+So operators — superscripts, subscripts, infix marks like \# and
+\ot — are lexemes with binders, same as letter symbols. The math
+lexicon = letter symbols + operator symbols + decorators, ALL rows in
+the R4 symbol table, and an mexpr parse = a small expression tree
+whose every leaf and every internal node resolves to a table row (or
+the envelope carries R7's parse-incomplete). THIS is what "NLP for
+mathematics" means at the token level; prose NLP with opaque math
+blobs is NLP for the prose around mathematics.
+
+- Tags: `m`/`i`, type-level; severity: foundational ("offensive to my
+  senses" — the mission statement violated, not a corner case).
+- Detector hook: expression grammar over the macro-table alphabet
+  (precedence: grouping, sub/superscript, infix \ot/\#/\x, relations
+  =/\in/\iso); leaves and operators join the symbol table; compounds
+  resolve to construction sites when one exists (:= displays, R6).
+- Minted: 2026-06-12, live walk, voice.
