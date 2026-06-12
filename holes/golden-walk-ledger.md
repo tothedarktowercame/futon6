@@ -624,3 +624,33 @@ blobs is NLP for the prose around mathematics.
   =/\in/\iso); leaves and operators join the symbol table; compounds
   resolve to construction sites when one exists (:= displays, R6).
 - Minted: 2026-06-12, live walk, voice.
+
+## Walk verdict (Joe, voice, ~15:22): half of one paper sufficed
+
+"I almost think I've said everything there is to say at this point by
+looking at about half of one paper... we've marked up some stuff and
+not other stuff in a way that's quite arbitrary."
+
+The meta-finding: current coverage is ARBITRARY — the boundary between
+marked and unmarked tracks detector accidents (regex reach, span
+length, inline-vs-display, which lane saw the token first), not any
+property of the mathematics. A reader cannot infer from a missing
+mark that nothing is there, nor from a present mark that it is
+understood (R7). Arbitrary coverage is worse than sparse-but-principled
+coverage because it cannot be reasoned about.
+
+What the walk produced (one §, paper 0809.2517, ~25 minutes of voice):
+- R1–R14 + W1: an expression grammar requirement (R14), a five-kind
+  binder taxonomy (macro-def / semantic / convention / promissory /
+  decorator), a decorator grammar with capability with-clauses and
+  zip semantics, debt-region scopes, honesty bits (parse-incomplete,
+  bundling-unresolved), the authored-layer harvest (\ref/\cite/
+  respectively/proof discourse), and hypergraph-as-native-form (R11).
+- The acceptance test: W1's nine-word sentence.
+- The build order is essentially: (1) macro-def sweep → symbol table;
+  (2) expression grammar over that alphabet; (3) authored-layer
+  harvest; (4) binder chain + decorator grammar; (5) proof discourse.
+  Steps 1–3 are mechanical; 4–5 are where the NLP actually lives.
+
+Status: ledger = the spec for the next detector generation, minted
+from live operator walk rather than from detector introspection.
