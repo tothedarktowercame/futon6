@@ -135,6 +135,40 @@ def collect_marks(text, defs, holes, scopes):
     return marks
 
 
+SUBTERM_COLORS = {"math/typed-arrow": "#008080", "math/membership": "#7851a9",
+                  "math/subscript": "#8b008b", "math/superscript": "#8b008b",
+                  "math/constructor-declaration": "#cc5500",
+                  "math/grounded-symbol": "#b22222", "math/group": "#704214",
+                  "math/macro-call": "#666"}
+
+
+def math_expression_layer(eid, text):
+    """Golden rule 1 (Joe, 2026-06-12): anything between dollar signs is a
+    math-expression scope, and it should have subterms. Envelopes from the
+    $...$ blocks; typed subterms nested inside at absolute positions."""
+    exprs = []
+    for m in re.finditer(r"\$([^$]{1,300})\$", text):
+        exprs.append({"start": m.start(), "end": m.end(), "subterms": []})
+    sub_all = []
+    for det in ("detect_math_scopes", "detect_math_scopes_ast"):
+        fn = getattr(nw, det, None)
+        if fn:
+            sub_all.extend(fn(eid, text) or [])
+    by_start = sorted(exprs, key=lambda e: e["start"])
+    import bisect
+    starts = [e["start"] for e in by_start]
+    for s_ in sub_all:
+        c = s_.get("hx/content") or {}
+        pos, end = c.get("position"), c.get("end")
+        t = str(s_.get("hx/type", ""))
+        if pos is None or end is None or t == "math/envelope":
+            continue
+        i = bisect.bisect_right(starts, pos) - 1
+        if i >= 0 and end <= by_start[i]["end"]:
+            by_start[i]["subterms"].append((pos, min(end, pos + 80), t))
+    return by_start
+
+
 CLS = {"defined": "background:#d3f3df;border-bottom:2px solid #0f766e",
        "hole": "background:#fdf3d7;border-bottom:2px dashed #9a7b1a",
        "bind": "background:#dde7fb;border-bottom:2px solid #2a4d9a"}
@@ -151,14 +185,42 @@ def render(pid):
     defs = mine_definienda(text, envs)
     holes = concept_holes(text, defs)
     marks = collect_marks(text, defs, holes, scopes)
+    exprs = math_expression_layer(eid, text)
+    expr_events = {e["start"]: e for e in exprs}
     out, pos, last = [], 0, 0
     n_used = Counter()
-    for s, e, kind, tip in marks:
-        if s < last:
+
+    def emit_expr(e):
+        seg, p = [], e["start"]
+        subs = sorted(set(e["subterms"]))
+        s_last = e["start"]
+        for sp, se, st in subs:
+            if sp < s_last:
+                continue
+            seg.append(esc(text[p:sp]))
+            color = SUBTERM_COLORS.get(st, "#555")
+            seg.append(f'<span style="color:{color};font-weight:600" '
+                       f'title="{esc(st)}">{esc(text[sp:se])}</span>')
+            p = se; s_last = se
+        seg.append(esc(text[p:e["end"]]))
+        n_used["mexpr"] += 1
+        return (f'<span style="background:#eef0f7;border-radius:3px" '
+                f'title="math expression ({len(subs)} subterms)">{"".join(seg)}</span>')
+
+    events = sorted(set([m[0] for m in marks] + list(expr_events)))
+    midx = {m[0]: m for m in marks}
+    for start in events:
+        if start < last:
             continue
-        out.append(esc(text[pos:s]))
-        out.append(f'<span style="{CLS[kind]}" title="{esc(tip)}">{esc(text[s:e])}</span>')
-        pos = e; last = e; n_used[kind] += 1
+        out.append(esc(text[pos:start]))
+        if start in midx and (start not in expr_events or midx[start][1] >= expr_events[start]["end"]):
+            s_, e_, kind, tip = midx[start]
+            out.append(f'<span style="{CLS[kind]}" title="{esc(tip)}">{esc(text[s_:e_])}</span>')
+            pos = e_; last = e_; n_used[kind] += 1
+        elif start in expr_events:
+            e = expr_events[start]
+            out.append(emit_expr(e))
+            pos = e["end"]; last = e["end"]
     out.append(esc(text[pos:]))
     census = Counter(e["hx/type"].removeprefix("env-tex/") for e in envs
                      if e["hx/type"].removeprefix("env-tex/") in
@@ -175,7 +237,7 @@ pre{{white-space:pre-wrap;font:inherit}}.card{{border:2px solid #0f766e;border-r
 <b>Census:</b> {esc(", ".join(f"{k}×{v}" for k, v in census.most_common()))}<br>
 <b>Top external concepts (holes, deduped, ≥2 occurrences):</b> {esc(top_holes)}<br>
 <b>Repair log:</b> {rep_html}<br>
-<b>Marks:</b> {n_used['defined']} defined · {n_used['hole']} holes ({len(holes)} distinct) · {n_used['bind']} binds</div>
+<b>Marks:</b> {n_used['defined']} defined · {n_used['hole']} holes ({len(holes)} distinct) · {n_used['bind']} binds · {n_used['mexpr']} math expressions</div>
 <p><span style="{CLS['defined']}">defined in-paper</span> ·
 <span style="{CLS['hole']}">needs canon link</span> ·
 <span style="{CLS['bind']}">typed bind</span> ·

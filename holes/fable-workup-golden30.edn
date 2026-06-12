@@ -21,3 +21,8 @@
   {:type :T11 :verdict :new-type
    :note "0506470 is a file-compendium artifact; classify, don't anatomize"}]
  :stress-test-instruction "Codex proofreaders' findings are CALIBRATED against these verdicts: a proofreader who reports T4 noise paper-by-paper without naming the systematic pattern scores lower than one who generalizes; T5 strength means bind findings should be RARE — many bind findings signals proofreader over-flagging."}
+;; GOLDEN WALK RULES (operator, accumulating)
+;; R1 (Joe, 2026-06-12): "anything in between dollar signs should be treated
+;; as a 'math expression' scope and should probably have some subterms."
+;; Implemented in build_fable_golden; display-math blocks (\[..\],
+;; eqnarray/align/gathered) are the natural R1b extension, not yet ruled.
