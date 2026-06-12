@@ -742,3 +742,18 @@ Two disciplines follow:
 This is we-do-discipline applied to markup: the demo voice ("we can
 draw anatomy graphs") must not launder the prior ("Fable can draw
 anatomy graphs") into a capability claim about the pipeline.
+
+## RULING — the golden IS the graph (Joe, voice, walk close)
+
+"That's the golden. There's your golden. You've just drawn it
+yourself. That's your golden — it should ALL look like that."
+
+The golden data format is hereby the edge-complete anatomy graph, not
+the span list. Span-level marks are an intermediate representation;
+gold = nodes (symbols/compounds/concepts/decorators/displays/anchors)
++ role-typed hyperedges (bind/equips/assume/parametrizes/built-from/
+designates/anchors/...), per region. First instance:
+holes/golden-graphs/0809.2517-MA-comod.edn (the SVG is its rendering).
+Detector acceptance = machine round-trip from a marks file to this
+edge set (W2). The golden-30 deliverable is reframed: graphs for
+calibration regions, spans only as scaffolding.

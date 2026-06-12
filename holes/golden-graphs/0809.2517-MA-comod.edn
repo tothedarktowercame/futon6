@@ -1,0 +1,64 @@
+;; GOLDEN anatomy graph — Lemma \label{M^A-comod}, arXiv 0809.2517.
+;; Ruled golden by Joe, live walk 2026-06-12: "That's the golden.
+;; You've just drawn it yourself. It should all look like that."
+;; The SVG (data/showcases/ct-anatomy/golden/lemma-MA-comod-anatomy.svg)
+;; is the rendering; THIS file is the data. Acceptance = a detector run
+;; whose marks file machine-round-trips to this edge set (W2 standard).
+{:paper "0809.2517"
+ :region {:label "M^A-comod" :approx-chars [10300 10560]}
+ :nodes
+ [{:id :H      :form "$H$"        :role :symbol  :binder :semantic-bind}
+  {:id :A      :form "$A$"        :role :symbol  :binder :semantic-bind}
+  {:id :M      :form "$M$"        :role :symbol  :binder :semantic-bind}
+  {:id :rho-M  :form "$\\rho_M$"  :role :symbol  :binder :semantic-bind
+   :type "M \\to M \\ot H"}
+  {:id :C      :form "$\\C$"      :role :symbol  :binder :semantic-bind
+   :bound-at :section-2-assumption}
+  {:id :C-H    :form "$\\C^H$"    :role :compound
+   :decode "right H-comodules in C (superscript decorator)"}
+  {:id :A-bar  :form "$\\crta{A}$" :role :compound
+   :decode "\\crta = \\overline (beseq2.tex:82)"}
+  {:id :AxAbar :form "$A \\otimes \\crta{A}$" :role :compound}
+  {:id :hopf-algebra :form "Hopf algebra" :role :concept :canon :nlab}
+  {:id :flat   :form "flat"        :role :decorator}
+  {:id :algebra :form "algebra"    :role :concept :canon :nlab}
+  {:id :left-module :form "left module" :role :concept :canon :nlab}
+  {:id :linear :form "$X$-linear"  :role :decorator}
+  {:id :display-1 :form "$$\\gbeg{4}{4}...$$" :role :display
+   :decode "GrCalc: l-action then coaction = coaction then l-action"}
+  {:id :anchor :form "\\label{M^A-comod}" :role :anchor}]
+ :hyperedges
+ [{:kind :bind     :ends [{:role :subject :node :H}
+                          {:role :concept :node :hopf-algebra}
+                          {:role :decorator :node :flat}
+                          {:role :ambient :node :C}]
+   :via "Let $H \\in \\C$ be a flat Hopf algebra"}
+  {:kind :bind     :ends [{:role :subject :node :A}
+                          {:role :concept :node :algebra}
+                          {:role :ambient :node :C}]
+   :via "$A\\in\\C$ an algebra"}
+  {:kind :bind     :ends [{:role :subject :node :M}
+                          {:role :ambient :node :C-H}]
+   :via "$M\\in \\C^H$"}
+  {:kind :parametrizes :ends [{:role :parameter :node :H}
+                              {:role :compound :node :C-H}]}
+  {:kind :equips   :ends [{:role :object :node :M}
+                          {:role :equipment :node :rho-M}]
+   :via "with structure morphism" :rule :R10}
+  {:kind :built-from :ends [{:role :part :node :A}
+                            {:role :part :node :A-bar}
+                            {:role :whole :node :AxAbar}]}
+  {:kind :assume   :ends [{:role :subject :node :M}
+                          {:role :parameter :node :AxAbar}
+                          {:role :concept :node :left-module}]
+   :via "Assume that $M$ is a left $A \\otimes \\crta{A}$-module"}
+  {:kind :assume   :ends [{:role :subject :node :rho-M}
+                          {:role :parameter :node :AxAbar}
+                          {:role :concept :node :linear}]
+   :re-entry true :rule :R11
+   :via "$\\rho_M$ is $A \\otimes \\crta{A}$-linear"}
+  {:kind :designates :ends [{:role :prose :node :linear}
+                            {:role :diagram :node :display-1}]
+   :via "that is," :rule :W1}
+  {:kind :anchors  :ends [{:role :anchor :node :anchor}]
+   :rule :R12}]}
