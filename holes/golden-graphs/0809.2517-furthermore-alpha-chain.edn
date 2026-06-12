@@ -22,6 +22,29 @@
   "\\gbr = braiding crossing cell (GrCalc3.sty:410)"
   "\\gibr = inverse-braiding crossing cell (GrCalc3.sty:438)"
   "\\gbeg, \\gend, \\gnl, \\gvac, \\hspace, \\scalebox = diagram/layout controls only, suppressed as nodes (GrCalc3.sty:38,52,64,68; sequence2.tex:1125)"]
+ :control-sequence-classification
+ {:decision-order "R5/R15 amendment: eprint macro table first; then latexml-math-roles.tsv standard math roles; then tex-plain-cseq.txt TeX/plain engine layer; otherwise UNKNOWN."
+  :author-defined ["\\ot (beseq2.tex:86)"
+                   "\\id (beseq2.tex:90)"
+                   "\\got (GrCalc3.sty:133)"
+                   "\\gob (GrCalc3.sty:146)"
+                   "\\gcl (GrCalc3.sty:71)"
+                   "\\gcn (GrCalc3.sty:82)"
+                   "\\gcmu (GrCalc3.sty:178)"
+                   "\\gbr (GrCalc3.sty:410)"
+                   "\\gibr (GrCalc3.sty:438)"
+                   "\\gbeg (GrCalc3.sty:38)"
+                   "\\gend (GrCalc3.sty:52)"
+                   "\\gnl (GrCalc3.sty:64)"
+                   "\\gvac (GrCalc3.sty:68)"]
+  :standard-or-tex-layer ["\\hspace (LaTeX layout, suppressed)"
+                          "\\scalebox (LaTeX graphics/layout, suppressed)"
+                          "\\begin/\\end (environment delimiters, suppressed)"
+                          "\\stackrel (standard math annotation; retained as authored justification edges)"
+                          "\\ref (standard cross-reference; retained as R12 reference)"
+                          "\\rho, \\lambda, \\alpha, \\zeta, \\Delta, \\Phi (standard math symbols)"]
+  :non-control-notation ["\\# is a TeX control symbol for the printed hash token; its paper-level smash-product semantics is recorded as :bundling :unresolved rather than guessed from a control-sequence table."]
+  :unknown []}
  :nodes
  [{:id :A
    :form "A"
