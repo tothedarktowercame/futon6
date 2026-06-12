@@ -1,0 +1,86 @@
+;; GOLDEN anatomy graph -- Section 2 standing assumption, arXiv 0809.2517.
+;; Hand-authored from source: sequence2.tex:2 plus macro files beseq2.tex and GrCalc3.sty.
+{:paper "0809.2517"
+ :region {:label "section-2-standing-assumption"
+          :source-file "sequence2.tex"
+          :source-lines [2 2]
+          :quote "In this section we will assume that {\\it $\\C$ is a closed braided monoidal category with equalizers and coequalizers, $H\\in\\C$ is a flat Hopf algebra and the braiding of $\\C$ is $H$-linear.} Nevertheless, for some of the results not all of the assumptions will be necessary."
+          :parse-incomplete false}
+ :macro-decodes
+ [{:macro "\\C" :expands-to "{\\mathcal C}" :class :macro-def :via "\\newcommand{\\C}{{\\mathcal C}} (beseq2.tex:65)" :rule :R5}
+  {:macro "\\ot" :expands-to "\\otimes" :class :macro-def :via "\\newcommand{\\ot}{\\otimes} (beseq2.tex:86)" :rule :R5}
+  {:macro "\\crta" :expands-to "\\overline" :class :macro-def :via "\\newcommand{\\crta}{\\overline} (beseq2.tex:82)" :rule :R5}]
+ :grcalc-macro-classification
+ {:via "GrCalc3.sty active \\newcommand sweep; 56 active diagram macros plus 2 commented-out sketches."
+  :rule :R15
+  :layout ["\\gbeg" "\\gend" "\\gslend" "\\gnl" "\\gvac" "\\gsbox" "\\ghline" "\\gvline"]
+  :structural-label ["\\gnot" "\\got" "\\gob" "\\gslob"]
+  :structural-wire ["\\gcl" "\\gcn"]
+  :structural-operation ["\\gmu" "\\gcmu" "\\glm" "\\grm" "\\glcm" "\\grcm" "\\gwmu" "\\gwcm" "\\gwmuc" "\\gwcmc" "\\gev" "\\gdb" "\\gwev" "\\gwdb" "\\gbr" "\\gibr" "\\gbrc" "\\gibrc" "\\gu" "\\gcu" "\\gmp" "\\gbmp" "\\gbmpt" "\\gbmpb" "\\gbmpn" "\\glmptb" "\\glmpt" "\\glmpb" "\\glmp" "\\gcmptb" "\\gcmpt" "\\gcmpb" "\\gcmp" "\\grmptb" "\\grmpt" "\\grmpb" "\\grmp" "\\gwmuh" "\\gwcmh" "\\gwevh" "\\gwdbh" "\\gsy"]
+  :commented-out ["\\gulbr" "\\gfbr"]}
+ :nodes
+ [{:id :assumption-envelope :form "In this section we will assume that ..." :role :scope :via "In this section we will assume that ..." :rule :R2}
+  {:id :dependency-caveat :form "Nevertheless, for some of the results not all of the assumptions will be necessary." :role :authored-caveat :via "Nevertheless, for some of the results not all of the assumptions will be necessary." :rule :R10}
+  {:id :C-mexpr :form "$\\C$" :role :mexpr :parse-incomplete false :via "$\\C$" :rule :R1}
+  {:id :C :form "\\C" :role :symbol :binder :semantic-bind :macro-def :macro/C :via "$\\C$ is a closed braided monoidal category with equalizers and coequalizers" :rule :R2}
+  {:id :macro/C :form "\\C" :role :macro :decode "\\C = \\mathcal C" :via "\\newcommand{\\C}{{\\mathcal C}} (beseq2.tex:65)" :rule :R5}
+  {:id :closed :form "closed" :role :decorator :via "closed braided monoidal category" :rule :R10}
+  {:id :braided :form "braided" :role :decorator :via "closed braided monoidal category" :rule :R10}
+  {:id :braiding-C :form "the braiding of $\\C$" :role :component :binder :decorator-bind :via "the braiding of $\\C$" :rule :R11}
+  {:id :monoidal-category :form "monoidal category" :role :concept :canon :pointer :via "closed braided monoidal category" :rule :R3}
+  {:id :closed-braided-monoidal-category :form "closed braided monoidal category" :role :compound :via "closed braided monoidal category" :rule :R10}
+  {:id :equalizers :form "equalizers" :role :capability :canon :pointer :bundling :unresolved :via "with equalizers and coequalizers" :rule :R10}
+  {:id :coequalizers :form "coequalizers" :role :capability :canon :pointer :bundling :unresolved :via "with equalizers and coequalizers" :rule :R10}
+  {:id :H-in-C-mexpr :form "$H\\in\\C$" :role :mexpr :parse-incomplete false :via "$H\\in\\C$" :rule :R14}
+  {:id :H :form "H" :role :symbol :binder :semantic-bind :via "$H\\in\\C$ is a flat Hopf algebra" :rule :R2}
+  {:id :membership-in :form "\\in" :role :operator :canon :membership :via "$H\\in\\C$" :rule :R14}
+  {:id :flat :form "flat" :role :decorator :via "flat Hopf algebra" :rule :R10}
+  {:id :hopf-algebra :form "Hopf algebra" :role :concept :canon :pointer :via "flat Hopf algebra" :rule :R3}
+  {:id :flat-hopf-algebra :form "flat Hopf algebra" :role :compound :via "flat Hopf algebra" :rule :R9}
+  {:id :H-linear-mexpr :form "$H$-linear" :role :mexpr :parse-incomplete false :via "$H$-linear" :rule :R14}
+  {:id :linear :form "linear" :role :concept :canon :pointer :via "$H$-linear" :rule :R9}
+  {:id :H-linear :form "$H$-linear" :role :compound :via "$H$-linear" :rule :R9}]
+ :hyperedges
+ [{:kind :assume :ends [{:role :scope :node :assumption-envelope}
+                         {:role :content :node :C}
+                         {:role :content :node :H}
+                         {:role :content :node :braiding-C}]
+   :via "In this section we will assume that ..." :rule :R2}
+  {:kind :macro-def :ends [{:role :surface :node :C}
+                           {:role :definition :node :macro/C}]
+   :via "\\newcommand{\\C}{{\\mathcal C}} (beseq2.tex:65)" :rule :R5}
+  {:kind :bind :ends [{:role :subject :node :C}
+                      {:role :concept :node :closed-braided-monoidal-category}
+                      {:role :decorator :node :closed}
+                      {:role :decorator :node :braided}
+                      {:role :concept :node :monoidal-category}
+                      {:role :capability :node :equalizers}
+                      {:role :capability :node :coequalizers}]
+   :bundling :unresolved
+   :via "$\\C$ is a closed braided monoidal category with equalizers and coequalizers" :rule :R10}
+  {:kind :decorator-supplies-component :ends [{:role :decorator :node :braided}
+                                               {:role :base :node :C}
+                                               {:role :component :node :braiding-C}]
+   :via "the braiding of $\\C$" :rule :R11}
+  {:kind :bind :ends [{:role :subject :node :H}
+                      {:role :operator :node :membership-in}
+                      {:role :ambient :node :C}
+                      {:role :concept :node :hopf-algebra}
+                      {:role :decorator :node :flat}]
+   :via "$H\\in\\C$ is a flat Hopf algebra" :rule :R2}
+  {:kind :parametrizes :ends [{:role :parameter :node :H}
+                              {:role :concept :node :linear}
+                              {:role :compound :node :H-linear}]
+   :via "$H$-linear" :rule :R9}
+  {:kind :constrain :ends [{:role :subject :node :braiding-C}
+                           {:role :property :node :H-linear}
+                           {:role :parameter :node :H}]
+   :via "the braiding of $\\C$ is $H$-linear" :rule :R11}
+  {:kind :announces-dependency-map :ends [{:role :assumption :node :closed}
+                                           {:role :assumption :node :braided}
+                                           {:role :assumption :node :equalizers}
+                                           {:role :assumption :node :coequalizers}
+                                           {:role :assumption :node :flat}
+                                           {:role :assumption :node :H-linear}
+                                           {:role :caveat :node :dependency-caveat}]
+   :via "Nevertheless, for some of the results not all of the assumptions will be necessary." :rule :R10}]}
