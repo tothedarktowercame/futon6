@@ -2508,7 +2508,11 @@ def _load_eprint_text_for_entity(eprint_dir, entity_id, max_chars=240_000, max_m
             if text:
                 return text, meta
             attempts.append(_compact_eprint_meta(meta))
-            continue
+            # The CT bundler names EVERY eprint .tar.gz, but a large class
+            # (3,882/9,916 in the 2026-02-20 run — verified by `file` magic
+            # on the local store) are plain-gzipped SINGLE TeX files. After
+            # tar fails, fall through to the plain-gzip path below instead
+            # of giving up.
         if name.endswith(".gz"):
             # Old-style arXiv eprints (pre-2007 especially) are gzipped SINGLE
             # TeX files, not tarballs: tar-decode fails, so try plain gzip.

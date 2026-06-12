@@ -1419,7 +1419,9 @@ def test_load_eprint_text_gzip_single_file(tmp_path):
     spec.loader.exec_module(mod)
     eprint_dir = tmp_path
     tex = "\\documentclass{article}\\begin{document}Let $H$ be a Hopf algebra.\\end{document}"
-    (eprint_dir / "q-alg__9503002.gz").write_bytes(gzip.compress(tex.encode()))
+    # the real-world case: bundler names EVERYTHING .tar.gz, including
+    # plain-gzipped single TeX files (3,882/9,916 in the CT run)
+    (eprint_dir / "q-alg__9503002.tar.gz").write_bytes(gzip.compress(tex.encode()))
     text, meta = mod._load_eprint_text_for_entity(eprint_dir, "arxiv-q-alg/9503002")
     assert meta["status"] == "ok", meta
     assert "Hopf algebra" in text
