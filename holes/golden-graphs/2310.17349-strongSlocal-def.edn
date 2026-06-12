@@ -1,0 +1,229 @@
+;; GOLDEN anatomy graph -- Definition \label{strongSlocal}, arXiv 2310.17349.
+;; Region rationale: compact definition region introducing the paper's enriched
+;; S-local / strictly S-local vocabulary; it has explicit Let-binders, a label
+;; anchor, a display-definition with :=, and macro-heavy math spans suitable for
+;; R14 accounting.
+{:paper "2310.17349"
+ :region {:kind :definition
+          :label "strongSlocal"
+          :source "Bonart1arxiv.tex"
+          :lines [1062 1072]
+          :rationale "Definition region chosen because it binds the local vocabulary used immediately by Lemma \\ref{localobjectcomparison}."}
+ :nodes
+ [{:id :anchor-strongSlocal
+   :form "\\label{strongSlocal}"
+   :role :anchor
+   :via "\\begin{dfn}\\label{strongSlocal}"
+   :rule :R12}
+  {:id :B
+   :form "$\\cc B$"
+   :role :symbol
+   :binder :semantic-bind
+   :macro-decodes ["\\cc = \\mathcal (Bonart1arxiv.tex:105)"]
+   :via "Let $\\cc B$ be any small $\\ShvA$-enriched category."
+   :rule :R2}
+  {:id :ShvA
+   :form "$\\ShvA$"
+   :role :compound
+   :binder :macro-def
+   :macro-decodes ["\\ShvA = \\Shv(\\Cor) (Bonart1arxiv.tex:142)"
+                  "\\Shv = \\mathsf{Shv} (Bonart1arxiv.tex:136)"
+                  "\\Cor = \\mathcal{A} (Bonart1arxiv.tex:137)"]
+   :via "Let $\\cc B$ be any small $\\ShvA$-enriched category."
+   :rule :R5}
+  {:id :small
+   :form "small"
+   :role :decorator
+   :via "any small $\\ShvA$-enriched category"
+   :rule :R10}
+  {:id :enriched-category
+   :form "$\\ShvA$-enriched category"
+   :role :parametrized-concept
+   :via "any small $\\ShvA$-enriched category"
+   :rule :R9}
+  {:id :Ch-B-ShvA
+   :form "$\\Ch([\\cc B, \\ShvA])$"
+   :role :compound
+   :parse-incomplete true
+   :macro-decodes ["\\Ch = \\mathsf{Ch} (Bonart1arxiv.tex:166)"
+                  "\\cc = \\mathcal (Bonart1arxiv.tex:105)"
+                  "\\ShvA = \\Shv(\\Cor) (Bonart1arxiv.tex:142)"]
+   :via "We can consider $\\Ch([\\cc B, \\ShvA])$ to be a $\\Ch(\\ShvA)$-enriched category"
+   :rule :R14}
+  {:id :Ch-ShvA
+   :form "$\\Ch(\\ShvA)$"
+   :role :compound
+   :parse-incomplete true
+   :macro-decodes ["\\Ch = \\mathsf{Ch} (Bonart1arxiv.tex:166)"
+                  "\\ShvA = \\Shv(\\Cor) (Bonart1arxiv.tex:142)"]
+   :via "to be a $\\Ch(\\ShvA)$-enriched category"
+   :rule :R14}
+  {:id :homShv
+   :form "$\\homShv(A,B)$"
+   :role :symbol
+   :binder :semantic-bind
+   :macro-decodes ["\\homShv = \\mathrm{map}^{\\mathrm{Ch(\\ShvA)}} (Bonart1arxiv.tex:148)"]
+   :via "denote the morphism objects by $\\homShv(A,B) \\in \\Ch(\\ShvA)$"
+   :rule :R2}
+  {:id :A-placeholder
+   :form "$A$"
+   :role :symbol
+   :binder :semantic-bind
+   :via "denote the morphism objects by $\\homShv(A,B) \\in \\Ch(\\ShvA)$"
+   :rule :R4}
+  {:id :B-placeholder
+   :form "$B$"
+   :role :symbol
+   :binder :semantic-bind
+   :via "denote the morphism objects by $\\homShv(A,B) \\in \\Ch(\\ShvA)$"
+   :rule :R4}
+  {:id :Z
+   :form "$Z$"
+   :role :symbol
+   :binder :semantic-bind
+   :via "These morphism objects are defined on $Z \\in \\Smk$ by"
+   :rule :R2}
+  {:id :Smk
+   :form "$\\Smk$"
+   :role :compound
+   :binder :macro-def
+   :macro-decodes ["\\Smk = \\mathsf{Sm}_k (Bonart1arxiv.tex:138)"]
+   :via "defined on $Z \\in \\Smk$"
+   :rule :R5}
+  {:id :display-homShv-def
+   :form "$$\\homShv(A,B)(Z) := \\mathrm{map}^{\\mathrm{Ch(Ab)}}(A \\otimesShv Z, B) \\in \\Ch(\\Ab)$$"
+   :role :display
+   :parse-incomplete true
+   :macro-decodes ["\\homShv = \\mathrm{map}^{\\mathrm{Ch(\\ShvA)}} (Bonart1arxiv.tex:148)"
+                  "\\otimesShv = \\underset{\\mathrm{Shv}}{\\otimes} (Bonart1arxiv.tex:151)"
+                  "\\Ch = \\mathsf{Ch} (Bonart1arxiv.tex:166)"
+                  "\\Ab = Ab operator (Bonart1arxiv.tex:71)"]
+   :via "$$\\homShv(A,B)(Z) := \\mathrm{map}^{\\mathrm{Ch(Ab)}}(A \\otimesShv Z, B) \\in \\Ch(\\Ab)$$"
+   :rule :R6}
+  {:id :F
+   :form "$F$"
+   :role :symbol
+   :binder :semantic-bind
+   :via "Given an object $F \\in \\Ch([\\cc B, \\ShvA])$"
+   :rule :R2}
+  {:id :S
+   :form "$S$"
+   :role :symbol
+   :binder :semantic-bind
+   :via "and a class of morphisms $S$ in $\\Ch([\\cc B, \\ShvA])$"
+   :rule :R2}
+  {:id :class-of-morphisms
+   :form "class of morphisms"
+   :role :concept
+   :via "a class of morphisms $S$"
+   :rule :R3}
+  {:id :enriched-S-local
+   :form "enriched $S$-local"
+   :role :parametrized-concept
+   :binder :semantic-bind
+   :via "we say that $F$ is \\textit{enriched $S$-local} if"
+   :rule :R9}
+  {:id :f
+   :form "$f : A \\rightarrow B$"
+   :role :symbol
+   :binder :semantic-bind
+   :parse-incomplete true
+   :via "for every $f : A \\rightarrow B$ in $S$"
+   :rule :R2}
+  {:id :quasi-isomorphism
+   :form "quasi-isomorphism"
+   :role :concept
+   :via "we have a quasi-isomorphism of complexes of sheaves"
+   :rule :R3}
+  {:id :display-local-map
+   :form "$$\\homShv(B,F) \\rightarrow \\homShv(A,F) $$"
+   :role :display
+   :parse-incomplete true
+   :macro-decodes ["\\homShv = \\mathrm{map}^{\\mathrm{Ch(\\ShvA)}} (Bonart1arxiv.tex:148)"]
+   :via "$$\\homShv(B,F) \\rightarrow \\homShv(A,F) $$"
+   :rule :R14}
+  {:id :strictly-S-local
+   :form "strictly $S$-local"
+   :role :parametrized-concept
+   :binder :semantic-bind
+   :via "Furthermore say that $F \\in \\Ch([\\cc B, \\ShvA])$ is \\textit{strictly $S$-local} if"
+   :rule :R9}
+  {:id :F-f
+   :form "$F^f$"
+   :role :compound
+   :parse-incomplete true
+   :via "its pointwise locally fibrant replacement $F^f$"
+   :rule :R14}
+  {:id :pointwise-locally-fibrant-replacement
+   :form "pointwise locally fibrant replacement"
+   :role :concept
+   :via "its pointwise locally fibrant replacement $F^f$"
+   :rule :R3}]
+ :hyperedges
+ [{:kind :anchors
+   :ends [{:role :anchor :node :anchor-strongSlocal}]
+   :via "\\begin{dfn}\\label{strongSlocal}"
+   :rule :R12}
+  {:kind :bind
+   :ends [{:role :subject :node :B}
+          {:role :concept :node :enriched-category}
+          {:role :decorator :node :small}
+          {:role :parameter :node :ShvA}]
+   :via "Let $\\cc B$ be any small $\\ShvA$-enriched category."
+   :rule :R2}
+  {:kind :parametrizes
+   :ends [{:role :parameter :node :ShvA}
+          {:role :compound :node :enriched-category}]
+   :via "$\\ShvA$-enriched category"
+   :rule :R9}
+  {:kind :considers-as
+   :ends [{:role :object :node :Ch-B-ShvA}
+          {:role :concept :node :Ch-ShvA}]
+   :via "We can consider $\\Ch([\\cc B, \\ShvA])$ to be a $\\Ch(\\ShvA)$-enriched category"
+   :rule :W1}
+  {:kind :denotes
+   :ends [{:role :notation :node :homShv}
+          {:role :domain-placeholder :node :A-placeholder}
+          {:role :codomain-placeholder :node :B-placeholder}
+          {:role :ambient :node :Ch-ShvA}]
+   :via "denote the morphism objects by $\\homShv(A,B) \\in \\Ch(\\ShvA)$"
+   :rule :W1}
+  {:kind :defines-on
+   :ends [{:role :defined-object :node :homShv}
+          {:role :input :node :Z}
+          {:role :ambient :node :Smk}
+          {:role :display :node :display-homShv-def}]
+   :via "These morphism objects are defined on $Z \\in \\Smk$ by"
+   :rule :R6}
+  {:kind :bind
+   :ends [{:role :subject :node :F}
+          {:role :ambient :node :Ch-B-ShvA}]
+   :via "Given an object $F \\in \\Ch([\\cc B, \\ShvA])$"
+   :rule :R2}
+  {:kind :bind
+   :ends [{:role :subject :node :S}
+          {:role :concept :node :class-of-morphisms}
+          {:role :ambient :node :Ch-B-ShvA}]
+   :via "and a class of morphisms $S$ in $\\Ch([\\cc B, \\ShvA])$"
+   :rule :R2}
+  {:kind :defines
+   :ends [{:role :subject :node :F}
+          {:role :concept :node :enriched-S-local}
+          {:role :parameter :node :S}
+          {:role :condition :node :display-local-map}
+          {:role :witness :node :quasi-isomorphism}]
+   :via "we say that $F$ is \\textit{enriched $S$-local} if for every $f : A \\rightarrow B$ in $S$ we have a quasi-isomorphism"
+   :rule :R2}
+  {:kind :quantifies
+   :ends [{:role :bound-morphism :node :f}
+          {:role :class :node :S}
+          {:role :condition :node :display-local-map}]
+   :via "for every $f : A \\rightarrow B$ in $S$"
+   :rule :R2}
+  {:kind :defines
+   :ends [{:role :subject :node :F}
+          {:role :concept :node :strictly-S-local}
+          {:role :replacement :node :F-f}
+          {:role :depends-on :node :enriched-S-local}]
+   :via "Furthermore say that $F \\in \\Ch([\\cc B, \\ShvA])$ is \\textit{strictly $S$-local} if its pointwise locally fibrant replacement $F^f$ in $\\Ch([\\cc B, \\ShvA])$ is enriched $S$-local."
+   :rule :R2}]}
