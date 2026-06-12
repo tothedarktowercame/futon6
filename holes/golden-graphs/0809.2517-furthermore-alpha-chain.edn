@@ -12,8 +12,8 @@
           :parse-incomplete true
           :parse-incomplete-reason "GrCalc wire geometry is decoded to authored structural macros, ports, and justifications; low-level picture-coordinate topology is not normalized into a full string-diagram graph."}
  :macro-decodes
- ["\\ot = \\otimes (beseq2.tex:86)"
-  "\\id = \\it id (beseq2.tex:90)"
+ ["\\ot = \\otimes (beseq2.tex:86); \\otimes = MULOP (latexml-math-roles.tsv:697)"
+  "\\id = \\it id (beseq2.tex:90); RHS role UNKNOWN under latexml-math-roles.tsv"
   "\\got = top object/wire label in GrCalc display (GrCalc3.sty:133)"
   "\\gob = bottom object/wire label in GrCalc display (GrCalc3.sty:146)"
   "\\gcl = straight wire segment in GrCalc display (GrCalc3.sty:71)"
@@ -23,9 +23,9 @@
   "\\gibr = inverse-braiding crossing cell (GrCalc3.sty:438)"
   "\\gbeg, \\gend, \\gnl, \\gvac, \\hspace, \\scalebox = diagram/layout controls only, suppressed as nodes (GrCalc3.sty:38,52,64,68; sequence2.tex:1125)"]
  :control-sequence-classification
- {:decision-order "R5/R15 amendment: eprint macro table first; then latexml-math-roles.tsv standard math roles; then tex-plain-cseq.txt TeX/plain engine layer; otherwise UNKNOWN."
-  :author-defined ["\\ot (beseq2.tex:86)"
-                   "\\id (beseq2.tex:90)"
+ {:decision-order "R5/R15 amendment: eprint macro table first with RHS-transitive role lookup; then latexml-math-roles.tsv; then tex-plain-cseq.txt; otherwise UNKNOWN."
+  :author-defined ["\\ot (beseq2.tex:86), RHS \\otimes -> MULOP (latexml-math-roles.tsv:697)"
+                   "\\id (beseq2.tex:90), RHS \\it id -> role UNKNOWN under latexml-math-roles.tsv"
                    "\\got (GrCalc3.sty:133)"
                    "\\gob (GrCalc3.sty:146)"
                    "\\gcl (GrCalc3.sty:71)"
@@ -37,14 +37,27 @@
                    "\\gend (GrCalc3.sty:52)"
                    "\\gnl (GrCalc3.sty:64)"
                    "\\gvac (GrCalc3.sty:68)"]
-  :standard-or-tex-layer ["\\hspace (LaTeX layout, suppressed)"
-                          "\\scalebox (LaTeX graphics/layout, suppressed)"
-                          "\\begin/\\end (environment delimiters, suppressed)"
-                          "\\stackrel (standard math annotation; retained as authored justification edges)"
-                          "\\ref (standard cross-reference; retained as R12 reference)"
-                          "\\rho, \\lambda, \\alpha, \\zeta, \\Delta, \\Phi (standard math symbols)"]
+  :latexml-role-classified ["\\otimes MULOP (latexml-math-roles.tsv:697), inherited by author macro \\ot"]
+  :tex-plain-layer ["\\end (tex-plain-cseq.txt:64), environment terminator suppressed as envelope syntax"]
+  :standard-or-tex-layer ["\\hspace (layout occurrence, suppressed; lexicon role UNKNOWN)"
+                          "\\scalebox (layout occurrence, suppressed; lexicon role UNKNOWN)"
+                          "\\begin (environment delimiter, suppressed; lexicon role UNKNOWN)"
+                          "\\stackrel (math annotation syntax; retained as authored justification edges; lexicon role UNKNOWN)"
+                          "\\ref (cross-reference syntax; retained as R12 reference; lexicon role UNKNOWN)"
+                          "\\rho, \\lambda, \\alpha, \\zeta, \\Delta, \\Phi (math symbol controls used only where semantically bound by source; lexicon roles UNKNOWN)"]
   :non-control-notation ["\\# is a TeX control symbol for the printed hash token; its paper-level smash-product semantics is recorded as :bundling :unresolved rather than guessed from a control-sequence table."]
-  :unknown []}
+  :unknown ["\\id RHS role via \\it id"
+            "\\hspace"
+            "\\scalebox"
+            "\\begin"
+            "\\stackrel"
+            "\\ref"
+            "\\rho"
+            "\\lambda"
+            "\\alpha"
+            "\\zeta"
+            "\\Delta"
+            "\\Phi"]}
  :nodes
  [{:id :A
    :form "A"
@@ -75,14 +88,14 @@
    :form "\\ot"
    :role :operator
    :binder :macro-def
-   :decode "\\ot = \\otimes (beseq2.tex:86)"
+   :decode "\\ot = \\otimes (beseq2.tex:86); inherited role MULOP from \\otimes (latexml-math-roles.tsv:697)"
    :via "\\newcommand{\\ot}{\\otimes}"
    :rule :R5}
   {:id :identity
    :form "\\id"
    :role :operator
    :binder :macro-def
-   :decode "\\id = \\it id (beseq2.tex:90)"
+   :decode "\\id = \\it id (beseq2.tex:90); inherited role UNKNOWN under latexml-math-roles.tsv"
    :via "\\newcommand{\\id}{\\it id}"
    :rule :R5}
   {:id :A-prime
