@@ -181,3 +181,22 @@ Three findings stack:
   GrCalc grammar as a subterm parser (stretch).
 - Minted: 2026-06-12, live walk, voice ("now I'm going to mark a
   large display").
+
+**R6 amendment (Joe, voice):** the display is "absolutely full of
+user-defined symbols — \gbeg, \got, \gu, on and on. Those are not
+standard LaTeX markup... all of those have some type of lexical
+meaning, and by and large we could get at least some clues about that
+by referring to the LaTeX preamble. But as it is, this whole thing is
+just marked up as one big display scope with no internal structure at
+all."
+
+Verified: GrCalc3.sty defines 58 macros via \newcommand (\gbeg \gend
+\gnl \gcl \got \gob \gmu \gcmu \glm \grm \gwmu \gbr ...). So R5's
+macro-def sweep and R6's subterm parsing are ONE mechanism, not two:
+the preamble/styles give every non-standard control sequence a
+macro-def entry, and any occurrence of an author-defined macro inside
+a display becomes a typed subterm *by lookup* — no diagram-grammar
+intelligence needed for the first cut. "Not in the standard LaTeX/
+AMS vocabulary" is the detector test; the macro-def table is the
+decoder ring. A full GrCalc grammar parse stays the stretch goal;
+macro-table-driven subterm marks are the immediately buildable rung.
