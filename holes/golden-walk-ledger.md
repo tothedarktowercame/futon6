@@ -808,3 +808,40 @@ decision order is therefore:
 Reference inventory captured: holes/golden-graphs/tex-plain-cseq.txt
 (322 letters-only control sequences, from
 https://www.tug.org/utilities/plain/cseq.html, fetched 2026-06-12).
+
+## Design note — steal LaTeXML's best ideas, do not reimplement (Joe, post-walk)
+
+LaTeXML (NIST, Bruce Miller; installed here, 0.8.8) is the prior art
+for most of the mechanical strata. Trial on 0809.2517: wholesale
+conversion FAILS (100+ errors on the master file — custom class,
+GrCalc, eqnarray recursion), consistent with arXMLiv coverage tiers.
+So: harvest its assets, not its pipeline.
+
+What to steal:
+1. **The binding library as standard vocabulary** — 455 package
+   bindings + TeX.pool + LaTeX.pool declare control sequences WITH
+   semantic roles. Mined to holes/golden-graphs/latexml-math-roles.tsv:
+   967 control sequences with roles (RELOP 372, ARROW 133, ADDOP 79,
+   MULOP 61, INTOP 55, ID, OPEN/CLOSE, SUMOP, OPFUNCTION...). This is
+   classification step 3 made machine-readable, AND the lexeme-class
+   alphabet for R14's expression grammar (their role set ≈ our
+   operator taxonomy: relations/arrows/binops/delimiters).
+2. **The math grammar architecture** — LaTeXML parses math by token
+   ROLES (precedence over role classes, not over surface strings).
+   R14's grammar should do the same: author macros get roles via the
+   R5 table (\ot → MULOP by RHS \otimes lookup!), then one
+   role-driven parser covers every paper.
+3. **RHS-transitive role resolution** — \newcommand{\ot}{\otimes}:
+   look up the RHS in the role lexicon, inherit the role. Decodes
+   most author macros without judgment calls.
+4. **Their failure mode is our warning** — full TeX digestion is
+   fragile against wild classes/styles; our regex-level macro sweep +
+   role lookup deliberately stays BELOW digestion (no expansion, no
+   typesetting), which is why it can be corpus-robust where latexml
+   fatals.
+
+Updated classification order (supersedes 4-step above): (1) eprint's
+own macro table → author-defined, role via RHS-transitive lookup;
+(2) latexml-math-roles.tsv → standard math lexeme with role;
+(3) tex-plain-cseq.txt → TeX/plain engine layer (layout unless
+math-structural); (4) UNKNOWN, flagged.
