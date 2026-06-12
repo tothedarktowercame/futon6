@@ -93,7 +93,7 @@ def slug(s: str) -> str:
 
 def clean_title(title: str) -> str:
     title = re.sub(r"`([^`]+)`", r"\1", title)
-    title = re.sub(r"^\d+[.\-)]\s*", "", title.strip())
+    title = re.sub(r"^\d+[a-z]?[.\-)]\s*", "", title.strip())
     title = re.sub(r"^\d+[–-]\d+[.\s-]*", "", title)
     title = re.sub(r"\s+\([^)]*\)$", "", title)
     title = title.replace("_", "").replace("*", "")
