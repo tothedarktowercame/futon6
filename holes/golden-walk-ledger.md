@@ -200,3 +200,41 @@ intelligence needed for the first cut. "Not in the standard LaTeX/
 AMS vocabulary" is the detector test; the macro-def table is the
 decoder ring. A full GrCalc grammar parse stays the stretch goal;
 macro-table-driven subterm marks are the immediately buildable rung.
+
+## R7 — partial subterm markup is worse than none: parse the whole expression or flag it
+
+Specimen: `$A\ot\Delta_H$` (0809.2517, ~point 1353 — "right
+$H$-comodule given by $A\ot\Delta_H$"). The only subterm marked is the
+`_H` subscript. Joe, voice: "I don't know what A is. I don't know if
+\ot is an operator or some other type of symbol. And I don't know how
+\Delta is defined in this paper."
+
+A lone subscript mark inside an otherwise-unparsed expression ASSERTS
+structure that isn't there — it reads as "this expression is
+understood" when three of its four tokens are dark. Rule: subterm
+markup within a mexpr is all-or-flagged — either every token resolves
+through the chain, or the envelope carries an explicit
+`parse-incomplete` mark so partial coverage can't masquerade as
+coverage.
+
+What the full chain yields here, each token answering one of Joe's
+three questions (all verified in the eprint):
+- `A` → semantic bind needed (the H-Azumaya algebra of the running
+  construction) — R2/R4 territory.
+- `\ot` → macro-def: `\newcommand{\ot}{\otimes}` (beseq2.tex:86) →
+  canon pointer: tensor product. R5 lookup, trivially decodable.
+- `\Delta_H` → comultiplication of H. In-paper evidence exists but is
+  DIFFUSE: Sweedler-notation convention stated in applic3.tex for
+  $\Delta_B$ generally; no single crisp binder for $\Delta_H$. This is
+  the interesting case: a *convention-bound* symbol — bound by a
+  notational convention paragraph, not a definition. The symbol table
+  needs a third binder kind: macro-def / semantic-bind /
+  **convention-bind** (Sweedler notation, "we write", "we denote by").
+- `_H` → the one thing already marked, useless without its parent.
+
+- Tags: `i` (incomplete — expression-level parse missing), type-level.
+- Detector hook: mexpr subterm pass must tokenize the WHOLE $-span
+  (R1) and join every control sequence through macro-table (R5) +
+  symbol table (R4) + convention paragraphs (new); emit
+  parse-incomplete on the envelope when any token fails to resolve.
+- Minted: 2026-06-12, live walk, voice.
