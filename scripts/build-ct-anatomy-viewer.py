@@ -119,19 +119,37 @@ def spark(depths: dict) -> str:
 
 
 def main() -> None:
+    import sys
+    all_mode = "--all" in sys.argv
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     audit = json.load(open(OUTPUT / "audit-summary.json"))
+    audited = {p["entity_id"]: p for p in audit["papers"]}
+    if all_mode:
+        papers = []
+        for sl in sorted(SLICES.glob("*.json")):
+            if sl.name == "_meta.json":
+                continue
+            eid = sl.stem.replace("_", "/", 1) if sl.stem.startswith("arxiv-math_") else sl.stem
+            papers.append(eid)
+        audit = {"sample_size": len(papers),
+                 "papers": [audited.get(e, {"entity_id": e, "total": None,
+                                            "inhabited": None, "outer": None,
+                                            "straddled": None,
+                                            "depth_distribution": {}})
+                            for e in papers]}
     stats = json.load(open(OUTPUT / "stats.json"))
     repair = json.load(open(OUTPUT / "mparts-repair-receipt.json"))
     generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%MZ")
     rows = []
-    for p in sorted(audit["papers"], key=lambda p: -p["total"]):
+    for p in sorted(audit["papers"], key=lambda p: -(p["total"] or 0)):
         eid = p["entity_id"]
         slice_path = SLICES / (eid.replace("/", "_") + ".json")
         if not slice_path.exists():
             continue
         rec = json.loads(slice_path.read_text())
         scopes = rec.get("scopes", [])
+        if p["total"] is None:
+            p = dict(p, total=len(scopes), inhabited="·", outer="·", straddled="·")
         mix = Counter(s.get("hx/type", "?") for s in scopes)
         skel = [s for s in scopes if str(s.get("hx/type", "")).startswith(SKELETON_PREFIXES)]
         roots = build_tree(skel)

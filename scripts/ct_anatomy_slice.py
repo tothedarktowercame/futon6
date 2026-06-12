@@ -14,9 +14,14 @@ HANDOFF = Path("/home/joe/code/storage/mark2/ct-handoff/output")
 SLICES = HANDOFF.parent / "ct-anatomy-slices"
 SLICES.mkdir(exist_ok=True)
 
-audit = json.load(open(HANDOFF / "audit-summary.json"))
-wanted = {p["entity_id"] for p in audit["papers"]}
-print(f"slicing {len(wanted)} audited papers from scopes.json", flush=True)
+import sys
+if len(sys.argv) > 1 and sys.argv[1] == "--all":
+    wanted = None  # slice every paper
+    print("slicing ALL papers from scopes.json", flush=True)
+else:
+    audit = json.load(open(HANDOFF / "audit-summary.json"))
+    wanted = {p["entity_id"] for p in audit["papers"]}
+    print(f"slicing {len(wanted)} audited papers from scopes.json", flush=True)
 
 found = {}
 with open(HANDOFF / "scopes.json") as f:
@@ -29,14 +34,15 @@ with open(HANDOFF / "scopes.json") as f:
         if eid_at < 0:
             continue
         eid = line[eid_at + 14 : line.find('"', eid_at + 14)]
-        if eid not in wanted:
+        if wanted is not None and eid not in wanted:
             continue
         rec = json.loads(line)
         out = SLICES / (eid.replace("/", "_") + ".json")
         out.write_text(json.dumps(rec))
         found[eid] = rec.get("count", len(rec.get("scopes", [])))
-        print(f"  {eid}: {found[eid]} scopes", flush=True)
-        if len(found) == len(wanted):
+        if wanted is not None or len(found) % 500 == 0:
+            print(f"  {len(found)} sliced (latest {eid}: {found[eid]} scopes)", flush=True)
+        if wanted is not None and len(found) == len(wanted):
             break
 
 # paper metadata (titles) for the index
@@ -46,9 +52,9 @@ try:
     ent_list = ents if isinstance(ents, list) else ents.get("entities", [])
     for e in ent_list:
         eid = e.get("id") or e.get("entity_id")
-        if eid in wanted:
+        if wanted is None or eid in wanted:
             meta[eid] = {k: e.get(k) for k in ("title", "name", "tags", "created") if e.get(k)}
 except Exception as exc:
     print(f"entities.json metadata pass failed: {exc}", flush=True)
 (SLICES / "_meta.json").write_text(json.dumps(meta))
-print(f"DONE: {len(found)}/{len(wanted)} sliced, {len(meta)} with metadata", flush=True)
+print(f"DONE: {len(found)}/{len(wanted) if wanted is not None else 'all'} sliced, {len(meta)} with metadata", flush=True)
