@@ -291,3 +291,43 @@ semantics, in scope terms: binder at the open, body = debt region,
 discharge = the close. An EOF before the close = the
 promised-never-delivered defect, now detectable as an unclosed scope
 rather than a missing row.
+
+## R9 — `$X$-term` is a parametrized concept: one compound, two edges
+
+Specimen (0809.2517, the Υ subsection heading and throughout):
+"$H$-Galois object", "$H$-Azumaya algebra"; earlier "$H$-linear",
+"$H$-comodule algebra", "$A\x A$-bimodule". Joe, voice: "this kind of
+construction — dollar-sign symbol, dash, lexical term — shows up a
+lot in mathematics... we're able to recognize the structural things
+like Galois object or Azumaya algebra, but we're not connecting
+them."
+
+The pattern `$X$-<concept>` is a PARAMETRIZED CONCEPT, and the
+current anatomy splits it down the middle: the concept detector sees
+the lexical term, the math detector (when it fires at all, R4) sees
+the $X$, and nothing records that they form one compound. The honest
+parse is a single compound node with two outgoing edges:
+
+1. **parameter edge** — $X$ → its binder via the R4 symbol table
+   (here: H → the §2 semantic bind, "a flat Hopf algebra").
+2. **concept edge** — the lexical head → canon pointer (R3): "Galois
+   object", "Azumaya algebra" resolve to nLab; the H-parametrized
+   FORM may itself have a canon page (nLab: Hopf–Galois object) —
+   prefer the parametrized entry when it exists, fall back to the
+   bare concept + parameter edge when it doesn't.
+
+This is the bridge rule: R3 (concept pointers) and R4 (symbol table)
+have so far been separate lanes; `$X$-term` compounds are where they
+MUST join. It is also intensely productive: parametrized concepts are
+how the paper builds its working vocabulary (every structure in this
+paper is an H-something), so missing the connection means the
+concept-lane reads the paper as generic category theory while the
+symbol-lane reads it as untyped algebra.
+
+- Tags: `i` (concept marks incomplete — parameter edge missing),
+  type-level.
+- Detector hook: regex family `\$([^$]+)\$-(\w[\w ]*)` joined at
+  build time: parameter → symbol table, head → concept/canon lane;
+  emit one compound scope spanning the whole construction.
+- Minted: 2026-06-12, live walk, voice (utterance truncated
+  mid-clause; the connection-failure point was complete).
