@@ -44,3 +44,21 @@ fragment that survived.
   "suppose", "we will assume that") → assume envelope; "$X$ is a Y"
   inside → bind/typing.
 - Minted: 2026-06-12, live walk, voice.
+
+## R3 — undefined standard concepts = holes needing canon links (CONFIRMED)
+
+Concept-shaped terms used with no in-paper definition (here: "Hopf
+algebra", 23 occurrences, deduped to one hole) are correctly marked as
+`hole` by the golden layer's concept-shaped filter. Joe confirmed live:
+"It's a hole with no in-paper definition, needs a Canon link."
+
+This generalizes: every such hole should eventually *resolve* to a
+canon anchor (nLab entry / canon-fingerprint-store id) rather than stay
+a bare flag. The hole mark is the sorry; the canon link is the term
+that discharges it. Resolution pipeline = the grounding-layer port
+(papers ↔ concepts bipartite graph, same shape as missions ↔ patterns).
+
+- Site: 0809.2517 point ~139 ("flat Hopf algebra" in the §2 assumption).
+- Verdict: golden mark CORRECT (true positive for the concept-shaped
+  filter — the ≥2-occurrence dedupe and kind-word head both behaved).
+- Minted: 2026-06-12, live walk, voice.
