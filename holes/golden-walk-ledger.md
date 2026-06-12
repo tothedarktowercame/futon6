@@ -458,3 +458,41 @@ Two findings, one representational and one binder-taxonomic:
   monoidal→tensor/unit, closed→internal hom); constraint conjuncts
   emitted as n-ary hyperedges with role-typed ends.
 - Minted: 2026-06-12, live walk, voice.
+
+## R12 — \ref/\label/\cite: the author's OWN hypergraph is being dropped
+
+Specimen: "according to Diagram \ref{A-B-bimod2}, the left and right
+$A$-module structures of $A\# H$ are given..." (0809.2517, ~point
+2637). Marks: nil.
+
+This is the cheapest possible signal and we drop it: \label/\ref is
+the author's own link layer — exact, machine-readable, zero
+inference. The anatomy should harvest it as a typed edge family:
+
+- **\label{X}** = anchor (and the \begin{equation}\label{...} pattern
+  ties the anchor to an env-tex scope we already detect — the join is
+  free).
+- **\ref{X}** = intra-paper edge; TYPE comes from the prose word
+  immediately before (Diagram/Lemma/Equation/Section/Proposition...) —
+  the author tells us the referent's kind at every use site.
+- **\cite[locus]{key}** = extern edge, the cross-PAPER analogue of
+  R3's pointer: resolves through the bibliography to another paper,
+  and the optional argument is a SUB-ANCHOR into the target ("recalling
+  from \cite[Proposition 2.3]{Maj3}" — earlier in this same section —
+  points at a specific proposition inside Majid). Citations with loci
+  are exactly the paper↔paper edges the corpus graph wants, at
+  proposition granularity rather than bibliographic granularity.
+
+With R11 this completes the picture: the paper IS a hypergraph
+already, partially authored by its writer (\ref/\cite edges, explicit
+and exact) and partially implicit (binder chains, decorator
+components, debt regions — R2–R11). The detector job is to harvest
+the authored layer verbatim and infer the implicit layer; the shame
+of the current pipeline is that it infers (badly) while discarding
+what was authored.
+
+- Tags: `m` (ref edge unmarked), type-level.
+- Detector hook: \label/\ref/\eqref/\cite sweep (trivial regexes, all
+  files); prose-word-before typing on refs; bibliography resolution +
+  locus capture on cites; emit as hyperedges with anchored ends.
+- Minted: 2026-06-12, live walk, voice.
