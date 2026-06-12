@@ -715,3 +715,30 @@ in: "Let X be ..." binder sentences are completely dark — the single
 most standard binding construction in mathematics has no detector.
 
 - Minted: 2026-06-12, live walk, voice.
+
+**W2 addendum — the recoverability standard (Joe, voice):** "The fact
+that you can draw it post hoc doesn't convince me it's recoverable
+directly from the markup. And the real tell is: even if it were
+recoverable from this particular example, so many other sections
+don't [have the markup at all]."
+
+Two disciplines follow:
+
+1. **Machine round-trip or it didn't happen.** A recoverability claim
+   is demonstrated only by a renderer that consumes the marks file
+   ALONE (fable-<paper>-emacs.json → graph, no human, no source text
+   peeking) and produces the picture. The graph command in
+   paper-anatomy.el must be built this way precisely so it CANNOT
+   cheat: if the graph comes out poor, the markup is poor — the
+   renderer doubles as the lie detector. Hand-drawn graphs are
+   targets/golden only, never evidence of pipeline capability.
+2. **Coverage is a corpus property, not an example property.** One
+   recoverable lemma is a survivor, not a proof; the ct-nlp-sbs bands
+   (feb=0 papers, unusable-eprint papers) and the binding-gradient
+   floats are the corpus-level instruments that say what fraction of
+   sections COULD even attempt the round-trip. Recoverability gets
+   reported as a distribution over sections, never as a demo.
+
+This is we-do-discipline applied to markup: the demo voice ("we can
+draw anatomy graphs") must not launder the prior ("Fable can draw
+anatomy graphs") into a capability claim about the pipeline.
