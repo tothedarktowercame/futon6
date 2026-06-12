@@ -1,0 +1,278 @@
+;; GOLDEN anatomy graph — Definition "Pretriangulated dg-category", arXiv 1312.2127.
+;; Chosen because it is a compact formal definition environment whose whole
+;; mathematical content is local enough to satisfy R14 token accounting by hand:
+;; it defines one concept, binds D/K/X, uses one external citation, and has no
+;; TikZ/layout macro noise.
+{:paper "1312.2127"
+ :region {:slug "pretriangulated-dg-category"
+          :kind :definition
+          :file "1312.2127.tex"
+          :lines [1494 1497]
+          :why "compact definition environment; exercises concept definition, citation, quantifier binders, applications, and all inline $-span parses without layout macros"}
+ :nodes
+ [{:id :defi-env
+   :form "\\begin{defi}...\\end{defi}"
+   :role :environment
+   :decode "\\newtheorem{defi}[equation]{Definition} (1312.2127.tex:39)"
+   :via "\\begin{defi}[Pretriangulated dg-category, \\cite{MK}]"
+   :rule :R5}
+  {:id :cite-MK
+   :form "\\cite{MK}"
+   :role :extern-pointer
+   :via "\\begin{defi}[Pretriangulated dg-category, \\cite{MK}]"
+   :rule :R12}
+  {:id :bib-MK
+   :form "\\bibitem[Bo-Ka]{MK}"
+   :role :bibliography-entry
+   :via "\\bibitem[Bo-Ka]{MK} Bondal A.I., Kapranov M., \\emph{Enhanced Triangulated Categories}."
+   :rule :R12}
+  {:id :pretriangulated-dg-category
+   :form "pretriangulated dg-category"
+   :role :concept
+   :binder :semantic-bind
+   :via "A dg-category $\\mathcal{D}$ is called pretriangulated if"
+   :rule :R2}
+  {:id :dg-category
+   :form "dg-category"
+   :role :concept
+   :canon :pointer
+   :via "A dg-category $\\mathcal{D}$"
+   :rule :R3}
+  {:id :D
+   :form "$\\mathcal{D}$"
+   :role :symbol
+   :binder :semantic-bind
+   :via "A dg-category $\\mathcal{D}$"
+   :rule :R2}
+  {:id :mexpr-D
+   :form "$\\mathcal{D}$"
+   :role :mexpr
+   :parse-incomplete false
+   :tokens ["\\mathcal" "{" "D" "}"]
+   :via "$\\mathcal{D}$"
+   :rule :R14}
+  {:id :twisted-complex
+   :form "twisted complex"
+   :role :concept
+   :canon :pointer
+   :via "for every twisted complex $K\\in PreTr(\\mathcal{D})$"
+   :rule :R3}
+  {:id :K
+   :form "$K$"
+   :role :symbol
+   :binder :semantic-bind
+   :via "for every twisted complex $K\\in PreTr(\\mathcal{D})$"
+   :rule :R2}
+  {:id :PreTr
+   :form "PreTr"
+   :role :operator
+   :binder :convention-bind
+   :via "the dg-category of twisted complexes in $\\mathcal{D}$, denoted by $PreTr(\\mathcal{D})$"
+   :rule :R7}
+  {:id :PreTr-D
+   :form "PreTr(\\mathcal{D})"
+   :role :compound
+   :decode "PreTr applied to \\mathcal{D}"
+   :via "$K\\in PreTr(\\mathcal{D})$"
+   :rule :R14}
+  {:id :membership
+   :form "\\in"
+   :role :operator
+   :canon :membership
+   :via "$K\\in PreTr(\\mathcal{D})$"
+   :rule :R14}
+  {:id :mexpr-K-in-PreTr-D
+   :form "$K\\in PreTr(\\mathcal{D})$"
+   :role :mexpr
+   :parse-incomplete false
+   :tokens ["K" "\\in" "PreTr" "(" "\\mathcal" "{" "D" "}" ")"]
+   :via "$K\\in PreTr(\\mathcal{D})$"
+   :rule :R14}
+  {:id :alpha
+   :form "$\\alpha$"
+   :role :operator
+   :binder :semantic-bind
+   :via "$\\alpha$ is the dg-functor that to a twisted complex $K=(K_i, q_{ij})$ associates the dg-functor"
+   :rule :R2}
+  {:id :alpha-K
+   :form "$\\alpha(K)$"
+   :role :compound
+   :decode "\\alpha applied to K"
+   :via "the dg-functor $\\alpha(K)$ is representable"
+   :rule :R14}
+  {:id :mexpr-alpha-K
+   :form "$\\alpha(K)$"
+   :role :mexpr
+   :parse-incomplete false
+   :tokens ["\\alpha" "(" "K" ")"]
+   :via "$\\alpha(K)$"
+   :rule :R14}
+  {:id :representable
+   :form "representable"
+   :role :concept
+   :canon :pointer
+   :via "the dg-functor $\\alpha(K)$ is representable"
+   :rule :R3}
+  {:id :isomorphic
+   :form "isomorphic"
+   :role :relation
+   :canon :pointer
+   :via "it is isomorphic, as a dg-functor, to $h(X)$"
+   :rule :R3}
+  {:id :dg-functor
+   :form "dg-functor"
+   :role :concept
+   :canon :pointer
+   :via "as a dg-functor"
+   :rule :R3}
+  {:id :h
+   :form "$h$"
+   :role :operator
+   :binder :semantic-bind
+   :via "where $h$ is the dg-Yoneda functor"
+   :rule :R2}
+  {:id :X
+   :form "$X$"
+   :role :symbol
+   :binder :semantic-bind
+   :via "for some object $X\\in \\mathcal{D}$"
+   :rule :R2}
+  {:id :h-X
+   :form "$h(X)$"
+   :role :compound
+   :decode "h applied to X"
+   :via "to $h(X)$ for some object $X\\in \\mathcal{D}$"
+   :rule :R14}
+  {:id :mexpr-h-X
+   :form "$h(X)$"
+   :role :mexpr
+   :parse-incomplete false
+   :tokens ["h" "(" "X" ")"]
+   :via "$h(X)$"
+   :rule :R14}
+  {:id :object
+   :form "object"
+   :role :concept
+   :canon :pointer
+   :via "for some object $X\\in \\mathcal{D}$"
+   :rule :R3}
+  {:id :mexpr-X-in-D
+   :form "$X\\in \\mathcal{D}$"
+   :role :mexpr
+   :parse-incomplete false
+   :tokens ["X" "\\in" "\\mathcal" "{" "D" "}"]
+   :via "$X\\in \\mathcal{D}$"
+   :rule :R14}]
+ :hyperedges
+ [{:kind :macro-def
+   :ends [{:role :surface :node :defi-env}]
+   :via "\\newtheorem{defi}[equation]{Definition}"
+   :rule :R5}
+  {:kind :cites
+   :ends [{:role :citation :node :cite-MK}
+          {:role :target :node :bib-MK}]
+   :via "\\cite{MK}"
+   :rule :R12}
+  {:kind :defines
+   :ends [{:role :environment :node :defi-env}
+          {:role :defined-concept :node :pretriangulated-dg-category}
+          {:role :source :node :cite-MK}]
+   :via "\\begin{defi}[Pretriangulated dg-category, \\cite{MK}]"
+   :rule :R2}
+  {:kind :bind
+   :ends [{:role :subject :node :D}
+          {:role :concept :node :dg-category}]
+   :via "A dg-category $\\mathcal{D}$"
+   :rule :R2}
+  {:kind :parses
+   :ends [{:role :envelope :node :mexpr-D}
+          {:role :symbol :node :D}]
+   :via "$\\mathcal{D}$"
+   :rule :R14}
+  {:kind :quantifies
+   :ends [{:role :quantifier :value :every}
+          {:role :subject :node :K}
+          {:role :concept :node :twisted-complex}
+          {:role :ambient :node :PreTr-D}]
+   :via "for every twisted complex $K\\in PreTr(\\mathcal{D})$"
+   :rule :R2}
+  {:kind :applies
+   :ends [{:role :operator :node :PreTr}
+          {:role :argument :node :D}
+          {:role :result :node :PreTr-D}]
+   :via "PreTr(\\mathcal{D})"
+   :rule :R14}
+  {:kind :membership
+   :ends [{:role :element :node :K}
+          {:role :operator :node :membership}
+          {:role :container :node :PreTr-D}]
+   :via "$K\\in PreTr(\\mathcal{D})$"
+   :rule :R14}
+  {:kind :parses
+   :ends [{:role :envelope :node :mexpr-K-in-PreTr-D}
+          {:role :symbol :node :K}
+          {:role :operator :node :membership}
+          {:role :compound :node :PreTr-D}]
+   :via "$K\\in PreTr(\\mathcal{D})$"
+   :rule :R14}
+  {:kind :applies
+   :ends [{:role :operator :node :alpha}
+          {:role :argument :node :K}
+          {:role :result :node :alpha-K}]
+   :via "$\\alpha(K)$"
+   :rule :R14}
+  {:kind :parses
+   :ends [{:role :envelope :node :mexpr-alpha-K}
+          {:role :operator :node :alpha}
+          {:role :argument :node :K}
+          {:role :compound :node :alpha-K}]
+   :via "$\\alpha(K)$"
+   :rule :R14}
+  {:kind :requires
+   :ends [{:role :subject :node :alpha-K}
+          {:role :property :node :representable}]
+   :via "the dg-functor $\\alpha(K)$ is representable"
+   :rule :R2}
+  {:kind :exists
+   :ends [{:role :subject :node :X}
+          {:role :concept :node :object}
+          {:role :ambient :node :D}]
+   :via "for some object $X\\in \\mathcal{D}$"
+   :rule :R2}
+  {:kind :applies
+   :ends [{:role :operator :node :h}
+          {:role :argument :node :X}
+          {:role :result :node :h-X}]
+   :via "$h(X)$"
+   :rule :R14}
+  {:kind :parses
+   :ends [{:role :envelope :node :mexpr-h-X}
+          {:role :operator :node :h}
+          {:role :argument :node :X}
+          {:role :compound :node :h-X}]
+   :via "$h(X)$"
+   :rule :R14}
+  {:kind :membership
+   :ends [{:role :element :node :X}
+          {:role :operator :node :membership}
+          {:role :container :node :D}]
+   :via "$X\\in \\mathcal{D}$"
+   :rule :R14}
+  {:kind :parses
+   :ends [{:role :envelope :node :mexpr-X-in-D}
+          {:role :symbol :node :X}
+          {:role :operator :node :membership}
+          {:role :symbol :node :D}]
+   :via "$X\\in \\mathcal{D}$"
+   :rule :R14}
+  {:kind :definition-condition
+   :ends [{:role :defined-concept :node :pretriangulated-dg-category}
+          {:role :subject :node :D}
+          {:role :universal-witness :node :K}
+          {:role :required-object :node :alpha-K}
+          {:role :required-property :node :representable}
+          {:role :comparison :node :isomorphic}
+          {:role :representing-object :node :h-X}
+          {:role :as-concept :node :dg-functor}]
+   :via "is called pretriangulated if, for every twisted complex $K\\in PreTr(\\mathcal{D})$, the dg-functor $\\alpha(K)$ is representable, i.e. it is isomorphic, as a dg-functor, to $h(X)$ for some object $X\\in \\mathcal{D}$"
+   :rule :R11}]}
