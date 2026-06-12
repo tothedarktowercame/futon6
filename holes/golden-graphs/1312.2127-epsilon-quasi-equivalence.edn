@@ -2,195 +2,276 @@
 ;; Chosen because it is a one-sentence theorem statement with explicit
 ;; If/then structure: one Let-like assumption, one typed dg-functor expression,
 ;; one conclusion, and a nearby authored citation.
-{:paper "1312.2127"
- :region {:slug "epsilon-quasi-equivalence"
-          :kind :statement
-          :file "1312.2127.tex"
-          :lines [1498 1501]
-          :why "compact proposition statement; exercises statement assumption/conclusion structure and a fully parsed typed-arrow $-span"}
+{:paper "1312.2127",
+ :region
+ {:slug "epsilon-quasi-equivalence",
+  :kind :statement,
+  :file "1312.2127.tex",
+  :lines [1498 1501],
+  :why
+  "compact proposition statement; exercises statement assumption/conclusion structure and a fully parsed typed-arrow $-span"},
  :nodes
- [{:id :prop-env
-   :form "\\begin{prop}...\\end{prop}"
-   :role :environment
-   :decode "\\newtheorem{prop}[equation]{Proposition} (1312.2127.tex:29)"
-   :cseq-classes [{:environment "prop" :decision-step 1 :class :author-defined :source "1312.2127.tex:29"}]
-   :via "\\begin{prop}"
-   :rule :R5}
-  {:id :cite-MK
-   :form "\\cite{MK}"
-   :role :extern-pointer
-   :via "A consequence of this definition is the following proposition \\cite{MK}."
-   :rule :R12}
-  {:id :bib-MK
-   :form "\\bibitem[Bo-Ka]{MK}"
-   :role :bibliography-entry
-   :via "\\bibitem[Bo-Ka]{MK} Bondal A.I., Kapranov M., \\emph{Enhanced Triangulated Categories}."
-   :rule :R12}
-  {:id :D
-   :form "$\\mathcal{D}$"
-   :role :symbol
-   :binder :semantic-bind
-   :via "If $\\mathcal{D}$ is a pretriangulated dg-category"
-   :rule :R2}
-  {:id :mexpr-D
-   :form "$\\mathcal{D}$"
-   :role :mexpr
-   :parse-incomplete false
-   :tokens ["\\mathcal" "{" "D" "}"]
-   :cseq-classes [{:cseq "\\mathcal" :decision-step 4 :class :UNKNOWN
-                   :reason "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}]
-   :via "$\\mathcal{D}$"
-   :rule :R14}
-  {:id :pretriangulated-dg-category
-   :form "pretriangulated dg-category"
-   :role :concept
-   :canon :in-paper
-   :defined-at "1312.2127-pretriangulated-dg-category.edn"
-   :via "If $\\mathcal{D}$ is a pretriangulated dg-category"
-   :rule :R4}
-  {:id :epsilon
-   :form "$\\epsilon$"
-   :role :symbol
-   :binder :semantic-bind
-   :cseq-class {:cseq "\\epsilon" :decision-step 4 :class :UNKNOWN
-                :reason "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}
-   :via "then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :rule :R2}
-  {:id :dg-functor
-   :form "dg-functor"
-   :role :concept
-   :canon :pointer
-   :via "then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :rule :R3}
-  {:id :to
-   :form "\\to"
-   :role :operator
-   :canon :arrow
-   :cseq-class {:cseq "\\to" :decision-step 2 :class :latexml-standard-math :role :ARROW
-                :source "latexml-math-roles.tsv:876"}
-   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :rule :R14}
-  {:id :typed-colon
-   :form ":"
-   :role :operator
-   :canon :typed-arrow
-   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :rule :R14}
-  {:id :PreTr
-   :form "PreTr"
-   :role :operator
-   :binder :convention-bind
-   :via "the dg-category of twisted complexes in $\\mathcal{D}$, denoted by $PreTr(\\mathcal{D})$"
-   :rule :R7}
-  {:id :PreTr-D
-   :form "PreTr(\\mathcal{D})"
-   :role :compound
-   :decode "PreTr applied to \\mathcal{D}"
-   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :rule :R14}
-  {:id :epsilon-arrow
-   :form "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :role :compound
-   :decode "typed dg-functor from \\mathcal{D} to PreTr(\\mathcal{D})"
-   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :rule :R14}
-  {:id :mexpr-epsilon-arrow
-   :form "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :role :mexpr
-   :parse-incomplete false
-   :tokens ["\\epsilon" ":" "\\mathcal" "{" "D" "}" "\\to" "PreTr" "(" "\\mathcal" "{" "D" "}" ")"]
-   :cseq-classes [{:cseq "\\epsilon" :decision-step 4 :class :UNKNOWN
-                   :reason "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}
-                  {:cseq "\\mathcal" :decision-step 4 :class :UNKNOWN
-                   :reason "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}
-                  {:cseq "\\to" :decision-step 2 :class :latexml-standard-math :role :ARROW
-                   :source "latexml-math-roles.tsv:876"}]
-   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :rule :R14}
-  {:id :quasi-equivalence
-   :form "quasi-equivalence"
-   :role :concept
-   :canon :pointer
-   :via "is a quasi-equivalence of dg-categories"
-   :rule :R3}
-  {:id :dg-categories
-   :form "dg-categories"
-   :role :concept
-   :canon :pointer
-   :via "is a quasi-equivalence of dg-categories"
-   :rule :R3}
-  {:id :if-then
-   :form "If ... then ..."
-   :role :discourse-operator
-   :via "If $\\mathcal{D}$ is a pretriangulated dg-category, then"
-   :rule :R13}]
+ [{:id :prop-env,
+   :form "\\begin{prop}...\\end{prop}",
+   :role :environment,
+   :decode
+   "\\newtheorem{prop}[equation]{Proposition} (1312.2127.tex:29)",
+   :cseq-classes
+   [{:environment "prop",
+     :decision-step 1,
+     :class :author-defined,
+     :source "1312.2127.tex:29"}],
+   :via "\\begin{prop}",
+   :rule :R5,
+   :satiety :full}
+  {:id :cite-MK,
+   :form "\\cite{MK}",
+   :role :extern-pointer,
+   :via
+   "A consequence of this definition is the following proposition \\cite{MK}.",
+   :rule :R12,
+   :satiety :full}
+  {:id :bib-MK,
+   :form "\\bibitem[Bo-Ka]{MK}",
+   :role :bibliography-entry,
+   :via
+   "\\bibitem[Bo-Ka]{MK} Bondal A.I., Kapranov M., \\emph{Enhanced Triangulated Categories}.",
+   :rule :R12,
+   :satiety :full}
+  {:id :D,
+   :form "$\\mathcal{D}$",
+   :role :symbol,
+   :binder :semantic-bind,
+   :via "If $\\mathcal{D}$ is a pretriangulated dg-category",
+   :rule :R2,
+   :satiety :full}
+  {:role :mexpr,
+   :parse-incomplete false,
+   :via "$\\mathcal{D}$",
+   :rule :R14,
+   :cseq-classes
+   [{:cseq "\\mathcal",
+     :decision-step 4,
+     :class :UNKNOWN,
+     :reason
+     "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}],
+   :id :mexpr-D,
+   :satiety :full,
+   :tokens ["\\mathcal" "{" "D" "}"],
+   :form "$\\mathcal{D}$"}
+  {:id :pretriangulated-dg-category,
+   :form "pretriangulated dg-category",
+   :role :concept,
+   :canon :in-paper,
+   :defined-at "1312.2127-pretriangulated-dg-category.edn",
+   :via "If $\\mathcal{D}$ is a pretriangulated dg-category",
+   :rule :R4,
+   :satiety :full}
+  {:id :epsilon,
+   :form "$\\epsilon$",
+   :role :symbol,
+   :binder :semantic-bind,
+   :cseq-class
+   {:cseq "\\epsilon",
+    :decision-step 4,
+    :class :UNKNOWN,
+    :reason
+    "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"},
+   :via
+   "then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
+   :rule :R2,
+   :satiety :full}
+  {:id :dg-functor,
+   :form "dg-functor",
+   :role :concept,
+   :canon :pointer,
+   :via
+   "then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
+   :rule :R3,
+   :satiety {:hungry-for :canon}}
+  {:id :to,
+   :form "\\to",
+   :role :operator,
+   :canon :arrow,
+   :cseq-class
+   {:cseq "\\to",
+    :decision-step 2,
+    :class :latexml-standard-math,
+    :role :ARROW,
+    :source "latexml-math-roles.tsv:876"},
+   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
+   :rule :R14,
+   :satiety :full}
+  {:id :typed-colon,
+   :form ":",
+   :role :operator,
+   :canon :typed-arrow,
+   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
+   :rule :R14,
+   :satiety :full}
+  {:id :PreTr,
+   :form "PreTr",
+   :role :operator,
+   :binder :convention-bind,
+   :via
+   "the dg-category of twisted complexes in $\\mathcal{D}$, denoted by $PreTr(\\mathcal{D})$",
+   :rule :R7,
+   :satiety :full}
+  {:id :PreTr-D,
+   :form "PreTr(\\mathcal{D})",
+   :role :compound,
+   :decode "PreTr applied to \\mathcal{D}",
+   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
+   :rule :R14,
+   :satiety :full}
+  {:id :epsilon-arrow,
+   :form "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
+   :role :compound,
+   :decode "typed dg-functor from \\mathcal{D} to PreTr(\\mathcal{D})",
+   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
+   :rule :R14,
+   :satiety :full}
+  {:role :mexpr,
+   :parse-incomplete false,
+   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
+   :rule :R14,
+   :cseq-classes
+   [{:cseq "\\epsilon",
+     :decision-step 4,
+     :class :UNKNOWN,
+     :reason
+     "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}
+    {:cseq "\\mathcal",
+     :decision-step 4,
+     :class :UNKNOWN,
+     :reason
+     "absent from eprint macro table, latexml-math-roles.tsv, and tex-plain-cseq.txt"}
+    {:cseq "\\to",
+     :decision-step 2,
+     :class :latexml-standard-math,
+     :role :ARROW,
+     :source "latexml-math-roles.tsv:876"}],
+   :id :mexpr-epsilon-arrow,
+   :satiety :full,
+   :tokens
+   ["\\epsilon"
+    ":"
+    "\\mathcal"
+    "{"
+    "D"
+    "}"
+    "\\to"
+    "PreTr"
+    "("
+    "\\mathcal"
+    "{"
+    "D"
+    "}"
+    ")"],
+   :form "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"}
+  {:id :quasi-equivalence,
+   :form "quasi-equivalence",
+   :role :concept,
+   :canon :pointer,
+   :via "is a quasi-equivalence of dg-categories",
+   :rule :R3,
+   :satiety {:hungry-for :canon}}
+  {:id :dg-categories,
+   :form "dg-categories",
+   :role :concept,
+   :canon :pointer,
+   :via "is a quasi-equivalence of dg-categories",
+   :rule :R3,
+   :satiety {:hungry-for :canon}}
+  {:id :if-then,
+   :form "If ... then ...",
+   :role :discourse-operator,
+   :via "If $\\mathcal{D}$ is a pretriangulated dg-category, then",
+   :rule :R13,
+   :satiety :full}],
  :hyperedges
- [{:kind :macro-def
-   :ends [{:role :surface :node :prop-env}]
-   :via "\\newtheorem{prop}[equation]{Proposition}"
+ [{:kind :macro-def,
+   :ends [{:role :surface, :node :prop-env}],
+   :via "\\newtheorem{prop}[equation]{Proposition}",
    :rule :R5}
-  {:kind :cites
-   :ends [{:role :citation :node :cite-MK}
-          {:role :target :node :bib-MK}]
-   :via "\\cite{MK}"
+  {:kind :cites,
+   :ends
+   [{:role :citation, :node :cite-MK} {:role :target, :node :bib-MK}],
+   :via "\\cite{MK}",
    :rule :R12}
-  {:kind :supports
-   :ends [{:role :citation :node :cite-MK}
-          {:role :environment :node :prop-env}]
-   :via "A consequence of this definition is the following proposition \\cite{MK}."
-   :rule :R12}
-  {:kind :parses
-   :ends [{:role :envelope :node :mexpr-D}
-          {:role :symbol :node :D}]
-   :via "$\\mathcal{D}$"
+  {:kind :proof-step,
+   :ends
+   [{:role :citation, :node :cite-MK}
+    {:role :environment, :node :prop-env}],
+   :via
+   "A consequence of this definition is the following proposition \\cite{MK}.",
+   :rule :R12,
+   :kind-original :supports}
+  {:kind :parses,
+   :ends [{:role :envelope, :node :mexpr-D} {:role :symbol, :node :D}],
+   :via "$\\mathcal{D}$",
    :rule :R14}
-  {:kind :assume
-   :ends [{:role :subject :node :D}
-          {:role :concept :node :pretriangulated-dg-category}]
-   :via "If $\\mathcal{D}$ is a pretriangulated dg-category"
+  {:kind :assume,
+   :ends
+   [{:role :subject, :node :D}
+    {:role :concept, :node :pretriangulated-dg-category}],
+   :via "If $\\mathcal{D}$ is a pretriangulated dg-category",
    :rule :R2}
-  {:kind :applies
-   :ends [{:role :operator :node :PreTr}
-          {:role :argument :node :D}
-          {:role :result :node :PreTr-D}]
-   :via "PreTr(\\mathcal{D})"
-   :rule :R14}
-  {:kind :typed-arrow
-   :ends [{:role :subject :node :epsilon}
-          {:role :type-operator :node :typed-colon}
-          {:role :domain :node :D}
-          {:role :arrow :node :to}
-          {:role :codomain :node :PreTr-D}
-          {:role :compound :node :epsilon-arrow}]
-   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
-   :rule :R14}
-  {:kind :bind
-   :ends [{:role :subject :node :epsilon}
-          {:role :concept :node :dg-functor}
-          {:role :type :node :epsilon-arrow}]
-   :via "then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
+  {:kind :parses,
+   :ends
+   [{:role :operator, :node :PreTr}
+    {:role :argument, :node :D}
+    {:role :result, :node :PreTr-D}],
+   :via "PreTr(\\mathcal{D})",
+   :rule :R14,
+   :kind-original :applies}
+  {:kind :constrains,
+   :ends
+   [{:role :subject, :node :epsilon}
+    {:role :type-operator, :node :typed-colon}
+    {:role :domain, :node :D}
+    {:role :arrow, :node :to}
+    {:role :codomain, :node :PreTr-D}
+    {:role :compound, :node :epsilon-arrow}],
+   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
+   :rule :R14,
+   :kind-original :typed-arrow}
+  {:kind :bind,
+   :ends
+   [{:role :subject, :node :epsilon}
+    {:role :concept, :node :dg-functor}
+    {:role :type, :node :epsilon-arrow}],
+   :via
+   "then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
    :rule :R2}
-  {:kind :parses
-   :ends [{:role :envelope :node :mexpr-epsilon-arrow}
-          {:role :symbol :node :epsilon}
-          {:role :operator :node :typed-colon}
-          {:role :domain :node :D}
-          {:role :operator :node :to}
-          {:role :codomain :node :PreTr-D}]
-   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$"
+  {:kind :parses,
+   :ends
+   [{:role :envelope, :node :mexpr-epsilon-arrow}
+    {:role :symbol, :node :epsilon}
+    {:role :operator, :node :typed-colon}
+    {:role :domain, :node :D}
+    {:role :operator, :node :to}
+    {:role :codomain, :node :PreTr-D}],
+   :via "$\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
    :rule :R14}
-  {:kind :concludes
-   :ends [{:role :subject :node :epsilon-arrow}
-          {:role :property :node :quasi-equivalence}
-          {:role :ambient :node :dg-categories}]
-   :via "is a quasi-equivalence of dg-categories"
-   :rule :R2}
-  {:kind :statement
-   :ends [{:role :environment :node :prop-env}
-          {:role :discourse :node :if-then}
-          {:role :assumption-subject :node :D}
-          {:role :assumption-type :node :pretriangulated-dg-category}
-          {:role :conclusion-subject :node :epsilon-arrow}
-          {:role :conclusion-property :node :quasi-equivalence}]
-   :via "If $\\mathcal{D}$ is a pretriangulated dg-category, then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$ is a quasi-equivalence of dg-categories."
-   :rule :R13}]}
+  {:kind :proof-step,
+   :ends
+   [{:role :subject, :node :epsilon-arrow}
+    {:role :property, :node :quasi-equivalence}
+    {:role :ambient, :node :dg-categories}],
+   :via "is a quasi-equivalence of dg-categories",
+   :rule :R2,
+   :kind-original :concludes}
+  {:kind :states,
+   :ends
+   [{:role :environment, :node :prop-env}
+    {:role :discourse, :node :if-then}
+    {:role :assumption-subject, :node :D}
+    {:role :assumption-type, :node :pretriangulated-dg-category}
+    {:role :conclusion-subject, :node :epsilon-arrow}
+    {:role :conclusion-property, :node :quasi-equivalence}],
+   :via
+   "If $\\mathcal{D}$ is a pretriangulated dg-category, then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$ is a quasi-equivalence of dg-categories.",
+   :rule :R13,
+   :kind-original :statement}],
+ :schema "golden-graphs/SCHEMA.md v1"}
