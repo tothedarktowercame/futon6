@@ -1,0 +1,451 @@
+;; GOLDEN anatomy graph — proof-calculation chain after "We furthermore have",
+;; arXiv 0809.2517, source file sequence2.tex lines 1123-1176.
+;;
+;; Assignment named Galois2.tex, but the exact requested phrase occurs in
+;; sequence2.tex:1123 in the extracted eprint. This graph follows the exact
+;; TeX source occurrence.
+{:paper "0809.2517"
+ :region {:label "furthermore-alpha-chain"
+          :source-file "sequence2.tex"
+          :source-lines [1123 1176]
+          :assigned-file-note "Requested as Galois2.tex; exact phrase found in sequence2.tex:1123."
+          :parse-incomplete true
+          :parse-incomplete-reason "GrCalc wire geometry is decoded to authored structural macros, ports, and justifications; low-level picture-coordinate topology is not normalized into a full string-diagram graph."}
+ :macro-decodes
+ ["\\ot = \\otimes (beseq2.tex:86)"
+  "\\id = \\it id (beseq2.tex:90)"
+  "\\got = top object/wire label in GrCalc display (GrCalc3.sty:133)"
+  "\\gob = bottom object/wire label in GrCalc display (GrCalc3.sty:146)"
+  "\\gcl = straight wire segment in GrCalc display (GrCalc3.sty:71)"
+  "\\gcn = connector/wire bend macro in GrCalc display (GrCalc3.sty:82)"
+  "\\gcmu = comultiplication-like split cell (GrCalc3.sty:178)"
+  "\\gbr = braiding crossing cell (GrCalc3.sty:410)"
+  "\\gibr = inverse-braiding crossing cell (GrCalc3.sty:438)"
+  "\\gbeg, \\gend, \\gnl, \\gvac, \\hspace, \\scalebox = diagram/layout controls only, suppressed as nodes (GrCalc3.sty:38,52,64,68; sequence2.tex:1125)"]
+ :nodes
+ [{:id :A
+   :form "A"
+   :role :symbol
+   :binder :semantic-bind
+   :via "If $A$ and $B$ are $H$-Azumaya algebras in $\\C$"
+   :rule :R2}
+  {:id :B
+   :form "B"
+   :role :symbol
+   :binder :semantic-bind
+   :via "If $A$ and $B$ are $H$-Azumaya algebras in $\\C$"
+   :rule :R2}
+  {:id :H
+   :form "H"
+   :role :symbol
+   :binder :semantic-bind
+   :via "for any $H$-Galois object $T$ and $X \\in \\C$"
+   :rule :R2}
+  {:id :smash-product
+   :form "\\#"
+   :role :operator
+   :binder :promissory-bind
+   :via "Set $\\alpha=(A \\otimes \\Phi_{B,H} \\otimes B)(A \\otimes B \\otimes \\Delta_H)$."
+   :rule :R14
+   :bundling :unresolved}
+  {:id :tensor-product
+   :form "\\ot"
+   :role :operator
+   :binder :macro-def
+   :decode "\\ot = \\otimes (beseq2.tex:86)"
+   :via "\\newcommand{\\ot}{\\otimes}"
+   :rule :R5}
+  {:id :identity
+   :form "\\id"
+   :role :operator
+   :binder :macro-def
+   :decode "\\id = \\it id (beseq2.tex:90)"
+   :via "\\newcommand{\\id}{\\it id}"
+   :rule :R5}
+  {:id :A-prime
+   :form "A'"
+   :role :symbol
+   :binder :semantic-bind
+   :via "A':=A\\# H"
+   :rule :R6}
+  {:id :B-prime
+   :form "B'"
+   :role :symbol
+   :binder :semantic-bind
+   :via "B':=B\\# H"
+   :rule :R6}
+  {:id :A-smash-H
+   :form "A\\# H"
+   :role :compound
+   :parse-incomplete true
+   :tokens [{:token "A" :node :A}
+            {:token "\\#" :node :smash-product}
+            {:token "H" :node :H}]
+   :via "A':=A\\# H"
+   :rule :R14}
+  {:id :B-smash-H
+   :form "B\\# H"
+   :role :compound
+   :parse-incomplete true
+   :tokens [{:token "B" :node :B}
+            {:token "\\#" :node :smash-product}
+            {:token "H" :node :H}]
+   :via "B':=B\\# H"
+   :rule :R14}
+  {:id :rho
+   :form "\\rho"
+   :role :morphism
+   :binder :semantic-bind
+   :via "\\rho:=\\rho_{A\\#H}"
+   :rule :R6}
+  {:id :lambda
+   :form "\\lambda"
+   :role :morphism
+   :binder :semantic-bind
+   :via "\\lambda:=\\lambda_{B\\#H}"
+   :rule :R6}
+  {:id :rho-prime
+   :form "\\rho'"
+   :role :morphism
+   :binder :semantic-bind
+   :via "\\rho':=\\rho_{(A\\#H)^A}"
+   :rule :R6}
+  {:id :lambda-prime
+   :form "\\lambda'"
+   :role :morphism
+   :binder :semantic-bind
+   :via "\\lambda':=\\lambda_{(B\\#H)^B}"
+   :rule :R6}
+  {:id :alpha
+   :form "\\alpha"
+   :role :morphism
+   :binder :semantic-bind
+   :via "Set $\\alpha=(A \\otimes \\Phi_{B,H} \\otimes B)(A \\otimes B \\otimes \\Delta_H)$."
+   :rule :R6}
+  {:id :alpha-1
+   :form "\\alpha_1"
+   :role :morphism
+   :binder :semantic-bind
+   :via "which will induce $\\alpha_1$"
+   :rule :R2}
+  {:id :alpha-2
+   :form "\\alpha_2"
+   :role :morphism
+   :binder :semantic-bind
+   :via "will induce $\\alpha_2$"
+   :rule :R2}
+  {:id :j-A-prime
+   :form "j_{A'}"
+   :role :morphism
+   :binder :promissory-bind
+   :via "j_{A'}\\ot j_{B'}"
+   :rule :R14}
+  {:id :j-B-prime
+   :form "j_{B'}"
+   :role :morphism
+   :binder :promissory-bind
+   :via "j_{A'}\\ot j_{B'}"
+   :rule :R14}
+  {:id :zeta-inv
+   :form "\\zeta^{-1}_{A', B'}"
+   :role :morphism
+   :binder :semantic-bind
+   :via "We can use then the natural transformation $\\zeta$ from Proposition \\ref{Azcounitmult}."
+   :rule :R12}
+  {:id :diagp69
+   :form "\\label{diagp69}"
+   :role :anchor
+   :binder :semantic-bind
+   :via "\\begin{eqnarray}\\label{diagp69}"
+   :rule :R12}
+  {:id :diagram-triangle-1
+   :form "\\langle1\\rangle"
+   :role :diagram-region
+   :binder :semantic-bind
+   :via "\\put(450,-250){\\fbox{1}}"
+   :rule :R12}
+  {:id :diagram-triangle-2
+   :form "\\langle2\\rangle"
+   :role :diagram-region
+   :binder :semantic-bind
+   :via "\\put(900,-750){\\fbox{2}}"
+   :rule :R12}
+  {:id :diagram-triangle-3
+   :form "\\langle3\\rangle"
+   :role :diagram-region
+   :binder :semantic-bind
+   :via "\\put(1580,-1280){\\fbox{3}}"
+   :rule :R12}
+  {:id :diagram-triangle-4
+   :form "\\langle4\\rangle"
+   :role :diagram-region
+   :binder :semantic-bind
+   :via "\\put(-350,-750){\\fbox{4}}"
+   :rule :R12}
+  {:id :claimed-equation
+   :form "$((A\\# H)\\ot\\lambda)\\alpha=(\\rho\\ot (B\\# H))\\alpha$"
+   :role :mexpr
+   :parse-incomplete true
+   :tokens [{:token "(" :role :grouping}
+            {:token "(" :role :grouping}
+            {:token "A" :node :A}
+            {:token "\\#" :node :smash-product}
+            {:token "H" :node :H}
+            {:token ")" :role :grouping}
+            {:token "\\ot" :node :tensor-product}
+            {:token "\\lambda" :node :lambda}
+            {:token ")" :role :grouping}
+            {:token "\\alpha" :node :alpha}
+            {:token "=" :role :equality}
+            {:token "(" :role :grouping}
+            {:token "\\rho" :node :rho}
+            {:token "\\ot" :node :tensor-product}
+            {:token "(" :role :grouping}
+            {:token "B" :node :B}
+            {:token "\\#" :node :smash-product}
+            {:token "H" :node :H}
+            {:token ")" :role :grouping}
+            {:token ")" :role :grouping}
+            {:token "\\alpha" :node :alpha}]
+   :via "We furthermore have $((A\\# H)\\ot\\lambda)\\alpha=(\\rho\\ot (B\\# H))\\alpha$."
+   :rule :R14}
+  {:id :proof-discourse-indeed
+   :form "Indeed,"
+   :role :proof-discourse
+   :binder :convention-bind
+   :via "Indeed,"
+   :rule :R13}
+  {:id :cocommutativity
+   :form "coc."
+   :role :authored-justification
+   :binder :convention-bind
+   :via "\\stackrel{coc.}{=}"
+   :rule :R13}
+  {:id :coassociativity
+   :form "coass."
+   :role :authored-justification
+   :binder :convention-bind
+   :via "\\stackrel{coass.}{=}"
+   :rule :R13}
+  {:id :naturality
+   :form "nat."
+   :role :authored-justification
+   :binder :convention-bind
+   :via "\\stackrel{nat.}{=}"
+   :rule :R13}
+  {:id :braid-lin-ref
+   :form "Prop. \\ref{braid-lin}"
+   :role :reference
+   :binder :promissory-bind
+   :via "Prop. \\ref{braid-lin}"
+   :rule :R12}
+  {:id :diagram-claim-0
+   :form "\\scalebox{0.8}[0.8]{\\gbeg{5}{7} ... \\gend}"
+   :role :display-diagram
+   :parse-incomplete true
+   :structural-macros ["\\got(A,B,H)" "\\gcmu x2" "\\gbr x1" "\\gcn x1" "\\gibr x2" "\\gob(A,H,H,B,H)" "\\gcl wires"]
+   :layout-macros-suppressed ["\\scalebox" "\\gbeg" "\\gend" "\\gnl"]
+   :via "\\gbeg{5}{7}\n\\got{1}{A} \\got{1}{B} \\got{2}{H} \\gnl\n\\gcl{1} \\gcl{1} \\gcmu \\gnl\n\\gcl{1} \\gbr \\gcn{1}{1}{1}{2} \\gnl\n\\gcl{1} \\gcl{1} \\gcl{1} \\gcmu \\gnl\n\\gcl{1} \\gcl{1} \\gcl{1} \\gibr \\gnl\n\\gcl{1} \\gcl{1} \\gibr \\gcl{1} \\gnl\n\\gob{1}{A} \\gob{1}{H} \\gob{1}{H} \\gob{1}{B} \\gob{1}{H}\n\\gend}"
+   :rule :R15}
+  {:id :diagram-claim-1
+   :form "\\scalebox{0.8}[0.8]{\\gbeg{5}{6} ... \\gend}"
+   :role :display-diagram
+   :parse-incomplete true
+   :structural-macros ["\\got(A,B,H)" "\\gcmu x2" "\\gbr x1" "\\gcn x1" "\\gibr x1" "\\gob(A,H,H,B,H)" "\\gcl wires"]
+   :layout-macros-suppressed ["\\scalebox" "\\gbeg" "\\gend" "\\gnl"]
+   :via "\\gbeg{5}{6}\n\\got{1}{A} \\got{1}{B} \\got{2}{H} \\gnl\n\\gcl{1} \\gcl{1} \\gcmu \\gnl\n\\gcl{1} \\gbr \\gcn{1}{1}{1}{2} \\gnl\n\\gcl{1} \\gcl{1} \\gcl{1} \\gcmu \\gnl\n\\gcl{1} \\gcl{1} \\gibr \\gcl{1} \\gnl\n\\gob{1}{A} \\gob{1}{H} \\gob{1}{H} \\gob{1}{B} \\gob{1}{H}\n\\gend}"
+   :rule :R15}
+  {:id :diagram-claim-2
+   :form "\\scalebox{0.8}[0.8]{\\gbeg{5}{7} ... \\gend}"
+   :role :display-diagram
+   :parse-incomplete true
+   :structural-macros ["\\got(A,B,H)" "\\gcmu x2" "\\gbr x2" "\\gcn x3" "\\gibr x1" "\\gob(A,H,H,B,H)" "\\gcl wires"]
+   :layout-macros-suppressed ["\\scalebox" "\\gbeg" "\\gend" "\\gnl" "\\gvac" "\\hspace"]
+   :via "\\gbeg{5}{7}\n\\got{1}{A} \\got{1}{B} \\got{1}{} \\got{2}{H} \\gnl\n\\gcl{5} \\gcl{3} \\gvac{1} \\gcmu \\gnl\n\\gvac{3} \\hspace{-0,22cm} \\gcmu \\hspace{-0,2cm} \\gcl{4} \\gnl\n\\gvac{3} \\hspace{-0,16cm} \\gcn{1}{1}{2}{1} \\gcn{1}{1}{2}{2} \\gnl\n\\gvac{2} \\gbr \\gcn{1}{1}{2}{1} \\gnl\n\\gvac{2} \\gcl{1} \\gibr \\gnl\n\\gvac{1} \\gob{1}{A} \\gob{1}{H} \\gob{1}{H} \\gob{1}{B} \\gob{1}{H}\n\\gend}"
+   :rule :R15}
+  {:id :diagram-claim-3
+   :form "\\scalebox{0.8}[0.8]{\\gbeg{5}{6} ... \\gend}"
+   :role :display-diagram
+   :parse-incomplete true
+   :structural-macros ["\\got(A,B,H)" "\\gcmu x2" "\\gbr x1" "\\gob(A,H,B,H)" "\\gcl wires"]
+   :layout-macros-suppressed ["\\scalebox" "\\gbeg" "\\gend" "\\gnl" "\\gvac" "\\hspace"]
+   :via "\\gbeg{5}{6}\n\\got{1}{A} \\got{1}{B} \\got{2}{H} \\gnl\n\\gcl{1} \\gcl{1} \\gcmu \\gnl\n\\gcl{1} \\gbr \\gcl{2} \\gnl\n\\gcl{1} \\gcl{1} \\gcl{1} \\gnl\n\\gcl{1} \\hspace{-0,2cm} \\gcmu \\hspace{-0,22cm} \\gcl{1} \\gcl{1} \\gnl\n\\gvac{1} \\gob{1}{A} \\gob{1}{H} \\gob{1}{B} \\gob{1}{H}\n\\gend}"
+   :rule :R15}
+  {:id :compute-discourse
+   :form "We now compute looking at the Diagram \\ref{diagp69}:"
+   :role :proof-discourse
+   :binder :convention-bind
+   :via "We now compute looking at the Diagram \\ref{diagp69}:"
+   :rule :R13}
+  {:id :array-computation
+   :form "$$\\begin{array}{l} ... \\end{array}$$"
+   :role :display-equational-chain
+   :parse-incomplete true
+   :tokens [{:token "j_{A'}" :node :j-A-prime}
+            {:token "\\ot" :node :tensor-product}
+            {:token "H" :node :H}
+            {:token "\\ot" :node :tensor-product}
+            {:token "j_{B'}" :node :j-B-prime}
+            {:token "\\rho'" :node :rho-prime}
+            {:token "\\id" :node :identity}
+            {:token "\\zeta^{-1}_{A', B'}" :node :zeta-inv}
+            {:token "\\alpha_1" :node :alpha-1}
+            {:token "\\rho" :node :rho}
+            {:token "\\lambda" :node :lambda}
+            {:token "\\lambda'" :node :lambda-prime}
+            {:token "\\langle1\\rangle" :node :diagram-triangle-1}
+            {:token "\\langle2\\rangle" :node :diagram-triangle-2}
+            {:token "\\langle3\\rangle" :node :diagram-triangle-3}]
+   :via "\\begin{array}{l}\n\\hspace{-0,2cm}(j_{A'}\\ot H\\ot j_{B'})(\\rho'\\ot\\id_{(B\\# H)^B})\\zeta^{-1}_{A', B'}\n\\alpha_1  = \\\\\n \\hspace{3,5cm} \\stackrel{\\langle3\\rangle}{=} (\\rho\\ot\\id_{B'})(j_{A'}\\ot j_{B'})\\zeta^{-1}_{A', B'}\\alpha_1 \\\\\n \\hspace{3,5cm} \\stackrel{\\langle2\\rangle}{=} (\\rho\\ot\\id_{B'})\\breve j\\alpha_1 \\\\\n \\hspace{3,5cm}  \\stackrel{\\langle1\\rangle}{=} (\\rho\\ot\\id_{B'})\\alpha j \\\\\n \\hspace{3,5cm} = (\\id_{A'}\\ot\\lambda)\\alpha j \\\\\n  \\hspace{3,5cm} \\stackrel{\\langle1\\rangle}{=} (\\id_{A'}\\ot\\lambda)\\breve j\\alpha_1\\\\\n   \\hspace{3,5cm} \\stackrel{\\langle2\\rangle}{=} (\\id_{A'}\\ot\\lambda)(j_{A'}\\ot j_{B'})\n\\zeta^{-1}_{A', B'}\\alpha_1 \\\\\n \\hspace{3,5cm} \\stackrel{\\langle3\\rangle}{=} (j_{A'}\\ot H\\ot j_{B'})(\\id_{(A\\# H)^A}\n\\ot\\lambda')\\zeta^{-1}_{A', B'}\\alpha_1.\n\\end{array}"
+   :rule :R14}
+  {:id :monomorphism-inference
+   :form "Since $j_{A'}\\ot H\\ot j_{B'}$ is a monomorphism"
+   :role :proof-discourse
+   :parse-incomplete true
+   :tokens [{:token "j_{A'}" :node :j-A-prime}
+            {:token "\\ot" :node :tensor-product}
+            {:token "H" :node :H}
+            {:token "\\ot" :node :tensor-product}
+            {:token "j_{B'}" :node :j-B-prime}
+            {:token "monomorphism" :role :concept}]
+   :via "Since $j_{A'}\\ot H\\ot j_{B'}$ is a monomorphism, we obtain that $\\zeta^{-1}_{A', B'}\\alpha_1$ induces $\\alpha_2$ so that the diagram $\\langle4\\rangle$ commutes."
+   :rule :R13}]
+ :hyperedges
+ [{:kind :macro-def
+   :ends [{:role :surface :node :tensor-product}]
+   :via "\\newcommand{\\ot}{\\otimes}"
+   :rule :R5}
+  {:kind :macro-def
+   :ends [{:role :surface :node :identity}]
+   :via "\\newcommand{\\id}{\\it id}"
+   :rule :R5}
+  {:kind :display-definition
+   :ends [{:role :defined :node :A-prime}
+          {:role :value :node :A-smash-H}]
+   :via "A':=A\\# H"
+   :rule :R6}
+  {:kind :display-definition
+   :ends [{:role :defined :node :B-prime}
+          {:role :value :node :B-smash-H}]
+   :via "B':=B\\# H"
+   :rule :R6}
+  {:kind :display-definition
+   :ends [{:role :defined :node :rho}
+          {:role :value :node :A-smash-H}]
+   :via "\\rho:=\\rho_{A\\#H}"
+   :rule :R6}
+  {:kind :display-definition
+   :ends [{:role :defined :node :lambda}
+          {:role :value :node :B-smash-H}]
+   :via "\\lambda:=\\lambda_{B\\#H}"
+   :rule :R6}
+  {:kind :claims-equation
+   :ends [{:role :claim :node :claimed-equation}]
+   :via "We furthermore have $((A\\# H)\\ot\\lambda)\\alpha=(\\rho\\ot (B\\# H))\\alpha$."
+   :rule :R13}
+  {:kind :proves-by-diagram-chain
+   :ends [{:role :discourse :node :proof-discourse-indeed}
+          {:role :claim :node :claimed-equation}
+          {:role :first-display :node :diagram-claim-0}]
+   :via "Indeed,"
+   :rule :R13}
+  {:kind :equational-step
+   :ends [{:role :from :node :diagram-claim-0}
+          {:role :to :node :diagram-claim-1}
+          {:role :justification :node :cocommutativity}]
+   :justification {:form "\\stackrel{coc.}{=}"
+                   :via "\\gend}\\stackrel{coc.}{=}"
+                   :rule :R13}
+   :via "\\gend}\\stackrel{coc.}{=}\n\\scalebox{0.8}[0.8]{\\gbeg{5}{6}"
+   :rule :R13}
+  {:kind :equational-step
+   :ends [{:role :from :node :diagram-claim-1}
+          {:role :to :node :diagram-claim-2}
+          {:role :justification :node :coassociativity}]
+   :justification {:form "\\stackrel{coass.}{=}"
+                   :via "\\gend} \\stackrel{coass.}{=}"
+                   :rule :R13}
+   :via "\\gend} \\stackrel{coass.}{=}\n\\scalebox{0.8}[0.8]{\\gbeg{5}{7}"
+   :rule :R13}
+  {:kind :equational-step
+   :ends [{:role :from :node :diagram-claim-2}
+          {:role :to :node :diagram-claim-3}
+          {:role :justification :node :naturality}
+          {:role :justification :node :braid-lin-ref}]
+   :justification {:form "\\stackrel{Prop. \\ref{braid-lin}}{\\stackrel{nat.}{=}}"
+                   :via "\\gend} \\stackrel{Prop. \\ref{braid-lin}}{\\stackrel{nat.}{=}}"
+                   :rule :R12}
+   :via "\\gend} \\stackrel{Prop. \\ref{braid-lin}}{\\stackrel{nat.}{=}}\n\\scalebox{0.8}[0.8]{\\gbeg{5}{6}"
+   :rule :R12}
+  {:kind :references
+   :ends [{:role :reference :node :braid-lin-ref}]
+   :via "Prop. \\ref{braid-lin}"
+   :rule :R12}
+  {:kind :references
+   :ends [{:role :reference :node :diagp69}]
+   :via "We now compute looking at the Diagram \\ref{diagp69}:"
+   :rule :R12}
+  {:kind :equational-step
+   :ends [{:role :chain :node :array-computation}
+          {:role :justification :node :diagram-triangle-3}]
+   :justification {:form "\\stackrel{\\langle3\\rangle}{=}"
+                   :via "\\stackrel{\\langle3\\rangle}{=}"
+                   :rule :R12}
+   :via "\\stackrel{\\langle3\\rangle}{=} (\\rho\\ot\\id_{B'})(j_{A'}\\ot j_{B'})\\zeta^{-1}_{A', B'}\\alpha_1"
+   :rule :R12}
+  {:kind :equational-step
+   :ends [{:role :chain :node :array-computation}
+          {:role :justification :node :diagram-triangle-2}]
+   :justification {:form "\\stackrel{\\langle2\\rangle}{=}"
+                   :via "\\stackrel{\\langle2\\rangle}{=}"
+                   :rule :R12}
+   :via "\\stackrel{\\langle2\\rangle}{=} (\\rho\\ot\\id_{B'})\\breve j\\alpha_1"
+   :rule :R12}
+  {:kind :equational-step
+   :ends [{:role :chain :node :array-computation}
+          {:role :justification :node :diagram-triangle-1}]
+   :justification {:form "\\stackrel{\\langle1\\rangle}{=}"
+                   :via "\\stackrel{\\langle1\\rangle}{=}"
+                   :rule :R12}
+   :via "\\stackrel{\\langle1\\rangle}{=} (\\rho\\ot\\id_{B'})\\alpha j"
+   :rule :R12}
+  {:kind :equational-step
+   :ends [{:role :chain :node :array-computation}
+          {:role :claim-used :node :claimed-equation}]
+   :justification {:form "="
+                   :via "= (\\id_{A'}\\ot\\lambda)\\alpha j"
+                   :rule :R13}
+   :via "= (\\id_{A'}\\ot\\lambda)\\alpha j"
+   :rule :R13}
+  {:kind :equational-step
+   :ends [{:role :chain :node :array-computation}
+          {:role :justification :node :diagram-triangle-1}]
+   :justification {:form "\\stackrel{\\langle1\\rangle}{=}"
+                   :via "\\stackrel{\\langle1\\rangle}{=}"
+                   :rule :R12}
+   :via "\\stackrel{\\langle1\\rangle}{=} (\\id_{A'}\\ot\\lambda)\\breve j\\alpha_1"
+   :rule :R12}
+  {:kind :equational-step
+   :ends [{:role :chain :node :array-computation}
+          {:role :justification :node :diagram-triangle-2}]
+   :justification {:form "\\stackrel{\\langle2\\rangle}{=}"
+                   :via "\\stackrel{\\langle2\\rangle}{=}"
+                   :rule :R12}
+   :via "\\stackrel{\\langle2\\rangle}{=} (\\id_{A'}\\ot\\lambda)(j_{A'}\\ot j_{B'})"
+   :rule :R12}
+  {:kind :equational-step
+   :ends [{:role :chain :node :array-computation}
+          {:role :justification :node :diagram-triangle-3}]
+   :justification {:form "\\stackrel{\\langle3\\rangle}{=}"
+                   :via "\\stackrel{\\langle3\\rangle}{=}"
+                   :rule :R12}
+   :via "\\stackrel{\\langle3\\rangle}{=} (j_{A'}\\ot H\\ot j_{B'})(\\id_{(A\\# H)^A}\n\\ot\\lambda')\\zeta^{-1}_{A', B'}\\alpha_1."
+   :rule :R12}
+  {:kind :monomorphism-cancel
+   :ends [{:role :premise :node :monomorphism-inference}
+          {:role :morphism :node :zeta-inv}
+          {:role :input :node :alpha-1}
+          {:role :output :node :alpha-2}
+          {:role :commuting-region :node :diagram-triangle-4}]
+   :via "Since $j_{A'}\\ot H\\ot j_{B'}$ is a monomorphism, we obtain that $\\zeta^{-1}_{A', B'}\\alpha_1$ induces $\\alpha_2$ so that the diagram $\\langle4\\rangle$ commutes."
+   :rule :R13}]}
