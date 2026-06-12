@@ -70,6 +70,7 @@
    :role :symbol
    :binder :semantic-bind
    :standard-decodes ["\\widehat is a standard TeX/LaTeX accent, not an author macro"]
+   :standard-roles ["\\widehat => OVERACCENT (latexml-math-roles.tsv:968)"]
    :via "Define a new set of morphisms $$\\widehat{S} :=\\{ (f \\otimesShv Z)[n] \\mid n \\in \\bb Z, Z \\in \\Smk , f \\in S \\} $$"
    :rule :R6}
   {:id :display-widehat-S
@@ -79,6 +80,10 @@
    :macro-decodes ["\\otimesShv = \\underset{\\mathrm{Shv}}{\\otimes} (Bonart1arxiv.tex:151)"
                   "\\bb = \\mathbb (Bonart1arxiv.tex:106)"
                   "\\Smk = \\mathsf{Sm}_k (Bonart1arxiv.tex:138)"]
+   :inherited-roles ["\\otimesShv inherits \\otimes => MULOP (latexml-math-roles.tsv:697) via Bonart1arxiv.tex:151"]
+   :standard-roles ["\\widehat => OVERACCENT (latexml-math-roles.tsv:968)"
+                    "\\mid => VERTBAR (latexml-math-roles.tsv:534)"
+                    "\\in => RELOP (latexml-math-roles.tsv:388)"]
    :via "Define a new set of morphisms $$\\widehat{S} :=\\{ (f \\otimesShv Z)[n] \\mid n \\in \\bb Z, Z \\in \\Smk , f \\in S \\} $$"
    :rule :R14}
   {:id :D-B-ShvA
@@ -131,6 +136,9 @@
    :role :symbol
    :binder :semantic-bind
    :parse-incomplete true
+   :standard-roles ["\\rightarrow => ARROW (latexml-math-roles.tsv:749)"
+                    "\\in => RELOP (latexml-math-roles.tsv:388)"
+                    "\\widehat => OVERACCENT (latexml-math-roles.tsv:968)"]
    :via "for all $g: C \\rightarrow D, g \\in \\widehat{S}$"
    :rule :R2}
   {:id :isomorphism
@@ -144,6 +152,7 @@
    :parse-incomplete true
    :macro-decodes ["\\cc = \\mathcal (Bonart1arxiv.tex:105)"
                   "\\ShvA = \\Shv(\\Cor) (Bonart1arxiv.tex:142)"]
+   :standard-roles ["\\rightarrow => ARROW (latexml-math-roles.tsv:749)"]
    :via "$$g^*: \\mathrm{Hom}_{D([\\cc B, \\ShvA])}(D,F) \\rightarrow \\mathrm{Hom}_{D([\\cc B, \\ShvA])}(C,F).$$"
    :rule :R14}]
  :hyperedges

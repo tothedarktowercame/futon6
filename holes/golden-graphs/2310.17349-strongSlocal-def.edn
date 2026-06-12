@@ -98,6 +98,8 @@
                   "\\otimesShv = \\underset{\\mathrm{Shv}}{\\otimes} (Bonart1arxiv.tex:151)"
                   "\\Ch = \\mathsf{Ch} (Bonart1arxiv.tex:166)"
                   "\\Ab = Ab operator (Bonart1arxiv.tex:71)"]
+   :inherited-roles ["\\otimesShv inherits \\otimes => MULOP (latexml-math-roles.tsv:697) via Bonart1arxiv.tex:151"]
+   :standard-roles ["\\in => RELOP (latexml-math-roles.tsv:388)"]
    :via "$$\\homShv(A,B)(Z) := \\mathrm{map}^{\\mathrm{Ch(Ab)}}(A \\otimesShv Z, B) \\in \\Ch(\\Ab)$$"
    :rule :R6}
   {:id :F
@@ -128,6 +130,7 @@
    :role :symbol
    :binder :semantic-bind
    :parse-incomplete true
+   :standard-roles ["\\rightarrow => ARROW (latexml-math-roles.tsv:749)"]
    :via "for every $f : A \\rightarrow B$ in $S$"
    :rule :R2}
   {:id :quasi-isomorphism
@@ -140,6 +143,7 @@
    :role :display
    :parse-incomplete true
    :macro-decodes ["\\homShv = \\mathrm{map}^{\\mathrm{Ch(\\ShvA)}} (Bonart1arxiv.tex:148)"]
+   :standard-roles ["\\rightarrow => ARROW (latexml-math-roles.tsv:749)"]
    :via "$$\\homShv(B,F) \\rightarrow \\homShv(A,F) $$"
    :rule :R14}
   {:id :strictly-S-local
