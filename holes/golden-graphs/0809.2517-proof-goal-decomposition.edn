@@ -92,10 +92,11 @@
   {:id :azumaya-algebra,
    :form "Azumaya algebra",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/Azumaya+algebra"},
    :via "$H$-Azumaya algebra",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :H-Azumaya-algebra,
    :form "$H$-Azumaya algebra",
    :role :compound,
@@ -105,10 +106,11 @@
   {:id :galois-object,
    :form "Galois object",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/Galois+object"},
    :via "$H$-Galois object",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :H-Galois-object,
    :form "$H$-Galois object",
    :role :compound,
@@ -146,10 +148,11 @@
   {:id :comodule-algebra,
    :form "comodule algebra",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/comodule+algebra"},
    :via "$H$-comodule algebra",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :H-comodule-algebra,
    :form "$H$-comodule algebra",
    :role :compound,
@@ -159,10 +162,12 @@
   {:id :faithfully-flat,
    :form "faithfully flat",
    :role :property,
-   :canon :pointer,
+   :canon
+   {:nlab "https://ncatlab.org/nlab/show/faithfully+flat+morphism"},
    :via "faithfully flat",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :can,
    :form "can",
    :role :symbol,
@@ -180,10 +185,11 @@
   {:id :isomorphism,
    :form "isomorphism",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/isomorphism"},
    :via "is an isomorphism",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :obligation-1,
    :form "1) $(A\\# H)^A$ is an $H$-comodule algebra",
    :role :obligation,

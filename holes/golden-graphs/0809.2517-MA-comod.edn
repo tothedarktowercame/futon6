@@ -51,19 +51,22 @@
   {:id :hopf-algebra,
    :form "Hopf algebra",
    :role :concept,
-   :canon :pointer,
-   :satiety {:hungry-for :canon}}
+   :canon {:nlab "https://ncatlab.org/nlab/show/Hopf+algebra"},
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :flat, :form "flat", :role :decorator, :satiety :full}
   {:id :algebra,
    :form "algebra",
    :role :concept,
-   :canon :pointer,
-   :satiety {:hungry-for :canon}}
+   :canon {:nlab "https://ncatlab.org/nlab/show/algebra"},
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :left-module,
    :form "left module",
    :role :concept,
-   :canon :pointer,
-   :satiety {:hungry-for :canon}}
+   :canon {:nlab "https://ncatlab.org/nlab/show/module"},
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :linear, :form "$X$-linear", :role :decorator, :satiety :full}
   {:id :display-1,
    :form "$$\\gbeg{4}{4}...$$",

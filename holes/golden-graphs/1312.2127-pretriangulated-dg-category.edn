@@ -48,10 +48,11 @@
   {:id :dg-category,
    :form "dg-category",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/dg-category"},
    :via "A dg-category $\\mathcal{D}$",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :D,
    :form "$\\mathcal{D}$",
    :role :symbol,
@@ -76,10 +77,11 @@
   {:id :twisted-complex,
    :form "twisted complex",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/twisted+complex"},
    :via "for every twisted complex $K\\in PreTr(\\mathcal{D})$",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :K,
    :form "$K$",
    :role :symbol,
@@ -172,24 +174,28 @@
   {:id :representable,
    :form "representable",
    :role :concept,
-   :canon :pointer,
+   :canon
+   {:nlab "https://ncatlab.org/nlab/show/representable+functor"},
    :via "the dg-functor $\\alpha(K)$ is representable",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :isomorphic,
    :form "isomorphic",
    :role :relation,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/isomorphism"},
    :via "it is isomorphic, as a dg-functor, to $h(X)$",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :dg-functor,
    :form "dg-functor",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/dg-category"},
    :via "as a dg-functor",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :h,
    :form "$h$",
    :role :operator,
@@ -222,10 +228,11 @@
   {:id :object,
    :form "object",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/object"},
    :via "for some object $X\\in \\mathcal{D}$",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:role :mexpr,
    :parse-incomplete false,
    :via "$X\\in \\mathcal{D}$",

@@ -84,11 +84,12 @@
   {:id :dg-functor,
    :form "dg-functor",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/dg-category"},
    :via
    "then the dg-functor $\\epsilon: \\mathcal{D}\\to PreTr(\\mathcal{D})$",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :to,
    :form "\\to",
    :role :operator,
@@ -172,17 +173,21 @@
   {:id :quasi-equivalence,
    :form "quasi-equivalence",
    :role :concept,
-   :canon :pointer,
+   :canon
+   {:nlab
+    "https://ncatlab.org/nlab/show/quasi-equivalence+of+dg-categories"},
    :via "is a quasi-equivalence of dg-categories",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :dg-categories,
    :form "dg-categories",
    :role :concept,
-   :canon :pointer,
+   :canon {:nlab "https://ncatlab.org/nlab/show/dg-category"},
    :via "is a quasi-equivalence of dg-categories",
    :rule :R3,
-   :satiety {:hungry-for :canon}}
+   :satiety :full,
+   :fed-at "2026-06-12"}
   {:id :if-then,
    :form "If ... then ...",
    :role :discourse-operator,
