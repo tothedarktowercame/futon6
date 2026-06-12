@@ -2509,6 +2509,27 @@ def _load_eprint_text_for_entity(eprint_dir, entity_id, max_chars=240_000, max_m
                 return text, meta
             attempts.append(_compact_eprint_meta(meta))
             continue
+        if name.endswith(".gz"):
+            # Old-style arXiv eprints (pre-2007 especially) are gzipped SINGLE
+            # TeX files, not tarballs: tar-decode fails, so try plain gzip.
+            # This was the dominant "unusable" class in the 2026-02-20 CT run
+            # (3,882/9,916 papers fell to abstract-only for want of this path).
+            text, meta = _read_tex_members_from_tar(path, max_chars=max_chars, max_members=max_members)
+            if text:
+                return text, meta
+            attempts.append(_compact_eprint_meta(meta))
+            try:
+                import gzip as _gzip
+                raw = _gzip.decompress(path.read_bytes())
+                guess = raw[: max(8192, max_chars * 2)].decode("utf-8", errors="ignore")
+                if "\\documentclass" in guess or "\\begin{" in guess or "$" in guess:
+                    return guess[:max_chars], {"status": "ok", "path": str(path), "members": [path.name]}
+                attempts.append({"status": "gzip-plain-no-tex", "path": str(path)})
+            except OSError as exc:
+                attempts.append({"status": "gzip-read-error", "path": str(path), "error": str(exc)})
+            except Exception as exc:
+                attempts.append({"status": "gzip-decode-error", "path": str(path), "error": str(exc)})
+            continue
         if name.endswith(".bin"):
             # Some payloads are mislabeled; try tar decode first, then plain text.
             text, meta = _read_tex_members_from_tar(path, max_chars=max_chars, max_members=max_members)
