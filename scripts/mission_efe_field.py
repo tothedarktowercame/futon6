@@ -12,7 +12,7 @@ from collections import defaultdict
 
 ROOT = Path("/home/joe/code")
 POS = json.load(open(ROOT / "futon6/data/mission-carpet-pos.json"))
-SCOPES = json.load(open("/tmp/scopes.json"))
+SCOPES = json.load(open(ROOT / "futon6/data/efe-scopes.json"))  # reproducible: scripts/mission_efe_scope_dump.py
 CAPS = json.load(open(ROOT / "futon6/data/capability-graph.json"))
 ROADS = json.load(open(ROOT / "futon6/data/mission-carpet-roads.json"))
 OUT = ROOT / "futon6/data/mission-efe-field.html"
@@ -29,11 +29,12 @@ def ccol(m): return CLSCOL.get(CLS.get(m, ""), "#888888")
 by_m = defaultdict(list)
 for sc in SCOPES:
     by_m[sc["m"]].append(sc)
-ORDER = {"eightfold-phase": 0, "loose-section": 1, "mission-scope-in": 2, "mission-scope-out": 2,
-         "map-item": 3, "source-material": 4, "relates-to": 5, "capability-scope": 6,
-         "pattern": 7, "psr": 8, "pur": 8}
+ORDER = {"eightfold-phase": 0, "loose-section": 1, "plain-argument": 1, "mission-scope-in": 2,
+         "mission-scope-out": 2, "map-item": 3, "source-material": 4, "relates-to": 5,
+         "capability-scope": 6, "pattern": 7, "psr": 8, "pur": 8,
+         "verify-gate": 9, "certificate": 10}
 GOLD = math.pi * (3 - math.sqrt(5))
-FRONTIER = {"capability-scope", "pattern", "psr", "pur"}
+FRONTIER = {"capability-scope", "pattern", "psr", "pur", "verify-gate"}
 scope_pts, hub_lines, hubs = [], [], []
 for m, scs in by_m.items():
     key = "M-" + m
@@ -48,8 +49,17 @@ for m, scs in by_m.items():
         ang = i * GOLD
         rad = R * math.sqrt((i + 0.5) / n)
         x, y = cx + rad * math.cos(ang), cy + rad * math.sin(ang)
+        vac = bool(sc.get("vacuous"))
+        verdict = sc.get("verdict")
         metric = 0.18 + (1.0 if sc["det"] else 0.0) + (0.30 if sc["binder"] in FRONTIER else 0.0)
-        scope_pts.append((x, y, metric, sc["det"], ccol(m)))
+        # anatomy terms (2026-06-12 redraw): a vacuous scope (binder with no named
+        # entities inside) is suspect terrain; a certificate re-grades its district
+        # by its verdict — verified ground is LOW cost, known-broken ground is high.
+        if vac:
+            metric += 0.5
+        if sc["binder"] == "certificate":
+            metric = max(0.05, metric - 0.45) if verdict == "pass" else metric + 0.8
+        scope_pts.append((x, y, metric, sc["det"], ccol(m), vac, verdict))
         hub_lines.append((cx, cy, x, y))
 
 # --- metric field on a vertex grid via scatter-add ---
@@ -59,7 +69,7 @@ SIGMA = 70.0
 gw, gh = W // STEP + 1, H // STEP + 1
 grid = [[0.0] * gw for _ in range(gh)]
 rc = int(3 * SIGMA / STEP)
-for x, y, mtr, _det, _col in scope_pts:
+for x, y, mtr, _det, _col, _vac, _ver in scope_pts:
     cgx, cgy = int(round(x / STEP)), int(round(y / STEP))
     for vy in range(max(0, cgy - rc), min(gh, cgy + rc + 1)):
         for vx in range(max(0, cgx - rc), min(gw, cgx + rc + 1)):
@@ -192,8 +202,16 @@ for a, b, w in ROADS:
 
 hubline_svg = "".join(f'<line x1="{a:.0f}" y1="{b:.0f}" x2="{c:.1f}" y2="{d:.1f}" stroke="#54627f" stroke-width="0.4" opacity="0.22"/>'
                       for a, b, c, d in hub_lines)
-scope_svg = "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{2.4 if det else 1.4}" fill="{"#ffb454" if det else col}" opacity="{0.9 if det else 0.6}"/>'
-                    for x, y, mtr, det, col in scope_pts)
+def scope_mark(x, y, mtr, det, col, vac, verdict):
+    if verdict is not None:  # certificate: verdict diamond, green pass / red fail
+        c = "#4ade80" if verdict == "pass" else "#ef4444"
+        return (f'<path d="M {x:.1f} {y-4.4:.1f} L {x+4.4:.1f} {y:.1f} L {x:.1f} {y+4.4:.1f} '
+                f'L {x-4.4:.1f} {y:.1f} Z" fill="{c}" stroke="#04060c" stroke-width="0.6" opacity="0.95"/>')
+    if vac:  # vacuous scope: hollow ring — a binder with nothing bound inside
+        return f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.6" fill="none" stroke="{col}" stroke-width="1.0" opacity="0.85"/>'
+    return (f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{2.4 if det else 1.4}" '
+            f'fill="{"#ffb454" if det else col}" opacity="{0.9 if det else 0.6}"/>')
+scope_svg = "".join(scope_mark(*pt) for pt in scope_pts)
 # HEAD hubs: colour = Salingaros class (red/green/blue/grey), size = phylogeny generativity
 hub_svg = "".join(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{2.6+1.5*math.sqrt(GEN.get(m,0)):.1f}" fill="{ccol(m)}" '
                   f'stroke="#04060c" stroke-width="0.9"><title>{m} · {CLS.get(m,"?")} · generativity {GEN.get(m,0)} · {n} scopes</title></circle>'
@@ -260,9 +278,11 @@ for stem, (why, desc) in MARKED.items():
     mscs = by_m.get(stem, [])
     mdet = sum(1 for s in mscs if s["det"])
     mfront = sum(1 for s in mscs if s["binder"] in FRONTIER)
+    mvac = sum(1 for s in mscs if s.get("vacuous"))
+    mcert = [s.get("verdict") for s in mscs if s["binder"] == "certificate"]
     title = (f"🚀 M-{stem} — {why}.  {desc}  "
              f"METRIC HERE: class={CLS.get(stem,'?')} · generativity {GEN.get(stem,0)} · "
-             f"{len(mscs)} scopes, {mdet} open/:detached, {mfront} frontier.  "
+             f"{len(mscs)} scopes, {mdet} open/:detached, {mfront} frontier, {mvac} vacuous, certs={mcert or 'none'}.  "
              f"DIAGNOSTIC: low open-signal ({mdet}/{len(mscs)}) and no frontier scopes ⇒ a low "
              f"epistemic peak — so a WM pick here is likely pragmatic/where-driven, not terrain-driven. "
              f"Look at WHERE it sits: which class-neighbourhood, near which roads/stars.")
@@ -286,7 +306,10 @@ streamlines). Each mission is a DISTRICT — scopes spiral around the HEAD hub, 
 (<span style="color:#3a9a4a">green=alive</span> · <span style="color:#c0392b">red=mess</span> ·
 <span style="color:#3a7ad0">blue=pipeline</span> · grey=stub) and <b>sized by generativity</b> (backlinks).
 Orange points = open <b>:detached</b> holes (high ground); smooth level sets = topography; faint purple = pattern
-roads. <b>★ filled = claimed</b> capability (at its minting mission) · <b>☆ empty = unclaimed</b> (sky: a registered
+roads. <b>Anatomy marks (2026-06-12)</b>: hollow rings = <b>vacuous scopes</b> (a binder with no named
+entities inside — suspect terrain, +cost); <span style="color:#4ade80">◆ green diamond = certificate
+PASS</span> (verified ground, −cost) · <span style="color:#ef4444">◆ red = FAIL</span> (+cost); verify-gates
+count as frontier. <b>★ filled = claimed</b> capability (at its minting mission) · <b>☆ empty = unclaimed</b> (sky: a registered
 goal with no minting mission). <b>🚀 = a specially-marked mission (the WM's current recommendation)</b> —
 cyan ring, hover for its story + metric diagnostic. <b><span style="color:#ffb43c">amber dashed lasso = YOUR
 territory</span></b> (missions worked in git's last ~3 weeks — the momentum/exploit baseline; inside = the WM
