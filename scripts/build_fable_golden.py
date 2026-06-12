@@ -253,6 +253,14 @@ def render(pid):
     base_str = " · ".join(f"{k}:{v}" for k, v in base_counts.most_common(8))
     n_str = " · ".join(f"{k}:{v}" for k, v in n.most_common(12))
     page.write_text(f"""<!doctype html><meta charset=utf-8><title>FABLE GOLDEN — {esc(pid)}</title>
+<script>
+/* live-reload: poll own Last-Modified; reload when the builder rewrites us */
+(async()=>{{let last=null;setInterval(async()=>{{try{{
+ const r=await fetch(location.href,{{method:"HEAD",cache:"no-store"}});
+ const lm=r.headers.get("last-modified");
+ if(last&&lm&&lm!==last){{location.reload();}}
+ if(lm)last=lm;}}catch(e){{}}}},1500);}})();
+</script>
 <style>body{{font:16px/1.7 Georgia,serif;max-width:1000px;margin:30px auto;color:#1d1a16;background:#fffdf8;padding:0 18px}}
 pre{{white-space:pre-wrap;font:inherit}}.card{{border:2px solid #0f766e;border-radius:10px;padding:14px 18px;background:#f6fffd;font-family:system-ui;font-size:14px}}</style>
 <div class="card"><h2 style="margin:0 0 6px">FABLE GOLDEN — {esc(pid)} (base = the system's existing voice; dashes on top = golden ADDITIONS)</h2>
@@ -271,6 +279,21 @@ pre{{white-space:pre-wrap;font:inherit}}.card{{border:2px solid #0f766e;border-r
 <span style="background:#e4ecf4;border-bottom:2px solid #1d3a4d;border-top:2px dashed #444">+real-env</span> ·
 <a href="https://arxiv.org/abs/{esc(pid.replace('_','/'))}">arXiv</a></p>
 <pre>{body}</pre>""")
+    # Emacs surface: text + flat marks for paper-anatomy.el
+    emarks = []
+    for pos, end, kind, tip in flat:
+        emarks.append({"start": pos, "end": end, "layer": "base",
+                       "kind": kind[4:] if kind.startswith("FAM:") else kind,
+                       "tip": tip})
+    for e in envelopes:
+        emarks.append({"start": e["start"], "end": e["end"], "layer": "base",
+                       "kind": "mexpr", "tip": f"math expression ({len(e['subterms'])} subterms)"})
+        for sp, se, st in sorted(set(e["subterms"])):
+            emarks.append({"start": sp, "end": se, "layer": "sub", "kind": st, "tip": st})
+    for pos, end, kind, tip in golden:
+        emarks.append({"start": pos, "end": end, "layer": "golden", "kind": kind, "tip": tip})
+    (OUT_DIR / f"fable-{pid}-emacs.json").write_text(json.dumps(
+        {"paper": pid, "text": text, "marks": sorted(emarks, key=lambda m: m["start"])}))
     print(f"{pid}: base={len(base)} scopes ({base_str}); golden +{len(golden)} -> {page.name}")
 
 
