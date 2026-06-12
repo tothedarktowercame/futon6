@@ -37,11 +37,22 @@
   {:id :flat :form "flat" :role :decorator :via "flat Hopf algebra" :rule :R10}
   {:id :hopf-algebra :form "Hopf algebra" :role :concept :canon :pointer :via "flat Hopf algebra" :rule :R3}
   {:id :flat-hopf-algebra :form "flat Hopf algebra" :role :compound :via "flat Hopf algebra" :rule :R9}
-  {:id :H-linear-mexpr :form "$H$-linear" :role :mexpr :parse-incomplete false :via "$H$-linear" :rule :R14}
+  {:id :H-mexpr :form "$H$" :role :mexpr :parse-incomplete false :via "$H$-linear" :rule :R14}
   {:id :linear :form "linear" :role :concept :canon :pointer :via "$H$-linear" :rule :R9}
   {:id :H-linear :form "$H$-linear" :role :compound :via "$H$-linear" :rule :R9}]
  :hyperedges
- [{:kind :assume :ends [{:role :scope :node :assumption-envelope}
+ [{:kind :envelope :ends [{:role :mexpr :node :C-mexpr}
+                          {:role :content :node :C}]
+   :via "$\\C$" :rule :R1}
+  {:kind :envelope :ends [{:role :mexpr :node :H-in-C-mexpr}
+                          {:role :content :node :H}
+                          {:role :content :node :membership-in}
+                          {:role :content :node :C}]
+   :via "$H\\in\\C$" :rule :R1}
+  {:kind :envelope :ends [{:role :mexpr :node :H-mexpr}
+                          {:role :content :node :H}]
+   :via "$H$-linear" :rule :R1}
+  {:kind :assume :ends [{:role :scope :node :assumption-envelope}
                          {:role :content :node :C}
                          {:role :content :node :H}
                          {:role :content :node :braiding-C}]
