@@ -654,3 +654,40 @@ What the walk produced (one §, paper 0809.2517, ~25 minutes of voice):
 
 Status: ledger = the spec for the next detector generation, minted
 from live operator walk rather than from detector introspection.
+
+## R15 — parsed ≠ understood: syntax marks are not semantic marks
+
+Specimen (0809.2517, ~point 10524, the M^A comodule lemma): here the
+display IS full of marks — and they are "not particularly meaningful"
+(Joe, voice). Inspection confirms: math/macro-call on \hspace{-5pt},
+math/macro-arg on {-5pt} and on grid dimensions {4}, every \gcl{1}
+wire individually... plus the SAME assume span marked twice (dedup
+failure). R14's failure inverted: where elsewhere we mark nothing,
+here we mark the TeX grammar derivation and call it anatomy.
+
+The criterion a mark must meet to be MEANINGFUL: its kind ties tokens
+to the symbol table / concept lane / binder chain. A macro-call mark
+that says "this is a macro with two arguments" is true of \hspace and
+of \glm equally — which is exactly why it is worthless: it
+distinguishes nothing mathematical.
+
+Consequence for the R5 macro table — a SEMANTIC CLASS column:
+- **layout** (\hspace, \gnl, \gvac, spacing/grid args): excluded from
+  anatomy, or quarantined in a typesetting layer. Marking these as
+  math subterms is a category error.
+- **structural** (\glm = left module action, \grcm = right comodule
+  coaction, \gmu/\gcmu = (co)multiplication, \gbr = braiding, \crta =
+  the bar/check decoration on A...): these decode to OPERATIONS — rows
+  that join the concept lane. The GrCalc subterm pass (R6) marks ONLY
+  these, typed by what they denote, not by their TeX arity.
+
+Classification is cheap: the style file groups them (GrCalc3.sty
+comments), the RHS reveals it (pure \kern/\hskip RHS = layout), and
+~20 macros per paper need a judgment call at most.
+
+Also: dedup defect filed — identical (start,end,kind) marks must
+merge.
+
+- Tags: `x` (invented marks on layout tokens), `i` (duplicate assume),
+  type-level.
+- Minted: 2026-06-12, live walk, voice.
