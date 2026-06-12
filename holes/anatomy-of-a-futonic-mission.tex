@@ -1,0 +1,414 @@
+\documentclass[11pt,oneside]{article}
+\usepackage[margin=2.6cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{longtable,booktabs}
+\usepackage{enumitem}
+\usepackage[normalem]{ulem}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{soul}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=teal!60!black, urlcolor=teal!60!black}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\sffamily Anatomy of a Futonic Mission (from the HEAD down)}
+\fancyhead[R]{\small\sffamily\thepage}
+% --- the mission-mode depth palette, in print (per First Proof house style) ---
+\definecolor{phaseframe}{HTML}{0F766E}
+\definecolor{sectamber}{HTML}{B45309}
+\definecolor{subrose}{HTML}{D6608A}
+\definecolor{subviolet}{HTML}{7C3AED}
+\definecolor{hlamber}{HTML}{FDF3DF}
+\definecolor{chipviolet}{HTML}{7C3AED}
+\newtcolorbox{phasebox}[1][]{%
+  breakable, colback=teal!3, colframe=phaseframe,
+  fonttitle=\bfseries\sffamily\small, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.7pt, arc=2pt, before skip=10pt, after skip=6pt}
+\newtcolorbox{sectionbox}[1][]{%
+  breakable, colback=orange!4, colframe=sectamber,
+  fonttitle=\bfseries\sffamily\small, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  boxrule=0.5pt, arc=2pt, before skip=8pt, after skip=4pt}
+\newtcolorbox{subbox}[1][]{%
+  breakable, colback=violet!3, colframe=subrose,
+  fonttitle=\bfseries\sffamily\footnotesize, #1,
+  left=5pt, right=5pt, top=3pt, bottom=3pt,
+  boxrule=0.4pt, arc=2pt, before skip=6pt, after skip=3pt}
+\newtcolorbox{vitalsbox}[1][]{%
+  colback=teal!4, colframe=phaseframe, fonttitle=\bfseries\sffamily,
+  title={$\heartsuit$ vitals (computed from this document)}, #1,
+  left=6pt, right=6pt, top=4pt, bottom=4pt, boxrule=0.7pt, arc=2pt}
+\sethlcolor{hlamber}
+\newcommand{\scopehl}[1]{\texttt{\hl{#1}}}
+\begin{document}
+\begin{center}{\LARGE\bfseries Anatomy of a Futonic Mission (from the HEAD down)}\end{center}\medskip
+
+*Preprint skeleton --- DOCUMENT phase of E-mission-head. Companion to "A First
+Proof Sprint" (futon6). Format: running example, not monograph --- the primary
+source is \scopehl{futon6/holes/missions/E-mission-head.md} and its sibling artifacts;
+this paper reads them rather than repeating them.*
+
+\textbf{Status:} draft v3 (2026-06-12, Joe + Fable) --- adds \S{}8, the third ascent: the mission read as a derivation (triple, derive gate, cascade, diagram; 79-mission miner evidence). v2 (2026-06-10): level-0 prose holds to the
+plain-language standard (the ARGUE \S{}4.1 discipline applied to the whole paper:
+boxes may speak the system's native language; the prose around them may not).
+
+\medskip\hrule\medskip
+
+\section*{1. Two ascents of one mountain}
+
+In the software system we work in, the unit of work is called a \emph{mission}: a
+single document that begins with a short statement of intent (its \emph{HEAD}) and
+grows, phase by phase, into a finished piece of work. On 10 June 2026 one
+mission went from a bare statement of intent to a verified design in a single
+working session --- and two different instruments watched it happen.
+
+The first instrument read the mission's \textbf{structure}. As each section was
+written, a live outline showed the document's parts --- its phases, sections,
+and cited methods --- appearing as nested, colored blocks, with the phases that
+had \emph{not} been written yet shown as pale "ghost" lines. The second instrument
+read the mission's \textbf{life}. The same statement of intent was compiled into a
+small numerical fingerprint, from which the system computed a health report
+for the newborn work: how confident, what was missing, what would count as
+failure --- together with stated conditions under which the work would declare
+itself dead.
+
+In René Daumal's \emph{Mount Analogue}, a mountain is climbed by parties on
+different faces, and what makes the summit real is that the ascents agree.
+The two readings here are two such ascents: neither reduces to the other, and
+their agreement --- made precise in \S{}5 --- is the point.
+
+\section*{2. The running example}
+
+The running example is a mission whose subject is missions themselves: *make
+the opening statement of intent a typed, checkable object*. Its development
+is unusually well documented because it documented itself --- every phase it
+grew through was captured by the very tooling it was building. The primary
+sources (everything below is on disk and quoted from, never paraphrased):
+
+\begin{center}\small\begin{tabular}{ll}
+\toprule
+artifact & reading \\
+\midrule
+\scopehl{E-mission-head.md} (the doc, HEAD$\rightarrow$DOCUMENT) & both --- the common source \\
+substrate-2 mission-scope hyperedges (31 scopes) + \scopehl{*mission-overview*} & scope \\
+\scopehl{E-mission-head.aif.edn} (sigil, vitals, F-nodes, amendments) + \scopehl{-contra} & AIF \\
+\scopehl{meme.db} \scopehl{diagram/E-mission-head} (4+3 arrows) + \scopehl{cascade/E-mission-head-argue} (3+3) & both \\
+\scopehl{mission\_head\_invariants.clj} (VERIFY V0, 5/5) & AIF (verified) / scope (a scope) \\
+\scopehl{closure-folds.edn} entries incl. the first \scopehl{:success false} & the loop's grain \\
+\bottomrule
+\end{tabular}\end{center}
+
+\begin{vitalsbox}
+confidence 0.33 $\cdot$ xenotype 89\% $\cdot$ exotype \texttt{00011100}\\[2pt]$\otimes$\textsf{\small IF} $\otimes$\textsf{\small HOWEVER} \checkmark{}\textsf{\small THEN} \checkmark{}\textsf{\small BECAUSE}\\[3pt]\emph{alive but wobbly: xenotype completeness 0.89; strong anchors ['THEN', 'BECAUSE'], weak anchors ['IF', 'HOWEVER'].}\\[2pt]{\scriptsize generated 2026-06-10T18:16:29 by \texttt{head\_exotype\_probe.py}}
+\end{vitalsbox}
+
+
+\section*{3. The scope reading (anatomy)}
+
+Read structurally, a mission is a nested system of typed regions of text ---
+\emph{scopes}. The standard life-cycle phases form its spine; sections nest inside
+phases; records of which methods were chosen, and how they fared, nest inside
+sections. A detector finds these regions automatically and a panel draws them
+as colored blocks inside blocks (the same typography used in this PDF). This
+reading is third-person and anatomical: it says what the mission is *made
+of*. Its most useful device is the \textbf{ghost line}: a life-cycle phase that
+the standard form expects but the document does not yet contain, drawn in
+pale outline. Here is the running example's opening statement, exactly as the
+structural typography renders it:
+
+\begin{phasebox}[title={HEAD (Joe, 2026-06-10, verbatim sense)}]
+
+A mission's HEAD is doing two things at once.
+
+First, in a Jazz or Free Jazz sense, the HEAD is the **theme around which the
+whole mission is improvised** --- ideally in a fully automated way, by following
+the \textbf{patterns of improvisation} that Joe intends to learn from the futon5
+work. We are not there yet.
+
+Second, each mission is a \textbf{virtual peripheral}, and the HEAD is an **AIF
+head\textbf{: it should be }mappable to the usual AIF terminal vocabulary** ---
+priors, preferences, observations, policies --- which would allow us to
+understand, in typed terms, **what it means to satisfy the requirements of
+the mission**.
+
+Concretely, the HEAD should therefore carry an extraction of \textbf{concepts} ---
+per the \textbf{Interest Network} --- named entities like "storage", "agents",
+"patterns", "meme graph", "futon3b", "pattern cascades", obtainable just by
+\emph{reading the HEAD}. The current kernel extraction is unigram-grade; the
+upgrade is Interest-Network-grade extraction over the mission corpus, feeding
+the mission-mode concept lane that already exists. The satisfaction-conditions
+half connects to E-ground-G: a HEAD mapped to AIF terminal vocabulary is what
+grounded-G ultimately discharges against.
+
+\end{phasebox}
+
+\section*{4. The organism reading (physiology)}
+
+Read the other way, the mission is a small organism. (In-house this is
+called the \emph{AIF reading}, after \textbf{active inference} --- a framework from
+computational neuroscience in which an organism maintains a model of itself
+and acts to keep that model's predictions true. Nothing below requires more
+of the theory than that sentence.) Its statement of intent
+is rewritten in a four-part design-pattern form (*if / however / then /
+because*) and compiled into a numerical fingerprint --- the system borrows the
+word \emph{sigil}, after an earlier experiment in which simulated ants were
+animated by installing exactly such fingerprints. From the sigil the system
+computes birth vitals; the design states in advance what observations would
+prove it wrong; the work even argues for its own existence against the
+strongest objections we could write down, and carries a clause that declares
+it dead, publicly, if its parts are not put to use by a deadline. This
+reading is first-person and physiological: it says what the mission \emph{wants}
+and whether it is \emph{well}. Its most useful device is the \textbf{open arrow}: a
+named gap whose target is specified but whose construction is still owed.
+The moment the organism first spoke --- the fingerprint compilation, from the
+source:
+
+\begin{subbox}[title={3.3.1 v0.1 RESULT --- the Golemization run (2026-06-10)}]
+
+The probe's pattern-mode ran on \S{}3.3's recast (same projector, section-wise):
+
+\begin{center}\small\begin{tabular}{lllll}
+\toprule
+section & bits & conf & nearest anchor & cos \\
+\midrule
+IF & \scopehl{00011100} & 0.28 & hexagram-49 \textbf{Ge } (molting/revolution) & 0.284 \\
+HOWEVER & \scopehl{00011001} & 0.36 & hexagram-13 \textbf{Tongren } (fellowship) & 0.306 \\
+THEN & \scopehl{10101100} & 0.32 & iiching/exotype-248 & \textbf{0.454} \\
+BECAUSE & \scopehl{11001000} & 0.37 & hexagram-31 \textbf{Xian } (mutual influence) & \textbf{0.461} \\
+\bottomrule
+\end{tabular}\end{center}
+
+**xenotype-32 \scopehl{00011100$\cdot$00011001$\cdot$10101100$\cdot$11001000}, mean-conf 0.33** (baseline 0.29).
+
+Findings, honestly weighted:
+\begin{enumerate}[leftmargin=1.4em,itemsep=1pt]
+\item \textbf{Qualitative unlock confirmed: the sigil now exists.} The xenotype was \emph{uncomputable} before the recast; the Golem has a complete shem.
+\item \textbf{Bit-confidence lift is modest} (+0.04). Sectioning helps; it does not transform the projection. (Caveat: v0.1 reused the whole-pattern projector per section; the bridge's official path trains per-section projectors --- some headroom there.)
+\item \textbf{The real signal moved into anchor proximity, asymmetrically}: THEN and BECAUSE land at cos $\approx$ 0.46 --- a third stronger than the whole-text best (0.349) --- while IF/HOWEVER stay weak ($\approx$ 0.29). Reading: \textbf{the actionable half of a HEAD (move + warrant) projects into pattern-space well; the intent/gap half is mission-specific prose the pattern-grain anchors don't cover.} Supports next-car 3: HEAD-grain anchors (missions with known outcomes) for the IF/HOWEVER half.
+\item The oracle stayed coherent: intent$\rightarrow$\emph{molting}, gap$\rightarrow$\emph{fellowship}, warrant$\rightarrow$\emph{mutual influence}. Recorded as flavor, not evidence.
+\end{enumerate}
+
+\end{subbox}
+
+\section*{5. The synthesis (the new thing)}
+
+The two readings are not merely parallel descriptions; they are **coupled,
+the way observation and model are coupled in a living thing**:
+
+\begin{quote}\itshape
+**The structural reading is the organism's observation space; the organism
+reading is its model of itself. A mission is well-formed exactly when the two cohere,
+and the coherence is computable.**
+\end{quote}
+
+The mapping is exact, not poetic:
+
+\begin{center}\small\begin{tabular}{lll}
+\toprule
+structural object & organism object & the coupling \\
+\midrule
+statement of intent (HEAD) & the model's starting beliefs & the fingerprint compiler \\
+the standard phases & stages of a plan & the standard form is an \emph{expectation about how work unfolds} \\
+\textbf{ghost line} & \textbf{prediction error} & the standard form expects a phase; the document lacks it --- the pale line \emph{is} the mismatch \\
+a phase satisfied in passing & a prediction met by an unexpected route & belief updated without the expected observation \\
+open arrow & an unmet commitment the model still expects & the deadline clause prices its persistence \\
+method chosen / how it fared & action selected / outcome observed & the records make the learning loop legible \\
+stated failure condition & what would \emph{count} as error & written before the construction, never after \\
+the vitals card & interoception (the body sensing itself) & computed \emph{from} the structurally-readable document \\
+the outline panel & exteroception (the body as seen) & the same document, drawn \\
+\bottomrule
+\end{tabular}\end{center}
+
+Three consequences worth the paper:
+
+\begin{enumerate}[leftmargin=1.3em,itemsep=1pt]
+\item \textbf{The body-schema claim.} Late in the session, three pieces of wiring were added: the health report is computed from the document, displayed in the outline panel, and fed into the mission's model of itself. That is not plumbing; it is the binding of inner sense to outer sense --- the point at which the mission acquires a body schema. Before it, two instruments; after it, one organism with two senses.
+\item \textbf{Coherence is checkable.} Disagreements between the readings are not embarrassments but findings, surfaced mechanically: structure the model has no use for (decoration); a want with no corresponding structure (a desire nothing can observe --- the session caught a cited method that had never actually been written down this way); a ghost the model says is already satisfied (one phase was closed in passing, inside another section, and the detector learned to see it). The session produced live instances of all three.
+\item \textbf{The synthesis pays one of its own debts.} When the mission argued for its existence, its argument leaned on a design principle that turned out never to have been written into the method library: \emph{two projections of one quantity}. The synthesis above is precisely that principle's missing construction --- the structural reading and the organism reading are two projections of one underlying object, stored three ways. Publishing the argument writes the missing principle down.
+\end{enumerate}
+
+And the Daumal closure, which the stack supplies on its own: the points where
+two independent ascents \emph{agree} are the only points one may call real --- and
+the stack already has a name and a discipline for externally-checkable value
+found on the mountain: \textbf{the peradam}. The synthesis predicts where peradams
+form: at reading-agreements. "One descends, one sees no longer, but one has
+seen."
+
+And the argument in the register anyone can read --- the mission's own
+plain-language statement, boxed as it appears in the source:
+
+\begin{subbox}[title={4.1 Plain-language argument (the version anyone can read)}]
+
+When we start a piece of work, we write a short statement of what it is for.
+Right now that statement is just words: nothing else in the system can read
+it, check it, or use it. So nobody can tell, at the start, whether a piece of
+work rests on solid ground or shaky ground --- and when work quietly stalls,
+nothing notices. This has already happened here: a major piece of work was
+"finished" on paper three months ago, and nobody saw that it was never
+actually connected to anything.
+
+The proposal: when work begins, turn its opening statement into a small
+summary the system can read --- what the work wants, what is in the way, what
+it will do, and why. From that, the system can show, from day one, how strong
+or weak the work looks, what is missing, and what would count as finishing.
+As the work proceeds, the same readout shows whether it is getting healthier.
+
+What we checked before believing this: we tried it on this very piece of
+work. It partly worked --- the "what to do" and "why" parts came through
+clearly; the "what we want" part needs better reference material, which we
+now know how to gather. We also put up the strongest objections we could
+find, and answered each one:
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=1pt]
+\item \emph{"These summaries will be built and then ignored, like last time."} Last time, nothing showed that the finished work was never put to use. This time there is a deadline: if the pieces are not in use by then, the work is marked as failed, in a place everyone can see.
+\item \emph{"People will write their statements to score well."} The readout is never used as a target or a gate. It is information only, checked occasionally and independently.
+\item \emph{"This will make creative work bureaucratic."} The summary describes only the starting point, never the path. The path stays free --- that freedom is the point of working this way, and it is kept on purpose.
+\end{enumerate}
+
+Every claim above comes with a stated test that would prove it wrong, and the
+first of those tests has already been run and passed.
+
+Why this is needed, in one line: **work should be able to say what it is for,
+in a form that lets anyone --- or anything --- check how it is doing.**
+
+\end{subbox}
+
+\section*{6. Method appendix (planned)}
+
+How the session was actually run: a human operator and several AI agents
+sharing one learning loop --- every method-use recorded with its outcome
+(including the record-keeping's first honestly-logged \emph{failure}), build work
+handed to worker agents with acceptance criteria and reviewed on return, and
+each claim checked against the system's stores before being written here.
+Technical cross-references for in-house readers are kept in the source
+repositories rather than in this text.
+
+\section*{7. A second ascent: a mission read mid-life}
+
+The running example above was born instrumented --- it documented itself from
+its first sentence. The harder test of the two readings is a mission that
+lived first and was analyzed later. On 11 June 2026 the structural
+instruments were pointed at \scopehl{M-futonzero-generative} --- a mission chartered
+two days earlier, advanced through twenty live War-Machine flights, its
+work products built by three agents --- and the detector recovered
+\textbf{33 typed scopes} from a document nobody wrote for the instruments.
+
+What the structural reading found, mid-life: the mission's *behavioral
+constraints* came back as typed objects --- each "scope out" bullet ("No
+reward-trained policy update", "No hidden scheduler") is an anchored scope
+with outward polarity, machine-visible at its exact line; its two hard
+gates and its checkpoint came back as sections; and its life-cycle came
+back honestly thin --- HEAD and IDENTIFY present, every later phase a ghost
+line, which is \emph{true}: this mission advances by external flights, not by
+writing its own phases. The organism reading agrees from the other face:
+the twenty flights were this mission's metabolism, and the document only
+records what the metabolism deposited.
+
+And the instrument reported its own boundary, which is the finding worth
+the section: the mission's **Remaining-Work checklist --- the seven counted
+holes that the flights actually closed and the War Machine actually
+counted --- is invisible to the scope reading.** The checkboxes detect as
+nothing at all; meanwhile a separate counter (the mission registry's)
+reads the same lines by regex, and the flights' acts changed them without
+either instrument seeing one object. Three systems touch the same holes;
+none share them. The mid-life analysis thus ends the way the first ascent
+did --- with the synthesis paying a debt by \emph{naming} it: the counted hole
+wants to become a first-class scope, so that a hole's count, a flight's
+act, and a panel's display are one thing read three ways. That is the
+next construction, and this paragraph is its preregistration.
+
+\section*{8. A third ascent: the mission read as a derivation}
+
+Two days after the first ascent, a third reading emerged --- not of a
+mission's structure or its life, but of its \emph{logic}. On 12 June 2026 a
+human operator and an agent flew the War Machine together for an afternoon,
+with \scopehl{M-first-flights} as the mission under advance, and what
+crystallized is that a mission, read whole, is a \textbf{derivation}: it
+states a typed gap, argues a way across, checks the argument, and builds the
+term. Each phase contributes one part of a single formal object --- a
+\emph{triple}.
+
+\begin{phasebox}[title={the triple a mission mints}]
+\textbf{(typed hole, term, wiring diagram)}\\[2pt]
+\emph{hole} --- what is missing, stated as an arrow from what we \emph{have}
+to what we \emph{want}. Minted at the end of DERIVE and persisted in the
+arrow store; the worked instance is \scopehl{arr-7535a5b6-e59}: \emph{have}
+flight records whose grounds live in prose, \emph{want} flights as a fully
+typed corpus.\\[2pt]
+\emph{term} --- the construction that fills the hole (here: a renderer that
+was specified, built by a worker agent, and reviewed the same evening).\\[2pt]
+\emph{diagram} --- the composition showing \emph{how} the term fills the
+hole: every step wired from the \emph{have} port to the \emph{want} port,
+each step carrying either its \textbf{witness} (which checkpoint, which
+verdict, which artifact) or a typed statement of what it still \emph{hungers}
+for.
+\end{phasebox}
+
+Three disciplines fell out of the flight, each checkable by the same
+instruments that read structure in \S{}3:
+
+\textbf{The derive gate.} You cannot argue until you know what you are
+arguing about: DERIVE ends only when the typed hole is minted, and the
+mission carries a certificate line saying so --- detected by the same
+certificate lane that reads pass/fail verdicts, so a mission that skipped
+the gate shows the gap in its outline. (The pattern is in the library as
+\scopehl{derive-exits-on-a-minted-sorry}; the worked mission's certificate is
+honestly labelled a retrofit, since it ran DERIVE before the gate existed.)
+
+\textbf{The cascade.} ARGUE, read formally, is a pattern language in
+Alexander's sense: the mission's nine cited methods assembled as a
+semilattice --- largest context first, each pattern differentiating the
+space set above it, every edge carrying its \emph{because} verbatim from the
+mission's own rationale records. The cascade is the argument in
+pattern-theoretic form, and it is data
+(\scopehl{first-flights-cascade.edn}), rendered by a tool that consumes the
+data alone and so cannot flatter it.
+
+\textbf{The verify reading.} VERIFY, read formally, is not a checklist ---
+it type-checks the diagram: do the boundary ports match the minted arrow,
+is every wire typed, does every application carry a witness it did not
+manufacture? The logic model is the checker; the diagram is the content.
+
+The abstraction holds beyond the running example. The same evening, a miner
+walked \textbf{79 completed missions} and recovered, from documents nobody
+wrote for it: 391 pattern citations in citation order, 1{,}320 named
+artifacts of which \textbf{912 verify as existing} (the retrodictive
+witness: \emph{it built this}), and a per-mission loss report saying exactly
+where reconstruction fell short --- every one of the 79 lacks an explicit
+derive-gate statement, which is true, since the gate was invented that
+afternoon. The corpus is imperfect by measurement rather than by suspicion,
+and improves by revisiting the worst losses first.
+
+One debt from \S{}7 is part-paid and one new construction is preregistered.
+Part-paid: the counted hole is now a first-class typed object (the minted
+arrow, with its discharge tracked by review and checkpoint) --- though the
+checkbox-counter unification proper remains open. Preregistered: the
+diagrams above record \emph{that} steps compose but not \emph{how} ---
+in parallel without coordination, in sequence with one-way influence, in
+tight coupling, or as a branch among alternatives. A typed grammar for
+exactly these four composition modes exists (the stack's sibling excursion
+derives it from the causal-category literature), and equipping the mined
+diagrams with it is the next pass over the corpus. When that lands, a
+mission's argument will be readable, checkable, and \emph{composable} in
+the same notation as the proofs and flights it governs.
+
+\section*{9. Relation to "A First Proof Sprint"}
+
+"A First Proof Sprint" follows a single mathematical proof finding its way
+through this same system. The present account sits one level up: it follows
+the \emph{unit of work itself} --- the mission --- through the same passage, the
+container examining the concept of containment. Same house, different floor.
+
+\medskip\hrule\medskip
+
+*TODO (next sessions): \S{}3/\S{}4 prose passes over the primary source; figures
+(the panel at frames 1$\rightarrow$6; the bout's cross-edge diagram; the vitals card);
+\S{}5 worked dis/agreement instances with store queries; decide venue + whether
+the two-projections flexiarg ships with the paper or before it.*
+
+\end{document}
