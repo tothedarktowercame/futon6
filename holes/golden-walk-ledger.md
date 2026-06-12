@@ -541,3 +541,46 @@ definition operator of this sentence and it is unmarked. Two pieces:
    gets its own binder. ("Respectively" is pure syntax with exact
    semantics — another authored signal in R12's class, free to
    harvest.)
+
+## R13 — authored proof structure: goal, decomposition, discharge plan
+
+Specimen (0809.2517, ~point 3724): "The first goal of this subsection
+is to prove that if $A$ is an $H$-Azumaya algebra in $\C$, then
+$(A\# H)^A$ is an $H$-Galois object ($H$ flat). The proof will be
+completed once we prove: 1) $(A\# H)^A$ is an $H$-comodule algebra;
+2) $(A\# H)^A$ is faithfully flat; 3) $can_{(A\# H)^A}$ is an
+isomorphism." Then: "We proceed to prove 1)." Marks: nil — "it's just
+hanging there... obviously trying to do something mathematical"
+(Joe, voice).
+
+What the author wrote, in proof-engineering terms, is a PROOF TREE
+NODE in prose:
+
+- "The first goal of this subsection is to prove that if..then.." =
+  an explicit GOAL statement (and note: it is the discharge plan for
+  R8's promissory $\Upsilon$ — the subsection heading promised the
+  map, this sentence states the theorem that delivers it).
+- "The proof will be completed once we prove: 1)..2)..3).." = a
+  DECOMPOSITION step — the author runs a 'suffices' tactic by hand,
+  splitting the goal into three obligations. Three typed sorries,
+  opened in one sentence, each with its statement given.
+- "We proceed to prove 1)" = ENTERING a subgoal — a scope open whose
+  close is wherever 1) is discharged; same extent semantics as R8's
+  debt regions, nested.
+
+This is R12's lesson at the discourse level: the proof DAG is
+AUTHORED ("goal", "it suffices", "once we prove", "we proceed to",
+enumerate environments, "this completes the proof") — harvestable
+with a small marker lexicon, no theorem-proving required. It is also
+exactly the proof-anatomy showcase's vocabulary (goal/subgoal/
+discharge) arriving in the wild, and the natural consumer of the
+superpod discourse-wiring stage. Subsection anatomy becomes: heading
+(promise) → goal (statement) → decomposition (3 obligations) →
+discharge scopes 1,2,3 → promise closed.
+
+- Tags: `m`, type-level; Joe notes fair-enough/new-instruction status:
+  proof structure was not previously in scope — it is NOW.
+- Detector hook: proof-discourse marker lexicon + enumerate items as
+  obligation nodes + "prove i)" anaphora resolution to item anchors;
+  emit goal/decomposes-into/discharges hyperedges.
+- Minted: 2026-06-12, live walk, voice.
