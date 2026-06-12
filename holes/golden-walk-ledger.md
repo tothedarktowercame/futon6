@@ -58,6 +58,24 @@ a bare flag. The hole mark is the sorry; the canon link is the term
 that discharges it. Resolution pipeline = the grounding-layer port
 (papers ↔ concepts bipartite graph, same shape as missions ↔ patterns).
 
+**Refinement (Joe, voice, same walk):** "a hole with no in-paper
+definition isn't a hole per se. It's a *pointer* — and it becomes a
+problem if we can't find a reference on the outside of that pointer."
+So the type splits, two-stage:
+
+1. **pointer** — detection-time kind: an extern reference, presumed
+   resolvable. Not a defect; linking is just deferred.
+2. **hole-proper** — the *verdict after a failed canon lookup*. Only
+   then is it a problem (a genuine sorry).
+
+Hole status is the failure of resolution, not the absence of in-paper
+definition. Same discriminator as the sorry typing discipline:
+closes-by-construction (pointer → canon link found) vs needs
+world-action (no canon entry exists → real gap, possibly a missing
+canon page rather than a paper defect). Detector consequence: the
+golden layer should emit `pointer`, and `hole` becomes a post-resolution
+state, not a detection kind.
+
 - Site: 0809.2517 point ~139 ("flat Hopf algebra" in the §2 assumption).
 - Verdict: golden mark CORRECT (true positive for the concept-shaped
   filter — the ≥2-occurrence dedupe and kind-word head both behaved).
