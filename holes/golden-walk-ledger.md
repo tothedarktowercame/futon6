@@ -845,3 +845,44 @@ own macro table → author-defined, role via RHS-transitive lookup;
 (2) latexml-math-roles.tsv → standard math lexeme with role;
 (3) tex-plain-cseq.txt → TeX/plain engine layer (layout unless
 math-structural); (4) UNKNOWN, flagged.
+
+## THE KILLER IDEA (Joe, post-walk) — concept-driven, priority-first mining of the whole corpus
+
+"Instead of parsing everything one paper at a time in a linear way,
+we propose to mine the whole of arXiv on a STRUCTURE-FIRST basis,
+concept-driven, with the most important concepts given priority. If it
+turns out that a 'closed braided monoidal category with equalizers and
+coequalizers' is important — we will recognize it the next time we see
+it coming."
+
+The inversion: papers stop being the unit of work; CONCEPTS are the
+index and papers are occurrence sites. Consequences:
+
+1. **Parse once, recognize forever.** A decorated concept (R9/R10
+   grammar) is parsed at full golden depth ONCE — decorator tower,
+   capability with-clause, canon links, component lexicon — minted
+   into a persistent recognizer registry. Every later occurrence,
+   corpus-wide, is a lookup + local slot-fill, not a parse. The
+   expensive judgment amortizes over the whole of arXiv.
+2. **Priority = importance.** Rank concepts by occurrence count ×
+   binding centrality (how many binds/assumes consume them) ×
+   operator interest. The frontier advances on the highest-value
+   structures first; the long tail waits its turn. (EFE flavor:
+   attend where expected information gain is highest; the importance
+   scores update as recognitions land, so the queue re-prioritizes —
+   a self-reinforcing frontier.)
+3. **Composes with what exists.** The futon6 NER kernel/term-spotter
+   already finds candidate SITES cheaply; the decorator grammar
+   parses the local neighborhood; the registry grows. This is the
+   futon3 pattern-library architecture (patterns ↔ missions) ported
+   to mathematics (concepts ↔ papers) — the bipartite graph we
+   already wanted for the papers-EFE field becomes the primary
+   artifact, not a visualization.
+4. **Golden graphs are the mint.** Each golden-graph node IS a
+   recognizer template (surface forms + grammar slots + canon edge).
+   The codex goldens now under construction seed the registry.
+5. **Pilot = the local math.CT corpus** (9,916 fresh-extracted
+   papers); arXiv-wide is the horizon once recognizers are cheap.
+
+Status: strategic coda of the walk; should shape the detector work
+order (registry-of-recognizers, not per-paper parser).
