@@ -385,3 +385,35 @@ and coequalizers" (0809.2517, the §2 assumption).
   individuated per conjunct; (stretch) result-side consumption mining
   ("since \C has equalizers...", "by closedness...").
 - Minted: 2026-06-12, live walk, voice.
+
+**R10 sharpening (Joe, voice):** "Are we building up an object type
+called closed-braided-monoidal-category-with-equalizers-and-
+coequalizers? Or are the equalizers and coequalizers separately
+supplied from that object? Wherever they are, these terms aren't
+marked up — we have no concept of how they fit or relate structurally
+to the closed braided monoidal category whatsoever."
+
+Two layers:
+1. **Baseline failure first:** "equalizers" and "coequalizers" are
+   concept-shaped terms with perfectly good canon entries and they got
+   ZERO marks — they didn't even reach R3 pointer status. Before any
+   type-theory subtlety, the concept detector simply missed two
+   textbook nouns (likely because they appear only inside the
+   assumption sentence — singular/plural or context filtering).
+2. **The bundling question is REAL and the anatomy shouldn't guess:**
+   bundled type (category equipped with chosen (co)equalizers — a
+   sigma/structure reading) vs property (such limits exist) vs
+   separately-supplied structure. This distinction is itself
+   canon-grade — nLab's "property, structure, and property-like
+   structure" page IS the reference for it; having (co)equalizers is
+   the textbook property-like-structure example (a choice is
+   structure, unique up to unique iso, so existence behaves like a
+   property). The honest move: mark the parts, emit an edge typed
+   `equips?` (bundling-unresolved), and let the edge's resolution
+   itself carry a canon link. The markup's job is to record the
+   relation AND its unresolved bundling status — not to silently pick
+   a reading the author didn't state.
+
+- Detector consequence: with-clause conjuncts get concept marks
+  ALWAYS (pointer at minimum); the with-edge carries a bundling slot
+  {bundled | property | supplied | unresolved}.
