@@ -6,16 +6,20 @@
 #   g(s) = per-step cost / local metric (epistemic pole). NOT the EFE. EFE = G(π) = the
 #   geodesic over this; drawn later as policy streamlines. 🌟 claimed cap at its minting
 #   mission; ⭐ unclaimed = registered goal w/ no minting mission (endpoint, no terrain).
-import json, re, math, subprocess, time
+import json, re, math, subprocess, time, sys
 from pathlib import Path
 from collections import defaultdict
 
 ROOT = Path("/home/joe/code")
-POS = json.load(open(ROOT / "futon6/data/mission-carpet-pos.json"))
+# Optional variant arg (force|embed|springs|seed) selects an alternate mission layout from
+# mission_carpet_variants.py — the projection FAMILY. No arg = the canonical carpet, unchanged.
+_VARIANT = sys.argv[1] if len(sys.argv) > 1 else None
+POS = json.load(open(ROOT / "futon6/data" /
+                     (f"mission-carpet-pos-{_VARIANT}.json" if _VARIANT else "mission-carpet-pos.json")))
 SCOPES = json.load(open(ROOT / "futon6/data/efe-scopes.json"))  # reproducible: scripts/mission_efe_scope_dump.py
 CAPS = json.load(open(ROOT / "futon6/data/capability-graph.json"))
 ROADS = json.load(open(ROOT / "futon6/data/mission-carpet-roads.json"))
-OUT = ROOT / "futon6/data/mission-efe-field.html"
+OUT = ROOT / "futon6/data" / (f"mission-efe-field-{_VARIANT}.html" if _VARIANT else "mission-efe-field.html")
 bare = lambda k: k[2:] if k.startswith("M-") else k
 
 # Off-map minters: builder/* and external/* are NOT missions, so a claimed cap
