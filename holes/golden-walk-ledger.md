@@ -952,3 +952,30 @@ snippet. Fragment-scale dodges the whole-document fragility we
 measured (100+ errors on the full master); the macro table we already
 sweep is exactly the preamble the fragment needs. Deep parse becomes
 an on-demand, per-site service — never a corpus stage.
+
+## Processing model (Joe, voice, 16:08) — per-paper loss + Distributed Proofreaders, random access
+
+"What we'll have is a loss function per paper — we'll know exactly
+what we've covered and what we haven't. And we'll do the whole thing
+via the Distributed Proofreaders algorithm we tested with our Codex
+cloud. As long as anything that's grounded is grounded sufficiently
+well that we can proceed, we don't need to be perfect the first time.
+We'll do it by random access."
+
+The last architectural piece. Corpus processing is NOT a linear
+pipeline — it is an anytime algorithm:
+- **Per-paper loss** = the satiety aggregates anatomy-v0 already
+  emits (unknown-cseqs, unfed canon hunger, unbound symbols, missing
+  authored-layer joins). Honesty bits are what make loss computable.
+- **DP passes** = per-TYPE improvement sweeps by the Codex pool
+  (today's golden-graphs fan-out was the pilot): pick a defect type,
+  sweep the papers where its loss concentrates, land the fix.
+- **Random access** = loss-ranked revisiting. Per-paper output files
+  (resumable, independently re-processable) are the enabling design —
+  any paper can be redone alone, no corpus re-run ever.
+- **Sufficiency gate** = grounded-well-enough-to-proceed, not perfect.
+  Monotone improvement, measured by the loss going down.
+
+Together with the depth ruling and the killer idea: concept-level
+models, hunger-prioritized, loss-ranked, anytime-improvable, all on
+house hardware. This closes the architecture.
