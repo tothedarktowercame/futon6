@@ -2,7 +2,7 @@
   "mission": "M-agency-forum",
   "path": "/home/joe/code/futon3/holes/missions/M-agency-forum.md",
   "scope-count-by-binder-type": {
-    "loose-section": 15,
+    "loose-section": 19,
     "mission-scope-in": 1,
     "mission-scope-out": 1
   },
@@ -244,6 +244,130 @@
       "scope-id": "M-agency-forum:scope-002"
     },
     {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-forum",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Scope In"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "pur"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        }
+      ],
+      "hx/content": {
+        "end": 837,
+        "match": "Scope In",
+        "position": 462
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-forum",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Scope In"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "pur"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        }
+      ],
+      "hx/id": "M-agency-forum:scope-003",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-forum:scope-002",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-forum:scope-002",
+      "scope-id": "M-agency-forum:scope-003"
+    },
+    {
       "binder-type": "mission-scope-in",
       "ends": [
         {
@@ -376,7 +500,7 @@
           "term": "identify"
         }
       ],
-      "hx/id": "M-agency-forum:scope-003",
+      "hx/id": "M-agency-forum:scope-004",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -387,7 +511,83 @@
       "hx/role": "component",
       "hx/type": "mission-scope/mission-scope-in",
       "parent": "M-agency-forum:scope-002",
-      "scope-id": "M-agency-forum:scope-003"
+      "scope-id": "M-agency-forum:scope-004"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-forum",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Scope Out"
+        },
+        {
+          "role": "concept",
+          "term": "persistence"
+        },
+        {
+          "role": "concept",
+          "term": "moderation"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        }
+      ],
+      "hx/content": {
+        "end": 1059,
+        "match": "Scope Out",
+        "position": 837
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-forum",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Scope Out"
+        },
+        {
+          "role": "concept",
+          "term": "persistence"
+        },
+        {
+          "role": "concept",
+          "term": "moderation"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        }
+      ],
+      "hx/id": "M-agency-forum:scope-005",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-forum:scope-002",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-forum:scope-002",
+      "scope-id": "M-agency-forum:scope-005"
     },
     {
       "binder-type": "mission-scope-out",
@@ -466,7 +666,7 @@
           "term": "pattern"
         }
       ],
-      "hx/id": "M-agency-forum:scope-004",
+      "hx/id": "M-agency-forum:scope-006",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -477,7 +677,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/mission-scope-out",
       "parent": "M-agency-forum:scope-002",
-      "scope-id": "M-agency-forum:scope-004"
+      "scope-id": "M-agency-forum:scope-006"
     },
     {
       "binder-type": "loose-section",
@@ -542,7 +742,7 @@
           "term": "agency"
         }
       ],
-      "hx/id": "M-agency-forum:scope-005",
+      "hx/id": "M-agency-forum:scope-007",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -553,7 +753,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-005"
+      "scope-id": "M-agency-forum:scope-007"
     },
     {
       "binder-type": "loose-section",
@@ -634,7 +834,7 @@
           "term": "scope"
         }
       ],
-      "hx/id": "M-agency-forum:scope-006",
+      "hx/id": "M-agency-forum:scope-008",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -645,7 +845,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-006"
+      "scope-id": "M-agency-forum:scope-008"
     },
     {
       "binder-type": "loose-section",
@@ -750,7 +950,7 @@
           "term": "pur"
         }
       ],
-      "hx/id": "M-agency-forum:scope-007",
+      "hx/id": "M-agency-forum:scope-009",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -761,7 +961,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-007"
+      "scope-id": "M-agency-forum:scope-009"
     },
     {
       "binder-type": "loose-section",
@@ -850,7 +1050,7 @@
           "term": "fucodex"
         }
       ],
-      "hx/id": "M-agency-forum:scope-008",
+      "hx/id": "M-agency-forum:scope-010",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -861,7 +1061,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-008"
+      "scope-id": "M-agency-forum:scope-010"
     },
     {
       "binder-type": "loose-section",
@@ -974,7 +1174,7 @@
           "term": "fucodex"
         }
       ],
-      "hx/id": "M-agency-forum:scope-009",
+      "hx/id": "M-agency-forum:scope-011",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -985,7 +1185,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-009"
+      "scope-id": "M-agency-forum:scope-011"
     },
     {
       "binder-type": "loose-section",
@@ -1130,7 +1330,7 @@
           "term": "standalone"
         }
       ],
-      "hx/id": "M-agency-forum:scope-010",
+      "hx/id": "M-agency-forum:scope-012",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1141,7 +1341,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-010"
+      "scope-id": "M-agency-forum:scope-012"
     },
     {
       "binder-type": "loose-section",
@@ -1198,7 +1398,7 @@
           "term": "fulab"
         }
       ],
-      "hx/id": "M-agency-forum:scope-011",
+      "hx/id": "M-agency-forum:scope-013",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1209,7 +1409,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-011"
+      "scope-id": "M-agency-forum:scope-013"
     },
     {
       "binder-type": "loose-section",
@@ -1250,7 +1450,7 @@
           "title": "Division of Work"
         }
       ],
-      "hx/id": "M-agency-forum:scope-012",
+      "hx/id": "M-agency-forum:scope-014",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1261,7 +1461,151 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-012"
+      "scope-id": "M-agency-forum:scope-014"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-forum",
+          "role": "entity"
+        },
+        {
+          "name": "Codex builds:",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Codex builds:"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        }
+      ],
+      "hx/content": {
+        "end": 7710,
+        "match": "Codex builds:",
+        "position": 7371
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-forum",
+          "role": "entity"
+        },
+        {
+          "name": "Codex builds:",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Codex builds:"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        }
+      ],
+      "hx/id": "M-agency-forum:scope-015",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-agency-forum:scope-014",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-forum:scope-014",
+      "scope-id": "M-agency-forum:scope-015"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-forum",
+          "role": "entity"
+        },
+        {
+          "name": "Claude builds:",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Claude builds:"
+        },
+        {
+          "role": "concept",
+          "term": "websocket"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        }
+      ],
+      "hx/content": {
+        "end": 7959,
+        "match": "Claude builds:",
+        "position": 7710
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-forum",
+          "role": "entity"
+        },
+        {
+          "name": "Claude builds:",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Claude builds:"
+        },
+        {
+          "role": "concept",
+          "term": "websocket"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        }
+      ],
+      "hx/id": "M-agency-forum:scope-016",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-agency-forum:scope-014",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-forum:scope-014",
+      "scope-id": "M-agency-forum:scope-016"
     },
     {
       "binder-type": "loose-section",
@@ -1318,7 +1662,7 @@
           "term": "musn"
         }
       ],
-      "hx/id": "M-agency-forum:scope-013",
+      "hx/id": "M-agency-forum:scope-017",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1329,7 +1673,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-013"
+      "scope-id": "M-agency-forum:scope-017"
     },
     {
       "binder-type": "loose-section",
@@ -1386,7 +1730,7 @@
           "term": "agents"
         }
       ],
-      "hx/id": "M-agency-forum:scope-014",
+      "hx/id": "M-agency-forum:scope-018",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1397,7 +1741,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-014"
+      "scope-id": "M-agency-forum:scope-018"
     },
     {
       "binder-type": "loose-section",
@@ -1470,7 +1814,7 @@
           "term": "fuclaude"
         }
       ],
-      "hx/id": "M-agency-forum:scope-015",
+      "hx/id": "M-agency-forum:scope-019",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1481,7 +1825,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-015"
+      "scope-id": "M-agency-forum:scope-019"
     },
     {
       "binder-type": "loose-section",
@@ -1578,7 +1922,7 @@
           "term": "pattern"
         }
       ],
-      "hx/id": "M-agency-forum:scope-016",
+      "hx/id": "M-agency-forum:scope-020",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1589,7 +1933,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-forum:scope-000",
-      "scope-id": "M-agency-forum:scope-016"
+      "scope-id": "M-agency-forum:scope-020"
     }
   ]
 }

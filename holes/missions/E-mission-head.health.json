@@ -1,0 +1,50 @@
+{
+  "mission": "E-mission-head",
+  "generated-at": "2026-06-10T18:16:29.009254+00:00",
+  "generator": "head_exotype_probe.py",
+  "sigil": {
+    "exotype": "00011100",
+    "xenotype-32": "00011100\u00b700011001\u00b710101100\u00b711001000",
+    "per-section": {
+      "IF": {
+        "bits": "00011100",
+        "conf": 0.28,
+        "anchor": "iching/hexagram-49-ge",
+        "cos": 0.284
+      },
+      "HOWEVER": {
+        "bits": "00011001",
+        "conf": 0.36,
+        "anchor": "iching/hexagram-13-tongren",
+        "cos": 0.306
+      },
+      "THEN": {
+        "bits": "10101100",
+        "conf": 0.32,
+        "anchor": "iiching/exotype-248",
+        "cos": 0.454
+      },
+      "BECAUSE": {
+        "bits": "11001000",
+        "conf": 0.37,
+        "anchor": "iching/hexagram-31-xian",
+        "cos": 0.461
+      }
+    }
+  },
+  "health": {
+    "bit-confidence": 0.33,
+    "xenotype-completeness": 0.89,
+    "anchor-proximity": {
+      "strong": [
+        "THEN",
+        "BECAUSE"
+      ],
+      "weak": [
+        "IF",
+        "HOWEVER"
+      ]
+    },
+    "reading": "alive but wobbly: xenotype completeness 0.89; strong anchors ['THEN', 'BECAUSE'], weak anchors ['IF', 'HOWEVER']."
+  }
+}

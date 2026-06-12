@@ -1,0 +1,16 @@
+{
+  "grain": "mission+capability",
+  "adjacency": "sparse-knn N=230 k=20",
+  "n": 230,
+  "k": 20,
+  "sat_before": 0.5816310048103333,
+  "sat_after": 0.8818507194519043,
+  "gradnorm_min": 0.000179333655978553,
+  "gradnorm_med": 0.00026863152743317187,
+  "gradnorm_max": 0.00036734892637468874,
+  "gradnorm_max_med_ratio": 1.3674825429916382,
+  "corr_gradnorm_degree": 0.1804272959548854,
+  "summit_score_med": 0.270705,
+  "island_score_med": 0.042805,
+  "moves": 19
+}

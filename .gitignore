@@ -49,3 +49,5 @@ tmp/
 mo-processed/
 test*.pdf
 data/question-patterns/*.json
+.clj-kondo/
+.lsp/
