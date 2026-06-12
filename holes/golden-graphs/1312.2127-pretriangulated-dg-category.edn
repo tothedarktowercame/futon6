@@ -14,6 +14,8 @@
    :form "\\begin{defi}...\\end{defi}"
    :role :environment
    :decode "\\newtheorem{defi}[equation]{Definition} (1312.2127.tex:39)"
+   :cseq-classes [{:cseq "\\begin" :decision-step 3 :class :latex-standard}
+                  {:environment "defi" :decision-step 1 :class :author-defined :source "1312.2127.tex:39"}]
    :via "\\begin{defi}[Pretriangulated dg-category, \\cite{MK}]"
    :rule :R5}
   {:id :cite-MK
@@ -49,6 +51,7 @@
    :role :mexpr
    :parse-incomplete false
    :tokens ["\\mathcal" "{" "D" "}"]
+   :cseq-classes [{:cseq "\\mathcal" :decision-step 3 :class :latex-standard :role :alphabetic-style}]
    :via "$\\mathcal{D}$"
    :rule :R14}
   {:id :twisted-complex
@@ -79,6 +82,7 @@
    :form "\\in"
    :role :operator
    :canon :membership
+   :cseq-class {:cseq "\\in" :decision-step 3 :class :latex-ams-standard :role :relation}
    :via "$K\\in PreTr(\\mathcal{D})$"
    :rule :R14}
   {:id :mexpr-K-in-PreTr-D
@@ -86,12 +90,15 @@
    :role :mexpr
    :parse-incomplete false
    :tokens ["K" "\\in" "PreTr" "(" "\\mathcal" "{" "D" "}" ")"]
+   :cseq-classes [{:cseq "\\in" :decision-step 3 :class :latex-ams-standard :role :relation}
+                  {:cseq "\\mathcal" :decision-step 3 :class :latex-standard :role :alphabetic-style}]
    :via "$K\\in PreTr(\\mathcal{D})$"
    :rule :R14}
   {:id :alpha
    :form "$\\alpha$"
    :role :operator
    :binder :semantic-bind
+   :cseq-class {:cseq "\\alpha" :decision-step 3 :class :latex-ams-standard :role :math-symbol}
    :via "$\\alpha$ is the dg-functor that to a twisted complex $K=(K_i, q_{ij})$ associates the dg-functor"
    :rule :R2}
   {:id :alpha-K
@@ -105,6 +112,7 @@
    :role :mexpr
    :parse-incomplete false
    :tokens ["\\alpha" "(" "K" ")"]
+   :cseq-classes [{:cseq "\\alpha" :decision-step 3 :class :latex-ams-standard :role :math-symbol}]
    :via "$\\alpha(K)$"
    :rule :R14}
   {:id :representable
@@ -161,6 +169,8 @@
    :role :mexpr
    :parse-incomplete false
    :tokens ["X" "\\in" "\\mathcal" "{" "D" "}"]
+   :cseq-classes [{:cseq "\\in" :decision-step 3 :class :latex-ams-standard :role :relation}
+                  {:cseq "\\mathcal" :decision-step 3 :class :latex-standard :role :alphabetic-style}]
    :via "$X\\in \\mathcal{D}$"
    :rule :R14}]
  :hyperedges
