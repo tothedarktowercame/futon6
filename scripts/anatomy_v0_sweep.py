@@ -408,22 +408,44 @@ def classify_cseq(cs: str, macros: dict[str, dict], roles: dict[str, dict], plai
 
 
 def math_spans(text: str):
+    # A LaTeX comment (unescaped `%` to end of line) is NOT math — a `$` inside
+    # one is not a delimiter. Skipping comment regions (offset-preserving: we
+    # advance past them, we do not delete) keeps `$`-parity correct; otherwise a
+    # lone comment-`$` mis-pairs real delimiters and swallows prose into giant
+    # spurious "math spans" (verified on 0708.3326: 877 comment-`$` -> 838
+    # W-ATOMIC + 1758 null spans). Callers that pre-`strip_comments` see no `%`,
+    # so this is a no-op for them.
     i = 0
     n = len(text)
     while i < n:
-        if text[i] != "$" or (i > 0 and text[i - 1] == "\\"):
+        ch = text[i]
+        if ch == "%" and (i == 0 or text[i - 1] != "\\"):
+            nl = text.find("\n", i)
+            if nl == -1:
+                return
+            i = nl + 1
+            continue
+        if ch != "$" or (i > 0 and text[i - 1] == "\\"):
             i += 1
             continue
         delim = "$$" if i + 1 < n and text[i + 1] == "$" else "$"
         start = i
         j = i + len(delim)
+        found = False
         while j < n:
-            if text.startswith(delim, j) and (j == 0 or text[j - 1] != "\\"):
+            if text[j] == "%" and text[j - 1] != "\\":
+                nl = text.find("\n", j)
+                if nl == -1:
+                    break
+                j = nl + 1
+                continue
+            if text.startswith(delim, j) and text[j - 1] != "\\":
                 yield start, j + len(delim), delim, text[i + len(delim):j]
                 i = j + len(delim)
+                found = True
                 break
             j += 1
-        else:
+        if not found:
             i = start + 1
 
 
