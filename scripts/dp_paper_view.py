@@ -296,6 +296,20 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             marks.extend(bm)
         if with_scopes:
             sm = detect_scope_manifest(ftext, base, f"arxiv-{paper}", nw, ca)
+            # SNAP (Joe): a math span $...$ is atomic — NO scope boundary may
+            # fall strictly inside one. A start inside a span snaps out to the
+            # span's end; an end inside a span snaps back to its start. (The
+            # codiagonal mess was a constrain/relation that began on the closing
+            # $ of $A$, so blue+purple met inside $...$.) Display envs too.
+            spans = [(base + s, base + e) for s, e, _d, _b in sweep.math_spans(ftext)]
+            spans += [(base + dm.start(), base + dm.end()) for dm in DISPLAY_RE.finditer(ftext)]
+            for m in sm:
+                for s, e in spans:
+                    if s < m["start"] < e:
+                        m["start"] = e
+                    if s < m["end"] < e:
+                        m["end"] = s
+            sm = [m for m in sm if m["end"] > m["start"]]
             counts["scope"] = counts.get("scope", 0) + len(sm)
             marks.extend(sm)
         # DISPLAY EQUATIONS (Joe): \begin{eqnarray}/\[...\] are math scopes
