@@ -12,3 +12,4 @@ holes). See `holes/dp-fleet-plan.md` for the capability targets.
 | 2026-06-13T17:22:11 | 32 | 53% | 1 | 46928 | round 2 landed: Galois alias (DEBT->Lean), sub/superscript grounding, DEBT concept-filter, W2 linkage re-run; all self-committed on split modules |
 | 2026-06-13T17:52:39 | 62 | 57% | 838 | 95629 | round 3: display-:= grounding, wf->0 (stale-golden cleared), memory-safe batch runner, corpus scaled 32->62 papers, DEBT summary written |
 | 2026-06-13T18:32:29 | 231 | 57% | 859 | 324767 | round 4: corpus scaled 62->227; residue analysis (tail NOT irreducible); citation-DEBT bridge (0 internal resolutions) |
+| 2026-06-13T20:16:38 | 261 | 70% | 0 | 220054 | FULL REGEN by claude-1 (agents stalled on it 3x): appositive + noise-context + current wf applied corpus-wide |
