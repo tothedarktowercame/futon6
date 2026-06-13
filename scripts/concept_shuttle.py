@@ -36,12 +36,56 @@ mpd = _ilu.module_from_spec(_pd); _pd.loader.exec_module(mpd)
 def _camel(t): return "".join(w.capitalize() for w in re.split(r"[\s-]+", t.strip()))
 
 
+# Generic categorical head-nouns a prose concept may carry that mathlib folds
+# into a qualified identifier ("Galois object" -> IsGalois / PointedGaloisObject).
+GENERIC_NOUNS = {"object", "objects", "morphism", "structure", "element"}
+
+
+def _boundary_suffix(name, key):
+    """True if mathlib NAME ends with camel-KEY (lowercased) at a CamelCase token
+    boundary — so 'galoisobject' matches 'Pointed|GaloisObject', not a mid-word
+    substring. The boundary guard keeps the alias match from latching a
+    coincidental tail (e.g. it will not call 'AddGroup' a match for 'dGroup')."""
+    nl = name.lower()
+    if key == nl or not nl.endswith(key):
+        return False
+    start = len(name) - len(key)
+    return start == 0 or name[start].isupper()
+
+
 def in_mathlib(term, mathlib_names):
-    c = _camel(term).lower()
-    # match Foo / FooObj / FooBar against the mined structure/class names
-    return next((n for n in mathlib_names
-                 if c == n.lower() or c == (n.lower().rstrip("_") )
-                 or n.lower().rstrip("obj") == c or c == n.lower().rstrip("obj")), None)
+    """Connect a prose concept name to a mathlib identifier. Beyond exact
+    camel-case equality, bridge the two mathlib naming conventions GENERALLY
+    (not a Galois one-off): properties are stated as Is<Concept> ("Galois
+    object" -> IsGalois) and structures are qualified with prefixes ("Galois
+    object" -> PointedGaloisObject). Priority: an EXACT identifier always wins
+    over an aliased variant, and aliases never fire for a bare generic noun."""
+    c = _camel(term)
+    cl = c.lower()
+    words = re.split(r"[\s-]+", term.strip())
+    multi = len(words) >= 2
+    # head = the concept minus a trailing generic noun ("Galois object"->"galois")
+    head = (_camel(" ".join(words[:-1])).lower()
+            if multi and words[-1].lower() in GENERIC_NOUNS else None)
+    # (1) direct camel-equality (Foo / FooObj / FooBar, with obj/_ normalization)
+    #     — an exact identifier must win before any alias rule is tried.
+    for n in mathlib_names:
+        nl = n.lower()
+        if cl == nl or cl == nl.rstrip("_") or nl.rstrip("obj") == cl:
+            return n
+    # (2) Is<Concept> predicate convention (the dominant false-DEBT cause).
+    for n in mathlib_names:
+        nl = n.lower()
+        if nl == "is" + cl or (head and nl == "is" + head):
+            return n
+    # (3) CamelCase-boundary suffix = a qualified variant of the concept; require
+    #     multi-token (so a bare "group"/"module" cannot match everything) and
+    #     pick the SHORTEST hit as the most canonical identifier.
+    if multi:
+        cands = [n for n in mathlib_names if _boundary_suffix(n, cl)]
+        if cands:
+            return min(cands, key=len)
+    return None
 
 
 def in_planetmath(term):
