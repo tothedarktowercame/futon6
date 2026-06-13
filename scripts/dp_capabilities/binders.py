@@ -69,6 +69,30 @@ WHERE_RES = [
                r"([^.,;:]+?)(?=[.,;:]|\s+and\s+\$|$)"),
 ]
 
+# APPOSITIVE TYPING (claude-2's residue analysis: ~78% of the ungrounded tail).
+# "<determiner> <qualifiers> <TYPE-NOUN> $X$" introduces X WITH its type by
+# apposition — "a Hopf algebra $H$", "the monoidal category $\C$", "an
+# $H$-comodule algebra $A$" — the type-THEN-symbol direction the Let/is-a binders
+# (symbol-THEN-type) structurally miss. HIGH PRECISION (claude-1), three anchors:
+#   (1) a determiner leads (a/an/the/any/some/every/each) — never bare adjacency;
+#   (2) the noun IMMEDIATELY before the symbol is a STRUCTURAL TYPE-NOUN from the
+#       lexicon below (not "proof"/"number"/"diagram"/"case" etc.);
+#   (3) the $symbol$ immediately follows that type-noun.
+# group(1)=type phrase (ends in the type-noun), group(2)=$symbol$; fed into the
+# same _add_binding harvest as the other binders (binding-contributor only — it
+# adds no marks and shrinks no denominator, so it can only make `grounded` rise).
+TYPE_NOUNS = (
+    r"algebras?|coalgebras?|bialgebras?|subalgebras?|superalgebras?|"
+    r"modules?|comodules?|bimodules?|submodules?|"
+    r"categor(?:y|ies)|functors?|morphisms?|homomorphisms?|isomorphisms?|"
+    r"objects?|groups?|groupoids?|subgroups?|monoids?|semigroups?|"
+    r"rings?|fields?|sets?|subsets?|spaces?|maps?|mappings?|functions?|"
+    r"ideals?|operads?|sheaves|schemes?|varieties|manifolds?|complexes|"
+    r"transformations?|representations?|extensions?|monomials?")
+APPOSITIVE_RE = re.compile(
+    r"\b(?:an?|the|any|some|every|each)\s+"
+    r"([^.,;:]{0,40}?\b(?:" + TYPE_NOUNS + r"))\s+(\$[^$]+\$)")
+
 # INFORMAL PROOF MOVES (Joe). Not the strategies an author *executes* (those
 # are the futon3 math-informal flexiargs) but the *rhetoric of the proof*: the
 # discourse gestures that assert a step while declining to carry it out — "it

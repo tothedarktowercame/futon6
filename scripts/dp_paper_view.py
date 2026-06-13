@@ -32,6 +32,7 @@ def _load_nlab_wiring():
 EPRINTS = sweep.DEFAULT_EPRINTS
 GOLDEN_DIR = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
 from dp_capabilities.binders import (
+    APPOSITIVE_RE,
     BINDER_RE,
     CONJUNCT_RE,
     DEFINE_RES,
@@ -136,6 +137,11 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             for rx in WHERE_RES:
                 for m in rx.finditer(f["text"]):
                     pairs.append((m.group(1), m.group(2), m.start()))
+            # appositive typing: "<det> <type-noun-phrase> $X$" (a Hopf algebra
+            # $H$) — the type-THEN-symbol direction the binders above miss; the
+            # biggest remaining grounding lever (~78% of the ungrounded tail).
+            for m in APPOSITIVE_RE.finditer(f["text"]):
+                pairs.append((m.group(2), m.group(1), m.start()))
             for subj, phrase, pos in pairs:
                 label = phrase
                 if ca is not None:
