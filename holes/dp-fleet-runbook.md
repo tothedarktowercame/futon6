@@ -59,11 +59,14 @@ checker to make a violation vanish — that is gaming the loop and fails review.
 Hand-made map on 0809.2517 (✓ live · – exists in another view, unwired · ·
 unbuilt). Rank by loss-cleared-per-unit-work, not list order:
 
-- **C1 macro-table → classifier join** (cheapest, widest): the per-paper macro
-  table is built but not consulted when classifying tokens, so the whole
-  author-macro tail (`\C \Hom \Set \Cat \id \op …`) is FALSE-unknown across
-  hundreds of papers. Single-site fix, biggest corpus-wide debt cleared. See
-  `holes/anatomy-v0-loss-backlog.md` C1–C3. **Start here if unclaimed.**
+- ~~**C1 macro-table → classifier join**~~ **ALREADY DONE** (claude-2 verified
+  2026-06-13): the join landed in `32e1798` — `classify_cseq()` opens with
+  `if cs in macros: return author-defined`. On 0809.2517 `\C`/`\id` classify as
+  author-defined·ID; the author-macro tail is false-unknown NOWHERE. The
+  hand-map's C1 premise was stale. Residual unknowns are layout/xref macros
+  (`\scalebox \phantom \ref \sf \begin \put \fbox \Box \#`) — see C2/C3 in
+  `holes/anatomy-v0-loss-backlog.md` (standard-vocab table + package profiles)
+  if you want the next classifier win, but it is NOT the dominant debt.
 - **defined-in-paper** (–): harvest `\newtheorem`/definition envs + "we
   call/define/denote … by" so definienda introduced in-paper GROUND their
   later uses → kills the dominant `C-SYM-GROUND` debt and `canon holes`.
