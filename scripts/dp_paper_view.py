@@ -35,6 +35,9 @@ CSEQ_RE = re.compile(r"\\([A-Za-z@]+)|\\([^A-Za-z\s])")
 # "Let $X$ be a <concept> ..." — the most regular binder in mathematics
 # (W2: was dark). Subject = the $-symbol; concept = the noun phrase to the
 # first clause boundary. Also catches "and $Y$ a <concept>" conjuncts.
+DISPLAY_RE = re.compile(
+    r"\\begin\{(equation|eqnarray|align|displaymath|gather|multline)\*?\}"
+    r"(.*?)\\end\{\1\*?\}|\\\[(.*?)\\\]", re.S)
 BINDER_RE = re.compile(
     r"\b(?:Let|let)\s+(\$[^$]+\$)\s+(?:be|denote)\s+(?:an?\s+|the\s+)?"
     r"([^.,;:]+?)(?=[.,;:]|\s+such that|\s+and\s+\$|\s+in\s+\$|$)")
@@ -151,9 +154,20 @@ def detect_scope_manifest(ftext, base, entity_id, nw, ca):
         # scopes must NOT cross a sentence boundary — the period is English,
         # not mathematics (Joe). Stop before the first ". " after pos.
         if not stype.startswith("env/"):
+            # a binder/constraint/quantifier scope must not (a) cross a
+            # sentence boundary, (b) run into a display equation, or (c)
+            # exceed a sane length — else it becomes the huge nonsemantic
+            # blob Joe flagged (a 414-char constrain/relation across a
+            # GrCalc display). Clamp to the earliest of all three.
+            limits = [end, pos + 140]
             sent = ftext.find(". ", pos)
-            if sent != -1 and sent < end:
-                end = sent
+            if sent != -1:
+                limits.append(sent)
+            for delim in (r"\begin{", r"\[", "$$"):
+                d = ftext.find(delim, pos + 1)
+                if d != -1:
+                    limits.append(d)
+            end = min(limits)
         else:
             end = min(end, pos + 400)  # bounded, but room for a real env
         ends = s.get("hx/ends", [])
@@ -284,6 +298,44 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             sm = detect_scope_manifest(ftext, base, f"arxiv-{paper}", nw, ca)
             counts["scope"] = counts.get("scope", 0) + len(sm)
             marks.extend(sm)
+        # DISPLAY EQUATIONS (Joe): \begin{eqnarray}/\[...\] are math scopes
+        # too — math_spans only sees $-delims. Don't parse the GrCalc layout
+        # this pass; DO mark the whole thing a display-math scope and surface
+        # the variables it relates (+ := => a definition). "Going inside" the
+        # mess: at minimum, this is a display equation relating these symbols.
+        for dm in DISPLAY_RE.finditer(ftext):
+            dbody = dm.group(2) or dm.group(3) or ""
+            if not dbody.strip():
+                continue
+            dvars = sorted({s for s in re.findall(r"(?<!\\)(?<![A-Za-z])[A-Za-z]", dbody)
+                            if s not in "et"})[:8]  # the cell variables
+            is_def = ":=" in dbody or "\\stackrel{def}" in dbody
+            counts["display"] = counts.get("display", 0) + 1
+            marks.append({
+                "start": base + dm.start(), "end": base + dm.end(),
+                "layer": "dp", "kind": "math",
+                "tip": ("display DEFINITION" if is_def else "display equation")
+                       + (f" relating {', '.join(dvars)}" if dvars else ""),
+                "fields": [["display", "definition (:=)" if is_def else "equation"],
+                           ["relates", ", ".join(dvars) or "—"]],
+            })
+            # mark + ground the variable symbols inside the display
+            for sm in re.finditer(r"(?<!\\)(?<![A-Za-z])[A-Za-z][A-Za-z0-9]*", dbody):
+                sym = sm.group(0)
+                if sym in ("got", "gcl", "gbeg", "gend", "gnl", "gvac", "gob",
+                           "grm", "gmu", "gbr", "gcn", "grcm", "gcmu", "hspace",
+                           "scalebox", "ot", "label"):
+                    continue  # GrCalc / layout macro names, not variables
+                g = base + dm.start() + (dm.start(2) - dm.start() if dm.group(2) else
+                                         dm.start(3) - dm.start()) + sm.start()
+                bound = ground(sym, g)
+                k = "symbol-grounded" if bound else "symbol"
+                counts[k] = counts.get(k, 0) + 1
+                mk = {"start": g, "end": g + len(sym), "layer": "dp", "kind": k,
+                      "tip": (f"{sym} : {bound}" if bound else f"symbol {sym} (in display)")}
+                if bound:
+                    mk["fields"] = [["symbol", sym], ["bound", bound]]
+                marks.append(mk)
         for start, end, delim, body in sweep.math_spans(ftext):
             body_off = start + len(delim)
             # RULE (Joe): anything between dollar signs IS a math scope —
