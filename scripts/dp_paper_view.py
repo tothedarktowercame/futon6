@@ -224,23 +224,47 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     # bindings so each later symbol occurrence resolves to its binder (R4,
     # the use→binder edge) instead of leaving an ungrounded "symbol" debt.
     bindings = {}  # bare symbol -> sorted [(global_pos, label)]
-    if with_binders:
+
+    def _add_binding(sym_text, label, gpos):
+        s = re.search(r"[A-Za-z]+", sym_text or "")
+        if not s or not label:
+            return
+        bindings.setdefault(s.group(0), []).append((gpos, label.strip()[:50]))
+
+    if with_binders or with_scopes:
         for f in tex_files:
             base = bases[f["file"]]
+            # (1) Let-binders (cleanest symbol+phrase)
             for m in BINDER_RE.finditer(f["text"]):
                 pairs = [(m.group(1), m.group(2), m.start())]
                 for cm in CONJUNCT_RE.finditer(f["text"], m.end(), m.end() + 160):
                     pairs.append((cm.group(1), cm.group(2), cm.start()))
                 for subj, phrase, pos in pairs:
-                    sym = re.search(r"[A-Za-z]+", subj)
-                    if not sym:
-                        continue
-                    label = phrase.strip()[:50]
+                    label = phrase
                     if ca is not None:
                         hit = ca.resolve(_concept_head(phrase))
                         if hit:
-                            label = f"{hit.get('term')}"
-                    bindings.setdefault(sym.group(0), []).append((base + pos, label))
+                            label = hit.get("term")
+                    _add_binding(subj, label, base + pos)
+            # (2) the FULL scope manifest: every binding-like scope grounds its
+            # symbol — bind/typed, assume ("If $M$ is a right $A$-module"),
+            # quant, where-binding — not just Let (Joe: the 4029 ungrounded are
+            # mostly bound by non-Let forms the grounding never consulted).
+            if nw is not None:
+                for s in nw.detect_scopes(f"arxiv-{paper}", f["text"]):
+                    pos = base + (s.get("hx/content", {}).get("position") or 0)
+                    ends = s.get("hx/ends", [])
+                    sym = next((e.get("latex") or e.get("text") for e in ends
+                                if e.get("role") in ("symbol", "condition")), None)
+                    typ = next((e.get("text") or e.get("latex") for e in ends
+                                if e.get("role") in ("type", "relation", "value")), None)
+                    if sym and not typ:
+                        # assume/if: pull the type from the match phrase
+                        mm = re.search(r"\bis\s+(?:a|an|the)\s+([^.,;]+)",
+                                       s.get("hx/content", {}).get("match", ""))
+                        typ = mm.group(1) if mm else None
+                    if sym and typ:
+                        _add_binding(sym, typ, pos)
         for k in bindings:
             bindings[k].sort()
 
