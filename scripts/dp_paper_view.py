@@ -53,6 +53,42 @@ IS_RE = re.compile(
     r"(?:^|(?<=\s))(\$[^$]+\$)\s+(?:is|are)\s+(?:an?|the)\s+"
     r"([^.,;:]+?)(?=[.,;:]|\s+such that|\s+and\s+\$|$)")
 
+# INFORMAL PROOF MOVES (Joe). Not the strategies an author *executes* (those
+# are the futon3 math-informal flexiargs) but the *rhetoric of the proof*: the
+# discourse gestures that assert a step while declining to carry it out — "it
+# is not difficult to check", "left to the reader", "clearly". The
+# deferred-verification family is the one Joe flagged; a couple of structural
+# markers (suffices, WLOG) ride along. (rx, label, family) — matched case-insens.
+PROOF_MOVES = [
+    (r"it is not (?:difficult|hard) to (?:check|see|verify|show|prove)",
+     "deferred verification: “not difficult to check”", "deferred-verification"),
+    (r"it is (?:easy|straightforward|routine|immediate|trivial) to "
+     r"(?:check|see|verify|show|prove)",
+     "deferred verification: “easy to see”", "deferred-verification"),
+    (r"it is (?:clear|obvious|evident|immediate)(?:\s+from[^.,;]{0,40})? that",
+     "deferred verification: “it is clear that”", "deferred-verification"),
+    (r"(?:one|the reader) (?:can|may) (?:easily |readily )?"
+     r"(?:check|verify|see|show)",
+     "deferred verification: “one can check”", "deferred-verification"),
+    (r"(?:by )?a (?:direct|routine|straightforward|simple|short) "
+     r"(?:computation|calculation|verification|argument|check)",
+     "deferred verification: routine computation", "deferred-verification"),
+    (r"(?:is|are) (?:easily|readily) (?:seen|checked|verified|shown)",
+     "deferred verification: “readily checked”", "deferred-verification"),
+    (r"(?:we )?leave[^.,;]{0,30} to the reader|left to the reader",
+     "deferred verification: left to the reader", "deferred-verification"),
+    (r"the (?:proofs?|verifications?|details?|computations?) (?:is|are) "
+     r"(?:omitted|left|straightforward|routine|similar|analogous)",
+     "deferred verification: details omitted", "deferred-verification"),
+    (r"\bclearly\b|\bobviously\b|\btrivially\b",
+     "hedge adverb", "deferred-verification"),
+    (r"it (?:suffices|is enough) to (?:show|prove|check|consider|find)",
+     "reduction: it suffices to show", "sufficiency-reduction"),
+    (r"without loss of generality|\bWLOG\b|\bw\.l\.o\.g\.|by symmetry",
+     "WLOG / symmetry reduction", "wlog-symmetry"),
+]
+PROOF_MOVES_C = [(re.compile(p, re.I), lbl, fam) for p, lbl, fam in PROOF_MOVES]
+
 
 def _load_xref():
     """Shuttle cross-ref components: mathlib names, PlanetMath finder."""
@@ -394,6 +430,19 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                 if bound:
                     mk["fields"] = [["symbol", sym], ["bound", bound]]
                 marks.append(mk)
+        # INFORMAL PROOF MOVES (Joe): the proof's discourse gestures — "it is
+        # not difficult to check" and kin — asserting a step while declining to
+        # carry it out. A layer distinct from the structural scopes.
+        for rx, label, family in PROOF_MOVES_C:
+            for pm in rx.finditer(ftext):
+                counts["proof-move"] = counts.get("proof-move", 0) + 1
+                marks.append({
+                    "start": base + pm.start(), "end": base + pm.end(),
+                    "layer": "dp", "kind": "proof-move",
+                    "tip": f"informal proof move · {label}",
+                    "fields": [["move", label], ["family", family],
+                               ["text", pm.group(0)[:50]]],
+                })
         for start, end, delim, body in sweep.math_spans(ftext):
             body_off = start + len(delim)
             # RULE (Joe): anything between dollar signs IS a math scope —
