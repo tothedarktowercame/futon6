@@ -18,6 +18,16 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import anatomy_v0_sweep as sweep
+import importlib.util as _ilu
+
+
+def _load_nlab_wiring():
+    """Import the superpod scope detector (filename has a hyphen)."""
+    p = Path(__file__).resolve().parent / "nlab-wiring.py"
+    spec = _ilu.spec_from_file_location("nlab_wiring", p)
+    mod = _ilu.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 EPRINTS = sweep.DEFAULT_EPRINTS
 GOLDEN_DIR = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
@@ -69,11 +79,48 @@ def detect_binders(ftext, base, ca):
     return out
 
 
-def build(paper: str, with_ca: bool = False, with_binders: bool = False) -> dict:
+def detect_scope_manifest(ftext, base, entity_id, nw, ca):
+    """Port the superpod scope detector (nlab-wiring.detect_scopes) onto one
+    file's text, mapping to global offsets and paper-anatomy mark shape.
+    The full ~40-type manifest, not a hand-rolled subset."""
+    out = []
+    for s in nw.detect_scopes(entity_id, ftext):
+        content = s.get("hx/content", {})
+        pos, end = content.get("position"), content.get("end")
+        if pos is None or end is None or end <= pos:
+            continue
+        stype = s.get("hx/type", "scope")
+        ends = s.get("hx/ends", [])
+        fields = []
+        for e in ends:
+            role = e.get("role")
+            val = e.get("latex") or e.get("text")
+            if role and role != "entity" and val:
+                fields.append([role, str(val)[:70]])
+        # concept-type the bound symbol's type phrase if the authority knows it
+        if ca is not None:
+            for e in ends:
+                if e.get("role") == "type" and e.get("text"):
+                    hit = ca.resolve(_concept_head(e["text"]))
+                    if hit:
+                        fields.append(["canon", f"{hit.get('term')} [{hit.get('target')}]"])
+                        break
+        out.append({
+            "start": base + pos, "end": base + min(end, pos + 200),
+            "layer": "scope", "kind": stype,
+            "tip": f"{stype} · " + " | ".join(f"{r}:{v}" for r, v in fields[:3]),
+            "fields": fields or None,
+        })
+    return out
+
+
+def build(paper: str, with_ca: bool = False, with_binders: bool = False,
+          with_scopes: bool = False) -> dict:
     ca = None
-    if with_ca or with_binders:
+    if with_ca or with_binders or with_scopes:
         from concept_authority import ConceptAuthority
         ca = ConceptAuthority()
+    nw = _load_nlab_wiring() if with_scopes else None
     eprint = None
     for suffix in (".tar.gz", ".tex.gz", ".gz", ".tar", ".tex"):
         cand = EPRINTS / f"{paper}{suffix}"
@@ -110,6 +157,10 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False) -> dict
             bm = detect_binders(ftext, base, ca)
             counts["let-binder"] += len(bm)
             marks.extend(bm)
+        if with_scopes:
+            sm = detect_scope_manifest(ftext, base, f"arxiv-{paper}", nw, ca)
+            counts["scope"] = counts.get("scope", 0) + len(sm)
+            marks.extend(sm)
         for start, end, delim, body in sweep.math_spans(ftext):
             body_off = start + len(delim)
             for m in CSEQ_RE.finditer(body):
@@ -153,7 +204,9 @@ def main(argv=None) -> int:
     paper = argv[0]
     with_ca = "--with-concept-authority" in argv[1:]
     with_binders = "--with-binders" in argv[1:]
-    data = build(paper, with_ca=with_ca, with_binders=with_binders)
+    with_scopes = "--with-scopes" in argv[1:]
+    data = build(paper, with_ca=with_ca, with_binders=with_binders,
+                 with_scopes=with_scopes)
     GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
     out = GOLDEN_DIR / f"fable-{paper}-dp-emacs.json"
     out.write_text(json.dumps({k: v for k, v in data.items() if k != "_counts"}))
@@ -164,7 +217,7 @@ def main(argv=None) -> int:
           f"role-gap {c['role-gap']} ({100*c['role-gap']//tot}%), "
           f"concept-typed {c['concept-typed']} ({100*c['concept-typed']//tot}%), "
           f"unknown {c['unknown']} ({100*c['unknown']//tot}%), "
-          f"let-binders {c['let-binder']}")
+          f"let-binders {c['let-binder']}, scopes {c.get('scope', 0)}")
     print(f"wrote {out}  →  M-x paper-anatomy-open  RET  {paper}-dp")
     return 0
 
