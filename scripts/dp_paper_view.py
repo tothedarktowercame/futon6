@@ -24,7 +24,11 @@ GOLDEN_DIR = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
 CSEQ_RE = re.compile(r"\\([A-Za-z@]+)|\\([^A-Za-z\s])")
 
 
-def build(paper: str) -> dict:
+def build(paper: str, with_ca: bool = False) -> dict:
+    ca = None
+    if with_ca:
+        from concept_authority import ConceptAuthority
+        ca = ConceptAuthority()
     eprint = None
     for suffix in (".tar.gz", ".tex.gz", ".gz", ".tar", ".tex"):
         cand = EPRINTS / f"{paper}{suffix}"
@@ -52,7 +56,7 @@ def build(paper: str) -> dict:
         parts.append("\n")
     text = "".join(parts)
 
-    marks, counts = [], {"classified": 0, "role-gap": 0, "unknown": 0}
+    marks, counts = [], {"classified": 0, "role-gap": 0, "unknown": 0, "concept-typed": 0}
     for f in tex_files:
         base = bases[f["file"]]
         body_text = sweep.strip_comments(f["text"])
@@ -63,21 +67,32 @@ def build(paper: str) -> dict:
             for m in CSEQ_RE.finditer(body):
                 cs = m.group(1) or m.group(2)
                 cls = sweep.classify_cseq(cs, macros, roles, plain)
+                concept = None
                 if cls["class"] == "UNKNOWN":
                     kind = "unknown"
                 elif cls["role"] == "UNKNOWN":
                     kind = "role-gap"
+                    # concept-typing fold: resolve the role-gap against the
+                    # authority. Guard single-char surfaces (\C->"c" junk).
+                    if ca is not None and len(cs.lstrip("\\")) >= 2:
+                        hit = ca.resolve(cs)
+                        if hit:
+                            kind = "concept-typed"
+                            concept = f"{hit.get('term')} [{hit.get('target')}]"
                 else:
                     kind = "classified"
                 counts[kind] += 1
                 g = base + body_off + m.start()
+                tip = (f"\\{cs} · {cls['class']} · {cls['role']}"
+                       + (f" · {cls.get('source','')}" if cls.get("source") else ""))
+                if concept:
+                    tip += f" · concept: {concept}"
                 marks.append({
                     "start": g,
                     "end": g + (m.end() - m.start()),
                     "layer": "dp",
                     "kind": kind,
-                    "tip": f"\\{cs} · {cls['class']} · {cls['role']}"
-                           + (f" · {cls.get('source','')}" if cls.get("source") else ""),
+                    "tip": tip,
                 })
     return {"paper": f"{paper}-dp", "text": text, "marks": marks, "_counts": counts}
 
@@ -88,7 +103,8 @@ def main(argv=None) -> int:
         print("usage: dp_paper_view.py <paper-id>")
         return 2
     paper = argv[0]
-    data = build(paper)
+    with_ca = "--with-concept-authority" in argv[1:]
+    data = build(paper, with_ca=with_ca)
     GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
     out = GOLDEN_DIR / f"fable-{paper}-dp-emacs.json"
     out.write_text(json.dumps({k: v for k, v in data.items() if k != "_counts"}))
@@ -97,6 +113,7 @@ def main(argv=None) -> int:
     print(f"{paper}: {len(data['marks'])} marks — "
           f"classified {c['classified']} ({100*c['classified']//tot}%), "
           f"role-gap {c['role-gap']} ({100*c['role-gap']//tot}%), "
+          f"concept-typed {c['concept-typed']} ({100*c['concept-typed']//tot}%), "
           f"unknown {c['unknown']} ({100*c['unknown']//tot}%)")
     print(f"wrote {out}  →  M-x paper-anatomy-open  RET  {paper}-dp")
     return 0
