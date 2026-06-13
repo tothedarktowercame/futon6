@@ -304,19 +304,29 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
         # the variables it relates (+ := => a definition). "Going inside" the
         # mess: at minimum, this is a display equation relating these symbols.
         for dm in DISPLAY_RE.finditer(ftext):
+            envname = dm.group(1) or "\\[ \\]"
             dbody = dm.group(2) or dm.group(3) or ""
-            if not dbody.strip():
-                continue
+            counts["display"] = counts.get("display", 0) + 1
+            # PRINCIPLE (Joe): a display environment IS a math scope — by virtue
+            # of being a math environment, independently of whether we can read
+            # its display semantics. Same status as $...$ (R1), so it's emitted
+            # UNCONDITIONALLY. The definition/relating-variables below is
+            # ENRICHMENT that rides on the math scope; it does not constitute it.
             dvars = sorted({s for s in re.findall(r"(?<!\\)(?<![A-Za-z])[A-Za-z]", dbody)
                             if s not in "et"})[:8]  # the cell variables
             is_def = ":=" in dbody or "\\stackrel{def}" in dbody
-            counts["display"] = counts.get("display", 0) + 1
+            tip = f"math scope · display ({envname})"
+            if is_def:
+                tip += " · DEFINITION (:=)"
+            if dvars:
+                tip += f" · relates {', '.join(dvars)}"
             marks.append({
                 "start": base + dm.start(), "end": base + dm.end(),
                 "layer": "dp", "kind": "math",
-                "tip": ("display DEFINITION" if is_def else "display equation")
-                       + (f" relating {', '.join(dvars)}" if dvars else ""),
-                "fields": [["display", "definition (:=)" if is_def else "equation"],
+                "tip": tip,
+                "fields": [["scope", f"display math ({envname})"],
+                           ["semantics", ("definition (:=)" if is_def else "equation")
+                                         if (dvars or is_def) else "unread (math scope only)"],
                            ["relates", ", ".join(dvars) or "—"]],
             })
             # mark + ground the variable symbols inside the display
