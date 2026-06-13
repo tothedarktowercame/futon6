@@ -45,6 +45,15 @@ STRUCTURAL_SCOPE = {"let-binder"}          # dp layer
 STRUCTURAL_ENV_PREFIXES = ("env/",)        # legitimately multi-sentence
 SYMBOL_KINDS = {"symbol", "symbol-grounded", "classified", "concept-typed",
                 "role-gap", "unknown"}      # any tag that "covers" a letter-run
+# NON-MATH tokens that LETTER_RUN catches inside $$ displays but which are NOT
+# math symbols and never could be grounded: length-unit args (cm/pt/em in
+# \hspace/\vspace/\kern), env-names after \begin/\end, and text-mode content
+# (\mbox/\text/\stackrel labels). The DETECTOR classifies these with one of
+# these kinds; the CHECKER then EXCLUDES them from the symbol denominator
+# entirely (not a symbol → neither C-SYM-GROUND debt nor inflated grounding).
+# (claude-3's finding: ~49% of 0809.2517's C-SYM-GROUND was this false floor.)
+# I (claude-1, checker owner) make THIS half so no agent grades its own work.
+NON_SYMBOL_KINDS = {"layout", "text-mode"}
 MATH_KINDS = {"math"}
 LETTER_RUN = re.compile(r"(?<!\\)(?<![A-Za-z])[A-Za-z][A-Za-z0-9]*")
 
@@ -123,10 +132,19 @@ def check_paper(paper, data=None):
     # ungrounded tagged symbols are explicit (countable) debt.
     sym_marks = [m for m in marks if m.get("kind") in SYMBOL_KINDS]
     sym_extents = [(m["start"], m["end"], m["kind"]) for m in sym_marks]
-    total_syms = tagged = grounded = 0
+    nonsym_extents = [(m["start"], m["end"]) for m in marks
+                      if m.get("kind") in NON_SYMBOL_KINDS]
+    total_syms = tagged = grounded = nonsym = 0
     for s, e in spans:
         for lm in LETTER_RUN.finditer(text[s:e]):
             ls, le = s + lm.start(), s + lm.end()
+            # EXCLUDE non-math tokens (length units / env-names / text-mode) the
+            # detector classified — they are not symbols, so not in the
+            # denominator (neither debt nor grounding). Math is atomic, layout
+            # is not math.
+            if any(ms <= ls and me >= le for ms, me in nonsym_extents):
+                nonsym += 1
+                continue
             total_syms += 1
             cover = [k for ms, me, k in sym_extents if ms <= ls and me >= le]
             if cover:
@@ -160,6 +178,7 @@ def check_paper(paper, data=None):
         "math_null": null_spans,
         "math_coverage": rate(len(spans) - null_spans, len(spans)),
         "symbols": total_syms,
+        "nonsym_excluded": nonsym,   # length-units/env-names/text-mode (not math)
         "symbol_tagged": rate(tagged, total_syms),
         "symbol_grounded": rate(grounded, total_syms),
         "wellformed_errors": len(errors),
