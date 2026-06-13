@@ -41,7 +41,9 @@ def find_planetmath(term: str) -> Path | None:
         stem = f.stem.split("-", 1)[-1]  # drop the MSC code
         if stem.lower() == cam.lower():
             return f
-        if cam.lower() in stem.lower() or stem.lower() in cam.lower():
+        # substring fallback, but only for non-trivial stems (avoid "C.tex"
+        # matching "GaloisObje[c]t" on a single letter)
+        if len(stem) >= 5 and (cam.lower() in stem.lower() or stem.lower() in cam.lower()):
             cands.append(f)
     return cands[0] if cands else None
 
