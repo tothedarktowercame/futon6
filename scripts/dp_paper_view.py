@@ -47,6 +47,7 @@ from dp_capabilities.math_envelope import (
     DISPLAY_RE,
     _nonsym_kind,
     _textmode_regions,
+    script_base_grounding,
 )
 from dp_capabilities.proof_moves import detect_proof_moves
 from dp_capabilities.references import _harvest_labels, detect_references
@@ -305,6 +306,10 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                         "tip": f"{nonsym}: {sym} (non-math token, excluded)"})
                     continue
                 bound = ground(sym, g)
+                if not bound:
+                    # sub/superscript of a grounded base grounds to it (claude-4)
+                    bound = script_base_grounding(body, sm.start(), ground,
+                                                  base + body_off)
                 kind = "symbol-grounded" if bound else "symbol"
                 counts[kind] = counts.get(kind, 0) + 1
                 mark = {

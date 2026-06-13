@@ -39,6 +39,42 @@ def _textmode_regions(body):
     return regions
 
 
+_SCRIPT_BASE_RE = re.compile(r"([A-Za-z][A-Za-z0-9]*)\s*$")
+
+
+def script_base_grounding(body, pos, ground_fn, base_off):
+    """Ground a sub/superscript letter-run via its base symbol (claude-4).
+
+    A script is PART of its base's compound symbol — the ``coH`` in ``M^{coH}``,
+    the ``i`` in ``X_i``, the ``op`` in ``A^{op}`` are modifiers of M / X / A,
+    not independent variables. So when the base bare-symbol is ALREADY grounded,
+    the script grounds to it too; this only flips ungrounded->grounded (it adds
+    no marks, shrinks no denominator) and attacks the C-SYM-GROUND tail.
+
+    BODY[pos:] is the candidate script run; GROUND_FN(sym, global_pos)->label|None
+    is build()'s grounder; BASE_OFF is the global offset of BODY[0]. Returns the
+    base's binding label (so the script inherits it) or None. Conservative by
+    design: the script must sit immediately after ``^``/``_`` (optionally just
+    inside one ``{``), and the base must be a bare letter-run (a control-sequence
+    base like ``\\alpha`` is not in the binder table, so it is left as residue).
+    """
+    i = pos - 1
+    if i >= 0 and body[i] == "{":
+        i -= 1
+    if i < 0 or body[i] not in "^_":
+        return None
+    op = body[i]
+    base_end = i  # the base symbol ends immediately before the ^ / _
+    m = _SCRIPT_BASE_RE.search(body[:base_end])
+    if not m:
+        return None
+    base = m.group(1)
+    base_label = ground_fn(base, base_off + m.start(1))
+    if not base_label:
+        return None
+    return f"{base}{op}-script : {base_label}"
+
+
 def _nonsym_kind(body, pos, tok, tm_regions):
     """Classify a letter-run at BODY[pos:pos+len(tok)] as a NON-math token, else
     None. A CONTEXT test, not a symbol denylist:
