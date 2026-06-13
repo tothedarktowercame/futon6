@@ -187,6 +187,15 @@ def detect_scope_manifest(ftext, base, entity_id, nw, ca):
                         break
         if end <= pos:
             continue
+        # SUPPRESS the compound-noun false relation (Joe): "$A$-module" is a
+        # typed noun, not a relation between $A$ and "module". The detector
+        # latches the "-module" suffix as a relation head (text begins with a
+        # bare hyphen) and runs through the following prose — that's the purple
+        # blob meeting the blue assume inside the compound. A real relation
+        # symbol (=, ⊆, →, "is a") never begins with "-", so drop these.
+        if stype == "constrain/relation" and any(
+                r == "relation" and str(v).lstrip().startswith("-") for r, v in fields):
+            continue
         out.append({
             "start": base + pos, "end": base + end,
             "layer": "scope", "kind": stype,
