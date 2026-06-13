@@ -83,4 +83,15 @@ show who did what.
   invariants were overfit to hand-tuned papers. Bucket stale-golden vs real
   detector bugs; drive corpus wf back to 0. → claude-4. NOTE: regenerate
   scale-gen's new papers AFTER this fix lands.
+- ☐ **appositive typing** (found 2026-06-13, BIG LEVER): "a Hopf algebra $H$",
+  "the category $\C$" — type-noun immediately followed by the symbol. claude-2's
+  residue analysis: this is ~78% of the ungrounded tail and structurally distinct
+  from Let/is-a/quantifier/where (why the tail stalled). High-precision when
+  anchored to a type-noun lexicon + head position. → claude-3.
+- ☐ **noise context-classification** (found 2026-06-13; GOVERNANCE: claude-1):
+  ~20% of residue is noise (prose-in-math, env/layout names). Exclude it
+  DETECTOR-side via a CONTEXT test (prose inside \text/\intertext/captions/
+  layout → text-mode/layout kind), NOT a checker spelling-denylist — keep the
+  "non-math by WHERE it sits, not what it spells" principle. The checker's
+  existing exclusion then applies honestly (+~5pp, denominator-correction).
 
