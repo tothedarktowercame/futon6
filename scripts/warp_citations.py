@@ -668,7 +668,7 @@ def link_citations(args: argparse.Namespace) -> dict[str, Any]:
     seen_edges: set[tuple[str, str, str]] = set()
     link_cache: dict[str, tuple[str | None, dict[str, Any] | None]] = {}
 
-    for row in rows:
+    for row_idx, row in enumerate(rows, 1):
         src = paper_id_of(row)
         if not src:
             stats["rows_without_paper_id"] += 1
@@ -729,6 +729,17 @@ def link_citations(args: argparse.Namespace) -> dict[str, Any]:
                 continue
             seen_edges.add(edge_key)
             edges.append({"from": src, "to": target, "via": via})
+        if args.progress_every and row_idx % args.progress_every == 0:
+            elapsed = time.time() - start
+            total = stats["bibitems"]
+            rate = (len(edges) / total) if total else 0.0
+            print(
+                f"[warp-citations] {row_idx}/{len(rows)} papers "
+                f"bibitems={total} edges={len(edges)} linkage={rate:.4f} "
+                f"elapsed={elapsed:.1f}s",
+                file=sys.stderr,
+                flush=True,
+            )
 
     cited_by: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for edge in edges:
@@ -781,6 +792,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     ap.add_argument("--force-eprint-identity", action="store_true", help="Build identities from eprint sources even when W1 paper identities are available")
     ap.add_argument("--threshold", type=float, default=0.82)
     ap.add_argument("--max-candidates", type=int, default=150)
+    ap.add_argument("--progress-every", type=int, default=0, help="Print progress every N bibliography rows")
     ap.add_argument("--no-write", action="store_true")
     return ap.parse_args(argv)
 
