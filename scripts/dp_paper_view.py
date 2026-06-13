@@ -53,6 +53,26 @@ IS_RE = re.compile(
     r"(?:^|(?<=\s))(\$[^$]+\$)\s+(?:is|are)\s+(?:an?|the)\s+"
     r"([^.,;:]+?)(?=[.,;:]|\s+such that|\s+and\s+\$|$)")
 
+# DEFINED-IN-PAPER (defined-in-paper capability): in-paper definienda introduced
+# by definition prose ground their later uses — the C-SYM-GROUND debt the
+# Let/is-a binders miss (Joe's "non-Let forms the grounding never consulted").
+# High-precision forms only; group(1)=$symbol$, group(2)=definiens phrase, fed
+# into the same binding harvest as BINDER_RE/IS_RE.
+DEFINE_RES = [
+    # "(we) define $X$ to be/as/by <phrase>"
+    re.compile(r"\b(?:[Ww]e\s+)?[Dd]efine\s+(\$[^$]+\$)\s+(?:to\s+be|as|by)\s+"
+               r"([^.,;:]+?)(?=[.,;:]|\s+such that|$)"),
+    # "$X$ is defined to be/as/by <phrase>"
+    re.compile(r"(\$[^$]+\$)\s+is\s+defined\s+(?:to\s+be|as|by)\s+"
+               r"([^.,;:]+?)(?=[.,;:]|\s+such that|$)"),
+    # "(we) denote by $X$ (the/a) <phrase>"
+    re.compile(r"\b(?:[Ww]e\s+)?[Dd]enote\s+by\s+(\$[^$]+\$)\s+(?:the\s+|an?\s+)?"
+               r"([^.,;:]+?)(?=[.,;:]|\s+such that|$)"),
+    # "(we) write $X$ for <phrase>"
+    re.compile(r"\b(?:[Ww]e\s+)?[Ww]rite\s+(\$[^$]+\$)\s+for\s+"
+               r"([^.,;:]+?)(?=[.,;:]|\s+such that|$)"),
+]
+
 # INFORMAL PROOF MOVES (Joe). Not the strategies an author *executes* (those
 # are the futon3 math-informal flexiargs) but the *rhetoric of the proof*: the
 # discourse gestures that assert a step while declining to carry it out — "it
@@ -470,6 +490,10 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                     pairs.append((cm.group(1), cm.group(2), cm.start()))
             for m in IS_RE.finditer(f["text"]):
                 pairs.append((m.group(1), m.group(2), m.start()))
+            # defined-in-paper: definition-prose definienda (define/denote/write)
+            for rx in DEFINE_RES:
+                for m in rx.finditer(f["text"]):
+                    pairs.append((m.group(1), m.group(2), m.start()))
             for subj, phrase, pos in pairs:
                 label = phrase
                 if ca is not None:
