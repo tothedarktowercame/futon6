@@ -2,10 +2,10 @@
 """Corpus-scale definition debt report from the WARP concordance.
 
 Find concept terms that are used across many papers and defined in no corpus
-paper. External formal/prose shuttle coverage (Lean/mathlib, PlanetMath, nLab)
-is retained on each row as metadata, but the debt frontier is a corpus
-used-but-undefined frontier. Also report the inverse: terms that are both
-widely defined and widely used inside the corpus.
+paper. Split them into true external debt (also absent from Lean/mathlib,
+PlanetMath, and nLab) versus corpus-undefined terms that are already covered by
+an external layer. Also report the inverse: terms that are both widely defined
+and widely used inside the corpus.
 """
 
 from __future__ import annotations
@@ -180,7 +180,7 @@ MACRO_CONCEPT_ALIASES = {
     "dgcat": "dg category",
     "dgCat": "dg category",
     "liminj": "filtered colimit",
-    "Deltaop": "opposite simplex category",
+    "Deltaop": "simplex category",
     "ModR": "module category",
     "Cobar": "cobar construction",
     "pretr": "pretriangulated category",
@@ -408,15 +408,7 @@ def load_nlab_index(path: Path) -> dict[str, str]:
 
 def planetmath_hit(term: str, pm_index: dict[str, str]) -> str | None:
     cam = compact(camel(term))
-    direct = pm_index.get(cam)
-    if direct:
-        return direct
-    if len(cam) < 5:
-        return None
-    for key, rel in pm_index.items():
-        if len(key) >= 5 and (cam in key or key in cam):
-            return rel
-    return None
+    return pm_index.get(cam)
 
 
 def nlab_hit(term: str, nlab_index: dict[str, str]) -> str | None:
@@ -472,7 +464,7 @@ def row_for(term: str, original_term: str, summary: dict, cov: dict) -> dict:
     }
 
 
-def add_debt_acc(acc: dict[str, dict], term: str, original_term: str, summary: dict, cov: dict) -> None:
+def add_frontier_acc(acc: dict[str, dict], term: str, original_term: str, summary: dict, cov: dict) -> None:
     row = acc.setdefault(
         term,
         {
@@ -518,13 +510,17 @@ def build(args: argparse.Namespace) -> dict:
     pm_index = load_planetmath_index(args.planetmath)
     nlab_index = load_nlab_index(args.nlab)
     authority = concept_authority_mod.ConceptAuthority()
-    debt_acc: dict[str, dict] = {}
+    external_debt_acc: dict[str, dict] = {}
+    covered_undefined_acc: dict[str, dict] = {}
     core: list[dict] = []
     stats = {
         "terms_seen": 0,
         "reportable_terms": 0,
         "covered_reportable_terms": 0,
-        "debt_candidates": 0,
+        "external_debt_candidates": 0,
+        "externally_covered_corpus_undefined_candidates": 0,
+        "corpus_undefined_concordance_candidates": 0,
+        "corpus_undefined_unique_candidates": 0,
         "core_candidates": 0,
         "mathlib_defs": len(mathlib_names),
         "planetmath_terms": len(pm_index),
@@ -549,26 +545,35 @@ def build(args: argparse.Namespace) -> dict:
             and not summary["defined_papers"]
             and debt_label
         ):
-            add_debt_acc(debt_acc, debt_label, term, summary, cov)
+            stats["corpus_undefined_concordance_candidates"] += 1
+            if cov["covered"]:
+                add_frontier_acc(covered_undefined_acc, debt_label, term, summary, cov)
+            else:
+                add_frontier_acc(external_debt_acc, debt_label, term, summary, cov)
         if summary["used_papers"] and summary["defined_papers"]:
             stats["core_candidates"] += 1
             core.append(row_for(term_label, term, summary, cov))
         if args.progress and stats["terms_seen"] % args.progress == 0:
             print(
-                f"[warp-debt] terms={stats['terms_seen']} debt={len(debt_acc)} core={len(core)}",
+                f"[warp-debt] terms={stats['terms_seen']} external-debt={len(external_debt_acc)} covered-undefined={len(covered_undefined_acc)} core={len(core)}",
                 file=sys.stderr,
                 flush=True,
             )
 
-    debt = [debt_row_from_acc(row) for row in debt_acc.values()]
-    debt.sort(key=lambda r: (-r["used_papers"], -r["used_count"], r["term"].lower()))
+    external_debt = [debt_row_from_acc(row) for row in external_debt_acc.values()]
+    covered_undefined = [debt_row_from_acc(row) for row in covered_undefined_acc.values()]
+    external_debt.sort(key=lambda r: (-r["used_papers"], -r["used_count"], r["term"].lower()))
+    covered_undefined.sort(key=lambda r: (-r["used_papers"], -r["used_count"], r["term"].lower()))
     core.sort(key=lambda r: (-min(r["used_papers"], r["defined_papers"]), -r["used_papers"], -r["defined_papers"], r["term"].lower()))
-    stats["debt_candidates"] = len(debt)
+    stats["external_debt_candidates"] = len(external_debt)
+    stats["externally_covered_corpus_undefined_candidates"] = len(covered_undefined)
+    stats["corpus_undefined_unique_candidates"] = len(external_debt) + len(covered_undefined)
     stats["elapsed_sec"] = round(time.time() - start, 3)
-    stats["debt_returned"] = min(args.limit, len(debt))
+    stats["external_debt_returned"] = min(args.limit, len(external_debt))
+    stats["externally_covered_corpus_undefined_returned"] = min(args.limit, len(covered_undefined))
     stats["core_returned"] = min(args.limit, len(core))
     return {
-        "schema": "warp-corpus-debt-v1",
+        "schema": "warp-corpus-debt-v2",
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "inputs": {
             "concordance": str(args.concordance),
@@ -577,7 +582,8 @@ def build(args: argparse.Namespace) -> dict:
             "nlab": str(args.nlab),
         },
         "stats": stats,
-        "debt_frontier": debt[: args.limit],
+        "external_debt_frontier": external_debt[: args.limit],
+        "externally_covered_corpus_undefined": covered_undefined[: args.limit],
         "well_covered_core": core[: args.limit],
     }
 
@@ -603,8 +609,11 @@ def main(argv: list[str] | None = None) -> int:
     tmp.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     tmp.replace(args.out)
     print(json.dumps(result["stats"], indent=2, sort_keys=True))
-    print("\nTop debt:")
-    for row in result["debt_frontier"][:20]:
+    print("\nTop external debt:")
+    for row in result["external_debt_frontier"][:20]:
+        print(f"{row['used_papers']:5d} papers  {row['used_count']:7d} uses  {row['term']}")
+    print("\nTop externally covered corpus-undefined:")
+    for row in result["externally_covered_corpus_undefined"][:20]:
         print(f"{row['used_papers']:5d} papers  {row['used_count']:7d} uses  {row['term']}")
     return 0
 
