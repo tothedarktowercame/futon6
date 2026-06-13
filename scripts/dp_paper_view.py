@@ -73,6 +73,34 @@ DEFINE_RES = [
                r"([^.,;:]+?)(?=[.,;:]|\s+such that|$)"),
 ]
 
+# QUANTIFIER + WHERE-BINDING (Joe's tail): the C-SYM-GROUND residue the
+# Let/is-a/define binders never consult. A quantifier INTRODUCES a bound symbol
+# with no type phrase ("for all $x$") — the scope-manifest harvest above drops
+# it (`sym and typ` fails when there is no type). A where/with clause is a
+# post-hoc gloss that DOES carry a type phrase, like IS_RE but lead by
+# where/with. Both feed the same _add_binding harvest, so they only ADD bindings
+# (symbol -> symbol-grounded); they emit no scope/coverage marks (zero wf impact,
+# denominator unchanged) and can only make `grounded` rise.
+#   (rx, label) — label is the binding occasion when there is no concept type.
+QUANT_RES = [
+    # "for all / for every / for each / for some / for any  $x$"
+    (re.compile(r"\bfor\s+(?:all|every|each|some|any)\s+(\$[^$]+\$)"),
+     "quantified variable (for all/every/some)"),
+    # "there exist(s) (a/an/some) $x$"
+    (re.compile(r"\bthere\s+exists?\s+(?:an?\s+|some\s+)?(\$[^$]+\$)"),
+     "existentially quantified variable"),
+    # bare \forall x / \exists x inside math (single Latin letter; high-precision)
+    (re.compile(r"\\(?:forall|exists)\s*\$?\s*([A-Za-z])\b"),
+     "quantified variable ($\\forall$/$\\exists$)"),
+]
+# "where $x$ is/denotes <phrase>" / "with $x$ a/an/the <phrase>" — typed gloss.
+WHERE_RES = [
+    re.compile(r"\bwhere\s+(\$[^$]+\$)\s+(?:is|are|denotes?|stands?\s+for)\s+"
+               r"(?:an?\s+|the\s+)?([^.,;:]+?)(?=[.,;:]|\s+and\s+\$|$)"),
+    re.compile(r"\bwith\s+(\$[^$]+\$)\s+(?:being\s+)?(?:an?|the)\s+"
+               r"([^.,;:]+?)(?=[.,;:]|\s+and\s+\$|$)"),
+]
+
 # INFORMAL PROOF MOVES (Joe). Not the strategies an author *executes* (those
 # are the futon3 math-informal flexiargs) but the *rhetoric of the proof*: the
 # discourse gestures that assert a step while declining to carry it out — "it
@@ -118,12 +146,57 @@ PROOF_MOVES_C = [(re.compile(p, re.I), lbl, fam) for p, lbl, fam in PROOF_MOVES]
 # structural scope nor a symbol/math mark and the coverage/well-formedness
 # invariants never see it (zero regression by construction). Pairs with the
 # informal-proof-move layer: a hedge + the \eqref it defers its verification to.
-# REF_RE alternation lists "ref" LAST so \eqref/\autoref/\cref win their prefix.
-LABEL_RE = re.compile(r"\\label\{([^}]*)\}")
-REF_RE = re.compile(r"\\(eqref|autoref|cref|Cref|vref|pageref|ref)\{([^}]*)\}")
-CITE_RE = re.compile(r"\\(cite[a-zA-Z]*)\s*(?:\[[^\]]*\])?\{([^}]*)\}")
+# REF alternation lists "ref" LAST so \eqref/\autoref/\cref win their prefix.
+# We match only the command + opening brace, then brace-BALANCE the argument:
+# real keys in this corpus carry nested braces (e.g. \label{t_{M,V}}), which a
+# naive \{([^}]*)\} truncates at the first '}' — falsely splitting the key and
+# reporting in-paper refs as dangling (verified on 0809.2517).
+LABEL_CMD = re.compile(r"\\label\s*\{")
+REF_CMD = re.compile(r"\\(eqref|autoref|cref|Cref|vref|pageref|ref)\s*\{")
+CITE_CMD = re.compile(r"\\(cite[a-zA-Z]*)\s*(?:\[[^\]]*\])?\{")
 _ANCHOR_BEGIN_RE = re.compile(r"\\begin\{([a-zA-Z*]+)\}")
 _ANCHOR_SECTION_RE = re.compile(r"\\((?:sub)*section|paragraph)\*?\{")
+
+
+def _braced_arg(text, i):
+    """text[i] must be '{'. Return (inner, end) where INNER is the
+    brace-balanced content and END is the index just past the closing '}'.
+    Returns (None, i) if the braces never balance (truncated source)."""
+    depth = 0
+    for j in range(i, len(text)):
+        if text[j] == "{":
+            depth += 1
+        elif text[j] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[i + 1:j], j + 1
+    return None, i
+
+
+def _split_top_commas(s):
+    """Split S on commas at brace-depth 0, so a key like t_{M,V} stays whole."""
+    out, depth, cur = [], 0, []
+    for c in s:
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+        if c == "," and depth == 0:
+            out.append("".join(cur)); cur = []
+        else:
+            cur.append(c)
+    out.append("".join(cur))
+    return [x.strip() for x in out if x.strip()]
+
+
+def _harvest_labels(ftext):
+    """[(start, end, key)] for each \\label, keys brace-balanced."""
+    out = []
+    for m in LABEL_CMD.finditer(ftext):
+        inner, end = _braced_arg(ftext, m.end() - 1)
+        if inner is not None:
+            out.append((m.start(), end, inner.strip()))
+    return out
 
 
 def _load_xref():
@@ -327,31 +400,36 @@ def detect_references(ftext, base, label_keys):
     """
     out = []
     anchors = _anchor_index(ftext)
-    for m in LABEL_RE.finditer(ftext):
-        key = m.group(1).strip()
-        names = _anchor_for(anchors, m.start())
+    for s, e, key in _harvest_labels(ftext):
+        names = _anchor_for(anchors, s)
         out.append({
-            "start": base + m.start(), "end": base + m.end(),
+            "start": base + s, "end": base + e,
             "layer": "dp", "kind": "label",
             "tip": f"label {key}" + (f" · names {names}" if names else ""),
             "fields": [["label", key], ["names", names or "—"]],
         })
-    for m in REF_RE.finditer(ftext):
-        cmd, raw = m.group(1), m.group(2).strip()
-        keys = [k.strip() for k in raw.split(",") if k.strip()]
+    for m in REF_CMD.finditer(ftext):
+        inner, end = _braced_arg(ftext, m.end() - 1)
+        if inner is None:
+            continue
+        cmd, raw = m.group(1), inner.strip()
+        keys = _split_top_commas(raw)
         resolved = bool(keys) and all(k in label_keys for k in keys)
         out.append({
-            "start": base + m.start(), "end": base + m.end(),
+            "start": base + m.start(), "end": base + end,
             "layer": "dp", "kind": "ref",
             "tip": f"\\{cmd} → {raw}"
                    + ("" if resolved else " · DANGLING (no matching \\label)"),
             "fields": [["ref", raw], ["via", f"\\{cmd}"],
                        ["target", "in-paper" if resolved else "dangling"]],
         })
-    for m in CITE_RE.finditer(ftext):
-        cmd, keys = m.group(1), m.group(2).strip()
+    for m in CITE_CMD.finditer(ftext):
+        inner, end = _braced_arg(ftext, m.end() - 1)
+        if inner is None:
+            continue
+        cmd, keys = m.group(1), inner.strip()
         out.append({
-            "start": base + m.start(), "end": base + m.end(),
+            "start": base + m.start(), "end": base + end,
             "layer": "dp", "kind": "cite",
             "tip": f"\\{cmd} → {keys} (bibliography)",
             "fields": [["cite", keys], ["via", f"\\{cmd}"],
@@ -430,6 +508,25 @@ def _reconcile_structural_crossings(marks):
     return [m for m in marks if m["end"] > m["start"]]
 
 
+def _clamp_structural_sentence_markers(marks, text):
+    """Keep structural scopes on one checker sentence.
+
+    The checker's sentence invariant is deliberately text-only. That means a
+    TeX ellipsis written as `... ` inside a binder's math subject is also seen
+    as a sentence boundary. Clamp such scopes before the first `. ` and let the
+    math-atom snap/drop pass remove any degenerate residue.
+    """
+    for mark in marks:
+        if not _is_structural_scope(mark):
+            continue
+        i = text.find(". ", mark["start"], mark["end"])
+        if i != -1:
+            mark["end"] = i
+    return [m for m in marks
+            if m["end"] > m["start"]
+            and text[m["start"]:m["end"]].strip() not in {"Let", "For", "If", "Assume"}]
+
+
 def build(paper: str, with_ca: bool = False, with_binders: bool = False,
           with_scopes: bool = False, with_xref: bool = False) -> dict:
     ca = None
@@ -494,6 +591,13 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             for rx in DEFINE_RES:
                 for m in rx.finditer(f["text"]):
                     pairs.append((m.group(1), m.group(2), m.start()))
+            # quantifier + where/with binding (Joe's QUANTIFIER/POSITIONAL tail)
+            for rx, qlabel in QUANT_RES:
+                for m in rx.finditer(f["text"]):
+                    pairs.append((m.group(1), qlabel, m.start()))
+            for rx in WHERE_RES:
+                for m in rx.finditer(f["text"]):
+                    pairs.append((m.group(1), m.group(2), m.start()))
             for subj, phrase, pos in pairs:
                 label = phrase
                 if ca is not None:
@@ -535,8 +639,8 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     # first, so a \ref to a forward label (later section/file) still resolves.
     label_keys = set()
     for f in tex_files:
-        for m in LABEL_RE.finditer(f["text"]):
-            label_keys.add(m.group(1).strip())
+        for _s, _e, key in _harvest_labels(f["text"]):
+            label_keys.add(key)
 
     for f in tex_files:
         base = bases[f["file"]]
@@ -554,6 +658,8 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             spans = [(base + s, base + e) for s, e, _d, _b in sweep.math_spans(ftext)]
             spans += [(base + dm.start(), base + dm.end()) for dm in DISPLAY_RE.finditer(ftext)]
             structural = _snap_marks_to_math_atoms(bm + sm, spans)
+            structural = _clamp_structural_sentence_markers(structural, text)
+            structural = _snap_marks_to_math_atoms(structural, spans)
             structural = _reconcile_structural_crossings(structural)
             counts["let-binder"] += sum(1 for m in structural
                                          if m.get("layer") == "dp"
@@ -636,15 +742,14 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             # RULE (Joe): anything between dollar signs IS a math scope —
             # never null. Even a bare $H$ (no control sequence) gets an
             # envelope; LaTeX itself is telling us it's mathematics.
-            if body.strip():
-                counts["math"] = counts.get("math", 0) + 1
-                marks.append({
-                    "start": base + start, "end": base + end,
-                    "layer": "dp", "kind": "math",
-                    "tip": f"math: {body.strip()[:60]}",
-                    "fields": [["math", body.strip()[:70]],
-                               ["delim", "display ($$)" if delim == "$$" else "inline ($)"]],
-                })
+            counts["math"] = counts.get("math", 0) + 1
+            marks.append({
+                "start": base + start, "end": base + end,
+                "layer": "dp", "kind": "math",
+                "tip": f"math: {(body.strip() or 'empty math span')[:60]}",
+                "fields": [["math", (body.strip() or "— empty span —")[:70]],
+                           ["delim", "display ($$)" if delim == "$$" else "inline ($)"]],
+            })
             # SATIETY (Joe): the $...$ scope is hungry for content — annotate
             # the symbols inside, not just control sequences. A bare $H$ whose
             # H is unmarked is a hungry envelope (a violation). Mark each
