@@ -75,6 +75,40 @@ def script_base_grounding(body, pos, ground_fn, base_off):
     return f"{base}{op}-script : {base_label}"
 
 
+# R6 — display-defined (:=) grounding (claude-3). A bare symbol introduced as the
+# WHOLE left-hand side of a ":=" definition ("$X := ...$", "$$L := ...$$") IS that
+# definition; its later uses inherit it. KEY precision (claude-1's gate): X must be
+# a STANDALONE definiendum — preceded by a math delimiter / hard separator, never a
+# binary operator or accent — so "a \cdot l :=" (l is a factor), "X_i :=" (i is a
+# subscript), and GrCalc diagram LHS are NOT harvested. Like script_base_grounding,
+# this only flips ungrounded->grounded at the ground() seam: no marks, no denom.
+_ASSIGN_RE = re.compile(r"([A-Za-z][A-Za-z0-9]*)\s*:=")
+_ASSIGN_SEP = re.compile(r"(?:\$|&|\\\\|\\quad|\\qquad|\\,|\\;|\\:|\[|^)\s*$")
+
+
+def harvest_display_assigns(text):
+    """Map each standalone ':='-definiendum bare symbol to its sorted global
+    definition offsets (X-:=-grounds-X). The _ASSIGN_SEP guard requires X to be
+    the whole LHS, so a factor/subscript/diagram-internal letter is never taken."""
+    defs = {}
+    for m in _ASSIGN_RE.finditer(text):
+        if _ASSIGN_SEP.search(text[:m.start(1)]):
+            defs.setdefault(m.group(1), []).append(m.start(1))
+    for k in defs:
+        defs[k].sort()
+    return defs
+
+
+def display_assign_grounding(sym, gpos, assign_defs):
+    """Fallback grounder (R6): if SYM is display-defined by 'SYM := ...' at or
+    before GPOS, ground SYM to that definition. Forward-only (a use before the
+    definition is not yet grounded), mirroring ground()'s at-or-before scope."""
+    ps = assign_defs.get(sym)
+    if ps and ps[0] <= gpos:
+        return f"display-defined (:=) : {sym}"
+    return None
+
+
 def _nonsym_kind(body, pos, tok, tm_regions):
     """Classify a letter-run at BODY[pos:pos+len(tok)] as a NON-math token, else
     None. A CONTEXT test, not a symbol denylist:

@@ -47,6 +47,8 @@ from dp_capabilities.math_envelope import (
     DISPLAY_RE,
     _nonsym_kind,
     _textmode_regions,
+    display_assign_grounding,
+    harvest_display_assigns,
     script_base_grounding,
 )
 from dp_capabilities.proof_moves import detect_proof_moves
@@ -93,6 +95,10 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
         cursor += len(f["text"]) + 1
         parts.append("\n")
     text = "".join(parts)
+    # R6 (claude-3): bare symbols display-defined by "X := ..." ground to that
+    # definition. Harvested once over the whole text (global offsets), consumed
+    # as a fallback at the ground() seam below.
+    assign_defs = harvest_display_assigns(text)
 
     marks, counts = [], {"classified": 0, "role-gap": 0, "unknown": 0,
                          "concept-typed": 0, "let-binder": 0}
@@ -310,6 +316,9 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                     # sub/superscript of a grounded base grounds to it (claude-4)
                     bound = script_base_grounding(body, sm.start(), ground,
                                                   base + body_off)
+                if not bound:
+                    # symbol display-defined by "X := ..." grounds to it (R6, claude-3)
+                    bound = display_assign_grounding(sym, g, assign_defs)
                 kind = "symbol-grounded" if bound else "symbol"
                 counts[kind] = counts.get(kind, 0) + 1
                 mark = {
