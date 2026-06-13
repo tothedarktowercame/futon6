@@ -407,6 +407,25 @@ def classify_cseq(cs: str, macros: dict[str, dict], roles: dict[str, dict], plai
     return {"cs": "\\" + cs, "class": "UNKNOWN", "role": "UNKNOWN"}
 
 
+def _unescaped(text: str, k: int) -> bool:
+    r"""True if text[k] is NOT backslash-escaped — i.e. preceded by an EVEN
+    number of consecutive backslashes (zero counts). Critical for `$`-parity:
+    `\\$` (a LaTeX line-break `\\` then `$`) is a REAL math delimiter, while
+    `\$` (a lone backslash) escapes the `$`. The old `text[k-1] != '\\'` test
+    mis-read `\\$$`/`\\$` (line-break + display/inline open, common in GrCalc
+    bodies like `}\\$$`) as an escaped `$`, dropped the delimiter, and let
+    `$`-parity drift so inter-formula PROSE was swallowed into a giant spurious
+    span. Counting backslash parity is strictly MORE correct (it never escapes
+    a `$` the old test treated as real; it only RECOVERS real delimiters the
+    old test wrongly skipped), so spans only tighten."""
+    b = 0
+    k -= 1
+    while k >= 0 and text[k] == "\\":
+        b += 1
+        k -= 1
+    return b % 2 == 0
+
+
 def math_spans(text: str):
     # A LaTeX comment (unescaped `%` to end of line) is NOT math — a `$` inside
     # one is not a delimiter. Skipping comment regions (offset-preserving: we
@@ -425,7 +444,7 @@ def math_spans(text: str):
                 return
             i = nl + 1
             continue
-        if ch != "$" or (i > 0 and text[i - 1] == "\\"):
+        if ch != "$" or not _unescaped(text, i):
             i += 1
             continue
         delim = "$$" if i + 1 < n and text[i + 1] == "$" else "$"
@@ -439,7 +458,7 @@ def math_spans(text: str):
                     break
                 j = nl + 1
                 continue
-            if text.startswith(delim, j) and text[j - 1] != "\\":
+            if text.startswith(delim, j) and _unescaped(text, j):
                 yield start, j + len(delim), delim, text[i + len(delim):j]
                 i = j + len(delim)
                 found = True
