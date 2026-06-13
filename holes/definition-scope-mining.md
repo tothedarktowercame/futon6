@@ -100,3 +100,29 @@ not a bare pointer; (b) the recursion — Mon's definiens reference
 MonoidalCategory, ⊗, 𝟙_ — chase the definition dependency graph (= mathlib's
 import graph); (c) PlanetMath prose definitions as the second source (the
 NNexus pointers' actual content).
+
+## Backward rung — prose skeletons for terms NOT in Lean (2026-06-13)
+
+`scripts/mine_prose_def.py`: --not-in-mathlib filters a term list against the
+mathlib defs, then skeletonises the residue from PlanetMath prose (same
+shape: definiendum + ambient let-context + definiens + such-that
+conditions). Verified on 0809.2517's working terms:
+- **right $H$-comodule algebra** (16W30-ComoduleAlgebra): ambient $H$ a
+  bialgebra; is a: unital algebra $A$ which is a right $H$-comodule;
+  conditions yes (compatibility eqn).
+- **Hopf algebra** (16W30-HopfAlgebra): bialgebra $A$ with antipode
+  $S: A\to A$; conditions yes (antipode axiom).
+- **right $A$-comodule** (16W30-Comodule): vector space $V$ with coaction
+  $t: V\to V\otimes A$; conditions yes (coassociativity).
+
+The two rungs BRACKET the semantics: PlanetMath = the classical structure
+(algebra + coaction + compatibility); mathlib (Mon_/internalization) = those
+operations as morphisms in $\C$. Together they resolve "$H$-comodule algebra
+in $\C$" = the comodule-algebra structure internalised to the monoidal
+category. forward(formal) ∪ backward(prose) covers the concept vocabulary.
+
+Honest gaps: "Galois object" found in neither mathlib nor PlanetMath — a
+genuine frontier (try nLab, else it stays a bare concept-pointer). Prose
+extraction is lightweight (definiens/condition boundaries capture trailing
+LaTeX; example-context leaks into ambient) — refinable, but the skeleton
+shape is right.
