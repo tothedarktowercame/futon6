@@ -108,3 +108,12 @@ generic variables — record as irreducible-debt, do not chase):
   exclude form/relation/theory/number) — a few pp. → claude-3.
 After these: grounding axis structurally COMPLETE; loop consolidates.
 
+## Breadth phase (2026-06-13, loop re-invoked after ceiling)
+
+Grounding axis structurally complete (75%, wf 0). Loop continues on BREADTH:
+scale toward the full 9742 math.CT eprints so the grounding number + DEBT
+frontier are archive-representative. Grounding % expected to stay ~75% (new
+papers average the ceiling); the value is representativeness + a comprehensive
+concept-DEBT frontier. Throttled subprocess batches; warp artifacts refreshed
+as the corpus grows. → codex-3 scaling; claude-1 measures + logs each tick.
+
