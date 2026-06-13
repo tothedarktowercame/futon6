@@ -32,6 +32,7 @@ def _load_nlab_wiring():
 EPRINTS = sweep.DEFAULT_EPRINTS
 GOLDEN_DIR = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
 from dp_capabilities.binders import (
+    APPOS_CONJ_RE,
     APPOSITIVE_RE,
     BINDER_RE,
     CONJUNCT_RE,
@@ -142,6 +143,16 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             # biggest remaining grounding lever (~78% of the ungrounded tail).
             for m in APPOSITIVE_RE.finditer(f["text"]):
                 pairs.append((m.group(2), m.group(1), m.start()))
+                # plural type-noun ("objects $K$ and $L$") -> the contiguous
+                # ", "/" and " conjunct chain shares the type; singular does not.
+                if m.group(1).rstrip().endswith("s"):
+                    pos = m.end()
+                    while True:
+                        cj = APPOS_CONJ_RE.match(f["text"], pos)
+                        if not cj:
+                            break
+                        pairs.append((cj.group(1), m.group(1), cj.start(1)))
+                        pos = cj.end()
             for subj, phrase, pos in pairs:
                 label = phrase
                 if ca is not None:

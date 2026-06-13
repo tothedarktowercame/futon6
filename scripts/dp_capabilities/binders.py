@@ -92,6 +92,12 @@ TYPE_NOUNS = (
 APPOSITIVE_RE = re.compile(
     r"\b(?:an?|the|any|some|every|each)\s+"
     r"([^.,;:]{0,40}?\b(?:" + TYPE_NOUNS + r"))\s+(\$[^$]+\$)")
+# Conjuncts sharing ONE plural appositive type: "objects $K$ and $L$", "spaces
+# $(V,q_V)$ and $(W,q_W)$" — each extra $symbol$ inherits the same type-noun.
+# Anchored (re.match from the previous symbol's end) so only a CONTIGUOUS
+# ", "/" and " chain attaches; gated to PLURAL type-nouns by the caller (a
+# singular "the map $f$ and $g$" must NOT drag $g$ in — $g$ may be unrelated).
+APPOS_CONJ_RE = re.compile(r"\s*(?:,\s*and\s+|,\s*|\s+and\s+)(\$[^$]+\$)")
 
 # INFORMAL PROOF MOVES (Joe). Not the strategies an author *executes* (those
 # are the futon3 math-informal flexiargs) but the *rhetoric of the proof*: the
