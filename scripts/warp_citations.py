@@ -59,6 +59,42 @@ STOPWORDS = {
     "with",
 }
 
+VENUE_WORDS = {
+    "advances",
+    "annals",
+    "bulletin",
+    "cambridge",
+    "commun",
+    "communications",
+    "compositio",
+    "contemporary",
+    "dissertation",
+    "doctor",
+    "doctoral",
+    "geometry",
+    "homology",
+    "journal",
+    "lecture",
+    "letters",
+    "math",
+    "mathematical",
+    "mathematics",
+    "memoirs",
+    "notes",
+    "phd",
+    "preprint",
+    "proceedings",
+    "proc",
+    "publ",
+    "publication",
+    "series",
+    "springer",
+    "thesis",
+    "topology",
+    "transactions",
+    "trans",
+}
+
 
 @dataclass(frozen=True)
 class PaperIdentity:
@@ -85,6 +121,11 @@ def arxiv_aliases(paper_id: str) -> set[str]:
         aliases.add(paper_id.replace("__", "/"))
     if "/" in paper_id:
         aliases.add(paper_id.replace("/", "__"))
+    legacy = re.fullmatch(r"([A-Za-z.-]+)__([0-9]{7})", paper_id)
+    if legacy:
+        archive, number = legacy.groups()
+        aliases.add(f"{archive.split('.')[0]}__{number}")
+        aliases.add(f"{archive.split('.')[0]}/{number}")
     return aliases
 
 
@@ -92,15 +133,40 @@ def normalize_arxiv_id(value: str | None) -> str | None:
     if not value:
         return None
     text = value.strip()
-    text = re.sub(r"(?i)^arxiv\s*:\s*", "", text)
-    text = re.sub(r"(?i)^(https?://)?arxiv\.org/(abs|pdf)/", "", text)
-    text = text.strip().strip(". ")
+    text = re.sub(r"(?i)^arxiv\s*:?\s*", "", text)
+    text = re.sub(r"(?i)^(?:https?://)?(?:www\.)?arxiv\.org/(abs|pdf)/", "", text)
+    text = re.sub(r"(?i)^https?://front\.math\.ucdavis\.edu/", "", text)
+    text = text.strip().strip("!.,;()[]{}<> ")
     text = re.sub(r"\.pdf$", "", text, flags=re.I)
     text = re.sub(r"v\d+$", "", text, flags=re.I)
+    legacy = re.fullmatch(r"([A-Za-z]+)(?:\.[A-Za-z]{2})?/(\d{7})", text)
+    if legacy:
+        return f"{legacy.group(1).lower()}__{legacy.group(2)}"
     text = text.replace("/", "__")
     if re.fullmatch(r"\d{4}\.\d{4,5}", text) or re.fullmatch(r"[A-Za-z.-]+__\d{7}", text):
         return text
     return None
+
+
+def find_arxiv_ids(text: str) -> list[str]:
+    if not text:
+        return []
+    patterns = [
+        r"(?i)arxiv\s*:?\s*([A-Za-z]+(?:\.[A-Za-z]{2})?/\d{7}|\d{4}\.\d{4,5})(?:v\d+)?",
+        r"(?i)arxiv\.org/(?:abs|pdf)/([A-Za-z]+(?:\.[A-Za-z]{2})?/\d{7}|\d{4}\.\d{4,5})(?:v\d+)?",
+        r"(?i)front\.math\.ucdavis\.edu/([A-Za-z]+(?:\.[A-Za-z]{2})?/\d{7}|\d{4}\.\d{4,5})(?:v\d+)?",
+        r"(?i)\b([A-Za-z]+(?:\.[A-Za-z]{2})?/\d{7})\b",
+        r"(?<![\d.])(\d{4}\.\d{4,5})(?:v\d+)?(?![\d.])",
+    ]
+    out: list[str] = []
+    seen = set()
+    for pattern in patterns:
+        for match in re.finditer(pattern, text):
+            got = normalize_arxiv_id(match.group(1))
+            if got and got not in seen:
+                seen.add(got)
+                out.append(got)
+    return out
 
 
 def tex_to_words(text: str) -> str:
@@ -124,6 +190,18 @@ def normalize_title(text: str | None) -> str:
 
 def title_tokens(title_norm: str) -> frozenset[str]:
     return frozenset(t for t in title_norm.split() if len(t) > 2 and t not in STOPWORDS)
+
+
+def is_probable_venue_title(text: str | None) -> bool:
+    norm = normalize_title(text)
+    if not norm:
+        return True
+    tokens = title_tokens(norm)
+    if len(tokens) <= 2 and tokens & VENUE_WORDS:
+        return True
+    if tokens and len(tokens & VENUE_WORDS) / len(tokens) >= 0.6:
+        return True
+    return False
 
 
 def clean_author_text(text: str | None) -> str:
@@ -199,6 +277,66 @@ def identity_from_eprint(path: Path) -> PaperIdentity | None:
     )
 
 
+def identity_from_bib_row(row: dict[str, Any]) -> PaperIdentity | None:
+    paper_id = paper_id_of(row)
+    title = row.get("title")
+    authors = row.get("authors")
+    if isinstance(authors, list):
+        author_text = " and ".join(str(a) for a in authors)
+    elif isinstance(authors, str):
+        author_text = authors
+    else:
+        author_text = ""
+    if not isinstance(title, str) or not title.strip():
+        return None
+    title_norm = normalize_title(title)
+    if not paper_id or not title_norm:
+        return None
+    author_tokens = author_last_tokens(author_text)
+    return PaperIdentity(
+        paper_id=paper_id,
+        title=title.strip(),
+        title_norm=title_norm,
+        title_tokens=title_tokens(title_norm),
+        author_names=tuple(sorted(author_tokens)),
+        author_tokens=author_tokens,
+        source="bib-index",
+    )
+
+
+def add_identity(
+    ident: PaperIdentity,
+    identities: dict[str, PaperIdentity],
+    arxiv_to_id: dict[str, str],
+    exact_title: dict[str, list[str]],
+    token_index: dict[str, set[str]],
+) -> None:
+    identities[ident.paper_id] = ident
+    for alias in arxiv_aliases(ident.paper_id):
+        arxiv_to_id[alias] = ident.paper_id
+    exact_title[ident.title_norm].append(ident.paper_id)
+    for token in ident.title_tokens:
+        token_index[token].add(ident.paper_id)
+
+
+def build_identity_index_from_rows(
+    rows: list[dict[str, Any]],
+) -> tuple[dict[str, PaperIdentity], dict[str, str], dict[str, list[str]], dict[str, set[str]], dict[str, Any]]:
+    identities: dict[str, PaperIdentity] = {}
+    arxiv_to_id: dict[str, str] = {}
+    exact_title: dict[str, list[str]] = defaultdict(list)
+    token_index: dict[str, set[str]] = defaultdict(set)
+    stats = Counter({"candidate_rows": len(rows)})
+    for row in rows:
+        ident = identity_from_bib_row(row)
+        if ident is None:
+            stats["identity_missing"] += 1
+            continue
+        add_identity(ident, identities, arxiv_to_id, exact_title, token_index)
+        stats["identity_indexed"] += 1
+    return identities, arxiv_to_id, exact_title, token_index, dict(stats)
+
+
 def build_identity_index(eprints: Path, limit: int | None, paper_ids: list[str]) -> tuple[dict[str, PaperIdentity], dict[str, str], dict[str, list[str]], dict[str, set[str]], dict[str, Any]]:
     paths = iter_eprints(eprints)
     if paper_ids:
@@ -221,12 +359,7 @@ def build_identity_index(eprints: Path, limit: int | None, paper_ids: list[str])
         if ident is None:
             stats["identity_missing"] += 1
             continue
-        identities[ident.paper_id] = ident
-        for alias in arxiv_aliases(ident.paper_id):
-            arxiv_to_id[alias] = ident.paper_id
-        exact_title[ident.title_norm].append(ident.paper_id)
-        for token in ident.title_tokens:
-            token_index[token].add(ident.paper_id)
+        add_identity(ident, identities, arxiv_to_id, exact_title, token_index)
         stats["identity_indexed"] += 1
     return identities, arxiv_to_id, exact_title, token_index, dict(stats)
 
@@ -279,20 +412,69 @@ def bibitem_arxiv_id(item: dict[str, Any]) -> str | None:
             got = normalize_arxiv_id(val)
             if got:
                 return got
-    raw = item.get("raw")
-    if isinstance(raw, str):
-        match = re.search(r"(?i)(?:arxiv\s*:\s*|arxiv\.org/(?:abs|pdf)/)([A-Za-z.-]+/\d{7}|\d{4}\.\d{4,5})(?:v\d+)?", raw)
-        if match:
-            return normalize_arxiv_id(match.group(1))
+    text = " ".join(str(item.get(key) or "") for key in ("raw", "author", "authors", "title"))
+    found = find_arxiv_ids(text)
+    if found:
+        return found[0]
     return None
 
 
-def bibitem_title(item: dict[str, Any]) -> str:
+def bibitem_arxiv_ids(item: dict[str, Any]) -> list[str]:
+    out: list[str] = []
+    seen = set()
+    for key in ("arxiv_id", "arxiv", "eprint", "archive_id"):
+        val = item.get(key)
+        if isinstance(val, str):
+            got = normalize_arxiv_id(val)
+            if got and got not in seen:
+                seen.add(got)
+                out.append(got)
+    text = " ".join(str(item.get(key) or "") for key in ("raw", "author", "authors", "title"))
+    for got in find_arxiv_ids(text):
+        if got not in seen:
+            seen.add(got)
+            out.append(got)
+    return out
+
+
+def bibitem_titles(item: dict[str, Any]) -> list[str]:
+    titles: list[str] = []
+    seen: set[str] = set()
+
+    def add(value: str | None) -> None:
+        if not value:
+            return
+        value = clean_reference_fragment(value)
+        norm = normalize_title(value)
+        if len(norm) < 12 or norm in seen:
+            return
+        seen.add(norm)
+        titles.append(value)
+
     for key in ("title", "paper_title", "work_title"):
         val = item.get(key)
-        if isinstance(val, str) and val.strip():
-            return val
-    return title_from_raw(item.get("raw") if isinstance(item.get("raw"), str) else "")
+        if isinstance(val, str) and val.strip() and not is_probable_venue_title(val):
+            add(val)
+    for key in ("author", "raw"):
+        val = item.get(key)
+        if isinstance(val, str):
+            for candidate in titles_from_reference(val):
+                add(candidate)
+    return titles
+
+
+def bibitem_title(item: dict[str, Any]) -> str:
+    titles = bibitem_titles(item)
+    return titles[0] if titles else ""
+
+
+def clean_reference_fragment(text: str) -> str:
+    text = re.sub(r"(?i)https?://\S+", " ", text)
+    text = re.sub(r"(?i)\bdoi\s*:?\s*\S+", " ", text)
+    text = re.sub(r"(?i)\barxiv\s*:?\s*(?:[A-Za-z]+(?:\.[A-Za-z]{2})?/\d{7}|\d{4}\.\d{4,5})(?:v\d+)?", " ", text)
+    text = re.sub(r"(?i)\b[A-Za-z]+(?:\.[A-Za-z]{2})?/\d{7}\b", " ", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip(" .,!;:")
 
 
 def title_from_raw(raw: str) -> str:
@@ -305,6 +487,47 @@ def title_from_raw(raw: str) -> str:
     if emph:
         return emph.group(1)
     return ""
+
+
+def titles_from_reference(raw: str) -> list[str]:
+    if not raw:
+        return []
+    raw = clean_reference_fragment(raw)
+    out: list[str] = []
+    quoted = re.findall(r"[\"“](.{12,240}?)[\"”]", raw, re.S)
+    out.extend(quoted)
+    out.extend(re.findall(r"\\(?:emph|textit)\s*\{(.{12,240}?)\}", raw, re.S))
+
+    # Most W1 raw strings are "Authors, Title, Venue ..."; W1's author field
+    # often also includes that title when no better title was extracted.
+    parts = [p.strip() for p in re.split(r"\s*,\s*", raw) if p.strip()]
+    for idx in range(1, min(len(parts), 4)):
+        candidate = parts[idx]
+        if is_probable_venue_title(candidate):
+            continue
+        out.append(candidate)
+
+    # Also keep a larger post-author fragment for titles containing commas.
+    if len(parts) >= 3:
+        joined = ", ".join(parts[1:3])
+        if not is_probable_venue_title(joined):
+            out.append(joined)
+
+    cleaned: list[str] = []
+    seen = set()
+    for candidate in out:
+        candidate = re.split(
+            r"(?i)\b(?:to appear|preprint|available|submitted|journal|j\.|proc\.|proceedings|trans\.|adv\.|ann\.|lect(?:ure)? notes|vol\.|no\.|pp\.)\b",
+            candidate,
+            maxsplit=1,
+        )[0]
+        candidate = clean_reference_fragment(candidate)
+        norm = normalize_title(candidate)
+        if len(norm) < 12 or norm in seen:
+            continue
+        seen.add(norm)
+        cleaned.append(candidate)
+    return cleaned
 
 
 def bibitem_authors(item: dict[str, Any]) -> str:
@@ -320,12 +543,43 @@ def bibitem_authors(item: dict[str, Any]) -> str:
     return ""
 
 
+def bibitem_cache_key(item: dict[str, Any]) -> str:
+    return "\n".join(str(item.get(key) or "") for key in ("raw", "author", "authors", "title", "arxiv_id", "arxiv", "eprint", "archive_id"))
+
+
 def candidate_ids_for_title(tokens: frozenset[str], token_index: dict[str, set[str]], max_candidates: int) -> list[str]:
     counts: Counter[str] = Counter()
-    for token in tokens:
+    ranked_tokens = sorted(tokens, key=lambda token: len(token_index.get(token, ())))[:8]
+    for token in ranked_tokens:
         for paper_id in token_index.get(token, ()):
             counts[paper_id] += 1
     return [paper_id for paper_id, _count in counts.most_common(max_candidates)]
+
+
+def prefiltered_title_candidates(
+    tokens: frozenset[str],
+    identities: dict[str, PaperIdentity],
+    token_index: dict[str, set[str]],
+    max_candidates: int,
+) -> list[str]:
+    counts: Counter[str] = Counter()
+    ranked_tokens = sorted(tokens, key=lambda token: len(token_index.get(token, ())))[:8]
+    for token in ranked_tokens:
+        for paper_id in token_index.get(token, ()):
+            counts[paper_id] += 1
+    if not counts:
+        return []
+    ranked: list[tuple[str, float, int]] = []
+    for paper_id, shared in counts.most_common(max_candidates * 4):
+        ident = identities.get(paper_id)
+        if ident is None or not ident.title_tokens:
+            continue
+        containment = shared / max(1, min(len(tokens), len(ident.title_tokens)))
+        jaccard = shared / max(1, len(tokens | ident.title_tokens))
+        if containment >= 0.55 or (shared >= 4 and jaccard >= 0.35):
+            ranked.append((paper_id, containment + jaccard, shared))
+    ranked.sort(key=lambda row: (row[1], row[2]), reverse=True)
+    return [paper_id for paper_id, _score, _shared in ranked[:max_candidates]]
 
 
 def score_candidate(title_norm: str, authors: frozenset[str], ident: PaperIdentity) -> tuple[float, float, float]:
@@ -334,11 +588,14 @@ def score_candidate(title_norm: str, authors: frozenset[str], ident: PaperIdenti
         author_overlap = len(authors & ident.author_tokens) / max(1, min(len(authors), len(ident.author_tokens)))
     else:
         author_overlap = 0.0
-    token_overlap = 0.0
     q_tokens = title_tokens(title_norm)
+    token_overlap = 0.0
     if q_tokens and ident.title_tokens:
         token_overlap = len(q_tokens & ident.title_tokens) / len(q_tokens | ident.title_tokens)
-    score = (0.75 * title_ratio) + (0.15 * token_overlap) + (0.10 * author_overlap)
+        containment = len(q_tokens & ident.title_tokens) / min(len(q_tokens), len(ident.title_tokens))
+    else:
+        containment = 0.0
+    score = (0.50 * title_ratio) + (0.25 * token_overlap) + (0.15 * containment) + (0.10 * author_overlap)
     return score, title_ratio, author_overlap
 
 
@@ -350,26 +607,28 @@ def fuzzy_link(
     max_candidates: int,
     threshold: float,
 ) -> tuple[str | None, dict[str, Any] | None]:
-    title = bibitem_title(item)
-    title_norm = normalize_title(title)
-    if len(title_norm) < 12:
+    titles = bibitem_titles(item)
+    if not titles:
         return None, None
     authors = author_last_tokens(bibitem_authors(item))
 
-    candidates = exact_title.get(title_norm, [])
-    if not candidates:
-        candidates = candidate_ids_for_title(title_tokens(title_norm), token_index, max_candidates)
-    best: tuple[str, float, float, float] | None = None
-    for paper_id in candidates:
-        ident = identities.get(paper_id)
-        if ident is None:
-            continue
-        score, title_ratio, author_overlap = score_candidate(title_norm, authors, ident)
-        if best is None or score > best[1]:
-            best = (paper_id, score, title_ratio, author_overlap)
+    best: tuple[str, float, float, float, str] | None = None
+    for title in titles:
+        title_norm = normalize_title(title)
+        q_tokens = title_tokens(title_norm)
+        candidates = exact_title.get(title_norm, [])
+        if not candidates:
+            candidates = prefiltered_title_candidates(q_tokens, identities, token_index, max_candidates)
+        for paper_id in candidates:
+            ident = identities.get(paper_id)
+            if ident is None:
+                continue
+            score, title_ratio, author_overlap = score_candidate(title_norm, authors, ident)
+            if best is None or score > best[1]:
+                best = (paper_id, score, title_ratio, author_overlap, title)
     if best is None or best[1] < threshold:
         return None, None
-    paper_id, score, title_ratio, author_overlap = best
+    paper_id, score, title_ratio, author_overlap, title = best
     if title_ratio < 0.88 and author_overlap <= 0:
         return None, None
     return paper_id, {
@@ -383,12 +642,17 @@ def fuzzy_link(
 
 def link_citations(args: argparse.Namespace) -> dict[str, Any]:
     start = time.time()
-    identities, arxiv_to_id, exact_title, token_index, identity_stats = build_identity_index(
-        args.eprints,
-        args.identity_limit,
-        args.identity_paper_id,
-    )
     rows, bib_stats = load_bibliography_rows(args.bib_index, args.bib_dir)
+    if rows and not args.force_eprint_identity and not args.identity_limit and not args.identity_paper_id:
+        identities, arxiv_to_id, exact_title, token_index, identity_stats = build_identity_index_from_rows(rows)
+        identity_stats["source"] = "bib-index"
+    else:
+        identities, arxiv_to_id, exact_title, token_index, identity_stats = build_identity_index(
+            args.eprints,
+            args.identity_limit,
+            args.identity_paper_id,
+        )
+        identity_stats["source"] = "eprints"
     if args.paper_id:
         wanted = set(args.paper_id)
         rows = [r for r in rows if paper_id_of(r) in wanted]
@@ -402,6 +666,7 @@ def link_citations(args: argparse.Namespace) -> dict[str, Any]:
     stats["edges_fuzzy"] = 0
     edges: list[dict[str, Any]] = []
     seen_edges: set[tuple[str, str, str]] = set()
+    link_cache: dict[str, tuple[str | None, dict[str, Any] | None]] = {}
 
     for row in rows:
         src = paper_id_of(row)
@@ -419,26 +684,42 @@ def link_citations(args: argparse.Namespace) -> dict[str, Any]:
             key = str(item.get("key") or "")
             target = None
             via: dict[str, Any] = {"key": key}
-            arxiv_id = bibitem_arxiv_id(item)
-            if arxiv_id:
-                target = arxiv_to_id.get(arxiv_id)
-                via.update({"method": "arxiv-id", "arxiv_id": arxiv_id})
-                if target:
-                    stats["edges_arxiv"] += 1
-                else:
-                    stats["arxiv_id_not_in_corpus"] += 1
-            if target is None:
-                target, fuzzy_via = fuzzy_link(
-                    item,
-                    identities,
-                    exact_title,
-                    token_index,
-                    args.max_candidates,
-                    args.threshold,
-                )
-                if target and fuzzy_via:
-                    via.update(fuzzy_via)
-                    stats["edges_fuzzy"] += 1
+            cache_key = bibitem_cache_key(item)
+            cached = link_cache.get(cache_key)
+            if cached is not None:
+                target, cached_via = cached
+                if cached_via:
+                    via.update(cached_via)
+                    stats["cache_hits"] += 1
+                    if cached_via.get("method") == "arxiv-id":
+                        stats["edges_arxiv"] += 1
+                    elif cached_via.get("method") == "fuzzy-author-title":
+                        stats["edges_fuzzy"] += 1
+            else:
+                arxiv_ids = bibitem_arxiv_ids(item)
+                for arxiv_id in arxiv_ids:
+                    target = arxiv_to_id.get(arxiv_id)
+                    if target:
+                        via.update({"method": "arxiv-id", "arxiv_id": arxiv_id})
+                        stats["edges_arxiv"] += 1
+                        break
+                    else:
+                        stats["arxiv_id_not_in_corpus"] += 1
+                if arxiv_ids:
+                    stats["bibitems_with_arxiv_id"] += 1
+                if target is None:
+                    target, fuzzy_via = fuzzy_link(
+                        item,
+                        identities,
+                        exact_title,
+                        token_index,
+                        args.max_candidates,
+                        args.threshold,
+                    )
+                    if target and fuzzy_via:
+                        via.update(fuzzy_via)
+                        stats["edges_fuzzy"] += 1
+                link_cache[cache_key] = (target, {k: v for k, v in via.items() if k != "key"} if target else None)
             if target is None:
                 stats["unlinked_bibitems"] += 1
                 continue
@@ -454,6 +735,7 @@ def link_citations(args: argparse.Namespace) -> dict[str, Any]:
         cited_by[edge["to"]].append({"from": edge["from"], "via": edge["via"]})
 
     stats["edges"] = len(edges)
+    stats["link_cache_entries"] = len(link_cache)
     linked = stats["edges"]
     total = stats["bibitems"]
     stats["linkage_rate"] = round(linked / total, 6) if total else 0.0
@@ -465,6 +747,7 @@ def link_citations(args: argparse.Namespace) -> dict[str, Any]:
         "inputs": {
             "eprints": str(args.eprints),
             "bib": bib_stats,
+            "identity": identity_stats,
             "threshold": args.threshold,
             "max_candidates": args.max_candidates,
         },
@@ -495,8 +778,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     ap.add_argument("--paper-id", action="append", default=[], help="Restrict W1 bibliography rows by source paper id")
     ap.add_argument("--identity-limit", type=int, default=None, help="Limit identity-index eprints for sampling")
     ap.add_argument("--identity-paper-id", action="append", default=[], help="Restrict identity-index eprints by paper id")
-    ap.add_argument("--threshold", type=float, default=0.90)
-    ap.add_argument("--max-candidates", type=int, default=200)
+    ap.add_argument("--force-eprint-identity", action="store_true", help="Build identities from eprint sources even when W1 paper identities are available")
+    ap.add_argument("--threshold", type=float, default=0.82)
+    ap.add_argument("--max-candidates", type=int, default=150)
     ap.add_argument("--no-write", action="store_true")
     return ap.parse_args(argv)
 
