@@ -99,3 +99,29 @@ In: the deterministic CPU extraction/recognition/QA loop over the local math
 corpus; the recognizer registry; loss-driven passes. Out: the multi-party
 superpod-scale arXiv-wide run (that stays `full-arxiv-mining`); GPU embedding
 work (single-GPU Linode, separate lane).
+
+## Checkpoint 1 — 2026-06-13 (turn-1 of the DP loop; CT demo end-to-end)
+
+**What was done (capability chain demonstrated on math.CT):**
+- Re-sweep (corrected extraction, A/B/C2) over 9,795 papers, 9.7 min:
+  **unknown-cseqs 707,183 → 204,126 (71% reduction)**; spans-fully-classified
+  5.98M → 12.8M. ~503K false-unknowns cleared.
+- Recognizer registry built (`scripts/build_recognizer_registry.py` →
+  `data/ct-recognizer-registry.json`, regenerable/gitignored): **21,811
+  recognizers** (≥10 papers) of 191,927 macros; **80% role-resolved**.
+- NNexus + LaTeXML brought online as reuse capabilities (concept-authority
+  130,960 terms via `concept_authority.py`; latexmlmath fragment parse).
+  Star-map: `:concept-authority`, `:latexml-fragment-parse` (t3, satisfied).
+- Loop closed: **22/25 top role-gaps resolve** against the concept authority
+  (\id→identity morphism, \Hom→hom, \op→opposite category, \End→end, \Set→set).
+
+**Next (loss-ranked):**
+1. **Role-gap concept precision:** single-letter surfaces mis-resolve
+   (\C→"c" not ℂ). Prefer the RHS-derived concept (\C := \mathbb{C} →
+   complex numbers) over the bare surface; guard single-letter lookups.
+2. Structural mop-up (\begin/\label/\ref shared with authored-layer vocab).
+3. Stand up the registry as a persistent recognizer index consumed at
+   classification time (true "parse once, recognize forever").
+
+**Per-MSC replication:** the whole chain is `--eprints <dir>`-parameterised;
+the superpod blast re-points DEFAULT_EPRINTS per MSC class. Demo complete.
