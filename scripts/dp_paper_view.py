@@ -22,11 +22,52 @@ import anatomy_v0_sweep as sweep
 EPRINTS = sweep.DEFAULT_EPRINTS
 GOLDEN_DIR = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
 CSEQ_RE = re.compile(r"\\([A-Za-z@]+)|\\([^A-Za-z\s])")
+# "Let $X$ be a <concept> ..." — the most regular binder in mathematics
+# (W2: was dark). Subject = the $-symbol; concept = the noun phrase to the
+# first clause boundary. Also catches "and $Y$ a <concept>" conjuncts.
+BINDER_RE = re.compile(
+    r"\b(?:Let|let)\s+(\$[^$]+\$)\s+(?:be|denote)\s+(?:an?\s+|the\s+)?"
+    r"([^.,;:]+?)(?=[.,;:]|\s+such that|\s+and\s+\$|\s+in\s+\$|$)")
+CONJUNCT_RE = re.compile(
+    r"\band\s+(\$[^$]+\$)\s+(?:be\s+)?(?:an?\s+|the\s+)?"
+    r"([^.,;:]+?)(?=[.,;:]|\s+such that|\s+and\s+\$|$)")
 
 
-def build(paper: str, with_ca: bool = False) -> dict:
+def _concept_head(phrase: str) -> str:
+    """Last 1-3 words of a concept phrase, math/markup stripped, for lookup."""
+    words = re.findall(r"[A-Za-z][A-Za-z-]+", re.sub(r"\$[^$]*\$|[\\{}]", " ", phrase))
+    return " ".join(words[-3:]) if words else ""
+
+
+def detect_binders(ftext, base, ca):
+    """Emit let-binder scope marks for one file's text (global offsets)."""
+    out = []
+    for m in BINDER_RE.finditer(ftext):
+        subj, phrase = m.group(1), m.group(2).strip()
+        binders = [(subj, phrase, m.start(1), m.end(1))]
+        # conjoined "and $Y$ a <concept>" riding the same Let
+        for cm in CONJUNCT_RE.finditer(ftext, m.end(), m.end() + 160):
+            binders.append((cm.group(1), cm.group(2).strip(),
+                            cm.start(1), cm.end(1)))
+        for subj, phrase, ss, se in binders:
+            concept = None
+            if ca is not None:
+                head = _concept_head(phrase)
+                hit = ca.resolve(head) if head else None
+                if hit:
+                    concept = f"{hit.get('term')} [{hit.get('target')}]"
+            out.append({
+                "start": base + ss, "end": base + se,
+                "layer": "dp", "kind": "let-binder",
+                "tip": f"binds {subj} : {phrase[:60]}"
+                       + (f" · concept: {concept}" if concept else ""),
+            })
+    return out
+
+
+def build(paper: str, with_ca: bool = False, with_binders: bool = False) -> dict:
     ca = None
-    if with_ca:
+    if with_ca or with_binders:
         from concept_authority import ConceptAuthority
         ca = ConceptAuthority()
     eprint = None
@@ -56,12 +97,15 @@ def build(paper: str, with_ca: bool = False) -> dict:
         parts.append("\n")
     text = "".join(parts)
 
-    marks, counts = [], {"classified": 0, "role-gap": 0, "unknown": 0, "concept-typed": 0}
+    marks, counts = [], {"classified": 0, "role-gap": 0, "unknown": 0,
+                         "concept-typed": 0, "let-binder": 0}
     for f in tex_files:
         base = bases[f["file"]]
-        body_text = sweep.strip_comments(f["text"])
-        # NB strip_comments may shift offsets; classify on the same text we map.
         ftext = f["text"]
+        if with_binders:
+            bm = detect_binders(ftext, base, ca)
+            counts["let-binder"] += len(bm)
+            marks.extend(bm)
         for start, end, delim, body in sweep.math_spans(ftext):
             body_off = start + len(delim)
             for m in CSEQ_RE.finditer(body):
@@ -104,7 +148,8 @@ def main(argv=None) -> int:
         return 2
     paper = argv[0]
     with_ca = "--with-concept-authority" in argv[1:]
-    data = build(paper, with_ca=with_ca)
+    with_binders = "--with-binders" in argv[1:]
+    data = build(paper, with_ca=with_ca, with_binders=with_binders)
     GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
     out = GOLDEN_DIR / f"fable-{paper}-dp-emacs.json"
     out.write_text(json.dumps({k: v for k, v in data.items() if k != "_counts"}))
@@ -114,7 +159,8 @@ def main(argv=None) -> int:
           f"classified {c['classified']} ({100*c['classified']//tot}%), "
           f"role-gap {c['role-gap']} ({100*c['role-gap']//tot}%), "
           f"concept-typed {c['concept-typed']} ({100*c['concept-typed']//tot}%), "
-          f"unknown {c['unknown']} ({100*c['unknown']//tot}%)")
+          f"unknown {c['unknown']} ({100*c['unknown']//tot}%), "
+          f"let-binders {c['let-binder']}")
     print(f"wrote {out}  →  M-x paper-anatomy-open  RET  {paper}-dp")
     return 0
 
