@@ -232,6 +232,18 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             marks.extend(sm)
         for start, end, delim, body in sweep.math_spans(ftext):
             body_off = start + len(delim)
+            # RULE (Joe): anything between dollar signs IS a math scope —
+            # never null. Even a bare $H$ (no control sequence) gets an
+            # envelope; LaTeX itself is telling us it's mathematics.
+            if body.strip():
+                counts["math"] = counts.get("math", 0) + 1
+                marks.append({
+                    "start": base + start, "end": base + end,
+                    "layer": "dp", "kind": "math",
+                    "tip": f"math: {body.strip()[:60]}",
+                    "fields": [["math", body.strip()[:70]],
+                               ["delim", "display ($$)" if delim == "$$" else "inline ($)"]],
+                })
             for m in CSEQ_RE.finditer(body):
                 cs = m.group(1) or m.group(2)
                 cls = sweep.classify_cseq(cs, macros, roles, plain)
