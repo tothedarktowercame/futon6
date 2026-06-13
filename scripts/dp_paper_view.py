@@ -527,6 +527,58 @@ def _clamp_structural_sentence_markers(marks, text):
             and text[m["start"]:m["end"]].strip() not in {"Let", "For", "If", "Assume"}]
 
 
+# NON-SYMBOL TOKENS (claude-3): LETTER_RUN catches letter-runs inside $$ displays
+# that are NOT math symbols and can never be grounded — TeX length units, env
+# names, and text-mode prose. The checker (ff9099e) excludes any run COVERED by a
+# kind 'layout'/'text-mode' mark from the symbol denominator. We classify them
+# here. This is a VERIFIABLE CONTEXT TEST (claude-1's review gate), never a denylist
+# of hard symbols: a run is non-math because of WHERE it sits, not what it spells.
+LENGTH_UNITS = {"cm", "mm", "pt", "pc", "in", "ex", "em", "bp", "dd", "sp", "mu"}
+# text-mode commands whose brace argument is genuine TEXT MODE — prose, not math
+# symbols. \stackrel is DELIBERATELY EXCLUDED: TeX sets its above-argument in
+# MATH mode, and it is routinely a real morphism/arrow label (\stackrel{S}{\to},
+# \stackrel{f}{\to}) — blanket-classifying it leaks real symbols, failing the
+# precision gate. Its textual labels (\stackrel{nat.}{=}) are left as honest
+# residue for a future, more-surgical morphism-label capability.
+TEXTMODE_CMD = re.compile(
+    r"\\(?:mbox|hbox|text|textrm|textbf|textit|textsf|texttt)\s*\{")
+
+
+def _textmode_regions(body):
+    """Inner char-spans of text-mode command arguments in a math body, brace
+    matched. A letter-run inside one is prose/label text, not a math symbol."""
+    regions = []
+    for m in TEXTMODE_CMD.finditer(body):
+        i, depth = m.end(), 1
+        while i < len(body) and depth:
+            if body[i] == "{":
+                depth += 1
+            elif body[i] == "}":
+                depth -= 1
+            i += 1
+        regions.append((m.end(), i - 1))  # inner span, exclusive of close brace
+    return regions
+
+
+def _nonsym_kind(body, pos, tok, tm_regions):
+    """Classify a letter-run at BODY[pos:pos+len(tok)] as a NON-math token, else
+    None. A CONTEXT test, not a symbol denylist:
+      - 'layout': an env-name right after \\begin{ / \\end{ , or a TeX length
+        unit immediately preceded by a digit (\\hspace{-0,4cm} -> 'cm').
+      - 'text-mode': a run inside a \\mbox/\\text/\\textrm text argument.
+    """
+    pre = body[:pos]
+    if pre.endswith("\\begin{") or pre.endswith("\\end{"):
+        return "layout"
+    if tok in LENGTH_UNITS and pos > 0 and body[pos - 1].isdigit():
+        return "layout"
+    end = pos + len(tok)
+    for s, e in tm_regions:
+        if s <= pos and end <= e:
+            return "text-mode"
+    return None
+
+
 def build(paper: str, with_ca: bool = False, with_binders: bool = False,
           with_scopes: bool = False, with_xref: bool = False) -> dict:
     ca = None
@@ -699,6 +751,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                            ["relates", ", ".join(dvars) or "—"]],
             })
             # mark + ground the variable symbols inside the display
+            tm_regions = _textmode_regions(dbody)
             for sm in re.finditer(r"(?<!\\)(?<![A-Za-z])[A-Za-z][A-Za-z0-9]*", dbody):
                 sym = sm.group(0)
                 if sym in ("got", "gcl", "gbeg", "gend", "gnl", "gvac", "gob",
@@ -707,6 +760,14 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                     continue  # GrCalc / layout macro names, not variables
                 g = base + dm.start() + (dm.start(2) - dm.start() if dm.group(2) else
                                          dm.start(3) - dm.start()) + sm.start()
+                nonsym = _nonsym_kind(dbody, sm.start(), sym, tm_regions)
+                if nonsym is not None:
+                    counts[nonsym] = counts.get(nonsym, 0) + 1
+                    marks.append({
+                        "start": g, "end": g + len(sym), "layer": "dp",
+                        "kind": nonsym,
+                        "tip": f"{nonsym}: {sym} (non-math token, excluded)"})
+                    continue
                 bound = ground(sym, g)
                 k = "symbol-grounded" if bound else "symbol"
                 counts[k] = counts.get(k, 0) + 1
@@ -754,11 +815,23 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             # the symbols inside, not just control sequences. A bare $H$ whose
             # H is unmarked is a hungry envelope (a violation). Mark each
             # symbol (letter/identifier run not part of a \cseq name).
+            tm_regions = _textmode_regions(body)
             for sm in re.finditer(r"[A-Za-z][A-Za-z0-9]*", body):
                 if sm.start() > 0 and body[sm.start() - 1] == "\\":
                     continue  # it's a control-sequence name, handled below
                 sym = sm.group(0)
                 g = base + body_off + sm.start()
+                # NON-MATH token (length unit / env-name / text-mode prose)? Tag
+                # it so the checker excludes it from the symbol denominator —
+                # never could be grounded, so it is not a symbol (claude-3).
+                nonsym = _nonsym_kind(body, sm.start(), sym, tm_regions)
+                if nonsym is not None:
+                    counts[nonsym] = counts.get(nonsym, 0) + 1
+                    marks.append({
+                        "start": g, "end": g + len(sym), "layer": "dp",
+                        "kind": nonsym,
+                        "tip": f"{nonsym}: {sym} (non-math token, excluded)"})
+                    continue
                 bound = ground(sym, g)
                 kind = "symbol-grounded" if bound else "symbol"
                 counts[kind] = counts.get(kind, 0) + 1
