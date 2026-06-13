@@ -126,3 +126,33 @@ genuine frontier (try nLab, else it stays a bare concept-pointer). Prose
 extraction is lightweight (definiens/condition boundaries capture trailing
 LaTeX; example-context leaks into ambient) — refinable, but the skeleton
 shape is right.
+
+## The shuttle — three-Norn coverage weave (2026-06-13)
+
+`scripts/concept_shuttle.py` weaves a concept across the three layers of a
+definition's existence (Joe's 3-Norn shuttle):
+
+- **Urðr (既, laid-down)** → FORMAL libraries: mathlib now; extensible to
+  Coq/Isabelle for what Lean *should* have but doesn't.
+- **Verðandi (化, becoming)** → PROSE commons: PlanetMath / nLab.
+- **Skuld (應/債, the-debt)** → arXiv USAGE: terms used, which pull a
+  definition into being where none is laid down.
+
+The weave's load-bearing output is the DEBT cell. Demonstrated on 0809.2517:
+| term | Lean | PlanetMath | used | verdict |
+|---|---|---|---|---|
+| monoidal category | ✓ | ✓ | ✓ | fully covered |
+| comodule algebra | – | ✓ | ✓ | formalisation candidate (Lean should have it) |
+| Hopf algebra | – | ✓ | ✓ | formalisation candidate |
+| **Galois object** | – | – | ✓ | **DEBT — used but undefined (a definition hole)** |
+
+So the shuttle generates work, Norn-shaped: Skuld(usage) ∖ (Urðr ∪ Verðandi)
+= the definition holes; Verðandi ∖ Urðr = the formalisation queue. It is the
+hunger field at the DEFINITION level, the same loop one rung up.
+
+Known probe gaps (refinable): Lean-name aliasing — mathlib abbreviates
+("monoid object" is `Mon`/`MonObj`), so the formal column false-negatives
+until a term→identifier alias layer is added (mathlib docstrings carry the
+prose name). PlanetMath/usage probes hardened (phrase-grep; ≥5-char stem
+match). Coq/Isabelle sources: not yet on disk — the formal column is
+pluralisable when they are.
