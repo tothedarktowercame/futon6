@@ -260,6 +260,76 @@ def detect_scope_manifest(ftext, base, entity_id, nw, ca):
     return out
 
 
+BINDER_KINDS = {"let-binder", "definiendum", "definiens"}
+
+
+def _snap_marks_to_math_atoms(marks, spans):
+    """Move detector boundaries out of atomic math spans.
+
+    This is the SNAP pass generalized beyond scope-manifest marks: binder
+    detectors also produce structural extents, and those extents must not split
+    a $...$ or display-math atom. A start strictly inside a math span moves to
+    that span's end; an end strictly inside moves to that span's start.
+    """
+    for mark in marks:
+        for s, e in spans:
+            if s < mark["start"] < e:
+                mark["start"] = e
+            if s < mark["end"] < e:
+                mark["end"] = s
+    return [m for m in marks if m["end"] > m["start"]]
+
+
+def _is_manifest_structural(mark):
+    return mark.get("layer") == "scope" and not mark.get("kind", "").startswith("env/")
+
+
+def _is_binder_scope(mark):
+    return mark.get("layer") == "dp" and mark.get("kind") == "let-binder"
+
+
+def _is_structural_scope(mark):
+    return _is_binder_scope(mark) or _is_manifest_structural(mark)
+
+
+def _crosses(a, b):
+    return a["start"] < b["start"] < a["end"] < b["end"]
+
+
+def _reconcile_structural_crossings(marks):
+    """Make structural scopes nest or become disjoint.
+
+    The two detectors often describe the same "Let ... be ..." prose at
+    slightly different grains. Preserve the binder as the canonical local
+    definition scope and clamp only the crossing manifest boundary to the
+    binder edge. This avoids gaming by deletion while making the two structural
+    layers comparable. For manifest-vs-manifest crossings, preserve the earlier
+    structural read and start the later one at the shared edge. Containing/nested
+    scopes remain intact; crossings become adjacent regions.
+    """
+    structural = [m for m in marks if _is_structural_scope(m)]
+    for _ in range(4):
+        changed = False
+        structural.sort(key=lambda m: (m["start"], -m["end"]))
+        for i, a in enumerate(structural):
+            if a["end"] <= a["start"]:
+                continue
+            for b in structural[i + 1:]:
+                if b["start"] >= a["end"]:
+                    break
+                if b["end"] <= b["start"]:
+                    continue
+                if _crosses(a, b):
+                    if _is_binder_scope(b) and not _is_binder_scope(a):
+                        a["end"] = b["start"]
+                    else:
+                        b["start"] = a["end"]
+                    changed = True
+        if not changed:
+            break
+    return [m for m in marks if m["end"] > m["start"]]
+
+
 def build(paper: str, with_ca: bool = False, with_binders: bool = False,
           with_scopes: bool = False, with_xref: bool = False) -> dict:
     ca = None
@@ -360,28 +430,26 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     for f in tex_files:
         base = bases[f["file"]]
         ftext = f["text"]
+        bm = []
+        sm = []
         if with_binders:
             bm = detect_binders(ftext, base, ca, xref=xref)
-            counts["let-binder"] += len(bm)
-            marks.extend(bm)
         if with_scopes:
             sm = detect_scope_manifest(ftext, base, f"arxiv-{paper}", nw, ca)
-            # SNAP (Joe): a math span $...$ is atomic — NO scope boundary may
-            # fall strictly inside one. A start inside a span snaps out to the
-            # span's end; an end inside a span snaps back to its start. (The
-            # codiagonal mess was a constrain/relation that began on the closing
-            # $ of $A$, so blue+purple met inside $...$.) Display envs too.
+        if bm or sm:
+            # SNAP (Joe): math spans are atomic. Generalize the old
+            # scope-manifest-only pass to binder marks too, then reconcile the
+            # two structural layers so manifest-vs-binder scopes never cross.
             spans = [(base + s, base + e) for s, e, _d, _b in sweep.math_spans(ftext)]
             spans += [(base + dm.start(), base + dm.end()) for dm in DISPLAY_RE.finditer(ftext)]
-            for m in sm:
-                for s, e in spans:
-                    if s < m["start"] < e:
-                        m["start"] = e
-                    if s < m["end"] < e:
-                        m["end"] = s
-            sm = [m for m in sm if m["end"] > m["start"]]
-            counts["scope"] = counts.get("scope", 0) + len(sm)
-            marks.extend(sm)
+            structural = _snap_marks_to_math_atoms(bm + sm, spans)
+            structural = _reconcile_structural_crossings(structural)
+            counts["let-binder"] += sum(1 for m in structural
+                                         if m.get("layer") == "dp"
+                                         and m.get("kind") in BINDER_KINDS)
+            counts["scope"] = counts.get("scope", 0) + sum(
+                1 for m in structural if m.get("layer") == "scope")
+            marks.extend(structural)
         # DISPLAY EQUATIONS (Joe): \begin{eqnarray}/\[...\] are math scopes
         # too — math_spans only sees $-delims. Don't parse the GrCalc layout
         # this pass; DO mark the whole thing a display-math scope and surface
