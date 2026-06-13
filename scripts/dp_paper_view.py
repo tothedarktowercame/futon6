@@ -43,13 +43,43 @@ CONJUNCT_RE = re.compile(
     r"([^.,;:]+?)(?=[.,;:]|\s+such that|\s+and\s+\$|$)")
 
 
+def _load_xref():
+    """Shuttle cross-ref components: mathlib names, PlanetMath finder."""
+    import json as _j
+    mathlib_names = []
+    mj = Path("/home/joe/code/futon6/data/mathlib-defs-monoidal.json")
+    if mj.exists():
+        mathlib_names = [d["name"] for d in _j.loads(mj.read_text())]
+    pd = _ilu.spec_from_file_location("mpd", Path(__file__).resolve().parent / "mine_prose_def.py")
+    mpd = _ilu.module_from_spec(pd); pd.loader.exec_module(mpd)
+    return mathlib_names, mpd
+
+
+def _xref_fields(phrase, head, mathlib_names, mpd, ca):
+    """Lean / PlanetMath / nLab cross-references + coverage verdict for a
+    definiens — the three-Norn shuttle, surfaced as annotation fields."""
+    import re as _re
+    cam = "".join(w.capitalize() for w in _re.split(r"[\s-]+", (head or phrase).strip()))
+    lean = next((n for n in mathlib_names
+                 if cam.lower() in (n.lower(), n.lower().rstrip("_"), n.lower().rstrip("obj"))), None)
+    pm = mpd.find_planetmath(head or phrase) if (head or phrase) else None
+    pm = pm.name if pm else None
+    hit = ca.resolve(head) if (ca and head) else None
+    nlab = hit.get("target") if hit else None
+    cov = ("fully covered" if (lean and pm) else
+           "formalise: prose only" if (pm and not lean) else
+           "Lean" if lean else "DEBT: undefined" if not nlab else "pointer only")
+    return [["Lean", lean or "–"], ["PlanetMath", pm or "–"],
+            ["nLab/NNexus", nlab or "–"], ["coverage", cov]]
+
+
 def _concept_head(phrase: str) -> str:
     """Last 1-3 words of a concept phrase, math/markup stripped, for lookup."""
     words = re.findall(r"[A-Za-z][A-Za-z-]+", re.sub(r"\$[^$]*\$|[\\{}]", " ", phrase))
     return " ".join(words[-3:]) if words else ""
 
 
-def detect_binders(ftext, base, ca):
+def detect_binders(ftext, base, ca, xref=None):
     """Emit Let-binder marks with explicit definiendum/definiens structure.
     Per binder, three marks within the blue Let scope:
       - the scope (kind let-binder),
@@ -87,13 +117,20 @@ def detect_binders(ftext, base, ca):
                 "layer": "dp", "kind": "definiendum", "term-index": term_i,
                 "tip": f"definiendum #{term_i}: {subj}",
             })
-            # definiens: the type phrase (underlined, same term-index)
+            # definiens: the type phrase (underlined, same term-index),
+            # carrying the three-Norn cross-references as annotation fields
             if pe > ps:
+                fields = None
+                if xref is not None:
+                    mathlib_names, mpd = xref
+                    fields = _xref_fields(phrase, _concept_head(phrase),
+                                          mathlib_names, mpd, ca)
                 out.append({
                     "start": base + ps, "end": base + pe,
                     "layer": "dp", "kind": "definiens", "term-index": term_i,
-                    "tip": f"definiens #{term_i}: {phrase[:70]}"
+                    "tip": f"definiens #{term_i}: {phrase[:60]}"
                            + (f" · {concept}" if concept else ""),
+                    "fields": fields,
                 })
     return out
 
@@ -134,12 +171,13 @@ def detect_scope_manifest(ftext, base, entity_id, nw, ca):
 
 
 def build(paper: str, with_ca: bool = False, with_binders: bool = False,
-          with_scopes: bool = False) -> dict:
+          with_scopes: bool = False, with_xref: bool = False) -> dict:
     ca = None
-    if with_ca or with_binders or with_scopes:
+    if with_ca or with_binders or with_scopes or with_xref:
         from concept_authority import ConceptAuthority
         ca = ConceptAuthority()
     nw = _load_nlab_wiring() if with_scopes else None
+    xref = _load_xref() if with_xref else None
     eprint = None
     for suffix in (".tar.gz", ".tex.gz", ".gz", ".tar", ".tex"):
         cand = EPRINTS / f"{paper}{suffix}"
@@ -173,7 +211,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
         base = bases[f["file"]]
         ftext = f["text"]
         if with_binders:
-            bm = detect_binders(ftext, base, ca)
+            bm = detect_binders(ftext, base, ca, xref=xref)
             counts["let-binder"] += len(bm)
             marks.extend(bm)
         if with_scopes:
@@ -224,8 +262,9 @@ def main(argv=None) -> int:
     with_ca = "--with-concept-authority" in argv[1:]
     with_binders = "--with-binders" in argv[1:]
     with_scopes = "--with-scopes" in argv[1:]
+    with_xref = "--with-xref" in argv[1:]
     data = build(paper, with_ca=with_ca, with_binders=with_binders,
-                 with_scopes=with_scopes)
+                 with_scopes=with_scopes, with_xref=with_xref)
     GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
     out = GOLDEN_DIR / f"fable-{paper}-dp-emacs.json"
     out.write_text(json.dumps({k: v for k, v in data.items() if k != "_counts"}))
