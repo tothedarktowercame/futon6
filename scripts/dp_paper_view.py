@@ -47,6 +47,7 @@ from dp_capabilities.binders import (
 from dp_capabilities.math_envelope import (
     CSEQ_RE,
     DISPLAY_RE,
+    _layout_regions,
     _nonsym_kind,
     _textmode_regions,
     display_assign_grounding,
@@ -255,6 +256,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             })
             # mark + ground the variable symbols inside the display
             tm_regions = _textmode_regions(dbody)
+            lay_regions = _layout_regions(dbody)
             for sm in re.finditer(r"(?<!\\)(?<![A-Za-z])[A-Za-z][A-Za-z0-9]*", dbody):
                 sym = sm.group(0)
                 if sym in ("got", "gcl", "gbeg", "gend", "gnl", "gvac", "gob",
@@ -263,7 +265,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                     continue  # GrCalc / layout macro names, not variables
                 g = base + dm.start() + (dm.start(2) - dm.start() if dm.group(2) else
                                          dm.start(3) - dm.start()) + sm.start()
-                nonsym = _nonsym_kind(dbody, sm.start(), sym, tm_regions)
+                nonsym = _nonsym_kind(dbody, sm.start(), sym, tm_regions, lay_regions)
                 if nonsym is not None:
                     counts[nonsym] = counts.get(nonsym, 0) + 1
                     marks.append({
@@ -312,6 +314,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             # H is unmarked is a hungry envelope (a violation). Mark each
             # symbol (letter/identifier run not part of a \cseq name).
             tm_regions = _textmode_regions(body)
+            lay_regions = _layout_regions(body)
             for sm in re.finditer(r"[A-Za-z][A-Za-z0-9]*", body):
                 if sm.start() > 0 and body[sm.start() - 1] == "\\":
                     continue  # it's a control-sequence name, handled below
@@ -320,7 +323,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                 # NON-MATH token (length unit / env-name / text-mode prose)? Tag
                 # it so the checker excludes it from the symbol denominator —
                 # never could be grounded, so it is not a symbol (claude-3).
-                nonsym = _nonsym_kind(body, sm.start(), sym, tm_regions)
+                nonsym = _nonsym_kind(body, sm.start(), sym, tm_regions, lay_regions)
                 if nonsym is not None:
                     counts[nonsym] = counts.get(nonsym, 0) + 1
                     marks.append({

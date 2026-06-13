@@ -20,22 +20,65 @@ LENGTH_UNITS = {"cm", "mm", "pt", "pc", "in", "ex", "em", "bp", "dd", "sp", "mu"
 # precision gate. Its textual labels (\stackrel{nat.}{=}) are left as honest
 # residue for a future, more-surgical morphism-label capability.
 TEXTMODE_CMD = re.compile(
-    r"\\(?:mbox|hbox|text|textrm|textbf|textit|textsf|texttt)\s*\{")
+    r"\\(?:mbox|hbox|text|textrm|textbf|textit|textsf|texttt|textnormal|textsc"
+    r"|textup|textmd|textsl|intertext|shortintertext|emph|caption|footnote)\s*\{")
+
+# \mathrm/\mathnormal/\mathit set their argument upright but in MATH mode — so
+# \mathrm{Hom}, \mathrm{dim}, \mathrm{op} are REAL operator/decoration symbols and
+# must NOT be excluded. The only safe context discriminator is INTERNAL SPACING:
+# an operator name is a single contiguous token, while an inter-formula prose
+# spacer carries an explicit spacing macro (\quad, \, …) or run of spaces
+# (\mathrm{\quad and \quad}). We classify a \mathrm-arg as text-mode ONLY when it
+# contains such a spacer — a context test on construct shape, not word spelling.
+MATHRM_CMD = re.compile(r"\\(?:mathrm|mathnormal|mathit)\s*\{")
+_SPACER_RE = re.compile(r"\\(?:quad|qquad|,|;|:|!|\s)| {2,}")
+
+# Reference-graph commands whose brace argument is a CITATION/LABEL KEY — never a
+# math symbol. When a \label/\ref/\cite sits inside a display-math environment
+# (\begin{eqnarray} \label{coc-coass} …), LETTER_RUN otherwise tags the key
+# fragments (coc, coass, surjec, …) as symbols. The key is layout, by context.
+REF_KEY_CMD = re.compile(
+    r"\\(?:label|ref|eqref|cref|Cref|vref|pageref|nameref|autoref|hyperref"
+    r"|cite[a-zA-Z]*)\s*(?:\[[^\]]*\])?\{")
+# Column-alignment SPEC of an array/tabular — \begin{array}{ll}, {rcl}, {p{..}}:
+# pure layout letters (l/c/r/p), not math. The env NAME is already caught by the
+# \begin{ guard in _nonsym_kind; this catches the spec ARGUMENT after it.
+ARRAY_SPEC_CMD = re.compile(
+    r"\\begin\s*\{(?:array|tabular\*?|tabularx|longtable)\}\s*(?:\[[^\]]*\])?\s*\{")
+
+
+def _brace_inner(body, open_idx):
+    """OPEN_IDX indexes a '{'. Return (inner_start, inner_end) of the brace-
+    matched argument (inner_end exclusive of the closing '}')."""
+    i, depth = open_idx + 1, 1
+    while i < len(body) and depth:
+        if body[i] == "{":
+            depth += 1
+        elif body[i] == "}":
+            depth -= 1
+        i += 1
+    return open_idx + 1, i - 1
 
 
 def _textmode_regions(body):
     """Inner char-spans of text-mode command arguments in a math body, brace
-    matched. A letter-run inside one is prose/label text, not a math symbol."""
-    regions = []
-    for m in TEXTMODE_CMD.finditer(body):
-        i, depth = m.end(), 1
-        while i < len(body) and depth:
-            if body[i] == "{":
-                depth += 1
-            elif body[i] == "}":
-                depth -= 1
-            i += 1
-        regions.append((m.end(), i - 1))  # inner span, exclusive of close brace
+    matched. A letter-run inside one is prose/label text, not a math symbol.
+    Includes \\mathrm-as-spacer (\\mathrm{\\quad and \\quad}) — gated on an
+    internal spacing macro so real operator names (\\mathrm{dim}) are untouched."""
+    regions = [_brace_inner(body, m.end() - 1) for m in TEXTMODE_CMD.finditer(body)]
+    for m in MATHRM_CMD.finditer(body):
+        s, e = _brace_inner(body, m.end() - 1)
+        if _SPACER_RE.search(body[s:e]):
+            regions.append((s, e))
+    return regions
+
+
+def _layout_regions(body):
+    """Inner char-spans of LAYOUT command arguments in a math body: reference
+    keys (\\label/\\ref/\\cite …) and array/tabular column specs. A letter-run
+    inside one is a key or alignment letter, not a math symbol."""
+    regions = [_brace_inner(body, m.end() - 1) for m in REF_KEY_CMD.finditer(body)]
+    regions += [_brace_inner(body, m.end() - 1) for m in ARRAY_SPEC_CMD.finditer(body)]
     return regions
 
 
@@ -109,12 +152,14 @@ def display_assign_grounding(sym, gpos, assign_defs):
     return None
 
 
-def _nonsym_kind(body, pos, tok, tm_regions):
+def _nonsym_kind(body, pos, tok, tm_regions, layout_regions=()):
     """Classify a letter-run at BODY[pos:pos+len(tok)] as a NON-math token, else
-    None. A CONTEXT test, not a symbol denylist:
-      - 'layout': an env-name right after \\begin{ / \\end{ , or a TeX length
-        unit immediately preceded by a digit (\\hspace{-0,4cm} -> 'cm').
-      - 'text-mode': a run inside a \\mbox/\\text/\\textrm text argument.
+    None. A CONTEXT test (where it sits), not a symbol denylist:
+      - 'layout': an env-name right after \\begin{ / \\end{ , a TeX length unit
+        immediately preceded by a digit (\\hspace{-0,4cm} -> 'cm'), a reference
+        key inside \\label/\\ref/\\cite, or an array/tabular column-spec letter.
+      - 'text-mode': a run inside a \\mbox/\\text/\\textrm/\\intertext text
+        argument, or a \\mathrm-as-spacer (\\mathrm{\\quad and \\quad}).
     """
     pre = body[:pos]
     if pre.endswith("\\begin{") or pre.endswith("\\end{"):
@@ -122,6 +167,9 @@ def _nonsym_kind(body, pos, tok, tm_regions):
     if tok in LENGTH_UNITS and pos > 0 and body[pos - 1].isdigit():
         return "layout"
     end = pos + len(tok)
+    for s, e in layout_regions:
+        if s <= pos and end <= e:
+            return "layout"
     for s, e in tm_regions:
         if s <= pos and end <= e:
             return "text-mode"
