@@ -143,6 +143,28 @@ MACRO_NOISE = {
     "tocsection", "arraystretch", "limsup", "bibsetup", "partrunhead",
     "overfullrule", "catname", "relto", "cocolon", "everydisplay",
     "exhyphenpenalty", "botmark",
+    "oslash", "baselinestretch", "rightleftharpoons",
+    "rightharpoondown", "thicksim", "grave", "seename", "smaller",
+    "floatpagefraction", "after", "abstractheadfont", "abstractfont",
+    "smfandname",
+    "textfont", "tocpart", "larger", "copyrightinfo",
+    "copyrightholder", "nonbreakingspace", "altabstractname",
+    "alttitle", "topmark", "translatedby", "bottomfraction",
+    "dblfloatpagefraction", "dbltopfraction", "textfraction",
+    "topfraction", "splitmaxdepth", "splittopskip", "suchthat",
+    "biguplus", "dedicatoryfont", "impliedby", "altkeywords",
+    "altkeywordsname", "isopil", "datename", "hfilneg", "cdotp",
+    "labelstyle", "firstaddress", "otheraddress", "pagespan",
+    "issueinfo", "bigodot", "smfbyname", "iffalse", "fromto",
+    "widebar",
+    "frown", "theaddress", "varsubsetneq", "newtheorem",
+    "boxminus", "IEEEeqnarraymathstyle", "thmheadnl", "swappedhead",
+    "theoremstyle", "endsplit", "newtheoremstyle", "nonslanted",
+    "circledcirc", "discard", "xfrom", "goesto", "liminf",
+    "qedhere", "roundNbox", "equivto", "mathqed",
+    "qedsymbol", "objectstyle", "newswitch", "altucnm", "commby",
+    "tocappendix", "popQED", "pushQED", "setTrue",
+    "DDelta",
 }
 
 
@@ -208,7 +230,9 @@ def report_term(term: str) -> str | None:
             return None
         if re.match(r"^(bb|cal|frak|scr|sf|rm|bf|it)[A-Z]$", name):
             return None
-        if re.match(r"^(mc|mcal|bb|bo|u|s|Pr)[A-Z].*", name):
+        if re.match(r"^(mc|mcal|bb|bo|b|u|s|Pr|i|c|l)[A-Z].*", name):
+            return None
+        if name.startswith("bbone"):
             return None
         if re.match(r"^(cat|Cat|obj|Obj|mor|Mor)[A-Z]$", name):
             return None
