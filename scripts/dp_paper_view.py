@@ -50,32 +50,51 @@ def _concept_head(phrase: str) -> str:
 
 
 def detect_binders(ftext, base, ca):
-    """Emit let-binder scope marks for one file's text (global offsets)."""
+    """Emit Let-binder marks with explicit definiendum/definiens structure.
+    Per binder, three marks within the blue Let scope:
+      - the scope (kind let-binder),
+      - the definiendum (the $symbol$; bold, term-indexed),
+      - the definiens (the type phrase; underlined, same term-index).
+    term-index distinguishes multiple defined terms in one Let sentence
+    (Joe: graded gray, <=10/sentence)."""
     out = []
     for m in BINDER_RE.finditer(ftext):
-        subj, phrase = m.group(1), m.group(2).strip()
-        # scope extent = the whole "Let $X$ be <concept>" / "and $Y$ <concept>"
-        binders = [(subj, phrase, m.start(), m.end())]
+        # primary + conjoined binders share the SENTENCE; index within it.
+        binders = [(m.start(1), m.end(1), m.start(2), m.end(2), m.start(), m.end())]
         for cm in CONJUNCT_RE.finditer(ftext, m.end(), m.end() + 160):
-            binders.append((cm.group(1), cm.group(2).strip(),
+            binders.append((cm.start(1), cm.end(1), cm.start(2), cm.end(2),
                             cm.start(), cm.end()))
-        for subj, phrase, ss, se in binders:
+        for term_i, (ds, de, ps, pe, ss, se) in enumerate(binders):
+            subj = ftext[ds:de]
+            phrase = ftext[ps:pe].strip()
             concept = None
             if ca is not None:
-                head = _concept_head(phrase)
-                hit = ca.resolve(head) if head else None
+                hit = ca.resolve(_concept_head(phrase)) if phrase else None
                 if hit:
                     concept = f"{hit.get('term')} [{hit.get('target')}]"
+            # the blue Let scope
             out.append({
                 "start": base + ss, "end": base + se,
                 "layer": "dp", "kind": "let-binder",
                 "tip": f"binds {subj} : {phrase[:60]}"
                        + (f" · concept: {concept}" if concept else ""),
-                # structured fields → Scratch-style nested render in the panel
-                "fields": [["binds", subj],
-                           ["as", phrase[:70]],
+                "fields": [["binds", subj], ["as", phrase[:70]],
                            ["canon", concept or "— (unresolved)"]],
             })
+            # definiendum: the $symbol$ (bold, term-indexed)
+            out.append({
+                "start": base + ds, "end": base + de,
+                "layer": "dp", "kind": "definiendum", "term-index": term_i,
+                "tip": f"definiendum #{term_i}: {subj}",
+            })
+            # definiens: the type phrase (underlined, same term-index)
+            if pe > ps:
+                out.append({
+                    "start": base + ps, "end": base + pe,
+                    "layer": "dp", "kind": "definiens", "term-index": term_i,
+                    "tip": f"definiens #{term_i}: {phrase[:70]}"
+                           + (f" · {concept}" if concept else ""),
+                })
     return out
 
 
