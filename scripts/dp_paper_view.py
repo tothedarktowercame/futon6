@@ -44,6 +44,14 @@ BINDER_RE = re.compile(
 CONJUNCT_RE = re.compile(
     r"\band\s+(\$[^$]+\$)\s+(?:be\s+)?(?:an?\s+|the\s+)?"
     r"([^.,;:]+?)(?=[.,;:]|\s+such that|\s+and\s+\$|$)")
+# "$M$ is a right $A$-module" — a hypothesis binding (Joe). Article REQUIRED
+# (a/an/the) so a predicate like "$f$ is continuous" / "$X$ is closed" does NOT
+# match — only genuine type assignments "$X$ is a/an/the <type>".
+# NB: no leading \b — a word boundary never holds between a space and the "$"
+# delimiter (both non-word chars), so \b would make this never match.
+IS_RE = re.compile(
+    r"(?:^|(?<=\s))(\$[^$]+\$)\s+(?:is|are)\s+(?:an?|the)\s+"
+    r"([^.,;:]+?)(?=[.,;:]|\s+such that|\s+and\s+\$|$)")
 
 
 def _load_xref():
@@ -91,12 +99,23 @@ def detect_binders(ftext, base, ca, xref=None):
     term-index distinguishes multiple defined terms in one Let sentence
     (Joe: graded gray, <=10/sentence)."""
     out = []
+    # "Let $H$ be a Hopf algebra [and $A$ ...]" + "$M$ is a right $A$-module".
+    # Each entry = the binders sharing one sentence (for term-index grading).
+    sentences = []
     for m in BINDER_RE.finditer(ftext):
-        # primary + conjoined binders share the SENTENCE; index within it.
-        binders = [(m.start(1), m.end(1), m.start(2), m.end(2), m.start(), m.end())]
+        grp = [(m.start(1), m.end(1), m.start(2), m.end(2), m.start(), m.end())]
         for cm in CONJUNCT_RE.finditer(ftext, m.end(), m.end() + 160):
-            binders.append((cm.start(1), cm.end(1), cm.start(2), cm.end(2),
-                            cm.start(), cm.end()))
+            grp.append((cm.start(1), cm.end(1), cm.start(2), cm.end(2),
+                        cm.start(), cm.end()))
+        sentences.append(grp)
+    let_spans = [(g[0][4], g[-1][5]) for g in sentences]
+    for m in IS_RE.finditer(ftext):
+        # skip if this "is a" sits inside a Let sentence already captured
+        if any(s <= m.start() < e for s, e in let_spans):
+            continue
+        sentences.append([(m.start(1), m.end(1), m.start(2), m.end(2),
+                           m.start(), m.end())])
+    for binders in sentences:
         for term_i, (ds, de, ps, pe, ss, se) in enumerate(binders):
             subj = ftext[ds:de]
             phrase = ftext[ps:pe].strip()
@@ -257,18 +276,21 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     if with_binders or with_scopes:
         for f in tex_files:
             base = bases[f["file"]]
-            # (1) Let-binders (cleanest symbol+phrase)
+            # (1) Let-binders + "$M$ is a right $A$-module" (symbol+phrase)
+            pairs = []
             for m in BINDER_RE.finditer(f["text"]):
-                pairs = [(m.group(1), m.group(2), m.start())]
+                pairs.append((m.group(1), m.group(2), m.start()))
                 for cm in CONJUNCT_RE.finditer(f["text"], m.end(), m.end() + 160):
                     pairs.append((cm.group(1), cm.group(2), cm.start()))
-                for subj, phrase, pos in pairs:
-                    label = phrase
-                    if ca is not None:
-                        hit = ca.resolve(_concept_head(phrase))
-                        if hit:
-                            label = hit.get("term")
-                    _add_binding(subj, label, base + pos)
+            for m in IS_RE.finditer(f["text"]):
+                pairs.append((m.group(1), m.group(2), m.start()))
+            for subj, phrase, pos in pairs:
+                label = phrase
+                if ca is not None:
+                    hit = ca.resolve(_concept_head(phrase))
+                    if hit:
+                        label = hit.get("term")
+                _add_binding(subj, label, base + pos)
             # (2) the FULL scope manifest: every binding-like scope grounds its
             # symbol — bind/typed, assume ("If $M$ is a right $A$-module"),
             # quant, where-binding — not just Let (Joe: the 4029 ungrounded are
@@ -282,9 +304,12 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                     typ = next((e.get("text") or e.get("latex") for e in ends
                                 if e.get("role") in ("type", "relation", "value")), None)
                     if sym and not typ:
-                        # assume/if: pull the type from the match phrase
+                        # assume/if: the scope match is often just "If $M$" —
+                        # pull the type from the FILE TEXT at the scope position,
+                        # not the truncated match.
+                        raw = s.get("hx/content", {}).get("position") or 0
                         mm = re.search(r"\bis\s+(?:a|an|the)\s+([^.,;]+)",
-                                       s.get("hx/content", {}).get("match", ""))
+                                       f["text"][raw:raw + 120])
                         typ = mm.group(1) if mm else None
                     if sym and typ:
                         _add_binding(sym, typ, pos)
