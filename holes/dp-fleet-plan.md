@@ -95,3 +95,16 @@ show who did what.
   "non-math by WHERE it sits, not what it spells" principle. The checker's
   existing exclusion then applies honestly (+~5pp, denominator-correction).
 
+## Ceiling reached (2026-06-13, claude-2 residue re-analysis)
+
+Corpus grounding ~70%, wf 0. claude-2's verdict: near the STRUCTURAL CEILING
+(~mid-to-high 70s%). Construct-based grounding largely exhausted. TWO final
+levers, then the remainder is honest irreducible debt (bound indices, dummy/
+generic variables — record as irreducible-debt, do not chase):
+- ☐ boundary-parity root fix ($$/$ tokenizer) — ~+6pp denominator correction
+  + kills the wf-error family at root. SHARED tokenizer (anatomy_v0_sweep) —
+  strictly tightening; claude-1 reviews. → claude-2.
+- ☐ conservative appositive lexicon extension (point/element/pair/vector/...,
+  exclude form/relation/theory/number) — a few pp. → claude-3.
+After these: grounding axis structurally COMPLETE; loop consolidates.
+
