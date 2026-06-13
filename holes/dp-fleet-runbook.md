@@ -67,9 +67,19 @@ unbuilt). Rank by loss-cleared-per-unit-work, not list order:
   (`\scalebox \phantom \ref \sf \begin \put \fbox \Box \#`) — see C2/C3 in
   `holes/anatomy-v0-loss-backlog.md` (standard-vocab table + package profiles)
   if you want the next classifier win, but it is NOT the dominant debt.
-- **defined-in-paper** (–): harvest `\newtheorem`/definition envs + "we
+- **non-symbol token classifier** (claude-3, 2026-06-13): ~49% of 0809.2517's
+  C-SYM-GROUND debt (1279/2614) is NOT real ungrounded symbols — it's layout/
+  text-mode tokens `LETTER_RUN` catches inside `$$` (cm length-units in
+  `\hspace`, `\mbox`/`\stackrel` content, env-names after `\begin{`). A false-
+  debt floor no grounding can clear. FIX: detector classifies them kind
+  `layout` / `text-mode`; the checker (ff9099e) excludes those kinds from the
+  symbol denominator. Highest loss-per-work; clears the floor so the real
+  residue (~1335) is visible. CLASSIFY, never suppress (suppression breaks
+  symbol_tagged=1.0).
+- **defined-in-paper** (claude-2): harvest `\newtheorem`/definition envs + "we
   call/define/denote … by" so definienda introduced in-paper GROUND their
-  later uses → kills the dominant `C-SYM-GROUND` debt and `canon holes`.
+  later uses → reaches the REAL `C-SYM-GROUND` residue (~1335, not 2614, after
+  the noise classifier) and `canon holes`.
 - **TeX environments** (–): theorem/proof/lemma/definition/remark env scopes
   (env/* — legitimately multi-sentence; the checker exempts them from the
   sentence clamp). Cheap, structural, enables defined-in-paper.
