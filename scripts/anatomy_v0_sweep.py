@@ -32,6 +32,59 @@ TEXT_EXTS = {
 }
 MATH_STRUCTURAL_PLAIN = {"atop", "over", "above", "choose", "mathchoice"}
 
+# Alphabet/font wrappers: a macro defined as \mathcal{C}, \mathbf{Set}, etc.
+# denotes an ATOM, not whatever role the wrapper itself carries. Treated as
+# transparent in role resolution (the wrapped letters are the atom).
+ALPHABET_WRAPPERS = {
+    "mathcal", "mathbb", "mathbf", "mathrm", "mathsf", "mathfrak", "mathtt",
+    "mathit", "mathscr", "boldsymbol", "operatorname", "operatornamewithlimits",
+    "text", "textrm", "textbf", "textit", "textsf", "texttt", "bm", "mbox", "hbox",
+}
+
+# Standard math vocabulary the LaTeXML mining under-covers (loss-backlog C2):
+# greek, alphabet wrappers, delimiters, spacing, common operators/relations.
+# Seeded into the role table so direct uses don't read as UNKNOWN. Roles use
+# the LaTeXML vocabulary (ID=atom; RELOP/ADDOP/MULOP/ARROW/SUMOP/INTOP/LIMITOP
+# =operators; OPEN/CLOSE=delimiters; SPACE=layout).
+def _build_standard_math_roles() -> dict[str, str]:
+    out: dict[str, str] = {}
+    greek = ("alpha beta gamma delta epsilon varepsilon zeta eta theta vartheta "
+             "iota kappa lambda mu nu xi pi varpi rho varrho sigma varsigma tau "
+             "upsilon phi varphi chi psi omega Gamma Delta Theta Lambda Xi Pi "
+             "Sigma Upsilon Phi Psi Omega ell hbar imath jmath aleph nabla "
+             "partial infty").split()
+    for g in greek:
+        out[g] = "ID"
+    for w in ALPHABET_WRAPPERS:
+        out[w] = "ID"  # atom-former; recognised, not unknown
+    ops = {
+        "frac": "MULOP", "cdot": "MULOP", "times": "MULOP", "otimes": "MULOP",
+        "circ": "MULOP", "cap": "MULOP", "wedge": "MULOP", "prod": "MULOP",
+        "oplus": "ADDOP", "vee": "ADDOP", "cup": "ADDOP", "pm": "ADDOP", "mp": "ADDOP",
+        "le": "RELOP", "ge": "RELOP", "leq": "RELOP", "geq": "RELOP", "neq": "RELOP",
+        "sim": "RELOP", "cong": "RELOP", "equiv": "RELOP", "approx": "RELOP",
+        "subset": "RELOP", "subseteq": "RELOP", "supset": "RELOP", "supseteq": "RELOP",
+        "in": "RELOP", "notin": "RELOP", "ni": "RELOP", "mid": "RELOP", "propto": "RELOP",
+        "to": "ARROW", "rightarrow": "ARROW", "longrightarrow": "ARROW", "mapsto": "ARROW",
+        "xrightarrow": "ARROW", "hookrightarrow": "ARROW", "twoheadrightarrow": "ARROW",
+        "Rightarrow": "ARROW", "leftarrow": "ARROW", "leftrightarrow": "ARROW",
+        "overset": "OVERACCENT", "underset": "OVERACCENT", "stackrel": "OVERACCENT",
+        "sum": "SUMOP", "coprod": "SUMOP", "int": "INTOP", "oint": "INTOP",
+        "lim": "LIMITOP", "colim": "LIMITOP", "varinjlim": "LIMITOP", "varprojlim": "LIMITOP",
+    }
+    out.update(ops)
+    delims = {"langle": "OPEN", "rangle": "CLOSE", "lfloor": "OPEN", "rfloor": "CLOSE",
+              "lceil": "OPEN", "rceil": "CLOSE", "{": "OPEN", "}": "CLOSE",
+              "left": "OPEN", "right": "CLOSE", "big": "OPEN", "Big": "OPEN",
+              "bigg": "OPEN", "Bigg": "OPEN"}
+    out.update(delims)
+    for s in ("quad qquad ldots cdots vdots ddots dots hspace vspace smallskip "
+              "medskip bigskip nonumber").split():
+        out[s] = "SPACE"
+    return out
+
+STANDARD_MATH_ROLES = _build_standard_math_roles()
+
 
 def strip_archive_suffix(path: Path) -> str:
     name = path.name
@@ -131,6 +184,11 @@ def load_latexml_roles(path: Path) -> dict[str, dict]:
             "source": parts[2] if len(parts) > 2 else "",
             "line": line_no,
         }
+    # Seed/override with curated standard vocab (C2). Standard wins: the
+    # mining left e.g. \mathbb tagged OVERACCENT, which mis-typed every
+    # \mathbb{...}-defined atom; the curated entries are authoritative here.
+    for k, v in STANDARD_MATH_ROLES.items():
+        roles[k] = {"role": v, "source": "standard-vocab", "line": 0}
     return roles
 
 
@@ -263,7 +321,11 @@ def resolve_macro_role(cs: str, macros: dict[str, dict], roles: dict[str, dict],
             r = roles[cs]
             return {"role": r["role"], "source": f"latexml-math-roles.tsv:{r['line']}", "via": [f"\\{cs}"]}
         return {"role": "UNKNOWN", "via": [f"\\{cs}"]}
-    for rhs_cs in control_sequences(macro.get("rhs", "")):
+    rhs = macro.get("rhs", "")
+    # Alphabet/font wrappers are transparent: the wrapped letters are the atom.
+    for rhs_cs in control_sequences(rhs):
+        if rhs_cs in ALPHABET_WRAPPERS:
+            continue
         if rhs_cs in roles:
             r = roles[rhs_cs]
             return {
@@ -276,6 +338,13 @@ def resolve_macro_role(cs: str, macros: dict[str, dict], roles: dict[str, dict],
             if resolved.get("role") != "UNKNOWN":
                 resolved["via"] = [macro["cs"], *resolved.get("via", [])]
                 return resolved
+    # No operator cseq in the RHS. If what remains (after stripping wrappers,
+    # braces, scripts) is letters/digits, the macro names an ATOM — e.g.
+    # \C := {\mathcal C}, \Set := \mathbf{Set}, \Hom := \mathrm{Hom}. Role ID,
+    # not UNKNOWN (this is the dominant false-unknown class — registry seed).
+    stripped = re.sub(r"\\[A-Za-z@]+|[{}$\\\s^_]", "", rhs)
+    if stripped and re.fullmatch(r"[A-Za-z0-9'’.,\-]+", stripped):
+        return {"role": "ID", "source": "atom-from-rhs", "via": [macro["cs"], "(atom)"]}
     return {"role": "UNKNOWN", "via": [macro["cs"]]}
 
 
@@ -360,8 +429,9 @@ def math_spans(text: str):
 
 def token_census(files: list[dict], macros: dict[str, dict], roles: dict[str, dict], plain: set[str]) -> dict:
     spans = []
-    classified_total = unknown_total = fully = 0
+    classified_total = unknown_total = fully = role_gap_total = 0
     unknowns = Counter()
+    role_gaps = Counter()
     for f in files:
         text = strip_comments(f["text"])
         for start, end, delim, body in math_spans(text):
@@ -370,12 +440,19 @@ def token_census(files: list[dict], macros: dict[str, dict], roles: dict[str, di
             for cs in control_sequences(body):
                 cls = classify_cseq(cs, macros, roles, plain)
                 controls.append(cls)
-                if cls["class"] == "UNKNOWN" or cls["role"] == "UNKNOWN":
+                if cls["class"] == "UNKNOWN":
+                    # genuinely unrecognised: not in the paper's macros, not in
+                    # the role lexicon, not a known TeX/plain control sequence.
                     unknown_total += 1
                     unknowns["\\" + cs] += 1
                     span_unknown.append("\\" + cs)
                 else:
+                    # recognised token. A still-UNKNOWN role is a role-gap
+                    # (typing refinement), NOT a false "unknown control seq".
                     classified_total += 1
+                    if cls["role"] == "UNKNOWN":
+                        role_gap_total += 1
+                        role_gaps["\\" + cs] += 1
             if not span_unknown:
                 fully += 1
             spans.append({
@@ -394,6 +471,8 @@ def token_census(files: list[dict], macros: dict[str, dict], roles: dict[str, di
         "classified": classified_total,
         "unknown": unknown_total,
         "unknown-list": sorted(unknowns),
+        "role-gap": role_gap_total,
+        "role-gap-list": sorted(role_gaps),
         "spans-fully-classified": fully,
         "spans": spans,
     }
