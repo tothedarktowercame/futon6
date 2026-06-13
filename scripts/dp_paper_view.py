@@ -244,6 +244,21 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                     "fields": [["math", body.strip()[:70]],
                                ["delim", "display ($$)" if delim == "$$" else "inline ($)"]],
                 })
+            # SATIETY (Joe): the $...$ scope is hungry for content — annotate
+            # the symbols inside, not just control sequences. A bare $H$ whose
+            # H is unmarked is a hungry envelope (a violation). Mark each
+            # symbol (letter/identifier run not part of a \cseq name).
+            for sm in re.finditer(r"[A-Za-z][A-Za-z0-9]*", body):
+                if sm.start() > 0 and body[sm.start() - 1] == "\\":
+                    continue  # it's a control-sequence name, handled below
+                sym = sm.group(0)
+                counts["symbol"] = counts.get("symbol", 0) + 1
+                g = base + body_off + sm.start()
+                marks.append({
+                    "start": g, "end": g + len(sym),
+                    "layer": "dp", "kind": "symbol",
+                    "tip": f"symbol {sym}",
+                })
             for m in CSEQ_RE.finditer(body):
                 cs = m.group(1) or m.group(2)
                 cls = sweep.classify_cseq(cs, macros, roles, plain)
