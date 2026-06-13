@@ -1,138 +1,216 @@
 #!/usr/bin/env python3
-"""Batch-run the DP detector (dp_paper_view.build) over many math.CT eprints —
-the scale-up arm of the structure-mining fleet (claude-4, 2026-06-13).
+"""Memory-safe batch runner for the DP detector.
 
-Generation is embarrassingly parallel: each paper is independent and writes its
-own golden JSON, so we fan out across CPU cores. Crashes and hangs are isolated
-per worker (try/except + a per-paper SIGALRM wall) and RECORDED, never silently
-dropped — the runbook's no-silent-caps discipline. Skips papers already in the
-golden dir so re-runs are incremental.
-
-    dp_batch.py                 # next 200 unprocessed CT papers, full flags
-    dp_batch.py --limit 50 --jobs 4
-    dp_batch.py --paper 0809.2517   # force one paper (ignores skip)
-
-Only this runner is committed; the generated data/ JSON is gitignored.
+The parent process stays light: it does not import ``dp_paper_view`` or the
+concept authority stack. Each paper runs in a fresh Python subprocess, writes
+its own golden JSON, exits, and releases memory. The parent runs sequentially
+by default, logs every done/skipped/failed paper, and sleeps between papers to
+avoid load spikes.
 """
+
 from __future__ import annotations
 
 import argparse
 import json
-import signal
+import subprocess
 import sys
 import time
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from collections import Counter
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import dp_paper_view as dpv
 
-EPRINTS = dpv.EPRINTS
-GOLDEN_DIR = dpv.GOLDEN_DIR
+ROOT = Path(__file__).resolve().parents[1]
+SCRIPT = Path(__file__).resolve()
+EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
+GOLDEN_DIR = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
+LOG_DIR = ROOT / "data" / "warp" / "logs"
 FLAGS = dict(with_ca=True, with_binders=True, with_scopes=True, with_xref=True)
 
 
-class _Timeout(Exception):
-    pass
+def golden_path(paper: str) -> Path:
+    return GOLDEN_DIR / f"fable-{paper}-dp-emacs.json"
 
 
-def _build_one(paper: str, timeout: int):
-    """Worker: build one paper with the full flags, write its golden JSON.
-    Returns a small result dict (picklable). Self-aborts after `timeout` s so a
-    pathological paper cannot wedge a worker forever."""
-    def _alarm(signum, frame):
-        raise _Timeout()
-    signal.signal(signal.SIGALRM, _alarm)
-    signal.alarm(timeout)
+def iter_eprint_ids() -> list[str]:
+    suffixes = (".tar.gz", ".tex.gz", ".gz", ".tar", ".tex")
+    ids: set[str] = set()
+    for path in EPRINTS.iterdir():
+        if not path.is_file():
+            continue
+        name = path.name
+        for suffix in suffixes:
+            if name.endswith(suffix):
+                ids.add(name[: -len(suffix)])
+                break
+    return sorted(ids)
+
+
+def candidates(limit: int | None) -> tuple[list[str], int, int, int]:
+    have = {
+        p.name[len("fable-") : -len("-dp-emacs.json")]
+        for p in GOLDEN_DIR.glob("fable-*-dp-emacs.json")
+    }
+    ids = iter_eprint_ids()
+    todo = [pid for pid in ids if pid not in have]
+    if limit is not None:
+        todo = todo[:limit]
+    return todo, len(ids), len(have), len(ids) - len(have)
+
+
+def worker_main(paper: str) -> int:
+    sys.path.insert(0, str(SCRIPT.parent))
+    import dp_paper_view as dpv
+
+    t0 = time.time()
+    data = dpv.build(paper, **FLAGS)
+    GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
+    out = golden_path(paper)
+    out.write_text(json.dumps({k: v for k, v in data.items() if k != "_counts"}), encoding="utf-8")
+    counts = data.get("_counts", {})
+    result = {
+        "paper": paper,
+        "state": "done",
+        "secs": round(time.time() - t0, 1),
+        "marks": len(data.get("marks", [])),
+        "refs": counts.get("ref", 0),
+        "labels": counts.get("label", 0),
+        "cites": counts.get("cite", 0),
+        "out": str(out),
+    }
+    print(json.dumps(result, sort_keys=True), flush=True)
+    return 0
+
+
+def run_one(paper: str, timeout: int) -> dict:
+    if golden_path(paper).exists():
+        return {"paper": paper, "state": "skipped", "reason": "already in golden"}
+    cmd = [sys.executable, str(SCRIPT), "--worker-paper", paper]
     t0 = time.time()
     try:
-        data = dpv.build(paper, **FLAGS)
-        out = GOLDEN_DIR / f"fable-{paper}-dp-emacs.json"
-        out.write_text(json.dumps({k: v for k, v in data.items()
-                                   if k != "_counts"}))
-        c = data["_counts"]
-        return {"paper": paper, "state": "done", "secs": round(time.time() - t0, 1),
-                "marks": len(data["marks"]),
-                "refs": c.get("ref", 0), "labels": c.get("label", 0),
-                "cites": c.get("cite", 0)}
-    except _Timeout:
-        return {"paper": paper, "state": "failed", "secs": round(time.time() - t0, 1),
-                "reason": f"timeout >{timeout}s"}
-    except BaseException as e:  # SystemExit (no eprint), parse errors, etc.
-        return {"paper": paper, "state": "failed", "secs": round(time.time() - t0, 1),
-                "reason": f"{type(e).__name__}: {str(e)[:160]}"}
-    finally:
-        signal.alarm(0)
+        proc = subprocess.run(
+            cmd,
+            cwd=str(ROOT),
+            text=True,
+            capture_output=True,
+            timeout=timeout,
+            check=False,
+        )
+    except subprocess.TimeoutExpired as exc:
+        return {
+            "paper": paper,
+            "state": "failed",
+            "secs": round(time.time() - t0, 1),
+            "reason": f"timeout >{timeout}s",
+            "stdout_tail": (exc.stdout or "")[-1000:],
+            "stderr_tail": (exc.stderr or "")[-1000:],
+        }
+    stdout = proc.stdout.strip()
+    if proc.returncode == 0:
+        for line in reversed(stdout.splitlines()):
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(row, dict) and row.get("state") == "done":
+                return row
+    return {
+        "paper": paper,
+        "state": "failed",
+        "secs": round(time.time() - t0, 1),
+        "reason": f"exit {proc.returncode}",
+        "stdout_tail": stdout[-1000:],
+        "stderr_tail": proc.stderr[-2000:],
+    }
 
 
-def _candidates(limit: int):
-    """The next `limit` CT papers (sorted, deterministic) that have a .tar.gz
-    eprint but no golden JSON yet. Returns (todo, n_total, n_already)."""
-    have = {p.name[len("fable-"):-len("-dp-emacs.json")]
-            for p in GOLDEN_DIR.glob("fable-*-dp-emacs.json")}
-    todo = []
-    n_total = 0
-    for e in sorted(EPRINTS.glob("*.tar.gz")):
-        n_total += 1
-        pid = e.name[:-len(".tar.gz")]
-        if pid not in have:
-            todo.append(pid)
-    return todo[:limit], n_total, len(have)
-
-
-def main(argv=None):
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--limit", type=int, default=200,
-                    help="max papers to process this run (default 200)")
-    ap.add_argument("--jobs", type=int, default=8,
-                    help="parallel worker processes (default 8)")
-    ap.add_argument("--timeout", type=int, default=240,
-                    help="per-paper wall-clock seconds before abort (default 240)")
-    ap.add_argument("--paper", help="force a single paper id (ignores skip-set)")
-    args = ap.parse_args(argv)
-
-    if args.paper:
-        todo, n_total, n_have = [args.paper], 1, 0
+def format_result(idx: int, total: int, row: dict) -> str:
+    state = row["state"]
+    paper = row["paper"]
+    secs = row.get("secs", 0)
+    if state == "done":
+        detail = (
+            f"refs={row.get('refs', 0)} labels={row.get('labels', 0)} "
+            f"cites={row.get('cites', 0)} marks={row.get('marks', 0)}"
+        )
+    elif state == "skipped":
+        detail = row.get("reason", "")
     else:
-        todo, n_total, n_have = _candidates(args.limit)
-    GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
+        detail = f"FAILED {row.get('reason', '')}"
+    return f"[{idx}/{total}] {paper:14} {state:7} {secs:6}s  {detail}"
 
-    print(f"eprints: {n_total} total · {n_have} already in golden · "
-          f"processing {len(todo)} (jobs={args.jobs}, timeout={args.timeout}s)",
-          flush=True)
+
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--limit", type=int, default=30, help="max new papers to process")
+    ap.add_argument("--timeout", type=int, default=240, help="per-paper subprocess timeout in seconds")
+    ap.add_argument("--sleep", type=float, default=2.0, help="seconds to sleep between papers")
+    ap.add_argument("--paper", action="append", default=[], help="specific paper id(s); already-existing outputs are skipped unless --force")
+    ap.add_argument("--force", action="store_true", help="rebuild --paper targets even if output exists")
+    ap.add_argument("--log", type=Path, default=None, help="JSONL run log path")
+    ap.add_argument("--worker-paper", help=argparse.SUPPRESS)
+    return ap.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv or sys.argv[1:])
+    if args.worker_paper:
+        return worker_main(args.worker_paper)
+
+    GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
+    if args.paper:
+        todo = args.paper
+        n_total = len(todo)
+        n_have = sum(1 for paper in todo if golden_path(paper).exists())
+        n_missing = n_total - n_have
+    else:
+        todo, n_total, n_have, n_missing = candidates(args.limit)
+    if args.force and args.paper:
+        for paper in args.paper:
+            golden_path(paper).unlink(missing_ok=True)
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_path = args.log or (LOG_DIR / f"dp-batch-{time.strftime('%Y%m%d-%H%M%S')}.jsonl")
+
+    print(
+        f"eprints: {n_total} total · {n_have} already in golden · "
+        f"{n_missing} missing · processing {len(todo)} sequentially "
+        f"(timeout={args.timeout}s, sleep={args.sleep}s)",
+        flush=True,
+    )
+    print(f"log: {log_path}", flush=True)
     if not todo:
         print("nothing to do.")
         return 0
 
-    done, failed = [], []
-    t0 = time.time()
-    with ProcessPoolExecutor(max_workers=args.jobs) as ex:
-        futs = {ex.submit(_build_one, p, args.timeout): p for p in todo}
-        for i, fut in enumerate(as_completed(futs), 1):
-            r = fut.result()
-            if r["state"] == "done":
-                done.append(r)
-                tag = (f"refs={r['refs']} labels={r['labels']} "
-                       f"cites={r['cites']} marks={r['marks']}")
-            else:
-                failed.append(r)
-                tag = f"FAILED {r['reason']}"
-            print(f"[{i}/{len(todo)}] {r['paper']:14} {r['state']:6} "
-                  f"{r['secs']:5}s  {tag}", flush=True)
+    counts: Counter[str] = Counter()
+    failures: list[dict] = []
+    started = time.time()
+    with log_path.open("a", encoding="utf-8") as log:
+        for idx, paper in enumerate(todo, 1):
+            if args.force and args.paper:
+                golden_path(paper).unlink(missing_ok=True)
+            row = run_one(paper, args.timeout)
+            counts[row["state"]] += 1
+            if row["state"] == "failed":
+                failures.append(row)
+            row = {"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), **row}
+            log.write(json.dumps(row, sort_keys=True) + "\n")
+            log.flush()
+            print(format_result(idx, len(todo), row), flush=True)
+            if idx < len(todo) and args.sleep > 0:
+                time.sleep(args.sleep)
 
-    dt = time.time() - t0
-    print(f"\n{'='*64}")
-    print(f"BATCH DONE in {dt/60:.1f}min — {len(done)} ok, {len(failed)} failed, "
-          f"{len(todo)} attempted of {n_total} eprints")
-    if failed:
-        print("FAILURES (paper · reason):")
-        # group identical reasons for a compact, honest tally
-        from collections import Counter
-        by_reason = Counter(f["reason"].split(":")[0] for f in failed)
-        for r in failed:
-            print(f"  {r['paper']:14} {r['reason']}")
-        print("  reason tally:", dict(by_reason))
-    return 0
+    elapsed = time.time() - started
+    print(
+        f"BATCH DONE in {elapsed/60:.1f}min — "
+        f"done={counts['done']} skipped={counts['skipped']} failed={counts['failed']} "
+        f"attempted={len(todo)}",
+        flush=True,
+    )
+    if failures:
+        print("FAILURES:")
+        for row in failures:
+            print(f"  {row['paper']:14} {row.get('reason', '')}", flush=True)
+    return 0 if not failures else 1
 
 
 if __name__ == "__main__":
