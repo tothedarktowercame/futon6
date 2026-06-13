@@ -89,12 +89,30 @@ PROOF_MOVES = [
 ]
 PROOF_MOVES_C = [(re.compile(p, re.I), lbl, fam) for p, lbl, fam in PROOF_MOVES]
 
+# REFERENCE GRAPH (Joe's label/ref/cite harvest). The in-paper reference graph:
+# \label declares an anchor (typed by the nearest enclosing theorem-env /
+# section / equation it sits inside); \ref/\eqref/\autoref/\cref point AT an
+# anchor (resolved in-paper, or dangling if no matching \label); \cite points
+# OUT to the bibliography. A new dp-layer family, mirroring the proof-move idiom
+# — additive structure that lives in PROSE (outside $...$), so it is neither a
+# structural scope nor a symbol/math mark and the coverage/well-formedness
+# invariants never see it (zero regression by construction). Pairs with the
+# informal-proof-move layer: a hedge + the \eqref it defers its verification to.
+# REF_RE alternation lists "ref" LAST so \eqref/\autoref/\cref win their prefix.
+LABEL_RE = re.compile(r"\\label\{([^}]*)\}")
+REF_RE = re.compile(r"\\(eqref|autoref|cref|Cref|vref|pageref|ref)\{([^}]*)\}")
+CITE_RE = re.compile(r"\\(cite[a-zA-Z]*)\s*(?:\[[^\]]*\])?\{([^}]*)\}")
+_ANCHOR_BEGIN_RE = re.compile(r"\\begin\{([a-zA-Z*]+)\}")
+_ANCHOR_SECTION_RE = re.compile(r"\\((?:sub)*section|paragraph)\*?\{")
+
 
 def _load_xref():
     """Shuttle cross-ref components: mathlib names, PlanetMath finder."""
     import json as _j
     mathlib_names = []
-    mj = Path("/home/joe/code/futon6/data/mathlib-defs-monoidal.json")
+    mj = Path("/home/joe/code/futon6/data/mathlib-defs.json")
+    if not mj.exists():
+        mj = Path("/home/joe/code/futon6/data/mathlib-defs-monoidal.json")
     if mj.exists():
         mathlib_names = [d["name"] for d in _j.loads(mj.read_text())]
     pd = _ilu.spec_from_file_location("mpd", Path(__file__).resolve().parent / "mine_prose_def.py")
@@ -256,6 +274,68 @@ def detect_scope_manifest(ftext, base, entity_id, nw, ca):
             "layer": "scope", "kind": stype,
             "tip": f"{stype} · " + " | ".join(f"{r}:{v}" for r, v in fields[:3]),
             "fields": fields or None,
+        })
+    return out
+
+
+def _anchor_index(ftext):
+    """Sorted [(start, typename)] of constructs a \\label can name — every
+    \\begin{env} and every sectioning command — so each label is typed by the
+    nearest one preceding it (a label names the thing it sits inside)."""
+    idx = [(m.start(), m.group(1)) for m in _ANCHOR_BEGIN_RE.finditer(ftext)]
+    idx += [(m.start(), m.group(1)) for m in _ANCHOR_SECTION_RE.finditer(ftext)]
+    idx.sort()
+    return idx
+
+
+def _anchor_for(idx, pos):
+    """typename of the nearest anchor strictly before POS (None if none)."""
+    name = None
+    for start, typename in idx:
+        if start < pos:
+            name = typename
+        else:
+            break
+    return name
+
+
+def detect_references(ftext, base, label_keys):
+    """Harvest \\label / \\ref|\\eqref|... / \\cite into reference-graph marks.
+
+    label_keys is the set of EVERY \\label key in the whole paper, so a \\ref to
+    a forward label (declared in a later section/file) still resolves in-paper.
+    """
+    out = []
+    anchors = _anchor_index(ftext)
+    for m in LABEL_RE.finditer(ftext):
+        key = m.group(1).strip()
+        names = _anchor_for(anchors, m.start())
+        out.append({
+            "start": base + m.start(), "end": base + m.end(),
+            "layer": "dp", "kind": "label",
+            "tip": f"label {key}" + (f" · names {names}" if names else ""),
+            "fields": [["label", key], ["names", names or "—"]],
+        })
+    for m in REF_RE.finditer(ftext):
+        cmd, raw = m.group(1), m.group(2).strip()
+        keys = [k.strip() for k in raw.split(",") if k.strip()]
+        resolved = bool(keys) and all(k in label_keys for k in keys)
+        out.append({
+            "start": base + m.start(), "end": base + m.end(),
+            "layer": "dp", "kind": "ref",
+            "tip": f"\\{cmd} → {raw}"
+                   + ("" if resolved else " · DANGLING (no matching \\label)"),
+            "fields": [["ref", raw], ["via", f"\\{cmd}"],
+                       ["target", "in-paper" if resolved else "dangling"]],
+        })
+    for m in CITE_RE.finditer(ftext):
+        cmd, keys = m.group(1), m.group(2).strip()
+        out.append({
+            "start": base + m.start(), "end": base + m.end(),
+            "layer": "dp", "kind": "cite",
+            "tip": f"\\{cmd} → {keys} (bibliography)",
+            "fields": [["cite", keys], ["via", f"\\{cmd}"],
+                       ["target", "bibliography"]],
         })
     return out
 
@@ -427,6 +507,13 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
         cand = [(p, lab) for p, lab in bindings.get(sym, []) if p <= g]
         return cand[-1][1] if cand else None
 
+    # REFERENCE GRAPH pre-pass: collect every \label key across the WHOLE paper
+    # first, so a \ref to a forward label (later section/file) still resolves.
+    label_keys = set()
+    for f in tex_files:
+        for m in LABEL_RE.finditer(f["text"]):
+            label_keys.add(m.group(1).strip())
+
     for f in tex_files:
         base = bases[f["file"]]
         ftext = f["text"]
@@ -511,6 +598,15 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                     "fields": [["move", label], ["family", family],
                                ["text", pm.group(0)[:50]]],
                 })
+        # REFERENCE GRAPH (Joe): \label/\ref/\cite harvest — the in-paper
+        # reference graph + outbound citations. Unconditional, like proof-moves;
+        # lives in prose, so the coverage/well-formedness invariants never see it.
+        for rmark in detect_references(ftext, base, label_keys):
+            counts[rmark["kind"]] = counts.get(rmark["kind"], 0) + 1
+            if rmark["kind"] == "ref" and any(
+                    k == "target" and v == "dangling" for k, v in rmark["fields"]):
+                counts["ref-dangling"] = counts.get("ref-dangling", 0) + 1
+            marks.append(rmark)
         for start, end, delim, body in sweep.math_spans(ftext):
             body_off = start + len(delim)
             # RULE (Joe): anything between dollar signs IS a math scope —
@@ -601,6 +697,9 @@ def main(argv=None) -> int:
           f"concept-typed {c['concept-typed']} ({100*c['concept-typed']//tot}%), "
           f"unknown {c['unknown']} ({100*c['unknown']//tot}%), "
           f"let-binders {c['let-binder']}, scopes {c.get('scope', 0)}")
+    print(f"  reference graph: {c.get('label', 0)} labels, "
+          f"{c.get('ref', 0)} refs ({c.get('ref-dangling', 0)} dangling), "
+          f"{c.get('cite', 0)} cites")
     print(f"wrote {out}  →  M-x paper-anatomy-open  RET  {paper}-dp")
     return 0
 

@@ -23,7 +23,10 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path("/home/joe/code/futon6")
-MATHLIB_DEFS = ROOT / "data" / "mathlib-defs-monoidal.json"
+# prefer the FULL mathlib index (3454 structure/class defs); fall back to the
+# Monoidal-only slice if the broad mine has not been run yet.
+_BROAD = ROOT / "data" / "mathlib-defs.json"
+MATHLIB_DEFS = _BROAD if _BROAD.exists() else ROOT / "data" / "mathlib-defs-monoidal.json"
 
 import importlib.util as _ilu
 _pd = _ilu.spec_from_file_location("mpd", ROOT / "scripts" / "mine_prose_def.py")
