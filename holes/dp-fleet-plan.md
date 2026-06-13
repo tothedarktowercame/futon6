@@ -78,3 +78,9 @@ show who did what.
 - ☐ **display-defined (`:=`) symbol grounding** (found 2026-06-13): symbols
   defined in display equations (the codiagonal `:=` class, R6) are still
   ungrounded — a real C-SYM-GROUND lever. → claude-3.
+- ☐ **wf generalization** (found 2026-06-13, HIGH PRIORITY): scaling golden 32->62
+  exposed 838 well-formedness errors (was 1) — the atomicity/nesting/sentence
+  invariants were overfit to hand-tuned papers. Bucket stale-golden vs real
+  detector bugs; drive corpus wf back to 0. → claude-4. NOTE: regenerate
+  scale-gen's new papers AFTER this fix lands.
+
