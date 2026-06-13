@@ -11,3 +11,4 @@ holes). See `holes/dp-fleet-plan.md` for the capability targets.
 | 2026-06-13T16:54:19 | 32 | 52% | 1 | 47176 | refactor landed (behavior-preserving, gate-verified); non-symbol classifier lifted 0809.2517 78%->86%; warp DEBT report + W2 committed; +2 discovered items (DEBT concept-filter, W2 re-run) |
 | 2026-06-13T17:22:11 | 32 | 53% | 1 | 46928 | round 2 landed: Galois alias (DEBT->Lean), sub/superscript grounding, DEBT concept-filter, W2 linkage re-run; all self-committed on split modules |
 | 2026-06-13T17:52:39 | 62 | 57% | 838 | 95629 | round 3: display-:= grounding, wf->0 (stale-golden cleared), memory-safe batch runner, corpus scaled 32->62 papers, DEBT summary written |
+| 2026-06-13T18:32:29 | 231 | 57% | 859 | 324767 | round 4: corpus scaled 62->227; residue analysis (tail NOT irreducible); citation-DEBT bridge (0 internal resolutions) |
