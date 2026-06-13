@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Corpus-scale definition debt report from the WARP concordance.
 
-Find terms that are used across many papers, defined in no corpus paper, and
-absent from the formal/prose shuttle coverage layers (Lean/mathlib,
-PlanetMath, nLab). Also report the inverse: terms that are both widely defined
-and widely used inside the corpus.
+Find concept terms that are used across many papers and defined in no corpus
+paper. External formal/prose shuttle coverage (Lean/mathlib, PlanetMath, nLab)
+is retained on each row as metadata, but the debt frontier is a corpus
+used-but-undefined frontier. Also report the inverse: terms that are both
+widely defined and widely used inside the corpus.
 """
 
 from __future__ import annotations
@@ -167,6 +168,32 @@ MACRO_NOISE = {
     "DDelta",
 }
 
+MACRO_CONCEPT_ALIASES = {
+    "hocolim": "homotopy colimit",
+    "holim": "homotopy limit",
+    "FPdim": "Frobenius Perron dimension",
+    "fpdim": "Frobenius Perron dimension",
+    "gldim": "global dimension",
+    "twocat": "2 category",
+    "cocart": "cocartesian fibration",
+    "oplax": "oplax functor",
+    "dgcat": "dg category",
+    "dgCat": "dg category",
+    "liminj": "filtered colimit",
+    "Deltaop": "opposite simplex category",
+    "ModR": "module category",
+    "Cobar": "cobar construction",
+    "pretr": "pretriangulated category",
+    "rdual": "right dual",
+    "inprod": "inner product",
+    "smcat": "symmetric monoidal category",
+    "coend": "coend",
+    "Coend": "coend",
+    "Operad": "operad",
+    "Cat": "category",
+    "Set": "set",
+}
+
 
 def load_module(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -178,6 +205,7 @@ def load_module(name: str, path: Path):
 
 
 concept_shuttle = load_module("concept_shuttle", ROOT / "scripts" / "concept_shuttle.py")
+concept_authority_mod = load_module("concept_authority", ROOT / "scripts" / "concept_authority.py")
 
 
 def norm_label(value: str) -> str:
@@ -212,6 +240,32 @@ def is_reportable_term(term: str) -> bool:
     if re.search(r"\b(?:tex|mathcal|mathrm|phantom|hspace|vspace)\b", label):
         return False
     return True
+
+
+def is_macro_origin(term: str) -> bool:
+    return term.strip().startswith("\\")
+
+
+def concept_debt_label(original_term: str, term: str, authority) -> str | None:
+    if is_macro_origin(original_term):
+        name = original_term.strip()[1:]
+        alias = MACRO_CONCEPT_ALIASES.get(name) or MACRO_CONCEPT_ALIASES.get(name.lower())
+        if not alias:
+            return None
+        return alias
+    if not is_reportable_term(term):
+        return None
+    label = norm_label(term)
+    words = label.split()
+    if len(words) >= 2:
+        return term
+    hit = authority.resolve(term) if authority is not None else None
+    if not hit:
+        return None
+    target = str(hit.get("term") or hit.get("target") or "")
+    if not target:
+        return None
+    return term if re.search(r"[A-Za-z]", target) else None
 
 
 def split_macro_name(name: str) -> str:
@@ -418,12 +472,53 @@ def row_for(term: str, original_term: str, summary: dict, cov: dict) -> dict:
     }
 
 
+def add_debt_acc(acc: dict[str, dict], term: str, original_term: str, summary: dict, cov: dict) -> None:
+    row = acc.setdefault(
+        term,
+        {
+            "term": term,
+            "concordance_terms": set(),
+            "used_papers": set(),
+            "defined_papers": set(),
+            "used_count": 0,
+            "defined_count": 0,
+            "coverage": cov,
+        },
+    )
+    row["concordance_terms"].add(original_term)
+    row["used_papers"].update(summary["used_papers"])
+    row["defined_papers"].update(summary["defined_papers"])
+    row["used_count"] += summary["used_count"]
+    row["defined_count"] += summary["defined_count"]
+    if not row["coverage"].get("covered") and cov.get("covered"):
+        row["coverage"] = cov
+
+
+def debt_row_from_acc(row: dict) -> dict:
+    used_papers = sorted(row["used_papers"])
+    defined_papers = sorted(row["defined_papers"])
+    terms = sorted(row["concordance_terms"])
+    return {
+        "term": row["term"],
+        "concordance_term": terms[0] if len(terms) == 1 else None,
+        "concordance_terms": terms,
+        "used_papers": len(used_papers),
+        "defined_papers": len(defined_papers),
+        "used_count": row["used_count"],
+        "defined_count": row["defined_count"],
+        "sample_used_papers": used_papers[:10],
+        "sample_defined_papers": defined_papers[:10],
+        "coverage": row["coverage"],
+    }
+
+
 def build(args: argparse.Namespace) -> dict:
     start = time.time()
     mathlib_names = load_mathlib_names(args.mathlib)
     pm_index = load_planetmath_index(args.planetmath)
     nlab_index = load_nlab_index(args.nlab)
-    debt: list[dict] = []
+    authority = concept_authority_mod.ConceptAuthority()
+    debt_acc: dict[str, dict] = {}
     core: list[dict] = []
     stats = {
         "terms_seen": 0,
@@ -445,24 +540,30 @@ def build(args: argparse.Namespace) -> dict:
         if len(summary["used_papers"]) < args.min_used_papers:
             continue
         stats["reportable_terms"] += 1
-        cov = coverage(term_label, mathlib_names, pm_index, nlab_index)
+        debt_label = concept_debt_label(term, term_label, authority)
+        cov = coverage(debt_label or term_label, mathlib_names, pm_index, nlab_index)
         if cov["covered"]:
             stats["covered_reportable_terms"] += 1
-        if summary["used_papers"] and not summary["defined_papers"] and not cov["covered"]:
-            stats["debt_candidates"] += 1
-            debt.append(row_for(term_label, term, summary, cov))
+        if (
+            summary["used_papers"]
+            and not summary["defined_papers"]
+            and debt_label
+        ):
+            add_debt_acc(debt_acc, debt_label, term, summary, cov)
         if summary["used_papers"] and summary["defined_papers"]:
             stats["core_candidates"] += 1
             core.append(row_for(term_label, term, summary, cov))
         if args.progress and stats["terms_seen"] % args.progress == 0:
             print(
-                f"[warp-debt] terms={stats['terms_seen']} debt={len(debt)} core={len(core)}",
+                f"[warp-debt] terms={stats['terms_seen']} debt={len(debt_acc)} core={len(core)}",
                 file=sys.stderr,
                 flush=True,
             )
 
+    debt = [debt_row_from_acc(row) for row in debt_acc.values()]
     debt.sort(key=lambda r: (-r["used_papers"], -r["used_count"], r["term"].lower()))
     core.sort(key=lambda r: (-min(r["used_papers"], r["defined_papers"]), -r["used_papers"], -r["defined_papers"], r["term"].lower()))
+    stats["debt_candidates"] = len(debt)
     stats["elapsed_sec"] = round(time.time() - start, 3)
     stats["debt_returned"] = min(args.limit, len(debt))
     stats["core_returned"] = min(args.limit, len(core))
