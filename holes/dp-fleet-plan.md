@@ -45,6 +45,18 @@ TARGETED THIS RUN:
   defined in NONE and absent from Lean∪PlanetMath∪nLab (cross-paper Skuld)
 - ☐ (stretch) concordance query surface / shuttle integration
 
+## Discovered during the run (added per Joe's standing instruction)
+
+- ☐ **DEBT-report concept-filtering** (found 2026-06-13): the corpus-DEBT
+  `debt_frontier` is keyed on raw cseq macros (`\coker`, `\hocolim` = real
+  notation; `\frontmatter`, `\vfuzz` = layout noise), not concept terms. Must
+  filter to the concept vocabulary (definienda / multi-word terms / authority-
+  resolvable) so it surfaces real definition-holes (the "Galois object" class),
+  not control sequences. → codex-3.
+- ☐ **W2 re-run with the improved matcher** (found 2026-06-13): `warp_citations.py`
+  was improved but `citations.json` is stale at 2% — regenerate over the corpus
+  and verify the new linkage rate honestly. → codex-4.
+
 ## Coverage target
 
 "Good" = grounding well up from today's ~52% across a representative corpus,
