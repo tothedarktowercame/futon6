@@ -73,3 +73,30 @@ the terms mean." Not started; this note is the charter. First concrete
 step on Joe's word: mine mathlib + PlanetMath for the algebra-in-a-
 monoidal-category definition and resolve the "in $\C$" question as the
 worked example.
+
+## Worked result — mathlib answers "in $\C$" (2026-06-13, first rung BUILT)
+
+`scripts/mine_mathlib_defs.py` mines structured definition-scopes from .lean
+(definiendum + ambient context + fields-with-doc). Run on
+`Mathlib/CategoryTheory/Monoidal/`: **107 definition-scopes**, incl. the
+exact family 0809.2517 uses — `MonObj`, `ComonObj`, `ModObj`, `BimonObj`,
+`HopfObj`.
+
+THE "in $\C$" QUESTION, ANSWERED FROM THE FORMAL TEXT (not asserted):
+- `structure Mon` — ambient `[Category C] [MonoidalCategory C]`; field
+  `X : C` — doc: "The underlying object in the ambient monoidal category".
+- `class MonObj (X : C)` — `one : 𝟙_ C ⟶ X`, `mul : X ⊗ X ⟶ X`, axioms in
+  terms of ⊗ / unitors / associator.
+
+Verdict: "an algebra/comodule object **in** $\C$" = an **object of the
+category $\C$** equipped with structure whose operations are **morphisms of
+$\C$** — the INTERNALIZATION reading. Element-of is formally wrong. The
+witness is the Lean, with provenance (Mon.lean:73, :254), per
+no-self-certification.
+
+Next rungs: (a) attach mined mathlib definition-scopes to the
+concept-authority so resolving "comodule algebra" returns this structure,
+not a bare pointer; (b) the recursion — Mon's definiens reference
+MonoidalCategory, ⊗, 𝟙_ — chase the definition dependency graph (= mathlib's
+import graph); (c) PlanetMath prose definitions as the second source (the
+NNexus pointers' actual content).
