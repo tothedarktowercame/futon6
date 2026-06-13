@@ -219,6 +219,36 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
 
     marks, counts = [], {"classified": 0, "role-gap": 0, "unknown": 0,
                          "concept-typed": 0, "let-binder": 0}
+    # PRE-PASS (Joe's grounding point): the "Let $H$ be a Hopf algebra"
+    # stanza grounds the symbol H. Collect symbol → (global-pos, concept)
+    # bindings so each later symbol occurrence resolves to its binder (R4,
+    # the use→binder edge) instead of leaving an ungrounded "symbol" debt.
+    bindings = {}  # bare symbol -> sorted [(global_pos, label)]
+    if with_binders:
+        for f in tex_files:
+            base = bases[f["file"]]
+            for m in BINDER_RE.finditer(f["text"]):
+                pairs = [(m.group(1), m.group(2), m.start())]
+                for cm in CONJUNCT_RE.finditer(f["text"], m.end(), m.end() + 160):
+                    pairs.append((cm.group(1), cm.group(2), cm.start()))
+                for subj, phrase, pos in pairs:
+                    sym = re.search(r"[A-Za-z]+", subj)
+                    if not sym:
+                        continue
+                    label = phrase.strip()[:50]
+                    if ca is not None:
+                        hit = ca.resolve(_concept_head(phrase))
+                        if hit:
+                            label = f"{hit.get('term')}"
+                    bindings.setdefault(sym.group(0), []).append((base + pos, label))
+        for k in bindings:
+            bindings[k].sort()
+
+    def ground(sym, g):
+        """Latest binding of SYM at-or-before global offset G (its scope)."""
+        cand = [(p, lab) for p, lab in bindings.get(sym, []) if p <= g]
+        return cand[-1][1] if cand else None
+
     for f in tex_files:
         base = bases[f["file"]]
         ftext = f["text"]
@@ -252,13 +282,18 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                 if sm.start() > 0 and body[sm.start() - 1] == "\\":
                     continue  # it's a control-sequence name, handled below
                 sym = sm.group(0)
-                counts["symbol"] = counts.get("symbol", 0) + 1
                 g = base + body_off + sm.start()
-                marks.append({
+                bound = ground(sym, g)
+                kind = "symbol-grounded" if bound else "symbol"
+                counts[kind] = counts.get(kind, 0) + 1
+                mark = {
                     "start": g, "end": g + len(sym),
-                    "layer": "dp", "kind": "symbol",
-                    "tip": f"symbol {sym}",
-                })
+                    "layer": "dp", "kind": kind,
+                    "tip": (f"{sym} : {bound}" if bound else f"symbol {sym} (ungrounded)"),
+                }
+                if bound:
+                    mark["fields"] = [["symbol", sym], ["bound", bound]]
+                marks.append(mark)
             for m in CSEQ_RE.finditer(body):
                 cs = m.group(1) or m.group(2)
                 cls = sweep.classify_cseq(cs, macros, roles, plain)
