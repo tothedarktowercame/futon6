@@ -72,3 +72,9 @@ On return, `holes/loss-ledger.md` is the trajectory; `git log` shows what
 capabilities landed (each detector commit names the capability + before/after
 numbers); the claim ledgers (`data/loss/claims.jsonl`, `data/warp/claims.jsonl`)
 show who did what.
+- ☐ **memory-safe batch runner** (found 2026-06-13): `dp_batch.py` OOM'd at 8/200
+  (loads concept-authority/nlab/mathlib in-process per paper, leaks). Needs
+  subprocess-per-paper isolation before scaling the corpus. → codex-3.
+- ☐ **display-defined (`:=`) symbol grounding** (found 2026-06-13): symbols
+  defined in display equations (the codiagonal `:=` class, R6) are still
+  ungrounded — a real C-SYM-GROUND lever. → claude-3.
