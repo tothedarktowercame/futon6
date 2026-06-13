@@ -14,3 +14,4 @@ holes). See `holes/dp-fleet-plan.md` for the capability targets.
 | 2026-06-13T18:32:29 | 231 | 57% | 859 | 324767 | round 4: corpus scaled 62->227; residue analysis (tail NOT irreducible); citation-DEBT bridge (0 internal resolutions) |
 | 2026-06-13T20:16:38 | 261 | 70% | 0 | 220054 | FULL REGEN by claude-1 (agents stalled on it 3x): appositive + noise-context + current wf applied corpus-wide |
 | 2026-06-13T20:51:24 | 261 | 70% | 0 | 219924 | round 5: def-equation/name-verb grounding (+0.5pp); residue re-analysis -> NEAR ACHIEVABLE CEILING ~70%; warp DEBT refreshed |
+| 2026-06-13T21:57:53 | 261 | 75% | 0 | 174469 | FINAL REGEN (claude-1): $-parity root fix (a21e774, reviewed PASS — recovers swallowed-prose denominators) + appositive lexicon ext; grounding axis -> structural ceiling |
