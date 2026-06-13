@@ -88,7 +88,13 @@ TYPE_NOUNS = (
     r"objects?|groups?|groupoids?|subgroups?|monoids?|semigroups?|"
     r"rings?|fields?|sets?|subsets?|spaces?|maps?|mappings?|functions?|"
     r"ideals?|operads?|sheaves|schemes?|varieties|manifolds?|complexes|"
-    r"transformations?|representations?|extensions?|monomials?")
+    r"transformations?|representations?|extensions?|monomials?|"
+    # conservative extension (claude-2's final lever): high-confidence,
+    # unambiguous type-nouns only. EXCLUDES form/relation/theory/number — those
+    # frequently do NOT type a single symbol ("a relation $R$ on", "number $n$ of
+    # elements"). All plurals end in "s", so the plural-conjunct gate stays valid.
+    r"points?|elements?|pairs?|vectors?|sequences?|famil(?:y|ies)|bundles?|"
+    r"lattices?")
 APPOSITIVE_RE = re.compile(
     r"\b(?:an?|the|any|some|every|each)\s+"
     r"([^.,;:]{0,40}?\b(?:" + TYPE_NOUNS + r"))\s+(\$[^$]+\$)")
