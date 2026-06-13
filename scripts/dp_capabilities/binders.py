@@ -99,6 +99,20 @@ APPOSITIVE_RE = re.compile(
 # singular "the map $f$ and $g$" must NOT drag $g$ in — $g$ may be unrelated).
 APPOS_CONJ_RE = re.compile(r"\s*(?:,\s*and\s+|,\s*|\s+and\s+)(\$[^$]+\$)")
 
+# DEF-EQUATION / NAME-VERB (claude-2's sequence). A definitional LEAD-IN verb
+# (set/put/define/let/write/denote) before "$X = ...$" makes even a BARE "="
+# definitional and grounds the LHS symbol X — WITHOUT the lead-in, a bare
+# "$X = Y$" is an assertional equation and is deliberately NOT grounded (the
+# precision gate: lead-in or := required, never a bare equality). group(1) = the
+# LHS bare symbol; ":?=(?!=)" accepts "=" or ":=" but not "==".
+DEF_EQ_RE = re.compile(
+    r"\b(?:[Ww]e\s+)?(?:[Ss]et|[Pp]ut|[Dd]efin\w+|[Ll]et|[Ww]rite|[Dd]enote)\b\s+"
+    r"\$\\?([A-Za-z][A-Za-z0-9]*)\s*:?=(?!=)")
+# "we call $X$ [and $Y$ ...] <name>" — a naming; bind the symbol(s) to the name.
+CALL_RE = re.compile(
+    r"\b[Ww]e\s+call\s+(\$[^$]+\$(?:\s+and\s+\$[^$]+\$)*)\s+"
+    r"(?:an?\s+|the\s+)?([^.,;:]+?)(?=[.,;:]|$)")
+
 # INFORMAL PROOF MOVES (Joe). Not the strategies an author *executes* (those
 # are the futon3 math-informal flexiargs) but the *rhetoric of the proof*: the
 # discourse gestures that assert a step while declining to carry it out — "it

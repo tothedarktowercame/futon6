@@ -35,7 +35,9 @@ from dp_capabilities.binders import (
     APPOS_CONJ_RE,
     APPOSITIVE_RE,
     BINDER_RE,
+    CALL_RE,
     CONJUNCT_RE,
+    DEF_EQ_RE,
     DEFINE_RES,
     IS_RE,
     QUANT_RES,
@@ -139,6 +141,14 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             for rx in WHERE_RES:
                 for m in rx.finditer(f["text"]):
                     pairs.append((m.group(1), m.group(2), m.start()))
+            # def-equation: a lead-in verb (set/put/let/...) + "$X = ...$" makes
+            # a bare = definitional -> ground X (bare assertional = is rejected).
+            for m in DEF_EQ_RE.finditer(f["text"]):
+                pairs.append((m.group(1), "definitional equation", m.start()))
+            # naming: "we call $X$ [and $Y$] <name>" -> bind each symbol to name.
+            for m in CALL_RE.finditer(f["text"]):
+                for sm in re.finditer(r"\$[^$]+\$", m.group(1)):
+                    pairs.append((sm.group(0), m.group(2), m.start()))
             # appositive typing: "<det> <type-noun-phrase> $X$" (a Hopf algebra
             # $H$) — the type-THEN-symbol direction the binders above miss; the
             # biggest remaining grounding lever (~78% of the ungrounded tail).
