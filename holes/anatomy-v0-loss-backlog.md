@@ -92,3 +92,35 @@ Note: nlab-wiring.py is the SHARED superpod detector (nLab/papers/
 missions). (1) is strictly additive/safe; (2) needs a corpus re-check
 (could over-fire on "is defined" prose). Dispatch (2) with the
 golden-walk specimens as the test set.
+
+## C5 — the dense-definition blindness (codiagonal passage, proofread 2026-06-13)
+
+Specimen (Joe): "If $M$ is a right $A$-module, then it is not difficult to
+check that [big eqnarray of GrCalc \gbeg/\got/\gcl... ] := [...] equips
+$M\ot H$ with a structure of right $A$-module, usually referred to as the
+{\em codiagonal} one." — "a mess in the current markup regime." Multiple
+distinct scope problems in ONE passage:
+
+1. **GrCalc layout noise (R15 not applied in dp_paper_view).** \gbeg \got
+   \gcl \grm \gmu \gbr \gcn \gob \gnl \gvac \scalebox are diagram/layout
+   macros; they resolve as author-defined but role-UNKNOWN → role-gap noise
+   filling the display. Fix: classify GrCalc (and \newcommand layout macros)
+   as a `layout` class, excluded from role-gap/symbol accounting (the R15
+   semantic-class column, ported into the sweep).
+2. **`:=` in a display defines a structure (R6).** The eqnarray defines the
+   codiagonal right-$A$-module structure on $M\ot H$; not recognised as a
+   definition (the := display-binder). Should emit a bind/define scope whose
+   definiendum is the constructed structure.
+3. **`{\em codiagonal}` emphasis definiendum (C4).** The named structure is
+   introduced by emphasis ("referred to as the {\em codiagonal} one") — the
+   prose-definiendum gap, still open.
+4. **Conditional binder ("If $M$ is a right $A$-module").** Now grounds $M$
+   via the assume scope (C5 fix landed: manifest-grounding) — but the type
+   extraction from the assume phrase is crude ("is a X" regex).
+
+Grounding status after manifest-grounding: 72% (was 66%); 3272 symbols
+still ungrounded — genuine debt (indices, ad-hoc vars, reference-bound, and
+symbols inside GrCalc displays that are layout-noise not real symbols — (1)
+would remove many). Order: (1) GrCalc/layout quarantine clears the display
+noise AND drops the false ungrounded-symbol count; then (2)/(3) the
+:=-definition + emphasis-definiendum; (4) assume-type quality.
