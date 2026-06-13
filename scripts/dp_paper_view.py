@@ -146,6 +146,16 @@ def detect_scope_manifest(ftext, base, entity_id, nw, ca):
         if pos is None or end is None or end <= pos:
             continue
         stype = s.get("hx/type", "scope")
+        # Clamp the overlay extent. Environment scopes (theorem/proof/defn)
+        # legitimately span multiple sentences; binder/constraint/quantifier
+        # scopes must NOT cross a sentence boundary — the period is English,
+        # not mathematics (Joe). Stop before the first ". " after pos.
+        if not stype.startswith("env/"):
+            sent = ftext.find(". ", pos)
+            if sent != -1 and sent < end:
+                end = sent
+        else:
+            end = min(end, pos + 400)  # bounded, but room for a real env
         ends = s.get("hx/ends", [])
         fields = []
         for e in ends:
@@ -161,8 +171,10 @@ def detect_scope_manifest(ftext, base, entity_id, nw, ca):
                     if hit:
                         fields.append(["canon", f"{hit.get('term')} [{hit.get('target')}]"])
                         break
+        if end <= pos:
+            continue
         out.append({
-            "start": base + pos, "end": base + min(end, pos + 200),
+            "start": base + pos, "end": base + end,
             "layer": "scope", "kind": stype,
             "tip": f"{stype} · " + " | ".join(f"{r}:{v}" for r, v in fields[:3]),
             "fields": fields or None,
