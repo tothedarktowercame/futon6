@@ -133,3 +133,106 @@ and should be *recorded* as `irreducible-debt`, not chased.
 exhausted the *binder-shaped* constructs (Let/is-a/define/quantifier/where).
 The residue is dominated by a *different shape* — appositive typing — plus a
 fixable noise floor. Two more capabilities, not a floor.
+
+---
+
+# UPDATE 2026-06-13 — residue at ~66–70% (after appositive + def-eq + noise landed)
+
+**Task** (claude-1 → claude-2): the predicted levers all landed — appositive
+typing (`b45380e` + conjuncts `bc1937c`), def-equation/name-verb (`DEF_EQ_RE`/
+`CALL_RE`), script-base & R6 display-`:=` grounding, and noise-exclusion
+(`b5d8a67` base + `436ae14` in-math ref-keys/array/`\mathrm`-spacers). Full
+regen lifted corpus grounding to ~70% with WF 0 (the 859 wf-errors were all
+stale-golden). What is the remaining ~30% made of, and is there another lever?
+
+## Method / snapshot
+
+Corpus has grown to **261 golden papers** (from 62). Numbers are **pooled over
+all marks** (not per-paper averaged) on the freshly-regenerated golden; the
+corpus may still be partially mid-regen, so treat composition ratios as the
+stable signal. Pooled headline:
+
+| | count | % of denom |
+|---|---|---|
+| denominator (symbol + grounded) | 947,179 | — |
+| grounded | 628,567 | **66.4%** (pooled) |
+| ungrounded (C-SYM-GROUND) | 318,612 | 33.6% |
+| already-excluded non-symbols (layout + text-mode) | 44,757 | — |
+
+(claude-1's ~70% is the per-paper-averaged best_guess; pooled is 66.4% — both
+consistent, per-paper averaging up-weights small high-coverage papers.)
+
+## Composition of the remaining ungrounded residue
+
+| bucket | count | % of ungrounded | category |
+|---|---|---|---|
+| single-letter | 157,589 | 49.5% | mostly (a) — see below |
+| multichar-alpha | 99,802 | 31.3% | mixed (a)/(c) |
+| english-noise (prose words, STOP-filtered) | 47,684 | 15.0% | (c) noise |
+| other (punctuation-bearing) | 10,862 | 3.4% | mixed |
+| latex/layout-noise | 2,675 | 0.8% | (c) — down from 2.0%, `436ae14` helped |
+
+Two structural facts drive the categorization:
+
+- **Index/dummy letters dominate the single-letter bucket**: `i,j,k,l,m,n,p,q,
+  r,s,t,d` = **53,429 (33% of all single letters)**. A summation/subscript index
+  (`\sum_i`, `x_i`) is a *bound dummy* — it has no introducing construct to
+  detect, and grounding it to a "type" is not meaningful. This is honest floor,
+  not a missed capability.
+- **The multichar bucket is mostly boundary-drift prose**, not symbols: its top
+  tokens are `the×6543, of×3983, is×2736, and×2410, to, in, that, for, we, by,
+  be, with, are, an, category…` — English words mis-tagged as symbols where a
+  `$$`-display closes and inter-formula prose runs into the next `$`. Plus a tail
+  of GrCalc display-macro fragments (`rr, dr, dd, dl, Fo, ur`) and a few real
+  compound symbols (`ij, id, op`). So a large slice of "multichar-alpha" + all of
+  "english-noise" is the **same $$/$ boundary-parity noise** — together ≈ 75–80k.
+
+## (a)/(b)/(c) verdict
+
+- **(c) Residual NOISE — ≈ 24% of the ungrounded (≈ 75–80k).** Boundary-drift
+  English prose (the/of/is/and/that/for…) mis-tagged via `$$`/`$` parity drift,
+  plus GrCalc display fragments. This is the **already-identified, already-scoped
+  `$$/$` boundary-parity ROOT fix** (claude-1's checker-half + claude-4's
+  wf-error car) — a DENOMINATOR correction, **not a new grounding lever**.
+  Excluding it lifts pooled grounded **66.4% → ~72–73%** with zero new detection.
+- **(a) IRREDUCIBLE / DUMMY — the bulk of the single-letter core.** Index/dummy
+  variables (53k+) and generic variables (`x,y,z,a,b,c,u,v,g…`) used throughout
+  with no local typing introduction. No construct introduces a free index — this
+  is honest `irreducible-debt`, the achievable floor.
+- **(b) NEXT detectable construct — appositive LEXICON EXTENSION (incremental).**
+  The one genuine remaining grounding lever. Sample (24 papers): residue head-
+  letters preceded by `<determiner> … <noun> $X$` where the noun is NOT in the
+  current `TYPE_NOUNS` lexicon = **754 gap-occurrences** vs **521 in-lexicon
+  misses**. Top gap type-nouns: `point, element, pair, vector, sequence, family,
+  lattice, bundle, connection, inclusion, cospan, cover, product, triple`. But:
+  (i) yield is **far smaller** than the original appositive lever (−601); (ii)
+  ~40% of "gap nouns" are false matches (`and, that, for, unique, principal` —
+  not type-nouns); (iii) several real candidates are precision-risky (`form`,
+  `relation`, `theory` often DON'T type a single symbol: "a relation between
+  $x$ and $y$", "in the form of $X$"). The 521 in-lexicon misses are
+  detector-tightening (determiner/adjacency variants), not a new construct.
+
+## Recommendation: near the achievable ceiling; one small lever left
+
+We have largely exhausted construct-based grounding. The two biggest residue
+chunks are **not** new-lever territory:
+
+1. **Residual boundary-drift noise (~24%)** → the already-scoped `$$/$` parity
+   root fix. Do this first: it is a denominator correction worth **~+6pp**
+   (66.4% → ~72–73%) and it also kills claude-4's wf-error family (one root).
+2. **Index/dummy/generic variables** → irreducible honest debt; record as
+   `irreducible-debt`, do not chase.
+
+The ONE worthwhile remaining grounding lever is **a conservative appositive
+lexicon extension** — add only high-confidence, unambiguous type-nouns
+(`point, element, pair, vector, sequence, family, bundle, lattice`) under the
+existing determiner + head-position gate; **exclude** the ambiguous ones
+(`form, relation, theory, number`). Estimated yield: a **few percentage points**
+of numerator grounding, not another −601. Optionally recover the 521 in-lexicon
+misses via a small determiner/adjacency loosening (precision-gated).
+
+**Bottom line:** after (1) the pending boundary-parity denominator fix and (2)
+one conservative lexicon extension, the corpus reaches its structural ceiling —
+roughly **mid-to-high 70s % grounded** — and the remainder is honest irreducible
+debt (bound indices, dummy/generic variables with no introduction). There is no
+third big lever; the curve has flattened by design, not by oversight.
