@@ -193,6 +193,15 @@ MACRO_CONCEPT_ALIASES = {
     "Cat": "category",
     "Set": "set",
 }
+NON_CONCEPT_DEBT_WORDS = {
+    "all", "every", "some", "forall", "exists", "quantified", "variable",
+    "variables", "script", "follow", "following", "where", "when", "then",
+    "there", "such", "let", "rightarrow", "leftarrow", "otimes", "oplus",
+    "times", "maps", "map", "object", "objects", "element", "elements",
+    "family", "between", "single", "two", "structure", "equivalence",
+    "only", "end", "equation", "function", "functions", "set", "sets",
+    "pair", "pairs", "fact",
+}
 
 
 def load_module(name: str, path: Path):
@@ -246,14 +255,32 @@ def is_macro_origin(term: str) -> bool:
     return term.strip().startswith("\\")
 
 
+def is_noise_concept_label(term: str) -> bool:
+    label = norm_label(term)
+    words = label.split()
+    if not words:
+        return True
+    if any(re.fullmatch(r"[A-Za-z]", word) for word in words):
+        return True
+    if any(word in NON_CONCEPT_DEBT_WORDS for word in words):
+        return True
+    if len(words) == 1 and words[0] in {"map", "set", "class", "case"}:
+        return True
+    return False
+
+
 def concept_debt_label(original_term: str, term: str, authority) -> str | None:
     if is_macro_origin(original_term):
         name = original_term.strip()[1:]
         alias = MACRO_CONCEPT_ALIASES.get(name) or MACRO_CONCEPT_ALIASES.get(name.lower())
         if not alias:
             return None
+        if is_noise_concept_label(alias):
+            return None
         return alias
     if not is_reportable_term(term):
+        return None
+    if is_noise_concept_label(term):
         return None
     label = norm_label(term)
     words = label.split()
