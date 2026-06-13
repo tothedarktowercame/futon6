@@ -69,3 +69,26 @@ Detector gap vs genuinely absent — sample to decide per class.
    mission surfacing.
 4. Re-run both sweeps to measure the new floors; then **C3 / M2 / M3** against
    the residue.
+
+## C4 — prose-concept definitions are dark (proofread-sourced, 2026-06-13)
+
+Operator proofread tag (Joe, "incomplete", 0809.2517 Galois2.tex:152):
+"an $H$-Galois object is defined to be an $H$-comodule algebra $A$ such
+that …" → detect_scopes returns ZERO scopes. Two gaps:
+
+1. **Cheap:** the `is-called` regex alternation is `(called|defined as)`
+   — add `defined to be` / `to be`. Catches the bare-$symbol$ variants.
+2. **Real:** the definiendum here is a PROSE CONCEPT PHRASE ("$H$-Galois
+   object"), not a bare $-symbol. Needs a prose-definiendum regex:
+   `(an?|the)\s+(<concept-phrase incl. $math$>)\s+is\s+(defined to be|
+   called|said to be)\s+(<def>)` → emit bind/define with the concept as
+   definiendum (the golden-walk emphasis-definiendum lesson, R-rules).
+   This is the same class the golden builder caught via {\em …}; the
+   superpod detector doesn't have it.
+3. The sentence's `\cite[Definition 3.1]{Sch1}` is authored-layer
+   (label/ref/cite harvest) — already the dashboard's `·` not-yet row.
+
+Note: nlab-wiring.py is the SHARED superpod detector (nLab/papers/
+missions). (1) is strictly additive/safe; (2) needs a corpus re-check
+(could over-fire on "is defined" prose). Dispatch (2) with the
+golden-walk specimens as the test set.
