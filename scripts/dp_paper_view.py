@@ -44,11 +44,11 @@ def detect_binders(ftext, base, ca):
     out = []
     for m in BINDER_RE.finditer(ftext):
         subj, phrase = m.group(1), m.group(2).strip()
-        binders = [(subj, phrase, m.start(1), m.end(1))]
-        # conjoined "and $Y$ a <concept>" riding the same Let
+        # scope extent = the whole "Let $X$ be <concept>" / "and $Y$ <concept>"
+        binders = [(subj, phrase, m.start(), m.end())]
         for cm in CONJUNCT_RE.finditer(ftext, m.end(), m.end() + 160):
             binders.append((cm.group(1), cm.group(2).strip(),
-                            cm.start(1), cm.end(1)))
+                            cm.start(), cm.end()))
         for subj, phrase, ss, se in binders:
             concept = None
             if ca is not None:
