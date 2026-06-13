@@ -11,50 +11,59 @@ concept cite another corpus paper that defines it?
 
 ## Result
 
-No positive citation bridges were found for the 18 corpus-undefined frontier
-concepts. The holes are therefore not self-contained via the current citation
-graph and concordance definitions. They should be grounded to their external
-nLab/Lean/PlanetMath anchors rather than resolved by following corpus citations.
+Positive bridges using corpus-debt provenance terms: `0`.
+Positive bridges using normalized concept labels: `0`.
+
+The corpus-debt v2 undefined status is provenance-term based: for example,
+`\smcat` and `\inprod` have no `role=defined` rows. A stricter
+concept-label scan finds in-corpus definitions for two labels
+(`symmetric monoidal category`, `inner product`), but no using paper cites
+those defining papers. The graph therefore still does not self-contain the
+frontier holes.
+
+Grounding strategy: use external nLab/Lean/PlanetMath anchors for all 18;
+optionally also attach the two label-level in-corpus definers as secondary
+anchors after the concordance role/provenance model is reconciled.
 
 ## Bridge Table
 
-| concept | papers using | corpus defining papers | citation bridges found | verdict |
-|---|---:|---:|---:|---|
-| homotopy colimit | 168 | 0 | 0 | external dependency |
-| 2 category | 115 | 0 | 0 | external dependency |
-| homotopy limit | 101 | 0 | 0 | external dependency |
-| cocartesian fibration | 83 | 0 | 0 | external dependency |
-| dg category | 76 | 0 | 0 | external dependency |
-| Frobenius Perron dimension | 69 | 0 | 0 | external dependency |
-| global dimension | 54 | 0 | 0 | external dependency |
-| oplax functor | 46 | 0 | 0 | external dependency |
-| coend | 41 | 0 | 0 | external dependency |
-| filtered colimit | 37 | 0 | 0 | external dependency |
-| simplex category | 35 | 0 | 0 | external dependency |
-| module category | 32 | 0 | 0 | external dependency |
-| pretriangulated category | 29 | 0 | 0 | external dependency |
-| right dual | 27 | 0 | 0 | external dependency |
-| cobar construction | 27 | 0 | 0 | external dependency |
-| symmetric monoidal category | 26 | 2 (`0706.0711`, `0809.2517`) | 0 | corpus definition exists, but is not cited by users |
-| inner product | 26 | 1 (`0706.0711`) | 0 | corpus definition exists, but is not cited by users |
-| operad | 17 | 0 | 0 | external dependency |
+| concept | papers using | provenance-term definitions | concept-label definitions | citation bridges | verdict |
+|---|---:|---:|---:|---:|---|
+| homotopy colimit | 168 | 0 | 0 | 0 | no corpus concept-label definition |
+| 2 category | 115 | 0 | 0 | 0 | no corpus concept-label definition |
+| homotopy limit | 101 | 0 | 0 | 0 | no corpus concept-label definition |
+| cocartesian fibration | 83 | 0 | 0 | 0 | no corpus concept-label definition |
+| dg category | 76 | 0 | 0 | 0 | no corpus concept-label definition |
+| Frobenius Perron dimension | 69 | 0 | 0 | 0 | no corpus concept-label definition |
+| global dimension | 54 | 0 | 0 | 0 | no corpus concept-label definition |
+| oplax functor | 46 | 0 | 0 | 0 | no corpus concept-label definition |
+| coend | 41 | 0 | 0 | 0 | no corpus concept-label definition |
+| filtered colimit | 37 | 0 | 0 | 0 | no corpus concept-label definition |
+| simplex category | 35 | 0 | 0 | 0 | no corpus concept-label definition |
+| module category | 32 | 0 | 0 | 0 | no corpus concept-label definition |
+| pretriangulated category | 29 | 0 | 0 | 0 | no corpus concept-label definition |
+| right dual | 27 | 0 | 0 | 0 | no corpus concept-label definition |
+| cobar construction | 27 | 0 | 0 | 0 | no corpus concept-label definition |
+| symmetric monoidal category | 26 | 0 | 2 (`0706.0711`, `0809.2517`) | 0 | label definition exists, but users do not cite it |
+| inner product | 26 | 0 | 1 (`0706.0711`) | 0 | label definition exists, but users do not cite it |
+| operad | 17 | 0 | 0 | 0 | no corpus concept-label definition |
 
 ## Spot Checks
 
-There were no bridges to resolve, so the positive-bridge gate is inapplicable.
-I checked the negative result directly:
+There are no positive bridges to resolve. I checked the disagreement mode directly:
 
-- `homotopy colimit`: `168` using papers via `\hocolim`; no concordance row
-  defines `homotopy colimit`, so no cited corpus definition can exist.
-- `oplax functor`: `46` using papers via `\Oplax` / `\oplax`; no concordance row
-  defines `oplax functor`, so no cited corpus definition can exist.
-- `symmetric monoidal category`: `26` using papers and two defining corpus
-  papers (`0706.0711`, `0809.2517`), but none of the outgoing citation edges
-  from the using papers target either defining paper.
+- `\smcat`: `26` used rows and `0` defined rows for the provenance term;
+  the normalized label `symmetric monoidal category` has definitions in
+  `0706.0711` and `0809.2517`, but none of the 26 users cite those papers.
+- `\inprod`: `26` used rows and `0` defined rows for the provenance term;
+  the normalized label `inner product` has a definition in `0706.0711`,
+  but none of the 26 users cite it.
+- `homotopy colimit`: `168` users via `\hocolim`; no provenance-term or
+  normalized-label corpus definition exists, so no citation bridge can exist.
 
 ## Method
 
 For each frontier concept, collect using papers from its provenance
-`concordance_terms`, collect defining papers by normalized concept label in the
-concordance (`role=defined`), then intersect the using papers' outgoing
-citation targets with the defining-paper set.
+`concordance_terms`, collect defining papers in two modes (exact provenance
+term and normalized concept label), then intersect the using papers'
+outgoing citation targets with each defining-paper set.
