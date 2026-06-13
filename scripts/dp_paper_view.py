@@ -61,6 +61,10 @@ def detect_binders(ftext, base, ca):
                 "layer": "dp", "kind": "let-binder",
                 "tip": f"binds {subj} : {phrase[:60]}"
                        + (f" · concept: {concept}" if concept else ""),
+                # structured fields → Scratch-style nested render in the panel
+                "fields": [["binds", subj],
+                           ["as", phrase[:70]],
+                           ["canon", concept or "— (unresolved)"]],
             })
     return out
 
