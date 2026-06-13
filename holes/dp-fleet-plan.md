@@ -117,3 +117,20 @@ papers average the ceiling); the value is representativeness + a comprehensive
 concept-DEBT frontier. Throttled subprocess batches; warp artifacts refreshed
 as the corpus grows. → codex-3 scaling; claude-1 measures + logs each tick.
 
+## Breadth stress-test finding (2026-06-14): one pathological outlier
+
+The 949-paper scale showed 4215 wf errors — but the diagnostic proved they are
+NOT stale (persist after current-detector regen) and come almost ENTIRELY from
+ONE paper: 1001.4071, a 1.2M-char book-length doc with unusual `$$...$$` spans
+that embed LaTeX comments (`$$}%%ascii three dollars...`). All 4215 are W-ATOMIC
+(bind/typed boundaries inside these weird display spans that the snap pass
+doesn't handle). The OTHER 948/949 papers are wf-CLEAN.
+- ☐ **outlier-span handling** (real detector-generalization bug, HIGH value but
+  not loop-cheap): make the snap pass handle long/comment-embedded `$$` display
+  spans so bind/typed boundaries snap out. Until then, 1001.4071 is a KNOWN
+  outlier — the corpus is effectively wf-clean (948/949). Do NOT exclude it to
+  hide the number (that's gaming); fix the span handling or report it as a
+  flagged outlier. → a focused detector task / Joe's prioritization.
+NOTE: the "clean full regen" ledger row mislabeled this as staleness; it is a
+real single-paper outlier. The corpus wf is honestly "0 except 1 outlier paper".
+
