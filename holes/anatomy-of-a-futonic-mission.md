@@ -78,7 +78,9 @@ of the theory than that sentence.) Its statement of intent
 is rewritten in a four-part design-pattern form (*if / however / then /
 because*) and compiled into a numerical fingerprint — the system borrows the
 word *sigil*, after an earlier experiment in which simulated ants were
-animated by installing exactly such fingerprints. From the sigil the system
+animated by installing exactly such fingerprints. (To actually compile one for
+a mission of your own, see `futon5/README-sigils.md` — the compilation is a
+script, `head_exotype_probe.py`, not a hand-authored value.) From the sigil the system
 computes birth vitals; the design states in advance what observations would
 prove it wrong; the work even argues for its own existence against the
 strongest objections we could write down, and carries a clause that declares

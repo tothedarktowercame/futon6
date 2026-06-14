@@ -66,6 +66,16 @@ IDENTIFY  →  MAP  →  DERIVE  →  ARGUE  →  VERIFY  →  INSTANTIATE
 You don't need to follow every step for small changes. But for anything that
 establishes a precedent or commits to an architecture, the full sequence pays off.
 
+**Sigils (the AIF reading of a mission HEAD).** When a mission gets the
+"organism reading" (HEAD → sigil → birth vitals → failure conditions; see
+`holes/anatomy-of-a-futonic-mission.md`), the sigil — the 8-bit exotype + the
+per-clause xenotype-32 over the I-Ching/iiching anchors — is a **computed**
+artifact, not authored. Don't hand-wave or fabricate the bitstrings: run the
+probe. The full recipe (command, the `**IF:**`-block format the regex needs, the
+output schema, and a worked example) is in **`../futon5/README-sigils.md`**.
+One-liner: `../futon6/.venv/bin/python ../futon5/scripts/head_exotype_probe.py
+<mission.md> --emit-health`.
+
 ### PSR/PUR Discipline
 
 When applying a pattern from the library:
