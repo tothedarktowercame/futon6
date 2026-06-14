@@ -10,6 +10,19 @@ colored by anatomy kind; a per-scope local-incompleteness metric (ungrounded
 fraction within the scope) scatter-adds into a topographic terrain.
 
     warp_greatest_hits.py -> data/warp/greatest-hits.html
+
+Scopes are AGGREGATED per (paper, anatomy-kind-class): one glyph per kind, sized
+~ scope count, so each paper yields <=6 glyphs (<~1.2k total).
+
+History (perf / OOM hazard, measured & fixed 2026-06-14): the original emitted
+ONE <circle> (each with a nested <title>) AND one <line> per scope-MARK across
+all ~194 papers. Real papers carry thousands of marks each, so output exploded
+to ~793k circles + ~795k lines + 6k rects on a single HTML line (189 MB,
+~1.6M DOM nodes) — which OOMs Firefox and trips librsvg's 1M-element cap; 60% of
+the dots were one kind (teal "math", ~478k), saturating the canvas. The per-kind
+aggregation below replaced that. If you ever need per-mark detail again, don't
+render it as DOM at this scale: rasterise the flat geometry directly to PNG
+(circles/lines/rects); a browser is the wrong tool at that node count.
 """
 import json
 import math
@@ -34,6 +47,25 @@ def kindcol(k):
     if k.startswith("assume") or k.startswith("quant"):
         return "#2f9f6a"
     return "#8893a8"
+
+
+# six anatomy-kind classes (legend order); raw marks bucket into these so one
+# paper yields <=6 aggregate glyphs instead of one dot per scope-mark.
+CLASSES = ["bind", "constrain", "math", "proof-move", "assume", "other"]
+
+
+def classof(k):
+    if k == "let-binder" or k.startswith("bind"):
+        return "bind"
+    if k.startswith("constrain"):
+        return "constrain"
+    if k == "math":
+        return "math"
+    if k == "proof-move":
+        return "proof-move"
+    if k.startswith("assume") or k.startswith("quant"):
+        return "assume"
+    return "other"
 
 
 def scope_points(marks):
@@ -90,34 +122,43 @@ def main():
     hx = PAD + (VW - 2 * PAD) * (hub[:, 0] - hub[:, 0].min()) / (np.ptp(hub[:, 0]) + 1e-9)
     hy = PAD + (VH - 2 * PAD) * (hub[:, 1] - hub[:, 1].min()) / (np.ptp(hub[:, 1]) + 1e-9)
 
-    GOLDA = math.pi * (3 - math.sqrt(5))
+    # Aggregate per (paper, anatomy-kind-class): one glyph per kind, ringed
+    # around the hub at a fixed slot, area ~ scope count (log-scaled so the
+    # ~10^4-scope papers stay bounded), tooltip carries the count + mean
+    # incompleteness. Collapses ~793k dots to <=6 per paper.
+    ROFF = 24.0
     scope_pts, hub_lines, dots = [], [], []
     for i, p in enumerate(papers):
-        scs = paper_scopes[p]
-        n = len(scs)
-        R = 14 + 3.4 * math.sqrt(n)
         cx, cy = hx[i], hy[i]
-        for j, (k, metric) in enumerate(scs):
-            ang = j * GOLDA
-            rad = R * math.sqrt((j + 0.5) / n)
-            x, y = cx + rad * math.cos(ang), cy + rad * math.sin(ang)
-            scope_pts.append((x, y, metric))
+        agg = {}  # class -> [count, sum_metric]
+        for k, metric in paper_scopes[p]:
+            a = agg.setdefault(classof(k), [0, 0.0])
+            a[0] += 1
+            a[1] += metric
+        for c, (n, msum) in agg.items():
+            inc = msum / n
+            ang = CLASSES.index(c) / len(CLASSES) * 2 * math.pi
+            x, y = cx + ROFF * math.cos(ang), cy + ROFF * math.sin(ang)
+            r = 3.0 + 3.0 * math.log10(1 + n)
+            scope_pts.append((x, y, inc, n))
             hub_lines.append(f'<line x1="{cx:.0f}" y1="{cy:.0f}" x2="{x:.1f}" y2="{y:.1f}" '
-                             f'stroke="#33415a" stroke-width="0.4" opacity="0.35"/>')
-            dots.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.1" fill="{kindcol(k)}" '
-                        f'fill-opacity="0.85"><title>{p}: {k} (incompleteness {metric:.2f})</title></circle>')
+                             f'stroke="#33415a" stroke-width="0.5" opacity="0.4"/>')
+            dots.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{kindcol(c)}" '
+                        f'fill-opacity="0.85"><title>{p}: {c} ×{n} '
+                        f'(mean incompleteness {inc:.2f})</title></circle>')
 
     # terrain field (per-scope incompleteness), mission-efe technique
     STEP, SIG = 16, 30.0
     gw, gh = VW // STEP + 1, VH // STEP + 1
     grid = [[0.0] * gw for _ in range(gh)]
     rc = int(3 * SIG / STEP)
-    for x, y, mtr in scope_pts:
+    for x, y, mtr, n in scope_pts:
         cgx, cgy = int(round(x / STEP)), int(round(y / STEP))
+        wt = mtr * math.log10(1 + n)  # count-weighted, log-scaled like the glyph
         for vy in range(max(0, cgy - rc), min(gh, cgy + rc + 1)):
             for vx in range(max(0, cgx - rc), min(gw, cgx + rc + 1)):
                 d2 = (vx * STEP - x) ** 2 + (vy * STEP - y) ** 2
-                grid[vy][vx] += mtr * math.exp(-d2 / (2 * SIG * SIG))
+                grid[vy][vx] += wt * math.exp(-d2 / (2 * SIG * SIG))
     fmax = max(max(r) for r in grid) or 1.0
     NB = 7
     TERR = ["#0a0e1a", "#10243a", "#16374a", "#1f5a44", "#3f7a34", "#9c8a2c", "#c87a28"]
@@ -152,9 +193,9 @@ def main():
             '<body style="margin:0;background:#0a0e1a;color:#ccd;font:13px sans-serif">'
             f'<div style="padding:8px 14px">math.CT <b>greatest hits</b> — {len(papers)} most-cited '
             'in-corpus papers as DISTRICTS OF THEIR DETECTED SCOPES (apples-to-apples with the '
-            'mission-EFE portrait) · hubs = concept-multiplicity t-SNE · scope color = anatomy kind '
-            '(blue binder, purple constrain, teal math, amber proof-move, green assume/quant) · '
-            'terrain = per-scope incompleteness</div>'
+            'mission-EFE portrait) · hubs = concept-multiplicity t-SNE · one glyph per anatomy kind, '
+            'area ~ scope count (blue binder, purple constrain, teal math, amber proof-move, '
+            'green assume/quant, grey other) · terrain = count-weighted incompleteness</div>'
             f'<svg width={VW} height={VH}>{"".join(fill)}{"".join(contour)}'
             f'{"".join(hub_lines)}{"".join(dots)}</svg></body>')
     (W / "greatest-hits.html").write_text(html)
