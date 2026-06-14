@@ -97,6 +97,21 @@ def main():
                     "tension": round(float(tension[i]), 4), "n_concepts": ncon[i]}
                    for i in range(len(papers))]}))
 
+    # terrain field: OR-curvature (#1, the real metric) if computed, else tension.
+    orf = W / "or-curvature.json"
+    if orf.exists():
+        pk = json.load(open(orf))["paper_kappa"]
+        ks = np.array([pk.get(papers[i], np.nan) for i in range(len(papers))])
+        ks = np.where(np.isnan(ks), np.nanmedian(ks), ks)
+        lo, hi = np.nanpercentile(ks, 5), np.nanpercentile(ks, 95)
+        field = np.clip((ks - lo) / (hi - lo + 1e-9), 0, 1)
+        field_name = ("OR-curvature (real metric) · ridges = dense well-connected "
+                      "communities, valleys = bridges / frontier positioning")
+    else:
+        field = tension
+        field_name = ("temporal reaching-tension · ridges = frontier/new-idea, "
+                      "valleys = incremental")
+
     # ---- topographic render (mission-efe-field technique) ----
     VW, VH, PAD = 1600, 1000, 60
     xs, ys = xy[:, 0], xy[:, 1]
@@ -113,7 +128,7 @@ def main():
         for vy in range(max(0, cgy - rc), min(gh, cgy + rc + 1)):
             for vx in range(max(0, cgx - rc), min(gw, cgx + rc + 1)):
                 d2 = (vx * STEP - px[i]) ** 2 + (vy * STEP - py[i]) ** 2
-                grid[vy][vx] += tension[i] * math.exp(-d2 / (2 * SIGMA * SIGMA))
+                grid[vy][vx] += field[i] * math.exp(-d2 / (2 * SIGMA * SIGMA))
     fmax = max(max(r) for r in grid) or 1.0
     NB = 7
     TERR = ["#0a0e1a", "#10243a", "#16374a", "#1f5a44", "#3f7a34", "#9c8a2c", "#c87a28"]
@@ -148,16 +163,16 @@ def main():
                                    f'stroke="#e6edff" stroke-width="1" opacity="{0.22+0.07*li:.2f}"/>')
     dots = []
     for i in range(len(papers)):
-        col = f"rgb({int(60+195*tension[i])},{int(90+30*(1-tension[i]))},{int(210*(1-tension[i]))})"
-        dots.append(f'<circle cx="{px[i]:.1f}" cy="{py[i]:.1f}" r="{1.5+ncon[i]**0.5*0.4:.1f}" '
-                    f'fill="{col}" fill-opacity="0.7"><title>{papers[i]} '
-                    f't={tension[i]:.2f} n={ncon[i]}</title></circle>')
+        v = float(field[i])
+        col = f"rgb({int(60+195*v)},{int(90+30*(1-v))},{int(210*(1-v))})"
+        dots.append(f'<circle cx="{px[i]:.1f}" cy="{py[i]:.1f}" r="{0.7+ncon[i]**0.5*0.16:.1f}" '
+                    f'fill="{col}" fill-opacity="0.6"><title>{papers[i]} '
+                    f'field={v:.2f} tension={tension[i]:.2f} n={ncon[i]}</title></circle>')
     html = ('<!doctype html><meta charset=utf8><title>math.CT paper landscape</title>'
             '<body style="margin:0;background:#0a0e1a;color:#ccd;font:13px sans-serif">'
             f'<div style="padding:8px 14px">math.CT paper landscape — <b>{len(papers)} papers</b> · '
-            'geometry = concept-multiplicity embedding (real metric, superpod-free) · '
-            'terrain = temporal reaching-tension (ridges = frontier/new-idea regions, '
-            'valleys = incremental)</div>'
+            'geometry = concept-multiplicity embedding, t-SNE (superpod-free) · '
+            f'terrain = {field_name}</div>'
             f'<svg width={VW} height={VH}>{"".join(fill)}{"".join(contour)}{"".join(dots)}</svg></body>')
     (W / "paper-landscape.html").write_text(html)
     print(f"placed {len(papers)} / 9745 papers (>=2 embedded concepts); "
