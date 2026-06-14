@@ -147,6 +147,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     ap.add_argument("--paper", action="append", default=[], help="specific paper id(s); already-existing outputs are skipped unless --force")
     ap.add_argument("--force", action="store_true", help="rebuild --paper targets even if output exists")
     ap.add_argument("--log", type=Path, default=None, help="JSONL run log path")
+    ap.add_argument("--shard", default=None, help="k/n: process only todo papers where index%%n==k (clean disjoint partition for parallel runs; todo order is deterministic-sorted)")
     ap.add_argument("--worker-paper", help=argparse.SUPPRESS)
     return ap.parse_args(argv)
 
@@ -164,6 +165,9 @@ def main(argv: list[str] | None = None) -> int:
         n_missing = n_total - n_have
     else:
         todo, n_total, n_have, n_missing = candidates(args.limit)
+    if args.shard:
+        k, n = (int(x) for x in args.shard.split("/"))
+        todo = [p for i, p in enumerate(todo) if i % n == k]
     if args.force and args.paper:
         for paper in args.paper:
             golden_path(paper).unlink(missing_ok=True)
