@@ -47,13 +47,21 @@ math.LO    5      74%   100%  100%       0
   lexicon** (§3, step B). Run that way, NT grounds against NT concepts.
 
 ### Concept extraction is unbiased (parity)
-Within CT, DP-marked (992) vs classical-only (8750) papers are at parity on what
-the extractor sees — concepts/paper median 99 vs 103, defs/paper 39 vs 43. So
-landscape placement by concept-usage is fair corpus-wide. The DP set *is* a
-biased **sample** (citation in-deg mean 8.6 vs 2.5; median year 2009 vs 2020,
-because it's the early + most-cited papers) — which is exactly why the rollout
-marks **all** papers: it erases the selection bias. DP-exclusive metrics
-(grounding%, aliveness) should not be read as corpus-representative until then.
+Within CT, at validation-time snapshot the DP-marked (~1k) vs classical-only
+(~8.7k of 9742) papers were at parity on what the extractor sees — concepts/paper
+median 99 vs 103, defs/paper 39 vs 43. So landscape placement by concept-usage is
+fair corpus-wide. The DP-marked set *was* a biased **sample** (citation in-deg
+mean 8.6 vs 2.5; median year 2009 vs 2020, because it was the early + most-cited
+papers) — which is exactly why the rollout marks **all** papers: it erases the
+selection bias. DP-exclusive metrics (grounding%, aliveness) should not be read as
+corpus-representative until the whole class is marked.
+
+> Status (2026-06-14): the math.CT mark-all is **already running locally** (a
+> 4-way `dp_batch --shard` pass over the ~8.7k unmarked CT papers, ~12h), so the
+> CT selection bias is being closed now and CT will land fully marked. Rob's
+> full-corpus run is therefore primarily the **other** MSC classes; he can redo
+> CT on his complete corpus if he wants the canonical version, but it isn't the
+> bottleneck.
 
 ---
 
