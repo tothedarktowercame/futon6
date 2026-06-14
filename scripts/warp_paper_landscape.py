@@ -2,7 +2,7 @@
 """Paper landscape v2 (Joe): ALL papers + a topographic TENSION field.
 
 Geometry (real metric): each paper = tf-mean of its used-concept multiplicity-
-embedding vectors -> 2D via PCA. Now places EVERY concordance paper that uses
+embedding vectors (IDF-weighted) -> 2D via t-SNE (sklearn). Now places EVERY concordance paper that uses
 >=2 embedded concepts (classical coverage is the whole 9745-paper corpus).
 
 Field (the reading): TEMPORAL establishment-reaching tension, rendered as a
@@ -35,6 +35,7 @@ def adate(pid):
     return int(m.group(1)) if m else 9999
 
 
+
 def main():
     hl = json.load(open(W / "hitlist.json"))["hitlist"]
     concepts = [h["concept"] for h in hl]
@@ -64,20 +65,31 @@ def main():
                 for r in rows:
                     paper_concepts[r.get("paper")].add(c)
 
-    papers, vecs, tension, ncon = [], [], [], []
+    papers, placed_cs, tension, ncon = [], [], [], []
     for p, cs in paper_concepts.items():
         cs = [c for c in cs if c in cidx]
         if len(cs) < 2:
             continue
-        vecs.append(emb[[cidx[c] for c in cs]].mean(axis=0))
         pd = adate(p)
         tension.append(sum(1 for c in cs if first_def.get(c, 9999) >= pd) / len(cs))
-        papers.append(p); ncon.append(len(cs))
-    X = np.array(vecs, dtype=np.float32)
+        papers.append(p); placed_cs.append(cs); ncon.append(len(cs))
     tension = np.array(tension)
-    Xc = X - X.mean(0)
-    U, S, _ = np.linalg.svd(Xc, full_matrices=False)
-    xy = U[:, :2] * S[:2]
+    # IDF-weighted paper vectors (specific/rare concepts dominate = attestation),
+    # then t-SNE for spread + clusters (real DR, not hand-rolled force).
+    from collections import Counter
+    df = Counter(c for cs in placed_cs for c in cs)
+    Np = len(papers)
+    PV = np.zeros((Np, emb.shape[1]), dtype=np.float32)
+    for i, cs in enumerate(placed_cs):
+        wsum = 0.0
+        for c in cs:
+            w = math.log(Np / df[c])
+            PV[i] += w * emb[cidx[c]]; wsum += w
+        if wsum:
+            PV[i] /= wsum
+    from sklearn.manifold import TSNE
+    xy = TSNE(n_components=2, init="pca", perplexity=30, metric="cosine",
+              random_state=7).fit_transform(PV)
 
     (W / "paper-landscape.json").write_text(json.dumps({
         "schema": "paper-landscape-v2", "n_papers": len(papers),
@@ -88,8 +100,8 @@ def main():
     # ---- topographic render (mission-efe-field technique) ----
     VW, VH, PAD = 1600, 1000, 60
     xs, ys = xy[:, 0], xy[:, 1]
-    def mapx(v): return PAD + (VW - 2 * PAD) * (v - xs.min()) / (xs.ptp() + 1e-9)
-    def mapy(v): return PAD + (VH - 2 * PAD) * (v - ys.min()) / (ys.ptp() + 1e-9)
+    def mapx(v): return PAD + (VW - 2 * PAD) * (v - xs.min()) / (np.ptp(xs) + 1e-9)
+    def mapy(v): return PAD + (VH - 2 * PAD) * (v - ys.min()) / (np.ptp(ys) + 1e-9)
     px = [mapx(v) for v in xs]; py = [mapy(v) for v in ys]
 
     STEP, SIGMA = 16, 34.0
