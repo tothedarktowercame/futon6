@@ -134,3 +134,17 @@ doesn't handle). The OTHER 948/949 papers are wf-CLEAN.
 NOTE: the "clean full regen" ledger row mislabeled this as staleness; it is a
 real single-paper outlier. The corpus wf is honestly "0 except 1 outlier paper".
 
+
+## Outlier quarantine (2026-06-14): 1001.4071 — documented, NOT hidden
+
+Quarantined to data/quarantine/ + holes/dp-outlier-skiplist.txt. Reason: 1.2M-char
+book-length doc whose author writes ABOUT `$$` literally ("ascii three dollars")
+in LaTeX comments, breaking the math tokenizer into giant malformed display spans
+→ 4215 spurious W-ATOMIC (ALL of the corpus's wf errors) AND a ~2-hour detector
+hang (perf pathology, likely catastrophic regex backtracking). A genuine
+unrepresentative outlier distorting the metric AND jamming the pipeline; excluded
+transparently (skiplist + this note + ledger), NOT to flatter the number. The
+other 948 papers stand on their own.
+- [ ] detector hardening (deferred, real): bound span length / fix $$+comment
+  span pairing so such inputs neither hang nor mis-span. Until then 1001.4071
+  stays quarantined. -> focused detector task / Joe's prioritization.
