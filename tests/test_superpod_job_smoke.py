@@ -1401,3 +1401,27 @@ def test_arxiv_paper_stage5d_resume_keeps_existing_chunk_geometry_when_default_c
     assert "Reusing existing Stage 5d checkpoint geometry (32 papers/chunk)" in second.stdout
     assert "Stage 5d chunking: 2 chunks" in second.stdout
     assert "chunk 1/2 exists (32 papers), skipping" in second.stdout
+
+
+def test_load_eprint_text_gzip_single_file(tmp_path):
+    """Old-style arXiv eprints are gzipped single TeX files, not tarballs.
+
+    The 2026-02-20 CT run lost 3,882/9,916 papers to 'unusable' because the
+    loader tried tar-decode and gave up; plain gzip must be the fallback.
+    """
+    import gzip
+    import importlib.util
+    from pathlib import Path
+    repo_root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "superpod_job", str(repo_root / "scripts" / "superpod-job.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    eprint_dir = tmp_path
+    tex = "\\documentclass{article}\\begin{document}Let $H$ be a Hopf algebra.\\end{document}"
+    # the real-world case: bundler names EVERYTHING .tar.gz, including
+    # plain-gzipped single TeX files (3,882/9,916 in the CT run)
+    (eprint_dir / "q-alg__9503002.tar.gz").write_bytes(gzip.compress(tex.encode()))
+    text, meta = mod._load_eprint_text_for_entity(eprint_dir, "arxiv-q-alg/9503002")
+    assert meta["status"] == "ok", meta
+    assert "Hopf algebra" in text
