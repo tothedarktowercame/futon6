@@ -106,7 +106,7 @@ def main():
                       key=lambda r: -r["used_papers"])
     (W / "hitlist.json").write_text(json.dumps({
         "schema": "hitlist-v1", "n_groundable": len(hit),
-        "hitlist": hit[:1000], "frontier": frontier[:200]}))
+        "hitlist": hit[:4000], "frontier": frontier[:200]}))
     print(f"groundable concepts (used AND defined, noise-filtered): {len(hit)}")
     print("=== top 18 groundable (by used-breadth) ===")
     for h in hit[:18]:
