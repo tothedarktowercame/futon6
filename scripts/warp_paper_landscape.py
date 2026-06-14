@@ -161,13 +161,19 @@ def main():
                     (ax, ay), (bx, by) = cr[k], cr[k + 1]
                     contour.append(f'<line x1="{ax:.1f}" y1="{ay:.1f}" x2="{bx:.1f}" y2="{by:.1f}" '
                                    f'stroke="#e6edff" stroke-width="1" opacity="{0.22+0.07*li:.2f}"/>')
+    # dot color = Salingaros aliveness (#2 overlay) where available; terrain = field (#1).
+    alf = W / "aliveness.json"
+    alive = json.load(open(alf))["paper_aliveness"] if alf.exists() else {}
     dots = []
     for i in range(len(papers)):
-        v = float(field[i])
-        col = f"rgb({int(60+195*v)},{int(90+30*(1-v))},{int(210*(1-v))})"
+        a = alive.get(papers[i])
+        if a is None:                         # not DP-marked -> dim neutral
+            col, at = "rgb(105,115,135)", "—"
+        else:                                 # aliveness colormap (warm = alive)
+            col, at = f"rgb({int(50+205*a)},{int(70+110*a)},{int(190*(1-a))})", f"{a:.2f}"
         dots.append(f'<circle cx="{px[i]:.1f}" cy="{py[i]:.1f}" r="{0.7+ncon[i]**0.5*0.16:.1f}" '
-                    f'fill="{col}" fill-opacity="0.6"><title>{papers[i]} '
-                    f'field={v:.2f} tension={tension[i]:.2f} n={ncon[i]}</title></circle>')
+                    f'fill="{col}" fill-opacity="0.62"><title>{papers[i]} '
+                    f'alive={at} tension={tension[i]:.2f} n={ncon[i]}</title></circle>')
     html = ('<!doctype html><meta charset=utf8><title>math.CT paper landscape</title>'
             '<body style="margin:0;background:#0a0e1a;color:#ccd;font:13px sans-serif">'
             f'<div style="padding:8px 14px">math.CT paper landscape — <b>{len(papers)} papers</b> · '
