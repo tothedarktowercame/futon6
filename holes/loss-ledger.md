@@ -16,3 +16,4 @@ holes). See `holes/dp-fleet-plan.md` for the capability targets.
 | 2026-06-13T20:51:24 | 261 | 70% | 0 | 219924 | round 5: def-equation/name-verb grounding (+0.5pp); residue re-analysis -> NEAR ACHIEVABLE CEILING ~70%; warp DEBT refreshed |
 | 2026-06-13T21:57:53 | 261 | 75% | 0 | 174469 | FINAL REGEN (claude-1): $-parity root fix (a21e774, reviewed PASS — recovers swallowed-prose denominators) + appositive lexicon ext; grounding axis -> structural ceiling |
 | 2026-06-14T00:43:47 | 949 | 73% | 4215 | 722332 | breadth: claude-1 scaled +500 papers reliably (codex-3 stalled); grounding % expected stable at ~75% ceiling = representativeness, not depth |
+| 2026-06-14T03:21:05 | 948 | 76% | 0 | 638991 | quarantined pathological outlier 1001.4071 (1.2M-char, malformed $$, 4215 spurious W-ATOMIC + 2h hang); clean 948-paper corpus |
