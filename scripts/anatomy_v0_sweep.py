@@ -78,8 +78,71 @@ def _build_standard_math_roles() -> dict[str, str]:
               "left": "OPEN", "right": "CLOSE", "big": "OPEN", "Big": "OPEN",
               "bigg": "OPEN", "Bigg": "OPEN"}
     out.update(delims)
+    # C2 standard-vocab extension (claude-2, 2026-06-14): measured from the
+    # CURRENT classifier-unknown tail (Greek/alphabets already cleared above; the
+    # backlog's "Greek 18.2%" was stale). Adds the genuinely-missing standard
+    # delimiters/relations/arrows/operators/atoms + layout/structural macros.
+    # EXCLUDES xy-pic (\ar \ar@ \xymatrix = C3 package profile) and the bare
+    # macro-parameter char. Additive: classify_cseq checks macros first, so these
+    # only reclassify currently-UNKNOWN control sequences, never override.
+    more_delims = ("lbrack rbrack lbrace rbrace vert Vert lvert rvert lVert rVert "
+                   "lgroup rgroup ulcorner urcorner llcorner lrcorner backslash")
+    for s in more_delims.split():
+        out[s] = "OPEN" if s[0] in "lLuU" or s in ("vert", "Vert", "backslash") else "CLOSE"
+    for s in ("ne doteq simeq asymp prec succ preceq succeq models vdash dashv "
+              "perp parallel ll gg lll ggg subsetneq supsetneq sqsubseteq "
+              "sqsupseteq sqsubset sqsupset triangleleft triangleright "
+              "trianglelefteq trianglerighteq bowtie smile frown lesssim gtrsim "
+              "approxeq backsim eqsim gtrless lessgtr ngeq nleq nsubseteq").split():
+        out[s] = "RELOP"
+    for s in ("xleftarrow xrightarrow Leftarrow Leftrightarrow Longrightarrow "
+              "Longleftarrow longleftarrow longmapsto uparrow downarrow updownarrow "
+              "Uparrow Downarrow nearrow searrow swarrow nwarrow hookleftarrow "
+              "rightrightarrows leftleftarrows rightleftarrows leftrightarrows "
+              "twoheadleftarrow rightarrowtail leftarrowtail dashrightarrow "
+              "dashleftarrow rightsquigarrow leadsto rightharpoonup rightharpoondown "
+              "leftharpoonup leftharpoondown rightleftharpoons").split():
+        out[s] = "ARROW"
+    for s in "bigcap bigcup bigsqcup bigvee bigwedge bigotimes bigoplus bigodot biguplus".split():
+        out[s] = "SUMOP"
+    for s in ("setminus smallsetminus ast star bullet diamond sqcap boxtimes "
+              "boxdot ltimes rtimes wr odot ominus oslash dagger ddagger bigtriangleup "
+              "bigtriangledown triangleq curlywedge divideontimes").split():
+        out[s] = "MULOP"
+    for s in "sqcup boxplus boxminus uplus amalg dotplus".split():
+        out[s] = "ADDOP"
+    for s in ("Box Diamond square blacksquare triangle blacktriangle emptyset "
+              "varnothing top bot forall exists nexists neg lnot flat sharp natural "
+              "angle measuredangle Re Im wp Bbbk prime backprime surd checkmark "
+              "spadesuit heartsuit diamondsuit clubsuit star bigstar mho complement "
+              "circledast circledcirc circleddash").split():
+        out[s] = "ID"
+    # layout / structural / font / reference macros: not math symbols -> layout
+    # class (R15). Clears the GrCalc/text-mode tail (scalebox phantom fbox put ...).
+    for s in ("begin end text scalebox phantom hphantom vphantom fbox framebox "
+              "makebox raisebox put sf bf rm it tt sl scriptstyle displaystyle "
+              "textstyle scriptscriptstyle hline noalign multicolumn label ref "
+              "eqref cite notag tag intertext allowbreak smash limits nolimits "
+              "newline linebreak textnormal textsc resizebox rule vspace* "
+              "centering noindent").split():
+        out[s] = "SPACE"
     for s in ("quad qquad ldots cdots vdots ddots dots hspace vspace smallskip "
               "medskip bigskip nonumber").split():
+        out[s] = "SPACE"
+    # single-char control symbols captured by CSEQ_RE's non-alpha branch:
+    # `\#` is a literal hash atom (overloaded as smash-product in some papers);
+    # `\\` (captured as cseq "\\") is the row break -> layout.
+    out["#"] = "ID"
+    out["\\"] = "SPACE"
+    for s in "bigl Bigl biggl Biggl bigm Bigm biggm Biggm".split():
+        out[s] = "OPEN"
+    for s in "bigr Bigr biggr Biggr".split():
+        out[s] = "CLOSE"
+    for s in "dag ddag".split():
+        out[s] = "ID"
+    # non-alpha control symbols: \! \, \; \: \> thin/med spaces (layout);
+    # \sb \sp are plain-TeX subscript/superscript aliases (engine-layer).
+    for s in ("!", ",", ";", ":", ">", "sb", "sp"):
         out[s] = "SPACE"
     return out
 
