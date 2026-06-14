@@ -73,10 +73,10 @@ def _is_structural(m):
     return m.get("layer") == "dp" and k in STRUCTURAL_SCOPE
 
 
-def check_paper(paper, data=None):
+def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     """Return {paper, coverage{...}, violations[...], counts{...}}."""
     if data is None:
-        f = GOLDEN_DIR / f"fable-{paper}-dp-emacs.json"
+        f = Path(golden_dir) / f"fable-{paper}-dp-emacs.json"
         data = json.loads(f.read_text())
     text, marks = data["text"], data["marks"]
     spans = _math_spans(text)
@@ -208,13 +208,15 @@ def _print_paper(rep):
         print(f"    {flag} {inv:18} {counts[inv]:5}   [{fix}]")
 
 
-def corpus():
-    LOSS_DIR.mkdir(parents=True, exist_ok=True)
+def corpus(golden_dir=GOLDEN_DIR, loss_dir=LOSS_DIR):
+    golden_dir = Path(golden_dir)
+    loss_dir = Path(loss_dir)
+    loss_dir.mkdir(parents=True, exist_ok=True)
     reps = []
-    for f in sorted(GOLDEN_DIR.glob("fable-*-dp-emacs.json")):
+    for f in sorted(golden_dir.glob("fable-*-dp-emacs.json")):
         paper = f.name[len("fable-"):-len("-dp-emacs.json")]
         rep = check_paper(paper, json.loads(f.read_text()))
-        (LOSS_DIR / f"{paper}.json").write_text(json.dumps(rep))
+        (loss_dir / f"{paper}.json").write_text(json.dumps(rep))
         reps.append(rep)
         _print_paper(rep)
     # aggregate
@@ -232,27 +234,47 @@ def corpus():
     t = agg["totals"]
     agg["corpus_best_guess"] = round(t["grounded"] / t["symbols"], 4) \
         if t["symbols"] else 1.0
-    (LOSS_DIR / "dashboard.json").write_text(json.dumps(agg, indent=1))
+    (loss_dir / "dashboard.json").write_text(json.dumps(agg, indent=1))
     print(f"\n{'='*60}\nCORPUS  ({agg['papers']} papers)  "
           f"best-guess {agg['corpus_best_guess']:.0%}   "
           f"errors {t['errors']}   debt {t['debt']}")
     for inv in sorted(agg["by_invariant"]):
         print(f"    {inv:18} {agg['by_invariant'][inv]:6}")
-    print(f"wrote {LOSS_DIR}/dashboard.json")
+    print(f"wrote {loss_dir}/dashboard.json")
     return agg
 
 
 def main(argv=None):
     argv = argv if argv is not None else sys.argv[1:]
     if not argv:
-        print("usage: check_invariants.py <paper-id> | --corpus")
+        print("usage: check_invariants.py <paper-id> | --corpus "
+              "[--golden-dir DIR] [--loss-dir DIR]")
+        return 2
+    golden_dir = GOLDEN_DIR
+    loss_dir = LOSS_DIR
+    rest = []
+    i = 0
+    while i < len(argv):
+        if argv[i] == "--golden-dir" and i + 1 < len(argv):
+            golden_dir = Path(argv[i + 1])
+            i += 2
+        elif argv[i] == "--loss-dir" and i + 1 < len(argv):
+            loss_dir = Path(argv[i + 1])
+            i += 2
+        else:
+            rest.append(argv[i])
+            i += 1
+    argv = rest
+    if not argv:
+        print("usage: check_invariants.py <paper-id> | --corpus "
+              "[--golden-dir DIR] [--loss-dir DIR]")
         return 2
     if argv[0] == "--corpus":
-        corpus()
+        corpus(golden_dir=golden_dir, loss_dir=loss_dir)
         return 0
-    rep = check_paper(argv[0])
-    LOSS_DIR.mkdir(parents=True, exist_ok=True)
-    (LOSS_DIR / f"{argv[0]}.json").write_text(json.dumps(rep))
+    rep = check_paper(argv[0], golden_dir=golden_dir)
+    Path(loss_dir).mkdir(parents=True, exist_ok=True)
+    (Path(loss_dir) / f"{argv[0]}.json").write_text(json.dumps(rep))
     _print_paper(rep)
     return 0
 
