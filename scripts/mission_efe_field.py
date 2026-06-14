@@ -289,23 +289,104 @@ def cap_anchor(cap):  # centroid of the claimed ascent-parents' minting missions
             mp += [POS[m] for m in pv["minted_by"] if m in POS]
     return (sum(q[0] for q in mp) / len(mp), sum(q[1] for q in mp) / len(mp)) if mp else None
 
+# Projection-layer grounding (same status as BUILDER_HOST_MISSION / the pudding-kit
+# coalescing in starmap_to_capability_graph.bb): a mission that GROUNDS an unclaimed
+# cap without minting it. The curated EDN stays untouched — M-cold-chain exit cond. 4
+# reserves the minted-by flip for the curators' channel; this map is display-only and
+# claims nothing. Warrants:
+#   cold-*: futon7/holes/M-cold-chain.md ("four cold-* stars = one ladder", rung table)
+#   kit-*:  pudding-prover-registry.edn — held kits of the family whose claimed
+#           siblings (pudding-kit cluster) already anchor at M-pudding-peradams
+# Value = (grounding mission, rung) — rung orders a multi-cap ladder bottom-up.
+GROUNDED_BY = {
+    "cold-eoi-authored-outbox": ("M-cold-chain", 1),
+    "cold-eoi-sent":            ("M-cold-chain", 2),
+    "cold-send-response":       ("M-cold-chain", 3),
+    "cold-response-conversion": ("M-cold-chain", 4),
+    "kit-outbox":               ("M-pudding-peradams", 1),
+    "kit-intake":               ("M-pudding-peradams", 2),
+    "kit-cadence":              ("M-pudding-peradams", 3),
+}
+
 unclaimed = sorted((c for c, v in CAPS.items() if not v["claimed"]), key=str)
-summit_svg, islands = [], []
+# Anchor resolution for unclaimed caps, strongest foothold first:
+#   1. own minting mission on the map (in flight: minted-by recorded in the curated
+#      EDN while the cap is still :held) — incl. the builder-host fallback, which the
+#      claimed branch already gets;
+#   2. GROUNDED_BY (projection-layer, warrants above);
+#   3. claimed scope-parents' centroid (the original SUMMIT);
+#   4. an already-anchored unclaimed scope-parent (transitive — summit on a summit).
+# Only a cap with no foothold under all four lands in the sky.
+def _own_minter(info):
+    via = [m for m in info["minted_by"] if m in POS]
+    if not via:
+        via = [h for h in (BUILDER_HOST_MISSION.get(m) for m in info["minted_by"]) if h and h in POS]
+    if via:
+        pts = [POS[m] for m in via]
+        return (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts), via)
+anchors = {}                                                     # cap -> (x, y, kind, via)
 for c in unclaimed:
-    info = CAPS[c]; a = cap_anchor(c)
-    if a:                                                        # SUMMIT — place above its claimed substrate
-        cx, cy = a[0], a[1] - 46
-        t = f"{c} — UNCLAIMED SUMMIT ({info['status']}): builds on claimed {info['scope']}. {info.get('title','')[:100]}"
-        summit_svg.append(f'<line x1="{cx:.0f}" y1="{cy+46:.0f}" x2="{cx:.0f}" y2="{cy:.0f}" stroke="#ffd24a" '
-                          f'stroke-width="0.9" stroke-dasharray="3,3" opacity="0.55"/>'
-                          + starpoly(cx, cy, 12, "none", "#ffd24a", c, t.replace('"', "'")))
+    info = CAPS[c]
+    om = _own_minter(info)
+    if om:
+        anchors[c] = (om[0], om[1], "minting", ", ".join(om[2])); continue
+    if c in GROUNDED_BY and GROUNDED_BY[c][0] in POS:
+        gm = GROUNDED_BY[c][0]
+        anchors[c] = (POS[gm][0], POS[gm][1], "grounded", gm); continue
+    a = cap_anchor(c)
+    if a:
+        anchors[c] = (a[0], a[1], "summit", "claimed " + ", ".join(info["scope"]))
+for _ in range(3):                                               # transitive pass (4)
+    for c in unclaimed:
+        if c in anchors:
+            continue
+        pa = [anchors[p] for p in CAPS[c]["scope"] if p in anchors]
+        if pa:
+            via = ", ".join(p for p in CAPS[c]["scope"] if p in anchors)
+            anchors[c] = (sum(p[0] for p in pa) / len(pa), sum(p[1] for p in pa) / len(pa),
+                          "summit-chain", "unclaimed " + via)
+
+KINDLBL = {"minting":      "MINTING IN PROGRESS at",
+           "grounded":     "GROUNDED (not minted) by",
+           "summit":       "SUMMIT: builds on",
+           "summit-chain": "SUMMIT-CHAIN: stacks on"}
+summit_svg, islands = [], []
+_anchor_groups = defaultdict(list)
+for c in unclaimed:
+    if c in anchors:
+        _anchor_groups[(round(anchors[c][0]), round(anchors[c][1]))].append(c)
     else:
         islands.append(c)                                       # ISLAND — no terrain, needs constructing
+for grp in _anchor_groups.values():
+    grp.sort(key=lambda c: (GROUNDED_BY.get(c, ("", 99))[1], c))  # ladder rung order where known
+    for j, c in enumerate(grp):                                  # co-anchored caps stack as rungs
+        x, y, kind, via = anchors[c]
+        cx, cy = x, y - 46 - 42 * j
+        info = CAPS[c]
+        t = f"{c} — UNCLAIMED ({info['status']}) · {KINDLBL[kind]} {via}. {info.get('title','')[:100]}"
+        summit_svg.append(f'<line x1="{cx:.0f}" y1="{y:.0f}" x2="{cx:.0f}" y2="{cy:.0f}" stroke="#ffd24a" '
+                          f'stroke-width="0.9" stroke-dasharray="3,3" opacity="0.55"/>'
+                          + starpoly(cx, cy, 12, "none", "#ffd24a", c, t.replace('"', "'")))
+# --- the SKY: strictly the OFF-MAP registry — anything with no place in the terrain.
+#   hollow red  = UNCLAIMED island (a registered goal with no foothold anywhere);
+#   filled, red-rimmed = CLAIMED cap whose minters have no carpet position (external/*
+#   or ambiguous builder/* owners) — real inventory with no address; previously these
+#   were dropped to a stdout warning and never rendered at all.
 sky = []
-for i, c in enumerate(islands):
+_per_row = max(1, (W - 360) // 470)                              # wrap: keep every star inside the viewBox
+_sky_items = [(c, False) for c in islands] + [(c, True) for c in sorted(offmap_unplaced)]
+SKY_H = max(150, 80 + 52 * ((max(len(_sky_items), 1) - 1) // _per_row) + 60)
+for i, (c, is_claimed) in enumerate(_sky_items):
     info = CAPS[c]
-    t = f"{c} — UNCLAIMED ISLAND ({info['status']}): NO ascent-anchor, no terrain — needs a constructed foothold. {info.get('title','')[:100]}"
-    sky.append(starpoly(180 + i * 470, 80, 13, "none", "#ff8a6a", c, t.replace('"', "'")))  # red-ish = truly off-map
+    sx, sy = 180 + (i % _per_row) * 470, 80 + 52 * (i // _per_row)
+    if is_claimed:
+        t = (f"{c} — CLAIMED but OFF-MAP ({info['status']}): minted by {', '.join(info['minted_by'])} — "
+             f"no carpet position for any minter; operator semantics decision pending. {info.get('title','')[:100]}")
+        sky.append(starpoly(sx, sy, 13, "#ffe08a", "#c0392b", c, t.replace('"', "'")))
+    else:
+        t = (f"{c} — UNCLAIMED ISLAND ({info['status']}): NO foothold (own minter, grounding mission, "
+             f"scope-parents all came up empty) — needs a constructed foothold. {info.get('title','')[:100]}")
+        sky.append(starpoly(sx, sy, 13, "none", "#ff8a6a", c, t.replace('"', "'")))  # red-ish = truly off-map
 
 # --- specially MARKED missions (e.g. the WM's current recommendation) — 🚀 + explainer ---
 MARKED = {
@@ -354,14 +435,19 @@ Orange points = open <b>:detached</b> holes (high ground); smooth level sets = t
 roads. <b>Anatomy marks (2026-06-12)</b>: hollow rings = <b>vacuous scopes</b> (a binder with no named
 entities inside — suspect terrain, +cost); <span style="color:#4ade80">◆ green diamond = certificate
 PASS</span> (verified ground, −cost) · <span style="color:#ef4444">◆ red = FAIL</span> (+cost); verify-gates
-count as frontier. <b>★ filled = claimed</b> capability (at its minting mission) · <b>☆ empty = unclaimed</b> (sky: a registered
-goal with no minting mission). <b>🚀 = a specially-marked mission (the WM's current recommendation)</b> —
+count as frontier. <b>★ filled = claimed</b> capability (at its minting mission) · <b>☆ empty gold = unclaimed but
+anchored</b> (tethered to its foothold — an in-flight minting mission, a grounding mission, or its claimed substrate;
+hover for which; co-anchored stars stack as ladder rungs). <b>The sky holds only what is OFF-MAP</b>:
+<b><span style="color:#ff8a6a">☆ red = unclaimed, no foothold anywhere</span></b> (a registered goal with no path
+built) · <b><span style="color:#c0392b">★ red-rimmed filled = claimed but off-map</span></b> (its minting missions
+have no district on the carpet — operator semantics decision pending).
+<b>🚀 = a specially-marked mission (the WM's current recommendation)</b> —
 cyan ring, hover for its story + metric diagnostic. <b><span style="color:#ffb43c">amber dashed lasso = YOUR
 territory</span></b> (missions worked in git's last ~3 weeks — the momentum/exploit baseline; inside = the WM
 confirms, outside = it breaks trend). <b><span style="color:#d8b066">⬡ = dark matter</span></b> (a lasso loop with
 momentum but no substrate-2 district — a mission worked but not yet ingested). <b>Hover any star or hub for its story.</b></p></header>
 <svg width="{W}" height="{H}" viewBox="0 0 {W} {H}">
-<rect x="0" y="0" width="{W}" height="150" fill="#0c0f18"/>
+<rect x="0" y="0" width="{W}" height="{SKY_H}" fill="#0c0f18"/>
 <g>{''.join(fill)}</g><g>{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
 <g>{hubline_svg}</g><g>{scope_svg}</g><g>{hub_svg}</g>
 <g>{lasso}</g><g>{''.join(ghosts)}</g>
@@ -374,6 +460,12 @@ print(f"{len(scope_pts)} scopes / {len(hubs)} districts · {sum(1 for p in scope
 if offmap_unplaced:
     print(f"⚠ {len(offmap_unplaced)} claimed cap(s) still off-map (no owning-mission anchor; "
           f"operator semantics decision pending): {', '.join(sorted(offmap_unplaced))}")
+_kinds = defaultdict(list)
+for c in unclaimed:
+    _kinds[anchors[c][2] if c in anchors else "SKY"].append(c)
+for k in ("minting", "grounded", "summit", "summit-chain", "SKY"):
+    if _kinds[k]:
+        print(f"unclaimed/{k}: {', '.join(sorted(_kinds[k]))}")
 _top = sorted(MOM.items(), key=lambda kv: -kv[1])[:10]
 print("momentum (recent-git, top): " + ", ".join(f"{k[2:]}={v:.2f}" for k, v in _top))
 _p = POS.get("M-emacs-cursor-peripheral")
