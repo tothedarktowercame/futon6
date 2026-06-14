@@ -1,0 +1,22 @@
+;; Canon links for hungry-for-canon scopes — minted 2026-06-12, all URLs
+;; HTTP-verified (200/301-redirect). Keyed by node :form (case-sensitive).
+;; A concept absent here stays hungry — honesty over coverage.
+{"Hopf algebra"      "https://ncatlab.org/nlab/show/Hopf+algebra"
+ "monoidal category" "https://ncatlab.org/nlab/show/monoidal+category"
+ "twisted complex"   "https://ncatlab.org/nlab/show/twisted+complex"
+ "quasi-equivalence" "https://ncatlab.org/nlab/show/quasi-equivalence+of+dg-categories"
+ "Galois object"     "https://ncatlab.org/nlab/show/Galois+object"
+ "left module"       "https://ncatlab.org/nlab/show/module"
+ "equalizers"        "https://ncatlab.org/nlab/show/equalizer"
+ "coequalizers"      "https://ncatlab.org/nlab/show/coequalizer"
+ "faithfully flat"   "https://ncatlab.org/nlab/show/faithfully+flat+morphism"
+ "representable"     "https://ncatlab.org/nlab/show/representable+functor"
+ "isomorphism"       "https://ncatlab.org/nlab/show/isomorphism"
+ "isomorphic"        "https://ncatlab.org/nlab/show/isomorphism"
+"dg-category"       "https://ncatlab.org/nlab/show/dg-category"
+ "dg-categories"     "https://ncatlab.org/nlab/show/dg-category"
+ "Azumaya algebra"   "https://ncatlab.org/nlab/show/Azumaya+algebra"
+ "comodule algebra"  "https://ncatlab.org/nlab/show/comodule+algebra"
+ "algebra"           "https://ncatlab.org/nlab/show/algebra"
+ "object"            "https://ncatlab.org/nlab/show/object"
+ "dg-functor"        "https://ncatlab.org/nlab/show/dg-category"}

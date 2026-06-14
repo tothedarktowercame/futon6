@@ -1,0 +1,3176 @@
+{
+  "mission": "M-agency-refactor",
+  "path": "/home/joe/code/futon3c/holes/missions/M-agency-refactor.md",
+  "scope-count-by-binder-type": {
+    "capability-scope": 1,
+    "loose-section": 14,
+    "map-item": 6,
+    "mission-scope-in": 1,
+    "mission-scope-out": 1,
+    "source-material": 1
+  },
+  "scope-hyperedges": [
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Mission: Agency Refactor",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 1,
+          "role": "heading",
+          "title": "Mission: Agency Refactor"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        }
+      ],
+      "hx/content": {
+        "end": 45,
+        "match": "Mission: Agency Refactor",
+        "position": 0
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Mission: Agency Refactor",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 1,
+          "role": "heading",
+          "title": "Mission: Agency Refactor"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-000",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": null,
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": null,
+      "scope-id": "M-agency-refactor:scope-000"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Derivation",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Derivation"
+        },
+        {
+          "role": "concept",
+          "term": "instantiate"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "xenotype"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "realtime"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        }
+      ],
+      "hx/content": {
+        "end": 405,
+        "match": "Derivation",
+        "position": 45
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Derivation",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Derivation"
+        },
+        {
+          "role": "concept",
+          "term": "instantiate"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "xenotype"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "realtime"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "standalone"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-001",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "derive"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-001"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Scope In"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/content": {
+        "end": 680,
+        "match": "Scope In",
+        "position": 405
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Scope In"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-002",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-002"
+    },
+    {
+      "binder-type": "mission-scope-in",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-presence: Agent presence verification (R7)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-authenticate: Identity resolution (R6)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-dispatch: Message routing with receipts (R1, R2)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-persist: Session continuity (R8, R9)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Agent registry: Core agent lifecycle (R3, R5)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Social error handling (R4)"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/content": {
+        "end": 680,
+        "match": "Scope In",
+        "position": 405
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-presence: Agent presence verification (R7)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-authenticate: Identity resolution (R6)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-dispatch: Message routing with receipts (R1, R2)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-persist: Session continuity (R8, R9)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Agent registry: Core agent lifecycle (R3, R5)"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Social error handling (R4)"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-003",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "mission-scope-in",
+        "identify"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/mission-scope-in",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-003"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Scope Out"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "refactor"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 1081,
+        "match": "Scope Out",
+        "position": 680
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Scope Out"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "refactor"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-004",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-004"
+    },
+    {
+      "binder-type": "mission-scope-out",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-mode: Mode classification (R10) \u2014 belongs to M-peripheral-model"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-validate: Coordination outcome validation (R5 lifecycle) \u2014 needs forum"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-default: Default mode network \u2014 needs all other components first"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Forum service \u2014 M-forum-refactor"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Drawbridge routing \u2014 absorbed into S-dispatch, but HTTP/WS transport is later"
+        },
+        {
+          "role": "bounded-item",
+          "text": "HTTP API \u2014 subsequent mission after core components work"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "refactor"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 1081,
+        "match": "Scope Out",
+        "position": 680
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-mode: Mode classification (R10) \u2014 belongs to M-peripheral-model"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-validate: Coordination outcome validation (R5 lifecycle) \u2014 needs forum"
+        },
+        {
+          "role": "bounded-item",
+          "text": "S-default: Default mode network \u2014 needs all other components first"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Forum service \u2014 M-forum-refactor"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Drawbridge routing \u2014 absorbed into S-dispatch, but HTTP/WS transport is later"
+        },
+        {
+          "role": "bounded-item",
+          "text": "HTTP API \u2014 subsequent mission after core components work"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "refactor"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-005",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "mission-scope-out",
+        "identify"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/mission-scope-out",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-005"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Source Material",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Source Material"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "wrapper"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "persistence"
+        }
+      ],
+      "hx/content": {
+        "end": 1713,
+        "match": "Source Material",
+        "position": 1081
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Source Material",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Source Material"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "wrapper"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "persistence"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-006",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-006"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Source Material",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/invokes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/agency/invokes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/agents.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/http.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/social/dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/service.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/social/persist.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/codex_mirror.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "wrapper"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "persistence"
+        }
+      ],
+      "hx/content": {
+        "end": 1713,
+        "match": "Source Material",
+        "position": 1081
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Source Material",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/invokes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/agency/invokes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/agents.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/http.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/social/dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/service.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3c/social/persist.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "agency/codex_mirror.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "wrapper"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "persistence"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-007",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-007"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Parts",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Parts"
+        }
+      ],
+      "hx/content": {
+        "end": 1723,
+        "match": "Parts",
+        "position": 1713
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Parts",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Parts"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-008",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-008"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part I: Registry + Shapes",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part I: Registry + Shapes"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "malli"
+        }
+      ],
+      "hx/content": {
+        "end": 2445,
+        "match": "Part I: Registry + Shapes",
+        "position": 1723
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part I: Registry + Shapes",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part I: Registry + Shapes"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "malli"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-009",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-009"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part I: Registry + Shapes",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part I: Registry + Shapes"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "social-exotype.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/shapes_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/test_fixtures.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/pipeline_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/agency/invariant_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/agency/registry_test.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "malli"
+        }
+      ],
+      "hx/content": {
+        "end": 2445,
+        "match": "Part I: Registry + Shapes",
+        "position": 1723
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part I: Registry + Shapes",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part I: Registry + Shapes"
+        },
+        {
+          "kind": "file",
+          "ref": "futon3/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "social-exotype.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/shapes_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/test_fixtures.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/pipeline_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/agency/invariant_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/agency/registry_test.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "malli"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-010",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-010"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part II: S-presence",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part II: S-presence"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/content": {
+        "end": 3288,
+        "match": "Part II: S-presence",
+        "position": 2445
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part II: S-presence",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part II: S-presence"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-011",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-011"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part II: S-presence",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part II: S-presence"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/test_fixtures.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon5/data/missions/social-exotype.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/presence.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/presence_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "561da67",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/content": {
+        "end": 3288,
+        "match": "Part II: S-presence",
+        "position": 2445
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part II: S-presence",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part II: S-presence"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/test_fixtures.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon5/data/missions/social-exotype.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/presence.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/presence_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "561da67",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-012",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-012"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part III: S-authenticate",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part III: S-authenticate"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/content": {
+        "end": 4316,
+        "match": "Part III: S-authenticate",
+        "position": 3288
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part III: S-authenticate",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part III: S-authenticate"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-013",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-013"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part III: S-authenticate",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "capability",
+          "role": "capability",
+          "source": "kernel"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/content": {
+        "end": 4316,
+        "match": "Part III: S-authenticate",
+        "position": 3288
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part III: S-authenticate",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "capability",
+          "role": "capability",
+          "source": "kernel"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-014",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-014"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part III: S-authenticate",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part III: S-authenticate"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/presence.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/authenticate.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/authenticate_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "1d533f0",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/content": {
+        "end": 4316,
+        "match": "Part III: S-authenticate",
+        "position": 3288
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part III: S-authenticate",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part III: S-authenticate"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/presence.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/authenticate.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/authenticate_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "1d533f0",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-015",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-015"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part IV: S-dispatch",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part IV: S-dispatch"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "lossy"
+        }
+      ],
+      "hx/content": {
+        "end": 6038,
+        "match": "Part IV: S-dispatch",
+        "position": 4316
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part IV: S-dispatch",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part IV: S-dispatch"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "lossy"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-016",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-016"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part IV: S-dispatch",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part IV: S-dispatch"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/authenticate.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/dispatch_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "d86df0f",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "40acbce",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "lossy"
+        }
+      ],
+      "hx/content": {
+        "end": 6038,
+        "match": "Part IV: S-dispatch",
+        "position": 4316
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part IV: S-dispatch",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part IV: S-dispatch"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/agency/registry.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/authenticate.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/dispatch_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "d86df0f",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "40acbce",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "lossy"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-017",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-017"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part V: S-persist",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part V: S-persist"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 7291,
+        "match": "Part V: S-persist",
+        "position": 6038
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part V: S-persist",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part V: S-persist"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-018",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-018"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part V: S-persist",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part V: S-persist"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/persist.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/persist_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "5f3ef6a",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 7291,
+        "match": "Part V: S-persist",
+        "position": 6038
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part V: S-persist",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part V: S-persist"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/shapes.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3c/social/persist.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/persist_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "dispatch.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "5f3ef6a",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "socialerror"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-019",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-019"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part VI: Integration",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part VI: Integration"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "lossy"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/content": {
+        "end": 9477,
+        "match": "Part VI: Integration",
+        "position": 7291
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part VI: Integration",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Part VI: Integration"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "lossy"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-020",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-020"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part VI: Integration",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part VI: Integration"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/pipeline_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "bootstrap.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "presence.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "dispatch.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "lossy"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/content": {
+        "end": 9477,
+        "match": "Part VI: Integration",
+        "position": 7291
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Part VI: Integration",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Part VI: Integration"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3c/social/pipeline_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "bootstrap.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "presence.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "dispatch.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "lossy"
+        },
+        {
+          "role": "concept",
+          "term": "support"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-021",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-refactor:scope-008",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-refactor:scope-008",
+      "scope-id": "M-agency-refactor:scope-021"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Exit Conditions",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Exit Conditions"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        }
+      ],
+      "hx/content": {
+        "end": 9733,
+        "match": "Exit Conditions",
+        "position": 9477
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "Exit Conditions",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Exit Conditions"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-022",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-022"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "R11 Enforcement",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "R11 Enforcement"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        }
+      ],
+      "hx/content": {
+        "end": 10143,
+        "match": "R11 Enforcement",
+        "position": 9733
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-refactor",
+          "role": "entity"
+        },
+        {
+          "name": "R11 Enforcement",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "R11 Enforcement"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        }
+      ],
+      "hx/id": "M-agency-refactor:scope-023",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "derive"
+      ],
+      "hx/parent": "M-agency-refactor:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-refactor:scope-000",
+      "scope-id": "M-agency-refactor:scope-023"
+    }
+  ]
+}

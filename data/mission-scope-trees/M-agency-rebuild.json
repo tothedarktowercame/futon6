@@ -1,0 +1,4189 @@
+{
+  "mission": "M-agency-rebuild",
+  "path": "/home/joe/code/futon3/holes/missions/M-agency-rebuild.md",
+  "scope-count-by-binder-type": {
+    "loose-section": 19,
+    "map-item": 10,
+    "mission-scope-in": 1,
+    "mission-scope-out": 1,
+    "pattern": 2,
+    "relates-to": 2,
+    "source-material": 4
+  },
+  "scope-hyperedges": [
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Mission: Agency Rebuild",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 1,
+          "role": "heading",
+          "title": "Mission: Agency Rebuild"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "par"
+        }
+      ],
+      "hx/content": {
+        "end": 479,
+        "match": "Mission: Agency Rebuild",
+        "position": 0
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Mission: Agency Rebuild",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 1,
+          "role": "heading",
+          "title": "Mission: Agency Rebuild"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "par"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-000",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": null,
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": null,
+      "scope-id": "M-agency-rebuild:scope-000"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Motivation",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Motivation"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "devmap"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "auditable"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "websocket"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        }
+      ],
+      "hx/content": {
+        "end": 1550,
+        "match": "Motivation",
+        "position": 479
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Motivation",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Motivation"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "devmap"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "auditable"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "websocket"
+        },
+        {
+          "role": "concept",
+          "term": "argument"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-001",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-001"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Patterns",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Patterns"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 2737,
+        "match": "Patterns",
+        "position": 1550
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Patterns",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Patterns"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-002",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "derive"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-002"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Patterns",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "single-routing-authority",
+          "ref": "futon3/library/agency/single-routing-authority.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "ident": "all-or-nothing",
+          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 2737,
+        "match": "Patterns",
+        "position": 1550
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Patterns",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "single-routing-authority",
+          "ref": "futon3/library/agency/single-routing-authority.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "ident": "all-or-nothing",
+          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-003",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-003"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Scope"
+        }
+      ],
+      "hx/content": {
+        "end": 2747,
+        "match": "Scope",
+        "position": 2737
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Scope"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-004",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-004"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Scope In"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 3615,
+        "match": "Scope In",
+        "position": 2747
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Scope In"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-005",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-004",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-004",
+      "scope-id": "M-agency-rebuild:scope-005"
+    },
+    {
+      "binder-type": "mission-scope-in",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Make Agency uphold A0-A5 in code, tests, and observable evidence."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Replace multi-tier routing split-brain with single routing authority semantics (including WS and local/in-JVM paths)."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Implement deterministic lifecycle management for all transient in-memory resources (no fire-and-forget TTL futures as the primary mechanism)."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Enforce identifier separation across layers (transport IDs vs LLM continuity IDs vs protocol IDs)."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Replace boolean/best-effort send semantics with receipt-or-explicit-failure result types for bell/whistle and for outbound HTTP integrations."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Make loud-failure behavior mechanical: remove catch-and-swallow, add explicit error results and context."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Add proof tests for invariants and at least one integration test that exercises Drawbridge multiplexing via Agency (WS + HTTP inputs converge into one agent session)."
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 3615,
+        "match": "Scope In",
+        "position": 2747
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope In",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Make Agency uphold A0-A5 in code, tests, and observable evidence."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Replace multi-tier routing split-brain with single routing authority semantics (including WS and local/in-JVM paths)."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Implement deterministic lifecycle management for all transient in-memory resources (no fire-and-forget TTL futures as the primary mechanism)."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Enforce identifier separation across layers (transport IDs vs LLM continuity IDs vs protocol IDs)."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Replace boolean/best-effort send semantics with receipt-or-explicit-failure result types for bell/whistle and for outbound HTTP integrations."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Make loud-failure behavior mechanical: remove catch-and-swallow, add explicit error results and context."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Add proof tests for invariants and at least one integration test that exercises Drawbridge multiplexing via Agency (WS + HTTP inputs converge into one agent session)."
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-006",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "mission-scope-in",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-004",
+      "hx/role": "component",
+      "hx/type": "mission-scope/mission-scope-in",
+      "parent": "M-agency-rebuild:scope-004",
+      "scope-id": "M-agency-rebuild:scope-006"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Scope Out"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/content": {
+        "end": 4022,
+        "match": "Scope Out",
+        "position": 3615
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Scope Out"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-007",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-004",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-004",
+      "scope-id": "M-agency-rebuild:scope-007"
+    },
+    {
+      "binder-type": "mission-scope-out",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Re-architecting all of futon3 (Forum, MUSN transport, pattern canon, futon1/futon2 exports) beyond the explicit Agency boundary and its interfaces."
+        },
+        {
+          "role": "bounded-item",
+          "text": "New peripheral features unrelated to Agency correctness (new tools, new bridges, new UI)."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Making Agency production-grade as a scheduler/daemon manager (supervision, load balancing, multi-node HA) unless required to satisfy A0-A5 proofs."
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/content": {
+        "end": 4022,
+        "match": "Scope Out",
+        "position": 3615
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Scope Out",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "role": "bounded-item",
+          "text": "Re-architecting all of futon3 (Forum, MUSN transport, pattern canon, futon1/futon2 exports) beyond the explicit Agency boundary and its interfaces."
+        },
+        {
+          "role": "bounded-item",
+          "text": "New peripheral features unrelated to Agency correctness (new tools, new bridges, new UI)."
+        },
+        {
+          "role": "bounded-item",
+          "text": "Making Agency production-grade as a scheduler/daemon manager (supervision, load balancing, multi-node HA) unless required to satisfy A0-A5 proofs."
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-008",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "mission-scope-out",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-004",
+      "hx/role": "component",
+      "hx/type": "mission-scope/mission-scope-out",
+      "parent": "M-agency-rebuild:scope-004",
+      "scope-id": "M-agency-rebuild:scope-008"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Dependencies",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Dependencies"
+        }
+      ],
+      "hx/content": {
+        "end": 4039,
+        "match": "Dependencies",
+        "position": 4022
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Dependencies",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Dependencies"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-009",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-009"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Blocks",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Blocks"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 4145,
+        "match": "Blocks",
+        "position": 4039
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Blocks",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Blocks"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-010",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-009",
+      "scope-id": "M-agency-rebuild:scope-010"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Blocks",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Blocks"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 4145,
+        "match": "Blocks",
+        "position": 4039
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Blocks",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Blocks"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-011",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-009",
+      "scope-id": "M-agency-rebuild:scope-011"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Enables",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Enables"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        }
+      ],
+      "hx/content": {
+        "end": 4425,
+        "match": "Enables",
+        "position": 4145
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Enables",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Enables"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-012",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-009",
+      "scope-id": "M-agency-rebuild:scope-012"
+    },
+    {
+      "binder-type": "relates-to",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Enables",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-agency-unified-routing",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-make-agency-work-properly",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        }
+      ],
+      "hx/content": {
+        "end": 4425,
+        "match": "Enables",
+        "position": 4145
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Enables",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-agency-unified-routing",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-make-agency-work-properly",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-013",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "relates-to",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/role": "component",
+      "hx/type": "mission-scope/relates-to",
+      "parent": "M-agency-rebuild:scope-009",
+      "scope-id": "M-agency-rebuild:scope-013"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Enables",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Enables"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-agency-unified-routing.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-make-agency-work-properly.md",
+          "role": "source"
+        },
+        {
+          "ident": "M-agency-unified-routing",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-make-agency-work-properly",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        }
+      ],
+      "hx/content": {
+        "end": 4425,
+        "match": "Enables",
+        "position": 4145
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Enables",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Enables"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-agency-unified-routing.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-make-agency-work-properly.md",
+          "role": "source"
+        },
+        {
+          "ident": "M-agency-unified-routing",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-make-agency-work-properly",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-014",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-009",
+      "scope-id": "M-agency-rebuild:scope-014"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Shares",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Shares"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "blocker"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        }
+      ],
+      "hx/content": {
+        "end": 4779,
+        "match": "Shares",
+        "position": 4425
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Shares",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Shares"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "blocker"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-015",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-009",
+      "scope-id": "M-agency-rebuild:scope-015"
+    },
+    {
+      "binder-type": "relates-to",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Shares",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-agency-forum",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "blocker"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        }
+      ],
+      "hx/content": {
+        "end": 4779,
+        "match": "Shares",
+        "position": 4425
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Shares",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "M-agency-forum",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "blocker"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-016",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "relates-to",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/role": "component",
+      "hx/type": "mission-scope/relates-to",
+      "parent": "M-agency-rebuild:scope-009",
+      "scope-id": "M-agency-rebuild:scope-016"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Shares",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Shares"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-agency-forum.md",
+          "role": "source"
+        },
+        {
+          "ident": "M-agency-forum",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "blocker"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        }
+      ],
+      "hx/content": {
+        "end": 4779,
+        "match": "Shares",
+        "position": 4425
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Shares",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Shares"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-agency-forum.md",
+          "role": "source"
+        },
+        {
+          "ident": "M-agency-forum",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "blocker"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-017",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-009",
+      "scope-id": "M-agency-rebuild:scope-017"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Success Criteria",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Success Criteria"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        }
+      ],
+      "hx/content": {
+        "end": 5598,
+        "match": "Success Criteria",
+        "position": 4779
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Success Criteria",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Success Criteria"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-018",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-018"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Time Box",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Time Box"
+        },
+        {
+          "role": "concept",
+          "term": "phases"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/content": {
+        "end": 5770,
+        "match": "Time Box",
+        "position": 5598
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Time Box",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Time Box"
+        },
+        {
+          "role": "concept",
+          "term": "phases"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-019",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-019"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Exit Conditions",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Exit Conditions"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 6166,
+        "match": "Exit Conditions",
+        "position": 5770
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Exit Conditions",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Exit Conditions"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-020",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-020"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Work Plan",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Work Plan"
+        }
+      ],
+      "hx/content": {
+        "end": 6207,
+        "match": "Work Plan",
+        "position": 6166
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Work Plan",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Work Plan"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-021",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-021"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 0: Base Camp",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 0: Base Camp"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "endpoints"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/content": {
+        "end": 6734,
+        "match": "Phase 0: Base Camp",
+        "position": 6207
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 0: Base Camp",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 0: Base Camp"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "endpoints"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-022",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-021",
+      "scope-id": "M-agency-rebuild:scope-022"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 0: Base Camp",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 0: Base Camp"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "endpoints"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/content": {
+        "end": 6734,
+        "match": "Phase 0: Base Camp",
+        "position": 6207
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 0: Base Camp",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 0: Base Camp"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "endpoints"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-023",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-021",
+      "scope-id": "M-agency-rebuild:scope-023"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 0 Outputs",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 0 Outputs"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3/agency/service.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3/agency/http.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "rationale"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "websocket"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "liveness"
+        },
+        {
+          "role": "concept",
+          "term": "legacy"
+        },
+        {
+          "role": "concept",
+          "term": "timeout"
+        }
+      ],
+      "hx/content": {
+        "end": 10433,
+        "match": "Phase 0 Outputs",
+        "position": 6734
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 0 Outputs",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 0 Outputs"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3/agency/service.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3/agency/http.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "rationale"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "websocket"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "liveness"
+        },
+        {
+          "role": "concept",
+          "term": "legacy"
+        },
+        {
+          "role": "concept",
+          "term": "timeout"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-024",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-022",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-022",
+      "scope-id": "M-agency-rebuild:scope-024"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1: Spec-to-Tests",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 1: Spec-to-Tests"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 10845,
+        "match": "Phase 1: Spec-to-Tests",
+        "position": 10433
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1: Spec-to-Tests",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 1: Spec-to-Tests"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-025",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-021",
+      "scope-id": "M-agency-rebuild:scope-025"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1: Spec-to-Tests",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 1: Spec-to-Tests"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 10845,
+        "match": "Phase 1: Spec-to-Tests",
+        "position": 10433
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1: Spec-to-Tests",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 1: Spec-to-Tests"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-026",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-021",
+      "scope-id": "M-agency-rebuild:scope-026"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1 Results",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 1 Results"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/integration_test.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "deliverable"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "pre"
+        },
+        {
+          "role": "concept",
+          "term": "fulab"
+        },
+        {
+          "role": "concept",
+          "term": "blockers"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "persistence"
+        },
+        {
+          "role": "concept",
+          "term": "async"
+        }
+      ],
+      "hx/content": {
+        "end": 12527,
+        "match": "Phase 1 Results",
+        "position": 10845
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1 Results",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 1 Results"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/integration_test.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "deliverable"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "pre"
+        },
+        {
+          "role": "concept",
+          "term": "fulab"
+        },
+        {
+          "role": "concept",
+          "term": "blockers"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "persistence"
+        },
+        {
+          "role": "concept",
+          "term": "async"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-027",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-025",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-025",
+      "scope-id": "M-agency-rebuild:scope-027"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 2: Implementation",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 2: Implementation"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        }
+      ],
+      "hx/content": {
+        "end": 13122,
+        "match": "Phase 2: Implementation",
+        "position": 12527
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 2: Implementation",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 2: Implementation"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-028",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-021",
+      "scope-id": "M-agency-rebuild:scope-028"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 2: Implementation",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 2: Implementation"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        }
+      ],
+      "hx/content": {
+        "end": 13122,
+        "match": "Phase 2: Implementation",
+        "position": 12527
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 2: Implementation",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 2: Implementation"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "llm"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-029",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-021",
+      "scope-id": "M-agency-rebuild:scope-029"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 2 Results",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 2 Results"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a0_delivery_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a1_identity_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a2_atomicity_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a3_loud_failure_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a5_bounded_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/integration_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "3f0aa3a",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "c5b5929",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "5f85287",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "5dcb28b",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "804fe8f",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "fulab"
+        },
+        {
+          "role": "concept",
+          "term": "blockers"
+        }
+      ],
+      "hx/content": {
+        "end": 14334,
+        "match": "Phase 2 Results",
+        "position": 13122
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 2 Results",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Phase 2 Results"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a0_delivery_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a1_identity_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a2_atomicity_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a3_loud_failure_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/a5_bounded_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/integration_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "3f0aa3a",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "c5b5929",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "5f85287",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "5dcb28b",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "804fe8f",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "fulab"
+        },
+        {
+          "role": "concept",
+          "term": "blockers"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-030",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-028",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-028",
+      "scope-id": "M-agency-rebuild:scope-030"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Agent Compatibility Audit",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "reconnect-with-backoff",
+          "ref": "futon3c/library/realtime/reconnect-with-backoff.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "fucodex"
+        },
+        {
+          "role": "concept",
+          "term": "wrapper"
+        },
+        {
+          "role": "concept",
+          "term": "fuclaude"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 16670,
+        "match": "Agent Compatibility Audit",
+        "position": 14334
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Agent Compatibility Audit",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "ident": "reconnect-with-backoff",
+          "ref": "futon3c/library/realtime/reconnect-with-backoff.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "fucodex"
+        },
+        {
+          "role": "concept",
+          "term": "wrapper"
+        },
+        {
+          "role": "concept",
+          "term": "fuclaude"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-031",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-028",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-agency-rebuild:scope-028",
+      "scope-id": "M-agency-rebuild:scope-031"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Agent Compatibility Audit",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Agent Compatibility Audit"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3/drawbridge/core.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "fubar-agency.el",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "contrib/fubar-agency.el",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "fucodex-peripheral.ts",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/fucodex-peripheral.ts",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "fuclaude-peripheral.ts",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/fuclaude-peripheral.ts",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "fucodex"
+        },
+        {
+          "role": "concept",
+          "term": "wrapper"
+        },
+        {
+          "role": "concept",
+          "term": "fuclaude"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 16670,
+        "match": "Agent Compatibility Audit",
+        "position": 14334
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Agent Compatibility Audit",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Agent Compatibility Audit"
+        },
+        {
+          "kind": "file",
+          "ref": "src/futon3/drawbridge/core.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "fubar-agency.el",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "contrib/fubar-agency.el",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "fucodex-peripheral.ts",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/fucodex-peripheral.ts",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "fuclaude-peripheral.ts",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/fuclaude-peripheral.ts",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "fucodex"
+        },
+        {
+          "role": "concept",
+          "term": "wrapper"
+        },
+        {
+          "role": "concept",
+          "term": "fuclaude"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-032",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "map-item",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-028",
+      "hx/role": "component",
+      "hx/type": "mission-scope/map-item",
+      "parent": "M-agency-rebuild:scope-028",
+      "scope-id": "M-agency-rebuild:scope-032"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 3: Validation + Evidence",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 3: Validation + Evidence"
+        }
+      ],
+      "hx/content": {
+        "end": 16714,
+        "match": "Phase 3: Validation + Evidence",
+        "position": 16670
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 3: Validation + Evidence",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 3: Validation + Evidence"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-033",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "verify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-021",
+      "scope-id": "M-agency-rebuild:scope-033"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "3a. Pre-validation fixes",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "fubar-agency.el",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 17231,
+        "match": "3a. Pre-validation fixes",
+        "position": 16714
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "3a. Pre-validation fixes",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "fubar-agency.el",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-034",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "verify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-033",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-agency-rebuild:scope-033",
+      "scope-id": "M-agency-rebuild:scope-034"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "3b. Soak test",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/soak_test.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        }
+      ],
+      "hx/content": {
+        "end": 17436,
+        "match": "3b. Soak test",
+        "position": 17231
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "3b. Soak test",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/invariants/soak_test.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-035",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "verify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-033",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-agency-rebuild:scope-033",
+      "scope-id": "M-agency-rebuild:scope-035"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "3c. Agent integration tests",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/integration_test.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/content": {
+        "end": 17894,
+        "match": "3c. Agent integration tests",
+        "position": 17436
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "3c. Agent integration tests",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "test/futon3/agency/integration_test.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-036",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "verify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-033",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-agency-rebuild:scope-033",
+      "scope-id": "M-agency-rebuild:scope-036"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "3d. Standup end-to-end",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "POST /agency/standup",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "timeout"
+        }
+      ],
+      "hx/content": {
+        "end": 18164,
+        "match": "3d. Standup end-to-end",
+        "position": 17894
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "3d. Standup end-to-end",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "POST /agency/standup",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "timeout"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-037",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "verify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-033",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-agency-rebuild:scope-033",
+      "scope-id": "M-agency-rebuild:scope-037"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Notes: Scope Check",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Notes: Scope Check"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        }
+      ],
+      "hx/content": {
+        "end": 19305,
+        "match": "Notes: Scope Check",
+        "position": 18634
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Notes: Scope Check",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Notes: Scope Check"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "musn"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-038",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "identify"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-038"
+    }
+  ]
+}

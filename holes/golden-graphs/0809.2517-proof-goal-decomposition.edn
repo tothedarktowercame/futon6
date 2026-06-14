@@ -1,0 +1,338 @@
+;; GOLDEN anatomy graph -- proof-goal/decomposition block, arXiv 0809.2517.
+;; Hand-authored from source: sequence2.tex:105-114.
+{:paper "0809.2517",
+ :region
+ {:label "upsilon-first-goal-decomposition",
+  :source-file "sequence2.tex",
+  :source-lines [105 114],
+  :quote
+  "The first goal of this subsection is to prove that if $A$ is an $H$-Azumaya algebra in $\\C$, then $(A\\# H)^A$ is an $H$-Galois object ($H$ flat). The proof will be completed once we prove: 1) $(A\\# H)^A$ is an $H$-comodule algebra; 2) $(A\\# H)^A$ is faithfully flat; 3) $can_{(A\\# H)^A}$ is an isomorphism. We proceed to prove 1). For this part the algebra $A$ does not have to be Azumaya.",
+  :parse-incomplete false},
+ :macro-decodes
+ [{:macro "\\C",
+   :expands-to "{\\mathcal C}",
+   :class :macro-def,
+   :via "\\newcommand{\\C}{{\\mathcal C}} (beseq2.tex:65)",
+   :rule :R5}
+  {:macro "\\can",
+   :expands-to "\\it can",
+   :class :macro-def,
+   :via "\\newcommand{\\can}{\\it can} (beseq2.tex:85)",
+   :rule :R5}
+  {:macro "\\#",
+   :expands-to "smash-product infix in this paper",
+   :class :semantic-bind,
+   :via
+   "the {\\em smash product algebra} $A\\# H$ is defined as follows ... (sequence2.tex:7-33)",
+   :rule :R6}],
+ :nodes
+ [{:id :subsection-promise,
+   :form
+   "The map $\\Upsilon$ assigning an $H$-Galois object to an $H$-Azumaya algebra",
+   :role :promissory-scope,
+   :via
+   "\\subsection{The map $\\Upsilon$ assigning an $H$-Galois object to an $H$-Azumaya algebra} (sequence2.tex:5)",
+   :rule :R8,
+   :satiety {:hungry-for :payoff}}
+  {:id :goal-statement,
+   :form
+   "The first goal of this subsection is to prove that if ... then ...",
+   :role :goal,
+   :via
+   "The first goal of this subsection is to prove that if $A$ is an $H$-Azumaya algebra in $\\C$, then $(A\\# H)^A$ is an $H$-Galois object ($H$ flat).",
+   :rule :R13,
+   :satiety :full}
+  {:id :decomposition,
+   :form "The proof will be completed once we prove",
+   :role :decomposition,
+   :via "The proof will be completed once we prove:",
+   :rule :R13,
+   :satiety :full}
+  {:id :proceed-1,
+   :form "We proceed to prove 1).",
+   :role :discharge-open,
+   :via "We proceed to prove 1).",
+   :rule :R13,
+   :satiety :full}
+  {:id :part-1-caveat,
+   :form "For this part the algebra $A$ does not have to be Azumaya.",
+   :role :local-assumption-caveat,
+   :via "For this part the algebra $A$ does not have to be Azumaya.",
+   :rule :R13,
+   :satiety :full}
+  {:id :C,
+   :form "\\C",
+   :role :symbol,
+   :binder :semantic-bind,
+   :bound-at :section-2-assumption,
+   :via "$\\C$",
+   :rule :R4,
+   :satiety :full}
+  {:id :A,
+   :form "A",
+   :role :symbol,
+   :binder :semantic-bind,
+   :via "if $A$ is an $H$-Azumaya algebra in $\\C$",
+   :rule :R2,
+   :satiety :full}
+  {:id :H,
+   :form "H",
+   :role :symbol,
+   :binder :semantic-bind,
+   :bound-at :section-2-assumption,
+   :via "$H$-Azumaya algebra",
+   :rule :R4,
+   :satiety :full}
+  {:id :flat,
+   :form "flat",
+   :role :decorator,
+   :via "($H$ flat)",
+   :rule :R10,
+   :satiety :full}
+  {:id :azumaya-algebra,
+   :form "Azumaya algebra",
+   :role :concept,
+   :canon {:nlab "https://ncatlab.org/nlab/show/Azumaya+algebra"},
+   :via "$H$-Azumaya algebra",
+   :rule :R3,
+   :satiety :full,
+   :fed-at "2026-06-12"}
+  {:id :H-Azumaya-algebra,
+   :form "$H$-Azumaya algebra",
+   :role :compound,
+   :via "$H$-Azumaya algebra",
+   :rule :R9,
+   :satiety :full}
+  {:id :galois-object,
+   :form "Galois object",
+   :role :concept,
+   :canon {:nlab "https://ncatlab.org/nlab/show/Galois+object"},
+   :via "$H$-Galois object",
+   :rule :R3,
+   :satiety :full,
+   :fed-at "2026-06-12"}
+  {:id :H-Galois-object,
+   :form "$H$-Galois object",
+   :role :compound,
+   :via "$H$-Galois object",
+   :rule :R9,
+   :satiety :full}
+  {:id :smash-product-operator,
+   :form "\\#",
+   :role :operator,
+   :binder :semantic-bind,
+   :via
+   "the {\\em smash product algebra} $A\\# H$ is defined as follows ... (sequence2.tex:7-33)",
+   :rule :R6,
+   :satiety :full}
+  {:id :A-smash-H,
+   :form "$A\\# H$",
+   :role :compound,
+   :via "$(A\\# H)^A$",
+   :rule :R14,
+   :satiety :full}
+  {:id :coinvariants-operator,
+   :form "$(-)^A$",
+   :role :operator,
+   :binder :convention-bind,
+   :via "$(A\\# H)^A$",
+   :rule :R14,
+   :satiety :full}
+  {:id :A-smash-H-coinv,
+   :form "$(A\\# H)^A$",
+   :role :compound,
+   :parse-incomplete false,
+   :via "$(A\\# H)^A$",
+   :rule :R14,
+   :satiety :full}
+  {:id :comodule-algebra,
+   :form "comodule algebra",
+   :role :concept,
+   :canon {:nlab "https://ncatlab.org/nlab/show/comodule+algebra"},
+   :via "$H$-comodule algebra",
+   :rule :R3,
+   :satiety :full,
+   :fed-at "2026-06-12"}
+  {:id :H-comodule-algebra,
+   :form "$H$-comodule algebra",
+   :role :compound,
+   :via "$H$-comodule algebra",
+   :rule :R9,
+   :satiety :full}
+  {:id :faithfully-flat,
+   :form "faithfully flat",
+   :role :property,
+   :canon
+   {:nlab "https://ncatlab.org/nlab/show/faithfully+flat+morphism"},
+   :via "faithfully flat",
+   :rule :R3,
+   :satiety :full,
+   :fed-at "2026-06-12"}
+  {:id :can,
+   :form "can",
+   :role :symbol,
+   :binder :macro-def,
+   :via "$can_{(A\\# H)^A}$",
+   :rule :R5,
+   :satiety :full}
+  {:id :can-subscript,
+   :form "$can_{(A\\# H)^A}$",
+   :role :compound,
+   :parse-incomplete false,
+   :via "$can_{(A\\# H)^A}$",
+   :rule :R14,
+   :satiety :full}
+  {:id :isomorphism,
+   :form "isomorphism",
+   :role :concept,
+   :canon {:nlab "https://ncatlab.org/nlab/show/isomorphism"},
+   :via "is an isomorphism",
+   :rule :R3,
+   :satiety :full,
+   :fed-at "2026-06-12"}
+  {:id :obligation-1,
+   :form "1) $(A\\# H)^A$ is an $H$-comodule algebra",
+   :role :obligation,
+   :via "1) $(A\\# H)^A$ is an $H$-comodule algebra",
+   :rule :R13,
+   :satiety :full}
+  {:id :obligation-2,
+   :form "2) $(A\\# H)^A$ is faithfully flat",
+   :role :obligation,
+   :via "2) $(A\\# H)^A$ is faithfully flat",
+   :rule :R13,
+   :satiety :full}
+  {:id :obligation-3,
+   :form "3) $can_{(A\\# H)^A}$ is an isomorphism",
+   :role :obligation,
+   :via "3) $can_{(A\\# H)^A}$ is an isomorphism",
+   :rule :R13,
+   :satiety :full}],
+ :hyperedges
+ [{:kind :promises,
+   :ends
+   [{:role :heading, :node :subsection-promise}
+    {:role :promised-result, :node :goal-statement}],
+   :via
+   "The map $\\Upsilon$ assigning an $H$-Galois object to an $H$-Azumaya algebra",
+   :rule :R8}
+  {:kind :goal,
+   :ends
+   [{:role :subject, :node :A-smash-H-coinv}
+    {:role :conclusion, :node :H-Galois-object}
+    {:role :hypothesis, :node :H-Azumaya-algebra}
+    {:role :ambient, :node :C}
+    {:role :side-condition, :node :flat}],
+   :via
+   "if $A$ is an $H$-Azumaya algebra in $\\C$, then $(A\\# H)^A$ is an $H$-Galois object ($H$ flat)",
+   :rule :R13}
+  {:kind :bind,
+   :ends
+   [{:role :subject, :node :A}
+    {:role :concept, :node :azumaya-algebra}
+    {:role :parameter, :node :H}
+    {:role :ambient, :node :C}
+    {:role :compound, :node :H-Azumaya-algebra}],
+   :via "$A$ is an $H$-Azumaya algebra in $\\C$",
+   :rule :R2}
+  {:kind :parametrizes,
+   :ends
+   [{:role :parameter, :node :H}
+    {:role :concept, :node :azumaya-algebra}
+    {:role :compound, :node :H-Azumaya-algebra}],
+   :via "$H$-Azumaya algebra",
+   :rule :R9}
+  {:kind :parametrizes,
+   :ends
+   [{:role :parameter, :node :H}
+    {:role :concept, :node :galois-object}
+    {:role :compound, :node :H-Galois-object}],
+   :via "$H$-Galois object",
+   :rule :R9}
+  {:kind :built-from,
+   :ends
+   [{:role :left, :node :A}
+    {:role :operator, :node :smash-product-operator}
+    {:role :right, :node :H}
+    {:role :whole, :node :A-smash-H}],
+   :via "$A\\# H$",
+   :rule :R14}
+  {:kind :parses,
+   :ends
+   [{:role :operator, :node :coinvariants-operator}
+    {:role :input, :node :A-smash-H}
+    {:role :parameter, :node :A}
+    {:role :output, :node :A-smash-H-coinv}],
+   :via "$(A\\# H)^A$",
+   :rule :R14,
+   :kind-original :applies-operator}
+  {:kind :decomposes-into,
+   :ends
+   [{:role :goal, :node :goal-statement}
+    {:role :decomposition, :node :decomposition}
+    {:role :subgoal, :node :obligation-1}
+    {:role :subgoal, :node :obligation-2}
+    {:role :subgoal, :node :obligation-3}],
+   :via "The proof will be completed once we prove:",
+   :rule :R13}
+  {:kind :decomposes-into,
+   :ends
+   [{:role :obligation, :node :obligation-1}
+    {:role :subject, :node :A-smash-H-coinv}
+    {:role :property, :node :H-comodule-algebra}],
+   :via "1) $(A\\# H)^A$ is an $H$-comodule algebra",
+   :rule :R13,
+   :kind-original :obligation-statement}
+  {:kind :parametrizes,
+   :ends
+   [{:role :parameter, :node :H}
+    {:role :concept, :node :comodule-algebra}
+    {:role :compound, :node :H-comodule-algebra}],
+   :via "$H$-comodule algebra",
+   :rule :R9}
+  {:kind :decomposes-into,
+   :ends
+   [{:role :obligation, :node :obligation-2}
+    {:role :subject, :node :A-smash-H-coinv}
+    {:role :property, :node :faithfully-flat}],
+   :via "2) $(A\\# H)^A$ is faithfully flat",
+   :rule :R13,
+   :kind-original :obligation-statement}
+  {:kind :decomposes-into,
+   :ends
+   [{:role :obligation, :node :obligation-3}
+    {:role :subject, :node :can-subscript}
+    {:role :property, :node :isomorphism}],
+   :via "3) $can_{(A\\# H)^A}$ is an isomorphism",
+   :rule :R13,
+   :kind-original :obligation-statement}
+  {:kind :macro-def,
+   :ends
+   [{:role :surface, :node :can}
+    {:role :compound, :node :can-subscript}],
+   :via "\\newcommand{\\can}{\\it can} (beseq2.tex:85)",
+   :rule :R5}
+  {:kind :parses,
+   :ends
+   [{:role :operator, :node :can}
+    {:role :subscript, :node :A-smash-H-coinv}
+    {:role :compound, :node :can-subscript}],
+   :via "$can_{(A\\# H)^A}$",
+   :rule :R14,
+   :kind-original :subscript-parametrizes}
+  {:kind :enters-subgoal,
+   :ends
+   [{:role :discharge, :node :proceed-1}
+    {:role :target, :node :obligation-1}],
+   :via "We proceed to prove 1).",
+   :rule :R13}
+  {:kind :proof-step,
+   :ends
+   [{:role :discharge, :node :proceed-1}
+    {:role :symbol, :node :A}
+    {:role :dropped-property, :node :H-Azumaya-algebra}
+    {:role :caveat, :node :part-1-caveat}],
+   :via "For this part the algebra $A$ does not have to be Azumaya.",
+   :rule :R13,
+   :kind-original :weakens-local-hypothesis}],
+ :schema "golden-graphs/SCHEMA.md v1"}

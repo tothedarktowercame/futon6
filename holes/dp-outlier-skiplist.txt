@@ -1,0 +1,4 @@
+# DP-detector skiplist — pathological inputs quarantined (documented, not hidden).
+# Format: <paper-id>  # <reason>   (lines starting with # are comments)
+# Convention: append timeouts here with their reason rather than silently dropping.
+1001.4071  # ~1.2M chars, malformed $-spans interleaved with comments; detector hangs ~2h (exceeds 240s timeout)

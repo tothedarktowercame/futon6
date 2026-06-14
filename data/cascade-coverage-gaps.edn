@@ -1,0 +1,4 @@
+[
+ {:scope "hypergraph-operator/argue" :missing "aif-architecture/capability-operator-argue" :at "closure-folds.edn"}
+{:scope "hypergraph-operator/derive" :missing "aif-architecture/capability-operator-derive" :at "closure-folds.edn"}
+]

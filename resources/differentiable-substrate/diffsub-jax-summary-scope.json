@@ -1,0 +1,18 @@
+{
+  "metric": "option-a",
+  "grain": "scope+capability",
+  "adjacency": "sparse-knn N=5565 k=20",
+  "n": 5565,
+  "k": 20,
+  "sat_before": 0.585155725479126,
+  "sat_after": 0.5989530682563782,
+  "gradnorm_max_med_ratio": 1.5028263330459595,
+  "corr_gradnorm_degree": -0.13170602128400719,
+  "summit_score_med": 0.011281,
+  "island_score_med": 0.001744,
+  "moves": 55,
+  "det_scopes_surfaced": 44,
+  "prior_entropy_norm": 0.8520840208554286,
+  "prior_max": 0.10420241319712005,
+  "score_cv": 0.35598228956147576
+}

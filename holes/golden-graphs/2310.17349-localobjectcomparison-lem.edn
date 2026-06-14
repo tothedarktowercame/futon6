@@ -1,0 +1,280 @@
+;; GOLDEN anatomy graph -- Lemma \label{localobjectcomparison}, arXiv 2310.17349.
+;; Region rationale: self-contained statement region immediately following
+;; Definition \ref{strongSlocal}; it has Let-binders, an authored label anchor,
+;; a display-defined set \widehat{S}, assumptions, a \ref edge, and iff structure.
+{:paper "2310.17349",
+ :region
+ {:kind :statement,
+  :label "localobjectcomparison",
+  :source "Bonart1arxiv.tex",
+  :lines [1074 1081],
+  :rationale
+  "Statement region chosen because it compares Definition \\ref{strongSlocal} to ordinary localization via explicit binders and assumptions."},
+ :nodes
+ [{:id :anchor-localobjectcomparison,
+   :form "\\label{localobjectcomparison}",
+   :role :anchor,
+   :via "\\begin{lem} \\label{localobjectcomparison}",
+   :rule :R12,
+   :satiety :full}
+  {:id :B,
+   :form "$\\cc B$",
+   :role :symbol,
+   :binder :semantic-bind,
+   :macro-decodes ["\\cc = \\mathcal (Bonart1arxiv.tex:105)"],
+   :via "Let $\\cc B$ be a small monoidal $\\ShvA$-enriched category",
+   :rule :R2,
+   :satiety :full}
+  {:id :small,
+   :form "small",
+   :role :decorator,
+   :via "a small monoidal $\\ShvA$-enriched category",
+   :rule :R10,
+   :satiety :full}
+  {:id :monoidal,
+   :form "monoidal",
+   :role :decorator,
+   :via "a small monoidal $\\ShvA$-enriched category",
+   :rule :R10,
+   :satiety :full}
+  {:id :ShvA,
+   :form "$\\ShvA$",
+   :role :compound,
+   :binder :macro-def,
+   :macro-decodes
+   ["\\ShvA = \\Shv(\\Cor) (Bonart1arxiv.tex:142)"
+    "\\Shv = \\mathsf{Shv} (Bonart1arxiv.tex:136)"
+    "\\Cor = \\mathcal{A} (Bonart1arxiv.tex:137)"],
+   :via "a small monoidal $\\ShvA$-enriched category",
+   :rule :R5,
+   :satiety :full}
+  {:id :enriched-category,
+   :form "$\\ShvA$-enriched category",
+   :role :parametrized-concept,
+   :via "a small monoidal $\\ShvA$-enriched category",
+   :rule :R9,
+   :satiety :full}
+  {:id :S,
+   :form "$S$",
+   :role :symbol,
+   :binder :semantic-bind,
+   :via "and $S$ a set of morphisms in $\\Ch([\\cc B, \\ShvA])$",
+   :rule :R2,
+   :satiety :full}
+  {:id :set-of-morphisms,
+   :form "set of morphisms",
+   :role :concept,
+   :via "$S$ a set of morphisms",
+   :rule :R3,
+   :satiety :full}
+  {:id :Ch-B-ShvA,
+   :form "$\\Ch([\\cc B, \\ShvA])$",
+   :role :compound,
+   :parse-incomplete true,
+   :macro-decodes
+   ["\\Ch = \\mathsf{Ch} (Bonart1arxiv.tex:166)"
+    "\\cc = \\mathcal (Bonart1arxiv.tex:105)"
+    "\\ShvA = \\Shv(\\Cor) (Bonart1arxiv.tex:142)"],
+   :via "$S$ a set of morphisms in $\\Ch([\\cc B, \\ShvA])$",
+   :rule :R14,
+   :satiety {:hungry-for :parse}}
+  {:role :symbol,
+   :standard-decodes
+   ["\\widehat is a standard TeX/LaTeX accent, not an author macro"],
+   :via
+   "Define a new set of morphisms $$\\widehat{S} :=\\{ (f \\otimesShv Z)[n] \\mid n \\in \\bb Z, Z \\in \\Smk , f \\in S \\} $$",
+   :rule :R6,
+   :binder :semantic-bind,
+   :id :widehat-S,
+   :satiety :full,
+   :form "$\\widehat{S}$",
+   :standard-roles
+   ["\\widehat => OVERACCENT (latexml-math-roles.tsv:968)"]}
+  {:role :display,
+   :parse-incomplete true,
+   :via
+   "Define a new set of morphisms $$\\widehat{S} :=\\{ (f \\otimesShv Z)[n] \\mid n \\in \\bb Z, Z \\in \\Smk , f \\in S \\} $$",
+   :rule :R14,
+   :id :display-widehat-S,
+   :satiety {:hungry-for :parse},
+   :form
+   "$$\\widehat{S} :=\\{ (f \\otimesShv Z)[n] \\mid n \\in \\bb Z, Z \\in \\Smk , f \\in S \\} $$",
+   :macro-decodes
+   ["\\otimesShv = \\underset{\\mathrm{Shv}}{\\otimes} (Bonart1arxiv.tex:151)"
+    "\\bb = \\mathbb (Bonart1arxiv.tex:106)"
+    "\\Smk = \\mathsf{Sm}_k (Bonart1arxiv.tex:138)"],
+   :standard-roles
+   ["\\widehat => OVERACCENT (latexml-math-roles.tsv:968)"
+    "\\mid => VERTBAR (latexml-math-roles.tsv:534)"
+    "\\in => RELOP (latexml-math-roles.tsv:388)"],
+   :inherited-roles
+   ["\\otimesShv inherits \\otimes => MULOP (latexml-math-roles.tsv:697) via Bonart1arxiv.tex:151"]}
+  {:id :D-B-ShvA,
+   :form "$D([\\cc B, \\ShvA])$",
+   :role :compound,
+   :parse-incomplete true,
+   :macro-decodes
+   ["\\cc = \\mathcal (Bonart1arxiv.tex:105)"
+    "\\ShvA = \\Shv(\\Cor) (Bonart1arxiv.tex:142)"],
+   :via "in $D([\\cc B, \\ShvA])$",
+   :rule :R14,
+   :satiety {:hungry-for :parse}}
+  {:id :F,
+   :form "$F$",
+   :role :symbol,
+   :binder :semantic-bind,
+   :via "Let $F \\in \\Ch([\\cc B, \\ShvA])$ be locally fibrant",
+   :rule :R2,
+   :satiety :full}
+  {:id :locally-fibrant,
+   :form "locally fibrant",
+   :role :concept,
+   :via "be locally fibrant",
+   :rule :R3,
+   :satiety :full}
+  {:id :cofibrant-domains-codomains,
+   :form "all domains and codomains from $S$ are cofibrant",
+   :role :assumption,
+   :via
+   "assume that all domains and codomains from $S$ are cofibrant.in the local model structure",
+   :rule :R2,
+   :satiety :full}
+  {:id :local-model-structure,
+   :form "local model structure",
+   :role :concept,
+   :via "in the local model structure",
+   :rule :R3,
+   :satiety :full}
+  {:id :strictly-S-local,
+   :form "strictly $S$-local",
+   :role :parametrized-concept,
+   :via
+   "$F$ is strictly $S$-local in the sense of Definition \\ref{strongSlocal}",
+   :rule :R9,
+   :satiety :full}
+  {:id :ref-strongSlocal,
+   :form "\\ref{strongSlocal}",
+   :role :ref,
+   :target-label "strongSlocal",
+   :via "Definition \\ref{strongSlocal}",
+   :rule :R12,
+   :satiety :full}
+  {:id :widehat-S-local,
+   :form "$\\widehat{S}$-local",
+   :role :parametrized-concept,
+   :via
+   "$F$ is $\\widehat{S}$-local in $D([\\cc B, \\ShvA])$ in the usual sense",
+   :rule :R9,
+   :satiety :full}
+  {:role :symbol,
+   :parse-incomplete true,
+   :via "for all $g: C \\rightarrow D, g \\in \\widehat{S}$",
+   :rule :R2,
+   :binder :semantic-bind,
+   :id :g,
+   :satiety {:hungry-for :parse},
+   :form "$g: C \\rightarrow D$",
+   :standard-roles
+   ["\\rightarrow => ARROW (latexml-math-roles.tsv:749)"
+    "\\in => RELOP (latexml-math-roles.tsv:388)"
+    "\\widehat => OVERACCENT (latexml-math-roles.tsv:968)"]}
+  {:id :isomorphism,
+   :form "isomorphism of abelian groups",
+   :role :concept,
+   :via "we have an isomorphism of abelian groups",
+   :rule :R3,
+   :satiety :full}
+  {:role :display,
+   :parse-incomplete true,
+   :via
+   "$$g^*: \\mathrm{Hom}_{D([\\cc B, \\ShvA])}(D,F) \\rightarrow \\mathrm{Hom}_{D([\\cc B, \\ShvA])}(C,F).$$",
+   :rule :R14,
+   :id :display-g-star,
+   :satiety {:hungry-for :parse},
+   :form
+   "$$g^*: \\mathrm{Hom}_{D([\\cc B, \\ShvA])}(D,F) \\rightarrow \\mathrm{Hom}_{D([\\cc B, \\ShvA])}(C,F).$$",
+   :macro-decodes
+   ["\\cc = \\mathcal (Bonart1arxiv.tex:105)"
+    "\\ShvA = \\Shv(\\Cor) (Bonart1arxiv.tex:142)"],
+   :standard-roles
+   ["\\rightarrow => ARROW (latexml-math-roles.tsv:749)"]}],
+ :hyperedges
+ [{:kind :anchors,
+   :ends [{:role :anchor, :node :anchor-localobjectcomparison}],
+   :via "\\begin{lem} \\label{localobjectcomparison}",
+   :rule :R12}
+  {:kind :bind,
+   :ends
+   [{:role :subject, :node :B}
+    {:role :concept, :node :enriched-category}
+    {:role :decorator, :node :small}
+    {:role :decorator, :node :monoidal}
+    {:role :parameter, :node :ShvA}],
+   :via "Let $\\cc B$ be a small monoidal $\\ShvA$-enriched category",
+   :rule :R2}
+  {:kind :bind,
+   :ends
+   [{:role :subject, :node :S}
+    {:role :concept, :node :set-of-morphisms}
+    {:role :ambient, :node :Ch-B-ShvA}],
+   :via "and $S$ a set of morphisms in $\\Ch([\\cc B, \\ShvA])$",
+   :rule :R2}
+  {:kind :defines,
+   :ends
+   [{:role :subject, :node :widehat-S}
+    {:role :display, :node :display-widehat-S}
+    {:role :ambient, :node :D-B-ShvA}],
+   :via
+   "Define a new set of morphisms $$\\widehat{S} :=\\{ (f \\otimesShv Z)[n] \\mid n \\in \\bb Z, Z \\in \\Smk , f \\in S \\} $$ in $D([\\cc B, \\ShvA])$.",
+   :rule :R6}
+  {:kind :bind,
+   :ends
+   [{:role :subject, :node :F}
+    {:role :ambient, :node :Ch-B-ShvA}
+    {:role :concept, :node :locally-fibrant}],
+   :via "Let $F \\in \\Ch([\\cc B, \\ShvA])$ be locally fibrant",
+   :rule :R2}
+  {:kind :assume,
+   :ends
+   [{:role :subject, :node :S}
+    {:role :assumption, :node :cofibrant-domains-codomains}
+    {:role :ambient, :node :local-model-structure}],
+   :via
+   "assume that all domains and codomains from $S$ are cofibrant.in the local model structure",
+   :rule :R2}
+  {:kind :refers,
+   :ends
+   [{:role :ref, :node :ref-strongSlocal}
+    {:role :target-label, :node :strictly-S-local}],
+   :via "in the sense of Definition \\ref{strongSlocal}",
+   :rule :R12,
+   :kind-original :refers-to}
+  {:kind :logical,
+   :ends
+   [{:role :left, :node :strictly-S-local}
+    {:role :right, :node :widehat-S-local}
+    {:role :subject, :node :F}],
+   :via
+   "Then $F$ is strictly $S$-local in the sense of Definition \\ref{strongSlocal} if and only if $F$ is $\\widehat{S}$-local in $D([\\cc B, \\ShvA])$ in the usual sense",
+   :rule :W1,
+   :kind-original :iff,
+   :connective :iff}
+  {:kind :logical,
+   :ends
+   [{:role :concept, :node :widehat-S-local}
+    {:role :bound-morphism, :node :g}
+    {:role :witness, :node :isomorphism}
+    {:role :display, :node :display-g-star}],
+   :via
+   "i.e. if and only if for all $g: C \\rightarrow D, g \\in \\widehat{S}$ we have an isomorphism of abelian groups",
+   :rule :W1,
+   :kind-original :iff-expansion,
+   :connective :iff}
+  {:kind :quantifies,
+   :ends
+   [{:role :bound-morphism, :node :g}
+    {:role :class, :node :widehat-S}
+    {:role :condition, :node :display-g-star}],
+   :via "for all $g: C \\rightarrow D, g \\in \\widehat{S}$",
+   :rule :R2}],
+ :schema "golden-graphs/SCHEMA.md v1"}

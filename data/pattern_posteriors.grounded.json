@@ -1,0 +1,47 @@
+{
+  "evidence-situated-log": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "logic-model-before-code": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "mission-anchored-scan": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "mission-interface-signature": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "mission-unlocks-eoi": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "model-recompute-schedule": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "prototype-maturity-lifecycle": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "read-existing-seam-before-implementing": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
+  "typed-kolmogorov-arrows": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  }
+}

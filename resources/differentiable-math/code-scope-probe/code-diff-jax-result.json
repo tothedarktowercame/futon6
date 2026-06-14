@@ -1,0 +1,11 @@
+{
+  "n": 342,
+  "band_center": 0.6,
+  "band_width": 0.12,
+  "sat_before": 0.6990228295326233,
+  "sat_after": 0.7797518968582153,
+  "gradnorm_min": 2.3723503545625135e-05,
+  "gradnorm_med": 4.054477540194057e-05,
+  "gradnorm_max": 5.256255462882109e-05,
+  "gradnorm_corr_modsize": 0.6469338663028963
+}

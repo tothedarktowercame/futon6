@@ -1,0 +1,118 @@
+{:leaf "E-mission-head"
+ :name "E-mission-head — the mission HEAD as AIF+ lifeform"
+ :format :aif+
+ :version 2
+ :date "2026-06-10"
+ :source "futon6/holes/missions/E-mission-head.md"
+ :note "First Golemized mission: HEAD recast as design pattern (§3.3), sigil
+computed via pattern_exotype_bridge (head_exotype_probe.py v0.1). Package
+authored so the mission can contend in a Calculemus battle
+(futon5a/scripts/run_aif2_contest.clj). Alternative Shem-computations remain
+open — incl. Skolemization: the :open arrows below are existentials; naming
+their witness functions is another way to write the animating word.
+'Skolemization: tired → Golemization: wired' (Joe, 2026-06-10)."
+
+ ;; --- the sigil (the installed Shem) ---------------------------------
+ :sigil
+ {:exotype "00011100"            ;; whole-text run, bit-confidence 0.29
+  :xenotype-32 "00011100·00011001·10101100·11001000"  ;; IF·HOWEVER·THEN·BECAUSE
+  :mean-bit-confidence 0.33
+  :per-section {:if      {:bits "00011100" :conf 0.28 :anchor "iching/hexagram-49-ge"      :cos 0.284}
+                :however {:bits "00011001" :conf 0.36 :anchor "iching/hexagram-13-tongren" :cos 0.306}
+                :then    {:bits "10101100" :conf 0.32 :anchor "iiching/exotype-248"        :cos 0.454}
+                :because {:bits "11001000" :conf 0.37 :anchor "iching/hexagram-31-xian"    :cos 0.461}}
+  :provenance "futon5/scripts/head_exotype_probe.py @ 2026-06-10; ridge over 320 anchors"}
+
+ ;; --- birth vitals (health-at-birth readout, v0) ---------------------
+ :health
+ {:xenotype-completeness 32/36     ;; 4-bit phenotype nibble not yet computed
+  :bit-confidence 0.33             ;; LOW — lifeform is young/weak, honestly
+  :anchor-proximity {:strong [:then :because] :weak [:if :however]}
+  :construction-state {:constructed 4 :open 3}  ;; meme.db diagram/E-mission-head
+  :reading "alive but wobbly: actionable half projects well; intent half needs HEAD-grain anchors"}
+
+ ;; --- the argument (contest substrate) -------------------------------
+ :spine [:n0 :nIF :nHOW :nTHEN :nBEC]
+
+ :nodes
+ [{:id :n0 :type :claim
+   :ref "arrow|meme.db|diagram/E-mission-head"
+   :content "A mission HEAD recast as a design pattern and compiled to a sigil makes the mission an AIF lifeform at seeding — health observable from birth"
+   :status :in-progress
+   :role :thesis}
+
+  {:id :nIF :type :claim :role :pillar :status :operational
+   :ref "E-mission-head.md|3.3|IF"
+   :content "missions should be living things — purpose not progress — improvised around a theme like a jazz head"}
+  {:id :nHOW :type :claim :role :pillar :status :operational
+   :ref "E-mission-head.md|3.3|HOWEVER"
+   :content "missions are treated as PM tools; HEAD is prose; strength/weakness/boundaries unreadable at seeding; satisfaction untyped"}
+  {:id :nTHEN :type :claim :role :pillar :status :in-progress
+   :ref "E-mission-head.md|3.3|THEN"
+   :content "recast the HEAD as a pattern, compile it, install the sigil at birth (Golemize)"}
+  {:id :nBEC :type :claim :role :pillar :status :operational
+   :ref "E-mission-head.md|3.3|BECAUSE"
+   :content "mission = virtual peripheral with an AIF head; typed satisfaction = what grounded-G discharges against; the ants precedent shows sigil-installation animates AIF agents"}
+
+  ;; supports — the constructed arrows (evidence on disk)
+  {:id :nS1 :type :claim :status :operational
+   :ref "arrow|mission-head-text->pattern-exotype-xenotype-encoding"
+   :content "HEAD text compiles to exotype/xenotype today (bridge, 791 patterns precedent)"}
+  {:id :nS2 :type :claim :status :operational
+   :ref "arrow|mission-aif-head-code->ten-observation-channels"
+   :content "ten health channels exist (M-aif-head 2026-03-15) — dormant, zero callers"}
+  {:id :nS3 :type :claim :status :operational
+   :ref "E-mission-head.md|3.3.1"
+   :content "sectioning unlocked the xenotype and lifted THEN/BECAUSE anchor proximity to cos~0.46"}
+
+  ;; F-nodes — named observations that would refute (falsifiability)
+  {:id :nF1 :type :falsifiability :status :discharged-pass
+   :content "IF sectioning fails to beat whole-text baseline (0.29), structure is not the weakness — RESULT: 0.33 + xenotype unlocked; passed 2026-06-10"}
+  {:id :nF2 :type :falsifiability :status :spec-only
+   :content "IF the seeded health readout never changes a WM/operator decision over N missions, the lifeform reading is decorative"}
+  {:id :nF3 :type :falsifiability :status :spec-only
+   :content "IF seeded beliefs predict mission outcomes no better than a uniform prior over the mission corpus, the sigil carries no information"}
+  {:id :nF4 :type :falsifiability :status :spec-only
+   :content "IF HEAD-grain anchors fail to lift IF/HOWEVER proximity above cos 0.4, the intent half of HEADs is not pattern-typeable"}
+  {:id :nF5 :type :falsifiability :status :spec-only
+   :content "IF birth vitals have no predictive validity over mission outcomes versus base rate (the corpus of births-with-outcomes, once it exists), the readout has accrued unearned authority — sharper than F2/F4: health-at-birth is a prior against which no likelihood has yet been computed (Mama Fable review 8.2)"}]
+
+ :edges
+ {:internal
+  [{:from :nIF :to :n0 :type :supports}
+   {:from :nHOW :to :n0 :type :supports :note "the gap motivates the thesis"}
+   {:from :nTHEN :to :n0 :type :supports :note "the move IS the thesis enacted"}
+   {:from :nBEC :to :n0 :type :supports}
+   {:from :nS1 :to :nTHEN :type :supports :note "compilability — the bridge exists"}
+   {:from :nS2 :to :n0 :type :supports :note "health channels exist, dormant"}
+   {:from :nS3 :to :nTHEN :type :supports :note "v0.1 measured result"}
+   {:from :nF1 :to :nTHEN :type :falsifies :note "discharged PASS 2026-06-10"}
+   {:from :nF2 :to :n0 :type :falsifies}
+   {:from :nF3 :to :n0 :type :falsifies}
+   {:from :nF4 :to :nIF :type :falsifies}]
+  :bites
+  ;; the self-argument: why I should exist — counter-attacks on the contra
+  [{:from :n0 :to "E-mission-head-contra/nC1" :type :counters
+    :note "the graveyard PROVES the need it cites: M-aif-head died invisibly because nothing measured its non-wiring. My three :open arrows make death visible in the store — failure to promote is a queryable corpse, not a silent one. I am the autopsy discipline applied prospectively"}
+   {:from :nHOW :to "E-mission-head-contra/nC2" :type :counters
+    :note "health is audit-separated by construction (E-ground-G): the readout never enters G, never gates birth — mode-crossing constitutes, attestation audits. F2 carries the decorative-readout kill-switch INSIDE my own package"}
+   {:from :nBEC :to "E-mission-head-contra/nC3" :type :counters
+    :note "a jazz head IS a typed object — changes, key, form — and the solos are wild BECAUSE the theme is stable. The ants were not less alive for their sigils; they were animate BECAUSE of them. Typing the theme is not charting the solo"}
+   {:from :nS3 :to "E-mission-head-contra/nC4" :type :counters
+    :note "the signal is the ASYMMETRY (THEN/BECAUSE cos 0.45+ vs IF/HOWEVER 0.29), not the +0.04 mean — structure, not noise; and F4 names the kill condition. A falsifiable weak signal beats an unfalsifiable strong vibe"}
+   {:from :nF1 :to "E-mission-head-contra/nC4" :type :counters
+    :note "the first falsifier already ran and PASSED — the contra's 'premature' is an argument for more probes, which is what I am"}
+   ;; the thesis-strike (added after round 1 exposed pillar-only defense):
+   {:from :n0 :to "E-mission-head-contra/nC0" :type :attacks
+    :note "remaining prose is not the safe default — it is the status quo that already failed, measurably: the gap is eight-times palpable (IDENTIFY), the WM starves for mission structure, untyped satisfaction leaves grounded-G nothing to discharge against, and prose HEADs let M-aif-head die INVISIBLY. The contra's thesis defends the very condition that produced the graveyard it cites"}]}
+
+ ;; --- ARGUE amendments (what the contra earned, round 1) --------------
+ :amendments
+ [{:id :A1 :from "E-mission-head-contra/nC2" :date "2026-06-10"
+   :rescoped "2026-06-10 (Mama Fable review 8.1)"
+   :text "SCOPED: signals grounded in EXTERNAL DISCHARGE (three-witness peradams, CH2 closures) are targetable; SELF-ESTIMATED signals (bit-confidence, health vitals, CH1 q-values) are observation-only and NEVER enter an optimization target (G, EFE ranking, fitness) or gate birth. The health readout is in the second class. This scope condition is the missing pattern relating measure-never-target to reward-must-be-grounded; unscoped, the rule is either too strong or erodes by exception."}
+  {:id :A2 :from "E-mission-head-contra/nC1" :date "2026-06-10"
+   :discharged "2026-06-10 (3 promotions, commits 17e9b53/9c4033b/5b87192) — IN EASY MODE: same session, full attention; tested construction, not inhabitation (Mama Fable review 8.3)"
+   :text "Wire-or-die: if the three :open arrows in diagram/E-mission-head are not promoted with real constructions within the next two working sessions on this thread, this lifeform self-declares :moribund in this package. The graveyard claim is load-bearing, not dismissed."}
+  {:id :A2-prime :from "Mama Fable review 8.3" :date "2026-06-10"
+   :text "The moribund clause re-arms as a STANDING HEARTBEAT (liveness-heartbeats applied temporally): every newly seeded mission either gets its health.json at birth or increments a visible failure counter. The real test of the revive: the birth ceremony fires for the next mission seeded by someone who is not thinking about today. (Implementation: the watcher, per E-scope-audit W12 — not anyone's attention.)"}]}

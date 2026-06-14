@@ -1,0 +1,55 @@
+{:leaf "E-mission-head-contra"
+ :name "Contra: mission HEADs should remain prose"
+ :format :aif+
+ :version 2
+ :date "2026-06-10"
+ :source "futon6/holes/missions/E-mission-head.md (ARGUE adversary, steel-manned)"
+ :note "The strongest honest case AGAINST E-mission-head's existence, assembled
+from the stack's own evidence for the first lifeform self-argument (why should
+I exist?). Every claim here is true or was true; the contest is over what they
+imply."
+
+ :spine [:nC0 :nC1 :nC2 :nC3 :nC4]
+
+ :nodes
+ [{:id :nC0 :type :claim :role :thesis :status :in-progress
+   :content "Mission HEADs should remain prose: the lifeform apparatus will become another uninhabited formalism, and what it measures will distort what makes missions work"}
+
+  {:id :nC1 :type :claim :role :pillar :status :operational
+   :ref "futon2/holes/M-aif-head.md; futon3a meme.db history"
+   :content "The graveyard base-rate: this stack's own formal apparatus dies uninhabited — M-aif-head COMPLETE with 0% wiring (zero callers, 3 months); meme.arrow write-orphaned and empty for 5 months. Formalisms bolted onto living practice are corpses by default"}
+
+  {:id :nC2 :type :claim :role :pillar :status :operational
+   :ref "Joe's Xbox-achievement discipline; Goodhart/Strathern"
+   :content "Health-at-birth is an optimization surface: the moment a readout exists, HEADs get authored to look healthy — sigil-gaming. The stack's own peradam discipline says measures that become targets cease to measure"}
+
+  {:id :nC3 :type :claim :role :pillar :status :operational
+   :ref "E-mission-head.md HEAD (Joe's own values)"
+   :content "Missions are fun BECAUSE improvised and unknowable in advance — that is what distinguishes them from Gantt charts. Typing the HEAD at birth Gantt-ifies the very thing the excursion claims to love; the lifeform kills its own reason to exist"}
+
+  {:id :nC4 :type :claim :role :pillar :status :operational
+   :ref "E-mission-head.md 3.3.1"
+   :content "The measured signal is thin: bit-confidence 0.33 (vs 0.29 baseline, +0.04), best anchor cos 0.461, IF/HOWEVER near noise. Building stack infrastructure on one probe's marginal lift is premature"}
+
+  {:id :nCF1 :type :falsifiability :status :spec-only
+   :content "IF the three open arrows are promoted with real constructions AND the health readout demonstrably changes a WM/operator decision, the graveyard claim (nC1) fails for this instance"}
+  {:id :nCF2 :type :falsifiability :status :spec-only
+   :content "IF missions Golemized at birth remain as improvisationally rich (measured by mid-flight scope novelty vs pre-Golem missions), the Gantt-ification claim (nC3) fails"}]
+
+ :edges
+ {:internal
+  [{:from :nC1 :to :nC0 :type :supports}
+   {:from :nC2 :to :nC0 :type :supports}
+   {:from :nC3 :to :nC0 :type :supports}
+   {:from :nC4 :to :nC0 :type :supports}]
+  :bites
+  [{:from :nC1 :to "E-mission-head/n0" :type :attacks
+    :note "base-rate: this will be M-aif-head again — beautifully specified, never inhabited"}
+   {:from :nC2 :to "E-mission-head/nHOW" :type :attacks
+    :note "'satisfaction untyped' is the feature: untypeable satisfaction cannot be gamed"}
+   {:from :nC3 :to "E-mission-head/nIF" :type :attacks
+    :note "the jazz value refutes the typing move: you cannot chart your way to surprise"}
+   {:from :nC3 :to "E-mission-head/nTHEN" :type :attacks
+    :note "Golemization IS Gantt-ification with better mythology"}
+   {:from :nC4 :to "E-mission-head/nS3" :type :attacks
+    :note "+0.04 mean-confidence is noise dressed as unlock"}]}}
