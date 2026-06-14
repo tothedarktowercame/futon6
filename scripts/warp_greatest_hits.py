@@ -31,6 +31,8 @@ from pathlib import Path
 
 import numpy as np
 
+from viz_budget import guard_svg
+
 W = Path("/home/joe/code/futon6/data/warp")
 GOLD = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
 
@@ -198,8 +200,10 @@ def main():
             'green assume/quant, grey other) · terrain = count-weighted incompleteness</div>'
             f'<svg width={VW} height={VH}>{"".join(fill)}{"".join(contour)}'
             f'{"".join(hub_lines)}{"".join(dots)}</svg></body>')
+    n_elem = guard_svg(html, "greatest-hits")
     (W / "greatest-hits.html").write_text(html)
-    print(f"greatest-hits: {len(papers)} papers, {len(scope_pts)} scope-points -> greatest-hits.html")
+    print(f"greatest-hits: {len(papers)} papers, {len(scope_pts)} scope-points, "
+          f"{n_elem} svg elements -> greatest-hits.html")
 
 
 if __name__ == "__main__":

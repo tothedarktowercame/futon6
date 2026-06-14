@@ -20,6 +20,8 @@ from pathlib import Path
 
 import numpy as np
 
+from viz_budget import guard_svg
+
 W = Path("/home/joe/code/futon6/data/warp")
 DASH = re.compile(r"[‐-―−-]")
 
@@ -180,9 +182,10 @@ def main():
             'geometry = concept-multiplicity embedding, t-SNE (superpod-free) · '
             f'terrain = {field_name}</div>'
             f'<svg width={VW} height={VH}>{"".join(fill)}{"".join(contour)}{"".join(dots)}</svg></body>')
+    n_elem = guard_svg(html, "paper-landscape")
     (W / "paper-landscape.html").write_text(html)
     print(f"placed {len(papers)} / 9745 papers (>=2 embedded concepts); "
-          f"tension mean {tension.mean():.2f}; wrote paper-landscape.html")
+          f"tension mean {tension.mean():.2f}; {n_elem} svg elements; wrote paper-landscape.html")
 
 
 if __name__ == "__main__":
