@@ -59,3 +59,20 @@ Warp: W1 bibliography, W3 concordance, W2 citation graph, corpus-DEBT report
 
 Wound down at the ceiling (goal met). Re-invoke `/loop` to resume if you want
 breadth-scaling; charter a deep-parse mission to push past 75%.
+
+## Archive-scale validation (2026-06-14, 948-paper clean corpus)
+
+Correction to an earlier mid-run claim ("coverage invariants overfit at scale"):
+that reading was off a STALE dashboard still containing the outlier 1001.4071,
+whose malformed spans alone contributed ~76k untagged runs. With it quarantined,
+the honest 948-paper numbers are:
+- **grounded 76%, wf 0, C-SYM-TAGGED 67, C-MATH-NONNULL 0.**
+The detector GENERALIZES: across 948 diverse papers, grounding holds at the
+ceiling, well-formedness is clean, tagging/math coverage essentially complete.
+The 4215 wf + ~76k untagged "regression" was ONE pathological outlier distorting
+three metrics — not a generalization failure. Net: the structure-mining result
+is validated at archive scale, not just the tuned 261-set. Remaining debt is the
+honest ~24% ungrounded (bound indices / dummy vars) + the C-DEFINIENS-DEBT
+frontier (the second-layer feature, scales with corpus). One deferred real item:
+detector-hardening for the outlier-span class (so 1001.4071-type inputs can be
+un-quarantined).
