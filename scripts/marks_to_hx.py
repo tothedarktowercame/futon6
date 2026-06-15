@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Import first-cut CT anatomy marks into substrate-2a hx/ grounding stores.
 
-This is the re-runnable version of marks_to_hx_proto.py for the grounding
+This is the re-runnable version of the shape-lock prototype for the grounding
 projection (#3).  It emits one EDN hx/ store per paper plus a deterministic QA
 report.  The metric intentionally matches SUBSTRATE-2A-BASELINE.md:
 
