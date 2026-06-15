@@ -203,6 +203,99 @@ through this same system. The present account sits one level up: it follows
 the *unit of work itself* — the mission — through the same passage, the
 container examining the concept of containment. Same house, different floor.
 
+## 9. Reprise and technical explainer (supporting material)
+
+*This section reprises the account above in the system's native,
+category-theoretic vocabulary — the language the level-0 prose deliberately kept
+in boxes. It is written to travel as **supporting material**: a publication can
+carry §§1–8 as the paper and this as a technical supplement. Every construction
+named below is on disk; where a leg is schematic or still owed, it says so. The
+datatype used here is formalized by the companion mission `M-typed-holes`
+(futon3c; Lean in `mathlib4/DarkTower/`), of which the running mission
+E-mission-head is itself a worked example (`M-typed-holes-example-mission-head.md`;
+Lean `DarkTower/Examples.lean::MissionExample`).*
+
+**R1 — the object (reprise of §§1, 3, 4): a mission is a BV-typed wiring
+diagram with typed holes.** The structural reading of §3 is, precisely, a
+**hyperedge with typed holes** — a position in the polynomial functor category
+**Poly**, carrying a set of *typed directions* (the holes). Concretely:
+
+- the life-cycle phases (§3's "spine") are a **non-commutative `seq` comb**,
+  `⟨HEAD; IDENTIFY; …; DOCUMENT⟩` (`DarkTower/BV.lean`, `Examples.lean::lifecycle`);
+- the two ascents of §1 — scope and organism — are a **`copar`** (parallel
+  composition held together), `copar(scope, organism)`
+  (`Examples.lean::readings`); a mission is well-formed exactly when the two
+  branches cohere, which is the §1 "summit is where the ascents agree" stated
+  categorically;
+- §3's **ghost line** and §4's **open arrow** are both **typed holes**: the
+  ghost line is a hole typed by an *expected phase* (`hungry_for = expected-phase`),
+  the open arrow a hole typed by a *named-but-unbuilt target*
+  (`DarkTower/TypedHole.lean`; `M-typed-holes-example-mission-head.md` §2).
+
+**R2 — the act (reprise of §4): "fill" is the discharge counit; prediction
+error is an unfilled hole.** §4's organism *acts* to keep its self-model's
+predictions true. In the native vocabulary that act is **`fill`**: supplying a
+typed hole with a well-typed filler. A **prediction error is exactly an
+unfilled typed hole**, and the AIF action that resolves it is one application of
+`fill` — formally the **counit** of the discharge comonad (`DarkTower/Fill.lean`,
+`DarkTower/Discharge.lean`). So §4's "the body acts to reduce surprise" and the
+stack's "discharge a hole" are one operation under two descriptions.
+
+**R3 — the synthesis is a construction, and it is now built (reprise of §5).**
+§5.3 records a debt: the synthesis leans on the principle *two projections of
+one quantity*, which had never been written into the method library, and §5
+claims the paper itself is "that principle's missing construction." This
+supplement reports the construction **discharged**. The one underlying object is
+the **typed-hole/`fill` datatype**; the structural and organism readings are two
+of its **projections**; and `M-typed-holes` built the single runtime
+operator — `fill(hole, filler, kind=…)` — that **six** such projections route
+through (answer/query, reply/bell, ground/symbol, compose/comb, discharge/proof,
+cascade-feed/mining), each a view, none a reimplementation
+(`futon3c/scripts/fill.py`; the coverage proof `DarkTower/Coverage.lean`:
+`Fintype.card Projection = 6`, no orphan by construction). The §5 coupling table
+is then literally a list of **typed coherence-wires across the `copar`** — the
+BV interaction that makes the two readings one object rather than two
+descriptions. (Each row of §5's table is one such wire; see
+`M-typed-holes-example-mission-head.md` §2(c).)
+
+The construction was not merely defined but **witnessed at runtime**: routing the
+six projections through the one `fill` produced typed records in the witness
+store (ArSE) — *proof = witnessed fill*, the stack's I5 — so the claim "the two
+readings are two projections of one operator" is checkable on the running system,
+not only in Lean.
+
+**R4 — the mid-life preregistration came true (reprise of §7).** §7 closes by
+*preregistering* a construction: the counted Remaining-Work hole "wants to become
+a first-class scope, so that a hole's count, a flight's act, and a panel's
+display are one thing read three ways," because "three systems touch the same
+holes; none share them." That is the **same disunity** R3 resolves: three (here,
+six) surfaces of one hole with no shared operator. The single `fill` is the
+shared operator the preregistration asked for; the predicted next construction
+has since landed. (Caveat preserved from §7: making the *displayed/counted* hole
+literally the same object as the scope is the wiring D1 demonstrates in principle;
+the full last-mile UI/registry unification is its own follow-on.)
+
+**R5 — diagrams and their provenance.** Two diagram families illustrate this
+supplement. (i) The **lifecycle `seq` + readings `copar`** string diagram is
+*native* to this paper's running example (E-mission-head = `MissionExample`), so
+it carries no caveat. (ii) The **Poly position-with-directions**, the **lens
+(`comb`) composition**, and the **answer = `fill`/discharge counit** diagrams are
+drawn from a *different* worked example — the grounding of arXiv 0809.2517
+(`DarkTower/Examples.lean::PaperExample`) and the cascade→sorry→wiring fold
+(`DarkTower/FirstFlightsExample.lean`) — and **must be labelled as such**: they
+show the same machinery on a mathematics-paper instance, not on this mission.
+
+**R6 — what is proved vs. demonstrated vs. owed (honesty ledger).** The
+datatype, the six-projection coverage, and the discharge/fill laws are **Lean-
+proved** (`DarkTower/`, `lake build` green, 0 `sorryAx`). The single runtime
+`fill` and all six adapters routing through it are **demonstrated live** (witnessed
+in ArSE this session). Still **schematic or owed**: the `cascade-feed` leg is
+covered as a static satiety grade, not yet a hungry→sated *transition*; the BV
+`medial`/`switch` rules are schematic (full Guglielmi-BV fidelity deferred); a
+formal `copar`-interaction functor is future work; the substrate-2a data is a
+first cut (filler *quality* tracks its QA baseline, not the wiring). Nothing here
+is claimed beyond these lines.
+
 ---
 
 *TODO (next sessions): §3/§4 prose passes over the primary source; figures

@@ -5,6 +5,8 @@
 \usepackage{lmodern}
 \usepackage{amsmath,amssymb}
 \usepackage{longtable,booktabs}
+\usepackage{tabularx}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \usepackage{enumitem}
 \usepackage[normalem]{ulem}
 \usepackage{xcolor}
@@ -53,7 +55,7 @@ Proof Sprint" (futon6). Format: running example, not monograph --- the primary
 source is \scopehl{futon6/holes/missions/E-mission-head.md} and its sibling artifacts;
 this paper reads them rather than repeating them.*
 
-\textbf{Status:} draft v3 (2026-06-12, Joe + Fable) --- adds \S{}8, the third ascent: the mission read as a derivation (triple, derive gate, cascade, diagram; 79-mission miner evidence). v2 (2026-06-10): level-0 prose holds to the
+\textbf{Status:} draft v2 (2026-06-10, Joe + Fable) --- level-0 prose now holds to the
 plain-language standard (the ARGUE \S{}4.1 discipline applied to the whole paper:
 boxes may speak the system's native language; the prose around them may not).
 
@@ -90,7 +92,7 @@ is unusually well documented because it documented itself --- every phase it
 grew through was captured by the very tooling it was building. The primary
 sources (everything below is on disk and quoted from, never paraphrased):
 
-\begin{center}\small\begin{tabular}{ll}
+\begin{center}\small\begin{tabularx}{\textwidth}{YY}
 \toprule
 artifact & reading \\
 \midrule
@@ -101,7 +103,7 @@ substrate-2 mission-scope hyperedges (31 scopes) + \scopehl{*mission-overview*} 
 \scopehl{mission\_head\_invariants.clj} (VERIFY V0, 5/5) & AIF (verified) / scope (a scope) \\
 \scopehl{closure-folds.edn} entries incl. the first \scopehl{:success false} & the loop's grain \\
 \bottomrule
-\end{tabular}\end{center}
+\end{tabularx}\end{center}
 
 \begin{vitalsbox}
 confidence 0.33 $\cdot$ xenotype 89\% $\cdot$ exotype \texttt{00011100}\\[2pt]$\otimes$\textsf{\small IF} $\otimes$\textsf{\small HOWEVER} \checkmark{}\textsf{\small THEN} \checkmark{}\textsf{\small BECAUSE}\\[3pt]\emph{alive but wobbly: xenotype completeness 0.89; strong anchors ['THEN', 'BECAUSE'], weak anchors ['IF', 'HOWEVER'].}\\[2pt]{\scriptsize generated 2026-06-10T18:16:29 by \texttt{head\_exotype\_probe.py}}
@@ -157,7 +159,9 @@ of the theory than that sentence.) Its statement of intent
 is rewritten in a four-part design-pattern form (*if / however / then /
 because*) and compiled into a numerical fingerprint --- the system borrows the
 word \emph{sigil}, after an earlier experiment in which simulated ants were
-animated by installing exactly such fingerprints. From the sigil the system
+animated by installing exactly such fingerprints. (To actually compile one for
+a mission of your own, see \scopehl{futon5/README-sigils.md} --- the compilation is a
+script, \scopehl{head\_exotype\_probe.py}, not a hand-authored value.) From the sigil the system
 computes birth vitals; the design states in advance what observations would
 prove it wrong; the work even argues for its own existence against the
 strongest objections we could write down, and carries a clause that declares
@@ -172,7 +176,7 @@ source:
 
 The probe's pattern-mode ran on \S{}3.3's recast (same projector, section-wise):
 
-\begin{center}\small\begin{tabular}{lllll}
+\begin{center}\small\begin{tabularx}{\textwidth}{YYYYY}
 \toprule
 section & bits & conf & nearest anchor & cos \\
 \midrule
@@ -181,7 +185,7 @@ HOWEVER & \scopehl{00011001} & 0.36 & hexagram-13 \textbf{Tongren } (fellowship)
 THEN & \scopehl{10101100} & 0.32 & iiching/exotype-248 & \textbf{0.454} \\
 BECAUSE & \scopehl{11001000} & 0.37 & hexagram-31 \textbf{Xian } (mutual influence) & \textbf{0.461} \\
 \bottomrule
-\end{tabular}\end{center}
+\end{tabularx}\end{center}
 
 **xenotype-32 \scopehl{00011100$\cdot$00011001$\cdot$10101100$\cdot$11001000}, mean-conf 0.33** (baseline 0.29).
 
@@ -208,7 +212,7 @@ and the coherence is computable.**
 
 The mapping is exact, not poetic:
 
-\begin{center}\small\begin{tabular}{lll}
+\begin{center}\small\begin{tabularx}{\textwidth}{YYY}
 \toprule
 structural object & organism object & the coupling \\
 \midrule
@@ -222,7 +226,7 @@ stated failure condition & what would \emph{count} as error & written before the
 the vitals card & interoception (the body sensing itself) & computed \emph{from} the structurally-readable document \\
 the outline panel & exteroception (the body as seen) & the same document, drawn \\
 \bottomrule
-\end{tabular}\end{center}
+\end{tabularx}\end{center}
 
 Three consequences worth the paper:
 
@@ -322,87 +326,99 @@ wants to become a first-class scope, so that a hole's count, a flight's
 act, and a panel's display are one thing read three ways. That is the
 next construction, and this paragraph is its preregistration.
 
-\section*{8. A third ascent: the mission read as a derivation}
-
-Two days after the first ascent, a third reading emerged --- not of a
-mission's structure or its life, but of its \emph{logic}. On 12 June 2026 a
-human operator and an agent flew the War Machine together for an afternoon,
-with \scopehl{M-first-flights} as the mission under advance, and what
-crystallized is that a mission, read whole, is a \textbf{derivation}: it
-states a typed gap, argues a way across, checks the argument, and builds the
-term. Each phase contributes one part of a single formal object --- a
-\emph{triple}.
-
-\begin{phasebox}[title={the triple a mission mints}]
-\textbf{(typed hole, term, wiring diagram)}\\[2pt]
-\emph{hole} --- what is missing, stated as an arrow from what we \emph{have}
-to what we \emph{want}. Minted at the end of DERIVE and persisted in the
-arrow store; the worked instance is \scopehl{arr-7535a5b6-e59}: \emph{have}
-flight records whose grounds live in prose, \emph{want} flights as a fully
-typed corpus.\\[2pt]
-\emph{term} --- the construction that fills the hole (here: a renderer that
-was specified, built by a worker agent, and reviewed the same evening).\\[2pt]
-\emph{diagram} --- the composition showing \emph{how} the term fills the
-hole: every step wired from the \emph{have} port to the \emph{want} port,
-each step carrying either its \textbf{witness} (which checkpoint, which
-verdict, which artifact) or a typed statement of what it still \emph{hungers}
-for.
-\end{phasebox}
-
-Three disciplines fell out of the flight, each checkable by the same
-instruments that read structure in \S{}3:
-
-\textbf{The derive gate.} You cannot argue until you know what you are
-arguing about: DERIVE ends only when the typed hole is minted, and the
-mission carries a certificate line saying so --- detected by the same
-certificate lane that reads pass/fail verdicts, so a mission that skipped
-the gate shows the gap in its outline. (The pattern is in the library as
-\scopehl{derive-exits-on-a-minted-sorry}; the worked mission's certificate is
-honestly labelled a retrofit, since it ran DERIVE before the gate existed.)
-
-\textbf{The cascade.} ARGUE, read formally, is a pattern language in
-Alexander's sense: the mission's nine cited methods assembled as a
-semilattice --- largest context first, each pattern differentiating the
-space set above it, every edge carrying its \emph{because} verbatim from the
-mission's own rationale records. The cascade is the argument in
-pattern-theoretic form, and it is data
-(\scopehl{first-flights-cascade.edn}), rendered by a tool that consumes the
-data alone and so cannot flatter it.
-
-\textbf{The verify reading.} VERIFY, read formally, is not a checklist ---
-it type-checks the diagram: do the boundary ports match the minted arrow,
-is every wire typed, does every application carry a witness it did not
-manufacture? The logic model is the checker; the diagram is the content.
-
-The abstraction holds beyond the running example. The same evening, a miner
-walked \textbf{79 completed missions} and recovered, from documents nobody
-wrote for it: 391 pattern citations in citation order, 1{,}320 named
-artifacts of which \textbf{912 verify as existing} (the retrodictive
-witness: \emph{it built this}), and a per-mission loss report saying exactly
-where reconstruction fell short --- every one of the 79 lacks an explicit
-derive-gate statement, which is true, since the gate was invented that
-afternoon. The corpus is imperfect by measurement rather than by suspicion,
-and improves by revisiting the worst losses first.
-
-One debt from \S{}7 is part-paid and one new construction is preregistered.
-Part-paid: the counted hole is now a first-class typed object (the minted
-arrow, with its discharge tracked by review and checkpoint) --- though the
-checkbox-counter unification proper remains open. Preregistered: the
-diagrams above record \emph{that} steps compose but not \emph{how} ---
-in parallel without coordination, in sequence with one-way influence, in
-tight coupling, or as a branch among alternatives. A typed grammar for
-exactly these four composition modes exists (the stack's sibling excursion
-derives it from the causal-category literature), and equipping the mined
-diagrams with it is the next pass over the corpus. When that lands, a
-mission's argument will be readable, checkable, and \emph{composable} in
-the same notation as the proofs and flights it governs.
-
-\section*{9. Relation to "A First Proof Sprint"}
+\section*{8. Relation to "A First Proof Sprint"}
 
 "A First Proof Sprint" follows a single mathematical proof finding its way
 through this same system. The present account sits one level up: it follows
 the \emph{unit of work itself} --- the mission --- through the same passage, the
 container examining the concept of containment. Same house, different floor.
+
+\section*{9. Reprise and technical explainer (supporting material)}
+
+*This section reprises the account above in the system's native,
+category-theoretic vocabulary --- the language the level-0 prose deliberately kept
+in boxes. It is written to travel as \textbf{supporting material}: a publication can
+carry \S{}\S{}1--8 as the paper and this as a technical supplement. Every construction
+named below is on disk; where a leg is schematic or still owed, it says so. The
+datatype used here is formalized by the companion mission \scopehl{M-typed-holes}
+(futon3c; Lean in \scopehl{mathlib4/DarkTower/}), of which the running mission
+E-mission-head is itself a worked example (\scopehl{M-typed-holes-example-mission-head.md};
+Lean \scopehl{DarkTower/Examples.lean::MissionExample}).*
+
+**R1 --- the object (reprise of \S{}\S{}1, 3, 4): a mission is a BV-typed wiring
+diagram with typed holes.** The structural reading of \S{}3 is, precisely, a
+\textbf{hyperedge with typed holes} --- a position in the polynomial functor category
+\textbf{Poly}, carrying a set of \emph{typed directions} (the holes). Concretely:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=1pt]
+\item the life-cycle phases (\S{}3's "spine") are a **non-commutative \scopehl{seq} comb**, \scopehl{HEAD; IDENTIFY; \ldots{}; DOCUMENT} (\scopehl{DarkTower/BV.lean}, \scopehl{Examples.lean::lifecycle});
+\item the two ascents of \S{}1 --- scope and organism --- are a **\scopehl{copar}** (parallel composition held together), \scopehl{copar(scope, organism)} (\scopehl{Examples.lean::readings}); a mission is well-formed exactly when the two branches cohere, which is the \S{}1 "summit is where the ascents agree" stated categorically;
+\item \S{}3's \textbf{ghost line} and \S{}4's \textbf{open arrow} are both \textbf{typed holes}: the ghost line is a hole typed by an \emph{expected phase} (\scopehl{hungry\_for = expected-phase}), the open arrow a hole typed by a \emph{named-but-unbuilt target} (\scopehl{DarkTower/TypedHole.lean}; \scopehl{M-typed-holes-example-mission-head.md} \S{}2).
+\end{itemize}
+
+**R2 --- the act (reprise of \S{}4): "fill" is the discharge counit; prediction
+error is an unfilled hole.** \S{}4's organism \emph{acts} to keep its self-model's
+predictions true. In the native vocabulary that act is **\scopehl{fill}**: supplying a
+typed hole with a well-typed filler. A **prediction error is exactly an
+unfilled typed hole**, and the AIF action that resolves it is one application of
+\scopehl{fill} --- formally the \textbf{counit} of the discharge comonad (\scopehl{DarkTower/Fill.lean},
+\scopehl{DarkTower/Discharge.lean}). So \S{}4's "the body acts to reduce surprise" and the
+stack's "discharge a hole" are one operation under two descriptions.
+
+\textbf{R3 --- the synthesis is a construction, and it is now built (reprise of \S{}5).}
+\S{}5.3 records a debt: the synthesis leans on the principle *two projections of
+one quantity*, which had never been written into the method library, and \S{}5
+claims the paper itself is "that principle's missing construction." This
+supplement reports the construction \textbf{discharged}. The one underlying object is
+the **typed-hole/\scopehl{fill} datatype**; the structural and organism readings are two
+of its \textbf{projections}; and \scopehl{M-typed-holes} built the single runtime
+operator --- \scopehl{fill(hole, filler, kind=\ldots{})} --- that \textbf{six} such projections route
+through (answer/query, reply/bell, ground/symbol, compose/comb, discharge/proof,
+cascade-feed/mining), each a view, none a reimplementation
+(\scopehl{futon3c/scripts/fill.py}; the coverage proof \scopehl{DarkTower/Coverage.lean}:
+\scopehl{Fintype.card Projection = 6}, no orphan by construction). The \S{}5 coupling table
+is then literally a list of **typed coherence-wires across the \scopehl{copar}** --- the
+BV interaction that makes the two readings one object rather than two
+descriptions. (Each row of \S{}5's table is one such wire; see
+\scopehl{M-typed-holes-example-mission-head.md} \S{}2(c).)
+
+The construction was not merely defined but \textbf{witnessed at runtime}: routing the
+six projections through the one \scopehl{fill} produced typed records in the witness
+store (ArSE) --- \emph{proof = witnessed fill}, the stack's I5 --- so the claim "the two
+readings are two projections of one operator" is checkable on the running system,
+not only in Lean.
+
+\textbf{R4 --- the mid-life preregistration came true (reprise of \S{}7).} \S{}7 closes by
+\emph{preregistering} a construction: the counted Remaining-Work hole "wants to become
+a first-class scope, so that a hole's count, a flight's act, and a panel's
+display are one thing read three ways," because "three systems touch the same
+holes; none share them." That is the \textbf{same disunity} R3 resolves: three (here,
+six) surfaces of one hole with no shared operator. The single \scopehl{fill} is the
+shared operator the preregistration asked for; the predicted next construction
+has since landed. (Caveat preserved from \S{}7: making the \emph{displayed/counted} hole
+literally the same object as the scope is the wiring D1 demonstrates in principle;
+the full last-mile UI/registry unification is its own follow-on.)
+
+\textbf{R5 --- diagrams and their provenance.} Two diagram families illustrate this
+supplement. (i) The **lifecycle \scopehl{seq} + readings \scopehl{copar}** string diagram is
+\emph{native} to this paper's running example (E-mission-head = \scopehl{MissionExample}), so
+it carries no caveat. (ii) The \textbf{Poly position-with-directions}, the **lens
+(\scopehl{comb}) composition\textbf{, and the }answer = \scopehl{fill}/discharge counit** diagrams are
+drawn from a \emph{different} worked example --- the grounding of arXiv 0809.2517
+(\scopehl{DarkTower/Examples.lean::PaperExample}) and the cascade$\rightarrow$sorry$\rightarrow$wiring fold
+(\scopehl{DarkTower/FirstFlightsExample.lean}) --- and \textbf{must be labelled as such}: they
+show the same machinery on a mathematics-paper instance, not on this mission.
+
+\textbf{R6 --- what is proved vs. demonstrated vs. owed (honesty ledger).} The
+datatype, the six-projection coverage, and the discharge/fill laws are **Lean-
+proved** (\scopehl{DarkTower/}, \scopehl{lake build} green, 0 \scopehl{sorryAx}). The single runtime
+\scopehl{fill} and all six adapters routing through it are \textbf{demonstrated live} (witnessed
+in ArSE this session). Still \textbf{schematic or owed}: the \scopehl{cascade-feed} leg is
+covered as a static satiety grade, not yet a hungry$\rightarrow$sated \emph{transition}; the BV
+\scopehl{medial}/\scopehl{switch} rules are schematic (full Guglielmi-BV fidelity deferred); a
+formal \scopehl{copar}-interaction functor is future work; the substrate-2a data is a
+first cut (filler \emph{quality} tracks its QA baseline, not the wiring). Nothing here
+is claimed beyond these lines.
 
 \medskip\hrule\medskip
 
