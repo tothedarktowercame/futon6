@@ -1,0 +1,991 @@
+{:store/id "substrate-2a/grounding"
+ :format/version 1
+ :projection :grounding
+ :paper/id "0704.1378"
+ :source/file "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-0704.1378-dp-emacs.json"
+ :source/cut {:source-dir "/home/joe/code/futon6/data/showcases/ct-anatomy/golden" :file-count 9733 :selection "sorted-first:80" :selection-count 80 :fingerprint "e106cfed462c0e5b"}
+ :qa/metrics {:filled 402 :open 417 :grounded-pct 49.1 :symbol-grounded 379 :symbol-open 388 :let-filled 11 :let-open 29 :bind-typed 12}
+ :nodes [
+  {:id :A, :label "$A$"}
+  {:id :A-6dcd4ce2, :label "A"}
+  {:id :A-ktd-a-u-v-v--1-I, :label "$A= k\\td{a,u,v,v^{-1}}/I$"}
+  {:id :Ast-f-r-Bst-i-r-Cst-q-r-A, :label "$A\\st{f}\\r B\\st{i}\\r C\\st{q}\\r A$"}
+  {:id :Ato-A, :label "A\\to A"}
+  {:id :B, :label "B"}
+  {:id :C, :label "C"}
+  {:id :C-D-A, :label "$\\C{D}(A)$"}
+  {:id :C-F-k-eps-eps-2, :label "$\\C{F}(k[\\eps]/\\eps^2)$"}
+  {:id :C-T, :label "$\\C{T}$"}
+  {:id :C-T-E-A, :label "$\\C{T}(E,A)$"}
+  {:id :C-T-Sigma, :label "$(\\C{T},\\Sigma)$"}
+  {:id :D, :label "D"}
+  {:id :E, :label "$E$"}
+  {:id :E-e0184ade, :label "E"}
+  {:id :Eto-A, :label "E\\to A"}
+  {:id :Eto-E, :label "E\\to E"}
+  {:id :Eto-Sigma-E, :label "E\\to \\Sigma E"}
+  {:id :EtoS-E, :label "E\\to\\S E"}
+  {:id :EtoSigma-E, :label "E\\to\\Sigma E"}
+  {:id :F, :label "$F$"}
+  {:id :F-e69f20e9, :label "F"}
+  {:id :F-eta-tau-Sigma-F-A-To-F-A, :label "$F(\\eta)\\tau:\\Sigma F(A)\\To F(A)$"}
+  {:id :H, :label "H"}
+  {:id :H_0, :label "$H_0$"}
+  {:id :H_0-M, :label "$H_0(M)$"}
+  {:id :Hopf-map-for-F-A, :label "Hopf map for $F(A)$"}
+  {:id :I, :label "I"}
+  {:id :K, :label "K"}
+  {:id :L, :label "L"}
+  {:id :M, :label "$M$"}
+  {:id :M-c63ae6dd, :label "M"}
+  {:id :N, :label "N"}
+  {:id :P, :label "P"}
+  {:id :R, :label "$R$"}
+  {:id :R-06576556, :label "R"}
+  {:id :R-m, :label "$(R,\\m)$"}
+  {:id :S, :label "S"}
+  {:id :S-2, :label "$S/2$"}
+  {:id :Sigma-Ato-A, :label "\\Sigma A\\to A"}
+  {:id :Sigma-Sto-S, :label "\\Sigma S\\to S"}
+  {:id :Sigma-tau, :label "$\\Sigma=\\tau^*$"}
+  {:id :T, :label "$T$"}
+  {:id :T-c2c53d66, :label "T"}
+  {:id :Theta-Phi-Psi, :label "$(\\Theta,\\Phi,\\Psi)$"}
+  {:id :W, :label "W"}
+  {:id :X, :label "$X$"}
+  {:id :X-c032adc1, :label "X"}
+  {:id :X_2, :label "$X_2$"}
+  {:id :Xwedge, :label "X\\wedge -"}
+  {:id :Y, :label "Y"}
+  {:id :Z, :label "Z"}
+  {:id :a, :label "a"}
+  {:id :abs-v--1, :label "$\\abs{v}=-1$"}
+  {:id :algebra, :label "algebra"}
+  {:id :algebraic-triangulated-category, :label "algebraic triangulated category"}
+  {:id :algebraic-triangulated-category-nlab-6064, :label "algebraic triangulated category [nlab-6064]"}
+  {:id :alpha-beta-gamma, :label "$(\\alpha,\\beta,\\gamma)$"}
+  {:id :alpha-beta-gamma-colon-f-i-q-r-f-i-q, :label "$(\\alpha,\\beta,\\gamma)\\colon (f,i,q)\\r(f',i',q')$"}
+  {:id :alpha_-script-candidate-triangle-begin-equation-label-tri, :label "alpha_-script : candidate triangle \\begin{equation*}%\\label{tri} \\"}
+  {:id :any-dg-A--module-and-let-x-in-H_0-M-be-a-hom, :label "any dg $A$-module and let $[x]\\in H_0(M)$ be a hom"}
+  {:id :au, :label "au"}
+  {:id :av, :label "av"}
+  {:id :c, :label "c"}
+  {:id :category, :label "category"}
+  {:id :cofibrant-fibrant-object-of-the-model-category, :label "cofibrant-fibrant object of the model category $\\"}
+  {:id :cofibrant-fibrant-object-of-the-model-category-529efdbf, :label "cofibrant-fibrant object of the model category"}
+  {:id :commutative-local-ring-with-m-2-neq-0, :label "commutative local ring with $\\m=(2)\\neq 0$"}
+  {:id :cycle-with-x-zu-d-ya, :label "cycle with $x=zu-d(ya)$"}
+  {:id :d, :label "d"}
+  {:id :delta-Phi-0, :label "$(\\delta,\\Phi,0)$"}
+  {:id :dg-algebra, :label "dg algebra"}
+  {:id :diagram-begin-equation-label-tri-Ast-f-To-B, :label "diagram \\begin{equation}\\label{tri} A\\st{f}\\To B\\"}
+  {:id :emph-quasi-exact-triangle-if-begin-equation-A, :label "\\emph{quasi-exact triangle} if \\begin{equation*} A"}
+  {:id :eps-u, :label "$\\eps=[u]$"}
+  {:id :eta, :label "\\eta"}
+  {:id :eta-Sigma-Ato-A, :label "$\\eta:\\Sigma A\\to A$"}
+  {:id :exact-equivalence-from-C-D-c-A-to-C-F-k, :label "exact equivalence from $\\C{D}^c(A)$ to $\\C{F}(k[\\"}
+  {:id :exact-functor-with-natural-isomorphism-tau, :label "exact functor with natural isomorphism $\\tau"}
+  {:id :existentially-quantified-variable, :label "existentially quantified variable"}
+  {:id :exotic-object, :label "exotic object"}
+  {:id :f, :label "f"}
+  {:id :f-f-g, :label "$(f,f,g)$"}
+  {:id :field, :label "field"}
+  {:id :field-of-characteristic-2, :label "field of characteristic~2"}
+  {:id :finite-direct-sum-of-copies-of-R_2, :label "finite direct sum of copies of $R_2$"}
+  {:id :free-module, :label "free module"}
+  {:id :free-module-nlab-3159, :label "free module [nlab-3159]"}
+  {:id :g, :label "g"}
+  {:id :gamma_-script-existentially-quantified-variable, :label "gamma_-script : existentially quantified variable"}
+  {:id :h, :label "h"}
+  {:id :hopf-map-nnexus-hopf-map, :label "hopf map [nnexus:hopf map]"}
+  {:id :hospectohoC-M, :label "\\ho\\spec\\to\\ho\\C{M}"}
+  {:id :i, :label "i"}
+  {:id :ideal-generated-by, :label "ideal generated by"}
+  {:id :ideal-generated-by-nnexus-ideal-generated-by, :label "ideal generated by [nnexus:ideal generated by]"}
+  {:id :identity-nnexus-identity, :label "identity [nnexus:identity]"}
+  {:id :if, :label "if"}
+  {:id :ij, :label "ij"}
+  {:id :in-degree, :label "in degree"}
+  {:id :in-degree-nnexus-in-degree, :label "in degree [nnexus:in degree]"}
+  {:id :isomorphism-nnexus-isomorphism, :label "isomorphism [nnexus:isomorphism]"}
+  {:id :k, :label "$k$"}
+  {:id :k-13fbd79c, :label "k"}
+  {:id :l, :label "l"}
+  {:id :ld, :label "ld"}
+  {:id :localization-of-the-polynomial-ring, :label "localization of the polynomial ring"}
+  {:id :m, :label "$\\m$"}
+  {:id :mapping-cone-of-the-chain-map, :label "mapping cone of the chain map"}
+  {:id :mod-2-Moore-spectrum, :label "mod-2 Moore spectrum"}
+  {:id :morphism, :label "morphism"}
+  {:id :morphism-eta, :label "morphism $\\eta"}
+  {:id :morphism-from-eqref-eq, :label "morphism from \\eqref{eq"}
+  {:id :morphism-groups, :label "morphism groups"}
+  {:id :n, :label "n"}
+  {:id :object, :label "object"}
+  {:id :op, :label "op"}
+  {:id :pair, :label "pair"}
+  {:id :perfect-field, :label "perfect field"}
+  {:id :proof-that-the-triangulated-category, :label "proof that the triangulated category"}
+  {:id :psi, :label "$\\psi$"}
+  {:id :psi-c774d4ea, :label "\\psi"}
+  {:id :q, :label "q"}
+  {:id :qi, :label "qi"}
+  {:id :quantified-variable-for-all-every-some, :label "quantified variable (for all/every/some)"}
+  {:id :quasi-exact-triangle, :label "quasi-exact triangle"}
+  {:id :r, :label "r"}
+  {:id :representing-cycle-x-and-an-element, :label "representing cycle $x$ and an element"}
+  {:id :required-functor, :label "required functor"}
+  {:id :ring, :label "ring"}
+  {:id :sigma, :label "$\\sigma$"}
+  {:id :spec, :label "$\\spec$"}
+  {:id :spectoC-M, :label "\\spec\\to\\C{M}"}
+  {:id :t, :label "t"}
+  {:id :the-free-graded, :label "the free graded"}
+  {:id :triangulated-category-nlab-1076, :label "triangulated category [nlab-1076]"}
+  {:id :triangulation-of-the-category, :label "triangulation of the category"}
+  {:id :two-sided-homogeneous-ideal, :label "two-sided homogeneous ideal"}
+  {:id :u, :label "u"}
+  {:id :ua, :label "ua"}
+  {:id :unit-in-degree--1, :label "unit in degree $-1$"}
+  {:id :usual-shift-of-complexes, :label "usual shift of complexes"}
+  {:id :uv, :label "uv"}
+  {:id :v, :label "$[v]$"}
+  {:id :v--1, :label "$v^{-1}$"}
+  {:id :v-7a38d8cb, :label "v"}
+  {:id :va, :label "va"}
+  {:id :varphi_-script-morphism, :label "varphi_-script : morphism"}
+  {:id :vector-space-nnexus-vector-space, :label "vector space [nnexus:vector space]"}
+  {:id :vt, :label "vt"}
+  {:id :vu, :label "vu"}
+  {:id :x, :label "x"}
+  {:id :xa, :label "xa"}
+  {:id :xu, :label "xu"}
+  {:id :xv, :label "xv"}
+  {:id :y, :label "y"}
+  {:id :ya, :label "ya"}
+  {:id :yuv, :label "yuv"}
+  {:id :z, :label "z"}
+  {:id :z-yuv-xa, :label "$z=yuv-xa$"}
+  {:id :zu, :label "zu"}
+ ]
+ :hyperedges [
+  {:id :e-000001, :kind :bind, :ends [{:role :subject, :node :R-m} {:role :concept, :node :?}], :status :open, :source {:start 6171 :end 6231}, :attrs {:mark-kind "let-binder" :subject "$(R,\\m)$"}}
+  {:id :e-000002, :kind :bind, :ends [{:role :subject, :node :C-T} {:role :concept, :node :?}], :status :open, :source {:start 9290 :end 9428}, :attrs {:mark-kind "let-binder" :subject "$\\C{T}$"}}
+  {:id :e-000003, :kind :bind, :ends [{:role :subject, :node :Theta-Phi-Psi} {:role :concept, :node :?}], :status :open, :source {:start 16185 :end 16253}, :attrs {:mark-kind "let-binder" :subject "$(\\Theta,\\Phi,\\Psi)$"}}
+  {:id :e-000004, :kind :bind, :ends [{:role :subject, :node :T} {:role :concept, :node :?}], :status :open, :source {:start 20170 :end 20203}, :attrs {:mark-kind "let-binder" :subject "$T$"}}
+  {:id :e-000005, :kind :bind, :ends [{:role :subject, :node :k} {:role :concept, :node :?}], :status :open, :source {:start 21063 :end 21101}, :attrs {:mark-kind "let-binder" :subject "$k$"}}
+  {:id :e-000006, :kind :bind, :ends [{:role :subject, :node :A-ktd-a-u-v-v--1-I} {:role :concept, :node :?}], :status :open, :source {:start 22606 :end 22684}, :attrs {:mark-kind "let-binder" :subject "$A= k\\td{a,u,v,v^{-1}}/I$"}}
+  {:id :e-000007, :kind :bind, :ends [{:role :subject, :node :v--1} {:role :concept, :node :in-degree-nnexus-in-degree}], :status :filled, :source {:start 22695 :end 22738}, :attrs {:concept "in degree [nnexus:in degree]" :mark-kind "let-binder" :subject "$v^{-1}$"}}
+  {:id :e-000008, :kind :bind, :ends [{:role :subject, :node :abs-v--1} {:role :concept, :node :ideal-generated-by-nnexus-ideal-generated-by}], :status :filled, :source {:start 22739 :end 22814}, :attrs {:concept "ideal generated by [nnexus:ideal generated by]" :mark-kind "let-binder" :subject "$\\abs{v}=-1$"}}
+  {:id :e-000009, :kind :bind, :ends [{:role :subject, :node :M} {:role :concept, :node :?}], :status :open, :source {:start 23535 :end 23629}, :attrs {:mark-kind "let-binder" :subject "$M$"}}
+  {:id :e-000010, :kind :bind, :ends [{:role :subject, :node :C-T} {:role :concept, :node :triangulated-category-nlab-1076}], :status :filled, :source {:start 27851 :end 27889}, :attrs {:concept "triangulated category [nlab-1076]" :mark-kind "let-binder" :subject "$\\C{T}$"}}
+  {:id :e-000011, :kind :bind, :ends [{:role :subject, :node :E} {:role :concept, :node :?}], :status :open, :source {:start 27912 :end 27936}, :attrs {:mark-kind "let-binder" :subject "$E$"}}
+  {:id :e-000012, :kind :bind, :ends [{:role :subject, :node :C-T-E-A} {:role :concept, :node :?}], :status :open, :source {:start 27977 :end 28005}, :attrs {:mark-kind "let-binder" :subject "$\\C{T}(E,A)$"}}
+  {:id :e-000013, :kind :bind, :ends [{:role :subject, :node :eta-Sigma-Ato-A} {:role :concept, :node :hopf-map-nnexus-hopf-map}], :status :filled, :source {:start 28099 :end 28137}, :attrs {:concept "hopf map [nnexus:hopf map]" :mark-kind "let-binder" :subject "$\\eta:\\Sigma A\\to A$"}}
+  {:id :e-000014, :kind :bind, :ends [{:role :subject, :node :X} {:role :concept, :node :?}], :status :open, :source {:start 29670 :end 29801}, :attrs {:mark-kind "let-binder" :subject "$X$"}}
+  {:id :e-000015, :kind :bind, :ends [{:role :subject, :node :C-T-Sigma} {:role :concept, :node :?}], :status :open, :source {:start 9471 :end 9502}, :attrs {:mark-kind "let-binder" :subject "$(\\C{T},\\Sigma)$"}}
+  {:id :e-000016, :kind :bind, :ends [{:role :subject, :node :alpha-beta-gamma-colon-f-i-q-r-f-i-q} {:role :concept, :node :?}], :status :open, :source {:start 9678 :end 10021}, :attrs {:mark-kind "let-binder" :subject "$(\\alpha,\\beta,\\gamma)\\colon (f,i,q)\\r(f',i',q')$"}}
+  {:id :e-000017, :kind :bind, :ends [{:role :subject, :node :alpha-beta-gamma} {:role :concept, :node :?}], :status :open, :source {:start 10063 :end 10113}, :attrs {:mark-kind "let-binder" :subject "$(\\alpha,\\beta,\\gamma)$"}}
+  {:id :e-000018, :kind :bind, :ends [{:role :subject, :node :R} {:role :concept, :node :ideal-generated-by-nnexus-ideal-generated-by}], :status :filled, :source {:start 13729 :end 13812}, :attrs {:concept "ideal generated by [nnexus:ideal generated by]" :mark-kind "let-binder" :subject "$R$"}}
+  {:id :e-000019, :kind :bind, :ends [{:role :subject, :node :m} {:role :concept, :node :vector-space-nnexus-vector-space}], :status :filled, :source {:start 15090 :end 15116}, :attrs {:concept "vector space [nnexus:vector space]" :mark-kind "let-binder" :subject "$\\m$"}}
+  {:id :e-000020, :kind :bind, :ends [{:role :subject, :node :Ast-f-r-Bst-i-r-Cst-q-r-A} {:role :concept, :node :?}], :status :open, :source {:start 15403 :end 15473}, :attrs {:mark-kind "let-binder" :subject "$A\\st{f}\\r B\\st{i}\\r C\\st{q}\\r A$"}}
+  {:id :e-000021, :kind :bind, :ends [{:role :subject, :node :delta-Phi-0} {:role :concept, :node :?}], :status :open, :source {:start 18934 :end 18989}, :attrs {:mark-kind "let-binder" :subject "$(\\delta,\\Phi,0)$"}}
+  {:id :e-000022, :kind :bind, :ends [{:role :subject, :node :X_2} {:role :concept, :node :?}], :status :open, :source {:start 19643 :end 19690}, :attrs {:mark-kind "let-binder" :subject "$X_2$"}}
+  {:id :e-000023, :kind :bind, :ends [{:role :subject, :node :sigma} {:role :concept, :node :identity-nnexus-identity}], :status :filled, :source {:start 20790 :end 20814}, :attrs {:concept "identity [nnexus:identity]" :mark-kind "let-binder" :subject "$\\sigma$"}}
+  {:id :e-000024, :kind :bind, :ends [{:role :subject, :node :C-F-k-eps-eps-2} {:role :concept, :node :?}], :status :open, :source {:start 21698 :end 21793}, :attrs {:mark-kind "let-binder" :subject "$\\C{F}(k[\\eps]/\\eps^2)$"}}
+  {:id :e-000025, :kind :bind, :ends [{:role :subject, :node :Sigma-tau} {:role :concept, :node :?}], :status :open, :source {:start 21819 :end 21968}, :attrs {:mark-kind "let-binder" :subject "$\\Sigma=\\tau^*$"}}
+  {:id :e-000026, :kind :bind, :ends [{:role :subject, :node :eps-u} {:role :concept, :node :?}], :status :open, :source {:start 23064 :end 23113}, :attrs {:mark-kind "let-binder" :subject "$\\eps=[u]$"}}
+  {:id :e-000027, :kind :bind, :ends [{:role :subject, :node :v} {:role :concept, :node :?}], :status :open, :source {:start 23184 :end 23214}, :attrs {:mark-kind "let-binder" :subject "$[v]$"}}
+  {:id :e-000028, :kind :bind, :ends [{:role :subject, :node :z-yuv-xa} {:role :concept, :node :?}], :status :open, :source {:start 23720 :end 23759}, :attrs {:mark-kind "let-binder" :subject "$z=yuv-xa$"}}
+  {:id :e-000029, :kind :bind, :ends [{:role :subject, :node :H_0-M} {:role :concept, :node :free-module-nlab-3159}], :status :filled, :source {:start 23903 :end 23945}, :attrs {:concept "free module [nlab-3159]" :mark-kind "let-binder" :subject "$H_0(M)$"}}
+  {:id :e-000030, :kind :bind, :ends [{:role :subject, :node :C-D-A} {:role :concept, :node :?}], :status :open, :source {:start 23984 :end 24142}, :attrs {:mark-kind "let-binder" :subject "$\\C{D}(A)$"}}
+  {:id :e-000031, :kind :bind, :ends [{:role :subject, :node :H_0} {:role :concept, :node :?}], :status :open, :source {:start 24693 :end 24798}, :attrs {:mark-kind "let-binder" :subject "$H_0$"}}
+  {:id :e-000032, :kind :bind, :ends [{:role :subject, :node :A} {:role :concept, :node :?}], :status :open, :source {:start 25128 :end 25146}, :attrs {:mark-kind "let-binder" :subject "$A$"}}
+  {:id :e-000033, :kind :bind, :ends [{:role :subject, :node :F} {:role :concept, :node :?}], :status :open, :source {:start 25538 :end 25587}, :attrs {:mark-kind "let-binder" :subject "$F$"}}
+  {:id :e-000034, :kind :bind, :ends [{:role :subject, :node :F-eta-tau-Sigma-F-A-To-F-A} {:role :concept, :node :?}], :status :open, :source {:start 25680 :end 25738}, :attrs {:mark-kind "let-binder" :subject "$F(\\eta)\\tau:\\Sigma F(A)\\To F(A)$"}}
+  {:id :e-000035, :kind :bind, :ends [{:role :subject, :node :psi} {:role :concept, :node :isomorphism-nnexus-isomorphism}], :status :filled, :source {:start 27285 :end 27309}, :attrs {:concept "isomorphism [nnexus:isomorphism]" :mark-kind "let-binder" :subject "$\\psi$"}}
+  {:id :e-000036, :kind :bind, :ends [{:role :subject, :node :psi} {:role :concept, :node :isomorphism-nnexus-isomorphism}], :status :filled, :source {:start 27366 :end 27390}, :attrs {:concept "isomorphism [nnexus:isomorphism]" :mark-kind "let-binder" :subject "$\\psi$"}}
+  {:id :e-000037, :kind :bind, :ends [{:role :subject, :node :f-f-g} {:role :concept, :node :?}], :status :open, :source {:start 28208 :end 28246}, :attrs {:mark-kind "let-binder" :subject "$(f,f,g)$"}}
+  {:id :e-000038, :kind :bind, :ends [{:role :subject, :node :spec} {:role :concept, :node :?}], :status :open, :source {:start 29503 :end 29640}, :attrs {:mark-kind "let-binder" :subject "$\\spec$"}}
+  {:id :e-000039, :kind :bind, :ends [{:role :subject, :node :S-2} {:role :concept, :node :?}], :status :open, :source {:start 30726 :end 30759}, :attrs {:mark-kind "let-binder" :subject "$S/2$"}}
+  {:id :e-000040, :kind :bind, :ends [{:role :subject, :node :C-T} {:role :concept, :node :algebraic-triangulated-category-nlab-6064}], :status :filled, :source {:start 32065 :end 32110}, :attrs {:concept "algebraic triangulated category [nlab-6064]" :mark-kind "let-binder" :subject "$\\C{T}$"}}
+  {:id :e-000041, :kind :bind-typed, :ends [{:role :subject, :node :d} {:role :type, :node :Ato-A}], :status :filled, :source {:start 22887 :end 22897}, :attrs {:mark-kind "bind/typed" :subject "d" :type "A\\to A"}}
+  {:id :e-000042, :kind :bind-typed, :ends [{:role :subject, :node :eta} {:role :type, :node :Sigma-Ato-A}], :status :filled, :source {:start 25146 :end 25166}, :attrs {:mark-kind "bind/typed" :subject "\\eta" :type "\\Sigma A\\to A"}}
+  {:id :e-000043, :kind :bind-typed, :ends [{:role :subject, :node :eta} {:role :type, :node :Sigma-Ato-A}], :status :filled, :source {:start 25620 :end 25640}, :attrs {:mark-kind "bind/typed" :subject "\\eta" :type "\\Sigma A\\to A"}}
+  {:id :e-000044, :kind :bind-typed, :ends [{:role :subject, :node :h} {:role :type, :node :EtoSigma-E}], :status :filled, :source {:start 25930 :end 25946}, :attrs {:mark-kind "bind/typed" :subject "h" :type "E\\to\\Sigma E"}}
+  {:id :e-000045, :kind :bind-typed, :ends [{:role :subject, :node :psi-c774d4ea} {:role :type, :node :EtoS-E}], :status :filled, :source {:start 26428 :end 26443}, :attrs {:mark-kind "bind/typed" :subject "\\psi" :type "E\\to\\S E"}}
+  {:id :e-000046, :kind :bind-typed, :ends [{:role :subject, :node :psi-c774d4ea} {:role :type, :node :Eto-Sigma-E}], :status :filled, :source {:start 27069 :end 27089}, :attrs {:mark-kind "bind/typed" :subject "\\psi" :type "E\\to \\Sigma E"}}
+  {:id :e-000047, :kind :bind-typed, :ends [{:role :subject, :node :f} {:role :type, :node :Eto-E}], :status :filled, :source {:start 27484 :end 27494}, :attrs {:mark-kind "bind/typed" :subject "f" :type "E\\to E"}}
+  {:id :e-000048, :kind :bind-typed, :ends [{:role :subject, :node :eta} {:role :type, :node :Sigma-Ato-A}], :status :filled, :source {:start 28103 :end 28123}, :attrs {:mark-kind "bind/typed" :subject "\\eta" :type "\\Sigma A\\to A"}}
+  {:id :e-000049, :kind :bind-typed, :ends [{:role :subject, :node :f} {:role :type, :node :Eto-A}], :status :filled, :source {:start 28158 :end 28168}, :attrs {:mark-kind "bind/typed" :subject "f" :type "E\\to A"}}
+  {:id :e-000050, :kind :bind-typed, :ends [{:role :subject, :node :F-e69f20e9} {:role :type, :node :hospectohoC-M}], :status :filled, :source {:start 29375 :end 29398}, :attrs {:mark-kind "bind/typed" :subject "F" :type "\\ho\\spec\\to\\ho\\C{M}"}}
+  {:id :e-000051, :kind :bind-typed, :ends [{:role :subject, :node :Xwedge} {:role :type, :node :spectoC-M}], :status :filled, :source {:start 30167 :end 30192}, :attrs {:mark-kind "bind/typed" :subject "X\\wedge -" :type "\\spec\\to\\C{M}"}}
+  {:id :e-000052, :kind :bind-typed, :ends [{:role :subject, :node :eta} {:role :type, :node :Sigma-Sto-S}], :status :filled, :source {:start 30464 :end 30484}, :attrs {:mark-kind "bind/typed" :subject "\\eta" :type "\\Sigma S\\to S"}}
+  {:id :e-000053, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 9530 :end 9531}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000054, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 9535 :end 9536}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000055, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 9541 :end 9542}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000056, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 9546 :end 9547}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000057, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :diagram-begin-equation-label-tri-Ast-f-To-B}], :status :filled, :source {:start 9552 :end 9553}, :attrs {:concept "diagram \\begin{equation}\\label{tri} A\\st{f}\\To B\\" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000058, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 9557 :end 9558}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000059, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 9566 :end 9567}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000060, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 9797 :end 9798}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000061, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 9802 :end 9803}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000062, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 9805 :end 9806}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000063, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 9810 :end 9811}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000064, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 9822 :end 9823}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000065, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 9827 :end 9828}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000066, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 9830 :end 9831}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000067, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 9835 :end 9836}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000068, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :diagram-begin-equation-label-tri-Ast-f-To-B}], :status :filled, :source {:start 9846 :end 9847}, :attrs {:concept "diagram \\begin{equation}\\label{tri} A\\st{f}\\To B\\" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000069, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 9851 :end 9852}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000070, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 9854 :end 9855}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000071, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 9859 :end 9860}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000072, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 9878 :end 9879}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000073, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 9883 :end 9884}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000074, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 9904 :end 9905}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000075, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 9910 :end 9911}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000076, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 9914 :end 9915}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000077, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 9918 :end 9919}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000078, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 9924 :end 9925}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000079, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 9928 :end 9929}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000080, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :diagram-begin-equation-label-tri-Ast-f-To-B}], :status :filled, :source {:start 9932 :end 9933}, :attrs {:concept "diagram \\begin{equation}\\label{tri} A\\st{f}\\To B\\" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000081, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 9938 :end 9939}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000082, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 9942 :end 9943}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000083, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 9953 :end 9954}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000084, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :diagram-begin-equation-label-tri-Ast-f-To-B}], :status :filled, :source {:start 10153 :end 10154}, :attrs {:concept "diagram \\begin{equation}\\label{tri} A\\st{f}\\To B\\" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000085, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 10160 :end 10161}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000086, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 10168 :end 10169}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000087, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 10174 :end 10175}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000088, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 10236 :end 10237}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000089, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 10274 :end 10275}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000090, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :diagram-begin-equation-label-tri-Ast-f-To-B}], :status :filled, :source {:start 10328 :end 10329}, :attrs {:concept "diagram \\begin{equation}\\label{tri} A\\st{f}\\To B\\" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000091, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 10336 :end 10337}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000092, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 10342 :end 10343}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000093, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 10404 :end 10405}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000094, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 10443 :end 10444}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000095, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 10519 :end 10520}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000096, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :diagram-begin-equation-label-tri-Ast-f-To-B}], :status :filled, :source {:start 10527 :end 10528}, :attrs {:concept "diagram \\begin{equation}\\label{tri} A\\st{f}\\To B\\" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000097, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 10533 :end 10534}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000098, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 10602 :end 10603}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000099, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 10648 :end 10649}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000100, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 10708 :end 10709}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000101, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 10722 :end 10723}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000102, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 10906 :end 10907}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000103, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 10911 :end 10912}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000104, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 10914 :end 10915}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000105, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 10927 :end 10928}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000106, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 10950 :end 10951}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000107, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 10965 :end 10966}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000108, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 10970 :end 10971}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000109, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 10973 :end 10974}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000110, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 10986 :end 10987}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000111, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 11008 :end 11009}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000112, :kind :bind, :ends [{:role :subject, :node :ld} {:role :concept, :node :?}], :status :open, :source {:start 11024 :end 11026}, :attrs {:mark-kind "symbol" :subject "ld"}}
+  {:id :e-000113, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :diagram-begin-equation-label-tri-Ast-f-To-B}], :status :filled, :source {:start 11041 :end 11042}, :attrs {:concept "diagram \\begin{equation}\\label{tri} A\\st{f}\\To B\\" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000114, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 11046 :end 11047}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000115, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 11049 :end 11050}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000116, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 11062 :end 11063}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000117, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 11085 :end 11086}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000118, :kind :bind, :ends [{:role :subject, :node :ld} {:role :concept, :node :?}], :status :open, :source {:start 11102 :end 11104}, :attrs {:mark-kind "symbol" :subject "ld"}}
+  {:id :e-000119, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 11124 :end 11125}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000120, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 11137 :end 11138}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000121, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 11166 :end 11167}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000122, :kind :bind, :ends [{:role :subject, :node :ld} {:role :concept, :node :?}], :status :open, :source {:start 11189 :end 11191}, :attrs {:mark-kind "symbol" :subject "ld"}}
+  {:id :e-000123, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 11205 :end 11206}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000124, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 11211 :end 11212}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000125, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 11215 :end 11216}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000126, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 11219 :end 11220}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000127, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 11225 :end 11226}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000128, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 11229 :end 11230}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000129, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :diagram-begin-equation-label-tri-Ast-f-To-B}], :status :filled, :source {:start 11233 :end 11234}, :attrs {:concept "diagram \\begin{equation}\\label{tri} A\\st{f}\\To B\\" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000130, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 11239 :end 11240}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000131, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 11243 :end 11244}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000132, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 11254 :end 11255}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000133, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 12207 :end 12208}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000134, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 12218 :end 12219}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000135, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 12235 :end 12236}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000136, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 12466 :end 12467}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000137, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 12472 :end 12473}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000138, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :pair}], :status :filled, :source {:start 12478 :end 12479}, :attrs {:concept "pair" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000139, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 12484 :end 12485}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000140, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 12493 :end 12494}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000141, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 12507 :end 12508}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000142, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 12516 :end 12517}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000143, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 12610 :end 12611}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000144, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 12615 :end 12616}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000145, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 12618 :end 12619}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000146, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 12623 :end 12624}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000147, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 12635 :end 12636}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000148, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 12640 :end 12641}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000149, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 12643 :end 12644}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000150, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 12648 :end 12649}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000151, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :pair}], :status :filled, :source {:start 12659 :end 12660}, :attrs {:concept "pair" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000152, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 12664 :end 12665}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000153, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 12667 :end 12668}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000154, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 12676 :end 12677}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000155, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 12681 :end 12682}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000156, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 12702 :end 12703}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000157, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 12708 :end 12709}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000158, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 12712 :end 12713}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000159, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 12716 :end 12717}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000160, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 12722 :end 12723}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000161, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 12726 :end 12727}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000162, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :pair}], :status :filled, :source {:start 12730 :end 12731}, :attrs {:concept "pair" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000163, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 12736 :end 12737}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000164, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 12740 :end 12741}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000165, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 12751 :end 12752}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000166, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 13237 :end 13238}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000167, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 13248 :end 13249}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000168, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 13259 :end 13260}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000169, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 13270 :end 13271}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000170, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :category}], :status :filled, :source {:start 14184 :end 14185}, :attrs {:concept "category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000171, :kind :bind, :ends [{:role :subject, :node :W} {:role :concept, :node :?}], :status :open, :source {:start 14191 :end 14192}, :attrs {:mark-kind "symbol" :subject "W"}}
+  {:id :e-000172, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 14199 :end 14200}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000173, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 14204 :end 14205}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000174, :kind :bind, :ends [{:role :subject, :node :W} {:role :concept, :node :?}], :status :open, :source {:start 14352 :end 14353}, :attrs {:mark-kind "symbol" :subject "W"}}
+  {:id :e-000175, :kind :bind, :ends [{:role :subject, :node :Z} {:role :concept, :node :localization-of-the-polynomial-ring}], :status :filled, :source {:start 14360 :end 14361}, :attrs {:concept "localization of the polynomial ring" :mark-kind "symbol-grounded" :subject "Z"}}
+  {:id :e-000176, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 14365 :end 14366}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000177, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 14528 :end 14529}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000178, :kind :bind, :ends [{:role :subject, :node :Z} {:role :concept, :node :localization-of-the-polynomial-ring}], :status :filled, :source {:start 14536 :end 14537}, :attrs {:concept "localization of the polynomial ring" :mark-kind "symbol-grounded" :subject "Z"}}
+  {:id :e-000179, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 14541 :end 14542}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000180, :kind :bind, :ends [{:role :subject, :node :W} {:role :concept, :node :?}], :status :open, :source {:start 14688 :end 14689}, :attrs {:mark-kind "symbol" :subject "W"}}
+  {:id :e-000181, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 14696 :end 14697}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000182, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 14870 :end 14871}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000183, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 14875 :end 14876}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000184, :kind :bind, :ends [{:role :subject, :node :t} {:role :concept, :node :?}], :status :open, :source {:start 14880 :end 14881}, :attrs {:mark-kind "symbol" :subject "t"}}
+  {:id :e-000185, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 14886 :end 14887}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000186, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 14899 :end 14900}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000187, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 14904 :end 14905}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000188, :kind :bind, :ends [{:role :subject, :node :vt} {:role :concept, :node :?}], :status :open, :source {:start 14909 :end 14911}, :attrs {:mark-kind "symbol" :subject "vt"}}
+  {:id :e-000189, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 14918 :end 14919}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000190, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 14931 :end 14932}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000191, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 14936 :end 14937}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000192, :kind :bind, :ends [{:role :subject, :node :t} {:role :concept, :node :?}], :status :open, :source {:start 14941 :end 14942}, :attrs {:mark-kind "symbol" :subject "t"}}
+  {:id :e-000193, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 14947 :end 14948}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000194, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :?}], :status :open, :source {:start 14957 :end 14958}, :attrs {:mark-kind "symbol" :subject "v"}}
+  {:id :e-000195, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 14965 :end 14966}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000196, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 14970 :end 14971}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000197, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 14986 :end 14987}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000198, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 14991 :end 14992}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000199, :kind :bind, :ends [{:role :subject, :node :t} {:role :concept, :node :?}], :status :open, :source {:start 14995 :end 14996}, :attrs {:mark-kind "symbol" :subject "t"}}
+  {:id :e-000200, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 14998 :end 14999}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000201, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 15003 :end 15004}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000202, :kind :bind, :ends [{:role :subject, :node :t} {:role :concept, :node :?}], :status :open, :source {:start 15007 :end 15008}, :attrs {:mark-kind "symbol" :subject "t"}}
+  {:id :e-000203, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 15010 :end 15011}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000204, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 15015 :end 15016}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000205, :kind :bind, :ends [{:role :subject, :node :vt} {:role :concept, :node :?}], :status :open, :source {:start 15019 :end 15021}, :attrs {:mark-kind "symbol" :subject "vt"}}
+  {:id :e-000206, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 15023 :end 15024}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000207, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :emph-quasi-exact-triangle-if-begin-equation-A}], :status :filled, :source {:start 15491 :end 15492}, :attrs {:concept "\\emph{quasi-exact triangle} if \\begin{equation*} A" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000208, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 15496 :end 15497}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000209, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 15502 :end 15503}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000210, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 15507 :end 15508}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000211, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :category}], :status :filled, :source {:start 15513 :end 15514}, :attrs {:concept "category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000212, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 15518 :end 15519}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000213, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :emph-quasi-exact-triangle-if-begin-equation-A}], :status :filled, :source {:start 15524 :end 15525}, :attrs {:concept "\\emph{quasi-exact triangle} if \\begin{equation*} A" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000214, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 15529 :end 15530}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000215, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 15535 :end 15536}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000216, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :emph-quasi-exact-triangle-if-begin-equation-A}], :status :filled, :source {:start 15738 :end 15739}, :attrs {:concept "\\emph{quasi-exact triangle} if \\begin{equation*} A" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000217, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 15743 :end 15744}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000218, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 15746 :end 15747}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000219, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 15751 :end 15752}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000220, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 15763 :end 15764}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000221, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 15768 :end 15769}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000222, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 15771 :end 15772}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000223, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 15776 :end 15777}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000224, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :category}], :status :filled, :source {:start 15787 :end 15788}, :attrs {:concept "category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000225, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 15792 :end 15793}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000226, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 15795 :end 15796}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000227, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :emph-quasi-exact-triangle-if-begin-equation-A}], :status :filled, :source {:start 15797 :end 15798}, :attrs {:concept "\\emph{quasi-exact triangle} if \\begin{equation*} A" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000228, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 15802 :end 15803}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000229, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :emph-quasi-exact-triangle-if-begin-equation-A}], :status :filled, :source {:start 15816 :end 15817}, :attrs {:concept "\\emph{quasi-exact triangle} if \\begin{equation*} A" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000230, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 15822 :end 15823}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000231, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 15826 :end 15827}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000232, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 15830 :end 15831}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000233, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 15836 :end 15837}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000234, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 15840 :end 15841}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000235, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :category}], :status :filled, :source {:start 15844 :end 15845}, :attrs {:concept "category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000236, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 15850 :end 15851}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000237, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 15854 :end 15855}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000238, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :emph-quasi-exact-triangle-if-begin-equation-A}], :status :filled, :source {:start 15858 :end 15859}, :attrs {:concept "\\emph{quasi-exact triangle} if \\begin{equation*} A" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000239, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 17120 :end 17121}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000240, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 17125 :end 17126}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000241, :kind :bind, :ends [{:role :subject, :node :t} {:role :concept, :node :?}], :status :open, :source {:start 17128 :end 17129}, :attrs {:mark-kind "symbol" :subject "t"}}
+  {:id :e-000242, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 17133 :end 17134}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000243, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 17145 :end 17146}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000244, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 17150 :end 17151}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000245, :kind :bind, :ends [{:role :subject, :node :t} {:role :concept, :node :?}], :status :open, :source {:start 17153 :end 17154}, :attrs {:mark-kind "symbol" :subject "t"}}
+  {:id :e-000246, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 17158 :end 17159}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000247, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 17169 :end 17170}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000248, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 17174 :end 17175}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000249, :kind :bind, :ends [{:role :subject, :node :vt} {:role :concept, :node :?}], :status :open, :source {:start 17178 :end 17180}, :attrs {:mark-kind "symbol" :subject "vt"}}
+  {:id :e-000250, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 17182 :end 17183}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000251, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :?}], :status :open, :source {:start 17187 :end 17188}, :attrs {:mark-kind "symbol" :subject "d"}}
+  {:id :e-000252, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 17202 :end 17203}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000253, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 17207 :end 17208}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000254, :kind :bind, :ends [{:role :subject, :node :t} {:role :concept, :node :?}], :status :open, :source {:start 17211 :end 17212}, :attrs {:mark-kind "symbol" :subject "t"}}
+  {:id :e-000255, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 17214 :end 17215}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000256, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 17219 :end 17220}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000257, :kind :bind, :ends [{:role :subject, :node :t} {:role :concept, :node :?}], :status :open, :source {:start 17223 :end 17224}, :attrs {:mark-kind "symbol" :subject "t"}}
+  {:id :e-000258, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 17226 :end 17227}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000259, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 17231 :end 17232}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000260, :kind :bind, :ends [{:role :subject, :node :vt} {:role :concept, :node :?}], :status :open, :source {:start 17235 :end 17237}, :attrs {:mark-kind "symbol" :subject "vt"}}
+  {:id :e-000261, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 17239 :end 17240}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000262, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 18746 :end 18747}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000263, :kind :bind, :ends [{:role :subject, :node :L} {:role :concept, :node :?}], :status :open, :source {:start 18749 :end 18750}, :attrs {:mark-kind "symbol" :subject "L"}}
+  {:id :e-000264, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :?}], :status :open, :source {:start 18757 :end 18758}, :attrs {:mark-kind "symbol" :subject "M"}}
+  {:id :e-000265, :kind :bind, :ends [{:role :subject, :node :N} {:role :concept, :node :?}], :status :open, :source {:start 18765 :end 18766}, :attrs {:mark-kind "symbol" :subject "N"}}
+  {:id :e-000266, :kind :bind, :ends [{:role :subject, :node :L} {:role :concept, :node :?}], :status :open, :source {:start 18770 :end 18771}, :attrs {:mark-kind "symbol" :subject "L"}}
+  {:id :e-000267, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :?}], :status :open, :source {:start 18778 :end 18779}, :attrs {:mark-kind "symbol" :subject "M"}}
+  {:id :e-000268, :kind :bind, :ends [{:role :subject, :node :P} {:role :concept, :node :?}], :status :open, :source {:start 18786 :end 18787}, :attrs {:mark-kind "symbol" :subject "P"}}
+  {:id :e-000269, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 18788 :end 18789}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000270, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :algebra}], :status :filled, :source {:start 21419 :end 21420}, :attrs {:concept "algebra" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000271, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :algebra}], :status :filled, :source {:start 21447 :end 21448}, :attrs {:concept "algebra" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000272, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :algebra}], :status :filled, :source {:start 21475 :end 21476}, :attrs {:concept "algebra" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000273, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :algebra}], :status :filled, :source {:start 21504 :end 21505}, :attrs {:concept "algebra" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000274, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22012 :end 22013}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000275, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22040 :end 22041}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000276, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22068 :end 22069}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000277, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22104 :end 22105}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000278, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25278 :end 25279}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000279, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25290 :end 25291}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000280, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :quantified-variable-for-all-every-some}], :status :filled, :source {:start 25296 :end 25297}, :attrs {:concept "quantified variable (for all/every/some)" :mark-kind "symbol-grounded" :subject "i"}}
+  {:id :e-000281, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :proof-that-the-triangulated-category}], :status :filled, :source {:start 25303 :end 25304}, :attrs {:concept "proof that the triangulated category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000282, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 25309 :end 25310}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000283, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25323 :end 25324}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000284, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 25850 :end 25851}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000285, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 25862 :end 25863}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000286, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 25875 :end 25876}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000287, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :?}], :status :open, :source {:start 25881 :end 25882}, :attrs {:mark-kind "symbol" :subject "h"}}
+  {:id :e-000288, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 25895 :end 25896}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000289, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 26737 :end 26738}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000290, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 26743 :end 26744}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000291, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 26749 :end 26750}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000292, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 26755 :end 26756}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000293, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 26762 :end 26763}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000294, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :morphism}], :status :filled, :source {:start 26768 :end 26769}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "h"}}
+  {:id :e-000295, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 26782 :end 26783}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000296, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6177 :end 6178}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000297, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6283 :end 6284}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000298, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6311 :end 6312}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000299, :kind :bind, :ends [{:role :subject, :node :W} {:role :concept, :node :?}], :status :open, :source {:start 6313 :end 6314}, :attrs {:mark-kind "symbol" :subject "W"}}
+  {:id :e-000300, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :?}], :status :open, :source {:start 6317 :end 6318}, :attrs {:mark-kind "symbol" :subject "k"}}
+  {:id :e-000301, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :perfect-field}], :status :filled, :source {:start 6387 :end 6388}, :attrs {:concept "perfect field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000302, :kind :bind, :ends [{:role :subject, :node :t} {:role :concept, :node :?}], :status :open, :source {:start 6532 :end 6533}, :attrs {:mark-kind "symbol" :subject "t"}}
+  {:id :e-000303, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 6579 :end 6580}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000304, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6582 :end 6583}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000305, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6627 :end 6628}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000306, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 6682 :end 6683}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000307, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6685 :end 6686}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000308, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6803 :end 6804}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000309, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6814 :end 6815}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000310, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6825 :end 6826}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000311, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :commutative-local-ring-with-m-2-neq-0}], :status :filled, :source {:start 6836 :end 6837}, :attrs {:concept "commutative local ring with $\\m=(2)\\neq 0$" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000312, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 7104 :end 7105}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000313, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 7155 :end 7156}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000314, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 7184 :end 7185}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000315, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 7198 :end 7199}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000316, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 7204 :end 7205}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000317, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :algebraic-triangulated-category}], :status :filled, :source {:start 7209 :end 7210}, :attrs {:concept "algebraic triangulated category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000318, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 7216 :end 7217}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000319, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :algebraic-triangulated-category}], :status :filled, :source {:start 7244 :end 7245}, :attrs {:concept "algebraic triangulated category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000320, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ring}], :status :filled, :source {:start 7316 :end 7317}, :attrs {:concept "ring" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000321, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ring}], :status :filled, :source {:start 7339 :end 7340}, :attrs {:concept "ring" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000322, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 7387 :end 7388}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000323, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ring}], :status :filled, :source {:start 7390 :end 7391}, :attrs {:concept "ring" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000324, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 7480 :end 7481}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000325, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ring}], :status :filled, :source {:start 7483 :end 7484}, :attrs {:concept "ring" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000326, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 7524 :end 7525}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000327, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :?}], :status :open, :source {:start 7526 :end 7527}, :attrs {:mark-kind "symbol" :subject "S"}}
+  {:id :e-000328, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :triangulation-of-the-category}], :status :filled, :source {:start 7616 :end 7617}, :attrs {:concept "triangulation of the category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000329, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 7684 :end 7685}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000330, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ring}], :status :filled, :source {:start 7687 :end 7688}, :attrs {:concept "ring" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000331, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 7932 :end 7933}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000332, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ring}], :status :filled, :source {:start 7935 :end 7936}, :attrs {:concept "ring" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000333, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 8060 :end 8061}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000334, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ring}], :status :filled, :source {:start 8063 :end 8064}, :attrs {:concept "ring" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000335, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 8315 :end 8316}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000336, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 8892 :end 8893}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000337, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 9298 :end 9299}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000338, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 9347 :end 9348}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000339, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 9363 :end 9364}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000340, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 9460 :end 9461}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000341, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 9462 :end 9463}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000342, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 9464 :end 9465}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000343, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 9476 :end 9477}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000344, :kind :bind, :ends [{:role :subject, :node :if} {:role :concept, :node :?}], :status :open, :source {:start 9591 :end 9593}, :attrs {:mark-kind "symbol" :subject "if"}}
+  {:id :e-000345, :kind :bind, :ends [{:role :subject, :node :qi} {:role :concept, :node :?}], :status :open, :source {:start 9597 :end 9599}, :attrs {:mark-kind "symbol" :subject "qi"}}
+  {:id :e-000346, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 9611 :end 9612}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000347, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 9613 :end 9614}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000348, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 9708 :end 9709}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000349, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 9710 :end 9711}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000350, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 9712 :end 9713}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000351, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 9717 :end 9718}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000352, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 9720 :end 9721}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000353, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 9723 :end 9724}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000354, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 11346 :end 11347}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000355, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 11348 :end 11349}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000356, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 11393 :end 11394}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000357, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 11395 :end 11396}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000358, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 11455 :end 11456}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000359, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 11458 :end 11459}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000360, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 11928 :end 11929}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000361, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :?}], :status :open, :source {:start 12277 :end 12278}, :attrs {:mark-kind "symbol" :subject "f"}}
+  {:id :e-000362, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 12285 :end 12286}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000363, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 12289 :end 12290}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000364, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 12299 :end 12300}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000365, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 13141 :end 13142}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000366, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 13151 :end 13152}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000367, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ring}], :status :filled, :source {:start 13154 :end 13155}, :attrs {:concept "ring" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000368, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 13194 :end 13195}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000369, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 13333 :end 13334}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000370, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ring}], :status :filled, :source {:start 13336 :end 13337}, :attrs {:concept "ring" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000371, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 13730 :end 13731}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000372, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 13868 :end 13869}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000373, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 13876 :end 13877}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000374, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 13880 :end 13881}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000375, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 13890 :end 13891}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000376, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 13893 :end 13894}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000377, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 13939 :end 13940}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000378, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :?}], :status :open, :source {:start 14013 :end 14014}, :attrs {:mark-kind "symbol" :subject "A"}}
+  {:id :e-000379, :kind :bind, :ends [{:role :subject, :node :W} {:role :concept, :node :?}], :status :open, :source {:start 14016 :end 14017}, :attrs {:mark-kind "symbol" :subject "W"}}
+  {:id :e-000380, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 14024 :end 14025}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000381, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 14032 :end 14033}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000382, :kind :bind, :ends [{:role :subject, :node :W} {:role :concept, :node :?}], :status :open, :source {:start 14037 :end 14038}, :attrs {:mark-kind "symbol" :subject "W"}}
+  {:id :e-000383, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 14045 :end 14046}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000384, :kind :bind, :ends [{:role :subject, :node :Z} {:role :concept, :node :localization-of-the-polynomial-ring}], :status :filled, :source {:start 14053 :end 14054}, :attrs {:concept "localization of the polynomial ring" :mark-kind "symbol-grounded" :subject "Z"}}
+  {:id :e-000385, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 14055 :end 14056}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000386, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 14066 :end 14067}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000387, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :emph-quasi-exact-triangle-if-begin-equation-A}], :status :filled, :source {:start 15404 :end 15405}, :attrs {:concept "\\emph{quasi-exact triangle} if \\begin{equation*} A" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000388, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 15409 :end 15410}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000389, :kind :bind, :ends [{:role :subject, :node :B} {:role :concept, :node :?}], :status :open, :source {:start 15414 :end 15415}, :attrs {:mark-kind "symbol" :subject "B"}}
+  {:id :e-000390, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 15419 :end 15420}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000391, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :category}], :status :filled, :source {:start 15424 :end 15425}, :attrs {:concept "category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000392, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 15429 :end 15430}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000393, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :emph-quasi-exact-triangle-if-begin-equation-A}], :status :filled, :source {:start 15434 :end 15435}, :attrs {:concept "\\emph{quasi-exact triangle} if \\begin{equation*} A" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000394, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 15579 :end 15580}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000395, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 16052 :end 16053}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000396, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 16067 :end 16068}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000397, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 16076 :end 16077}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000398, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 16085 :end 16086}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000399, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :category}], :status :filled, :source {:start 16098 :end 16099}, :attrs {:concept "category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000400, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :category}], :status :filled, :source {:start 16144 :end 16145}, :attrs {:concept "category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000401, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :category}], :status :filled, :source {:start 16148 :end 16149}, :attrs {:concept "category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000402, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 16163 :end 16164}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000403, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 16181 :end 16182}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000404, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 16277 :end 16278}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000405, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 16292 :end 16293}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000406, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 16613 :end 16614}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000407, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 16617 :end 16618}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000408, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 16628 :end 16629}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000409, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 16631 :end 16632}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000410, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 16648 :end 16649}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000411, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 16651 :end 16652}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000412, :kind :bind, :ends [{:role :subject, :node :op} {:role :concept, :node :?}], :status :open, :source {:start 16655 :end 16657}, :attrs {:mark-kind "symbol" :subject "op"}}
+  {:id :e-000413, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 16746 :end 16747}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000414, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 16769 :end 16770}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000415, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 16865 :end 16866}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000416, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 16875 :end 16876}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000417, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 17004 :end 17005}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000418, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 17008 :end 17009}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000419, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 17610 :end 17611}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000420, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 17620 :end 17621}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000421, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 17628 :end 17629}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000422, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 17638 :end 17639}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000423, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 17663 :end 17664}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000424, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 17671 :end 17672}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000425, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 17878 :end 17879}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000426, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 17888 :end 17889}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000427, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 17893 :end 17894}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000428, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 17903 :end 17904}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000429, :kind :bind, :ends [{:role :subject, :node :ij} {:role :concept, :node :varphi_-script-morphism}], :status :filled, :source {:start 17925 :end 17927}, :attrs {:concept "varphi_-script : morphism" :mark-kind "symbol-grounded" :subject "ij"}}
+  {:id :e-000430, :kind :bind, :ends [{:role :subject, :node :ij} {:role :concept, :node :alpha_-script-candidate-triangle-begin-equation-label-tri}], :status :filled, :source {:start 17938 :end 17940}, :attrs {:concept "alpha_-script : candidate triangle \\begin{equation*}%\\label{tri} \\" :mark-kind "symbol-grounded" :subject "ij"}}
+  {:id :e-000431, :kind :bind, :ends [{:role :subject, :node :ij} {:role :concept, :node :?}], :status :open, :source {:start 17949 :end 17951}, :attrs {:mark-kind "symbol" :subject "ij"}}
+  {:id :e-000432, :kind :bind, :ends [{:role :subject, :node :ij} {:role :concept, :node :gamma_-script-existentially-quantified-variable}], :status :filled, :source {:start 17961 :end 17963}, :attrs {:concept "gamma_-script : existentially quantified variable" :mark-kind "symbol-grounded" :subject "ij"}}
+  {:id :e-000433, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 18254 :end 18255}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000434, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 18264 :end 18265}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000435, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 18269 :end 18270}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000436, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 18279 :end 18280}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000437, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 18380 :end 18381}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000438, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :?}], :status :open, :source {:start 18406 :end 18407}, :attrs {:mark-kind "symbol" :subject "T"}}
+  {:id :e-000439, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 18518 :end 18519}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000440, :kind :bind, :ends [{:role :subject, :node :L} {:role :concept, :node :?}], :status :open, :source {:start 18521 :end 18522}, :attrs {:mark-kind "symbol" :subject "L"}}
+  {:id :e-000441, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :?}], :status :open, :source {:start 18529 :end 18530}, :attrs {:mark-kind "symbol" :subject "M"}}
+  {:id :e-000442, :kind :bind, :ends [{:role :subject, :node :N} {:role :concept, :node :?}], :status :open, :source {:start 18537 :end 18538}, :attrs {:mark-kind "symbol" :subject "N"}}
+  {:id :e-000443, :kind :bind, :ends [{:role :subject, :node :L} {:role :concept, :node :?}], :status :open, :source {:start 18542 :end 18543}, :attrs {:mark-kind "symbol" :subject "L"}}
+  {:id :e-000444, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :?}], :status :open, :source {:start 18550 :end 18551}, :attrs {:mark-kind "symbol" :subject "M"}}
+  {:id :e-000445, :kind :bind, :ends [{:role :subject, :node :P} {:role :concept, :node :?}], :status :open, :source {:start 18558 :end 18559}, :attrs {:mark-kind "symbol" :subject "P"}}
+  {:id :e-000446, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 18560 :end 18561}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000447, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :object}], :status :filled, :source {:start 18906 :end 18907}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000448, :kind :bind, :ends [{:role :subject, :node :Y} {:role :concept, :node :?}], :status :open, :source {:start 18910 :end 18911}, :attrs {:mark-kind "symbol" :subject "Y"}}
+  {:id :e-000449, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :?}], :status :open, :source {:start 19237 :end 19238}, :attrs {:mark-kind "symbol" :subject "M"}}
+  {:id :e-000450, :kind :bind, :ends [{:role :subject, :node :N} {:role :concept, :node :?}], :status :open, :source {:start 19244 :end 19245}, :attrs {:mark-kind "symbol" :subject "N"}}
+  {:id :e-000451, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :?}], :status :open, :source {:start 19251 :end 19252}, :attrs {:mark-kind "symbol" :subject "M"}}
+  {:id :e-000452, :kind :bind, :ends [{:role :subject, :node :P} {:role :concept, :node :?}], :status :open, :source {:start 19271 :end 19272}, :attrs {:mark-kind "symbol" :subject "P"}}
+  {:id :e-000453, :kind :bind, :ends [{:role :subject, :node :L} {:role :concept, :node :?}], :status :open, :source {:start 19323 :end 19324}, :attrs {:mark-kind "symbol" :subject "L"}}
+  {:id :e-000454, :kind :bind, :ends [{:role :subject, :node :L} {:role :concept, :node :?}], :status :open, :source {:start 19329 :end 19330}, :attrs {:mark-kind "symbol" :subject "L"}}
+  {:id :e-000455, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :finite-direct-sum-of-copies-of-R_2}], :status :filled, :source {:start 19644 :end 19645}, :attrs {:concept "finite direct sum of copies of $R_2$" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000456, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 19686 :end 19687}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000457, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 19726 :end 19727}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000458, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 19729 :end 19730}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000459, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 19760 :end 19761}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000460, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 19994 :end 19995}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000461, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 20109 :end 20110}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000462, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 20112 :end 20113}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000463, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20175 :end 20176}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000464, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 20268 :end 20269}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000465, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 20286 :end 20287}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000466, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20290 :end 20291}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000467, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20302 :end 20303}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000468, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20348 :end 20349}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000469, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20365 :end 20366}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000470, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20392 :end 20393}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000471, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 20488 :end 20489}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000472, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20493 :end 20494}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000473, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 20499 :end 20500}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000474, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20508 :end 20509}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000475, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 20595 :end 20596}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000476, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20600 :end 20601}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000477, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20621 :end 20622}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000478, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20702 :end 20703}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000479, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 20728 :end 20729}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000480, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20733 :end 20734}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000481, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20748 :end 20749}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000482, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :finite-direct-sum-of-copies-of-R_2}], :status :filled, :source {:start 20750 :end 20751}, :attrs {:concept "finite direct sum of copies of $R_2$" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000483, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 20761 :end 20762}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000484, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :?}], :status :open, :source {:start 20763 :end 20764}, :attrs {:mark-kind "symbol" :subject "i"}}
+  {:id :e-000485, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 20766 :end 20767}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000486, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :finite-direct-sum-of-copies-of-R_2}], :status :filled, :source {:start 20770 :end 20771}, :attrs {:concept "finite direct sum of copies of $R_2$" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000487, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :quantified-variable-for-all-every-some}], :status :filled, :source {:start 20783 :end 20784}, :attrs {:concept "quantified variable (for all/every/some)" :mark-kind "symbol-grounded" :subject "i"}}
+  {:id :e-000488, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field-of-characteristic-2}], :status :filled, :source {:start 21068 :end 21069}, :attrs {:concept "field of characteristic~2" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000489, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 21188 :end 21189}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000490, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field-of-characteristic-2}], :status :filled, :source {:start 21191 :end 21192}, :attrs {:concept "field of characteristic~2" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000491, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :algebra}], :status :filled, :source {:start 21261 :end 21262}, :attrs {:concept "algebra" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000492, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 21702 :end 21703}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000493, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :algebra}], :status :filled, :source {:start 21705 :end 21706}, :attrs {:concept "algebra" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000494, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 21791 :end 21792}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000495, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 21876 :end 21877}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000496, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 21912 :end 21913}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000497, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 21929 :end 21930}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000498, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22295 :end 22296}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000499, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22361 :end 22362}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000500, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :dg-algebra}], :status :filled, :source {:start 22373 :end 22374}, :attrs {:concept "dg algebra" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000501, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 22391 :end 22392}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000502, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22394 :end 22395}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000503, :kind :bind, :ends [{:role :subject, :node :D} {:role :concept, :node :?}], :status :open, :source {:start 22495 :end 22496}, :attrs {:mark-kind "symbol" :subject "D"}}
+  {:id :e-000504, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :dg-algebra}], :status :filled, :source {:start 22498 :end 22499}, :attrs {:concept "dg algebra" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000505, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :dg-algebra}], :status :filled, :source {:start 22517 :end 22518}, :attrs {:concept "dg algebra" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000506, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 22549 :end 22550}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000507, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22552 :end 22553}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000508, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 22611 :end 22612}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000509, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22614 :end 22615}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000510, :kind :bind, :ends [{:role :subject, :node :a} {:role :concept, :node :?}], :status :open, :source {:start 22619 :end 22620}, :attrs {:mark-kind "symbol" :subject "a"}}
+  {:id :e-000511, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 22621 :end 22622}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000512, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :?}], :status :open, :source {:start 22623 :end 22624}, :attrs {:mark-kind "symbol" :subject "v"}}
+  {:id :e-000513, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :?}], :status :open, :source {:start 22625 :end 22626}, :attrs {:mark-kind "symbol" :subject "v"}}
+  {:id :e-000514, :kind :bind, :ends [{:role :subject, :node :I} {:role :concept, :node :?}], :status :open, :source {:start 22633 :end 22634}, :attrs {:mark-kind "symbol" :subject "I"}}
+  {:id :e-000515, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 22657 :end 22658}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000516, :kind :bind, :ends [{:role :subject, :node :a} {:role :concept, :node :?}], :status :open, :source {:start 22682 :end 22683}, :attrs {:mark-kind "symbol" :subject "a"}}
+  {:id :e-000517, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 22687 :end 22688}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000518, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :?}], :status :open, :source {:start 22692 :end 22693}, :attrs {:mark-kind "symbol" :subject "v"}}
+  {:id :e-000519, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :in-degree}], :status :filled, :source {:start 22700 :end 22701}, :attrs {:concept "in degree" :mark-kind "symbol-grounded" :subject "v"}}
+  {:id :e-000520, :kind :bind, :ends [{:role :subject, :node :a} {:role :concept, :node :?}], :status :open, :source {:start 22725 :end 22726}, :attrs {:mark-kind "symbol" :subject "a"}}
+  {:id :e-000521, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 22733 :end 22734}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000522, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :in-degree}], :status :filled, :source {:start 22749 :end 22750}, :attrs {:concept "in degree" :mark-kind "symbol-grounded" :subject "v"}}
+  {:id :e-000523, :kind :bind, :ends [{:role :subject, :node :I} {:role :concept, :node :two-sided-homogeneous-ideal}], :status :filled, :source {:start 22797 :end 22798}, :attrs {:concept "two-sided homogeneous ideal" :mark-kind "symbol-grounded" :subject "I"}}
+  {:id :e-000524, :kind :bind, :ends [{:role :subject, :node :a} {:role :concept, :node :?}], :status :open, :source {:start 22816 :end 22817}, :attrs {:mark-kind "symbol" :subject "a"}}
+  {:id :e-000525, :kind :bind, :ends [{:role :subject, :node :au} {:role :concept, :node :?}], :status :open, :source {:start 22825 :end 22827}, :attrs {:mark-kind "symbol" :subject "au"}}
+  {:id :e-000526, :kind :bind, :ends [{:role :subject, :node :ua} {:role :concept, :node :?}], :status :open, :source {:start 22828 :end 22830}, :attrs {:mark-kind "symbol" :subject "ua"}}
+  {:id :e-000527, :kind :bind, :ends [{:role :subject, :node :av} {:role :concept, :node :?}], :status :open, :source {:start 22838 :end 22840}, :attrs {:mark-kind "symbol" :subject "av"}}
+  {:id :e-000528, :kind :bind, :ends [{:role :subject, :node :va} {:role :concept, :node :?}], :status :open, :source {:start 22841 :end 22843}, :attrs {:mark-kind "symbol" :subject "va"}}
+  {:id :e-000529, :kind :bind, :ends [{:role :subject, :node :uv} {:role :concept, :node :?}], :status :open, :source {:start 22860 :end 22862}, :attrs {:mark-kind "symbol" :subject "uv"}}
+  {:id :e-000530, :kind :bind, :ends [{:role :subject, :node :vu} {:role :concept, :node :?}], :status :open, :source {:start 22863 :end 22865}, :attrs {:mark-kind "symbol" :subject "vu"}}
+  {:id :e-000531, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 22888 :end 22889}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000532, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 22890 :end 22891}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000533, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 22895 :end 22896}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000534, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 22917 :end 22918}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000535, :kind :bind, :ends [{:role :subject, :node :a} {:role :concept, :node :?}], :status :open, :source {:start 22919 :end 22920}, :attrs {:mark-kind "symbol" :subject "a"}}
+  {:id :e-000536, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 22922 :end 22923}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000537, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :in-degree}], :status :filled, :source {:start 22925 :end 22926}, :attrs {:concept "in degree" :mark-kind "symbol-grounded" :subject "v"}}
+  {:id :e-000538, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 22932 :end 22933}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000539, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 22934 :end 22935}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000540, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 22944 :end 22945}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000541, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :in-degree}], :status :filled, :source {:start 22946 :end 22947}, :attrs {:concept "in degree" :mark-kind "symbol-grounded" :subject "v"}}
+  {:id :e-000542, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 22998 :end 22999}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000543, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 23002 :end 23003}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000544, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 23041 :end 23042}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000545, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 23071 :end 23072}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000546, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 23111 :end 23112}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000547, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 23136 :end 23137}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000548, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 23140 :end 23141}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000549, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :unit-in-degree--1}], :status :filled, :source {:start 23186 :end 23187}, :attrs {:concept "unit in degree $-1$" :mark-kind "symbol-grounded" :subject "v"}}
+  {:id :e-000550, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :unit-in-degree--1}], :status :filled, :source {:start 23237 :end 23238}, :attrs {:concept "unit in degree $-1$" :mark-kind "symbol-grounded" :subject "v"}}
+  {:id :e-000551, :kind :bind, :ends [{:role :subject, :node :v-7a38d8cb} {:role :concept, :node :unit-in-degree--1}], :status :filled, :source {:start 23241 :end 23242}, :attrs {:concept "unit in degree $-1$" :mark-kind "symbol-grounded" :subject "v"}}
+  {:id :e-000552, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 23314 :end 23315}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000553, :kind :bind, :ends [{:role :subject, :node :D} {:role :concept, :node :?}], :status :open, :source {:start 23329 :end 23330}, :attrs {:mark-kind "symbol" :subject "D"}}
+  {:id :e-000554, :kind :bind, :ends [{:role :subject, :node :c} {:role :concept, :node :?}], :status :open, :source {:start 23332 :end 23333}, :attrs {:mark-kind "symbol" :subject "c"}}
+  {:id :e-000555, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 23334 :end 23335}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000556, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 23346 :end 23347}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000557, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 23349 :end 23350}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000558, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 23464 :end 23465}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000559, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 23483 :end 23484}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000560, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 23516 :end 23517}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000561, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :any-dg-A--module-and-let-x-in-H_0-M-be-a-hom}], :status :filled, :source {:start 23540 :end 23541}, :attrs {:concept "any dg $A$-module and let $[x]\\in H_0(M)$ be a hom" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000562, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 23554 :end 23555}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000563, :kind :bind, :ends [{:role :subject, :node :x} {:role :concept, :node :?}], :status :open, :source {:start 23574 :end 23575}, :attrs {:mark-kind "symbol" :subject "x"}}
+  {:id :e-000564, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :?}], :status :open, :source {:start 23580 :end 23581}, :attrs {:mark-kind "symbol" :subject "H"}}
+  {:id :e-000565, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :any-dg-A--module-and-let-x-in-H_0-M-be-a-hom}], :status :filled, :source {:start 23584 :end 23585}, :attrs {:concept "any dg $A$-module and let $[x]\\in H_0(M)$ be a hom" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000566, :kind :bind, :ends [{:role :subject, :node :x} {:role :concept, :node :?}], :status :open, :source {:start 23615 :end 23616}, :attrs {:mark-kind "symbol" :subject "x"}}
+  {:id :e-000567, :kind :bind, :ends [{:role :subject, :node :x} {:role :concept, :node :?}], :status :open, :source {:start 23664 :end 23665}, :attrs {:mark-kind "symbol" :subject "x"}}
+  {:id :e-000568, :kind :bind, :ends [{:role :subject, :node :y} {:role :concept, :node :representing-cycle-x-and-an-element}], :status :filled, :source {:start 23683 :end 23684}, :attrs {:concept "representing cycle $x$ and an element" :mark-kind "symbol-grounded" :subject "y"}}
+  {:id :e-000569, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 23692 :end 23693}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000570, :kind :bind, :ends [{:role :subject, :node :y} {:role :concept, :node :representing-cycle-x-and-an-element}], :status :filled, :source {:start 23694 :end 23695}, :attrs {:concept "representing cycle $x$ and an element" :mark-kind "symbol-grounded" :subject "y"}}
+  {:id :e-000571, :kind :bind, :ends [{:role :subject, :node :xu} {:role :concept, :node :?}], :status :open, :source {:start 23697 :end 23699}, :attrs {:mark-kind "symbol" :subject "xu"}}
+  {:id :e-000572, :kind :bind, :ends [{:role :subject, :node :z} {:role :concept, :node :cycle-with-x-zu-d-ya}], :status :filled, :source {:start 23721 :end 23722}, :attrs {:concept "cycle with $x=zu-d(ya)$" :mark-kind "symbol-grounded" :subject "z"}}
+  {:id :e-000573, :kind :bind, :ends [{:role :subject, :node :yuv} {:role :concept, :node :?}], :status :open, :source {:start 23723 :end 23726}, :attrs {:mark-kind "symbol" :subject "yuv"}}
+  {:id :e-000574, :kind :bind, :ends [{:role :subject, :node :xa} {:role :concept, :node :?}], :status :open, :source {:start 23727 :end 23729}, :attrs {:mark-kind "symbol" :subject "xa"}}
+  {:id :e-000575, :kind :bind, :ends [{:role :subject, :node :x} {:role :concept, :node :?}], :status :open, :source {:start 23748 :end 23749}, :attrs {:mark-kind "symbol" :subject "x"}}
+  {:id :e-000576, :kind :bind, :ends [{:role :subject, :node :zu} {:role :concept, :node :?}], :status :open, :source {:start 23750 :end 23752}, :attrs {:mark-kind "symbol" :subject "zu"}}
+  {:id :e-000577, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 23753 :end 23754}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000578, :kind :bind, :ends [{:role :subject, :node :ya} {:role :concept, :node :?}], :status :open, :source {:start 23755 :end 23757}, :attrs {:mark-kind "symbol" :subject "ya"}}
+  {:id :e-000579, :kind :bind, :ends [{:role :subject, :node :x} {:role :concept, :node :?}], :status :open, :source {:start 23767 :end 23768}, :attrs {:mark-kind "symbol" :subject "x"}}
+  {:id :e-000580, :kind :bind, :ends [{:role :subject, :node :z} {:role :concept, :node :cycle-with-x-zu-d-ya}], :status :filled, :source {:start 23771 :end 23772}, :attrs {:concept "cycle with $x=zu-d(ya)$" :mark-kind "symbol-grounded" :subject "z"}}
+  {:id :e-000581, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :free-module}], :status :filled, :source {:start 23904 :end 23905}, :attrs {:concept "free module" :mark-kind "symbol-grounded" :subject "H"}}
+  {:id :e-000582, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :any-dg-A--module-and-let-x-in-H_0-M-be-a-hom}], :status :filled, :source {:start 23908 :end 23909}, :attrs {:concept "any dg $A$-module and let $[x]\\in H_0(M)$ be a hom" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000583, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 23923 :end 23924}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000584, :kind :bind, :ends [{:role :subject, :node :D} {:role :concept, :node :?}], :status :open, :source {:start 23988 :end 23989}, :attrs {:mark-kind "symbol" :subject "D"}}
+  {:id :e-000585, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 23991 :end 23992}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000586, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24028 :end 24029}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000587, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24037 :end 24038}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000588, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :free-module}], :status :filled, :source {:start 24079 :end 24080}, :attrs {:concept "free module" :mark-kind "symbol-grounded" :subject "H"}}
+  {:id :e-000589, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24083 :end 24084}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000590, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :free-module}], :status :filled, :source {:start 24091 :end 24092}, :attrs {:concept "free module" :mark-kind "symbol-grounded" :subject "H"}}
+  {:id :e-000591, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24095 :end 24096}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000592, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :free-module}], :status :filled, :source {:start 24101 :end 24102}, :attrs {:concept "free module" :mark-kind "symbol-grounded" :subject "H"}}
+  {:id :e-000593, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24108 :end 24109}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000594, :kind :bind, :ends [{:role :subject, :node :x} {:role :concept, :node :?}], :status :open, :source {:start 24127 :end 24128}, :attrs {:mark-kind "symbol" :subject "x"}}
+  {:id :e-000595, :kind :bind, :ends [{:role :subject, :node :xv} {:role :concept, :node :?}], :status :open, :source {:start 24138 :end 24140}, :attrs {:mark-kind "symbol" :subject "xv"}}
+  {:id :e-000596, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24176 :end 24177}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000597, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 24178 :end 24179}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000598, :kind :bind, :ends [{:role :subject, :node :x} {:role :concept, :node :?}], :status :open, :source {:start 24181 :end 24182}, :attrs {:mark-kind "symbol" :subject "x"}}
+  {:id :e-000599, :kind :bind, :ends [{:role :subject, :node :y} {:role :concept, :node :representing-cycle-x-and-an-element}], :status :filled, :source {:start 24183 :end 24184}, :attrs {:concept "representing cycle $x$ and an element" :mark-kind "symbol-grounded" :subject "y"}}
+  {:id :e-000600, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 24257 :end 24258}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000601, :kind :bind, :ends [{:role :subject, :node :x} {:role :concept, :node :?}], :status :open, :source {:start 24271 :end 24272}, :attrs {:mark-kind "symbol" :subject "x"}}
+  {:id :e-000602, :kind :bind, :ends [{:role :subject, :node :y} {:role :concept, :node :representing-cycle-x-and-an-element}], :status :filled, :source {:start 24287 :end 24288}, :attrs {:concept "representing cycle $x$ and an element" :mark-kind "symbol-grounded" :subject "y"}}
+  {:id :e-000603, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24308 :end 24309}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000604, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :the-free-graded}], :status :filled, :source {:start 24322 :end 24323}, :attrs {:concept "the free graded" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000605, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 24348 :end 24349}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000606, :kind :bind, :ends [{:role :subject, :node :x} {:role :concept, :node :?}], :status :open, :source {:start 24350 :end 24351}, :attrs {:mark-kind "symbol" :subject "x"}}
+  {:id :e-000607, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 24361 :end 24362}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000608, :kind :bind, :ends [{:role :subject, :node :y} {:role :concept, :node :representing-cycle-x-and-an-element}], :status :filled, :source {:start 24363 :end 24364}, :attrs {:concept "representing cycle $x$ and an element" :mark-kind "symbol-grounded" :subject "y"}}
+  {:id :e-000609, :kind :bind, :ends [{:role :subject, :node :xu} {:role :concept, :node :?}], :status :open, :source {:start 24366 :end 24368}, :attrs {:mark-kind "symbol" :subject "xu"}}
+  {:id :e-000610, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24380 :end 24381}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000611, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :mapping-cone-of-the-chain-map}], :status :filled, :source {:start 24426 :end 24427}, :attrs {:concept "mapping cone of the chain map" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000612, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 24431 :end 24432}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000613, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :mapping-cone-of-the-chain-map}], :status :filled, :source {:start 24437 :end 24438}, :attrs {:concept "mapping cone of the chain map" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000614, :kind :bind, :ends [{:role :subject, :node :z} {:role :concept, :node :cycle-with-x-zu-d-ya}], :status :filled, :source {:start 24454 :end 24455}, :attrs {:concept "cycle with $x=zu-d(ya)$" :mark-kind "symbol-grounded" :subject "z"}}
+  {:id :e-000615, :kind :bind, :ends [{:role :subject, :node :yuv} {:role :concept, :node :?}], :status :open, :source {:start 24456 :end 24459}, :attrs {:mark-kind "symbol" :subject "yuv"}}
+  {:id :e-000616, :kind :bind, :ends [{:role :subject, :node :xa} {:role :concept, :node :?}], :status :open, :source {:start 24460 :end 24462}, :attrs {:mark-kind "symbol" :subject "xa"}}
+  {:id :e-000617, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24466 :end 24467}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000618, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :mapping-cone-of-the-chain-map}], :status :filled, :source {:start 24495 :end 24496}, :attrs {:concept "mapping cone of the chain map" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000619, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 24500 :end 24501}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000620, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :mapping-cone-of-the-chain-map}], :status :filled, :source {:start 24549 :end 24550}, :attrs {:concept "mapping cone of the chain map" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000621, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 24556 :end 24557}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000622, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :mapping-cone-of-the-chain-map}], :status :filled, :source {:start 24562 :end 24563}, :attrs {:concept "mapping cone of the chain map" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000623, :kind :bind, :ends [{:role :subject, :node :u} {:role :concept, :node :?}], :status :open, :source {:start 24568 :end 24569}, :attrs {:mark-kind "symbol" :subject "u"}}
+  {:id :e-000624, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :mapping-cone-of-the-chain-map}], :status :filled, :source {:start 24574 :end 24575}, :attrs {:concept "mapping cone of the chain map" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000625, :kind :bind, :ends [{:role :subject, :node :uv} {:role :concept, :node :?}], :status :open, :source {:start 24580 :end 24582}, :attrs {:mark-kind "symbol" :subject "uv"}}
+  {:id :e-000626, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :mapping-cone-of-the-chain-map}], :status :filled, :source {:start 24587 :end 24588}, :attrs {:concept "mapping cone of the chain map" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000627, :kind :bind, :ends [{:role :subject, :node :D} {:role :concept, :node :?}], :status :open, :source {:start 24601 :end 24602}, :attrs {:mark-kind "symbol" :subject "D"}}
+  {:id :e-000628, :kind :bind, :ends [{:role :subject, :node :c} {:role :concept, :node :?}], :status :open, :source {:start 24604 :end 24605}, :attrs {:mark-kind "symbol" :subject "c"}}
+  {:id :e-000629, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :mapping-cone-of-the-chain-map}], :status :filled, :source {:start 24606 :end 24607}, :attrs {:concept "mapping cone of the chain map" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000630, :kind :bind, :ends [{:role :subject, :node :H} {:role :concept, :node :exact-equivalence-from-C-D-c-A-to-C-F-k}], :status :filled, :source {:start 24694 :end 24695}, :attrs {:concept "exact equivalence from $\\C{D}^c(A)$ to $\\C{F}(k[\\" :mark-kind "symbol-grounded" :subject "H"}}
+  {:id :e-000631, :kind :bind, :ends [{:role :subject, :node :D} {:role :concept, :node :?}], :status :open, :source {:start 24733 :end 24734}, :attrs {:mark-kind "symbol" :subject "D"}}
+  {:id :e-000632, :kind :bind, :ends [{:role :subject, :node :c} {:role :concept, :node :?}], :status :open, :source {:start 24736 :end 24737}, :attrs {:mark-kind "symbol" :subject "c"}}
+  {:id :e-000633, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :mapping-cone-of-the-chain-map}], :status :filled, :source {:start 24738 :end 24739}, :attrs {:concept "mapping cone of the chain map" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000634, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 24749 :end 24750}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000635, :kind :bind, :ends [{:role :subject, :node :k-13fbd79c} {:role :concept, :node :field}], :status :filled, :source {:start 24752 :end 24753}, :attrs {:concept "field" :mark-kind "symbol-grounded" :subject "k"}}
+  {:id :e-000636, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :?}], :status :open, :source {:start 24886 :end 24887}, :attrs {:mark-kind "symbol" :subject "F"}}
+  {:id :e-000637, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 24889 :end 24890}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000638, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :object}], :status :filled, :source {:start 25056 :end 25057}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000639, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25129 :end 25130}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000640, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25159 :end 25160}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000641, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25164 :end 25165}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000642, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :quantified-variable-for-all-every-some}], :status :filled, :source {:start 25349 :end 25350}, :attrs {:concept "quantified variable (for all/every/some)" :mark-kind "symbol-grounded" :subject "i"}}
+  {:id :e-000643, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 25355 :end 25356}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000644, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :proof-that-the-triangulated-category}], :status :filled, :source {:start 25366 :end 25367}, :attrs {:concept "proof that the triangulated category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000645, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :exact-functor-with-natural-isomorphism-tau}], :status :filled, :source {:start 25539 :end 25540}, :attrs {:concept "exact functor with natural isomorphism $\\tau" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000646, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :exact-functor-with-natural-isomorphism-tau}], :status :filled, :source {:start 25600 :end 25601}, :attrs {:concept "exact functor with natural isomorphism $\\tau" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000647, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :exact-functor-with-natural-isomorphism-tau}], :status :filled, :source {:start 25607 :end 25608}, :attrs {:concept "exact functor with natural isomorphism $\\tau" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000648, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25633 :end 25634}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000649, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25638 :end 25639}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000650, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25657 :end 25658}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000651, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :Hopf-map-for-F-A}], :status :filled, :source {:start 25681 :end 25682}, :attrs {:concept "Hopf map for $F(A)$" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000652, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :Hopf-map-for-F-A}], :status :filled, :source {:start 25700 :end 25701}, :attrs {:concept "Hopf map for $F(A)$" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000653, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25702 :end 25703}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000654, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :Hopf-map-for-F-A}], :status :filled, :source {:start 25708 :end 25709}, :attrs {:concept "Hopf map for $F(A)$" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000655, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25710 :end 25711}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000656, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :Hopf-map-for-F-A}], :status :filled, :source {:start 25733 :end 25734}, :attrs {:concept "Hopf map for $F(A)$" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000657, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 25735 :end 25736}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000658, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 25760 :end 25761}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000659, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :EtoSigma-E}], :status :filled, :source {:start 25931 :end 25932}, :attrs {:concept "E\\to\\Sigma E" :mark-kind "symbol-grounded" :subject "h"}}
+  {:id :e-000660, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 25933 :end 25934}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000661, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 25944 :end 25945}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000662, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :Hopf-map-for-F-A}], :status :filled, :source {:start 26153 :end 26154}, :attrs {:concept "Hopf map for $F(A)$" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000663, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 26156 :end 26157}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000664, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :morphism}], :status :filled, :source {:start 26237 :end 26238}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "h"}}
+  {:id :e-000665, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :morphism}], :status :filled, :source {:start 26381 :end 26382}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "h"}}
+  {:id :e-000666, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :morphism}], :status :filled, :source {:start 26400 :end 26401}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "h"}}
+  {:id :e-000667, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 26434 :end 26435}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000668, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 26441 :end 26442}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000669, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 26818 :end 26819}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000670, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 26840 :end 26841}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000671, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 26862 :end 26863}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000672, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 26922 :end 26923}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000673, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27031 :end 27032}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000674, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27075 :end 27076}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000675, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27087 :end 27088}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000676, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27128 :end 27129}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000677, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 27133 :end 27134}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000678, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27137 :end 27138}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000679, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 27146 :end 27147}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000680, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27150 :end 27151}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000681, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 27155 :end 27156}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000682, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27159 :end 27160}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000683, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 27168 :end 27169}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000684, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27172 :end 27173}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000685, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 27177 :end 27178}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000686, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :morphism}], :status :filled, :source {:start 27181 :end 27182}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "h"}}
+  {:id :e-000687, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 27193 :end 27194}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000688, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27205 :end 27206}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000689, :kind :bind, :ends [{:role :subject, :node :d} {:role :concept, :node :Ato-A}], :status :filled, :source {:start 27215 :end 27216}, :attrs {:concept "A\\to A" :mark-kind "symbol-grounded" :subject "d"}}
+  {:id :e-000690, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27220 :end 27221}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000691, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 27225 :end 27226}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000692, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27229 :end 27230}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000693, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27233 :end 27234}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000694, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 27238 :end 27239}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000695, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :morphism}], :status :filled, :source {:start 27242 :end 27243}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "h"}}
+  {:id :e-000696, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27248 :end 27249}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000697, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 27253 :end 27254}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000698, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27259 :end 27260}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000699, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27266 :end 27267}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000700, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27320 :end 27321}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000701, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :morphism}], :status :filled, :source {:start 27326 :end 27327}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "h"}}
+  {:id :e-000702, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27329 :end 27330}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000703, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27350 :end 27351}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000704, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27406 :end 27407}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000705, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27415 :end 27416}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000706, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :Eto-E}], :status :filled, :source {:start 27485 :end 27486}, :attrs {:concept "E\\to E" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000707, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27487 :end 27488}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000708, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27492 :end 27493}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000709, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27510 :end 27511}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000710, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27512 :end 27513}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000711, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :Eto-E}], :status :filled, :source {:start 27519 :end 27520}, :attrs {:concept "E\\to E" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000712, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27542 :end 27543}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000713, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27545 :end 27546}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000714, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :Eto-E}], :status :filled, :source {:start 27549 :end 27550}, :attrs {:concept "E\\to E" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000715, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27564 :end 27565}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000716, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27592 :end 27593}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000717, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27602 :end 27603}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000718, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27619 :end 27620}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000719, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 27662 :end 27663}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000720, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 27677 :end 27678}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000721, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 27859 :end 27860}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000722, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 27892 :end 27893}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000723, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :exotic-object}], :status :filled, :source {:start 27917 :end 27918}, :attrs {:concept "exotic object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000724, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 27968 :end 27969}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000725, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 27971 :end 27972}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000726, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :exotic-object}], :status :filled, :source {:start 27973 :end 27974}, :attrs {:concept "exotic object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000727, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 27985 :end 27986}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000728, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :exotic-object}], :status :filled, :source {:start 27988 :end 27989}, :attrs {:concept "exotic object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000729, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 27990 :end 27991}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000730, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 28116 :end 28117}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000731, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 28121 :end 28122}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000732, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :Eto-A}], :status :filled, :source {:start 28159 :end 28160}, :attrs {:concept "E\\to A" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000733, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :exotic-object}], :status :filled, :source {:start 28161 :end 28162}, :attrs {:concept "exotic object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000734, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 28166 :end 28167}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000735, :kind :bind, :ends [{:role :subject, :node :g} {:role :concept, :node :existentially-quantified-variable}], :status :filled, :source {:start 28183 :end 28184}, :attrs {:concept "existentially quantified variable" :mark-kind "symbol-grounded" :subject "g"}}
+  {:id :e-000736, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :exotic-object}], :status :filled, :source {:start 28191 :end 28192}, :attrs {:concept "exotic object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000737, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :morphism-groups}], :status :filled, :source {:start 28195 :end 28196}, :attrs {:concept "morphism groups" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000738, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism-from-eqref-eq}], :status :filled, :source {:start 28210 :end 28211}, :attrs {:concept "morphism from \\eqref{eq" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000739, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism-from-eqref-eq}], :status :filled, :source {:start 28212 :end 28213}, :attrs {:concept "morphism from \\eqref{eq" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000740, :kind :bind, :ends [{:role :subject, :node :g} {:role :concept, :node :existentially-quantified-variable}], :status :filled, :source {:start 28214 :end 28215}, :attrs {:concept "existentially quantified variable" :mark-kind "symbol-grounded" :subject "g"}}
+  {:id :e-000741, :kind :bind, :ends [{:role :subject, :node :if} {:role :concept, :node :?}], :status :open, :source {:start 28293 :end 28295}, :attrs {:mark-kind "symbol" :subject "if"}}
+  {:id :e-000742, :kind :bind, :ends [{:role :subject, :node :g} {:role :concept, :node :existentially-quantified-variable}], :status :filled, :source {:start 28297 :end 28298}, :attrs {:concept "existentially quantified variable" :mark-kind "symbol-grounded" :subject "g"}}
+  {:id :e-000743, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :quantified-variable-for-all-every-some}], :status :filled, :source {:start 28299 :end 28300}, :attrs {:concept "quantified variable (for all/every/some)" :mark-kind "symbol-grounded" :subject "i"}}
+  {:id :e-000744, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 28305 :end 28306}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000745, :kind :bind, :ends [{:role :subject, :node :g} {:role :concept, :node :existentially-quantified-variable}], :status :filled, :source {:start 28307 :end 28308}, :attrs {:concept "existentially quantified variable" :mark-kind "symbol-grounded" :subject "g"}}
+  {:id :e-000746, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :quantified-variable-for-all-every-some}], :status :filled, :source {:start 28309 :end 28310}, :attrs {:concept "quantified variable (for all/every/some)" :mark-kind "symbol-grounded" :subject "i"}}
+  {:id :e-000747, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism-from-eqref-eq}], :status :filled, :source {:start 28322 :end 28323}, :attrs {:concept "morphism from \\eqref{eq" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000748, :kind :bind, :ends [{:role :subject, :node :h} {:role :concept, :node :morphism}], :status :filled, :source {:start 28324 :end 28325}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "h"}}
+  {:id :e-000749, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :quantified-variable-for-all-every-some}], :status :filled, :source {:start 28326 :end 28327}, :attrs {:concept "quantified variable (for all/every/some)" :mark-kind "symbol-grounded" :subject "i"}}
+  {:id :e-000750, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism-from-eqref-eq}], :status :filled, :source {:start 28339 :end 28340}, :attrs {:concept "morphism from \\eqref{eq" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000751, :kind :bind, :ends [{:role :subject, :node :n} {:role :concept, :node :?}], :status :open, :source {:start 28415 :end 28416}, :attrs {:mark-kind "symbol" :subject "n"}}
+  {:id :e-000752, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism-from-eqref-eq}], :status :filled, :source {:start 28493 :end 28494}, :attrs {:concept "morphism from \\eqref{eq" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000753, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism-from-eqref-eq}], :status :filled, :source {:start 28496 :end 28497}, :attrs {:concept "morphism from \\eqref{eq" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000754, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :quantified-variable-for-all-every-some}], :status :filled, :source {:start 28510 :end 28511}, :attrs {:concept "quantified variable (for all/every/some)" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000755, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :exotic-object}], :status :filled, :source {:start 28519 :end 28520}, :attrs {:concept "exotic object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000756, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 28523 :end 28524}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000757, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 28567 :end 28568}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000758, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :exotic-object}], :status :filled, :source {:start 28575 :end 28576}, :attrs {:concept "exotic object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000759, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 28579 :end 28580}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000760, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 28590 :end 28591}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000761, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :exotic-object}], :status :filled, :source {:start 28641 :end 28642}, :attrs {:concept "exotic object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000762, :kind :bind, :ends [{:role :subject, :node :f} {:role :concept, :node :morphism}], :status :filled, :source {:start 28651 :end 28652}, :attrs {:concept "morphism" :mark-kind "symbol-grounded" :subject "f"}}
+  {:id :e-000763, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 28675 :end 28676}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000764, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :morphism-eta}], :status :filled, :source {:start 28678 :end 28679}, :attrs {:concept "morphism $\\eta" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000765, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :exotic-object}], :status :filled, :source {:start 28680 :end 28681}, :attrs {:concept "exotic object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000766, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 28866 :end 28867}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000767, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 28910 :end 28911}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000768, :kind :bind, :ends [{:role :subject, :node :E-e0184ade} {:role :concept, :node :object}], :status :filled, :source {:start 28930 :end 28931}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "E"}}
+  {:id :e-000769, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 28986 :end 28987}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000770, :kind :bind, :ends [{:role :subject, :node :op} {:role :concept, :node :?}], :status :open, :source {:start 28990 :end 28992}, :attrs {:mark-kind "symbol" :subject "op"}}
+  {:id :e-000771, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 29257 :end 29258}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000772, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 29293 :end 29294}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000773, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :object}], :status :filled, :source {:start 29328 :end 29329}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000774, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 29341 :end 29342}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000775, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :hospectohoC-M}], :status :filled, :source {:start 29376 :end 29377}, :attrs {:concept "\\ho\\spec\\to\\ho\\C{M}" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000776, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 29395 :end 29396}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000777, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :object}], :status :filled, :source {:start 29494 :end 29495}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000778, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :hospectohoC-M}], :status :filled, :source {:start 29664 :end 29665}, :attrs {:concept "\\ho\\spec\\to\\ho\\C{M}" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000779, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :cofibrant-fibrant-object-of-the-model-category}], :status :filled, :source {:start 29675 :end 29676}, :attrs {:concept "cofibrant-fibrant object of the model category $\\" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000780, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 29735 :end 29736}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000781, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :object}], :status :filled, :source {:start 29763 :end 29764}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000782, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 29798 :end 29799}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000783, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :cofibrant-fibrant-object-of-the-model-category-529efdbf}], :status :filled, :source {:start 29935 :end 29936}, :attrs {:concept "cofibrant-fibrant object of the model category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000784, :kind :bind, :ends [{:role :subject, :node :r} {:role :concept, :node :?}], :status :open, :source {:start 29966 :end 29967}, :attrs {:mark-kind "symbol" :subject "r"}}
+  {:id :e-000785, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :cofibrant-fibrant-object-of-the-model-category}], :status :filled, :source {:start 29971 :end 29972}, :attrs {:concept "cofibrant-fibrant object of the model category $\\" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000786, :kind :bind, :ends [{:role :subject, :node :l} {:role :concept, :node :?}], :status :open, :source {:start 29995 :end 29996}, :attrs {:mark-kind "symbol" :subject "l"}}
+  {:id :e-000787, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :cofibrant-fibrant-object-of-the-model-category}], :status :filled, :source {:start 30005 :end 30006}, :attrs {:concept "cofibrant-fibrant object of the model category $\\" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000788, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 30020 :end 30021}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000789, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :cofibrant-fibrant-object-of-the-model-category}], :status :filled, :source {:start 30047 :end 30048}, :attrs {:concept "cofibrant-fibrant object of the model category $\\" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000790, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :?}], :status :open, :source {:start 30083 :end 30084}, :attrs {:mark-kind "symbol" :subject "S"}}
+  {:id :e-000791, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :cofibrant-fibrant-object-of-the-model-category}], :status :filled, :source {:start 30090 :end 30091}, :attrs {:concept "cofibrant-fibrant object of the model category $\\" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000792, :kind :bind, :ends [{:role :subject, :node :X-c032adc1} {:role :concept, :node :spectoC-M}], :status :filled, :source {:start 30168 :end 30169}, :attrs {:concept "\\spec\\to\\C{M}" :mark-kind "symbol-grounded" :subject "X"}}
+  {:id :e-000793, :kind :bind, :ends [{:role :subject, :node :M-c63ae6dd} {:role :concept, :node :usual-shift-of-complexes}], :status :filled, :source {:start 30189 :end 30190}, :attrs {:concept "usual shift of complexes" :mark-kind "symbol-grounded" :subject "M"}}
+  {:id :e-000794, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :required-functor}], :status :filled, :source {:start 30241 :end 30242}, :attrs {:concept "required functor" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000795, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :?}], :status :open, :source {:start 30477 :end 30478}, :attrs {:mark-kind "symbol" :subject "S"}}
+  {:id :e-000796, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :?}], :status :open, :source {:start 30482 :end 30483}, :attrs {:mark-kind "symbol" :subject "S"}}
+  {:id :e-000797, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :?}], :status :open, :source {:start 30625 :end 30626}, :attrs {:mark-kind "symbol" :subject "S"}}
+  {:id :e-000798, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :?}], :status :open, :source {:start 30640 :end 30641}, :attrs {:mark-kind "symbol" :subject "S"}}
+  {:id :e-000799, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :?}], :status :open, :source {:start 30647 :end 30648}, :attrs {:mark-kind "symbol" :subject "S"}}
+  {:id :e-000800, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :quantified-variable-for-all-every-some}], :status :filled, :source {:start 30653 :end 30654}, :attrs {:concept "quantified variable (for all/every/some)" :mark-kind "symbol-grounded" :subject "i"}}
+  {:id :e-000801, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :?}], :status :open, :source {:start 30660 :end 30661}, :attrs {:mark-kind "symbol" :subject "S"}}
+  {:id :e-000802, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 30668 :end 30669}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000803, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :?}], :status :open, :source {:start 30682 :end 30683}, :attrs {:mark-kind "symbol" :subject "S"}}
+  {:id :e-000804, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :mod-2-Moore-spectrum}], :status :filled, :source {:start 30727 :end 30728}, :attrs {:concept "mod-2 Moore spectrum" :mark-kind "symbol-grounded" :subject "S"}}
+  {:id :e-000805, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :mod-2-Moore-spectrum}], :status :filled, :source {:start 30790 :end 30791}, :attrs {:concept "mod-2 Moore spectrum" :mark-kind "symbol-grounded" :subject "S"}}
+  {:id :e-000806, :kind :bind, :ends [{:role :subject, :node :i} {:role :concept, :node :quantified-variable-for-all-every-some}], :status :filled, :source {:start 30808 :end 30809}, :attrs {:concept "quantified variable (for all/every/some)" :mark-kind "symbol-grounded" :subject "i"}}
+  {:id :e-000807, :kind :bind, :ends [{:role :subject, :node :q} {:role :concept, :node :?}], :status :open, :source {:start 30814 :end 30815}, :attrs {:mark-kind "symbol" :subject "q"}}
+  {:id :e-000808, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :required-functor}], :status :filled, :source {:start 31198 :end 31199}, :attrs {:concept "required functor" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000809, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 31201 :end 31202}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000810, :kind :bind, :ends [{:role :subject, :node :F-e69f20e9} {:role :concept, :node :required-functor}], :status :filled, :source {:start 31891 :end 31892}, :attrs {:concept "required functor" :mark-kind "symbol-grounded" :subject "F"}}
+  {:id :e-000811, :kind :bind, :ends [{:role :subject, :node :R-06576556} {:role :concept, :node :ideal-generated-by}], :status :filled, :source {:start 31894 :end 31895}, :attrs {:concept "ideal generated by" :mark-kind "symbol-grounded" :subject "R"}}
+  {:id :e-000812, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 32069 :end 32070}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000813, :kind :bind, :ends [{:role :subject, :node :C} {:role :concept, :node :algebraic-triangulated-category}], :status :filled, :source {:start 32191 :end 32192}, :attrs {:concept "algebraic triangulated category" :mark-kind "symbol-grounded" :subject "C"}}
+  {:id :e-000814, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :object}], :status :filled, :source {:start 33038 :end 33039}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000815, :kind :bind, :ends [{:role :subject, :node :T-c2c53d66} {:role :concept, :node :quasi-exact-triangle}], :status :filled, :source {:start 33088 :end 33089}, :attrs {:concept "quasi-exact triangle" :mark-kind "symbol-grounded" :subject "T"}}
+  {:id :e-000816, :kind :bind, :ends [{:role :subject, :node :S} {:role :concept, :node :mod-2-Moore-spectrum}], :status :filled, :source {:start 33125 :end 33126}, :attrs {:concept "mod-2 Moore spectrum" :mark-kind "symbol-grounded" :subject "S"}}
+  {:id :e-000817, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :object}], :status :filled, :source {:start 33132 :end 33133}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000818, :kind :bind, :ends [{:role :subject, :node :A-6dcd4ce2} {:role :concept, :node :object}], :status :filled, :source {:start 33242 :end 33243}, :attrs {:concept "object" :mark-kind "symbol-grounded" :subject "A"}}
+  {:id :e-000819, :kind :bind, :ends [{:role :subject, :node :K} {:role :concept, :node :?}], :status :open, :source {:start 34393 :end 34394}, :attrs {:mark-kind "symbol" :subject "K"}}
+ ]}
