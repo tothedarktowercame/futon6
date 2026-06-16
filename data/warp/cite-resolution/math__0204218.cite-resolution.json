@@ -293,8 +293,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "M. Kapranov, On the q -analog of homological algebra , available as q-alg/9611005",
+        "candidate": "q-alg/9611005",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1513,8 +1514,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Christensen, B. Keller, and A. Neeman, Failure of B rown representability in derived categories , Available as math.AT/0001056",
+        "candidate": "AT/0001056",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1613,8 +1615,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Christensen, B. Keller, and A. Neeman, Failure of B rown representability in derived categories , Available as math.AT/0001056",
+        "candidate": "AT/0001056",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,

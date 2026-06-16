@@ -121,8 +121,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "Joyal, A. and M. Tierney. Quasi-categories vs. Segal Spaces. Preprint available at math.AT/0607820",
+        "candidate": "AT/0607820",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,

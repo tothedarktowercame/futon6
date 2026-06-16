@@ -293,8 +293,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "Galatius, S. Stable homology of automorphism groups of free groups. Available for download at math.AT/0610216",
+        "candidate": "AT/0610216",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -313,8 +314,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "Galatius, S. Stable homology of automorphism groups of free groups. Available for download at math.AT/0610216",
+        "candidate": "AT/0610216",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -561,8 +563,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "Toen, B. Homotopical finiteness of smooth and proper dg-algebras. Available for download as math.AT/0609762",
+        "candidate": "AT/0609762",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,

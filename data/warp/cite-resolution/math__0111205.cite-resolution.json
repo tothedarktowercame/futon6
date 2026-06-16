@@ -1729,8 +1729,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, V. Turaev L. Vainerman: Invariants of Knots and 3-manifolds from Quantum Groupoids. math.QA/0006078 .:",
+        "candidate": "QA/0006078",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -3101,8 +3102,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, V. Turaev L. Vainerman: Invariants of Knots and 3-manifolds from Quantum Groupoids. math.QA/0006078 .:",
+        "candidate": "QA/0006078",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,

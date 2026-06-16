@@ -29,8 +29,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "T. Lada and J. Stasheff, Introduction to sh Lie algebras for physicists, Int. Jour. Theor. Phys. 32 (7) (1993), 1087--1103. Also available as hep-th/9209099",
+        "candidate": "hep-th/9209099",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -126,16 +127,12 @@
       "cite/key": "BLan",
       "cite/marker": "[5]",
       "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
-      "confidence": 0.0,
-      "hole": {
-        "bibitem": "J. Baez and L. Langford, Higher-dimensional algebra IV: 2-tangles, Adv. Math. 180 (2003), 705--764. Also available as math/9811139",
-        "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
-      },
-      "method": "hole",
-      "resolved-arxiv-id": null,
-      "resolved-corpus-id": null,
-      "title": "Adv. Math"
+      "confidence": 0.98,
+      "hole": null,
+      "method": "bibitem-arxiv-id",
+      "resolved-arxiv-id": "math/9811139",
+      "resolved-corpus-id": "math__9811139",
+      "title": "Higher-Dimensional Algebra IV: 2-Tangles"
     },
     {
       "char-anchor": [
@@ -149,8 +146,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Baez and M. Neuchl, Higher-dimensional algebra I: braided monoidal categories, Adv. Math. 121 (1996), 196--244. Also available as q-alg/9511013",
+        "candidate": "q-alg/9511013",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -329,8 +327,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Baez, Higher-dimensional algebra II: 2-Hilbert spaces, Adv. Math. 127 (1997), 125--189. Also available as q-alg/9609018",
+        "candidate": "q-alg/9609018",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -409,8 +408,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Baez and M. Neuchl, Higher-dimensional algebra I: braided monoidal categories, Adv. Math. 121 (1996), 196--244. Also available as q-alg/9511013",
+        "candidate": "q-alg/9511013",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -546,16 +546,12 @@
       "cite/key": "BLan",
       "cite/marker": "[5]",
       "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
-      "confidence": 0.0,
-      "hole": {
-        "bibitem": "J. Baez and L. Langford, Higher-dimensional algebra IV: 2-tangles, Adv. Math. 180 (2003), 705--764. Also available as math/9811139",
-        "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
-      },
-      "method": "hole",
-      "resolved-arxiv-id": null,
-      "resolved-corpus-id": null,
-      "title": "Adv. Math"
+      "confidence": 0.98,
+      "hole": null,
+      "method": "bibitem-arxiv-id",
+      "resolved-arxiv-id": "math/9811139",
+      "resolved-corpus-id": "math__9811139",
+      "title": "Higher-Dimensional Algebra IV: 2-Tangles"
     },
     {
       "char-anchor": [
@@ -569,8 +565,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Baez and M. Neuchl, Higher-dimensional algebra I: braided monoidal categories, Adv. Math. 121 (1996), 196--244. Also available as q-alg/9511013",
+        "candidate": "q-alg/9511013",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -669,8 +666,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "T. Lada and M. Markl, Strongly homotopy Lie algebras, Comm. Alg. 23(6) (1995), 2147--2161. Also available as hep-th/9406095",
+        "candidate": "hep-th/9406095",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -689,8 +687,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "T. Lada and J. Stasheff, Introduction to sh Lie algebras for physicists, Int. Jour. Theor. Phys. 32 (7) (1993), 1087--1103. Also available as hep-th/9209099",
+        "candidate": "hep-th/9209099",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -709,8 +708,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "M. Markl, Homotopy algebras via resolutions of operads, available as math.AT/9808101",
+        "candidate": "AT/9808101",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -729,8 +729,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "M. Penkava, L_ algebras and their cohomology, available as q-alg/9512014",
+        "candidate": "q-alg/9512014",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -785,8 +786,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "T. Lada and M. Markl, Strongly homotopy Lie algebras, Comm. Alg. 23(6) (1995), 2147--2161. Also available as hep-th/9406095",
+        "candidate": "hep-th/9406095",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -825,8 +827,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Baez, Higher Yang-Mills Theory, available as hep-th/9808101",
+        "candidate": "hep-th/9808101",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -845,8 +848,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Baez, Higher Yang-Mills Theory, available as hep-th/9808101",
+        "candidate": "hep-th/9808101",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -937,8 +941,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. A. de Azcarraga, J.M. Izquierdo, and J. C.\\ Perez Bueno, An introduction to some novel applications of Lie algebra cohomology in mathematics and physics, available as physics/9803046",
+        "candidate": "physics/9803046",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1067,9 +1072,9 @@
     "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__0307263-dp-emacs.json"
   },
   "stats": {
-    "holes": 48,
-    "resolution-rate": 0.1111,
-    "resolved": 6,
+    "holes": 46,
+    "resolution-rate": 0.1481,
+    "resolved": 8,
     "total": 54
   }
 }

@@ -13,8 +13,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "I. Bernstein, Sackler lectures , q-alg/9501032",
+        "candidate": "q-alg/9501032",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -53,8 +54,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "R. Behrend, P. Pearce, V. Petkova, J.-B. Zuber Boundary conditions in Rational Conformal Field Theories , hep-th/9908036",
+        "candidate": "hep-th/9908036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -129,8 +131,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "candidate": "QA/0006057",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -149,8 +152,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "candidate": "QA/0011036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -169,8 +173,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -205,8 +210,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -281,8 +287,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "T. Gannon, Boundary Conformal Field Theory and Fusion Ring Representations , hep-th/0106105",
+        "candidate": "hep-th/0106105",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -301,8 +308,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "R. Behrend, P. Pearce, V. Petkova, J.-B. Zuber Boundary conditions in Rational Conformal Field Theories , hep-th/9908036",
+        "candidate": "hep-th/9908036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -437,8 +445,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "candidate": "QA/0011036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -457,8 +466,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "candidate": "QA/0006057",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -517,8 +527,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "I. Bernstein, Sackler lectures , q-alg/9501032",
+        "candidate": "q-alg/9501032",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -557,8 +568,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "R. Behrend, P. Pearce, V. Petkova, J.-B. Zuber Boundary conditions in Rational Conformal Field Theories , hep-th/9908036",
+        "candidate": "hep-th/9908036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -593,8 +605,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "candidate": "hep-th/0101151",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -837,8 +850,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -873,8 +887,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "candidate": "QA/0011036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -893,8 +908,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "candidate": "QA/0006057",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -913,8 +929,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "F. Nill, Axioms for weak bialgebras , q-alg/9805104",
+        "candidate": "q-alg/9805104",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -933,8 +950,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "candidate": "QA/0011036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -953,8 +971,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "candidate": "QA/0006057",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -973,8 +992,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "candidate": "QA/0006057",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -993,8 +1013,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "candidate": "QA/0011036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1013,8 +1034,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "candidate": "QA/0011036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1089,8 +1111,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "candidate": "hep-th/0101151",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1149,8 +1172,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "candidate": "hep-th/0101151",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1169,8 +1193,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "candidate": "QA/0011036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1189,8 +1214,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "candidate": "QA/0011036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1209,8 +1235,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "F. Nill, Axioms for weak bialgebras , q-alg/9805104",
+        "candidate": "q-alg/9805104",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1229,8 +1256,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "candidate": "QA/0006057",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1249,8 +1277,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "candidate": "QA/0011036",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1269,8 +1298,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "candidate": "QA/0006057",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1289,8 +1319,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "candidate": "QA/0006057",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1309,8 +1340,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "candidate": "QA/0006057",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1329,8 +1361,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "candidate": "hep-th/0101151",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1349,8 +1382,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "candidate": "QA/0101046",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1369,8 +1403,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "candidate": "QA/0101046",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1389,8 +1424,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "candidate": "QA/0101046",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1409,8 +1445,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "candidate": "QA/0101046",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1429,8 +1466,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "candidate": "QA/0101046",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1549,8 +1587,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "T. Gannon, Boundary Conformal Field Theory and Fusion Ring Representations , hep-th/0106105",
+        "candidate": "hep-th/0106105",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1589,8 +1628,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Bockenhauer, D. E. Evans, Modular Invariants from Subfactors: Type I Coupling Matrices and Intermediate Subfactors , math.OA/9911239",
+        "candidate": "OA/9911239",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1609,8 +1649,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1629,8 +1670,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1649,8 +1691,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Bockenhauer, D. E. Evans, Modular Invariants from Subfactors: Type I Coupling Matrices and Intermediate Subfactors , math.OA/9911239",
+        "candidate": "OA/9911239",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1849,8 +1892,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1949,8 +1993,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1969,8 +2014,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -2109,8 +2155,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -2129,8 +2176,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -2149,8 +2197,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -2169,8 +2218,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -2189,8 +2239,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "candidate": "QA/0101219",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -2365,8 +2416,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "candidate": "hep-th/0101151",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -2385,8 +2437,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "R. Coquereaux, G. Schieber, Twisted partition functions for ADE boundary conformal field theories and Ocneanu algebras of quantum symmetries , hep-th/0107001",
+        "candidate": "hep-th/0107001",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -2405,8 +2458,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "T. Gannon, Boundary Conformal Field Theory and Fusion Ring Representations , hep-th/0106105",
+        "candidate": "hep-th/0106105",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,

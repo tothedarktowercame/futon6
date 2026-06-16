@@ -131,11 +131,11 @@
       "total": 45
     },
     {
-      "holes": 75,
+      "holes": 74,
       "paper-id": "math__0307200",
       "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__0307200.cite-resolution.json",
-      "resolution-rate": 0.1279,
-      "resolved": 11,
+      "resolution-rate": 0.1395,
+      "resolved": 12,
       "total": 86
     },
     {
@@ -147,11 +147,11 @@
       "total": 184
     },
     {
-      "holes": 48,
+      "holes": 46,
       "paper-id": "math__0307263",
       "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__0307263.cite-resolution.json",
-      "resolution-rate": 0.1111,
-      "resolved": 6,
+      "resolution-rate": 0.1481,
+      "resolved": 8,
       "total": 54
     }
   ],
@@ -163,11 +163,11 @@
     }
   ],
   "stats": {
-    "holes": 1565,
+    "holes": 1562,
     "papers-skipped": 1,
     "papers-written": 19,
-    "resolution-rate": 0.1286,
-    "resolved": 231,
+    "resolution-rate": 0.1303,
+    "resolved": 234,
     "total": 1796
   }
 }

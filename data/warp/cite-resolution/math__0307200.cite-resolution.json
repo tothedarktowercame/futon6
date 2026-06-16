@@ -294,16 +294,12 @@
       "cite/key": "Attal",
       "cite/marker": "[1]",
       "cite/raw": "\\cite{Attal,Baez,GP,Pfeiffer}",
-      "confidence": 0.0,
-      "hole": {
-        "bibitem": "R. Attal, Combinatorics of non-abelian gerbes with connection and curvature, available as math-ph/0203056",
-        "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
-      },
-      "method": "hole",
-      "resolved-arxiv-id": null,
-      "resolved-corpus-id": null,
-      "title": null
+      "confidence": 0.98,
+      "hole": null,
+      "method": "bibitem-arxiv-id",
+      "resolved-arxiv-id": "math-ph/0203056",
+      "resolved-corpus-id": "math-ph__0203056",
+      "title": "Combinatorics of Non-Abelian Gerbes with Connection and Curvature"
     },
     {
       "char-anchor": [
@@ -317,8 +313,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Baez, Higher Yang--Mills theory, available at hep-th/0206130",
+        "candidate": "hep-th/0206130",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -337,8 +334,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "F. Girelli and H. Pfeiffer, Higher gauge theory --- differential versus integral formulation, available as hep-th/0309173",
+        "candidate": "hep-th/0309173",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -393,8 +391,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "L. Crane and D. Yetter, Measurable categories and 2-groups, available as math.QA/0305176",
+        "candidate": "QA/0305176",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -513,8 +512,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Baez, Higher Yang--Mills theory, available at hep-th/0206130",
+        "candidate": "hep-th/0206130",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1417,8 +1417,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J. Baez, Higher Yang--Mills theory, available at hep-th/0206130",
+        "candidate": "hep-th/0206130",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1453,8 +1454,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "L. Crane and D. Yetter, Measurable categories and 2-groups, available as math.QA/0305176",
+        "candidate": "QA/0305176",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1649,8 +1651,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "J.--L. Brylinski, Differentiable cohomology of gauge groups, available as math.DG/0011069",
+        "candidate": "DG/0011069",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1669,8 +1672,9 @@
       "confidence": 0.0,
       "hole": {
         "bibitem": "A. Carey, S. Johnson, M. Murray, D. Stevenson and B.--L. Wang, Bundle gerbes for Chern-Simons and Wess-Zumino-Witten theories, available as math.DG/0410013",
+        "candidate": "DG/0410013",
         "kind": "unresolved-citation",
-        "reason": "no-corpus-match"
+        "reason": "candidate-not-in-corpus-id-set"
       },
       "method": "hole",
       "resolved-arxiv-id": null,
@@ -1686,9 +1690,9 @@
     "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__0307200-dp-emacs.json"
   },
   "stats": {
-    "holes": 75,
-    "resolution-rate": 0.1279,
-    "resolved": 11,
+    "holes": 74,
+    "resolution-rate": 0.1395,
+    "resolved": 12,
     "total": 86
   }
 }
