@@ -1,0 +1,29 @@
+{
+  "paper-id": "0708.2067",
+  "passage-id": "0708.2067:proof-move:L389-397",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 393,
+    "conclusion": 393
+  },
+  "window-lines": [
+    389,
+    397
+  ],
+  "binder-context": [
+    "(let-binder) binds $C$ : combinatorial model category with weak equivalences $W$",
+    "(definiendum) definiendum #0: $C$",
+    "(definiens) definiens #0: combinatorial model category with weak equivalences $W$",
+    "(let-binder) binds $W$ : accessibly embedded accessible subcategory of $C^1$",
+    "(definiendum) definiendum #0: $W$",
+    "(definiens) definiens #0: accessibly embedded accessible subcategory of $C^1$",
+    "(let-binder) binds $\\fromto{\\colim H}{\\colim G}$ : fibration \u00b7 concept: fibration [nnexus:fibration]",
+    "(definiendum) definiendum #0: $\\fromto{\\colim H}{\\colim G}$",
+    "(definiens) definiens #0: fibration \u00b7 fibration [nnexus:fibration]",
+    "(let-binder) binds $I$ : $\\XX$-small set of generating cofibrations with cofibrant do",
+    "(definiendum) definiendum #0: $I$",
+    "(definiens) definiens #0: $\\XX$-small set of generating cofibrations with cofibrant do"
+  ],
+  "source-window": "\\begin{cor} Any $\\XX$-combinatorial model $\\XX$-category satisfies the hypotheses of \\ref{lem_smith-beke}.\n\\end{cor}\n\n\\begin{cor}\\label{cor:tractislefttract} An $\\XX$-combinatorial model $\\XX$-category $\\CC$ is $\\XX$-tractable if and only if the $\\XX$-small set $I$ of generating cofibrations can be chosen with cofibrant domains.\n\\begin{proof} Suppose $I$ is an $\\XX$-small set of generating cofibrations with cofibrant domains, and suppose $J$ an $\\XX$-small set of trivial cofibrations satisfying the conditions of \\ref{lem:denseJ}. To give another such $\\XX$-small set of trivial cofibrations with cofibrant domains, it suffices to show that any commutative square\n\\begin{equation*}\n\\xymatrix@C=18pt@R=18pt{\nK\\ar[d]\\ar[r]&M\\ar[d]\\\\\nL\\ar[r]&N\n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0708.2067-dp-emacs.json"
+}

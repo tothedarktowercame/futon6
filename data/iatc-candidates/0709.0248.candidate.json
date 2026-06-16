@@ -1,0 +1,29 @@
+{
+  "paper-id": "0709.0248",
+  "passage-id": "0709.0248:proof-move:L1507-1519",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 1511,
+    "conclusion": 1515
+  },
+  "window-lines": [
+    1507,
+    1519
+  ],
+  "binder-context": [
+    "(let-binder) binds $A$ : type it is possible to consider\n$A$-indexed families of type",
+    "(definiendum) definiendum #0: $A$",
+    "(definiens) definiens #0: type it is possible to consider\n$A$-indexed families of type",
+    "(let-binder) binds $B(x)$ : $A$-indexed family\nof types is indicated by the following fo",
+    "(definiendum) definiendum #0: $B(x)$",
+    "(definiens) definiens #0: $A$-indexed family\nof types is indicated by the following fo",
+    "(let-binder) binds $a$ : \\emph{term} of type $A$ in the context\n$\\Gamma$",
+    "(definiendum) definiendum #0: $a$",
+    "(definiens) definiens #0: \\emph{term} of type $A$ in the context\n$\\Gamma$",
+    "(let-binder) binds $p$ : reflexivity term",
+    "(definiendum) definiendum #0: $p$",
+    "(definiens) definiens #0: reflexivity term"
+  ],
+  "source-window": "Under the general interpretation in\nlocally cartesian closed categories\nsketched above the reflection rule is always valid.\n\\begin{proposition}\n  In the standard interpretation given above, every locally cartesian\n  closed category $\\mathcal{C}$ is extensional. \n\\end{proposition}\n\\begin{proof}\n  Note that it suffices to consider\n  ``parameterized'' versions of the rules governing identity types.\n  I.e., the rules given above\n  are equivalent, by the structural rules of the theory, to the rules\n  obtained by replacing any terms $a,b:A$ and $p:\\id{A}(a,b)$ by\n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0709.0248-dp-emacs.json"
+}

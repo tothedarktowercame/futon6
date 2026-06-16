@@ -1,0 +1,29 @@
+{
+  "paper-id": "0712.0724",
+  "passage-id": "0712.0724:proof-move:L884-907",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 888,
+    "conclusion": 903
+  },
+  "window-lines": [
+    884,
+    907
+  ],
+  "binder-context": [
+    "(let-binder) binds $U$ : morphism\n\\begin{equation*}\n    \\cd{\n        A\n            \\a",
+    "(definiendum) definiendum #0: $U$",
+    "(definiens) definiens #0: morphism\n\\begin{equation*}\n    \\cd{\n        A\n            \\a",
+    "(let-binder) binds $(g', \\phi')$ : morphism\n$(u \u00b7 concept: morphism [nnexus:morphism]",
+    "(definiendum) definiendum #0: $(g', \\phi')$",
+    "(definiens) definiens #0: morphism\n$(u \u00b7 morphism [nnexus:morphism]",
+    "(let-binder) binds $\\C^\\mathbf 2$ : evident\nforgetful functor",
+    "(definiendum) definiendum #0: $\\C^\\mathbf 2$",
+    "(definiens) definiens #0: evident\nforgetful functor",
+    "(bind/let) bind/let \u00b7 symbol:(\\Ll, \\Rr) | type:a natural w",
+    "(bind/let) bind/let \u00b7 symbol:I \\colon \\J \\to \\C^\\mathbf 2 | type:an object of",
+    "(bind/let) bind/let \u00b7 symbol:\\C | type:a category | canon:category [nnexus:category]"
+  ],
+  "source-window": "of $\\C^\\mathbf 2$, then we have $\\phi(a, hs, kt) = \\phi(a', h, k) \\circ t$. A\nmorphism of $\\A^\\pitchfork$ from $(g, \\phi)$ to $(g', \\phi')$ is a morphism\n$(u, v) \\colon g \\to g'$ of $\\C^\\mathbf 2$ which respects the choice of\nliftings in $\\phi$ and $\\phi'$, in the sense that the equation $u \\circ \\phi(a,\nh, k) = \\phi'(a, uh, vk)$ holds for all suitable $a$, $h$ and $k$. The functor\nexhibiting $\\A^\\pitchfork$ as a category over $\\C^\\mathbf 2$ is the evident\nforgetful functor.\n\nThis defines $(\\thg)^\\pitchfork$ on objects of $\\cat{CAT}/\\C^\\mathbf 2$; and to\nextend this definition to morphisms, we consider a further category $\\B$ over\n$\\C^\\mathbf 2$ and a functor $F \\colon \\A \\to \\B$ over $\\C^\\mathbf 2$: from\nwhich we obtain a map $F^\\pitchfork \\colon \\B^\\pitchfork \\to \\A^\\pitchfork$\nover $\\C^\\mathbf 2$ by sending the object $(c, \\phi(\\thg, \\mathord \\ast,\n\\mathord ?))$ of $\\B^\\pitchfork$ to the object $(c, \\phi(F(\\thg), \\mathord\n\\ast, \\mathord ?))$ of $\\A^\\pitchfork$.\n\nWe define the functor ${}^\\pitchfork(\\thg)$ in the same way as\n$(\\thg)^\\pitchfork$, but with $Ua$ and $g$ swapped around in equation\n\\eqref{fillin2}. It remains only to exhibit the adjointness\n${}^\\pitchfork(\\thg) \\dashv (\\thg)^\\pitchfork$: for which it is easy to see\nthat, given categories $U \\colon \\A \\to \\C^\\mathbf 2$ and $V \\colon \\B \\to\n\\C^\\mathbf 2$ over $\\C^\\mathbf 2$, we may identify both\n\\begin{equation*}\n    \\text{functors } \\A \\to {}^\\pitchfork \\B \\qquad \\text{and} \\qquad \\text{functors } \\B \\to \\A^\\pitchfork\n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0712.0724-dp-emacs.json"
+}

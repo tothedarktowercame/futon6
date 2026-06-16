@@ -1,0 +1,29 @@
+{
+  "paper-id": "0705.0452",
+  "passage-id": "0705.0452:proof-move:L1290-1302",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 1294,
+    "conclusion": 1298
+  },
+  "window-lines": [
+    1290,
+    1302
+  ],
+  "binder-context": [
+    "(definiens) definiens #0: functor\r\n\\begin{equation}\r\n\\label{25}\r\ns^{*}",
+    "(let-binder) binds $\\mathrm{Rec}_{\\pi}$ : weak inverse of the functor $\\ex{\\pi}$ and thus show that $\\ \u00b7 concept: equivalence of categories [nlab-800]",
+    "(definiendum) definiendum #0: $\\mathrm{Rec}_{\\pi}$",
+    "(definiens) definiens #0: weak inverse of the functor $\\ex{\\pi}$ and thus show that $\\ \u00b7 equivalence of categories [nlab-800]",
+    "(let-binder) binds $\\trans{i}{\\mathrm{Gr}}{1}$ : descent category of the functor category $\\funct(M",
+    "(definiendum) definiendum #0: $\\trans{i}{\\mathrm{Gr}}{1}$",
+    "(definiens) definiens #0: descent category of the functor category $\\funct(M",
+    "(let-binder) binds $\\upp{M}{\\pi}$ : path groupoid of the covering\r\n$Y$ combined with \\quot{jumps",
+    "(definiendum) definiendum #0: $\\upp{M}{\\pi}$",
+    "(definiens) definiens #0: path groupoid of the covering\r\n$Y$ combined with \\quot{jumps",
+    "(bind/let) bind/let \u00b7 symbol:\\mathrm{Gr} | type:a Lie groupoid and let",
+    "(bind/let) bind/let \u00b7 symbol:us | type:the set of such paths by $PM$"
+  ],
+  "source-window": "of morphisms in $\\upp{M}{\\pi}$ is commutative.\r\n\\item[(3)]\r\nwe impose the equation\r\n$\\overline{\\id_x}\r\n= (x,x)\\in Y^{[2]}$ for any $x\\in Y$.\r\n\\end{enumerate}\r\n\\end{definition}\r\n\r\nIt is clear that this definition  indeed gives a groupoid. It is important for us because it\r\nprovides   the two following natural definitions.\r\n\\begin{definition}\r\n\\label{def13}\r\nFor an object $(\\mathrm{triv},g)$ in $\\trans{i}{\\mathrm{Gr}}{1}$, we have a functor\r\n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0705.0452-dp-emacs.json"
+}

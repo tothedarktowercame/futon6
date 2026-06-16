@@ -1,0 +1,29 @@
+{
+  "paper-id": "0708.2185",
+  "passage-id": "0708.2185:proof-move:L176-185",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 180,
+    "conclusion": 181
+  },
+  "window-lines": [
+    176,
+    185
+  ],
+  "binder-context": [
+    "(definiendum) definiendum #0: $\\ck_{cf}$",
+    "(definiens) definiens #0: closure under retracts of a full image of an accessible\nfunc",
+    "(let-binder) binds $f$ : weak equivalence if and only if its replacement $R(f)$ to $\\",
+    "(definiendum) definiendum #0: $f$",
+    "(definiens) definiens #0: weak equivalence if and only if its replacement $R(f)$ to $\\",
+    "(let-binder) binds $\\lambda$ : regular cardinal \u00b7 concept: regular cardinal [nnexus:regular cardinal]",
+    "(definiendum) definiendum #0: $\\lambda$",
+    "(definiens) definiens #0: regular cardinal \u00b7 regular cardinal [nnexus:regular cardinal]",
+    "(let-binder) binds $\\ck$ : $\\lambda$-directed colimit of objects from $\\ca$",
+    "(definiendum) definiendum #0: $\\ck$",
+    "(definiens) definiens #0: $\\lambda$-directed colimit of objects from $\\ca$",
+    "(bind/let) bind/let \u00b7 symbol:\\ck | type:an accessible category"
+  ],
+  "source-window": "\\begin{proof}\nBy \\cite{AR}, 2.36, a full subcategory of $\\ck$ is accessible and accessibly embedded if and only if it is closed\nunder $\\lambda$-directed colimits and $\\lambda$-pure subobjects for some regular cardinal $\\lambda$. Thus, given a set\n$\\cl_i$, $i\\in I$ of accessible and accessibly embedded subcategories of $\\ck$, there is a regular cardinal $\\lambda$\nsuch that all $\\cl_i$, $i\\in I$ are closed under $\\lambda$-directed colimits and $\\lambda$-pure subobjects. Then their\nunion $\\cl$ is closed under $\\lambda$-pure subobjects as well. Without loss of generality, we can assume that\n$\\card I<\\lambda$. Consider a $\\lambda$-directed diagram $D:\\cd\\to\\cl$. Let $D_i:\\cd_i\\to\\cl_i$ be the pullback\nof $D$ with the inclusion $\\cl_i\\to\\cl$. There is $i\\in I$ such that the embedding of $\\cd_i$ to $\\cd$ is cofinal. \nIn fact, assuming the contrary, there is an object $d_i$ in $\\cd$ with $d_i\\downarrow\\cd_i=\\emptyset$, for each\r\n$i\\in I$, which contradicts to $\\card I<\\lambda$. Consequently, $\\cl$ is closed under $\\lambda$-directed colimits \r\n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0708.2185-dp-emacs.json"
+}

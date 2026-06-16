@@ -1,0 +1,94 @@
+{
+  "papers": [
+    {
+      "paper-id": "0705.0452",
+      "passage-id": "0705.0452:proof-move:L1290-1302",
+      "selection": ":proof-move",
+      "window-lines": [
+        1290,
+        1302
+      ]
+    },
+    {
+      "paper-id": "0706.1286",
+      "passage-id": "0706.1286:proof-move:L333-341",
+      "selection": ":proof-move",
+      "window-lines": [
+        333,
+        341
+      ]
+    },
+    {
+      "paper-id": "0708.1921",
+      "passage-id": "0708.1921:proof-move:L676-684",
+      "selection": ":proof-move",
+      "window-lines": [
+        676,
+        684
+      ]
+    },
+    {
+      "paper-id": "0708.2067",
+      "passage-id": "0708.2067:proof-move:L389-397",
+      "selection": ":proof-move",
+      "window-lines": [
+        389,
+        397
+      ]
+    },
+    {
+      "paper-id": "0708.2185",
+      "passage-id": "0708.2185:proof-move:L176-185",
+      "selection": ":proof-move",
+      "window-lines": [
+        176,
+        185
+      ]
+    },
+    {
+      "paper-id": "0709.0248",
+      "passage-id": "0709.0248:proof-move:L1507-1519",
+      "selection": ":proof-move",
+      "window-lines": [
+        1507,
+        1519
+      ]
+    },
+    {
+      "paper-id": "0711.0473",
+      "passage-id": "0711.0473:proof-move:L1114-1122",
+      "selection": ":proof-move",
+      "window-lines": [
+        1114,
+        1122
+      ]
+    },
+    {
+      "paper-id": "0712.0724",
+      "passage-id": "0712.0724:proof-move:L884-907",
+      "selection": ":proof-move",
+      "window-lines": [
+        884,
+        907
+      ]
+    },
+    {
+      "paper-id": "0801.0199",
+      "passage-id": "0801.0199:proof-move:L386-394",
+      "selection": ":proof-move",
+      "window-lines": [
+        386,
+        394
+      ]
+    },
+    {
+      "paper-id": "0801.3843",
+      "passage-id": "0801.3843:proof-move:L643-660",
+      "selection": ":proof-move",
+      "window-lines": [
+        643,
+        660
+      ]
+    }
+  ]
+}

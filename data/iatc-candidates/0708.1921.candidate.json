@@ -1,0 +1,29 @@
+{
+  "paper-id": "0708.1921",
+  "passage-id": "0708.1921:proof-move:L676-684",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 680,
+    "conclusion": 680
+  },
+  "window-lines": [
+    676,
+    684
+  ],
+  "binder-context": [
+    "(definiendum) definiendum #0: $\\pi\\f m\\ra n$",
+    "(definiens) definiens #0: invertible modification satisfying  \n$\\beta",
+    "(let-binder) binds $\\ox\\f\\bA^2\\ra\\bA$ : tensor product \u00b7 concept: tensor product [nlab-239]",
+    "(definiendum) definiendum #0: $\\ox\\f\\bA^2\\ra\\bA$",
+    "(definiens) definiens #0: tensor product \u00b7 tensor product [nlab-239]",
+    "(let-binder) binds $P,R\\f\\bA^2\\ra\\bA$ : projection \npseudofunctors",
+    "(definiendum) definiendum #0: $P,R\\f\\bA^2\\ra\\bA$",
+    "(definiens) definiens #0: projection \npseudofunctors",
+    "(let-binder) binds $sS$ : inverse \nequivalence of $s$",
+    "(definiendum) definiendum #0: $sS$",
+    "(definiens) definiens #0: inverse \nequivalence of $s$",
+    "(bind/let) bind/let \u00b7 symbol:(p_i\\f P\\ra X_i)_{i\\in I} | type:a product cone for"
+  ],
+  "source-window": "Before dealing with the further data for a braiding and the\nbraiding and syllepsis equations we will\nestablish the symmetry equation (\\ref{eleven}) directly from the\ndescriptions of $\\sigma$ and $\\sigma S$. To show that \n$s\\sigma=(\\sigma S)s$ it suffices to show that \n$(rS)s\\sigma=(rS)(\\sigma S)s$ and $(pS)s\\sigma=(pS)(\\sigma S)s$.\nWe show the first equality by showing equality of the pasting \ncomposites of each side with the invertible $\\mu\\inv\\f(rS)s\\ra p$.\nWe have:\n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0708.1921-dp-emacs.json"
+}
