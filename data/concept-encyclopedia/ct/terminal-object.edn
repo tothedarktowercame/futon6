@@ -41,12 +41,12 @@
  :holes
  [{:kind :unresolved-genus,
    :wanted :lso-initial,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
    :wanted [:isomorphism],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 16,
@@ -56,7 +56,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Mathworld" "Planetmath"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["18" "18A05"],
   :nlab-page-id "307",
   :resolution-kind "nnexus",

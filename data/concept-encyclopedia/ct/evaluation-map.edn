@@ -8,20 +8,17 @@
   ["1010.4527" "1011.0144" "1208.5505" "1305.0944" "1309.6952"]},
  :axioms
  [{:id :nlab-condition-1,
-   :statement "#Definition Let (, , ) be a closed monoidal category.",
-   :refs [:tensor-product :adjoint-functor]}
-  {:id :nlab-condition-2,
    :statement
    "For S, D C two objects, with internal hom [S, ] right adjoint to the tensor product S (), the *evaluation map* ev \\;\\; S [S, D] D is the counit of this adjunction, hence the adjunct of the identity morphism Id \\;\\; [S,D] [S,D] \\,.",
    :refs [:tensor-product :adjoint-functor]}
-  {:id :nlab-condition-3,
+  {:id :nlab-condition-2,
    :statement
    "Concretely for = Sets or generally on generalized elements, the evaluation map is given by evaluating a function at a value, whence the name: & D \\\\ ( s ,\\, f ) && f(s) If is moreover compact then for D = the tensor unit we have that [S, ] \\,=\\, S^ is the dual object to S, whence the evaluation map becomes the pairing of objects with their duals S S^ \\,.",
    :refs [:tensor-product :adjoint-functor]}],
  :holes
  [{:kind :unresolved-genus,
    :wanted :given-by-evaluating-a-function-at-a-value,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
@@ -32,7 +29,7 @@
     :right-adjoint-functor
     :counit-of-an-adjunction
     :adjunct],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :genus :given-by-evaluating-a-function-at-a-value,
@@ -44,7 +41,7 @@
   :formaliser :codex-1,
   :formaliser-note
   "regenerated from local nLab definition text; no corpus-gloss filler",
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :nlab-page-id "5887",
   :definition-id nil},
  :depends-on

@@ -16,7 +16,8 @@
    ": [C,D] [C',D] or Lanp : [C,D] [C',D] then this left adjoint is called the ( ordinary or weak ) left Kan extension operation along p.",
    :refs [:left-adjoint :right-adjoint]}
   {:id :nlab-condition-3,
-   :statement "h the left Kan extension of h along p.",
+   :statement
+   "Similarly, if p^* has a right adjoint, this right adjoint is called the right Kan extension operation along p.",
    :refs [:left-adjoint :right-adjoint]}],
  :holes
  [{:kind :unresolved-genus,

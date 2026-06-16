@@ -10,15 +10,16 @@
    "Every ring R has a characteristic: it is zero if equivalently.",
    :refs [:abelian-group]}
   {:id :nlab-condition-2,
-   :statement "its underlying -module is a flat module,.",
+   :statement "its underlying abelian group is a torsion-free group..",
    :refs [:abelian-group]}
   {:id :nlab-condition-3,
-   :statement "its underlying abelian group is a torsion-free group..",
+   :statement
+   "The unique ring homomorphism from to R is an injection.",
    :refs [:abelian-group]}],
  :holes
  [{:kind :unresolved-genus,
    :wanted :flat-module,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
@@ -29,7 +30,7 @@
     :flat-module
     :torsion-free-group
     :ring-homomorphism],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :genus :flat-module,
@@ -41,7 +42,7 @@
   :formaliser :codex-1,
   :formaliser-note
   "regenerated from local nLab definition text; no corpus-gloss filler",
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :nlab-page-id "5904",
   :definition-id nil},
  :depends-on [:flat-module :abelian-group],

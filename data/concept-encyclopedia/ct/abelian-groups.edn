@@ -22,23 +22,23 @@
    :refs [:category :object :morphism :commutative-ring]}],
  :holes
  [{:kind :unresolved-genus,
-   :wanted :group-a,
-   :source :nlab-raw-section,
+   :wanted :group,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
    :wanted [:niels-henrik-abel :group :ab :module :mod],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 22,
- :genus :group-a,
+ :genus :group,
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["20" "20K99" "Properties_of_groups" "XX-XX"],
   :nlab-page-id "229",
   :resolution-kind "nnexus",
@@ -46,7 +46,7 @@
   :definition-id nil,
   :formaliser-note
   "regenerated from local nLab definition text; no corpus-gloss filler"},
- :depends-on [:group-a :category :object :morphism :commutative-ring],
+ :depends-on [:group :category :object :morphism :commutative-ring],
  :gloss
  {:paper "1912.12901",
   :text

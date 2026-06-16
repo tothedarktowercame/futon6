@@ -41,7 +41,7 @@
  [{:kind :unresolved-genus,
    :wanted
    :domain-category-for-the-presheaf-category-of-simplicial-sets,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
@@ -52,7 +52,7 @@
     :top
     :ab
     :simplicial-objects-in-cat],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :genus :domain-category-for-the-presheaf-category-of-simplicial-sets,
@@ -61,7 +61,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Planetmath" "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["18G30" "Algebraic_topology" "Category_theory"],
   :nlab-page-id "262",
   :resolution-kind "nnexus",

@@ -23,7 +23,7 @@
  [{:kind :unresolved-genus,
    :wanted
    :meant-specifically-an-equivalence-in-a-2-category-of-2-functors,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
@@ -34,7 +34,7 @@
     :functors
     :higher-category-theory
     :category-theory],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 3,
@@ -45,7 +45,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Planetmath"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["18-00"],
   :nlab-page-id "5661",
   :resolution-kind "nnexus",

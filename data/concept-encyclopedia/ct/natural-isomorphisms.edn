@@ -10,34 +10,27 @@
  :axioms
  [{:id :nlab-condition-1,
    :statement
-   "A natural isomorphism F G between two functors F and G \\\\ C &^^& D \\\\ & is equivalently.",
-   :refs [:natural-transformation :functor-category]}
-  {:id :nlab-condition-2,
-   :statement "a natural transformation with a two-sided inverse;.",
-   :refs [:natural-transformation :functor-category]}
-  {:id :nlab-condition-3,
-   :statement
    "a natural transformation each of whose components : F(c) G(c) for all c Obj(C) is an isomorphism in D;.",
    :refs [:natural-transformation :functor-category]}],
  :holes
  [{:kind :unresolved-genus,
-   :wanted :isomorphism-in-d,
-   :source :nlab-raw-section,
+   :wanted :isomorphism-in,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
    :wanted [:functors :inverse :isomorphism :the :automorphism],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 8,
- :genus :isomorphism-in-d,
+ :genus :isomorphism-in,
  :status :draft,
  :kind :morphism,
  :provenance
  {:formaliser :codex-1,
   :domains ["Planetmath"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["18-00"],
   :nlab-page-id "121",
   :resolution-kind "nnexus",
@@ -46,7 +39,7 @@
   :formaliser-note
   "regenerated from local nLab definition text; no corpus-gloss filler"},
  :depends-on
- [:isomorphism-in-d :natural-transformation :functor-category],
+ [:isomorphism-in :natural-transformation :functor-category],
  :gloss
  {:paper "0905.3884",
   :text

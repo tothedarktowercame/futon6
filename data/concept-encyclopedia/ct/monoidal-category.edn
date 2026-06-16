@@ -18,27 +18,6 @@
     :object
     :unit-object
     :natural-isomorphism
-    :adjunction]}
-  {:id :nlab-condition-2,
-   :statement
-   "a functor \\[ \\;\\; \\] out of the product category of with itself, called the tensor product,.",
-   :refs
-   [:category
-    :functor
-    :tensor-product
-    :object
-    :unit-object
-    :natural-isomorphism
-    :adjunction]}
-  {:id :nlab-condition-3,
-   :statement "an object 1 called the unit object or tensor unit,.",
-   :refs
-   [:category
-    :functor
-    :tensor-product
-    :object
-    :unit-object
-    :natural-isomorphism
     :adjunction]}],
  :holes
  [{:kind :unresolved-source-refs,

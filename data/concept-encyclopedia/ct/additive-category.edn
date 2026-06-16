@@ -15,9 +15,6 @@
   {:id :nlab-condition-2,
    :statement
    "an Ab-enriched category; (sometimes called a pre-additive category--this means that each hom-set carries the structure of an abelian group and composition is bilinear).",
-   :refs [:category :hom-set :abelian-group]}
-  {:id :nlab-condition-3,
-   :statement "which admits finite coproducts (and hence, by prop.",
    :refs [:category :hom-set :abelian-group]}],
  :holes
  [{:kind :unresolved-genus,

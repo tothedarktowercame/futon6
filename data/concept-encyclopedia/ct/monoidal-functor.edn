@@ -10,7 +10,7 @@
  :axioms
  [{:id :nlab-condition-1,
    :statement
-   "###### Definition Let (,, 1) and (,, 1 ) be two monoidal categories.",
+   "A lax monoidal functor between them is a functor: F \\;\\; \\,, together with coherence maps:.",
    :refs
    [:monoidal-categories
     :functor
@@ -19,7 +19,7 @@
     :identity-morphisms]}
   {:id :nlab-condition-2,
    :statement
-   "A lax monoidal functor between them is a functor: F \\;\\; \\,, together with coherence maps:.",
+   "#StrictMonoidalFunctor If and all are isomorphisms, then F is called a strong monoidal functor.",
    :refs
    [:monoidal-categories
     :functor
@@ -28,7 +28,7 @@
     :identity-morphisms]}
   {:id :nlab-condition-3,
    :statement
-   "a natural transformation \\;\\; F(x) F(y) F(x y) for all x,y satisfying the following conditions:.",
+   "> (Beware that it has also become common to say \"strong monoidal functor\" for monoidal functors with *tensorial strength*, which is different.) If they are even identity morphisms, then F is called a strict monoidal functor.",
    :refs
    [:monoidal-categories
     :functor

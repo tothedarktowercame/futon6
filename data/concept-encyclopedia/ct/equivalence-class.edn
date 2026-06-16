@@ -6,21 +6,23 @@
  {:n-papers 21,
   :sample
   ["0803.4209" "0809.3023" "1305.3835" "1308.0729" "1603.08186"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement "There are a variety of ways to make this precise.",
-   :refs []}],
+ :axioms [],
  :holes
  [{:kind :missing-genus,
    :wanted :genus,
-   :source :nlab-raw-section,
-   :note "nLab definition text did not expose an unambiguous genus"}],
+   :source :nlab-raw-definition,
+   :note "nLab definition text did not expose an unambiguous genus"}
+  {:kind :missing-axioms,
+   :wanted :axioms,
+   :source :nlab-raw-definition,
+   :note
+   "nLab page resolved but no definitional condition sentence was extractable"}],
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :domains ["Mathhub" "Mathworld" "Planetmath" "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc
   ["03B52"
    "03D20"

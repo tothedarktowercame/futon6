@@ -18,7 +18,7 @@
    :refs []}
   {:id :nlab-condition-3,
    :statement
-   "The category of k-functors, denoted by co Psh (Mk), is defined to be the category of covariant functors Mk Set.",
+   "The forgetful functor Ok:R R sending a k-ring to its underlying set is called the affine line.",
    :refs []}],
  :holes
  [{:kind :unresolved-genus,

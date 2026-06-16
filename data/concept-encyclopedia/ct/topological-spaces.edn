@@ -13,18 +13,13 @@
    "A topological space is a set X equipped with a set of subsets U X, called the open sets, which are closed under.",
    :refs [:set :open-sets]}],
  :holes
- [{:kind :unresolved-genus,
-   :wanted :set-x,
-   :source :nlab-dictionary-definition,
-   :note
-   "inferred from nLab definition, but not present in the CT encyclopedia index"}
-  {:kind :unresolved-source-refs,
+ [{:kind :unresolved-source-refs,
    :wanted [:subsets :intersections :unions],
    :source :nlab-dictionary-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 10,
- :genus :set-x,
+ :genus :set,
  :status :draft,
  :kind :object,
  :provenance
@@ -36,7 +31,7 @@
   :definition-source :nlab-dictionary-definition,
   :nlab-page-id "374",
   :definition-id "nlab-374-d1"},
- :depends-on [:set-x :set :open-sets],
+ :depends-on [:set :open-sets],
  :gloss
  {:paper "0808.3681",
   :text

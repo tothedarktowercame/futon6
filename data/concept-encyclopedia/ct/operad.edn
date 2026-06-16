@@ -10,26 +10,22 @@
  :axioms
  [{:id :nlab-condition-1,
    :statement
-   "The original definition is due to Peter May and was given in his book ([The Geometry of Iterated Loop Spaces](#May1972)).",
+   "It describes an operad as a collection of operations equipped with a notion of composition and subject to various conditions.",
    :refs [:enriched-category :monoidal-category]}
   {:id :nlab-condition-2,
    :statement
-   "It describes an operad as a collection of operations equipped with a notion of composition and subject to various conditions.",
-   :refs [:enriched-category :monoidal-category]}
-  {:id :nlab-condition-3,
-   :statement
-   "This definition is essentially that of an enriched category, only that the hom-objects are allowed to go from more than one object to a given output object.",
+   "There is a more abstract way to encode all this simply as a monoid in a suitable ambient monoidal category.",
    :refs [:enriched-category :monoidal-category]}],
  :holes
  [{:kind :unresolved-genus,
    :wanted
    :more-abstract-way-to-encode-all-this-simply-as-a-monoid-in-a-suitable-ambient-monoidal-category,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
    :wanted [:peter-may :hom-object :monoid-in-a-monoidal-category],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 49,
@@ -40,7 +36,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Mathworld" "Nlab"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["13" "category"],
   :nlab-page-id "322",
   :resolution-kind "nnexus",

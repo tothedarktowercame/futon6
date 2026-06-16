@@ -12,19 +12,11 @@
  [{:id :nlab-condition-1,
    :statement
    "Given categories C and D, the functor category -- written D^C or [C,D] -- is the category whose.",
-   :refs [:category :natural-transformations]}
-  {:id :nlab-condition-2,
-   :statement
-   "class of objects is the collection of all functors F C D.",
-   :refs [:category :natural-transformations]}
-  {:id :nlab-condition-3,
-   :statement
-   "morphisms are natural transformations between these functors.",
    :refs [:category :natural-transformations]}],
  :holes
  [{:kind :unresolved-source-refs,
    :wanted [:class :objects :functors :morphisms],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 18,
@@ -34,7 +26,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Planetmath" "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["18-00" "18A05" "18A25" "18D05" "18E05" "Functors"],
   :nlab-page-id "225",
   :resolution-kind "nnexus",

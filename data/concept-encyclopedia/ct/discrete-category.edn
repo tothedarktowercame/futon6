@@ -6,37 +6,12 @@
  {:n-papers 19,
   :sample
   ["1104.3630" "1202.2591" "1210.5678" "1312.7833" "1507.06623"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement
-   "The term discrete category (or discrete groupoid) is used in two different ways:.",
-   :refs []}
-  {:id :nlab-condition-2,
-   :statement
-   "A category is discrete if it is equivalent to (or, sometimes, isomorphic to) a category whose only morphisms are identities; i.e., if small, to a set.",
-   :refs []}
-  {:id :nlab-condition-3,
-   :statement
-   "In other words, this is a 0-truncated object of Cat; see also discrete object in a 2-category.",
-   :refs []}],
+ :axioms [],
  :holes
- [{:kind :unresolved-genus,
-   :wanted :0-truncated-object-of-cat,
-   :source :nlab-raw-section,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "inferred from nLab definition, but not present in the CT encyclopedia index"}
-  {:kind :unresolved-source-refs,
-   :wanted
-   [:equivalence-of-categories
-    :small
-    :set-ascategory
-    :truncated-object
-    :cat
-    :discrete-object-in-a-2-category],
-   :source :nlab-raw-section,
-   :note
-   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
- :genus :0-truncated-object-of-cat,
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -49,8 +24,8 @@
   :target "nnexus:discrete category",
   :definition-id nil,
   :formaliser-note
-  "regenerated from local nLab definition text; no corpus-gloss filler"},
- :depends-on [:0-truncated-object-of-cat],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1210.5678",
   :text

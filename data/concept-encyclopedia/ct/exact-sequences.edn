@@ -13,7 +13,7 @@
    :refs [:chain-complex]}],
  :holes
  [{:kind :unresolved-genus,
-   :wanted :chain-complex-c-in,
+   :wanted :chain-complex-in,
    :source :nlab-dictionary-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
@@ -22,7 +22,7 @@
    :source :nlab-dictionary-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
- :genus :chain-complex-c-in,
+ :genus :chain-complex-in,
  :status :draft,
  :kind :object,
  :provenance
@@ -34,7 +34,7 @@
   :definition-source :nlab-dictionary-definition,
   :nlab-page-id "1242",
   :definition-id "nlab-1242-d1"},
- :depends-on [:chain-complex-c-in :chain-complex],
+ :depends-on [:chain-complex-in :chain-complex],
  :gloss
  {:paper "1807.03164",
   :text

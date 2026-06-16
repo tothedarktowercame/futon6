@@ -13,10 +13,11 @@
    :refs [:homotopy-category :category]}
   {:id :nlab-condition-2,
    :statement
-   "[As functors on homotopy categories](#OnHomotopyCat) and then the (∞,1)-category-version in.",
+   "The special case of derived functors in the context of homological algebra is discussed from this general perspective in.",
    :refs [:homotopy-category :category]}
   {:id :nlab-condition-3,
-   :statement "[As functors on (∞,1)-categories](#OnInftyCats).",
+   :statement
+   "A dedicated discussion of this case is at derived functors in homological algebra.",
    :refs [:homotopy-category :category]}],
  :holes
  [{:kind :unresolved-source-refs,
@@ -24,7 +25,7 @@
    [:decategorification
     :homological-algebra
     :derived-functors-in-homological-algebra],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :genus :morphism,
@@ -33,7 +34,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["18" "18E25" "18G10" "Functors" "XX-XX"],
   :nlab-page-id "265",
   :resolution-kind "nnexus",

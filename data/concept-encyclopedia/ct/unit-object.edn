@@ -7,32 +7,13 @@
  {:n-papers 78,
   :sample
   ["0903.0340" "0904.3137" "0906.4725" "0907.4553" "1012.5910"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement
-   "In a monoidal category (C, , I), the unit object (or tensor unit) I is the object which plays the role of the unit for the tensor product , in that for any other object a there are isomorphisms a I a and I a a (the unitors).",
-   :refs [:monoidal-category :object :tensor-product :closed-category]}
-  {:id :nlab-condition-2,
-   :statement
-   "Dually, in a closed category there is a unit object which is such that maps out of it into an internal hom correspond to the external hom.",
-   :refs
-   [:monoidal-category :object :tensor-product :closed-category]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-genus,
-   :wanted
-   :object-which-plays-the-role-of-the-unit-for-the-tensor-product,
-   :source :nlab-raw-section,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "inferred from nLab definition, but not present in the CT encyclopedia index"}
-  {:kind :unresolved-source-refs,
-   :wanted
-   [:tensor-unit :generalized-the :isomorphism :unitors :internal-hom],
-   :source :nlab-raw-section,
-   :note
-   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
  :used-papers 15,
- :genus
- :object-which-plays-the-role-of-the-unit-for-the-tensor-product,
  :status :draft,
  :kind :object,
  :provenance
@@ -45,13 +26,8 @@
   :target "nnexus:unit object",
   :definition-id nil,
   :formaliser-note
-  "regenerated from local nLab definition text; no corpus-gloss filler"},
- :depends-on
- [:object-which-plays-the-role-of-the-unit-for-the-tensor-product
-  :monoidal-category
-  :object
-  :tensor-product
-  :closed-category],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0906.4725",
   :text

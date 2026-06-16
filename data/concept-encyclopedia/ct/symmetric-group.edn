@@ -7,38 +7,13 @@
  {:n-papers 18,
   :sample
   ["1105.5091" "1208.3097" "1605.03880" "1704.03674" "1904.12851"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement
-   "The permutations of a set X form a group, SX, under composition.",
-   :refs [:set :composition :finite-set :finite-group]}
-  {:id :nlab-condition-2,
-   :statement
-   "This is especially clear if one thinks of the permutation as a bijection on X, where the multiplication / composition is just composition of functions.",
-   :refs [:set :composition :finite-set :finite-group]}
-  {:id :nlab-condition-3,
-   :statement
-   "This group is called the symmetric group of X and often denoted SX, , Sym(X) or similar.",
-   :refs [:set :composition :finite-set :finite-group]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-genus,
-   :wanted :finite-group-of-cardinality-n-n-factorial,
-   :source :nlab-raw-section,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "inferred from nLab definition, but not present in the CT encyclopedia index"}
-  {:kind :unresolved-source-refs,
-   :wanted
-   [:permutations
-    :group
-    :bijection
-    :functions
-    :subgroups
-    :permutation-groups],
-   :source :nlab-raw-section,
-   :note
-   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
  :used-papers 10,
- :genus :finite-group-of-cardinality-n-n-factorial,
  :status :draft,
  :kind :object,
  :provenance
@@ -56,13 +31,8 @@
   :target "nnexus:symmetric group",
   :definition-id nil,
   :formaliser-note
-  "regenerated from local nLab definition text; no corpus-gloss filler"},
- :depends-on
- [:finite-group-of-cardinality-n-n-factorial
-  :set
-  :composition
-  :finite-set
-  :finite-group],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1904.12851",
   :text

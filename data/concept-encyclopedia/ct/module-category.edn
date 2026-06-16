@@ -6,28 +6,12 @@
  {:n-papers 59,
   :sample
   ["0708.3398" "0709.4326" "0802.1036" "0806.1079" "0812.0986"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement
-   "A module category is a linear category equipped with an action of a tensor linear category.",
-   :refs [:linear-category :enriched-category]}
-  {:id :nlab-condition-2,
-   :statement
-   "That is, a module category is an actegory enriched in K, or a pseudoaction internal to K-.",
-   :refs [:linear-category :enriched-category]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-source-refs,
-   :wanted
-   [:action
-    :tensor-linear-category
-    :actegory
-    :category-of-modules
-    :pseudoaction
-    :internalization],
-   :source :nlab-raw-section,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
- :genus :linear-category,
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -35,17 +19,12 @@
   :resolution-kind "page",
   :formaliser :codex-1,
   :formaliser-note
-  "regenerated from local nLab definition text; no corpus-gloss filler",
+  "no local nLab definition source resolved; emitted honest holes only",
   :definition-source :nlab-raw-section,
   :nlab-page-id "9580",
   :definition-id nil},
- :depends-on [:linear-category :enriched-category],
+ :depends-on [],
  :gloss
  {:paper "0709.4326",
   :text
-  ", where $1_{\\C}$, $\\alpha$, $\\lambda$, and $\\rho$ are the unit object, the associativity constraint, the left unit constraint, and the right unit constraint, respectively. A right {\\em module category} over $\\C$ (see \\cite{O1} and references therein) is a category $\\M$ together with an exact bifunct"},
- :data
- [{:component :definition-data-1,
-   :signature
-   "A module category is a linear category equipped with an action of a tensor linear category.",
-   :source :nlab-definition}]}
+  ", where $1_{\\C}$, $\\alpha$, $\\lambda$, and $\\rho$ are the unit object, the associativity constraint, the left unit constraint, and the right unit constraint, respectively. A right {\\em module category} over $\\C$ (see \\cite{O1} and references therein) is a category $\\M$ together with an exact bifunct"}}

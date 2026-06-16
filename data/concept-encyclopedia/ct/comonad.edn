@@ -21,22 +21,22 @@
    :refs [:category :monoidal-category :object :monad]}],
  :holes
  [{:kind :unresolved-genus,
-   :wanted :comonoid-in-the-monoidal-category-of-endofunctors-a-a,
-   :source :nlab-raw-section,
+   :wanted :comonoid-in-the-monoidal-category-of-endofunctors-a,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
    :wanted [:comonoid :2-category :lax-2-functor :oplax-2-functor],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
- :genus :comonoid-in-the-monoidal-category-of-endofunctors-a-a,
+ :genus :comonoid-in-the-monoidal-category-of-endofunctors-a,
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :domains ["Planetmath"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["18C15"],
   :nlab-page-id "1876",
   :resolution-kind "nnexus",
@@ -45,7 +45,7 @@
   :formaliser-note
   "regenerated from local nLab definition text; no corpus-gloss filler"},
  :depends-on
- [:comonoid-in-the-monoidal-category-of-endofunctors-a-a
+ [:comonoid-in-the-monoidal-category-of-endofunctors-a
   :category
   :monoidal-category
   :object

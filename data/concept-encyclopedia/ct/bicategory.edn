@@ -9,20 +9,13 @@
   ["0706.1286" "0706.2307" "0708.1178" "0710.0032" "0710.1208"]},
  :axioms
  [{:id :nlab-condition-1,
-   :statement "A collection of objects x,y,z,, also called 0-cells;.",
-   :refs [:category :identity-morphism :natural-isomorphisms]}
-  {:id :nlab-condition-2,
    :statement
    "For each pair of 0-cells x,y, a category B(x,y), whose objects are called morphisms or 1-cells and whose morphisms are called 2-morphisms or 2-cells;.",
-   :refs [:category :identity-morphism :natural-isomorphisms]}
-  {:id :nlab-condition-3,
-   :statement
-   "For each 0-cell x, a distinguished 1-cell 1x B(x,x) called the identity morphism or identity 1-cell at x;.",
    :refs [:category :identity-morphism :natural-isomorphisms]}],
  :holes
  [{:kind :missing-genus,
    :wanted :genus,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note "nLab definition text did not expose an unambiguous genus"}
   {:kind :unresolved-source-refs,
    :wanted
@@ -32,7 +25,7 @@
     :2-morphisms
     :horizontal-composition
     :unitors],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 11,
@@ -41,7 +34,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Encyclopediaofmath"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["XX-XX"],
   :nlab-page-id "253",
   :resolution-kind "nnexus",

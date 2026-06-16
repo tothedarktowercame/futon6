@@ -14,10 +14,6 @@
   {:id :nlab-condition-2,
    :statement
    "objects are triples (c,d,) where c C, d D, and \\[ f(c) g(d) \\] is a morphism in E, and whose.",
-   :refs [:category :morphism :composition]}
-  {:id :nlab-condition-3,
-   :statement
-   "morphisms from (c1,d1,1) to (c2,d2,2) are pairs (,), where :c1 c2 and :d1 d2 are morphisms in C and D, respectively, such that 2 .",
    :refs [:category :morphism :composition]}],
  :holes
  [{:kind :unresolved-source-refs,

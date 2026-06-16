@@ -15,20 +15,16 @@
   {:id :nlab-condition-2,
    :statement
    "In other words, a small category is an internal category in the category Set.",
-   :refs [:category :object :morphism :set]}
-  {:id :nlab-condition-3,
-   :statement
-   "A category which is not small may be called large, especially when it is not *essentially* small (see below).",
    :refs [:category :object :morphism :set]}],
  :holes
  [{:kind :unresolved-genus,
    :wanted :n-internal-category-in-the-category-set,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
    :wanted [:small-set :internal-category :large-category],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 30,
@@ -38,7 +34,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Encyclopediaofmath" "Planetmath"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["03E30" "18A15" "XX-XX"],
   :nlab-page-id "223",
   :resolution-kind "nnexus",

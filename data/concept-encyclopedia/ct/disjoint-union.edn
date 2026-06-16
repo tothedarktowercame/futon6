@@ -13,16 +13,16 @@
    :refs [:cartesian-product]}
   {:id :nlab-condition-2,
    :statement
-   "As stated, the type of the second element of such a pair depends on the first element, which is natural in dependent type theory (see at dependent sum type) and no problem for material set theory, but it may be ill formed in a structural set theory or in some forms of type theory, especially those based on the internal language of topos theory.",
+   "Alternatively, one may define Ai to be the set of those elements x of the cartesian product Ai of the power sets such that there is exactly one index j such that xj is inhabited and that xj is a singleton.",
    :refs [:cartesian-product]}
   {:id :nlab-condition-3,
    :statement
-   "Alternatively, one may define Ai to be the set of those elements x of the cartesian product Ai of the power sets such that there is exactly one index j such that xj is inhabited and that xj is a singleton.",
+   "If you\\'re trying to be predicative too, then you may need to simply adopt the existence of disjoint unions as an axiom (the axiom of disjoint unions) in your foundations, stating the following facts about it.",
    :refs [:cartesian-product]}],
  :holes
  [{:kind :unresolved-genus,
    :wanted :set-of-all-pairs-i,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
@@ -33,7 +33,7 @@
     :structural-set-theory
     :type-theory
     :internal-language],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :genus :set-of-all-pairs-i,
@@ -42,7 +42,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Mathworld" "Nlab" "Planetmath" "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc
   ["03E"
    "03E99"

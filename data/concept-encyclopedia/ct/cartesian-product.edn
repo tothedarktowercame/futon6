@@ -11,12 +11,12 @@
  :holes
  [{:kind :unresolved-genus,
    :wanted :construction,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :missing-axioms,
    :wanted :axioms,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab page resolved but no definitional condition sentence was extractable"}],
  :used-papers 3,
@@ -32,7 +32,7 @@
    "Nlab"
    "Planetmath"
    "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc
   ["03-00"
    "16D70"

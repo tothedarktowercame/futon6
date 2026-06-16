@@ -12,7 +12,7 @@
  [{:kind :missing-definition-source,
    :wanted :nlab-definition,
    :note
-   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
  :used-papers 3,
  :status :draft,
  :kind :object,

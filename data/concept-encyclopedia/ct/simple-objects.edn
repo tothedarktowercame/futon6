@@ -6,16 +6,17 @@
  {:n-papers 8,
   :sample
   ["1610.07628" "1711.07945" "1911.07895" "2002.09241" "2005.01626"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement
-   "###### Definition An object X in a category C with a terminal object 1 is simple if there are precisely two quotient objects of X, namely 1 and X.",
-   :refs [:object :category :terminal-object]}],
+ :axioms [],
  :holes
  [{:kind :missing-genus,
    :wanted :genus,
    :source :nlab-dictionary-definition,
    :note "nLab definition text did not expose an unambiguous genus"}
+  {:kind :missing-axioms,
+   :wanted :axioms,
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab page resolved but no definitional condition sentence was extractable"}
   {:kind :unresolved-source-refs,
    :wanted [:quotient-objects],
    :source :nlab-dictionary-definition,

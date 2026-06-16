@@ -9,13 +9,10 @@
   ["0704.3976" "0706.1286" "0706.2922" "0711.1761" "0801.0157"]},
  :axioms
  [{:id :nlab-condition-1,
-   :statement "###### Definition Write BMod for the category whose.",
-   :refs [:category]}
-  {:id :nlab-condition-2,
    :statement
    "objects are triples (R,S,B) where R and S are rings and where B is an R-S-bimodule;.",
    :refs [:category]}
-  {:id :nlab-condition-3,
+  {:id :nlab-condition-2,
    :statement
    "morphisms are triples (f,g, ) consisting of two ring homomorphisms f R R' and g S S' and an intertwiner of R-S'-bimodules B g f B'.",
    :refs [:category]}],

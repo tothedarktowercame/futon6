@@ -23,12 +23,12 @@
  :holes
  [{:kind :unresolved-genus,
    :wanted :typically-denoted-vect,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
    :wanted [:field :division-ring :module :ring :vect],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 19,
@@ -38,7 +38,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc
   ["13-00"
    "15"

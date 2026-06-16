@@ -9,20 +9,22 @@
   ["0711.1608" "0805.0432" "0810.1279" "0902.1750" "0902.3436"]},
  :axioms
  [{:id :nlab-condition-1,
-   :statement "The general notion of topos is that of.",
+   :statement
+   "Grothendieck/sheaf toposes This is the notion relevant for applications in geometry and geometric logic, whereas the notion of elementary toposes is relevant for more general applications in logic.",
    :refs []}
   {:id :nlab-condition-2,
-   :statement "[Elementary toposes](#ElementaryTopos).",
+   :statement
+   "For standard notions of mathematics to be available inside a given topos, one typically at least needs a natural numbers object.",
    :refs []}
   {:id :nlab-condition-3,
    :statement
-   "A specialization of this which is important enough that much of the literature implicitly takes it to be the general definition is the notion of.",
+   "Its existence is guaranteed by the axioms of a sheaf topos, but not by the more general axioms of an elementary topos.",
    :refs []}],
  :holes
  [{:kind :unresolved-genus,
    :wanted
    :notion-of-grothendieck-sheaf-toposes-this-is-the-notion-relevant-for-applications-in-geometry-and-geometric-logic,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
@@ -32,7 +34,7 @@
     :logic
     :internal-logic
     :natural-numbers-object],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 50,
@@ -44,7 +46,7 @@
  {:formaliser :codex-1,
   :domains
   ["Encyclopediaofmath" "Mathworld" "Nlab" "Planetmath" "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc
   ["03G30"
    "14F20"

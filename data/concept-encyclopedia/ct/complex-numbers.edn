@@ -14,12 +14,12 @@
    :refs [:associative-algebra]}
   {:id :nlab-condition-3,
    :statement
-   "the vector space ^2 made into an algebra by the rule (a, b) (c, d) = (a c.",
+   "the elliptic 2-dimensional algebra of hypercomplex numbers;.",
    :refs [:associative-algebra]}],
  :holes
  [{:kind :unresolved-genus,
    :wanted :number-of-the-form-a-b,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
@@ -30,7 +30,7 @@
     :field
     :topological-vector-space
     :matrix],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :genus :number-of-the-form-a-b,
@@ -44,7 +44,7 @@
    "Mathworld"
    "Planetmath"
    "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc
   ["12D"
    "12D99"
@@ -69,4 +69,9 @@
  :gloss
  {:paper "2011.13903",
   :text
-  "\\infty} \\frac{1}{n^{s}}. $$ (To reserve the symbol $\\zeta$ for later use, we will denote Riemann's zeta function by $\\zeta_{\\Q}(s)$.) The series $\\zeta_{\\Q}(s)$ converges for all \\emph{complex numbers} $s$ with $\\re(s) > 1$ and it conceals deep information about the nature of prime numbers within it"}}
+  "\\infty} \\frac{1}{n^{s}}. $$ (To reserve the symbol $\\zeta$ for later use, we will denote Riemann's zeta function by $\\zeta_{\\Q}(s)$.) The series $\\zeta_{\\Q}(s)$ converges for all \\emph{complex numbers} $s$ with $\\re(s) > 1$ and it conceals deep information about the nature of prime numbers within it"},
+ :data
+ [{:component :definition-data-1,
+   :signature
+   "is equipped with a -linear involution , called complex conjugation, that maps to = -.",
+   :source :nlab-definition}]}

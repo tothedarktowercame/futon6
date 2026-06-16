@@ -24,7 +24,7 @@
     :abelian-groups]}
   {:id :nlab-condition-2,
    :statement
-   "Equivalently this may be thought of as a contravariant functor F:\\: C Set.",
+   "More generally, given any category S, an S-valued presheaf on C is a functor F:\\: C^op S.",
    :refs
    [:small-category
     :functor
@@ -38,7 +38,7 @@
     :abelian-groups]}
   {:id :nlab-condition-3,
    :statement
-   "More generally, given any category S, an S-valued presheaf on C is a functor F:\\: C^op S.",
+   "While, hence, presheaves are just functors (on small categories), one says \"presheaf\" to indicate a specific perspective or interest, namely interest in the sheafification of the functor/presheaf, or at least interest in the functor category as a topos (the presheaf topos).",
    :refs
    [:small-category
     :functor
@@ -53,7 +53,7 @@
  :holes
  [{:kind :unresolved-genus,
    :wanted :functor-f,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
@@ -64,7 +64,7 @@
     :concept-with-an-attitude
     :cring
     :ab],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 17,
@@ -74,7 +74,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Mathworld" "Planetmath" "Wikipedia"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["14F05" "14F20" "18F10" "18F20" "54B40" "55" "Functors"],
   :nlab-page-id "146",
   :resolution-kind "nnexus",

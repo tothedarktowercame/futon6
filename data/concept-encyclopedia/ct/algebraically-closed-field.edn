@@ -5,31 +5,12 @@
  :defined-in
  {:n-papers 4,
   :sample ["1101.3054" "2001.04730" "2601.03128" "math__0312190"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement
-   "A field k is algebraically closed if every non-constant polynomial (with one variable and coefficients from k) has a root in k.",
-   :refs [:functor]}
-  {:id :nlab-condition-2,
-   :statement
-   "It follows that every polynomial of degree n can be factored uniquely (up to permutation of the factors) as p = c ^n (.",
-   :refs [:functor]}
-  {:id :nlab-condition-3,
-   :statement "ai) , where c and the ai are elements of k.",
-   :refs [:functor]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-source-refs,
-   :wanted
-   [:field
-    :polynomial
-    :permutation
-    :injection
-    :algebraic-extension
-    :axiom-of-choice],
-   :source :nlab-raw-section,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
- :genus :algebraically-closed-field,
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -42,14 +23,9 @@
   :target "nnexus:algebraically closed field",
   :definition-id nil,
   :formaliser-note
-  "regenerated from local nLab definition text; no corpus-gloss filler"},
- :depends-on [:algebraically-closed-field :functor],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "2601.03128",
   :text
-  "application to smash product algebras concludes the section. \\section{Module categories and triangulated module categories}\\label{section2} Throughout this paper $\\k$ denotes an \\textit{algebraically closed field}. In this section, we recall some definitions and basic properties related to module ca"},
- :data
- [{:component :definition-data-1,
-   :signature
-   "An algebraic closure of an arbitrary field k is an algebraically closed field equipped with a field homomorphism (necessarily an injection) i: k such that is an algebraic extension of k (which means that every element of is the root of some non-zero polynomial with coefficients only from k).",
-   :source :nlab-definition}]}
+  "application to smash product algebras concludes the section. \\section{Module categories and triangulated module categories}\\label{section2} Throughout this paper $\\k$ denotes an \\textit{algebraically closed field}. In this section, we recall some definitions and basic properties related to module ca"}}

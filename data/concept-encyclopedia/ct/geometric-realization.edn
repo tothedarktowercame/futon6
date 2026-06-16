@@ -12,17 +12,13 @@
    "There are various levels of generality in which the notion of (topological) geometric realization makes sense.",
    :refs []}
   {:id :nlab-condition-2,
-   :statement
-   "[For cell complexes such as simplicial sets](#OfSimplicialSets).",
-   :refs []}
-  {:id :nlab-condition-3,
-   :statement "A generalization of this of central importance is the.",
+   :statement "Geometric realization of cohesive ∞-groupoids.",
    :refs []}],
  :holes
  [{:kind :unresolved-genus,
    :wanted
    :geometric-realization-of-simplicial-topological-spaces-up-to-homotopy,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}],
  :genus
@@ -32,7 +28,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Mathworld"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["55"],
   :nlab-page-id "447",
   :resolution-kind "nnexus",

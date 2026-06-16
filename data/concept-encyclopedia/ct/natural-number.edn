@@ -7,38 +7,13 @@
  {:n-papers 8,
   :sample
   ["1102.1889" "1704.04747" "1812.10527" "1905.05636" "2106.15390"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement
-   "A natural number is traditionally one of the numbers 1, 2, 3, and so on.",
-   :refs [:finite-set]}
-  {:id :nlab-condition-2,
-   :statement
-   "It is now common in many fields of mathematics to include 0 as a natural number as well.",
-   :refs [:finite-set]}
-  {:id :nlab-condition-3,
-   :statement
-   "One advantage of doing so is that a natural number can then be identified with the cardinality of a finite set, as well as a finite ordinal number.",
-   :refs [:finite-set]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-genus,
-   :wanted :traditionally-one-of-the-numbers-1,
-   :source :nlab-raw-section,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "inferred from nLab definition, but not present in the CT encyclopedia index"}
-  {:kind :unresolved-source-refs,
-   :wanted
-   [:numbers
-    :cardinal-number
-    :ordinal-number
-    :set-theory
-    :integer
-    :foundations],
-   :source :nlab-raw-section,
-   :note
-   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
  :used-papers 4,
- :genus :traditionally-one-of-the-numbers-1,
  :status :draft,
  :kind :object,
  :provenance
@@ -56,8 +31,8 @@
   :target "nnexus:natural number",
   :definition-id nil,
   :formaliser-note
-  "regenerated from local nLab definition text; no corpus-gloss filler"},
- :depends-on [:traditionally-one-of-the-numbers-1 :finite-set],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1102.1889",
   :text

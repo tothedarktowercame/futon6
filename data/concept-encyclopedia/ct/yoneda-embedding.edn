@@ -33,7 +33,7 @@
     :morphism]}
   {:id :nlab-condition-3,
    :statement
-   "The Yoneda embedding is sometimes denoted by , the [hiragana](https://en.wikipedia.org/wiki/Yo_(kana%29) for \"Yo\"; see the references [below](#ReferencesNotation).",
+   "The Yoneda embedding is sometimes denoted by , the hiragana for \"Yo\"; see the references below.",
    :refs
    [:locally-small-category
     :functor
@@ -46,7 +46,7 @@
  :holes
  [{:kind :unresolved-genus,
    :wanted :sometimes-denoted-by,
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "inferred from nLab definition, but not present in the CT encyclopedia index"}
   {:kind :unresolved-source-refs,
@@ -55,7 +55,7 @@
     :closed-monoidal-category
     :cat
     :representable-presheaf],
-   :source :nlab-raw-section,
+   :source :nlab-raw-definition,
    :note
    "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :genus :sometimes-denoted-by,
@@ -64,7 +64,7 @@
  :provenance
  {:formaliser :codex-1,
   :domains ["Planetmath"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["18A25"],
   :nlab-page-id "499",
   :resolution-kind "nnexus",

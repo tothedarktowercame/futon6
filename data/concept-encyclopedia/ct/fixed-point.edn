@@ -6,37 +6,12 @@
  {:n-papers 23,
   :sample
   ["0710.3077" "1107.6032" "1402.4541" "1601.00239" "1603.03092"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement
-   "A fixed point (or fixpoint) of an endofunction f X X is an element x X such that f(x) = x.",
-   :refs [:category :terminal-object :endofunctor]}
-  {:id :nlab-condition-2,
-   :statement
-   "More generally, if C is a category with a terminal object 1 and an endomorphism f X X, then a fixed point of f is an element x 1 X such that f x = x.",
-   :refs [:category :terminal-object :endofunctor]}
-  {:id :nlab-condition-3,
-   :statement
-   "More generally still, we can speak of the same notion but replacing global elements x 1 X by generalized elements x U X, where again x is a fixed point of f X X if f x = x.",
-   :refs [:category :terminal-object :endofunctor]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-genus,
-   :wanted :element-x-x,
-   :source :nlab-raw-section,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "inferred from nLab definition, but not present in the CT encyclopedia index"}
-  {:kind :unresolved-source-refs,
-   :wanted
-   [:endofunction
-    :element
-    :endomorphism
-    :generalized-elements
-    :invariants
-    :monoid],
-   :source :nlab-raw-section,
-   :note
-   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
- :genus :element-x-x,
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -58,8 +33,8 @@
   :target "nnexus:fixed point",
   :definition-id nil,
   :formaliser-note
-  "regenerated from local nLab definition text; no corpus-gloss filler"},
- :depends-on [:element-x-x :category :terminal-object :endofunctor],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0710.3077",
   :text

@@ -7,19 +7,14 @@
  {:n-papers 27,
   :sample
   ["0709.4364" "0711.4401" "0912.1415" "1009.3553" "1102.1313"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement "###### Definition A metric space is.",
-   :refs [:set :cartesian-product]}
-  {:id :nlab-condition-2,
-   :statement
-   "a function d \\;\\; X X [0,) (the \"distance function\") from the Cartesian product of the set with itself to the non-negative real numbers such that for all x,y,z X:.",
-   :refs [:set :cartesian-product]}
-  {:id :nlab-condition-3,
-   :statement "(triangle inequality) d(x,y)+ d(y,z) d(x,z).",
-   :refs [:set :cartesian-product]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-source-refs,
+ [{:kind :missing-axioms,
+   :wanted :axioms,
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab page resolved but no definitional condition sentence was extractable"}
+  {:kind :unresolved-source-refs,
    :wanted
    [:metric-space
     :function

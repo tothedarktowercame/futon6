@@ -16,7 +16,8 @@
    :statement "A presheaf A PSh(C) is a sheaf with respect to J if.",
    :refs [:small-category :presheaf]}
   {:id :nlab-condition-3,
-   :statement "for every covering family \\pi : Ui U\\i I in J.",
+   :statement
+   "and for every compatible family of elements, given by tuples (si A(Ui))i I such that for all j,k I and all morphisms Uj K Uk in C with pj f = pk g we have A(f)(sj) = A(g)(sk) A(K) then.",
    :refs [:small-category :presheaf]}],
  :holes
  [{:kind :unresolved-source-refs,

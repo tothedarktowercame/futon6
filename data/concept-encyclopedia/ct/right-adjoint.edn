@@ -25,7 +25,7 @@
  :provenance
  {:formaliser :codex-1-redo,
   :domains ["Planetmath"],
-  :definition-source :nlab-raw-section,
+  :definition-source :nlab-raw-definition,
   :msc ["18A40"],
   :nlab-page-id "1021",
   :resolution-kind "nnexus",

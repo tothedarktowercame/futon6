@@ -7,56 +7,13 @@
  {:n-papers 34,
   :sample
   ["0810.2070" "0905.4883" "1001.4071" "1002.3166" "1108.2913"]},
- :axioms
- [{:id :nlab-condition-1,
-   :statement
-   "Given a concrete category, that is a category C equipped with a functor U from C to the category of sets (satisfying certain conditions), we call U a forgetful functor and call U(x), for x an object of C, the underlying set of x.",
-   :refs
-   [:category
-    :functor
-    :forgetful-functor
-    :object
-    :set
-    :faithful-functor]}
-  {:id :nlab-condition-2,
-   :statement
-   "In the case where C is explicitly a category of structured sets, then every object x of C is a set |x| equipped with some extra structure.",
-   :refs
-   [:category
-    :functor
-    :forgetful-functor
-    :object
-    :set
-    :faithful-functor]}
-  {:id :nlab-condition-3,
-   :statement
-   "In that case, the underlying set of x is precisely this set |x|.",
-   :refs
-   [:category
-    :functor
-    :forgetful-functor
-    :object
-    :set
-    :faithful-functor]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-genus,
-   :wanted :category-c,
-   :source :nlab-raw-section,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "inferred from nLab definition, but not present in the CT encyclopedia index"}
-  {:kind :unresolved-source-refs,
-   :wanted
-   [:concrete-category
-    :category-of-sets
-    :structured-sets
-    :extra-structure
-    :structure
-    :redirects-underlying-set],
-   :source :nlab-raw-section,
-   :note
-   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
  :used-papers 5,
- :genus :category-c,
  :status :draft,
  :kind :object,
  :provenance
@@ -69,25 +26,9 @@
   :target "nnexus:underlying set",
   :definition-id nil,
   :formaliser-note
-  "regenerated from local nLab definition text; no corpus-gloss filler"},
- :depends-on
- [:category-c
-  :category
-  :functor
-  :forgetful-functor
-  :object
-  :set
-  :faithful-functor],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0711.0674",
   :text
-  "ing the generator of the free group $|R\\<|$ corresponding to each $a\\in|A\\<|$ to that element of $A.$ So, for instance, if $A$ is the free group on one generator (representing the {\\em underlying-set} functor), then $|R\\<|$ will be a free group on countably many generators, indexed by the nonzero in"},
- :data
- [{:component :definition-data-1,
-   :signature
-   "Given a concrete category, that is a category C equipped with a functor U from C to the category of sets (satisfying certain conditions), we call U a forgetful functor and call U(x), for x an object of C, the underlying set of x.",
-   :source :nlab-definition}
-  {:component :definition-data-2,
-   :signature
-   "In the case where C is explicitly a category of structured sets, then every object x of C is a set |x| equipped with some extra structure.",
-   :source :nlab-definition}]}
+  "ing the generator of the free group $|R\\<|$ corresponding to each $a\\in|A\\<|$ to that element of $A.$ So, for instance, if $A$ is the free group on one generator (representing the {\\em underlying-set} functor), then $|R\\<|$ will be a free group on countably many generators, indexed by the nonzero in"}}

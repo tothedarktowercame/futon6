@@ -11,14 +11,6 @@
  [{:id :nlab-condition-1,
    :statement
    "###### Definition A model structure on a category is a choice of three distinguished classes of morphisms.",
-   :refs [:category]}
-  {:id :nlab-condition-2,
-   :statement
-   "weak equivalences W Mor() satisfying the following conditions:.",
-   :refs [:category]}
-  {:id :nlab-condition-3,
-   :statement
-   "W makes into a category with weak equivalences, (meaning that it contains all isomorphisms and is closed under two-out-of-three: given a composable pair of morphisms f,g, if two out of the three morphisms f, g, g f are in W, so is the third);.",
    :refs [:category]}],
  :holes
  [{:kind :unresolved-genus,
