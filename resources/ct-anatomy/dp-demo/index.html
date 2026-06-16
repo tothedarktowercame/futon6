@@ -1,0 +1,155 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>DP anatomy — current-run QC demo</title>
+<style>
+body{font:16px/1.6 Georgia,serif;margin:0;color:#1d1a16;background:#fffdf8}
+main{max-width:1180px;margin:0 auto;padding:26px 28px 70px}
+a{color:#174ea6}
+.top{border-bottom:1px solid #e8dfcf;background:#fff8e8;padding:22px 26px;margin:0 -28px 22px}
+.meta{color:#5f5548;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px}
+.stat{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 4px;font-family:ui-sans-serif,system-ui,sans-serif}
+.stat div{border:1px solid #e9e0d0;background:#fff;border-radius:6px;padding:7px 11px;min-width:96px;font-size:12px;color:#6a5f4f}
+.stat b{display:block;font-size:20px;line-height:1.1;color:#1d1a16}
+.ok{color:#0f766e}.warn{color:#c2410c}
+.legend{font-family:ui-sans-serif,system-ui,sans-serif;font-size:12.5px;line-height:2.1}
+.legend span{padding:1px 5px;border-radius:3px;margin-right:3px}
+.paper{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  background:#fff;border:1px solid #e5dccd;border-radius:6px;padding:18px 18px 18px 0;overflow-wrap:anywhere}
+.codeline{display:grid;grid-template-columns:4em auto 1fr;align-items:stretch}
+.codeline:target .lc,.codeline:hover .lc{background:#fff4d8}
+.ln{color:#c2b9a7;text-align:right;user-select:none;-webkit-user-select:none;
+  font-size:11.5px;padding-right:12px}
+.ln a{color:inherit;text-decoration:none}
+.rails{display:flex;align-items:stretch}
+.lc{white-space:pre-wrap;overflow-wrap:anywhere;min-height:1.7em;padding-left:2px}
+/* nested-blockquote rails: one CONTINUOUS full-height vertical bar per active
+   multi-line ENVIRONMENT/implication scope, outer to inner — like nested
+   follow-up threads. Each bar fills its row and rows abut, so a scope's rail is
+   one unbroken line across all its lines. Only containing scopes (env/*, the
+   Let–Then implication) draw rails; short inline scopes (binders) do not, so a
+   binder that runs past an environment boundary can't cross a rail. */
+.rail{display:block;width:0;border-left:3px solid #d8cdb6;margin-right:7px}
+.rail.r-impl{border-color:#7c6bd6}
+.rail.r-env{border-color:#c9a227}
+.rail.r-claim{border-color:#c026d3}
+.rail.r-expo{border-color:#0f766e}  /* expository scope (teal) — the prose layer */
+/* a rail BREAKS (gap above) only when ITS scope changes — env rail breaks
+   between environments, pink rail breaks between reasoning regions —
+   independently, so the proof rail stays continuous across region breaks. */
+.rail.rail-break{margin-top:.7em}
+/* re-laid-out IATC reasoning rows (claims + arrow divider), nested under env */
+.codeline.iq .lc{padding:1px 0 1px 8px;color:#3a2f46}
+/* IATC inference broken out from the source (a DERIVED view of the standoff
+   claim/inference marks — the reasoning is styled here, not echoed inline):
+   LHS claim / magenta arrow divider / RHS claim, one continuous magenta
+   blockquote bar through all three, nested under whatever environment rails. */
+.codeline.iq .lc{padding:1px 0 1px 8px;color:#3a2f46}
+.iq .qarrow{color:#c026d3;font-weight:700}
+.iq .qarrow::before{content:"="}
+.iq .qarrow::after{content:"=>"}
+/* mark families — combine when nested (e.g. a grounded symbol inside a math span) */
+.k-math{background:#eef3fb;border-radius:2px}
+.k-symg{color:#0b5e57;border-bottom:2px solid #0f766e;font-weight:600}
+.k-sym{background:#fdf3d7;border-bottom:2px dashed #c2410c;color:#8a3d05;font-weight:600}
+.k-bind{border-bottom:2px solid #2a4d9a}
+.k-defd{background:#efe3fb;color:#6b21a8;font-weight:700;border-radius:2px}
+.k-defs{color:#6b21a8;font-style:italic}
+.k-concept{background:#e9f7ef;border-bottom:2px dotted #15803d;color:#166534}
+/* Let–Then implication = ONE scope: a single continuous underline runs the whole
+   span (text-decoration flows through nested marks and abutting segments, so it
+   reads as one unit even across the sentence boundary). */
+.k-impl{background:#faf7ff;text-decoration:underline;text-decoration-color:#7c6bd6;
+  text-decoration-thickness:2px;text-underline-offset:4px;text-decoration-skip-ink:none}
+/* hypothesis / conclusion keywords, coloured by syntax class (Let = binder,
+   Then = inference), bold so they read as keywords. */
+.k-kw-hyp{font-weight:700;color:#1d4ed8}
+.k-kw-con{font-weight:700;color:#6d28d9}
+/* IATC reasoning layer: claims (clause-level propositions, dotted) + the inference
+   illative rendered INLINE as a stylized magenta arrow =relation=>, so the triple
+   reads in place (subject =relation=> object) without a separate table. */
+.k-claim{border-bottom:1px dotted #9a8fb0}
+/* anaphor: a (1)/(2) reference resolved to its bound enumerate item (hover) */
+.k-anaphor{border-bottom:1px dotted #1d4ed8;color:#1d4ed8;cursor:help}
+/* inference illative: ALWAYS magenta — highest precedence so a surrounding
+   quant/constraint colour can never override it. */
+.k-inf,.lc .k-inf{color:#c026d3 !important;font-weight:700}
+.k-inf::before{content:"="}
+.k-inf::after{content:"=>"}
+/* a single logical arrow can be SPLIT into adjacent k-inf spans when another
+   mark overlaps it (e.g. the anaphor on the ref in "following (1)"). Decorate
+   the RUN once: "=" only before the first segment, "=>" only after the last, so
+   a split arrow reads "=following (1)=>" not "=following =>=(1)=>". */
+.k-inf + .k-inf::before{content:""}
+.k-inf:has(+ .k-inf)::after{content:""}
+.k-con{border-bottom:1px dotted #9a3a3a}
+.k-quant{border-bottom:1px solid #4a6b2f;color:#3f5d28}
+.k-assume{border-bottom:1px solid #4a6b2f}
+.k-cite{color:#9a8f80}
+.k-env{background:#fff4d8;border-radius:2px}
+.k-cls{border-bottom:1px solid #c8bca6}
+.k-unk{background:#ffe2e2;border-bottom:2px dotted #b91c1c}
+.k-label{color:#b9b0a0}
+/* IATC argument-graph panel (layer b: interpretive reconstruction, standoff) */
+.iatc{margin:26px 0 0;border-top:2px solid #e8dfcf;padding-top:14px}
+.iatc h2{font-size:17px;margin:0 0 2px}
+.iatc .sub{color:#6a5f4f;font:13px/1.5 ui-sans-serif,system-ui,sans-serif;margin:0 0 12px}
+.ax{border:1px solid #e5dccd;border-radius:7px;padding:11px 14px;margin:0 0 12px;background:#fffdf8}
+.ax > h3{font:600 13px/1.3 ui-sans-serif,system-ui,sans-serif;margin:0 0 8px;color:#3a342b}
+.ax .lines{font-weight:400;color:#9a8f80}
+.ax .lines a{color:#9a8f80;text-decoration:none;border-bottom:1px dotted #c9bfae}
+.ax-edge{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:start;
+  padding:7px 0;border-top:1px dashed #efe7d7;font:13px/1.45 ui-sans-serif,system-ui,sans-serif}
+.ax-edge:first-of-type{border-top:0}
+.ax-prem,.ax-concl{color:#2b2722}
+.ax-rel{color:#c026d3;font-weight:700;white-space:nowrap;align-self:center}
+.ax-rel::before{content:"="}.ax-rel::after{content:"=>"}
+.ax-warr{grid-column:1/-1;font-size:12px;color:#3f6b4a;padding:2px 0 0 2px}
+.ax-warr.cite{color:#6a5f4f}
+.ax-hole{grid-column:1/-1;font-size:12px;color:#9a3412;background:#fff3e8;
+  border-left:3px solid #ea7317;padding:3px 8px;margin:2px 0 0;border-radius:3px}
+.ax-meta{color:#8a8276;font-style:italic}
+
+table{border-collapse:collapse;width:100%;font:14px/1.45 ui-sans-serif,system-ui,sans-serif;margin-top:8px}
+th,td{border-bottom:1px solid #eadfce;padding:9px 10px;text-align:left}
+th{background:#fff4d8}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.bucket{font:600 11px/1 ui-sans-serif,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;
+  color:#6a5f4f;background:#f0e9d8;border-radius:999px;padding:3px 8px}
+.lede{max-width:74ch}
+.mockups{margin-top:34px;border-top:2px solid #e8dfcf;padding-top:14px}
+.mockups h2{font-size:18px;margin:0 0 4px}
+.mk-list{list-style:none;padding:0;margin:12px 0}
+.mk-list li{border:1px solid #e9d9f5;background:#faf5ff;border-radius:7px;padding:11px 14px;margin:0 0 10px}
+.mk-list a{font:600 15px/1.4 ui-sans-serif,system-ui,sans-serif;color:#6d28d9}
+.mk-blurb{font:13px/1.5 ui-sans-serif,system-ui,sans-serif;color:#5f5548;margin-top:3px}
+</style>
+<main>
+  <section class="top">
+    <h1>DP anatomy &mdash; current-run QC</h1>
+    <p class="meta">Rendered from the live run's <code>fable-*-dp-emacs.json</code> &middot; 6 papers</p>
+    <p class="lede">Each paper is shown with the <b>actual DP marks from the ongoing run</b> &mdash;
+      every control sequence inside every math span, coloured by class. Unlike the GOLDEN-30
+      pages (a separate prose-concept detector), this descends into math mode, so you can
+      QC the symbol/math coverage directly.</p>
+    <p class="lede">Across the corpus, <b>tagging and well-formedness are already maxed</b>
+      (100% symbols tagged, 0 well-formedness errors); the open question is <b>grounding</b>
+      &mdash; whether each tagged symbol is linked to a definition. The papers below span that
+      axis, from well-grounded to grounding-debt-heavy. <b>Grounded %</b> is the column to scan;
+      ungrounded symbols render <span class="k-sym">amber-dashed</span> in the pages,
+      grounded ones <span class="k-symg">teal</span>.</p>
+  </section>
+  <table>
+    <thead><tr><th>Paper</th><th>Quality</th><th>Marks</th><th>Math tagged</th>
+      <th>Symbols tagged</th><th>Grounded</th><th>Well-formed</th><th>Open debts</th></tr></thead>
+    <tbody>
+<tr><td><a href="0807.1872.html">0807.1872</a></td><td><span class="bucket">well-grounded</span></td><td class="num">890</td><td class="num">98% <small>(130)</small></td><td class="num">100% <small>(75)</small></td><td class="num"><b class="ok">88%</b></td><td class="num ok">CLEAN</td><td class="num">31</td></tr>
+<tr><td><a href="1012.1220.html">1012.1220</a></td><td><span class="bucket">well-grounded</span></td><td class="num">3993</td><td class="num">100% <small>(555)</small></td><td class="num">100% <small>(1200)</small></td><td class="num"><b class="ok">89%</b></td><td class="num ok">CLEAN</td><td class="num">211</td></tr>
+<tr><td><a href="0905.0595.html">0905.0595</a></td><td><span class="bucket">mid</span></td><td class="num">1098</td><td class="num">100% <small>(183)</small></td><td class="num">100% <small>(77)</small></td><td class="num"><b class="warn">71%</b></td><td class="num ok">CLEAN</td><td class="num">63</td></tr>
+<tr><td><a href="0801.2567.html">0801.2567</a></td><td><span class="bucket">mid</span></td><td class="num">4843</td><td class="num">100% <small>(598)</small></td><td class="num">100% <small>(1199)</small></td><td class="num"><b class="warn">59%</b></td><td class="num ok">CLEAN</td><td class="num">528</td></tr>
+<tr><td><a href="1005.2653.html">1005.2653</a></td><td><span class="bucket">debt-heavy</span></td><td class="num">390</td><td class="num">96% <small>(57)</small></td><td class="num">100% <small>(102)</small></td><td class="num"><b class="warn">25%</b></td><td class="num ok">CLEAN</td><td class="num">90</td></tr>
+<tr><td><a href="0711.1761.html">0711.1761</a></td><td><span class="bucket">debt-heavy</span></td><td class="num">10217</td><td class="num">100% <small>(912)</small></td><td class="num">100% <small>(1139)</small></td><td class="num"><b class="warn">42%</b></td><td class="num ok">CLEAN</td><td class="num">859</td></tr>
+    </tbody>
+  </table>
+
+  <section class="mockups"><h2>Mockups</h2><p class="lede">Aspirational pages — what we <i>imagine</i> a downstream LLM-scale (superpod) phase could add on top of the deterministic pipeline. Clearly marked real ✓ vs imagined ⚗; not produced by the current detector.</p><ul class="mk-list"><li><a href="1005.2653-superpod-mockup.html">1005.2653 — Superpod MARK-3 mockup</a><div class="mk-blurb">Imagined LLM-scale output (ground-to-type, anaphora, classified expository scopes, citation resolution) on top of the real CPU pipeline + the genuine Codex-pool argument graphs. Hand-authored; real ✓ vs imagined ⚗ marked.</div></li></ul></section>
+</main>
