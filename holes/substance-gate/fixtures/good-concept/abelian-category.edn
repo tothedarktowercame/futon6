@@ -1,0 +1,31 @@
+{:given [{:var :A, :type :additive-category}],
+ :name "abelian category",
+ :concept/id :abelian-category,
+ :msc "ct",
+ :axioms
+ [{:id :has-kernels-cokernels,
+   :statement "∀ f ∈ Mor(A). f has a kernel and a cokernel",
+   :refs [:kernel :cokernel]}
+  {:id :monos-are-kernels,
+   :statement
+   "∀ monomorphism m ∈ Mor(A). m = ker(coker m)   (every mono is a kernel)",
+   :refs [:monomorphism :kernel :cokernel]}
+  {:id :epis-are-cokernels,
+   :statement
+   "∀ epimorphism e ∈ Mor(A). e = coker(ker e)   (every epi is a cokernel)",
+   :refs [:epimorphism :kernel :cokernel]}],
+ :holes [],
+ :genus :additive-category,
+ :status :golden,
+ :kind :object,
+ :provenance {:target "nlab-1041", :source :curated},
+ :depends-on
+ [:additive-category
+  :morphism
+  :kernel
+  :cokernel
+  :monomorphism
+  :epimorphism],
+ :gloss
+ {:text
+  "An abelian category is an additive category in which every morphism\n  has a kernel and a cokernel, every monomorphism is a kernel, and every\n  epimorphism is a cokernel."}}
