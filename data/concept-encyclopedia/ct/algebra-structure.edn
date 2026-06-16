@@ -1,0 +1,34 @@
+{:given [{:var :X, :type :object, :signature "X : algebra structure"}],
+ :name "algebra structure",
+ :df 759,
+ :concept/id :algebra-structure,
+ :msc "ct",
+ :defined-in {:n-papers 2, :sample ["1007.2925" "2011.03313"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :any-object,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:any-object :object],
+ :gloss
+ {:paper "2305.00893",
+  :text
+  "{C}, n\\geq 0 \\}. \\end{equation} \\begin{proposition}\\label{prop:uniformstructequiv} For any object $X$ in \\cSet\\ the following are equivalent: \\begin{enumerate} \\item $X$ admits a \\emph{$+$-algebra structure:} a retraction $\\alpha :X^+ \\ra X$ of the unit $\\eta : X\\ra X^+$. \\item $X\\to 1$ is a \\emph{t"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for algebra structure"}]}

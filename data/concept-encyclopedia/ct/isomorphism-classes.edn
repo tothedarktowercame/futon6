@@ -1,0 +1,68 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : isomorphism classes"}],
+ :name "isomorphism classes",
+ :df 886,
+ :concept/id :isomorphism-classes,
+ :msc "ct",
+ :defined-in
+ {:n-papers 37,
+  :sample
+  ["0707.2052" "0709.3091" "0710.0032" "0807.1329" "0901.3975"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : morphism. the morphisms are \\textit{isomorphism classes} of homotopies. The isomorphisms in question will not be homotopies themselves (to avoid extr",
+   :refs
+   [:classes :question :isomorphisms :textit :morphisms :themselves]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :classes,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :question,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :isomorphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :textit,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :morphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :themselves,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:bicategory
+  :morphism
+  :classes
+  :question
+  :isomorphisms
+  :textit
+  :morphisms
+  :themselves],
+ :gloss
+ {:paper "0710.0032",
+  :text
+  "en this composition is again not associative. So to get around this, we say that the bicategory we want has its $\\hom$-categories $\\underline{\\hom(a,b)}$, where the morphisms are \\textit{isomorphism classes} of homotopies. The isomorphisms in question will not be homotopies themselves (to avoid extr"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for isomorphism classes"}]}

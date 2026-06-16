@@ -1,0 +1,35 @@
+{:given [{:var :X, :type :bialgebra, :signature "X : hopf algebra"}],
+ :name "hopf algebra",
+ :df 441,
+ :concept/id :hopf-algebra,
+ :msc "ct",
+ :defined-in
+ {:n-papers 54,
+  :sample
+  ["0804.1460" "0806.3205" "0907.0187" "0907.3335" "1003.1920"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :bialgebra,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :bialgebra,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-528",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:bialgebra],
+ :gloss
+ {:paper "0907.3335",
+  :text "A {\\it Hopf algebra} is a bialgebra with antipode."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for hopf algebra"}]}

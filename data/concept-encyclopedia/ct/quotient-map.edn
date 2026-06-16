@@ -1,0 +1,74 @@
+{:given
+ [{:var :X, :type :simplicial-map, :signature "X : quotient map"}],
+ :name "quotient map",
+ :df 351,
+ :concept/id :quotient-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 19,
+  :sample
+  ["1306.1895" "1408.5220" "1512.03698" "1908.03268" "2001.05758"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : simplicial-map. we fix a simplicial set $X$, then the quotient maps $X\\to Y$ form a set. This explains \\cref{d",
+   :refs [:cref :maps :explains :form :simplicial-set :quotient]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :simplicial-map,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :quotient-maps,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :cref,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :maps,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :explains,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :form,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :quotient,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :genus :simplicial-map,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:quotient map",
+  :resolution-kind "nnexus",
+  :msc ["54B15"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:simplicial
+  :canonical-map
+  :simplicial-set
+  :simplicial-map
+  :quotient-maps
+  :cref
+  :maps
+  :explains
+  :form
+  :quotient],
+ :gloss
+ {:paper "2001.05758",
+  :text
+  "ativity of (\\ref{eq:second_diagram_proof_lem_desing_unique_factorization_through_unit}), it is automatic that the canonical map $X\\to X/R$ is a simplicial map. We say that it is a \\textbf{quotient map}. If we fix a simplicial set $X$, then the quotient maps $X\\to Y$ form a set. This explains \\cref{d"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for quotient map"}]}

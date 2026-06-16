@@ -1,0 +1,75 @@
+{:given [{:var :X, :type :object, :signature "X : model category"}],
+ :name "model category",
+ :pagerank 0.012377,
+ :df 750,
+ :concept/id :model-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 126,
+  :sample
+  ["0704.1624" "0707.0300" "0707.1449" "0708.2185" "0709.0248"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equ",
+   :refs [:classes :weak :three :fibrations :textit :morphisms]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :cocomplete-category,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :classes,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :weak,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :three,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :fibrations,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :textit,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :morphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 26,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-257",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:weak-equivalences
+  :cocomplete-category
+  :object
+  :classes
+  :weak
+  :three
+  :fibrations
+  :textit
+  :morphisms],
+ :gloss
+ {:paper "0708.2185",
+  :text
+  "\\end{proof} \\section{Weak equivalences} A \\textit{model category} is a complete and cocomplete category $\\ck$ together with three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equ"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for model category"}]}

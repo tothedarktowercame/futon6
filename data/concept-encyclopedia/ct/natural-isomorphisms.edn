@@ -1,0 +1,40 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : natural isomorphisms"}],
+ :name "natural isomorphisms",
+ :pagerank 0.004812,
+ :df 1037,
+ :concept/id :natural-isomorphisms,
+ :msc "ct",
+ :defined-in
+ {:n-papers 14,
+  :sample
+  ["0905.3884" "0906.4725" "1009.3673" "1308.0729" "1408.5220"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 8,
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:natural isomorphism",
+  :resolution-kind "nnexus",
+  :msc ["18-00"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:natural-transformation :morphism],
+ :gloss
+ {:paper "0905.3884",
+  :text
+  "$ we set\\[ \\varepsilon_{\\mathcal{C}}(x):=(Px)^{(1)}.\\] \\textbf{On morphisms}. For each $f\\colon x\\to y$ in $\\mathcal{C}$, we set\\[ \\varepsilon_{C}(f):=P_{x,y}^{(1)}(f)\\,(=P(f)).\\] \\textbf{Natural isomorphisms}. For each $a\\in G$ we define a natural transformation $\\phi_{a}\\colon A_{a}\\varepsilon_{\\m"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for natural isomorphisms"}]}

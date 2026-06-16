@@ -1,0 +1,11 @@
+{:concept/id :fixture-bad-kind
+ :name "fixture bad kind"
+ :msc "ct"
+ :kind :relation
+ :status :draft
+ :genus :category
+ :given [{:var :X :type :category}]
+ :axioms []
+ :gloss {:text "Negative fixture: invalid kind."}
+ :expect/gate :kind
+ :holes []}

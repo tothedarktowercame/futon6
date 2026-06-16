@@ -1,0 +1,41 @@
+{:given
+ [{:var :X,
+   :type :category-endowed,
+   :signature "X : tensor category"}],
+ :name "tensor category",
+ :pagerank 0.003361,
+ :df 362,
+ :concept/id :tensor-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 108,
+  :sample
+  ["0809.3394" "0809.4423" "0903.4233" "0908.3347" "0910.5695"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :category-endowed,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 12,
+ :genus :category-endowed,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-2647",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:category-endowed],
+ :gloss
+ {:paper "0809.3394",
+  :text
+  "A \\index{tensor category|emph}\\textit{tensor category} is a category endowed with a tensor structure."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for tensor category"}]}

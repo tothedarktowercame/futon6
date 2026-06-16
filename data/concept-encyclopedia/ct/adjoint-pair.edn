@@ -1,0 +1,46 @@
+{:given [{:var :X, :type :morphism, :signature "X : adjoint pair"}],
+ :name "adjoint pair",
+ :df 413,
+ :concept/id :adjoint-pair,
+ :msc "ct",
+ :defined-in
+ {:n-papers 43,
+  :sample
+  ["0704.1624" "0704.3976" "0711.3642" "0802.4266" "0804.1460"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : morphism. $B\\leq \\Psi\\cdot\\Phi$ and $\\Phi\\cdot\\Psi\\leq A$. As before, every lax morp",
+   :refs [:cdot :before]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :cdot,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :before,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:adjoint pair",
+  :resolution-kind "nnexus",
+  :msc ["18A40"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism :cdot :before],
+ :gloss
+ {:paper "0704.3976",
+  :text
+  "in the context of $\\V$-categories, $A$ and $B$ act as identities for the composition with bimodules, so that a pair of bimodules $(\\Phi:(Y,B)\\bim(X,A),(\\Psi:(X,A)\\bim(Y,B))$ is an {\\em adjoint pair}, with $\\Phi\\dashv\\Psi$, if $B\\leq \\Psi\\cdot\\Phi$ and $\\Phi\\cdot\\Psi\\leq A$. As before, every lax morp"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for adjoint pair"}]}

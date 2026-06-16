@@ -1,0 +1,35 @@
+{:given [{:var :X, :type :object, :signature "X : comma category"}],
+ :name "comma category",
+ :df 344,
+ :concept/id :comma-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 82,
+  :sample
+  ["0710.0032" "0712.0724" "0801.0161" "0801.1133" "0810.0979"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-745",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:stack :object],
+ :gloss
+ {:paper "0810.0979",
+  :text
+  "t case. See \\cite[Chapter 7]{\\Borceux} or \\cite[Appendix 2]{\\GH} for the definition of lax colimits. Let $\\X$ be a stack on $\\Diff$. The \\emph{category of manifolds over $\\X$} is defined to be the comma category $(\\Diff\\downarrow\\X)$. An object in $(\\Diff\\downarrow\\X)$ is simply a morphism \\begin{eq"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for comma category"}]}

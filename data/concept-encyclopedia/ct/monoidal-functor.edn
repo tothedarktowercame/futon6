@@ -1,0 +1,38 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : monoidal functor"}],
+ :name "monoidal functor",
+ :pagerank 0.00194,
+ :df 863,
+ :concept/id :monoidal-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 124,
+  :sample
+  ["0708.1178" "0708.2757" "0801.2055" "0805.0845" "0809.1760"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 33,
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-2814",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:monoidal-category :monoidal-categories :morphism],
+ :gloss
+ {:paper "0805.0845",
+  :text
+  "ly, it can be shown that it is not restrictive, using MacLane's coherence theorem~\\cite{maclane:cwm}: every monoidal category is monoidally equivalent to a strict one. A (strict) \\emph{monoidal functor} $F:\\mathcal{C}\\to\\mathcal{D}$ between two strict monoidal categories $\\mathcal{C}$ and $\\mathcal{"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for monoidal functor"}]}

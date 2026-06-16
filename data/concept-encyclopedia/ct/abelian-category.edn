@@ -1,0 +1,61 @@
+{:given
+ [{:var :X,
+   :type :additive-category,
+   :signature "X : abelian category"}],
+ :name "abelian category",
+ :pagerank 0.00229,
+ :df 909,
+ :concept/id :abelian-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 39,
+  :sample
+  ["0711.1608" "0804.3587" "1110.3526" "1205.3669" "1206.6632"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : additive-category. every morphism has a kernel and a cokernel",
+   :refs [:every-morphism :kernel :cokernel :morphism]}
+  {:id :condition-2,
+   :statement
+   "∀ x : additive-category. every monic (epic) is a kernel (cokernel)",
+   :refs [:kernel :monic :cokernel :epic]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :every-morphism,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :monic,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :epic,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :used-papers 25,
+ :genus :additive-category,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1041",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:additive-category
+  :every-morphism
+  :kernel
+  :cokernel
+  :morphism
+  :monic
+  :epic],
+ :gloss
+ {:paper "0804.3587",
+  :text
+  "\\item An {\\bf abelian category} is an additive category where every morphism has a kernel and a cokernel and every monic (epic) is a kernel (cokernel)."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for abelian category"}]}

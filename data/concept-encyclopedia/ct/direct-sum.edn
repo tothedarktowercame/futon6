@@ -1,0 +1,38 @@
+{:given [{:var :X, :type :object, :signature "X : direct sum"}],
+ :name "direct sum",
+ :pagerank 0.002153,
+ :df 1048,
+ :concept/id :direct-sum,
+ :msc "ct",
+ :defined-in
+ {:n-papers 129,
+  :sample
+  ["0709.4326" "0710.0032" "0809.2161" "0810.0066" "0810.2361"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 3,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1078",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:module-categories :module-category :tensor-category :object],
+ :gloss
+ {:paper "0709.4326",
+  :text
+  "For two module categories $\\M_1$ and $\\M_2$ over a tensor category $\\C$ their {\\em direct sum} is the category $\\M_1 \\oplus \\M_2$ with the obvious module category structure."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for direct sum"}]}

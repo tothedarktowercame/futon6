@@ -1,0 +1,64 @@
+{:given [{:var :X, :type :object, :signature "X : module category"}],
+ :name "module category",
+ :df 422,
+ :concept/id :module-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 59,
+  :sample
+  ["0708.3398" "0709.4326" "0802.1036" "0806.1079" "0812.0986"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $1_{\\C}$, $\\alpha$, $\\lambda$, and $\\rho$ are the unit object, the associativity constraint, the left unit constraint, and the right unit constraint, respective",
+   :refs [:exact :references :right :over :category :object]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :associativity-constraint,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :exact,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :references,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :right,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :over,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-9580",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:unit-object
+  :associativity-constraint
+  :object
+  :exact
+  :references
+  :right
+  :over
+  :category],
+ :gloss
+ {:paper "0709.4326",
+  :text
+  ", where $1_{\\C}$, $\\alpha$, $\\lambda$, and $\\rho$ are the unit object, the associativity constraint, the left unit constraint, and the right unit constraint, respectively. A right {\\em module category} over $\\C$ (see \\cite{O1} and references therein) is a category $\\M$ together with an exact bifunct"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for module category"}]}

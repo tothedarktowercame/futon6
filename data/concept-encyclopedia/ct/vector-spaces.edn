@@ -1,0 +1,81 @@
+{:given [{:var :X, :type :object, :signature "X : vector spaces"}],
+ :name "vector spaces",
+ :pagerank 0.00469,
+ :df 1298,
+ :concept/id :vector-spaces,
+ :msc "ct",
+ :defined-in
+ {:n-papers 14,
+  :sample
+  ["0903.0340" "0908.2469" "0911.3845" "1207.2054" "1309.6952"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. \\[ e^i e^j = \\sum_{k} m^{ij}_k e^k \\] where the constants $m^{ij}_k$ are \\textit{natural numbers}. Namely, we can think of these numbers as dimensions of \\texti",
+   :refs [:algebra :namely :basis :textit :vector :irreducible]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :algebra,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :namely,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :basis,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :textit,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :vector,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :irreducible,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 19,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:vector space",
+  :resolution-kind "nnexus",
+  :msc
+  ["13-00"
+   "15"
+   "15-00"
+   "16-00"
+   "20-00"
+   "70B15"
+   "Mathematical_structures"
+   "Topological_vector_spaces"
+   "XX-XX"],
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:natural-numbers
+  :object
+  :algebra
+  :namely
+  :basis
+  :textit
+  :vector
+  :irreducible],
+ :gloss
+ {:paper "0908.2469",
+  :text
+  "s a basis $e^i$ for which \\[ e^i e^j = \\sum_{k} m^{ij}_k e^k \\] where the constants $m^{ij}_k$ are \\textit{natural numbers}. Namely, we can think of these numbers as dimensions of \\textit{vector spaces} $M^{ij}_k$. Then we can seek a 2-algebra with a basis of irreducible objects $E^i$ such that \\[ E"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for vector spaces"}]}

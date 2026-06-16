@@ -1,0 +1,11 @@
+{:concept/id :fixture-malformed-axiom
+ :name "fixture malformed axiom"
+ :msc "ct"
+ :kind :object
+ :status :draft
+ :genus :category
+ :given [{:var :X :type :category}]
+ :axioms [{:id :bad}]
+ :gloss {:text "Negative fixture: axiom lacks a statement."}
+ :expect/gate :typed-statement
+ :holes []}

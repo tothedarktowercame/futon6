@@ -1,0 +1,35 @@
+{:given [{:var :X, :type :object, :signature "X : exact sequences"}],
+ :name "exact sequences",
+ :df 687,
+ :concept/id :exact-sequences,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["0903.3717" "1111.0330" "1201.0591" "1210.4566" "1807.03164"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1242",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1807.03164",
+  :text
+  "modular, Barr exact with binary coproducts), it amounts to the following: the diagram in Figure~\\ref{3x3 diag} is a \\defn{$3\\times 3$-diagram} when all of its rows and columns are \\emph{exact sequences}, which for the bottom horizontal sequence means that $k=\\ker(f)$, $f=\\coker(k)$. (In other words,"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for exact sequences"}]}

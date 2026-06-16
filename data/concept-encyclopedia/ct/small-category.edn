@@ -1,0 +1,43 @@
+{:given [{:var :X, :type :object, :signature "X : small category"}],
+ :name "small category",
+ :pagerank 0.008457,
+ :df 1019,
+ :concept/id :small-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 43,
+  :sample
+  ["0801.0083" "0810.1279" "1001.4071" "1105.4710" "1111.3335"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :internal-category,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 30,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:small category",
+  :resolution-kind "nnexus",
+  :msc ["03E30" "18A15" "XX-XX"],
+  :domains ["Encyclopediaofmath" "Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:internal-category :object],
+ :gloss
+ {:paper "1105.4710",
+  :text
+  "r[d]^{d_1}\\\\ C_1\\ar[r]_{d_0}&C_0}\\] a pullback. A full definition can be found in~\\cite{MR1674451},~\\cite{MR0470019}. We will refer to an internal category in \\cateb{Sets} as to a \\emph{small category}. \\begin{definition} Let $\\catebf{C}=(C_0,C_1,d_0,d_1,c,i)$ be an internal category in a category \\"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for small category"}]}

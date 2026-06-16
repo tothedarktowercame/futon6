@@ -1,0 +1,33 @@
+{:given [{:var :X, :type :isomorphism, :signature "X : natural map"}],
+ :name "natural map",
+ :df 712,
+ :concept/id :natural-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 4,
+  :sample ["1407.1817" "1609.04622" "1803.00180" "2502.01138"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :isomorphism,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :isomorphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:isomorphism],
+ :gloss
+ {:paper "1407.1817",
+  :text
+  "{s<t} X_s\\to X_t $ is an isomorphism, and for all non limit ordinals $t<\\lambda$, the map $X_{t-1}\\to X_t $ is in $N$. The (transfinite) composition of the $\\lambda$-sequence $X$ is defined to be the natural map $X(0)\\to\\colim_{\\lambda} X$. \\end{define} \\begin{define} Let $\\mcal{D}$ be a category wi"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for natural map"}]}

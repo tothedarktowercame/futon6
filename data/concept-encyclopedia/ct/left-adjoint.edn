@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :morphism, :signature "X : left adjoint"}],
+ :name "left adjoint",
+ :pagerank 0.002527,
+ :df 1916,
+ :concept/id :left-adjoint,
+ :msc "ct",
+ :defined-in
+ {:n-papers 213,
+  :sample
+  ["0704.1624" "0704.2207" "0801.1133" "0804.0326" "0807.4123"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 17,
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-1020",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:right-adjoint :morphism],
+ :gloss
+ {:paper "0704.2207",
+  :text
+  "\\cong\\;}% \\operatorname*{Hom}_{\\mathbf{X}}(x,Ga)$. \\end{center} \\noindent With this standard way of writing the isomorphism of hom-sets, the functor $F$ on the left is called the \\textit{left adjoint} and the functor $G$ on the right is the \\textit{right adjoint}. Maps associated with each other by "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for left adjoint"}]}

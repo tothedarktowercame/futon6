@@ -1,0 +1,35 @@
+{:given [{:var :X, :type :object, :signature "X : kan extension"}],
+ :name "kan extension",
+ :df 581,
+ :concept/id :kan-extension,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["0810.2361" "0912.4914" "1007.2925" "1212.3914" "1402.5922"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-266",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "0912.4914",
+  :text
+  "That it is a \\emph{Kan extension} is the pavlovian reflex response of anyone trained in category theory (seriously, it is just another instance of principle \\ref{principle:universal-properties-coherence-laws} at w"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for kan extension"}]}

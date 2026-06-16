@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :morphism, :signature "X : identity map"}],
+ :name "identity map",
+ :df 939,
+ :concept/id :identity-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 25,
+  :sample
+  ["0711.1608" "0809.2161" "1007.2925" "1308.2583" "1312.4642"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:identity map",
+  :resolution-kind "nnexus",
+  :msc ["03E20" "51M" "Basic_concepts_in_set_theory"],
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism],
+ :gloss
+ {:paper "1308.2583",
+  :text
+  "The {\\it source} and {\\it target} maps $\\zs,\\zt$ are defined, for any 1-morphism $f\\in {\\tt S}_1$, by $\\zs f=d_1f\\in{\\tt S}_0$, $\\zt f=d_0f\\in{\\tt S}_0$, and the {\\it identity map} is defined, for any 0-morphism $s\\in {\\tt S}_0$, by $\\id_s=s_0s\\in {\\tt S}_1$, with self-explaining notation."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for identity map"}]}

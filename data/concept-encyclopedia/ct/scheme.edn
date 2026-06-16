@@ -1,0 +1,63 @@
+{:given [{:var :X, :type :scheme, :signature "X : scheme"}],
+ :name "scheme",
+ :pagerank 0.002953,
+ :df 784,
+ :concept/id :scheme,
+ :msc "ct",
+ :defined-in
+ {:n-papers 27,
+  :sample
+  ["0905.0459" "1006.2706" "1102.2395" "1110.6523" "1212.3563"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : scheme. $X$ is a projective scheme. In general, we call a scheme $X$ \\emph{tensorial} if every cocontinuous tensor functor $\\Q(X) \\to \\Q(Y)$ is induced by a morphism $Y",
+   :refs
+   [:cocontinuous :call :tensor-functor :morphism :induced :emph]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :tensor-functor,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :cocontinuous,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :call,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :induced,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :emph,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :used-papers 20,
+ :genus :scheme,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1835",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:tensor-functor
+  :scheme
+  :cocontinuous
+  :call
+  :morphism
+  :induced
+  :emph],
+ :gloss
+ {:paper "1110.6523",
+  :text
+  "ck $f^*$ of a morphism $f : Y \\to X$ under the additional assumption that $F$ is \\emph{tame}. In this note we get rid of this assumption if $X$ is a projective scheme. In general, we call a scheme $X$ \\emph{tensorial} if every cocontinuous tensor functor $\\Q(X) \\to \\Q(Y)$ is induced by a morphism $Y"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for scheme"}]}

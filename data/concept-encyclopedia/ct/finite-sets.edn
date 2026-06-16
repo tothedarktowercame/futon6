@@ -1,0 +1,45 @@
+{:given [{:var :X, :type :object, :signature "X : finite sets"}],
+ :name "finite sets",
+ :pagerank 0.004172,
+ :df 724,
+ :concept/id :finite-sets,
+ :msc "ct",
+ :defined-in
+ {:n-papers 8,
+  :sample
+  ["0901.0074" "0904.1790" "1305.0086" "1609.07775" "1809.05923"]},
+ :axioms
+ [{:id :condition-1,
+   :statement "∀ x : object. we're meant to think of $V$",
+   :refs [:think :meant]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :think,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :meant,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 7,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-501",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object :think :meant],
+ :gloss
+ {:paper "1809.05923",
+  :text
+  "for these designations is to remember that when we screw together two pipes, we attach the output of the first to the input of the second.''} A \\textbf{cospan} in the category of \\textbf{finite sets}, for example, is just a diagram of the form $X\\to V\\leftarrow Y$, where we're meant to think of $V$ "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for finite sets"}]}

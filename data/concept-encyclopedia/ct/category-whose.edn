@@ -1,0 +1,62 @@
+{:given [{:var :X, :type :object, :signature "X : category whose"}],
+ :name "category whose",
+ :pagerank 0.00686,
+ :df 1362,
+ :concept/id :category-whose,
+ :msc "ct",
+ :defined-in
+ {:n-papers 3, :sample ["2003.04610" "2401.17483" "2512.08566"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. \\begin{itemize} \\item objects are tuples $(\\{f_i:X\\to Y_i\\}_{i=1}^\\infty,\\,n)$, where $n\\in\\mathbb N$, $X, Y_i$ are objects in $\\mathcal A$ and $f_i:X\\to Y_i$ i",
+   :refs [:mathbb :mathcal :objects :begin :morphism :infty]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :mathbb,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :mathcal,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :objects,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :begin,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :infty,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 46,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:additive-category
+  :object
+  :mathbb
+  :mathcal
+  :objects
+  :begin
+  :morphism
+  :infty],
+ :gloss
+ {:paper "2003.04610",
+  :text
+  "\\begin{defn} The {\\em injective abelianization} $\\underline{\\mathcal A}$ of an additive category $\\mathcal A$ is defined as a category whose \\begin{itemize} \\item objects are tuples $(\\{f_i:X\\to Y_i\\}_{i=1}^\\infty,\\,n)$, where $n\\in\\mathbb N$, $X, Y_i$ are objects in $\\mathcal A$ and $f_i:X\\to Y_i$ is a morphism in"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for category whose"}]}

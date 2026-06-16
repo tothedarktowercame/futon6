@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :object, :signature "X : monoidal category"}],
+ :name "monoidal category",
+ :pagerank 0.012843,
+ :df 1565,
+ :concept/id :monoidal-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 276,
+  :sample
+  ["0704.2106" "0708.1348" "0708.2757" "0711.0324" "0803.2694"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 60,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-231",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:monoidal-categories :object],
+ :gloss
+ {:paper "0708.2757",
+  :text
+  "\\subsection{Monoidal categories and functors} A {\\em monoidal category} is a category $\\cG$ with a functor \\begin{displaymath} \\otimes :{\\cal G} \\times {\\cal G} \\longrightarrow {\\cal G} \\qquad (X,Y) \\mapsto X \\otimes Y \\end{displaymath} ({\\em tensor"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for monoidal category"}]}

@@ -1,0 +1,38 @@
+{:given
+ [{:var :X, :type :object, :signature "X : connected component"}],
+ :name "connected component",
+ :df 377,
+ :concept/id :connected-component,
+ :msc "ct",
+ :defined-in
+ {:n-papers 44,
+  :sample
+  ["0904.4896" "0908.0428" "0909.1793" "1106.3250" "1304.0257"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:connected component",
+  :resolution-kind "nnexus",
+  :msc ["05C" "05C40" "06A07" "54D05"],
+  :domains ["Mathworld" "Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "0904.4896",
+  :text
+  "pha_0}$ are open, nonempty, and cover $C_{\\alpha_0}$, thus $C_{\\alpha_0}$ is not connected, contradiction. Hence $\\bigcup_{\\alpha \\in A} C_{\\alpha}$ is connected. \\end{proof} The \\textbf{connected component} of a point $x\\in X$ of a small space $X$ is the largest connected set $C_x$ containing $x$. "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for connected component"}]}

@@ -1,0 +1,36 @@
+{:given
+ [{:var :X, :type :object, :signature "X : commutative square"}],
+ :name "commutative square",
+ :df 888,
+ :concept/id :commutative-square,
+ :msc "ct",
+ :defined-in
+ {:n-papers 14,
+  :sample
+  ["1002.4863" "1207.6613" "1308.0729" "1402.1871" "1402.6984"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-775",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1402.6984",
+  :text
+  "We allow ourselves to re-emphasize that, in general, one has to be careful about what one means by saying that a \\emph{commutative square} is homotopy exact."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for commutative square"}]}

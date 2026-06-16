@@ -1,0 +1,48 @@
+{:given [{:var :X, :type :object, :signature "X : structure maps"}],
+ :name "structure maps",
+ :df 508,
+ :concept/id :structure-maps,
+ :msc "ct",
+ :defined-in
+ {:n-papers 20,
+  :sample
+  ["0809.3394" "0906.4725" "1001.0668" "1101.2363" "1401.4772"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:structure map",
+  :resolution-kind "nnexus",
+  :msc
+  ["08A05"
+   "08A70"
+   "18-00"
+   "18B40"
+   "18E05"
+   "20L05"
+   "22A22"
+   "55N20"
+   "55N33"
+   "55P10"
+   "55U40"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:monoidal-category :object],
+ :gloss
+ {:paper "0906.4725",
+  :text
+  "A monoidal category is called \\emph{strict} when the structure maps are all identities; that is, when the objects made isomorphic by $\\lambda$, $\\rho$, $\\alpha$ are in fact equ"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for structure maps"}]}

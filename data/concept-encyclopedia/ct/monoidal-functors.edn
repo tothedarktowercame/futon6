@@ -1,0 +1,40 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : monoidal functors"}],
+ :name "monoidal functors",
+ :df 628,
+ :concept/id :monoidal-functors,
+ :msc "ct",
+ :defined-in
+ {:n-papers 16,
+  :sample
+  ["0708.2757" "1303.0153" "1507.06494" "1803.05316" "1904.08541"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :tensor-functor,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-2814",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:monoidal-categories :tensor-functor :morphism],
+ :gloss
+ {:paper "1507.06494",
+  :text
+  "some other field), the prescription reduces to the conventional notion of an algebra. It is possible to define functors between monoidal categories, which are called accordingly \\textit{monoidal functors}\\footnote{The notion of tensor functor works analogously to the one for categories: a monoidal f"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for monoidal functors"}]}

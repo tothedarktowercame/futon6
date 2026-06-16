@@ -1,0 +1,52 @@
+{:given [{:var :X, :type :object, :signature "X : vector space"}],
+ :name "vector space",
+ :pagerank 0.005857,
+ :df 1175,
+ :concept/id :vector-space,
+ :msc "ct",
+ :defined-in
+ {:n-papers 22,
+  :sample
+  ["0807.1329" "0812.4969" "0901.3975" "0905.3010" "0910.5699"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :commutative-group,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 40,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:vector space",
+  :resolution-kind "nnexus",
+  :msc
+  ["13-00"
+   "15"
+   "15-00"
+   "16-00"
+   "20-00"
+   "70B15"
+   "Mathematical_structures"
+   "Topological_vector_spaces"
+   "XX-XX"],
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:commutative-group :object],
+ :gloss
+ {:paper "0905.3010",
+  :text
+  "Slightly more involved but in the same spirit: \\begin{itemize} \\item[-] A {\\em vector space} is a pair $(V,\\mathbb{K})$, respectively a commutative group and a field, and these interact via the notion of scalar multiplication, i.e.~a map $V\\times \\mathbb{K}\\to V$ which i"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for vector space"}]}

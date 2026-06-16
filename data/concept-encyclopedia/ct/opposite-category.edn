@@ -1,0 +1,66 @@
+{:given [{:var :X, :type :object, :signature "X : opposite category"}],
+ :name "opposite category",
+ :df 456,
+ :concept/id :opposite-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 61,
+  :sample
+  ["0807.4256" "0812.2443" "0903.0340" "0905.3010" "1102.0264"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. there is a single arrow from $p$ to $q$ if $p \\leq q$, and none otherwise. The \\emph{opposite category} $P^{\\op}$ is the category formed from the opposite poset",
+   :refs [:category :opposite :otherwise :emph :formed :poset]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :opposite,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :otherwise,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :emph,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :formed,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :poset,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:opposite category",
+  :resolution-kind "nnexus",
+  :msc ["18A05" "Category_theory"],
+  :domains ["Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:ordered-sets
+  :object
+  :category
+  :opposite
+  :otherwise
+  :emph
+  :formed
+  :poset],
+ :gloss
+ {:paper "1102.0264",
+  :text
+  "\\Set$, with sets as objects and functions as arrows; and partially ordered sets $(P, {\\leq})$, where there is a single arrow from $p$ to $q$ if $p \\leq q$, and none otherwise. The \\emph{opposite category} $P^{\\op}$ is the category formed from the opposite poset $(P, {\\geq})$. If $\\CC$ and $\\DD$ are "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for opposite category"}]}

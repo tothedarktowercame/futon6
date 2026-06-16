@@ -1,0 +1,43 @@
+{:given [{:var :X, :type :object, :signature "X : linear maps"}],
+ :name "linear maps",
+ :pagerank 0.002795,
+ :df 662,
+ :concept/id :linear-maps,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["1110.6411" "1307.8088" "1507.04772" "1806.04804" "1809.05923"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :we-have,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 4,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:linear map",
+  :resolution-kind "nnexus",
+  :msc ["15A04" "Functions_and_mappings" "XX-XX"],
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:we-have :object],
+ :gloss
+ {:paper "1307.8088",
+  :text
+  "terminology of Chapter \\bref{ch:nat_acc_dist}, calling the objects of $\\X$ and $\\sL$ \\textit{spaces} and \\textit{linear spaces}, respectively, and the morphisms \\textit{maps} and \\textit{linear maps}. In particular, we have again the examples of convergence spaces and smooth spaces noted in \\bref{ch"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for linear maps"}]}

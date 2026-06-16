@@ -1,0 +1,28 @@
+;; GOLDEN seed (hand-authored, APM-Xi level) — few-shot target for mark3.
+;; A universal-property concept: the defining datum is a natural hom-iso.
+{:concept/id :adjunction
+ :name "adjunction"
+ :aliases ["adjoint functor" "left adjoint" "right adjoint"]
+ :msc "ct"
+ :kind :property
+ :status :golden
+ :genus :universal-property
+ :depends-on [:functor :natural-transformation :natural-isomorphism :hom-set]
+ :given [{:var :C :type :category}
+         {:var :D :type :category}
+         {:var :F :type :functor :signature "F : C → D   (left adjoint)"}
+         {:var :G :type :functor :signature "G : D → C   (right adjoint)"}]
+ :data [{:component :hom-isomorphism
+         :signature "φ_{a,b} : D(F a, b) ≅ C(a, G b)   for a ∈ Ob(C), b ∈ Ob(D)"}]
+ :axioms [{:id :naturality
+          :statement "φ is natural in a and in b: ∀ h : a' → a in C, k : b → b' in D. the square relating φ_{a,b}, φ_{a',b'} under pre/post-composition commutes"
+          :refs [:natural-transformation :composition]}]
+ :equivalent-to [{:form :unit-counit
+                  :data ["η : Id_C ⇒ G F (unit)" "ε : F G ⇒ Id_D (counit)"]
+                  :axioms ["(εF) ∘ (Fη) = id_F" "(Gε) ∘ (ηG) = id_G   (triangle identities)"]
+                  :refs [:natural-transformation :identity-morphism]}]
+ :gloss {:text "F is left adjoint to G (F ⊣ G) when there is a natural isomorphism
+  D(F a, b) ≅ C(a, G b) for all a ∈ C, b ∈ D; equivalently, unit/counit natural
+  transformations satisfying the triangle identities."}
+ :provenance {:target "nlab-494" :source :curated}
+ :holes []}

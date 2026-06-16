@@ -1,0 +1,34 @@
+{:given [{:var :X, :type :object, :signature "X : open subsets"}],
+ :name "open subsets",
+ :df 337,
+ :concept/id :open-subsets,
+ :msc "ct",
+ :defined-in {:n-papers 2, :sample ["1703.03007" "1710.10258"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:open subset",
+  :resolution-kind "nnexus",
+  :msc ["54A05"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1703.03007",
+  :text
+  "maps \\emph{out} of a type. For instance, with continuous sets in mind, % it is perfectly natural to consider functions $A\\to\\R$ as well as $\\R\\to A$. %In particular, we can define \\emph{open subsets} as the preimages of open intervals under functions $A\\to\\R$. % Alternatively, we can construct or po"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for open subsets"}]}

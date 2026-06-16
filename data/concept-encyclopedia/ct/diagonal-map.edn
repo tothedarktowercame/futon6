@@ -1,0 +1,36 @@
+{:given [{:var :X, :type :morphism, :signature "X : diagonal map"}],
+ :name "diagonal map",
+ :df 333,
+ :concept/id :diagonal-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 11,
+  :sample
+  ["0807.2927" "0912.4914" "1010.4527" "1107.1222" "1206.3916"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:diagonal map",
+  :resolution-kind "nnexus",
+  :msc ["18A05" "54B10"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism],
+ :gloss
+ {:paper "1509.07915",
+  :text "The diagonal map is defined up to $2$-isomorphism."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for diagonal map"}]}

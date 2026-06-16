@@ -1,0 +1,84 @@
+{:given [{:var :X, :type :object, :signature "X : simple objects"}],
+ :name "simple objects",
+ :df 326,
+ :concept/id :simple-objects,
+ :msc "ct",
+ :defined-in
+ {:n-papers 8,
+  :sample
+  ["1610.07628" "1711.07945" "1911.07895" "2002.09241" "2005.01626"]},
+ :axioms
+ [{:id :condition-1,
+   :statement "∀ x : object. the data $\\left(N_{ab}^c,\\ F^{abc}_{d",
+   :refs [:left :data]}
+  {:id :condition-2,
+   :statement "∀ x : object. nm},\\ t_a,\\ U_g(a,b",
+   :refs []}
+  {:id :condition-3,
+   :statement
+   "∀ x : object. c),\\ \\eta_a(g,h), \\ R_c^{ab}\\right)$ defined as follows, where $a,b,c,d,m,n \\in \\tilde{L}, \\, g,h \\in G$. \\textbf{Simple objects.} As defined above, $\\tilde{L}$",
+   :refs
+   [:representatives :right :objects :simple :follows :defined]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :left,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :data,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :representatives,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :right,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :objects,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :simple,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :follows,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :defined,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-2046",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:object
+  :left
+  :data
+  :representatives
+  :right
+  :objects
+  :simple
+  :follows
+  :defined],
+ :gloss
+ {:paper "1610.07628",
+  :text
+  "together with the data $\\left(N_{ab}^c,\\ F^{abc}_{d;nm},\\ t_a,\\ U_g(a,b;c),\\ \\eta_a(g,h), \\ R_c^{ab}\\right)$ defined as follows, where $a,b,c,d,m,n \\in \\tilde{L}, \\, g,h \\in G$. \\textbf{Simple objects.} As defined above, $\\tilde{L}$ is a complete set of representatives of simple objects. There is a "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for simple objects"}]}

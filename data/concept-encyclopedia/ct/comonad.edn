@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :object, :signature "X : comonad"}],
+ :name "comonad",
+ :df 396,
+ :concept/id :comonad,
+ :msc "ct",
+ :defined-in
+ {:n-papers 99,
+  :sample
+  ["0711.0674" "0711.3642" "0804.1460" "0809.2494" "0809.2495"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:comonad",
+  :resolution-kind "nnexus",
+  :msc ["18C15"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "0711.3642",
+  :text
+  "b^{co}$ and $\\Bb^{coop}$. These are constructed by taking respectively opposite composition for the $1$--cells, for vertical composition of $2$--cells and for both. Recall that a \\emph{comonad} $\\cc=(A,c,\\Delta_c,\\varepsilon_c)$ in $\\Bb$ consists of a $0$--cell $A$, an $1$--cell $c\\in\\Hom_1(A,A)$ an"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for comonad"}]}

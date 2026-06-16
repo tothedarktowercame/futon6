@@ -1,0 +1,36 @@
+{:given
+ [{:var :X, :type :object, :signature "X : abelian categories"}],
+ :name "abelian categories",
+ :pagerank 0.002091,
+ :df 697,
+ :concept/id :abelian-categories,
+ :msc "ct",
+ :defined-in
+ {:n-papers 63,
+  :sample
+  ["0706.2491" "0706.2922" "0711.1608" "0711.2077" "0801.1462"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 6,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "0711.2077",
+  :text
+  "and important cases when one gets a (canonical) diptych structure, which is moreover \\emph{regular}, by taking as good monos/epis \\emph{all} the mono/epi -morphisms, to know : the \\emph{abelian categories} and the \\emph{toposes}\\footnote{See for instance, for a good part, but not the whole, of the p"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for abelian categories"}]}

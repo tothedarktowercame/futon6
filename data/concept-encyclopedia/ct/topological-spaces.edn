@@ -1,0 +1,41 @@
+{:given
+ [{:var :X,
+   :type :classical-one,
+   :signature "X : topological spaces"}],
+ :name "topological spaces",
+ :pagerank 0.011992,
+ :df 1008,
+ :concept/id :topological-spaces,
+ :msc "ct",
+ :defined-in
+ {:n-papers 23,
+  :sample
+  ["0808.3681" "0907.2460" "1103.3493" "1103.4565" "1212.3563"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :classical-one,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 10,
+ :genus :classical-one,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-374",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:continuous-map :classical-one],
+ :gloss
+ {:paper "0808.3681",
+  :text
+  "tor is the classical one, that is $cyl(A)=A\\times\\Dl[1]$, as well as the induced cofiber sequences. A detailed study of them can be found, for instance, in \\cite{GZ}.\\\\ % \\indent {\\textbf{Topological Spaces:}} Given a continuous map $f$ of topological spaces, the cone $c(f)$ of $f$ induced by the de"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for topological spaces"}]}

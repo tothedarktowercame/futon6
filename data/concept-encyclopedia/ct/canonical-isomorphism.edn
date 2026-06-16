@@ -1,0 +1,66 @@
+{:given
+ [{:var :X,
+   :type :isomorphisms,
+   :signature "X : canonical isomorphism"}],
+ :name "canonical isomorphism",
+ :df 699,
+ :concept/id :canonical-isomorphism,
+ :msc "ct",
+ :defined-in
+ {:n-papers 4,
+  :sample ["0711.1608" "1908.02633" "2408.09488" "2507.10061"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : isomorphisms. $\\alpha_A: A \\to \\neg \\neg A$ is an isomorphisms, for any object $A$. \\item \\textbf{Canonical Isomorphism:} The canonical map $\\lambda_{\\neg A} ev \\langle p_1, ",
+   :refs
+   [:canonical :isomorphisms :any-object :rangle :object :langle]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :any-object,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :isomorphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :canonical,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :rangle,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :langle,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :genus :isomorphisms,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:canonical isomorphism",
+  :resolution-kind "nnexus",
+  :msc ["81P10" "Symplectic_geometry"],
+  :domains ["Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:natural-transformation
+  :canonical-map
+  :any-object
+  :isomorphisms
+  :canonical
+  :rangle
+  :object
+  :langle],
+ :gloss
+ {:paper "2408.09488",
+  :text
+  "in $A$, i.e., there is a natural transformation $\\alpha : id_{\\mathcal{C}} \\to \\neg \\neg (-)$ such that $\\alpha_A: A \\to \\neg \\neg A$ is an isomorphisms, for any object $A$. \\item \\textbf{Canonical Isomorphism:} The canonical map $\\lambda_{\\neg A} ev \\langle p_1, p_0 \\rangle$ from $A$ to $\\neg \\neg "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for canonical isomorphism"}]}

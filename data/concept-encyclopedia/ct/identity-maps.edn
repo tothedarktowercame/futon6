@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :object, :signature "X : identity maps"}],
+ :name "identity maps",
+ :df 371,
+ :concept/id :identity-maps,
+ :msc "ct",
+ :defined-in
+ {:n-papers 9,
+  :sample
+  ["0810.4420" "1011.1691" "1101.0772" "1102.0186" "1312.7275"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:identity map",
+  :resolution-kind "nnexus",
+  :msc ["03E20" "51M" "Basic_concepts_in_set_theory"],
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:weak-equivalences :weak-equivalence :object],
+ :gloss
+ {:paper "1102.0186",
+  :text
+  "e maps of which are called the \\textbf{weak equivalences}, and which is \\emph{only} subject to the condition that it contains all the \\emph{objects} of $\\cat C$ (and hence all the \\emph{identity maps}). The category of small relative categories and the \\textbf{relative} (i.e.\\ weak equivalence prese"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for identity maps"}]}

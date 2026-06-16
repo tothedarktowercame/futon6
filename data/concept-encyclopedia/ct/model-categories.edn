@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :object, :signature "X : model categories"}],
+ :name "model categories",
+ :pagerank 0.008884,
+ :df 721,
+ :concept/id :model-categories,
+ :msc "ct",
+ :defined-in
+ {:n-papers 574,
+  :sample
+  ["0704.1378" "0704.2576" "0706.2868" "0707.0300" "0707.1449"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 4,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-22072",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:topological-spaces :object],
+ :gloss
+ {:paper "0707.0300",
+  :text
+  "r and Rainer M Vogt. Modules of topological spaces, applications to homotopy colimits and $E_\\infty$ structures. \\emph{Arch Math}, 59:115--129, 1992. \\bibitem{hove99} Mark Hovey. \\emph{Model Categories.} Volume~63 of \\emph{Mathematical Surveys and Monographs}. AMS, Providence RI, 1999. \\bibitem{h-m-"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for model categories"}]}

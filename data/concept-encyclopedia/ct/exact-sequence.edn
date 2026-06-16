@@ -1,0 +1,35 @@
+{:given [{:var :X, :type :object, :signature "X : exact sequence"}],
+ :name "exact sequence",
+ :df 1038,
+ :concept/id :exact-sequence,
+ :msc "ct",
+ :defined-in
+ {:n-papers 41,
+  :sample
+  ["0708.1741" "1012.1964" "1206.3645" "1206.6632" "1212.5232"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1242",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1212.5232",
+  :text
+  "\\end{enumerate} \\item In an exact $\\infty$-category, an \\emph{exact sequence} is a cofiber/fiber sequence \\begin{equation*} \\begin{tikzpicture} \\matrix(m)[matrix of math nodes, row sep=4ex, column sep=4ex, text height=1.5ex, text depth=0.25ex] {X'&X\\\\"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for exact sequence"}]}

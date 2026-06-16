@@ -1,0 +1,74 @@
+{:given [{:var :X, :type :object, :signature "X : finite limits"}],
+ :name "finite limits",
+ :pagerank 0.004706,
+ :df 645,
+ :concept/id :finite-limits,
+ :msc "ct",
+ :defined-in
+ {:n-papers 17,
+  :sample
+  ["0810.5174" "1004.3802" "1102.1496" "1306.6789" "1507.01564"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $\\cC$ already possesses \\textbf{finite limits}. In this case $\\Pro(\\cC)$ admits \\textbf{all small limits}, and enjoys the following universal pr",
+   :refs [:limits :universal :enjoys :small :already :finite]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :all-functors,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :limits,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :universal,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :enjoys,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :small,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :already,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :finite,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 3,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-4072",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:all-functors
+  :object
+  :limits
+  :universal
+  :enjoys
+  :small
+  :already
+  :finite],
+ :gloss
+ {:paper "1507.01564",
+  :text
+  "filtered limits is naturally equivalent, via restriction, with the category of all functors $\\cC \\lrar \\cD$. It is often natural to consider the case where $\\cC$ already possesses \\textbf{finite limits}. In this case $\\Pro(\\cC)$ admits \\textbf{all small limits}, and enjoys the following universal pr"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for finite limits"}]}

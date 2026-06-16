@@ -1,0 +1,76 @@
+{:given
+ [{:var :X, :type :object, :signature "X : triangulated category"}],
+ :name "triangulated category",
+ :pagerank 0.010912,
+ :df 518,
+ :concept/id :triangulated-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 37,
+  :sample
+  ["0704.1378" "0802.2044" "0804.2154" "0808.3681" "0811.1480"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. a collection of candidate triangles, called \\emph{distinguished} or \\emph{exact triangles}, satisfying the following properties",
+   :refs
+   [:exact
+    :satisfying
+    :collection
+    :properties
+    :called
+    :distinguished]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :exact,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :satisfying,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :collection,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :properties,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :called,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :distinguished,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 11,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1076",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:object
+  :exact
+  :satisfying
+  :collection
+  :properties
+  :called
+  :distinguished],
+ :gloss
+ {:paper "0704.1378",
+  :text
+  "A \\emph{triangulated category} is a pair $(\\C{T},\\Sigma)$ as above together with a collection of candidate triangles, called \\emph{distinguished} or \\emph{exact triangles}, satisfying the following properties."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for triangulated category"}]}

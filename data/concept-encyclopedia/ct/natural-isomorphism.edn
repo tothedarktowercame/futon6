@@ -1,0 +1,49 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : natural isomorphism"}],
+ :name "natural isomorphism",
+ :pagerank 0.008693,
+ :df 1560,
+ :concept/id :natural-isomorphism,
+ :msc "ct",
+ :defined-in
+ {:n-papers 72,
+  :sample
+  ["0801.2826" "0810.2070" "0812.1464" "0812.4864" "0901.0203"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : morphism. for each $x \\in X$, the morphism $\\alpha_x$ is invertible",
+   :refs [:morphism :alpha :invertible]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :alpha,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :invertible,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 36,
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:natural isomorphism",
+  :resolution-kind "nnexus",
+  :msc ["18-00"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:natural-transformation :morphism :alpha :invertible],
+ :gloss
+ {:paper "0812.4864",
+  :text
+  "on} \\begin{definition} A {\\bf natural isomorphism} is a natural transformation $\\alpha \\maps F \\to G$ between functors $F,G \\maps X \\to Y$ such that for each $x \\in X$, the morphism $\\alpha_x$ is invertible."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for natural isomorphism"}]}

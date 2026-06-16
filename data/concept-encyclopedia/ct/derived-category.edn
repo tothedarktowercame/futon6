@@ -1,0 +1,39 @@
+{:given [{:var :X, :type :object, :signature "X : derived category"}],
+ :name "derived category",
+ :df 612,
+ :concept/id :derived-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 109,
+  :sample
+  ["0710.5065" "0801.2664" "0806.1324" "0811.1480" "0902.0876"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :quotient-functor,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1070",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:quotient-functor :object],
+ :gloss
+ {:paper "0806.1324",
+  :text
+  "^n\\p$ is an isomorphism for all $n\\in\\bbZ$, and we denote the set of all quasi-isomorphisms by $\\qis$. Then $$\\bfD(A):=\\bfD(\\Mod A):=\\bfK(\\Mod A)[\\qis^{-1}]$$ is by definition the \\emph{derived category} of $\\Mod A$. The kernel of the quotient functor $Q\\colon\\bfK(\\Mod A)\\to\\bfD(\\Mod)$ is the full s"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for derived category"}]}

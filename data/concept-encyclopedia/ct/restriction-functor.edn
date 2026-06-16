@@ -1,0 +1,34 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : restriction functor"}],
+ :name "restriction functor",
+ :df 337,
+ :concept/id :restriction-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 58,
+  :sample
+  ["0806.2520" "0911.4183" "1105.5091" "1202.0255" "1205.3121"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:functor-between :morphism],
+ :gloss
+ {:paper "1202.0255",
+  :text
+  "\\end{definition} \\begin{definition}[\\protect{\\citealt[\\S2.2.1]{cockett02:_restr_i}}] A \\emph{restriction functor} is a functor between restriction categories which commutes with restrictions."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for restriction functor"}]}

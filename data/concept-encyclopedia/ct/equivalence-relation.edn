@@ -1,0 +1,49 @@
+{:given
+ [{:var :X, :type :object, :signature "X : equivalence relation"}],
+ :name "equivalence relation",
+ :pagerank 0.002866,
+ :df 1177,
+ :concept/id :equivalence-relation,
+ :msc "ct",
+ :defined-in
+ {:n-papers 72,
+  :sample
+  ["0710.3066" "0710.3077" "0803.4209" "0810.2070" "1111.3845"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :any-object,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 15,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:equivalence relation",
+  :resolution-kind "nnexus",
+  :msc ["03D20" "03E20" "06-00" "Mathematical_relations" "XX-XX"],
+  :domains
+  ["Encyclopediaofmath"
+   "Mathhub"
+   "Mathworld"
+   "Planetmath"
+   "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:any-object :object],
+ :gloss
+ {:paper "0710.3066",
+  :text
+  "Two parallel arrows \\diag{ R \\ar@<.8ex>[r]^{r_0} \\ar@<-.8ex>[r]_-{r_1} & X } in category \\ct{E} form an \\emph{equivalence relation} when for any object $A$ in \\ct{E} the induced function \\[ \\mbox{Hom}(A,R) \\rTo \\mbox{Hom}(A, X) \\times \\mbox{Hom}(A, X) \\] is an injection defining an equivalence relation on the"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for equivalence relation"}]}

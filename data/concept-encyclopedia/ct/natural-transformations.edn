@@ -1,0 +1,40 @@
+{:given
+ [{:var :X,
+   :type :morphism,
+   :signature "X : natural transformations"}],
+ :name "natural transformations",
+ :pagerank 0.009635,
+ :df 1761,
+ :concept/id :natural-transformations,
+ :msc "ct",
+ :defined-in
+ {:n-papers 70,
+  :sample
+  ["0711.1608" "0711.2077" "0807.1002" "0809.3676" "0809.4970"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 13,
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-122",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism],
+ :gloss
+ {:paper "0711.1608",
+  :text
+  "set of \\emph{functors} from $\\cT$ to $\\cD$, called here `` \\emph{diagrams of type} $\\cT\\ $ in $\\cD\\,$''; \\item $\\overrightarrow{\\cT}(\\cD)$ (\\emph{arrows}) the (large) category of \\emph{natural transformations} \\cite{ML} between these functors, (which means just \\emph{commutative diagrams connecting "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for natural transformations"}]}

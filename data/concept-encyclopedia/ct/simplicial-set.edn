@@ -1,0 +1,61 @@
+{:given [{:var :X, :type :object, :signature "X : simplicial set"}],
+ :name "simplicial set",
+ :df 591,
+ :concept/id :simplicial-set,
+ :msc "ct",
+ :defined-in
+ {:n-papers 115,
+  :sample
+  ["0704.1624" "0801.0404" "0802.2044" "0809.4221" "0811.3175"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $\\Deltaop$ is the opposite of the category ${\\bf \\Delta}$ of finite ordered sets $[n] = \\{0 \\rightarrow 1 \\rightarrow \\cd",
+   :refs
+   [:rightarrow :category :opposite :ordered-sets :finite :sets]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :rightarrow,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :opposite,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :finite,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :sets,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-261",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:simplicial
+  :ordered-sets
+  :object
+  :rightarrow
+  :category
+  :opposite
+  :finite
+  :sets],
+ :gloss
+ {:paper "0704.1624",
+  :text
+  "Recall that a \\emph{simplicial set} is a functor $X \\colon \\Deltaop \\rightarrow \\Sets$, where $\\Deltaop$ is the opposite of the category ${\\bf \\Delta}$ of finite ordered sets $[n] = \\{0 \\rightarrow 1 \\rightarrow \\cd"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for simplicial set"}]}

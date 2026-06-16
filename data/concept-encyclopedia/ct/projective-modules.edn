@@ -1,0 +1,36 @@
+{:given
+ [{:var :X, :type :object, :signature "X : projective modules"}],
+ :name "projective modules",
+ :df 311,
+ :concept/id :projective-modules,
+ :msc "ct",
+ :defined-in
+ {:n-papers 9,
+  :sample
+  ["0810.5684" "1202.2481" "1204.1358" "1405.5768" "1710.04153"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-4477",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "2406.02829",
+  :text
+  "s)}, and minimal approximations (\\emph{covers} and \\emph{envelopes}), of the general modules by modules in the chosen classes. A model case is the special class $\\mathcal P_0$ of \\emph{projective modules} that yields {projective precovers}, and projective resolutions of modules. Similarly, the class"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for projective modules"}]}

@@ -1,0 +1,62 @@
+{:given [{:var :X, :type :object, :signature "X : tensor product"}],
+ :name "tensor product",
+ :pagerank 0.006528,
+ :df 1816,
+ :concept/id :tensor-product,
+ :msc "ct",
+ :defined-in
+ {:n-papers 408,
+  :sample
+  ["0704.2106" "0704.2576" "0705.0462" "0706.1286" "0708.2757"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. it exists: \\[M \\odot B \\odot N \\toto M \\odot N \\to M\\odot_B N.\\] \\end{itemize} \\end{defn} Of course, if \\bbD\\ is a mono",
+   :refs [:defn :mono :toto :odot :exists :itemize]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :defn,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :mono,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :toto,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :odot,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :exists,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :itemize,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 11,
+ :genus :object,
+ :status :draft,
+ :kind :construction,
+ :provenance
+ {:target "nlab-239",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object :defn :mono :toto :odot :exists :itemize],
+ :gloss
+ {:paper "0706.1286",
+  :text
+  "Their \\textbf{tensor product} is the following coequalizer in $\\calD(A,C)$, if it exists: \\[M \\odot B \\odot N \\toto M \\odot N \\to M\\odot_B N.\\] \\end{itemize} \\end{defn} Of course, if \\bbD\\ is a mono"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for tensor product"}]}

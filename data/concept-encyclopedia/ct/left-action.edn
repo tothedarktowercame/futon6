@@ -1,0 +1,55 @@
+{:given [{:var :X, :type :object, :signature "X : left action"}],
+ :name "left action",
+ :df 421,
+ :concept/id :left-action,
+ :msc "ct",
+ :defined-in
+ {:n-papers 54,
+  :sample
+  ["0807.4848" "0808.3147" "0811.4539" "1003.3221" "1012.6001"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. a map $p:X\\to G_0$ called the \\emph{projection} into $G_0$. The \\emph{category of $G_0$-locales} is the slice category $\\Loc/G_0$. A \\emph{(left) action} of $G$",
+   :refs [:action :slice-category :category :left :called :slice]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :action,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :left,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :called,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :slice,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:left action",
+  :resolution-kind "nnexus",
+  :msc ["16W22" "20M30"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:slice-category :object :action :category :left :called :slice],
+ :gloss
+ {:paper "0807.4848",
+  :text
+  "ale}, will be meant a locale $X$ together with a map $p:X\\to G_0$ called the \\emph{projection} into $G_0$. The \\emph{category of $G_0$-locales} is the slice category $\\Loc/G_0$. A \\emph{(left) action} of $G$ on the $G_0$-locale $(X,p)$ is a map of locales $\\mathfrak a:G_1\\pb X\\to X$ such that the fo"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for left action"}]}

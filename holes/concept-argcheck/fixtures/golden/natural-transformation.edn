@@ -1,0 +1,22 @@
+;; GOLDEN seed (hand-authored, APM-Xi level) — few-shot target for mark3.
+{:concept/id :natural-transformation
+ :name "natural transformation"
+ :msc "ct"
+ :kind :morphism
+ :status :golden
+ :genus :morphism-of-functors
+ :depends-on [:functor :category :morphism :composition :commutative-square]
+ :given [{:var :C :type :category}
+         {:var :D :type :category}
+         {:var :F :type :functor :signature "F : C → D"}
+         {:var :G :type :functor :signature "G : C → D"}]
+ :data [{:component :components
+         :signature "α_a : F a → G a in D   for each a ∈ Ob(C)"}]
+ :axioms [{:id :naturality
+          :statement "∀ f : a → b in C. G(f) ∘ α_a = α_b ∘ F(f)   (the naturality square commutes)"
+          :refs [:composition :commutative-square]}]
+ :gloss {:text "A natural transformation α : F ⇒ G between functors F,G : C → D
+  assigns to each object a a morphism α_a : F a → G a such that for every
+  f : a → b the naturality square commutes."}
+ :provenance {:target "nlab-122" :source :curated}
+ :holes []}

@@ -1,0 +1,34 @@
+{:given
+ [{:var :X, :type :object, :signature "X : triangulated categories"}],
+ :name "triangulated categories",
+ :df 577,
+ :concept/id :triangulated-categories,
+ :msc "ct",
+ :defined-in
+ {:n-papers 259,
+  :sample
+  ["0709.3091" "0712.3296" "0802.2044" "0806.1324" "0809.3201"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "0802.2044",
+  :text
+  "}m.\\ Henri Cartan \\textbf{7} (1954/55), \\textit{Alg\\`{e}bres d'Eilenberg-Mac~Lane et homotopie}, Secr.\\ Math{\\'{e}}matique, Paris, 1957, \\S 19.\\ % \\bibitem[N]{NeemTC} A.~Neeman, \\textit{Triangulated Categories}, Princeton U.\\ Press \\textit{Ann.\\ Math.\\ Studies} \\textbf{148}, Princeton, 2001. % \\bibi"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for triangulated categories"}]}

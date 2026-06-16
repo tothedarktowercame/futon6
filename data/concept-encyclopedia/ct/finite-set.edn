@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :object, :signature "X : finite set"}],
+ :name "finite set",
+ :pagerank 0.005988,
+ :df 870,
+ :concept/id :finite-set,
+ :msc "ct",
+ :defined-in
+ {:n-papers 5,
+  :sample
+  ["1905.06281" "2102.06146" "2104.05517" "2505.03862" "2509.22584"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 20,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-501",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1905.06281",
+  :text
+  "\\end{proof} Here and thoughout the paper, a {\\em finite set} means a set equipped with a bijection with $\\{1 \\, , \\ldots, n \\}$, for some $n \\in \\mathbb{N}$."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for finite set"}]}

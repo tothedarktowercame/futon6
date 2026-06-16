@@ -1,0 +1,73 @@
+{:given [{:var :X, :type :object, :signature "X : empty set"}],
+ :name "empty set",
+ :pagerank 0.002919,
+ :df 482,
+ :concept/id :empty-set,
+ :msc "ct",
+ :defined-in
+ {:n-papers 13,
+  :sample
+  ["1004.3802" "1308.0729" "1311.3451" "1509.03649" "1512.01602"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $n=0$ then the coproduct is defined as the empty set $\\varnothing$. \\end{enumerate} In what follows, if the identity morphisms and the composition",
+   :refs
+   [:identity
+    :varnothing
+    :composition
+    :enumerate
+    :morphisms
+    :coproduct]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :identity,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :varnothing,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :enumerate,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :morphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :coproduct,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 9,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-461",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:disjoint-union
+  :identity-morphisms
+  :object
+  :identity
+  :varnothing
+  :composition
+  :enumerate
+  :morphisms
+  :coproduct],
+ :gloss
+ {:paper "1512.01602",
+  :text
+  "en the coproduct $\\coprod_{i=1}^n X_i$ is defined as the disjoint union of the $X_i'$ for $1 \\leq i \\leq n$, and it is well-defined up to isomorphism. If $n=0$ then the coproduct is defined as the empty set $\\varnothing$. \\end{enumerate} In what follows, if the identity morphisms and the composition"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for empty set"}]}

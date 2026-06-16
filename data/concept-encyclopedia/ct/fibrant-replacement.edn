@@ -1,0 +1,39 @@
+{:given
+ [{:var :X,
+   :type :marked-equivalence,
+   :signature "X : fibrant replacement"}],
+ :name "fibrant replacement",
+ :df 309,
+ :concept/id :fibrant-replacement,
+ :msc "ct",
+ :defined-in
+ {:n-papers 44,
+  :sample
+  ["0704.1624" "0707.0300" "0906.4087" "1104.1805" "1207.6404"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :marked-equivalence,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :marked-equivalence,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-8143",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:marked-equivalence],
+ :gloss
+ {:paper "1210.0212",
+  :text
+  "egenerate edges. This means that $\\iota$ is a marked equivalence. Furthermore the completeness of $Y$ implies the completeness of $\\F^{\\natural}(Y)$, and so $\\iota$ can serve as a \\textbf{fibrant replacement} of $\\F^+(Y)$. The upshot of this is that $\\F^+(Y)$ is \\textbf{marked equivalent} to its fib"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for fibrant replacement"}]}

@@ -1,0 +1,59 @@
+{:given [{:var :X, :type :object, :signature "X : fully faithful"}],
+ :name "fully faithful",
+ :df 1228,
+ :concept/id :fully-faithful,
+ :msc "ct",
+ :defined-in
+ {:n-papers 237,
+  :sample
+  ["0705.3249" "0708.3326" "0710.3853" "0711.0473" "0801.0199"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $F$ is additionally {\\it fully faithful} in the sense of \\cite{bungepare79}, \\ie if $$\\xymatrix@C=3pc{\\bbA_1 \\ar[r]^{F_1} \\ar[d]_{(s,t)} & \\",
+   :refs [:fully :faithful :xymatrix :sense :additionally :cite]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :fully,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :faithful,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :xymatrix,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :sense,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :additionally,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :cite,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:object :fully :faithful :xymatrix :sense :additionally :cite],
+ :gloss
+ {:paper "0711.0473",
+  :text
+  "r[d]_j\\ar@{}[dr]|\\alpha & F_0a\\ar[d]^{F_0k}\\\\b'\\ar[r]_-\\cong & F_0a'}} \\right)=\\raisebox{1.8em}{\\xymatrix{b\\ar[d]_j\\\\b'}} $$ is a $\\mathcal{T}$-epimorphism. If $F$ is additionally {\\it fully faithful} in the sense of \\cite{bungepare79}, \\ie if $$\\xymatrix@C=3pc{\\bbA_1 \\ar[r]^{F_1} \\ar[d]_{(s,t)} & \\"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for fully faithful"}]}

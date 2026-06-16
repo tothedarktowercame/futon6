@@ -1,0 +1,38 @@
+{:given [{:var :X, :type :object, :signature "X : module structure"}],
+ :name "module structure",
+ :df 532,
+ :concept/id :module-structure,
+ :msc "ct",
+ :defined-in
+ {:n-papers 5,
+  :sample
+  ["1109.6515" "1904.00580" "2305.18515" "2406.11964" "2501.16978"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :module-functor,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:natural-isomorphism :module-categories :module-functor :object],
+ :gloss
+ {:paper "2501.16978",
+  :text
+  "es in $\\C$ is exact (resp.~indecomposable). A \\emph{$\\C$-module functor} between two $\\C$-module categories $\\M$ and $\\N$ consists of a functor $H\\colon \\M\\to\\N$ endowed with a \\textit{module structure}, i.e.\\ a natural isomorphism \\[\\varphi_{c,m}\\Colon H(c\\act m)\\xsim c\\act H(m)\\] for $c\\iN\\C$ and "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for module structure"}]}

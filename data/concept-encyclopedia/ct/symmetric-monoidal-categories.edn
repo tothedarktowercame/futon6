@@ -1,0 +1,36 @@
+{:given
+ [{:var :X,
+   :type :object,
+   :signature "X : symmetric monoidal categories"}],
+ :name "symmetric monoidal categories",
+ :df 488,
+ :concept/id :symmetric-monoidal-categories,
+ :msc "ct",
+ :defined-in
+ {:n-papers 21,
+  :sample
+  ["1002.2540" "1102.1313" "1112.1448" "1303.3170" "1701.04732"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:monoidal-categories :monad :object],
+ :gloss
+ {:paper "1112.1448",
+  :text
+  "finite products}: arguing exactly as in the preceding two examples, we conclude that in this case the pie algebras are (many-sorted) Lawvere theories.\\vskip0.5\\baselineskip \\item \\emph{(Symmetric) monoidal categories}: this time the induced monad on $\\Set$ is the monad for \\emph{pointed magmas}: the"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for symmetric monoidal categories"}]}

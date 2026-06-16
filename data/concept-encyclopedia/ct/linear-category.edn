@@ -1,0 +1,69 @@
+{:given [{:var :X, :type :category, :signature "X : linear category"}],
+ :name "linear category",
+ :df 354,
+ :concept/id :linear-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 31,
+  :sample
+  ["0812.4969" "0901.3975" "1110.1711" "1112.0781" "1206.6632"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : category. for each pair of objects $x$ and $y$, the set of morphisms from $x$ to $y$ is equipped with the structure of a finite-dimensional complex vector space, and com",
+   :refs
+   [:complex
+    :complex-vector-space
+    :vector
+    :morphisms
+    :dimensional
+    :objects]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :complex-vector-space,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :complex,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :vector,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :morphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :dimensional,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :objects,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :genus :category,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:vector-space
+  :complex-vector-space
+  :category
+  :complex
+  :vector
+  :morphisms
+  :dimensional
+  :objects],
+ :gloss
+ {:paper "0812.4969",
+  :text
+  "First, a {\\bf linear category} is a category where for each pair of objects $x$ and $y$, the set of morphisms from $x$ to $y$ is equipped with the structure of a finite-dimensional complex vector space, and com"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for linear category"}]}

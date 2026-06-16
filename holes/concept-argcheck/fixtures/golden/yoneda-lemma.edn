@@ -1,0 +1,32 @@
+;; GOLDEN seed (hand-authored, APM-Xi level) — a THEOREM as a scope.
+;; A theorem is a class of definition: typed :given (hypotheses) -> a produced
+;; :conclusion relation, JUSTIFIED by a :proof (an IATC argument graph). Its
+;; interface is explicit — it IMPORTS its hypotheses + the lemmas it :uses, and
+;; EXPORTS its conclusion + the downstream constructs it enables.
+{:concept/id :yoneda-lemma
+ :name "Yoneda lemma"
+ :msc "ct"
+ :kind :theorem
+ :status :golden
+ :genus :representability-theorem
+ :depends-on [:locally-small-category :functor :natural-transformation
+              :hom-functor :set :natural-isomorphism :identity-morphism]
+ :given [{:var :C :type :locally-small-category}
+         {:var :F :type :functor :signature "F : C → Set"}
+         {:var :c :type :object :in :C}]
+ :conclusion {:relation "Nat(C(c,−), F) ≅ F(c)"
+              :detail "natural transformations from the hom-functor C(c,−) to F
+               are in bijection with the elements of F(c)"
+              :natural-in [:c :F]
+              :refs [:natural-transformation :hom-functor :natural-isomorphism]}
+ :proof {:via :iatc-argument-graph          ; the proof is a verb-side IATC graph
+         :map "α ↦ α_c(id_c)   (the Yoneda map)"
+         :inverse "x ↦ (the natural transformation with components g ↦ (F g)(x))"
+         :obligations ["the two maps are mutually inverse"
+                       "the bijection is natural in c and in F"]
+         :uses [:identity-morphism :natural-transformation]}   ; imported lemmas
+ :exports [:representable-functor :yoneda-embedding :universal-element]  ; what it enables
+ :gloss {:text "For a locally small category C, a functor F : C → Set, and an
+  object c, there is a bijection Nat(C(c,−), F) ≅ F(c), natural in c and F."}
+ :provenance {:target "nlab-yoneda-lemma" :source :curated}
+ :holes []}

@@ -1,0 +1,39 @@
+{:given [{:var :X, :type :object, :signature "X : abelian groups"}],
+ :name "abelian groups",
+ :pagerank 0.003008,
+ :df 997,
+ :concept/id :abelian-groups,
+ :msc "ct",
+ :defined-in
+ {:n-papers 16,
+  :sample
+  ["1312.0432" "1704.00303" "1712.09302" "1912.12901" "2006.16624"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 22,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:abelian group",
+  :resolution-kind "nnexus",
+  :msc ["20" "20K99" "Properties_of_groups" "XX-XX"],
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1912.12901",
+  :text
+  "y follows from our theorem that a finite non-trivial median algebra $\\L\\in \\CM$ is endoprimal iff $\\L$ is $3$-endoprimal iff $\\L$ is endodualisable. \\smallskip \\noindent {\\bf Abelian groups} Our method allows us to identify also the finite endoprimal abelian groups. Starting from a finite abelian gr"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for abelian groups"}]}

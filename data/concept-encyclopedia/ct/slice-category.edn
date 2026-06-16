@@ -1,0 +1,60 @@
+{:given
+ [{:var :X,
+   :type :monoidal-category,
+   :signature "X : slice category"}],
+ :name "slice category",
+ :df 377,
+ :concept/id :slice-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 71,
+  :sample
+  ["0807.1704" "0809.2070" "1007.2925" "1101.2792" "1101.3064"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : monoidal-category. the tensor product of two objects % \\[",
+   :refs [:objects :tensor-product :tensor :product]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :functor-part,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :objects,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :tensor,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :product,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :genus :monoidal-category,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:slice category",
+  :resolution-kind "nnexus",
+  :msc ["18A25" "Category_theory"],
+  :domains ["Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:tensor-product
+  :monoidal-category
+  :functor-part
+  :objects
+  :tensor
+  :product],
+ :gloss
+ {:paper "0809.2070",
+  :text
+  "n \\cl{E}, that is, the functor part preserves pullbacks, and all the naturality squares for $\\eta$ and $\\mu$ are pullbacks. The category \\cat{$T$-Coll} of \\demph{$T$-collections} is defined to be the slice category $\\cl{E}/T1$. This is a monoidal category where the tensor product of two objects % \\["},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for slice category"}]}

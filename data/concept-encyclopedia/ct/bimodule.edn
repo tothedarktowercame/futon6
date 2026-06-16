@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :object, :signature "X : bimodule"}],
+ :name "bimodule",
+ :pagerank 0.004607,
+ :df 736,
+ :concept/id :bimodule,
+ :msc "ct",
+ :defined-in
+ {:n-papers 114,
+  :sample
+  ["0704.3976" "0706.1286" "0706.2922" "0711.1761" "0801.0157"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 30,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-656",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "0706.2922",
+  :text
+  "bject@{/}} & \\D}$ is a $\\V$-functor $F: \\C^{\\text{op}} \\ox \\D \\ra \\V$; we call this a \\emph{module from} $\\C$ \\emph{to} $\\D$ (others call it a \\emph{left} $\\D$-, \\emph{right} $\\C$-\\emph{bimodule}). Composition of modules is defined by (\\ref{1}) above. We can sum up now by saying that \\[ \\widehat{(~)"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for bimodule"}]}

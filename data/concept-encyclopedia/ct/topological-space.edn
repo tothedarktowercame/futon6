@@ -1,0 +1,58 @@
+{:given [{:var :X, :type :object, :signature "X : topological space"}],
+ :name "topological space",
+ :pagerank 0.008217,
+ :df 848,
+ :concept/id :topological-space,
+ :msc "ct",
+ :defined-in
+ {:n-papers 44,
+  :sample
+  ["0810.2070" "0902.1272" "1009.1166" "1010.3336" "1011.3574"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. for every $x\\in X$ and $U\\in\\O(x)$ the conclusion of (\\ref{eq:corefamily}) holds for every family $\\mathbb{H}$ of filters such that there is an i",
+   :refs [:filters :mathbb :conclusion :holds :family]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :filters,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :mathbb,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :conclusion,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :holds,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :family,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 38,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-374",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object :filters :mathbb :conclusion :holds :family],
+ :gloss
+ {:paper "1011.3574",
+  :text
+  "We call a topological space \\emph{injectively core compact} if for every $x\\in X$ and $U\\in\\O(x)$ the conclusion of (\\ref{eq:corefamily}) holds for every family $\\mathbb{H}$ of filters such that there is an i"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for topological space"}]}

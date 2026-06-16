@@ -1,0 +1,35 @@
+{:given [{:var :X, :type :object, :signature "X : category enriched"}],
+ :name "category enriched",
+ :df 386,
+ :concept/id :category-enriched,
+ :msc "ct",
+ :defined-in {:n-papers 1, :sample ["0704.1624"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:simplicial
+  :simplicial-sets
+  :simplicial-set
+  :simplicial-category
+  :object],
+ :gloss
+ {:paper "0704.1624",
+  :text
+  "this paper, by (small) ``simplicial category\" we will mean a category with a set of objects and a simplicial set of morphisms $\\Map(x,y)$ between any two objects $x$ and $y$, also known as a category enriched over simplicial sets. This notion does not coincide with the more general one of a simplici"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for category enriched"}]}

@@ -1,0 +1,71 @@
+{:given [{:var :X, :type :object, :signature "X : homotopy category"}],
+ :name "homotopy category",
+ :pagerank 0.004271,
+ :df 846,
+ :concept/id :homotopy-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 282,
+  :sample
+  ["0704.1624" "0707.0300" "0807.1002" "0807.1329" "0809.1760"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $\\gamma(e)$ is an isomorphism in the \\emph{homotopy category} $\\Ho(\\cat{mc})$ for every weak equivalence. Here $\\Ho(\\cat{mc})$ has the same objects as $\\cat{",
+   :refs [:same :same-objects :weak :category :objects :here]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :same,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :weak,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :objects,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :here,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 8,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:homotopy category",
+  :resolution-kind "nnexus",
+  :msc
+  ["55P99"
+   "55R05"
+   "55R10"
+   "55R37"
+   "55R65"
+   "Homological_algebra"
+   "Homotopy_theory"],
+  :domains ["Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:same-objects
+  :weak-equivalence
+  :object
+  :same
+  :weak
+  :category
+  :objects
+  :here],
+ :gloss
+ {:paper "0707.0300",
+  :text
+  "ivalences. An important consequence of the axioms is the existence of a localisation functor $\\gamma\\colon\\cat{mc}\\to\\Ho(\\cat{mc})$, such that $\\gamma(e)$ is an isomorphism in the \\emph{homotopy category} $\\Ho(\\cat{mc})$ for every weak equivalence. Here $\\Ho(\\cat{mc})$ has the same objects as $\\cat{"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for homotopy category"}]}

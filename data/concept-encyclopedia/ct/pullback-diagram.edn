@@ -1,0 +1,35 @@
+{:given [{:var :X, :type :object, :signature "X : pullback diagram"}],
+ :name "pullback diagram",
+ :df 398,
+ :concept/id :pullback-diagram,
+ :msc "ct",
+ :defined-in
+ {:n-papers 3, :sample ["1301.4616" "1610.09640" "1910.05172"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:pullback diagram",
+  :resolution-kind "nnexus",
+  :msc ["18A30"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1610.09640",
+  :text
+  "ddr]_{g'_1} \\ar@{-->}@(r,ul)[drr]^{g'_2} \\ar@{-->}[dr]_{h} \\\\ & E \\ar[d]_{g_1} \\ar[r]^{g_2} & D_2 \\ar[d]^{f_2} \\\\ & D_1 \\ar[r]^{f_1} & C } \\] A cartesian diagram is also called a {\\em pullback diagram}, and the object $E$ is called the {\\em fibered product} of $D_1$ and $D_2$ over $C$, with notation"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for pullback diagram"}]}

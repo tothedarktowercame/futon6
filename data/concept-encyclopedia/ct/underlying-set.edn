@@ -1,0 +1,76 @@
+{:given [{:var :X, :type :object, :signature "X : underlying set"}],
+ :name "underlying set",
+ :pagerank 0.002142,
+ :df 506,
+ :concept/id :underlying-set,
+ :msc "ct",
+ :defined-in
+ {:n-papers 34,
+  :sample
+  ["0810.2070" "0905.4883" "1001.4071" "1002.3166" "1108.2913"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $A$ is the free group on one generator (representing the {\\em underlying-set} functor), then $|R\\<|$ will be a free group on countably many generators, indexed ",
+   :refs [:countably :nonzero :group :many :underlying :free]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :free-group,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :countably,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :nonzero,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :group,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :many,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :underlying,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :free,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 5,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:underlying set",
+  :resolution-kind "nnexus",
+  :msc ["Functors"],
+  :domains ["Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:free-group
+  :object
+  :countably
+  :nonzero
+  :group
+  :many
+  :underlying
+  :free],
+ :gloss
+ {:paper "0711.0674",
+  :text
+  "ing the generator of the free group $|R\\<|$ corresponding to each $a\\in|A\\<|$ to that element of $A.$ So, for instance, if $A$ is the free group on one generator (representing the {\\em underlying-set} functor), then $|R\\<|$ will be a free group on countably many generators, indexed by the nonzero in"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for underlying set"}]}

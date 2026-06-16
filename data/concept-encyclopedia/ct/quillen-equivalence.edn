@@ -1,0 +1,39 @@
+{:given
+ [{:var :X,
+   :type :quillen-equivalence,
+   :signature "X : quillen equivalence"}],
+ :name "quillen equivalence",
+ :df 313,
+ :concept/id :quillen-equivalence,
+ :msc "ct",
+ :defined-in
+ {:n-papers 59,
+  :sample
+  ["0704.1624" "0901.3602" "0906.4087" "0910.1861" "1001.4071"]},
+ :axioms
+ [{:id :condition-1,
+   :statement "∀ x : quillen-equivalence. and only if for a",
+   :refs []}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :quillen-adjunction,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :genus :quillen-equivalence,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1736",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:quillen-adjunction :quillen-equivalence],
+ :gloss
+ {:paper "0906.4087",
+  :text
+  "\\smallskip\\noindent {\\bf Theorem:} A Quillen adjunction $(L,R)$ is a Quillen equivalence if and only if for a"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for quillen equivalence"}]}

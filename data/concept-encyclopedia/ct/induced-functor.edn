@@ -1,0 +1,33 @@
+{:given [{:var :X, :type :morphism, :signature "X : induced functor"}],
+ :name "induced functor",
+ :df 556,
+ :concept/id :induced-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["0708.1348" "1112.3840" "1209.2995" "1209.4307" "1712.03492"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism],
+ :gloss
+ {:paper "1112.3840",
+  :text
+  "rything we do here can also be done with pseudo-functors. \\end{remark} Let now $\\DD$ be a prederivator and let $u\\colon J\\nach K$ be a functor. Motivated by the above examples we call the induced functor $\\DD(u)=u^\\ast\\colon \\DD(K)\\nach \\DD(J)$ a \\emph{restriction of diagram functor} or \\emph{precom"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for induced functor"}]}

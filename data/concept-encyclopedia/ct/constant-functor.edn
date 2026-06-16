@@ -1,0 +1,51 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : constant functor"}],
+ :name "constant functor",
+ :df 311,
+ :concept/id :constant-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["1704.02401" "1802.08101" "1902.05447" "2012.08669" "2106.14094"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : morphism. this sends each object in \\textbf{J} to the same \\textbf",
+   :refs [:same :object :sends :textbf]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :same,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :sends,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :textbf,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:constant functor",
+  :resolution-kind "nnexus",
+  :msc ["18-00"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism :same :object :sends :textbf],
+ :gloss
+ {:paper "2012.08669",
+  :text
+  "ch is represented by the functor $c: \\underline{1} \\rightarrow \\textbf{C}$. Then, precomposing with $t$ to get $c \\circ t: \\textbf{J} \\rightarrow \\textbf{C}$ will just give us the \\textit{constant functor}\\index{functor!constant} at $c$, where this sends each object in \\textbf{J} to the same \\textbf"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for constant functor"}]}

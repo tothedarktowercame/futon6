@@ -1,0 +1,38 @@
+{:given
+ [{:var :X, :type :object, :signature "X : characteristic zero"}],
+ :name "characteristic zero",
+ :df 318,
+ :concept/id :characteristic-zero,
+ :msc "ct",
+ :defined-in
+ {:n-papers 3, :sample ["0905.1444" "1101.3054" "1406.4947"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :base-field,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-5904",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:base-field :object],
+ :gloss
+ {:paper "0905.1444",
+  :text
+  "the paper, we use our new bound on generation time of tilting objects to investigate Conjecture \\ref{conj:1} in some examples. Below, we will assume that our base field, $k$, has \\textbf{characteristic zero} and is \\textbf{algebraically-closed} to achieve sharper statements, assure all stacks encoun"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for characteristic zero"}]}

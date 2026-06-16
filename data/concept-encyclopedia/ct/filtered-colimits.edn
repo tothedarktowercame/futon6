@@ -1,0 +1,35 @@
+{:given [{:var :X, :type :object, :signature "X : filtered colimits"}],
+ :name "filtered colimits",
+ :df 457,
+ :concept/id :filtered-colimits,
+ :msc "ct",
+ :defined-in
+ {:n-papers 15,
+  :sample
+  ["0810.4502" "1211.6134" "1405.2429" "1605.01555" "1802.10425"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-2946",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:finite-limits :object],
+ :gloss
+ {:paper "1211.6134",
+  :text
+  "Notice the similarity between sifted colimits, and \\emph{filtered colimits}, which commute with all finite limits in $\\Set.$ In particular, filtered colimits are a special case of sifted colimits."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for filtered colimits"}]}

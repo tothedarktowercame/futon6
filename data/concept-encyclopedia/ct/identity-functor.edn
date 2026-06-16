@@ -1,0 +1,38 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : identity functor"}],
+ :name "identity functor",
+ :df 892,
+ :concept/id :identity-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 18,
+  :sample
+  ["0810.2070" "1408.5220" "1501.02503" "1508.00921" "1509.03649"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:identity functor",
+  :resolution-kind "nnexus",
+  :msc ["18-00" "18A05"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism],
+ :gloss
+ {:paper "1509.03649",
+  :text
+  "tors as arrows. It is not difficult to see that functors are a collection of order arrows for categories. They are discernible arrows and composition is well defined. Consider the \\textit{identity functor} $\\textgoth{I}_\\mathcal C$ which acts as unit on objects and arrows of the category $\\mathcal C"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for identity functor"}]}

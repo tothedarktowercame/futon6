@@ -1,0 +1,52 @@
+{:given [{:var :X, :type :object, :signature "X : cartesian product"}],
+ :name "cartesian product",
+ :pagerank 0.002135,
+ :df 689,
+ :concept/id :cartesian-product,
+ :msc "ct",
+ :defined-in
+ {:n-papers 57,
+  :sample
+  ["0711.0324" "0809.3676" "0809.4970" "0810.2070" "0903.0340"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 3,
+ :genus :object,
+ :status :draft,
+ :kind :construction,
+ :provenance
+ {:target "nnexus:cartesian product",
+  :resolution-kind "nnexus",
+  :msc
+  ["03-00"
+   "16D70"
+   "81P05"
+   "81P10"
+   "Basic_concepts_in_set_theory"
+   "XX-XX"
+   "foundational axiom"],
+  :domains
+  ["Encyclopediaofmath"
+   "Mathhub"
+   "Mathworld"
+   "Nlab"
+   "Planetmath"
+   "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:equivalence-relation :object],
+ :gloss
+ {:paper "0810.2070",
+  :text
+  "tive functions are called \\emph{epimorphisms} in the \\emph{category of sets} (see below). Bijective functions are called \\emph{isomorphisms}. A \\emph{relation} is any subset of a \\emph{Cartesian product} (see below). By definition, an \\emph{equivalence relation} $\\alpha$ on a set $X$ is a relation w"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for cartesian product"}]}

@@ -1,0 +1,30 @@
+{:given [{:var :X, :type :object, :signature "X : finite subset"}],
+ :name "finite subset",
+ :df 310,
+ :concept/id :finite-subset,
+ :msc "ct",
+ :defined-in {:n-papers 1, :sample ["1103.0248"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1103.0248",
+  :text
+  "mph{certain} answers (true in all models of a database). In fact, Skolem constants are not part of any certain answer to conjunctive query. Consequently, we are able to obtain a \\emph{finite subset} of a canonical \\emph{database}, which is large enough to obtain all certain answers. \\\\ Let us denote"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for finite subset"}]}

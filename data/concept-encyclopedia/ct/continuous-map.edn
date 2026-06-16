@@ -1,0 +1,38 @@
+{:given [{:var :X, :type :function, :signature "X : continuous map"}],
+ :name "continuous map",
+ :pagerank 0.003317,
+ :df 426,
+ :concept/id :continuous-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 27,
+  :sample
+  ["0709.4364" "0711.4401" "0912.1415" "1009.3553" "1102.1313"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :function,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 12,
+ :genus :function,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-2120",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:function],
+ :gloss
+ {:paper "0711.4401",
+  :text
+  "mph{homomorphism} of locales $h:X\\to Y$ is a function that preserves arbitrary joins (including the least element $0$) and finite meets (including the greatest element $1$); and a \\emph{continuous map} of locales (or simply a \\emph{map}) $f:Y\\to X$ is a homomorphism in the opposite direction, $f^*:X"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for continuous map"}]}

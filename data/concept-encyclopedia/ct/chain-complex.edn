@@ -1,0 +1,35 @@
+{:given [{:var :X, :type :object, :signature "X : chain complex"}],
+ :name "chain complex",
+ :df 366,
+ :concept/id :chain-complex,
+ :msc "ct",
+ :defined-in
+ {:n-papers 53,
+  :sample
+  ["0707.3499" "0809.1760" "0811.1480" "0905.0465" "0908.2469"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1067",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:abelian-categories :object],
+ :gloss
+ {:paper "0707.3499",
+  :text
+  "\\subsection{Homology in semi-abelian categories} As usual a \\defn{chain complex} is a sequence of maps $(d_{n}\\colon {C_n \\to C_{n-1}})_{n\\in\\Z}$ with $d_{n-1}\\comp d_n=0$ for all $n$."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for chain complex"}]}

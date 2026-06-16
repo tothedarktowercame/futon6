@@ -1,0 +1,46 @@
+{:given
+ [{:var :X,
+   :type :simple-but-powerful-idea,
+   :signature "X : finite groups"}],
+ :name "finite groups",
+ :df 344,
+ :concept/id :finite-groups,
+ :msc "ct",
+ :defined-in
+ {:n-papers 8,
+  :sample
+  ["1007.1890" "1111.3469" "1404.2156" "1604.06306" "1808.04902"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : simple-but-powerful-idea. one can add objects and add mor",
+   :refs [:objects]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :simple-but-powerful-idea,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :objects,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :genus :simple-but-powerful-idea,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:finite group",
+  :resolution-kind "nnexus",
+  :msc ["20A05" "20D" "Finite_groups" "XX-XX"],
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:simple-but-powerful-idea :objects],
+ :gloss
+ {:paper "1808.04902",
+  :text
+  "bjects in order to study the group~$G$ is a simple but powerful idea. It is used in all corners of what we shall loosely call `equivariant mathematics'. In this work, we focus on \\emph{finite groups}~$G$ and \\emph{additive categories}~$\\MM(G)$, \\ie categories in which one can add objects and add mor"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for finite groups"}]}

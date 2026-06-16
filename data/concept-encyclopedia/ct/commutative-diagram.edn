@@ -1,0 +1,39 @@
+{:given
+ [{:var :X, :type :graph, :signature "X : commutative diagram"}],
+ :name "commutative diagram",
+ :df 1912,
+ :concept/id :commutative-diagram,
+ :msc "ct",
+ :defined-in
+ {:n-papers 22,
+  :sample
+  ["0711.1608" "0810.2070" "0907.3335" "1102.1889" "1304.0867"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :graph,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :graph,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:commutative diagram",
+  :resolution-kind "nnexus",
+  :msc ["18" "18A05" "18A10" "Category_theory"],
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:graph],
+ :gloss
+ {:paper "1102.1889",
+  :text
+  "A {\\em commutative diagram} is a graph with some declared path equivalences."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for commutative diagram"}]}

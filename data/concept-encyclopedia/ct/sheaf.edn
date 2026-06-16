@@ -1,0 +1,63 @@
+{:given [{:var :X, :type :object, :signature "X : sheaf"}],
+ :name "sheaf",
+ :pagerank 0.003496,
+ :df 792,
+ :concept/id :sheaf,
+ :msc "ct",
+ :defined-in
+ {:n-papers 166,
+  :sample
+  ["0807.1704" "0808.2122" "0808.3627" "0809.1187" "0809.3394"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. given any open cover $U_\\alpha \\subset U$ in $\\cc{O}(X)$, the following \\emph{sheaf axiom} holds for $F$: $ \\hspace{-5ex} \\forall \\, s_\\alpha \\in FU_\\",
+   :refs [:hspace :subset :open :cover :alpha :axiom]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :hspace,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :subset,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :open,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :cover,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :alpha,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :axiom,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 35,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-143",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:presheaf :object :hspace :subset :open :cover :alpha :axiom],
+ :gloss
+ {:paper "0809.1187",
+  :text
+  "\\vspace{1ex} \\item A \\emph{sheaf} is a presheaf $F$ such that given any open cover $U_\\alpha \\subset U$ in $\\cc{O}(X)$, the following \\emph{sheaf axiom} holds for $F$: $ \\hspace{-5ex} \\forall \\, s_\\alpha \\in FU_\\"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for sheaf"}]}

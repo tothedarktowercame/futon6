@@ -1,0 +1,51 @@
+{:given [{:var :X, :type :sense, :signature "X : adjoint functor"}],
+ :name "adjoint functor",
+ :df 588,
+ :concept/id :adjoint-functor,
+ :msc "ct",
+ :defined-in {:n-papers 2, :sample ["0706.0711" "2407.03488"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : sense. sheafification sends any presheaf to its ``nearest'' sheaf~\\cite{rosi",
+   :refs [:presheaf :sends :cite :sheafification :sheaf]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :we-have,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :sense,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :sends,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :cite,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :sheafification,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :genus :sense,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-494",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:sheaf :presheaf :we-have :sense :sends :cite :sheafification],
+ :gloss
+ {:paper "2407.03488",
+  :text
+  "n{Developing Some Technical Machinery} \\body{We have mentioned that one can turn a presheaf into a sheaf through a construction called \\textit{sheafification}. Formally, being an \\textit{adjoint functor}, there is a sense in which sheafification sends any presheaf to its ``nearest'' sheaf~\\cite{rosi"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for adjoint functor"}]}

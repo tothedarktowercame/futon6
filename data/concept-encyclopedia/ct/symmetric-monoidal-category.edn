@@ -1,0 +1,61 @@
+{:given
+ [{:var :X,
+   :type :braided-monoidal-category,
+   :signature "X : symmetric monoidal category"}],
+ :name "symmetric monoidal category",
+ :pagerank 0.002593,
+ :df 859,
+ :concept/id :symmetric-monoidal-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 124,
+  :sample
+  ["0808.1029" "0808.1037" "0903.0340" "0906.4725" "0908.2469"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : braided-monoidal-category. the braiding satisfies $b_{X,Y} = b_{Y,X}^{-1}$",
+   :refs [:satisfies :braiding]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :braided-monoidal-category,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :braided-monoidal-categories,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :satisfies,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :braiding,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :used-papers 13,
+ :genus :braided-monoidal-category,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-244",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:monoidal-category
+  :monoidal-categories
+  :braided-monoidal
+  :braided-monoidal-category
+  :braided-monoidal-categories
+  :satisfies
+  :braiding],
+ :gloss
+ {:paper "0903.0340",
+  :text
+  "So, the first braided monoidal categories to be discovered were `symmetric' ones \\cite{MacLane}: \\begin{definition} A {\\bf symmetric monoidal category} is a braided monoidal category where the braiding satisfies $b_{X,Y} = b_{Y,X}^{-1}$."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for symmetric monoidal category"}]}

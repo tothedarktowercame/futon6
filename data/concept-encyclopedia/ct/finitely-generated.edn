@@ -1,0 +1,70 @@
+{:given
+ [{:var :X, :type :object, :signature "X : finitely generated"}],
+ :name "finitely generated",
+ :pagerank 0.001858,
+ :df 864,
+ :concept/id :finitely-generated,
+ :msc "ct",
+ :defined-in
+ {:n-papers 243,
+  :sample
+  ["0706.1835" "0710.0032" "0806.0308" "0810.1442" "0810.2361"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $\\Cr$ is isomorphic to the $n$-category~$\\cl{\\Sigma}$ presented by $\\Sigma$. One says that an $n$-category $\\Cr$ is \\emph{finitely generated} when it admits a p",
+   :refs
+   [:presentation :category :isomorphic :says :whose :presented]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :presentation,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :isomorphic,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :says,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :whose,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :presented,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 2,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:finitely generated",
+  :resolution-kind "nnexus",
+  :msc
+  ["08A05"
+   "08A30"
+   "08A62"
+   "16D10"
+   "20"
+   "20A05"
+   "Algebraic_structures"],
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:object :presentation :category :isomorphic :says :whose :presented],
+ :gloss
+ {:paper "0810.1442",
+  :text
+  "esentation of $\\Cr$} is an $(n+1)$-polygraph $\\Sigma$ such that $\\Cr$ is isomorphic to the $n$-category~$\\cl{\\Sigma}$ presented by $\\Sigma$. One says that an $n$-category $\\Cr$ is \\emph{finitely generated} when it admits a presentation by an $(n+1)$-polygraph $\\Sigma$ whose underlying $n$-polygraph "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for finitely generated"}]}

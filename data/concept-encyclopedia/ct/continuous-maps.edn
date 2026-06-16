@@ -1,0 +1,39 @@
+{:given [{:var :X, :type :object, :signature "X : continuous maps"}],
+ :name "continuous maps",
+ :df 411,
+ :concept/id :continuous-maps,
+ :msc "ct",
+ :defined-in
+ {:n-papers 16,
+  :sample
+  ["0807.4848" "0810.2070" "0912.1415" "1401.8116" "1505.06460"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :dual-category,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-2120",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:dual-category :object],
+ :gloss
+ {:paper "1401.8116",
+  :text
+  "his defines the \\emph{category of frames}, $\\Frm$. The dual category $\\Loc=\\opp\\Frm$ is referred to as the \\emph{category of locales} \\cite{stonespaces}, and its arrows are called \\emph{continuous maps}, or simply \\emph{maps}. These categories are bi-complete, and the product of $X$ and $Y$ in $\\Loc"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for continuous maps"}]}

@@ -1,0 +1,43 @@
+{:given
+ [{:var :X,
+   :type :burnside-category-burn,
+   :signature "X : abelian group"}],
+ :name "abelian group",
+ :pagerank 0.002786,
+ :df 898,
+ :concept/id :abelian-group,
+ :msc "ct",
+ :defined-in
+ {:n-papers 18,
+  :sample
+  ["0810.2070" "1011.0558" "1511.00824" "1704.08386" "1805.03032"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :burnside-category-burn,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 36,
+ :genus :burnside-category-burn,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:abelian group",
+  :resolution-kind "nnexus",
+  :msc ["20" "20K99" "Properties_of_groups" "XX-XX"],
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:burnside-category-burn],
+ :gloss
+ {:paper "1805.08745",
+  :text
+  "ssociated to the structure of \\emph{abelian group} is the Burnside category Burn."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for abelian group"}]}

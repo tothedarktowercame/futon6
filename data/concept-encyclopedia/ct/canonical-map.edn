@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :morphism, :signature "X : canonical map"}],
+ :name "canonical map",
+ :df 774,
+ :concept/id :canonical-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 17,
+  :sample
+  ["1212.3539" "1406.1692" "1503.02036" "1602.04857" "1903.09192"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:canonical map",
+  :resolution-kind "nnexus",
+  :msc ["03E20"],
+  :domains ["Mathworld"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism],
+ :gloss
+ {:paper "2005.07603",
+  :text
+  "n$ the \\defterm{boundary inclusion}. We denote $\\mcube n = \\trunc {n-1} (\\cube n)$ the $n$-cube with the non-degenerate $n$-cube marked and no other non-degenerate cubes marked. We call the canonical map $\\cube n \\to \\mcube n$ the \\defterm{$n$-marker}. \\begin{prop} The monomorphisms of $\\mcSet$ (and"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for canonical map"}]}

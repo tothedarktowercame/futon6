@@ -1,0 +1,50 @@
+{:given [{:var :X, :type :object, :signature "X : direct sums"}],
+ :name "direct sums",
+ :pagerank 0.001901,
+ :df 674,
+ :concept/id :direct-sums,
+ :msc "ct",
+ :defined-in
+ {:n-papers 24,
+  :sample
+  ["0802.0097" "0910.2996" "0912.4914" "1012.5282" "1107.0557"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. the homomorphisms $\\Phi^{n,M}_\\frakF$ (respectively $\\Phi^{n,M}_\\CF$) are isomorphisms for all d",
+   :refs [:isomorphisms :respectively :homomorphisms]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :isomorphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :respectively,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :homomorphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 5,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1078",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object :isomorphisms :respectively :homomorphisms],
+ :gloss
+ {:paper "1107.0557",
+  :text
+  "$\\Phi^{1,M}_\\frakF=\\Phi^{M}_\\frakF$, respectively $\\Phi^{0,M}_\\CF:=\\Psi^{M}_\\CF$, $\\Phi^{1,M}_\\CF=\\Phi^{M}_\\CF$. We say that $\\Ext^n_R(M,-)$ \\textsl{commutes with direct limits} (\\textsl{direct sums}) if the homomorphisms $\\Phi^{n,M}_\\frakF$ (respectively $\\Phi^{n,M}_\\CF$) are isomorphisms for all d"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for direct sums"}]}

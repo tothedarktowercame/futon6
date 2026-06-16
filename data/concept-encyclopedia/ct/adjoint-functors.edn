@@ -1,0 +1,41 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : adjoint functors"}],
+ :name "adjoint functors",
+ :df 649,
+ :concept/id :adjoint-functors,
+ :msc "ct",
+ :defined-in
+ {:n-papers 30,
+  :sample
+  ["0704.2207" "0804.1460" "0810.2070" "0811.4304" "0909.3162"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : morphism. for any $x$ in $\\mathbf{X}$ and $a$ in $\\ma",
+   :refs [:mathbf]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :mathbf,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-494",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism :mathbf],
+ :gloss
+ {:paper "0704.2207",
+  :text
+  "s. Let $\\mathbf{X}$ and $\\mathbf{A}$ be categories and $F:\\mathbf{X\\rightarrow A}$ and $G:\\mathbf{A\\rightarrow X}$ functors between them. Then $F$ and $G$ are said to be a pair of \\textit{adjoint functors} or an \\textit{adjunction}, written $F\\dashv G$, if for any $x$ in $\\mathbf{X}$ and $a$ in $\\ma"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for adjoint functors"}]}

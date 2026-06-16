@@ -1,0 +1,72 @@
+{:given [{:var :X, :type :object, :signature "X : coalgebra"}],
+ :name "coalgebra",
+ :pagerank 0.004075,
+ :df 580,
+ :concept/id :coalgebra,
+ :msc "ct",
+ :defined-in
+ {:n-papers 120,
+  :sample
+  ["0708.3398" "0711.0674" "0712.1864" "0801.0157" "0806.3205"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $\\mu_3 = \\mu(1 \\ox \\mu) = \\mu(\\mu \\ox 1):A^{\\ox 3} \\ra A$ (associativity) and $\\mu(\\eta \\ox 1) = 1 = \\mu(1 \\ox \\eta):A \\ra A$ (unit conditions). Dually, a \\emph",
+   :refs
+   [:counit
+    :object
+    :associativity
+    :comultiplication
+    :equipped
+    :conditions]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :counit,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :associativity,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :comultiplication,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :equipped,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :conditions,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 26,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:coalgebra",
+  :resolution-kind "nnexus",
+  :msc ["Coalgebras"],
+  :domains ["Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:object
+  :counit
+  :associativity
+  :comultiplication
+  :equipped
+  :conditions],
+ :gloss
+ {:paper "0712.1864",
+  :text
+  "\\eta:I \\ra A$ satisfying $\\mu_3 = \\mu(1 \\ox \\mu) = \\mu(\\mu \\ox 1):A^{\\ox 3} \\ra A$ (associativity) and $\\mu(\\eta \\ox 1) = 1 = \\mu(1 \\ox \\eta):A \\ra A$ (unit conditions). Dually, a \\emph{coalgebra} in $\\C$ is an object $C \\in \\C$ equipped with a comultiplication $\\delta:C \\ra C \\ox C$ and a counit $\\"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for coalgebra"}]}

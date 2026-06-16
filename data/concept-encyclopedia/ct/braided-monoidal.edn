@@ -1,0 +1,73 @@
+{:given [{:var :X, :type :object, :signature "X : braided monoidal"}],
+ :name "braided monoidal",
+ :pagerank 0.001964,
+ :df 385,
+ :concept/id :braided-monoidal,
+ :msc "ct",
+ :defined-in
+ {:n-papers 10,
+  :sample
+  ["0901.3975" "0908.2469" "1411.3038" "2002.06055" "2008.02394"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. it is monoidal and it makes the following diagram commute for all $x,y \\in C$: \\[ \\begin{diag",
+   :refs [:diagram :commute :makes :begin :monoidal :diag]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :braided-monoidal-categories,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :diagram,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :commute,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :makes,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :begin,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :monoidal,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :diag,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 13,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:monoidal-categories
+  :braided-monoidal-categories
+  :object
+  :diagram
+  :commute
+  :makes
+  :begin
+  :monoidal
+  :diag],
+ :gloss
+ {:paper "0908.2469",
+  :text
+  "s}, which must in turn satisfy some plausible equations called `coherence laws'. This is typical of weakening. A functor $F \\maps C \\to D$ between braided monoidal categories is \\textbf{braided monoidal} if it is monoidal and it makes the following diagram commute for all $x,y \\in C$: \\[ \\begin{diag"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for braided monoidal"}]}

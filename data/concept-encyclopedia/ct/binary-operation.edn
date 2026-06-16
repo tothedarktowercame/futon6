@@ -1,0 +1,37 @@
+{:given [{:var :X, :type :object, :signature "X : binary operation"}],
+ :name "binary operation",
+ :df 331,
+ :concept/id :binary-operation,
+ :msc "ct",
+ :defined-in
+ {:n-papers 10,
+  :sample
+  ["1203.0202" "1501.07082" "1509.03649" "1806.03012" "1809.05923"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:binary operation",
+  :resolution-kind "nnexus",
+  :msc ["08A40" "08A99"],
+  :domains ["Mathworld" "Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1203.0202",
+  :text
+  "artite quantum state in $H \\otimes H$ can be thought of as a quantum channel from $H$ to $H$. Similarly, we can treat a tripartite state as a map from $H \\otimes H$ to $H$, i.e. a \\textit{binary operation} on quantum states in $H$. Nearly all algebraic objects of interest (e.g. groups, rings, vector"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for binary operation"}]}

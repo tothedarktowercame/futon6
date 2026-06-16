@@ -1,0 +1,43 @@
+{:given [{:var :X, :type :morphism, :signature "X : evaluation map"}],
+ :name "evaluation map",
+ :df 312,
+ :concept/id :evaluation-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 45,
+  :sample
+  ["1010.4527" "1011.0144" "1208.5505" "1305.0944" "1309.6952"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :dual-object,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :we-have,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-5887",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:natural-isomorphism :dual-object :we-have :morphism],
+ :gloss
+ {:paper "1208.5505",
+  :text
+  "n\\sC$, there is a \\emph{dual} or \\emph{conjugate} $\\overline{X}\\in\\sC$, and there is a natural isomorphism $\\overline{\\overline{X}}\\cong X$. Along with the dual object, we have an \\emph{evaluation map} $\\ev_X\\colon \\overline{X}\\otimes X\\to 1$ and a \\emph{coevaluation} map $\\coev_X\\colon 1\\to X\\otime"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for evaluation map"}]}

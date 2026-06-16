@@ -1,0 +1,36 @@
+{:given
+ [{:var :X, :type :object, :signature "X : homotopy equivalences"}],
+ :name "homotopy equivalences",
+ :df 343,
+ :concept/id :homotopy-equivalences,
+ :msc "ct",
+ :defined-in
+ {:n-papers 30,
+  :sample
+  ["1009.3673" "1011.1691" "1208.1777" "1406.4182" "1408.0038"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-936",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "1009.3673",
+  :text
+  "go V. Bacard} \\begin{document} \\maketitle \\begin{abstract} We develop a theory of enriched categories over a (higher) category $\\M$ equipped with a class $\\W$ of morphisms called \\emph{homotopy equivalences}. We call them Segal $\\M_{\\W}$-categories. Our motivation was to generalize the notion of ``u"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for homotopy equivalences"}]}

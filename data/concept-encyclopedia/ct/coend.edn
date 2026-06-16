@@ -1,0 +1,33 @@
+{:given [{:var :X, :type :object, :signature "X : coend"}],
+ :name "coend",
+ :df 323,
+ :concept/id :coend,
+ :msc "ct",
+ :defined-in
+ {:n-papers 128,
+  :sample
+  ["0804.3587" "0805.3030" "0810.2070" "0812.2443" "0902.0399"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "0810.2070",
+  :text
+  "rightarrow }S$ with $H\\omega =v$, and this wedge $\\omega $ is an end of $S.$ The definition of the coend of a functor $S:C^{op}\\times C\\rightarrow X$ is dual to that of an end. A \\emph{coend} of $S$ is a pair $\\langle d,\\zeta \\rangle $, consisting of an object $d\\in X$ and a wedge $\\zeta :S\\overset{"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for coend"}]}

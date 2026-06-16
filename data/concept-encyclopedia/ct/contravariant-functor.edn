@@ -1,0 +1,38 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : contravariant functor"}],
+ :name "contravariant functor",
+ :df 504,
+ :concept/id :contravariant-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 41,
+  :sample
+  ["0708.3398" "0710.1208" "0801.2826" "0810.2070" "0905.3010"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:contravariant functor",
+  :resolution-kind "nnexus",
+  :msc ["18" "18-00"],
+  :domains ["Mathworld" "Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism],
+ :gloss
+ {:paper "0810.2070",
+  :text
+  "(g)`\\mathcal{F}(k)] \\put(2000,200){\\oval(1350,700)}\\put(1980,180){$\\mathcal{L}$} \\put(800,170){$% \\cone{\\mathcal{F}_\\ast}$} \\efig \\end{equation*} \\bigbreak\\smallskip Similarly, a \\emph{contravariant functor}, or a \\emph{cofunctor}, $% \\mathcal{F}^{\\ast }:\\mathcal{K}\\rightarrow \\mathcal{L}$ is a \\emp"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for contravariant functor"}]}

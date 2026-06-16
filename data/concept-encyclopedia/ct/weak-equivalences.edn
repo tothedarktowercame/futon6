@@ -1,0 +1,77 @@
+{:given [{:var :X, :type :object, :signature "X : weak equivalences"}],
+ :name "weak equivalences",
+ :pagerank 0.005066,
+ :df 722,
+ :concept/id :weak-equivalences,
+ :msc "ct",
+ :defined-in
+ {:n-papers 263,
+  :sample
+  ["0707.1449" "0708.2185" "0709.0248" "0712.0617" "0804.2154"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equivalences} such that \\begin{enumerate} \\",
+   :refs [:classes :equivalences :out-of :weak :three :fibrations]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :cocomplete-category,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :classes,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :equivalences,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :out-of,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :weak,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :three,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :fibrations,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 11,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:weak equivalence",
+  :resolution-kind "nnexus",
+  :msc ["55" "55P10" "Homotopy_theory"],
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:model-category
+  :cocomplete-category
+  :object
+  :classes
+  :equivalences
+  :out-of
+  :weak
+  :three
+  :fibrations],
+ :gloss
+ {:paper "0708.2185",
+  :text
+  "t{model category} is a complete and cocomplete category $\\ck$ together with three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equivalences} such that \\begin{enumerate} \\item[(1)] $\\cw$ has the 2-out-of-3 property, i.e., with any two "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for weak equivalences"}]}

@@ -1,0 +1,49 @@
+{:given [{:var :X, :type :object, :signature "X : groupoid"}],
+ :name "groupoid",
+ :pagerank 0.012633,
+ :df 1111,
+ :concept/id :groupoid,
+ :msc "ct",
+ :defined-in
+ {:n-papers 261,
+  :sample
+  ["0706.1771" "0708.1348" "0711.1608" "0711.2077" "0801.0083"]},
+ :axioms
+ [{:id :condition-1,
+   :statement "∀ x : object. all morphisms are isomorphisms",
+   :refs [:isomorphisms :morphisms :all-morphisms]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :all-morphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :isomorphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :morphisms,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 54,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-28",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:all-morphisms :object :isomorphisms :morphisms],
+ :gloss
+ {:paper "0801.0083",
+  :text
+  "Recall that a {\\em groupoid} is a category $\\cat{G}$ in which all morphisms are isomorphisms."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for groupoid"}]}

@@ -1,0 +1,77 @@
+{:given
+ [{:var :X, :type :object, :signature "X : geometric realization"}],
+ :name "geometric realization",
+ :df 330,
+ :concept/id :geometric-realization,
+ :msc "ct",
+ :defined-in
+ {:n-papers 92,
+  :sample
+  ["0704.1624" "0808.3684" "0902.0399" "0902.1750" "0903.5058"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : object. $\\cat{C}$ is either $\\sset$ or $\\spectra$, then a simplicial object $X_{\\bullet}$ has a \\emph{geometric realization}, written $|X_{\\bullet}|$, and a cosimplicia",
+   :refs
+   [:simplicial-object
+    :realization
+    :bullet
+    :object
+    :cosimplicial
+    :written]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :simplicial-object,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :cosimplicial-object,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :realization,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :bullet,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :cosimplicial,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :written,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :genus :object,
+ :status :draft,
+ :kind :construction,
+ :provenance
+ {:target "nnexus:geometric realization",
+  :resolution-kind "nnexus",
+  :msc ["55"],
+  :domains ["Mathworld"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:simplicial
+  :simplicial-object
+  :cosimplicial-object
+  :object
+  :realization
+  :bullet
+  :cosimplicial
+  :written],
+ :gloss
+ {:paper "0902.0399",
+  :text
+  "ion} \\begin{definition}[Geometric realization and totalization] \\label{def:realization} If $\\cat{C}$ is either $\\sset$ or $\\spectra$, then a simplicial object $X_{\\bullet}$ has a \\emph{geometric realization}, written $|X_{\\bullet}|$, and a cosimplicial object $X^{\\bullet}$ has a \\emph{totalization},"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for geometric realization"}]}

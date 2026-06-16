@@ -1,0 +1,44 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : identity morphism"}],
+ :name "identity morphism",
+ :df 936,
+ :concept/id :identity-morphism,
+ :msc "ct",
+ :defined-in
+ {:n-papers 75,
+  :sample
+  ["0708.1500" "0903.0340" "0908.2469" "1001.0668" "1006.5475"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :algebra-morphism,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :algebra-object,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-1247",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:algebra-morphism :algebra-object :morphism],
+ :gloss
+ {:paper "1006.5475",
+  :text
+  "the definition of a strictly unital $A_{\\infty}$-algebra morphism. \\begin{examp} \\label{idmorphism} Let $A$ be an $A_{\\infty}$-algebra object in $\\mathcal{C}$. Then we define the \\textit{identity morphism} $\\id_A:A\\rightarrow A$, as a morphism of $A_{\\infty}$-algebra objects, by the following series"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for identity morphism"}]}

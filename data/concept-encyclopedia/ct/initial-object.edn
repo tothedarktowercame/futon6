@@ -1,0 +1,41 @@
+{:given [{:var :X, :type :object, :signature "X : initial object"}],
+ :name "initial object",
+ :pagerank 0.005801,
+ :df 813,
+ :concept/id :initial-object,
+ :msc "ct",
+ :defined-in
+ {:n-papers 64,
+  :sample
+  ["0810.2070" "0904.1529" "0906.4087" "1008.3145" "1011.1691"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :final-object,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 8,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-372",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:commutative-diagram :final-object :object],
+ :gloss
+ {:paper "0810.2070",
+  :text
+  "$ is used instead of $\\mathtt{Mor}(\\mathcal{K})$; see \\cite{Switzer}). A category $\\mathcal{K}$ is usually depicted as a \\emph{commutative diagram} (i.e., a diagram with a common \\emph{initial object} $A$ and \\emph{final object} $D$):\\\\ \\smallskip \\begin{equation*} \\bfig \\putsquare<1`1`1`1;500`400>("},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for initial object"}]}

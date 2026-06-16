@@ -1,0 +1,36 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : identity morphisms"}],
+ :name "identity morphisms",
+ :df 575,
+ :concept/id :identity-morphisms,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["0908.3347" "0911.0469" "1308.6548" "1709.09743" "2101.04015"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-1247",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism],
+ :gloss
+ {:paper "2101.04015",
+  :text
+  "begin{tikzcd} I_2 \\ar[r, \"\\pi_2\"] \\ar[d,\"\\pi_1\"'] \\ar[dr, phantom, \"\\lrcorner\", very near start] & I_1 \\ar[d, \"d\"]\\\\ I_1 \\ar[r, \"c\"] & I_0. \\end{tikzcd}\\] The morphisms define the \\textit{identity morphisms}, \\textit{domains}, \\textit{codomains} and \\textit{composition}, respectively. These are requ"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for identity morphisms"}]}

@@ -1,0 +1,44 @@
+{:given
+ [{:var :X,
+   :type :property,
+   :signature "X : compatibility conditions"}],
+ :name "compatibility conditions",
+ :df 313,
+ :concept/id :compatibility-conditions,
+ :msc "ct",
+ :defined-in
+ {:n-papers 5,
+  :sample
+  ["1508.02843"
+   "1805.03032"
+   "2009.12670"
+   "2405.04157"
+   "math__0608601"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :property,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :property,
+ :status :draft,
+ :kind :property,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:property],
+ :gloss
+ {:paper "2405.04157",
+  :text
+  "One of the required compatibility conditions is $(\\sqsubseteq) \\circ R"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for compatibility conditions"}]}

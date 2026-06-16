@@ -1,0 +1,59 @@
+{:given
+ [{:var :X,
+   :type :preadditive-category,
+   :signature "X : additive category"}],
+ :name "additive category",
+ :pagerank 0.003932,
+ :df 480,
+ :concept/id :additive-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 41,
+  :sample
+  ["0903.5185" "1006.4343" "1107.3608" "1206.6632" "1304.0520"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : preadditive-category. the (co)product of any finite set of objects exists",
+   :refs [:objects :exists :finite-set :finite :product]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :preadditive-category,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :objects,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :exists,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :finite,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :product,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+ :used-papers 11,
+ :genus :preadditive-category,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1035",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on
+ [:finite-set :preadditive-category :objects :exists :finite :product],
+ :gloss
+ {:paper "1006.4343",
+  :text
+  "An \\emph{additive category} is a preadditive category in which the (co)product of any finite set of objects exists."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for additive category"}]}

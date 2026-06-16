@@ -1,0 +1,33 @@
+{:given
+ [{:var :X, :type :object, :signature "X : commutative squares"}],
+ :name "commutative squares",
+ :df 320,
+ :concept/id :commutative-squares,
+ :msc "ct",
+ :defined-in {:n-papers 2, :sample ["0711.1608" "0803.4209"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-775",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:object],
+ :gloss
+ {:paper "0711.1608",
+  :text
+  "nd in multifarious ways) with two such distinguished subcategories. It is also very important to observe that, when dealing with categories of commutative diagrams (and primarily \\emph{commutative squares}\\footnote {Called ``\\emph{quatuors}'' (i.e. quartets) in \\textsc{Ehres\\-mann}'s terminology.} )"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for commutative squares"}]}

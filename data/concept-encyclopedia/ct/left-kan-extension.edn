@@ -1,0 +1,36 @@
+{:given
+ [{:var :X, :type :object, :signature "X : left kan extension"}],
+ :name "left kan extension",
+ :pagerank 0.001843,
+ :df 479,
+ :concept/id :left-kan-extension,
+ :msc "ct",
+ :defined-in
+ {:n-papers 84,
+  :sample
+  ["0805.3030" "0903.2722" "0909.4715" "0911.0977" "1007.2925"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :used-papers 3,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:kan-extension :object],
+ :gloss
+ {:paper "0909.4715",
+  :text
+  "The horizontal composite of $F:MV{\\rightarrow}W$ and $E:MW{\\rightarrow}X$, denoted $E \\comp F$, is defined as a left kan extension \\[ \\LaxSq {M^2V} {MV} {MW} {X} {MF} {\\mu} {E \\comp F} {E} {l_{E,F}} \\] of $EM(F)$ along $\\mu$."},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for left kan extension"}]}

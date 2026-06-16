@@ -1,0 +1,43 @@
+{:given [{:var :X, :type :object, :signature "X : hopf algebras"}],
+ :name "hopf algebras",
+ :pagerank 0.001989,
+ :df 550,
+ :concept/id :hopf-algebras,
+ :msc "ct",
+ :defined-in
+ {:n-papers 165,
+  :sample
+  ["0711.0674" "0801.1133" "0803.0775" "0804.1460" "0804.3587"]},
+ :axioms
+ [{:id :condition-1, :statement "∀ x : object. there is", :refs []}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :bialgebra,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :hopf-modules,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 5,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-528",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:monad :hopf-algebra :bialgebra :hopf-modules :object],
+ :gloss
+ {:paper "0804.1460",
+  :text
+  "om_R(\\oB, -\\otimes_R \\uB)$ is a monad on $\\M_R$. The category of its modules is isomorphic to the category of $[B,-]$-Hopf modules. \\end{zlist} \\end{thm} \\begin{thm}\\Label{Hopf}{\\bf Hopf algebras. }\\em An $R$-bialgebra $(H,\\product,\\unit,\\cop,\\counit)$ is said to be a {\\em Hopf algebra} if there is "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for hopf algebras"}]}

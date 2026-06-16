@@ -1,0 +1,38 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : forgetful functors"}],
+ :name "forgetful functors",
+ :df 416,
+ :concept/id :forgetful-functors,
+ :msc "ct",
+ :defined-in
+ {:n-papers 8,
+  :sample
+  ["0711.1608" "1406.1115" "2012.08669" "2107.09576" "2408.09488"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}
+  {:kind :underspecified-axioms,
+   :wanted :axioms,
+   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:forgetful functor",
+  :resolution-kind "nnexus",
+  :msc ["18" "18A05" "Functors"],
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:morphism],
+ :gloss
+ {:paper "2012.08669",
+  :text
+  "or all of the structure or the properties carried by the source category by passing, via a functor, to another category. This process informally describes what are usually called \\textit{forgetful functors}, \\index{functor!forgetful} which provide us with a large source of examples.\\par There are ma"},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for forgetful functors"}]}
