@@ -83,8 +83,72 @@ def env_int(name: str, default: int) -> int:
         return default
 
 
+def cgroup_cpu_quota_count() -> int | None:
+    cpu_max = Path("/sys/fs/cgroup/cpu.max")
+    try:
+        quota_s, period_s = cpu_max.read_text().strip().split()[:2]
+    except (OSError, ValueError):
+        return None
+    if quota_s == "max":
+        return None
+    try:
+        quota = int(quota_s)
+        period = int(period_s)
+    except ValueError:
+        return None
+    if quota <= 0 or period <= 0:
+        return None
+    return max(1, math.ceil(quota / period))
+
+
+def available_cpu_count() -> int:
+    """CPU count available to this job, honoring Slurm/cpuset/cgroup limits."""
+    counts: list[int] = []
+    slurm_cpus = os.environ.get("SLURM_CPUS_PER_TASK")
+    if slurm_cpus and slurm_cpus.isdigit():
+        counts.append(int(slurm_cpus))
+    try:
+        counts.append(len(os.sched_getaffinity(0)))
+    except (AttributeError, OSError):
+        pass
+    quota = cgroup_cpu_quota_count()
+    if quota:
+        counts.append(quota)
+    return max(1, min(c for c in counts if c > 0)) if counts else 1
+
+
 def cpu_default() -> int:
-    return env_int("SLURM_CPUS_PER_TASK", env_int("NUM_CPU_WORKERS", 32))
+    if os.environ.get("NUM_CPU_WORKERS"):
+        return env_int("NUM_CPU_WORKERS", 16)
+    return min(16, available_cpu_count())
+
+
+def visible_cuda_count() -> int:
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            return int(torch.cuda.device_count())
+    except Exception:
+        pass
+    visible = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if visible:
+        devices = [d for d in visible.split(",") if d.strip() and d.strip() != "-1"]
+        return len(devices)
+    return 0
+
+
+def resolve_embed_workers(device: str | None, requested: int, num_gpus: int) -> int:
+    if requested < 0:
+        raise ValueError("embed workers must be >= 0")
+    if requested > 0:
+        return requested
+    if device and str(device).startswith("cuda"):
+        visible = visible_cuda_count()
+        if visible:
+            return max(1, min(num_gpus, visible))
+        return max(1, num_gpus)
+    return 1
 
 
 def tokens(text: str) -> list[str]:
@@ -334,6 +398,14 @@ def load_bge_model(model_name_or_path: str, device: str | None):
     return SentenceTransformer(model_name_or_path, **kwargs)
 
 
+def bge_device(args: argparse.Namespace) -> str | None:
+    if args.device:
+        return args.device
+    if visible_cuda_count() > 0:
+        return "cuda"
+    return None
+
+
 def encode_items(items: Sequence[EmbedItem], args: argparse.Namespace) -> np.ndarray:
     texts = [i.text for i in items]
     backend = args.backend
@@ -342,7 +414,31 @@ def encode_items(items: Sequence[EmbedItem], args: argparse.Namespace) -> np.nda
     if backend == "hash":
         return stable_hash_embeddings(texts, args.hash_dim)
     model_path = args.model_out if args.model_out.exists() and any(args.model_out.iterdir()) else args.model
-    model = load_bge_model(str(model_path), args.device)
+    device = bge_device(args)
+    embed_workers = resolve_embed_workers(device, args.embed_workers, args.num_gpus)
+    model_device = device
+    if embed_workers > 1 and device and device.startswith("cuda"):
+        # SentenceTransformer.encode(device="cuda") is single-device. Keep the
+        # parent model off cuda:0; the pool below places one replica per target.
+        model_device = "cpu"
+    model = load_bge_model(str(model_path), model_device)
+    if embed_workers > 1:
+        target_devices = (
+            [f"cuda:{i}" for i in range(embed_workers)]
+            if device and device.startswith("cuda")
+            else [device or "cpu"] * embed_workers
+        )
+        pool = model.start_multi_process_pool(target_devices=target_devices)
+        try:
+            emb = model.encode_multi_process(
+                texts,
+                pool,
+                batch_size=args.batch_size,
+                normalize_embeddings=True,
+            )
+        finally:
+            model.stop_multi_process_pool(pool)
+        return np.asarray(emb, dtype=np.float32)
     emb = model.encode(
         texts,
         batch_size=args.batch_size,
@@ -433,6 +529,7 @@ def infer_stage(args: argparse.Namespace) -> dict:
             "EMBED_BATCH": args.batch_size,
             "NUM_CPU_WORKERS": args.num_workers,
             "NUM_SHARDS": args.num_shards,
+            "EMBED_WORKERS": resolve_embed_workers(bge_device(args), args.embed_workers, args.num_gpus),
         },
     }
     write_json(args.output_dir / "infer-report.json", report)
@@ -553,6 +650,15 @@ def add_common_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--model-out", type=Path, default=Path(os.environ.get("MARK3_EMBED_MODEL_OUT", DEFAULT_OUT / "bge-ft")))
     parser.add_argument("--backend", choices=["auto", "bge", "hash"], default=os.environ.get("MARK3_EMBED_BACKEND", "auto"))
     parser.add_argument("--device", default=os.environ.get("EMBED_DEVICE"))
+    parser.add_argument(
+        "--embed-workers",
+        type=int,
+        default=env_int("EMBED_WORKERS", 0),
+        help=(
+            "BGE replica fanout workers. Default 0 = auto: all visible CUDA "
+            "GPUs up to NUM_GPUS; 1 = single SentenceTransformer.encode path."
+        ),
+    )
     parser.add_argument("--batch-size", type=int, default=env_int("EMBED_BATCH", 256))
     parser.add_argument("--num-gpus", type=int, default=env_int("NUM_GPUS", 8))
     parser.add_argument("--num-workers", type=int, default=cpu_default())
@@ -568,7 +674,8 @@ def build_parser() -> argparse.ArgumentParser:
     epilog = """Environment knobs:
   NUM_GPUS=8                 default GPU count hint for Rob's 8-GPU box
   EMBED_BATCH=256            BGE encode/train batch size
-  NUM_CPU_WORKERS=32         dataloader / CPU worker default (or SLURM_CPUS_PER_TASK)
+  EMBED_WORKERS=0            0 = auto fanout over visible CUDA GPUs, up to NUM_GPUS
+  NUM_CPU_WORKERS=16         dataloader workers; honors Slurm/cpuset/cgroup affinity
   NUM_SHARDS=8               shard hint for full-scale corpus partitioning
   BGE_MODEL=BAAI/bge-small-en-v1.5
   MARK3_EMBED_OUT=tmp/mark3-embed/ct-sample

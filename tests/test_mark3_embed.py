@@ -52,3 +52,35 @@ def test_batching_shards_and_hash_embeddings_are_deterministic():
     emb2 = mark3_embed.stable_hash_embeddings(["monoidal category", "abelian category"], 16)
     np.testing.assert_allclose(emb1, emb2)
     np.testing.assert_allclose(np.linalg.norm(emb1, axis=1), np.ones(2), rtol=1e-6)
+
+
+def test_embed_worker_auto_uses_visible_cuda_up_to_num_gpus(monkeypatch):
+    monkeypatch.setattr(mark3_embed, "visible_cuda_count", lambda: 8)
+
+    assert mark3_embed.resolve_embed_workers("cuda", 0, 8) == 8
+    assert mark3_embed.resolve_embed_workers("cuda", 0, 4) == 4
+    assert mark3_embed.resolve_embed_workers("cuda", 2, 8) == 2
+    assert mark3_embed.resolve_embed_workers("cpu", 0, 8) == 1
+
+
+def test_cpu_default_honors_explicit_env_and_affinity(monkeypatch):
+    monkeypatch.setenv("NUM_CPU_WORKERS", "12")
+    assert mark3_embed.cpu_default() == 12
+
+    monkeypatch.delenv("NUM_CPU_WORKERS")
+    monkeypatch.delenv("SLURM_CPUS_PER_TASK", raising=False)
+    monkeypatch.setattr(mark3_embed, "cgroup_cpu_quota_count", lambda: None)
+    monkeypatch.setattr(mark3_embed.os, "sched_getaffinity", lambda _pid: set(range(64)))
+    assert mark3_embed.cpu_default() == 16
+
+    monkeypatch.setattr(mark3_embed.os, "sched_getaffinity", lambda _pid: set(range(6)))
+    assert mark3_embed.cpu_default() == 6
+
+
+def test_cpu_default_honors_slurm_before_physical_count(monkeypatch):
+    monkeypatch.delenv("NUM_CPU_WORKERS", raising=False)
+    monkeypatch.setenv("SLURM_CPUS_PER_TASK", "16")
+    monkeypatch.setattr(mark3_embed, "cgroup_cpu_quota_count", lambda: None)
+    monkeypatch.setattr(mark3_embed.os, "sched_getaffinity", lambda _pid: set(range(64)), raising=False)
+
+    assert mark3_embed.cpu_default() == 16
