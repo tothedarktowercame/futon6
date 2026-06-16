@@ -1,0 +1,890 @@
+{
+  "paper-id": "0905.0465",
+  "records": [
+    {
+      "char-anchor": [
+        8441,
+        8457
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "baezdolan",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{baezdolan}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Baez, J. and J. Dolan. Higher-Dimensional Algebra and Topological Qauntum Field Theory. J. Math. Phys. 36 (11), 1995, 6073--6105",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Higher-Dimensional Algebra and Topological Qauntum Field Theory"
+    },
+    {
+      "char-anchor": [
+        11002,
+        11018
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "baezdolan",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{baezdolan}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Baez, J. and J. Dolan. Higher-Dimensional Algebra and Topological Qauntum Field Theory. J. Math. Phys. 36 (11), 1995, 6073--6105",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Higher-Dimensional Algebra and Topological Qauntum Field Theory"
+    },
+    {
+      "char-anchor": [
+        11131,
+        11146
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "costello",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{costello}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Costello, K. Topological conformal field theories and Calabi-Yau categories. Adv. Math. 210 (1), 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Topological conformal field theories and Calabi-Yau categories"
+    },
+    {
+      "char-anchor": [
+        12986,
+        12999
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "atiyah",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{atiyah}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Atiyah, M.F. Topological quantum field theories. Publications Mathematiques de l'IHES, 68 (1988), p. 175-186",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Topological quantum field theories"
+    },
+    {
+      "char-anchor": [
+        15693,
+        15707
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "maclane",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{maclane}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "MacLane, S. Categories for the Working Mathematician. Second edition. Graduate Texts in Mathematics, 5. Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the Working Mathematician"
+    },
+    {
+      "char-anchor": [
+        16942,
+        16956
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "maclane",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{maclane}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "MacLane, S. Categories for the Working Mathematician. Second edition. Graduate Texts in Mathematics, 5. Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the Working Mathematician"
+    },
+    {
+      "char-anchor": [
+        65640,
+        65656
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "baezdolan",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{baezdolan}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Baez, J. and J. Dolan. Higher-Dimensional Algebra and Topological Qauntum Field Theory. J. Math. Phys. 36 (11), 1995, 6073--6105",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Higher-Dimensional Algebra and Topological Qauntum Field Theory"
+    },
+    {
+      "char-anchor": [
+        65852,
+        65862
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "csp",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{csp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Schommer-Pries, C. Classification of Extended 2D Topological Field Theories. PhD dissertation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Classification of Extended 2D Topological Field Theories"
+    },
+    {
+      "char-anchor": [
+        68174,
+        68187
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "tricat",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{tricat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Gordon, R., A.J. Power, and R. Street. Coherence for Tricategories. Mem. Amer. Math. Soc. 117(558), American Mathematical Society, Providence, R.I., 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence for Tricategories"
+    },
+    {
+      "char-anchor": [
+        79216,
+        79228
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "bicat",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{bicat}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0905.0462",
+      "resolved-corpus-id": "0905.0462",
+      "title": "(Infinity,2)-Categories and the Goodwillie Calculus I"
+    },
+    {
+      "char-anchor": [
+        107470,
+        107481
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "dag3",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{dag3}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0703204",
+      "resolved-corpus-id": "math__0703204",
+      "title": "Derived Algebraic Geometry III: Commutative Algebra"
+    },
+    {
+      "char-anchor": [
+        109582,
+        109594
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "bicat",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{bicat}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0905.0462",
+      "resolved-corpus-id": "0905.0462",
+      "title": "(Infinity,2)-Categories and the Goodwillie Calculus I"
+    },
+    {
+      "char-anchor": [
+        135170,
+        135185
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "bergner2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{bergner2}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0610239",
+      "resolved-corpus-id": "math__0610239",
+      "title": "A survey of (\\infty, 1)-categories"
+    },
+    {
+      "char-anchor": [
+        135477,
+        135492
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "toenchar",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{toenchar}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Toen, B. Vers une axiomatisation de la theorie des categories superiures. K-theory 34(3), 2005, 233--263",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        144593,
+        144605
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "bicat",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{bicat}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0905.0462",
+      "resolved-corpus-id": "0905.0462",
+      "title": "(Infinity,2)-Categories and the Goodwillie Calculus I"
+    },
+    {
+      "char-anchor": [
+        153971,
+        153984
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "soren2",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{soren2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Galatius, S. Stable homology of automorphism groups of free groups. Available for download at math.AT/0610216",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Stable homology of automorphism groups of free groups"
+    },
+    {
+      "char-anchor": [
+        159081,
+        159094
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "soren2",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{soren2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Galatius, S. Stable homology of automorphism groups of free groups. Available for download at math.AT/0610216",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Stable homology of automorphism groups of free groups"
+    },
+    {
+      "char-anchor": [
+        220096,
+        220114
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "madsenweiss",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{madsenweiss}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Madsen, I., and M. Weiss. The stable moduli space of Riemann surfaces: Mumford's conjecture. Ann. of Math. 165 (3), 2007, 843--941",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The stable moduli space of Riemann surfaces: Mumford's conjecture"
+    },
+    {
+      "char-anchor": [
+        225517,
+        225530
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "soren1",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{soren1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Galatius, S., I. Madsen, U. Tillmann, and M. Weiss. The Homotopy Type of the Cobordism Category. Acta Math., to appear",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Homotopy Type of the Cobordism Category"
+    },
+    {
+      "char-anchor": [
+        226729,
+        226740
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "thom",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{thom}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Thom. Quelques proprietes globales des varietes differentiables. Commentarii Mathematici Helvetici 28, 1954, 17--86",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        304965,
+        304975
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "htt",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{htt}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        338931,
+        338943
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "igusa",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{igusa}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Igusa, K. K The space of framed functions. Trans. Amer. Math. Soc. 301, 1987, 431--477",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "K The space of framed functions"
+    },
+    {
+      "char-anchor": [
+        400551,
+        400563
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "igusa",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{igusa}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Igusa, K. K The space of framed functions. Trans. Amer. Math. Soc. 301, 1987, 431--477",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "K The space of framed functions"
+    },
+    {
+      "char-anchor": [
+        406798,
+        406813
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "costello",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{costello}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Costello, K. Topological conformal field theories and Calabi-Yau categories. Adv. Math. 210 (1), 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Topological conformal field theories and Calabi-Yau categories"
+    },
+    {
+      "char-anchor": [
+        406886,
+        406905
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "chassullivan",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{chassullivan}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Chas, M., and D. Sullivan. String Topology",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "String Topology"
+    },
+    {
+      "char-anchor": [
+        413349,
+        413359
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "htt",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{htt}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        414034,
+        414045
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "dag2",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{dag2}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0702299",
+      "resolved-corpus-id": "math__0702299",
+      "title": "Derived Algebraic Geometry II: Noncommutative Algebra"
+    },
+    {
+      "char-anchor": [
+        418907,
+        418917
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "may",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{may}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "May, J. P. The Geometry of Iterated Loop Spaces. Springer-Verlag, Berlin and New York, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Geometry of Iterated Loop Spaces"
+    },
+    {
+      "char-anchor": [
+        422840,
+        422856
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "beilinson",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{beilinson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Beilinson, A., and V. Drinfeld. Chiral Algebras. Colloquium Publications 51, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Algebras"
+    },
+    {
+      "char-anchor": [
+        430130,
+        430147
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "toensmooth",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{toensmooth}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Toen, B. Homotopical finiteness of smooth and proper dg-algebras. Available for download as math.AT/0609762",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopical finiteness of smooth and proper dg-algebras"
+    },
+    {
+      "char-anchor": [
+        430472,
+        430487
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "costello",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{costello}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Costello, K. Topological conformal field theories and Calabi-Yau categories. Adv. Math. 210 (1), 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Topological conformal field theories and Calabi-Yau categories"
+    },
+    {
+      "char-anchor": [
+        430596,
+        430615
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "chassullivan",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{chassullivan}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Chas, M., and D. Sullivan. String Topology",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "String Topology"
+    },
+    {
+      "char-anchor": [
+        447063,
+        447078
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "costello",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{costello}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Costello, K. Topological conformal field theories and Calabi-Yau categories. Adv. Math. 210 (1), 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Topological conformal field theories and Calabi-Yau categories"
+    },
+    {
+      "char-anchor": [
+        447503,
+        447518
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "costello",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{costello}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Costello, K. Topological conformal field theories and Calabi-Yau categories. Adv. Math. 210 (1), 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Topological conformal field theories and Calabi-Yau categories"
+    },
+    {
+      "char-anchor": [
+        447899,
+        447909
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "htt",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{htt}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        450045,
+        450055
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "htt",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{htt}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        450328,
+        450343
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "vogtmann",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{vogtmann}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Culler, M., and K. Vogtmann. Moduli of graphs and automorphisms of free groups. Inventiones Mathematicae 84 (1): 91--119",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Moduli of graphs and automorphisms of free groups"
+    },
+    {
+      "char-anchor": [
+        450379,
+        450390
+      ],
+      "cite/group-marker": "[?]",
+      "cite/key": "wahl",
+      "cite/marker": "[?]",
+      "cite/raw": "\\cite{wahl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": null,
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        450631,
+        450650
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "chassullivan",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{chassullivan}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Chas, M., and D. Sullivan. String Topology",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "String Topology"
+    },
+    {
+      "char-anchor": [
+        452327,
+        452346
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "chassullivan",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{chassullivan}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Chas, M., and D. Sullivan. String Topology",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "String Topology"
+    },
+    {
+      "char-anchor": [
+        473581,
+        473592
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "baas",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{baas}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Baas, N. On bordism theory of manifolds with singularities. Math. Scand. 33, 1973, 279--302",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On bordism theory of manifolds with singularities"
+    },
+    {
+      "char-anchor": [
+        496719,
+        496735
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "baezdolan",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{baezdolan}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Baez, J. and J. Dolan. Higher-Dimensional Algebra and Topological Qauntum Field Theory. J. Math. Phys. 36 (11), 1995, 6073--6105",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Higher-Dimensional Algebra and Topological Qauntum Field Theory"
+    },
+    {
+      "char-anchor": [
+        501006,
+        501016
+      ],
+      "cite/group-marker": "[?]",
+      "cite/key": "???",
+      "cite/marker": "[?]",
+      "cite/raw": "\\cite{???}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": null,
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        509578,
+        509588
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "htt",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{htt}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        515269,
+        515279
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "htt",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{htt}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        520282,
+        520297
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "kirillov",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{kirillov}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bakalov, B., and A. Kirillov. Lectures on Tensor Categories and Modular Functors. AMS University Lecture Series 21, 2001",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on Tensor Categories and Modular Functors"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-0905.0465-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 34,
+    "resolution-rate": 0.2609,
+    "resolved": 12,
+    "total": 46
+  }
+}

@@ -1,0 +1,970 @@
+{
+  "paper-id": "1110.0605",
+  "records": [
+    {
+      "char-anchor": [
+        5801,
+        5810
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "GU",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{GU}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Gabriel and F. Ulmer, Lokal Pr asentierbare Kategorien , Lect. Notes in Math. 221, Springer-Verlag 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lokal Pr asentierbare Kategorien"
+    },
+    {
+      "char-anchor": [
+        5916,
+        5925
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "MP",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{MP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Makkai and R. Par e, Accessible Categories: The Foundation of Categorical Model Theory , Cont. Math. 104, AMS 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Accessible Categories: The Foundation of Categorical Model Theory"
+    },
+    {
+      "char-anchor": [
+        6275,
+        6300
+      ],
+      "cite/group-marker": "[5,15,16]",
+      "cite/key": "Beke",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{Beke,D-universal,D}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0102087",
+      "resolved-corpus-id": "math__0102087",
+      "title": "Sheafifiable homotopy model categories"
+    },
+    {
+      "char-anchor": [
+        6275,
+        6300
+      ],
+      "cite/group-marker": "[5,15,16]",
+      "cite/key": "D-universal",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{Beke,D-universal,D}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0007070",
+      "resolved-corpus-id": "math__0007070",
+      "title": "Universal homotopy theories"
+    },
+    {
+      "char-anchor": [
+        6275,
+        6300
+      ],
+      "cite/group-marker": "[5,15,16]",
+      "cite/key": "D",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Beke,D-universal,D}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Dugger, Combinatorial model categories have presentations , Adv. Math. 164 (2001), 177-201",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Combinatorial model categories have presentations"
+    },
+    {
+      "char-anchor": [
+        6454,
+        6475
+      ],
+      "cite/group-marker": "[6,11,13,20]",
+      "cite/key": "BCR",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BCR, CD, CI, I}",
+      "confidence": 0.8643,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1208.1919",
+      "resolved-corpus-id": "1208.1919",
+      "title": "On calculus of functors in model categories"
+    },
+    {
+      "char-anchor": [
+        6454,
+        6475
+      ],
+      "cite/group-marker": "[6,11,13,20]",
+      "cite/key": "CD",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{BCR, CD, CI, I}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0607117",
+      "resolved-corpus-id": "math__0607117",
+      "title": "Homotopy theory of small diagrams over large categories"
+    },
+    {
+      "char-anchor": [
+        6454,
+        6475
+      ],
+      "cite/group-marker": "[6,11,13,20]",
+      "cite/key": "CI",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{BCR, CD, CI, I}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Christensen and D. Isaksen, Duality and pro-spectra, Algebr. Geom. Topol. 4 (2004), 781-812",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Duality and pro-spectra"
+    },
+    {
+      "char-anchor": [
+        6454,
+        6475
+      ],
+      "cite/group-marker": "[6,11,13,20]",
+      "cite/key": "I",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{BCR, CD, CI, I}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Isaksen, A model structure on the category of pro-simplicial sets, Trans. Amer. Math. Soc. 353 (2001), 2805--2841",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A model structure on the category of pro-simplicial sets"
+    },
+    {
+      "char-anchor": [
+        6743,
+        6752
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "CR",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{CR}",
+      "confidence": 0.95,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.4252",
+      "resolved-corpus-id": "1110.4252",
+      "title": "Class-combinatorial model categories"
+    },
+    {
+      "char-anchor": [
+        7237,
+        7246
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "MP",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{MP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Makkai and R. Par e, Accessible Categories: The Foundation of Categorical Model Theory , Cont. Math. 104, AMS 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Accessible Categories: The Foundation of Categorical Model Theory"
+    },
+    {
+      "char-anchor": [
+        7279,
+        7288
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BH",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BH}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Banaschewski and H. Herrlich, Subcategories defined by implications , Houston J. Math. 2 (1976), 149-171",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Subcategories defined by implications"
+    },
+    {
+      "char-anchor": [
+        7899,
+        7908
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "CR",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{CR}",
+      "confidence": 0.95,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.4252",
+      "resolved-corpus-id": "1110.4252",
+      "title": "Class-combinatorial model categories"
+    },
+    {
+      "char-anchor": [
+        7969,
+        7979
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BCR",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BCR}",
+      "confidence": 0.8643,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1208.1919",
+      "resolved-corpus-id": "1208.1919",
+      "title": "On calculus of functors in model categories"
+    },
+    {
+      "char-anchor": [
+        7981,
+        7989
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "C",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{C}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0401424",
+      "resolved-corpus-id": "math__0401424",
+      "title": "A generalization of Quillen's small object argument"
+    },
+    {
+      "char-anchor": [
+        7991,
+        8000
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "C1",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{C1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Chorny, Brown representability for space-valued functors , Israel J. Math., to appear",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Brown representability for space-valued functors"
+    },
+    {
+      "char-anchor": [
+        8005,
+        8014
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "CD",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{CD}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0607117",
+      "resolved-corpus-id": "math__0607117",
+      "title": "Homotopy theory of small diagrams over large categories"
+    },
+    {
+      "char-anchor": [
+        8416,
+        8424
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "W",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{W}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. C. Waterhouse, Basically bounded functors and flat sheaves , Pac. J. Math. 87 (1975), 597-610",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basically bounded functors and flat sheaves"
+    },
+    {
+      "char-anchor": [
+        8857,
+        8866
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "Dr",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{Dr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. Dror Farjoun, Homotopy theories for diagrams of spaces , Proc. Amer. Math. Soc. 101 (1987), 181-189",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy theories for diagrams of spaces"
+    },
+    {
+      "char-anchor": [
+        9885,
+        9894
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        9898,
+        9907
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "MP",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{MP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Makkai and R. Par e, Accessible Categories: The Foundation of Categorical Model Theory , Cont. Math. 104, AMS 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Accessible Categories: The Foundation of Categorical Model Theory"
+    },
+    {
+      "char-anchor": [
+        12344,
+        12354
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "AGV",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{AGV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Artin, A. Grothendieck and J. L. Verdier, Th eorie des Topos et Cohomologie Etale des Sch emas , Lect. Notes in Math. 269, Springer-Verlag 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Th eorie des Topos et Cohomologie Etale des Sch emas"
+    },
+    {
+      "char-anchor": [
+        13165,
+        13174
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        13950,
+        13959
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        15403,
+        15412
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        16785,
+        16796
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AHRT",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AHRT}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Adamek, H. Herrlich, J. Rosicky and W. Tholen, On a generalized small-object argument for the injective subcategory problem , Cah. Top. G eom. Diff. Cat. XLIII (2002), 83-106",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On a generalized small-object argument for the injective subcategory problem"
+    },
+    {
+      "char-anchor": [
+        17620,
+        17628
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "F",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{F}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Freyd, Several new concepts: Lucid and concordant functors, pre-limits, pre-completeness, the continuous and concordant completions of categories , Lect. Notes in Math. 99 (1969), 196-241",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Several new concepts: Lucid and concordant functors, pre-limits, pre-completeness, the continuous and concordant completions of categories"
+    },
+    {
+      "char-anchor": [
+        17633,
+        17641
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "R",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{R}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Rosick y, Cartesian closed exact completions , J. Pure Appl. Alg. 142 (1999), 261-270",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Cartesian closed exact completions"
+    },
+    {
+      "char-anchor": [
+        18236,
+        18245
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        19197,
+        19205
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "F",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{F}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Freyd, Several new concepts: Lucid and concordant functors, pre-limits, pre-completeness, the continuous and concordant completions of categories , Lect. Notes in Math. 99 (1969), 196-241",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Several new concepts: Lucid and concordant functors, pre-limits, pre-completeness, the continuous and concordant completions of categories"
+    },
+    {
+      "char-anchor": [
+        19211,
+        19219
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "R",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{R}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Rosick y, Cartesian closed exact completions , J. Pure Appl. Alg. 142 (1999), 261-270",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Cartesian closed exact completions"
+    },
+    {
+      "char-anchor": [
+        21724,
+        21733
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "MP",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{MP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Makkai and R. Par e, Accessible Categories: The Foundation of Categorical Model Theory , Cont. Math. 104, AMS 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Accessible Categories: The Foundation of Categorical Model Theory"
+    },
+    {
+      "char-anchor": [
+        21746,
+        21755
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        22735,
+        22744
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        23611,
+        23620
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "MP",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{MP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Makkai and R. Par e, Accessible Categories: The Foundation of Categorical Model Theory , Cont. Math. 104, AMS 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Accessible Categories: The Foundation of Categorical Model Theory"
+    },
+    {
+      "char-anchor": [
+        28523,
+        28539
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "MP",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[5.1.1]{MP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Makkai and R. Par e, Accessible Categories: The Foundation of Categorical Model Theory , Cont. Math. 104, AMS 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Accessible Categories: The Foundation of Categorical Model Theory"
+    },
+    {
+      "char-anchor": [
+        28644,
+        28653
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        29595,
+        29604
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        30120,
+        30129
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "MP",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{MP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Makkai and R. Par e, Accessible Categories: The Foundation of Categorical Model Theory , Cont. Math. 104, AMS 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Accessible Categories: The Foundation of Categorical Model Theory"
+    },
+    {
+      "char-anchor": [
+        31048,
+        31057
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "R2",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{R2}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0708.2185",
+      "resolved-corpus-id": "0708.2185",
+      "title": "On combinatorial model categories"
+    },
+    {
+      "char-anchor": [
+        35674,
+        35683
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        36103,
+        36112
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        37330,
+        37339
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        37563,
+        37574
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "Beke",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{Beke}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0102087",
+      "resolved-corpus-id": "math__0102087",
+      "title": "Sheafifiable homotopy model categories"
+    },
+    {
+      "char-anchor": [
+        40109,
+        40118
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AR",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AR}",
+      "confidence": 0.8412,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1110.0605",
+      "resolved-corpus-id": "1110.0605",
+      "title": "Locally class-presentable and class-accessible categories"
+    },
+    {
+      "char-anchor": [
+        40201,
+        40210
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "Dr",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{Dr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. Dror Farjoun, Homotopy theories for diagrams of spaces , Proc. Amer. Math. Soc. 101 (1987), 181-189",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy theories for diagrams of spaces"
+    },
+    {
+      "char-anchor": [
+        41029,
+        41037
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "C",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{C}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0401424",
+      "resolved-corpus-id": "math__0401424",
+      "title": "A generalization of Quillen's small object argument"
+    },
+    {
+      "char-anchor": [
+        41141,
+        41150
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "Dr",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{Dr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. Dror Farjoun, Homotopy theories for diagrams of spaces , Proc. Amer. Math. Soc. 101 (1987), 181-189",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy theories for diagrams of spaces"
+    },
+    {
+      "char-anchor": [
+        44721,
+        44729
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "D",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{D}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Dugger, Combinatorial model categories have presentations , Adv. Math. 164 (2001), 177-201",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Combinatorial model categories have presentations"
+    },
+    {
+      "char-anchor": [
+        44739,
+        44748
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "R1",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{R1}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0506168",
+      "resolved-corpus-id": "math__0506168",
+      "title": "Generalized Brown representability in homotopy categories"
+    },
+    {
+      "char-anchor": [
+        59296,
+        59305
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Bo",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Bo}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. K. Bousfield, Constructions of factorization systems in categories , J. Pure Appl. Algebra 9 (1976/77), 207-220",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Constructions of factorization systems in categories"
+    },
+    {
+      "char-anchor": [
+        59445,
+        59454
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "FR",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{FR}",
+      "confidence": 0.95,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0708.3937",
+      "resolved-corpus-id": "0708.3937",
+      "title": "A convenient category for directed homotopy"
+    },
+    {
+      "char-anchor": [
+        63934,
+        63942
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "W",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{W}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. C. Waterhouse, Basically bounded functors and flat sheaves , Pac. J. Math. 87 (1975), 597-610",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basically bounded functors and flat sheaves"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-1110.0605-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 26,
+    "resolution-rate": 0.5094,
+    "resolved": 27,
+    "total": 53
+  }
+}

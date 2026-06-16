@@ -1,0 +1,362 @@
+{
+  "paper-id": "0905.0462",
+  "records": [
+    {
+      "char-anchor": [
+        27116,
+        27127
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "EKMM",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{EKMM}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Elmendorf, A.D., Kriz, I. , Mandell, M.A., and J.P. May. Rings, modules and algebras in stable homotopy theory. Mathematical Surveys and Monographs 47, American Mathematical Society, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rings, modules and algebras in stable homotopy theory"
+    },
+    {
+      "char-anchor": [
+        31018,
+        31030
+      ],
+      "cite/group-marker": "[80]",
+      "cite/key": "hakim",
+      "cite/marker": "[80]",
+      "cite/raw": "\\cite{hakim}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Hakim, M. Topoes anneles et schemas relatifs. Springer-Verlag, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        44819,
+        44831
+      ],
+      "cite/group-marker": "[40]",
+      "cite/key": "topoi",
+      "cite/marker": "[40]",
+      "cite/raw": "\\cite{topoi}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        45966,
+        45980
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "bergner",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{bergner}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0406507",
+      "resolved-corpus-id": "math__0406507",
+      "title": "A model category structure on the category of simplicial categories"
+    },
+    {
+      "char-anchor": [
+        46541,
+        46561
+      ],
+      "cite/group-marker": "[55]",
+      "cite/key": "completesegal",
+      "cite/marker": "[55]",
+      "cite/raw": "\\cite{completesegal}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/9811037",
+      "resolved-corpus-id": "math__9811037",
+      "title": "A model for the homotopy theory of homotopy theory"
+    },
+    {
+      "char-anchor": [
+        46850,
+        46866
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "joyalsimp",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{joyalsimp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Joyal, A. Simplicial categories vs. quasi-categories",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Simplicial categories vs. quasi-categories"
+    },
+    {
+      "char-anchor": [
+        47251,
+        47264
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "joyalt",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{joyalt}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Joyal, A. and M. Tierney. Quasi-categories vs. Segal Spaces. Preprint available at math.AT/0607820",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-categories vs. Segal Spaces"
+    },
+    {
+      "char-anchor": [
+        47749,
+        47764
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "bergner4",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{bergner4}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0504334",
+      "resolved-corpus-id": "math__0504334",
+      "title": "Three models for the homotopy theory of homotopy theories"
+    },
+    {
+      "char-anchor": [
+        48049,
+        48064
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "bergner4",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{bergner4}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0504334",
+      "resolved-corpus-id": "math__0504334",
+      "title": "Three models for the homotopy theory of homotopy theories"
+    },
+    {
+      "char-anchor": [
+        59860,
+        59873
+      ],
+      "cite/group-marker": "[71]",
+      "cite/key": "verity",
+      "cite/marker": "[71]",
+      "cite/raw": "\\cite{verity}",
+      "confidence": 0.9576,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0604414",
+      "resolved-corpus-id": "math__0604414",
+      "title": "Weak complicial sets, a simplicial weak omega-category theory. Part I: basic homotopy theory"
+    },
+    {
+      "char-anchor": [
+        59878,
+        59892
+      ],
+      "cite/group-marker": "[72]",
+      "cite/key": "verity2",
+      "cite/marker": "[72]",
+      "cite/raw": "\\cite{verity2}",
+      "confidence": 0.9626,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0604416",
+      "resolved-corpus-id": "math__0604416",
+      "title": "Weak complicial sets, a simplicial weak omega-category theory. Part II: nerves of complicial Gray-categories"
+    },
+    {
+      "char-anchor": [
+        61312,
+        61327
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "calculus",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{calculus}",
+      "confidence": 0.8941,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0905.0462",
+      "resolved-corpus-id": "0905.0462",
+      "title": "(Infinity,2)-Categories and the Goodwillie Calculus I"
+    },
+    {
+      "char-anchor": [
+        212896,
+        212912
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "combmodel",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{combmodel}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Dugger, D. Combinatorial model categories have presentations. Advances in Mathematics 164, 2001, 177-201",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Combinatorial model categories have presentations"
+    },
+    {
+      "char-anchor": [
+        675831,
+        675846
+      ],
+      "cite/group-marker": "[65]",
+      "cite/key": "toenchar",
+      "cite/marker": "[65]",
+      "cite/raw": "\\cite{toenchar}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Toen, B. Vers une axiomatisation de la theorie des categories superiures. K-theory 34 (2005), no. 3, 233-263",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        721519,
+        721537
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "goodwillieI",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{goodwillieI}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Goodwillie, T. Calculus I: The rst derivative of pseudoisotopy theory. K-Theory 4 (1990), no. 1, 127",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Calculus I: The rst derivative of pseudoisotopy theory"
+    },
+    {
+      "char-anchor": [
+        721539,
+        721558
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "goodwillieII",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{goodwillieII}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Goodwillie, T. Calculus. II. Analytic functors. K-Theory 5 (1991/92), no. 4, 295332",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Calculus. II. Analytic functors"
+    },
+    {
+      "char-anchor": [
+        721564,
+        721581
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "goodwillie",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{goodwillie}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Goodwillie, T. Calculus III: Taylor Series. Geometry and Topology, Volume 7 (2003) 645-711",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Calculus III: Taylor Series"
+    },
+    {
+      "char-anchor": [
+        721593,
+        721605
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "klein",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{klein}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Klein, J. and J. Rognes. A chain rule in the calculus of homotopy functors. Geom. Topol. 6 (2002), 853887",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A chain rule in the calculus of homotopy functors"
+    },
+    {
+      "char-anchor": [
+        721610,
+        721627
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "chingarone",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{chingarone}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0902.0399",
+      "resolved-corpus-id": "0902.0399",
+      "title": "Operads and chain rules for the calculus of functors"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-0905.0462-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 10,
+    "resolution-rate": 0.4737,
+    "resolved": 9,
+    "total": 19
+  }
+}

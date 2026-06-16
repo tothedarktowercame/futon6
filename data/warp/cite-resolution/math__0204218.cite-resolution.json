@@ -1,0 +1,1998 @@
+{
+  "paper-id": "math__0204218",
+  "records": [
+    {
+      "char-anchor": [
+        9349,
+        9363
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Bondal4",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Bondal4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Representable functors, S erre functors, and mutations , Izv. Akad. Nauk SSSR Ser. Mat. 53 (1989), no. 6, 1183--1205, 1337",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "53"
+    },
+    {
+      "char-anchor": [
+        9932,
+        9946
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Bondal4",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Bondal4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Representable functors, S erre functors, and mutations , Izv. Akad. Nauk SSSR Ser. Mat. 53 (1989), no. 6, 1183--1205, 1337",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "53"
+    },
+    {
+      "char-anchor": [
+        10610,
+        10624
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "Bondal3",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Bondal3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal, Non-commutative deformations and P oisson brackets on projective spaces , MPI-preprint, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        14204,
+        14218
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "Keller4",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{Keller4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, A_ algebras and triangulated categories , in preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        15725,
+        15738
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "ReVdB1",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{ReVdB1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "I. Reiten and M. Van den Bergh, Noetherian hereditary categories satisfying S erre duality , to appear",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        16635,
+        16644
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "Ri",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{Ri}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Rickard, Morita theory for derived categories , J. London Math. Soc. (2) 39 (1989), 436--456",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Morita theory for derived categories"
+    },
+    {
+      "char-anchor": [
+        17826,
+        17839
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Neeman",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Neeman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. B ockstedt and A. Neeman, Homotopy limits in triangulated categories , Compositio Math. 86 (1993), 209--234",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy limits in triangulated categories"
+    },
+    {
+      "char-anchor": [
+        18196,
+        18210
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "Neeman3",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{Neeman3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "The connection between the K -theory localization theorem of T homason, T robaugh and Y ao and the smashing subcategories of B ousfield and R avenel , Ann. Sci. Ecole Norm. Sup. (4) 25 (1992), no. 5, 547--566",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "25"
+    },
+    {
+      "char-anchor": [
+        18987,
+        18997
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BBD",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BBD}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Beilinson, J. Bernstein, and P. Deligne, Faisceaux pervers , Ast erisque, vol. 100, Soc. Math. France, 1983",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Faisceaux pervers"
+    },
+    {
+      "char-anchor": [
+        23087,
+        23109
+      ],
+      "cite/group-marker": "[20,26]",
+      "cite/key": "Keller1",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{Keller1,Neeman1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Deriving DG -categories , Ann. Sci. Ecole Norm. Sup. (4) 27 (1994), 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "27"
+    },
+    {
+      "char-anchor": [
+        23087,
+        23109
+      ],
+      "cite/group-marker": "[20,26]",
+      "cite/key": "Neeman1",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{Keller1,Neeman1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "The G rothendieck duality theorem via B ousfield's techniques and B rown representability , J. Amer. Math. Soc. 9 (1996), 205--236",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "9"
+    },
+    {
+      "char-anchor": [
+        24117,
+        24138
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "Keller1",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite[\\S5.3]{Keller1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Deriving DG -categories , Ann. Sci. Ecole Norm. Sup. (4) 27 (1994), 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "27"
+    },
+    {
+      "char-anchor": [
+        25936,
+        25948
+      ],
+      "cite/group-marker": "[?]",
+      "cite/key": "Groth",
+      "cite/marker": "[?]",
+      "cite/raw": "\\cite{Groth}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": null,
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26736,
+        26747
+      ],
+      "cite/group-marker": "[?]",
+      "cite/key": "SGA4",
+      "cite/marker": "[?]",
+      "cite/raw": "\\cite{SGA4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": null,
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        27609,
+        27625
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "Kapranov1",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{Kapranov1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov, On the q -analog of homological algebra , available as q-alg/9611005",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        32603,
+        32625
+      ],
+      "cite/group-marker": "[20,26]",
+      "cite/key": "Keller1",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{Keller1,Neeman1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Deriving DG -categories , Ann. Sci. Ecole Norm. Sup. (4) 27 (1994), 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "27"
+    },
+    {
+      "char-anchor": [
+        32603,
+        32625
+      ],
+      "cite/group-marker": "[20,26]",
+      "cite/key": "Neeman1",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{Keller1,Neeman1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "The G rothendieck duality theorem via B ousfield's techniques and B rown representability , J. Amer. Math. Soc. 9 (1996), 205--236",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "9"
+    },
+    {
+      "char-anchor": [
+        36851,
+        36864
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "ReVdB1",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{ReVdB1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "I. Reiten and M. Van den Bergh, Noetherian hereditary categories satisfying S erre duality , to appear",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        38513,
+        38531
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "KSI",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite[1.7.11]{KSI}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kashiwara and P. Schapira, Sheaves on manifolds , Die Grundlehren der mathematischen Wissenschaften, vol. 292, Springer Verlag, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sheaves on manifolds"
+    },
+    {
+      "char-anchor": [
+        40600,
+        40616
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "thomasson",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{thomasson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Thomason and T. Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, vol. 3, Birkh auser, 1990, pp. 247--435",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        41732,
+        41760
+      ],
+      "cite/group-marker": "[1,7,21]",
+      "cite/key": "Lipman1",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{Lipman1,Neeman,Keller}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Alonso Tarr io, A. Jerem ias L opez, and J. Lipman, Local homology and cohomology on schemes , Ann. Sci. Ecole Norm. Sup. (4) 30 (1997), no. 1, 1--39",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Local homology and cohomology on schemes"
+    },
+    {
+      "char-anchor": [
+        41732,
+        41760
+      ],
+      "cite/group-marker": "[1,7,21]",
+      "cite/key": "Neeman",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Lipman1,Neeman,Keller}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. B ockstedt and A. Neeman, Homotopy limits in triangulated categories , Compositio Math. 86 (1993), 209--234",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy limits in triangulated categories"
+    },
+    {
+      "char-anchor": [
+        41732,
+        41760
+      ],
+      "cite/group-marker": "[1,7,21]",
+      "cite/key": "Keller",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{Lipman1,Neeman,Keller}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Introduction to A -infinity algebras and modules , Homology Homotopy Appl. 3 (2001), no. 1, 1--35 (electronic)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "3"
+    },
+    {
+      "char-anchor": [
+        42061,
+        42082
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "Illusie",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite[App I]{Illusie}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Illusie, Existence de r esolutions globales , SGA6, Lecture Notes in Math., vol. 225, Springer Verlag, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        43220,
+        43234
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "Bondal2",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{Bondal2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Representations of associative algebras and coherent sheaves , Izv. Akad. Nauk SSSR Ser. Mat. 53 (1989), 25--44",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations of associative algebras and coherent sheaves"
+    },
+    {
+      "char-anchor": [
+        43566,
+        43580
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "Keller4",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{Keller4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, A_ algebras and triangulated categories , in preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        44621,
+        44637
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "thomasson",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{thomasson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Thomason and T. Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, vol. 3, Birkh auser, 1990, pp. 247--435",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        44682,
+        44705
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "Neeman3",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite[Thm 2.1]{Neeman3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "The connection between the K -theory localization theorem of T homason, T robaugh and Y ao and the smashing subcategories of B ousfield and R avenel , Ann. Sci. Ecole Norm. Sup. (4) 25 (1992), no. 5, 547--566",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "25"
+    },
+    {
+      "char-anchor": [
+        45413,
+        45436
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "Neeman3",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite[Thm 2.1]{Neeman3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "The connection between the K -theory localization theorem of T homason, T robaugh and Y ao and the smashing subcategories of B ousfield and R avenel , Ann. Sci. Ecole Norm. Sup. (4) 25 (1992), no. 5, 547--566",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "25"
+    },
+    {
+      "char-anchor": [
+        46815,
+        46829
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "Neeman3",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{Neeman3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "The connection between the K -theory localization theorem of T homason, T robaugh and Y ao and the smashing subcategories of B ousfield and R avenel , Ann. Sci. Ecole Norm. Sup. (4) 25 (1992), no. 5, 547--566",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "25"
+    },
+    {
+      "char-anchor": [
+        46860,
+        46889
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "thomasson",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite[Prop. 5.5.4]{thomasson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Thomason and T. Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, vol. 3, Birkh auser, 1990, pp. 247--435",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        52697,
+        52716
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Spaltenstein",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Spaltenstein}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes , Compositio Math. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Resolutions of unbounded complexes"
+    },
+    {
+      "char-anchor": [
+        52891,
+        52910
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Spaltenstein",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Spaltenstein}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes , Compositio Math. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Resolutions of unbounded complexes"
+    },
+    {
+      "char-anchor": [
+        53783,
+        53813
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Spaltenstein",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite[Prop. 6.1]{Spaltenstein}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes , Compositio Math. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Resolutions of unbounded complexes"
+    },
+    {
+      "char-anchor": [
+        55551,
+        55579
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Lipman",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Lemma 3.9.2.4]{Lipman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Lipman, Notes on derived categories and derived functors , available from http://www.math.purdu/ lipman",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Notes on derived categories and derived functors"
+    },
+    {
+      "char-anchor": [
+        57001,
+        57027
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Lipman",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Prop. 3.9.2]{Lipman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Lipman, Notes on derived categories and derived functors , available from http://www.math.purdu/ lipman",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Notes on derived categories and derived functors"
+    },
+    {
+      "char-anchor": [
+        57740,
+        57770
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Spaltenstein",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite[Prop 3.13]{Spaltenstein}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes , Compositio Math. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Resolutions of unbounded complexes"
+    },
+    {
+      "char-anchor": [
+        58491,
+        58522
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Spaltenstein",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite[Lemma 0.11]{Spaltenstein}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes , Compositio Math. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Resolutions of unbounded complexes"
+    },
+    {
+      "char-anchor": [
+        60182,
+        60210
+      ],
+      "cite/group-marker": "[1,7,21]",
+      "cite/key": "Lipman1",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{Lipman1,Neeman,Keller}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Alonso Tarr io, A. Jerem ias L opez, and J. Lipman, Local homology and cohomology on schemes , Ann. Sci. Ecole Norm. Sup. (4) 30 (1997), no. 1, 1--39",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Local homology and cohomology on schemes"
+    },
+    {
+      "char-anchor": [
+        60182,
+        60210
+      ],
+      "cite/group-marker": "[1,7,21]",
+      "cite/key": "Neeman",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Lipman1,Neeman,Keller}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. B ockstedt and A. Neeman, Homotopy limits in triangulated categories , Compositio Math. 86 (1993), 209--234",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy limits in triangulated categories"
+    },
+    {
+      "char-anchor": [
+        60182,
+        60210
+      ],
+      "cite/group-marker": "[1,7,21]",
+      "cite/key": "Keller",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{Lipman1,Neeman,Keller}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Introduction to A -infinity algebras and modules , Homology Homotopy Appl. 3 (2001), no. 1, 1--35 (electronic)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "3"
+    },
+    {
+      "char-anchor": [
+        60769,
+        60782
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Neeman",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Neeman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. B ockstedt and A. Neeman, Homotopy limits in triangulated categories , Compositio Math. 86 (1993), 209--234",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy limits in triangulated categories"
+    },
+    {
+      "char-anchor": [
+        61977,
+        62002
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "Neeman1",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[Prop. 2.5]{Neeman1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "The G rothendieck duality theorem via B ousfield's techniques and B rown representability , J. Amer. Math. Soc. 9 (1996), 205--236",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "9"
+    },
+    {
+      "char-anchor": [
+        62912,
+        62925
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Neeman",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Neeman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. B ockstedt and A. Neeman, Homotopy limits in triangulated categories , Compositio Math. 86 (1993), 209--234",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy limits in triangulated categories"
+    },
+    {
+      "char-anchor": [
+        64583,
+        64596
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Neeman",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Neeman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. B ockstedt and A. Neeman, Homotopy limits in triangulated categories , Compositio Math. 86 (1993), 209--234",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy limits in triangulated categories"
+    },
+    {
+      "char-anchor": [
+        64674,
+        64687
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Neeman",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Neeman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. B ockstedt and A. Neeman, Homotopy limits in triangulated categories , Compositio Math. 86 (1993), 209--234",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy limits in triangulated categories"
+    },
+    {
+      "char-anchor": [
+        66055,
+        66069
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "Neeman1",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{Neeman1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "The G rothendieck duality theorem via B ousfield's techniques and B rown representability , J. Amer. Math. Soc. 9 (1996), 205--236",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "9"
+    },
+    {
+      "char-anchor": [
+        68976,
+        68989
+      ],
+      "cite/group-marker": "[2,38]",
+      "cite/key": "AZ",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AZ, VO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Artin and J. J. Zhang, Noncommutative projective schemes , Adv. in Math. 109 (1994), no. 2, 228--287",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Noncommutative projective schemes"
+    },
+    {
+      "char-anchor": [
+        68976,
+        68989
+      ],
+      "cite/group-marker": "[2,38]",
+      "cite/key": "VO",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{AZ, VO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Van Oystaeyen, Graded A zumaya algebras and B rauer groups , Ring Theory 1980 (Berlin), Lecture Notes in Mathematics, vol. 825, Springer Verlag, Berlin, 1981",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        70141,
+        70153
+      ],
+      "cite/group-marker": "[37]",
+      "cite/key": "VdB16",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{VdB16}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Van den Bergh, Existence theorems for dualizing complexes over non-commutative graded and filtered rings , J. Algebra (1997), 662--679",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Existence theorems for dualizing complexes over non-commutative graded and filtered rings"
+    },
+    {
+      "char-anchor": [
+        72414,
+        72430
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "stenstrom",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{stenstrom}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Stenstr om, Rings of quotients , Die G rundlehren der mathematischen W issenschaften in E inzeldarstellungen, vol. 217, Springer Verlag, Berlin, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rings of quotients"
+    },
+    {
+      "char-anchor": [
+        73140,
+        73156
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "stenstrom",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{stenstrom}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Stenstr om, Rings of quotients , Die G rundlehren der mathematischen W issenschaften in E inzeldarstellungen, vol. 217, Springer Verlag, Berlin, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rings of quotients"
+    },
+    {
+      "char-anchor": [
+        75979,
+        75988
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "RD",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{RD}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Hartshorne, Residues and duality , Lecture notes in mathematics, vol. 20, Springer Verlag, Berlin, 1966",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Residues and duality"
+    },
+    {
+      "char-anchor": [
+        76969,
+        76978
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AZ",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Artin and J. J. Zhang, Noncommutative projective schemes , Adv. in Math. 109 (1994), no. 2, 228--287",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Noncommutative projective schemes"
+    },
+    {
+      "char-anchor": [
+        77123,
+        77145
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AZ",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite[Cor. 3.6(3)]{AZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Artin and J. J. Zhang, Noncommutative projective schemes , Adv. in Math. 109 (1994), no. 2, 228--287",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Noncommutative projective schemes"
+    },
+    {
+      "char-anchor": [
+        83079,
+        83092
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Neeman",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Neeman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. B ockstedt and A. Neeman, Homotopy limits in triangulated categories , Compositio Math. 86 (1993), 209--234",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy limits in triangulated categories"
+    },
+    {
+      "char-anchor": [
+        83668,
+        83696
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "RD",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite[Thm 5.1, Cor. 5.3]{RD}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Hartshorne, Residues and duality , Lecture notes in mathematics, vol. 20, Springer Verlag, Berlin, 1966",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Residues and duality"
+    },
+    {
+      "char-anchor": [
+        87326,
+        87335
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AZ",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Artin and J. J. Zhang, Noncommutative projective schemes , Adv. in Math. 109 (1994), no. 2, 228--287",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Noncommutative projective schemes"
+    },
+    {
+      "char-anchor": [
+        89641,
+        89659
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "KSI",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite[1.7.11]{KSI}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kashiwara and P. Schapira, Sheaves on manifolds , Die Grundlehren der mathematischen Wissenschaften, vol. 292, Springer Verlag, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sheaves on manifolds"
+    },
+    {
+      "char-anchor": [
+        91533,
+        91547
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Bondal4",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Bondal4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Representable functors, S erre functors, and mutations , Izv. Akad. Nauk SSSR Ser. Mat. 53 (1989), no. 6, 1183--1205, 1337",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "53"
+    },
+    {
+      "char-anchor": [
+        91923,
+        91935
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "ramis",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{ramis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-P. Ramis and G. Ruget, Complexe dualisant et th eor emes de dualit e en g eom etrie analytique complexe , Inst. Hautes Etudes Sci. Publ. Math. (1970), no. 38, 77--91",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        92779,
+        92793
+      ],
+      "cite/group-marker": "[39]",
+      "cite/key": "Verdier",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{Verdier}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-L. Verdier, Des cat egories d eriv ees des cat egories ab eliennes , Ast erisque (1996), no. 239, xii+253 pp. (1997), With a preface by Luc Illusie, Edited and with a note by Georges Maltsiniotis",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        94734,
+        94764
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "Illusie",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite[Lemma II.2.1.3]{Illusie}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Illusie, Existence de r esolutions globales , SGA6, Lecture Notes in Math., vol. 225, Springer Verlag, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        95389,
+        95399
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BBD",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BBD}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Beilinson, J. Bernstein, and P. Deligne, Faisceaux pervers , Ast erisque, vol. 100, Soc. Math. France, 1983",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Faisceaux pervers"
+    },
+    {
+      "char-anchor": [
+        97005,
+        97019
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "Quillen",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Quillen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972) (Berlin), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        97024,
+        97038
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "Neeman4",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{Neeman4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, The derived category of an exact category , J. Algebra 135 (1990), no. 2, 388--394",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The derived category of an exact category"
+    },
+    {
+      "char-anchor": [
+        97623,
+        97648
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "Neeman4",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite[Lemma 1.1]{Neeman4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, The derived category of an exact category , J. Algebra 135 (1990), no. 2, 388--394",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The derived category of an exact category"
+    },
+    {
+      "char-anchor": [
+        97862,
+        97887
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "Neeman4",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite[Lemma 1.2]{Neeman4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, The derived category of an exact category , J. Algebra 135 (1990), no. 2, 388--394",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The derived category of an exact category"
+    },
+    {
+      "char-anchor": [
+        99127,
+        99137
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "HRS",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{HRS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Happel, I. Reiten, and S. Smalo, Tilting in abelian categories and quasitilted algebra , Memoirs of the AMS, vol. 575, Amer. Math. Soc., 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tilting in abelian categories and quasitilted algebra"
+    },
+    {
+      "char-anchor": [
+        99830,
+        99853
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "HRS",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite[Prop. I.3.2]{HRS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Happel, I. Reiten, and S. Smalo, Tilting in abelian categories and quasitilted algebra , Memoirs of the AMS, vol. 575, Amer. Math. Soc., 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tilting in abelian categories and quasitilted algebra"
+    },
+    {
+      "char-anchor": [
+        100846,
+        100874
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BBD",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite[Ex.\\ 1.3.23(iii)]{BBD}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Beilinson, J. Bernstein, and P. Deligne, Faisceaux pervers , Ast erisque, vol. 100, Soc. Math. France, 1983",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Faisceaux pervers"
+    },
+    {
+      "char-anchor": [
+        101205,
+        101227
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "RD",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite[Lemma I.4.6]{RD}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Hartshorne, Residues and duality , Lecture notes in mathematics, vol. 20, Springer Verlag, Berlin, 1966",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Residues and duality"
+    },
+    {
+      "char-anchor": [
+        101943,
+        101953
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "HRS",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{HRS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Happel, I. Reiten, and S. Smalo, Tilting in abelian categories and quasitilted algebra , Memoirs of the AMS, vol. 575, Amer. Math. Soc., 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tilting in abelian categories and quasitilted algebra"
+    },
+    {
+      "char-anchor": [
+        110384,
+        110399
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "schuster",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{schuster}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "H.-W. Schuster, Locally free resolutions of coherent sheaves on surfaces , J. Reine Angew. Math. 337 (1982), 159--165",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Locally free resolutions of coherent sheaves on surfaces"
+    },
+    {
+      "char-anchor": [
+        113483,
+        113498
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "Nakamura",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Nakamura}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "I. Nakamura, V I I 0 surfaces and a duality of cusp singularities , Classification of algebraic and analytic manifolds (Katata, 1982) (Boston, MA), Birkh auser Boston, Boston, MA, 1983, pp. 333--378",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        114105,
+        114131
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "keller3",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite[lemma 2.13]{keller3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Christensen, B. Keller, and A. Neeman, Failure of B rown representability in derived categories , Available as math.AT/0001056",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        114287,
+        114301
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Bondal4",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Bondal4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Representable functors, S erre functors, and mutations , Izv. Akad. Nauk SSSR Ser. Mat. 53 (1989), no. 6, 1183--1205, 1337",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "53"
+    },
+    {
+      "char-anchor": [
+        114448,
+        114464
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "Beilinson",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{Beilinson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Beilinson, Coherent sheaves on ^n and problems of linear algebra , Functional Anal. Appl. 12 (1978), 214--216",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "12"
+    },
+    {
+      "char-anchor": [
+        114491,
+        114510
+      ],
+      "cite/group-marker": "[3,10]",
+      "cite/key": "Baer",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{Baer,Bondal2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Baer, Tilting sheaves in representation theory of algebras , Manuscripta Math. 60 (1988), no. 3, 323--347",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tilting sheaves in representation theory of algebras"
+    },
+    {
+      "char-anchor": [
+        114491,
+        114510
+      ],
+      "cite/group-marker": "[3,10]",
+      "cite/key": "Bondal2",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{Baer,Bondal2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Representations of associative algebras and coherent sheaves , Izv. Akad. Nauk SSSR Ser. Mat. 53 (1989), 25--44",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations of associative algebras and coherent sheaves"
+    },
+    {
+      "char-anchor": [
+        114691,
+        114717
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "keller3",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite[lemma 2.13]{keller3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Christensen, B. Keller, and A. Neeman, Failure of B rown representability in derived categories , Available as math.AT/0001056",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        116212,
+        116228
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Jurchescu",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Jurchescu}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Jurchescu, Theory of categories , topology, Categories, Riemann Surfaces (Romanian), Editura Acad. Republicii Socialiste Rom ania, Bucharest, 1966, pp. 73--240",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theory of categories"
+    },
+    {
+      "char-anchor": [
+        116249,
+        116262
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "Raikov",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{Raikov}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. A. Raikov, Semiabelian categories, and additive objects , Sibirsk. Mat. Z. 17 (1976), no. 1, 160--176, 239",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Semiabelian categories, and additive objects"
+    },
+    {
+      "char-anchor": [
+        116284,
+        116310
+      ],
+      "cite/group-marker": "[32,12]",
+      "cite/key": "Schneiders",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{Schneiders,Cruciani}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-P. Schneiders, Quasi-abelian categories and sheaves , M em. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        116284,
+        116310
+      ],
+      "cite/group-marker": "[32,12]",
+      "cite/key": "Cruciani",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{Schneiders,Cruciani}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Succi Cruciani, Sulle categorie quasi abeliane , Rev. Roumaine Math. Pures Appl. 18 (1973), 105--119",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sulle categorie quasi abeliane"
+    },
+    {
+      "char-anchor": [
+        116419,
+        116429
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BGO",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BGO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Barr, P. A. Grillet, D. H. van Osdol, Exact categories and categories of sheaves , Lecture notes in mathematics, vol. 236, Springer Verlag, Berlin, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Exact categories and categories of sheaves"
+    },
+    {
+      "char-anchor": [
+        116735,
+        116762
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "Schneiders",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite[\\S 1.1.4]{Schneiders}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-P. Schneiders, Quasi-abelian categories and sheaves , M em. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        116768,
+        116795
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "Schneiders",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite[\\S 1.2.3]{Schneiders}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-P. Schneiders, Quasi-abelian categories and sheaves , M em. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        117064,
+        117095
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "Schneiders",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite[Prop. 1.2.35]{Schneiders}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-P. Schneiders, Quasi-abelian categories and sheaves , M em. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        117473,
+        117504
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "Schneiders",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite[Prop. 1.2.31]{Schneiders}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-P. Schneiders, Quasi-abelian categories and sheaves , M em. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        130884,
+        130898
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "Quillen",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Quillen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972) (Berlin), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        130903,
+        130917
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "Neeman4",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{Neeman4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, The derived category of an exact category , J. Algebra 135 (1990), no. 2, 388--394",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The derived category of an exact category"
+    },
+    {
+      "char-anchor": [
+        131502,
+        131527
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "Neeman4",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite[Lemma 1.1]{Neeman4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, The derived category of an exact category , J. Algebra 135 (1990), no. 2, 388--394",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The derived category of an exact category"
+    },
+    {
+      "char-anchor": [
+        131741,
+        131766
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "Neeman4",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite[Lemma 1.2]{Neeman4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, The derived category of an exact category , J. Algebra 135 (1990), no. 2, 388--394",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The derived category of an exact category"
+    },
+    {
+      "char-anchor": [
+        133006,
+        133016
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "HRS",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{HRS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Happel, I. Reiten, and S. Smalo, Tilting in abelian categories and quasitilted algebra , Memoirs of the AMS, vol. 575, Amer. Math. Soc., 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tilting in abelian categories and quasitilted algebra"
+    },
+    {
+      "char-anchor": [
+        133709,
+        133732
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "HRS",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite[Prop. I.3.2]{HRS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Happel, I. Reiten, and S. Smalo, Tilting in abelian categories and quasitilted algebra , Memoirs of the AMS, vol. 575, Amer. Math. Soc., 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tilting in abelian categories and quasitilted algebra"
+    },
+    {
+      "char-anchor": [
+        134726,
+        134749
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BBD",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite[Ex.\\ 1.3.23]{BBD}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Beilinson, J. Bernstein, and P. Deligne, Faisceaux pervers , Ast erisque, vol. 100, Soc. Math. France, 1983",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Faisceaux pervers"
+    },
+    {
+      "char-anchor": [
+        135084,
+        135106
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "RD",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite[Lemma I.4.6]{RD}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Hartshorne, Residues and duality , Lecture notes in mathematics, vol. 20, Springer Verlag, Berlin, 1966",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Residues and duality"
+    },
+    {
+      "char-anchor": [
+        135710,
+        135720
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "HRS",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{HRS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Happel, I. Reiten, and S. Smalo, Tilting in abelian categories and quasitilted algebra , Memoirs of the AMS, vol. 575, Amer. Math. Soc., 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tilting in abelian categories and quasitilted algebra"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__0204218-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 99,
+    "resolution-rate": 0.0,
+    "resolved": 0,
+    "total": 99
+  }
+}

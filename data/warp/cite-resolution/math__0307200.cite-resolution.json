@@ -1,0 +1,1694 @@
+{
+  "paper-id": "math__0307200",
+  "records": [
+    {
+      "char-anchor": [
+        4911,
+        4924
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "Brown2",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{Brown2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Brown, Higher dimensional group theory, available at http://www.bangor.ac.uk/ mas010/hdaweb2.htm",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        5896,
+        5912
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "Whitehead",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{Whitehead}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. H. C. Whitehead, Note on a previous paper entitled `On adding relations to homotopy groups', Ann. Math. 47 (1946), 806--810. J. H. C. Whitehead, Combinatorial homotopy II, Bull. Amer.\\ Math. Soc. 55 (1949), 453--496",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On adding relations to homotopy groups"
+    },
+    {
+      "char-anchor": [
+        6033,
+        6042
+      ],
+      "cite/group-marker": "[41]",
+      "cite/key": "MW",
+      "cite/marker": "[41]",
+      "cite/raw": "\\cite{MW}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane and J. H. C. Whitehead, On the 3-type of a complex, Proc. Nat. Acad. Sci. 36 (1950), 41--48",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Nat. Acad. Sci"
+    },
+    {
+      "char-anchor": [
+        6615,
+        6624
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "BS",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{BS}",
+      "confidence": 0.8681,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0801.3843",
+      "resolved-corpus-id": "0801.3843",
+      "title": "The Classifying Space of a Topological 2-Group"
+    },
+    {
+      "char-anchor": [
+        6829,
+        6840
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "Sinh",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{Sinh}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "H. Sinh, Gr-categories , Universite Paris VII doctoral thesis, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Gr-categories"
+    },
+    {
+      "char-anchor": [
+        7327,
+        7336
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "JS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{JS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided monoidal categories, Macquarie Mathematics Report No. 860081, November 1986. A. Joyal and R. Street, Braided tensor categories, Adv. Math. 102 (1993), 20--78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        8713,
+        8722
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "FB",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{FB}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0212065",
+      "resolved-corpus-id": "math__0212065",
+      "title": "Group Objects and Internal Categories"
+    },
+    {
+      "char-anchor": [
+        8806,
+        8821
+      ],
+      "cite/group-marker": "[13,15]",
+      "cite/key": "Brown",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{Brown,BS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Brown, Groupoids and crossed objects in algebraic topology, Homology, Homotopy and Applications 1 (1999), 1--78. Available at http://www.math.rutgers.edu/hha/volumes/1999/volume1-1.htm",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homology, Homotopy and Applications"
+    },
+    {
+      "char-anchor": [
+        8806,
+        8821
+      ],
+      "cite/group-marker": "[13,15]",
+      "cite/key": "BS",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{Brown,BS}",
+      "confidence": 0.8681,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0801.3843",
+      "resolved-corpus-id": "0801.3843",
+      "title": "The Classifying Space of a Topological 2-Group"
+    },
+    {
+      "char-anchor": [
+        8859,
+        8872
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "Yetter",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{Yetter}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Yetter, TQFTs from homotopy 2-types, J. Knot Theory Ramifications 2 (1993), 113--123",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "J. Knot Theory Ramifications"
+    },
+    {
+      "char-anchor": [
+        8898,
+        8924
+      ],
+      "cite/group-marker": "[8,9,27]",
+      "cite/key": "Breen",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Breen,Breen2,Giraud}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Breen, Bitorseurs et cohomologie non-abelienne, in The Grothendieck Festschrift , ed. P. Cartier et al , Progress in Mathematics vol. 86 , Birkhauser, Boston, 1990, pp. 401--476",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Grothendieck Festschrift"
+    },
+    {
+      "char-anchor": [
+        8898,
+        8924
+      ],
+      "cite/group-marker": "[8,9,27]",
+      "cite/key": "Breen2",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Breen,Breen2,Giraud}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Breen, Theorie de Schreier superieure, Ann. Sci. Ecole Norm. Sup. 25 (1992), 465--514",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. Sci. Ecole Norm. Sup"
+    },
+    {
+      "char-anchor": [
+        8898,
+        8924
+      ],
+      "cite/group-marker": "[8,9,27]",
+      "cite/key": "Giraud",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Breen,Breen2,Giraud}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Giraud, Cohomologie Non-abelienne , Springer, Berlin, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Cohomologie Non-abelienne"
+    },
+    {
+      "char-anchor": [
+        8958,
+        8974
+      ],
+      "cite/group-marker": "[9,11]",
+      "cite/key": "Breen2",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Breen2,BM}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Breen, Theorie de Schreier superieure, Ann. Sci. Ecole Norm. Sup. 25 (1992), 465--514",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. Sci. Ecole Norm. Sup"
+    },
+    {
+      "char-anchor": [
+        8958,
+        8974
+      ],
+      "cite/group-marker": "[9,11]",
+      "cite/key": "BM",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{Breen2,BM}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0106083",
+      "resolved-corpus-id": "math__0106083",
+      "title": "Differential Geometry of Gerbes"
+    },
+    {
+      "char-anchor": [
+        9008,
+        9037
+      ],
+      "cite/group-marker": "[1,2,28,43]",
+      "cite/key": "Attal",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{Attal,Baez,GP,Pfeiffer}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Attal, Combinatorics of non-abelian gerbes with connection and curvature, available as math-ph/0203056",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9008,
+        9037
+      ],
+      "cite/group-marker": "[1,2,28,43]",
+      "cite/key": "Baez",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{Attal,Baez,GP,Pfeiffer}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Baez, Higher Yang--Mills theory, available at hep-th/0206130",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9008,
+        9037
+      ],
+      "cite/group-marker": "[1,2,28,43]",
+      "cite/key": "GP",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{Attal,Baez,GP,Pfeiffer}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Girelli and H. Pfeiffer, Higher gauge theory --- differential versus integral formulation, available as hep-th/0309173",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9008,
+        9037
+      ],
+      "cite/group-marker": "[1,2,28,43]",
+      "cite/key": "Pfeiffer",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite{Attal,Baez,GP,Pfeiffer}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "H. Pfeiffer, Higher gauge theory and a non-Abelian generalization of 2-form electrodynamics, Ann. Phys. 308 (2003), 447--477",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. Phys"
+    },
+    {
+      "char-anchor": [
+        9064,
+        9076
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "CS",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{CS,CY}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0306440",
+      "resolved-corpus-id": "math__0306440",
+      "title": "2-categorical Poincare Representations and State Sum Applications"
+    },
+    {
+      "char-anchor": [
+        9064,
+        9076
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "CY",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{CS,CY}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Crane and D. Yetter, Measurable categories and 2-groups, available as math.QA/0305176",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        10609,
+        10624
+      ],
+      "cite/group-marker": "[39]",
+      "cite/key": "MacLane2",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{MacLane2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Natural associativity and commutativity, Rice Univ. Stud. 49 (1963), 28--46",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rice Univ. Stud"
+    },
+    {
+      "char-anchor": [
+        10785,
+        10794
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "JS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{JS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided monoidal categories, Macquarie Mathematics Report No. 860081, November 1986. A. Joyal and R. Street, Braided tensor categories, Adv. Math. 102 (1993), 20--78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        10908,
+        10930
+      ],
+      "cite/group-marker": "[36,50]",
+      "cite/key": "Laplaza",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{Laplaza,Ulbrich}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. L. Laplaza, Coherence for categories with group structure: an alternative approach, J. Algebra 84 (1983), 305--323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "J. Algebra"
+    },
+    {
+      "char-anchor": [
+        10908,
+        10930
+      ],
+      "cite/group-marker": "[36,50]",
+      "cite/key": "Ulbrich",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{Laplaza,Ulbrich}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K.-H. Ulbrich, Koharenz in Kategorien mit Gruppenstruktur, J. Algebra 72 (1981), 279--295",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "J. Algebra"
+    },
+    {
+      "char-anchor": [
+        11916,
+        11930
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "Laplaza",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{Laplaza}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. L. Laplaza, Coherence for categories with group structure: an alternative approach, J. Algebra 84 (1983), 305--323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "J. Algebra"
+    },
+    {
+      "char-anchor": [
+        13851,
+        13862
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "Baez",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{Baez}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Baez, Higher Yang--Mills theory, available at hep-th/0206130",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        15204,
+        15215
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "HDA6",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{HDA6}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0307263",
+      "resolved-corpus-id": "math__0307263",
+      "title": "Higher-Dimensional Algebra VI: Lie 2-Algebras"
+    },
+    {
+      "char-anchor": [
+        19699,
+        19713
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "Benabou",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{Benabou}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Benabou, Introduction to Bicategories , Lecture Notes in Mathematics 47 , Springer, New York, 1967, pp. 1--77",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Introduction to Bicategories"
+    },
+    {
+      "char-anchor": [
+        19803,
+        19817
+      ],
+      "cite/group-marker": "[46]",
+      "cite/key": "Street2",
+      "cite/marker": "[46]",
+      "cite/raw": "\\cite{Street2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street, Categorical structures, in Handbook of Algebra , Vol. 1, ed. M. Hazewinkel, Elsevier, Amsterdam, 1995, pp. 529--577",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of Algebra"
+    },
+    {
+      "char-anchor": [
+        22324,
+        22333
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "JS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{JS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided monoidal categories, Macquarie Mathematics Report No. 860081, November 1986. A. Joyal and R. Street, Braided tensor categories, Adv. Math. 102 (1993), 20--78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        25619,
+        25632
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "moncat",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{moncat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Eilenberg and G. M. Kelly, Closed categories, Proceedings of the Conference on Categorical Algebra (La Jolla, Calif., 1965), Springer, Berlin, 1966, pp. 421--562",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the Conference on Categorical Algebra (La Jolla, Calif., 1965)"
+    },
+    {
+      "char-anchor": [
+        27185,
+        27198
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "moncat",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{moncat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Eilenberg and G. M. Kelly, Closed categories, Proceedings of the Conference on Categorical Algebra (La Jolla, Calif., 1965), Springer, Berlin, 1966, pp. 421--562",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the Conference on Categorical Algebra (La Jolla, Calif., 1965)"
+    },
+    {
+      "char-anchor": [
+        29209,
+        29220
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "Sinh",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{Sinh}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "H. Sinh, Gr-categories , Universite Paris VII doctoral thesis, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Gr-categories"
+    },
+    {
+      "char-anchor": [
+        29336,
+        29349
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "Rivano",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite{Rivano}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Saavedra Rivano, Categories Tannakiennes , Lecture Notes in Mathematics 265 , Springer, New York, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "265"
+    },
+    {
+      "char-anchor": [
+        29360,
+        29373
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "Breen2",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Breen2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Breen, Theorie de Schreier superieure, Ann. Sci. Ecole Norm. Sup. 25 (1992), 465--514",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. Sci. Ecole Norm. Sup"
+    },
+    {
+      "char-anchor": [
+        29502,
+        29524
+      ],
+      "cite/group-marker": "[36,50]",
+      "cite/key": "Laplaza",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{Laplaza,Ulbrich}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. L. Laplaza, Coherence for categories with group structure: an alternative approach, J. Algebra 84 (1983), 305--323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "J. Algebra"
+    },
+    {
+      "char-anchor": [
+        29502,
+        29524
+      ],
+      "cite/group-marker": "[36,50]",
+      "cite/key": "Ulbrich",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{Laplaza,Ulbrich}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K.-H. Ulbrich, Koharenz in Kategorien mit Gruppenstruktur, J. Algebra 72 (1981), 279--295",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "J. Algebra"
+    },
+    {
+      "char-anchor": [
+        29622,
+        29631
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "JS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{JS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided monoidal categories, Macquarie Mathematics Report No. 860081, November 1986. A. Joyal and R. Street, Braided tensor categories, Adv. Math. 102 (1993), 20--78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        29681,
+        29691
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "HKK",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{HKK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. A. Hardie, K. H. Kamps and R. W. Kieboom, A homotopy 2-groupoid of a topological space, Appl. Cat.\\ Str. 8 (2000) 209--234. K. A. Hardie, K. H. Kamps and R. W. Kieboom, A homotopy bigroupoid of a topological space, Appl. Cat. Str. 9 (2001) 311--327",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Appl. Cat.\\ Str"
+    },
+    {
+      "char-anchor": [
+        31444,
+        31458
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "Ulbrich",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{Ulbrich}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K.-H. Ulbrich, Koharenz in Kategorien mit Gruppenstruktur, J. Algebra 72 (1981), 279--295",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "J. Algebra"
+    },
+    {
+      "char-anchor": [
+        31471,
+        31485
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "Laplaza",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{Laplaza}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. L. Laplaza, Coherence for categories with group structure: an alternative approach, J. Algebra 84 (1983), 305--323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "J. Algebra"
+    },
+    {
+      "char-anchor": [
+        33980,
+        33993
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "Street",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{Street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street, Low-dimensional topology and higher-order categories, Proceedings of CT95 , Halifax, July 9-15 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of CT95"
+    },
+    {
+      "char-anchor": [
+        39879,
+        39889
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "JS0",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{JS0}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, The geometry of tensor calculus, I, Adv. Math. 88 (1991), 55--112",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        39938,
+        39953
+      ],
+      "cite/group-marker": "[39]",
+      "cite/key": "MacLane2",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{MacLane2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Natural associativity and commutativity, Rice Univ. Stud. 49 (1963), 28--46",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rice Univ. Stud"
+    },
+    {
+      "char-anchor": [
+        48051,
+        48060
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "JS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{JS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided monoidal categories, Macquarie Mathematics Report No. 860081, November 1986. A. Joyal and R. Street, Braided tensor categories, Adv. Math. 102 (1993), 20--78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        50956,
+        50969
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "Rivano",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite{Rivano}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Saavedra Rivano, Categories Tannakiennes , Lecture Notes in Mathematics 265 , Springer, New York, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "265"
+    },
+    {
+      "char-anchor": [
+        79319,
+        79328
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "KL",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{KL}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly and S. Lack, On property-like structures, Theor. and Appl. Cat. 3 (1997), 213--250",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theor. and Appl. Cat"
+    },
+    {
+      "char-anchor": [
+        98178,
+        98187
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "JS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{JS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided monoidal categories, Macquarie Mathematics Report No. 860081, November 1986. A. Joyal and R. Street, Braided tensor categories, Adv. Math. 102 (1993), 20--78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        98661,
+        98676
+      ],
+      "cite/group-marker": "[40]",
+      "cite/key": "MacLane3",
+      "cite/marker": "[40]",
+      "cite/raw": "\\cite{MacLane3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Categories for the Working Mathematician , Springer, Berlin, 1998, Ch. 3 Section 6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the Working Mathematician"
+    },
+    {
+      "char-anchor": [
+        101516,
+        101525
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "JS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{JS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided monoidal categories, Macquarie Mathematics Report No. 860081, November 1986. A. Joyal and R. Street, Braided tensor categories, Adv. Math. 102 (1993), 20--78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        128553,
+        128569
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "Ehresmann",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{Ehresmann}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Ehresmann, Categories structurees, Ann. Ec. Normale Sup. 80 (1963). C. Ehresmann, Categories structurees III: Quintettes et applications covariantes, Cahiers Top. et DG V (1963). C. Ehresmann, Introduction to the theory of structured categories, Technical Report Univ. of Kansas at Lawrence (1966)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. Ec. Normale Sup"
+    },
+    {
+      "char-anchor": [
+        128638,
+        128652
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Borceux",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Borceux}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Borceux, Handbook of Categorical Algebra 1: Basic Category Theory , Cambridge U. Press, Cambridge, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of Categorical Algebra 1: Basic Category Theory"
+    },
+    {
+      "char-anchor": [
+        133586,
+        133600
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Borceux",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Borceux}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Borceux, Handbook of Categorical Algebra 1: Basic Category Theory , Cambridge U. Press, Cambridge, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of Categorical Algebra 1: Basic Category Theory"
+    },
+    {
+      "char-anchor": [
+        133609,
+        133620
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "HDA6",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{HDA6}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0307263",
+      "resolved-corpus-id": "math__0307263",
+      "title": "Higher-Dimensional Algebra VI: Lie 2-Algebras"
+    },
+    {
+      "char-anchor": [
+        136167,
+        136176
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "FB",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{FB}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0212065",
+      "resolved-corpus-id": "math__0212065",
+      "title": "Group Objects and Internal Categories"
+    },
+    {
+      "char-anchor": [
+        145682,
+        145708
+      ],
+      "cite/group-marker": "[8,9,27]",
+      "cite/key": "Breen",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Breen,Breen2,Giraud}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Breen, Bitorseurs et cohomologie non-abelienne, in The Grothendieck Festschrift , ed. P. Cartier et al , Progress in Mathematics vol. 86 , Birkhauser, Boston, 1990, pp. 401--476",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Grothendieck Festschrift"
+    },
+    {
+      "char-anchor": [
+        145682,
+        145708
+      ],
+      "cite/group-marker": "[8,9,27]",
+      "cite/key": "Breen2",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Breen,Breen2,Giraud}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Breen, Theorie de Schreier superieure, Ann. Sci. Ecole Norm. Sup. 25 (1992), 465--514",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. Sci. Ecole Norm. Sup"
+    },
+    {
+      "char-anchor": [
+        145682,
+        145708
+      ],
+      "cite/group-marker": "[8,9,27]",
+      "cite/key": "Giraud",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Breen,Breen2,Giraud}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Giraud, Cohomologie Non-abelienne , Springer, Berlin, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Cohomologie Non-abelienne"
+    },
+    {
+      "char-anchor": [
+        153271,
+        153281
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "HKK",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{HKK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. A. Hardie, K. H. Kamps and R. W. Kieboom, A homotopy 2-groupoid of a topological space, Appl. Cat.\\ Str. 8 (2000) 209--234. K. A. Hardie, K. H. Kamps and R. W. Kieboom, A homotopy bigroupoid of a topological space, Appl. Cat. Str. 9 (2001) 311--327",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Appl. Cat.\\ Str"
+    },
+    {
+      "char-anchor": [
+        156601,
+        156614
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "Duskin",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Duskin}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Duskin, Simplicial matrices and the nerves of weak n -categories I: nerves of bicategories, Theory and Applications of Categories , 9 (2001), 198--308",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theory and Applications of Categories"
+    },
+    {
+      "char-anchor": [
+        156882,
+        156891
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BD",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BD}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "2401.14311",
+      "resolved-corpus-id": "2401.14311",
+      "title": "Higher categories"
+    },
+    {
+      "char-anchor": [
+        157885,
+        157898
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "Berger",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{Berger}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Berger, Double loop spaces, braided monoidal categories and algebraic 3-type of space, in Higher Homotopy Structures in Topology and Mathematical Physics , Contemp.\\ Math. 227 , American Mathematical Society, Providence, Rhode Island, 1996, pp. 49--66",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Higher Homotopy Structures in Topology and Mathematical Physics"
+    },
+    {
+      "char-anchor": [
+        158546,
+        158557
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "Sinh",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{Sinh}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "H. Sinh, Gr-categories , Universite Paris VII doctoral thesis, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Gr-categories"
+    },
+    {
+      "char-anchor": [
+        158776,
+        158785
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "JS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{JS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided monoidal categories, Macquarie Mathematics Report No. 860081, November 1986. A. Joyal and R. Street, Braided tensor categories, Adv. Math. 102 (1993), 20--78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        159903,
+        159918
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "Robinson",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{Robinson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Robinson, Moore--Postnikov systems for nonsimple fibrations, Ill. Jour. Math. 16 (1972), 234--342",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ill. Jour. Math"
+    },
+    {
+      "char-anchor": [
+        170120,
+        170135
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MacLane1",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{MacLane1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Homology , Springer, Berlin, 1963",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homology"
+    },
+    {
+      "char-anchor": [
+        178389,
+        178404
+      ],
+      "cite/group-marker": "[39]",
+      "cite/key": "MacLane2",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{MacLane2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Natural associativity and commutativity, Rice Univ. Stud. 49 (1963), 28--46",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rice Univ. Stud"
+    },
+    {
+      "char-anchor": [
+        179690,
+        179705
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MacLane1",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{MacLane1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Homology , Springer, Berlin, 1963",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homology"
+    },
+    {
+      "char-anchor": [
+        179778,
+        179791
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "KBrown",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{KBrown}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. S. Brown, Cohomology of Groups , Springer, Berlin, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Cohomology of Groups"
+    },
+    {
+      "char-anchor": [
+        180032,
+        180041
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "JS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{JS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided monoidal categories, Macquarie Mathematics Report No. 860081, November 1986. A. Joyal and R. Street, Braided tensor categories, Adv. Math. 102 (1993), 20--78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        180098,
+        180107
+      ],
+      "cite/group-marker": "[41]",
+      "cite/key": "MW",
+      "cite/marker": "[41]",
+      "cite/raw": "\\cite{MW}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane and J. H. C. Whitehead, On the 3-type of a complex, Proc. Nat. Acad. Sci. 36 (1950), 41--48",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Nat. Acad. Sci"
+    },
+    {
+      "char-anchor": [
+        185709,
+        185720
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "Baez",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{Baez}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Baez, Higher Yang--Mills theory, available at hep-th/0206130",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        185790,
+        185802
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "CS",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{CS,CY}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0306440",
+      "resolved-corpus-id": "math__0306440",
+      "title": "2-categorical Poincare Representations and State Sum Applications"
+    },
+    {
+      "char-anchor": [
+        185790,
+        185802
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "CY",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{CS,CY}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Crane and D. Yetter, Measurable categories and 2-groups, available as math.QA/0305176",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        186651,
+        186666
+      ],
+      "cite/group-marker": "[49]",
+      "cite/key": "Thompson",
+      "cite/marker": "[49]",
+      "cite/raw": "\\cite{Thompson}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0009201",
+      "resolved-corpus-id": "math__0009201",
+      "title": "Introducing Quaternionic Gerbes"
+    },
+    {
+      "char-anchor": [
+        192467,
+        192480
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "ChernS",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{ChernS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. S. Chern and J. Simons, Characteristic forms and geometric invariants, Ann. Math. 99 (1974), 48--69",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. Math"
+    },
+    {
+      "char-anchor": [
+        192501,
+        192516
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "CheegerS",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{CheegerS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Cheeger and J. Simons, Differential characters and geometric invariants, in Geometry and Topology , eds. J. Alexander and J. Harer, Lecture Notes in Mathematics 1167 (1985), 50--80",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Geometry and Topology"
+    },
+    {
+      "char-anchor": [
+        194540,
+        194549
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "CE",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{CE}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Chevalley and S. Eilenberg, Cohomology theory of Lie groups and Lie algebras, Trans. Amer. Math. Soc. 63 (1948), 85--124",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Trans. Amer. Math. Soc"
+    },
+    {
+      "char-anchor": [
+        195008,
+        195025
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "Whitehead0",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{Whitehead0}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. W. Whitehead, Elements of Homotopy Theory , Springer, Berlin, 1978, Ch. VIII Sections 1-3",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Elements of Homotopy Theory"
+    },
+    {
+      "char-anchor": [
+        198430,
+        198444
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "Jeffrey",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{Jeffrey}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Jeffrey, Chern--Simons--Witten invariants of lens spaces and torus bundles and the semiclassical approximation, Comm. Math. Phys. 147 (1992), 563--604",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Comm. Math. Phys"
+    },
+    {
+      "char-anchor": [
+        203142,
+        203151
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "Hu",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{Hu}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. T. Hu, Cohomology theory in topological groups, Mich. Math. J. 1 (1952), 11--59",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mich. Math. J"
+    },
+    {
+      "char-anchor": [
+        203161,
+        203174
+      ],
+      "cite/group-marker": "[51]",
+      "cite/key": "vanEst",
+      "cite/marker": "[51]",
+      "cite/raw": "\\cite{vanEst}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. T. van Est, On the algebraic cohomology concepts in Lie groups I II Indag. Math. 17 (1955), 225--233, 286--294",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Indag. Math"
+    },
+    {
+      "char-anchor": [
+        203186,
+        203199
+      ],
+      "cite/group-marker": "[42]",
+      "cite/key": "Mostow",
+      "cite/marker": "[42]",
+      "cite/raw": "\\cite{Mostow}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. D. Mostow, Cohomology of topological groups and solvmanifolds, Ann. Math. 73 (1961), 20--48",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. Math"
+    },
+    {
+      "char-anchor": [
+        206275,
+        206297
+      ],
+      "cite/group-marker": "[16,17]",
+      "cite/key": "Brylinski",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Brylinski,CJMSW}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.--L. Brylinski, Differentiable cohomology of gauge groups, available as math.DG/0011069",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        206275,
+        206297
+      ],
+      "cite/group-marker": "[16,17]",
+      "cite/key": "CJMSW",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{Brylinski,CJMSW}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Carey, S. Johnson, M. Murray, D. Stevenson and B.--L. Wang, Bundle gerbes for Chern-Simons and Wess-Zumino-Witten theories, available as math.DG/0410013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__0307200-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 75,
+    "resolution-rate": 0.1279,
+    "resolved": 11,
+    "total": 86
+  }
+}

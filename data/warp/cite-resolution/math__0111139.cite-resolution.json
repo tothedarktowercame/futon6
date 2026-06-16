@@ -1,0 +1,2490 @@
+{
+  "paper-id": "math__0111139",
+  "records": [
+    {
+      "char-anchor": [
+        2087,
+        2098
+      ],
+      "cite/group-marker": "[3,10]",
+      "cite/key": "B",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{B,CF}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "I. Bernstein, Sackler lectures , q-alg/9501032",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sackler lectures"
+    },
+    {
+      "char-anchor": [
+        2087,
+        2098
+      ],
+      "cite/group-marker": "[3,10]",
+      "cite/key": "CF",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{B,CF}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Crane, I. Frenkel Four-dimensional topological quantum field theory, Hopf categories, and canonical bases , J. Math. Phys. 35 no. 10 (1994), 5136-5154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Four-dimensional topological quantum field theory, Hopf categories, and canonical bases"
+    },
+    {
+      "char-anchor": [
+        2330,
+        2345
+      ],
+      "cite/group-marker": "[2,14]",
+      "cite/key": "BPPZ",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{BPPZ, FS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Behrend, P. Pearce, V. Petkova, J.-B. Zuber Boundary conditions in Rational Conformal Field Theories , hep-th/9908036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boundary conditions in Rational Conformal Field Theories"
+    },
+    {
+      "char-anchor": [
+        2330,
+        2345
+      ],
+      "cite/group-marker": "[2,14]",
+      "cite/key": "FS",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{BPPZ, FS}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0106050",
+      "resolved-corpus-id": "math__0106050",
+      "title": "Category theory for conformal boundary conditions"
+    },
+    {
+      "char-anchor": [
+        2374,
+        2387
+      ],
+      "cite/group-marker": "[6,30]",
+      "cite/key": "BEK",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BEK, O}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Y. Kawahigashi, Chiral Structure of Modular Invariants for Subfactors , CMP 210 (2000), 733-784",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Structure of Modular Invariants for Subfactors"
+    },
+    {
+      "char-anchor": [
+        2374,
+        2387
+      ],
+      "cite/group-marker": "[6,30]",
+      "cite/key": "O",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{BEK, O}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu, Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors , in Lectures on operator theory , the Fields Institute Monographs, Amer. Math. Soc., Providence, RI, 2000, 243-323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors"
+    },
+    {
+      "char-anchor": [
+        2427,
+        2440
+      ],
+      "cite/group-marker": "[28,34]",
+      "cite/key": "NV",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{NV, Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and their applications"
+    },
+    {
+      "char-anchor": [
+        2427,
+        2440
+      ],
+      "cite/group-marker": "[28,34]",
+      "cite/key": "Sl",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{NV, Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and inclusions of finite type"
+    },
+    {
+      "char-anchor": [
+        2491,
+        2500
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        2593,
+        2602
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BO",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BO}",
+      "confidence": 0.8878,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0010089",
+      "resolved-corpus-id": "math__0010089",
+      "title": "On tensor categories attached to cells in affine Weyl groups"
+    },
+    {
+      "char-anchor": [
+        3099,
+        3108
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        3557,
+        3565
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/9904073",
+      "resolved-corpus-id": "math__9904073",
+      "title": "A canonical Tannaka duality for finite seimisimple tensor categories"
+    },
+    {
+      "char-anchor": [
+        3695,
+        3704
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "EK",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{EK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, M. Khovanov, Representations of tensor categories and Dynkin diagrams , IMRN No. 5 (1995), 235-247",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations of tensor categories and Dynkin diagrams"
+    },
+    {
+      "char-anchor": [
+        3709,
+        3718
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "Lu",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{Lu}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Lusztig Leading coefficients of character values of Hecke algebras , Proc. Symp. in Pure Math. 47 (1987), 235-262",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Leading coefficients of character values of Hecke algebras"
+    },
+    {
+      "char-anchor": [
+        5282,
+        5291
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "Ga",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{Ga}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Gannon, Boundary Conformal Field Theory and Fusion Ring Representations , hep-th/0106105",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boundary Conformal Field Theory and Fusion Ring Representations"
+    },
+    {
+      "char-anchor": [
+        7815,
+        7830
+      ],
+      "cite/group-marker": "[2,14]",
+      "cite/key": "BPPZ",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{BPPZ, FS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Behrend, P. Pearce, V. Petkova, J.-B. Zuber Boundary conditions in Rational Conformal Field Theories , hep-th/9908036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boundary conditions in Rational Conformal Field Theories"
+    },
+    {
+      "char-anchor": [
+        7815,
+        7830
+      ],
+      "cite/group-marker": "[2,14]",
+      "cite/key": "FS",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{BPPZ, FS}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0106050",
+      "resolved-corpus-id": "math__0106050",
+      "title": "Category theory for conformal boundary conditions"
+    },
+    {
+      "char-anchor": [
+        8880,
+        8889
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BK",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov, Jr., Lectures on tensor categories and modular functor , Amer. Math. Soc., 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on tensor categories and modular functor"
+    },
+    {
+      "char-anchor": [
+        9950,
+        9959
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BK",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov, Jr., Lectures on tensor categories and modular functor , Amer. Math. Soc., 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on tensor categories and modular functor"
+    },
+    {
+      "char-anchor": [
+        10420,
+        10429
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "TY",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{TY}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Tambara, S. Yamagami, Tensor categories with fusion rules of self-duality for finite abelian groups , J. Algebra 209 (1998), 692-707",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tensor categories with fusion rules of self-duality for finite abelian groups"
+    },
+    {
+      "char-anchor": [
+        10457,
+        10466
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BK",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov, Jr., Lectures on tensor categories and modular functor , Amer. Math. Soc., 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on tensor categories and modular functor"
+    },
+    {
+      "char-anchor": [
+        11527,
+        11536
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BK",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov, Jr., Lectures on tensor categories and modular functor , Amer. Math. Soc., 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on tensor categories and modular functor"
+    },
+    {
+      "char-anchor": [
+        14785,
+        14798
+      ],
+      "cite/group-marker": "[34,28]",
+      "cite/key": "Sl",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Sl, NV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and inclusions of finite type"
+    },
+    {
+      "char-anchor": [
+        14785,
+        14798
+      ],
+      "cite/group-marker": "[34,28]",
+      "cite/key": "NV",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{Sl, NV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and their applications"
+    },
+    {
+      "char-anchor": [
+        16107,
+        16118
+      ],
+      "cite/group-marker": "[33,35]",
+      "cite/key": "Q",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{Q,TY}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Quinn, Group categories and their field theories , Geometry Topology Monographs, Volume 2: Proceedings of the Kirbyfest, 407-453",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Group categories and their field theories"
+    },
+    {
+      "char-anchor": [
+        16107,
+        16118
+      ],
+      "cite/group-marker": "[33,35]",
+      "cite/key": "TY",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{Q,TY}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Tambara, S. Yamagami, Tensor categories with fusion rules of self-duality for finite abelian groups , J. Algebra 209 (1998), 692-707",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tensor categories with fusion rules of self-duality for finite abelian groups"
+    },
+    {
+      "char-anchor": [
+        17157,
+        17165
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "B",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{B}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "I. Bernstein, Sackler lectures , q-alg/9501032",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sackler lectures"
+    },
+    {
+      "char-anchor": [
+        17209,
+        17218
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "CF",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{CF}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Crane, I. Frenkel Four-dimensional topological quantum field theory, Hopf categories, and canonical bases , J. Math. Phys. 35 no. 10 (1994), 5136-5154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Four-dimensional topological quantum field theory, Hopf categories, and canonical bases"
+    },
+    {
+      "char-anchor": [
+        17299,
+        17318
+      ],
+      "cite/group-marker": "[2,14,32]",
+      "cite/key": "BPPZ",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{BPPZ, FS, PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Behrend, P. Pearce, V. Petkova, J.-B. Zuber Boundary conditions in Rational Conformal Field Theories , hep-th/9908036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boundary conditions in Rational Conformal Field Theories"
+    },
+    {
+      "char-anchor": [
+        17299,
+        17318
+      ],
+      "cite/group-marker": "[2,14,32]",
+      "cite/key": "FS",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{BPPZ, FS, PZ}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0106050",
+      "resolved-corpus-id": "math__0106050",
+      "title": "Category theory for conformal boundary conditions"
+    },
+    {
+      "char-anchor": [
+        17299,
+        17318
+      ],
+      "cite/group-marker": "[2,14,32]",
+      "cite/key": "PZ",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{BPPZ, FS, PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The many faces of Ocneanu cells"
+    },
+    {
+      "char-anchor": [
+        17996,
+        18009
+      ],
+      "cite/group-marker": "[6,30]",
+      "cite/key": "BEK",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BEK, O}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Y. Kawahigashi, Chiral Structure of Modular Invariants for Subfactors , CMP 210 (2000), 733-784",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Structure of Modular Invariants for Subfactors"
+    },
+    {
+      "char-anchor": [
+        17996,
+        18009
+      ],
+      "cite/group-marker": "[6,30]",
+      "cite/key": "O",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{BEK, O}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu, Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors , in Lectures on operator theory , the Fields Institute Monographs, Amer. Math. Soc., Providence, RI, 2000, 243-323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors"
+    },
+    {
+      "char-anchor": [
+        21756,
+        21765
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Br",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Br}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Bruguieres, Categories premodulaires, modularisations et invariants des varietes de dimension 3 , Math. Ann. 316 (2000), 215-236",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories premodulaires, modularisations et invariants des varietes de dimension 3"
+    },
+    {
+      "char-anchor": [
+        25129,
+        25138
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "FS",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{FS}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0106050",
+      "resolved-corpus-id": "math__0106050",
+      "title": "Category theory for conformal boundary conditions"
+    },
+    {
+      "char-anchor": [
+        25201,
+        25210
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "FS",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{FS}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0106050",
+      "resolved-corpus-id": "math__0106050",
+      "title": "Category theory for conformal boundary conditions"
+    },
+    {
+      "char-anchor": [
+        33508,
+        33517
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BO",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BO}",
+      "confidence": 0.8878,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0010089",
+      "resolved-corpus-id": "math__0010089",
+      "title": "On tensor categories attached to cells in affine Weyl groups"
+    },
+    {
+      "char-anchor": [
+        34263,
+        34272
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BO",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BO}",
+      "confidence": 0.8878,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0010089",
+      "resolved-corpus-id": "math__0010089",
+      "title": "On tensor categories attached to cells in affine Weyl groups"
+    },
+    {
+      "char-anchor": [
+        35497,
+        35506
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "Mo",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Mo}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. V. Movshev, Twisting in group algebras of finite groups , Funct. Anal. Appl. 27 (1993), 240-244",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Twisting in group algebras of finite groups"
+    },
+    {
+      "char-anchor": [
+        35536,
+        35545
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "EG",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{EG}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, S. Gelaki, Isocategorical groups , IMRN No. 2 (2001), 59-76",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Isocategorical groups"
+    },
+    {
+      "char-anchor": [
+        35994,
+        36003
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "TY",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{TY}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Tambara, S. Yamagami, Tensor categories with fusion rules of self-duality for finite abelian groups , J. Algebra 209 (1998), 692-707",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tensor categories with fusion rules of self-duality for finite abelian groups"
+    },
+    {
+      "char-anchor": [
+        36005,
+        36014
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "EG",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{EG}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, S. Gelaki, Isocategorical groups , IMRN No. 2 (2001), 59-76",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Isocategorical groups"
+    },
+    {
+      "char-anchor": [
+        37135,
+        37144
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "EG",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{EG}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, S. Gelaki, Isocategorical groups , IMRN No. 2 (2001), 59-76",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Isocategorical groups"
+    },
+    {
+      "char-anchor": [
+        39196,
+        39205
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        39959,
+        39968
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "FS",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{FS}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0106050",
+      "resolved-corpus-id": "math__0106050",
+      "title": "Category theory for conformal boundary conditions"
+    },
+    {
+      "char-anchor": [
+        42092,
+        42101
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Sl",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and inclusions of finite type"
+    },
+    {
+      "char-anchor": [
+        42178,
+        42194
+      ],
+      "cite/group-marker": "[28,29,34]",
+      "cite/key": "NV",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{NV, N, Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and their applications"
+    },
+    {
+      "char-anchor": [
+        42178,
+        42194
+      ],
+      "cite/group-marker": "[28,29,34]",
+      "cite/key": "N",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{NV, N, Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Nill, Axioms for weak bialgebras , q-alg/9805104",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Axioms for weak bialgebras"
+    },
+    {
+      "char-anchor": [
+        42178,
+        42194
+      ],
+      "cite/group-marker": "[28,29,34]",
+      "cite/key": "Sl",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{NV, N, Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and inclusions of finite type"
+    },
+    {
+      "char-anchor": [
+        43143,
+        43152
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "NV",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{NV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and their applications"
+    },
+    {
+      "char-anchor": [
+        43228,
+        43237
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "NV",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{NV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and their applications"
+    },
+    {
+      "char-anchor": [
+        43242,
+        43251
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Sl",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and inclusions of finite type"
+    },
+    {
+      "char-anchor": [
+        45522,
+        45531
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Sl",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and inclusions of finite type"
+    },
+    {
+      "char-anchor": [
+        45753,
+        45761
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/9904073",
+      "resolved-corpus-id": "math__9904073",
+      "title": "A canonical Tannaka duality for finite seimisimple tensor categories"
+    },
+    {
+      "char-anchor": [
+        45861,
+        45878
+      ],
+      "cite/group-marker": "[30,6,32]",
+      "cite/key": "O",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{O, BEK, PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu, Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors , in Lectures on operator theory , the Fields Institute Monographs, Amer. Math. Soc., Providence, RI, 2000, 243-323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors"
+    },
+    {
+      "char-anchor": [
+        45861,
+        45878
+      ],
+      "cite/group-marker": "[30,6,32]",
+      "cite/key": "BEK",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{O, BEK, PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Y. Kawahigashi, Chiral Structure of Modular Invariants for Subfactors , CMP 210 (2000), 733-784",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Structure of Modular Invariants for Subfactors"
+    },
+    {
+      "char-anchor": [
+        45861,
+        45878
+      ],
+      "cite/group-marker": "[30,6,32]",
+      "cite/key": "PZ",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{O, BEK, PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The many faces of Ocneanu cells"
+    },
+    {
+      "char-anchor": [
+        45893,
+        45906
+      ],
+      "cite/group-marker": "[30,6]",
+      "cite/key": "O",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{O, BEK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu, Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors , in Lectures on operator theory , the Fields Institute Monographs, Amer. Math. Soc., Providence, RI, 2000, 243-323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors"
+    },
+    {
+      "char-anchor": [
+        45893,
+        45906
+      ],
+      "cite/group-marker": "[30,6]",
+      "cite/key": "BEK",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{O, BEK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Y. Kawahigashi, Chiral Structure of Modular Invariants for Subfactors , CMP 210 (2000), 733-784",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Structure of Modular Invariants for Subfactors"
+    },
+    {
+      "char-anchor": [
+        46039,
+        46048
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "PZ",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The many faces of Ocneanu cells"
+    },
+    {
+      "char-anchor": [
+        46187,
+        46196
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Sl",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and inclusions of finite type"
+    },
+    {
+      "char-anchor": [
+        46301,
+        46310
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Sl",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and inclusions of finite type"
+    },
+    {
+      "char-anchor": [
+        46670,
+        46678
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "N",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{N}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Nill, Axioms for weak bialgebras , q-alg/9805104",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Axioms for weak bialgebras"
+    },
+    {
+      "char-anchor": [
+        46982,
+        46995
+      ],
+      "cite/group-marker": "[28,34]",
+      "cite/key": "NV",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{NV, Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and their applications"
+    },
+    {
+      "char-anchor": [
+        46982,
+        46995
+      ],
+      "cite/group-marker": "[28,34]",
+      "cite/key": "Sl",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{NV, Sl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Szlachanyi, Finite quantum groupoids and inclusions of finite type , math.QA/0011036",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and inclusions of finite type"
+    },
+    {
+      "char-anchor": [
+        49529,
+        49538
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "NV",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{NV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and their applications"
+    },
+    {
+      "char-anchor": [
+        49688,
+        49697
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "NV",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{NV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and their applications"
+    },
+    {
+      "char-anchor": [
+        49945,
+        49954
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "NV",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{NV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, L. Vainerman, Finite quantum groupoids and their applications , math.QA/0006057",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Finite quantum groupoids and their applications"
+    },
+    {
+      "char-anchor": [
+        52445,
+        52454
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "PZ",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The many faces of Ocneanu cells"
+    },
+    {
+      "char-anchor": [
+        52787,
+        52796
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "EN",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{EN}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Dynamical twists in group algebras"
+    },
+    {
+      "char-anchor": [
+        53067,
+        53076
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "EN",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{EN}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Dynamical twists in group algebras"
+    },
+    {
+      "char-anchor": [
+        53932,
+        53941
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "EN",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{EN}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Dynamical twists in group algebras"
+    },
+    {
+      "char-anchor": [
+        53974,
+        53983
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "EN",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{EN}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Dynamical twists in group algebras"
+    },
+    {
+      "char-anchor": [
+        54083,
+        54092
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "EN",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{EN}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, Dynamical twists in group algebras , math.QA/0101046",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Dynamical twists in group algebras"
+    },
+    {
+      "char-anchor": [
+        54269,
+        54278
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BK",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov, Jr., Lectures on tensor categories and modular functor , Amer. Math. Soc., 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on tensor categories and modular functor"
+    },
+    {
+      "char-anchor": [
+        54400,
+        54410
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BEK",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BEK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Y. Kawahigashi, Chiral Structure of Modular Invariants for Subfactors , CMP 210 (2000), 733-784",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Structure of Modular Invariants for Subfactors"
+    },
+    {
+      "char-anchor": [
+        54605,
+        54615
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BEK",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BEK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Y. Kawahigashi, Chiral Structure of Modular Invariants for Subfactors , CMP 210 (2000), 733-784",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Structure of Modular Invariants for Subfactors"
+    },
+    {
+      "char-anchor": [
+        55122,
+        55130
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "W",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{W}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Wassermann, Operator algebras and conformal field theory .III. Fusion of positive energy representations of LSU(N) using bounded operators , Invent. Math. 133 (1998), no. 3, 467-538",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Operator algebras and conformal field theory .III. Fusion of positive energy representations of LSU(N) using bounded operators"
+    },
+    {
+      "char-anchor": [
+        58115,
+        58124
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BK",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov, Jr., Lectures on tensor categories and modular functor , Amer. Math. Soc., 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on tensor categories and modular functor"
+    },
+    {
+      "char-anchor": [
+        59056,
+        59065
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "Ga",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{Ga}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Gannon, Boundary Conformal Field Theory and Fusion Ring Representations , hep-th/0106105",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boundary Conformal Field Theory and Fusion Ring Representations"
+    },
+    {
+      "char-anchor": [
+        59848,
+        59857
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BK",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov, Jr., Lectures on tensor categories and modular functor , Amer. Math. Soc., 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on tensor categories and modular functor"
+    },
+    {
+      "char-anchor": [
+        60527,
+        60536
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "BE",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BE}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Modular Invariants from Subfactors: Type I Coupling Matrices and Intermediate Subfactors , math.OA/9911239",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Modular Invariants from Subfactors: Type I Coupling Matrices and Intermediate Subfactors"
+    },
+    {
+      "char-anchor": [
+        62248,
+        62257
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        62382,
+        62391
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        62829,
+        62843
+      ],
+      "cite/group-marker": "[5,11]",
+      "cite/key": "BE",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BE, DMS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Modular Invariants from Subfactors: Type I Coupling Matrices and Intermediate Subfactors , math.OA/9911239",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Modular Invariants from Subfactors: Type I Coupling Matrices and Intermediate Subfactors"
+    },
+    {
+      "char-anchor": [
+        62829,
+        62843
+      ],
+      "cite/group-marker": "[5,11]",
+      "cite/key": "DMS",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{BE, DMS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Di Francesco, P. Mathieu, D. Senechal, Conformal Field Theory , Graduate Texts in Contemprorary Physics, Springer-Verlag, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Conformal Field Theory"
+    },
+    {
+      "char-anchor": [
+        63329,
+        63339
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "DMS",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{DMS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Di Francesco, P. Mathieu, D. Senechal, Conformal Field Theory , Graduate Texts in Contemprorary Physics, Springer-Verlag, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Conformal Field Theory"
+    },
+    {
+      "char-anchor": [
+        63877,
+        63887
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "CIZ",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{CIZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Cappelli, C. Itzykson, J. B. Zuber, The A-D-E classification of minimal and A_1^ (1) conformal invariant theories, CMP 113 (1987), 1-26",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        63897,
+        63905
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "K",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{K}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kato, Classification of modular invariant partition functions in two dimensions , Modern Phys. Lett. A 2 (1987), 585-600",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Classification of modular invariant partition functions in two dimensions"
+    },
+    {
+      "char-anchor": [
+        64504,
+        64514
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "Kac",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{Kac}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Kac, Infinite dimensional Lie algebras , Cambridge University Press, Cambridge (1990)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Infinite dimensional Lie algebras"
+    },
+    {
+      "char-anchor": [
+        64605,
+        64614
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "Fi",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{Fi}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Finkelberg, An equivalence of fusion categories , Geom. Funct. Anal. 6 (1996), 249-267",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An equivalence of fusion categories"
+    },
+    {
+      "char-anchor": [
+        64727,
+        64736
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BK",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov, Jr., Lectures on tensor categories and modular functor , Amer. Math. Soc., 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on tensor categories and modular functor"
+    },
+    {
+      "char-anchor": [
+        65299,
+        65312
+      ],
+      "cite/group-marker": "[20,23]",
+      "cite/key": "Ke",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{Ke, KW}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Frolich, T. Kerler, Quantum groups, quantum categories and quantum field theory , LNM 1542",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum groups, quantum categories and quantum field theory"
+    },
+    {
+      "char-anchor": [
+        65299,
+        65312
+      ],
+      "cite/group-marker": "[20,23]",
+      "cite/key": "KW",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Ke, KW}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Kazhdan, H. Wenzl, Reconstructing monoidal categories , I. M. Gelfand Seminar, 111-136, Adv. Soviet Math., 16, Part 2, Amer. Math. Soc",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Reconstructing monoidal categories"
+    },
+    {
+      "char-anchor": [
+        66151,
+        66160
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        66298,
+        66306
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "Q",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{Q}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Quinn, Group categories and their field theories , Geometry Topology Monographs, Volume 2: Proceedings of the Kirbyfest, 407-453",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Group categories and their field theories"
+    },
+    {
+      "char-anchor": [
+        66918,
+        66928
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "DFZ",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{DFZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Di Francesco, J.-B. Zuber, SU(N) lattice integrable models associated with graphs , Nucl. Phys. B 338 (1990), 602-646",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        66984,
+        66993
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "EK",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{EK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, M. Khovanov, Representations of tensor categories and Dynkin diagrams , IMRN No. 5 (1995), 235-247",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations of tensor categories and Dynkin diagrams"
+    },
+    {
+      "char-anchor": [
+        67615,
+        67624
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "EK",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{EK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, M. Khovanov, Representations of tensor categories and Dynkin diagrams , IMRN No. 5 (1995), 235-247",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations of tensor categories and Dynkin diagrams"
+    },
+    {
+      "char-anchor": [
+        69330,
+        69339
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        69769,
+        69778
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        70348,
+        70358
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "DMS",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{DMS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Di Francesco, P. Mathieu, D. Senechal, Conformal Field Theory , Graduate Texts in Contemprorary Physics, Springer-Verlag, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Conformal Field Theory"
+    },
+    {
+      "char-anchor": [
+        70862,
+        70872
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "DMS",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{DMS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Di Francesco, P. Mathieu, D. Senechal, Conformal Field Theory , Graduate Texts in Contemprorary Physics, Springer-Verlag, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Conformal Field Theory"
+    },
+    {
+      "char-anchor": [
+        71357,
+        71365
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "W",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{W}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Wassermann, Operator algebras and conformal field theory .III. Fusion of positive energy representations of LSU(N) using bounded operators , Invent. Math. 133 (1998), no. 3, 467-538",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Operator algebras and conformal field theory .III. Fusion of positive energy representations of LSU(N) using bounded operators"
+    },
+    {
+      "char-anchor": [
+        71400,
+        71410
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BEK",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BEK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Y. Kawahigashi, Chiral Structure of Modular Invariants for Subfactors , CMP 210 (2000), 733-784",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Structure of Modular Invariants for Subfactors"
+    },
+    {
+      "char-anchor": [
+        71482,
+        71492
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "DMS",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{DMS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Di Francesco, P. Mathieu, D. Senechal, Conformal Field Theory , Graduate Texts in Contemprorary Physics, Springer-Verlag, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Conformal Field Theory"
+    },
+    {
+      "char-anchor": [
+        72180,
+        72190
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "DMS",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{DMS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Di Francesco, P. Mathieu, D. Senechal, Conformal Field Theory , Graduate Texts in Contemprorary Physics, Springer-Verlag, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Conformal Field Theory"
+    },
+    {
+      "char-anchor": [
+        72693,
+        72702
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        74031,
+        74040
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        74440,
+        74449
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        76253,
+        76262
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        76588,
+        76597
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "KO",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{KO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Kirillov, V. Ostrik, On q- analog of McKay correspondence and ADE classification of conformal field theories , math.QA/0101219",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On q- analog of McKay correspondence and ADE classification of conformal field theories"
+    },
+    {
+      "char-anchor": [
+        77464,
+        77474
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BEK",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BEK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Y. Kawahigashi, Chiral Structure of Modular Invariants for Subfactors , CMP 210 (2000), 733-784",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Structure of Modular Invariants for Subfactors"
+    },
+    {
+      "char-anchor": [
+        77568,
+        77578
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BEK",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BEK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bockenhauer, D. E. Evans, Y. Kawahigashi, Chiral Structure of Modular Invariants for Subfactors , CMP 210 (2000), 733-784",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chiral Structure of Modular Invariants for Subfactors"
+    },
+    {
+      "char-anchor": [
+        77843,
+        77851
+      ],
+      "cite/group-marker": "[37]",
+      "cite/key": "X",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{X}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Xu, New braided endomorphisms from conformal inclusions , Comm. Math. Phys. 192 (1998), 349-403",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "New braided endomorphisms from conformal inclusions"
+    },
+    {
+      "char-anchor": [
+        78592,
+        78604
+      ],
+      "cite/group-marker": "[33,35]",
+      "cite/key": "Q",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{Q, TY}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Quinn, Group categories and their field theories , Geometry Topology Monographs, Volume 2: Proceedings of the Kirbyfest, 407-453",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Group categories and their field theories"
+    },
+    {
+      "char-anchor": [
+        78592,
+        78604
+      ],
+      "cite/group-marker": "[33,35]",
+      "cite/key": "TY",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{Q, TY}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Tambara, S. Yamagami, Tensor categories with fusion rules of self-duality for finite abelian groups , J. Algebra 209 (1998), 692-707",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tensor categories with fusion rules of self-duality for finite abelian groups"
+    },
+    {
+      "char-anchor": [
+        78925,
+        78934
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "FS",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{FS}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0106050",
+      "resolved-corpus-id": "math__0106050",
+      "title": "Category theory for conformal boundary conditions"
+    },
+    {
+      "char-anchor": [
+        79287,
+        79303
+      ],
+      "cite/group-marker": "[30,31,32]",
+      "cite/key": "O",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{O, Om, PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu, Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors , in Lectures on operator theory , the Fields Institute Monographs, Amer. Math. Soc., Providence, RI, 2000, 243-323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors"
+    },
+    {
+      "char-anchor": [
+        79287,
+        79303
+      ],
+      "cite/group-marker": "[30,31,32]",
+      "cite/key": "Om",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{O, Om, PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu, Higher Coxeter systems , transparancies of the talk given at MSRI, http://www.msri.org/publications/ln/msri/2000/subfactors/ocneanu",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Higher Coxeter systems"
+    },
+    {
+      "char-anchor": [
+        79287,
+        79303
+      ],
+      "cite/group-marker": "[30,31,32]",
+      "cite/key": "PZ",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{O, Om, PZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Petkova, J. Zuber The many faces of Ocneanu cells , hep-th/0101151",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The many faces of Ocneanu cells"
+    },
+    {
+      "char-anchor": [
+        79704,
+        79714
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "Coq",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Coq}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Coquereaux, G. Schieber, Twisted partition functions for ADE boundary conformal field theories and Ocneanu algebras of quantum symmetries , hep-th/0107001",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Twisted partition functions for ADE boundary conformal field theories and Ocneanu algebras of quantum symmetries"
+    },
+    {
+      "char-anchor": [
+        79905,
+        79914
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "Ga",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{Ga}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Gannon, Boundary Conformal Field Theory and Fusion Ring Representations , hep-th/0106105",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boundary Conformal Field Theory and Fusion Ring Representations"
+    },
+    {
+      "char-anchor": [
+        80082,
+        80091
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "Om",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{Om}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu, Higher Coxeter systems , transparancies of the talk given at MSRI, http://www.msri.org/publications/ln/msri/2000/subfactors/ocneanu",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Higher Coxeter systems"
+    },
+    {
+      "char-anchor": [
+        80845,
+        80853
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "O",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{O}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu, Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors , in Lectures on operator theory , the Fields Institute Monographs, Amer. Math. Soc., Providence, RI, 2000, 243-323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Paths on Coxeter diagrams: From Platonic solids and singularities to minimal models and subfactors"
+    },
+    {
+      "char-anchor": [
+        81229,
+        81238
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "GP",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{GP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Lusztig, On quiver varieties , Adv. Math. 136 , no. 1 (1998), 141-182",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On quiver varieties"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__0111139-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 114,
+    "resolution-rate": 0.0952,
+    "resolved": 12,
+    "total": 126
+  }
+}

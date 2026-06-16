@@ -1,0 +1,2518 @@
+{
+  "paper-id": "0908.3347",
+  "records": [
+    {
+      "char-anchor": [
+        4360,
+        4372
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "Pen71",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{Pen71}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Penrose. Applications of negative dimensional tensors. In D. J. A. Welsh, editor, Combinatorial Mathematics and its Applications , pages 221--244. Academic Press, New York, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Combinatorial Mathematics and its Applications"
+    },
+    {
+      "char-anchor": [
+        6096,
+        6108
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "Pen71",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{Pen71}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Penrose. Applications of negative dimensional tensors. In D. J. A. Welsh, editor, Combinatorial Mathematics and its Applications , pages 221--244. Academic Press, New York, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Combinatorial Mathematics and its Applications"
+    },
+    {
+      "char-anchor": [
+        6473,
+        6485
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "Pen71",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{Pen71}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Penrose. Applications of negative dimensional tensors. In D. J. A. Welsh, editor, Combinatorial Mathematics and its Applications , pages 221--244. Academic Press, New York, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Combinatorial Mathematics and its Applications"
+    },
+    {
+      "char-anchor": [
+        8991,
+        9002
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "ML71",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{ML71}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane . Categories for the Working Mathematician . Graduate Texts in Mathematics 5. Springer, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the Working Mathematician"
+    },
+    {
+      "char-anchor": [
+        14575,
+        14586
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        21296,
+        21312
+      ],
+      "cite/group-marker": "[29,23]",
+      "cite/key": "ML71",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{ML71,JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane . Categories for the Working Mathematician . Graduate Texts in Mathematics 5. Springer, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the Working Mathematician"
+    },
+    {
+      "char-anchor": [
+        21296,
+        21312
+      ],
+      "cite/group-marker": "[29,23]",
+      "cite/key": "JS93",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{ML71,JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Braided tensor categories. Advances in Mathematics , 102:20--78, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        26764,
+        26785
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[Thm.~1.5]{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26789,
+        26810
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Thm.~1.2]{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        27684,
+        27700
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88,JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        27684,
+        27700
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS88,JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        27763,
+        27779
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88,JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        27763,
+        27779
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS88,JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        29830,
+        29841
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "ML63",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{ML63}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane . Natural associativity and commutativity. Rice University Studies , 49:28--46, 1963",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rice University Studies"
+    },
+    {
+      "char-anchor": [
+        30043,
+        30062
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "K72b",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[p.~107]{K72b}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly. An abstract approach to coherence. In S. Mac Lane, editor, Coherence in Categories , Lecture Notes in Mathematics 281, pages 106--147. Springer, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in Categories"
+    },
+    {
+      "char-anchor": [
+        31214,
+        31230
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88,JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        31214,
+        31230
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS88,JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        31302,
+        31323
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Def.~1.4]{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        31327,
+        31348
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[Def.~1.6]{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        38216,
+        38227
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "JS93",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Braided tensor categories. Advances in Mathematics , 102:20--78, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        43042,
+        43063
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Thm.~3.7]{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        43815,
+        43826
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        43878,
+        43889
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        44234,
+        44245
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "JS93",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Braided tensor categories. Advances in Mathematics , 102:20--78, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        45328,
+        45339
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        45922,
+        45943
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Thm.~4.5]{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        48197,
+        48218
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Thm.~2.3]{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        49286,
+        49297
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "JS93",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Braided tensor categories. Advances in Mathematics , 102:20--78, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        50547,
+        50568
+      ],
+      "cite/group-marker": "[20,21,23]",
+      "cite/key": "JS86",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{JS86,JS88,JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Braided monoidal categories. Mathematics Report 860081, Macquarie University, Nov. 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        50547,
+        50568
+      ],
+      "cite/group-marker": "[20,21,23]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS86,JS88,JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        50547,
+        50568
+      ],
+      "cite/group-marker": "[20,21,23]",
+      "cite/key": "JS93",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{JS86,JS88,JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Braided tensor categories. Advances in Mathematics , 102:20--78, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        51010,
+        51028
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "SR72",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite[p.~78]{SR72}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Saavedra Rivano. Categories Tanakiennes . Lecture Notes in Mathematics 265. Springer, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories Tanakiennes"
+    },
+    {
+      "char-anchor": [
+        51250,
+        51262
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "Bar79",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{Bar79}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Barr. *-Autonomous Categories . Lectures Notes in Mathematics 752. Springer, 1979",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "*-Autonomous Categories"
+    },
+    {
+      "char-anchor": [
+        54445,
+        54466
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[Thm.~2.7]{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        55088,
+        55099
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        55180,
+        55191
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        57936,
+        57947
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        58018,
+        58039
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[Def.~2.5]{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        60008,
+        60032
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "SR72",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite[Prop.~5.2.3]{SR72}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Saavedra Rivano. Categories Tanakiennes . Lecture Notes in Mathematics 265. Springer, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories Tanakiennes"
+    },
+    {
+      "char-anchor": [
+        60045,
+        60067
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "JS93",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite[Prop.~7.1]{JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Braided tensor categories. Advances in Mathematics , 102:20--78, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        61581,
+        61592
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        62280,
+        62291
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        63392,
+        63413
+      ],
+      "cite/group-marker": "[15,16,19]",
+      "cite/key": "FY89",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{FY89,FY92,JSXX}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Braided compact closed categories with applications to low dimensional topology. Advances in Mathematics , 77:156--182, 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        63392,
+        63413
+      ],
+      "cite/group-marker": "[15,16,19]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{FY89,FY92,JSXX}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        63392,
+        63413
+      ],
+      "cite/group-marker": "[15,16,19]",
+      "cite/key": "JSXX",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{FY89,FY92,JSXX}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus II . Unpublished draft, available from Ross Street's website",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        64207,
+        64230
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "JSXX",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite[Def.~3.1.1]{JSXX}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus II . Unpublished draft, available from Ross Street's website",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        64769,
+        64780
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{FY92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        64803,
+        64824
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Def.~4.1]{FY92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        64968,
+        64979
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{FY92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        66363,
+        66384
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Thm.~4.4]{FY92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        66798,
+        66809
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "JSXX",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{JSXX}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus II . Unpublished draft, available from Ross Street's website",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        68914,
+        68925
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "BW99",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BW99}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett and B. W. Westbury. Spherical categories. Advances in Mathematics , 143:357--375, 1999",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        72564,
+        72586
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "JS93",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite[Prop.~7.2]{JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Braided tensor categories. Advances in Mathematics , 102:20--78, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        75057,
+        75069
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "Kau86",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{Kau86}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. H. Kauffman. An invariant of regular isotopy. Transactions of the American Mathematical Society , 318(2):417--471, 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Transactions of the American Mathematical Society"
+    },
+    {
+      "char-anchor": [
+        76014,
+        76026
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "Rei32",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{Rei32}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Reidemeister. Knotentheorie . Springer, Berlin, 1932; Chelsea, New York, 1948. English translation: Knot Theory , BCS Associates, 1983",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Knotentheorie"
+    },
+    {
+      "char-anchor": [
+        76846,
+        76867
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Thm.~3.8]{FY92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        77112,
+        77136
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "Yet92",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite[Prop.~2.11]{Yet92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. N. Yetter. Framed tangles and a theorem of Deligne on braided deformations of tannakian categories. In M. Gerstenhaber and J. D. Stasheff, editors, Deformation Theory and Quantum Groups with Applications to Mathematical Physics , Contemporary Mathematics 134, pages 325--349. Americal Mathematical Society, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Deformation Theory and Quantum Groups with Applications to Mathematical Physics"
+    },
+    {
+      "char-anchor": [
+        81106,
+        81127
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Thm.~4.4]{FY92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        81732,
+        81751
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "FY89",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite[p.~169]{FY89}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Braided compact closed categories with applications to low dimensional topology. Advances in Mathematics , 77:156--182, 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        84144,
+        84155
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "JS93",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{JS93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Braided tensor categories. Advances in Mathematics , 102:20--78, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        84529,
+        84541
+      ],
+      "cite/group-marker": "[42]",
+      "cite/key": "Tur94",
+      "cite/marker": "[42]",
+      "cite/raw": "\\cite{Tur94}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev. Quantum Invariants of Knots and 3-Manifolds . Studies in Mathematics 18. Walter De Gruyter Co., Berlin, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum Invariants of Knots and 3-Manifolds"
+    },
+    {
+      "char-anchor": [
+        86381,
+        86404
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Shum94",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite[Thm.~6.1]{Shum94}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. C. Shum. Tortile tensor categories. Journal of Pure and Applied Algebra , 93:57--110, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        90434,
+        90455
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "KL80",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite[Thm.~8.2]{KL80}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly and M. L. Laplaza. Coherence for compact closed categories. Journal of Pure and Applied Algebra , 19:193--213, 1980",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        93027,
+        93040
+      ],
+      "cite/group-marker": "[38,10,11]",
+      "cite/key": "6",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{6,12,8}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. Feedback theories (a calculus for isomorphism classes of flowchart schemes). Revue Roumaine de Mathematiques Pures et Appliquees , 35:73--79, 1990. Also appeared as: INCREST Preprint Series in Mathematics 24, Bucharest, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Revue Roumaine de Mathematiques Pures et Appliquees"
+    },
+    {
+      "char-anchor": [
+        93027,
+        93040
+      ],
+      "cite/group-marker": "[38,10,11]",
+      "cite/key": "12",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{6,12,8}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Towards a new algebraic foundation of flowchart scheme theory. Fundamenta Informaticae , 13:171--210, 1990. Also appeared as: INCREST Preprint Series in Mathematics 43, Bucharest, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fundamenta Informaticae"
+    },
+    {
+      "char-anchor": [
+        93027,
+        93040
+      ],
+      "cite/group-marker": "[38,10,11]",
+      "cite/key": "8",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{6,12,8}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Feedback, iteration and repetition. In G. P a un, editor, Mathematical aspects of natural and formal languages , pages 43--62. World Scientific, Singapore, 1995. Also appeared as: INCREST Preprint Series in Mathematics 42, Bucharest, 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical aspects of natural and formal languages"
+    },
+    {
+      "char-anchor": [
+        93268,
+        93280
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        94844,
+        94856
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        108065,
+        108077
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        110451,
+        110463
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        112420,
+        112443
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite[Prop.~5.1]{JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        114011,
+        114028
+      ],
+      "cite/group-marker": "[11,10,24]",
+      "cite/key": "8",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{8,12,JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Feedback, iteration and repetition. In G. P a un, editor, Mathematical aspects of natural and formal languages , pages 43--62. World Scientific, Singapore, 1995. Also appeared as: INCREST Preprint Series in Mathematics 42, Bucharest, 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical aspects of natural and formal languages"
+    },
+    {
+      "char-anchor": [
+        114011,
+        114028
+      ],
+      "cite/group-marker": "[11,10,24]",
+      "cite/key": "12",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{8,12,JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Towards a new algebraic foundation of flowchart scheme theory. Fundamenta Informaticae , 13:171--210, 1990. Also appeared as: INCREST Preprint Series in Mathematics 43, Bucharest, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fundamenta Informaticae"
+    },
+    {
+      "char-anchor": [
+        114011,
+        114028
+      ],
+      "cite/group-marker": "[11,10,24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{8,12,JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        114667,
+        114679
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        114890,
+        114902
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        116658,
+        116666
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "6",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{6}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. Feedback theories (a calculus for isomorphism classes of flowchart schemes). Revue Roumaine de Mathematiques Pures et Appliquees , 35:73--79, 1990. Also appeared as: INCREST Preprint Series in Mathematics 24, Bucharest, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Revue Roumaine de Mathematiques Pures et Appliquees"
+    },
+    {
+      "char-anchor": [
+        116752,
+        116763
+      ],
+      "cite/group-marker": "[10,11]",
+      "cite/key": "12",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{12,8}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Towards a new algebraic foundation of flowchart scheme theory. Fundamenta Informaticae , 13:171--210, 1990. Also appeared as: INCREST Preprint Series in Mathematics 43, Bucharest, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fundamenta Informaticae"
+    },
+    {
+      "char-anchor": [
+        116752,
+        116763
+      ],
+      "cite/group-marker": "[10,11]",
+      "cite/key": "8",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{12,8}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Feedback, iteration and repetition. In G. P a un, editor, Mathematical aspects of natural and formal languages , pages 43--62. World Scientific, Singapore, 1995. Also appeared as: INCREST Preprint Series in Mathematics 42, Bucharest, 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical aspects of natural and formal languages"
+    },
+    {
+      "char-anchor": [
+        116777,
+        116785
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "6",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{6}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. Feedback theories (a calculus for isomorphism classes of flowchart schemes). Revue Roumaine de Mathematiques Pures et Appliquees , 35:73--79, 1990. Also appeared as: INCREST Preprint Series in Mathematics 24, Bucharest, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Revue Roumaine de Mathematiques Pures et Appliquees"
+    },
+    {
+      "char-anchor": [
+        128860,
+        128872
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        130646,
+        130658
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "Bai76",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{Bai76}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. S. Bainbridge. Feedback and generalized logic. Information and Control , 31:75--96, 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Information and Control"
+    },
+    {
+      "char-anchor": [
+        131295,
+        131306
+      ],
+      "cite/group-marker": "[10,11]",
+      "cite/key": "12",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{12,8}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Towards a new algebraic foundation of flowchart scheme theory. Fundamenta Informaticae , 13:171--210, 1990. Also appeared as: INCREST Preprint Series in Mathematics 43, Bucharest, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fundamenta Informaticae"
+    },
+    {
+      "char-anchor": [
+        131295,
+        131306
+      ],
+      "cite/group-marker": "[10,11]",
+      "cite/key": "8",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{12,8}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Feedback, iteration and repetition. In G. P a un, editor, Mathematical aspects of natural and formal languages , pages 43--62. World Scientific, Singapore, 1995. Also appeared as: INCREST Preprint Series in Mathematics 42, Bucharest, 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical aspects of natural and formal languages"
+    },
+    {
+      "char-anchor": [
+        132429,
+        132449
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "2a",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite[Prop.~B.1]{2a}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. On flowchart theories, part I . the deterministic case. Journal of Computer and System Sciences , 35(2):163--191, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Computer and System Sciences"
+    },
+    {
+      "char-anchor": [
+        132646,
+        132658
+      ],
+      "cite/group-marker": "[12,9]",
+      "cite/key": "22",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{22,25}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and C. Ungureanu. Again on advice on structuring compilers and proving them correct. Preprint Series in Mathematics 75, INCREST, Bucharest, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        132646,
+        132658
+      ],
+      "cite/group-marker": "[12,9]",
+      "cite/key": "25",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{22,25}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu. On context-free trees. Theoretical Comput. Sci. , 41:33--50, 1985",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theoretical Comput. Sci"
+    },
+    {
+      "char-anchor": [
+        132749,
+        132757
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "8",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{8}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Feedback, iteration and repetition. In G. P a un, editor, Mathematical aspects of natural and formal languages , pages 43--62. World Scientific, Singapore, 1995. Also appeared as: INCREST Preprint Series in Mathematics 42, Bucharest, 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical aspects of natural and formal languages"
+    },
+    {
+      "char-anchor": [
+        133984,
+        133992
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "8",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{8}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and G. S tef a nescu. Feedback, iteration and repetition. In G. P a un, editor, Mathematical aspects of natural and formal languages , pages 43--62. World Scientific, Singapore, 1995. Also appeared as: INCREST Preprint Series in Mathematics 42, Bucharest, 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical aspects of natural and formal languages"
+    },
+    {
+      "char-anchor": [
+        134568,
+        134579
+      ],
+      "cite/group-marker": "[36,35]",
+      "cite/key": "2a",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{2a,5}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. On flowchart theories, part I . the deterministic case. Journal of Computer and System Sciences , 35(2):163--191, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Computer and System Sciences"
+    },
+    {
+      "char-anchor": [
+        134568,
+        134579
+      ],
+      "cite/group-marker": "[36,35]",
+      "cite/key": "5",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{2a,5}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. An algebraic theory of flowchart schemes. In Proceedings of the 11th Colloquium on Trees in Algebra and Programming, CAAP'86 , Lecture Notes in Computer Science 214, pages 60--73. Springer, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the 11th Colloquium on Trees in Algebra and Programming, CAAP'86"
+    },
+    {
+      "char-anchor": [
+        135095,
+        135109
+      ],
+      "cite/group-marker": "[36,37,40]",
+      "cite/key": "2a",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{2a,2b,4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. On flowchart theories, part I . the deterministic case. Journal of Computer and System Sciences , 35(2):163--191, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Computer and System Sciences"
+    },
+    {
+      "char-anchor": [
+        135095,
+        135109
+      ],
+      "cite/group-marker": "[36,37,40]",
+      "cite/key": "2b",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{2a,2b,4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. On flowchart theories: Part II . the nondeterministic case. tcs , 52:307--340, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "tcs"
+    },
+    {
+      "char-anchor": [
+        135095,
+        135109
+      ],
+      "cite/group-marker": "[36,37,40]",
+      "cite/key": "4",
+      "cite/marker": "[40]",
+      "cite/raw": "\\cite{2a,2b,4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. Network Algebra . Springer, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Network Algebra"
+    },
+    {
+      "char-anchor": [
+        135401,
+        135410
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "15",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{15}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Z. Esik. Identities in iterative and rational algebraic theories. Computational Linguistics and Computer Languages , XIV:183--207, 1980",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Computational Linguistics and Computer Languages"
+    },
+    {
+      "char-anchor": [
+        136226,
+        136238
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "Has97",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{Has97}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Hasegawa. Models of Sharing Graphs: A Categorical Semantics of let and letrec . PhD thesis, Department of Computer Science, University of Edinburgh, July 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Models of Sharing Graphs: A Categorical Semantics of let and letrec"
+    },
+    {
+      "char-anchor": [
+        136473,
+        136488
+      ],
+      "cite/group-marker": "[12,7,39]",
+      "cite/key": "22",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{22,10,11}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V.-E. C a z a nescu and C. Ungureanu. Again on advice on structuring compilers and proving them correct. Preprint Series in Mathematics 75, INCREST, Bucharest, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        136473,
+        136488
+      ],
+      "cite/group-marker": "[12,7,39]",
+      "cite/key": "10",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{22,10,11}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. L. Bloom and Z. Esik. Axiomatizing schemes and their behaviors. Journal of Computer and System Sciences , 31:375--393, 1985",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Computer and System Sciences"
+    },
+    {
+      "char-anchor": [
+        136473,
+        136488
+      ],
+      "cite/group-marker": "[12,7,39]",
+      "cite/key": "11",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{22,10,11}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. Algebra of flownomials. Technical Report TUM-I9437, Technische Univeritat Munchen, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        137214,
+        137225
+      ],
+      "cite/group-marker": "[39,40]",
+      "cite/key": "11",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{11,4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. Algebra of flownomials. Technical Report TUM-I9437, Technische Univeritat Munchen, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        137214,
+        137225
+      ],
+      "cite/group-marker": "[39,40]",
+      "cite/key": "4",
+      "cite/marker": "[40]",
+      "cite/raw": "\\cite{11,4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. S tef a nescu. Network Algebra . Springer, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Network Algebra"
+    },
+    {
+      "char-anchor": [
+        143959,
+        143971
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "Sel05",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{Sel05}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Selinger. Dagger compact closed categories and completely positive maps. In Proceedings of the 3rd International Workshop on Quantum Programming Languages , Electronic Notes in Theoretical Computer Science 170, pages 139--163. Elsevier Science, 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the 3rd International Workshop on Quantum Programming Languages"
+    },
+    {
+      "char-anchor": [
+        157076,
+        157093
+      ],
+      "cite/group-marker": "[1,33]",
+      "cite/key": "AC04",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AC04,Sel05}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Abramsky and B. Coecke. A categorical semantics of quantum protocols. In Proceedings of the 19th Annual IEEE Symposium on Logic in Computer Science, LICS 2004 , pages 415--425. IEEE Computer Society Press, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the 19th Annual IEEE Symposium on Logic in Computer Science, LICS 2004"
+    },
+    {
+      "char-anchor": [
+        157076,
+        157093
+      ],
+      "cite/group-marker": "[1,33]",
+      "cite/key": "Sel05",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{AC04,Sel05}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Selinger. Dagger compact closed categories and completely positive maps. In Proceedings of the 3rd International Workshop on Quantum Programming Languages , Electronic Notes in Theoretical Computer Science 170, pages 139--163. Elsevier Science, 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the 3rd International Workshop on Quantum Programming Languages"
+    },
+    {
+      "char-anchor": [
+        160288,
+        160300
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "JSV96",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{JSV96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal, R. Street, and D. Verity. Traced monoidal categories. Mathematical Proceedings of the Cambridge Philosophical Society , 119:447--468, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        163649,
+        163661
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "Ben67",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{Ben67}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Benabou. Introduction to bicategories, part I . In Reports of the Midwest Category Seminar , Lecture Notes in Mathematics 47, pages 1--77. Springer, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Reports of the Midwest Category Seminar"
+    },
+    {
+      "char-anchor": [
+        166329,
+        166341
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "Ben67",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{Ben67}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Benabou. Introduction to bicategories, part I . In Reports of the Midwest Category Seminar , Lecture Notes in Mathematics 47, pages 1--77. Springer, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Reports of the Midwest Category Seminar"
+    },
+    {
+      "char-anchor": [
+        166408,
+        166420
+      ],
+      "cite/group-marker": "[41]",
+      "cite/key": "Str95",
+      "cite/marker": "[41]",
+      "cite/raw": "\\cite{Str95}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street. Low-dimensional topology and higher-order categories. In Proceedings of the International Category Theory Conference (CT'95) , 1995. Available from http://www.mta.ca/ cat-dist/ct95.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the International Category Theory Conference (CT'95)"
+    },
+    {
+      "char-anchor": [
+        166424,
+        166443
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "BD95",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite[Sec.~7]{BD95}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. C. Baez and J. Dolan. Higher-dimensional algebra and topological quantum field theory. Journal of Mathematical Physics , 36(11):6073--6105, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Mathematical Physics"
+    },
+    {
+      "char-anchor": [
+        167101,
+        167112
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "CS97",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{CS97}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. R. B. Cockett and R. A. G. Seely. Weakly distributive categories. Pure and Applied Algebra , 114(2):133--173, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        167143,
+        167155
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "Bar79",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{Bar79}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Barr. *-Autonomous Categories . Lectures Notes in Mathematics 752. Springer, 1979",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "*-Autonomous Categories"
+    },
+    {
+      "char-anchor": [
+        167223,
+        167236
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "Gir87a",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{Gir87a}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-Y. Girard. Linear logic. Theoretical Comput. Sci. , 50:1--102, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theoretical Comput. Sci"
+    },
+    {
+      "char-anchor": [
+        169239,
+        169252
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "Gir87a",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{Gir87a}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-Y. Girard. Linear logic. Theoretical Comput. Sci. , 50:1--102, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theoretical Comput. Sci"
+    },
+    {
+      "char-anchor": [
+        169322,
+        169335
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "BCST96",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{BCST96}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. F. Blute, J. R. B. Cockett, R. A. G. Seely, and T. H. Trimble. Natural deduction and coherence for weakly distributive categories. Journal of Pure and Applied Algebra , 113(3):229--296, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        170951,
+        170967
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88,JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        170951,
+        170967
+      ],
+      "cite/group-marker": "[21,22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS88,JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        171137,
+        171148
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        171228,
+        171239
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        171318,
+        171329
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "JS91",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{JS91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. The geometry of tensor calculus I . Advances in Mathematics , 88(1):55--112, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Advances in Mathematics"
+    },
+    {
+      "char-anchor": [
+        172546,
+        172557
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "JS88",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{JS88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street. Planar diagrams and tensor algebra. Unpublished manuscript, available from Ross Street's website, Sept. 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        172664,
+        172675
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{FY92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        172860,
+        172871
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{FY92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        173028,
+        173039
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "FY92",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{FY92}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Freyd and D. N. Yetter. Coherence theorems via knot theory. Journal of Pure and Applied Algebra , 78:49--76, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        173124,
+        173137
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Shum94",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Shum94}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. C. Shum. Tortile tensor categories. Journal of Pure and Applied Algebra , 93:57--110, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        173218,
+        173229
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "KL80",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{KL80}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly and M. L. Laplaza. Coherence for compact closed categories. Journal of Pure and Applied Algebra , 19:193--213, 1980",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-0908.3347-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 125,
+    "resolution-rate": 0.0,
+    "resolved": 0,
+    "total": 125
+  }
+}
