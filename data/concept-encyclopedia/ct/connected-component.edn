@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : connected component"}],
- :name "connected component",
+{:name "connected component",
  :df 377,
  :concept/id :connected-component,
  :msc "ct",
@@ -10,13 +8,10 @@
   ["0904.4896" "0908.0428" "0909.1793" "1106.3250" "1304.0257"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -26,13 +21,9 @@
   :domains ["Mathworld" "Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0904.4896",
   :text
-  "pha_0}$ are open, nonempty, and cover $C_{\\alpha_0}$, thus $C_{\\alpha_0}$ is not connected, contradiction. Hence $\\bigcup_{\\alpha \\in A} C_{\\alpha}$ is connected. \\end{proof} The \\textbf{connected component} of a point $x\\in X$ of a small space $X$ is the largest connected set $C_x$ containing $x$. "},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for connected component"}]}
+  "pha_0}$ are open, nonempty, and cover $C_{\\alpha_0}$, thus $C_{\\alpha_0}$ is not connected, contradiction. Hence $\\bigcup_{\\alpha \\in A} C_{\\alpha}$ is connected. \\end{proof} The \\textbf{connected component} of a point $x\\in X$ of a small space $X$ is the largest connected set $C_x$ containing $x$. "}}

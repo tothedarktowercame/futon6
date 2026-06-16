@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : comma category"}],
- :name "comma category",
+{:name "comma category",
  :df 344,
  :concept/id :comma-category,
  :msc "ct",
@@ -7,15 +6,26 @@
  {:n-papers 82,
   :sample
   ["0710.0032" "0712.0724" "0801.0161" "0801.1133" "0810.0979"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "If f C E and g D E are functors, their comma category is the category (f/g) whose.",
+   :refs [:category :morphism :composition]}
+  {:id :nlab-condition-2,
+   :statement
+   "objects are triples (c,d,) where c C, d D, and \\[ f(c) g(d) \\] is a morphism in E, and whose.",
+   :refs [:category :morphism :composition]}
+  {:id :nlab-condition-3,
+   :statement
+   "morphisms from (c1,d1,1) to (c2,d2,2) are pairs (,), where :c1 c2 and :d1 d2 are morphisms in C and D, respectively, such that 2 .",
+   :refs [:category :morphism :composition]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :unresolved-source-refs,
+   :wanted [:functors :objects :triples :morphisms],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :category,
  :status :draft,
  :kind :object,
  :provenance
@@ -23,13 +33,12 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:stack :object],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "745",
+  :definition-id "nlab-745-d1"},
+ :depends-on [:category :morphism :composition],
  :gloss
  {:paper "0810.0979",
   :text
-  "t case. See \\cite[Chapter 7]{\\Borceux} or \\cite[Appendix 2]{\\GH} for the definition of lax colimits. Let $\\X$ be a stack on $\\Diff$. The \\emph{category of manifolds over $\\X$} is defined to be the comma category $(\\Diff\\downarrow\\X)$. An object in $(\\Diff\\downarrow\\X)$ is simply a morphism \\begin{eq"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for comma category"}]}
+  "t case. See \\cite[Chapter 7]{\\Borceux} or \\cite[Appendix 2]{\\GH} for the definition of lax colimits. Let $\\X$ be a stack on $\\Diff$. The \\emph{category of manifolds over $\\X$} is defined to be the comma category $(\\Diff\\downarrow\\X)$. An object in $(\\Diff\\downarrow\\X)$ is simply a morphism \\begin{eq"}}

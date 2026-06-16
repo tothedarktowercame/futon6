@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : finite type"}],
- :name "finite type",
+{:name "finite type",
  :df 347,
  :concept/id :finite-type,
  :msc "ct",
@@ -7,44 +6,12 @@
  {:n-papers 78,
   :sample
   ["0806.4345" "0908.4305" "1006.5347" "1011.6077" "1107.5511"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : object. and only if $\\dim \\Hom_\\BB (X,B) < \\infty$ for all $X$ of finite length. A Grothendieck category is said to be of \\emph{finite type} if and only if it is locall",
-   :refs [:category :locally :type :infty :grothendieck :finite]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :finite-length,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :grothendieck-category,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :locally,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :type,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :infty,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :grothendieck,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :finite,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :object,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -54,22 +21,9 @@
   :domains ["Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:finite-length
-  :grothendieck-category
-  :object
-  :category
-  :locally
-  :type
-  :infty
-  :grothendieck
-  :finite],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1011.6077",
   :text
-  "Grothendieck category $\\BB$ is said to be \\emph{quasi-finite} if and only if $\\dim \\Hom_\\BB (X,B) < \\infty$ for all $X$ of finite length. A Grothendieck category is said to be of \\emph{finite type} if and only if it is locally finite and $\\dim_k \\Hom(A,B) < \\infty$ for all $A,B$ of finite length; th"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for finite type"}]}
+  "Grothendieck category $\\BB$ is said to be \\emph{quasi-finite} if and only if $\\dim \\Hom_\\BB (X,B) < \\infty$ for all $X$ of finite length. A Grothendieck category is said to be of \\emph{finite type} if and only if it is locally finite and $\\dim_k \\Hom(A,B) < \\infty$ for all $A,B$ of finite length; th"}}

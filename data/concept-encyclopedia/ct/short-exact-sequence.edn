@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : short exact sequence"}],
- :name "short exact sequence",
+{:name "short exact sequence",
  :df 617,
  :concept/id :short-exact-sequence,
  :msc "ct",
@@ -10,13 +8,10 @@
   ["0711.1608" "0801.3843" "0908.3762" "1104.0518" "1107.0954"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -26,13 +21,9 @@
   :domains ["Mathworld" "Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:exact-sequence :object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0908.3762",
   :text
-  "A \\defn{short exact sequence} is any sequence \\[ \\xymatrix{K \\ar[r]^-{k} & B \\ar[r]^-{f} & A} \\] that satisfies $k=\\ker f$ and $f=\\coker k$."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for short exact sequence"}]}
+  "A \\defn{short exact sequence} is any sequence \\[ \\xymatrix{K \\ar[r]^-{k} & B \\ar[r]^-{f} & A} \\] that satisfies $k=\\ker f$ and $f=\\coker k$."}}

@@ -1,23 +1,50 @@
-{:given [{:var :X, :type :object, :signature "X : complex numbers"}],
- :name "complex numbers",
+{:name "complex numbers",
  :df 323,
  :concept/id :complex-numbers,
  :msc "ct",
  :defined-in {:n-papers 2, :sample ["1804.02203" "2011.13903"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A complex number is a number of the form a + b, where a and b are real numbers and ^2 =.",
+   :refs [:associative-algebra]}
+  {:id :nlab-condition-2,
+   :statement
+   "The set of complex numbers (in fact a field and topological vector space) is denoted or .",
+   :refs [:associative-algebra]}
+  {:id :nlab-condition-3,
+   :statement
+   "the vector space ^2 made into an algebra by the rule (a, b) (c, d) = (a c.",
+   :refs [:associative-algebra]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :unresolved-genus,
+   :wanted :number-of-the-form-a-b,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:number
+    :real-numbers
+    :imaginary-unit
+    :field
+    :topological-vector-space
+    :matrix],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :number-of-the-form-a-b,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:complex number",
-  :resolution-kind "nnexus",
+ {:formaliser :codex-1,
+  :domains
+  ["Encyclopediaofmath"
+   "Mathhub"
+   "Mathworld"
+   "Planetmath"
+   "Wikipedia"],
+  :definition-source :nlab-raw-section,
   :msc
   ["12D"
    "12D99"
@@ -32,21 +59,14 @@
    "81R50"
    "Complex_numbers"
    "XX-XX"],
-  :domains
-  ["Encyclopediaofmath"
-   "Mathhub"
-   "Mathworld"
-   "Planetmath"
-   "Wikipedia"],
-  :formaliser :codex-1,
+  :nlab-page-id "2165",
+  :resolution-kind "nnexus",
+  :target "nnexus:complex number",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:number-of-the-form-a-b :associative-algebra],
  :gloss
  {:paper "2011.13903",
   :text
-  "\\infty} \\frac{1}{n^{s}}. $$ (To reserve the symbol $\\zeta$ for later use, we will denote Riemann's zeta function by $\\zeta_{\\Q}(s)$.) The series $\\zeta_{\\Q}(s)$ converges for all \\emph{complex numbers} $s$ with $\\re(s) > 1$ and it conceals deep information about the nature of prime numbers within it"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for complex numbers"}]}
+  "\\infty} \\frac{1}{n^{s}}. $$ (To reserve the symbol $\\zeta$ for later use, we will denote Riemann's zeta function by $\\zeta_{\\Q}(s)$.) The series $\\zeta_{\\Q}(s)$ converges for all \\emph{complex numbers} $s$ with $\\re(s) > 1$ and it conceals deep information about the nature of prime numbers within it"}}

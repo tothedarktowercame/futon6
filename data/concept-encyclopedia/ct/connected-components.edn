@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : connected components"}],
- :name "connected components",
+{:name "connected components",
  :df 475,
  :concept/id :connected-components,
  :msc "ct",
@@ -10,13 +8,10 @@
   ["0711.0324" "1104.1054" "1201.1575" "1210.0212" "1401.5656"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -26,13 +21,9 @@
   :domains ["Mathworld" "Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:disjoint-union :object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1210.0212",
   :text
-  "{X}(x,y) \\neq \\emptyset$. Every quasi-unital semiKan space is a disjoint union of connected quasi-unital semiKan spaces in an essentially unique way. We will refer to these as the \\textbf{connected components} of $X$. We will say that a map $f: X \\lrar Y$ of quasi-unital semiKan spaces is a \\textbf{"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for connected components"}]}
+  "{X}(x,y) \\neq \\emptyset$. Every quasi-unital semiKan space is a disjoint union of connected quasi-unital semiKan spaces in an essentially unique way. We will refer to these as the \\textbf{connected components} of $X$. We will say that a map $f: X \\lrar Y$ of quasi-unital semiKan spaces is a \\textbf{"}}

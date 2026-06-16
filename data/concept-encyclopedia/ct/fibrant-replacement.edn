@@ -1,8 +1,4 @@
-{:given
- [{:var :X,
-   :type :marked-equivalence,
-   :signature "X : fibrant replacement"}],
- :name "fibrant replacement",
+{:name "fibrant replacement",
  :df 309,
  :concept/id :fibrant-replacement,
  :msc "ct",
@@ -10,16 +6,46 @@
  {:n-papers 44,
   :sample
   ["0704.1624" "0707.0300" "0906.4087" "1104.1805" "1207.6404"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "In a model category every morphism may be factored as a weak equivalence followed by a fibration.",
+   :refs
+   [:model-category
+    :morphism
+    :weak-equivalence
+    :fibration
+    :terminal-object]}
+  {:id :nlab-condition-2,
+   :statement
+   "Specifically if the morphism is that to the terminal object, this process finds a weakly equivalent fibrant object.",
+   :refs
+   [:model-category
+    :morphism
+    :weak-equivalence
+    :fibration
+    :terminal-object]}
+  {:id :nlab-condition-3,
+   :statement
+   "This is a fibrant replacement or resolution of the original object.",
+   :refs
+   [:model-category
+    :morphism
+    :weak-equivalence
+    :fibration
+    :terminal-object]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :marked-equivalence,
+ [{:kind :unresolved-genus,
+   :wanted :fibrant-replacement-or-resolution-of-the-original-object,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :marked-equivalence,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:fibrant-object :resolution :functorial-factorization],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :fibrant-replacement-or-resolution-of-the-original-object,
  :status :draft,
  :kind :object,
  :provenance
@@ -27,13 +53,18 @@
   :resolution-kind "page",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:marked-equivalence],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "8143",
+  :definition-id nil},
+ :depends-on
+ [:fibrant-replacement-or-resolution-of-the-original-object
+  :model-category
+  :morphism
+  :weak-equivalence
+  :fibration
+  :terminal-object],
  :gloss
  {:paper "1210.0212",
   :text
-  "egenerate edges. This means that $\\iota$ is a marked equivalence. Furthermore the completeness of $Y$ implies the completeness of $\\F^{\\natural}(Y)$, and so $\\iota$ can serve as a \\textbf{fibrant replacement} of $\\F^+(Y)$. The upshot of this is that $\\F^+(Y)$ is \\textbf{marked equivalent} to its fib"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for fibrant replacement"}]}
+  "egenerate edges. This means that $\\iota$ is a marked equivalence. Furthermore the completeness of $Y$ implies the completeness of $\\F^{\\natural}(Y)$, and so $\\iota$ can serve as a \\textbf{fibrant replacement} of $\\F^+(Y)$. The upshot of this is that $\\F^+(Y)$ is \\textbf{marked equivalent} to its fib"}}

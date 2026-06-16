@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : forgetful functors"}],
- :name "forgetful functors",
+{:name "forgetful functors",
  :df 416,
  :concept/id :forgetful-functors,
  :msc "ct",
@@ -8,31 +6,56 @@
  {:n-papers 8,
   :sample
   ["0711.1608" "1406.1115" "2012.08669" "2107.09576" "2408.09488"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A forgetful functor is a functor which is defined by 'forgetting' some structure.",
+   :refs [:functor :set :adjoint-functor]}
+  {:id :nlab-condition-2,
+   :statement
+   "For example, the forgetful functor from Grp to Set forgets the group structure of a group, remembering only the underlying set.",
+   :refs [:functor :set :adjoint-functor]}
+  {:id :nlab-condition-3,
+   :statement
+   "In common parlance, the term 'forgetful functor' has no precise definition, being simply used whenever a functor is obviously defined by forgetting something.",
+   :refs [:functor :set :adjoint-functor]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :morphism,
+ [{:kind :unresolved-genus,
+   :wanted :functor-which-is-defined-by-forgetting-some-structure,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:mathematical-structure
+    :grp
+    :group
+    :monadic-functor
+    :comonadic-functor
+    :stuff-structure-property],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :functor-which-is-defined-by-forgetting-some-structure,
  :status :draft,
  :kind :morphism,
  :provenance
- {:target "nnexus:forgetful functor",
-  :resolution-kind "nnexus",
-  :msc ["18" "18A05" "Functors"],
+ {:formaliser :codex-1,
   :domains ["Mathworld" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18" "18A05" "Functors"],
+  :nlab-page-id "208",
+  :resolution-kind "nnexus",
+  :target "nnexus:forgetful functor",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:morphism],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:functor-which-is-defined-by-forgetting-some-structure
+  :functor
+  :set
+  :adjoint-functor],
  :gloss
  {:paper "2012.08669",
   :text
-  "or all of the structure or the properties carried by the source category by passing, via a functor, to another category. This process informally describes what are usually called \\textit{forgetful functors}, \\index{functor!forgetful} which provide us with a large source of examples.\\par There are ma"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for forgetful functors"}]}
+  "or all of the structure or the properties carried by the source category by passing, via a functor, to another category. This process informally describes what are usually called \\textit{forgetful functors}, \\index{functor!forgetful} which provide us with a large source of examples.\\par There are ma"}}

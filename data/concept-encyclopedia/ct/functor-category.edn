@@ -1,5 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : functor category"}],
+{:given [{:var :C, :type :category} {:var :D, :type :category}],
  :name "functor category",
  :pagerank 0.003429,
  :df 497,
@@ -10,40 +9,41 @@
   :sample
   ["0810.2070" "1011.4114" "1102.1313" "1104.3630" "1203.0202"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : morphism. $\\Mod \\k$ denotes the category of $\\k$-modules",
-   :refs [:category :denotes :modules]}],
+   "Given categories C and D, the functor category -- written D^C or [C,D] -- is the category whose.",
+   :refs [:category :natural-transformations]}
+  {:id :nlab-condition-2,
+   :statement
+   "class of objects is the collection of all functors F C D.",
+   :refs [:category :natural-transformations]}
+  {:id :nlab-condition-3,
+   :statement
+   "morphisms are natural transformations between these functors.",
+   :refs [:category :natural-transformations]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :denotes,
+ [{:kind :unresolved-source-refs,
+   :wanted [:class :objects :functors :morphisms],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :modules,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 18,
- :genus :morphism,
+ :genus :category,
  :status :draft,
  :kind :morphism,
  :provenance
- {:target "nnexus:functor category",
-  :resolution-kind "nnexus",
-  :msc ["18-00" "18A05" "18A25" "18D05" "18E05" "Functors"],
+ {:formaliser :codex-1,
   :domains ["Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18-00" "18A05" "18A25" "18D05" "18E05" "Functors"],
+  :nlab-page-id "225",
+  :resolution-kind "nnexus",
+  :target "nnexus:functor category",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:module-category :morphism :category :denotes :modules],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:category :natural-transformations],
  :gloss
  {:paper "1204.0196",
   :text
-  "ory'' $\\Mod X$ of $X$ as a colax functor $I \\to \\kCat$ given in our previous paper \\cite{Asa-a}. Recall that the {\\em module category} $\\Mod \\calC$ of a category $\\calC \\in \\kCat$ is defined to be the functor category $\\kCat(\\calC\\op, \\Mod \\k)$, where $\\Mod \\k$ denotes the category of $\\k$-modules. "},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for functor category"}]}
+  "ory'' $\\Mod X$ of $X$ as a colax functor $I \\to \\kCat$ given in our previous paper \\cite{Asa-a}. Recall that the {\\em module category} $\\Mod \\calC$ of a category $\\calC \\in \\kCat$ is defined to be the functor category $\\kCat(\\calC\\op, \\Mod \\k)$, where $\\Mod \\k$ denotes the category of $\\k$-modules. "}}

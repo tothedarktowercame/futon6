@@ -1,8 +1,4 @@
-{:given
- [{:var :X,
-   :type :monoid-for-the-composition-product,
-   :signature "X : unit map"}],
- :name "unit map",
+{:name "unit map",
  :df 342,
  :concept/id :unit-map,
  :msc "ct",
@@ -10,63 +6,20 @@
  {:n-papers 25,
   :sample
   ["0803.4209" "0902.0399" "1001.0668" "1009.5034" "1101.2363"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : monoid-for-the-composition-product. a \\emph{composition map} \\[ P \\circ P \\to P \\] and a \\emph{unit map} \\[ \\mathsf{1} \\to P \\] satisfying standard associativity and unit axioms. A \\emph{morphism ",
-   :refs
-   [:circ :satisfying :operads :mathsf :composition :associativity]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :composition-map,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :monoid-for-the-composition-product,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :circ,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :satisfying,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :operads,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :mathsf,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :associativity,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
- :genus :monoid-for-the-composition-product,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :morphism,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:operad
-  :composition-map
-  :monoid-for-the-composition-product
-  :circ
-  :satisfying
-  :operads
-  :mathsf
-  :composition
-  :associativity],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0902.0399",
   :text
-  "\\cat{C}$ is a monoid for the composition product. In other words, an operad consists of a symmetric sequence $P$ together with a \\emph{composition map} \\[ P \\circ P \\to P \\] and a \\emph{unit map} \\[ \\mathsf{1} \\to P \\] satisfying standard associativity and unit axioms. A \\emph{morphism of operads} i"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for unit map"}]}
+  "\\cat{C}$ is a monoid for the composition product. In other words, an operad consists of a symmetric sequence $P$ together with a \\emph{composition map} \\[ P \\circ P \\to P \\] and a \\emph{unit map} \\[ \\mathsf{1} \\to P \\] satisfying standard associativity and unit axioms. A \\emph{morphism of operads} i"}}

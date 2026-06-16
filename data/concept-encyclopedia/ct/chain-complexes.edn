@@ -1,8 +1,4 @@
-{:given
- [{:var :X,
-   :type :abelian-category,
-   :signature "X : chain complexes"}],
- :name "chain complexes",
+{:name "chain complexes",
  :df 533,
  :concept/id :chain-complexes,
  :msc "ct",
@@ -10,54 +6,20 @@
  {:n-papers 12,
   :sample
   ["0808.3681" "0905.0465" "1303.4133" "1405.3921" "1509.07632"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : abelian-category. $\\mc{A}$ is an additive or abelian category with countable coproducts, then a simple functor",
-   :refs
-   [:countable :abelian :coproducts :category :simple :functor]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :degeneracy-maps,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :countable,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :abelian,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :coproducts,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :simple,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
- :genus :abelian-category,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:abelian-category
-  :degeneracy-maps
-  :countable
-  :abelian
-  :coproducts
-  :category
-  :simple
-  :functor],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0808.3681",
   :text
-  "ll degeneracy maps of $C(f)$ are closed cofibrations (they are coproducts of identities), then $c(f)$ is naturally homotopic to the classical cone associated with $f$.\\\\ % \\indent \\textbf{Chain complexes} If $\\mc{A}$ is an additive or abelian category with countable coproducts, then a simple functor"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for chain complexes"}]}
+  "ll degeneracy maps of $C(f)$ are closed cofibrations (they are coproducts of identities), then $c(f)$ is naturally homotopic to the classical cone associated with $f$.\\\\ % \\indent \\textbf{Chain complexes} If $\\mc{A}$ is an additive or abelian category with countable coproducts, then a simple functor"}}

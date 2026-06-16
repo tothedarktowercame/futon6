@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : monoidal categories"}],
- :name "monoidal categories",
+{:name "monoidal categories",
  :pagerank 0.008139,
  :df 1173,
  :concept/id :monoidal-categories,
@@ -11,26 +9,19 @@
   ["0704.2106" "0708.2757" "0710.1163" "0711.4657" "0910.2931"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 8,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0708.2757",
   :text
-  "etries of bialgebras which manifest themselves in representation theory. It is very well-known that categories of representations (modules) of bialgebras are examples of so-called {\\em monoidal categories}. It is less acknowledged that relations between bialgebras ({\\em homomorphisms of bialgebras})"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for monoidal categories"}]}
+  "etries of bialgebras which manifest themselves in representation theory. It is very well-known that categories of representations (modules) of bialgebras are examples of so-called {\\em monoidal categories}. It is less acknowledged that relations between bialgebras ({\\em homomorphisms of bialgebras})"}}

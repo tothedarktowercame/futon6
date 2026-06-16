@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : identity morphisms"}],
- :name "identity morphisms",
+{:name "identity morphisms",
  :df 575,
  :concept/id :identity-morphisms,
  :msc "ct",
@@ -8,15 +6,34 @@
  {:n-papers 12,
   :sample
   ["0908.3347" "0911.0469" "1308.6548" "1709.09743" "2101.04015"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "The identity morphism, or simply identity, of an object x in some category C is the morphism 1x: x x, or : x x, which acts as a two-sided identity for composition.",
+   :refs [:object :category :composition :small-category :set]}
+  {:id :nlab-condition-2,
+   :statement
+   "Given a small category C with set of objects C0 and set of morphisms C1, the identity assigning function of C is the function i: C0 C1 that maps each object in C0 to its identity morphism in C1.",
+   :refs [:object :category :composition :small-category :set]}
+  {:id :nlab-condition-3,
+   :statement
+   "For the generalisation to an internal category C, see identity-assigning morphism.",
+   :refs [:object :category :composition :small-category :set]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :morphism,
+ [{:kind :unresolved-genus,
+   :wanted :identity-functions,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:internal-category
+    :identity-assigning-morphism
+    :identity-functions],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :identity-functions,
  :status :draft,
  :kind :morphism,
  :provenance
@@ -24,13 +41,18 @@
   :resolution-kind "page",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:morphism],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "1247",
+  :definition-id nil},
+ :depends-on
+ [:identity-functions
+  :object
+  :category
+  :composition
+  :small-category
+  :set],
  :gloss
  {:paper "2101.04015",
   :text
-  "begin{tikzcd} I_2 \\ar[r, \"\\pi_2\"] \\ar[d,\"\\pi_1\"'] \\ar[dr, phantom, \"\\lrcorner\", very near start] & I_1 \\ar[d, \"d\"]\\\\ I_1 \\ar[r, \"c\"] & I_0. \\end{tikzcd}\\] The morphisms define the \\textit{identity morphisms}, \\textit{domains}, \\textit{codomains} and \\textit{composition}, respectively. These are requ"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for identity morphisms"}]}
+  "begin{tikzcd} I_2 \\ar[r, \"\\pi_2\"] \\ar[d,\"\\pi_1\"'] \\ar[dr, phantom, \"\\lrcorner\", very near start] & I_1 \\ar[d, \"d\"]\\\\ I_1 \\ar[r, \"c\"] & I_0. \\end{tikzcd}\\] The morphisms define the \\textit{identity morphisms}, \\textit{domains}, \\textit{codomains} and \\textit{composition}, respectively. These are requ"}}

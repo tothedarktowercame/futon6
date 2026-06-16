@@ -1,7 +1,8 @@
 {:given
- [{:var :X,
-   :type :morphism,
-   :signature "X : natural transformations"}],
+ [{:var :C, :type :category}
+  {:var :D, :type :category}
+  {:var :F, :type :functor, :signature "F : C → D"}
+  {:var :G, :type :functor, :signature "G : C → D"}],
  :name "natural transformations",
  :pagerank 0.009635,
  :df 1761,
@@ -11,30 +12,30 @@
  {:n-papers 70,
   :sample
   ["0711.1608" "0711.2077" "0807.1002" "0809.3676" "0809.4970"]},
- :axioms [],
- :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :axioms
+ [{:id :naturality,
+   :statement
+   "∀ f : a → b in C. G(f) ∘ α_a = α_b ∘ F(f)   (the naturality square commutes)",
+   :refs [:composition :commutative-square]}],
+ :holes [],
  :used-papers 13,
- :genus :morphism,
- :status :draft,
+ :genus :morphism-of-functors,
+ :status :formalized,
  :kind :morphism,
  :provenance
  {:target "nlab-122",
   :resolution-kind "definition-site",
-  :formaliser :codex-1,
+  :formaliser :codex-1-redo,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:morphism],
+  "derived from ct-golden natural-transformation seed for plural variant",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "122",
+  :definition-id "nlab-122-d1"},
+ :depends-on
+ [:functor :category :morphism :composition :commutative-square],
  :gloss
- {:paper "0711.1608",
-  :text
-  "set of \\emph{functors} from $\\cT$ to $\\cD$, called here `` \\emph{diagrams of type} $\\cT\\ $ in $\\cD\\,$''; \\item $\\overrightarrow{\\cT}(\\cD)$ (\\emph{arrows}) the (large) category of \\emph{natural transformations} \\cite{ML} between these functors, (which means just \\emph{commutative diagrams connecting "},
+ {:text
+  "A natural transformation α : F ⇒ G between functors F,G : C → D\n  assigns to each object a a morphism α_a : F a → G a such that for every\n  f : a → b the naturality square commutes."},
  :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for natural transformations"}]}
+ [{:component :components,
+   :signature "α_a : F a → G a in D   for each a ∈ Ob(C)"}]}

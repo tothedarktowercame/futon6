@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : bicategory"}],
- :name "bicategory",
+{:name "bicategory",
  :pagerank 0.006767,
  :df 619,
  :concept/id :bicategory,
@@ -9,43 +8,49 @@
   :sample
   ["0706.1286" "0706.2307" "0708.1178" "0710.0032" "0710.1208"]},
  :axioms
- [{:id :condition-1,
-   :statement "∀ x : object. objects are $(n-2)$-manifolds, whose",
-   :refs [:whose :objects :manifolds]}],
+ [{:id :nlab-condition-1,
+   :statement "A collection of objects x,y,z,, also called 0-cells;.",
+   :refs [:category :identity-morphism :natural-isomorphisms]}
+  {:id :nlab-condition-2,
+   :statement
+   "For each pair of 0-cells x,y, a category B(x,y), whose objects are called morphisms or 1-cells and whose morphisms are called 2-morphisms or 2-cells;.",
+   :refs [:category :identity-morphism :natural-isomorphisms]}
+  {:id :nlab-condition-3,
+   :statement
+   "For each 0-cell x, a distinguished 1-cell 1x B(x,x) called the identity morphism or identity 1-cell at x;.",
+   :refs [:category :identity-morphism :natural-isomorphisms]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :whose,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :objects,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :manifolds,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
+ [{:kind :missing-genus,
    :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   :source :nlab-raw-section,
+   :note "nLab definition text did not expose an unambiguous genus"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:collection
+    :objects
+    :morphisms
+    :2-morphisms
+    :horizontal-composition
+    :unitors],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 11,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:bicategory",
-  :resolution-kind "nnexus",
-  :msc ["XX-XX"],
+ {:formaliser :codex-1,
   :domains ["Encyclopediaofmath"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["XX-XX"],
+  :nlab-page-id "253",
+  :resolution-kind "nnexus",
+  :target "nnexus:bicategory",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object :whose :objects :manifolds],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:category :identity-morphism :natural-isomorphisms],
  :gloss
  {:paper "0710.0032",
   :text
-  "m for describing the ways such cobordisms can be glued together. Louis Crane has written a number of papers on this issue, including one with David Yetter \\cite{CY} which gives a \\textit{bicategory} of such cobordisms. We want to define a structure $\\nCob$, whose objects are $(n-2)$-manifolds, whose"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for bicategory"}]}
+  "m for describing the ways such cobordisms can be glued together. Louis Crane has written a number of papers on this issue, including one with David Yetter \\cite{CY} which gives a \\textit{bicategory} of such cobordisms. We want to define a structure $\\nCob$, whose objects are $(n-2)$-manifolds, whose"}}

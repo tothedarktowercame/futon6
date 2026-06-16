@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : sheaf"}],
- :name "sheaf",
+{:name "sheaf",
  :pagerank 0.003496,
  :df 792,
  :concept/id :sheaf,
@@ -9,40 +8,24 @@
   :sample
   ["0807.1704" "0808.2122" "0808.3627" "0809.1187" "0809.3394"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. given any open cover $U_\\alpha \\subset U$ in $\\cc{O}(X)$, the following \\emph{sheaf axiom} holds for $F$: $ \\hspace{-5ex} \\forall \\, s_\\alpha \\in FU_\\",
-   :refs [:hspace :subset :open :cover :alpha :axiom]}],
+   "###### Definition Let (C,J) be a site in the form of a small category C equipped with a coverage J.",
+   :refs [:small-category :presheaf]}
+  {:id :nlab-condition-2,
+   :statement "A presheaf A PSh(C) is a sheaf with respect to J if.",
+   :refs [:small-category :presheaf]}
+  {:id :nlab-condition-3,
+   :statement "for every covering family \\pi : Ui U\\i I in J.",
+   :refs [:small-category :presheaf]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :hspace,
+ [{:kind :unresolved-source-refs,
+   :wanted [:site :coverage :covering :matching-family :morphisms],
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :subset,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :open,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :cover,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :alpha,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :axiom,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 35,
- :genus :object,
+ :genus :sheaf,
  :status :draft,
  :kind :object,
  :provenance
@@ -50,14 +33,21 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:presheaf :object :hspace :subset :open :cover :alpha :axiom],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "143",
+  :definition-id "nlab-143-d1"},
+ :depends-on [:sheaf :small-category :presheaf],
  :gloss
  {:paper "0809.1187",
   :text
   "\\vspace{1ex} \\item A \\emph{sheaf} is a presheaf $F$ such that given any open cover $U_\\alpha \\subset U$ in $\\cc{O}(X)$, the following \\emph{sheaf axiom} holds for $F$: $ \\hspace{-5ex} \\forall \\, s_\\alpha \\in FU_\\"},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for sheaf"}]}
+   "###### Definition Let (C,J) be a site in the form of a small category C equipped with a coverage J.",
+   :source :nlab-definition}
+  {:component :definition-data-2,
+   :signature
+   "and for every compatible family of elements, given by tuples (si A(Ui))i I such that for all j,k I and all morphisms Uj K Uk in C with pj f = pk g we have A(f)(sj) = A(g)(sk) A(K) then.",
+   :source :nlab-definition}]}

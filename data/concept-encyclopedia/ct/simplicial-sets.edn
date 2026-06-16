@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : simplicial sets"}],
- :name "simplicial sets",
+{:name "simplicial sets",
  :pagerank 0.004429,
  :df 758,
  :concept/id :simplicial-sets,
@@ -8,16 +7,44 @@
  {:n-papers 63,
   :sample
   ["0807.1002" "0809.4221" "0903.5058" "1001.4071" "1010.4956"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition A simplicial set is a presheaf on the simplex category , that is, a functor X : ^op Sets from the opposite category of the simplex category to the category Set of sets; equivalently this a simplicial object in Set.",
+   :refs
+   [:presheaf
+    :functor
+    :opposite-category
+    :set
+    :natural-transformation]}
+  {:id :nlab-condition-2,
+   :statement
+   "Equipped with the standard homomorphisms of presheaves as morphisms (namely natural transformations of the corresponding functors), simplicial sets form the category sSet (denoted both SSet or sSet).",
+   :refs
+   [:presheaf
+    :functor
+    :opposite-category
+    :set
+    :natural-transformation]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :unresolved-genus,
+   :wanted :presheaf-on-the-simplex-category,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:simplex-category
+    :sets
+    :simplicial-object
+    :homomorphisms
+    :functors
+    :sset],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 12,
- :genus :object,
+ :genus :presheaf-on-the-simplex-category,
  :status :draft,
  :kind :object,
  :provenance
@@ -25,13 +52,23 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:simplicial :full-subcategory :object],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "261",
+  :definition-id "nlab-261-d1"},
+ :depends-on
+ [:presheaf-on-the-simplex-category
+  :presheaf
+  :functor
+  :opposite-category
+  :set
+  :natural-transformation],
  :gloss
  {:paper "0807.1002",
   :text
   "The category $\\SSets$ of \\emph{simplicial sets} is by definition the category of functors $X_\\bullet:\\op{\\Delta}\\longrightarrow\\Sets$, $[n]\\mapsto X_n$, and for a set $\\cU$, we denote by $\\USSets{\\cU}$ the full subcategory of $"},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for simplicial sets"}]}
+   "Equipped with the standard homomorphisms of presheaves as morphisms (namely natural transformations of the corresponding functors), simplicial sets form the category sSet (denoted both SSet or sSet).",
+   :source :nlab-definition}]}

@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : simplicial set"}],
- :name "simplicial set",
+{:name "simplicial set",
  :df 591,
  :concept/id :simplicial-set,
  :msc "ct",
@@ -8,32 +7,42 @@
   :sample
   ["0704.1624" "0801.0404" "0802.2044" "0809.4221" "0811.3175"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. $\\Deltaop$ is the opposite of the category ${\\bf \\Delta}$ of finite ordered sets $[n] = \\{0 \\rightarrow 1 \\rightarrow \\cd",
+   "###### Definition A simplicial set is a presheaf on the simplex category , that is, a functor X : ^op Sets from the opposite category of the simplex category to the category Set of sets; equivalently this a simplicial object in Set.",
    :refs
-   [:rightarrow :category :opposite :ordered-sets :finite :sets]}],
+   [:presheaf
+    :functor
+    :opposite-category
+    :set
+    :natural-transformation]}
+  {:id :nlab-condition-2,
+   :statement
+   "Equipped with the standard homomorphisms of presheaves as morphisms (namely natural transformations of the corresponding functors), simplicial sets form the category sSet (denoted both SSet or sSet).",
+   :refs
+   [:presheaf
+    :functor
+    :opposite-category
+    :set
+    :natural-transformation]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :rightarrow,
+ [{:kind :unresolved-genus,
+   :wanted :presheaf-on-the-simplex-category,
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :opposite,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:simplex-category
+    :sets
+    :simplicial-object
+    :homomorphisms
+    :functors
+    :sset],
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :finite,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :sets,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :object,
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :presheaf-on-the-simplex-category,
  :status :draft,
  :kind :object,
  :provenance
@@ -41,21 +50,23 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "261",
+  :definition-id "nlab-261-d1"},
  :depends-on
- [:simplicial
-  :ordered-sets
-  :object
-  :rightarrow
-  :category
-  :opposite
-  :finite
-  :sets],
+ [:presheaf-on-the-simplex-category
+  :presheaf
+  :functor
+  :opposite-category
+  :set
+  :natural-transformation],
  :gloss
  {:paper "0704.1624",
   :text
   "Recall that a \\emph{simplicial set} is a functor $X \\colon \\Deltaop \\rightarrow \\Sets$, where $\\Deltaop$ is the opposite of the category ${\\bf \\Delta}$ of finite ordered sets $[n] = \\{0 \\rightarrow 1 \\rightarrow \\cd"},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for simplicial set"}]}
+   "Equipped with the standard homomorphisms of presheaves as morphisms (namely natural transformations of the corresponding functors), simplicial sets form the category sSet (denoted both SSet or sSet).",
+   :source :nlab-definition}]}

@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : associative algebra"}],
- :name "associative algebra",
+{:name "associative algebra",
  :pagerank 0.011769,
  :df 350,
  :concept/id :associative-algebra,
@@ -9,45 +7,13 @@
  {:n-papers 13,
   :sample
   ["0710.0429" "1312.4642" "1503.02701" "1807.00785" "2107.09581"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : object. \\begin{equation} P(x)P(y) = P(xP(y))+ P(P(x)y)+\\lambda P(xy),\\ \\forall\\, x,y\\, \\in\\, A",
-   :refs [:begin :equation :forall :lambda]}
-  {:id :condition-2,
-   :statement
-   "∀ x : object. \\mlabel{eq:rba} \\end{equation} \\item A differential",
-   :refs [:equation :differential :item]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :begin,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :equation,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :forall,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :lambda,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :differential,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :item,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 11,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
@@ -57,14 +23,9 @@
   :domains ["Mathworld" "Wikipedia"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:object :begin :equation :forall :lambda :differential :item],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0710.0429",
   :text
-  "A Rota-Baxter algebras~\\mcite{Ba,Ca,C-K1,E-G4,G-K1,Ro1,Ro2} (of weight $\\lambda$) is defined to be an associative algebra $A$ with a linear operator $P$ such that \\begin{equation} P(x)P(y) = P(xP(y))+ P(P(x)y)+\\lambda P(xy),\\ \\forall\\, x,y\\, \\in\\, A; \\mlabel{eq:rba} \\end{equation} \\item A differential"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for associative algebra"}]}
+  "A Rota-Baxter algebras~\\mcite{Ba,Ca,C-K1,E-G4,G-K1,Ro1,Ro2} (of weight $\\lambda$) is defined to be an associative algebra $A$ with a linear operator $P$ such that \\begin{equation} P(x)P(y) = P(xP(y))+ P(P(x)y)+\\lambda P(xy),\\ \\forall\\, x,y\\, \\in\\, A; \\mlabel{eq:rba} \\end{equation} \\item A differential"}}

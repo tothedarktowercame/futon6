@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :morphism, :signature "X : derived functor"}],
- :name "derived functor",
+{:name "derived functor",
  :df 347,
  :concept/id :derived-functor,
  :msc "ct",
@@ -8,64 +7,42 @@
   :sample
   ["0906.4087" "1309.6039" "1812.11575" "2312.14908" "2411.11816"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : morphism. $G$ preserves fibrations and acyclic fibrations). Given a pair of Quillen adjoint functors $(F\\dashv G)$, the \\emph{left} (resp.~\\emph{right}) \\emph{derived fun",
-   :refs
-   [:preserves
-    :cofibrant
-    :right
-    :quillen
-    :fibrations
-    :adjoint-functors]}],
+   "We first give the decategorified definition of total derived functors on homotopy categories in.",
+   :refs [:homotopy-category :category]}
+  {:id :nlab-condition-2,
+   :statement
+   "[As functors on homotopy categories](#OnHomotopyCat) and then the (∞,1)-category-version in.",
+   :refs [:homotopy-category :category]}
+  {:id :nlab-condition-3,
+   :statement "[As functors on (∞,1)-categories](#OnInftyCats).",
+   :refs [:homotopy-category :category]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :preserves,
+ [{:kind :unresolved-source-refs,
+   :wanted
+   [:decategorification
+    :homological-algebra
+    :derived-functors-in-homological-algebra],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :cofibrant,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :right,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :quillen,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :fibrations,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :genus :morphism,
  :status :draft,
  :kind :morphism,
  :provenance
- {:target "nnexus:derived functor",
-  :resolution-kind "nnexus",
-  :msc ["18" "18E25" "18G10" "Functors" "XX-XX"],
+ {:formaliser :codex-1,
   :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18" "18E25" "18G10" "Functors" "XX-XX"],
+  :nlab-page-id "265",
+  :resolution-kind "nnexus",
+  :target "nnexus:derived functor",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:adjoint-functors
-  :morphism
-  :preserves
-  :cofibrant
-  :right
-  :quillen
-  :fibrations],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:morphism :homotopy-category :category],
  :gloss
  {:paper "2411.11816",
   :text
-  "c cofibrations (or, equivalently, if $G$ preserves fibrations and acyclic fibrations). Given a pair of Quillen adjoint functors $(F\\dashv G)$, the \\emph{left} (resp.~\\emph{right}) \\emph{derived functor} $\\L F$ (resp.~$\\R G$) is obtained by applying $F$ (resp.~$G$) to cofibrant (resp.~fibrant) object"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for derived functor"}]}
+  "c cofibrations (or, equivalently, if $G$ preserves fibrations and acyclic fibrations). Given a pair of Quillen adjoint functors $(F\\dashv G)$, the \\emph{left} (resp.~\\emph{right}) \\emph{derived functor} $\\L F$ (resp.~$\\R G$) is obtained by applying $F$ (resp.~$G$) to cofibrant (resp.~fibrant) object"}}

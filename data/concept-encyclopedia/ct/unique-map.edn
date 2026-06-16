@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :morphism, :signature "X : unique map"}],
- :name "unique map",
+{:name "unique map",
  :df 736,
  :concept/id :unique-map,
  :msc "ct",
@@ -7,53 +6,20 @@
  {:n-papers 7,
   :sample
   ["0807.1704" "1307.7216" "1401.6983" "1406.1115" "1812.04036"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : morphism. $f\\colon X \\to X'$ and $g\\colon Y \\to Y'$ are morphisms in $\\cC$, $f\\wed g$ is defined to be the unique map $X\\wed Y \\to X'\\wed Y'$ that makes the diagrams \\beg",
-   :refs [:label :makes :morphisms :colon :begin :diagrams]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :label,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :makes,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :morphisms,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :colon,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :begin,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :diagrams,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :morphism,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :morphism,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:morphism :label :makes :morphisms :colon :begin :diagrams],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1812.04036",
   :text
-  "e pushout implies this assignment extends to a functor $\\wed \\colon \\cC \\times \\cC \\to \\cC$. Indeed, if $f\\colon X \\to X'$ and $g\\colon Y \\to Y'$ are morphisms in $\\cC$, $f\\wed g$ is defined to be the unique map $X\\wed Y \\to X'\\wed Y'$ that makes the diagrams \\begin{equation}\\label{iotanatural} \\beg"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for unique map"}]}
+  "e pushout implies this assignment extends to a functor $\\wed \\colon \\cC \\times \\cC \\to \\cC$. Indeed, if $f\\colon X \\to X'$ and $g\\colon Y \\to Y'$ are morphisms in $\\cC$, $f\\wed g$ is defined to be the unique map $X\\wed Y \\to X'\\wed Y'$ that makes the diagrams \\begin{equation}\\label{iotanatural} \\beg"}}

@@ -1,38 +1,26 @@
 {:given
- [{:var :X, :type :morphism, :signature "X : natural transformation"}],
+ [{:var :C, :type :category}
+  {:var :D, :type :category}
+  {:var :F, :type :functor, :signature "F : C → D"}
+  {:var :G, :type :functor, :signature "G : C → D"}],
  :name "natural transformation",
- :pagerank 0.010804,
- :df 1999,
  :concept/id :natural-transformation,
  :msc "ct",
- :defined-in
- {:n-papers 253,
-  :sample
-  ["0705.3249" "0710.1163" "0711.1608" "0801.2826" "0803.4209"]},
- :axioms [],
- :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :used-papers 53,
- :genus :morphism,
- :status :draft,
+ :axioms
+ [{:id :naturality,
+   :statement
+   "∀ f : a → b in C. G(f) ∘ α_a = α_b ∘ F(f)   (the naturality square commutes)",
+   :refs [:composition :commutative-square]}],
+ :holes [],
+ :genus :morphism-of-functors,
+ :status :golden,
  :kind :morphism,
- :provenance
- {:target "nlab-122",
-  :resolution-kind "definition-site",
-  :formaliser :codex-1,
-  :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:morphism],
+ :provenance {:target "nlab-122", :source :curated},
+ :depends-on
+ [:functor :category :morphism :composition :commutative-square],
  :gloss
- {:paper "0710.1163",
-  :text
-  "An antipode is defined as a natural transformation $S:B\\to B$ with special properties and for categories $\\A$ with limits or colimits and bimonads $B$ preserving them, the existence of an antipode is equivalent to $B$ inducing an e"},
+ {:text
+  "A natural transformation α : F ⇒ G between functors F,G : C → D\n  assigns to each object a a morphism α_a : F a → G a such that for every\n  f : a → b the naturality square commutes."},
  :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for natural transformation"}]}
+ [{:component :components,
+   :signature "α_a : F a → G a in D   for each a ∈ Ob(C)"}]}

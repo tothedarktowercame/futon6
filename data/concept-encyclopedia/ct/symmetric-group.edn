@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : symmetric group"}],
- :name "symmetric group",
+{:name "symmetric group",
  :pagerank 0.003439,
  :df 394,
  :concept/id :symmetric-group,
@@ -8,41 +7,63 @@
  {:n-papers 18,
   :sample
   ["1105.5091" "1208.3097" "1605.03880" "1704.03674" "1904.12851"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "The permutations of a set X form a group, SX, under composition.",
+   :refs [:set :composition :finite-set :finite-group]}
+  {:id :nlab-condition-2,
+   :statement
+   "This is especially clear if one thinks of the permutation as a bijection on X, where the multiplication / composition is just composition of functions.",
+   :refs [:set :composition :finite-set :finite-group]}
+  {:id :nlab-condition-3,
+   :statement
+   "This group is called the symmetric group of X and often denoted SX, , Sym(X) or similar.",
+   :refs [:set :composition :finite-set :finite-group]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :weyl-group,
+ [{:kind :unresolved-genus,
+   :wanted :finite-group-of-cardinality-n-n-factorial,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:permutations
+    :group
+    :bijection
+    :functions
+    :subgroups
+    :permutation-groups],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 10,
- :genus :object,
+ :genus :finite-group-of-cardinality-n-n-factorial,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:symmetric group",
-  :resolution-kind "nnexus",
-  :msc ["05A05" "20B30" "Permutation_groups" "XX-XX"],
+ {:formaliser :codex-1,
   :domains
   ["Encyclopediaofmath"
    "Mathhub"
    "Mathworld"
    "Planetmath"
    "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["05A05" "20B30" "Permutation_groups" "XX-XX"],
+  :nlab-page-id "19755",
+  :resolution-kind "nnexus",
+  :target "nnexus:symmetric group",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:weyl-group :object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:finite-group-of-cardinality-n-n-factorial
+  :set
+  :composition
+  :finite-set
+  :finite-group],
  :gloss
  {:paper "1904.12851",
   :text
-  "&\\textnormal{ for } |i-j| > 1. \\end{aligned} \\end{equation*} The elements $s_i\\in W^B(d)$ for $i>0$ generate a subgroup isomorphic to $W^A(d)$, the Weyl group of type A (otherwise known as the symmetric group $S_d$). Let $\\mathcal{H}_{Q,q}^{B}(d)$ be the two-parameter Hecke algebra of type BC~\\cite{"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for symmetric group"}]}
+  "&\\textnormal{ for } |i-j| > 1. \\end{aligned} \\end{equation*} The elements $s_i\\in W^B(d)$ for $i>0$ generate a subgroup isomorphic to $W^A(d)$, the Weyl group of type A (otherwise known as the symmetric group $S_d$). Let $\\mathcal{H}_{Q,q}^{B}(d)$ be the two-parameter Hecke algebra of type BC~\\cite{"}}

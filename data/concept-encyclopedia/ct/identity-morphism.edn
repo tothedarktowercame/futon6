@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : identity morphism"}],
- :name "identity morphism",
+{:name "identity morphism",
  :df 936,
  :concept/id :identity-morphism,
  :msc "ct",
@@ -8,23 +6,34 @@
  {:n-papers 75,
   :sample
   ["0708.1500" "0903.0340" "0908.2469" "1001.0668" "1006.5475"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "The identity morphism, or simply identity, of an object x in some category C is the morphism 1x: x x, or : x x, which acts as a two-sided identity for composition.",
+   :refs [:object :category :composition :small-category :set]}
+  {:id :nlab-condition-2,
+   :statement
+   "Given a small category C with set of objects C0 and set of morphisms C1, the identity assigning function of C is the function i: C0 C1 that maps each object in C0 to its identity morphism in C1.",
+   :refs [:object :category :composition :small-category :set]}
+  {:id :nlab-condition-3,
+   :statement
+   "For the generalisation to an internal category C, see identity-assigning morphism.",
+   :refs [:object :category :composition :small-category :set]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :algebra-morphism,
+ [{:kind :unresolved-genus,
+   :wanted :morphism-1x,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :algebra-object,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:internal-category
+    :identity-assigning-morphism
+    :identity-functions],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :morphism,
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :morphism-1x,
  :status :draft,
  :kind :morphism,
  :provenance
@@ -32,13 +41,13 @@
   :resolution-kind "page",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:algebra-morphism :algebra-object :morphism],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "1247",
+  :definition-id nil},
+ :depends-on
+ [:morphism-1x :object :category :composition :small-category :set],
  :gloss
  {:paper "1006.5475",
   :text
-  "the definition of a strictly unital $A_{\\infty}$-algebra morphism. \\begin{examp} \\label{idmorphism} Let $A$ be an $A_{\\infty}$-algebra object in $\\mathcal{C}$. Then we define the \\textit{identity morphism} $\\id_A:A\\rightarrow A$, as a morphism of $A_{\\infty}$-algebra objects, by the following series"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for identity morphism"}]}
+  "the definition of a strictly unital $A_{\\infty}$-algebra morphism. \\begin{examp} \\label{idmorphism} Let $A$ be an $A_{\\infty}$-algebra object in $\\mathcal{C}$. Then we define the \\textit{identity morphism} $\\id_A:A\\rightarrow A$, as a morphism of $A_{\\infty}$-algebra objects, by the following series"}}

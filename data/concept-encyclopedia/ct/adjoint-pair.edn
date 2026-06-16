@@ -1,4 +1,8 @@
-{:given [{:var :X, :type :morphism, :signature "X : adjoint pair"}],
+{:given
+ [{:var :C, :type :category}
+  {:var :D, :type :category}
+  {:var :F, :type :functor, :signature "F : C → D   (left adjoint)"}
+  {:var :G, :type :functor, :signature "G : D → C   (right adjoint)"}],
  :name "adjoint pair",
  :df 413,
  :concept/id :adjoint-pair,
@@ -8,39 +12,38 @@
   :sample
   ["0704.1624" "0704.3976" "0711.3642" "0802.4266" "0804.1460"]},
  :axioms
- [{:id :condition-1,
+ [{:id :naturality,
    :statement
-   "∀ x : morphism. $B\\leq \\Psi\\cdot\\Phi$ and $\\Phi\\cdot\\Psi\\leq A$. As before, every lax morp",
-   :refs [:cdot :before]}],
- :holes
- [{:kind :unresolved-concept,
-   :wanted :cdot,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :before,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :morphism,
- :status :draft,
- :kind :morphism,
+   "φ is natural in a and in b: ∀ h : a' → a in C, k : b → b' in D. the square relating φ_{a,b}, φ_{a',b'} under pre/post-composition commutes",
+   :refs [:natural-transformation :composition]}],
+ :holes [],
+ :genus :adjunction,
+ :status :formalized,
+ :kind :property,
  :provenance
  {:target "nnexus:adjoint pair",
   :resolution-kind "nnexus",
   :msc ["18A40"],
   :domains ["Planetmath"],
-  :formaliser :codex-1,
+  :formaliser :codex-1-redo,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:morphism :cdot :before],
+  "derived from ct-golden adjunction seed for adjunction-variant entry"},
+ :depends-on
+ [:adjunction
+  :functor
+  :natural-transformation
+  :natural-isomorphism
+  :hom-set],
+ :equivalent-to
+ [{:form :unit-counit,
+   :data ["η : Id_C ⇒ G F (unit)" "ε : F G ⇒ Id_D (counit)"],
+   :axioms
+   ["(εF) ∘ (Fη) = id_F" "(Gε) ∘ (ηG) = id_G   (triangle identities)"],
+   :refs [:natural-transformation :identity-morphism]}],
  :gloss
- {:paper "0704.3976",
-  :text
-  "in the context of $\\V$-categories, $A$ and $B$ act as identities for the composition with bimodules, so that a pair of bimodules $(\\Phi:(Y,B)\\bim(X,A),(\\Psi:(X,A)\\bim(Y,B))$ is an {\\em adjoint pair}, with $\\Phi\\dashv\\Psi$, if $B\\leq \\Psi\\cdot\\Phi$ and $\\Phi\\cdot\\Psi\\leq A$. As before, every lax morp"},
+ {:text
+  "adjoint pair is represented here by the adjunction structure: F is left adjoint to G (F ⊣ G) when there is a natural isomorphism\n  D(F a, b) ≅ C(a, G b) for all a ∈ C, b ∈ D; equivalently, unit/counit natural\n  transformations satisfying the triangle identities."},
  :data
- [{:component :carrier,
+ [{:component :hom-isomorphism,
    :signature
-   "X carries the structure described by the corpus gloss for adjoint pair"}]}
+   "φ_{a,b} : D(F a, b) ≅ C(a, G b)   for a ∈ Ob(C), b ∈ Ob(D)"}]}

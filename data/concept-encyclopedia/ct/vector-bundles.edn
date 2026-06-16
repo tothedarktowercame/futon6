@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : vector bundles"}],
- :name "vector bundles",
+{:name "vector bundles",
  :df 319,
  :concept/id :vector-bundles,
  :msc "ct",
@@ -9,13 +8,10 @@
   ["0711.1608" "0806.2520" "0809.3394" "1111.3335" "1304.0520"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -25,13 +21,9 @@
   :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1406.1692",
   :text
-  "In particular, {\\em vector bundles} are a special kind of associoids."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for vector bundles"}]}
+  "In particular, {\\em vector bundles} are a special kind of associoids."}}

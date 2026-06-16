@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :fibration, :signature "X : functor p"}],
- :name "functor p",
+{:name "functor p",
  :df 636,
  :concept/id :functor-p,
  :msc "ct",
@@ -7,37 +6,20 @@
  {:n-papers 6,
   :sample
   ["1812.08079" "2312.14600" "2403.03085" "2503.05790" "2504.16690"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : fibration. (a) a cod ∘ P is a fibration, and (b) f is cartesian in E implies that Pf is a pullback in B",
-   :refs [:fibration :pullback :implies :cartesian]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :pullback,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :implies,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :cartesian,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
- :genus :fibration,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :morphism,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:fibration :pullback :implies :cartesian],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1812.08079",
   :text
-  "ension category is defined as a functor P:E→B→ satisfying (a) a cod ∘ P is a fibration, and (b) f is cartesian in E implies that Pf is a pullback in B."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for functor p"}]}
+  "ension category is defined as a functor P:E→B→ satisfying (a) a cod ∘ P is a fibration, and (b) f is cartesian in E implies that Pf is a pullback in B."}}

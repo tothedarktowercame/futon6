@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : disjoint union"}],
- :name "disjoint union",
+{:name "disjoint union",
  :df 903,
  :concept/id :disjoint-union,
  :msc "ct",
@@ -7,20 +6,43 @@
  {:n-papers 57,
   :sample
   ["0708.4039" "0809.2161" "1003.4850" "1102.1313" "1112.0427"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "Given any family (Ai)i:I of sets, the (external) disjoint union Ai (also written Ai, Ai, etc) of the family is the set of all (ordered) pairs (i,a) with i in the index set I and a in Ai.",
+   :refs [:cartesian-product]}
+  {:id :nlab-condition-2,
+   :statement
+   "As stated, the type of the second element of such a pair depends on the first element, which is natural in dependent type theory (see at dependent sum type) and no problem for material set theory, but it may be ill formed in a structural set theory or in some forms of type theory, especially those based on the internal language of topos theory.",
+   :refs [:cartesian-product]}
+  {:id :nlab-condition-3,
+   :statement
+   "Alternatively, one may define Ai to be the set of those elements x of the cartesian product Ai of the power sets such that there is exactly one index j such that xj is inhabited and that xj is a singleton.",
+   :refs [:cartesian-product]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :unresolved-genus,
+   :wanted :set-of-all-pairs-i,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:dependent-type-theory
+    :dependent-sum-type
+    :material-set-theory
+    :structural-set-theory
+    :type-theory
+    :internal-language],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :set-of-all-pairs-i,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:disjoint union",
-  :resolution-kind "nnexus",
+ {:formaliser :codex-1,
+  :domains ["Mathworld" "Nlab" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-section,
   :msc
   ["03E"
    "03E99"
@@ -29,16 +51,14 @@
    "General_topology"
    "Type_theory"
    "foundational axiom"],
-  :domains ["Mathworld" "Nlab" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :nlab-page-id "876",
+  :resolution-kind "nnexus",
+  :target "nnexus:disjoint union",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:set-of-all-pairs-i :cartesian-product],
  :gloss
  {:paper "0708.4039",
   :text
-  "}_{\\mf{B}(w)}$. We will present a construction of this isomorphism. According to the construction from Proposition~\\vref{pr15}, the Alexandroff space $\\ol{\\mr{cyl}}_{\\mf{B}(w)}$ is defined as the disjoint union $$\\{(R,0)\\}_{R\\in \\mf{B}(B,\\mc R) }\\cup\\{(T,1)\\}_{T \\in \\mf{B}(B, \\mc T)} $$ of $\\mf{B}(B"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for disjoint union"}]}
+  "}_{\\mf{B}(w)}$. We will present a construction of this isomorphism. According to the construction from Proposition~\\vref{pr15}, the Alexandroff space $\\ol{\\mr{cyl}}_{\\mf{B}(w)}$ is defined as the disjoint union $$\\{(R,0)\\}_{R\\in \\mf{B}(B,\\mc R) }\\cup\\{(T,1)\\}_{T \\in \\mf{B}(B, \\mc T)} $$ of $\\mf{B}(B"}}

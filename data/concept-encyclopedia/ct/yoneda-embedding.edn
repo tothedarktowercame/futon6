@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : yoneda embedding"}],
- :name "yoneda embedding",
+{:name "yoneda embedding",
  :df 612,
  :concept/id :yoneda-embedding,
  :msc "ct",
@@ -7,31 +6,83 @@
  {:n-papers 131,
   :sample
   ["0802.0097" "0807.4256" "0810.0979" "0903.2722" "1004.2228"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "The Yoneda embedding for C a locally small category is the functor Y : C [C^op, Set] from C to the category of presheaves over C which is the image of the hom-functor Hom : C^op C Set under the Hom adjunction Hom(C^op C , Set) Hom(C, [C^op, Set]) in the closed symmetric monoidal category Cat.",
+   :refs
+   [:locally-small-category
+    :functor
+    :hom-functor
+    :adjunction
+    :monoidal-category
+    :object
+    :hom-set
+    :morphism]}
+  {:id :nlab-condition-2,
+   :statement
+   "Hence Y sends any object c C to the representable presheaf which assigns to any other object d of C the hom-set of morphisms from d into c: Y(c) \\;\\; C^op Set \\,.",
+   :refs
+   [:locally-small-category
+    :functor
+    :hom-functor
+    :adjunction
+    :monoidal-category
+    :object
+    :hom-set
+    :morphism]}
+  {:id :nlab-condition-3,
+   :statement
+   "The Yoneda embedding is sometimes denoted by , the [hiragana](https://en.wikipedia.org/wiki/Yo_(kana%29) for \"Yo\"; see the references [below](#ReferencesNotation).",
+   :refs
+   [:locally-small-category
+    :functor
+    :hom-functor
+    :adjunction
+    :monoidal-category
+    :object
+    :hom-set
+    :morphism]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :unresolved-genus,
+   :wanted :sometimes-denoted-by,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:category-of-presheaves
+    :closed-monoidal-category
+    :cat
+    :representable-presheaf],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :sometimes-denoted-by,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:yoneda embedding",
-  :resolution-kind "nnexus",
-  :msc ["18A25"],
+ {:formaliser :codex-1,
   :domains ["Planetmath"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18A25"],
+  :nlab-page-id "499",
+  :resolution-kind "nnexus",
+  :target "nnexus:yoneda embedding",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:sometimes-denoted-by
+  :locally-small-category
+  :functor
+  :hom-functor
+  :adjunction
+  :monoidal-category
+  :object
+  :hom-set
+  :morphism],
  :gloss
  {:paper "0807.4256",
   :text
-  "n:\\alpha ^{(n-1)}_1\\to \\alpha ^{(n-1)}_2) \\mapsto (L(\\alpha ^n ,b):x\\mapsto \\mu (e^nx,\\alpha ^n )) & \\alpha ^n \\in L^n(a,a'), \\ x\\in L^0(a',b)\\\\ \\dots & \\endcases$$ \\item{10.} The {\\bf Yoneda embedding} \\ $\\bold Y:L\\to \\infty\\text{\\bf -CAT}^{L^{op}}:\\alpha \\mapsto L(-,\\alpha )$, \\ $\\alpha \\in L$, wh"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for yoneda embedding"}]}
+  "n:\\alpha ^{(n-1)}_1\\to \\alpha ^{(n-1)}_2) \\mapsto (L(\\alpha ^n ,b):x\\mapsto \\mu (e^nx,\\alpha ^n )) & \\alpha ^n \\in L^n(a,a'), \\ x\\in L^0(a',b)\\\\ \\dots & \\endcases$$ \\item{10.} The {\\bf Yoneda embedding} \\ $\\bold Y:L\\to \\infty\\text{\\bf -CAT}^{L^{op}}:\\alpha \\mapsto L(-,\\alpha )$, \\ $\\alpha \\in L$, wh"}}

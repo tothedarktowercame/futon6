@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : module category"}],
- :name "module category",
+{:name "module category",
  :df 422,
  :concept/id :module-category,
  :msc "ct",
@@ -8,35 +7,27 @@
   :sample
   ["0708.3398" "0709.4326" "0802.1036" "0806.1079" "0812.0986"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. $1_{\\C}$, $\\alpha$, $\\lambda$, and $\\rho$ are the unit object, the associativity constraint, the left unit constraint, and the right unit constraint, respective",
-   :refs [:exact :references :right :over :category :object]}],
+   "A module category is a linear category equipped with an action of a tensor linear category.",
+   :refs [:linear-category :enriched-category]}
+  {:id :nlab-condition-2,
+   :statement
+   "That is, a module category is an actegory enriched in K, or a pseudoaction internal to K-.",
+   :refs [:linear-category :enriched-category]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :associativity-constraint,
+ [{:kind :unresolved-source-refs,
+   :wanted
+   [:action
+    :tensor-linear-category
+    :actegory
+    :category-of-modules
+    :pseudoaction
+    :internalization],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :exact,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :references,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :right,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :over,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :object,
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :linear-category,
  :status :draft,
  :kind :object,
  :provenance
@@ -44,21 +35,17 @@
   :resolution-kind "page",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:unit-object
-  :associativity-constraint
-  :object
-  :exact
-  :references
-  :right
-  :over
-  :category],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "9580",
+  :definition-id nil},
+ :depends-on [:linear-category :enriched-category],
  :gloss
  {:paper "0709.4326",
   :text
   ", where $1_{\\C}$, $\\alpha$, $\\lambda$, and $\\rho$ are the unit object, the associativity constraint, the left unit constraint, and the right unit constraint, respectively. A right {\\em module category} over $\\C$ (see \\cite{O1} and references therein) is a category $\\M$ together with an exact bifunct"},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for module category"}]}
+   "A module category is a linear category equipped with an action of a tensor linear category.",
+   :source :nlab-definition}]}

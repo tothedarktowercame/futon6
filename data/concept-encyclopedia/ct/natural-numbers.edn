@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : natural numbers"}],
- :name "natural numbers",
+{:name "natural numbers",
  :pagerank 0.003445,
  :df 758,
  :concept/id :natural-numbers,
@@ -8,37 +7,58 @@
  {:n-papers 20,
   :sample
   ["0810.1279" "0908.2469" "1201.3898" "1201.5239" "1701.08075"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A natural number is traditionally one of the numbers 1, 2, 3, and so on.",
+   :refs [:finite-set]}
+  {:id :nlab-condition-2,
+   :statement
+   "It is now common in many fields of mathematics to include 0 as a natural number as well.",
+   :refs [:finite-set]}
+  {:id :nlab-condition-3,
+   :statement
+   "One advantage of doing so is that a natural number can then be identified with the cardinality of a finite set, as well as a finite ordinal number.",
+   :refs [:finite-set]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :unresolved-genus,
+   :wanted :often-written-n,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:numbers
+    :cardinal-number
+    :ordinal-number
+    :set-theory
+    :integer
+    :foundations],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 4,
- :genus :object,
+ :genus :often-written-n,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:natural number",
-  :resolution-kind "nnexus",
-  :msc ["03E" "03E10" "74D99" "Numbers" "XX-XX"],
+ {:formaliser :codex-1,
   :domains
   ["Encyclopediaofmath"
    "Mathhub"
    "Mathworld"
    "Planetmath"
    "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["03E" "03E10" "74D99" "Numbers" "XX-XX"],
+  :nlab-page-id "885",
+  :resolution-kind "nnexus",
+  :target "nnexus:natural number",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:often-written-n :finite-set],
  :gloss
  {:paper "1701.08075",
   :text
-  "semiring} $(\\reals^{+},+,\\times)$ is used to model probabilistic computation, the \\textit{boolean semiring} $(\\mathbb{B},\\vee,\\wedge)$ is used to model existence problems, and the \\textit{natural numbers} $(\\naturals,+,\\times)$ are used to model counting problems\\footnote{One could also mention the "},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for natural numbers"}]}
+  "semiring} $(\\reals^{+},+,\\times)$ is used to model probabilistic computation, the \\textit{boolean semiring} $(\\mathbb{B},\\vee,\\wedge)$ is used to model existence problems, and the \\textit{natural numbers} $(\\naturals,+,\\times)$ are used to model counting problems\\footnote{One could also mention the "}}

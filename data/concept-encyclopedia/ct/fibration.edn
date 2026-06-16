@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : fibration"}],
- :name "fibration",
+{:name "fibration",
  :pagerank 0.010113,
  :df 1029,
  :concept/id :fibration,
@@ -10,14 +9,11 @@
   ["0706.1286" "0708.3584" "0711.1608" "0711.4657" "0801.0404"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 38,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
@@ -27,13 +23,9 @@
   :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:more-generally :groupoid :object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0711.1608",
   :text
-  "\\subsubsection{Generalized fibrations} \\label{terminology} From now on \\textsc{Ehres\\-mann} will consider that the essence of a (\\emph{generalized}) \\emph{fibration} consists in the datum of a \\emph{small} groupoid (more generally a category) acting\\footnote% {As emphasized below (\\ref{spemor}), this action may be described by a groupoid morph"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for fibration"}]}
+  "\\subsubsection{Generalized fibrations} \\label{terminology} From now on \\textsc{Ehres\\-mann} will consider that the essence of a (\\emph{generalized}) \\emph{fibration} consists in the datum of a \\emph{small} groupoid (more generally a category) acting\\footnote% {As emphasized below (\\ref{spemor}), this action may be described by a groupoid morph"}}

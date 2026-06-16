@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : open subset"}],
- :name "open subset",
+{:name "open subset",
  :df 339,
  :concept/id :open-subset,
  :msc "ct",
@@ -9,21 +8,10 @@
   ["0904.4896" "1703.03007" "1807.06986" "1912.07339" "2409.20464"]},
  :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :euclidean-space,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :diffeological-space,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -33,13 +21,9 @@
   :domains ["Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:euclidean-space :diffeological-space :object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "2505.04170",
   :text
-  "article. We begin with the definition of a diffeological space. A comprehensive reference for diffeology is the book by Iglesias-Zemmour \\cite{PIZ12}. \\begin{defn}%(\\cite{So}) We call an open subset $U$ of a Euclidean space (of arbitrary, but finite dimension) a \\textit{domain}. A map from a domain "},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for open subset"}]}
+  "article. We begin with the definition of a diffeological space. A comprehensive reference for diffeology is the book by Iglesias-Zemmour \\cite{PIZ12}. \\begin{defn}%(\\cite{So}) We call an open subset $U$ of a Euclidean space (of arbitrary, but finite dimension) a \\textit{domain}. A map from a domain "}}

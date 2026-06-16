@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : fixed point"}],
- :name "fixed point",
+{:name "fixed point",
  :df 323,
  :concept/id :fixed-point,
  :msc "ct",
@@ -8,40 +7,42 @@
   :sample
   ["0710.3077" "1107.6032" "1402.4541" "1601.00239" "1603.03092"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. all its reindexings are also initial in the appropriate fibres. \\end{defi} An essential fact about initial algebras is that they are fixed points. A \\emph{fixed",
-   :refs [:defi :fixed :they :appropriate :cong :endofunctor]}],
+   "A fixed point (or fixpoint) of an endofunction f X X is an element x X such that f(x) = x.",
+   :refs [:category :terminal-object :endofunctor]}
+  {:id :nlab-condition-2,
+   :statement
+   "More generally, if C is a category with a terminal object 1 and an endomorphism f X X, then a fixed point of f is an element x 1 X such that f x = x.",
+   :refs [:category :terminal-object :endofunctor]}
+  {:id :nlab-condition-3,
+   :statement
+   "More generally still, we can speak of the same notion but replacing global elements x 1 X by generalized elements x U X, where again x is a fixed point of f X X if f x = x.",
+   :refs [:category :terminal-object :endofunctor]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :defi,
+ [{:kind :unresolved-genus,
+   :wanted :element-x-x,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :fixed,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:endofunction
+    :element
+    :endomorphism
+    :generalized-elements
+    :invariants
+    :monoid],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :they,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :appropriate,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :cong,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :object,
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :element-x-x,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:fixed point",
-  :resolution-kind "nnexus",
+ {:formaliser :codex-1,
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-section,
   :msc
   ["03-00"
    "06A15"
@@ -52,17 +53,14 @@
    "Curves"
    "Fixed_points_(mathematics)"
    "XX-XX"],
-  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :nlab-page-id "8480",
+  :resolution-kind "nnexus",
+  :target "nnexus:fixed point",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:object :defi :fixed :they :appropriate :cong :endofunctor],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:element-x-x :category :terminal-object :endofunctor],
  :gloss
  {:paper "0710.3077",
   :text
-  "dexed initial $T$-algebra} if all its reindexings are also initial in the appropriate fibres. \\end{defi} An essential fact about initial algebras is that they are fixed points. A \\emph{fixed point} for an endofunctor $T$ is an object $A$ together with an isomorphism $TA \\cong A$. A lemma by Lambek \\"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for fixed point"}]}
+  "dexed initial $T$-algebra} if all its reindexings are also initial in the appropriate fibres. \\end{defi} An essential fact about initial algebras is that they are fixed points. A \\emph{fixed point} for an endofunctor $T$ is an object $A$ together with an isomorphism $TA \\cong A$. A lemma by Lambek \\"}}

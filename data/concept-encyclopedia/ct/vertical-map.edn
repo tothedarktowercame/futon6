@@ -1,30 +1,22 @@
-{:given [{:var :X, :type :morphism, :signature "X : vertical map"}],
- :name "vertical map",
+{:name "vertical map",
  :df 327,
  :concept/id :vertical-map,
  :msc "ct",
  :defined-in {:n-papers 2, :sample ["1105.6206" "2307.09497"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :morphism,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :morphism,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:morphism],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "2307.09497",
   :text
-  "Mod]}$ in the bi-initial model to a type $\\Mor[S\\Sub{\\TP}\\cdot A]{\\Yo{S\\Gamma}}{\\TP[\\Modd]}$ in the normalization model. This map internalizes directly into $\\Sh{\\GlTop}$ as a \\emph{vertical map} from $\\Mor{\\TP}{\\TP\\NS\\Sub{\\bbrk{-}}}$ from $\\TP$ to the restriction $\\TP\\NS\\Sub{\\bbrk{-}}$ of $\\TP\\NS$ "},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for vertical map"}]}
+  "Mod]}$ in the bi-initial model to a type $\\Mor[S\\Sub{\\TP}\\cdot A]{\\Yo{S\\Gamma}}{\\TP[\\Modd]}$ in the normalization model. This map internalizes directly into $\\Sh{\\GlTop}$ as a \\emph{vertical map} from $\\Mor{\\TP}{\\TP\\NS\\Sub{\\bbrk{-}}}$ from $\\TP$ to the restriction $\\TP\\NS\\Sub{\\bbrk{-}}$ of $\\TP\\NS$ "}}

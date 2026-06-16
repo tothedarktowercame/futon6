@@ -1,61 +1,31 @@
-{:given
- [{:var :X,
-   :type :additive-category,
-   :signature "X : abelian category"}],
+{:given [{:var :A, :type :additive-category}],
  :name "abelian category",
- :pagerank 0.00229,
- :df 909,
  :concept/id :abelian-category,
  :msc "ct",
- :defined-in
- {:n-papers 39,
-  :sample
-  ["0711.1608" "0804.3587" "1110.3526" "1205.3669" "1206.6632"]},
  :axioms
- [{:id :condition-1,
+ [{:id :has-kernels-cokernels,
+   :statement "∀ f ∈ Mor(A). f has a kernel and a cokernel",
+   :refs [:kernel :cokernel]}
+  {:id :monos-are-kernels,
    :statement
-   "∀ x : additive-category. every morphism has a kernel and a cokernel",
-   :refs [:every-morphism :kernel :cokernel :morphism]}
-  {:id :condition-2,
+   "∀ monomorphism m ∈ Mor(A). m = ker(coker m)   (every mono is a kernel)",
+   :refs [:monomorphism :kernel :cokernel]}
+  {:id :epis-are-cokernels,
    :statement
-   "∀ x : additive-category. every monic (epic) is a kernel (cokernel)",
-   :refs [:kernel :monic :cokernel :epic]}],
- :holes
- [{:kind :unresolved-concept,
-   :wanted :every-morphism,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :monic,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :epic,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
- :used-papers 25,
+   "∀ epimorphism e ∈ Mor(A). e = coker(ker e)   (every epi is a cokernel)",
+   :refs [:epimorphism :kernel :cokernel]}],
+ :holes [],
  :genus :additive-category,
- :status :draft,
+ :status :golden,
  :kind :object,
- :provenance
- {:target "nlab-1041",
-  :resolution-kind "definition-site",
-  :formaliser :codex-1,
-  :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :provenance {:target "nlab-1041", :source :curated},
  :depends-on
  [:additive-category
-  :every-morphism
+  :morphism
   :kernel
   :cokernel
-  :morphism
-  :monic
-  :epic],
+  :monomorphism
+  :epimorphism],
  :gloss
- {:paper "0804.3587",
-  :text
-  "\\item An {\\bf abelian category} is an additive category where every morphism has a kernel and a cokernel and every monic (epic) is a kernel (cokernel)."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for abelian category"}]}
+ {:text
+  "An abelian category is an additive category in which every morphism\n  has a kernel and a cokernel, every monomorphism is a kernel, and every\n  epimorphism is a cokernel."}}

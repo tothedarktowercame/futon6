@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :morphism, :signature "X : linear map"}],
- :name "linear map",
+{:name "linear map",
  :pagerank 0.001863,
  :df 761,
  :concept/id :linear-map,
@@ -8,41 +7,13 @@
  {:n-papers 16,
   :sample
   ["1208.4070" "1710.06084" "1807.09554" "1902.03033" "2002.02554"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : morphism. $L_0(X) = X$. Say that map $f: X \\to Y$ between linear objects is a \\textbf{linear map} if $D(f) = \\pi_0 f$. \\end{definition} We can now determine the linear ma",
-   :refs [:linear-maps :maps :definition :between :objects :cofree]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :differential-category,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :maps,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :definition,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :between,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :objects,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :cofree,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 15,
- :genus :morphism,
  :status :draft,
  :kind :morphism,
  :provenance
@@ -52,21 +23,9 @@
   :domains ["Mathworld" "Planetmath" "Wikipedia"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:linear-maps
-  :differential-category
-  :morphism
-  :maps
-  :definition
-  :between
-  :objects
-  :cofree],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1208.4070",
   :text
-  "nition} Say that an object $X$ in a generalized Cartesian differential category is a \\textbf{linear object} if $L_0(X) = X$. Say that map $f: X \\to Y$ between linear objects is a \\textbf{linear map} if $D(f) = \\pi_0 f$. \\end{definition} We can now determine the linear maps in cofree generalized Cart"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for linear map"}]}
+  "nition} Say that an object $X$ in a generalized Cartesian differential category is a \\textbf{linear object} if $L_0(X) = X$. Say that map $f: X \\to Y$ between linear objects is a \\textbf{linear map} if $D(f) = \\pi_0 f$. \\end{definition} We can now determine the linear maps in cofree generalized Cart"}}

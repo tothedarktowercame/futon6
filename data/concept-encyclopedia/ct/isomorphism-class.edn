@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : isomorphism class"}],
- :name "isomorphism class",
+{:name "isomorphism class",
  :df 382,
  :concept/id :isomorphism-class,
  :msc "ct",
@@ -8,18 +6,21 @@
  {:n-papers 7,
   :sample
   ["0807.1329" "1707.08049" "1803.00180" "2005.05108" "2203.05500"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "Given a category, the *isomorphism class* of one of its objects is its equivalence class under the equivalence relation which regards two objects as related when they are connected by an isomorphism.",
+   :refs [:category :equivalence-class :equivalence-relation]}
+  {:id :nlab-condition-2,
+   :statement
+   "The set of isomorphism classes of a category is also sometimes thought of as the category's *decategorification*.",
+   :refs [:category :equivalence-class :equivalence-relation]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :every-morphism,
+ [{:kind :unresolved-source-refs,
+   :wanted [:objects :relation :isomorphism :decategorification],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :genus :morphism,
  :status :draft,
  :kind :morphism,
@@ -28,13 +29,13 @@
   :resolution-kind "page",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:every-morphism :morphism],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "23972",
+  :definition-id nil},
+ :depends-on
+ [:morphism :category :equivalence-class :equivalence-relation],
  :gloss
  {:paper "0807.1329",
   :text
-  "structure. \\end{defn} In other words, instead of stipulating a specific ambidextrous adjoint $\\langle F^* \\rangle$ for every morphism $F$, an even-handed structure selects only an {\\em isomorphism class} $F^{[*]}$ of such adjoints, in such a way that the resultant choices are compatible with composi"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for isomorphism class"}]}
+  "structure. \\end{defn} In other words, instead of stipulating a specific ambidextrous adjoint $\\langle F^* \\rangle$ for every morphism $F$, an even-handed structure selects only an {\\em isomorphism class} $F^{[*]}$ of such adjoints, in such a way that the resultant choices are compatible with composi"}}

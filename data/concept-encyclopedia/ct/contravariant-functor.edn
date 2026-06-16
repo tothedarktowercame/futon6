@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : contravariant functor"}],
- :name "contravariant functor",
+{:name "contravariant functor",
  :df 504,
  :concept/id :contravariant-functor,
  :msc "ct",
@@ -8,31 +6,46 @@
  {:n-papers 41,
   :sample
   ["0708.3398" "0710.1208" "0801.2826" "0810.2070" "0905.3010"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A contravariant functor is like a functor but it reverses the directions of the morphisms.",
+   :refs [:functor]}
+  {:id :nlab-condition-2,
+   :statement
+   "(Between groupoids, contravariant functors are essentially the same as functors.)",
+   :refs [:functor]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :morphism,
+ [{:kind :unresolved-genus,
+   :wanted
+   :like-a-functor-but-it-reverses-the-directions-of-the-morphisms,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:morphisms :groupoids],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus
+ :like-a-functor-but-it-reverses-the-directions-of-the-morphisms,
  :status :draft,
  :kind :morphism,
  :provenance
- {:target "nnexus:contravariant functor",
-  :resolution-kind "nnexus",
-  :msc ["18" "18-00"],
+ {:formaliser :codex-1,
   :domains ["Mathworld" "Planetmath"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18" "18-00"],
+  :nlab-page-id "1018",
+  :resolution-kind "nnexus",
+  :target "nnexus:contravariant functor",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:morphism],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:like-a-functor-but-it-reverses-the-directions-of-the-morphisms
+  :functor],
  :gloss
  {:paper "0810.2070",
   :text
-  "(g)`\\mathcal{F}(k)] \\put(2000,200){\\oval(1350,700)}\\put(1980,180){$\\mathcal{L}$} \\put(800,170){$% \\cone{\\mathcal{F}_\\ast}$} \\efig \\end{equation*} \\bigbreak\\smallskip Similarly, a \\emph{contravariant functor}, or a \\emph{cofunctor}, $% \\mathcal{F}^{\\ast }:\\mathcal{K}\\rightarrow \\mathcal{L}$ is a \\emp"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for contravariant functor"}]}
+  "(g)`\\mathcal{F}(k)] \\put(2000,200){\\oval(1350,700)}\\put(1980,180){$\\mathcal{L}$} \\put(800,170){$% \\cone{\\mathcal{F}_\\ast}$} \\efig \\end{equation*} \\bigbreak\\smallskip Similarly, a \\emph{contravariant functor}, or a \\emph{cofunctor}, $% \\mathcal{F}^{\\ast }:\\mathcal{K}\\rightarrow \\mathcal{L}$ is a \\emp"}}

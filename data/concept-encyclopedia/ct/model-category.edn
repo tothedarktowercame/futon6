@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : model category"}],
- :name "model category",
+{:name "model category",
  :pagerank 0.012377,
  :df 750,
  :concept/id :model-category,
@@ -9,44 +8,39 @@
   :sample
   ["0704.1624" "0707.0300" "0707.1449" "0708.2185" "0709.0248"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equ",
-   :refs [:classes :weak :three :fibrations :textit :morphisms]}],
+   "###### Definition A model structure on a category is a choice of three distinguished classes of morphisms.",
+   :refs [:category]}
+  {:id :nlab-condition-2,
+   :statement
+   "weak equivalences W Mor() satisfying the following conditions:.",
+   :refs [:category]}
+  {:id :nlab-condition-3,
+   :statement
+   "W makes into a category with weak equivalences, (meaning that it contains all isomorphisms and is closed under two-out-of-three: given a composable pair of morphisms f,g, if two out of the three morphisms f, g, g f are in W, so is the third);.",
+   :refs [:category]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :cocomplete-category,
+ [{:kind :unresolved-genus,
+   :wanted
+   :choice-of-three-distinguished-classes-of-morphisms-cofibrations-cof-mor,
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :classes,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:classes
+    :morphisms
+    :category-with-weak-equivalences
+    :isomorphisms
+    :two-out-of-three
+    :weak-factorization-systems],
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :weak,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :three,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :fibrations,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :textit,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :morphisms,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 26,
- :genus :object,
+ :genus
+ :choice-of-three-distinguished-classes-of-morphisms-cofibrations-cof-mor,
  :status :draft,
  :kind :object,
  :provenance
@@ -54,22 +48,14 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "257",
+  :definition-id "nlab-257-d1"},
  :depends-on
- [:weak-equivalences
-  :cocomplete-category
-  :object
-  :classes
-  :weak
-  :three
-  :fibrations
-  :textit
-  :morphisms],
+ [:choice-of-three-distinguished-classes-of-morphisms-cofibrations-cof-mor
+  :category],
  :gloss
  {:paper "0708.2185",
   :text
-  "\\end{proof} \\section{Weak equivalences} A \\textit{model category} is a complete and cocomplete category $\\ck$ together with three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equ"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for model category"}]}
+  "\\end{proof} \\section{Weak equivalences} A \\textit{model category} is a complete and cocomplete category $\\ck$ together with three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equ"}}

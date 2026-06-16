@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : coalgebra"}],
- :name "coalgebra",
+{:name "coalgebra",
  :pagerank 0.004075,
  :df 580,
  :concept/id :coalgebra,
@@ -9,64 +8,89 @@
   :sample
   ["0708.3398" "0711.0674" "0712.1864" "0801.0157" "0806.3205"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. $\\mu_3 = \\mu(1 \\ox \\mu) = \\mu(\\mu \\ox 1):A^{\\ox 3} \\ra A$ (associativity) and $\\mu(\\eta \\ox 1) = 1 = \\mu(1 \\ox \\eta):A \\ra A$ (unit conditions). Dually, a \\emph",
+   "In the [most familiar sense](http://en.wikipedia.org/wiki/Coalgebra), a coalgebra is just like an associative algebra, but with all the structure maps 'turned around' (a \"co-monoid\").",
    :refs
-   [:counit
+   [:associative-algebra
+    :vector-space
+    :opposite-category
+    :category
+    :hopf-algebra
     :object
-    :associativity
-    :comultiplication
-    :equipped
-    :conditions]}],
+    :morphism]}
+  {:id :nlab-condition-2,
+   :statement "More precisely, fix a ground field k.",
+   :refs
+   [:associative-algebra
+    :vector-space
+    :opposite-category
+    :category
+    :hopf-algebra
+    :object
+    :morphism]}
+  {:id :nlab-condition-3,
+   :statement
+   "Then an associative algebra A over k is a vector space equipped with a multiplication m A A A and a unit i k A satisfying the associativity law and left/right unit laws, which can be drawn as commutative diagrams.",
+   :refs
+   [:associative-algebra
+    :vector-space
+    :opposite-category
+    :category
+    :hopf-algebra
+    :object
+    :morphism]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :counit,
+ [{:kind :unresolved-genus,
+   :wanted :just-like-an-associative-algebra,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :associativity,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:co-monoid
+    :ground-field
+    :associativity
+    :unit-laws
+    :commutative-diagrams
+    :formal-duality],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :comultiplication,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :equipped,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :conditions,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 26,
- :genus :object,
+ :genus :just-like-an-associative-algebra,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:coalgebra",
-  :resolution-kind "nnexus",
-  :msc ["Coalgebras"],
+ {:formaliser :codex-1,
   :domains ["Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["Coalgebras"],
+  :nlab-page-id "181",
+  :resolution-kind "nnexus",
+  :target "nnexus:coalgebra",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
  :depends-on
- [:object
-  :counit
-  :associativity
-  :comultiplication
-  :equipped
-  :conditions],
+ [:just-like-an-associative-algebra
+  :associative-algebra
+  :vector-space
+  :opposite-category
+  :category
+  :hopf-algebra
+  :object
+  :morphism],
  :gloss
  {:paper "0712.1864",
   :text
   "\\eta:I \\ra A$ satisfying $\\mu_3 = \\mu(1 \\ox \\mu) = \\mu(\\mu \\ox 1):A^{\\ox 3} \\ra A$ (associativity) and $\\mu(\\eta \\ox 1) = 1 = \\mu(1 \\ox \\eta):A \\ra A$ (unit conditions). Dually, a \\emph{coalgebra} in $\\C$ is an object $C \\in \\C$ equipped with a comultiplication $\\delta:C \\ra C \\ox C$ and a counit $\\"},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for coalgebra"}]}
+   "Then an associative algebra A over k is a vector space equipped with a multiplication m A A A and a unit i k A satisfying the associativity law and left/right unit laws, which can be drawn as commutative diagrams.",
+   :source :nlab-definition}
+  {:component :definition-data-2,
+   :signature
+   "Dually, a coalgebra C is a vector space equipped with a comultiplication C C C and a counit e C k satisfying *co-associativity* and left/right *co-unitality* laws.",
+   :source :nlab-definition}]}

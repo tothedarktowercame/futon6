@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : topological space"}],
- :name "topological space",
+{:name "topological space",
  :pagerank 0.008217,
  :df 848,
  :concept/id :topological-space,
@@ -9,36 +8,23 @@
   :sample
   ["0810.2070" "0902.1272" "1009.1166" "1010.3336" "1011.3574"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. for every $x\\in X$ and $U\\in\\O(x)$ the conclusion of (\\ref{eq:corefamily}) holds for every family $\\mathbb{H}$ of filters such that there is an i",
-   :refs [:filters :mathbb :conclusion :holds :family]}],
+   "A topological space is a set X equipped with a set of subsets U X, called the open sets, which are closed under.",
+   :refs [:set :open-sets]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :filters,
+ [{:kind :unresolved-genus,
+   :wanted :set-x,
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :mathbb,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:subsets :intersections :unions],
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :conclusion,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :holds,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :family,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 38,
- :genus :object,
+ :genus :set-x,
  :status :draft,
  :kind :object,
  :provenance
@@ -46,13 +32,17 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object :filters :mathbb :conclusion :holds :family],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "374",
+  :definition-id "nlab-374-d1"},
+ :depends-on [:set-x :set :open-sets],
  :gloss
  {:paper "1011.3574",
   :text
   "We call a topological space \\emph{injectively core compact} if for every $x\\in X$ and $U\\in\\O(x)$ the conclusion of (\\ref{eq:corefamily}) holds for every family $\\mathbb{H}$ of filters such that there is an i"},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for topological space"}]}
+   "A topological space is a set X equipped with a set of subsets U X, called the open sets, which are closed under.",
+   :source :nlab-definition}]}

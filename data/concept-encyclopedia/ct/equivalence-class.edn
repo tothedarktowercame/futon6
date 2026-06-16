@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : equivalence class"}],
- :name "equivalence class",
+{:name "equivalence class",
  :df 845,
  :concept/id :equivalence-class,
  :msc "ct",
@@ -7,20 +6,21 @@
  {:n-papers 21,
   :sample
   ["0803.4209" "0809.3023" "1305.3835" "1308.0729" "1603.08186"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement "There are a variety of ways to make this precise.",
+   :refs []}],
  :holes
  [{:kind :missing-genus,
    :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+   :source :nlab-raw-section,
+   :note "nLab definition text did not expose an unambiguous genus"}],
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:equivalence class",
-  :resolution-kind "nnexus",
+ {:formaliser :codex-1,
+  :domains ["Mathhub" "Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-section,
   :msc
   ["03B52"
    "03D20"
@@ -30,16 +30,14 @@
    "93D05"
    "Mathematical_relations"
    "XX-XX"],
-  :domains ["Mathhub" "Mathworld" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :nlab-page-id "5802",
+  :resolution-kind "nnexus",
+  :target "nnexus:equivalence class",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [],
  :gloss
  {:paper "0809.3023",
   :text
-  "\\defn A {\\bf diagram} in $G$ is by definition an equivalence class of graph homomorphisms $\\delta:I\\to G$.\\edefn As is the practice when an object is defined to be an equivalence class, we will refer to a diagram by any member of the equivalence class."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for equivalence class"}]}
+  "\\defn A {\\bf diagram} in $G$ is by definition an equivalence class of graph homomorphisms $\\delta:I\\to G$.\\edefn As is the practice when an object is defined to be an equivalence class, we will refer to a diagram by any member of the equivalence class."}}

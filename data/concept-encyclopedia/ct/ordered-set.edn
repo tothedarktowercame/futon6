@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : ordered set"}],
- :name "ordered set",
+{:name "ordered set",
  :pagerank 0.002351,
  :df 561,
  :concept/id :ordered-set,
@@ -8,16 +7,13 @@
  {:n-papers 11,
   :sample
   ["1507.05486" "1604.04700" "1611.03836" "1702.02602" "2006.01613"]},
- :axioms
- [{:id :condition-1,
-   :statement "∀ x : object. $X\\in\\UU$",
-   :refs []}],
+ :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 19,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
@@ -27,13 +23,9 @@
   :domains ["Encyclopediaofmath" "Mathhub" "Mathworld"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "2006.01613",
   :text
-  "\\end{itemize} An {\\em ordered set}\\index{ordered set}\\index{mathematical structure!ordered set} is an ordered class $(X,S)$ such that $X\\in\\UU$."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for ordered set"}]}
+  "\\end{itemize} An {\\em ordered set}\\index{ordered set}\\index{mathematical structure!ordered set} is an ordered class $(X,S)$ such that $X\\in\\UU$."}}

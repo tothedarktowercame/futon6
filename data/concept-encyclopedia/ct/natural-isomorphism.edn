@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : natural isomorphism"}],
- :name "natural isomorphism",
+{:name "natural isomorphism",
  :pagerank 0.008693,
  :df 1560,
  :concept/id :natural-isomorphism,
@@ -10,40 +8,46 @@
   :sample
   ["0801.2826" "0810.2070" "0812.1464" "0812.4864" "0901.0203"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : morphism. for each $x \\in X$, the morphism $\\alpha_x$ is invertible",
-   :refs [:morphism :alpha :invertible]}],
+   "A natural isomorphism F G between two functors F and G \\\\ C &^^& D \\\\ & is equivalently.",
+   :refs [:natural-transformation :functor-category]}
+  {:id :nlab-condition-2,
+   :statement "a natural transformation with a two-sided inverse;.",
+   :refs [:natural-transformation :functor-category]}
+  {:id :nlab-condition-3,
+   :statement
+   "a natural transformation each of whose components : F(c) G(c) for all c Obj(C) is an isomorphism in D;.",
+   :refs [:natural-transformation :functor-category]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :alpha,
+ [{:kind :unresolved-genus,
+   :wanted :isomorphism-in-d,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :invertible,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:functors :inverse :isomorphism :the :automorphism],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 36,
- :genus :morphism,
+ :genus :isomorphism-in-d,
  :status :draft,
  :kind :morphism,
  :provenance
- {:target "nnexus:natural isomorphism",
-  :resolution-kind "nnexus",
-  :msc ["18-00"],
+ {:formaliser :codex-1,
   :domains ["Planetmath"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18-00"],
+  :nlab-page-id "121",
+  :resolution-kind "nnexus",
+  :target "nnexus:natural isomorphism",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:natural-transformation :morphism :alpha :invertible],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:isomorphism-in-d :natural-transformation :functor-category],
  :gloss
  {:paper "0812.4864",
   :text
-  "on} \\begin{definition} A {\\bf natural isomorphism} is a natural transformation $\\alpha \\maps F \\to G$ between functors $F,G \\maps X \\to Y$ such that for each $x \\in X$, the morphism $\\alpha_x$ is invertible."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for natural isomorphism"}]}
+  "on} \\begin{definition} A {\\bf natural isomorphism} is a natural transformation $\\alpha \\maps F \\to G$ between functors $F,G \\maps X \\to Y$ such that for each $x \\in X$, the morphism $\\alpha_x$ is invertible."}}

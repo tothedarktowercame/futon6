@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : inclusion functor"}],
- :name "inclusion functor",
+{:name "inclusion functor",
  :df 672,
  :concept/id :inclusion-functor,
  :msc "ct",
@@ -9,13 +7,10 @@
   :sample ["0810.2070" "1508.00921" "1912.10800" "2512.03371"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :morphism,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :morphism,
  :provenance
@@ -25,13 +20,9 @@
   :domains ["Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:morphism],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "2512.03371",
   :text
-  "ext, we introduce the appropriate $2$-categorical structure for inclusion categories, starting with inclusion functors. \\begin{definition} \\label{definition:inclusion-functor} An \\textbf{inclusion functor} from an inclusion category $\\C$ to an inclusion category $\\C'$ consists of a functor $F\\colon\\"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for inclusion functor"}]}
+  "ext, we introduce the appropriate $2$-categorical structure for inclusion categories, starting with inclusion functors. \\begin{definition} \\label{definition:inclusion-functor} An \\textbf{inclusion functor} from an inclusion category $\\C$ to an inclusion category $\\C'$ consists of a functor $F\\colon\\"}}

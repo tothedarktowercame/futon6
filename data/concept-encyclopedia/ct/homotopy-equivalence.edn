@@ -1,8 +1,4 @@
-{:given
- [{:var :X,
-   :type :isomorphism,
-   :signature "X : homotopy equivalence"}],
- :name "homotopy equivalence",
+{:name "homotopy equivalence",
  :df 543,
  :concept/id :homotopy-equivalence,
  :msc "ct",
@@ -11,32 +7,17 @@
   :sample
   ["0704.1624" "0708.2185" "0905.2621" "0907.4969" "0908.3325"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : isomorphism. $Qf$ is the isomorphism, i.e., if there exists $g:L\\to K$ such that both $fg\\approx\\id_L$",
-   :refs [:exists :approx :there-exists :isomorphism]}],
+   "###### Definition A strong homotopy equivalence between spaces X and Y is a quadruple (f,g,H,K), as above, such that f*H f^*K and g*K g^*H.",
+   :refs []}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :quotient-functor,
+ [{:kind :unresolved-genus,
+   :wanted :quadruple-f,
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :there-exists,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :isomorphism,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :exists,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :approx,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
- :genus :isomorphism,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}],
+ :genus :quadruple-f,
  :status :draft,
  :kind :object,
  :provenance
@@ -44,14 +25,12 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:quotient-functor :there-exists :isomorphism :exists :approx],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "936",
+  :definition-id "nlab-936-d1"},
+ :depends-on [:quadruple-f],
  :gloss
  {:paper "0708.2185",
   :text
-  "ut, it is not transitive in general and we will denote its transitive hull by $\\approx$. We get the quotient functor $$ Q:\\ck\\to\\ck/\\approx. $$ A morphism $f:K\\to L$ is called a \\textit{homotopy equivalence} if $Qf$ is the isomorphism, i.e., if there exists $g:L\\to K$ such that both $fg\\approx\\id_L$"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for homotopy equivalence"}]}
+  "ut, it is not transitive in general and we will denote its transitive hull by $\\approx$. We get the quotient functor $$ Q:\\ck\\to\\ck/\\approx. $$ A morphism $f:K\\to L$ is called a \\textit{homotopy equivalence} if $Qf$ is the isomorphism, i.e., if there exists $g:L\\to K$ such that both $fg\\approx\\id_L$"}}

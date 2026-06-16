@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : topos"}],
- :name "topos",
+{:name "topos",
  :pagerank 0.012185,
  :df 935,
  :concept/id :topos,
@@ -8,21 +7,44 @@
  {:n-papers 98,
   :sample
   ["0711.1608" "0805.0432" "0810.1279" "0902.1750" "0902.3436"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement "The general notion of topos is that of.",
+   :refs []}
+  {:id :nlab-condition-2,
+   :statement "[Elementary toposes](#ElementaryTopos).",
+   :refs []}
+  {:id :nlab-condition-3,
+   :statement
+   "A specialization of this which is important enough that much of the literature implicitly takes it to be the general definition is the notion of.",
+   :refs []}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :unresolved-genus,
+   :wanted
+   :notion-of-grothendieck-sheaf-toposes-this-is-the-notion-relevant-for-applications-in-geometry-and-geometric-logic,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:geometry
+    :geometric-logic
+    :logic
+    :internal-logic
+    :natural-numbers-object],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 50,
- :genus :object,
+ :genus
+ :notion-of-grothendieck-sheaf-toposes-this-is-the-notion-relevant-for-applications-in-geometry-and-geometric-logic,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:topos",
-  :resolution-kind "nnexus",
+ {:formaliser :codex-1,
+  :domains
+  ["Encyclopediaofmath" "Mathworld" "Nlab" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-section,
   :msc
   ["03G30"
    "14F20"
@@ -32,17 +54,15 @@
    "Sheaf_theory"
    "XX-XX"
    "category"],
-  :domains
-  ["Encyclopediaofmath" "Mathworld" "Nlab" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :nlab-page-id "124",
+  :resolution-kind "nnexus",
+  :target "nnexus:topos",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:closed-category :object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:notion-of-grothendieck-sheaf-toposes-this-is-the-notion-relevant-for-applications-in-geometry-and-geometric-logic],
  :gloss
  {:paper "0711.1608",
   :text
-  "is uninteresting and useless, at least for their main field of interest. Another widespread standpoint consists in embedding \\textbf{Dif} into a ``better'' category, preferably a \\emph{topos} \\cite{GIR, Ja, Jb}, or at least a cartesian closed category \\cite{ML}. This was done in countless ways by va"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for topos"}]}
+  "is uninteresting and useless, at least for their main field of interest. Another widespread standpoint consists in embedding \\textbf{Dif} into a ``better'' category, preferably a \\emph{topos} \\cite{GIR, Ja, Jb}, or at least a cartesian closed category \\cite{ML}. This was done in countless ways by va"}}

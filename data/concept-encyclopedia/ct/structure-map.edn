@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :morphism, :signature "X : structure map"}],
- :name "structure map",
+{:name "structure map",
  :df 352,
  :concept/id :structure-map,
  :msc "ct",
@@ -7,48 +6,12 @@
  {:n-papers 35,
   :sample
   ["0809.2161" "0907.1359" "1108.2913" "1110.3526" "1206.3704"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : morphism. $n>1$ then $\\iota_{\\gamma}$ is a laxity map (eventually composed with a structure map)",
-   :refs [:iota :composed :structure :eventually :gamma]}
-  {:id :condition-2,
-   :statement
-   "∀ x : morphism. in particular when $(s_1,s_2) \\in \\otimes^{-1}(z)$ and $",
-   :refs [:otimes :particular]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :iota,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :composed,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :structure,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :eventually,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :gamma,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :otimes,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :particular,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :morphism,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :morphism,
  :provenance
@@ -69,21 +32,9 @@
   :domains ["Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:morphism
-  :iota
-  :composed
-  :structure
-  :eventually
-  :gamma
-  :otimes
-  :particular],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1206.3704",
   :text
-  "If $n>1$ then $\\iota_{\\gamma}$ is a laxity map (eventually composed with a structure map); in particular when $(s_1,s_2) \\in \\otimes^{-1}(z)$ and $"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for structure map"}]}
+  "If $n>1$ then $\\iota_{\\gamma}$ is a laxity map (eventually composed with a structure map); in particular when $(s_1,s_2) \\in \\otimes^{-1}(z)$ and $"}}

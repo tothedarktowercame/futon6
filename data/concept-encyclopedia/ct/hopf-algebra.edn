@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :bialgebra, :signature "X : hopf algebra"}],
- :name "hopf algebra",
+{:name "hopf algebra",
  :df 441,
  :concept/id :hopf-algebra,
  :msc "ct",
@@ -7,16 +6,18 @@
  {:n-papers 54,
   :sample
   ["0804.1460" "0806.3205" "0907.0187" "0907.3335" "1003.1920"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition (antipode) A k-bialgebra (A,m,,,) with multiplication m, comultiplication , unit k A and counit A k is called a Hopf algebra if there exists a k-linear function S A A \\,, then called the antipode or coinverse, such that m( S) \\;=\\; m(S) = (as a map A A).",
+   :refs []}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :bialgebra,
+ [{:kind :unresolved-source-refs,
+   :wanted [:antipode :bialgebra :linear-function],
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :bialgebra,
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :hopf-algebra,
  :status :draft,
  :kind :object,
  :provenance
@@ -24,12 +25,11 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:bialgebra],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "528",
+  :definition-id "nlab-528-d1"},
+ :depends-on [:hopf-algebra],
  :gloss
  {:paper "0907.3335",
-  :text "A {\\it Hopf algebra} is a bialgebra with antipode."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for hopf algebra"}]}
+  :text "A {\\it Hopf algebra} is a bialgebra with antipode."}}

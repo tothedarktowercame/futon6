@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : associative algebras"}],
- :name "associative algebras",
+{:name "associative algebras",
  :df 330,
  :concept/id :associative-algebras,
  :msc "ct",
@@ -8,16 +6,12 @@
  {:n-papers 19,
   :sample
   ["1505.00220" "1701.05493" "1801.03480" "1810.10503" "1812.07272"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : object. $x(yz)=(xy)z$. The category $\\Alt_{\\K}$",
-   :refs [:category]}],
+ :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :object,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -27,13 +21,9 @@
   :domains ["Mathworld" "Wikipedia"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:full-subcategory :object :category],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1701.05493",
   :text
-  "t algebraically coherent. A \\defn{subvariety} of~$\\Alg_{\\K}$ is any equationally defined class of algebras, considered as a full subcategory~$\\V$ of~$\\Alg_{\\K}$. The category of \\defn{associative algebras} over $\\K$ is the subvariety of~$\\Alg_{\\K}$ satisfying $x(yz)=(xy)z$. The category $\\Alt_{\\K}$ "},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for associative algebras"}]}
+  "t algebraically coherent. A \\defn{subvariety} of~$\\Alg_{\\K}$ is any equationally defined class of algebras, considered as a full subcategory~$\\V$ of~$\\Alg_{\\K}$. The category of \\defn{associative algebras} over $\\K$ is the subvariety of~$\\Alg_{\\K}$ satisfying $x(yz)=(xy)z$. The category $\\Alt_{\\K}$ "}}

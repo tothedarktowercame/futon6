@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : open sets"}],
- :name "open sets",
+{:name "open sets",
  :df 320,
  :concept/id :open-sets,
  :msc "ct",
@@ -7,40 +6,12 @@
  {:n-papers 13,
   :sample
   ["0810.2070" "0904.4896" "1209.2735" "1302.6946" "1803.05316"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : object. a family of subsets $\\stackrel{\\circ}{\\mathcal{T}} (X)$ of $X$, called \\textbf{open sets}, and a family of open families $\\mathrm{Cov}_X $, called \\textbf{admis",
-   :refs [:circ :open :mathcal :admissible :called :sets]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :circ,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :open,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :mathcal,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :admissible,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :called,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :sets,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :object,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -50,21 +21,9 @@
   :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:topological-space
-  :object
-  :circ
-  :open
-  :mathcal
-  :admissible
-  :called
-  :sets],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0904.4896",
   :text
-  "M. Knebusch in \\cite{LSS}: a \\textbf{generalized topological space} (\\emph{gts}) is a set $X$ together with a family of subsets $\\stackrel{\\circ}{\\mathcal{T}} (X)$ of $X$, called \\textbf{open sets}, and a family of open families $\\mathrm{Cov}_X $, called \\textbf{admissible families} or \\textbf{admis"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for open sets"}]}
+  "M. Knebusch in \\cite{LSS}: a \\textbf{generalized topological space} (\\emph{gts}) is a set $X$ together with a family of subsets $\\stackrel{\\circ}{\\mathcal{T}} (X)$ of $X$, called \\textbf{open sets}, and a family of open families $\\mathrm{Cov}_X $, called \\textbf{admissible families} or \\textbf{admis"}}

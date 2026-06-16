@@ -1,4 +1,8 @@
-{:given [{:var :X, :type :morphism, :signature "X : left adjoint"}],
+{:given
+ [{:var :C, :type :category}
+  {:var :D, :type :category}
+  {:var :F, :type :functor, :signature "F : C → D   (left adjoint)"}
+  {:var :G, :type :functor, :signature "G : D → C   (right adjoint)"}],
  :name "left adjoint",
  :pagerank 0.002527,
  :df 1916,
@@ -8,30 +12,41 @@
  {:n-papers 213,
   :sample
   ["0704.1624" "0704.2207" "0801.1133" "0804.0326" "0807.4123"]},
- :axioms [],
- :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ :axioms
+ [{:id :naturality,
+   :statement
+   "φ is natural in a and in b: ∀ h : a' → a in C, k : b → b' in D. the square relating φ_{a,b}, φ_{a',b'} under pre/post-composition commutes",
+   :refs [:natural-transformation :composition]}],
+ :holes [],
  :used-papers 17,
- :genus :morphism,
- :status :draft,
- :kind :morphism,
+ :genus :adjunction,
+ :status :formalized,
+ :kind :property,
  :provenance
  {:target "nlab-1020",
   :resolution-kind "definition-site",
-  :formaliser :codex-1,
+  :formaliser :codex-1-redo,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:right-adjoint :morphism],
+  "derived from ct-golden adjunction seed for adjunction-variant entry",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "1020",
+  :definition-id "nlab-1020-d1"},
+ :depends-on
+ [:adjunction
+  :functor
+  :natural-transformation
+  :natural-isomorphism
+  :hom-set],
+ :equivalent-to
+ [{:form :unit-counit,
+   :data ["η : Id_C ⇒ G F (unit)" "ε : F G ⇒ Id_D (counit)"],
+   :axioms
+   ["(εF) ∘ (Fη) = id_F" "(Gε) ∘ (ηG) = id_G   (triangle identities)"],
+   :refs [:natural-transformation :identity-morphism]}],
  :gloss
- {:paper "0704.2207",
-  :text
-  "\\cong\\;}% \\operatorname*{Hom}_{\\mathbf{X}}(x,Ga)$. \\end{center} \\noindent With this standard way of writing the isomorphism of hom-sets, the functor $F$ on the left is called the \\textit{left adjoint} and the functor $G$ on the right is the \\textit{right adjoint}. Maps associated with each other by "},
+ {:text
+  "left adjoint is represented here by the adjunction structure: F is left adjoint to G (F ⊣ G) when there is a natural isomorphism\n  D(F a, b) ≅ C(a, G b) for all a ∈ C, b ∈ D; equivalently, unit/counit natural\n  transformations satisfying the triangle identities."},
  :data
- [{:component :carrier,
+ [{:component :hom-isomorphism,
    :signature
-   "X carries the structure described by the corpus gloss for left adjoint"}]}
+   "φ_{a,b} : D(F a, b) ≅ C(a, G b)   for a ∈ Ob(C), b ∈ Ob(D)"}]}

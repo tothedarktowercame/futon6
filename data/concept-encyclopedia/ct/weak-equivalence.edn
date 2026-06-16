@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : weak equivalence"}],
- :name "weak equivalence",
+{:name "weak equivalence",
  :pagerank 0.0068,
  :df 717,
  :concept/id :weak-equivalence,
@@ -9,84 +8,58 @@
   :sample
   ["0708.3584" "0710.3553" "0711.1330" "0801.0083" "0801.0404"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. \\ $\\picM{k} f$ \\ is a weak equivalence of $\\cM$-graded simplicial groups for each \\ $k\\geq 0$",
-   :refs [:graded :weak :groups :equivalence :simplicial]}
-  {:id :condition-2,
+   "A weak equivalence is a morphism in a category C which is supposed to be a true equivalence in a higher categorical refinement of C.",
+   :refs [:morphism :category :homotopy-category :model-category]}
+  {:id :nlab-condition-2,
    :statement
-   "∀ x : object. % \\item a \\emph{cofibration} if it is a retract of a homotopically $\\cM$-free ma",
-   :refs [:homotopically :cofibration :retract :free :emph :item]}],
+   "The bare minimum of axioms to be satisfied by a weak equivalence are encoded in the concepts of category with weak equivalences and homotopical category.",
+   :refs [:morphism :category :homotopy-category :model-category]}
+  {:id :nlab-condition-3,
+   :statement "For such categories one can consider.",
+   :refs [:morphism :category :homotopy-category :model-category]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :graded,
+ [{:kind :unresolved-genus,
+   :wanted
+   :morphism-in-a-category-c-which-is-supposed-to-be-a-true-equivalence-in-a-higher-categorical-refinement-of-c,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :weak,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:equivalence
+    :higher-category-theory
+    :category-with-weak-equivalences
+    :homotopical-category
+    :isomorphisms
+    :equivalences],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :groups,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :equivalence,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :homotopically,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :retract,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :free,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :emph,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :item,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 27,
- :genus :object,
+ :genus
+ :morphism-in-a-category-c-which-is-supposed-to-be-a-true-equivalence-in-a-higher-categorical-refinement-of-c,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:weak equivalence",
-  :resolution-kind "nnexus",
-  :msc ["55" "55P10" "Homotopy_theory"],
+ {:formaliser :codex-1,
   :domains ["Mathworld" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["55" "55P10" "Homotopy_theory"],
+  :nlab-page-id "786",
+  :resolution-kind "nnexus",
+  :target "nnexus:weak equivalence",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
  :depends-on
- [:simplicial
-  :cofibration
-  :object
-  :graded
-  :weak
-  :groups
-  :equivalence
-  :homotopically
-  :retract
-  :free
-  :emph
-  :item],
+ [:morphism-in-a-category-c-which-is-supposed-to-be-a-true-equivalence-in-a-higher-categorical-refinement-of-c
+  :morphism
+  :category
+  :homotopy-category
+  :model-category],
  :gloss
  {:paper "0802.2044",
   :text
-  "lence} if \\ $\\picM{k} f$ \\ is a weak equivalence of $\\cM$-graded simplicial groups for each \\ $k\\geq 0$; % \\item a \\emph{cofibration} if it is a retract of a homotopically $\\cM$-free ma"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for weak equivalence"}]}
+  "lence} if \\ $\\picM{k} f$ \\ is a weak equivalence of $\\cM$-graded simplicial groups for each \\ $k\\geq 0$; % \\item a \\emph{cofibration} if it is a retract of a homotopically $\\cM$-free ma"}}

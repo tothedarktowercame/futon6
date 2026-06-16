@@ -1,8 +1,4 @@
-{:given
- [{:var :X,
-   :type :full-subcategory,
-   :signature "X : full subcategory"}],
- :name "full subcategory",
+{:name "full subcategory",
  :pagerank 0.006368,
  :df 2218,
  :concept/id :full-subcategory,
@@ -12,39 +8,26 @@
   :sample
   ["0711.2077" "0905.0459" "0905.3010" "0906.4087" "1202.0061"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : full-subcategory. $(hA)'\\subset hA$ is a full subcategory",
-   :refs [:subset :subcategory :full]}],
- :holes
- [{:kind :unresolved-concept,
-   :wanted :subset,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :subcategory,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :full,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+   "###### Definition (invariant definition) A full subcategory-inclusion is a fully faithful functor.",
+   :refs [:fully-faithful-functor]}],
+ :holes [],
  :used-papers 19,
- :genus :full-subcategory,
- :status :draft,
+ :genus :fully-faithful-functor,
+ :status :formalized,
  :kind :object,
  :provenance
  {:target "nlab-896",
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:full-subcategory :subset :subcategory :full],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "896",
+  :definition-id "nlab-896-d1"},
+ :depends-on [:fully-faithful-functor],
  :gloss
  {:paper "1204.3607",
   :text
-  "We will say that $A'\\subset A$ is a \\textbf{\\emph{full subcategory}} if $(hA)'\\subset hA$ is a full subcategory."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for full subcategory"}]}
+  "We will say that $A'\\subset A$ is a \\textbf{\\emph{full subcategory}} if $(hA)'\\subset hA$ is a full subcategory."}}

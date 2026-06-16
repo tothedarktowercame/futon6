@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : comonad"}],
- :name "comonad",
+{:name "comonad",
  :df 396,
  :concept/id :comonad,
  :msc "ct",
@@ -7,31 +6,51 @@
  {:n-papers 99,
   :sample
   ["0711.0674" "0711.3642" "0804.1460" "0809.2494" "0809.2495"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A comonad (or *cotriple*) on a category A is a comonoid in the monoidal category of endofunctors A A.",
+   :refs [:category :monoidal-category :object :monad]}
+  {:id :nlab-condition-2,
+   :statement
+   "More generally, a comonad in a 2-category E is a comonoid in the monoidal category E(X,X) for some object X K.",
+   :refs [:category :monoidal-category :object :monad]}
+  {:id :nlab-condition-3,
+   :statement
+   "Just as a monad may be defined for any 2-category, E, as a lax 2-functor from to E, so a comonad in E is an oplax 2-functor from E.",
+   :refs [:category :monoidal-category :object :monad]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :unresolved-genus,
+   :wanted :comonoid-in-the-monoidal-category-of-endofunctors-a-a,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:comonoid :2-category :lax-2-functor :oplax-2-functor],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :comonoid-in-the-monoidal-category-of-endofunctors-a-a,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:comonad",
-  :resolution-kind "nnexus",
-  :msc ["18C15"],
+ {:formaliser :codex-1,
   :domains ["Planetmath"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18C15"],
+  :nlab-page-id "1876",
+  :resolution-kind "nnexus",
+  :target "nnexus:comonad",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:comonoid-in-the-monoidal-category-of-endofunctors-a-a
+  :category
+  :monoidal-category
+  :object
+  :monad],
  :gloss
  {:paper "0711.3642",
   :text
-  "b^{co}$ and $\\Bb^{coop}$. These are constructed by taking respectively opposite composition for the $1$--cells, for vertical composition of $2$--cells and for both. Recall that a \\emph{comonad} $\\cc=(A,c,\\Delta_c,\\varepsilon_c)$ in $\\Bb$ consists of a $0$--cell $A$, an $1$--cell $c\\in\\Hom_1(A,A)$ an"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for comonad"}]}
+  "b^{co}$ and $\\Bb^{coop}$. These are constructed by taking respectively opposite composition for the $1$--cells, for vertical composition of $2$--cells and for both. Recall that a \\emph{comonad} $\\cc=(A,c,\\Delta_c,\\varepsilon_c)$ in $\\Bb$ consists of a $0$--cell $A$, an $1$--cell $c\\in\\Hom_1(A,A)$ an"}}

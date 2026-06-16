@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : enriched category"}],
- :name "enriched category",
+{:name "enriched category",
  :pagerank 0.002802,
  :df 547,
  :concept/id :enriched-category,
@@ -8,32 +7,48 @@
  {:n-papers 20,
   :sample
   ["1007.1931" "1112.0781" "1211.6170" "1411.3038" "1501.03791"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "Ordinarily, enriched categories are considered as enriched over or enriched in a monoidal category.",
+   :refs [:monoidal-category :bicategory]}
+  {:id :nlab-condition-2,
+   :statement
+   "[Enrichment in a monoidal category](#InMonoidCat) More generally, one may think of a monoidal category as a bicategory with a single object (so that the monoidal product becomes horizontal composition) and this way regard enrichment in a monoidal category as the special case of enrichment in a bicategory .",
+   :refs [:monoidal-category :bicategory]}
+  {:id :nlab-condition-3,
+   :statement
+   "[Enrichment in a bicategory](#InBicat) Enriched categories and enriched functors between them form themselves a category, the category of V-enriched categories.",
+   :refs [:monoidal-category :bicategory]}],
  :holes
  [{:kind :missing-genus,
    :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+   :source :nlab-raw-section,
+   :note "nLab definition text did not expose an unambiguous genus"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:horizontal-composition
+    :enriched-functors
+    :category-of-v-enriched-categories],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 5,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:enriched category",
-  :resolution-kind "nnexus",
-  :msc ["Category_theory"],
+ {:formaliser :codex-1,
   :domains ["Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["Category_theory"],
+  :nlab-page-id "232",
+  :resolution-kind "nnexus",
+  :target "nnexus:enriched category",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:monoidal-category :bicategory],
  :gloss
  {:paper "1007.1931",
   :text
-  "An {\\bf enriched category} consists of: \\begin{itemize} \\item a set of objects $x,y,z\\ldots$, \\item for each pair of objects $x,y$, an object $\\hom(x,y)\\in \\mathcal{V}$, \\item composition and identity-assig"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for enriched category"}]}
+  "An {\\bf enriched category} consists of: \\begin{itemize} \\item a set of objects $x,y,z\\ldots$, \\item for each pair of objects $x,y$, an object $\\hom(x,y)\\in \\mathcal{V}$, \\item composition and identity-assig"}}

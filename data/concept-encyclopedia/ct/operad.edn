@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : operad"}],
- :name "operad",
+{:name "operad",
  :pagerank 0.005602,
  :df 477,
  :concept/id :operad,
@@ -8,32 +7,57 @@
  {:n-papers 134,
   :sample
   ["0711.4904" "0803.1408" "0804.2663" "0805.3030" "0902.0399"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "The original definition is due to Peter May and was given in his book ([The Geometry of Iterated Loop Spaces](#May1972)).",
+   :refs [:enriched-category :monoidal-category]}
+  {:id :nlab-condition-2,
+   :statement
+   "It describes an operad as a collection of operations equipped with a notion of composition and subject to various conditions.",
+   :refs [:enriched-category :monoidal-category]}
+  {:id :nlab-condition-3,
+   :statement
+   "This definition is essentially that of an enriched category, only that the hom-objects are allowed to go from more than one object to a given output object.",
+   :refs [:enriched-category :monoidal-category]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :unresolved-genus,
+   :wanted
+   :more-abstract-way-to-encode-all-this-simply-as-a-monoid-in-a-suitable-ambient-monoidal-category,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:peter-may :hom-object :monoid-in-a-monoidal-category],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 49,
- :genus :object,
+ :genus
+ :more-abstract-way-to-encode-all-this-simply-as-a-monoid-in-a-suitable-ambient-monoidal-category,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:operad",
-  :resolution-kind "nnexus",
-  :msc ["13" "category"],
+ {:formaliser :codex-1,
   :domains ["Mathworld" "Nlab"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["13" "category"],
+  :nlab-page-id "322",
+  :resolution-kind "nnexus",
+  :target "nnexus:operad",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:more-abstract-way-to-encode-all-this-simply-as-a-monoid-in-a-suitable-ambient-monoidal-category
+  :enriched-category
+  :monoidal-category],
  :gloss
  {:paper "0803.1408",
   :text
   "\\begin{defn} \\label{operaddefinition} The notion of {\\em operad} is defined by following verbatim Definition \\ref{theorydefinition}, except that we replace the morphisms of the category $\\Gamma$ by all bijections, and restrict in the equivarian"},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for operad"}]}
+   "It describes an operad as a collection of operations equipped with a notion of composition and subject to various conditions.",
+   :source :nlab-definition}]}

@@ -1,4 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : direct sum"}],
+{:given [{:var :r, :type :morphism}],
  :name "direct sum",
  :pagerank 0.002153,
  :df 1048,
@@ -8,16 +8,31 @@
  {:n-papers 129,
   :sample
   ["0709.4326" "0710.0032" "0809.2161" "0810.0066" "0810.2361"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition Let r be the morphism from the coproduct Ai to the product Ai characterized by having the following components ( Ai A A Aj ) = \\ & if\\; i = j \\\\ 0ij & if\\; i j , .",
+   :refs []}
+  {:id :nlab-condition-2,
+   :statement "\\, where 0ij is the zero morphism from Ai to Aj.",
+   :refs []}
+  {:id :nlab-condition-3,
+   :statement
+   "The direct sum over the family \\Ai\\ is the image Ai Ai A_i of the morphism r.",
+   :refs []}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :unresolved-genus,
+   :wanted :zero-morphism,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:coproduct :product :zero-morphism :image],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 3,
- :genus :object,
+ :genus :zero-morphism,
  :status :draft,
  :kind :object,
  :provenance
@@ -25,14 +40,12 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:module-categories :module-category :tensor-category :object],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "1078",
+  :definition-id "nlab-1078-d1"},
+ :depends-on [:zero-morphism],
  :gloss
  {:paper "0709.4326",
   :text
-  "For two module categories $\\M_1$ and $\\M_2$ over a tensor category $\\C$ their {\\em direct sum} is the category $\\M_1 \\oplus \\M_2$ with the obvious module category structure."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for direct sum"}]}
+  "For two module categories $\\M_1$ and $\\M_2$ over a tensor category $\\C$ their {\\em direct sum} is the category $\\M_1 \\oplus \\M_2$ with the obvious module category structure."}}

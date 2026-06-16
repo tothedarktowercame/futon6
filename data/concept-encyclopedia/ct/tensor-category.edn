@@ -1,8 +1,4 @@
-{:given
- [{:var :X,
-   :type :category-endowed,
-   :signature "X : tensor category"}],
- :name "tensor category",
+{:name "tensor category",
  :pagerank 0.003361,
  :df 362,
  :concept/id :tensor-category,
@@ -11,17 +7,65 @@
  {:n-papers 108,
   :sample
   ["0809.3394" "0809.4423" "0903.4233" "0908.3347" "0910.5695"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "#Idea Some authors use \"tensor category\" essentially as a synonym for (symmetric) monoidal categories (e.g.",
+   :refs
+   [:symmetric-monoidal-category
+    :monoidal-categories
+    :monoidal-category
+    :tensor-product
+    :symmetric-monoidal-categories
+    :enriched-category
+    :additive-category
+    :direct-sums
+    :abelian-category]}
+  {:id :nlab-condition-2,
+   :statement
+   "[Davydov 1998](#Davydov98), [Kashiwara & Schapira 2006, Def.",
+   :refs
+   [:symmetric-monoidal-category
+    :monoidal-categories
+    :monoidal-category
+    :tensor-product
+    :symmetric-monoidal-categories
+    :enriched-category
+    :additive-category
+    :direct-sums
+    :abelian-category]}
+  {:id :nlab-condition-3,
+   :statement
+   "These days, a tensor category is usually understood to be a monoidal category equipped with further \"linear algebraic\" properties and structure, hence with monoidal-structure given by a kind of tensor product in the original sense (i.e.",
+   :refs
+   [:symmetric-monoidal-category
+    :monoidal-categories
+    :monoidal-category
+    :tensor-product
+    :symmetric-monoidal-categories
+    :enriched-category
+    :additive-category
+    :direct-sums
+    :abelian-category]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :category-endowed,
+ [{:kind :unresolved-genus,
+   :wanted :usually-understood-to-be-a-monoidal-category,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:linear-algebra
+    :properties
+    :structure
+    :bilinear-map
+    :braided-monoidal-categories
+    :ab],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 12,
- :genus :category-endowed,
+ :genus :usually-understood-to-be-a-monoidal-category,
  :status :draft,
  :kind :object,
  :provenance
@@ -29,13 +73,27 @@
   :resolution-kind "page",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:category-endowed],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "2647",
+  :definition-id nil},
+ :depends-on
+ [:usually-understood-to-be-a-monoidal-category
+  :symmetric-monoidal-category
+  :monoidal-categories
+  :monoidal-category
+  :tensor-product
+  :symmetric-monoidal-categories
+  :enriched-category
+  :additive-category
+  :direct-sums
+  :abelian-category],
  :gloss
  {:paper "0809.3394",
   :text
   "A \\index{tensor category|emph}\\textit{tensor category} is a category endowed with a tensor structure."},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for tensor category"}]}
+   "These days, a tensor category is usually understood to be a monoidal category equipped with further \"linear algebraic\" properties and structure, hence with monoidal-structure given by a kind of tensor product in the original sense (i.e.",
+   :source :nlab-definition}]}

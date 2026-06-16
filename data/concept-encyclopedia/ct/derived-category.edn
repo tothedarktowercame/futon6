@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : derived category"}],
- :name "derived category",
+{:name "derived category",
  :df 612,
  :concept/id :derived-category,
  :msc "ct",
@@ -7,19 +6,18 @@
  {:n-papers 109,
   :sample
   ["0710.5065" "0801.2664" "0806.1324" "0811.1480" "0902.0876"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition The derived category D() is the homotopy category of K() with respect to these weak equivalences.",
+   :refs [:homotopy-category]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :quotient-functor,
+ [{:kind :unresolved-genus,
+   :wanted :homotopy-category-of-k,
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}],
+ :genus :homotopy-category-of-k,
  :status :draft,
  :kind :object,
  :provenance
@@ -27,13 +25,12 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:quotient-functor :object],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "1070",
+  :definition-id "nlab-1070-d1"},
+ :depends-on [:homotopy-category-of-k :homotopy-category],
  :gloss
  {:paper "0806.1324",
   :text
-  "^n\\p$ is an isomorphism for all $n\\in\\bbZ$, and we denote the set of all quasi-isomorphisms by $\\qis$. Then $$\\bfD(A):=\\bfD(\\Mod A):=\\bfK(\\Mod A)[\\qis^{-1}]$$ is by definition the \\emph{derived category} of $\\Mod A$. The kernel of the quotient functor $Q\\colon\\bfK(\\Mod A)\\to\\bfD(\\Mod)$ is the full s"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for derived category"}]}
+  "^n\\p$ is an isomorphism for all $n\\in\\bbZ$, and we denote the set of all quasi-isomorphisms by $\\qis$. Then $$\\bfD(A):=\\bfD(\\Mod A):=\\bfK(\\Mod A)[\\qis^{-1}]$$ is by definition the \\emph{derived category} of $\\Mod A$. The kernel of the quotient functor $Q\\colon\\bfK(\\Mod A)\\to\\bfD(\\Mod)$ is the full s"}}

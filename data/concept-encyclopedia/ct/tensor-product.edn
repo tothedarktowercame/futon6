@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : tensor product"}],
- :name "tensor product",
+{:name "tensor product",
  :pagerank 0.006528,
  :df 1816,
  :concept/id :tensor-product,
@@ -9,40 +8,24 @@
   :sample
   ["0704.2106" "0704.2576" "0705.0462" "0706.1286" "0708.2757"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. it exists: \\[M \\odot B \\odot N \\toto M \\odot N \\to M\\odot_B N.\\] \\end{itemize} \\end{defn} Of course, if \\bbD\\ is a mono",
-   :refs [:defn :mono :toto :odot :exists :itemize]}],
+   "###### Definition For M a multicategory and A and B objects in M, the tensor product A B is defined to be an object equipped with a universal multimorphism A,B A B in that any multimorphism A,B C factors uniquely through A,B A B via a (1-ary) morphism A B C.",
+   :refs []}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :defn,
+ [{:kind :unresolved-genus,
+   :wanted :construction,
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :mono,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:multicategory :objects :universal-construction :multimorphism],
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :toto,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :odot,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :exists,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :itemize,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 11,
- :genus :object,
+ :genus :construction,
  :status :draft,
  :kind :construction,
  :provenance
@@ -50,13 +33,17 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object :defn :mono :toto :odot :exists :itemize],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "239",
+  :definition-id "nlab-239-d1"},
+ :depends-on [:construction],
  :gloss
  {:paper "0706.1286",
   :text
   "Their \\textbf{tensor product} is the following coequalizer in $\\calD(A,C)$, if it exists: \\[M \\odot B \\odot N \\toto M \\odot N \\to M\\odot_B N.\\] \\end{itemize} \\end{defn} Of course, if \\bbD\\ is a mono"},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for tensor product"}]}
+   "###### Definition For M a multicategory and A and B objects in M, the tensor product A B is defined to be an object equipped with a universal multimorphism A,B A B in that any multimorphism A,B C factors uniquely through A,B A B via a (1-ary) morphism A B C.",
+   :source :nlab-definition}]}

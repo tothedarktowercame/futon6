@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : cofibration"}],
- :name "cofibration",
+{:name "cofibration",
  :pagerank 0.004552,
  :df 575,
  :concept/id :cofibration,
@@ -9,66 +8,56 @@
   :sample
   ["0708.3435" "0708.3584" "0802.2044" "0809.3341" "0809.4192"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. there exists a weak equivalence $\\fromto{Y}{Z}$ of $\\CC$ such that the composition $\\fromto{X}{Z}$ is an element of $\\cell I_{R_K\\CC}$",
-   :refs
-   [:weak
-    :composition
-    :element
-    :exists
-    :weak-equivalence
-    :equivalence]}],
+   "The notion of cofibration is dual to that of fibration.",
+   :refs [:fibration :model-category]}
+  {:id :nlab-condition-2,
+   :statement
+   "A cofibration is a member of a distinguished *class of cofibrations* in one of the several setups in homotopy theory:.",
+   :refs [:fibration :model-category]}
+  {:id :nlab-condition-3,
+   :statement "Quillen categories of models for homotopy theory.",
+   :refs [:fibration :model-category]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :there-exists,
+ [{:kind :unresolved-genus,
+   :wanted
+   :member-of-a-distinguished-class-of-cofibrations-in-one-of-the-several-setups-in-homotopy-theory,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :weak,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:duality
+    :homotopy-theory
+    :category-with-cofibrations
+    :waldhausen-categories
+    :topology
+    :hurewicz-cofibration],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :element,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :exists,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :equivalence,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 24,
- :genus :object,
+ :genus
+ :member-of-a-distinguished-class-of-cofibrations-in-one-of-the-several-setups-in-homotopy-theory,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:cofibration",
-  :resolution-kind "nnexus",
-  :msc ["55P05" "Topology_stubs" "XX-XX"],
+ {:formaliser :codex-1,
   :domains ["Encyclopediaofmath" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["55P05" "Topology_stubs" "XX-XX"],
+  :nlab-page-id "3151",
+  :resolution-kind "nnexus",
+  :target "nnexus:cofibration",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
  :depends-on
- [:weak-equivalence
-  :there-exists
-  :object
-  :weak
-  :composition
-  :element
-  :exists
-  :equivalence],
+ [:member-of-a-distinguished-class-of-cofibrations-in-one-of-the-several-setups-in-homotopy-theory
+  :fibration
+  :model-category],
  :gloss
  {:paper "0708.3435",
   :text
-  "\\begin{enumerate}[(\\ref{prp:coffibweRKC}.1)] \\item A cofibration of $R_K\\CC$ is defined to be a cofibration $\\fromto{X}{Y}$ of $\\CC$ such that there exists a weak equivalence $\\fromto{Y}{Z}$ of $\\CC$ such that the composition $\\fromto{X}{Z}$ is an element of $\\cell I_{R_K\\CC}$."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for cofibration"}]}
+  "\\begin{enumerate}[(\\ref{prp:coffibweRKC}.1)] \\item A cofibration of $R_K\\CC$ is defined to be a cofibration $\\fromto{X}{Y}$ of $\\CC$ such that there exists a weak equivalence $\\fromto{Y}{Z}$ of $\\CC$ such that the composition $\\fromto{X}{Z}$ is an element of $\\cell I_{R_K\\CC}$."}}

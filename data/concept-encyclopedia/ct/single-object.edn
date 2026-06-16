@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : single object"}],
- :name "single object",
+{:name "single object",
  :pagerank 0.001993,
  :df 469,
  :concept/id :single-object,
@@ -7,26 +6,19 @@
  :defined-in {:n-papers 1, :sample ["2202.04543"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 7,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "2202.04543",
   :text
-  "ls} Actually, we not only need to find the right inverses. In \\(\\mathsf{Set}\\), we need a \\emph{set} of right inverses, which means instead of a collection of morphisms we need a \\emph{single object} that stands for the set of right inverses. Before we tackle that, we shall look at how we can create"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for single object"}]}
+  "ls} Actually, we not only need to find the right inverses. In \\(\\mathsf{Set}\\), we need a \\emph{set} of right inverses, which means instead of a collection of morphisms we need a \\emph{single object} that stands for the set of right inverses. Before we tackle that, we shall look at how we can create"}}

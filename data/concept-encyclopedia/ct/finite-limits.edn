@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : finite limits"}],
- :name "finite limits",
+{:name "finite limits",
  :pagerank 0.004706,
  :df 645,
  :concept/id :finite-limits,
@@ -9,44 +8,36 @@
   :sample
   ["0810.5174" "1004.3802" "1102.1496" "1306.6789" "1507.01564"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
+   :statement "A finite limit is a limit over a finite diagram.",
+   :refs [:category :functor :natural-transformations]}
+  {:id :nlab-condition-2,
+   :statement "that is, one whose shape is a finite category.",
+   :refs [:category :functor :natural-transformations]}
+  {:id :nlab-condition-3,
    :statement
-   "∀ x : object. $\\cC$ already possesses \\textbf{finite limits}. In this case $\\Pro(\\cC)$ admits \\textbf{all small limits}, and enjoys the following universal pr",
-   :refs [:limits :universal :enjoys :small :already :finite]}],
+   "More generally, in higher category theory, a finite limit is a limit of a diagram that is a finite (n,r)-category.",
+   :refs [:category :functor :natural-transformations]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :all-functors,
+ [{:kind :unresolved-genus,
+   :wanted
+   :finitely-complete-category-or-a-essentially-algebraic-theory,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :limits,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:limit
+    :diagram
+    :finite-category
+    :higher-category-theory
+    :finitely-complete-category
+    :essentially-algebraic-theory],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :universal,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :enjoys,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :small,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :already,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :finite,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 3,
- :genus :object,
+ :genus :finitely-complete-category-or-a-essentially-algebraic-theory,
  :status :draft,
  :kind :object,
  :provenance
@@ -54,21 +45,16 @@
   :resolution-kind "page",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "4072",
+  :definition-id nil},
  :depends-on
- [:all-functors
-  :object
-  :limits
-  :universal
-  :enjoys
-  :small
-  :already
-  :finite],
+ [:finitely-complete-category-or-a-essentially-algebraic-theory
+  :category
+  :functor
+  :natural-transformations],
  :gloss
  {:paper "1507.01564",
   :text
-  "filtered limits is naturally equivalent, via restriction, with the category of all functors $\\cC \\lrar \\cD$. It is often natural to consider the case where $\\cC$ already possesses \\textbf{finite limits}. In this case $\\Pro(\\cC)$ admits \\textbf{all small limits}, and enjoys the following universal pr"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for finite limits"}]}
+  "filtered limits is naturally equivalent, via restriction, with the category of all functors $\\cC \\lrar \\cD$. It is often natural to consider the case where $\\cC$ already possesses \\textbf{finite limits}. In this case $\\Pro(\\cC)$ admits \\textbf{all small limits}, and enjoys the following universal pr"}}

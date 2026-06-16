@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : commutative ring"}],
- :name "commutative ring",
+{:name "commutative ring",
  :pagerank 0.002255,
  :df 858,
  :concept/id :commutative-ring,
@@ -10,14 +9,11 @@
   ["0709.3091" "0905.0459" "0905.0462" "0911.0018" "1507.02811"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 29,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
@@ -27,13 +23,9 @@
   :domains ["Encyclopediaofmath" "Mathworld" "Wikipedia"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:commutative-rings :object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1507.02811",
   :text
-  "\\mathcal{T}$ as desired. The formula for the cotilting class is derived analogously, using Lemma~\\ref{L02}(2). \\end{proof} \\subsection{Commutative rings} From now on, let $R$ be a {\\bf commutative ring}. We begin by proving that any cofinite type 1-cotilting torsion pair is hereditary. Note that thi"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for commutative ring"}]}
+  "\\mathcal{T}$ as desired. The formula for the cotilting class is derived analogously, using Lemma~\\ref{L02}(2). \\end{proof} \\subsection{Commutative rings} From now on, let $R$ be a {\\bf commutative ring}. We begin by proving that any cofinite type 1-cotilting torsion pair is hereditary. Note that thi"}}

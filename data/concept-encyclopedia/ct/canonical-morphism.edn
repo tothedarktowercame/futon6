@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : canonical morphism"}],
- :name "canonical morphism",
+{:name "canonical morphism",
  :df 473,
  :concept/id :canonical-morphism,
  :msc "ct",
@@ -8,39 +6,20 @@
  {:n-papers 10,
   :sample
   ["1204.0196" "1812.11222" "1908.01212" "2004.06854" "2105.12688"]},
- :axioms
- [{:id :condition-1,
-   :statement "∀ x : morphism. $\\sigma_{\\mathtt{I},\\",
-   :refs [:mathtt :sigma]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :there-exists,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :mathtt,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :sigma,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :morphism,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :morphism,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:there-exists :morphism :mathtt :sigma],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "2004.06854",
   :text
-  "oduct of the collection $\\mathrm{M}=\\{M\\mid i\\in \\mathtt{I}\\}$, there exists a unique \\textit{summation morphism} $\\sigma_{\\mathtt{I},\\mathrm{M}}:\\coprod_{i} M \\to M$ and a unique \\textit{canonical morphism} $\\iota_{\\mathtt{I},\\mathrm{M}}:\\coprod_{i} M\\to \\prod_{i} M$ for which $\\sigma_{\\mathtt{I},\\"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for canonical morphism"}]}
+  "oduct of the collection $\\mathrm{M}=\\{M\\mid i\\in \\mathtt{I}\\}$, there exists a unique \\textit{summation morphism} $\\sigma_{\\mathtt{I},\\mathrm{M}}:\\coprod_{i} M \\to M$ and a unique \\textit{canonical morphism} $\\iota_{\\mathtt{I},\\mathrm{M}}:\\coprod_{i} M\\to \\prod_{i} M$ for which $\\sigma_{\\mathtt{I},\\"}}

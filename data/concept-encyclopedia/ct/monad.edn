@@ -1,37 +1,35 @@
-{:given [{:var :X, :type :object, :signature "X : monad"}],
+{:given [{:var :C, :type :category}],
  :name "monad",
- :pagerank 0.006714,
- :df 921,
  :concept/id :monad,
  :msc "ct",
- :defined-in
- {:n-papers 280,
-  :sample
-  ["0704.3976" "0711.0674" "0711.3642" "0804.1460" "0809.2494"]},
- :axioms [],
- :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :used-papers 46,
- :genus :object,
- :status :draft,
+ :axioms
+ [{:id :associativity,
+   :statement
+   "μ ∘ (T μ) = μ ∘ (μ T)   as natural transformations T³ ⇒ T",
+   :refs [:natural-transformation]}
+  {:id :left-unit,
+   :statement "μ ∘ (η T) = id_T",
+   :refs [:identity-morphism]}
+  {:id :right-unit,
+   :statement "μ ∘ (T η) = id_T",
+   :refs [:identity-morphism]}],
+ :holes [],
+ :genus :monoid-in-endofunctors,
+ :status :golden,
  :kind :object,
- :provenance
- {:target "nlab-255",
-  :resolution-kind "definition-site",
-  :formaliser :codex-1,
-  :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:tensor-product :comonad :object],
+ :provenance {:target "nlab-255", :source :curated},
+ :depends-on
+ [:category
+  :endofunctor
+  :natural-transformation
+  :identity-functor
+  :composition],
  :gloss
- {:paper "0711.0674",
-  :text
-  "ads in these remarks. (To complicate things further, in \\cite{coalg} I also defined ``WT-monads'', ``WT-comonads'', and ``WT-comonad objects'', to mean representable functors with {\\em monad} structures, respectively their left adjoints, i.e., ``tensor product-like'' functors with comonad structures"},
+ {:text
+  "A monad on C is an endofunctor T : C → C with natural transformations\n  μ : T² ⇒ T and η : Id_C ⇒ T satisfying associativity (μ∘Tμ = μ∘μT) and the unit\n  laws (μ∘ηT = μ∘Tη = id_T) — a monoid in the endofunctor category."},
  :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for monad"}]}
+ [{:component :endofunctor, :signature "T : C → C"}
+  {:component :multiplication,
+   :signature "μ : T ∘ T ⇒ T   (natural transformation)"}
+  {:component :unit,
+   :signature "η : Id_C ⇒ T   (natural transformation)"}]}

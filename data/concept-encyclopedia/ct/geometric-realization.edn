@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : geometric realization"}],
- :name "geometric realization",
+{:name "geometric realization",
  :df 330,
  :concept/id :geometric-realization,
  :msc "ct",
@@ -9,69 +7,42 @@
   :sample
   ["0704.1624" "0808.3684" "0902.0399" "0902.1750" "0903.5058"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. $\\cat{C}$ is either $\\sset$ or $\\spectra$, then a simplicial object $X_{\\bullet}$ has a \\emph{geometric realization}, written $|X_{\\bullet}|$, and a cosimplicia",
-   :refs
-   [:simplicial-object
-    :realization
-    :bullet
-    :object
-    :cosimplicial
-    :written]}],
+   "There are various levels of generality in which the notion of (topological) geometric realization makes sense.",
+   :refs []}
+  {:id :nlab-condition-2,
+   :statement
+   "[For cell complexes such as simplicial sets](#OfSimplicialSets).",
+   :refs []}
+  {:id :nlab-condition-3,
+   :statement "A generalization of this of central importance is the.",
+   :refs []}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :simplicial-object,
+ [{:kind :unresolved-genus,
+   :wanted
+   :geometric-realization-of-simplicial-topological-spaces-up-to-homotopy,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :cosimplicial-object,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :realization,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :bullet,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :cosimplicial,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :written,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :object,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}],
+ :genus
+ :geometric-realization-of-simplicial-topological-spaces-up-to-homotopy,
  :status :draft,
  :kind :construction,
  :provenance
- {:target "nnexus:geometric realization",
-  :resolution-kind "nnexus",
-  :msc ["55"],
+ {:formaliser :codex-1,
   :domains ["Mathworld"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["55"],
+  :nlab-page-id "447",
+  :resolution-kind "nnexus",
+  :target "nnexus:geometric realization",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
  :depends-on
- [:simplicial
-  :simplicial-object
-  :cosimplicial-object
-  :object
-  :realization
-  :bullet
-  :cosimplicial
-  :written],
+ [:geometric-realization-of-simplicial-topological-spaces-up-to-homotopy],
  :gloss
  {:paper "0902.0399",
   :text
-  "ion} \\begin{definition}[Geometric realization and totalization] \\label{def:realization} If $\\cat{C}$ is either $\\sset$ or $\\spectra$, then a simplicial object $X_{\\bullet}$ has a \\emph{geometric realization}, written $|X_{\\bullet}|$, and a cosimplicial object $X^{\\bullet}$ has a \\emph{totalization},"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for geometric realization"}]}
+  "ion} \\begin{definition}[Geometric realization and totalization] \\label{def:realization} If $\\cat{C}$ is either $\\sset$ or $\\spectra$, then a simplicial object $X_{\\bullet}$ has a \\emph{geometric realization}, written $|X_{\\bullet}|$, and a cosimplicial object $X^{\\bullet}$ has a \\emph{totalization},"}}

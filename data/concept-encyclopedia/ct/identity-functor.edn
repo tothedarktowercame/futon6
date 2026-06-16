@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : identity functor"}],
- :name "identity functor",
+{:name "identity functor",
  :df 892,
  :concept/id :identity-functor,
  :msc "ct",
@@ -8,31 +6,61 @@
  {:n-papers 18,
   :sample
   ["0810.2070" "1408.5220" "1501.02503" "1508.00921" "1509.03649"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "The identity functor on a category C is the functor id_C: C C that maps each object and morphism of C to itself.",
+   :refs
+   [:category
+    :functor
+    :object
+    :morphism
+    :identity-morphism
+    :composition]}
+  {:id :nlab-condition-2,
+   :statement
+   "The identity functors are the identities for composition of functors in Cat.",
+   :refs
+   [:category
+    :functor
+    :object
+    :morphism
+    :identity-morphism
+    :composition]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :morphism,
+ [{:kind :unresolved-genus,
+   :wanted :functor-id-c,
+   :source :nlab-raw-section,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:cat],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :functor-id-c,
  :status :draft,
  :kind :morphism,
  :provenance
- {:target "nnexus:identity functor",
-  :resolution-kind "nnexus",
-  :msc ["18-00" "18A05"],
+ {:formaliser :codex-1,
   :domains ["Planetmath"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18-00" "18A05"],
+  :nlab-page-id "1396",
+  :resolution-kind "nnexus",
+  :target "nnexus:identity functor",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:morphism],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:functor-id-c
+  :category
+  :functor
+  :object
+  :morphism
+  :identity-morphism
+  :composition],
  :gloss
  {:paper "1509.03649",
   :text
-  "tors as arrows. It is not difficult to see that functors are a collection of order arrows for categories. They are discernible arrows and composition is well defined. Consider the \\textit{identity functor} $\\textgoth{I}_\\mathcal C$ which acts as unit on objects and arrows of the category $\\mathcal C"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for identity functor"}]}
+  "tors as arrows. It is not difficult to see that functors are a collection of order arrows for categories. They are discernible arrows and composition is well defined. Consider the \\textit{identity functor} $\\textgoth{I}_\\mathcal C$ which acts as unit on objects and arrows of the category $\\mathcal C"}}

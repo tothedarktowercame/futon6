@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :morphism, :signature "X : fully faithful functor"}],
- :name "fully faithful functor",
+{:name "fully faithful functor",
  :df 448,
  :concept/id :fully-faithful-functor,
  :msc "ct",
@@ -8,34 +6,18 @@
  {:n-papers 3, :sample ["0903.2722" "2104.00666" "2211.02387"]},
  :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :exact-category,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :morphism,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :morphism,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:fully-faithful
-  :faithful-functor
-  :abelian-category
-  :exact-category
-  :morphism],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "2104.00666",
   :text
-  "ega,\\textbf{AdMon})$-elementary) abelian categoriy. The first point to note is that any small exact category $\\mathpzc{E}$ has both a left and right abelianization. \\begin{defn} We call an fully faithful functor $I:\\mathpzc{E}\\rightarrow\\mathpzc{A}$ from an exact category to an abelian category a \\t"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for fully faithful functor"}]}
+  "ega,\\textbf{AdMon})$-elementary) abelian categoriy. The first point to note is that any small exact category $\\mathpzc{E}$ has both a left and right abelianization. \\begin{defn} We call an fully faithful functor $I:\\mathpzc{E}\\rightarrow\\mathpzc{A}$ from an exact category to an abelian category a \\t"}}

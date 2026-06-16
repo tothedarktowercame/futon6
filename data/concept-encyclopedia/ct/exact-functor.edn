@@ -1,8 +1,4 @@
-{:given
- [{:var :X,
-   :type :natural-transformation,
-   :signature "X : exact functor"}],
- :name "exact functor",
+{:name "exact functor",
  :df 512,
  :concept/id :exact-functor,
  :msc "ct",
@@ -11,36 +7,51 @@
   :sample
   ["0710.2509" "0807.1002" "1207.6613" "1304.0520" "1405.7805"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : natural-transformation. for every $(n+2)$-angle in $\\F$",
-   :refs [:angle]}],
+   "#Definition A functor between finitely complete categories is called left exact (or flat) if it preserves finite limits.",
+   :refs [:functor :finite-limits :abelian-categories :exact-sequence]}
+  {:id :nlab-condition-2,
+   :statement
+   "Dually, a functor between finitely cocomplete categories is called right exact if it preserves finite colimits.",
+   :refs [:functor :finite-limits :abelian-categories :exact-sequence]}
+  {:id :nlab-condition-3,
+   :statement
+   "A functor is called exact if it is both left and right exact.",
+   :refs
+   [:functor :finite-limits :abelian-categories :exact-sequence]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :additive-functor,
+ [{:kind :unresolved-source-refs,
+   :wanted
+   [:finitely-complete-categories
+    :flat-functor
+    :finite-colimits
+    :ab
+    :enriched-functor],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :angle,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
- :genus :natural-transformation,
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :morphism,
  :status :draft,
  :kind :morphism,
  :provenance
- {:target "nnexus:exact functor",
-  :resolution-kind "nnexus",
-  :msc ["18" "18-00" "18A22" "18E05" "Functors" "XX-XX"],
+ {:formaliser :codex-1,
   :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18" "18-00" "18A22" "18E05" "Functors" "XX-XX"],
+  :nlab-page-id "1050",
+  :resolution-kind "nnexus",
+  :target "nnexus:exact functor",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:natural-transformation :additive-functor :angle],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:morphism
+  :functor
+  :finite-limits
+  :abelian-categories
+  :exact-sequence],
  :gloss
  {:paper "1405.7805",
   :text
-  "An \\emph{exact functor} is a pair $(F,\\eta)$ wehre $F\\colon\\F\\to\\G$ is an additive functor and $\\eta\\colon F\\Sigma_\\F\\to \\Sigma_\\G F$ is a natural transformation such that for every $(n+2)$-angle in $\\F$"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for exact functor"}]}
+  "An \\emph{exact functor} is a pair $(F,\\eta)$ wehre $F\\colon\\F\\to\\G$ is an additive functor and $\\eta\\colon F\\Sigma_\\F\\to \\Sigma_\\G F$ is a natural transformation such that for every $(n+2)$-angle in $\\F$"}}

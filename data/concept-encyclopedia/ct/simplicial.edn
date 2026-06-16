@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : simplicial"}],
- :name "simplicial",
+{:name "simplicial",
  :pagerank 0.018979,
  :df 1258,
  :concept/id :simplicial,
@@ -8,47 +7,13 @@
  {:n-papers 131,
   :sample
   ["0711.0473" "0711.1608" "0711.2077" "0801.0404" "0804.2154"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : object. it is also a simplicial model category, and the simplicial action commutes with the monoidal product, i.e., there are natural coherent isomorphisms \\[ K\\boxtime",
-   :refs
-   [:simplicial-model-category
-    :boxtimes
-    :model
-    :commutes
-    :model-category
-    :otimes]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :monoidal-model-category,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :simplicial-model-category,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :boxtimes,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :model,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :commutes,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :otimes,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 8,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
@@ -58,22 +23,9 @@
   :domains ["Wikipedia"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:model-category
-  :monoidal-product
-  :monoidal-model-category
-  :simplicial-model-category
-  :object
-  :boxtimes
-  :model
-  :commutes
-  :otimes],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0806.3983",
   :text
-  "A monoidal model category $\\M$ is called \\emph{simplicial} if it is also a simplicial model category, and the simplicial action commutes with the monoidal product, i.e., there are natural coherent isomorphisms \\[ K\\boxtimes(X\\otimes Y)\\co"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for simplicial"}]}
+  "A monoidal model category $\\M$ is called \\emph{simplicial} if it is also a simplicial model category, and the simplicial action commutes with the monoidal product, i.e., there are natural coherent isomorphisms \\[ K\\boxtimes(X\\otimes Y)\\co"}}

@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : monoidal category"}],
- :name "monoidal category",
+{:name "monoidal category",
  :pagerank 0.012843,
  :df 1565,
  :concept/id :monoidal-category,
@@ -8,16 +7,53 @@
  {:n-papers 276,
   :sample
   ["0704.2106" "0708.1348" "0708.2757" "0711.0324" "0803.2694"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "(monoidal category) A monoidal category is a category equipped with.",
+   :refs
+   [:category
+    :functor
+    :tensor-product
+    :object
+    :unit-object
+    :natural-isomorphism
+    :adjunction]}
+  {:id :nlab-condition-2,
+   :statement
+   "a functor \\[ \\;\\; \\] out of the product category of with itself, called the tensor product,.",
+   :refs
+   [:category
+    :functor
+    :tensor-product
+    :object
+    :unit-object
+    :natural-isomorphism
+    :adjunction]}
+  {:id :nlab-condition-3,
+   :statement "an object 1 called the unit object or tensor unit,.",
+   :refs
+   [:category
+    :functor
+    :tensor-product
+    :object
+    :unit-object
+    :natural-isomorphism
+    :adjunction]}],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :unresolved-source-refs,
+   :wanted
+   [:product-category
+    :tensor-unit
+    :associator
+    :left-unitor
+    :right-unitor
+    :commuting-diagram],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 60,
- :genus :object,
+ :genus :category,
  :status :draft,
  :kind :object,
  :provenance
@@ -25,13 +61,24 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:monoidal-categories :object],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "231",
+  :definition-id "nlab-231-d1"},
+ :depends-on
+ [:category
+  :functor
+  :tensor-product
+  :object
+  :unit-object
+  :natural-isomorphism
+  :adjunction],
  :gloss
  {:paper "0708.2757",
   :text
   "\\subsection{Monoidal categories and functors} A {\\em monoidal category} is a category $\\cG$ with a functor \\begin{displaymath} \\otimes :{\\cal G} \\times {\\cal G} \\longrightarrow {\\cal G} \\qquad (X,Y) \\mapsto X \\otimes Y \\end{displaymath} ({\\em tensor"},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for monoidal category"}]}
+   "(monoidal category) A monoidal category is a category equipped with.",
+   :source :nlab-definition}]}

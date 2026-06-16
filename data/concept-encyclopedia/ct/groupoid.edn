@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : groupoid"}],
- :name "groupoid",
+{:name "groupoid",
  :pagerank 0.012633,
  :df 1111,
  :concept/id :groupoid,
@@ -9,27 +8,29 @@
   :sample
   ["0706.1771" "0708.1348" "0711.1608" "0711.2077" "0801.0083"]},
  :axioms
- [{:id :condition-1,
-   :statement "∀ x : object. all morphisms are isomorphisms",
-   :refs [:isomorphisms :morphisms :all-morphisms]}],
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition **(groupoid -- homotopily typed definition) A small groupoid is a space or homotopy type such that for all points a and b in , all paths c and d in the path space (type) a = b, all homotopies (2-paths) e and f in the path space type c = d, the path space type e = f is contractible.",
+   :refs []}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :all-morphisms,
+ [{:kind :unresolved-genus,
+   :wanted :space-or-homotopy-type,
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :isomorphisms,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:homotopy-type-theory
+    :small-groupoid
+    :space
+    :homotopy-type
+    :path-space
+    :path-space-type],
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :morphisms,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 54,
- :genus :object,
+ :genus :space-or-homotopy-type,
  :status :draft,
  :kind :object,
  :provenance
@@ -37,13 +38,12 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:all-morphisms :object :isomorphisms :morphisms],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "28",
+  :definition-id "nlab-28-d1"},
+ :depends-on [:space-or-homotopy-type],
  :gloss
  {:paper "0801.0083",
   :text
-  "Recall that a {\\em groupoid} is a category $\\cat{G}$ in which all morphisms are isomorphisms."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for groupoid"}]}
+  "Recall that a {\\em groupoid} is a category $\\cat{G}$ in which all morphisms are isomorphisms."}}

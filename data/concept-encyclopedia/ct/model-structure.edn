@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : model structure"}],
- :name "model structure",
+{:name "model structure",
  :pagerank 0.004071,
  :df 742,
  :concept/id :model-structure,
@@ -8,46 +7,21 @@
  {:n-papers 78,
   :sample
   ["0801.0404" "0906.4087" "0910.2733" "1104.1805" "1109.2883"]},
- :axioms
- [{:id :condition-1,
-   :statement
-   "∀ x : object. $\\W$ satisfies the 2-of-3 property and such that $(\\C \\cap \\W, \\F)$ and $(\\C, \\W \\cap \\F)$ are wfs.\\footnote{It is not i",
-   :refs [:footnote :satisfies :property]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :cocomplete-category,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :footnote,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :satisfies,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :property,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 7,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:cocomplete-category :object :footnote :satisfies :property],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0910.2733",
   :text
-  "Indeed, a particularly concise definition of a model structure on a complete and cocomplete category $\\M$ is the following: a \\emph{model structure} consists of three class of maps $\\C$, $\\F$, $\\W$ such that $\\W$ satisfies the 2-of-3 property and such that $(\\C \\cap \\W, \\F)$ and $(\\C, \\W \\cap \\F)$ are wfs.\\footnote{It is not i"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for model structure"}]}
+  "Indeed, a particularly concise definition of a model structure on a complete and cocomplete category $\\M$ is the following: a \\emph{model structure} consists of three class of maps $\\C$, $\\F$, $\\W$ such that $\\W$ satisfies the 2-of-3 property and such that $(\\C \\cap \\W, \\F)$ and $(\\C, \\W \\cap \\F)$ are wfs.\\footnote{It is not i"}}

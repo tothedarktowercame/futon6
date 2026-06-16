@@ -1,8 +1,4 @@
-{:given
- [{:var :X,
-   :type :preadditive-category,
-   :signature "X : additive category"}],
- :name "additive category",
+{:name "additive category",
  :pagerank 0.003932,
  :df 480,
  :concept/id :additive-category,
@@ -12,33 +8,36 @@
   :sample
   ["0903.5185" "1006.4343" "1107.3608" "1206.6632" "1304.0520"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : preadditive-category. the (co)product of any finite set of objects exists",
-   :refs [:objects :exists :finite-set :finite :product]}],
+   "###### Definition An additive category is a category which is.",
+   :refs [:category :hom-set :abelian-group]}
+  {:id :nlab-condition-2,
+   :statement
+   "an Ab-enriched category; (sometimes called a pre-additive category--this means that each hom-set carries the structure of an abelian group and composition is bilinear).",
+   :refs [:category :hom-set :abelian-group]}
+  {:id :nlab-condition-3,
+   :statement "which admits finite coproducts (and hence, by prop.",
+   :refs [:category :hom-set :abelian-group]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :preadditive-category,
+ [{:kind :unresolved-genus,
+   :wanted :category-which-is-1,
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :objects,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:ab-enriched-category
+    :pre-additive-category
+    :bilinear-map
+    :finite-limit
+    :coproducts
+    :products],
+   :source :nlab-dictionary-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :exists,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :finite,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :product,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 11,
- :genus :preadditive-category,
+ :genus :category-which-is-1,
  :status :draft,
  :kind :object,
  :provenance
@@ -46,14 +45,12 @@
   :resolution-kind "definition-site",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:finite-set :preadditive-category :objects :exists :finite :product],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "1035",
+  :definition-id "nlab-1035-d1"},
+ :depends-on [:category-which-is-1 :category :hom-set :abelian-group],
  :gloss
  {:paper "1006.4343",
   :text
-  "An \\emph{additive category} is a preadditive category in which the (co)product of any finite set of objects exists."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for additive category"}]}
+  "An \\emph{additive category} is a preadditive category in which the (co)product of any finite set of objects exists."}}

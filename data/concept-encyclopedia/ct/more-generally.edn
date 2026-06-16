@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : more generally"}],
- :name "more generally",
+{:name "more generally",
  :pagerank 0.004276,
  :df 1807,
  :concept/id :more-generally,
@@ -7,18 +6,11 @@
  :defined-in {:n-papers 1, :sample ["0711.1608"]},
  :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :any-object,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 3,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
@@ -26,13 +18,9 @@
   :resolution-kind "ct-prior",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:any-object :object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0711.1608",
   :text
-  "s a consequence of the axioms, it turns out that whenever $A$ is $s$-condensed, then, for any object $B$, one has: \\[\\left(A\\times B\\rsTo^{\\text{pr}_2\\ \\ } B\\right)\\in\\cD_s\\ . \\] \\emph{More generally}, an object $A$ will be called \\emph{s-basic} when the previous condition is satisfied for $B=A$ (se"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for more generally"}]}
+  "s a consequence of the axioms, it turns out that whenever $A$ is $s$-condensed, then, for any object $B$, one has: \\[\\left(A\\times B\\rsTo^{\\text{pr}_2\\ \\ } B\\right)\\in\\cD_s\\ . \\] \\emph{More generally}, an object $A$ will be called \\emph{s-basic} when the previous condition is satisfied for $B=A$ (se"}}

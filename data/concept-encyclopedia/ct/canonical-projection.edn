@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : canonical projection"}],
- :name "canonical projection",
+{:name "canonical projection",
  :df 373,
  :concept/id :canonical-projection,
  :msc "ct",
@@ -8,55 +6,12 @@
  {:n-papers 8,
   :sample
   ["1003.4850" "1211.2851" "1306.3943" "1411.5591" "2305.03581"]},
- :axioms
- [{:id :condition-1,
-   :statement "∀ x : object. subscripts we usually suppress)",
-   :refs [:subscripts :suppress :usually]}
-  {:id :condition-2,
-   :statement
-   "∀ x : object. \\item for each $X \\in \\ob_{n+1} \\CC$, a map $p_X \\colon X \\to \\ft X$ (the \\emph{canonical projection} from $X$)",
-   :refs [:canonical :colon :emph :projection :item]}
-  {:id :condition-3,
-   :statement
-   "∀ x : object. \\item for each $X \\in \\ob_{n+1} \\CC$ and $f \\colon Y \\to \\ft(X)$, an object $f^*(X",
-   :refs [:object :colon :item]}],
+ :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :subscripts,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :suppress,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :usually,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :canonical,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :colon,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :emph,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :projection,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :item,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
- :genus :object,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -66,22 +21,9 @@
   :domains ["Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on
- [:object
-  :subscripts
-  :suppress
-  :usually
-  :canonical
-  :colon
-  :emph
-  :projection
-  :item],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1211.2851",
   :text
-  "\\in \\ob_0 \\CC$; \\item maps $\\ft_n : \\ob_{n+1} \\CC \\to \\ob_n \\CC$ (whose subscripts we usually suppress); \\item for each $X \\in \\ob_{n+1} \\CC$, a map $p_X \\colon X \\to \\ft X$ (the \\emph{canonical projection} from $X$); \\item for each $X \\in \\ob_{n+1} \\CC$ and $f \\colon Y \\to \\ft(X)$, an object $f^*(X"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for canonical projection"}]}
+  "\\in \\ob_0 \\CC$; \\item maps $\\ft_n : \\ob_{n+1} \\CC \\to \\ob_n \\CC$ (whose subscripts we usually suppress); \\item for each $X \\in \\ob_{n+1} \\CC$, a map $p_X \\colon X \\to \\ft X$ (the \\emph{canonical projection} from $X$); \\item for each $X \\in \\ob_{n+1} \\CC$ and $f \\colon Y \\to \\ft(X)$, an object $f^*(X"}}

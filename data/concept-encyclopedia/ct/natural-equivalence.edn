@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : natural equivalence"}],
- :name "natural equivalence",
+{:name "natural equivalence",
  :pagerank 0.003333,
  :df 356,
  :concept/id :natural-equivalence,
@@ -10,66 +8,55 @@
   :sample
   ["0809.3676" "0810.2070" "1101.4803" "1501.02503" "1707.08049"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. all components $\\mathbf{\\tau }_{A}$ are isomorphisms) is called a \\emph{natural equivalence} (or, \\emph{natural isomorphism}). In this case, the inverses $(\\mat",
-   :refs
-   [:mathbf :isomorphisms :components :called :equivalence :case]}],
+   "Often, by a natural equivalence is meant specifically an equivalence in a 2-category of 2-functors.",
+   :refs [:natural-isomorphism]}
+  {:id :nlab-condition-2,
+   :statement
+   "But more generally it is an equivalence between any kind of functors in higher category theory:.",
+   :refs [:natural-isomorphism]}
+  {:id :nlab-condition-3,
+   :statement "In 1-category theory it is a natural isomorphism..",
+   :refs [:natural-isomorphism]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :mathbf,
+ [{:kind :unresolved-genus,
+   :wanted
+   :meant-specifically-an-equivalence-in-a-2-category-of-2-functors,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :isomorphisms,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:equivalence
+    :2-category
+    :2-functors
+    :functors
+    :higher-category-theory
+    :category-theory],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :components,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :called,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :equivalence,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :case,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 3,
- :genus :object,
+ :genus
+ :meant-specifically-an-equivalence-in-a-2-category-of-2-functors,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:natural equivalence",
-  :resolution-kind "nnexus",
-  :msc ["18-00"],
+ {:formaliser :codex-1,
   :domains ["Planetmath"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["18-00"],
+  :nlab-page-id "5661",
+  :resolution-kind "nnexus",
+  :target "nnexus:natural equivalence",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
  :depends-on
- [:natural-transformation
-  :natural-isomorphism
-  :object
-  :mathbf
-  :isomorphisms
-  :components
-  :called
-  :equivalence
-  :case],
+ [:meant-specifically-an-equivalence-in-a-2-category-of-2-functors
+  :natural-isomorphism],
  :gloss
  {:paper "0810.2070",
   :text
-  "ure $\\mathcal{G}$, preserving the commutativity of all diagrams. An invertible natural transformation, such that all components $\\mathbf{\\tau }_{A}$ are isomorphisms) is called a \\emph{natural equivalence} (or, \\emph{natural isomorphism}). In this case, the inverses $(\\mathbf{\\tau }_{A})^{-1}$ in $\\"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for natural equivalence"}]}
+  "ure $\\mathcal{G}$, preserving the commutativity of all diagrams. An invertible natural transformation, such that all components $\\mathbf{\\tau }_{A}$ are isomorphisms) is called a \\emph{natural equivalence} (or, \\emph{natural isomorphism}). In this case, the inverses $(\\mathbf{\\tau }_{A})^{-1}$ in $\\"}}

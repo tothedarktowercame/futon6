@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : small categories"}],
- :name "small categories",
+{:name "small categories",
  :pagerank 0.00658,
  :df 809,
  :concept/id :small-categories,
@@ -10,26 +9,19 @@
   ["0810.1279" "1004.2547" "1104.3630" "1111.3335" "1507.01564"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :used-papers 7,
- :genus :object,
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:small-category :object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1104.3630",
   :text
-  "The \\textit{barycentric subdivision} of small categories is a functor from the category of small categories to itself $$\\lmap{\\mathrm{Sd}}{\\textbf{Small categories}}{\\textbf{Small categories}}.$$ For a small category $\\mathcal{J}$, $\\mathrm{Sd}(\\mathcal{J})$ is an acyclic category and its objects a"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for small categories"}]}
+  "The \\textit{barycentric subdivision} of small categories is a functor from the category of small categories to itself $$\\lmap{\\mathrm{Sd}}{\\textbf{Small categories}}{\\textbf{Small categories}}.$$ For a small category $\\mathcal{J}$, $\\mathrm{Sd}(\\mathcal{J})$ is an acyclic category and its objects a"}}

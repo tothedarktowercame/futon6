@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : structure maps"}],
- :name "structure maps",
+{:name "structure maps",
  :df 508,
  :concept/id :structure-maps,
  :msc "ct",
@@ -9,13 +8,10 @@
   ["0809.3394" "0906.4725" "1001.0668" "1101.2363" "1401.4772"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -36,13 +32,9 @@
   :domains ["Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:monoidal-category :object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "0906.4725",
   :text
-  "A monoidal category is called \\emph{strict} when the structure maps are all identities; that is, when the objects made isomorphic by $\\lambda$, $\\rho$, $\\alpha$ are in fact equ"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for structure maps"}]}
+  "A monoidal category is called \\emph{strict} when the structure maps are all identities; that is, when the objects made isomorphic by $\\lambda$, $\\rho$, $\\alpha$ are in fact equ"}}

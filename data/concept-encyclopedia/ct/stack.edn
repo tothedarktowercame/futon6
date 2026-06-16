@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : stack"}],
- :name "stack",
+{:name "stack",
  :pagerank 0.002362,
  :df 369,
  :concept/id :stack,
@@ -8,36 +7,59 @@
  {:n-papers 85,
   :sample
   ["0708.3326" "0801.0083" "0803.1408" "0808.2122" "0808.3627"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "The term stack is a traditional synonym for 2-sheaf (typically specifically on a category rather than a 2-category) or often, more restrictively, a synonym for (2,1)-sheaf (see there for more details).",
+   :refs [:category :sheaf :stack :functor :groupoid]}
+  {:id :nlab-condition-2,
+   :statement
+   "This is part of a whole hierarchy of higher categorical generalizations of the notion of a sheaf.",
+   :refs [:category :sheaf :stack :functor :groupoid]}
+  {:id :nlab-condition-3,
+   :statement
+   "A (2,1)-sheaf / stack is equivalently a 1-truncated (∞,1)-sheaf/∞-stack.",
+   :refs [:category :sheaf :stack :functor :groupoid]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :prestack,
+ [{:kind :unresolved-genus,
+   :wanted :sometimes-referred-to-as-a-stack-of-groupoids,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:2-sheaf
+    :2-category
+    :higher-category-theory
+    :1-truncated
+    :n-stack
+    :n-sheaf],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 33,
- :genus :object,
+ :genus :sometimes-referred-to-as-a-stack-of-groupoids,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:stack",
-  :resolution-kind "nnexus",
-  :msc ["68P05" "Abstract_data_types" "Category_theory"],
+ {:formaliser :codex-1,
   :domains ["Mathworld" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["68P05" "Abstract_data_types" "Category_theory"],
+  :nlab-page-id "142",
+  :resolution-kind "nnexus",
+  :target "nnexus:stack",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:vector-bundles :prestack :object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:sometimes-referred-to-as-a-stack-of-groupoids
+  :category
+  :sheaf
+  :stack
+  :functor
+  :groupoid],
  :gloss
  {:paper "0809.3394",
   :text
-  "n equivalence of categories for every flat mapping of manifolds $p: X' \\to X$, one says that the prestack \\stack P is a \\index{smooth tensor stack}\\index{tensor stack}\\index{stack}\\textit{stack.} %\\begin{esempio}[smooth complex vector bundles]\\label{N.i32}% %\\end{esempio}% \\begin{nota}\\label{N.i33} "},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for stack"}]}
+  "n equivalence of categories for every flat mapping of manifolds $p: X' \\to X$, one says that the prestack \\stack P is a \\index{smooth tensor stack}\\index{tensor stack}\\index{stack}\\textit{stack.} %\\begin{esempio}[smooth complex vector bundles]\\label{N.i32}% %\\end{esempio}% \\begin{nota}\\label{N.i33} "}}

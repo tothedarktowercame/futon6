@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : monoidal closed"}],
- :name "monoidal closed",
+{:name "monoidal closed",
  :df 315,
  :concept/id :monoidal-closed,
  :msc "ct",
@@ -9,25 +8,18 @@
   ["0910.2737" "1009.3892" "1102.2395" "1303.3170" "1704.00329"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:right-adjoint :object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1009.3892",
   :text
-  "-metric) on $X\\times Y$ but rather the $+$-metric, and denote the resulting space as $X\\otimes Y$. This comes with the advantage that, albeit $\\MET$ is not Cartesian closed, it is \\emph{monoidal closed} in the sense that $X\\otimes-$ has a right adjoint $-^X$. Here $Y^X$ can be taken as the set of al"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for monoidal closed"}]}
+  "-metric) on $X\\times Y$ but rather the $+$-metric, and denote the resulting space as $X\\otimes Y$. This comes with the advantage that, albeit $\\MET$ is not Cartesian closed, it is \\emph{monoidal closed} in the sense that $X\\otimes-$ has a right adjoint $-^X$. Here $Y^X$ can be taken as the set of al"}}

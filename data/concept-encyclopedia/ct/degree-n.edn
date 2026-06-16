@@ -1,30 +1,22 @@
-{:given [{:var :X, :type :object, :signature "X : degree n"}],
- :name "degree n",
+{:name "degree n",
  :df 371,
  :concept/id :degree-n,
  :msc "ct",
  :defined-in {:n-papers 1, :sample ["1707.04765"]},
  :axioms [],
  :holes
- [{:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
  {:formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1610.01930",
   :text
-  "y reduced. The results of Section \\ref{sec:cross-effects} make it clear that both the reduced and non-reduced cases can be treated simultaneously. Second, we refine the notion of \\emph{degree $n$} functors, replacing the requirement of acyclicity (quasi-isomorphism) in \\cite[Definition 2.9]{JM:Deriv"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for degree n"}]}
+  "y reduced. The results of Section \\ref{sec:cross-effects} make it clear that both the reduced and non-reduced cases can be treated simultaneously. Second, we refine the notion of \\emph{degree $n$} functors, replacing the requirement of acyclicity (quasi-isomorphism) in \\cite[Definition 2.9]{JM:Deriv"}}

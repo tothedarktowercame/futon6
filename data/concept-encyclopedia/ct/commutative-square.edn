@@ -1,5 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : commutative square"}],
+{:given [{:var :C, :type :category}],
  :name "commutative square",
  :df 888,
  :concept/id :commutative-square,
@@ -8,15 +7,23 @@
  {:n-papers 14,
   :sample
   ["1002.4863" "1207.6613" "1308.0729" "1402.1871" "1402.6984"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A square of morphisms of C consists of objects X,Y,Z,W of C and morphisms f X Z, g X Y, f' Y W, and g' Z W.",
+   :refs [:category :commutative-diagram]}
+  {:id :nlab-condition-2,
+   :statement
+   "This is often pictured as a square & Z & \\\\ g & && & g'\\\\ &Y & & W & \\\\ The square is commutative if g' f = f' g.",
+   :refs [:category :commutative-diagram]}
+  {:id :nlab-condition-3,
+   :statement "The category of commutative squares in C is written C.",
+   :refs [:category :commutative-diagram]}],
  :holes
  [{:kind :missing-genus,
    :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :object,
+   :source :nlab-raw-section,
+   :note "nLab definition text did not expose an unambiguous genus"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -24,13 +31,17 @@
   :resolution-kind "page",
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:object],
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "775",
+  :definition-id nil},
+ :depends-on [:category :commutative-diagram],
  :gloss
  {:paper "1402.6984",
   :text
   "We allow ourselves to re-emphasize that, in general, one has to be careful about what one means by saying that a \\emph{commutative square} is homotopy exact."},
  :data
- [{:component :carrier,
+ [{:component :definition-data-1,
    :signature
-   "X carries the structure described by the corpus gloss for commutative square"}]}
+   "A square of morphisms of C consists of objects X,Y,Z,W of C and morphisms f X Z, g X Y, f' Y W, and g' Z W.",
+   :source :nlab-definition}]}

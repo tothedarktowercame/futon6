@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :morphism, :signature "X : induced map"}],
- :name "induced map",
+{:name "induced map",
  :df 931,
  :concept/id :induced-map,
  :msc "ct",
@@ -9,14 +8,10 @@
   ["0807.4256" "0809.3676" "1302.2774" "1312.7275" "1404.1485"]},
  :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :vector-bundle,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :morphism,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :morphism,
  :provenance
@@ -26,13 +21,9 @@
   :domains ["Mathworld"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:vector-bundle :morphism],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1404.1485",
   :text
-  "er standard vector bundle on $X$ and $\\alpha:(H,E)\\rightarrow (K,F)$ is a morphism, that is, a map $\\alpha:\\xi_H E\\rightarrow \\xi_K F$ of sheaves on $\\ZAR{X}$, then $\\Phi(\\alpha)$ is defined to be the induced map $\\alpha|_X:\\xi_H E|_X \\rightarrow \\xi_K F|_X$ of sheaves on $X$. This assignment respec"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for induced map"}]}
+  "er standard vector bundle on $X$ and $\\alpha:(H,E)\\rightarrow (K,F)$ is a morphism, that is, a map $\\alpha:\\xi_H E\\rightarrow \\xi_K F$ of sheaves on $\\ZAR{X}$, then $\\Phi(\\alpha)$ is defined to be the induced map $\\alpha|_X:\\xi_H E|_X \\rightarrow \\xi_K F|_X$ of sheaves on $X$. This assignment respec"}}

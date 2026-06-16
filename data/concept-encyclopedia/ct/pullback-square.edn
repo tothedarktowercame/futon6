@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :identity, :signature "X : pullback square"}],
- :name "pullback square",
+{:name "pullback square",
  :df 509,
  :concept/id :pullback-square,
  :msc "ct",
@@ -9,18 +8,10 @@
   ["1305.0086" "1308.0729" "1506.07341" "1912.10642" "2005.10015"]},
  :axioms [],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :composite-map,
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :identity,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
- :genus :identity,
+   "neither :provenance :target nor the concept name resolved to a local nLab definition/raw definition section"}],
  :status :draft,
  :kind :object,
  :provenance
@@ -30,13 +21,9 @@
   :domains ["Planetmath"],
   :formaliser :codex-1,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:composite-map :identity],
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
  :gloss
  {:paper "1506.07341",
   :text
-  "left square is defined to be a pullback square, then the top composite map is an equivalence: since the bottom composite map is the identity, it suffices to check that the map is an equivalence on each fibre, which is clear."},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for pullback square"}]}
+  "left square is defined to be a pullback square, then the top composite map is an equivalence: since the bottom composite map is the identity, it suffices to check that the map is an equivalence on each fibre, which is clear."}}

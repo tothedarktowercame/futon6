@@ -1,5 +1,4 @@
-{:given [{:var :X, :type :object, :signature "X : weak equivalences"}],
- :name "weak equivalences",
+{:name "weak equivalences",
  :pagerank 0.005066,
  :df 722,
  :concept/id :weak-equivalences,
@@ -9,69 +8,58 @@
   :sample
   ["0707.1449" "0708.2185" "0709.0248" "0712.0617" "0804.2154"]},
  :axioms
- [{:id :condition-1,
+ [{:id :nlab-condition-1,
    :statement
-   "∀ x : object. three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equivalences} such that \\begin{enumerate} \\",
-   :refs [:classes :equivalences :out-of :weak :three :fibrations]}],
+   "A weak equivalence is a morphism in a category C which is supposed to be a true equivalence in a higher categorical refinement of C.",
+   :refs [:morphism :category :homotopy-category :model-category]}
+  {:id :nlab-condition-2,
+   :statement
+   "The bare minimum of axioms to be satisfied by a weak equivalence are encoded in the concepts of category with weak equivalences and homotopical category.",
+   :refs [:morphism :category :homotopy-category :model-category]}
+  {:id :nlab-condition-3,
+   :statement "For such categories one can consider.",
+   :refs [:morphism :category :homotopy-category :model-category]}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :cocomplete-category,
+ [{:kind :unresolved-genus,
+   :wanted
+   :morphism-in-a-category-c-which-is-supposed-to-be-a-true-equivalence-in-a-higher-categorical-refinement-of-c,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :classes,
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:equivalence
+    :higher-category-theory
+    :category-with-weak-equivalences
+    :homotopical-category
+    :isomorphisms
+    :equivalences],
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :equivalences,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :out-of,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :weak,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :three,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :unresolved-concept,
-   :wanted :fibrations,
-   :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}],
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 11,
- :genus :object,
+ :genus
+ :morphism-in-a-category-c-which-is-supposed-to-be-a-true-equivalence-in-a-higher-categorical-refinement-of-c,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:weak equivalence",
-  :resolution-kind "nnexus",
-  :msc ["55" "55P10" "Homotopy_theory"],
+ {:formaliser :codex-1,
   :domains ["Mathworld" "Planetmath" "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["55" "55P10" "Homotopy_theory"],
+  :nlab-page-id "786",
+  :resolution-kind "nnexus",
+  :target "nnexus:weak equivalence",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
  :depends-on
- [:model-category
-  :cocomplete-category
-  :object
-  :classes
-  :equivalences
-  :out-of
-  :weak
-  :three
-  :fibrations],
+ [:morphism-in-a-category-c-which-is-supposed-to-be-a-true-equivalence-in-a-higher-categorical-refinement-of-c
+  :morphism
+  :category
+  :homotopy-category
+  :model-category],
  :gloss
  {:paper "0708.2185",
   :text
-  "t{model category} is a complete and cocomplete category $\\ck$ together with three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equivalences} such that \\begin{enumerate} \\item[(1)] $\\cw$ has the 2-out-of-3 property, i.e., with any two "},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for weak equivalences"}]}
+  "t{model category} is a complete and cocomplete category $\\ck$ together with three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equivalences} such that \\begin{enumerate} \\item[(1)] $\\cw$ has the 2-out-of-3 property, i.e., with any two "}}

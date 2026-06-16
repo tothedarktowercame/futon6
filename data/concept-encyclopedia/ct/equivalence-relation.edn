@@ -1,6 +1,4 @@
-{:given
- [{:var :X, :type :object, :signature "X : equivalence relation"}],
- :name "equivalence relation",
+{:name "equivalence relation",
  :pagerank 0.002866,
  :df 1177,
  :concept/id :equivalence-relation,
@@ -9,41 +7,57 @@
  {:n-papers 72,
   :sample
   ["0710.3066" "0710.3077" "0803.4209" "0810.2070" "1111.3845"]},
- :axioms [],
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "An equivalence relation on a set S is a binary relation on S that is:.",
+   :refs []}
+  {:id :nlab-condition-2,
+   :statement "Thus, an equivalence relation is a symmetric preorder.",
+   :refs []}
+  {:id :nlab-condition-3,
+   :statement
+   "(One can also define it as a relation that is both reflexive and euclidean.) The de Morgan dual of an equivalence relation is an apartness relation.",
+   :refs []}],
  :holes
- [{:kind :unresolved-concept,
-   :wanted :any-object,
+ [{:kind :unresolved-genus,
+   :wanted :symmetric-preorder,
+   :source :nlab-raw-section,
    :note
-   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
-  {:kind :missing-genus,
-   :wanted :genus,
-   :note "scaffold did not pin a genus; fallback is heuristic"}
-  {:kind :underspecified-axioms,
-   :wanted :axioms,
-   :note "scaffold did not expose differentiae clauses to formalise"}],
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:relation
+    :reflexive-relation
+    :symmetric-relation
+    :transitive-relation
+    :preorder
+    :euclidean-relation],
+   :source :nlab-raw-section,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
  :used-papers 15,
- :genus :object,
+ :genus :symmetric-preorder,
  :status :draft,
  :kind :object,
  :provenance
- {:target "nnexus:equivalence relation",
-  :resolution-kind "nnexus",
-  :msc ["03D20" "03E20" "06-00" "Mathematical_relations" "XX-XX"],
+ {:formaliser :codex-1,
   :domains
   ["Encyclopediaofmath"
    "Mathhub"
    "Mathworld"
    "Planetmath"
    "Wikipedia"],
-  :formaliser :codex-1,
+  :definition-source :nlab-raw-section,
+  :msc ["03D20" "03E20" "06-00" "Mathematical_relations" "XX-XX"],
+  :nlab-page-id "484",
+  :resolution-kind "nnexus",
+  :target "nnexus:equivalence relation",
+  :definition-id nil,
   :formaliser-note
-  "generated from scaffold :components; unresolved imports retained as typed holes"},
- :depends-on [:any-object :object],
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:symmetric-preorder],
  :gloss
  {:paper "0710.3066",
   :text
-  "Two parallel arrows \\diag{ R \\ar@<.8ex>[r]^{r_0} \\ar@<-.8ex>[r]_-{r_1} & X } in category \\ct{E} form an \\emph{equivalence relation} when for any object $A$ in \\ct{E} the induced function \\[ \\mbox{Hom}(A,R) \\rTo \\mbox{Hom}(A, X) \\times \\mbox{Hom}(A, X) \\] is an injection defining an equivalence relation on the"},
- :data
- [{:component :carrier,
-   :signature
-   "X carries the structure described by the corpus gloss for equivalence relation"}]}
+  "Two parallel arrows \\diag{ R \\ar@<.8ex>[r]^{r_0} \\ar@<-.8ex>[r]_-{r_1} & X } in category \\ct{E} form an \\emph{equivalence relation} when for any object $A$ in \\ct{E} the induced function \\[ \\mbox{Hom}(A,R) \\rTo \\mbox{Hom}(A, X) \\times \\mbox{Hom}(A, X) \\] is an injection defining an equivalence relation on the"}}
