@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 """CPU-only keyword retrieval for mark4 APM structure-learning evals.
 
-The script extracts distinctive uni- and bi-grams from frozen APM informal
+The script extracts domain-agnostic technical terms from frozen APM informal
 proofs, then ranks batch-007/008 arXiv papers by exact keyword hits in
 title+abstract. Full-text eprint search is available behind --full-text but is
-off by default.
+off by default. No external corpus or network resource is used.
 """
 from __future__ import annotations
 
 import argparse
 import io
 import json
-import math
 import re
 import tarfile
 from collections import Counter, defaultdict
@@ -20,7 +19,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FROZEN = Path("/home/joe/code/storage/apm/mark4-frozen-candidates.txt")
 DEFAULT_PROOF_DIR = Path("/home/joe/code/futon3c/data/apm-informal-proofs")
-DEFAULT_PRIOR = ROOT / "data" / "ct-term-prior.json"
 DEFAULT_BATCHES = [
     Path("/home/joe/code/storage/mark2/inbox/batch-007.tar.gz"),
     Path("/home/joe/code/storage/mark2/inbox/batch-008.tar.gz"),
@@ -71,35 +69,52 @@ LATEX_WORDS = {
 
 STOPWORDS = {
     "a", "all", "also", "among", "an", "and", "any", "are", "as", "at", "be",
-    "because", "been", "being", "between", "both", "but", "by", "can", "could", "does", "each",
-    "every", "for", "from", "has", "have", "having", "hence", "if", "in",
-    "into", "is", "it", "its", "let", "may", "more", "must", "no", "not",
-    "now", "of", "on", "one", "only", "or", "our", "over", "so", "some",
-    "rather", "since", "such", "than", "that", "the", "their", "then", "there",
-    "these", "this", "those", "through", "to", "two", "under", "using", "was",
-    "we", "when", "where", "which", "while", "with", "within", "would", "you",
+    "because", "been", "being", "between", "both", "but", "by", "can",
+    "could", "does", "each", "every", "for", "from", "has", "have", "having",
+    "hence", "if", "in", "into", "is", "it", "its", "let", "may", "more",
+    "most", "must", "no", "not", "now", "of", "on", "one", "only", "or",
+    "our", "over", "rather", "since", "so", "some", "such", "than", "that",
+    "the", "their", "then", "there", "these", "this", "those", "through",
+    "to", "two", "under", "using", "was", "we", "what", "when", "where",
+    "which", "while", "with", "within", "would", "you",
 }
 
 BOILERPLATE_TERMS = {
-    "above", "abs", "absmax", "aeval", "apm", "arbitrary", "asks", "assume", "assumption", "below", "claim",
-    "cleaner", "combine", "combining", "complete", "complete proof", "conclude",
-    "consider", "core", "definition", "defined", "definitionally", "different",
-    "direction", "elpnorm", "exactly", "exists", "fact", "filter", "fixed", "following",
-    "given", "gives", "hold", "holds", "key", "key insight", "lean", "lemma",
-    "geq", "ispreconnected", "isn", "leq", "left", "mathlib", "mul", "nat",
-    "need", "nonneg", "proof", "prove", "requires", "result", "right", "rpow",
-    "show", "shown", "shows", "side", "sides", "statement", "step", "suppose",
-    "take", "taking", "technique", "tendsto", "theorem", "therefore", "thus",
-    "univ", "way", "well", "why", "why hard", "without",
+    "above", "abs", "absmax", "aeval", "apm", "apply", "arbitrary", "asks",
+    "assume", "assumption", "below", "bound", "case", "cases", "claim",
+    "class", "classes", "cleaner", "combine", "combining", "complete",
+    "complete proof", "conclude", "condition", "conditions", "consider",
+    "core", "definition", "defined", "definitionally", "different", "direct",
+    "direction", "elpnorm", "equal", "equality", "exactly", "exists",
+    "explicit", "fact", "filter", "finding", "first", "fixed", "following",
+    "form", "forms", "general", "get", "given", "gives", "hold", "holds",
+    "implicit", "key", "key insight", "largest", "lean", "lemma", "geq",
+    "ispreconnected", "isn", "leq", "left", "lower", "many", "mathlib",
+    "means", "method", "methods", "mul", "nat", "natural", "need", "nonneg",
+    "order", "orders", "previous", "problem", "problems", "proof", "prove",
+    "pure", "relation", "relations", "representation", "requires", "respect",
+    "result", "right", "rpow", "second", "self", "show", "shown", "shows",
+    "side", "sides", "simply", "smallest", "statement", "step", "suppose",
+    "support", "take", "taking", "technique", "tendsto", "theorem",
+    "therefore", "thus", "time", "type", "univ", "upper", "way", "well",
+    "why", "why hard", "without",
 }
 
 BOILERPLATE_PARTS = {
-    "abs", "absmax", "aeval", "all", "also", "apm", "asks", "cleaner", "core", "definitionally", "elpnorm", "filter",
+    "abs", "absmax", "aeval", "all", "also", "apm", "apply", "asks", "bound",
+    "case", "cases", "class", "classes", "cleaner", "condition", "conditions",
+    "core", "definitionally", "direct", "elpnorm", "equal", "equality",
+    "explicit", "filter", "finding", "first", "form", "forms", "general",
+    "get", "implicit", "largest", "lower", "many", "means", "method",
+    "methods",
     "proof", "theorem", "lemma", "definition", "defined", "suppose", "given",
     "claim", "geq", "ispreconnected", "isn", "leq", "lean", "mathlib", "mul",
-    "nat", "nonneg", "rpow", "show", "shows", "complete", "insight", "hard",
-    "tendsto", "then", "thus", "hence", "therefore", "univ", "using", "when",
-    "you",
+    "nat", "natural", "nonneg", "order", "orders", "previous", "problem",
+    "problems", "pure", "relation", "relations", "representation", "respect",
+    "rpow", "second", "self", "show", "shows", "simply", "smallest",
+    "complete", "insight", "hard", "support", "tendsto", "then", "thus",
+    "hence", "therefore", "time", "type", "univ", "upper", "using", "what",
+    "when", "you",
 }
 
 
@@ -132,12 +147,13 @@ def tokens(text: str, *, drop_fences: bool = True) -> list[str]:
 
 def term_counts(words: list[str]) -> Counter[str]:
     counts: Counter[str] = Counter()
-    for word in words:
-        if usable_unigram(word):
-            counts[word] += 1
-    for left, right in zip(words, words[1:]):
-        if usable_bigram(left, right):
-            counts[f"{left} {right}"] += 1
+    for i in range(len(words)):
+        for width in (1, 2, 3):
+            if i + width > len(words):
+                break
+            phrase = words[i:i + width]
+            if usable_phrase(phrase):
+                counts[" ".join(phrase)] += 1
     return counts
 
 
@@ -151,76 +167,57 @@ def usable_unigram(word: str) -> bool:
     )
 
 
-def usable_bigram(left: str, right: str) -> bool:
-    if left == right:
+def usable_phrase(words: list[str]) -> bool:
+    if len(words) == 1:
+        return usable_unigram(words[0])
+    if len(set(words)) != len(words):
         return False
-    if left in STOPWORDS or right in STOPWORDS:
+    if any(word in STOPWORDS for word in words):
         return False
-    if left in BOILERPLATE_PARTS or right in BOILERPLATE_PARTS:
+    if any(word in BOILERPLATE_PARTS for word in words):
         return False
-    term = f"{left} {right}"
-    return term not in BOILERPLATE_TERMS and usable_unigram(left) and usable_unigram(right)
-
-
-def read_prior(path: Path) -> tuple[int, dict[str, int], dict[str, int]]:
-    with path.open() as f:
-        prior = json.load(f)
-    return (
-        int(prior["n_docs"]),
-        {str(k): int(v) for k, v in prior.get("unigram_df", {}).items()},
-        {str(k): int(v) for k, v in prior.get("bigram_df", {}).items()},
-    )
+    term = " ".join(words)
+    return term not in BOILERPLATE_TERMS and all(usable_unigram(word) for word in words)
 
 
 def load_frozen_ids(path: Path) -> list[str]:
     return [line.strip() for line in path.read_text().splitlines() if line.strip()]
 
 
-def distinctiveness_score(
-    term: str,
-    count: int,
-    n_docs: int,
-    unigram_df: dict[str, int],
-    bigram_df: dict[str, int],
-    df_threshold: float,
-) -> float | None:
-    df_table = bigram_df if " " in term else unigram_df
-    df = df_table.get(term, 0)
-    if df and df / n_docs > df_threshold:
-        return None
-    if df == 0 and not all(part.isalpha() and len(part) >= 3 for part in term.split()):
-        return None
-    rarity = math.log((n_docs + 1.0) / (df + 1.0))
-    phrase_bonus = 1.35 if " " in term else 1.0
-    freq_bonus = 1.0 + math.log1p(count)
-    return rarity * phrase_bonus * freq_bonus
-
-
 def extract_keywords(
     proof_ids: list[str],
     proof_dir: Path,
-    n_docs: int,
-    unigram_df: dict[str, int],
-    bigram_df: dict[str, int],
     df_threshold: float,
     per_proof_k: int,
 ) -> dict[str, list[str]]:
+    proof_counts: dict[str, Counter[str]] = {}
+    proof_df: Counter[str] = Counter()
+    max_df = max(1, int(len(proof_ids) * df_threshold))
+
+    for proof_id in proof_ids:
+        text = proof_text(proof_dir, proof_id)
+        counts = term_counts(tokens(text, drop_fences=True))
+        proof_counts[proof_id] = counts
+        proof_df.update(counts.keys())
+
     out: dict[str, list[str]] = {}
     for proof_id in proof_ids:
-        proof_path = proof_dir / f"apm-{proof_id}.md"
-        text = proof_path.read_text(errors="replace")
-        text = re.split(r"^## Lean 4 Theorem Statements\b", text, flags=re.MULTILINE)[0]
-        counts = term_counts(tokens(text, drop_fences=True))
         scored = []
-        for term, count in counts.items():
-            score = distinctiveness_score(
-                term, count, n_docs, unigram_df, bigram_df, df_threshold
-            )
-            if score is not None:
-                scored.append((score, len(term.split()), count, term))
-        scored.sort(key=lambda row: (-row[0], -row[1], -row[2], row[3]))
-        out[proof_id] = [term for _, _, _, term in scored[:per_proof_k]]
+        for term, count in proof_counts[proof_id].items():
+            if proof_df[term] > max_df:
+                continue
+            parts = term.split()
+            salience = count * len(parts)
+            scored.append((salience, len(parts), count, len(term), term))
+        scored.sort(key=lambda row: (-row[0], -row[1], -row[2], -row[3], row[4]))
+        out[proof_id] = [term for _, _, _, _, term in scored[:per_proof_k]]
     return out
+
+
+def proof_text(proof_dir: Path, proof_id: str) -> str:
+    proof_path = proof_dir / f"apm-{proof_id}.md"
+    text = proof_path.read_text(errors="replace")
+    return re.split(r"^## Lean 4 Theorem Statements\b", text, flags=re.MULTILINE)[0]
 
 
 def batch_name(path: Path) -> str:
@@ -308,7 +305,7 @@ def search_batches(
             for record in iter_batch_records(batch_tar):
                 add_hit(record, paper_text(record), keywords, keyword_sources, hits)
 
-    hits.sort(key=lambda row: (-row["n_distinct"], -row["n_hits"], row["id"]))
+    hits.sort(key=lambda row: (-row["n_hits"], -row["n_distinct"], row["id"]))
     return hits
 
 
@@ -356,13 +353,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument("--frozen-candidates", type=Path, default=DEFAULT_FROZEN)
     ap.add_argument("--proof-dir", type=Path, default=DEFAULT_PROOF_DIR)
-    ap.add_argument("--prior", type=Path, default=DEFAULT_PRIOR)
     ap.add_argument("--batch", type=Path, action="append", dest="batches")
     ap.add_argument("--keywords-out", type=Path, default=DEFAULT_KEYWORDS_OUT)
     ap.add_argument("--hits-out", type=Path, default=DEFAULT_HITS_OUT)
     ap.add_argument("--top-tsv", type=Path, default=DEFAULT_TOP_TSV)
     ap.add_argument("--top", type=int, default=200)
-    ap.add_argument("--df-threshold", type=float, default=0.4)
+    ap.add_argument(
+        "--df-threshold",
+        type=float,
+        default=0.1,
+        help="drop terms appearing in more than this fraction of frozen proofs",
+    )
     ap.add_argument("--per-proof-k", type=int, default=20)
     ap.add_argument("--full-text", action="store_true")
     return ap.parse_args(argv)
@@ -372,14 +373,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     batches = args.batches or DEFAULT_BATCHES
     proof_ids = load_frozen_ids(args.frozen_candidates)
-    n_docs, unigram_df, bigram_df = read_prior(args.prior)
 
     keywords_by_proof = extract_keywords(
         proof_ids,
         args.proof_dir,
-        n_docs,
-        unigram_df,
-        bigram_df,
         args.df_threshold,
         args.per_proof_k,
     )
