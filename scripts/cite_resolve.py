@@ -32,8 +32,14 @@ SCHEMA = "futon6/h7-cite-resolution/v1"
 
 
 ARXIV_PATTERNS = [
-    re.compile(r"arxiv[:\\s-]*([0-9]{4}\\.[0-9]{4,5})(?:v[0-9]+)?", re.I),
-    re.compile(r"arxiv[:\\s-]*([a-z-]+/[0-9]{7})(?:v[0-9]+)?", re.I),
+    # New-style numeric id (e.g. 2401.14311). Require an arXiv prefix so we never
+    # collide with DOIs (10.1006/aima.1993.1055) or volume.page tokens. NB: the
+    # separator class uses a real \s — the previous \\s/\\. matched a literal
+    # backslash, so new-style ids were never extracted.
+    re.compile(r"arxiv[:\s.-]*([0-9]{4}\.[0-9]{4,5})(?:v[0-9]+)?", re.I),
+    # Old-style archive/NNNNNNN id (math/9811139, hep-th/9901001, cond-mat/0011001).
+    # Unambiguous, so also catch it bare in prose ("Also available as math/9811139").
+    re.compile(r"(?:arxiv[:\s.-]*)?\b([a-z][a-z-]+/[0-9]{7})(?:v[0-9]+)?\b", re.I),
 ]
 
 
