@@ -82,6 +82,21 @@ def check_iatc_item(path: Path, text: str, feats: dict) -> list[str]:
         fails.append(f"thin: {feats['nodes']} node(s) — no argument structure")
     if feats["edges"] < 1:
         fails.append("thin: 0 inference edges")
+    # Degenerate self-loop edges (:premise == :conclusion) are vacuous "X infers X"
+    # reasoning — the structural checker accepts them (refs resolve) but they carry
+    # no argument. A small model that can't recover the real DAG defaults to these.
+    edges_seg = text[text.find(":edges"): text.rfind(":holes")] if ":holes" in text else text[text.find(":edges"):]
+    self_loops, n_edges = 0, 0
+    for blk in re.split(r"\{:id :e", edges_seg)[1:]:
+        prem = re.search(r":premise\s+\[?\s*(:[\w./-]+)", blk)
+        conc = re.search(r":conclusion\s+\[?\s*(:[\w./-]+)", blk)
+        if prem and conc:
+            n_edges += 1
+            if prem.group(1) == conc.group(1):
+                self_loops += 1
+    if self_loops:
+        fails.append(f"degenerate: {self_loops}/{n_edges} edges are self-loops "
+                     f"(:premise == :conclusion) — vacuous X⊢X reasoning, not a DAG")
     return fails
 
 
