@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -150,6 +151,27 @@ def gate_one(path: Path) -> tuple[bool, str]:
     return True, "ok"
 
 
+def candidate_check(edn: str, cand: dict) -> tuple[bool, str]:
+    """Candidate-aware faithfulness: the graph must be about THIS paper and anchor
+    only into the given window. A small model hallucinates the paper/passage id and
+    cites :source lines outside the window it was shown (observed 2026-06-16)."""
+    pid = cand["paper-id"]
+    m = re.search(r':paper/id\s+"([^"]+)"', edn)
+    if m and m.group(1) != pid:
+        return False, f"faithfulness: :paper/id '{m.group(1)}' != candidate '{pid}'"
+    lo, hi = cand["window-lines"]
+    slack = 3
+    out = []
+    for a, b in re.findall(r':lines\s*\[\s*(\d+)\s+(\d+)\s*\]', edn):
+        a, b = int(a), int(b)
+        if a < lo - slack or b > hi + slack:
+            out.append([a, b])
+    if out:
+        return False, (f"faithfulness: {len(out)} :source span(s) outside window "
+                       f"[{lo} {hi}] (±{slack}), e.g. {out[0]}")
+    return True, "ok"
+
+
 def run(args) -> int:
     cands = sorted(Path(args.candidates).glob("*.candidate.json"))
     if not cands:
@@ -177,9 +199,13 @@ def run(args) -> int:
                 last_err = "no EDN map found in response"
                 continue
             ap = tmp / f"{pid}.attempt{attempt}.edn"
+            ap.parent.mkdir(parents=True, exist_ok=True)
             ap.write_text(edn)
-            ok, err = gate_one(ap)
+            ok, err = candidate_check(edn, cand)
             if ok:
+                ok, err = gate_one(ap)
+            if ok:
+                outdir.mkdir(parents=True, exist_ok=True)
                 (outdir / f"{pid}.edn").write_text(edn)
                 status, last_err = "pass", f"attempt {attempt}"
                 break

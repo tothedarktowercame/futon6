@@ -39,6 +39,47 @@ FILLER_PATTERNS = [
     (re.compile(r':signature\s+"X\s*:\s'), "self-referential signature \"X : <name>\""),
 ]
 
+# Prompt-scaffolding tokens that must never appear in graph content — a small model
+# leaks its prompt's field labels into node :text / :wanted (observed 2026-06-16:
+# node text "source-window of morphisms…"). None of these belong in real math prose.
+PROMPT_LEAK = re.compile(r"\b(source-window|binder-context|few-shot|EDN graph|window-lines)\b", re.I)
+
+# Allowed top-level keys of an IATC argument-graph map. A small model invents extra
+# top-level keys (observed: a stray top-level `:warrants`) that the structural checker
+# ignores; flag them as schema drift.
+ALLOWED_IATC_TOPLEVEL = {":paper/id", ":passage/id", ":source", ":provenance",
+                         ":nodes", ":edges", ":holes"}
+
+
+def top_level_keys(text: str) -> list[str]:
+    """Keywords at brace-depth 1 (outer-map keys). Skips string contents and ;; comments
+    so LaTeX braces inside :text strings don't corrupt the depth count."""
+    keys, depth, i, n = [], 0, 0, len(text)
+    while i < n:
+        c = text[i]
+        if c == '"':                                  # skip string literal
+            i += 1
+            while i < n and text[i] != '"':
+                i += 2 if text[i] == '\\' else 1
+            i += 1
+            continue
+        if c == ';':                                  # skip ;; comment to EOL
+            while i < n and text[i] != '\n':
+                i += 1
+            continue
+        if c in "{[":
+            depth += 1
+        elif c in "}]":
+            depth -= 1
+        elif c == ":" and depth == 1:
+            m = re.match(r":[\w/.+-]+", text[i:])
+            if m:
+                keys.append(m.group(0))
+                i += m.end()
+                continue
+        i += 1
+    return keys
+
 
 def detect_kind(text: str) -> str:
     if ":nodes" in text and ":edges" in text:
@@ -97,6 +138,14 @@ def check_iatc_item(path: Path, text: str, feats: dict) -> list[str]:
     if self_loops:
         fails.append(f"degenerate: {self_loops}/{n_edges} edges are self-loops "
                      f"(:premise == :conclusion) — vacuous X⊢X reasoning, not a DAG")
+    leak = PROMPT_LEAK.search(text)
+    if leak:
+        fails.append(f"prompt-leak: graph contains scaffolding token '{leak.group(0)}' "
+                     f"— a prompt field label leaked into content")
+    extra = [k for k in top_level_keys(text) if k not in ALLOWED_IATC_TOPLEVEL]
+    if extra:
+        fails.append(f"schema-drift: unexpected top-level key(s) {extra} "
+                     f"— not in the IATC graph schema")
     return fails
 
 
