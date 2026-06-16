@@ -1,0 +1,59 @@
+{
+ :paper/id "math__0202130",
+ :passage/id "math__0202130:proof-move:L164-164:9342-9359",
+ :source {
+   :lines [164 164],
+   :chars [9342 9359],
+   :kind :argument-passage,
+   :selection :proof-move
+  },
+ :provenance {
+   :generator "scripts/generate_iatc_gh200.py",
+   :scaffold "data/showcases/ct-anatomy/golden/fable-math__0202130-dp-emacs.json",
+   :layer-a :dp-emacs,
+   :standoff-only true
+  },
+ :nodes [{
+   :id :passage-premise,
+   :kind :claim,
+   :source {
+     :lines [163 164],
+     :chars [9249 9335],
+     :mark/kind :quant-universal
+    }
+  } {
+   :id :passage-conclusion,
+   :kind :claim,
+   :source {
+     :lines [164 164],
+     :chars [9342 9359],
+     :mark/kind :proof-move
+    }
+  }],
+ :edges [{
+   :id :e-main,
+   :kind :infer,
+   :relation :because,
+   :premise [:passage-premise],
+   :warrant {
+     :kind :missing-warrant,
+     :wanted :local-verification-elided
+    },
+   :conclusion :passage-conclusion,
+   :source {
+     :lines [164 164],
+     :chars [9342 9359],
+     :mark/kind :proof-move
+    }
+  }],
+ :holes [{
+   :kind :missing-warrant,
+   :edge :e-main,
+   :wanted :local-verification-elided,
+   :source {
+     :lines [164 164],
+     :chars [9342 9359],
+     :mark/kind :proof-move
+    }
+  }]
+}

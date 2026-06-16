@@ -1,0 +1,59 @@
+{
+ :paper/id "1104.5047",
+ :passage/id "1104.5047:proof-move:L121-121:8767-8778",
+ :source {
+   :lines [121 121],
+   :chars [8767 8778],
+   :kind :argument-passage,
+   :selection :proof-move
+  },
+ :provenance {
+   :generator "scripts/generate_iatc_gh200.py",
+   :scaffold "data/showcases/ct-anatomy/golden/fable-1104.5047-dp-emacs.json",
+   :layer-a :dp-emacs,
+   :standoff-only true
+  },
+ :nodes [{
+   :id :passage-premise,
+   :kind :claim,
+   :source {
+     :lines [121 121],
+     :chars [9499 9639],
+     :mark/kind :assume-explicit
+    }
+  } {
+   :id :passage-conclusion,
+   :kind :claim,
+   :source {
+     :lines [121 121],
+     :chars [8767 8778],
+     :mark/kind :proof-move
+    }
+  }],
+ :edges [{
+   :id :e-main,
+   :kind :infer,
+   :relation :because,
+   :premise [:passage-premise],
+   :warrant {
+     :kind :missing-warrant,
+     :wanted :prose-illative-warrant-elided
+    },
+   :conclusion :passage-conclusion,
+   :source {
+     :lines [121 121],
+     :chars [8767 8778],
+     :mark/kind :proof-move
+    }
+  }],
+ :holes [{
+   :kind :missing-warrant,
+   :edge :e-main,
+   :wanted :prose-illative-warrant-elided,
+   :source {
+     :lines [121 121],
+     :chars [8767 8778],
+     :mark/kind :proof-move
+    }
+  }]
+}

@@ -1,0 +1,59 @@
+{
+ :paper/id "math__0301027",
+ :passage/id "math__0301027:proof-move:L375-375:14779-14798",
+ :source {
+   :lines [375 375],
+   :chars [14779 14798],
+   :kind :argument-passage,
+   :selection :proof-move
+  },
+ :provenance {
+   :generator "scripts/generate_iatc_gh200.py",
+   :scaffold "data/showcases/ct-anatomy/golden/fable-math__0301027-dp-emacs.json",
+   :layer-a :dp-emacs,
+   :standoff-only true
+  },
+ :nodes [{
+   :id :passage-premise,
+   :kind :claim,
+   :source {
+     :lines [370 372],
+     :chars [14601 14735],
+     :mark/kind :quant-universal
+    }
+  } {
+   :id :passage-conclusion,
+   :kind :claim,
+   :source {
+     :lines [375 375],
+     :chars [14779 14798],
+     :mark/kind :proof-move
+    }
+  }],
+ :edges [{
+   :id :e-main,
+   :kind :infer,
+   :relation :because,
+   :premise [:passage-premise],
+   :warrant {
+     :kind :missing-warrant,
+     :wanted :reduction-justification-elided
+    },
+   :conclusion :passage-conclusion,
+   :source {
+     :lines [375 375],
+     :chars [14779 14798],
+     :mark/kind :proof-move
+    }
+  }],
+ :holes [{
+   :kind :missing-warrant,
+   :edge :e-main,
+   :wanted :reduction-justification-elided,
+   :source {
+     :lines [375 375],
+     :chars [14779 14798],
+     :mark/kind :proof-move
+    }
+  }]
+}

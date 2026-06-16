@@ -1,0 +1,59 @@
+{
+ :paper/id "math__0610239",
+ :passage/id "math__0610239:conditional-passage:L223-225:9872-10012",
+ :source {
+   :lines [223 225],
+   :chars [9872 10012],
+   :kind :argument-passage,
+   :selection :conditional-passage
+  },
+ :provenance {
+   :generator "scripts/generate_iatc_gh200.py",
+   :scaffold "data/showcases/ct-anatomy/golden/fable-math__0610239-dp-emacs.json",
+   :layer-a :dp-emacs,
+   :standoff-only true
+  },
+ :nodes [{
+   :id :passage-premise,
+   :kind :claim,
+   :source {
+     :lines [192 194],
+     :chars [7998 8138],
+     :mark/kind :assume-explicit
+    }
+  } {
+   :id :passage-conclusion,
+   :kind :claim,
+   :source {
+     :lines [223 225],
+     :chars [9872 10012],
+     :mark/kind :quant-universal
+    }
+  }],
+ :edges [{
+   :id :e-main,
+   :kind :infer,
+   :relation :because,
+   :premise [:passage-premise],
+   :warrant {
+     :kind :missing-warrant,
+     :wanted :prose-illative-warrant-elided
+    },
+   :conclusion :passage-conclusion,
+   :source {
+     :lines [223 225],
+     :chars [9872 10012],
+     :mark/kind :quant-universal
+    }
+  }],
+ :holes [{
+   :kind :missing-warrant,
+   :edge :e-main,
+   :wanted :prose-illative-warrant-elided,
+   :source {
+     :lines [223 225],
+     :chars [9872 10012],
+     :mark/kind :quant-universal
+    }
+  }]
+}
