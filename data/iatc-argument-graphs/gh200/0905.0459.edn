@@ -1,59 +1,11 @@
-{
- :paper/id "0905.0459",
- :passage/id "0905.0459:proof-move:L94-94:5319-5345",
- :source {
-   :lines [94 94],
-   :chars [5319 5345],
-   :kind :argument-passage,
-   :selection :proof-move
-  },
- :provenance {
-   :generator "scripts/generate_iatc_gh200.py",
-   :scaffold "data/showcases/ct-anatomy/golden/fable-0905.0459-dp-emacs.json",
-   :layer-a :dp-emacs,
-   :standoff-only true
-  },
- :nodes [{
-   :id :passage-premise,
-   :kind :claim,
-   :source {
-     :lines [42 45],
-     :chars [2234 2368],
-     :mark/kind :assume-explicit
-    }
-  } {
-   :id :passage-conclusion,
-   :kind :claim,
-   :source {
-     :lines [94 94],
-     :chars [5319 5345],
-     :mark/kind :proof-move
-    }
-  }],
- :edges [{
-   :id :e-main,
-   :kind :infer,
-   :relation :because,
-   :premise [:passage-premise],
-   :warrant {
-     :kind :missing-warrant,
-     :wanted :reduction-justification-elided
-    },
-   :conclusion :passage-conclusion,
-   :source {
-     :lines [94 94],
-     :chars [5319 5345],
-     :mark/kind :proof-move
-    }
-  }],
- :holes [{
-   :kind :missing-warrant,
-   :edge :e-main,
-   :wanted :reduction-justification-elided,
-   :source {
-     :lines [94 94],
-     :chars [5319 5345],
-     :mark/kind :proof-move
-    }
-  }]
-}
+{:paper/id "0905.0459" :passage/id "0905.0459:geometry-construction-universal-property:2343-2349" :source {:lines [2343 2349] :kind :proof}
+ :nodes [{:id :K-fiber-product :kind :object :text "K(M) is the displayed fiber product in RGeom" :source {:lines [2343 2345]}}
+         {:id :L-localization :kind :object :text "L:P(M')->K(M) is a localization functor" :source {:lines [2345 2345]}}
+         {:id :O-composite :kind :object :text "O_M is M -> M' -> P(M') -> K(M)" :source {:lines [2345 2349]}}
+         {:id :fiber-UP :kind :claim :text "the fiber product imposes the two sheaf compatibility conditions" :source {:lines [2343 2345]}}
+         {:id :localization-UP :kind :claim :text "the localization is accessible and left exact" :source {:lines [2345 2345]}}
+         {:id :desired-UP :kind :claim :text "O_M has the desired universal property" :source {:lines [2349 2349]}}]
+ :edges [{:id :e-construct :kind :infer :relation :constructs :premise [:K-fiber-product :L-localization] :conclusion :O-composite :source {:lines [2343 2349]}}
+         {:id :e-fiber :kind :infer :relation :supplies :premise :K-fiber-product :conclusion :fiber-UP :source {:lines [2343 2345]}}
+         {:id :e-UP :kind :infer :relation :therefore :premise [:O-composite :fiber-UP :localization-UP] :warrant {:kind :missing-warrant :text "the pullback and localization universal properties compose to the intended M-structure universal property"} :conclusion :desired-UP :source {:lines [2343 2349]}}]
+ :holes [{:kind :missing-warrant :edge :e-UP :wanted :fiber-product-localization-yields-structure-universal-property}]}

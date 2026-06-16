@@ -1,59 +1,16 @@
-{
- :paper/id "1805.03776",
- :passage/id "1805.03776:proof-move:L754-754:54016-54035",
- :source {
-   :lines [754 754],
-   :chars [54016 54035],
-   :kind :argument-passage,
-   :selection :proof-move
-  },
- :provenance {
-   :generator "scripts/generate_iatc_gh200.py",
-   :scaffold "data/showcases/ct-anatomy/golden/fable-1805.03776-dp-emacs.json",
-   :layer-a :dp-emacs,
-   :standoff-only true
-  },
- :nodes [{
-   :id :passage-premise,
-   :kind :claim,
-   :source {
-     :lines [750 750],
-     :chars [53895 53953],
-     :mark/kind :assume-explicit
-    }
-  } {
-   :id :passage-conclusion,
-   :kind :claim,
-   :source {
-     :lines [754 754],
-     :chars [54016 54035],
-     :mark/kind :proof-move
-    }
-  }],
- :edges [{
-   :id :e-main,
-   :kind :infer,
-   :relation :because,
-   :premise [:passage-premise],
-   :warrant {
-     :kind :missing-warrant,
-     :wanted :reduction-justification-elided
-    },
-   :conclusion :passage-conclusion,
-   :source {
-     :lines [754 754],
-     :chars [54016 54035],
-     :mark/kind :proof-move
-    }
-  }],
- :holes [{
-   :kind :missing-warrant,
-   :edge :e-main,
-   :wanted :reduction-justification-elided,
-   :source {
-     :lines [754 754],
-     :chars [54016 54035],
-     :mark/kind :proof-move
-    }
-  }]
-}
+{:paper/id "1805.03776" :passage/id "1805.03776:sink-resolution-from-AB:2219-2231" :source {:lines [2219 2231] :kind :proof}
+ :nodes [{:id :AB-approx :kind :claim :text "Auslander-Buchweitz gives 0->Y_C->X_C->C->0 with X_C in perp U" :source {:lines [2219 2222]}}
+         {:id :AB-resolution :kind :claim :text "objects Y in double perpendicular admit add U resolutions" :source {:lines [2222 2223]}}
+         {:id :radP-sequences :kind :object :text "applying AB to C=rad P gives the two displayed exact sequences" :source {:lines [2224 2225]}}
+         {:id :Hom-exact :kind :claim :text "the sequences stay exact after applying Hom_Lambda(perp U,-)" :source {:lines [2226 2226]}}
+         {:id :Ext-radP :kind :claim :text "Ext^i(rad P,U)=Ext^{i+1}(P/rad P,U)=0 for i>=n" :source {:lines [2227 2227]}}
+         {:id :Ext-Y :kind :claim :text "Ext^i(Y_radP,U)=0 for i>=n-1" :source {:lines [2227 2228]}}
+         {:id :ell :kind :claim :text "we can assume ell=n-2" :source {:lines [2228 2228]}}
+         {:id :sink-resolution :kind :claim :text "splicing with rad P -> P gives the desired sink resolution" :source {:lines [2229 2231]}}]
+ :edges [{:id :e-apply :kind :infer :relation :instantiates :premise [:AB-approx :AB-resolution] :conclusion :radP-sequences :source {:lines [2224 2225]}}
+         {:id :e-Hom :kind :infer :relation :checks :premise :radP-sequences :warrant {:kind :missing-warrant :text "right approximation properties make Hom(perp U,-) preserve exactness"} :conclusion :Hom-exact :source {:lines [2226 2226]}}
+         {:id :e-shift :kind :infer :relation :dimension-shift :premise :Ext-radP :conclusion :Ext-Y :source {:lines [2227 2228]}}
+         {:id :e-length :kind :infer :relation :therefore :premise :Ext-Y :warrant {:kind :missing-warrant :text "the AB resolution truncates at n-2 under this Ext vanishing"} :conclusion :ell :source {:lines [2227 2228]}}
+         {:id :e-sink :kind :infer :relation :splices :premise [:radP-sequences :ell] :conclusion :sink-resolution :source {:lines [2229 2231]}}]
+ :holes [{:kind :missing-warrant :edge :e-Hom :wanted :Hom-perpU-exactness-from-AB-approximations}
+         {:kind :missing-warrant :edge :e-length :wanted :truncating-AB-resolution-from-Ext-vanishing}]}

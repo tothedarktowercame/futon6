@@ -1,59 +1,16 @@
-{
- :paper/id "1308.1804",
- :passage/id "1308.1804:proof-move:L120-120:9134-9141",
- :source {
-   :lines [120 120],
-   :chars [9134 9141],
-   :kind :argument-passage,
-   :selection :proof-move
-  },
- :provenance {
-   :generator "scripts/generate_iatc_gh200.py",
-   :scaffold "data/showcases/ct-anatomy/golden/fable-1308.1804-dp-emacs.json",
-   :layer-a :dp-emacs,
-   :standoff-only true
-  },
- :nodes [{
-   :id :passage-premise,
-   :kind :claim,
-   :source {
-     :lines [120 120],
-     :chars [8998 9138],
-     :mark/kind :assume-explicit
-    }
-  } {
-   :id :passage-conclusion,
-   :kind :claim,
-   :source {
-     :lines [120 120],
-     :chars [9134 9141],
-     :mark/kind :proof-move
-    }
-  }],
- :edges [{
-   :id :e-main,
-   :kind :infer,
-   :relation :because,
-   :premise [:passage-premise],
-   :warrant {
-     :kind :missing-warrant,
-     :wanted :local-verification-elided
-    },
-   :conclusion :passage-conclusion,
-   :source {
-     :lines [120 120],
-     :chars [9134 9141],
-     :mark/kind :proof-move
-    }
-  }],
- :holes [{
-   :kind :missing-warrant,
-   :edge :e-main,
-   :wanted :local-verification-elided,
-   :source {
-     :lines [120 120],
-     :chars [9134 9141],
-     :mark/kind :proof-move
-    }
-  }]
-}
+{:paper/id "1308.1804"
+ :passage/id "1308.1804:tilting-quillen-equivalence:593-601"
+ :source {:lines [593 601] :kind :proof}
+ :nodes
+ [{:id :tilting-derived-equivalence :kind :ref :label "Proposition tilt-char and Theorem cotilt-from-tilt" :source {:lines [593 594]}}
+  {:id :theorem-QE :kind :claim :text "the adjunction between Cpx R and Cpx G is a Quillen equivalence for the stated model structures" :source {:lines [595 597]}}
+  {:id :U-Hom :kind :object :text "U = Hom_G(T,-)" :source {:lines [600 600]}}
+  {:id :F-left-adjoint :kind :claim :text "U has a left adjoint F: Cpx R -> Cpx G" :source {:lines [600 600]}}
+  {:id :special-adjoint :kind :ref :label "special adjoint functor theorem, McLane V.8" :source {:lines [600 600]}}
+  {:id :explicit-F-later :kind :meta :text "an explicit description of F is deferred to a later remark" :source {:lines [600 600]}}]
+ :edges
+ [{:id :e-left-adjoint :kind :infer :relation :by-theorem :premise :U-Hom :warrant {:kind :citation :target "special adjoint functor theorem, McLane V.8"} :conclusion :F-left-adjoint :source {:lines [600 600]}}
+  {:id :e-QE-supported :kind :infer :relation :supports :given [:tilting-derived-equivalence :F-left-adjoint] :premise :theorem-QE :warrant {:kind :missing-warrant :text "the derived equivalence from tilting/cotilting is realized by the Quillen adjunction with left adjoint F and right adjoint U"} :meta [:explicit-F-later] :conclusion :theorem-QE :source {:lines [593 601]}}]
+ :holes
+ [{:kind :missing-warrant :edge :e-QE-supported :wanted :tilting-derived-equivalence-lifts-to-Quillen-equivalence-for-model-structures}]}
+

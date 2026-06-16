@@ -1,59 +1,10 @@
-{
- :paper/id "1901.01453",
- :passage/id "1901.01453:proof-move:L714-714:20633-20658",
- :source {
-   :lines [714 714],
-   :chars [20633 20658],
-   :kind :argument-passage,
-   :selection :proof-move
-  },
- :provenance {
-   :generator "scripts/generate_iatc_gh200.py",
-   :scaffold "data/showcases/ct-anatomy/golden/fable-1901.01453-dp-emacs.json",
-   :layer-a :dp-emacs,
-   :standoff-only true
-  },
- :nodes [{
-   :id :passage-premise,
-   :kind :claim,
-   :source {
-     :lines [677 678],
-     :chars [19550 19596],
-     :mark/kind :quant-universal
-    }
-  } {
-   :id :passage-conclusion,
-   :kind :claim,
-   :source {
-     :lines [714 714],
-     :chars [20633 20658],
-     :mark/kind :proof-move
-    }
-  }],
- :edges [{
-   :id :e-main,
-   :kind :infer,
-   :relation :because,
-   :premise [:passage-premise],
-   :warrant {
-     :kind :missing-warrant,
-     :wanted :prose-illative-warrant-elided
-    },
-   :conclusion :passage-conclusion,
-   :source {
-     :lines [714 714],
-     :chars [20633 20658],
-     :mark/kind :proof-move
-    }
-  }],
- :holes [{
-   :kind :missing-warrant,
-   :edge :e-main,
-   :wanted :prose-illative-warrant-elided,
-   :source {
-     :lines [714 714],
-     :chars [20633 20658],
-     :mark/kind :proof-move
-    }
-  }]
-}
+{:paper/id "1901.01453" :passage/id "1901.01453:preadditive-completion-equivalence:770-779" :source {:lines [770 779] :kind :remark-proof}
+ :nodes [{:id :lawvere-completion :kind :object :text "for arbitrary categories Lawvere completion is fl'(c) or Kelly enriched completion" :source {:lines [770 774]}}
+         {:id :triangulated-special :kind :claim :text "Neeman18A assumes c triangulated and only mentions fl(c)" :source {:lines [774 775]}}
+         {:id :preadditive :kind :claim :text "c is pre-additive" :source {:lines [776 776]}}
+         {:id :Phi :kind :object :text "Phi:MMod c -> Hom[c^op,Set]" :source {:lines [776 777]}}
+         {:id :fl-equivalence :kind :claim :text "Phi restricts to an equivalence fl(c)->fl'(c)" :source {:lines [776 778]}}
+         {:id :fs-equivalence :kind :claim :text "hence Phi restricts to fs(cs)->fs'(cs)" :source {:lines [778 779]}}]
+ :edges [{:id :e-fl :kind :infer :relation :checks :premise [:lawvere-completion :preadditive :Phi] :warrant {:kind :missing-warrant :text "preadditivity identifies additive module-valued completion with the Set-valued completion"} :conclusion :fl-equivalence :source {:lines [776 778]}}
+         {:id :e-fs :kind :infer :relation :restricts :premise :fl-equivalence :conclusion :fs-equivalence :source {:lines [778 779]}}]
+ :holes [{:kind :missing-warrant :edge :e-fl :wanted :preadditive-module-to-set-completion-equivalence}]}

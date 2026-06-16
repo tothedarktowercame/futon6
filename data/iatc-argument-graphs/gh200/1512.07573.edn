@@ -1,59 +1,14 @@
-{
- :paper/id "1512.07573",
- :passage/id "1512.07573:proof-move:L1346-1346:63084-63097",
- :source {
-   :lines [1346 1346],
-   :chars [63084 63097],
-   :kind :argument-passage,
-   :selection :proof-move
-  },
- :provenance {
-   :generator "scripts/generate_iatc_gh200.py",
-   :scaffold "data/showcases/ct-anatomy/golden/fable-1512.07573-dp-emacs.json",
-   :layer-a :dp-emacs,
-   :standoff-only true
-  },
- :nodes [{
-   :id :passage-premise,
-   :kind :claim,
-   :source {
-     :lines [1331 1332],
-     :chars [62344 62414],
-     :mark/kind :quant-universal
-    }
-  } {
-   :id :passage-conclusion,
-   :kind :claim,
-   :source {
-     :lines [1346 1346],
-     :chars [63084 63097],
-     :mark/kind :proof-move
-    }
-  }],
- :edges [{
-   :id :e-main,
-   :kind :infer,
-   :relation :because,
-   :premise [:passage-premise],
-   :warrant {
-     :kind :missing-warrant,
-     :wanted :prose-illative-warrant-elided
-    },
-   :conclusion :passage-conclusion,
-   :source {
-     :lines [1346 1346],
-     :chars [63084 63097],
-     :mark/kind :proof-move
-    }
-  }],
- :holes [{
-   :kind :missing-warrant,
-   :edge :e-main,
-   :wanted :prose-illative-warrant-elided,
-   :source {
-     :lines [1346 1346],
-     :chars [63084 63097],
-     :mark/kind :proof-move
-    }
-  }]
-}
+{:paper/id "1512.07573" :passage/id "1512.07573:segal-condition-equivalences:1604-1608" :source {:lines [1604 1608] :kind :proof}
+ :nodes [{:id :condition-1 :kind :claim :text "(1) is the Segal condition" :source {:lines [1604 1607]}}
+         {:id :condition-2 :kind :claim :text "(2) is the general pullback square condition" :source {:lines [1604 1606]}}
+         {:id :condition-3 :kind :claim :text "(3) is a special case of (2)" :source {:lines [1605 1606]}}
+         {:id :condition-4 :kind :claim :text "(4) is a special case of (2)" :source {:lines [1605 1607]}}
+         {:id :composite-pullbacks :kind :claim :text "the pullback in (2) is a composite of pullbacks of the type in (3)" :source {:lines [1605 1606]}}
+         {:id :induction :kind :claim :text "one shows inductively that (4) implies the Segal condition" :source {:lines [1607 1607]}}]
+ :edges [{:id :e-1-2 :kind :infer :relation :implies :premise :condition-1 :warrant {:kind :missing-warrant :text "Segal decomposition yields the pullback square in (2)"} :conclusion :condition-2 :source {:lines [1604 1604]}}
+         {:id :e-2-3 :kind :infer :relation :specializes :premise :condition-2 :conclusion :condition-3 :source {:lines [1605 1605]}}
+         {:id :e-2-4 :kind :infer :relation :specializes :premise :condition-2 :conclusion :condition-4 :source {:lines [1605 1605]}}
+         {:id :e-3-2 :kind :infer :relation :composes :premise [:condition-3 :composite-pullbacks] :conclusion :condition-2 :source {:lines [1605 1606]}}
+         {:id :e-4-1 :kind :infer :relation :induction :premise [:condition-4 :induction] :warrant {:kind :missing-warrant :text "induction on simplex length reconstructs all Segal pullbacks"} :conclusion :condition-1 :source {:lines [1607 1607]}}]
+ :holes [{:kind :missing-warrant :edge :e-1-2 :wanted :segal-condition-implies-pullback-square-condition}
+         {:kind :missing-warrant :edge :e-4-1 :wanted :induction-from-special-pullbacks-to-segal-condition}]}

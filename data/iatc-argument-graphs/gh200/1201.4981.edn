@@ -1,59 +1,20 @@
-{
- :paper/id "1201.4981",
- :passage/id "1201.4981:proof-move:L492-492:21207-21216",
- :source {
-   :lines [492 492],
-   :chars [21207 21216],
-   :kind :argument-passage,
-   :selection :proof-move
-  },
- :provenance {
-   :generator "scripts/generate_iatc_gh200.py",
-   :scaffold "data/showcases/ct-anatomy/golden/fable-1201.4981-dp-emacs.json",
-   :layer-a :dp-emacs,
-   :standoff-only true
-  },
- :nodes [{
-   :id :passage-premise,
-   :kind :claim,
-   :source {
-     :lines [471 471],
-     :chars [19949 19969],
-     :mark/kind :quant-universal
-    }
-  } {
-   :id :passage-conclusion,
-   :kind :claim,
-   :source {
-     :lines [492 492],
-     :chars [21207 21216],
-     :mark/kind :proof-move
-    }
-  }],
- :edges [{
-   :id :e-main,
-   :kind :infer,
-   :relation :because,
-   :premise [:passage-premise],
-   :warrant {
-     :kind :missing-warrant,
-     :wanted :local-verification-elided
-    },
-   :conclusion :passage-conclusion,
-   :source {
-     :lines [492 492],
-     :chars [21207 21216],
-     :mark/kind :proof-move
-    }
-  }],
- :holes [{
-   :kind :missing-warrant,
-   :edge :e-main,
-   :wanted :local-verification-elided,
-   :source {
-     :lines [492 492],
-     :chars [21207 21216],
-     :mark/kind :proof-move
-    }
-  }]
-}
+{:paper/id "1201.4981"
+ :passage/id "1201.4981:skew-monoidal-AbR:689-705"
+ :source {:lines [689 705] :kind :proof-construction}
+ :nodes
+ [{:id :right-actions-defined :kind :claim :text "the displayed formulas define the right R-actions on the tensor product data" :source {:lines [689 690]}}
+  {:id :eta-eps-gamma-defined :kind :definition :text "eta, epsilon, and gamma are the displayed natural transformations" :source {:lines [691 695]}}
+  {:id :bialgebroid-axioms :kind :claim :text "the bialgebroid axioms apply to the displayed transformations" :source {:lines [697 697]}}
+  {:id :right-monoidal-category :kind :claim :text "<Ab_R, smp, R_R, gamma, eta, epsilon> is a right-monoidal category" :source {:lines [697 697]}}
+  {:id :gamma-determined :kind :claim :text "the skew-associator gamma is uniquely determined by gamma_{R,R,R}" :source {:lines [699 700]}}
+  {:id :gamma-as-galois :kind :claim :text "gamma identifies, up to the displayed isomorphisms, with the canonical/Galois map" :source {:lines [699 703]}}
+  {:id :hopf-algebroid-criterion :kind :claim :text "the bialgebroid is Hopf precisely when the canonical map has the required property" :source {:lines [704 705]}}]
+ :edges
+ [{:id :e-naturals-well-defined :kind :infer :relation :so :premise :right-actions-defined :conclusion :eta-eps-gamma-defined :source {:lines [689 695]}}
+  {:id :e-right-monoidal :kind :infer :relation :verify :premise [:eta-eps-gamma-defined :bialgebroid-axioms] :warrant {:kind :missing-warrant :text "checking the unit and associativity diagrams reduces to the source/target/coproduct/counit axioms of the bialgebroid"} :conclusion :right-monoidal-category :source {:lines [697 697]}}
+  {:id :e-gamma-galois :kind :infer :relation :identifies :premise [:gamma-determined :eta-eps-gamma-defined] :warrant {:kind :missing-warrant :text "under the two tensor-product identifications gamma_{R,R,R} is exactly g tensor h maps to h_1 tensor g h_2"} :conclusion :gamma-as-galois :source {:lines [699 703]}}
+  {:id :e-hopf-criterion :kind :infer :relation :therefore :premise :gamma-as-galois :warrant {:kind :citation :target "Schauenburg Hopf algebroid criterion"} :conclusion :hopf-algebroid-criterion :source {:lines [704 705]}}]
+ :holes
+ [{:kind :missing-warrant :edge :e-right-monoidal :wanted :bialgebroid-axioms-imply-skew-monoidal-coherence}
+  {:kind :missing-warrant :edge :e-gamma-galois :wanted :compute-gamma-RRR-under-H-tensor-H-identifications}]}
+

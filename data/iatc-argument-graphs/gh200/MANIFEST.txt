@@ -1,4 +1,3 @@
-total-gh200-html=182
-emitted-edn=181
-skipped=1
-skip math__0702299 missing-golden-json
+pilot-count=15
+replaces-shell-output=true
+mode=hand-reconstructed-pilot
