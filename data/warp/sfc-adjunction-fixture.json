@@ -471,7 +471,7 @@
     ]
   },
   "surface_to_core": {
-    "all categories": {
+    "all category": {
       "action": "fold",
       "core": "category",
       "df": 953,
@@ -486,34 +486,101 @@
         "term_prior": {
           "action": "KEPT",
           "df": 953,
-          "input": "all categories",
-          "resolution": "all categories"
+          "input": "all category",
+          "resolution": "all category"
         }
       },
       "genuine": false,
       "retained_papers": 953
     },
-    "all cells": {
+    "all colimits": {
       "action": "fold",
-      "core": "cell",
-      "df": 222,
+      "core": "colimit",
+      "df": 805,
       "evidence": {
         "candidate_term_prior": {
           "action": "HAPAX",
           "df": 0,
-          "input": "cell",
+          "input": "colimit",
           "resolution": null
         },
         "method": "right-head",
         "term_prior": {
           "action": "KEPT",
-          "df": 222,
-          "input": "all cells",
-          "resolution": "all cells"
+          "df": 805,
+          "input": "all colimits",
+          "resolution": "all colimits"
         }
       },
       "genuine": false,
-      "retained_papers": 222
+      "retained_papers": 805
+    },
+    "all continuous maps": {
+      "action": "fold",
+      "core": "all continuous maps",
+      "df": 106,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HUNGRY",
+          "df": 1023,
+          "input": "continuous maps",
+          "resolution": "all continuous maps",
+          "resolved_df": 106
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 106,
+          "input": "all continuous maps",
+          "resolution": "all continuous maps"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 106
+    },
+    "all edges": {
+      "action": "fold",
+      "core": "edge",
+      "df": 396,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "edge",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 396,
+          "input": "all edges",
+          "resolution": "all edges"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 396
+    },
+    "all finite limits": {
+      "action": "fold",
+      "core": "finite limit",
+      "df": 393,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "KEPT",
+          "df": 402,
+          "input": "finite limit",
+          "resolution": "finite limit"
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 393,
+          "input": "all finite limits",
+          "resolution": "all finite limits"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 393
     },
     "all finite subsets": {
       "action": "fold",
@@ -537,7 +604,7 @@
       "genuine": false,
       "retained_papers": 141
     },
-    "all functors": {
+    "all functor": {
       "action": "fold",
       "core": "functor",
       "df": 1028,
@@ -552,12 +619,34 @@
         "term_prior": {
           "action": "KEPT",
           "df": 1028,
-          "input": "all functors",
-          "resolution": "all functors"
+          "input": "all functor",
+          "resolution": "all functor"
         }
       },
       "genuine": false,
       "retained_papers": 1028
+    },
+    "all limits": {
+      "action": "fold",
+      "core": "limit",
+      "df": 805,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "limit",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 805,
+          "input": "all limits",
+          "resolution": "all limits"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 805
     },
     "all maps": {
       "action": "fold",
@@ -581,7 +670,29 @@
       "genuine": false,
       "retained_papers": 1518
     },
-    "all morphisms": {
+    "all monomorphisms": {
+      "action": "fold",
+      "core": "monomorphism",
+      "df": 290,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "monomorphism",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 290,
+          "input": "all monomorphisms",
+          "resolution": "all monomorphisms"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 290
+    },
+    "all morphism": {
       "action": "fold",
       "core": "morphism",
       "df": 2579,
@@ -596,14 +707,14 @@
         "term_prior": {
           "action": "KEPT",
           "df": 2579,
-          "input": "all morphisms",
-          "resolution": "all morphisms"
+          "input": "all morphism",
+          "resolution": "all morphism"
         }
       },
       "genuine": false,
       "retained_papers": 2579
     },
-    "all objects": {
+    "all object": {
       "action": "fold",
       "core": "object",
       "df": 3498,
@@ -618,56 +729,79 @@
         "term_prior": {
           "action": "KEPT",
           "df": 3498,
-          "input": "all objects",
-          "resolution": "all objects"
+          "input": "all object",
+          "resolution": "all object"
         }
       },
       "genuine": false,
       "retained_papers": 3498
     },
-    "all possible": {
+    "all pullbacks": {
       "action": "fold",
-      "core": "possible",
-      "df": 1393,
+      "core": "pullback",
+      "df": 326,
       "evidence": {
         "candidate_term_prior": {
           "action": "HAPAX",
           "df": 0,
-          "input": "possible",
+          "input": "pullback",
           "resolution": null
         },
         "method": "right-head",
         "term_prior": {
           "action": "KEPT",
-          "df": 1393,
-          "input": "all possible",
-          "resolution": "all possible"
+          "df": 326,
+          "input": "all pullbacks",
+          "resolution": "all pullbacks"
         }
       },
       "genuine": false,
-      "retained_papers": 1393
+      "retained_papers": 326
     },
-    "all sets": {
+    "all set": {
       "action": "fold",
-      "core": "sets",
+      "core": "set",
       "df": 571,
       "evidence": {
         "candidate_term_prior": {
           "action": "HAPAX",
           "df": 0,
-          "input": "sets",
+          "input": "set",
           "resolution": null
         },
         "method": "right-head",
         "term_prior": {
           "action": "KEPT",
           "df": 571,
-          "input": "all sets",
-          "resolution": "all sets"
+          "input": "all set",
+          "resolution": "all set"
         }
       },
       "genuine": false,
       "retained_papers": 571
+    },
+    "any abelian group": {
+      "action": "fold",
+      "core": "free abelian group",
+      "df": 178,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HUNGRY",
+          "df": 3348,
+          "input": "abelian group",
+          "resolution": "free abelian group",
+          "resolved_df": 507
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 178,
+          "input": "any abelian group",
+          "resolution": "any abelian group"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 178
     },
     "any category": {
       "action": "fold",
@@ -712,6 +846,28 @@
       },
       "genuine": false,
       "retained_papers": 1464
+    },
+    "any extension": {
+      "action": "fold",
+      "core": "extension",
+      "df": 257,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "extension",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 257,
+          "input": "any extension",
+          "resolution": "any extension"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 257
     },
     "any field": {
       "action": "fold",
@@ -779,6 +935,28 @@
       "genuine": false,
       "retained_papers": 1458
     },
+    "any monomorphism": {
+      "action": "fold",
+      "core": "monomorphism",
+      "df": 238,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "monomorphism",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 238,
+          "input": "any monomorphism",
+          "resolution": "any monomorphism"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 238
+    },
     "any object": {
       "action": "fold",
       "core": "object",
@@ -800,44 +978,6 @@
       },
       "genuine": false,
       "retained_papers": 3772
-    },
-    "any relation": {
-      "action": "fold",
-      "core": "relation",
-      "df": 219,
-      "evidence": {
-        "candidate_term_prior": {
-          "action": "HAPAX",
-          "df": 0,
-          "input": "relation",
-          "resolution": null
-        },
-        "method": "right-head",
-        "term_prior": {
-          "action": "KEPT",
-          "df": 219,
-          "input": "any relation",
-          "resolution": "any relation"
-        }
-      },
-      "genuine": false,
-      "retained_papers": 219
-    },
-    "any two": {
-      "action": "fold",
-      "core": "pair",
-      "df": 3661,
-      "evidence": {
-        "method": "idiom",
-        "term_prior": {
-          "action": "KEPT",
-          "df": 3661,
-          "input": "any two",
-          "resolution": "any two"
-        }
-      },
-      "genuine": false,
-      "retained_papers": 3661
     },
     "each other": {
       "action": "fold",
@@ -899,6 +1039,28 @@
       "genuine": false,
       "retained_papers": 4627
     },
+    "one dimensional": {
+      "action": "fold",
+      "core": "dimensional",
+      "df": 1247,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "dimensional",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1247,
+          "input": "one dimensional",
+          "resolution": "one dimensional"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1247
+    },
     "one has": {
       "action": "fold",
       "core": "has",
@@ -921,28 +1083,6 @@
       "genuine": false,
       "retained_papers": 3097
     },
-    "one node tree": {
-      "action": "fold",
-      "core": "node tree",
-      "df": 10,
-      "evidence": {
-        "candidate_term_prior": {
-          "action": "HAPAX",
-          "df": 0,
-          "input": "node tree",
-          "resolution": null
-        },
-        "method": "right-head",
-        "term_prior": {
-          "action": "KEPT",
-          "df": 10,
-          "input": "one node tree",
-          "resolution": "one node tree"
-        }
-      },
-      "genuine": false,
-      "retained_papers": 10
-    },
     "one object": {
       "action": "fold",
       "core": "object",
@@ -956,37 +1096,53 @@
         },
         "method": "right-head",
         "term_prior": {
-          "action": "HUNGRY",
+          "action": "KEPT",
           "df": 2158,
           "input": "one object",
-          "resolution": "one object tricategory",
-          "resolved_df": 29
+          "resolution": "one object"
         }
       },
       "genuine": false,
       "retained_papers": 2158
     },
-    "one object tricategory": {
+    "one one": {
+      "action": "retain-unfolded",
+      "core": null,
+      "df": 1972,
+      "evidence": {
+        "method": "no-content-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1972,
+          "input": "one one",
+          "resolution": "one one"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1972
+    },
+    "one point": {
       "action": "fold",
-      "core": "object tricategory",
-      "df": 29,
+      "core": "point",
+      "df": 1128,
       "evidence": {
         "candidate_term_prior": {
           "action": "HAPAX",
           "df": 0,
-          "input": "object tricategory",
+          "input": "point",
           "resolution": null
         },
         "method": "right-head",
         "term_prior": {
-          "action": "KEPT",
-          "df": 29,
-          "input": "one object tricategory",
-          "resolution": "one object tricategory"
+          "action": "HUNGRY",
+          "df": 1128,
+          "input": "one point",
+          "resolution": "one point set",
+          "resolved_df": 191
         }
       },
       "genuine": false,
-      "retained_papers": 29
+      "retained_papers": 1128
     },
     "one point set": {
       "action": "fold",
@@ -1011,27 +1167,49 @@
       "genuine": false,
       "retained_papers": 191
     },
-    "one type": {
+    "one variable": {
       "action": "fold",
-      "core": "type",
-      "df": 278,
+      "core": "variable",
+      "df": 372,
       "evidence": {
         "candidate_term_prior": {
           "action": "HAPAX",
           "df": 0,
-          "input": "type",
+          "input": "variable",
           "resolution": null
         },
         "method": "right-head",
         "term_prior": {
           "action": "KEPT",
-          "df": 278,
-          "input": "one type",
-          "resolution": "one type"
+          "df": 372,
+          "input": "one variable",
+          "resolution": "one variable"
         }
       },
       "genuine": false,
-      "retained_papers": 278
+      "retained_papers": 372
+    },
+    "one vertex": {
+      "action": "fold",
+      "core": "vertex",
+      "df": 449,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "vertex",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 449,
+          "input": "one vertex",
+          "resolution": "one vertex"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 449
     },
     "there exist": {
       "action": "fold",
@@ -1077,7 +1255,7 @@
       "genuine": false,
       "retained_papers": 7685
     },
-    "two categories": {
+    "two category": {
       "action": "fold",
       "core": "category",
       "df": 1355,
@@ -1092,8 +1270,8 @@
         "term_prior": {
           "action": "KEPT",
           "df": 1355,
-          "input": "two categories",
-          "resolution": "two categories"
+          "input": "two category",
+          "resolution": "two category"
         }
       },
       "genuine": false,
@@ -1121,7 +1299,7 @@
       "genuine": false,
       "retained_papers": 1674
     },
-    "two morphisms": {
+    "two morphism": {
       "action": "fold",
       "core": "morphism",
       "df": 2177,
@@ -1136,8 +1314,8 @@
         "term_prior": {
           "action": "KEPT",
           "df": 2177,
-          "input": "two morphisms",
-          "resolution": "two morphisms"
+          "input": "two morphism",
+          "resolution": "two morphism"
         }
       },
       "genuine": false,
@@ -1186,6 +1364,28 @@
       },
       "genuine": false,
       "retained_papers": 360
+    },
+    "two vertices": {
+      "action": "fold",
+      "core": "vertice",
+      "df": 565,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "vertice",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 565,
+          "input": "two vertices",
+          "resolution": "two vertices"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 565
     }
   }
 }

@@ -9,8 +9,8 @@
 
 ## GC Surface -> Core Retention
 
-- `all functors` -> `functor`; action=fold; df=1028; retained_papers=1028
-- `any two` -> `pair`; action=fold; df=3661; retained_papers=3661
+- `all functors` -> `None`; action=None; df=None; retained_papers=None
+- `any two` -> `None`; action=None; df=None; retained_papers=None
 - `each other` -> `relation`; action=fold; df=3445; retained_papers=3445
 
 ## Variant-Axes Schema
