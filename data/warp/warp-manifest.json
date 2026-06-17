@@ -1,8 +1,181 @@
 {
-  "S6a": {
-    "built-at": "2026-06-17T19:52:30.342346+00:00",
+  "S1a": {
+    "built-at": "2026-06-17T22:14:50.767684+00:00",
     "freshness": "fresh",
-    "input-hash": "5ea5e49ef998730dd6f0bc3ba51c770a06ee1237e06e9d942b6bcd167a09df8b",
+    "input-hash": "1c5a87090ee976c7d9e93f367f6af1261773eb2873c7c014dd57b4168efb034a",
+    "inputs": [
+      "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints",
+      "/home/joe/code/storage/futon6/data/ct-anatomy-v0",
+      "data/showcases/ct-anatomy/golden"
+    ],
+    "notes": "",
+    "output": [
+      "data/warp/concordance.json"
+    ],
+    "rows": {
+      "terms": 3056934
+    },
+    "script": "warp_concordance.py",
+    "status": "built"
+  },
+  "S1b": {
+    "built-at": "2026-06-17T22:15:15.627081+00:00",
+    "freshness": "fresh",
+    "input-hash": "35e88e951c68d270773240c99af915911e76961d89c7d54d48e6e3b9b901b15b",
+    "inputs": [
+      "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints"
+    ],
+    "notes": "",
+    "output": [
+      "data/warp/bib-index.json",
+      "data/warp/bib"
+    ],
+    "rows": {
+      "bibitems": 256030,
+      "papers": 9742
+    },
+    "script": "warp_bib.py",
+    "status": "skipped"
+  },
+  "S1c": {
+    "built-at": "2026-06-17T22:15:22.119730+00:00",
+    "freshness": "fresh",
+    "input-hash": "db781f6e124c7f4ca9ac5bfb7e88f230f4d91198ea3b95f890ab6f265905b938",
+    "inputs": [
+      "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints",
+      "data/warp/bib-index.json",
+      "data/warp/bib"
+    ],
+    "notes": "",
+    "output": [
+      "data/warp/citations.json"
+    ],
+    "rows": {
+      "cited_by": 5512,
+      "edges": 30426
+    },
+    "script": "warp_citations.py",
+    "status": "skipped"
+  },
+  "S2": {
+    "built-at": "2026-06-17T22:15:24.711977+00:00",
+    "freshness": "fresh",
+    "input-hash": "35e88e951c68d270773240c99af915911e76961d89c7d54d48e6e3b9b901b15b",
+    "inputs": [
+      "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints"
+    ],
+    "notes": "",
+    "output": [
+      "data/warp/defined-index.json"
+    ],
+    "rows": {
+      "concept_to_papers": 179990
+    },
+    "script": "warp_defined_pass.py",
+    "status": "skipped"
+  },
+  "S3": {
+    "built-at": "2026-06-17T22:16:42.240690+00:00",
+    "freshness": "fresh",
+    "input-hash": "3eafea776aad5e89a8ddf11ba729568db04fe8698f0c229620dd9ea4b575e9ab",
+    "inputs": [
+      "data/warp/concordance.json",
+      "data/warp/defined-index.json"
+    ],
+    "notes": "",
+    "output": [
+      "data/warp/hitlist.json"
+    ],
+    "rows": {
+      "frontier": 95,
+      "hitlist": 4000
+    },
+    "script": "warp_hitlist.py",
+    "status": "built"
+  },
+  "S4a": {
+    "built-at": "2026-06-17T22:24:19.304012+00:00",
+    "freshness": "fresh",
+    "input-hash": "80b1cc459b869275ac42a4520c9d881009af41d31dc0194b6a266cfd8871059e",
+    "inputs": [
+      "data/warp/hitlist.json",
+      "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints"
+    ],
+    "notes": "Script has no dry-run CLI and hard-codes live hitlist/eprints.",
+    "output": [
+      "data/warp/def-snippets.json"
+    ],
+    "rows": {
+      "papers_scanned": 9742,
+      "snippets": 3868
+    },
+    "script": "warp_def_snippets.py",
+    "status": "built"
+  },
+  "S4b": {
+    "built-at": "2026-06-17T22:35:55.627784+00:00",
+    "freshness": "fresh",
+    "input-hash": "80b1cc459b869275ac42a4520c9d881009af41d31dc0194b6a266cfd8871059e",
+    "inputs": [
+      "data/warp/hitlist.json",
+      "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints"
+    ],
+    "notes": "",
+    "output": [
+      "data/warp/concept-usage.json"
+    ],
+    "rows": {
+      "paper_concepts": 9738,
+      "papers_scanned": 9742
+    },
+    "script": "warp_concept_usage.py",
+    "status": "built"
+  },
+  "S4c": {
+    "built-at": "2026-06-17T22:42:49.712476+00:00",
+    "freshness": "fresh",
+    "input-hash": "b22f2ec86fb9fa5337d4ef0628e02ff4f1d8b106e0e35d22ce5bd9d2eb641a01",
+    "inputs": [
+      "data/warp/hitlist.json",
+      "data/warp/def-snippets.json",
+      "data/warp/concept-graph.json"
+    ],
+    "notes": "",
+    "output": [
+      "data/warp/concept-embed.npy",
+      "data/warp/concept-carpet-pos.json"
+    ],
+    "rows": {
+      "npy_bytes": 768128,
+      "positions": 4000
+    },
+    "script": "warp_concept_embed.py",
+    "status": "built"
+  },
+  "S5": {
+    "built-at": "2026-06-17T22:36:00.135950+00:00",
+    "freshness": "fresh",
+    "input-hash": "6c778de60721cca789e37fb3213d407d70a2ebb0d38e2c4781445c818996cc90",
+    "inputs": [
+      "data/warp/hitlist.json",
+      "data/warp/def-snippets.json"
+    ],
+    "notes": "Must precede S4c because embeddings consume concept-graph.json.",
+    "output": [
+      "data/warp/concept-graph.json"
+    ],
+    "rows": {
+      "authority": 120,
+      "n_edges": 32633,
+      "n_nodes": 4000
+    },
+    "script": "warp_concept_graph.py",
+    "status": "built"
+  },
+  "S6a": {
+    "built-at": "2026-06-17T23:14:43.584599+00:00",
+    "freshness": "fresh",
+    "input-hash": "c6c80fd39d3243d8e2318c4666096639725595c5572edd826c8b96455df8f152",
     "inputs": [
       "data/showcases/ct-anatomy/golden",
       "data/concept-encyclopedia/ct",
@@ -13,12 +186,73 @@
       "data/warp/concept-phylogeny.json"
     ],
     "rows": {
-      "candidate_concepts": 200,
-      "cited_activations": 416,
-      "concepts_with_threads": 200,
+      "candidate_concepts": 262,
+      "cited_activations": 599,
+      "concepts_with_threads": 262,
       "papers": 92
     },
     "script": "mark3_thread_tapestry.py",
     "status": "built"
+  },
+  "S6b": {
+    "built-at": "2026-06-17T23:14:27.095172+00:00",
+    "freshness": "fresh",
+    "input-hash": "ab1773c3562220844220c68fa2888f5724c31b95df0dc3d37c2b05b5738d554b",
+    "inputs": [
+      "data/term-prior-ct.json",
+      "data/background-corpus-index.json",
+      "data/warp/def-snippets.json",
+      "data/warp/concept-graph.json",
+      "data/warp/defined-index.json"
+    ],
+    "notes": "",
+    "output": [
+      "data/concept-encyclopedia-ct.json",
+      "data/concept-encyclopedia/ct"
+    ],
+    "rows": {
+      "entries": 200
+    },
+    "script": "build_concept_encyclopedia.py",
+    "status": "built"
+  },
+  "S6t": {
+    "built-at": "2026-06-17T22:55:21.835062+00:00",
+    "freshness": "fresh",
+    "input-hash": "fefb927f5c9aded49de839d2c915345794a71124175057c966a1c945aa2995c0",
+    "inputs": [
+      "data/showcases/ct-anatomy/golden"
+    ],
+    "notes": "SFC foundation term prior; feeds S6b concept encyclopedia.",
+    "output": [
+      "data/term-prior-ct.json"
+    ],
+    "rows": {
+      "terms": 3624679
+    },
+    "script": "build_term_prior.py",
+    "status": "built"
+  },
+  "__derived-staleness-ping": {
+    "action": "bell claude-2 before proceeding; guarded SFC artifacts derive from this spine output",
+    "after": {
+      "counts": {
+        "paper_concepts": 9738,
+        "papers_scanned": 9742,
+        "unique_concepts": 3952
+      },
+      "hash": "8357d9f439edd428c0f6ceb1b946d6d1b2ac8d5cea1392e0128f33b83635e928",
+      "source": "post-run-worktree"
+    },
+    "artifact": "data/warp/concept-usage.json",
+    "baseline": {
+      "counts": {
+        "paper_concepts": 9737,
+        "papers_scanned": 9742,
+        "unique_concepts": 3737
+      },
+      "hash": "0d0b0ac84bcecdbfef1f7d511aa16e9c4f59a962681c062ddff60903346a0393",
+      "source": "pre-run-worktree"
+    }
   }
 }

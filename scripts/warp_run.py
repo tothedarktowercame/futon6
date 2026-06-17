@@ -685,12 +685,15 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     records = run(stages, dry_run=args.dry_run, manifest_path=args.manifest)
-    built = sum(1 for entry in records.values() if entry["status"] == "built")
-    skipped = sum(1 for entry in records.values() if entry["status"] == "skipped")
-    would_run = sum(1 for entry in records.values() if entry["status"] == "would-run")
+    # Skip non-stage meta entries (e.g. "__derived-staleness-ping") in the tally.
+    stage_records = {k: v for k, v in records.items() if not k.startswith("__")}
+    built = sum(1 for entry in stage_records.values() if entry["status"] == "built")
+    skipped = sum(1 for entry in stage_records.values() if entry["status"] == "skipped")
+    would_run = sum(1 for entry in stage_records.values() if entry["status"] == "would-run")
+    drift = "__derived-staleness-ping" in records
     print(
         f"warp_run: built={built} skipped={skipped} would-run={would_run} "
-        f"manifest={display_path(args.manifest)}"
+        f"drift={'YES' if drift else 'no'} manifest={display_path(args.manifest)}"
     )
     return 0
 
