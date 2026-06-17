@@ -129,15 +129,20 @@ def check_iatc_item(path: Path, text: str, feats: dict) -> list[str]:
     edges_seg = text[text.find(":edges"): text.rfind(":holes")] if ":holes" in text else text[text.find(":edges"):]
     self_loops, n_edges = 0, 0
     for blk in re.split(r"\{:id :e", edges_seg)[1:]:
-        prem = re.search(r":premise\s+\[?\s*(:[\w./-]+)", blk)
+        # :premise may be a single keyword OR a [vector] of tokens. Read ALL of
+        # them: a self-loop is the conclusion appearing among ANY premise token
+        # (e.g. :premise [:F-functor :F-pitchfork] :conclusion :F-pitchfork — the
+        # conclusion is the 2nd premise; reading only the first token misses it).
+        pm = re.search(r":premise\s+(\[[^\]]*\]|:[\w./-]+)", blk)
         conc = re.search(r":conclusion\s+\[?\s*(:[\w./-]+)", blk)
-        if prem and conc:
+        if pm and conc:
             n_edges += 1
-            if prem.group(1) == conc.group(1):
+            premises = re.findall(r":[\w./-]+", pm.group(1))
+            if conc.group(1) in premises:
                 self_loops += 1
     if self_loops:
         fails.append(f"degenerate: {self_loops}/{n_edges} edges are self-loops "
-                     f"(:premise == :conclusion) — vacuous X⊢X reasoning, not a DAG")
+                     f"(:conclusion is one of the :premise tokens) — vacuous X⊢X reasoning, not a DAG")
     leak = PROMPT_LEAK.search(text)
     if leak:
         fails.append(f"prompt-leak: graph contains scaffolding token '{leak.group(0)}' "
