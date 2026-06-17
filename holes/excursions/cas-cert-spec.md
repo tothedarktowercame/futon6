@@ -221,3 +221,12 @@ FAIL over loop-run-70b (miswires exist in 6/9) — the honest, expected result.
 **CAS-CERT COMPLETE.** The capstone aggregator is live over the proof + concept grains; technique
 (rung-3) + symbol (SFC2b) grains wire in as N/A and grow automatically when those land. Feeds the
 4-facet RENDER guide + the ArSE-question seeds.
+
+### Confidence field — REVIEWED PASS (claude-1, 2026-06-17) · commit 822294e
+Re-ran gates (py_compile OK; pytest 6/6). Verified the load-bearing invariant: **verdict
+byte-unchanged** — PASS set still exactly {0706.1286, 0708.1921, 0801.0199}, aggregate FAIL,
+identical to pre-confidence. All 9 certs = `medium`, each naming exactly {symbol grain N/A —
+SFC2b, technique grain N/A — rung-3} as limiting factors — the reviewer voice the design called
+for. Note: codex treated symbol/concept/**technique** as foundation grains (I'd said symbol/concept);
+that's *more* correct — technique is below proof in the nested ladder, so a current verdict honestly
+rests on two unanalysed foundation grains → capped at medium. Rises automatically as SFC2b/rung-3 land.
