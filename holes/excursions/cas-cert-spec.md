@@ -70,6 +70,43 @@ Each port has a **state**: `filled` · `empty` · `miswired` · `na`.
 ```
 `gate` = `FAIL` iff `miswires` is non-empty; empty/na ports never fail it.
 
+## 2b. Confidence — the reviewer's second axis (Joe, 2026-06-17)
+
+A reviewer rates the paper **and** rates their own confidence. CAS-CERT's `verdict` is the first
+axis (kept binary — signal-tuning is premature). **Confidence is a separate, *derived* axis** — not
+a new signal to tune, but a deterministic readout of **how complete our analysis was**. The
+nested grain ladder (symbol ⊂ concept ⊂ technique ⊂ proof) gives it for free:
+
+> **Confidence in a verdict = the solidity of the grains *below* the one where the verdict's
+> determining issue lives.** If the foundation grains are fully analysed and the higher grain still
+> fails, the failure is attributable to the paper/reconstruction, not to our incomplete analysis →
+> high confidence. If a foundation grain is N/A (we never ran it), the verdict may be an artifact of
+> that gap → low confidence.
+
+Joe's worked intuition: *"confident we could ground the symbols, find the scopes, define the
+concepts, and **still** couldn't make sense of the claim → confidence is high."*
+
+**Derivation (deterministic, no tuning):**
+- A grain is **analysed** if it is not `na` (the rung ran). `solidity(grain)` = fraction of its
+  ports that reached a *definitive* state (`filled` or `miswired`) vs indeterminate (`empty`).
+- `confidence` = a level (`low`/`medium`/`high`) from (a) how many grains *below the verdict's
+  locus* are analysed at all, and (b) their solidity. The cert also names the **limiting factor**
+  (which grain is N/A or unresolved), so the report reads like a reviewer:
+  *"FAIL · confidence LIMITED — symbol grounding (SFC2b) + technique grounding (rung-3) not yet
+  performed."*
+
+**Honest consequence today:** symbol (SFC2b) and technique-full (rung-3) grains are **N/A**, so
+**every current certificate is capped at medium confidence**, and must say which grains it couldn't
+analyse. Confidence rises **automatically** as SFC2b + rung-3 land — no re-tuning, just more of the
+ladder filled. This keeps the honesty boundary sharp: a high-confidence FAIL (full ladder analysed,
+still broken) is a strong claim; a low-confidence FAIL is "we couldn't finish looking."
+
+*Status: implemented in `cas_cert.py`; the `confidence` field is a small derived addition
+(reads grain N/A + solidity off the existing port ledger). Verdict semantics unchanged.
+On the current `loop-run-70b` set, all 9 certificates are `medium` because symbol
+(`SFC2b`) and technique (`rung-3`) grains are N/A; those two grains are named as
+the limiting factors.*
+
 ## 3. The residual-sorry map = facet (3) = the empty ports
 
 The set of `empty` ports IS the residual-sorry map and the ArSE-question seeds, typed by grain:
@@ -160,3 +197,27 @@ Gates passed:
 
 - `python3 -m py_compile scripts/cas_cert.py`
 - `pytest -q tests/test_cas_cert.py` (`4` passed)
+
+## Review — claude-1 (author ≠ reviewer), 2026-06-17 · commit 85ce000
+
+**Verdict: PASS, clean — no amendments.** Checked: re-ran gates (py_compile OK; pytest 4/4);
+read the diff. It's a genuine deterministic reader — no model, no re-checking; the lone
+`subprocess` reads `iatc_semcheck.bb --out` (reads verdicts, doesn't re-implement them). Gate
+logic correct: `gate=FAIL` iff a `miswired` port exists; `--gate` exits 1 only then; empty/na
+never fail. Conformance is a vector-by-grain (concept/proof separate), not a single grade.
+
+**Spot-checked port states against ground truth (the CAS-SEL-3 lesson):**
+- `0709.0248` → FAIL, miswires `anchor::extensional-category` + `anchor::reflexivity-term` —
+  trace exactly to the known R2a proposition-anchor flags. Correct.
+- `0708.1921` → **PASS despite proof_rate 0.000** — its 6 proof ports are all *empty* (orphan +
+  missing-warrant), zero miswired. This is the honesty boundary working as designed: a
+  0%-grounded graph passes the conformance gate because nothing is *mis-wired*; the residual map
+  carries all 6 open ports. Flagging it loudly here so it's not later mistaken for a bug — it's
+  the spec's load-bearing distinction (cert = "well-wired or flagged", NOT "verified").
+
+Residual kinds typed correctly (undefined / orphan / missing-warrant / thin). Aggregate gate
+FAIL over loop-run-70b (miswires exist in 6/9) — the honest, expected result.
+
+**CAS-CERT COMPLETE.** The capstone aggregator is live over the proof + concept grains; technique
+(rung-3) + symbol (SFC2b) grains wire in as N/A and grow automatically when those land. Feeds the
+4-facet RENDER guide + the ArSE-question seeds.

@@ -124,3 +124,35 @@ def test_na_grains_do_not_fail_gate():
     assert cert["conformance"]["by_grain"]["symbol"]["na"] is True
     assert cert["conformance"]["by_grain"]["technique"]["na"] is True
     assert cert["verdict"]["gate"] == "PASS"
+
+
+def test_confidence_is_medium_when_foundation_grains_are_na():
+    cert = cas_cert.certificate_for_graph(graph())
+
+    assert cert["confidence"] == {
+        "level": "medium",
+        "limiting_factors": [
+            "symbol grain N/A — SFC2b not built",
+            "technique grain N/A — rung-3 not built",
+        ],
+    }
+    assert cert["verdict"] == {"well_wired": True, "miswires": [], "gate": "PASS"}
+
+
+def test_confidence_high_and_low_are_structural():
+    solid = {
+        "symbol": {"filled": 2, "empty": 0, "miswired": 0, "na": False, "rung": "SFC2b"},
+        "concept": {"filled": 1, "empty": 1, "miswired": 0, "na": False, "rung": "R2d"},
+        "technique": {"filled": 0, "empty": 0, "miswired": 1, "na": False, "rung": "rung-3"},
+        "proof": {"filled": 0, "empty": 10, "miswired": 0, "na": False, "rung": "R2a/R2b/R2c"},
+    }
+    weak = {
+        **solid,
+        "concept": {"filled": 1, "empty": 2, "miswired": 0, "na": False, "rung": "R2d"},
+    }
+
+    assert cas_cert.confidence(solid) == {"level": "high", "limiting_factors": []}
+    assert cas_cert.confidence(weak) == {
+        "level": "low",
+        "limiting_factors": ["concept grain low solidity 0.333"],
+    }

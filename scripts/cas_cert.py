@@ -306,6 +306,39 @@ def grain_summary(ports: list[dict[str, Any]], grain: str, rung: str) -> dict[st
     }
 
 
+def grain_solidity(summary: dict[str, Any]) -> float | None:
+    denom = summary["filled"] + summary["empty"] + summary["miswired"]
+    if denom == 0:
+        return None
+    return (summary["filled"] + summary["miswired"]) / denom
+
+
+def confidence(by_grain: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    limiting_factors = []
+    low_solidity = False
+    for grain in ("symbol", "concept", "technique"):
+        summary = by_grain[grain]
+        if summary["na"]:
+            if grain == "symbol":
+                limiting_factors.append("symbol grain N/A — SFC2b not built")
+            elif grain == "technique":
+                limiting_factors.append("technique grain N/A — rung-3 not built")
+            else:
+                limiting_factors.append(f"{grain} grain N/A — {summary['rung']} not built")
+            continue
+        solidity = grain_solidity(summary)
+        if solidity is not None and solidity < 0.5:
+            low_solidity = True
+            limiting_factors.append(f"{grain} grain low solidity {solidity:.3f}")
+    if low_solidity:
+        level = "low"
+    elif any(by_grain[grain]["na"] for grain in ("symbol", "concept", "technique")):
+        level = "medium"
+    else:
+        level = "high"
+    return {"level": level, "limiting_factors": limiting_factors}
+
+
 def residual_sorries(ports: list[dict[str, Any]]) -> list[dict[str, Any]]:
     out = []
     for p in ports:
@@ -366,6 +399,7 @@ def certificate_for_graph(graph: dict[str, Any], cas_select: dict[str, Any] | No
             "by_grain": by_grain,
             "headline": "vector-by-grain; symbol and full rung-3 technique grains are N/A until wired",
         },
+        "confidence": confidence(by_grain),
         "ports": ports,
         "residual_sorries": residual_sorries(ports),
         "value_signals": {
