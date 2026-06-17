@@ -110,3 +110,33 @@ rung-3 is the **terminal fill** of `cascade → sorry → wiring` at edge grain:
 technique, *asks* about the rest, and what stays unanswered is the honest "where we're least sure" — the same
 output as CAS-CERT's residual-sorry map, one level down. Its value is real only if rung-3-1 shows the
 deterministic residue is small; that measurement is the gate on the rest.
+
+## Findings — rung-3-1 empirical residue spike (codex-4, 2026-06-17)
+
+Delivered `holes/excursions/rung-3-spec.md` plus `scripts/rung3_residue_spike.py`.
+
+Measurement method: direct `cas_select.retrieve(..., k=4)` + `cas_select.verify(..., backend="stub",
+oracle=...)` on the CAS-0 fixtures, deliberately avoiding `select_proof` because its fixture-only stub path
+injects missed oracle patterns. The CAS menu loaded 39 math-informal patterns from the current committed
+library/index.
+
+Results:
+- CAS-0 strict verified residue: **6/22 = 27.3%**. This is the empirical LLM/verifier share for the current
+  oracle-backed worked-proof setting.
+- CAS-0 buckets: **grounded 14**, **thin 2**, **ungrounded 6**. Pattern typing: **verifiable 14**,
+  **heuristic 2**, **none 6**.
+- `loop-run-70b` final graphs: 28 warranted edges. Because no oracle-backed verifier exists for those edges,
+  strict verified residue is **28/28 = 100%**. Deterministic retrieval nevertheless proposes a top candidate
+  for **28/28** edges; this is candidate reach, not correctness.
+- `loop-run-70b` retrieval buckets: **thin 25**, **grounded-provisional 2**, **conjecture 1**. The conjecture
+  recognizer credits author-declared/open-status phrasing such as `ought-to-*` rather than treating it as a
+  hidden failure.
+
+Gap-to-question mapping is drafted in the spec: heuristic leaves map to `STRUCTURAL PROBE`, no-match gaps to
+`THEOREM APPLICABILITY` / `TECHNIQUE LANDSCAPE`, missing warrants to `KERNEL IDENTIFICATION`,
+author-declared gaps to `EXISTENCE_WONDER` / `CONJECTURE_TESTING`, and obstruction residuals to
+`OBSTRUCTION_IDENTIFICATION`.
+
+Implication: the deterministic selector is useful and honestly bounded. CAS-0 still needs a semantic
+retriever/verifier for the 27.3% residue; loop-run needs rung-3-3-style model judgement or new gold before
+retrieval candidates can be counted as real matches.
