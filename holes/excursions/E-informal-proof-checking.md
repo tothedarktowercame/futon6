@@ -241,3 +241,49 @@ Results:
 Gates passed: `clj-kondo --lint scripts/iatc_closure_check.bb`,
 `emacs --batch -l /home/joe/code/futon4/dev/check-parens.el
 scripts/iatc_closure_check.bb`, and `bb tests/iatc_closure_check_test.clj`.
+
+### H-R2a findings — codex-1
+
+Implemented `scripts/iatc_anchor_faithfulness.bb` with the shared
+`check-graph` contract:
+`{:check :anchor-faithfulness :pass :rate :reasons :per-item}`. The checker
+resolves each graph to `data/showcases/ct-anatomy/golden/fable-<id>-dp-emacs.json`,
+splits the `"text"` field into 1-based lines, extracts node key terms, and tests
+the cited line span for those terms. CLI overrides: `--marks-dir`, `--source`,
+`--k`, `--tau`, `--floor`, and `--edn`.
+
+Chosen thresholds: `K=2`, `tau=0.45`. The observed final-graph spread is
+`0.333..1.000`, so the default gate floor is `0.300`.
+
+Acceptance run:
+
+```sh
+bb scripts/iatc_anchor_faithfulness.bb data/iatc-argument-graphs/loop-run-70b
+```
+
+Per-final rates:
+`0705.0452 0.500`, `0706.1286 0.857`, `0708.1921 1.000`,
+`0708.2067 0.625`, `0709.0248 0.333`, `0711.0473 0.667`,
+`0712.0724 0.667`, `0801.0199 0.833`, `0801.3843 0.417`.
+
+Required spot checks:
+
+- `0706.1286` scores high: `0.857`.
+- `0709.0248` flags `:extensional-category` at `[1510 1510]`:
+  line 1510 is only `\begin{proposition}`, so it matches `0/5` key terms
+  and misses `locally`, `cartesian`, `closed`, `category`, `extensional`.
+
+Remaining gaps:
+
+- This is a deliberately lexical anchor check. It does not expand author macros,
+  resolve synonyms, or use neighboring theorem/proof lines when the node's cited
+  span is too narrow.
+- Several low-rate finals appear to reflect over-specific generated node anchors
+  rather than necessarily bad paper understanding; the checker reports those as
+  flags instead of silently repairing spans.
+
+Gates passed: `clj-kondo --lint scripts/iatc_anchor_faithfulness.bb
+tests/iatc_anchor_faithfulness_test.clj`, `emacs -Q --batch -l
+/home/joe/code/futon4/dev/check-parens.el --eval "(arxana-check-parens-cli)"
+-- --no-defaults scripts/iatc_anchor_faithfulness.bb`, and
+`bb tests/iatc_anchor_faithfulness_test.clj` (`4` tests, `10` assertions).
