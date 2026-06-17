@@ -1,0 +1,7 @@
+{:paper/id "bad"
+ :passage/id "empty-held"
+ :source {:lines [1 4] :kind :expository}
+ :scopes [{:id :s1
+           :kind :open-problem/status
+           :held {:reason ""}
+           :source {:lines [1 2]}}]}

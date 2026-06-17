@@ -1,0 +1,12 @@
+{:paper/id "0710.2254"
+ :passage/id "0710.2254:L192-204"
+ :source {:lines [192 204] :kind :expository}
+ :scopes
+ [{:id :s1
+   :kind :rationale/telos
+   :slot-fill "the goal is to define Segal categories with involution"
+   :source {:lines [194 199]}}
+  {:id :s2
+   :kind :auxiliary-construction
+   :slot-fill "the maps Xi_n used to define the Segal category"
+   :source {:lines [199 203]}}]}

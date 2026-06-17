@@ -1,0 +1,12 @@
+{:paper/id "0905.0595"
+ :passage/id "0905.0595:L202-208"
+ :source {:lines [202 208] :kind :expository}
+ :scopes
+ [{:id :s1
+   :kind :connection/transfer
+   :slot-fill "Condition (2) is read through the absence of maps from 1 to non-terminal graphs"
+   :source {:lines [203 208]}}
+  {:id :s2
+   :kind :obstruction
+   :slot-fill "the missing morphism from 1 to a non-terminal object"
+   :source {:lines [203 204]}}]}

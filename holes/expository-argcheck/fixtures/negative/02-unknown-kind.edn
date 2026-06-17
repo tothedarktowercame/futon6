@@ -1,0 +1,7 @@
+{:paper/id "bad"
+ :passage/id "unknown-kind"
+ :source {:lines [1 4] :kind :expository}
+ :scopes [{:id :s1
+           :kind :connection/bridge-analogy
+           :slot-fill "not in the finalized vocab"
+           :source {:lines [1 2]}}]}

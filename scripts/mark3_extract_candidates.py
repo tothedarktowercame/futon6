@@ -29,6 +29,18 @@ GH200_DIR = REPO / "data" / "showcases" / "ct-anatomy" / "gh200"
 MARKS_DIR = REPO / "data" / "showcases" / "ct-anatomy" / "golden"
 PILOT_DIR = REPO / "data" / "iatc-argument-graphs" / "gh200"
 CONTEXT_LINES = 4  # window padding around the selected passage
+SCHEMA = "iatc-candidate/v2-enriched"  # bumped when the candidate payload changes
+
+# Deterministic-anatomy mark kinds worth inlining for the model (symbol typings +
+# structural anchors). Excludes the dense low-level noise (classified/math/raw symbol).
+ENRICH_KINDS = {
+    "symbol-grounded", "bind/typed", "bind/define", "bind/let", "let-binder",
+    "definiendum", "definiens", "assume/explicit", "quant/universal", "proof-move",
+    "constrain/relation", "constrain/where", "constrain/such-that",
+    "label", "cite", "env/proof", "env/lemma", "env/theorem",
+    "env/proposition", "env/corollary",
+}
+ENRICH_CAP = 60  # bound prompt size; windows are small so this rarely bites
 
 # --- salvaged selection helpers (verbatim from generate_iatc_gh200.py @ c20fdd3) ---
 
@@ -106,6 +118,22 @@ def binder_context(marks: list[dict[str, Any]], starts: list[int], before_line: 
     return out[-12:]  # nearest dozen
 
 
+def window_enrichment(marks: list[dict[str, Any]], starts: list[int],
+                      lo_line: int, hi_line: int) -> list[dict[str, Any]]:
+    """The deterministic anatomy the detector found INSIDE the candidate window —
+    symbol->type groundings, definitions, quantifiers, proof-moves, citations. This
+    is the enrichment that previously never reached the model (marks-path was a dead
+    pointer); inlining it here is what makes the candidate self-contained."""
+    out = []
+    for m in marks:
+        if m.get("kind") in ENRICH_KINDS and m.get("tip"):
+            ln = mark_line(m, starts)
+            if lo_line <= ln <= hi_line:
+                out.append({"line": ln, "kind": m["kind"], "tip": m["tip"]})
+    out.sort(key=lambda r: (r["line"], r["kind"]))
+    return out[:ENRICH_CAP]
+
+
 def extract(paper_id: str) -> dict[str, Any] | None:
     mf = MARKS_DIR / f"fable-{paper_id}-dp-emacs.json"
     if not mf.exists():
@@ -128,8 +156,10 @@ def extract(paper_id: str) -> dict[str, Any] | None:
         "anchor-lines": {"premise": mark_line(p, starts), "conclusion": mark_line(c, starts)},
         "window-lines": win_lines,
         "binder-context": binder_context(marks, starts, hi + 1),
+        "enrichment": window_enrichment(marks, starts, win_lines[0], win_lines[1]),
         "source-window": win,
         "marks-path": str(mf.relative_to(REPO)),
+        "schema": SCHEMA,
     }
 
 
@@ -165,7 +195,8 @@ def main() -> int:
         manifest.append({"paper-id": pid, "passage-id": cand["passage-id"],
                          "selection": cand["selection"], "window-lines": cand["window-lines"]})
         print(f"  {pid}: {cand['selection']} lines {cand['window-lines']} "
-              f"({len(cand['source-window'])} chars, {len(cand['binder-context'])} binders)")
+              f"({len(cand['source-window'])} chars, {len(cand['binder-context'])} binders, "
+              f"{len(cand['enrichment'])} anatomy marks)")
     (outdir / "manifest.json").write_text(json.dumps({"papers": manifest}, indent=2))
     print(f"\n{len(manifest)}/{len(papers)} candidates -> {outdir}")
     return 0
