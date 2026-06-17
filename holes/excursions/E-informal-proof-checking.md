@@ -365,3 +365,43 @@ tests/iatc_anchor_faithfulness_test.clj`, `emacs -Q --batch -l
 /home/joe/code/futon4/dev/check-parens.el --eval "(arxana-check-parens-cli)"
 -- --no-defaults scripts/iatc_anchor_faithfulness.bb`, and
 `bb tests/iatc_anchor_faithfulness_test.clj` (`4` tests, `10` assertions).
+
+### R2a-v2 findings — codex-1
+
+De-noised `scripts/iatc_anchor_faithfulness.bb` without changing the public
+`check-graph` contract. Term matching now normalizes light LaTeX on both
+node/source text (`\maps`, `\Ob`, `\Mor`, `\G`, math/text wrapper macros,
+styled alphabets, arrows), searches cited spans with ±1 neighbor-line tolerance,
+and marks nodes with fewer than `K=2` scoreable terms as `:status :na` instead
+of scoring them as failures.
+
+To avoid over-relaxing proposition anchors, the v2 matcher keeps `tau=0.45` as
+the decisive criterion for longer claims. This preserves the genuine
+`0709.0248` miss: `:extensional-category` at `[1510 1510]` remains flagged even
+with ±1 lines because only `locally/cartesian` are reached and the span still
+misses `closed/category/extensional`.
+
+Before/after on the 9 `loop-run-70b` finals:
+
+| paper | before rate | before flags | after rate | after flags |
+|---|---:|---:|---:|---:|
+| 0705.0452 | 0.500 | 5 | 0.500 | 4 |
+| 0706.1286 | 0.857 | 1 | 1.000 | 0 |
+| 0708.1921 | 1.000 | 0 | 1.000 | 0 |
+| 0708.2067 | 0.625 | 3 | 0.714 | 2 |
+| 0709.0248 | 0.333 | 4 | 0.667 | 2 |
+| 0711.0473 | 0.667 | 2 | 0.833 | 1 |
+| 0712.0724 | 0.667 | 4 | 1.000 | 0 |
+| 0801.0199 | 0.833 | 1 | 1.000 | 0 |
+| 0801.3843 | 0.417 | 7 | 0.857 | 1 |
+
+Spread improved from `0.333..1.000` to `0.500..1.000`; total flags dropped from
+`27` to `10`. The remaining flags include the intended genuine miss
+`0709.0248/:extensional-category`.
+
+Gates passed: `clj-kondo --lint scripts/iatc_anchor_faithfulness.bb
+tests/iatc_anchor_faithfulness_test.clj`, `emacs -Q --batch -l
+/home/joe/code/futon4/dev/check-parens.el --eval "(arxana-check-parens-cli)"
+-- --no-defaults scripts/iatc_anchor_faithfulness.bb`,
+`bb tests/iatc_anchor_faithfulness_test.clj` (`6` tests, `18` assertions),
+`bb tests/iatc_semcheck_test.clj`, and `bb tests/iatc_closure_check_test.clj`.

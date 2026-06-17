@@ -35,6 +35,16 @@
     "operatorname" "ref" "section" "subsection" "text" "textbf" "textit"
     "textrm"})
 
+(def latex-wrapper-commands
+  #{"emph" "ensuremath" "mathbb" "mathcal" "mathfrak" "mathit" "mathbf"
+    "mathrm" "mathsf" "operatorname" "text" "textbf" "textit" "textrm"})
+
+(def latex-macro-expansions
+  {"G" "G group"
+   "Ob" "Ob object"
+   "Mor" "Mor morphism"
+   "maps" "maps to"})
+
 (defn usage! []
   (binding [*out* *err*]
     (println "Usage: bb scripts/iatc_anchor_faithfulness.bb [--marks-dir DIR] [--source FILE] [--k N] [--tau X] [--floor X] [--edn] <graph.edn-or-dir> [...]"))
@@ -140,6 +150,23 @@
       (str/replace #"[^A-Za-z0-9]+" "")
       str/lower-case))
 
+(defn normalize-latex [text]
+  (loop [s (or text "")
+         n 0]
+    (let [unwrapped (str/replace s #"\\([A-Za-z]+)\{([^{}]*)\}"
+                                  (fn [[_ cmd body]]
+                                    (if (contains? latex-wrapper-commands cmd)
+                                      body
+                                      (str " " (get latex-macro-expansions cmd cmd) " " body " "))))]
+      (if (or (= s unwrapped) (>= n 6))
+        (-> unwrapped
+            (str/replace #"\\([A-Za-z]+)"
+                         (fn [[_ cmd]]
+                           (str " " (get latex-macro-expansions cmd cmd) " ")))
+            (str/replace #"[$^_{}]" " ")
+            (str/replace #"[\u2192\u27f6\u27f5\u2190]" " to "))
+        (recur unwrapped (inc n))))))
+
 (defn keep-token? [tok]
   (let [n (normalize-token tok)]
     (and (>= (count n) 3)
@@ -147,20 +174,23 @@
          (not (contains? math-command-stopwords n)))))
 
 (defn text-terms [text]
-  (let [raw (re-seq #"\\[A-Za-z]+|[A-Za-z][A-Za-z0-9]*" (or text ""))]
+  (let [raw (re-seq #"[A-Za-z][A-Za-z0-9]*" (normalize-latex text))]
     (->> raw
          (map normalize-token)
          (filter keep-token?)
          distinct
          vec)))
 
-(defn span-text [lines [a b]]
+(defn span-text
+  ([lines line-range]
+   (span-text lines line-range 0))
+  ([lines [a b] pad]
   (let [n (count lines)
-        lo (max 1 (or a 1))
-        hi (min n (or b n))]
+        lo (max 1 (- (or a 1) pad))
+        hi (min n (+ (or b n) pad))]
     (if (> lo hi)
       ""
-      (str/join "\n" (subvec lines (dec lo) hi)))))
+      (str/join "\n" (subvec lines (dec lo) hi))))))
 
 (defn valid-lines? [lines]
   (and (vector? lines)
@@ -171,18 +201,29 @@
 (defn node-item [ctx opts node]
   (let [src-lines (get-in node [:source :lines])
         terms (text-terms (:text node))
+        exact-text (when (valid-lines? src-lines)
+                     (span-text (:lines ctx) src-lines))
         source-text (when (valid-lines? src-lines)
-                      (span-text (:lines ctx) src-lines))
+                      (span-text (:lines ctx) src-lines 1))
+        exact-terms (set (text-terms exact-text))
         source-terms (set (text-terms source-text))
         matched (vec (filter source-terms terms))
         missing (vec (remove source-terms terms))
         n-terms (count terms)
         n-matched (count matched)
         fraction (if (pos? n-terms) (/ n-matched n-terms) 0.0)
-        scorable? (and (valid-lines? src-lines) (pos? n-terms))
+        scorable? (and (valid-lines? src-lines) (>= n-terms (:k opts)))
+        exact-matched? (boolean (some exact-terms terms))
         faithful? (and scorable?
-                       (or (>= n-matched (:k opts))
-                           (>= fraction (:tau opts))))]
+                       (or (>= fraction (:tau opts))
+                           (and exact-matched?
+                                (<= n-terms (:k opts))
+                                (>= n-matched (:k opts)))))
+        status (cond
+                 (not (valid-lines? src-lines)) :na
+                 (< n-terms (:k opts)) :na
+                 faithful? :pass
+                 :else :fail)]
     {:id (:id node)
      :kind (:kind node)
      :source {:lines src-lines}
@@ -194,6 +235,7 @@
      :n_matched n-matched
      :fraction (double fraction)
      :scorable scorable?
+     :status status
      :faithful faithful?}))
 
 (defn check-graph
@@ -224,8 +266,8 @@
                          {:id (:id item)
                           :source (:source item)
                           :reason (str "matched " (:n_matched item) "/" (:n_terms item)
-                                       " key terms below k=" (:k opts)
-                                       " and tau=" (:tau opts))
+                                       " key terms below v2 faithfulness thresholds"
+                                       " k=" (:k opts) " tau=" (:tau opts))
                           :missing (:missing item)})
                        flagged)]
      {:check :anchor-faithfulness

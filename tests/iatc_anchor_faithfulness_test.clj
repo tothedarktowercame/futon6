@@ -17,7 +17,11 @@
   (is (= ["locally" "cartesian" "closed" "category" "extensional"]
          (text-terms* "every locally cartesian closed category is extensional")))
   (is (= ["calmod" "bicategories" "ring" "isomorphisms"]
-         (text-terms* "\\calMod-like bicategories ought to include ring isomorphisms"))))
+         (text-terms* "\\calMod-like bicategories ought to include ring isomorphisms")))
+  (is (= ["homomorphism" "maps" "group"]
+         (text-terms* "\\textbf{homomorphism} $t\\maps H\\to \\G$")))
+  (is (= ["object"]
+         (text-terms* "\\Ob(\\mathcal{C})"))))
 
 (deftest check-graph-contract-shape
   (let [graph {:nodes [{:id :x
@@ -33,6 +37,35 @@
     (is (= 1.0 (:rate result)))
     (is (empty? (:reasons result)))
     (is (= [:x] (mapv :id (:per-item result))))))
+
+(deftest sparse-node-is-na-not-fail
+  (let [graph {:nodes [{:id :h
+                        :kind :object
+                        :text "group H"
+                        :source {:lines [1 1]}}]}
+        ctx {:paper-id "toy"
+             :source "memory"
+             :lines ["Let H be a group."]}
+        result (check-graph* graph ctx {:k 2 :tau 0.45 :floor 0.30})
+        item (first (:per-item result))]
+    (is (= :na (:status item)))
+    (is (false? (:scorable item)))
+    (is (= 1.0 (:rate result)))
+    (is (empty? (:reasons result)))))
+
+(deftest neighbor-line-tolerance-recovers-crossed-module-anchor
+  (let [graph {:nodes [{:id :crossed-module
+                        :kind :claim
+                        :text "crossed module (G,H,t,a)"
+                        :source {:lines [2 2]}}]}
+        ctx {:paper-id "toy"
+             :source "memory"
+             :lines [""
+                     "$(G,H,t,a)$ by setting $G$ to be $\\Ob(\\G)$"
+                     "Conversely, given a topological $2$-group $\\G$, we define a crossed module"]}
+        result (check-graph* graph ctx {:k 2 :tau 0.45 :floor 0.30})]
+    (is (:pass result))
+    (is (= :pass (:status (first (:per-item result)))))))
 
 (deftest flags-empty-anchor-for-extensional-claim
   (let [result (check-graph*
