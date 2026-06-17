@@ -161,3 +161,42 @@ Remaining gaps:
 Gates passed: `python3 -m py_compile scripts/sfc_concept_coverage.py`,
 `pytest -q tests/test_sfc_concept_coverage.py` (`3 passed`), and full
 `pytest -q tests/` (`772 passed, 38 skipped`).
+
+### H-SFC2a findings — codex-3
+
+Implemented `scripts/sfc_def_structure.bb`, a deterministic
+LaTeXML-Content-MathML to Clojure `:structure` transducer. The script shells
+`latexmlmath --cmml=- -`, parses the returned Content MathML with a small
+dependency-free tag parser, and applies the D4 deterministic rules:
+
+- binder-normalize `\forall f,g:T` into single binders while preserving
+  `{:vars ["f" "g"], :type "T"}`;
+- symbol dictionary: `approx -> cong`, `evaluated-at -> restrict`,
+  `conditional-set`, `for-all`, `\Rw -> \Rightarrow`;
+- relational-chain regroup for the observed `A => B ~= C` shape.
+
+The L-closure worked example emits the target:
+
+```clojure
+(= (overline M) (conditional-set (∈ x X)
+  (forall [f g] (: (→ X Y))
+    (implies (= (restrict f M) (restrict g M))
+             (cong (· f x) (· g x))))))
+```
+
+Evidence report committed at
+`holes/excursions/sfc-def-structure-evidence.md`, including three additional
+formula-defined concepts from `data/warp/def-snippets.json`: `fibrant
+replacement`, `homotopy category`, and `homotopy equivalence`.
+
+Remaining gaps:
+
+- H-SFC2a intentionally leaves symbols/operators as `{:grounding :hole}`;
+  H-SFC2b must bind those per paper.
+- The generic Content-MathML mapper is deliberately small; it handles the
+  observed formula layer but does not yet canonicalize all LaTeXML fallback
+  operators such as implicit `times` from juxtaposition.
+
+Gates passed: `clj-kondo --lint scripts/sfc_def_structure.bb`,
+`emacs --batch -l /home/joe/code/futon4/dev/check-parens.el
+scripts/sfc_def_structure.bb`, and `bb tests/sfc_def_structure_test.clj`.
