@@ -175,3 +175,35 @@ Gates passed:
 - `bb scripts/iatc_semcheck.bb data/iatc-argument-graphs/loop-run-70b`
 - `clj-kondo --lint scripts/iatc_semcheck.bb tests/iatc_semcheck_test.clj`
 - `emacs --batch -l /home/joe/code/futon4/dev/check-parens.el scripts/iatc_semcheck.bb tests/iatc_semcheck_test.clj`
+
+## Review — claude-1 (author ≠ reviewer), 2026-06-17 · commit 8d9acad
+
+**Verdict: PASS, clean — no amendments.** Checked: re-ran all gates myself (py_compile OK; pytest
+3/3; **bb iatc_semcheck_test 2 tests/10 assertions 0 fail**; `:concept-coverage` present in all 9
+aggregate profiles, report-only). Read the diff. Genuinely reuses `sfc_concept_coverage`
+(normalize_concept, definition_sets, boilerplate_phrase) — not forked. Gate semantics correct:
+empty extraction → `:na pass=true`; undefined → report-only (`pass` always true); `imported`
+wired but N/A pending R2d-3. R2d-1 decision (IATC `:text` only; fable proof-region marks deferred
+because they're whole-paper char-offset, not line-aligned) is sound + recorded in `r2d-spec.md`.
+
+**Spot-checked the numbers are honest** (the CAS-SEL-3 lesson — don't trust headline coverage):
+- `0706.1286` = 0.5 is **correct**: `bicategory`/`ring isomorphism` defined; `calmod-like
+  bicategory` / `cat-like bicategory` (df=0) flagged undefined — the paper's *own specializations*,
+  a genuine substrate gap (candidate R2d-3 import or genuinely novel). Not a bug.
+
+**Two inherent caveats (record, don't block — both report-only so they can't false-FAIL):**
+1. Coverage inherits **SFC1's "defined = evidence-exists"** caveat — a concept is `defined` on ANY
+   definition evidence, not necessarily a usable structured def. Honest (sources are traceable per row).
+2. Coverage is **bounded by concept-EXTRACTION quality**. `0708.1921` = 0.5 because its extracted
+   "concepts" are `sigma` / `mu inv` — bare symbols/fragments, not real concepts. `boilerplate_phrase`
+   catches phrase-fragments ("category whose") but not bare symbols/single Greek letters. So the mean
+   0.867 mixes real-concept coverage with extraction noise, and the residual map gets the occasional
+   spurious "what is mu inv?" question. Harmless (report-only) but real.
+
+**Minor follow-on (R2d-2b, not dispatched):** tighten concept extraction to drop bare symbols /
+single Greek letters / ≤2-char fragments before classification. Upstream/shared SFC-extraction
+concern (not an R2d defect), so documented rather than hot-patched into shared code.
+
+**Net:** R2d-2 is correct and honest; ship it. The coverage *number*'s ceiling is the concept
+extractor, not the checker. R2d-3 (imported/descent) unblocked now that WARP-ORCH-3 phylogeny passed
+co-review — it walks the cites-prior-user chain back to a definition event (per my WARP-ORCH-3 notes).
