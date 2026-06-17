@@ -88,6 +88,11 @@ CONCEPT_ENDINGS = (
     "algebra", "algebras", "space", "spaces", "group", "groups", "symmetry",
     "field", "fields", "geometry", "topology", "theory", "structure", "structures",
     "morphism", "morphisms", "module", "modules", "complex", "complexes",
+    # CT vocabulary (DC-1, 2026-06-15): the dp-demo QC surfaced these endings
+    # going unrecognised — subcategory/colimit/system etc. in 0905.0595.
+    "subcategory", "subcategories", "colimit", "colimits", "limit", "limits",
+    "system", "systems", "monad", "monads", "adjunction", "adjunctions",
+    "transformation", "transformations", "equivalence", "equivalences",
 )
 APPOSITIVE_ENDINGS = (
     "category", "manifold", "functor", "algebra", "space", "group", "module",
@@ -388,6 +393,50 @@ def select_non_overlapping(marks: list[Mark]) -> list[Mark]:
         accepted.append(mark)
         occupied.append((mark.start, mark.end))
     return sorted(accepted, key=lambda m: m.start)
+
+
+def audit_concept_term_coverage(text: str, expected_terms: list[str]) -> dict:
+    """C-TERM-COVERAGE audit over an explicit row sample.
+
+    `expected_terms` is the independent numerator/denominator: terms a reviewer
+    says are named mathematical prose concepts. We then ask whether this script's
+    concept marks notice them, and whether produced concept marks correspond to
+    one of the expected terms. This is intentionally independent of the rendered
+    HTML and can be sampled at sentence/row granularity in tests or audits.
+    """
+    definitions = mine_definitions(text)
+    marks = select_non_overlapping(
+        appositive_bind_marks(text)
+        + definition_marks(text, definitions)
+        + hole_marks(text, definitions)
+    )
+    concept_marks = [m for m in marks if m.kind in {"defined", "hole", "bind"}]
+    expected = {normalized_term_key(t): t for t in expected_terms if normalized_term_key(t)}
+    noticed = set()
+    false_positive_marks = []
+    for mark in concept_marks:
+        label_key = normalized_term_key(mark.label)
+        span_key = normalized_term_key(text[mark.start:mark.end])
+        if label_key in expected:
+            noticed.add(label_key)
+        elif span_key in expected:
+            noticed.add(span_key)
+        else:
+            false_positive_marks.append(mark)
+    missed = sorted(v for k, v in expected.items() if k not in noticed)
+    precision_den = len(concept_marks)
+    recall_den = len(expected)
+    return {
+        "sample_rows": recall_den,
+        "expected_terms": recall_den,
+        "concept_marks": precision_den,
+        "true_positive_marks": precision_den - len(false_positive_marks),
+        "false_positive_marks": len(false_positive_marks),
+        "missed_terms": missed,
+        "precision": (precision_den - len(false_positive_marks)) / precision_den
+        if precision_den else 1.0,
+        "recall": len(noticed) / recall_den if recall_den else 1.0,
+    }
 
 
 def render_marked_text(text: str, marks: list[Mark]) -> str:
