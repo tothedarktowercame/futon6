@@ -82,6 +82,7 @@
   <h1>Pre-Superpod Pipeline — Stage Map &amp; Readiness</h1>
   <div class="meta">futon6 · branch <code>mark4-held-steps</code> · readiness review (claude-6, 2026-06-16; liabilities #1–#3 fixed same day) ·
   cards 1.1 / 2.1–2.3 / 4.5 / 4.6 / 6.1 revalidated 2026-06-17 (claude-1, Codex handoff round H1–H9 — <code>holes/codex-handoffs-pre-superpod.md</code>; Phase ⑤ stays claude-6's) ·
+  card 7.2 <code>run.sh</code> auto-eval tail added 2026-06-17 (claude-loop, repo-only, scoped green-light from claude-1; tested vs <code>gh200</code>, non-fatal) ·
   built to be iterated. Sources for each readiness note are tagged
   <span class="src">verified</span> (claude-6 ran it this session) ·
   <span class="src">documented</span> (claimed in repo docs / read from code) ·
@@ -113,9 +114,10 @@
     <li><b>gh200 eval was enrichment-blind — now just RE-RUN.</b> No longer a code defect: re-run the loop over the
       regenerated enriched candidate dir and the grounding/expository metrics become real. <span class="src">verified</span></li>
   </ol>
-  <div class="note"><b>Residual / next:</b> (a) do the enrichment-fed 70B re-run to replace the blind eval — the headline
-  action; (b) <code>data/iatc-candidates</code> has been regenerated (10/10 enriched) and is ready; (c) Phase ⑤ and the
-  APM-match stage (⑥) remain unbuilt/unvalidated.</div>
+  <div class="note"><b>Residual / next:</b> (a) <s>do the enrichment-fed 70B re-run to replace the blind eval</s> — <b>DONE 2026-06-17</b>
+  (9 finals, checker 9/9 · substance 9/9; grounding-% redefined to warrant-resolution 21.4% + <code>.attempts</code> double-count fixed,
+  commits <code>cc808d4</code>/<code>aed7bbb</code>, reviewed PASS); (b) <code>data/iatc-candidates</code> regenerated (10/10 enriched);
+  (c) Phase ⑤.4 expository ran first real GPU pass (10/10 gated); the APM-match stage (⑥) now has a real gate (H9).</div>
 </div>
 
 <div class="legend">
@@ -138,7 +140,7 @@
 <footer>
   <h2>Open questions to resolve as we iterate this map</h2>
   <ul>
-    <li><b>Headline next action:</b> do the enrichment-fed 70B re-run to replace the blind eval (now unblocked).</li>
+    <li><s><b>Headline next action:</b> do the enrichment-fed 70B re-run to replace the blind eval.</s> <b>DONE 2026-06-17 (claude-1):</b> 9 finals, checker 9/9 · substance 9/9 PASS (vs 8B 6/10), H-main supported (9/10 vs blind 4/10). Real metrics now in card 7.3; grounding-% redefined + <code>.attempts</code> double-count fixed (commits <code>cc808d4</code>/<code>aed7bbb</code>, reviewed PASS).</li>
     <li><s>Which paper is the 1/15 substance failure?</s> <b>Resolved (H5):</b> <code>1308.1804.edn</code> — a true positive (vacuous X⇒X); the gate is correct.</li>
     <li><b>Phase ⑤'s open hole is the GPU hole-filling step (5.4)</b>: the typed taxonomy + 193-paper vote <i>classify</i> expository moves but don't <i>fill</i> the typed holes into a graph. Needs an expository checker (analogue of <code>iatc_argcheck</code>) + a reconstruction loop; the 13-graph IATC pilot shows the method works. Then render integration (5.5).</li>
     <li><s>Concept substrate (②) / APM match (⑥): no validation yet?</s> <b>Resolved (H2–H4, H9; improved by A):</b> ② is now measured and no longer at the original floor — prose-concept precision 0.108/recall 0.22 after the detector fix (still weak, but measurably above 0.072/0.14); term-prior + encyclopedia audited; ⑥ has a real gate (<code>gate_pass=true</code>). The open follow-on is more detector quality, not measurement.</li>
@@ -166,7 +168,7 @@ const PHASES = [
     compute:"cpu",
     io:"marks → merged prose-concept layer; standoff HTML anatomy pages",
     badge:["ready","ready"], src:"documented",
-    note:"<code>render_gh200.py</code> runs the detector with ALL flags and emits HTML — this is stage ① done correctly (and is the contrast to the bypassed GPU path). In-memory re-mine, never writes golden/."}
+    note:"<code>render_gh200.py</code> runs the detector with ALL flags and emits HTML — this is stage ① done correctly, in contrast to the earlier GPU path that bypassed CPU enrichment. In-memory re-mine, never writes golden/."}
   ]},
 
  {title:"② Concept / term substrate", dev:"CPU",
@@ -185,7 +187,7 @@ const PHASES = [
     compute:"cpu",
     io:"corpus + NNexus/nLab → concept entries (def passage + provenance + dep edges + centrality)",
     badge:["partial","audited"], src:"verified",
-    note:"E-superpod-mark3 'cheap PlanetMath' structure-first noun substrate. <b>Audited (H4, 2026-06-17, <code>8ae1ecf</code>)</b> on 50 entries: def-passage 50/50, provenance 42/50, dep-edge 28/50, centrality 37/50; the deep semi-formalisation is now a TYPED <code>:hole</code> (50/50), not silently absent. Structure-first is sound; provenance/edges/centrality incomplete for a minority."}
+    note:"E-superpod-mark3 'cheap PlanetMath' structure-first noun substrate. <b>Audited (H4, 2026-06-17, <code>8ae1ecf</code>)</b> on 50 entries: def-passage 50/50, provenance 42/50, dep-edge 28/50, centrality 37/50; the missing deep semi-formalisation is now represented as an explicit typed <code>:hole</code> (50/50), not silently absent. The hole declaration/audit is complete; the semi-formal structure fill is still future work. Structure-first is sound; provenance/edges/centrality incomplete for a minority."}
   ]},
 
  {title:"③ Warp — cross-corpus second layer", dev:"CPU",
@@ -292,12 +294,12 @@ const PHASES = [
     compute:"gpu-required",
     io:"serve 70B (vLLM) · (re)extract enriched candidates · run loop · batch CPU render",
     badge:["ready","fixed 2026-06-17"], src:"verified",
-    note:"<b>Fixed:</b> <code>run.sh</code> is now self-contained — it (re)extracts enriched candidates when marks are local, or refuses early with instructions when not, then runs the loop. New provisioning path: private StackScript <code>mark4-ubuntu2404-gpu-bootstrap</code> (<code>2142757</code>) installs NVIDIA drivers/CUDA toolkit on Ubuntu 24.04 and reboots before operator setup. Setup/run then share <code>$HOME/mark4-venv</code>, serve with the preregistered max-model-len / gpu-memory-utilization / enforce-eager flags, and can install <code>linode-cli</code> via <code>pipx</code>. No more single-stage run on stale input."},
+    note:"<b>Fixed:</b> <code>run.sh</code> is now self-contained — it (re)extracts enriched candidates when marks are local, or refuses early with instructions when not, then runs the loop. New provisioning path: private StackScript <code>mark4-ubuntu2404-gpu-bootstrap</code> (<code>2142757</code>) installs NVIDIA drivers/CUDA toolkit on Ubuntu 24.04 and reboots before operator setup. Setup/run then share <code>$HOME/mark4-venv</code>, serve with the preregistered max-model-len / gpu-memory-utilization / enforce-eager flags, and can install <code>linode-cli</code> via <code>pipx</code>. No more single-stage run on stale input. <b>Auto-eval tail added 2026-06-17 (claude-loop):</b> after the loop, <code>run.sh</code> now runs <code>iatc_argcheck.bb</code> + <code>substance_gate.py</code> + <code>mark3_eval_harness.py</code> over <code>$OUT</code> and prints/writes the graded report (<code>mark3-eval-{report,summary}-70b</code>) — so the run self-reports checker-% / substance-% / grounding-% / expository-% instead of deferring to manual steps. <b>NON-FATAL</b> (graphs are the precious artifact; an eval hiccup never aborts a completed GPU run) and <code>RUN_EVAL=0</code> opt-out; verified against <code>gh200</code>. This is the runner-side half of replacing the blind eval — the real numbers land when claude-1's live enriched-70B run completes."},
    {id:"7.3", name:"Eval harness", cls:"p", scripts:"mark3-eval-report.json · mark3-eval-summary.md",
     compute:"gpu-output",
     io:"graph dir → checker-% / substance-% / grounding-% / expository-% / prior-vs-posterior",
     badge:["partial","awaiting re-run"], src:"verified",
-    note:"Works and reports honestly (checker 15/15, substance 14/15), but graded the enrichment-blind run (grounding 0.01% / expository 0.32%). The bypass is fixed — a re-run over the regenerated enriched candidates replaces these with real metrics."},
+    note:"Works and reports honestly (checker 15/15, substance 14/15), but graded the enrichment-blind run (grounding 0.01% / expository 0.32%). The bypass is fixed — a re-run over the regenerated enriched candidates replaces these with real metrics. The enriched-70B re-run COMPLETED 2026-06-17 (claude-1) and was graded on the 9 finals: <b>checker 9/9, substance 9/9 PASS</b> (vs the 8B baseline's 6/10 substance fails). Two eval-metric defects were found grading the real output (claude-loop) and <b>FIXED + reviewed PASS</b> (author≠reviewer; codex authored, claude-loop reviewed, claude-1 owns): (i) <code>grounding-%</code> was mis-defined as <code>(#graph files)/(#layer-a marks)</code> — structurally ~0% regardless of enrichment — and was <b>redefined to warrant-resolution</b> (resolved-warrant edges / total inference edges), now <b>6/28 = 21.4%</b> on the finals and genuinely discriminating (commit <code>cc808d4</code>); (ii) both <code>mark3_eval_harness</code> (rglob) and <code>iatc_argcheck.bb</code> (file-seq) recursed into <code>.attempts/</code> retries, inflating counts and scoring a failed paper's attempts as passes — both now default to <b>finals-only</b> with an <code>--include-attempts</code> escape hatch (commits <code>cc808d4</code> / <code>aed7bbb</code>). Real finals-only metrics: checker 9/9 · substance 9/9 · grounding 21.4% · expository 0.59% · prior-vs-posterior 12.70%."},
    {id:"7.4", name:"Demos / vision", cls:"v", scripts:"build_dp_demo.py · build_golden_demo.py · build_superpod_mockup.py",
     compute:"gpu-output",
     io:"runs → QC landing pages; 1005.2653 superpod mockup (✓ real vs ⚗ imagined)",
