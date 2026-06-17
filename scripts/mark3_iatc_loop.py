@@ -42,6 +42,7 @@ SEED_DIRS = [REPO / "holes" / "iatc-argcheck" / "fixtures" / "golden",
              REPO / "data" / "iatc-argument-graphs" / "gh200"]
 ARGCHECK = REPO / "scripts" / "iatc_argcheck.bb"
 SUBSTANCE = REPO / "scripts" / "substance_gate.py"
+SEMCHECK = REPO / "scripts" / "iatc_semcheck.bb"
 MAX_ATTEMPTS = 3
 
 SYSTEM = """You reconstruct the warranted argument DAG of a single mathematical \
@@ -151,6 +152,30 @@ def gate_one(path: Path) -> tuple[bool, str]:
     return True, "ok"
 
 
+def rung2_passed(report_path: Path) -> bool:
+    text = report_path.read_text(encoding="utf-8")
+    return ":pass true" in text and ":pass false" not in text
+
+
+def run_rung2(graph_path: Path, report_path: Path, *, gate: bool) -> tuple[bool, str]:
+    """Run rung-2 as a description-first sidecar.
+
+    Soft mode records the profile/verdict without rejecting the graph. Hard mode
+    passes `--gate` through to the checker so semantic failures force a retry.
+    """
+    cmd = ["bb", str(SEMCHECK), "--out", str(report_path)]
+    if gate:
+        cmd.append("--gate")
+    cmd.append(str(graph_path))
+    sem = subprocess.run(cmd, capture_output=True, text=True)
+    if not report_path.exists():
+        return False, "rung2: no semcheck report emitted: " + (sem.stdout + sem.stderr).strip()[-500:]
+    passed = rung2_passed(report_path)
+    if gate and sem.returncode != 0:
+        return False, "rung2: " + (sem.stdout + sem.stderr).strip()[-500:]
+    return passed, "rung2-pass" if passed else "rung2-soft-fail"
+
+
 def candidate_check(edn: str, cand: dict) -> tuple[bool, str]:
     """Candidate-aware faithfulness: the graph must be about THIS paper and anchor
     only into the given window. A small model hallucinates the paper/passage id and
@@ -183,6 +208,7 @@ def run(args) -> int:
     tmp = outdir / ".attempts"
     tmp.mkdir(exist_ok=True)
     results = []
+    accepted_graphs = []
     for cf in cands:
         cand = json.loads(cf.read_text())
         pid = cand["paper-id"]
@@ -206,8 +232,19 @@ def run(args) -> int:
                 ok, err = gate_one(ap)
             if ok:
                 outdir.mkdir(parents=True, exist_ok=True)
-                (outdir / f"{pid}.edn").write_text(edn)
-                status, last_err = "pass", f"attempt {attempt}"
+                final = outdir / f"{pid}.edn"
+                rung2_report = outdir / f"{pid}.rung2.edn"
+                if args.rung2_gate:
+                    attempt_report = tmp / f"{pid}.attempt{attempt}.rung2.edn"
+                    r2_ok, r2_msg = run_rung2(ap, attempt_report, gate=True)
+                    if not r2_ok:
+                        last_err = r2_msg
+                        continue
+                final.write_text(edn)
+                r2_ok, r2_msg = run_rung2(final, rung2_report, gate=False)
+                accepted_graphs.append(final)
+                status = "pass"
+                last_err = f"attempt {attempt}; {r2_msg}; report {rung2_report.name}"
                 break
             last_err = err
         results.append((pid, status, last_err))
@@ -215,7 +252,8 @@ def run(args) -> int:
 
     # cross-item substance gate over the accepted batch
     print("\n=== batch substance gate (cross-item) ===")
-    sub = subprocess.run([sys.executable, str(SUBSTANCE), str(outdir), "--kind", "iatc"],
+    sub_paths = [str(p) for p in accepted_graphs] or [str(outdir)]
+    sub = subprocess.run([sys.executable, str(SUBSTANCE), *sub_paths, "--kind", "iatc"],
                          capture_output=True, text=True)
     print(sub.stdout.strip()[-400:])
     n_pass = sum(1 for _, s, _ in results if s == "pass")
@@ -232,6 +270,8 @@ def main() -> int:
     ap.add_argument("--backend", choices=["stub", "openai"], default="stub")
     ap.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct")
     ap.add_argument("--shots", type=int, default=3)
+    ap.add_argument("--rung2-gate", action="store_true",
+                    help="Hard-gate rung-2 semantic failures; default records the profile/verdict only.")
     return run(ap.parse_args())
 
 
