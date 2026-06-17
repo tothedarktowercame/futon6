@@ -30,8 +30,27 @@ def test_guard_rejects_runnable_concept_index_writer(tmp_path: Path) -> None:
         warp_run.validate_guards([guarded])
 
 
+def test_guard_rejects_runnable_sfc_aggregate_fixture_writer(tmp_path: Path) -> None:
+    guarded = warp_run.Stage(
+        "bad",
+        "sfc_concept_aggregate.py",
+        (tmp_path / "input.json",),
+        (warp_run.WARP / "sfc-adjunction-fixture.json",),
+        ("scripts/sfc_concept_aggregate.py",),
+    )
+
+    with pytest.raises(SystemExit):
+        warp_run.validate_guards([guarded])
+
+
 def test_audit_only_concept_index_is_allowed() -> None:
     stage = next(stage for stage in warp_run.AUDIT_ONLY_STAGES if stage.script == "sfc_concept_index.py")
+
+    warp_run.validate_guards([stage])
+
+
+def test_audit_only_sfc_aggregate_is_allowed() -> None:
+    stage = next(stage for stage in warp_run.AUDIT_ONLY_STAGES if stage.script == "sfc_concept_aggregate.py")
 
     warp_run.validate_guards([stage])
 
@@ -88,3 +107,42 @@ def test_run_writes_skip_manifest_for_fresh_stage(tmp_path: Path) -> None:
     manifest = json.loads(manifest_path.read_text())
     assert manifest["T"]["status"] == "skipped"
     assert manifest["T"]["input-hash"]
+
+
+def test_concept_usage_drift_record_reports_hash_and_counts(tmp_path: Path) -> None:
+    usage_path = tmp_path / "concept-usage.json"
+    baseline_payload = {
+        "papers_scanned": 1,
+        "paper_concepts": {"p1": ["category", "functor"]},
+    }
+    changed_payload = {
+        "papers_scanned": 2,
+        "paper_concepts": {"p1": ["category"], "p2": ["monad"]},
+    }
+    baseline_bytes = json.dumps(baseline_payload, sort_keys=True).encode()
+    baseline = {
+        "source": "HEAD",
+        "hash": warp_run.content_hash_bytes(baseline_bytes),
+        "counts": warp_run.concept_usage_counts_from_bytes(baseline_bytes),
+    }
+    usage_path.write_text(json.dumps(changed_payload, sort_keys=True))
+
+    drift = warp_run.concept_usage_drift_record(baseline, path=usage_path)
+
+    assert drift is not None
+    assert drift["baseline"]["counts"]["unique_concepts"] == 2
+    assert drift["after"]["counts"]["paper_concepts"] == 2
+    assert drift["baseline"]["hash"] != drift["after"]["hash"]
+
+
+def test_concept_usage_drift_record_suppresses_identical_hash(tmp_path: Path) -> None:
+    usage_path = tmp_path / "concept-usage.json"
+    payload = json.dumps({"papers_scanned": 1, "paper_concepts": {"p1": ["category"]}}, sort_keys=True)
+    usage_path.write_text(payload)
+    baseline = {
+        "source": "pre-run-worktree",
+        "hash": warp_run.content_hash_bytes(payload.encode()),
+        "counts": {},
+    }
+
+    assert warp_run.concept_usage_drift_record(baseline, path=usage_path) is None

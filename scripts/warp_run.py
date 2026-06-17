@@ -2,7 +2,7 @@
 """Make-like runner for the WARP concept spine.
 
 The runner intentionally shells out to the existing stage scripts.  It does not
-own or rebuild downstream SFC-D3 artifacts such as data/warp/concept-index.json.
+own or rebuild downstream SFC-D3/SFC-AGG artifacts under data/warp.
 """
 
 from __future__ import annotations
@@ -29,9 +29,12 @@ MANIFEST = WARP / "warp-manifest.json"
 
 GUARDED_OUTPUTS = {
     WARP / "concept-index.json",
+    WARP / "sfc-adjunction-fixture.json",
     ROOT / "holes" / "excursions" / "sfc-concept-index.md",
+    ROOT / "holes" / "excursions" / "sfc-concept-aggregate.md",
 }
-GUARDED_SCRIPTS = {"sfc_concept_index.py"}
+GUARDED_SCRIPTS = {"sfc_concept_index.py", "sfc_concept_aggregate.py"}
+CONCEPT_USAGE = WARP / "concept-usage.json"
 
 
 @dataclass(frozen=True)
@@ -251,6 +254,19 @@ AUDIT_ONLY_STAGES: tuple[Stage, ...] = (
         audit_only=True,
         notes="Canonical downstream artifact; read-only in WARP-ORCH-2.",
     ),
+    Stage(
+        "SFC-AGG",
+        "sfc_concept_aggregate.py",
+        (
+            p("data/warp/concept-index.json"),
+            p("data/warp/def-snippets.json"),
+            p("data/concept-encyclopedia-ct.json"),
+        ),
+        (p("data/warp/sfc-adjunction-fixture.json"), p("holes/excursions/sfc-concept-aggregate.md")),
+        None,
+        audit_only=True,
+        notes="Canonical downstream SFC-AGG artifact; read-only in WARP-ORCH-2.",
+    ),
 )
 
 
@@ -320,6 +336,97 @@ def input_hash(inputs: Iterable[Path]) -> str:
             digest.update(str(stat.st_size).encode())
             digest.update(str(int(stat.st_mtime_ns)).encode())
     return digest.hexdigest()
+
+
+def content_hash_bytes(payload: bytes) -> str:
+    return hashlib.sha256(payload).hexdigest()
+
+
+def file_content_hash(path: Path) -> str | None:
+    if not path.exists() or not path.is_file():
+        return None
+    digest = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def git_blob_bytes(path: Path) -> bytes | None:
+    rel = display_path(path)
+    run = subprocess.run(
+        ["git", "show", f"HEAD:{rel}"],
+        cwd=ROOT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    if run.returncode != 0:
+        return None
+    return run.stdout
+
+
+def concept_usage_counts(data: Any) -> dict[str, Any]:
+    if not isinstance(data, dict):
+        return {}
+    paper_concepts = data.get("paper_concepts", {})
+    concept_set: set[str] = set()
+    if isinstance(paper_concepts, dict):
+        for concepts in paper_concepts.values():
+            if isinstance(concepts, list):
+                concept_set.update(str(concept) for concept in concepts)
+    return {
+        "paper_concepts": len(paper_concepts) if isinstance(paper_concepts, dict) else 0,
+        "papers_scanned": data.get("papers_scanned"),
+        "unique_concepts": len(concept_set),
+    }
+
+
+def concept_usage_counts_from_bytes(payload: bytes | None) -> dict[str, Any]:
+    if payload is None:
+        return {}
+    try:
+        return concept_usage_counts(json.loads(payload))
+    except json.JSONDecodeError:
+        return {}
+
+
+def concept_usage_baseline(path: Path = CONCEPT_USAGE) -> dict[str, Any]:
+    committed = git_blob_bytes(path)
+    if committed is not None:
+        return {
+            "source": "HEAD",
+            "hash": content_hash_bytes(committed),
+            "counts": concept_usage_counts_from_bytes(committed),
+        }
+    if path.exists():
+        payload = path.read_bytes()
+        return {
+            "source": "pre-run-worktree",
+            "hash": content_hash_bytes(payload),
+            "counts": concept_usage_counts_from_bytes(payload),
+        }
+    return {"source": "missing", "hash": None, "counts": {}}
+
+
+def concept_usage_drift_record(baseline: dict[str, Any], path: Path = CONCEPT_USAGE) -> dict[str, Any] | None:
+    if not path.exists():
+        after = {"source": "post-run-worktree", "hash": None, "counts": {}}
+    else:
+        payload = path.read_bytes()
+        after = {
+            "source": "post-run-worktree",
+            "hash": content_hash_bytes(payload),
+            "counts": concept_usage_counts_from_bytes(payload),
+        }
+    if baseline.get("hash") == after.get("hash"):
+        return None
+    return {
+        "artifact": display_path(path),
+        "baseline": baseline,
+        "after": after,
+        "action": "bell claude-2 before proceeding; guarded SFC artifacts derive from this spine output",
+    }
 
 
 def load_json(path: Path) -> Any:
@@ -401,6 +508,17 @@ def count_rows(stage: Stage) -> dict[str, Any]:
                 "concepts": len(data),
                 "genuine": sum(1 for item in values if isinstance(item, dict) and item.get("genuine")),
                 "defined": sum(1 for item in values if isinstance(item, dict) and item.get("defined")),
+            }
+        if script == "sfc_concept_aggregate.py":
+            data = load_json(stage.outputs[0])
+            return {
+                "surface_to_core": len(data.get("surface_to_core", {})),
+                "fixture_instances": len(data.get("fixture", {}).get("instances", [])),
+                "variants": len(
+                    data.get("reduced", {})
+                    .get("variant_axes", [{}])[0]
+                    .get("variants", [])
+                ),
             }
         if script == "warp_or_curvature.py":
             return {"keys": len(load_json(stage.outputs[0]))}
@@ -506,11 +624,20 @@ def run_stage(stage: Stage, dry_run: bool = False) -> str:
 def run(stages: Iterable[Stage], dry_run: bool = False, manifest_path: Path = MANIFEST) -> dict[str, Any]:
     stage_list = tuple(stages)
     validate_guards(stage_list)
+    baseline = concept_usage_baseline()
     records: dict[str, Any] = {}
     for stage in stage_list:
         status = run_stage(stage, dry_run=dry_run)
         records[stage.stage_id] = manifest_entry(stage, status)
     if not dry_run:
+        drift = concept_usage_drift_record(baseline)
+        if drift is not None:
+            records["__derived-staleness-ping"] = drift
+            print(
+                "DERIVED-STALENESS-PING: data/warp/concept-usage.json content changed; "
+                "bell claude-2 before proceeding.",
+                file=sys.stderr,
+            )
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
         manifest_path.write_text(json.dumps(records, indent=2, sort_keys=True) + "\n")
     return records
