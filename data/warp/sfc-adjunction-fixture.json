@@ -1,0 +1,1191 @@
+{
+  "fixture": {
+    "aliases": [
+      "adjoint functor",
+      "adjoint functors",
+      "left adjoint",
+      "right adjoint"
+    ],
+    "canonical_concept": "adjunction",
+    "fixture": "adjunction",
+    "instances": [
+      {
+        "concept_surface": "adjoint functor",
+        "paper": null,
+        "source": "PlanetMath",
+        "source_id": "18A40-AdjointFunctor.tex",
+        "text": "left adjoint functor} to $S$ (equivalently, $S$ is a \\emph{right adjoint functor} to $T$) if there is a natural equivalence \\[ \\nu\\colon \\Hom_{\\mathcal{D}}(T(-),-) \\overset{\\cdot}{\\longrightarrow} \\Hom_{\\mathcal{C}}(-,S(-)). \\] Here the functor $\\Hom_{\\mathcal{D}}(T(-),-)$ is a bifunctor $\\mathcal{C}\\times\\mathcal{D}\\to\\mathbf{Set}$ which is contravariant in the first variable, is covariant in the second variable, and sends an object $(C,D)$ to $\\Hom_{\\mathcal{D}}(T(C),D)$. The functor $\\Hom_{\\mathcal{C}}(-,S(-))$ is defined analogously. This definition needs additional explanation. Essentially, it says that for every object $C$ in $\\cal{C}$ and every object $D$ in $\\cal{D}$ there is a function \\[ \\nu_{C,D} \\colon \\Hom_{\\mathcal{D}}(T(C),D) \\overset{\\sim}{\\longrightarrow} \\Hom_{\\mathcal{C}}(C,S(D)) \\] which is a natural bijection of hom-sets. Naturality means that if $f\\colon C'\\to C$ is a morphism in $\\mathcal{C}$ and $g\\colon D\\to D'$ is a morphism in $\\mathcal{D}$, then the diagram \\[\\xymatrix{ \\Hom_{\\mathcal{D}}(T(C),D)\\ar[dd]_{(Tf,g)}\\ar[rr]^{\\nu_{C,D}} && \\Hom_{\\mathcal{C}}(C,S(D))\\ar[dd]^{(f,Sg)} \\\\ && \\\\ \\Hom_{\\mathcal{D}}(T(C'),D')\\ar[rr]^{\\nu_{C',D'}} && \\Hom_{\\mathcal{C}}(C',S(D')) \\\\ }\\] is a commutative diagram. If we pick any $h:T(C)\\to D$, then we have the equation $$Sg\\circ \\nu_{C,D}(h)\\circ f= \\nu_{C',D'}(g\\circ h\\circ Tf).$$ % % % I'm commenting the following out because I moved the mention of the % natural transformation before the mention of the naturality of the % bijection. This allows me to give the functors F_1 and F_2 the more % natural n"
+      },
+      {
+        "concept_surface": "unit of adjunction",
+        "paper": null,
+        "source": "PlanetMath",
+        "source_id": "18A40-UnitOfAdjunction.tex",
+        "text": "UnitOfAdjunction} \\pmcreated{2013-03-22 17:25:50} \\pmmodified{2013-03-22 17:25:50} \\pmowner{CWoo}{3771} \\pmmodifier{CWoo}{3771} \\pmtitle{unit of adjunction} \\pmrecord{16}{39806} \\pmprivacy{1} \\pmauthor{CWoo}{3771} \\pmtype{Definition} \\pmcomment{trigger rebuild} \\pmclassification{msc}{18A40} \\pmsynonym{co-unit}{UnitOfAdjunction} \\pmrelated{UniversalProperty} \\pmdefines{unit} \\pmdefines{counit} \\endmetadata \\usepackage{amssymb,amscd} \\usepackage{amsmath} \\usepackage{amsfonts} \\usepackage{mathrsfs} % used for TeXing text within eps files %\\usepackage{psfrag} % need this for including graphics (\\includegraphics) %\\usepackage{graphicx} % for neatly defining theorems and propositions \\usepackage{amsthm} % making logically defined graphics %%\\usepackage{xypic} \\usepackage{pst-plot} \\usepackage{psfrag} % define commands here \\newtheorem{prop}{Proposition} \\newtheorem{thm}{Theorem} \\newtheorem{ex}{Example} \\newcommand{\\real}{\\mathbb{R}} \\newcommand{\\pdiff}[2]{\\frac{\\partial #1}{\\partial #2}} \\newcommand{\\mpdiff}[3]{\\frac{\\partial^#1 #2}{\\partial #3^#1}} \\begin{document} Let $\\mathcal{C},\\mathcal{D}$ be categories and $(T,S,\\nu)$ be an adjunction from $\\mathcal{C}$ to $\\mathcal{D}$. For every pair of objects $C\\in\\mathcal{C}$ and $D\\in\\mathcal{D}$, we have a bijection \\begin{equation} \\nu_{C,D}:\\hom_{\\mathcal{D}}(T(C),D) \\longrightarrow \\hom_{\\mathcal{C}}(C,S(D)) \\end{equation} that is natural in each variable. If we set $D=T(C)$, and write $\\nu_C$ for $\\nu_{C,T(C)}$, then we get a bijection $$\\nu_C:\\hom_{\\mathcal{D}}(T(C),T(C)) \\longrightarrow \\hom_{\\mathcal{C}}(C,ST(C))$$ wh"
+      },
+      {
+        "concept_surface": "left adjoint",
+        "paper": "0704.1624",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.1624:left adjoint",
+        "text": "X$ of $\\mathcal C$ and $Y$ of $\\mathcal D$, there is a natural isomorphism \\[ \\varphi: \\Hom_\\mathcal D(FX, Y) \\rightarrow \\Hom_\\mathcal C(X, GY). \\] The functor $F$ is called the \\emph{left adjoint} and $G$ the \\emph{right adjoint} \\cite[IV.1]{macl}. \\begin{definition} \\cite[1.3.1]{hovey} An adjoint pair of functors $F \\colon \\mathcal M \\leftrightarrows \\mathcal N \\colon G$"
+      },
+      {
+        "concept_surface": "right adjoint",
+        "paper": "0704.1624",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.1624:right adjoint",
+        "text": "mathcal D$, there is a natural isomorphism \\[ \\varphi: \\Hom_\\mathcal D(FX, Y) \\rightarrow \\Hom_\\mathcal C(X, GY). \\] The functor $F$ is called the \\emph{left adjoint} and $G$ the \\emph{right adjoint} \\cite[IV.1]{macl}. \\begin{definition} \\cite[1.3.1]{hovey} An adjoint pair of functors $F \\colon \\mathcal M \\leftrightarrows \\mathcal N \\colon G$ between model categories is a \\em"
+      },
+      {
+        "concept_surface": "adjoint functors",
+        "paper": "0704.2207",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.2207:adjoint functors",
+        "text": "s. Let $\\mathbf{X}$ and $\\mathbf{A}$ be categories and $F:\\mathbf{X\\rightarrow A}$ and $G:\\mathbf{A\\rightarrow X}$ functors between them. Then $F$ and $G$ are said to be a pair of \\textit{adjoint functors} or an \\textit{adjunction}, written $F\\dashv G$, if for any $x$ in $\\mathbf{X}$ and $a$ in $\\mathbf{A}$, there is an isomorphism $\\phi$ natural in $x$ and in $a$: \\begin{center} $"
+      },
+      {
+        "concept_surface": "left adjoint",
+        "paper": "0704.2207",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.2207:left adjoint",
+        "text": "\\cong\\;}% \\operatorname*{Hom}_{\\mathbf{X}}(x,Ga)$. \\end{center} \\noindent With this standard way of writing the isomorphism of hom-sets, the functor $F$ on the left is called the \\textit{left adjoint} and the functor $G$ on the right is the \\textit{right adjoint}. Maps associated with each other by the adjunction isomorphism (\"adjoint transposes\" of one another) are indicated b"
+      },
+      {
+        "concept_surface": "right adjoint",
+        "paper": "0704.2207",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.2207:right adjoint",
+        "text": "} \\noindent With this standard way of writing the isomorphism of hom-sets, the functor $F$ on the left is called the \\textit{left adjoint} and the functor $G$ on the right is the \\textit{right adjoint}. Maps associated with each other by the adjunction isomorphism (\"adjoint transposes\" of one another) are indicated by an asterisk so if $g:Fx\\rightarrow a$ then $g^{\\ast}:x\\righta"
+      },
+      {
+        "concept_surface": "adjoint functor",
+        "paper": "0706.0711",
+        "source": "arxiv-def-snippets",
+        "source_id": "0706.0711:adjoint functor",
+        "text": "C} \\end{equation} satisfying $((-)_*)_* = \\id{\\cat{C}}$, which is compatible with the duality functor, in the sense that $((-)_*)^* = ((-)^*)_*$. This composite is then called the \\emph{adjoint functor} or \\emph{$\\dag$-functor}, as described in section \\ref{daggerstructure}, and is denoted in the following way: \\begin{equation} (-)^\\dag := ((-)^*)_*. \\end{equation} We extend our"
+      },
+      {
+        "concept_surface": "right adjoint",
+        "paper": "0709.0837",
+        "source": "arxiv-def-snippets",
+        "source_id": "0709.0837:right adjoint",
+        "text": "$(f\\down\\,y)$ or $f/y$, and we get the usual notion of universal arrow. \\subsection{Adjoint maps} Given the maps $f:X\\to Y$ and $g:Y\\to X$ in $\\C$, we say that $g$ is a {\\bf right adjoint} of $f$ when \\eq \\label{15gen} \\De_f\\adj\\De_g:\\MX\\to\\MY \\eeq As in~\\cite{pt}, we say that $f$ is (right) {\\bf adjunctible} if for any point $y:1\\to Y$ there is a universal di"
+      },
+      {
+        "concept_surface": "left adjoint",
+        "paper": "0801.1133",
+        "source": "arxiv-def-snippets",
+        "source_id": "0801.1133:left adjoint",
+        "text": "\\otimes \\chi\\otimes\\id}N^\\vee\\otimes C\\otimes N\\otimes N^\\vee\\xrightarrow{\\id\\otimes\\id\\otimes\\mathrm{e}}C\\otimes N^\\vee. \\end{equation} If $N\\in{}^C\\!\\M_f$, we call $N^\\ell$ the {\\em left adjoint}\\/ of $N$. When $C$ is a coquasi bialgebra we have a monoidal functor $(-)^\\ell:({}^C\\!\\M_f)^{\\mathrm{op}}\\to\\M^C_f$. \\end{defi} For future reference we record the following resu"
+      },
+      {
+        "concept_surface": "right adjoint",
+        "paper": "0801.1133",
+        "source": "arxiv-def-snippets",
+        "source_id": "0801.1133:right adjoint",
+        "text": "C\\otimes M^\\vee\\xrightarrow{\\mathrm{e}\\otimes \\id\\otimes \\id}C\\otimes M^\\vee. \\end{equation} On arrows, $(-)^r$ is given by the usual (linear) duality functor. We call $M^r$ the {\\em right adjoint} of $M$. When $C$ is a coquasi bialgebra, $(-)^r$ has the following canonical structure of a monoidal functor $(\\M^C_f)^{\\mathrm{op}}\\to{}^C\\!\\M_f$. The unit constraint is the ca"
+      },
+      {
+        "concept_surface": "left adjoint",
+        "paper": "0804.0326",
+        "source": "arxiv-def-snippets",
+        "source_id": "0804.0326:left adjoint",
+        "text": "$\\V$-functors to fully faithful $\\Tth$-functors. \\end{proof} One of the most important concepts in a 2-category is that of \\emph{adjointness}. Here, a $\\Tth$-functor $f:X\\to Y$ is \\emph{left adjoint} if there exists a $\\Tth$-functor $g:Y\\to X$ such that $1_X\\le g\\cdot f$ and $1_Y\\ge f\\cdot g$. Passing to $\\Mod{\\Tth}$, $f$ is left adjoint to $g$ if and only if $g_*\\dashv f_*$,"
+      },
+      {
+        "concept_surface": "adjoint functors",
+        "paper": "0804.1460",
+        "source": "arxiv-def-snippets",
+        "source_id": "0804.1460:adjoint functors",
+        "text": "ymbol $\\iso$ is also used to denote isomorphisms between objects in any category, in particular isomorphisms of modules and (natural) isomorphisms of functors. \\begin{thm}{\\bf Adjoint functors.} \\em A pair $(L,R)$ of functors $L:\\A\\to \\B$ and $R:\\B\\to \\A$ between categories $\\A$, $\\B$ is called an {\\em adjoint pair} if there is a natural isomorphism $$ \\Mor_"
+      },
+      {
+        "concept_surface": "adjoint functors",
+        "paper": "0810.2070",
+        "source": "arxiv-def-snippets",
+        "source_id": "0810.2070:adjoint functors",
+        "text": "s of mathematics. The dual notion, \\emph{colimit}, generalizes direct limits and direct sums. Limits and colimits are defined via universal properties and provide many examples of \\textit{adjoint functors}. A \\emph{limit} of a covariant functor $\\mathcal{F}:\\mathcal{J}\\rightarrow \\mathcal{C}$ is an object $L$ of $\\mathcal{C}$, together with morphisms $% \\phi _{X}:L\\rightarrow \\math"
+      },
+      {
+        "concept_surface": "adjoint functors",
+        "paper": "0811.4304",
+        "source": "arxiv-def-snippets",
+        "source_id": "0811.4304:adjoint functors",
+        "text": "n categories studied in the paper. \\subsection{Adjunctions and (co)monads}\\label{sec.eil-moo} It is well-known from \\cite{EM} that there is a close relationship between pairs of \\emph{adjoint functors} $(L:\\Xx\\to \\Yy, R:\\Yy\\to \\Xx)$, \\emph{monads} $\\A$ on $\\Xx$ and \\emph{comonads} $\\C$ on $\\Yy$. Starting from an adjunction $(L,R)$ with unit $\\eta:\\Xx\\to RL$ and counit $\\varepsil"
+      },
+      {
+        "concept_surface": "adjoint functor",
+        "paper": "2407.03488",
+        "source": "arxiv-def-snippets",
+        "source_id": "2407.03488:adjoint functor",
+        "text": "n{Developing Some Technical Machinery} \\body{We have mentioned that one can turn a presheaf into a sheaf through a construction called \\textit{sheafification}. Formally, being an \\textit{adjoint functor}, there is a sense in which sheafification sends any presheaf to its ``nearest'' sheaf~\\cite{rosiak-book, riehl2017category}. We will see that, in cases where $F$ is a separated pr"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-1020:left adjoint",
+        "text": "Given categories $\\mathcal{C}$ and $\\mathcal{D}$ and a functor $R: \\mathcal{D} \\to \\mathcal{C}$, a _left adjoint_ of $R$ is a functor $L: \\mathcal{C} \\to \\mathcal{D}$ together with [[natural transfor"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-10410:Dwyer map",
+        "text": "###### Proposition Let $c$ denote the left adjoint of the nerve functor and let $Sd$ denote the [[subdivision|barycentric subdivision]] functor. The composite $c Sd^2$ carries injective simplicial ma"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-17810:geometry of physics -- superalgebra",
+        "text": "###### Proposition There is a pair of [[adjoint functors]] $$ sCAlg_{\\mathbb{R}} \\underoverset {\\underset{per}{\\longrightarrow}} {\\overset{forget}{\\longleftarrow}} {\\bot} s"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-18700:linear bicategory",
+        "text": "###### Definition A **linear adjunction** in a linear bicategory consists of 1-cells $f:X\\to Y$ and $g:Y\\to X$ along with a unit $\\eta : \\top_X \\to g \\parr f$ and $\\epsilon : f \\otimes g \\to \\bot_Y$ s"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-210:full functor",
+        "text": "###### Proposition Given a pair of [[adjoint functors]] $$ \\mathcal{C} \\underoverset {\\underset{R}{\\longrightarrow}} {\\overset{L}{\\longleftarrow}} { \\phantom{AA} \\bot \\phantom{A"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-3510:model structure for complete Segal spaces",
+        "text": "###### Proposition We have the following pair of [[adjoint functors]] between [[simplicial sets]] and [[bisimplicial sets]]. The first is $$ (p_1^* \\dashv i_1^*) : [\\Delta^{op}, Set] \\stac"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-6100:geometric realization of categories",
+        "text": "###### Remark The statement still remains true for a pair of [[adjoint functor]]s $\\mathcal{C} \\leftrightarrows \\mathcal{D}$."
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-910:compactly generated topological space",
+        "text": "For every [[topological space]] $X$, the canonical [[continuous function]] from the $k$-ification (the [[adjunction counit]]) is a [[weak homotopy equivalence]], hence induces an [[isomorphism]] on"
+      }
+    ],
+    "source_files": {
+      "PlanetMath": [
+        "/home/joe/code/planetmath/18_Category_theory_homological_algebra/18A40-AdjointFunctor.tex",
+        "/home/joe/code/planetmath/18_Category_theory_homological_algebra/18A40-UnitOfAdjunction.tex"
+      ],
+      "arxiv-def-snippets": "/home/joe/code/futon6/data/warp/def-snippets.json",
+      "nLab": "/home/joe/code/futon6/data/nlab-wiring/pages.json"
+    }
+  },
+  "reduced": {
+    "aliases": [
+      "adjoint functor",
+      "adjoint functors",
+      "left adjoint",
+      "right adjoint"
+    ],
+    "concept": "adjunction",
+    "genus": "adjunction F\u22a3G",
+    "genus_source": "inferred-v0",
+    "instances": [
+      {
+        "concept_surface": "adjoint functor",
+        "paper": null,
+        "source": "PlanetMath",
+        "source_id": "18A40-AdjointFunctor.tex",
+        "text": "left adjoint functor} to $S$ (equivalently, $S$ is a \\emph{right adjoint functor} to $T$) if there is a natural equivalence \\[ \\nu\\colon \\Hom_{\\mathcal{D}}(T(-),-) \\overset{\\cdot}{\\longrightarrow} \\Hom_{\\mathcal{C}}(-,S(-)). \\] Here the functor $\\Hom_{\\mathcal{D}}(T(-),-)$ is a bifunctor $\\mathcal{C}\\times\\mathcal{D}\\to\\mathbf{Set}$ which is contravariant in the first variable, is covariant in the second variable, and sends an object $(C,D)$ to $\\Hom_{\\mathcal{D}}(T(C),D)$. The functor $\\Hom_{\\mathcal{C}}(-,S(-))$ is defined analogously. This definition needs additional explanation. Essentially, it says that for every object $C$ in $\\cal{C}$ and every object $D$ in $\\cal{D}$ there is a function \\[ \\nu_{C,D} \\colon \\Hom_{\\mathcal{D}}(T(C),D) \\overset{\\sim}{\\longrightarrow} \\Hom_{\\mathcal{C}}(C,S(D)) \\] which is a natural bijection of hom-sets. Naturality means that if $f\\colon C'\\to C$ is a morphism in $\\mathcal{C}$ and $g\\colon D\\to D'$ is a morphism in $\\mathcal{D}$, then the diagram \\[\\xymatrix{ \\Hom_{\\mathcal{D}}(T(C),D)\\ar[dd]_{(Tf,g)}\\ar[rr]^{\\nu_{C,D}} && \\Hom_{\\mathcal{C}}(C,S(D))\\ar[dd]^{(f,Sg)} \\\\ && \\\\ \\Hom_{\\mathcal{D}}(T(C'),D')\\ar[rr]^{\\nu_{C',D'}} && \\Hom_{\\mathcal{C}}(C',S(D')) \\\\ }\\] is a commutative diagram. If we pick any $h:T(C)\\to D$, then we have the equation $$Sg\\circ \\nu_{C,D}(h)\\circ f= \\nu_{C',D'}(g\\circ h\\circ Tf).$$ % % % I'm commenting the following out because I moved the mention of the % natural transformation before the mention of the naturality of the % bijection. This allows me to give the functors F_1 and F_2 the more % natural n"
+      },
+      {
+        "concept_surface": "unit of adjunction",
+        "paper": null,
+        "source": "PlanetMath",
+        "source_id": "18A40-UnitOfAdjunction.tex",
+        "text": "UnitOfAdjunction} \\pmcreated{2013-03-22 17:25:50} \\pmmodified{2013-03-22 17:25:50} \\pmowner{CWoo}{3771} \\pmmodifier{CWoo}{3771} \\pmtitle{unit of adjunction} \\pmrecord{16}{39806} \\pmprivacy{1} \\pmauthor{CWoo}{3771} \\pmtype{Definition} \\pmcomment{trigger rebuild} \\pmclassification{msc}{18A40} \\pmsynonym{co-unit}{UnitOfAdjunction} \\pmrelated{UniversalProperty} \\pmdefines{unit} \\pmdefines{counit} \\endmetadata \\usepackage{amssymb,amscd} \\usepackage{amsmath} \\usepackage{amsfonts} \\usepackage{mathrsfs} % used for TeXing text within eps files %\\usepackage{psfrag} % need this for including graphics (\\includegraphics) %\\usepackage{graphicx} % for neatly defining theorems and propositions \\usepackage{amsthm} % making logically defined graphics %%\\usepackage{xypic} \\usepackage{pst-plot} \\usepackage{psfrag} % define commands here \\newtheorem{prop}{Proposition} \\newtheorem{thm}{Theorem} \\newtheorem{ex}{Example} \\newcommand{\\real}{\\mathbb{R}} \\newcommand{\\pdiff}[2]{\\frac{\\partial #1}{\\partial #2}} \\newcommand{\\mpdiff}[3]{\\frac{\\partial^#1 #2}{\\partial #3^#1}} \\begin{document} Let $\\mathcal{C},\\mathcal{D}$ be categories and $(T,S,\\nu)$ be an adjunction from $\\mathcal{C}$ to $\\mathcal{D}$. For every pair of objects $C\\in\\mathcal{C}$ and $D\\in\\mathcal{D}$, we have a bijection \\begin{equation} \\nu_{C,D}:\\hom_{\\mathcal{D}}(T(C),D) \\longrightarrow \\hom_{\\mathcal{C}}(C,S(D)) \\end{equation} that is natural in each variable. If we set $D=T(C)$, and write $\\nu_C$ for $\\nu_{C,T(C)}$, then we get a bijection $$\\nu_C:\\hom_{\\mathcal{D}}(T(C),T(C)) \\longrightarrow \\hom_{\\mathcal{C}}(C,ST(C))$$ wh"
+      },
+      {
+        "concept_surface": "left adjoint",
+        "paper": "0704.1624",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.1624:left adjoint",
+        "text": "X$ of $\\mathcal C$ and $Y$ of $\\mathcal D$, there is a natural isomorphism \\[ \\varphi: \\Hom_\\mathcal D(FX, Y) \\rightarrow \\Hom_\\mathcal C(X, GY). \\] The functor $F$ is called the \\emph{left adjoint} and $G$ the \\emph{right adjoint} \\cite[IV.1]{macl}. \\begin{definition} \\cite[1.3.1]{hovey} An adjoint pair of functors $F \\colon \\mathcal M \\leftrightarrows \\mathcal N \\colon G$"
+      },
+      {
+        "concept_surface": "right adjoint",
+        "paper": "0704.1624",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.1624:right adjoint",
+        "text": "mathcal D$, there is a natural isomorphism \\[ \\varphi: \\Hom_\\mathcal D(FX, Y) \\rightarrow \\Hom_\\mathcal C(X, GY). \\] The functor $F$ is called the \\emph{left adjoint} and $G$ the \\emph{right adjoint} \\cite[IV.1]{macl}. \\begin{definition} \\cite[1.3.1]{hovey} An adjoint pair of functors $F \\colon \\mathcal M \\leftrightarrows \\mathcal N \\colon G$ between model categories is a \\em"
+      },
+      {
+        "concept_surface": "adjoint functors",
+        "paper": "0704.2207",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.2207:adjoint functors",
+        "text": "s. Let $\\mathbf{X}$ and $\\mathbf{A}$ be categories and $F:\\mathbf{X\\rightarrow A}$ and $G:\\mathbf{A\\rightarrow X}$ functors between them. Then $F$ and $G$ are said to be a pair of \\textit{adjoint functors} or an \\textit{adjunction}, written $F\\dashv G$, if for any $x$ in $\\mathbf{X}$ and $a$ in $\\mathbf{A}$, there is an isomorphism $\\phi$ natural in $x$ and in $a$: \\begin{center} $"
+      },
+      {
+        "concept_surface": "left adjoint",
+        "paper": "0704.2207",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.2207:left adjoint",
+        "text": "\\cong\\;}% \\operatorname*{Hom}_{\\mathbf{X}}(x,Ga)$. \\end{center} \\noindent With this standard way of writing the isomorphism of hom-sets, the functor $F$ on the left is called the \\textit{left adjoint} and the functor $G$ on the right is the \\textit{right adjoint}. Maps associated with each other by the adjunction isomorphism (\"adjoint transposes\" of one another) are indicated b"
+      },
+      {
+        "concept_surface": "right adjoint",
+        "paper": "0704.2207",
+        "source": "arxiv-def-snippets",
+        "source_id": "0704.2207:right adjoint",
+        "text": "} \\noindent With this standard way of writing the isomorphism of hom-sets, the functor $F$ on the left is called the \\textit{left adjoint} and the functor $G$ on the right is the \\textit{right adjoint}. Maps associated with each other by the adjunction isomorphism (\"adjoint transposes\" of one another) are indicated by an asterisk so if $g:Fx\\rightarrow a$ then $g^{\\ast}:x\\righta"
+      },
+      {
+        "concept_surface": "adjoint functor",
+        "paper": "0706.0711",
+        "source": "arxiv-def-snippets",
+        "source_id": "0706.0711:adjoint functor",
+        "text": "C} \\end{equation} satisfying $((-)_*)_* = \\id{\\cat{C}}$, which is compatible with the duality functor, in the sense that $((-)_*)^* = ((-)^*)_*$. This composite is then called the \\emph{adjoint functor} or \\emph{$\\dag$-functor}, as described in section \\ref{daggerstructure}, and is denoted in the following way: \\begin{equation} (-)^\\dag := ((-)^*)_*. \\end{equation} We extend our"
+      },
+      {
+        "concept_surface": "right adjoint",
+        "paper": "0709.0837",
+        "source": "arxiv-def-snippets",
+        "source_id": "0709.0837:right adjoint",
+        "text": "$(f\\down\\,y)$ or $f/y$, and we get the usual notion of universal arrow. \\subsection{Adjoint maps} Given the maps $f:X\\to Y$ and $g:Y\\to X$ in $\\C$, we say that $g$ is a {\\bf right adjoint} of $f$ when \\eq \\label{15gen} \\De_f\\adj\\De_g:\\MX\\to\\MY \\eeq As in~\\cite{pt}, we say that $f$ is (right) {\\bf adjunctible} if for any point $y:1\\to Y$ there is a universal di"
+      },
+      {
+        "concept_surface": "left adjoint",
+        "paper": "0801.1133",
+        "source": "arxiv-def-snippets",
+        "source_id": "0801.1133:left adjoint",
+        "text": "\\otimes \\chi\\otimes\\id}N^\\vee\\otimes C\\otimes N\\otimes N^\\vee\\xrightarrow{\\id\\otimes\\id\\otimes\\mathrm{e}}C\\otimes N^\\vee. \\end{equation} If $N\\in{}^C\\!\\M_f$, we call $N^\\ell$ the {\\em left adjoint}\\/ of $N$. When $C$ is a coquasi bialgebra we have a monoidal functor $(-)^\\ell:({}^C\\!\\M_f)^{\\mathrm{op}}\\to\\M^C_f$. \\end{defi} For future reference we record the following resu"
+      },
+      {
+        "concept_surface": "right adjoint",
+        "paper": "0801.1133",
+        "source": "arxiv-def-snippets",
+        "source_id": "0801.1133:right adjoint",
+        "text": "C\\otimes M^\\vee\\xrightarrow{\\mathrm{e}\\otimes \\id\\otimes \\id}C\\otimes M^\\vee. \\end{equation} On arrows, $(-)^r$ is given by the usual (linear) duality functor. We call $M^r$ the {\\em right adjoint} of $M$. When $C$ is a coquasi bialgebra, $(-)^r$ has the following canonical structure of a monoidal functor $(\\M^C_f)^{\\mathrm{op}}\\to{}^C\\!\\M_f$. The unit constraint is the ca"
+      },
+      {
+        "concept_surface": "left adjoint",
+        "paper": "0804.0326",
+        "source": "arxiv-def-snippets",
+        "source_id": "0804.0326:left adjoint",
+        "text": "$\\V$-functors to fully faithful $\\Tth$-functors. \\end{proof} One of the most important concepts in a 2-category is that of \\emph{adjointness}. Here, a $\\Tth$-functor $f:X\\to Y$ is \\emph{left adjoint} if there exists a $\\Tth$-functor $g:Y\\to X$ such that $1_X\\le g\\cdot f$ and $1_Y\\ge f\\cdot g$. Passing to $\\Mod{\\Tth}$, $f$ is left adjoint to $g$ if and only if $g_*\\dashv f_*$,"
+      },
+      {
+        "concept_surface": "adjoint functors",
+        "paper": "0804.1460",
+        "source": "arxiv-def-snippets",
+        "source_id": "0804.1460:adjoint functors",
+        "text": "ymbol $\\iso$ is also used to denote isomorphisms between objects in any category, in particular isomorphisms of modules and (natural) isomorphisms of functors. \\begin{thm}{\\bf Adjoint functors.} \\em A pair $(L,R)$ of functors $L:\\A\\to \\B$ and $R:\\B\\to \\A$ between categories $\\A$, $\\B$ is called an {\\em adjoint pair} if there is a natural isomorphism $$ \\Mor_"
+      },
+      {
+        "concept_surface": "adjoint functors",
+        "paper": "0810.2070",
+        "source": "arxiv-def-snippets",
+        "source_id": "0810.2070:adjoint functors",
+        "text": "s of mathematics. The dual notion, \\emph{colimit}, generalizes direct limits and direct sums. Limits and colimits are defined via universal properties and provide many examples of \\textit{adjoint functors}. A \\emph{limit} of a covariant functor $\\mathcal{F}:\\mathcal{J}\\rightarrow \\mathcal{C}$ is an object $L$ of $\\mathcal{C}$, together with morphisms $% \\phi _{X}:L\\rightarrow \\math"
+      },
+      {
+        "concept_surface": "adjoint functors",
+        "paper": "0811.4304",
+        "source": "arxiv-def-snippets",
+        "source_id": "0811.4304:adjoint functors",
+        "text": "n categories studied in the paper. \\subsection{Adjunctions and (co)monads}\\label{sec.eil-moo} It is well-known from \\cite{EM} that there is a close relationship between pairs of \\emph{adjoint functors} $(L:\\Xx\\to \\Yy, R:\\Yy\\to \\Xx)$, \\emph{monads} $\\A$ on $\\Xx$ and \\emph{comonads} $\\C$ on $\\Yy$. Starting from an adjunction $(L,R)$ with unit $\\eta:\\Xx\\to RL$ and counit $\\varepsil"
+      },
+      {
+        "concept_surface": "adjoint functor",
+        "paper": "2407.03488",
+        "source": "arxiv-def-snippets",
+        "source_id": "2407.03488:adjoint functor",
+        "text": "n{Developing Some Technical Machinery} \\body{We have mentioned that one can turn a presheaf into a sheaf through a construction called \\textit{sheafification}. Formally, being an \\textit{adjoint functor}, there is a sense in which sheafification sends any presheaf to its ``nearest'' sheaf~\\cite{rosiak-book, riehl2017category}. We will see that, in cases where $F$ is a separated pr"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-1020:left adjoint",
+        "text": "Given categories $\\mathcal{C}$ and $\\mathcal{D}$ and a functor $R: \\mathcal{D} \\to \\mathcal{C}$, a _left adjoint_ of $R$ is a functor $L: \\mathcal{C} \\to \\mathcal{D}$ together with [[natural transfor"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-10410:Dwyer map",
+        "text": "###### Proposition Let $c$ denote the left adjoint of the nerve functor and let $Sd$ denote the [[subdivision|barycentric subdivision]] functor. The composite $c Sd^2$ carries injective simplicial ma"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-17810:geometry of physics -- superalgebra",
+        "text": "###### Proposition There is a pair of [[adjoint functors]] $$ sCAlg_{\\mathbb{R}} \\underoverset {\\underset{per}{\\longrightarrow}} {\\overset{forget}{\\longleftarrow}} {\\bot} s"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-18700:linear bicategory",
+        "text": "###### Definition A **linear adjunction** in a linear bicategory consists of 1-cells $f:X\\to Y$ and $g:Y\\to X$ along with a unit $\\eta : \\top_X \\to g \\parr f$ and $\\epsilon : f \\otimes g \\to \\bot_Y$ s"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-210:full functor",
+        "text": "###### Proposition Given a pair of [[adjoint functors]] $$ \\mathcal{C} \\underoverset {\\underset{R}{\\longrightarrow}} {\\overset{L}{\\longleftarrow}} { \\phantom{AA} \\bot \\phantom{A"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-3510:model structure for complete Segal spaces",
+        "text": "###### Proposition We have the following pair of [[adjoint functors]] between [[simplicial sets]] and [[bisimplicial sets]]. The first is $$ (p_1^* \\dashv i_1^*) : [\\Delta^{op}, Set] \\stac"
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-6100:geometric realization of categories",
+        "text": "###### Remark The statement still remains true for a pair of [[adjoint functor]]s $\\mathcal{C} \\leftrightarrows \\mathcal{D}$."
+      },
+      {
+        "concept_surface": "adjunction",
+        "paper": null,
+        "source": "nLab",
+        "source_id": "nlab-910:compactly generated topological space",
+        "text": "For every [[topological space]] $X$, the canonical [[continuous function]] from the $k$-ification (the [[adjunction counit]]) is a [[weak homotopy equivalence]], hence induces an [[isomorphism]] on"
+      }
+    ],
+    "schema": {
+      "lean_analogy": "bundle common fields as a structure-like genus; store each observed paper/source use as an instance; connect equivalent definition framings with explicit Iff bridge holes rather than collapsing them",
+      "name": "lean-family-v0"
+    },
+    "variant_axes": [
+      {
+        "axis": "definition-framing",
+        "bridges": [
+          {
+            "from": "hom-set-natural-bijection",
+            "kind": "iff-lemma",
+            "status": "recorded-hole",
+            "to": "unit-counit-triangle"
+          },
+          {
+            "from": "hom-set-natural-bijection",
+            "kind": "iff-lemma",
+            "status": "recorded-hole",
+            "to": "universal-arrow"
+          },
+          {
+            "from": "unit-counit-triangle",
+            "kind": "iff-lemma",
+            "status": "recorded-hole",
+            "to": "universal-arrow"
+          }
+        ],
+        "representation": "labelled-family",
+        "variants": [
+          {
+            "example_source_ids": [
+              "0704.1624:left adjoint",
+              "0704.1624:right adjoint",
+              "0704.2207:adjoint functors",
+              "0704.2207:left adjoint",
+              "0704.2207:right adjoint"
+            ],
+            "fields": [
+              "local_usage_context"
+            ],
+            "instance_count": 17,
+            "label": "contextual-use",
+            "sources": [
+              "arxiv-def-snippets",
+              "nLab"
+            ]
+          },
+          {
+            "example_source_ids": [
+              "18A40-AdjointFunctor.tex"
+            ],
+            "fields": [
+              "left_functor",
+              "right_functor",
+              "hom_equivalence",
+              "naturality"
+            ],
+            "instance_count": 1,
+            "label": "hom-set-natural-bijection",
+            "sources": [
+              "PlanetMath"
+            ]
+          },
+          {
+            "example_source_ids": [
+              "18A40-UnitOfAdjunction.tex",
+              "0801.1133:right adjoint",
+              "0811.4304:adjoint functors",
+              "nlab-18700:linear bicategory",
+              "nlab-910:compactly generated topological space"
+            ],
+            "fields": [
+              "unit",
+              "counit",
+              "triangle_identities"
+            ],
+            "instance_count": 5,
+            "label": "unit-counit-triangle",
+            "sources": [
+              "PlanetMath",
+              "arxiv-def-snippets",
+              "nLab"
+            ]
+          },
+          {
+            "example_source_ids": [
+              "0709.0837:right adjoint"
+            ],
+            "fields": [
+              "universal_arrow_from",
+              "universal_arrow_to",
+              "unique_factorization"
+            ],
+            "instance_count": 1,
+            "label": "universal-arrow",
+            "sources": [
+              "arxiv-def-snippets"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "surface_to_core": {
+    "all categories": {
+      "action": "fold",
+      "core": "category",
+      "df": 953,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "category",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 953,
+          "input": "all categories",
+          "resolution": "all categories"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 953
+    },
+    "all cells": {
+      "action": "fold",
+      "core": "cell",
+      "df": 222,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "cell",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 222,
+          "input": "all cells",
+          "resolution": "all cells"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 222
+    },
+    "all finite subsets": {
+      "action": "fold",
+      "core": "finite subset",
+      "df": 141,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "KEPT",
+          "df": 822,
+          "input": "finite subset",
+          "resolution": "finite subset"
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 141,
+          "input": "all finite subsets",
+          "resolution": "all finite subsets"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 141
+    },
+    "all functors": {
+      "action": "fold",
+      "core": "functor",
+      "df": 1028,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "functor",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1028,
+          "input": "all functors",
+          "resolution": "all functors"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1028
+    },
+    "all maps": {
+      "action": "fold",
+      "core": "maps",
+      "df": 1518,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "maps",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1518,
+          "input": "all maps",
+          "resolution": "all maps"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1518
+    },
+    "all morphisms": {
+      "action": "fold",
+      "core": "morphism",
+      "df": 2579,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "morphism",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 2579,
+          "input": "all morphisms",
+          "resolution": "all morphisms"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 2579
+    },
+    "all objects": {
+      "action": "fold",
+      "core": "object",
+      "df": 3498,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "object",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 3498,
+          "input": "all objects",
+          "resolution": "all objects"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 3498
+    },
+    "all possible": {
+      "action": "fold",
+      "core": "possible",
+      "df": 1393,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "possible",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1393,
+          "input": "all possible",
+          "resolution": "all possible"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1393
+    },
+    "all sets": {
+      "action": "fold",
+      "core": "sets",
+      "df": 571,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "sets",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 571,
+          "input": "all sets",
+          "resolution": "all sets"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 571
+    },
+    "any category": {
+      "action": "fold",
+      "core": "category",
+      "df": 1908,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "category",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1908,
+          "input": "any category",
+          "resolution": "any category"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1908
+    },
+    "any element": {
+      "action": "fold",
+      "core": "element",
+      "df": 1464,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "element",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1464,
+          "input": "any element",
+          "resolution": "any element"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1464
+    },
+    "any field": {
+      "action": "fold",
+      "core": "field",
+      "df": 337,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "field",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 337,
+          "input": "any field",
+          "resolution": "any field"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 337
+    },
+    "any function": {
+      "action": "fold",
+      "core": "function",
+      "df": 556,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "function",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 556,
+          "input": "any function",
+          "resolution": "any function"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 556
+    },
+    "any functor": {
+      "action": "fold",
+      "core": "functor",
+      "df": 1458,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "functor",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1458,
+          "input": "any functor",
+          "resolution": "any functor"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1458
+    },
+    "any object": {
+      "action": "fold",
+      "core": "object",
+      "df": 3772,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "object",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 3772,
+          "input": "any object",
+          "resolution": "any object"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 3772
+    },
+    "any relation": {
+      "action": "fold",
+      "core": "relation",
+      "df": 219,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "relation",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 219,
+          "input": "any relation",
+          "resolution": "any relation"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 219
+    },
+    "any two": {
+      "action": "fold",
+      "core": "pair",
+      "df": 3661,
+      "evidence": {
+        "method": "idiom",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 3661,
+          "input": "any two",
+          "resolution": "any two"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 3661
+    },
+    "each other": {
+      "action": "fold",
+      "core": "relation",
+      "df": 3445,
+      "evidence": {
+        "method": "idiom",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 3445,
+          "input": "each other",
+          "resolution": "each other"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 3445
+    },
+    "every morphism": {
+      "action": "fold",
+      "core": "morphism",
+      "df": 2750,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "morphism",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 2750,
+          "input": "every morphism",
+          "resolution": "every morphism"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 2750
+    },
+    "more generally": {
+      "action": "fold",
+      "core": "generally",
+      "df": 4627,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "generally",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 4627,
+          "input": "more generally",
+          "resolution": "more generally"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 4627
+    },
+    "one has": {
+      "action": "fold",
+      "core": "has",
+      "df": 3097,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "has",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 3097,
+          "input": "one has",
+          "resolution": "one has"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 3097
+    },
+    "one node tree": {
+      "action": "fold",
+      "core": "node tree",
+      "df": 10,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "node tree",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 10,
+          "input": "one node tree",
+          "resolution": "one node tree"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 10
+    },
+    "one object": {
+      "action": "fold",
+      "core": "object",
+      "df": 2158,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "object",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "HUNGRY",
+          "df": 2158,
+          "input": "one object",
+          "resolution": "one object tricategory",
+          "resolved_df": 29
+        }
+      },
+      "genuine": false,
+      "retained_papers": 2158
+    },
+    "one object tricategory": {
+      "action": "fold",
+      "core": "object tricategory",
+      "df": 29,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "object tricategory",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 29,
+          "input": "one object tricategory",
+          "resolution": "one object tricategory"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 29
+    },
+    "one point set": {
+      "action": "fold",
+      "core": "one point set",
+      "df": 191,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HUNGRY",
+          "df": 663,
+          "input": "point set",
+          "resolution": "one point set",
+          "resolved_df": 191
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 191,
+          "input": "one point set",
+          "resolution": "one point set"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 191
+    },
+    "one type": {
+      "action": "fold",
+      "core": "type",
+      "df": 278,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "type",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 278,
+          "input": "one type",
+          "resolution": "one type"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 278
+    },
+    "there exist": {
+      "action": "fold",
+      "core": "exist",
+      "df": 4400,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "exist",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 4400,
+          "input": "there exist",
+          "resolution": "there exist"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 4400
+    },
+    "there exists": {
+      "action": "fold",
+      "core": "exist",
+      "df": 7685,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "exist",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 7685,
+          "input": "there exists",
+          "resolution": "there exists"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 7685
+    },
+    "two categories": {
+      "action": "fold",
+      "core": "category",
+      "df": 1355,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "category",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1355,
+          "input": "two categories",
+          "resolution": "two categories"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1355
+    },
+    "two maps": {
+      "action": "fold",
+      "core": "maps",
+      "df": 1674,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "maps",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 1674,
+          "input": "two maps",
+          "resolution": "two maps"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 1674
+    },
+    "two morphisms": {
+      "action": "fold",
+      "core": "morphism",
+      "df": 2177,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "morphism",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 2177,
+          "input": "two morphisms",
+          "resolution": "two morphisms"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 2177
+    },
+    "two sided ideal": {
+      "action": "fold",
+      "core": "sided ideal",
+      "df": 407,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "sided ideal",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 407,
+          "input": "two sided ideal",
+          "resolution": "two sided ideal"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 407
+    },
+    "two variables": {
+      "action": "fold",
+      "core": "variable",
+      "df": 360,
+      "evidence": {
+        "candidate_term_prior": {
+          "action": "HAPAX",
+          "df": 0,
+          "input": "variable",
+          "resolution": null
+        },
+        "method": "right-head",
+        "term_prior": {
+          "action": "KEPT",
+          "df": 360,
+          "input": "two variables",
+          "resolution": "two variables"
+        }
+      },
+      "genuine": false,
+      "retained_papers": 360
+    }
+  }
+}

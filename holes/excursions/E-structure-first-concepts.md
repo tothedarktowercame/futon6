@@ -385,3 +385,39 @@ The H-SFC2a L-closure target remains unchanged.
 Gates passed: `clj-kondo --lint scripts/sfc_def_structure.bb`,
 `emacs --batch -l /home/joe/code/futon4/dev/check-parens.el
 scripts/sfc_def_structure.bb`, and `bb tests/sfc_def_structure_test.clj`.
+
+### H-SFC-AGG findings — codex-1
+
+Implemented `scripts/sfc_concept_aggregate.py`, the v0 reduce stage over
+`concept-index.json` plus definition sources. The run writes the committed
+adjunction fixture at `data/warp/sfc-adjunction-fixture.json` and evidence report
+at `holes/excursions/sfc-concept-aggregate.md`.
+
+Results:
+
+- GC surface→core retention emits the required bad-term examples while retaining
+  their paper support: `all functors -> functor` (`df=1028`), `any two -> pair`
+  (`df=3661`), `each other -> relation` (`df=3445`).
+- Adjunction fixture assembled from all requested source families:
+  `PlanetMath=2`, `nLab=8`, `arxiv-def-snippets=14`.
+- Reduce recovers `genus = "adjunction F⊣G"` and the three non-contextual
+  definition framings: `hom-set-natural-bijection`, `unit-counit-triangle`,
+  and `universal-arrow`.
+- Chosen variant-axis schema: `lean-family-v0`. It keeps a structure-like
+  `genus`, stores every observed source/paper use as an `instance`, and records
+  equivalent definition framings as a labelled family under
+  `variant_axes[].variants`. Equivalence between framings is represented as
+  explicit `iff-lemma` bridge holes, mirroring Lean's broad pattern of
+  `structure`/`class` fields, `instance`s, and separate `Iff`/defeq bridges.
+
+Remaining gaps:
+
+- The `iff-lemma` bridges are recorded, not proved.
+- Framing classification is prose/keyword based; formula grounding remains an
+  H-SFC2b responsibility.
+- Encyclopedia-v0 seeds the genus where usable, but the adjunction entries have
+  noisy/missing genus fields, so this fixture uses the hand-recognised fallback
+  `adjunction F⊣G`.
+
+Gates passed: `python3 -m py_compile scripts/sfc_concept_aggregate.py`,
+`pytest -q tests/test_sfc_concept_aggregate.py`, and full `pytest -q tests/`.
