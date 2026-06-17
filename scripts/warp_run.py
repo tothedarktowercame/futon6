@@ -135,9 +135,9 @@ SPINE_STAGES: tuple[Stage, ...] = (
             p("data/concept-encyclopedia/ct"),
             p("data/warp/cite-resolution"),
         ),
-        (p("tmp/mark3-threads/ct-threads.json"),),
-        ("scripts/mark3_thread_tapestry.py",),
-        notes="WARP-ORCH-3 will promote this to a named data/warp artifact.",
+        (p("data/warp/concept-phylogeny.json"),),
+        ("scripts/mark3_thread_tapestry.py", "--out", "data/warp/concept-phylogeny.json"),
+        notes="CAS-SEL genealogical-select descent input; R2d-3 coupling candidate.",
     ),
     Stage(
         "S6b",
@@ -489,9 +489,12 @@ def count_rows(stage: Stage) -> dict[str, Any]:
             if not stage.outputs[0].exists():
                 return {}
             data = load_json(stage.outputs[0])
+            summary = data.get("summary", {})
             return {
-                "concepts_with_threads": len(data.get("concepts", data)),
-                "n_papers": len(data.get("papers", [])),
+                "concepts_with_threads": summary.get("concepts_with_threads", len(data.get("threads", {}))),
+                "papers": summary.get("papers"),
+                "candidate_concepts": summary.get("candidate_concepts"),
+                "cited_activations": summary.get("activation_counts", {}).get("cited-activation", 0),
             }
         if script == "build_concept_encyclopedia.py":
             data = load_json(stage.outputs[0])
@@ -556,6 +559,10 @@ def validate_guards(stages: Iterable[Stage]) -> None:
         raise SystemExit("Refusing guarded WARP run:\n" + "\n".join(violations))
 
 
+def missing_inputs(stage: Stage) -> list[Path]:
+    return [path for path in stage.inputs if not path.exists()]
+
+
 def selected_stages(include_overlays: bool = False, audit: bool = False) -> tuple[Stage, ...]:
     stages: tuple[Stage, ...] = SPINE_STAGES
     if include_overlays:
@@ -563,6 +570,18 @@ def selected_stages(include_overlays: bool = False, audit: bool = False) -> tupl
     if audit:
         stages += AUDIT_ONLY_STAGES
     return stages
+
+
+def filter_stages(stages: Iterable[Stage], stage_ids: Iterable[str] | None) -> tuple[Stage, ...]:
+    wanted = tuple(stage_ids or ())
+    if not wanted:
+        return tuple(stages)
+    stage_list = tuple(stages)
+    known = {stage.stage_id for stage in stage_list}
+    unknown = sorted(set(wanted) - known)
+    if unknown:
+        raise SystemExit(f"Unknown stage id(s): {', '.join(unknown)}")
+    return tuple(stage for stage in stage_list if stage.stage_id in set(wanted))
 
 
 def audit_rows(stages: Iterable[Stage]) -> list[dict[str, Any]]:
@@ -611,6 +630,10 @@ def manifest_entry(stage: Stage, status: str) -> dict[str, Any]:
 def run_stage(stage: Stage, dry_run: bool = False) -> str:
     if not stage.runnable:
         return "audit-only"
+    missing = missing_inputs(stage)
+    if missing and not dry_run:
+        missing_list = ", ".join(display_path(path) for path in missing)
+        raise SystemExit(f"Refusing to run {stage.stage_id}; missing input(s): {missing_list}")
     if is_fresh(stage):
         return "skipped"
     if dry_run:
@@ -649,9 +672,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--audit", action="store_true", help="read-only liveness audit; writes no manifest")
     parser.add_argument("--dry-run", action="store_true", help="show manifest statuses without running stages")
     parser.add_argument("--manifest", type=Path, default=MANIFEST, help="manifest path")
+    parser.add_argument("--stage", action="append", help="run/audit only this stage id; repeatable")
     args = parser.parse_args(argv)
 
-    stages = selected_stages(include_overlays=args.overlays, audit=args.audit)
+    stages = filter_stages(
+        selected_stages(include_overlays=args.overlays, audit=args.audit),
+        args.stage,
+    )
     validate_guards(stages)
     if args.audit:
         print_audit(audit_rows(stages))

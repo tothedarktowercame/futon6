@@ -13,6 +13,9 @@ def test_confirmed_spine_orders_graph_before_embed() -> None:
     stage_ids = [stage.stage_id for stage in warp_run.SPINE_STAGES]
 
     assert stage_ids.index("S5") < stage_ids.index("S4c")
+    s6a = next(stage for stage in warp_run.SPINE_STAGES if stage.stage_id == "S6a")
+    assert s6a.outputs == (warp_run.WARP / "concept-phylogeny.json",)
+    assert "--out" in s6a.command
     defined = next(stage for stage in warp_run.SPINE_STAGES if stage.stage_id == "S2")
     assert all("concordance.json" not in str(path) for path in defined.inputs)
 
@@ -89,6 +92,25 @@ def test_dry_run_manifest_reports_would_run_without_writing(tmp_path: Path) -> N
     assert records["T"]["status"] == "would-run"
     assert records["T"]["freshness"] == "stale"
     assert not manifest_path.exists()
+
+
+def test_filter_stages_selects_only_requested_stage() -> None:
+    stages = warp_run.filter_stages(warp_run.SPINE_STAGES, ["S6a"])
+
+    assert [stage.stage_id for stage in stages] == ["S6a"]
+
+
+def test_filter_stages_rejects_unknown_stage() -> None:
+    with pytest.raises(SystemExit):
+        warp_run.filter_stages(warp_run.SPINE_STAGES, ["NOPE"])
+
+
+def test_missing_inputs_blocks_real_run(tmp_path: Path) -> None:
+    output_path = tmp_path / "output.json"
+    stage = warp_run.Stage("T", "noop.py", (tmp_path / "missing.json",), (output_path,), ("noop.py",))
+
+    with pytest.raises(SystemExit):
+        warp_run.run_stage(stage, dry_run=False)
 
 
 def test_run_writes_skip_manifest_for_fresh_stage(tmp_path: Path) -> None:

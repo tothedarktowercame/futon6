@@ -41,6 +41,7 @@ ROOT = Path(__file__).resolve().parents[1]
 GOLDEN = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 CONCEPT_DIR = ROOT / "data" / "concept-encyclopedia" / "ct"
 CITES = ROOT / "data" / "warp" / "cite-resolution"
+DEFAULT_OUT = ROOT / "data" / "warp" / "concept-phylogeny.json"
 DEF_MARK_KINDS = {"definiendum", "definiens"}
 
 
@@ -63,15 +64,22 @@ def paper_date(pid: str):
         return None
 
 
-def scan_occurrences(golden_dir: Path, candidates: set[str]):
+def scan_occurrences(golden_dir: Path, candidates: set[str], paper_filter: set[str] | None = None):
     """concept -> [{paper, date, is_def}]; uses the same extractor as the prior.
     A paper *defines* a concept if the concept surface appears inside a
     definiendum/definiens mark span in that paper."""
-    word_re, ngrams, _ = _dia.load_term_extractor()
+    word_re, _, _ = _dia.load_term_extractor()
+    by_len: dict[int, set[str]] = defaultdict(set)
+    for candidate in candidates:
+        words = candidate.split()
+        if words:
+            by_len[len(words)].add(candidate)
     occ: dict[str, list] = defaultdict(list)
     papers = 0
     for path in sorted(golden_dir.glob("fable-*-dp-emacs.json")):
         pid = _dia.paper_id_from_path(path)
+        if paper_filter is not None and pid not in paper_filter:
+            continue
         date = paper_date(pid)
         if not date:
             continue
@@ -83,7 +91,15 @@ def scan_occurrences(golden_dir: Path, candidates: set[str]):
         if not text:
             continue
         papers += 1
-        present = _dia.extract_terms(text, word_re, ngrams) & candidates
+        words = word_re.findall(text.lower())
+        present: set[str] = set()
+        for n, wanted in by_len.items():
+            if n > len(words):
+                continue
+            for i in range(len(words) - n + 1):
+                phrase = " ".join(words[i:i + n])
+                if phrase in wanted:
+                    present.add(phrase)
         if not present:
             continue
         # definienda surfaces in this paper (text inside def-marks)
@@ -143,12 +159,73 @@ def build_thread(concept: str, occ: list, cites: dict):
     }
 
 
+def worked_example(threads: dict[str, dict]) -> dict | None:
+    for concept in sorted(threads):
+        trajectory = threads[concept].get("trajectory", [])
+        for step in trajectory:
+            if step.get("type") == "cited-activation" and step.get("cites-prior-user"):
+                return {
+                    "concept": concept,
+                    "paper": step["paper"],
+                    "via": "cited-activation",
+                    "from_paper": step["cites-prior-user"],
+                    "sentence": (
+                        f"concept {concept!r} reached paper {step['paper']} "
+                        f"via cited-activation from paper {step['cites-prior-user']}."
+                    ),
+                }
+    return None
+
+
+def artifact_payload(*, papers: int, candidates: int, threads: dict[str, dict]) -> dict:
+    activation_counts = defaultdict(int)
+    for thread in threads.values():
+        for step in thread.get("trajectory", []):
+            activation_counts[step.get("type", "unknown")] += 1
+    return {
+        "schema": "futon6/warp/concept-phylogeny/v1",
+        "artifact": "data/warp/concept-phylogeny.json",
+        "description": (
+            "Per-concept citation-descent phylogeny: definition, cited-activation, "
+            "uncited-activation, and redefinition events woven over the resolved "
+            "citation graph."
+        ),
+        "cas_sel": {
+            "role": "genealogical-select descent input",
+            "relation": "a paper inherits its imports'/citations' concept patterns",
+        },
+        "r2d": {
+            "role": "R2d-3 coupling candidate",
+            "relation": "citation-descent edges can be checked against proof/warrant inheritance",
+        },
+        "summary": {
+            "papers": papers,
+            "concepts_with_threads": len(threads),
+            "candidate_concepts": candidates,
+            "activation_counts": dict(sorted(activation_counts.items())),
+            "data_limit_note": (
+                "Local CT sample; cited/uncited split sharpens at arXiv scale "
+                "where citation overlap and concept reuse are dense."
+            ),
+        },
+        "worked_example": worked_example(threads),
+        "threads": threads,
+    }
+
+
 def run(args) -> dict:
     candidates = _dia.load_candidate_terms(args.concept_dir)
-    occ, papers = scan_occurrences(args.golden_dir, candidates)
-    cites = _xdoc.load_cites(args.cites)
+    raw_cites = _xdoc.load_cites(args.cites)
+    citation_neighborhood = set(raw_cites)
+    citation_neighborhood.update(
+        r["corpus_id"]
+        for recs in raw_cites.values()
+        for r in recs
+        if r.get("corpus_id")
+    )
+    occ, papers = scan_occurrences(args.golden_dir, candidates, paper_filter=citation_neighborhood)
     # normalize cite values to plain target-id lists
-    cites = {p: [r["corpus_id"] for r in recs] for p, recs in cites.items()}
+    cites = {p: [r["corpus_id"] for r in recs] for p, recs in raw_cites.items()}
     threads = {c: build_thread(c, occ[c], cites) for c in occ}
     if args.concept:
         key = args.concept.lower()
@@ -157,18 +234,18 @@ def run(args) -> dict:
         return out
     ranked = sorted(threads.values(),
                     key=lambda t: (len(t["bursts"]), t["n_papers"]), reverse=True)
+    payload = artifact_payload(papers=papers, candidates=len(candidates), threads=threads)
+    payload["summary"]["citation_neighborhood_papers"] = len(citation_neighborhood)
     summary = {
-        "meta": {"papers": papers, "concepts_with_threads": len(threads),
-                 "candidate_concepts": len(candidates),
-                 "data_limit_note": "Local CT sample; cited/uncited split sharpens at arXiv scale "
-                                    "where citation overlap and concept reuse are dense."},
+        "meta": payload["summary"],
         "top_threads": [
             {"concept": t["concept"], "n_papers": t["n_papers"], "first_seen": t["first_seen"],
              "bursts": t["bursts"], **t["stats"]}
             for t in ranked[:args.top_n]],
+        "worked_example": payload["worked_example"],
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps({"summary": summary["meta"], "threads": threads}, indent=2))
+    args.out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     print(json.dumps(summary, indent=2))
     return summary
 
@@ -191,6 +268,8 @@ def self_test() -> int:
     (c / "0101.0001.cite-resolution.json").write_text(json.dumps(
         {"paper-id": "0101.0001", "records": [
             {"cite/marker": "[1]", "resolved-corpus-id": "0001.0001", "confidence": 0.9}]}))
+    (c / "0201.0001.cite-resolution.json").write_text(json.dumps(
+        {"paper-id": "0201.0001", "records": []}))
     args = argparse.Namespace(golden_dir=g, concept_dir=conc, cites=c, concept=None,
                               out=d / "out.json", top_n=10)
     run(args)
@@ -209,7 +288,7 @@ def main() -> int:
     ap.add_argument("--concept-dir", type=Path, default=CONCEPT_DIR)
     ap.add_argument("--cites", type=Path, default=CITES)
     ap.add_argument("--concept", default=None, help="trace one concept's thread")
-    ap.add_argument("--out", type=Path, default=ROOT / "tmp" / "mark3-threads" / "ct-threads.json")
+    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--top-n", type=int, default=15)
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()

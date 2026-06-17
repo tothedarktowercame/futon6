@@ -1,0 +1,24 @@
+{
+  "S6a": {
+    "built-at": "2026-06-17T19:52:30.342346+00:00",
+    "freshness": "fresh",
+    "input-hash": "5ea5e49ef998730dd6f0bc3ba51c770a06ee1237e06e9d942b6bcd167a09df8b",
+    "inputs": [
+      "data/showcases/ct-anatomy/golden",
+      "data/concept-encyclopedia/ct",
+      "data/warp/cite-resolution"
+    ],
+    "notes": "CAS-SEL genealogical-select descent input; R2d-3 coupling candidate.",
+    "output": [
+      "data/warp/concept-phylogeny.json"
+    ],
+    "rows": {
+      "candidate_concepts": 200,
+      "cited_activations": 416,
+      "concepts_with_threads": 200,
+      "papers": 92
+    },
+    "script": "mark3_thread_tapestry.py",
+    "status": "built"
+  }
+}
