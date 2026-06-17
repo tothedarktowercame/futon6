@@ -1,0 +1,25 @@
+{:name "tensor categories",
+ :df 481,
+ :concept/id :tensor-categories,
+ :msc "ct",
+ :defined-in
+ {:n-papers 312,
+  :sample
+  ["0804.3587" "1203.4568" "1206.4284" "1206.5716" "1206.5934"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1206.4284",
+  :text
+  "attention to the 3-vector spaces that are free finitely-generated $\\TwVect$-modules. We have not endeavored to make precise the symmetric monoidal 3-category of 3-vector spaces. \\emph{Tensor categories.} A notion of 3-vector space came from considering modules over the monoidal 2-category $\\TwVect$."}}

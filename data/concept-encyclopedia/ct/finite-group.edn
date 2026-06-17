@@ -1,0 +1,40 @@
+{:name "finite group",
+ :df 503,
+ :concept/id :finite-group,
+ :msc "ct",
+ :defined-in {:n-papers 2, :sample ["0809.3341" "2310.03786"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A finite group is a group whose underlying set is finite.",
+   :refs [:set :finite-set]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :group,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:group :underlying :group-object :finset],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :group,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-definition,
+  :msc ["20A05" "20D" "Finite_groups" "XX-XX"],
+  :nlab-page-id "741",
+  :resolution-kind "nnexus",
+  :target "nnexus:finite group",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:group :set :finite-set],
+ :gloss
+ {:paper "0809.3341",
+  :text
+  "rphism of generalized Reedy categories.\\vspace{1ex} (d) Any group(oid) is a generalized Reedy category.\\vspace{1ex} (e) \\emph{Orbit categories}. The orbit category $\\OO(G)$ of a \\emph{finite group} $G$ has the subgroups of $G$ as objects, and the $G$-equivariant maps $G/H\\to G/K$ as morphisms. This "}}

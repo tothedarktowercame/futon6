@@ -1,0 +1,40 @@
+{:given [{:var :C, :type :category}],
+ :name "commutative squares",
+ :df 320,
+ :concept/id :commutative-squares,
+ :msc "ct",
+ :defined-in {:n-papers 2, :sample ["0711.1608" "0803.4209"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A square of morphisms of C consists of objects X,Y,Z,W of C and morphisms f X Z, g X Y, f' Y W, and g' Z W.",
+   :refs [:category :commutative-diagram]}
+  {:id :nlab-condition-2,
+   :statement "The category of commutative squares in C is written C.",
+   :refs [:category :commutative-diagram]}],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :source :nlab-raw-definition,
+   :note "nLab definition text did not expose an unambiguous genus"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-775",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-definition,
+  :nlab-page-id "775",
+  :definition-id nil},
+ :depends-on [:category :commutative-diagram],
+ :gloss
+ {:paper "0711.1608",
+  :text
+  "nd in multifarious ways) with two such distinguished subcategories. It is also very important to observe that, when dealing with categories of commutative diagrams (and primarily \\emph{commutative squares}\\footnote {Called ``\\emph{quatuors}'' (i.e. quartets) in \\textsc{Ehres\\-mann}'s terminology.} )"},
+ :data
+ [{:component :definition-data-1,
+   :signature
+   "A square of morphisms of C consists of objects X,Y,Z,W of C and morphisms f X Z, g X Y, f' Y W, and g' Z W.",
+   :source :nlab-definition}]}

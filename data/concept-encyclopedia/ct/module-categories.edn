@@ -1,0 +1,25 @@
+{:name "module categories",
+ :df 495,
+ :concept/id :module-categories,
+ :msc "ct",
+ :defined-in
+ {:n-papers 11,
+  :sample
+  ["0802.1036" "1012.1964" "1502.02354" "1712.08047" "1902.04866"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1902.04866",
+  :text
+  "tegory $\\calc$, and their Morita bicategory $\\Alg(\\calc)$. We identify the target of the representation bifunctor $\\Rep^{\\calc}$ as the 2-category $\\Mod^{ss}(\\calc)$ of semisimple \\emph{module categories} over $\\calc$, which we briefly recall in the paper. After equipping $\\Mod^{ss}(\\calc)$ with a w"}}

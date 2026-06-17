@@ -1,0 +1,978 @@
+{
+  "paper-id": "2311.05789",
+  "records": [
+    {
+      "char-anchor": [
+        2961,
+        2970
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "be",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{be}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Benabou J. (1963), Categories avec multiplication, C.R. Acad. Sci. Paris 256, 1887\u20131890",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        2994,
+        3004
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "mc0",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{mc0}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Natural associativity and commutativity, Rice University Studies 49 (1963) 28\u201346",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        3010,
+        3019
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "ke",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{ke}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Kelly M. (1964), On MacLane's Conditions for Coherence of Natural Associativities, Commutativities, etc. , Journal of Algebra 1, pp.397-402",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        3191,
+        3203
+      ],
+      "cite/group-marker": "[6,2]",
+      "cite/key": "cf",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{cf,bd}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Crane L. , Frenkel I. (1994), Four-dimensional Topological Quantum Field Theory, Hopf Categories, and the Canonical Bases, J. Math. Phys. 35 (10), 5136-5145",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        3191,
+        3203
+      ],
+      "cite/group-marker": "[6,2]",
+      "cite/key": "bd",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{cf,bd}",
+      "confidence": 0.8681,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "2401.14311",
+      "resolved-corpus-id": "2401.14311",
+      "title": "Higher categories"
+    },
+    {
+      "char-anchor": [
+        3620,
+        3629
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "tu",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{tu}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Turaev V. (1994), Quantum invariants of knots and 3-manifolds, de Gruyter Studies in Mathematics 18 Walter de Gruyter, Berlin",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        3757,
+        3766
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "bs",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{bs}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Baez J. , Stay M. (2010), Physics, Topology, Logic and Computation: A Rosetta Stone. Lecture Notes in Physics, pp. 95-172",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        4394,
+        4408
+      ],
+      "cite/group-marker": "[12,11]",
+      "cite/key": "dm",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{dm, de1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Deligne P. , Milne J. (1982), Tannakian categories, in: Hodge Cycles, Motives, and Shimura Varieties, in: Lecture Notes in Math., vol. 900, Springer-Verlag, Berlin, pp. 101-228",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        4394,
+        4408
+      ],
+      "cite/group-marker": "[12,11]",
+      "cite/key": "de1",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{dm, de1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Deligne P. (2002), Categories Tensorielles, Moscow Math. Journal 2, no. 2, 227-248",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        4513,
+        4522
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "ms",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{ms}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Moore G. , Seiberg N. (1990), Lectures on RCFT. Superstrings 89 (Trieste, 1989), 1129, World Sci. Publ",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        4898,
+        4907
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "ki",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{ki}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Kitaev A. (2006), Anyons in an exactly solved model and beyond, Ann. Phys. (N.Y.) 321, 2",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        5006,
+        5015
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "mc",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{mc}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Mac Lane S. (1971), Categories For The Working Mathematician, Springer, Berlin",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        11544,
+        11554
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "js1",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{js1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Joyal A., Street R. (1993), Braided tensor categories, Adv. Math. 102, 20-78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        12400,
+        12412
+      ],
+      "cite/group-marker": "[18,25]",
+      "cite/key": "js",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{js,ma}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Joyal A., Street R. (1991), Tortile Yang-Baxter operators in tensor categories, Journal of Pure and Applied Algebra, 71 (1): 43-51",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        12400,
+        12412
+      ],
+      "cite/group-marker": "[18,25]",
+      "cite/key": "ma",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{js,ma}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Majid S. (1991), Representations, duals and quantum doubles of monoidal categories, Rendiconti del Circolo Matematico di Palermo. Serie II. Supplemento. No. 26, 197-206",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        13042,
+        13052
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "js1",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{js1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Joyal A., Street R. (1993), Braided tensor categories, Adv. Math. 102, 20-78",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        13556,
+        13565
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "dr",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{dr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Drinfeld V. (1989), Quasi-Hopf algebras. Algebra i Analiz, 1(6):114\u2013148",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        14362,
+        14371
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "ek",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{ek}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Eilenberg S., Kelly M. (1966), Closed Categories, in: Proceedings of the Conference on Categorical Algebra - La Jolla 1965, Springer, 421-562",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        14484,
+        14494
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "mc0",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{mc0}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Natural associativity and commutativity, Rice University Studies 49 (1963) 28\u201346",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        15271,
+        15280
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "sr",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{sr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saavedra Rivano N. (1972), Categories Tannakiennes, Bulletin de la Societe Mathematique de France 100: 417-430",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        16227,
+        16236
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "fy",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{fy}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Freyd P., Yetter D. (1989), Braided compact closed categories with applications to low dimensional topology, Adv. in Math. 77 , 156-182",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        16634,
+        16643
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "bw",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{bw}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Barrett J., Westbury B. (1999). Spherical Categories. Advances in Mathematics. 143 (2): 357-375",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        19165,
+        19174
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "os",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{os}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0111139",
+      "resolved-corpus-id": "math__0111139",
+      "title": "Module categories, weak Hopf algebras and modular invariants"
+    },
+    {
+      "char-anchor": [
+        22166,
+        22175
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "pa",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{pa}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Pareigis B. (1995), On braiding and dyslexia, J. Algebra 171, 413-425",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        22553,
+        22564
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "dmno",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{dmno}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Davydov A., Muger M., Nikshych D., Ostrik V. (2013), \u201cWitt group of non-degenerate braided fusion categories\u201d. Journal fur die Reine und Angewandte Mathematik, 677, pp. 135-177",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Witt group of non-degenerate braided fusion categories"
+    },
+    {
+      "char-anchor": [
+        23240,
+        23254
+      ],
+      "cite/group-marker": "[16,7]",
+      "cite/key": "ffrs",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{ffrs,da}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Frohlich J., Fuchs J., Runkel I., Schweigert C. (2006), Correspondences of ribbon categories. Adv. Math. 199 , no. 1, 192-329",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        23240,
+        23254
+      ],
+      "cite/group-marker": "[16,7]",
+      "cite/key": "da",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{ffrs,da}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "0908.1250",
+      "resolved-corpus-id": "0908.1250",
+      "title": "Centre of an algebra"
+    },
+    {
+      "char-anchor": [
+        23426,
+        23435
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "sh",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{sh}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Schauenburg P. (2001), The monoidal center construction and bimodules. J. Pure Appl. Algebra 158(2-3), 325-346",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        23703,
+        23712
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "pa",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{pa}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Pareigis B. (1995), On braiding and dyslexia, J. Algebra 171, 413-425",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        23942,
+        23953
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "ffrs",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{ffrs}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Frohlich J., Fuchs J., Runkel I., Schweigert C. (2006), Correspondences of ribbon categories. Adv. Math. 199 , no. 1, 192-329",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        24255,
+        24269
+      ],
+      "cite/group-marker": "[27,16]",
+      "cite/key": "pa",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{pa,ffrs}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Pareigis B. (1995), On braiding and dyslexia, J. Algebra 171, 413-425",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        24255,
+        24269
+      ],
+      "cite/group-marker": "[27,16]",
+      "cite/key": "ffrs",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{pa,ffrs}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Frohlich J., Fuchs J., Runkel I., Schweigert C. (2006), Correspondences of ribbon categories. Adv. Math. 199 , no. 1, 192-329",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        24747,
+        24757
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "ke1",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{ke1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Kelly M. (1982), Basic concepts of enriched category theory, London Math. Soc. Lec. Note Series 64, Cambridge Univ. Press, Reprints in Theory and Applications of Categories 10 (2005) 1-136",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26232,
+        26244
+      ],
+      "cite/group-marker": "[31,4]",
+      "cite/key": "tu",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{tu,bw}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Turaev V. (1994), Quantum invariants of knots and 3-manifolds, de Gruyter Studies in Mathematics 18 Walter de Gruyter, Berlin",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26232,
+        26244
+      ],
+      "cite/group-marker": "[31,4]",
+      "cite/key": "bw",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{tu,bw}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Barrett J., Westbury B. (1999). Spherical Categories. Advances in Mathematics. 143 (2): 357-375",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26980,
+        26989
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "dy",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{dy}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Day B. (1970), On closed categories of functors, Reports of the Midwest Category Seminar IV, Lecture Notes in Mathematics Vol. 137. Springer-Verlag, pp 1-38",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        28440,
+        28456
+      ],
+      "cite/group-marker": "[16,15]",
+      "cite/key": "ffrs",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{ffrs,egno}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Frohlich J., Fuchs J., Runkel I., Schweigert C. (2006), Correspondences of ribbon categories. Adv. Math. 199 , no. 1, 192-329",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        28440,
+        28456
+      ],
+      "cite/group-marker": "[16,15]",
+      "cite/key": "egno",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{ffrs,egno}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Etingof P., Gelaki S., Nikshych D., Ostrik V. (2015), Tensor categories, Mathematical Surveys and Monographs, Volume 205, American Mathematical Society",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        28592,
+        28602
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "ceo",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{ceo}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "2306.09745",
+      "resolved-corpus-id": "2306.09745",
+      "title": "Incompressible tensor categories"
+    },
+    {
+      "char-anchor": [
+        29052,
+        29062
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "de1",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{de1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Deligne P. (2002), Categories Tensorielles, Moscow Math. Journal 2, no. 2, 227-248",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        29379,
+        29389
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "ceo",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{ceo}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "2306.09745",
+      "resolved-corpus-id": "2306.09745",
+      "title": "Incompressible tensor categories"
+    },
+    {
+      "char-anchor": [
+        29611,
+        29622
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "dmno",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{dmno}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Davydov A., Muger M., Nikshych D., Ostrik V. (2013), \u201cWitt group of non-degenerate braided fusion categories\u201d. Journal fur die Reine und Angewandte Mathematik, 677, pp. 135-177",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Witt group of non-degenerate braided fusion categories"
+    },
+    {
+      "char-anchor": [
+        30142,
+        30153
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "dmno",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{dmno}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Davydov A., Muger M., Nikshych D., Ostrik V. (2013), \u201cWitt group of non-degenerate braided fusion categories\u201d. Journal fur die Reine und Angewandte Mathematik, 677, pp. 135-177",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Witt group of non-degenerate braided fusion categories"
+    },
+    {
+      "char-anchor": [
+        34116,
+        34127
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "egno",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{egno}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Etingof P., Gelaki S., Nikshych D., Ostrik V. (2015), Tensor categories, Mathematical Surveys and Monographs, Volume 205, American Mathematical Society",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        35301,
+        35310
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "ds",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{ds}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Davydov A., Simmons D., On Lagrangian algebras in group-theoretical braided fusion categories, J. Algebra, 471, 1 (2017), 149-175",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "J. Algebra"
+    },
+    {
+      "char-anchor": [
+        36448,
+        36462
+      ],
+      "cite/group-marker": "[18,8]",
+      "cite/key": "js",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{js,dmno}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Joyal A., Street R. (1991), Tortile Yang-Baxter operators in tensor categories, Journal of Pure and Applied Algebra, 71 (1): 43-51",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        36448,
+        36462
+      ],
+      "cite/group-marker": "[18,8]",
+      "cite/key": "dmno",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{js,dmno}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Davydov A., Muger M., Nikshych D., Ostrik V. (2013), \u201cWitt group of non-degenerate braided fusion categories\u201d. Journal fur die Reine und Angewandte Mathematik, 677, pp. 135-177",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Witt group of non-degenerate braided fusion categories"
+    },
+    {
+      "char-anchor": [
+        37680,
+        37691
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "dmno",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{dmno}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Davydov A., Muger M., Nikshych D., Ostrik V. (2013), \u201cWitt group of non-degenerate braided fusion categories\u201d. Journal fur die Reine und Angewandte Mathematik, 677, pp. 135-177",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Witt group of non-degenerate braided fusion categories"
+    },
+    {
+      "char-anchor": [
+        37896,
+        37905
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "dm",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{dm}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Deligne P. , Milne J. (1982), Tannakian categories, in: Hodge Cycles, Motives, and Shimura Varieties, in: Lecture Notes in Math., vol. 900, Springer-Verlag, Berlin, pp. 101-228",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-2311.05789-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 44,
+    "resolution-rate": 0.102,
+    "resolved": 5,
+    "total": 49
+  }
+}

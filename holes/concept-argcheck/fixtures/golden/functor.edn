@@ -1,0 +1,27 @@
+;; GOLDEN seed (hand-authored, APM-Xi level) — few-shot target for the mark3
+;; superpod concept-formaliser. Fully specified: typed :given, the structural
+;; :data, and :axioms as ∀ conditions with concept refs. No holes.
+{:concept/id :functor
+ :name "functor"
+ :msc "ct"
+ :kind :morphism
+ :status :golden
+ :genus :structure-preserving-map
+ :depends-on [:category :morphism :composition :identity-morphism :object]
+ :given [{:var :C :type :category}
+         {:var :D :type :category}]
+ :data [{:component :on-objects
+         :signature "F₀ : Ob(C) → Ob(D)"}
+        {:component :on-morphisms
+         :signature "F₁ : C(a,b) → D(F₀ a, F₀ b)   for all a,b ∈ Ob(C)"}]
+ :axioms [{:id :preserves-identities
+          :statement "∀ a ∈ Ob(C). F₁(id_a) = id_{F₀ a}"
+          :refs [:identity-morphism]}
+          {:id :preserves-composition
+          :statement "∀ a,b,c ∈ Ob(C). ∀ f ∈ C(a,b), g ∈ C(b,c). F₁(g ∘ f) = F₁(g) ∘ F₁(f)"
+          :refs [:composition]}]
+ :gloss {:text "A functor F : C → D sends each object a of C to an object F a of D
+  and each morphism f : a → b to a morphism F f : F a → F b, preserving identities
+  and composition."}
+ :provenance {:target "nlab-123" :source :curated}
+ :holes []}

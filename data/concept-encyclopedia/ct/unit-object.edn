@@ -1,0 +1,34 @@
+{:name "unit object",
+ :pagerank 0.003256,
+ :df 667,
+ :concept/id :unit-object,
+ :msc "ct",
+ :defined-in
+ {:n-papers 78,
+  :sample
+  ["0903.0340" "0904.3137" "0906.4725" "0907.4553" "1012.5910"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 15,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Planetmath"],
+  :definition-source :nlab-raw-section,
+  :msc ["18-00" "18D10" "81-00"],
+  :nlab-page-id "3992",
+  :resolution-kind "nnexus",
+  :target "nnexus:unit object",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0906.4725",
+  :text
+  "certain kind, built from two `smaller' ones, e.g.~using the Cartesian product of sets, or the direct product of groups, or the tensor product of vector spaces. One also assumes a \\emph{unit object} $\\II$ such that composing $A$ with $\\II$ leaves $A$ essentially unchanged. Finally, for each pair of o"}}

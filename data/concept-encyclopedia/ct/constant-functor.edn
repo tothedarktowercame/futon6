@@ -1,0 +1,46 @@
+{:name "constant functor",
+ :df 311,
+ :concept/id :constant-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["1704.02401" "1802.08101" "1902.05447" "2012.08669" "2106.14094"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A constant functor d: C D is a functor that maps each object of the category C to a fixed object d D and each morphism of C to the identity morphism of that fixed object.",
+   :refs [:functor :object :category]}
+  {:id :nlab-condition-2,
+   :statement
+   "(The notation d is suggested by the fact that if d: 1 D names an object d of D, then the composite 1 D D^C names a functor d: C D which is the constant functor at d.",
+   :refs [:functor :object :category]}
+  {:id :nlab-condition-3,
+   :statement
+   "Here : D D^C denotes a diagonal functor.) Viewing D [1,D], it is possible to see that is a base change of the functor categories D^1 and D^C, given the functor !_C: C.",
+   :refs [:functor :object :category]}],
+ :holes
+ [{:kind :unresolved-source-refs,
+   :wanted [:diagonal-functor :naturally-isomorphic],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :functor,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Planetmath"],
+  :definition-source :nlab-raw-definition,
+  :msc ["18-00"],
+  :nlab-page-id "2767",
+  :resolution-kind "nnexus",
+  :target "nnexus:constant functor",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:functor :object :category],
+ :gloss
+ {:paper "2012.08669",
+  :text
+  "ch is represented by the functor $c: \\underline{1} \\rightarrow \\textbf{C}$. Then, precomposing with $t$ to get $c \\circ t: \\textbf{J} \\rightarrow \\textbf{C}$ will just give us the \\textit{constant functor}\\index{functor!constant} at $c$, where this sends each object in \\textbf{J} to the same \\textbf"}}

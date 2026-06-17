@@ -1,0 +1,29 @@
+{:name "short exact sequence",
+ :df 617,
+ :concept/id :short-exact-sequence,
+ :msc "ct",
+ :defined-in
+ {:n-papers 64,
+  :sample
+  ["0711.1608" "0801.3843" "0908.3762" "1104.0518" "1107.0954"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:short exact sequence",
+  :resolution-kind "nnexus",
+  :msc ["16E05" "18-00" "18E05" "18G"],
+  :domains ["Mathworld" "Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0908.3762",
+  :text
+  "A \\defn{short exact sequence} is any sequence \\[ \\xymatrix{K \\ar[r]^-{k} & B \\ar[r]^-{f} & A} \\] that satisfies $k=\\ker f$ and $f=\\coker k$."}}

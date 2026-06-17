@@ -1,0 +1,29 @@
+{:name "pullback square",
+ :df 509,
+ :concept/id :pullback-square,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["1305.0086" "1308.0729" "1506.07341" "1912.10642" "2005.10015"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:pullback square",
+  :resolution-kind "nnexus",
+  :msc ["18A30"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1506.07341",
+  :text
+  "left square is defined to be a pullback square, then the top composite map is an equivalence: since the bottom composite map is the identity, it suffices to check that the map is an equivalence on each fibre, which is clear."}}

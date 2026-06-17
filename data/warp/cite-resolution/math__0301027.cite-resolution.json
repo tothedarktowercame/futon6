@@ -1,0 +1,883 @@
+{
+  "paper-id": "math__0301027",
+  "records": [
+    {
+      "char-anchor": [
+        6091,
+        6101
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "ENO",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{ENO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, V. Ostrik, On fusion categories , preprint math.QA/0203060",
+        "candidate": "QA/0203060",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On fusion categories"
+    },
+    {
+      "char-anchor": [
+        6599,
+        6608
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "Ga",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Ga}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Gaberdiel, An algebraic approach to logarithmic conformal field theory , preprint hep-th/0111260",
+        "candidate": "hep-th/0111260",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An algebraic approach to logarithmic conformal field theory"
+    },
+    {
+      "char-anchor": [
+        8282,
+        8290
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "O",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{O}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111139",
+      "resolved-corpus-id": "math__0111139",
+      "title": "Module categories, weak Hopf algebras and modular invariants"
+    },
+    {
+      "char-anchor": [
+        8291,
+        8301
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "ENO",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{ENO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, V. Ostrik, On fusion categories , preprint math.QA/0203060",
+        "candidate": "QA/0203060",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On fusion categories"
+    },
+    {
+      "char-anchor": [
+        10692,
+        10701
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "Ob",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{Ob}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0202130",
+      "resolved-corpus-id": "math__0202130",
+      "title": "Module categories over the Drinfeld double of a finite group"
+    },
+    {
+      "char-anchor": [
+        10752,
+        10762
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "EG1",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{EG1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof and S. Gelaki, Classification of finite-dimensional triangular Hopf algebras with the Chevalley property, Math. Res. Lett. 8 (2001), no. 3, 249--255",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        12076,
+        12087
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BaKi",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BaKi}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov Jr., Lectures on Tensor categories and modular functors, AMS, Providence, (2001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on Tensor categories and modular functors"
+    },
+    {
+      "char-anchor": [
+        12126,
+        12137
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "BaKi",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{BaKi}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Bakalov, A. Kirillov Jr., Lectures on Tensor categories and modular functors, AMS, Providence, (2001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on Tensor categories and modular functors"
+    },
+    {
+      "char-anchor": [
+        12991,
+        13001
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "De2",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{De2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Deligne, Categories tannakiennes , The Grothendieck Festschrift, Vol. II, 111-195, Progr. Math. 87 , Birkhauser Boston (1990)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories tannakiennes"
+    },
+    {
+      "char-anchor": [
+        13121,
+        13131
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "De2",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{De2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Deligne, Categories tannakiennes , The Grothendieck Festschrift, Vol. II, 111-195, Progr. Math. 87 , Birkhauser Boston (1990)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories tannakiennes"
+    },
+    {
+      "char-anchor": [
+        13382,
+        13392
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "KL4",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{KL4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Kazhdan, G. Lusztig, Tensor structures arising from affine Lie algebras. IV , J. Amer. Math. Soc. 7 (1994), no. 2, 383-453",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Tensor structures arising from affine Lie algebras. IV"
+    },
+    {
+      "char-anchor": [
+        16643,
+        16651
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "E",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{E}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, On Vafa's theorem for tensor categories , preprint math.QA/0207007",
+        "candidate": "QA/0207007",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On Vafa's theorem for tensor categories"
+    },
+    {
+      "char-anchor": [
+        17294,
+        17304
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "ENO",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{ENO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, V. Ostrik, On fusion categories , preprint math.QA/0203060",
+        "candidate": "QA/0203060",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On fusion categories"
+    },
+    {
+      "char-anchor": [
+        17808,
+        17818
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "De2",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{De2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Deligne, Categories tannakiennes , The Grothendieck Festschrift, Vol. II, 111-195, Progr. Math. 87 , Birkhauser Boston (1990)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories tannakiennes"
+    },
+    {
+      "char-anchor": [
+        18362,
+        18372
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "ENO",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{ENO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, V. Ostrik, On fusion categories , preprint math.QA/0203060",
+        "candidate": "QA/0203060",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On fusion categories"
+    },
+    {
+      "char-anchor": [
+        18500,
+        18510
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "MaS",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{MaS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Mack, V. Schomerus, Quasi Hopf quantum symmetry in quantum theory , Nucl. Phys. B 370 (1992), 185-230",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi Hopf quantum symmetry in quantum theory"
+    },
+    {
+      "char-anchor": [
+        21377,
+        21385
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "E",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{E}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, On Vafa's theorem for tensor categories , preprint math.QA/0207007",
+        "candidate": "QA/0207007",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On Vafa's theorem for tensor categories"
+    },
+    {
+      "char-anchor": [
+        23907,
+        23916
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "NZ",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{NZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. D. Nichols, M. B. Zoeller, A Hopf algebra freeness theorem , Amer. J. Math. 111 (1989), no. 2, 381-385",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A Hopf algebra freeness theorem"
+    },
+    {
+      "char-anchor": [
+        24065,
+        24075
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "ENO",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{ENO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, V. Ostrik, On fusion categories , preprint math.QA/0203060",
+        "candidate": "QA/0203060",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On fusion categories"
+    },
+    {
+      "char-anchor": [
+        24132,
+        24142
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "Sch",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{Sch}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Schauenburg, A quasi-Hopf algebra freeness theorem , preprint math.QA/0204141",
+        "candidate": "QA/0204141",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A quasi-Hopf algebra freeness theorem"
+    },
+    {
+      "char-anchor": [
+        27438,
+        27446
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "N",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{N}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, On the structure of weak Hopf algebras , Adv. Math. 170 (2002), no. 2, 257-286",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On the structure of weak Hopf algebras"
+    },
+    {
+      "char-anchor": [
+        27448,
+        27458
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "ENO",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{ENO}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof, D. Nikshych, V. Ostrik, On fusion categories , preprint math.QA/0203060",
+        "candidate": "QA/0203060",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On fusion categories"
+    },
+    {
+      "char-anchor": [
+        27614,
+        27622
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "L",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Lorenz, Representations of finite-dimensional Hopf algebras , J. Algebra 188 (1997), no. 2, 476-505",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations of finite-dimensional Hopf algebras"
+    },
+    {
+      "char-anchor": [
+        31989,
+        31998
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "SA",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{SA}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Suarez-Alvarez, The Hilton-Eckmann argument for cup-products , preprint math.KT/0209029",
+        "candidate": "KT/0209029",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Hilton-Eckmann argument for cup-products"
+    },
+    {
+      "char-anchor": [
+        32305,
+        32314
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "FS",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{FS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. Friedlander, A. Suslin, Cohomology of finite group schemes over a field , Invent. Math. 127 (1997), no. 2, 209-270",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Cohomology of finite group schemes over a field"
+    },
+    {
+      "char-anchor": [
+        44029,
+        44037
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "O",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{O}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111139",
+      "resolved-corpus-id": "math__0111139",
+      "title": "Module categories, weak Hopf algebras and modular invariants"
+    },
+    {
+      "char-anchor": [
+        44531,
+        44539
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "O",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{O}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111139",
+      "resolved-corpus-id": "math__0111139",
+      "title": "Module categories, weak Hopf algebras and modular invariants"
+    },
+    {
+      "char-anchor": [
+        45926,
+        45935
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "Se",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{Se}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Gabriel, Des categories abeliennes , Bull. Soc. Math. France 90 (1962), 323-448",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Des categories abeliennes"
+    },
+    {
+      "char-anchor": [
+        46530,
+        46538
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "O",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{O}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111139",
+      "resolved-corpus-id": "math__0111139",
+      "title": "Module categories, weak Hopf algebras and modular invariants"
+    },
+    {
+      "char-anchor": [
+        49917,
+        49925
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "O",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{O}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111139",
+      "resolved-corpus-id": "math__0111139",
+      "title": "Module categories, weak Hopf algebras and modular invariants"
+    },
+    {
+      "char-anchor": [
+        59050,
+        59060
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "Mu1",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{Mu1}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        60739,
+        60749
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "Mu1",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{Mu1}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        61625,
+        61634
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "Ob",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{Ob}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0202130",
+      "resolved-corpus-id": "math__0202130",
+      "title": "Module categories over the Drinfeld double of a finite group"
+    },
+    {
+      "char-anchor": [
+        69850,
+        69861
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "Sch2",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{Sch2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Schauenburg, Quotients of finite quasi-Hopf algebras , preprint math.QA/0204337",
+        "candidate": "QA/0204337",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quotients of finite quasi-Hopf algebras"
+    },
+    {
+      "char-anchor": [
+        73041,
+        73049
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "O",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{O}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111139",
+      "resolved-corpus-id": "math__0111139",
+      "title": "Module categories, weak Hopf algebras and modular invariants"
+    },
+    {
+      "char-anchor": [
+        73181,
+        73190
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "Ob",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{Ob}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0202130",
+      "resolved-corpus-id": "math__0202130",
+      "title": "Module categories over the Drinfeld double of a finite group"
+    },
+    {
+      "char-anchor": [
+        73239,
+        73248
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "Ob",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{Ob}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0202130",
+      "resolved-corpus-id": "math__0202130",
+      "title": "Module categories over the Drinfeld double of a finite group"
+    },
+    {
+      "char-anchor": [
+        74231,
+        74240
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "De",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{De}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Deligne, Categories tensorielles , Moscow Math. J. 2 (2002) no. 2, 227-248",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories tensorielles"
+    },
+    {
+      "char-anchor": [
+        86309,
+        86318
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "De",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{De}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Deligne, Categories tensorielles , Moscow Math. J. 2 (2002) no. 2, 227-248",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories tensorielles"
+    },
+    {
+      "char-anchor": [
+        86757,
+        86767
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "EG1",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{EG1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof and S. Gelaki, Classification of finite-dimensional triangular Hopf algebras with the Chevalley property, Math. Res. Lett. 8 (2001), no. 3, 249--255",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        86828,
+        86837
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "De",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{De}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Deligne, Categories tensorielles , Moscow Math. J. 2 (2002) no. 2, 227-248",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories tensorielles"
+    },
+    {
+      "char-anchor": [
+        86911,
+        86921
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "EG2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{EG2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof and S. Gelaki, The classification of finite-dimensional triangular Hopf algebras over an algebraically closed field of characteristic 0, math.QA/0202258",
+        "candidate": "QA/0202258",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        87182,
+        87190
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "T",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{T}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. Taft, The order of the antipode of a finite-dimensional Hopf algebra , Proc. Nat. Acad. Sci. USA 68 (1971), 2631-2633. thebibliography document",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The order of the antipode of a finite-dimensional Hopf algebra"
+    },
+    {
+      "char-anchor": [
+        90778,
+        90787
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "MS",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{MS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Montgomery, H.-J. Schneider, Skew derivations of finite-dimensional algebras and actions of the double of the Taft Hopf algebra , Tsukuba J. Math. 25 (2001), no. 2, 337-358",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Skew derivations of finite-dimensional algebras and actions of the double of the Taft Hopf algebra"
+    },
+    {
+      "char-anchor": [
+        90841,
+        90850
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "MS",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{MS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Montgomery, H.-J. Schneider, Skew derivations of finite-dimensional algebras and actions of the double of the Taft Hopf algebra , Tsukuba J. Math. 25 (2001), no. 2, 337-358",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Skew derivations of finite-dimensional algebras and actions of the double of the Taft Hopf algebra"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__0301027-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 33,
+    "resolution-rate": 0.2667,
+    "resolved": 12,
+    "total": 45
+  }
+}

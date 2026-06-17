@@ -1,0 +1,942 @@
+{
+  "paper-id": "1901.01453",
+  "records": [
+    {
+      "char-anchor": [
+        15603,
+        15629
+      ],
+      "cite/group-marker": "[11,12]",
+      "cite/key": "Lawvere73",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{Lawvere73,Lawvere02}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Metric spaces, generalized logic, and closed categories. Rend. Sem. Mat. Fis. Milano , 43:135--166 (1974), 1973",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rend. Sem. Mat. Fis. Milano"
+    },
+    {
+      "char-anchor": [
+        15603,
+        15629
+      ],
+      "cite/group-marker": "[11,12]",
+      "cite/key": "Lawvere02",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{Lawvere73,Lawvere02}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Metric spaces, generalized logic, and closed categories [ R end. S em. M at. F is. M ilano 43 (1973), 135--166 (1974); MR 0352214 (50 4701)]. Repr. Theory Appl. Categ. , (1):1--37, 2002. With an author commentary: Enriched categories in the logic of geometry and analysis",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "43"
+    },
+    {
+      "char-anchor": [
+        15683,
+        15699
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "Lawvere73",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{Lawvere73}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Metric spaces, generalized logic, and closed categories. Rend. Sem. Mat. Fis. Milano , 43:135--166 (1974), 1973",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rend. Sem. Mat. Fis. Milano"
+    },
+    {
+      "char-anchor": [
+        20740,
+        20827
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "Lawvere73",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite[Proposition, bottom of p.~163, and its proof which goes on\r\nto p.~164]{Lawvere73}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Metric spaces, generalized logic, and closed categories. Rend. Sem. Mat. Fis. Milano , 43:135--166 (1974), 1973",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rend. Sem. Mat. Fis. Milano"
+    },
+    {
+      "char-anchor": [
+        20879,
+        20895
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "Lawvere73",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{Lawvere73}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Metric spaces, generalized logic, and closed categories. Rend. Sem. Mat. Fis. Milano , 43:135--166 (1974), 1973",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rend. Sem. Mat. Fis. Milano"
+    },
+    {
+      "char-anchor": [
+        21026,
+        21048
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "Betti-Galuzzi75",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{Betti-Galuzzi75}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Renato Betti and Massimo Galuzzi. Categorie normate. Boll. Un. Mat. Ital. (4) , 11(1):66--75, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boll. Un. Mat. Ital. (4)"
+    },
+    {
+      "char-anchor": [
+        21220,
+        21234
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "Kelly82",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{Kelly82}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Maxwell Kelly. Basic concepts of enriched category theory , volume 64 of London Mathematical Society Lecture Note Series . Cambridge University Press, Cambridge-New York, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basic concepts of enriched category theory"
+    },
+    {
+      "char-anchor": [
+        21291,
+        21313
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "Kelly-Schmitt05",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Kelly-Schmitt05}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Maxwell Kelly and Vincent Schmitt. Notes on enriched categories with colimits of some class. Theory Appl. Categ. , 14:no. 17, 399--423, 2005",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theory Appl. Categ"
+    },
+    {
+      "char-anchor": [
+        21551,
+        21573
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "Betti-Galuzzi75",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{Betti-Galuzzi75}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Renato Betti and Massimo Galuzzi. Categorie normate. Boll. Un. Mat. Ital. (4) , 11(1):66--75, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boll. Un. Mat. Ital. (4)"
+    },
+    {
+      "char-anchor": [
+        21761,
+        21775
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "Kubis17",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{Kubis17}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1705.10189",
+      "resolved-corpus-id": "1705.10189",
+      "title": "Categories with norms"
+    },
+    {
+      "char-anchor": [
+        22343,
+        22358
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Krause18",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Krause18}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1805.10751",
+      "resolved-corpus-id": "1805.10751",
+      "title": "Completing perfect complexes"
+    },
+    {
+      "char-anchor": [
+        22534,
+        22557
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "Gabriel-Zisman67",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{Gabriel-Zisman67}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Gabriel and Michel Zisman. Calculus of fractions and homotopy theory . Ergebnisse der Mathematik und ihrer Grenzgebiete, Band 35. Springer-Verlag New York, Inc., New York, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Calculus of fractions and homotopy theory"
+    },
+    {
+      "char-anchor": [
+        22748,
+        22764
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        22804,
+        22820
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        23075,
+        23091
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        23332,
+        23348
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        30130,
+        30160
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Theorem~2.11]{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        31117,
+        31132
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Keller05",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Keller05}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller. On triangulated orbit categories. Doc. Math. , 10:551--581, 2005",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Doc. Math"
+    },
+    {
+      "char-anchor": [
+        31454,
+        31470
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "Balmer11A",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{Balmer11A}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Paul Balmer. Separability and triangulated categories. Adv. Math. , 226(5):4352--4372, 2011",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        37137,
+        37167
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Theorem~3.15]{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        44713,
+        44742
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Example~4.2]{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        45445,
+        45476
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "BondalvandenBergh04",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite[2.1]{BondalvandenBergh04}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alexei I. Bondal and Michel Van den Bergh. Generators and representability of functors in commutative and noncommutative geometry. Mosc. Math. J. , 3(1):1--36, 258, 2003",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mosc. Math. J"
+    },
+    {
+      "char-anchor": [
+        46149,
+        46163
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "Serre51",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{Serre51}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Jean-Pierre Serre. Homologie singuliere des espaces fibres. A pplications. Ann. of Math. (2) , 54:425--505, 1951",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. of Math. (2)"
+    },
+    {
+      "char-anchor": [
+        46438,
+        46463
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "Lin76",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite[Theorem 3.6]{Lin76}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Tsau Young Lin. Duality and E ilenberg- M ac L ane spectra. Proc. Amer. Math. Soc. , 56:291--299, 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Amer. Math. Soc"
+    },
+    {
+      "char-anchor": [
+        46524,
+        46541
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "Margolis74",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{Margolis74}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Harvey R. Margolis. Eilenberg- M ac L ane spectra. Proc. Amer. Math. Soc. , 43:409--415, 1974",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Amer. Math. Soc"
+    },
+    {
+      "char-anchor": [
+        46621,
+        46648
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "Ravenel84",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite[Section~4]{Ravenel84}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Douglas C. Ravenel. Localization with respect to certain periodic homology theories. Amer. J. of Math. , 106:351--414, 1984",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Amer. J. of Math"
+    },
+    {
+      "char-anchor": [
+        47747,
+        47761
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "Serre51",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{Serre51}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Jean-Pierre Serre. Homologie singuliere des espaces fibres. A pplications. Ann. of Math. (2) , 54:425--505, 1951",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann. of Math. (2)"
+    },
+    {
+      "char-anchor": [
+        49290,
+        49323
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Proposition~5.6]{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        51253,
+        51269
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        51644,
+        51675
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "BondalvandenBergh04",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite[2.1]{BondalvandenBergh04}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alexei I. Bondal and Michel Van den Bergh. Generators and representability of functors in commutative and noncommutative geometry. Mosc. Math. J. , 3(1):1--36, 258, 2003",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mosc. Math. J"
+    },
+    {
+      "char-anchor": [
+        53985,
+        54001
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        54835,
+        54850
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Krause18",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Krause18}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1805.10751",
+      "resolved-corpus-id": "1805.10751",
+      "title": "Completing perfect complexes"
+    },
+    {
+      "char-anchor": [
+        54931,
+        54947
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        54956,
+        54971
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Krause18",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Krause18}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1805.10751",
+      "resolved-corpus-id": "1805.10751",
+      "title": "Completing perfect complexes"
+    },
+    {
+      "char-anchor": [
+        55234,
+        55249
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Krause18",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Krause18}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1805.10751",
+      "resolved-corpus-id": "1805.10751",
+      "title": "Completing perfect complexes"
+    },
+    {
+      "char-anchor": [
+        55367,
+        55382
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Krause18",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Krause18}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1805.10751",
+      "resolved-corpus-id": "1805.10751",
+      "title": "Completing perfect complexes"
+    },
+    {
+      "char-anchor": [
+        55401,
+        55417
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        56351,
+        56366
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Krause18",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Krause18}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1805.10751",
+      "resolved-corpus-id": "1805.10751",
+      "title": "Completing perfect complexes"
+    },
+    {
+      "char-anchor": [
+        59948,
+        59963
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "Keller91",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{Keller91}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller. Derived categories and universal problems. Comm. in Algebra , 19:699--747, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Comm. in Algebra"
+    },
+    {
+      "char-anchor": [
+        60020,
+        60035
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Krause18",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Krause18}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1805.10751",
+      "resolved-corpus-id": "1805.10751",
+      "title": "Completing perfect complexes"
+    },
+    {
+      "char-anchor": [
+        60559,
+        60588
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Example~4.9]{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        61213,
+        61240
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Krause18",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite[Appendix~A]{Krause18}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1805.10751",
+      "resolved-corpus-id": "1805.10751",
+      "title": "Completing perfect complexes"
+    },
+    {
+      "char-anchor": [
+        61682,
+        61698
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "Neeman17B",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{Neeman17B}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Amnon Neeman. Approximable triangulated categories. In Representations of Algebras, Geometry and Physics , volume 769 of Contemp. Math. , pages 111--155. Amer. Math. Soc., Providence, RI, 2021",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations of Algebras, Geometry and Physics"
+    },
+    {
+      "char-anchor": [
+        61740,
+        61756
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "Neeman17B",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{Neeman17B}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Amnon Neeman. Approximable triangulated categories. In Representations of Algebras, Geometry and Physics , volume 769 of Contemp. Math. , pages 111--155. Amer. Math. Soc., Providence, RI, 2021",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations of Algebras, Geometry and Physics"
+    },
+    {
+      "char-anchor": [
+        62208,
+        62224
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "Neeman18A",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{Neeman18A}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1806.06471",
+      "resolved-corpus-id": "1806.06471",
+      "title": "The categories ${\\mathcal T}^c$ and ${\\mathcal T}^b_c$ determine each other"
+    },
+    {
+      "char-anchor": [
+        62310,
+        62336
+      ],
+      "cite/group-marker": "[11,12]",
+      "cite/key": "Lawvere73",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{Lawvere73,Lawvere02}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Metric spaces, generalized logic, and closed categories. Rend. Sem. Mat. Fis. Milano , 43:135--166 (1974), 1973",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rend. Sem. Mat. Fis. Milano"
+    },
+    {
+      "char-anchor": [
+        62310,
+        62336
+      ],
+      "cite/group-marker": "[11,12]",
+      "cite/key": "Lawvere02",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{Lawvere73,Lawvere02}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Metric spaces, generalized logic, and closed categories [ R end. S em. M at. F is. M ilano 43 (1973), 135--166 (1974); MR 0352214 (50 4701)]. Repr. Theory Appl. Categ. , (1):1--37, 2002. With an author commentary: Enriched categories in the logic of geometry and analysis",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "43"
+    },
+    {
+      "char-anchor": [
+        62405,
+        62427
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "Betti-Galuzzi75",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{Betti-Galuzzi75}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Renato Betti and Massimo Galuzzi. Categorie normate. Boll. Un. Mat. Ital. (4) , 11(1):66--75, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boll. Un. Mat. Ital. (4)"
+    },
+    {
+      "char-anchor": [
+        62437,
+        62451
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "Kelly82",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{Kelly82}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Maxwell Kelly. Basic concepts of enriched category theory , volume 64 of London Mathematical Society Lecture Note Series . Cambridge University Press, Cambridge-New York, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basic concepts of enriched category theory"
+    },
+    {
+      "char-anchor": [
+        62471,
+        62493
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "Kelly-Schmitt05",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Kelly-Schmitt05}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Maxwell Kelly and Vincent Schmitt. Notes on enriched categories with colimits of some class. Theory Appl. Categ. , 14:no. 17, 399--423, 2005",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theory Appl. Categ"
+    },
+    {
+      "char-anchor": [
+        62508,
+        62522
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "Kubis17",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{Kubis17}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1705.10189",
+      "resolved-corpus-id": "1705.10189",
+      "title": "Categories with norms"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-1901.01453-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 27,
+    "resolution-rate": 0.4706,
+    "resolved": 24,
+    "total": 51
+  }
+}

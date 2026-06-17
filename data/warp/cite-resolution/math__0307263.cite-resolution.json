@@ -1,0 +1,1080 @@
+{
+  "paper-id": "math__0307263",
+  "records": [
+    {
+      "char-anchor": [
+        4341,
+        4352
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BLau",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BLau}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0307200",
+      "resolved-corpus-id": "math__0307200",
+      "title": "Higher-Dimensional Algebra V: 2-Groups"
+    },
+    {
+      "char-anchor": [
+        5274,
+        5286
+      ],
+      "cite/group-marker": "[25,34]",
+      "cite/key": "LS",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{LS,SS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Lada and J. Stasheff, Introduction to sh Lie algebras for physicists, Int. Jour. Theor. Phys. 32 (7) (1993), 1087--1103. Also available as hep-th/9209099",
+        "candidate": "hep-th/9209099",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Int. Jour. Theor. Phys"
+    },
+    {
+      "char-anchor": [
+        5274,
+        5286
+      ],
+      "cite/group-marker": "[25,34]",
+      "cite/key": "SS",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{LS,SS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Schlessinger and J. Stasheff, The Lie algebra structure of tangent cohomology and deformation theory, Jour.\\ Pure App. Alg. 38 (1985), 313--322",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Jour.\\ Pure App. Alg"
+    },
+    {
+      "char-anchor": [
+        6149,
+        6158
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "KV",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov and V. Voevodsky, 2-Categories and Zamolodchikov tetrahedra equations, in Proc. Symp. Pure Math. 56 Part 2 (1994), AMS, Providence, pp. 177--260",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Symp. Pure Math"
+    },
+    {
+      "char-anchor": [
+        6561,
+        6570
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "BM",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{BM}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Barrett and M. Mackaay, personal communication",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        7181,
+        7190
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Gr",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Gr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Grothendieck, Categories Cofibrees Additives et Complexe Cotangent Relatif , Lecture Notes in Math. 79 , Springer-Verlag, New York, 1968",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories Cofibrees Additives et Complexe Cotangent Relatif"
+    },
+    {
+      "char-anchor": [
+        8640,
+        8666
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "BLan",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.98,
+      "hole": null,
+      "method": "bibitem-arxiv-id",
+      "resolved-arxiv-id": "math/9811139",
+      "resolved-corpus-id": "math__9811139",
+      "title": "Higher-Dimensional Algebra IV: 2-Tangles"
+    },
+    {
+      "char-anchor": [
+        8640,
+        8666
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "BN",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Baez and M. Neuchl, Higher-dimensional algebra I: braided monoidal categories, Adv. Math. 121 (1996), 196--244. Also available as q-alg/9511013",
+        "candidate": "q-alg/9511013",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        8640,
+        8666
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "CS",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. S. Carter and M. Saito, Knotted Surfaces and Their Diagrams , American Mathematical Society, Providence, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Knotted Surfaces and Their Diagrams"
+    },
+    {
+      "char-anchor": [
+        8640,
+        8666
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "Crans",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Crans, Generalized centers of braided and sylleptic monoidal 2-categories, Adv. Math. 136 (1998), 183-223",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        8640,
+        8666
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "KV",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov and V. Voevodsky, 2-Categories and Zamolodchikov tetrahedra equations, in Proc. Symp. Pure Math. 56 Part 2 (1994), AMS, Providence, pp. 177--260",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Symp. Pure Math"
+    },
+    {
+      "char-anchor": [
+        12637,
+        12645
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "E",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{E}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Ehresmann, Categories structurees, Ann.\\ Ec. Normale Sup. 80 (1963). C. Ehresmann, Categories structurees III: Quintettes et applications covariantes, Cahiers Top. et GD V (1963). C. Ehresmann, Introduction to the theory of structured categories, Technical Report Univ. of Kansas at Lawrence (1966)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann.\\ Ec. Normale Sup"
+    },
+    {
+      "char-anchor": [
+        12715,
+        12724
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "Bo",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{Bo}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Borceux, Handbook of Categorical Algebra 1: Basic Category Theory , Cambridge U. Press, Cambridge, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of Categorical Algebra 1: Basic Category Theory"
+    },
+    {
+      "char-anchor": [
+        22278,
+        22286
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "E",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{E}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Ehresmann, Categories structurees, Ann.\\ Ec. Normale Sup. 80 (1963). C. Ehresmann, Categories structurees III: Quintettes et applications covariantes, Cahiers Top. et GD V (1963). C. Ehresmann, Introduction to the theory of structured categories, Technical Report Univ. of Kansas at Lawrence (1966)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Ann.\\ Ec. Normale Sup"
+    },
+    {
+      "char-anchor": [
+        22775,
+        22784
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "KV",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov and V. Voevodsky, 2-Categories and Zamolodchikov tetrahedra equations, in Proc. Symp. Pure Math. 56 Part 2 (1994), AMS, Providence, pp. 177--260",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Symp. Pure Math"
+    },
+    {
+      "char-anchor": [
+        23042,
+        23057
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "Lawrence",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{Lawrence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Lawrence, Triangulation, categories and extended field theories, in Quantum Topology, eds. R. Baadhio and L. Kauffman, World Scientific, Singapore, 1993, pp.\\ 191-208",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum Topology"
+    },
+    {
+      "char-anchor": [
+        23090,
+        23099
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "B2",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{B2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Baez, Higher-dimensional algebra II: 2-Hilbert spaces, Adv. Math. 127 (1997), 125--189. Also available as q-alg/9609018",
+        "candidate": "q-alg/9609018",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        34785,
+        34794
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Gr",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Gr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Grothendieck, Categories Cofibrees Additives et Complexe Cotangent Relatif , Lecture Notes in Math. 79 , Springer-Verlag, New York, 1968",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories Cofibrees Additives et Complexe Cotangent Relatif"
+    },
+    {
+      "char-anchor": [
+        39936,
+        39946
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "Mac",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Mac}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Categories for the Working Mathematician, 2nd edition, Springer, Berlin, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the Working Mathematician"
+    },
+    {
+      "char-anchor": [
+        44084,
+        44093
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "DS",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{DS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Day and R. Street, Monoidal bicategories and Hopf algebroids, Adv. Math. 129 (1997), 99--157",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        49091,
+        49112
+      ],
+      "cite/group-marker": "[7,17,18,23]",
+      "cite/key": "BN",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{BN,Crans,DS,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Baez and M. Neuchl, Higher-dimensional algebra I: braided monoidal categories, Adv. Math. 121 (1996), 196--244. Also available as q-alg/9511013",
+        "candidate": "q-alg/9511013",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        49091,
+        49112
+      ],
+      "cite/group-marker": "[7,17,18,23]",
+      "cite/key": "Crans",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{BN,Crans,DS,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Crans, Generalized centers of braided and sylleptic monoidal 2-categories, Adv. Math. 136 (1998), 183-223",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        49091,
+        49112
+      ],
+      "cite/group-marker": "[7,17,18,23]",
+      "cite/key": "DS",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{BN,Crans,DS,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Day and R. Street, Monoidal bicategories and Hopf algebroids, Adv. Math. 129 (1997), 99--157",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        49091,
+        49112
+      ],
+      "cite/group-marker": "[7,17,18,23]",
+      "cite/key": "KV",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{BN,Crans,DS,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov and V. Voevodsky, 2-Categories and Zamolodchikov tetrahedra equations, in Proc. Symp. Pure Math. 56 Part 2 (1994), AMS, Providence, pp. 177--260",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Symp. Pure Math"
+    },
+    {
+      "char-anchor": [
+        51680,
+        51690
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "Mac",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Mac}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Categories for the Working Mathematician, 2nd edition, Springer, Berlin, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the Working Mathematician"
+    },
+    {
+      "char-anchor": [
+        56270,
+        56279
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "BZ",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{BZ}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Burde and H. Zieschang, Knots , Walter de Gruyter, New York, 1985",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Knots"
+    },
+    {
+      "char-anchor": [
+        56366,
+        56379
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "Birman",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Birman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Birman, Braids, Links, and Mapping Class Groups , Princeton U. Press, Princeton, 1974",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braids, Links, and Mapping Class Groups"
+    },
+    {
+      "char-anchor": [
+        78991,
+        79017
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "BLan",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.98,
+      "hole": null,
+      "method": "bibitem-arxiv-id",
+      "resolved-arxiv-id": "math/9811139",
+      "resolved-corpus-id": "math__9811139",
+      "title": "Higher-Dimensional Algebra IV: 2-Tangles"
+    },
+    {
+      "char-anchor": [
+        78991,
+        79017
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "BN",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Baez and M. Neuchl, Higher-dimensional algebra I: braided monoidal categories, Adv. Math. 121 (1996), 196--244. Also available as q-alg/9511013",
+        "candidate": "q-alg/9511013",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        78991,
+        79017
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "CS",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. S. Carter and M. Saito, Knotted Surfaces and Their Diagrams , American Mathematical Society, Providence, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Knotted Surfaces and Their Diagrams"
+    },
+    {
+      "char-anchor": [
+        78991,
+        79017
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "Crans",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Crans, Generalized centers of braided and sylleptic monoidal 2-categories, Adv. Math. 136 (1998), 183-223",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Adv. Math"
+    },
+    {
+      "char-anchor": [
+        78991,
+        79017
+      ],
+      "cite/group-marker": "[5,7,16,17,23]",
+      "cite/key": "KV",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{BLan,BN,CS,Crans,KV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov and V. Voevodsky, 2-Categories and Zamolodchikov tetrahedra equations, in Proc. Symp. Pure Math. 56 Part 2 (1994), AMS, Providence, pp. 177--260",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Symp. Pure Math"
+    },
+    {
+      "char-anchor": [
+        82284,
+        82293
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "SS",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{SS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Schlessinger and J. Stasheff, The Lie algebra structure of tangent cohomology and deformation theory, Jour.\\ Pure App. Alg. 38 (1985), 313--322",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Jour.\\ Pure App. Alg"
+    },
+    {
+      "char-anchor": [
+        82388,
+        82409
+      ],
+      "cite/group-marker": "[24,25,29,32]",
+      "cite/key": "LM",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{LM, LS, Mar, P}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Lada and M. Markl, Strongly homotopy Lie algebras, Comm. Alg. 23(6) (1995), 2147--2161. Also available as hep-th/9406095",
+        "candidate": "hep-th/9406095",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Comm. Alg"
+    },
+    {
+      "char-anchor": [
+        82388,
+        82409
+      ],
+      "cite/group-marker": "[24,25,29,32]",
+      "cite/key": "LS",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{LM, LS, Mar, P}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Lada and J. Stasheff, Introduction to sh Lie algebras for physicists, Int. Jour. Theor. Phys. 32 (7) (1993), 1087--1103. Also available as hep-th/9209099",
+        "candidate": "hep-th/9209099",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Int. Jour. Theor. Phys"
+    },
+    {
+      "char-anchor": [
+        82388,
+        82409
+      ],
+      "cite/group-marker": "[24,25,29,32]",
+      "cite/key": "Mar",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{LM, LS, Mar, P}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Markl, Homotopy algebras via resolutions of operads, available as math.AT/9808101",
+        "candidate": "AT/9808101",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        82388,
+        82409
+      ],
+      "cite/group-marker": "[24,25,29,32]",
+      "cite/key": "P",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{LM, LS, Mar, P}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Penkava, L_ algebras and their cohomology, available as q-alg/9512014",
+        "candidate": "q-alg/9512014",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        82718,
+        82728
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "MSS",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{MSS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Markl, S. Schnider and J. Stasheff, Operads in Algebra, Topology and Physics , AMS, Providence, Rhode Island, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Operads in Algebra, Topology and Physics"
+    },
+    {
+      "char-anchor": [
+        83068,
+        83077
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "BH",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{BH}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0212157",
+      "resolved-corpus-id": "math__0212157",
+      "title": "Cubical abelian groups with connections are equivalent to chain complexes"
+    },
+    {
+      "char-anchor": [
+        85091,
+        85100
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "LM",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{LM}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Lada and M. Markl, Strongly homotopy Lie algebras, Comm. Alg. 23(6) (1995), 2147--2161. Also available as hep-th/9406095",
+        "candidate": "hep-th/9406095",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Comm. Alg"
+    },
+    {
+      "char-anchor": [
+        86908,
+        86917
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "SS",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{SS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Schlessinger and J. Stasheff, The Lie algebra structure of tangent cohomology and deformation theory, Jour.\\ Pure App. Alg. 38 (1985), 313--322",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Jour.\\ Pure App. Alg"
+    },
+    {
+      "char-anchor": [
+        111484,
+        111492
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "B",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{B}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Baez, Higher Yang-Mills Theory, available as hep-th/9808101",
+        "candidate": "hep-th/9808101",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        112874,
+        112882
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "B",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{B}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Baez, Higher Yang-Mills Theory, available as hep-th/9808101",
+        "candidate": "hep-th/9808101",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        118236,
+        118244
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "G",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{G}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Gerstenhaber, A uniform cohomology theory for algebras, Proc. Nat. Acad. Sci. 51 (1964), 626--629",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proc. Nat. Acad. Sci"
+    },
+    {
+      "char-anchor": [
+        119119,
+        119133
+      ],
+      "cite/group-marker": "[6,20]",
+      "cite/key": "BLau",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BLau,FB}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0307200",
+      "resolved-corpus-id": "math__0307200",
+      "title": "Higher-Dimensional Algebra V: 2-Groups"
+    },
+    {
+      "char-anchor": [
+        119119,
+        119133
+      ],
+      "cite/group-marker": "[6,20]",
+      "cite/key": "FB",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{BLau,FB}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0212065",
+      "resolved-corpus-id": "math__0212065",
+      "title": "Group Objects and Internal Categories"
+    },
+    {
+      "char-anchor": [
+        120452,
+        120462
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "Mac",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Mac}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Categories for the Working Mathematician, 2nd edition, Springer, Berlin, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the Working Mathematician"
+    },
+    {
+      "char-anchor": [
+        133405,
+        133415
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AIP",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AIP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. A. de Azcarraga, J.M. Izquierdo, and J. C.\\ Perez Bueno, An introduction to some novel applications of Lie algebra cohomology in mathematics and physics, available as physics/9803046",
+        "candidate": "physics/9803046",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        138661,
+        138670
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BD",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BD}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "2401.14311",
+      "resolved-corpus-id": "2401.14311",
+      "title": "Higher categories"
+    },
+    {
+      "char-anchor": [
+        138907,
+        138923
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "Mackenzie",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{Mackenzie}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Mackenzie, Lie Groupoids and Lie Algebroids in Differential Geometry , London Math.\\ Society Lecture Notes 124 , Cambridge U. Press, Cambridge, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lie Groupoids and Lie Algebroids in Differential Geometry"
+    },
+    {
+      "char-anchor": [
+        140186,
+        140202
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "Mackenzie",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{Mackenzie}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Mackenzie, Lie Groupoids and Lie Algebroids in Differential Geometry , London Math.\\ Society Lecture Notes 124 , Cambridge U. Press, Cambridge, 1987",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lie Groupoids and Lie Algebroids in Differential Geometry"
+    },
+    {
+      "char-anchor": [
+        142561,
+        142570
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "CS",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{CS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. S. Carter and M. Saito, Knotted Surfaces and Their Diagrams , American Mathematical Society, Providence, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Knotted Surfaces and Their Diagrams"
+    },
+    {
+      "char-anchor": [
+        142656,
+        142668
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "Noohi",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{Noohi}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0910.1818",
+      "resolved-corpus-id": "0910.1818",
+      "title": "Integrating morphisms of Lie 2-algebras"
+    },
+    {
+      "char-anchor": [
+        142691,
+        142708
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "Roytenberg",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{Roytenberg}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Roytenberg, On weak Lie 2-algebras, available as arXiv:0712.3461",
+        "candidate": "0712.3461",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__0307263-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 46,
+    "resolution-rate": 0.1481,
+    "resolved": 8,
+    "total": 54
+  }
+}

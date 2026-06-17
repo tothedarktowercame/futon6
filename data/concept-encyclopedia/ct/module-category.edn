@@ -1,0 +1,30 @@
+{:name "module category",
+ :df 422,
+ :concept/id :module-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 59,
+  :sample
+  ["0708.3398" "0709.4326" "0802.1036" "0806.1079" "0812.0986"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-9580",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "9580",
+  :definition-id nil},
+ :depends-on [],
+ :gloss
+ {:paper "0709.4326",
+  :text
+  ", where $1_{\\C}$, $\\alpha$, $\\lambda$, and $\\rho$ are the unit object, the associativity constraint, the left unit constraint, and the right unit constraint, respectively. A right {\\em module category} over $\\C$ (see \\cite{O1} and references therein) is a category $\\M$ together with an exact bifunct"}}

@@ -1,0 +1,31 @@
+{:name "algebraically closed field",
+ :df 312,
+ :concept/id :algebraically-closed-field,
+ :msc "ct",
+ :defined-in
+ {:n-papers 4,
+  :sample ["1101.3054" "2001.04730" "2601.03128" "math__0312190"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Encyclopediaofmath"],
+  :definition-source :nlab-raw-section,
+  :msc ["XX-XX"],
+  :nlab-page-id "2116",
+  :resolution-kind "nnexus",
+  :target "nnexus:algebraically closed field",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2601.03128",
+  :text
+  "application to smash product algebras concludes the section. \\section{Module categories and triangulated module categories}\\label{section2} Throughout this paper $\\k$ denotes an \\textit{algebraically closed field}. In this section, we recall some definitions and basic properties related to module ca"}}

@@ -1,0 +1,12 @@
+{:paper/id "0807.1872"
+ :passage/id "0807.1872:L521-532"
+ :source {:lines [521 532] :kind :expository}
+ :scopes
+ [{:id :s1
+   :kind :connection/literature-gap
+   :slot-fill "the prior Ext calculation does not supply a set-sized Hom class"
+   :source {:lines [523 527]}}
+  {:id :s2
+   :kind :difficulty-assessment
+   :held {:reason "the region signals a proof burden but the exact difficulty phrase is not recoverable"}
+   :source {:lines [528 529]}}]}

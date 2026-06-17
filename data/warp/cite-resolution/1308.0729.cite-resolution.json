@@ -1,0 +1,3735 @@
+{
+  "paper-id": "1308.0729",
+  "records": [
+    {
+      "char-anchor": [
+        9726,
+        9739
+      ],
+      "cite/group-marker": "[39]",
+      "cite/key": "Euclid",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{Euclid}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Euclid. Elements, V ols. 1--13 . Elsevier, 300 BC",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        135013,
+        135035
+      ],
+      "cite/group-marker": "[78]",
+      "cite/key": "Martin-Lof-1972",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{Martin-Lof-1972}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types. In Giovanni Sambin and Jan M. Smith, editors, Twenty-five years of constructive type theory ( V enice, 1995) , volume 36 of Oxford Logic Guides , pages 127--172. Oxford University Press, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Oxford Logic Guides"
+    },
+    {
+      "char-anchor": [
+        136058,
+        136079
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "hs:gpd-typethy",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{hs:gpd-typethy}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Martin Hofmann and Thomas Streicher. The groupoid interpretation of type theory. In Giovanni Sambin and Jan M. Smith, editors, Twenty-five years of constructive type theory ( V enice, 1995) , volume 36 of Oxford Logic Guides , pages 83--111. Oxford University Press, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Oxford Logic Guides"
+    },
+    {
+      "char-anchor": [
+        136265,
+        136274
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "AW",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{AW}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Steve Awodey and Michael A. Warren. Homotopy theoretic models of identity types. Mathematical Proceedings of the Cambridge Philosophical Society , 146:45--55, 2009",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        136451,
+        136467
+      ],
+      "cite/group-marker": "[116]",
+      "cite/key": "mw:thesis",
+      "cite/marker": "[116]",
+      "cite/raw": "\\cite{mw:thesis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Michael A. Warren. Homotopy Theoretic Aspects of Constructive Type Theory . PhD thesis, Carnegie Mellon University, 2008",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy Theoretic Aspects of Constructive Type Theory"
+    },
+    {
+      "char-anchor": [
+        136583,
+        136603
+      ],
+      "cite/group-marker": "[70]",
+      "cite/key": "pll:wkom-type",
+      "cite/marker": "[70]",
+      "cite/raw": "\\cite{pll:wkom-type}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "0812.0409",
+      "resolved-corpus-id": "0812.0409",
+      "title": "Weak omega-categories from intensional type theory"
+    },
+    {
+      "char-anchor": [
+        136608,
+        136627
+      ],
+      "cite/group-marker": "[113]",
+      "cite/key": "bg:type-wkom",
+      "cite/marker": "[113]",
+      "cite/raw": "\\cite{bg:type-wkom}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Benno van den Berg and Richard Garner. Types are weak -groupoids. Proceedings of the London Mathematical Society , 102(2):370--394, 2011, http://plms.oxfordjournals.org/content/102/2/370.full.pdf+html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the London Mathematical Society"
+    },
+    {
+      "char-anchor": [
+        137135,
+        137155
+      ],
+      "cite/group-marker": "[67]",
+      "cite/key": "lh:canonicity",
+      "cite/marker": "[67]",
+      "cite/raw": "\\cite{lh:canonicity}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel R. Licata and Robert Harper. Canonicity for 2-dimensional type theory. In Proceedings of the 39th annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages , pages 337--348, New York, NY, USA, 2012. ACM",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the 39th annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages"
+    },
+    {
+      "char-anchor": [
+        137596,
+        137606
+      ],
+      "cite/group-marker": "[119]",
+      "cite/key": "PM2",
+      "cite/marker": "[119]",
+      "cite/raw": "\\cite{PM2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alfred North Whitehead and Bertrand Russell. Principia mathematica, 3 vol.s . Cambridge University Press, Cambridge, 1910--1913; Second edition, 1925--1927",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Principia mathematica, 3 vol.s"
+    },
+    {
+      "char-anchor": [
+        137674,
+        137695
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "garner:depprod",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite{garner:depprod}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Richard Garner. On the strength of dependent products in the type theory of M artin- L of. Annals of Pure and Applied Logic , 160(1):1--12, 2009",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Annals of Pure and Applied Logic"
+    },
+    {
+      "char-anchor": [
+        138084,
+        138104
+      ],
+      "cite/group-marker": "[61]",
+      "cite/key": "klv:ssetmodel",
+      "cite/marker": "[61]",
+      "cite/raw": "\\cite{klv:ssetmodel}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1211.2851",
+      "resolved-corpus-id": "1211.2851",
+      "title": "The Simplicial Model of Univalent Foundations (after Voevodsky)"
+    },
+    {
+      "char-anchor": [
+        139010,
+        139030
+      ],
+      "cite/group-marker": "[67]",
+      "cite/key": "lh:canonicity",
+      "cite/marker": "[67]",
+      "cite/raw": "\\cite{lh:canonicity}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel R. Licata and Robert Harper. Canonicity for 2-dimensional type theory. In Proceedings of the 39th annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages , pages 337--348, New York, NY, USA, 2012. ACM",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the 39th annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages"
+    },
+    {
+      "char-anchor": [
+        139674,
+        139689
+      ],
+      "cite/group-marker": "[68]",
+      "cite/key": "ls:pi1s1",
+      "cite/marker": "[68]",
+      "cite/raw": "\\cite{ls:pi1s1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel R. Licata and Michael Shulman. Calculating the fundamental group of the circle in homotopy type theory. In LICS 2013: Proceedings of the Twenty-Eighth Annual ACM/IEEE Symposium on Logic in Computer Science , 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "LICS 2013: Proceedings of the Twenty-Eighth Annual ACM/IEEE Symposium on Logic in Computer Science"
+    },
+    {
+      "char-anchor": [
+        139839,
+        139856
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "howard:pat",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{howard:pat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "William A. Howard. The formulae-as-types notion of construction. In J. Roger Seldin, Jonathan P.; Hindley, editor, To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus and Formalism , pages 479--490. Academic Press, 1980. original paper manuscript from 1969",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus and Formalism"
+    },
+    {
+      "char-anchor": [
+        140064,
+        140079
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "Bourbaki",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{Bourbaki}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nicolas Bourbaki. Theory of Sets . Hermann, Paris, 1968",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theory of Sets"
+    },
+    {
+      "char-anchor": [
+        140227,
+        140239
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "AKL13",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{AKL13}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1304.0680",
+      "resolved-corpus-id": "1304.0680",
+      "title": "Homotopy limits in type theory"
+    },
+    {
+      "char-anchor": [
+        158742,
+        158762
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "bsp12infncats",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{bsp12infncats}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1112.0040",
+      "resolved-corpus-id": "1112.0040",
+      "title": "On the Unicity of the Homotopy Theory of Higher Categories"
+    },
+    {
+      "char-anchor": [
+        245422,
+        245488
+      ],
+      "cite/group-marker": "[17,40,72,73]",
+      "cite/key": "blanc:eqv-log",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{blanc:eqv-log,freyd:invar-eqv,makkai:folds,makkai:comparing}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Georges Blanc. Equivalence naturelle et formules logiques en th eorie des cat egories. Archiv f ur Mathematische Logik und Grundlagenforschung , 19(3-4):131--137, 1978/79",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        245422,
+        245488
+      ],
+      "cite/group-marker": "[17,40,72,73]",
+      "cite/key": "freyd:invar-eqv",
+      "cite/marker": "[40]",
+      "cite/raw": "\\cite{blanc:eqv-log,freyd:invar-eqv,makkai:folds,makkai:comparing}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Freyd. Properties invariant within equivalence types of categories. In Algebra, topology, and category theory (a collection of papers in honor of S amuel E ilenberg) , pages 55--61. Academic Press, 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        245422,
+        245488
+      ],
+      "cite/group-marker": "[17,40,72,73]",
+      "cite/key": "makkai:folds",
+      "cite/marker": "[72]",
+      "cite/raw": "\\cite{blanc:eqv-log,freyd:invar-eqv,makkai:folds,makkai:comparing}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Michael Makkai. First order logic with dependent sorts, with applications to category theory. http://www.math.mcgill.ca/makkai/folds/, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        245422,
+        245488
+      ],
+      "cite/group-marker": "[17,40,72,73]",
+      "cite/key": "makkai:comparing",
+      "cite/marker": "[73]",
+      "cite/raw": "\\cite{blanc:eqv-log,freyd:invar-eqv,makkai:folds,makkai:comparing}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Michael Makkai. On comparing definitions of weak n -category. http://www.math.mcgill.ca/makkai/, August 2001",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        246874,
+        246889
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "aks:rezk",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{aks:rezk}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1303.0584",
+      "resolved-corpus-id": "1303.0584",
+      "title": "Univalent categories and the Rezk completion"
+    },
+    {
+      "char-anchor": [
+        247365,
+        247381
+      ],
+      "cite/group-marker": "[95]",
+      "cite/key": "rezk01css",
+      "cite/marker": "[95]",
+      "cite/raw": "\\cite{rezk01css}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/9811037",
+      "resolved-corpus-id": "math__9811037",
+      "title": "A model for the homotopy theory of homotopy theory"
+    },
+    {
+      "char-anchor": [
+        248618,
+        248642
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "bergner:infty-one",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{bergner:infty-one}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0610239",
+      "resolved-corpus-id": "math__0610239",
+      "title": "A survey of (\\infty, 1)-categories"
+    },
+    {
+      "char-anchor": [
+        249758,
+        249781
+      ],
+      "cite/group-marker": "[58]",
+      "cite/key": "jt:strong-stacks",
+      "cite/marker": "[58]",
+      "cite/raw": "\\cite{jt:strong-stacks}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Andr e Joyal and Myles Tierney. Strong stacks and classifying spaces. In Category Theory. Proceedings of the International Conference held in Como, Italy, July 22\u201328, 1990 , volume 1488 of Lecture Notes in Mathematics , pages 213--236. Springer, Berlin, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category Theory. Proceedings of the International Conference held in Como, Italy, July 22\u201328, 1990"
+    },
+    {
+      "char-anchor": [
+        249810,
+        249845
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "bunge:stacks-morita-internal",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{bunge:stacks-morita-internal}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Marta Bunge. Stack completions and M orita equivalence for categories in a topos. Cahiers de Topologie et Geometrie Differentielle , 20(4):401--436, 1979",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Cahiers de Topologie et Geometrie Differentielle"
+    },
+    {
+      "char-anchor": [
+        305112,
+        305144
+      ],
+      "cite/group-marker": "[96,71]",
+      "cite/key": "Rezk05",
+      "cite/marker": "[96]",
+      "cite/raw": "\\cite{Rezk05,lurie:higher-topoi}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Charles Rezk. Toposes and homotopy toposes. http://www.math.uiuc.edu/ rezk/homotopy-topos-sketch.pdf, 2005",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        305112,
+        305144
+      ],
+      "cite/group-marker": "[96,71]",
+      "cite/key": "lurie:higher-topoi",
+      "cite/marker": "[71]",
+      "cite/raw": "\\cite{Rezk05,lurie:higher-topoi}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        344721,
+        344749
+      ],
+      "cite/group-marker": "[31,87]",
+      "cite/key": "Coq",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{Coq,norell2007towards}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coq Development Team . The C oq Proof Assistant Reference Manual . INRIA-Rocquencourt, 2012",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        344721,
+        344749
+      ],
+      "cite/group-marker": "[31,87]",
+      "cite/key": "norell2007towards",
+      "cite/marker": "[87]",
+      "cite/raw": "\\cite{Coq,norell2007towards}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Ulf Norell. Towards a practical programming language based on dependent type theory . PhD thesis, Chalmers, Goteborg University , 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Towards a practical programming language based on dependent type theory"
+    },
+    {
+      "char-anchor": [
+        354202,
+        354222
+      ],
+      "cite/group-marker": "[61]",
+      "cite/key": "klv:ssetmodel",
+      "cite/marker": "[61]",
+      "cite/raw": "\\cite{klv:ssetmodel}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1211.2851",
+      "resolved-corpus-id": "1211.2851",
+      "title": "The Simplicial Model of Univalent Foundations (after Voevodsky)"
+    },
+    {
+      "char-anchor": [
+        354293,
+        354307
+      ],
+      "cite/group-marker": "[69]",
+      "cite/key": "ls:hits",
+      "cite/marker": "[69]",
+      "cite/raw": "\\cite{ls:hits}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter LeFanu Lumsdaine and Michael Shulman. Higher inductive types. In preparation, 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        354907,
+        354924
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "howard:pat",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{howard:pat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "William A. Howard. The formulae-as-types notion of construction. In J. Roger Seldin, Jonathan P.; Hindley, editor, To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus and Formalism , pages 479--490. Academic Press, 1980. original paper manuscript from 1969",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus and Formalism"
+    },
+    {
+      "char-anchor": [
+        354985,
+        355007
+      ],
+      "cite/group-marker": "[78]",
+      "cite/key": "Martin-Lof-1972",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{Martin-Lof-1972}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types. In Giovanni Sambin and Jan M. Smith, editors, Twenty-five years of constructive type theory ( V enice, 1995) , volume 36 of Oxford Logic Guides , pages 127--172. Oxford University Press, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Oxford Logic Guides"
+    },
+    {
+      "char-anchor": [
+        355060,
+        355082
+      ],
+      "cite/group-marker": "[75]",
+      "cite/key": "Martin-Lof-1973",
+      "cite/marker": "[75]",
+      "cite/raw": "\\cite{Martin-Lof-1973}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types: predicative part. In H.E. Rose and J.C. Shepherdson, editors, Logic Colloquium '73, Proceedings of the Logic Colloquium , volume 80 of Studies in Logic and the Foundations of Mathematics , pages 73--118. North-Holland, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic Colloquium '73, Proceedings of the Logic Colloquium"
+    },
+    {
+      "char-anchor": [
+        355117,
+        355139
+      ],
+      "cite/group-marker": "[76]",
+      "cite/key": "Martin-Lof-1979",
+      "cite/marker": "[76]",
+      "cite/raw": "\\cite{Martin-Lof-1979}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. Constructive mathematics and computer programming. In L. Jonathan Cohen, Jerzy \u0141o\u015b , Helmut Pfeiffer, and Klaus-Peter Podewski, editors, Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979 , volume 104 of Studies in Logic and the Foundations of Mathematics , pages 153--175. North-Holland, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979"
+    },
+    {
+      "char-anchor": [
+        355189,
+        355205
+      ],
+      "cite/group-marker": "[108]",
+      "cite/key": "Tait-1968",
+      "cite/marker": "[108]",
+      "cite/raw": "\\cite{Tait-1968}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "William W. Tait. Constructive reasoning. In Logic, M ethodology and P hilos. S ci. III ( P roc. T hird I nternat. C ongr., A msterdam, 1967) , pages 185--199. North-Holland, Amsterdam, 1968",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        355362,
+        355381
+      ],
+      "cite/group-marker": "[49]",
+      "cite/key": "Hilbert-1925",
+      "cite/marker": "[49]",
+      "cite/raw": "\\cite{Hilbert-1925}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "David Hilbert. Uber das U nendliche. Mathematische Annalen , 95(1):161--190, 1926",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematische Annalen"
+    },
+    {
+      "char-anchor": [
+        355420,
+        355440
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "Goedel-T-1958",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{Goedel-T-1958}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Kurt G odel. Uber eine bisher noch nicht ben utzte E rweiterung des finiten S tandpunktes. Dialectica. International Journal of Philosophy , 12:280--287, 1958",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Dialectica. International Journal of Philosophy"
+    },
+    {
+      "char-anchor": [
+        355464,
+        355480
+      ],
+      "cite/group-marker": "[107]",
+      "cite/key": "Tait-1966",
+      "cite/marker": "[107]",
+      "cite/raw": "\\cite{Tait-1966}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "William W. Tait. Intensional interpretations of functionals of finite type. I . The Journal of Symbolic Logic , 32:198--212, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Journal of Symbolic Logic"
+    },
+    {
+      "char-anchor": [
+        355502,
+        355522
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "Goedel-T-1958",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{Goedel-T-1958}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Kurt G odel. Uber eine bisher noch nicht ben utzte E rweiterung des finiten S tandpunktes. Dialectica. International Journal of Philosophy , 12:280--287, 1958",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Dialectica. International Journal of Philosophy"
+    },
+    {
+      "char-anchor": [
+        355761,
+        355781
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "deBruijn-1973",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{deBruijn-1973}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nicolaas Govert de Bruijn. A UTOMATH , a language for mathematics . Les Presses de l'Universite de Montreal, Montreal, Quebec, 1973. S eminaire de Math ematiques Sup erieures, No. 52 ( Et e 1971)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        355849,
+        355884
+      ],
+      "cite/group-marker": "[105]",
+      "cite/key": "Streicher-1991",
+      "cite/marker": "[105]",
+      "cite/raw": "\\cite[Theorem 4.13]{Streicher-1991}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Thomas Streicher. Semantics of type theory . Progress in Theoretical Computer Science. Birkhauser Boston Inc., 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Semantics of type theory"
+    },
+    {
+      "char-anchor": [
+        356239,
+        356274
+      ],
+      "cite/group-marker": "[51]",
+      "cite/key": "hofmann:syntax-and-semantics",
+      "cite/marker": "[51]",
+      "cite/raw": "\\cite{hofmann:syntax-and-semantics}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Martin Hofmann. Syntax and semantics of dependent types. In Semantics and logics of computation , volume 14 of Publictions of the Newton Institute , pages 79--130. Cambridge University Press, Cambridge, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Semantics and logics of computation"
+    },
+    {
+      "char-anchor": [
+        356409,
+        356438
+      ],
+      "cite/group-marker": "[77]",
+      "cite/key": "martin-lof:bibliopolis",
+      "cite/marker": "[77]",
+      "cite/raw": "\\cite{martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. Intuitionistic type theory , volume 1 of Studies in Proof Theory . Bibliopolis, 1984",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Intuitionistic type theory"
+    },
+    {
+      "char-anchor": [
+        489588,
+        489602
+      ],
+      "cite/group-marker": "[69]",
+      "cite/key": "ls:hits",
+      "cite/marker": "[69]",
+      "cite/raw": "\\cite{ls:hits}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter LeFanu Lumsdaine and Michael Shulman. Higher inductive types. In preparation, 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        491373,
+        491396
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "ab:bracket-types",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{ab:bracket-types}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Steven Awodey and Andrej Bauer. Propositions as [types]. Journal of Logic and Computation , 14(4):447--471, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Logic and Computation"
+    },
+    {
+      "char-anchor": [
+        491566,
+        491595
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "constable+86nuprl-book",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{constable+86nuprl-book}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Robert L. Constable, Stuart F. Allen, H. M. Bromley, W. R. Cleaveland, J. F. Cremer, Robert W. Harper, Douglas J. Howe, T. B. Knoblock, N. P. Mendler, P. Panangaden, James T. Sasaki, and Scott F. Smith. Implementing Mathematics with the NuPRL Proof Development System . Prentice Hall, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        491942,
+        491995
+      ],
+      "cite/group-marker": "[50,7,8]",
+      "cite/key": "hofmann:thesis",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{hofmann:thesis,Altenkirch1999,altenkirch+07ott}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Martin Hofmann. Extensional concepts in intensional type theory . PhD thesis, University of Edinburgh, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Extensional concepts in intensional type theory"
+    },
+    {
+      "char-anchor": [
+        491942,
+        491995
+      ],
+      "cite/group-marker": "[50,7,8]",
+      "cite/key": "Altenkirch1999",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{hofmann:thesis,Altenkirch1999,altenkirch+07ott}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Thorsten Altenkirch. Extensional equality in intensional type theory. In 14th Annual IEEE Symposium on Logic in Computer Science, Trento, Italy, July 2--5, 1999 , pages 412--420, 1999",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "14th Annual IEEE Symposium on Logic in Computer Science, Trento, Italy, July 2--5, 1999"
+    },
+    {
+      "char-anchor": [
+        491942,
+        491995
+      ],
+      "cite/group-marker": "[50,7,8]",
+      "cite/key": "altenkirch+07ott",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{hofmann:thesis,Altenkirch1999,altenkirch+07ott}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Thorsten Altenkirch, Conor McBride, and Wouter Swierstra. Observational equality, now! In Aaron Stump and Hongwei Xi, editors, Proceedings of the ACM Workshop Programming Languages meets Program Verification, PLPV 2007, Freiburg, Germany, October 5, 2007 , 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the ACM Workshop Programming Languages meets Program Verification, PLPV 2007, Freiburg, Germany, October 5, 2007"
+    },
+    {
+      "char-anchor": [
+        493011,
+        493032
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "hofmann:thesis",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{hofmann:thesis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Martin Hofmann. Extensional concepts in intensional type theory . PhD thesis, University of Edinburgh, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Extensional concepts in intensional type theory"
+    },
+    {
+      "char-anchor": [
+        493058,
+        493072
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "carboni",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{carboni}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Aurelio Carboni. Some free constructions in realizability and proof theory. Journal of Pure and Applied Algebra , 103:117--148, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        508711,
+        508729
+      ],
+      "cite/group-marker": "[106]",
+      "cite/key": "Streicher93",
+      "cite/marker": "[106]",
+      "cite/raw": "\\cite{Streicher93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Thomas Streicher. Investigations into intensional type theory, 1993. Habilitationsschrift, Ludwig-Maximilians-Universitat Munchen",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        591946,
+        591973
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "hedberg1998coherence",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite{hedberg1998coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Michael Hedberg. A coherence theorem for martin-l of's type theory. Journal of Functional Programming , 8(4):413--436, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Functional Programming"
+    },
+    {
+      "char-anchor": [
+        591975,
+        592002
+      ],
+      "cite/group-marker": "[59]",
+      "cite/key": "krausgeneralizations",
+      "cite/marker": "[59]",
+      "cite/raw": "\\cite{krausgeneralizations}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nicolai Kraus, Mart n Escard o, Thierry Coquand, and Thorsten Altenkirch. Generalizations of hedberg\u2019s theorem. In Masahito Hasegawa, editor, 11th International Conference, Typed Lambda Calculus and Applications 2013, Eindhoven, The Netherlands, June 26--28, 2013. Proceedings , volume 7941 of Lecture Notes in Computer Science , pages 173--188. Springer Berlin Heidelberg, 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "11th International Conference, Typed Lambda Calculus and Applications 2013, Eindhoven, The Netherlands, June 26--28, 2013. Proceedings"
+    },
+    {
+      "char-anchor": [
+        592508,
+        592542
+      ],
+      "cite/group-marker": "[71]",
+      "cite/key": "lurie:higher-topoi",
+      "cite/marker": "[71]",
+      "cite/raw": "\\cite[\\S6.5.1]{lurie:higher-topoi}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        592783,
+        592797
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "modalTT",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{modalTT}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Valeria de Paiva, Rajeev Gor e, and Michael Mendler. Modalities in constructive logics and type theories. Journal of Logic and Computation , 14(4):439--446, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Logic and Computation"
+    },
+    {
+      "char-anchor": [
+        592841,
+        592864
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "ab:bracket-types",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{ab:bracket-types}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Steven Awodey and Andrej Bauer. Propositions as [types]. Journal of Logic and Computation , 14(4):447--471, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Logic and Computation"
+    },
+    {
+      "char-anchor": [
+        593905,
+        593925
+      ],
+      "cite/group-marker": "[104]",
+      "cite/key": "QGFTinCHoTT12",
+      "cite/marker": "[104]",
+      "cite/raw": "\\cite{QGFTinCHoTT12}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Urs Schreiber and Michael Shulman. Quantum gauge field theory in cohesive homotopy type theory. Quantum Physics and Logic , 2012",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum Physics and Logic"
+    },
+    {
+      "char-anchor": [
+        594123,
+        594137
+      ],
+      "cite/group-marker": "[80]",
+      "cite/key": "Moggi89",
+      "cite/marker": "[80]",
+      "cite/raw": "\\cite{Moggi89}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Eugenio Moggi. Notions of computation and monads. Information and Computation , 93:55--92, 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Information and Computation"
+    },
+    {
+      "char-anchor": [
+        613614,
+        613637
+      ],
+      "cite/group-marker": "[117]",
+      "cite/key": "wikipedia-groups",
+      "cite/marker": "[117]",
+      "cite/raw": "\\cite{wikipedia-groups}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Wikipedia. Homotopy groups of spheres, April 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        727327,
+        727352
+      ],
+      "cite/group-marker": "[71]",
+      "cite/key": "lurie:higher-topoi",
+      "cite/marker": "[71]",
+      "cite/raw": "\\cite{lurie:higher-topoi}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        747973,
+        747997
+      ],
+      "cite/group-marker": "[46]",
+      "cite/key": "hatcher02topology",
+      "cite/marker": "[46]",
+      "cite/raw": "\\cite{hatcher02topology}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Allen Hatcher. Algebraic Topology . Cambridge University Press, 2002. http://www.math.cornell.edu/ hatcher/AT/ATpage.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Algebraic Topology"
+    },
+    {
+      "char-anchor": [
+        850444,
+        850471
+      ],
+      "cite/group-marker": "[74]",
+      "cite/key": "martin-lof-hauptsatz",
+      "cite/marker": "[74]",
+      "cite/raw": "\\cite{martin-lof-hauptsatz}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L o f. Hauptsatz for the intuitionistic theory of iterated inductive definitions. In Proceedings of the Second Scandinavian Logic Symposium (University of Oslo 1970) , volume 63 of Studies in Logic and the Foundations of Mathematics , pages 179--216. North-Holland, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the Second Scandinavian Logic Symposium (University of Oslo 1970)"
+    },
+    {
+      "char-anchor": [
+        850685,
+        850707
+      ],
+      "cite/group-marker": "[75]",
+      "cite/key": "Martin-Lof-1973",
+      "cite/marker": "[75]",
+      "cite/raw": "\\cite{Martin-Lof-1973}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types: predicative part. In H.E. Rose and J.C. Shepherdson, editors, Logic Colloquium '73, Proceedings of the Logic Colloquium , volume 80 of Studies in Logic and the Foundations of Mathematics , pages 73--118. North-Holland, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic Colloquium '73, Proceedings of the Logic Colloquium"
+    },
+    {
+      "char-anchor": [
+        850757,
+        850779
+      ],
+      "cite/group-marker": "[76]",
+      "cite/key": "Martin-Lof-1979",
+      "cite/marker": "[76]",
+      "cite/raw": "\\cite{Martin-Lof-1979}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. Constructive mathematics and computer programming. In L. Jonathan Cohen, Jerzy \u0141o\u015b , Helmut Pfeiffer, and Klaus-Peter Podewski, editors, Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979 , volume 104 of Studies in Logic and the Foundations of Mathematics , pages 153--175. North-Holland, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979"
+    },
+    {
+      "char-anchor": [
+        850886,
+        850919
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "DBLP:conf/lop/ConstableM85",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{DBLP:conf/lop/ConstableM85}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Robert L. Constable and N. P. Mendler. Recursive definitions in type theory. In Rohit Parikh, editor, Logics of Programs, Conference, B rooklyn College, J une 17--19, 1985, Proceedings , volume 193 of Lecture Notes in Computer Science , pages 61--78, 1985",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lecture Notes in Computer Science"
+    },
+    {
+      "char-anchor": [
+        851003,
+        851031
+      ],
+      "cite/group-marker": "[93]",
+      "cite/key": "PfenningPaulinMohring",
+      "cite/marker": "[93]",
+      "cite/raw": "\\cite{PfenningPaulinMohring}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Frank Pfenning and Christine Paulin-Mohring. Inductively defined types in the calculus of constructions. In Michael G. Main, Austin Melton, Michael W. Mislove, and David A. Schmidt, editors, Mathematical Foundations of Programming Semantics, 5th International Conference, Tulane University, New Orleans, Louisiana, USA, March 29 -- April 1, 1989, Proceedings , number 442 in Lecture Notes in Computer Science, pages 209--228. Springer, 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Foundations of Programming Semantics, 5th International Conference, Tulane University, New Orleans, Louisiana, USA, March 29 -- April 1, 1989, Proceedings"
+    },
+    {
+      "char-anchor": [
+        851064,
+        851097
+      ],
+      "cite/group-marker": "[32,36]",
+      "cite/key": "CoquandPaulin",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{CoquandPaulin, Dybjer:1991}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Thierry Coquand and Christine Paulin. Inductively defined types. In COLOG-88 (Tallinn, 1988) , volume 416 of Lecture Notes in Computer Science , pages 50--66. Springer, 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "COLOG-88 (Tallinn, 1988)"
+    },
+    {
+      "char-anchor": [
+        851064,
+        851097
+      ],
+      "cite/group-marker": "[32,36]",
+      "cite/key": "Dybjer:1991",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{CoquandPaulin, Dybjer:1991}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Dybjer. Inductive sets and families in M artin- L of's type theory and their set-theoretic semantics. In Gerard Huet and Gordon Plotkin, editors, Logical Frameworks , pages 280--30. Cambridge University Press, 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logical Frameworks"
+    },
+    {
+      "char-anchor": [
+        851156,
+        851174
+      ],
+      "cite/group-marker": "[37]",
+      "cite/key": "Dybjer:2000",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{Dybjer:2000}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Dybjer. A general formulation of simultaneous inductive-recursive definitions in type theory. Journal of Symbolic Logic , 65(2):525--549, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Symbolic Logic"
+    },
+    {
+      "char-anchor": [
+        851324,
+        851345
+      ],
+      "cite/group-marker": "[94]",
+      "cite/key": "PeterssonSynek",
+      "cite/marker": "[94]",
+      "cite/raw": "\\cite{PeterssonSynek}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Kent Petersson and Dan Synek. A set constructor for inductive sets in M artin- L of 's type theory. In David H. Pitt, David E. Rydeheard, Peter Dybjer, Andrew M. Pitts, and Axel Poign e, editors, Category Theory and Computer Science, Manchester, UK, September 5--8, 1989, Proceedings , volume 389 of Lecture Notes in Computer Science , pages 128--140. Springer, 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category Theory and Computer Science, Manchester, UK, September 5--8, 1989, Proceedings"
+    },
+    {
+      "char-anchor": [
+        851468,
+        851493
+      ],
+      "cite/group-marker": "[66]",
+      "cite/key": "lawvere:adjinfound",
+      "cite/marker": "[66]",
+      "cite/raw": "\\cite{lawvere:adjinfound}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Adjointness in foundations. Reprints in Theory and Applications of Categories , 16:1--16, 2006. Reprinted from Dialectica 23 (1969)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Reprints in Theory and Applications of Categories"
+    },
+    {
+      "char-anchor": [
+        851619,
+        851636
+      ],
+      "cite/group-marker": "[81]",
+      "cite/key": "mp:wftrees",
+      "cite/marker": "[81]",
+      "cite/raw": "\\cite{mp:wftrees}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Ieke Moerdijk and Erik Palmgren. Wellfounded trees in categories. In Proceedings of the W orkshop on P roof T heory and C omplexity, PTAC '98 ( A arhus) , volume 104, pages 189--218, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        851849,
+        851867
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "ags:it-hott",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{ags:it-hott}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1201.3898",
+      "resolved-corpus-id": "1201.3898",
+      "title": "Inductive types in homotopy type theory"
+    },
+    {
+      "char-anchor": [
+        851966,
+        852006
+      ],
+      "cite/group-marker": "[61,85,69]",
+      "cite/key": "klv:ssetmodel",
+      "cite/marker": "[61]",
+      "cite/raw": "\\cite{klv:ssetmodel,mvdb:wtypes,ls:hits}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1211.2851",
+      "resolved-corpus-id": "1211.2851",
+      "title": "The Simplicial Model of Univalent Foundations (after Voevodsky)"
+    },
+    {
+      "char-anchor": [
+        851966,
+        852006
+      ],
+      "cite/group-marker": "[61,85,69]",
+      "cite/key": "mvdb:wtypes",
+      "cite/marker": "[85]",
+      "cite/raw": "\\cite{klv:ssetmodel,mvdb:wtypes,ls:hits}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Ieke Moerdijk and Benno van den Berg. W -types in cartesian model categories. in preparation, 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        851966,
+        852006
+      ],
+      "cite/group-marker": "[61,85,69]",
+      "cite/key": "ls:hits",
+      "cite/marker": "[69]",
+      "cite/raw": "\\cite{klv:ssetmodel,mvdb:wtypes,ls:hits}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter LeFanu Lumsdaine and Michael Shulman. Higher inductive types. In preparation, 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        857309,
+        857328
+      ],
+      "cite/group-marker": "[100]",
+      "cite/key": "Russell:1908",
+      "cite/marker": "[100]",
+      "cite/raw": "\\cite{Russell:1908}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bertand Russell. Mathematical logic based on the theory of types. American Journal of Mathematics , 30:222--262, 1908",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "American Journal of Mathematics"
+    },
+    {
+      "char-anchor": [
+        857605,
+        857653
+      ],
+      "cite/group-marker": "[24,25,26]",
+      "cite/key": "Church:1933cl",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{Church:1933cl,Church:1940tu,Church:1941tc}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alonzo Church. A set of postulates for the foundation of logic 2. Annals of Mathematics , 34:839--864, 1933",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Annals of Mathematics"
+    },
+    {
+      "char-anchor": [
+        857605,
+        857653
+      ],
+      "cite/group-marker": "[24,25,26]",
+      "cite/key": "Church:1940tu",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{Church:1933cl,Church:1940tu,Church:1941tc}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alonzo Church. A formulation of of the simple theory of types. Journal of Symbolic Logic , 5:56--68, 1940",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Symbolic Logic"
+    },
+    {
+      "char-anchor": [
+        857605,
+        857653
+      ],
+      "cite/group-marker": "[24,25,26]",
+      "cite/key": "Church:1941tc",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{Church:1933cl,Church:1940tu,Church:1941tc}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alonzo Church. The Calculi of Lambda Conversation . Princeton University Press, 1941",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Calculi of Lambda Conversation"
+    },
+    {
+      "char-anchor": [
+        857888,
+        857906
+      ],
+      "cite/group-marker": "[91]",
+      "cite/key": "Pierce-TAPL",
+      "cite/marker": "[91]",
+      "cite/raw": "\\cite{Pierce-TAPL}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Benjamin C. Pierce. Types and Programming Languages . MIT Press, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Types and Programming Languages"
+    },
+    {
+      "char-anchor": [
+        858013,
+        858090
+      ],
+      "cite/group-marker": "[78,75,76,77]",
+      "cite/key": "Martin-Lof-1972",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{Martin-Lof-1972,Martin-Lof-1973,Martin-Lof-1979,martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types. In Giovanni Sambin and Jan M. Smith, editors, Twenty-five years of constructive type theory ( V enice, 1995) , volume 36 of Oxford Logic Guides , pages 127--172. Oxford University Press, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Oxford Logic Guides"
+    },
+    {
+      "char-anchor": [
+        858013,
+        858090
+      ],
+      "cite/group-marker": "[78,75,76,77]",
+      "cite/key": "Martin-Lof-1973",
+      "cite/marker": "[75]",
+      "cite/raw": "\\cite{Martin-Lof-1972,Martin-Lof-1973,Martin-Lof-1979,martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types: predicative part. In H.E. Rose and J.C. Shepherdson, editors, Logic Colloquium '73, Proceedings of the Logic Colloquium , volume 80 of Studies in Logic and the Foundations of Mathematics , pages 73--118. North-Holland, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic Colloquium '73, Proceedings of the Logic Colloquium"
+    },
+    {
+      "char-anchor": [
+        858013,
+        858090
+      ],
+      "cite/group-marker": "[78,75,76,77]",
+      "cite/key": "Martin-Lof-1979",
+      "cite/marker": "[76]",
+      "cite/raw": "\\cite{Martin-Lof-1972,Martin-Lof-1973,Martin-Lof-1979,martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. Constructive mathematics and computer programming. In L. Jonathan Cohen, Jerzy \u0141o\u015b , Helmut Pfeiffer, and Klaus-Peter Podewski, editors, Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979 , volume 104 of Studies in Logic and the Foundations of Mathematics , pages 153--175. North-Holland, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979"
+    },
+    {
+      "char-anchor": [
+        858013,
+        858090
+      ],
+      "cite/group-marker": "[78,75,76,77]",
+      "cite/key": "martin-lof:bibliopolis",
+      "cite/marker": "[77]",
+      "cite/raw": "\\cite{Martin-Lof-1972,Martin-Lof-1973,Martin-Lof-1979,martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. Intuitionistic type theory , volume 1 of Studies in Proof Theory . Bibliopolis, 1984",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Intuitionistic type theory"
+    },
+    {
+      "char-anchor": [
+        858605,
+        858623
+      ],
+      "cite/group-marker": "[102,60]",
+      "cite/key": "somma",
+      "cite/marker": "[102]",
+      "cite/raw": "\\cite{somma,kamar}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Giovanni Sommaruga. History and Philosophy of Constructive Type Theory . Number 290 in Synthese Library. Kluwer, 2010",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "History and Philosophy of Constructive Type Theory"
+    },
+    {
+      "char-anchor": [
+        858605,
+        858623
+      ],
+      "cite/group-marker": "[102,60]",
+      "cite/key": "kamar",
+      "cite/marker": "[60]",
+      "cite/raw": "\\cite{somma,kamar}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fairouz Kamareddine, Twan Laan, and Rob Nederpelt. A Modern Perspective on Type Theory: From its Origins until Today . Number 29 in Applied Logic. Kluwer, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A Modern Perspective on Type Theory: From its Origins until Today"
+    },
+    {
+      "char-anchor": [
+        865839,
+        865848
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "AW",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{AW}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Steve Awodey and Michael A. Warren. Homotopy theoretic models of identity types. Mathematical Proceedings of the Cambridge Philosophical Society , 146:45--55, 2009",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Proceedings of the Cambridge Philosophical Society"
+    },
+    {
+      "char-anchor": [
+        865863,
+        865872
+      ],
+      "cite/group-marker": "[114]",
+      "cite/key": "VV",
+      "cite/marker": "[114]",
+      "cite/raw": "\\cite{VV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Vladimir Voevodsky. A very short note on the homotopy -calculus. http://www.math.ias.edu/ vladimir/Site3/Univalent_Foundations_files/Hla mbda_short_current.pdf, 2006",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        865954,
+        865975
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "hs:gpd-typethy",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{hs:gpd-typethy}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Martin Hofmann and Thomas Streicher. The groupoid interpretation of type theory. In Giovanni Sambin and Jan M. Smith, editors, Twenty-five years of constructive type theory ( V enice, 1995) , volume 36 of Oxford Logic Guides , pages 83--111. Oxford University Press, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Oxford Logic Guides"
+    },
+    {
+      "char-anchor": [
+        874678,
+        874693
+      ],
+      "cite/group-marker": "[42]",
+      "cite/key": "gonthier",
+      "cite/marker": "[42]",
+      "cite/raw": "\\cite{gonthier}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Georges Gonthier, Andrea Asperti, Jeremy Avigad, Yves Bertot, Cyril Cohen, Fran c ois Garillot, St ephane Le Roux, Assia Mahboubi, Russell O'Connor, Sidi Ould Biha, Ioana Pasca, Laurence Rideau, Alexey Solovyev, Enrico Tassi, and Laurent Thery. A machine-checked proof of the odd order theorem. In Interactive Theorem Proving , 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Interactive Theorem Proving"
+    },
+    {
+      "char-anchor": [
+        875328,
+        875352
+      ],
+      "cite/group-marker": "[65]",
+      "cite/key": "lawvere:etcs-long",
+      "cite/marker": "[65]",
+      "cite/raw": "\\cite{lawvere:etcs-long}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. An elementary theory of the category of sets (long version) with commentary. Reprints in Theory and Applications of Categories , 11:1--35, 2005. Reprinted and expanded from Proc. Nat. Acad. Sci. U.S.A. 52 (1964), With comments by the author and Colin McLarty",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Reprints in Theory and Applications of Categories"
+    },
+    {
+      "char-anchor": [
+        884191,
+        884231
+      ],
+      "cite/group-marker": "[63,111,112]",
+      "cite/key": "kolmogorov",
+      "cite/marker": "[63]",
+      "cite/raw": "\\cite{kolmogorov,TroelstraI,TroelstraII}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Andrey Kolmogorov. Zur D eutung der intuitionistischen L ogik. Mathematische Zeitschrift , 35:58--65, 1932",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematische Zeitschrift"
+    },
+    {
+      "char-anchor": [
+        884191,
+        884231
+      ],
+      "cite/group-marker": "[63,111,112]",
+      "cite/key": "TroelstraI",
+      "cite/marker": "[111]",
+      "cite/raw": "\\cite{kolmogorov,TroelstraI,TroelstraII}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Anne Sjerp Troelstra and Dirk van Dalen. Constructivism in mathematics. V ol. I , volume 121 of Studies in Logic and the Foundations of Mathematics . North-Holland Publishing Co., Amsterdam, 1988. An introduction",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Studies in Logic and the Foundations of Mathematics"
+    },
+    {
+      "char-anchor": [
+        884191,
+        884231
+      ],
+      "cite/group-marker": "[63,111,112]",
+      "cite/key": "TroelstraII",
+      "cite/marker": "[112]",
+      "cite/raw": "\\cite{kolmogorov,TroelstraI,TroelstraII}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Anne Sjerp Troelstra and Dirk van Dalen. Constructivism in mathematics. V ol. II , volume 123 of Studies in Logic and the Foundations of Mathematics . North-Holland Publishing Co., Amsterdam, 1988. An introduction",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Studies in Logic and the Foundations of Mathematics"
+    },
+    {
+      "char-anchor": [
+        890313,
+        890359
+      ],
+      "cite/group-marker": "[110,96,71]",
+      "cite/key": "ToenVezzosi02",
+      "cite/marker": "[110]",
+      "cite/raw": "\\cite{ToenVezzosi02,Rezk05,lurie:higher-topoi}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bertrand Toen and Gabriele Vezzosi. Homotopical algebraic geometry I : Topos theory, 2002. http://arxiv.org/abs/math/0207028/ arXiv:math/0207028",
+        "candidate": "math/0207028",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        890313,
+        890359
+      ],
+      "cite/group-marker": "[110,96,71]",
+      "cite/key": "Rezk05",
+      "cite/marker": "[96]",
+      "cite/raw": "\\cite{ToenVezzosi02,Rezk05,lurie:higher-topoi}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Charles Rezk. Toposes and homotopy toposes. http://www.math.uiuc.edu/ rezk/homotopy-topos-sketch.pdf, 2005",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        890313,
+        890359
+      ],
+      "cite/group-marker": "[110,96,71]",
+      "cite/key": "lurie:higher-topoi",
+      "cite/marker": "[71]",
+      "cite/raw": "\\cite{ToenVezzosi02,Rezk05,lurie:higher-topoi}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        891145,
+        891165
+      ],
+      "cite/group-marker": "[67]",
+      "cite/key": "lh:canonicity",
+      "cite/marker": "[67]",
+      "cite/raw": "\\cite{lh:canonicity}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel R. Licata and Robert Harper. Canonicity for 2-dimensional type theory. In Proceedings of the 39th annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages , pages 337--348, New York, NY, USA, 2012. ACM",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the 39th annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages"
+    },
+    {
+      "char-anchor": [
+        894393,
+        894413
+      ],
+      "cite/group-marker": "[61]",
+      "cite/key": "klv:ssetmodel",
+      "cite/marker": "[61]",
+      "cite/raw": "\\cite{klv:ssetmodel}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1211.2851",
+      "resolved-corpus-id": "1211.2851",
+      "title": "The Simplicial Model of Univalent Foundations (after Voevodsky)"
+    },
+    {
+      "char-anchor": [
+        894419,
+        894433
+      ],
+      "cite/group-marker": "[69]",
+      "cite/key": "ls:hits",
+      "cite/marker": "[69]",
+      "cite/raw": "\\cite{ls:hits}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter LeFanu Lumsdaine and Michael Shulman. Higher inductive types. In preparation, 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        894747,
+        894791
+      ],
+      "cite/group-marker": "[67,12]",
+      "cite/key": "lh:canonicity",
+      "cite/marker": "[67]",
+      "cite/raw": "\\cite{lh:canonicity,coquand2012constructive}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel R. Licata and Robert Harper. Canonicity for 2-dimensional type theory. In Proceedings of the 39th annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages , pages 337--348, New York, NY, USA, 2012. ACM",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the 39th annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages"
+    },
+    {
+      "char-anchor": [
+        894747,
+        894791
+      ],
+      "cite/group-marker": "[67,12]",
+      "cite/key": "coquand2012constructive",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{lh:canonicity,coquand2012constructive}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bruno Barras, Thierry Coquand, and Simon Huber. A generalization of T akeuti- G andy interpretation. http://uf-ias-2012.wikispaces.com/file/view/semi.pdf, 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        896543,
+        896563
+      ],
+      "cite/group-marker": "[115]",
+      "cite/key": "Universe-poly",
+      "cite/marker": "[115]",
+      "cite/raw": "\\cite{Universe-poly}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Vladimir Voevodsky. A universe polymorphic type system. http://uf-ias-2012.wikispaces.com/file/view/Universe+polymorphic+type+s ytem.pdf, 2012",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        980121,
+        980133
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "Con85",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{Con85}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Robert L. Constable. Constructive mathematics as a programming logic I : Some principles of theory. In Annals of Mathematics , volume 24, pages 21--37. Elsevier Science Publishers, B.V. (North-Holland), 1985. Reprinted from Topics in the Theory of Computation, Selected Papers of the International Conference on Foundations of Computation Theory, FCT '83",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Annals of Mathematics"
+    },
+    {
+      "char-anchor": [
+        980295,
+        980324
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "constable+86nuprl-book",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{constable+86nuprl-book}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Robert L. Constable, Stuart F. Allen, H. M. Bromley, W. R. Cleaveland, J. F. Cremer, Robert W. Harper, Douglas J. Howe, T. B. Knoblock, N. P. Mendler, P. Panangaden, James T. Sasaki, and Scott F. Smith. Implementing Mathematics with the NuPRL Proof Development System . Prentice Hall, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        980434,
+        980457
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "ab:bracket-types",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{ab:bracket-types}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Steven Awodey and Andrej Bauer. Propositions as [types]. Journal of Logic and Computation , 14(4):447--471, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Logic and Computation"
+    },
+    {
+      "char-anchor": [
+        980738,
+        980758
+      ],
+      "cite/group-marker": "[115]",
+      "cite/key": "Universe-poly",
+      "cite/marker": "[115]",
+      "cite/raw": "\\cite{Universe-poly}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Vladimir Voevodsky. A universe polymorphic type system. http://uf-ias-2012.wikispaces.com/file/view/Universe+polymorphic+type+s ytem.pdf, 2012",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        981035,
+        981045
+      ],
+      "cite/group-marker": "[119]",
+      "cite/key": "PM2",
+      "cite/marker": "[119]",
+      "cite/raw": "\\cite{PM2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alfred North Whitehead and Bertrand Russell. Principia mathematica, 3 vol.s . Cambridge University Press, Cambridge, 1910--1913; Second edition, 1925--1927",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Principia mathematica, 3 vol.s"
+    },
+    {
+      "char-anchor": [
+        981757,
+        981783
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "aczel2002collection",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{aczel2002collection}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Aczel and Nicola Gambino. Collection principles in dependent type theory. In Paul Callaghan, Zhaohui Luo, James McKinna, and Robert Pollack, editors, Types for Proofs and Programs, International Workshop, TYPES 2000, Durham, UK, December 8-12, 2000, Selected Papers , volume 2277 of Lecture Notes in Computer Science , pages 1--23. Springer, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Types for Proofs and Programs, International Workshop, TYPES 2000, Durham, UK, December 8-12, 2000, Selected Papers"
+    },
+    {
+      "char-anchor": [
+        981889,
+        981926
+      ],
+      "cite/group-marker": "[55,57]",
+      "cite/key": "jacobs1999categorical",
+      "cite/marker": "[55]",
+      "cite/raw": "\\cite{jacobs1999categorical,elephant}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bart Jacobs. Categorical logic and type theory , volume 141 of Studies in Logic and the Foundations of Mathematics . Elsevier, 1999",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categorical logic and type theory"
+    },
+    {
+      "char-anchor": [
+        981889,
+        981926
+      ],
+      "cite/group-marker": "[55,57]",
+      "cite/key": "elephant",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{jacobs1999categorical,elephant}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter T. Johnstone. Sketches of an Elephant: A Topos Theory Compendium: Volumes 1 and 2 . Number 43 in Oxford Logic Guides. Oxford Science Publications, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sketches of an Elephant: A Topos Theory Compendium: Volumes 1 and 2"
+    },
+    {
+      "char-anchor": [
+        982188,
+        982202
+      ],
+      "cite/group-marker": "[103]",
+      "cite/key": "Spiwack",
+      "cite/marker": "[103]",
+      "cite/raw": "\\cite{Spiwack}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Arnaud Spiwack. A Journey Exploring the Power and Limits of Dependent Type Theory . PhD thesis, Ecole Polytechnique, Palaiseau, France , 2011",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A Journey Exploring the Power and Limits of Dependent Type Theory"
+    },
+    {
+      "char-anchor": [
+        982234,
+        982260
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "aczel2002collection",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{aczel2002collection}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Aczel and Nicola Gambino. Collection principles in dependent type theory. In Paul Callaghan, Zhaohui Luo, James McKinna, and Robert Pollack, editors, Types for Proofs and Programs, International Workshop, TYPES 2000, Durham, UK, December 8-12, 2000, Selected Papers , volume 2277 of Lecture Notes in Computer Science , pages 1--23. Springer, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Types for Proofs and Programs, International Workshop, TYPES 2000, Durham, UK, December 8-12, 2000, Selected Papers"
+    },
+    {
+      "char-anchor": [
+        982289,
+        982313
+      ],
+      "cite/group-marker": "[84]",
+      "cite/key": "maietti2005toward",
+      "cite/marker": "[84]",
+      "cite/raw": "\\cite{maietti2005toward}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Maria Emilia Maietti and Giovanni Sambin. Toward a minimalist foundation for constructive mathematics. In Laura Crosilla and Peter Schuster, editors, From Sets and Types to Topology and Analysis: Practicable Foundations for Constructive Mathematics , volume 48 of Oxford Logic Guides , pages 91--114. Clarendon Press, 2005",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "From Sets and Types to Topology and Analysis: Practicable Foundations for Constructive Mathematics"
+    },
+    {
+      "char-anchor": [
+        982486,
+        982506
+      ],
+      "cite/group-marker": "[79]",
+      "cite/key": "martin2006100",
+      "cite/marker": "[79]",
+      "cite/raw": "\\cite{martin2006100}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. 100 years of Z ermelo's axiom of choice: what was the problem with it? The Computer Journal , 49(3):345--350, 2006",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Computer Journal"
+    },
+    {
+      "char-anchor": [
+        982708,
+        982737
+      ],
+      "cite/group-marker": "[111,112]",
+      "cite/key": "TroelstraI",
+      "cite/marker": "[111]",
+      "cite/raw": "\\cite{TroelstraI,TroelstraII}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Anne Sjerp Troelstra and Dirk van Dalen. Constructivism in mathematics. V ol. I , volume 121 of Studies in Logic and the Foundations of Mathematics . North-Holland Publishing Co., Amsterdam, 1988. An introduction",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Studies in Logic and the Foundations of Mathematics"
+    },
+    {
+      "char-anchor": [
+        982708,
+        982737
+      ],
+      "cite/group-marker": "[111,112]",
+      "cite/key": "TroelstraII",
+      "cite/marker": "[112]",
+      "cite/raw": "\\cite{TroelstraI,TroelstraII}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Anne Sjerp Troelstra and Dirk van Dalen. Constructivism in mathematics. V ol. II , volume 123 of Studies in Logic and the Foundations of Mathematics . North-Holland Publishing Co., Amsterdam, 1988. An introduction",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Studies in Logic and the Foundations of Mathematics"
+    },
+    {
+      "char-anchor": [
+        985163,
+        985190
+      ],
+      "cite/group-marker": "[59]",
+      "cite/key": "krausgeneralizations",
+      "cite/marker": "[59]",
+      "cite/raw": "\\cite{krausgeneralizations}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nicolai Kraus, Mart n Escard o, Thierry Coquand, and Thorsten Altenkirch. Generalizations of hedberg\u2019s theorem. In Masahito Hasegawa, editor, 11th International Conference, Typed Lambda Calculus and Applications 2013, Eindhoven, The Netherlands, June 26--28, 2013. Proceedings , volume 7941 of Lecture Notes in Computer Science , pages 173--188. Springer Berlin Heidelberg, 2013",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "11th International Conference, Typed Lambda Calculus and Applications 2013, Eindhoven, The Netherlands, June 26--28, 2013. Proceedings"
+    },
+    {
+      "char-anchor": [
+        1078198,
+        1078220
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "coquand:paradox",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{coquand:paradox}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Thierry Coquand. The paradox of trees in type theory. BIT Numerical Mathematics , 32(1):10--14, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "BIT Numerical Mathematics"
+    },
+    {
+      "char-anchor": [
+        1078328,
+        1078349
+      ],
+      "cite/group-marker": "[?]",
+      "cite/key": "girard:paradox",
+      "cite/marker": "[?]",
+      "cite/raw": "\\cite{girard:paradox}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": null,
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1170505,
+        1170582
+      ],
+      "cite/group-marker": "[78,75,76,77]",
+      "cite/key": "Martin-Lof-1972",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{Martin-Lof-1972,Martin-Lof-1973,Martin-Lof-1979,martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types. In Giovanni Sambin and Jan M. Smith, editors, Twenty-five years of constructive type theory ( V enice, 1995) , volume 36 of Oxford Logic Guides , pages 127--172. Oxford University Press, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Oxford Logic Guides"
+    },
+    {
+      "char-anchor": [
+        1170505,
+        1170582
+      ],
+      "cite/group-marker": "[78,75,76,77]",
+      "cite/key": "Martin-Lof-1973",
+      "cite/marker": "[75]",
+      "cite/raw": "\\cite{Martin-Lof-1972,Martin-Lof-1973,Martin-Lof-1979,martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types: predicative part. In H.E. Rose and J.C. Shepherdson, editors, Logic Colloquium '73, Proceedings of the Logic Colloquium , volume 80 of Studies in Logic and the Foundations of Mathematics , pages 73--118. North-Holland, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic Colloquium '73, Proceedings of the Logic Colloquium"
+    },
+    {
+      "char-anchor": [
+        1170505,
+        1170582
+      ],
+      "cite/group-marker": "[78,75,76,77]",
+      "cite/key": "Martin-Lof-1979",
+      "cite/marker": "[76]",
+      "cite/raw": "\\cite{Martin-Lof-1972,Martin-Lof-1973,Martin-Lof-1979,martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. Constructive mathematics and computer programming. In L. Jonathan Cohen, Jerzy \u0141o\u015b , Helmut Pfeiffer, and Klaus-Peter Podewski, editors, Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979 , volume 104 of Studies in Logic and the Foundations of Mathematics , pages 153--175. North-Holland, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979"
+    },
+    {
+      "char-anchor": [
+        1170505,
+        1170582
+      ],
+      "cite/group-marker": "[78,75,76,77]",
+      "cite/key": "martin-lof:bibliopolis",
+      "cite/marker": "[77]",
+      "cite/raw": "\\cite{Martin-Lof-1972,Martin-Lof-1973,Martin-Lof-1979,martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. Intuitionistic type theory , volume 1 of Studies in Proof Theory . Bibliopolis, 1984",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Intuitionistic type theory"
+    },
+    {
+      "char-anchor": [
+        1170661,
+        1170674
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "beeson",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{beeson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Michael Beeson. Foundations of Constructive Mathematics . Springer, 1985",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Foundations of Constructive Mathematics"
+    },
+    {
+      "char-anchor": [
+        1170684,
+        1170714
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "heyting1966intuitionism",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{heyting1966intuitionism}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Arend Heyting. Intuitionism: an introduction . Studies in logic and the foundations of mathematics. North-Holland Pub. Co., 1966",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Intuitionism: an introduction"
+    },
+    {
+      "char-anchor": [
+        1170722,
+        1170736
+      ],
+      "cite/group-marker": "[101]",
+      "cite/key": "scott70",
+      "cite/marker": "[101]",
+      "cite/raw": "\\cite{scott70}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Dana Scott. Constructive validity. In M. Laudet, D. Lacombe, L. Nolin, and M. Sch utzenberger, editors, Symposium on Automatic Demonstration , volume 125, pages 237--275. Springer-Verlag, 1970",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Symposium on Automatic Demonstration"
+    },
+    {
+      "char-anchor": [
+        1170749,
+        1170769
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "deBruijn-1973",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{deBruijn-1973}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nicolaas Govert de Bruijn. A UTOMATH , a language for mathematics . Les Presses de l'Universite de Montreal, Montreal, Quebec, 1973. S eminaire de Math ematiques Sup erieures, No. 52 ( Et e 1971)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1170778,
+        1170795
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "howard:pat",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{howard:pat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "William A. Howard. The formulae-as-types notion of construction. In J. Roger Seldin, Jonathan P.; Hindley, editor, To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus and Formalism , pages 479--490. Academic Press, 1980. original paper manuscript from 1969",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus and Formalism"
+    },
+    {
+      "char-anchor": [
+        1170802,
+        1170828
+      ],
+      "cite/group-marker": "[107,108]",
+      "cite/key": "Tait-1966",
+      "cite/marker": "[107]",
+      "cite/raw": "\\cite{Tait-1966,Tait-1968}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "William W. Tait. Intensional interpretations of functionals of finite type. I . The Journal of Symbolic Logic , 32:198--212, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Journal of Symbolic Logic"
+    },
+    {
+      "char-anchor": [
+        1170802,
+        1170828
+      ],
+      "cite/group-marker": "[107,108]",
+      "cite/key": "Tait-1968",
+      "cite/marker": "[108]",
+      "cite/raw": "\\cite{Tait-1966,Tait-1968}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "William W. Tait. Constructive reasoning. In Logic, M ethodology and P hilos. S ci. III ( P roc. T hird I nternat. C ongr., A msterdam, 1967) , pages 185--199. North-Holland, Amsterdam, 1968",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1170842,
+        1170867
+      ],
+      "cite/group-marker": "[66]",
+      "cite/key": "lawvere:adjinfound",
+      "cite/marker": "[66]",
+      "cite/raw": "\\cite{lawvere:adjinfound}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Adjointness in foundations. Reprints in Theory and Applications of Categories , 16:1--16, 2006. Reprinted from Dialectica 23 (1969)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Reprints in Theory and Applications of Categories"
+    },
+    {
+      "char-anchor": [
+        1170986,
+        1171015
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "constable+86nuprl-book",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{constable+86nuprl-book}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Robert L. Constable, Stuart F. Allen, H. M. Bromley, W. R. Cleaveland, J. F. Cremer, Robert W. Harper, Douglas J. Howe, T. B. Knoblock, N. P. Mendler, P. Panangaden, James T. Sasaki, and Scott F. Smith. Implementing Mathematics with the NuPRL Proof Development System . Prentice Hall, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1171022,
+        1171032
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "Coq",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{Coq}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coq Development Team . The C oq Proof Assistant Reference Manual . INRIA-Rocquencourt, 2012",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1171045,
+        1171069
+      ],
+      "cite/group-marker": "[87]",
+      "cite/key": "norell2007towards",
+      "cite/marker": "[87]",
+      "cite/raw": "\\cite{norell2007towards}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Ulf Norell. Towards a practical programming language based on dependent type theory . PhD thesis, Chalmers, Goteborg University , 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Towards a practical programming language based on dependent type theory"
+    },
+    {
+      "char-anchor": [
+        1171635,
+        1171657
+      ],
+      "cite/group-marker": "[75]",
+      "cite/key": "Martin-Lof-1973",
+      "cite/marker": "[75]",
+      "cite/raw": "\\cite{Martin-Lof-1973}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types: predicative part. In H.E. Rose and J.C. Shepherdson, editors, Logic Colloquium '73, Proceedings of the Logic Colloquium , volume 80 of Studies in Logic and the Foundations of Mathematics , pages 73--118. North-Holland, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic Colloquium '73, Proceedings of the Logic Colloquium"
+    },
+    {
+      "char-anchor": [
+        1171702,
+        1171724
+      ],
+      "cite/group-marker": "[76]",
+      "cite/key": "Martin-Lof-1979",
+      "cite/marker": "[76]",
+      "cite/raw": "\\cite{Martin-Lof-1979}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. Constructive mathematics and computer programming. In L. Jonathan Cohen, Jerzy \u0141o\u015b , Helmut Pfeiffer, and Klaus-Peter Podewski, editors, Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979 , volume 104 of Studies in Logic and the Foundations of Mathematics , pages 153--175. North-Holland, 1982",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Logic, Methodology and Philosophy of Science VI, Proceedings of the Sixth International Congress of Logic, Methodology and Philosophy of Science, Hannover 1979"
+    },
+    {
+      "char-anchor": [
+        1172268,
+        1172297
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "constable+86nuprl-book",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{constable+86nuprl-book}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Robert L. Constable, Stuart F. Allen, H. M. Bromley, W. R. Cleaveland, J. F. Cremer, Robert W. Harper, Douglas J. Howe, T. B. Knoblock, N. P. Mendler, P. Panangaden, James T. Sasaki, and Scott F. Smith. Implementing Mathematics with the NuPRL Proof Development System . Prentice Hall, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1172333,
+        1172343
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "Coq",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{Coq}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coq Development Team . The C oq Proof Assistant Reference Manual . INRIA-Rocquencourt, 2012",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1172354,
+        1172378
+      ],
+      "cite/group-marker": "[87]",
+      "cite/key": "norell2007towards",
+      "cite/marker": "[87]",
+      "cite/raw": "\\cite{norell2007towards}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Ulf Norell. Towards a practical programming language based on dependent type theory . PhD thesis, Chalmers, Goteborg University , 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Towards a practical programming language based on dependent type theory"
+    },
+    {
+      "char-anchor": [
+        1172735,
+        1172753
+      ],
+      "cite/group-marker": "[106]",
+      "cite/key": "Streicher93",
+      "cite/marker": "[106]",
+      "cite/raw": "\\cite{Streicher93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Thomas Streicher. Investigations into intensional type theory, 1993. Habilitationsschrift, Ludwig-Maximilians-Universitat Munchen",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1172924,
+        1172942
+      ],
+      "cite/group-marker": "[106]",
+      "cite/key": "Streicher93",
+      "cite/marker": "[106]",
+      "cite/raw": "\\cite{Streicher93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Thomas Streicher. Investigations into intensional type theory, 1993. Habilitationsschrift, Ludwig-Maximilians-Universitat Munchen",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1176620,
+        1176640
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "deBruijn-1973",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{deBruijn-1973}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nicolaas Govert de Bruijn. A UTOMATH , a language for mathematics . Les Presses de l'Universite de Montreal, Montreal, Quebec, 1973. S eminaire de Math ematiques Sup erieures, No. 52 ( Et e 1971)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1176649,
+        1176666
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "howard:pat",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{howard:pat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "William A. Howard. The formulae-as-types notion of construction. In J. Roger Seldin, Jonathan P.; Hindley, editor, To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus and Formalism , pages 479--490. Academic Press, 1980. original paper manuscript from 1969",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus and Formalism"
+    },
+    {
+      "char-anchor": [
+        1176673,
+        1176689
+      ],
+      "cite/group-marker": "[108]",
+      "cite/key": "Tait-1968",
+      "cite/marker": "[108]",
+      "cite/raw": "\\cite{Tait-1968}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "William W. Tait. Constructive reasoning. In Logic, M ethodology and P hilos. S ci. III ( P roc. T hird I nternat. C ongr., A msterdam, 1967) , pages 185--199. North-Holland, Amsterdam, 1968",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1176710,
+        1176732
+      ],
+      "cite/group-marker": "[78]",
+      "cite/key": "Martin-Lof-1972",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{Martin-Lof-1972}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types. In Giovanni Sambin and Jan M. Smith, editors, Twenty-five years of constructive type theory ( V enice, 1995) , volume 36 of Oxford Logic Guides , pages 127--172. Oxford University Press, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Oxford Logic Guides"
+    },
+    {
+      "char-anchor": [
+        1177118,
+        1177147
+      ],
+      "cite/group-marker": "[77]",
+      "cite/key": "martin-lof:bibliopolis",
+      "cite/marker": "[77]",
+      "cite/raw": "\\cite{martin-lof:bibliopolis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. Intuitionistic type theory , volume 1 of Studies in Proof Theory . Bibliopolis, 1984",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Intuitionistic type theory"
+    },
+    {
+      "char-anchor": [
+        1179023,
+        1179045
+      ],
+      "cite/group-marker": "[78]",
+      "cite/key": "Martin-Lof-1972",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{Martin-Lof-1972}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Per Martin-L of. An intuitionistic theory of types. In Giovanni Sambin and Jan M. Smith, editors, Twenty-five years of constructive type theory ( V enice, 1995) , volume 36 of Oxford Logic Guides , pages 127--172. Oxford University Press, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Oxford Logic Guides"
+    },
+    {
+      "char-anchor": [
+        1179145,
+        1179157
+      ],
+      "cite/group-marker": "[92]",
+      "cite/key": "Moh93",
+      "cite/marker": "[92]",
+      "cite/raw": "\\cite{Moh93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Christine Paulin-Mohring. Inductive Definitions in the System Coq - Rules and Properties . In Marc Bezem and Jan Friso Groote, editors, Proceedings of the conference T yped L ambda C alculi and A pplications , number 664 in Lecture Notes in Computer Science, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1179323,
+        1179365
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "constable+86nuprl-book",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Section~8.1]{constable+86nuprl-book}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Robert L. Constable, Stuart F. Allen, H. M. Bromley, W. R. Cleaveland, J. F. Cremer, Robert W. Harper, Douglas J. Howe, T. B. Knoblock, N. P. Mendler, P. Panangaden, James T. Sasaki, and Scott F. Smith. Implementing Mathematics with the NuPRL Proof Development System . Prentice Hall, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1179630,
+        1179668
+      ],
+      "cite/group-marker": "[106]",
+      "cite/key": "Streicher93",
+      "cite/marker": "[106]",
+      "cite/raw": "\\cite[\\S1.3 and Addendum]{Streicher93}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Thomas Streicher. Investigations into intensional type theory, 1993. Habilitationsschrift, Ludwig-Maximilians-Universitat Munchen",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1291117,
+        1291134
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "Bishop1967",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{Bishop1967}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Erret Bishop. Foundations of constructive analysis . McGraw-Hill Book Co., New York, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Foundations of constructive analysis"
+    },
+    {
+      "char-anchor": [
+        1317397,
+        1317415
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "conway:onag",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{conway:onag}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "John H. Conway. On numbers and games . A K Peters Ltd., 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On numbers and games"
+    },
+    {
+      "char-anchor": [
+        1353463,
+        1353481
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "conway:onag",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{conway:onag}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "John H. Conway. On numbers and games . A K Peters Ltd., 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On numbers and games"
+    },
+    {
+      "char-anchor": [
+        1358604,
+        1358624
+      ],
+      "cite/group-marker": "[98]",
+      "cite/key": "Richman:reals",
+      "cite/marker": "[98]",
+      "cite/raw": "\\cite{Richman:reals}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fred Richman. Real numbers and other completions. Mathematical Logic Quarterly , 54(1):98--108, 2008",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Logic Quarterly"
+    },
+    {
+      "char-anchor": [
+        1358766,
+        1358784
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "conway:onag",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{conway:onag}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "John H. Conway. On numbers and games . A K Peters Ltd., 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On numbers and games"
+    },
+    {
+      "char-anchor": [
+        1358948,
+        1358968
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "BauerTaylor09",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{BauerTaylor09}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Andrej Bauer and Paul Taylor. The D edekind reals in abstract S tone duality. Mathematical structures in computer science , 19(4):757--838, 2009",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical structures in computer science"
+    },
+    {
+      "char-anchor": [
+        1359252,
+        1359272
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "BauerTaylor09",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{BauerTaylor09}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Andrej Bauer and Paul Taylor. The D edekind reals in abstract S tone duality. Mathematical structures in computer science , 19(4):757--838, 2009",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical structures in computer science"
+    },
+    {
+      "char-anchor": [
+        1359576,
+        1359600
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "EscardoSimpson:01",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{EscardoSimpson:01}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Mart n H otzel Escard o and Alex K. Simpson. A universal characterization of the closed euclidean interval. In 16th Annual IEEE Symposium on Logic in Computer Science, Boston, Massachusetts, USA, June 16-19, 2001, Proceedings , pages 115--125. IEEE Computer Society, 2001",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "16th Annual IEEE Symposium on Logic in Computer Science, Boston, Massachusetts, USA, June 16-19, 2001, Proceedings"
+    },
+    {
+      "char-anchor": [
+        1361103,
+        1361132
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "bridges2002compactness",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{bridges2002compactness}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Douglas Bridges, Hajime Ishihara, and Peter Schuster. Compactness and continuity, constructively revisited. In Julian C. Bradfield, editor, Computer Science Logic, 16th International Workshop, CSL 2002, 11th Annual Conference of the EACSL, Edinburgh, Scotland, UK, September 22-25, 2002, Proceedings , volume 2471 of Lecture Notes in Computer Science , pages 89--102. Springer, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Computer Science Logic, 16th International Workshop, CSL 2002, 11th Annual Conference of the EACSL, Edinburgh, Scotland, UK, September 22-25, 2002, Proceedings"
+    },
+    {
+      "char-anchor": [
+        1361143,
+        1361161
+      ],
+      "cite/group-marker": "[88]",
+      "cite/key": "Palmgren:FT",
+      "cite/marker": "[88]",
+      "cite/raw": "\\cite{Palmgren:FT}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Erik Palmgren. A constructive and functorial embedding of locally compact metric spaces into locales. Topology and its Applications , 154(9):1854--1880, 2007",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Topology and its Applications"
+    },
+    {
+      "char-anchor": [
+        1361274,
+        1361292
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "conway:onag",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{conway:onag}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "John H. Conway. On numbers and games . A K Peters Ltd., 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On numbers and games"
+    },
+    {
+      "char-anchor": [
+        1361668,
+        1361689
+      ],
+      "cite/group-marker": "[41]",
+      "cite/key": "forsbergfinite",
+      "cite/marker": "[41]",
+      "cite/raw": "\\cite{forsbergfinite}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fredrik Nordvall Forsberg and Anton Setzer. A finite axiomatisation of inductive-inductive definitions. http://cs.swan.ac.uk/ csfnf/papers/indind_finite.pdf, 2012",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1366659,
+        1366687
+      ],
+      "cite/group-marker": "[64]",
+      "cite/key": "lawvere:metric-spaces",
+      "cite/marker": "[64]",
+      "cite/raw": "\\cite{lawvere:metric-spaces}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. Metric spaces, generalized logic, and closed categories. Rendiconti del Seminario Matematico e Fisico di Milano , 43:135--166, 1974. Reprinted as Reprints in Theory and Applications of Categories 1:1--37, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rendiconti del Seminario Matematico e Fisico di Milano"
+    },
+    {
+      "char-anchor": [
+        1366715,
+        1366745
+      ],
+      "cite/group-marker": "[97]",
+      "cite/key": "Richman00thefundamental",
+      "cite/marker": "[97]",
+      "cite/raw": "\\cite{Richman00thefundamental}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fred Richman. The fundamental theorem of algebra: a constructive development without choice. Pacific Journal of Mathematics , 196(1):213--230, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Pacific Journal of Mathematics"
+    },
+    {
+      "char-anchor": [
+        1369591,
+        1369621
+      ],
+      "cite/group-marker": "[62]",
+      "cite/key": "knuth74:_surreal_number",
+      "cite/marker": "[62]",
+      "cite/raw": "\\cite{knuth74:_surreal_number}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Donald Ervin Knuth. Surreal Numbers . Addison-Wesley, 1974",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Surreal Numbers"
+    },
+    {
+      "char-anchor": [
+        1383626,
+        1383649
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "elephant",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A1.3.4]{elephant}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter T. Johnstone. Sketches of an Elephant: A Topos Theory Compendium: Volumes 1 and 2 . Number 43 in Oxford Logic Guides. Oxford Science Publications, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sketches of an Elephant: A Topos Theory Compendium: Volumes 1 and 2"
+    },
+    {
+      "char-anchor": [
+        1401745,
+        1401769
+      ],
+      "cite/group-marker": "[65]",
+      "cite/key": "lawvere:etcs-long",
+      "cite/marker": "[65]",
+      "cite/raw": "\\cite{lawvere:etcs-long}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. An elementary theory of the category of sets (long version) with commentary. Reprints in Theory and Applications of Categories , 11:1--35, 2005. Reprinted and expanded from Proc. Nat. Acad. Sci. U.S.A. 52 (1964), With comments by the author and Colin McLarty",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Reprints in Theory and Applications of Categories"
+    },
+    {
+      "char-anchor": [
+        1457979,
+        1457994
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AczelCZF",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AczelCZF}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Aczel. The type theoretic interpretation of constructive set theory. In A. MacIntyre, L. Pacholski, and J. Paris, editors, Logic C olloquium '77 , volume 96 of Studies in Logic and the Foundations of Mathematics , pages 55--66. North-Holland, Amsterdam, 1978",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Studies in Logic and the Foundations of Mathematics"
+    },
+    {
+      "char-anchor": [
+        1460255,
+        1460279
+      ],
+      "cite/group-marker": "[65]",
+      "cite/key": "lawvere:etcs-long",
+      "cite/marker": "[65]",
+      "cite/raw": "\\cite{lawvere:etcs-long}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. William Lawvere. An elementary theory of the category of sets (long version) with commentary. Reprints in Theory and Applications of Categories , 11:1--35, 2005. Reprinted and expanded from Proc. Nat. Acad. Sci. U.S.A. 52 (1964), With comments by the author and Colin McLarty",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Reprints in Theory and Applications of Categories"
+    },
+    {
+      "char-anchor": [
+        1460494,
+        1460521
+      ],
+      "cite/group-marker": "[82]",
+      "cite/key": "MoerdijkPalmgren2002",
+      "cite/marker": "[82]",
+      "cite/raw": "\\cite{MoerdijkPalmgren2002}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Ieke Moerdijk and Erik Palmgren. Type theories, toposes and constructive set theory: predicative aspects of AST . Annals of Pure and Applied Logic , 114(1--3):155--201, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Annals of Pure and Applied Logic"
+    },
+    {
+      "char-anchor": [
+        1460532,
+        1460553
+      ],
+      "cite/group-marker": "[89]",
+      "cite/key": "palmgren:cetcs",
+      "cite/marker": "[89]",
+      "cite/raw": "\\cite{palmgren:cetcs}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Erik Palmgren. Constructivist and structuralist foundations: B ishop's and L awvere's theories of sets. http://www.math.uu.se/ palmgren/cetcs.pdf, 2009",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1460648,
+        1460668
+      ],
+      "cite/group-marker": "[99]",
+      "cite/key": "RijkeSpitters",
+      "cite/marker": "[99]",
+      "cite/raw": "\\cite{RijkeSpitters}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1305.3835",
+      "resolved-corpus-id": "1305.3835",
+      "title": "Sets in homotopy type theory"
+    },
+    {
+      "char-anchor": [
+        1460888,
+        1460909
+      ],
+      "cite/group-marker": "[83]",
+      "cite/key": "Mines/R/R:1988",
+      "cite/marker": "[83]",
+      "cite/raw": "\\cite{Mines/R/R:1988}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Ray Mines, Fred Richman, and Wim Ruitenburg. A course in constructive algebra . Springer-Verlag, 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A course in constructive algebra"
+    },
+    {
+      "char-anchor": [
+        1461200,
+        1461219
+      ],
+      "cite/group-marker": "[118]",
+      "cite/key": "Wilander2010",
+      "cite/marker": "[118]",
+      "cite/raw": "\\cite{Wilander2010}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Olov Wilander. Setoids and universes. Mathematical Structures in Computer Science , 20(4):563--576, 2010",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Structures in Computer Science"
+    },
+    {
+      "char-anchor": [
+        1461485,
+        1461502
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "Diaconescu",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{Diaconescu}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Radu Diaconescu. Axiom of choice and complementation. Proceedings of the American Mathematical Society , 51:176--178, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the American Mathematical Society"
+    },
+    {
+      "char-anchor": [
+        1461548,
+        1461576
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "Bishop1967",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite[Problem~2]{Bishop1967}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Erret Bishop. Foundations of constructive analysis . McGraw-Hill Book Co., New York, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Foundations of constructive analysis"
+    },
+    {
+      "char-anchor": [
+        1461633,
+        1461655
+      ],
+      "cite/group-marker": "[109]",
+      "cite/key": "taylor:ordinals",
+      "cite/marker": "[109]",
+      "cite/raw": "\\cite{taylor:ordinals}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Paul Taylor. Intuitionistic sets and ordinals. The Journal of Symbolic Logic , 61(3):705--744, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Journal of Symbolic Logic"
+    },
+    {
+      "char-anchor": [
+        1461665,
+        1461689
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "JoyalMoerdijk1995",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{JoyalMoerdijk1995}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and I. Moerdijk. Algebraic set theory , volume 220 of London Mathematical Society Lecture Note Series . Cambridge University Press, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Algebraic set theory"
+    },
+    {
+      "char-anchor": [
+        1461854,
+        1461889
+      ],
+      "cite/group-marker": "[54,90,86]",
+      "cite/key": "Huet80",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{Huet80,Paulson86,Nordstrom88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G erard Huet. Confluent reductions: Abstract properties and applications to term rewriting systems: Abstract properties and applications to term rewriting systems. Journal of the ACM , 27(4):797--821, 1980",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of the ACM"
+    },
+    {
+      "char-anchor": [
+        1461854,
+        1461889
+      ],
+      "cite/group-marker": "[54,90,86]",
+      "cite/key": "Paulson86",
+      "cite/marker": "[90]",
+      "cite/raw": "\\cite{Huet80,Paulson86,Nordstrom88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Lawrence C. Paulson. Constructing recursion operators in intuitionistic type theory. Journal of Symbolic Computation , 2(4):325--355, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Symbolic Computation"
+    },
+    {
+      "char-anchor": [
+        1461854,
+        1461889
+      ],
+      "cite/group-marker": "[54,90,86]",
+      "cite/key": "Nordstrom88",
+      "cite/marker": "[86]",
+      "cite/raw": "\\cite{Huet80,Paulson86,Nordstrom88}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bengt Nordstr om. Terminating general recursion. BIT Numerical Mathematics , 28(3):605--619, 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "BIT Numerical Mathematics"
+    },
+    {
+      "char-anchor": [
+        1462004,
+        1462020
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "Gentzen36",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{Gentzen36}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Gerhard Gentzen. Die widerspruchsfreiheit der reinen zahlentheorie. Mathematische Annalen , 112(1):493--565, 1936",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematische Annalen"
+    },
+    {
+      "char-anchor": [
+        1462164,
+        1462188
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "JoyalMoerdijk1995",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{JoyalMoerdijk1995}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and I. Moerdijk. Algebraic set theory , volume 220 of London Mathematical Society Lecture Note Series . Cambridge University Press, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Algebraic set theory"
+    },
+    {
+      "char-anchor": [
+        1462226,
+        1462241
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AczelCZF",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AczelCZF}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Aczel. The type theoretic interpretation of constructive set theory. In A. MacIntyre, L. Pacholski, and J. Paris, editors, Logic C olloquium '77 , volume 96 of Studies in Logic and the Foundations of Mathematics , pages 55--66. North-Holland, Amsterdam, 1978",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Studies in Logic and the Foundations of Mathematics"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-1308.0729-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 173,
+    "resolution-rate": 0.0847,
+    "resolved": 16,
+    "total": 189
+  }
+}

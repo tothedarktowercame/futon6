@@ -1,0 +1,30 @@
+{:name "isomorphism class",
+ :df 382,
+ :concept/id :isomorphism-class,
+ :msc "ct",
+ :defined-in
+ {:n-papers 7,
+  :sample
+  ["0807.1329" "1707.08049" "1803.00180" "2005.05108" "2203.05500"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-23972",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "23972",
+  :definition-id nil},
+ :depends-on [],
+ :gloss
+ {:paper "0807.1329",
+  :text
+  "structure. \\end{defn} In other words, instead of stipulating a specific ambidextrous adjoint $\\langle F^* \\rangle$ for every morphism $F$, an even-handed structure selects only an {\\em isomorphism class} $F^{[*]}$ of such adjoints, in such a way that the resultant choices are compatible with composi"}}

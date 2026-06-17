@@ -1,0 +1,27 @@
+{:name "model structure",
+ :pagerank 0.004071,
+ :df 742,
+ :concept/id :model-structure,
+ :msc "ct",
+ :defined-in
+ {:n-papers 78,
+  :sample
+  ["0801.0404" "0906.4087" "0910.2733" "1104.1805" "1109.2883"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 7,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0910.2733",
+  :text
+  "Indeed, a particularly concise definition of a model structure on a complete and cocomplete category $\\M$ is the following: a \\emph{model structure} consists of three class of maps $\\C$, $\\F$, $\\W$ such that $\\W$ satisfies the 2-of-3 property and such that $(\\C \\cap \\W, \\F)$ and $(\\C, \\W \\cap \\F)$ are wfs.\\footnote{It is not i"}}

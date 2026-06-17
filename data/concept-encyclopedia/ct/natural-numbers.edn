@@ -1,0 +1,39 @@
+{:name "natural numbers",
+ :pagerank 0.003445,
+ :df 758,
+ :concept/id :natural-numbers,
+ :msc "ct",
+ :defined-in
+ {:n-papers 20,
+  :sample
+  ["0810.1279" "0908.2469" "1201.3898" "1201.5239" "1701.08075"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 4,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains
+  ["Encyclopediaofmath"
+   "Mathhub"
+   "Mathworld"
+   "Planetmath"
+   "Wikipedia"],
+  :definition-source :nlab-raw-section,
+  :msc ["03E" "03E10" "74D99" "Numbers" "XX-XX"],
+  :nlab-page-id "885",
+  :resolution-kind "nnexus",
+  :target "nnexus:natural number",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1701.08075",
+  :text
+  "semiring} $(\\reals^{+},+,\\times)$ is used to model probabilistic computation, the \\textit{boolean semiring} $(\\mathbb{B},\\vee,\\wedge)$ is used to model existence problems, and the \\textit{natural numbers} $(\\naturals,+,\\times)$ are used to model counting problems\\footnote{One could also mention the "}}

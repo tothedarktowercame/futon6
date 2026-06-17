@@ -1,0 +1,173 @@
+{
+  "out-dir": "/home/joe/code/futon6/data/warp/cite-resolution",
+  "output-schema": "futon6/h7-cite-resolution/v1",
+  "papers": [
+    {
+      "holes": 44,
+      "paper-id": "2311.05789",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/2311.05789.cite-resolution.json",
+      "resolution-rate": 0.102,
+      "resolved": 5,
+      "total": 49
+    },
+    {
+      "holes": 26,
+      "paper-id": "1110.0605",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/1110.0605.cite-resolution.json",
+      "resolution-rate": 0.5094,
+      "resolved": 27,
+      "total": 53
+    },
+    {
+      "holes": 156,
+      "paper-id": "0811.1480",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/0811.1480.cite-resolution.json",
+      "resolution-rate": 0.0189,
+      "resolved": 3,
+      "total": 159
+    },
+    {
+      "holes": 27,
+      "paper-id": "1901.01453",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/1901.01453.cite-resolution.json",
+      "resolution-rate": 0.4706,
+      "resolved": 24,
+      "total": 51
+    },
+    {
+      "holes": 173,
+      "paper-id": "1308.0729",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/1308.0729.cite-resolution.json",
+      "resolution-rate": 0.0847,
+      "resolved": 16,
+      "total": 189
+    },
+    {
+      "holes": 29,
+      "paper-id": "math__9811037",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__9811037.cite-resolution.json",
+      "resolution-rate": 0.0,
+      "resolved": 0,
+      "total": 29
+    },
+    {
+      "holes": 2,
+      "paper-id": "math__9810017",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__9810017.cite-resolution.json",
+      "resolution-rate": 0.0,
+      "resolved": 0,
+      "total": 2
+    },
+    {
+      "holes": 125,
+      "paper-id": "0908.3347",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/0908.3347.cite-resolution.json",
+      "resolution-rate": 0.0,
+      "resolved": 0,
+      "total": 125
+    },
+    {
+      "holes": 114,
+      "paper-id": "math__0111139",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__0111139.cite-resolution.json",
+      "resolution-rate": 0.0952,
+      "resolved": 12,
+      "total": 126
+    },
+    {
+      "holes": 34,
+      "paper-id": "0905.0465",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/0905.0465.cite-resolution.json",
+      "resolution-rate": 0.2609,
+      "resolved": 12,
+      "total": 46
+    },
+    {
+      "holes": 217,
+      "paper-id": "2002.06055",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/2002.06055.cite-resolution.json",
+      "resolution-rate": 0.1873,
+      "resolved": 50,
+      "total": 267
+    },
+    {
+      "holes": 99,
+      "paper-id": "math__0204218",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__0204218.cite-resolution.json",
+      "resolution-rate": 0.0,
+      "resolved": 0,
+      "total": 99
+    },
+    {
+      "holes": 10,
+      "paper-id": "0905.0462",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/0905.0462.cite-resolution.json",
+      "resolution-rate": 0.4737,
+      "resolved": 9,
+      "total": 19
+    },
+    {
+      "holes": 145,
+      "paper-id": "math__0210114",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__0210114.cite-resolution.json",
+      "resolution-rate": 0.0333,
+      "resolved": 5,
+      "total": 150
+    },
+    {
+      "holes": 62,
+      "paper-id": "quant-ph__0402130",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/quant-ph__0402130.cite-resolution.json",
+      "resolution-rate": 0.0159,
+      "resolved": 1,
+      "total": 63
+    },
+    {
+      "holes": 33,
+      "paper-id": "math__0301027",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__0301027.cite-resolution.json",
+      "resolution-rate": 0.2667,
+      "resolved": 12,
+      "total": 45
+    },
+    {
+      "holes": 74,
+      "paper-id": "math__0307200",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__0307200.cite-resolution.json",
+      "resolution-rate": 0.1395,
+      "resolved": 12,
+      "total": 86
+    },
+    {
+      "holes": 146,
+      "paper-id": "math__0111205",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__0111205.cite-resolution.json",
+      "resolution-rate": 0.2065,
+      "resolved": 38,
+      "total": 184
+    },
+    {
+      "holes": 46,
+      "paper-id": "math__0307263",
+      "path": "/home/joe/code/futon6/data/warp/cite-resolution/math__0307263.cite-resolution.json",
+      "resolution-rate": 0.1481,
+      "resolved": 8,
+      "total": 54
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution-run/v1",
+  "skipped": [
+    {
+      "paper-id": "math__0608040",
+      "reason": "missing-marks-json"
+    }
+  ],
+  "stats": {
+    "holes": 1562,
+    "papers-skipped": 1,
+    "papers-written": 19,
+    "resolution-rate": 0.1303,
+    "resolved": 234,
+    "total": 1796
+  }
+}

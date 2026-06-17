@@ -1,0 +1,46 @@
+{:name "natural isomorphisms",
+ :pagerank 0.004812,
+ :df 1037,
+ :concept/id :natural-isomorphisms,
+ :msc "ct",
+ :defined-in
+ {:n-papers 14,
+  :sample
+  ["0905.3884" "0906.4725" "1009.3673" "1308.0729" "1408.5220"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "a natural transformation each of whose components : F(c) G(c) for all c Obj(C) is an isomorphism in D;.",
+   :refs [:natural-transformation :functor-category]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :isomorphism-in,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:functors :inverse :isomorphism :the :automorphism],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 8,
+ :genus :isomorphism-in,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Planetmath"],
+  :definition-source :nlab-raw-definition,
+  :msc ["18-00"],
+  :nlab-page-id "121",
+  :resolution-kind "nnexus",
+  :target "nnexus:natural isomorphism",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:isomorphism-in :natural-transformation :functor-category],
+ :gloss
+ {:paper "0905.3884",
+  :text
+  "$ we set\\[ \\varepsilon_{\\mathcal{C}}(x):=(Px)^{(1)}.\\] \\textbf{On morphisms}. For each $f\\colon x\\to y$ in $\\mathcal{C}$, we set\\[ \\varepsilon_{C}(f):=P_{x,y}^{(1)}(f)\\,(=P(f)).\\] \\textbf{Natural isomorphisms}. For each $a\\in G$ we define a natural transformation $\\phi_{a}\\colon A_{a}\\varepsilon_{\\m"}}

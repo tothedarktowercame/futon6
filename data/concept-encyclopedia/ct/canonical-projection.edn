@@ -1,0 +1,29 @@
+{:name "canonical projection",
+ :df 373,
+ :concept/id :canonical-projection,
+ :msc "ct",
+ :defined-in
+ {:n-papers 8,
+  :sample
+  ["1003.4850" "1211.2851" "1306.3943" "1411.5591" "2305.03581"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:canonical projection",
+  :resolution-kind "nnexus",
+  :msc ["20-00"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1211.2851",
+  :text
+  "\\in \\ob_0 \\CC$; \\item maps $\\ft_n : \\ob_{n+1} \\CC \\to \\ob_n \\CC$ (whose subscripts we usually suppress); \\item for each $X \\in \\ob_{n+1} \\CC$, a map $p_X \\colon X \\to \\ft X$ (the \\emph{canonical projection} from $X$); \\item for each $X \\in \\ob_{n+1} \\CC$ and $f \\colon Y \\to \\ft(X)$, an object $f^*(X"}}

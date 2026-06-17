@@ -1,0 +1,53 @@
+{:name "model category",
+ :pagerank 0.012377,
+ :df 750,
+ :concept/id :model-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 126,
+  :sample
+  ["0704.1624" "0707.0300" "0707.1449" "0708.2185" "0709.0248"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition A model structure on a category is a choice of three distinguished classes of morphisms.",
+   :refs [:category]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted
+   :choice-of-three-distinguished-classes-of-morphisms-cofibrations-cof-mor,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:classes
+    :morphisms
+    :category-with-weak-equivalences
+    :isomorphisms
+    :two-out-of-three
+    :weak-factorization-systems],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 26,
+ :genus
+ :choice-of-three-distinguished-classes-of-morphisms-cofibrations-cof-mor,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-257",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "257",
+  :definition-id "nlab-257-d1"},
+ :depends-on
+ [:choice-of-three-distinguished-classes-of-morphisms-cofibrations-cof-mor
+  :category],
+ :gloss
+ {:paper "0708.2185",
+  :text
+  "\\end{proof} \\section{Weak equivalences} A \\textit{model category} is a complete and cocomplete category $\\ck$ together with three classes of morphisms $\\cf$, $\\cc$ and $\\cw$ called \\textit{fibrations}, \\textit{cofibrations} and \\textit{weak equ"}}

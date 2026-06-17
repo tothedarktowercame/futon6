@@ -1,0 +1,22 @@
+{:name "category enriched",
+ :df 386,
+ :concept/id :category-enriched,
+ :msc "ct",
+ :defined-in {:n-papers 1, :sample ["0704.1624"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0704.1624",
+  :text
+  "this paper, by (small) ``simplicial category\" we will mean a category with a set of objects and a simplicial set of morphisms $\\Map(x,y)$ between any two objects $x$ and $y$, also known as a category enriched over simplicial sets. This notion does not coincide with the more general one of a simplici"}}

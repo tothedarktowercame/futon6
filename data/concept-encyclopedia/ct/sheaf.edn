@@ -1,0 +1,54 @@
+{:name "sheaf",
+ :pagerank 0.003496,
+ :df 792,
+ :concept/id :sheaf,
+ :msc "ct",
+ :defined-in
+ {:n-papers 166,
+  :sample
+  ["0807.1704" "0808.2122" "0808.3627" "0809.1187" "0809.3394"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition Let (C,J) be a site in the form of a small category C equipped with a coverage J.",
+   :refs [:small-category :presheaf]}
+  {:id :nlab-condition-2,
+   :statement "A presheaf A PSh(C) is a sheaf with respect to J if.",
+   :refs [:small-category :presheaf]}
+  {:id :nlab-condition-3,
+   :statement
+   "and for every compatible family of elements, given by tuples (si A(Ui))i I such that for all j,k I and all morphisms Uj K Uk in C with pj f = pk g we have A(f)(sj) = A(g)(sk) A(K) then.",
+   :refs [:small-category :presheaf]}],
+ :holes
+ [{:kind :unresolved-source-refs,
+   :wanted [:site :coverage :covering :matching-family :morphisms],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 35,
+ :genus :sheaf,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-143",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "143",
+  :definition-id "nlab-143-d1"},
+ :depends-on [:sheaf :small-category :presheaf],
+ :gloss
+ {:paper "0809.1187",
+  :text
+  "\\vspace{1ex} \\item A \\emph{sheaf} is a presheaf $F$ such that given any open cover $U_\\alpha \\subset U$ in $\\cc{O}(X)$, the following \\emph{sheaf axiom} holds for $F$: $ \\hspace{-5ex} \\forall \\, s_\\alpha \\in FU_\\"},
+ :data
+ [{:component :definition-data-1,
+   :signature
+   "###### Definition Let (C,J) be a site in the form of a small category C equipped with a coverage J.",
+   :source :nlab-definition}
+  {:component :definition-data-2,
+   :signature
+   "and for every compatible family of elements, given by tuples (si A(Ui))i I such that for all j,k I and all morphisms Uj K Uk in C with pj f = pk g we have A(f)(sj) = A(g)(sk) A(K) then.",
+   :source :nlab-definition}]}

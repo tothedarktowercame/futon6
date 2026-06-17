@@ -1,0 +1,38 @@
+{:name "chain complex",
+ :df 366,
+ :concept/id :chain-complex,
+ :msc "ct",
+ :defined-in
+ {:n-papers 53,
+  :sample
+  ["0707.3499" "0809.1760" "0811.1480" "0905.0465" "0908.2469"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement "###### Definition A (-graded) chain complex in is.",
+   :refs []}],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :source :nlab-dictionary-definition,
+   :note "nLab definition text did not expose an unambiguous genus"}
+  {:kind :unresolved-source-refs,
+   :wanted [:objects :morphisms :zero-morphism],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1067",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "1067",
+  :definition-id "nlab-1067-d1"},
+ :depends-on [],
+ :gloss
+ {:paper "0707.3499",
+  :text
+  "\\subsection{Homology in semi-abelian categories} As usual a \\defn{chain complex} is a sequence of maps $(d_{n}\\colon {C_n \\to C_{n-1}})_{n\\in\\Z}$ with $d_{n-1}\\comp d_n=0$ for all $n$."}}

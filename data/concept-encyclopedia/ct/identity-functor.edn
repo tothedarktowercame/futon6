@@ -1,0 +1,32 @@
+{:name "identity functor",
+ :df 892,
+ :concept/id :identity-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 18,
+  :sample
+  ["0810.2070" "1408.5220" "1501.02503" "1508.00921" "1509.03649"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Planetmath"],
+  :definition-source :nlab-raw-section,
+  :msc ["18-00" "18A05"],
+  :nlab-page-id "1396",
+  :resolution-kind "nnexus",
+  :target "nnexus:identity functor",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1509.03649",
+  :text
+  "tors as arrows. It is not difficult to see that functors are a collection of order arrows for categories. They are discernible arrows and composition is well defined. Consider the \\textit{identity functor} $\\textgoth{I}_\\mathcal C$ which acts as unit on objects and arrows of the category $\\mathcal C"}}

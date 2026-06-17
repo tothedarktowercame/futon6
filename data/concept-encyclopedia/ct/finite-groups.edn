@@ -1,0 +1,43 @@
+{:name "finite groups",
+ :df 344,
+ :concept/id :finite-groups,
+ :msc "ct",
+ :defined-in
+ {:n-papers 8,
+  :sample
+  ["1007.1890" "1111.3469" "1404.2156" "1604.06306" "1808.04902"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A finite group is a group whose underlying set is finite.",
+   :refs [:set :finite-set]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :group,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:group :underlying :group-object :finset],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :group,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-definition,
+  :msc ["20A05" "20D" "Finite_groups" "XX-XX"],
+  :nlab-page-id "741",
+  :resolution-kind "nnexus",
+  :target "nnexus:finite group",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:group :set :finite-set],
+ :gloss
+ {:paper "1808.04902",
+  :text
+  "bjects in order to study the group~$G$ is a simple but powerful idea. It is used in all corners of what we shall loosely call `equivariant mathematics'. In this work, we focus on \\emph{finite groups}~$G$ and \\emph{additive categories}~$\\MM(G)$, \\ie categories in which one can add objects and add mor"}}

@@ -1,0 +1,12 @@
+{:paper/id "0705.0102" :passage/id "0705.0102:cot-direct-summands:324-332" :source {:lines [324 332] :kind :proof}
+ :nodes [{:id :cot-axiom-2 :kind :claim :text "Hom(Sigma^{-1}A,B)=0 is condition (2)" :source {:lines [324 324]}}
+         {:id :cot-axiom-3 :kind :claim :text "every X sits in a triangle A -> X -> B" :source {:lines [326 326]}}
+         {:id :A-retract-closed :kind :claim :text "A is closed under direct summands" :source {:lines [332 332]}}
+         {:id :shift-A-retract-closed :kind :claim :text "Sigma^{-1}A is closed under direct summands" :source {:lines [332 332]}}
+         {:id :B-similar :kind :claim :text "the same retract-closure comparison holds for B" :source {:lines [332 332]}}]
+ :edges [{:id :e-forward :kind :infer :relation :iff-half :premise :A-retract-closed :warrant {:kind :missing-warrant :text "suspension is an equivalence and preserves retracts"} :conclusion :shift-A-retract-closed :source {:lines [332 332]}}
+         {:id :e-back :kind :infer :relation :iff-half :premise :shift-A-retract-closed :warrant {:kind :missing-warrant :text "inverse suspension reflects retract closure"} :conclusion :A-retract-closed :source {:lines [332 332]}}
+         {:id :e-B :kind :infer :relation :similarity :premise [:A-retract-closed :shift-A-retract-closed] :warrant {:kind :missing-warrant :text "the suspension/retract argument applies to the B half as well"} :conclusion :B-similar :source {:lines [332 332]}}]
+ :holes [{:kind :missing-warrant :edge :e-forward :wanted :suspension-equivalence-preserves-retracts}
+         {:kind :missing-warrant :edge :e-back :wanted :inverse-suspension-reflects-retracts}
+         {:kind :missing-warrant :edge :e-B :wanted :dual-retract-closure-for-B}]}

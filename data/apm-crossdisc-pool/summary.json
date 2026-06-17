@@ -1,0 +1,754 @@
+{
+  "schema": "futon6.apm-crossdisc-pool.v1",
+  "apm_proofs": 236,
+  "batch_tars": [
+    "/home/joe/code/storage/mark2/inbox/batch-007.tar.gz",
+    "/home/joe/code/storage/mark2/inbox/batch-008.tar.gz"
+  ],
+  "candidate_records_with_eprints": 8916,
+  "target_size": 150,
+  "pool_size": 150,
+  "math_ct_count": 0,
+  "eprints_complete": true,
+  "missing_eprints": [],
+  "category_histogram": {
+    "cs.CC": 1,
+    "cs.IT": 2,
+    "cs.NA": 1,
+    "math-ph": 7,
+    "math.AC": 1,
+    "math.AG": 14,
+    "math.AP": 22,
+    "math.AT": 2,
+    "math.CA": 16,
+    "math.CO": 7,
+    "math.CV": 15,
+    "math.DG": 12,
+    "math.DS": 19,
+    "math.FA": 32,
+    "math.GN": 1,
+    "math.GR": 10,
+    "math.GT": 5,
+    "math.IT": 2,
+    "math.KT": 3,
+    "math.MG": 2,
+    "math.MP": 7,
+    "math.NA": 6,
+    "math.NT": 16,
+    "math.OA": 7,
+    "math.OC": 6,
+    "math.PR": 18,
+    "math.RA": 3,
+    "math.RT": 4,
+    "math.SG": 2,
+    "math.SP": 5,
+    "math.ST": 3,
+    "physics.comp-ph": 1,
+    "stat.TH": 3
+  },
+  "keyword_top20": [
+    {
+      "term": "function",
+      "tf": 137,
+      "df": 137,
+      "score": 675.0337548665372
+    },
+    {
+      "term": "open",
+      "tf": 130,
+      "df": 130,
+      "score": 633.7756520161497
+    },
+    {
+      "term": "integral",
+      "tf": 114,
+      "df": 114,
+      "score": 540.9222626334105
+    },
+    {
+      "term": "finite",
+      "tf": 108,
+      "df": 108,
+      "score": 506.6655712807475
+    },
+    {
+      "term": "bounded",
+      "tf": 102,
+      "df": 102,
+      "score": 472.74235679942285
+    },
+    {
+      "term": "norm",
+      "tf": 95,
+      "df": 95,
+      "score": 433.6130781894444
+    },
+    {
+      "term": "continuous",
+      "tf": 94,
+      "df": 94,
+      "score": 428.0644278104508
+    },
+    {
+      "term": "convergence",
+      "tf": 78,
+      "df": 78,
+      "score": 340.81693249242767
+    },
+    {
+      "term": "field",
+      "tf": 65,
+      "df": 65,
+      "score": 272.32755823171766
+    },
+    {
+      "term": "measure",
+      "tf": 63,
+      "df": 63,
+      "score": 262.0096342516593
+    },
+    {
+      "term": "analytic",
+      "tf": 62,
+      "df": 62,
+      "score": 256.874353036275
+    },
+    {
+      "term": "space",
+      "tf": 58,
+      "df": 58,
+      "score": 236.49717174653173
+    },
+    {
+      "term": "linear",
+      "tf": 57,
+      "df": 57,
+      "score": 231.44525160114588
+    },
+    {
+      "term": "converges",
+      "tf": 56,
+      "df": 56,
+      "score": 226.41087099873482
+    },
+    {
+      "term": "basic open",
+      "tf": 54,
+      "df": 54,
+      "score": 216.39599200255344
+    },
+    {
+      "term": "polynomial",
+      "tf": 54,
+      "df": 54,
+      "score": 216.39599200255344
+    },
+    {
+      "term": "group",
+      "tf": 53,
+      "df": 53,
+      "score": 211.41615446790655
+    },
+    {
+      "term": "compact",
+      "tf": 52,
+      "df": 52,
+      "score": 206.45517950471034
+    },
+    {
+      "term": "tendsto fun",
+      "tf": 50,
+      "df": 50,
+      "score": 196.59128163621628
+    },
+    {
+      "term": "analysis complex",
+      "tf": 49,
+      "df": 49,
+      "score": 191.68912726597915
+    }
+  ],
+  "selected_ids": [
+    "0706.0574v1",
+    "math/0606537v1",
+    "0710.5790v1",
+    "0711.3637v1",
+    "0712.3837v1",
+    "math/0507172v1",
+    "math/0701525v1",
+    "math/0701795v1",
+    "math/0702487v1",
+    "0711.2980v1",
+    "0709.3509v1",
+    "math/0603449v1",
+    "0708.2838v1",
+    "0711.2093v1",
+    "0707.3470v1",
+    "0707.0218v1",
+    "0711.2123v1",
+    "0705.0603v1",
+    "0706.1006v1",
+    "math/0603365v1",
+    "0705.0643v1",
+    "0705.4649v1",
+    "math/0512197v1",
+    "0710.1606v1",
+    "0708.3664v1",
+    "0711.1480v1",
+    "0711.4183v1",
+    "0711.0132v1",
+    "0801.2131v1",
+    "0802.0826v1",
+    "0711.0904v1",
+    "0711.4876v1",
+    "0711.3328v1",
+    "0710.0067v1",
+    "0707.0538v1",
+    "0706.0954v1",
+    "math/0701780v1",
+    "0803.3062v1",
+    "0708.4069v1",
+    "0711.1913v1",
+    "0706.0722v1",
+    "math/0609316v1",
+    "0709.2008v1",
+    "0802.2322v1",
+    "0803.4344v1",
+    "0711.4236v1",
+    "0711.3694v1",
+    "math/0612197v1",
+    "math/0303243v1",
+    "math/0601580v1",
+    "0801.0884v1",
+    "0709.3673v1",
+    "math/0602425v1",
+    "0802.0792v1",
+    "math/0609469v1",
+    "0708.4234v1",
+    "0803.3824v1",
+    "math/0610038v1",
+    "0709.1431v1",
+    "0707.1600v1",
+    "0710.1107v1",
+    "0706.2819v1",
+    "math/0609272v1",
+    "0709.2821v1",
+    "math/0605406v1",
+    "0704.3973v1",
+    "math/0702756v1",
+    "0706.3619v1",
+    "0803.3326v1",
+    "math/0703167v1",
+    "0706.3861v1",
+    "0709.3245v1",
+    "0707.2327v1",
+    "0711.3451v1",
+    "math/0702660v1",
+    "0709.1420v1",
+    "0709.1430v1",
+    "math/0506577v1",
+    "0709.2702v1",
+    "0705.2650v1",
+    "0708.1726v1",
+    "0705.2714v1",
+    "0710.0872v1",
+    "0801.1745v1",
+    "0706.0413v1",
+    "0801.0728v1",
+    "math/0703641v1",
+    "math/0702424v1",
+    "0706.2977v1",
+    "0706.4296v1",
+    "0705.1114v1",
+    "0802.0282v1",
+    "0709.3311v1",
+    "math/0612100v1",
+    "0705.1067v1",
+    "0710.3520v1",
+    "0707.0597v1",
+    "math/0611700v1",
+    "0803.3122v1",
+    "0707.2159v1",
+    "0802.1988v1",
+    "math/0503083v1",
+    "math/0611814v1",
+    "0801.1938v1",
+    "0711.3191v1",
+    "0707.3663v1",
+    "0707.2927v1",
+    "0803.3981v1",
+    "0801.0001v1",
+    "math/0512646v1",
+    "0705.1286v1",
+    "0710.0437v1",
+    "math/0611141v1",
+    "0708.0806v1",
+    "math/0607463v1",
+    "math/0606515v1",
+    "0707.3898v1",
+    "0711.3936v1",
+    "0712.3671v1",
+    "0803.0490v1",
+    "0709.2393v1",
+    "math/0402321v1",
+    "0709.3524v1",
+    "0710.2496v1",
+    "0710.5161v1",
+    "0706.2034v1",
+    "0709.3347v1",
+    "0704.2995v1",
+    "0801.1589v1",
+    "0706.4095v1",
+    "0711.2869v1",
+    "0705.2118v1",
+    "0707.1974v1",
+    "0712.2085v1",
+    "0706.4193v1",
+    "0709.1607v1",
+    "math/0607771v1",
+    "0704.2050v1",
+    "math/0510261v1",
+    "0712.3464v1",
+    "math/0612578v1",
+    "0803.3708v1",
+    "0711.0406v1",
+    "0802.0647v1",
+    "0708.1263v1",
+    "0710.3241v1",
+    "0707.0230v1",
+    "0707.2723v1",
+    "math/0607067v1",
+    "0712.0989v1"
+  ],
+  "selected_sample": [
+    {
+      "id": "0706.0574v1",
+      "title": "Norm and Numerical Peak Holomorphic Functions on Banach Spaces",
+      "categories": [
+        "math.FA"
+      ],
+      "score": 3644.821930033047,
+      "matched_terms": [
+        "bounded",
+        "continuous",
+        "continuous functions",
+        "finite",
+        "function",
+        "holomorphic function",
+        "holomorphic functions",
+        "norm",
+        "open",
+        "open unit",
+        "space",
+        "subset"
+      ],
+      "eprint": "0706.0574v1.tar.gz"
+    },
+    {
+      "id": "math/0606537v1",
+      "title": "The distributional Denjoy integral",
+      "categories": [
+        "math.CA"
+      ],
+      "score": 3463.309248697887,
+      "matched_terms": [
+        "bounded",
+        "continuous",
+        "continuous function",
+        "continuous functions",
+        "convergence",
+        "function",
+        "integrable",
+        "integral",
+        "mean value",
+        "norm",
+        "space"
+      ],
+      "eprint": "math__0606537v1.tar.gz"
+    },
+    {
+      "id": "0710.5790v1",
+      "title": "On uniform continuity of Cauchy's function and uniform convergence of Cauchy's integral formula with applications",
+      "categories": [
+        "math.CV",
+        "math-ph",
+        "math.MP"
+      ],
+      "score": 3365.231216440498,
+      "matched_terms": [
+        "bounded",
+        "continuous",
+        "convergence",
+        "differentiable",
+        "function",
+        "integral",
+        "integral formula",
+        "open",
+        "uniform convergence",
+        "unit circle"
+      ],
+      "eprint": "0710.5790v1.tar.gz"
+    },
+    {
+      "id": "0711.3637v1",
+      "title": "Uniformity seminorms on $\\ell^\\infty$ and applications",
+      "categories": [
+        "math.DS",
+        "math.NT"
+      ],
+      "score": 3270.7807380804843,
+      "matched_terms": [
+        "bounded",
+        "continuous",
+        "continuous function",
+        "convergence",
+        "function",
+        "group",
+        "measure",
+        "norm",
+        "sequence",
+        "space",
+        "upper bound"
+      ],
+      "eprint": "0711.3637v1.tar.gz"
+    },
+    {
+      "id": "0712.3837v1",
+      "title": "On the convergence to the multiple Wiener-Ito integral",
+      "categories": [
+        "math.PR"
+      ],
+      "score": 3038.1051081491705,
+      "matched_terms": [
+        "absolutely continuous",
+        "continuous",
+        "convergence",
+        "converges",
+        "finite",
+        "function",
+        "integral",
+        "more precisely",
+        "space"
+      ],
+      "eprint": "0712.3837v1.tar.gz"
+    },
+    {
+      "id": "math/0507172v1",
+      "title": "Deterministic equivalents for certain functionals of large random matrices",
+      "categories": [
+        "math.PR",
+        "math.ST",
+        "stat.TH"
+      ],
+      "score": 3006.2861482565822,
+      "matched_terms": [
+        "analytic",
+        "bounded",
+        "continuous",
+        "continuous function",
+        "convergence",
+        "function",
+        "matrix",
+        "measure",
+        "norm",
+        "probability",
+        "uniformly bounded"
+      ],
+      "eprint": "math__0507172v1.tar.gz"
+    },
+    {
+      "id": "math/0701525v1",
+      "title": "Groups with compact open subgroups and multiplier Hopf $^*$-algebras",
+      "categories": [
+        "math.OA"
+      ],
+      "score": 2977.837991415261,
+      "matched_terms": [
+        "compact",
+        "compact support",
+        "continuous",
+        "continuous function",
+        "finite",
+        "function",
+        "group",
+        "has finite",
+        "open",
+        "operator",
+        "subgroup"
+      ],
+      "eprint": "math__0701525v1.tar.gz"
+    },
+    {
+      "id": "math/0701795v1",
+      "title": "Renyi Dimension and Gaussian Filtering II",
+      "categories": [
+        "math.FA"
+      ],
+      "score": 2971.6836142390484,
+      "matched_terms": [
+        "borel",
+        "compact",
+        "compact support",
+        "continuous",
+        "differentiable",
+        "dimension",
+        "finite",
+        "integral",
+        "measure",
+        "norm",
+        "sequence",
+        "space"
+      ],
+      "eprint": "math__0701795v1.tar.gz"
+    },
+    {
+      "id": "math/0702487v1",
+      "title": "Valuations and plurisubharmonic singularities",
+      "categories": [
+        "math.CV",
+        "math.AG"
+      ],
+      "score": 2876.3033403049944,
+      "matched_terms": [
+        "bounded",
+        "finite",
+        "function",
+        "ideal",
+        "integral",
+        "measure",
+        "operator",
+        "positive measure",
+        "space"
+      ],
+      "eprint": "math__0702487v1.tar.gz"
+    },
+    {
+      "id": "0711.2980v1",
+      "title": "Stochastic Integrals and Abelian Processes",
+      "categories": [
+        "math.PR"
+      ],
+      "score": 2761.4975541363615,
+      "matched_terms": [
+        "continuous",
+        "convergence",
+        "converges",
+        "finite",
+        "fourier transform",
+        "integral",
+        "integral converges",
+        "norm",
+        "space"
+      ],
+      "eprint": "0711.2980v1.tar.gz"
+    },
+    {
+      "id": "0709.3509v1",
+      "title": "Spherical characters: the supercuspidal case",
+      "categories": [
+        "math.RT",
+        "math.GR"
+      ],
+      "score": 2756.160462798777,
+      "matched_terms": [
+        "basis",
+        "compact",
+        "function",
+        "group",
+        "integral",
+        "integral formula",
+        "matrix",
+        "open",
+        "space",
+        "subgroup"
+      ],
+      "eprint": "0709.3509v1.tar.gz"
+    },
+    {
+      "id": "math/0603449v1",
+      "title": "Maximal ideal spaces of invariant function algebras on compact groups",
+      "categories": [
+        "math.FA",
+        "math.RA"
+      ],
+      "score": 2754.6966441514337,
+      "matched_terms": [
+        "algebra",
+        "analytic",
+        "compact",
+        "finite",
+        "function",
+        "group",
+        "ideal",
+        "maximal ideal",
+        "measure",
+        "sequence",
+        "space",
+        "topological"
+      ],
+      "eprint": "math__0603449v1.tar.gz"
+    },
+    {
+      "id": "0708.2838v1",
+      "title": "CW type of inverse limits and function spaces",
+      "categories": [
+        "math.AT"
+      ],
+      "score": 2751.753648745652,
+      "matched_terms": [
+        "compact",
+        "continuous",
+        "continuous functions",
+        "finite",
+        "function",
+        "open",
+        "space"
+      ],
+      "eprint": "0708.2838v1.tar.gz"
+    },
+    {
+      "id": "0711.2093v1",
+      "title": "Metric sparsification and operator norm localization",
+      "categories": [
+        "math.MG",
+        "math.KT"
+      ],
+      "score": 2706.046998444375,
+      "matched_terms": [
+        "borel",
+        "bounded",
+        "bounded linear",
+        "dimension",
+        "finite",
+        "has finite",
+        "hilbert space",
+        "linear",
+        "measure",
+        "metric",
+        "norm",
+        "operator",
+        "sequence",
+        "space",
+        "vector"
+      ],
+      "eprint": "0711.2093v1.tar.gz"
+    },
+    {
+      "id": "0707.3470v1",
+      "title": "Convergence of Kaehler-Ricci flow with integral curvature bound",
+      "categories": [
+        "math.DG",
+        "math.GT"
+      ],
+      "score": 2668.943434618577,
+      "matched_terms": [
+        "compact",
+        "convergence",
+        "converges",
+        "finite",
+        "function",
+        "integral",
+        "metric"
+      ],
+      "eprint": "0707.3470v1.tar.gz"
+    },
+    {
+      "id": "0707.0218v1",
+      "title": "Exponentially Stable Nonlinear Systems have Polynomial Lyapunov Functions on Bounded Regions",
+      "categories": [
+        "math.CA",
+        "math.OC"
+      ],
+      "score": 2648.9187807768394,
+      "matched_terms": [
+        "bounded",
+        "continuous",
+        "differentiable",
+        "function",
+        "norm",
+        "polynomial",
+        "series",
+        "subset"
+      ],
+      "eprint": "0707.0218v1.tar.gz"
+    },
+    {
+      "id": "0711.2123v1",
+      "title": "Ergodic properties of sub-hyperbolic functions with polynomial Schwarzian derivative",
+      "categories": [
+        "math.DS"
+      ],
+      "score": 2648.2319813498675,
+      "matched_terms": [
+        "absolutely continuous",
+        "bounded",
+        "continuous",
+        "dimension",
+        "finite",
+        "function",
+        "measure",
+        "polynomial"
+      ],
+      "eprint": "0711.2123v1.tar.gz"
+    },
+    {
+      "id": "0705.0603v1",
+      "title": "Quasi Ordinary Singularities, Essential Divisors and Poincare Series",
+      "categories": [
+        "math.AG"
+      ],
+      "score": 2631.799831807845,
+      "matched_terms": [
+        "algebra",
+        "analytic",
+        "finite",
+        "function",
+        "integral",
+        "ring",
+        "sequence",
+        "series",
+        "topological"
+      ],
+      "eprint": "0705.0603v1.tar.gz"
+    },
+    {
+      "id": "0706.1006v1",
+      "title": "Sharp $L^p$-estimates for maximal operators associated to hypersurfaces in $\\bR^3$ for $p>2.$",
+      "categories": [
+        "math.CA"
+      ],
+      "score": 2566.869221891338,
+      "matched_terms": [
+        "analytic",
+        "bounded",
+        "dimension",
+        "finite",
+        "fourier transform",
+        "function",
+        "measure",
+        "operator",
+        "space"
+      ],
+      "eprint": "0706.1006v1.tar.gz"
+    },
+    {
+      "id": "math/0603365v1",
+      "title": "Moduli spaces of parabolic $U(p,q)$-Higgs bundles",
+      "categories": [
+        "math.AG",
+        "math.DG"
+      ],
+      "score": 2542.3584682875953,
+      "matched_terms": [
+        "compact",
+        "field",
+        "finite",
+        "function",
+        "group",
+        "norm",
+        "space"
+      ],
+      "eprint": "math__0603365v1.tar.gz"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{:name "monoidal functor",
+ :pagerank 0.00194,
+ :df 863,
+ :concept/id :monoidal-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 124,
+  :sample
+  ["0708.1178" "0708.2757" "0801.2055" "0805.0845" "0809.1760"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A lax monoidal functor between them is a functor: F \\;\\; \\,, together with coherence maps:.",
+   :refs
+   [:monoidal-categories
+    :functor
+    :morphism
+    :natural-transformation
+    :identity-morphisms]}
+  {:id :nlab-condition-2,
+   :statement
+   "#StrictMonoidalFunctor If and all are isomorphisms, then F is called a strong monoidal functor.",
+   :refs
+   [:monoidal-categories
+    :functor
+    :morphism
+    :natural-transformation
+    :identity-morphisms]}
+  {:id :nlab-condition-3,
+   :statement
+   "> (Beware that it has also become common to say \"strong monoidal functor\" for monoidal functors with *tensorial strength*, which is different.) If they are even identity morphisms, then F is called a strict monoidal functor.",
+   :refs
+   [:monoidal-categories
+    :functor
+    :morphism
+    :natural-transformation
+    :identity-morphisms]}],
+ :holes
+ [{:kind :unresolved-source-refs,
+   :wanted
+   [:maps
+    :associativity
+    :commuting-diagram
+    :associators
+    :unitality
+    :unitors],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 33,
+ :genus :functor,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-2814",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "2814",
+  :definition-id "nlab-2814-d1"},
+ :depends-on
+ [:functor
+  :monoidal-categories
+  :morphism
+  :natural-transformation
+  :identity-morphisms],
+ :gloss
+ {:paper "0805.0845",
+  :text
+  "ly, it can be shown that it is not restrictive, using MacLane's coherence theorem~\\cite{maclane:cwm}: every monoidal category is monoidally equivalent to a strict one. A (strict) \\emph{monoidal functor} $F:\\mathcal{C}\\to\\mathcal{D}$ between two strict monoidal categories $\\mathcal{C}$ and $\\mathcal{"}}

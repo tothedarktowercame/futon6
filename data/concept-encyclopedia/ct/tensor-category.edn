@@ -1,0 +1,32 @@
+{:name "tensor category",
+ :pagerank 0.003361,
+ :df 362,
+ :concept/id :tensor-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 108,
+  :sample
+  ["0809.3394" "0809.4423" "0903.4233" "0908.3347" "0910.5695"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 12,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-2647",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "2647",
+  :definition-id nil},
+ :depends-on [],
+ :gloss
+ {:paper "0809.3394",
+  :text
+  "A \\index{tensor category|emph}\\textit{tensor category} is a category endowed with a tensor structure."}}

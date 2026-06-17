@@ -1,0 +1,30 @@
+{:name "identity morphism",
+ :df 936,
+ :concept/id :identity-morphism,
+ :msc "ct",
+ :defined-in
+ {:n-papers 75,
+  :sample
+  ["0708.1500" "0903.0340" "0908.2469" "1001.0668" "1006.5475"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-1247",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only",
+  :definition-source :nlab-raw-section,
+  :nlab-page-id "1247",
+  :definition-id nil},
+ :depends-on [],
+ :gloss
+ {:paper "1006.5475",
+  :text
+  "the definition of a strictly unital $A_{\\infty}$-algebra morphism. \\begin{examp} \\label{idmorphism} Let $A$ be an $A_{\\infty}$-algebra object in $\\mathcal{C}$. Then we define the \\textit{identity morphism} $\\id_A:A\\rightarrow A$, as a morphism of $A_{\\infty}$-algebra objects, by the following series"}}

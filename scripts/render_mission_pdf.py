@@ -44,6 +44,8 @@ PREAMBLE = r"""\documentclass[11pt,oneside]{article}
 \usepackage{lmodern}
 \usepackage{amsmath,amssymb}
 \usepackage{longtable,booktabs}
+\usepackage{tabularx}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \usepackage{enumitem}
 \usepackage[normalem]{ulem}
 \usepackage{xcolor}
@@ -131,14 +133,15 @@ def inline(s: str) -> str:
 
 def table_to_tex(rows):
     cols = max(len(r) for r in rows)
-    spec = "l" * cols
-    out = [r"\begin{center}\small\begin{tabular}{" + spec + "}", r"\toprule"]
+    # Full-width wrapping columns (Y = raggedright X) so wide tables don't overflow.
+    spec = "Y" * cols
+    out = [r"\begin{center}\small\begin{tabularx}{\textwidth}{" + spec + "}", r"\toprule"]
     for i, r in enumerate(rows):
         cells = [inline(c.strip()) for c in r] + [""] * (cols - len(r))
         out.append(" & ".join(cells) + r" \\")
         if i == 0:
             out.append(r"\midrule")
-    out += [r"\bottomrule", r"\end{tabular}\end{center}"]
+    out += [r"\bottomrule", r"\end{tabularx}\end{center}"]
     return "\n".join(out)
 
 

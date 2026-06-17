@@ -1,0 +1,18 @@
+{:paper/id "1211.2851"
+ :passage/id "1211.2851:initial-model-and-inconsistency:225-238"
+ :source {:lines [225 238] :kind :definition-comment}
+ :nodes
+ [{:id :mltt-ua-definition :kind :definition :text "MLTT+UA is dependent type theory with the listed type formers and univalence" :source {:lines [225 228]}}
+  {:id :models-essentially-algebraic :kind :claim :text "the type theory is presented as an essentially algebraic theory" :source {:lines [231 231]}}
+  {:id :initial-model :kind :claim :text "any such type theory has an initial model" :source {:lines [231 231]}}
+  {:id :inconsistency-definition :kind :definition :text "inconsistency is defined using the initial model and the empty type" :source {:lines [233 235]}}
+  {:id :usual-syntactic-inconsistency :kind :claim :text "assuming initiality, this corresponds to a closed term inhabiting the empty type" :source {:lines [237 237]}}
+  {:id :simplicial-model-reading :kind :claim :text "readers accepting initiality may read the later theorem as an interpretation of the usual syntax" :source {:lines [238 238]}}]
+ :edges
+ [{:id :e-initial-model :kind :infer :relation :immediate :premise [:mltt-ua-definition :models-essentially-algebraic] :warrant {:kind :missing-warrant :text "essentially algebraic theories have initial algebras/models when the operations and equations are presented syntactically"} :conclusion :initial-model :source {:lines [231 231]}}
+  {:id :e-inconsistency-correspondence :kind :infer :relation :corresponds :given :initial-model :premise :inconsistency-definition :warrant {:kind :missing-warrant :text "terms in the initial model classify derivable closed syntactic terms"} :conclusion :usual-syntactic-inconsistency :source {:lines [233 237]}}
+  {:id :e-reading-theorem :kind :infer :relation :therefore :premise [:initial-model :usual-syntactic-inconsistency] :conclusion :simplicial-model-reading :source {:lines [237 238]}}]
+ :holes
+ [{:kind :missing-warrant :edge :e-initial-model :wanted :essentially-algebraic-syntax-has-initial-model}
+  {:kind :missing-warrant :edge :e-inconsistency-correspondence :wanted :initial-model-terms-correspond-to-syntactic-derivations}]}
+

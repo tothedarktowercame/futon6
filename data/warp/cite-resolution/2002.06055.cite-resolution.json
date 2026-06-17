@@ -1,0 +1,5158 @@
+{
+  "paper-id": "2002.06055",
+  "records": [
+    {
+      "char-anchor": [
+        129307,
+        129321
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "benabou",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{benabou}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Introduction to bicategories, Reports of the M idwest C ategory S eminar, Springer, Berlin, 1967, pp. 1--77",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Introduction to bicategories"
+    },
+    {
+      "char-anchor": [
+        129326,
+        129345
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "benabou-2cat",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{benabou-2cat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Benabou, Categories relatives, C. R. Acad. Sci. Paris 260 (1965), 3824--3827",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "260"
+    },
+    {
+      "char-anchor": [
+        129375,
+        129401
+      ],
+      "cite/group-marker": "[78,86]",
+      "cite/key": "lack",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{lack,leinster-bicat}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0702535",
+      "resolved-corpus-id": "math__0702535",
+      "title": "A 2-categories companion"
+    },
+    {
+      "char-anchor": [
+        129375,
+        129401
+      ],
+      "cite/group-marker": "[78,86]",
+      "cite/key": "leinster-bicat",
+      "cite/marker": "[86]",
+      "cite/raw": "\\cite{lack,leinster-bicat}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/9810017",
+      "resolved-corpus-id": "math__9810017",
+      "title": "Basic Bicategories"
+    },
+    {
+      "char-anchor": [
+        129815,
+        129848
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "borceux2",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[Definition 7.7.1]{borceux2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra 2: Categories and structures, Encyclopedia of Mathematics and its Applications, vol. 51, Cambridge University Press, Cambridge, 1994, Categories and structures",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra 2: Categories and structures"
+    },
+    {
+      "char-anchor": [
+        130548,
+        130584
+      ],
+      "cite/group-marker": "[65]",
+      "cite/key": "kapranov-voevodsky",
+      "cite/marker": "[65]",
+      "cite/raw": "\\cite[Section 5]{kapranov-voevodsky}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov and V. Voevodsky, 2 -categories and Z amolodchikov tetrahedra equations , Algebraic groups and their generalizations: quantum and infinite-dimensional methods ( U niversity P ark, PA , 1991), Proc. Sympos. Pure Math., vol. 56, Amer. Math. Soc., Providence, RI, 1994, pp. 177--259",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        131071,
+        131101
+      ],
+      "cite/group-marker": "[2,88,120]",
+      "cite/key": "awodey",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{awodey,leinster,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Awodey, Category theory, second ed., Oxford Logic Guides, vol. 52, Oxford University Press, Oxford, 2010",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory"
+    },
+    {
+      "char-anchor": [
+        131071,
+        131101
+      ],
+      "cite/group-marker": "[2,88,120]",
+      "cite/key": "leinster",
+      "cite/marker": "[88]",
+      "cite/raw": "\\cite{awodey,leinster,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Basic category theory, Cambridge Studies in Advanced Mathematics, vol. 143, Cambridge University Press, Cambridge, 2014. 10.1017/CBO9781107360068",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basic category theory"
+    },
+    {
+      "char-anchor": [
+        131071,
+        131101
+      ],
+      "cite/group-marker": "[2,88,120]",
+      "cite/key": "simmons",
+      "cite/marker": "[120]",
+      "cite/raw": "\\cite{awodey,leinster,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "H. Simmons, An introduction to category theory, Cambridge University Press, Cambridge, 2011. 10.1017/CBO9780511863226",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An introduction to category theory"
+    },
+    {
+      "char-anchor": [
+        132382,
+        132404
+      ],
+      "cite/group-marker": "[75]",
+      "cite/key": "lack-model-2cat",
+      "cite/marker": "[75]",
+      "cite/raw": "\\cite{lack-model-2cat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A Q uillen model structure for 2-categories , K -Theory 26 (2002), no. 2, 171--205. 10.1023/A:1020305604826",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "26"
+    },
+    {
+      "char-anchor": [
+        132455,
+        132482
+      ],
+      "cite/group-marker": "[136,137]",
+      "cite/key": "whpt",
+      "cite/marker": "[136]",
+      "cite/raw": "\\cite{whpt,whpt-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Worytkiewicz, K. Hess, P. E. Parent, and A. Tonks, A model structure a la T homason on 2- C at , J. Pure Appl. Algebra 208 (2007), no. 1, 205--236. 10.1016/j.jpaa.2005.12.010",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "208"
+    },
+    {
+      "char-anchor": [
+        132455,
+        132482
+      ],
+      "cite/group-marker": "[136,137]",
+      "cite/key": "whpt-correction",
+      "cite/marker": "[137]",
+      "cite/raw": "\\cite{whpt,whpt-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Worytkiewicz, K. Hess, P.-E. Parent, and A. Tonks, Corrigendum to: `` A model structure a la T homason on 2- C at'' [ J . P ure A ppl. A lgebra 208 (2007) 205--236] , J. Pure Appl. Algebra 220 (2016), no. 12, 4017--4023. 10.1016/j.jpaa.2016.04.002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "` A model structure a la T homason on 2- C at"
+    },
+    {
+      "char-anchor": [
+        132546,
+        132569
+      ],
+      "cite/group-marker": "[76]",
+      "cite/key": "lack-model-bicat",
+      "cite/marker": "[76]",
+      "cite/raw": "\\cite{lack-model-bicat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A Q uillen model structure for bicategories , K -Theory 33 (2004), no. 3, 185--197. 10.1007/s10977-004-6757-9",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "33"
+    },
+    {
+      "char-anchor": [
+        132716,
+        132729
+      ],
+      "cite/group-marker": "[67]",
+      "cite/key": "kelly2",
+      "cite/marker": "[67]",
+      "cite/raw": "\\cite{kelly2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly, On M ac L ane's conditions for coherence of natural associativities, commutativities, etc. , J. Algebra 1 (1964), 397--402",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "1"
+    },
+    {
+      "char-anchor": [
+        132888,
+        132916
+      ],
+      "cite/group-marker": "[94]",
+      "cite/key": "maclane-pare",
+      "cite/marker": "[94]",
+      "cite/raw": "\\cite[page 68]{maclane-pare}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane and R. Pare, Coherence for bicategories and indexed categories, J. Pure Appl. Algebra 37 (1985), no. 1, 59--80. 10.1016/0022-4049(85)90087-8",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence for bicategories and indexed categories"
+    },
+    {
+      "char-anchor": [
+        133356,
+        133373
+      ],
+      "cite/group-marker": "[139]",
+      "cite/key": "yau-operad",
+      "cite/marker": "[139]",
+      "cite/raw": "\\cite{yau-operad}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Colored operads, Graduate Studies in Mathematics, vol. 170, American Mathematical Society, Providence, RI, 2016",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Colored operads"
+    },
+    {
+      "char-anchor": [
+        133508,
+        133521
+      ],
+      "cite/group-marker": "[82]",
+      "cite/key": "lambek",
+      "cite/marker": "[82]",
+      "cite/raw": "\\cite{lambek}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Lambek, Deductive systems and categories II . S tandard constructions and closed categories , Category T heory, H omology T heory and their A pplications, I ( B attelle I nstitute C onference, S eattle, W ash., 1968, V ol. O ne), Springer, Berlin, 1969, pp. 76--122",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        133528,
+        133538
+      ],
+      "cite/group-marker": "[97]",
+      "cite/key": "may",
+      "cite/marker": "[97]",
+      "cite/raw": "\\cite{may}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. P. May, The geometry of iterated loop spaces, Springer-Verlag, Berlin-New York, 1972, Lectures Notes in Mathematics, Vol. 271",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The geometry of iterated loop spaces"
+    },
+    {
+      "char-anchor": [
+        133680,
+        133717
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "boardman-vogt",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite[Definition 2.14]{boardman-vogt}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. M. Boardman and R. M. Vogt, Homotopy invariant algebraic structures on topological spaces, Lecture Notes in Mathematics, Vol. 347, Springer-Verlag, Berlin-New York, 1973",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy invariant algebraic structures on topological spaces"
+    },
+    {
+      "char-anchor": [
+        133803,
+        133836
+      ],
+      "cite/group-marker": "[101]",
+      "cite/key": "moerdijk-toen",
+      "cite/marker": "[101]",
+      "cite/raw": "\\cite[Section 4.1]{moerdijk-toen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "I. Moerdijk and B. Toen, Simplicial methods for operads and algebraic geometry, Advanced Courses in Mathematics. CRM Barcelona, Birkhauser/Springer Basel AG, Basel, 2010, Edited by Carles Casacuberta and Joachim Kock. 10.1007/978-3-0348-0052-5",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Simplicial methods for operads and algebraic geometry"
+    },
+    {
+      "char-anchor": [
+        133890,
+        133920
+      ],
+      "cite/group-marker": "[101,135]",
+      "cite/key": "moerdijk-toen",
+      "cite/marker": "[101]",
+      "cite/raw": "\\cite{moerdijk-toen,white-yau}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "I. Moerdijk and B. Toen, Simplicial methods for operads and algebraic geometry, Advanced Courses in Mathematics. CRM Barcelona, Birkhauser/Springer Basel AG, Basel, 2010, Edited by Carles Casacuberta and Joachim Kock. 10.1007/978-3-0348-0052-5",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Simplicial methods for operads and algebraic geometry"
+    },
+    {
+      "char-anchor": [
+        133890,
+        133920
+      ],
+      "cite/group-marker": "[101,135]",
+      "cite/key": "white-yau",
+      "cite/marker": "[135]",
+      "cite/raw": "\\cite{moerdijk-toen,white-yau}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1503.06720",
+      "resolved-corpus-id": "1503.06720",
+      "title": "Bousfield Localization and Algebras over Colored Operads"
+    },
+    {
+      "char-anchor": [
+        133999,
+        134021
+      ],
+      "cite/group-marker": "[140,141]",
+      "cite/key": "yau-wd",
+      "cite/marker": "[140]",
+      "cite/raw": "\\cite{yau-wd,yau-hqft}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1512.01602",
+      "resolved-corpus-id": "1512.01602",
+      "title": "Operads of Wiring Diagrams"
+    },
+    {
+      "char-anchor": [
+        133999,
+        134021
+      ],
+      "cite/group-marker": "[140,141]",
+      "cite/key": "yau-hqft",
+      "cite/marker": "[141]",
+      "cite/raw": "\\cite{yau-wd,yau-hqft}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1802.08101",
+      "resolved-corpus-id": "1802.08101",
+      "title": "Homotopical Quantum Field Theory"
+    },
+    {
+      "char-anchor": [
+        134096,
+        134108
+      ],
+      "cite/group-marker": "[132]",
+      "cite/key": "szabo",
+      "cite/marker": "[132]",
+      "cite/raw": "\\cite{szabo}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. E. Szabo, Polycategories, Comm. Algebra 3 (1975), no. 8, 663--689. 10.1080/00927877508822067",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Polycategories"
+    },
+    {
+      "char-anchor": [
+        134115,
+        134125
+      ],
+      "cite/group-marker": "[41]",
+      "cite/key": "gan",
+      "cite/marker": "[41]",
+      "cite/raw": "\\cite{gan}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. L. Gan, Koszul duality for dioperads, Math. Res. Lett. 10 (2003), no. 1, 109--124. 10.4310/MRL.2003.v10.n1.a11",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Koszul duality for dioperads"
+    },
+    {
+      "char-anchor": [
+        134326,
+        134352
+      ],
+      "cite/group-marker": "[96,142]",
+      "cite/key": "markl08",
+      "cite/marker": "[96]",
+      "cite/raw": "\\cite{markl08,bluemonster}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Markl, Operads and PROP s , Handbook of algebra, vol. 5, Elsevier/North-Holland, Amsterdam, 2008, pp. 87--140. 10.1016/S1570-7954(07)05002-4",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        134326,
+        134352
+      ],
+      "cite/group-marker": "[96,142]",
+      "cite/key": "bluemonster",
+      "cite/marker": "[142]",
+      "cite/raw": "\\cite{markl08,bluemonster}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Yau and M. W. Johnson, A foundation for PROP s, algebras, and modules , Mathematical Surveys and Monographs, vol. 203, American Mathematical Society, Providence, RI, 2015. 10.1090/surv/203",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        134474,
+        134484
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "hry",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{hry}",
+      "confidence": 0.95,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1410.6716",
+      "resolved-corpus-id": "1410.6716",
+      "title": "Infinity Properads and Infinity Wheeled Properads"
+    },
+    {
+      "char-anchor": [
+        238713,
+        238748
+      ],
+      "cite/group-marker": "[98,104]",
+      "cite/key": "may-sigurdsson",
+      "cite/marker": "[98]",
+      "cite/raw": "\\cite{may-sigurdsson,ponto-shulman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. P. May and J. Sigurdsson, Parametrized homotopy theory, Mathematical Surveys and Monographs, vol. 132, American Mathematical Society, Providence, RI, 2006. 10.1090/surv/132",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Parametrized homotopy theory"
+    },
+    {
+      "char-anchor": [
+        238713,
+        238748
+      ],
+      "cite/group-marker": "[98,104]",
+      "cite/key": "ponto-shulman",
+      "cite/marker": "[104]",
+      "cite/raw": "\\cite{may-sigurdsson,ponto-shulman}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1211.1555",
+      "resolved-corpus-id": "1211.1555",
+      "title": "Duality and traces for indexed monoidal categories"
+    },
+    {
+      "char-anchor": [
+        240631,
+        240659
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "gurski-biequivalences",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{gurski-biequivalences}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1102.0979",
+      "resolved-corpus-id": "1102.0979",
+      "title": "Biequivalences in tricategories"
+    },
+    {
+      "char-anchor": [
+        241169,
+        241190
+      ],
+      "cite/group-marker": "[85]",
+      "cite/key": "lawvere-metric",
+      "cite/marker": "[85]",
+      "cite/raw": "\\cite{lawvere-metric}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. W. Lawvere, Metric spaces, generalized logic, and closed categories, Rend. Sem. Mat. Fis. Milano 43 (1973), 135--166. 10.1007/BF02924844",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Metric spaces, generalized logic, and closed categories"
+    },
+    {
+      "char-anchor": [
+        241227,
+        241297
+      ],
+      "cite/group-marker": "[124,126,68,106,17]",
+      "cite/key": "street_monads",
+      "cite/marker": "[124]",
+      "cite/raw": "\\cite{street_monads,street-yoneda,kelly-coherence,power-coherence,bkp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street, The formal theory of monads, J. Pure Appl. Algebra 2 (1972), no. 2, 149--168. 10.1016/0022-4049(72)90019-9",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The formal theory of monads"
+    },
+    {
+      "char-anchor": [
+        241227,
+        241297
+      ],
+      "cite/group-marker": "[124,126,68,106,17]",
+      "cite/key": "street-yoneda",
+      "cite/marker": "[126]",
+      "cite/raw": "\\cite{street_monads,street-yoneda,kelly-coherence,power-coherence,bkp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fibrations and Y oneda's lemma in a 2 -category , Category S eminar ( P roc. S em., S ydney, 1972/1973), 1974, pp. 104--133. Lecture Notes in Math., Vol. 420",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        241227,
+        241297
+      ],
+      "cite/group-marker": "[124,126,68,106,17]",
+      "cite/key": "kelly-coherence",
+      "cite/marker": "[68]",
+      "cite/raw": "\\cite{street_monads,street-yoneda,kelly-coherence,power-coherence,bkp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence theorems for lax algebras and for distributive laws, Category S eminar ( P roc. S em., S ydney, 1972/1973), Lecture Notes in Math., Vol. 420, 1974, pp. 281--375",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence theorems for lax algebras and for distributive laws"
+    },
+    {
+      "char-anchor": [
+        241227,
+        241297
+      ],
+      "cite/group-marker": "[124,126,68,106,17]",
+      "cite/key": "power-coherence",
+      "cite/marker": "[106]",
+      "cite/raw": "\\cite{street_monads,street-yoneda,kelly-coherence,power-coherence,bkp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A general coherence result, J. Pure Appl. Algebra 57 (1989), no. 2, 165--173. 10.1016/0022-4049(89)90113-8",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A general coherence result"
+    },
+    {
+      "char-anchor": [
+        241227,
+        241297
+      ],
+      "cite/group-marker": "[124,126,68,106,17]",
+      "cite/key": "bkp",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{street_monads,street-yoneda,kelly-coherence,power-coherence,bkp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Blackwell, G. M. Kelly, and A. J. Power, Two-dimensional monad theory, J. Pure Appl. Algebra 59 (1989), no. 1, 1--41. 10.1016/0022-4049(89)90160-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Two-dimensional monad theory"
+    },
+    {
+      "char-anchor": [
+        241378,
+        241398
+      ],
+      "cite/group-marker": "[124]",
+      "cite/key": "street_monads",
+      "cite/marker": "[124]",
+      "cite/raw": "\\cite{street_monads}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street, The formal theory of monads, J. Pure Appl. Algebra 2 (1972), no. 2, 149--168. 10.1016/0022-4049(72)90019-9",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The formal theory of monads"
+    },
+    {
+      "char-anchor": [
+        241458,
+        241469
+      ],
+      "cite/group-marker": "[78]",
+      "cite/key": "lack",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{lack}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0702535",
+      "resolved-corpus-id": "math__0702535",
+      "title": "A 2-categories companion"
+    },
+    {
+      "char-anchor": [
+        241976,
+        241996
+      ],
+      "cite/group-marker": "[124]",
+      "cite/key": "street_monads",
+      "cite/marker": "[124]",
+      "cite/raw": "\\cite{street_monads}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street, The formal theory of monads, J. Pure Appl. Algebra 2 (1972), no. 2, 149--168. 10.1016/0022-4049(72)90019-9",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The formal theory of monads"
+    },
+    {
+      "char-anchor": [
+        242077,
+        242099
+      ],
+      "cite/group-marker": "[68]",
+      "cite/key": "kelly-coherence",
+      "cite/marker": "[68]",
+      "cite/raw": "\\cite{kelly-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence theorems for lax algebras and for distributive laws, Category S eminar ( P roc. S em., S ydney, 1972/1973), Lecture Notes in Math., Vol. 420, 1974, pp. 281--375",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence theorems for lax algebras and for distributive laws"
+    },
+    {
+      "char-anchor": [
+        242384,
+        242395
+      ],
+      "cite/group-marker": "[78]",
+      "cite/key": "lack",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{lack}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0702535",
+      "resolved-corpus-id": "math__0702535",
+      "title": "A 2-categories companion"
+    },
+    {
+      "char-anchor": [
+        242417,
+        242427
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "bkp",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{bkp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Blackwell, G. M. Kelly, and A. J. Power, Two-dimensional monad theory, J. Pure Appl. Algebra 59 (1989), no. 1, 1--41. 10.1016/0022-4049(89)90160-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Two-dimensional monad theory"
+    },
+    {
+      "char-anchor": [
+        242632,
+        242653
+      ],
+      "cite/group-marker": "[119]",
+      "cite/key": "shulman-pseudo",
+      "cite/marker": "[119]",
+      "cite/raw": "\\cite{shulman-pseudo}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1005.1520",
+      "resolved-corpus-id": "1005.1520",
+      "title": "Not every pseudoalgebra is equivalent to a strict one"
+    },
+    {
+      "char-anchor": [
+        242808,
+        242830
+      ],
+      "cite/group-marker": "[68]",
+      "cite/key": "kelly-coherence",
+      "cite/marker": "[68]",
+      "cite/raw": "\\cite{kelly-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence theorems for lax algebras and for distributive laws, Category S eminar ( P roc. S em., S ydney, 1972/1973), Lecture Notes in Math., Vol. 420, 1974, pp. 281--375",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence theorems for lax algebras and for distributive laws"
+    },
+    {
+      "char-anchor": [
+        242853,
+        242875
+      ],
+      "cite/group-marker": "[106]",
+      "cite/key": "power-coherence",
+      "cite/marker": "[106]",
+      "cite/raw": "\\cite{power-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A general coherence result, J. Pure Appl. Algebra 57 (1989), no. 2, 165--173. 10.1016/0022-4049(89)90113-8",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A general coherence result"
+    },
+    {
+      "char-anchor": [
+        242923,
+        242945
+      ],
+      "cite/group-marker": "[106]",
+      "cite/key": "power-coherence",
+      "cite/marker": "[106]",
+      "cite/raw": "\\cite{power-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A general coherence result, J. Pure Appl. Algebra 57 (1989), no. 2, 165--173. 10.1016/0022-4049(89)90113-8",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A general coherence result"
+    },
+    {
+      "char-anchor": [
+        243814,
+        243858
+      ],
+      "cite/group-marker": "[17,60,74,80]",
+      "cite/key": "bkp",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{bkp,hermida,lack-codescent,lack-paoli}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Blackwell, G. M. Kelly, and A. J. Power, Two-dimensional monad theory, J. Pure Appl. Algebra 59 (1989), no. 1, 1--41. 10.1016/0022-4049(89)90160-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Two-dimensional monad theory"
+    },
+    {
+      "char-anchor": [
+        243814,
+        243858
+      ],
+      "cite/group-marker": "[17,60,74,80]",
+      "cite/key": "hermida",
+      "cite/marker": "[60]",
+      "cite/raw": "\\cite{bkp,hermida,lack-codescent,lack-paoli}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Hermida, From coherent structures to universal properties, J. Pure Appl. Algebra 165 (2001), no. 1, 7--61. 10.1016/S0022-4049(01)00008-1",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "From coherent structures to universal properties"
+    },
+    {
+      "char-anchor": [
+        243814,
+        243858
+      ],
+      "cite/group-marker": "[17,60,74,80]",
+      "cite/key": "lack-codescent",
+      "cite/marker": "[74]",
+      "cite/raw": "\\cite{bkp,hermida,lack-codescent,lack-paoli}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Lack, Codescent objects and coherence, J. Pure Appl. Algebra 175 (2002), no. 1-3, 223--241, Special volume celebrating the 70th birthday of Professor Max Kelly. 10.1016/S0022-4049(02)00136-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Codescent objects and coherence"
+    },
+    {
+      "char-anchor": [
+        243814,
+        243858
+      ],
+      "cite/group-marker": "[17,60,74,80]",
+      "cite/key": "lack-paoli",
+      "cite/marker": "[80]",
+      "cite/raw": "\\cite{bkp,hermida,lack-codescent,lack-paoli}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0607271",
+      "resolved-corpus-id": "math__0607271",
+      "title": "2-nerves for bicategories"
+    },
+    {
+      "char-anchor": [
+        243987,
+        244033
+      ],
+      "cite/group-marker": "[23,24]",
+      "cite/key": "bourke-garner-awfs1",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{bourke-garner-awfs1,bourke-garner-awfs2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bourke and R. Garner, Algebraic weak factorisation systems I : A ccessible AWFS , J. Pure Appl. Algebra 220 (2016), no. 1, 108--147. 10.1016/j.jpaa.2015.06.002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "220"
+    },
+    {
+      "char-anchor": [
+        243987,
+        244033
+      ],
+      "cite/group-marker": "[23,24]",
+      "cite/key": "bourke-garner-awfs2",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{bourke-garner-awfs1,bourke-garner-awfs2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Algebraic weak factorisation systems II : C ategories of weak maps , J. Pure Appl. Algebra 220 (2016), no. 1, 148--174. 10.1016/j.jpaa.2015.06.003",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "220"
+    },
+    {
+      "char-anchor": [
+        244124,
+        244144
+      ],
+      "cite/group-marker": "[55]",
+      "cite/key": "gjo-extending",
+      "cite/marker": "[55]",
+      "cite/raw": "\\cite{gjo-extending}",
+      "confidence": 0.95,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1508.00054",
+      "resolved-corpus-id": "1508.00054",
+      "title": "Extending homotopy theories across adjunctions"
+    },
+    {
+      "char-anchor": [
+        257695,
+        257721
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "borceux1",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite[Chapter 3]{borceux1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Borceux, Handbook of categorical algebra 1: Basic category theory, Encyclopedia of Mathematics and its Applications, vol. 50, Cambridge University Press, Cambridge, 1994, Basic category theory",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra 1: Basic category theory"
+    },
+    {
+      "char-anchor": [
+        257726,
+        257746
+      ],
+      "cite/group-marker": "[93]",
+      "cite/key": "maclane",
+      "cite/marker": "[93]",
+      "cite/raw": "\\cite[IV.1]{maclane}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categories for the working mathematician, second ed., Graduate Texts in Mathematics, vol. 5, Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        281930,
+        281949
+      ],
+      "cite/group-marker": "[91]",
+      "cite/key": "maclane-rice",
+      "cite/marker": "[91]",
+      "cite/raw": "\\cite{maclane-rice}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Natural associativity and commutativity, Rice Univ. Stud. 49 (1963), no. 4, 28--46",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Natural associativity and commutativity"
+    },
+    {
+      "char-anchor": [
+        281951,
+        281981
+      ],
+      "cite/group-marker": "[93]",
+      "cite/key": "maclane",
+      "cite/marker": "[93]",
+      "cite/raw": "\\cite[XI.3 Theorem 1]{maclane}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categories for the working mathematician, second ed., Graduate Texts in Mathematics, vol. 5, Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        281987,
+        282006
+      ],
+      "cite/group-marker": "[64]",
+      "cite/key": "joyal-street",
+      "cite/marker": "[64]",
+      "cite/raw": "\\cite{joyal-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided tensor categories, Adv. Math. 102 (1993), no. 1, 20--78. 10.1006/aima.1993.1055",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braided tensor categories"
+    },
+    {
+      "char-anchor": [
+        282688,
+        282719
+      ],
+      "cite/group-marker": "[93]",
+      "cite/key": "maclane",
+      "cite/marker": "[93]",
+      "cite/raw": "\\cite[VII.2 Theorem 1]{maclane}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categories for the working mathematician, second ed., Graduate Texts in Mathematics, vol. 5, Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        282842,
+        282873
+      ],
+      "cite/group-marker": "[93]",
+      "cite/key": "maclane",
+      "cite/marker": "[93]",
+      "cite/raw": "\\cite[VII.2 Corollary]{maclane}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categories for the working mathematician, second ed., Graduate Texts in Mathematics, vol. 5, Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        283410,
+        283442
+      ],
+      "cite/group-marker": "[64]",
+      "cite/key": "joyal-street",
+      "cite/marker": "[64]",
+      "cite/raw": "\\cite[Theorem 1.2]{joyal-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided tensor categories, Adv. Math. 102 (1993), no. 1, 20--78. 10.1006/aima.1993.1055",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braided tensor categories"
+    },
+    {
+      "char-anchor": [
+        287936,
+        287955
+      ],
+      "cite/group-marker": "[64]",
+      "cite/key": "joyal-street",
+      "cite/marker": "[64]",
+      "cite/raw": "\\cite{joyal-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided tensor categories, Adv. Math. 102 (1993), no. 1, 20--78. 10.1006/aima.1993.1055",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braided tensor categories"
+    },
+    {
+      "char-anchor": [
+        289100,
+        289115
+      ],
+      "cite/group-marker": "[134]",
+      "cite/key": "weidmann",
+      "cite/marker": "[134]",
+      "cite/raw": "\\cite{weidmann}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Weidmann, Linear operators in H ilbert spaces , Graduate Texts in Mathematics, vol. 68, Springer-Verlag, New York-Berlin, 1980, Translated from the German by Joseph Szucs",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        294367,
+        294379
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "artin",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{artin}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. Artin, Theory of braids, Ann. of Math. 48 (1947), 101--126. 10.2307/1969218",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theory of braids"
+    },
+    {
+      "char-anchor": [
+        295436,
+        295455
+      ],
+      "cite/group-marker": "[64]",
+      "cite/key": "joyal-street",
+      "cite/marker": "[64]",
+      "cite/raw": "\\cite{joyal-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided tensor categories, Adv. Math. 102 (1993), no. 1, 20--78. 10.1006/aima.1993.1055",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braided tensor categories"
+    },
+    {
+      "char-anchor": [
+        316046,
+        316096
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "awodey",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Awodey, Category theory, second ed., Oxford Logic Guides, vol. 52, Oxford University Press, Oxford, 2010",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory"
+    },
+    {
+      "char-anchor": [
+        316046,
+        316096
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "grandis",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Grandis, Category theory and applications: A textbook for beginners, World Scientific Publishing Co. Pte. Ltd., Hackensack, NJ, 2018. 10.1142/10737",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory and applications: A textbook for beginners"
+    },
+    {
+      "char-anchor": [
+        316046,
+        316096
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "leinster",
+      "cite/marker": "[88]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Basic category theory, Cambridge Studies in Advanced Mathematics, vol. 143, Cambridge University Press, Cambridge, 2014. 10.1017/CBO9781107360068",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basic category theory"
+    },
+    {
+      "char-anchor": [
+        316046,
+        316096
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "riehl",
+      "cite/marker": "[113]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Category theory in context, Courier Dover Publications, 2016",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory in context"
+    },
+    {
+      "char-anchor": [
+        316046,
+        316096
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "roman",
+      "cite/marker": "[114]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Roman, An introduction to the language of category theory, Compact Textbooks in Mathematics, Birkhauser/Springer, Cham, 2017. 10.1007/978-3-319-41917-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An introduction to the language of category theory"
+    },
+    {
+      "char-anchor": [
+        316046,
+        316096
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "simmons",
+      "cite/marker": "[120]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "H. Simmons, An introduction to category theory, Cambridge University Press, Cambridge, 2011. 10.1017/CBO9780511863226",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An introduction to category theory"
+    },
+    {
+      "char-anchor": [
+        316232,
+        316247
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "bourbaki",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{bourbaki}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Bourbaki, Th eorie des topos et cohomologie etale des sch emas , S eminaire de G eom etrie Alg ebrique du Bois-Marie 1963--1964 (SGA 4). Lecture Notes in Mathematics, vol. 269, Springer, Available at http://library.msri.org/books/sga/sga/index.html, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        316359,
+        316400
+      ],
+      "cite/group-marker": "[92,118,89]",
+      "cite/key": "maclane-foundation",
+      "cite/marker": "[92]",
+      "cite/raw": "\\cite{maclane-foundation,shulman-set,low}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "One universe as a foundation for category theory, Reports of the M idwest C ategory S eminar. III , Springer, Berlin, 1969, pp. 192--200",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "One universe as a foundation for category theory"
+    },
+    {
+      "char-anchor": [
+        316359,
+        316400
+      ],
+      "cite/group-marker": "[92,118,89]",
+      "cite/key": "shulman-set",
+      "cite/marker": "[118]",
+      "cite/raw": "\\cite{maclane-foundation,shulman-set,low}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "0810.1279",
+      "resolved-corpus-id": "0810.1279",
+      "title": "Set theory for category theory"
+    },
+    {
+      "char-anchor": [
+        316359,
+        316400
+      ],
+      "cite/group-marker": "[92,118,89]",
+      "cite/key": "low",
+      "cite/marker": "[89]",
+      "cite/raw": "\\cite{maclane-foundation,shulman-set,low}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1304.5227",
+      "resolved-corpus-id": "1304.5227",
+      "title": "Universes for category theory"
+    },
+    {
+      "char-anchor": [
+        316731,
+        316780
+      ],
+      "cite/group-marker": "[7,21,43,93,113]",
+      "cite/key": "barr-wells",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{barr-wells,borceux2,godement,maclane,riehl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Barr and C. Wells, Toposes, triples and theories, Repr. Theory Appl. Categ. (2005), no. 12, x+288, Corrected reprint",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Toposes, triples and theories"
+    },
+    {
+      "char-anchor": [
+        316731,
+        316780
+      ],
+      "cite/group-marker": "[7,21,43,93,113]",
+      "cite/key": "borceux2",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{barr-wells,borceux2,godement,maclane,riehl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra 2: Categories and structures, Encyclopedia of Mathematics and its Applications, vol. 51, Cambridge University Press, Cambridge, 1994, Categories and structures",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra 2: Categories and structures"
+    },
+    {
+      "char-anchor": [
+        316731,
+        316780
+      ],
+      "cite/group-marker": "[7,21,43,93,113]",
+      "cite/key": "godement",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite{barr-wells,borceux2,godement,maclane,riehl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Godement, Topologie algebrique et theorie des faisceaux, Actualit'es Sci. Ind. No. 1252. Publ. Math. Univ. Strasbourg. No. 13, Hermann, Paris, 1958",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        316731,
+        316780
+      ],
+      "cite/group-marker": "[7,21,43,93,113]",
+      "cite/key": "maclane",
+      "cite/marker": "[93]",
+      "cite/raw": "\\cite{barr-wells,borceux2,godement,maclane,riehl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categories for the working mathematician, second ed., Graduate Texts in Mathematics, vol. 5, Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        316731,
+        316780
+      ],
+      "cite/group-marker": "[7,21,43,93,113]",
+      "cite/key": "riehl",
+      "cite/marker": "[113]",
+      "cite/raw": "\\cite{barr-wells,borceux2,godement,maclane,riehl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Category theory in context, Courier Dover Publications, 2016",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory in context"
+    },
+    {
+      "char-anchor": [
+        317230,
+        317249
+      ],
+      "cite/group-marker": "[64]",
+      "cite/key": "joyal-street",
+      "cite/marker": "[64]",
+      "cite/raw": "\\cite{joyal-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided tensor categories, Adv. Math. 102 (1993), no. 1, 20--78. 10.1006/aima.1993.1055",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braided tensor categories"
+    },
+    {
+      "char-anchor": [
+        317860,
+        317922
+      ],
+      "cite/group-marker": "[64,67,91,93,138]",
+      "cite/key": "joyal-street",
+      "cite/marker": "[64]",
+      "cite/raw": "\\cite{joyal-street,kelly2,maclane-rice,maclane,yau-inf-operad}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided tensor categories, Adv. Math. 102 (1993), no. 1, 20--78. 10.1006/aima.1993.1055",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braided tensor categories"
+    },
+    {
+      "char-anchor": [
+        317860,
+        317922
+      ],
+      "cite/group-marker": "[64,67,91,93,138]",
+      "cite/key": "kelly2",
+      "cite/marker": "[67]",
+      "cite/raw": "\\cite{joyal-street,kelly2,maclane-rice,maclane,yau-inf-operad}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly, On M ac L ane's conditions for coherence of natural associativities, commutativities, etc. , J. Algebra 1 (1964), 397--402",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "1"
+    },
+    {
+      "char-anchor": [
+        317860,
+        317922
+      ],
+      "cite/group-marker": "[64,67,91,93,138]",
+      "cite/key": "maclane-rice",
+      "cite/marker": "[91]",
+      "cite/raw": "\\cite{joyal-street,kelly2,maclane-rice,maclane,yau-inf-operad}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Natural associativity and commutativity, Rice Univ. Stud. 49 (1963), no. 4, 28--46",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Natural associativity and commutativity"
+    },
+    {
+      "char-anchor": [
+        317860,
+        317922
+      ],
+      "cite/group-marker": "[64,67,91,93,138]",
+      "cite/key": "maclane",
+      "cite/marker": "[93]",
+      "cite/raw": "\\cite{joyal-street,kelly2,maclane-rice,maclane,yau-inf-operad}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categories for the working mathematician, second ed., Graduate Texts in Mathematics, vol. 5, Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        317860,
+        317922
+      ],
+      "cite/group-marker": "[64,67,91,93,138]",
+      "cite/key": "yau-inf-operad",
+      "cite/marker": "[138]",
+      "cite/raw": "\\cite{joyal-street,kelly2,maclane-rice,maclane,yau-inf-operad}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1903.03839",
+      "resolved-corpus-id": "1903.03839",
+      "title": "Infinity Operads and Monoidal Categories with Group Equivariance"
+    },
+    {
+      "char-anchor": [
+        317996,
+        318030
+      ],
+      "cite/group-marker": "[63]",
+      "cite/key": "joyal-street-mmr",
+      "cite/marker": "[63]",
+      "cite/raw": "\\cite[Section 6]{joyal-street-mmr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal and R. Street, Braided tensor categories, Macquarie Mathematics report no. 860061, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braided tensor categories"
+    },
+    {
+      "char-anchor": [
+        318160,
+        318181
+      ],
+      "cite/group-marker": "[71]",
+      "cite/key": "kelly-enriched",
+      "cite/marker": "[71]",
+      "cite/raw": "\\cite{kelly-enriched}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Basic concepts of enriched category theory, Repr. Theory Appl. Categ. (2005), no. 10, vi+137, Reprint of the 1982 original (Cambridge Univ. Press, Cambridge)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basic concepts of enriched category theory"
+    },
+    {
+      "char-anchor": [
+        318222,
+        318248
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "borceux2",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[Chapter 6]{borceux2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra 2: Categories and structures, Encyclopedia of Mathematics and its Applications, vol. 51, Cambridge University Press, Cambridge, 1994, Categories and structures",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra 2: Categories and structures"
+    },
+    {
+      "char-anchor": [
+        318312,
+        318348
+      ],
+      "cite/group-marker": "[17,81,124]",
+      "cite/key": "bkp",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{bkp,lack-street,street_monads}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Blackwell, G. M. Kelly, and A. J. Power, Two-dimensional monad theory, J. Pure Appl. Algebra 59 (1989), no. 1, 1--41. 10.1016/0022-4049(89)90160-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Two-dimensional monad theory"
+    },
+    {
+      "char-anchor": [
+        318312,
+        318348
+      ],
+      "cite/group-marker": "[17,81,124]",
+      "cite/key": "lack-street",
+      "cite/marker": "[81]",
+      "cite/raw": "\\cite{bkp,lack-street,street_monads}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Lack and R. Street, The formal theory of monads II , J. Pure Appl. Algebra 175 (2002), no. 1-3, 243--265, Special volume celebrating the 70th birthday of Professor Max Kelly. 10.1016/S0022-4049(02)00137-8",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "175"
+    },
+    {
+      "char-anchor": [
+        318312,
+        318348
+      ],
+      "cite/group-marker": "[17,81,124]",
+      "cite/key": "street_monads",
+      "cite/marker": "[124]",
+      "cite/raw": "\\cite{bkp,lack-street,street_monads}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street, The formal theory of monads, J. Pure Appl. Algebra 2 (1972), no. 2, 149--168. 10.1016/0022-4049(72)90019-9",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The formal theory of monads"
+    },
+    {
+      "char-anchor": [
+        376658,
+        376686
+      ],
+      "cite/group-marker": "[131]",
+      "cite/key": "street_cat-structures",
+      "cite/marker": "[131]",
+      "cite/raw": "\\cite{street_cat-structures}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categorical structures, Handbook of algebra, V ol. 1, Handb. Algebr., vol. 1, Elsevier/North-Holland, Amsterdam, 1996, pp. 529--577. 10.1016/S1570-7954(96)80019-2",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categorical structures"
+    },
+    {
+      "char-anchor": [
+        376731,
+        376751
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "bakovicYoneda",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{bakovicYoneda}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "I. Bakovic, Bicategorical Y oneda lemma , 2007. Available at https://www2.irb.hr/korisnici/ibakovic/yoneda.pdf",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        376925,
+        376968
+      ],
+      "cite/group-marker": "[131]",
+      "cite/key": "street_cat-structures",
+      "cite/marker": "[131]",
+      "cite/raw": "\\cite[Corollary 9.2]{street_cat-structures}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categorical structures, Handbook of algebra, V ol. 1, Handb. Algebr., vol. 1, Elsevier/North-Holland, Amsterdam, 1996, pp. 529--577. 10.1016/S1570-7954(96)80019-2",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categorical structures"
+    },
+    {
+      "char-anchor": [
+        377213,
+        377247
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite[Chapter\n2]{gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        377353,
+        377372
+      ],
+      "cite/group-marker": "[64]",
+      "cite/key": "joyal-street",
+      "cite/marker": "[64]",
+      "cite/raw": "\\cite{joyal-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided tensor categories, Adv. Math. 102 (1993), no. 1, 20--78. 10.1006/aima.1993.1055",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braided tensor categories"
+    },
+    {
+      "char-anchor": [
+        470384,
+        470517
+      ],
+      "cite/group-marker": "[16,40,70,77,105,109,127,128,130]",
+      "cite/key": "bkps",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{bkps,fiore,kelly-limits,lack-limits,power-bilimits,power-robinson,street-limits,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. J. Bird, G. M. Kelly, A. J. Power, and R. H. Street, Flexible limits for 2 -categories , J. Pure Appl. Algebra 61 (1989), no. 1, 1--27. 10.1016/0022-4049(89)90065-0",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "61"
+    },
+    {
+      "char-anchor": [
+        470384,
+        470517
+      ],
+      "cite/group-marker": "[16,40,70,77,105,109,127,128,130]",
+      "cite/key": "fiore",
+      "cite/marker": "[40]",
+      "cite/raw": "\\cite{bkps,fiore,kelly-limits,lack-limits,power-bilimits,power-robinson,street-limits,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. M. Fiore, Pseudo limits, biadjoints, and pseudo algebras: C ategorical foundations of conformal field theory , Mem. Amer. Math. Soc. 182 (2006), no. 860, x+171. 10.1090/memo/0860",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "182"
+    },
+    {
+      "char-anchor": [
+        470384,
+        470517
+      ],
+      "cite/group-marker": "[16,40,70,77,105,109,127,128,130]",
+      "cite/key": "kelly-limits",
+      "cite/marker": "[70]",
+      "cite/raw": "\\cite{bkps,fiore,kelly-limits,lack-limits,power-bilimits,power-robinson,street-limits,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Elementary observations on 2 -categorical limits , Bull. Austral. Math. Soc. 39 (1989), no. 2, 301--317. 10.1017/S0004972700002781",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "39"
+    },
+    {
+      "char-anchor": [
+        470384,
+        470517
+      ],
+      "cite/group-marker": "[16,40,70,77,105,109,127,128,130]",
+      "cite/key": "lack-limits",
+      "cite/marker": "[77]",
+      "cite/raw": "\\cite{bkps,fiore,kelly-limits,lack-limits,power-bilimits,power-robinson,street-limits,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Limits for lax morphisms, Appl. Categ. Structures 13 (2005), no. 3, 189--203. 10.1007/s10485-005-2958-5",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Limits for lax morphisms"
+    },
+    {
+      "char-anchor": [
+        470384,
+        470517
+      ],
+      "cite/group-marker": "[16,40,70,77,105,109,127,128,130]",
+      "cite/key": "power-bilimits",
+      "cite/marker": "[105]",
+      "cite/raw": "\\cite{bkps,fiore,kelly-limits,lack-limits,power-bilimits,power-robinson,street-limits,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. J. Power, Coherence for bicategories with finite bilimits I , Categories in computer science and logic ( B oulder, CO , 1987), Contemp. Math., vol. 92, Amer. Math. Soc., Providence, RI, 1989, pp. 341--347. 10.1090/conm/092/1003207",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        470384,
+        470517
+      ],
+      "cite/group-marker": "[16,40,70,77,105,109,127,128,130]",
+      "cite/key": "power-robinson",
+      "cite/marker": "[109]",
+      "cite/raw": "\\cite{bkps,fiore,kelly-limits,lack-limits,power-bilimits,power-robinson,street-limits,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Power and E. Robinson, A characterization of pie limits, Math. Proc. Cambridge Philos. Soc. 110 (1991), no. 1, 33--47. 10.1017/S0305004100070092",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A characterization of pie limits"
+    },
+    {
+      "char-anchor": [
+        470384,
+        470517
+      ],
+      "cite/group-marker": "[16,40,70,77,105,109,127,128,130]",
+      "cite/key": "street-limits",
+      "cite/marker": "[127]",
+      "cite/raw": "\\cite{bkps,fiore,kelly-limits,lack-limits,power-bilimits,power-robinson,street-limits,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Limits indexed by category-valued 2 -functors , J. Pure Appl. Algebra 8 (1976), no. 2, 149--181. 10.1016/0022-4049(76)90013-X",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "8"
+    },
+    {
+      "char-anchor": [
+        470384,
+        470517
+      ],
+      "cite/group-marker": "[16,40,70,77,105,109,127,128,130]",
+      "cite/key": "street_fibrations",
+      "cite/marker": "[128]",
+      "cite/raw": "\\cite{bkps,fiore,kelly-limits,lack-limits,power-bilimits,power-robinson,street-limits,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fibrations in bicategories, Cahiers Topologie Geom. Differentielle 21 (1980), no. 2, 111--160",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        470384,
+        470517
+      ],
+      "cite/group-marker": "[16,40,70,77,105,109,127,128,130]",
+      "cite/key": "street_fibrations-correction",
+      "cite/marker": "[130]",
+      "cite/raw": "\\cite{bkps,fiore,kelly-limits,lack-limits,power-bilimits,power-robinson,street-limits,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Correction to: `` F ibrations in bicategories'' [ C ahiers T opologie G eom. D ifferentielle 21 (1980), no. 2, 111--160] , Cahiers Topologie Geom. Differentielle Categ. 28 (1987), no. 1, 53--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "` F ibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        470687,
+        470711
+      ],
+      "cite/group-marker": "[37,80]",
+      "cite/key": "duskin",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{duskin,lack-paoli}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Duskin, Simplicial matrices and the nerves of weak n -categories. I : N erves of bicategories , Theory Appl. Categ. 9 (2001/02), 198--308, CT2000 Conference (Como)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "9"
+    },
+    {
+      "char-anchor": [
+        470687,
+        470711
+      ],
+      "cite/group-marker": "[37,80]",
+      "cite/key": "lack-paoli",
+      "cite/marker": "[80]",
+      "cite/raw": "\\cite{duskin,lack-paoli}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0607271",
+      "resolved-corpus-id": "math__0607271",
+      "title": "2-nerves for bicategories"
+    },
+    {
+      "char-anchor": [
+        470717,
+        470734
+      ],
+      "cite/group-marker": "[80]",
+      "cite/key": "lack-paoli",
+      "cite/marker": "[80]",
+      "cite/raw": "\\cite{lack-paoli}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0607271",
+      "resolved-corpus-id": "math__0607271",
+      "title": "2-nerves for bicategories"
+    },
+    {
+      "char-anchor": [
+        470943,
+        470962
+      ],
+      "cite/group-marker": "[51]",
+      "cite/key": "gurski-nerve",
+      "cite/marker": "[51]",
+      "cite/raw": "\\cite{gurski-nerve}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Gurski, Nerves of bicategories as stratified simplicial sets, J. Pure Appl. Algebra 213 (2009), no. 6, 927--946. 10.1016/j.jpaa.2008.10.011",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Nerves of bicategories as stratified simplicial sets"
+    },
+    {
+      "char-anchor": [
+        471096,
+        471117
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "cordier-porter",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{cordier-porter}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J.-M. Cordier and T. Porter, Homotopy coherent category theory, Trans. Amer. Math. Soc. 349 (1997), no. 1, 1--54. 10.1090/S0002-9947-97-01752-2",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy coherent category theory"
+    },
+    {
+      "char-anchor": [
+        471213,
+        471226
+      ],
+      "cite/group-marker": "[133]",
+      "cite/key": "verity",
+      "cite/marker": "[133]",
+      "cite/raw": "\\cite{verity}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Verity, Enriched categories, internal categories and change of base, Repr. Theory Appl. Categ. (2011), no. 20, 1--266",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Enriched categories, internal categories and change of base"
+    },
+    {
+      "char-anchor": [
+        471522,
+        471532
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "ccg",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{ccg}",
+      "confidence": 0.95,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0903.5058",
+      "resolved-corpus-id": "0903.5058",
+      "title": "Nerves and classifying spaces for bicategories"
+    },
+    {
+      "char-anchor": [
+        586458,
+        586477
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "grothendieck",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{grothendieck}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Grothendieck, Cat egories fibr ees et descente , Revetements etales et groupe fondamental (SGA 1), Lect. Notes in Math, vol. 224, Springer Heidelberg, 1971, pp. 145--194",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        586670,
+        586708
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "barr-wells-category",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite[Chapter 12]{barr-wells-category}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Category theory for computing science, Repr. Theory Appl. Categ. (2012), no. 22, xviii+538, Corrected reprint",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory for computing science"
+    },
+    {
+      "char-anchor": [
+        586710,
+        586736
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "borceux2",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[Chapter 8]{borceux2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra 2: Categories and structures, Encyclopedia of Mathematics and its Applications, vol. 51, Cambridge University Press, Cambridge, 1994, Categories and structures",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra 2: Categories and structures"
+    },
+    {
+      "char-anchor": [
+        586738,
+        586767
+      ],
+      "cite/group-marker": "[62]",
+      "cite/key": "elephant",
+      "cite/marker": "[62]",
+      "cite/raw": "\\cite[Chapter B1.3]{elephant}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. T. Johnstone, Sketches of an elephant: A topos theory compendium: V ol. 1 , Oxford Logic Guides, vol. 43, The Clarendon Press, Oxford University Press, New York, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        586773,
+        586791
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "gray-fibred",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{gray-fibred}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Gray, Fibred and cofibred categories, Proc. C onf. C ategorical A lgebra ( L a J olla, C alif., 1965), Springer, New York, 1966, pp. 21--83",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fibred and cofibred categories"
+    },
+    {
+      "char-anchor": [
+        586854,
+        586939
+      ],
+      "cite/group-marker": "[126,128,130,129]",
+      "cite/key": "street-yoneda",
+      "cite/marker": "[126]",
+      "cite/raw": "\\cite{street-yoneda,street_fibrations,street_fibrations-correction,street-conspectus}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fibrations and Y oneda's lemma in a 2 -category , Category S eminar ( P roc. S em., S ydney, 1972/1973), 1974, pp. 104--133. Lecture Notes in Math., Vol. 420",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        586854,
+        586939
+      ],
+      "cite/group-marker": "[126,128,130,129]",
+      "cite/key": "street_fibrations",
+      "cite/marker": "[128]",
+      "cite/raw": "\\cite{street-yoneda,street_fibrations,street_fibrations-correction,street-conspectus}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fibrations in bicategories, Cahiers Topologie Geom. Differentielle 21 (1980), no. 2, 111--160",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        586854,
+        586939
+      ],
+      "cite/group-marker": "[126,128,130,129]",
+      "cite/key": "street_fibrations-correction",
+      "cite/marker": "[130]",
+      "cite/raw": "\\cite{street-yoneda,street_fibrations,street_fibrations-correction,street-conspectus}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Correction to: `` F ibrations in bicategories'' [ C ahiers T opologie G eom. D ifferentielle 21 (1980), no. 2, 111--160] , Cahiers Topologie Geom. Differentielle Categ. 28 (1987), no. 1, 53--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "` F ibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        586854,
+        586939
+      ],
+      "cite/group-marker": "[126,128,130,129]",
+      "cite/key": "street-conspectus",
+      "cite/marker": "[129]",
+      "cite/raw": "\\cite{street-yoneda,street_fibrations,street_fibrations-correction,street-conspectus}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Conspectus of variable categories, J. Pure Appl. Algebra 21 (1981), no. 3, 307--338. 10.1016/0022-4049(81)90021-9",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Conspectus of variable categories"
+    },
+    {
+      "char-anchor": [
+        586989,
+        587038
+      ],
+      "cite/group-marker": "[14,39,59,95]",
+      "cite/key": "benabou-fibered",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{benabou-fibered,fgiknv,harpaz,maltsiniotis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fibered categories and the foundations of naive category theory, The Journal of Symbolic Logic 50 (1985), no. 1, 10--37",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fibered categories and the foundations of naive category theory"
+    },
+    {
+      "char-anchor": [
+        586989,
+        587038
+      ],
+      "cite/group-marker": "[14,39,59,95]",
+      "cite/key": "fgiknv",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{benabou-fibered,fgiknv,harpaz,maltsiniotis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Fantechi, L. Gottsche, L. Illusie, S. L. Kleiman, N. Nitsure, and A. Vistoli, Fundamental algebraic geometry, Mathematical Surveys and Monographs, vol. 123, American Mathematical Society, Providence, RI, 2005, Grothendieck's FGA explained",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fundamental algebraic geometry"
+    },
+    {
+      "char-anchor": [
+        586989,
+        587038
+      ],
+      "cite/group-marker": "[14,39,59,95]",
+      "cite/key": "harpaz",
+      "cite/marker": "[59]",
+      "cite/raw": "\\cite{benabou-fibered,fgiknv,harpaz,maltsiniotis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Y. Harpaz and M. Prasma, The G rothendieck construction for model categories , Adv. Math. 281 (2015), 1306--1363. 10.1016/j.aim.2015.03.031",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "281"
+    },
+    {
+      "char-anchor": [
+        586989,
+        587038
+      ],
+      "cite/group-marker": "[14,39,59,95]",
+      "cite/key": "maltsiniotis",
+      "cite/marker": "[95]",
+      "cite/raw": "\\cite{benabou-fibered,fgiknv,harpaz,maltsiniotis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Maltsiniotis, La theorie de l'homotopie de G rothendieck , Asterisque (2005), no. 301, vi+140",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        587193,
+        587207
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "buckley",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{buckley}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1212.6283",
+      "resolved-corpus-id": "1212.6283",
+      "title": "Fibred 2-categories and bicategories"
+    },
+    {
+      "char-anchor": [
+        730404,
+        730418
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "benabou",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{benabou}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Introduction to bicategories, Reports of the M idwest C ategory S eminar, Springer, Berlin, 1967, pp. 1--77",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Introduction to bicategories"
+    },
+    {
+      "char-anchor": [
+        730609,
+        730626
+      ],
+      "cite/group-marker": "[125]",
+      "cite/key": "street_lax",
+      "cite/marker": "[125]",
+      "cite/raw": "\\cite{street_lax}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Two constructions on lax functors, Cahiers Topologie Geom. Differentielle 13 (1972), 217--264",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Two constructions on lax functors"
+    },
+    {
+      "char-anchor": [
+        730969,
+        730994
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "benabou",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite[Section 8]{benabou}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Introduction to bicategories, Reports of the M idwest C ategory S eminar, Springer, Berlin, 1967, pp. 1--77",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Introduction to bicategories"
+    },
+    {
+      "char-anchor": [
+        731400,
+        731436
+      ],
+      "cite/group-marker": "[44,54,62]",
+      "cite/key": "gps",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{gps,gurski-coherence,elephant}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Gordon, A. J. Power, and R. Street, Coherence for tricategories, Mem. Amer. Math. Soc. 117 (1995), no. 558, vi+81. 10.1090/memo/0558",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence for tricategories"
+    },
+    {
+      "char-anchor": [
+        731400,
+        731436
+      ],
+      "cite/group-marker": "[44,54,62]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{gps,gurski-coherence,elephant}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        731400,
+        731436
+      ],
+      "cite/group-marker": "[44,54,62]",
+      "cite/key": "elephant",
+      "cite/marker": "[62]",
+      "cite/raw": "\\cite{gps,gurski-coherence,elephant}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. T. Johnstone, Sketches of an elephant: A topos theory compendium: V ol. 1 , Oxford Logic Guides, vol. 43, The Clarendon Press, Oxford University Press, New York, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        731555,
+        731654
+      ],
+      "cite/group-marker": "[13,69,86,79,128,130]",
+      "cite/key": "benabou",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{benabou,kelly-clubs,leinster-bicat,lack-icons,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Introduction to bicategories, Reports of the M idwest C ategory S eminar, Springer, Berlin, 1967, pp. 1--77",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Introduction to bicategories"
+    },
+    {
+      "char-anchor": [
+        731555,
+        731654
+      ],
+      "cite/group-marker": "[13,69,86,79,128,130]",
+      "cite/key": "kelly-clubs",
+      "cite/marker": "[69]",
+      "cite/raw": "\\cite{benabou,kelly-clubs,leinster-bicat,lack-icons,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "On clubs and doctrines, Category S eminar ( P roc. S em., S ydney, 1972/1973), Lecture Notes in Math., Vol. 420, 1974, pp. 181--256",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On clubs and doctrines"
+    },
+    {
+      "char-anchor": [
+        731555,
+        731654
+      ],
+      "cite/group-marker": "[13,69,86,79,128,130]",
+      "cite/key": "leinster-bicat",
+      "cite/marker": "[86]",
+      "cite/raw": "\\cite{benabou,kelly-clubs,leinster-bicat,lack-icons,street_fibrations,street_fibrations-correction}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/9810017",
+      "resolved-corpus-id": "math__9810017",
+      "title": "Basic Bicategories"
+    },
+    {
+      "char-anchor": [
+        731555,
+        731654
+      ],
+      "cite/group-marker": "[13,69,86,79,128,130]",
+      "cite/key": "lack-icons",
+      "cite/marker": "[79]",
+      "cite/raw": "\\cite{benabou,kelly-clubs,leinster-bicat,lack-icons,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Icons, Appl. Categ. Structures 18 (2010), no. 3, 289--307. 10.1007/s10485-008-9136-5",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Icons"
+    },
+    {
+      "char-anchor": [
+        731555,
+        731654
+      ],
+      "cite/group-marker": "[13,69,86,79,128,130]",
+      "cite/key": "street_fibrations",
+      "cite/marker": "[128]",
+      "cite/raw": "\\cite{benabou,kelly-clubs,leinster-bicat,lack-icons,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fibrations in bicategories, Cahiers Topologie Geom. Differentielle 21 (1980), no. 2, 111--160",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        731555,
+        731654
+      ],
+      "cite/group-marker": "[13,69,86,79,128,130]",
+      "cite/key": "street_fibrations-correction",
+      "cite/marker": "[130]",
+      "cite/raw": "\\cite{benabou,kelly-clubs,leinster-bicat,lack-icons,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Correction to: `` F ibrations in bicategories'' [ C ahiers T opologie G eom. D ifferentielle 21 (1980), no. 2, 111--160] , Cahiers Topologie Geom. Differentielle Categ. 28 (1987), no. 1, 53--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "` F ibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        731660,
+        731677
+      ],
+      "cite/group-marker": "[125]",
+      "cite/key": "street_lax",
+      "cite/marker": "[125]",
+      "cite/raw": "\\cite{street_lax}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Two constructions on lax functors, Cahiers Topologie Geom. Differentielle 13 (1972), 217--264",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Two constructions on lax functors"
+    },
+    {
+      "char-anchor": [
+        732518,
+        732535
+      ],
+      "cite/group-marker": "[79]",
+      "cite/key": "lack-icons",
+      "cite/marker": "[79]",
+      "cite/raw": "\\cite{lack-icons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Icons, Appl. Categ. Structures 18 (2010), no. 3, 289--307. 10.1007/s10485-008-9136-5",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Icons"
+    },
+    {
+      "char-anchor": [
+        732904,
+        732932
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "borceux2",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[Section 6.4]{borceux2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra 2: Categories and structures, Encyclopedia of Mathematics and its Applications, vol. 51, Cambridge University Press, Cambridge, 1994, Categories and structures",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra 2: Categories and structures"
+    },
+    {
+      "char-anchor": [
+        897007,
+        897026
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "grothendieck",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{grothendieck}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Grothendieck, Cat egories fibr ees et descente , Revetements etales et groupe fondamental (SGA 1), Lect. Notes in Math, vol. 224, Springer Heidelberg, 1971, pp. 145--194",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        897139,
+        897177
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "barr-wells-category",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite[Chapter 12]{barr-wells-category}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Category theory for computing science, Repr. Theory Appl. Categ. (2012), no. 22, xviii+538, Corrected reprint",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory for computing science"
+    },
+    {
+      "char-anchor": [
+        897263,
+        897354
+      ],
+      "cite/group-marker": "[11,27,100,128,130]",
+      "cite/key": "beardsley-wong",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{beardsley-wong,buckley,moerdijk-weiss,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Beardsley and L. Z. Wong, The enriched G rothendieck construction , Adv. Math. 344 (2019), 234--261. 10.1016/j.aim.2018.12.009",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "344"
+    },
+    {
+      "char-anchor": [
+        897263,
+        897354
+      ],
+      "cite/group-marker": "[11,27,100,128,130]",
+      "cite/key": "buckley",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{beardsley-wong,buckley,moerdijk-weiss,street_fibrations,street_fibrations-correction}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1212.6283",
+      "resolved-corpus-id": "1212.6283",
+      "title": "Fibred 2-categories and bicategories"
+    },
+    {
+      "char-anchor": [
+        897263,
+        897354
+      ],
+      "cite/group-marker": "[11,27,100,128,130]",
+      "cite/key": "moerdijk-weiss",
+      "cite/marker": "[100]",
+      "cite/raw": "\\cite{beardsley-wong,buckley,moerdijk-weiss,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.854,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0701295",
+      "resolved-corpus-id": "math__0701295",
+      "title": "On inner Kan complexes in the category of dendroidal sets"
+    },
+    {
+      "char-anchor": [
+        897263,
+        897354
+      ],
+      "cite/group-marker": "[11,27,100,128,130]",
+      "cite/key": "street_fibrations",
+      "cite/marker": "[128]",
+      "cite/raw": "\\cite{beardsley-wong,buckley,moerdijk-weiss,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fibrations in bicategories, Cahiers Topologie Geom. Differentielle 21 (1980), no. 2, 111--160",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        897263,
+        897354
+      ],
+      "cite/group-marker": "[11,27,100,128,130]",
+      "cite/key": "street_fibrations-correction",
+      "cite/marker": "[130]",
+      "cite/raw": "\\cite{beardsley-wong,buckley,moerdijk-weiss,street_fibrations,street_fibrations-correction}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Correction to: `` F ibrations in bicategories'' [ C ahiers T opologie G eom. D ifferentielle 21 (1980), no. 2, 111--160] , Cahiers Topologie Geom. Differentielle Categ. 28 (1987), no. 1, 53--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "` F ibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        897536,
+        897546
+      ],
+      "cite/group-marker": "[42]",
+      "cite/key": "ghn",
+      "cite/marker": "[42]",
+      "cite/raw": "\\cite{ghn}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Gepner, R. Haugseng, and T. Nikolaus, Lax colimits and free fibrations in -categories , Doc. Math. 22 (2017), 1225--1266",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "22"
+    },
+    {
+      "char-anchor": [
+        897875,
+        897898
+      ],
+      "cite/group-marker": "[62]",
+      "cite/key": "elephant",
+      "cite/marker": "[62]",
+      "cite/raw": "\\cite[B1.3.6]{elephant}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. T. Johnstone, Sketches of an elephant: A topos theory compendium: V ol. 1 , Oxford Logic Guides, vol. 43, The Clarendon Press, Oxford University Press, New York, 2002",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        897903,
+        897923
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "borceux2",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[8.3]{borceux2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra 2: Categories and structures, Encyclopedia of Mathematics and its Applications, vol. 51, Cambridge University Press, Cambridge, 1994, Categories and structures",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra 2: Categories and structures"
+    },
+    {
+      "char-anchor": [
+        898235,
+        898256
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "ccg",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite[Section 7]{ccg}",
+      "confidence": 0.95,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0903.5058",
+      "resolved-corpus-id": "0903.5058",
+      "title": "Nerves and classifying spaces for bicategories"
+    },
+    {
+      "char-anchor": [
+        1095916,
+        1095930
+      ],
+      "cite/group-marker": "[29,28]",
+      "cite/key": "cw",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{cw,ckww}",
+      "confidence": 0.8898,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0708.1921",
+      "resolved-corpus-id": "0708.1921",
+      "title": "Cartesian Bicategories II"
+    },
+    {
+      "char-anchor": [
+        1095916,
+        1095930
+      ],
+      "cite/group-marker": "[29,28]",
+      "cite/key": "ckww",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{cw,ckww}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Carboni, G. M. Kelly, R. F. C. Walters, and R. J. Wood, Cartesian bicategories II , Theory Appl. Categ. 19 (2007), 93--124",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "19"
+    },
+    {
+      "char-anchor": [
+        1096009,
+        1096019
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "gps",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{gps}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Gordon, A. J. Power, and R. Street, Coherence for tricategories, Mem. Amer. Math. Soc. 117 (1995), no. 558, vi+81. 10.1090/memo/0558",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence for tricategories"
+    },
+    {
+      "char-anchor": [
+        1096369,
+        1096392
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1096511,
+        1096522
+      ],
+      "cite/group-marker": "[123]",
+      "cite/key": "stay",
+      "cite/marker": "[123]",
+      "cite/raw": "\\cite{stay}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1301.1053",
+      "resolved-corpus-id": "1301.1053",
+      "title": "Compact Closed Bicategories"
+    },
+    {
+      "char-anchor": [
+        1096778,
+        1096810
+      ],
+      "cite/group-marker": "[52,99]",
+      "cite/key": "gurski-monoidal",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{gurski-monoidal,mccrudden}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1102.0981",
+      "resolved-corpus-id": "1102.0981",
+      "title": "Loop spaces, and coherence for monoidal and braided monoidal bicategories"
+    },
+    {
+      "char-anchor": [
+        1096778,
+        1096810
+      ],
+      "cite/group-marker": "[52,99]",
+      "cite/key": "mccrudden",
+      "cite/marker": "[99]",
+      "cite/raw": "\\cite{gurski-monoidal,mccrudden}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. McCrudden, Balanced coalgebroids, Theory Appl. Categ. 7 (2000), No. 6, 71--147",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Balanced coalgebroids"
+    },
+    {
+      "char-anchor": [
+        1097037,
+        1097083
+      ],
+      "cite/group-marker": "[65,66]",
+      "cite/key": "kapranov-voevodsky",
+      "cite/marker": "[65]",
+      "cite/raw": "\\cite{kapranov-voevodsky,kapranov-voevodsky-b}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov and V. Voevodsky, 2 -categories and Z amolodchikov tetrahedra equations , Algebraic groups and their generalizations: quantum and infinite-dimensional methods ( U niversity P ark, PA , 1991), Proc. Sympos. Pure Math., vol. 56, Amer. Math. Soc., Providence, RI, 1994, pp. 177--259",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1097037,
+        1097083
+      ],
+      "cite/group-marker": "[65,66]",
+      "cite/key": "kapranov-voevodsky-b",
+      "cite/marker": "[66]",
+      "cite/raw": "\\cite{kapranov-voevodsky,kapranov-voevodsky-b}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided monoidal 2 -categories and M anin- S chechtman higher braid groups , J. Pure Appl. Algebra 92 (1994), no. 3, 241--267. 10.1016/0022-4049(94)90097-3",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "92"
+    },
+    {
+      "char-anchor": [
+        1097684,
+        1097695
+      ],
+      "cite/group-marker": "[123]",
+      "cite/key": "stay",
+      "cite/marker": "[123]",
+      "cite/raw": "\\cite{stay}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1301.1053",
+      "resolved-corpus-id": "1301.1053",
+      "title": "Compact Closed Bicategories"
+    },
+    {
+      "char-anchor": [
+        1097713,
+        1097725
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "breen",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{breen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Breen, On the classification of 2 -gerbes and 2 -stacks , Asterisque (1994), no. 225, 160",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1097893,
+        1097911
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "baez-neuchl",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{baez-neuchl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. C. Baez and M. Neuchl, Higher-dimensional algebra I : B raided monoidal 2 -categories , Adv. Math. 121 (1996), no. 2, 196--244. 10.1006/aima.1996.0052",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "121"
+    },
+    {
+      "char-anchor": [
+        1098023,
+        1098035
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "crans",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{crans}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. E. Crans, Generalized centers of braided and sylleptic monoidal 2 -categories, Adv. Math. 136 (1998), no. 2, 183--223. 10.1006/aima.1998.1720",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Generalized centers of braided and sylleptic monoidal 2 -categories"
+    },
+    {
+      "char-anchor": [
+        1098158,
+        1098181
+      ],
+      "cite/group-marker": "[6,10]",
+      "cite/key": "barnatan",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{barnatan,batanin}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Bar-Natan, Non-associative tangles, Geometric topology ( A thens, GA , 1993), AMS/IP Stud. Adv. Math., vol. 2, Amer. Math. Soc., Providence, RI, 1997, pp. 139--183",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Non-associative tangles"
+    },
+    {
+      "char-anchor": [
+        1098158,
+        1098181
+      ],
+      "cite/group-marker": "[6,10]",
+      "cite/key": "batanin",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{barnatan,batanin}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. A. Batanin, The E ckmann- H ilton argument and higher operads , Adv. Math. 217 (2008), no. 1, 334--385. 10.1016/j.aim.2007.06.014",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "217"
+    },
+    {
+      "char-anchor": [
+        1098283,
+        1098305
+      ],
+      "cite/group-marker": "[3,73]",
+      "cite/key": "baez-neuchl",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{baez-neuchl,ktz}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. C. Baez and M. Neuchl, Higher-dimensional algebra I : B raided monoidal 2 -categories , Adv. Math. 121 (1996), no. 2, 196--244. 10.1006/aima.1996.0052",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "121"
+    },
+    {
+      "char-anchor": [
+        1098283,
+        1098305
+      ],
+      "cite/group-marker": "[3,73]",
+      "cite/key": "ktz",
+      "cite/marker": "[73]",
+      "cite/raw": "\\cite{baez-neuchl,ktz}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Kong, Y. Tian, and S. Zhou, The center of monoidal 2 -categories in 3+1 D D ijkgraaf- W itten theory , Adv. Math. 360 (2020), 106928, 25. 10.1016/j.aim.2019.106928",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "360"
+    },
+    {
+      "char-anchor": [
+        1098470,
+        1098481
+      ],
+      "cite/group-marker": "[123]",
+      "cite/key": "stay",
+      "cite/marker": "[123]",
+      "cite/raw": "\\cite{stay}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1301.1053",
+      "resolved-corpus-id": "1301.1053",
+      "title": "Compact Closed Bicategories"
+    },
+    {
+      "char-anchor": [
+        1098765,
+        1098782
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "day-street",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{day-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Day and R. Street, Monoidal bicategories and H opf algebroids , Adv. Math. 129 (1997), no. 1, 99--157. 10.1006/aima.1997.1649",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "129"
+    },
+    {
+      "char-anchor": [
+        1098942,
+        1098964
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "gurski-monoidal",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{gurski-monoidal}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1102.0981",
+      "resolved-corpus-id": "1102.0981",
+      "title": "Loop spaces, and coherence for monoidal and braided monoidal bicategories"
+    },
+    {
+      "char-anchor": [
+        1099108,
+        1099120
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "crans",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{crans}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. E. Crans, Generalized centers of braided and sylleptic monoidal 2 -categories, Adv. Math. 136 (1998), no. 2, 183--223. 10.1006/aima.1998.1720",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Generalized centers of braided and sylleptic monoidal 2 -categories"
+    },
+    {
+      "char-anchor": [
+        1099191,
+        1099211
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "gurski-osorno",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{gurski-osorno}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1210.1174",
+      "resolved-corpus-id": "1210.1174",
+      "title": "Infinite loop spaces, and coherence for symmetric monoidal bicategories"
+    },
+    {
+      "char-anchor": [
+        1099299,
+        1099329
+      ],
+      "cite/group-marker": "[9,115]",
+      "cite/key": "bartlett",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{bartlett,schommer-pries}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1409.2148",
+      "resolved-corpus-id": "1409.2148",
+      "title": "Quasistrict symmetric monoidal 2-categories via wire diagrams"
+    },
+    {
+      "char-anchor": [
+        1099299,
+        1099329
+      ],
+      "cite/group-marker": "[9,115]",
+      "cite/key": "schommer-pries",
+      "cite/marker": "[115]",
+      "cite/raw": "\\cite{bartlett,schommer-pries}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Schommer-Pries, The classification of two-dimensional extended topological field theories, 2011. 1112.1000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The classification of two-dimensional extended topological field theories"
+    },
+    {
+      "char-anchor": [
+        1099462,
+        1099485
+      ],
+      "cite/group-marker": "[48,49]",
+      "cite/key": "gray-fibred",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{gray-fibred,gray}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Gray, Fibred and cofibred categories, Proc. C onf. C ategorical A lgebra ( L a J olla, C alif., 1965), Springer, New York, 1966, pp. 21--83",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fibred and cofibred categories"
+    },
+    {
+      "char-anchor": [
+        1099462,
+        1099485
+      ],
+      "cite/group-marker": "[48,49]",
+      "cite/key": "gray",
+      "cite/marker": "[49]",
+      "cite/raw": "\\cite{gray-fibred,gray}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Formal category theory: adjointness for 2 -categories , Lecture Notes in Mathematics, Vol. 391, Springer-Verlag, Berlin-New York, 1974",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1099836,
+        1099859
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1099889,
+        1099899
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "gps",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{gps}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Gordon, A. J. Power, and R. Street, Coherence for tricategories, Mem. Amer. Math. Soc. 117 (1995), no. 558, vi+81. 10.1090/memo/0558",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence for tricategories"
+    },
+    {
+      "char-anchor": [
+        1099904,
+        1099915
+      ],
+      "cite/group-marker": "[78]",
+      "cite/key": "lack",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{lack}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0702535",
+      "resolved-corpus-id": "math__0702535",
+      "title": "A 2-categories companion"
+    },
+    {
+      "char-anchor": [
+        1100304,
+        1100346
+      ],
+      "cite/group-marker": "[78,54,25]",
+      "cite/key": "lack",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{lack,gurski-coherence,bourke-gurski}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0702535",
+      "resolved-corpus-id": "math__0702535",
+      "title": "A 2-categories companion"
+    },
+    {
+      "char-anchor": [
+        1100304,
+        1100346
+      ],
+      "cite/group-marker": "[78,54,25]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{lack,gurski-coherence,bourke-gurski}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1100304,
+        1100346
+      ],
+      "cite/group-marker": "[78,54,25]",
+      "cite/key": "bourke-gurski",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{lack,gurski-coherence,bourke-gurski}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bourke and N. Gurski, The G ray tensor product via factorisation , Appl. Categ. Structures 25 (2017), no. 4, 603--624. 10.1007/s10485-016-9467-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "25"
+    },
+    {
+      "char-anchor": [
+        1100352,
+        1100372
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "bourke-gurski",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{bourke-gurski}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bourke and N. Gurski, The G ray tensor product via factorisation , Appl. Categ. Structures 25 (2017), no. 4, 603--624. 10.1007/s10485-016-9467-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "25"
+    },
+    {
+      "char-anchor": [
+        1100721,
+        1100755
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "baez-neuchl",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite[Lemmas 3 and 4]{baez-neuchl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. C. Baez and M. Neuchl, Higher-dimensional algebra I : B raided monoidal 2 -categories , Adv. Math. 121 (1996), no. 2, 196--244. 10.1006/aima.1996.0052",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "121"
+    },
+    {
+      "char-anchor": [
+        1101081,
+        1101106
+      ],
+      "cite/group-marker": "[65]",
+      "cite/key": "kapranov-voevodsky",
+      "cite/marker": "[65]",
+      "cite/raw": "\\cite{kapranov-voevodsky}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov and V. Voevodsky, 2 -categories and Z amolodchikov tetrahedra equations , Algebraic groups and their generalizations: quantum and infinite-dimensional methods ( U niversity P ark, PA , 1991), Proc. Sympos. Pure Math., vol. 56, Amer. Math. Soc., Providence, RI, 1994, pp. 177--259",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1101179,
+        1101221
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite[Proposition\n  3.5]{gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1101534,
+        1101567
+      ],
+      "cite/group-marker": "[139]",
+      "cite/key": "yau-operad",
+      "cite/marker": "[139]",
+      "cite/raw": "\\cite[Section\n  11.7]{yau-operad}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Colored operads, Graduate Studies in Mathematics, vol. 170, American Mathematical Society, Providence, RI, 2016",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Colored operads"
+    },
+    {
+      "char-anchor": [
+        1102246,
+        1102285
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite[Remark\n    5.2]{gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1102418,
+        1102435
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "ehresmann1",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{ehresmann1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Ehresmann, Categories structurees, Ann. Sci. Ecole Norm. Sup. (3) 80 (1963), 349--426",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "80"
+    },
+    {
+      "char-anchor": [
+        1102638,
+        1102662
+      ],
+      "cite/group-marker": "[46]",
+      "cite/key": "grandis-pare-1999",
+      "cite/marker": "[46]",
+      "cite/raw": "\\cite{grandis-pare-1999}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Grandis and R. Pare, Limits in double categories, Cahiers Topologie Geom. Differentielle Categ. 40 (1999), no. 3, 162--220",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Limits in double categories"
+    },
+    {
+      "char-anchor": [
+        1102754,
+        1102778
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "grandis-pare-2019",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite{grandis-pare-2019}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Persistent double limits, Cah. Topol. Geom. Differ. Categ. 60 (2019), no. 3, 255--297",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Persistent double limits"
+    },
+    {
+      "char-anchor": [
+        1102807,
+        1102821
+      ],
+      "cite/group-marker": "[117]",
+      "cite/key": "shulman",
+      "cite/marker": "[117]",
+      "cite/raw": "\\cite{shulman}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1004.0993",
+      "resolved-corpus-id": "1004.0993",
+      "title": "Constructing symmetric monoidal bicategories"
+    },
+    {
+      "char-anchor": [
+        1102841,
+        1102862
+      ],
+      "cite/group-marker": "[58]",
+      "cite/key": "hansen-shulman",
+      "cite/marker": "[58]",
+      "cite/raw": "\\cite{hansen-shulman}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1910.09240",
+      "resolved-corpus-id": "1910.09240",
+      "title": "Constructing symmetric monoidal bicategories functorially"
+    },
+    {
+      "char-anchor": [
+        1103108,
+        1103129
+      ],
+      "cite/group-marker": "[58]",
+      "cite/key": "hansen-shulman",
+      "cite/marker": "[58]",
+      "cite/raw": "\\cite{hansen-shulman}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1910.09240",
+      "resolved-corpus-id": "1910.09240",
+      "title": "Constructing symmetric monoidal bicategories functorially"
+    },
+    {
+      "char-anchor": [
+        1103797,
+        1103814
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "day-street",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{day-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Day and R. Street, Monoidal bicategories and H opf algebroids , Adv. Math. 129 (1997), no. 1, 99--157. 10.1006/aima.1997.1649",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "129"
+    },
+    {
+      "char-anchor": [
+        1104012,
+        1104046
+      ],
+      "cite/group-marker": "[64]",
+      "cite/key": "joyal-street",
+      "cite/marker": "[64]",
+      "cite/raw": "\\cite[Proposition 1]{joyal-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided tensor categories, Adv. Math. 102 (1993), no. 1, 20--78. 10.1006/aima.1993.1055",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Braided tensor categories"
+    },
+    {
+      "char-anchor": [
+        1104144,
+        1104158
+      ],
+      "cite/group-marker": "[117]",
+      "cite/key": "shulman",
+      "cite/marker": "[117]",
+      "cite/raw": "\\cite{shulman}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1004.0993",
+      "resolved-corpus-id": "1004.0993",
+      "title": "Constructing symmetric monoidal bicategories"
+    },
+    {
+      "char-anchor": [
+        1104178,
+        1104199
+      ],
+      "cite/group-marker": "[58]",
+      "cite/key": "hansen-shulman",
+      "cite/marker": "[58]",
+      "cite/raw": "\\cite{hansen-shulman}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1910.09240",
+      "resolved-corpus-id": "1910.09240",
+      "title": "Constructing symmetric monoidal bicategories functorially"
+    },
+    {
+      "char-anchor": [
+        1104522,
+        1104543
+      ],
+      "cite/group-marker": "[58]",
+      "cite/key": "hansen-shulman",
+      "cite/marker": "[58]",
+      "cite/raw": "\\cite{hansen-shulman}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "1910.09240",
+      "resolved-corpus-id": "1910.09240",
+      "title": "Constructing symmetric monoidal bicategories functorially"
+    },
+    {
+      "char-anchor": [
+        1214971,
+        1215001
+      ],
+      "cite/group-marker": "[93]",
+      "cite/key": "maclane",
+      "cite/marker": "[93]",
+      "cite/raw": "\\cite[pages 166--168]{maclane}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categories for the working mathematician, second ed., Graduate Texts in Mathematics, vol. 5, Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        1249771,
+        1249789
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "bondy-murty",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{bondy-murty}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. A. Bondy and U. S. R. Murty, Graph theory with applications, American Elsevier Publishing Co., Inc., New York, 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Graph theory with applications"
+    },
+    {
+      "char-anchor": [
+        1249967,
+        1249981
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "benabou",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{benabou}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Introduction to bicategories, Reports of the M idwest C ategory S eminar, Springer, Berlin, 1967, pp. 1--77",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Introduction to bicategories"
+    },
+    {
+      "char-anchor": [
+        1250148,
+        1250160
+      ],
+      "cite/group-marker": "[107]",
+      "cite/key": "power",
+      "cite/marker": "[107]",
+      "cite/raw": "\\cite{power}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A 2 -categorical pasting theorem , J. Algebra 129 (1990), no. 2, 439--445. 10.1016/0021-8693(90)90229-H",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "129"
+    },
+    {
+      "char-anchor": [
+        1250727,
+        1250740
+      ],
+      "cite/group-marker": "[133]",
+      "cite/key": "verity",
+      "cite/marker": "[133]",
+      "cite/raw": "\\cite{verity}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Verity, Enriched categories, internal categories and change of base, Repr. Theory Appl. Categ. (2011), no. 20, 1--266",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Enriched categories, internal categories and change of base"
+    },
+    {
+      "char-anchor": [
+        1252943,
+        1252969
+      ],
+      "cite/group-marker": "[61,108]",
+      "cite/key": "johnson-ncat",
+      "cite/marker": "[61]",
+      "cite/raw": "\\cite{johnson-ncat,power2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Johnson, The combinatorics of n -categorical pasting , J. Pure Appl. Algebra 62 (1989), no. 3, 211--225. 10.1016/0022-4049(89)90136-9",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "62"
+    },
+    {
+      "char-anchor": [
+        1252943,
+        1252969
+      ],
+      "cite/group-marker": "[61,108]",
+      "cite/key": "power2",
+      "cite/marker": "[108]",
+      "cite/raw": "\\cite{johnson-ncat,power2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "An n -categorical pasting theorem , Category theory ( C omo, 1990), Lecture Notes in Math., vol. 1488, Springer, Berlin, 1991, pp. 326--358. 10.1007/BFb0084230",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1253139,
+        1253163
+      ],
+      "cite/group-marker": "[93]",
+      "cite/key": "maclane",
+      "cite/marker": "[93]",
+      "cite/raw": "\\cite[page 166]{maclane}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categories for the working mathematician, second ed., Graduate Texts in Mathematics, vol. 5, Springer-Verlag, New York, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        1253434,
+        1253449
+      ],
+      "cite/group-marker": "[116]",
+      "cite/key": "selinger",
+      "cite/marker": "[116]",
+      "cite/raw": "\\cite{selinger}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0908.3347",
+      "resolved-corpus-id": "0908.3347",
+      "title": "A survey of graphical languages for monoidal categories"
+    },
+    {
+      "char-anchor": [
+        1253616,
+        1253634
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "bondy-murty",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{bondy-murty}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. A. Bondy and U. S. R. Murty, Graph theory with applications, American Elsevier Publishing Co., Inc., New York, 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Graph theory with applications"
+    },
+    {
+      "char-anchor": [
+        1254149,
+        1254236
+      ],
+      "cite/group-marker": "[3,65,66,73,103,115]",
+      "cite/key": "baez-neuchl",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{baez-neuchl,kapranov-voevodsky,kapranov-voevodsky-b,ktz,parzygnat,schommer-pries}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. C. Baez and M. Neuchl, Higher-dimensional algebra I : B raided monoidal 2 -categories , Adv. Math. 121 (1996), no. 2, 196--244. 10.1006/aima.1996.0052",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "121"
+    },
+    {
+      "char-anchor": [
+        1254149,
+        1254236
+      ],
+      "cite/group-marker": "[3,65,66,73,103,115]",
+      "cite/key": "kapranov-voevodsky",
+      "cite/marker": "[65]",
+      "cite/raw": "\\cite{baez-neuchl,kapranov-voevodsky,kapranov-voevodsky-b,ktz,parzygnat,schommer-pries}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kapranov and V. Voevodsky, 2 -categories and Z amolodchikov tetrahedra equations , Algebraic groups and their generalizations: quantum and infinite-dimensional methods ( U niversity P ark, PA , 1991), Proc. Sympos. Pure Math., vol. 56, Amer. Math. Soc., Providence, RI, 1994, pp. 177--259",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1254149,
+        1254236
+      ],
+      "cite/group-marker": "[3,65,66,73,103,115]",
+      "cite/key": "kapranov-voevodsky-b",
+      "cite/marker": "[66]",
+      "cite/raw": "\\cite{baez-neuchl,kapranov-voevodsky,kapranov-voevodsky-b,ktz,parzygnat,schommer-pries}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Braided monoidal 2 -categories and M anin- S chechtman higher braid groups , J. Pure Appl. Algebra 92 (1994), no. 3, 241--267. 10.1016/0022-4049(94)90097-3",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "92"
+    },
+    {
+      "char-anchor": [
+        1254149,
+        1254236
+      ],
+      "cite/group-marker": "[3,65,66,73,103,115]",
+      "cite/key": "ktz",
+      "cite/marker": "[73]",
+      "cite/raw": "\\cite{baez-neuchl,kapranov-voevodsky,kapranov-voevodsky-b,ktz,parzygnat,schommer-pries}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Kong, Y. Tian, and S. Zhou, The center of monoidal 2 -categories in 3+1 D D ijkgraaf- W itten theory , Adv. Math. 360 (2020), 106928, 25. 10.1016/j.aim.2019.106928",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "360"
+    },
+    {
+      "char-anchor": [
+        1254149,
+        1254236
+      ],
+      "cite/group-marker": "[3,65,66,73,103,115]",
+      "cite/key": "parzygnat",
+      "cite/marker": "[103]",
+      "cite/raw": "\\cite{baez-neuchl,kapranov-voevodsky,kapranov-voevodsky-b,ktz,parzygnat,schommer-pries}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. J. Parzygnat, From observables and states to H ilbert space and back: a 2-categorical adjunction , Appl. Categ. Structures 26 (2018), no. 6, 1123--1157. 10.1007/s10485-018-9522-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "26"
+    },
+    {
+      "char-anchor": [
+        1254149,
+        1254236
+      ],
+      "cite/group-marker": "[3,65,66,73,103,115]",
+      "cite/key": "schommer-pries",
+      "cite/marker": "[115]",
+      "cite/raw": "\\cite{baez-neuchl,kapranov-voevodsky,kapranov-voevodsky-b,ktz,parzygnat,schommer-pries}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Schommer-Pries, The classification of two-dimensional extended topological field theories, 2011. 1112.1000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The classification of two-dimensional extended topological field theories"
+    },
+    {
+      "char-anchor": [
+        1254255,
+        1254276
+      ],
+      "cite/group-marker": "[110]",
+      "cite/key": "preller-lambek",
+      "cite/marker": "[110]",
+      "cite/raw": "\\cite{preller-lambek}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Preller and J. Lambek, Free compact 2-categories, Math. Structures Comput. Sci. 17 (2007), no. 2, 309--340. 10.1017/S0960129506005901",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Free compact 2-categories"
+    },
+    {
+      "char-anchor": [
+        1254294,
+        1254334
+      ],
+      "cite/group-marker": "[83,84]",
+      "cite/key": "lambek-linguistics",
+      "cite/marker": "[83]",
+      "cite/raw": "\\cite{lambek-linguistics,lambek-physics}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bicategories in algebra and linguistics, Linear logic in computer science, London Mathematical Society Lecture Note Series, vol. 316, Cambridge University Press, 2004, pp. 325--345",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Bicategories in algebra and linguistics"
+    },
+    {
+      "char-anchor": [
+        1254294,
+        1254334
+      ],
+      "cite/group-marker": "[83,84]",
+      "cite/key": "lambek-physics",
+      "cite/marker": "[84]",
+      "cite/raw": "\\cite{lambek-linguistics,lambek-physics}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Compact monoidal categories from linguistics to physics, New structures for physics, Lecture Notes in Phys., vol. 813, Springer, Heidelberg, 2011, pp. 467--487. 10.1007/978-3-642-12821-9_8",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Compact monoidal categories from linguistics to physics"
+    },
+    {
+      "char-anchor": [
+        1254443,
+        1254462
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "benabou-2cat",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{benabou-2cat}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Benabou, Categories relatives, C. R. Acad. Sci. Paris 260 (1965), 3824--3827",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "260"
+    },
+    {
+      "char-anchor": [
+        1254467,
+        1254481
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "benabou",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{benabou}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Introduction to bicategories, Reports of the M idwest C ategory S eminar, Springer, Berlin, 1967, pp. 1--77",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Introduction to bicategories"
+    },
+    {
+      "char-anchor": [
+        1261583,
+        1261633
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "awodey",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Awodey, Category theory, second ed., Oxford Logic Guides, vol. 52, Oxford University Press, Oxford, 2010",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory"
+    },
+    {
+      "char-anchor": [
+        1261583,
+        1261633
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "grandis",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Grandis, Category theory and applications: A textbook for beginners, World Scientific Publishing Co. Pte. Ltd., Hackensack, NJ, 2018. 10.1142/10737",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory and applications: A textbook for beginners"
+    },
+    {
+      "char-anchor": [
+        1261583,
+        1261633
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "leinster",
+      "cite/marker": "[88]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Basic category theory, Cambridge Studies in Advanced Mathematics, vol. 143, Cambridge University Press, Cambridge, 2014. 10.1017/CBO9781107360068",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basic category theory"
+    },
+    {
+      "char-anchor": [
+        1261583,
+        1261633
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "riehl",
+      "cite/marker": "[113]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Category theory in context, Courier Dover Publications, 2016",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Category theory in context"
+    },
+    {
+      "char-anchor": [
+        1261583,
+        1261633
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "roman",
+      "cite/marker": "[114]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Roman, An introduction to the language of category theory, Compact Textbooks in Mathematics, Birkhauser/Springer, Cham, 2017. 10.1007/978-3-319-41917-6",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An introduction to the language of category theory"
+    },
+    {
+      "char-anchor": [
+        1261583,
+        1261633
+      ],
+      "cite/group-marker": "[2,45,88,113,114,120]",
+      "cite/key": "simmons",
+      "cite/marker": "[120]",
+      "cite/raw": "\\cite{awodey,grandis,leinster,riehl,roman,simmons}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "H. Simmons, An introduction to category theory, Cambridge University Press, Cambridge, 2011. 10.1017/CBO9780511863226",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An introduction to category theory"
+    },
+    {
+      "char-anchor": [
+        1261812,
+        1261833
+      ],
+      "cite/group-marker": "[71]",
+      "cite/key": "kelly-enriched",
+      "cite/marker": "[71]",
+      "cite/raw": "\\cite{kelly-enriched}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Basic concepts of enriched category theory, Repr. Theory Appl. Categ. (2005), no. 10, vi+137, Reprint of the 1982 original (Cambridge Univ. Press, Cambridge)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basic concepts of enriched category theory"
+    },
+    {
+      "char-anchor": [
+        1261881,
+        1261900
+      ],
+      "cite/group-marker": "[72]",
+      "cite/key": "kelly-street",
+      "cite/marker": "[72]",
+      "cite/raw": "\\cite{kelly-street}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly and R. Street, Review of the elements of 2 -categories , Category S eminar ( P roc. S em., S ydney, 1972/1973), 1974, pp. 75--103. Lecture Notes in Math., Vol. 420",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1261949,
+        1261963
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "benabou",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{benabou}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Introduction to bicategories, Reports of the M idwest C ategory S eminar, Springer, Berlin, 1967, pp. 1--77",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Introduction to bicategories"
+    },
+    {
+      "char-anchor": [
+        1261980,
+        1262075
+      ],
+      "cite/group-marker": "[78,86,128,130,131]",
+      "cite/key": "lack",
+      "cite/marker": "[78]",
+      "cite/raw": "\\cite{lack,leinster-bicat,street_fibrations,street_fibrations-correction,street_cat-structures}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0702535",
+      "resolved-corpus-id": "math__0702535",
+      "title": "A 2-categories companion"
+    },
+    {
+      "char-anchor": [
+        1261980,
+        1262075
+      ],
+      "cite/group-marker": "[78,86,128,130,131]",
+      "cite/key": "leinster-bicat",
+      "cite/marker": "[86]",
+      "cite/raw": "\\cite{lack,leinster-bicat,street_fibrations,street_fibrations-correction,street_cat-structures}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/9810017",
+      "resolved-corpus-id": "math__9810017",
+      "title": "Basic Bicategories"
+    },
+    {
+      "char-anchor": [
+        1261980,
+        1262075
+      ],
+      "cite/group-marker": "[78,86,128,130,131]",
+      "cite/key": "street_fibrations",
+      "cite/marker": "[128]",
+      "cite/raw": "\\cite{lack,leinster-bicat,street_fibrations,street_fibrations-correction,street_cat-structures}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fibrations in bicategories, Cahiers Topologie Geom. Differentielle 21 (1980), no. 2, 111--160",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        1261980,
+        1262075
+      ],
+      "cite/group-marker": "[78,86,128,130,131]",
+      "cite/key": "street_fibrations-correction",
+      "cite/marker": "[130]",
+      "cite/raw": "\\cite{lack,leinster-bicat,street_fibrations,street_fibrations-correction,street_cat-structures}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Correction to: `` F ibrations in bicategories'' [ C ahiers T opologie G eom. D ifferentielle 21 (1980), no. 2, 111--160] , Cahiers Topologie Geom. Differentielle Categ. 28 (1987), no. 1, 53--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "` F ibrations in bicategories"
+    },
+    {
+      "char-anchor": [
+        1261980,
+        1262075
+      ],
+      "cite/group-marker": "[78,86,128,130,131]",
+      "cite/key": "street_cat-structures",
+      "cite/marker": "[131]",
+      "cite/raw": "\\cite{lack,leinster-bicat,street_fibrations,street_fibrations-correction,street_cat-structures}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categorical structures, Handbook of algebra, V ol. 1, Handb. Algebr., vol. 1, Elsevier/North-Holland, Amsterdam, 1996, pp. 529--577. 10.1016/S1570-7954(96)80019-2",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categorical structures"
+    },
+    {
+      "char-anchor": [
+        1262201,
+        1262228
+      ],
+      "cite/group-marker": "[44,54]",
+      "cite/key": "gps",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{gps,gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Gordon, A. J. Power, and R. Street, Coherence for tricategories, Mem. Amer. Math. Soc. 117 (1995), no. 558, vi+81. 10.1090/memo/0558",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence for tricategories"
+    },
+    {
+      "char-anchor": [
+        1262201,
+        1262228
+      ],
+      "cite/group-marker": "[44,54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{gps,gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1262336,
+        1262405
+      ],
+      "cite/group-marker": "[15,33,87,90,102,112,121]",
+      "cite/key": "bergner",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{bergner,cisinski,leinster-higher,lurie,paoli,riehl-cht,simpson}",
+      "confidence": 0.8853,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "2408.05325",
+      "resolved-corpus-id": "2408.05325",
+      "title": "The Homotopy Theory of $A_\\infty$Categories"
+    },
+    {
+      "char-anchor": [
+        1262336,
+        1262405
+      ],
+      "cite/group-marker": "[15,33,87,90,102,112,121]",
+      "cite/key": "cisinski",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{bergner,cisinski,leinster-higher,lurie,paoli,riehl-cht,simpson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D.-C. Cisinski, Higher categories and homotopical algebra, Cambridge Studies in Advanced Mathematics, vol. 180, Cambridge University Press, Cambridge, 2019. 10.1017/9781108588737",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Higher categories and homotopical algebra"
+    },
+    {
+      "char-anchor": [
+        1262336,
+        1262405
+      ],
+      "cite/group-marker": "[15,33,87,90,102,112,121]",
+      "cite/key": "leinster-higher",
+      "cite/marker": "[87]",
+      "cite/raw": "\\cite{bergner,cisinski,leinster-higher,lurie,paoli,riehl-cht,simpson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Higher operads, higher categories, London Mathematical Society Lecture Note Series, vol. 298, Cambridge University Press, Cambridge, 2004. 10.1017/CBO9780511525896",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Higher operads, higher categories"
+    },
+    {
+      "char-anchor": [
+        1262336,
+        1262405
+      ],
+      "cite/group-marker": "[15,33,87,90,102,112,121]",
+      "cite/key": "lurie",
+      "cite/marker": "[90]",
+      "cite/raw": "\\cite{bergner,cisinski,leinster-higher,lurie,paoli,riehl-cht,simpson}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0608040",
+      "resolved-corpus-id": "math__0608040",
+      "title": "Higher Topos Theory"
+    },
+    {
+      "char-anchor": [
+        1262336,
+        1262405
+      ],
+      "cite/group-marker": "[15,33,87,90,102,112,121]",
+      "cite/key": "paoli",
+      "cite/marker": "[102]",
+      "cite/raw": "\\cite{bergner,cisinski,leinster-higher,lurie,paoli,riehl-cht,simpson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Paoli, Simplicial methods for higher categories, Algebra and Applications, vol. 26, Springer, Cham, 2019, Segal-type models of weak n -categories. 10.1007/978-3-030-05674-2",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Simplicial methods for higher categories"
+    },
+    {
+      "char-anchor": [
+        1262336,
+        1262405
+      ],
+      "cite/group-marker": "[15,33,87,90,102,112,121]",
+      "cite/key": "riehl-cht",
+      "cite/marker": "[112]",
+      "cite/raw": "\\cite{bergner,cisinski,leinster-higher,lurie,paoli,riehl-cht,simpson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. Riehl, Categorical homotopy theory, New Mathematical Monographs, vol. 24, Cambridge University Press, Cambridge, 2014. 10.1017/CBO9781107261457",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categorical homotopy theory"
+    },
+    {
+      "char-anchor": [
+        1262336,
+        1262405
+      ],
+      "cite/group-marker": "[15,33,87,90,102,112,121]",
+      "cite/key": "simpson",
+      "cite/marker": "[121]",
+      "cite/raw": "\\cite{bergner,cisinski,leinster-higher,lurie,paoli,riehl-cht,simpson}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Simpson, Homotopy theory of higher categories, New Mathematical Monographs, vol. 19, Cambridge University Press, Cambridge, 2012",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy theory of higher categories"
+    },
+    {
+      "char-anchor": [
+        1351678,
+        1351693
+      ],
+      "cite/group-marker": "[122]",
+      "cite/key": "stasheff",
+      "cite/marker": "[122]",
+      "cite/raw": "\\cite{stasheff}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. D. Stasheff, Homotopy associativity of H -spaces. I , II , Trans. Amer. Math. Soc. 108 (1963), 275--312. 10.1090/s0002-9947-1963-0158400-5",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "108"
+    },
+    {
+      "char-anchor": [
+        1535136,
+        1535159
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1535774,
+        1535797
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1536012,
+        1536035
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1536088,
+        1536098
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "gps",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{gps}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Gordon, A. J. Power, and R. Street, Coherence for tricategories, Mem. Amer. Math. Soc. 117 (1995), no. 558, vi+81. 10.1090/memo/0558",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence for tricategories"
+    },
+    {
+      "char-anchor": [
+        1539340,
+        1539355
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "gps",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite[5.6]{gps}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Gordon, A. J. Power, and R. Street, Coherence for tricategories, Mem. Amer. Math. Soc. 117 (1995), no. 558, vi+81. 10.1090/memo/0558",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence for tricategories"
+    },
+    {
+      "char-anchor": [
+        1539360,
+        1539396
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite[Theorem 5.9]{gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1539636,
+        1539663
+      ],
+      "cite/group-marker": "[44,54]",
+      "cite/key": "gps",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{gps,gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Gordon, A. J. Power, and R. Street, Coherence for tricategories, Mem. Amer. Math. Soc. 117 (1995), no. 558, vi+81. 10.1090/memo/0558",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence for tricategories"
+    },
+    {
+      "char-anchor": [
+        1539636,
+        1539663
+      ],
+      "cite/group-marker": "[44,54]",
+      "cite/key": "gurski-coherence",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{gps,gurski-coherence}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Coherence in three-dimensional category theory, Cambridge Tracts in Mathematics, vol. 201, Cambridge University Press, Cambridge, 2013. 10.1017/CBO9781139542333",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Coherence in three-dimensional category theory"
+    },
+    {
+      "char-anchor": [
+        1622668,
+        1622705
+      ],
+      "cite/group-marker": "[71]",
+      "cite/key": "kelly-enriched",
+      "cite/marker": "[71]",
+      "cite/raw": "\\cite[Section\n  1.11]{kelly-enriched}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Basic concepts of enriched category theory, Repr. Theory Appl. Categ. (2005), no. 10, vi+137, Reprint of the 1982 original (Cambridge Univ. Press, Cambridge)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Basic concepts of enriched category theory"
+    },
+    {
+      "char-anchor": [
+        1622833,
+        1622854
+      ],
+      "cite/group-marker": "[115]",
+      "cite/key": "schommer-pries",
+      "cite/marker": "[115]",
+      "cite/raw": "\\cite{schommer-pries}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Schommer-Pries, The classification of two-dimensional extended topological field theories, 2011. 1112.1000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The classification of two-dimensional extended topological field theories"
+    },
+    {
+      "char-anchor": [
+        1623028,
+        1623067
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "gurski-biequivalences",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite[Lemma 3.1]{gurski-biequivalences}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1102.0979",
+      "resolved-corpus-id": "1102.0979",
+      "title": "Biequivalences in tricategories"
+    },
+    {
+      "char-anchor": [
+        1623368,
+        1623402
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "buckley",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite[Construction 4.2.1]{buckley}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1212.6283",
+      "resolved-corpus-id": "1212.6283",
+      "title": "Fibred 2-categories and bicategories"
+    },
+    {
+      "char-anchor": [
+        1626310,
+        1626326
+      ],
+      "cite/group-marker": "[111]",
+      "cite/key": "quillenKI",
+      "cite/marker": "[111]",
+      "cite/raw": "\\cite{quillenKI}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Quillen, Higher algebraic K -theory I : H igher K -theories , P roc. C onf., B attelle M emorial I nst., S eattle, W ash., (1972), Lecture Notes in Math., Vol. 341, 1973, pp. 85--147",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        1626399,
+        1626409
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "chr",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{chr}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1404.2715",
+      "resolved-corpus-id": "1404.2715",
+      "title": "Bicategorical homotopy pullbacks"
+    },
+    {
+      "char-anchor": [
+        1626459,
+        1626476
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "bakovicFib",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{bakovicFib}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fibrations of bicategories, 2007. Available at https://www2.irb.hr/korisnici/ibakovic/groth2fib.pdf",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Fibrations of bicategories"
+    },
+    {
+      "char-anchor": [
+        1626481,
+        1626495
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "buckley",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{buckley}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "1212.6283",
+      "resolved-corpus-id": "1212.6283",
+      "title": "Fibred 2-categories and bicategories"
+    },
+    {
+      "char-anchor": [
+        1626504,
+        1626517
+      ],
+      "cite/group-marker": "[32]",
+      "cite/key": "chiche",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{chiche}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Chiche, Un T heoreme A de Q uillen pour les 2-foncteurs lax , Theory Appl. Categ. 30 (2015), Paper No. 4, 49--85",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "30"
+    },
+    {
+      "char-anchor": [
+        1627188,
+        1627215
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "ccg",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite[Proposition 7.1]{ccg}",
+      "confidence": 0.95,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0903.5058",
+      "resolved-corpus-id": "0903.5058",
+      "title": "Nerves and classifying spaces for bicategories"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-2002.06055-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 217,
+    "resolution-rate": 0.1873,
+    "resolved": 50,
+    "total": 267
+  }
+}

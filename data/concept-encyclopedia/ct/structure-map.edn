@@ -1,0 +1,40 @@
+{:name "structure map",
+ :df 352,
+ :concept/id :structure-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 35,
+  :sample
+  ["0809.2161" "0907.1359" "1108.2913" "1110.3526" "1206.3704"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:structure map",
+  :resolution-kind "nnexus",
+  :msc
+  ["08A05"
+   "08A70"
+   "18-00"
+   "18B40"
+   "18E05"
+   "20L05"
+   "22A22"
+   "55N20"
+   "55N33"
+   "55P10"
+   "55U40"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1206.3704",
+  :text
+  "If $n>1$ then $\\iota_{\\gamma}$ is a laxity map (eventually composed with a structure map); in particular when $(s_1,s_2) \\in \\otimes^{-1}(z)$ and $"}}

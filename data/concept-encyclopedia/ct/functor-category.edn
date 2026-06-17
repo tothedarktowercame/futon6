@@ -1,0 +1,41 @@
+{:given [{:var :C, :type :category} {:var :D, :type :category}],
+ :name "functor category",
+ :pagerank 0.003429,
+ :df 497,
+ :concept/id :functor-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 52,
+  :sample
+  ["0810.2070" "1011.4114" "1102.1313" "1104.3630" "1203.0202"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "Given categories C and D, the functor category -- written D^C or [C,D] -- is the category whose.",
+   :refs [:category :natural-transformations]}],
+ :holes
+ [{:kind :unresolved-source-refs,
+   :wanted [:class :objects :functors :morphisms],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 18,
+ :genus :category,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-definition,
+  :msc ["18-00" "18A05" "18A25" "18D05" "18E05" "Functors"],
+  :nlab-page-id "225",
+  :resolution-kind "nnexus",
+  :target "nnexus:functor category",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:category :natural-transformations],
+ :gloss
+ {:paper "1204.0196",
+  :text
+  "ory'' $\\Mod X$ of $X$ as a colax functor $I \\to \\kCat$ given in our previous paper \\cite{Asa-a}. Recall that the {\\em module category} $\\Mod \\calC$ of a category $\\calC \\in \\kCat$ is defined to be the functor category $\\kCat(\\calC\\op, \\Mod \\k)$, where $\\Mod \\k$ denotes the category of $\\k$-modules. "}}

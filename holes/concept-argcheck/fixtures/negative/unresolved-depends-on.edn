@@ -1,0 +1,12 @@
+{:concept/id :fixture-unresolved-depends-on
+ :name "fixture unresolved dependency"
+ :msc "ct"
+ :kind :object
+ :status :draft
+ :genus :category
+ :depends-on [:definitely-not-a-concept-entry]
+ :given [{:var :X :type :category}]
+ :axioms []
+ :gloss {:text "Negative fixture: dependency is not resolved or named by a hole."}
+ :expect/gate :unresolved-target
+ :holes []}

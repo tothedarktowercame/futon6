@@ -1,0 +1,25 @@
+{:name "functor p",
+ :df 636,
+ :concept/id :functor-p,
+ :msc "ct",
+ :defined-in
+ {:n-papers 6,
+  :sample
+  ["1812.08079" "2312.14600" "2403.03085" "2503.05790" "2504.16690"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1812.08079",
+  :text
+  "ension category is defined as a functor P:E→B→ satisfying (a) a cod ∘ P is a fibration, and (b) f is cartesian in E implies that Pf is a pullback in B."}}

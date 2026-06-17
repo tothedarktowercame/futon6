@@ -1,0 +1,69 @@
+{:name "fibrant replacement",
+ :df 309,
+ :concept/id :fibrant-replacement,
+ :msc "ct",
+ :defined-in
+ {:n-papers 44,
+  :sample
+  ["0704.1624" "0707.0300" "0906.4087" "1104.1805" "1207.6404"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "This is a fibrant replacement or resolution of the original object.",
+   :refs
+   [:model-category
+    :morphism
+    :weak-equivalence
+    :fibration
+    :terminal-object]}
+  {:id :nlab-condition-2,
+   :statement "The dual concept is called cofibrant replacement.",
+   :refs
+   [:model-category
+    :morphism
+    :weak-equivalence
+    :fibration
+    :terminal-object]}
+  {:id :nlab-condition-3,
+   :statement
+   "If the factorization is functorial, then it yields a fibrant replacement functor.",
+   :refs
+   [:model-category
+    :morphism
+    :weak-equivalence
+    :fibration
+    :terminal-object]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :fibrant-replacement-or-resolution-of-the-original-object,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:fibrant-object :resolution :functorial-factorization],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :fibrant-replacement-or-resolution-of-the-original-object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-8143",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-definition,
+  :nlab-page-id "8143",
+  :definition-id nil},
+ :depends-on
+ [:fibrant-replacement-or-resolution-of-the-original-object
+  :model-category
+  :morphism
+  :weak-equivalence
+  :fibration
+  :terminal-object],
+ :gloss
+ {:paper "1210.0212",
+  :text
+  "egenerate edges. This means that $\\iota$ is a marked equivalence. Furthermore the completeness of $Y$ implies the completeness of $\\F^{\\natural}(Y)$, and so $\\iota$ can serve as a \\textbf{fibrant replacement} of $\\F^+(Y)$. The upshot of this is that $\\F^+(Y)$ is \\textbf{marked equivalent} to its fib"}}

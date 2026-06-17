@@ -1,0 +1,29 @@
+{:name "compatibility conditions",
+ :df 313,
+ :concept/id :compatibility-conditions,
+ :msc "ct",
+ :defined-in
+ {:n-papers 5,
+  :sample
+  ["1508.02843"
+   "1805.03032"
+   "2009.12670"
+   "2405.04157"
+   "math__0608601"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :property,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2405.04157",
+  :text
+  "One of the required compatibility conditions is $(\\sqsubseteq) \\circ R"}}

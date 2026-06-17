@@ -1,0 +1,28 @@
+{:name "canonical isomorphism",
+ :df 699,
+ :concept/id :canonical-isomorphism,
+ :msc "ct",
+ :defined-in
+ {:n-papers 4,
+  :sample ["0711.1608" "1908.02633" "2408.09488" "2507.10061"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:canonical isomorphism",
+  :resolution-kind "nnexus",
+  :msc ["81P10" "Symplectic_geometry"],
+  :domains ["Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2408.09488",
+  :text
+  "in $A$, i.e., there is a natural transformation $\\alpha : id_{\\mathcal{C}} \\to \\neg \\neg (-)$ such that $\\alpha_A: A \\to \\neg \\neg A$ is an isomorphisms, for any object $A$. \\item \\textbf{Canonical Isomorphism:} The canonical map $\\lambda_{\\neg A} ev \\langle p_1, p_0 \\rangle$ from $A$ to $\\neg \\neg "}}

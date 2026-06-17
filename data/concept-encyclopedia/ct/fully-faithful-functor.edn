@@ -1,0 +1,23 @@
+{:name "fully faithful functor",
+ :df 448,
+ :concept/id :fully-faithful-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 3, :sample ["0903.2722" "2104.00666" "2211.02387"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2104.00666",
+  :text
+  "ega,\\textbf{AdMon})$-elementary) abelian categoriy. The first point to note is that any small exact category $\\mathpzc{E}$ has both a left and right abelianization. \\begin{defn} We call an fully faithful functor $I:\\mathpzc{E}\\rightarrow\\mathpzc{A}$ from an exact category to an abelian category a \\t"}}

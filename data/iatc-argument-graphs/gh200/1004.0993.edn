@@ -1,0 +1,9 @@
+{:paper/id "1004.0993" :passage/id "1004.0993:companion-composite-check:1568-1578" :source {:lines [1568 1578] :kind :proof}
+ :nodes [{:id :displayed-cells :kind :object :text "the displayed cells define candidate composite companion data" :source {:lines [1568 1575]}}
+         {:id :interchange-law :kind :claim :text "double categories have interchange for odot and circ" :source {:lines [1576 1577]}}
+         {:id :compeqn :kind :claim :text "the candidate cells satisfy equation (compeqn)" :source {:lines [1576 1577]}}
+         {:id :companion-condition :kind :claim :text "satisfying (compeqn) is the remaining companion condition" :source {:lines [1576 1578]}}
+         {:id :composite-companion :kind :claim :text "the construction gives the composite companion" :source {:lines [1568 1578]}}]
+ :edges [{:id :e-paste :kind :infer :relation :calculates :premise [:displayed-cells :interchange-law] :warrant {:kind :missing-warrant :text "pasting the displayed squares and applying interchange gives (compeqn)"} :conclusion :compeqn :source {:lines [1576 1577]}}
+         {:id :e-companion :kind :infer :relation :therefore :premise [:compeqn :companion-condition] :conclusion :composite-companion :source {:lines [1576 1578]}}]
+ :holes [{:kind :missing-warrant :edge :e-paste :wanted :double-category-interchange-pasting-computation}]}

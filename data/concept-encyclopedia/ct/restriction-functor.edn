@@ -1,0 +1,25 @@
+{:name "restriction functor",
+ :df 337,
+ :concept/id :restriction-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 58,
+  :sample
+  ["0806.2520" "0911.4183" "1105.5091" "1202.0255" "1205.3121"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1202.0255",
+  :text
+  "\\end{definition} \\begin{definition}[\\protect{\\citealt[\\S2.2.1]{cockett02:_restr_i}}] A \\emph{restriction functor} is a functor between restriction categories which commutes with restrictions."}}

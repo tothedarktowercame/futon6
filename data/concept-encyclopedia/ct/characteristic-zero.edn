@@ -1,0 +1,52 @@
+{:name "characteristic zero",
+ :df 318,
+ :concept/id :characteristic-zero,
+ :msc "ct",
+ :defined-in
+ {:n-papers 3, :sample ["0905.1444" "1101.3054" "1406.4947"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "Every ring R has a characteristic: it is zero if equivalently.",
+   :refs [:abelian-group]}
+  {:id :nlab-condition-2,
+   :statement "its underlying abelian group is a torsion-free group..",
+   :refs [:abelian-group]}
+  {:id :nlab-condition-3,
+   :statement
+   "The unique ring homomorphism from to R is an injection.",
+   :refs [:abelian-group]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :flat-module,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:ring
+    :characteristic
+    :module
+    :flat-module
+    :torsion-free-group
+    :ring-homomorphism],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :flat-module,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-5904",
+  :resolution-kind "page",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-raw-definition,
+  :nlab-page-id "5904",
+  :definition-id nil},
+ :depends-on [:flat-module :abelian-group],
+ :gloss
+ {:paper "0905.1444",
+  :text
+  "the paper, we use our new bound on generation time of tilting objects to investigate Conjecture \\ref{conj:1} in some examples. Below, we will assume that our base field, $k$, has \\textbf{characteristic zero} and is \\textbf{algebraically-closed} to achieve sharper statements, assure all stacks encoun"}}

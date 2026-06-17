@@ -1,0 +1,44 @@
+{:given [{:var :r, :type :morphism}],
+ :name "direct sum",
+ :pagerank 0.002153,
+ :df 1048,
+ :concept/id :direct-sum,
+ :msc "ct",
+ :defined-in
+ {:n-papers 129,
+  :sample
+  ["0709.4326" "0710.0032" "0809.2161" "0810.0066" "0810.2361"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "The direct sum over the family \\Ai\\ is the image Ai Ai A_i of the morphism r.",
+   :refs []}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :zero-morphism,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:coproduct :product :zero-morphism :image],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 3,
+ :genus :zero-morphism,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1078",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "1078",
+  :definition-id "nlab-1078-d1"},
+ :depends-on [:zero-morphism],
+ :gloss
+ {:paper "0709.4326",
+  :text
+  "For two module categories $\\M_1$ and $\\M_2$ over a tensor category $\\C$ their {\\em direct sum} is the category $\\M_1 \\oplus \\M_2$ with the obvious module category structure."}}

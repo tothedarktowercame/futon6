@@ -1,0 +1,18 @@
+{:paper/id "1406.4204"
+ :passage/id "1406.4204:transported-bimodule-adjoint:1018-1029"
+ :source {:lines [1018 1029] :kind :commented-proof-and-corollary}
+ :nodes
+ [{:id :underlying-equivalence :kind :claim :text "F has an underlying right/left adjoint equivalence datum" :source {:lines [1016 1018]}}
+  {:id :transported-structure :kind :claim :text "the bimodule structure on G is transported from F via epsilon and eta" :source {:lines [1018 1021]}}
+  {:id :iso-sequences :kind :claim :text "the two displayed isomorphism sequences define the left and right actions on G" :source {:lines [1019 1021]}}
+  {:id :which-isomorphisms :kind :claim :text "the first sequence uses epsilon^{-1}, f^{-1}_{c,G(n)}, eta^{-1}; the second analogous sequence uses d" :source {:lines [1023 1023]}}
+  {:id :module-coherence :kind :claim :text "the transported structures satisfy bimodule coherence" :source {:lines [1023 1023]}}
+  {:id :corollary-module-adjoint :kind :claim :text "an underlying adjoint of a bimodule functor inherits a bimodule functor structure" :source {:lines [1026 1029]}}]
+ :edges
+ [{:id :e-transport :kind :infer :relation :transport :premise :underlying-equivalence :conclusion :transported-structure :source {:lines [1018 1021]}}
+  {:id :e-actions :kind :infer :relation :defined-by :premise [:transported-structure :which-isomorphisms] :conclusion :iso-sequences :source {:lines [1019 1023]}}
+  {:id :e-coherence :kind :infer :relation :routine-calculation :premise [:iso-sequences :which-isomorphisms] :warrant {:kind :missing-warrant :text "triangle identities for eta/epsilon and bimodule coherence for F make the transported actions associative and unital"} :conclusion :module-coherence :source {:lines [1023 1023]}}
+  {:id :e-corollary :kind :infer :relation :therefore :premise [:transported-structure :module-coherence] :conclusion :corollary-module-adjoint :source {:lines [1026 1029]}}]
+ :holes
+ [{:kind :missing-warrant :edge :e-coherence :wanted :transported-bimodule-actions-satisfy-coherence-by-adjunction-triangle-identities}]}
+

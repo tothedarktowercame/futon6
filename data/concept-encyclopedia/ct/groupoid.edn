@@ -1,0 +1,49 @@
+{:name "groupoid",
+ :pagerank 0.012633,
+ :df 1111,
+ :concept/id :groupoid,
+ :msc "ct",
+ :defined-in
+ {:n-papers 261,
+  :sample
+  ["0706.1771" "0708.1348" "0711.1608" "0711.2077" "0801.0083"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition **(groupoid -- homotopily typed definition) A small groupoid is a space or homotopy type such that for all points a and b in , all paths c and d in the path space (type) a = b, all homotopies (2-paths) e and f in the path space type c = d, the path space type e = f is contractible.",
+   :refs []}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :space-or-homotopy-type,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:homotopy-type-theory
+    :small-groupoid
+    :space
+    :homotopy-type
+    :path-space
+    :path-space-type],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 54,
+ :genus :space-or-homotopy-type,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-28",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "28",
+  :definition-id "nlab-28-d1"},
+ :depends-on [:space-or-homotopy-type],
+ :gloss
+ {:paper "0801.0083",
+  :text
+  "Recall that a {\\em groupoid} is a category $\\cat{G}$ in which all morphisms are isomorphisms."}}

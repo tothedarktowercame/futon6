@@ -1,0 +1,38 @@
+{:name "finite sets",
+ :pagerank 0.004172,
+ :df 724,
+ :concept/id :finite-sets,
+ :msc "ct",
+ :defined-in
+ {:n-papers 8,
+  :sample
+  ["0901.0074" "0904.1790" "1305.0086" "1609.07775" "1809.05923"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A finite set is a set A for which there exists a bijection between A and the set [n] \\k | k n\\ for some n , where is the natural numbers.",
+   :refs [:set :natural-number]}],
+ :holes
+ [{:kind :unresolved-source-refs,
+   :wanted [:bijection],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 7,
+ :genus :set,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-501",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "501",
+  :definition-id "nlab-501-d1"},
+ :depends-on [:set :natural-number],
+ :gloss
+ {:paper "1809.05923",
+  :text
+  "for these designations is to remember that when we screw together two pipes, we attach the output of the first to the input of the second.''} A \\textbf{cospan} in the category of \\textbf{finite sets}, for example, is just a diagram of the form $X\\to V\\leftarrow Y$, where we're meant to think of $V$ "}}

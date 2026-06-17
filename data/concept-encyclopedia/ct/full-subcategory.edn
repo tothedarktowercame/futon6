@@ -1,0 +1,33 @@
+{:name "full subcategory",
+ :pagerank 0.006368,
+ :df 2218,
+ :concept/id :full-subcategory,
+ :msc "ct",
+ :defined-in
+ {:n-papers 57,
+  :sample
+  ["0711.2077" "0905.0459" "0905.3010" "0906.4087" "1202.0061"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition (invariant definition) A full subcategory-inclusion is a fully faithful functor.",
+   :refs [:fully-faithful-functor]}],
+ :holes [],
+ :used-papers 19,
+ :genus :fully-faithful-functor,
+ :status :formalized,
+ :kind :object,
+ :provenance
+ {:target "nlab-896",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "896",
+  :definition-id "nlab-896-d1"},
+ :depends-on [:fully-faithful-functor],
+ :gloss
+ {:paper "1204.3607",
+  :text
+  "We will say that $A'\\subset A$ is a \\textbf{\\emph{full subcategory}} if $(hA)'\\subset hA$ is a full subcategory."}}

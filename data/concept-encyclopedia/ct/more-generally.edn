@@ -1,0 +1,26 @@
+{:name "more generally",
+ :pagerank 0.004276,
+ :df 1807,
+ :concept/id :more-generally,
+ :msc "ct",
+ :defined-in {:n-papers 1, :sample ["0711.1608"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 3,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "ct-term-prior:more generally",
+  :resolution-kind "ct-prior",
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0711.1608",
+  :text
+  "s a consequence of the axioms, it turns out that whenever $A$ is $s$-condensed, then, for any object $B$, one has: \\[\\left(A\\times B\\rsTo^{\\text{pr}_2\\ \\ } B\\right)\\in\\cD_s\\ . \\] \\emph{More generally}, an object $A$ will be called \\emph{s-basic} when the previous condition is satisfied for $B=A$ (se"}}

@@ -1,0 +1,40 @@
+{:name "simple objects",
+ :df 326,
+ :concept/id :simple-objects,
+ :msc "ct",
+ :defined-in
+ {:n-papers 8,
+  :sample
+  ["1610.07628" "1711.07945" "1911.07895" "2002.09241" "2005.01626"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :source :nlab-dictionary-definition,
+   :note "nLab definition text did not expose an unambiguous genus"}
+  {:kind :missing-axioms,
+   :wanted :axioms,
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab page resolved but no definitional condition sentence was extractable"}
+  {:kind :unresolved-source-refs,
+   :wanted [:quotient-objects],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-2046",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "2046",
+  :definition-id "nlab-2046-d1"},
+ :depends-on [:object :category :terminal-object],
+ :gloss
+ {:paper "1610.07628",
+  :text
+  "together with the data $\\left(N_{ab}^c,\\ F^{abc}_{d;nm},\\ t_a,\\ U_g(a,b;c),\\ \\eta_a(g,h), \\ R_c^{ab}\\right)$ defined as follows, where $a,b,c,d,m,n \\in \\tilde{L}, \\, g,h \\in G$. \\textbf{Simple objects.} As defined above, $\\tilde{L}$ is a complete set of representatives of simple objects. There is a "}}

@@ -1,0 +1,51 @@
+{:name "scheme",
+ :pagerank 0.002953,
+ :df 784,
+ :concept/id :scheme,
+ :msc "ct",
+ :defined-in
+ {:n-papers 27,
+  :sample
+  ["0905.0459" "1006.2706" "1102.2395" "1110.6523" "1212.3563"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition (k-ring, k-functor,affine k-scheme) For a ring k the category of k-rings, denoted by Mk, is defined to be the category of commutative associative k-algebras with unit.",
+   :refs []}
+  {:id :nlab-condition-2,
+   :statement
+   "This is equivalently the under category k CRing of pairs (R,f:k R) where R is a commutative ring and f is a ring homomorphism.",
+   :refs []}
+  {:id :nlab-condition-3,
+   :statement
+   "The forgetful functor Ok:R R sending a k-ring to its underlying set is called the affine line.",
+   :refs []}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :commutative-ring-and-f-is-a-ring-homomorphism,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:under-category],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 20,
+ :genus :commutative-ring-and-f-is-a-ring-homomorphism,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1835",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "1835",
+  :definition-id "nlab-1835-d1"},
+ :depends-on [:commutative-ring-and-f-is-a-ring-homomorphism],
+ :gloss
+ {:paper "1110.6523",
+  :text
+  "ck $f^*$ of a morphism $f : Y \\to X$ under the additional assumption that $F$ is \\emph{tame}. In this note we get rid of this assumption if $X$ is a projective scheme. In general, we call a scheme $X$ \\emph{tensorial} if every cocontinuous tensor functor $\\Q(X) \\to \\Q(Y)$ is induced by a morphism $Y"}}

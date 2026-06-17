@@ -1,0 +1,22 @@
+{:name "degree n",
+ :df 371,
+ :concept/id :degree-n,
+ :msc "ct",
+ :defined-in {:n-papers 1, :sample ["1707.04765"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1610.01930",
+  :text
+  "y reduced. The results of Section \\ref{sec:cross-effects} make it clear that both the reduced and non-reduced cases can be treated simultaneously. Second, we refine the notion of \\emph{degree $n$} functors, replacing the requirement of acyclicity (quasi-isomorphism) in \\cite[Definition 2.9]{JM:Deriv"}}

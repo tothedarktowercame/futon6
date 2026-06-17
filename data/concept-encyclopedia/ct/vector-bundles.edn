@@ -1,0 +1,29 @@
+{:name "vector bundles",
+ :df 319,
+ :concept/id :vector-bundles,
+ :msc "ct",
+ :defined-in
+ {:n-papers 13,
+  :sample
+  ["0711.1608" "0806.2520" "0809.3394" "1111.3335" "1304.0520"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:vector bundle",
+  :resolution-kind "nnexus",
+  :msc ["55R" "55R25" "Algebraic_topology" "XX-XX"],
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1406.1692",
+  :text
+  "In particular, {\\em vector bundles} are a special kind of associoids."}}

@@ -1,0 +1,29 @@
+;; GOLDEN seed (hand-authored, APM-Xi level) — few-shot target for mark3.
+{:concept/id :monad
+ :name "monad"
+ :msc "ct"
+ :kind :object
+ :status :golden
+ :genus :monoid-in-endofunctors
+ :depends-on [:category :endofunctor :natural-transformation :identity-functor :composition]
+ :given [{:var :C :type :category}]
+ :data [{:component :endofunctor
+         :signature "T : C → C"}
+        {:component :multiplication
+         :signature "μ : T ∘ T ⇒ T   (natural transformation)"}
+        {:component :unit
+         :signature "η : Id_C ⇒ T   (natural transformation)"}]
+ :axioms [{:id :associativity
+          :statement "μ ∘ (T μ) = μ ∘ (μ T)   as natural transformations T³ ⇒ T"
+          :refs [:natural-transformation]}
+          {:id :left-unit
+          :statement "μ ∘ (η T) = id_T"
+          :refs [:identity-morphism]}
+          {:id :right-unit
+          :statement "μ ∘ (T η) = id_T"
+          :refs [:identity-morphism]}]
+ :gloss {:text "A monad on C is an endofunctor T : C → C with natural transformations
+  μ : T² ⇒ T and η : Id_C ⇒ T satisfying associativity (μ∘Tμ = μ∘μT) and the unit
+  laws (μ∘ηT = μ∘Tη = id_T) — a monoid in the endofunctor category."}
+ :provenance {:target "nlab-255" :source :curated}
+ :holes []}

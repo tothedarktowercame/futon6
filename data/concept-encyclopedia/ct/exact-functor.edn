@@ -1,0 +1,57 @@
+{:name "exact functor",
+ :df 512,
+ :concept/id :exact-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 38,
+  :sample
+  ["0710.2509" "0807.1002" "1207.6613" "1304.0520" "1405.7805"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "#Definition A functor between finitely complete categories is called left exact (or flat) if it preserves finite limits.",
+   :refs [:functor :finite-limits :abelian-categories :exact-sequence]}
+  {:id :nlab-condition-2,
+   :statement
+   "Dually, a functor between finitely cocomplete categories is called right exact if it preserves finite colimits.",
+   :refs [:functor :finite-limits :abelian-categories :exact-sequence]}
+  {:id :nlab-condition-3,
+   :statement
+   "A functor is called exact if it is both left and right exact.",
+   :refs
+   [:functor :finite-limits :abelian-categories :exact-sequence]}],
+ :holes
+ [{:kind :unresolved-source-refs,
+   :wanted
+   [:finitely-complete-categories
+    :flat-functor
+    :finite-colimits
+    :ab
+    :enriched-functor],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-definition,
+  :msc ["18" "18-00" "18A22" "18E05" "Functors" "XX-XX"],
+  :nlab-page-id "1050",
+  :resolution-kind "nnexus",
+  :target "nnexus:exact functor",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:morphism
+  :functor
+  :finite-limits
+  :abelian-categories
+  :exact-sequence],
+ :gloss
+ {:paper "1405.7805",
+  :text
+  "An \\emph{exact functor} is a pair $(F,\\eta)$ wehre $F\\colon\\F\\to\\G$ is an additive functor and $\\eta\\colon F\\Sigma_\\F\\to \\Sigma_\\G F$ is a natural transformation such that for every $(n+2)$-angle in $\\F$"}}

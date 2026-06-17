@@ -1,0 +1,25 @@
+{:name "module structure",
+ :df 532,
+ :concept/id :module-structure,
+ :msc "ct",
+ :defined-in
+ {:n-papers 5,
+  :sample
+  ["1109.6515" "1904.00580" "2305.18515" "2406.11964" "2501.16978"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2501.16978",
+  :text
+  "es in $\\C$ is exact (resp.~indecomposable). A \\emph{$\\C$-module functor} between two $\\C$-module categories $\\M$ and $\\N$ consists of a functor $H\\colon \\M\\to\\N$ endowed with a \\textit{module structure}, i.e.\\ a natural isomorphism \\[\\varphi_{c,m}\\Colon H(c\\act m)\\xsim c\\act H(m)\\] for $c\\iN\\C$ and "}}

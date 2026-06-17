@@ -1,0 +1,83 @@
+{:name "simplicial category",
+ :df 333,
+ :concept/id :simplicial-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 65,
+  :sample
+  ["0711.1608" "0806.3983" "0807.1002" "0808.3684" "0907.0930"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "The term simplicial category has at least three common meanings.",
+   :refs
+   [:simplicial-set
+    :full-subcategory
+    :quiver
+    :set
+    :enriched-category
+    :simplicial-sets]}
+  {:id :nlab-condition-2,
+   :statement
+   "Thus, to avoid ambiguity, it is perhaps better to avoid it entirely and use an equivalent, unambiguous term for the particular meaning one has in mind.",
+   :refs
+   [:simplicial-set
+    :full-subcategory
+    :quiver
+    :set
+    :enriched-category
+    :simplicial-sets]}
+  {:id :nlab-condition-3,
+   :statement
+   "The simplicial category is the domain category for the presheaf category of simplicial sets.",
+   :refs
+   [:simplicial-set
+    :full-subcategory
+    :quiver
+    :set
+    :enriched-category
+    :simplicial-sets]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted
+   :domain-category-for-the-presheaf-category-of-simplicial-sets,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:cat
+    :simplex-category
+    :simplicial-object
+    :top
+    :ab
+    :simplicial-objects-in-cat],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :domain-category-for-the-presheaf-category-of-simplicial-sets,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-definition,
+  :msc ["18G30" "Algebraic_topology" "Category_theory"],
+  :nlab-page-id "262",
+  :resolution-kind "nnexus",
+  :target "nnexus:simplicial category",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:domain-category-for-the-presheaf-category-of-simplicial-sets
+  :simplicial-set
+  :full-subcategory
+  :quiver
+  :set
+  :enriched-category
+  :simplicial-sets],
+ :gloss
+ {:paper "0806.3983",
+  :text
+  "Recall that a \\emph{simplicial category} is a category $\\C$ equipped with an enrichment, a tensor and a cotensor over the category of simplicial sets."}}

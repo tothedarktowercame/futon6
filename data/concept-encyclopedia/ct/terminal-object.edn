@@ -1,0 +1,78 @@
+{:name "terminal object",
+ :pagerank 0.004475,
+ :df 982,
+ :concept/id :terminal-object,
+ :msc "ct",
+ :defined-in
+ {:n-papers 81,
+  :sample
+  ["0708.1921" "0709.4364" "0711.1608" "0711.2077" "0810.2070"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A terminal object in a category C is an object 1 of C satisfying the following universal property: for every object x of C, there exists a unique morphism !:x.",
+   :refs
+   [:category
+    :object
+    :universal-property
+    :morphism
+    :initial-object
+    :zero-object]}
+  {:id :nlab-condition-2,
+   :statement
+   "The terminal object of any category, if it exists, is unique up to unique isomorphism.",
+   :refs
+   [:category
+    :object
+    :universal-property
+    :morphism
+    :initial-object
+    :zero-object]}
+  {:id :nlab-condition-3,
+   :statement
+   "If the terminal object is also initial, it is called a zero object.",
+   :refs
+   [:category
+    :object
+    :universal-property
+    :morphism
+    :initial-object
+    :zero-object]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :lso-initial,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:isomorphism],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 16,
+ :genus :lso-initial,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Mathworld" "Planetmath"],
+  :definition-source :nlab-raw-definition,
+  :msc ["18" "18A05"],
+  :nlab-page-id "307",
+  :resolution-kind "nnexus",
+  :target "nnexus:terminal object",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:lso-initial
+  :category
+  :object
+  :universal-property
+  :morphism
+  :initial-object
+  :zero-object],
+ :gloss
+ {:paper "0904.1529",
+  :text
+  "It is part of standard theory that a terminal object is unique u"}}

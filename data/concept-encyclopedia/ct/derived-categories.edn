@@ -1,0 +1,25 @@
+{:name "derived categories",
+ :df 534,
+ :concept/id :derived-categories,
+ :msc "ct",
+ :defined-in
+ {:n-papers 25,
+  :sample
+  ["0804.2154" "0905.2621" "1006.4343" "1202.2697" "1304.0557"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0804.2154",
+  :text
+  "uction}\\addcontentsline{toc}{chapter}{Introduction} In the f{i}eld of Algebraic Geometry, Grothendieck, at the beginning of the sixties, glimpsed and impelled the introduction of {\\em derived categories} as the appropriate framework to handle the general formulation of duality theorems, either ``con"}}

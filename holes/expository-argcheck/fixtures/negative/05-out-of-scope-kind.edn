@@ -1,0 +1,7 @@
+{:paper/id "bad"
+ :passage/id "out-of-scope"
+ :source {:lines [1 4] :kind :expository}
+ :scopes [{:id :s1
+           :kind :perf/Agree
+           :slot-fill "dialogue-only interpersonal agreement"
+           :source {:lines [1 2]}}]}

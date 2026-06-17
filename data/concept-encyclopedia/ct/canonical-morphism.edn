@@ -1,0 +1,25 @@
+{:name "canonical morphism",
+ :df 473,
+ :concept/id :canonical-morphism,
+ :msc "ct",
+ :defined-in
+ {:n-papers 10,
+  :sample
+  ["1204.0196" "1812.11222" "1908.01212" "2004.06854" "2105.12688"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2004.06854",
+  :text
+  "oduct of the collection $\\mathrm{M}=\\{M\\mid i\\in \\mathtt{I}\\}$, there exists a unique \\textit{summation morphism} $\\sigma_{\\mathtt{I},\\mathrm{M}}:\\coprod_{i} M \\to M$ and a unique \\textit{canonical morphism} $\\iota_{\\mathtt{I},\\mathrm{M}}:\\coprod_{i} M\\to \\prod_{i} M$ for which $\\sigma_{\\mathtt{I},\\"}}

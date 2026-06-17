@@ -1,0 +1,29 @@
+{:name "finite type",
+ :df 347,
+ :concept/id :finite-type,
+ :msc "ct",
+ :defined-in
+ {:n-papers 78,
+  :sample
+  ["0806.4345" "0908.4305" "1006.5347" "1011.6077" "1107.5511"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:finite type",
+  :resolution-kind "nnexus",
+  :msc ["14-00" "14A10" "14A15"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1011.6077",
+  :text
+  "Grothendieck category $\\BB$ is said to be \\emph{quasi-finite} if and only if $\\dim \\Hom_\\BB (X,B) < \\infty$ for all $X$ of finite length. A Grothendieck category is said to be of \\emph{finite type} if and only if it is locally finite and $\\dim_k \\Hom(A,B) < \\infty$ for all $A,B$ of finite length; th"}}

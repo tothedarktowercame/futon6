@@ -1,0 +1,29 @@
+{:name "canonical map",
+ :df 774,
+ :concept/id :canonical-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 17,
+  :sample
+  ["1212.3539" "1406.1692" "1503.02036" "1602.04857" "1903.09192"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:canonical map",
+  :resolution-kind "nnexus",
+  :msc ["03E20"],
+  :domains ["Mathworld"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2005.07603",
+  :text
+  "n$ the \\defterm{boundary inclusion}. We denote $\\mcube n = \\trunc {n-1} (\\cube n)$ the $n$-cube with the non-degenerate $n$-cube marked and no other non-degenerate cubes marked. We call the canonical map $\\cube n \\to \\mcube n$ the \\defterm{$n$-marker}. \\begin{prop} The monomorphisms of $\\mcSet$ (and"}}

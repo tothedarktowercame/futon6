@@ -1,0 +1,11 @@
+{:concept/id :fixture-golden-with-holes
+ :name "fixture golden with holes"
+ :msc "ct"
+ :kind :object
+ :status :golden
+ :genus :category
+ :given [{:var :X :type :category}]
+ :axioms []
+ :gloss {:text "Negative fixture: golden entries must have no holes."}
+ :expect/gate :golden-holes
+ :holes [{:kind :formalise :wanted :missing-definition}]}

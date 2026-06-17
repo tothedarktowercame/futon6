@@ -1,0 +1,54 @@
+{:given
+ [{:var :C, :type :category}
+  {:var :D, :type :category}
+  {:var :F, :type :functor, :signature "F : C → D   (left adjoint)"}
+  {:var :G, :type :functor, :signature "G : D → C   (right adjoint)"}],
+ :name "right adjoint",
+ :pagerank 0.001921,
+ :df 1807,
+ :concept/id :right-adjoint,
+ :msc "ct",
+ :defined-in
+ {:n-papers 185,
+  :sample
+  ["0704.1624" "0704.2207" "0709.0837" "0801.1133" "0809.2494"]},
+ :axioms
+ [{:id :naturality,
+   :statement
+   "φ is natural in a and in b: ∀ h : a' → a in C, k : b → b' in D. the square relating φ_{a,b}, φ_{a',b'} under pre/post-composition commutes",
+   :refs [:natural-transformation :composition]}],
+ :holes [],
+ :used-papers 17,
+ :genus :adjunction,
+ :status :formalized,
+ :kind :property,
+ :provenance
+ {:formaliser :codex-1-redo,
+  :domains ["Planetmath"],
+  :definition-source :nlab-raw-definition,
+  :msc ["18A40"],
+  :nlab-page-id "1021",
+  :resolution-kind "nnexus",
+  :target "nnexus:right adjoint",
+  :definition-id nil,
+  :formaliser-note
+  "derived from ct-golden adjunction seed for adjunction-variant entry"},
+ :depends-on
+ [:adjunction
+  :functor
+  :natural-transformation
+  :natural-isomorphism
+  :hom-set],
+ :equivalent-to
+ [{:form :unit-counit,
+   :data ["η : Id_C ⇒ G F (unit)" "ε : F G ⇒ Id_D (counit)"],
+   :axioms
+   ["(εF) ∘ (Fη) = id_F" "(Gε) ∘ (ηG) = id_G   (triangle identities)"],
+   :refs [:natural-transformation :identity-morphism]}],
+ :gloss
+ {:text
+  "right adjoint is represented here by the adjunction structure: F is left adjoint to G (F ⊣ G) when there is a natural isomorphism\n  D(F a, b) ≅ C(a, G b) for all a ∈ C, b ∈ D; equivalently, unit/counit natural\n  transformations satisfying the triangle identities."},
+ :data
+ [{:component :hom-isomorphism,
+   :signature
+   "φ_{a,b} : D(F a, b) ≅ C(a, G b)   for a ∈ Ob(C), b ∈ Ob(D)"}]}

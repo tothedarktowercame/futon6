@@ -1,0 +1,39 @@
+{:name "symmetric group",
+ :pagerank 0.003439,
+ :df 394,
+ :concept/id :symmetric-group,
+ :msc "ct",
+ :defined-in
+ {:n-papers 18,
+  :sample
+  ["1105.5091" "1208.3097" "1605.03880" "1704.03674" "1904.12851"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 10,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains
+  ["Encyclopediaofmath"
+   "Mathhub"
+   "Mathworld"
+   "Planetmath"
+   "Wikipedia"],
+  :definition-source :nlab-raw-section,
+  :msc ["05A05" "20B30" "Permutation_groups" "XX-XX"],
+  :nlab-page-id "19755",
+  :resolution-kind "nnexus",
+  :target "nnexus:symmetric group",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1904.12851",
+  :text
+  "&\\textnormal{ for } |i-j| > 1. \\end{aligned} \\end{equation*} The elements $s_i\\in W^B(d)$ for $i>0$ generate a subgroup isomorphic to $W^A(d)$, the Weyl group of type A (otherwise known as the symmetric group $S_d$). Let $\\mathcal{H}_{Q,q}^{B}(d)$ be the two-parameter Hecke algebra of type BC~\\cite{"}}

@@ -1,0 +1,27 @@
+{:name "unique morphism",
+ :pagerank 0.002001,
+ :df 1030,
+ :concept/id :unique-morphism,
+ :msc "ct",
+ :defined-in
+ {:n-papers 9,
+  :sample
+  ["1112.3456" "1802.08101" "1903.05777" "1906.05593" "1912.00214"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 21,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1912.00214",
+  :text
+  "$ are such that $$v\\mathcal{P}_\\mathcal{G}= v\\mathcal{Q}_\\mathcal{G} :=v\\mathcal{G}.$$ Also, for $e,f\\in v\\mathcal{G}$ such that $e\\leq f$, a morphism in $\\mathcal{P}_\\mathcal{G}$ is defined as the unique morphism $\\iota(e,f)$ from $e$ to $f$ and a morphism in $\\mathcal{Q}_\\mathcal{G}$ is defined as"}}

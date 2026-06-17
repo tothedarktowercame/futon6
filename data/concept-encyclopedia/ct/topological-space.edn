@@ -1,0 +1,43 @@
+{:name "topological space",
+ :pagerank 0.008217,
+ :df 848,
+ :concept/id :topological-space,
+ :msc "ct",
+ :defined-in
+ {:n-papers 44,
+  :sample
+  ["0810.2070" "0902.1272" "1009.1166" "1010.3336" "1011.3574"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A topological space is a set X equipped with a set of subsets U X, called the open sets, which are closed under.",
+   :refs [:set :open-sets]}],
+ :holes
+ [{:kind :unresolved-source-refs,
+   :wanted [:subsets :intersections :unions],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 38,
+ :genus :set,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-374",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "374",
+  :definition-id "nlab-374-d1"},
+ :depends-on [:set :open-sets],
+ :gloss
+ {:paper "1011.3574",
+  :text
+  "We call a topological space \\emph{injectively core compact} if for every $x\\in X$ and $U\\in\\O(x)$ the conclusion of (\\ref{eq:corefamily}) holds for every family $\\mathbb{H}$ of filters such that there is an i"},
+ :data
+ [{:component :definition-data-1,
+   :signature
+   "A topological space is a set X equipped with a set of subsets U X, called the open sets, which are closed under.",
+   :source :nlab-definition}]}

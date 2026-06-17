@@ -1,0 +1,45 @@
+{:given [{:var :r, :type :morphism}],
+ :name "direct sums",
+ :pagerank 0.001901,
+ :df 674,
+ :concept/id :direct-sums,
+ :msc "ct",
+ :defined-in
+ {:n-papers 24,
+  :sample
+  ["0802.0097" "0910.2996" "0912.4914" "1012.5282" "1107.0557"]},
+ :axioms [],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :zero-morphism,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :missing-axioms,
+   :wanted :axioms,
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab page resolved but no definitional condition sentence was extractable"}
+  {:kind :unresolved-source-refs,
+   :wanted [:coproduct :product :zero-morphism :image],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 5,
+ :genus :zero-morphism,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-1078",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "1078",
+  :definition-id "nlab-1078-d1"},
+ :depends-on [:zero-morphism],
+ :gloss
+ {:paper "1107.0557",
+  :text
+  "$\\Phi^{1,M}_\\frakF=\\Phi^{M}_\\frakF$, respectively $\\Phi^{0,M}_\\CF:=\\Psi^{M}_\\CF$, $\\Phi^{1,M}_\\CF=\\Phi^{M}_\\CF$. We say that $\\Ext^n_R(M,-)$ \\textsl{commutes with direct limits} (\\textsl{direct sums}) if the homomorphisms $\\Phi^{n,M}_\\frakF$ (respectively $\\Phi^{n,M}_\\CF$) are isomorphisms for all d"}}

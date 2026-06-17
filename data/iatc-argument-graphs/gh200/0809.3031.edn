@@ -1,0 +1,11 @@
+{:paper/id "0809.3031" :passage/id "0809.3031:eqext2-i-proof:793-799" :source {:lines [793 799] :kind :proof}
+ :nodes [{:id :A-functions :kind :object :text "A=Fun(G) is a commutative algebra in Z(C)" :source {:lines [794 795]}}
+         {:id :D-modules :kind :object :text "D=C_G is the category of A-modules in C" :source {:lines [795 796]}}
+         {:id :D-fusion :kind :claim :text "D is a fusion category" :source {:lines [795 796]}}
+         {:id :translation-action :kind :claim :text "right translations of G on A induce an action of G on D" :source {:lines [796 797]}}
+         {:id :equivariantization-C :kind :claim :text "the corresponding equivariantization of D is equivalent to C" :source {:lines [797 799]}}
+         {:id :DGNO-reference :kind :ref :label "Section 2.6; DGNO2 Section 4.2" :text "cited equivariantization machinery" :source {:lines [799 799]}}]
+ :edges [{:id :e-fusion :kind :infer :relation :therefore :premise :A-functions :warrant {:kind :claim :text "modules over this algebra object form a fusion category"} :conclusion :D-fusion :source {:lines [794 796]}}
+         {:id :e-action :kind :infer :relation :induces :premise :A-functions :warrant {:kind :claim :text "algebra automorphisms by right translation transport module structures"} :conclusion :translation-action :source {:lines [796 797]}}
+         {:id :e-descent :kind :infer :relation :therefore :premise [:D-fusion :translation-action] :given [:DGNO-reference] :warrant {:kind :missing-warrant :text "descent for Fun(G)-modules identifies C with the G-equivariantization of C_G"} :conclusion :equivariantization-C :source {:lines [797 799]}}]
+ :holes [{:kind :missing-warrant :edge :e-descent :wanted :fun-G-module-descent-equivariantization-equivalence}]}

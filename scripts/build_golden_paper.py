@@ -78,16 +78,24 @@ class Mark:
 COMMON_HOLE_STARTS = {
     "A", "An", "The", "This", "That", "These", "Those", "Such", "Some", "Any",
     "Every", "Let", "For", "If", "Then", "By", "In", "On", "We", "Our", "Their",
+    "a", "an", "the", "this", "that", "these", "those", "such", "some", "any",
+    "every", "let", "for", "if", "then", "by", "in", "on", "we", "our", "their",
 }
 HOLE_LEADING_TRIM = {
-    "a", "an", "the", "and", "or", "has", "have", "with", "without", "of", "to",
-    "from", "in", "on", "is", "are", "be", "being", "called",
+    "a", "an", "the", "and", "or", "has", "have", "without",
+    "is", "are", "be", "being", "called",
 }
 CONCEPT_ENDINGS = (
     "category", "categories", "manifold", "manifolds", "functor", "functors",
     "algebra", "algebras", "space", "spaces", "group", "groups", "symmetry",
     "field", "fields", "geometry", "topology", "theory", "structure", "structures",
     "morphism", "morphisms", "module", "modules", "complex", "complexes",
+    # CT vocabulary (DC-1, 2026-06-15): the dp-demo QC surfaced these endings
+    # going unrecognised — subcategory/colimit/system etc. in 0905.0595.
+    "subcategory", "subcategories", "colimit", "colimits", "limit", "limits",
+    "system", "systems", "monad", "monads", "adjunction", "adjunctions",
+    "transformation", "transformations", "equivalence", "equivalences",
+    "representation", "representations", "form", "forms", "cohomology",
 )
 APPOSITIVE_ENDINGS = (
     "category", "manifold", "functor", "algebra", "space", "group", "module",
@@ -319,6 +327,8 @@ def appositive_bind_marks(text: str) -> list[Mark]:
     marks = []
     for match in pat.finditer(text):
         type_phrase = re.sub(r"\s+", " ", match.group("type")).strip()
+        if type_phrase.lower() in APPOSITIVE_ENDINGS:
+            continue
         symbol = match.group("sym")
         marks.append(Mark(
             start=match.start(),
@@ -345,14 +355,6 @@ def hole_marks(text: str, definitions: list[Definition]) -> list[Mark]:
             start += len(words[0]) + 1
             words = words[1:]
         phrase = " ".join(words)
-        for prep in (" in ", " of ", " on "):
-            if prep in phrase:
-                tail = phrase.rsplit(prep, 1)[1]
-                if len(tail.split()) >= 2:
-                    start = match.end("phrase") - len(tail)
-                    phrase = tail
-                    words = phrase.split()
-                    break
         first = words[0] if words else ""
         if first in COMMON_HOLE_STARTS:
             continue
@@ -388,6 +390,50 @@ def select_non_overlapping(marks: list[Mark]) -> list[Mark]:
         accepted.append(mark)
         occupied.append((mark.start, mark.end))
     return sorted(accepted, key=lambda m: m.start)
+
+
+def audit_concept_term_coverage(text: str, expected_terms: list[str]) -> dict:
+    """C-TERM-COVERAGE audit over an explicit row sample.
+
+    `expected_terms` is the independent numerator/denominator: terms a reviewer
+    says are named mathematical prose concepts. We then ask whether this script's
+    concept marks notice them, and whether produced concept marks correspond to
+    one of the expected terms. This is intentionally independent of the rendered
+    HTML and can be sampled at sentence/row granularity in tests or audits.
+    """
+    definitions = mine_definitions(text)
+    marks = select_non_overlapping(
+        appositive_bind_marks(text)
+        + definition_marks(text, definitions)
+        + hole_marks(text, definitions)
+    )
+    concept_marks = [m for m in marks if m.kind in {"defined", "hole", "bind"}]
+    expected = {normalized_term_key(t): t for t in expected_terms if normalized_term_key(t)}
+    noticed = set()
+    false_positive_marks = []
+    for mark in concept_marks:
+        label_key = normalized_term_key(mark.label)
+        span_key = normalized_term_key(text[mark.start:mark.end])
+        if label_key in expected:
+            noticed.add(label_key)
+        elif span_key in expected:
+            noticed.add(span_key)
+        else:
+            false_positive_marks.append(mark)
+    missed = sorted(v for k, v in expected.items() if k not in noticed)
+    precision_den = len(concept_marks)
+    recall_den = len(expected)
+    return {
+        "sample_rows": recall_den,
+        "expected_terms": recall_den,
+        "concept_marks": precision_den,
+        "true_positive_marks": precision_den - len(false_positive_marks),
+        "false_positive_marks": len(false_positive_marks),
+        "missed_terms": missed,
+        "precision": (precision_den - len(false_positive_marks)) / precision_den
+        if precision_den else 1.0,
+        "recall": len(noticed) / recall_den if recall_den else 1.0,
+    }
 
 
 def render_marked_text(text: str, marks: list[Mark]) -> str:

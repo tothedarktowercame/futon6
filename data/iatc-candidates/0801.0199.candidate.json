@@ -1,0 +1,29 @@
+{
+  "paper-id": "0801.0199",
+  "passage-id": "0801.0199:proof-move:L386-394",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 390,
+    "conclusion": 390
+  },
+  "window-lines": [
+    386,
+    394
+  ],
+  "binder-context": [
+    "(let-binder) binds $X^\\op=(X,a^\\circ)$ : usual opposite $\\V$-category",
+    "(definiendum) definiendum #0: $X^\\op=(X,a^\\circ)$",
+    "(definiens) definiens #0: usual opposite $\\V$-category",
+    "(let-binder) binds $\\varphi:X\\modto Y$ : $\\V$-module \u00b7 concept: module [nnexus:module]",
+    "(definiendum) definiendum #0: $\\varphi:X\\modto Y$",
+    "(definiens) definiens #0: $\\V$-module \u00b7 module [nnexus:module]",
+    "(let-binder) binds $\\varphi:X^\\op\\otimes Y\\to\\V$ : $\\V$-functor \u00b7 concept: functor [nnexus:functor]",
+    "(definiendum) definiendum #0: $\\varphi:X^\\op\\otimes Y\\to\\V$",
+    "(definiens) definiens #0: $\\V$-functor \u00b7 functor [nnexus:functor]",
+    "(let-binder) binds $\\mate{a}$ : Yoneda-$\\V$-functor\n\\[\n\\yoneda",
+    "(definiendum) definiendum #0: $\\mate{a}$",
+    "(definiens) definiens #0: Yoneda-$\\V$-functor\n\\[\n\\yoneda"
+  ],
+  "source-window": "$\\yoneda:X\\to\\hat{X}$ is fully faithful.\n\\end{corollary}\n\n\\subsection{L-separation}\\label{LsepV}\nFor $\\V$-functors $f,g:Z\\to X$ we write $f\\cong g$ if $f\\le g$ and $g\\le f$; equivalently, if $f^*=g^*$, or $f_*=g_*$. We call $X$ \\emph{L-separated} if $f\\cong g$ implies $f=g$, for all $f,g:Z\\to X$. The full subcategory of $\\Cat{\\V}$ consisting of all L-separated $\\V$-categories is denoted by $\\CatSep{\\V}$. Obviously, it suffices to consider $Z=E$ (the $\\otimes$-neutral object) here: writing $x:E\\to X$ in $\\Cat{\\V}$ instead of $x\\in X$, we just note that $f_*=g_*$ implies\n\\[\n(f\\cdot x)_*=f_*\\cdot x_*=g_*\\cdot x_*=(g\\cdot x)_*.\n\\]\nThis proves the equivalence of (i),(ii) of the following proposition.\n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0801.0199-dp-emacs.json"
+}

@@ -1,0 +1,25 @@
+{:name "triangulated categories",
+ :df 577,
+ :concept/id :triangulated-categories,
+ :msc "ct",
+ :defined-in
+ {:n-papers 259,
+  :sample
+  ["0709.3091" "0712.3296" "0802.2044" "0806.1324" "0809.3201"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0802.2044",
+  :text
+  "}m.\\ Henri Cartan \\textbf{7} (1954/55), \\textit{Alg\\`{e}bres d'Eilenberg-Mac~Lane et homotopie}, Secr.\\ Math{\\'{e}}matique, Paris, 1957, \\S 19.\\ % \\bibitem[N]{NeemTC} A.~Neeman, \\textit{Triangulated Categories}, Princeton U.\\ Press \\textit{Ann.\\ Math.\\ Studies} \\textbf{148}, Princeton, 2001. % \\bibi"}}

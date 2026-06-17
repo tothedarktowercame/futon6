@@ -1,0 +1,22 @@
+{:name "finite subset",
+ :df 310,
+ :concept/id :finite-subset,
+ :msc "ct",
+ :defined-in {:n-papers 1, :sample ["1103.0248"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1103.0248",
+  :text
+  "mph{certain} answers (true in all models of a database). In fact, Skolem constants are not part of any certain answer to conjunctive query. Consequently, we are able to obtain a \\emph{finite subset} of a canonical \\emph{database}, which is large enough to obtain all certain answers. \\\\ Let us denote"}}

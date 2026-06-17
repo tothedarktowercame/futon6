@@ -1,0 +1,23 @@
+{:name "composable morphisms",
+ :df 315,
+ :concept/id :composable-morphisms,
+ :msc "ct",
+ :defined-in
+ {:n-papers 3, :sample ["1102.1313" "2211.07618" "2302.05233"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2211.07618",
+  :text
+  "textit{unit} map $\\un: \\CZ\\rightarrow \\CU$ assigns $\\id_u$ to an object $u$. Additionally, the set $\\CD=\\{(x,y)\\in \\CU\\times\\CU: \\s(x)=\\rr(y) \\}$ represents the collection of all \\textit{composable morphisms}, and, finally, $\\m: \\CD\\rightarrow \\CU$ assigns the composition $xy$ to every pair of $(x,y"}}

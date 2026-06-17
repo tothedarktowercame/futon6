@@ -1,0 +1,49 @@
+{:name "tensor product",
+ :pagerank 0.006528,
+ :df 1816,
+ :concept/id :tensor-product,
+ :msc "ct",
+ :defined-in
+ {:n-papers 408,
+  :sample
+  ["0704.2106" "0704.2576" "0705.0462" "0706.1286" "0708.2757"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition For M a multicategory and A and B objects in M, the tensor product A B is defined to be an object equipped with a universal multimorphism A,B A B in that any multimorphism A,B C factors uniquely through A,B A B via a (1-ary) morphism A B C.",
+   :refs []}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :construction,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:multicategory :objects :universal-construction :multimorphism],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 11,
+ :genus :construction,
+ :status :draft,
+ :kind :construction,
+ :provenance
+ {:target "nlab-239",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "239",
+  :definition-id "nlab-239-d1"},
+ :depends-on [:construction],
+ :gloss
+ {:paper "0706.1286",
+  :text
+  "Their \\textbf{tensor product} is the following coequalizer in $\\calD(A,C)$, if it exists: \\[M \\odot B \\odot N \\toto M \\odot N \\to M\\odot_B N.\\] \\end{itemize} \\end{defn} Of course, if \\bbD\\ is a mono"},
+ :data
+ [{:component :definition-data-1,
+   :signature
+   "###### Definition For M a multicategory and A and B objects in M, the tensor product A B is defined to be an object equipped with a universal multimorphism A,B A B in that any multimorphism A,B C factors uniquely through A,B A B via a (1-ary) morphism A B C.",
+   :source :nlab-definition}]}

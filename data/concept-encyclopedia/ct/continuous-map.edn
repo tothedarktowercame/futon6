@@ -1,0 +1,44 @@
+{:name "continuous map",
+ :pagerank 0.003317,
+ :df 426,
+ :concept/id :continuous-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 27,
+  :sample
+  ["0709.4364" "0711.4401" "0912.1415" "1009.3553" "1102.1313"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-axioms,
+   :wanted :axioms,
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab page resolved but no definitional condition sentence was extractable"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:metric-space
+    :function
+    :nonnegative-number
+    :real-numbers
+    :triangle-inequality],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 12,
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nlab-2120",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "2120",
+  :definition-id "nlab-2120-d1"},
+ :depends-on [:morphism :set :cartesian-product],
+ :gloss
+ {:paper "0711.4401",
+  :text
+  "mph{homomorphism} of locales $h:X\\to Y$ is a function that preserves arbitrary joins (including the least element $0$) and finite meets (including the greatest element $1$); and a \\emph{continuous map} of locales (or simply a \\emph{map}) $f:Y\\to X$ is a homomorphism in the opposite direction, $f^*:X"}}

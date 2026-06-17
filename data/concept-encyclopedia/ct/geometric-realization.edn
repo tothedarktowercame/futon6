@@ -1,0 +1,44 @@
+{:name "geometric realization",
+ :df 330,
+ :concept/id :geometric-realization,
+ :msc "ct",
+ :defined-in
+ {:n-papers 92,
+  :sample
+  ["0704.1624" "0808.3684" "0902.0399" "0902.1750" "0903.5058"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "There are various levels of generality in which the notion of (topological) geometric realization makes sense.",
+   :refs []}
+  {:id :nlab-condition-2,
+   :statement "Geometric realization of cohesive ∞-groupoids.",
+   :refs []}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted
+   :geometric-realization-of-simplicial-topological-spaces-up-to-homotopy,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}],
+ :genus
+ :geometric-realization-of-simplicial-topological-spaces-up-to-homotopy,
+ :status :draft,
+ :kind :construction,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Mathworld"],
+  :definition-source :nlab-raw-definition,
+  :msc ["55"],
+  :nlab-page-id "447",
+  :resolution-kind "nnexus",
+  :target "nnexus:geometric realization",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:geometric-realization-of-simplicial-topological-spaces-up-to-homotopy],
+ :gloss
+ {:paper "0902.0399",
+  :text
+  "ion} \\begin{definition}[Geometric realization and totalization] \\label{def:realization} If $\\cat{C}$ is either $\\sset$ or $\\spectra$, then a simplicial object $X_{\\bullet}$ has a \\emph{geometric realization}, written $|X_{\\bullet}|$, and a cosimplicial object $X^{\\bullet}$ has a \\emph{totalization},"}}

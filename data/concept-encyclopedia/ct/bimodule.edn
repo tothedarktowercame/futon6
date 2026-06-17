@@ -1,0 +1,47 @@
+{:name "bimodule",
+ :pagerank 0.004607,
+ :df 736,
+ :concept/id :bimodule,
+ :msc "ct",
+ :defined-in
+ {:n-papers 114,
+  :sample
+  ["0704.3976" "0706.1286" "0706.2922" "0711.1761" "0801.0157"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "objects are triples (R,S,B) where R and S are rings and where B is an R-S-bimodule;.",
+   :refs [:category]}
+  {:id :nlab-condition-2,
+   :statement
+   "morphisms are triples (f,g, ) consisting of two ring homomorphisms f R R' and g S S' and an intertwiner of R-S'-bimodules B g f B'.",
+   :refs [:category]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :r-s-bimodule,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:objects :rings :morphisms :homomorphisms :intertwiner],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 30,
+ :genus :r-s-bimodule,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-656",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "656",
+  :definition-id "nlab-656-d1"},
+ :depends-on [:r-s-bimodule :category],
+ :gloss
+ {:paper "0706.2922",
+  :text
+  "bject@{/}} & \\D}$ is a $\\V$-functor $F: \\C^{\\text{op}} \\ox \\D \\ra \\V$; we call this a \\emph{module from} $\\C$ \\emph{to} $\\D$ (others call it a \\emph{left} $\\D$-, \\emph{right} $\\C$-\\emph{bimodule}). Composition of modules is defined by (\\ref{1}) above. We can sum up now by saying that \\[ \\widehat{(~)"}}

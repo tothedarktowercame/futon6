@@ -1,0 +1,27 @@
+{:name "base category",
+ :pagerank 0.002182,
+ :df 331,
+ :concept/id :base-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 35,
+  :sample
+  ["1105.4710" "1111.4146" "1211.1555" "1304.0520" "1305.7414"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 3,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1304.0520",
+  :text
+  "$p\\colon E\\to B$ as a bundle with total space $E$ and base space $B$, one sometimes considers a functor ${P\\colon\\E\\to\\B}$ as a bundle of categories with \\emph{total category} \\E, \\emph{base category} \\B and \\emph{fibre categories} the preimage categories $P^{-1}(B)$ for each $B\\in B$. When we do so"}}

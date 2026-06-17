@@ -1,0 +1,25 @@
+{:name "chain complexes",
+ :df 533,
+ :concept/id :chain-complexes,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["0808.3681" "0905.0465" "1303.4133" "1405.3921" "1509.07632"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0808.3681",
+  :text
+  "ll degeneracy maps of $C(f)$ are closed cofibrations (they are coproducts of identities), then $c(f)$ is naturally homotopic to the classical cone associated with $f$.\\\\ % \\indent \\textbf{Chain complexes} If $\\mc{A}$ is an additive or abelian category with countable coproducts, then a simple functor"}}

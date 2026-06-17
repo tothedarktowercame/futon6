@@ -1,0 +1,32 @@
+{:name "contravariant functor",
+ :df 504,
+ :concept/id :contravariant-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 41,
+  :sample
+  ["0708.3398" "0710.1208" "0801.2826" "0810.2070" "0905.3010"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Mathworld" "Planetmath"],
+  :definition-source :nlab-raw-section,
+  :msc ["18" "18-00"],
+  :nlab-page-id "1018",
+  :resolution-kind "nnexus",
+  :target "nnexus:contravariant functor",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0810.2070",
+  :text
+  "(g)`\\mathcal{F}(k)] \\put(2000,200){\\oval(1350,700)}\\put(1980,180){$\\mathcal{L}$} \\put(800,170){$% \\cone{\\mathcal{F}_\\ast}$} \\efig \\end{equation*} \\bigbreak\\smallskip Similarly, a \\emph{contravariant functor}, or a \\emph{cofunctor}, $% \\mathcal{F}^{\\ast }:\\mathcal{K}\\rightarrow \\mathcal{L}$ is a \\emp"}}

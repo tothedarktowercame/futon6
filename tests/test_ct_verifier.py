@@ -191,6 +191,8 @@ class TestIntegrationProblem4:
         wiring_path = root / "data/first-proof/problem4-wiring.json"
         reference_path = root / "data/nlab-ct-reference.json"
         output_path = tmp_path / "problem4-verification.json"
+        if not wiring_path.exists():
+            pytest.skip(f"optional integration fixture missing: {wiring_path}")
 
         ct_verifier.verify_wiring_file(wiring_path, reference_path, output_path)
         report = json.loads(output_path.read_text(encoding="utf-8"))

@@ -1,0 +1,25 @@
+{:name "induced functor",
+ :df 556,
+ :concept/id :induced-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["0708.1348" "1112.3840" "1209.2995" "1209.4307" "1712.03492"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1112.3840",
+  :text
+  "rything we do here can also be done with pseudo-functors. \\end{remark} Let now $\\DD$ be a prederivator and let $u\\colon J\\nach K$ be a functor. Motivated by the above examples we call the induced functor $\\DD(u)=u^\\ast\\colon \\DD(K)\\nach \\DD(J)$ a \\emph{restriction of diagram functor} or \\emph{precom"}}

@@ -1,0 +1,15 @@
+{:paper/id "1503.05523" :passage/id "1503.05523:torsion-stable-derived-essential-image:972-991" :source {:lines [972 991] :kind :proof}
+ :nodes [{:id :external-result :kind :ref :label "PSY Corollary 4.32; DG Proposition 6.12" :text "cited source for the corollary" :source {:lines [977 979]}}
+         {:id :forward-image :kind :claim :text "image of D_st(R-mod_I-tors)->D_st(R-mod) is contained in D_st_I-tors" :source {:lines [980 981]}}
+         {:id :converse-goal :kind :claim :text "every object of D_st_I-tors lies in the image" :source {:lines [982 990]}}
+         {:id :fixed-image :kind :claim :text "the fully faithful image consists of complexes fixed by the adjoint composite" :source {:lines [982 987]}}
+         {:id :finite-dim :kind :claim :text "RΓ_I has finite homological dimension" :source {:lines [988 988]}}
+         {:id :cohomology-fixed :kind :claim :text "a complex is fixed whenever its cohomology modules are fixed" :source {:lines [988 990]}}
+         {:id :torsion-cohomology :kind :claim :text "objects under discussion have I-torsion cohomology modules" :source {:lines [972 974]}}
+         {:id :essential-image :kind :claim :text "the essential image is exactly D_st_I-tors(R-mod)" :source {:lines [980 991]}}]
+ :edges [{:id :e-cite :kind :infer :relation :cites :premise :external-result :conclusion :essential-image :source {:lines [977 979]}}
+         {:id :e-forward :kind :infer :relation :obvious :premise :forward-image :conclusion :essential-image :source {:lines [980 981]}}
+         {:id :e-fixed :kind :infer :relation :because :premise [:fixed-image :finite-dim :torsion-cohomology] :warrant {:kind :missing-warrant :text "finite homological dimension lifts fixedness from cohomology modules to the complex"} :conclusion :cohomology-fixed :source {:lines [982 990]}}
+         {:id :e-converse :kind :infer :relation :therefore :premise [:cohomology-fixed :fixed-image] :conclusion :converse-goal :source {:lines [982 990]}}
+         {:id :e-total :kind :infer :relation :combines :premise [:forward-image :converse-goal] :conclusion :essential-image :source {:lines [980 991]}}]
+ :holes [{:kind :missing-warrant :edge :e-fixed :wanted :finite-homological-dimension-lifts-cohomology-fixedness}]}

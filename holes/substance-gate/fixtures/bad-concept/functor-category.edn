@@ -1,0 +1,49 @@
+{:given
+ [{:var :X, :type :morphism, :signature "X : functor category"}],
+ :name "functor category",
+ :pagerank 0.003429,
+ :df 497,
+ :concept/id :functor-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 52,
+  :sample
+  ["0810.2070" "1011.4114" "1102.1313" "1104.3630" "1203.0202"]},
+ :axioms
+ [{:id :condition-1,
+   :statement
+   "∀ x : morphism. $\\Mod \\k$ denotes the category of $\\k$-modules",
+   :refs [:category :denotes :modules]}],
+ :holes
+ [{:kind :unresolved-concept,
+   :wanted :denotes,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :unresolved-concept,
+   :wanted :modules,
+   :note
+   "dependency target not present in ct/ or ct-golden/; left as explicit concept import"}
+  {:kind :missing-genus,
+   :wanted :genus,
+   :note "scaffold did not pin a genus; fallback is heuristic"}],
+ :used-papers 18,
+ :genus :morphism,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:functor category",
+  :resolution-kind "nnexus",
+  :msc ["18-00" "18A05" "18A25" "18D05" "18E05" "Functors"],
+  :domains ["Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "generated from scaffold :components; unresolved imports retained as typed holes"},
+ :depends-on [:module-category :morphism :category :denotes :modules],
+ :gloss
+ {:paper "1204.0196",
+  :text
+  "ory'' $\\Mod X$ of $X$ as a colax functor $I \\to \\kCat$ given in our previous paper \\cite{Asa-a}. Recall that the {\\em module category} $\\Mod \\calC$ of a category $\\calC \\in \\kCat$ is defined to be the functor category $\\kCat(\\calC\\op, \\Mod \\k)$, where $\\Mod \\k$ denotes the category of $\\k$-modules. "},
+ :data
+ [{:component :carrier,
+   :signature
+   "X carries the structure described by the corpus gloss for functor category"}]}

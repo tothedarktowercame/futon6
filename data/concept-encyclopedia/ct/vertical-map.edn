@@ -1,0 +1,22 @@
+{:name "vertical map",
+ :df 327,
+ :concept/id :vertical-map,
+ :msc "ct",
+ :defined-in {:n-papers 2, :sample ["1105.6206" "2307.09497"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2307.09497",
+  :text
+  "Mod]}$ in the bi-initial model to a type $\\Mor[S\\Sub{\\TP}\\cdot A]{\\Yo{S\\Gamma}}{\\TP[\\Modd]}$ in the normalization model. This map internalizes directly into $\\Sh{\\GlTop}$ as a \\emph{vertical map} from $\\Mor{\\TP}{\\TP\\NS\\Sub{\\bbrk{-}}}$ from $\\TP$ to the restriction $\\TP\\NS\\Sub{\\bbrk{-}}$ of $\\TP\\NS$ "}}

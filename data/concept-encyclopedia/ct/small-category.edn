@@ -1,0 +1,54 @@
+{:name "small category",
+ :pagerank 0.008457,
+ :df 1019,
+ :concept/id :small-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 43,
+  :sample
+  ["0801.0083" "0810.1279" "1001.4071" "1105.4710" "1111.3335"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A category is small if it has a small set of objects and a small set of morphisms.",
+   :refs [:category :object :morphism :set]}
+  {:id :nlab-condition-2,
+   :statement
+   "In other words, a small category is an internal category in the category Set.",
+   :refs [:category :object :morphism :set]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :n-internal-category-in-the-category-set,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:small-set :internal-category :large-category],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 30,
+ :genus :n-internal-category-in-the-category-set,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Encyclopediaofmath" "Planetmath"],
+  :definition-source :nlab-raw-definition,
+  :msc ["03E30" "18A15" "XX-XX"],
+  :nlab-page-id "223",
+  :resolution-kind "nnexus",
+  :target "nnexus:small category",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:n-internal-category-in-the-category-set
+  :category
+  :object
+  :morphism
+  :set],
+ :gloss
+ {:paper "1105.4710",
+  :text
+  "r[d]^{d_1}\\\\ C_1\\ar[r]_{d_0}&C_0}\\] a pullback. A full definition can be found in~\\cite{MR1674451},~\\cite{MR0470019}. We will refer to an internal category in \\cateb{Sets} as to a \\emph{small category}. \\begin{definition} Let $\\catebf{C}=(C_0,C_1,d_0,d_1,c,i)$ be an internal category in a category \\"}}

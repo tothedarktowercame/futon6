@@ -1,0 +1,34 @@
+{:name "stack",
+ :pagerank 0.002362,
+ :df 369,
+ :concept/id :stack,
+ :msc "ct",
+ :defined-in
+ {:n-papers 85,
+  :sample
+  ["0708.3326" "0801.0083" "0803.1408" "0808.2122" "0808.3627"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 33,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-section,
+  :msc ["68P05" "Abstract_data_types" "Category_theory"],
+  :nlab-page-id "142",
+  :resolution-kind "nnexus",
+  :target "nnexus:stack",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0809.3394",
+  :text
+  "n equivalence of categories for every flat mapping of manifolds $p: X' \\to X$, one says that the prestack \\stack P is a \\index{smooth tensor stack}\\index{tensor stack}\\index{stack}\\textit{stack.} %\\begin{esempio}[smooth complex vector bundles]\\label{N.i32}% %\\end{esempio}% \\begin{nota}\\label{N.i33} "}}

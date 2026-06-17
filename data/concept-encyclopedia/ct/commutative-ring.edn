@@ -1,0 +1,31 @@
+{:name "commutative ring",
+ :pagerank 0.002255,
+ :df 858,
+ :concept/id :commutative-ring,
+ :msc "ct",
+ :defined-in
+ {:n-papers 11,
+  :sample
+  ["0709.3091" "0905.0459" "0905.0462" "0911.0018" "1507.02811"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 29,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:commutative ring",
+  :resolution-kind "nnexus",
+  :msc ["16" "Algebraic_structures" "XX-XX"],
+  :domains ["Encyclopediaofmath" "Mathworld" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1507.02811",
+  :text
+  "\\mathcal{T}$ as desired. The formula for the cotilting class is derived analogously, using Lemma~\\ref{L02}(2). \\end{proof} \\subsection{Commutative rings} From now on, let $R$ be a {\\bf commutative ring}. We begin by proving that any cofinite type 1-cotilting torsion pair is hereditary. Note that thi"}}

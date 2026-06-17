@@ -1,0 +1,16 @@
+{:paper/id "math__0204218" :passage/id "math__0204218:karoubian-representability:405-413" :source {:lines [405 413] :kind :proof}
+ :nodes [{:id :strong-generator :kind :object :text "E is a strong generator of Dscr" :source {:lines [405 407]}}
+         {:id :finite-type-H :kind :object :text "H is a contravariant cohomological functor of finite type" :source {:lines [405 407]}}
+         {:id :direct-summand :kind :claim :text "H is a direct summand of Hom(-,Q_n)" :source {:lines [407 408]}}
+         {:id :projector-functor :kind :claim :text "the direct summand corresponds to a projector on Hom(-,Q_n)" :source {:lines [408 409]}}
+         {:id :projector-object :kind :claim :text "Yoneda gives a corresponding projector on Q_n" :source {:lines [409 410]}}
+         {:id :Karoubian-summand :kind :claim :text "Karoubian splitting gives a summand of Q_n" :source {:lines [410 412]}}
+         {:id :summand-represents-H :kind :claim :text "that summand represents H" :source {:lines [412 412]}}
+         {:id :representable :kind :claim :text "H is representable" :source {:lines [405 413]}}]
+ :edges [{:id :e-direct :kind :infer :relation :by :premise [:strong-generator :finite-type-H] :warrant {:kind :citation :target "Theorem 1.4-3.2"} :conclusion :direct-summand :source {:lines [405 408]}}
+         {:id :e-projector-functor :kind :infer :relation :corresponds :premise :direct-summand :conclusion :projector-functor :source {:lines [408 409]}}
+         {:id :e-yoneda :kind :infer :relation :by :premise :projector-functor :warrant {:kind :claim :text "Yoneda identifies natural endomorphisms of Hom(-,Q_n) with endomorphisms of Q_n"} :conclusion :projector-object :source {:lines [409 410]}}
+         {:id :e-karoubian :kind :infer :relation :splits :premise :projector-object :conclusion :Karoubian-summand :source {:lines [410 412]}}
+         {:id :e-represents :kind :infer :relation :therefore :premise [:Karoubian-summand :direct-summand] :warrant {:kind :missing-warrant :text "the Hom functor of the split summand is exactly the direct summand H"} :conclusion :summand-represents-H :source {:lines [412 412]}}
+         {:id :e-final :kind :infer :relation :therefore :premise :summand-represents-H :conclusion :representable :source {:lines [412 413]}}]
+ :holes [{:kind :missing-warrant :edge :e-represents :wanted :split-idempotent-Hom-summand-represents-direct-summand-functor}]}

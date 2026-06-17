@@ -1,0 +1,41 @@
+{:name "fixed point",
+ :df 323,
+ :concept/id :fixed-point,
+ :msc "ct",
+ :defined-in
+ {:n-papers 23,
+  :sample
+  ["0710.3077" "1107.6032" "1402.4541" "1601.00239" "1603.03092"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-section,
+  :msc
+  ["03-00"
+   "06A15"
+   "11A63"
+   "34C99"
+   "37C25"
+   "54A05"
+   "Curves"
+   "Fixed_points_(mathematics)"
+   "XX-XX"],
+  :nlab-page-id "8480",
+  :resolution-kind "nnexus",
+  :target "nnexus:fixed point",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0710.3077",
+  :text
+  "dexed initial $T$-algebra} if all its reindexings are also initial in the appropriate fibres. \\end{defi} An essential fact about initial algebras is that they are fixed points. A \\emph{fixed point} for an endofunctor $T$ is an object $A$ together with an isomorphism $TA \\cong A$. A lemma by Lambek \\"}}

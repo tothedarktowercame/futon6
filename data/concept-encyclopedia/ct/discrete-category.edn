@@ -1,0 +1,32 @@
+{:name "discrete category",
+ :df 351,
+ :concept/id :discrete-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 19,
+  :sample
+  ["1104.3630" "1202.2591" "1210.5678" "1312.7833" "1507.06623"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-section,
+  :msc ["18A05" "Category_theory"],
+  :nlab-page-id "132",
+  :resolution-kind "nnexus",
+  :target "nnexus:discrete category",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1210.5678",
+  :text
+  "A \\textit{discrete category} consists of only objects and identity morphisms."}}

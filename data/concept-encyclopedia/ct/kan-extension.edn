@@ -1,0 +1,45 @@
+{:name "kan extension",
+ :df 581,
+ :concept/id :kan-extension,
+ :msc "ct",
+ :defined-in
+ {:n-papers 12,
+  :sample
+  ["0810.2361" "0912.4914" "1007.2925" "1212.3914" "1402.5922"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition If p^* has a left adjoint, typically denoted p!",
+   :refs [:left-adjoint :right-adjoint]}
+  {:id :nlab-condition-2,
+   :statement
+   ": [C,D] [C',D] or Lanp : [C,D] [C',D] then this left adjoint is called the ( ordinary or weak ) left Kan extension operation along p.",
+   :refs [:left-adjoint :right-adjoint]}
+  {:id :nlab-condition-3,
+   :statement
+   "Similarly, if p^* has a right adjoint, this right adjoint is called the right Kan extension operation along p.",
+   :refs [:left-adjoint :right-adjoint]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :left-kan-extension-operation-along-p,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}],
+ :genus :left-kan-extension-operation-along-p,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-266",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "266",
+  :definition-id "nlab-266-d1"},
+ :depends-on
+ [:left-kan-extension-operation-along-p :left-adjoint :right-adjoint],
+ :gloss
+ {:paper "0912.4914",
+  :text
+  "That it is a \\emph{Kan extension} is the pavlovian reflex response of anyone trained in category theory (seriously, it is just another instance of principle \\ref{principle:universal-properties-coherence-laws} at w"}}

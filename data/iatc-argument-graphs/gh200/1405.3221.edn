@@ -1,0 +1,18 @@
+{:paper/id "1405.3221"
+ :passage/id "1405.3221:yoneda-natural-transformation-inverse:496-504"
+ :source {:lines [496 504] :kind :proof}
+ :nodes
+ [{:id :matrix-test :kind :claim :text "the displayed matrices test additivity on P_a^C plus P_a^C" :source {:lines [488 496]}}
+  {:id :M-splits-on-sum :kind :claim :text "M_{P_a^C plus P_a^C} = M_{P_a^C} plus M_{P_a^C}" :source {:lines [496 496]}}
+  {:id :M-on-representable :kind :object :text "M_{P_a^C}: Hom(P_a^C,F) -> Hom(P_a^C,G)" :source {:lines [496 496]}}
+  {:id :Mtilde-a :kind :claim :text "M induces a morphism Mtilde_a:F(a)->G(a) natural in a" :source {:lines [497 497]}}
+  {:id :inverse-to-phi :kind :claim :text "the association M maps to Mtilde defines an inverse to phi" :source {:lines [497 497]}}]
+ :edges
+ [{:id :e-splitting :kind :infer :relation :matrix-calculation :premise :matrix-test :warrant {:kind :missing-warrant :text "the two displayed idempotent/inclusion matrices force M to preserve the biproduct decomposition"} :conclusion :M-splits-on-sum :source {:lines [488 496]}}
+  {:id :e-component-map :kind :infer :relation :yoneda :premise [:M-splits-on-sum :M-on-representable] :warrant {:kind :missing-warrant :text "Yoneda identifies natural maps out of the representable P_a^C with component maps F(a)->G(a)"} :conclusion :Mtilde-a :source {:lines [496 497]}}
+  {:id :e-inverse :kind :infer :relation :therefore :premise :Mtilde-a :warrant {:kind :missing-warrant :text "reconstructing every component naturally recovers the original natural transformation and vice versa"} :conclusion :inverse-to-phi :source {:lines [497 497]}}]
+ :holes
+ [{:kind :missing-warrant :edge :e-splitting :wanted :matrix-idempotents-force-biproduct-additivity-of-M}
+  {:kind :missing-warrant :edge :e-component-map :wanted :yoneda-identifies-representable-Hom-map-with-component-morphism}
+  {:kind :missing-warrant :edge :e-inverse :wanted :componentwise-Yoneda-reconstruction-is-inverse-to-phi}]}
+

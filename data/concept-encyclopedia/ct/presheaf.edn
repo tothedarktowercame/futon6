@@ -1,0 +1,100 @@
+{:name "presheaf",
+ :pagerank 0.005502,
+ :df 784,
+ :concept/id :presheaf,
+ :msc "ct",
+ :defined-in
+ {:n-papers 157,
+  :sample
+  ["0807.1704" "0808.2122" "0809.1187" "0809.4343" "0811.1480"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "A presheaf on a small category C is a functor F:\\: C^op Set from the opposite category C^op of C to the category Set of sets.",
+   :refs
+   [:small-category
+    :functor
+    :opposite-category
+    :set
+    :contravariant-functor
+    :small-categories
+    :functor-category
+    :topos
+    :commutative-ring
+    :abelian-groups]}
+  {:id :nlab-condition-2,
+   :statement
+   "More generally, given any category S, an S-valued presheaf on C is a functor F:\\: C^op S.",
+   :refs
+   [:small-category
+    :functor
+    :opposite-category
+    :set
+    :contravariant-functor
+    :small-categories
+    :functor-category
+    :topos
+    :commutative-ring
+    :abelian-groups]}
+  {:id :nlab-condition-3,
+   :statement
+   "While, hence, presheaves are just functors (on small categories), one says \"presheaf\" to indicate a specific perspective or interest, namely interest in the sheafification of the functor/presheaf, or at least interest in the functor category as a topos (the presheaf topos).",
+   :refs
+   [:small-category
+    :functor
+    :opposite-category
+    :set
+    :contravariant-functor
+    :small-categories
+    :functor-category
+    :topos
+    :commutative-ring
+    :abelian-groups]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :functor-f,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted
+   [:functors
+    :sheafification
+    :presheaf-topos
+    :concept-with-an-attitude
+    :cring
+    :ab],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 17,
+ :genus :functor-f,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-definition,
+  :msc ["14F05" "14F20" "18F10" "18F20" "54B40" "55" "Functors"],
+  :nlab-page-id "146",
+  :resolution-kind "nnexus",
+  :target "nnexus:presheaf",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:functor-f
+  :small-category
+  :functor
+  :opposite-category
+  :set
+  :contravariant-functor
+  :small-categories
+  :functor-category
+  :topos
+  :commutative-ring
+  :abelian-groups],
+ :gloss
+ {:paper "0811.1480",
+  :text
+  "In general, a \\emph{presheaf} is the same thing as a functor $G: \\scrA^{\\opp} \\to \\Ab$, which we will assume to be additive except in the next lemma."}}

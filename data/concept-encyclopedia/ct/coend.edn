@@ -1,0 +1,25 @@
+{:name "coend",
+ :df 323,
+ :concept/id :coend,
+ :msc "ct",
+ :defined-in
+ {:n-papers 128,
+  :sample
+  ["0804.3587" "0805.3030" "0810.2070" "0812.2443" "0902.0399"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0810.2070",
+  :text
+  "rightarrow }S$ with $H\\omega =v$, and this wedge $\\omega $ is an end of $S.$ The definition of the coend of a functor $S:C^{op}\\times C\\rightarrow X$ is dual to that of an end. A \\emph{coend} of $S$ is a pair $\\langle d,\\zeta \\rangle $, consisting of an object $d\\in X$ and a wedge $\\zeta :S\\overset{"}}

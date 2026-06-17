@@ -1,0 +1,27 @@
+{:name "monoidal product",
+ :pagerank 0.002068,
+ :df 381,
+ :concept/id :monoidal-product,
+ :msc "ct",
+ :defined-in
+ {:n-papers 60,
+  :sample
+  ["1308.3586" "1401.0149" "1403.3597" "1406.5942" "1407.3994"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 4,
+ :status :draft,
+ :kind :construction,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1406.5942",
+  :text
+  "end{tikzpicture} \\] \\item the \\textbf{monoidal product} is defined as the disjoint union of two dot-diagrams: \\[ F \\otimes G := (B^F + B^G,\\, D^F + D^G,\\, I^F + I^G,\\, O^F + O^G,\\, [\\Lbox^F, \\Lbox^G],\\, [\\Ldot^F, \\Ldot^G],\\, \\Win^F"}}

@@ -1,0 +1,25 @@
+{:name "isomorphism classes",
+ :df 886,
+ :concept/id :isomorphism-classes,
+ :msc "ct",
+ :defined-in
+ {:n-papers 37,
+  :sample
+  ["0707.2052" "0709.3091" "0710.0032" "0807.1329" "0901.3975"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0710.0032",
+  :text
+  "en this composition is again not associative. So to get around this, we say that the bicategory we want has its $\\hom$-categories $\\underline{\\hom(a,b)}$, where the morphisms are \\textit{isomorphism classes} of homotopies. The isomorphisms in question will not be homotopies themselves (to avoid extr"}}

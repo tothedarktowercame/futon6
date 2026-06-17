@@ -1,0 +1,16 @@
+{
+  "paper-id": "0706.1286",
+  "passage-id": "0706.1286:proof-move:L333-341",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 337,
+    "conclusion": 337
+  },
+  "window-lines": [
+    333,
+    341
+  ],
+  "binder-context": [],
+  "source-window": "and $Y\\eqv FGY$.  This is fine for \\Cat-like bicategories, but for\n\\calMod-like bicategories, the right notion of equivalence ought to\ninclude something corresponding to ring isomorphisms instead.  This\nproblem arose in~\\cite[19.3.5]{pht}, where two \\calMod-like\nbicategories were clearly `equivalent', yet the language did not exist\nto describe what sort of equivalence was meant.\n\nSimilar problems arise in many other situations, such as the\nfollowing.\n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0706.1286-dp-emacs.json"
+}

@@ -1,0 +1,38 @@
+{:name "initial object",
+ :pagerank 0.005801,
+ :df 813,
+ :concept/id :initial-object,
+ :msc "ct",
+ :defined-in
+ {:n-papers 64,
+  :sample
+  ["0810.2070" "0904.1529" "0906.4087" "1008.3145" "1011.1691"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "An initial object in a category is an object such that for all objects x \\,\\, , there is a unique morphism x with source .",
+   :refs [:category :object :morphism]}],
+ :holes
+ [{:kind :unresolved-source-refs,
+   :wanted [:source :target],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 8,
+ :genus :object,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-372",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "372",
+  :definition-id "nlab-372-d1"},
+ :depends-on [:object :category :morphism],
+ :gloss
+ {:paper "0810.2070",
+  :text
+  "$ is used instead of $\\mathtt{Mor}(\\mathcal{K})$; see \\cite{Switzer}). A category $\\mathcal{K}$ is usually depicted as a \\emph{commutative diagram} (i.e., a diagram with a common \\emph{initial object} $A$ and \\emph{final object} $D$):\\\\ \\smallskip \\begin{equation*} \\bfig \\putsquare<1`1`1`1;500`400>("}}

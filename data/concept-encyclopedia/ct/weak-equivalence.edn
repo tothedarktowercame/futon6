@@ -1,0 +1,34 @@
+{:name "weak equivalence",
+ :pagerank 0.0068,
+ :df 717,
+ :concept/id :weak-equivalence,
+ :msc "ct",
+ :defined-in
+ {:n-papers 270,
+  :sample
+  ["0708.3584" "0710.3553" "0711.1330" "0801.0083" "0801.0404"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 27,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-section,
+  :msc ["55" "55P10" "Homotopy_theory"],
+  :nlab-page-id "786",
+  :resolution-kind "nnexus",
+  :target "nnexus:weak equivalence",
+  :definition-id nil,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0802.2044",
+  :text
+  "lence} if \\ $\\picM{k} f$ \\ is a weak equivalence of $\\cM$-graded simplicial groups for each \\ $k\\geq 0$; % \\item a \\emph{cofibration} if it is a retract of a homotopically $\\cM$-free ma"}}

@@ -1,0 +1,29 @@
+{:name "quotient map",
+ :df 351,
+ :concept/id :quotient-map,
+ :msc "ct",
+ :defined-in
+ {:n-papers 19,
+  :sample
+  ["1306.1895" "1408.5220" "1512.03698" "1908.03268" "2001.05758"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:quotient map",
+  :resolution-kind "nnexus",
+  :msc ["54B15"],
+  :domains ["Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2001.05758",
+  :text
+  "ativity of (\\ref{eq:second_diagram_proof_lem_desing_unique_factorization_through_unit}), it is automatic that the canonical map $X\\to X/R$ is a simplicial map. We say that it is a \\textbf{quotient map}. If we fix a simplicial set $X$, then the quotient maps $X\\to Y$ form a set. This explains \\cref{d"}}

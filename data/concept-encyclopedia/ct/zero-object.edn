@@ -1,0 +1,32 @@
+{:name "zero object",
+ :df 423,
+ :concept/id :zero-object,
+ :msc "ct",
+ :defined-in
+ {:n-papers 113,
+  :sample
+  ["0706.0711" "0808.1023" "0809.1760" "0904.0078" "0906.0012"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition In a category, an object is called a zero object, null object, or biterminator if it is both an initial object and a terminal object.",
+   :refs [:category :object :initial-object :terminal-object]}],
+ :holes [],
+ :genus :zero-object,
+ :status :formalized,
+ :kind :object,
+ :provenance
+ {:target "nlab-371",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "371",
+  :definition-id "nlab-371-d1"},
+ :depends-on
+ [:zero-object :category :object :initial-object :terminal-object],
+ :gloss
+ {:paper "0808.1023",
+  :text
+  "If $\\Zero$ is a zero object, there is an arrow \\begin{diagram} \\hspace{-8mm}0_{A,B}:A&\\rTo&\\Zero &\\rTo &B \\end{diagram}"}}

@@ -1,0 +1,31 @@
+{:name "faithful functor",
+ :pagerank 0.002327,
+ :df 770,
+ :concept/id :faithful-functor,
+ :msc "ct",
+ :defined-in
+ {:n-papers 6,
+  :sample
+  ["0810.2070" "1412.6559" "1412.6560" "1508.00921" "2004.05631"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 14,
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:faithful functor",
+  :resolution-kind "nnexus",
+  :msc ["18" "18A22" "Functors" "XX-XX"],
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2004.05631",
+  :text
+  "sus limits, let us point out an interesting blueprint. \\subsection{A Blueprint} Let $\\D$ be a category with binary products, let $\\C$ be any category, let $U\\colon \\C\\to\\D$ be a \\textbf{faithful functor} %\\marginnote{\\tai{define faithful + say forgetful functors are usually faithful!}} and consider "}}

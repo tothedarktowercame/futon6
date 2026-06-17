@@ -6,6 +6,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 import importlib
 
@@ -21,6 +23,8 @@ NER_TSV = ROOT / "data/ner-kernel/terms.tsv"
 
 
 def _load_fixture():
+    if not PROBLEM4.exists():
+        pytest.skip(f"optional integration fixture missing: {PROBLEM4}")
     wiring = json.loads(PROBLEM4.read_text(encoding="utf-8"))
     reference = json.loads(REFERENCE.read_text(encoding="utf-8"))
     singles, multi_index, _ = nlab_wiring.load_ner_kernel(NER_TSV)

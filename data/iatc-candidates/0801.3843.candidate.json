@@ -1,0 +1,29 @@
+{
+  "paper-id": "0801.3843",
+  "passage-id": "0801.3843:proof-move:L643-660",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 647,
+    "conclusion": 656
+  },
+  "window-lines": [
+    643,
+    660
+  ],
+  "binder-context": [
+    "(definiendum) definiendum #0: $\\G$",
+    "(definiens) definiens #0: topological 2-group \u00b7 topological group [nlab-899]",
+    "(let-binder) binds $N\\G$ : topological simplicial group",
+    "(definiendum) definiendum #0: $N\\G$",
+    "(definiens) definiens #0: topological simplicial group",
+    "(let-binder) binds $\\G$ : $2$-group \u00b7 concept: group [nnexus:group]",
+    "(definiendum) definiendum #0: $\\G$",
+    "(definiens) definiens #0: $2$-group \u00b7 group [nnexus:group]",
+    "(bind/let) bind/let \u00b7 symbol:G | type:a topological group | canon:topological group [nlab-899]",
+    "(bind/let) bind/let \u00b7 symbol:\\cU | type:a cover\nof",
+    "(bind/let) bind/let \u00b7 symbol:c\\in H^4(BG,\\QQ)\n= \\QQ | type:the transgression of the generator",
+    "(bind/let) bind/let \u00b7 symbol:us | type:this by $\\String(G)$"
+  ],
+  "source-window": "s(h,g) = g\\qquad \\text{and}\\qquad t(h,g) = t(h)g \n$$ \n(Denoting both the target map $t \\maps\n\\Mor(\\G) \\to \\Ob(\\G)$ and the homomorphism $t\\maps H\\to G$ by\nthe same letter should not cause any problems, since the first\nis the restriction of the second to $H \\subseteq \\Mor(\\G)$.)\nThe identity morphism of an object $g \\in \\Ob(G)$ is defined by\n$$i(g) = (1,g). $$\nFinally, the composite of the morphisms \n$$\\alpha = (h,g) \\maps g \\to t(h)g \\qquad \\text{and}\\qquad\n\\beta = (h',t(h)g) \\maps t(h)g \\to t(h'h)g'$$ \nis defined to be\n$$ \\beta \\circ \\alpha =  (h'h, g) \\maps g \\to t(h'h) g $$\nIt is easy to check that with these definitions, $\\G$ is a $2$-group.  \nConversely, given a topological $2$-group $\\G$, we define a crossed module \n$(G,H,t,\\a)$ by setting $G$ to be $\\Ob(\\G)$, $H$ to be \n$\\ker(s)\\subset \\Mor(\\G)$, \n$t$ to be the restriction of the target homomorphism \n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0801.3843-dp-emacs.json"
+}

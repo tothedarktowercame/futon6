@@ -1,0 +1,27 @@
+{:name "braided monoidal",
+ :pagerank 0.001964,
+ :df 385,
+ :concept/id :braided-monoidal,
+ :msc "ct",
+ :defined-in
+ {:n-papers 10,
+  :sample
+  ["0901.3975" "0908.2469" "1411.3038" "2002.06055" "2008.02394"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 13,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0908.2469",
+  :text
+  "s}, which must in turn satisfy some plausible equations called `coherence laws'. This is typical of weakening. A functor $F \\maps C \\to D$ between braided monoidal categories is \\textbf{braided monoidal} if it is monoidal and it makes the following diagram commute for all $x,y \\in C$: \\[ \\begin{diag"}}

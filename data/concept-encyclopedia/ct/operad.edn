@@ -1,0 +1,59 @@
+{:name "operad",
+ :pagerank 0.005602,
+ :df 477,
+ :concept/id :operad,
+ :msc "ct",
+ :defined-in
+ {:n-papers 134,
+  :sample
+  ["0711.4904" "0803.1408" "0804.2663" "0805.3030" "0902.0399"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "It describes an operad as a collection of operations equipped with a notion of composition and subject to various conditions.",
+   :refs [:enriched-category :monoidal-category]}
+  {:id :nlab-condition-2,
+   :statement
+   "There is a more abstract way to encode all this simply as a monoid in a suitable ambient monoidal category.",
+   :refs [:enriched-category :monoidal-category]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted
+   :more-abstract-way-to-encode-all-this-simply-as-a-monoid-in-a-suitable-ambient-monoidal-category,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:peter-may :hom-object :monoid-in-a-monoidal-category],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 49,
+ :genus
+ :more-abstract-way-to-encode-all-this-simply-as-a-monoid-in-a-suitable-ambient-monoidal-category,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Mathworld" "Nlab"],
+  :definition-source :nlab-raw-definition,
+  :msc ["13" "category"],
+  :nlab-page-id "322",
+  :resolution-kind "nnexus",
+  :target "nnexus:operad",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on
+ [:more-abstract-way-to-encode-all-this-simply-as-a-monoid-in-a-suitable-ambient-monoidal-category
+  :enriched-category
+  :monoidal-category],
+ :gloss
+ {:paper "0803.1408",
+  :text
+  "\\begin{defn} \\label{operaddefinition} The notion of {\\em operad} is defined by following verbatim Definition \\ref{theorydefinition}, except that we replace the morphisms of the category $\\Gamma$ by all bijections, and restrict in the equivarian"},
+ :data
+ [{:component :definition-data-1,
+   :signature
+   "It describes an operad as a collection of operations equipped with a notion of composition and subject to various conditions.",
+   :source :nlab-definition}]}

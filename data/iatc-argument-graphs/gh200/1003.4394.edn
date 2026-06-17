@@ -1,0 +1,12 @@
+{:paper/id "1003.4394" :passage/id "1003.4394:compact-closed-product:862-878" :source {:lines [862 878] :kind :proof}
+ :nodes [{:id :product-category :kind :object :text "FVect x P has morphisms (f:V->W,p<=q)" :source {:lines [862 867]}}
+         {:id :no-order-no-map :kind :claim :text "if p not <= q there are no morphisms (V,p)->(W,q)" :source {:lines [870 870]}}
+         {:id :FVect-compact :kind :claim :text "FVect is compact closed" :source {:lines [870 870]}}
+         {:id :P-component :kind :claim :text "P supplies the componentwise order data" :source {:lines [870 870]}}
+         {:id :unit-counit-maps :kind :claim :text "the displayed eta and epsilon maps are typed morphisms in FVect x P" :source {:lines [872 878]}}
+         {:id :compact-product :kind :claim :text "FVect x P is compact closed componentwise" :source {:lines [870 878]}}]
+ :edges [{:id :e-no-map :kind :infer :relation :by-definition :premise :product-category :conclusion :no-order-no-map :source {:lines [862 870]}}
+         {:id :e-typed :kind :infer :relation :checks :premise [:FVect-compact :P-component] :warrant {:kind :missing-warrant :text "the P inequalities required for the displayed units and counits hold"} :conclusion :unit-counit-maps :source {:lines [872 878]}}
+         {:id :e-compact :kind :infer :relation :therefore :premise [:unit-counit-maps :no-order-no-map] :warrant {:kind :missing-warrant :text "snake identities and compact-closed coherence are inherited componentwise"} :conclusion :compact-product :source {:lines [870 878]}}]
+ :holes [{:kind :missing-warrant :edge :e-typed :wanted :order-inequalities-for-componentwise-units-counits}
+         {:kind :missing-warrant :edge :e-compact :wanted :componentwise-compact-closed-coherence}]}

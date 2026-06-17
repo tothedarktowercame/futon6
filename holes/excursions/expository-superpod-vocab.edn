@@ -1,0 +1,89 @@
+;; expository-superpod-vocab.edn — finalized arXiv expository-scope vocabulary for the
+;; superpod expository stage (Phase 5.4 in pre-superpod-pipeline-readiness.html).
+;;
+;; = the empirical mint taxonomy (close-reading vote) UNION the IATC categories that SURVIVE
+;;   into published arXiv prose (Pass A, audited) MINUS the dialogical/aesthetic IATC categories
+;;   that are STRIPPED on publication (reserved for a later MO/SE cross-corpus round).
+;; Each scope is a TYPED HOLE {:slot :type}; the GPU stage classifies a carved expository region
+;; into a :kind and fills the hole's slot (source-anchored), mirroring the IATC stage's
+;; candidate -> GPU-loop -> gate shape.
+
+{:provenance
+ {:empirical  "futon3c/holes/excursions/close-reading/{expository-scope-hierarchy.edn, consolidation-report.json}"
+  :alignment  "futon6/holes/excursions/E-iatc-expository-alignment.md (Pass A audited §9; MO/SE baseline §10)"
+  :iatc-spec  "s10503-018-9474-x Tables 1 & 2 (Corneli et al. 2018)"
+  :date "2026-06-17"
+  :note "arXiv (published-monologue) scope only; the content/inferential layer is NOT here."}
+
+ ;; ---- the scope kinds the superpod stage classifies + fills (each a typed hole) ----
+ :scopes
+ [;; -- empirical mint kinds (kept; minted by the 193-paper / 47,843-proposal vote) --
+  {:kind :rationale/telos                 :parent :root
+   :hole {:slot :telos :type "the problem/goal/impetus the construct serves"}
+   :source :empirical :arxiv :high :iatc-aligns [:meta/goal :value/useful]}
+  {:kind :rationale/telos/organization-roadmap :parent :rationale/telos
+   :hole {:slot :roadmap :type "how the exposition/paper is organised"}
+   :source :empirical-mint :arxiv :high :iatc-aligns [:meta/strategy]}
+  {:kind :connection                      :parent :root
+   :hole {:slot :other-structure :type "the structure/theory connected to"}
+   :source :empirical :arxiv :high :iatc-aligns [:struct/used_in]}
+  {:kind :connection/transfer             :parent :connection
+   :hole {:slot :read-as :type "the alternative reading/interpretation"}
+   :source :empirical :arxiv :high :iatc-aligns [:meta/analogy :perf/Suggest]}
+  {:kind :connection/literature-gap       :parent :connection
+   :hole {:slot :prior-result :type "the cited result and its limitation/absence"}
+   :source :empirical :arxiv :high}
+  {:kind :connection/literature-gap/terminology-origin :parent :connection/literature-gap
+   :hole {:slot :term-source :type "the earlier name/source of current terminology"}
+   :source :empirical-mint :arxiv :high}
+  {:kind :connection/application-domain   :parent :connection
+   :hole {:slot :application :type "the domain the result is applied to / useful for"}
+   :source :empirical-mint :arxiv :high :iatc-aligns [:value/useful]}
+  {:kind :connection/example-source       :parent :connection
+   :hole {:slot :example :type "the example instantiating the structure"}
+   :source :empirical-mint :arxiv :high :iatc-aligns [:struct/instantiates]}
+  {:kind :open-problem/status             :parent :root
+   :hole {:slot :unresolved :type "the question/claim whose truth is not settled"}
+   :source :empirical :arxiv :med :iatc-aligns [:perf/Query]}
+  {:kind :universal-property/characterizes :parent :root
+   :hole {:slot :characterizing-property :type "the universal/defining property"}
+   :source :empirical :arxiv :high}
+  {:kind :computes-invariant/calculation  :parent :root
+   :hole {:slot :computed-value :type "the invariant/value being computed"}
+   :source :empirical :arxiv :med}
+  {:kind :obstruction                     :parent :root
+   :hole {:slot :missing-condition :type "the condition whose failure obstructs"}
+   :source :empirical :arxiv :low}
+
+  ;; -- NEW kinds surfaced by the IATC alignment: present in arXiv expository prose but NOT
+  ;;    minted by the IATC-blind vote. This is the alignment experiment's payoff. --
+  {:kind :difficulty-assessment          :parent :root
+   :hole {:slot :difficulty :type "how hard or easy a step/result is, asserted informally"}
+   :source :iatc-survivor :from :value/easy :arxiv "51% papers (Pass A)"
+   :cues ["it is easy to see/show" "straightforward(ly)" "shouldn't be too hard to show" "clear/obvious that"]}
+  {:kind :heuristic-plausibility         :parent :root
+   :hole {:slot :expectation :type "an informal expectation / what is plausible before proof"}
+   :source :iatc-survivor :from :value/plausible :arxiv "13% papers (Pass A)"
+   :cues ["intuitively" "we expect" "presumably" "heuristically"]}
+  {:kind :auxiliary-construction         :parent :root
+   :hole {:slot :auxiliary :type "the helper lemma/object/key step the argument leans on"}
+   :source :iatc-survivor :from :meta/auxiliary :arxiv "27% papers (Pass A)"
+   :cues ["the following lemma" "we first prove/establish" "the key is/ingredient"]}
+  {:kind :generalisation                 :parent :root
+   :hole {:slot :generalised-form :type "the broader statement/method the result extends to"}
+   :source :iatc-survivor :from :meta/generalise :arxiv "72% papers (Pass A)"
+   :cues ["more generally" "generali[sz]e" "in greater generality" "still applies if/when"]}]
+
+ ;; ---- explicitly OUT OF SCOPE for arXiv (stripped on publication; do NOT hunt these in the
+ ;;      superpod arXiv run; reserve for the MO/SE cross-corpus round) ----
+ :out-of-scope-arxiv
+ [{:iatc :perf/Agree     :arxiv "1.0%"  :dialogue "29.0%" :why "interpersonal; no interlocutor in a monologue"}
+  {:iatc :perf/Challenge :arxiv "1.6%"  :dialogue "7.5%"  :why "interpersonal disagreement act"}
+  {:iatc :perf/Retract   :arxiv "0.0%"  :dialogue "5.5%"  :why "interpersonal self-correction act"}
+  {:iatc :meta/implements :arxiv "3.1%"                    :why "'implements a previously-suggested strategy' — needs the prior suggestion"}
+  {:iatc :value/beautiful :arxiv "7.8%" :dialogue "praise" :why "aesthetic praise; informal, lives in comments not papers"}]
+
+ ;; ---- NOT modelled here; owned by other layers ----
+ :covered-elsewhere
+ {:rel    "the formal illative layer (implies/equivalent/... ) = Phase 4 IATC argument graphs"
+  :struct "expands/used_in/reform/instantiates/sums/cont_summand — content moves likely living in PROOFS, not exposition (Phase 4 gap, logged in E-iatc-expository-alignment.md §9)"}}

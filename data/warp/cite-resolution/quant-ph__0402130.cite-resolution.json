@@ -1,0 +1,1282 @@
+{
+  "paper-id": "quant-ph__0402130",
+  "records": [
+    {
+      "char-anchor": [
+        2280,
+        2289
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "vN",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{vN}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. von Neumann. Mathematische grundlagen der quantenmechanik . Springer-Verlag, Berlin, 1932. Translation, Mathematical foundations of quantum mechanics , Princeton University Press, 1955",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematische grundlagen der quantenmechanik"
+    },
+    {
+      "char-anchor": [
+        2471,
+        2481
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "BBC",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BBC}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. H. Bennett, G. Brassard, C. Crepeau, R. Jozsa, A. Peres, and W. K. Wooters. Teleporting an unknown quantum state via dual classical and E instein- P odolsky- R osen channels. Physical Review Letters , 70:1895--1899, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Physical Review Letters"
+    },
+    {
+      "char-anchor": [
+        2513,
+        2529
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "Gottesman",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{Gottesman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Gottesman and I. L. Chuang. Quantum teleportation is a universal computational primitive. Nature , 402:390--393, 1999. arXiv:quant-ph/9908010",
+        "candidate": "quant-ph/9908010",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Nature"
+    },
+    {
+      "char-anchor": [
+        2562,
+        2573
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "Swap",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{Swap}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Zukowski, A. Zeilinger, M. A. Horne, and A. K. Ekert. Event-ready-detectors' B ell experiment via entanglement swapping. Physical Review Letters , 71:4287--4290, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Physical Review Letters"
+    },
+    {
+      "char-anchor": [
+        3243,
+        3259
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1,Coe2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        3243,
+        3259
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Coe2",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Coe1,Coe2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. arXiv:quant-ph/ 0402014, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        3734,
+        3748
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "Nielsen",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{Nielsen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. A. Nielsen and L. Chuang. Quantum computation and quantum information . Cambridge University Press, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum computation and quantum information"
+    },
+    {
+      "char-anchor": [
+        4101,
+        4111
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "BBC",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BBC}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. H. Bennett, G. Brassard, C. Crepeau, R. Jozsa, A. Peres, and W. K. Wooters. Teleporting an unknown quantum state via dual classical and E instein- P odolsky- R osen channels. Physical Review Letters , 70:1895--1899, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Physical Review Letters"
+    },
+    {
+      "char-anchor": [
+        4145,
+        4161
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "Gottesman",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{Gottesman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Gottesman and I. L. Chuang. Quantum teleportation is a universal computational primitive. Nature , 402:390--393, 1999. arXiv:quant-ph/9908010",
+        "candidate": "quant-ph/9908010",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Nature"
+    },
+    {
+      "char-anchor": [
+        4196,
+        4207
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "Swap",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{Swap}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Zukowski, A. Zeilinger, M. A. Horne, and A. K. Ekert. Event-ready-detectors' B ell experiment via entanglement swapping. Physical Review Letters , 71:4287--4290, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Physical Review Letters"
+    },
+    {
+      "char-anchor": [
+        4378,
+        4406
+      ],
+      "cite/group-marker": "[7,12,20]",
+      "cite/key": "BEZ",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{BEZ,Gottesman,Nielsen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Bouwmeester, A. Ekert, and A. Zeilinger, editors. The physics of quantum information . Springer-Verlag, Berlin, 2001",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The physics of quantum information"
+    },
+    {
+      "char-anchor": [
+        4378,
+        4406
+      ],
+      "cite/group-marker": "[7,12,20]",
+      "cite/key": "Gottesman",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{BEZ,Gottesman,Nielsen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Gottesman and I. L. Chuang. Quantum teleportation is a universal computational primitive. Nature , 402:390--393, 1999. arXiv:quant-ph/9908010",
+        "candidate": "quant-ph/9908010",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Nature"
+    },
+    {
+      "char-anchor": [
+        4378,
+        4406
+      ],
+      "cite/group-marker": "[7,12,20]",
+      "cite/key": "Nielsen",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{BEZ,Gottesman,Nielsen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. A. Nielsen and L. Chuang. Quantum computation and quantum information . Cambridge University Press, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum computation and quantum information"
+    },
+    {
+      "char-anchor": [
+        6810,
+        6819
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "vN",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{vN}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. von Neumann. Mathematische grundlagen der quantenmechanik . Springer-Verlag, Berlin, 1932. Translation, Mathematical foundations of quantum mechanics , Princeton University Press, 1955",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematische grundlagen der quantenmechanik"
+    },
+    {
+      "char-anchor": [
+        7380,
+        7394
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "Nielsen",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{Nielsen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. A. Nielsen and L. Chuang. Quantum computation and quantum information . Cambridge University Press, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum computation and quantum information"
+    },
+    {
+      "char-anchor": [
+        8732,
+        8748
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1,Coe2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        8732,
+        8748
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Coe2",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Coe1,Coe2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. arXiv:quant-ph/ 0402014, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        8861,
+        8872
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        10953,
+        10962
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "RM",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{RM}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. G. Simpson. Subsystems of Second-Order Arithmetic . Springer-Verlag, 1999",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Subsystems of Second-Order Arithmetic"
+    },
+    {
+      "char-anchor": [
+        11943,
+        11954
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        12504,
+        12518
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "Nielsen",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{Nielsen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. A. Nielsen and L. Chuang. Quantum computation and quantum information . Cambridge University Press, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum computation and quantum information"
+    },
+    {
+      "char-anchor": [
+        12843,
+        12855
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "Isham",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{Isham}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Isham. Lectures on Quantum Theory . Imperial College Press, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lectures on Quantum Theory"
+    },
+    {
+      "char-anchor": [
+        18359,
+        18369
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "BBC",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BBC}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. H. Bennett, G. Brassard, C. Crepeau, R. Jozsa, A. Peres, and W. K. Wooters. Teleporting an unknown quantum state via dual classical and E instein- P odolsky- R osen channels. Physical Review Letters , 70:1895--1899, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Physical Review Letters"
+    },
+    {
+      "char-anchor": [
+        18380,
+        18391
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        21074,
+        21090
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1,Coe2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        21074,
+        21090
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Coe2",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Coe1,Coe2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. arXiv:quant-ph/ 0402014, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        21122,
+        21131
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AC",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AC}",
+      "confidence": 0.98,
+      "hole": null,
+      "method": "bibitem-arxiv-id",
+      "resolved-arxiv-id": "cs/0207057",
+      "resolved-corpus-id": "cs__0207057",
+      "title": "Physical Traces: Quantum vs. Classical Information Processing"
+    },
+    {
+      "char-anchor": [
+        23877,
+        23889
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "Petri",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{Petri}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. A. Petri. Non-sequential processes. Technical Report ISF-77-5, GMD, St-Augustin, Germany, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        24023,
+        24039
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "Gottesman",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{Gottesman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Gottesman and I. L. Chuang. Quantum teleportation is a universal computational primitive. Nature , 402:390--393, 1999. arXiv:quant-ph/9908010",
+        "candidate": "quant-ph/9908010",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Nature"
+    },
+    {
+      "char-anchor": [
+        24050,
+        24061
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        24403,
+        24419
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "Gottesman",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{Gottesman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Gottesman and I. L. Chuang. Quantum teleportation is a universal computational primitive. Nature , 402:390--393, 1999. arXiv:quant-ph/9908010",
+        "candidate": "quant-ph/9908010",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Nature"
+    },
+    {
+      "char-anchor": [
+        24641,
+        24652
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "Shor",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{Shor}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. W. Shor. Fault-tolerant quantum computation. In Proceedings of the 37nd Annual Symposium on Foundations of Computer Science , pages 56--65. IEEE Computer Society Press, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Proceedings of the 37nd Annual Symposium on Foundations of Computer Science"
+    },
+    {
+      "char-anchor": [
+        25026,
+        25037
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "Swap",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{Swap}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Zukowski, A. Zeilinger, M. A. Horne, and A. K. Ekert. Event-ready-detectors' B ell experiment via entanglement swapping. Physical Review Letters , 71:4287--4290, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Physical Review Letters"
+    },
+    {
+      "char-anchor": [
+        25048,
+        25059
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        27972,
+        27986
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "MacLane",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{MacLane}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane. Categories for the Working Mathematician . Springer-Verlag, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the Working Mathematician"
+    },
+    {
+      "char-anchor": [
+        28033,
+        28044
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "Barr",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{Barr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Barr. * -Autonomous Categories , volume 752 of Lecture Notes in Mathematics . Springer-Verlag, 1979",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "* -Autonomous Categories"
+    },
+    {
+      "char-anchor": [
+        28493,
+        28505
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "Seely",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Seely}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. A. G. Seely. Linear logic, * -autonomous categories and cofree algebras. In Categories in Computer Science and Logic , volume 92 of Contemporary Mathematics , pages 371--382, June 1987, Boulder, Colorado, 1989",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories in Computer Science and Logic"
+    },
+    {
+      "char-anchor": [
+        28542,
+        28554
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "Kelly",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{Kelly}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly. An abstract approach to coherence. Lecture Notes in Mathematics , 281:106--147, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Lecture Notes in Mathematics"
+    },
+    {
+      "char-anchor": [
+        29053,
+        29062
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "KL",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{KL}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly and M. L. Laplaza. Coherence for compact closed categories. Journal of Pure and Applied Algebra , 19:193--213, 1980",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        31796,
+        31805
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "KL",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{KL}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly and M. L. Laplaza. Coherence for compact closed categories. Journal of Pure and Applied Algebra , 19:193--213, 1980",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        33067,
+        33076
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "KL",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{KL}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly and M. L. Laplaza. Coherence for compact closed categories. Journal of Pure and Applied Algebra , 19:193--213, 1980",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        36754,
+        36765
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        38305,
+        38321
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1,Coe2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        38305,
+        38321
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Coe2",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Coe1,Coe2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. arXiv:quant-ph/ 0402014, 2004",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        41022,
+        41033
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "Ross",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{Ross}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Duncan. Quantum entanglement and multiplicative linear logic. Transfer Report Oxford University, November 2003",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        41250,
+        41265
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "Mitchell",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{Mitchell}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Mitchell. Theory of Categories . Academic Press, 1965",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Theory of Categories"
+    },
+    {
+      "char-anchor": [
+        45722,
+        45736
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "Deligne",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{Deligne}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Deligne. Cat egories tannakiennes. In The Grothendieck Festschrift Volume II , volume 87 of Progress in Mathematics , pages 111--196. Birkh auser, 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The Grothendieck Festschrift Volume II"
+    },
+    {
+      "char-anchor": [
+        45843,
+        45858
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "Abramsky",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{Abramsky}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Abramsky, S. J. Gay, and R. Nagarajan. Interaction categories and foundations of typed concurrent programming. In Deductive Program Design: Proceedings of the 1994 Marktoberdorf International Summer School , NATO Advanced Science Institutes Series F, pages 35--113. Springer-Verlag, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Deductive Program Design: Proceedings of the 1994 Marktoberdorf International Summer School"
+    },
+    {
+      "char-anchor": [
+        45998,
+        46007
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "KL",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{KL}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly and M. L. Laplaza. Coherence for compact closed categories. Journal of Pure and Applied Algebra , 19:193--213, 1980",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        53053,
+        53067
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "Nielsen",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{Nielsen}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. A. Nielsen and L. Chuang. Quantum computation and quantum information . Cambridge University Press, 2000",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum computation and quantum information"
+    },
+    {
+      "char-anchor": [
+        75021,
+        75037
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "Gottesman",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{Gottesman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Gottesman and I. L. Chuang. Quantum teleportation is a universal computational primitive. Nature , 402:390--393, 1999. arXiv:quant-ph/9908010",
+        "candidate": "quant-ph/9908010",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Nature"
+    },
+    {
+      "char-anchor": [
+        75097,
+        75113
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "Gottesman",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{Gottesman}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Gottesman and I. L. Chuang. Quantum teleportation is a universal computational primitive. Nature , 402:390--393, 1999. arXiv:quant-ph/9908010",
+        "candidate": "quant-ph/9908010",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Nature"
+    },
+    {
+      "char-anchor": [
+        75124,
+        75135
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "Coe1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Coe1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Coecke. The logic of entanglement. A n invitation. Technical Report PRG-RR-03-12, Oxford University, 2003. web.comlab.ox.ac.uk/oucl/publications/tr/rr-03-12.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        81440,
+        81450
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BvN",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BvN}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Birkhoff and J. von Neumann. The logic of quantum mechanics. Annals of Mathematics , 37:823--843, 1936",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Annals of Mathematics"
+    },
+    {
+      "char-anchor": [
+        81547,
+        81560
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "Mackey",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{Mackey}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Mackey. The mathematical foundations of quantum mechanics . W. A. Benjamin, 1963",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The mathematical foundations of quantum mechanics"
+    },
+    {
+      "char-anchor": [
+        81571,
+        81583
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Piron",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Piron}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Piron. Foundations of quantum physics . W. A. Benjamin, 1976",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Foundations of quantum physics"
+    },
+    {
+      "char-anchor": [
+        81883,
+        81896
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "IshBut",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{IshBut}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. J. Isham and J. Butterfield. A topos perspective on the K ochen- S pecker theorem I : Quantum states as generalized valuations. International Journal of Theoretical Physics , 37:2669--2733, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "International Journal of Theoretical Physics"
+    },
+    {
+      "char-anchor": [
+        82389,
+        82404
+      ],
+      "cite/group-marker": "[24,27]",
+      "cite/key": "Sel",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{Sel,vTon}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Selinger. Towards a quantum programming language. Mathematical Structures in Computer Science , 2004. To appear",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Mathematical Structures in Computer Science"
+    },
+    {
+      "char-anchor": [
+        82389,
+        82404
+      ],
+      "cite/group-marker": "[24,27]",
+      "cite/key": "vTon",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Sel,vTon}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. van Tonder. Quantum computation, categorical semantics, and linear logic. arXiv:quant-ph/0312174, 2003",
+        "candidate": "quant-ph/0312174",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        83788,
+        83798
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "ABP",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{ABP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Abramsky, R. Blute, and P. Panangaden. Nuclear and trace ideals in tensored * -categories. Journal of Pure and Applied Algebra , 143:3--47, 1999",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        83867,
+        83877
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "ABP",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{ABP}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Abramsky, R. Blute, and P. Panangaden. Nuclear and trace ideals in tensored * -categories. Journal of Pure and Applied Algebra , 143:3--47, 1999",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Journal of Pure and Applied Algebra"
+    },
+    {
+      "char-anchor": [
+        84183,
+        84198
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "Abramsky",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{Abramsky}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Abramsky, S. J. Gay, and R. Nagarajan. Interaction categories and foundations of typed concurrent programming. In Deductive Program Design: Proceedings of the 1994 Marktoberdorf International Summer School , NATO Advanced Science Institutes Series F, pages 35--113. Springer-Verlag, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Deductive Program Design: Proceedings of the 1994 Marktoberdorf International Summer School"
+    },
+    {
+      "char-anchor": [
+        84352,
+        84367
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "Abramsky",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{Abramsky}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Abramsky, S. J. Gay, and R. Nagarajan. Interaction categories and foundations of typed concurrent programming. In Deductive Program Design: Proceedings of the 1994 Marktoberdorf International Summer School , NATO Advanced Science Institutes Series F, pages 35--113. Springer-Verlag, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Deductive Program Design: Proceedings of the 1994 Marktoberdorf International Summer School"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-quant-ph__0402130-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 62,
+    "resolution-rate": 0.0159,
+    "resolved": 1,
+    "total": 63
+  }
+}

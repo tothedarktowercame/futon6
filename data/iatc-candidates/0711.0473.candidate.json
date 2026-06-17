@@ -1,0 +1,29 @@
+{
+  "paper-id": "0711.0473",
+  "passage-id": "0711.0473:proof-move:L1114-1122",
+  "selection": ":proof-move",
+  "anchor-lines": {
+    "premise": 1118,
+    "conclusion": 1118
+  },
+  "window-lines": [
+    1114,
+    1122
+  ],
+  "binder-context": [
+    "(definiendum) definiendum #0: $\\bbD$",
+    "(definiens) definiens #0: double\ncategory $\\bbD^t$ with\n$$\\aligned\n\\Obj \\bbD^t &= \\Obj",
+    "(let-binder) binds $\\xymatrix@1{\\sigma\\co F\n\\ar@{=>}[r] & G}$ : horizontal natural transformation\n$\\xymatrix@1{\\sigma^t\\co F",
+    "(definiendum) definiendum #0: $\\xymatrix@1{\\sigma\\co F\n\\ar@{=>}[r] & G}$",
+    "(definiens) definiens #0: horizontal natural transformation\n$\\xymatrix@1{\\sigma^t\\co F",
+    "(let-binder) binds $\\bbH \\dashv \\bfH$ : 2-adjunction $\\bbV \\dashv\n\\bfV$ \u00b7 concept: adjunction [nlab-193]",
+    "(definiendum) definiendum #0: $\\bbH \\dashv \\bfH$",
+    "(definiens) definiens #0: 2-adjunction $\\bbV \\dashv\n\\bfV$ \u00b7 adjunction [nlab-193]",
+    "(let-binder) binds $\\bbA$ : internal graph in the category of\nsmall graphs",
+    "(definiendum) definiendum #0: $\\bbA$",
+    "(definiens) definiens #0: internal graph in the category of\nsmall graphs",
+    "(bind/let) bind/let \u00b7 symbol:[m] | type:the partially ordered set | canon:partially ordered set [nnexus:partially ordered set]"
+  ],
+  "source-window": "\\end{prop}\n\n\\begin{pf}\nWe argue by induction on the number of squares in the arrangement.\nThe statement is trivially true for arrangements consisting of a single square.\nNow let $C$ be a compatible arrangement consisting of two or more squares,\nwith an assignment into a double category $\\bbD$ which is composable by a sequence\nof horizontal and vertical compositions of squares.\nConsider the last composition used. Without loss of generality, assume that\n",
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0711.0473-dp-emacs.json"
+}

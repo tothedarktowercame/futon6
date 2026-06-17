@@ -1,0 +1,25 @@
+{:name "category whose",
+ :pagerank 0.00686,
+ :df 1362,
+ :concept/id :category-whose,
+ :msc "ct",
+ :defined-in
+ {:n-papers 3, :sample ["2003.04610" "2401.17483" "2512.08566"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 46,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2003.04610",
+  :text
+  "\\begin{defn} The {\\em injective abelianization} $\\underline{\\mathcal A}$ of an additive category $\\mathcal A$ is defined as a category whose \\begin{itemize} \\item objects are tuples $(\\{f_i:X\\to Y_i\\}_{i=1}^\\infty,\\,n)$, where $n\\in\\mathbb N$, $X, Y_i$ are objects in $\\mathcal A$ and $f_i:X\\to Y_i$ is a morphism in"}}

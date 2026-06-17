@@ -1,0 +1,3548 @@
+{
+  "paper-id": "math__0111205",
+  "records": [
+    {
+      "char-anchor": [
+        18522,
+        18532
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "ma1",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{ma1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Majid: Representations, duals and s of monoidal categories. Rend. Circ. Mat. Palermo Suppl. 26 , 197-206 (1991)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "26"
+    },
+    {
+      "char-anchor": [
+        18554,
+        18564
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "js2",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{js2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal R. Street: Tortile Yang-Baxter operators in tensor categories. J. Pure Appl. Alg. 71 , 43-51 (1991)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "71"
+    },
+    {
+      "char-anchor": [
+        18743,
+        18758
+      ],
+      "cite/group-marker": "[36,20]",
+      "cite/key": "ma1",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{ma1, js2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Majid: Representations, duals and s of monoidal categories. Rend. Circ. Mat. Palermo Suppl. 26 , 197-206 (1991)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "26"
+    },
+    {
+      "char-anchor": [
+        18743,
+        18758
+      ],
+      "cite/group-marker": "[36,20]",
+      "cite/key": "js2",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{ma1, js2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Joyal R. Street: Tortile Yang-Baxter operators in tensor categories. J. Pure Appl. Alg. 71 , 43-51 (1991)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "71"
+    },
+    {
+      "char-anchor": [
+        19307,
+        19317
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "bw2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{bw2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Spherical categories. Adv. Math. 143 , 357-375 (1999)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "143"
+    },
+    {
+      "char-anchor": [
+        19374,
+        19384
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "bw2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{bw2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Spherical categories. Adv. Math. 143 , 357-375 (1999)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "143"
+    },
+    {
+      "char-anchor": [
+        19463,
+        19486
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Lemma 2.8]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        19493,
+        19503
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "bw2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{bw2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Spherical categories. Adv. Math. 143 , 357-375 (1999)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "143"
+    },
+    {
+      "char-anchor": [
+        19507,
+        19530
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Section 2]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        20107,
+        20115
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "y",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{y}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. N. Yetter: Framed tangles and a theorem of Deligne on braided deformations of tannakian categories. Contemp. Math. 134 , 325-350 (1992)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "134"
+    },
+    {
+      "char-anchor": [
+        20478,
+        20486
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        21152,
+        21164
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "brug1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{brug1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Bruguieres: Categories premodulaires, modularisations et invariants de varietes de dimension 3. Math. Ann. 316 , 215-236 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "316"
+    },
+    {
+      "char-anchor": [
+        21315,
+        21326
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "khr1",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{khr1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K.-H. Rehren: Braid group statistics and their superselection rules. In : D. Kastler (ed.): The algebraic theory of superselection sectors. Introduction and recent results . World Scientific, 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In"
+    },
+    {
+      "char-anchor": [
+        21353,
+        21364
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "bebl",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{bebl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Beliakova C. Blanchet: Modular categories of types B, C and D. Comment. Math. Helv. 76 , 467-500 (2001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "76"
+    },
+    {
+      "char-anchor": [
+        22039,
+        22047
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        22283,
+        22293
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "ly2",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{ly2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko: Modular transformations for tensor categories. J. Pure Appl. Alg. 98 , 279-327 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "98"
+    },
+    {
+      "char-anchor": [
+        22666,
+        22677
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "drin",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{drin}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Drinfel'd: Quantum groups. In: Proc. Int. Congr. Math, Berkeley 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        23016,
+        23025
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "ka",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{ka}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Kassel: Quantum groups . Springer-Verlag, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum groups"
+    },
+    {
+      "char-anchor": [
+        23816,
+        23841
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "ka",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Chapter XIII.4]{ka}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Kassel: Quantum groups . Springer-Verlag, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum groups"
+    },
+    {
+      "char-anchor": [
+        23980,
+        23990
+      ],
+      "cite/group-marker": "[49]",
+      "cite/key": "rst",
+      "cite/marker": "[49]",
+      "cite/raw": "\\cite{rst}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Yu. Reshetikhin M. A. Semenov-Tian-Shansky: Quantum R-matrices and factorization problems. J. Geom. Phys. 5 , 533-550 (1988)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "5"
+    },
+    {
+      "char-anchor": [
+        24057,
+        24067
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "rad",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite{rad}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. E. Radford: Minimal s. J. Algebra 157 , 285-315 (1993)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "157"
+    },
+    {
+      "char-anchor": [
+        24219,
+        24227
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        24249,
+        24258
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "eg",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{eg}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof S. Gelaki: Some properties of finite dimensional semi-simple Hopf algebras. Math. Res. Lett. 5 , 191-197 (1998)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "5"
+    },
+    {
+      "char-anchor": [
+        24899,
+        24908
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "kt",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{kt}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Kassel V. G. Turaev: Double construction for monoidal categories. Acta Math. 175 , 1-48 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "175"
+    },
+    {
+      "char-anchor": [
+        25058,
+        25066
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "s",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{s}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street: The quantum double and related constructions. J. Pure Appl. Alg. 132 , 195-206 (1998)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "132"
+    },
+    {
+      "char-anchor": [
+        25316,
+        25340
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "kt",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite[Theorem 5.4.1]{kt}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Kassel V. G. Turaev: Double construction for monoidal categories. Acta Math. 175 , 1-48 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "175"
+    },
+    {
+      "char-anchor": [
+        25360,
+        25369
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "kt",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{kt}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Kassel V. G. Turaev: Double construction for monoidal categories. Acta Math. 175 , 1-48 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "175"
+    },
+    {
+      "char-anchor": [
+        26361,
+        26372
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "ocn2",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite{ocn2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu (notes by Y. Kawahigashi): Quantum symmetry, differential geometry of finite graphs and classification of subfactors. Lectures given at Tokyo Univ. 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26607,
+        26618
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "ocn3",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{ocn3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu (notes by Y. Kawahigashi): Chirality for operator algebras. In: Araki, H. et al. (eds.): Subfactors . World Scientific, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        26935,
+        26945
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "ek1",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{ek1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. E. Evans Y. Kawahigashi: On Ocneanu's theory of asymptotic inclusions for subfactors, topological quantum field theories and s. Int. J. Math. 6 , 205-228 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        27035,
+        27045
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "lre",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{lre}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Longo K.-H. Rehren: Nets of subfactors. 7 , 567-597 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "7"
+    },
+    {
+      "char-anchor": [
+        27401,
+        27411
+      ],
+      "cite/group-marker": "[37]",
+      "cite/key": "mas",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{mas}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Masuda: An analogue of Longo's canonical endomorphism for bimodule theory and its application to asymptotic inclusions. Int. J. Math. 8 , 249-265 (1997)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "8"
+    },
+    {
+      "char-anchor": [
+        27517,
+        27527
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "iz1",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{iz1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of Longo-Rehren inclusions. Preprint 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        27608,
+        27618
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        27623,
+        27637
+      ],
+      "cite/group-marker": "[18,19]",
+      "cite/key": "iz1",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{iz1,iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of Longo-Rehren inclusions. Preprint 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        27623,
+        27637
+      ],
+      "cite/group-marker": "[18,19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz1,iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        27732,
+        27742
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "iz1",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{iz1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of Longo-Rehren inclusions. Preprint 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        28303,
+        28314
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "ocn3",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{ocn3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu (notes by Y. Kawahigashi): Chirality for operator algebras. In: Araki, H. et al. (eds.): Subfactors . World Scientific, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        28452,
+        28462
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        28914,
+        28924
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        29131,
+        29143
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        29198,
+        29208
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "lro",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{lro}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Longo J. E. Roberts: A theory of dimension. K-Theory 11 , 103-159 (1997)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "11"
+    },
+    {
+      "char-anchor": [
+        29362,
+        29374
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        29414,
+        29426
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        29602,
+        29614
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        29929,
+        29941
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        31093,
+        31116
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Section 2]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        34389,
+        34401
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        37228,
+        37242
+      ],
+      "cite/group-marker": "[5,16]",
+      "cite/key": "bw1",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{bw1, gk}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Invariants of piecewise-linear 3-manifolds. Trans. Amer. Math. Soc. 348 , 3997-4022 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "348"
+    },
+    {
+      "char-anchor": [
+        37228,
+        37242
+      ],
+      "cite/group-marker": "[5,16]",
+      "cite/key": "gk",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{bw1, gk}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Gelfand D. Kazhdan: Invariants of three-dimensional manifolds. Geom. Funct. Anal. 6 , 268-300 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        37264,
+        37276
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        37644,
+        37656
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        37817,
+        37829
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        43563,
+        43572
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "ka",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{ka}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Kassel: Quantum groups . Springer-Verlag, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum groups"
+    },
+    {
+      "char-anchor": [
+        43795,
+        43818
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "s",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite[Proposition 1]{s}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street: The quantum double and related constructions. J. Pure Appl. Alg. 132 , 195-206 (1998)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "132"
+    },
+    {
+      "char-anchor": [
+        44247,
+        44255
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "s",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{s}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Street: The quantum double and related constructions. J. Pure Appl. Alg. 132 , 195-206 (1998)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "132"
+    },
+    {
+      "char-anchor": [
+        47738,
+        47766
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Subsection 2.3]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        57266,
+        57278
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "brug3",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{brug3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Altschuler A. Bruguieres: Sliding property in sovereign categories. Preprint",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        59962,
+        59974
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        60999,
+        61009
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "kad",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{kad}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Kadison: New examples of Frobenius extensions . University Lecture Series 14, AMS, 1999",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "New examples of Frobenius extensions"
+    },
+    {
+      "char-anchor": [
+        61938,
+        61958
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "gk",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Lemma 3.1]{gk}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Gelfand D. Kazhdan: Invariants of three-dimensional manifolds. Geom. Funct. Anal. 6 , 268-300 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        62625,
+        62633
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        63785,
+        63795
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "bw1",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{bw1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Invariants of piecewise-linear 3-manifolds. Trans. Amer. Math. Soc. 348 , 3997-4022 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "348"
+    },
+    {
+      "char-anchor": [
+        65068,
+        65091
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Lemma 2.9]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        65401,
+        65429
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "lre",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite[Proposition 4.10]{lre}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Longo K.-H. Rehren: Nets of subfactors. 7 , 567-597 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "7"
+    },
+    {
+      "char-anchor": [
+        66945,
+        66963
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "lre",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite[p. 591]{lre}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Longo K.-H. Rehren: Nets of subfactors. 7 , 567-597 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "7"
+    },
+    {
+      "char-anchor": [
+        67548,
+        67558
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "bw2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{bw2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Spherical categories. Adv. Math. 143 , 357-375 (1999)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "143"
+    },
+    {
+      "char-anchor": [
+        67978,
+        68007
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Proposition 5.3]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        68233,
+        68263
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Proposition 5.16]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        70817,
+        70846
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Proposition 3.8]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        81191,
+        81217
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Theorem 3.12]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        86504,
+        86520
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "cwm",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite[XI.2]{cwm}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane: Categories for the working mathematician . 2nd ed. Springer-Verlag, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        87208,
+        87218
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        91979,
+        92005
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Theorem 3.12]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        96620,
+        96632
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        97080,
+        97106
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "cwm",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite[Theorem IV.4.1]{cwm}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane: Categories for the working mathematician . 2nd ed. Springer-Verlag, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        97176,
+        97192
+      ],
+      "cite/group-marker": "[51]",
+      "cite/key": "sr",
+      "cite/marker": "[51]",
+      "cite/raw": "\\cite[I.4.4]{sr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Saaveda Rivano: Categories Tannakiennes . LNM 265, Springer-Verlag, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        97278,
+        97307
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Proposition 2.4]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        98998,
+        99024
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Theorem 5.14]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        99388,
+        99414
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Theorem 5.13]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        99806,
+        99833
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "ka",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Theorem XIII.5.1]{ka}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Kassel: Quantum groups . Springer-Verlag, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum groups"
+    },
+    {
+      "char-anchor": [
+        100156,
+        100167
+      ],
+      "cite/group-marker": "[46]",
+      "cite/key": "ostr",
+      "cite/marker": "[46]",
+      "cite/raw": "\\cite{ostr}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111139",
+      "resolved-corpus-id": "math__0111139",
+      "title": "Module categories, weak Hopf algebras and modular invariants"
+    },
+    {
+      "char-anchor": [
+        100396,
+        100408
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        102681,
+        102700
+      ],
+      "cite/group-marker": "[45,15,19]",
+      "cite/key": "ocn3",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{ocn3,ek1,iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu (notes by Y. Kawahigashi): Chirality for operator algebras. In: Araki, H. et al. (eds.): Subfactors . World Scientific, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        102681,
+        102700
+      ],
+      "cite/group-marker": "[45,15,19]",
+      "cite/key": "ek1",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{ocn3,ek1,iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. E. Evans Y. Kawahigashi: On Ocneanu's theory of asymptotic inclusions for subfactors, topological quantum field theories and s. Int. J. Math. 6 , 205-228 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        102681,
+        102700
+      ],
+      "cite/group-marker": "[45,15,19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{ocn3,ek1,iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        103123,
+        103133
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        112799,
+        112809
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        113434,
+        113442
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        120099,
+        120112
+      ],
+      "cite/group-marker": "[53,48]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t,khr1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        120099,
+        120112
+      ],
+      "cite/group-marker": "[53,48]",
+      "cite/key": "khr1",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{t,khr1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K.-H. Rehren: Braid group statistics and their superselection rules. In : D. Kastler (ed.): The algebraic theory of superselection sectors. Introduction and recent results . World Scientific, 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In"
+    },
+    {
+      "char-anchor": [
+        120455,
+        120465
+      ],
+      "cite/group-marker": "[41]",
+      "cite/key": "ntv",
+      "cite/marker": "[41]",
+      "cite/raw": "\\cite{ntv}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, V. Turaev L. Vainerman: Invariants of Knots and 3-manifolds from Quantum Groupoids. math.QA/0006078 .:",
+        "candidate": "QA/0006078",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        120783,
+        120792
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "ka",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{ka}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Kassel: Quantum groups . Springer-Verlag, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum groups"
+    },
+    {
+      "char-anchor": [
+        120997,
+        121009
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        121077,
+        121102
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Remark 3.18]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        121137,
+        121148
+      ],
+      "cite/group-marker": "[46]",
+      "cite/key": "ostr",
+      "cite/marker": "[46]",
+      "cite/raw": "\\cite{ostr}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111139",
+      "resolved-corpus-id": "math__0111139",
+      "title": "Module categories, weak Hopf algebras and modular invariants"
+    },
+    {
+      "char-anchor": [
+        122195,
+        122206
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "bebl",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{bebl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Beliakova C. Blanchet: Modular categories of types B, C and D. Comment. Math. Helv. 76 , 467-500 (2001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "76"
+    },
+    {
+      "char-anchor": [
+        122706,
+        122720
+      ],
+      "cite/group-marker": "[32,33]",
+      "cite/key": "ly1",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{ly1,ly2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko: Tangles and s in braided categories. J. Pure Appl. Alg. 98 , 245-278 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "98"
+    },
+    {
+      "char-anchor": [
+        122706,
+        122720
+      ],
+      "cite/group-marker": "[32,33]",
+      "cite/key": "ly2",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{ly1,ly2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko: Modular transformations for tensor categories. J. Pure Appl. Alg. 98 , 279-327 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "98"
+    },
+    {
+      "char-anchor": [
+        123040,
+        123052
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "baez2",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{baez2}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "2401.14311",
+      "resolved-corpus-id": "2401.14311",
+      "title": "Higher categories"
+    },
+    {
+      "char-anchor": [
+        123150,
+        123167
+      ],
+      "cite/group-marker": "[3,10]",
+      "cite/key": "baez",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{baez,crans}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. C. Baez M. Neuchl: Higher dimensional algebra. I: Braided monoidal 2-categories. Adv. Math. 121 , 196-244 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "121"
+    },
+    {
+      "char-anchor": [
+        123150,
+        123167
+      ],
+      "cite/group-marker": "[3,10]",
+      "cite/key": "crans",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{baez,crans}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. E. Crans: Generalized centers of braided and sylleptic monoidal 2-categories. Adv. Math. 136 , 183-223 (1998)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "136"
+    },
+    {
+      "char-anchor": [
+        123611,
+        123637
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "y",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite[Proposition\n2.11]{y}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. N. Yetter: Framed tangles and a theorem of Deligne on braided deformations of tannakian categories. Contemp. Math. 134 , 325-350 (1992)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "134"
+    },
+    {
+      "char-anchor": [
+        124255,
+        124265
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "lro",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{lro}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Longo J. E. Roberts: A theory of dimension. K-Theory 11 , 103-159 (1997)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "11"
+    },
+    {
+      "char-anchor": [
+        124820,
+        124830
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        129022,
+        129035
+      ],
+      "cite/group-marker": "[53,48]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t,khr1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        129022,
+        129035
+      ],
+      "cite/group-marker": "[53,48]",
+      "cite/key": "khr1",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{t,khr1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K.-H. Rehren: Braid group statistics and their superselection rules. In : D. Kastler (ed.): The algebraic theory of superselection sectors. Introduction and recent results . World Scientific, 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In"
+    },
+    {
+      "char-anchor": [
+        129214,
+        129222
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        129490,
+        129501
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "khr1",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{khr1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K.-H. Rehren: Braid group statistics and their superselection rules. In : D. Kastler (ed.): The algebraic theory of superselection sectors. Introduction and recent results . World Scientific, 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In"
+    },
+    {
+      "char-anchor": [
+        131079,
+        131089
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        131114,
+        131124
+      ],
+      "cite/group-marker": "[25]",
+      "cite/key": "klm",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{klm}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Y. Kawahigashi, R. Longo M. Muger: Multi-interval subfactors and modularity of representations in conformal field theory. Commun. Math. Phys. 219 , 631-669 (2001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "219"
+    },
+    {
+      "char-anchor": [
+        131455,
+        131465
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "glr",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{glr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Ghez, R. Lima J. E. Roberts: W^* -categories. Pac. J. Math. 120 , 79-109 (1985)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "120"
+    },
+    {
+      "char-anchor": [
+        132333,
+        132361
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Subsection 5.3]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        132672,
+        132682
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "lro",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{lro}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Longo J. E. Roberts: A theory of dimension. K-Theory 11 , 103-159 (1997)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "11"
+    },
+    {
+      "char-anchor": [
+        133181,
+        133209
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Subsection 5.3]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        136589,
+        136618
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Proposition 5.6]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        137077,
+        137108
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "ka",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite[Proposition XIII.4.3]{ka}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. Kassel: Quantum groups . Springer-Verlag, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum groups"
+    },
+    {
+      "char-anchor": [
+        146003,
+        146015
+      ],
+      "cite/group-marker": "[40]",
+      "cite/key": "mue11",
+      "cite/marker": "[40]",
+      "cite/raw": "\\cite{mue11}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Muger: On Galois extensions of braided tensor categories, mapping class group representations and simple current extensions. In preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        150273,
+        150284
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "bebl",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{bebl}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Beliakova C. Blanchet: Modular categories of types B, C and D. Comment. Math. Helv. 76 , 467-500 (2001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "76"
+    },
+    {
+      "char-anchor": [
+        150559,
+        150567
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        151894,
+        151920
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "cwm",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite[Theorem IV.4.1]{cwm}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane: Categories for the working mathematician . 2nd ed. Springer-Verlag, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        153404,
+        153416
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        154370,
+        154378
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        154465,
+        154475
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "rt2",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{rt2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Yu. Reshetikhin V. G. Turaev: Invariants of 3-manifolds via link polynomials and quantum groups. Invent. Math. 103 , 547-598 (1991)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "103"
+    },
+    {
+      "char-anchor": [
+        154625,
+        154637
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "brug1",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{brug1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Bruguieres: Categories premodulaires, modularisations et invariants de varietes de dimension 3. Math. Ann. 316 , 215-236 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "316"
+    },
+    {
+      "char-anchor": [
+        154998,
+        155007
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "tv",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{tv}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev O. Y. Viro: State sum invariants of 3-manifolds and quantum 6j-symbols, Topology 31 , 865-902 (1992)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "31"
+    },
+    {
+      "char-anchor": [
+        155092,
+        155100
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        155220,
+        155234
+      ],
+      "cite/group-marker": "[5,16]",
+      "cite/key": "bw1",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{bw1,\ngk}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Invariants of piecewise-linear 3-manifolds. Trans. Amer. Math. Soc. 348 , 3997-4022 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "348"
+    },
+    {
+      "char-anchor": [
+        155220,
+        155234
+      ],
+      "cite/group-marker": "[5,16]",
+      "cite/key": "gk",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{bw1,\ngk}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Gelfand D. Kazhdan: Invariants of three-dimensional manifolds. Geom. Funct. Anal. 6 , 268-300 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        155302,
+        155313
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "ocn4",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{ocn4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu: An invariant coupling between 3-manifolds and subfactors, with connections to topological and conformal quantum field theory. Unpublished manuscript. Ca. 1991",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        155441,
+        155464
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "gk",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite[Conjecture 1]{gk}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Gelfand D. Kazhdan: Invariants of three-dimensional manifolds. Geom. Funct. Anal. 6 , 268-300 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        155790,
+        155799
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "gk",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{gk}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Gelfand D. Kazhdan: Invariants of three-dimensional manifolds. Geom. Funct. Anal. 6 , 268-300 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        156245,
+        156256
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "ocn3",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{ocn3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu (notes by Y. Kawahigashi): Chirality for operator algebras. In: Araki, H. et al. (eds.): Subfactors . World Scientific, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        156289,
+        156312
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "ek1",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite[Theorem 3.1]{ek1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. E. Evans Y. Kawahigashi: On Ocneanu's theory of asymptotic inclusions for subfactors, topological quantum field theories and s. Int. J. Math. 6 , 205-228 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        156426,
+        156442
+      ],
+      "cite/group-marker": "[45,15]",
+      "cite/key": "ocn3",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{ocn3, ek1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu (notes by Y. Kawahigashi): Chirality for operator algebras. In: Araki, H. et al. (eds.): Subfactors . World Scientific, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        156426,
+        156442
+      ],
+      "cite/group-marker": "[45,15]",
+      "cite/key": "ek1",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{ocn3, ek1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. E. Evans Y. Kawahigashi: On Ocneanu's theory of asymptotic inclusions for subfactors, topological quantum field theories and s. Int. J. Math. 6 , 205-228 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        156476,
+        156487
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "kosu",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{kosu}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Kodiyalam V. S. Sunder: Topological quantum field theories from subfactors . Chapman Hall/CRC Research Notes in Mathematics, 2001",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Topological quantum field theories from subfactors"
+    },
+    {
+      "char-anchor": [
+        156526,
+        156549
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Section 7]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        156624,
+        156638
+      ],
+      "cite/group-marker": "[5,16]",
+      "cite/key": "bw1",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{bw1, gk}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Invariants of piecewise-linear 3-manifolds. Trans. Amer. Math. Soc. 348 , 3997-4022 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "348"
+    },
+    {
+      "char-anchor": [
+        156624,
+        156638
+      ],
+      "cite/group-marker": "[5,16]",
+      "cite/key": "gk",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{bw1, gk}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Gelfand D. Kazhdan: Invariants of three-dimensional manifolds. Geom. Funct. Anal. 6 , 268-300 (1996)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        156731,
+        156743
+      ],
+      "cite/group-marker": "[39]",
+      "cite/key": "mue15",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{mue15}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Muger: From subfactors to categories and topology III. Triangulation invariants of 3-manifolds and Morita equivalence of tensor categories. In preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        156964,
+        156972
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        156977,
+        156997
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "bw2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite[p.\\ 4018]{bw2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Spherical categories. Adv. Math. 143 , 357-375 (1999)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "143"
+    },
+    {
+      "char-anchor": [
+        157185,
+        157193
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        157652,
+        157673
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "ke",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[Question 5]{ke}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Kerler: Genealogy of non-perturbative quantum-invariants of 3 -manifolds: the surgical family. In: Geometry and physics (Aarhus, 1995), 503--547, Lecture Notes in Pure and Appl. Math., 184, Dekker, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        158322,
+        158349
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite[Theorem VII.4.1.1]{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        159048,
+        159058
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "bw2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{bw2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Spherical categories. Adv. Math. 143 , 357-375 (1999)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "143"
+    },
+    {
+      "char-anchor": [
+        159269,
+        159294
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[Theorem 7.1]{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        159373,
+        159383
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "bw2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{bw2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Spherical categories. Adv. Math. 143 , 357-375 (1999)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "143"
+    },
+    {
+      "char-anchor": [
+        159859,
+        159869
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "iz1",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{iz1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of Longo-Rehren inclusions. Preprint 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        160667,
+        160677
+      ],
+      "cite/group-marker": "[30]",
+      "cite/key": "lre",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{lre}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Longo K.-H. Rehren: Nets of subfactors. 7 , 567-597 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "7"
+    },
+    {
+      "char-anchor": [
+        160844,
+        160853
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "lo",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{lo}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. Longo: A duality for s and for subfactors I. 159 , 133-150 (1994)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "159"
+    },
+    {
+      "char-anchor": [
+        162394,
+        162406
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        163308,
+        163318
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        164095,
+        164118
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite[Theorem 4.1]{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        164288,
+        164311
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "iz2",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite[Theorem 4.6]{iz2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Izumi: The structure of sectors associated with Longo-Rehren inclusions. 213 , 127-179 (2000)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "213"
+    },
+    {
+      "char-anchor": [
+        164708,
+        164719
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "ocn3",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{ocn3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu (notes by Y. Kawahigashi): Chirality for operator algebras. In: Araki, H. et al. (eds.): Subfactors . World Scientific, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        164750,
+        164761
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "ocn2",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite{ocn2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ocneanu (notes by Y. Kawahigashi): Quantum symmetry, differential geometry of finite graphs and classification of subfactors. Lectures given at Tokyo Univ. 1990",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        164790,
+        164800
+      ],
+      "cite/group-marker": "[37]",
+      "cite/key": "mas",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{mas}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Masuda: An analogue of Longo's canonical endomorphism for bimodule theory and its application to asymptotic inclusions. Int. J. Math. 8 , 249-265 (1997)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "8"
+    },
+    {
+      "char-anchor": [
+        166781,
+        166793
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "mue09",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{mue09}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0111204",
+      "resolved-corpus-id": "math__0111204",
+      "title": "From Subfactors to Categories and Topology I. Frobenius algebras in and Morita equivalence of tensor categories"
+    },
+    {
+      "char-anchor": [
+        167906,
+        167915
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "ac",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{ac}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Altschuler A. Coste: Invariants of 3-manifolds from finite groups. In: Proc. XXth Int. Conf. Diff. Geom. Meth. in Theor. Phys., New York, 1991, pp.\\ 219--233, World Scientific, 1992",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        168031,
+        168040
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "eg",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{eg}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof S. Gelaki: Some properties of finite dimensional semi-simple Hopf algebras. Math. Res. Lett. 5 , 191-197 (1998)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "5"
+    },
+    {
+      "char-anchor": [
+        168129,
+        168139
+      ],
+      "cite/group-marker": "[41]",
+      "cite/key": "ntv",
+      "cite/marker": "[41]",
+      "cite/raw": "\\cite{ntv}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Nikshych, V. Turaev L. Vainerman: Invariants of Knots and 3-manifolds from Quantum Groupoids. math.QA/0006078 .:",
+        "candidate": "QA/0006078",
+        "kind": "unresolved-citation",
+        "reason": "candidate-not-in-corpus-id-set"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        168222,
+        168236
+      ],
+      "cite/group-marker": "[32,33]",
+      "cite/key": "ly1",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{ly1,ly2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko: Tangles and s in braided categories. J. Pure Appl. Alg. 98 , 245-278 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "98"
+    },
+    {
+      "char-anchor": [
+        168222,
+        168236
+      ],
+      "cite/group-marker": "[32,33]",
+      "cite/key": "ly2",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{ly1,ly2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko: Modular transformations for tensor categories. J. Pure Appl. Alg. 98 , 279-327 (1995)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "98"
+    },
+    {
+      "char-anchor": [
+        168247,
+        168258
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "lyma",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{lyma}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko S. Majid: Braided groups and quantum Fourier transform. J. Algebra 166 , 506-528 (1994)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "166"
+    },
+    {
+      "char-anchor": [
+        169102,
+        169112
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "rad",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite{rad}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. E. Radford: Minimal s. J. Algebra 157 , 285-315 (1993)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "157"
+    },
+    {
+      "char-anchor": [
+        169150,
+        169160
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "eg2",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{eg2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Etingof S. Gelaki: On finite-dimensional semisimple and cosemisimple Hopf algebras in positive characterstic. Int. Math. Res. Not. 1998 , 187-195",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "1998"
+    },
+    {
+      "char-anchor": [
+        169787,
+        169796
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "ls",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{ls}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. G. Larson M. E. Sweedler: An associative orthogonal bilinear form for s. Amer. J. Math. 91 , 75-94 (1969)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "91"
+    },
+    {
+      "char-anchor": [
+        169863,
+        169887
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "ls",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite[Proposition 8]{ls}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. G. Larson M. E. Sweedler: An associative orthogonal bilinear form for s. Amer. J. Math. 91 , 75-94 (1969)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "91"
+    },
+    {
+      "char-anchor": [
+        170128,
+        170138
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "bw2",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{bw2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. W. Barrett B. W. Westbury: Spherical categories. Adv. Math. 143 , 357-375 (1999)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "143"
+    },
+    {
+      "char-anchor": [
+        170301,
+        170313
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "drin1",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{drin1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Drinfel'd: On almost cocommutative Hopf algebras. Leningrad Math. J. 1 , 321-342 (1990)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "1"
+    },
+    {
+      "char-anchor": [
+        170779,
+        170787
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "t",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{t}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. G. Turaev: Quantum invariants of knots and 3-manifolds . Walter de Gruyter, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quantum invariants of knots and 3-manifolds"
+    },
+    {
+      "char-anchor": [
+        171260,
+        171284
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "kr",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite[Proposition 4]{kr}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Kauffman, L. H., Radford, D. E.: A necessary and sufficient condition for a finite-dimensional Drinfel'd double to be a ribbon . J. Algebra 159 , 98-114 (1993)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "159"
+    },
+    {
+      "char-anchor": [
+        171977,
+        171987
+      ],
+      "cite/group-marker": "[49]",
+      "cite/key": "rst",
+      "cite/marker": "[49]",
+      "cite/raw": "\\cite{rst}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Yu. Reshetikhin M. A. Semenov-Tian-Shansky: Quantum R-matrices and factorization problems. J. Geom. Phys. 5 , 533-550 (1988)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "5"
+    },
+    {
+      "char-anchor": [
+        172298,
+        172312
+      ],
+      "cite/group-marker": "[34,26]",
+      "cite/key": "lyma",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{lyma,ke}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko S. Majid: Braided groups and quantum Fourier transform. J. Algebra 166 , 506-528 (1994)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "166"
+    },
+    {
+      "char-anchor": [
+        172298,
+        172312
+      ],
+      "cite/group-marker": "[34,26]",
+      "cite/key": "ke",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{lyma,ke}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Kerler: Genealogy of non-perturbative quantum-invariants of 3 -manifolds: the surgical family. In: Geometry and physics (Aarhus, 1995), 503--547, Lecture Notes in Pure and Appl. Math., 184, Dekker, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    },
+    {
+      "char-anchor": [
+        172394,
+        172405
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "lyma",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{lyma}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko S. Majid: Braided groups and quantum Fourier transform. J. Algebra 166 , 506-528 (1994)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "166"
+    },
+    {
+      "char-anchor": [
+        172800,
+        172811
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "lyma",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{lyma}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko S. Majid: Braided groups and quantum Fourier transform. J. Algebra 166 , 506-528 (1994)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "166"
+    },
+    {
+      "char-anchor": [
+        174115,
+        174139
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "ls",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite[Proposition 8]{ls}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. G. Larson M. E. Sweedler: An associative orthogonal bilinear form for s. Amer. J. Math. 91 , 75-94 (1969)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "91"
+    },
+    {
+      "char-anchor": [
+        176765,
+        176773
+      ],
+      "cite/group-marker": "[55]",
+      "cite/key": "w",
+      "cite/marker": "[55]",
+      "cite/raw": "\\cite{w}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. L. Woronowicz: Compact matrix pseudogroups. Commun. Math. Phys. 111 , 613-665 (1987)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "111"
+    },
+    {
+      "char-anchor": [
+        177505,
+        177513
+      ],
+      "cite/group-marker": "[42]",
+      "cite/key": "n",
+      "cite/marker": "[42]",
+      "cite/raw": "\\cite{n}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "F. Nill: Weyl algebras, Fourier transformations and integral on finite-dimensional Hopf algebras. Rev. Math. Phys. 6 , 149-166 (1994)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        177977,
+        177988
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "lyma",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{lyma}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. V. Lyubashenko S. Majid: Braided groups and quantum Fourier transform. J. Algebra 166 , 506-528 (1994)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "166"
+    },
+    {
+      "char-anchor": [
+        178985,
+        179009
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "ke",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[Proposition 9]{ke}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "T. Kerler: Genealogy of non-perturbative quantum-invariants of 3 -manifolds: the surgical family. In: Geometry and physics (Aarhus, 1995), 503--547, Lecture Notes in Pure and Appl. Math., 184, Dekker, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "In:"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__0111205-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 146,
+    "resolution-rate": 0.2065,
+    "resolved": 38,
+    "total": 184
+  }
+}

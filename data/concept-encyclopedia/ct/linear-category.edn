@@ -1,0 +1,25 @@
+{:name "linear category",
+ :df 354,
+ :concept/id :linear-category,
+ :msc "ct",
+ :defined-in
+ {:n-papers 31,
+  :sample
+  ["0812.4969" "0901.3975" "1110.1711" "1112.0781" "1206.6632"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0812.4969",
+  :text
+  "First, a {\\bf linear category} is a category where for each pair of objects $x$ and $y$, the set of morphisms from $x$ to $y$ is equipped with the structure of a finite-dimensional complex vector space, and com"}}

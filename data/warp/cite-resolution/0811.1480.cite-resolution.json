@@ -1,0 +1,3186 @@
+{
+  "paper-id": "0811.1480",
+  "records": [
+    {
+      "char-anchor": [
+        5925,
+        5941
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "MR0338129",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{MR0338129}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341. MR0338129 (49 2895)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        6051,
+        6068
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "barr-exact",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{barr-exact}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "0811.1480",
+      "resolved-corpus-id": "0811.1480",
+      "title": "Exact Categories"
+    },
+    {
+      "char-anchor": [
+        6986,
+        7012
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "rump-counterexample",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{rump-counterexample}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A counterexample to R aikov's conjecture , Bull. London Math. Soc. 40 (2008), 985--994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "40"
+    },
+    {
+      "char-anchor": [
+        7315,
+        7331
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "MR0166240",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{MR0166240}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Abelian categories. A n introduction to the theory of functors , Harper's Series in Modern Mathematics, Harper Row Publishers, New York, 1964. MR0166240 (29 3517)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        7336,
+        7352
+      ],
+      "cite/group-marker": "[46]",
+      "cite/key": "MR0167511",
+      "cite/marker": "[46]",
+      "cite/raw": "\\cite{MR0167511}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Barry Mitchell, The full imbedding theorem, Amer. J. Math. 86 (1964), 619--637. MR0167511 (29 4783)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The full imbedding theorem"
+    },
+    {
+      "char-anchor": [
+        7992,
+        8008
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "MR0146234",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{MR0146234}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Freyd, Relative homological algebra made absolute, Proc. Nat. Acad. Sci. U.S.A. 49 (1963), 19--20. MR0146234 (26 3756)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Relative homological algebra made absolute"
+    },
+    {
+      "char-anchor": [
+        9599,
+        9615
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "MR0080654",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{MR0080654}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Hochschild, Relative homological algebra, Trans. Amer. Math. Soc. 82 (1956), 246--269. MR0080654 (18,278a)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Relative homological algebra"
+    },
+    {
+      "char-anchor": [
+        9775,
+        9801
+      ],
+      "cite/group-marker": "[30,9]",
+      "cite/key": "MR0147577",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{MR0147577,MR1721403}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Hochschild and G. D. Mostow, Cohomology of L ie groups , Illinois J. Math. 6 (1962), 367--401. MR0147577 (26 5092)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "6"
+    },
+    {
+      "char-anchor": [
+        9775,
+        9801
+      ],
+      "cite/group-marker": "[30,9]",
+      "cite/key": "MR1721403",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{MR0147577,MR1721403}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Borel and N. Wallach, Continuous cohomology, discrete subgroups, and representations of reductive groups, Mathematical Surveys and Monographs, vol. 67, American Mathematical Society, Providence, RI, 2000. MR1721403 (2000j:22015)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Continuous cohomology, discrete subgroups, and representations of reductive groups"
+    },
+    {
+      "char-anchor": [
+        9834,
+        9850
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "MR2329311",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{MR2329311}",
+      "confidence": 0.9762,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0510345",
+      "resolved-corpus-id": "math__0510345",
+      "title": "Homological algebra with locally compact abelian groups"
+    },
+    {
+      "char-anchor": [
+        9891,
+        9917
+      ],
+      "cite/group-marker": "[32,25]",
+      "cite/key": "MR0417787",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{MR0417787,MR1093462}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. E. Johnson, Introduction to cohomology in B anach algebras , Algebras in analysis (Proc. Instructional Conf. and NATO Advanced Study Inst., Birmingham, 1973), Academic Press, London, 1975, pp. 84--100. MR0417787 (54 5835)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9891,
+        9917
+      ],
+      "cite/group-marker": "[32,25]",
+      "cite/key": "MR1093462",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{MR0417787,MR1093462}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Ya. Helemskii, The homology of B anach and topological algebras , Mathematics and its Applications (Soviet Series), vol. 41, Kluwer Academic Publishers Group, Dordrecht, 1989. MR1093462 (92d:46178)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        10229,
+        10244
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "MR935124",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{MR935124}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Dieter Happel, Triangulated categories in the representation theory of finite-dimensional algebras, London Mathematical Society Lecture Note Series, vol. 119, Cambridge University Press, Cambridge, 1988. MR935124 (89e:16035)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Triangulated categories in the representation theory of finite-dimensional algebras"
+    },
+    {
+      "char-anchor": [
+        10627,
+        10643
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "MR0338129",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{MR0338129}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341. MR0338129 (49 2895)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        10667,
+        10683
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "MR2181829",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{MR2181829}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Paul Balmer, Witt groups, Handbook of K -theory. V ol. 1, 2, Springer, Berlin, 2005, pp. 539--576. MR2181829 (2006h:19004)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Witt groups"
+    },
+    {
+      "char-anchor": [
+        10727,
+        10745
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "schlichting",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{schlichting}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Marco Schlichting, Hermitian K -theory of exact categories , preprint, to appear in J. of K -theory (2008), 1--49",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        13341,
+        13357
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        14348,
+        14364
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        14387,
+        14403
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "MR0140556",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{MR0140556}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "David A. Buchsbaum, A note on homology in categories, Ann. of Math. (2) 69 (1959), 66--74. MR0140556 (25 3974)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A note on homology in categories"
+    },
+    {
+      "char-anchor": [
+        14426,
+        14442
+      ],
+      "cite/group-marker": "[60]",
+      "cite/key": "MR0225854",
+      "cite/marker": "[60]",
+      "cite/raw": "\\cite{MR0225854}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nobuo Yoneda, On E xt and exact sequences , J. Fac. Sci. Univ. Tokyo Sect. I 8 (1960), 507--576. MR0225854 (37 1445)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "8"
+    },
+    {
+      "char-anchor": [
+        14471,
+        14487
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "MR0188267",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{MR0188267}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. C. R. Butler and G. Horrocks, Classes of extensions and resolutions, Philos. Trans. Roy. Soc. London Ser. A 254 (1961/1962), 155--222. MR0188267 (32 5706)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Classes of extensions and resolutions"
+    },
+    {
+      "char-anchor": [
+        14521,
+        14544
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "MR0156879",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite[XII.4]{MR0156879}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane, Homology, Die Grundlehren der mathematischen Wissenschaften, Bd. 114, Academic Press Inc., Publishers, New York, 1963. MR0156879 (28 122)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homology"
+    },
+    {
+      "char-anchor": [
+        14813,
+        14847
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "MR0338129",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite[p.~``92/16/100'']{MR0338129}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341. MR0338129 (49 2895)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        14930,
+        14952
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[\\S~3]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        15096,
+        15112
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        15191,
+        15207
+      ],
+      "cite/group-marker": "[?]",
+      "cite/key": "MR0102537",
+      "cite/marker": "[?]",
+      "cite/raw": "\\cite{MR0102537}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": null,
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        15620,
+        15655
+      ],
+      "cite/group-marker": "[60]",
+      "cite/key": "MR0225854",
+      "cite/marker": "[60]",
+      "cite/raw": "\\cite[p.~525, Corollary]{MR0225854}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nobuo Yoneda, On E xt and exact sequences , J. Fac. Sci. Univ. Tokyo Sect. I 8 (1960), 507--576. MR0225854 (37 1445)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "8"
+    },
+    {
+      "char-anchor": [
+        15711,
+        15732
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "MR1052551",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite[A.1]{MR1052551}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller, Chain complexes and stable categories, Manuscripta Math. 67 (1990), no. 4, 379--417. MR1052551 (91h:18006)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chain complexes and stable categories"
+    },
+    {
+      "char-anchor": [
+        16055,
+        16083
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "MR1438546",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite[Chapter~II]{MR1438546}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Hilton and U. Stammbach, A course in homological algebra, Graduate Texts in Mathematics, vol. 4, Springer-Verlag, New York, 1997. MR1438546 (97k:18001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A course in homological algebra"
+    },
+    {
+      "char-anchor": [
+        16096,
+        16124
+      ],
+      "cite/group-marker": "[59]",
+      "cite/key": "MR1269324",
+      "cite/marker": "[59]",
+      "cite/raw": "\\cite[Appendix~A]{MR1269324}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Charles A. Weibel, An introduction to homological algebra, Cambridge Studies in Advanced Mathematics, vol. 38, Cambridge University Press, Cambridge, 1994. MR1269324 (95f:18001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An introduction to homological algebra"
+    },
+    {
+      "char-anchor": [
+        16803,
+        16819
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        16830,
+        16856
+      ],
+      "cite/group-marker": "[36,38]",
+      "cite/key": "MR1052551",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{MR1052551,MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller, Chain complexes and stable categories, Manuscripta Math. 67 (1990), no. 4, 379--417. MR1052551 (91h:18006)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chain complexes and stable categories"
+    },
+    {
+      "char-anchor": [
+        16830,
+        16856
+      ],
+      "cite/group-marker": "[36,38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{MR1052551,MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        16870,
+        16886
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        17246,
+        17274
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "MR1052551",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite[Appendix~A]{MR1052551}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller, Chain complexes and stable categories, Manuscripta Math. 67 (1990), no. 4, 379--417. MR1052551 (91h:18006)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chain complexes and stable categories"
+    },
+    {
+      "char-anchor": [
+        17357,
+        17379
+      ],
+      "cite/group-marker": "[60]",
+      "cite/key": "MR0225854",
+      "cite/marker": "[60]",
+      "cite/raw": "\\cite[\\S~2]{MR0225854}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nobuo Yoneda, On E xt and exact sequences , J. Fac. Sci. Univ. Tokyo Sect. I 8 (1960), 507--576. MR0225854 (37 1445)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "8"
+    },
+    {
+      "char-anchor": [
+        17641,
+        17663
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "MR0338129",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite[\\S~2]{MR0338129}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341. MR0338129 (49 2895)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        22177,
+        22201
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "MR1052551",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite[App.~A]{MR1052551}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller, Chain complexes and stable categories, Manuscripta Math. 67 (1990), no. 4, 379--417. MR1052551 (91h:18006)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chain complexes and stable categories"
+    },
+    {
+      "char-anchor": [
+        23292,
+        23319
+      ],
+      "cite/group-marker": "[36,38]",
+      "cite/key": "MR1052551",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{MR1052551, MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller, Chain complexes and stable categories, Manuscripta Math. 67 (1990), no. 4, 379--417. MR1052551 (91h:18006)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chain complexes and stable categories"
+    },
+    {
+      "char-anchor": [
+        23292,
+        23319
+      ],
+      "cite/group-marker": "[36,38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{MR1052551, MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        23515,
+        23538
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "MR1239447",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite[Ch.~9]{MR1239447}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Gabriel and A. V. Ro ter, Representations of finite-dimensional algebras, Algebra, VIII , Encyclopaedia Math. Sci., vol. 73, Springer, Berlin, 1992, With a chapter by B. Keller, pp. 1--177. MR1239447 (94h:16001b)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations of finite-dimensional algebras"
+    },
+    {
+      "char-anchor": [
+        23741,
+        23757
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "MR1608305",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{MR1608305}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Dr axler, Idun Reiten, Sverre O. Smal , and yvind Solberg, Exact categories and vector space categories, Trans. Amer. Math. Soc. 351 (1999), no. 2, 647--682, With an appendix by B. Keller. MR1608305 (99f:16001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Exact categories and vector space categories"
+    },
+    {
+      "char-anchor": [
+        23899,
+        23942
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "MR0166240",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite[Ch.~7, Exercise~G, p.~153]{MR0166240}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Abelian categories. A n introduction to the theory of functors , Harper's Series in Modern Mathematics, Harper Row Publishers, New York, 1964. MR0166240 (29 3517)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        25061,
+        25083
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "MR0338129",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite[\\S~2]{MR0338129}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341. MR0338129 (49 2895)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        34376,
+        34398
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "MR0338129",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite[\\S~2]{MR0338129}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341. MR0338129 (49 2895)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        34490,
+        34525
+      ],
+      "cite/group-marker": "[60]",
+      "cite/key": "MR0225854",
+      "cite/marker": "[60]",
+      "cite/raw": "\\cite[Corollary, p.~525]{MR0225854}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Nobuo Yoneda, On E xt and exact sequences , J. Fac. Sci. Univ. Tokyo Sect. I 8 (1960), 507--576. MR0225854 (37 1445)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "8"
+    },
+    {
+      "char-anchor": [
+        34594,
+        34615
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "MR1052551",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite[A.1]{MR1052551}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller, Chain complexes and stable categories, Manuscripta Math. 67 (1990), no. 4, 379--417. MR1052551 (91h:18006)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chain complexes and stable categories"
+    },
+    {
+      "char-anchor": [
+        34671,
+        34694
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.1.1]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        48294,
+        48315
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[6.2]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        49403,
+        49434
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "MR0156879",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite[XII.6, p.~375]{MR0156879}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane, Homology, Die Grundlehren der mathematischen Wissenschaften, Bd. 114, Academic Press Inc., Publishers, New York, 1963. MR0156879 (28 122)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homology"
+    },
+    {
+      "char-anchor": [
+        49488,
+        49504
+      ],
+      "cite/group-marker": "[41]",
+      "cite/key": "MR2366951",
+      "cite/marker": "[41]",
+      "cite/raw": "\\cite{MR2366951}",
+      "confidence": 0.9,
+      "hole": null,
+      "method": "fuzzy-author-title",
+      "resolved-arxiv-id": "math/0508565",
+      "resolved-corpus-id": "math__0508565",
+      "title": "Heller triangulated categories"
+    },
+    {
+      "char-anchor": [
+        52165,
+        52188
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "MR1779315",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite[1.1.7]{MR1779315}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Jean-Pierre Schneiders, Quasi-abelian categories and sheaves, Mem. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134. MR1779315 (2001i:18023)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        53761,
+        53783
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "MR0156879",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite[IX.2]{MR0156879}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane, Homology, Die Grundlehren der mathematischen Wissenschaften, Bd. 114, Academic Press Inc., Publishers, New York, 1963. MR0156879 (28 122)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homology"
+    },
+    {
+      "char-anchor": [
+        54610,
+        54633
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "MR1779315",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite[1.1.5]{MR1779315}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Jean-Pierre Schneiders, Quasi-abelian categories and sheaves, Mem. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134. MR1779315 (2001i:18023)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        56163,
+        56189
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "rump-counterexample",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{rump-counterexample}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A counterexample to R aikov's conjecture , Bull. London Math. Soc. 40 (2008), 985--994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "40"
+    },
+    {
+      "char-anchor": [
+        56335,
+        56351
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "MR1779315",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{MR1779315}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Jean-Pierre Schneiders, Quasi-abelian categories and sheaves, Mem. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134. MR1779315 (2001i:18023)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        56358,
+        56374
+      ],
+      "cite/group-marker": "[51]",
+      "cite/key": "MR1856638",
+      "cite/marker": "[51]",
+      "cite/raw": "\\cite{MR1856638}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Wolfgang Rump, Almost abelian categories, Cahiers Topologie Geom. Differentielle Categ. 42 (2001), no. 3, 163--225. MR1856638 (2002m:18008)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Almost abelian categories"
+    },
+    {
+      "char-anchor": [
+        57586,
+        57607
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[7.3]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        60171,
+        60192
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "MR0238927",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite[1.2]{MR0238927}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Max Karoubi, Algebres de C lifford et K -theorie , Ann. Sci. Ecole Norm. Sup. (4) 1 (1968), 161--270. MR0238927 (39 287)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "1"
+    },
+    {
+      "char-anchor": [
+        60572,
+        60615
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "MR1291599",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite[Proposition~6.5.9, p.~274]{MR1291599}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Francis Borceux, Handbook of categorical algebra. 1, Encyclopedia of Mathematics and its Applications, vol. 50, Cambridge University Press, Cambridge, 1994. MR1291599 (96g:18001a)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra. 1"
+    },
+    {
+      "char-anchor": [
+        60672,
+        60691
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "bungesthesis",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{bungesthesis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Marta Bunge, Categories of set-valued functors, Ph.D. thesis, University of Pennsylvania, 1966",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories of set-valued functors"
+    },
+    {
+      "char-anchor": [
+        60770,
+        60800
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "MR0238927",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite[1.2.1, 1.2.2]{MR0238927}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Max Karoubi, Algebres de C lifford et K -theorie , Ann. Sci. Ecole Norm. Sup. (4) 1 (1968), 161--270. MR0238927 (39 287)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "1"
+    },
+    {
+      "char-anchor": [
+        66645,
+        66675
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "MR1712872",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite[II.5, p.~42f]{MR1712872}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Categories for the working mathematician, Graduate Texts in Mathematics, vol. 5, Springer-Verlag, New York, 1998. MR1712872 (2001j:18001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories for the working mathematician"
+    },
+    {
+      "char-anchor": [
+        73695,
+        73722
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.9.1~(b)]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        75358,
+        75381
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.5.1]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        76480,
+        76496
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "MR0206069",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{MR0206069}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Splitting homotopy idempotents, Proc. C onf. C ategorical A lgebra ( L a J olla, C alif., 1965), Springer, New York, 1966, pp. 173--176. MR0206069 (34 5894)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Splitting homotopy idempotents"
+    },
+    {
+      "char-anchor": [
+        78949,
+        78979
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[(P2), p.~492]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        81370,
+        81392
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "MR1080854",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite[1.12]{MR1080854}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Amnon Neeman, The derived category of an exact category, J. Algebra 135 (1990), no. 2, 388--394. MR1080854 (91m:18016)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The derived category of an exact category"
+    },
+    {
+      "char-anchor": [
+        82727,
+        82752
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "MR1313497",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite[p.~373f]{MR1313497}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra. 2, Encyclopedia of Mathematics and its Applications, vol. 51, Cambridge University Press, Cambridge, 1994. MR1313497 (96g:18001b)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra. 2"
+    },
+    {
+      "char-anchor": [
+        84207,
+        84234
+      ],
+      "cite/group-marker": "[51,54]",
+      "cite/key": "MR1856638",
+      "cite/marker": "[51]",
+      "cite/raw": "\\cite{MR1856638, MR1779315}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Wolfgang Rump, Almost abelian categories, Cahiers Topologie Geom. Differentielle Categ. 42 (2001), no. 3, 163--225. MR1856638 (2002m:18008)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Almost abelian categories"
+    },
+    {
+      "char-anchor": [
+        84207,
+        84234
+      ],
+      "cite/group-marker": "[51,54]",
+      "cite/key": "MR1779315",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{MR1856638, MR1779315}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Jean-Pierre Schneiders, Quasi-abelian categories and sheaves, Mem. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134. MR1779315 (2001i:18023)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        84398,
+        84419
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[3.4]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        85300,
+        85322
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "MR0156879",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite[IX.2]{MR0156879}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane, Homology, Die Grundlehren der mathematischen Wissenschaften, Bd. 114, Academic Press Inc., Publishers, New York, 1963. MR0156879 (28 122)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homology"
+    },
+    {
+      "char-anchor": [
+        85859,
+        85892
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "MR0209333",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite[Proposition~3.1]{MR0209333}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Representations in abelian categories, Proc. Conf. Categorical Algebra (La Jolla, Calif., 1965), Springer, New York, 1966, pp. 95--120. MR0209333 (35 231)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Representations in abelian categories"
+    },
+    {
+      "char-anchor": [
+        96312,
+        96333
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[4.3]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        97026,
+        97047
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[4.3]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        102327,
+        102359
+      ],
+      "cite/group-marker": "[58]",
+      "cite/key": "MR1453167",
+      "cite/marker": "[58]",
+      "cite/raw": "\\cite[Ch.II,\n  1.3.6]{MR1453167}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Jean-Louis Verdier, Des categories derivees des categories abeliennes, Asterisque (1996), no. 239, xii+253 pp., with a preface by Luc Illusie, edited and with a note by Georges Maltsiniotis. MR1453167 (98c:18007)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Des categories derivees des categories abeliennes"
+    },
+    {
+      "char-anchor": [
+        102518,
+        102534
+      ],
+      "cite/group-marker": "[58]",
+      "cite/key": "MR1453167",
+      "cite/marker": "[58]",
+      "cite/raw": "\\cite{MR1453167}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Jean-Louis Verdier, Des categories derivees des categories abeliennes, Asterisque (1996), no. 239, xii+253 pp., with a preface by Luc Illusie, edited and with a note by Georges Maltsiniotis. MR1453167 (98c:18007)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Des categories derivees des categories abeliennes"
+    },
+    {
+      "char-anchor": [
+        102571,
+        102586
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "MR751966",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{MR751966}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. A. Be linson, J. Bernstein, and P. Deligne, Faisceaux pervers, Analysis and topology on singular spaces, I (Luminy, 1981), Asterisque, vol. 100, Soc. Math. France, Paris, 1982, pp. 5--171. MR751966 (86g:32015)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Faisceaux pervers"
+    },
+    {
+      "char-anchor": [
+        102605,
+        102621
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "MR1950475",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{MR1950475}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Sergei I. Gelfand and Yuri I. Manin, Methods of homological algebra, Springer Monographs in Mathematics, Springer-Verlag, Berlin, 2003. MR1950475 (2003m:18001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Methods of homological algebra"
+    },
+    {
+      "char-anchor": [
+        102633,
+        102659
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "MR882000",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite[Chapter~I]{MR882000}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Borel, P.-P. Grivel, B. Kaup, A. Haefliger, B. Malgrange, and F. Ehlers, Algebraic D -modules , Perspectives in Mathematics, vol. 2, Academic Press Inc., Boston, MA, 1987. MR882000 (89g:32014)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        102682,
+        102698
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "MR2182076",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{MR2182076}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Masaki Kashiwara and Pierre Schapira, Categories and sheaves, Grundlehren der Mathematischen Wissenschaften [Fundamental Principles of Mathematical Sciences], vol. 332, Springer-Verlag, Berlin, 2006. MR2182076 (2006k:18001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        102710,
+        102726
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        102737,
+        102753
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "MR1812507",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{MR1812507}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Triangulated categories, Annals of Mathematics Studies, vol. 148, Princeton University Press, Princeton, NJ, 2001. MR1812507 (2001k:18010)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Triangulated categories"
+    },
+    {
+      "char-anchor": [
+        102764,
+        102780
+      ],
+      "cite/group-marker": "[59]",
+      "cite/key": "MR1269324",
+      "cite/marker": "[59]",
+      "cite/raw": "\\cite{MR1269324}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Charles A. Weibel, An introduction to homological algebra, Cambridge Studies in Advanced Mathematics, vol. 38, Cambridge University Press, Cambridge, 1994. MR1269324 (95f:18001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An introduction to homological algebra"
+    },
+    {
+      "char-anchor": [
+        105794,
+        105821
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "MR1812507",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite[Chapter~2]{MR1812507}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Triangulated categories, Annals of Mathematics Studies, vol. 148, Princeton University Press, Princeton, NJ, 2001. MR1812507 (2001k:18010)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Triangulated categories"
+    },
+    {
+      "char-anchor": [
+        108400,
+        108421
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "MR1080854",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite[1.1]{MR1080854}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Amnon Neeman, The derived category of an exact category, J. Algebra 135 (1990), no. 2, 388--394. MR1080854 (91m:18016)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The derived category of an exact category"
+    },
+    {
+      "char-anchor": [
+        113091,
+        113115
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "MR1052551",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite[2.3 a)]{MR1052551}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller, Chain complexes and stable categories, Manuscripta Math. 67 (1990), no. 4, 379--417. MR1052551 (91h:18006)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chain complexes and stable categories"
+    },
+    {
+      "char-anchor": [
+        114963,
+        114985
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[11.2]{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        122801,
+        122822
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "MR1080854",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite[1.9]{MR1080854}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Amnon Neeman, The derived category of an exact category, J. Algebra 135 (1990), no. 2, 388--394. MR1080854 (91m:18016)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The derived category of an exact category"
+    },
+    {
+      "char-anchor": [
+        124345,
+        124372
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "MR1812507",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite[Chapter~2]{MR1812507}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Triangulated categories, Annals of Mathematics Studies, vol. 148, Princeton University Press, Princeton, NJ, 2001. MR1812507 (2001k:18010)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Triangulated categories"
+    },
+    {
+      "char-anchor": [
+        124384,
+        124415
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[\\S\\S{} 10, 11]{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        125205,
+        125235
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[\\S\\S{} 9, 10]{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        125667,
+        125689
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[11.7]{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        127178,
+        127200
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[12.1]{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        130442,
+        130472
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[\\S\\S {13-15}]{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        134576,
+        134600
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[\\S{}13]{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        134972,
+        135000
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[15.1, 15.3]{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        136248,
+        136268
+      ],
+      "cite/group-marker": "[40]",
+      "cite/key": "MR907948",
+      "cite/marker": "[40]",
+      "cite/raw": "\\cite[1.6]{MR907948}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller and Dieter Vossieck, Sous les categories derivees, C. R. Acad. Sci. Paris Ser. I Math. 305 (1987), no. 6, 225--228. MR907948 (88m:18014)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sous les categories derivees"
+    },
+    {
+      "char-anchor": [
+        136299,
+        136320
+      ],
+      "cite/group-marker": "[37]",
+      "cite/key": "MR1102982",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite[6.7]{MR1102982}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and universal problems, Comm. Algebra 19 (1991), no. 3, 699--747. MR1102982 (92b:18010)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and universal problems"
+    },
+    {
+      "char-anchor": [
+        136710,
+        136740
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "MR1421815",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite[\\S\\S{}13--15]{MR1421815}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Derived categories and their uses, Handbook of algebra, Vol.\\ 1, North-Holland, Amsterdam, 1996, pp. 671--701. MR1421815 (98h:18013)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories and their uses"
+    },
+    {
+      "char-anchor": [
+        140512,
+        140533
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[5.6]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        141067,
+        141088
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[5.6]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        147568,
+        147600
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "MR1052551",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite[4.1, Lemma, b)]{MR1052551}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller, Chain complexes and stable categories, Manuscripta Math. 67 (1990), no. 4, 379--417. MR1052551 (91h:18006)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chain complexes and stable categories"
+    },
+    {
+      "char-anchor": [
+        153884,
+        153900
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "MR1731415",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{MR1731415}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Henri Cartan and Samuel Eilenberg, Homological algebra, Princeton Landmarks in Mathematics, Princeton University Press, Princeton, NJ, 1999. MR1731415 (2000h:18022)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra"
+    },
+    {
+      "char-anchor": [
+        153914,
+        153930
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "MR0156879",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite{MR0156879}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane, Homology, Die Grundlehren der mathematischen Wissenschaften, Bd. 114, Academic Press Inc., Publishers, New York, 1963. MR0156879 (28 122)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homology"
+    },
+    {
+      "char-anchor": [
+        153949,
+        153965
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "MR1438546",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{MR1438546}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. J. Hilton and U. Stammbach, A course in homological algebra, Graduate Texts in Mathematics, vol. 4, Springer-Verlag, New York, 1997. MR1438546 (97k:18001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A course in homological algebra"
+    },
+    {
+      "char-anchor": [
+        153979,
+        153995
+      ],
+      "cite/group-marker": "[59]",
+      "cite/key": "MR1269324",
+      "cite/marker": "[59]",
+      "cite/raw": "\\cite{MR1269324}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Charles A. Weibel, An introduction to homological algebra, Cambridge Studies in Advanced Mathematics, vol. 38, Cambridge University Press, Cambridge, 1994. MR1269324 (95f:18001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "An introduction to homological algebra"
+    },
+    {
+      "char-anchor": [
+        157233,
+        157259
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[6.3, 6.5]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    },
+    {
+      "char-anchor": [
+        158641,
+        158662
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "mythesis",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite[IV.2]{mythesis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Theo B uhler, On the algebraic foundation of bounded cohomology, Ph.D. thesis, ETH Zurich, 2008",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On the algebraic foundation of bounded cohomology"
+    },
+    {
+      "char-anchor": [
+        159867,
+        159882
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "mythesis",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{mythesis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Theo B uhler, On the algebraic foundation of bounded cohomology, Ph.D. thesis, ETH Zurich, 2008",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On the algebraic foundation of bounded cohomology"
+    },
+    {
+      "char-anchor": [
+        160370,
+        160400
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "MR1321597",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite[(9.9), p.~61]{MR1321597}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alexander S. Kechris, Classical descriptive set theory, Graduate Texts in Mathematics, vol. 156, Springer-Verlag, New York, 1995. MR1321597 (96e:03057)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Classical descriptive set theory"
+    },
+    {
+      "char-anchor": [
+        160621,
+        160636
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "mythesis",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{mythesis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Theo B uhler, On the algebraic foundation of bounded cohomology, Ph.D. thesis, ETH Zurich, 2008",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On the algebraic foundation of bounded cohomology"
+    },
+    {
+      "char-anchor": [
+        160724,
+        160740
+      ],
+      "cite/group-marker": "[49]",
+      "cite/key": "MR1749013",
+      "cite/marker": "[49]",
+      "cite/raw": "\\cite{MR1749013}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Fabienne Prosmans, Derived categories for functional analysis, Publ. Res. Inst. Math. Sci. 36 (2000), no. 1, 19--83. MR1749013 (2001g:46156)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Derived categories for functional analysis"
+    },
+    {
+      "char-anchor": [
+        160756,
+        160772
+      ],
+      "cite/group-marker": "[54]",
+      "cite/key": "MR1779315",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{MR1779315}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Jean-Pierre Schneiders, Quasi-abelian categories and sheaves, Mem. Soc. Math. Fr. (N.S.) (1999), no. 76, vi+134. MR1779315 (2001i:18023)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Quasi-abelian categories and sheaves"
+    },
+    {
+      "char-anchor": [
+        160779,
+        160805
+      ],
+      "cite/group-marker": "[52]",
+      "cite/key": "rump-counterexample",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{rump-counterexample}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A counterexample to R aikov's conjecture , Bull. London Math. Soc. 40 (2008), 985--994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "40"
+    },
+    {
+      "char-anchor": [
+        162101,
+        162126
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "mythesis",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite[Ch.~IV.2]{mythesis}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Theo B uhler, On the algebraic foundation of bounded cohomology, Ph.D. thesis, ETH Zurich, 2008",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On the algebraic foundation of bounded cohomology"
+    },
+    {
+      "char-anchor": [
+        162409,
+        162425
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "MR0116045",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{MR0116045}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "The loop-space functor in homological algebra, Trans. Amer. Math. Soc. 96 (1960), 382--394. MR0116045 (22 6840)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The loop-space functor in homological algebra"
+    },
+    {
+      "char-anchor": [
+        162517,
+        162538
+      ],
+      "cite/group-marker": "[39]",
+      "cite/key": "MR2275593",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite[3.6]{MR2275593}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "On differential graded categories, International C ongress of M athematicians. V ol. II , Eur. Math. Soc., Zurich, 2006, pp. 151--190. MR2275593 (2008g:18015)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "On differential graded categories"
+    },
+    {
+      "char-anchor": [
+        163682,
+        163708
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "MR935124",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite[2.6, p.16]{MR935124}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Dieter Happel, Triangulated categories in the representation theory of finite-dimensional algebras, London Mathematical Society Lecture Note Series, vol. 119, Cambridge University Press, Cambridge, 1988. MR935124 (89e:16035)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Triangulated categories in the representation theory of finite-dimensional algebras"
+    },
+    {
+      "char-anchor": [
+        164543,
+        164558
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "MR935124",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{MR935124}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Dieter Happel, Triangulated categories in the representation theory of finite-dimensional algebras, London Mathematical Society Lecture Note Series, vol. 119, Cambridge University Press, Cambridge, 1988. MR935124 (89e:16035)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Triangulated categories in the representation theory of finite-dimensional algebras"
+    },
+    {
+      "char-anchor": [
+        165681,
+        165712
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "MR1291599",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite[2.15.1, p. 87]{MR1291599}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Francis Borceux, Handbook of categorical algebra. 1, Encyclopedia of Mathematics and its Applications, vol. 50, Cambridge University Press, Cambridge, 1994. MR1291599 (96g:18001a)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra. 1"
+    },
+    {
+      "char-anchor": [
+        166881,
+        166897
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "MR2181829",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{MR2181829}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Paul Balmer, Witt groups, Handbook of K -theory. V ol. 1, 2, Springer, Berlin, 2005, pp. 539--576. MR2181829 (2006h:19004)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Witt groups"
+    },
+    {
+      "char-anchor": [
+        168556,
+        168572
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "MR2181829",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{MR2181829}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Paul Balmer, Witt groups, Handbook of K -theory. V ol. 1, 2, Springer, Berlin, 2005, pp. 539--576. MR2181829 (2006h:19004)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Witt groups"
+    },
+    {
+      "char-anchor": [
+        168647,
+        168665
+      ],
+      "cite/group-marker": "[53]",
+      "cite/key": "schlichting",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{schlichting}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Marco Schlichting, Hermitian K -theory of exact categories , preprint, to appear in J. of K -theory (2008), 1--49",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        169409,
+        169438
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[3.2, p.~313]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        169467,
+        169483
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "MR0338129",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{MR0338129}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341. MR0338129 (49 2895)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        171855,
+        171871
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "MR0338129",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{MR0338129}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341. MR0338129 (49 2895)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        171892,
+        171908
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "MR1382659",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{MR1382659}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Srinivas, Algebraic K -theory , Progress in Mathematics, vol. 90, Birkhauser Boston Inc., Boston, MA, 1996. MR1382659 (97c:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        172037,
+        172053
+      ],
+      "cite/group-marker": "[20]",
+      "cite/key": "MR2182598",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{MR2182598}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Eric M. Friedlander and Daniel R. Grayson (eds.), Handbook of K -theory. V ol. 1, 2 , Springer-Verlag, Berlin, 2005. MR2182598 (2006e:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        172212,
+        172228
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "MR0166240",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{MR0166240}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Abelian categories. A n introduction to the theory of functors , Harper's Series in Modern Mathematics, Harper Row Publishers, New York, 1964. MR0166240 (29 3517)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        172233,
+        172249
+      ],
+      "cite/group-marker": "[46]",
+      "cite/key": "MR0167511",
+      "cite/marker": "[46]",
+      "cite/raw": "\\cite{MR0167511}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Barry Mitchell, The full imbedding theorem, Amer. J. Math. 86 (1964), 619--637. MR0167511 (29 4783)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "The full imbedding theorem"
+    },
+    {
+      "char-anchor": [
+        172456,
+        172487
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.7.1, A.7.16]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        174215,
+        174249
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "MR0338129",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite[p.~``92/16/100'']{MR0338129}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Daniel Quillen, Higher algebraic K -theory. I , Algebraic K -theory, I: Higher K -theories (Proc. Conf., Battelle Memorial Inst., Seattle, Wash., 1972), Springer, Berlin, 1973, pp. 85--147. Lecture Notes in Math., Vol. 341. MR0338129 (49 2895)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        174866,
+        174882
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "MR0232821",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{MR0232821}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Pierre Gabriel, Des categories abeliennes, Bull. Soc. Math. France 90 (1962), 323--448. MR0232821 (38 1144)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Des categories abeliennes"
+    },
+    {
+      "char-anchor": [
+        175333,
+        175349
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "MR0146234",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{MR0146234}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Peter Freyd, Relative homological algebra made absolute, Proc. Nat. Acad. Sci. U.S.A. 49 (1963), 19--20. MR0146234 (26 3756)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Relative homological algebra made absolute"
+    },
+    {
+      "char-anchor": [
+        175512,
+        175534
+      ],
+      "cite/group-marker": "[42]",
+      "cite/key": "MR726427",
+      "cite/marker": "[42]",
+      "cite/raw": "\\cite[1.0.3]{MR726427}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Laumon, Sur la categorie derivee des D -modules filtres , Algebraic geometry (Tokyo/Kyoto, 1982), Lecture Notes in Math., vol. 1016, Springer, Berlin, 1983, pp. 151--237. MR726427 (85d:32022)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        175608,
+        175624
+      ],
+      "cite/group-marker": "[55]",
+      "cite/key": "MR0354652",
+      "cite/marker": "[55]",
+      "cite/raw": "\\cite{MR0354652}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "SGA4, Theorie des topos et cohomologie etale des schemas. T ome 1: T heorie des topos , Springer-Verlag, Berlin, 1972, Seminaire de Geometrie Algebrique du Bois-Marie 1963--1964 (SGA 4), Dirige par M. Artin, A. Grothendieck, et J. L. Verdier. Avec la collaboration de N. Bourbaki, P. Deligne et B. Saint-Donat, Lecture Notes in Mathematics, Vol. 269. MR0354652 (50 7130)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        175947,
+        175975
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[Appendix~A]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        176059,
+        176080
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "MR1052551",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite[A.3]{MR1052551}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Bernhard Keller, Chain complexes and stable categories, Manuscripta Math. 67 (1990), no. 4, 379--417. MR1052551 (91h:18006)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Chain complexes and stable categories"
+    },
+    {
+      "char-anchor": [
+        176134,
+        176155
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.7]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        176194,
+        176216
+      ],
+      "cite/group-marker": "[42]",
+      "cite/key": "MR726427",
+      "cite/marker": "[42]",
+      "cite/raw": "\\cite[1.0.3]{MR726427}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Laumon, Sur la categorie derivee des D -modules filtres , Algebraic geometry (Tokyo/Kyoto, 1982), Lecture Notes in Math., vol. 1016, Springer, Berlin, 1983, pp. 151--237. MR726427 (85d:32022)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        176359,
+        176385
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[(A.7.10)]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        176598,
+        176627
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "MR1300636",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite[Chapter~III]{MR1300636}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane and Ieke Moerdijk, Sheaves in geometry and logic, Universitext, Springer-Verlag, New York, 1994, A first introduction to topos theory, Corrected reprint of the 1992 edition. MR1300636 (96c:03119)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sheaves in geometry and logic"
+    },
+    {
+      "char-anchor": [
+        176702,
+        176723
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "artin-grothtop",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{artin-grothtop}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Artin, Grothendieck topologies, Mimeographed Notes, Harvard University, Cambridge, Massachusetts, 1962",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Grothendieck topologies"
+    },
+    {
+      "char-anchor": [
+        176735,
+        176751
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "MR1315049",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{MR1315049}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra. 3, Encyclopedia of Mathematics and its Applications, vol. 52, Cambridge University Press, Cambridge, 1994. MR1315049 (96g:18001c)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra. 3"
+    },
+    {
+      "char-anchor": [
+        177957,
+        177995
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "MR1300636",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite[Definition~2, p.~111]{MR1300636}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane and Ieke Moerdijk, Sheaves in geometry and logic, Universitext, Springer-Verlag, New York, 1994, A first introduction to topos theory, Corrected reprint of the 1992 edition. MR1300636 (96c:03119)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sheaves in geometry and logic"
+    },
+    {
+      "char-anchor": [
+        179575,
+        179599
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "MR1300636",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite[p.~129]{MR1300636}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane and Ieke Moerdijk, Sheaves in geometry and logic, Universitext, Springer-Verlag, New York, 1994, A first introduction to topos theory, Corrected reprint of the 1992 edition. MR1300636 (96c:03119)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sheaves in geometry and logic"
+    },
+    {
+      "char-anchor": [
+        181298,
+        181321
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.7.6]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        183815,
+        183839
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "MR1300636",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite[p.~121]{MR1300636}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane and Ieke Moerdijk, Sheaves in geometry and logic, Universitext, Springer-Verlag, New York, 1994, A first introduction to topos theory, Corrected reprint of the 1992 edition. MR1300636 (96c:03119)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sheaves in geometry and logic"
+    },
+    {
+      "char-anchor": [
+        189618,
+        189643
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "MR1315049",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite[p.~206f]{MR1315049}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra. 3, Encyclopedia of Mathematics and its Applications, vol. 52, Cambridge University Press, Cambridge, 1994. MR1315049 (96g:18001c)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra. 3"
+    },
+    {
+      "char-anchor": [
+        189672,
+        189695
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.7.8]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        190209,
+        190238
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "MR1315049",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite[Lemma~3.3.1]{MR1315049}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Handbook of categorical algebra. 3, Encyclopedia of Mathematics and its Applications, vol. 52, Cambridge University Press, Cambridge, 1994. MR1315049 (96g:18001c)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of categorical algebra. 3"
+    },
+    {
+      "char-anchor": [
+        191197,
+        191236
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.7.11, (a), (b), (c)]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        192039,
+        192072
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "MR1300636",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite[Lemma~2, p.~131]{MR1300636}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Saunders Mac Lane and Ieke Moerdijk, Sheaves in geometry and logic, Universitext, Springer-Verlag, New York, 1994, A first introduction to topos theory, Corrected reprint of the 1992 edition. MR1300636 (96c:03119)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Sheaves in geometry and logic"
+    },
+    {
+      "char-anchor": [
+        192080,
+        192114
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.7.11, (d), (e)]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        192596,
+        192620
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.7.12]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        200650,
+        200674
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "MR1106918",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite[A.7.15]{MR1106918}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason and Thomas Trobaugh, Higher algebraic K -theory of schemes and of derived categories , The Grothendieck Festschrift, Vol. III, Progr. Math., vol. 88, Birkhauser Boston, Boston, MA, 1990, pp. 247--435. MR1106918 (92f:19001)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        206943,
+        206976
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "MR0100622",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite[Proposition~4.1]{MR0100622}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Alex Heller, Homological algebra in abelian categories, Ann. of Math. (2) 68 (1958), 484--525. MR0100622 (20 7051)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homological algebra in abelian categories"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-0811.1480-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 156,
+    "resolution-rate": 0.0189,
+    "resolved": 3,
+    "total": 159
+  }
+}

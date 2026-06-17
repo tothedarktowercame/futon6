@@ -1,0 +1,29 @@
+{:name "group homomorphism",
+ :df 478,
+ :concept/id :group-homomorphism,
+ :msc "ct",
+ :defined-in
+ {:n-papers 9,
+  :sample
+  ["0810.2070" "0905.3010" "1101.3138" "1302.6946" "1409.6067"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :morphism,
+ :provenance
+ {:target "nnexus:group homomorphism",
+  :resolution-kind "nnexus",
+  :msc ["20" "20A05" "Morphisms"],
+  :domains ["Mathworld" "Planetmath" "Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2002.03570",
+  :text
+  "s case, $I'_\\EE$ is a homomorphism of $\\WW_r(\\EE_p)$. However, we do not intend to pursue further discussion of this version of $I'_\\EE$ in this paper. \\end{remark} \\begin{defn} We call the group homomorphism $\\esgn: \\WW(\\EE) \\to \\K$ defined in Theorem \\ref{t:signature} the \\emph{$\\EE$-signature} on"}}

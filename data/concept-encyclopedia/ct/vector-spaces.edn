@@ -1,0 +1,62 @@
+{:name "vector spaces",
+ :pagerank 0.00469,
+ :df 1298,
+ :concept/id :vector-spaces,
+ :msc "ct",
+ :defined-in
+ {:n-papers 14,
+  :sample
+  ["0903.0340" "0908.2469" "0911.3845" "1207.2054" "1309.6952"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "For k a field or a division ring, a vector space over k (or a k-vector space) is a module over the ring k.",
+   :refs [:linear-map :category]}
+  {:id :nlab-condition-2,
+   :statement
+   "When the vector space is fixed, its elements are called vectors, the field k is referred to as the base field of the ground field of the vector space, and the elements of k are called scalars.",
+   :refs [:linear-map :category]}
+  {:id :nlab-condition-3,
+   :statement
+   "Sometimes a vector space over k is called a k-linear space.",
+   :refs [:linear-map :category]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :typically-denoted-vect,
+   :source :nlab-raw-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:field :division-ring :module :ring :vect],
+   :source :nlab-raw-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :used-papers 19,
+ :genus :typically-denoted-vect,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Encyclopediaofmath" "Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-definition,
+  :msc
+  ["13-00"
+   "15"
+   "15-00"
+   "16-00"
+   "20-00"
+   "70B15"
+   "Mathematical_structures"
+   "Topological_vector_spaces"
+   "XX-XX"],
+  :nlab-page-id "226",
+  :resolution-kind "nnexus",
+  :target "nnexus:vector space",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [:typically-denoted-vect :linear-map :category],
+ :gloss
+ {:paper "0908.2469",
+  :text
+  "s a basis $e^i$ for which \\[ e^i e^j = \\sum_{k} m^{ij}_k e^k \\] where the constants $m^{ij}_k$ are \\textit{natural numbers}. Namely, we can think of these numbers as dimensions of \\textit{vector spaces} $M^{ij}_k$. Then we can seek a 2-algebra with a basis of irreducible objects $E^i$ such that \\[ E"}}

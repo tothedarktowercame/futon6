@@ -1,0 +1,6 @@
+{:paper/id "bad"
+ :passage/id "missing-source"
+ :source {:lines [1 4] :kind :expository}
+ :scopes [{:id :s1
+           :kind :connection
+           :slot-fill "has no line locus"}]}

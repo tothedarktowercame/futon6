@@ -1,0 +1,2998 @@
+{
+  "paper-id": "math__0210114",
+  "records": [
+    {
+      "char-anchor": [
+        8650,
+        8662
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1,V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        8650,
+        8662
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V1,V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        8807,
+        8818
+      ],
+      "cite/group-marker": "[17,40]",
+      "cite/key": "G",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{G,Ma}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Grothendieck, Les Derivateurs. Manuscript a part of which is available at http://www.math.jussieu.fr/ maltsin/groth/Derivateurs.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        8807,
+        8818
+      ],
+      "cite/group-marker": "[17,40]",
+      "cite/key": "Ma",
+      "cite/marker": "[40]",
+      "cite/raw": "\\cite{G,Ma}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Maltsiniotis, Introduction a la theorie des derivateurs. E-print available at http://www.math.jussieu.fr/ maltsin/Gtder.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        8879,
+        8888
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BK",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Enhanced triangulated categories. Math. USSR-Sbornik, vol. 70 (1991), no. 1, 93--107. (Russian original: vol. 181 (1990), no. 5)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        8903,
+        8912
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BK",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Enhanced triangulated categories. Math. USSR-Sbornik, vol. 70 (1991), no. 1, 93--107. (Russian original: vol. 181 (1990), no. 5)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9372,
+        9408
+      ],
+      "cite/group-marker": "[14,15,30,31,24,25,33,36,37]",
+      "cite/key": "F",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite{F,FS,\nK1,K2,Ke3,Ke3',KS,L-H,L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Fukaya, Morse homotopy, A -category, and Floer homologies. In: Proceedings of GARC Workshop on Geometry and Topology '93 (Lecture Notes Series, vol. 18), p. 1--102. Seoul Nat. Univ., Seoul, 1993",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9372,
+        9408
+      ],
+      "cite/group-marker": "[14,15,30,31,24,25,33,36,37]",
+      "cite/key": "FS",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{F,FS,\nK1,K2,Ke3,Ke3',KS,L-H,L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Fukaya and P. Seidel, Floer homology, A -categories and topological field theory. Geometry and physics, Aarhus,1995 (Lecture Notes in Pure and Appl. Math., vol. 184), p. 9--32. Dekker, New York, 1997",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9372,
+        9408
+      ],
+      "cite/group-marker": "[14,15,30,31,24,25,33,36,37]",
+      "cite/key": "K1",
+      "cite/marker": "[30]",
+      "cite/raw": "\\cite{F,FS,\nK1,K2,Ke3,Ke3',KS,L-H,L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich, Homological algebra of Mirror Symmetry. Proceedings of the International Congress of Mathematicians, Zurich, 1994, vol. 1, p. 120--139. Birkhauser, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9372,
+        9408
+      ],
+      "cite/group-marker": "[14,15,30,31,24,25,33,36,37]",
+      "cite/key": "K2",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{F,FS,\nK1,K2,Ke3,Ke3',KS,L-H,L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich, Notes du cours a l' Ecole Normale Superieure lors du premier trimestre 1998, version de 16/09/1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9372,
+        9408
+      ],
+      "cite/group-marker": "[14,15,30,31,24,25,33,36,37]",
+      "cite/key": "Ke3",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{F,FS,\nK1,K2,Ke3,Ke3',KS,L-H,L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Introduction to A-infinity algebras and modules. Homology, Homotopy and Applications, vol. 3 (2001), no. 1, 1--35",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9372,
+        9408
+      ],
+      "cite/group-marker": "[14,15,30,31,24,25,33,36,37]",
+      "cite/key": "Ke3'",
+      "cite/marker": "[25]",
+      "cite/raw": "\\cite{F,FS,\nK1,K2,Ke3,Ke3',KS,L-H,L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Addendum to ``Introduction to A-infinity algebras and modules''. Homology, Homotopy and Applications, vol. 4 (2001), no. 1, 25--28",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "`Introduction to A-infinity algebras and modules"
+    },
+    {
+      "char-anchor": [
+        9372,
+        9408
+      ],
+      "cite/group-marker": "[14,15,30,31,24,25,33,36,37]",
+      "cite/key": "KS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{F,FS,\nK1,K2,Ke3,Ke3',KS,L-H,L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, A_ -categories and non-commutative geometry. In preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9372,
+        9408
+      ],
+      "cite/group-marker": "[14,15,30,31,24,25,33,36,37]",
+      "cite/key": "L-H",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{F,FS,\nK1,K2,Ke3,Ke3',KS,L-H,L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Lefevre-Hasegawa, Sur les A_ -categories. Ph.D. thesis. See www.math.jussieu.fr/ lefevre/publ.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9372,
+        9408
+      ],
+      "cite/group-marker": "[14,15,30,31,24,25,33,36,37]",
+      "cite/key": "L",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{F,FS,\nK1,K2,Ke3,Ke3',KS,L-H,L}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0210047",
+      "resolved-corpus-id": "math__0210047",
+      "title": "Category of A_infinity-categories"
+    },
+    {
+      "char-anchor": [
+        9472,
+        9486
+      ],
+      "cite/group-marker": "[51,52]",
+      "cite/key": "St1",
+      "cite/marker": "[51]",
+      "cite/raw": "\\cite{St1,St2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. D. Stasheff, Homotopy associativity of H -spaces. I. Trans. Amer. Math. Soc., vol. 108 (1963), 275-292",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9472,
+        9486
+      ],
+      "cite/group-marker": "[51,52]",
+      "cite/key": "St2",
+      "cite/marker": "[52]",
+      "cite/raw": "\\cite{St1,St2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. D. Stasheff, Homotopy associativity of H -spaces. II. Trans. Amer. Math. Soc., vol. 108 (1963), 293-312",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9533,
+        9545
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1,V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9533,
+        9545
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V1,V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9638,
+        9650
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "Ke4''",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Ke4''}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, On the cyclic homology category of exact categories, J. Pure Appl. Algebra, vol. 136 (1999), no. 1, 1--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9873,
+        9885
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "Ke4''",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Ke4''}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, On the cyclic homology category of exact categories, J. Pure Appl. Algebra, vol. 136 (1999), no. 1, 1--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        9999,
+        10008
+      ],
+      "cite/group-marker": "[33]",
+      "cite/key": "KS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{KS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, A_ -categories and non-commutative geometry. In preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        10037,
+        10047
+      ],
+      "cite/group-marker": "[38]",
+      "cite/key": "L-O",
+      "cite/marker": "[38]",
+      "cite/raw": "\\cite{L-O}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0211037",
+      "resolved-corpus-id": "math__0211037",
+      "title": "A construction of quotient A_infinity-categories"
+    },
+    {
+      "char-anchor": [
+        10897,
+        10909
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "Ke4''",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Ke4''}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, On the cyclic homology category of exact categories, J. Pure Appl. Algebra, vol. 136 (1999), no. 1, 1--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        11268,
+        11288
+      ],
+      "cite/group-marker": "[11,12,13]",
+      "cite/key": "DK1",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{DK1, DK2, DK3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. Dwyer and D. Kan. Simplicial localizations of categories. J. Pure and Appl. Algebra, vol. 17 (1980), no. 3, 267-284",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        11268,
+        11288
+      ],
+      "cite/group-marker": "[11,12,13]",
+      "cite/key": "DK2",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{DK1, DK2, DK3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. Dwyer and D. Kan. Calculating simplicial localizations. J. Pure and Appl. Algebra, vol. 18 (1980), no. 1, 17-35",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        11268,
+        11288
+      ],
+      "cite/group-marker": "[11,12,13]",
+      "cite/key": "DK3",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{DK1, DK2, DK3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. Dwyer and D. Kan. Function complexes in homotopical algebra. Topology vol. 19 (1980), no. 4, 427-440",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        11880,
+        11890
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        22861,
+        22873
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "Ke4''",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Ke4''}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, On the cyclic homology category of exact categories, J. Pure Appl. Algebra, vol. 136 (1999), no. 1, 1--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26010,
+        26025
+      ],
+      "cite/group-marker": "[33,34]",
+      "cite/key": "KS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{KS,KoSo3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, A_ -categories and non-commutative geometry. In preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26010,
+        26025
+      ],
+      "cite/group-marker": "[33,34]",
+      "cite/key": "KoSo3",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{KS,KoSo3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, Homotopy n-categories and Deligne conjecture",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26175,
+        26187
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "KoSo3",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{KoSo3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, Homotopy n-categories and Deligne conjecture",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26275,
+        26287
+      ],
+      "cite/group-marker": "[34]",
+      "cite/key": "KoSo3",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{KoSo3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, Homotopy n-categories and Deligne conjecture",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        26615,
+        26633
+      ],
+      "cite/group-marker": "[32,34]",
+      "cite/key": "KoSo1",
+      "cite/marker": "[32]",
+      "cite/raw": "\\cite{KoSo1,KoSo3}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0001151",
+      "resolved-corpus-id": "math__0001151",
+      "title": "Deformations of algebras over operads and Deligne's conjecture"
+    },
+    {
+      "char-anchor": [
+        26615,
+        26633
+      ],
+      "cite/group-marker": "[32,34]",
+      "cite/key": "KoSo3",
+      "cite/marker": "[34]",
+      "cite/raw": "\\cite{KoSo1,KoSo3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, Homotopy n-categories and Deligne conjecture",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        28475,
+        28485
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        29670,
+        29680
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        30227,
+        30237
+      ],
+      "cite/group-marker": "[29]",
+      "cite/key": "Ke2",
+      "cite/marker": "[29]",
+      "cite/raw": "\\cite{Ke2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly, Chain maps inducing zero homology maps. Proc. Cambridge Philos. Soc., vol. 61 (1965), 847--854",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        30275,
+        30285
+      ],
+      "cite/group-marker": "[28]",
+      "cite/key": "Ke1",
+      "cite/marker": "[28]",
+      "cite/raw": "\\cite{Ke1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. M. Kelly, Complete functors in homology. II. The exact homology sequence. Proc. Cambridge Philos. Soc., vol. 60 (1964), 737--749",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        31487,
+        31496
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BK",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Enhanced triangulated categories. Math. USSR-Sbornik, vol. 70 (1991), no. 1, 93--107. (Russian original: vol. 181 (1990), no. 5)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        31738,
+        31747
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BK",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Enhanced triangulated categories. Math. USSR-Sbornik, vol. 70 (1991), no. 1, 93--107. (Russian original: vol. 181 (1990), no. 5)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        32825,
+        32834
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BK",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Enhanced triangulated categories. Math. USSR-Sbornik, vol. 70 (1991), no. 1, 93--107. (Russian original: vol. 181 (1990), no. 5)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        33737,
+        33746
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BK",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Enhanced triangulated categories. Math. USSR-Sbornik, vol. 70 (1991), no. 1, 93--107. (Russian original: vol. 181 (1990), no. 5)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        34526,
+        34535
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BK",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Enhanced triangulated categories. Math. USSR-Sbornik, vol. 70 (1991), no. 1, 93--107. (Russian original: vol. 181 (1990), no. 5)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        35111,
+        35120
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "BK",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{BK}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Enhanced triangulated categories. Math. USSR-Sbornik, vol. 70 (1991), no. 1, 93--107. (Russian original: vol. 181 (1990), no. 5)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        36162,
+        36172
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        36429,
+        36438
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BL",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BL}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bernstein and V. Lunts, Equivariant sheaves and functors. Lecture notes in Math., vol. 1578. Springer-Verlag, Berlin, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        36458,
+        36468
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        42411,
+        42420
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "Sp",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{Sp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes. Compositio Mathematica, vol. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        45457,
+        45466
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "GV",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{GV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Grothendieck et J. L. Verdier, Prefaisceaux. In: SGA 4, tome 1, Lecture Notes in Mathematics, vol. 269, 1--217. Springer-Verlag, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        49572,
+        49581
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "K2",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{K2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich, Notes du cours a l' Ecole Normale Superieure lors du premier trimestre 1998, version de 16/09/1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        50564,
+        50572
+      ],
+      "cite/group-marker": "[58]",
+      "cite/key": "V",
+      "cite/marker": "[58]",
+      "cite/raw": "\\cite{V}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. M. Vogt, A note on homotopy equivalences. Proc. Amer. Math. Soc., vol. 32 (1972), no. 2, 627--629",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        51600,
+        51610
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        55040,
+        55050
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        57085,
+        57097
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "Ke4''",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Ke4''}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, On the cyclic homology category of exact categories, J. Pure Appl. Algebra, vol. 136 (1999), no. 1, 1--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        57233,
+        57242
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "N3",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite{N3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, The connection between the K -theory localization theorem of Thomason, Trobaugh and Yao and the smashing subcategories of Bousfield and Ravenel. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 25 (1992), no. 5, 547--566",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        57356,
+        57365
+      ],
+      "cite/group-marker": "[47]",
+      "cite/key": "N3",
+      "cite/marker": "[47]",
+      "cite/raw": "\\cite{N3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, The connection between the K -theory localization theorem of Thomason, Trobaugh and Yao and the smashing subcategories of Bousfield and Ravenel. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 25 (1992), no. 5, 547--566",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        65987,
+        65999
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1,V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        65987,
+        65999
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V1,V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        66603,
+        66612
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "De",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{De}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Deligne, Cohomologie a supports propres. In: SGA 4, tome 3 (Lecture Notes in Math., vol. 305), p. 250--480. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        67016,
+        67025
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "GV",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{GV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Grothendieck et J. L. Verdier, Prefaisceaux. In: SGA 4, tome 1, Lecture Notes in Mathematics, vol. 269, 1--217. Springer-Verlag, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        67202,
+        67211
+      ],
+      "cite/group-marker": "[46]",
+      "cite/key": "N2",
+      "cite/marker": "[46]",
+      "cite/raw": "\\cite{N2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, Triangulated categories. Annals of Mathematics Studies, vol. 148. Princeton University Press, 2001",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        67252,
+        67265
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Br",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite{Br,Br2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. H. Brown, Cohomology theories. Ann. of Math., vol. 75 (1962), no. 3, 467--484",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        67252,
+        67265
+      ],
+      "cite/group-marker": "[8,9]",
+      "cite/key": "Br2",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite{Br,Br2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. H. Brown, Abstract homotopy theory. Trans. Amer. Math. Soc., vol. 119 (1965), no. 1, 79--85",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        67294,
+        67303
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "GV",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{GV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Grothendieck et J. L. Verdier, Prefaisceaux. In: SGA 4, tome 1, Lecture Notes in Mathematics, vol. 269, 1--217. Springer-Verlag, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        92666,
+        92675
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "Sp",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{Sp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes. Compositio Mathematica, vol. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        93060,
+        93069
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "Sp",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{Sp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes. Compositio Mathematica, vol. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        93906,
+        93915
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "Sp",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{Sp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes. Compositio Mathematica, vol. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        95728,
+        95737
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "GV",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{GV}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Grothendieck et J. L. Verdier, Prefaisceaux. In: SGA 4, tome 1, Lecture Notes in Mathematics, vol. 269, 1--217. Springer-Verlag, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        106951,
+        106964
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1, V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        106951,
+        106964
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V1, V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        106986,
+        106999
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1, V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        106986,
+        106999
+      ],
+      "cite/group-marker": "[56,57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V1, V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        107499,
+        107508
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        107714,
+        107723
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        107748,
+        107757
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        107843,
+        107852
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        108034,
+        108043
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        108171,
+        108180
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        108185,
+        108194
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        108256,
+        108265
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        108284,
+        108293
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        108402,
+        108411
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        108462,
+        108470
+      ],
+      "cite/group-marker": "[49]",
+      "cite/key": "R",
+      "cite/marker": "[49]",
+      "cite/raw": "\\cite{R}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Rickard, Derived categories and stable equivalence. J. Pure and Appl. Algebra, vol. 61 (1989), 303--317",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        108503,
+        108511
+      ],
+      "cite/group-marker": "[45]",
+      "cite/key": "N",
+      "cite/marker": "[45]",
+      "cite/raw": "\\cite{N}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Neeman, The derived category of an exact category. J. Algebra, vol. 135 (1990), 388--394",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        108986,
+        108995
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        109024,
+        109033
+      ],
+      "cite/group-marker": "[57]",
+      "cite/key": "V2",
+      "cite/marker": "[57]",
+      "cite/raw": "\\cite{V2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Des categories derivees des categories abeliennes. Asterisque, vol. 239. Societe mathematique de France, 1996",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        110445,
+        110455
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "BK2",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BK2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Representable functors, Serre functors, and reconstructions. Math. USSR-Izvestiya, vol. 35 (1990), no. 3, 519--541. (Russian original: vol. 53 (1989), no. 6)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        111127,
+        111137
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "BK2",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BK2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Representable functors, Serre functors, and reconstructions. Math. USSR-Izvestiya, vol. 35 (1990), no. 3, 519--541. (Russian original: vol. 53 (1989), no. 6)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        111158,
+        111167
+      ],
+      "cite/group-marker": "[56]",
+      "cite/key": "V1",
+      "cite/marker": "[56]",
+      "cite/raw": "\\cite{V1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. L. Verdier, Categories derivees, etat 0. In: SGA 4 1 2 (Lecture Notes in Math., vol. 569), p. 262--312. Springer-Verlag, 1977",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        111788,
+        111800
+      ],
+      "cite/group-marker": "[27]",
+      "cite/key": "Ke-Vo",
+      "cite/marker": "[27]",
+      "cite/raw": "\\cite{Ke-Vo}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller and D. Vossieck, Sous les categories derivees. C. R. Acad. Sci. Paris Ser. I Math., vol. 305 (1987), no. 6, 225--228",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        111823,
+        111833
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "BK2",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{BK2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. I. Bondal and M. M. Kapranov, Representable functors, Serre functors, and reconstructions. Math. USSR-Izvestiya, vol. 35 (1990), no. 3, 519--541. (Russian original: vol. 53 (1989), no. 6)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        112853,
+        112862
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AH",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AH}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Avramov and S. Halperin, Through the looking glass: a dictionary between rational homotopy theory and local algebra. In: Algebra, algebraic topology and their interactions, 1--27, (Lecture Notes in Math., vol. 1183). Springer-Verlag, Berlin, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        112896,
+        112905
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AH",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AH}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Avramov and S. Halperin, Through the looking glass: a dictionary between rational homotopy theory and local algebra. In: Algebra, algebraic topology and their interactions, 1--27, (Lecture Notes in Math., vol. 1183). Springer-Verlag, Berlin, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        113178,
+        113187
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AH",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AH}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Avramov and S. Halperin, Through the looking glass: a dictionary between rational homotopy theory and local algebra. In: Algebra, algebraic topology and their interactions, 1--27, (Lecture Notes in Math., vol. 1183). Springer-Verlag, Berlin, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        113200,
+        113209
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "GM",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{GM}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. K. A .M. Gugenheim and J. P. May, On the theory and applications of differential torsion products. Memoirs of the A.M.S., No. 142 , 1974",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        113280,
+        113289
+      ],
+      "cite/group-marker": "[35]",
+      "cite/key": "KM",
+      "cite/marker": "[35]",
+      "cite/raw": "\\cite{KM}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "I. Kriz and J. P. May, Operads, algebras, modules, and motives. Asterisque, vol. 233. Societe mathematique de France, 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        113337,
+        113345
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, Homological algebra of homotopy algebras. Comm. Algebra, vol. 25 (1997), no. 10, 3291--3323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        113386,
+        113394
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, Homological algebra of homotopy algebras. Comm. Algebra, vol. 25 (1997), no. 10, 3291--3323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        113724,
+        113734
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AFH",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AFH}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Avramov, H.-B. Foxby, and S. Halperin, Differential graded homological algebra, in preparation (manuscript of June 6, 1991)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        113739,
+        113747
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, Homological algebra of homotopy algebras. Comm. Algebra, vol. 25 (1997), no. 10, 3291--3323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        114851,
+        114860
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "AH",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{AH}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Avramov and S. Halperin, Through the looking glass: a dictionary between rational homotopy theory and local algebra. In: Algebra, algebraic topology and their interactions, 1--27, (Lecture Notes in Math., vol. 1183). Springer-Verlag, Berlin, 1986",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        115705,
+        115713
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, Homological algebra of homotopy algebras. Comm. Algebra, vol. 25 (1997), no. 10, 3291--3323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        116906,
+        116914
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, Homological algebra of homotopy algebras. Comm. Algebra, vol. 25 (1997), no. 10, 3291--3323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        117006,
+        117014
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, Homological algebra of homotopy algebras. Comm. Algebra, vol. 25 (1997), no. 10, 3291--3323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        117377,
+        117385
+      ],
+      "cite/group-marker": "[55]",
+      "cite/key": "T",
+      "cite/marker": "[55]",
+      "cite/raw": "\\cite{T}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Tate, Homology of Noetherian rings and local rings. Illinois J. Math. vol. 1 (1957), 14--27",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        117447,
+        117461
+      ],
+      "cite/group-marker": "[53,54]",
+      "cite/key": "Su1",
+      "cite/marker": "[53]",
+      "cite/raw": "\\cite{Su1,Su2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Sullivan, Differential forms and the topology of manifolds. In: Proc. Internat. Conf. on Manifolds, (Tokyo, 1973), pp. 37--49. Univ. of Tokyo Press, Tokyo, 1975",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        117447,
+        117461
+      ],
+      "cite/group-marker": "[53,54]",
+      "cite/key": "Su2",
+      "cite/marker": "[54]",
+      "cite/raw": "\\cite{Su1,Su2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Sullivan, Infinitesimal computations in topology. Publ.Math.IHES, vol. 47 (1978), 269--331",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        117470,
+        117478
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, Homological algebra of homotopy algebras. Comm. Algebra, vol. 25 (1997), no. 10, 3291--3323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        117499,
+        117508
+      ],
+      "cite/group-marker": "[50]",
+      "cite/key": "Sp",
+      "cite/marker": "[50]",
+      "cite/raw": "\\cite{Sp}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "N. Spaltenstein, Resolutions of unbounded complexes. Compositio Mathematica, vol. 65 (1988), no. 2, 121--154",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        117513,
+        117523
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "AFH",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{AFH}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "L. Avramov, H.-B. Foxby, and S. Halperin, Differential graded homological algebra, in preparation (manuscript of June 6, 1991)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        118026,
+        118034
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, Homological algebra of homotopy algebras. Comm. Algebra, vol. 25 (1997), no. 10, 3291--3323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        120351,
+        120359
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "H",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, Homological algebra of homotopy algebras. Comm. Algebra, vol. 25 (1997), no. 10, 3291--3323",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        120772,
+        120782
+      ],
+      "cite/group-marker": "[42]",
+      "cite/key": "Mi2",
+      "cite/marker": "[42]",
+      "cite/raw": "\\cite{Mi2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Mitchell, Some applications of module theory to functor categories. Bull. Amer. Math. Soc., vol. 84 (1978), no. 5, 867--885",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        120907,
+        120917
+      ],
+      "cite/group-marker": "[41]",
+      "cite/key": "Mi1",
+      "cite/marker": "[41]",
+      "cite/raw": "\\cite{Mi1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Mitchell, Rings with several objects. Advances in Math., vol. 8 (1972), 1--161",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        123523,
+        123532
+      ],
+      "cite/group-marker": "[39]",
+      "cite/key": "ML",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{ML}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Categories for the working mathematician. Graduate Texts in Mathematics, 5. Springer-Verlag, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        130767,
+        130776
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "BL",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{BL}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Bernstein and V. Lunts, Equivariant sheaves and functors. Lecture notes in Math., vol. 1578. Springer-Verlag, Berlin, 1994",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        138840,
+        138850
+      ],
+      "cite/group-marker": "[24]",
+      "cite/key": "Ke3",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{Ke3}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Introduction to A-infinity algebras and modules. Homology, Homotopy and Applications, vol. 3 (2001), no. 1, 1--35",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        138863,
+        138873
+      ],
+      "cite/group-marker": "[36]",
+      "cite/key": "L-H",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{L-H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Lefevre-Hasegawa, Sur les A_ -categories. Ph.D. thesis. See www.math.jussieu.fr/ lefevre/publ.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        138888,
+        138909
+      ],
+      "cite/group-marker": "[31,33,36,37]",
+      "cite/key": "K2",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{K2, KS, L-H, L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich, Notes du cours a l' Ecole Normale Superieure lors du premier trimestre 1998, version de 16/09/1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        138888,
+        138909
+      ],
+      "cite/group-marker": "[31,33,36,37]",
+      "cite/key": "KS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{K2, KS, L-H, L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, A_ -categories and non-commutative geometry. In preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        138888,
+        138909
+      ],
+      "cite/group-marker": "[31,33,36,37]",
+      "cite/key": "L-H",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{K2, KS, L-H, L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Lefevre-Hasegawa, Sur les A_ -categories. Ph.D. thesis. See www.math.jussieu.fr/ lefevre/publ.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        138888,
+        138909
+      ],
+      "cite/group-marker": "[31,33,36,37]",
+      "cite/key": "L",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{K2, KS, L-H, L}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0210047",
+      "resolved-corpus-id": "math__0210047",
+      "title": "Category of A_infinity-categories"
+    },
+    {
+      "char-anchor": [
+        141039,
+        141060
+      ],
+      "cite/group-marker": "[31,33,36,37]",
+      "cite/key": "K2",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{K2, KS, L-H, L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich, Notes du cours a l' Ecole Normale Superieure lors du premier trimestre 1998, version de 16/09/1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        141039,
+        141060
+      ],
+      "cite/group-marker": "[31,33,36,37]",
+      "cite/key": "KS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{K2, KS, L-H, L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, A_ -categories and non-commutative geometry. In preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        141039,
+        141060
+      ],
+      "cite/group-marker": "[31,33,36,37]",
+      "cite/key": "L-H",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{K2, KS, L-H, L}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Lefevre-Hasegawa, Sur les A_ -categories. Ph.D. thesis. See www.math.jussieu.fr/ lefevre/publ.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        141039,
+        141060
+      ],
+      "cite/group-marker": "[31,33,36,37]",
+      "cite/key": "L",
+      "cite/marker": "[37]",
+      "cite/raw": "\\cite{K2, KS, L-H, L}",
+      "confidence": 1.0,
+      "hole": null,
+      "method": "arxiv-id",
+      "resolved-arxiv-id": "math/0210047",
+      "resolved-corpus-id": "math__0210047",
+      "title": "Category of A_infinity-categories"
+    },
+    {
+      "char-anchor": [
+        142147,
+        142156
+      ],
+      "cite/group-marker": "[31]",
+      "cite/key": "K2",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{K2}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich, Notes du cours a l' Ecole Normale Superieure lors du premier trimestre 1998, version de 16/09/1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        146498,
+        146508
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        146734,
+        146743
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "Be",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{Be}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. Benabou, Introduction to bicategories. In: Reports of the Midwest Category Seminar (1967), 1--77, (Lecture Notes in Math., vol. 47). Springer-Verlag, Berlin, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        146758,
+        146767
+      ],
+      "cite/group-marker": "[39]",
+      "cite/key": "ML",
+      "cite/marker": "[39]",
+      "cite/raw": "\\cite{ML}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "S. Mac Lane, Categories for the working mathematician. Graduate Texts in Mathematics, 5. Springer-Verlag, 1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        147862,
+        147872
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        147883,
+        147894
+      ],
+      "cite/group-marker": "[26]",
+      "cite/key": "Ke4'",
+      "cite/marker": "[26]",
+      "cite/raw": "\\cite{Ke4'}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Corrections to Ke4 and Ke4'' , www.math.jussieu.fr/ keller/publ/",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        147910,
+        147920
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        160162,
+        160182
+      ],
+      "cite/group-marker": "[31,24,33,36]",
+      "cite/key": "K2",
+      "cite/marker": "[31]",
+      "cite/raw": "\\cite{K2,Ke3,KS,L-H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich, Notes du cours a l' Ecole Normale Superieure lors du premier trimestre 1998, version de 16/09/1998",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        160162,
+        160182
+      ],
+      "cite/group-marker": "[31,24,33,36]",
+      "cite/key": "Ke3",
+      "cite/marker": "[24]",
+      "cite/raw": "\\cite{K2,Ke3,KS,L-H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Introduction to A-infinity algebras and modules. Homology, Homotopy and Applications, vol. 3 (2001), no. 1, 1--35",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        160162,
+        160182
+      ],
+      "cite/group-marker": "[31,24,33,36]",
+      "cite/key": "KS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{K2,Ke3,KS,L-H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, A_ -categories and non-commutative geometry. In preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        160162,
+        160182
+      ],
+      "cite/group-marker": "[31,24,33,36]",
+      "cite/key": "L-H",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{K2,Ke3,KS,L-H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Lefevre-Hasegawa, Sur les A_ -categories. Ph.D. thesis. See www.math.jussieu.fr/ lefevre/publ.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        163408,
+        163421
+      ],
+      "cite/group-marker": "[33,36]",
+      "cite/key": "KS",
+      "cite/marker": "[33]",
+      "cite/raw": "\\cite{KS,L-H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "M. Kontsevich and Y. Soibelman, A_ -categories and non-commutative geometry. In preparation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        163408,
+        163421
+      ],
+      "cite/group-marker": "[33,36]",
+      "cite/key": "L-H",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{KS,L-H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Lefevre-Hasegawa, Sur les A_ -categories. Ph.D. thesis. See www.math.jussieu.fr/ lefevre/publ.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        166810,
+        166818
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "M",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{M}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. C. Moore, Differential homological algebra. Actes du Congres International des Mathematiciens (Nice, 1970), Tome 1, p. 335--339. Gauthier-Villars, Paris, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        166935,
+        166945
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "Br0",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{Br0}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "E. H. Brown, Twisted tensor products I. Ann. of Math., vol. 69 (1959), no. 1, 223--246",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        167123,
+        167132
+      ],
+      "cite/group-marker": "[43]",
+      "cite/key": "M1",
+      "cite/marker": "[43]",
+      "cite/raw": "\\cite{M1}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. C. Moore, Algebre homologique et homologie des espaces classifiants. Expose 7 in: Seminaire Henri Cartan, 12e annee (1959/60), Periodicite des groupes d'homotopie stables des groupes classiques, d'apres Bott, fascicule 1 (exposes 1--9). Secretariat mathematique, Paris, 1961",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        167209,
+        167217
+      ],
+      "cite/group-marker": "[44]",
+      "cite/key": "M",
+      "cite/marker": "[44]",
+      "cite/raw": "\\cite{M}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. C. Moore, Differential homological algebra. Actes du Congres International des Mathematiciens (Nice, 1970), Tome 1, p. 335--339. Gauthier-Villars, Paris, 1971",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        167232,
+        167242
+      ],
+      "cite/group-marker": "[21]",
+      "cite/key": "HMS",
+      "cite/marker": "[21]",
+      "cite/raw": "\\cite{HMS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Husemoller, J. C. Moore, and J. Stasheff, Differential homological algebra and homogeneous spaces. J. Pure and Appl. Algebra, vol. 5 (1974), 113--185",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        167338,
+        167346
+      ],
+      "cite/group-marker": "[48]",
+      "cite/key": "Q",
+      "cite/marker": "[48]",
+      "cite/raw": "\\cite{Q}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. Quillen, Rational HomotopyTheory. Annals of Math., Second Series, vol. 90, no. 2 (1969), 205--295",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        167481,
+        167494
+      ],
+      "cite/group-marker": "[20,36]",
+      "cite/key": "H'",
+      "cite/marker": "[20]",
+      "cite/raw": "\\cite{H',L-H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "V. Hinich, DG coalgebras as formal stacks. J. Pure Appl. Algebra, vol. 162 (2001), no. 2-3, 209--250",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        167481,
+        167494
+      ],
+      "cite/group-marker": "[20,36]",
+      "cite/key": "L-H",
+      "cite/marker": "[36]",
+      "cite/raw": "\\cite{H',L-H}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "K. Lefevre-Hasegawa, Sur les A_ -categories. Ph.D. thesis. See www.math.jussieu.fr/ lefevre/publ.html",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        172181,
+        172191
+      ],
+      "cite/group-marker": "[22]",
+      "cite/key": "Ke4",
+      "cite/marker": "[22]",
+      "cite/raw": "\\cite{Ke4}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, Deriving DG categories. Ann. Sci. Ecole Norm. Sup., serie 4, vol. 27 (1994), no. 1, 63--102",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    },
+    {
+      "char-anchor": [
+        172196,
+        172208
+      ],
+      "cite/group-marker": "[23]",
+      "cite/key": "Ke4''",
+      "cite/marker": "[23]",
+      "cite/raw": "\\cite{Ke4''}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "B. Keller, On the cyclic homology category of exact categories, J. Pure Appl. Algebra, vol. 136 (1999), no. 1, 1--56",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": null
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__0210114-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 145,
+    "resolution-rate": 0.0333,
+    "resolved": 5,
+    "total": 150
+  }
+}

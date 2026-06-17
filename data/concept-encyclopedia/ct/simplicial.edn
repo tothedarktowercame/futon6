@@ -1,0 +1,31 @@
+{:name "simplicial",
+ :pagerank 0.018979,
+ :df 1258,
+ :concept/id :simplicial,
+ :msc "ct",
+ :defined-in
+ {:n-papers 131,
+  :sample
+  ["0711.0473" "0711.1608" "0711.2077" "0801.0404" "0804.2154"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :used-papers 8,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:simplicial",
+  :resolution-kind "nnexus",
+  :msc ["Topology"],
+  :domains ["Wikipedia"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0806.3983",
+  :text
+  "A monoidal model category $\\M$ is called \\emph{simplicial} if it is also a simplicial model category, and the simplicial action commutes with the monoidal product, i.e., there are natural coherent isomorphisms \\[ K\\boxtimes(X\\otimes Y)\\co"}}

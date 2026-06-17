@@ -1,0 +1,45 @@
+{:name "equivalence class",
+ :df 845,
+ :concept/id :equivalence-class,
+ :msc "ct",
+ :defined-in
+ {:n-papers 21,
+  :sample
+  ["0803.4209" "0809.3023" "1305.3835" "1308.0729" "1603.08186"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-genus,
+   :wanted :genus,
+   :source :nlab-raw-definition,
+   :note "nLab definition text did not expose an unambiguous genus"}
+  {:kind :missing-axioms,
+   :wanted :axioms,
+   :source :nlab-raw-definition,
+   :note
+   "nLab page resolved but no definitional condition sentence was extractable"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :domains ["Mathhub" "Mathworld" "Planetmath" "Wikipedia"],
+  :definition-source :nlab-raw-definition,
+  :msc
+  ["03B52"
+   "03D20"
+   "03E20"
+   "06-00"
+   "93C42"
+   "93D05"
+   "Mathematical_relations"
+   "XX-XX"],
+  :nlab-page-id "5802",
+  :resolution-kind "nnexus",
+  :target "nnexus:equivalence class",
+  :definition-id nil,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler"},
+ :depends-on [],
+ :gloss
+ {:paper "0809.3023",
+  :text
+  "\\defn A {\\bf diagram} in $G$ is by definition an equivalence class of graph homomorphisms $\\delta:I\\to G$.\\edefn As is the practice when an object is defined to be an equivalence class, we will refer to a diagram by any member of the equivalence class."}}

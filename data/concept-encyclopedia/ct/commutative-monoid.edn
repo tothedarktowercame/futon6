@@ -1,0 +1,29 @@
+{:name "commutative monoid",
+ :df 388,
+ :concept/id :commutative-monoid,
+ :msc "ct",
+ :defined-in
+ {:n-papers 47,
+  :sample
+  ["0805.0845" "0908.3994" "1101.4813" "1103.6009" "1203.0202"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nnexus:commutative monoid",
+  :resolution-kind "nnexus",
+  :msc ["18A25" "18D05" "20M14" "XX-XX"],
+  :domains ["Mathworld" "Planetmath"],
+  :formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0805.0845",
+  :text
+  "_sym_lnat_r} \\end{array} \\] A \\emph{commutative monoid} is a symmetric monoid such that the diagram \\[ \\xymatrix{ &M\\otimes M\\ar[dr]^{\\mu}&\\\\ M\\otimes M\\ar[ur]^{\\gamma}\\ar[rr]_{\\mu}&&M } \\] commutes."}}

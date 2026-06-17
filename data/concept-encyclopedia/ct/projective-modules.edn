@@ -1,0 +1,48 @@
+{:name "projective modules",
+ :df 311,
+ :concept/id :projective-modules,
+ :msc "ct",
+ :defined-in
+ {:n-papers 9,
+  :sample
+  ["0810.5684" "1202.2481" "1204.1358" "1405.5768" "1710.04153"]},
+ :axioms
+ [{:id :nlab-condition-1,
+   :statement
+   "###### Definition For R a ring, a projective R-module is a projective object in the category RMod of R-modules.",
+   :refs [:category :epimorphism]}
+  {:id :nlab-condition-2,
+   :statement
+   "Hence an R-module N is projective precisely if for all diagrams of R-module homomorphisms of the form \\\\ N && B where the vertical morphism is an epimorphism, there exists a lift, hence a morphism N A making a commuting diagram of the form ^ & ^ \\\\ N && B \\,.",
+   :refs [:category :epimorphism]}],
+ :holes
+ [{:kind :unresolved-genus,
+   :wanted :projective-object-in-the-category-rmod-of-r-modules,
+   :source :nlab-dictionary-definition,
+   :note
+   "inferred from nLab definition, but not present in the CT encyclopedia index"}
+  {:kind :unresolved-source-refs,
+   :wanted [:ring :projective-object :mod :modules :diagrams :module],
+   :source :nlab-dictionary-definition,
+   :note
+   "nLab definition links to concepts not present in ct/ or ct-golden/; refs were not silently imported"}],
+ :genus :projective-object-in-the-category-rmod-of-r-modules,
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:target "nlab-4477",
+  :resolution-kind "definition-site",
+  :formaliser :codex-1,
+  :formaliser-note
+  "regenerated from local nLab definition text; no corpus-gloss filler",
+  :definition-source :nlab-dictionary-definition,
+  :nlab-page-id "4477",
+  :definition-id "nlab-4477-d1"},
+ :depends-on
+ [:projective-object-in-the-category-rmod-of-r-modules
+  :category
+  :epimorphism],
+ :gloss
+ {:paper "2406.02829",
+  :text
+  "s)}, and minimal approximations (\\emph{covers} and \\emph{envelopes}), of the general modules by modules in the chosen classes. A model case is the special class $\\mathcal P_0$ of \\emph{projective modules} that yields {projective precovers}, and projective resolutions of modules. Similarly, the class"}}

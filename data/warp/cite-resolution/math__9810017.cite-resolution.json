@@ -1,0 +1,58 @@
+{
+  "paper-id": "math__9810017",
+  "records": [
+    {
+      "char-anchor": [
+        11539,
+        11550
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "StCS",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite{StCS}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Ross Street, Categorical structures (1995). In: Handbook of Algebra, Vol. 1, ed. M. Hazewinkel, Elsevier North-Holland",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Handbook of Algebra"
+    },
+    {
+      "char-anchor": [
+        11827,
+        11838
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "StFB",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{StFB}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "Ross Street, Fibrations in bicategories (1980). Cahiers Top. Geom. Diff., vol. XXI, no. 2",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Cahiers Top. Geom. Diff"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__9810017-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 2,
+    "resolution-rate": 0.0,
+    "resolved": 0,
+    "total": 2
+  }
+}

@@ -1,0 +1,25 @@
+{:name "symmetric monoidal categories",
+ :df 488,
+ :concept/id :symmetric-monoidal-categories,
+ :msc "ct",
+ :defined-in
+ {:n-papers 21,
+  :sample
+  ["1002.2540" "1102.1313" "1112.1448" "1303.3170" "1701.04732"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "1112.1448",
+  :text
+  "finite products}: arguing exactly as in the preceding two examples, we conclude that in this case the pie algebras are (many-sorted) Lawvere theories.\\vskip0.5\\baselineskip \\item \\emph{(Symmetric) monoidal categories}: this time the induced monad on $\\Set$ is the monad for \\emph{pointed magmas}: the"}}

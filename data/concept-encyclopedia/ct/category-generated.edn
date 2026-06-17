@@ -1,0 +1,22 @@
+{:name "category generated",
+ :df 309,
+ :concept/id :category-generated,
+ :msc "ct",
+ :defined-in {:n-papers 1, :sample ["2312.00429"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "2312.00429",
+  :text
+  "onsider the following situation. We suppose given a category~$C$ presented by a 2-polygraph~$P$ and a set~$G$ of morphisms of~$C$, whose elements are called \\emph{generators}. The \\emph{category generated} by~$G$, denoted $\\gencat{G}$, is the smallest subcategory of~$C$ which contains the elements o"}}

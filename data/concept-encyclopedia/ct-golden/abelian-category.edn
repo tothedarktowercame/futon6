@@ -1,0 +1,24 @@
+;; GOLDEN seed (hand-authored, APM-Xi level) — few-shot target for mark3.
+;; A property-defined object: genus + defining conditions as ∀ axioms.
+{:concept/id :abelian-category
+ :name "abelian category"
+ :msc "ct"
+ :kind :object
+ :status :golden
+ :genus :additive-category
+ :depends-on [:additive-category :morphism :kernel :cokernel :monomorphism :epimorphism]
+ :given [{:var :A :type :additive-category}]
+ :axioms [{:id :has-kernels-cokernels
+          :statement "∀ f ∈ Mor(A). f has a kernel and a cokernel"
+          :refs [:kernel :cokernel]}
+          {:id :monos-are-kernels
+          :statement "∀ monomorphism m ∈ Mor(A). m = ker(coker m)   (every mono is a kernel)"
+          :refs [:monomorphism :kernel :cokernel]}
+          {:id :epis-are-cokernels
+          :statement "∀ epimorphism e ∈ Mor(A). e = coker(ker e)   (every epi is a cokernel)"
+          :refs [:epimorphism :kernel :cokernel]}]
+ :gloss {:text "An abelian category is an additive category in which every morphism
+  has a kernel and a cokernel, every monomorphism is a kernel, and every
+  epimorphism is a cokernel."}
+ :provenance {:target "nlab-1041" :source :curated}
+ :holes []}

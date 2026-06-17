@@ -1,0 +1,598 @@
+{
+  "paper-id": "math__9811037",
+  "records": [
+    {
+      "char-anchor": [
+        6233,
+        6259
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "homotopical-algebra",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{homotopical-algebra}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. G. Quillen, Homotopical algebra, Lecture Notes in Mathematics 43, Springer-Verlag, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopical algebra"
+    },
+    {
+      "char-anchor": [
+        6910,
+        6935
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "function-complexes",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{function-complexes}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, Function complexes in homotopical algebra, Topology 19 (1980), 427--440",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Function complexes in homotopical algebra"
+    },
+    {
+      "char-anchor": [
+        7820,
+        7848
+      ],
+      "cite/group-marker": "[16]",
+      "cite/key": "quillen-ratl-homotopy",
+      "cite/marker": "[16]",
+      "cite/raw": "\\cite{quillen-ratl-homotopy}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. G. Quillen, Rational homotopy theory, Annals of Math 90 (1969), 65--87",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Rational homotopy theory"
+    },
+    {
+      "char-anchor": [
+        8188,
+        8213
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "function-complexes",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{function-complexes}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, Function complexes in homotopical algebra, Topology 19 (1980), 427--440",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Function complexes in homotopical algebra"
+    },
+    {
+      "char-anchor": [
+        9121,
+        9169
+      ],
+      "cite/group-marker": "[8]",
+      "cite/key": "dwyer-spalinski-homotopy-theories",
+      "cite/marker": "[8]",
+      "cite/raw": "\\cite[\\S11.6]{dwyer-spalinski-homotopy-theories}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and J. Spalinski, Homotopy theories and model categories, Handbook of algebraic topology (I. M. James, ed.), Elsevier Science B. V., 1995",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy theories and model categories"
+    },
+    {
+      "char-anchor": [
+        16311,
+        16358
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "dwyer-kan-realizing-diagrams-by-diagrams",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{dwyer-kan-realizing-diagrams-by-diagrams}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, Realizing diagrams in the homotopy category by means of diagrams of simplicial sets, Proc. Amer. Math. Soc. 91 (1984), 456--460",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Realizing diagrams in the homotopy category by means of diagrams of simplicial sets"
+    },
+    {
+      "char-anchor": [
+        16360,
+        16385
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "classification-thm",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{classification-thm}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, A classification theorem for diagrams of simplicial sets, Topology 23 (1984), 139--155",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A classification theorem for diagrams of simplicial sets"
+    },
+    {
+      "char-anchor": [
+        18275,
+        18316
+      ],
+      "cite/group-marker": "[12]",
+      "cite/key": "jardine;simplicial-presheaves;pure",
+      "cite/marker": "[12]",
+      "cite/raw": "\\cite{jardine;simplicial-presheaves;pure}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. F. Jardine, Simplicial presheaves, J. Pure Appl. Algebra 47 (1987), no. 1, 35--87",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Simplicial presheaves"
+    },
+    {
+      "char-anchor": [
+        18318,
+        18353
+      ],
+      "cite/group-marker": "[13]",
+      "cite/key": "jardine-boolean-localization",
+      "cite/marker": "[13]",
+      "cite/raw": "\\cite{jardine-boolean-localization}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. F. Jardine, Boolean localization, in practice, Doc. Math. 1 (1996), No. 13, 245--275 (electronic)",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Boolean localization, in practice"
+    },
+    {
+      "char-anchor": [
+        19494,
+        19525
+      ],
+      "cite/group-marker": "[10]",
+      "cite/key": "heller-homotopy-theories",
+      "cite/marker": "[10]",
+      "cite/raw": "\\cite{heller-homotopy-theories}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. Heller, Homotopy theories, Memoirs of the Amer. Math. Soc., no. 383, Amer. Math. Soc., 1988",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy theories"
+    },
+    {
+      "char-anchor": [
+        33191,
+        33219
+      ],
+      "cite/group-marker": "[17]",
+      "cite/key": "reedy-homotopy-theory",
+      "cite/marker": "[17]",
+      "cite/raw": "\\cite{reedy-homotopy-theory}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "C. L. Reedy, Homotopy theory of model categories, unpublished manuscript",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy theory of model categories"
+    },
+    {
+      "char-anchor": [
+        33221,
+        33253
+      ],
+      "cite/group-marker": "[7]",
+      "cite/key": "e2-model-category",
+      "cite/marker": "[7]",
+      "cite/raw": "\\cite[2.4--6]{e2-model-category}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer, D. M. Kan, and C. R. Stover, An E^2 model category structure for pointed simplicial spaces , Journal of Pure and Applied Algebra 90 (1993), 137--152",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "90"
+    },
+    {
+      "char-anchor": [
+        34290,
+        34314
+      ],
+      "cite/group-marker": "[3]",
+      "cite/key": "abstract-homotopy",
+      "cite/marker": "[3]",
+      "cite/raw": "\\cite{abstract-homotopy}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer, P. Hirschhorn, and D. M. Kan, General abstract homotopy theory, in preperation",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "General abstract homotopy theory"
+    },
+    {
+      "char-anchor": [
+        36275,
+        36301
+      ],
+      "cite/group-marker": "[15]",
+      "cite/key": "homotopical-algebra",
+      "cite/marker": "[15]",
+      "cite/raw": "\\cite{homotopical-algebra}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. G. Quillen, Homotopical algebra, Lecture Notes in Mathematics 43, Springer-Verlag, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopical algebra"
+    },
+    {
+      "char-anchor": [
+        48950,
+        48997
+      ],
+      "cite/group-marker": "[18]",
+      "cite/key": "segal-categories-and-cohomology-theories",
+      "cite/marker": "[18]",
+      "cite/raw": "\\cite{segal-categories-and-cohomology-theories}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "G. Segal, Categories and cohomology theories, Topology 13 (1974), 293--312",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Categories and cohomology theories"
+    },
+    {
+      "char-anchor": [
+        49137,
+        49175
+      ],
+      "cite/group-marker": "[1]",
+      "cite/key": "anderson-spectra-and-gamma-sets",
+      "cite/marker": "[1]",
+      "cite/raw": "\\cite{anderson-spectra-and-gamma-sets}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "D. W. Anderson, Spectra and -sets, Algebraic Topology (A. Liulevicius, ed.), Proceedings of symposia in pure mathematics, no. XXII, Amer. Math. Soc., 1971, pp. 23--30",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Spectra and -sets"
+    },
+    {
+      "char-anchor": [
+        49250,
+        49284
+      ],
+      "cite/group-marker": "[19]",
+      "cite/key": "thomason-delooping-machines",
+      "cite/marker": "[19]",
+      "cite/raw": "\\cite{thomason-delooping-machines}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "R. W. Thomason, Uniqueness of delooping machines, Duke Math. J. 46 (1979), 217--252",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Uniqueness of delooping machines"
+    },
+    {
+      "char-anchor": [
+        75740,
+        75765
+      ],
+      "cite/group-marker": "[4]",
+      "cite/key": "function-complexes",
+      "cite/marker": "[4]",
+      "cite/raw": "\\cite{function-complexes}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, Function complexes in homotopical algebra, Topology 19 (1980), 427--440",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Function complexes in homotopical algebra"
+    },
+    {
+      "char-anchor": [
+        76615,
+        76650
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "classification-thm",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite[2.3, 2.4]{classification-thm}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, A classification theorem for diagrams of simplicial sets, Topology 23 (1984), 139--155",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A classification theorem for diagrams of simplicial sets"
+    },
+    {
+      "char-anchor": [
+        79899,
+        79931
+      ],
+      "cite/group-marker": "[14]",
+      "cite/key": "simplicial-methods",
+      "cite/marker": "[14]",
+      "cite/raw": "\\cite[p. 87]{simplicial-methods}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "J. P. May, Simplicial objects in algebraic topology, University of Chicago Press, 1967",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Simplicial objects in algebraic topology"
+    },
+    {
+      "char-anchor": [
+        84955,
+        84980
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "classification-thm",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite{classification-thm}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, A classification theorem for diagrams of simplicial sets, Topology 23 (1984), 139--155",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A classification theorem for diagrams of simplicial sets"
+    },
+    {
+      "char-anchor": [
+        84982,
+        85029
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "dwyer-kan-realizing-diagrams-by-diagrams",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{dwyer-kan-realizing-diagrams-by-diagrams}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, Realizing diagrams in the homotopy category by means of diagrams of simplicial sets, Proc. Amer. Math. Soc. 91 (1984), 456--460",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Realizing diagrams in the homotopy category by means of diagrams of simplicial sets"
+    },
+    {
+      "char-anchor": [
+        85451,
+        85472
+      ],
+      "cite/group-marker": "[2]",
+      "cite/key": "yellow-monster",
+      "cite/marker": "[2]",
+      "cite/raw": "\\cite{yellow-monster}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "A. K. Bousfield and D. M. Kan, Homotopy limits, completions and localizations, Lecture Notes in Mathematics 304, Springer-Verlag, 1972",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Homotopy limits, completions and localizations"
+    },
+    {
+      "char-anchor": [
+        85641,
+        85676
+      ],
+      "cite/group-marker": "[5]",
+      "cite/key": "classification-thm",
+      "cite/marker": "[5]",
+      "cite/raw": "\\cite[3.4(iii)]{classification-thm}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, A classification theorem for diagrams of simplicial sets, Topology 23 (1984), 139--155",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "A classification theorem for diagrams of simplicial sets"
+    },
+    {
+      "char-anchor": [
+        85780,
+        85827
+      ],
+      "cite/group-marker": "[6]",
+      "cite/key": "dwyer-kan-realizing-diagrams-by-diagrams",
+      "cite/marker": "[6]",
+      "cite/raw": "\\cite{dwyer-kan-realizing-diagrams-by-diagrams}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "W. G. Dwyer and D. M. Kan, Realizing diagrams in the homotopy category by means of diagrams of simplicial sets, Proc. Amer. Math. Soc. 91 (1984), 456--460",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Realizing diagrams in the homotopy category by means of diagrams of simplicial sets"
+    },
+    {
+      "char-anchor": [
+        89516,
+        89570
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "goerss-jardine-simplicial-book",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite[Ch. 9,\nThm. 2.3]{goerss-jardine-simplicial-book}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. G. Goerss and J. F. Jardine, Simplicial homotopy theory, to appear",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Simplicial homotopy theory"
+    },
+    {
+      "char-anchor": [
+        89772,
+        89789
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "hirschhorn",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{hirschhorn}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Hirschhorn, Localization in model categories, http://www-math.mit.edu/ psh",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Localization in model categories"
+    },
+    {
+      "char-anchor": [
+        90015,
+        90060
+      ],
+      "cite/group-marker": "[9]",
+      "cite/key": "goerss-jardine-simplicial-book",
+      "cite/marker": "[9]",
+      "cite/raw": "\\cite[Ch.\\ 9]{goerss-jardine-simplicial-book}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. G. Goerss and J. F. Jardine, Simplicial homotopy theory, to appear",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Simplicial homotopy theory"
+    },
+    {
+      "char-anchor": [
+        90089,
+        90106
+      ],
+      "cite/group-marker": "[11]",
+      "cite/key": "hirschhorn",
+      "cite/marker": "[11]",
+      "cite/raw": "\\cite{hirschhorn}",
+      "confidence": 0.0,
+      "hole": {
+        "bibitem": "P. Hirschhorn, Localization in model categories, http://www-math.mit.edu/ psh",
+        "kind": "unresolved-citation",
+        "reason": "no-corpus-match"
+      },
+      "method": "hole",
+      "resolved-arxiv-id": null,
+      "resolved-corpus-id": null,
+      "title": "Localization in model categories"
+    }
+  ],
+  "schema": "futon6/h7-cite-resolution/v1",
+  "source": {
+    "bib-index": "/home/joe/code/futon6/data/warp/bib-index.json",
+    "citations-index": "/home/joe/code/futon6/data/warp/citations.json",
+    "corpus-id-index": "/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl",
+    "marks-path": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden/fable-math__9811037-dp-emacs.json"
+  },
+  "stats": {
+    "holes": 29,
+    "resolution-rate": 0.0,
+    "resolved": 0,
+    "total": 29
+  }
+}

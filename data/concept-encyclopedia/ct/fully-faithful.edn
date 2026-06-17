@@ -1,0 +1,25 @@
+{:name "fully faithful",
+ :df 1228,
+ :concept/id :fully-faithful,
+ :msc "ct",
+ :defined-in
+ {:n-papers 237,
+  :sample
+  ["0705.3249" "0708.3326" "0710.3853" "0711.0473" "0801.0199"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0711.0473",
+  :text
+  "r[d]_j\\ar@{}[dr]|\\alpha & F_0a\\ar[d]^{F_0k}\\\\b'\\ar[r]_-\\cong & F_0a'}} \\right)=\\raisebox{1.8em}{\\xymatrix{b\\ar[d]_j\\\\b'}} $$ is a $\\mathcal{T}$-epimorphism. If $F$ is additionally {\\it fully faithful} in the sense of \\cite{bungepare79}, \\ie if $$\\xymatrix@C=3pc{\\bbA_1 \\ar[r]^{F_1} \\ar[d]_{(s,t)} & \\"}}

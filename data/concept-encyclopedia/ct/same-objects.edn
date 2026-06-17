@@ -1,0 +1,23 @@
+{:name "same objects",
+ :df 747,
+ :concept/id :same-objects,
+ :msc "ct",
+ :defined-in
+ {:n-papers 3, :sample ["0711.1608" "0711.2077" "0803.4209"]},
+ :axioms [],
+ :holes
+ [{:kind :missing-definition-source,
+   :wanted :nlab-definition,
+   :note
+   "neither :provenance :target nor the concept name resolved to a local nLab dictionary definition or raw Definition section"}],
+ :status :draft,
+ :kind :object,
+ :provenance
+ {:formaliser :codex-1,
+  :formaliser-note
+  "no local nLab definition source resolved; emitted honest holes only"},
+ :depends-on [],
+ :gloss
+ {:paper "0711.2077",
+  :text
+  "l orbital structures cannot be taken as \\emph{objects} of a new category. However one can define [P4] a new category which shall be denoted here by $\\textbf{Mero}(\\sfD)$, with the \\emph{same objects} as $\\textbf{Gpd}(\\sfD)$, and arrows called ``\\emph{meromorphisms}'', in which the $s$-equivalences ("}}
