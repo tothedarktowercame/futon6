@@ -40,7 +40,8 @@ If the result is ambiguous, that control is the first follow-up.
 | Item | Value |
 |---|---|
 | Box | Linode 4×GPU, Ubuntu 24.04, re-provisioned **with CUDA toolkit (`nvcc`) on the image** if available |
-| Setup | `linode-4gpu-setup.sh`: installs Ubuntu base packages, creates `$HOME/mark4-venv`, optionally installs `linode-cli` via `pipx`, then serves vLLM |
+| Provisioning | Private StackScript `mark4-ubuntu2404-gpu-bootstrap` (`2142757`) on `linode/ubuntu24.04`: installs NVIDIA drivers, optional CUDA toolkit, optional `linode-cli`, then reboots |
+| Setup | after the StackScript reboot, `linode-4gpu-setup.sh`: verifies `nvidia-smi`, creates `$HOME/mark4-venv`, then serves vLLM |
 | Model | Llama-3.1-70B-Instruct-AWQ-INT4, TP=4, `--enforce-eager`, `--max-model-len 16384`, `--gpu-memory-utilization 0.95` |
 | Inputs | `data/iatc-candidates/` — **10/10** candidates, all `iatc-candidate/v2-enriched` (verified on dev box) |
 | Run | `linode-4gpu-run.sh`: uses `$HOME/mark4-venv/bin/python` by default; (re)build enriched candidates → wait for vLLM → IATC loop → owner-review gates |
@@ -50,6 +51,19 @@ If the result is ambiguous, that control is the first follow-up.
 **Out of scope this run:** the expository ⑤.4 GPU reconstruction (lane C, built+
 reviewed on stub, GPU run pending); the APM embedding/pgvector matcher; the 70B-raw
 control arm above.
+
+Provisioning template:
+
+```bash
+linode-cli linodes create \
+  --region us-ord \
+  --type g2-gpu-rtx4000a4-s \
+  --image linode/ubuntu24.04 \
+  --stackscript_id 2142757 \
+  --label mark4-70b-$(date +%Y%m%d) \
+  --root_pass 'REPLACE-ME' \
+  --authorized_keys "$(cat ~/.ssh/id_ed25519.pub)"
+```
 
 ## 3. Predictions (committed; each with a threshold + a falsifier)
 

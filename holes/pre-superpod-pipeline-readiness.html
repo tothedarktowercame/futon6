@@ -251,7 +251,7 @@ const PHASES = [
    {id:"7.2", name:"GPU host setup + run", cls:"r", scripts:"linode-4gpu-setup.sh · linode-4gpu-run.sh · render_gh200.py",
     io:"serve 70B (vLLM) · (re)extract enriched candidates · run loop · batch CPU render",
     badge:["ready","fixed 2026-06-17"], src:"verified",
-    note:"<b>Fixed:</b> <code>run.sh</code> is now self-contained — it (re)extracts enriched candidates when marks are local, or refuses early with instructions when not, then runs the loop. Setup/run now share <code>$HOME/mark4-venv</code>; setup targets Ubuntu 24.04, serves with the preregistered max-model-len / gpu-memory-utilization / enforce-eager flags, and can install <code>linode-cli</code> via <code>pipx</code>. No more single-stage run on stale input."},
+    note:"<b>Fixed:</b> <code>run.sh</code> is now self-contained — it (re)extracts enriched candidates when marks are local, or refuses early with instructions when not, then runs the loop. New provisioning path: private StackScript <code>mark4-ubuntu2404-gpu-bootstrap</code> (<code>2142757</code>) installs NVIDIA drivers/CUDA toolkit on Ubuntu 24.04 and reboots before operator setup. Setup/run then share <code>$HOME/mark4-venv</code>, serve with the preregistered max-model-len / gpu-memory-utilization / enforce-eager flags, and can install <code>linode-cli</code> via <code>pipx</code>. No more single-stage run on stale input."},
    {id:"7.3", name:"Eval harness", cls:"p", scripts:"mark3-eval-report.json · mark3-eval-summary.md",
     io:"graph dir → checker-% / substance-% / grounding-% / expository-% / prior-vs-posterior",
     badge:["partial","awaiting re-run"], src:"verified",
