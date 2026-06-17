@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Pre-Superpod Pipeline — Stage Map &amp; Readiness</title>
+<style>
+  :root{
+    --paper:#f7f5ef; --ink:#1a1a1a; --line:#ddd6c8;
+    --ready:#1d7a3a; --ready-bg:#e7f6ec;
+    --partial:#9a6a00; --partial-bg:#fdf3e0;
+    --liability:#a11; --liability-bg:#fbe9e9;
+    --vision:#555; --vision-bg:#eee;
+    --untested:#2456a6; --untested-bg:#e8f0fb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font:14px/1.5 "Iowan Old Style",Georgia,serif;}
+  header{padding:24px 32px 8px;}
+  h1{font-size:22px;margin:0 0 4px;}
+  .meta{color:#666;font-size:12.5px;}
+  .flow{margin:14px 32px;padding:10px 14px;border:1px solid var(--line);background:#fff;
+        font:12.5px/1.6 ui-sans-serif,system-ui;color:#333;border-radius:6px;}
+  .flow b{color:#000}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:8px 32px;font:12px/1 ui-sans-serif,system-ui;}
+  .badge{display:inline-block;padding:2px 8px;border-radius:10px;font:600 11px/1.5 ui-sans-serif,system-ui;
+         text-transform:uppercase;letter-spacing:.03em;}
+  .ready{color:var(--ready);background:var(--ready-bg);}
+  .partial{color:var(--partial);background:var(--partial-bg);}
+  .liability{color:var(--liability);background:var(--liability-bg);}
+  .vision{color:var(--vision);background:var(--vision-bg);}
+  .untested{color:var(--untested);background:var(--untested-bg);}
+  .src{font:600 9.5px/1.4 ui-sans-serif,system-ui;text-transform:uppercase;letter-spacing:.04em;
+       padding:1px 5px;border-radius:3px;border:1px solid #ccc;color:#666;background:#faf8f2;}
+  .liabilities{margin:14px 32px;padding:12px 16px;border:1.5px solid var(--liability);
+       background:var(--liability-bg);border-radius:6px;}
+  .liabilities h2{margin:0 0 6px;font-size:14px;color:var(--liability);text-transform:uppercase;letter-spacing:.04em;}
+  .liabilities.resolved{border-color:var(--ready);background:var(--ready-bg);}
+  .liabilities.resolved h2{color:var(--ready);}
+  .liabilities ol{margin:6px 0 0 18px;padding:0;font-size:13px;}
+  .liabilities li{margin:3px 0;}
+  main{padding:8px 24px 40px;}
+  .phase{margin:18px 8px;}
+  .phase h2{font-size:15px;margin:0 0 2px;border-bottom:2px solid var(--line);padding-bottom:4px;}
+  .phase .pmeta{color:#777;font-size:12px;margin:0 0 10px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;}
+  .card{border:1px solid var(--line);background:#fff;border-radius:6px;padding:11px 13px;}
+  .card.l{border-left:4px solid var(--liability);}
+  .card.r{border-left:4px solid var(--ready);}
+  .card.p{border-left:4px solid var(--partial);}
+  .card.v{border-left:4px solid var(--vision);}
+  .card.u{border-left:4px solid var(--untested);}
+  .card h3{margin:0 0 2px;font-size:13.5px;}
+  .card .id{color:#999;font:600 11px/1 ui-sans-serif,system-ui;}
+  .chip{display:inline-block;font:600 10px/1.4 ui-sans-serif,system-ui;padding:1px 6px;border-radius:3px;
+        background:#eef;color:#335;margin-left:4px;}
+  .chip.gpu{background:#fbe9e9;color:#a11;}
+  .io{font:11.5px/1.4 "SF Mono",ui-monospace,Menlo,monospace;color:#444;margin:6px 0;}
+  .io b{color:#777;font-weight:600}
+  .scripts{font:11px/1.4 "SF Mono",ui-monospace,Menlo,monospace;color:#2456a6;margin:4px 0;}
+  .note{font-size:12.5px;color:#333;margin:6px 0 0;}
+  .note .src{margin-right:5px;}
+  .row1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  footer{padding:0 32px 60px;max-width:900px;}
+  footer h2{font-size:15px;}
+  footer li{font-size:13px;margin:3px 0;}
+  code{background:#ece8dd;padding:1px 4px;border-radius:3px;font-size:11.5px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Pre-Superpod Pipeline — Stage Map &amp; Readiness</h1>
+  <div class="meta">futon6 · branch <code>mark4-held-steps</code> · readiness review (claude-6, 2026-06-16; liabilities #1–#3 fixed same day) ·
+  cards 1.1 / 2.1–2.3 / 4.5 / 4.6 / 6.1 revalidated 2026-06-17 (claude-1, Codex handoff round H1–H9 — <code>holes/codex-handoffs-pre-superpod.md</code>; Phase ⑤ stays claude-6's) ·
+  built to be iterated. Sources for each readiness note are tagged
+  <span class="src">verified</span> (claude-6 ran it this session) ·
+  <span class="src">documented</span> (claimed in repo docs / read from code) ·
+  <span class="src">inferred</span> (claude-6's read, unconfirmed).</div>
+</header>
+
+<div class="flow">
+  <b>Macro-flow:</b> ① Weft anatomy (CPU) → ② Concept/term substrate (CPU) &amp; ③ Warp (cross-corpus, CPU) →
+  <b>two GPU reasoning siblings over the same anatomy:</b> ④ IATC = the formal / illative argument DAG, and
+  ⑤ Expository-region reasoning = the informal reasoning (motivation, heuristics, strategy; folds IATC's
+  performative / value / meta) → ⑥ APM structure match (CPU). ⑦ orchestration + eval wrap it. Each model/derivation
+  stage is gated before the next consumes it.
+</div>
+
+<div class="liabilities resolved">
+  <h2>✓ Liabilities — resolved 2026-06-16</h2>
+  <ol>
+    <li><b>Silent enrichment bypass — FIXED.</b> <code>mark3_extract_candidates</code> now inlines a window-scoped
+      <code>enrichment</code> list (symbol→type groundings, definitions, quantifiers, proof-moves, citations) + a
+      <code>schema</code> marker; <code>mark3_iatc_loop.build_prompt</code> renders it into the prompt. Verified: a
+      candidate now carries a median 16 anatomy marks and the prompt contains them. <span class="src">verified</span></li>
+    <li><b>Silent run on un-enriched input — FIXED.</b> The loop has a hard precondition gate
+      (<code>require_enriched</code>): any candidate lacking the v2 schema prints FATAL and exits 2 <i>before any model
+      call</i>. Verified against the old candidate dir (10/10 refused). <span class="src">verified</span></li>
+    <li><b>Single-stage run / validator≠executor — FIXED.</b> <code>linode-4gpu-run.sh</code> is now self-contained:
+      it (re)extracts enriched candidates when marks are local, or refuses early with instructions when not, then runs the
+      loop. (<code>mark4_pipeline_runner.py</code> stays a planner, but is no longer a trap — the gate + run.sh enforce
+      order at runtime.) <span class="src">verified</span></li>
+    <li><b>gh200 eval was enrichment-blind — now just RE-RUN.</b> No longer a code defect: re-run the loop over the
+      regenerated enriched candidate dir and the grounding/expository metrics become real. <span class="src">verified</span></li>
+  </ol>
+  <div class="note"><b>Residual / next:</b> (a) do the enrichment-fed 70B re-run to replace the blind eval — the headline
+  action; (b) <code>data/iatc-candidates</code> has been regenerated (10/10 enriched) and is ready; (c) Phase ⑤ and the
+  APM-match stage (⑥) remain unbuilt/unvalidated.</div>
+</div>
+
+<div class="legend">
+  <span><span class="badge ready">ready</span> validated / independently verified</span>
+  <span><span class="badge partial">partial</span> works, incomplete or overfit</span>
+  <span><span class="badge liability">liability</span> known defect / false comfort</span>
+  <span><span class="badge untested">untested</span> present, not yet assessed</span>
+  <span><span class="badge vision">vision</span> aspirational / mockup</span>
+</div>
+
+<main id="app"></main>
+
+<footer>
+  <h2>Open questions to resolve as we iterate this map</h2>
+  <ul>
+    <li><b>Headline next action:</b> do the enrichment-fed 70B re-run to replace the blind eval (now unblocked).</li>
+    <li><s>Which paper is the 1/15 substance failure?</s> <b>Resolved (H5):</b> <code>1308.1804.edn</code> — a true positive (vacuous X⇒X); the gate is correct.</li>
+    <li><b>Phase ⑤'s open hole is the GPU hole-filling step (5.4)</b>: the typed taxonomy + 193-paper vote <i>classify</i> expository moves but don't <i>fill</i> the typed holes into a graph. Needs an expository checker (analogue of <code>iatc_argcheck</code>) + a reconstruction loop; the 13-graph IATC pilot shows the method works. Then render integration (5.5).</li>
+    <li><s>Concept substrate (②) / APM match (⑥): no validation yet?</s> <b>Resolved (H2–H4, H9; improved by A):</b> ② is now measured and no longer at the original floor — prose-concept precision 0.108/recall 0.22 after the detector fix (still weak, but measurably above 0.072/0.14); term-prior + encyclopedia audited; ⑥ has a real gate (<code>gate_pass=true</code>). The open follow-on is more detector quality, not measurement.</li>
+    <li><s>Reasoning-layer detector overfit (5/7)?</s> <b>Re-measured (H1):</b> on a 15-paper held-out gate, inference coverage 15/15, proof-region 12/15, wf=0 — less overfit than feared; residual = papers with no proof delimiter (e.g. 1012.1220).</li>
+    <li>Commit hygiene: ~25 untracked files + two eval artifacts at repo root — what lands on this branch vs stays data/gitignored?</li>
+  </ul>
+</footer>
+
+<script>
+const PHASES = [
+ {title:"① Weft — per-paper anatomy", dev:"CPU",
+  meta:"The deterministic detector + checker. Object layer is the validated floor; reasoning layer is the new, still-overfit addition.",
+  stages:[
+   {id:"1.1", name:"Detector", cls:"p", scripts:"dp_paper_view.py (build) · dp_capabilities/{math_envelope,wellformed}",
+    io:"paper.tex → marks: scopes, binders, math-envelope, symbols, proof-moves; + reasoning: claim/inference/anaphor/label, exposition",
+    badge:["partial","OBJECT ready · REASONING held-out-gated"],
+    src:"verified", note:"Object layer validated cross-MSC (wf=0, tagged/math 100%). REASONING (H1, 2026-06-17, <code>b2df5c5</code>): generalised proof anchors (capitalised <code>\\begin{Proof}</code>, <code>\\proof…\\qed</code>, text <code>Proof.</code>) + a 15-paper held-out coverage harness (<code>dp_reasoning_coverage_harness.py</code>) now gates it — held-out <b>inference 15/15</b>, proof-region 11→12/15, wf stays 0. Less overfit than the feared 5/7; residual = papers with no proof delimiter (1012.1220 has none in body, so nothing to anchor)."},
+   {id:"1.2", name:"Checker / lint", cls:"r", scripts:"check_invariants.py (check_paper)",
+    io:"{text, marks} → coverage (grounded/tagged/math) + wellformed_errors",
+    badge:["ready","ready"], src:"documented",
+    note:"The hard gate. Discipline: coverage ⊥ well-formedness — fix the detector, never the checker. wf=0 held across all probe classes. Modified +119; not line-reviewed by claude-6."},
+   {id:"1.3", name:"Enrichment + render", cls:"r", scripts:"dp_enrich.py · dp_anatomy_html.py · render_gh200.py",
+    io:"marks → merged prose-concept layer; standoff HTML anatomy pages",
+    badge:["ready","ready"], src:"documented",
+    note:"<code>render_gh200.py</code> runs the detector with ALL flags and emits HTML — this is stage ① done correctly (and is the contrast to the bypassed GPU path). In-memory re-mine, never writes golden/."}
+  ]},
+
+ {title:"② Concept / term substrate", dev:"CPU",
+  meta:"The noun layer: normalize prose terms and ground concepts to in-corpus definitions. Design-doc backed; not independently validated.",
+  stages:[
+   {id:"2.1", name:"Prose-concept layer", cls:"p", scripts:"build_golden_paper.py",
+    io:"paper text → named math-term concept marks (prose, outside $…$)",
+    badge:["partial","fixed above floor — still WEAK"], src:"verified", note:"The prose-concept detector that <code>dp_enrich</code> merges. <b>Validated (H2, 2026-06-17, <code>8ae1ecf</code>)</b> via a wired C-TERM-COVERAGE audit; <b>fixed by A (<code>64c7e4a</code>)</b>: the same 100-row golden sample improved from precision 0.072 / recall 0.14 to <b>precision 0.108 / recall 0.22</b> (22 TP, 181 FP, residual DC-1 miss rate 78%). Still weak, but no longer at the original floor."},
+   {id:"2.2", name:"Term prior", cls:"u", scripts:"build_term_prior.py",
+    io:"corpus → document-frequency prior over candidate terms",
+    badge:["partial","validated"], src:"verified",
+    note:"E-prior-over-terms: resolves OVERFED (trim to recurring core), HUNGRY (extend), HAPAX (drop df=1). <b>Validated (H3, 2026-06-17, <code>8ae1ecf</code>)</b> and improved by A (<code>64c7e4a</code>): OVERFED now prefers the longest recurring core, so <code>interesting abelian category→abelian category</code> instead of generic <code>category</code>; HUNGRY <code>model category→cofibrantly generated model category</code>; HAPAX df=1 dropped."},
+   {id:"2.3", name:"Concept encyclopedia", cls:"u", scripts:"build_concept_encyclopedia.py",
+    io:"corpus + NNexus/nLab → concept entries (def passage + provenance + dep edges + centrality)",
+    badge:["partial","audited"], src:"verified",
+    note:"E-superpod-mark3 'cheap PlanetMath' structure-first noun substrate. <b>Audited (H4, 2026-06-17, <code>8ae1ecf</code>)</b> on 50 entries: def-passage 50/50, provenance 42/50, dep-edge 28/50, centrality 37/50; the deep semi-formalisation is now a TYPED <code>:hole</code> (50/50), not silently absent. Structure-first is sound; provenance/edges/centrality incomplete for a minority."}
+  ]},
+
+ {title:"③ Warp — cross-corpus second layer", dev:"CPU",
+  meta:"The classical 'floor' pass Rob runs over the full corpus, one MSC class at a time. This is the validated part.",
+  stages:[
+   {id:"3.1", name:"Lexicon build (per class)", cls:"r", scripts:"warp_defined_pass · warp_concordance · warp_hitlist",
+    io:"class marks → defined-index → term→{paper,role} → groundable concept hitlist",
+    badge:["ready","ready"], src:"documented",
+    note:"Run-spec fix: build the lexicon PER CLASS so grounding resolves against the domain's own vocab (the CT hitlist caps NT at 33%)."},
+   {id:"3.2", name:"Concept graph + embed", cls:"r", scripts:"warp_concept_usage · warp_citations/bib · warp_concept_graph · warp_concept_embed",
+    io:"hitlist + usage + citations → definition-dependency graph (PageRank) + multiplicity embedding",
+    badge:["ready","ready"], src:"documented",
+    note:"No GPU/superpod needed. Cross-MSC validated as the floor (the 10-class table: wf=0, tagged/math=100%)."},
+   {id:"3.3", name:"Landscape overlays (optional)", cls:"u", scripts:"warp_paper_landscape (t-SNE) · warp_or_curvature · warp_salingaros · warp_greatest_hits",
+    io:"graph/embed → terrain, aliveness, scope-district portraits",
+    badge:["untested","inspection-only"], src:"inferred", note:"Inspection aids, not gated. <code>warp_greatest_hits.py</code> modified +33."}
+  ]},
+
+ {title:"④ IATC — formal / illative reconstruction", dev:"GPU + CPU gates",
+  meta:"The FORMAL reasoning layer: claims joined by typed inference arrows. Scoped to illative-only (rel/struct) per Joe; the performative / value / meta IATC categories move to Phase ⑤ (expository). This is also where the liabilities live.",
+  stages:[
+   {id:"4.1", name:"Candidate extraction", cls:"r", scripts:"mark3_extract_candidates.py",
+    io:"marks → candidate {passage, anchors, binder-context, ENRICHMENT, source-window, marks-path, schema}",
+    badge:["ready","fixed 2026-06-16"], src:"verified",
+    note:"The 'scripted half' (codex-4: a parser can SELECT passages but can't reconstruct the DAG). <b>Fixed:</b> now inlines a window-scoped <code>enrichment</code> list (symbol→type groundings, definitions, quantifiers, proof-moves, citations) + a <code>schema</code> marker — the anatomy is self-contained in the candidate."},
+   {id:"4.2", name:"IATC LLM loop", cls:"r", scripts:"mark3_iatc_loop.py  [vLLM 70B-AWQ TP=4]", gpu:true,
+    io:"candidate → argument-graph (.edn), with repair + retry + in-loop gate",
+    badge:["ready","fixed 2026-06-16"], src:"verified",
+    note:"<b>Fixed:</b> <code>build_prompt()</code> now renders the candidate's inlined enrichment into the prompt, and a hard <code>require_enriched</code> precondition gate refuses (exit 2, no model call) any pre-enrichment candidate. Also carries the <code>iatc_repair</code> canonicalization pass + validator-aware system prompt."},
+   {id:"4.3", name:"Repair (canonicalize)", cls:"r", scripts:"iatc_repair.bb",
+    io:"raw EDN → mirror missing-warrants into :holes, back-fill edge :source",
+    badge:["ready","ready"], src:"documented", note:"Mechanical, no LLM. Runs before the gate so trivially-fixable shapes don't burn a retry."},
+   {id:"4.4", name:"Structural gate", cls:"r", scripts:"iatc_argcheck.bb",
+    io:"argument-graph .edn → PASS/FAIL on the §6 gates",
+    badge:["ready","ready — verified"], src:"verified",
+    note:"claude-6 ran it: 3/3 goldens PASS; all 7 negatives FAIL each with the matching gate (parse, missing-source, dangling-endpoint, unresolved-ref, meta-conclusion, bad-subproof, missing-warrant); exit codes correct. A real gate."},
+   {id:"4.5", name:"Substance gate", cls:"p", scripts:"substance_gate.py",
+    io:"argument-graph .edn → PASS/FAIL on anti-shell-gaming checks",
+    badge:["partial","verified · true-positive"], src:"verified",
+    note:"Catches shells that pass structurally (self-referential :given, template collapse). 14/15 on the gh200 run; <b>the 1/15 examined (H5, 2026-06-17, <code>4aad369</code>): <code>1308.1804.edn</code> is a TRUE POSITIVE</b> — vacuous X⇒X (<code>:premise</code>=<code>:conclusion</code>=<code>:theorem-QE</code>). The gate is correct; no code change."},
+   {id:"4.6", name:"Render (side-by-side)", cls:"r", scripts:"build_iatc_goldens.py",
+    io:"gated-graph + marks → CPU-marks vs GPU-marks demo",
+    badge:["ready","fixed 2026-06-17"], src:"verified", note:"<b>Finished (H6, <code>4aad369</code>):</b> each golden is window-cropped to its passage (slice text + rebase BOTH columns' mark offsets), linked from <code>dp-demo/index.html</code>, headless-screenshot-verified. Caveat: 4/5 papers render from <code>.attempt2</code> fallbacks until the enriched 70B re-run lands a real gated graph (only 0801.2567 has one now)."}
+  ]},
+
+ {title:"⑤ Expository-region reasoning", dev:"CPU carve + GPU reconstruct",
+  meta:"The INFORMAL-reasoning sibling of IATC and a likely research contribution (extends Joe's IATC / mathematical-argumentation work). Substantial prior work exists — a close reading, a typed-hole expository taxonomy, and a 193-paper multi-agent vote — but it currently CLASSIFIES expository moves; the GPU hole-filling reconstruction is the open hole. Artifacts: futon3c/holes/excursions/close-reading/.",
+  stages:[
+   {id:"5.1", name:"Close reading (empirical base)", cls:"r", scripts:"futon3c …/close-reading/*.close-reading.md (6 papers)",
+    io:"6 math.CT paper openings → 427 hand close-reading records",
+    badge:["ready","done"], src:"verified",
+    note:"Hand close reading (2026-06-15). Finding: formal-genre openings are 94% covered by existing detectors; the uncovered remainder is EXPOSITORY — the target of this whole phase. This is the empirical foundation, not a guess."},
+   {id:"5.2", name:"Seed typed-hole taxonomy", cls:"r", scripts:"close-reading/expository-scope-hierarchy.edn",
+    io:"close reading → controlled scope-kind hierarchy; each kind carries :hole{:slot :type} + :fill",
+    badge:["ready","done"], src:"verified",
+    note:"Kinds: rationale/telos · connection{/transfer,/literature-gap} · open-problem/status · universal-property · computes-invariant · obstruction. Each kind is a TYPED HOLE — so this unifies with Phase ④ and the meme→sorry model, and is the empirically-induced version of IATC's value/meta categories (the research-contribution core). FINALIZED for arXiv as <code>expository-superpod-vocab.edn</code> — +4 IATC-survivor kinds (difficulty / heuristic-plausibility / auxiliary / generalisation) the IATC-blind vote never minted, plus an explicit arXiv skip-list."},
+   {id:"5.3", name:"Multi-agent vote + mint", cls:"p", scripts:"expository_region_extract.py (carve) · consolidate_scope_votes.py (mint) · close-reading/proposals/ (4 agents)",
+    io:"193 papers → 47,843 proposals → mint policy (≥5 papers ∧ ≥2 agents) → minted vocabulary",
+    badge:["partial","classifies only"], src:"verified",
+    note:"Real scaled run: 5 sub-kinds minted (e.g. connection/application-domain, 68 papers), 8 fringe resolutions (e.g. context-setting→rationale/telos), 34.72% expository-sentence coverage, saturating discovery curve. HOLE: this BINS each scope into a kind — it does not yet FILL the typed holes into a reasoning graph."},
+   {id:"5.4", name:"GPU hole-filling reconstruction", cls:"p", scripts:"expository_argcheck.bb · mark3_extract_expository_candidates.py · mark3_expository_loop.py", gpu:true,
+    io:"regions + scope-kinds → filled expository-reasoning graph (fill each :hole's :slot)",
+    badge:["partial","built + reviewed (stub); GPU run pending"], src:"inferred",
+    note:"The missing step: fill rationale/telos's 'telos', connection's 'other-structure', etc. into a graph — the expository analogue of IATC. Method is PROVEN on the formal layer: the close-reading/iatc-clojure pilot hand-built 13 IATC graphs (codex-pool + handoff-review), 13/13 checker-PASS, claude-3-reviewed. Target now FINALIZED: <code>expository-superpod-vocab.edn</code> (16 typed-hole scopes) + the §11 runner contract in E-iatc-expository-alignment.md. Still needs the GPU loop + an expository checker analogous to iatc_argcheck. — <b>BUILT (codex-3, commit cfec4f9; reviewed by claude-6 2026-06-17):</b> checker (3 golden PASS / 6 negatives FIRE, clj-kondo+check-parens clean), extractor, loop (stub+openai, require_enriched gate, 1/1 gated PASS on stub). Remaining: the real GPU reconstruction run (stub only so far) + render integration (5.5)."},
+   {id:"5.5", name:"Render integration", cls:"v", scripts:"dp_enrich.py · dp_anatomy_html.py",
+    io:"graphs (.edn) → surfaced in the dp-anatomy showcase IATC areas",
+    badge:["vision","not done"], src:"documented",
+    note:"Named open next step in PILOT-NOTES: surface the compiled argument / expository graphs alongside the object-layer marks in the showcase, so the reasoning layer is visible next to the anatomy."}
+  ]},
+
+ {title:"⑥ APM structure match", dev:"CPU",
+  meta:"How much of an APM prelim proof's typed scope-structure is matched by literature scopes.",
+  stages:[
+   {id:"6.1", name:"APM ↔ eprint scope coverage", cls:"u", scripts:"mark4_apm_structure_coverage.py",
+    io:"APM proof scopes + eprint scope pool → matched fraction (type-only → tightest)",
+    badge:["partial","validated · gated"], src:"verified",
+    note:"Three match flavors coarsest→tightest so the saturation artifact is visible. <b>Validated (H9, 2026-06-17, <code>5eb2541</code>):</b> type-only/any-symbol saturate; type+multichar is the discriminative cut (mean .26 / median .14, 13-proof tail ≥80%); script now emits a real gate (mean≥.20, median≥.10, tail≥10) → <code>gate_pass=true</code>. Gap: needs a non-keyword random batch-007/008 arm for the disagreement metric (current eprint pool is keyword-selected)."}
+  ]},
+
+ {title:"⑦ Orchestration · eval · demos", dev:"mixed",
+  meta:"The wrappers — including the two that gave false comfort.",
+  stages:[
+   {id:"7.1", name:"Pipeline runner", cls:"u", scripts:"mark4_pipeline_runner.py",
+    io:"--plan: validate stage DAG · --evidence PID: show stage-1 marks vs candidate",
+    badge:["untested","planner — no longer a trap"], src:"verified",
+    note:"Still a PLANNER, not an executor — but no longer false comfort: the loop's <code>require_enriched</code> gate + the self-contained <code>run.sh</code> now enforce order at runtime. Promoting it to a real executor is optional follow-up."},
+   {id:"7.2", name:"GPU host setup + run", cls:"r", scripts:"linode-4gpu-setup.sh · linode-4gpu-run.sh · render_gh200.py",
+    io:"serve 70B (vLLM) · (re)extract enriched candidates · run loop · batch CPU render",
+    badge:["ready","fixed 2026-06-17"], src:"verified",
+    note:"<b>Fixed:</b> <code>run.sh</code> is now self-contained — it (re)extracts enriched candidates when marks are local, or refuses early with instructions when not, then runs the loop. Setup/run now share <code>$HOME/mark4-venv</code>; setup targets Ubuntu 24.04, serves with the preregistered max-model-len / gpu-memory-utilization / enforce-eager flags, and can install <code>linode-cli</code> via <code>pipx</code>. No more single-stage run on stale input."},
+   {id:"7.3", name:"Eval harness", cls:"p", scripts:"mark3-eval-report.json · mark3-eval-summary.md",
+    io:"graph dir → checker-% / substance-% / grounding-% / expository-% / prior-vs-posterior",
+    badge:["partial","awaiting re-run"], src:"verified",
+    note:"Works and reports honestly (checker 15/15, substance 14/15), but graded the enrichment-blind run (grounding 0.01% / expository 0.32%). The bypass is fixed — a re-run over the regenerated enriched candidates replaces these with real metrics."},
+   {id:"7.4", name:"Demos / vision", cls:"v", scripts:"build_dp_demo.py · build_golden_demo.py · build_superpod_mockup.py",
+    io:"runs → QC landing pages; 1005.2653 superpod mockup (✓ real vs ⚗ imagined)",
+    badge:["vision","mixed"], src:"documented",
+    note:"Demos render the current run; the superpod mockup is explicitly hand-authored aspiration, honestly labelled."}
+  ]}
+];
+
+const app=document.getElementById("app");
+for(const ph of PHASES){
+  const sec=document.createElement("section"); sec.className="phase";
+  sec.innerHTML=`<h2>${ph.title} <span style="font-size:12px;color:#999;font-weight:400">— ${ph.dev}</span></h2>`+
+                `<p class="pmeta">${ph.meta}</p>`;
+  const grid=document.createElement("div"); grid.className="grid";
+  for(const s of ph.stages){
+    const card=document.createElement("div"); card.className="card "+s.cls;
+    card.innerHTML=
+      `<div class="row1"><h3><span class="id">${s.id}</span> ${s.name}`+
+        `${s.gpu?'<span class="chip gpu">GPU</span>':''}</h3>`+
+        `<span class="badge ${s.badge[0]}">${s.badge[1]}</span></div>`+
+      `<div class="scripts">${s.scripts}</div>`+
+      `<div class="io"><b>io</b> ${s.io}</div>`+
+      `<div class="note"><span class="src">${s.src}</span>${s.note}</div>`;
+    grid.appendChild(card);
+  }
+  sec.appendChild(grid); app.appendChild(sec);
+}
+</script>
+</body>
+</html>
