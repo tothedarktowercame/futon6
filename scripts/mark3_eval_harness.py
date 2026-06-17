@@ -3,8 +3,7 @@
 
 Aggregates the measurement set used to grade mark3 runs:
 
-* grounding-% against layer-(a) golden-mark baseline when artifact evidence can
-  be tied to golden papers,
+* grounding-% as warrant-resolution over inference edges,
 * expository-coverage-% when artifacts carry source line intervals,
 * checker-PASS-% from the structural checker applicable to the run kind,
 * substance-PASS-% from ``substance_gate.py``, and
@@ -57,10 +56,102 @@ def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
-def collect_edn(run_dir: Path) -> list[Path]:
+def is_attempt_path(path: Path) -> bool:
+    return ".attempts" in path.parts
+
+
+def collect_edn(run_dir: Path, *, include_attempts: bool = False) -> list[Path]:
     if run_dir.is_file():
-        return [run_dir] if run_dir.suffix == ".edn" else []
-    return sorted(p for p in run_dir.rglob("*.edn") if p.is_file())
+        if run_dir.suffix != ".edn":
+            return []
+        if is_attempt_path(run_dir) and not include_attempts:
+            return []
+        return [run_dir]
+    return sorted(
+        p
+        for p in run_dir.rglob("*.edn")
+        if p.is_file() and (include_attempts or not is_attempt_path(p))
+    )
+
+
+def _find_matching(text: str, start: int, opener: str, closer: str) -> int | None:
+    depth = 0
+    in_string = False
+    escape = False
+    for i in range(start, len(text)):
+        ch = text[i]
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch == opener:
+            depth += 1
+        elif ch == closer:
+            depth -= 1
+            if depth == 0:
+                return i
+    return None
+
+
+def top_level_map_blocks_in_vector(text: str, key: str) -> list[str]:
+    key_pos = text.find(key)
+    if key_pos < 0:
+        return []
+    vec_start = text.find("[", key_pos + len(key))
+    if vec_start < 0:
+        return []
+    vec_end = _find_matching(text, vec_start, "[", "]")
+    if vec_end is None:
+        return []
+    blocks = []
+    i = vec_start + 1
+    while i < vec_end:
+        if text[i] == "{":
+            block_end = _find_matching(text, i, "{", "}")
+            if block_end is None or block_end > vec_end:
+                break
+            blocks.append(text[i:block_end + 1])
+            i = block_end + 1
+        else:
+            i += 1
+    return blocks
+
+
+def edge_warrant_resolved(edge_text: str) -> bool:
+    """No :warrant means unresolved; {:kind :missing-warrant} is unresolved."""
+    warrant_match = re.search(r":warrant\b", edge_text)
+    if not warrant_match:
+        return False
+    tail = edge_text[warrant_match.end():]
+    missing = re.match(r"\s+:missing-warrant\b", tail)
+    if missing:
+        return False
+    brace = re.match(r"\s*\{", tail)
+    if not brace:
+        return True
+    block_start = warrant_match.end() + brace.start()
+    block_end = _find_matching(edge_text, block_start, "{", "}")
+    if block_end is None:
+        return False
+    warrant_block = edge_text[block_start:block_end + 1]
+    return not re.search(r":kind\s+:missing-warrant\b", warrant_block)
+
+
+def warrant_resolution_counts(files: list[Path]) -> tuple[int, int]:
+    total_edges = 0
+    resolved = 0
+    for path in files:
+        for edge in top_level_map_blocks_in_vector(read_text(path), ":edges"):
+            total_edges += 1
+            if edge_warrant_resolved(edge):
+                resolved += 1
+    return resolved, total_edges
 
 
 def detect_kind_for_text(text: str) -> str:
@@ -145,32 +236,35 @@ def artifact_index(files: list[Path]) -> dict[str, Any]:
 
 
 def grounding_metric(files: list[Path], idx: dict[str, Any], golden_dir: Path) -> dict[str, Any]:
+    resolved, total_edges = warrant_resolution_counts(files)
     paper_ids = idx["paper_ids"]
-    if not paper_ids:
+    legacy_baseline = (
+        sum(golden_mark_count(golden_file(golden_dir, pid)) for pid in paper_ids)
+        if paper_ids else None
+    )
+    if not total_edges:
         return {
             "computable": False,
-            "reason": "artifacts do not name source papers",
+            "reason": "no inference edges found in IATC graphs",
             "grounded_artifacts": len(files),
-            "baseline_layer_a_marks": None,
-            "grounding_percent": None,
-        }
-    baseline = sum(golden_mark_count(golden_file(golden_dir, pid)) for pid in paper_ids)
-    if not baseline:
-        return {
-            "computable": False,
-            "reason": "no matching golden mark files for artifact paper ids",
-            "paper_count": len(paper_ids),
-            "grounded_artifacts": len(files),
-            "baseline_layer_a_marks": 0,
+            "baseline_layer_a_marks": legacy_baseline,
+            "total_edges": 0,
+            "resolved_warrant_edges": 0,
             "grounding_percent": None,
         }
     return {
         "computable": True,
-        "method": "artifact-count divided by layer-(a) dp mark count over referenced golden papers",
+        "method": (
+            "warrant-resolution over IATC inference edges: an edge is grounded when "
+            "it has a :warrant whose :kind is not :missing-warrant; edges with no "
+            ":warrant key count as unresolved"
+        ),
         "paper_count": len(paper_ids),
         "grounded_artifacts": len(files),
-        "baseline_layer_a_marks": baseline,
-        "grounding_percent": pct(len(files), baseline),
+        "baseline_layer_a_marks": legacy_baseline,
+        "total_edges": total_edges,
+        "resolved_warrant_edges": resolved,
+        "grounding_percent": pct(resolved, total_edges),
     }
 
 
@@ -260,12 +354,14 @@ def run_command(cmd: list[str]) -> dict[str, Any]:
     }
 
 
-def checker_metrics(run_dir: Path, run_kind: str) -> dict[str, Any]:
+def checker_metrics(run_dir: Path, run_kind: str, *, include_attempts: bool = False) -> dict[str, Any]:
     structural: dict[str, Any] = {}
     applicable = []
     for kind, checker in CHECKERS.items():
         if run_kind in {kind, "mixed"}:
             cmd = ["bb", str(checker), str(run_dir)]
+            if include_attempts:
+                cmd.append("--include-attempts")
             structural[kind] = run_command(cmd)
             applicable.append(structural[kind])
         else:
@@ -324,11 +420,17 @@ def prior_vs_posterior_metric(terms: list[str], prior_path: Path) -> dict[str, A
     }
 
 
-def build_report(run_dir: Path, golden_dir: Path, prior_path: Path) -> dict[str, Any]:
-    files = collect_edn(run_dir)
+def build_report(
+    run_dir: Path,
+    golden_dir: Path,
+    prior_path: Path,
+    *,
+    include_attempts: bool = False,
+) -> dict[str, Any]:
+    files = collect_edn(run_dir, include_attempts=include_attempts)
     run_kind, kind_counts = detect_run_kind(files)
     idx = artifact_index(files)
-    checkers = checker_metrics(run_dir, run_kind) if files else {
+    checkers = checker_metrics(run_dir, run_kind, include_attempts=include_attempts) if files else {
         "structural": {},
         "checker_PASS_percent": None,
         "checker_passed": 0,
@@ -343,6 +445,7 @@ def build_report(run_dir: Path, golden_dir: Path, prior_path: Path) -> dict[str,
         "golden_dir": str(golden_dir),
         "prior_path": str(prior_path),
         "artifact_count": len(files),
+        "include_attempts": include_attempts,
         "run_kind": run_kind,
         "kind_counts": kind_counts,
         "paper_ids": idx["paper_ids"],
@@ -375,7 +478,7 @@ def human_summary(report: dict[str, Any]) -> str:
         "## Metrics",
         "",
         f"- grounding-%: {fmt_pct(g.get('grounding_percent'))} "
-        f"({g.get('grounded_artifacts')} artifacts / {g.get('baseline_layer_a_marks')} layer-(a) marks; "
+        f"({g.get('resolved_warrant_edges')} / {g.get('total_edges')} resolved warrant edges; "
         f"computable={g.get('computable')})",
         f"- expository-coverage-%: {fmt_pct(e.get('expository_coverage_percent'))} "
         f"({e.get('covered_expository_lines')} / {e.get('expository_lines')} lines; "
@@ -414,12 +517,22 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--prior", type=Path, default=DEFAULT_PRIOR)
     parser.add_argument("--out", type=Path, default=Path("mark3-eval-report.json"))
     parser.add_argument("--summary-out", type=Path, default=Path("mark3-eval-summary.md"))
+    parser.add_argument(
+        "--include-attempts",
+        action="store_true",
+        help="include retry intermediates under .attempts/ (old behavior; default is finals-only)",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    report = build_report(args.run_dir.resolve(), args.golden.resolve(), args.prior.resolve())
+    report = build_report(
+        args.run_dir.resolve(),
+        args.golden.resolve(),
+        args.prior.resolve(),
+        include_attempts=args.include_attempts,
+    )
     summary = human_summary(report)
     args.out.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     args.summary_out.write_text(summary, encoding="utf-8")

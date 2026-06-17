@@ -22,8 +22,26 @@ def test_mark3_harness_builds_full_metric_set(tmp_path, monkeypatch):
         '{:paper/id "0705.0102" :passage/id "p" '
         ':source {:lines [10 12] :kind :proof} '
         ':nodes [{:id :x :kind :claim :text "a claim" :source {:lines [10 10]}}] '
-        ':edges [{:id :e :kind :infer :premise :x :conclusion :x :source {:lines [11 11]}}] '
+        ':edges [{:id :e :kind :infer :premise :x :conclusion :x '
+        ':warrant {:kind :modus-ponens :label "resolved"} '
+        ':source {:lines [11 11]}}] '
         ':holes []}',
+        encoding="utf-8",
+    )
+    (run_dir / "0705.0103.edn").write_text(
+        '{:paper/id "0705.0102" :passage/id "q" '
+        ':source {:lines [12 12] :kind :proof} '
+        ':nodes [{:id :y :kind :claim :text "another claim" :source {:lines [12 12]}}] '
+        ':edges [{:id :f :kind :infer :premise :y :conclusion :y '
+        ':warrant {:kind :missing-warrant :wanted "specific missing lemma"} '
+        ':source {:lines [12 12]}}] '
+        ':holes [{:kind :missing-warrant :edge :f :wanted "specific missing lemma"}]}',
+        encoding="utf-8",
+    )
+    attempts = run_dir / ".attempts"
+    attempts.mkdir()
+    (attempts / "0705.0102.attempt0.edn").write_text(
+        '{:paper/id "0705.0102" :nodes [] :edges [] :holes []}',
         encoding="utf-8",
     )
     golden = tmp_path / "golden"
@@ -76,8 +94,19 @@ def test_mark3_harness_builds_full_metric_set(tmp_path, monkeypatch):
     report = HARNESS.build_report(run_dir, golden, prior)
 
     assert report["run_kind"] == "iatc"
-    assert report["metrics"]["grounding"]["grounding_percent"] == 0.5
-    assert report["metrics"]["expository_coverage"]["expository_coverage_percent"] == 1.0
+    assert report["artifact_count"] == 2
+    assert report["include_attempts"] is False
+    assert [p.name for p in HARNESS.collect_edn(run_dir)] == ["0705.0102.edn", "0705.0103.edn"]
+    assert [p.name for p in HARNESS.collect_edn(run_dir, include_attempts=True)] == [
+        "0705.0102.attempt0.edn",
+        "0705.0102.edn",
+        "0705.0103.edn",
+    ]
+    grounding = report["metrics"]["grounding"]
+    assert grounding["total_edges"] == 2
+    assert grounding["resolved_warrant_edges"] == 1
+    assert grounding["grounding_percent"] == 0.5
+    assert report["metrics"]["expository_coverage"]["expository_coverage_percent"] == 2 / 3
     assert report["metrics"]["checkers"]["checker_PASS_percent"] == 1.0
     assert report["metrics"]["checkers"]["substance_PASS_percent"] == 1.0
     assert report["metrics"]["prior_vs_posterior"]["posterior_terms_with_prior_df"] == 1
