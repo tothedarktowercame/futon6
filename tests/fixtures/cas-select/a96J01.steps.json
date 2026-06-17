@@ -1,0 +1,25 @@
+{
+  "paper_id": "a96J01",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "Prove existence by explicitly constructing the sequence of nonnegative continuous functions."
+    },
+    {
+      "id": "s2",
+      "text": "Partition [0,1] into consecutive intervals I_n with length 1/(n(n+1)), using the telescoping sum."
+    },
+    {
+      "id": "s3",
+      "text": "Choose the supports of the tent functions to be disjoint, exactly on the intervals I_n, so the bumps do not interfere."
+    },
+    {
+      "id": "s4",
+      "text": "The sup norms are 1/n, so the sum of sup norms diverges by the harmonic series."
+    },
+    {
+      "id": "s5",
+      "text": "At each x at most one term is nonzero, so bound the tail sup by 1/(N+1), which tends to zero."
+    }
+  ]
+}

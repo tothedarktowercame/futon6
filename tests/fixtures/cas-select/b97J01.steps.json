@@ -1,0 +1,33 @@
+{
+  "paper_id": "b97J01",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "Construct explicit separating examples such as A_5 and S_3 for the hierarchy."
+    },
+    {
+      "id": "s2",
+      "text": "Split into cases for A_5: the commutator subgroup is either trivial or all of A_5."
+    },
+    {
+      "id": "s3",
+      "text": "Invoke the class equation and orbit-stabilizer to write |G| as |Z(G)| plus non-central conjugacy classes."
+    },
+    {
+      "id": "s4",
+      "text": "Count over the conjugacy-class decomposition: every non-central class has size divisible by p, so |Z(G)| is divisible by p."
+    },
+    {
+      "id": "s5",
+      "text": "Since p divides |Z(G)|, bound it below by p and conclude the center is nontrivial."
+    },
+    {
+      "id": "s6",
+      "text": "Build the upper central series Z_i with Z_{i+1}/Z_i equal to the center of G/Z_i."
+    },
+    {
+      "id": "s7",
+      "text": "Use induction and well-ordering on the finite p-group order: the strictly increasing central series terminates at G."
+    }
+  ]
+}

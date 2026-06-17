@@ -1,0 +1,25 @@
+{
+  "paper_id": "a96J04",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "Unfold absolute continuity into the epsilon-delta budget for disjoint intervals."
+    },
+    {
+      "id": "s2",
+      "text": "Unfold monotonicity: |f(b_k)-f(a_k)| equals f(b_k)-f(a_k), and intervals map into intervals of that length."
+    },
+    {
+      "id": "s3",
+      "text": "Unfold the null set definition: cover E by disjoint open intervals with total length less than delta."
+    },
+    {
+      "id": "s4",
+      "text": "Estimate by bounding outer measure using countable subadditivity: m*(f(E)) is at most the sum of image lengths."
+    },
+    {
+      "id": "s5",
+      "text": "Because epsilon was arbitrary, give yourself epsilon of room and let epsilon go to zero to conclude m(f(E))=0."
+    }
+  ]
+}

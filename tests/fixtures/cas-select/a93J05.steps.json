@@ -1,0 +1,25 @@
+{
+  "paper_id": "a93J05",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "Let P be the fundamental parallelogram {s omega_1 + t omega_2 : s,t in [0,1]}."
+    },
+    {
+      "id": "s2",
+      "text": "P is compact and f is continuous, so |f| attains a maximum M on P by the extreme value theorem."
+    },
+    {
+      "id": "s3",
+      "text": "Any z in C is congruent modulo the period lattice to z_0 in P."
+    },
+    {
+      "id": "s4",
+      "text": "By periodicity f(z)=f(z_0), so the local bound on P extends globally to all of C."
+    },
+    {
+      "id": "s5",
+      "text": "A bounded entire function is constant by Liouville's theorem."
+    }
+  ]
+}

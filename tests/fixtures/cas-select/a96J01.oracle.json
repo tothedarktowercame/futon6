@@ -1,0 +1,10 @@
+{
+  "paper_id": "a96J01",
+  "matches": [
+    {"step": "s1", "pattern": "construct-an-explicit-witness", "slot": "sequence f_n", "declares_sorry": true},
+    {"step": "s2", "pattern": "construct-auxiliary-object", "slot": "partition I_n", "declares_sorry": true},
+    {"step": "s3", "pattern": "separate-into-independent-pieces", "slot": "disjoint supports", "declares_sorry": true},
+    {"step": "s4", "pattern": "reduce-to-known-result", "slot": "harmonic", "declares_sorry": false},
+    {"step": "s5", "pattern": "estimate-by-bounding", "slot": "tail <= 1/(N+1)", "declares_sorry": false}
+  ]
+}

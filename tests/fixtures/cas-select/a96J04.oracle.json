@@ -1,0 +1,10 @@
+{
+  "paper_id": "a96J04",
+  "matches": [
+    {"step": "s1", "pattern": "unfold-the-definition", "slot": "absolute continuity", "declares_sorry": true},
+    {"step": "s2", "pattern": "unfold-the-definition", "slot": "monotone", "declares_sorry": false},
+    {"step": "s3", "pattern": "unfold-the-definition", "slot": "null set", "declares_sorry": false},
+    {"step": "s4", "pattern": "estimate-by-bounding", "slot": "countable subadditivity", "declares_sorry": true},
+    {"step": "s5", "pattern": "epsilon-of-room", "slot": "epsilon arbitrary", "declares_sorry": true}
+  ]
+}

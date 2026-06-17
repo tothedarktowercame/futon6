@@ -1,0 +1,12 @@
+{
+  "paper_id": "b97J01",
+  "matches": [
+    {"step": "s1", "pattern": "construct-an-explicit-witness", "slot": "A5 and S3", "declares_sorry": false},
+    {"step": "s2", "pattern": "split-into-cases", "slot": "A5 commutator", "declares_sorry": false},
+    {"step": "s3", "pattern": "reduce-to-known-result", "slot": "class equation", "declares_sorry": true},
+    {"step": "s4", "pattern": "count-over-a-decomposition", "slot": "class-equation divisibility", "declares_sorry": true},
+    {"step": "s5", "pattern": "estimate-by-bounding", "slot": "|Z(G)| >= p", "declares_sorry": false},
+    {"step": "s6", "pattern": "construct-auxiliary-object", "slot": "upper central series", "declares_sorry": false},
+    {"step": "s7", "pattern": "induction-and-well-ordering", "slot": "finite p-group order", "declares_sorry": true}
+  ]
+}
