@@ -89,7 +89,8 @@ def resolve_phrase(phrase: str, df, *, min_papers: int = 2) -> dict:
 
     phrase_df = df.get(phrase_key, 0)
     if phrase_df < min_papers:
-        best = sorted(eligible.items(), key=lambda kv: (-kv[1], -len(kv[0]), kv[0]))[0]
+        best = sorted(eligible.items(),
+                      key=lambda kv: (-len(kv[0].split()), -kv[1], kv[0]))[0]
         return {"input": phrase, "resolution": best[0], "action": "OVERFED",
                 "df": phrase_df, "resolved_df": best[1]}
 

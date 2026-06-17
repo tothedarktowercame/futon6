@@ -78,10 +78,12 @@ class Mark:
 COMMON_HOLE_STARTS = {
     "A", "An", "The", "This", "That", "These", "Those", "Such", "Some", "Any",
     "Every", "Let", "For", "If", "Then", "By", "In", "On", "We", "Our", "Their",
+    "a", "an", "the", "this", "that", "these", "those", "such", "some", "any",
+    "every", "let", "for", "if", "then", "by", "in", "on", "we", "our", "their",
 }
 HOLE_LEADING_TRIM = {
-    "a", "an", "the", "and", "or", "has", "have", "with", "without", "of", "to",
-    "from", "in", "on", "is", "are", "be", "being", "called",
+    "a", "an", "the", "and", "or", "has", "have", "without",
+    "is", "are", "be", "being", "called",
 }
 CONCEPT_ENDINGS = (
     "category", "categories", "manifold", "manifolds", "functor", "functors",
@@ -93,6 +95,7 @@ CONCEPT_ENDINGS = (
     "subcategory", "subcategories", "colimit", "colimits", "limit", "limits",
     "system", "systems", "monad", "monads", "adjunction", "adjunctions",
     "transformation", "transformations", "equivalence", "equivalences",
+    "representation", "representations", "form", "forms", "cohomology",
 )
 APPOSITIVE_ENDINGS = (
     "category", "manifold", "functor", "algebra", "space", "group", "module",
@@ -324,6 +327,8 @@ def appositive_bind_marks(text: str) -> list[Mark]:
     marks = []
     for match in pat.finditer(text):
         type_phrase = re.sub(r"\s+", " ", match.group("type")).strip()
+        if type_phrase.lower() in APPOSITIVE_ENDINGS:
+            continue
         symbol = match.group("sym")
         marks.append(Mark(
             start=match.start(),
@@ -350,14 +355,6 @@ def hole_marks(text: str, definitions: list[Definition]) -> list[Mark]:
             start += len(words[0]) + 1
             words = words[1:]
         phrase = " ".join(words)
-        for prep in (" in ", " of ", " on "):
-            if prep in phrase:
-                tail = phrase.rsplit(prep, 1)[1]
-                if len(tail.split()) >= 2:
-                    start = match.end("phrase") - len(tail)
-                    phrase = tail
-                    words = phrase.split()
-                    break
         first = words[0] if words else ""
         if first in COMMON_HOLE_STARTS:
             continue

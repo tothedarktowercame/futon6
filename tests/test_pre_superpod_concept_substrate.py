@@ -1,4 +1,6 @@
 import importlib.util
+import json
+import re
 import sys
 from pathlib import Path
 
@@ -18,6 +20,54 @@ def load_script(name):
 golden = load_script("build_golden_paper")
 prior = load_script("build_term_prior")
 ency = load_script("build_concept_encyclopedia")
+
+BASELINE_PRECISION = 0.0724
+BASELINE_RECALL = 0.14
+
+
+def strict_h2_sample_rows(limit=100):
+    endings = "|".join(golden.CONCEPT_ENDINGS)
+    word = r"[A-Za-z][A-Za-z-]*"
+    pat = re.compile(rf"\b(?P<phrase>{word}(?:\s+{word}){{0,4}}\s+(?:{endings}))\b")
+    rows = []
+    for path in sorted((ROOT / "data/showcases/ct-anatomy/golden").glob("fable-*-dp-emacs.json")):
+        text = json.loads(path.read_text()).get("text", "")
+        body = text[text.find(r"\begin{document}"):] if r"\begin{document}" in text else text
+        for match in pat.finditer(body):
+            phrase = re.sub(r"\s+", " ", match.group("phrase")).strip()
+            if len(phrase) < 8:
+                continue
+            context = body[max(0, match.start() - 120):match.end() + 120]
+            rows.append((phrase, context))
+            if len(rows) >= limit:
+                return rows
+    return rows
+
+
+def aggregate_h2_audit(rows):
+    agg = {
+        "sample_rows": 0,
+        "expected_terms": 0,
+        "concept_marks": 0,
+        "true_positive_marks": 0,
+        "false_positive_marks": 0,
+        "missed_terms": [],
+    }
+    for phrase, context in rows:
+        audit = golden.audit_concept_term_coverage(context, [phrase])
+        for key in ["sample_rows", "expected_terms", "concept_marks",
+                    "true_positive_marks", "false_positive_marks"]:
+            agg[key] += audit[key]
+        agg["missed_terms"].extend(audit["missed_terms"])
+    agg["precision"] = (
+        agg["true_positive_marks"] / agg["concept_marks"]
+        if agg["concept_marks"] else 1.0
+    )
+    agg["recall"] = (
+        (agg["expected_terms"] - len(agg["missed_terms"])) / agg["expected_terms"]
+        if agg["expected_terms"] else 1.0
+    )
+    return agg
 
 
 def test_h2_c_term_coverage_audit_reports_precision_and_recall():
@@ -44,6 +94,13 @@ def test_h2_c_term_coverage_audit_quantifies_dc1_misses():
     assert audit["sample_rows"] == 2
     assert audit["recall"] == 0.5
     assert audit["missed_terms"] == ["triangulated category"]
+
+
+def test_h2_strict_sample_regression_floor_beats_baseline():
+    audit = aggregate_h2_audit(strict_h2_sample_rows())
+    assert audit["sample_rows"] == 100
+    assert audit["precision"] > BASELINE_PRECISION
+    assert audit["recall"] > BASELINE_RECALL
 
 
 def test_h3_term_prior_resolves_overfed_hungry_and_hapax_terms():
