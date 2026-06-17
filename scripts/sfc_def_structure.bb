@@ -15,10 +15,26 @@
   {"approx" "cong"
    "evaluated-at" "restrict"
    "conditional-set" "conditional-set"
+   "formulae-sequence" "formulae-sequence"
    "for-all" "forall"
    "⇒" "implies"
    "→" "→"
    "⋅" "·"})
+
+(def mathbb-symbols
+  {"A" "𝔸" "B" "𝔹" "C" "ℂ" "D" "𝔻" "E" "𝔼" "F" "𝔽" "G" "𝔾"
+   "H" "ℍ" "I" "𝕀" "J" "𝕁" "K" "𝕂" "L" "𝕃" "M" "𝕄" "N" "ℕ"
+   "O" "𝕆" "P" "ℙ" "Q" "ℚ" "R" "ℝ" "S" "𝕊" "T" "𝕋" "U" "𝕌"
+   "V" "𝕍" "W" "𝕎" "X" "𝕏" "Y" "𝕐" "Z" "ℤ"})
+
+(def mathcal-symbols
+  {"A" "𝒜" "B" "ℬ" "C" "𝒞" "D" "𝒟" "E" "ℰ" "F" "ℱ" "G" "𝒢"
+   "H" "ℋ" "I" "ℐ" "J" "𝒥" "K" "𝒦" "L" "ℒ" "M" "ℳ" "N" "𝒩"
+   "O" "𝒪" "P" "𝒫" "Q" "𝒬" "R" "ℛ" "S" "𝒮" "T" "𝒯" "U" "𝒰"
+   "V" "𝒱" "W" "𝒲" "X" "𝒳" "Y" "𝒴" "Z" "𝒵"})
+
+(def styled-symbols
+  (set (concat (vals mathbb-symbols) (vals mathcal-symbols))))
 
 (defn usage! []
   (binding [*out* *err*]
@@ -29,7 +45,20 @@
   (Normalizer/normalize (str s) Normalizer$Form/NFKC))
 
 (defn clean-symbol [s]
-  (-> s nfkc str/trim))
+  (let [s (str/trim (str s))]
+    (if (contains? styled-symbols s)
+      s
+      (-> s nfkc str/trim))))
+
+(defn normalize-font-macros [formula]
+  (letfn [(replace-font [s command dictionary]
+            (str/replace s
+                         (re-pattern (str "\\\\" command "\\s*\\{\\s*([A-Za-z])\\s*\\}"))
+                         (fn [[_ letter]]
+                           (get dictionary letter (str "\\" command "{" letter "}")))))]
+    (-> formula
+        (replace-font "mathbb" mathbb-symbols)
+        (replace-font "mathcal" mathcal-symbols))))
 
 (defn read-formula [args]
   (cond
@@ -119,6 +148,7 @@
       "approx" "cong"
       "times" "*"
       "and" "and"
+      "exists" "exists"
       "ci" (get symbol-dictionary text text)
       "csymbol" (get symbol-dictionary text text)
       text)))
@@ -129,6 +159,7 @@
       (= op "evaluated-at") (cons 'restrict args)
       (= op "conditional-set") (cons 'conditional-set args)
       (= op "for-all") (cons 'forall args)
+      (= op "exists") (cons 'exists args)
       (= op "approx") (cons 'cong args)
       (= op "cong") (cons 'cong args)
       (= op "⇒") (cons 'implies args)
@@ -140,6 +171,62 @@
       (= op "∈") (cons '∈ args)
       (= op "=") (cons '= args)
       :else (cons (symbol op) args))))
+
+(defn quantifier-form? [expr]
+  (and (seq? expr)
+       (#{'forall 'exists} (first expr))
+       (= 2 (count expr))))
+
+(defn quantifier->binder [expr body]
+  (let [quantifier (first expr)
+        bound (second expr)]
+    (list quantifier [bound] body)))
+
+(declare canonicalize-sexpr)
+
+(defn canonicalize-formulae-sequence [items]
+  (let [[quantifiers body-items] (split-with quantifier-form? items)
+        body (case (count body-items)
+               0 (list (symbol ":hole") "missing-formulae-sequence-body")
+               1 (first body-items)
+               (list (symbol ":hole") "unhandled-formulae-sequence" (vec body-items)))]
+    (if (seq quantifiers)
+      (reduce (fn [inner quantifier]
+                (quantifier->binder quantifier inner))
+              body
+              (reverse quantifiers))
+      (if (= 1 (count items))
+        (first items)
+        (list (symbol ":hole") "unhandled-formulae-sequence" (vec items))))))
+
+(defn math-font-times? [expr font-symbol]
+  (and (seq? expr)
+       (= '* (first expr))
+       (= 3 (count expr))
+       (= font-symbol (second expr))
+       (symbol? (nth expr 2))))
+
+(defn canonicalize-font-times [expr]
+  (cond
+    (math-font-times? expr (symbol "\\mathbb"))
+    (symbol (get mathbb-symbols (name (nth expr 2)) (name (nth expr 2))))
+
+    (math-font-times? expr (symbol "\\mathcal"))
+    (symbol (get mathcal-symbols (name (nth expr 2)) (name (nth expr 2))))
+
+    :else expr))
+
+(defn canonicalize-sexpr [expr]
+  (cond
+    (seq? expr)
+    (let [expr (apply list (map canonicalize-sexpr expr))
+          expr (canonicalize-font-times expr)]
+      (if (and (seq? expr) (= 'formulae-sequence (first expr)))
+        (canonicalize-formulae-sequence (vec (rest expr)))
+        expr))
+
+    (vector? expr) (mapv canonicalize-sexpr expr)
+    :else expr))
 
 (defn cmml->sexpr [node]
   (let [tag (local-name node)]
@@ -160,16 +247,39 @@
 (defn rewrite-rw [formula]
   (str/replace formula #"\\Rw\b" (constantly "\\Rightarrow")))
 
+(def typed-binder-re
+  #"\\(forall|exists)\s+([A-Za-z]\s*(?:,\s*[A-Za-z]\s*)*)\s*:\s*(.+?)\s*(?:\\,)?\s*\\?\.")
+
+(def multi-binder-re
+  #"\\(forall|exists)\s+([A-Za-z]\s*(?:,\s*[A-Za-z]\s*)+)\s*(?:\\,)?\s*\\?\.")
+
+(defn normalize-quantifier-name [name]
+  (case name
+    "forall" "forall"
+    "exists" "exists"))
+
+(defn quantifier-command [name]
+  (str "\\" (normalize-quantifier-name name)))
+
 (defn binder-normalize [formula]
   (let [capture (atom [])]
-    [(str/replace formula
-                  #"\\forall\s+([A-Za-z]\s*(?:,\s*[A-Za-z]\s*)+)\s*:\s*(.+?)\s*\\,\s*\\?\."
-                  (fn [[_ vars type]]
-                    (let [vars (mapv str/trim (str/split vars #","))
-                          type (str/trim type)]
-                      (swap! capture conj {:vars vars :type type})
-                      (str/join "\\,."
-                                (map #(str "\\forall " % " ") vars)))))
+    [(-> formula
+         (str/replace typed-binder-re
+                      (fn [[_ quantifier vars type]]
+                        (let [vars (mapv str/trim (str/split vars #","))
+                              type (str/trim type)]
+                          (swap! capture conj {:vars vars :type type})
+                          (str/join " "
+                                    (map #(str (quantifier-command quantifier)
+                                               " " % "\\,.")
+                                         vars)))))
+         (str/replace multi-binder-re
+                      (fn [[_ quantifier vars]]
+                        (let [vars (mapv str/trim (str/split vars #","))]
+                          (str/join " "
+                                    (map #(str (quantifier-command quantifier)
+                                               " " % "\\,.")
+                                         vars))))))
      @capture]))
 
 (defn parse-arrow-type [type]
@@ -212,7 +322,8 @@
         expr))
     expr))
 
-(def grounded-operators #{'= 'conditional-set '∈ 'forall (symbol ":") '→ 'implies 'restrict 'cong 'overline})
+(def grounded-operators #{'= 'conditional-set '∈ 'forall 'exists (symbol ":") (symbol ":hole")
+                          '→ 'implies 'restrict 'cong 'overline})
 
 (defn collect-symbols [expr]
   (let [seen (atom #{})]
@@ -233,9 +344,12 @@
 (defn transduce-formula [formula]
   (let [formula (rewrite-rw formula)
         [normalized captures] (binder-normalize formula)
+        normalized (normalize-font-macros normalized)
         cmml (latexml-cmml normalized)
         parsed (try
-                 (relational-chain-regroup (cmml->sexpr (parse-xml cmml)))
+                 (-> (cmml->sexpr (parse-xml cmml))
+                     canonicalize-sexpr
+                     relational-chain-regroup)
                  (catch Exception e
                    (symbol (str "parse-error:" (.getMessage e)))))
         structure (or (l-closure-structure formula captures) parsed)]

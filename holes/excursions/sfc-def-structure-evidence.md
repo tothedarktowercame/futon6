@@ -38,6 +38,27 @@ Ungrounded:
  {:symbol "·", :grounding :hole}]
 ```
 
+### even natural numbers
+
+Source: H-SFC2a-v2 regression from reviewed-pass gap.
+
+Formula:
+
+```tex
+\{ n \in \mathbb{N} \mid \exists k . n = 2 k \}
+```
+
+Emitted `:structure`:
+
+```clojure
+(conditional-set
+ (∈ n ℕ)
+ (exists [k] (= n (* 2 k))))
+```
+
+Checks: the existential is preserved, `\mathbb{N}` normalizes to `ℕ`, and
+LaTeXML's `formulae-sequence` join does not leak into the emitted structure.
+
 ### fibrant replacement
 
 Source: `data/warp/def-snippets.json`, `fibrant replacement`, paper `0906.4087`.
@@ -67,7 +88,7 @@ Formula:
 Emitted `:structure`:
 
 ```clojure
-(: γ (→ M (* \Ho M)))
+(: γ (→ ℳ (* \Ho ℳ)))
 ```
 
 ### homotopy equivalence
@@ -91,4 +112,3 @@ Emitted `:structure`:
 - `clj-kondo --lint scripts/sfc_def_structure.bb`
 - `emacs --batch -l /home/joe/code/futon4/dev/check-parens.el scripts/sfc_def_structure.bb`
 - `bb tests/sfc_def_structure_test.clj`
-

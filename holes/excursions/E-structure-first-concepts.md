@@ -353,3 +353,35 @@ functor-app, ≅). Meets the handoff bar — **PASS**.
 - LaTeXML's `formulae-sequence` join leaks into output; canonicalize/strip it.
 - (Known, by design) juxtaposition `Qf` → `(* Q f)`: mult-vs-application ambiguity —
   correctly deferred to H-SFC2b grounding (Q-as-functor ⇒ application).
+
+### H-SFC2a-v2 findings — codex-4
+
+Widened `scripts/sfc_def_structure.bb` without replacing the H-SFC2a transducer:
+the original LaTeXML Content-MathML path and three deterministic rules remain,
+with a new canonicalization pass for the reviewed gaps.
+
+Closed gaps:
+
+- `\exists k . φ` now canonicalizes from LaTeXML's `formulae-sequence` fallback to
+  `(exists [k] φ)` instead of silently dropping the quantifier.
+- Typed/multi-variable existentials normalize analogously to the existing binder
+  rule: `\exists x,y:X\to Y. x=y` emits
+  `(exists [x] (exists [y] (= x y)))` and captures
+  `{:vars ["x" "y"], :type "X\\to Y"}`.
+- `\mathbb{X}` / `\mathcal{X}` normalize to styled mathematical symbols before
+  LaTeXML where possible, with a fallback that collapses LaTeXML's
+  `(* \mathbb X)` / `(* \mathcal X)` artifacts.
+- Unrecognized `formulae-sequence` shapes become explicit `:hole` structures
+  rather than leaking the ambiguous operator into `:structure`.
+
+The reviewed regression formula now emits:
+
+```clojure
+(conditional-set (∈ n ℕ) (exists [k] (= n (* 2 k))))
+```
+
+The H-SFC2a L-closure target remains unchanged.
+
+Gates passed: `clj-kondo --lint scripts/sfc_def_structure.bb`,
+`emacs --batch -l /home/joe/code/futon4/dev/check-parens.el
+scripts/sfc_def_structure.bb`, and `bb tests/sfc_def_structure_test.clj`.
