@@ -64,6 +64,20 @@
     (is (str/includes? (:out result) "[closure] PASS"))
     (is (str/includes? (:out result) "[warrant-resolution] FAIL rate=0.000"))))
 
+(deftest warrant-resolution-na-on-zero-edges
+  ;; No inference edges => no warrants to resolve => N/A, NOT a warrant FAIL,
+  ;; even with a positive floor (N/A != FAIL — a coarse/edgeless graph stays useful).
+  (let [dir (fs/create-temp-dir)
+        graph (write-edn dir "edgeless.edn"
+                         "{:paper/id \"coarse\" :passage/id \"coarse:L1-1\"
+                           :source {:lines [1 1] :kind :proof}
+                           :nodes [{:id :a :kind :claim :source {:lines [1 1]}}]
+                           :edges []
+                           :holes []}")
+        result (run-check "--warrant-floor" "0.5" graph)]
+    (is (str/includes? (:out result) "[warrant-resolution] PASS rate=n/a"))
+    (is (str/includes? (:out result) "N/A"))))
+
 (let [summary (run-tests)]
   (when (pos? (+ (:fail summary) (:error summary)))
     (System/exit 1)))

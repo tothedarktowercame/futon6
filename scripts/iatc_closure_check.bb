@@ -195,14 +195,20 @@
   (let [[resolved total] (python-warrant-counts (io/file (:file ctx)))
         rate (if (pos? total) (/ resolved (double total)) nil)
         floor (:warrant-floor ctx default-warrant-floor)
-        pass? (and (some? rate) (>= rate floor))
+        ;; No inference edges => no warrants to resolve => N/A, NOT a failure.
+        ;; (N/A != FAIL: the gate fails only on present-but-wrong structure, never
+        ;; on absent structure — a coarse/edgeless graph must stay useful.)
+        na? (zero? total)
+        below? (and (some? rate) (< rate floor))
+        pass? (or na? (not below?))
+        status (cond na? :na below? :fail :else :pass)
         reasons (cond-> []
-                  (zero? total) (conj "no inference edges found")
-                  (and (some? rate) (< rate floor))
-                  (conj (format "warrant-resolution %.3f below floor %.3f (%d/%d real warrants)"
-                                rate floor resolved total)))]
+                  na? (conj "no inference edges — N/A (warrant-resolution not applicable)")
+                  below? (conj (format "warrant-resolution %.3f below floor %.3f (%d/%d real warrants)"
+                                       rate floor resolved total)))]
     {:check :warrant-resolution
      :pass pass?
+     :status status
      :rate rate
      :reasons reasons
      :per-item [{:resolved-warrant-edges resolved
