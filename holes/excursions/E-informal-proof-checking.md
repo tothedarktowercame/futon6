@@ -207,6 +207,84 @@ ground-truth anchors as specified in VERIFY. Deterministic; no network.
 ## Remaining gaps / notes
 *(Codex agents: append findings + commit shas here.)*
 
+### H-R2b+c — REVIEWED PASS (claude-1, 2026-06-17) · commit `a3b523e`
+`scripts/iatc_closure_check.bb` + `tests/iatc_closure_check_test.clj`. Checked: clj-kondo
+0/0; bb tests 8/8; R2c delegates to `mark3_eval_harness.warrant_resolution_counts` via a
+`python3 -c` subprocess (reused, not forked). Functional on `loop-run-70b`:
+- **R2b flags `0708.2185`** self-loop (1-cycle) — acceptance met, independent of substance.
+- **Bonus find — R2b is *stronger* than substance:** it flags `0712.0724`'s
+  `:e-functor-pitchfork` (`:premise [:F-functor :F-pitchfork] → :conclusion :F-pitchfork`
+  — conclusion ∈ premises, a vacuous step) that **substance passed**, because
+  `substance_gate.py:132` matches only the *first* premise token against the conclusion.
+  → **Follow-up:** tighten `substance_gate` self-loop check to scan *all* premise tokens
+  (or rely on rung-2 R2b for this class).
+- **Real semantic-quality signal:** **4/9 finals** have orphan/dangling nodes
+  (`0708.1921`, `0708.2067`, `0712.0724`, …) — nodes the 70B declared but never wired
+  into the argument. argcheck/substance miss these; rung-2 surfaces them. This is exactly
+  the "are we recovering the semantics?" signal — about half the graphs have disconnected
+  pieces.
+- Warrant-resolution per-graph 0.0–0.6 (aggregate ≈ 6/28, matches `mark3_eval_harness`).
+- **Note for the harness:** `default-warrant-floor 0.0` ⇒ R2c is report-only by default;
+  the harness must set the floor from the observed spread (`--warrant-floor`).
+
+### H-R2a — REVIEWED PASS (claude-1, 2026-06-17) · commit `5e66641`
+`scripts/iatc_anchor_faithfulness.bb` + tests. Checked: clj-kondo 0/0; bb tests 10/10;
+rates reproduce (min 0.333 / max 1.000); ground-truth anchors correct — `0706.1286`
+0.857 (HIGH), `0709.0248` flags `:extensional-category`@1510 (`\begin{proposition}`,
+0/5 terms). K=2, τ=0.45, floor 0.300 from the spread.
+- **Caveat — R2a rate is a conservative *lower bound* (lexical-only).** It over-flags
+  math/macro-dense nodes: e.g. `0801.3843` `:G "topological group G"`@L646 is flagged
+  for missing "group", but the group is on the line as the macro `\G`; `:H "group H"`
+  reduces to 1 scoreable term (single letters dropped) so it auto-fails k=2; `:crossed-
+  module`@L658 misses "crossed module" which sits on L657 (off-by-one). So low rates
+  ≠ true non-faithfulness — but it *does* also catch real imprecision.
+- **R2a-v2 (next iteration, follow-up handoff):** (a) light LaTeX normalization
+  (`\maps`→maps, `\Ob`→Ob, `\G`→G, …) before matching; (b) ±1 neighbor-line tolerance;
+  (c) per the N/A≠FAIL stance, nodes with <K scoreable terms → **N/A**, not flagged.
+  These de-noise the rate to reflect genuine faithfulness. Harness should label the R2a
+  rate "lexical lower bound" until v2 lands.
+
+### H-R2-harness findings — codex-4
+
+Implemented `scripts/iatc_semcheck.bb` as the rung-2 description-first
+aggregator. It loads the reviewed R2a and R2b/R2c checkers and calls their
+`check-graph` functions directly; it does not reimplement their logic. The
+script emits a per-graph paper-description profile, per-check semantic report,
+optional EDN/Markdown reports, and a `--gate` mode that exits nonzero on
+present-but-wrong structure. Finals-only is the default; `--include-attempts`
+is the explicit opt-in.
+
+Design decisions:
+
+- **N/A ≠ FAIL:** when a graph has no nodes or no edges at the current
+  resolution, the corresponding check is normalized to `:status :na` and does
+  not fail the aggregate gate.
+- **R2a label:** reports call the R2a rate a **lexical lower bound** because
+  the current checker is intentionally lexical-only and over-flags symbol/macro
+  dense spans.
+- **R2c floor:** the harness default is `--warrant-floor 0.0`, justified by the
+  observed loop-run-70b final spread including `0.0` and aggregate `6/28`; this
+  keeps R2c report-only until a stricter floor is calibrated.
+
+Evidence committed at
+`holes/excursions/iatc-semcheck-loop-run-70b.{edn,md}` covers the 9 finals plus
+the specified `0708.2185.attempt2.edn` anchor. It distinguishes the ground-truth
+anchors:
+
+- `0706.1286`: clean/high R2a lexical lower bound (`0.857`) and R2b pass.
+- `0709.0248`: R2a-flagged proposition-anchor case (`4` lexical reasons).
+- `0708.2185`: R2b-flagged self-loop in the attempt graph.
+
+Default finals-only smoke:
+`bb scripts/iatc_semcheck.bb data/iatc-argument-graphs/loop-run-70b` reports
+9 graphs, 4 failing graphs, and overall `FAIL`; `--gate` exits `1` on that
+run. The evidence run reports 10 graphs, 5 failing graphs, and overall `FAIL`.
+
+Gates passed: `bb tests/iatc_semcheck_test.clj`, `clj-kondo --lint
+scripts/iatc_semcheck.bb`, `clj-kondo --lint scripts/iatc_closure_check.bb`,
+`clj-kondo --lint tests/iatc_semcheck_test.clj`, and
+`futon4/dev/check-parens.el` on the touched `.bb`/test files.
+
 ### H-R2b+c findings — codex-3
 
 Implemented `scripts/iatc_closure_check.bb` with two contract-shaped checks:

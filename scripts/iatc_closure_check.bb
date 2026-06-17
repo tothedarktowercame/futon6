@@ -255,20 +255,24 @@
                  :reasons [(.getMessage e)]
                  :per-item []}]})))
 
-(let [{:keys [opts paths]} (parse-args *command-line-args*)]
-  (when (empty? paths) (usage!))
-  (let [files (mapcat edn-files paths)]
-    (when (empty? files)
-      (binding [*out* *err*]
-        (println "No .edn files found in input paths:" (str/join " " paths)))
-      (System/exit 2))
-    (let [results (mapv #(check-file % opts) files)]
-      (doseq [{:keys [file checks]} results]
-        (println (str (if (every? :pass checks) "PASS " "FAIL ") file))
-        (doseq [check checks]
-          (print-check check)))
-      (let [failures (count (remove :pass results))]
-        (println)
-        (println (format "iatc-closure-check: %d file(s), %d failing file(s) -- %s"
-                         (count results) failures (if (zero? failures) "PASS" "FAIL")))
-        (System/exit (if (zero? failures) 0 1))))))
+(defn -main [args]
+  (let [{:keys [opts paths]} (parse-args args)]
+    (when (empty? paths) (usage!))
+    (let [files (mapcat edn-files paths)]
+      (when (empty? files)
+        (binding [*out* *err*]
+          (println "No .edn files found in input paths:" (str/join " " paths)))
+        (System/exit 2))
+      (let [results (mapv #(check-file % opts) files)]
+        (doseq [{:keys [file checks]} results]
+          (println (str (if (every? :pass checks) "PASS " "FAIL ") file))
+          (doseq [check checks]
+            (print-check check)))
+        (let [failures (count (remove :pass results))]
+          (println)
+          (println (format "iatc-closure-check: %d file(s), %d failing file(s) -- %s"
+                           (count results) failures (if (zero? failures) "PASS" "FAIL")))
+          (System/exit (if (zero? failures) 0 1)))))))
+
+(when (= *file* (System/getProperty "babashka.file"))
+  (-main *command-line-args*))
