@@ -1,0 +1,1275 @@
+{
+  "agent_count": 2,
+  "coverage": {
+    "missing_denominator_papers": [],
+    "overall": {
+      "expository_sentences": 672,
+      "pct": 0.89,
+      "proposals": 6
+    },
+    "per_paper": {
+      "0710.2254": {
+        "expository_sentences": 19,
+        "pct": 5.26,
+        "proposals": 1
+      },
+      "0711.1761": {
+        "expository_sentences": 232,
+        "pct": 0.43,
+        "proposals": 1
+      },
+      "0801.2567": {
+        "expository_sentences": 320,
+        "pct": 0.31,
+        "proposals": 1
+      },
+      "0807.1872": {
+        "expository_sentences": 13,
+        "pct": 7.69,
+        "proposals": 1
+      },
+      "0905.0595": {
+        "expository_sentences": 88,
+        "pct": 2.27,
+        "proposals": 2
+      }
+    }
+  },
+  "discovery_curve": [
+    {
+      "n_minted": 0,
+      "paper": "math__0608040",
+      "paper_index": 1
+    },
+    {
+      "n_minted": 0,
+      "paper": "2311.05789",
+      "paper_index": 2
+    },
+    {
+      "n_minted": 0,
+      "paper": "1110.0605",
+      "paper_index": 3
+    },
+    {
+      "n_minted": 0,
+      "paper": "0811.1480",
+      "paper_index": 4
+    },
+    {
+      "n_minted": 0,
+      "paper": "1901.01453",
+      "paper_index": 5
+    },
+    {
+      "n_minted": 0,
+      "paper": "1308.0729",
+      "paper_index": 6
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__9811037",
+      "paper_index": 7
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__9810017",
+      "paper_index": 8
+    },
+    {
+      "n_minted": 0,
+      "paper": "0908.3347",
+      "paper_index": 9
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0111139",
+      "paper_index": 10
+    },
+    {
+      "n_minted": 0,
+      "paper": "0905.0465",
+      "paper_index": 11
+    },
+    {
+      "n_minted": 0,
+      "paper": "2002.06055",
+      "paper_index": 12
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0204218",
+      "paper_index": 13
+    },
+    {
+      "n_minted": 0,
+      "paper": "0905.0462",
+      "paper_index": 14
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0210114",
+      "paper_index": 15
+    },
+    {
+      "n_minted": 0,
+      "paper": "quant-ph__0402130",
+      "paper_index": 16
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0301027",
+      "paper_index": 17
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0307200",
+      "paper_index": 18
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0111205",
+      "paper_index": 19
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0307263",
+      "paper_index": 20
+    },
+    {
+      "n_minted": 0,
+      "paper": "1405.3221",
+      "paper_index": 21
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0310134",
+      "paper_index": 22
+    },
+    {
+      "n_minted": 0,
+      "paper": "0706.1286",
+      "paper_index": 23
+    },
+    {
+      "n_minted": 0,
+      "paper": "0806.1324",
+      "paper_index": 24
+    },
+    {
+      "n_minted": 0,
+      "paper": "1211.2851",
+      "paper_index": 25
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0406507",
+      "paper_index": 26
+    },
+    {
+      "n_minted": 0,
+      "paper": "1112.0040",
+      "paper_index": 27
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0702535",
+      "paper_index": 28
+    },
+    {
+      "n_minted": 0,
+      "paper": "1905.09566",
+      "paper_index": 29
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0310337",
+      "paper_index": 30
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0701293",
+      "paper_index": 31
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0102087",
+      "paper_index": 32
+    },
+    {
+      "n_minted": 0,
+      "paper": "1004.0993",
+      "paper_index": 33
+    },
+    {
+      "n_minted": 0,
+      "paper": "0905.2621",
+      "paper_index": 34
+    },
+    {
+      "n_minted": 0,
+      "paper": "1212.3563",
+      "paper_index": 35
+    },
+    {
+      "n_minted": 0,
+      "paper": "1902.10863",
+      "paper_index": 36
+    },
+    {
+      "n_minted": 0,
+      "paper": "1003.4394",
+      "paper_index": 37
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0212237",
+      "paper_index": 38
+    },
+    {
+      "n_minted": 0,
+      "paper": "1904.07004",
+      "paper_index": 39
+    },
+    {
+      "n_minted": 0,
+      "paper": "1908.07021",
+      "paper_index": 40
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0302304",
+      "paper_index": 41
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0504334",
+      "paper_index": 42
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0511710",
+      "paper_index": 43
+    },
+    {
+      "n_minted": 0,
+      "paper": "0708.3398",
+      "paper_index": 44
+    },
+    {
+      "n_minted": 0,
+      "paper": "1009.3370",
+      "paper_index": 45
+    },
+    {
+      "n_minted": 0,
+      "paper": "1305.0086",
+      "paper_index": 46
+    },
+    {
+      "n_minted": 0,
+      "paper": "1610.09640",
+      "paper_index": 47
+    },
+    {
+      "n_minted": 0,
+      "paper": "1702.00244",
+      "paper_index": 48
+    },
+    {
+      "n_minted": 0,
+      "paper": "1509.06811",
+      "paper_index": 49
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0107188",
+      "paper_index": 50
+    },
+    {
+      "n_minted": 0,
+      "paper": "0903.0340",
+      "paper_index": 51
+    },
+    {
+      "n_minted": 0,
+      "paper": "2401.14311",
+      "paper_index": 52
+    },
+    {
+      "n_minted": 0,
+      "paper": "0906.4931",
+      "paper_index": 53
+    },
+    {
+      "n_minted": 0,
+      "paper": "1406.4204",
+      "paper_index": 54
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0409360",
+      "paper_index": 55
+    },
+    {
+      "n_minted": 0,
+      "paper": "1205.4473",
+      "paper_index": 56
+    },
+    {
+      "n_minted": 0,
+      "paper": "1412.1615",
+      "paper_index": 57
+    },
+    {
+      "n_minted": 0,
+      "paper": "0809.3031",
+      "paper_index": 58
+    },
+    {
+      "n_minted": 0,
+      "paper": "1503.00991",
+      "paper_index": 59
+    },
+    {
+      "n_minted": 0,
+      "paper": "2003.06663",
+      "paper_index": 60
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0410328",
+      "paper_index": 61
+    },
+    {
+      "n_minted": 0,
+      "paper": "0908.4187",
+      "paper_index": 62
+    },
+    {
+      "n_minted": 0,
+      "paper": "1209.2995",
+      "paper_index": 63
+    },
+    {
+      "n_minted": 0,
+      "paper": "1102.0261",
+      "paper_index": 64
+    },
+    {
+      "n_minted": 0,
+      "paper": "1405.6881",
+      "paper_index": 65
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0612139",
+      "paper_index": 66
+    },
+    {
+      "n_minted": 0,
+      "paper": "0906.4725",
+      "paper_index": 67
+    },
+    {
+      "n_minted": 0,
+      "paper": "1104.5047",
+      "paper_index": 68
+    },
+    {
+      "n_minted": 0,
+      "paper": "1310.8279",
+      "paper_index": 69
+    },
+    {
+      "n_minted": 0,
+      "paper": "1512.08119",
+      "paper_index": 70
+    },
+    {
+      "n_minted": 0,
+      "paper": "1005.3248",
+      "paper_index": 71
+    },
+    {
+      "n_minted": 0,
+      "paper": "1009.2331",
+      "paper_index": 72
+    },
+    {
+      "n_minted": 0,
+      "paper": "1210.1036",
+      "paper_index": 73
+    },
+    {
+      "n_minted": 0,
+      "paper": "1609.05382",
+      "paper_index": 74
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0610194",
+      "paper_index": 75
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0610239",
+      "paper_index": 76
+    },
+    {
+      "n_minted": 0,
+      "paper": "0708.1921",
+      "paper_index": 77
+    },
+    {
+      "n_minted": 0,
+      "paper": "1301.1053",
+      "paper_index": 78
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0007070",
+      "paper_index": 79
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0201017",
+      "paper_index": 80
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0608228",
+      "paper_index": 81
+    },
+    {
+      "n_minted": 0,
+      "paper": "0709.0248",
+      "paper_index": 82
+    },
+    {
+      "n_minted": 0,
+      "paper": "0712.0724",
+      "paper_index": 83
+    },
+    {
+      "n_minted": 0,
+      "paper": "1305.0297",
+      "paper_index": 84
+    },
+    {
+      "n_minted": 0,
+      "paper": "1710.02230",
+      "paper_index": 85
+    },
+    {
+      "n_minted": 0,
+      "paper": "1809.00738",
+      "paper_index": 86
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0202130",
+      "paper_index": 87
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0502533",
+      "paper_index": 88
+    },
+    {
+      "n_minted": 0,
+      "paper": "0901.3602",
+      "paper_index": 89
+    },
+    {
+      "n_minted": 0,
+      "paper": "0902.1954",
+      "paper_index": 90
+    },
+    {
+      "n_minted": 0,
+      "paper": "1409.0837",
+      "paper_index": 91
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0512575",
+      "paper_index": 92
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0606241",
+      "paper_index": 93
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__9906038",
+      "paper_index": 94
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__9911242",
+      "paper_index": 95
+    },
+    {
+      "n_minted": 0,
+      "paper": "1003.1920",
+      "paper_index": 96
+    },
+    {
+      "n_minted": 0,
+      "paper": "1202.2697",
+      "paper_index": 97
+    },
+    {
+      "n_minted": 0,
+      "paper": "1301.5206",
+      "paper_index": 98
+    },
+    {
+      "n_minted": 0,
+      "paper": "1805.03776",
+      "paper_index": 99
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0101102",
+      "paper_index": 100
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0409598",
+      "paper_index": 101
+    },
+    {
+      "n_minted": 0,
+      "paper": "0705.0102",
+      "paper_index": 102
+    },
+    {
+      "n_minted": 0,
+      "paper": "1201.4981",
+      "paper_index": 103
+    },
+    {
+      "n_minted": 0,
+      "paper": "1203.3253",
+      "paper_index": 104
+    },
+    {
+      "n_minted": 0,
+      "paper": "1211.0529",
+      "paper_index": 105
+    },
+    {
+      "n_minted": 0,
+      "paper": "1502.00872",
+      "paper_index": 106
+    },
+    {
+      "n_minted": 0,
+      "paper": "1801.02927",
+      "paper_index": 107
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0501383",
+      "paper_index": 108
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0607271",
+      "paper_index": 109
+    },
+    {
+      "n_minted": 0,
+      "paper": "0708.2185",
+      "paper_index": 110
+    },
+    {
+      "n_minted": 0,
+      "paper": "0911.4979",
+      "paper_index": 111
+    },
+    {
+      "n_minted": 0,
+      "paper": "1804.07538",
+      "paper_index": 112
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0111204",
+      "paper_index": 113
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0207281",
+      "paper_index": 114
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0409602",
+      "paper_index": 115
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0503632",
+      "paper_index": 116
+    },
+    {
+      "n_minted": 0,
+      "paper": "0807.1704",
+      "paper_index": 117
+    },
+    {
+      "n_minted": 0,
+      "paper": "0908.1787",
+      "paper_index": 118
+    },
+    {
+      "n_minted": 0,
+      "paper": "1109.1004",
+      "paper_index": 119
+    },
+    {
+      "n_minted": 0,
+      "paper": "1301.3191",
+      "paper_index": 120
+    },
+    {
+      "n_minted": 0,
+      "paper": "1409.4219",
+      "paper_index": 121
+    },
+    {
+      "n_minted": 0,
+      "paper": "1502.06526",
+      "paper_index": 122
+    },
+    {
+      "n_minted": 0,
+      "paper": "1512.07573",
+      "paper_index": 123
+    },
+    {
+      "n_minted": 0,
+      "paper": "1803.05316",
+      "paper_index": 124
+    },
+    {
+      "n_minted": 0,
+      "paper": "2012.04537",
+      "paper_index": 125
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0106083",
+      "paper_index": 126
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0409473",
+      "paper_index": 127
+    },
+    {
+      "n_minted": 0,
+      "paper": "0705.0452",
+      "paper_index": 128
+    },
+    {
+      "n_minted": 0,
+      "paper": "1002.1372",
+      "paper_index": 129
+    },
+    {
+      "n_minted": 0,
+      "paper": "1302.5756",
+      "paper_index": 130
+    },
+    {
+      "n_minted": 0,
+      "paper": "1312.1269",
+      "paper_index": 131
+    },
+    {
+      "n_minted": 0,
+      "paper": "1410.6716",
+      "paper_index": 132
+    },
+    {
+      "n_minted": 0,
+      "paper": "2006.08022",
+      "paper_index": 133
+    },
+    {
+      "n_minted": 0,
+      "paper": "2311.00200",
+      "paper_index": 134
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0407275",
+      "paper_index": 135
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0412512",
+      "paper_index": 136
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0607646",
+      "paper_index": 137
+    },
+    {
+      "n_minted": 0,
+      "paper": "0904.1997",
+      "paper_index": 138
+    },
+    {
+      "n_minted": 0,
+      "paper": "0905.0459",
+      "paper_index": 139
+    },
+    {
+      "n_minted": 0,
+      "paper": "1101.3064",
+      "paper_index": 140
+    },
+    {
+      "n_minted": 0,
+      "paper": "1203.5657",
+      "paper_index": 141
+    },
+    {
+      "n_minted": 0,
+      "paper": "1208.1749",
+      "paper_index": 142
+    },
+    {
+      "n_minted": 0,
+      "paper": "1309.6952",
+      "paper_index": 143
+    },
+    {
+      "n_minted": 0,
+      "paper": "1406.0058",
+      "paper_index": 144
+    },
+    {
+      "n_minted": 0,
+      "paper": "1605.03934",
+      "paper_index": 145
+    },
+    {
+      "n_minted": 0,
+      "paper": "2105.15167",
+      "paper_index": 146
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0308246",
+      "paper_index": 147
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0312088",
+      "paper_index": 148
+    },
+    {
+      "n_minted": 0,
+      "paper": "0808.1923",
+      "paper_index": 149
+    },
+    {
+      "n_minted": 0,
+      "paper": "1210.6363",
+      "paper_index": 150
+    },
+    {
+      "n_minted": 0,
+      "paper": "1503.05523",
+      "paper_index": 151
+    },
+    {
+      "n_minted": 0,
+      "paper": "1509.00038",
+      "paper_index": 152
+    },
+    {
+      "n_minted": 0,
+      "paper": "1612.09225",
+      "paper_index": 153
+    },
+    {
+      "n_minted": 0,
+      "paper": "1905.04644",
+      "paper_index": 154
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0203255",
+      "paper_index": 155
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0502155",
+      "paper_index": 156
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0608420",
+      "paper_index": 157
+    },
+    {
+      "n_minted": 0,
+      "paper": "0907.2460",
+      "paper_index": 158
+    },
+    {
+      "n_minted": 0,
+      "paper": "0910.2733",
+      "paper_index": 159
+    },
+    {
+      "n_minted": 0,
+      "paper": "1011.1691",
+      "paper_index": 160
+    },
+    {
+      "n_minted": 0,
+      "paper": "1107.5511",
+      "paper_index": 161
+    },
+    {
+      "n_minted": 0,
+      "paper": "1409.2165",
+      "paper_index": 162
+    },
+    {
+      "n_minted": 0,
+      "paper": "1503.06720",
+      "paper_index": 163
+    },
+    {
+      "n_minted": 0,
+      "paper": "1705.07442",
+      "paper_index": 164
+    },
+    {
+      "n_minted": 0,
+      "paper": "1908.02202",
+      "paper_index": 165
+    },
+    {
+      "n_minted": 0,
+      "paper": "2306.15958",
+      "paper_index": 166
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0106050",
+      "paper_index": 167
+    },
+    {
+      "n_minted": 0,
+      "paper": "0801.3843",
+      "paper_index": 168
+    },
+    {
+      "n_minted": 0,
+      "paper": "0811.2435",
+      "paper_index": 169
+    },
+    {
+      "n_minted": 0,
+      "paper": "0911.0469",
+      "paper_index": 170
+    },
+    {
+      "n_minted": 0,
+      "paper": "1204.2013",
+      "paper_index": 171
+    },
+    {
+      "n_minted": 0,
+      "paper": "1204.3607",
+      "paper_index": 172
+    },
+    {
+      "n_minted": 0,
+      "paper": "1212.6283",
+      "paper_index": 173
+    },
+    {
+      "n_minted": 0,
+      "paper": "1404.0108",
+      "paper_index": 174
+    },
+    {
+      "n_minted": 0,
+      "paper": "1405.7805",
+      "paper_index": 175
+    },
+    {
+      "n_minted": 0,
+      "paper": "1411.6691",
+      "paper_index": 176
+    },
+    {
+      "n_minted": 0,
+      "paper": "1512.07577",
+      "paper_index": 177
+    },
+    {
+      "n_minted": 0,
+      "paper": "1705.04960",
+      "paper_index": 178
+    },
+    {
+      "n_minted": 0,
+      "paper": "1809.10621",
+      "paper_index": 179
+    },
+    {
+      "n_minted": 0,
+      "paper": "2011.08808",
+      "paper_index": 180
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0304277",
+      "paper_index": 181
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0702299",
+      "paper_index": 182
+    },
+    {
+      "n_minted": 0,
+      "paper": "0910.1306",
+      "paper_index": 183
+    },
+    {
+      "n_minted": 0,
+      "paper": "1005.3251",
+      "paper_index": 184
+    },
+    {
+      "n_minted": 0,
+      "paper": "1006.3930",
+      "paper_index": 185
+    },
+    {
+      "n_minted": 0,
+      "paper": "1112.3840",
+      "paper_index": 186
+    },
+    {
+      "n_minted": 0,
+      "paper": "1205.6522",
+      "paper_index": 187
+    },
+    {
+      "n_minted": 0,
+      "paper": "1308.1804",
+      "paper_index": 188
+    },
+    {
+      "n_minted": 0,
+      "paper": "1404.3886",
+      "paper_index": 189
+    },
+    {
+      "n_minted": 0,
+      "paper": "1804.02240",
+      "paper_index": 190
+    },
+    {
+      "n_minted": 0,
+      "paper": "1910.09240",
+      "paper_index": 191
+    },
+    {
+      "n_minted": 0,
+      "paper": "1911.04630",
+      "paper_index": 192
+    },
+    {
+      "n_minted": 0,
+      "paper": "2003.02254",
+      "paper_index": 193
+    },
+    {
+      "n_minted": 0,
+      "paper": "2208.05973",
+      "paper_index": 194
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0210047",
+      "paper_index": 195
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__0212065",
+      "paper_index": 196
+    },
+    {
+      "n_minted": 0,
+      "paper": "math__9812040",
+      "paper_index": 197
+    },
+    {
+      "n_minted": 0,
+      "paper": "0708.2067",
+      "paper_index": 198
+    },
+    {
+      "n_minted": 0,
+      "paper": "0711.0473",
+      "paper_index": 199
+    },
+    {
+      "n_minted": 0,
+      "paper": "0801.0199",
+      "paper_index": 200
+    },
+    {
+      "n_minted": 0,
+      "paper": "0710.2254",
+      "paper_index": 201
+    },
+    {
+      "n_minted": 0,
+      "paper": "0711.1761",
+      "paper_index": 202
+    },
+    {
+      "n_minted": 0,
+      "paper": "0801.2567",
+      "paper_index": 203
+    },
+    {
+      "n_minted": 0,
+      "paper": "0807.1872",
+      "paper_index": 204
+    },
+    {
+      "n_minted": 1,
+      "paper": "0905.0595",
+      "paper_index": 205
+    }
+  ],
+  "fringe_resolved": [
+    {
+      "agents": [
+        "codex-3"
+      ],
+      "definition": "A local aside that should not mint from one paper.",
+      "n_agents": 1,
+      "n_papers": 1,
+      "name": "One-Off Aside",
+      "normalized_name": "one-off-aside",
+      "papers": [
+        "0905.0595"
+      ],
+      "parent": "rationale",
+      "resolution": "resolve-to-parent",
+      "resolved_kind": "rationale",
+      "sample_evidence": [
+        {
+          "agent": "codex-3",
+          "file": "codex-3.proposals.jsonl:4",
+          "line": 30,
+          "paper": "0905.0595",
+          "quote": "We briefly recall the motivating example.",
+          "region_id": "0905.0595-leaf-0001"
+        }
+      ],
+      "status": "fringe-resolved",
+      "votes": 1,
+      "why": "Synthetic fringe validation."
+    }
+  ],
+  "inputs": {
+    "gh_order": "/home/joe/code/futon6/data/warp/gh200.txt",
+    "hierarchy": "/home/joe/code/futon6/holes/excursions/close-reading/expository-scope-hierarchy.edn",
+    "proposals_dir": "/home/joe/code/futon6/holes/excursions/close-reading/proposals"
+  },
+  "minted_hierarchy": {
+    "newly_minted": [
+      {
+        "agents": [
+          "claude-3",
+          "codex-3"
+        ],
+        "definition": "Transfers a construction or claim across an analogy between settings.",
+        "kind": "connection/bridge-analogy",
+        "n_agents": 2,
+        "n_papers": 5,
+        "name": "Bridge Analogy",
+        "normalized_name": "bridge-analogy",
+        "papers": [
+          "0710.2254",
+          "0711.1761",
+          "0801.2567",
+          "0807.1872",
+          "0905.0595"
+        ],
+        "parent": "connection",
+        "sample_evidence": [
+          {
+            "agent": "claude-3",
+            "file": "claude-3.proposals.jsonl:1",
+            "line": 128,
+            "paper": "0807.1872",
+            "quote": "The comparison with the earlier construction suggests the required transfer.",
+            "region_id": "0807.1872-inflight-0001"
+          },
+          {
+            "agent": "claude-3",
+            "file": "claude-3.proposals.jsonl:2",
+            "line": 74,
+            "paper": "0710.2254",
+            "quote": "We pass between these two descriptions without changing the universal property.",
+            "region_id": "0710.2254-inflight-0001"
+          },
+          {
+            "agent": "codex-3",
+            "file": "codex-3.proposals.jsonl:1",
+            "line": 202,
+            "paper": "0905.0595",
+            "quote": "Since, following (1), delta_lambda is a colimit cocone for each lambda...",
+            "region_id": "0905.0595-inflight-0001"
+          },
+          {
+            "agent": "codex-3",
+            "file": "codex-3.proposals.jsonl:2",
+            "line": 140,
+            "paper": "0711.1761",
+            "quote": "The same construction can be read in the dual setting.",
+            "region_id": "0711.1761-inflight-0001"
+          },
+          {
+            "agent": "codex-3",
+            "file": "codex-3.proposals.jsonl:3",
+            "line": 95,
+            "paper": "0801.2567",
+            "quote": "This identifies the preceding algebraic description with the categorical one.",
+            "region_id": "0801.2567-inflight-0001"
+          }
+        ],
+        "status": "minted",
+        "votes": 5,
+        "why": "Repeated bridge prose connects a local construction to a broader categorical setting."
+      }
+    ],
+    "seed_kinds": [
+      "connection",
+      "context",
+      "open-problem",
+      "rationale"
+    ],
+    "sufficient_scope_set": [
+      "connection",
+      "connection/bridge-analogy",
+      "context",
+      "open-problem",
+      "rationale"
+    ]
+  },
+  "paper_count": 5,
+  "per_kind_votes": {
+    "connection": {
+      "agents": [
+        "claude-3",
+        "codex-3"
+      ],
+      "kind": "connection",
+      "n_agents": 2,
+      "n_papers": 5,
+      "papers": [
+        "0710.2254",
+        "0711.1761",
+        "0801.2567",
+        "0807.1872",
+        "0905.0595"
+      ],
+      "sample_evidence": [
+        {
+          "agent": "claude-3",
+          "file": "claude-3.proposals.jsonl:1",
+          "line": 128,
+          "paper": "0807.1872",
+          "quote": "The comparison with the earlier construction suggests the required transfer.",
+          "region_id": "0807.1872-inflight-0001"
+        },
+        {
+          "agent": "claude-3",
+          "file": "claude-3.proposals.jsonl:2",
+          "line": 74,
+          "paper": "0710.2254",
+          "quote": "We pass between these two descriptions without changing the universal property.",
+          "region_id": "0710.2254-inflight-0001"
+        },
+        {
+          "agent": "codex-3",
+          "file": "codex-3.proposals.jsonl:1",
+          "line": 202,
+          "paper": "0905.0595",
+          "quote": "Since, following (1), delta_lambda is a colimit cocone for each lambda...",
+          "region_id": "0905.0595-inflight-0001"
+        },
+        {
+          "agent": "codex-3",
+          "file": "codex-3.proposals.jsonl:2",
+          "line": 140,
+          "paper": "0711.1761",
+          "quote": "The same construction can be read in the dual setting.",
+          "region_id": "0711.1761-inflight-0001"
+        },
+        {
+          "agent": "codex-3",
+          "file": "codex-3.proposals.jsonl:3",
+          "line": 95,
+          "paper": "0801.2567",
+          "quote": "This identifies the preceding algebraic description with the categorical one.",
+          "region_id": "0801.2567-inflight-0001"
+        }
+      ],
+      "votes": 5
+    },
+    "rationale": {
+      "agents": [
+        "codex-3"
+      ],
+      "kind": "rationale",
+      "n_agents": 1,
+      "n_papers": 1,
+      "papers": [
+        "0905.0595"
+      ],
+      "sample_evidence": [
+        {
+          "agent": "codex-3",
+          "file": "codex-3.proposals.jsonl:4",
+          "line": 30,
+          "paper": "0905.0595",
+          "quote": "We briefly recall the motivating example.",
+          "region_id": "0905.0595-leaf-0001"
+        }
+      ],
+      "votes": 1
+    }
+  },
+  "policy": {
+    "fringe_resolution": "resolve-to-parent",
+    "mint_threshold": {
+      "min_agents": 2,
+      "min_papers": 5
+    }
+  },
+  "proposal_count": 6
+}

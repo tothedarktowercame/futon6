@@ -219,3 +219,60 @@ Gate evidence from a temp `--n 50` build:
 Remaining gap: structure-first entries are now auditable and the formalisation
 HOLE is typed, but provenance, dep edges, and centrality are incomplete for a
 substantial minority of entries.
+
+## Remaining gaps — H5 (codex-3)
+
+Classified the GH200 substance-gate failure as a true positive, not a fixture
+issue. `scripts/substance_gate.py --self-check` passes, and the GH200 batch has
+exactly one failing graph:
+
+- `data/iatc-argument-graphs/gh200/1308.1804.edn`
+- reason: `:e-QE-supported` has `:premise :theorem-QE` and
+  `:conclusion :theorem-QE`, so the graph contains vacuous X-implies-X
+  reasoning even though the intended premises are present separately under
+  `:given`.
+
+Remaining gap: no code change is needed for H5; the failure should remain a
+substance-gate catch until the graph is regenerated or manually repaired.
+
+## Remaining gaps — H6 (codex-3)
+
+Finished `scripts/build_iatc_goldens.py` so each golden is rendered in the
+IATC passage window rather than from the LaTeX preamble. The builder now:
+
+- derives the crop from graph source line ranges;
+- slices the source text to that window;
+- rebases both CPU anatomy marks and GPU/IATC marks into the cropped text;
+- writes `data/showcases/ct-anatomy/dp-demo/mark4-iatc-goldens.html`.
+
+Added `data/showcases/ct-anatomy/dp-demo/index.html` with a Mockups link to the
+side-by-side page. Headless Chrome screenshot verification passed at:
+`/tmp/futon6-screens/mark4-iatc-goldens.png`.
+
+Remaining gap: the page still reflects the available
+`loop-run-dpdemo-final` artifacts: only `0801.2567.edn` exists as a final graph,
+with the other four papers falling back to `.attempts/*.attempt2.edn`.
+
+## Remaining gaps — H7 (codex-3)
+
+Finalised the CPU expository carve lane as a structural extractor, not an
+IATC-grade reasoning reconstruction. Validation ran on five goldens:
+
+- `0905.0595`: 1 region, 183/209 body lines, 87.56%;
+- `0711.1761`: 84 regions, 845/2714 body lines, 31.13%;
+- `0801.2567`: 117 regions, 645/1594 body lines, 40.46%;
+- `0807.1872`: 1 region, 42/259 body lines, 16.22%;
+- `0710.2254`: 6 regions, 19/194 body lines, 9.79%.
+
+The documented 0905.0595 lines 202-208 are covered by
+`0905.0595-leaf-0001` (`leaf-section`, lines 81-263). Scope-vote
+consolidation is now repo-local under `holes/excursions/close-reading/` and
+mints `connection/bridge-analogy` from 5 papers, 2 agents, and 5 votes. The
+generated reports are:
+
+- `holes/excursions/close-reading/consolidation-report.json`;
+- `holes/excursions/close-reading/consolidation-report.md`.
+
+Remaining gap: the carve/reasoning split should still be confirmed by Joe
+before H8 work starts; H7 intentionally stops at structural region extraction
+plus scope-vocabulary consolidation.

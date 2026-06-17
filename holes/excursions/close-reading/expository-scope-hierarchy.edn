@@ -1,0 +1,7 @@
+{:policy {:mint-threshold {:min-papers 5 :min-agents 2}
+          :fringe-resolution :resolve-to-parent}
+ :seed-kinds
+ [{:kind :rationale :definition "Why this construction, proof move, or example matters here."}
+  {:kind :connection :definition "A prose bridge between constructions, claims, examples, or settings."}
+  {:kind :context :definition "Background positioning, prior work, or setup that frames the local argument."}
+  {:kind :open-problem :definition "A stated remaining question, limitation, conjectural direction, or gap."}]}
