@@ -196,6 +196,38 @@ inversion; genuine/defined flags consistent with SFC1's numbers; a sample query 
 the right papers; deterministic. Commit a short evidence report under `holes/excursions/`.
 **Gates:** PY (`pytest` + report the numbers). Bell claude-1 back; append findings here.
 
+### H-SFC-AGG — the per-concept reduce (map-reduce aggregator)  · `scripts/sfc_concept_aggregate.py` · PY
+The **reduce** stage (concept = monoid; see the Design stance). Consumes SFC-D3's
+`concept-index.json` (concept→papers) + the def sources, folds a concept's instances into
+`{genus, variant-axes, instances}`, keeping divergence as a family.
+Three parts:
+- **GC + `surface → core` retention.** Drop quantifier/determiner-noise surface terms
+  (`all functors`, `any two`, `each other`) — but emit a `surface → core` map
+  (`all functors → functor`) so a GC'd term **folds its usage into the real concept**
+  (nothing lost). Reuse `build_term_prior` for the head-extraction. (Absorbs SFC-NORM.)
+- **Fixture — `adjoint functor` / `adjunction`** (the textbook multiply-defined concept,
+  3 equivalent framings). Assemble its definitions from the three on-disk sources:
+  PlanetMath-18 `18A40-AdjointFunctor.tex` + `18A40-UnitOfAdjunction.tex`, nLab
+  `data/nlab-wiring/pages.json` (adjoint pages), arxiv `def-snippets.json` (adjoint
+  passages). Commit as a fixture.
+- **The reduce.** Per concept → `{genus, variant-axes, instances}`; seed `genus` from
+  `concept-encyclopedia-v0`'s genus/differentia where present. Test on the fixture:
+  recover `genus` = "adjunction F⊣G" + the framings as `variant-axes`.
+
+**KNOWN HOLE — variant-axes representation (Codex's call; don't overthink).** How to
+record divergence: a labelled family vs a generalization (e.g. "over a field K"). **Look
+at how Lean broadly handles this** — `structure` (bundled fields ≈ genus + differentiae),
+`class`/`instance`, equivalent definitions bridged by `↔`/`Iff` lemmas, defeq — and model
+a **simple v0** here, documenting what you leave as a hole. Compositionally-formed concepts
+are in scope but keep v0 minimal.
+
+**Acceptance:** GC emits the surface→core map (bad-term examples GC'd + retained); the
+adjunction fixture assembled + committed; the reduce runs on it and recovers the genus +
+the framings under whatever v0 variant-axes schema you pick (justified by the Lean look,
+residual holes named); deterministic. **Gates:** PY (`pytest` + the fixture as a test).
+Bell claude-1 back with summary + shas; append findings + the chosen variant-axes schema
+to this doc.
+
 ### Deferred (spec later — car-of-sequence)
 - **H-SFC3** D5 R2d proof-concept-coverage bridge into E-informal-proof-checking.
 - Normalization/merge pass for mis-segmented undefined concepts (`non commutative`,

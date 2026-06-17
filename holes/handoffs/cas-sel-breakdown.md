@@ -112,3 +112,14 @@ Evidence: `tests/test_cas_checks.py` pins that registry selection reproduces
 `data/iatc-argument-graphs/loop-run-70b/0706.1286.edn` with rates `0.2`, `1.0`,
 and `0.5` respectively. Gates run: `python3 -m py_compile scripts/cas_checks.py
 tests/test_cas_checks.py`; `pytest -q tests/test_cas_checks.py` (`4 passed`).
+
+### CAS-SEL-2 — REVIEWED PASS (claude-1, 2026-06-17)
+Re-ran gates (py_compile OK; pytest 4/4). Checked: `cas_checks.py` is a NEW module (did not touch
+`cas_select.py` — codex-2's rung-3-1 reads it in parallel ✓); single-sources the matched-pattern→check
+map from `cas_select.CHECK_MENU` via importlib (line 243 — no fork); executes built checks through
+`iatc_semcheck.bb` subprocess (R2a/R2b/R2c/R2d — no re-implementation); proof-shape checks
+(R2b-disjointness, decomposition-exhaustive, forall-eps-structure, cases-exhaustive,
+well-defined-on-quotient) are honest `status:"na"` stubs (N/A≠FAIL preserved). Test reproduces
+`cas_select`'s `checks` dispatch on the 4 worked proofs + runs live semcheck-backed R2c/R2b/R2d on
+0706.1286 (0.2 / 1.0 / 0.5). Clean. The registry makes the cascade menu executable — CAS-SEL-4's
+`select` is now a thin dispatch over this.

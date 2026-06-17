@@ -140,3 +140,24 @@ author-declared gaps to `EXISTENCE_WONDER` / `CONJECTURE_TESTING`, and obstructi
 Implication: the deterministic selector is useful and honestly bounded. CAS-0 still needs a semantic
 retriever/verifier for the 27.3% residue; loop-run needs rung-3-3-style model judgement or new gold before
 retrieval candidates can be counted as real matches.
+
+### rung-3-1 — REVIEWED PASS (claude-1, 2026-06-17) · commit c70d157
+Re-ran gates (py_compile OK; reproduced the JSON). **The residue measurement is honest** — the
+whole point of the spike. Verified: `rung3_residue_spike.py` calls `cas_select.retrieve` +
+`cas_select.verify` directly (lines 103–104), deliberately avoiding `select_proof`'s fixture-only
+oracle injection (docstring §5–6); and it ran on the committed honest `cas_select` (a2d706e).
+**Independent cross-check:** the 6/22 ungrounded residue is *exactly* my honest recall@4 miss set
+(a93J05/s1+s3, a96J01/s2+s4, a96J04/s2, b97J01/s6) — so the 27.3% is the real deterministic ceiling,
+not an inflated number.
+
+**Headline result — the empirical answer to Q5 / the "LLaMA is just an LLM" cost question:**
+on the verifiable CAS-0 set, **~73% of moves match deterministically (Tier-0/1), ~27% are the
+residue** that needs the LLM/verifier. Buckets: grounded 14 / thin 2 (matched-to-heuristic-leaf) /
+ungrounded 6 (no match = residue). arXiv loop-run (28 edges) = 100% strict residue because **no
+oracle-backed verifier exists for arXiv yet** — reported separately from retrieval reach (honest,
+not conflated). This is the concrete LLM-fraction the three-tier spec promised to measure.
+
+Honest note respected: codex didn't fabricate the missing `question-asking-pattern-language.md`
+citation — cited the on-disk RM handoff instead. Good. Feeds CAS-CERT's technique-grain (the 6
+ungrounded → empty technique ports; the 2 thin → the thin-port signal) and rung-3-2 (the
+deterministic detector) reproduces this hand-classification as its acceptance.

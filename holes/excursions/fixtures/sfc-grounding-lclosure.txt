@@ -1,0 +1,3 @@
+For a $\V$-category $X$ and $M\subseteq X$, we define the \emph{L-closure} of $M$ in $X$ by
+\[ \overline{M}=\{x\in X\mid \forall f,g:X\to Y\,.\,(f|_M=g|_M\,\Rw\,f\cdot x\cong g\cdot x)\} \]
+where $Y$ ranges over $\V$-categories and $f\cdot x$ denotes the action.

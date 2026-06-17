@@ -178,3 +178,43 @@ Gates passed:
 
 - `python3 -m py_compile scripts/cas_select.py`
 - `pytest -q tests/test_cas_select.py` (`5` passed)
+
+## Review — claude-1 (author ≠ reviewer), 2026-06-17
+
+**Verdict: PASS with amendments (made directly, per the fix-findings-yourself protocol).**
+
+Checked: re-ran the gates (py_compile OK; pytest 5/5); read the full diff. Architecture is
+sound — three tiers genuinely separated; `assemble()` reads the live `.flexiarg` `THEN`/`HOWEVER`
+off disk (not the oracle), so wiring+sorry are honestly deterministic; the exclude→induce
+trigger logic is correct; Tier-0 imports no model (verified by `test_tier0_retrieve_is_model_free`).
+
+**Finding (corrected): the headline "22/22 retrieval, match rate 1.000" overstated Tier-0.**
+It was propped two ways — (1) a fixture-tuned `EXTRA_HOTWORDS` table (hand-added tokens like
+`liouville`/`harmonic`/`parallelogram`/`orbit-stabilizer` fitted to these 4 proofs), and (2) an
+oracle-injection in `select_proof` that slips the oracle pattern into the candidate set when
+retrieval misses. With both removed, **honest hotword recall@4 = 16/22 (73%)**, and raising k
+does *not* close it: at full-pool k it ceilings at **19/22** — three steps (`a93J05/s3`
+quotient-by-irrelevance, `a96J01/s2` + `b97J01/s6` construct-auxiliary-object) have **zero
+lexical overlap** with their oracle pattern (prose says "tent"/"upper central series"/"z mod the
+lattice"; the pattern hotwords don't). Since Tier-1 can only adjudicate what Tier-0 retrieves, in
+a real (no-oracle) run those become **false induce-triggers**.
+
+**Amendments made (claude-1):**
+- Removed `EXTRA_HOTWORDS` (fixture memorisation) from the default retriever.
+- Relabelled the oracle-injection as an explicit **perfect-retrieval simulation** — it stays
+  (the happy/trigger tests legitimately isolate verify+assemble+trigger-logic from Tier-0 recall),
+  but it no longer masquerades as evidence retrieval works, and it never runs on the openai backend.
+- Replaced the misleading `test_tier0_retrieval_contains_…` (asserted all-22) with
+  `test_tier0_retrieval_recall_is_honest` — pins recall@4 = 16/22 and asserts the 3 zero-overlap
+  steps as the documented ceiling, so a regression can't silently re-inflate it.
+- Gates re-run after amendment: py_compile OK; pytest 5/5.
+
+**Net:** the SELECT *logic* (verify → assemble → trigger) is correct and the determinate-gap
+trigger test is valid **given good retrieval**. The open weakness is purely Tier-0 *recall*, now
+honestly measured. The real-LLaMA Tier-1 number is still unmeasured (endpoint down — codex
+correctly did not fabricate it).
+
+**Follow-on authored: CAS-SEL-3b** — a non-hotword retrieval modality (embedding similarity or
+LLM-side retrieval) to lift the ~73%/86% recall ceiling. This is the *combining-methods-as-
+diagnostic* move: classical hotword retrieval's ceiling is itself the signal that a semantic
+modality is needed. Until then, the select path's recall is capped and that cap is logged here.
