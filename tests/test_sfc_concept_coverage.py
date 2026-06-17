@@ -6,7 +6,7 @@ from scripts import sfc_concept_coverage as sfc
 def test_invert_usage_counts_documents_once_per_concept():
     paper_concepts = {
         "p1": ["Natural Transformation", "natural transformation", "there exists"],
-        "p2": ["natural transformation", "left adjoint"],
+        "p2": ["natural transformations", "left adjoint"],
         "p3": ["left adjoint"],
     }
 
@@ -15,6 +15,24 @@ def test_invert_usage_counts_documents_once_per_concept():
     assert df["natural transformation"] == 2
     assert df["left adjoint"] == 2
     assert df["there exists"] == 1
+
+
+def test_normalize_concept_merges_named_fragments_and_variants():
+    examples = {
+        "non commutative": "non-commutative",
+        "unit counit": "unit-counit",
+        "algebra topology": "algebraic topology",
+        "n categories": "n-categories",
+        "quasi inverse": "quasi-inverse",
+        "quasi isomorphisms": "quasi-isomorphism",
+        "hom spaces": "hom-spaces",
+        "natural transformations": "natural transformation",
+        "monoidal categories": "monoidal category",
+        "vector spaces": "vector space",
+    }
+
+    for raw, canonical in examples.items():
+        assert sfc.normalize_concept(raw) == canonical
 
 
 def test_resolved_genuine_concept_filters_boilerplate_and_keeps_terms():
