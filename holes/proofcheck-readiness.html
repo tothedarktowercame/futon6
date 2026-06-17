@@ -1,0 +1,220 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Informal proof-checking + structure-first concepts — readiness</title>
+<style>
+  :root{
+    --paper:#f7f5ef; --ink:#1a1a1a; --line:#ddd6c8;
+    --ready:#1d7a3a; --ready-bg:#e7f6ec;
+    --partial:#9a6a00; --partial-bg:#fdf3e0;
+    --vision:#555; --vision-bg:#eee;
+    --untested:#2456a6; --untested-bg:#e8f0fb;
+    --build:#0e7490; --build-bg:#e2f4f7;
+    --break:#8a2bbd; --break-bg:#f3e8fb;
+    --open:#555; --open-bg:#ececec;
+    --cpu:#6b7280; --cpu-bg:#f3f4f6;
+    --gpu:#a11; --gpu-bg:#fbe9e9;
+    --llm:#6d3aa8; --llm-bg:#f0e8fb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.5 "Iowan Old Style",Georgia,serif;}
+  header{padding:24px 32px 8px;} h1{font-size:22px;margin:0 0 4px;} .meta{color:#666;font-size:12.5px;}
+  .flow{margin:14px 32px;padding:10px 14px;border:1px solid var(--line);background:#fff;
+        font:12.5px/1.7 ui-sans-serif,system-ui;color:#333;border-radius:6px;} .flow b{color:#000}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 32px;font:12px/1.8 ui-sans-serif,system-ui;}
+  .badge{display:inline-block;padding:2px 8px;border-radius:10px;font:600 11px/1.5 ui-sans-serif,system-ui;
+         text-transform:uppercase;letter-spacing:.03em;}
+  .ready{color:var(--ready);background:var(--ready-bg);} .partial{color:var(--partial);background:var(--partial-bg);}
+  .vision{color:var(--vision);background:var(--vision-bg);} .untested{color:var(--untested);background:var(--untested-bg);}
+  .build{color:var(--build);background:var(--build-bg);} .break{color:var(--break);background:var(--break-bg);}
+  .open{color:var(--open);background:var(--open-bg);}
+  main{padding:8px 24px 40px;} .phase{margin:20px 8px;}
+  .phase h2{font-size:15px;margin:0 0 2px;border-bottom:2px solid var(--line);padding-bottom:4px;}
+  .phase .pmeta{color:#777;font-size:12px;margin:0 0 10px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;}
+  .card{border:1px solid var(--line);border-top-width:4px;background:#fff;border-radius:6px;padding:11px 13px;display:flex;flex-direction:column;}
+  .card.s-ready{border-top-color:var(--ready);} .card.s-partial{border-top-color:var(--partial);}
+  .card.s-build{border-top-color:var(--build);} .card.s-break{border-top-color:var(--break);}
+  .card.s-open{border-top-color:var(--open);} .card.s-vision{border-top-color:var(--vision);}
+  .card h3{margin:0 0 2px;font-size:13.5px;} .card .id{color:#999;font:600 11px/1 ui-sans-serif,system-ui;}
+  .row1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .chip{display:inline-block;font:600 10px/1.4 ui-sans-serif,system-ui;padding:1px 6px;border-radius:3px;margin-left:4px;}
+  .chip.cpu{background:var(--cpu-bg);color:var(--cpu);} .chip.gpu{background:var(--gpu-bg);color:var(--gpu);}
+  .chip.llm{background:var(--llm-bg);color:var(--llm);}
+  .ev{font:11px/1.4 "SF Mono",ui-monospace,Menlo,monospace;color:#2456a6;margin:5px 0 0;}
+  .ev a{color:#0e7490;text-decoration:none;border-bottom:1px dotted #0e7490;} .ev a:hover{background:#e2f4f7;}
+  .ev-link{margin-top:auto;padding-top:8px;font-size:11.5px;} .ev-link a{font-weight:600;border-bottom-style:solid;}
+  .note{font-size:12.5px;color:#333;margin:6px 0 0;} code{background:#ece8dd;padding:1px 4px;border-radius:3px;font-size:11.5px;}
+  footer{padding:8px 32px 60px;max-width:920px;} footer h2{font-size:15px;border-bottom:2px solid var(--line);padding-bottom:4px;}
+  footer li{font-size:13px;margin:4px 0;}
+</style></head><body>
+<header>
+  <h1>Informal proof-checking + structure-first concepts — readiness</h1>
+  <div class="meta">claude-1 · 2026-06-17 · covers excursions <code>E-structure-first-concepts</code> + <code>E-informal-proof-checking</code>. Companion to <code>pre-superpod-pipeline-readiness.html</code>. "We know how to do this & it's a good idea — the rest is implementation."</div>
+</header>
+<div class="flow">
+  <b>The spine</b> (deterministic-where-possible, LLM-only-for-the-residue, an incremental monoid over the corpus):<br>
+  <b>rung −1</b> structure-first concepts — <i>are the terms even defined?</i> → <b>:structure</b> lift (parse the defining formula) → <b>symbol grounding</b> (bind symbols to per-paper domains) → <b>rung 0–2</b> proof-checking — <i>is the reasoning over them sound?</i> → <b>rung 3</b> judge (the residual). The cascade reframe: each proof = a <i>sorry</i>; checks = a menu; <code>select</code> matches the menu to <i>this</i> proof's topology.
+</div>
+<div class="legend">
+  <span class="badge ready">built+reviewed</span> author≠reviewer, gated, verified ·
+  <span class="badge partial">v1 / gaps</span> works, known limits ·
+  <span class="badge build">needs build</span> specified, ready to implement ·
+  <span class="badge break">needs breakdown</span> unspecified — decompose first ·
+  <span class="badge open">open question</span> decision pending ·
+  <span class="chip cpu">cpu</span><span class="chip gpu">gpu</span><span class="chip llm">llm</span>
+</div>
+<main id="app"></main>
+<footer>
+  <h2>What needs breakdown (Joe's flag)</h2>
+  <ol id="breakdowns"></ol>
+  <h2>Suggested order (dependency-aware)</h2>
+  <ol>
+    <li><b>Cheap wins now</b> (specified, CPU): SFC-D3 annotate-everywhere index · SFC-norm concept normalization · SFC2a-v2 (∃/<code>\mathbb</code> — the ∃ silent-drop is a correctness fix) · R2a-v2 de-noise · wire rung-2 into the loop self-gate.</li>
+    <li><b>Decompose</b> (needs breakdown): the per-concept map-reduce aggregator + schema · SFC2b symbol grounding (= M-symbol-grounding) · R2d concept-coverage-of-proofs bridge · the cascade <code>select</code>-per-topology + conformance certificate.</li>
+    <li><b>Settle the open questions</b> (Q1 menu location, Q2 select topology) — leanings recorded, Joe to ratify — they gate the cascade work.</li>
+    <li><b>Then the LLM rungs</b> (gpu/llm): SFC2b grounding, rung-3 judge — bounded, checkable, last.</li>
+  </ol>
+</footer>
+<script>
+const CARDS = {
+ "★ DEMO CRITICAL PATH (now — get something concrete to test against)": [
+  {id:"DEMO-COMPOSE", t:"Per-paper anatomy → proof-check demo", s:"ready", c:"cpu",
+   ev:"scripts/build_proofcheck_demo.py · ba39b27 · reviewed PASS · data/showcases/ct-anatomy/proofcheck-demo/index.html",
+   n:"<b>The one new build.</b> Composes only green pieces into one HTML per paper: imported concepts + coverage (SFC1), a worked <code>:structure</code> with grounding-holes shown (SFC2a), the IATC graph + <b>rung-2 verdict with residual sorries highlighted</b> (iatc_semcheck). Featured set spans the range: 0706.1286 (clean) · 0708.2067 (orphans) · 0709.0248 (anchor-flag) · 0708.2185 (self-loop). This is the artifact to test against."},
+  {id:"DEMO-paper", t:"Demo paper scout", s:"ready", c:"cpu",
+   n:"Done — all 10 loop-run-70b papers carry ≥45 formula-defined concepts; chose the 4-paper range above. SFC2a + iatc_semcheck already cover them."}
+ ],
+ "A · Structure-first concepts (rung −1) — do we know the terms?": [
+  {id:"SFC1", t:"Concept-definition coverage + genuine ranking", s:"ready", c:"cpu",
+   ev:"scripts/sfc_concept_coverage.py · 3c6da8b · reviewed PASS",
+   n:"df-rank (invert concept-usage) de-noised by the term-prior; coverage vs def-snippets/defined-index/encyclopedia. <b>top-100 100% / top-500 98.4%</b>. Caveat: \"defined\" = <i>evidence exists</i>, not a usable structured definition."},
+  {id:"SFC-D3", t:"concept → papers \"annotate-everywhere\" index", s:"ready", c:"cpu",
+   ev:"scripts/sfc_concept_index.py · 546298e · reviewed PASS · data/warp/concept-index.json (regenerated post-SFC-NORM: 3500 concepts, plurals merged)",
+   n:"The inverse of concept-usage (where each concept shows up) as a first-class queryable artifact + the <i>map/shuffle</i> stage of the map-reduce. concept→{df,papers,genuine,defined,sources}; --concept/--paper queries."},
+  {id:"SFC-AGG", t:"Per-concept map-reduce aggregator", s:"ready", c:"cpu",
+   ev:"scripts/sfc_concept_aggregate.py · 1ad4103 · reviewed PASS · lean-family-v0",
+   n:"<code>reduce([instances])</code> → <code>{genus, variant_axes (labelled-family), iff-bridge holes}</code> + GC <code>surface→core</code> (\"all functors\"→functor, retains df). <b>lean-family-v0</b> (Lean structure-genus + labelled family + Iff bridges) recovered adjunction's 3 framings (5/1/1 + 17 contextual) from PlanetMath+nLab+arxiv. Caveats: genus hand-recognized for fixture (encyclopedia seed noisy); framing keyword-based (→ SFC2b); bridges recorded-not-proved."},
+  {id:"SFC-NORM", t:"Normalize / merge concept variants", s:"ready", c:"cpu",
+   ev:"scripts/sfc_concept_coverage.py · bdf2c4f · reviewed PASS · index regenerated 3737→3500 concepts",
+   n:"Singularization + exact-merge in the shared <code>normalize_concept</code> (\"natural transformations\"→\"natural transformation\"); <b>complementary</b> to SFC-AGG's quantifier-GC (\"all functors\"→functor). Plurals now fold (df summed: natural transformation 4882→5659). concept-index regenerated for consistency."},
+  {id:"WARP-ORCH", t:"Wire the warp / tapestry layer (un-orchestrated)", s:"break", c:"cpu",
+   ev:"breakdown → warp-orch-breakdown.md · queued behind demo · WARP-ORCH-1 sent to codex-3 pre-division, no commit landed (bellback lost) — re-dispatch when prioritized",
+   n:"<code>warp_concept_usage</code>, <code>def-snippets</code>, <code>concept-encyclopedia-v0</code>, <code>mark3_thread_tapestry</code> all live on disk but in no runner. Decomposed: <b>-1 liveness audit (read-only, first)</b> → -2 make-like runner → -3 promote the tapestry as the <b>citation-descent</b> artifact CAS-SEL's genealogical select needs → -4 close the SFC join. <b>This is where the two excursions meet.</b>"}
+ ],
+ "B · Definition structure — the :structure lift (D4)": [
+  {id:"SFC2a", t:"Deterministic LaTeXML → Clojure :structure transducer", s:"ready", c:"cpu",
+   ev:"scripts/sfc_def_structure.bb · bc38163 · reviewed PASS (live)",
+   n:"<code>latexmlmath --cmml</code> → Clojure, via 3 rules (binder-normalize, symbol-dict, relational-regroup). L-closure → the worked target <i>live</i>. Handles the ∀ / set-builder / ⇒ / ≅ class; symbols emitted as <code>:grounding :hole</code>."},
+  {id:"SFC2a-v2", t:"Widen the transducer: ∃, \\mathbb, join cleanup", s:"ready", c:"cpu",
+   ev:"scripts/sfc_def_structure.bb · d22eab0 · reviewed PASS · ∃ preserved + ℕ; L-closure regression intact",
+   n:"<b>Correctness fix landed:</b> <code>\\exists</code> no longer silently dropped → <code>(exists [k] …)</code>; <code>\\mathbb{N}</code>→ℕ; <code>formulae-sequence</code> cleaned (unrecognized → explicit <code>:hole</code>). Transducer now covers ∀ + ∃ + set-builder + restriction + ≅ + action."},
+  {id:"SFC2b", t:"LLM symbol grounding (= M-symbol-grounding)", s:"partial", c:"llm",
+   ev:"scripts/sfc_symbol_grounding.py · built + stub-validated (claude-1, carve-out) · openai backend ready, model-pending",
+   n:"Fills each <code>:grounding :hole</code> by binding the symbol to its <i>per-paper</i> domain from the prose. <b>Built</b> as a grounding loop (IATC/expository pattern): SFC2a holes → prompt → stub|openai → <b>defeasible evidence-check</b> (a binding cites verbatim evidence or is <code>:unsupported</code>; symbols the context never introduces are honest <code>:undefined-in-context</code>). Stub-validated on the L-closure (6 grounded / 1 undefined / 0 unsupported). Needs a served model for real bindings (no GPU now)."}
+ ],
+ "C · Proof-checking — the rung ladder (E-informal-proof-checking)": [
+  {id:"rung-0", t:"argcheck — wiring well-formedness", s:"ready", c:"cpu",
+   ev:"scripts/iatc_argcheck.bb (pre-existing)",
+   n:"Every node/edge has :source; endpoints resolve; missing-warrant mirrored in :holes; refs resolve. Structural floor."},
+  {id:"rung-1", t:"substance gate — anti-degeneracy", s:"ready", c:"cpu",
+   ev:"scripts/substance_gate.py · 249aa83 · reviewed PASS · now reads ALL premise tokens",
+   n:"Rejects shells, self-loops, template collapse, canned warrants. The first-premise-only gap is <b>fixed</b> (249aa83): now catches conclusion-among-any-premise self-loops (e.g. 0712.0724) — agrees with R2b."},
+  {id:"R2a", t:"Anchor-faithfulness", s:"ready", c:"cpu",
+   ev:"scripts/iatc_anchor_faithfulness.bb · 5e66641 · reviewed PASS",
+   n:"Do a node's cited :source lines contain its key terms? Automates P3. <b>Lexical lower bound</b> — over-flags macro/symbol-dense nodes."},
+  {id:"R2a-v2", t:"De-noise R2a", s:"ready", c:"cpu",
+   ev:"scripts/iatc_anchor_faithfulness.bb · 12ae310 · reviewed PASS · total flags 27→10; 0709 genuine miss preserved",
+   n:"LaTeX-macro normalization (\\maps/\\Ob/\\G/\\mathbb…) + ±1 neighbor-line + N/A for sparse nodes. False flags gone (0801.3843 0.417→0.857, 0712 →1.0) WITHOUT over-relaxing: 0709 :extensional-category still flagged (2/5, real \\begin{proposition} miss). Other rung-2 checkers regression-clean."},
+  {id:"R2b", t:"Goal-reaching closure", s:"ready", c:"cpu",
+   ev:"scripts/iatc_closure_check.bb · a3b523e · reviewed PASS",
+   n:"DAG (no cycles incl. self-loops), no orphan nodes, reachable conclusion. Caught a vacuous step substance missed + orphan/dangling nodes in 4/9 finals."},
+  {id:"R2c", t:"Warrant-resolution gate", s:"ready", c:"cpu",
+   ev:"scripts/iatc_closure_check.bb · a3b523e + 465577f · reviewed PASS · floor decision: report-only",
+   n:"resolved-warrant edges / total (reuses mark3_eval_harness). N/A on zero-edge graphs (465577f). <b>Floor stays report-only (0.0) — decided:</b> ~half the 70B graphs have 0 resolved warrants (the model rarely emits explicit warrants — a generation *style*, not a quality fail), and missing-warrant IS the residual-sorry signal (already mirrored in :holes). Hard-failing on it would conflate style with faithfulness; revisit via the rung-3 judge."},
+  {id:"R2-harness", t:"iatc_semcheck — aggregator + profile + gate", s:"ready", c:"cpu",
+   ev:"scripts/iatc_semcheck.bb · d104927 · reviewed PASS",
+   n:"Composes R2a/R2b/R2c → per-paper description profile + report + <code>--gate</code>, N/A≠FAIL. On loop-run-70b: 4/9 finals FAIL (orphan nodes) — the deterministic answer to \"are we recovering the semantics?\""},
+  {id:"R2-wire", t:"Wire rung-2 as a loop self-gate", s:"ready", c:"cpu",
+   ev:"scripts/mark3_iatc_loop.py · 9344558 · reviewed PASS · soft default + --rung2-gate",
+   n:"<code>iatc_semcheck</code> runs in <code>mark3_iatc_loop.py</code> after rung 0/1, attaching the rung-2 profile+verdict per graph (self-describing). SOFT by default (records <code>rung2-soft-fail</code>, doesn't reject — avoids blocking loop termination); hard-gate behind <code>--rung2-gate</code>. Next GPU run self-describes with rung-2."},
+  {id:"R2d", t:"Concept-coverage of proofs (bridge ← SFC)", s:"ready", c:"cpu",
+   ev:"R2d-1+R2d-2 BUILT+REVIEWED PASS (codex-4 · 8d9acad · claude-1 re-ran gates+spot-checked numbers honest). scripts/r2d_concept_coverage.py reuses sfc_concept_coverage, wired into iatc_semcheck; 9 proofs coverage min .5/max 1/mean .867, report-only. Caveats: inherits SFC1 evidence-exists + extraction-noise (sigma/mu-inv). R2d-3 (imported) now unblocked (WARP-ORCH-3 phylogeny passed co-review).",
+   n:"Do the concepts a proof <i>uses</i> have definitions in the structure-first substrate (or point to known concepts)? The <b>noun-side detector</b>, twin of rung-3. <b>Broken down → <code>r2d-breakdown.md</code>; gate now settled</b> by the detector framing — an undefined concept is a <b>flagged gap → ArSE question</b> (N/A≠FAIL), not a hard FAIL. Buckets: defined / known(nLab) / imported(cited paper) / undefined. Core (R2d-2) is a scoped reuse of <code>sfc_concept_coverage</code> — ready to build; the <i>imported</i> class (R2d-3) waits on WARP-ORCH-3's descent artifact."}
+ ],
+ "D · The cascade reframe + open questions": [
+  {id:"CAS-0", t:"Seed the cascade pattern pool (empirical, via a worked proof)", s:"ready", c:"cpu",
+   ev:"4 worked proofs (a93J05 reduce-to-known · a96J01 construction · b97J01 induction+counting · a96J04 ε-δ measure); mechanism 4/4 shape-independent (wiring=conclusions, sorry=undischarged HOWEVERs); pool +0,+1,+1,+1 → 39 (separate-into-independent-pieces, count-over-a-decomposition, epsilon-of-room); analysis idioms were the gap, mechanism saturated. CAS-SEL-1 specifiable on corpus.",
+   n:"<b>Prerequisite to everything else in Rank D (Joe): you can't match on patterns you don't have, and the topology vocab should be settled EMPIRICALLY not by fiat.</b> Work an example <b>APM proof</b> (before arXiv) end-to-end: induce its sorry + wiring, iteratively FIND (math-informal / the un-mined MO·math.SE RM corpora) or WRITE the reasoning patterns it needs. Demand-driven seeding — Q3's topology vocabulary EMERGES from the worked examples."},
+  {id:"CAS-SEL", t:"select-per-topology — each proof its own cascade", s:"build", c:"cpu",
+   ev:"CAS-SEL-1 spec DRAFTED on the 4-proof corpus (cas-sel-1-spec.md — 3-tier cost gradient; Q1/Q2/Q3 resolved). CAS-SEL-3 (topology extractor, Tier-0+1) DISPATCHED → codex-1. CAS-SEL-2/4 follow; CAS-SEL-5 waits WARP-ORCH-3.",
+   n:"Match the check-menu to <i>this</i> proof's sorry-topology rather than uniform {R2a,R2b,R2c}. <b>Content seeded</b> (claude-loop, Joe-ratified): Pólya + the RM question-pattern survey (12+8 patterns, corpora live) + the expository taxonomy — which <b>converge name-for-name</b> (three views of one menu). New build = the <i>reused RM mining method</i> aimed at IATC+expository + a <b>genealogical select</b> (a paper inherits its imports'/citations' patterns via warp_citations/bib). <b>Prior art:</b> the cascade already <i>runs</i> over the stack's own missions+patterns (<code>futon3c/holes/excursions/pipeline-pattern-cascade.html</code>, Moran-style; clusters=basins, cited-patterns warrant, hollow=residual-sorries) — the reframe is porting that to proofs, not new machinery. Decompose: the compiler + genealogical select. <b>Broken down</b> → cas-sel-breakdown.md (CAS-SEL-1 spec-spike → registry → topology-extractor → select → genealogical); CAS-SEL-1 pending Q3 (topology vocab) + Q4 (static vs adaptive)."},
+  {id:"CAS-Q1", t:"Q1 — where does the cascade menu live?", s:"ready", c:"cpu",
+   n:"<b>RESOLVED</b> (cas-sel-1-spec.md §3, empirically on the 4-proof corpus): split confirmed — the <b>menu = the 39 .flexiarg patterns</b> (retrieval deterministic via hotword/patterns-index.tsv), the <b>checks = the rung-2 registry</b> dispatched by which patterns matched. flexiarg for the growable shape→cascade map; registry for what executes."},
+  {id:"CAS-Q2", t:"Q2 — where does select get the topology?", s:"ready", c:"cpu",
+   n:"<b>RESOLVED</b> (cas-sel-1-spec.md): the <b>matched-pattern set IS the topology</b>, read off the proof by Tier-0 retrieve + Tier-1 verify (the coarse frame). The resolution axis <i>is</i> the control flow: coarse → select → fill → re-render. <b>Q3 also resolved:</b> the topology-feature vocabulary <i>is the pattern pool itself</i> — no separate taxonomy (empirical finding, all 4 worked proofs)."},
+  {id:"CAS-CERT", t:"Conformance certificate + residual-sorry map", s:"break", c:"cpu",
+   n:"Output beyond the profile: \"this model is well-formed wiring — all claim/term ports filled\" + the \"where we're least sure\" map (feeds rung-3). <b>Framed by the discursive-core CP</b> (conformance = every scoped query answered; residual-sorry map = the empty-scoped-query set = the honest open questions) — but still <b>needs breakdown</b> into sub-handoffs."},
+  {id:"rung-3", t:"Technique-grounding detector — verb-twin of R2d, per-edge cascade select", s:"build", c:"llm",
+   ev:"Reframed (detector not judge) + broken down → rung-3-breakdown.md; rung-3-1 = empirical residue-measurement spike (specified, dispatchable). CAS-0 mechanism (sorry=undischarged HOWEVER) supplies the per-edge thin signal. Full rung-3 still gated on the menu + CAS-CERT.",
+   n:"<b>Reframed + moved Phase C→D (Joe, 2026-06-17):</b> not a correctness judge — a <b>detector of thin / ungrounded MOVES</b> (the verb-twin of R2d: R2d grounds the <i>terms</i>, rung-3 grounds the <i>techniques</i>). \"Thin\" = a load-bearing step whose pattern bottoms out in a <i>heuristic</i> where a <i>verifiable</i> step is required — an undischarged HOWEVER / undeclared unfilled sorry (CAS-0's mechanism, per-edge). Buckets parallel R2d: grounded-by-pattern / by-citation / thin / ungrounded. <b>Conjectures = author-declared gaps</b> (credit them — a corpus open-problem map). Output = a <b>likely-gap → ArSE question</b> (phrased via the RM question-pattern menu), not a verdict. = the <b>per-edge instance of CAS-SEL</b> (best-pattern-fit residual = the gap); depends on the menu + CAS-CERT. LLM-fraction is <b>empirical</b> (measure the deterministic residue, per CAS-0 Q5). Breakdown: <code>holes/handoffs/rung-3-breakdown.md</code>."}
+ ],
+ "E · Cross-cutting / context": [
+  {id:"GOLIVE", t:"mark4 IATC go-live (the substrate)", s:"ready", c:"gpu",
+   ev:"loop-run-70b · mark4-linode-go-live-preregistration.md §7",
+   n:"9/10 substance-clean 70B graphs (vs 8B 4/10); produced the graphs rung-2 grades. Box decommissioned."},
+  {id:"RAW-CTL", t:"70B-on-raw control arm", s:"build", c:"gpu",
+   n:"<b>Resolvable, not blocked — a specified, ready-to-run bounded experiment.</b> All provisioning exists (<code>linode-4gpu-setup/run.sh</code> + the register/bootstrap StackScripts), ~15min up + ~1hr run: serve the 70B over <b>RAW</b> (un-enriched) candidates, compare to enriched <code>loop-run-70b</code>. Isolates the go-live confound (enriched-70B vs blind-8B changed BOTH enrichment and model size). Priority dropped after the rung-2 / discursive reframe (generator quality is less central than the checking), but it answers the real <b>cost-at-scale question</b>: do we enrich before the 70B over arXiv, or does raw suffice? Run next time the box is up — needs Joe's send-gate."},
+  {id:"RENDER", t:"Inline renderer / HTML composite + LLM IR", s:"partial", c:"cpu",
+   n:"<b>Largely resolved.</b> The human renderer is BUILT — twice: <code>build_proofcheck_demo.py</code> (DEMO-COMPOSE, reviewed PASS — the canonical proof-check demo, <code>proofcheck-demo/index.html</code> 94KB) + <code>render_run.py</code> (committed <code>d6eea58</code> — the richer two-up golden+GPU twin). The <b>\"LLM IR\" is not a separate artifact</b>: per the discursive-core reframe it IS the <code>iatc_semcheck</code> per-paper profile + the scope query database (the answerable substrate) — so render_run and the IR really are two projections of one wiring, and the machine half is the checker profile we're already building. Remaining = generalize the render across all papers (mechanical); the Haskell rewrite is optional, not a blocker."}
+ ]
+};
+const app=document.getElementById('app'), bd=document.getElementById('breakdowns');
+const LBL={ready:"built+reviewed",partial:"v1 / gaps",build:"needs build",break:"needs breakdown",open:"open question",vision:"deferred"};
+const BASE="file:///home/joe/code/futon6/";
+// each card → its latest artifact (built → report/demo; planned → its spec). Mostly EDN/markdown, not styled HTML.
+const LINKS={
+ "DEMO-COMPOSE":"data/showcases/ct-anatomy/proofcheck-demo/index.html",
+ "DEMO-paper":"data/showcases/ct-anatomy/proofcheck-demo/index.html",
+ "SFC1":"holes/excursions/sfc-concept-coverage.md",
+ "SFC-D3":"holes/excursions/sfc-concept-index.md",
+ "SFC-AGG":"holes/excursions/sfc-concept-aggregate.md",
+ "SFC-NORM":"holes/excursions/E-structure-first-concepts.md",
+ "WARP-ORCH":"holes/handoffs/warp-orch-breakdown.md",
+ "SFC2a":"holes/excursions/sfc-def-structure-evidence.md",
+ "SFC2a-v2":"holes/excursions/sfc-def-structure-evidence.md",
+ "SFC2b":"holes/excursions/E-structure-first-concepts.md",
+ "rung-0":"scripts/iatc_argcheck.bb",
+ "rung-1":"scripts/substance_gate.py",
+ "R2a":"scripts/iatc_anchor_faithfulness.bb",
+ "R2a-v2":"holes/excursions/E-informal-proof-checking.md",
+ "R2b":"scripts/iatc_closure_check.bb",
+ "R2c":"scripts/iatc_closure_check.bb",
+ "R2-harness":"holes/excursions/iatc-semcheck-loop-run-70b.md",
+ "R2-wire":"holes/excursions/E-informal-proof-checking.md",
+ "R2d":"holes/excursions/E-informal-proof-checking.md",
+ "rung-3":"holes/excursions/E-informal-proof-checking.md",
+ "CAS-0":"holes/excursions/cas0-worked-a93J05.md",
+ "CAS-SEL":"holes/handoffs/cas-sel-breakdown.md",
+ "CAS-Q1":"holes/excursions/E-informal-proof-checking.md",
+ "CAS-Q2":"holes/excursions/E-informal-proof-checking.md",
+ "CAS-CERT":"holes/excursions/E-informal-proof-checking.md",
+ "GOLIVE":"holes/mark4-linode-go-live-preregistration.md",
+ "RAW-CTL":"holes/mark4-linode-go-live-preregistration.md",
+ "RENDER":"data/showcases/ct-anatomy/dp-demo/mark4-iatc-goldens.html"
+};
+for(const [phase,cards] of Object.entries(CARDS)){
+  const sec=document.createElement('section'); sec.className='phase';
+  sec.innerHTML=`<h2>${phase}</h2><div class="grid"></div>`;
+  const grid=sec.querySelector('.grid');
+  for(const c of cards){
+    const chip = c.c?`<span class="chip ${c.c}">${c.c}</span>`:'';
+    grid.innerHTML += `<div class="card s-${c.s}">
+      <div class="row1"><h3>${c.t} ${chip}</h3><span class="badge ${c.s}">${LBL[c.s]}</span></div>
+      <div class="id">${c.id}</div>
+      <div class="note">${c.n}</div>
+      ${c.ev?`<div class="ev">${c.ev}</div>`:''}
+      ${LINKS[c.id]?`<div class="ev ev-link"><a href="${BASE}${LINKS[c.id]}">▸ ${(c.s==='ready'||c.s==='partial')?'open artifact':'open spec'}: ${LINKS[c.id].split('/').pop()}</a></div>`:''}</div>`;
+    if(c.s==='break'||c.s==='open'){ bd.innerHTML += `<li><b>${c.id}</b> — ${c.t}</li>`; }
+  }
+  app.appendChild(sec);
+}
+</script></body></html>
