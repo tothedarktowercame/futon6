@@ -44,6 +44,11 @@
       (is (= :pass (get-in by-check [:anchor-faithfulness :status])))
       (is (= :na (get-in by-check [:closure :status])))
       (is (= :na (get-in by-check [:warrant-resolution :status])))
+      (is (= :pass (get-in by-check [:concept-coverage :status])))
+      (is (= {:defined 1 :known 0 :imported 0 :undefined 0}
+             (get-in by-check [:concept-coverage :buckets])))
+      (is (= "iatc-node-text"
+             (get-in result [:profile :concept-coverage :concept-source])))
       (is (str/includes? (first (get-in by-check [:closure :reasons])) "N/A")))))
 
 (when (= *file* (System/getProperty "babashka.file"))

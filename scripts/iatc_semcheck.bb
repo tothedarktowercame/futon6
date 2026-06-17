@@ -4,11 +4,14 @@
 ;; Composes:
 ;;   R2a scripts/iatc_anchor_faithfulness.bb
 ;;   R2b/R2c scripts/iatc_closure_check.bb
+;;   R2d scripts/r2d_concept_coverage.py
 ;;
 ;; Defaults to final graph files only; use --include-attempts to inspect retry
 ;; intermediates under .attempts/.
 
-(require '[clojure.java.io :as io]
+(require '[babashka.process :as p]
+         '[clojure.edn :as edn]
+         '[clojure.java.io :as io]
          '[clojure.string :as str])
 
 (def default-opts
@@ -138,7 +141,7 @@
              :kind (:kind w)
              :label (or (:label w) (:target w) (:text w))})))
 
-(defn profile [file graph anchor-result closure-results]
+(defn profile [file graph anchor-result closure-results concept-result]
   (let [nodes (vec (:nodes graph))
         edges (vec (:edges graph))
         holes (vec (:holes graph))
@@ -173,6 +176,11 @@
                          :warrant (warrant-profile edge)
                          :source {:lines (source-lines edge)}})
                       edges)
+     :concept-coverage {:rate (:rate concept-result)
+                        :buckets (:buckets concept-result)
+                        :undefined (:undefined concept-result)
+                        :imported (:imported concept-result)
+                        :concept-source (:concept-source concept-result)}
      :certified-by (mapv :check closure-results)}))
 
 (defn absent-structure? [check graph]
@@ -183,12 +191,24 @@
     false))
 
 (defn normalize-check [graph result]
-  (let [na? (absent-structure? (:check result) graph)]
+  (let [na? (or (absent-structure? (:check result) graph)
+                (and (= :concept-coverage (:check result))
+                     (empty? (:per-item result))))]
     (cond-> result
       true (assoc :status (if na? :na (if (:pass result) :pass :fail)))
       na? (assoc :pass true
                  :rate nil
                  :reasons ["N/A: required structure absent at this resolution"]))))
+
+(defn concept-check-file [file]
+  (let [result @(p/process ["python3" "scripts/r2d_concept_coverage.py"
+                            "--edn" (.getPath (io/file file))]
+                           {:out :string :err :string})]
+    (when-not (zero? (:exit result))
+      (throw (ex-info "R2d concept coverage failed"
+                      {:file (.getPath (io/file file))
+                       :stderr (:err result)})))
+    (edn/read-string (:out result))))
 
 (defn check-file [opts file]
   (try
@@ -205,12 +225,13 @@
                                                      {:file (.getPath (io/file file))
                                                       :paper-id (graph-paper-id graph file)
                                                       :warrant-floor (:warrant-floor opts)}))
-          checks (into [anchor-result] closure-results)
+          concept-result (normalize-check graph (concept-check-file file))
+          checks (into [anchor-result] (conj closure-results concept-result))
           pass? (every? :pass checks)]
       {:file (.getPath (io/file file))
        :paper-id (graph-paper-id graph file)
        :pass pass?
-       :profile (profile file graph anchor-result closure-results)
+       :profile (profile file graph anchor-result closure-results concept-result)
        :checks checks})
     (catch Exception e
       {:file (.getPath (io/file file))
@@ -258,6 +279,7 @@
                      :anchor-faithfulness "a"
                      :closure "b"
                      :warrant-resolution "c"
+                     :concept-coverage "d"
                      "?")
                    (str (name (:check check))
                         (when (= :anchor-faithfulness (:check check))
