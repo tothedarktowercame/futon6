@@ -60,6 +60,24 @@ not bridged to proof-checking.
   (the inverse of `concept-usage`; "where does each concept show up").
 - **D4 (deferred) · prioritized enrichment loop** — fill missing glosses; lift
   `gloss → components → :structure` (the EXPLORE→ASSIMILATE move), common-concepts-first.
+  **Now de-risked on both ends (2026-06-17):**
+  - *Feedstock confirmed* (H-SFC1, reviewed PASS): top-100 **100%** / top-500 **98.4%**
+    of genuine concepts have definitional evidence, and the bulk carry *real* glosses
+    (encyclopedia + def-snippets), not just `defined-index`. Caveat: "defined" =
+    *evidence exists*, not *usable structured definition* — and ~8/500 "undefined" are
+    normalization noise (`non commutative`, `unit counit`, `algebra topology`) to
+    merge/clean before enrichment.
+  - *`:structure` lift has a deterministic LaTeXML path* (live demo, L-closure example):
+    `latexmlmath --cmml` parses the defining formula to Content MathML that maps
+    **mechanically** to Clojure — recognizing `conditional-set` (set-builder),
+    `evaluated-at` (restriction), `for-all`, `eq`, `⇒`, `≅`, action. The *only* gap was
+    the **typed multi-var binder** `∀f,g:X→Y.` (sole un-parse; everything else clean).
+    Three small deterministic rules close it — **no LLM for the expression layer**:
+    (1) binder-normalize `∀f,g:T.φ → ∀f.∀g.φ` (capture `T` aside);
+    (2) symbol dictionary (`approx→cong`, `evaluated-at→restrict`, `⋅→action`);
+    (3) relational-chain regroup (`A⇒B≅C` → `A⇒(B≅C)`).
+    Worked target: `(= (overline M) (conditional-set (∈ x X) (forall [f g] (: (→ X Y))
+    (implies (= (restrict f M) (restrict g M)) (cong (· f x) (· g x))))))`.
 - **D5 (deferred) · bridge to [[E-informal-proof-checking]]** — **R2d concept-coverage of
   proofs**: do the concepts a proof *uses* have definitions in the substrate? A proof
   over undefined terms is unverifiable; this couples the two excursions.
@@ -73,6 +91,35 @@ not bridged to proof-checking.
 > concepts — structure-first, priority by usage,
 > **BECAUSE** you cannot check reasoning over undefined terms, and ranking by usage puts
 > the scarce enrichment effort where it buys the most downstream proof-checking.
+
+## Design stance (Joe, 2026-06-17) — each concept is a map-reduce aggregator
+
+A structure-first concept is **not a single canonical definition**; it's a **reduce over
+per-paper grounded instances**:
+- **map** — each paper's *use* emits a per-paper grounded instance (the H-SFC2b
+  grounding: `f(x,y)` over ℝ in one paper, over ℂ in another; `≅` = iso-in-`Y` here, …).
+- **shuffle** — the `concept → papers` index (D3) groups instances by concept.
+- **reduce** — fold the instances into the entry, **keeping variation as a family**, not
+  an error: surface the common core (the `genus`) vs the varying axis (a `differentia`,
+  e.g. domain ∈ {ℝ, ℂ}), and generalize ("over a field `K`") where the fold can.
+
+Consequences:
+- **Variation is data, fixed "in post."** Divergent groundings across papers aren't
+  contradictions to resolve eagerly — they're a family reconciled at the reduce.
+  Polysemy-tolerant by construction.
+- **Incremental + order-independent (a monoid).** Each new paper just emits instances;
+  the aggregator merges. Matches "useful at every resolution" — a new paper only refines.
+- **Robust to grounding noise.** No single H-SFC2b grounding needs to be right; quality
+  is the *reduced consensus*, not any one source. (Softens H-SFC1's "evidence ≠ quality"
+  caveat: quality emerges from aggregation.)
+- This **is** [[project_symbol_grounding_25_year_framing]]'s shape: per-paper *defeasible*
+  bindings (map) + cross-paper meta-learning (reduce). It also gives the encyclopedia's
+  `genus`/`differentiae` a **computational origin** (genus = reduced core; differentiae =
+  the variant axes discovered by the fold).
+
+**Schema implication:** the per-concept entry carries `instances [{paper, grounding}]`
++ a reduced `{genus, variant-axes}`, not a lone definition. Shapes **D3** (map/shuffle)
+and **D4 / H-SFC2b** (the per-paper map outputs and the reduce that families them).
 
 ## VERIFY — acceptance bar
 
@@ -104,11 +151,56 @@ deterministic. Commit a short evidence report under `holes/excursions/`.
 **Gates:** PY (`pytest` + report the numbers).
 **When done:** bell claude-1 back with summary + shas; append findings here.
 
-### Deferred (spec after we see D1's coverage numbers — car-of-sequence)
-- **H-SFC2** D4 enrichment loop (fill glosses; `gloss→components→:structure` lift).
+### H-SFC2 — the `:structure` lift, in two layers (Joe, 2026-06-17)
+
+The `gloss → :structure` lift splits cleanly by *who does what*, and puts the LLM only
+where it earns its keep:
+
+- **H-SFC2a (deterministic, dispatch now) · LaTeXML → Clojure skeleton.**
+  `scripts/sfc_def_structure.bb`. Shell `latexmlmath --cmml` on a definition's defining
+  formula → Content MathML → map mechanically to a Clojure s-expr, applying the 3 rules
+  from D4: (1) binder-normalize `∀f,g:T.φ → ∀f.∀g.φ` (capture `T` aside), (2) symbol
+  dictionary (`approx→cong`, `evaluated-at→restrict`, `⋅→action`), (3) relational-chain
+  regroup. Output = the skeleton **plus a list of ungrounded symbols/operators**
+  (`X, Y, M, ·, ≅, f, g`) each marked `:grounding :hole`.
+  *Acceptance:* the L-closure example yields the D4 worked target; ≥3 more formula-
+  defined concepts (drawn from `def-snippets.json`) parse to Clojure; ungrounded-symbol
+  list emitted; deterministic. *Gates:* BB (clj-kondo + check-parens + bb tests).
+- **H-SFC2b (LLM, deferred) · symbol grounding.** Fill each `:grounding :hole` by binding
+  the symbol/operator to its **per-paper domain meaning** read from the surrounding prose
+  + the paper's own definitions (`X` = "$\V$-category", `·` = the action defined at
+  eqn N, `≅` = iso in `Y`). This **IS** [[project_symbol_grounding_25_year_framing]] /
+  M-symbol-grounding applied at the definition layer — so use its stance: bindings are
+  **per-paper defeasible strategies**, checkable against the paper's *own* definitions
+  ("does this symbol resolve to something the paper defines?" — flag "uses undefined
+  symbol" otherwise), and cross-paper learning stays meta (no global symbol table).
+  Don't reinvent it; charter against M-symbol-grounding's yardstick.
+
+### H-SFC-D3 — concept → papers "annotate-everywhere" index  · `scripts/sfc_concept_index.py` · PY
+The **map/shuffle** stage of the map-reduce (concept = monoid): the inverse of
+`concept-usage` (which is paper→concepts), as a first-class queryable artifact.
+**Goal:** build `data/warp/concept-index.json` = `{concept → {df, papers:[ids],
+genuine:bool, defined:bool, sources:[...]}}` over the full corpus, **reusing**
+`sfc_concept_coverage` helpers (`invert_usage` for df, `genuine_ranking` for the
+term-prior de-noise, `definition_sets`/`attach_coverage` for defined?+sources) — note
+`invert_usage` only *counts*, so the new bit is collecting the actual **paper lists**
+per concept. Plus a query CLI: `--concept "natural transformation"` → its papers +
+metadata; `--paper 0706.1286` → its concepts (forward direction for symmetry).
+**Scope:** shuffle only — concept→paper-list + flags. The per-paper *grounded instance*
+and the **reduce** (`{genus, variant-axes}`) are D4/SFC2b, not here.
+**Files:** reuse `scripts/sfc_concept_coverage.py` + `scripts/build_term_prior.py` (don't
+fork); inputs `data/warp/concept-usage.json` (+ def-snippets/defined-index/encyclopedia
+for flags).
+**Acceptance:** index built over all ~9742 papers / ~3737 concepts; df equals the
+inversion; genuine/defined flags consistent with SFC1's numbers; a sample query returns
+the right papers; deterministic. Commit a short evidence report under `holes/excursions/`.
+**Gates:** PY (`pytest` + report the numbers). Bell claude-1 back; append findings here.
+
+### Deferred (spec later — car-of-sequence)
 - **H-SFC3** D5 R2d proof-concept-coverage bridge into E-informal-proof-checking.
-- Optional: re-run `warp_concept_usage` on the current corpus for a fresh ranking
-  (the inversion itself needs no re-run).
+- Normalization/merge pass for mis-segmented undefined concepts (`non commutative`,
+  `unit counit`, `algebra topology`) before any enrichment.
+- Optional: re-run `warp_concept_usage` on the current corpus for a fresh ranking.
 
 ## Remaining gaps / notes
 *(Codex agents: append findings + commit shas here.)*
@@ -162,6 +254,47 @@ Gates passed: `python3 -m py_compile scripts/sfc_concept_coverage.py`,
 `pytest -q tests/test_sfc_concept_coverage.py` (`3 passed`), and full
 `pytest -q tests/` (`772 passed, 38 skipped`).
 
+### H-SFC-D3 findings — codex-4
+
+Implemented `scripts/sfc_concept_index.py`, the D3 map/shuffle artifact for
+structure-first concepts. It builds `data/warp/concept-index.json`, the inverse
+of `data/warp/concept-usage.json`, as:
+`{concept -> {df, papers, genuine, defined, sources}}`.
+
+The script reuses the SFC1 helpers instead of forking them:
+
+- `invert_usage` supplies the document-frequency denominator;
+- `genuine_ranking` supplies the term-prior de-noised `genuine` flag;
+- `definition_sets` / `attach_coverage` supply `defined` and `sources`.
+
+Acceptance run:
+
+```sh
+python3 scripts/sfc_concept_index.py
+```
+
+Evidence report committed at `holes/excursions/sfc-concept-index.md`.
+
+Results:
+
+- Indexed `3737` concepts over `9737` papers with concepts (`9742` scanned).
+- `df` and `len(papers)` validate exactly against `invert_usage`.
+- De-noised genuine concepts: `3340`.
+- Concepts with definition evidence: `3382`.
+- SFC1 consistency from the index: top-100 genuine concepts `100/100 = 100.0%`
+  defined; top-500 `492/500 = 98.4%` defined.
+- Sample `--concept "natural transformation"`: `df=4882`, `genuine=true`,
+  `defined=true`, sources `concept-encyclopedia`, `def-snippets`,
+  `defined-index`, and includes `0706.1286`.
+- Sample `--paper 0706.1286`: `293` concepts, including
+  `natural transformation`.
+
+Scope boundary: this is only the D3 shuffle (concept → paper-list + flags). It
+does not build per-paper grounded instances or the genus/variant-axis reduce.
+
+Gates passed: `python3 -m py_compile scripts/sfc_concept_index.py`,
+`pytest -q tests/test_sfc_concept_index.py`.
+
 ### H-SFC2a findings — codex-3
 
 Implemented `scripts/sfc_def_structure.bb`, a deterministic
@@ -200,3 +333,23 @@ Remaining gaps:
 Gates passed: `clj-kondo --lint scripts/sfc_def_structure.bb`,
 `emacs --batch -l /home/joe/code/futon4/dev/check-parens.el
 scripts/sfc_def_structure.bb`, and `bb tests/sfc_def_structure_test.clj`.
+
+### H-SFC2a — REVIEWED PASS (claude-1, 2026-06-17) · commit `bc38163`
+Checked: clj-kondo 0/0; bb tests 6/6; **L-closure reproduces the D4 target *live*** (via
+`bb scripts/sfc_def_structure.bb -`), with `:normalized-formula` + `:binder-captures
+[{:vars [f g] :type "X→Y"}]` confirming the binder-normalize rule, and the ungrounded
+list emitted. Generalizes across the 4 report shapes (set-builder/∀/⇒, typed map,
+functor-app, ≅). Meets the handoff bar — **PASS**.
+
+**Generalization gaps I found by testing a formula NOT in the report** (`\{ n \in
+\mathbb{N} \mid \exists k . n = 2k \}`) — these are H-SFC2a-v2, not blockers, but one is a
+*correctness* concern:
+- **`\exists` is silently mangled** → `(formulae-sequence ( k) …)`; the existential is
+  **dropped**, not flagged. *Must* gain an `∃`-normalize analogous to the `∀` rule (or at
+  minimum mark `∃` as an unhandled `:hole`) before the transducer is trusted beyond the
+  ∀-class — a silent quantifier drop yields a *wrong* `:structure`.
+- `\mathbb{N}` → `(* \mathbb N)` (spurious juxtaposition-times + ungrounded `\mathbb`);
+  add `\mathbb{X}`/`\mathcal{X}` → blackboard/script symbol to the dictionary.
+- LaTeXML's `formulae-sequence` join leaks into output; canonicalize/strip it.
+- (Known, by design) juxtaposition `Qf` → `(* Q f)`: mult-vs-application ambiguity —
+  correctly deferred to H-SFC2b grounding (Q-as-functor ⇒ application).
