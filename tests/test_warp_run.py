@@ -13,6 +13,7 @@ def test_confirmed_spine_orders_graph_before_embed() -> None:
     stage_ids = [stage.stage_id for stage in warp_run.SPINE_STAGES]
 
     assert stage_ids.index("S5") < stage_ids.index("S4c")
+    assert stage_ids.index("S6t") < stage_ids.index("S6b") < stage_ids.index("S6a")
     s6a = next(stage for stage in warp_run.SPINE_STAGES if stage.stage_id == "S6a")
     assert s6a.outputs == (warp_run.WARP / "concept-phylogeny.json",)
     assert "--out" in s6a.command

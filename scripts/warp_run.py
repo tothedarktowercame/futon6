@@ -128,16 +128,12 @@ SPINE_STAGES: tuple[Stage, ...] = (
         ("scripts/warp_concept_embed.py",),
     ),
     Stage(
-        "S6a",
-        "mark3_thread_tapestry.py",
-        (
-            GOLDEN,
-            p("data/concept-encyclopedia/ct"),
-            p("data/warp/cite-resolution"),
-        ),
-        (p("data/warp/concept-phylogeny.json"),),
-        ("scripts/mark3_thread_tapestry.py", "--out", "data/warp/concept-phylogeny.json"),
-        notes="CAS-SEL genealogical-select descent input; R2d-3 coupling candidate.",
+        "S6t",
+        "build_term_prior.py",
+        (GOLDEN,),
+        (p("data/term-prior-ct.json"),),
+        ("scripts/build_term_prior.py",),
+        notes="SFC foundation term prior; feeds S6b concept encyclopedia.",
     ),
     Stage(
         "S6b",
@@ -151,6 +147,18 @@ SPINE_STAGES: tuple[Stage, ...] = (
         ),
         (p("data/concept-encyclopedia-ct.json"), p("data/concept-encyclopedia/ct")),
         ("scripts/build_concept_encyclopedia.py",),
+    ),
+    Stage(
+        "S6a",
+        "mark3_thread_tapestry.py",
+        (
+            GOLDEN,
+            p("data/concept-encyclopedia/ct"),
+            p("data/warp/cite-resolution"),
+        ),
+        (p("data/warp/concept-phylogeny.json"),),
+        ("scripts/mark3_thread_tapestry.py", "--out", "data/warp/concept-phylogeny.json"),
+        notes="CAS-SEL genealogical-select descent input; R2d-3 coupling candidate.",
     ),
 )
 
@@ -218,14 +226,6 @@ OVERLAY_STAGES: tuple[Stage, ...] = (
 )
 
 AUDIT_ONLY_STAGES: tuple[Stage, ...] = (
-    Stage(
-        "consumer",
-        "build_term_prior.py",
-        (GOLDEN,),
-        (p("data/term-prior-ct.json"),),
-        None,
-        audit_only=True,
-    ),
     Stage(
         "consumer",
         "sfc_concept_coverage.py",
