@@ -39,21 +39,6 @@ CHECK_MENU = {
     "unfold-the-definition": [],
 }
 
-EXTRA_HOTWORDS = {
-    "construct-auxiliary-object": {
-        "fundamental", "parallelogram", "partition", "intervals", "upper", "central", "series",
-    },
-    "estimate-by-bounding": {"tail", "bounded", "bounding", "at-most", "subadditivity"},
-    "quotient-by-irrelevance": {"congruent", "modulo", "lattice", "period", "periodicity"},
-    "reduce-to-known-result": {
-        "evt", "liouville", "harmonic", "theorem", "invoke", "class", "equation",
-        "orbit-stabilizer",
-    },
-    "unfold-the-definition": {
-        "unfold", "absolute", "continuity", "monotonicity", "monotone", "null",
-    },
-}
-
 SYSTEM = (
     "You classify one informal proof step against a short list of reasoning patterns. "
     "Return JSON only: {\"pattern\":\"name\"|null,\"slot\":string|null,\"confidence\":0..1}."
@@ -144,7 +129,7 @@ def load_patterns(
         if allowed is not None and name not in allowed:
             continue
         hotwords = tuple(
-            sorted(set(index.get(name, ()) + tuple(tokenize(path.stem.replace("-", " ")))) | EXTRA_HOTWORDS.get(name, set()))
+            sorted(set(index.get(name, ()) + tuple(tokenize(path.stem.replace("-", " ")))))
         )
         patterns[name] = parse_flexiarg(path, hotwords)
     return patterns
@@ -304,6 +289,12 @@ def select_proof(
     for step in steps_doc["steps"]:
         candidates = retrieve(step["text"], patterns, k=k)
         if backend == "stub" and oracle:
+            # PERFECT-RETRIEVAL SIMULATION (stub/tests only): inject the oracle pattern into
+            # the candidate set when Tier-0 hotword retrieval misses it, so the stub tests can
+            # exercise verify + assemble + the Tier-2 trigger logic IN ISOLATION from Tier-0
+            # recall. This does NOT run on the openai backend. Tier-0's true recall is measured
+            # separately (test_tier0_retrieval_recall_is_honest); it is ~16/22@k4, ceiling ~19/22
+            # at full pool — 3 steps have zero lexical overlap and need a semantic retriever.
             oracle_pattern = oracle.get(step["id"], {}).get("pattern")
             if oracle_pattern in patterns and oracle_pattern not in {c["pattern"] for c in candidates}:
                 candidates = [*candidates, {"pattern": oracle_pattern, "score": 1.0, "hits": ["oracle"]}]
