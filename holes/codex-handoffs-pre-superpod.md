@@ -276,3 +276,51 @@ generated reports are:
 Remaining gap: the carve/reasoning split should still be confirmed by Joe
 before H8 work starts; H7 intentionally stops at structural region extraction
 plus scope-vocabulary consolidation.
+
+## Remaining gaps — H1 (codex-1)
+
+Implemented a detector-side text-proof generalisation in
+`scripts/dp_paper_view.py`: capitalised proof environments canonicalise to
+`env/proof`, `\proof...\qed` macro pairs are recognised, and bare/emphasised
+`Proof.` blocks are lifted to proof regions. Added
+`scripts/dp_reasoning_coverage_harness.py` as a ≥15-paper held-out coverage gate.
+
+Held-out coverage (15 papers beyond the tuned demo set) improved on proof-region
+anchors from 11/15 papers and 198 proof regions to 12/15 papers and 209 proof
+regions. Illative/inference coverage stayed 15/15 papers, 499 inferences, 996
+claims. In-memory `check_invariants.check_paper(..., data=dp_paper_view.build(...))`
+over the 15 held-out papers plus `1012.1220` reported 0 well-formedness errors.
+
+Remaining gap: the available `1012.1220` source does not contain a body `Proof.`,
+`\proof`, `\qed`, or `\begin{Proof}` marker; the only literal `Proof.` is in a
+commented preamble environment definition. The detector now supports those forms,
+but `1012.1220` itself still has 0 proof regions because there is no proof
+delimiter to anchor. It does have 14 body-register inferences. If another
+converted source for `1012.1220` contains text-style proof delimiters, rerun the
+harness against that source; otherwise this card's named example appears to be a
+corpus/source mismatch, not a remaining detector miss.
+
+The persisted `check_invariants.py --corpus` path reads old golden JSON and still
+streams pre-existing W-NEST-SCOPE errors unrelated to this detector patch. The
+clean gate above uses freshly mined in-memory detector output, preserving the
+"fix detector, never checker" discipline.
+
+## Remaining gaps — H9 (codex-1)
+
+Validated `scripts/mark4_apm_structure_coverage.py` against the frozen local
+APM/eprint scope set. The three flavours reproduce the pilot numbers:
+type-only mean/median 1.00/1.00, type+any-symbol 0.8588/1.00, and
+type+multichar 0.2570/0.1364 with histogram [73, 30, 12, 7, 13] and 13 proofs
+at ≥80% coverage.
+
+Chosen real v1 metric: `type_multichar`. Gate now emitted by the script:
+mean ≥0.20, median ≥0.10, confirmatory tail ≥10 proofs at ≥80%; the frozen run
+passes. Rationale: type-only and type+any-symbol saturate on common scope types
+and single-letter variables; multichar overlap is the first discriminative cut.
+
+Remaining gap: this is still not the final structural matcher. The next metric
+should be role-typed/symbol-class overlap, or pgvector/embedding matching in
+Rob's graph-DB pattern. The disagreement-vs-keyword diagnostic also still needs
+a broader non-keyword random batch-007/008 sample; the current 200-paper eprint
+pool is already keyword-selected, so it cannot measure scope-retrieves-what-
+keyword-missed.
