@@ -72,8 +72,12 @@ STAGES = [
     {"id": "7.cas_checks", "device": "cpu", "status": "built",
      "consumes": ["topology+sorry"], "produces": "executed-checks",
      "path": "──", "needs": []},
+    {"id": "7b.rung3-2", "device": "cpu", "status": "built",
+     "consumes": ["proof-steps"], "produces": "technique-gap-map",
+     "path": "data/rung3-technique/loop-run-70b/{pid}.technique.json",
+     "needs": ["moves", "buckets", "gaps"]},
     {"id": "8.cas_cert", "device": "cpu", "status": "in-flight",
-     "consumes": ["semcheck-profile", "topology+sorry", "symbol-grounding"], "produces": "port-ledger",
+     "consumes": ["semcheck-profile", "topology+sorry", "symbol-grounding", "technique-gap-map"], "produces": "port-ledger",
      "path": "data/cas-cert/{pid}.cert.edn", "needs": []},
     {"id": "9.rung-3", "device": "cpu", "status": "in-flight",
      "consumes": ["topology+sorry"], "produces": "technique-ports",
@@ -161,9 +165,9 @@ def plan() -> int:
             ok = False
     print(f"\n  DAG order valid (each stage's inputs produced upstream): {'✓' if ok else '✗'}")
     print("  NOTE: stage 5b.cas_segment is the seam-6 producer: it segments arXiv IATC")
-    print("        graphs into proof-steps consumed by 6.cas_select. APM hand-authored")
-    print("        fixtures remain the CAS-SEL oracle path; arXiv now has a deterministic")
-    print("        CPU proof-step producer.")
+    print("        graphs into proof-steps consumed by 6.cas_select and 7b.rung3-2.")
+    print("        APM hand-authored fixtures remain the CAS-SEL oracle path; arXiv now")
+    print("        has deterministic CPU producers for proof-steps and technique-gap-map.")
     print("        stage 5a.sfc_ground(SFC2b) produces symbol-grounding consumed by")
     print("        8.cas_cert; stub mode is CPU deterministic, openai mode is the")
     print("        scheduled LLM symbol grounding pass.")

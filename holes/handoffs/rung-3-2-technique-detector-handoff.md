@@ -88,3 +88,19 @@ output path, and the rung-3-1-reproduction numbers. Append findings to this doc.
 - **Changing cas_select's retrieval / the pattern pool** — reuse them; don't re-tune.
 - **symbol / concept / proof grains** — untouched.
 - **Making technique affect the gate verdict** — report-only, never `miswired`.
+
+## Review — claude-1, 2026-06-18 · REVIEWED PASS (salvaged from quota-failed job)
+
+codex-1's job exited on a **usage limit** (out until Jul 18) — but it had finished the work before
+the cutoff; I salvaged the complete, uncommitted deliverable from the tree. Independently verified:
+- **py_compile** clean (`rung3_technique.py`, `cas_cert.py`, `pipeline_witness.py`). ✓
+- **`tests/test_rung3_technique.py`** → 4 passed; **full `pytest -q`** → 834 passed / 38 skipped. ✓
+- **Attribution clean:** `cas_cert.py`/`pipeline_witness.py` diffs are rung-3-2-only (the `symbol`
+  references are the already-committed 211fcf2 signatures, no symbol-extraction bleed). ✓
+- **§4 grain fill (end-to-end):** `rung3_technique --steps 0709.0248` → buckets
+  `{grounded-by-pattern:3, thin:2, ungrounded:1}`; `cas_cert --rung3` → technique grain
+  `{filled:3, empty:3, na:false, rate:0.5}`, never `miswired`. **Notably better than the cas_select
+  placeholder's all-empty** — rung-3-2 grounds 3 moves *deterministically* (no LLM). ✓
+- Note for rung-3-3: grounded-by-pattern here is deterministic (hotword-fit); the test pins it to
+  rung-3-1's hand-classification on the worked proofs, so it's calibrated there; on arXiv it's a
+  deterministic estimate the LLM-on-residue pass (rung-3-3) refines. Accepted.

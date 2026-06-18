@@ -278,7 +278,44 @@ def warrant_ports(graph: dict[str, Any]) -> list[dict[str, Any]]:
     return out
 
 
-def technique_ports(paper_id: str, cas_select: dict[str, Any] | None) -> list[dict[str, Any]]:
+def technique_ports(
+    paper_id: str,
+    cas_select: dict[str, Any] | None,
+    rung3: dict[str, dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    rung3_doc = (rung3 or {}).get(paper_id)
+    if rung3_doc:
+        out = []
+        for row in rung3_doc.get("moves") or []:
+            bucket = row.get("bucket")
+            if bucket in {"grounded-by-pattern", "grounded-by-citation"}:
+                state = "filled"
+                kind = None
+            else:
+                state = "empty"
+                kind = "conjecture" if bucket == "conjecture" else str(bucket or "ungrounded")
+            evidence = {
+                "bucket": bucket,
+                "pattern": row.get("pattern"),
+                "type": row.get("type"),
+                "score": row.get("score"),
+                "candidates": row.get("candidates", []),
+            }
+            if bucket == "conjecture":
+                evidence["credited"] = True
+            out.append(
+                port(
+                    grain="technique",
+                    item=f"technique:{row.get('step')}",
+                    state=state,
+                    rung="rung-3-2",
+                    scoped_query="proof move is grounded by a known technique pattern or credited gap",
+                    evidence=evidence,
+                    kind=kind,
+                )
+            )
+        if out:
+            return out
     out = [
         port(
             grain="technique",
@@ -401,6 +438,10 @@ def arse_seed(kind: str, p: dict[str, Any]) -> str:
         return f"What warrant licenses {p['item']}?"
     if kind == "thin":
         return f"What technique pattern grounds {p['item']}?"
+    if kind == "ungrounded":
+        return f"Which known technique, if any, grounds {p['item']}?"
+    if kind == "conjecture":
+        return f"What is known about the author-declared gap {p['item']}?"
     return f"What fills the {p['grain']} port {p['item']}?"
 
 
@@ -408,13 +449,14 @@ def certificate_for_graph(
     graph: dict[str, Any],
     cas_select: dict[str, Any] | None = None,
     symbols_by_paper: dict[str, dict[str, Any]] | None = None,
+    rung3_by_paper: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     paper_id = graph.get("paper-id") or (graph.get("profile") or {}).get("paper-id")
     symbol_doc = (symbols_by_paper or {}).get(str(paper_id))
     ports = []
     ports.extend(symbol_ports(symbol_doc))
     ports.extend(concept_ports(graph))
-    ports.extend(technique_ports(str(paper_id), cas_select))
+    ports.extend(technique_ports(str(paper_id), cas_select, rung3_by_paper))
     ports.extend(anchor_ports(graph))
     ports.extend(closure_ports(graph))
     ports.extend(warrant_ports(graph))
@@ -470,13 +512,31 @@ def symbols_by_paper(payload: Any) -> dict[str, dict[str, Any]]:
     return out
 
 
+def docs_by_paper(payload: Any) -> dict[str, dict[str, Any]]:
+    if payload is None:
+        return {}
+    if isinstance(payload, list):
+        docs = payload
+    elif isinstance(payload, dict) and "papers" in payload:
+        docs = payload.get("papers") or []
+    else:
+        docs = [payload]
+    out = {}
+    for doc in docs:
+        paper_id = doc.get("paper_id") or doc.get("paper-id")
+        if paper_id:
+            out[str(paper_id)] = doc
+    return out
+
+
 def build_certificates(
     semcheck: dict[str, Any],
     cas_select: dict[str, Any] | None = None,
     symbols: dict[str, dict[str, Any]] | None = None,
+    rung3: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     certs = [
-        certificate_for_graph(graph, cas_select, symbols)
+        certificate_for_graph(graph, cas_select, symbols, rung3)
         for graph in semcheck.get("graphs", [])
     ]
     return {
@@ -492,6 +552,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--semcheck", type=Path, help="EDN emitted by iatc_semcheck.bb --out")
     ap.add_argument("--cas-select", type=Path, help="JSON emitted by cas_select.py")
     ap.add_argument("--symbols", type=Path, help="JSON emitted by sfc_ground_paper.py")
+    ap.add_argument("--rung3", type=Path, help="JSON emitted by rung3_technique.py")
     ap.add_argument("--graph-dir", type=Path, default=DEFAULT_GRAPH_DIR)
     ap.add_argument("--out", type=Path)
     ap.add_argument("--gate", action="store_true")
@@ -500,7 +561,8 @@ def main(argv: list[str] | None = None) -> int:
     semcheck = load_edn(args.semcheck) if args.semcheck else run_semcheck(args.graph_dir)
     cas_select = load_json(args.cas_select) if args.cas_select else None
     symbols = symbols_by_paper(load_json(args.symbols)) if args.symbols else None
-    payload = build_certificates(semcheck, cas_select, symbols)
+    rung3 = docs_by_paper(load_json(args.rung3)) if args.rung3 else None
+    payload = build_certificates(semcheck, cas_select, symbols, rung3)
     text = json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False)
     if args.out:
         args.out.write_text(text + "\n")
