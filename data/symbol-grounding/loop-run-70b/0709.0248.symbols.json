@@ -1,0 +1,64 @@
+{
+  "backend": "stub",
+  "candidate": "data/iatc-candidates/0709.0248.candidate.json",
+  "formula": "\\mathcal{C}, a,b:A, p:\\id{A}(a,b)",
+  "groundings": [
+    {
+      "binding": "",
+      "evidence": "",
+      "status": "undefined-in-context",
+      "symbol": "*"
+    },
+    {
+      "binding": "(stub) introduced in context near 'A'",
+      "evidence": "eplacing any terms $a,b:A$ and $p:\\id{A}(a,b)$ by",
+      "status": "grounded",
+      "symbol": "A"
+    },
+    {
+      "binding": "",
+      "evidence": "",
+      "status": "undefined-in-context",
+      "symbol": "Ap"
+    },
+    {
+      "binding": "",
+      "evidence": "",
+      "status": "undefined-in-context",
+      "symbol": "Cab"
+    },
+    {
+      "binding": "",
+      "evidence": "",
+      "status": "undefined-in-context",
+      "symbol": "\\\\id"
+    },
+    {
+      "binding": "(stub) introduced in context near 'ab'",
+      "evidence": "sed categories\nsketched above the reflection rule",
+      "status": "grounded",
+      "symbol": "ab"
+    },
+    {
+      "binding": "(stub) introduced in context near 'and'",
+      "evidence": "proposition}\n  In the standard interpretation given",
+      "status": "grounded",
+      "symbol": "and"
+    },
+    {
+      "binding": "",
+      "evidence": "",
+      "status": "undefined-in-context",
+      "symbol": "share"
+    }
+  ],
+  "paper_id": "0709.0248",
+  "schema": "sfc-symbol-grounding/v0",
+  "structure": "(and (: Cab Ap) (: share (* \\id A ab)))",
+  "summary": {
+    "grounded": 3,
+    "symbols": 8,
+    "undefined_in_context": 5,
+    "unsupported": 0
+  }
+}

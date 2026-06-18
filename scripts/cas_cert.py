@@ -91,7 +91,37 @@ def port(
     return row
 
 
-def symbol_ports() -> list[dict[str, Any]]:
+def symbol_ports(symbols: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    if symbols:
+        out = []
+        for row in symbols.get("groundings") or []:
+            status = str(row.get("status", ""))
+            if status == "grounded":
+                state = "filled"
+                kind = None
+            elif status in {"undefined-in-context", "unsupported"}:
+                state = "empty"
+                kind = status
+            else:
+                state = "empty"
+                kind = "unknown-symbol-status"
+            symbol = str(row.get("symbol", ""))
+            out.append(
+                port(
+                    grain="symbol",
+                    item=f"symbol:{symbol}",
+                    state=state,
+                    rung="SFC2b",
+                    scoped_query=f"per-paper grounding for symbol '{symbol}'",
+                    evidence={
+                        "status": status,
+                        "binding": row.get("binding", ""),
+                        "evidence": row.get("evidence", ""),
+                    },
+                    kind=kind,
+                )
+            )
+        return out
     return [
         port(
             grain="symbol",
@@ -374,10 +404,15 @@ def arse_seed(kind: str, p: dict[str, Any]) -> str:
     return f"What fills the {p['grain']} port {p['item']}?"
 
 
-def certificate_for_graph(graph: dict[str, Any], cas_select: dict[str, Any] | None = None) -> dict[str, Any]:
+def certificate_for_graph(
+    graph: dict[str, Any],
+    cas_select: dict[str, Any] | None = None,
+    symbols_by_paper: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     paper_id = graph.get("paper-id") or (graph.get("profile") or {}).get("paper-id")
+    symbol_doc = (symbols_by_paper or {}).get(str(paper_id))
     ports = []
-    ports.extend(symbol_ports())
+    ports.extend(symbol_ports(symbol_doc))
     ports.extend(concept_ports(graph))
     ports.extend(technique_ports(str(paper_id), cas_select))
     ports.extend(anchor_ports(graph))
@@ -418,8 +453,32 @@ def certificate_for_graph(graph: dict[str, Any], cas_select: dict[str, Any] | No
     }
 
 
-def build_certificates(semcheck: dict[str, Any], cas_select: dict[str, Any] | None = None) -> dict[str, Any]:
-    certs = [certificate_for_graph(graph, cas_select) for graph in semcheck.get("graphs", [])]
+def symbols_by_paper(payload: Any) -> dict[str, dict[str, Any]]:
+    if payload is None:
+        return {}
+    if isinstance(payload, list):
+        docs = payload
+    elif isinstance(payload, dict) and "papers" in payload:
+        docs = payload.get("papers") or []
+    else:
+        docs = [payload]
+    out = {}
+    for doc in docs:
+        paper_id = doc.get("paper_id") or doc.get("paper-id")
+        if paper_id:
+            out[str(paper_id)] = doc
+    return out
+
+
+def build_certificates(
+    semcheck: dict[str, Any],
+    cas_select: dict[str, Any] | None = None,
+    symbols: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    certs = [
+        certificate_for_graph(graph, cas_select, symbols)
+        for graph in semcheck.get("graphs", [])
+    ]
     return {
         "schema": SCHEMA,
         "paper_count": len(certs),
@@ -432,6 +491,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--semcheck", type=Path, help="EDN emitted by iatc_semcheck.bb --out")
     ap.add_argument("--cas-select", type=Path, help="JSON emitted by cas_select.py")
+    ap.add_argument("--symbols", type=Path, help="JSON emitted by sfc_ground_paper.py")
     ap.add_argument("--graph-dir", type=Path, default=DEFAULT_GRAPH_DIR)
     ap.add_argument("--out", type=Path)
     ap.add_argument("--gate", action="store_true")
@@ -439,7 +499,8 @@ def main(argv: list[str] | None = None) -> int:
 
     semcheck = load_edn(args.semcheck) if args.semcheck else run_semcheck(args.graph_dir)
     cas_select = load_json(args.cas_select) if args.cas_select else None
-    payload = build_certificates(semcheck, cas_select)
+    symbols = symbols_by_paper(load_json(args.symbols)) if args.symbols else None
+    payload = build_certificates(semcheck, cas_select, symbols)
     text = json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False)
     if args.out:
         args.out.write_text(text + "\n")

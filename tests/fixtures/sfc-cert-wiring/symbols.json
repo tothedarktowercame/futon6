@@ -1,0 +1,33 @@
+{
+  "backend": "stub",
+  "formula": "x,y,z",
+  "groundings": [
+    {
+      "binding": "a term introduced by the fixture context",
+      "evidence": "let x be fixed",
+      "status": "grounded",
+      "symbol": "x"
+    },
+    {
+      "binding": "",
+      "evidence": "",
+      "status": "undefined-in-context",
+      "symbol": "y"
+    },
+    {
+      "binding": "hallucinated rejected binding",
+      "evidence": "not in context",
+      "status": "unsupported",
+      "symbol": "z"
+    }
+  ],
+  "paper_id": "fixture",
+  "schema": "sfc-symbol-grounding/v0",
+  "structure": "(fixture x y z)",
+  "summary": {
+    "grounded": 1,
+    "symbols": 3,
+    "undefined_in_context": 1,
+    "unsupported": 1
+  }
+}

@@ -57,6 +57,10 @@ STAGES = [
      "consumes": ["gated-graph", "marks"], "produces": "semcheck-profile",
      "path": "data/iatc-argument-graphs/loop-run-70b/{pid}.rung2.edn",
      "needs": []},
+    {"id": "5a.sfc_ground(SFC2b)", "device": "cpu/GPU", "status": "built",
+     "consumes": ["candidate"], "produces": "symbol-grounding",
+     "path": "data/symbol-grounding/loop-run-70b/{pid}.symbols.json",
+     "needs": ["groundings", "summary"]},
     {"id": "5b.cas_segment", "device": "cpu", "status": "built",
      "consumes": ["argument-graph"], "produces": "proof-steps",
      "path": "data/cas-select-steps/loop-run-70b/{pid}.steps.json",
@@ -69,7 +73,7 @@ STAGES = [
      "consumes": ["topology+sorry"], "produces": "executed-checks",
      "path": "──", "needs": []},
     {"id": "8.cas_cert", "device": "cpu", "status": "in-flight",
-     "consumes": ["semcheck-profile", "topology+sorry"], "produces": "port-ledger",
+     "consumes": ["semcheck-profile", "topology+sorry", "symbol-grounding"], "produces": "port-ledger",
      "path": "data/cas-cert/{pid}.cert.edn", "needs": []},
     {"id": "9.rung-3", "device": "cpu", "status": "in-flight",
      "consumes": ["topology+sorry"], "produces": "technique-ports",
@@ -160,6 +164,9 @@ def plan() -> int:
     print("        graphs into proof-steps consumed by 6.cas_select. APM hand-authored")
     print("        fixtures remain the CAS-SEL oracle path; arXiv now has a deterministic")
     print("        CPU proof-step producer.")
+    print("        stage 5a.sfc_ground(SFC2b) produces symbol-grounding consumed by")
+    print("        8.cas_cert; stub mode is CPU deterministic, openai mode is the")
+    print("        scheduled LLM symbol grounding pass.")
     return 0 if ok else 1
 
 

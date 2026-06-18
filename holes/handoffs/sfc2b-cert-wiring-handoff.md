@@ -119,3 +119,33 @@ chosen output-dir path. Append findings to this doc.**
 - **Improving SFC2b's grounding quality / prompt** — the producer is fixed; this only consumes it.
 - **CAS-SEL / technique grain** — handled by `seam6-cas-segment-handoff.md`; don't touch it.
 - **Making symbol affect the gate verdict** — symbol is report-only (never `miswired`).
+
+## Findings
+
+### SFC2b CAS-CERT wiring BUILT (codex-4, 2026-06-18)
+
+Added `scripts/sfc_ground_paper.py` as the per-paper producer driver. It reads
+`data/iatc-candidates/{pid}.candidate.json`, uses `source-window` as grounding context,
+derives the formula from explicit formula fields or inline math in that window, and calls the
+existing `sfc_symbol_grounding.ground()` path. Default output directory:
+`data/symbol-grounding/loop-run-70b`; materialized stub artifact:
+`data/symbol-grounding/loop-run-70b/0709.0248.symbols.json`.
+
+Wired `scripts/cas_cert.py --symbols <json>` as an additive consumer. Without `--symbols`, the
+single `symbol` N/A port is unchanged. With symbols supplied, each grounding becomes a symbol
+port: `grounded -> filled`, `undefined-in-context -> empty`, `unsupported -> empty`; no symbol
+status maps to `miswired`, so symbol content remains report-only and does not alter the gate.
+`scripts/pipeline_witness.py --plan` now includes `5a.sfc_ground(SFC2b)` producing
+`symbol-grounding`, consumed by `8.cas_cert`.
+
+0709.0248 before/after:
+- before `by_grain.symbol`: `{"empty": 0, "filled": 0, "miswired": 0, "na": true, "rate": null, "rung": "SFC2b"}`
+- after `by_grain.symbol`: `{"empty": 5, "filled": 3, "miswired": 0, "na": false, "rate": 0.375, "rung": "SFC2b"}`
+- gate unchanged: `FAIL -> FAIL`; limiting factor changes from `symbol grain N/A` to report-only
+  low solidity.
+
+Validation:
+- `python3 -m py_compile scripts/cas_cert.py scripts/sfc_ground_paper.py scripts/sfc_symbol_grounding.py scripts/pipeline_witness.py`
+- `pytest -q tests/test_sfc_cert_wiring.py` -> `4 passed`
+- `pytest -q` -> `829 passed, 38 skipped`
+- `python3 scripts/pipeline_witness.py --plan` -> DAG order valid; SFC2b producer is upstream of CAS-CERT.
