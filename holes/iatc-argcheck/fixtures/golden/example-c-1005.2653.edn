@@ -1,0 +1,53 @@
+{:paper/id "1005.2653"
+ :passage/id "1005.2653:fourier-transfer:70-77"
+ :source {:lines [70 77] :kind :expository-proof}
+ :nodes
+ [{:id :h
+   :kind :object
+   :text "canonical Kleisli functor h : A^op tensor A -> H"
+   :source {:lines [70 72]}}
+  {:id :khat-restriction
+   :kind :claim
+   :text "the Fourier functor K-hat is restriction along h, i.e. [h,1]"
+   :source {:lines [70 73]}}
+  {:id :khat-preserves-homs
+   :kind :claim
+   :text "K-hat preserves both left and right internal homs"
+   :source {:lines [73 73]}}
+  {:id :khat-conservative
+   :kind :claim
+   :text "K-hat is conservative"
+   :source {:lines [74 74]}}
+  {:id :source-star-autonomous
+   :kind :claim
+   :text "[A^op tensor A,Vect_k] is star-autonomous monoidal biclosed"
+   :source {:lines [74 74]}}
+  {:id :target-star-autonomous
+   :kind :claim
+   :text "[H,Vect_k] is star-autonomous monoidal biclosed"
+   :source {:lines [74 74]}}
+  {:id :quantum-groupoid
+   :kind :claim
+   :text "K-hat=[h,1] is a quantum groupoid in the sense of [3]"
+   :source {:lines [77 77]}}]
+ :edges
+ [{:id :e-transfer-star-autonomy
+   :kind :infer
+   :relation :transfer
+   :given [:khat-restriction :khat-preserves-homs :khat-conservative]
+   :premise :source-star-autonomous
+   :warrant {:kind :missing-warrant
+             :text "conservative hom-preserving restriction reflects/transfers the biclosed star-autonomous structure"}
+   :conclusion :target-star-autonomous
+   :source {:lines [70 74]}}
+  {:id :e-quantum-groupoid
+   :kind :infer
+   :relation :therefore
+   :premise [:target-star-autonomous :khat-restriction]
+   :warrant {:kind :citation :target "[3]"}
+   :conclusion :quantum-groupoid
+   :source {:lines [75 77]}}]
+ :holes
+ [{:kind :missing-warrant
+   :edge :e-transfer-star-autonomy
+   :wanted :restriction-transfer-of-star-autonomous-biclosed-structure}]}

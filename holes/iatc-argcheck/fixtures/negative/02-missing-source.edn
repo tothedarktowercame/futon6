@@ -1,0 +1,6 @@
+{:paper/id "bad"
+ :passage/id "missing-source"
+ :source {:lines [1 4] :kind :proof}
+ :nodes [{:id :a :kind :claim :text "A"}]
+ :edges [{:id :e :from :a :to :a :role :premise}]
+ :holes []}

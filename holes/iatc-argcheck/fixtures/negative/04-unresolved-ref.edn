@@ -1,0 +1,7 @@
+{:paper/id "bad"
+ :passage/id "unresolved-ref"
+ :source {:lines [1 4] :kind :proof}
+ :nodes [{:id :r :kind :ref :text "the previous theorem" :source {:lines [1 1]}}
+         {:id :c :kind :claim :text "C" :source {:lines [2 2]}}]
+ :edges [{:id :e :from :r :to :c :role :premise :source {:lines [2 2]}}]
+ :holes []}

@@ -1,0 +1,237 @@
+{
+  "schema": "futon6.mark3-eval-harness.v1",
+  "generated_at": "2026-06-17T15:42:49.145620+00:00",
+  "run_dir": "/home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b",
+  "golden_dir": "/home/joe/code/futon6/data/showcases/ct-anatomy/golden",
+  "prior_path": "/home/joe/code/futon6/data/term-prior-ct.json",
+  "artifact_count": 9,
+  "include_attempts": false,
+  "run_kind": "iatc",
+  "kind_counts": {
+    "iatc": 9
+  },
+  "paper_ids": [
+    "0705.0452",
+    "0706.1286",
+    "0708.1921",
+    "0708.2067",
+    "0709.0248",
+    "0711.0473",
+    "0712.0724",
+    "0801.0199",
+    "0801.3843"
+  ],
+  "metrics": {
+    "grounding": {
+      "computable": true,
+      "method": "warrant-resolution over IATC inference edges: an edge is grounded when it has a :warrant whose :kind is not :missing-warrant; edges with no :warrant key count as unresolved",
+      "paper_count": 9,
+      "grounded_artifacts": 9,
+      "baseline_layer_a_marks": 82287,
+      "total_edges": 28,
+      "resolved_warrant_edges": 6,
+      "grounding_percent": 0.21428571428571427
+    },
+    "expository_coverage": {
+      "computable": true,
+      "method": "artifact source lines intersected with expository_region_extract.py regions",
+      "covered_expository_lines": 43,
+      "expository_lines": 7296,
+      "expository_coverage_percent": 0.005893640350877193,
+      "per_paper": [
+        {
+          "paper": "0705.0452",
+          "covered_expository_lines": 2,
+          "expository_lines": 1116,
+          "coverage": 0.0017921146953405018
+        },
+        {
+          "paper": "0706.1286",
+          "covered_expository_lines": 0,
+          "expository_lines": 1689,
+          "coverage": 0.0
+        },
+        {
+          "paper": "0708.1921",
+          "covered_expository_lines": 0,
+          "expository_lines": 280,
+          "coverage": 0.0
+        },
+        {
+          "paper": "0708.2067",
+          "covered_expository_lines": 3,
+          "expository_lines": 359,
+          "coverage": 0.008356545961002786
+        },
+        {
+          "paper": "0709.0248",
+          "covered_expository_lines": 3,
+          "expository_lines": 205,
+          "coverage": 0.014634146341463415
+        },
+        {
+          "paper": "0711.0473",
+          "covered_expository_lines": 7,
+          "expository_lines": 2254,
+          "coverage": 0.003105590062111801
+        },
+        {
+          "paper": "0712.0724",
+          "covered_expository_lines": 22,
+          "expository_lines": 770,
+          "coverage": 0.02857142857142857
+        },
+        {
+          "paper": "0801.0199",
+          "covered_expository_lines": 6,
+          "expository_lines": 164,
+          "coverage": 0.036585365853658534
+        },
+        {
+          "paper": "0801.3843",
+          "covered_expository_lines": 0,
+          "expository_lines": 459,
+          "coverage": 0.0
+        }
+      ]
+    },
+    "checkers": {
+      "structural": {
+        "concept": {
+          "skipped": true,
+          "reason": "run kind is iatc, not concept",
+          "pass_percent": null
+        },
+        "iatc": {
+          "command": [
+            "bb",
+            "/home/joe/code/futon6/scripts/iatc_argcheck.bb",
+            "/home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b"
+          ],
+          "exit_code": 0,
+          "passed": 9,
+          "failed": 0,
+          "total": 9,
+          "pass_percent": 1.0,
+          "stdout_tail": "PASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0705.0452.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0706.1286.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0708.1921.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0708.2067.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0709.0248.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0711.0473.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0712.0724.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0801.0199.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0801.3843.edn",
+          "stderr_tail": ""
+        }
+      },
+      "checker_PASS_percent": 1.0,
+      "checker_passed": 9,
+      "checker_total": 9,
+      "substance": {
+        "command": [
+          "/home/joe/code/futon6/.venv/bin/python",
+          "/home/joe/code/futon6/scripts/substance_gate.py",
+          "/home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b",
+          "--kind",
+          "iatc"
+        ],
+        "exit_code": 0,
+        "passed": 9,
+        "failed": 0,
+        "total": 9,
+        "pass_percent": 1.0,
+        "stdout_tail": "PASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0705.0452.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0706.1286.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0708.1921.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0708.2067.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0709.0248.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0711.0473.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0712.0724.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0801.0199.edn\nPASS /home/joe/code/futon6/data/iatc-argument-graphs/loop-run-70b/0801.3843.edn\n\nsubstance-gate: 9 file(s), 0 failure line(s) — PASS",
+        "stderr_tail": ""
+      },
+      "substance_PASS_percent": 1.0
+    },
+    "prior_vs_posterior": {
+      "computable": true,
+      "method": "posterior artifact terms looked up in data/term-prior-ct.json document-frequency prior",
+      "posterior_terms": 63,
+      "prior_terms": 2459715,
+      "posterior_terms_with_prior_df": 8,
+      "posterior_prior_hit_percent": 0.12698412698412698,
+      "median_prior_df_for_hits": 376.0,
+      "novel_posterior_terms": [
+        "^pitchfork(thg) is left adjoint to (thg)^pitchfork",
+        "any commutative square",
+        "c^2 : evident forgetful functor",
+        "calmod-like bicategories",
+        "cat-like bicategories",
+        "commutative diagram implies groupoid structure",
+        "consider the last composition used",
+        "construction of crossed module",
+        "crossed module (g,h,t,a)",
+        "definition of l-separated",
+        "definition of r_{(triv,g)} as a functor",
+        "definition of upp{m}{pi} implies commutativity",
+        "equality-of-pasting-composites",
+        "equivalence for cat-like bicategories is fine",
+        "equivalence issue arose in [19.3.5]{pht}",
+        "equivalence of ≤ and ≅",
+        "f^pitchfork : b^pitchfork -> a^pitchfork",
+        "f^pitchfork is a functor over c^2",
+        "f_*=g_* implies (f⋅x)_*=f_*⋅x_*=g_*⋅x_*=(g⋅x)_*",
+        "functor f : a -> b",
+        "functor r_{(triv,g)}: upp{m}{pi} -> t",
+        "functor u : a -> c^2",
+        "functor v : b -> c^2",
+        "functoriality of _*",
+        "f≅g if f*=g* or f_*=g_*",
+        "f≅g if f≤g and g≤f",
+        "g is a 2-group",
+        "homomorphism t: h -> g",
+        "identity morphism i(g) = (1,g)",
+        "it suffices to consider z=e",
+        "lemma dense j",
+        "lemma smith-beke",
+        "morphism alpha = (h,g)",
+        "morphism beta = (h',t(h)g)",
+        "morphism g of c",
+        "morphism g' of c",
+        "morphism x in y",
+        "object (triv,g) in trans{i}{gr}{1}",
+        "object g in ob(g)",
+        "parameterized rules imply extensionality",
+        "phi' : a lifting of g'",
+        "reduction-to-subgoals",
+        "reflexivity term p",
+        "ring-isomorphism-equivalence-for-calmod-like-bicats",
+        "s sigma = (sigma s) s",
+        "standard rules governing identity types",
+        "structural rules of the theory",
+        "sufficiency of considering z=e",
+        "terms a, b of type a",
+        "tractability implies existence of cofibrant domains"
+      ],
+      "top_prior_supported_posterior_terms": [
+        {
+          "term": "sigma",
+          "df": 2969
+        },
+        {
+          "term": "morphism h",
+          "df": 704
+        },
+        {
+          "term": "yoneda embedding",
+          "df": 612
+        },
+        {
+          "term": "sigma s",
+          "df": 448
+        },
+        {
+          "term": "group h",
+          "df": 304
+        },
+        {
+          "term": "smooth manifold m",
+          "df": 68
+        },
+        {
+          "term": "topological group g",
+          "df": 51
+        },
+        {
+          "term": "mu inv",
+          "df": 11
+        }
+      ]
+    }
+  }
+}

@@ -48,9 +48,13 @@ If the result is ambiguous, that control is the first follow-up.
 | Order proof | `mark4_pipeline_runner.py --plan`: GPU IATC stage is **last** (position N/N); every prior stage is CPU enrichment |
 | Gates after | `iatc_argcheck.bb` + `substance_gate.py` over the output dir |
 
-**Out of scope this run:** the expository ⑤.4 GPU reconstruction (lane C, built+
-reviewed on stub, GPU run pending); the APM embedding/pgvector matcher; the 70B-raw
-control arm above.
+**In scope — added 2026-06-17 (Joe):** the **expository ⑤.4 GPU reconstruction**
+(lane C) — its **first real-GPU run** (it had only been stub-validated). Run on a
+**bounded 10-candidate sample** (1 inflight region per paper) against the same vLLM
+70B; the full carve is **2058 regions**, a separate scaling job. Scored as **P6**.
+
+**Out of scope this run:** the APM embedding/pgvector matcher; the 70B-raw control
+arm above; **full-coverage** expository over all 2058 regions (sample only this run).
 
 Provisioning template:
 
@@ -74,6 +78,7 @@ linode-cli linodes create \
 | P3 | **faithfulness** (≥3 graphs spot-checked vs source at cited line anchors) | blind run: anchors often didn't support the claim | cited `:source {:lines}` actually contain the claimed premise/conclusion in **≥ 3/3** spot-checks | any spot-check cites lines that don't support the node |
 | P4 | **distribution** (node/edge/hole spread) | risk: template collapse (every graph identical shape) | **non-uniform** across the 10 — varied node counts, real `:holes`/`missing-warrant` where the proof genuinely gaps | near-identical graphs ⇒ the model is templating, not reading |
 | P5 | **APM ⑥ coverage** on the live pool | frozen CPU set: `type_multichar` mean 0.257 / median 0.136, 13 proofs ≥80% (gate: mean≥.20, median≥.10, tail≥10) | gate **holds** on the live run (within noise of the frozen numbers) | gate fails on the live pool ⇒ the frozen numbers were not representative |
+| P6 | **expository ⑤.4** first real-GPU run (stub-only before) — *exploratory* | stub: 1/1 gated PASS (plumbing only); no real-GPU baseline | **≥ 6/10** sample candidates yield an `expository_argcheck`-passing graph, with non-uniform output | < 6/10 pass, or template collapse across the 10 (⇒ the phase isn't ready for real input) |
 
 ## 4. What we learn regardless of outcome
 
@@ -109,3 +114,55 @@ linode-cli linodes create \
 - the refreshed side-by-side demo on the **real** 70B graphs (H6)
 - a results note scoring P1–P5 against the predictions above — **filled in after**, so
   the preregistration stays honest.
+
+## 7. RESULTS — filled in after the run (2026-06-17, claude-1 driving)
+
+Box `172.232.13.6` (4× RTX 4000 Ada, driver 580.159.03, driver-only path with
+`--enforce-eager` + FlashInfer sampler off). vLLM 70B-AWQ-INT4 TP=4 served; IATC loop
+over the 10 enriched candidates, then the expository ⑤.4 sample (10, 1 region/paper).
+
+| # | Prediction | Result | Verdict |
+|---|---|---|---|
+| P1 | argcheck ≥8/10 after repair | **9/9 final graphs PASS (100%)**; the failed paper's best attempt is *also* well-formed | **PASS** |
+| P2 | substance ≥8/10 | **9/10 as-run → 8/10 under the sharpened gate** (`249aa83` reads *all* premise tokens, so `0712.0724`'s `[:F-functor :F-pitchfork]→:F-pitchfork` self-loop is now caught — the old first-premise-only check missed it); ≥8 → **PASS** | **PASS** |
+| P3 | cited lines support the node, 3/3 | content-faithful (terms/claims drawn from the right region) but **line-anchor precision loose** on ~1/3 of spot-checked nodes (e.g. `0709.0248` cites `\begin{proposition}` rather than the statement; one off-by-one) | **PARTIAL** |
+| P4 | non-uniform distribution | nodes **6–12**, edges 2–5, holes 1–3; real `:holes` throughout; no template collapse | **PASS** |
+| P5 | APM ⑥ coverage gate holds | `type_multichar` mean **0.257** / median **0.136**, tail≥80% = **13**, **`gate_pass: true`** (135 proofs) | **PASS** |
+| P6 | expository ⑤.4 first real-GPU run, ≥6/10 gated + non-uniform | **10/10 gated PASS**; 4 distinct scope kinds (example-source, literature-gap, computes-invariant, difficulty-assessment) with real slot-fills | **PASS** (exceeds) |
+
+**Headline (H-main): supported.** Enriched 70B clears the substance bar the blind 8B
+run failed (8/10 under the sharpened gate, vs 4/10). The confound stands — size *and* input both changed — so the
+70B-on-raw control remains the clean follow-up before claiming "enrichment did it."
+
+**Self-loop catches — true positives, not fixture bugs:** substance rejected `0708.2185`
+for *"self-loops (`:premise == :conclusion`) — vacuous X⊢X"* (same class as the prereg's
+GH200 `1308.1804`). And post-run, the **sharpened** substance gate (`249aa83`, all premise
+tokens) also flags `0712.0724` (conclusion among a *later* premise token) — which **R2b
+closure independently flags too**, so two checks agree. The gate is discriminating;
+the honest rate is **8/10 under the improved gate** (9/10 as originally run), still ≥8 → P2 PASS.
+
+**P3 is the actionable finding:** the model reads the right region but its line anchors
+are imprecise — points at the prompt's source-citation contract (matches §4's "form, not
+reading" branch), not a model-capability ceiling. Tightening the citation contract is the
+next IATC-prompt iteration.
+
+**Grading note — finals-only (FIXED).** The shared graders originally recursed into
+`.attempts/` (`mark3_eval_harness` rglob, `iatc_argcheck` file-seq), grading **20**
+artifacts (9 finals + 11 retries) and scoring the failed paper's attempts as passes;
+`substance_gate` (top-level glob) was already correct. Fixed on `mark4-held-steps`
+(codex-2 authored, claude-loop reviewed, claude-1 re-verified): both now default to
+**finals-only** with an opt-in `--include-attempts`. Re-run confirms **9 artifacts,
+checker 9/9, substance 9/9**. The P-table above is finals-only.
+
+**`grounding-%` REDEFINED — now real and discriminating.** The old metric
+(`#graph files / #layer-a marks`) divided count-by-count, never inspected groundings,
+and sat at ~0.01% regardless of enrichment. Redefined (commit `cc808d4`) as
+**warrant-resolution** = resolved-warrant edges / total inference edges (an edge with a
+real `:warrant` that is not `:missing-warrant`). On the 9 finals: **6/28 = 21.4%**,
+per-graph spread **0/3 … 3/5** — it moves and discriminates. `expository-coverage`
+0.32→0.59% and `prior-vs-posterior` 12.70% also moved. (Independently re-run by
+claude-1: 21.43% grounding, 9/9 checker, 9/9 substance.)
+
+**Deferred / follow-up:** H6 side-by-side render still points at the old dp-demo 5 IDs —
+needs repointing to `loop-run-70b` + these 10 IDs (CPU, no GPU needed). Full 2058-region
+expository coverage and the 70B-raw control remain separate jobs.

@@ -1,0 +1,59 @@
+{:paper/id "0807.1872"
+ :passage/id "0807.1872:L1.3-C1.4:487-527"
+ :source {:lines [487 527] :kind :proof}
+ :nodes
+ [{:id :modules-Mi
+   :kind :object
+   :text "modules M_i with underlying group Z plus Z and one nonzero phi_i"
+   :source {:lines [487 494]}}
+  {:id :pairwise-nonisomorphic
+   :kind :claim
+   :text "the M_i are pairwise non-isomorphic as R-modules"
+   :source {:lines [494 494]}}
+  {:id :proper-class-Mi
+   :kind :claim
+   :text "there is a proper class of non-isomorphic modules M_i"
+   :source {:lines [495 497]}}
+  {:id :short-exact-sequence
+   :kind :claim
+   :text "each M_i fits in 0 -> Z -> M_i -> Z -> 0"
+   :source {:lines [497 502]}}
+  {:id :proper-ext
+   :kind :claim
+   :text "Ext^1_A(Z,Z) is a proper class"
+   :source {:lines [503 503]}}
+  {:id :hom-ext-iso
+   :kind :claim
+   :text "Hom_{D(A)}(Z,TZ) is isomorphic to Ext^1_A(Z,Z)"
+   :source {:lines [523 523]}}
+  {:id :proper-hom
+   :kind :claim
+   :text "there is a proper class of morphisms Z -> T Z in D(A)"
+   :source {:lines [525 527]}}]
+ :edges
+ [{:id :e-nonisomorphic
+   :kind :infer
+   :relation :because
+   :premise :modules-Mi
+   :warrant {:kind :claim
+             :text "the ordinal j for which phi_j is nonzero changes with i"}
+   :conclusion :pairwise-nonisomorphic
+   :source {:lines [494 494]}}
+  {:id :e-ext
+   :kind :infer
+   :relation :therefore
+   :premise [:proper-class-Mi :short-exact-sequence]
+   :warrant {:kind :missing-warrant
+             :text "short exact extensions classify Ext^1 classes"}
+   :conclusion :proper-ext
+   :source {:lines [495 503]}}
+  {:id :e-corollary
+   :kind :infer
+   :relation :implies
+   :premise [:hom-ext-iso :proper-ext]
+   :conclusion :proper-hom
+   :source {:lines [523 527]}}]
+ :holes
+ [{:kind :missing-warrant
+   :edge :e-ext
+   :wanted :ext-classification-of-short-exact-sequences}]}

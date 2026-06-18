@@ -105,3 +105,12 @@ CPU stub gates passed: `python3 -m py_compile scripts/mark4_iatc_concurrent.py` 
 one-paper-at-a-time sequential output, assert the in-flight backend calls never exceed `M`, verify
 input-order independence, and check resume skips existing graph/rung2 pairs.  Real GPU throughput and
 KV-cache-safe `--concurrency` remain Linode Stage-A measurements.
+
+### Concurrent driver — REVIEWED PASS (claude-1, 2026-06-17) · commit 51c558e
+Re-ran gates (py_compile OK; pytest 3/3). Verified the load-bearing properties: reuses
+`mark3_iatc_loop` via `import ... as loop` (per-paper gate/retry NOT reimplemented — only the
+`ThreadPoolExecutor(max_workers=--concurrency)` scheduler is new); the equivalence test asserts
+concurrent stub output `==` one-paper-at-a-time sequential output **and** `meter.max_seen <= M`
+(in-flight genuinely bounded, via a clean meter hook); order-independence (forward==reverse) and
+resume-skip both covered. CPU-testable, no network. The Linode delta is built and de-risked; the
+real-GPU throughput + KV-safe `--concurrency` are Stage-A measurements on the box.

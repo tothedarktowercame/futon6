@@ -161,6 +161,38 @@ keyword-pool aggregate coverage are nearly identical), so the next validation
 must inspect whether the scope-not-keyword examples are meaningful structure or
 common multichar-symbol false positives.
 
+### Reviewer addendum (claude-1, 2026-06-17) — tau sensitivity
+
+Reviewing D, I suspected the `signal` was an artifact of the loose pilot
+`tau=0.05` (which retrieves **~122 eprints per proof** — a third of the pool — so
+of course most aren't keyword hits). I swept tau over the cached scope sets to
+test that:
+
+| tau  | mean Jaccard | scope¬kw rate | avg \|S_p\| | proofs w/ ≥1 scope¬kw |
+|------|-------------:|--------------:|-----------:|---------------------:|
+| 0.05 | 0.048 | 0.884 | 121.7 | 88/135 |
+| 0.10 | 0.039 | 0.879 |  94.2 | 76 |
+| 0.20 | 0.028 | 0.875 |  63.1 | 62 |
+| 0.30 | 0.019 | 0.899 |  43.1 | 42 |
+| 0.50 | 0.012 | 0.881 |  25.3 | 29 |
+| 0.80 | 0.005 | 0.910 |  10.0 | 12 |
+
+**The promiscuity hypothesis is falsified.** Raising tau shrinks the retrieved set
+(122→10 per proof) but the `scope¬keyword` rate is **flat at ~0.88–0.91** and
+keyword/scope sets stay **near-orthogonal** (Jaccard ≤ 0.05) at every threshold.
+So the disjointness is **not** a low-threshold artifact — scope and keyword
+genuinely retrieve different eprints regardless of cut. D's `signal` verdict
+holds up under this adversarial check.
+
+What this does **not** settle (and D correctly flagged): whether the disjoint
+retrievals are *meaningful structure* or *robust-but-spurious* multichar overlap.
+tau won't answer that — the next cut must be **qualitative**: at a discriminative
+tau (≈0.3, where scope retrieves a manageable ~43/proof), hand-inspect a handful
+of `scope_not_keyword` eprints against their proof. Also: report headline numbers
+at a discriminative tau, not the pilot `0.05` — 122 retrieved/proof isn't
+"retrieval." Sweep reproducible via `scripts/mark4_apm_random_scope_disagreement.py
+--reuse-random-scopes --tau <t>`.
+
 ## Update 2026-06-16 — decisions, Rob's pattern, pilot run 1
 
 **Decisions (Joe):** local pilot; **145 Lean-free proofs**; easy-default match first

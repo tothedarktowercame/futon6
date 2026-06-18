@@ -251,6 +251,36 @@ calibrates judgments, not weights.
   `math_outer_count` per paper is non-trivial (the frontier metric
   extends into math, giving the loop a new target).
 
+## 5a. Capability-star status & pre-registered completion bar (2026-06-16)
+
+The `:symbol-grounding` star (`futon0/.../M-capability-star-map`) is **in-progress,
+pre-registered** — NOT satisfied. Marking it complete on the mark3 *projection*
+(the `1005.2653-superpod-mockup` "25% → ~98%", which is explicitly ⚗ imagined)
+would launder a prior as evidence. Honest split:
+
+- **Evidenced (real, measured):** symbol *tagging* = 1.0; the classical grounding
+  layer — Layer-1/2/3 strategies here (let-binding, denotation, the-Y-X,
+  newcommand) **and** the dp-pipeline additions this session (named operators,
+  binders, NNexus provenance-gated singles, morphology). Measured `symbol_grounded`
+  per paper, e.g. 0807 0.88 / 0905 0.71 / 1005 0.25.
+- **Projected only (unbuilt):** **bound-variable ground-to-type** — the bulk of the
+  remaining gap (handoff **H4** in `E-superpod-mark3.md`); exists only in the mockup.
+
+**Pre-registered bar — the star flips to satisfied iff, on REAL (post-H4) output:**
+1. the Layer-3 criterion holds — symbol-grounding precision ≥ 50% on a 30-paper
+   sample vs First Proof Batch One (§5), AND
+2. `symbol_grounded` coverage-at-confidence meets the mockup's projected target on a
+   held set (gh200 / sample) — the ~98% becomes the *prediction H4 is tested
+   against*, not evidence, AND
+3. gates hold with no regression: `symbol_tagged`=1.0, `W-NEST-SCOPE`=0, grounding
+   never falls.
+
+Reported as **coverage-at-confidence**, not a binary (bindings are per-paper
+defeasible strategies). The bar is machine-checkable by the eval harness (H0a), so
+it **auto-surfaces when the evidence lands and is processed** — no post-hoc
+judgement call. (The star-map graph is generated from missions + the
+grounded-ledger; this bar lives at the source so a regen reflects it.)
+
 ## 6. Dependencies
 
 - `pylatexenc` (Layer 2). If unavailable on the superpod, custom parser

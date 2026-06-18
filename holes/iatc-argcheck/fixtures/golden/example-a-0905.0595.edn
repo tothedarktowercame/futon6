@@ -1,0 +1,69 @@
+{:paper/id "0905.0595"
+ :passage/id "0905.0595:prop0.2:proof:190-208"
+ :source {:lines [190 208] :kind :proof}
+ :nodes
+ [{:id :ar-1
+   :kind :ref
+   :label "(1)"
+   :text "for each regular cardinal lambda, delta_lambda is a colimit cocone"
+   :source {:lines [198 199]}}
+  {:id :ar-2
+   :kind :ref
+   :label "(2)"
+   :text "id_1 does not factorize through any component of delta_lambda"
+   :source {:lines [200 200]}}
+  {:id :delta-colimit
+   :kind :claim
+   :text "delta_lambda is a colimit cocone for each lambda"
+   :source {:lines [202 202]}}
+  {:id :not-presentable
+   :kind :claim
+   :text "1 is not lambda-presentable for any regular lambda"
+   :source {:lines [202 203]}}
+  {:id :ar-meta
+   :kind :meta
+   :text "Condition (2) is not stated explicitly in AR"
+   :source {:lines [203 203]}}
+  {:id :no-map-from-1
+   :kind :claim
+   :text "there is no morphism from 1 to a non-terminal object of ca"
+   :source {:lines [203 204]}}
+  {:id :ca-graphs
+   :kind :definition
+   :text "ca is the full subcategory of Gra consisting of graphs A without any morphism B_i -> A"
+   :source {:lines [204 207]}}
+  {:id :loop-gives-constant-map
+   :kind :claim
+   :text "a morphism 1 -> A means a loop in A and consequently a constant morphism B_i -> A"
+   :source {:lines [207 208]}}]
+ :edges
+ [{:id :e-presentability
+   :kind :infer
+   :relation :implies
+   :given [:ar-1 :delta-colimit]
+   :premise :ar-2
+   :warrant {:kind :missing-warrant
+             :text "presentability would make id_1 factor through a component of the filtered colimit"}
+   :conclusion :not-presentable
+   :source {:lines [202 203]}}
+  {:id :e-ar-2
+   :kind :infer
+   :relation :follows-from
+   :premise :no-map-from-1
+   :conclusion :ar-2
+   :meta [:ar-meta]
+   :source {:lines [203 204]}}
+  {:id :e-no-map
+   :kind :infer
+   :relation :contradiction
+   :given [:ca-graphs]
+   :assume {:kind :claim
+            :text "there is a morphism 1 -> A for non-terminal A in ca"}
+   :premise :loop-gives-constant-map
+   :contradicts :ca-graphs
+   :conclusion :no-map-from-1
+   :source {:lines [204 208]}}]
+ :holes
+ [{:kind :missing-warrant
+   :edge :e-presentability
+   :wanted :presentability-factorization-rule}]}

@@ -324,3 +324,61 @@ Rob's graph-DB pattern. The disagreement-vs-keyword diagnostic also still needs
 a broader non-keyword random batch-007/008 sample; the current 200-paper eprint
 pool is already keyword-selected, so it cannot measure scope-retrieves-what-
 keyword-missed.
+
+---
+
+# Follow-on FIX handoffs (post-gaps · claude-6 liaison 2026-06-17)
+
+These two are the **fixes** the gaps round surfaced, agreed with claude-6 in the
+whistle salvo. They are claude-1's lane (claude-6 drives the GPU re-run B + the
+expository ⑤.4 C). **A ⟂ B confirmed** — A touches only the prose-concept layer,
+which the candidate enrichment B consumes (`ENRICH_KINDS`) does *not* include — so
+A and B parallelise; no sequencing. **D is additive** — it must not change the
+coverage gate H9 just set (`GATE_MULTICHAR_*`), only add the control arm + metric.
+Each ends with "bell claude-1 back with a summary + commit shas."
+
+## A — Phase ② concept-substrate FIX (codex-2)  · size M · PY
+**Builds on:** your own H2 audit. The `C-TERM-COVERAGE` measurement is wired and
+honest; it exposes the defect — **precision 0.0724 / recall 0.14** on the strict
+100-row one-expected-term-per-row sample (221 concept marks, 16 TP, **205 FP**).
+**Goal:** raise the prose-concept detector's precision AND recall **measurably above
+that baseline**, on the same audit, **fixing the detector — never the audit**.
+**Files:** `scripts/build_golden_paper.py` (the concept-mark producer),
+`scripts/dp_enrich.py` (merge), `scripts/build_term_prior.py` (the H3
+OVERFED/HUNGRY/HAPAX df-prior — a ready precision lever: gate noisy marks through
+`resolve_phrase` to drop generic/hapax false positives), `holes/dp-defect-catalogue.md`
+(DC-1). Audit harness + test already exist (`tests/test_pre_superpod_concept_substrate.py`).
+**Fix:** diagnose the 205 FP / low-recall split (over-generic heads vs missed
+multiword terms); widen recall (catch the DC-1 missed terms) while using the
+df-prior to cut FP precision noise; re-run the **same** 100-row audit.
+**Acceptance:** before/after precision + recall on the identical sample; **both
+strictly above 0.0724 / 0.14**, with **0.0724 / 0.14 as a hard regression floor**
+asserted in the test (the run fails if either metric drops below baseline). Report
+the residual DC-1 miss rate. Do not relax the audit to clear the bar.
+**Gates:** PY (`pytest tests/` incl. the concept-substrate test + the new
+regression-floor assert) + report the numbers.
+
+## D — APM ⑥ non-keyword random arm + disagreement metric (codex-1)  · size M · PY
+**Builds on:** your own H9 closing note — the 200-paper eprint pool is
+keyword-selected, so the coverage number cannot show *scope-retrieves-what-keyword-
+missed*. This adds the missing control arm and makes the diagnostic falsifiable.
+**Goal:** build a **random (non-keyword-selected)** eprint-scope pool from
+batch-007/008 and define an explicit **keyword-vs-scope disagreement metric** so the
+"scope finds structure keyword missed" claim can be confirmed or refuted.
+**Files:** `scripts/mark4_apm_structure_coverage.py` (read-only re the gate — do NOT
+change `GATE_MULTICHAR_*`; add the arm as a new function/script),
+`holes/apm-structure-match-design.md`, the batch-007/008 eprint LaTeX source, the
+existing keyword-search code that selected the 200-paper pool.
+**Fix:** (a) draw a random N-paper sample from batch-007/008 with a **fixed seed**,
+recorded for reproducibility, deliberately NOT keyword-filtered; (b) build its
+eprint-scopes the same way (`detect_scopes`); (c) define the disagreement metric
+explicitly with its **null hypothesis** — e.g. per APM proof, the set keyword-search
+retrieves vs the set scope-coverage retrieves (type_multichar ≥ τ); disagreement =
+scope-retrieved eprints that are NOT keyword hits (and vice versa), reported as a
+rate or Jaccard. **Null:** scope-coverage on the random pool ≈ on the keyword pool ⇒
+scope is only tracking keywords (no independent signal).
+**Acceptance:** random pool built + provenance (seed, N, source) documented; the
+disagreement metric stated formally with its null; reported on the frozen APM proof
+set; a one-line verdict (signal vs null) given the numbers. Existing H9 coverage
+gate untouched.
+**Gates:** PY.

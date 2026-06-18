@@ -1,0 +1,11 @@
+{:paper/id "bad"
+ :passage/id "missing-warrant"
+ :source {:lines [1 4] :kind :proof}
+ :nodes [{:id :p :kind :claim :text "P" :source {:lines [1 1]}}
+         {:id :c :kind :claim :text "C" :source {:lines [2 2]}}]
+ :edges [{:id :e :kind :infer :relation :implies
+          :premise :p
+          :warrant {:kind :missing-warrant :text "unstated inference rule"}
+          :conclusion :c
+          :source {:lines [1 2]}}]
+ :holes []}

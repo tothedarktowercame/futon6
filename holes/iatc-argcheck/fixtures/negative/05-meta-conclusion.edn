@@ -1,0 +1,7 @@
+{:paper/id "bad"
+ :passage/id "meta-conclusion"
+ :source {:lines [1 4] :kind :proof}
+ :nodes [{:id :p :kind :claim :text "P" :source {:lines [1 1]}}
+         {:id :m :kind :meta :text "The author notes P." :source {:lines [2 2]}}]
+ :edges [{:id :e :from :p :to :m :role :conclusion :source {:lines [2 2]}}]
+ :holes []}

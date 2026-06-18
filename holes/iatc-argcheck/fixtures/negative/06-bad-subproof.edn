@@ -1,0 +1,10 @@
+{:paper/id "bad"
+ :passage/id "bad-subproof"
+ :source {:lines [1 10] :kind :proof}
+ :nodes [{:id :a :kind :claim :text "A" :source {:lines [1 1]}}
+         {:id :b :kind :claim :text "B" :source {:lines [2 2]}}
+         {:id :c :kind :claim :text "C" :source {:lines [3 3]}}]
+ :edges [{:id :assume-a :from :a :to :a :role :assume :scope {:id :s1 :lines [1 5]} :source {:lines [1 5]}}
+         {:id :assume-b :from :b :to :b :role :assume :scope {:id :s2 :lines [3 8]} :source {:lines [3 8]}}
+         {:id :conclude-a :from :a :to :c :role :conclusion :scope {:id :s1 :lines [1 5]} :source {:lines [5 5]}}]
+ :holes []}
