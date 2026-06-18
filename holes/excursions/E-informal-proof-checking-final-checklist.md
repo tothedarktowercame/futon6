@@ -26,6 +26,32 @@ Legend:  ☐ open · ✅ done this session · 🔒 honesty boundary (do NOT "fix
 
 ---
 
+## Experiments to run (the concrete GPU-session agenda)
+
+Three runs, all send-gated to Joe (box time). EXP-1 is the main event; EXP-2/EXP-3 are independent
+offshoots that can run alongside or after it. (More may emerge — this is the current short list.)
+
+**EXP-1 — Pipeline rerun (the main run).** Producer → IATC (70B) → gate → checker → CAS-CERT on the
+Linode, staged 10 → 30 papers. *Runners:* `scripts/linode-4gpu-setup.sh` (serve 70B) → `linode-4gpu-run.sh`
+(enriched arm) → the checker spine. *Plan/prereg:* `holes/linode-test-runner.md` + `holes/proofcheck-run-invocation.md`.
+*Answers* the §1 preregistration **C1–C6 / L1–L5**, and is where the **LLM-coupled grain passes ride**:
+the symbol `openai` grounding (→ real bindings), cas_select Tier-1 verify (→ fills technique on arXiv),
+rung-3-3 `openai` (→ novel-vs-gap + ArSE questions). *Read:* end-to-end with no stage erroring;
+grains hold (concept ≈0.867, warrant up vs run-#1); honesty holds (spot-check ≥3).
+
+**EXP-2 — RAW-CTL (enrichment control arm).** Same 70B, same candidates, **enrichment stripped** —
+isolates the enrichment variable the go-live confounded with model size. *Runner:*
+`scripts/linode-4gpu-run-raw.sh` (after EXP-1's enriched arm). *Excursion:* `holes/excursions/E-70B-on-raw-control-arm.md`.
+*Answers* **C5** + the cost-at-scale question. *Read:* raw ≈ enriched → drop enrichment before arXiv
+(the cost win); raw degrades → enrichment earns its keep.
+
+**EXP-3 — BGE retrieval / CAS-SEL-3b (discriminating).** Run the bge-large recall test that OOM'd on
+the dev box. *Runner:* `scripts/linode-bge-retrieval.sh` (standalone, no 70B, CPU). *Excursion:*
+`holes/excursions/E-bge-retrieval-cas-sel-3b.md`. *Read (decisive either way):* bge-large recovers the
+3 zero-overlap steps → ceiling was **model size** (ship embedding CAS-SEL-3b, re-pin recall up);
+recovers none → ceiling is **text-vs-structure** → the empirical case for **R-GCN / structure-first**
+(§6). Dev-box baseline (bge-small): hot 15/22 · embed 12/22 · union 17/22 · recovers none · collapse mild.
+
 ## 1. GPU-run questions — answer these when we have GPUs (the headline)
 
 **Preregistration to score against** (predictions — confirm/refute, don't just run):
