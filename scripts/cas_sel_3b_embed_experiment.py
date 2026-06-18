@@ -112,6 +112,11 @@ def main(argv=None):
                     choices=["title+conclusion+hotwords", "title+conclusion", "full"],
                     default="title+conclusion+hotwords")
     ap.add_argument("--k", type=int, default=4)
+    ap.add_argument("--context", type=int, default=0,
+                    help="EXP-3b: step-context window radius for the EMBEDDING query. "
+                         "0 = isolated step (EXP-3 behaviour); 1 = step + its ±1 proof "
+                         "neighbours; etc. Tests whether proof-flow context (not model size) "
+                         "recovers the zero-overlap steps. Hotword baseline stays isolated.")
     ap.add_argument("--device", default=None, help="cpu | cuda | (default auto)")
     ap.add_argument("--out", type=Path)
     a = ap.parse_args(argv)
@@ -133,11 +138,18 @@ def main(argv=None):
     zero, recovered, per = [], [], []
     for pid in PIDS:
         steps, oracle = load_fixture(pid)
-        for s in steps:
+        texts = [s["text"] for s in steps]
+        for i, s in enumerate(steps):
             want = oracle[s["id"]]["pattern"]
             total += 1
+            # EXP-3b: the embedding query carries the step's proof-flow context
+            # (its ±context neighbours, in proof order). The hotword baseline and the
+            # zero-overlap definition below stay on the isolated step text — so any
+            # recovery is attributable to context, not a changed baseline.
+            lo, hi = max(0, i - a.context), min(len(texts), i + a.context + 1)
+            qtext = " ".join(texts[lo:hi]) if a.context else s["text"]
             h = hot_retrieve(s["text"], a.k)
-            e = embed_top(s["text"], a.k)
+            e = embed_top(qtext, a.k)
             ih, ie, iu = want in h, want in e, want in (h | e)
             hot += ih; emb += ie; union += iu
             full = hot_retrieve(s["text"], len(names))
@@ -149,7 +161,7 @@ def main(argv=None):
 
     ceiling = total - len(zero)
     result = {
-        "model": a.model, "repr": a.repr_mode, "k": a.k, "device": a.device or "auto",
+        "model": a.model, "repr": a.repr_mode, "k": a.k, "context": a.context, "device": a.device or "auto",
         "recall": {"hotword": f"{hot}/{total}", "embed": f"{emb}/{total}", "union": f"{union}/{total}"},
         "hotword_full_pool_ceiling": f"{ceiling}/{total}",
         "zero_overlap_steps": zero,
