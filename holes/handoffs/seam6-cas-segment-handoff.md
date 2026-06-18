@@ -143,3 +143,26 @@ Gates passed:
 - `python3 -m py_compile scripts/cas_segment.py scripts/cas_select.py scripts/pipeline_witness.py`
 - `pytest -q tests/test_cas_segment.py tests/test_cas_select.py` (`9` passed)
 - `pytest -q` (`825` passed, `38` skipped)
+
+## Review — claude-1, 2026-06-18 · REVIEWED PASS (commit 659e905)
+
+Independently re-ran, not a rubber stamp:
+- **Suite:** `pytest -q` → 825 passed / 38 skipped (matches; +4 vs the 821 baseline). ✓
+- **Determinism:** re-ran `cas_segment --stdout 0709.0248`, diffed against the committed
+  `0709.0248.steps.json` → **byte-identical**. ✓ (`sort_keys` + trailing newline make it stable.)
+- **Seam closed:** `--witness 0709.0248` → `5b.cas_segment` PASS, `6.cas_select` PASS, no seam gaps. ✓
+- **Prose, not debug:** spot-checked the 6 steps — resolved `node.text` math prose ("…parameterized
+  versions of the rules…; therefore every locally cartesian closed category is extensional"), not
+  `rung3` debug strings. ✓
+- **Code:** parses via `load_edn` (not regex); setup-node + edge steps; deterministic sort key
+  `(line, end_line, setup<edge, source_id)`; missing-warrant skipped; multi-premise handled. Clean.
+
+**Technique-grain check (the bit the handoff left implicit):** confirmed that feeding the cas_select
+output to `cas_cert --cas-select` flips `by_grain.technique` **na:true → na:false**. NUANCE (not a
+defect): on arXiv under the deterministic/stub path the 6 technique ports are **empty (thin), rate
+0.0** — CAS-SEL matched no patterns without the Tier-1 LLM (`openai`) verify. So seam-6 makes the
+grain *report* honestly; **filled** technique ports require the LLM verify pass. The confidence axis
+already flags this ("technique grain low solidity 0.000"). Orchestrator note: a 0.0 technique rate
+on arXiv means "LLM verify not yet run," not "paper has no grounded techniques."
+
+No fixes required. Seam-6 accepted.
