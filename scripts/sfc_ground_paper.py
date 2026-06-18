@@ -19,6 +19,13 @@ import sfc_symbol_grounding as sfc
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT_DIR = ROOT / "data" / "symbol-grounding" / "loop-run-70b"
+STOP_WORDS = {
+    "and",
+    "or",
+    "share",
+    "the",
+    "with",
+}
 
 
 def load_candidate(path: Path) -> dict[str, Any]:
@@ -26,43 +33,117 @@ def load_candidate(path: Path) -> dict[str, Any]:
 
 
 def inline_math(text: str) -> list[str]:
+    spans = []
+    patterns = [
+        r"\$\$(.+?)\$\$",
+        r"\\\[(.+?)\\\]",
+        r"\\\((.+?)\\\)",
+        r"(?<!\\)(?<!\$)\$(?!\$)([^$]+?)(?<!\\)\$(?!\$)",
+    ]
+    for pattern in patterns:
+        for match in re.finditer(pattern, text, re.S):
+            spans.append((match.start(), match.group(1)))
     out = []
-    for match in re.finditer(r"\$(.+?)\$", text, re.S):
-        formula = " ".join(match.group(1).split())
+    for _, raw in sorted(spans, key=lambda row: row[0]):
+        formula = " ".join(raw.split())
         if formula:
             out.append(formula)
     return out
 
 
-def candidate_formula(candidate: dict[str, Any]) -> str:
-    for key in ("formula", "math"):
-        value = candidate.get(key)
-        if isinstance(value, str) and value.strip():
-            return value.strip()
-    formulas = candidate.get("formulas")
-    if isinstance(formulas, list):
-        joined = ", ".join(str(f).strip() for f in formulas if str(f).strip())
-        if joined:
-            return joined
-    fragments = inline_math(str(candidate.get("source-window") or ""))
-    if fragments:
-        return ", ".join(fragments)
-    binder_symbols = []
+def binder_definienda(candidate: dict[str, Any]) -> list[str]:
+    out = []
     for line in candidate.get("binder-context") or []:
         match = re.search(r"definiendum #\d+:\s*\$([^$]+)\$", line)
         if match:
-            binder_symbols.append(match.group(1).strip())
-    return ", ".join(binder_symbols)
+            formula = " ".join(match.group(1).split())
+            if formula:
+                out.append(formula)
+    return out
 
 
-def merge_groundings(results: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, int]]:
-    merged: dict[str, dict[str, Any]] = {}
-    for result in results:
-        for row in result.get("groundings") or []:
-            symbol = str(row.get("symbol", ""))
-            if not symbol or symbol in merged:
+def candidate_formulas(candidate: dict[str, Any]) -> list[str]:
+    for key in ("formula", "math"):
+        value = candidate.get(key)
+        if isinstance(value, str) and value.strip():
+            return [value.strip()]
+    formulas = candidate.get("formulas")
+    if isinstance(formulas, list):
+        out = [str(f).strip() for f in formulas if str(f).strip()]
+        if out:
+            return out
+    binder = binder_definienda(candidate)
+    if binder:
+        return binder
+    fragments = inline_math(str(candidate.get("source-window") or ""))
+    if fragments:
+        return fragments
+    return []
+
+
+def candidate_formula(candidate: dict[str, Any]) -> str:
+    return ", ".join(candidate_formulas(candidate))
+
+
+def formula_variants(text: str) -> set[str]:
+    return {text, text.replace("\\\\", "\\")}
+
+
+def symbol_variants(symbol: str) -> set[str]:
+    stripped = symbol.strip()
+    return {stripped, stripped.replace("\\\\", "\\")}
+
+
+def atom_in_formula(symbol: str, formula: str) -> bool:
+    for sym in symbol_variants(symbol):
+        if not sym:
+            continue
+        for source in formula_variants(formula):
+            if sym.startswith("\\"):
+                if sym in source:
+                    return True
                 continue
-            merged[symbol] = dict(row)
+            if re.fullmatch(r"[A-Za-z]", sym):
+                if re.search(rf"(?<![A-Za-z]){re.escape(sym)}(?![A-Za-z])", source):
+                    return True
+                continue
+            if re.search(rf"(?<![A-Za-z]){re.escape(sym)}(?![A-Za-z])", source):
+                return True
+    return False
+
+
+def symbol_filter_reason(symbol: str, formula: str) -> str | None:
+    normalized = symbol.strip().replace("\\\\", "\\")
+    lower = normalized.lower()
+    if lower in STOP_WORDS:
+        return "drop prose stop-word"
+    if not atom_in_formula(normalized, formula):
+        return "drop parser artifact not present as a TeX atom"
+    if re.fullmatch(r"[a-z]{2,}", normalized):
+        return "drop pure lowercase word-like token"
+    return None
+
+
+def filter_groundings(result: dict[str, Any], formula: str) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    kept = []
+    dropped = []
+    for row in result.get("groundings") or []:
+        symbol = str(row.get("symbol", ""))
+        reason = symbol_filter_reason(symbol, formula)
+        if reason:
+            dropped.append({"symbol": symbol, "formula": formula, "reason": reason})
+        else:
+            kept.append(row)
+    return kept, dropped
+
+
+def merge_groundings(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    merged: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        symbol = str(row.get("symbol", ""))
+        if not symbol or symbol in merged:
+            continue
+        merged[symbol] = dict(row)
     counts = Counter(row.get("status") for row in merged.values())
     summary = {
         "symbols": len(merged),
@@ -81,17 +162,25 @@ def ground_candidate(
 ) -> dict[str, Any]:
     candidate = load_candidate(candidate_path)
     context = str(candidate.get("source-window") or "")
-    formula = candidate_formula(candidate)
-    result = sfc.ground(formula, context, backend, model)
-    groundings, summary = merge_groundings([result])
+    formulas = candidate_formulas(candidate)
+    results = [sfc.ground(formula, context, backend, model) for formula in formulas]
+    kept = []
+    dropped = []
+    for formula, result in zip(formulas, results):
+        rows, drops = filter_groundings(result, formula)
+        kept.extend(rows)
+        dropped.extend(drops)
+    groundings, summary = merge_groundings(kept)
     return {
         "schema": "sfc-symbol-grounding/v0",
         "paper_id": candidate.get("paper-id") or candidate.get("paper_id") or candidate_path.stem.split(".")[0],
         "candidate": str(candidate_path),
         "backend": backend,
-        "formula": formula,
-        "structure": result.get("structure"),
+        "formula": ", ".join(formulas),
+        "formulas": formulas,
+        "structures": [result.get("structure") for result in results],
         "groundings": groundings,
+        "dropped_symbols": dropped,
         "summary": summary,
     }
 

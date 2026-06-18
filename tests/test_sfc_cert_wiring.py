@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "tests" / "fixtures" / "sfc-cert-wiring"
 CANDIDATE_0709 = ROOT / "data" / "iatc-candidates" / "0709.0248.candidate.json"
 GRAPH_0709 = ROOT / "data" / "iatc-argument-graphs" / "loop-run-70b" / "0709.0248.edn"
+sys.path.insert(0, str(ROOT / "scripts"))
 
 
 def load_module(name, path):
@@ -21,6 +22,7 @@ def load_module(name, path):
 
 
 cas_cert = load_module("cas_cert_test", ROOT / "scripts" / "cas_cert.py")
+sfc_ground_paper = load_module("sfc_ground_paper_test", ROOT / "scripts" / "sfc_ground_paper.py")
 
 
 def minimal_graph(paper_id="fixture"):
@@ -102,11 +104,25 @@ def test_sfc_ground_paper_stub_is_deterministic_and_evidence_is_verbatim(tmp_pat
     assert doc["schema"] == "sfc-symbol-grounding/v0"
     assert doc["paper_id"] == "0709.0248"
     assert doc["summary"]["symbols"] == len(doc["groundings"])
+    assert [row["symbol"] for row in doc["groundings"]] == ["A", "B", "x", "a", "p"]
+    assert not {"and", "share"} & {row["symbol"] for row in doc["groundings"]}
+    assert doc["summary"] == {
+        "grounded": 4,
+        "symbols": 5,
+        "undefined_in_context": 1,
+        "unsupported": 0,
+    }
     assert any(row["status"] == "grounded" for row in doc["groundings"])
     for row in doc["groundings"]:
         if row["status"] == "grounded":
             assert row["evidence"]
             assert row["evidence"] in context
+
+
+def test_inline_math_extraction_does_not_capture_prose_between_spans():
+    text = r"Let $X$ and $Y$ be related; also \(f:A\to B\), \[Z^2\], and $$W_0$$."
+
+    assert sfc_ground_paper.inline_math(text) == ["X", "Y", r"f:A\to B", "Z^2", "W_0"]
 
 
 def run_json(cmd):
@@ -150,11 +166,11 @@ def test_0709_cert_symbol_grain_goes_from_na_to_populated(tmp_path):
     after_cert = after["certificates"][0]
     assert before_cert["conformance"]["by_grain"]["symbol"]["na"] is True
     assert after_cert["conformance"]["by_grain"]["symbol"] == {
-        "filled": 3,
-        "empty": 5,
+        "filled": 4,
+        "empty": 1,
         "miswired": 0,
         "na": False,
-        "rate": 3 / 8,
+        "rate": 4 / 5,
         "rung": "SFC2b",
     }
     assert before_cert["verdict"]["gate"] == after_cert["verdict"]["gate"]

@@ -67,3 +67,17 @@ Then: **bell claude-1 back with a summary + commit shas, the before/after 0709.0
 - **The real `openai` grounding run** — still the costed pass the orchestrator schedules; here only
   the deterministic stub extraction must get sharper.
 - **The SFC2b prompt / grounding quality beyond extraction** — only the *symbol set* is in scope.
+
+## Review — claude-1, 2026-06-18 · REVIEWED PASS
+
+Independently verified:
+- **Junk gone:** 0709.0248 symbols went from `* A Ap Cab \\id ab and share` → `['A','B','x','a','p']`
+  — genuine math tokens; `and`/`share` absent. ✓
+- **Sharper, not empty:** 5 symbols, summary `{grounded:4, undefined_in_context:1, unsupported:0}`. ✓
+- **Trust anchor intact:** all 4 `grounded` symbols' evidence appears verbatim in the candidate's
+  `source-window` (4/4, 0 violations). ✓
+- **Consumer untouched:** `cas_cert.symbol_ports` unchanged (no diff); the wiring/mapping reviewed
+  earlier still holds. ✓
+- **Suite:** full `pytest -q` → 834 passed / 38 skipped. ✓
+Accepted. (The real bindings still come from the openai pass; this makes the symbol *set* real so
+that pass isn't wasted on prose tokens.)

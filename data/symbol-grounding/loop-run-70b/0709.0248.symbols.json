@@ -1,14 +1,21 @@
 {
   "backend": "stub",
   "candidate": "data/iatc-candidates/0709.0248.candidate.json",
-  "formula": "\\mathcal{C}, a,b:A, p:\\id{A}(a,b)",
-  "groundings": [
+  "dropped_symbols": [
     {
-      "binding": "",
-      "evidence": "",
-      "status": "undefined-in-context",
+      "formula": "B(x)",
+      "reason": "drop parser artifact not present as a TeX atom",
       "symbol": "*"
-    },
+    }
+  ],
+  "formula": "A, B(x), a, p",
+  "formulas": [
+    "A",
+    "B(x)",
+    "a",
+    "p"
+  ],
+  "groundings": [
     {
       "binding": "(stub) introduced in context near 'A'",
       "evidence": "eplacing any terms $a,b:A$ and $p:\\id{A}(a,b)$ by",
@@ -19,46 +26,39 @@
       "binding": "",
       "evidence": "",
       "status": "undefined-in-context",
-      "symbol": "Ap"
+      "symbol": "B"
     },
     {
-      "binding": "",
-      "evidence": "",
-      "status": "undefined-in-context",
-      "symbol": "Cab"
-    },
-    {
-      "binding": "",
-      "evidence": "",
-      "status": "undefined-in-context",
-      "symbol": "\\\\id"
-    },
-    {
-      "binding": "(stub) introduced in context near 'ab'",
-      "evidence": "sed categories\nsketched above the reflection rule",
+      "binding": "(stub) introduced in context near 'x'",
+      "evidence": "egory $\\mathcal{C}$ is extensional. \n\\end{proposi",
       "status": "grounded",
-      "symbol": "ab"
+      "symbol": "x"
     },
     {
-      "binding": "(stub) introduced in context near 'and'",
-      "evidence": "proposition}\n  In the standard interpretation given",
+      "binding": "(stub) introduced in context near 'a'",
+      "evidence": "Under the general interpretation in\nloca",
       "status": "grounded",
-      "symbol": "and"
+      "symbol": "a"
     },
     {
-      "binding": "",
-      "evidence": "",
-      "status": "undefined-in-context",
-      "symbol": "share"
+      "binding": "(stub) introduced in context near 'p'",
+      "evidence": "Under the general interpretation in\nlocally cart",
+      "status": "grounded",
+      "symbol": "p"
     }
   ],
   "paper_id": "0709.0248",
   "schema": "sfc-symbol-grounding/v0",
-  "structure": "(and (: Cab Ap) (: share (* \\id A ab)))",
+  "structures": [
+    "{:schema \"sfc-def-structure/v1\", :formula \"A\", :normalized-formula \"A\", :binder-captures [], :structure A, :ungrounded [{:symbol \"A\", :grounding :hole}]}",
+    "(* B x)",
+    "{:schema \"sfc-def-structure/v1\", :formula \"a\", :normalized-formula \"a\", :binder-captures [], :structure a, :ungrounded [{:symbol \"a\", :grounding :hole}]}",
+    "{:schema \"sfc-def-structure/v1\", :formula \"p\", :normalized-formula \"p\", :binder-captures [], :structure p, :ungrounded [{:symbol \"p\", :grounding :hole}]}"
+  ],
   "summary": {
-    "grounded": 3,
-    "symbols": 8,
-    "undefined_in_context": 5,
+    "grounded": 4,
+    "symbols": 5,
+    "undefined_in_context": 1,
     "unsupported": 0
   }
 }
