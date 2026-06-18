@@ -29,6 +29,7 @@ DEFAULT_TOP_TSV = ROOT / "data" / "mark4-retrieval-top200.tsv"
 
 WORD_RE = re.compile(r"[a-z][a-z]+(?:-[a-z]+)?")
 FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+INLINE_CODE_RE = re.compile(r"`[^`]+`")
 INLINE_MATH_RE = re.compile(r"\$+")
 CONTROL_RE = re.compile(r"\\([a-zA-Z]+)")
 URL_RE = re.compile(r"https?://\S+")
@@ -121,6 +122,9 @@ BOILERPLATE_PARTS = {
 def normalize_text(text: str, *, drop_fences: bool = True) -> str:
     if drop_fences:
         text = FENCE_RE.sub(" ", text)
+        # Drop `inline-code` spans too: proofs list Lean idents/tactics as inline
+        # code in prose (e.g. `rcases` — destructuring…), which fences miss.
+        text = INLINE_CODE_RE.sub(" ", text)
     text = URL_RE.sub(" ", text)
     text = text.replace("L^p", "lp").replace("L^\\infty", "l infinity")
     text = text.replace("L^∞", "l infinity")
@@ -217,7 +221,9 @@ def extract_keywords(
 def proof_text(proof_dir: Path, proof_id: str) -> str:
     proof_path = proof_dir / f"apm-{proof_id}.md"
     text = proof_path.read_text(errors="replace")
-    return re.split(r"^## Lean 4 Theorem Statements\b", text, flags=re.MULTILINE)[0]
+    # Drop every Lean/Mathlib appendix (theorem statements, tactics lists,
+    # formalization notes) — keep only the informal prose before the first one.
+    return re.split(r"^##\s+.*\blean\b", text, flags=re.MULTILINE | re.IGNORECASE)[0]
 
 
 def batch_name(path: Path) -> str:

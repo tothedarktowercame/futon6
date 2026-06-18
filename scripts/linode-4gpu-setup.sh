@@ -25,7 +25,7 @@ fi
 
 echo "== Ubuntu base packages =="
 $SUDO apt-get update
-$SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
+$SUDO env DEBIAN_FRONTEND=noninteractive apt-get install -y \
   curl git python3 python3-venv python3-pip pipx
 
 if [ "$INSTALL_LINODE_CLI" = "1" ]; then

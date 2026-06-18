@@ -18,11 +18,22 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import dp_anatomy_html as R
 import dp_paper_view as dpv
 
-IDS = ["0710.2254", "0711.1761", "0801.2567", "0807.1872", "0905.0595"]
-RUN = R.ROOT / "data" / "iatc-argument-graphs" / "loop-run-dpdemo-final"
+IDS = ["0705.0452", "0706.1286", "0708.1921", "0708.2067", "0708.2185",
+       "0709.0248", "0711.0473", "0712.0724", "0801.0199", "0801.3843"]
+RUN = R.ROOT / "data" / "iatc-argument-graphs" / "loop-run-70b"
 OUT = R.DEFAULT_OUT / "mark4-iatc-goldens.html"
 FIXED: dict[str, list] = {}   # pid -> [normalized 70B graph]
 KMAP = {"claim": "claim", "object": "concept", "ref": "label"}
+# An IATC edge's :source spans premise->conclusion lines, but the ARROW itself is
+# just the illative connective. Mark only that token as `inference` (pink); if the
+# prose carries no explicit connective in the edge's range, draw no arrow mark
+# (don't flood whole line-ranges pink). Connective set mirrors dp_paper_view.
+_ILLATIVE_CONN = re.compile(
+    r"\b(if and only if|iff|it follows that|it follows|it is clear that|in fact|"
+    r"without loss of generality|wlog|by contradiction|contradicts?|contradiction|"
+    r"therefore|hence|thus|consequently|because|since|whence|so that|"
+    r"implies that|implies|clearly)\b",
+    re.IGNORECASE)
 
 
 def line_offsets(text: str) -> list[int]:
@@ -114,7 +125,19 @@ def iatc_to_marks(graph: dict, text: str) -> list:
             tip = f'⚠ {rel} — missing warrant: wants {w.get("wanted","")}'
         else:
             tip = f'{rel} — warrant: {w.get("kind","(stated)")}'
-        marks.append({"start": sp[0], "end": sp[1], "kind": "inference", "tip": tip})
+        # the arrow == a narrow anchor, NOT the whole premise->conclusion span.
+        # Prefer the surface illative connective; if the prose carries none in
+        # range, anchor at the start of the conclusion (final cited) line so the
+        # edge is ALWAYS shown (never dropped) but never floods the window.
+        seg = text[sp[0]:sp[1]]
+        cm = _ILLATIVE_CONN.search(seg)
+        if cm:
+            cs, ce = sp[0] + cm.start(), sp[0] + cm.end()
+        else:
+            concl = (e.get("source") or {}).get("lines")[1]
+            cs = off[concl - 1]
+            ce = min(cs + 24, off[concl] - 1)
+        marks.append({"start": cs, "end": max(ce, cs + 1), "kind": "inference", "tip": tip})
     return marks
 
 
@@ -124,6 +147,17 @@ def stage_graphs() -> None:
     {:id N} maps become bare node-ids N — then feed them straight into the renderer
     by overriding load_iatc_graphs. No file round-trip, no schema guessing."""
     import edn_format
+    import re as _re
+
+    def _lenient_edn(text: str) -> str:
+        # edn_format's lexer rejects apostrophes in symbols/keywords (e.g. :g', :phi'),
+        # which are valid EDN and pass bb's reader. Strip them OUTSIDE string literals
+        # so the demo can parse the graph; symbol names are cosmetic for the marks view.
+        parts = _re.split(r'("(?:[^"\\]|\\.)*")', text)
+        for i in range(0, len(parts), 2):
+            parts[i] = parts[i].replace("'", "")
+        return "".join(parts)
+
     for pid in IDS:
         g = RUN / f"{pid}.edn"
         if not g.exists():
@@ -132,7 +166,7 @@ def stage_graphs() -> None:
                 continue
             g = atts[-1]
         try:
-            parsed = R._edn_to_py(edn_format.loads(g.read_text(encoding="utf8")))
+            parsed = R._edn_to_py(edn_format.loads(_lenient_edn(g.read_text(encoding="utf8"))))
         except Exception:
             continue
         def nid(v):  # resolve a node reference to a scalar id (id or node-id)

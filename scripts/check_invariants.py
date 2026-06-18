@@ -31,6 +31,10 @@ import re
 import sys
 from pathlib import Path
 
+from dp_capabilities.math_envelope import is_script_run, mathalpha_regions  # SHARED
+from dp_capabilities.wellformed import scope_crossings  # SHARED nesting lint
+# "where math-alphabet groups / scripts are" locators (DC-6) — same status as the
+# span tokenizer: agreeing where things are is not an author≠reviewer breach.
 import anatomy_v0_sweep as sweep  # SHARED math-span tokenizer (delimiter parity,
 # \$ / $$ handling) — the same ground-truth the detector uses for "where math
 # is". Agreeing on the span tokenizer is not an author≠reviewer breach (it's
@@ -56,6 +60,14 @@ SYMBOL_KINDS = {"symbol", "symbol-grounded", "classified", "concept-typed",
 NON_SYMBOL_KINDS = {"layout", "text-mode"}
 MATH_KINDS = {"math"}
 LETTER_RUN = re.compile(r"(?<!\\)(?<![A-Za-z])[A-Za-z][A-Za-z0-9]*")
+
+# C-TERM-COVERAGE locator. The checker's INDEPENDENT ground truth for "where a
+# named term is" = AUTHOR EMPHASIS (\textit/\emph/\textbf/...). The detector
+# (dp_paper_view's concept layer) keys on concept-endings + definition verbs,
+# NOT on emphasis — so emphasised phrases are a test set the detector did not
+# get to define, and coverage over them is a real measurement, not self-grading.
+TERM_NOTICE_KINDS = {"concept", "definiendum", "definiens"}
+EMPH_RE = re.compile(r"\\(?:emph|textit|textbf|textsl|textsc|dfn)\s*\{([^{}]*)\}")
 
 
 def _math_spans(text):
@@ -111,6 +123,14 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
                 add("W-NEST", "error", b["start"], b["end"],
                     f'{b.get("kind")} partially overlaps {a.get("kind")} '
                     f'(crossing, not nesting)', "tighten-detector")
+    # W-NEST-SCOPE: the BROAD nesting lint — every extent scope (environments,
+    # manifest/binder scopes, Let–Then implications, IATC claims) must nest or be
+    # disjoint, never cross. Catches env×scope / claim×scope crossings the
+    # struct-only W-NEST above misses (Joe's final linting gate).
+    for a, b in scope_crossings(marks):
+        add("W-NEST-SCOPE", "error", b["start"], b["end"],
+            f'{b.get("kind")} crosses {a.get("kind")} '
+            f'(partial overlap, not nesting)', "tighten-detector")
     # W-SENTENCE: a non-env structural scope must not cross ". ".
     for m in struct:
         seg = text[m["start"]:m["end"]]
@@ -131,9 +151,19 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     # C-SYM-TAGGED / C-SYM-GROUND: every letter-run inside math is tagged;
     # ungrounded tagged symbols are explicit (countable) debt.
     sym_marks = [m for m in marks if m.get("kind") in SYMBOL_KINDS]
-    sym_extents = [(m["start"], m["end"], m["kind"]) for m in sym_marks]
     nonsym_extents = [(m["start"], m["end"]) for m in marks
                       if m.get("kind") in NON_SYMBOL_KINDS]
+    # PIECEWISE coverage (DC-6): a letter-run may be tiled by SEVERAL symbol marks
+    # (a split juxtaposition "gf" -> g + f). The run is tagged if every char is
+    # under some symbol mark, grounded if every char is under a grounded one. The
+    # LETTER_RUN denominator is unchanged, so corpus symbol counts don't move.
+    GROUNDED = {"symbol-grounded", "concept-typed", "classified"}
+    tagged_pos, grounded_pos = set(), set()
+    for m in sym_marks:
+        rng = range(m["start"], m["end"])
+        tagged_pos.update(rng)
+        if m["kind"] in GROUNDED:
+            grounded_pos.update(rng)
     total_syms = tagged = grounded = nonsym = 0
     for s, e in spans:
         for lm in LETTER_RUN.finditer(text[s:e]):
@@ -146,11 +176,10 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
                 nonsym += 1
                 continue
             total_syms += 1
-            cover = [k for ms, me, k in sym_extents if ms <= ls and me >= le]
-            if cover:
+            run = range(ls, le)
+            if all(p in tagged_pos for p in run):
                 tagged += 1
-                if "symbol-grounded" in cover or "concept-typed" in cover \
-                        or "classified" in cover:
+                if all(p in grounded_pos for p in run):
                     grounded += 1
                 else:
                     add("C-SYM-GROUND", "debt", ls, le,
@@ -160,6 +189,32 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
                 add("C-SYM-TAGGED", "debt", ls, le,
                     f'letter-run {text[ls:le]!r} in math is untagged',
                     "extend-coverage")
+    # W-SYM-JUXTAPOSITION (DC-6): a single symbol mark over a BARE multi-letter
+    # italic run is a mis-tokenised product ("gf"=g·f) the detector should split.
+    # Independent test on the SOURCE: not inside a \mathrm/\operatorname group and
+    # not a sub/superscript modifier. Debt (not error) — never inflates wf errors.
+    ma_global = []
+    for s, e in spans:
+        for rs, re_ in mathalpha_regions(text[s:e]):
+            ma_global.append((s + rs, s + re_))
+    # Only UNGROUNDED bare runs (kind "symbol"): a grounded multi-letter unit is
+    # a NAME the binder resolved (a sloppy bare "Ab" = the category, not A·b) —
+    # not a product to split, so not a juxtaposition defect.
+    for m in sym_marks:
+        if m["kind"] != "symbol":
+            continue
+        # only within MEASURED math spans — consistent with C-SYM coverage, and
+        # avoids flagging marks the detector placed via per-file span boundaries
+        # that differ from the concatenated-text tokenizer (e.g. xy-pic displays).
+        if not any(a <= m["start"] and m["end"] <= b for a, b in spans):
+            continue
+        surf = text[m["start"]:m["end"]]
+        if len(surf) >= 2 and surf.isalpha() \
+                and not any(rs <= m["start"] and m["end"] <= re for rs, re in ma_global) \
+                and not is_script_run(text, m["start"]):
+            add("W-SYM-JUXTAPOSITION", "debt", m["start"], m["end"],
+                f'ungrounded bare multi-letter run {surf!r} should split into '
+                f'single symbols (TeX sets it as a product)', "tighten-detector")
     # C-DEFINIENS-DEBT: a definiens that resolves nowhere = irreducible debt.
     for m in marks:
         if m.get("kind") == "definiens" and m.get("fields"):
@@ -168,6 +223,56 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
                 add("C-DEFINIENS-DEBT", "debt", m["start"], m["end"],
                     f'definiens {text[m["start"]:m["end"]][:40]!r} undefined '
                     f'(Lean/PM/nLab all miss)', "irreducible-debt")
+    # C-TERM-COVERAGE: every AUTHOR-EMPHASISED prose phrase should be NOTICED —
+    # carry a concept/definiendum/definiens mark. Emphasis is the independent
+    # locator (the detector does not use it); coverage over it measures the
+    # "terms not noticed" defect class (DC-1) corpus-wide. Emphasis wrapping a
+    # formula (content overlaps a math span) is skipped — not a prose term.
+    notice_extents = [(m["start"], m["end"]) for m in marks
+                      if m.get("kind") in TERM_NOTICE_KINDS]
+    terms_located = terms_covered = 0
+    for em in EMPH_RE.finditer(text):
+        cs, ce = em.start(1), em.end(1)
+        term = text[cs:ce].strip()
+        if ce - cs < 3 or not any(c.isalpha() for c in term):
+            continue
+        if term.endswith(".") or ". " in term:
+            continue  # an emphasised SENTENCE (stress), not a named term
+        if any(ms < ce and me > cs for ms, me in spans):
+            continue  # emphasis around math, not a term
+        terms_located += 1
+        if any(ns < ce and ne > cs for ns, ne in notice_extents):
+            terms_covered += 1
+        else:
+            add("C-TERM-COVERAGE", "debt", cs, ce,
+                f'emphasised term {term[:40]!r} not noticed (no concept mark)',
+                "extend-coverage")
+
+    # C-TERM-GROUND: a concept term grounded to an authority (nLab/NNexus/CT-prior
+    # via the lexicon spotter) vs only heuristically spotted. Mirrors
+    # C-SYM-GROUND for the prose-term layer; ungrounded = extend-coverage debt.
+    concept_marks_ = [m for m in marks if m.get("kind") == "concept"]
+    terms_grounded = 0
+    for m in concept_marks_:
+        if any(k == "grounded" for k, _ in m.get("fields", [])):
+            terms_grounded += 1
+        else:
+            add("C-TERM-GROUND", "debt", m["start"], m["end"],
+                f'concept {text[m["start"]:m["end"]][:40]!r} not grounded to an '
+                f'authority', "extend-coverage")
+
+    # C-IMPL-PAIR (DC-3): a sentence-initial Then/Hence/Thus with a Let/Given/
+    # Suppose hypothesis just before it should sit inside an `implies` scope that
+    # links the two. Independent locator (consequent connective + nearby
+    # hypothesis); uncovered = the implication structure was not captured.
+    impl_extents = [(m["start"], m["end"]) for m in marks if m.get("kind") == "implies"]
+    for cm in re.finditer(r"(?:^|\.\s+)(Then|Hence|Thus|Therefore)\b", text):
+        cs = cm.start(1)
+        if re.search(r"\b(?:Let|Given|Suppose|Assume)\b", text[max(0, cs - 400):cs]):
+            if not any(s <= cs < e for s, e in impl_extents):
+                add("C-IMPL-PAIR", "debt", cs, cs + len(cm.group(1)),
+                    f'"{cm.group(1)}" consequent not linked to its hypothesis '
+                    f'(no implication scope)', "extend-coverage")
 
     # --- COVERAGE BEST-GUESS (per-paper scalars) ------------------------
     def rate(n, d):
@@ -181,6 +286,10 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
         "nonsym_excluded": nonsym,   # length-units/env-names/text-mode (not math)
         "symbol_tagged": rate(tagged, total_syms),
         "symbol_grounded": rate(grounded, total_syms),
+        "terms_emphasised": terms_located,
+        "term_coverage": rate(terms_covered, terms_located),
+        "terms_concept": len(concept_marks_),
+        "term_grounded": rate(terms_grounded, len(concept_marks_)),
         "wellformed_errors": len(errors),
         # one headline number: grounded-symbol rate is the live convergence dial
         "best_guess": rate(grounded, total_syms),

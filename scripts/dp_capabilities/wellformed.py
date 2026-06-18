@@ -70,6 +70,65 @@ def _reconcile_structural_crossings(marks):
     return [m for m in marks if m["end"] > m["start"]]
 
 
+# ALL extent-bearing scopes (not just the structural ones) must nest cleanly.
+# Authority rank: a genuine \begin..\end environment is authoritative and never
+# moves; manifest/binder scopes next; the Let–Then implication; then the
+# heuristic IATC claim, which yields first. On a crossing, the lower-rank scope's
+# boundary is clamped to the higher one's edge (nest -> stays; cross -> becomes
+# adjacent). Equal rank: the later scope yields (mirrors the structural pass).
+def _scope_rank(m):
+    k = m.get("kind", "")
+    if k.startswith("env/"):
+        return 4
+    if m.get("layer") == "scope" or k == "let-binder" or k.startswith("bind/"):
+        return 3
+    if k == "implies":
+        return 2
+    if k == "claim":
+        return 1
+    return None  # not a scope (math/symbol/cite/inference edge/...)
+
+
+def scope_crossings(marks):
+    """Pairs (a, b) of extent scopes that partially overlap (cross, not nest)."""
+    sc = sorted((m for m in marks if _scope_rank(m) is not None),
+                key=lambda m: (m["start"], -m["end"]))
+    out = []
+    for i, a in enumerate(sc):
+        for b in sc[i + 1:]:
+            if b["start"] >= a["end"]:
+                break
+            if _crosses(a, b):
+                out.append((a, b))
+    return out
+
+
+def reconcile_all_scopes(marks):
+    """Clamp crossings among ALL extent scopes so they nest or are disjoint."""
+    sc = [m for m in marks if _scope_rank(m) is not None]
+    for _ in range(6):
+        changed = False
+        sc.sort(key=lambda m: (m["start"], -m["end"]))
+        for i, a in enumerate(sc):
+            if a["end"] <= a["start"]:
+                continue
+            for b in sc[i + 1:]:
+                if b["start"] >= a["end"]:
+                    break
+                if b["end"] <= b["start"] or not _crosses(a, b):
+                    continue
+                ra, rb = _scope_rank(a), _scope_rank(b)
+                if ra > rb:        # b lower authority -> start it at a's edge
+                    b["start"] = a["end"]
+                else:              # a lower or equal -> end it at b's edge
+                    a["end"] = b["start"]
+                changed = True
+        if not changed:
+            break
+    return [m for m in marks
+            if _scope_rank(m) is None or m["end"] > m["start"]]
+
+
 def _clamp_structural_sentence_markers(marks, text):
     """Keep structural scopes on one checker sentence.
 

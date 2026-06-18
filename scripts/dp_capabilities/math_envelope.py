@@ -47,6 +47,36 @@ ARRAY_SPEC_CMD = re.compile(
     r"\\begin\s*\{(?:array|tabular\*?|tabularx|longtable)\}\s*(?:\[[^\]]*\])?\s*\{")
 
 
+# DC-6: math-ALPHABET commands whose brace argument is a single multi-letter
+# identifier/operator name (\mathrm{Hom}, \operatorname{colim}, \mathcal{...}) —
+# NOT a juxtaposition. A bare run NOT inside one of these is default math italic,
+# which TeX sets as a PRODUCT of single-letter variables ("gf" = g·f). (Text-mode
+# commands like \text/\mbox are handled separately as non-symbol regions.)
+MATHALPHA_CMD = re.compile(
+    r"\\(?:mathrm|mathnormal|mathit|mathbf|mathcal|mathbb|mathsf|mathtt"
+    r"|mathscr|mathfrak|operatorname\*?)\s*\{")
+
+
+def mathalpha_regions(body):
+    """Inner char-spans of math-alphabet command arguments — a multi-letter run
+    inside one is an operator/identifier name, never a juxtaposition to split."""
+    return [_brace_inner(body, m.end() - 1) for m in MATHALPHA_CMD.finditer(body)]
+
+
+def inside_regions(start, end, regions):
+    return any(rs <= start and end <= re for rs, re in regions)
+
+
+def is_script_run(body, pos):
+    """True if the run at BODY[pos] is a sub/superscript (after ^ or _, possibly
+    just inside a brace) — e.g. the 'op' in A^{op}. Such a run is a single
+    modifier, not a juxtaposition, so it is never split."""
+    i = pos - 1
+    if i >= 0 and body[i] == "{":
+        i -= 1
+    return i >= 0 and body[i] in "^_"
+
+
 def _brace_inner(body, open_idx):
     """OPEN_IDX indexes a '{'. Return (inner_start, inner_end) of the brace-
     matched argument (inner_end exclusive of the closing '}')."""

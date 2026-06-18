@@ -43,6 +43,7 @@ SEED_DIRS = [REPO / "holes" / "iatc-argcheck" / "fixtures" / "golden",
 ARGCHECK = REPO / "scripts" / "iatc_argcheck.bb"
 SUBSTANCE = REPO / "scripts" / "substance_gate.py"
 SEMCHECK = REPO / "scripts" / "iatc_semcheck.bb"
+REPAIR = REPO / "scripts" / "iatc_repair.bb"
 MAX_ATTEMPTS = 3
 
 SYSTEM = """You reconstruct the warranted argument DAG of a single mathematical \
@@ -59,6 +60,12 @@ step (what fact/lemma/computation the prose skipped), e.g. \
 :dimension-shift-through-short-exact-sequence. Never a generic bucket.
 - Cited justifications ("by [3]", "according to Thm 1.4") are :warrant {:kind :citation ...}, \
 not holes.
+- CRITICAL — the validator REJECTS the graph unless ALL of these hold: \
+(1) EVERY :edges entry carries :source {:lines [a b]} (not only :nodes). \
+(2) The map includes a top-level :holes vector, and EVERY edge whose :warrant is \
+{:kind :missing-warrant :wanted X} is mirrored by a matching {:kind :missing-warrant :wanted X} \
+entry in :holes. \
+(3) EVERY :ref node resolves via :label/:target/:citation, or is listed in :holes.
 - Output ONLY the EDN map. No prose."""
 
 
@@ -75,8 +82,16 @@ def load_seeds(n: int = 3) -> str:
     return "\n\n".join(out)
 
 
+def render_enrichment(cand: dict) -> str:
+    rows = cand.get("enrichment") or []
+    if not rows:
+        return "(no deterministic anatomy detected in this window)"
+    return "\n".join(f"L{r['line']} ({r['kind']}) {r['tip']}" for r in rows)
+
+
 def build_prompt(cand: dict, seeds: str) -> str:
     binders = "\n".join(cand.get("binder-context", [])) or "(none)"
+    anatomy = render_enrichment(cand)
     return f"""{SYSTEM}
 
 # Few-shot examples (the target form):
@@ -87,6 +102,10 @@ paper-id: {cand['paper-id']}
 window-lines: {cand['window-lines']}
 binder-context (variable typings established earlier):
 {binders}
+
+deterministic anatomy detected IN this window (symbol typings, definitions,
+quantifiers, proof-moves, citations — anchor to these; do not contradict them):
+{anatomy}
 
 source-window:
 {cand['source-window']}
@@ -197,10 +216,43 @@ def candidate_check(edn: str, cand: dict) -> tuple[bool, str]:
     return True, "ok"
 
 
+CANDIDATE_SCHEMA = "iatc-candidate/v2-enriched"
+
+
+def require_enriched(cands: list[Path]) -> bool:
+    """Hard precondition gate: refuse to run the model stage on candidates that do
+    not carry the inlined deterministic anatomy. Without this, the loop silently
+    feeds the model raw source + binders only (the enrichment-bypass liability) and
+    a whole GPU run is wasted before anyone notices."""
+    stale = []
+    for cf in cands:
+        try:
+            c = json.loads(cf.read_text())
+        except Exception as e:
+            stale.append((cf.name, f"unreadable: {e}"))
+            continue
+        if c.get("schema") != CANDIDATE_SCHEMA or "enrichment" not in c:
+            stale.append((cf.name, f"schema={c.get('schema')!r}, enrichment={'enrichment' in c}"))
+    if stale:
+        print(f"FATAL: {len(stale)}/{len(cands)} candidate(s) are pre-enrichment — "
+              f"the deterministic anatomy would never reach the model "
+              f"(the silent-bypass liability). Refusing to run the model stage.",
+              file=sys.stderr)
+        for name, why in stale[:10]:
+            print(f"  - {name}: {why}", file=sys.stderr)
+        print(f"Expected schema '{CANDIDATE_SCHEMA}' with an 'enrichment' field. "
+              f"Re-extract: python scripts/mark3_extract_candidates.py --out <candidates-dir>",
+              file=sys.stderr)
+        return False
+    return True
+
+
 def run(args) -> int:
     cands = sorted(Path(args.candidates).glob("*.candidate.json"))
     if not cands:
         print("no candidates found", file=sys.stderr)
+        return 2
+    if not require_enriched(cands):
         return 2
     seeds = load_seeds(args.shots)
     outdir = Path(args.out)
@@ -227,11 +279,14 @@ def run(args) -> int:
             ap = tmp / f"{pid}.attempt{attempt}.edn"
             ap.parent.mkdir(parents=True, exist_ok=True)
             ap.write_text(edn)
+            # mechanical canonicalization before gating: mirror missing-warrants
+            # into :holes + back-fill edge :source from endpoint nodes (no LLM).
+            subprocess.run(["bb", str(REPAIR), str(ap)], capture_output=True, text=True)
+            edn = ap.read_text()
             ok, err = candidate_check(edn, cand)
             if ok:
                 ok, err = gate_one(ap)
             if ok:
-                outdir.mkdir(parents=True, exist_ok=True)
                 final = outdir / f"{pid}.edn"
                 rung2_report = outdir / f"{pid}.rung2.edn"
                 if args.rung2_gate:

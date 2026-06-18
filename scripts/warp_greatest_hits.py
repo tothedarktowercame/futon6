@@ -129,7 +129,7 @@ def main():
     # ~10^4-scope papers stay bounded), tooltip carries the count + mean
     # incompleteness. Collapses ~793k dots to <=6 per paper.
     ROFF = 24.0
-    scope_pts, hub_lines, dots = [], [], []
+    scope_pts, hub_lines, dots, hub_dots = [], [], [], []
     for i, p in enumerate(papers):
         cx, cy = hx[i], hy[i]
         agg = {}  # class -> [count, sum_metric]
@@ -137,17 +137,39 @@ def main():
             a = agg.setdefault(classof(k), [0, 0.0])
             a[0] += 1
             a[1] += metric
+        # pale hub-center marker: the paper itself, spokes radiate to its kinds
+        hub_dots.append(f'<circle cx="{cx:.0f}" cy="{cy:.0f}" r="1.4" '
+                        f'fill="#cdd6ee" fill-opacity="0.9"/>')
         for c, (n, msum) in agg.items():
             inc = msum / n
             ang = CLASSES.index(c) / len(CLASSES) * 2 * math.pi
             x, y = cx + ROFF * math.cos(ang), cy + ROFF * math.sin(ang)
-            r = 3.0 + 3.0 * math.log10(1 + n)
+            # small dots so per-paper rosettes stay distinct; the spoke ties each
+            # kind-dot back to its hub so the paper<->scopes grouping reads.
+            r = 1.2 + 1.6 * math.log10(1 + n)
             scope_pts.append((x, y, inc, n))
             hub_lines.append(f'<line x1="{cx:.0f}" y1="{cy:.0f}" x2="{x:.1f}" y2="{y:.1f}" '
-                             f'stroke="#33415a" stroke-width="0.5" opacity="0.4"/>')
+                             f'stroke="#6f80a8" stroke-width="0.6" opacity="0.55"/>')
             dots.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{kindcol(c)}" '
                         f'fill-opacity="0.85"><title>{p}: {c} ×{n} '
                         f'(mean incompleteness {inc:.2f})</title></circle>')
+
+    # inter-paper citation roads: in-corpus edges among these papers, drawn as a
+    # distinct violet layer above the intra-paper spokes (mirrors the mission-EFE
+    # landscape's citation roads, tuned brighter/heavier for this hub density).
+    hubpos = {p: (hx[i], hy[i]) for i, p in enumerate(papers)}
+    cw = Counter()
+    for ed in json.load(open(W / "citations.json"))["edges"]:
+        a, b = ed.get("from"), ed.get("to")
+        if a in hubpos and b in hubpos and a != b:
+            cw[tuple(sorted((a, b)))] += 1
+    roads = []
+    for (a, b), c in cw.items():
+        (x1, y1), (x2, y2) = hubpos[a], hubpos[b]
+        op = min(0.6, 0.22 + 0.08 * (c - 1))
+        wd = min(2.6, 0.7 + 0.35 * (c - 1))
+        roads.append(f'<line x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" '
+                     f'stroke="#c9a8ff" stroke-width="{wd:.1f}" opacity="{op:.2f}"/>')
 
     # terrain field (per-scope incompleteness), mission-efe technique
     STEP, SIG = 16, 30.0
@@ -197,9 +219,10 @@ def main():
             'in-corpus papers as DISTRICTS OF THEIR DETECTED SCOPES (apples-to-apples with the '
             'mission-EFE portrait) · hubs = concept-multiplicity t-SNE · one glyph per anatomy kind, '
             'area ~ scope count (blue binder, purple constrain, teal math, amber proof-move, '
-            'green assume/quant, grey other) · terrain = count-weighted incompleteness</div>'
+            'green assume/quant, grey other) · violet roads = in-corpus citations '
+            'between papers · terrain = count-weighted incompleteness</div>'
             f'<svg width={VW} height={VH}>{"".join(fill)}{"".join(contour)}'
-            f'{"".join(hub_lines)}{"".join(dots)}</svg></body>')
+            f'{"".join(hub_lines)}{"".join(roads)}{"".join(dots)}{"".join(hub_dots)}</svg></body>')
     n_elem = guard_svg(html, "greatest-hits")
     (W / "greatest-hits.html").write_text(html)
     print(f"greatest-hits: {len(papers)} papers, {len(scope_pts)} scope-points, "
