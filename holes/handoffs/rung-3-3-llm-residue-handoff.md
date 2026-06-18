@@ -82,3 +82,29 @@ RM-menu source you used. Append findings to this doc.**
   is downstream).
 - **Pattern-minting from answered questions** (the seeding-loop closure) — future work.
 - **Changing rung-3-2 / cas_select / the grain rates / the gate** — rung-3-3 is report-only on the residue.
+
+## Built — claude-1, 2026-06-18 (built directly: Codex pool out of quota; Joe opted out of handoff)
+
+The whole Codex pool hit an account-wide usage limit (out until Jul 18), so Joe asked me to build
+this one directly. **Author = claude-1; self-reviewed** (no separate reviewer available — flagged).
+
+Built: `scripts/rung3_residue_llm.py` (producer), `cas_cert.py --questions` (report-only consumer →
+`open_questions`), `pipeline_witness.py` stage `7c.rung3-3`, `tests/test_rung3_residue_llm.py` +
+`tests/fixtures/rung3-residue/gapmap.json`. Menu source: this repo's `rung-3-spec.md` "Gap to ArSE
+question mapping" (the referenced `data/question-patterns/…` file isn't in the checkout).
+
+Self-review (what I checked):
+- **py_compile** clean; **new test** 6 passed; **full `pytest -q`** 843 passed / 38 skipped.
+- **Residue-only / bounded:** loop visits only `gaps[]` (thin/ungrounded); `assert calls == questions`
+  guarantees the model never touches a grounded move; `--max-questions` honored (test).
+- **Question, not verdict:** classification ∈ {novel-technique, real-gap} (gap-type, not truth);
+  each output ends in `?`; no correctness judgment.
+- **Menu-grounded:** thin→STRUCTURAL PROBE, ungrounded→THEOREM APPLICABILITY/TECHNIQUE LANDSCAPE.
+- **Report-only (verified on real 0709):** `cas_cert --questions` leaves `by_grain` + `verdict`
+  byte-identical, only adds `open_questions` (0→3). DAG valid in `--plan`.
+- **Human spot-check of questions (the breakdown gate):** the 3 generated questions read as genuine,
+  auditable open questions ("What verifiable inference discharges the heuristic step
+  find-the-right-abstraction here?"), not verdicts. PASS.
+- Stub marks all residue `real-gap` (deterministic; the stub does not judge novelty — novel-vs-gap is
+  the model's call). The **real novel-vs-gap split + the actual questions need the `openai` pass**
+  (the costed run), exactly as scoped.

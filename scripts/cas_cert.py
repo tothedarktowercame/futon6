@@ -450,6 +450,7 @@ def certificate_for_graph(
     cas_select: dict[str, Any] | None = None,
     symbols_by_paper: dict[str, dict[str, Any]] | None = None,
     rung3_by_paper: dict[str, dict[str, Any]] | None = None,
+    questions_by_paper: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     paper_id = graph.get("paper-id") or (graph.get("profile") or {}).get("paper-id")
     symbol_doc = (symbols_by_paper or {}).get(str(paper_id))
@@ -479,6 +480,9 @@ def certificate_for_graph(
         "confidence": confidence(by_grain),
         "ports": ports,
         "residual_sorries": residual_sorries(ports),
+        # rung-3-3: report-only phrased questions for the thin/ungrounded residue
+        # (does NOT affect grain rates or the gate verdict).
+        "open_questions": ((questions_by_paper or {}).get(str(paper_id)) or {}).get("questions", []),
         "value_signals": {
             "centrality": None,
             "novelty": None,
@@ -534,9 +538,10 @@ def build_certificates(
     cas_select: dict[str, Any] | None = None,
     symbols: dict[str, dict[str, Any]] | None = None,
     rung3: dict[str, dict[str, Any]] | None = None,
+    questions: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     certs = [
-        certificate_for_graph(graph, cas_select, symbols, rung3)
+        certificate_for_graph(graph, cas_select, symbols, rung3, questions)
         for graph in semcheck.get("graphs", [])
     ]
     return {
@@ -553,6 +558,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cas-select", type=Path, help="JSON emitted by cas_select.py")
     ap.add_argument("--symbols", type=Path, help="JSON emitted by sfc_ground_paper.py")
     ap.add_argument("--rung3", type=Path, help="JSON emitted by rung3_technique.py")
+    ap.add_argument("--questions", type=Path, help="JSON emitted by rung3_residue_llm.py (report-only)")
     ap.add_argument("--graph-dir", type=Path, default=DEFAULT_GRAPH_DIR)
     ap.add_argument("--out", type=Path)
     ap.add_argument("--gate", action="store_true")
@@ -562,7 +568,8 @@ def main(argv: list[str] | None = None) -> int:
     cas_select = load_json(args.cas_select) if args.cas_select else None
     symbols = symbols_by_paper(load_json(args.symbols)) if args.symbols else None
     rung3 = docs_by_paper(load_json(args.rung3)) if args.rung3 else None
-    payload = build_certificates(semcheck, cas_select, symbols, rung3)
+    questions = docs_by_paper(load_json(args.questions)) if args.questions else None
+    payload = build_certificates(semcheck, cas_select, symbols, rung3, questions)
     text = json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False)
     if args.out:
         args.out.write_text(text + "\n")

@@ -1,0 +1,13 @@
+{
+  "paper_id": "fixture",
+  "moves": [
+    {"step": "s1", "pattern": "reduce-to-known-result", "type": "verifiable", "bucket": "grounded-by-pattern", "text": "the bound follows by the extreme value theorem"},
+    {"step": "s2", "pattern": "find-the-right-abstraction", "type": "heuristic", "bucket": "thin", "text": "choose the right abstraction so the result follows"},
+    {"step": "s3", "pattern": null, "type": null, "bucket": "ungrounded", "text": "the claim holds in the general case"}
+  ],
+  "buckets": {"grounded-by-pattern": 1, "grounded-by-citation": 0, "thin": 1, "ungrounded": 1, "conjecture": 0},
+  "gaps": [
+    {"step": "s2", "bucket": "thin", "pattern": "find-the-right-abstraction", "why": "heuristic leaf needs a verifiable discharge"},
+    {"step": "s3", "bucket": "ungrounded", "pattern": null, "why": "no matching technique"}
+  ]
+}
