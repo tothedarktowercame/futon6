@@ -1,0 +1,29 @@
+{
+  "paper_id": "0709.0248",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "parameterized versions of the rules governing identity types; therefore every locally cartesian closed category is extensional."
+    },
+    {
+      "id": "s2",
+      "text": "standard rules governing identity types."
+    },
+    {
+      "id": "s3",
+      "text": "Because standard rules governing identity types, parameterized rules are equivalent to standard rules because structural rules of the theory."
+    },
+    {
+      "id": "s4",
+      "text": "parameterized rules are equivalent to standard rules; terms a, b of type A; reflexivity term p; therefore parameterized versions of the rules governing identity types."
+    },
+    {
+      "id": "s5",
+      "text": "reflexivity term p."
+    },
+    {
+      "id": "s6",
+      "text": "terms a, b of type A."
+    }
+  ]
+}

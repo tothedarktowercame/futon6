@@ -1,0 +1,37 @@
+{
+  "paper_id": "0801.0199",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "Yoneda embedding."
+    },
+    {
+      "id": "s2",
+      "text": "Because Yoneda embedding, Yoneda embedding is fully faithful because Yoneda embedding preserves and reflects isomorphisms."
+    },
+    {
+      "id": "s3",
+      "text": "f≅g if f*=g* or f_*=g_*."
+    },
+    {
+      "id": "s4",
+      "text": "it suffices to consider Z=E."
+    },
+    {
+      "id": "s5",
+      "text": "Because f≅g if f*=g* or f_*=g_*, f≅g if f≤g and g≤f."
+    },
+    {
+      "id": "s6",
+      "text": "Because X is L-separated if f≅g implies f=g, full subcategory of Cat(V) consisting of all L-separated V-categories because definition of L-separated."
+    },
+    {
+      "id": "s7",
+      "text": "Because it suffices to consider Z=E, f_*=g_* implies (f⋅x)_*=f_*⋅x_*=g_*⋅x_*=(g⋅x)_*."
+    },
+    {
+      "id": "s8",
+      "text": "Because f_*=g_* implies (f⋅x)_*=f_*⋅x_*=g_*⋅x_*=(g⋅x)_*, X is L-separated if f≅g implies f=g because functoriality of _*."
+    }
+  ]
+}

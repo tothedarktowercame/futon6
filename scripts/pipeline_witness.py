@@ -57,10 +57,14 @@ STAGES = [
      "consumes": ["gated-graph", "marks"], "produces": "semcheck-profile",
      "path": "data/iatc-argument-graphs/loop-run-70b/{pid}.rung2.edn",
      "needs": []},
-    {"id": "6.cas_select", "device": "cpu", "status": "gap",
+    {"id": "5b.cas_segment", "device": "cpu", "status": "built",
+     "consumes": ["argument-graph"], "produces": "proof-steps",
+     "path": "data/cas-select-steps/loop-run-70b/{pid}.steps.json",
+     "needs": ["steps"]},
+    {"id": "6.cas_select", "device": "cpu", "status": "built",
      "consumes": ["proof-steps"], "produces": "topology+sorry",
-     "path": "tests/fixtures/cas-select/{pid}.steps.json",
-     "needs": []},
+     "path": "data/cas-select-steps/loop-run-70b/{pid}.steps.json",
+     "needs": ["steps"]},
     {"id": "7.cas_checks", "device": "cpu", "status": "built",
      "consumes": ["topology+sorry"], "produces": "executed-checks",
      "path": "──", "needs": []},
@@ -152,11 +156,10 @@ def plan() -> int:
         if unmet and s["status"] not in ("gap",):
             ok = False
     print(f"\n  DAG order valid (each stage's inputs produced upstream): {'✓' if ok else '✗'}")
-    print("  NOTE: stage 6.cas_select is a known GAP — it consumes 'proof-steps', but no stage")
-    print("        produces a segmentation of an arXiv IATC graph into steps. cas_select today")
-    print("        runs on hand-authored step fixtures (the 4 APM worked proofs). Closing this")
-    print("        seam (an IATC-graph→steps segmenter, the deferred Tier-1 call) is the")
-    print("        prerequisite to exercising CAS-SEL/CAS-CERT on the arXiv witnesses.")
+    print("  NOTE: stage 5b.cas_segment is the seam-6 producer: it segments arXiv IATC")
+    print("        graphs into proof-steps consumed by 6.cas_select. APM hand-authored")
+    print("        fixtures remain the CAS-SEL oracle path; arXiv now has a deterministic")
+    print("        CPU proof-step producer.")
     return 0 if ok else 1
 
 

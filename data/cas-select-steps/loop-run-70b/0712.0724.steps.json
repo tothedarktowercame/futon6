@@ -1,0 +1,53 @@
+{
+  "paper_id": "0712.0724",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "phi(a, hs, kt) = phi(a', h, k) o t."
+    },
+    {
+      "id": "s2",
+      "text": "Because phi(a, hs, kt) = phi(a', h, k) o t, u o phi(a, h, k) = phi'(a, uh, vk)."
+    },
+    {
+      "id": "s3",
+      "text": "morphism g of C."
+    },
+    {
+      "id": "s4",
+      "text": "morphism g' of C."
+    },
+    {
+      "id": "s5",
+      "text": "phi' : a lifting of g'."
+    },
+    {
+      "id": "s6",
+      "text": "morphism (u, v) : g -> g'."
+    },
+    {
+      "id": "s7",
+      "text": "C^2 : evident forgetful functor."
+    },
+    {
+      "id": "s8",
+      "text": "functor F : A -> B."
+    },
+    {
+      "id": "s9",
+      "text": "functor F : A -> B; F^pitchfork : B^pitchfork -> A^pitchfork; therefore F^pitchfork : B^pitchfork -> A^pitchfork."
+    },
+    {
+      "id": "s10",
+      "text": "functor U : A -> C^2; functor V : B -> C^2; therefore ^pitchfork(thg) is left adjoint to (thg)^pitchfork."
+    },
+    {
+      "id": "s11",
+      "text": "functor U : A -> C^2."
+    },
+    {
+      "id": "s12",
+      "text": "functor V : B -> C^2."
+    }
+  ]
+}

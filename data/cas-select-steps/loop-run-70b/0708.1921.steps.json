@@ -1,0 +1,33 @@
+{
+  "paper_id": "0708.1921",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "sigma."
+    },
+    {
+      "id": "s2",
+      "text": "sigma S."
+    },
+    {
+      "id": "s3",
+      "text": "(rS) s sigma = (rS) (sigma S) s; therefore s sigma = (sigma S) s."
+    },
+    {
+      "id": "s4",
+      "text": "Because mu inv : (rS) s -> p, (pS) s sigma = (pS) (sigma S) s."
+    },
+    {
+      "id": "s5",
+      "text": "Because mu inv : (rS) s -> p, (rS) s sigma = (rS) (sigma S) s."
+    },
+    {
+      "id": "s6",
+      "text": "mu inv."
+    },
+    {
+      "id": "s7",
+      "text": "mu inv : (rS) s -> p."
+    }
+  ]
+}

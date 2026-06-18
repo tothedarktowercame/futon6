@@ -1,0 +1,33 @@
+{
+  "paper_id": "0711.0473",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "the statement is true for arrangements of a single square."
+    },
+    {
+      "id": "s2",
+      "text": "the statement is true for arrangements of a single square; therefore the statement is true for arrangements of two or more squares."
+    },
+    {
+      "id": "s3",
+      "text": "compatible arrangement consisting of two or more squares."
+    },
+    {
+      "id": "s4",
+      "text": "assignment into a double category composable by a sequence of horizontal and vertical compositions of squares."
+    },
+    {
+      "id": "s5",
+      "text": "compatible arrangement consisting of two or more squares; assignment into a double category composable by a sequence of horizontal and vertical compositions of squares; consider the last composition used; without loss of generality, assume the last composition is horizontal; therefore the statement is true for arrangements of two or more squares."
+    },
+    {
+      "id": "s6",
+      "text": "consider the last composition used."
+    },
+    {
+      "id": "s7",
+      "text": "without loss of generality, assume the last composition is horizontal."
+    }
+  ]
+}

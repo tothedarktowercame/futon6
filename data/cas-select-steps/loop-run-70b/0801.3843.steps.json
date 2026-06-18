@@ -1,0 +1,53 @@
+{
+  "paper_id": "0801.3843",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "morphism h."
+    },
+    {
+      "id": "s2",
+      "text": "source and target maps s and t."
+    },
+    {
+      "id": "s3",
+      "text": "topological group G."
+    },
+    {
+      "id": "s4",
+      "text": "group H."
+    },
+    {
+      "id": "s5",
+      "text": "homomorphism t: H -> G."
+    },
+    {
+      "id": "s6",
+      "text": "object g in Ob(G)."
+    },
+    {
+      "id": "s7",
+      "text": "identity morphism i(g) = (1,g)."
+    },
+    {
+      "id": "s8",
+      "text": "morphism alpha = (h,g)."
+    },
+    {
+      "id": "s9",
+      "text": "morphism beta = (h',t(h)g)."
+    },
+    {
+      "id": "s10",
+      "text": "source and target maps s and t; morphism h; object g in Ob(G); identity morphism i(g) = (1,g); morphism alpha = (h,g); morphism beta = (h',t(h)g); composite beta ∘ alpha = (h'h, g); therefore G is a 2-group."
+    },
+    {
+      "id": "s11",
+      "text": "composite beta ∘ alpha = (h'h, g)."
+    },
+    {
+      "id": "s12",
+      "text": "topological group G; group H; homomorphism t: H -> G; therefore crossed module (G,H,t,a) because construction of crossed module."
+    }
+  ]
+}

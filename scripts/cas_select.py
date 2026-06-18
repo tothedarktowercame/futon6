@@ -368,9 +368,36 @@ def run_fixture_dir(args: argparse.Namespace) -> dict[str, Any]:
     return {"results": results, "evaluation": evaluate(results, args.fixtures)}
 
 
+def _allowed_patterns(args: argparse.Namespace) -> set[str] | None:
+    if not args.exclude_patterns:
+        return None
+    excluded = set(args.exclude_patterns.split(","))
+    all_names = {p.stem for p in args.library.glob("*.flexiarg")}
+    return all_names - excluded
+
+
+def run_steps_paths(args: argparse.Namespace, paths: list[Path]) -> dict[str, Any]:
+    patterns = load_patterns(index_path=args.index, library_dir=args.library, allowed=_allowed_patterns(args))
+    results = {}
+    for steps_path in sorted(paths):
+        steps_doc = load_steps(steps_path)
+        results[steps_doc["paper_id"]] = select_proof(
+            steps_doc,
+            patterns,
+            backend=args.backend,
+            oracle=None,
+            model=args.model,
+            k=args.k,
+            confidence_floor=args.confidence_floor,
+        )
+    return {"results": results}
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--fixtures", type=Path, default=DEFAULT_FIXTURES)
+    ap.add_argument("--steps", type=Path, help="Run one produced .steps.json file")
+    ap.add_argument("--steps-dir", type=Path, help="Run all *.steps.json files in a produced steps directory")
     ap.add_argument("--index", type=Path, default=DEFAULT_INDEX)
     ap.add_argument("--library", type=Path, default=DEFAULT_LIBRARY)
     ap.add_argument("--backend", choices=["stub", "openai"], default="stub")
@@ -379,7 +406,14 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--confidence-floor", type=float, default=0.0)
     ap.add_argument("--exclude-patterns", default="")
     args = ap.parse_args(argv)
-    payload = run_fixture_dir(args)
+    if args.steps and args.steps_dir:
+        ap.error("--steps and --steps-dir are mutually exclusive")
+    if args.steps:
+        payload = run_steps_paths(args, [args.steps])
+    elif args.steps_dir:
+        payload = run_steps_paths(args, list(args.steps_dir.glob("*.steps.json")))
+    else:
+        payload = run_fixture_dir(args)
     print(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
     return 0
 

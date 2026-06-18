@@ -113,3 +113,33 @@ showing the closed seam, and the chosen output-dir path. Append findings to this
   must stand alone, CPU-only.
 - **Re-segmenting the APM proofs** — their hand-built fixtures stay authoritative.
 - **CAS-SEL/CAS-CERT logic changes** — they're built; this only feeds them.
+
+## Findings — codex-1, 2026-06-18
+
+Implemented `scripts/cas_segment.py` as a deterministic IATC EDN graph to CAS-SEL
+steps producer. It parses with `r2d_concept_coverage.load_edn`, emits one step
+per inference edge plus setup steps for nodes that are not edge conclusions, sorts
+by source lines, and re-ids contiguously as `s1..sN`. Edge steps resolve node ids
+to node prose and skip missing-warrant placeholders, so the output is math prose
+rather than `rung3_residue_spike` debug strings.
+
+Output directory chosen and wired: `data/cas-select-steps/loop-run-70b/`.
+Generated steps for the 9 committed `loop-run-70b` graphs. For `0709.0248`, the
+segmenter emits 6 steps and `cas_select.py --backend stub --steps
+data/cas-select-steps/loop-run-70b/0709.0248.steps.json` runs without error
+(`topology=[]`, 6 thin induce rows under stub/no oracle).
+
+Wiring:
+
+- `cas_select.py` now accepts additive `--steps <file>` and `--steps-dir <dir>`
+  inputs; the existing fixture default is unchanged.
+- `pipeline_witness.py --plan` now includes `5b.cas_segment` producing
+  `proof-steps`, and `6.cas_select` is `built` with no unmet inputs.
+- `pipeline_witness.py --witness 0709.0248` reports `5b.cas_segment` PASS,
+  `6.cas_select` PASS, and `SEAM GAPS: none`.
+
+Gates passed:
+
+- `python3 -m py_compile scripts/cas_segment.py scripts/cas_select.py scripts/pipeline_witness.py`
+- `pytest -q tests/test_cas_segment.py tests/test_cas_select.py` (`9` passed)
+- `pytest -q` (`825` passed, `38` skipped)

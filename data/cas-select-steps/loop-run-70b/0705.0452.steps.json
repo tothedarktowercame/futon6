@@ -1,0 +1,45 @@
+{
+  "paper_id": "0705.0452",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "smooth manifold M."
+    },
+    {
+      "id": "s2",
+      "text": "Because equation id_x = (x,x) in Y^{[2]} for any x in Y, diagram of morphisms in upp{M}{pi} is commutative."
+    },
+    {
+      "id": "s3",
+      "text": "diagram of morphisms in upp{M}{pi} is commutative; therefore upp{M}{pi} is a groupoid."
+    },
+    {
+      "id": "s4",
+      "text": "equation id_x = (x,x) in Y^{[2]} for any x in Y."
+    },
+    {
+      "id": "s5",
+      "text": "morphism x in Y."
+    },
+    {
+      "id": "s6",
+      "text": "disjoint union Y of all two-fold intersections of objects."
+    },
+    {
+      "id": "s7",
+      "text": "path groupoid upp{M}{pi} of the covering Y."
+    },
+    {
+      "id": "s8",
+      "text": "Because upp{M}{pi} is a groupoid, functor R_{(triv,g)}: upp{M}{pi} -> T."
+    },
+    {
+      "id": "s9",
+      "text": "descent category trans{i}{Gr}{1} of the functor category funct(M)."
+    },
+    {
+      "id": "s10",
+      "text": "object (triv,g) in trans{i}{Gr}{1}."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "paper_id": "0706.1286",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "Cat-like bicategories."
+    },
+    {
+      "id": "s2",
+      "text": "Cat-like bicategories; therefore equivalence for Cat-like bicategories is fine."
+    },
+    {
+      "id": "s3",
+      "text": "CalMod-like bicategories."
+    },
+    {
+      "id": "s4",
+      "text": "CalMod-like bicategories; therefore equivalence for CalMod-like bicategories ought to include ring isomorphisms."
+    },
+    {
+      "id": "s5",
+      "text": "equivalence for CalMod-like bicategories ought to include ring isomorphisms; therefore problem of describing equivalence for CalMod-like bicategories."
+    },
+    {
+      "id": "s6",
+      "text": "problem of describing equivalence for CalMod-like bicategories; therefore equivalence issue arose in [19.3.5]{pht}."
+    },
+    {
+      "id": "s7",
+      "text": "equivalence issue arose in [19.3.5]{pht}; therefore similar equivalence problems arise in other situations."
+    }
+  ]
+}

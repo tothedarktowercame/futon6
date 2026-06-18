@@ -1,0 +1,41 @@
+{
+  "paper_id": "0708.2067",
+  "steps": [
+    {
+      "id": "s1",
+      "text": "combinatorial model category with weak equivalences W."
+    },
+    {
+      "id": "s2",
+      "text": "lemma smith-beke."
+    },
+    {
+      "id": "s3",
+      "text": "X-small set of generating cofibrations with cofibrant domains; therefore an X-combinatorial model X-category C is X-tractable if and only if the X-small set I of generating cofibrations can be chosen with cofibrant domains."
+    },
+    {
+      "id": "s4",
+      "text": "X-small set of generating cofibrations with cofibrant domains."
+    },
+    {
+      "id": "s5",
+      "text": "X-small set of trivial cofibrations."
+    },
+    {
+      "id": "s6",
+      "text": "lemma dense J."
+    },
+    {
+      "id": "s7",
+      "text": "combinatorial model category with weak equivalences W."
+    },
+    {
+      "id": "s8",
+      "text": "any commutative square."
+    },
+    {
+      "id": "s9",
+      "text": "any commutative square; therefore an X-combinatorial model X-category C is X-tractable if and only if the X-small set I of generating cofibrations can be chosen with cofibrant domains."
+    }
+  ]
+}
