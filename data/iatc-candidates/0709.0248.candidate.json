@@ -24,6 +24,59 @@
     "(definiendum) definiendum #0: $p$",
     "(definiens) definiens #0: reflexivity term"
   ],
+  "enrichment": [
+    {
+      "line": 1510,
+      "kind": "env/proposition",
+      "tip": "env/proposition \u00b7 "
+    },
+    {
+      "line": 1511,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:every | symbol:\\mathcal{C}"
+    },
+    {
+      "line": 1514,
+      "kind": "env/proof",
+      "tip": "env/proof \u00b7 "
+    },
+    {
+      "line": 1515,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 reduction: it suffices to show"
+    },
+    {
+      "line": 1519,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:any | symbol:a,b:A"
+    },
+    {
+      "line": 1519,
+      "kind": "symbol-grounded",
+      "tip": "a : A_{n}\\to<150>A"
+    },
+    {
+      "line": 1519,
+      "kind": "symbol-grounded",
+      "tip": "A : global section $1\\to<150>A$ of the object"
+    },
+    {
+      "line": 1519,
+      "kind": "symbol-grounded",
+      "tip": "p : reflexivity term"
+    },
+    {
+      "line": 1519,
+      "kind": "symbol-grounded",
+      "tip": "A : global section $1\\to<150>A$ of the object"
+    },
+    {
+      "line": 1519,
+      "kind": "symbol-grounded",
+      "tip": "a : A_{n}\\to<150>A"
+    }
+  ],
   "source-window": "Under the general interpretation in\nlocally cartesian closed categories\nsketched above the reflection rule is always valid.\n\\begin{proposition}\n  In the standard interpretation given above, every locally cartesian\n  closed category $\\mathcal{C}$ is extensional. \n\\end{proposition}\n\\begin{proof}\n  Note that it suffices to consider\n  ``parameterized'' versions of the rules governing identity types.\n  I.e., the rules given above\n  are equivalent, by the structural rules of the theory, to the rules\n  obtained by replacing any terms $a,b:A$ and $p:\\id{A}(a,b)$ by\n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0709.0248-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0709.0248-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }

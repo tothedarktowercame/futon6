@@ -24,6 +24,259 @@
     "(definiendum) definiendum #0: $\\mate{a}$",
     "(definiens) definiens #0: Yoneda-$\\V$-functor\n\\[\n\\yoneda"
   ],
+  "enrichment": [
+    {
+      "line": 386,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 symbol:\\yoneda | type:X\\to\\hat{X}"
+    },
+    {
+      "line": 386,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:\\yoneda:X\\to\\hat{X}"
+    },
+    {
+      "line": 386,
+      "kind": "symbol-grounded",
+      "tip": "X : usual opposite $\\V$-category"
+    },
+    {
+      "line": 386,
+      "kind": "symbol-grounded",
+      "tip": "X : usual opposite $\\V$-category"
+    },
+    {
+      "line": 389,
+      "kind": "label",
+      "tip": "label LsepV \u00b7 names subsection"
+    },
+    {
+      "line": 390,
+      "kind": "bind/define",
+      "tip": "bind/define \u00b7 description:The full subcategory of $\\Cat{\\V}$ consisting of all L-separated $\\V$- | symbol:\\CatSep{\\V}"
+    },
+    {
+      "line": 390,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 symbol:f,g | type:Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 symbol:f,g | type:Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 symbol:x | type:E\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:f,g:Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:f,g:Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:x:E\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:f\\cong g"
+    },
+    {
+      "line": 390,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:f^*=g^*"
+    },
+    {
+      "line": 390,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:f_*=g_*"
+    },
+    {
+      "line": 390,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:f\\cong g"
+    },
+    {
+      "line": 390,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:f=g"
+    },
+    {
+      "line": 390,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:Z=E"
+    },
+    {
+      "line": 390,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:x\\in X"
+    },
+    {
+      "line": 390,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:f_*=g_*"
+    },
+    {
+      "line": 390,
+      "kind": "constrain/such-that",
+      "tip": "constrain/such-that \u00b7 membership:x\\in X"
+    },
+    {
+      "line": 390,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 hedge adverb"
+    },
+    {
+      "line": 390,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 reduction: it suffices to show"
+    },
+    {
+      "line": 390,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:all | symbol:\\V"
+    },
+    {
+      "line": 390,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:all | symbol:f,g:Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "X : usual opposite $\\V$-category"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "X : \\emph{L-separated} if $f\\cong g$ implies $f=g$"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "X : \\emph{L-separated} if $f\\cong g$ implies $f=g$"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "E : singleton set"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "x : E\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "E : singleton set"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "X : \\emph{L-separated} if $f\\cong g$ implies $f=g$"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "x : E\\to X"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "X : \\emph{L-separated} if $f\\cong g$ implies $f=g$"
+    },
+    {
+      "line": 390,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 392,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 392,
+      "kind": "symbol-grounded",
+      "tip": "x : E\\to X"
+    },
+    {
+      "line": 392,
+      "kind": "symbol-grounded",
+      "tip": "f : Z\\to X"
+    },
+    {
+      "line": 392,
+      "kind": "symbol-grounded",
+      "tip": "x : E\\to X"
+    },
+    {
+      "line": 392,
+      "kind": "symbol-grounded",
+      "tip": "x : E\\to X"
+    },
+    {
+      "line": 392,
+      "kind": "symbol-grounded",
+      "tip": "x : E\\to X"
+    }
+  ],
   "source-window": "$\\yoneda:X\\to\\hat{X}$ is fully faithful.\n\\end{corollary}\n\n\\subsection{L-separation}\\label{LsepV}\nFor $\\V$-functors $f,g:Z\\to X$ we write $f\\cong g$ if $f\\le g$ and $g\\le f$; equivalently, if $f^*=g^*$, or $f_*=g_*$. We call $X$ \\emph{L-separated} if $f\\cong g$ implies $f=g$, for all $f,g:Z\\to X$. The full subcategory of $\\Cat{\\V}$ consisting of all L-separated $\\V$-categories is denoted by $\\CatSep{\\V}$. Obviously, it suffices to consider $Z=E$ (the $\\otimes$-neutral object) here: writing $x:E\\to X$ in $\\Cat{\\V}$ instead of $x\\in X$, we just note that $f_*=g_*$ implies\n\\[\n(f\\cdot x)_*=f_*\\cdot x_*=g_*\\cdot x_*=(g\\cdot x)_*.\n\\]\nThis proves the equivalence of (i),(ii) of the following proposition.\n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0801.0199-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0801.0199-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }

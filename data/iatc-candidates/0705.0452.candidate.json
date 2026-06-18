@@ -24,6 +24,104 @@
     "(bind/let) bind/let \u00b7 symbol:\\mathrm{Gr} | type:a Lie groupoid and let",
     "(bind/let) bind/let \u00b7 symbol:us | type:the set of such paths by $PM$"
   ],
+  "enrichment": [
+    {
+      "line": 1290,
+      "kind": "symbol-grounded",
+      "tip": "M : smooth manifold"
+    },
+    {
+      "line": 1293,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:\\overline{\\id_x}\r\n= (x,x)\\in Y^{[2]}"
+    },
+    {
+      "line": 1293,
+      "kind": "constrain/such-that",
+      "tip": "constrain/such-that \u00b7 membership:\\overline{\\id_x}\r\n= (x,x)\\in Y^{[2]}"
+    },
+    {
+      "line": 1293,
+      "kind": "symbol-grounded",
+      "tip": "x : morphism $t'(x) \\circ \\alpha(\\pi(x)) \\circ t(x)^{-"
+    },
+    {
+      "line": 1294,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:x\\in Y"
+    },
+    {
+      "line": 1294,
+      "kind": "constrain/such-that",
+      "tip": "constrain/such-that \u00b7 membership:x\\in Y"
+    },
+    {
+      "line": 1294,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:any | symbol:x\\in Y"
+    },
+    {
+      "line": 1294,
+      "kind": "symbol-grounded",
+      "tip": "x : morphism $t'(x) \\circ \\alpha(\\pi(x)) \\circ t(x)^{-"
+    },
+    {
+      "line": 1294,
+      "kind": "symbol-grounded",
+      "tip": "x : morphism $t'(x) \\circ \\alpha(\\pi(x)) \\circ t(x)^{-"
+    },
+    {
+      "line": 1294,
+      "kind": "symbol-grounded",
+      "tip": "Y : disjoint union of all two-fold\r\nintersections of o"
+    },
+    {
+      "line": 1294,
+      "kind": "symbol-grounded",
+      "tip": "x : quantified variable (for all/every/some)"
+    },
+    {
+      "line": 1294,
+      "kind": "symbol-grounded",
+      "tip": "Y : disjoint union of all two-fold\r\nintersections of o"
+    },
+    {
+      "line": 1298,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 deferred verification: \u201cit is clear that\u201d"
+    },
+    {
+      "line": 1301,
+      "kind": "label",
+      "tip": "label def13 \u00b7 names definition"
+    },
+    {
+      "line": 1302,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 symbol:, we have a functor\r\n\\begin{equation*}\r\nR_{(\\mathrm{triv},g)} | type:\\upp{M}{\\pi} \\to T\r\n\\end{equation*}\r\nthat sends  an object"
+    },
+    {
+      "line": 1302,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:, we have a functor\r\n\\begin{equation*}\r\nR_{(\\mathrm{triv},g)}: \\upp{M}"
+    },
+    {
+      "line": 1302,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 symbol:(\\mathrm{triv},g) | domain:\\trans{i}{\\mathrm{Gr}}{1}"
+    },
+    {
+      "line": 1302,
+      "kind": "symbol-grounded",
+      "tip": "g : \\begin{equation*}\r\n  g"
+    },
+    {
+      "line": 1302,
+      "kind": "symbol-grounded",
+      "tip": "i : \\mathrm{Gr} \\to T"
+    }
+  ],
   "source-window": "of morphisms in $\\upp{M}{\\pi}$ is commutative.\r\n\\item[(3)]\r\nwe impose the equation\r\n$\\overline{\\id_x}\r\n= (x,x)\\in Y^{[2]}$ for any $x\\in Y$.\r\n\\end{enumerate}\r\n\\end{definition}\r\n\r\nIt is clear that this definition  indeed gives a groupoid. It is important for us because it\r\nprovides   the two following natural definitions.\r\n\\begin{definition}\r\n\\label{def13}\r\nFor an object $(\\mathrm{triv},g)$ in $\\trans{i}{\\mathrm{Gr}}{1}$, we have a functor\r\n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0705.0452-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0705.0452-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }

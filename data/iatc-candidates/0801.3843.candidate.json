@@ -24,6 +24,304 @@
     "(bind/let) bind/let \u00b7 symbol:c\\in H^4(BG,\\QQ)\n= \\QQ | type:the transgression of the generator",
     "(bind/let) bind/let \u00b7 symbol:us | type:this by $\\String(G)$"
   ],
+  "enrichment": [
+    {
+      "line": 643,
+      "kind": "symbol-grounded",
+      "tip": "s : source and target maps"
+    },
+    {
+      "line": 643,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 643,
+      "kind": "symbol-grounded",
+      "tip": "t : map"
+    },
+    {
+      "line": 643,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 643,
+      "kind": "symbol-grounded",
+      "tip": "t : map"
+    },
+    {
+      "line": 643,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 645,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:t \\maps\n\\Mor(\\G) \\to \\Ob(\\G)"
+    },
+    {
+      "line": 645,
+      "kind": "symbol-grounded",
+      "tip": "t : target map"
+    },
+    {
+      "line": 646,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:t\\maps H\\to G"
+    },
+    {
+      "line": 646,
+      "kind": "symbol-grounded",
+      "tip": "t : homomorphism"
+    },
+    {
+      "line": 646,
+      "kind": "symbol-grounded",
+      "tip": "H : such\ngroup there is an isomorphism"
+    },
+    {
+      "line": 646,
+      "kind": "symbol-grounded",
+      "tip": "G : topological group"
+    },
+    {
+      "line": 647,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:any | symbol:H \\subseteq \\Mor(\\G)"
+    },
+    {
+      "line": 648,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:H \\subseteq \\Mor(\\G)"
+    },
+    {
+      "line": 648,
+      "kind": "symbol-grounded",
+      "tip": "H : restriction of the second to $H \\subseteq \\Mor(\\G)"
+    },
+    {
+      "line": 649,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:g \\in \\Ob(G)"
+    },
+    {
+      "line": 649,
+      "kind": "constrain/such-that",
+      "tip": "constrain/such-that \u00b7 membership:g \\in \\Ob(G)"
+    },
+    {
+      "line": 649,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 649,
+      "kind": "symbol-grounded",
+      "tip": "G : topological group"
+    },
+    {
+      "line": 650,
+      "kind": "symbol-grounded",
+      "tip": "i : map"
+    },
+    {
+      "line": 650,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 650,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 652,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 652,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 652,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 652,
+      "kind": "symbol-grounded",
+      "tip": "t : homomorphism"
+    },
+    {
+      "line": 652,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 652,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "t : homomorphism"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "t : homomorphism"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "t : homomorphism"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 653,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 655,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 655,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 655,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 655,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 655,
+      "kind": "symbol-grounded",
+      "tip": "t : homomorphism"
+    },
+    {
+      "line": 655,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 655,
+      "kind": "symbol-grounded",
+      "tip": "h : morphism"
+    },
+    {
+      "line": 655,
+      "kind": "symbol-grounded",
+      "tip": "g : $$i(g) = (1"
+    },
+    {
+      "line": 656,
+      "kind": "definiendum",
+      "tip": "definiendum #0: $\\G$"
+    },
+    {
+      "line": 656,
+      "kind": "definiens",
+      "tip": "definiens #0: $2$-group \u00b7 group [nnexus:group]"
+    },
+    {
+      "line": 656,
+      "kind": "let-binder",
+      "tip": "binds $\\G$ : $2$-group \u00b7 concept: group [nnexus:group]"
+    },
+    {
+      "line": 656,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 deferred verification: \u201ceasy to see\u201d"
+    },
+    {
+      "line": 658,
+      "kind": "symbol-grounded",
+      "tip": "G : crossed module"
+    },
+    {
+      "line": 658,
+      "kind": "symbol-grounded",
+      "tip": "H : restriction of the second to $H \\subseteq \\Mor(\\G)"
+    },
+    {
+      "line": 658,
+      "kind": "symbol-grounded",
+      "tip": "t : homomorphism"
+    },
+    {
+      "line": 658,
+      "kind": "symbol-grounded",
+      "tip": "G : crossed module"
+    },
+    {
+      "line": 658,
+      "kind": "symbol-grounded",
+      "tip": "H : restriction of the second to $H \\subseteq \\Mor(\\G)"
+    },
+    {
+      "line": 659,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:\\ker(s)\\subset \\Mor(\\G)"
+    },
+    {
+      "line": 659,
+      "kind": "symbol-grounded",
+      "tip": "s : source and target maps"
+    },
+    {
+      "line": 660,
+      "kind": "symbol-grounded",
+      "tip": "t : homomorphism"
+    }
+  ],
   "source-window": "s(h,g) = g\\qquad \\text{and}\\qquad t(h,g) = t(h)g \n$$ \n(Denoting both the target map $t \\maps\n\\Mor(\\G) \\to \\Ob(\\G)$ and the homomorphism $t\\maps H\\to G$ by\nthe same letter should not cause any problems, since the first\nis the restriction of the second to $H \\subseteq \\Mor(\\G)$.)\nThe identity morphism of an object $g \\in \\Ob(G)$ is defined by\n$$i(g) = (1,g). $$\nFinally, the composite of the morphisms \n$$\\alpha = (h,g) \\maps g \\to t(h)g \\qquad \\text{and}\\qquad\n\\beta = (h',t(h)g) \\maps t(h)g \\to t(h'h)g'$$ \nis defined to be\n$$ \\beta \\circ \\alpha =  (h'h, g) \\maps g \\to t(h'h) g $$\nIt is easy to check that with these definitions, $\\G$ is a $2$-group.  \nConversely, given a topological $2$-group $\\G$, we define a crossed module \n$(G,H,t,\\a)$ by setting $G$ to be $\\Ob(\\G)$, $H$ to be \n$\\ker(s)\\subset \\Mor(\\G)$, \n$t$ to be the restriction of the target homomorphism \n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0801.3843-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0801.3843-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }

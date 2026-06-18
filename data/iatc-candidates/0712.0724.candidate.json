@@ -24,6 +24,194 @@
     "(bind/let) bind/let \u00b7 symbol:I \\colon \\J \\to \\C^\\mathbf 2 | type:an object of",
     "(bind/let) bind/let \u00b7 symbol:\\C | type:a category | canon:category [nnexus:category]"
   ],
+  "enrichment": [
+    {
+      "line": 884,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:\\phi(a, hs, kt) = \\phi(a', h, k) \\circ t"
+    },
+    {
+      "line": 884,
+      "kind": "symbol-grounded",
+      "tip": "a : mapping which to each object"
+    },
+    {
+      "line": 884,
+      "kind": "symbol-grounded",
+      "tip": "a : mapping which to each object"
+    },
+    {
+      "line": 884,
+      "kind": "symbol-grounded",
+      "tip": "h : square \\eqref{fillinsquare} as a map"
+    },
+    {
+      "line": 885,
+      "kind": "definiendum",
+      "tip": "definiendum #0: $(g', \\phi')$"
+    },
+    {
+      "line": 885,
+      "kind": "definiens",
+      "tip": "definiens #0: morphism\n$(u \u00b7 morphism [nnexus:morphism]"
+    },
+    {
+      "line": 885,
+      "kind": "let-binder",
+      "tip": "binds $(g', \\phi')$ : morphism\n$(u \u00b7 concept: morphism [nnexus:morphism]"
+    },
+    {
+      "line": 885,
+      "kind": "symbol-grounded",
+      "tip": "g : morphism of $\\C$"
+    },
+    {
+      "line": 885,
+      "kind": "symbol-grounded",
+      "tip": "g : morphism"
+    },
+    {
+      "line": 886,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:(u, v) \\colon g \\to g'"
+    },
+    {
+      "line": 886,
+      "kind": "symbol-grounded",
+      "tip": "u : morphism"
+    },
+    {
+      "line": 886,
+      "kind": "symbol-grounded",
+      "tip": "g : morphism"
+    },
+    {
+      "line": 886,
+      "kind": "symbol-grounded",
+      "tip": "g : morphism"
+    },
+    {
+      "line": 887,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:u \\circ \\phi(a,\nh, k) = \\phi'(a, uh, vk)"
+    },
+    {
+      "line": 887,
+      "kind": "symbol-grounded",
+      "tip": "u : morphism"
+    },
+    {
+      "line": 887,
+      "kind": "symbol-grounded",
+      "tip": "a : mapping which to each object"
+    },
+    {
+      "line": 888,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:all | symbol:a"
+    },
+    {
+      "line": 888,
+      "kind": "symbol-grounded",
+      "tip": "h : square \\eqref{fillinsquare} as a map"
+    },
+    {
+      "line": 888,
+      "kind": "symbol-grounded",
+      "tip": "a : mapping which to each object"
+    },
+    {
+      "line": 888,
+      "kind": "symbol-grounded",
+      "tip": "a : evide"
+    },
+    {
+      "line": 888,
+      "kind": "symbol-grounded",
+      "tip": "h : square \\eqref{fillinsquare} as a map"
+    },
+    {
+      "line": 889,
+      "kind": "definiendum",
+      "tip": "definiendum #0: $\\C^\\mathbf 2$"
+    },
+    {
+      "line": 889,
+      "kind": "definiens",
+      "tip": "definiens #0: evident\nforgetful functor"
+    },
+    {
+      "line": 889,
+      "kind": "let-binder",
+      "tip": "binds $\\C^\\mathbf 2$ : evident\nforgetful functor"
+    },
+    {
+      "line": 894,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:F \\colon \\A \\to \\B"
+    },
+    {
+      "line": 894,
+      "kind": "symbol-grounded",
+      "tip": "F : functor"
+    },
+    {
+      "line": 895,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:F^\\pitchfork \\colon \\B^\\pitchfork \\to \\A^\\pitchfork"
+    },
+    {
+      "line": 895,
+      "kind": "symbol-grounded",
+      "tip": "F : map"
+    },
+    {
+      "line": 896,
+      "kind": "symbol-grounded",
+      "tip": "c : object"
+    },
+    {
+      "line": 897,
+      "kind": "symbol-grounded",
+      "tip": "c : object"
+    },
+    {
+      "line": 897,
+      "kind": "symbol-grounded",
+      "tip": "F : map"
+    },
+    {
+      "line": 901,
+      "kind": "symbol-grounded",
+      "tip": "g : morphism"
+    },
+    {
+      "line": 903,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 deferred verification: \u201ceasy to see\u201d"
+    },
+    {
+      "line": 904,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:U \\colon \\A \\to \\C^\\mathbf 2"
+    },
+    {
+      "line": 904,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:V \\colon \\B \\to\n\\C^\\mathbf 2"
+    },
+    {
+      "line": 904,
+      "kind": "symbol-grounded",
+      "tip": "U : morphism\n\\begin{equation*}\n    \\cd{\n        A\n    "
+    },
+    {
+      "line": 905,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:, we may identify both\n\\begin{equation*}\n    \\text{functors } \\A \\to {"
+    }
+  ],
   "source-window": "of $\\C^\\mathbf 2$, then we have $\\phi(a, hs, kt) = \\phi(a', h, k) \\circ t$. A\nmorphism of $\\A^\\pitchfork$ from $(g, \\phi)$ to $(g', \\phi')$ is a morphism\n$(u, v) \\colon g \\to g'$ of $\\C^\\mathbf 2$ which respects the choice of\nliftings in $\\phi$ and $\\phi'$, in the sense that the equation $u \\circ \\phi(a,\nh, k) = \\phi'(a, uh, vk)$ holds for all suitable $a$, $h$ and $k$. The functor\nexhibiting $\\A^\\pitchfork$ as a category over $\\C^\\mathbf 2$ is the evident\nforgetful functor.\n\nThis defines $(\\thg)^\\pitchfork$ on objects of $\\cat{CAT}/\\C^\\mathbf 2$; and to\nextend this definition to morphisms, we consider a further category $\\B$ over\n$\\C^\\mathbf 2$ and a functor $F \\colon \\A \\to \\B$ over $\\C^\\mathbf 2$: from\nwhich we obtain a map $F^\\pitchfork \\colon \\B^\\pitchfork \\to \\A^\\pitchfork$\nover $\\C^\\mathbf 2$ by sending the object $(c, \\phi(\\thg, \\mathord \\ast,\n\\mathord ?))$ of $\\B^\\pitchfork$ to the object $(c, \\phi(F(\\thg), \\mathord\n\\ast, \\mathord ?))$ of $\\A^\\pitchfork$.\n\nWe define the functor ${}^\\pitchfork(\\thg)$ in the same way as\n$(\\thg)^\\pitchfork$, but with $Ua$ and $g$ swapped around in equation\n\\eqref{fillin2}. It remains only to exhibit the adjointness\n${}^\\pitchfork(\\thg) \\dashv (\\thg)^\\pitchfork$: for which it is easy to see\nthat, given categories $U \\colon \\A \\to \\C^\\mathbf 2$ and $V \\colon \\B \\to\n\\C^\\mathbf 2$ over $\\C^\\mathbf 2$, we may identify both\n\\begin{equation*}\n    \\text{functors } \\A \\to {}^\\pitchfork \\B \\qquad \\text{and} \\qquad \\text{functors } \\B \\to \\A^\\pitchfork\n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0712.0724-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0712.0724-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }

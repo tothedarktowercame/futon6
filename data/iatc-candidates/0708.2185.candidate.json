@@ -24,6 +24,229 @@
     "(definiens) definiens #0: $\\lambda$-directed colimit of objects from $\\ca$",
     "(bind/let) bind/let \u00b7 symbol:\\ck | type:an accessible category"
   ],
+  "enrichment": [
+    {
+      "line": 176,
+      "kind": "env/proof",
+      "tip": "env/proof \u00b7 "
+    },
+    {
+      "line": 177,
+      "kind": "cite",
+      "tip": "\\cite \u2192 AR (bibliography)"
+    },
+    {
+      "line": 179,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:i\\in I"
+    },
+    {
+      "line": 179,
+      "kind": "constrain/such-that",
+      "tip": "constrain/such-that \u00b7 membership:i\\in I"
+    },
+    {
+      "line": 179,
+      "kind": "symbol-grounded",
+      "tip": "i : cl_-script : set"
+    },
+    {
+      "line": 180,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:i\\in I"
+    },
+    {
+      "line": 180,
+      "kind": "constrain/such-that",
+      "tip": "constrain/such-that \u00b7 membership:i\\in I"
+    },
+    {
+      "line": 180,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:all | symbol:\\cl_i"
+    },
+    {
+      "line": 180,
+      "kind": "symbol-grounded",
+      "tip": "i : cl_-script : set"
+    },
+    {
+      "line": 181,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 WLOG / symmetry reduction"
+    },
+    {
+      "line": 182,
+      "kind": "bind/let",
+      "tip": "bind/let \u00b7 symbol:D_i:\\cd_i\\to\\cl_i | type:the pullback\nof"
+    },
+    {
+      "line": 182,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 symbol:D | type:\\cd\\to\\cl"
+    },
+    {
+      "line": 182,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 symbol:D_i | type:\\cd_i\\to\\cl_i"
+    },
+    {
+      "line": 182,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:\\card I<\\lambda"
+    },
+    {
+      "line": 182,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:D:\\cd\\to\\cl"
+    },
+    {
+      "line": 182,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:D_i:\\cd_i\\to\\cl_i"
+    },
+    {
+      "line": 182,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:\\card I<\\lambda"
+    },
+    {
+      "line": 182,
+      "kind": "definiendum",
+      "tip": "definiendum #0: $D_i:\\cd_i\\to\\cl_i$"
+    },
+    {
+      "line": 182,
+      "kind": "definiens",
+      "tip": "definiens #0: pullback\nof $D$ with the inclusion $\\cl_i\\to\\cl$"
+    },
+    {
+      "line": 182,
+      "kind": "let-binder",
+      "tip": "binds $D_i:\\cd_i\\to\\cl_i$ : pullback\nof $D$ with the inclusion $\\cl_i\\to\\cl$"
+    },
+    {
+      "line": 182,
+      "kind": "symbol-grounded",
+      "tip": "D : \\cd\\to\\cl"
+    },
+    {
+      "line": 182,
+      "kind": "symbol-grounded",
+      "tip": "D : \\cd_i\\to\\cl_i"
+    },
+    {
+      "line": 182,
+      "kind": "symbol-grounded",
+      "tip": "i : D_-script : \\cd_i\\to\\cl_i"
+    },
+    {
+      "line": 182,
+      "kind": "symbol-grounded",
+      "tip": "i : cl_-script : set"
+    },
+    {
+      "line": 183,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:\\cl_i\\to\\cl"
+    },
+    {
+      "line": 183,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:i\\in I"
+    },
+    {
+      "line": 183,
+      "kind": "constrain/such-that",
+      "tip": "constrain/such-that \u00b7 membership:i\\in I"
+    },
+    {
+      "line": 183,
+      "kind": "symbol-grounded",
+      "tip": "D : \\cd_i\\to\\cl_i"
+    },
+    {
+      "line": 183,
+      "kind": "symbol-grounded",
+      "tip": "i : cl_-script : set"
+    },
+    {
+      "line": 183,
+      "kind": "symbol-grounded",
+      "tip": "i : o"
+    },
+    {
+      "line": 183,
+      "kind": "symbol-grounded",
+      "tip": "i : o"
+    },
+    {
+      "line": 184,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:d_i\\downarrow\\cd_i=\\emptyset"
+    },
+    {
+      "line": 184,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:each | symbol:i\\in I"
+    },
+    {
+      "line": 184,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:each | symbol:i\\in I"
+    },
+    {
+      "line": 184,
+      "kind": "symbol-grounded",
+      "tip": "d : object"
+    },
+    {
+      "line": 184,
+      "kind": "symbol-grounded",
+      "tip": "i : o"
+    },
+    {
+      "line": 184,
+      "kind": "symbol-grounded",
+      "tip": "d : object"
+    },
+    {
+      "line": 184,
+      "kind": "symbol-grounded",
+      "tip": "i : o"
+    },
+    {
+      "line": 184,
+      "kind": "symbol-grounded",
+      "tip": "i : o"
+    },
+    {
+      "line": 185,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:\\card I<\\lambda"
+    },
+    {
+      "line": 185,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:i\\in I"
+    },
+    {
+      "line": 185,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:\\card I<\\lambda"
+    },
+    {
+      "line": 185,
+      "kind": "constrain/such-that",
+      "tip": "constrain/such-that \u00b7 membership:i\\in I"
+    },
+    {
+      "line": 185,
+      "kind": "symbol-grounded",
+      "tip": "i : quantified variable (for all/every/some)"
+    }
+  ],
   "source-window": "\\begin{proof}\nBy \\cite{AR}, 2.36, a full subcategory of $\\ck$ is accessible and accessibly embedded if and only if it is closed\nunder $\\lambda$-directed colimits and $\\lambda$-pure subobjects for some regular cardinal $\\lambda$. Thus, given a set\n$\\cl_i$, $i\\in I$ of accessible and accessibly embedded subcategories of $\\ck$, there is a regular cardinal $\\lambda$\nsuch that all $\\cl_i$, $i\\in I$ are closed under $\\lambda$-directed colimits and $\\lambda$-pure subobjects. Then their\nunion $\\cl$ is closed under $\\lambda$-pure subobjects as well. Without loss of generality, we can assume that\n$\\card I<\\lambda$. Consider a $\\lambda$-directed diagram $D:\\cd\\to\\cl$. Let $D_i:\\cd_i\\to\\cl_i$ be the pullback\nof $D$ with the inclusion $\\cl_i\\to\\cl$. There is $i\\in I$ such that the embedding of $\\cd_i$ to $\\cd$ is cofinal. \nIn fact, assuming the contrary, there is an object $d_i$ in $\\cd$ with $d_i\\downarrow\\cd_i=\\emptyset$, for each\r\n$i\\in I$, which contradicts to $\\card I<\\lambda$. Consequently, $\\cl$ is closed under $\\lambda$-directed colimits \r\n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0708.2185-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0708.2185-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }

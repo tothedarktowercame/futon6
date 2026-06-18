@@ -24,6 +24,69 @@
     "(definiens) definiens #0: inverse \nequivalence of $s$",
     "(bind/let) bind/let \u00b7 symbol:(p_i\\f P\\ra X_i)_{i\\in I} | type:a product cone for"
   ],
+  "enrichment": [
+    {
+      "line": 679,
+      "kind": "symbol-grounded",
+      "tip": "S : second arrow \nfrom $(B"
+    },
+    {
+      "line": 680,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:s\\sigma=(\\sigma S)s"
+    },
+    {
+      "line": 680,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 reduction: it suffices to show"
+    },
+    {
+      "line": 680,
+      "kind": "symbol-grounded",
+      "tip": "S : second arrow \nfrom $(B"
+    },
+    {
+      "line": 681,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:(rS)s\\sigma=(rS)(\\sigma S)s"
+    },
+    {
+      "line": 681,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:(pS)s\\sigma=(pS)(\\sigma S)s"
+    },
+    {
+      "line": 681,
+      "kind": "symbol-grounded",
+      "tip": "S : second arrow \nfrom $(B"
+    },
+    {
+      "line": 681,
+      "kind": "symbol-grounded",
+      "tip": "S : second arrow \nfrom $(B"
+    },
+    {
+      "line": 683,
+      "kind": "bind/typed",
+      "tip": "bind/typed \u00b7 type:\\mu\\inv\\f(rS)s\\ra p"
+    },
+    {
+      "line": 683,
+      "kind": "constrain/relation",
+      "tip": "constrain/relation \u00b7 relation:\\mu\\inv\\f(rS)s\\ra p"
+    },
+    {
+      "line": 683,
+      "kind": "quant/universal",
+      "tip": "quant/universal \u00b7 quantifier:each | symbol:\\mu\\inv\\f(rS)s\\ra p"
+    },
+    {
+      "line": 683,
+      "kind": "symbol-grounded",
+      "tip": "p : product cone for $X$ and\nconsider the $J$-family o"
+    }
+  ],
   "source-window": "Before dealing with the further data for a braiding and the\nbraiding and syllepsis equations we will\nestablish the symmetry equation (\\ref{eleven}) directly from the\ndescriptions of $\\sigma$ and $\\sigma S$. To show that \n$s\\sigma=(\\sigma S)s$ it suffices to show that \n$(rS)s\\sigma=(rS)(\\sigma S)s$ and $(pS)s\\sigma=(pS)(\\sigma S)s$.\nWe show the first equality by showing equality of the pasting \ncomposites of each side with the invertible $\\mu\\inv\\f(rS)s\\ra p$.\nWe have:\n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0708.1921-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0708.1921-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }

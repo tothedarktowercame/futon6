@@ -24,6 +24,79 @@
     "(definiendum) definiendum #0: $I$",
     "(definiens) definiens #0: $\\XX$-small set of generating cofibrations with cofibrant do"
   ],
+  "enrichment": [
+    {
+      "line": 389,
+      "kind": "env/corollary",
+      "tip": "env/corollary \u00b7 "
+    },
+    {
+      "line": 392,
+      "kind": "env/corollary",
+      "tip": "env/corollary \u00b7 "
+    },
+    {
+      "line": 392,
+      "kind": "label",
+      "tip": "label cor:tractislefttract \u00b7 names cor"
+    },
+    {
+      "line": 392,
+      "kind": "symbol-grounded",
+      "tip": "I : small set"
+    },
+    {
+      "line": 393,
+      "kind": "assume/explicit",
+      "tip": "assume/explicit \u00b7 condition:I"
+    },
+    {
+      "line": 393,
+      "kind": "assume/explicit",
+      "tip": "assume/explicit \u00b7 condition:$I$ is an $\\XX$-small set of generating cofibrations with cofibrant do"
+    },
+    {
+      "line": 393,
+      "kind": "definiendum",
+      "tip": "definiendum #0: $I$"
+    },
+    {
+      "line": 393,
+      "kind": "definiens",
+      "tip": "definiens #0: $\\XX$-small set of generating cofibrations with cofibrant do"
+    },
+    {
+      "line": 393,
+      "kind": "env/proof",
+      "tip": "env/proof \u00b7 "
+    },
+    {
+      "line": 393,
+      "kind": "let-binder",
+      "tip": "binds $I$ : $\\XX$-small set of generating cofibrations with cofibrant do"
+    },
+    {
+      "line": 393,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 reduction: it suffices to show"
+    },
+    {
+      "line": 393,
+      "kind": "symbol-grounded",
+      "tip": "I : $\\XX$-small set of generating cofibrations with co"
+    },
+    {
+      "line": 393,
+      "kind": "symbol-grounded",
+      "tip": "J : small set"
+    },
+    {
+      "line": 395,
+      "kind": "symbol-grounded",
+      "tip": "C : combinatorial model category with weak equivalence"
+    }
+  ],
   "source-window": "\\begin{cor} Any $\\XX$-combinatorial model $\\XX$-category satisfies the hypotheses of \\ref{lem_smith-beke}.\n\\end{cor}\n\n\\begin{cor}\\label{cor:tractislefttract} An $\\XX$-combinatorial model $\\XX$-category $\\CC$ is $\\XX$-tractable if and only if the $\\XX$-small set $I$ of generating cofibrations can be chosen with cofibrant domains.\n\\begin{proof} Suppose $I$ is an $\\XX$-small set of generating cofibrations with cofibrant domains, and suppose $J$ an $\\XX$-small set of trivial cofibrations satisfying the conditions of \\ref{lem:denseJ}. To give another such $\\XX$-small set of trivial cofibrations with cofibrant domains, it suffices to show that any commutative square\n\\begin{equation*}\n\\xymatrix@C=18pt@R=18pt{\nK\\ar[d]\\ar[r]&M\\ar[d]\\\\\nL\\ar[r]&N\n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0708.2067-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0708.2067-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }

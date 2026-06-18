@@ -24,6 +24,39 @@
     "(definiens) definiens #0: internal graph in the category of\nsmall graphs",
     "(bind/let) bind/let \u00b7 symbol:[m] | type:the partially ordered set | canon:partially ordered set [nnexus:partially ordered set]"
   ],
+  "enrichment": [
+    {
+      "line": 1118,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 hedge adverb"
+    },
+    {
+      "line": 1119,
+      "kind": "definiendum",
+      "tip": "definiendum #0: $C$"
+    },
+    {
+      "line": 1119,
+      "kind": "definiens",
+      "tip": "definiens #0: compatible arrangement consisting of two or more squares"
+    },
+    {
+      "line": 1119,
+      "kind": "let-binder",
+      "tip": "binds $C$ : compatible arrangement consisting of two or more squares"
+    },
+    {
+      "line": 1119,
+      "kind": "symbol-grounded",
+      "tip": "C : compatible arrangement consisting of two or more s"
+    },
+    {
+      "line": 1122,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 WLOG / symmetry reduction"
+    }
+  ],
   "source-window": "\\end{prop}\n\n\\begin{pf}\nWe argue by induction on the number of squares in the arrangement.\nThe statement is trivially true for arrangements consisting of a single square.\nNow let $C$ be a compatible arrangement consisting of two or more squares,\nwith an assignment into a double category $\\bbD$ which is composable by a sequence\nof horizontal and vertical compositions of squares.\nConsider the last composition used. Without loss of generality, assume that\n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0711.0473-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0711.0473-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }

@@ -11,6 +11,19 @@
     341
   ],
   "binder-context": [],
+  "enrichment": [
+    {
+      "line": 336,
+      "kind": "cite",
+      "tip": "\\cite \u2192 pht (bibliography)"
+    },
+    {
+      "line": 337,
+      "kind": "proof-move",
+      "tip": "informal proof move \u00b7 hedge adverb"
+    }
+  ],
   "source-window": "and $Y\\eqv FGY$.  This is fine for \\Cat-like bicategories, but for\n\\calMod-like bicategories, the right notion of equivalence ought to\ninclude something corresponding to ring isomorphisms instead.  This\nproblem arose in~\\cite[19.3.5]{pht}, where two \\calMod-like\nbicategories were clearly `equivalent', yet the language did not exist\nto describe what sort of equivalence was meant.\n\nSimilar problems arise in many other situations, such as the\nfollowing.\n",
-  "marks-path": "data/showcases/ct-anatomy/golden/fable-0706.1286-dp-emacs.json"
+  "marks-path": "data/showcases/ct-anatomy/golden/fable-0706.1286-dp-emacs.json",
+  "schema": "iatc-candidate/v2-enriched"
 }
