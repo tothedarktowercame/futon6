@@ -53,15 +53,23 @@ echo "GPUs visible: $NGPU (need TP=$TP)"
 
 echo "== CUDA toolkit (nvcc) detection =="
 EAGER_FLAGS=""
+# LIVE FINDING (2026-06-18, first real run on the StackScript box): the flashinfer
+# *sampler* JIT-compiles its CUDA kernels at engine startup, and that compile FAILS on
+# this toolchain — flashinfer 0.6.12's bundled cub header errors with
+#   class "cub::...BlockAdjacentDifference..." has no member "FlagHeads"
+# under the StackScript's CUDA 12.0 nvcc, so `ninja` fails and engine-core init dies.
+# nvcc being PRESENT does NOT mean the flashinfer sampler builds. So disable it
+# UNCONDITIONALLY and use native PyTorch sampling (proven faithful on the same prereg
+# run: temp-0 generations come out correct, full Stage-A pipeline runs through it).
+# Re-enable only after confirming a flashinfer/cub combo that compiles on the box image.
+export VLLM_USE_FLASHINFER_SAMPLER=0
 if command -v nvcc >/dev/null 2>&1; then
-  echo "nvcc present: $(nvcc --version | grep -i release) -> full perf (flashinfer + compile)"
+  echo "nvcc present: $(nvcc --version | grep -i release)"
+  echo "  -> torch.compile / CUDA-graphs available (only used if ENFORCE_EAGER=0)."
+  echo "  -> flashinfer sampler kept OFF regardless (see FlagHeads note above)."
 else
-  echo "WARNING: no nvcc (driver-only). Using fallback so the JIT-needing bits don't crash:"
-  echo "  - --enforce-eager  (skips torch.compile + CUDA-graph capture; both need nvcc)"
-  echo "  - VLLM_USE_FLASHINFER_SAMPLER=0  (native PyTorch sampling; flashinfer JITs kernels)"
-  echo "  (verify the exact sampler env on this vLLM build if it still probes flashinfer)"
+  echo "WARNING: no nvcc (driver-only) -> --enforce-eager (skips torch.compile + CUDA-graph capture, both need nvcc)."
   EAGER_FLAGS="--enforce-eager"
-  export VLLM_USE_FLASHINFER_SAMPLER=0
 fi
 if [ "$ENFORCE_EAGER" = "1" ] && [[ "$EAGER_FLAGS" != *"--enforce-eager"* ]]; then
   echo "ENFORCE_EAGER=1 -> serving with --enforce-eager as preregistered."

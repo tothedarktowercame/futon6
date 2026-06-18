@@ -161,7 +161,12 @@ def extract_edn(resp: str) -> str | None:
 
 
 def gate_one(path: Path) -> tuple[bool, str]:
-    chk = subprocess.run(["bb", str(ARGCHECK), str(path)], capture_output=True, text=True)
+    # `path` is the single explicit file we want gated (during the retry loop it lives
+    # under .attempts/ as <pid>.attemptN.edn). The bb gates' default skips attempt-named
+    # files — that exclusion is meant for *directory* scans, not an explicitly-named file.
+    # Pass --include-attempts so the file we hand it is actually checked (else argcheck
+    # reports "No .edn files found" and every paper fails the gate). See run_rung2 twin.
+    chk = subprocess.run(["bb", str(ARGCHECK), "--include-attempts", str(path)], capture_output=True, text=True)
     if chk.returncode != 0:
         return False, "checker: " + (chk.stdout + chk.stderr).strip()[-500:]
     sub = subprocess.run([sys.executable, str(SUBSTANCE), str(path), "--kind", "iatc"],
@@ -182,7 +187,10 @@ def run_rung2(graph_path: Path, report_path: Path, *, gate: bool) -> tuple[bool,
     Soft mode records the profile/verdict without rejecting the graph. Hard mode
     passes `--gate` through to the checker so semantic failures force a retry.
     """
-    cmd = ["bb", str(SEMCHECK), "--out", str(report_path)]
+    # --include-attempts: in hard-gate mode graph_path is an attempt file (.attempts/…),
+    # which semcheck's default would skip (dir-scan exclusion). Harmless for the soft-mode
+    # final-graph path (not attempt-named). Twin of the gate_one fix.
+    cmd = ["bb", str(SEMCHECK), "--include-attempts", "--out", str(report_path)]
     if gate:
         cmd.append("--gate")
     cmd.append(str(graph_path))
