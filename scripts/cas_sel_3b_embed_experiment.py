@@ -35,8 +35,9 @@ FIX = ROOT / "tests" / "fixtures" / "cas-select"
 PIDS = ["a93J05", "a96J01", "b97J01", "a96J04"]
 QINSTR = "Represent this sentence for searching relevant passages: "
 # portable snapshot of the 39-pattern corpus, so the experiment runs where futon3
-# (cas_select's pattern source) is absent — e.g. a fresh Linode box.
-SNAPSHOT = ROOT / "data" / "cas-select" / "pattern-texts.json"
+# (cas_select's pattern source) is absent — e.g. a fresh Linode box. In resources/
+# (tracked) not data/ (gitignored), so it ships via git.
+SNAPSHOT = ROOT / "resources" / "cas-select" / "pattern-texts.json"
 
 
 def load_fixture(pid):
