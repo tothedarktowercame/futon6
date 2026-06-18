@@ -4,6 +4,7 @@ scroll-linked demo. Mirrors the runner: one stage module per phase, composited b
 rr_compositor with a checked additivity invariant.
 
     render_run.py [PAPER_ID]        (default 0801.0199)
+    render_run.py --all             (render every paper with golden marks; skip+report the rest)
 
 Writes data/showcases/ct-anatomy/dp-demo/render-run-<paper>.html
 """
@@ -17,10 +18,12 @@ from rr_compositor import line_index, render_two_up
 
 ROOT = Path("/home/joe/code/futon6")
 OUT = ROOT / "data/showcases/ct-anatomy/dp-demo"
+GRAPH_DIR = ROOT / "data/iatc-argument-graphs/loop-run-70b"
 
 
-def main() -> int:
-    pid = sys.argv[1] if len(sys.argv) > 1 else "0801.0199"
+def render_one(pid: str) -> Path:
+    """Render one paper's full-pipeline demo. Raises if its artifacts are missing
+    or the additivity invariant is violated."""
     text, marks = rr_layer_weft.load_text(pid)
     starts, _ = line_index(text)          # line -> char start, for rail anchors
 
@@ -38,6 +41,36 @@ def main() -> int:
     print(f"wrote {out}  ({len(html)//1024} KB) — assert_additive PASSED")
     for L in layers:
         print(f"  {L.sigil} {L.name:26} mode={L.mode:6} {len(L.spans):5} spans  {len(L.annotations)} card(s)")
+    return out
+
+
+def discover_pids() -> list[str]:
+    """All papers with a final IATC graph — the canonical pipeline set."""
+    return sorted({p.stem for p in GRAPH_DIR.glob("*.edn")})
+
+
+def render_all() -> int:
+    pids = discover_pids()
+    rendered, skipped = [], []
+    for pid in pids:
+        try:
+            render_one(pid)
+            rendered.append(pid)
+        except Exception as e:  # missing golden marks / layer artifacts → skip, don't abort
+            reason = f"{type(e).__name__}: {e}"
+            skipped.append((pid, reason))
+            print(f"skip {pid} — {reason}")
+    print(f"\nrender_run --all: {len(rendered)}/{len(pids)} rendered, {len(skipped)} skipped")
+    for pid, reason in skipped:
+        print(f"  skipped {pid}: {reason}")
+    return 0
+
+
+def main() -> int:
+    arg = sys.argv[1] if len(sys.argv) > 1 else "0801.0199"
+    if arg == "--all":
+        return render_all()
+    render_one(arg)
     return 0
 
 
