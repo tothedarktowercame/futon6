@@ -56,9 +56,16 @@ flagged honestly rather than fake-completed.*
 - ☐ **CAS-SEL `.flexiarg`-pattern dispatch** (Q1's fuller select). **Not CPU-direct:** needs a
   check-metadata schema added to futon3's `.flexiarg` files (cross-repo); the v0 registry-predicate
   dispatch already covers the function.
-- ☐ **CAS-SEL-3b embedding retrieval** — lift the hotword recall ceiling (recall@4 = 16/22; 3
-  zero-overlap steps unreachable by hotword). **Blocked:** no embedding backend (`sentence_transformers`
-  not installed; BGE per the superpod note) — needs a model/dep, not a code edit.
+- ☐ **CAS-SEL-3b embedding retrieval** — lift the hotword recall ceiling (recall@4 = 15/22; 3
+  zero-overlap steps `a93J05/s3`, `a96J01/s2`, `b97J01/s6` unreachable by hotword). **Backend IS
+  available** (`sentence_transformers 5.2.3` in `futon6/.venv`; MiniLM/BGE-small/BGE-large all cached).
+  **Empirical finding (claude-1, 2026-06-18):** with **bge-small**, embed-only = 12/22 (weaker than
+  hotword alone), union = **17/22** — lifts 15→17 but **below the 19/22 ceiling, and recovers NONE of
+  the 3 zero-overlap steps**. The spec's model, **bge-large, was killed loading on the dev box**
+  (1.3 GB — the OOM lesson in miniature). ⇒ **Not closeable on the dev box.** Path: run **bge-large on
+  a bigger box** in the GPU window (small-data, just needs the RAM to load), and/or rethink the pattern
+  text representation (current `title+conclusion+hotwords` may dilute the embedding) or the spec's
+  Option B (LLM-side retrieval). Do NOT ship a sub-acceptance modality.
 - ☐ **CAS-SEL-5 genealogical select** — a proof inherits its citations'/imports' patterns; **blocked on
   WARP-ORCH being live**.
 - ☐ **seam-6 Tier-1 prose cleanup** — bounded IATC-graph→clean-prose call. **Run-time/LLM:** the
