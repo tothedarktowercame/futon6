@@ -80,6 +80,39 @@ def call_stub(symbols: list[str], context: str) -> dict:
     return {"groundings": out}
 
 
+_JSON_VALID_ESCAPE = set('"\\/bfnrt')
+_HEX = set("0123456789abcdefABCDEF")
+
+
+def _sanitize_json_escapes(s: str) -> str:
+    """Inside JSON strings, neutralize invalid backslash escapes by doubling the
+    backslash, so json.loads accepts 70B output that embedded raw LaTeX (e.g.
+    "u \\circ \\phi" -> the model writes \\c, which JSON rejects as Invalid \\escape).
+    Preserves valid JSON escapes \\" \\\\ \\/ \\b \\f \\n \\r \\t and \\uXXXX. JSON twin
+    of iatc_repair.bb's EDN escape sanitizer; see holes/excursions/E-sanitize-invalid-EDN.md."""
+    out = []
+    i, n, in_str = 0, len(s), False
+    while i < n:
+        c = s[i]
+        if not in_str:
+            out.append(c)
+            in_str = c == '"'
+            i += 1
+        elif c == "\\" and i + 1 < n:
+            d = s[i + 1]
+            if d in _JSON_VALID_ESCAPE:
+                out.append(c + d); i += 2
+            elif d == "u" and i + 6 <= n and all(ch in _HEX for ch in s[i + 2:i + 6]):
+                out.append(s[i:i + 6]); i += 6
+            else:
+                out.append("\\\\" + d); i += 2
+        elif c == '"':
+            out.append(c); in_str = False; i += 1
+        else:
+            out.append(c); i += 1
+    return "".join(out)
+
+
 def call_openai(prompt: str, model: str) -> dict:
     import urllib.request
     base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
@@ -93,7 +126,7 @@ def call_openai(prompt: str, model: str) -> dict:
     with urllib.request.urlopen(req, timeout=300) as r:
         txt = json.loads(r.read())["choices"][0]["message"]["content"]
     m = re.search(r"\{.*\}", txt, re.S)
-    return json.loads(m.group(0)) if m else {"groundings": []}
+    return json.loads(_sanitize_json_escapes(m.group(0))) if m else {"groundings": []}
 
 
 def check(groundings: list[dict], context: str) -> list[dict]:
