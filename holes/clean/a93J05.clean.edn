@@ -1,0 +1,78 @@
+;; CLean — the EDN image of the CT treatment of an APM proof.
+;; Proof a93J05: "A doubly-periodic (elliptic) entire function is constant."
+;;
+;; This is the proof-side sibling of M-typed-holes' mission EDN sketch
+;; (futon3c/holes/missions/M-typed-holes-example-mission-head.md §2): the same
+;; comb + typed-hole datatype, applied to a pattern-tagged proof instead of a
+;; mission. It renders to the DarkTower Lean types (Comb / TypedHole / BV /
+;; Discharge) the same way MissionExample does, so Rob's Lean->neo4j+pgvector
+;; pipeline can ingest proofs by the path it already ingests missions.
+;;
+;; The dual structure (Joe, 2026-06-18): tagging the steps with patterns gives us
+;; BOTH an informal structure (the method tags = iching/CT concepts) AND a formal
+;; structure (the comb of typed Poly interfaces). They are the two readings of one
+;; object, held together by :clean/copar — well-formed iff they cohere.
+
+{:clean/proof  "a93J05"
+ :clean/title  "An elliptic (doubly-periodic) entire function is constant"
+ :clean/source {:fixture "tests/fixtures/cas-select/a93J05"}
+
+ ;; ---- INFORMAL reading: the pattern-tagged method spine (a BV.seq chain) ----
+ ;; Each tag is a CT concept in futon3/library/iching (the 64-concept basis).
+ :clean/seq [:construct-auxiliary-object      ;; s1
+             :reduce-to-known-result          ;; s2
+             :quotient-by-irrelevance         ;; s3
+             :local-to-global                 ;; s4
+             :reduce-to-known-result]         ;; s5
+
+ ;; ---- FORMAL reading: each step is a typed Poly interface (a TypedHole node) ----
+ ;; position = the step; directions = the typed holes/obligations it exposes.
+ ;; :produces / :consumes name the wires; :hole present iff the step declares_sorry.
+ ;; :satiety ∈ {parse payoff canon bundling role} (DarkTower TypedHole.SatietyGrade).
+ ;; :discharge ∈ {sorryProof queryAnswer ungroundedBinder} (DarkTower DischargeKind).
+ :clean/boxes
+ [{:id :s1 :method :construct-auxiliary-object
+   :text "Let P be the fundamental parallelogram {s ω₁ + t ω₂ : s,t ∈ [0,1]}."
+   :produces :P/fundamental-domain
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "P is a well-defined fundamental domain for the lattice"}}
+  {:id :s2 :method :reduce-to-known-result
+   :text "P is compact and f continuous, so |f| attains a maximum M on P."
+   :consumes [:P/fundamental-domain] :produces :bound/M-on-P
+   :discharges {:to :extreme-value-theorem}}
+  {:id :s3 :method :quotient-by-irrelevance
+   :text "Any z ∈ ℂ is congruent modulo the period lattice to some z₀ ∈ P."
+   :consumes [:period-lattice] :produces :reduce/z-to-z0
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "the quotient ℂ/Λ is well-defined; every z has a representative in P"}}
+  {:id :s4 :method :local-to-global
+   :text "By periodicity f(z)=f(z₀), so the bound on P extends to all of ℂ."
+   :consumes [:bound/M-on-P :reduce/z-to-z0] :produces :bound/global
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "periodicity transports the local bound to a global bound"}}
+  {:id :s5 :method :reduce-to-known-result
+   :text "A bounded entire function is constant, by Liouville's theorem."
+   :consumes [:bound/global] :produces :f-constant
+   :discharges {:to :liouville-theorem}}]
+
+ ;; ---- the comb wiring: construct→consume edges (the open-diagram skeleton) ----
+ ;; In Lean these are Comb composition / Fill (PFunctor substitution).
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :P/fundamental-domain}
+  {:from :s1 :to :s3 :carries :P/fundamental-domain}   ;; aux object fans out (s1 → s2 AND s3)
+  {:from :s2 :to :s4 :carries :bound/M-on-P}
+  {:from :s3 :to :s4 :carries :reduce/z-to-z0}
+  {:from :s4 :to :s5 :carries :bound/global}]
+
+ ;; ---- the two readings, held together (M-typed-holes copar) ----
+ ;; well-formed iff informal (pattern spine) and formal (comb) cohere:
+ ;; every :clean/seq tag is the :method of exactly one box, in order.
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ ;; ---- shape signature (what Rob's pipeline indexes instead of the prose) ----
+ ;; macro-shape: construct-a-domain → exploit-a-symmetry → discharge-to-known.
+ ;; holes sit on the creative moves (s1,s3,s4), absent on the discharges (s2,s5).
+ :clean/shape {:macro :construct-exploit-discharge
+               :holes-at [:s1 :s3 :s4]
+               :discharges-at [:s2 :s5]}}
