@@ -19,7 +19,10 @@ def test_worked_extensional_category_case_reproduces_buckets():
     by_concept = {row["concept"]: row for row in result["per-item"]}
     assert result["check"] == ":concept-coverage"
     assert result["pass"] is True
-    assert result["buckets"] == {"defined": 8, "known": 0, "imported": 0, "undefined": 2}
+    # NB: substrate-coupled golden — reads LIVE data/warp (not a frozen fixture), so it
+    # tracks substrate growth. The WARP-ORCH-4 rebuild merged one redundant concept away
+    # (10 -> 9 extracted; was defined:8), all 7 remaining "defined" still well-sourced.
+    assert result["buckets"] == {"defined": 7, "known": 0, "imported": 0, "undefined": 2}
     assert by_concept["extensional category"]["bucket"] == "defined"
     assert by_concept["parameterized rules"]["bucket"] == "undefined"
     assert by_concept["standard rules"]["bucket"] == "undefined"
@@ -27,7 +30,10 @@ def test_worked_extensional_category_case_reproduces_buckets():
 
 def test_known_recurring_core_threshold_is_report_only():
     sub = substrate()
-    row = r2d.classify_concept("ab category", sub)
+    # substrate-coupled: the prior exemplar ("ab category") gained a def-snippet in the
+    # WARP-ORCH-4 rebuild and is now "defined". "finitely generated module" is a current
+    # recurring-but-undefined concept (df=505 >= threshold, no def evidence).
+    row = r2d.classify_concept("finitely generated module", sub)
 
     assert row["bucket"] == "known"
     assert "recurring core" in row["reason"]

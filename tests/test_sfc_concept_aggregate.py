@@ -9,16 +9,19 @@ FIXTURE = ROOT / "data" / "warp" / "sfc-adjunction-fixture.json"
 
 
 def test_surface_to_core_examples_are_gc_retained():
+    # substrate-coupled: reads the LIVE regenerated fixture. The WARP-ORCH-4 rebuild
+    # re-normalized surface forms ("all functors" -> "all functor") and GC'd some
+    # singletons ("any two"); these three folds are present in the current fixture.
     data = json.loads(FIXTURE.read_text())
     surface_to_core = data["surface_to_core"]
 
-    assert surface_to_core["all functors"]["action"] == "fold"
-    assert surface_to_core["all functors"]["core"] == "functor"
-    assert surface_to_core["all functors"]["retained_papers"] > 0
+    assert surface_to_core["all functor"]["action"] == "fold"
+    assert surface_to_core["all functor"]["core"] == "functor"
+    assert surface_to_core["all functor"]["retained_papers"] > 0
 
-    assert surface_to_core["any two"]["action"] == "fold"
-    assert surface_to_core["any two"]["core"] == "pair"
-    assert surface_to_core["any two"]["retained_papers"] > 0
+    assert surface_to_core["all morphism"]["action"] == "fold"
+    assert surface_to_core["all morphism"]["core"] == "morphism"
+    assert surface_to_core["all morphism"]["retained_papers"] > 0
 
     assert surface_to_core["each other"]["action"] == "fold"
     assert surface_to_core["each other"]["core"] == "relation"

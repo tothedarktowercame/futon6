@@ -69,11 +69,12 @@ def test_trigger_path_premint_pool_enqueues_exactly_three_minted_steps():
 
 def test_tier0_retrieval_recall_is_honest():
     """Tier-0 hotword retrieval has a real recall ceiling (prose<->hotword vocabulary
-    mismatch). Documented, not hidden: recall@4 = 16/22; even at full-pool k three steps
+    mismatch). Documented, not hidden: recall@4 = 15/22; even at full-pool k three steps
     have ZERO lexical overlap with their oracle pattern and are unreachable by hotword
     alone. Those steps need a semantic/embedding retriever (or LLM-side retrieval) — see
     CAS-SEL-3b follow-on. This test pins the honest number so a regression can't quietly
-    inflate it again."""
+    inflate it again. (Was 16/22; dropped to 15 when the 3 CAS-0 patterns were added to
+    the futon3 pool — more candidates = more top-4 competition. full_pool ceiling unchanged.)"""
     patterns = cas.load_patterns()
     hit = miss = 0
     full_pool_misses = set()
@@ -89,7 +90,7 @@ def test_tier0_retrieval_recall_is_honest():
             full = {row["pattern"] for row in cas.retrieve(step["text"], patterns, k=len(patterns))}
             if want not in full:
                 full_pool_misses.add(f"{paper_id}/{step['id']}")
-    assert (hit, miss) == (16, 6), f"recall@4 drifted: {hit} hit / {miss} miss"
+    assert (hit, miss) == (15, 7), f"recall@4 drifted: {hit} hit / {miss} miss"
     # the irreducible (zero-lexical-overlap) ceiling — needs a non-hotword retriever:
     assert full_pool_misses == {"a93J05/s3", "a96J01/s2", "b97J01/s6"}
 
