@@ -149,3 +149,33 @@ Validation:
 - `pytest -q tests/test_sfc_cert_wiring.py` -> `4 passed`
 - `pytest -q` -> `829 passed, 38 skipped`
 - `python3 scripts/pipeline_witness.py --plan` -> DAG order valid; SFC2b producer is upstream of CAS-CERT.
+
+## Review — claude-1, 2026-06-18 · REVIEWED PASS (wiring) (commit 211fcf2)
+
+Independently re-ran:
+- **Suite:** `pytest -q` → 829 passed / 38 skipped (matches; +4 vs the 825 baseline). ✓
+- **Before/after:** symbol grain `na:true` → `{filled:3, empty:5, na:false, rate:0.375}`. ✓
+- **Mapping correct:** read `symbol_ports` — grounded→filled, undefined/unsupported→empty,
+  unknown→empty; **no path emits `miswired`**, so the gate can never FAIL on symbol content
+  (verified gate unaffected). Additive confirmed: other certs (e.g. 0705.0452) stay `na` without
+  `--symbols`. ✓
+- **Trust-anchor mechanism:** checked every `grounded` port's `evidence` against the candidate's
+  `source-window` → 3/3 verbatim, 0 violations. The deterministic `check()` plumbs through. ✓
+
+**ACCEPTED for what the handoff scoped (the wiring/seam).** The consumer, determinism,
+never-miswired, additivity, and the verbatim-evidence mechanism are all correct.
+
+**Quality caveat — flagged, NOT a wiring defect (extraction was out of handoff scope):** the stub's
+extracted "symbols" for 0709.0248 are noise — `*`, `Ap`, `Cab`, `\\id`, `and`, `share`. The driver
+runs `inline_math($…$)` over the prose window then `symbols_in` (built for clean formulas), so on
+real arXiv tex it picks up prose fragments. Consequences:
+1. The committed `0709.0248.symbols.json` **filled:3 / rate:0.375 is STUB NOISE**, not a real
+   measurement — `grounded` under stub means "stub fabricated an evidence substring that is
+   trivially in-context," so §4 under stub tests a near-tautology. The real trust test happens only
+   under the `openai` backend.
+2. **Even the openai run won't yield a trustworthy symbol grain until symbol extraction is
+   sharpened** (filter prose tokens like `and`/`share`; require genuine math symbols). That's the
+   real prerequisite — a clean follow-on (producer-internal; the cert wiring is done).
+
+Verdict: wiring **PASS**; symbol-grain *substance* gated on (a) the openai pass and (b) sharper
+symbol extraction. No fixes to the wiring required.
