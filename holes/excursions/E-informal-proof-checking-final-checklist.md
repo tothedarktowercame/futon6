@@ -21,6 +21,8 @@ Legend:  ☐ open · ✅ done this session · 🔒 honesty boundary (do NOT "fix
 - ✅ rung-3-2 deterministic technique detector + `cas_cert --rung3` (e380e7e; review PASS)
 - ✅ rung-3-3 LLM-on-residue → ArSE questions, `cas_cert --questions` report-only (a97e790; self-reviewed)
 - ✅ CAS-SEL-4 v0 select-dispatch — verified already built in `cas_checks.py` (`run_selected_checks`)
+- ✅ R2a-v2 de-noising — verified already built in `iatc_anchor_faithfulness.bb` (`normalize-latex` macro expansion `\G`→"G group" + `<k terms → :na`; clj-kondo clean; `iatc_anchor_faithfulness_test.clj`; the cited `0801.3843` `\G` over-flag is fixed → PASS rate 0.857)
+- ✅ RENDER generalized across all papers — `render_run.py --all` (d9e93b7); 9/9 render, additivity invariant passing, skip+report for missing artifacts
 
 ---
 
@@ -45,18 +47,27 @@ Legend:  ☐ open · ✅ done this session · 🔒 honesty boundary (do NOT "fix
 
 ---
 
-## 2. Deferred refinements (real future builds — not blockers for the run)
-- ☐ **CAS-SEL `.flexiarg`-pattern dispatch** (Q1's fuller select; v0 registry-predicate dispatch is built).
-- ☐ **CAS-SEL-5 genealogical select** — a proof inherits its citations'/imports' patterns; **deferred on WARP-ORCH being live**.
-- ☐ **CAS-SEL-3b embedding retrieval** — lift the hotword recall ceiling (recall@4 = 16/22; 3 zero-overlap steps are unreachable by hotword alone).
-- ☐ **R2a-v2 de-noising** — light LaTeX normalization + N/A for nodes with <K scoreable terms (R2a is a conservative lexical *lower bound*; over-flags macro-dense nodes).
-- ☐ **seam-6 Tier-1 prose cleanup** — bounded IATC-graph→clean-prose call (the deterministic resolve-node-text version is the seam-closer; this is the quality follow-on).
+## 2. Deferred refinements — RECONCILED 2026-06-18 (most are already-built or genuinely blocked, not a to-build list)
+
+*Tackled directly per Joe's ask. Outcome: the CPU-deterministic subset is done (see §0: CAS-SEL-4,
+R2a-v2, RENDER). Everything still open below is genuinely **not** a CPU-direct build — each is gated on
+a missing backend, a cross-repo schema, a run-time LLM pass, a cross-agent dep, or live infra. They are
+flagged honestly rather than fake-completed.*
+- ☐ **CAS-SEL `.flexiarg`-pattern dispatch** (Q1's fuller select). **Not CPU-direct:** needs a
+  check-metadata schema added to futon3's `.flexiarg` files (cross-repo); the v0 registry-predicate
+  dispatch already covers the function.
+- ☐ **CAS-SEL-3b embedding retrieval** — lift the hotword recall ceiling (recall@4 = 16/22; 3
+  zero-overlap steps unreachable by hotword). **Blocked:** no embedding backend (`sentence_transformers`
+  not installed; BGE per the superpod note) — needs a model/dep, not a code edit.
+- ☐ **CAS-SEL-5 genealogical select** — a proof inherits its citations'/imports' patterns; **blocked on
+  WARP-ORCH being live**.
+- ☐ **seam-6 Tier-1 prose cleanup** — bounded IATC-graph→clean-prose call. **Run-time/LLM:** the
+  deterministic resolve-node-text version is the seam-closer; this needs the `openai` pass.
 - ☐ **WARP-ORCH wiring** — `warp_concept_usage` / `def-snippets` / `concept-encyclopedia` / `mark3_thread_tapestry` are live on disk but in no runner; the full rebuild **timed out on codex's 30-min limit** → re-approach (bg-supervised vs lighter audit). *Blocks CAS-SEL-5.*
 - ☐ **Superpod parallel runner** — claude-2 adds `--eprints/--out` to `warp_def_snippets` + `warp_concept_usage`; claude-1 builds the scheduler + the **`def_snippets` stable-sort merge** (the trap: naive merge silently breaks the drift-hash equivalence). Incremental-vs-full substrate is a follow-on (v1 = full per batch).
 - ☐ **rung-3-3 → ArSE typed-bells** — the artifact carries the `:query`/`:ref` shape; *actually opening* typed-bells is downstream (FUTON3C_TYPED_BELLS is off).
 - ☐ **Pattern-seeding loop closure** — an answered gap-question mints a new *verifiable* pattern (typed heuristic-vs-verifiable).
-- ☐ **SFC-AGG hardening** — genus is hand-recognized for the fixture; encyclopedia seed is noisy; framing is keyword-based; Iff-bridges are recorded-not-proved.
-- ☐ **RENDER generalization** — extend the inline renderer across all papers (mechanical); Haskell rewrite optional, not a blocker.
+- ☐ **SFC-AGG hardening** — genus is hand-recognized for the fixture; encyclopedia seed is noisy; framing is keyword-based; Iff-bridges are recorded-not-proved. (Data-quality + substrate-coupled — not a clean CPU build.)
 
 ---
 
