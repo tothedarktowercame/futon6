@@ -98,3 +98,64 @@ flagged honestly rather than fake-completed.*
 - ☐ **Linode shape:** 4×RTX 4000 Ada, 70B-AWQ-INT4 **TP=4 ~18.8 GB/card, util 0.95 → one server**, no device-sharding; only parallelism lever = vLLM continuous-batching (the `--concurrency M` from L3).
 - ☐ **Superpod shape:** device-sharding via Rob's `superpod-shard.py`; **`def_snippets` stable-sort** is the load-bearing merge-correctness property; copies-per-GPU is a *measured, tunable* knob (LLM inference is bandwidth-bound — not a guaranteed 7×).
 - ☐ **Cost:** arXiv on a hosted API ≈ **$13–16K** (big) / **$2K** (small); **local 70B = GPU-time** and is the default (`OPENAI_BASE_URL`). Pin **temp=0 + fixed seed** so the model is a stable instrument (a hosted API can silently change versions).
+
+---
+
+## 6. Beyond the pipeline — what we *do* with the results (the structure-first horizon)
+
+*The original direction of E-informal-proof-checking. So far the work has built the **pipeline** (the
+checker spine that produces certificates + coverage signals); the next horizon is **what we do with
+its results at scale** — structure-first retrieval/grounding over the whole corpus. That is where the
+"structure first" idea, R-GCN, and Rob's scaled neo4j+pgvector all live. Recorded here so the
+decision is mapped before the next GPU window.*
+
+**The crux (Joe, 2026-06-18):** neo4j+pgvector only earns its keep if the stored vectors **encode
+structure**. Pure BGE *text* vectors need no graph DB — a flat ANN index suffices. So the scaled
+graph-native stack is justified **only** by graph-aware (R-GCN-class) embeddings. The earlier
+"path to pgvector is mapped" claim is hollow without graph embeddings.
+
+**R-GCN was misdiagnosed, not broken.** M-superpod-mark2's own post-mortem: *"the R-GCN architecture
+is fine; the training data was too easy"* — random negatives → cosine collapse (all sims ≈ 1.0). The
+fix is a training-signal fix, and it is itself a BGE×R-GCN combination.
+
+**Ways to get BGE + R-GCN benefits together (best-first):**
+- ☐ **(1) BGE as R-GCN node features (early fusion — principled).** Initialize R-GCN node features
+  with BGE text embeddings, let the GNN propagate meaning through the argument-graph topology →
+  a *structure-aware text embedding*. Carries both signals in one vector **and** structurally
+  resists the mark2 collapse (node features start pre-spread; the GNN refines rather than degenerating
+  from a blank slate). The standard text-attributed-graph recipe.
+- ☐ **(2) Hard-negative loop (mark2's mapped fix).** Mine textually-confusable-but-structurally-
+  different pairs via **BGE similarity bands (0.7–0.8)** as hard negatives → R-GCN learns the
+  structure text can't see. BGE bootstraps R-GCN's training signal.
+- ☐ **(3) Two-stage retrieve = "structure first" operationalized.** BGE for cheap text recall →
+  R-GCN structural score to **rerank** (text proposes, structure decides; cheap — R-GCN only on the
+  BGE shortlist).
+- ☐ **(4) Dual-vector / late fusion.** Store both vectors in pgvector; retrieval = weighted
+  text-cosine + structure-cosine. Simplest to ship, tunable blend.
+
+**Why it fits futon6:** the IATC argument graph *is* the structure (claims + inference edges); the
+citation/import graph is the genealogical structure (**CAS-SEL-5**, currently blocked precisely
+because we lack graph embeddings). R-GCN-with-BGE-features over those makes structural proof-similarity
+and genealogical select real, not text-only.
+
+**Staging — BGE-now feeds R-GCN-later (not either/or):**
+- ☐ **Now (CPU, unblocks today):** CAS-SEL-3b stays **BGE-text** (cheap, recovers the lexical-miss
+  steps, no training) — *and* generates the hard-negative source for R-GCN later.
+- ☐ **Scaled (GPU/superpod, structure-first):** revive mark2's R-GCN with **(1) BGE node features +
+  (2) BGE-mined hard negatives**, collapse-audited via `scripts/audit-graph-embeddings.py`
+  (cosine-to-mean std gate: collapse `<0.01`, mild `<0.05`); output vectors → pgvector, neo4j holds
+  the graph. **Components already exist** (`src/futon6/graph_embed.py` "working code, bad training
+  signal", `audit-graph-embeddings.py`, `generate-review-pairs.py`, the BGE bridge
+  `futon3c/scripts/corpus_ws_bridge.py`) — composition, not greenfield.
+
+**Honest caveats 🔒:**
+- 🔒 R-GCN revival is **training = GPU/superpod**, send-gated + Rob-coupled — not a CPU-direct build now.
+- 🔒 "BGE-features resist collapse" is a well-grounded *expectation*, not proven here — the
+  collapse-audit is the gate that keeps it honest.
+- 🔒 The collapse to avoid is **R-GCN-specific** (graph embeddings); BGE-text is the *validated escape*
+  (mark2: "switching to BGE text embeddings was the fix — BGE is the working retrieval backend now").
+
+**What "the results" are for (the downstream the pipeline serves):** structure-aware retrieval (find
+proofs/moves by argument shape, not just prose), genealogical pattern inheritance (CAS-SEL-5), the
+ArSE open-question corpus (rung-3-3), and grounding NE/scope extraction against the literature — all
+of which want structure-first embeddings, i.e. the BGE+R-GCN fusion above.
