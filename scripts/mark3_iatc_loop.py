@@ -124,8 +124,17 @@ def call_stub(prompt: str, cand: dict, attempt: int) -> str:
     return seeds[idx].read_text()
 
 
+class ModelCallError(Exception):
+    """A vLLM/HTTP call failed (e.g. 400 context-overflow) — surfaced so the run
+    loop can skip the paper instead of crashing the whole batch."""
+    def __init__(self, code, detail):
+        self.code = code
+        super().__init__(f"HTTP {code}: {detail}")
+
+
 def call_openai(prompt: str, cand: dict, attempt: int, model: str) -> str:
     import urllib.request
+    import urllib.error
     base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
     key = os.environ.get("OPENAI_API_KEY", "x")
     body = json.dumps({
@@ -137,8 +146,14 @@ def call_openai(prompt: str, cand: dict, attempt: int, model: str) -> str:
     req = urllib.request.Request(f"{base}/chat/completions", data=body,
                                  headers={"Content-Type": "application/json",
                                           "Authorization": f"Bearer {key}"})
-    with urllib.request.urlopen(req, timeout=300) as r:
-        return json.loads(r.read())["choices"][0]["message"]["content"]
+    try:
+        with urllib.request.urlopen(req, timeout=300) as r:
+            return json.loads(r.read())["choices"][0]["message"]["content"]
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode("utf-8", "replace")[:300]
+        raise ModelCallError(e.code, detail)
+    except urllib.error.URLError as e:
+        raise ModelCallError(0, str(e.reason))
 
 
 def extract_edn(resp: str) -> str | None:
@@ -272,6 +287,11 @@ def run(args) -> int:
     for cf in cands:
         cand = json.loads(cf.read_text())
         pid = cand["paper-id"]
+        final = outdir / f"{pid}.edn"
+        if final.exists():                       # resume: skip papers already done
+            results.append((pid, "pass", "(resumed: existing graph)"))
+            print(f"  {pid}: pass (resumed)")
+            continue
         prompt = build_prompt(cand, seeds)
         status, last_err = "fail", ""
         for attempt in range(MAX_ATTEMPTS):
@@ -279,7 +299,13 @@ def run(args) -> int:
             if args.backend == "stub":
                 resp = call_stub(p, cand, attempt)
             else:
-                resp = call_openai(p, cand, attempt, args.model)
+                try:
+                    resp = call_openai(p, cand, attempt, args.model)
+                except ModelCallError as e:
+                    last_err = str(e)
+                    if e.code == 400:            # context-overflow/bad request — retry won't help; skip paper
+                        break
+                    continue
             edn = extract_edn(resp)
             if not edn:
                 last_err = "no EDN map found in response"
