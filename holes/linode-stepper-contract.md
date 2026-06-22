@@ -73,6 +73,76 @@ corpus barrier (needs all anatomy); S5/S7/S8 are cross-paper (Phase 2).
 | **S8 export→Rob** | ⑧ | CLean graph + vectors | neo4j cypher + pgvector SQL (+ DarkTower Lean) | `clean_graph_export.py`·`clean_to_lean.py` | cpu | cypher/SQL valid; load smoke-test | ✔ |
 | **S9 APM-match / pass-3** | ⑥/opt | B + comprehension | APM scope-coverage; conjecture/weak-proof map | `mark4_apm_structure_coverage.py`·`clean_hole_harvest.py` | cpu | APM gate / recurring-gaps keyed | — |
 
+## Feature coverage grid (every readiness card → stage → in this run?)
+
+*So nothing hides behind a phase label. Legend: **✓** run as a stage · **⚙** runs as a
+gate/sub-step inside a stage · **◐** built but NOT yet exercised · **○** design/
+foundation that informs a stage (not itself a run-step) · **✗** out of scope for the
+pipeline run (inspection / demo / separate experiment).*
+
+| card | feature | stage | in run | note |
+|------|---------|:-----:|:------:|------|
+| 1.1 | Detector (`dp_paper_view`) | S1 | ✓ | whole-paper marks |
+| 1.2 | Checker / lint | S1 | ⚙ | wf=0 gate |
+| 1.3 | Enrichment + render | S1 | ✓ | |
+| 2.1 | Prose-concept layer | S2 | ✓ | |
+| 2.2 | Term prior | S2 | ✓ | |
+| 2.3 | Concept encyclopedia | S2 | ✓ | |
+| 3.1 | Warp lexicon (per class) | S2 | ✓ | corpus substrate |
+| 3.2 | Warp concept-graph + embed | S2 | ✓ | |
+| 3.3 | Landscape overlays | — | ✗ | inspection-only |
+| SFC1 | Concept-def coverage + rank | S2 | ✓ | |
+| SFC-D3 | concept→papers index | S2 | ✓ | `concept-index.json` |
+| SFC-AGG | per-concept map-reduce | S2 | ✓ | genus/variant/iff |
+| SFC-NORM | normalize concept variants | S2 | ✓ | |
+| SFC2a/-v2 | `:structure` transducer | S2 | ✓ | definition lift |
+| SFC2b | LLM symbol grounding | S2/S5 | ◐ | needs served model |
+| WARP-ORCH | wire the warp runner | S2 | ◐ | concordance build >30min, partial |
+| 4.1 | IATC candidate extraction | S3 | ✓ | **→ ALL proofs** (was 1) |
+| 4.2 | IATC LLM loop | S3 | ✓ | |
+| 4.3 | Repair (canonicalize) | S3 | ⚙ | |
+| 4.4 / rung-0 | Structural gate (argcheck) | S3 | ⚙ | |
+| 4.5 / rung-1 | Substance gate | S3 | ⚙ | |
+| 4.6 | IATC render | — | ✗ | demo |
+| 5.1 | Close reading | S4 | ○ | empirical base (done) |
+| 5.2 | Seed typed-hole taxonomy | S4 | ○ | `expository-superpod-vocab.edn` |
+| 5.3 | Multi-agent vote + mint | S4 | ✓ | classifies regions |
+| **5.4** | **GPU hole-filling (expository)** | **S4** | **◐** | **built (cfec4f9), NEVER GPU-run — the mark5 gap** |
+| 5.5 | Expository render integration | — | ✗ | vision |
+| R2a/-v2 | Anchor-faithfulness | S5 | ✓ | |
+| R2b | Goal-reaching closure | S5 | ✓ | |
+| R2c | Warrant-resolution | S5 | ⚙ | report-only floor |
+| R2-harness | `iatc_semcheck` | S5 | ✓ | |
+| R2-wire | rung-2 loop self-gate | S3→S5 | ✓ | this is mark5's "rung2-soft-fail" |
+| R2d | Concept-coverage of proofs | S5 | ✓ | needs S2 |
+| rung-3 | Technique-grounding detector | S5 | ◐ | deterministic built; LLM-residue pending |
+| CAS-0 | Seed cascade pattern pool | S5 | ○ | 39 `.flexiarg` patterns (done) |
+| CAS-SEL | select-per-topology | S5 | ✓ | deterministic; Tier-1 LLM-verify pending |
+| CAS-Q1 | menu location | — | ○ | RESOLVED: menu = 39 flexiargs |
+| CAS-Q2 | topology source | — | ○ | RESOLVED: matched-pattern set = topology |
+| CAS-CERT | conformance certificate | S6 | ✓ | per-paper substrate → object B |
+| COMPREHENSION | per-proof comprehension floor | S5 | ✓ | verdict gate |
+| STRAT-REC | strategy/tactic recognizer | S5 | ✓ | prose-sourced gestures |
+| WARRANT-NORM | warrant norm + hole→concept | S5/S6 | ✓ | (type,concept) keying |
+| LEAN-NL | Herald reconciliation | S5 | ○ | recognizer training/validation (done) |
+| 8.1 | IATC→CLean producer | S7 | ✓ | |
+| 8.2 | CLean wf gate | S7 | ⚙ | |
+| 8.3 | Structure embedding | S7 | ✓ | **macro-vocab rework needed** (G-entropy) |
+| 8.4 | CLean→Lean + graph/pgvector export | S8 | ✓ | |
+| 8.5 | Strategy→comprehension | S5 | ✓ | = STRAT-REC/COMPREHENSION |
+| 6.1 | APM ↔ eprint scope coverage | S9 | ✓ | optional tail |
+| PASS3-HARVEST | hole harvest → conjecture map | S9 | ✓ | optional tail |
+| 7.1 | Pipeline runner | — | ⚙ | this stepper |
+| 7.2 | GPU host setup + run | S0 | ✓ | |
+| 7.3 | Eval harness | (tail) | ⚙ | non-fatal |
+| 7.4 / DEMO-COMPOSE / RENDER | Demos / renderers | — | ✗ | post-run rendering |
+| GOLIVE | mark4 IATC go-live | — | ○ | the substrate (done) |
+| RAW-CTL | 70B-on-raw control arm | — | ✗ | separate experiment |
+
+**What mark5 actually exercised (for contrast):** only 1.1–1.3, 4.1(one-proof)–4.5,
+R2-wire, and 8.1–8.4. Everything tagged ② / ⑤ / S5-comprehension / S6 / S9 above was
+**omitted** — which is the gap this corrected contract closes.
+
 ## Go/no-go gate registry
 
 - **G-coverage (S2)** — raw pre-HAPAX concept coverage *rises* with corpus-fraction
