@@ -1,0 +1,44 @@
+;; CLean — CT treatment of APM proof a01A01 (Pringsheim's theorem).
+;; "A power series with nonneg coefficients and radius 1 is singular at z=1."
+;; (contradiction → nonneg Taylor coeffs at 1 → convergence past 1 → root-test clash.)
+
+{:clean/proof  "a01A01"
+ :clean/title  "Pringsheim's theorem — nonneg-coefficient power series is singular at its radius"
+ :clean/source {:apm "futon3c/data/apm-informal-proofs/apm-a01A01.md"}
+
+ :clean/seq [:argue-by-contradiction   ;; s1
+             :local-to-global          ;; s2
+             :local-to-global          ;; s3
+             :reduce-to-known-result]  ;; s4
+
+ :clean/boxes
+ [{:id :s1 :method :argue-by-contradiction
+   :text "Suppose f is analytic at z=1, so it has a Taylor expansion there with radius ε>0."
+   :produces :assume-analytic-at-1}
+  {:id :s2 :method :local-to-global
+   :text "The Taylor coefficients at z=1 are c_n = f⁽ⁿ⁾(1)/n! ≥ 0, because f⁽ⁿ⁾(r) = Σ_{k≥n} a(k)·(falling factorial)·r^{k−n} ≥ 0 for 0<r<1 (a(k)≥0), and f⁽ⁿ⁾ is continuous at 1."
+   :consumes [:assume-analytic-at-1] :produces :nonneg-taylor-at-1
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "f⁽ⁿ⁾(r) ≥ 0 for r<1; continuity at 1 transports nonnegativity to c_n ≥ 0"}}
+  {:id :s3 :method :local-to-global
+   :text "Nonneg c_n with radius ε ⇒ Σ c_n ρ^n converges for real ρ∈(0,ε), i.e. f is finite at z=1+ρ>1; this forces the original Σ a(k) r^k to converge for some real r>1."
+   :consumes [:nonneg-taylor-at-1] :produces :converges-past-1
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "nonneg-coefficient series at 1 converges at a real point >1 and agrees with the original on the overlap"}}
+  {:id :s4 :method :reduce-to-known-result
+   :text "Convergence of Σ a(k) r^k at a real r>1 (nonneg terms) forces radius ≥ r > 1 by the root test — contradicting radius = 1."
+   :consumes [:converges-past-1] :produces :contradiction
+   :discharges {:to :root-test-radius}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :assume-analytic-at-1}
+  {:from :s2 :to :s3 :carries :nonneg-taylor-at-1}
+  {:from :s3 :to :s4 :carries :converges-past-1}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :contradiction-reduce
+               :holes-at [:s2 :s3]
+               :discharges-at [:s4]
+               :note "linear contradiction chain; the nonnegativity transport is the load-bearing move"}}

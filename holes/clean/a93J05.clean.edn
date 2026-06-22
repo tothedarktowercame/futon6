@@ -42,7 +42,7 @@
    :discharges {:to :extreme-value-theorem}}
   {:id :s3 :method :quotient-by-irrelevance
    :text "Any z ∈ ℂ is congruent modulo the period lattice to some z₀ ∈ P."
-   :consumes [:period-lattice] :produces :reduce/z-to-z0
+   :consumes [:period-lattice :P/fundamental-domain] :produces :reduce/z-to-z0
    :hole {:kind :sorry :discharge :sorryProof :satiety :canon
           :wanted "the quotient ℂ/Λ is well-defined; every z has a representative in P"}}
   {:id :s4 :method :local-to-global

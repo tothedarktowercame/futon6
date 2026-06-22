@@ -1,0 +1,88 @@
+;; CLean method vocabulary — the controlled set of method tags used as the
+;; INFORMAL reading (:clean/seq) of an APM proof's CT treatment.
+;;
+;; Each tag is a coarse iching/CT method concept (futon3/library/iching is the
+;; 64-concept basis; these are the subset the APM analysis corpus actually
+;; exercises). The point of a CONTROLLED vocabulary: structurally-similar proofs
+;; share method tags, so the structure embedding clusters them even when their
+;; prose/topic is unrelated (e.g. a group-theory counting proof and a topology
+;; counting proof). This is the demo's whole claim — index the structure, not
+;; the prose (E-clean / EXP-3).
+;;
+;; When the Linode batch pass lifts the full 462-proof corpus, the box-typing
+;; LLM is constrained to THIS vocabulary so the embedding space stays shared.
+
+{:clean/method-vocab
+ {:construct-auxiliary-object
+  {:gloss "Build a helper object the rest of the proof runs on."
+   :iching :the-well            ;; provision a resource
+   :seen-in [:a93J05 :a96J01 :m96A01]}
+
+  :reduce-to-known-result
+  {:gloss "Discharge a step to a named theorem (no hole)."
+   :iching :following
+   :seen-in [:a93J05 :m96A01 :t94A07 :a01A01]}
+
+  :quotient-by-irrelevance
+  {:gloss "Mod out a symmetry / pass to a quotient so only the essential remains."
+   :iching :splitting-apart
+   :seen-in [:a93J05]}
+
+  :local-to-global
+  {:gloss "Extend a property established locally to the whole space."
+   :iching :pushing-upward
+   :seen-in [:a93J05 :a96J04 :a01A01]}
+
+  :transport-along-symmetry
+  {:gloss "Move a bound/value across the space using an invariance (periodicity, group action)."
+   :iching :the-receptive
+   :seen-in [:a93J05 :t94A07]}
+
+  :argue-by-contradiction
+  {:gloss "Assume the negation; derive an impossibility."
+   :iching :opposition
+   :seen-in [:a01A01 :m96A01]}
+
+  :count-by-decomposition
+  {:gloss "Partition into classes/orbits and count (class equation, fixed-point count)."
+   :iching :the-cauldron
+   :seen-in [:b97J01 :t94A07]}
+
+  :compute-invariant
+  {:gloss "Compute a homotopy/algebraic invariant that obstructs or forces a conclusion."
+   :iching :inner-truth
+   :seen-in [:b97J01 :t94A07]}
+
+  :divisibility-or-parity
+  {:gloss "Push a number-theoretic divisibility/parity constraint to a conclusion."
+   :iching :limitation
+   :seen-in [:b97J01]}
+
+  :induct-up-a-tower
+  {:gloss "Iterate a base step up a chain/quotient tower (upper central series, etc.)."
+   :iching :development
+   :seen-in [:b97J01]}
+
+  :cover-and-estimate
+  {:gloss "Cover the target by intervals/balls and bound the total measure."
+   :iching :gathering-together
+   :seen-in [:a96J04 :a96J01]}
+
+  :epsilon-of-room
+  {:gloss "Quantify with ε–δ / tail control; conclude by arbitrariness of ε."
+   :iching :the-taming-power-of-the-small
+   :seen-in [:a96J04 :a96J01 :a00J01]}}
+
+ ;; macro-shapes — the coarse comb signature, one per proof (:clean/shape :macro).
+ ;; proofs sharing a macro-shape are the expected structural clusters.
+ :clean/macro-shapes
+ {:construct-exploit-discharge
+  "construct an aux object → exploit a structure on it → discharge to a known theorem"
+  :count-invariant-obstruct
+  "decompose-and-count → compute an invariant → force/obstruct a conclusion"
+  :cover-estimate
+  "cover the target → ε-estimate the total → conclude by arbitrariness"
+  :contradiction-reduce
+  "assume the negation → derive a forbidden consequence → reduce to a known impossibility"
+  :induct-tower
+  "establish a base case → iterate it up a quotient/series tower"}}

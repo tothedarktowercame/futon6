@@ -1,0 +1,48 @@
+;; CLean — CT treatment of APM proof t94A07.
+;; "A 180° rotation of the torus has four Lefschetz fixed points and is not
+;;  homotopic to the identity."
+;; (model → count fixed points → compute the Lefschetz number → obstruct via the
+;;  homotopy-invariance of L.)
+
+{:clean/proof  "t94A07"
+ :clean/title  "180° torus rotation — four fixed points and a Lefschetz obstruction"
+ :clean/source {:apm "futon3c/data/apm-informal-proofs/apm-t94A07.md"}
+
+ :clean/seq [:construct-auxiliary-object ;; s1
+             :count-by-decomposition     ;; s2
+             :compute-invariant          ;; s3
+             :reduce-to-known-result]    ;; s4
+
+ :clean/boxes
+ [{:id :s1 :method :construct-auxiliary-object
+   :text "Model T as the tube of radius r about the central circle {x²+y²=R², z=0} (R>r); the rotation is the rigid isometry f(x,y,z)=(x,−y,−z), which maps T to T."
+   :produces :model
+   :hole {:kind :sorry :discharge :sorryProof :satiety :parse
+          :wanted "T as a surface of revolution; f preserves T as a rigid 180° rotation about the x-axis"}}
+  {:id :s2 :method :count-by-decomposition
+   :text "Fixed points satisfy y=z=0, i.e. T ∩ x-axis = {(±(R+r),0,0), (±(R−r),0,0)} — exactly four points (where the x-axis pierces the torus)."
+   :consumes [:model] :produces :four-fixed-points
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "the x-axis meets T in exactly four points"}}
+  {:id :s3 :method :compute-invariant
+   :text "At each fixed point df_p = −I on the tangent (yz-)plane, so +1 is not an eigenvalue: each is nondegenerate with local index sign det(I−df_p)=sign det(2I)=+1. Summing gives L(f)=4 (cross-check: f_*=−I on H_1=ℤ², so L(f)=1−(−2)+1=4)."
+   :consumes [:four-fixed-points] :produces :lefschetz-number-4
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "df_p = −I ⇒ local index +1 at each fixed point; global L(f) = Σ local indices = 4"}}
+  {:id :s4 :method :reduce-to-known-result
+   :text "L(id) = χ(T) = 0 ≠ 4 = L(f), and the Lefschetz number is a homotopy invariant, so f is not homotopic to the identity."
+   :consumes [:lefschetz-number-4] :produces :not-homotopic-to-id
+   :discharges {:to :lefschetz-fixed-point-theorem}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :model}
+  {:from :s2 :to :s3 :carries :four-fixed-points}
+  {:from :s3 :to :s4 :carries :lefschetz-number-4}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :count-invariant-obstruct
+               :holes-at [:s1 :s2 :s3]
+               :discharges-at [:s4]
+               :note "count fixed points → compute the Lefschetz invariant → obstruct homotopy to id"}}

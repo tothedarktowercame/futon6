@@ -1,0 +1,46 @@
+;; CLean — CT treatment of APM proof b97J01 (parts c–d, the real mathematics).
+;; "A finite p-group has nontrivial center and is nilpotent."
+;; (class-equation count → divisibility ⇒ nontrivial center → induct up the
+;;  upper central series ⇒ nilpotent.)
+
+{:clean/proof  "b97J01"
+ :clean/title  "p-groups have nontrivial center and are nilpotent"
+ :clean/source {:apm "futon3c/data/apm-informal-proofs/apm-b97J01.md"}
+
+ :clean/seq [:count-by-decomposition   ;; s1
+             :divisibility-or-parity   ;; s2
+             :induct-up-a-tower        ;; s3
+             :reduce-to-known-result]  ;; s4
+
+ :clean/boxes
+ [{:id :s1 :method :count-by-decomposition
+   :text "G acts on itself by conjugation; orbits are conjugacy classes. The class equation |G| = |Z(G)| + Σ_i [G:C_G(x_i)] sums over non-central class representatives, with |class(x_i)| = [G:C_G(x_i)] by orbit–stabilizer."
+   :produces :class-equation
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "orbit–stabilizer gives |class(x_i)| = [G:C_G(x_i)]; non-central ⇒ index > 1"}}
+  {:id :s2 :method :divisibility-or-parity
+   :text "Each [G:C_G(x_i)] is a divisor of |G|=p^n that is >1, hence divisible by p; and p | |G|. Therefore p | |Z(G)|, forcing |Z(G)| ≥ p > 1 — a nontrivial center (part c)."
+   :consumes [:class-equation] :produces :nontrivial-center
+   :discharges {:to :lagrange-divisibility}}
+  {:id :s3 :method :induct-up-a-tower
+   :text "Each G/Z_i (while ≠ G) is a smaller nontrivial p-group, so by (c) its center Z(G/Z_i)=Z_{i+1}/Z_i is nontrivial; the upper central series {e}=Z_0 ⊊ Z_1 ⊊ … strictly increases, and being finite it must reach G."
+   :consumes [:nontrivial-center] :produces :upper-central-reaches-G
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "apply (c) to each nontrivial quotient G/Z_i ⇒ strict ascent; finiteness ⇒ stabilizes at G"}}
+  {:id :s4 :method :reduce-to-known-result
+   :text "An upper central series reaching G is exactly the definition of nilpotency, so G is nilpotent (part d)."
+   :consumes [:upper-central-reaches-G] :produces :nilpotent
+   :discharges {:to :definition-of-nilpotent}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :class-equation}
+  {:from :s2 :to :s3 :carries :nontrivial-center}    ;; (c) is the base case AND the inductive engine
+  {:from :s3 :to :s4 :carries :upper-central-reaches-G}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :count-invariant-obstruct
+               :holes-at [:s1 :s3]
+               :discharges-at [:s2 :s4]
+               :note "count (class equation) → divisibility invariant → self-propagating induction up the quotient tower"}}

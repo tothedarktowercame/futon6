@@ -1,0 +1,39 @@
+;; CLean — CT treatment of APM proof a96J04.
+;; "An absolutely continuous monotone increasing f maps null sets to null sets."
+;; (ε–δ from AC → cover the null set → outer-measure estimate → arbitrariness of ε.)
+
+{:clean/proof  "a96J04"
+ :clean/title  "AC monotone increasing maps send null sets to null sets (Lusin N-property)"
+ :clean/source {:apm "futon3c/data/apm-informal-proofs/apm-a96J04.md"}
+
+ :clean/seq [:epsilon-of-room        ;; s1
+             :cover-and-estimate     ;; s2
+             :reduce-to-known-result] ;; s3
+
+ :clean/boxes
+ [{:id :s1 :method :epsilon-of-room
+   :text "Absolute continuity: ∀ε>0 ∃δ>0 such that for disjoint intervals with Σ(b_k−a_k)<δ, Σ|f(b_k)−f(a_k)|<ε. Monotone ⇒ |f(b_k)−f(a_k)| = f(b_k)−f(a_k)."
+   :produces :delta-control
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "unpack the AC ε–δ modulus; monotonicity removes the absolute value"}}
+  {:id :s2 :method :cover-and-estimate
+   :text "Given m(E)=0, cover E by disjoint open intervals with Σ(b_k−a_k)<δ. Monotone ⇒ f((a_k,b_k))⊆[f(a_k),f(b_k)], so f(E) ⊆ ⋃[f(a_k),f(b_k)] and m*(f(E)) ≤ Σ(f(b_k)−f(a_k)) < ε."
+   :consumes [:delta-control] :produces :outer-measure-bound
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "null set covered to total length < δ; monotone image intervals cover f(E)"}}
+  {:id :s3 :method :reduce-to-known-result
+   :text "Since ε>0 was arbitrary, m(f(E)) = 0."
+   :consumes [:outer-measure-bound] :produces :null-image
+   :discharges {:to :arbitrariness-of-epsilon}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :delta-control}
+  {:from :s2 :to :s3 :carries :outer-measure-bound}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :cover-estimate
+               :holes-at [:s1 :s2]
+               :discharges-at [:s3]
+               :note "linear chain: modulus → cover-and-estimate → conclude by arbitrariness"}}

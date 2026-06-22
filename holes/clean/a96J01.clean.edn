@@ -1,0 +1,42 @@
+;; CLean — CT treatment of APM proof a96J01.
+;; "A uniformly convergent series of nonneg continuous functions whose sup-norms
+;;  diverge exists." (construct disjoint bumps → estimate.)
+;; Schema: see holes/clean/a93J05.clean.edn and holes/excursions/E-clean.md.
+
+{:clean/proof  "a96J01"
+ :clean/title  "Uniformly convergent series of nonneg continuous functions with divergent sup-norms"
+ :clean/source {:apm "futon3c/data/apm-informal-proofs/apm-a96J01.md"}
+
+ :clean/seq [:construct-auxiliary-object   ;; s1
+             :reduce-to-known-result       ;; s2
+             :epsilon-of-room]             ;; s3
+
+ :clean/boxes
+ [{:id :s1 :method :construct-auxiliary-object
+   :text "Partition [0,1] into consecutive intervals I_n of length 1/(n(n+1)) (Σ = 1, telescoping); define f_n a continuous tent on I_n with peak 1/n, zero elsewhere."
+   :produces :bumps
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "tents are well-defined and continuous, supported exactly on I_n; Σ ℓ_n = 1"}}
+  {:id :s2 :method :reduce-to-known-result
+   :text "‖f_n‖_∞ = 1/n, so Σ ‖f_n‖_∞ = Σ 1/n = ∞."
+   :consumes [:bumps] :produces :supnorm-divergence
+   :discharges {:to :harmonic-series-divergence}}
+  {:id :s3 :method :epsilon-of-room
+   :text "Supports are pairwise disjoint, so at most one f_n(x) is nonzero; the tail sup_x Σ_{n>N} f_n(x) ≤ 1/(N+1) → 0, hence uniform convergence."
+   :consumes [:bumps] :produces :uniform-convergence
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "disjoint supports ⇒ pointwise at most one term nonzero; tail bound 1/(N+1) → 0"}}]
+
+ ;; the aux object fans out into the two independent verifications (two sinks);
+ ;; the conclusion "such a sequence exists" = (s2 ∧ s3), no recombination box.
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :bumps}
+  {:from :s1 :to :s3 :carries :bumps}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :cover-estimate
+               :holes-at [:s1 :s3]
+               :discharges-at [:s2]
+               :note "fan-out construction with two sinks; conclusion = s2 ∧ s3"}}

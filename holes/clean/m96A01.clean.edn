@@ -1,0 +1,47 @@
+;; CLean — CT treatment of APM proof m96A01.
+;; "Eigenspaces of a compact operator at nonzero eigenvalues are finite-dimensional."
+;; (L|E_λ = λId ⇒ unit ball compact → contradiction via Riesz lemma.)
+
+{:clean/proof  "m96A01"
+ :clean/title  "Nonzero eigenspaces of a compact operator are finite-dimensional"
+ :clean/source {:apm "futon3c/data/apm-informal-proofs/apm-m96A01.md"}
+
+ :clean/seq [:reduce-to-known-result    ;; s1
+             :argue-by-contradiction    ;; s2
+             :construct-auxiliary-object ;; s3
+             :reduce-to-known-result]   ;; s4
+
+ :clean/boxes
+ [{:id :s1 :method :reduce-to-known-result
+   :text "On E_λ = ker(L−λI), L acts as λ·Id. By compactness of L, any bounded sequence (x_n) in E_λ has Lx_{n_k} = λx_{n_k} convergent, so x_{n_k} converges (λ≠0): the closed unit ball of E_λ is sequentially compact."
+   :produces :unit-ball-seq-compact
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "L|E_λ = λId; divide by λ≠0 to transfer compactness of L to compactness of the E_λ unit ball"}}
+  {:id :s2 :method :argue-by-contradiction
+   :text "Suppose, for contradiction, that E_λ is infinite-dimensional."
+   :produces :assume-infinite-dim}
+  {:id :s3 :method :construct-auxiliary-object
+   :text "By Riesz's lemma (θ=½), build unit vectors x_1,x_2,… ∈ E_λ with dist(x_{n+1}, span{x_1..x_n}) ≥ ½, hence ‖x_n − x_m‖ ≥ ½ for n≠m."
+   :consumes [:assume-infinite-dim] :produces :separated-sequence
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "Riesz lemma on each proper closed finite-dim span yields ½-separated unit vectors"}
+   :discharges {:to :riesz-lemma}}
+  {:id :s4 :method :reduce-to-known-result
+   :text "A ½-separated bounded sequence has no convergent subsequence, contradicting the sequential compactness of the E_λ unit ball. Hence E_λ is finite-dimensional."
+   :consumes [:unit-ball-seq-compact :separated-sequence] :produces :finite-dim
+   :discharges {:to :sequential-compactness-contradiction}}]
+
+ ;; s1 (the compactness fact) and the contradiction branch (s2→s3) both feed the
+ ;; clash at s4 — a diamond, not a chain.
+ :clean/wires
+ [{:from :s2 :to :s3 :carries :assume-infinite-dim}
+  {:from :s1 :to :s4 :carries :unit-ball-seq-compact}
+  {:from :s3 :to :s4 :carries :separated-sequence}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :contradiction-reduce
+               :holes-at [:s1 :s3]
+               :discharges-at [:s3 :s4]
+               :note "diamond: a compactness fact meets a constructed separated sequence at the contradiction"}}
