@@ -111,7 +111,10 @@ def load_graph(path):
             continue
         prem = as_list(ed.get("premise"))
         w = ed.get("warrant")
-        warrant = {kw(k): v for k, v in dict(w).items()} if w is not None else {}
+        try:
+            warrant = {kw(k): v for k, v in dict(w).items()} if w is not None else {}
+        except (TypeError, ValueError):
+            warrant = {}   # 70B sometimes emits a bare keyword as :warrant (passes bb, breaks dict()) -> treat as hole
         edges.append({"id": ed["id"], "premise": prem, "conclusion": ed["conclusion"],
                       "warrant": warrant})
     return nodes, edges
