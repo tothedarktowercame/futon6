@@ -1,0 +1,136 @@
+# mark5 — CLean/IATC structure-embedding run on ~100 math.CT proofs
+
+*claude-1 + Joe, 2026-06-22. Tech note: the first real end-to-end run of the adapted
+proof-structure pipeline (IATC → CLean → structure embeddings) on a live GPU box, over
+a 100-proof slice of math.CT. Written to record what ran, what the artifacts show, and
+— per Joe — **what the deficiencies are**. Evidence-first: every claim below is a count
+from the run. Artifacts: `data/mark5-ct100-run/` (gitignored). Playbook:
+[`mark5-run-playbook.md`](mark5-run-playbook.md). DAG: [`superpod-dag-contract.md`](superpod-dag-contract.md).*
+
+## 1. What we ran
+
+- **Box:** one Linode `g2-gpu-rtx4000a4-s` (4× RTX 4000 Ada, 80 GB aggregate, 32 vCPU),
+  us-ord, StackScript 2142757, vLLM serving `Meta-Llama-3.1-70B-Instruct-AWQ-INT4`
+  (TP=4, ~19.5 GB/card) as `mark4-70b`. ~1.5 h wall, ~$5. Claude drove `linode-cli`
+  create→run→delete via `pass` (token never in transcript).
+- **Corpus:** an unbiased even-spread-by-date draw of **200 primary math.CT papers**
+  (`holes/math-ct-200.ids.txt`), pre-staged on dev to **199 v2-enriched candidates**
+  (`mark3_extract_candidates`). The run was **capped at ~100** by operator choice
+  ("enough to explore the slice").
+- **Stages executed:** S1 anatomy (detector → marks → enriched candidates, on dev) →
+  **S3** IATC reconstruction loop (70B) → **S4** CLean box-typing (70B) → **S7**
+  structure embedding → **S8** export (neo4j cypher + pgvector SQL).
+- **Stages NOT run:** S2 concept-substrate (reused a prior index — see §6), S5/S6
+  recognition+comprehension, S9 mining.
+
+## 2. Results
+
+**S3 — IATC reconstruction (70B).** 106 proof graphs produced. First-batch yield
+**28 pass / 2 fail (93%)**; pass effort 23 first-try / 3 / 2 (the retry loop helped 5).
+The 2 fails were legit (one unparseable EDN, one substance-gate fail), not crashes.
+
+**Structural distribution (43-graph mid-run slice).** nodes 3–14 (median 9), infer-edges
+1–9 (median 4), holes 0–9 (mean 1.5) — real spread on every axis. **33/43 distinct
+(nodes,edges) shapes**; most-common shape 4×. Spot-checked node texts are genuine
+paper-specific math (accessible-categories / λ-pure-subobjects; nerve cohomology
+`Ner_n S`, `C^n(S,D)`), not boilerplate. → **graphs are distinct reconstructions, not
+templated shells** (the anti-gaming check passes).
+
+**S4 — CLean box-typing (70B).** **102 typed / 4 cyclic-rejected (logged) / 0 failed**;
+G-method-vocab PASS (all `:method`/`:macro` in controlled vocab).
+
+**S8 — export.** 552 nodes, 285 edges, 75 theorems → `clean-graph.json`, `load.cypher`,
+`pgvector.sql`.
+
+## 3. Deficiencies (the honest part)
+
+**D1 — Macro-vocabulary collapse (the headline; G-entropy RED).**
+At 102 proofs the 5 macro-shapes collapsed: **98/102 = `construct-exploit-discharge`**
+(3 contradiction-reduce, 1 induct-tower). macro-entropy 0.17 (floor 0.5); mean
+off-diagonal structure cosine 0.82 (ceiling 0.85). The G-entropy gate **failed**.
+
+> **IF** structure embeddings are to cluster proofs by *kind*, **HOWEVER** the
+> pre-planned 5-macro lens maps nearly every CT proof to one shape (most CT proofs
+> genuinely *are* construct→exploit→discharge), **THEN** the macro layer carries
+> almost no discriminative signal at scale, **BECAUSE** the vocabulary is too coarse
+> for the domain — a fixed, domain-agnostic macro set doesn't fit CT.
+
+The 9-proof demo (macro-entropy 0.77, PASS) **oversold**: it had too few proofs to
+reveal the collapse.
+
+**D2 — Discrimination is method-level, not macro-level (and the embedding is mis-weighted).**
+The 12-tag *method spine* stayed diverse — 10 tags fire: reduce-to-known-result 170,
+construct-auxiliary-object 163, transport-along-symmetry 69, compute-invariant 20,
+local-to-global 13, quotient-by-irrelevance 6, argue-by-contradiction 5,
+induct-up-a-tower 2, cover-and-estimate 1, count-by-decomposition 1 (avg 4.4/proof).
+So the 70B *does* discriminate — at the method layer — but the 33-d vector is dominated
+by the (collapsed) macro + comb scalars, so overall discriminativeness is weak
+(off-diag 0.82). The embedding should **reweight toward the method spine**.
+
+**D3 — Method distribution is top-heavy.** Two tags (reduce-to-known 170,
+construct-auxiliary 163) are ~74% of method occurrences; the tail (cover-and-estimate,
+count-by-decomposition) fires once. Real but skewed — retrieval will be dominated by
+the two head methods.
+
+**D4 — Concept modelling (S2) was skipped; comprehension (S6) untested.**
+The run reused a **stale prior `concept-index.json`** (3,623 concepts, built Jun 18 from
+a different corpus), took **no G-coverage measurement**, and never ran S6. So the
+"comprehension floor" (noun-grounding ⊕ strategy) is **unvalidated on this corpus**. Per
+[`superpod-dag-contract.md`](superpod-dag-contract.md) this reuse is invalid at scale —
+S2 concepts must be discovered from the corpus being processed.
+
+**D5 — rung2 reasoning gate is uncalibrated.** Nearly every accepted graph logged
+"rung2-soft-fail": the semcheck (anchor-faithfulness floor 0.3, warrant-resolution
+floor 0.0) runs **report-only with uncalibrated thresholds** ("report-only until
+calibrated"). It currently certifies nothing.
+
+**D6 — 70B output fragility.** Three malformed-EDN classes broke the strict Python
+loader mid-run (each passes the lenient `bb` reader): apostrophe-in-keyword (`:phi'`),
+bare-keyword `:warrant`, infer-edge missing `:conclusion`. Plus a loop crash on an
+uncaught vLLM HTTP 400. All fixed defensively, but it means **the producers need
+hardening against LLM output before the superpod run** (where there's no Claude/Codex
+to repair).
+
+**D7 — Slice, not corpus.** 100/199 of a 200-paper *sample*; not full math.CT
+(~4,616 papers). Findings are indicative, not archive-scale.
+
+## 4. What is solid
+
+- **The pipeline runs end-to-end at scale** (S1→S4→S7→S8) on a real GPU box.
+- **Per-proof yield is high** (93%) and **structures are distinct + source-faithful**
+  (33/43 shapes; real CT content) — not gamed shells.
+- **The method spine is diverse** (10/12 tags) — the recognition layer captures real
+  method variety.
+- **The gates have teeth:** G-entropy caught the macro collapse; argcheck, G-method-vocab,
+  and G-cyclic all fired correctly. The run failed *loudly* where it should.
+- **Resumability + error-tolerance proven** under live failure (the loop crashed and
+  resumed from existing graphs).
+
+## 5. Bugs found + fixed (live, committed)
+
+| commit | fix |
+|--------|-----|
+| `cfdaeb5` | `iatc_to_clean`: parse EDN with apostrophe-keywords (CT primes) |
+| `1b1040f` | `mark3_iatc_loop`: survive vLLM HTTP errors + resume from existing graphs |
+| `9bf22ef` | `iatc_to_clean`: tolerate bare-keyword `:warrant` |
+| `80a3f4d` | slash-safe ids (old-style `math/NNNN`) — recovered 4 papers |
+| `b0f3d85` | skip malformed infer-edges (missing `:conclusion`) + per-graph error isolation |
+| (S4 glob) | `clean_box_typing`: skip `.rung2.edn` sidecar reports |
+
+## 6. Recommendations / next steps
+
+1. **Fix the structure signal (D1/D2):** reweight the embedding toward the method spine,
+   and **refine or grow the macro vocabulary** — it should be richer (or partly emergent)
+   so it discriminates within CT instead of collapsing. This is the single highest-value
+   change before trusting structure retrieval.
+2. **Run S2 corpus-fresh + S6** on a real slice to validate the comprehension floor and
+   take the G-coverage curve (the thing this run skipped).
+3. **Harden the producers** (D6) against LLM output ahead of the LLaMA-only superpod run.
+4. **Calibrate rung2** (D5) so it certifies rather than reports.
+5. **Then scale** per [`superpod-dag-contract.md`](superpod-dag-contract.md) (phase-
+   completeness enforced) once the macro/embedding fix lands.
+
+*Bottom line: the machinery works and the gates are honest — but the structure
+embedding's discriminative power is **method-level, not macro-level**, and the macro
+vocabulary needs rework before the embeddings are useful for retrieval. Good to learn at
+100 proofs and ~$5 rather than at archive scale.*
