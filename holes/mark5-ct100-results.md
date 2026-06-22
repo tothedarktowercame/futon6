@@ -14,8 +14,9 @@ from the run. Artifacts: `data/mark5-ct100-run/` (gitignored). Playbook:
   (TP=4, ~19.5 GB/card) as `mark4-70b`. ~1.5 h wall, ~$5. Claude drove `linode-cli`
   create→run→delete via `pass` (token never in transcript).
 - **Corpus:** an unbiased even-spread-by-date draw of **200 primary math.CT papers**
-  (`holes/math-ct-200.ids.txt`), pre-staged on dev to **199 v2-enriched candidates**
-  (`mark3_extract_candidates`). The run was **capped at ~100** by operator choice
+  (`holes/math-ct-200.ids.txt`), pre-staged on dev to **199 v2-enriched candidates** —
+  `mark3_extract_candidates` selects **one proof passage per paper** (1 candidate ≡ 1
+  paper ≡ 1 proof; see §3 D8). The run was **capped at ~100** by operator choice
   ("enough to explore the slice").
 - **Stages executed:** S1 anatomy (detector → marks → enriched candidates, on dev) →
   **S3** IATC reconstruction loop (70B) → **S4** CLean box-typing (70B) → **S7**
@@ -25,7 +26,8 @@ from the run. Artifacts: `data/mark5-ct100-run/` (gitignored). Playbook:
 
 ## 2. Results
 
-**S3 — IATC reconstruction (70B).** 106 proof graphs produced. First-batch yield
+**S3 — IATC reconstruction (70B).** 106 proof graphs produced — **one proof per paper**,
+so 106 graphs = 106 distinct papers (see §3 D8). First-batch yield
 **28 pass / 2 fail (93%)**; pass effort 23 first-try / 3 / 2 (the retry loop helped 5).
 The 2 fails were legit (one unparseable EDN, one substance-gate fail), not crashes.
 
@@ -93,6 +95,14 @@ to repair).
 
 **D7 — Slice, not corpus.** 100/199 of a 200-paper *sample*; not full math.CT
 (~4,616 papers). Findings are indicative, not archive-scale.
+
+**D8 — One proof per paper.** `mark3_extract_candidates` selects a *single* proof
+passage per paper (the chosen proof-move window), so each paper is represented by
+exactly one argument graph: 199 candidates = 199 papers = 199 proofs (1:1), and the
+106 graphs are 106 distinct papers. A CT paper's *other* proofs and lemmas are **not
+captured**. "Proof graph" and "paper" are interchangeable counts in this run *only*
+because of this one-per-paper selection — at scale, capturing more proofs per paper
+is a real extraction-coverage axis we haven't touched.
 
 ## 4. What is solid
 
