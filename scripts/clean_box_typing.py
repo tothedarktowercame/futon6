@@ -97,7 +97,10 @@ def main():
     methods, macros = load_vocab()
     os.makedirs(os.path.join(ROOT, args.out), exist_ok=True)
     typed, failed, rejected = [], [], []
-    for gf in sorted(glob.glob(os.path.join(ROOT, args.graphs, "*.edn"))):
+    # skip sidecar report files (e.g. <pid>.rung2.edn) the IATC loop writes alongside
+    # the proof graphs — they aren't argument graphs.
+    for gf in sorted(g for g in glob.glob(os.path.join(ROOT, args.graphs, "*.edn"))
+                     if not g.endswith(".rung2.edn")):
         pid = os.path.basename(gf)[:-4]
         nodes, edges = itc.load_graph(gf)
         sk0 = itc.build_skeleton(nodes, edges)
