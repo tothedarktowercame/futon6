@@ -109,6 +109,8 @@ def load_graph(path):
         ed = {kw(k): v for k, v in dict(e).items()}
         if kw(ed.get("kind")) != "infer":
             continue
+        if "id" not in ed or "conclusion" not in ed:
+            continue   # malformed infer-edge: 70B omitted a required field (passes bb, would KeyError) -> skip
         prem = as_list(ed.get("premise"))
         w = ed.get("warrant")
         try:

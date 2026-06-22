@@ -102,9 +102,14 @@ def main():
     for gf in sorted(g for g in glob.glob(os.path.join(ROOT, args.graphs, "*.edn"))
                      if not g.endswith(".rung2.edn")):
         pid = os.path.basename(gf)[:-4]
-        nodes, edges = itc.load_graph(gf)
-        sk0 = itc.build_skeleton(nodes, edges)
-        prompt = itc.emit_prompt(pid, nodes, edges, sk0)
+        try:
+            nodes, edges = itc.load_graph(gf)
+            sk0 = itc.build_skeleton(nodes, edges)
+            prompt = itc.emit_prompt(pid, nodes, edges, sk0)
+        except Exception as e:   # malformed graph shouldn't abort the whole batch
+            failed.append((pid, f"load error: {type(e).__name__}: {e}"))
+            print(f"  FAIL {pid}: load error — {e}")
+            continue
         typing, why = None, "no attempt"
         for attempt in range(args.max_retries + 1):
             try:
