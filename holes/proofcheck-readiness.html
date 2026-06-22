@@ -34,6 +34,7 @@
   .card.s-ready{border-top-color:var(--ready);} .card.s-partial{border-top-color:var(--partial);}
   .card.s-build{border-top-color:var(--build);} .card.s-break{border-top-color:var(--break);}
   .card.s-open{border-top-color:var(--open);} .card.s-vision{border-top-color:var(--vision);}
+  .card.new{background:#f1e8fb;}  /* lavender: NEW this session — the adapted proof-structure / Phase-2 layer */
   .card h3{margin:0 0 2px;font-size:13.5px;} .card .id{color:#999;font:600 11px/1 ui-sans-serif,system-ui;}
   .row1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
   .chip{display:inline-block;font:600 10px/1.4 ui-sans-serif,system-ui;padding:1px 6px;border-radius:3px;margin-left:4px;}
@@ -60,7 +61,8 @@
   <span class="badge build">needs build</span> specified, ready to implement ·
   <span class="badge break">needs breakdown</span> unspecified — decompose first ·
   <span class="badge open">open question</span> decision pending ·
-  <span class="chip cpu">cpu</span><span class="chip gpu">gpu</span><span class="chip llm">llm</span>
+  <span class="chip cpu">cpu</span><span class="chip gpu">gpu</span><span class="chip llm">llm</span> ·
+  <span style="display:inline-block;width:11px;height:11px;background:#f1e8fb;border:1px solid #c8a8e8;border-radius:2px;vertical-align:middle"></span> lavender card = NEW this session (adapted proof-structure / Phase-2 layer)
 </div>
 <main id="app"></main>
 <footer>
@@ -166,6 +168,23 @@ const CARDS = {
    n:"<b>Resolvable, not blocked — a specified, ready-to-run bounded experiment.</b> All provisioning exists (<code>linode-4gpu-setup/run.sh</code> + the register/bootstrap StackScripts), ~15min up + ~1hr run: serve the 70B over <b>RAW</b> (un-enriched) candidates, compare to enriched <code>loop-run-70b</code>. Isolates the go-live confound (enriched-70B vs blind-8B changed BOTH enrichment and model size). Priority dropped after the rung-2 / discursive reframe (generator quality is less central than the checking), but it answers the real <b>cost-at-scale question</b>: do we enrich before the 70B over arXiv, or does raw suffice? Run next time the box is up — needs Joe's send-gate."},
   {id:"RENDER", t:"Inline renderer / HTML composite + LLM IR", s:"partial", c:"cpu",
    n:"<b>Largely resolved.</b> The human renderer is BUILT — twice: <code>build_proofcheck_demo.py</code> (DEMO-COMPOSE, reviewed PASS — the canonical proof-check demo, <code>proofcheck-demo/index.html</code> 94KB) + <code>render_run.py</code> (committed <code>d6eea58</code> — the richer two-up golden+GPU twin). The <b>\"LLM IR\" is not a separate artifact</b>: per the discursive-core reframe it IS the <code>iatc_semcheck</code> per-paper profile + the scope query database (the answerable substrate) — so render_run and the IR really are two projections of one wiring, and the machine half is the checker profile we're already building. Remaining = generalize the render across all papers (mechanical); the Haskell rewrite is optional, not a blocker."}
+ ],
+ "✦ ADAPTED PIPELINE — comprehension & strategy on proof structure (NEW 2026-06-22, lavender)": [
+  {id:"COMPREHENSION", t:"Per-proof comprehension floor (R2d ⊕ rung-3 ⊕ prose)", s:"ready", c:"cpu", new:true,
+   ev:"scripts/clean_comprehension.py · corpus-relative · verdict gate",
+   n:"Composes noun-grounding (R2d) + strategy-grounding (rung-3 + prose recognizer) into a per-proof, <b>corpus-relative</b> score. The GATE: low comprehension ⇒ \"weak-EXTRACTION / study more / richer corpus\", <b>never</b> \"weak-proof\" — you may only judge a proof you understand. Finding on loop-run-70b: noun axis solid (~1.0), <b>strategy axis is the binding constraint</b>."},
+  {id:"STRAT-REC", t:"Strategy/tactic recognizer (Lean-seeded)", s:"partial", c:"cpu", new:true,
+   ev:"scripts/strategy_recognizer.py · holes/clean/tactic-gesture-vocab.edn",
+   n:"Recognizes Lean-tactic-classes in NL proof <b>PROSE</b> (gestures live in the prose, not the distilled IATC claims); floor uses <code>strategy = max(rung-3, prose)</code>. Seed from Lean tactics + Herald tactic-explanations (the MEANS; the end is strategies in NL) → grow on math.CT (co-learning) → world-class CT recogniser by Phase 2."},
+  {id:"WARRANT-NORM", t:"Warrant normalization + hole→concept grounding", s:"partial", c:"cpu", new:true,
+   ev:"scripts/warrant_normalize.py",
+   n:"FOUNDATION, not Phase-3 repair (peng): normalize free-text <code>:wanted</code>; key holes by <b>(type, concept)</b> so recurring gaps surface (df≥2). Finding: raw <code>:wanted</code> is paper-local (0 cross-paper recurrence at this scale) — recurrence needs the concept key, the SFC-NORM discipline applied to the hole layer."},
+  {id:"PASS3-HARVEST", t:"Pass-3 hole harvest → conjecture / weak-proof map", s:"partial", c:"cpu", new:true,
+   ev:"scripts/clean_hole_harvest.py",
+   n:"Mine typed holes from the CLean corpus → a corpus <b>open-problem map</b> (conjectures = author-declared known holes — the Rob value-demo) + weak-proof candidates, disambiguated from weak-EXTRACTION by the comprehension gate. CPU, runs on already-extracted graphs."},
+  {id:"LEAN-NL", t:"Lean↔NL corpus + Herald reconciliation + mathlib-CT replication", s:"partial", c:"cpu", new:true,
+   ev:"scripts/herald_validate.py · herald_ct_endtoend.py · FrenzyMath/Herald_proofs (44,553 pairs) · E-strategy-recognizer.md",
+   n:"<b>DONE (core):</b> Herald pulled; recognizer self-validated; vocab reconciled into <b>12 discursive targets + 11 hidden-layer (silent bookkeeping) tactics</b> (\"rw is a hidden layer — we can't recognize what isn't there\"). mathlib-CT replication via Herald's CT subset (3952 proofs = mathlib-CT + NL): two-layer profile (discursive from prose + hidden from Lean trace) works end-to-end, <b>0.71 recall on CT discursive strategies</b>; CT signature = apply/intro/constructor (discursive) + simp/rw/ext/aesop_cat (hidden). Remaining: grow vocab on CT (562 misses), per-step attribution, attach the hidden layer into CLean."}
  ]
 };
 const app=document.getElementById('app'), bd=document.getElementById('breakdowns');
@@ -200,7 +219,12 @@ const LINKS={
  "CAS-CERT":"holes/excursions/E-informal-proof-checking.md",
  "GOLIVE":"holes/mark4-linode-go-live-preregistration.md",
  "RAW-CTL":"holes/mark4-linode-go-live-preregistration.md",
- "RENDER":"data/showcases/ct-anatomy/dp-demo/mark4-iatc-goldens.html"
+ "RENDER":"data/showcases/ct-anatomy/dp-demo/mark4-iatc-goldens.html",
+ "COMPREHENSION":"holes/excursions/E-comprehension-foundation.md",
+ "STRAT-REC":"holes/excursions/E-strategy-recognizer.md",
+ "WARRANT-NORM":"holes/excursions/E-comprehension-foundation.md",
+ "PASS3-HARVEST":"holes/excursions/E-strategy-recognizer.md",
+ "LEAN-NL":"holes/excursions/E-strategy-recognizer.md"
 };
 for(const [phase,cards] of Object.entries(CARDS)){
   const sec=document.createElement('section'); sec.className='phase';
@@ -208,7 +232,7 @@ for(const [phase,cards] of Object.entries(CARDS)){
   const grid=sec.querySelector('.grid');
   for(const c of cards){
     const chip = c.c?`<span class="chip ${c.c}">${c.c}</span>`:'';
-    grid.innerHTML += `<div class="card s-${c.s}">
+    grid.innerHTML += `<div class="card s-${c.s}${c.new?' new':''}">
       <div class="row1"><h3>${c.t} ${chip}</h3><span class="badge ${c.s}">${LBL[c.s]}</span></div>
       <div class="id">${c.id}</div>
       <div class="note">${c.n}</div>

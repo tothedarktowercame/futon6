@@ -53,6 +53,7 @@
   .card.p{border-left:4px solid var(--partial);}
   .card.v{border-left:4px solid var(--vision);}
   .card.u{border-left:4px solid var(--untested);}
+  .card.adapted{background:#f1e8fb;}  /* lavender: added this session for the adapted (proof-structure / Phase-2) pipeline */
   .card.compute-cpu{border-top-color:var(--cpu);}
   .card.compute-gpu-required{border-top-color:var(--gpu-need);}
   .card.compute-gpu-benefit{border-top-color:var(--gpu-help);}
@@ -126,6 +127,7 @@
   <span><span class="badge liability">liability</span> known defect / false comfort</span>
   <span><span class="badge untested">untested</span> present, not yet assessed</span>
   <span><span class="badge vision">vision</span> aspirational / mockup</span>
+  <span><span style="display:inline-block;width:11px;height:11px;background:#f1e8fb;border:1px solid #c8a8e8;border-radius:2px;vertical-align:middle"></span> lavender card = NEW this session (adapted proof-structure / Phase-2 layer — Phase ⑧)</span>
 </div>
 
 <div class="legend">
@@ -305,6 +307,36 @@ const PHASES = [
     io:"runs → QC landing pages; 1005.2653 superpod mockup (✓ real vs ⚗ imagined)",
     badge:["vision","mixed"], src:"documented",
     note:"Demos render the current run; the superpod mockup is explicitly hand-authored aspiration, honestly labelled."}
+  ]},
+
+ {title:"⑧ Proof-structure embedding — CLean → neo4j + pgvector", dev:"CPU + LLaMA box-typing",
+  meta:"NEW — the adapted (post-IATC) layer added 2026-06-22 (lavender cards). It turns the IATC argument-graphs into structure-bearing proof artifacts (CLean = comb of typed holes) and ships proof STRUCTURE to Rob's existing Lean→neo4j+pgvector workflow — the substrate Phase 2 reasons over. See holes/excursions/E-clean.md, holes/clean/.",
+  stages:[
+   {id:"8.1", name:"IATC-graph → CLean producer", cls:"r", adapted:true, scripts:"iatc_to_clean.py · clean-method-vocab.edn",
+    compute:"cpu",
+    io:"IATC argument-graph .edn → CLean skeleton (boxes/wires/holes) + LLaMA box-typing prompt",
+    badge:["ready","new 2026-06-22"], src:"verified",
+    note:"Mechanical except <code>:method</code>, which LLaMA types (the superpod has LLaMA, not Claude/Codex). Tested on <code>math__0204218</code> (6 boxes / 6 wires) → gate PASS; the DAG gate correctly REJECTS cyclic-equivalence proofs (1512.07573) rather than emitting a cyclic comb."},
+   {id:"8.2", name:"CLean well-formedness gate", cls:"r", adapted:true, scripts:"clean_argcheck.bb",
+    compute:"cpu",
+    io:"*.clean.edn → PASS/FAIL on copar coherence · ports · DAG · typed-hole grades",
+    badge:["ready","new 2026-06-22"], src:"verified",
+    note:"Proof-side analogue of <code>iatc_argcheck</code>. 7/7 hand-lifted APM CLeans PASS; caught two real port/discharge defects during authoring (gate has teeth)."},
+   {id:"8.3", name:"Structure embedding (+ text baseline)", cls:"r", adapted:true, scripts:"clean_structure_embed.py",
+    compute:"gpu-benefit",
+    io:"CLean → 33-d structure vector + MiniLM text baseline → cosine clusters",
+    badge:["ready","new 2026-06-22"], src:"verified",
+    note:"The EXP-3 claim made visible: structure clusters proofs by METHOD across topics (p-groups ↔ torus rotation, cos <b>0.95</b>) where text scatters them (0.24). This is the signal Rob indexes — index the structure, not the prose."},
+   {id:"8.4", name:"CLean → Lean emitter + graph / pgvector export", cls:"r", adapted:true, scripts:"clean_to_lean.py · clean_graph_export.py",
+    compute:"cpu",
+    io:"CLean → DarkTower Lean (0-sorry) ; CLean → neo4j cypher + pgvector SQL",
+    badge:["ready","new 2026-06-22"], src:"verified",
+    note:"Round-trip verified: 7 APM + 1 arXiv proof compile <b>0-sorry</b> against the DarkTower types (core Lean; full-Mathlib build gated on olean cache). Graph + vector export is the documented Rob-ingestion contract (<code>holes/clean/NEO4J-PGVECTOR-MAPPING.md</code>)."},
+   {id:"8.5", name:"Strategy/tactic recognizer → comprehension floor", cls:"p", adapted:true, scripts:"strategy_recognizer.py · clean_comprehension.py · tactic-gesture-vocab.edn",
+    compute:"cpu",
+    io:"proof PROSE → Lean-tactic-class tags ; R2d ⊕ rung-3 ⊕ prose-recognition → per-proof comprehension + verdict gate",
+    badge:["partial","new 2026-06-22 · seed"], src:"verified",
+    note:"Seeds a strategy vocabulary from Lean tactics + Herald tactic-explanations (means; the end is strategies in NL proofs). Finding: gestures live in PROSE, not the IATC claims — prose-sourced recognition recovers strategy the claim path lost (0.00→0.5). To be grown on math.CT (the co-learning loop) → world-class CT recogniser by Phase 2. See E-strategy-recognizer.md, E-comprehension-foundation.md."}
   ]}
 ];
 
@@ -323,7 +355,7 @@ for(const ph of PHASES){
   for(const s of ph.stages){
     const compute=s.compute || "cpu";
     const computeInfo=COMPUTE[compute] || COMPUTE.cpu;
-    const card=document.createElement("div"); card.className=`card ${s.cls} compute-${compute}`;
+    const card=document.createElement("div"); card.className=`card ${s.cls} compute-${compute} ${s.adapted?"adapted":""}`;
     card.innerHTML=
       `<div class="row1"><h3><span class="id">${s.id}</span> ${s.name}`+
         `<span class="chip ${computeInfo[1]}">${computeInfo[0]}</span></h3>`+
