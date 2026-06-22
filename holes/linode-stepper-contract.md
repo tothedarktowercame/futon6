@@ -1,170 +1,155 @@
-# Linode pipeline stepper — stage contract
+# Linode/superpod pipeline stepper — stage contract
 
-*claude-1 + Joe, 2026-06-22. The contract the Linode "stepper" runs against: the
-stage DAG for the adapted proof-structure pipeline (Phase ⑧ of
-`pre-superpod-pipeline-readiness.html` + the proofcheck comprehension/strategy
-layer), what each stage consumes/produces, its gates, where it HALTS for
-inspection, and the go/no-go checks. Goal: a CT batch runs end-to-end on Linode
-(~$3/hr) so Phase 2 has proof-structure to reason over — and we **see breakages
-live** instead of after, the mark2/mark3 lesson.*
+*claude-1 + Joe, 2026-06-22 (corrected). The contract the stepper runs against. This
+revision **realigns the DAG to the pipeline we actually built** — the phases in
+`pre-superpod-pipeline-readiness.html` (① anatomy → ② concepts → ④ IATC ∥ ⑤
+expository → ⑥ APM, ⑦ orch, ⑧ proof-structure embedding) and the proof-check/
+comprehension layer in `proofcheck-readiness.html`. It **supersedes the mark5 thin
+slice**, which ran only ④ (one proof passage per paper) → ⑧ and skipped ② concepts,
+the entire ⑤ expository sibling, and the comprehension layer — see
+`mark5-ct100-results.md` D8 and the macro-flow note below.*
 
-## Stepper semantics (the disciplines, learned the hard way)
+## The pipeline this exercises (macro-flow, from the readiness docs)
 
-1. **Supervised step-through, not fire-and-forget.** The stepper IS the executor
-   *and* the gate (mark3 lesson: a planner that isn't the executor is a trap).
-   It runs stage N, checks the postcondition, **halts at designated points**,
-   writes that stage's metrics report, and awaits operator `go` before N+1.
-2. **Precondition gate per stage** — refuse (exit nonzero, print why) if the input
-   is missing or stale, *before* any expensive work (the `require_enriched`
-   lesson). No silent run on degraded input.
-3. **Postcondition gate per stage** — verify the output is well-formed before it
-   counts as done (argcheck / substance / clean_argcheck / vocab-gate).
-4. **Non-fatal eval tail** — the precious artifacts (IATC graphs, CLean) are never
-   aborted by an eval hiccup; eval is `RUN_EVAL=0`-skippable and never fatal.
-5. **Finals-only counting** — never recurse into `.attempts/`; an `--include-attempts`
-   escape hatch only (the inflated-metrics lesson).
-6. **Idempotent / resumable** — re-running a stage reuses prior stages' outputs;
-   a stage can be re-run in isolation against a fixed input.
+> ① Weft anatomy (CPU, **whole paper incl. exposition**) → ② Concept/term substrate
+> (CPU) → **two GPU reasoning siblings over the same anatomy: ④ IATC = the formal/
+> illative argument DAG, and ⑤ Expository-region reasoning = the informal reasoning
+> (motivation, heuristics, strategy)** → comprehension/rung ladder grounds both → the
+> per-paper graph (B) integrates them → ⑧ CLean structure-embedding ships proof
+> structure to Rob. ⑥ APM-match + pass-3 mining are CPU tails.
 
-## Stage DAG
+**Unit discipline (the mark5 correction):** *Phase 1* is per-paper — each paper →
+a unified paper-level graph **(object B)**: definitions/theorem-statements as nodes,
+**every** proof as an IATC substructure off its statement, expository reasoning as the
+connective tissue, concepts grounded. *Phase 2* is **cross-paper/holistic** — the
+concept substrate, comprehension, and structure embeddings operate over the whole
+corpus; the per-paper B graphs are its input nodes. "Per paper" is only a Phase-1 word.
+
+## Stepper semantics (disciplines, learned the hard way)
+
+1. **Supervised step-through; the stepper IS the executor and the gate** (mark3 lesson).
+2. **Precondition gate per stage** — refuse before expensive work on missing/stale input
+   (`require_enriched`); and **DAG-completeness** — refuse a stage whose upstream phase
+   has no passing ledger entry *for this corpus* (the S2-skip lesson; see
+   `superpod-dag-contract.md`).
+3. **Postcondition gate per stage** — output well-formed before it counts (argcheck /
+   substance / expository-argcheck / clean-argcheck / vocab-gate).
+4. **Non-fatal eval tail**; **finals-only counting** (never recurse `.attempts/`).
+5. **Idempotent / resumable**; **error-tolerant** at scale (HTTP-skip + resume —
+   mark5 crashed on one vLLM 400).
+6. **Both siblings or neither.** ④ IATC and ⑤ expository are co-required for whole-paper
+   mining; running ④ alone is the mark5 mistake, not a valid run.
+
+## Stage DAG (corrected)
 
 ```
-S0 provision ─► S1 anatomy ─► S2 concept-substrate ─┐
-                   │                                  ├─► S6 comprehension ─► (S9 pass-3 mining)
-                   └─► S3 IATC-extract ─► S4 CLean ───┤
-                                          │           └─► S7 structure-embed ─► S8 export→Rob
-                                          └─► S5 strategy-recognition ─────────┘
+S0 provision
+  └► S1 anatomy ① (whole paper) ──┬─► S2 concepts ② (corpus barrier) ─┐
+                                  ├─► S3 IATC ④ (ALL proofs) ─────────┤
+                                  └─► S4 expository ⑤ (ALL regions) ──┤
+                                                                      ▼
+                              S5 comprehension/rung-ladder  ◄── needs {S2, S3, S4}
+                                       │
+                                       ▼
+                              S6 paper-graph (B)  ◄── integrates {S3 proofs, S4 expository, S2 concepts}
+                                       ├─► S7 CLean structure-embed ⑧ ─► S8 export→Rob ⑧
+                                       └─► S9 APM-match ⑥ / pass-3 mining (opt)
 ```
-Two GPU/LLM stages (S3 extract, S4 box-typing); everything else CPU. S2 is a
-corpus-aggregate barrier (needs the whole batch's marks before it can build the
-substrate); the rest pipeline per-paper.
+GPU/LLM: S3, S4 (the two siblings), and S7's box-typing. Everything else CPU. S2 is a
+corpus barrier (needs all anatomy); S5/S7/S8 are cross-paper (Phase 2).
 
 ## Per-stage contract
 
-| id | consumes | produces | compute | precondition (refuse if…) | postcondition gate | HALT | go/no-go |
-|----|----------|----------|---------|---------------------------|--------------------|:----:|----------|
-| **S0 provision** | StackScript, model weights | served 70B (vLLM), repo+venv | gpu | bootstrap not done / GPU absent | `/health` 200; smoke generate | ✔ | model serves at expected flags |
-| **S1 anatomy** | `paper.tex` (CT batch) | marks (scopes, symbols, proof-moves, expository regions) | cpu | no `.tex` | `check_invariants` **wf=0**; tagged/math coverage | ✔ | wf=0 holds across the batch sample |
-| **S2 concept-substrate** | all marks (barrier) | term-prior, concept-encyclopedia, concept-index | cpu | anatomy not done for the whole batch | substrate non-empty; re-ground pass run | ✔ | **G-coverage**: coverage-vs-corpus-fraction curve *rises* (not flat) |
-| **S3 IATC-extract** | marks → enriched candidates (w/ `source-window`) | IATC argument-graph `.edn`/proof | gpu-llm (70B) | candidate lacks v2 schema / source-window (`require_enriched`) | `iatc_argcheck` PASS + `substance_gate` PASS (finals-only) | ✔ | **G-substance**: checker-% / substance-% above floor; structure entropy sane |
-| **S4 CLean** | IATC graph | `*.clean.edn` (LLaMA box-typed) | gpu-llm + cpu | IATC graph FAIL | `clean_argcheck` PASS | ✔ | **G-method-vocab**: LLaMA `:method` ∈ controlled vocab; **G-cyclic**: cyclic-equiv rejections *logged*, not silently dropped |
-| **S5 strategy-recognition** | `source-window` prose (+ formal trace where paired) | per-proof two-layer profile (discursive + hidden) | cpu | no source-window | recognizer ran | — | discursive recall ≈ Herald-CT baseline (0.71) on a check set |
-| **S6 comprehension** | IATC graph (R2d) + recognizer profile + substrate | per-proof comprehension score + verdict | cpu | substrate or recognizer missing | scores computed | ✔ | **G-comprehension**: verdict gate separates weak-extraction from weak-proof; comp *rises* vs earlier corpus fraction |
-| **S7 structure-embed** | `*.clean.edn` (PASS) | 33-d structure vectors (+ text baseline) | cpu/gpu-benefit | CLean not gated | vectors L2-normed | ✔ | **G-entropy**: embedding entropy / cluster discriminativeness above threshold (no low-entropy collapse) |
-| **S8 export→Rob** | CLean graph + structure vectors | neo4j cypher + pgvector SQL | cpu | embeddings/gate missing | cypher/SQL valid; load smoke-test | ✔ | row counts match; sample ANN query returns sane structural neighbors |
-| **S9 pass-3 mining** *(opt)* | CLean corpus + comprehension | conjecture/open-problem map + weak-proof candidates | cpu | comprehension missing | harvest ran | — | recurring gaps surface once (type,concept)-keyed |
+| id | phase | consumes | produces | scripts (built) | compute | gate | HALT |
+|----|-------|----------|----------|-----------------|---------|------|:----:|
+| **S0 provision** | infra | StackScript/cluster, weights | served LLaMA/70B, venv | `linode-4gpu-setup.sh` (+ cluster alloc on superpod) | gpu | `/v1/models` 200; smoke gen | ✔ |
+| **S1 anatomy** | ① | `paper.tex` | whole-paper marks: scopes, symbols, proof-moves, claim/inference, **exposition regions**, definitions | `dp_paper_view.py`·`check_invariants.py`·`render_gh200.py`·`emit_marks.py` | cpu | `check_invariants` wf=0 | ✔ |
+| **S2 concept-substrate** | ② | all marks (barrier) | term-prior, encyclopedia, **concept-index** (corpus-fresh) | `build_golden_paper.py`·`build_term_prior.py`·`build_concept_encyclopedia.py`·`sfc_concept_index.py` | cpu | **G-coverage** (inline, raw concepts) | ✔ |
+| **S3 IATC-formal** | ④ | marks → **all** enriched proof candidates | IATC argument-graph `.edn` per proof | `mark3_extract_candidates.py` *(→ all proofs, see needs-build)*·`mark3_iatc_loop.py`·`iatc_repair.bb`·`iatc_argcheck.bb`·`substance_gate.py` | gpu-llm | `iatc_argcheck`+`substance_gate` (finals-only); **G-substance** | ✔ |
+| **S4 expository** | ⑤ | marks → **all** expository-region candidates | expository-reasoning graph (filled typed holes) | `mark3_extract_expository_candidates.py`·`mark3_expository_loop.py`·`expository_argcheck.bb`·`expository-superpod-vocab.edn` | gpu-llm | `expository_argcheck` PASS | ✔ |
+| **S5 comprehension/rung** | C/D + ⑧.5 | IATC + expository + concept-index | rung-2 profile, R2d coverage, per-proof comprehension + verdict | `iatc_semcheck.bb`·`r2d_concept_coverage.py`·`strategy_recognizer.py`·`clean_comprehension.py`·`cas_select.py`/`cas_cert.py` | cpu | **G-comprehension** (verdict separates weak-extraction from weak-proof) | ✔ |
+| **S6 paper-graph (B)** | synth | {proofs S3, expository S4, concepts S2} | unified paper-level graph: statements/defs as nodes, proofs as substructures, exposition as edges | **needs-build** (`paper_graph_assemble.py`) | cpu | B well-formed: every statement has its proof substructure or a flagged hole | ✔ |
+| **S7 CLean structure-embed** | ⑧ | IATC graphs (and B) | `*.clean.edn` (box-typed) + 33-d structure vectors | `iatc_to_clean.py`·`clean_box_typing.py`·`clean_argcheck.bb`·`clean_vocab_gate.bb`·`clean_structure_embed.py` | gpu-llm + cpu | `clean_argcheck`+**G-method-vocab**+**G-cyclic**; **G-entropy** | ✔ |
+| **S8 export→Rob** | ⑧ | CLean graph + vectors | neo4j cypher + pgvector SQL (+ DarkTower Lean) | `clean_graph_export.py`·`clean_to_lean.py` | cpu | cypher/SQL valid; load smoke-test | ✔ |
+| **S9 APM-match / pass-3** | ⑥/opt | B + comprehension | APM scope-coverage; conjecture/weak-proof map | `mark4_apm_structure_coverage.py`·`clean_hole_harvest.py` | cpu | APM gate / recurring-gaps keyed | — |
 
-## Go/no-go gate registry (the pre-mortem checks, wired to stages)
+## Go/no-go gate registry
 
-Each is a **halt-and-decide** the operator confirms before proceeding; a red gate
-means stop and fix, not push on.
+- **G-coverage (S2)** — raw pre-HAPAX concept coverage *rises* with corpus-fraction
+  (inline; `coverage_inline.py`). Built.
+- **G-substance (S3)** — checker-% / substance-% above floor on a random sample;
+  catches shell-gaming. Built (`substance_gate.py`).
+- **expository-argcheck (S4)** — the expository analogue of `iatc_argcheck` (3 golden
+  PASS / 6 negatives FIRE). Built (`expository_argcheck.bb`, cfec4f9) — **GPU run never
+  exercised** (mark5 skipped ⑤).
+- **G-method-vocab (S4→S7)** — every `:method`/`:macro` ∈ `clean-method-vocab.edn`.
+  Built (`clean_vocab_gate.bb`).
+- **G-cyclic (S7)** — cyclic-equivalence proofs logged + set aside, never dropped. Built.
+- **G-comprehension (S5)** — verdict separates weak-EXTRACTION ("study more") from
+  weak-PROOF; corpus-relative. Built (`clean_comprehension.py`).
+- **G-entropy (S7)** — structure embeddings discriminative, not collapsed.
+  **mark5 finding: FAILS at scale** — the 5 macro-shapes collapse (98/102 one macro);
+  signal is method-level. Built (`clean_entropy_gate.py`); the *vocabulary* needs rework.
 
-- **G-coverage (S2)** — does grounding a held-out paper against 10%/50%/100% of the
-  corpus *rise* then saturate? If flat → the substrate isn't helping; if it
-  saturates at 10% → know the ceiling. Tests Joe's "improves as we run."
-- **G-substance (S3)** — checker-% / substance-% above floor on a random
-  (non-keyword) sample; catches shell-gaming and enrichment-blind runs.
-- **G-method-vocab (S4)** — every LLaMA `:method` is in `clean-method-vocab.edn`;
-  off-vocab tags silently pollute the embedding (un-gated today — must add).
-- **G-cyclic (S4)** — cyclic-equivalence proofs are *counted and logged* when the
-  DAG gate rejects them, never silently dropped (silent truncation reads as
-  "covered everything").
-- **G-comprehension (S6)** — the floor separates weak-EXTRACTION ("study more")
-  from weak-PROOF, and comp rises with corpus. The Phase-2-readiness signal.
-- **G-entropy (S7)** — structure embeddings carry discriminative signal (method-tag
-  / macro entropy above threshold), not collapsed onto one cluster — else
-  retrieval is useless while every card stays green.
+## What's built vs. what this run still needs
 
-## What exists vs. what the stepper still needs
-
-- **Stages with code:** S1 (`render_gh200`/detector+checker), S3
-  (`mark3_iatc_loop` + `iatc_argcheck` + `substance_gate`), S4
-  (`iatc_to_clean` + `clean_argcheck`), S5 (`strategy_recognizer`), S6
-  (`clean_comprehension`), S7 (`clean_structure_embed`), S8
-  (`clean_graph_export`), S9 (`clean_hole_harvest`). S0/S2 from the warp + linode
-  scripts.
-- **The stepper runner — BUILT** (`scripts/linode_stepper.py`): reads the EDN
-  contract below, enforces pre/postconditions, runs the gate at each ✔ point,
-  halts for inspection, flags host-only GPU stages, and resumes (`--from`/`--to`).
-  Verified locally on the CPU tail (S7→S8 with the G-entropy gate; S3 host-halt).
-- **Gates built (2026-06-22):** **G-method-vocab** (`clean_vocab_gate.bb`, S4 —
-  every `:method`/`:macro` ∈ controlled vocab; 7/7 conformant, un-typed skeleton
-  correctly fails). **G-coverage diagnostic** (`coverage_curve.py`, S2) — which
-  established a key finding: **G-coverage cannot be a post-hoc gate.** All existing
-  concept artifacts are already HAPAX-filtered (term-prior df=1 drop), so a
-  post-hoc curve reads ~1.0 flat; the rise happened upstream. The real G-coverage
-  must run **INLINE at S2 on RAW per-paper concepts (pre-drop)** as the substrate
-  grows — an instrument inside the detector/substrate stage, not a standalone check.
-- **Built (2026-06-22):** **G-entropy** (`clean_entropy_gate.py`, S7 — macro-entropy
-  + mean off-diagonal cosine; PASS on the demo: entropy 0.98, sim 0.76) and the
-  **stepper runner** (`linode_stepper.py`) — reads this contract's EDN, drives
-  stages with precondition→cmd→gate→halt, flags host-only GPU stages and resumes
-  (`--plan` / `--run --from … --to … [--no-halt]`). Verified locally: S7→S8 run
-  with the G-entropy gate firing; S3 halts as host-only.
-- **Inline G-coverage instrument BUILT (2026-06-22):** `coverage_inline.py` — streams
-  RAW per-paper concepts as the substrate accumulates, reports coverage vs
-  corpus-fraction segmented by rarity band. Self-test on a synthetic tail: ALL
-  coverage rises **0.59 → 0.94**, concentrated in the rare/uncommon bands
-  (instrument validated). On the committed artifacts it reads flat (they're
-  df≥10-filtered — zero tail), printing "feed raw S1 concepts inline." It plugs in
-  at S2 against S1's raw concept stream on the live run.
-- **S4 box-typing driver BUILT (2026-06-22):** `clean_box_typing.py` — one-button
-  IATC-graph → served-70B box-typing → CLean, with in-loop vocab validation+retry,
-  per-graph argcheck (cyclic-equivalence proofs logged + set aside, G-cyclic), and
-  the vocab gate. Plumbing validated locally via `--stub` (typed 13 / rejected 2
-  cyclic / failed 0, exit 0); only the live vLLM HTTP call is box-exercised.
-- **Host commands wired** into the stepper (`--plan`) per README-linode for
-  S0/S1/S3/S4. **Run-ready** — remaining is the live run itself (a box + send-gate).
+- **Built and ready to exercise** (most of it): S0, S1, S2, S3 spine, S5, S7, S8, S9
+  scripts all exist and are individually validated (readiness cards 1.x–8.x).
+- **Built but NEVER exercised on GPU — the conspicuous mark5 gap:** **S4 expository**
+  (`mark3_expository_loop.py` + `expository_argcheck.bb`, cfec4f9, stub-tested only).
+  The whole point of the corrected run is to exercise ⑤ alongside ④.
+- **Needs a small change:** **S3 candidate extraction must yield ALL proof passages
+  per paper**, not the single `choose_passage` window (the mark3-demo one-proof
+  bottleneck — `mark5-ct100-results.md` D8).
+- **Needs build:** **S6 paper-graph (B) assembler** — the one genuinely-new component;
+  the rest is composition of built stages.
+- **Needs rework (not just a run):** the **macro vocabulary / embedding weighting**
+  (G-entropy collapse, mark5 D1/D2) before S7's embeddings are useful for retrieval.
+- **Needs re-sync:** `linode_stepper.py`'s `OPS` command-map still carries the mark5
+  stage semantics (S4=CLean, S5=strategy, S6=comprehension…); it must be re-keyed to
+  these corrected stage IDs (S4=expository, S5=comprehension, S6=paper-graph-B,
+  S7=clean-embed) before `--run` drives them. `--plan`'s stage list/gates already read
+  correct from this contract; only the per-stage commands lag.
 
 ## Machine-readable contract (the stepper reads this)
 
 ```edn
-{:pipeline :adapted-proof-structure
- :discipline {:executor-is-gate true :precondition-refuse true :finals-only true
-              :non-fatal-eval true :resumable true :supervised-halts true}
+{:pipeline :proof-structure-full
+ :supersedes "mark5 thin slice (④→⑧, one proof/paper, no ②/⑤/comprehension)"
+ :units {:p1 :per-paper :p2 :corpus}
+ :discipline {:executor-is-gate true :precondition-refuse true :dag-completeness true
+              :finals-only true :non-fatal-eval true :resumable true :error-tolerant true
+              :both-siblings-or-neither true}
  :stages
- [{:id :S0 :name "provision"        :compute :gpu      :halt true
-   :consumes [:stackscript :weights] :produces [:served-70b :venv]
-   :pre :bootstrap-done :post :health-200 :go-no-go [:serves-at-flags]}
-  {:id :S1 :name "anatomy"          :compute :cpu      :halt true
-   :consumes [:paper-tex] :produces [:marks]
-   :pre :tex-present :post :checker-wf0 :go-no-go [:wf0-on-batch]}
-  {:id :S2 :name "concept-substrate" :compute :cpu :barrier true :halt true
-   :consumes [:marks-all] :produces [:term-prior :encyclopedia :concept-index]
-   :pre :anatomy-complete :post :substrate-nonempty :go-no-go [:G-coverage]}
-  {:id :S3 :name "iatc-extract"     :compute :gpu-llm  :halt true
-   :consumes [:marks :enriched-candidates] :produces [:iatc-graph]
-   :pre :require-enriched :post [:iatc-argcheck :substance-gate]
-   :go-no-go [:G-substance]}
-  {:id :S4 :name "clean"            :compute :gpu-llm  :halt true
-   :consumes [:iatc-graph] :produces [:clean-edn]
-   :pre :iatc-pass :post :clean-argcheck :go-no-go [:G-method-vocab :G-cyclic]}
-  {:id :S5 :name "strategy-recognition" :compute :cpu  :halt false
-   :consumes [:source-window :formal-trace?] :produces [:strategy-profile]
-   :pre :source-window-present :post :recognizer-ran
-   :go-no-go [:discursive-recall-baseline]}
-  {:id :S6 :name "comprehension"    :compute :cpu      :halt true
-   :consumes [:iatc-graph :strategy-profile :concept-index] :produces [:comprehension]
-   :pre :substrate-and-recognizer :post :scores-computed :go-no-go [:G-comprehension]}
-  {:id :S7 :name "structure-embed"  :compute :cpu      :halt true
-   :consumes [:clean-edn] :produces [:structure-vectors :text-baseline]
-   :pre :clean-gated :post :vectors-normed :go-no-go [:G-entropy]}
-  {:id :S8 :name "export"           :compute :cpu      :halt true
-   :consumes [:clean-graph :structure-vectors] :produces [:neo4j-cypher :pgvector-sql]
-   :pre :embeddings-present :post :load-smoke-test :go-no-go [:rowcounts :ann-sane]}
-  {:id :S9 :name "pass3-mining"     :compute :cpu      :halt false :optional true
-   :consumes [:clean-edn :comprehension] :produces [:conjecture-map :weak-proof-map]
-   :pre :comprehension-present :post :harvest-ran :go-no-go [:recurring-gaps]}]
+ [{:id :S0 :name "provision"          :phase :infra :compute :gpu     :depends-on []            :halt true}
+  {:id :S1 :name "anatomy"            :phase :p1    :compute :cpu     :depends-on [:S0]         :halt true
+   :note "WHOLE paper: proofs + definitions + theorem statements + expository regions (dp_paper_view, all flags)"}
+  {:id :S2 :name "concept-substrate"  :phase :p2    :compute :cpu     :depends-on [:S1] :barrier true :must-be-corpus-fresh true :halt true
+   :go-no-go [:G-coverage]}
+  {:id :S3 :name "iatc-formal"        :phase :p1    :compute :gpu-llm :depends-on [:S0 :S1]     :halt true
+   :go-no-go [:G-substance] :note "extract + reconstruct EVERY proof in the paper (not one passage)"}
+  {:id :S4 :name "expository"         :phase :p1    :compute :gpu-llm :depends-on [:S0 :S1]     :halt true
+   :go-no-go [:expository-argcheck] :note "THE restored sibling: fill the 16 typed-hole expository scopes over ALL regions; built (cfec4f9) but never GPU-run"}
+  {:id :S5 :name "comprehension"      :phase :p2    :compute :cpu     :depends-on [:S2 :S3 :S4] :halt true
+   :go-no-go [:G-comprehension] :note "rung-ladder + R2d + strategy recognizer; needs BOTH siblings + concepts"}
+  {:id :S6 :name "paper-graph-B"      :phase :p1    :compute :cpu     :depends-on [:S2 :S3 :S4] :halt true :needs-build true
+   :note "unified paper-level graph: statements/defs nodes, proofs as substructures, exposition as edges"}
+  {:id :S7 :name "clean-embed"        :phase :p2    :compute :gpu-llm :depends-on [:S3 :S6]     :halt true
+   :go-no-go [:G-method-vocab :G-cyclic :G-entropy] :note "macro-vocab/embedding-weighting rework needed (mark5 G-entropy collapse)"}
+  {:id :S8 :name "export"             :phase :p2    :compute :cpu     :depends-on [:S7]         :halt true}
+  {:id :S9 :name "apm-match+mining"   :phase :p2    :compute :cpu     :depends-on [:S5 :S6]     :halt false :optional true}]
  :gate-registry
- {:G-coverage      {:at :S2 :status :built-inline :check "coverage_inline.py — raw pre-HAPAX concept coverage rises with corpus-fraction; MUST run inline at S2 (post-hoc reads flat — artifacts already df=1-filtered; diagnostic coverage_curve.py)"}
-  :G-substance     {:at :S3 :check "checker-% / substance-% above floor on random sample"}
-  :G-method-vocab  {:at :S4 :check "every :method/:macro in clean-method-vocab.edn (clean_vocab_gate.bb)" :status :built}
-  :G-cyclic        {:at :S4 :check "cyclic-equiv rejections logged, not dropped"}
-  :G-comprehension {:at :S6 :check "separates weak-extraction/weak-proof; rises with corpus"}
-  :G-entropy       {:at :S7 :check "structure-embedding macro-entropy + off-diag cosine discriminative (clean_entropy_gate.py)" :status :built}}}
+ {:G-coverage          {:at :S2 :status :built-inline}
+  :G-substance         {:at :S3 :status :built}
+  :expository-argcheck {:at :S4 :status :built-stub :note "GPU run never exercised — the mark5 gap"}
+  :G-method-vocab      {:at :S7 :status :built}
+  :G-cyclic            {:at :S7 :status :built}
+  :G-comprehension     {:at :S5 :status :built}
+  :G-entropy           {:at :S7 :status :built :finding "FAILS at scale (macro collapse) — vocab rework needed"}}}
 ```
 
-*Cross-refs:* `pre-superpod-pipeline-readiness.html` (Phase ⑧),
-`proofcheck-readiness.html` (comprehension/strategy cards),
-`E-comprehension-foundation.md`, `E-strategy-recognizer.md`, `E-clean.md`,
-`clean_pipeline.sh` (the local end-to-end precursor to the stepper).
+*Cross-refs:* `pre-superpod-pipeline-readiness.html` (phases ①–⑧),
+`proofcheck-readiness.html` (rung ladder + comprehension), `superpod-dag-contract.md`
+(phase-completeness enforcement, inherits this DAG), `mark5-ct100-results.md` (what the
+thin slice showed + why), `E-clean.md`, `E-comprehension-foundation.md`,
+`E-strategy-recognizer.md`.
