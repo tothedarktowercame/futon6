@@ -101,8 +101,15 @@ means stop and fix, not push on.
   stages with precondition→cmd→gate→halt, flags host-only GPU stages and resumes
   (`--plan` / `--run --from … --to … [--no-halt]`). Verified locally: S7→S8 run
   with the G-entropy gate firing; S3 halts as host-only.
-- **Still to build:** the inline S2 raw-coverage instrument (raw pre-HAPAX
-  concepts during the run); wiring the GPU stages' real commands on the host.
+- **Inline G-coverage instrument BUILT (2026-06-22):** `coverage_inline.py` — streams
+  RAW per-paper concepts as the substrate accumulates, reports coverage vs
+  corpus-fraction segmented by rarity band. Self-test on a synthetic tail: ALL
+  coverage rises **0.59 → 0.94**, concentrated in the rare/uncommon bands
+  (instrument validated). On the committed artifacts it reads flat (they're
+  df≥10-filtered — zero tail), printing "feed raw S1 concepts inline." It plugs in
+  at S2 against S1's raw concept stream on the live run.
+- **Still to build:** wiring the GPU stages' real commands on the host (S0/S1/S3/S4)
+  for the live Linode run.
 
 ## Machine-readable contract (the stepper reads this)
 
@@ -144,7 +151,7 @@ means stop and fix, not push on.
    :consumes [:clean-edn :comprehension] :produces [:conjecture-map :weak-proof-map]
    :pre :comprehension-present :post :harvest-ran :go-no-go [:recurring-gaps]}]
  :gate-registry
- {:G-coverage      {:at :S2 :status :inline-only :check "raw pre-HAPAX concept coverage rises with corpus-fraction; MUST run inline at S2 (post-hoc reads flat — artifacts already df=1-filtered; diagnostic coverage_curve.py)"}
+ {:G-coverage      {:at :S2 :status :built-inline :check "coverage_inline.py — raw pre-HAPAX concept coverage rises with corpus-fraction; MUST run inline at S2 (post-hoc reads flat — artifacts already df=1-filtered; diagnostic coverage_curve.py)"}
   :G-substance     {:at :S3 :check "checker-% / substance-% above floor on random sample"}
   :G-method-vocab  {:at :S4 :check "every :method/:macro in clean-method-vocab.edn (clean_vocab_gate.bb)" :status :built}
   :G-cyclic        {:at :S4 :check "cyclic-equiv rejections logged, not dropped"}

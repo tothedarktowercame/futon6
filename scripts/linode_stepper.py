@@ -48,7 +48,7 @@ def load_stages():
 OPS = {
     "S0": {"local": False, "note": "linode-4gpu-setup.sh / run.sh — provision + serve 70B (vLLM)"},
     "S1": {"local": False, "note": "render_gh200.py / detector -> marks", "gate": "check_invariants (wf=0)"},
-    "S2": {"local": False, "note": "warp substrate build (concordance heavy) + INLINE G-coverage on raw concepts"},
+    "S2": {"local": False, "note": "warp substrate build (concordance heavy); G-coverage runs INLINE here via coverage_inline.py on S1's raw concept stream"},
     "S3": {"local": False, "note": "mark3_iatc_loop (vLLM 70B) -> IATC graphs",
            "gate": "bb scripts/iatc_argcheck.bb <out> && {PY} scripts/substance_gate.py <out>"},
     "S4": {"local": False, "note": "iatc_to_clean.py skeleton + LLaMA box-typing",
