@@ -23,8 +23,9 @@ success.
 **THEN** make the DAG enforceable: explicit `:depends-on` edges, a per-run **phase
 ledger** that records each stage's completion + gated output + which corpus it
 pertains to, and a stepper precondition that **refuses a stage whose upstream phase
-has no ledger entry for this run** — with reuse permitted only when *declared*
-(recorded with provenance), never silent.
+has no ledger entry for this run** — the concept substrate (S2) **required
+corpus-fresh** (never substituted from a prior/pre-planned vocabulary), and reuse of
+any other artifact valid **only within the same corpus**.
 
 **BECAUSE** silent skipping degrades the output invisibly (concept model not
 corpus-faithful; no G-coverage) — the exact failure mode the gates exist to prevent.
@@ -66,11 +67,31 @@ truth for "what has actually run for this corpus."
 gate. If absent → **refuse** (exit nonzero, name the missing phase). This is the
 `precondition-refuse` discipline extended across the DAG, not just per-stage inputs.
 
-**Explicit reuse (not silent skip).** To carry a prior artifact into a new run
-(what we *did* with the substrate), pass `--reuse S2=<prior-run-id|path>`. The
-stepper writes a ledger entry with `:reused true` + `:provenance` + a
-`:corpus-faithful false` flag. Downstream still proceeds, but the output is *marked*
-as not corpus-fresh, and reports say so. Reuse becomes a decision on the record.
+**Reuse = same-corpus only; emergent concepts are never substituted.** The
+completeness check passes a dep if its artifact was built for **this `:corpus-id`**
+(any run-id — that covers a genuine resume after a crash). What is *not* allowed is
+substituting an artifact built from a **different** corpus. For **S2 specifically
+this is a hard refusal, not a declarable option**: the concept substrate is
+*discovered from the corpus being processed*, so a prior/pre-planned concept-index
+is simply the wrong concepts — `--reuse` cannot launder it in. The mark5 reuse of
+the Jun-18 index was a slice shortcut and is **explicitly invalid at superpod
+scale**. (`--reuse <stage>=<path>` exists only to point at a same-`corpus-id`
+artifact in a non-standard location, e.g. a recovered ledger — never to cross
+corpora.)
+
+### Emergent concepts vs. the controlled lens (don't conflate them)
+
+Two "vocabularies" live in the pipeline and they are opposite in kind:
+
+- **Concept substrate (S2) — EMERGENT, corpus-intrinsic.** The nouns/objects are
+  *discovered* from this corpus. Must be built fresh per run; never reused from a
+  pre-planned set. This is the data.
+- **Method/macro vocabulary (`clean-method-vocab.edn`, S4 G-method-vocab) —
+  CONTROLLED, pre-planned by design.** The 12 iching-derived method tags + 5
+  macro-shapes are the *lens* we classify proofs through; reusing them across runs
+  is correct (a fixed tagset keeps embeddings comparable). If the lens needs to
+  grow for a new domain, that is a **deliberate, reviewed vocabulary-evolution
+  step** — also never a silent reuse-vs-skip.
 
 ## Superpod compute specifics (differs from Linode)
 
@@ -93,7 +114,8 @@ the only safety net. They are now load-bearing, not advisory.
  :inherits "linode-stepper-contract.md"          ; per-stage consumes/produces/gates
  :discipline {:executor-is-gate true :precondition-refuse true :finals-only true
               :non-fatal-eval true :resumable true :supervised-halts true
-              :dag-completeness true :reuse-must-be-declared true}
+              :dag-completeness true :reuse-same-corpus-only true
+              :emergent-stages-never-substituted [:S2]}
  :phase-ledger {:path "data/runs/<run-id>/phase-ledger.edn"
                 :key [:stage :corpus-id]
                 :entry [:stage :run-id :corpus-id :output :fingerprint :gate :reused :ts]
@@ -102,8 +124,8 @@ the only safety net. They are now load-bearing, not advisory.
  :dag
  [{:id :S0 :depends-on []            :required true}
   {:id :S1 :depends-on [:S0]         :required true}
-  {:id :S2 :depends-on [:S1]         :required true :barrier true :reuse-allowed true
-   :note "concept-substrate — the phase mark5 skipped; reuse only via --reuse with provenance"}
+  {:id :S2 :depends-on [:S1]         :required true :barrier true :must-be-corpus-fresh true
+   :note "concept-substrate — EMERGENT from this corpus; NEVER reused from a prior/pre-planned vocabulary (mark5 wrongly reused a stale index). No --reuse for S2: a foreign corpus-id is a hard refusal."}
   {:id :S3 :depends-on [:S0 :S1]     :required true :compute :gpu-llm}
   {:id :S4 :depends-on [:S0 :S3]     :required true :compute :gpu-llm}
   {:id :S5 :depends-on [:S1]         :required true}
