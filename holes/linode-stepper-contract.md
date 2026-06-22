@@ -87,8 +87,16 @@ means stop and fix, not push on.
   contract below, enforces pre/postconditions, halts at the ✔ points, writes a
   per-stage metrics report, and resumes. (`mark4_pipeline_runner` is a planner —
   promote it, or write a fresh `linode_stepper`.)
-- **Un-gated today (build before the run):** G-method-vocab (S4) and the
-  G-coverage curve harness (S2).
+- **Gates built (2026-06-22):** **G-method-vocab** (`clean_vocab_gate.bb`, S4 —
+  every `:method`/`:macro` ∈ controlled vocab; 7/7 conformant, un-typed skeleton
+  correctly fails). **G-coverage diagnostic** (`coverage_curve.py`, S2) — which
+  established a key finding: **G-coverage cannot be a post-hoc gate.** All existing
+  concept artifacts are already HAPAX-filtered (term-prior df=1 drop), so a
+  post-hoc curve reads ~1.0 flat; the rise happened upstream. The real G-coverage
+  must run **INLINE at S2 on RAW per-paper concepts (pre-drop)** as the substrate
+  grows — an instrument inside the detector/substrate stage, not a standalone check.
+- **Still to build:** G-entropy (S7 — structure-embedding discriminativeness);
+  the inline S2 raw-coverage instrument; and the stepper runner itself.
 
 ## Machine-readable contract (the stepper reads this)
 
@@ -130,9 +138,9 @@ means stop and fix, not push on.
    :consumes [:clean-edn :comprehension] :produces [:conjecture-map :weak-proof-map]
    :pre :comprehension-present :post :harvest-ran :go-no-go [:recurring-gaps]}]
  :gate-registry
- {:G-coverage      {:at :S2 :check "coverage vs corpus-fraction rises then saturates"}
+ {:G-coverage      {:at :S2 :status :inline-only :check "raw pre-HAPAX concept coverage rises with corpus-fraction; MUST run inline at S2 (post-hoc reads flat — artifacts already df=1-filtered; diagnostic coverage_curve.py)"}
   :G-substance     {:at :S3 :check "checker-% / substance-% above floor on random sample"}
-  :G-method-vocab  {:at :S4 :check "LLaMA :method in clean-method-vocab.edn" :status :unbuilt}
+  :G-method-vocab  {:at :S4 :check "every :method/:macro in clean-method-vocab.edn (clean_vocab_gate.bb)" :status :built}
   :G-cyclic        {:at :S4 :check "cyclic-equiv rejections logged, not dropped"}
   :G-comprehension {:at :S6 :check "separates weak-extraction/weak-proof; rises with corpus"}
   :G-entropy       {:at :S7 :check "structure-embedding entropy above threshold" :status :unbuilt}}}
