@@ -50,8 +50,11 @@ MAN = "holes/math-ct-200.ids.txt"
 OPS = {
     "S0": {"local": False, "note": "README-linode: StackScript 2142757 box; scripts/linode-postsetup-deps.sh; "
            "hf download …-70B-…-AWQ-INT4 (retry loop); scripts/linode-4gpu-setup.sh (serves vLLM, flashinfer sampler off)"},
-    "S1": {"local": False, "note": f"scripts/fetch-arxiv-eprints.py (eprints for {MAN}) -> "
-           f"scripts/render_gh200.py --list {MAN} -> marks", "gate": "check_invariants wf=0"},
+    "S1": {"local": False, "note": "{PY} scripts/fetch-arxiv-eprints.py --input holes/math-ct-200.fetch.jsonl "
+           "--out-dir /home/joe/code/storage/futon6/data/arxiv-math-ct-eprints -> "
+           "{PY} scripts/emit_marks.py --list holes/math-ct-200.ids.txt -> "
+           "{PY} scripts/mark3_extract_candidates.py --papers <ids> --out data/iatc-candidates",
+           "gate": "candidate schema == iatc-candidate/v2-enriched"},
     "S2": {"local": False, "note": "warp substrate build (concordance heavy); G-coverage runs INLINE here via coverage_inline.py on S1's raw concept stream"},
     "S3": {"local": False, "note": "scripts/linode-4gpu-run.sh (mark3_extract_candidates -> mark3_iatc_loop vLLM 70B -> IATC graphs + eval tail)",
            "gate": "bb scripts/iatc_argcheck.bb $OUT && {PY} scripts/substance_gate.py $OUT"},

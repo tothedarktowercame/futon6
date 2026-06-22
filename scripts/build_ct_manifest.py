@@ -44,10 +44,11 @@ def main():
 
     con = sqlite3.connect(args.db)
     rows = con.execute(
-        "select arxiv_id, title, primary_category, created from papers "
+        "select arxiv_id, title, primary_category, created, eprint_url from papers "
         "where primary_category='math.CT' and created >= ? order by created, arxiv_id",
         (args.since,)).fetchall()
     pool = [{"arxiv_id": r[0], "title": (r[1] or "").strip(), "created": r[3]} for r in rows]
+    eu_by_id = {r[0]: (r[4] or f"https://arxiv.org/e-print/{r[0]}") for r in rows}
     pool_ids = {p["arxiv_id"] for p in pool}
 
     warm = sorted(warm_ids() & pool_ids)        # warm papers that are in the math.CT pool
@@ -80,6 +81,11 @@ def main():
     # fetch-arxiv-eprints.py consume on the Linode host (S1).
     listp = outp.rsplit(".manifest.json", 1)[0] + ".ids.txt"
     open(listp, "w").write("\n".join(p["arxiv_id"] for p in chosen) + "\n")
+    # fetch JSONL ({id, eprint_url}) — the input fetch-arxiv-eprints.py consumes (S1)
+    fjsonl = outp.rsplit(".manifest.json", 1)[0] + ".fetch.jsonl"
+    with open(fjsonl, "w") as fh:
+        for p in chosen:
+            fh.write(json.dumps({"id": p["arxiv_id"], "eprint_url": eu_by_id[p["arxiv_id"]]}) + "\n")
 
     print(f"math.CT pool (primary, since {args.since}): {len(pool)}")
     print(f"manifest: {len(chosen)} papers ({len(warm)} warm / already-IATC'd), "
