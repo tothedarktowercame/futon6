@@ -45,14 +45,18 @@ def load_stages():
 
 # dispatch: stage-id -> what to actually run. local stages have a cmd (+ optional
 # gate); host-only stages carry the command to run on the Linode GPU host.
+# host commands follow futon0/README-linode.md (StackScript 2142757 box).
+MAN = "holes/math-ct-200.ids.txt"
 OPS = {
-    "S0": {"local": False, "note": "linode-4gpu-setup.sh / run.sh — provision + serve 70B (vLLM)"},
-    "S1": {"local": False, "note": "render_gh200.py / detector -> marks", "gate": "check_invariants (wf=0)"},
+    "S0": {"local": False, "note": "README-linode: StackScript 2142757 box; scripts/linode-postsetup-deps.sh; "
+           "hf download …-70B-…-AWQ-INT4 (retry loop); scripts/linode-4gpu-setup.sh (serves vLLM, flashinfer sampler off)"},
+    "S1": {"local": False, "note": f"scripts/fetch-arxiv-eprints.py (eprints for {MAN}) -> "
+           f"scripts/render_gh200.py --list {MAN} -> marks", "gate": "check_invariants wf=0"},
     "S2": {"local": False, "note": "warp substrate build (concordance heavy); G-coverage runs INLINE here via coverage_inline.py on S1's raw concept stream"},
-    "S3": {"local": False, "note": "mark3_iatc_loop (vLLM 70B) -> IATC graphs",
-           "gate": "bb scripts/iatc_argcheck.bb <out> && {PY} scripts/substance_gate.py <out>"},
-    "S4": {"local": False, "note": "iatc_to_clean.py skeleton + LLaMA box-typing",
-           "gate": "bb scripts/clean_argcheck.bb holes/clean && bb scripts/clean_vocab_gate.bb holes/clean"},
+    "S3": {"local": False, "note": "scripts/linode-4gpu-run.sh (mark3_extract_candidates -> mark3_iatc_loop vLLM 70B -> IATC graphs + eval tail)",
+           "gate": "bb scripts/iatc_argcheck.bb $OUT && {PY} scripts/substance_gate.py $OUT"},
+    "S4": {"local": False, "note": "{PY} scripts/iatc_to_clean.py per graph (skeleton) + LLaMA box-typing via the served 70B; --apply typing",
+           "gate": "bb scripts/clean_argcheck.bb $CLEAN && bb scripts/clean_vocab_gate.bb $CLEAN"},
     "S5": {"local": True, "inputs": ["data/iatc-candidates"],
            "cmd": "{PY} scripts/strategy_recognizer.py --candidates data/iatc-candidates"},
     "S6": {"local": True, "inputs": ["data/iatc-argument-graphs/loop-run-70b"],

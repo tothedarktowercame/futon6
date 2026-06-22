@@ -76,6 +76,10 @@ def main():
     outp = os.path.join(ROOT, args.out)
     os.makedirs(os.path.dirname(outp), exist_ok=True)
     json.dump(out, open(outp, "w"), indent=1)
+    # sibling id-list (one arxiv_id per line) — the input render_gh200.py --list and
+    # fetch-arxiv-eprints.py consume on the Linode host (S1).
+    listp = outp.rsplit(".manifest.json", 1)[0] + ".ids.txt"
+    open(listp, "w").write("\n".join(p["arxiv_id"] for p in chosen) + "\n")
 
     print(f"math.CT pool (primary, since {args.since}): {len(pool)}")
     print(f"manifest: {len(chosen)} papers ({len(warm)} warm / already-IATC'd), "
