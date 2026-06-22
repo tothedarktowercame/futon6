@@ -83,10 +83,10 @@ means stop and fix, not push on.
   (`clean_comprehension`), S7 (`clean_structure_embed`), S8
   (`clean_graph_export`), S9 (`clean_hole_harvest`). S0/S2 from the warp + linode
   scripts.
-- **The stepper itself is the glue to build:** a thin runner that reads the EDN
-  contract below, enforces pre/postconditions, halts at the ✔ points, writes a
-  per-stage metrics report, and resumes. (`mark4_pipeline_runner` is a planner —
-  promote it, or write a fresh `linode_stepper`.)
+- **The stepper runner — BUILT** (`scripts/linode_stepper.py`): reads the EDN
+  contract below, enforces pre/postconditions, runs the gate at each ✔ point,
+  halts for inspection, flags host-only GPU stages, and resumes (`--from`/`--to`).
+  Verified locally on the CPU tail (S7→S8 with the G-entropy gate; S3 host-halt).
 - **Gates built (2026-06-22):** **G-method-vocab** (`clean_vocab_gate.bb`, S4 —
   every `:method`/`:macro` ∈ controlled vocab; 7/7 conformant, un-typed skeleton
   correctly fails). **G-coverage diagnostic** (`coverage_curve.py`, S2) — which
@@ -95,8 +95,14 @@ means stop and fix, not push on.
   post-hoc curve reads ~1.0 flat; the rise happened upstream. The real G-coverage
   must run **INLINE at S2 on RAW per-paper concepts (pre-drop)** as the substrate
   grows — an instrument inside the detector/substrate stage, not a standalone check.
-- **Still to build:** G-entropy (S7 — structure-embedding discriminativeness);
-  the inline S2 raw-coverage instrument; and the stepper runner itself.
+- **Built (2026-06-22):** **G-entropy** (`clean_entropy_gate.py`, S7 — macro-entropy
+  + mean off-diagonal cosine; PASS on the demo: entropy 0.98, sim 0.76) and the
+  **stepper runner** (`linode_stepper.py`) — reads this contract's EDN, drives
+  stages with precondition→cmd→gate→halt, flags host-only GPU stages and resumes
+  (`--plan` / `--run --from … --to … [--no-halt]`). Verified locally: S7→S8 run
+  with the G-entropy gate firing; S3 halts as host-only.
+- **Still to build:** the inline S2 raw-coverage instrument (raw pre-HAPAX
+  concepts during the run); wiring the GPU stages' real commands on the host.
 
 ## Machine-readable contract (the stepper reads this)
 
@@ -143,7 +149,7 @@ means stop and fix, not push on.
   :G-method-vocab  {:at :S4 :check "every :method/:macro in clean-method-vocab.edn (clean_vocab_gate.bb)" :status :built}
   :G-cyclic        {:at :S4 :check "cyclic-equiv rejections logged, not dropped"}
   :G-comprehension {:at :S6 :check "separates weak-extraction/weak-proof; rises with corpus"}
-  :G-entropy       {:at :S7 :check "structure-embedding entropy above threshold" :status :unbuilt}}}
+  :G-entropy       {:at :S7 :check "structure-embedding macro-entropy + off-diag cosine discriminative (clean_entropy_gate.py)" :status :built}}}
 ```
 
 *Cross-refs:* `pre-superpod-pipeline-readiness.html` (Phase ⑧),
