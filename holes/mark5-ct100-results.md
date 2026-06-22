@@ -69,6 +69,18 @@ explanations, both consistent with prior design discussions and neither yet chec
 The 9-proof demo (macro-entropy 0.77, PASS) **oversold** regardless — too few proofs,
 and hand-lifted to be macro-diverse.
 
+**Diagnostic 1 (2026-06-22, CPU on the 102 in hand): vocab bottleneck, not proof-sameness.**
+Unsupervised clustering of the 102 **method-bags** (the signal independent of the
+collapsed macro): **28 distinct method-sets**; the 98 proofs the fixed macro lumped as
+one class **split into method-distinct groups** (compute-invariant-led · construct-
+auxiliary-*pure* · transport-along-symmetry-heavy · reduce-to-known-led). So the fixed
+macro **discards real distinctions at the proof level** → candidate (2) [fixed vocab] is
+supported over "proofs are identical." **Caveat:** clusters are *weak* (silhouette ~0.30,
+peak 0.32 @k=8) — a graded continuum, not crisp classes; so the actionable signal is the
+**method-composition vector itself (reweighted up)**, and a *discrete* data-driven macro
+vocab may not buy much over using the composition directly. **Candidate (1) [paper-level
+lens] remains untestable here** — mark5 is one-proof-per-paper; needs the whole-paper run.
+
 **D2 — Discrimination is method-level, not macro-level (and the embedding is mis-weighted).**
 The 12-tag *method spine* stayed diverse — 10 tags fire: reduce-to-known-result 170,
 construct-auxiliary-object 163, transport-along-symmetry 69, compute-invariant 20,
