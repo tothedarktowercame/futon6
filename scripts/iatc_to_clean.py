@@ -72,8 +72,33 @@ def as_list(p):
     return list(p)
 
 
+def _edn_safe(text):
+    """edn_format (strict) rejects ' in symbols/keywords (e.g. :phi', common in CT
+    primes), but bb (the lenient reader that PRODUCED these graphs) accepts it.
+    Replace ' with 'prime' ONLY outside double-quoted strings — fixes keyword/symbol
+    tokens while leaving :text verbatim. Global+consistent, so ids/refs stay aligned."""
+    out, in_str, esc = [], False, False
+    for ch in text:
+        if in_str:
+            out.append(ch)
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+        elif ch == '"':
+            in_str = True
+            out.append(ch)
+        elif ch == "'":
+            out.append("prime")
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
 def load_graph(path):
-    m = edn.loads(open(path).read())
+    m = edn.loads(_edn_safe(open(path).read()))
     d = {kw(k): v for k, v in dict(m).items()}
     nodes = {}
     for n in d.get("nodes", []):
