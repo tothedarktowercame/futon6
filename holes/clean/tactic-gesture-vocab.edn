@@ -1,0 +1,140 @@
+;; Tactic->gesture vocabulary for the NL strategy recognizer.
+;; See holes/excursions/E-strategy-recognizer.md for the means/ends discipline.
+;;
+;; DIRECTION: recognition. Each :tactic-vocab entry maps a DISCURSIVE Lean tactic
+;; (one a mathematician verbally signals) to the informal GESTURES that signal it.
+;;
+;; RECONCILED against Herald (2026-06-22, scripts/herald_validate.py over 44,553
+;; NL<->Lean4 proof pairs). Empirical finding: the most FREQUENT Lean tactics
+;; (rw 1470x, simp 1385x, exact 879x, refine, ext) are SILENT in informal prose —
+;; the author writes the resulting equation, not "I now rewrite." They are a
+;; HIDDEN LAYER from the recognizer's point of view (Joe): we do not look for what
+;; isn't there. Recognition targets the DISCURSIVE layer (strategies the prose
+;; states); the hidden layer is recovered from the FORMAL trace where a proof is
+;; paired (Herald / the mathlib-CT replication), never guessed from prose.
+;;
+;; Herald recall on the discursive targets: intro .95 apply .93 induction .65
+;; contrapose .61 constructor .58 suffices .56 cases .51 (the strategy signal).
+;;
+;; STATUS :reconciled-vs-herald. Still to be GROWN on math.CT (co-learning loop).
+;;
+;; TWO LEVELS (clean-method-vocab.edn holds the high-level :combinator vocab;
+;; :method-tags links each atomic tactic UP to the combinators it serves).
+;;
+;; BRIDGE TO THE COMPREHENSION FLOOR (clean_comprehension.py / rung-3):
+;;   recognized verifiable tactic -> grounded ; heuristic -> thin ;
+;;   residue-marker / nothing -> ungrounded ; conjecture-marker -> conjecture.
+
+{:typing-source :reconciled-vs-herald
+ :adapted-from  [:lean-mathlib-tactic-set :herald-tactic-explanations-inverted]
+
+ ;; ---- DISCURSIVE recognition targets: tactic-class <- (tightened) gestures ----
+ :tactic-vocab
+ {:intro
+  {:gloss "introduce a hypothesis / fix an arbitrary element"
+   :gestures ["let " "fix " "assume " "suppose " "take an arbitrary" "consider an arbitrary"]
+   :verifiable? true :level :atomic :method-tags [:epsilon-of-room]}
+
+  :apply
+  {:gloss "apply a known lemma/theorem"
+   ;; tightened: dropped bare "by " (FP-rate 0.91 — matches everything)
+   :gestures ["by the theorem" "applying" "we apply" "it follows from" "follows by"
+              "using the" "invoke" "by a result of" "by a theorem of"]
+   :verifiable? true :level :atomic :method-tags [:reduce-to-known-result]}
+
+  :by_contra
+  {:gloss "assume the negation; derive a contradiction"
+   :gestures ["suppose not" "for contradiction" "assume the contrary" "suppose otherwise"
+              "towards a contradiction" "if not" "were false"]
+   :verifiable? true :level :atomic :method-tags [:argue-by-contradiction]}
+
+  :induction
+  {:gloss "induct on a structure (countable / recursive / well-founded)"
+   :gestures ["by induction on" "inductively" "by recursion on" "induction hypothesis"
+              "base case" "inductive step" "by strong induction"]
+   :verifiable? true :level :atomic :method-tags [:induct-up-a-tower]}
+
+  :cases
+  {:gloss "split into cases / destruct a hypothesis"
+   :gestures ["by cases" "case " "in each case" "we consider .* cases" "either"
+              "depending on whether" "split into"]
+   :verifiable? true :level :atomic :method-tags [:count-by-decomposition]}
+
+  :obtain
+  {:gloss "extract a witness from an existential/conjunction"
+   :gestures ["obtain" "there exists" "we get a" "call it" "there is a" "yields a"]
+   :verifiable? true :level :atomic :method-tags [:construct-auxiliary-object]}
+
+  :suffices
+  {:gloss "reduce the goal to a sufficient subgoal"
+   :gestures ["it suffices to show" "it suffices to" "it is enough to" "we reduce to"
+              "reduces to showing" "it would suffice"]
+   :verifiable? true :level :atomic :method-tags [:reduce-to-known-result]}
+
+  :wlog
+  {:gloss "normalize without loss of generality"
+   :gestures ["without loss of generality" "wlog" "by symmetry we may assume"
+              "we may assume" "after relabeling"]
+   :verifiable? true :level :atomic :method-tags [:quotient-by-irrelevance]}
+
+  :use
+  {:gloss "provide an explicit witness for an existential"
+   ;; tightened: dropped generic "consider the"/"define"/"set "/"take " (FP-rate 0.98)
+   :gestures ["we exhibit" "the witness" "take .* to be" "choose .* such that"
+              "there is a .* with" "define .* by"]
+   :verifiable? true :level :atomic :method-tags [:construct-auxiliary-object]}
+
+  :constructor
+  {:gloss "build a structured object / split a conjunction or iff"
+   :gestures ["we construct" "construct a" "we build" "both directions" "conversely"
+              "the two conditions"]
+   :verifiable? true :level :atomic :method-tags [:construct-auxiliary-object]}
+
+  :contrapose
+  {:gloss "prove the contrapositive"
+   :gestures ["contrapositive" "equivalently we show" "the contrapositive"]
+   :verifiable? true :level :atomic :method-tags [:argue-by-contradiction]}
+
+  :calc
+  {:gloss "a chain of (in)equalities computed step by step"
+   :gestures ["we compute" "calculating" "the computation" "chain of"
+              "we have the chain" "we estimate"]
+   :verifiable? true :level :atomic :method-tags [:cover-and-estimate]}}
+
+ ;; ---- HIDDEN LAYER: silent/mechanical tactics — NOT recognition targets ----
+ ;; Herald recall: rw .09 simp .16 exact .03 refine .02 ext .02 unfold .06
+ ;; ring/linarith/norm_num/gcongr/aesop_cat ~.00. The recognizer does NOT look for
+ ;; these in prose (Joe: "a hidden layer from the recognizer's point of view").
+ ;; Recover them from the FORMAL trace where a proof is paired (Herald / mathlib-CT
+ ;; replication) — there they are first-class; in informal prose they are elided.
+ :hidden-layer-tactics
+ {:rw       "rewrite along an equation — author writes the result, not the move"
+  :simp     "simplification — elided in prose"
+  :exact    "term that is exactly the goal — stated, not announced"
+  :refine   "partial term with subgoals — mechanical"
+  :ext      "extensionality — bookkeeping (CT-frequent: naturality/objects)"
+  :unfold   "unfold a definition — usually silent ('by definition' is too noisy a gesture, FP .97)"
+  :ring     "commutative-ring normalization — silent computation"
+  :linarith "linear-arithmetic closing — silent"
+  :norm_num "numeric discharge — silent"
+  :gcongr   "monotonicity congruence — silent"
+  :aesop_cat "CT automation — silent"}
+
+ ;; ---- automation with no informal gesture: if ever matched -> THIN ----
+ :heuristic-tactics
+ {:aesop   {:gloss "general automation" :gestures ["routine" "standard argument"] :verifiable? false}
+  :decide  {:gloss "decidable check" :gestures ["clearly decidable"] :verifiable? false}}
+
+ ;; ---- residue markers: hedge-words signalling an UNGROUNDED / hand-wave move ----
+ :residue-markers
+ ["clearly" "obviously" "it is well known" "well-known" "a standard argument"
+  "left to the reader" "routine" "straightforward" "easy to see" "evidently"
+  "it is easy to check" "an exercise" "we omit" "similar to" "mutatis mutandis"
+  "it can be shown" "one can show"]
+
+ ;; ---- conjecture / open-problem markers (author-declared gaps; credited) ----
+ :conjecture-markers
+ ["we conjecture" "it remains open" "is an open problem" "an interesting question"
+  "we expect that" "it is not known whether" "remains to be" "we leave open"]
+
+ :combinator-vocab-ref "holes/clean/clean-method-vocab.edn"}
