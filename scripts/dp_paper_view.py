@@ -556,10 +556,16 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     nw = _load_nlab_wiring() if with_scopes else None
     xref = _load_xref() if with_xref else None
     eprint = None
+    # try the raw id AND the safe_id form: old-style "math/NNNN" eprints are stored
+    # as "math__NNNN" by fetch-arxiv-eprints' safe_id, so the raw-only lookup silently
+    # missed ~2.5% of CT (more at full-arXiv scale).
     for suffix in (".tar.gz", ".tex.gz", ".gz", ".tar", ".tex"):
-        cand = EPRINTS / f"{paper}{suffix}"
-        if cand.exists():
-            eprint = cand
+        for name in (paper, paper.replace("/", "__")):
+            cand = EPRINTS / f"{name}{suffix}"
+            if cand.exists():
+                eprint = cand
+                break
+        if eprint is not None:
             break
     if eprint is None:
         raise SystemExit(f"no eprint for {paper} under {EPRINTS}")

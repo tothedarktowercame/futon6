@@ -79,13 +79,20 @@ def main():
     json.dump(out, open(outp, "w"), indent=1)
     # sibling id-list (one arxiv_id per line) — the input render_gh200.py --list and
     # fetch-arxiv-eprints.py consume on the Linode host (S1).
+    # canonical pipeline id is the SAFE form (old-style "math/NNNN" -> "math__NNNN"):
+    # slashes break every id->filename construction (marks, candidates, graphs). The
+    # real slashed id survives only in the fetch URL. ~2.5% of CT, much more at scale.
+    def safe(i):
+        return i.replace("/", "__")
     listp = outp.rsplit(".manifest.json", 1)[0] + ".ids.txt"
-    open(listp, "w").write("\n".join(p["arxiv_id"] for p in chosen) + "\n")
-    # fetch JSONL ({id, eprint_url}) — the input fetch-arxiv-eprints.py consumes (S1)
+    open(listp, "w").write("\n".join(safe(p["arxiv_id"]) for p in chosen) + "\n")
+    # fetch JSONL ({id, eprint_url}) — fetch-arxiv-eprints.py input (S1); id is the
+    # safe form (so the stored eprint filename matches), eprint_url keeps the real id.
     fjsonl = outp.rsplit(".manifest.json", 1)[0] + ".fetch.jsonl"
     with open(fjsonl, "w") as fh:
         for p in chosen:
-            fh.write(json.dumps({"id": p["arxiv_id"], "eprint_url": eu_by_id[p["arxiv_id"]]}) + "\n")
+            fh.write(json.dumps({"id": safe(p["arxiv_id"]),
+                                 "eprint_url": eu_by_id[p["arxiv_id"]]}) + "\n")
 
     print(f"math.CT pool (primary, since {args.since}): {len(pool)}")
     print(f"manifest: {len(chosen)} papers ({len(warm)} warm / already-IATC'd), "
