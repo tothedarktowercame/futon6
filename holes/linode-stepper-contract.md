@@ -103,12 +103,12 @@ pipeline run (inspection / demo / separate experiment).*
 | 4.3 | Repair (canonicalize) | S3 | ⚙ | |
 | 4.4 / rung-0 | Structural gate (argcheck) | S3 | ⚙ | |
 | 4.5 / rung-1 | Substance gate | S3 | ⚙ | |
-| 4.6 | IATC render | — | ✗ | demo |
+| 4.6 | IATC render (side-by-side) | render-tail | ✓ | built; runs post-S8 to present |
 | 5.1 | Close reading | S4 | ○ | empirical base (done) |
 | 5.2 | Seed typed-hole taxonomy | S4 | ○ | `expository-superpod-vocab.edn` |
 | 5.3 | Multi-agent vote + mint | S4 | ✓ | classifies regions |
 | **5.4** | **GPU hole-filling (expository)** | **S4** | **◐** | **built (cfec4f9), NEVER GPU-run — the mark5 gap** |
-| 5.5 | Expository render integration | — | ✗ | vision |
+| 5.5 | Expository render integration | render-tail | ◐ | the one render piece still needing a build |
 | R2a/-v2 | Anchor-faithfulness | S5 | ✓ | |
 | R2b | Goal-reaching closure | S5 | ✓ | |
 | R2c | Warrant-resolution | S5 | ⚙ | report-only floor |
@@ -135,13 +135,33 @@ pipeline run (inspection / demo / separate experiment).*
 | 7.1 | Pipeline runner | — | ⚙ | this stepper |
 | 7.2 | GPU host setup + run | S0 | ✓ | |
 | 7.3 | Eval harness | (tail) | ⚙ | non-fatal |
-| 7.4 / DEMO-COMPOSE / RENDER | Demos / renderers | — | ✗ | post-run rendering |
+| 7.4 / DEMO-COMPOSE / DEMO-paper / RENDER | Demos / renderers | render-tail | ✓ | built (`build_proofcheck_demo`, `render_run`); runs post-S8 to present for Rob |
 | GOLIVE | mark4 IATC go-live | — | ○ | the substrate (done) |
 | RAW-CTL | 70B-on-raw control arm | — | ✗ | separate experiment |
 
 **What mark5 actually exercised (for contrast):** only 1.1–1.3, 4.1(one-proof)–4.5,
 R2-wire, and 8.1–8.4. Everything tagged ② / ⑤ / S5-comprehension / S6 / S9 above was
 **omitted** — which is the gap this corrected contract closes.
+
+### Are any features *genuinely* omitted?
+
+No readiness card is unaccounted-for. Of the cards that are **not** run as core
+pipeline stages:
+
+- **Presentation/render is a post-S8 tail, not an omission.** 4.6 (IATC side-by-side),
+  7.4 / DEMO-COMPOSE / DEMO-paper / RENDER are built and run after export to present
+  results for Rob. **5.5** (expository render) is the one render piece still needing a
+  build.
+- **Deliberately optional — the only two true skips:** **3.3** warp landscape overlays
+  (t-SNE / curvature / aliveness — inspection aids, not gated) and **RAW-CTL** (the
+  raw-vs-enriched 70B control — a separate bounded experiment). Both are defensible to
+  leave out of a mining run; pull either in on request.
+- **In-scope but pending a served model (◐ — the real remaining work, NOT omissions):**
+  5.4 expository GPU hole-fill, SFC2b symbol grounding, rung-3 LLM-residue, WARP-ORCH
+  full runner.
+
+So: **nothing omitted by oversight; two deliberate optional skips (3.3, RAW-CTL); one
+render piece (5.5) needs a build; the rest is either run, gated, or ◐-pending the GPU.**
 
 ## Go/no-go gate registry
 
