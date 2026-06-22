@@ -55,8 +55,10 @@ OPS = {
     "S2": {"local": False, "note": "warp substrate build (concordance heavy); G-coverage runs INLINE here via coverage_inline.py on S1's raw concept stream"},
     "S3": {"local": False, "note": "scripts/linode-4gpu-run.sh (mark3_extract_candidates -> mark3_iatc_loop vLLM 70B -> IATC graphs + eval tail)",
            "gate": "bb scripts/iatc_argcheck.bb $OUT && {PY} scripts/substance_gate.py $OUT"},
-    "S4": {"local": False, "note": "{PY} scripts/iatc_to_clean.py per graph (skeleton) + LLaMA box-typing via the served 70B; --apply typing",
-           "gate": "bb scripts/clean_argcheck.bb $CLEAN && bb scripts/clean_vocab_gate.bb $CLEAN"},
+    "S4": {"local": False, "note": "{PY} scripts/clean_box_typing.py --graphs $OUT --out $CLEAN "
+           "--endpoint http://localhost:$PORT/v1/chat/completions (skeleton + served-70B box-typing "
+           "+ in-loop vocab gate/retry + per-graph argcheck, cyclic-reject logged)",
+           "gate": "bb scripts/clean_vocab_gate.bb $CLEAN"},
     "S5": {"local": True, "inputs": ["data/iatc-candidates"],
            "cmd": "{PY} scripts/strategy_recognizer.py --candidates data/iatc-candidates"},
     "S6": {"local": True, "inputs": ["data/iatc-argument-graphs/loop-run-70b"],

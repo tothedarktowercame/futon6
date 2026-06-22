@@ -108,8 +108,13 @@ means stop and fix, not push on.
   (instrument validated). On the committed artifacts it reads flat (they're
   df≥10-filtered — zero tail), printing "feed raw S1 concepts inline." It plugs in
   at S2 against S1's raw concept stream on the live run.
-- **Still to build:** wiring the GPU stages' real commands on the host (S0/S1/S3/S4)
-  for the live Linode run.
+- **S4 box-typing driver BUILT (2026-06-22):** `clean_box_typing.py` — one-button
+  IATC-graph → served-70B box-typing → CLean, with in-loop vocab validation+retry,
+  per-graph argcheck (cyclic-equivalence proofs logged + set aside, G-cyclic), and
+  the vocab gate. Plumbing validated locally via `--stub` (typed 13 / rejected 2
+  cyclic / failed 0, exit 0); only the live vLLM HTTP call is box-exercised.
+- **Host commands wired** into the stepper (`--plan`) per README-linode for
+  S0/S1/S3/S4. **Run-ready** — remaining is the live run itself (a box + send-gate).
 
 ## Machine-readable contract (the stepper reads this)
 
