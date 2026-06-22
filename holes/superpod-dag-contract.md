@@ -31,6 +31,29 @@ any other artifact valid **only within the same corpus**.
 corpus-faithful; no G-coverage) — the exact failure mode the gates exist to prevent.
 "Good enough to reuse" must be a recorded decision, not an accident.
 
+## Phase 1 (per-paper) vs Phase 2 (cross-paper) — the unit correction
+
+A second mark5 lesson (Joe, 2026-06-22): the run was **per-paper-isolated end to end**,
+which is wrong twice over. The architecture has two phases with *different units*:
+
+- **Phase 1 — per-paper extraction.** Each paper → a **unified paper-level graph
+  (target object "B")**: definitions and theorem/lemma statements are nodes, each
+  proof is a substructure hanging off the statement it proves, and expository prose is
+  the connective tissue/edges. Mine the **whole paper, including expository sections** —
+  not one proof. This **replaces** the one-passage `mark3_extract_candidates` selector
+  (a mark3 *demo* artifact: 1 candidate ≡ 1 paper ≡ 1 proof, which threw the paper
+  away — see `mark5-ct100-results.md` D8). "Per paper" is *only* a Phase-1 word.
+
+- **Phase 2 — cross-paper, holistic (the actual target).** The concept substrate spans
+  the whole corpus; structure embeddings, retrieval, and comprehension operate **across
+  all papers** (e.g. clustering proofs by method across topics). The per-paper Phase-1
+  graphs are merely the **input nodes** to this cross-paper structure. Phase 2 never
+  reasons about a single paper in isolation.
+
+Consequence for the stages below: S1 produces the **whole-paper graph (B)**, not a
+single-proof candidate; S3 reconstructs **every** proof substructure in the paper; S2,
+S6, S7 are **Phase-2 cross-paper** stages whose unit is the corpus, not the paper.
+
 ## The DAG (explicit dependencies)
 
 ```
@@ -121,19 +144,23 @@ the only safety net. They are now load-bearing, not advisory.
                 :entry [:stage :run-id :corpus-id :output :fingerprint :gate :reused :ts]
                 :rule "before stage N, every dep in N.:depends-on must have a passing
                        ledger entry for the same :corpus-id, else REFUSE (or --reuse)"}
+ :units {:p1 :per-paper :p2 :corpus}   ; Phase 1 mines each paper; Phase 2 reasons across all papers
  :dag
- [{:id :S0 :depends-on []            :required true}
-  {:id :S1 :depends-on [:S0]         :required true}
-  {:id :S2 :depends-on [:S1]         :required true :barrier true :must-be-corpus-fresh true
+ [{:id :S0 :depends-on []            :required true  :phase :p1}
+  {:id :S1 :depends-on [:S0]         :required true  :phase :p1
+   :note "whole-paper graph (target B): definitions + theorem/lemma statements as nodes, EVERY proof as a substructure off its statement, expository prose as connective edges. NOT a single-proof candidate (that mark3 one-passage selector is superseded)."}
+  {:id :S2 :depends-on [:S1]         :required true :barrier true :must-be-corpus-fresh true :phase :p2
    :note "concept-substrate — EMERGENT from this corpus; NEVER reused from a prior/pre-planned vocabulary (mark5 wrongly reused a stale index). No --reuse for S2: a foreign corpus-id is a hard refusal."}
-  {:id :S3 :depends-on [:S0 :S1]     :required true :compute :gpu-llm}
-  {:id :S4 :depends-on [:S0 :S3]     :required true :compute :gpu-llm}
-  {:id :S5 :depends-on [:S1]         :required true}
-  {:id :S6 :depends-on [:S2 :S3 :S5] :required true
-   :note "LOAD-BEARING EDGE: depends-on S2 — cannot ground without the corpus substrate"}
-  {:id :S7 :depends-on [:S4]         :required true}
-  {:id :S8 :depends-on [:S4 :S7]     :required true}
-  {:id :S9 :depends-on [:S4 :S6]     :required false :optional true}]
+  {:id :S3 :depends-on [:S0 :S1]     :required true :compute :gpu-llm :phase :p1
+   :note "reconstruct EVERY proof substructure in the paper's graph (not one selected passage)"}
+  {:id :S4 :depends-on [:S0 :S3]     :required true :compute :gpu-llm :phase :p1}
+  {:id :S5 :depends-on [:S1]         :required true  :phase :p1}
+  {:id :S6 :depends-on [:S2 :S3 :S5] :required true  :phase :p2
+   :note "LOAD-BEARING EDGE: depends-on S2 — cannot ground without the corpus substrate; CROSS-PAPER (comprehension is corpus-relative)"}
+  {:id :S7 :depends-on [:S4]         :required true  :phase :p2
+   :note "structure embeddings + retrieval are CROSS-PAPER (cluster proofs by method across topics)"}
+  {:id :S8 :depends-on [:S4 :S7]     :required true  :phase :p2}
+  {:id :S9 :depends-on [:S4 :S6]     :required false :optional true :phase :p2}]
  :gate-registry :inherited            ; see linode-stepper-contract.md (G-coverage … G-entropy)
  :superpod {:compute :llama-only :no-claude-codex true
             :s2-fresh-required true
