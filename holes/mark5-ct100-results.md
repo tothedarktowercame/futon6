@@ -51,14 +51,23 @@ At 102 proofs the 5 macro-shapes collapsed: **98/102 = `construct-exploit-discha
 (3 contradiction-reduce, 1 induct-tower). macro-entropy 0.17 (floor 0.5); mean
 off-diagonal structure cosine 0.82 (ceiling 0.85). The G-entropy gate **failed**.
 
-> **IF** structure embeddings are to cluster proofs by *kind*, **HOWEVER** the
-> pre-planned 5-macro lens maps nearly every CT proof to one shape (most CT proofs
-> genuinely *are* construct→exploit→discharge), **THEN** the macro layer carries
-> almost no discriminative signal at scale, **BECAUSE** the vocabulary is too coarse
-> for the domain — a fixed, domain-agnostic macro set doesn't fit CT.
+**The cause is OPEN — we have not looked at a single proof's detail.** What we observe
+is a per-proof macro collapse in *this* run; the *why* has at least two candidate
+explanations, both consistent with prior design discussions and neither yet checked:
 
-The 9-proof demo (macro-entropy 0.77, PASS) **oversold**: it had too few proofs to
-reveal the collapse.
+1. **Wrong unit (paper-level lens applied per-proof).** The 5 macro-shapes may be
+   *whole-paper* abstractions; applied to a single proof (mark5's one-proof-per-paper
+   error, D8) every proof reads the same, while a paper's macro arc (multiple proofs +
+   the expository sweep) would not. If so the collapse is a **framing artifact**, not a
+   vocabulary defect. *(Do NOT conclude "iching shapes are too coarse for CT" — unsupported.)*
+2. **Fixed vocab, not data-driven.** The embedding + box-typing run against the
+   *hand-authored* `clean-method-vocab.edn`. The **data-driven vocabulary machinery**
+   the adapted (lavender) layer specifies — STRAT-REC co-learning on math.CT, LEAN-NL/
+   Herald, WARRANT-NORM's (type,concept) keying — is **not wired into this stage**. A
+   weak fixed vocab here, where a co-learned one was intended, would look exactly like this.
+
+The 9-proof demo (macro-entropy 0.77, PASS) **oversold** regardless — too few proofs,
+and hand-lifted to be macro-diverse.
 
 **D2 — Discrimination is method-level, not macro-level (and the embedding is mis-weighted).**
 The 12-tag *method spine* stayed diverse — 10 tags fire: reduce-to-known-result 170,
@@ -129,10 +138,13 @@ is a real extraction-coverage axis we haven't touched.
 
 ## 6. Recommendations / next steps
 
-1. **Fix the structure signal (D1/D2):** reweight the embedding toward the method spine,
-   and **refine or grow the macro vocabulary** — it should be richer (or partly emergent)
-   so it discriminates within CT instead of collapsing. This is the single highest-value
-   change before trusting structure retrieval.
+1. **Diagnose the macro collapse before "fixing" it (D1):** look at actual per-proof
+   structures — (a) do the macro-shapes vary at the *paper* level (collapse = a per-proof
+   framing artifact, not coarseness)? (b) what would a **data-driven** vocabulary give
+   here — i.e. wire the adapted-layer machinery (STRAT-REC co-learning on math.CT,
+   LEAN-NL, WARRANT-NORM keying) into the typing/embedding instead of the fixed
+   `clean-method-vocab.edn`? Only after looking decide whether to reweight toward the
+   method spine and/or grow the vocab. **Do not assume the iching shapes are "too coarse."**
 2. **Run S2 corpus-fresh + S6** on a real slice to validate the comprehension floor and
    take the G-coverage curve (the thing this run skipped).
 3. **Harden the producers** (D6) against LLM output ahead of the LLaMA-only superpod run.
@@ -140,7 +152,9 @@ is a real extraction-coverage axis we haven't touched.
 5. **Then scale** per [`superpod-dag-contract.md`](superpod-dag-contract.md) (phase-
    completeness enforced) once the macro/embedding fix lands.
 
-*Bottom line: the machinery works and the gates are honest — but the structure
-embedding's discriminative power is **method-level, not macro-level**, and the macro
-vocabulary needs rework before the embeddings are useful for retrieval. Good to learn at
-100 proofs and ~$5 rather than at archive scale.*
+*Bottom line: the machinery works and the gates are honest — and at the proof level the
+discriminative signal is **method-level, not macro-level**. WHY the macro layer collapses
+is still open (paper-level lens applied per-proof? fixed vocab where a data-driven one was
+intended?) — it needs *investigation of the details*, not an assumed "too coarse" verdict,
+before the embeddings can be trusted for retrieval. Good to learn at 100 proofs and ~$5
+rather than at archive scale.*

@@ -197,8 +197,11 @@ a ready-but-never-run GPU arm; 5.5 needs a build; the substantive remaining work
   bottleneck — `mark5-ct100-results.md` D8).
 - **Needs build:** **S6 paper-graph (B) assembler** — the one genuinely-new component;
   the rest is composition of built stages.
-- **Needs rework (not just a run):** the **macro vocabulary / embedding weighting**
-  (G-entropy collapse, mark5 D1/D2) before S7's embeddings are useful for retrieval.
+- **Needs diagnosis, then maybe rework:** the S7 macro collapse (G-entropy, mark5 D1) —
+  cause **open**, not "too coarse." Candidates: a paper-level macro lens applied
+  per-proof, and/or the **data-driven vocabulary** (the adapted/lavender layer:
+  STRAT-REC co-learning, LEAN-NL, WARRANT-NORM keying) **not yet wired into typing/
+  embedding**, which still uses the fixed `clean-method-vocab.edn`. Look at details first.
 - **Needs re-sync:** `linode_stepper.py`'s `OPS` command-map still carries the mark5
   stage semantics (S4=CLean, S5=strategy, S6=comprehension…); it must be re-keyed to
   these corrected stage IDs (S4=expository, S5=comprehension, S6=paper-graph-B,
