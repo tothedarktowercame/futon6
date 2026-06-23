@@ -261,6 +261,15 @@ Caveat: the macro is part of the structure vector, so same-macro proofs cluster 
 the 0.74 mean is that); richer structure features would widen the dynamic range. But the
 embedding is sound and the collapse worry is retired.
 
+**Widening the dynamic range (todo #16, diagnosed + validated).** The tightness has two
+fixable causes, both confirmed on the surviving breakdowns: (a) the comb-scalar features use
+ad-hoc constants, not corpus z-scores, so they dominate the cosine — z-normalizing columns
+across the corpus drops structure-sim mean **0.80 → 0.35**; (b) methods are *bagged* (order
+lost) though method-**sequences are 56/58 distinct** — adding method-bigrams drops it further
+to **0.10** (range −0.70..1.00). Together: far finer structural twins. Recorded as a
+de-risked recipe in `clean_structure_embed.py`; applied + validated on the next live run
+(the mark6 CLeans went with the box).
+
 ## 5d. Whole-paper CLean — the structure treatment, one level up
 
 The instance level gives proof-shapes, definition-shapes, expository-moves. The same
