@@ -561,8 +561,14 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     # try the raw id AND the safe_id form: old-style "math/NNNN" eprints are stored
     # as "math__NNNN" by fetch-arxiv-eprints' safe_id, so the raw-only lookup silently
     # missed ~2.5% of CT (more at full-arXiv scale).
-    for suffix in (".tar.gz", ".tex.gz", ".gz", ".tar", ".tex"):
-        for name in (paper, paper.replace("/", "__")):
+    # id-form variants (cheap, O(1) each) so a flat eprint store under $FUTON6_EPRINTS
+    # resolves regardless of naming convention: safe-form, slash-form, no-separator, bare id.
+    _name_variants = list(dict.fromkeys([
+        paper, paper.replace("/", "__"), paper.replace("__", "/"),
+        paper.replace("__", "").replace("/", ""), paper.split("__")[-1].split("/")[-1],
+    ]))
+    for suffix in (".tar.gz", ".tex.gz", ".gz", ".tar", ".tex", ""):
+        for name in _name_variants:
             cand = EPRINTS / f"{name}{suffix}"
             if cand.exists():
                 eprint = cand

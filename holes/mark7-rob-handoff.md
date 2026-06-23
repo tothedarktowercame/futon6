@@ -9,9 +9,10 @@ This doc is just **what you do**.
 
 1. **The repo** — `futon6` at `master` (latest). The pipeline + the `linode_stepper.py`
    runner (it has a `superpod` profile).
-2. **`mark7-substrate.tgz`** (15 MB) — the only data you need from us (the concept substrate
-   + futon3 pattern library; symlinks already dereferenced). Extract at `~/code/` so it lands
-   as `futon6/data/...` and `futon3/...`.
+2. **`data/mark7-substrate.tgz`** (15 MB, **committed in the repo** — your clone already has it;
+   nothing to transfer out-of-band). The concept substrate + futon3 pattern library, symlinks
+   dereferenced. Extract at `~/code/`: `tar -xzf futon6/data/mark7-substrate.tgz -C ~/code/`
+   (lands as `futon6/data/...` and `futon3/...`).
 3. **The manifests** (in the repo): `holes/math-ct-full.ids.txt` (citation-ranked, the
    default) and `holes/math-ct-chrono.ids.txt` (chronological alternative).
 
