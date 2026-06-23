@@ -1,8 +1,8 @@
 # M-metric-harness — the next end-to-end run measures PROGRESS, not throughput
 
-**Status:** HEAD complete; IDENTIFY authored; **MAP in progress** (surveying the prior
-runs / grabbed-back data / rendered examples — the "scratch work"); DERIVE seeded;
-INSTANTIATE deferred (2026-06-23).
+**Status:** HEAD complete; IDENTIFY authored; MAP complete (scratch-work survey);
+**DERIVE authored** (3-axis metric taxonomy + per-phase & aggregate catalog + slope
+mechanism); ARGUE/VERIFY next; INSTANTIATE deferred (2026-06-23).
 
 *Follows `futon4/holes/mission-lifecycle.md`. Successor framing to the mark5 run
 (`holes/mark5-ct100-results.md`); executes against the corrected pipeline in
@@ -201,27 +201,113 @@ point.***
 
 ---
 
-## 3. DERIVE — *seeded; the metric contract*
+## 3. DERIVE (2026-06-23)
 
-Every headline metric must be **(a) defined at n=1**, **(b) expected to rise n=1→10**,
-**(c) decomposed per stage**.
+### Metric taxonomy — three axes (they "rise" differently)
 
-| metric | stage | n=1 baseline | why it rises (with n, features, or accretion) | if flat, suspect |
-|--------|-------|--------------|---------------------|------------------|
-| **any-markup coverage %** (per paper) | ①+④+⑤ | paper-1 % covered by any mark | rises as the full pipeline (esp. ⑤ expository) is on — closes the unmodelled gap | a sibling/detector is off or missing whole regions |
-| **symbol-grounding %**, by kind {var, named-concept, proof-move} | SFC2b/R2d/rung-3 | per-kind % grounded on paper-1 | substrate growth + each kind handled; verb-layer is the frontier | the grounding loop / the unhandled kind |
-| **# encyclopedia concepts defined** | ② | seed-set count (CT seed) | each paper accretes new definitions | encyclopedia not ingesting new defs |
-| concept-coverage / G-coverage | ②/R2d | paper-1 concepts vs substrate-of-1 | held-out terms more often grounded as substrate grows | ② substrate / SFC detector |
-| comprehension floor (corpus-relative) | S5 | per-proof vs corpus-of-1 | more papers ground more nouns + strategies | R2d (nouns) or STRAT-REC (strategy) |
-| recurring (type,concept) holes surfaced | WARRANT-NORM/PASS3 | 0 (no recurrence at n=1) | cross-paper gaps repeat (df≥2) | the (type,concept) keying |
-| structure-retrieval discriminativeness | ⑧ | n/a (no neighbours) | proof-space populates → method clusters sharpen | embedding weighting (mark5 D1/D2) |
-| expository scope coverage | ⑤ | scope-kinds on paper-1 | minted scopes cover more sentences (saturating) | expository vocab / hole-fill |
-| strategy-recognizer recall | STRAT-REC | recall on paper-1 prose | co-learning grows the vocab | recognizer vocab growth |
+The core design move. Every metric is exactly one of:
 
-**Anti-patterns (explicitly out):** "N papers completed" headline; one reasoning sibling;
-one proof per paper; raw counts without the slope.
+- **ACCRETION** — rises with corpus size n (leave-one-out at n=1). The corpus *compounds*.
+  **This axis IS the progress slope — the headline.** A held-out paper grounds / is
+  comprehended better as the substrate grows.
+- **COMPLETENESS** — rises when *features* are turned on; defined per-paper at n=1; roughly
+  flat across n. Answers "how much of *each* paper do we model?" The signal is the
+  **features-on jump** (proof-only → +expository), not n.
+- **QUALITY / FLOOR** — should stay above a threshold; not n-dependent. Soundness of the
+  extraction.
 
-*IF/HOWEVER/THEN/BECAUSE and the harness data-flow design land here next session.*
+Conflating these is exactly how mark5 reported "100 papers done" over a stalled signal.
+**The progress claim rests on the ACCRETION slopes**; COMPLETENESS shows feature value;
+QUALITY are the gates. The harness reports all three, labelled by axis.
+
+### Per-phase metric catalog (A=accretion · C=completeness · Q=quality)
+
+| stage | metric | axis | n=1 baseline | moves with | flat ⇒ suspect |
+|-------|--------|:----:|--------------|-----------|----------------|
+| **S1 ① anatomy** | any-markup coverage % | C | paper-1 % covered by any mark | features-on (esp. ⑤) | a sibling/detector off |
+| | mark-kind density (proof-move / def / expository / symbol) | C | per-paper breakdown | features-on | detector gaps |
+| | wf=0, proof-region coverage | Q/C | per-paper | — | detector overfit |
+| **S2 ② concepts** | # encyclopedia concepts defined | A | CT seed count | each paper accretes defs | encyclopedia not ingesting |
+| | concept-coverage / G-coverage | A | paper vs substrate-of-1 | substrate grows | ② substrate / SFC |
+| | prose-concept P/R, term-prior resolution | Q | per golden | — | detector quality |
+| **S3 ④ IATC** | yield (pass/fail/retry) | Q | per run | — | generator / gates |
+| | substance-%, grounding-% (warrant-resolution) | Q | per finals | — | shell-gaming / style |
+| | structural diversity (distinct shapes) | Q | per run | — | template collapse |
+| | anchor-faithfulness (R2a) | Q | per node | — | hallucinated source |
+| **S4 ⑤ expository** | expository scope coverage % | C→sat | scopes on paper-1 | features + minted vocab (saturating ~35%) | vocab / hole-fill |
+| | typed-hole fill rate (of 16 scopes) | C | per paper | hole-filling loop | the loop |
+| | expository-argcheck pass | Q | per graph | — | malformed fills |
+| **S5 comprehension** | comprehension floor (corpus-relative) | A | per-proof vs corpus-of-1 | nouns+strategy ground as n grows | R2d or STRAT-REC axis |
+| | noun axis (R2d) / strategy axis (rung-3+STRAT-REC) | A | per-proof | substrate / co-learning | whichever axis is flat |
+| | symbol-grounding %, by kind {var, named-concept, proof-move} | C+A | per-kind on paper-1 | each kind handled + substrate | the unhandled kind / grounding loop |
+| | weak-points flagged + **confidence** | A (confidence) | per-proof | confidence rises with grounding | verdict gate / comprehension |
+| **S6 paper-graph (B)** | B completeness (statement → proof-substructure-or-flag) | C | per paper | assembler + both siblings | a sibling missing |
+| | proof↔statement attachment rate | C/Q | per paper | attachment heuristic | attachment logic |
+| | expository connectivity (tissue linking proofs↔statements) | C | per paper | ⑤ on | expository sibling off |
+| **S7 ⑧ embed** | G-entropy (macro-entropy + off-diag cosine) | Q | per run | vocab/weighting | macro collapse (mark5 D1) |
+| | structure-vs-text retrieval gap (EXP-3 at scale) | A | n/a at n=1 | proof-space populates | embedding weighting |
+| | method-spine diversity | Q | per run | — | typing collapse |
+| **S8 ⑧ export** | row-counts match, ANN sanity | Q | per export | — | export bug |
+
+### Aggregate metrics (across papers / the whole run)
+
+- **The slope of every ACCRETION metric (n=1→n=10)** — *the* headline progress artifact.
+- **Corpus completeness:** distribution of any-markup coverage across papers + the
+  proof-only-vs-full-pipeline **features-on delta** (the evidence ⑤ earns its keep).
+- **Cross-paper recurrence:** # recurring (type,concept) holes (df≥2) = the size of the
+  conjecture / weak-proof map; grows with n.
+- **Cross-paper retrieval:** structure-clustering-by-method-across-topics (the EXP-3
+  "0.95 vs 0.24" claim, *reproduced at n* — does structure beat text at scale).
+- **Comprehension distribution:** fraction comprehended vs "study-more", and how it shifts
+  as n grows (with the weak-point confidence attached).
+
+### n=1 baseline + slope mechanism (per axis)
+
+- **ACCRETION → leave-one-out.** metric(held-out paper | substrate built from the other k),
+  swept k=1..N. At n=1 the substrate is the single paper itself (self-grounding floor).
+  **IF** we want "rises 1→10" **HOWEVER** raw metric-vs-n confounds "corpus helps" with
+  "later papers happen to be easier" **THEN** measure against a *fixed held-out set* as the
+  substrate grows **BECAUSE** that isolates the corpus contribution.
+- **COMPLETENESS → per-paper distribution + features-on delta** (proof-only vs full pipeline);
+  roughly flat in n by design.
+- **QUALITY → per-paper vs floor + aggregate pass-rate.**
+
+### Entity / relation types (harness data model)
+
+- `MetricRecord {run-id, corpus-id, paper-id, stage, metric, axis, value, n, computable}`
+  — `n` = substrate size for accretion metrics.
+- `SlopeReport {metric, points:[(k,value)], slope, rising?, attribution-stage}`.
+- Relation: each aggregate metric → its component per-paper `MetricRecord`s (for attribution).
+
+### Data flow
+
+Each stage emits `MetricRecord`s per paper → the harness collects → for ACCRETION metrics
+it **replays at k=1..n** (leave-one-out / incremental) → `SlopeReport`s + per-stage
+attribution → **the slope report** (the deliverable, and the superpod go/no-go input).
+
+### Invariants
+
+- Every required stage emits ≥1 `MetricRecord` per paper.
+- Every ACCRETION metric is **leave-one-out computable at n=1** (nothing undefined-at-1).
+- A flat/falling accretion slope **MUST resolve to a named stage** (`attribution-stage`
+  non-null) — else the *harness* is incomplete, not the pipeline.
+- COMPLETENESS metrics report the **features-on delta**, never a bare single number.
+
+### IF/HOWEVER/THEN/BECAUSE (key decisions)
+
+1. **IF** progress = "improves as we run" **HOWEVER** completeness metrics are ~flat in n
+   **THEN** split the three axes and rest the progress claim on ACCRETION slopes **BECAUSE**
+   conflating them is how mark5 mistook throughput for progress.
+2. **IF** a slope is flat **HOWEVER** a single top-line hides the cause **THEN** require
+   per-stage attribution **BECAUSE** "pinpoint why" is the operator's explicit requirement.
+3. **IF** the verb layer (proof-move grounding) is fuzzy **HOWEVER** rigor matters **THEN**
+   count a move grounded *only* on a cited definition / pattern-match, else an explicit
+   `:thin`/`:undefined` flag **BECAUSE** an inflated grounding-% would be the worst lie.
+
+### Anti-patterns (explicitly out)
+
+"N papers completed" headline; one reasoning sibling; one proof per paper; raw counts
+without the slope; an accretion slope reported without attribution.
 
 ---
 
