@@ -84,6 +84,46 @@ comprehension gap — a consistent, diagnosable signal pointing at the same plac
 
 ---
 
+## 2b. Two exhibits: what the IATC *does*, and what it *misses*
+
+**Exhibit A — the typical case (capability).** Most proofs carry no formal scaffold; the
+IATC's job is to turn prose into a navigable argument. A representative reconstruction,
+`0706.1286` (rendered `file:///home/joe/code/futon6/data/showcases/mark6-typical.html`):
+
+```
+cat-like-bicats        ──implies──▶      equiv-for-cat-like
+equiv-for-calmod-like  ──arises-from──▶  equiv-problem
+equiv-issue-in-pht     ──similar-to──▶   equiv-issue-in-other-situations
+```
+
+Note the **mixed inference relations** (`implies` · `arises-from` · `similar-to`) — not a
+flattened "implies" chain — with 3 of 5 warrants grounded and 2 honestly flagged missing;
+comprehension `0.50` (partial). *This* is the value-add: structure recovered from prose
+that had none marked up.
+
+**Exhibit B — formal inference we did NOT recover (diagnostic).** The same paper's
+type-theory section states inference rules *formally*, as `prooftree` environments —
+**13 of them, plus dozens of `\judge{Γ}{a:A}` typing judgments.** They parse
+**deterministically** into exact inference DAGs. The J-eliminator:
+
+```
+[premise]    Γ    ⊢  p : id(A, x, y)
+[premise]    x:A  ⊢  d(x) : D(x, x, r_A(x))
+                 ──justifies──▶
+[conclusion] Γ    ⊢  J_{A,D}(d, x, y, z) : D(x, y, z)
+```
+
+**The pipeline recognizes none of it** — no recognizer knows `prooftree`/`\judge`/
+`\justifies`; the 70B reconstructed from prose and caught ~1 of 3 judgments. This is the
+futon thesis inverted: the *canalized* layer (formal proof markup) is the
+highest-confidence signal and should **drive and validate** the LLM layer, not be
+re-derived by it. The fix is a deterministic formal-inference recognizer + an
+**explicit-structure-recall** metric (here ≈0.33 — ground-truthed, unlike most of our
+metrics). `prooftree` is rare across papers, so its worth is exactly this: proof that we
+have *not yet* recovered reasonably formal inference where the author handed it to us.
+
+---
+
 ## 3. n=1 → n=10: what rose, what stayed flat (and why that's correct)
 
 ```
