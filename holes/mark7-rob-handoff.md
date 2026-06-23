@@ -39,14 +39,19 @@ You already have the SLURM/GPU authority; mark7 should lean on it rather than st
 - **8-GPU throughput — two options:**
   - *Simplest:* serve the model once with **tensor-parallel across the 8 GPUs** and let the
     stepper batch against the single endpoint (`OPENAI_BASE_URL`). Good enough for ~28k proofs.
-  - *Higher throughput (data-parallel):* run **8 sharded stepper instances**, one model replica
-    per GPU, following the proven pattern in `scripts/superpod-shard.py` + `handoff-superpod-all.sh`
-    (partition the manifest → per-shard `CUDA_VISIBLE_DEVICES` → merge; env knobs `NUM_SHARDS`,
-    `LLM_GPU_WORKERS`, `SLURM_CPUS_PER_TASK`). Those scripts are wired for the *older* pipeline,
-    so the **orchestration pattern** transfers but the per-shard command is the stepper — the
-    cross-paper stages (S2, S10–S12) run once **post-merge** (Block-2 style). If you want the
-    data-parallel path, ping us and we'll add manifest `--shard-index/--num-shards` to the stepper
-    so it drops straight into your shard harness.
+  - *Higher throughput (data-parallel) — self-service, no round-trip:*
+    ```bash
+    .venv/bin/python scripts/mark7_shard_manifest.py --ids holes/math-ct-full.ids.txt --num-shards 8
+    # per-paper GPU stages, one shard per GPU (gpu-policy sets CUDA_VISIBLE_DEVICES per shard):
+    for k in $(seq 0 7); do CUDA_VISIBLE_DEVICES=$k .venv/bin/python scripts/linode_stepper.py \
+        --run --profile superpod --ids holes/shards/mark7-shard-$k.ids.txt \
+        --from S1 --to S1 --no-halt --run-dir data/runs/mark7 --corpus-id math-ct-full & done; wait
+    # then the corpus-wide stages (S2 substrate, S5, S8-S12) ONCE over the full manifest.
+    ```
+    i.e. shard the **per-paper** stages (S1, S3, S4, S6, S7-boxtype) with `--ids`; run the
+    **corpus-wide** stages once after each shard phase merges. Use `handoff-superpod-all.sh`'s
+    Block-1/Block-2 split + the `NUM_SHARDS`/`LLM_GPU_WORKERS`/`SLURM_CPUS_PER_TASK` knobs for the
+    exact sequencing — the GPU-policy and shard pattern are your existing, proven ones.
 
 Pick TP-serve for a first run (less moving parts); go data-parallel if the window is tight.
 

@@ -67,7 +67,7 @@ OPS = {
     "STAGE": {"boot": True, "note": "<profile.stage> — rsync eprints + the ~68MB substrate + futon3 "
               "patterns onto the host. DEREFERENCE symlinks (rsync -L / tar -h): dev uses a storage/ "
               "overlay, so a naive copy ships dangling links and S2/S5 then can't read the substrate."},
-    "S1": {"cmd": f"{{PY}} scripts/emit_marks.py --list {IDS} --run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
+    "S1": {"cmd": "{PY} scripts/emit_marks.py --list {IDS} --run-dir " + RUN + " --run-id $RUN_ID --corpus-id $CORPUS",
            "gate": "check_invariants wf=0 across the batch"},
     "S2": {"cmd": "{PY} scripts/coverage_inline.py  # concept-substrate corpus-fresh; G-coverage inline",
            "gate": "G-coverage: raw coverage rises with corpus-fraction"},
@@ -229,9 +229,9 @@ def plan(stages, profile):
             print(f"     note: {_boot_note(profile, s['id'])}")
             continue
         if op.get("cmd"):
-            print(f"     cmd : {op['cmd'].format(PY=PY)}")
+            print(f"     cmd : {op['cmd'].format(PY=PY, IDS=IDS)}")
         if op.get("gate"):
-            print(f"     gate: {op['gate'].format(PY=PY)}")
+            print(f"     gate: {op['gate'].format(PY=PY, IDS=IDS)}")
         if op.get("note"):
             print(f"     note: {op['note']}")
 
@@ -256,13 +256,13 @@ def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
             print(f"✗ precondition FAILED — missing input(s): {missing}")
             return
         if op.get("cmd"):
-            print(f"$ {op['cmd'].format(PY=PY)}")
-            if sh(op["cmd"].format(PY=PY)) != 0:
+            print(f"$ {op['cmd'].format(PY=PY, IDS=IDS)}")
+            if sh(op["cmd"].format(PY=PY, IDS=IDS)) != 0:
                 print(f"✗ {s['id']} command FAILED — stopping")
                 return
         if op.get("gate"):
-            print(f"[gate] {op['gate'].format(PY=PY)}")
-            if sh(op["gate"].format(PY=PY)) != 0:
+            print(f"[gate] {op['gate'].format(PY=PY, IDS=IDS)}")
+            if sh(op["gate"].format(PY=PY, IDS=IDS)) != 0:
                 print(f"✗ {s['id']} GATE FAILED ({','.join(s['go'])}) — stopping for fix")
                 return
         if run_dir:
@@ -283,12 +283,16 @@ def main():
     ap.add_argument("--from", dest="frm", default=None)
     ap.add_argument("--to", default=None)
     ap.add_argument("--no-halt", action="store_true")
+    ap.add_argument("--ids", help="override the S1 id-list (e.g. a shard slice for data-parallel)")
     ap.add_argument("--run-dir", help="phase-ledger + emit dir (data/runs/<run-id>)")
     ap.add_argument("--corpus-id", default="adhoc")
     ap.add_argument("--run-id", default="adhoc")
     ap.add_argument("--reuse", nargs="*", default=[], help="upstream stages to accept from --reuse (never S2)")
     ap.add_argument("--mark-done", nargs="*", default=[], help="record boot steps (S0/STAGE) as ledger-passed")
     args = ap.parse_args()
+    if args.ids:
+        global IDS
+        IDS = args.ids
     stages = load_stages()
     # inject the STAGE bootstrap step right after S0 (rsync substrate -> host; not in the contract EDN)
     ids = [s["id"] for s in stages]
