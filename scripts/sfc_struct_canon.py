@@ -28,7 +28,9 @@ OPERATORS = {
     "=", "∈", "∉", "⊆", "⊂", "≅", "≃", "≈", "≤", "≥", "<", ">", "→", "↦", "⟶", "⇒",
     "∀", "∃", "forall", "exists", "λ", "∘", "×", "⊗", "⊕", "∧", "∨", "¬", "∩", "∪",
     ":", "*", "conditional-set", "set", "tuple", "pair", "apply", "and", "or", "not",
-    ":hole", "⊢", "↪", "≔", ":=",
+    "⊢", "↪", "≔", ":=",
+    # type-formers kept DISTINCT (dependent product ≠ sum ≠ abstraction) once SFC emits them
+    "Π", "Σ", "∏", "∑", "Pi", "Sigma", "lambda", "Lambda", "prod", "coprod", "∐",
 }
 
 
@@ -64,7 +66,11 @@ def _ser(tree):
 
 
 def canon_key(structure_str):
-    """:structure s-expr -> canonical structural key (α-renamed, operators kept)."""
+    """:structure s-expr -> canonical structural key (α-renamed, operators kept).
+    Returns None for an SFC COVERAGE GAP — a structure SFC left as :hole/unhandled — so
+    unparsed structures are flagged, never falsely merged with one another (the Π/Σ trap)."""
+    if structure_str and (":hole" in structure_str or "unhandled" in structure_str):
+        return None
     tree = parse(structure_str)
     return _ser(canon(tree, {})) if tree is not None else None
 
@@ -92,6 +98,7 @@ def batch(formulae):
     from collections import defaultdict
     bb = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts", "sfc_def_structure.bb")
     groups = defaultdict(list)
+    gaps = []   # SFC coverage gaps (:hole/unhandled) — flagged, not merged
     for f in formulae:
         try:
             out = subprocess.run(["bb", bb, "-"], input=f, capture_output=True, text=True, timeout=30).stdout
@@ -101,7 +108,9 @@ def batch(formulae):
         k = canon_key(st) if st else None
         if k and k != "()":
             groups[k].append(f)
-    return groups
+        elif st and (":hole" in st or "unhandled" in st):
+            gaps.append(f)
+    return groups, gaps
 
 
 def main():
@@ -112,14 +121,18 @@ def main():
     a = ap.parse_args()
     if a.formulae:
         forms = [l.strip() for l in open(a.formulae) if l.strip()]
-        groups = batch(forms)
+        groups, gaps = batch(forms)
         nf = sum(len(v) for v in groups.values())
-        print(f"=== structural normalization: {nf} definition formulae -> {len(groups)} canonical shapes "
-              f"(ratio {nf / max(1, len(groups)):.2f}×) ===\n")
+        print(f"=== structural normalization: {nf} parsed defs -> {len(groups)} canonical shapes "
+              f"(ratio {nf / max(1, len(groups)):.2f}×) ; {len(gaps)} SFC coverage-gaps flagged ===\n")
         for k, fs in sorted(groups.items(), key=lambda kv: -len(kv[1]))[:8]:
             print(f"×{len(fs)}  {k}")
             for f in fs[:2]:
                 print(f"      ← {f[:64]}")
+        if gaps:
+            print(f"\nSFC coverage gaps ({len(gaps)} — :hole/unhandled, NOT merged; the constructs to teach SFC):")
+            for f in gaps[:8]:
+                print(f"   ⚑ {f[:64]}")
         return
     if a.self_test or not a.input:
         from collections import defaultdict
