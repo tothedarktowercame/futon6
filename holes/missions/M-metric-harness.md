@@ -335,6 +335,17 @@ selection* and as derived metrics:
   new-terms-vs-cited experiment). greatest-hits.html = the *concept-usage* embedding +
   citation roads (distinct from the CLean proof-structure embedding).
 
+### mark6 — live scale-up-from-1 result (2026-06-23)
+
+Ran the pipeline end-to-end at n=1 and n=10 on a live GPU box (single-host, since torn
+down), citation-coherent neighborhood. **The progress signal is real:** run-corpus
+concept-coverage **0.08 → 0.70** over n=1→9. Per-paper axes flat (correct). Macro fix
+holds at scale (n=10 entropy **0.77**, was 0.17). Three diagnosable findings banked
+(comprehension is a floor not a slope → scope to run-corpus; attach-rate 0.55 at scale;
+illegal-EDN graphs now per-graph-isolated). Topology correction: single-host + a STAGE
+step (~68MB, dereference symlinks), not a dev/box split. **Full literate write-up with
+rendered extracts: [mark6-results.md](../mark6-results.md).**
+
 ---
 
 ## 4. ARGUE (2026-06-23)
