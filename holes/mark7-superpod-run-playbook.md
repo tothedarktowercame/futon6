@@ -8,11 +8,16 @@ window yields the *whole* improve-as-we-run curve for every tier — not just en
 
 ## 1. The shape of it
 
-- **Corpus:** **primary** math.CT — `holes/math-ct-full.ids.txt` (4,510 papers whose
-  `primary_category = math.CT`, of ~4,616 in the archive; ordered **chronologically** = the
-  natural accretion order). A further **4,252 cross-listed** papers (primary in
-  math.AT/RT/QA/AG/… but tagged math.CT) are staged and available to *enrich the S2 substrate*
-  without being run subjects — add them if we want the broad corpus.
+- **Corpus:** **primary** math.CT — `holes/math-ct-full.ids.txt` (all **4,616** papers with
+  `primary_category = math.CT`; Rob has all of arXiv math on the Superpod, so we're not limited
+  to dev-staged eprints). Cross-listed math.CT papers (primary in math.AT/RT/QA/AG/…) are
+  available to *enrich the S2 substrate* without being run subjects — add if we want the broad corpus.
+- **Order = citation-ranked** (`math-ct-full.ids.txt`, most-cited-first; 2,700 have inbound
+  citations, backbone `math__0608040` @767). This makes the sweep a **backbone-saturation**
+  curve (how fast do the top-N most-cited papers cover math.CT's reasoning) and front-loads the
+  highest-value papers so an incomplete window still gets the important ones. **Chronological**
+  alternative (`math-ct-chrono.ids.txt`) gives the historical-accretion curve — running both and
+  comparing is itself a result.
 - **Single host:** everything (S1–S12) runs on the Superpod after one STAGE rsync. No
   dev/box split (that was a data-staging gap, not a topology — mark6 lesson).
 - **Accretion sweep:** process in chronological order; checkpoint every metric at log-spaced
@@ -24,7 +29,7 @@ window yields the *whole* improve-as-we-run curve for every tier — not just en
 
 | lesson | where |
 |---|---|
-| single-host STAGE (~68 MB substrate, **dereference symlinks**) | stepper STAGE step |
+| single-host STAGE — **only** ~68 MB substrate + futon3 (eprints already on the Superpod; **dereference symlinks**) | stepper STAGE step |
 | RETRIEVE all outputs before teardown (mark6 lost CLeans/B) | stepper RETRIEVE step |
 | whole-paper mining, all-proofs (not 1/paper) | S3 `--all-proofs` |
 | macro DERIVED from methods (not 70B-tagged) | `clean_box_typing` |
@@ -40,7 +45,8 @@ window yields the *whole* improve-as-we-run curve for every tier — not just en
 ```bash
 # S0 + STAGE (from dev) — provision the alloc, serve LLaMA TP=8, rsync substrate + eprints
 futon6/.venv/bin/python scripts/linode_stepper.py --plan --profile superpod   # review
-# ... provision, then rsync -L the STAGE manifest (incl. holes/math-ct-full.ids.txt) to scratch ...
+# ... provision, then rsync -L ONLY the ~68MB substrate + futon3 patterns + holes/math-ct-full.ids.txt
+#     (NO eprint download — Rob has all of arXiv math on the Superpod already) ...
 
 # S1..S12 ON THE HOST (set IDS=holes/math-ct-full.ids.txt, CORPUS=math-ct-full@<date>):
 RUN_ID=mark7  CORPUS=math-ct-full  \
@@ -81,7 +87,9 @@ The run is designed to produce, in one window, the curves that turn assertions i
 1. **The accretion curves** (S12) — does each tier's metric *rise then converge* with corpus
    size? concept-coverage, reference-resolution, proof-move grounding, expository-move
    recognition, structural-compression ratio, comprehension (now run-scoped → should finally
-   *slope*, not floor).
+   *slope*, not floor). With **citation-ranked order** this is a **backbone-saturation** curve:
+   how few of the most-cited papers already cover most of math.CT's reasoning (the Pareto/
+   diminishing-returns shape) — and how that differs from the chronological-accretion curve.
 2. **Move-lexicon convergence** (S10) — how large is math.CT's inference/expository move
    vocabulary, and where does it saturate? (the corpus's own reasoning repertoire)
 3. **Structural shape census** (S11) — how many canonical definition shapes does math.CT
