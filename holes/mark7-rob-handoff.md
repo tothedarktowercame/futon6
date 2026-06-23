@@ -28,6 +28,28 @@ This doc is just **what you do**.
    `export OPENAI_BASE_URL=http://localhost:<port>/v1 OPENAI_API_KEY=x` and pass `--model <id>`.
 3. **Extract the substrate**: `tar -xzf mark7-substrate.tgz -C ~/code/`.
 
+## Cluster setup — reuse your existing superpod stack (don't reconfigure)
+
+You already have the SLURM/GPU authority; mark7 should lean on it rather than stand up new config:
+
+- **GPU allocation:** `scripts/mfuton-superpod-gpu-policy.sh` defers to your **`mfuton`**
+  (`agent_skills/development/superpod/current-job-gpus.sh`, via `$MFUTON_HOME`) to export
+  `CUDA_VISIBLE_DEVICES` for the job's GPUs. Source it (or your usual policy) inside the alloc —
+  no new SLURM wiring.
+- **8-GPU throughput — two options:**
+  - *Simplest:* serve the model once with **tensor-parallel across the 8 GPUs** and let the
+    stepper batch against the single endpoint (`OPENAI_BASE_URL`). Good enough for ~28k proofs.
+  - *Higher throughput (data-parallel):* run **8 sharded stepper instances**, one model replica
+    per GPU, following the proven pattern in `scripts/superpod-shard.py` + `handoff-superpod-all.sh`
+    (partition the manifest → per-shard `CUDA_VISIBLE_DEVICES` → merge; env knobs `NUM_SHARDS`,
+    `LLM_GPU_WORKERS`, `SLURM_CPUS_PER_TASK`). Those scripts are wired for the *older* pipeline,
+    so the **orchestration pattern** transfers but the per-shard command is the stepper — the
+    cross-paper stages (S2, S10–S12) run once **post-merge** (Block-2 style). If you want the
+    data-parallel path, ping us and we'll add manifest `--shard-index/--num-shards` to the stepper
+    so it drops straight into your shard harness.
+
+Pick TP-serve for a first run (less moving parts); go data-parallel if the window is tight.
+
 ## SMOKE TEST FIRST (5 min — do NOT skip before a 20h window)
 
 Confirms eprints resolve + the model serves, on ONE paper:
