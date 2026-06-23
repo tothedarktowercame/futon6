@@ -346,6 +346,29 @@ illegal-EDN graphs now per-graph-isolated). Topology correction: single-host + a
 step (~68MB, dereference symlinks), not a dev/box split. **Full literate write-up with
 rendered extracts: [mark6-results.md](../mark6-results.md).**
 
+### The "improve as we run" normalization spine (2026-06-23)
+
+The accretion metrics measure *convergence of normalized content* as the corpus grows.
+There are three tiers, increasing in structure; each accretes, is confidence-weighted, and
+converges (fast→slow):
+
+1. **Label** (concepts) — `groups`→`group`, singularise/alias. **Exists** (`grounding.py`:
+   "normalized term, singularised, alias, alias-of-normalized").
+2. **Move** (inference + expository lexicon) — cluster move-phrases into move-types
+   (`"by functoriality"` ≈ `"functoriality of _*"`). Harvester built
+   (`iatc_lexicon_harvest.py`, layer-agnostic, per-anchoring confidence); **cluster-and-
+   reground is the next build** (should lift proof-move grounding 0.14).
+3. **Structural** (definitions) — we build per-paper SFC `:structure` trees
+   (`sfc_def_structure.bb`, e.g. `(= X (conditional-set (∈ x A) …))`) but **never normalize
+   them across papers**. Canonical definitions require **tree-match modulo α-renaming +
+   operator-canon + grounding** — string/label normalization is insufficient. **The gap, and
+   the deepest tier** ("building up definitions", not labels — Joe). Target: the
+   concept-encyclopedia accretes *canonical structured definitions*, not near-duplicates.
+
+All three feed the same machinery: each merge carries a confidence (label-match /
+cluster-membership / structural-alignment), and lexicon/encyclopedia size is the accretion
+axis, anchor/merge confidence the quality axis.
+
 ---
 
 ## 4. ARGUE (2026-06-23)
