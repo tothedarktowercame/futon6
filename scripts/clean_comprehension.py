@@ -108,9 +108,16 @@ def main():
     rung3_dir = ROOT / args.rung3
 
     rows = []
+    skipped = []
     for path in sorted(graph_dir.glob("*.edn")):
         pid = path.stem
-        res = r2d.check_graph(r2d.load_edn(path), path, substrate)
+        try:  # per-graph isolation: a single malformed graph (e.g. illegal EDN from the
+            # model) must not sink the whole comprehension batch
+            res = r2d.check_graph(r2d.load_edn(path), path, substrate)
+        except Exception as exc:
+            skipped.append((pid, str(exc)[:80]))
+            print(f"  SKIP {pid}: {type(exc).__name__} {str(exc)[:80]}")
+            continue
         N = res["rate"]
         nb = res["buckets"]
         S_r3, sb = strategy_score(strategy_buckets(pid, steps_dir, rung3_dir, patterns),
