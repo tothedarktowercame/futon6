@@ -364,6 +364,11 @@ converges (fast→slow):
    (recognition of the corpus's own move-shapes, 0.5 credit), the `grounded`
    (kernel-verifiable) count is unchanged. This proves the whole loop end-to-end on a real
    metric; more corpus → more cues → rises then saturates (the move-layer accretion curve).
+   **Same reground transfers to the EXPOSITORY layer** (`expository_reground.py`): base 16
+   seeded discourse cues (4 kinds) + 6 corpus-harvested signals → expository-move
+   recognition **0.023 → 0.040 (+74% rel)**, again via `thin`. Thin harvest (6 cues from 10
+   scope-graphs) → modest lift now, grows with the corpus — but the mechanism is layer-
+   independent, confirming the unified loop across inference + exposition.
 3. **Structural** (definitions) — we build per-paper SFC `:structure` trees
    (`sfc_def_structure.bb`, e.g. `(= X (conditional-set (∈ x A) …))`) but **never normalize
    them across papers**. Canonical definitions require **tree-match modulo α-renaming +
