@@ -3,10 +3,11 @@
 **Status:** HEAD complete; IDENTIFY authored; MAP complete (scratch-work survey);
 DERIVE authored (3-axis taxonomy + per-phase & aggregate catalog); ARGUE authored
 (paradox resolved); VERIFY spiked (accretion slope real + steep at small n);
-**INSTANTIATE (1)+(2) in progress** — `scripts/metric_harness.py`: 6 metrics across
-substrate+mined corpora (concept-coverage, encyclopedia, recurring-holes, comprehension
-noun/strategy/floor), all tested; INSTANTIATE remaining = expository/symbol/weak-point
-emitters + the everything-on box run (2026-06-23).
+**INSTANTIATE-CPU done** — `scripts/metric_harness.py`: 7 metrics across all 3 axes
+(concept-coverage, encyclopedia, recurring-holes, comprehension noun/strategy/floor,
+any-markup-coverage), + the `emit_record`/`read_records` MetricRecord interface, all
+tested. **INSTANTIATE-GPU** = wire the per-stage emit hooks + the everything-on run
+(must precede any GPU run) (2026-06-23).
 
 *Follows `futon4/holes/mission-lifecycle.md`. Successor framing to the mark5 run
 (`holes/mark5-ct100-results.md`); executes against the corrected pipeline in
@@ -448,10 +449,34 @@ declare `requires`/`corpus`, and run() sweeps the matching universe.
 
 The harness now carries **6 metrics** across both corpora; self-test + spike-reproduction pass.
 
-### (2, cont.) remaining — INSTANTIATE
+- **`any-markup-coverage` (S1, completeness) — BUILT.** Per-paper fraction of text under
+  any mark, from the fable anatomy marks (`_interval_coverage`). Over 120 sampled papers:
+  **mean 0.58, median 0.57, frac<0.5 = 0.29** — i.e. ~29% of papers have *more than half
+  unmodelled*. Quantifies the "50% uncovered" concern as a baseline; the features-on delta
+  (proof-only vs +expository) is the GPU-run measurement.
 
-- Register (when their data lands): expository coverage, symbol-grounding-by-kind,
-  weak-point-with-confidence (each `@metric` + a loader).
+The CPU harness now has **7 metrics across all three axes** (accretion / completeness /
+the quality ones live in the gate scripts). All on data in hand; self-test passes.
+
+### INSTANTIATE-GPU — the run must EMIT metrics inline (build BEFORE the next GPU run)
+
+The remaining emitters (expository coverage, symbol-grounding-by-kind,
+weak-point-with-confidence) need the GPU run's outputs — and the deeper requirement (Joe):
+**the next run must produce the slope report, not just artifacts.** So the run is
+instrumented to *emit metrics as it goes*:
+
+- **Interface (BUILT):** `emit_record(run_dir, **rec)` / `read_records(run_dir)` —
+  `MetricRecord` JSONL at `data/runs/<run-id>/metrics.jsonl`
+  (`{run_id, corpus_id, paper_id, stage, metric, axis, value, computable}`).
+- **Per-stage emit hooks (the remaining wiring, done when the run is wired):**
+  S1 → any-markup-coverage (+ proof-only/​+expository features-on delta) ·
+  S2 → encyclopedia-defined, G-coverage · S3 → substance/grounding/diversity ·
+  S4 → expository-scope-coverage, typed-hole-fill-rate · S5 → comprehension noun/strategy,
+  symbol-grounding-by-kind, weak-point-with-confidence · S7 → G-entropy, structure-vs-text.
+- **The CPU harness already prototypes the read/compute side** (S1 markup, S2
+  coverage/encyclopedia, S5 comprehension/recurring-holes on existing data) — the GPU
+  emit hooks just write the *same* `MetricRecord`s inline, and the harness aggregates
+  them into the slope report post-run. **No GPU run until these hooks are in.**
 - Wire **S3 all-proofs + S4 expository + S6 paper-graph**; run **10 then 20 whole papers
   everything-on**; the harness then emits the full multi-metric slope report.
 - Keep `f6/graph-enhanced-evaluation` (the ground-truth use-value proxy) in view.

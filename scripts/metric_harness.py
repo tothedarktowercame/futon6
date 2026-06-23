@@ -181,10 +181,17 @@ def run(ctx, n_held=20):
 
 def print_reports(reports):
     for r in reports:
-        print(f"\n[{r['stage']} · {r['axis']} · {r['corpus']}] {r['metric']}  "
-              f"(rising={r['rising']}, rise@1→10={r['rise_1_to_10']}, attribution={r['attribution_stage']})")
-        print("  k:   " + " ".join(f"{k:>7}" for k, _ in r["points"]))
-        print("  val: " + " ".join(f"{v:>7.3f}" for _, v in r["points"]))
+        tag = f"[{r['stage']} · {r['axis']} · {r.get('corpus', '-')}] {r['metric']}"
+        if "points" in r:  # accretion slope
+            print(f"\n{tag}  (rising={r['rising']}, rise@1→10={r['rise_1_to_10']}, "
+                  f"attribution={r['attribution_stage']})")
+            print("  k:   " + " ".join(f"{k:>7}" for k, _ in r["points"]))
+            print("  val: " + " ".join(f"{v:>7.3f}" for _, v in r["points"]))
+        else:  # completeness distribution
+            d = r["distribution"]
+            print(f"\n{tag}  (n={r['n_papers']}, attribution={r['attribution_stage']})")
+            print(f"  mean {d['mean']} · median {d['median']} · min {d['min']} · max {d['max']} "
+                  f"· frac<0.5 {d['frac_below_0.5']}")
 
 
 def self_test():
@@ -202,6 +209,64 @@ def self_test():
     assert reps2[0]["points"] == reps[0]["points"], "round-trip"
     os.unlink(p)
     print(f"self-test PASS: coverage {cov['v@1']}→{cov['v@max']}, encyclopedia {enc['v@1']:.0f}→{enc['v@max']:.0f}, round-trip ok")
+
+
+def emit_record(run_dir, **rec):
+    """INSTANTIATE-GPU hook: a stage appends one MetricRecord as it processes a paper,
+    so the run EMITS metrics inline (never again 'just finished'). Schema:
+    {run_id, corpus_id, paper_id, stage, metric, axis, value, computable}."""
+    os.makedirs(run_dir, exist_ok=True)
+    with open(os.path.join(run_dir, "metrics.jsonl"), "a") as fh:
+        fh.write(json.dumps(rec) + "\n")
+
+
+def read_records(run_dir):
+    p = os.path.join(run_dir, "metrics.jsonl")
+    return [json.loads(l) for l in open(p)] if os.path.exists(p) else []
+
+
+def _interval_coverage(marks, tlen):
+    iv = sorted((m["start"], m["end"]) for m in marks
+                if isinstance(m.get("start"), int) and isinstance(m.get("end"), int) and m["end"] > m["start"])
+    cov = cs = ce = 0
+    started = False
+    for s, e in iv:
+        if not started or s > ce:
+            if started:
+                cov += ce - cs
+            cs, ce, started = s, e, True
+        else:
+            ce = max(ce, e)
+    if started:
+        cov += ce - cs
+    return cov / max(1, tlen)
+
+
+def markup_coverage_report(golden_dir, sample_n=120):
+    """COMPLETENESS metric (S1): any-markup coverage % per paper = fraction of text under
+    any mark. Joe's headline — '50% covered = 50% unmodelled.' Per-paper distribution
+    (not a k-slope); the features-on delta (proof-only vs +expository) is INSTANTIATE-GPU."""
+    files = sorted(glob.glob(os.path.join(golden_dir, "fable-*-dp-emacs.json")))
+    if not files:
+        return None
+    step = max(1, len(files) // sample_n)
+    files = files[::step][:sample_n]
+    covs = []
+    for f in files:
+        try:
+            d = json.load(open(f))
+        except Exception:
+            continue
+        covs.append(_interval_coverage(d.get("marks", []), len(d.get("text", "")) or 1))
+    if not covs:
+        return None
+    covs.sort()
+    return {"metric": "any-markup-coverage", "stage": "S1", "axis": "completeness",
+            "kind": "per-paper", "attribution_stage": "S1", "n_papers": len(covs),
+            "distribution": {"mean": round(statistics.mean(covs), 3),
+                             "median": round(statistics.median(covs), 3),
+                             "min": round(covs[0], 3), "max": round(covs[-1], 3),
+                             "frac_below_0.5": round(sum(c < 0.5 for c in covs) / len(covs), 3)}}
 
 
 def load_candidates_prose(cand_dir):
@@ -253,6 +318,7 @@ def main():
     ap.add_argument("--clean-dir", default="data/mark5-ct100-run/holes/clean-ct200")
     ap.add_argument("--candidates", default="data/iatc-candidates-ct200")
     ap.add_argument("--vocab", default="holes/clean/tactic-gesture-vocab.edn")
+    ap.add_argument("--golden", default="data/showcases/ct-anatomy/golden")
     ap.add_argument("--n-held", type=int, default=20)
     ap.add_argument("--out", default="data/metric-harness-report.json")
     ap.add_argument("--self-test", action="store_true")
@@ -274,6 +340,12 @@ def main():
     if "paper2c" in ctx and os.path.isdir(cand) and os.path.exists(vocp):
         import strategy_recognizer as sr
         reps += run_comprehension(ctx, load_candidates_prose(cand), sr.load_vocab(vocp), a.n_held)
+    # completeness: any-markup coverage from S1 anatomy marks (if the golden marks dir exists)
+    gd = a.golden if os.path.isabs(a.golden) else os.path.join(ROOT, a.golden)
+    if os.path.isdir(gd):
+        mc = markup_coverage_report(gd)
+        if mc:
+            reps.append(mc)
     print_reports(reps)
     outp = a.out if os.path.isabs(a.out) else os.path.join(ROOT, a.out)
     json.dump({"reports": reps}, open(outp, "w"), indent=1)
