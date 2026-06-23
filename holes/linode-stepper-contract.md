@@ -68,7 +68,7 @@ corpus barrier (needs all anatomy); S5/S7/S8 are cross-paper (Phase 2).
 | **S3 IATC-formal** | ④ | marks → **all** enriched proof candidates | IATC argument-graph `.edn` per proof | `mark3_extract_candidates.py` *(→ all proofs, see needs-build)*·`mark3_iatc_loop.py`·`iatc_repair.bb`·`iatc_argcheck.bb`·`substance_gate.py` | gpu-llm | `iatc_argcheck`+`substance_gate` (finals-only); **G-substance** | ✔ |
 | **S4 expository** | ⑤ | marks → **all** expository-region candidates | expository-reasoning graph (filled typed holes) | `mark3_extract_expository_candidates.py`·`mark3_expository_loop.py`·`expository_argcheck.bb`·`expository-superpod-vocab.edn` | gpu-llm | `expository_argcheck` PASS | ✔ |
 | **S5 comprehension/rung** | C/D + ⑧.5 | IATC + expository + concept-index | rung-2 profile, R2d coverage, per-proof comprehension + verdict | `iatc_semcheck.bb`·`r2d_concept_coverage.py`·`strategy_recognizer.py`·`clean_comprehension.py`·`cas_select.py`/`cas_cert.py` | cpu | **G-comprehension** (verdict separates weak-extraction from weak-proof) | ✔ |
-| **S6 paper-graph (B)** | synth | {proofs S3, expository S4, concepts S2} | unified paper-level graph: statements/defs as nodes, proofs as substructures, exposition as edges | **needs-build** (`paper_graph_assemble.py`) | cpu | B well-formed: every statement has its proof substructure or a flagged hole | ✔ |
+| **S6 paper-graph (B)** | synth | {proofs S3, expository S4, concepts S2} | unified paper-level graph: statements/defs as nodes, proofs as substructures, exposition as edges | BUILT (`paper_graph_assemble.py`) | cpu | B well-formed: every statement has its proof substructure or a flagged hole | ✔ |
 | **S7 CLean structure-embed** | ⑧ | IATC graphs (and B) | `*.clean.edn` (box-typed) + 33-d structure vectors | `iatc_to_clean.py`·`clean_box_typing.py`·`clean_argcheck.bb`·`clean_vocab_gate.bb`·`clean_structure_embed.py` | gpu-llm + cpu | `clean_argcheck`+**G-method-vocab**+**G-cyclic**; **G-entropy** | ✔ |
 | **S8 export→Rob** | ⑧ | CLean graph + vectors | neo4j cypher + pgvector SQL (+ DarkTower Lean) | `clean_graph_export.py`·`clean_to_lean.py` | cpu | cypher/SQL valid; load smoke-test | ✔ |
 | **S9 APM-match / pass-3** | ⑥/opt | B + comprehension | APM scope-coverage; conjecture/weak-proof map | `mark4_apm_structure_coverage.py`·`clean_hole_harvest.py` | cpu | APM gate / recurring-gaps keyed | — |
@@ -188,16 +188,25 @@ a ready-but-never-run GPU arm; 5.5 needs a build; the substantive remaining work
 
 - **Built and ready to exercise** (most of it): S0, S1, S2, S3 spine, S5, S7, S8, S9
   scripts all exist and are individually validated (readiness cards 1.x–8.x).
-- **Built but NEVER exercised on GPU — the conspicuous mark5 gap:** **S4 expository**
-  (`mark3_expository_loop.py` + `expository_argcheck.bb`, cfec4f9, stub-tested only).
-  The whole point of the corrected run is to exercise ⑤ alongside ④.
+- **S4 expository — VERIFIED CPU-side (2026-06-23), GPU run still pending.** The chain
+  works end-to-end on dev: `mark3_extract_expository_candidates` carves **all** expository
+  regions (466 from one paper — true whole-paper expository mining), and
+  `mark3_expository_loop --backend stub` + `expository_argcheck` gate them 466/466. The
+  GPU run just swaps `--backend openai` (the LLaMA endpoint). **Remaining:** the live
+  openai run (never done — the conspicuous mark5 gap) + an expository-coverage emit hook.
+  **Cost flag:** ~hundreds of expository regions/paper → ⑤ is the expensive part at scale
+  (cap/sample for the 10–20-paper metric run).
 - **S3 all-proofs — DONE (2026-06-23).** `mark3_extract_candidates --all-proofs` groups
   proof-moves into proof regions → one candidate per proof with a unique `proof-id`;
   `mark3_iatc_loop` names graphs by `proof-id` (no per-paper collision). Tested:
   0704.0502→3 proofs, 0705.4406→7; 10 distinct graphs, backward-compat (no flag→1/paper)
   intact. (Was the mark3-demo one-proof bottleneck — `mark5-ct100-results.md` D8.)
-- **Needs build:** **S6 paper-graph (B) assembler** — the one genuinely-new component;
-  the rest is composition of built stages.
+- **S6 paper-graph (B) — BUILT (2026-06-23).** `paper_graph_assemble.py`: statements
+  (env/theorem|proposition|corollary|lemma) + definitions (definiendum) + proof regions
+  (env/proof) → unified per-paper graph B; each proof attached to the statement it proves
+  (nearest preceding), orphan statements flagged (not failed), S6 attachment-rate metric
+  emitted inline. Tested on 0704.0502: 39 statements / 36 proofs / 147 defs, attach-rate
+  0.49. IATC(S3)+expository(S4) attach by overlap (v0 single-graph; full overlap next).
 - **Needs diagnosis, then maybe rework:** the S7 macro collapse (G-entropy, mark5 D1) —
   cause **open**, not "too coarse." Candidates: a paper-level macro lens applied
   per-proof, and/or the **data-driven vocabulary** (the adapted/lavender layer:
