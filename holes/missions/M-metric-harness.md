@@ -356,8 +356,14 @@ converges (fast→slow):
    "normalized term, singularised, alias, alias-of-normalized").
 2. **Move** (inference + expository lexicon) — cluster move-phrases into move-types
    (`"by functoriality"` ≈ `"functoriality of _*"`). Harvester built
-   (`iatc_lexicon_harvest.py`, layer-agnostic, per-anchoring confidence); **cluster-and-
-   reground is the next build** (should lift proof-move grounding 0.14).
+   (`iatc_lexicon_harvest.py`, layer-agnostic, per-anchoring confidence). **Cluster-and-
+   reground DONE** (`iatc_move_reground.py`): 16 data-driven move-cues harvested from the
+   corpus (yoneda, functoriality, commutative, pasting/composites, construction,
+   equivalence, …) fed back to the strategy recognizer lift **proof-move grounding
+   0.126 → 0.188 (+49% rel)** — *honestly*: the lift is entirely `ungrounded → thin`
+   (recognition of the corpus's own move-shapes, 0.5 credit), the `grounded`
+   (kernel-verifiable) count is unchanged. This proves the whole loop end-to-end on a real
+   metric; more corpus → more cues → rises then saturates (the move-layer accretion curve).
 3. **Structural** (definitions) — we build per-paper SFC `:structure` trees
    (`sfc_def_structure.bb`, e.g. `(= X (conditional-set (∈ x A) …))`) but **never normalize
    them across papers**. Canonical definitions require **tree-match modulo α-renaming +
