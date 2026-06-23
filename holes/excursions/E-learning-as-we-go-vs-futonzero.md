@@ -77,6 +77,40 @@ prefix — once policy-frozen, once with the Codex review every 100/500 papers �
 self-graded ones. If the loop doesn't beat frozen on the grounded yardstick, it's ceremony —
 record it honestly, as FutonZero did with arguing-across-worlds.
 
+## 5b. What the agent concretely does per interval (~46 invocations for math.CT)
+
+Each invocation is **not** "retrain a model" — it's a **triage → bounded-fix → verify** pass
+over the batch's diagnostics, editing version-controlled *policy* artifacts. The job is
+exactly what this session did by hand, scoped to ~100 papers of fresh signal:
+
+1. **Read the batch diagnostics** (from the run-dir, all already emitted): new SFC `:hole`
+   coverage-gap constructs; low-confidence anchor clusters; high-frequency *ungrounded*
+   move-phrases; illegal-EDN / failed extractions; recurring *undefined* concepts; which
+   accretion curves moved vs plateaued.
+2. **Triage** by leverage (frequency × impact); take the top 1–3. Often the batch crosses no
+   threshold → **do nothing** (don't perturb a working policy — most later intervals are no-ops,
+   front-loaded like the accretion itself).
+3. **Fix** — a small edit to a policy artifact, picked from a known menu:
+   - add an SFC parser rule for the top coverage-gap construct → `sfc_def_structure.bb`
+     (exactly the Π/Σ/λ binder fix);
+   - promote/normalize recurring move-phrases into the recognizer → `tactic-gesture-vocab.edn`
+     (the reground, but curated/deduped);
+   - mint a new macro/method shape for a recurring *un-shaped* move → `clean-method-vocab.edn`
+     (the transport-symmetry add);
+   - add a repair rule for a recurring malformation (the illegal-EDN class);
+   - adjust an extraction prompt for a *systematic* 70B error (the macro over-tag class);
+   - confirm/split borderline structural-definition merges → canonical encyclopedia entries
+     (the judgment calls the deterministic canonicalizer can't make alone).
+4. **Verify against the EXOGENOUS anchor**, not the self-graded metric: re-run the affected
+   measure on the batch and keep the change only if **explicit-structure-recall /
+   source-faithfulness** improves (reject "the self-graded number went up" — the Goodhart guard).
+5. **Record** (a commit + a PUR line): what changed, before/after on the grounded metric — so
+   every interval's policy step is auditable and **revertible** if a later batch shows it hurt.
+
+The policy surface is small and entirely version-controlled (`*-vocab.edn`,
+`sfc_def_structure.bb`, the prompts, the structure features), so each interval is a reviewable
+diff — and Codex is well-suited to exactly this (read diagnostics → targeted edit → verify).
+
 ## 6. Why "learning as we go" is the crucial part (Joe)
 
 The old runners were throughput ("N papers done"). mark7 is a **flywheel**: data improves the
