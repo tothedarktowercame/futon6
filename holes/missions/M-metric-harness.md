@@ -1,9 +1,10 @@
 # M-metric-harness — the next end-to-end run measures PROGRESS, not throughput
 
 **Status:** HEAD complete; IDENTIFY authored; MAP complete (scratch-work survey);
-DERIVE authored (3-axis taxonomy + per-phase & aggregate catalog); **ARGUE authored**
-(progress-signal + navel-gazing + graph-enhanced-evaluation; paradox resolved); VERIFY
-spike next; INSTANTIATE deferred (2026-06-23).
+DERIVE authored (3-axis taxonomy + per-phase & aggregate catalog); ARGUE authored
+(paradox resolved); **VERIFY spiked** — concept-coverage accretion slope is real + steep
+at small n (0.10→0.56 over k=1→10 on the 9,738-paper CT corpus); INSTANTIATE = build the
+harness (2026-06-23).
 
 *Follows `futon4/holes/mission-lifecycle.md`. Successor framing to the mark5 run
 (`holes/mark5-ct100-results.md`); executes against the corrected pipeline in
@@ -361,11 +362,44 @@ goal — they're a cheap early stand-in for the real goal (does the mined struct
 downstream mathematical reasoning measurably better), which we keep honest by occasionally
 checking them against an actual bare-vs-graph-enhanced test.
 
-## 5. VERIFY · 6. INSTANTIATE · 7. DOCUMENT — *forward path*
+## 5. VERIFY (2026-06-23)
 
-- **VERIFY:** spike one accretion slope (concept-coverage leave-one-out, or encyclopedia
-  count) on data in hand — CPU, free — to prove a metric actually rises before any box.
-- **INSTANTIATE:** build the harness; wire S3-all-proofs + S4 expository + S6 assembler;
-  run 10 then 20 whole papers everything-on; emit the slope + per-stage attribution.
+### Spike — concept-coverage accretion slope (CPU, free, data in hand)
+
+Inverted `data/warp/concept-index.json` (3,623 concepts × **9,738 CT papers**) to
+paper→concepts; for 20 held-out papers, measured coverage vs substrate size k using the
+DERIVE leave-one-out mechanism:
+
+```
+ k (substrate)  :   1     2     5    10    20    50   100   200   400  9718
+ distinct conc. : 102   274   551   844  1259  1798  2482  2959  3317  3623
+ distinct DEFINED: 101   273   547   837  1243  1776  2442  2912  3260  3559
+ held-out cov.  :0.098 0.226 0.422 0.564 0.683 0.822 0.918 0.967 0.994 1.000
+```
+
+**Result — the accretion slope is real and steep at small n.** Held-out concept-coverage
+rises **0.10 → 0.56 over k=1→10 (~5.7×)** and saturates near 1.0 by k≈400; distinct
+concepts (and distinct *defined* concepts) accrete monotonically.
+
+**What this verifies (the riskiest DERIVE commitments):**
+1. The leave-one-out slope mechanism produces a real, monotone rising curve on actual data.
+2. The slope is steep precisely in the **1→20 range Joe targets** — "small first, read the
+   slope" is sound; we don't need 100s of papers to see progress.
+3. An ACCRETION metric behaves as the taxonomy predicts.
+
+**Caveats (honest).** Uses the existing curated concept-index (HAPAX-filtered); coverage
+here is "held-out concepts appearing in other papers' concept sets" — a proxy for
+grounding-against-*definitions* (the fuller version rebuilds the def-substrate per k, an
+INSTANTIATE concern). One metric spiked; the rest land in INSTANTIATE.
+
+**Decision log.** No DERIVE revision needed — the spike confirms accretion slopes are real
+and readable at small n. Risk that "there's no slope to find" is retired.
+
+## 6. INSTANTIATE · 7. DOCUMENT — *forward path*
+
+- **INSTANTIATE:** build the harness (`MetricRecord`/`SlopeReport` emit + leave-one-out
+  replay + per-stage attribution); wire S3-all-proofs + S4 expository + S6 assembler; run
+  10 then 20 whole papers everything-on; emit the slope + attribution. Keep a line of
+  sight to `f6/graph-enhanced-evaluation` as the ground-truth proxy check.
 - **DOCUMENT:** the slope report becomes the progress artifact (and the superpod
   go/no-go input).
