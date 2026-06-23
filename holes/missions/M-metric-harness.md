@@ -314,6 +314,27 @@ attribution → **the slope report** (the deliverable, and the superpod go/no-go
 "N papers completed" headline; one reasoning sibling; one proof per paper; raw counts
 without the slope; an accretion slope reported without attribution.
 
+### Bib layer + sample selection (2026-06-23)
+
+The (previously unused) bibliographic citation network is now wired in — for *sample
+selection* and as derived metrics:
+
+- **Sample = a citation-coherent neighborhood, not a random date-spread.** `build_ct_manifest
+  --citation-neighborhood` builds a hub + its in-corpus citers (`math-ct-neighborhood`,
+  hub `math__0608040` + 14 citers) **and** a matched even-spread `math-ct-random`. **Key
+  finding that forces this:** reference-resolution (and concept-coverage) are **flat at
+  small n on a random substrate** — a random sample's papers don't cite each other, so a
+  held-out paper's references/concepts aren't in the first 10–20. A citation-coherent
+  sample makes the slope steep *at the n=10–20 scale we want to run*.
+- **The neighborhood-vs-random slope comparison is itself the experiment:** does citation
+  coherence steepen the accretion? If yes, *corpus structure (not size) drives compounding*
+  — a finding about which papers to mine.
+- **New bib metrics (harness):** `reference-resolution` (S2, accretion — held-out refs
+  present vs substrate-k; 0→0.99) and `concept-novelty-vs-citations` (S2, completeness —
+  fraction of a paper's concepts absent from its cited papers; mean 0.34, the
+  new-terms-vs-cited experiment). greatest-hits.html = the *concept-usage* embedding +
+  citation roads (distinct from the CLean proof-structure embedding).
+
 ---
 
 ## 4. ARGUE (2026-06-23)
