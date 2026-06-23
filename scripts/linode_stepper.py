@@ -92,6 +92,7 @@ OPS = {
     "S8": {"cmd": f"{{PY}} scripts/clean_graph_export.py --clean-dir {CLEAN} --out {DEMO}/ingest "
            f"--embed-json {DEMO}/clean-embed.json"},
     "S9": {"cmd": "{PY} scripts/mark4_apm_structure_coverage.py ; {PY} scripts/clean_hole_harvest.py  # optional CPU tails"},
+    "RETRIEVE": {"boot": True, "halt": True, "note": "<profile.retrieve> — pull ALL run outputs to dev BEFORE teardown"},
 }
 
 
@@ -104,12 +105,22 @@ _STAGE_MANIFEST = ("eprints (the sample's *.tar.gz) + ~68MB substrate "
                    "(data/warp/{concept-index,def-snippets,defined-index,concept-usage}.json, "
                    "data/concept-encyclopedia-ct.json) + futon3 patterns "
                    "(futon3/resources/sigils/patterns-index.tsv, futon3/library)")
+# the RUN OUTPUTS to pull back to dev BEFORE teardown (mark6 lost the CLeans + paper-graphs
+# B by pulling only the embed JSON — never delete the box until all of these are on dev).
+_RETRIEVE_MANIFEST = ("data/iatc-argument-graphs/$RUN_ID (IATC graphs), holes/clean-$RUN_ID "
+                      "(CLeans EDN), data/iatc-paper-graphs/$RUN_ID (object B), "
+                      "data/showcases/clean-$RUN_ID-demo (embed+ingest), "
+                      "data/expository-scope-graphs/$RUN_ID, data/runs/$RUN_ID (metrics+ledger)")
+_RETRIEVE_CMD = ("rsync -avz root@$BOX:'futon6/{data/iatc-argument-graphs,holes/clean,"
+                 "data/iatc-paper-graphs,data/showcases,data/expository-scope-graphs,data/runs}/*$RUN_ID*' "
+                 "<dev>/  # verify counts, THEN teardown")
 PROFILES = {
     "linode": {
         "banner": "LINODE — small / single StackScript box (the reduced-scale end-to-end)",
         "s0": "README-linode: StackScript 2142757; linode-postsetup-deps.sh; hf pre-pull 70B; "
               "linode-4gpu-setup.sh (vLLM 70B, TP=4)",
         "stage": f"rsync -L (DEREFERENCE symlinks) {_STAGE_MANIFEST} to the box, then run S1..S9 there",
+        "retrieve": f"PULL run outputs to dev before teardown: {_RETRIEVE_MANIFEST}. {_RETRIEVE_CMD}",
         "scale": "sample: holes/math-ct-200.ids.txt OR a 15-paper citation neighborhood "
                  "(math-ct-neighborhood) + matched random",
     },
@@ -119,6 +130,7 @@ PROFILES = {
               "linode-postsetup-deps.sh; hf pre-pull; corpus-id = domain@date",
         "stage": f"rsync -L (DEREFERENCE symlinks) {_STAGE_MANIFEST} to the cluster scratch ONCE, "
                  "then run S1..S9 there — compute/disk are never the constraint",
+        "retrieve": f"PULL run outputs to dev/durable store before releasing the alloc: {_RETRIEVE_MANIFEST}",
         "scale": "ENTIRE math.XX domain (build_ct_manifest over the domain); LLM stages S3/S4/S7 "
                  "at batch concurrency; S2 MUST be corpus-fresh (no --reuse)",
     },
@@ -190,7 +202,8 @@ DEPS = load_deps()
 
 
 def _boot_note(profile, sid):
-    return PROFILES[profile]["stage"] if sid == "STAGE" else PROFILES[profile]["s0"]
+    return {"STAGE": PROFILES[profile]["stage"], "RETRIEVE": PROFILES[profile]["retrieve"]}.get(
+        sid, PROFILES[profile]["s0"])
 
 
 def plan(stages, profile):
@@ -274,6 +287,9 @@ def main():
         i = ids.index("S0") + 1
         stages.insert(i, {"id": "STAGE", "name": "stage substrate", "compute": "io",
                           "halt": True, "go": []})
+    if "RETRIEVE" not in [s["id"] for s in stages]:   # pull outputs before teardown (mark6 lesson)
+        stages.append({"id": "RETRIEVE", "name": "pull run outputs", "compute": "io",
+                       "halt": True, "go": []})
     if args.mark_done:
         for sid in args.mark_done:
             ledger_record(args.run_dir, sid, args.corpus_id, args.run_id)
