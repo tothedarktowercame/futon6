@@ -46,33 +46,52 @@ def load_stages():
 # dispatch: stage-id -> what to actually run. local stages have a cmd (+ optional
 # gate); host-only stages carry the command to run on the Linode GPU host.
 # host commands follow futon0/README-linode.md (StackScript 2142757 box).
-MAN = "holes/math-ct-200.ids.txt"
+# dispatch re-synced to the CORRECTED DAG (linode-stepper-contract.md, 2026-06-23):
+# S1 anatomy · S2 concepts · S3 IATC(all-proofs) ∥ S4 expository · S5 comprehension ·
+# S6 paper-graph(B) · S7 CLean-embed · S8 export · S9 APM/mining. Emitting stages take
+# --run-dir $RUN so the run produces the slope report (INSTANTIATE-GPU). After S8:
+#   {PY} scripts/metric_harness.py --from-records $RUN   (emitted completeness/quality)
+#   {PY} scripts/metric_harness.py                       (accretion slopes, leave-one-out)
+IDS = "holes/math-ct-200.ids.txt"
+RUN = "data/runs/$RUN_ID"           # set per run; stages emit MetricRecords here
+CAND = "data/iatc-candidates-run"
+GRAPHS = "data/iatc-argument-graphs/run"
+CLEAN = "holes/clean-run"
+DEMO = "data/showcases/clean-run-demo"
 OPS = {
-    "S0": {"local": False, "note": "README-linode: StackScript 2142757 box; scripts/linode-postsetup-deps.sh; "
-           "hf download …-70B-…-AWQ-INT4 (retry loop); scripts/linode-4gpu-setup.sh (serves vLLM, flashinfer sampler off)"},
-    "S1": {"local": False, "note": "{PY} scripts/fetch-arxiv-eprints.py --input holes/math-ct-200.fetch.jsonl "
-           "--out-dir /home/joe/code/storage/futon6/data/arxiv-math-ct-eprints -> "
-           "{PY} scripts/emit_marks.py --list holes/math-ct-200.ids.txt -> "
-           "{PY} scripts/mark3_extract_candidates.py --papers <ids> --out data/iatc-candidates",
-           "gate": "candidate schema == iatc-candidate/v2-enriched"},
-    "S2": {"local": False, "note": "warp substrate build (concordance heavy); G-coverage runs INLINE here via coverage_inline.py on S1's raw concept stream"},
-    "S3": {"local": False, "note": "scripts/linode-4gpu-run.sh (mark3_extract_candidates -> mark3_iatc_loop vLLM 70B -> IATC graphs + eval tail)",
-           "gate": "bb scripts/iatc_argcheck.bb $OUT && {PY} scripts/substance_gate.py $OUT"},
-    "S4": {"local": False, "note": "{PY} scripts/clean_box_typing.py --graphs $OUT --out $CLEAN "
-           "--endpoint http://localhost:$PORT/v1/chat/completions (skeleton + served-70B box-typing "
-           "+ in-loop vocab gate/retry + per-graph argcheck, cyclic-reject logged)",
-           "gate": "bb scripts/clean_vocab_gate.bb $CLEAN"},
-    "S5": {"local": True, "inputs": ["data/iatc-candidates"],
-           "cmd": "{PY} scripts/strategy_recognizer.py --candidates data/iatc-candidates"},
-    "S6": {"local": True, "inputs": ["data/iatc-argument-graphs/loop-run-70b"],
-           "cmd": "{PY} scripts/clean_comprehension.py"},
-    "S7": {"local": True, "inputs": ["holes/clean"],
-           "cmd": "{PY} scripts/clean_structure_embed.py --clean-dir holes/clean",
-           "gate": "{PY} scripts/clean_entropy_gate.py"},
-    "S8": {"local": True, "inputs": ["holes/clean", "data/showcases/clean-demo/clean-embed.json"],
-           "cmd": "{PY} scripts/clean_graph_export.py"},
-    "S9": {"local": True, "inputs": ["data/iatc-argument-graphs"],
-           "cmd": "{PY} scripts/clean_hole_harvest.py"},
+    "S0": {"local": False, "note": "README-linode: StackScript 2142757; linode-postsetup-deps.sh; "
+           "hf pre-pull 70B (retry loop); linode-4gpu-setup.sh (serve vLLM, flashinfer off)"},
+    "S1": {"local": False, "note": f"{{PY}} scripts/emit_marks.py --list {IDS} --run-dir {RUN} "
+           "(whole-paper anatomy from pre-fetched eprints; emits any-markup-coverage)",
+           "gate": "check_invariants wf=0 across the batch"},
+    "S2": {"local": False, "note": "warp substrate build (concordance) -> concept-index (corpus-fresh); "
+           "G-coverage INLINE via coverage_inline.py on raw S1 concepts",
+           "gate": "G-coverage: raw coverage rises with corpus-fraction"},
+    "S3": {"local": False, "note": f"{{PY}} scripts/mark3_extract_candidates.py --papers <ids> --all-proofs "
+           f"--out {CAND}  ->  CANDIDATES={CAND} OUT={GRAPHS} scripts/linode-4gpu-run.sh "
+           "(mark3_iatc_loop 70B; one graph per proof)",
+           "gate": f"bb scripts/iatc_argcheck.bb {GRAPHS} && {{PY}} scripts/substance_gate.py {GRAPHS} (finals-only)"},
+    "S4": {"local": False, "note": "{PY} scripts/mark3_extract_expository_candidates.py --papers <ids> "
+           "--out data/expository-candidates-run  ->  {PY} scripts/mark3_expository_loop.py "
+           "--candidates data/expository-candidates-run --out data/expository-scope-graphs/run "
+           f"--backend openai --run-dir {RUN} (ALL regions; cap/sample at scale)",
+           "gate": "expository_argcheck (self-gated in loop)"},
+    "S5": {"local": True, "inputs": [GRAPHS],
+           "cmd": "{PY} scripts/clean_comprehension.py  # rung-ladder + R2d + strategy_recognizer",
+           "gate": "G-comprehension: verdict separates weak-extraction from weak-proof"},
+    "S6": {"local": True, "inputs": [GRAPHS],
+           "cmd": f"{{PY}} scripts/paper_graph_assemble.py --paper <pid> --iatc {GRAPHS} --run-dir {RUN}",
+           "gate": "B wellformed: every proof attaches to a statement; orphans flagged"},
+    "S7": {"local": False, "note": f"{{PY}} scripts/clean_box_typing.py --graphs {GRAPHS} --out {CLEAN} "
+           f"--endpoint http://localhost:$PORT/v1/chat/completions --model mark4-70b --run-dir {RUN}  ->  "
+           f"{{PY}} scripts/clean_structure_embed.py --clean-dir {CLEAN} --out {DEMO}",
+           "gate": f"bb scripts/clean_vocab_gate.bb {CLEAN} && {{PY}} scripts/clean_entropy_gate.py "
+           f"--embed {DEMO}/clean-embed.json"},
+    "S8": {"local": True, "inputs": [CLEAN],
+           "cmd": f"{{PY}} scripts/clean_graph_export.py --clean-dir {CLEAN} --out {DEMO}/ingest "
+           f"--embed-json {DEMO}/clean-embed.json"},
+    "S9": {"local": True, "inputs": [GRAPHS],
+           "cmd": "{PY} scripts/mark4_apm_structure_coverage.py ; {PY} scripts/clean_hole_harvest.py  # optional CPU tails"},
 }
 
 

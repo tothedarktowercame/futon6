@@ -230,8 +230,10 @@ def run(args: argparse.Namespace) -> int:
     outdir.mkdir(parents=True, exist_ok=True)
     attempts.mkdir(exist_ok=True)
     results = []
+    bypaper = {}  # paper-id -> [total, passed], for the S4 expository-coverage emit
     for candidate_path in candidate_paths:
         candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+        pid = candidate.get("paper-id") or str(candidate["passage-id"]).split(":")[0]
         prompt = build_prompt(candidate)
         status, last_error = "fail", ""
         for attempt in range(MAX_ATTEMPTS):
@@ -260,10 +262,24 @@ def run(args: argparse.Namespace) -> int:
                 break
             last_error = err
         results.append((candidate["passage-id"], status, last_error))
+        rec = bypaper.setdefault(pid, [0, 0])
+        rec[0] += 1
+        rec[1] += 1 if status == "pass" else 0
         print(f"  {candidate['passage-id']}: {status} ({last_error[:100]})")
 
     passed = sum(1 for _, status, _ in results if status == "pass")
     print(f"\nexpository-loop: {passed}/{len(results)} graphs gated PASS")
+    if getattr(args, "run_dir", None):  # S4 inline metric: per-paper expository-coverage
+        try:
+            import sys as _sys
+            _sys.path.insert(0, str(REPO / "scripts"))
+            import metric_harness as mh
+            for pid, (tot, ok) in bypaper.items():
+                mh.emit_record(args.run_dir, run_id=args.run_id, corpus_id=args.corpus_id,
+                               paper_id=pid, stage="S4", metric="expository-coverage",
+                               axis="completeness", value=round(ok / max(1, tot), 4), computable=True)
+        except Exception as ee:
+            print(f"  (S4 metric emit skipped: {ee})")
     return 0 if passed == len(results) else 1
 
 
@@ -273,6 +289,9 @@ def main() -> int:
     parser.add_argument("--out", default=str(REPO / "data" / "expository-scope-graphs" / "loop-run"))
     parser.add_argument("--backend", choices=["stub", "openai"], default="stub")
     parser.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct")
+    parser.add_argument("--run-dir", help="if set, emit S4 expository-coverage MetricRecords here")
+    parser.add_argument("--run-id", default="adhoc")
+    parser.add_argument("--corpus-id", default="adhoc")
     return run(parser.parse_args())
 
 

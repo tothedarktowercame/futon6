@@ -212,7 +212,11 @@ a ready-but-never-run GPU arm; 5.5 needs a build; the substantive remaining work
   per-proof, and/or the **data-driven vocabulary** (the adapted/lavender layer:
   STRAT-REC co-learning, LEAN-NL, WARRANT-NORM keying) **not yet wired into typing/
   embedding**, which still uses the fixed `clean-method-vocab.edn`. Look at details first.
-- **Needs re-sync:** `linode_stepper.py`'s `OPS` command-map still carries the mark5
+- **Stepper re-synced — DONE (2026-06-23).** `linode_stepper.py` OPS re-keyed to the
+  corrected S1–S9 (anatomy · concepts · IATC `--all-proofs` ∥ expository · comprehension ·
+  paper-graph(B) · CLean-embed · export · APM), with `--run-dir` emit hooks on S1/S4/S6/S7;
+  `--plan` verified. Emit hooks wired+tested: S1 markup-coverage, S4 clean-discharge +
+  expository-coverage, S6 attachment-rate.
   stage semantics (S4=CLean, S5=strategy, S6=comprehension…); it must be re-keyed to
   these corrected stage IDs (S4=expository, S5=comprehension, S6=paper-graph-B,
   S7=clean-embed) before `--run` drives them. `--plan`'s stage list/gates already read
