@@ -18,10 +18,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import dp_anatomy_html as R
 import dp_paper_view as dpv
 
-IDS = ["0705.0452", "0706.1286", "0708.1921", "0708.2067", "0708.2185",
-       "0709.0248", "0711.0473", "0712.0724", "0801.0199", "0801.3843"]
-RUN = R.ROOT / "data" / "iatc-argument-graphs" / "loop-run-70b"
-OUT = R.DEFAULT_OUT / "mark4-iatc-goldens.html"
+import os
+IDS = (os.environ["IATC_IDS"].split() if os.environ.get("IATC_IDS") else
+       ["0705.0452", "0706.1286", "0708.1921", "0708.2067", "0708.2185",
+        "0709.0248", "0711.0473", "0712.0724", "0801.0199", "0801.3843"])
+RUN = Path(os.environ.get("IATC_RUN", str(R.ROOT / "data" / "iatc-argument-graphs" / "loop-run-70b")))
+OUT = Path(os.environ.get("IATC_OUT", str(R.DEFAULT_OUT / "mark4-iatc-goldens.html")))
 FIXED: dict[str, list] = {}   # pid -> [normalized 70B graph]
 KMAP = {"claim": "claim", "object": "concept", "ref": "label"}
 # An IATC edge's :source spans premise->conclusion lines, but the ARROW itself is

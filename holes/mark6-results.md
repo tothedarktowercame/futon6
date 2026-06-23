@@ -32,7 +32,13 @@ grows. It is computed at n=1 and it rises — exactly the design.
 ## 2. One proof, end-to-end (the literate thread)
 
 To show what "through the whole pipeline" means, here is a single proof —
-`0709.0248__p0` — from input to verdict.
+`0709.0248__p0` — from input to verdict. The **annotated render** (existing
+`build_iatc_goldens` engine, retargeted at the mark6 graph) shows the proof text with
+colour: grounded concepts and symbols highlighted with their grounding in hover-tooltips,
+golden CPU anatomy (128 marks) beside the 70B IATC projection (10 marks), on the *same*
+text — **`file:///home/joe/code/futon6/data/showcases/mark6-iatc-annotated.html`**
+(regen: `IATC_IDS=0709.0248 IATC_RUN=data/mark6-render IATC_OUT=… build_iatc_goldens.py`).
+The text blocks below are the plain-text distillation of that render.
 
 **(a) The input.** The raw passage the pipeline ingested (arXiv 0709.0248, on the
 homotopy interpretation of type theory):
