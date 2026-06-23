@@ -284,6 +284,25 @@ paper** — the shapes really do work at the whole-paper level (Joe's original i
 the mark5 collapse). The "improve as we run" spine thus gains a whole-paper tier: as the
 corpus grows, papers accrete into a finite set of structural archetypes.
 
+## 5e. The accretion curve — "improve as we run" plotted
+
+The single-point lifts become a *curve* when measured at increasing corpus size
+(`accretion_curves.py`): harvest move-cues from the first-n papers' graphs, measure
+proof-move grounding over a fixed window set.
+
+```
+ n papers harvested:   0     1     3     5     7     9
+ #cues:                0     3     6    10    11    16
+ proof-move grounding: 0.126 0.142 0.143 0.168 0.168 0.188   ▲ monotone, +0.062, not yet saturated
+```
+
+Rendered: `file:///home/joe/code/futon6/data/showcases/mark6-accretion-curve.html`. The
+metric **rises monotonically with corpus size** — the literal improve-as-we-run slope, and
+still climbing at n=9 (the move vocabulary hasn't saturated). This is the proof the whole
+thesis was after: not "N papers processed", but a metric that demonstrably *improves as the
+corpus grows*, honestly (the lift is recognition, not faked verification). The concept
+substrate shows the same shape (0.08→0.70, §1); a full run plots all tiers at once.
+
 ---
 
 ## 6. The topology that wasn't
