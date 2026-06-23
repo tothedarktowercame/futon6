@@ -421,10 +421,22 @@ attribution) ✓ · C3 (rises / else pinpointed) ✓ · C5 (slope is the headlin
 accretion-on-existing-data subset. **C4 (both siblings + comprehension + cross-paper
 mining ON) is INSTANTIATE-(2)** — it needs the box run's outputs.
 
-### (2) remaining — INSTANTIATE
+### (2) emitters added on existing data (CPU)
 
-- Register more metric emitters as their data lands: comprehension floor, expository
-  coverage, symbol-grounding-by-kind, weak-point-with-confidence (each `@metric` + a loader).
+The harness is now **multi-corpus** (substrate ~9.7k papers + mined ~100 CLeans), metrics
+declare `requires`/`corpus`, and run() sweeps the matching universe.
+
+- **`recurring-holes` (S5, mined, accretion) — BUILT.** Keys each CLean hole by
+  `(satiety, concept)` where concept is grounded from the hole-box text against the
+  concept-index; counts keys recurring in ≥2 papers (df≥2) as the mined corpus grows.
+  Result: **0 → 1 → 3 → 4 → 7 → 11** over k=1→82 (rising) — the `(type,concept)` key
+  surfaces cross-paper recurring gaps where raw `:wanted` (generic "warrant") found none.
+  Confirms the WARRANT-NORM hypothesis as a live accretion metric.
+
+### (2, cont.) remaining — INSTANTIATE
+
+- Register: comprehension floor, expository coverage, symbol-grounding-by-kind,
+  weak-point-with-confidence (each `@metric` + a loader).
 - Wire **S3 all-proofs + S4 expository + S6 paper-graph**; run **10 then 20 whole papers
   everything-on**; the harness then emits the full multi-metric slope report.
 - Keep `f6/graph-enhanced-evaluation` (the ground-truth use-value proxy) in view.
