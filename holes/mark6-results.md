@@ -261,6 +261,29 @@ Caveat: the macro is part of the structure vector, so same-macro proofs cluster 
 the 0.74 mean is that); richer structure features would widen the dynamic range. But the
 embedding is sound and the collapse worry is retired.
 
+## 5d. Whole-paper CLean — the structure treatment, one level up
+
+The instance level gives proof-shapes, definition-shapes, expository-moves. The same
+treatment at the **paper** level (`clean_paper_signature.py`): a paper's structural
+signature = its **macro fingerprint** (distribution over proof-shapes) + its mean
+**structural profile** (boxes/depth/holes/discharges/fanout). Papers then have whole-paper
+structural twins and archetypes:
+
+```
+0706.2868  reduce×4 construct×3 contradiction×1  ─┐ reduce+construct
+0709.0248  construct×1 reduce×1                   ─┤  cluster (≈0.72)
+0902.0399  reduce×7 construct×8                   ─┘
+0708.4401  contradiction×1 construct×1   ─┐ contradiction-bearing
+0808.4108  construct×5 contradiction×2 …   ─┘  pair (≈0.63)
+```
+
+paper-twin sim mean 0.55 (range 0.18–0.72) — papers cluster by **argument-shape
+composition**, not topic. Crucially this **settles the deferred macro question**: the
+macro vocabulary, weak and over-tagged *per proof*, is **informative once aggregated per
+paper** — the shapes really do work at the whole-paper level (Joe's original intuition from
+the mark5 collapse). The "improve as we run" spine thus gains a whole-paper tier: as the
+corpus grows, papers accrete into a finite set of structural archetypes.
+
 ---
 
 ## 6. The topology that wasn't
