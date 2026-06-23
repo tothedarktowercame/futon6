@@ -187,6 +187,38 @@ on data it never saw.
 
 ---
 
+## 5b. What the IATC run actually taught us — the inference lexicon
+
+First pass at "what did the metrics teach us about the IATC" was bleak: our headline
+(accretion) is blind to the IATC, and the IATC-touching numbers (noun-grounding 0.85 vs
+proof-move 0.14, discharge 0.33, prooftree-recall 0.33) all said the same thing — *good on
+entities, ~⅓ on inference*. But that reading missed the point. The IATC's habit of
+**naming inference moves in prose and anchoring each to a `:source` span** is not a failure
+to recover a DAG — it is a **harvest of grounded inference vocabulary.** `iatc_lexicon_harvest.py`
+collects it: **92 distinct entries** from the goldens — a relation grammar (`because` ·
+`therefore` · `implies` · `suffices-to-show` · `arises-from` …) plus named moves
+(`reduction-to-subgoals`, `equality-of-pasting-composites`, `functoriality of _*`,
+`Yoneda embedding preserves and reflects isomorphisms`).
+
+Each entry carries the IATC's **own confidence** in its anchoring:
+`confidence = anchor-faithfulness (claim head-terms ∩ anchored span) × formal-corroboration`.
+This discriminates — **21 high (≥0.7) vs 40 low (<0.3)** — so the lexicon is *weighted*,
+and poor anchorings are visible, not silently averaged in.
+
+The **prooftree anchorings are the extremal calibrator** (your prediction): a node whose
+span carries formal structure (`\judge`/`\justifies`) that its `:text` linearized scores
+**0.00 now** (FORMAL-STRUCTURE-FLATTENED) and would flip to **~1.0 once a deterministic
+recognizer exists** — the 0→1 gap is the measurable IATC-improvement target. On the
+prooftree proof, exactly 2 anchorings flag (L1519-24, L1527-30).
+
+So the real lesson: **the IATC is a miner of grounded, confidence-weighted inference
+vocabulary**, and the right IATC metrics are `inference-lexicon-size` (accretion — does the
+move-vocabulary grow then converge?) and `inference-anchor-confidence` (quality), both now
+emitted by the harvester. The harvested lexicon then becomes the *data-driven* proof-move
+vocabulary that should lift the 0.14 grounding — the macro-fix lesson, one level up.
+
+---
+
 ## 6. The topology that wasn't
 
 An earlier claim that the run needed a dev↔box "distributed topology" was **wrong** — it
