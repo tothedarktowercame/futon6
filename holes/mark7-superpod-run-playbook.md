@@ -8,14 +8,17 @@ window yields the *whole* improve-as-we-run curve for every tier — not just en
 
 ## 1. The shape of it
 
-- **Corpus:** the full math.CT arXiv — `holes/math-ct-full.ids.txt` (9,742 papers, ordered
-  **chronologically** = the natural accretion order; the corpus grows over time like the archive).
+- **Corpus:** **primary** math.CT — `holes/math-ct-full.ids.txt` (4,510 papers whose
+  `primary_category = math.CT`, of ~4,616 in the archive; ordered **chronologically** = the
+  natural accretion order). A further **4,252 cross-listed** papers (primary in
+  math.AT/RT/QA/AG/… but tagged math.CT) are staged and available to *enrich the S2 substrate*
+  without being run subjects — add them if we want the broad corpus.
 - **Single host:** everything (S1–S12) runs on the Superpod after one STAGE rsync. No
   dev/box split (that was a data-staging gap, not a topology — mark6 lesson).
 - **Accretion sweep:** process in chronological order; checkpoint every metric at log-spaced
-  n (1/10/100/1k/…/full). **The run need not COMPLETE** — ~58k all-proofs won't finish in 20h
-  even on 8 GPUs. Whatever the window reaches, the checkpoints give rising curves. *Coverage
-  is a bonus; the curve is the product.*
+  n (1/10/100/1k/…/full). At ~27k all-proofs (4,510 papers × ~6), full completion in 20h is
+  *plausible* with 8-GPU batching — but the design doesn't depend on it: whatever the window
+  reaches, the checkpoints give rising curves. *Coverage is a bonus; the curve is the product.*
 
 ## 2. Lessons baked in (audit — all wired)
 
@@ -57,7 +60,7 @@ lexicon+reground · S11 structural+whole-paper · S12 accretion-sweep · RETRIEV
 
 Process **chronologically**; rely on vLLM batch concurrency across 8 GPUs. Rough shares:
 
-- **S3 IATC** (~58k proofs) and **S7 box-typing** (~58k) are the cost; **cap S4 expository**
+- **S3 IATC** (~27k proofs) and **S7 box-typing** (~27k) are the cost; **cap S4 expository**
   (sample ~30 regions/paper, not all — one paper had 466) so it doesn't dominate.
 - CPU stages (S1/S2/S5/S6/S8–S12) are cheap and parallel.
 - If batching gives ~20× single-stream, the full corpus is plausible in the window; if not,
