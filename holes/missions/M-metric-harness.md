@@ -370,11 +370,17 @@ converges (fast→slow):
    scope-graphs) → modest lift now, grows with the corpus — but the mechanism is layer-
    independent, confirming the unified loop across inference + exposition.
 3. **Structural** (definitions) — we build per-paper SFC `:structure` trees
-   (`sfc_def_structure.bb`, e.g. `(= X (conditional-set (∈ x A) …))`) but **never normalize
-   them across papers**. Canonical definitions require **tree-match modulo α-renaming +
-   operator-canon + grounding** — string/label normalization is insufficient. **The gap, and
-   the deepest tier** ("building up definitions", not labels — Joe). Target: the
-   concept-encyclopedia accretes *canonical structured definitions*, not near-duplicates.
+   (`sfc_def_structure.bb`, e.g. `(= X (conditional-set (∈ x A) …))`). **DONE**
+   (`sfc_struct_canon.py`): a canonicalizer that tree-matches `:structure`s modulo
+   **α-renaming + operator-keep + grounding** → a structural key; same key = same
+   definitional shape → merge. On real formulae (hmit.tex): **31 defs → 18 canonical shapes
+   (1.72× compression)**, with genuine merges — typed maps `f:B→A`≡`f:A→B`, compositions
+   `g∘l=k`≡`l∘f=h`, judgments `Γ⊢A:type`≡`Γ⊢a:A`. The **compression ratio is the
+   structural-normalization accretion metric** (recurring shapes across papers → ratio
+   grows → convergence to a finite shape-vocabulary; the encyclopedia accretes canonical
+   structured definitions, not near-duplicates). Two knobs surfaced: merge granularity =
+   the `OPERATORS` set (add `Π`/`Σ`/`λ` for finer); and `:hole` patterns merging flags
+   **SFC structural-coverage gaps** (a free diagnostic). All three tiers now built.
 
 All three feed the same machinery: each merge carries a confidence (label-match /
 cluster-membership / structural-alignment), and lexicon/encyclopedia size is the accretion
