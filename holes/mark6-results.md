@@ -232,6 +232,37 @@ type-structure**, each layer with its own accretion (lexicon growth) and quality
 
 ---
 
+## 5c. The CLean structure embedding — the novel artifact (and it did NOT collapse)
+
+The most novel output of the run — the CLean proof-structure embedding (for Rob) — was
+missing from the exhibits, and the collapse question was still open. The macro-entropy
+(0.77) only spoke to the *labels*; the *vectors* are a separate question. The 58-proof
+embedding answers it:
+
+- **Not collapsed.** Structure-sim spans **0.27–1.00** (mean 0.74, std 0.14, **zero**
+  pairs > 0.99). Real spread, no degeneracy. Tighter than text (text-sim mean 0.11) —
+  proofs genuinely share argument-shape — but discriminating.
+- **Orthogonal to text.** Structure top-1 agrees with text top-1 **0 / 58** times — not
+  re-deriving topical similarity; it captures something else.
+- **It finds cross-paper structural twins** — **50 / 58** proofs' nearest structural
+  neighbor is in a *different paper*, and the twins share argument-shape:
+
+  ```
+  0706.2868__p4 [contradiction-reduce]  ≈  0708.4401__p0 [contradiction-reduce]  sim 0.93
+  0706.2868__p5 [reduce-to-known]       ≈  0809.2161__p9 [reduce-to-known]       sim 0.98
+  0706.2868__p7 [construct-exploit-…]   ≈  0808.4108__p2 [construct-exploit-…]   sim 0.99
+  (text-NN for these sits at 0.20–0.45 and points elsewhere)
+  ```
+
+Exactly the intended value: an index that answers *"this proof argues like that one"*
+across topics — orthogonal to text/topic similarity. Rendered (twins table, cross-paper
+rows highlighted): `file:///home/joe/code/futon6/data/showcases/mark6-clean-twins.html`.
+Caveat: the macro is part of the structure vector, so same-macro proofs cluster (some of
+the 0.74 mean is that); richer structure features would widen the dynamic range. But the
+embedding is sound and the collapse worry is retired.
+
+---
+
 ## 6. The topology that wasn't
 
 An earlier claim that the run needed a dev↔box "distributed topology" was **wrong** — it
