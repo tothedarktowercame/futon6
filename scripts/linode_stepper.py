@@ -22,7 +22,7 @@ import edn_format as edn
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, "holes", "linode-stepper-contract.md")
-PY = ".venv/bin/python"
+PY = ".venv/bin/python -u"   # -u: unbuffered → stage output streams live (no buffered black box)
 
 
 def kw(x):
