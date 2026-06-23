@@ -24,11 +24,16 @@ from iatc_move_reground import cluster_cues, score  # noqa: E402
 OUT = os.path.join(ROOT, "data/showcases/mark6-accretion-curve.html")
 
 
-def move_curve(ns=(0, 1, 2, 3, 5, 7, 9)):
-    golden = sorted(g for g in glob.glob(os.path.join(ROOT, "data/iatc-argument-graphs/loop-run-70b/*.edn"))
-                    if "rung2" not in g)
+def move_curve(graph_dir="data/iatc-argument-graphs/loop-run-70b",
+               cand_dir="data/cand-neighborhood", ns=None):
+    gd = graph_dir if os.path.isabs(graph_dir) else os.path.join(ROOT, graph_dir)
+    cd = cand_dir if os.path.isabs(cand_dir) else os.path.join(ROOT, cand_dir)
+    golden = sorted(g for g in glob.glob(os.path.join(gd, "*.edn")) if "rung2" not in g)
     windows = [json.load(open(f)).get("source-window", "")
-               for f in glob.glob(os.path.join(ROOT, "data/cand-neighborhood/*.candidate.json"))]
+               for f in glob.glob(os.path.join(cd, "*.candidate.json"))]
+    if ns is None:   # log-spaced checkpoints up to the corpus size (the accretion sweep)
+        N = len(golden)
+        ns = sorted({0, 1, 2, 3, 5, 7} | {n for n in (10, 30, 100, 300, 1000) if n < N} | {N})
     vocab = sr.load_vocab(os.path.join(ROOT, "holes/clean/tactic-gesture-vocab.edn"))
     pts = []
     for k in ns:
@@ -72,7 +77,13 @@ def svg(pts, n_windows):
 
 
 def main():
-    pts, nw = move_curve()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--graphs", default="data/iatc-argument-graphs/loop-run-70b")
+    ap.add_argument("--candidates", default="data/cand-neighborhood")
+    ap.add_argument("--run-dir", default=None)   # accepted for stepper symmetry
+    a = ap.parse_args()
+    pts, nw = move_curve(a.graphs, a.candidates)
     print("proof-move grounding accretion curve (n papers, #cues, grounding):")
     for k, c, g in pts:
         print(f"  n={k:2d}  cues={c:2d}  grounding={g:.3f}")

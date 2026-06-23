@@ -92,6 +92,15 @@ OPS = {
     "S8": {"cmd": f"{{PY}} scripts/clean_graph_export.py --clean-dir {CLEAN} --out {DEMO}/ingest "
            f"--embed-json {DEMO}/clean-embed.json"},
     "S9": {"cmd": "{PY} scripts/mark4_apm_structure_coverage.py ; {PY} scripts/clean_hole_harvest.py  # optional CPU tails"},
+    # --- LEARNING LAYER (the 'improve as we run' instrumentation; CPU post-stages) ---
+    "S10": {"cmd": f"{{PY}} scripts/iatc_lexicon_harvest.py --graphs {GRAPHS} --run-dir {RUN} && "
+            f"{{PY}} scripts/iatc_move_reground.py && {{PY}} scripts/expository_reground.py",
+            "gate": "move-lexicon harvested (relations+warrants+expository moves); reground lift >= 0"},
+    "S11": {"cmd": f"{{PY}} scripts/sfc_struct_canon.py --formulae {RUN}/def-formulae.txt ; "
+            f"{{PY}} scripts/clean_paper_signature.py --embed {DEMO}/clean-embed.json",
+            "gate": "structural canonical shapes + whole-paper signatures produced"},
+    "S12": {"cmd": f"{{PY}} scripts/accretion_curves.py --graphs {GRAPHS} --candidates {CAND} --run-dir {RUN}",
+            "gate": "ACCRETION SWEEP: every tier metric checkpointed at log-spaced n -> rising curves"},
     "RETRIEVE": {"boot": True, "halt": True, "note": "<profile.retrieve> — pull ALL run outputs to dev BEFORE teardown"},
 }
 
@@ -287,6 +296,11 @@ def main():
         i = ids.index("S0") + 1
         stages.insert(i, {"id": "STAGE", "name": "stage substrate", "compute": "io",
                           "halt": True, "go": []})
+    present = {s["id"] for s in stages}
+    for sid, nm in [("S10", "lexicon+reground"), ("S11", "structural+whole-paper"),
+                    ("S12", "accretion-sweep")]:   # the learning layer (CPU post-stages)
+        if sid not in present:
+            stages.append({"id": sid, "name": nm, "compute": "cpu", "halt": False, "go": []})
     if "RETRIEVE" not in [s["id"] for s in stages]:   # pull outputs before teardown (mark6 lesson)
         stages.append({"id": "RETRIEVE", "name": "pull run outputs", "compute": "io",
                        "halt": True, "go": []})
