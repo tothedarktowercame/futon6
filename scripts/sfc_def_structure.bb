@@ -311,6 +311,26 @@
                               (parse-restrict-eq antecedent)
                               (parse-action-cong consequent))))))))
 
+;; dependent-type binders Π/Σ/λ — LaTeXML holes these out (canonicalize-formulae-sequence
+;; only knows forall/exists), so parse them directly like l-closure-structure. A typed
+;; bound var (the `:` in the subscript) is required, so bare \Pi products don't match.
+(def dep-binder-re
+  #"\\(Pi|Sigma|lambda|prod|coprod)\s*_?\s*\{?\s*([A-Za-z])\s*:\s*([^}.]+?)\s*\}?\s*\\?\.?\s*(.+)")
+
+(defn parse-body [s]
+  (let [s (str/trim s)]
+    (if-let [[_ f a] (re-find #"^([A-Za-z][A-Za-z0-9_]*)\s*\(([^)]*)\)$" s)]
+      (cons (symbol (clean-symbol f))
+            (map (fn [x] (symbol (clean-symbol (str/trim x)))) (str/split a #",")))
+      (symbol (clean-symbol s)))))
+
+(defn dependent-binder-structure [formula]
+  (when-let [[_ op v ty body] (re-find dep-binder-re (str/trim formula))]
+    (let [opsym (case op ("Pi" "prod") 'Π ("Sigma" "coprod") 'Σ "lambda" 'λ)]
+      (list opsym
+            (list (symbol ":") (symbol v) (symbol (clean-symbol (str/trim ty))))
+            (or (dependent-binder-structure body) (parse-body body))))))
+
 (defn relational-chain-regroup [expr]
   (if (and (seq? expr)
            (= 'and (first expr))
@@ -323,7 +343,7 @@
     expr))
 
 (def grounded-operators #{'= 'conditional-set '∈ 'forall 'exists (symbol ":") (symbol ":hole")
-                          '→ 'implies 'restrict 'cong 'overline})
+                          '→ 'implies 'restrict 'cong 'overline 'Π 'Σ 'λ})
 
 (defn collect-symbols [expr]
   (let [seen (atom #{})]
@@ -352,7 +372,9 @@
                      relational-chain-regroup)
                  (catch Exception e
                    (symbol (str "parse-error:" (.getMessage e)))))
-        structure (or (l-closure-structure formula captures) parsed)]
+        structure (or (l-closure-structure formula captures)
+                      (dependent-binder-structure formula)
+                      parsed)]
     {:schema "sfc-def-structure/v1"
      :formula formula
      :normalized-formula normalized
