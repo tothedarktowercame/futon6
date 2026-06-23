@@ -33,10 +33,11 @@ grows. It is computed at n=1 and it rises — exactly the design.
 
 To show what "through the whole pipeline" means, here is a single proof —
 `0709.0248__p0` — from input to verdict. The stages **compose**: each adds its
-annotations to the *same* text, so the right view is an **N-up progressive render** —
-S1 anatomy (128 marks) → **+** S3 IATC inference structure (→138) → **+** S5 grounding,
-the final panel where everything is composed and the comprehension gap (*parameterized
-rules*) shows as a red wavy underline:
+annotations to the *same* text, so the view is a **2×3 grid** — columns are the stages,
+the **top row shows what each stage ADDS** (S1 anatomy 128 · S3 IATC 10 · S5 grounding 1)
+and the **bottom row the running composition** (128 → 138 → 139). The S5 comprehension gap
+(*parameterized*) shows as a red wavy underline in its own delta panel and in the final
+composed one:
 
 **`file:///home/joe/code/futon6/data/showcases/mark6-stages-composed.html`**
 (regen: `IATC_NUP=1 IATC_IDS=0709.0248 IATC_RUN=data/mark6-render IATC_OUT=… build_iatc_goldens.py`)

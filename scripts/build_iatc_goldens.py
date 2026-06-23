@@ -138,7 +138,10 @@ def iatc_to_marks(graph: dict, text: str) -> list:
         else:
             concl = (e.get("source") or {}).get("lines")[1]
             cs = off[concl - 1]
-            ce = min(cs + 24, off[concl] - 1)
+            lineend = off[concl] - 1
+            ce = min(cs + 24, lineend)
+            while ce < lineend and not text[ce].isspace():  # snap to token end — never cut mid-symbol
+                ce += 1
         marks.append({"start": cs, "end": max(ce, cs + 1), "kind": "inference", "tip": tip})
     return marks
 
@@ -211,9 +214,11 @@ def section(pid: str) -> str:
             f'</div></div>')
 
 
-def s5_marks(pid: str, text: str) -> list:
+def s5_marks(pid: str, window: str) -> list:
     """S5 grounding stage's contribution: the comprehension gaps — nouns the substrate
-    could not ground — projected onto the text as :undefined marks (the red wavy ones)."""
+    could not ground — projected onto the WINDOW text as :undefined marks (red wavy).
+    The undefined noun is a NORMALIZED phrase, so fall back to its longest content word
+    when it doesn't appear verbatim (e.g. 'parameterized rules' -> 'parameterized')."""
     import json
     cf = R.ROOT / "data" / "showcases" / "clean-demo" / "comprehension.json"
     if not cf.exists():
@@ -224,35 +229,48 @@ def s5_marks(pid: str, text: str) -> list:
         return []
     marks = []
     for noun in rec.get("undefined_nouns", []):
-        i = text.find(noun)
+        i, hit = window.find(noun), noun
+        if i < 0:  # normalized form not verbatim -> longest content word
+            for w in sorted(re.findall(r"[A-Za-z]{5,}", noun), key=len, reverse=True):
+                i = window.find(w)
+                if i >= 0:
+                    hit = w
+                    break
         if i >= 0:
-            marks.append({"start": i, "end": i + len(noun), "kind": "undefined",
-                          "tip": f"undefined in substrate — comprehension gap (comp={rec.get('comprehension')})"})
+            marks.append({"start": i, "end": i + len(hit), "kind": "undefined",
+                          "tip": f"undefined in substrate — comprehension gap "
+                                 f"(noun '{noun}', comp={rec.get('comprehension')})"})
     return marks
 
 
 def section_nup(pid: str) -> str:
-    """N-up COMPOSITION: the same passage rendered stage by stage, each panel ADDING the
-    next stage's annotations to the previous, up to a final panel where all compose."""
+    """2×3 COMPOSITION: columns are stages (S1 · S3 · S5). TOP row = what each stage ADDS
+    (its marks alone); BOTTOM row = the running composition (cumulative)."""
     d = dpv.build(pid, with_ca=True, with_binders=True, with_scopes=True, with_xref=True)
     text = d["text"]
     graph = FIXED[pid][0] if FIXED.get(pid) else {}
     ls, le, cs, ce, window = passage_window(graph, text)
-    s1 = rebase_marks(d["marks"], cs, ce)
-    s3 = rebase_marks(iatc_to_marks(graph, text), cs, ce) if graph else []
-    s5 = rebase_marks(s5_marks(pid, text), cs, ce)
-    panels = [("S1 · anatomy", s1, "deterministic concepts · binders · scopes"),
-              ("+ S3 · IATC structure", s1 + s3, "the 70B inference DAG, on the same text"),
-              ("+ S5 · grounding", s1 + s3 + s5, "comprehension gaps (red) — everything composed")]
-    cols = "".join(
-        f'<div class="col"><div class="col-h" style="background:{c}">{title}'
-        f'<br><span style="font-weight:400;opacity:.9">{sub} &middot; {len(marks)} marks</span></div>'
-        f'<div class="paper">{R.render_marked_source(window, marks)}</div></div>'
-        for (title, marks, sub), c in zip(panels, ["#9a3412", "#0f766e", "#991b1b"]))
+    stages = [("S1 · anatomy", rebase_marks(d["marks"], cs, ce), "#9a3412", "concepts · binders · scopes"),
+              ("S3 · IATC structure", rebase_marks(iatc_to_marks(graph, text), cs, ce) if graph else [],
+               "#0f766e", "70B inference DAG"),
+              ("S5 · grounding", s5_marks(pid, window), "#991b1b", "comprehension gaps (red)")]
+    cum, acc = [], []
+    for _, marks, _, _ in stages:
+        acc = acc + marks
+        cum.append(list(acc))
+
+    def cell(title, marks, colr, sub, row):
+        lab = "added at this stage" if row == 0 else "running composition"
+        return (f'<div class="col"><div class="col-h" style="background:{colr}">{title} '
+                f'<span style="opacity:.85">· {lab}</span>'
+                f'<br><span style="font-weight:400;opacity:.9">{sub} &middot; {len(marks)} marks</span></div>'
+                f'<div class="paper">{R.render_marked_source(window, marks)}</div></div>')
+    top = "".join(cell(t, m, c, s, 0) for (t, m, c, s) in stages)
+    bot = "".join(cell(stages[i][0], cum[i], stages[i][2], stages[i][3], 1) for i in range(len(stages)))
     return (f'<h2>{pid} <span style="font:400 12px ui-sans-serif">lines {ls}&ndash;{le} '
-            f'&middot; stages COMPOSE — each panel adds the next</span></h2>\n'
+            f'&middot; top: what each stage ADDS &middot; bottom: running COMPOSITION</span></h2>\n'
             f'<div class="twoup-scroll"><div class="twoup" '
-            f'style="grid-template-columns:repeat({len(panels)},1fr)">{cols}</div></div>')
+            f'style="grid-template-columns:repeat(3,1fr)">{top}{bot}</div></div>')
 
 
 def main() -> int:
