@@ -95,6 +95,9 @@ def main():
     ap.add_argument("--lo", type=float, default=0.5)
     ap.add_argument("--hi", type=float, default=0.8)
     ap.add_argument("--out", default="data/showcases/clean-demo/comprehension.json")
+    ap.add_argument("--run-dir", help="if set, emit S5 MetricRecords here (INSTANTIATE-GPU)")
+    ap.add_argument("--run-id", default="adhoc")
+    ap.add_argument("--corpus-id", default="adhoc")
     args = ap.parse_args()
 
     substrate = r2d.load_substrate(r2d.parse_args([]))
@@ -134,6 +137,26 @@ def main():
     Path(ROOT / args.out).parent.mkdir(parents=True, exist_ok=True)
     json.dump({"lo": args.lo, "hi": args.hi, "proofs": rows},
               open(ROOT / args.out, "w"), indent=2)
+
+    if args.run_dir:  # S5 inline metrics: weak-point (flag) + confidence + symbol-grounding by kind
+        try:
+            import sys as _sys
+            _sys.path.insert(0, str(ROOT / "scripts"))
+            import metric_harness as mh
+            for r in rows:
+                pid = r["pid"]
+                def em(metric, val, axis="completeness"):
+                    if val is not None:
+                        mh.emit_record(args.run_dir, run_id=args.run_id, corpus_id=args.corpus_id,
+                                       paper_id=pid, stage="S5", metric=metric, axis=axis,
+                                       value=round(float(val), 4), computable=True)
+                # weak-POINT iff genuine gap with comprehension established (never weak-extraction)
+                em("weak-point", 1.0 if r["verdict"] in ("weak-proof", "open-problem-bearing") else 0.0)
+                em("comprehension-confidence", r["comprehension"], axis="accretion")
+                em("symbol-grounding/named-concept", r["noun"])     # noun axis = named concepts
+                em("symbol-grounding/proof-move", r["strategy"])    # verb axis = proof-moves
+        except Exception as ee:
+            print(f"  (S5 metric emit skipped: {ee})")
 
     def fmt(x):
         return "  -- " if x is None else f"{x:.2f}"

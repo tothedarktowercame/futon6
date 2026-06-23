@@ -167,9 +167,27 @@ def main(argv=None) -> int:
     ap.add_argument("--context", required=True, help="file path, or - for stdin")
     ap.add_argument("--backend", choices=["stub", "openai"], default="stub")
     ap.add_argument("--model", default="mark4-70b")
+    ap.add_argument("--run-dir", help="if set, emit S5 symbol-grounding/variable here")
+    ap.add_argument("--run-id", default="adhoc")
+    ap.add_argument("--corpus-id", default="adhoc")
+    ap.add_argument("--paper-id", default="adhoc")
     a = ap.parse_args(argv)
     context = sys.stdin.read() if a.context == "-" else Path(a.context).read_text()
-    print(json.dumps(ground(a.formula, context, a.backend, a.model), indent=2, ensure_ascii=False))
+    res = ground(a.formula, context, a.backend, a.model)
+    print(json.dumps(res, indent=2, ensure_ascii=False))
+    if a.run_dir:  # S5 inline metric: symbol-grounding by kind=variable (grounded / all symbols)
+        try:
+            import sys as _sys
+            _sys.path.insert(0, str(Path(__file__).resolve().parent))
+            import metric_harness as mh
+            s = res.get("summary", {})
+            tot = sum(s.get(k, 0) for k in ("grounded", "undefined_in_context", "unsupported"))
+            if tot:
+                mh.emit_record(a.run_dir, run_id=a.run_id, corpus_id=a.corpus_id, paper_id=a.paper_id,
+                               stage="S5", metric="symbol-grounding/variable", axis="completeness",
+                               value=round(s.get("grounded", 0) / tot, 4), computable=True)
+        except Exception as ee:
+            print(f"  (S5 metric emit skipped: {ee})", file=sys.stderr)
     return 0
 
 
