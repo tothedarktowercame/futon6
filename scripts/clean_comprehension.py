@@ -95,12 +95,19 @@ def main():
     ap.add_argument("--lo", type=float, default=0.5)
     ap.add_argument("--hi", type=float, default=0.8)
     ap.add_argument("--out", default="data/showcases/clean-demo/comprehension.json")
+    ap.add_argument("--substrate-papers", help="file of paper-ids: scope grounding to this "
+                    "RUN-CORPUS (so comprehension rises with the run — finding #1 / accretion sweep)")
     ap.add_argument("--run-dir", help="if set, emit S5 MetricRecords here (INSTANTIATE-GPU)")
     ap.add_argument("--run-id", default="adhoc")
     ap.add_argument("--corpus-id", default="adhoc")
     args = ap.parse_args()
 
     substrate = r2d.load_substrate(r2d.parse_args([]))
+    if args.substrate_papers:   # scope grounding to the run-corpus (finding #1)
+        raw = [l.strip() for l in open(args.substrate_papers) if l.strip()]
+        ids = set(raw) | {i.replace("__", "/") for i in raw}   # match concept-index id form
+        substrate = r2d.restrict_substrate(substrate, ids)
+        print(f"  (substrate scoped to run-corpus: {len(raw)} papers, {len(substrate.concept_index)} concepts in scope)")
     patterns = cas_select.load_patterns()
     vocab = sr.load_vocab(str(ROOT / "holes/clean/tactic-gesture-vocab.edn"))
     graph_dir = ROOT / args.graphs

@@ -247,6 +247,29 @@ def load_substrate(args: argparse.Namespace) -> Substrate:
     )
 
 
+def restrict_substrate(substrate: Substrate, paper_ids) -> Substrate:
+    """Scope the substrate to a RUN-CORPUS (a set of papers): a concept is only present if
+    it occurs in a scope paper, and its df is recomputed over the scope. This makes
+    comprehension corpus-relative to the RUN — so it RISES as the run grows (the accretion
+    sweep), instead of grounding against the full archive (the mark6 floor, finding #1)."""
+    scope = set(paper_ids)
+    ci = {}
+    for concept, row in substrate.concept_index.items():
+        inscope = [p for p in (row.get("papers") or []) if p in scope]
+        if inscope:
+            ci[concept] = {**row, "df": len(inscope), "papers": inscope}
+    # a concept is "defined/known" in the run-corpus only if it also OCCURS in it: filter
+    # the (global) definition evidence + provenance to concepts present in the scope.
+    defs = {c: s for c, s in substrate.definition_sources.items() if c in ci}
+    prov = {c: p for c, p in substrate.known_provenance.items() if c in ci}
+    return Substrate(
+        concept_index=ci,
+        definition_sources=defs,
+        known_provenance=prov,
+        known_df_threshold=substrate.known_df_threshold,
+    )
+
+
 def classify_concept(concept: str, substrate: Substrate) -> dict[str, Any]:
     index_row = substrate.concept_index.get(concept) or {}
     sources = sorted(substrate.definition_sources.get(concept, set()) | set(index_row.get("sources") or []))

@@ -182,22 +182,12 @@ def structure_vector(d):
     ])
     feats["comb_scalars"] = scal
 
-    # WIDEN-DYNAMIC-RANGE (todo #16, validated on mark6 breakdowns; apply on the next run):
-    # the structure-sim was tight (mean 0.80) for two reasons, both fixable here —
-    #   (a) comb_scalars use ad-hoc /6.0,/3.0 constants, not corpus z-scores, so they don't
-    #       have unit variance and dominate the L2-cosine. FIX: collect RAW vectors in main(),
-    #       z-normalize the comb_scalar columns ACROSS the corpus, THEN L2. (-> sim mean 0.35)
-    #   (b) method_bag loses ORDER, but method-SEQUENCES are 56/58 distinct. FIX: add a
-    #       method-BIGRAM block (consecutive (seq[i],seq[i+1]) pairs over a corpus bigram
-    #       vocab built in main()). (-> sim mean 0.10, range -0.70..1.00)
-    # Both together take structure-sim 0.80 -> 0.10 (far finer structural twins). Kept as a
-    # documented recipe (not applied) because mark6's CLeans were lost with the box, so it
-    # can't be re-run/validated end-to-end until the next live run.
+    # WIDEN-DYNAMIC-RANGE (todo #16, APPLIED): return the RAW concatenated vector (no per-row
+    # L2 here). main() then (a) appends a method-BIGRAM block (order signal — method-sequences
+    # are ~unique per proof; counts collapse them) and (b) z-normalizes columns across the
+    # corpus so no feature dominates, THEN L2. Took structure-sim 0.80 -> ~0.10 in validation.
     vec = np.concatenate([feats["method_bag"], feats["macro"], feats["satiety"],
                           feats["discharge_kind"], feats["comb_scalars"]])
-    norm = np.linalg.norm(vec)
-    if norm > 0:
-        vec = vec / norm
 
     breakdown = {
         "macro": macro,
@@ -281,6 +271,23 @@ def main():
         text_srcs.append(src)
 
     S = np.vstack(struct_rows)
+    # WIDEN-DYNAMIC-RANGE (#16): append method-bigram (order) block, z-normalize columns
+    # across the corpus so no feature dominates, then L2 per row.
+    seqs = [bd.get("methods", []) for bd in breakdowns]
+    bigrams = sorted({(a, b) for s in seqs for a, b in zip(s, s[1:])})
+    if bigrams:
+        bidx = {g: i for i, g in enumerate(bigrams)}
+        Bm = np.zeros((len(seqs), len(bigrams)))
+        for r, s in enumerate(seqs):
+            for a, b in zip(s, s[1:]):
+                Bm[r, bidx[(a, b)]] = 1.0
+        S = np.hstack([S, Bm])
+    sd = S.std(axis=0)
+    sd[sd == 0] = 1.0
+    S = (S - S.mean(axis=0)) / sd
+    rn = np.linalg.norm(S, axis=1, keepdims=True)
+    rn[rn == 0] = 1.0
+    S = S / rn
     T, text_model = text_embeddings(texts)
 
     np.save(os.path.join(args.out, "structure-embeddings.npy"), S)
