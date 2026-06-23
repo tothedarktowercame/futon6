@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-"""Linode pipeline stepper — supervised, gated, resumable runner.
+"""Pipeline stepper — supervised, gated, resumable runner (Linode box or superpod).
 
 Reads the stage contract (holes/linode-stepper-contract.md, embedded EDN) and
 drives the stages in order: precondition (inputs present) -> command -> postcondition
 GATE -> per-stage report -> HALT for inspection at the contract's halt points. The
-executor IS the gate (mark3 lesson); host-only GPU/LLM stages are flagged and the
-run stops there locally (run them on the Linode host, then resume with --from).
+executor IS the gate (mark3 lesson).
 
-  --plan                 print the executable plan (the contract made runnable)
-  --run [--from S6 --to S8] [--no-halt]    execute (default S1..S9)
-  --on-host              permit host-only (GPU) stages to actually run
+SINGLE-HOST (corrected 2026-06-23): there is NO dev/box split. After the STAGE step
+(rsync of eprints + the ~68MB substrate + futon3 patterns onto the host), EVERY stage
+S1..S9 runs on the one host — box or superpod. The earlier "S2/S5 are dev-local" was a
+data-staging gap mistaken for a distributed topology, not a real requirement. Only S0
+(provision) and STAGE (rsync from dev) are from-dev bootstrap steps.
+
+  --plan [--profile linode|superpod]   print the executable plan (the contract made runnable)
+  --run [--from S6 --to S8] [--no-halt] [--run-dir .. --corpus-id ..]   execute (default S1..S9)
 
 This is the supervised sibling of clean_pipeline.sh: gated, halting, resumable.
 """
@@ -43,13 +47,13 @@ def load_stages():
     return out
 
 
-# dispatch: stage-id -> what to actually run. local stages have a cmd (+ optional
-# gate); host-only stages carry the command to run on the Linode GPU host.
-# host commands follow futon0/README-linode.md (StackScript 2142757 box).
-# dispatch re-synced to the CORRECTED DAG (linode-stepper-contract.md, 2026-06-23):
+# dispatch: stage-id -> the command to run ON THE HOST (box or superpod). After STAGE,
+# the ENTIRE pipeline is single-host — no dev/box split (that was a staging gap, not a
+# topology). S0 (provision) and STAGE (rsync from dev) are the only from-dev bootstrap
+# steps; both are "boot" (note-only, halt). CORRECTED DAG (2026-06-23):
 # S1 anatomy · S2 concepts · S3 IATC(all-proofs) ∥ S4 expository · S5 comprehension ·
 # S6 paper-graph(B) · S7 CLean-embed · S8 export · S9 APM/mining. Emitting stages take
-# --run-dir $RUN so the run produces the slope report (INSTANTIATE-GPU). After S8:
+# --run-dir $RUN so the run produces the slope report. After S8:
 #   {PY} scripts/metric_harness.py --from-records $RUN   (emitted completeness/quality)
 #   {PY} scripts/metric_harness.py                       (accretion slopes, leave-one-out)
 IDS = "holes/math-ct-200.ids.txt"
@@ -59,39 +63,35 @@ GRAPHS = "data/iatc-argument-graphs/run"
 CLEAN = "holes/clean-run"
 DEMO = "data/showcases/clean-run-demo"
 OPS = {
-    "S0": {"local": False, "note": "README-linode: StackScript 2142757; linode-postsetup-deps.sh; "
-           "hf pre-pull 70B (retry loop); linode-4gpu-setup.sh (serve vLLM, flashinfer off)"},
-    "S1": {"local": False, "note": f"{{PY}} scripts/emit_marks.py --list {IDS} --run-dir {RUN} "
-           "(whole-paper anatomy from pre-fetched eprints; emits any-markup-coverage)",
+    "S0": {"boot": True, "note": "<profile.s0> — provision the host + serve the model"},
+    "STAGE": {"boot": True, "note": "<profile.stage> — rsync eprints + the ~68MB substrate + futon3 "
+              "patterns onto the host. DEREFERENCE symlinks (rsync -L / tar -h): dev uses a storage/ "
+              "overlay, so a naive copy ships dangling links and S2/S5 then can't read the substrate."},
+    "S1": {"cmd": f"{{PY}} scripts/emit_marks.py --list {IDS} --run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
            "gate": "check_invariants wf=0 across the batch"},
-    "S2": {"local": False, "note": "warp substrate build (concordance) -> concept-index (corpus-fresh); "
-           "G-coverage INLINE via coverage_inline.py on raw S1 concepts",
+    "S2": {"cmd": "{PY} scripts/coverage_inline.py  # concept-substrate corpus-fresh; G-coverage inline",
            "gate": "G-coverage: raw coverage rises with corpus-fraction"},
-    "S3": {"local": False, "note": f"{{PY}} scripts/mark3_extract_candidates.py --papers <ids> --all-proofs "
-           f"--out {CAND}  ->  CANDIDATES={CAND} OUT={GRAPHS} scripts/linode-4gpu-run.sh "
-           "(mark3_iatc_loop 70B; one graph per proof)",
+    "S3": {"cmd": f"{{PY}} scripts/mark3_extract_candidates.py --papers <ids> --all-proofs --out {CAND} && "
+           f"CANDIDATES={CAND} OUT={GRAPHS} bash scripts/linode-4gpu-run.sh",
            "gate": f"bb scripts/iatc_argcheck.bb {GRAPHS} && {{PY}} scripts/substance_gate.py {GRAPHS} (finals-only)"},
-    "S4": {"local": False, "note": "{PY} scripts/mark3_extract_expository_candidates.py --papers <ids> "
-           "--out data/expository-candidates-run  ->  {PY} scripts/mark3_expository_loop.py "
+    "S4": {"cmd": "{PY} scripts/mark3_extract_expository_candidates.py --papers <ids> "
+           "--out data/expository-candidates-run && {PY} scripts/mark3_expository_loop.py "
            "--candidates data/expository-candidates-run --out data/expository-scope-graphs/run "
            f"--backend openai --run-dir {RUN} (ALL regions; cap/sample at scale)",
            "gate": "expository_argcheck (self-gated in loop)"},
-    "S5": {"local": True, "inputs": [GRAPHS],
-           "cmd": "{PY} scripts/clean_comprehension.py  # rung-ladder + R2d + strategy_recognizer",
+    "S5": {"cmd": f"{{PY}} scripts/clean_comprehension.py --graphs {GRAPHS} --candidates {CAND} --run-dir {RUN} "
+           "# rung-ladder + R2d + strategy_recognizer (reads the staged substrate + futon3 patterns)",
            "gate": "G-comprehension: verdict separates weak-extraction from weak-proof"},
-    "S6": {"local": True, "inputs": [GRAPHS],
-           "cmd": f"{{PY}} scripts/paper_graph_assemble.py --paper <pid> --iatc {GRAPHS} --run-dir {RUN}",
+    "S6": {"cmd": f"{{PY}} scripts/paper_graph_assemble.py --paper <pid> --iatc {GRAPHS} --run-dir {RUN}",
            "gate": "B wellformed: every proof attaches to a statement; orphans flagged"},
-    "S7": {"local": False, "note": f"{{PY}} scripts/clean_box_typing.py --graphs {GRAPHS} --out {CLEAN} "
-           f"--endpoint http://localhost:$PORT/v1/chat/completions --model mark4-70b --run-dir {RUN}  ->  "
+    "S7": {"cmd": f"{{PY}} scripts/clean_box_typing.py --graphs {GRAPHS} --out {CLEAN} "
+           f"--endpoint http://localhost:$PORT/v1/chat/completions --model mark4-70b --run-dir {RUN} && "
            f"{{PY}} scripts/clean_structure_embed.py --clean-dir {CLEAN} --out {DEMO}",
            "gate": f"bb scripts/clean_vocab_gate.bb {CLEAN} && {{PY}} scripts/clean_entropy_gate.py "
            f"--embed {DEMO}/clean-embed.json"},
-    "S8": {"local": True, "inputs": [CLEAN],
-           "cmd": f"{{PY}} scripts/clean_graph_export.py --clean-dir {CLEAN} --out {DEMO}/ingest "
+    "S8": {"cmd": f"{{PY}} scripts/clean_graph_export.py --clean-dir {CLEAN} --out {DEMO}/ingest "
            f"--embed-json {DEMO}/clean-embed.json"},
-    "S9": {"local": True, "inputs": [GRAPHS],
-           "cmd": "{PY} scripts/mark4_apm_structure_coverage.py ; {PY} scripts/clean_hole_harvest.py  # optional CPU tails"},
+    "S9": {"cmd": "{PY} scripts/mark4_apm_structure_coverage.py ; {PY} scripts/clean_hole_harvest.py  # optional CPU tails"},
 }
 
 
@@ -100,11 +100,16 @@ def sh(cmd):
 
 
 # ---- scale profiles (same stage commands; S0 + scale differ — the generalization test) ----
+_STAGE_MANIFEST = ("eprints (the sample's *.tar.gz) + ~68MB substrate "
+                   "(data/warp/{concept-index,def-snippets,defined-index,concept-usage}.json, "
+                   "data/concept-encyclopedia-ct.json) + futon3 patterns "
+                   "(futon3/resources/sigils/patterns-index.tsv, futon3/library)")
 PROFILES = {
     "linode": {
         "banner": "LINODE — small / single StackScript box (the reduced-scale end-to-end)",
         "s0": "README-linode: StackScript 2142757; linode-postsetup-deps.sh; hf pre-pull 70B; "
               "linode-4gpu-setup.sh (vLLM 70B, TP=4)",
+        "stage": f"rsync -L (DEREFERENCE symlinks) {_STAGE_MANIFEST} to the box, then run S1..S9 there",
         "scale": "sample: holes/math-ct-200.ids.txt OR a 15-paper citation neighborhood "
                  "(math-ct-neighborhood) + matched random",
     },
@@ -112,6 +117,8 @@ PROFILES = {
         "banner": "SUPERPOD — whole math.XX domain / 8-GPU cluster, overnight (LLaMA-only)",
         "s0": "cluster alloc (SLURM/queue); serve LLaMA across 8 GPUs (TP=8); "
               "linode-postsetup-deps.sh; hf pre-pull; corpus-id = domain@date",
+        "stage": f"rsync -L (DEREFERENCE symlinks) {_STAGE_MANIFEST} to the cluster scratch ONCE, "
+                 "then run S1..S9 there — compute/disk are never the constraint",
         "scale": "ENTIRE math.XX domain (build_ct_manifest over the domain); LLM stages S3/S4/S7 "
                  "at batch concurrency; S2 MUST be corpus-fresh (no --reuse)",
     },
@@ -182,17 +189,22 @@ def order(stages, frm, to):
 DEPS = load_deps()
 
 
+def _boot_note(profile, sid):
+    return PROFILES[profile]["stage"] if sid == "STAGE" else PROFILES[profile]["s0"]
+
+
 def plan(stages, profile):
     pr = PROFILES[profile]
-    print(f"PIPELINE STEPPER — {pr['banner']}\n  scale: {pr['scale']}\n")
+    print(f"PIPELINE STEPPER — {pr['banner']}\n  scale: {pr['scale']}")
+    print("  single-host: after STAGE, S1..S9 all run on the host (no dev/box split)\n")
     for s in stages:
         op = OPS.get(s["id"], {})
-        loc = "local" if op.get("local") else "HOST/CLUSTER"
         deps = ",".join(DEPS.get(s["id"], [])) or "—"
-        print(f"{s['id']} {s['name']:22s} [{s['compute']:8s} {loc:12s}] "
+        tag = "BOOT(dev)" if op.get("boot") else "host"
+        print(f"{s['id']} {s['name']:22s} [{s['compute']:8s} {tag:9s}] "
               f"{'⏸HALT' if s['halt'] else '     '}  deps: {deps}  go/no-go: {','.join(s['go']) or '—'}")
-        if s["id"] == "S0":
-            print(f"     note: {pr['s0']}")
+        if op.get("boot"):
+            print(f"     note: {_boot_note(profile, s['id'])}")
             continue
         if op.get("cmd"):
             print(f"     cmd : {op['cmd'].format(PY=PY)}")
@@ -202,7 +214,7 @@ def plan(stages, profile):
             print(f"     note: {op['note']}")
 
 
-def run(stages, profile, no_halt, on_host, run_dir, corpus_id, run_id, reuse):
+def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
     print(f"=== {PROFILES[profile]['banner']} | corpus={corpus_id} run={run_id} ===")
     for s in stages:
         op = OPS.get(s["id"], {})
@@ -212,10 +224,10 @@ def run(stages, profile, no_halt, on_host, run_dir, corpus_id, run_id, reuse):
         if block:
             print(block)
             return
-        if not op.get("local") and not on_host:
-            print(f"⏸ HOST/CLUSTER stage — run on the box/cluster, record it with "
-                  f"--mark-done {s['id']} (or resume --from {s['id']} --on-host)")
-            print(f"   {pr_s0 if (pr_s0 := PROFILES[profile]['s0']) and s['id']=='S0' else op.get('note','')}")
+        if op.get("boot"):   # S0 provision / STAGE rsync — done from dev, then resume on the host
+            nxt = stages[stages.index(s) + 1]["id"] if stages.index(s) + 1 < len(stages) else "(done)"
+            print(f"⏸ BOOT step — do this from dev, then run the stepper ON THE HOST with --from {nxt}:")
+            print(f"   {_boot_note(profile, s['id'])}")
             return
         missing = [p for p in op.get("inputs", []) if not os.path.exists(os.path.join(ROOT, p))]
         if missing:
@@ -249,14 +261,19 @@ def main():
     ap.add_argument("--from", dest="frm", default=None)
     ap.add_argument("--to", default=None)
     ap.add_argument("--no-halt", action="store_true")
-    ap.add_argument("--on-host", action="store_true")
     ap.add_argument("--run-dir", help="phase-ledger + emit dir (data/runs/<run-id>)")
     ap.add_argument("--corpus-id", default="adhoc")
     ap.add_argument("--run-id", default="adhoc")
     ap.add_argument("--reuse", nargs="*", default=[], help="upstream stages to accept from --reuse (never S2)")
-    ap.add_argument("--mark-done", nargs="*", default=[], help="record host/cluster stages as ledger-passed")
+    ap.add_argument("--mark-done", nargs="*", default=[], help="record boot steps (S0/STAGE) as ledger-passed")
     args = ap.parse_args()
     stages = load_stages()
+    # inject the STAGE bootstrap step right after S0 (rsync substrate -> host; not in the contract EDN)
+    ids = [s["id"] for s in stages]
+    if "STAGE" not in ids and "S0" in ids:
+        i = ids.index("S0") + 1
+        stages.insert(i, {"id": "STAGE", "name": "stage substrate", "compute": "io",
+                          "halt": True, "go": []})
     if args.mark_done:
         for sid in args.mark_done:
             ledger_record(args.run_dir, sid, args.corpus_id, args.run_id)
@@ -265,7 +282,7 @@ def main():
     if args.plan or not args.run:
         plan(stages, args.profile)
     if args.run:
-        run(order(stages, args.frm, args.to), args.profile, args.no_halt, args.on_host,
+        run(order(stages, args.frm, args.to), args.profile, args.no_halt,
             args.run_dir, args.corpus_id, args.run_id, args.reuse)
 
 
