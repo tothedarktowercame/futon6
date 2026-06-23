@@ -211,9 +211,54 @@ def section(pid: str) -> str:
             f'</div></div>')
 
 
+def s5_marks(pid: str, text: str) -> list:
+    """S5 grounding stage's contribution: the comprehension gaps — nouns the substrate
+    could not ground — projected onto the text as :undefined marks (the red wavy ones)."""
+    import json
+    cf = R.ROOT / "data" / "showcases" / "clean-demo" / "comprehension.json"
+    if not cf.exists():
+        return []
+    recs = json.load(open(cf)).get("proofs", [])
+    rec = next((r for r in recs if r["pid"].split("__")[0] == pid and "rung2" not in r["pid"]), None)
+    if not rec:
+        return []
+    marks = []
+    for noun in rec.get("undefined_nouns", []):
+        i = text.find(noun)
+        if i >= 0:
+            marks.append({"start": i, "end": i + len(noun), "kind": "undefined",
+                          "tip": f"undefined in substrate — comprehension gap (comp={rec.get('comprehension')})"})
+    return marks
+
+
+def section_nup(pid: str) -> str:
+    """N-up COMPOSITION: the same passage rendered stage by stage, each panel ADDING the
+    next stage's annotations to the previous, up to a final panel where all compose."""
+    d = dpv.build(pid, with_ca=True, with_binders=True, with_scopes=True, with_xref=True)
+    text = d["text"]
+    graph = FIXED[pid][0] if FIXED.get(pid) else {}
+    ls, le, cs, ce, window = passage_window(graph, text)
+    s1 = rebase_marks(d["marks"], cs, ce)
+    s3 = rebase_marks(iatc_to_marks(graph, text), cs, ce) if graph else []
+    s5 = rebase_marks(s5_marks(pid, text), cs, ce)
+    panels = [("S1 · anatomy", s1, "deterministic concepts · binders · scopes"),
+              ("+ S3 · IATC structure", s1 + s3, "the 70B inference DAG, on the same text"),
+              ("+ S5 · grounding", s1 + s3 + s5, "comprehension gaps (red) — everything composed")]
+    cols = "".join(
+        f'<div class="col"><div class="col-h" style="background:{c}">{title}'
+        f'<br><span style="font-weight:400;opacity:.9">{sub} &middot; {len(marks)} marks</span></div>'
+        f'<div class="paper">{R.render_marked_source(window, marks)}</div></div>'
+        for (title, marks, sub), c in zip(panels, ["#9a3412", "#0f766e", "#991b1b"]))
+    return (f'<h2>{pid} <span style="font:400 12px ui-sans-serif">lines {ls}&ndash;{le} '
+            f'&middot; stages COMPOSE — each panel adds the next</span></h2>\n'
+            f'<div class="twoup-scroll"><div class="twoup" '
+            f'style="grid-template-columns:repeat({len(panels)},1fr)">{cols}</div></div>')
+
+
 def main() -> int:
     stage_graphs()
-    body = "\n".join(section(pid) for pid in IDS)
+    sec = section_nup if os.environ.get("IATC_NUP") else section
+    body = "\n".join(sec(pid) for pid in IDS)
     OUT.write_text(f"""<!doctype html><meta charset="utf-8">
 <title>mark4 — CPU goldens vs 70B IATC</title>
 <style>

@@ -32,13 +32,18 @@ grows. It is computed at n=1 and it rises — exactly the design.
 ## 2. One proof, end-to-end (the literate thread)
 
 To show what "through the whole pipeline" means, here is a single proof —
-`0709.0248__p0` — from input to verdict. The **annotated render** (existing
-`build_iatc_goldens` engine, retargeted at the mark6 graph) shows the proof text with
-colour: grounded concepts and symbols highlighted with their grounding in hover-tooltips,
-golden CPU anatomy (128 marks) beside the 70B IATC projection (10 marks), on the *same*
-text — **`file:///home/joe/code/futon6/data/showcases/mark6-iatc-annotated.html`**
-(regen: `IATC_IDS=0709.0248 IATC_RUN=data/mark6-render IATC_OUT=… build_iatc_goldens.py`).
-The text blocks below are the plain-text distillation of that render.
+`0709.0248__p0` — from input to verdict. The stages **compose**: each adds its
+annotations to the *same* text, so the right view is an **N-up progressive render** —
+S1 anatomy (128 marks) → **+** S3 IATC inference structure (→138) → **+** S5 grounding,
+the final panel where everything is composed and the comprehension gap (*parameterized
+rules*) shows as a red wavy underline:
+
+**`file:///home/joe/code/futon6/data/showcases/mark6-stages-composed.html`**
+(regen: `IATC_NUP=1 IATC_IDS=0709.0248 IATC_RUN=data/mark6-render IATC_OUT=… build_iatc_goldens.py`)
+
+Grounded concepts/symbols carry their grounding in hover-tooltips (e.g. *intensional and
+extensional* → `concept (canon link)`). The text blocks below are the plain-text
+distillation of that render.
 
 **(a) The input.** The raw passage the pipeline ingested (arXiv 0709.0248, on the
 homotopy interpretation of type theory):

@@ -30,6 +30,7 @@ DEFAULT_OUT = ROOT / "data" / "showcases" / "ct-anatomy" / "dp-demo"
 
 # kind (or kind-prefix) -> css class. Order matters: first match wins.
 KIND_CLASS = [
+    ("undefined", "k-undef"),
     ("symbol-grounded", "k-symg"),
     ("symbol", "k-sym"),
     ("math", "k-math"),
@@ -126,6 +127,7 @@ a{color:#174ea6}
 .iq .qarrow::after{content:"=>"}
 /* mark families — combine when nested (e.g. a grounded symbol inside a math span) */
 .k-math{background:#eef3fb;border-radius:2px}
+.k-undef{background:#fde8e8;border-bottom:2px wavy #dc2626;color:#991b1b;font-weight:600}
 .k-symg{color:#0b5e57;border-bottom:2px solid #0f766e;font-weight:600}
 .k-sym{background:#fdf3d7;border-bottom:2px dashed #c2410c;color:#8a3d05;font-weight:600}
 .k-bind{border-bottom:2px solid #2a4d9a}
