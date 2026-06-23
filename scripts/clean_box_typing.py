@@ -130,6 +130,10 @@ def main():
             failed.append((pid, why))
             print(f"  FAIL {pid}: {why}")
             continue
+        # macro is DERIVED from the box methods, not the model's (the 70B over-tags one
+        # default — mark5 D1/Diagnostic-2). Override before applying.
+        from clean_macro_fix import derive_macro
+        typing["_macro"] = derive_macro([typing[b["id"]] for b in sk0["boxes"] if b["id"] in typing])
         sk = itc.build_skeleton(nodes, edges, typing)
         vacuous = sum(1 for e in edges if all(p == e["conclusion"] for p in e["premise"]))
         outfile = os.path.join(ROOT, args.out, f"{pid}.clean.edn")

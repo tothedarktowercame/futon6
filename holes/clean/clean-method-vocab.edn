@@ -85,4 +85,10 @@
   :contradiction-reduce
   "assume the negation → derive a forbidden consequence → reduce to a known impossibility"
   :induct-tower
-  "establish a base case → iterate it up a quotient/series tower"}}
+  "establish a base case → iterate it up a quotient/series tower"
+  :transport-symmetry
+  "transport a property along a symmetry/isomorphism → readdress → conclude on the image"
+  :reduce-to-known
+  "reduce the goal to a known result/lemma and apply it directly"
+  :local-to-global-glue
+  "establish the claim locally → glue/extend the local data to a global conclusion"}}

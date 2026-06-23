@@ -97,6 +97,14 @@ from the method distribution; re-derive macros on the 102 and re-check G-entropy
 EXP-3-at-scale re-test). The methods discriminate; the macro *assignment + vocab* are the
 fixable problem — NOT "iching shapes too coarse."
 
+**FIX LANDED (2026-06-23).** Grew the macro vocab +3 shapes (`transport-symmetry`,
+`reduce-to-known`, `local-to-global-glue`); `derive_macro()` (method-composition → macro,
+`clean_macro_fix.py`) wired into `clean_box_typing` so the macro is **derived, not
+70B-tagged**. On the 102: **macro-entropy 0.08 → 0.73** (clears the 0.5 floor), 56/94
+re-macro'd, balanced 6-macro distribution. Side-by-side old-vs-new at
+`data/showcases/macro-fix-comparison.html`. The structure-embedding's macro layer now
+discriminates; G-entropy collapse resolved before the live run.
+
 **D2 — Discrimination is method-level, not macro-level (and the embedding is mis-weighted).**
 The 12-tag *method spine* stayed diverse — 10 tags fire: reduce-to-known-result 170,
 construct-auxiliary-object 163, transport-along-symmetry 69, compute-invariant 20,
