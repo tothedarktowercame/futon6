@@ -85,6 +85,33 @@ assembler). *Enables* the superpod scale decision (`superpod-dag-contract.md`).
 **Owner & dependencies.** claude-1 + Joe; futon6 (CPU harness + the small run); a LLaMA/70B
 box for the S3/S4 GPU stages.
 
+### Candidate metrics (operator-seeded, 2026-06-23)
+
+Joe's likely candidates — the intuition-level targets that motivate the harness; the
+DERIVE table formalizes them. **The list is open** (more will surface in MAP).
+
+- **Any-markup coverage % (per paper).** What fraction of a paper's content is covered by
+  *any* mark at all. If a paper reads **50% covered, 50% is unmodelled** — earlier local
+  experiments sat near this, and that gap is exactly what motivated attending to the
+  **expository sections (⑤)**. Defined at n=1; should rise as the *full pipeline* (above
+  all the expository sibling) is turned on. A flat-low value says the feature-set is
+  missing whole regions, not that the paper is hard. **This is the direct test that we
+  model the WHOLE paper, not just its proofs** — so its rise when ⑤ is on is the evidence
+  the expository sibling earns its keep.
+- **Symbol-grounding %, by symbol *kind*.** Not one number but a small, rigorous taxonomy,
+  now that "symbol" has widened: (i) **variables inside expressions** (classic SFC2b),
+  (ii) **named concepts** (the noun layer), (iii) **proof-moves as concepts** (the verb
+  layer — a move is "grounded" iff it resolves to a known technique/pattern, else honestly
+  flagged). The verb layer is the hard, interesting part; stay rigorous by requiring a
+  cited definition / pattern-match or an explicit `:undefined`/`:thin` flag (the SFC2b +
+  rung-3 discipline — never count an ungrounded symbol as grounded). Per-kind, defined at
+  n=1; rises with substrate growth + as each kind is handled.
+- **# concepts defined in the encyclopedia.** Even in CT (a good seed set), the count of
+  concepts carrying a *real definition entry* should **rise as papers accrete** — each
+  paper contributes definitions/usages. A pure cross-paper accretion metric: seed at n=1,
+  climbing n=1→10. Flat ⇒ the encyclopedia isn't actually ingesting new definitions.
+- **(more to come)** — deliberately open; MAP-Q1 sorts which rise vs saturate at small n.
+
 **Exit criterion (IDENTIFY):** Joe agrees the gap is real and the scope (harness + small
 everything-on run, rework deferred) is right.
 
@@ -113,8 +140,11 @@ everything-on run, rework deferred) is right.
 Every headline metric must be **(a) defined at n=1**, **(b) expected to rise n=1→10**,
 **(c) decomposed per stage**.
 
-| metric | stage | n=1 baseline | why it rises with n | if flat, suspect |
+| metric | stage | n=1 baseline | why it rises (with n, features, or accretion) | if flat, suspect |
 |--------|-------|--------------|---------------------|------------------|
+| **any-markup coverage %** (per paper) | ①+④+⑤ | paper-1 % covered by any mark | rises as the full pipeline (esp. ⑤ expository) is on — closes the unmodelled gap | a sibling/detector is off or missing whole regions |
+| **symbol-grounding %**, by kind {var, named-concept, proof-move} | SFC2b/R2d/rung-3 | per-kind % grounded on paper-1 | substrate growth + each kind handled; verb-layer is the frontier | the grounding loop / the unhandled kind |
+| **# encyclopedia concepts defined** | ② | seed-set count (CT seed) | each paper accretes new definitions | encyclopedia not ingesting new defs |
 | concept-coverage / G-coverage | ②/R2d | paper-1 concepts vs substrate-of-1 | held-out terms more often grounded as substrate grows | ② substrate / SFC detector |
 | comprehension floor (corpus-relative) | S5 | per-proof vs corpus-of-1 | more papers ground more nouns + strategies | R2d (nouns) or STRAT-REC (strategy) |
 | recurring (type,concept) holes surfaced | WARRANT-NORM/PASS3 | 0 (no recurrence at n=1) | cross-paper gaps repeat (df≥2) | the (type,concept) keying |
