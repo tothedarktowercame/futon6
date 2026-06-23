@@ -81,6 +81,22 @@ peak 0.32 @k=8) — a graded continuum, not crisp classes; so the actionable sig
 vocab may not buy much over using the composition directly. **Candidate (1) [paper-level
 lens] remains untestable here** — mark5 is one-proof-per-paper; needs the whole-paper run.
 
+**Diagnostic 2 (2026-06-23, CPU on the 102): the macro is OVER-TAGGED, and the vocab has
+gaps.** Cross-tab of macro × dominant-method: the macro is `construct-exploit-discharge`
+*independent of method* — construct-auxiliary 48/48, reduce-to-known 40/44, transport
+6/6, compute-invariant 4/4. Annotated proofs confirm it: `1806.08645` is **all
+transport-along-symmetry** yet tagged construct-exploit-discharge (no construction in it).
+So the 70B's macro judgment is a near-constant **default** (over-tagging). Prototype fix —
+derive the macro from the method composition instead of the model: with the *existing* 5
+shapes it stays low (no transport/compute shape; construct-aux + reduce + transport all →
+construct-exploit-discharge), but **adding transport/compute shapes lifts macro-entropy
+0.17 → 0.42**. → **Two causes:** (1) over-tagging (the model defaults), (2) vocab gap (the
+5 shapes don't span the common CT methods). **Fix (pre-run, CPU):** derive macro from
+method-composition + **grow the macro vocab data-drivenly** (transport-symmetry, compute)
+from the method distribution; re-derive macros on the 102 and re-check G-entropy (the
+EXP-3-at-scale re-test). The methods discriminate; the macro *assignment + vocab* are the
+fixable problem — NOT "iching shapes too coarse."
+
 **D2 — Discrimination is method-level, not macro-level (and the embedding is mis-weighted).**
 The 12-tag *method spine* stayed diverse — 10 tags fire: reduce-to-known-result 170,
 construct-auxiliary-object 163, transport-along-symmetry 69, compute-invariant 20,
