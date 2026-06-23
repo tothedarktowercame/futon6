@@ -1,8 +1,9 @@
 # M-metric-harness — the next end-to-end run measures PROGRESS, not throughput
 
 **Status:** HEAD complete; IDENTIFY authored; MAP complete (scratch-work survey);
-**DERIVE authored** (3-axis metric taxonomy + per-phase & aggregate catalog + slope
-mechanism); ARGUE/VERIFY next; INSTANTIATE deferred (2026-06-23).
+DERIVE authored (3-axis taxonomy + per-phase & aggregate catalog); **ARGUE authored**
+(progress-signal + navel-gazing + graph-enhanced-evaluation; paradox resolved); VERIFY
+spike next; INSTANTIATE deferred (2026-06-23).
 
 *Follows `futon4/holes/mission-lifecycle.md`. Successor framing to the mark5 run
 (`holes/mark5-ct100-results.md`); executes against the corrected pipeline in
@@ -311,12 +312,60 @@ without the slope; an accretion slope reported without attribution.
 
 ---
 
-## 4. ARGUE · 5. VERIFY · 6. INSTANTIATE · 7. DOCUMENT — *forward path*
+## 4. ARGUE (2026-06-23)
 
-- **ARGUE:** the harness is the AIF+ move (measure the trajectory, not a scalar); the
-  plain-language pitch = "one paper already scores; ten should score better, and if not we
-  know which stage to blame."
-- **VERIFY:** prototype the rising metrics on the mark5 102 (CPU, free) before the GPU run.
+### Pattern cross-reference (`futon3/library/`)
+
+- **`futon-theory/progress-signal`** — the canonical pattern this mission instantiates:
+  *measure progress via accumulating evidence + explicit health states so stall / dead
+  work is caught early, not felt as vague stagnation.* The harness **extends** it from
+  mission-progress to **corpus-progress** — the accretion slope IS the evidence-
+  accumulation curve.
+- **`collaboration-coherence/navel-gazing`** ("close every feedback loop with an action
+  surface; reflection without one is noise / a Bateson double-bind") — the discipline
+  against Joe's paradox. **Every metric must close to an action:** the `attribution-stage`
+  is *where the fix goes*; the slope is *the scale / no-scale decision*. A metric admired
+  for its own sake is exactly the failure mode this pattern names.
+- **`f6/graph-enhanced-evaluation`** ("two agents, same questions, one has the graph; the
+  difference measures the value of the structure") — the **teleological anchor**. This is
+  the real question the harness's intermediate metrics only *approximate*: does the mined
+  structure make downstream reasoning measurably better? The accretion slopes are cheap,
+  early **proxies** for that bare-vs-graph-enhanced delta; the harness keeps a line of
+  sight to it as ground truth.
+- **`peeragogy/use-or-make`** — reuse before produce: the MAP found per-feature stage
+  slices already on disk; the harness *composes existing stage outputs*, it doesn't mint
+  new measurement machinery.
+
+### Theoretical coherence — the paradox resolved
+
+Joe's paradox (*metrics must not become the target; the real question is what the mined
+data lets us **do***) is resolved by two patterns acting together: **navel-gazing** keeps
+each metric tied to an action (a steering signal, not a score to game), and
+**graph-enhanced-evaluation** keeps the *whole set* honest as a proxy for downstream
+use-value (so we never optimize coverage-% at the expense of usefulness). The intermediate
+per-stage metrics earn their place **only** as early, cheap, decomposable approximations
+of the bare-vs-graph-enhanced delta — which is too expensive to run every iteration.
+
+**Trade-off accepted:** the slopes are proxies (cheap, early, per-stage) for the true
+use-value metric (graph-enhanced QA, expensive). The harness's job is to make the proxies
+trustworthy enough to steer *between* rare ground-truth evaluations.
+
+### Plain-language argument
+
+We're building a gauge for the mining pipeline. Today we can run it on 100 papers and all
+we learn is "it finished." The gauge instead asks: when we add papers, does the system
+actually understand *more* — and if not, which part is stuck? It does this with a few
+numbers that each (a) already mean something on a single paper, (b) should climb as papers
+accumulate, and (c) point at the responsible stage when they don't. The numbers aren't the
+goal — they're a cheap early stand-in for the real goal (does the mined structure make
+downstream mathematical reasoning measurably better), which we keep honest by occasionally
+checking them against an actual bare-vs-graph-enhanced test.
+
+## 5. VERIFY · 6. INSTANTIATE · 7. DOCUMENT — *forward path*
+
+- **VERIFY:** spike one accretion slope (concept-coverage leave-one-out, or encyclopedia
+  count) on data in hand — CPU, free — to prove a metric actually rises before any box.
 - **INSTANTIATE:** build the harness; wire S3-all-proofs + S4 expository + S6 assembler;
-  run 10 then 20 whole papers everything-on; emit the slope + attribution.
-- **DOCUMENT:** the slope report becomes the progress artifact (and the superpod go/no-go input).
+  run 10 then 20 whole papers everything-on; emit the slope + per-stage attribution.
+- **DOCUMENT:** the slope report becomes the progress artifact (and the superpod
+  go/no-go input).
